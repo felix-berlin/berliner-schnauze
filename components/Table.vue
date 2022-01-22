@@ -1,20 +1,5 @@
 <template>
   <div>
-    <!-- <table>
-      <thead>
-        <th>Berlinerisch</th>
-        <th>Übersetzung</th>
-        <th>Beispiel</th>
-      </thead>
-      <tbody>
-        <tr v-for="(value, name, index) in lang" :key="index">
-          <td>{{ value.berlinerisch }}</td>
-          <td>{{ value.translation }}</td>
-          <td>{{ value.example }}</td>
-        </tr>
-      </tbody>
-    </table> -->
-
     <vue-good-table
       :columns="columns"
       :rows="words"
@@ -33,7 +18,13 @@
       }"
       :pagination-options="{
         enabled: true,
-        perPage: 15
+        perPage: 15,
+        nextLabel: 'nächste',
+        prevLabel: 'vorher',
+        rowsPerPageLabel: 'Zeilen pro Seite',
+        ofLabel: 'von',
+        pageLabel: 'page', // for 'pages' mode
+        allLabel: 'Alle',
       }"
     />
   </div>
@@ -60,55 +51,59 @@ export default {
           html: true
         }
       ],
-      words: [
-        {
-          mode: 'span', // span means this header will span all columns
-          label: 'A', // this is the label that'll be used for the header
-          html: false, // if this is true, label will be rendered as html
-          children: []
-        },
-        {
-          mode: 'span', // span means this header will span all columns
-          label: 'B', // this is the label that'll be used for the header
-          html: false, // if this is true, label will be rendered as html
-          children: []
-        },
-        {
-          mode: 'span', // span means this header will span all columns
-          label: 'C', // this is the label that'll be used for the header
-          html: false, // if this is true, label will be rendered as html
-          children: []
-        }
-      ]
+      words: []
     }
   },
 
-  mounted () {
-    // const a = this.words.forEach((element) => {
-    //   console.log('test')
-    //   console.log(element)
-    // })
-    // console.log(a)
+  created () {
   },
 
-  created () {
-    fetch('https://webshaped.de/wp-json/berlinerisch/v1/post')
-      .then(r => r.json())
-      .then((response) => {
-        const words = response.map(x => x.acf)
-        words.forEach((element) => {
-          const checkWord = element.berlinerisch
-          if (checkWord.startsWith('A') || checkWord.startsWith('a')) {
-            this.words[0].children.push(element)
-          }
-          if (checkWord.startsWith('B') || checkWord.startsWith('b')) {
-            this.words[1].children.push(element)
-          }
-          if (checkWord.startsWith('C') || checkWord.startsWith('c')) {
-            this.words[2].children.push(element)
-          }
-        })
+  mounted () {
+    this.createGroups()
+    this.fetchWords('https://webshaped.de/wp-json/berlinerisch/v1/post')
+  },
+
+  methods: {
+    createGroups () {
+      const letter = ['A', 'B', 'C', 'D', 'E']
+      letter.forEach((element) => {
+        const groups = {
+          mode: 'span',
+          label: element,
+          html: false,
+          children: []
+        }
+
+        this.words.push(groups)
       })
+    },
+
+    fetchWords (url) {
+      fetch(url)
+        .then(r => r.json())
+        .then((response) => {
+          const words = response.map(x => x.acf)
+          words.forEach((element) => {
+            const checkWord = element.berlinerisch
+            if (checkWord.startsWith('A') || checkWord.startsWith('a')) {
+              this.words[0].children.push(element)
+            }
+            if (checkWord.startsWith('B') || checkWord.startsWith('b')) {
+              this.words[1].children.push(element)
+            }
+            if (checkWord.startsWith('C') || checkWord.startsWith('c')) {
+              this.words[2].children.push(element)
+            }
+            if (checkWord.startsWith('D') || checkWord.startsWith('d')) {
+              this.words[3].children.push(element)
+            }
+            if (checkWord.startsWith('E') || checkWord.startsWith('e')) {
+              this.words[4].children.push(element)
+            }
+          })
+        })
+    }
   }
+
 }
 </script>
