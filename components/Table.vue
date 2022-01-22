@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div>
+      <a v-for="(item, index) in groupNames" :key="index" :href="'#' + item">{{ item }}</a>
+    </div>
     <vue-good-table
       :columns="columns"
       :rows="words"
@@ -14,19 +17,15 @@
         initialSortBy: {field: 'berlinerisch', type: 'asc'}
       }"
       :group-options="{
-        enabled: true
-      }"
-      :pagination-options="{
         enabled: true,
-        perPage: 15,
-        nextLabel: 'nächste',
-        prevLabel: 'vorher',
-        rowsPerPageLabel: 'Zeilen pro Seite',
-        ofLabel: 'von',
-        pageLabel: 'page', // for 'pages' mode
-        allLabel: 'Alle',
       }"
-    />
+    >
+      <template slot="table-header-row" slot-scope="props">
+        <span :id="props.row.label" class="my-fancy-class">
+          {{ props.row.label }}
+        </span>
+      </template>
+    </vue-good-table>
   </div>
 </template>
 
@@ -51,7 +50,9 @@ export default {
           html: true
         }
       ],
-      words: []
+      words: [],
+      groupNames: ['A', 'B', 'C', 'D', 'E', 'F'],
+      wordCount: 0
     }
   },
 
@@ -65,7 +66,7 @@ export default {
 
   methods: {
     createGroups () {
-      const letter = ['A', 'B', 'C', 'D', 'E']
+      const letter = this.groupNames
       letter.forEach((element) => {
         const groups = {
           mode: 'span',
@@ -83,7 +84,8 @@ export default {
         .then(r => r.json())
         .then((response) => {
           const words = response.map(x => x.acf)
-          words.forEach((element) => {
+          words.forEach((element, index) => {
+            this.wordCount = index
             const checkWord = element.berlinerisch
             if (checkWord.startsWith('A') || checkWord.startsWith('a')) {
               this.words[0].children.push(element)
@@ -99,6 +101,9 @@ export default {
             }
             if (checkWord.startsWith('E') || checkWord.startsWith('e')) {
               this.words[4].children.push(element)
+            }
+            if (checkWord.startsWith('F') || checkWord.startsWith('f')) {
+              this.words[5].children.push(element)
             }
           })
         })
