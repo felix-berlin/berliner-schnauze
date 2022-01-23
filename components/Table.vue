@@ -1,8 +1,7 @@
 <template>
-  <div>
-    <div>
-      <a v-for="(item, index) in groupNames" :key="index" :href="'#' + item">{{ item }}</a>
-    </div>
+  <div class="c-table">
+    <p v-text="wordCount" />
+
     <vue-good-table
       :columns="columns"
       :rows="words"
@@ -18,6 +17,7 @@
       }"
       :group-options="{
         enabled: true,
+        collapsable: false
       }"
     >
       <template slot="table-header-row" slot-scope="props">
@@ -38,11 +38,13 @@ export default {
       columns: [
         {
           label: 'Berlinerisch',
-          field: 'berlinerisch'
+          field: 'berlinerisch',
+          thClass: 'c-table__th'
         },
         {
           label: 'Übersetzung',
-          field: 'translation'
+          field: 'translation',
+          html: true
         },
         {
           label: 'Beispiel',
@@ -51,7 +53,7 @@ export default {
         }
       ],
       words: [],
-      groupNames: ['A', 'B', 'C', 'D', 'E', 'F'],
+      groupNames: this.$store.state.groupNames,
       wordCount: 0
     }
   },
@@ -84,27 +86,15 @@ export default {
         .then(r => r.json())
         .then((response) => {
           const words = response.map(x => x.acf)
-          words.forEach((element, index) => {
+          words.forEach((word, index) => {
             this.wordCount = index
-            const checkWord = element.berlinerisch
-            if (checkWord.startsWith('A') || checkWord.startsWith('a')) {
-              this.words[0].children.push(element)
-            }
-            if (checkWord.startsWith('B') || checkWord.startsWith('b')) {
-              this.words[1].children.push(element)
-            }
-            if (checkWord.startsWith('C') || checkWord.startsWith('c')) {
-              this.words[2].children.push(element)
-            }
-            if (checkWord.startsWith('D') || checkWord.startsWith('d')) {
-              this.words[3].children.push(element)
-            }
-            if (checkWord.startsWith('E') || checkWord.startsWith('e')) {
-              this.words[4].children.push(element)
-            }
-            if (checkWord.startsWith('F') || checkWord.startsWith('f')) {
-              this.words[5].children.push(element)
-            }
+            const checkWord = word.berlinerisch.toLowerCase()
+            const groupNamesLower = this.groupNames
+            groupNamesLower.forEach((groupItem, index) => {
+              if (checkWord.startsWith(groupItem.toLowerCase())) {
+                this.words[index].children.push(word)
+              }
+            })
           })
         })
     }
