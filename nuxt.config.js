@@ -1,5 +1,5 @@
 export default {
-  ssr: false,
+  target: 'static',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -14,7 +14,8 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'preload', type: 'font/woff2', href: '~/assets/fonts/BerlinerRegular.woff2', crossorigin: 'true' }
     ]
   },
 
@@ -25,7 +26,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@plugins/vue-good-tables'
+    '@plugins/vue-good-tables',
+    '@plugins/vue2-smooth-scroll',
+    '@plugins/vue-waypoint'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

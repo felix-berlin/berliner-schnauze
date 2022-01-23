@@ -1,5 +1,6 @@
 <template>
   <header class="c-header">
+    <h1>Berliner Schnauze</h1>
     <ColorMode />
     <ScrollToTop>Nach oben</ScrollToTop>
   </header>

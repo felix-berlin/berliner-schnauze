@@ -1,9 +1,11 @@
 
 <template>
   <nav class="c-letter-nav">
-    <li v-for="(item, index) in navItems" :key="index" class="c-letter-nav__item">
-      <a :href="'#' + item" class="c-letter-nav__link">{{ item }}</a>
-    </li>
+    <ul class="c-letter-nav__list">
+      <li v-for="(item, index) in navItems" :key="index" class="c-letter-nav__list-item">
+        <a v-smooth-scroll :href="'#' + item" class="c-letter-nav__link" :title="'Buchstabe: ' + item">{{ item }}</a>
+      </li>
+    </ul>
   </nav>
 </template>
 

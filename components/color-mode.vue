@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Color mode: {{ $colorMode.value }}</h1>
+  <div class="c-color-mode">
+    <p>Color mode: {{ $colorMode.value }}</p>
     <select v-model="$colorMode.preference">
       <option value="system">
         System

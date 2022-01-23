@@ -1,0 +1,39 @@
+@use '../../variables/variables.scss' as vars;
+
+
+table {
+  &.vgt-table {
+
+    html[class='dark-mode'] & {
+      background-color: vars.$dark-600;
+    }
+
+    td {
+
+      html[class='dark-mode'] & {
+        color: vars.$light;
+        border-color: vars.$dark-300;
+      }
+    }
+
+    th {
+      &.vgt-row-header {
+        transition: background .33s ease-in-out;
+
+        &.is-active {
+          // background-color: linear-gradient();
+        }
+
+        html[class='dark-mode'] & {
+          background-color: vars.$dark-700;
+          border-color: vars.$dark-300;
+
+          &.is-active {
+            background: linear-gradient(35deg, vars.$dark-700 0%, vars.$dark-600 75%, vars.$highlight 100%);
+          }
+        }
+      }
+    }
+  }
+
+}

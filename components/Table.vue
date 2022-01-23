@@ -5,7 +5,6 @@
     <vue-good-table
       :columns="columns"
       :rows="words"
-      :fixed-header="true"
       :search-options="{
         enabled: true,
         placeholder: 'Suche nach einem Begriff oder Redewendung',
@@ -21,7 +20,7 @@
       }"
     >
       <template slot="table-header-row" slot-scope="props">
-        <span :id="props.row.label" class="my-fancy-class">
+        <span :id="props.row.label" v-waypoint="{ active: true, callback: onWaypoint, intersectionOptions }" class="my-fancy-class">
           {{ props.row.label }}
         </span>
       </template>
@@ -54,7 +53,13 @@ export default {
       ],
       words: [],
       groupNames: this.$store.state.groupNames,
-      wordCount: 0
+      wordCount: 0,
+      currentDictionaryPosition: '',
+      intersectionOptions: {
+        root: null,
+        rootMargin: '0px 0px 0px 0px',
+        threshold: 0.5 // [0.25, 0.75] if you want a 25% offset!
+      }
     }
   },
 
@@ -97,6 +102,37 @@ export default {
             })
           })
         })
+    },
+
+    onWaypoint ({ going, direction, el }) {
+      const currentElementId = el.getAttribute('id')
+      const currentElementRow = el.closest('.vgt-row-header')
+
+      if (going === this.$waypointMap.GOING_IN) {
+        console.log('waypoint going in! ' + currentElementId)
+
+        // Save the current Element
+        this.currentDictionaryPosition = currentElementId
+
+        // Append a focus class to the active row
+        currentElementRow.classList.add('is-active')
+
+        // Remove the class after 2s
+        setTimeout(() => {
+          currentElementRow.classList.remove('is-active')
+        }, 2000)
+
+        // TODO: add the currentElement to the Store
+        this.$store.commit('increment', { letter: currentElementId })
+      }
+
+      // if (going === this.$waypointMap.GOING_OUT) {
+      //   el.classList.remove('is-active')
+      // }
+
+      // if (direction === this.$waypointMap.DIRECTION_TOP) {
+      //   console.log('waypoint going top! ' + currentElementId)
+      // }
     }
   }
 
