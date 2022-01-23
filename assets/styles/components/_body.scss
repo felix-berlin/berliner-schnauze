@@ -1,0 +1,10 @@
+
+.c-body {
+  display: grid;
+  grid-template-areas:
+    'header header header'
+    ' . content . '
+    'sidebar sidebar sidebar'
+    'footer footer footer';
+  grid-template-columns: 100px 1fr 100px;
+}

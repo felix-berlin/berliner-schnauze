@@ -1,0 +1,39 @@
+@use '../variables/variables' as vars;
+
+.c-letter-nav {
+  --color-background: #{vars.$light};
+  background: var(--color-background);
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    display: flex;
+    justify-content: space-evenly;
+
+    &-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  &__link {
+    --color: #{vars.$dark-600};
+
+    color: var(--color);
+    text-decoration: none;
+    font-family: vars.$berliner;
+    padding: 1rem 0;
+    font-size: 1.8rem;
+  }
+
+  html[class='dark-mode'] & {
+    --color-background: #{vars.$dark-600};
+
+    .c-letter-nav__link {
+      --color: #{vars.$light};
+    }
+	}
+}

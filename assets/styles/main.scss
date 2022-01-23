@@ -1,1 +1,39 @@
-@use './components/scroll-to-top.scss'
+@use './components/components';
+@use './variables/variables' as vars;
+@use './node_modules/@felix_berlin/sassy-scss/mixins' as sassy-mx;
+
+@use './typo';
+
+@use './plugins/vue-good-tables/vue-good-tables';
+
+html {
+	// Normalize boxsizing
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+body {
+	--body-bgc: #{vars.$light};
+	--body-color: #{vars.$dark-600};
+
+	background-color: var(--body-bgc);
+	color: var(--body-color);
+  margin: 0;
+
+	@include sassy-mx.feature('motion') {
+		transition: background-color 1s ease-in-out;
+	}
+
+	html[class='dark-mode'] & {
+		--body-bgc: #{vars.$dark-600};
+		--body-color: #{vars.$light};
+	}
+}
+
+
+
