@@ -1,7 +1,6 @@
-@use '../../variables/variables.scss' as vars;
-
-@use 'overrides';
-@use '../../../../node_modules/vue-good-table/src/styles/style' with(
+@use "../../variables/variables.scss" as vars;
+@use "overrides";
+@use "../../../../node_modules/vue-good-table/src/styles/style" with(
   $table-bg: vars.$light,
-  $text-color: vars.$dark-600,
+	$text-color: vars.$dark-600,
 );

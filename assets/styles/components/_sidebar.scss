@@ -1,10 +1,10 @@
-@use '../variables/variables.scss' as vars;
+@use "../variables/variables.scss" as vars;
 
 .c-sidebar {
-  grid-area: sidebar;
-  border-top: 1px solid vars.$highlight;
   position: fixed;
   bottom: 0;
-  width: 100%;
   z-index: 999;
+  grid-area: sidebar;
+  width: 100%;
+  border-top: 1px solid vars.$highlight;
 }

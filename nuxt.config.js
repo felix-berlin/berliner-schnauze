@@ -14,8 +14,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'preload', type: 'font/woff2', href: '~/assets/fonts/BerlinerRegular.woff2', crossorigin: 'true' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
 
@@ -28,7 +27,8 @@ export default {
   plugins: [
     '@plugins/vue-good-tables',
     '@plugins/vue2-smooth-scroll',
-    '@plugins/vue-waypoint'
+    '@plugins/vue-waypoint',
+    '@plugins/floating-vue'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -40,7 +40,9 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
-    '@nuxtjs/svg'
+    '@nuxtjs/svg',
+    '@nuxtjs/color-mode',
+    'lucide-vue/nuxt'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -48,7 +50,6 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxt/image',
-    '@nuxtjs/color-mode',
     '@nuxtjs/sitemap'
   ],
 
@@ -60,10 +61,16 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    // Options
   },
 
   image: {
     // Options
+  },
+
+  stylelint: {
+    fix: true,
+    files: ['assets/**/*.{s?(a|c)ss,less,stylus}']
   },
 
   loading: {

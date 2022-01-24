@@ -1,11 +1,11 @@
 @use './variables/fonts';
 
 @font-face {
-  font-family: 'Berliner';
-  font-style: normal;
   font-weight: normal;
+  font-style: normal;
+  font-family: Berliner;
+  src: url("~/assets/fonts/BerlinerRegular.woff2") format("woff2");
   font-display: swap;
-  src: url('~/assets/fonts/BerlinerRegular.woff2') format('woff2');
 }
 
 @for $h from 1 to 6 {

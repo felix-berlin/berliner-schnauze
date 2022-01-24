@@ -16,6 +16,8 @@
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/sitemap": "^2.4.0",
     "core-js": "^3.20.3",
+    "floating-vue": "^1.0.0-beta.5",
+    "lucide-vue": "^0.16.28",
     "nuxt": "^2.15.8",
     "vue": "^2.6.14",
     "vue-good-table": "^2.21.11",
@@ -28,6 +30,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.5",
     "@felix_berlin/sassy-scss": "^1.4.1",
+    "@felix_berlin/stylelint-config-felix-berlin": "^1.0.0",
     "@nuxt/image": "^0.6.0",
     "@nuxtjs/color-mode": "^2.1.1",
     "@nuxtjs/eslint-config": "^8.0.0",
@@ -40,8 +43,9 @@
     "postcss-html": "^1.3.0",
     "sass": "^1.49.0",
     "sass-loader": "^10.2.1",
-    "stylelint": "^14.2.0",
+    "stylelint": "^14.3.0",
     "stylelint-config-recommended-vue": "^1.1.0",
-    "stylelint-config-standard": "^24.0.0"
+    "stylelint-config-standard": "^24.0.0",
+		"stylelint-config-standard-scss": "^3.0.0"
   }
 }
