@@ -25,10 +25,13 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@plugins/vue-good-tables',
+    // '@plugins/vue-good-tables',
     '@plugins/vue2-smooth-scroll',
     '@plugins/vue-waypoint',
-    '@plugins/floating-vue'
+    '@plugins/floating-vue',
+    '@plugins/fuse'
+    // '@plugins/vue-fuse'
+    // '@plugins/vue-meilisearch'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -50,7 +53,8 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxt/image',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    '@nuxt/content'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

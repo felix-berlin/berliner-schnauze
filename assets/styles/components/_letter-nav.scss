@@ -5,6 +5,10 @@
 
   background: var(--color-background);
 
+  html[class="dark-mode"] & {
+    --color-background: #{vars.$dark-600};
+  }
+
   &__list {
     display: flex;
     justify-content: space-evenly;
@@ -17,6 +21,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
+      &.is-current {
+
+        .c-letter-nav__link {
+          --color: #{vars.$highlight};
+        }
+
+      }
     }
   }
 
@@ -28,12 +40,8 @@
     font-size: 1.8rem;
     font-family: vars.$berliner;
     text-decoration: none;
-  }
 
-  html[class="dark-mode"] & {
-    --color-background: #{vars.$dark-600};
-
-    .c-letter-nav__link {
+    html[class="dark-mode"] & {
       --color: #{vars.$light};
     }
   }

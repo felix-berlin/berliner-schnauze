@@ -1,3 +1,13 @@
 .c-header {
   grid-area: header;
+  display: grid;
+  grid-template-areas:
+    ' . logo menu-nav . '
+  ;
+  grid-template-columns: 100px 1fr 1fr 100px;
+  align-items: center;
+
+  .c-logo {
+    grid-area: logo;
+  }
 }

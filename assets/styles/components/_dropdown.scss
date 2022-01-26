@@ -1,0 +1,9 @@
+.c-dropdown {
+  position: relative;
+
+  &__menu {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

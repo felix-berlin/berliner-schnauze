@@ -1,5 +1,7 @@
 <template>
-  <footer class="c-footer">
+  <footer class="c-footer" style="height: 300px;">
+    <p>Mensch ditt war nen weiter Weg</p>
+
     <NuxtLink to="/imprint">
       Impressum
     </NuxtLink>
