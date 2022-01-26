@@ -1,4 +1,11 @@
+import { resolve } from 'path'
+
 export default {
+  alias: {
+    styles: resolve(__dirname, './assets/styles'),
+    'sassy-scss': resolve(__dirname, './node_modules/@felix_berlin/sassy-scss/')
+  },
+
   target: 'static',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -20,18 +27,15 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '~/assets/styles/main.scss'
+    '~/assets/styles/app.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    // '@plugins/vue-good-tables',
     '@plugins/vue2-smooth-scroll',
     '@plugins/vue-waypoint',
     '@plugins/floating-vue',
     '@plugins/fuse'
-    // '@plugins/vue-fuse'
-    // '@plugins/vue-meilisearch'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -39,9 +43,7 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
-    // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
     '@nuxtjs/svg',
     '@nuxtjs/color-mode',
@@ -53,8 +55,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxt/image',
-    '@nuxtjs/sitemap',
-    '@nuxt/content'
+    '@nuxtjs/sitemap'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

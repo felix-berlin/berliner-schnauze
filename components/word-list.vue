@@ -2,23 +2,32 @@
   <div class="c-word-list">
     <p v-text="berlinerWordCount" />
 
-    <input v-model="fuse.search" type="text" class="c-search" placeholder="Durchsuche den Berliner-Wortschatz">
+    <div class="c-word-list__search">
+      <Search default-class="c-word-list__search-icon" />
+
+      <input v-model="fuse.search" type="text" class="c-word-list__search-input" placeholder="Durchsuche den Berliner-Wortschatz">
+    </div>
     <a href="javascript:" @click="doSort('berlinerisch')">Berlinerisch<span v-if="sort.field=='berlinerisch'">({{ sort.desc?'desc':'asc' }})</span></a>
-    <section v-for="(item, index) in searchDataResults" :id="item.ID" :key="item.ID" :data-index="index">
-      <p>
+    <section v-for="(item, index) in searchDataResults" :id="item.ID" :key="item.ID" :data-index="index" class="c-word-list__word">
+      <p class="c-word-list__berlinerisch">
         {{ item.berlinerisch }}
       </p>
-      <p v-html="item.translation" />
-      <i v-html="item.example" />
+      <p class="c-word-list__translation" v-html="item.translation" />
+      <i class="c-word-list__example" v-html="item.example" />
     </section>
   </div>
 </template>
 
 <script>
+import { Search } from 'lucide-vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'WordList',
+
+  components: {
+    Search
+  },
 
   data () {
     return {

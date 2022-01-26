@@ -1,12 +1,12 @@
 @use "../variables/variables" as vars;
 
 .c-letter-nav {
-  --color-background: #{vars.$light};
+  --color-background: #{vars.$white};
 
   background: var(--color-background);
 
   html[class="dark-mode"] & {
-    --color-background: #{vars.$dark-600};
+    --color-background: #{vars.$grey-600};
   }
 
   &__list {
@@ -33,7 +33,7 @@
   }
 
   &__link {
-    --color: #{vars.$dark-600};
+    --color: #{vars.$grey-600};
 
     padding: 1rem 0;
     color: var(--color);
@@ -42,7 +42,7 @@
     text-decoration: none;
 
     html[class="dark-mode"] & {
-      --color: #{vars.$light};
+      --color: #{vars.$white};
     }
   }
 }
