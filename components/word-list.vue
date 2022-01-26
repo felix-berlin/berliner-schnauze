@@ -1,19 +1,28 @@
 <template>
   <div class="c-word-list">
-    <p v-text="berlinerWordCount" />
+    <!-- Wordcount -->
+    <div class="c-word-list__word-count">
+      <span>Anzahl Wörter:</span>
+      <span v-text="berlinerWordCount" />
+    </div>
 
+    <!-- Search -->
     <div class="c-word-list__search">
       <Search default-class="c-word-list__search-icon" />
 
       <input v-model="fuse.search" type="text" class="c-word-list__search-input" placeholder="Durchsuche den Berliner-Wortschatz">
     </div>
+
+    <!-- Filter -->
     <a href="javascript:" @click="doSort('berlinerisch')">Berlinerisch<span v-if="sort.field=='berlinerisch'">({{ sort.desc?'desc':'asc' }})</span></a>
-    <section v-for="(item, index) in searchDataResults" :id="item.ID" :key="item.ID" :data-index="index" class="c-word-list__word">
-      <p class="c-word-list__berlinerisch">
-        {{ item.berlinerisch }}
-      </p>
-      <p class="c-word-list__translation" v-html="item.translation" />
-      <i class="c-word-list__example" v-html="item.example" />
+
+    <!-- List -->
+    <section class="c-word-list__list">
+      <article v-for="(item, index) in searchDataResults" :id="item.ID" :key="item.ID" :data-index="index" class="c-word-list__word">
+        <p class="c-word-list__berlinerisch" v-text="item.berlinerisch" />
+        <p class="c-word-list__translation" v-html="item.translation" />
+        <i class="c-word-list__example" v-html="item.example" />
+      </article>
     </section>
   </div>
 </template>

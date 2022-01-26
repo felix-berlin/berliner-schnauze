@@ -1,0 +1,14 @@
+@use '../variables/variables' as vars;
+
+.c-word-list {
+
+  &__list {
+    display: grid;
+    gap: vars.$spacer * 1.25;
+  }
+
+  &__word {
+    padding: vars.$spacer;
+    border: 1px solid vars.$grey-700;
+  }
+}
