@@ -2,6 +2,7 @@ export const state = () => ({
   words: [],
   wordGroups: [],
   wordCount: '',
+  searchWord: '',
   loadingWords: false,
   groupNames: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
   currentDictionaryPosition: ''
@@ -12,7 +13,8 @@ export const getters = {
   berlinerWordsGrouped: state => state.wordGroups,
   berlinerWordCount: state => state.wordCount,
   getWordLoadingStatus: state => state.loadingWords,
-  dictionaryPosition: state => state.currentDictionaryPosition
+  dictionaryPosition: state => state.currentDictionaryPosition,
+  getWordSearch: state => state.searchWord
 }
 
 export const actions = {
@@ -22,7 +24,6 @@ export const actions = {
     return await fetch('https://webshaped.de/wp-json/berlinerisch/v1/post')
       .then(res => res.json())
       .then((res) => {
-        console.log('loading')
         commit('setBerlinWords', res)
         commit('wordLoadingStatus', false)
       }).catch(error => console.log(error))
@@ -93,5 +94,6 @@ export const mutations = {
     state.words = words
   },
   setDictionaryPosition: (state, position) => (state.currentDictionaryPosition = position),
-  wordLoadingStatus: (state, status) => (state.loadingWords = status)
+  wordLoadingStatus: (state, status) => (state.loadingWords = status),
+  updateSearch: (state, search) => (state.searchWord = search)
 }

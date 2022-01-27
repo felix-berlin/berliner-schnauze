@@ -11,11 +11,7 @@
     </button>
 
     <!-- Search -->
-    <div class="c-word-list__search">
-      <Search default-class="c-word-list__search-icon" />
-
-      <input ref="search" v-model="fuse.search" type="text" class="c-word-list__search-input" placeholder="Durchsuche den Berliner-Wortschatz">
-    </div>
+    <SearchWords :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
 
     <!-- Filter -->
     <a href="javascript:" @click="doSort('berlinerisch')">Berlinerisch<span v-if="sort.field=='berlinerisch'">({{ sort.desc?'desc':'asc' }})</span></a>
@@ -89,7 +85,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['berlinerWords', 'berlinerWordsGrouped', 'berlinerWordCount', 'getWordLoadingStatus']),
+    ...mapGetters(['berlinerWords', 'berlinerWordsGrouped', 'berlinerWordCount', 'getWordLoadingStatus', 'getWordSearch']),
 
     sortedData () {
       // if (!this.sort.field) {
@@ -112,7 +108,7 @@ export default {
       const fuse = new this.$fuse(this.berlinerWords, this.fuse.options, index)
 
       // Get the search running
-      const results = fuse.search(this.fuse.search)
+      const results = fuse.search(this.getWordSearch)
 
       const cleanResults = []
       for (const items of results) {
@@ -137,7 +133,6 @@ export default {
   },
 
   mounted () {
-    this.focusSearch()
     // this.sortWords()
 
     // this.createGroups()
@@ -146,10 +141,6 @@ export default {
 
   methods: {
     ...mapActions(['fetchBerlinWords', 'updateDictionaryPosition']),
-
-    focusSearch () {
-      this.$refs.search.focus()
-    },
 
     copyNameToClipboard (id) {
       const getWord = document.querySelector('#word' + id + ' .c-word-list__berlinerisch').innerText

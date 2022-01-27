@@ -5,6 +5,7 @@
     </h1>
 
     <nav class="c-menu-nav">
+      <SearchWords placeholder="Durchsuche den Berliner-Wortschatz" />
       <Dropdown>
         <template #title>
           <span v-show="$colorMode.preference === 'dark'" style="pointer-events: none;">

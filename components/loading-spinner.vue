@@ -1,9 +1,7 @@
 <template>
-  <transition name="fade">
-    <div v-show="show" class="c-loader">
-      <i class="c-loader__spinner c-loader__spinner--5" />
-    </div>
-  </transition>
+  <div v-if="show" class="c-loader">
+    <i class="c-loader__spinner c-loader__spinner--5" />
+  </div>
 </template>
 
 <script>
