@@ -55,7 +55,9 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxt/image',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    '@nuxtjs/toast',
+    'nuxt-protected-mailto'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -66,7 +68,11 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    // Options
+    html: {
+      minify: {
+        decodeEntities: false
+      }
+    }
   },
 
   image: {
@@ -83,5 +89,11 @@ export default {
     height: '10px',
     continuous: true,
     duration: 3000
+  },
+
+  toast: {
+    position: 'top-right',
+    containerClass: 'c-toast',
+    className: 'c-toast__item'
   }
 }

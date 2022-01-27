@@ -63,19 +63,17 @@ export default {
     Laptop2,
     Dropdown,
     Menu
+
   },
 
   data () {
     return {
       mode: this.$colorMode.preferencer
-      // search: document.querySelector('.vgt-global-search')
     }
   },
 
   methodes: {
-    // focusSearch () {
-    //   this.search.focus()
-    // }
+
   }
 }
 </script>

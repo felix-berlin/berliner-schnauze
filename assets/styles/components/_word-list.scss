@@ -5,10 +5,54 @@
   &__list {
     display: grid;
     gap: vars.$spacer * 1.25;
+    position: relative;
+    min-height: 30vh;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
   }
 
   &__word {
     padding: vars.$spacer;
     border: 1px solid vars.$grey-700;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+
+    &:hover {
+
+      .c-word-list__berlinerisch {
+        text-decoration-color: beige;
+      }
+    }
+  }
+
+  &__berlinerisch {
+    font-family: vars.$berlin;
+    font-weight: 700;
+    font-size: 4rem;
+    transition: .3s;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-style: dashed;
+    text-decoration-thickness: from-font;
+    text-underline-position: from-font;
+  }
+
+  &__translation {
+    align-self: flex-start;
+    flex: 1 1;
+  }
+
+  &__example {
+    font-style: italic;
+    flex-basis: 100%;
+  }
+
+  &__copy-buttons {
+    position: absolute;
+    bottom: vars.$spacer;
+    right: vars.$spacer;
   }
 }
+

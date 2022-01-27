@@ -6,11 +6,15 @@
       <span v-text="berlinerWordCount" />
     </div>
 
+    <button type="button" @click="focusSearch()">
+      <Search />
+    </button>
+
     <!-- Search -->
     <div class="c-word-list__search">
       <Search default-class="c-word-list__search-icon" />
 
-      <input v-model="fuse.search" type="text" class="c-word-list__search-input" placeholder="Durchsuche den Berliner-Wortschatz">
+      <input ref="search" v-model="fuse.search" type="text" class="c-word-list__search-input" placeholder="Durchsuche den Berliner-Wortschatz">
     </div>
 
     <!-- Filter -->
@@ -18,24 +22,43 @@
 
     <!-- List -->
     <section class="c-word-list__list">
-      <article v-for="(item, index) in searchDataResults" :id="item.ID" :key="item.ID" :data-index="index" class="c-word-list__word">
+      <LoadingSpinner :show="getWordLoadingStatus" />
+
+      <article
+        v-for="(item, index) in searchDataResults"
+        :id="'word' + item.ID"
+        :ref="'word' + item.ID"
+        :key="item.ID"
+        :data-index="index"
+        class="c-word-list__word"
+      >
+        <div class="c-word-list__copy-buttons">
+          <button class="c-word-list__copy-word" @click="copyWordUrlToClipboard(item.ID)">
+            <Hash /> <span v-text="'word' + item.ID" />
+          </button>
+          <button class="c-word-list__copy-url" @click="copyNameToClipboard(item.ID)">
+            <Copy />
+          </button>
+        </div>
         <p class="c-word-list__berlinerisch" v-text="item.berlinerisch" />
-        <p class="c-word-list__translation" v-html="item.translation" />
-        <i class="c-word-list__example" v-html="item.example" />
+        <span class="c-word-list__translation" v-html="item.translation" />
+        <p class="c-word-list__example" v-html="item.example" />
       </article>
     </section>
   </div>
 </template>
 
 <script>
-import { Search } from 'lucide-vue'
+import { Search, Copy, Hash } from 'lucide-vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'WordList',
 
   components: {
-    Search
+    Search,
+    Copy,
+    Hash
   },
 
   data () {
@@ -66,7 +89,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['berlinerWords', 'berlinerWordsGrouped', 'berlinerWordCount']),
+    ...mapGetters(['berlinerWords', 'berlinerWordsGrouped', 'berlinerWordCount', 'getWordLoadingStatus']),
 
     sortedData () {
       // if (!this.sort.field) {
@@ -91,19 +114,20 @@ export default {
       // Get the search running
       const results = fuse.search(this.fuse.search)
 
+      const cleanResults = []
+      for (const items of results) {
+        const item = items.item
+        const refIndex = items.refIndex
+        const clean = Object.assign(item, { refIndex })
+        cleanResults.push(clean)
+      }
+
       // If there is no result display the full index
       if (!results.length) {
         return fuse.getIndex().docs
       }
 
-      // Sort the object like the prev
-      results.forEach((element) => {
-        // fuse builds a complete new object with a index and item key
-        // to get back to the previos object design we push back the item content
-        results.push(element.item)
-      })
-
-      return results
+      return cleanResults
     }
 
   },
@@ -113,6 +137,7 @@ export default {
   },
 
   mounted () {
+    this.focusSearch()
     // this.sortWords()
 
     // this.createGroups()
@@ -121,6 +146,31 @@ export default {
 
   methods: {
     ...mapActions(['fetchBerlinWords', 'updateDictionaryPosition']),
+
+    focusSearch () {
+      this.$refs.search.focus()
+    },
+
+    copyNameToClipboard (id) {
+      const getWord = document.querySelector('#word' + id + ' .c-word-list__berlinerisch').innerText
+
+      this.copyToClipboard(getWord, 'Wort erfolgreich kopiert!', 'Upps... Konnte leider nicht kopier werden')
+    },
+
+    copyWordUrlToClipboard (id) {
+      const getWordUrl = window.location.protocol + '//' + window.location.hostname + '#word' + id
+
+      this.copyToClipboard(getWordUrl, 'Link zum Wort erfolgreich kopiert!', 'Upps... Konnte leider nicht kopier werden')
+    },
+
+    copyToClipboard (textToCopy, successMessage, errorMessage) {
+      try {
+        navigator.clipboard.writeText(textToCopy)
+        this.$toast.success(successMessage).goAway(1500)
+      } catch (err) {
+        this.$toast.error(errorMessage).goAway(1500)
+      }
+    },
 
     doSort (field) {
       if (field === this.sort.field) {
