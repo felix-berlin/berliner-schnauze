@@ -9,6 +9,19 @@
   grid-template-columns: 100px 1fr 1fr 100px;
   align-items: center;
   background-color: vars.$grey-700;
+  box-shadow:
+    0px 1.6px 2.2px -5px rgba(0, 0, 0, 0.028),
+    0px 3.8px 5.3px -5px rgba(0, 0, 0, 0.04),
+    0px 7.4px 10px -5px rgba(0, 0, 0, 0.05),
+    0px 13.7px 17.9px -5px rgba(0, 0, 0, 0.06),
+    0px 26.3px 33.4px -5px rgba(0, 0, 0, 0.072),
+    0px 55px 80px -5px rgba(0, 0, 0, 0.1)
+  ;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
 
   .c-logo {
     grid-area: logo;
