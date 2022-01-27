@@ -1,9 +1,10 @@
 <template>
   <div class="c-word-search">
-    <button type="button" @click="focusSearch()">
+    <button type="button" class="c-word-search__search-button" :class="{ 'c-word-search__search-button--right': (searchButtonPosition != 'left') }" @click="buttonActions()">
       <Search default-class="c-word-search__search-icon" />
     </button>
     <input
+      v-show="showSearchBar"
       ref="search"
       :value="search"
       type="text"
@@ -33,12 +34,24 @@ export default {
     focusOnPageLoad: {
       type: Boolean,
       default: false
+    },
+    buttonPosition: {
+      type: String,
+      default: 'left',
+      validator (value) {
+        return ['left', 'right'].includes(value)
+      }
+    },
+    showSearchbarAfterClick: {
+      type: Boolean,
+      default: false
     }
   },
 
   data () {
     return {
-
+      searchButtonPosition: this.buttonPosition,
+      showSearchBar: true
     }
   },
 
@@ -52,6 +65,10 @@ export default {
     if (this.focusOnPageLoad) {
       this.focusSearch()
     }
+
+    if (this.showSearchbarAfterClick) {
+      this.showSearchBar = false
+    }
   },
 
   methods: {
@@ -61,6 +78,18 @@ export default {
 
     focusSearch () {
       this.$refs.search.focus()
+    },
+
+    buttonActions () {
+      if (this.showSearchbarAfterClick) {
+        this.showSearchBar = true
+
+        // When searchbar is loaded focus it
+        this.$nextTick(function () {
+          this.focusSearch()
+        })
+      }
+      this.focusSearch()
     }
   }
 }

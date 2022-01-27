@@ -1,0 +1,10 @@
+.c-word-search {
+  display: flex;
+
+  &__search-button {
+
+    &--right {
+      order: 2;
+    }
+  }
+}
