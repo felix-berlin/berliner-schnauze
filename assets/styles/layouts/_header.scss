@@ -1,3 +1,5 @@
+@use '../variables/variables' as vars;
+
 .c-header {
   grid-area: header;
   display: grid;
@@ -6,6 +8,7 @@
   ;
   grid-template-columns: 100px 1fr 1fr 100px;
   align-items: center;
+  background-color: vars.$grey-700;
 
   .c-logo {
     grid-area: logo;
