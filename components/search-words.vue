@@ -1,17 +1,19 @@
 <template>
-  <div class="c-word-search">
+  <div class="c-word-search" @focus="resetTimeout" @blur="hideSearchbarAfterTime">
     <button type="button" class="c-word-search__search-button" :class="{ 'c-word-search__search-button--right': (searchButtonPosition != 'left') }" @click="buttonActions()">
       <Search default-class="c-word-search__search-icon" />
     </button>
-    <input
-      v-show="showSearchBar"
-      ref="search"
-      :value="search"
-      type="text"
-      class="c-word-search__search-input"
-      :placeholder="placeholder"
-      @input="updateSearch"
-    >
+    <transition name="fade">
+      <input
+        v-show="showSearchBar"
+        ref="search"
+        :value="search"
+        type="text"
+        class="c-word-search__search-input"
+        :placeholder="placeholder"
+        @input="updateSearch"
+      >
+    </transition>
   </div>
 </template>
 
@@ -51,7 +53,8 @@ export default {
   data () {
     return {
       searchButtonPosition: this.buttonPosition,
-      showSearchBar: true
+      showSearchBar: true,
+      timeoutId: null
     }
   },
 
@@ -61,13 +64,15 @@ export default {
     })
   },
 
+  created () {
+    if (this.showSearchbarAfterClick) {
+      this.showSearchBar = false
+    }
+  },
+
   mounted () {
     if (this.focusOnPageLoad) {
       this.focusSearch()
-    }
-
-    if (this.showSearchbarAfterClick) {
-      this.showSearchBar = false
     }
   },
 
@@ -80,6 +85,20 @@ export default {
       this.$refs.search.focus()
     },
 
+    hideSearchbarAfterTime (timeout) {
+      const time = setTimeout(() => {
+        this.showSearchBar = false
+      }, timeout)
+
+      this.timeoutId = time
+
+      return time
+    },
+
+    resetTimeout () {
+      clearTimeout(this.timeoutId)
+    },
+
     buttonActions () {
       if (this.showSearchbarAfterClick) {
         this.showSearchBar = true
@@ -88,6 +107,7 @@ export default {
         this.$nextTick(function () {
           this.focusSearch()
         })
+        this.hideSearchbarAfterTime(8000)
       }
       this.focusSearch()
     }
