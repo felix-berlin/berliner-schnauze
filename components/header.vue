@@ -1,11 +1,13 @@
 <template>
   <header class="c-header">
     <h1 class="c-logo">
-      Berliner Schnauze
+      <NuxtLink to="/">
+        Berliner Schnauze
+      </NuxtLink>
     </h1>
 
     <nav class="c-menu-nav">
-      <SearchWords placeholder="Durchsuche den Berliner-Wortschatz" />
+      <SearchWords v-if="$route.name === 'index'" placeholder="Durchsuche den Berliner-Wortschatz" />
       <Dropdown>
         <template #title>
           <span v-show="$colorMode.preference === 'dark'" style="pointer-events: none;">

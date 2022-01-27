@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <main class="c-content">
     <h1>Impressum</h1>
-  </div>
+  </main>
 </template>
 
 <script>
