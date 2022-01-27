@@ -1,7 +1,8 @@
 <template>
   <div class="c-word-search">
-    <Search default-class="c-word-search__search-icon" />
-
+    <button type="button" @click="focusSearch()">
+      <Search default-class="c-word-search__search-icon" />
+    </button>
     <input
       ref="search"
       :value="search"
@@ -35,16 +36,16 @@ export default {
     }
   },
 
-  computed: {
-    ...mapState({
-      search: state => state.searchWord
-    })
-  },
-
   data () {
     return {
 
     }
+  },
+
+  computed: {
+    ...mapState({
+      search: state => state.searchWord
+    })
   },
 
   mounted () {

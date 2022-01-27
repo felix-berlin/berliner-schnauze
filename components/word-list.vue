@@ -6,10 +6,6 @@
       <span v-text="berlinerWordCount" />
     </div>
 
-    <button type="button" @click="focusSearch()">
-      <Search />
-    </button>
-
     <!-- Search -->
     <SearchWords :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
 
@@ -45,14 +41,13 @@
 </template>
 
 <script>
-import { Search, Copy, Hash } from 'lucide-vue'
+import { Copy, Hash } from 'lucide-vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'WordList',
 
   components: {
-    Search,
     Copy,
     Hash
   },
