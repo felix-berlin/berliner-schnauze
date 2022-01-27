@@ -128,10 +128,7 @@ export default {
   },
 
   mounted () {
-    // this.sortWords()
 
-    // this.createGroups()
-    // this.fetchWords('https://webshaped.de/wp-json/berlinerisch/v1/post')
   },
 
   methods: {
