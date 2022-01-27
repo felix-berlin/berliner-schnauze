@@ -1,0 +1,69 @@
+// @see: https://codepen.io/jenning/pen/YzNmzaV
+
+.c-loader {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+
+  &__spinner {
+    --color: white;
+    --size-mid: 6vmin;
+    --size-dot: 1.5vmin;
+    --size-bar: 0.4vmin;
+    --size-square: 3vmin;
+
+    display: block;
+    position: relative;
+    width: 50%;
+    display: grid;
+    place-items: center;
+
+    &::before,
+    &::after {
+      content: '';
+      box-sizing: border-box;
+      position: absolute;
+    }
+
+    &--5 {
+
+      &::before,
+      &::after {
+        height: 3vmin;
+        width: var(--size-bar);
+        background-color: var(--color);
+        animation: loader-5 0.6s cubic-bezier(0, 0, 0.03, 0.9) infinite;
+      }
+
+      &::before {
+        left: calc(50% - 1vmin);
+        top: calc(50% - 3vmin);
+      }
+
+      &::after {
+        left: calc(50% + 1vmin);
+        top: calc(50% - 1vmin);
+        animation-delay: 0.2s;
+      }
+    }
+  }
+}
+
+@keyframes loader-5 {
+	0%, 88%, 100% {
+		opacity: 0;
+	}
+
+	0% {
+		transform: translateY(-6vmin);
+	}
+
+	33% {
+		opacity: 1;
+	}
+
+	33%, 88% {
+		transform: translateY(3vmin);
+	}
+}
