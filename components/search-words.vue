@@ -1,5 +1,5 @@
 <template>
-  <div class="c-word-search" @focus="resetTimeout" @blur="hideSearchbarAfterTime">
+  <div class="c-word-search">
     <button type="button" class="c-word-search__search-button" :class="{ 'c-word-search__search-button--right': (searchButtonPosition != 'left') }" @click="buttonActions()">
       <Search default-class="c-word-search__search-icon" />
     </button>
@@ -12,6 +12,8 @@
         class="c-word-search__search-input"
         :placeholder="placeholder"
         @input="updateSearch"
+        @focus="resetTimeout"
+        @blur="hideSearchbarAfterTime(5000)"
       >
     </transition>
   </div>
