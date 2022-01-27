@@ -89,7 +89,7 @@ export default {
 
     hideSearchbarAfterTime (timeout) {
       const time = setTimeout(() => {
-        this.showSearchBar = false
+        if (this.showSearchbarAfterClick) { this.showSearchBar = false }
       }, timeout)
 
       this.timeoutId = time
