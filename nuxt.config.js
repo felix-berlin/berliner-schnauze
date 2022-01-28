@@ -25,6 +25,12 @@ export default {
     ]
   },
 
+  // Sitemap
+  sitemap: {
+    hostname: 'https://berliner-schnauze.wtf',
+    gzip: true
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~/assets/styles/app.scss'
