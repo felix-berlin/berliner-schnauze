@@ -1,0 +1,20 @@
+$white: #f7fff7;
+$highlight: #f33817;
+
+// greys
+$grey-300: #45515f;
+$grey-400: #3c4753;
+$grey-500: #333d47;
+$grey-600: #2b333b;
+$grey-700: #23282f;
+$grey-800: #1a1e23;
+$grey-900: #111417;
+
+$greys: (
+  'grey-300': $grey-300,
+  'grey-400': $grey-400,
+  'grey-500': $grey-500,
+  'grey-600': $grey-600,
+  'grey-700': $grey-700,
+  'grey-800': $grey-800
+)

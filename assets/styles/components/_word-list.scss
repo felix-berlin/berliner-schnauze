@@ -1,0 +1,65 @@
+@use '../variables/variables' as vars;
+
+.c-word-list {
+
+  &__list {
+    display: grid;
+    gap: vars.$spacer * 1.75;
+    position: relative;
+    min-height: 30vh;
+  }
+
+  &__word {
+    padding: vars.$spacer;
+    border: 1px solid vars.$grey-700;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    box-shadow:
+      1.2px 1.2px 2.2px rgba(0, 0, 0, 0.02),
+      3.3px 3.3px 5.3px rgba(0, 0, 0, 0.028),
+      7.3px 7.3px 10px rgba(0, 0, 0, 0.035),
+      14.9px 14.9px 17.9px rgba(0, 0, 0, 0.042),
+      32.2px 32.2px 33.4px rgba(0, 0, 0, 0.05),
+      100px 100px 80px rgba(0, 0, 0, 0.07)
+    ;
+
+    &:hover {
+
+      .c-word-list__berlinerisch {
+        text-decoration-color: beige;
+      }
+    }
+
+
+  }
+
+  &__berlinerisch {
+    font-family: vars.$berlin;
+    font-weight: 700;
+    font-size: 4rem;
+    transition: .3s;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-style: dashed;
+    text-decoration-thickness: from-font;
+    text-underline-position: from-font;
+  }
+
+  &__translation {
+    align-self: flex-start;
+    flex: 1 1;
+  }
+
+  &__example {
+    font-style: italic;
+    flex-basis: 100%;
+  }
+
+  &__copy-buttons {
+    position: absolute;
+    bottom: vars.$spacer;
+    right: vars.$spacer;
+  }
+}
+

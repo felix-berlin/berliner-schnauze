@@ -1,0 +1,54 @@
+@use "../../variables/variables.scss" as vars;
+
+table {
+  &.vgt-table {
+    html[class="dark-mode"] & {
+      background-color: vars.$grey-600;
+    }
+
+    td {
+      html[class="dark-mode"] & {
+        border-color: vars.$grey-300;
+        color: vars.$white;
+      }
+    }
+
+    th {
+      &.vgt-row-header {
+        transition: background 0.33s ease-in-out;
+
+        &.is-active {
+          // background-color: linear-gradient();
+        }
+
+        html[class="dark-mode"] & {
+          border-color: vars.$grey-300;
+          background-color: vars.$grey-700;
+
+          &.is-active {
+            background: linear-gradient(35deg, vars.$grey-700 0%, vars.$grey-600 75%, vars.$highlight 100%);
+          }
+        }
+      }
+
+      @media screen and (prefers-reduced-motion: reduce) {
+        &.vgt-row-header {
+          transition: none;
+
+          &.is-active {
+            // background-color: linear-gradient();
+          }
+
+          html[class="dark-mode"] & {
+            border-color: vars.$grey-300;
+            background-color: vars.$grey-700;
+
+            &.is-active {
+              background: linear-gradient(35deg, vars.$grey-700 0%, vars.$grey-600 75%, vars.$highlight 100%);
+            }
+          }
+        }
+      }
+    }
+  }
+}

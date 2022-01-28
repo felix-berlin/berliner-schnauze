@@ -1,0 +1,16 @@
+.c-scroll-to-top {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 99;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}

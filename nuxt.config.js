@@ -1,7 +1,16 @@
+import { resolve } from 'path'
+
 export default {
+  alias: {
+    styles: resolve(__dirname, './assets/styles'),
+    'sassy-scss': resolve(__dirname, './node_modules/@felix_berlin/sassy-scss/')
+  },
+
+  target: 'static',
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'nuxt',
+    title: 'berliner-schnauze',
     htmlAttrs: {
       lang: 'de'
     },
@@ -18,11 +27,15 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '~/assets/styles/app.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@plugins/vue-good-tables'
+    '@plugins/vue2-smooth-scroll',
+    '@plugins/vue-waypoint',
+    '@plugins/floating-vue',
+    '@plugins/fuse'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -30,10 +43,11 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
-    // https://go.nuxtjs.dev/stylelint
-    '@nuxtjs/stylelint-module'
+    '@nuxtjs/stylelint-module',
+    '@nuxtjs/svg',
+    '@nuxtjs/color-mode',
+    'lucide-vue/nuxt'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -41,7 +55,9 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxt/image',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/sitemap',
+    '@nuxtjs/toast',
+    'nuxt-protected-mailto'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -52,9 +68,32 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    html: {
+      minify: {
+        decodeEntities: false
+      }
+    }
   },
 
   image: {
     // Options
+  },
+
+  stylelint: {
+    fix: true,
+    files: ['assets/**/*.{s?(a|c)ss,less,stylus}']
+  },
+
+  loading: {
+    color: 'DodgerBlue',
+    height: '10px',
+    continuous: true,
+    duration: 3000
+  },
+
+  toast: {
+    position: 'top-right',
+    containerClass: 'c-toast',
+    className: 'c-toast__item'
   }
 }

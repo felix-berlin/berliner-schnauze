@@ -1,0 +1,243 @@
+@use 'sass:color';
+@use '../variables/variables' as vars;
+@use 'sassy-scss/functions' as sassy-fn;
+@use 'assy-scss/mixins' as sassy-mx;
+
+$active: vars.$primary;
+$active-inner: #fff;
+$focus: 2px color.adjust(vars.$primary, $lightness: 30%);
+$border: color.adjust(vars.$primary, $lightness: 30%);
+$border-hover: vars.$primary;
+$background: #fff;
+$disabled: #f6f8ff;
+$disables-inner: color.adjust(vars.$primary, $lightness: 38%);
+$input-padding-x: vars.$spacer * 0.75;
+$input-padding-y: vars.$spacer * 0.35;
+$icon-color: vars.$black-100;
+$icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>";
+
+@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+	input,
+	textarea,
+	select {
+		--active: #{$active};
+		--active-inner: #{$active-inner};
+		--focus: #{$focus};
+		--border: #{$border};
+		--border-hover: #{$border-hover};
+		--background: #{$background};
+		--disabled: #{$disabled};
+		--disabled-inner: #{$disables-inner};
+
+		width: 100%;
+		margin-bottom: vars.$spacer * 0.5;
+		border: 1px solid var(--bc, var(--border));
+		background: var(--b, var(--background));
+		outline: none;
+		appearance: none;
+
+		@include sassy-mx.feature('motion') {
+			transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
+		}
+
+		&:focus-visible {
+			box-shadow: 0 0 0 var(--focus);
+		}
+	}
+
+	input[type='text'],
+	input[type='number'],
+	input[type='email'],
+	input[type='tel'],
+	input[type='search'],
+	select,
+	textarea {
+		padding: $input-padding-y $input-padding-x;
+	}
+
+	/* stylelint-disable function-url-quotes */
+	select {
+		padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+		cursor: pointer;
+		background: {
+			position: right 0.75rem center;
+			image: url(sassy-fn.escape-svg($icon-chevron-down));
+			repeat: no-repeat;
+			size: 16px 12px;
+		}
+	}
+
+	/* stylelint-enable function-url-quotes */
+
+	input[type='checkbox'],
+	input[type='radio'] {
+		position: relative;
+		display: inline-block;
+		vertical-align: top;
+		height: 21px;
+		margin: 0;
+		cursor: pointer;
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: block;
+
+			@include sassy-mx.feature('motion') {
+				transition:
+					transform var(--d-t, 0.3s) var(--d-t-e, ease),
+					opacity var(--d-o, 0.2s);
+			}
+		}
+
+		&:checked {
+			--b: var(--active);
+			--bc: var(--active);
+			--d-o: 0.3s;
+			--d-t: 0.6s;
+			--d-t-e: cubic-bezier(0.2, 0.85, 0.32, 1.2);
+		}
+
+		&:disabled {
+			--b: var(--disabled);
+
+			opacity: 0.9;
+			cursor: not-allowed;
+
+			&:checked {
+				--b: var(--disabled-inner);
+				--bc: var(--border);
+			}
+
+			& + label {
+				cursor: not-allowed;
+			}
+		}
+
+		&:hover,
+		&:focus-visible {
+			&:not(:checked) {
+				&:not(:disabled) {
+					--bc: var(--border-hover);
+				}
+			}
+		}
+
+		&:focus-visible {
+			box-shadow: 0 0 0 var(--focus);
+		}
+
+		&:not(.o-switch) {
+			width: 21px;
+
+			&::after {
+				opacity: var(--o, 0);
+			}
+
+			&:checked {
+				--o: 1;
+			}
+		}
+
+		& + label {
+			display: inline-block;
+			vertical-align: top;
+			margin-left: 4px;
+			font-size: 14px;
+			line-height: 21px;
+			cursor: pointer;
+		}
+	}
+
+	input[type='checkbox'] {
+		&:not(.o-switch) {
+			border-radius: 3px;
+
+			&::after {
+				top: 4px;
+				left: 7px;
+				width: 5px;
+				height: 9px;
+				transform: rotate(var(--r, 20deg));
+				border: {
+					top: 0;
+					right: 2px solid var(--active-inner);
+					bottom: 2px solid var(--active-inner);
+					left: 0;
+				}
+			}
+
+			&:checked {
+				--r: 43deg;
+			}
+		}
+
+		&.o-switch {
+			width: 38px;
+			border-radius: 11px;
+
+			&::after {
+				top: 2px;
+				left: 2px;
+				width: 15px;
+				height: 15px;
+				border-radius: 50%;
+				background: var(--ab, var(--border));
+				transform: translateX(var(--x, 0));
+			}
+
+			&:checked {
+				--ab: var(--active-inner);
+				--x: 17px;
+			}
+
+			&:disabled {
+				&:not(:checked) {
+					&::after {
+						opacity: 0.6;
+					}
+				}
+			}
+		}
+	}
+
+	input[type='radio'] {
+		border-radius: 50%;
+
+		&::after {
+			width: 19px;
+			height: 19px;
+			border-radius: 50%;
+			background: var(--active-inner);
+			opacity: 0;
+			transform: scale(var(--s, 0.7));
+		}
+
+		&:checked {
+			--s: 0.5;
+		}
+	}
+}
+
+.u-input-group {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	width: 100%;
+
+	// Use __input and __attached when you want
+	// that both elemnts stick togeather
+	&__input {
+		position: relative;
+		flex: 1 1 auto;
+		margin: 0;
+	}
+
+	&__attached {
+		display: flex;
+		align-items: center;
+	}
+}
