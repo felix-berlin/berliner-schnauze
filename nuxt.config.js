@@ -7,10 +7,10 @@ export default {
   },
 
   target: 'static',
-  
-  router: {
-    base: '/berliner-schnauze/'
-  },
+
+  // router: {
+  //   base: '/berliner-schnauze/'
+  // },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
