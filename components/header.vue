@@ -7,7 +7,7 @@
     </h1>
 
     <nav class="c-menu-nav">
-      <SearchWords v-if="$route.name === 'index'" button-position="right" :show-searchbar-after-click="true" placeholder="Durchsuche den Berliner-Wortschatz" />
+      <SearchWords v-if="$route.name === 'index'" button-position="right" :show-searchbar-after-click="true" placeholder="Durchsuche den Berliner-Wortschatz" :keyboard-focus="true" />
 
       <Dropdown>
         <template #title>
