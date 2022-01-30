@@ -6,9 +6,15 @@
           :class="getClasses(color)"
           @click="$colorMode.preference = color"
         >
-          <Moon v-show="color === 'dark'" />
-          <Sun v-show="color === 'light'" />
-          <Laptop2 v-show="color === 'system'" />
+          <span v-show="color === 'dark'">
+            <Moon />
+          </span>
+          <span v-show="color === 'light'">
+            <Sun />
+          </span>
+          <span v-show="color === 'unknown'">
+            <Laptop2 />
+          </span>
         </a>
       </li>
     </ul>
