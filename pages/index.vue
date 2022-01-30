@@ -6,8 +6,6 @@
       </h2>
       <WordList />
     </main>
-
-    <Sidebar />
   </div>
 </template>
 

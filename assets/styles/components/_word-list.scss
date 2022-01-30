@@ -31,7 +31,9 @@
       }
     }
 
-
+    &.is-focused {
+      border-color: vars.$highlight;
+    }
   }
 
   &__berlinerisch {

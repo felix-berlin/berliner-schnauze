@@ -1,5 +1,12 @@
 <template>
   <div class="c-word-search">
+    <transition name="fade">
+      <div v-if="keyboardFocus" v-show="!showSearchBar" class="c-word-search__shortcut">
+        <Command v-if="$device.isMacOS" />
+        <span v-if="$device.isWindows">Control</span>
+        <span>+ K</span>
+      </div>
+    </transition>
     <button type="button" class="c-word-search__search-button" :class="{ 'c-word-search__search-button--right': (searchButtonPosition != 'left') }" @click="buttonActions()">
       <Search default-class="c-word-search__search-icon" />
     </button>
@@ -20,14 +27,15 @@
 </template>
 
 <script>
-import { Search } from 'lucide-vue'
+import { Search, Command } from 'lucide-vue'
 import { mapState } from 'vuex'
 
 export default {
   name: 'SearchWords',
 
   components: {
-    Search
+    Search,
+    Command
   },
 
   props: {
@@ -49,14 +57,23 @@ export default {
     showSearchbarAfterClick: {
       type: Boolean,
       default: false
+    },
+    keyboardFocus: {
+      type: Boolean,
+      default: false
     }
+
   },
 
   data () {
     return {
+      id: this.$uuid.v4(),
       searchButtonPosition: this.buttonPosition,
       showSearchBar: true,
-      timeoutId: null
+      timeoutId: null,
+      pressedKeys: {},
+      scrollPositionY: null,
+      searchLength: null
     }
   },
 
@@ -76,17 +93,46 @@ export default {
     if (this.focusOnPageLoad) {
       this.focusSearch()
     }
+
+    window.addEventListener('keydown', this.triggerKeyboardSearch)
+    window.addEventListener('scroll', this.onScroll, { passive: true })
+  },
+
+  beforeDestroy () {
+    window.addEventListener('keydown', this.triggerKeyboardSearch)
+    window.removeEventListener('scroll', this.onScroll, { passive: true })
   },
 
   methods: {
-    updateSearch (e) {
-      this.$store.commit('updateSearch', e.target.value)
+    /**
+     * Updates the vuex store with the current search input
+     *
+     * @param   {String}  searchInput  Search input
+     *
+     * @return  {String}               Search input
+     */
+    updateSearch (searchInput) {
+      this.$store.commit('updateSearch', searchInput.target.value)
+
+      this.searchLength = searchInput.target.value.length
+
+      this.scrollToResults()
     },
 
     focusSearch () {
-      this.$refs.search.focus()
+      this.$nextTick(function () {
+        this.$refs.search.blur() // Make sure the searchbar is not allready focused
+        this.$refs.search.focus()
+      })
     },
 
+    /**
+     * Hide the searchbar after a given time
+     *
+     * @param   {Number}  timeout  Timeout in millisecons
+     *
+     * @return  {Number}           Timeout ID
+     */
     hideSearchbarAfterTime (timeout) {
       const time = setTimeout(() => {
         if (this.showSearchbarAfterClick) { this.showSearchBar = false }
@@ -97,21 +143,70 @@ export default {
       return time
     },
 
+    /**
+     * Reset the given timeout
+     */
     resetTimeout () {
       clearTimeout(this.timeoutId)
     },
 
+    /**
+     * Show the searchbar and hide them after a given time
+     */
+    showAndFocusSearchbar () {
+      this.showSearchBar = true
+
+      // When searchbar is loaded focus it
+      this.$nextTick(function () {
+        this.focusSearch()
+      })
+      this.hideSearchbarAfterTime(8000)
+    },
+
     buttonActions () {
       if (this.showSearchbarAfterClick) {
-        this.showSearchBar = true
-
-        // When searchbar is loaded focus it
-        this.$nextTick(function () {
-          this.focusSearch()
-        })
-        this.hideSearchbarAfterTime(8000)
+        this.showAndFocusSearchbar()
       }
       this.focusSearch()
+    },
+
+    /**
+     * Checks if keyboard commands
+     *
+     * @param   {Object}  stroke  Eventlistener event
+     *
+     * @return  {Function}          [return description]
+     */
+    triggerKeyboardSearch (stroke) {
+      if (!this.keyboardFocus) {
+        return
+      }
+
+      this.pressedKeys[stroke.key] = stroke.type === 'keydown'
+
+      // Shortcuts per OS
+      const windowsCommand = this.$device.isWindows && this.pressedKeys.Control && this.pressedKeys.k
+      const macCommand = this.$device.isMacOS && this.pressedKeys.command && this.pressedKeys.k
+
+      if (windowsCommand || macCommand) {
+        stroke.preventDefault()
+
+        this.showAndFocusSearchbar()
+
+        this.pressedKeys = {}
+      }
+    },
+
+    onScroll (scroll) {
+      const positionY = window.scrollY
+
+      this.scrollPositionY = positionY
+    },
+
+    scrollToResults () {
+      if ((this.scrollPositionY > 200) && (this.searchLength > 0)) {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     }
   }
 }

@@ -13,15 +13,15 @@
     <a href="javascript:" @click="doSort('berlinerisch')">Berlinerisch<span v-if="sort.field=='berlinerisch'">({{ sort.desc?'desc':'asc' }})</span></a>
 
     <!-- List -->
-    <section class="c-word-list__list">
+    <section ref="wordList" class="c-word-list__list">
       <LoadingSpinner :show="getWordLoadingStatus" />
 
       <article
-        v-for="(item, index) in searchDataResults"
+        v-for="(item) in searchDataResults"
         :id="'word' + item.ID"
         :ref="'word' + item.ID"
         :key="item.ID"
-        :data-index="index"
+        :data-group="item.group"
         class="c-word-list__word"
       >
         <div class="c-word-list__copy-buttons">
@@ -37,6 +37,7 @@
         <p class="c-word-list__example" v-html="item.example" />
       </article>
     </section>
+    <!-- <Sidebar /> -->
   </div>
 </template>
 
@@ -128,7 +129,28 @@ export default {
   },
 
   mounted () {
+    if (window.location.hash.length) {
+      const currentHash = window.location.hash
+      this.$nextTick(() => {
+        if (this.getWordLoadingStatus === true) {
+          // TODO: find a better way
+          setTimeout(() => {
+            const linkToElement = document.getElementById(currentHash.replace('#', ''))
 
+            // Add focus class
+            linkToElement.classList.add('is-focused')
+
+            // Scroll to Element
+            this.$smoothScrollTo(linkToElement, -200)
+
+            // Remoce focus class after time
+            setTimeout(() => {
+              linkToElement.classList.remove('is-focused')
+            }, 1500)
+          }, 1000)
+        }
+      })
+    }
   },
 
   methods: {

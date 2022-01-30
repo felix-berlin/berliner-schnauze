@@ -7,7 +7,7 @@
     </h1>
 
     <nav class="c-menu-nav">
-      <SearchWords v-if="$route.name === 'index'" button-position="right" :show-searchbar-after-click="true" placeholder="Durchsuche den Berliner-Wortschatz" />
+      <SearchWords v-if="$route.name === 'index'" button-position="right" :show-searchbar-after-click="true" placeholder="Durchsuche den Berliner-Wortschatz" :keyboard-focus="true" />
 
       <Dropdown>
         <template #title>
@@ -26,6 +26,8 @@
         </template>
       </Dropdown>
 
+      <a ref="noopener" href="https://github.com/felix-berlin/berliner-schnauze" target="_blank"><Github /></a>
+
       <Dropdown>
         <template #title>
           <span style="pointer-events: none;">
@@ -33,7 +35,7 @@
           </span>
         </template>
         <template #content>
-          <ul>
+          <ul class="u-list-reset">
             <li>
               <NuxtLink to="/imprint">
                 Impressum
@@ -56,7 +58,7 @@
 </template>
 
 <script>
-import { Moon, Sun, Laptop2, Menu } from 'lucide-vue'
+import { Moon, Sun, Laptop2, Menu, Github } from 'lucide-vue'
 import Dropdown from './dropdown.vue'
 
 export default {
@@ -66,8 +68,8 @@ export default {
     Sun,
     Laptop2,
     Dropdown,
-    Menu
-
+    Menu,
+    Github
   },
 
   data () {
