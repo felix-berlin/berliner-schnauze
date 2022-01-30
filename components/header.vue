@@ -1,10 +1,10 @@
 <template>
   <header class="c-header">
-    <h1 class="c-logo">
+    <div class="c-logo">
       <NuxtLink to="/">
         Berliner Schnauze
       </NuxtLink>
-    </h1>
+    </div>
 
     <nav class="c-menu-nav">
       <SearchWords v-if="$route.name === 'index'" button-position="right" :show-searchbar-after-click="true" placeholder="Durchsuche den Berliner-Wortschatz" :keyboard-focus="true" />
@@ -54,6 +54,7 @@
         <Search />
       </button> -->
     </nav>
+    </div>
   </header>
 </template>
 
