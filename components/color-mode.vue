@@ -6,16 +6,16 @@
           :class="getClasses(color)"
           @click="$colorMode.preference = color"
         >
-          <Moon v-if="color === 'dark'" />
-          <Sun v-if="color === 'light'" />
-          <Laptop2 v-if="color === 'system'" />
+          <Moon v-show="color === 'dark'" />
+          <Sun v-show="color === 'light'" />
+          <Laptop2 v-show="color === 'system'" />
         </a>
       </li>
     </ul>
 
     <!-- <ColorScheme placeholder="..." tag="span">
       Color mode: <b>{{ $colorMode.preference }}</b>
-      <span v-if="$colorMode.preference === 'system'">(<i>{{ $colorMode.value }}</i> mode detected)</span>
+      <span v-show="$colorMode.preference === 'system'">(<i>{{ $colorMode.value }}</i> mode detected)</span>
     </ColorScheme> -->
   </div>
 </template>

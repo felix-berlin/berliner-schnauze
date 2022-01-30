@@ -7,7 +7,7 @@
     </button>
 
     <transition :name="transition">
-      <section v-if="isOpen" class="c-dropdown__menu" :class="menuModifier">
+      <section v-show="isOpen" class="c-dropdown__menu" :class="menuModifier">
         <slot name="content" />
       </section>
     </transition>
