@@ -3,7 +3,7 @@
   <nav class="c-letter-nav">
     <ul class="c-letter-nav__list u-list-reset">
       <li v-for="(item, index) in navItems" :key="index" class="c-letter-nav__list-item" :class="{ 'is-current' : (item === dictionaryPosition) }">
-        <button type="button" class="c-letter-nav__link" :title="'Buchstabe: ' + item" @click="linkToFirstLetter(item)">
+        <button type="button" class="c-letter-nav__link" :title="'Buchstabe: ' + item">
           {{ item }}
         </button>
       </li>

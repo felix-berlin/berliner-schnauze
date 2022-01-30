@@ -23,12 +23,13 @@
         :key="item.ID"
         :data-group="item.group"
         class="c-word-list__word"
+        :title="'Berliner Wort: ' + item.berlinerisch"
       >
         <div class="c-word-list__copy-buttons">
-          <button class="c-word-list__copy-word" @click="copyWordUrlToClipboard(item.ID)">
+          <button type="button" class="c-word-list__copy-word" @click="copyWordUrlToClipboard(item.ID)">
             <Hash /> <span v-text="'word' + item.ID" />
           </button>
-          <button class="c-word-list__copy-url" @click="copyNameToClipboard(item.ID)">
+          <button type="button" class="c-word-list__copy-url" @click="copyNameToClipboard(item.ID)">
             <Copy />
           </button>
         </div>
@@ -185,53 +186,6 @@ export default {
         this.sort.desc = true
       }
     },
-
-    // createGroups () {
-    //   this.groupNames.forEach((element) => {
-    //     const groups = {
-    //       mode: 'span',
-    //       label: element,
-    //       html: false,
-    //       children: []
-    //     }
-
-    //     this.berlinWords.push(groups)
-    //   })
-    // },
-
-    // fetchWords (url) {
-    //   fetch(url)
-    //     .then(r => r.json())
-    //     .then((response) => {
-    //       const words = response.map(x => x.word)
-    //       words.forEach((word, index) => {
-    //         this.wordCount = index
-    //         const checkWord = word.berlinerisch.toLowerCase()
-    //         const groupNamesLower = this.groupNames
-    //         groupNamesLower.forEach((groupItem, index) => {
-    //           if (checkWord.startsWith(groupItem.toLowerCase())) {
-    //             this.words[index].children.push(word)
-    //           }
-    //         })
-    //       })
-    //     })
-    // },
-
-    // sortWords1 () {
-    //   const words = this.berlinerWords.map(x => x.word)
-    //   console.log(words)
-    //   words.forEach((word, index) => {
-    //     console.log(word)
-    //     this.wordCount = index
-    //     const checkWord = word.berlinerisch.toLowerCase()
-    //     const groupNamesLower = this.groupNames
-    //     groupNamesLower.forEach((groupItem, index) => {
-    //       if (checkWord.startsWith(groupItem.toLowerCase())) {
-    //         this.berlinWords[index].children.push(word)
-    //       }
-    //     })
-    //   })
-    // },
 
     sortWords () {
       console.log('funzt')

@@ -1,6 +1,6 @@
 <template>
   <section class="c-dropdown" :class="modifier">
-    <button ref="menu" class="c-dropdown__button" :class="buttonModifier" @click="openClose">
+    <button ref="menu" type="button" class="c-dropdown__button" :class="buttonModifier" @click="openClose">
       <slot name="title" style="pointer-events: none;">
         Dropdown
       </slot>
