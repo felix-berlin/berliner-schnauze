@@ -24,7 +24,7 @@ export const actions = {
     return await fetch('https://webshaped.de/wp-json/berlinerisch/v1/post')
       .then(res => res.json())
       .then((res) => {
-        const sortAsc = res.concat().sort((a, b) => a > b ? 1 : -1)
+        const sortAsc = res.concat().sort((a, b) => a.group > b.group ? 1 : -1)
         commit('setBerlinWords', sortAsc)
         commit('wordLoadingStatus', false)
       }).catch(error => console.log(error))

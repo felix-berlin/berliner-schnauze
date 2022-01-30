@@ -42,7 +42,8 @@ export default {
     '@plugins/vue-waypoint',
     '@plugins/floating-vue',
     '@plugins/fuse',
-    '@plugins/vue-uuid'
+    '@plugins/vue-uuid',
+    '@plugins/smooth-scroll-to'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -55,7 +56,8 @@ export default {
     '@nuxtjs/svg',
     '@nuxtjs/color-mode',
     'lucide-vue/nuxt',
-    '@nuxtjs/device'
+    '@nuxtjs/device',
+    '@nuxtjs/dotenv'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

@@ -1,5 +1,12 @@
 <template>
   <div class="c-word-search">
+    <transition name="fade">
+      <div v-if="keyboardFocus" v-show="!showSearchBar" class="c-word-search__shortcut">
+        <Command v-if="$device.isMacOS" />
+        <span v-if="$device.isWindows">Control</span>
+        <span>+ K</span>
+      </div>
+    </transition>
     <button type="button" class="c-word-search__search-button" :class="{ 'c-word-search__search-button--right': (searchButtonPosition != 'left') }" @click="buttonActions()">
       <Search default-class="c-word-search__search-icon" />
     </button>
@@ -15,13 +22,6 @@
         @focus="resetTimeout"
         @blur="hideSearchbarAfterTime(5000)"
       >
-    </transition>
-    <transition name="fade">
-      <div v-if="keyboardFocus" v-show="!showSearchBar" class="c-word-search__shortcut">
-        <Command v-if="$device.isMacOS" />
-        <span v-if="$device.isWindows">Control</span>
-        <span>+ K</span>
-      </div>
     </transition>
   </div>
 </template>
@@ -62,6 +62,7 @@ export default {
       type: Boolean,
       default: false
     }
+
   },
 
   data () {
@@ -70,7 +71,9 @@ export default {
       searchButtonPosition: this.buttonPosition,
       showSearchBar: true,
       timeoutId: null,
-      pressedKeys: {}
+      pressedKeys: {},
+      scrollPositionY: null,
+      searchLength: null
     }
   },
 
@@ -92,10 +95,12 @@ export default {
     }
 
     window.addEventListener('keydown', this.triggerKeyboardSearch)
+    window.addEventListener('scroll', this.onScroll, { passive: true })
   },
 
   beforeDestroy () {
     window.addEventListener('keydown', this.triggerKeyboardSearch)
+    window.removeEventListener('scroll', this.onScroll, { passive: true })
   },
 
   methods: {
@@ -108,10 +113,17 @@ export default {
      */
     updateSearch (searchInput) {
       this.$store.commit('updateSearch', searchInput.target.value)
+
+      this.searchLength = searchInput.target.value.length
+
+      this.scrollToResults()
     },
 
     focusSearch () {
-      this.$refs.search.focus()
+      this.$nextTick(function () {
+        this.$refs.search.blur() // Make sure the searchbar is not allready focused
+        this.$refs.search.focus()
+      })
     },
 
     /**
@@ -182,6 +194,18 @@ export default {
         this.showAndFocusSearchbar()
 
         this.pressedKeys = {}
+      }
+    },
+
+    onScroll (scroll) {
+      const positionY = window.scrollY
+
+      this.scrollPositionY = positionY
+    },
+
+    scrollToResults () {
+      if ((this.scrollPositionY > 200) && (this.searchLength > 0)) {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     }
   }

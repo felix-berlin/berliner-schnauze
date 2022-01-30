@@ -26,16 +26,16 @@ export default {
   },
 
   mounted () {
-    window.addEventListener('scroll', this.onScroll, true)
+    window.addEventListener('scroll', this.onScroll, { passive: true })
   },
 
   beforeDestroy () {
-    window.removeEventListener('scroll', this.onScroll, true)
+    window.removeEventListener('scroll', this.onScroll, { passive: true })
   },
 
   methods: {
-    onScroll (e) {
-      this.windowTop = e.target.documentElement.scrollTop
+    onScroll (scroll) {
+      this.windowTop = scroll.target.documentElement.scrollTop
     },
 
     scrollToTop () {
