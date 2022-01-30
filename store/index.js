@@ -27,7 +27,7 @@ export const actions = {
         const sortAsc = res.concat().sort((a, b) => a.group > b.group ? 1 : -1)
         commit('setBerlinWords', sortAsc)
         commit('wordLoadingStatus', false)
-      }).catch(error => console.log(error))
+      }).catch(error => console.error(error))
   },
 
   updateDictionaryPosition ({ commit }, position) {

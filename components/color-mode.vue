@@ -1,6 +1,6 @@
 <template>
   <div class="c-color-mode">
-    <ul>
+    <ul class="u-list-reset">
       <li v-for="color of colors" v-show="$colorMode.preference !== color" :key="color">
         <a
           :class="getClasses(color)"
