@@ -67,7 +67,8 @@ export default {
     '@nuxt/image',
     '@nuxtjs/sitemap',
     '@nuxtjs/toast',
-    'nuxt-protected-mailto'
+    'nuxt-protected-mailto',
+    'nuxt-matomo' // https://github.com/pimlie/nuxt-matomo
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
