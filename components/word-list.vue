@@ -10,7 +10,7 @@
     <SearchWords :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
 
     <!-- Filter -->
-    <a href="javascript:" @click="doSort('berlinerisch')">Berlinerisch<span v-if="sort.field=='berlinerisch'">({{ sort.desc?'desc':'asc' }})</span></a>
+    <a href="javascript:" @click="doSort('berlinerisch')">Berlinerisch<span v-show="sort.field=='berlinerisch'">({{ sort.desc?'desc':'asc' }})</span></a>
 
     <!-- List -->
     <section ref="wordList" class="c-word-list__list">

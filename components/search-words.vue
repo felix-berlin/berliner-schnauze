@@ -1,9 +1,9 @@
 <template>
   <div class="c-word-search">
     <transition name="fade">
-      <div v-if="keyboardFocus" v-show="!showSearchBar" class="c-word-search__shortcut">
-        <Command v-if="$device.isMacOS" />
-        <span v-if="$device.isWindows">Control</span>
+      <div v-show="keyboardFocus && !showSearchBar" class="c-word-search__shortcut">
+        <Command v-show="$device.isMacOS" />
+        <span v-show="$device.isWindows">Control</span>
         <span>+ K</span>
       </div>
     </transition>

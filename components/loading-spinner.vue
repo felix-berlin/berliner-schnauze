@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" class="c-loader">
+  <div v-show="show" class="c-loader">
     <i class="c-loader__spinner c-loader__spinner--5" />
   </div>
 </template>
