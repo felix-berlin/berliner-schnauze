@@ -27,7 +27,7 @@ export default {
 
   // Sitemap
   sitemap: {
-    hostname: 'https://berliner-schnauze.wtf',
+    hostname: 'https://dict.berliner-schnauze.wtf',
     gzip: true
   },
 
@@ -56,8 +56,8 @@ export default {
     '@nuxtjs/svg',
     '@nuxtjs/color-mode',
     'lucide-vue/nuxt',
-    '@nuxtjs/device',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/device'
+    // '@nuxtjs/dotenv'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -67,8 +67,8 @@ export default {
     '@nuxt/image',
     '@nuxtjs/sitemap',
     '@nuxtjs/toast',
-    'nuxt-protected-mailto',
-    'nuxt-matomo' // https://github.com/pimlie/nuxt-matomo
+    'nuxt-protected-mailto'
+    // 'nuxt-matomo' // https://github.com/pimlie/nuxt-matomo
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
