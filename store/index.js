@@ -21,11 +21,10 @@ export const actions = {
   async fetchBerlinWords ({ commit, $sentry }) {
     commit('wordLoadingStatus', true)
 
-    return await fetch('https://webshaped.de/wp-json/berlinerisch/v1/post')
+    return await fetch('https://webshaped.de/wp-json/berliner-schnauze/v1/words')
       .then(res => res.json())
       .then((res) => {
-        const sortAsc = res.concat().sort((a, b) => a.group > b.group ? 1 : -1)
-        commit('setBerlinWords', sortAsc)
+        commit('setBerlinWords', res)
         commit('wordLoadingStatus', false)
       }).catch((error) => {
         $sentry.captureException(error)
