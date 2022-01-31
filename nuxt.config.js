@@ -181,7 +181,7 @@ export default {
   },
 
   nuxtPrecompress: {
-    enabled: true, // Enable in production
+    enabled: false, // Enable in production
     report: true, // set true to turn one console messages during module init
     test: /\.(js|css|html|txt|xml|svg)$/, // files to compress on build
     // Serving options
