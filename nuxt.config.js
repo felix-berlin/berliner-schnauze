@@ -70,10 +70,21 @@ export default {
     '@nuxtjs/toast',
     'nuxt-protected-mailto',
     'nuxt-speedkit',
-    'nuxt-precompress'
+    'nuxt-precompress',
+    '@nuxtjs/sentry'
     // '@dewib/xhr-cache'
     // 'nuxt-matomo' // https://github.com/pimlie/nuxt-matomo
   ],
+
+  sentry: {
+    dsn: 'https://f84fd7469c2e4ca7b3680f5e151d3499@o1131599.ingest.sentry.io/6176241', // Enter your project's DSN here
+    // Additional Module Options go here
+    // https://sentry.nuxtjs.org/sentry/options
+    config: {
+      // Add native Sentry config here
+      // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
+    }
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -219,26 +230,6 @@ export default {
 
   htmlValidator: {
     usePrettier: true,
-    failOnError: false,
-    options: {
-      extends: [
-        'html-validate:document',
-        'html-validate:recommended',
-        'html-validate:standard'
-      ],
-      rules: {
-        'svg-focusable': 'off',
-        'no-unknown-elements': 'error',
-        // Conflicts or not needed as we use prettier formatting
-        'void-style': 'off',
-        'no-trailing-whitespace': 'off',
-        // Conflict with Nuxt defaults
-        'require-sri': 'off',
-        'attribute-boolean-style': 'off',
-        'doctype-style': 'off',
-        // Unreasonable rule
-        'no-inline-style': 'off'
-      }
-    }
+    failOnError: false
   }
 }

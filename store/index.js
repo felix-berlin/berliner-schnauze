@@ -18,7 +18,7 @@ export const getters = {
 }
 
 export const actions = {
-  async fetchBerlinWords ({ commit }) {
+  async fetchBerlinWords ({ commit, $sentry }) {
     commit('wordLoadingStatus', true)
 
     return await fetch('https://webshaped.de/wp-json/berlinerisch/v1/post')
@@ -27,7 +27,9 @@ export const actions = {
         const sortAsc = res.concat().sort((a, b) => a.group > b.group ? 1 : -1)
         commit('setBerlinWords', sortAsc)
         commit('wordLoadingStatus', false)
-      }).catch(error => console.error(error))
+      }).catch((error) => {
+        $sentry.captureException(error)
+      })
   },
 
   updateDictionaryPosition ({ commit }, position) {
