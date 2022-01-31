@@ -4,7 +4,7 @@
       <h2 style="font-size: 4rem;">
         Na Keule, keen'n Dunst vom Berlinern?<br> Dann mal uff-gepasst!
       </h2>
-      <WordList />
+      <WordList :critical="true" />
     </main>
   </div>
 </template>

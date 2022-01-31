@@ -115,6 +115,7 @@ export default {
       performance: true,
       browserSupport: true
     },
+    componentAutoImport: true,
     fonts: [{
       family: 'Berlin Type',
       locals: ['Berlin Type'],

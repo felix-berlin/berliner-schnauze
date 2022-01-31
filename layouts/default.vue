@@ -1,6 +1,6 @@
 <template>
   <div class="c-body">
-    <Header />
+    <Header :critical="true" />
     <Nuxt />
     <ScrollToTop button-aria-label="Zurück zum Seitenanfang">
       <ChevronUp
