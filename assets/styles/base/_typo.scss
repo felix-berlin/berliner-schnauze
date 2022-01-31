@@ -83,12 +83,12 @@
 @for $h from 1 to 6 {
   h#{$h} {
     font-family: vars.$berliner;
+    font-weight: normal;
   }
 }
 
 * {
   font-family: vars.$berlin-type;
-  font-weight: 400;
 }
 
 p {
