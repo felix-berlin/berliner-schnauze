@@ -20,7 +20,7 @@
         type="search"
         class="c-word-search__search-input"
         placeholder=" "
-        aria-label="Wortsuche"
+        :aria-label="searchAriaLabel"
         @input="updateSearch"
         @focus="resetTimeout"
         @blur="hideSearchbarAfterTime(5000)"
@@ -65,8 +65,11 @@ export default {
     keyboardFocus: {
       type: Boolean,
       default: false
+    },
+    searchAriaLabel: {
+      type: String,
+      default: ''
     }
-
   },
 
   data () {
