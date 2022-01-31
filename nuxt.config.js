@@ -127,7 +127,7 @@ export default {
       performance: true,
       browserSupport: true
     },
-    componentAutoImport: true,
+    componentAutoImport: false,
     fonts: [{
       family: 'Berlin',
       locals: ['Berlin'],

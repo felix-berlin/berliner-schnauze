@@ -12,7 +12,11 @@
 <script>
 
 export default {
-  name: 'IndexPage'
+  name: 'IndexPage',
+
+  speedkitComponents: {
+    WordList: () => import('@/components/word-list')
+  }
 
 }
 </script>

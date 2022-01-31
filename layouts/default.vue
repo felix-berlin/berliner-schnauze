@@ -19,13 +19,13 @@ export default {
 
   components: {
     ChevronUp
-  }
+  },
 
-  // speedkitComponents: {
-  //   Header: () => import('@/components/header'),
-  //   ScrollToTop: () => import('@/components/scroll-to-top'),
-  //   Footer: () => import('@/components/footer')
-  // }
+  speedkitComponents: {
+    Header: () => import('@/components/header'),
+    ScrollToTop: () => import('@/components/scroll-to-top'),
+    Footer: () => import('@/components/footer')
+  }
 
 }
 </script>
