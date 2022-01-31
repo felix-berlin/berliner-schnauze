@@ -26,8 +26,8 @@
         </template>
       </Dropdown>
 
-      <a ref="noopener" aria-label="Link zum Github Projekt" href="https://github.com/felix-berlin/berliner-schnauze" target="_blank"><Github /></a>
-      <a ref="noopener" aria-label="Folge Berliner Schnauze auf Facebook" href="https://www.facebook.com/Berliner.Schnauze030" target="_blank"><Facebook /></a>
+      <a rel="noopener" aria-label="Link zum Github Projekt" href="https://github.com/felix-berlin/berliner-schnauze" target="_blank"><Github /></a>
+      <a rel="noopener" aria-label="Folge Berliner Schnauze auf Facebook" href="https://www.facebook.com/Berliner.Schnauze030" target="_blank"><Facebook /></a>
 
       <Dropdown button-aria-label="Website Menu Navigation">
         <template #title>

@@ -69,7 +69,9 @@ export default {
     '@nuxtjs/sitemap',
     '@nuxtjs/toast',
     'nuxt-protected-mailto',
-    'nuxt-speedkit'
+    'nuxt-speedkit',
+    'nuxt-precompress'
+    // '@dewib/xhr-cache'
     // 'nuxt-matomo' // https://github.com/pimlie/nuxt-matomo
   ],
 
@@ -78,6 +80,16 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/'
   },
+
+  // xhrCache: {
+  //   name: 'word-list',
+  //   maxAge: 3600 * 1000, // TTL of resource
+  //   init: true, // Fetch the resource at nuxt start
+  //   request: {
+  //     method: 'get',
+  //     url: 'https://webshaped.de/wp-json/berlinerisch/v1/post'
+  //   }
+  // },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
@@ -117,21 +129,36 @@ export default {
     },
     componentAutoImport: true,
     fonts: [{
-      family: 'Berlin Type',
-      locals: ['Berlin Type'],
+      family: 'Berlin',
+      locals: ['Berlin'],
       fallback: ['Arial', 'sans-serif'],
       variances: [
         {
           style: 'normal',
-          weight: 400,
+          weight: 'normal',
           sources: [
-            { src: '@/assets/fonts/BerlinTypeWeb-Regular.woff2', type: 'woff2' }
+            { src: '@/assets/fonts/Berlin.woff2', type: 'woff2' }
           ]
-        }, {
-          style: 'normal',
-          weight: 700,
+        },
+        {
+          style: 'italic',
+          weight: 'normal',
           sources: [
-            { src: '@/assets/fonts/BerlinTypeWeb-Bold.woff2', type: 'woff2' }
+            { src: '@/assets/fonts/Berlin-Italic.woff2', type: 'woff2' }
+          ]
+        },
+        {
+          style: 'normal',
+          weight: 'bold',
+          sources: [
+            { src: '@/assets/fonts/Berlin-Bold.woff2', type: 'woff2' }
+          ]
+        },
+        {
+          style: 'normal',
+          weight: 'bolder',
+          sources: [
+            { src: '@/assets/fonts/BerlinX-Bold.woff2', type: 'woff2' }
           ]
         }
       ]
@@ -151,6 +178,43 @@ export default {
       ]
     }
     ]
+  },
+
+  nuxtPrecompress: {
+    enabled: true, // Enable in production
+    report: true, // set true to turn one console messages during module init
+    test: /\.(js|css|html|txt|xml|svg)$/, // files to compress on build
+    // Serving options
+    middleware: {
+      // You can disable middleware if you serve static files using nginx...
+      enabled: true,
+      // Enable if you have .gz or .br files in /static/ folder
+      enabledStatic: true,
+      // Priority of content-encodings, first matched with request Accept-Encoding will me served
+      encodingsPriority: ['br', 'gzip']
+    },
+
+    // build time compression settings
+    gzip: {
+      // should compress to gzip?
+      enabled: true,
+      // compression config
+      // https://www.npmjs.com/package/compression-webpack-plugin
+      filename: '[path].gz[query]', // middleware will look for this filename
+      threshold: 10240,
+      minRatio: 0.8,
+      compressionOptions: { level: 9 }
+    },
+    brotli: {
+      // should compress to brotli?
+      enabled: true,
+      // compression config
+      // https://www.npmjs.com/package/compression-webpack-plugin
+      filename: '[path].br[query]', // middleware will look for this filename
+      compressionOptions: { level: 11 },
+      threshold: 10240,
+      minRatio: 0.8
+    }
   },
 
   htmlValidator: {
