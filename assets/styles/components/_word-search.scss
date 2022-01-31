@@ -7,4 +7,29 @@
       order: 2;
     }
   }
+
+  &__search-wrap {
+    position: relative;
+    flex: 1 1 100%;
+    display: flex;
+  }
+
+  &__search-input {
+    height: 100%;
+    padding: 0 .2em;
+    flex: 1 1 100%;
+  }
+
+  &__search-label {
+    position: absolute;
+    left: 0.3em;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #000;
+  }
+
+  .c-word-search__search-input:focus ~ .c-word-search__search-label,
+  .c-word-search__search-input:not(:placeholder-shown) ~ .c-word-search__search-label {
+    z-index: -1;
+  }
 }

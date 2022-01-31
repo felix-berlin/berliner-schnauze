@@ -1,9 +1,9 @@
 <template>
   <div class="c-content">
     <main class="c-main">
-      <h2 style="font-size: 4rem;">
+      <h1 style="font-size: 4rem;">
         Na Keule, keen'n Dunst vom Berlinern?<br> Dann mal uff-gepasst!
-      </h2>
+      </h1>
       <WordList :critical="true" />
     </main>
   </div>
