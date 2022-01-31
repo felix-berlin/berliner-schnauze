@@ -4,3 +4,6 @@
 ![Website](https://img.shields.io/website?style=flat-square&url=https%3A%2F%2Fberliner-schnauze.wtf)
 
 > Small Berlinerisch to Hochdeutsch Dictionary.
+---
+
+## Sorry for the ugly interface. **WORK IN PROGRESS**

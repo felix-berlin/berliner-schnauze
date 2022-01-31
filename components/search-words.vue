@@ -2,22 +2,24 @@
   <div class="c-word-search">
     <transition name="fade">
       <div v-show="keyboardFocus && !showSearchBar" class="c-word-search__shortcut">
-        <Command v-show="$device.isMacOS" />
+        <span v-show="$device.isMacOS">
+          <Command />
+        </span>
         <span v-show="$device.isWindows">Control</span>
         <span>+ K</span>
       </div>
     </transition>
-    <button type="button" class="c-word-search__search-button" :class="{ 'c-word-search__search-button--right': (searchButtonPosition != 'left') }" @click="buttonActions()">
+    <button aria-label="Wortsuche betätigen" type="button" class="c-word-search__search-button" :class="{ 'c-word-search__search-button--right': (searchButtonPosition != 'left') }" @click="buttonActions()">
       <Search default-class="c-word-search__search-icon" />
     </button>
     <transition name="fade">
       <input
         v-show="showSearchBar"
         ref="search"
-        :value="search"
-        type="text"
+        type="search"
         class="c-word-search__search-input"
         :placeholder="placeholder"
+        aria-label="Wortsuche"
         @input="updateSearch"
         @focus="resetTimeout"
         @blur="hideSearchbarAfterTime(5000)"

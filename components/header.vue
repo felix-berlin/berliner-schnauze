@@ -9,7 +9,7 @@
     <nav class="c-menu-nav">
       <SearchWords v-show="$route.name === 'index'" button-position="right" :show-searchbar-after-click="true" placeholder="Durchsuche den Berliner-Wortschatz" :keyboard-focus="true" />
 
-      <Dropdown>
+      <Dropdown button-aria-label="Ändere den Website Farbmodus">
         <template #title>
           <span v-show="$colorMode.preference === 'dark'" style="pointer-events: none;">
             <Moon />
@@ -26,9 +26,9 @@
         </template>
       </Dropdown>
 
-      <a ref="noopener" href="https://github.com/felix-berlin/berliner-schnauze" target="_blank"><Github /></a>
+      <a ref="noopener" aria-label="Link zum Github Projekt" href="https://github.com/felix-berlin/berliner-schnauze" target="_blank"><Github /></a>
 
-      <Dropdown>
+      <Dropdown button-aria-label="Website Menu Navigation">
         <template #title>
           <span style="pointer-events: none;">
             <Menu />
@@ -54,7 +54,6 @@
         <Search />
       </button> -->
     </nav>
-    </div>
   </header>
 </template>
 

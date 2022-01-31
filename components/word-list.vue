@@ -26,10 +26,10 @@
         :title="'Berliner Wort: ' + item.berlinerisch"
       >
         <div class="c-word-list__copy-buttons">
-          <button type="button" class="c-word-list__copy-word" @click="copyWordUrlToClipboard(item.ID)">
+          <button aria-label="Link zum Wort kopieren" type="button" class="c-word-list__copy-word" @click="copyWordUrlToClipboard(item.ID)">
             <Hash /> <span v-text="'word' + item.ID" />
           </button>
-          <button type="button" class="c-word-list__copy-url" @click="copyNameToClipboard(item.ID)">
+          <button aria-label="Wort kopieren" type="button" class="c-word-list__copy-url" @click="copyNameToClipboard(item.ID)">
             <Copy />
           </button>
         </div>

@@ -3,6 +3,7 @@
     <ul class="u-list-reset">
       <li v-for="color of colors" v-show="$colorMode.preference !== color" :key="color">
         <a
+          :aria-label="'Ändere den Farbmodus zu ' + color"
           :class="getClasses(color)"
           @click="$colorMode.preference = color"
         >

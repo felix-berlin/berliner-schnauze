@@ -2,7 +2,7 @@
   <div class="c-body">
     <Header />
     <Nuxt />
-    <ScrollToTop>
+    <ScrollToTop button-aria-label="Zurück zum Seitenanfang">
       <ChevronUp
         :size="32"
         default-class="c-scroll-to-top__icon"
