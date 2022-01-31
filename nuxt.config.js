@@ -110,7 +110,7 @@ export default {
   },
 
   htmlValidator: {
-    usePrettier: false,
+    usePrettier: true,
     failOnError: false,
     options: {
       extends: [

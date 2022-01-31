@@ -7,7 +7,7 @@
     </div>
 
     <nav class="c-menu-nav">
-      <SearchWords v-show="$route.name === 'index'" button-position="right" :show-searchbar-after-click="true" placeholder="Durchsuche den Berliner-Wortschatz" :keyboard-focus="true" />
+      <SearchWords v-if="$route.name === 'index'" button-position="right" :show-searchbar-after-click="true" placeholder="Durchsuche den Berliner-Wortschatz" :keyboard-focus="true" />
 
       <Dropdown button-aria-label="Ändere den Website Farbmodus">
         <template #title>
