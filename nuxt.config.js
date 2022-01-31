@@ -65,7 +65,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxt/image',
+    // '@nuxt/image',
     '@nuxtjs/sitemap',
     '@nuxtjs/toast',
     'nuxt-protected-mailto',
@@ -100,9 +100,9 @@ export default {
     }
   },
 
-  image: {
-    // Options
-  },
+  // image: {
+  //   // Options
+  // },
 
   stylelint: {
     fix: true,
@@ -181,8 +181,8 @@ export default {
   },
 
   nuxtPrecompress: {
-    enabled: false, // Enable in production
-    report: false, // set true to turn one console messages during module init
+    enabled: true, // Enable in production
+    report: true, // set true to turn one console messages during module init
     test: /\.(js|css|html|txt|xml|svg)$/, // files to compress on build
     // Serving options
     middleware: {
