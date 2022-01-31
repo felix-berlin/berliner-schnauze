@@ -1,84 +1,84 @@
 @use '../variables/variables' as vars;
 
-@font-face {
-  font-weight: normal;
-  font-style: normal;
-  font-family: Berliner;
-  src: url("~/assets/fonts/BerlinerRegular.woff2") format("woff2");
-  font-display: swap;
-}
+// @font-face {
+//   font-weight: normal;
+//   font-style: normal;
+//   font-family: Berliner;
+//   src: url("~/assets/fonts/BerlinerRegular.woff2") format("woff2");
+//   font-display: swap;
+// }
 
-@font-face {
-  font-weight: normal;
-  font-style: normal;
-  font-family: Berolina;
-  src: url("~/assets/fonts/Berolina.woff2") format("woff2");
-  font-display: swap;
-}
+// @font-face {
+//   font-weight: normal;
+//   font-style: normal;
+//   font-family: Berolina;
+//   src: url("~/assets/fonts/Berolina.woff2") format("woff2");
+//   font-display: swap;
+// }
 
-@font-face {
-  font-weight: normal;
-  font-style: normal;
-  font-family: Materhorn;
-  src: url("~/assets/fonts/MaterhornNF.woff2") format("woff2");
-  font-display: swap;
-}
+// @font-face {
+//   font-weight: normal;
+//   font-style: normal;
+//   font-family: Materhorn;
+//   src: url("~/assets/fonts/MaterhornNF.woff2") format("woff2");
+//   font-display: swap;
+// }
 
-@font-face {
-  font-weight: normal;
-  font-style: normal;
-  font-family: Berlin;
-  src: url("~/assets/fonts/Berlin.woff2") format("woff2");
-  font-display: swap;
-}
+// @font-face {
+//   font-weight: normal;
+//   font-style: normal;
+//   font-family: Berlin;
+//   src: url("~/assets/fonts/Berlin.woff2") format("woff2");
+//   font-display: swap;
+// }
 
-@font-face {
-  font-weight: normal;
-  font-style: italic;
-  font-family: Berlin;
-  src: url("~/assets/fonts/Berlin-Italic.woff2") format("woff2");
-  font-display: swap;
-}
+// @font-face {
+//   font-weight: normal;
+//   font-style: italic;
+//   font-family: Berlin;
+//   src: url("~/assets/fonts/Berlin-Italic.woff2") format("woff2");
+//   font-display: swap;
+// }
 
-@font-face {
-  font-weight: bold;
-  font-style: normal;
-  font-family: Berlin;
-  src: url("~/assets/fonts/Berlin-Bold.woff2") format("woff2");
-  font-display: swap;
-}
+// @font-face {
+//   font-weight: bold;
+//   font-style: normal;
+//   font-family: Berlin;
+//   src: url("~/assets/fonts/Berlin-Bold.woff2") format("woff2");
+//   font-display: swap;
+// }
 
-@font-face {
-  font-weight: bolder;
-  font-style: normal;
-  font-family: Berlin;
-  src: url("~/assets/fonts/BerlinX-Bold.woff2") format("woff2");
-  font-display: swap;
-}
+// @font-face {
+//   font-weight: bolder;
+//   font-style: normal;
+//   font-family: Berlin;
+//   src: url("~/assets/fonts/BerlinX-Bold.woff2") format("woff2");
+//   font-display: swap;
+// }
 
-@font-face {
-  font-weight: normal;
-  font-style: normal;
-  font-family: Midroba;
-  src: url("~/assets/fonts/Midroba-Regular.woff2") format("woff2");
-  font-display: swap;
-}
+// @font-face {
+//   font-weight: normal;
+//   font-style: normal;
+//   font-family: Midroba;
+//   src: url("~/assets/fonts/Midroba-Regular.woff2") format("woff2");
+//   font-display: swap;
+// }
 
-@font-face {
-  font-weight: normal;
-  font-style: normal;
-  font-family: 'Berlin Type';
-  src: url("~/assets/fonts/BerlinTypeWeb-Regular.woff2") format("woff2");
-  font-display: swap;
-}
+// @font-face {
+//   font-weight: normal;
+//   font-style: normal;
+//   font-family: 'Berlin Type';
+//   src: url("~/assets/fonts/BerlinTypeWeb-Regular.woff2") format("woff2");
+//   font-display: swap;
+// }
 
-@font-face {
-  font-weight: bold;
-  font-style: normal;
-  font-family: 'Berlin Type';
-  src: url("~/assets/fonts/BerlinTypeWeb-Bold.woff2") format("woff2");
-  font-display: swap;
-}
+// @font-face {
+//   font-weight: bold;
+//   font-style: normal;
+//   font-family: 'Berlin Type';
+//   src: url("~/assets/fonts/BerlinTypeWeb-Bold.woff2") format("woff2");
+//   font-display: swap;
+// }
 
 @for $h from 1 to 6 {
   h#{$h} {

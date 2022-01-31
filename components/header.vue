@@ -27,6 +27,7 @@
       </Dropdown>
 
       <a ref="noopener" aria-label="Link zum Github Projekt" href="https://github.com/felix-berlin/berliner-schnauze" target="_blank"><Github /></a>
+      <a ref="noopener" aria-label="Folge Berliner Schnauze auf Facebook" href="https://www.facebook.com/Berliner.Schnauze030" target="_blank"><Facebook /></a>
 
       <Dropdown button-aria-label="Website Menu Navigation">
         <template #title>
@@ -49,16 +50,12 @@
           </ul>
         </template>
       </Dropdown>
-
-      <!-- <button type="button" @click="focusSearch">
-        <Search />
-      </button> -->
     </nav>
   </header>
 </template>
 
 <script>
-import { Moon, Sun, Laptop2, Menu, Github } from 'lucide-vue'
+import { Moon, Sun, Laptop2, Menu, Github, Facebook } from 'lucide-vue'
 import Dropdown from './dropdown.vue'
 
 export default {
@@ -69,17 +66,8 @@ export default {
     Laptop2,
     Dropdown,
     Menu,
-    Github
-  },
-
-  data () {
-    return {
-      mode: this.$colorMode.preferencer
-    }
-  },
-
-  methodes: {
-
+    Github,
+    Facebook
   }
 }
 </script>

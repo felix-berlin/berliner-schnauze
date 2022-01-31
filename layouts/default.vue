@@ -21,5 +21,11 @@ export default {
     ChevronUp
   }
 
+  // speedkitComponents: {
+  //   Header: () => import('@/components/header'),
+  //   ScrollToTop: () => import('@/components/scroll-to-top'),
+  //   Footer: () => import('@/components/footer')
+  // }
+
 }
 </script>

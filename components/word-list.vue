@@ -23,7 +23,6 @@
         :key="item.ID"
         :data-group="item.group"
         class="c-word-list__word"
-        :title="'Berliner Wort: ' + item.berlinerisch"
       >
         <div class="c-word-list__copy-buttons">
           <button aria-label="Link zum Wort kopieren" type="button" class="c-word-list__copy-word" @click="copyWordUrlToClipboard(item.ID)">

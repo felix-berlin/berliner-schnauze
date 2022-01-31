@@ -10,14 +10,14 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'berliner-schnauze',
+    title: 'Berlinerisch zu Hochdeutsch Wörterbuch - Berliner Schnauze',
     htmlAttrs: {
       lang: 'de'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: 'Berlinerisch zu Hochdeutsch Wörterbuch, von Berliner für alle.' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
@@ -27,7 +27,7 @@ export default {
 
   // Sitemap
   sitemap: {
-    hostname: 'https://dict.berliner-schnauze.wtf',
+    hostname: 'https://berliner-schnauze.wtf',
     gzip: true
   },
 
@@ -68,7 +68,8 @@ export default {
     '@nuxt/image',
     '@nuxtjs/sitemap',
     '@nuxtjs/toast',
-    'nuxt-protected-mailto'
+    'nuxt-protected-mailto',
+    'nuxt-speedkit'
     // 'nuxt-matomo' // https://github.com/pimlie/nuxt-matomo
   ],
 
@@ -107,6 +108,48 @@ export default {
     position: 'top-right',
     containerClass: 'c-toast',
     className: 'c-toast__item'
+  },
+
+  speedkit: {
+    detection: {
+      performance: true,
+      browserSupport: true
+    },
+    fonts: [{
+      family: 'Berlin Type',
+      locals: ['Berlin Type'],
+      fallback: ['Arial', 'sans-serif'],
+      variances: [
+        {
+          style: 'normal',
+          weight: 400,
+          sources: [
+            { src: '@/assets/fonts/BerlinTypeWeb-Regular.woff2', type: 'woff2' }
+          ]
+        }, {
+          style: 'normal',
+          weight: 700,
+          sources: [
+            { src: '@/assets/fonts/BerlinTypeWeb-Bold.woff2', type: 'woff2' }
+          ]
+        }
+      ]
+    },
+    {
+      family: 'Berliner',
+      locals: ['Berliner'],
+      fallback: ['Arial', 'sans-serif'],
+      variances: [
+        {
+          style: 'normal',
+          weight: 400,
+          sources: [
+            { src: '@/assets/fonts/BerlinerRegular.woff2', type: 'woff2' }
+          ]
+        }
+      ]
+    }
+    ]
   },
 
   htmlValidator: {
