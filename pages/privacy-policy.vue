@@ -1,8 +1,7 @@
 <template>
-  <main v-if="status === 'publish'" class="c-content">
+  <main class="c-content o-legal-pages">
     <LoadingSpinner :show="$fetchState.pending" />
-    <h1 v-text="title" />
-    <div v-html="content" />
+    <div v-if="status === 'publish'" v-html="content" />
   </main>
 </template>
 
@@ -13,13 +12,12 @@ export default {
   data () {
     return {
       status: '',
-      title: 'Datenschutzerklärung',
       content: ''
     }
   },
 
   async fetch () {
-    return await fetch('https://webshaped.de/wp-json/wp/v2/pages/4715')
+    return await fetch(`${this.$config.baseApiUrl}/wp-json/wp/v2/pages/4715`)
       .then(res => res.json())
       .then((res) => {
         this.content = res.content.rendered
@@ -27,6 +25,10 @@ export default {
       }).catch((error) => {
         this.$sentry.captureException(new Error(error))
       })
+  },
+
+  created () {
+    console.log(process.env.NODE_ENV === 'development')
   }
 }
 </script>

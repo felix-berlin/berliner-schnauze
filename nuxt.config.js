@@ -1,6 +1,12 @@
 import { resolve } from 'path'
 
 export default {
+  publicRuntimeConfig: {
+    baseUrl: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
+    baseApiUrl: 'https://webshaped.de'
+  },
+  privateRuntimeConfig: {},
+
   alias: {
     styles: resolve(__dirname, './assets/styles'),
     'sassy-scss': resolve(__dirname, './node_modules/@felix_berlin/sassy-scss/')
@@ -27,7 +33,7 @@ export default {
 
   // Sitemap
   sitemap: {
-    hostname: 'https://berliner-schnauze.wtf',
+    hostname: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
     gzip: true
   },
 
@@ -58,14 +64,13 @@ export default {
     'lucide-vue/nuxt',
     '@nuxtjs/device',
     '@nuxtjs/html-validator'
-    // '@nuxtjs/dotenv'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    // '@nuxt/image',
+    // '@nuxt/image', // Speedkit comes with a own (modified) version of image
     '@nuxtjs/sitemap',
     '@nuxtjs/toast',
     'nuxt-protected-mailto',
@@ -77,9 +82,10 @@ export default {
   ],
 
   sentry: {
-    dsn: 'https://f84fd7469c2e4ca7b3680f5e151d3499@o1131599.ingest.sentry.io/6176241', // Enter your project's DSN here
     // Additional Module Options go here
     // https://sentry.nuxtjs.org/sentry/options
+    dsn: 'https://f84fd7469c2e4ca7b3680f5e151d3499@o1131599.ingest.sentry.io/6176241',
+    disabled: process.env.NODE_ENV === 'development',
     config: {
       // Add native Sentry config here
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
@@ -89,7 +95,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/'
+    baseUrl: '/'
   },
 
   // xhrCache: {
@@ -146,28 +152,28 @@ export default {
       variances: [
         {
           style: 'normal',
-          weight: 'normal',
+          weight: 400,
           sources: [
             { src: '@/assets/fonts/Berlin.woff2', type: 'woff2' }
           ]
         },
         {
           style: 'italic',
-          weight: 'normal',
+          weight: 400,
           sources: [
             { src: '@/assets/fonts/Berlin-Italic.woff2', type: 'woff2' }
           ]
         },
         {
           style: 'normal',
-          weight: 'bold',
+          weight: 700,
           sources: [
             { src: '@/assets/fonts/Berlin-Bold.woff2', type: 'woff2' }
           ]
         },
         {
           style: 'normal',
-          weight: 'bolder',
+          weight: 900,
           sources: [
             { src: '@/assets/fonts/BerlinX-Bold.woff2', type: 'woff2' }
           ]

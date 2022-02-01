@@ -46,6 +46,7 @@
     text-decoration-style: dashed;
     text-decoration-thickness: from-font;
     text-underline-position: from-font;
+    margin: 0;
   }
 
   &__translation {
@@ -56,6 +57,7 @@
   &__example {
     font-style: italic;
     flex-basis: 100%;
+    margin: 0;
   }
 
   &__copy-buttons {

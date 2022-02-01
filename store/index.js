@@ -21,7 +21,7 @@ export const actions = {
   async fetchBerlinWords ({ commit, $sentry }) {
     commit('wordLoadingStatus', true)
 
-    return await fetch('https://webshaped.de/wp-json/berliner-schnauze/v1/words')
+    return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/words`)
       .then(res => res.json())
       .then((res) => {
         commit('setBerlinWords', res)

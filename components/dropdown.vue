@@ -1,7 +1,7 @@
 <template>
   <section class="c-dropdown" :class="modifier">
     <button
-      ref="menu"
+      ref="menuButton"
       type="button"
       class="c-dropdown__button"
       :aria-label="buttonAriaLabel"
@@ -14,7 +14,7 @@
     </button>
 
     <transition :name="transition">
-      <section v-if="isOpen" class="c-dropdown__menu" :class="menuModifier">
+      <section v-if="isOpen" ref="menuContent" class="c-dropdown__menu" :class="menuModifier">
         <slot name="content" />
       </section>
     </transition>
@@ -60,7 +60,7 @@ export default {
       const closeListerner = (e) => {
         // Check if user clicks outside of the menu
         // true — close the menu and remove EventListener
-        if (self.catchOutsideClick(e, self.$refs.menu)) {
+        if (self.catchOutsideClick(e, self.$refs.menuButton)) {
           window.removeEventListener('click', closeListerner)
           self.isOpen = false
         }
