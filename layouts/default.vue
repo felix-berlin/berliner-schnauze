@@ -26,6 +26,5 @@ export default {
     ScrollToTop: () => import('@/components/scroll-to-top'),
     Footer: () => import('@/components/footer')
   }
-
 }
 </script>

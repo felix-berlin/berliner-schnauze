@@ -23,6 +23,8 @@
         :key="item.ID"
         :data-group="item.group"
         class="c-word-list__word"
+        data-track-content
+        data-content-name="word"
       >
         <div class="c-word-list__copy-buttons">
           <button aria-label="Link zum Wort kopieren" type="button" class="c-word-list__copy-word" @click="copyWordUrlToClipboard(item.ID)">
@@ -32,7 +34,7 @@
             <Copy />
           </button>
         </div>
-        <p class="c-word-list__berlinerisch" v-text="item.berlinerisch" />
+        <p class="c-word-list__berlinerisch" data-content-piece v-text="item.berlinerisch" />
         <span class="c-word-list__translation" v-html="item.translation" />
         <p class="c-word-list__example" v-html="item.example" />
       </article>

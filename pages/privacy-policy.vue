@@ -25,10 +25,7 @@ export default {
       }).catch((error) => {
         this.$sentry.captureException(new Error(error))
       })
-  },
-
-  created () {
-    console.log(process.env.NODE_ENV === 'development')
   }
+
 }
 </script>
