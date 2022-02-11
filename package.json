@@ -19,7 +19,7 @@
     "@nuxtjs/sitemap": "^2.4.0",
     "@nuxtjs/toast": "^3.3.1",
     "core-js": "^3.21.0",
-    "floating-vue": "^1.0.0-beta.8",
+    "floating-vue": "^1.0.0-beta.9",
     "fuse.js": "^6.5.3",
     "lucide-vue": "^0.16.29",
     "nuxt": "^2.15.8",
@@ -30,7 +30,7 @@
     "vue-matomo": "^4.1.0",
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
-    "vue-uuid": "^2.0.2",
+    "vue-uuid": "^2.1.0",
     "vue-waypoint": "^3.5.2",
     "vue2-smooth-scroll": "^1.5.1",
     "webpack": "^4.46.0"
@@ -53,9 +53,9 @@
     "postcss-html": "^1.3.0",
     "sass": "^1.49.7",
     "sass-loader": "^10.2.1",
-    "stylelint": "^14.3.0",
-    "stylelint-config-recommended-vue": "^1.1.0",
-    "stylelint-config-standard": "^24.0.0",
+    "stylelint": "^14.5.0",
+    "stylelint-config-recommended-vue": "^1.3.0",
+    "stylelint-config-standard": "^25.0.0",
     "stylelint-config-standard-scss": "^3.0.0"
   }
 }
