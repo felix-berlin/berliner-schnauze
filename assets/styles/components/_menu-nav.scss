@@ -1,5 +1,48 @@
+@use './../variables/variables' as vars;
 .c-menu-nav {
   display: flex;
   justify-content: flex-end;
+  gap: vars.$spacer * 3;
   grid-area: menu-nav;
+
+  &__item-button,
+  &__item-link {
+    --color-icon: #{vars.$white-100};
+
+    color: var(--color-icon);
+  }
+
+  &__item-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: vars.$spacer * .25;
+
+  }
+
+  &__social-links {
+    display: flex;
+  }
+
+  &__main-elements {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .c-word-search {
+
+    &__search-button {
+      transition: all .3s ease-in-out;
+
+      &.has-searchbar {
+        --color-border: #{vars.$white-100};
+
+        border: 1px dashed var(--color-border);
+        border-left: none;
+      }
+    }
+  }
+
+
 }

@@ -1,29 +1,41 @@
 @use '../variables/variables' as vars;
 
 .c-header {
+  --color-background: #{vars.$highlight-200};
+
   grid-area: header;
   display: grid;
   grid-template-areas:
     ' . logo menu-nav . '
   ;
-  grid-template-columns: 100px 1fr 1fr 100px;
+  grid-template-columns: 100px 1fr 2fr 100px;
   align-items: center;
-  background-color: vars.$grey-700;
+  background-color: var(--color-background);
   box-shadow:
-    0px 1.6px 2.2px -5px rgba(0, 0, 0, 0.028),
-    0px 3.8px 5.3px -5px rgba(0, 0, 0, 0.04),
-    0px 7.4px 10px -5px rgba(0, 0, 0, 0.05),
-    0px 13.7px 17.9px -5px rgba(0, 0, 0, 0.06),
-    0px 26.3px 33.4px -5px rgba(0, 0, 0, 0.072),
-    0px 55px 80px -5px rgba(0, 0, 0, 0.1)
-  ;
-  position: fixed;
+  0px 0.5px 0.6px rgba(0, 0, 0, 0.08),
+  0px 4px 5px rgba(0, 0, 0, 0.16)
+;
+  position: sticky;
   top: 0;
   left: 0;
   z-index: 999;
   width: 100%;
+  padding: vars.$spacer * .6 0;
+
+  html[class="dark-mode"] & {
+    --color-background: #{vars.$grey-700}
+  }
 
   .c-logo {
     grid-area: logo;
+
+    &__link {
+      --color: #{vars.$white-100};
+
+      font-family: vars.$berliner;
+      text-decoration: none;
+      color: var(--color);
+      font-size: 2.5rem;
+    }
   }
 }

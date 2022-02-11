@@ -9,6 +9,7 @@
       />
     </ScrollToTop>
     <Footer />
+    <div class="o-background" />
   </div>
 </template>
 

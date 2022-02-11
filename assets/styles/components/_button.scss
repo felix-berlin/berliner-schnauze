@@ -1,3 +1,18 @@
-.c-button {
+@use './../variables/variables' as vars;
 
+.c-button {
+  cursor: pointer;
+  padding: vars.$spacer * .25;
+
+  &--center-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+}
+
+.u-button-reset {
+  background-color: transparent;
+  border: none;
 }

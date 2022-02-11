@@ -3,18 +3,41 @@
 
 body {
   --body-bgc: #{vars.$white};
-  --body-color: #{vars.$grey-600};
+  --color-body: #{vars.$grey};
 
   margin: 0;
-  background-color: var(--body-bgc);
-  color: var(--body-color);
+  // background-color: var(--body-bgc);
+  color: var(--color-body);
+
+  // background-color: #FFD6CF;
+  // opacity: 0.5;
+  // background-image: radial-gradient(#F28F7F 1.1px, #FFD6CF 1.1px);
+  // background-size: 22px 22px;
+
+  // background: radial-gradient(circle, #F28F7F 10%, transparent 11%);
+  // background-size: 3em 3em;
+  // background-color: #FFD6CF;
+  // opacity: 0.45;
 
   @include sassy-mx.feature("motion") {
     transition: background-color 1s ease-in-out;
   }
 
+
   html[class="dark-mode"] & {
     --body-bgc: #{vars.$grey-600};
-    --body-color: #{vars.$white};
+    --color-body: #{vars.$white};
   }
+
+}
+
+.o-background {
+  position: fixed;
+  background-color: #FFD6CF;
+  opacity: 0.5;
+  background-image: radial-gradient(#F28F7F 1.1px, #FFD6CF 1.1px);
+  background-size: 22px 22px;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
 }

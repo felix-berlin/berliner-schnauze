@@ -1,55 +1,67 @@
 <template>
   <header class="c-header">
     <div class="c-logo">
-      <NuxtLink to="/">
+      <NuxtLink to="/" class="c-logo__link">
         Berliner Schnauze
       </NuxtLink>
     </div>
 
     <nav class="c-menu-nav">
-      <SearchWords v-if="$route.name === 'index'" button-position="right" :show-searchbar-after-click="true" placeholder="Durchsuche den Berliner-Wortschatz" :keyboard-focus="true" />
+      <div class="c-menu-nav__main-elements">
+        <SearchWords
+          v-if="$route.name === 'index'"
+          modifier="c-menu-nav__item"
+          button-position="right"
+          button-modifier="c-menu-nav__item-button"
+          :show-searchbar-after-click="true"
+          placeholder="Durchsuche den Berliner-Wortschatz"
+          :keyboard-focus="true"
+        />
 
-      <Dropdown button-aria-label="Ändere den Website Farbmodus">
-        <template #title>
-          <span v-show="$colorMode.preference === 'dark'" style="pointer-events: none;">
-            <Moon />
-          </span>
-          <span v-show="$colorMode.preference === 'light'" style="pointer-events: none;">
-            <Sun />
-          </span>
-          <span v-show="$colorMode.preference === 'system'" style="pointer-events: none;">
-            <Laptop2 />
-          </span>
-        </template>
-        <template #content>
-          <ColorMode />
-        </template>
-      </Dropdown>
+        <Dropdown modifier="c-menu-nav__item" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Ändere den Website Farbmodus">
+          <template #title>
+            <span v-show="$colorMode.preference === 'dark'" class="u-icon-untouchable u-icon-wrapper">
+              <Moon />
+            </span>
+            <span v-show="$colorMode.preference === 'light'" class="u-icon-untouchable u-icon-wrapper">
+              <Sun />
+            </span>
+            <span v-show="$colorMode.preference === 'system'" class="u-icon-untouchable u-icon-wrapper">
+              <Laptop2 />
+            </span>
+          </template>
+          <template #content>
+            <ColorMode />
+          </template>
+        </Dropdown>
 
-      <a rel="noopener" aria-label="Link zum Github Projekt" href="https://github.com/felix-berlin/berliner-schnauze" target="_blank"><Github /></a>
-      <a rel="noopener" aria-label="Folge Berliner Schnauze auf Facebook" href="https://www.facebook.com/Berliner.Schnauze030" target="_blank"><Facebook /></a>
+        <Dropdown modifier="c-menu-nav__item" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Website Menu Navigation">
+          <template #title>
+            <span class="u-icon-untouchable u-icon-wrapper">
+              <Menu />
+            </span>
+          </template>
+          <template #content>
+            <ul class="u-list-reset">
+              <li>
+                <NuxtLink to="/imprint">
+                  Impressum
+                </NuxtLink>
+              </li>
+              <li>
+                <NuxtLink to="/privacy-policy">
+                  Datenschutz
+                </NuxtLink>
+              </li>
+            </ul>
+          </template>
+        </Dropdown>
+      </div>
 
-      <Dropdown button-aria-label="Website Menu Navigation">
-        <template #title>
-          <span style="pointer-events: none;">
-            <Menu />
-          </span>
-        </template>
-        <template #content>
-          <ul class="u-list-reset">
-            <li>
-              <NuxtLink to="/imprint">
-                Impressum
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to="/privacy-policy">
-                Datenschutz
-              </NuxtLink>
-            </li>
-          </ul>
-        </template>
-      </Dropdown>
+      <div class="c-menu-nav__social-links">
+        <a rel="noopener" class="c-menu-nav__item-link" aria-label="Link zum Github Projekt" href="https://github.com/felix-berlin/berliner-schnauze" target="_blank"><Github /></a>
+        <a rel="noopener" class="c-menu-nav__item-link" aria-label="Folge Berliner Schnauze auf Facebook" href="https://www.facebook.com/Berliner.Schnauze030" target="_blank"><Facebook /></a>
+      </div>
     </nav>
   </header>
 </template>

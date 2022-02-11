@@ -10,7 +10,10 @@
   }
 
   &__word {
+    --color-background: #{vars.$white-100};
+
     padding: vars.$spacer;
+    background-color: var(--color-background);
     border: 1px solid vars.$grey-700;
     display: flex;
     flex-wrap: wrap;

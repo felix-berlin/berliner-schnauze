@@ -1,5 +1,11 @@
+@use '../variables/variables' as vars;
+
 .c-word-search {
   display: flex;
+  // gap: vars.$spacer * .5;
+  // flex: 1 1 100%;
+  width: 100%;
+  justify-content: flex-end;
 
   &__search-button {
 
@@ -15,9 +21,17 @@
   }
 
   &__search-input {
+    --color-border: #{vars.$highlight-100};
+
     height: 100%;
     padding: 0 .2em;
     flex: 1 1 100%;
+    border: 1px solid var(--color-border);
+
+    &:focus-visible {
+      outline-style: dashed;
+      // outline-offset: 3px;
+    }
   }
 
   &__search-label {
@@ -31,5 +45,17 @@
   .c-word-search__search-input:focus ~ .c-word-search__search-label,
   .c-word-search__search-input:not(:placeholder-shown) ~ .c-word-search__search-label {
     z-index: -1;
+  }
+
+  &__shortcut {
+    --color-border: #{vars.$highlight-100};
+    --color: #{vars.$white-100};
+
+    border: 1px dashed var(--color-border);
+    color: var(--color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: vars.$spacer * .35;
   }
 }

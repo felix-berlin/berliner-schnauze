@@ -3,12 +3,12 @@
     <button
       ref="menuButton"
       type="button"
-      class="c-dropdown__button"
+      class="c-dropdown__button c-button"
       :aria-label="buttonAriaLabel"
       :class="buttonModifier"
       @click="openClose"
     >
-      <slot name="title" style="pointer-events: none;">
+      <slot name="title">
         Dropdown
       </slot>
     </button>

@@ -1,18 +1,18 @@
 <template>
-  <div class="c-word-search">
-    <transition name="fade">
-      <div v-if="keyboardFocus" v-show="!showSearchBar && !$device.isMobileOrTablet" class="c-word-search__shortcut">
-        <span v-show="$device.isMacOS">
-          <Command />
-        </span>
-        <span v-show="$device.isWindows">Control</span>
-        <span>+ K</span>
-      </div>
-    </transition>
-    <button aria-label="Wortsuche betätigen" type="button" class="c-word-search__search-button" :class="{ 'c-word-search__search-button--right': (searchButtonPosition != 'left') }" @click="buttonActions()">
+  <div class="c-word-search" :class="modifier">
+    <!-- <transition name="fade-fast"> -->
+    <div v-if="keyboardFocus" v-show="!showSearchBar && !$device.isMobileOrTablet" class="c-word-search__shortcut">
+      <span v-show="$device.isMacOS">
+        <Command />
+      </span>
+      <span v-show="$device.isWindows">Control </span>
+      <span> + K</span>
+    </div>
+    <!-- </transition> -->
+    <button aria-label="Wortsuche betätigen" type="button" class="c-word-search__search-button u-button-reset c-button c-button--center-icon" :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'has-searchbar': showSearchBar }, buttonModifier]" @click="buttonActions()">
       <Search default-class="c-word-search__search-icon" />
     </button>
-    <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap" tag="div">
+    <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap" :class="searchbarModifier" tag="div">
       <input
         :id="'wordSearch' + id"
         ref="search"
@@ -67,6 +67,18 @@ export default {
       default: false
     },
     searchAriaLabel: {
+      type: String,
+      default: ''
+    },
+    modifier: {
+      type: String,
+      default: ''
+    },
+    buttonModifier: {
+      type: String,
+      default: ''
+    },
+    searchbarModifier: {
       type: String,
       default: ''
     }
