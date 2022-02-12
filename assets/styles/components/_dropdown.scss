@@ -1,3 +1,5 @@
+@use './../variables/variables' as vars;
+
 .c-dropdown {
   position: relative;
   display: flex;
@@ -5,10 +7,30 @@
   justify-content: center;
 
   &__menu {
+    --color-background: #{vars.$highlight-100};
+
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 100%;
+    top: 170%;
+    background-color: var(--color-background);
+    padding: vars.$spacer vars.$spacer * 1.5;
+    box-shadow:
+      0px 0.5px 0.6px rgba(0, 0, 0, 0.08),
+      0px 4px 5px rgba(0, 0, 0, 0.16);
+
+    &--left {
+      right: vars.$spacer * .25;
+      text-align: right;
+    }
+
+    &--right {
+      left: vars.$spacer * .25;
+      text-align: left;
+    }
+
+    &--center {
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
 }
 

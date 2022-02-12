@@ -1,11 +1,5 @@
 <template>
   <div class="c-word-list">
-    <!-- Wordcount -->
-    <div class="c-word-list__word-count">
-      <span>Anzahl Wörter:</span>
-      <span v-text="berlinerWordCount" />
-    </div>
-
     <!-- Search -->
     <SearchWords :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
 
@@ -26,17 +20,28 @@
         data-track-content
         data-content-name="word"
       >
-        <div class="c-word-list__copy-buttons">
-          <button aria-label="Link zum Wort kopieren" type="button" class="c-word-list__copy-word" @click="copyWordUrlToClipboard(item.ID)">
-            <Hash /> <span v-text="'word' + item.ID" />
-          </button>
-          <button aria-label="Wort kopieren" type="button" class="c-word-list__copy-url" @click="copyNameToClipboard(item.ID)">
-            <Copy />
-          </button>
+        <div class="c-word-list__header">
+          <p class="c-word-list__berlinerisch" data-content-piece v-text="item.berlinerisch" />
+          <span class="c-word-list__translation-wrapper">
+            <span class="c-word-list__translation-spacer">᛫</span>
+            <span class="c-word-list__translation" v-html="item.translation" />
+          </span>
         </div>
-        <p class="c-word-list__berlinerisch" data-content-piece v-text="item.berlinerisch" />
-        <span class="c-word-list__translation" v-html="item.translation" />
-        <p class="c-word-list__example" v-html="item.example" />
+        <div class="c-word-list__divider-wrapper">
+          <div class="c-word-list__divider" />
+          <div class="c-word-list__copy-buttons">
+            <button aria-label="Link zum Wort kopieren" type="button" class="c-word-list__copy-word c-button" @click="copyWordUrlToClipboard(item.ID)">
+              <Hash /> <span v-text="'word' + item.ID" />
+            </button>
+            <button aria-label="Wort kopieren" type="button" class="c-word-list__copy-url c-button" @click="copyNameToClipboard(item.ID)">
+              <Copy />
+            </button>
+          </div>
+        </div>
+        <div class="c-word-list__example-wrapper">
+          <Quote :size="44" />
+          <p class="c-word-list__example" v-html="item.example" />
+        </div>
       </article>
     </section>
     <!-- <Sidebar /> -->
@@ -44,7 +49,7 @@
 </template>
 
 <script>
-import { Copy, Hash } from 'lucide-vue'
+import { Copy, Hash, Quote } from 'lucide-vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -52,7 +57,8 @@ export default {
 
   components: {
     Copy,
-    Hash
+    Hash,
+    Quote
   },
 
   data () {

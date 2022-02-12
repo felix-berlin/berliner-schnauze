@@ -8,8 +8,15 @@
   &__item-button,
   &__item-link {
     --color-icon: #{vars.$white-100};
+    --color-border: transparent;
 
     color: var(--color-icon);
+    border: 1px dashed var(--color-border);
+    transition: all .3s ease-in-out;
+
+    &:hover {
+      --color-border: var(--color-icon);
+    }
   }
 
   &__item-link {
@@ -22,12 +29,14 @@
 
   &__social-links {
     display: flex;
+    gap: vars.$spacer * .25;
   }
 
   &__main-elements {
     display: flex;
     justify-content: flex-end;
     width: 100%;
+    gap: vars.$spacer * .7;
   }
 
   .c-word-search {
@@ -42,7 +51,23 @@
         border-left: none;
       }
     }
+
+    &__search-label,
+    &__search-input {
+      --color: #{vars.$highlight-200};
+
+      color: var(--color);
+    }
   }
 
 
+}
+
+.c-menu-more {
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * .5;
+  }
 }

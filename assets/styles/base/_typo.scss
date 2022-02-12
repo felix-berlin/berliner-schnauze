@@ -92,5 +92,13 @@
 }
 
 a {
-  color: vars.$highlight;
+  color: vars.$highlight-200;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-decoration-thickness: from-font;
+    text-underline-position: from-font;
+  }
 }

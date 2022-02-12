@@ -35,20 +35,20 @@
           </template>
         </Dropdown>
 
-        <Dropdown modifier="c-menu-nav__item" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Website Menu Navigation">
+        <Dropdown modifier="c-menu-nav__item c-menu-more" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Website Menu Navigation">
           <template #title>
             <span class="u-icon-untouchable u-icon-wrapper">
               <Menu />
             </span>
           </template>
           <template #content>
-            <ul class="u-list-reset">
-              <li>
+            <ul class="c-menu-more__list u-list-reset">
+              <li class="c-menu-more__item">
                 <NuxtLink to="/imprint">
                   Impressum
                 </NuxtLink>
               </li>
-              <li>
+              <li class="c-menu-more__item">
                 <NuxtLink to="/privacy-policy">
                   Datenschutz
                 </NuxtLink>

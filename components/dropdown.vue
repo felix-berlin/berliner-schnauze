@@ -14,7 +14,7 @@
     </button>
 
     <transition :name="transition">
-      <section v-if="isOpen" ref="menuContent" class="c-dropdown__menu" :class="menuModifier">
+      <section v-if="isOpen" ref="menuContent" class="c-dropdown__menu" :class="[{ 'c-dropdown__menu--left': menuAlign === 'left', 'c-dropdown__menu--right': menuAlign === 'right', 'c-dropdown__menu--center': menuAlign === 'center' }, menuModifier]">
         <slot name="content" />
       </section>
     </transition>
@@ -45,6 +45,13 @@ export default {
     buttonAriaLabel: {
       type: String,
       default: ''
+    },
+    menuAlign: {
+      type: String,
+      default: 'left',
+      validator (value) {
+        return ['left', 'right', 'center'].includes(value)
+      }
     }
   },
 
