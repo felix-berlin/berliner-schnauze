@@ -214,6 +214,10 @@ export default {
 
         this.pressedKeys = {}
       }
+
+      if (this.pressedKeys.Escape) {
+        this.showSearchBar = false
+      }
     },
 
     onScroll (scroll) {
