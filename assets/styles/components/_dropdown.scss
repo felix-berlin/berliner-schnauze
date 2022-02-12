@@ -6,6 +6,13 @@
   align-items: center;
   justify-content: center;
 
+  &__button {
+
+    &.is-active {
+      border-bottom: 1px dashed vars.$white-100;
+    }
+  }
+
   &__menu {
     --color-background: #{vars.$highlight-100};
 
@@ -18,12 +25,12 @@
       0px 4px 5px rgba(0, 0, 0, 0.16);
 
     &--left {
-      right: vars.$spacer * .25;
+      right: 0;
       text-align: right;
     }
 
     &--right {
-      left: vars.$spacer * .25;
+      left: 0;
       text-align: left;
     }
 

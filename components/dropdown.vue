@@ -5,7 +5,7 @@
       type="button"
       class="c-dropdown__button c-button"
       :aria-label="buttonAriaLabel"
-      :class="buttonModifier"
+      :class="[{ 'is-active': isOpen }, buttonModifier]"
       @click="openClose"
     >
       <slot name="title">
