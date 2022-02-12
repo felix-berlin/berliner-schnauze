@@ -1,3 +1,52 @@
+@use './../variables/variables' as vars;
+
 .c-footer {
+  --space-walking: 40px;
+
   grid-area: footer;
+  display: grid;
+  grid-template-columns: 100px 1fr 2fr 100px;
+  grid-template-areas:
+    ' . farewell farewell . '
+    ' ground ground ground ground '
+  ;
+
+  &__farewell {
+    grid-area: farewell;
+    display: flex;
+
+    &-image {
+      max-width: 100%;
+      height: auto;
+      // flex: 1 0 40%;
+      position: relative;
+      bottom: calc((var(--space-walking) * 1.7) * -1);
+
+      &-wrapper {
+        flex: 1 0 40%;
+        display: flex;
+      }
+    }
+  }
+
+  &__ground {
+    --color-background: #{rgba(vars.$highlight-200, .4)};
+
+    background-color: var(--color-background);
+    grid-area: ground;
+    display: grid;
+    grid-template-columns: 100px 2fr 1fr 1fr 100px;
+    grid-template-areas:
+      ' . . slogan nav . '
+    ;
+    padding-top: var(--space-walking);
+  }
+
+  &__nav {
+    grid-area: nav;
+  }
+
+  &__slogan {
+    grid-area: slogan;
+  }
 }

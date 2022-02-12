@@ -5,10 +5,19 @@
   padding-top: vars.$spacer * 4;
 
   &__headline {
-    font-size: 3rem;
+    font-size : clamp(1.5rem, 3rem, 3rem);
+    margin: 0;
+  }
+
+  &__image-wrap {
+    flex: 1 0 40%;
+    display: flex;
+    align-items: flex-end;
   }
 
   &__image {
-    flex: 1 0 40%;
+    max-width: 100%;
+    // max-width: 900px;
+    height: auto;
   }
 }

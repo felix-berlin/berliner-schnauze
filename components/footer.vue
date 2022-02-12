@@ -1,16 +1,35 @@
 <template>
   <footer class="c-footer" style="height: 300px;">
-    <p>Mensch ditt war nen weiter Weg</p>
     <Mailto mail="test@example.com" subject="Optional Example Subject" body="Optional Placeholder Body" title="Write me a email" />
 
-    <nuxt-picture preload src="/bear-walking.png" format="webp" />
+    <div class="c-footer__farewell">
+      <div class="c-footer__farewell-image-wrapper">
+        <picture>
+          <source srcset="~/static/bear-walking.avif" type="image/avif">
+          <source srcset="~/static/bear-walking.webp" type="image/webp">
+          <source srcset="~/static/bear-walking.png" type="image/png">
+          <img src="~/static/bear-walking.png" class="c-footer__farewell-image" alt="Laufender Bär" decoding="async" loading="lazy">
+        </picture>
+      </div>
+      <p class="c-footer__farewell-text">
+        Mensch, ditt war nen weiter Weg.
+      </p>
+    </div>
 
-    <NuxtLink to="/imprint">
-      Impressum
-    </NuxtLink>
-    <NuxtLink to="/privacy-policy">
-      Datenschutz
-    </NuxtLink>
+    <div class="c-footer__ground">
+      <p class="c-footer__slogan">
+        Hergestellt mit🐻und ganz viel ❤️ in Berlin
+      </p>
+
+      <nav class="c-footer__nav">
+        <NuxtLink to="/imprint">
+          Impressum
+        </NuxtLink>
+        <NuxtLink to="/privacy-policy">
+          Datenschutz
+        </NuxtLink>
+      </nav>
+    </div>
   </footer>
 </template>
 

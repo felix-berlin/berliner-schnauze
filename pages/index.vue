@@ -5,7 +5,15 @@
         <h1 class="c-start-header__headline">
           Na Keule, keen'n Dunst vom Berlinern?<br> Dann mal uff-gepasst,<br> hier warten {{ berlinerWordCount }} Wörter auf dich!
         </h1>
-        <nuxt-picture preload src="brown-bear-roar.png" fit="inside" class="c-start-header__image" />
+        <!-- <nuxt-picture preload src="/brown-bear-roar.png" fit="inside" format="webp" class="c-start-header__image" /> -->
+
+        <div class="c-start-header__image-wrap">
+          <picture>
+            <source srcset="~/static/brown-bear-roar.webp" type="image/webp">
+            <source srcset="~/static/brown-bear-roar.png" type="image/png">
+            <img src="~/static/brown-bear-roar.png" class="c-start-header__image" alt="Brüllender Bär" decoding="async" loading="eager">
+          </picture>
+        </div>
       </header>
       <WordList :critical="true" search-aria-label="Wortsuche" />
     </main>
