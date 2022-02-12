@@ -28,7 +28,7 @@
           </span>
         </div>
         <div class="c-word-list__divider-wrapper">
-          <div class="c-word-list__divider" />
+          <div v-if="item.example" class="c-word-list__divider" />
           <div class="c-word-list__copy-buttons">
             <button aria-label="Link zum Wort kopieren" type="button" class="c-word-list__copy-word c-button" @click="copyWordUrlToClipboard(item.ID)">
               <Hash /> <span v-text="'word' + item.ID" />
@@ -38,7 +38,7 @@
             </button>
           </div>
         </div>
-        <div class="c-word-list__example-wrapper">
+        <div v-if="item.example" class="c-word-list__example-wrapper">
           <Quote :size="44" />
           <p class="c-word-list__example" v-html="item.example" />
         </div>

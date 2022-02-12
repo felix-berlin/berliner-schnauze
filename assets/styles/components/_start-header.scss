@@ -1,0 +1,14 @@
+@use './../variables/variables' as vars;
+
+.c-start-header {
+  display: flex;
+  padding-top: vars.$spacer * 4;
+
+  &__headline {
+    font-size: 3rem;
+  }
+
+  &__image {
+    flex: 1 0 40%;
+  }
+}

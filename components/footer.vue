@@ -3,6 +3,8 @@
     <p>Mensch ditt war nen weiter Weg</p>
     <Mailto mail="test@example.com" subject="Optional Example Subject" body="Optional Placeholder Body" title="Write me a email" />
 
+    <nuxt-picture preload src="bear-walking.png" />
+
     <NuxtLink to="/imprint">
       Impressum
     </NuxtLink>

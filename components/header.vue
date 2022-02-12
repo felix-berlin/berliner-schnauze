@@ -60,7 +60,7 @@
 
       <div class="c-menu-nav__social-links">
         <a
-          v-tooltip="'Schau dir das Projekt auf Github an.'"
+          v-tooltip="'Juhu, Berliner Schnauze ist ein Open Source Projekt auf Github.'"
           rel="noopener"
           class="c-menu-nav__item-link"
           aria-label="Link zum Github Projekt"
@@ -68,7 +68,15 @@
           target="_blank"
         ><Github /></a>
         <a
-          v-tooltip="'Verrückt, Berliner Schnauze gibts auch auf Facebook.'"
+          v-tooltip="'Verrückt, Berliner Schnauze gibts auch auf Twitter.'"
+          rel="noopener"
+          class="c-menu-nav__item-link"
+          aria-label="Folge Berliner Schnauze auf Twitter"
+          href="https://twitter.com/BLN_Schnauze"
+          target="_blank"
+        ><Twitter /></a>
+        <a
+          v-tooltip="'Altmodisch, aber auf Facebook gibt es Berliner Schnauze auch.'"
           rel="noopener"
           class="c-menu-nav__item-link"
           aria-label="Folge Berliner Schnauze auf Facebook"
@@ -81,7 +89,7 @@
 </template>
 
 <script>
-import { Moon, Sun, Laptop2, Menu, Github, Facebook } from 'lucide-vue'
+import { Moon, Sun, Laptop2, Menu, Github, Facebook, Twitter } from 'lucide-vue'
 import Dropdown from './dropdown.vue'
 
 export default {
@@ -93,7 +101,8 @@ export default {
     Dropdown,
     Menu,
     Github,
-    Facebook
+    Facebook,
+    Twitter
   }
 }
 </script>
