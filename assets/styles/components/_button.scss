@@ -1,11 +1,24 @@
 @use './../variables/variables' as vars;
 
 .c-button {
+  --color-background: #{vars.$white-100};
+  --color-border: #{vars.$grey};
+  --style-border: solid;
+  --width-border: 1px;
+  --color: #{vars.$grey};
+
   cursor: pointer;
   padding: vars.$spacer * .25;
+  background-color: var(--color-background);
+  border: var(--width-border) var(--style-border) var(--color-border);
+  color: var(--color);
+
+  &--dashed-border {
+    --style-border: dashed;
+  }
 
   &--center-icon {
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
   }

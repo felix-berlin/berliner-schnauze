@@ -1,8 +1,16 @@
+@use 'sassy-scss/mixins' as mx;
+
 .c-scroll-to-top {
   position: fixed;
-  top: 10%;
-  right: 15px;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 99;
+
+  @include mx.breakpoint('md') {
+    top: 10%;
+    right: 15px;
+  }
 }
 
 .fade-enter-active,

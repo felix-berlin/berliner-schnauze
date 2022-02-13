@@ -30,10 +30,10 @@
         <div class="c-word-list__divider-wrapper">
           <div v-if="item.example" class="c-word-list__divider" />
           <div class="c-word-list__copy-buttons">
-            <button aria-label="Link zum Wort kopieren" type="button" class="c-word-list__copy-word c-button" @click="copyWordUrlToClipboard(item.ID)">
+            <button aria-label="Link zum Wort kopieren" type="button" class="c-word-list__copy-word c-button c-button--center-icon" @click="copyWordUrlToClipboard(item.ID)">
               <Link />
             </button>
-            <button aria-label="Wort kopieren" type="button" class="c-word-list__copy-url c-button" @click="copyNameToClipboard(item.ID)">
+            <button aria-label="Wort kopieren" type="button" class="c-word-list__copy-url c-button c-button--center-icon" @click="copyNameToClipboard(item.ID)">
               <Copy />
             </button>
           </div>

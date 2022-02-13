@@ -1,7 +1,7 @@
 <template>
   <div class="c-scroll-to-top">
     <transition name="fade">
-      <button v-show="windowTop >= showAtPosition" :aria-label="buttonAriaLabel" type="button" class="c-scroll-to-top__button" @click="scrollToTop">
+      <button v-show="windowTop >= showAtPosition" :aria-label="buttonAriaLabel" type="button" class="c-scroll-to-top__button c-button c-button--center-icon c-button--dashed-border " @click="scrollToTop">
         <slot>Scroll to top</slot>
       </button>
     </transition>
