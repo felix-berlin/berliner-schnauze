@@ -1,18 +1,39 @@
 @use './../variables/variables' as vars;
+@use 'sassy-scss/mixins' as mx;
 
 .c-start-header {
+  --wrap-flex: wrap;
+
   display: flex;
-  padding-top: vars.$spacer * 4;
+  flex-wrap: var(--wrap-flex);
+
+  @include mx.breakpoint('md') {
+    --wrap-flex: nowrap;
+
+    padding-top: vars.$spacer * 4;
+  }
 
   &__headline {
-    font-size : clamp(1.5rem, 3rem, 3rem);
-    margin: 0;
+    --size-font: 1.5rem;
+    --margin: #{vars.$spacer * 1.5} 0 #{vars.$spacer} 0;
+
+    margin: var(--margin);
+    font-size: var(--size-font);
+
+    @include mx.breakpoint('md') {
+      --size-font: clamp(1.5rem, 3rem, 3rem);
+      --margin: 0;
+    }
   }
 
   &__image-wrap {
     flex: 1 0 40%;
     display: flex;
     align-items: flex-end;
+
+    picture {
+      display: flex;
+    }
   }
 
   &__image {

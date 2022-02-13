@@ -1,4 +1,9 @@
-$breakpoints: (
-  'sm': 320,
-  'lg': 1024,
-);
+@use 'sassy-scss/mixins' as mx;
+
+:root {
+  --spacing-main-frame: 20px;
+
+  @include mx.breakpoint('md') {
+    --spacing-main-frame: 100px;
+  }
+}

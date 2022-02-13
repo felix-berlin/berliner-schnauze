@@ -4,6 +4,7 @@
   justify-content: flex-end;
   gap: vars.$spacer * 3;
   grid-area: menu-nav;
+  flex-wrap: wrap;
 
   &__item-button,
   &__item-link {
@@ -38,29 +39,6 @@
     width: 100%;
     gap: vars.$spacer * .7;
   }
-
-  .c-word-search {
-
-    &__search-button {
-      transition: all .3s ease-in-out;
-
-      &.has-searchbar {
-        --color-border: #{vars.$white-100};
-
-        border: 1px dashed var(--color-border);
-        border-left: none;
-      }
-    }
-
-    &__search-label,
-    &__search-input {
-      --color: #{vars.$highlight-200};
-
-      color: var(--color);
-    }
-  }
-
-
 }
 
 .c-menu-more {

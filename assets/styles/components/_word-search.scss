@@ -1,13 +1,24 @@
 @use '../variables/variables' as vars;
 
 .c-word-search {
+  --padding-y-input: .5rem;
+  --padding-x-input: .5rem;
+  --margin: 0 0 #{vars.$spacer * 1.5} 0;
+
   display: flex;
   // gap: vars.$spacer * .5;
   // flex: 1 1 100%;
   width: 100%;
   justify-content: flex-end;
+  margin: var(--margin);
 
   &__search-button {
+    --color-background: #{vars.$white-100};
+    --style-border: solid;
+    --color-border: #{vars.$grey};
+
+    background-color: var(--color-background);
+    border: 1px var(--style-border) var(--color-border);
 
     &--right {
       order: 2;
@@ -21,25 +32,28 @@
   }
 
   &__search-input {
-    --color-border: #{vars.$highlight-100};
+    --color-border: #{vars.$grey};
+    --color-background: #{vars.$white-200};
+    --size-font: 1.5rem;
 
     height: 100%;
-    padding: 0 .2em;
+    padding: var(--padding-y-input) var(--padding-x-input);
     flex: 1 1 100%;
     border: 1px solid var(--color-border);
+    background-color: var(--color-background);
+    border-left: none;
+    font-size: var(--size-font);
 
     &:focus-visible {
       outline-style: dashed;
-      // outline-offset: 3px;
     }
   }
 
   &__search-label {
     position: absolute;
-    left: 0.3em;
+    left: var(--padding-x-input);
     top: 50%;
     transform: translateY(-50%);
-    color: #000;
   }
 
   .c-word-search__search-input:focus ~ .c-word-search__search-label,
@@ -57,5 +71,38 @@
     align-items: center;
     justify-content: center;
     padding: vars.$spacer * .35;
+  }
+
+  &--nav-search {
+    --margin: 0;
+
+    .c-word-search {
+
+      &__search-button {
+        --color-background: transparent;
+        --color-border: transparent;
+
+        transition: all .3s ease-in-out;
+
+        &.has-searchbar {
+          --color-border: #{vars.$white-100};
+          --style-border: dashed;
+
+          // border: 1px dashed var(--color-border);
+          border-left: none;
+        }
+      }
+
+      &__search-label,
+      &__search-input {
+        --color: #{vars.$highlight-200};
+
+        color: var(--color);
+      }
+
+      &__search-input {
+        --color-border: #{vars.$highlight-100};
+      }
+    }
   }
 }

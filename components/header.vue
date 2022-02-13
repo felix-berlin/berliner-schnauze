@@ -10,7 +10,7 @@
       <div class="c-menu-nav__main-elements">
         <SearchWords
           v-if="$route.name === 'index'"
-          modifier="c-menu-nav__item"
+          modifier="c-menu-nav__item c-word-search--nav-search"
           button-position="right"
           button-modifier="c-menu-nav__item-button"
           :show-searchbar-after-click="true"
@@ -58,7 +58,7 @@
         </Dropdown>
       </div>
 
-      <div class="c-menu-nav__social-links">
+      <div v-if="$device.isDesktopOrTablet" class="c-menu-nav__social-links">
         <a
           v-tooltip="'Juhu, Berliner Schnauze ist ein Open Source Projekt auf Github.'"
           rel="noopener"

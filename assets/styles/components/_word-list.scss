@@ -1,4 +1,5 @@
 @use '../variables/variables' as vars;
+@use 'sassy-scss/mixins' as mx;
 
 .c-word-list {
 
@@ -6,7 +7,6 @@
     display: grid;
     gap: vars.$spacer * 1.75;
     position: relative;
-    min-height: 30vh;
   }
 
   &__word {
@@ -37,14 +37,23 @@
   }
 
   &__header {
+    --direction-flex: column;
+
     display: flex;
+    flex-direction: var(--direction-flex);
     margin-bottom: vars.$spacer * 1.5;
+
+    @include mx.breakpoint('md') {
+      --direction-flex: row;
+    }
   }
 
   &__berlinerisch {
+    --size-font: 1.5rem;
+
     font-family: vars.$berlin;
     font-weight: 700;
-    font-size: 4rem;
+    font-size: var(--size-font);
     transition: .3s;
     text-decoration: underline;
     text-decoration-color: transparent;
@@ -52,6 +61,10 @@
     text-decoration-thickness: from-font;
     text-underline-position: from-font;
     margin: 0;
+
+    @include mx.breakpoint('md') {
+      --size-font: 3rem;
+    }
   }
 
   &__translation {
@@ -69,15 +82,27 @@
   }
 
   &__example-wrapper {
+    --padding: #{vars.$spacer};
+
     display: flex;
-    padding: vars.$spacer * 2.5 10% vars.$spacer * 2 10%;
+    padding: var(--padding);
+
+    @include mx.breakpoint('md') {
+      --padding: #{vars.$spacer} * 2.5 10% #{vars.$spacer} * 2 10%;
+    }
   }
 
   &__example {
+    --size-font: 1.2rem;
+
     font-style: italic;
     flex-basis: 100%;
     margin: 44px 0 0 0;
-    font-size: 1.8rem;
+    font-size: var(--size-font);
+
+    @include mx.breakpoint('md') {
+      --size-font: 1.8rem;
+    }
   }
 
   &__divider-wrapper {
