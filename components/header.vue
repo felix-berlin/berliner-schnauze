@@ -58,7 +58,7 @@
         </Dropdown>
       </div>
 
-      <div v-if="$device.isDesktopOrTablet" class="c-menu-nav__social-links">
+      <div class="c-menu-nav__social-links">
         <a
           v-tooltip="'Juhu, Berliner Schnauze ist ein Open Source Projekt auf Github.'"
           rel="noopener"
