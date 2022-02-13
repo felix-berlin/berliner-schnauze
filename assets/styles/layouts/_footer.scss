@@ -20,7 +20,7 @@
       height: auto;
       // flex: 1 0 40%;
       position: relative;
-      bottom: calc((var(--space-walking) * 1.7) * -1);
+      bottom: calc(-1.7 * var(--space-walking));
 
       &-wrapper {
         flex: 1 0 40%;
