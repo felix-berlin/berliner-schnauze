@@ -74,6 +74,7 @@
     &-wrapper {
       display: flex;
       align-items: center;
+      margin-top: vars.$spacer * .5;
     }
 
     &-spacer {

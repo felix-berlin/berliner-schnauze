@@ -18,7 +18,7 @@
 
     <div class="c-footer__ground">
       <p class="c-footer__slogan">
-        Hergestellt mit🐻und ganz viel ❤️ in Berlin
+        Hergestellt mit🐻-Kräften in Berlin
       </p>
 
       <nav class="c-footer__nav">
