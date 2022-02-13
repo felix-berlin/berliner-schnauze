@@ -80,7 +80,7 @@ export default {
         search: '',
         options: {
           keys: [
-            'berlinerisch', 'translation', 'example'
+            'berlinerisch', 'translation'
           ]
         }
 
