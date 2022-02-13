@@ -18,7 +18,7 @@
           :keyboard-focus="true"
         />
 
-        <Dropdown modifier="c-menu-nav__item" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Ändere den Website Farbmodus">
+        <Dropdown modifier="c-menu-nav__item" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Ändere den Website Farbmodus" :menu-min-width="false">
           <template #title>
             <span v-show="$colorMode.preference === 'dark'" class="u-icon-untouchable u-icon-wrapper">
               <Moon />

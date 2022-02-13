@@ -14,7 +14,7 @@
     </button>
 
     <transition :name="transition">
-      <section v-if="isOpen" ref="menuContent" class="c-dropdown__menu" :class="[{ 'c-dropdown__menu--left': menuAlign === 'left', 'c-dropdown__menu--right': menuAlign === 'right', 'c-dropdown__menu--center': menuAlign === 'center' }, menuModifier]">
+      <section v-if="isOpen" ref="menuContent" class="c-dropdown__menu" :class="[{ 'c-dropdown__menu--left': menuAlign === 'left', 'c-dropdown__menu--right': menuAlign === 'right', 'c-dropdown__menu--center': menuAlign === 'center', 'c-dropdown__menu--min-width': menuMinWidth }, menuModifier]">
         <slot name="content" />
       </section>
     </transition>
@@ -52,6 +52,10 @@ export default {
       validator (value) {
         return ['left', 'right', 'center'].includes(value)
       }
+    },
+    menuMinWidth: {
+      type: Boolean,
+      default: true
     }
   },
 
