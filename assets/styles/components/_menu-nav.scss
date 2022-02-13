@@ -6,7 +6,7 @@
   justify-content: flex-end;
   gap: vars.$spacer * 3;
   grid-area: menu-nav;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
 
   &__item-button,
   &__item-link {
@@ -30,18 +30,6 @@
 
   }
 
-  &__social-links {
-    --display: none;
-
-    display: var(--display);
-
-    @include mx.breakpoint('md') {
-      --display: flex;
-
-      gap: vars.$spacer * .25;
-    }
-  }
-
   &__main-elements {
     display: flex;
     justify-content: flex-end;
@@ -53,8 +41,17 @@
 .c-menu-more {
 
   &__list {
+    --size-font: 1.15rem;
+    --gap: #{vars.$spacer * .7};
+
     display: flex;
     flex-direction: column;
-    gap: vars.$spacer * .5;
+    gap: var(--gap);
+    font-size: var(--size-font);
+
+    @include mx.breakpoint('md') {
+      --size-font: inherit;
+      --gap: #{vars.$spacer * .5};
+    }
   }
 }

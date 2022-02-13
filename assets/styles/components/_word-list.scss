@@ -77,7 +77,13 @@
     }
 
     &-spacer {
-      margin: 0 vars.$spacer;
+      --margin: 0 #{vars.$spacer * .5} 0 0;
+
+      margin: var(--margin);
+
+      @include mx.breakpoint('md') {
+        --margin: 0 vars.$spacer;
+      }
     }
   }
 

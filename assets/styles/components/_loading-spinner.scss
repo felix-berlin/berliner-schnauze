@@ -1,3 +1,5 @@
+@use './../variables/variables' as vars;
+
 // @see: https://codepen.io/jenning/pen/YzNmzaV
 
 .c-loader {
@@ -7,7 +9,7 @@
   left: 50%;
 
   &__spinner {
-    --color: white;
+    --color: #{vars.$highlight-200};
     --size-mid: 6vmin;
     --size-dot: 1.5vmin;
     --size-bar: 0.4vmin;

@@ -5,6 +5,7 @@
         <h1 class="c-start-header__headline">
           Na Keule,<br> keen'n Dunst vom Berlinern?<br><br> Dann mal uff-gepasst,<br> hier warten {{ berlinerWordCount }} Wörter auf dich!
         </h1>
+
         <!-- <nuxt-picture preload src="/brown-bear-roar.png" fit="inside" format="webp" class="c-start-header__image" /> -->
 
         <div class="c-start-header__image-wrap">

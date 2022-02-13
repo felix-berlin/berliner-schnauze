@@ -42,6 +42,7 @@
             </span>
           </template>
           <template #content>
+            <SocialList list-modifier="c-social-list--mobile-dropdown" :hide-tooltips="true" />
             <ul class="c-menu-more__list u-list-reset">
               <li class="c-menu-more__item">
                 <NuxtLink to="/imprint">
@@ -58,38 +59,13 @@
         </Dropdown>
       </div>
 
-      <div class="c-menu-nav__social-links">
-        <a
-          v-tooltip="'Juhu, Berliner Schnauze ist ein Open Source Projekt auf Github.'"
-          rel="noopener"
-          class="c-menu-nav__item-link"
-          aria-label="Link zum Github Projekt"
-          href="https://github.com/felix-berlin/berliner-schnauze"
-          target="_blank"
-        ><Github /></a>
-        <a
-          v-tooltip="'Verrückt, Berliner Schnauze gibts auch auf Twitter.'"
-          rel="noopener"
-          class="c-menu-nav__item-link"
-          aria-label="Folge Berliner Schnauze auf Twitter"
-          href="https://twitter.com/BLN_Schnauze"
-          target="_blank"
-        ><Twitter /></a>
-        <a
-          v-tooltip="'Altmodisch, aber auf Facebook gibt es Berliner Schnauze auch.'"
-          rel="noopener"
-          class="c-menu-nav__item-link"
-          aria-label="Folge Berliner Schnauze auf Facebook"
-          href="https://www.facebook.com/Berliner.Schnauze030"
-          target="_blank"
-        ><Facebook /></a>
-      </div>
+      <SocialList modifier="c-social-list--desktop" list-link-modifier="c-menu-nav__item-link" />
     </nav>
   </header>
 </template>
 
 <script>
-import { Moon, Sun, Laptop2, Menu, Github, Facebook, Twitter } from 'lucide-vue'
+import { Moon, Sun, Laptop2, Menu } from 'lucide-vue'
 import Dropdown from './dropdown.vue'
 
 export default {
@@ -99,10 +75,7 @@ export default {
     Sun,
     Laptop2,
     Dropdown,
-    Menu,
-    Github,
-    Facebook,
-    Twitter
+    Menu
   }
 }
 </script>

@@ -1,4 +1,5 @@
 @use './../variables/variables' as vars;
+@use 'sassy-scss/mixins' as mx;
 
 .c-footer {
   --space-walking: 40px;
@@ -23,30 +24,68 @@
       bottom: calc(-1.7 * var(--space-walking));
 
       &-wrapper {
-        flex: 1 0 40%;
+        --basis-flex: 70%;
+
+        flex: 0 0 var(--basis-flex);
         display: flex;
+
+        @include mx.breakpoint('md') {
+          --basis-flex: 40%;
+        }
+      }
+    }
+
+    &-text {
+      --display: none;
+
+      display: var(--display);
+
+      @include mx.breakpoint('md') {
+        --display: block;
       }
     }
   }
 
   &__ground {
     --color-background: #{rgba(vars.$highlight-200, .4)};
+    --columns-template: var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame);
+    --areas-template:
+      ' . slogan slogan slogan . '
+      ' nav nav nav nav nav '
+      ;
 
     background-color: var(--color-background);
     grid-area: ground;
     display: grid;
-    grid-template-columns: var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame);
-    grid-template-areas:
-      ' . . slogan nav . '
-    ;
+    grid-template-columns: var(--columns-template);
+    grid-template-areas: var(--areas-template);
     padding-top: var(--space-walking);
+
+    @include mx.breakpoint('md') {
+      --areas-template: ' . . slogan nav . ';
+      --columns-template: var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame);
+    }
   }
 
   &__nav {
+    --color-background: #{vars.$highlight-100};
+
     grid-area: nav;
+    background-color: var(--color-background);
+    display: flex;
+    justify-content: center;
+    gap: vars.$spacer;
+    align-items: center;
   }
 
   &__slogan {
+    --align-text: center;
+
     grid-area: slogan;
+    text-align: var(--align-text);
+
+    @include mx.breakpoint('md') {
+      --align-text: left;
+    }
   }
 }
