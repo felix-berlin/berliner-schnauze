@@ -21,7 +21,7 @@
     display: flex;
     justify-content: space-between;
     border-bottom: 1px dashed vars.$highlight-200;
-    margin-bottom: vars.$spacer * .7;
+    margin-bottom: vars.$spacer;
     padding-bottom: vars.$spacer * .7;
 
     @include mx.breakpoint('md') {

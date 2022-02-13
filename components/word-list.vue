@@ -31,7 +31,7 @@
           <div v-if="item.example" class="c-word-list__divider" />
           <div class="c-word-list__copy-buttons">
             <button aria-label="Link zum Wort kopieren" type="button" class="c-word-list__copy-word c-button" @click="copyWordUrlToClipboard(item.ID)">
-              <Hash /> <span v-text="'word' + item.ID" />
+              <Link />
             </button>
             <button aria-label="Wort kopieren" type="button" class="c-word-list__copy-url c-button" @click="copyNameToClipboard(item.ID)">
               <Copy />
@@ -39,7 +39,7 @@
           </div>
         </div>
         <div v-if="item.example" class="c-word-list__example-wrapper">
-          <Quote :size="44" />
+          <Quote :size="44" class="c-word-list__quote-icon" />
           <p class="c-word-list__example" v-html="item.example" />
         </div>
       </article>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { Copy, Hash, Quote } from 'lucide-vue'
+import { Copy, Link, Quote } from 'lucide-vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -57,7 +57,7 @@ export default {
 
   components: {
     Copy,
-    Hash,
+    Link,
     Quote
   },
 

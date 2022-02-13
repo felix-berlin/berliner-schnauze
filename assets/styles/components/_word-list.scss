@@ -2,6 +2,7 @@
 @use 'sassy-scss/mixins' as mx;
 
 .c-word-list {
+  --size-quote-icon: 32px;
 
   &__list {
     display: grid;
@@ -104,11 +105,20 @@
 
     font-style: italic;
     flex-basis: 100%;
-    margin: 44px 0 0 0;
+    margin: var(--size-quote-icon) 0 0 0;
     font-size: var(--size-font);
 
     @include mx.breakpoint('md') {
       --size-font: 1.8rem;
+    }
+  }
+
+  &__quote-icon {
+    width: var(--size-quote-icon);
+    height: var(--size-quote-icon);
+
+    @include mx.breakpoint('md') {
+      --size-quote-icon: 44px;
     }
   }
 

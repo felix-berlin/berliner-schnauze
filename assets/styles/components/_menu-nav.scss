@@ -42,7 +42,7 @@
 
   &__list {
     --size-font: 1.15rem;
-    --gap: #{vars.$spacer * .7};
+    --gap: #{vars.$spacer};
 
     display: flex;
     flex-direction: column;
