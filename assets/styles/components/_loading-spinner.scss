@@ -1,4 +1,5 @@
 @use './../variables/variables' as vars;
+@use 'sassy-scss/mixins' as mx;
 
 // @see: https://codepen.io/jenning/pen/YzNmzaV
 
@@ -10,10 +11,11 @@
 
   &__spinner {
     --color: #{vars.$highlight-200};
-    --size-mid: 6vmin;
-    --size-dot: 1.5vmin;
-    --size-bar: 0.4vmin;
-    --size-square: 3vmin;
+    --size-bar: 0.8vmin;
+
+    @include mx.breakpoint('sm') {
+      --size-bar: 0.4vmin;
+    }
 
     display: block;
     position: relative;
@@ -32,10 +34,16 @@
 
       &::before,
       &::after {
-        height: 3vmin;
+        --height-bar: 8vmin;
+
+        height: var(--height-bar);
         width: var(--size-bar);
         background-color: var(--color);
         animation: loader-5 0.6s cubic-bezier(0, 0, 0.03, 0.9) infinite;
+
+        @include mx.breakpoint('sm') {
+          --height-bar: 3vmin;
+        }
       }
 
       &::before {
