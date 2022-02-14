@@ -112,4 +112,11 @@
       }
     }
   }
+
+  &--full-width {
+
+    @include mx.breakpoint('xs', 'max') {
+      width: 100%;
+    }
+  }
 }

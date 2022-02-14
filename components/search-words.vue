@@ -71,8 +71,8 @@ export default {
       default: ''
     },
     modifier: {
-      type: String,
-      default: ''
+      type: Array,
+      default: () => []
     },
     buttonModifier: {
       type: String,

@@ -3,13 +3,13 @@
 
 .c-header {
   --color-background: #{vars.$highlight-200};
+  --columns-header-inner: 1fr 2fr;
+  --areas-template: ' . logo menu-nav . ';
 
   grid-area: header;
   display: grid;
-  grid-template-areas:
-    ' . logo menu-nav . '
-  ;
-  grid-template-columns: var(--spacing-main-frame) 1fr 2fr var(--spacing-main-frame);
+  grid-template-areas: var(--areas-template);
+  grid-template-columns: var(--spacing-main-frame) var(--columns-header-inner) var(--spacing-main-frame);
   align-items: center;
   background-color: var(--color-background);
   box-shadow:
@@ -22,14 +22,24 @@
   width: 100%;
   padding: vars.$spacer * .6 0;
 
-  &.has-searchbar {
-    grid-template-areas:
-      ' . logo logo . '
-      ' . menu-nav menu-nav . '
-    ;
+  @include mx.breakpoint('xxs') {
+    --columns-header-inner: 2fr 1fr;
+  }
 
-    .c-logo {
-      margin-bottom: vars.$spacer * .5;
+  @include mx.breakpoint('xs') {
+    --columns-header-inner: 1fr 2fr;
+  }
+
+  &.has-searchbar {
+    @include mx.breakpoint('xs', 'max') {
+      --areas-template:
+        ' . logo logo . '
+        ' . menu-nav menu-nav . '
+      ;
+
+      .c-logo {
+        margin-bottom: vars.$spacer * .5;
+      }
     }
   }
 

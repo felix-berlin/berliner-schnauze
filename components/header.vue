@@ -10,7 +10,7 @@
       <div class="c-menu-nav__main-elements">
         <SearchWords
           v-if="$route.name === 'index'"
-          modifier="c-menu-nav__item c-word-search--nav-search"
+          :modifier="[{'c-word-search--full-width': searchbarVisable}, 'c-menu-nav__item c-word-search--nav-search']"
           button-position="right"
           button-modifier="c-menu-nav__item-button"
           :show-searchbar-after-click="true"
@@ -18,7 +18,7 @@
           :keyboard-focus="true"
         />
 
-        <Dropdown v-show="!searchbarVisable" modifier="c-menu-nav__item" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Ändere den Website Farbmodus" :menu-min-width="false">
+        <Dropdown :modifier="[{'is-hidden': searchbarVisable}, 'c-menu-nav__item']" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Ändere den Website Farbmodus" :menu-min-width="false">
           <template #title>
             <span v-show="$colorMode.preference === 'dark'" class="u-icon-untouchable u-icon-wrapper">
               <Moon />
@@ -35,7 +35,7 @@
           </template>
         </Dropdown>
 
-        <Dropdown v-show="!searchbarVisable" modifier="c-menu-nav__item c-menu-more" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Website Menu Navigation">
+        <Dropdown :modifier="[{'is-hidden': searchbarVisable}, 'c-menu-nav__item c-menu-more']" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Website Menu Navigation">
           <template #title>
             <span class="u-icon-untouchable u-icon-wrapper">
               <Menu />

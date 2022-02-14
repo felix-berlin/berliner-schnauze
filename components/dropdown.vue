@@ -27,8 +27,8 @@ export default {
 
   props: {
     modifier: {
-      type: String,
-      default: ''
+      type: Array,
+      default: () => []
     },
     buttonModifier: {
       type: String,

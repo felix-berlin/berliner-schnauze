@@ -22,6 +22,15 @@
     }
   }
 
+  &__item {
+
+    &.is-hidden {
+      @include mx.breakpoint('xs', 'max') {
+        display: none;
+      }
+    }
+  }
+
   &__item-link {
     display: flex;
     align-items: center;
