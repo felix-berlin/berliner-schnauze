@@ -92,7 +92,8 @@ export default {
       timeoutId: null,
       pressedKeys: {},
       scrollPositionY: null,
-      searchLength: null
+      searchLength: null,
+      scrollToResultsTriggert: false // Prevent scroll to results triggert more than one time
     }
   },
 
@@ -154,7 +155,10 @@ export default {
      */
     hideSearchbarAfterTime (timeout) {
       const time = setTimeout(() => {
-        if (this.showSearchbarAfterClick) { this.showSearchBar = false }
+        if (this.showSearchbarAfterClick) {
+          this.showSearchBar = false
+          this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
+        }
       }, timeout)
 
       this.timeoutId = time
@@ -174,6 +178,7 @@ export default {
      */
     showAndFocusSearchbar () {
       this.showSearchBar = true
+      this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
 
       // When searchbar is loaded focus it
       this.$nextTick(function () {
@@ -217,6 +222,7 @@ export default {
 
       if (this.pressedKeys.Escape) {
         this.showSearchBar = false
+        this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
       }
     },
 
@@ -224,11 +230,18 @@ export default {
       const positionY = window.scrollY
 
       this.scrollPositionY = positionY
+
+      // Reset condition
+      if (positionY < 200) {
+        this.scrollToResultsTriggert = false
+      }
     },
 
     scrollToResults () {
-      if ((this.scrollPositionY > 200) && (this.searchLength > 0)) {
+      if ((this.scrollPositionY > 200) && (this.searchLength > 0) && !this.scrollToResultsTriggert) {
+        this.scrollToResultsTriggert = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
+        console.log('trigger')
       }
     }
   }

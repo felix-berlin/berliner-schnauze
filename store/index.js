@@ -3,6 +3,7 @@ export const state = () => ({
   wordGroups: [],
   wordCount: '',
   searchWord: '',
+  searchbarIsVisable: false,
   loadingWords: false,
   groupNames: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
   currentDictionaryPosition: ''
@@ -14,7 +15,8 @@ export const getters = {
   berlinerWordCount: state => state.wordCount,
   getWordLoadingStatus: state => state.loadingWords,
   dictionaryPosition: state => state.currentDictionaryPosition,
-  getWordSearch: state => state.searchWord
+  getWordSearch: state => state.searchWord,
+  searchbarVisable: state => state.searchbarIsVisable
 }
 
 export const actions = {
@@ -98,5 +100,6 @@ export const mutations = {
   upWords: (state, w) => (state.berlinerWords = w),
   setDictionaryPosition: (state, position) => (state.currentDictionaryPosition = position),
   wordLoadingStatus: (state, status) => (state.loadingWords = status),
-  updateSearch: (state, search) => (state.searchWord = search)
+  updateSearch: (state, search) => (state.searchWord = search),
+  updateSearchbarIsVisable: (state, visable) => (state.searchbarIsVisable = visable)
 }

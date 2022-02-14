@@ -7,10 +7,9 @@
   --margin: 0 0 #{vars.$spacer * 1.5} 0;
 
   display: flex;
-  // gap: vars.$spacer * .5;
-  // flex: 1 1 100%;
-  width: 100%;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  align-items: stretch;
+  // justify-content: flex-end;
   margin: var(--margin);
 
   &__search-button {
@@ -28,8 +27,10 @@
 
   &__search-wrap {
     position: relative;
-    flex: 1 1 100%;
+    flex: 1 1 auto;
     display: flex;
+    width: 1%;
+    min-width: 0;
   }
 
   &__search-input {
@@ -39,11 +40,11 @@
 
     height: 100%;
     padding: var(--padding-y-input) var(--padding-x-input);
-    flex: 1 1 100%;
     border: 1px solid var(--color-border);
     background-color: var(--color-background);
     border-left: none;
     font-size: var(--size-font);
+    width: 100%;
 
     &:focus-visible {
       outline-style: dashed;

@@ -22,6 +22,17 @@
   width: 100%;
   padding: vars.$spacer * .6 0;
 
+  &.has-searchbar {
+    grid-template-areas:
+      ' . logo logo . '
+      ' . menu-nav menu-nav . '
+    ;
+
+    .c-logo {
+      margin-bottom: vars.$spacer * .5;
+    }
+  }
+
   html[class="dark-mode"] & {
     --color-background: #{vars.$grey-700}
   }

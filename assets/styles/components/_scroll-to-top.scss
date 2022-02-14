@@ -6,6 +6,12 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 99;
+  box-shadow:
+    0px 0px 0.9px rgba(0, 0, 0, 0.035),
+    0px 0px 2.5px rgba(0, 0, 0, 0.05),
+    0px 0px 6px rgba(0, 0, 0, 0.065),
+    0px 0px 20px rgba(0, 0, 0, 0.1)
+  ;
 
   @include mx.breakpoint('md') {
     top: 10%;
