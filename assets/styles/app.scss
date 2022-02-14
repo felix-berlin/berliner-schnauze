@@ -3,6 +3,9 @@
 @use 'layouts/layout';
 @use 'components/components';
 @use 'objects/static-pages';
-@use '../../node_modules/floating-vue/dist/style.css';
+
+// Plugins
+@use 'plugins/floating-vue';
+
 
 

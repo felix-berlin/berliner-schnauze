@@ -1,0 +1,19 @@
+@use './../../../node_modules/floating-vue/dist/style.css';
+@use './../variables/variables' as vars;
+
+.v-popper--theme-berliner-schnauze .v-popper__inner {
+  background: vars.$grey;
+  color: vars.$white-100;
+  padding: vars.$spacer * .5;
+  border: none;
+  border-radius: 0px;
+  max-width: 250px;
+}
+
+.v-popper--theme-berliner-schnauze .v-popper__arrow-outer {
+  border-color: vars.$grey;
+}
+
+.v-popper--theme-berliner-schnauze .v-popper__arrow-inner {
+  visibility: hidden;
+}

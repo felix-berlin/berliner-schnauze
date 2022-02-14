@@ -87,13 +87,14 @@
   }
 }
 
-* {
+html {
   font-family: vars.$berlin;
 }
 
 a {
   color: vars.$highlight-200;
   text-decoration: none;
+  cursor: pointer;
 
   &:hover {
     text-decoration: underline;

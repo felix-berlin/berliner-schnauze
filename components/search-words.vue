@@ -9,7 +9,7 @@
       <span> + K</span>
     </div>
     <!-- </transition> -->
-    <button aria-label="Wortsuche betätigen" type="button" class="c-word-search__search-button u-button-reset c-button c-button--center-icon" :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'has-searchbar': showSearchBar }, buttonModifier]" @click="buttonActions()">
+    <button aria-label="Wortsuche betätigen" type="button" class="c-word-search__search-button u-button-reset c-button c-button--center-icon" :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'c-word-search__search-button--left': (searchButtonPosition != 'right'), 'has-searchbar': showSearchBar }, buttonModifier]" @click="buttonActions()">
       <Search default-class="c-word-search__search-icon" />
     </button>
     <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap" :class="searchbarModifier" tag="div">
@@ -91,7 +91,6 @@ export default {
       showSearchBar: true,
       timeoutId: null,
       pressedKeys: {},
-      scrollPositionY: null,
       searchLength: null,
       scrollToResultsTriggert: false // Prevent scroll to results triggert more than one time
     }
@@ -229,7 +228,7 @@ export default {
     onScroll (scroll) {
       const positionY = window.scrollY
 
-      this.scrollPositionY = positionY
+      this.$store.commit('updateScrollPositionY', positionY)
 
       // Reset condition
       if (positionY < 200) {
@@ -238,7 +237,7 @@ export default {
     },
 
     scrollToResults () {
-      if ((this.scrollPositionY > 200) && (this.searchLength > 0) && !this.scrollToResultsTriggert) {
+      if ((this.$store.state.scrollPositionY > 200) && (this.searchLength > 0) && !this.scrollToResultsTriggert) {
         this.scrollToResultsTriggert = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
         console.log('trigger')

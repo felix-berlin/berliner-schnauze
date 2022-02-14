@@ -6,7 +6,8 @@ export const state = () => ({
   searchbarIsVisable: false,
   loadingWords: false,
   groupNames: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-  currentDictionaryPosition: ''
+  currentDictionaryPosition: '',
+  scrollPositionY: null
 })
 
 export const getters = {
@@ -16,7 +17,8 @@ export const getters = {
   getWordLoadingStatus: state => state.loadingWords,
   dictionaryPosition: state => state.currentDictionaryPosition,
   getWordSearch: state => state.searchWord,
-  searchbarVisable: state => state.searchbarIsVisable
+  searchbarVisable: state => state.searchbarIsVisable,
+  getScrollPositionY: state => state.scrollPositionY
 }
 
 export const actions = {
@@ -101,5 +103,6 @@ export const mutations = {
   setDictionaryPosition: (state, position) => (state.currentDictionaryPosition = position),
   wordLoadingStatus: (state, status) => (state.loadingWords = status),
   updateSearch: (state, search) => (state.searchWord = search),
-  updateSearchbarIsVisable: (state, visable) => (state.searchbarIsVisable = visable)
+  updateSearchbarIsVisable: (state, visable) => (state.searchbarIsVisable = visable),
+  updateScrollPositionY: (state, position) => (state.scrollPositionY = position)
 }

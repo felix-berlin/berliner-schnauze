@@ -1,10 +1,14 @@
 @use 'sassy-scss/mixins' as mx;
 
 .c-scroll-to-top {
+  --left-position: 50%;
+  --bottom-position: 10px;
+  --transform: translateX(-50%);
+
   position: fixed;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: var(--bottom-position);
+  left: var(--left-position);
+  transform: var(--transform);
   z-index: 99;
   box-shadow:
     0px 0px 0.9px rgba(0, 0, 0, 0.035),
@@ -14,17 +18,12 @@
   ;
 
   @include mx.breakpoint('md') {
-    top: 10%;
-    right: 15px;
+    --left-position: none;
+    --bottom-position: none;
+    --transform: translateY(-50%);
+
+    top: 50%;
+    right: 1px;
   }
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}

@@ -1,5 +1,5 @@
 <template>
-  <header class="c-header" :class="{'has-searchbar': searchbarVisable}">
+  <header class="c-header tset" :class="{'has-searchbar': searchbarVisable}">
     <div class="c-logo">
       <NuxtLink to="/" class="c-logo__link">
         Berliner Schnauze
@@ -59,7 +59,7 @@
         </Dropdown>
       </div>
 
-      <SocialList modifier="c-social-list--desktop" list-link-modifier="c-menu-nav__item-link" />
+      <SocialList modifier="c-social-list--desktop" list-link-modifier="c-menu-nav__item-link" list-modifier="u-list-vertical" />
     </nav>
   </header>
 </template>

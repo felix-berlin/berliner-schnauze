@@ -1,5 +1,6 @@
 @use '../variables/variables' as vars;
 @use 'sassy-scss/mixins' as mx;
+@use 'sassy-scss/functions' as fn;
 
 .c-word-search {
   --padding-y-input: .5rem;
@@ -16,12 +17,21 @@
     --color-background: #{vars.$white-100};
     --style-border: solid;
     --color-border: #{vars.$grey};
+    --offset-x-box-shadow: 2px;
+    --color-box-shadow: rgb(0 0 0 / 20%);
 
     background-color: var(--color-background);
     border: 1px var(--style-border) var(--color-border);
 
     &--right {
       order: 2;
+      --offset-x-boxshadow: -2px;
+    }
+
+    &.has-searchbar {
+      position: relative;
+      z-index: 1;
+      box-shadow: var(--offset-x-box-shadow) 0px 0px 0px var(--color-box-shadow);
     }
   }
 
@@ -37,6 +47,7 @@
     --color-border: #{vars.$grey};
     --color-background: #{vars.$white-200};
     --size-font: 1.5rem;
+    --color-outline: #{rgba(vars.$highlight-200, .7)};
 
     height: 100%;
     padding: var(--padding-y-input) var(--padding-x-input);
@@ -47,7 +58,10 @@
     width: 100%;
 
     &:focus-visible {
-      outline-style: dashed;
+      outline-style: solid;
+      outline-color: var(--color-outline);
+      outline-width: 2px;
+      z-index: 2;
     }
   }
 
@@ -88,6 +102,7 @@
       &__search-button {
         --color-background: transparent;
         --color-border: transparent;
+        --color-box-shadow: #{fn.hex-to-rgb(vars.$highlight-100, 20%)};
 
         transition: all .3s ease-in-out;
 
@@ -95,7 +110,6 @@
           --color-border: #{vars.$white-100};
           --style-border: dashed;
 
-          // border: 1px dashed var(--color-border);
           border-left: none;
         }
       }
@@ -109,6 +123,7 @@
 
       &__search-input {
         --color-border: #{vars.$highlight-100};
+        --color-outline: #{fn.hex-to-rgb(vars.$white-200, 50%)};
       }
     }
   }

@@ -11,8 +11,11 @@
           <img src="~/static/bear-walking.png" class="c-footer__farewell-image" alt="Laufender Bär" decoding="async" loading="lazy">
         </picture>
       </div>
-      <p class="c-footer__farewell-text">
+      <p v-if="$store.state.scrollPositionY > 2000" class="c-footer__farewell-text">
         Mensch, ditt war nen weiter Weg.
+      </p>
+      <p v-else>
+        Knorke ditt du mich hier unten besuchst.
       </p>
     </div>
 

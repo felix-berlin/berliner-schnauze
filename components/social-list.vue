@@ -5,7 +5,8 @@
         <a
           v-tooltip="{
             content: social.tooltip,
-            disabled: (social.tooltip.length ? false : true) || hideTooltips
+            disabled: (social.tooltip.length ? false : true) || hideTooltips,
+            theme: 'berliner-schnauze'
           }"
           :href="social.link"
           :aria-label="social.ariaLabel"
