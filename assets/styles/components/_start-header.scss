@@ -7,8 +7,11 @@
   display: flex;
   flex-wrap: var(--wrap-flex);
 
-  @include mx.breakpoint('md') {
+  @include mx.breakpoint('xs') {
     --wrap-flex: nowrap;
+  }
+
+  @include mx.breakpoint('sm') {
 
     padding-top: vars.$spacer * 4;
   }
@@ -20,9 +23,14 @@
     margin: var(--margin);
     font-size: var(--size-font);
 
+    @include mx.breakpoint('sm') {
+      --margin: 0;
+
+      align-self: center;
+    }
+
     @include mx.breakpoint('md') {
       --size-font: clamp(1.5rem, 3rem, 3rem);
-      --margin: 0;
     }
   }
 
