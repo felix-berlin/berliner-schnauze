@@ -113,13 +113,15 @@ export default {
       this.focusSearch()
     }
 
+    if (this.$store.state.scrollPositionY < 200) {
+      this.scrollToResultsTriggert = false
+    }
+
     window.addEventListener('keydown', this.triggerKeyboardSearch)
-    window.addEventListener('scroll', this.onScroll, { passive: true })
   },
 
   beforeDestroy () {
     window.addEventListener('keydown', this.triggerKeyboardSearch)
-    window.removeEventListener('scroll', this.onScroll, { passive: true })
   },
 
   methods: {
@@ -225,22 +227,10 @@ export default {
       }
     },
 
-    onScroll (scroll) {
-      const positionY = window.scrollY
-
-      this.$store.commit('updateScrollPositionY', positionY)
-
-      // Reset condition
-      if (positionY < 200) {
-        this.scrollToResultsTriggert = false
-      }
-    },
-
     scrollToResults () {
       if ((this.$store.state.scrollPositionY > 200) && (this.searchLength > 0) && !this.scrollToResultsTriggert) {
         this.scrollToResultsTriggert = true
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        console.log('trigger')
       }
     }
   }
