@@ -17,11 +17,16 @@
     display: flex;
 
     &-image {
+      --to-bottom: -1.4;
+
       max-width: 100%;
       height: auto;
-      // flex: 1 0 40%;
       position: relative;
-      bottom: calc(-1.7 * var(--space-walking));
+      bottom: calc(var(--to-bottom) * var(--space-walking));
+
+      @include mx.breakpoint('xs') {
+
+      }
 
       &-wrapper {
         --basis-flex: 70%;
