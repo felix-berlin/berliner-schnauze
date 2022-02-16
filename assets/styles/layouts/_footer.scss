@@ -13,23 +13,26 @@
   ;
 
   &__farewell {
+    --gap: 5%;
+
     grid-area: farewell;
     display: flex;
+    gap: var(--gap);
 
     &-image {
-      --to-bottom: -1.4;
+      --to-bottom: -1.25;
 
       max-width: 100%;
       height: auto;
       position: relative;
       bottom: calc(var(--to-bottom) * var(--space-walking));
 
-      @include mx.breakpoint('xs') {
-
+      @include mx.breakpoint('md') {
+        --to-bottom: -1.7;
       }
 
       &-wrapper {
-        --basis-flex: 70%;
+        --basis-flex: 50%;
 
         flex: 0 0 var(--basis-flex);
         display: flex;
@@ -42,11 +45,19 @@
 
     &-text {
       --display: none;
+      --size-font: 2rem;
 
       display: var(--display);
+      font-family: vars.$berliner;
+      align-self: center;
+      font-size: var(--size-font);
 
-      @include mx.breakpoint('md') {
+      @include mx.breakpoint('xs') {
         --display: block;
+      }
+
+      @include mx.breakpoint('lg') {
+        --size-font: 3rem;
       }
     }
   }
@@ -74,6 +85,7 @@
 
   &__nav {
     --color-background: #{vars.$highlight-100};
+    --padding: #{vars.$spacer * .5} 0;
 
     grid-area: nav;
     background-color: var(--color-background);
@@ -81,6 +93,11 @@
     justify-content: center;
     gap: vars.$spacer;
     align-items: center;
+    padding: var(--padding);
+
+    @include mx.breakpoint('md') {
+      --color-background: transparent;
+    }
   }
 
   &__slogan {

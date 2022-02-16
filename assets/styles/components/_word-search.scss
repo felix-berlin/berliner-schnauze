@@ -10,7 +10,6 @@
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
-  // justify-content: flex-end;
   margin: var(--margin);
 
   &__search-button {
@@ -88,10 +87,17 @@
     align-items: center;
     justify-content: center;
     padding: vars.$spacer * .35;
+    font-size: .6rem;
+    gap: vars.$spacer * .25;
+    align-self: center;
 
     @include mx.breakpoint('md') {
       --display: flex;
     }
+  }
+
+  &__command-icon-wrap {
+    display: flex;
   }
 
   &--nav-search {

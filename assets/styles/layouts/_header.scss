@@ -59,7 +59,11 @@
       color: var(--color);
       font-size: var(--size-font);
 
-      @include mx.breakpoint('md') {
+      @include mx.breakpoint('sm') {
+        --size-font: 2rem;
+      }
+
+      @include mx.breakpoint('lg') {
         --size-font: 2.5rem;
       }
     }

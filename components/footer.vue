@@ -11,11 +11,17 @@
           <img src="~/static/bear-walking.png" class="c-footer__farewell-image" alt="Laufender Bär" decoding="async" loading="lazy">
         </picture>
       </div>
-      <p v-if="$store.state.scrollPositionY > 2000" class="c-footer__farewell-text">
+      <p v-if="$store.state.scrollPositionY > 2000 && $route.name === 'index'" class="c-footer__farewell-text">
         Mensch, ditt war nen weiter Weg.
       </p>
-      <p v-else>
+      <p v-else-if="$route.name === 'index'" class="c-footer__farewell-text">
         Knorke ditt du mich hier unten besuchst.
+      </p>
+      <p v-if="$route.name === 'imprint'" class="c-footer__farewell-text">
+        Na, allet klar?
+      </p>
+      <p v-if="$route.name === 'privacy-policy'" class="c-footer__farewell-text">
+        Keine Sorge, so viel weiß ich gar nicht über dich.
       </p>
     </div>
 

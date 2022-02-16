@@ -2,11 +2,12 @@
   <div class="c-word-search" :class="modifier">
     <!-- <transition name="fade-fast"> -->
     <div v-if="keyboardFocus" v-show="!showSearchBar && !$device.isMobileOrTablet" class="c-word-search__shortcut">
-      <span v-show="$device.isMacOS">
-        <Command />
+      <span v-show="$device.isMacOS" class="c-word-search__command-icon-wrap">
+        <Command :size="12" class="c-word-search__command-icon" />
       </span>
-      <span v-show="$device.isWindows">Control </span>
-      <span> + K</span>
+      <span v-show="$device.isWindows">Control</span>
+      <span class="c-word-search__shortcut-combine">+</span>
+      <span>K</span>
     </div>
     <!-- </transition> -->
     <button aria-label="Wortsuche betätigen" type="button" class="c-word-search__search-button u-button-reset c-button c-button--center-icon" :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'c-word-search__search-button--left': (searchButtonPosition != 'right'), 'has-searchbar': showSearchBar }, buttonModifier]" @click="buttonActions()">

@@ -17,6 +17,7 @@
         :key="item.ID"
         :data-group="item.group"
         class="c-word-list__word"
+        :class="{'has-translation': item.translation, 'has-example': item.example}"
         data-track-content
         data-content-name="word"
       >

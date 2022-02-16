@@ -11,26 +11,35 @@
     --wrap-flex: nowrap;
   }
 
-  @include mx.breakpoint('sm') {
-
+  @include mx.breakpoint('xs') {
     padding-top: vars.$spacer * 4;
   }
 
   &__headline {
-    --size-font: 1.5rem;
     --margin: #{vars.$spacer * 1.5} 0 #{vars.$spacer} 0;
+    --size-font: 1.8rem;
 
-    margin: var(--margin);
     font-size: var(--size-font);
+    margin: var(--margin);
+
+    @include mx.breakpoint('xxs') {
+      --size-font: 2rem;
+    }
+
+    @include mx.breakpoint('xs') {
+      --margin: 0 0 #{vars.$spacer * 3} 0;
+    }
 
     @include mx.breakpoint('sm') {
-      --margin: 0;
-
       align-self: center;
     }
 
-    @include mx.breakpoint('md') {
-      --size-font: clamp(1.5rem, 3rem, 3rem);
+    @include mx.breakpoint('lg') {
+      --size-font: 3rem;
+    }
+
+    @include mx.breakpoint('xlg') {
+      --size-font: 3.5rem;
     }
   }
 
@@ -38,6 +47,7 @@
     flex: 1 0 40%;
     display: flex;
     align-items: flex-end;
+    justify-content: flex-end;
 
     picture {
       display: flex;
@@ -46,7 +56,6 @@
 
   &__image {
     max-width: 100%;
-    // max-width: 900px;
     height: auto;
   }
 }
