@@ -44,7 +44,7 @@
     flex-direction: var(--direction-flex);
     margin-bottom: vars.$spacer * 1.5;
 
-    @include mx.breakpoint('md') {
+    @include mx.breakpoint('sm') {
       --direction-flex: row;
     }
   }
@@ -52,15 +52,19 @@
   &__berlinerisch {
     --size-font: 1.5rem;
 
-    font-family: vars.$berlin;
-    font-weight: 700;
-    font-size: var(--size-font);
+    font: {
+      family: vars.$berlin;
+      weight: 700;
+      size: var(--size-font);
+    }
+    text: {
+      decoration: underline;
+      decoration-color: transparent;
+      decoration-style: dashed;
+      decoration-thickness: from-font;
+      underline-position: from-font;
+    }
     transition: .3s;
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-decoration-style: dashed;
-    text-decoration-thickness: from-font;
-    text-underline-position: from-font;
     margin: 0;
     word-break: break-word;
 
@@ -70,13 +74,18 @@
   }
 
   &__translation {
-    // align-self: flex-start;
     flex: 1 1;
 
     &-wrapper {
+      --margin: #{vars.$spacer * .5} 0 0 0;
+
       display: flex;
       align-items: center;
-      margin-top: vars.$spacer * .5;
+      margin-top: var(--margin);
+
+      @include mx.breakpoint('sm') {
+        --margin: 0;
+      }
     }
 
     &-spacer {
@@ -84,20 +93,9 @@
 
       margin: var(--margin);
 
-      @include mx.breakpoint('md') {
-        --margin: 0 vars.$spacer;
+      @include mx.breakpoint('sm') {
+        --margin: 0 #{vars.$spacer};
       }
-    }
-  }
-
-  &__example-wrapper {
-    --padding: #{vars.$spacer};
-
-    display: flex;
-    padding: var(--padding);
-
-    @include mx.breakpoint('md') {
-      --padding: #{vars.$spacer} * 2.5 10% #{vars.$spacer} * 2 10%;
     }
   }
 
@@ -112,6 +110,32 @@
 
     @include mx.breakpoint('md') {
       --size-font: 1.8rem;
+    }
+
+    &-wrapper {
+      --padding: #{vars.$spacer};
+
+      display: flex;
+      padding: var(--padding);
+
+      @include mx.breakpoint('md') {
+        --padding: #{vars.$spacer} * 2.5 10% #{vars.$spacer} * 2 10%;
+      }
+    }
+  }
+
+  &__copy-button {
+    --color-background: #{vars.$white-200};
+  }
+
+  &__icon-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .3 ease-in-out;
+
+    &.is-hidden {
+      display: none;
     }
   }
 

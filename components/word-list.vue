@@ -11,7 +11,7 @@
       <LoadingSpinner :show="getWordLoadingStatus" />
 
       <article
-        v-for="(item) in searchDataResults"
+        v-for="(item, index) in searchDataResults"
         :id="'word' + item.ID"
         :ref="'word' + item.ID"
         :key="item.ID"
@@ -30,11 +30,32 @@
         <div class="c-word-list__divider-wrapper">
           <div v-if="item.example" class="c-word-list__divider" />
           <div class="c-word-list__copy-buttons">
-            <button aria-label="Link zum Wort kopieren" type="button" class="c-word-list__copy-word c-button c-button--center-icon" @click="copyWordUrlToClipboard(item.ID)">
-              <Link />
+            <button
+              aria-label="Link zum Wort kopieren"
+              type="button"
+              class="c-word-list__copy-button c-button c-button--center-icon"
+              @click="copyWordUrlToClipboard(item.ID, index)"
+            >
+              <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
+                <Link />
+              </span>
+              <span ref="copyUrlCheckIcon" class="c-word-list__icon-button is-hidden">
+                <CheckCircle2 />
+              </span>
+              <span ref="copyUrlErrorIcon" class="c-word-list__icon-button is-hidden">
+                <XCircle />
+              </span>
             </button>
-            <button aria-label="Wort kopieren" type="button" class="c-word-list__copy-url c-button c-button--center-icon" @click="copyNameToClipboard(item.ID)">
-              <Copy />
+            <button aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon" @click="copyNameToClipboard(item.ID, index)">
+              <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
+                <Copy />
+              </span>
+              <span ref="copyWordCheckIcon" class="c-word-list__icon-button is-hidden">
+                <CheckCircle2 />
+              </span>
+              <span ref="copyWordErrorIcon" class="c-word-list__icon-button is-hidden">
+                <XCircle />
+              </span>
             </button>
           </div>
         </div>
@@ -49,7 +70,7 @@
 </template>
 
 <script>
-import { Copy, Link, Quote } from 'lucide-vue'
+import { Copy, Link, Quote, CheckCircle2, XCircle } from 'lucide-vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -58,7 +79,9 @@ export default {
   components: {
     Copy,
     Link,
-    Quote
+    Quote,
+    CheckCircle2,
+    XCircle
   },
 
   data () {
@@ -164,24 +187,35 @@ export default {
   methods: {
     ...mapActions(['fetchBerlinWords', 'updateDictionaryPosition']),
 
-    copyNameToClipboard (id) {
+    copyNameToClipboard (id, index) {
       const getWord = document.querySelector('#word' + id + ' .c-word-list__berlinerisch').innerText
 
-      this.copyToClipboard(getWord, 'Wort erfolgreich kopiert!', 'Upps... Konnte leider nicht kopier werden')
+      this.copyToClipboard(getWord, 'name')
+      this.toggleCopyIcons('copyWordLinkIcon', 'copyWordCheckIcon', index)
     },
 
-    copyWordUrlToClipboard (id) {
+    copyWordUrlToClipboard (id, index) {
       const getWordUrl = window.location.protocol + '//' + window.location.hostname + '#word' + id
 
-      this.copyToClipboard(getWordUrl, 'Link zum Wort erfolgreich kopiert!', 'Upps... Konnte leider nicht kopier werden')
+      this.copyToClipboard(getWordUrl, 'url')
+
+      this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', index)
     },
 
-    copyToClipboard (textToCopy, successMessage, errorMessage) {
+    toggleCopyIcons (linkIcon, CheckIcon, index) {
+      this.$refs[linkIcon][index].classList.add('is-hidden')
+      this.$refs[CheckIcon][index].classList.remove('is-hidden')
+      setTimeout(() => {
+        this.$refs[CheckIcon][index].classList.add('is-hidden')
+        this.$refs[linkIcon][index].classList.remove('is-hidden')
+      }, 1500)
+    },
+
+    copyToClipboard (textToCopy) {
       try {
         navigator.clipboard.writeText(textToCopy)
-        this.$toast.success(successMessage).goAway(1500)
       } catch (err) {
-        this.$toast.error(errorMessage).goAway(1500)
+        console.error(err)
       }
     },
 
@@ -192,23 +226,6 @@ export default {
         this.sort.field = field
         this.sort.desc = true
       }
-    },
-
-    sortWords () {
-      console.log('funzt')
-      // const words = this.berlinerWords.map(x => x.word)
-      // console.log(words)
-      this.berlinerWords.forEach((word, index) => {
-        console.log(word, index)
-        // this.wordCount = index
-        // const checkWord = word.berlinerisch.toLowerCase()
-        // const groupNamesLower = this.groupNames
-        // groupNamesLower.forEach((groupItem, index) => {
-        //   if (checkWord.startsWith(groupItem.toLowerCase())) {
-        //     this.berlinWords[index].children.push(word)
-        //   }
-        // })
-      })
     },
 
     onWaypoint ({ going, direction, el }) {

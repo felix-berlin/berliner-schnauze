@@ -73,7 +73,7 @@ export default {
     '@nuxtjs/axios',
     // '@nuxt/image', // Speedkit comes with a own (modified) version of image
     '@nuxtjs/sitemap',
-    '@nuxtjs/toast',
+    // '@nuxtjs/toast',
     'nuxt-protected-mailto',
     'nuxt-speedkit',
     '@nuxtjs/sentry'
