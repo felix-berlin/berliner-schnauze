@@ -1,5 +1,5 @@
 @use '../variables/variables' as vars;
-@use 'sassy-scss/mixins' as sassy-mx;
+@use 'sassy-scss/mixins' as mx;
 
 body {
   --body-bgc: #{vars.$white};
@@ -19,7 +19,7 @@ body {
   // background-color: #FFD6CF;
   // opacity: 0.45;
 
-  @include sassy-mx.feature("motion") {
+  @include mx.feature("motion") {
     transition: background-color 1s ease-in-out;
   }
 
@@ -30,6 +30,8 @@ body {
   }
 
 }
+
+@include mx.select-style(vars.$highlight-200, vars.$white-100);
 
 .o-background {
   position: fixed;
