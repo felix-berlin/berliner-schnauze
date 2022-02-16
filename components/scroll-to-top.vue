@@ -1,7 +1,7 @@
 <template>
-  <div class="c-scroll-to-top">
+  <div class="c-scroll-to-top" :class="{'is-close-to-end': scrollCloseToEnd}">
     <transition name="fade">
-      <button v-show="windowTop >= showAtPosition" :aria-label="buttonAriaLabel" type="button" class="c-scroll-to-top__button c-button c-button--center-icon c-button--dashed-border " @click="scrollToTop">
+      <button v-show="$store.state.scrollPositionY >= showAtPosition" :aria-label="buttonAriaLabel" type="button" class="c-scroll-to-top__button c-button c-button--center-icon c-button--dashed-border " @click="scrollToTop">
         <slot>Scroll to top</slot>
       </button>
     </transition>
@@ -25,7 +25,7 @@ export default {
 
   data () {
     return {
-      windowTop: 0
+      scrollCloseToEnd: false
     }
   },
 
@@ -38,8 +38,14 @@ export default {
   },
 
   methods: {
-    onScroll (scroll) {
-      this.windowTop = scroll.target.documentElement.scrollTop
+    onScroll () {
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 300) {
+        this.scrollCloseToEnd = true
+      } else {
+        this.scrollCloseToEnd = false
+      }
+
+      this.$store.commit('updateScrollPositionY', window.scrollY)
     },
 
     scrollToTop () {

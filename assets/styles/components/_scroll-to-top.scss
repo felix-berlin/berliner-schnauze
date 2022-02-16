@@ -25,5 +25,9 @@
     top: 50%;
     right: 1px;
   }
+
+  &.is-close-to-end {
+    opacity: 0;
+  }
 }
 
