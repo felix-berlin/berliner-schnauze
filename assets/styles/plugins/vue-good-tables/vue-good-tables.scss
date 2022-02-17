@@ -2,5 +2,5 @@
 @use "overrides";
 @use "../../../../node_modules/vue-good-table/src/styles/style" with(
   $table-bg: vars.$white,
-	$text-color: vars.$grey-600,
+	$text-color: vars.$grey-100,
 );

@@ -92,9 +92,15 @@ html {
 }
 
 a {
-  color: vars.$highlight-200;
+  --color: #{vars.$red-200};
+
+  color: var(--color);
   text-decoration: none;
   cursor: pointer;
+
+  html[class="dark-mode"] & {
+    --color: #{vars.$blue-200}
+  }
 
   &:hover {
     text-decoration: underline;

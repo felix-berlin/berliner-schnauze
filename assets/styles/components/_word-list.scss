@@ -15,7 +15,7 @@
 
     padding: vars.$spacer;
     background-color: var(--color-background);
-    border: 1px solid vars.$grey-700;
+    border: 1px solid vars.$grey-100;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -23,7 +23,7 @@
     &:hover {
 
       .c-word-list__berlinerisch {
-        text-decoration-color: vars.$grey;
+        text-decoration-color: vars.$grey-100;
       }
 
       .c-word-list__copy-buttons {
@@ -146,6 +146,14 @@
 
   &__copy-button {
     --color-background: #{vars.$white-200};
+
+    &.is-success {
+      background: #35A672;
+      color: #fff;
+      // svg {
+      //   stroke: #fff;
+      // }
+    }
   }
 
   &__icon-button {
@@ -153,6 +161,8 @@
     justify-content: center;
     align-items: center;
     transition: all .3 ease-in-out;
+
+
 
     &.is-hidden {
       display: none;
@@ -162,7 +172,7 @@
   &__quote-icon {
     width: var(--size-quote-icon);
     height: var(--size-quote-icon);
-    fill: vars.$grey;
+    fill: vars.$grey-100;
 
     @include mx.breakpoint('md') {
       --size-quote-icon: 44px;

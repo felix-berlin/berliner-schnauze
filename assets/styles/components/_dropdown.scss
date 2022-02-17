@@ -12,7 +12,7 @@
   }
 
   &__menu {
-    --color-background: #{vars.$highlight-100};
+    --color-background: #{vars.$red-100};
     --top: 200%;
 
     position: absolute;
@@ -25,6 +25,10 @@
 
     @include mx.breakpoint('sm') {
       --top: 160%;
+    }
+
+    html[class="dark-mode"] & {
+      --color-background: #{vars.$blue-100}
     }
 
     &--left {

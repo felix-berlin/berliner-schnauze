@@ -32,6 +32,7 @@
           <div v-if="item.example" class="c-word-list__divider" />
           <div class="c-word-list__copy-buttons">
             <button
+              ref="copyUrlButton"
               aria-label="Link zum Wort kopieren"
               type="button"
               class="c-word-list__copy-button c-button c-button--center-icon"
@@ -40,14 +41,14 @@
               <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
                 <Link />
               </span>
-              <span ref="copyUrlCheckIcon" class="c-word-list__icon-button is-hidden">
+              <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success is-hidden">
                 <CheckCircle2 />
               </span>
               <span ref="copyUrlErrorIcon" class="c-word-list__icon-button is-hidden">
                 <XCircle />
               </span>
             </button>
-            <button aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon" @click="copyNameToClipboard(item.ID, index)">
+            <button ref="copyWordButton" aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon" @click="copyNameToClipboard(item.ID, index)">
               <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
                 <Copy />
               </span>
@@ -192,7 +193,7 @@ export default {
       const getWord = document.querySelector('#word' + id + ' .c-word-list__berlinerisch').innerText
 
       this.copyToClipboard(getWord, 'name')
-      this.toggleCopyIcons('copyWordLinkIcon', 'copyWordCheckIcon', index)
+      this.toggleCopyIcons('copyWordLinkIcon', 'copyWordCheckIcon', 'copyWordButton', index)
     },
 
     copyWordUrlToClipboard (id, index) {
@@ -200,13 +201,15 @@ export default {
 
       this.copyToClipboard(getWordUrl, 'url')
 
-      this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', index)
+      this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', 'copyUrlButton', index)
     },
 
-    toggleCopyIcons (linkIcon, CheckIcon, index) {
+    toggleCopyIcons (linkIcon, CheckIcon, button, index) {
+      this.$refs[button][index].classList.add('is-success')
       this.$refs[linkIcon][index].classList.add('is-hidden')
       this.$refs[CheckIcon][index].classList.remove('is-hidden')
       setTimeout(() => {
+        this.$refs[button][index].classList.remove('is-success')
         this.$refs[CheckIcon][index].classList.add('is-hidden')
         this.$refs[linkIcon][index].classList.remove('is-hidden')
       }, 1500)

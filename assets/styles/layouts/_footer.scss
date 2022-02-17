@@ -63,7 +63,7 @@
   }
 
   &__ground {
-    --color-background: #{rgba(vars.$highlight-200, .4)};
+    --color-background: #{rgba(vars.$red-200, .4)};
     --columns-template: var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame);
     --areas-template:
       ' . slogan slogan slogan . '
@@ -81,10 +81,14 @@
       --areas-template: ' . . slogan nav . ';
       --columns-template: var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame);
     }
+
+    html[class="dark-mode"] & {
+      --color-background: #{rgba(vars.$blue-200, .4)};
+    }
   }
 
   &__nav {
-    --color-background: #{vars.$highlight-100};
+    --color-background: #{vars.$red-100};
     --padding: #{vars.$spacer * .5} 0;
 
     grid-area: nav;

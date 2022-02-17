@@ -1,14 +1,7 @@
-@use 'sassy-scss/functions' as sassy-fn;
-
 @use '../variables/variables' as vars;
 
-// Convert all SCSS color vars to CSS vars and add them to the root
-$all-colors: sassy-fn.map-collect(
-	vars.$greys
-);
-
 :root {
-	@each $name, $color in $all-colors {
+	@each $name, $color in vars.$all-colors {
 		/* stylelint-disable-next-line custom-property-pattern */
 		--#{$name}: #{$color};
 	}

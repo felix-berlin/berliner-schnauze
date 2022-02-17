@@ -1,27 +1,41 @@
+@use 'sassy-scss/functions' as fn;
+
 $white: #f7fff7;
+$highlight: #F33B1D;
 
 $white-100: #F9F9F9;
 $white-200: #F5F5F5;
 
-$highlight: #F33B1D;
-$highlight-100: #FFD6CF;
-$highlight-200: #F28F7F;
+$white-colors: (
+  'white-100': $white-100,
+  'white-200': $white-200
+);
+
+$red-100: #FFD6CF;
+$red-200: #F28F7F;
+
+$red-colors: (
+  'red-100': $red-100,
+  'red-200': $red-200,
+);
+
+$blue-100: #637587;
+$blue-200: #2b333b;
+
+$blue-colors: (
+  'blue-100': $blue-100,
+  'blue-200': $blue-200
+);
+
 
 // greys
-$grey: #4E545A;
-$grey-300: #45515f;
-$grey-400: #3c4753;
-$grey-500: #333d47;
-$grey-600: #2b333b;
-$grey-700: #23282f;
-$grey-800: #1a1e23;
-$grey-900: #111417;
+$grey-100: #4E545A;
+$grey-200: #373C40;
 
-$greys: (
-  'grey-300': $grey-300,
-  'grey-400': $grey-400,
-  'grey-500': $grey-500,
-  'grey-600': $grey-600,
-  'grey-700': $grey-700,
-  'grey-800': $grey-800
-)
+
+$grey-colors: (
+  'grey-100': $grey-100,
+  'grey-200': $grey-200
+);
+
+$all-colors: fn.map-collect($white-colors, $grey-colors, $red-colors, $blue-colors);

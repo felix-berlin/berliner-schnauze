@@ -2,10 +2,10 @@
 
 .c-button {
   --color-background: #{vars.$white-100};
-  --color-border: #{vars.$grey};
+  --color-border: #{vars.$grey-100};
   --style-border: solid;
   --width-border: 1px;
-  --color: #{vars.$grey};
+  --color: #{vars.$grey-100};
 
   cursor: pointer;
   padding: vars.$spacer * .25;

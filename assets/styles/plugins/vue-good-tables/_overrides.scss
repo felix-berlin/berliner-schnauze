@@ -3,12 +3,12 @@
 table {
   &.vgt-table {
     html[class="dark-mode"] & {
-      background-color: vars.$grey-600;
+      background-color: vars.$grey-100;
     }
 
     td {
       html[class="dark-mode"] & {
-        border-color: vars.$grey-300;
+        border-color: vars.$grey-100;
         color: vars.$white;
       }
     }
@@ -22,11 +22,11 @@ table {
         }
 
         html[class="dark-mode"] & {
-          border-color: vars.$grey-300;
-          background-color: vars.$grey-700;
+          border-color: vars.$grey-100;
+          background-color: vars.$grey-100;
 
           &.is-active {
-            background: linear-gradient(35deg, vars.$grey-700 0%, vars.$grey-600 75%, vars.$highlight 100%);
+            background: linear-gradient(35deg, vars.$grey-100 0%, vars.$grey-100 75%, vars.$highlight 100%);
           }
         }
       }
@@ -40,11 +40,11 @@ table {
           }
 
           html[class="dark-mode"] & {
-            border-color: vars.$grey-300;
-            background-color: vars.$grey-700;
+            border-color: vars.$grey-100;
+            background-color: vars.$grey-100;
 
             &.is-active {
-              background: linear-gradient(35deg, vars.$grey-700 0%, vars.$grey-600 75%, vars.$highlight 100%);
+              background: linear-gradient(35deg, vars.$grey-100 0%, vars.$grey-100 75%, vars.$highlight 100%);
             }
           }
         }

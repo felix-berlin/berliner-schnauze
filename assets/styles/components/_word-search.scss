@@ -15,7 +15,7 @@
   &__search-button {
     --color-background: #{vars.$white-100};
     --style-border: solid;
-    --color-border: #{vars.$grey};
+    --color-border: #{vars.$grey-100};
     --offset-x-box-shadow: 2px;
     --color-box-shadow: rgb(0 0 0 / 20%);
 
@@ -43,10 +43,10 @@
   }
 
   &__search-input {
-    --color-border: #{vars.$grey};
+    --color-border: #{vars.$grey-100};
     --color-background: #{vars.$white-200};
     --size-font: 1.5rem;
-    --color-outline: #{rgba(vars.$highlight-200, .7)};
+    --color-outline: #{rgba(vars.$red-200, .7)};
 
     height: 100%;
     padding: var(--padding-y-input) var(--padding-x-input);
@@ -55,6 +55,10 @@
     border-left: none;
     font-size: var(--size-font);
     width: 100%;
+
+    html[class="dark-mode"] & {
+      --color-outline: #{rgba(vars.$blue-200, .7)};
+    }
 
     &:focus-visible {
       outline-style: solid;
@@ -78,7 +82,7 @@
 
   &__shortcut {
     --display: none;
-    --color-border: #{vars.$highlight-100};
+    --color-border: #{vars.$red-100};
     --color: #{vars.$white-100};
 
     border: 1px dashed var(--color-border);
@@ -94,6 +98,10 @@
     @include mx.breakpoint('md') {
       --display: flex;
     }
+
+    html[class="dark-mode"] & {
+      --color-border: #{vars.$blue-100}
+    }
   }
 
   &__command-icon-wrap {
@@ -108,9 +116,13 @@
       &__search-button {
         --color-background: transparent;
         --color-border: transparent;
-        --color-box-shadow: #{fn.hex-to-rgb(vars.$highlight-100, 20%)};
+        --color-box-shadow: #{fn.hex-to-rgb(vars.$red-100, 20%)};
 
         transition: all .3s ease-in-out;
+
+        html[class="dark-mode"] & {
+          --color-box-shadow: #{fn.hex-to-rgb(vars.$blue-100, 20%)};
+        }
 
         &.has-searchbar {
           --color-border: #{vars.$white-100};
@@ -122,14 +134,22 @@
 
       &__search-label,
       &__search-input {
-        --color: #{vars.$highlight-200};
+        --color: #{vars.$red-200};
 
         color: var(--color);
+
+        html[class="dark-mode"] & {
+          --color: #{vars.$blue-200};
+        }
       }
 
       &__search-input {
-        --color-border: #{vars.$highlight-100};
+        --color-border: #{vars.$red-100};
         --color-outline: #{fn.hex-to-rgb(vars.$white-200, 50%)};
+
+        html[class="dark-mode"] & {
+          --color-border: #{vars.$blue-100};
+        }
       }
     }
   }

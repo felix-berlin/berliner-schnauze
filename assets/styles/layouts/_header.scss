@@ -2,7 +2,7 @@
 @use 'sassy-scss/mixins' as mx;
 
 .c-header {
-  --color-background: #{vars.$highlight-200};
+  --color-background: #{vars.$red-200};
   --columns-header-inner: 1fr 2fr;
   --areas-template: ' . logo menu-nav . ';
 
@@ -44,7 +44,7 @@
   }
 
   html[class="dark-mode"] & {
-    --color-background: #{vars.$grey-700}
+    --color-background: #{vars.$blue-200}
   }
 
   .c-logo {

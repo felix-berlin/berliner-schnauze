@@ -12,7 +12,7 @@
   }
 
   html[class="dark-mode"] & {
-    --color-background: #{vars.$grey-600};
+    --color-background: #{vars.$grey-100};
   }
 
   &__list {
@@ -35,7 +35,7 @@
   }
 
   &__link {
-    --color: #{vars.$grey-600};
+    --color: #{vars.$grey-100};
 
     padding: 1rem 0;
     color: var(--color);
