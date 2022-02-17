@@ -61,7 +61,7 @@
           </div>
         </div>
         <div v-if="item.example" class="c-word-list__example-wrapper">
-          <Quote :size="44" class="c-word-list__quote-icon" />
+          <Quote :size="44" :stroke-width="0" class="c-word-list__quote-icon" />
           <p class="c-word-list__example" v-html="item.example" />
         </div>
       </article>

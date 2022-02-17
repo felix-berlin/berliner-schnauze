@@ -20,7 +20,7 @@
   left: 0;
   z-index: 999;
   width: 100%;
-  padding: vars.$spacer * .6 0;
+  padding: var(--padding-y-header) 0;
 
   @include mx.breakpoint('xxs') {
     --columns-header-inner: 2fr 1fr;

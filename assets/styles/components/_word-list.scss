@@ -77,7 +77,14 @@
   }
 
   &__translation {
+    --font-size: 1rem;
+
     flex: 1 1;
+    font-size: var(--font-size);
+
+    @include mx.breakpoint('md') {
+      --font-size: 1.125rem;
+    }
 
     &-wrapper {
       --margin: #{vars.$spacer * .5} 0 0 0;
@@ -107,7 +114,7 @@
 
     font-style: italic;
     flex-basis: 100%;
-    margin: var(--size-quote-icon) 0 0 0;
+    margin: calc(var(--size-quote-icon) + #{vars.$spacer * .5}) 0 0 0;
     font-size: var(--size-font);
     word-break: break-word;
 
@@ -116,13 +123,23 @@
     }
 
     &-wrapper {
-      --padding: #{vars.$spacer};
+      --gap: #{vars.$spacer * .5};
+      --padding-y: #{vars.$spacer};
+      --padding-x: var(--padding-y);
 
       display: flex;
-      padding: var(--padding);
+      padding: var(--padding-y) var(--padding-x);
+      gap: var(--gap);
+
+      @include mx.breakpoint('sm') {
+        --gap: #{vars.$spacer};
+        --padding-y: #{vars.$spacer * 1.5};
+        --padding-x: 5%;
+      }
 
       @include mx.breakpoint('md') {
-        --padding: #{vars.$spacer} * 2.5 10% #{vars.$spacer} * 2 10%;
+        --padding-y: #{vars.$spacer * 2.5};
+        --padding-x: 10%;
       }
     }
   }
@@ -145,6 +162,7 @@
   &__quote-icon {
     width: var(--size-quote-icon);
     height: var(--size-quote-icon);
+    fill: vars.$grey;
 
     @include mx.breakpoint('md') {
       --size-quote-icon: 44px;
