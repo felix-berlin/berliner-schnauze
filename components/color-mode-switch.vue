@@ -5,7 +5,7 @@
       v-model="checkedValue"
       type="checkbox"
       name="color-switch"
-      class="c-color-mode-switch__toggle o-switch"
+      class="c-color-mode-switch__toggle c-switch"
       :class="'is-' + $colorMode.value"
     >
   </div>
