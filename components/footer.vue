@@ -1,7 +1,5 @@
 <template>
   <footer class="c-footer" style="height: 300px;">
-    <!-- <Mailto mail="test@example.com" subject="Optional Example Subject" body="Optional Placeholder Body" title="Write me a email" /> -->
-
     <div class="c-footer__farewell">
       <div class="c-footer__farewell-image-wrapper">
         <picture>
