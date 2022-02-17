@@ -1,5 +1,5 @@
 @use '../variables/variables' as vars;
-@use 'sassy-scss/mixins' as mx;
+@use 'sassy-scss/mixins' as sassy-mx;
 
 body {
   --color-body: #{vars.$grey-100};
@@ -18,7 +18,7 @@ body {
   // background-color: #FFD6CF;
   // opacity: 0.45;
 
-  @include mx.feature("motion") {
+  @include sassy-mx.feature("motion") {
     transition: background-color 1s ease-in-out;
   }
 
@@ -29,7 +29,11 @@ body {
 
 }
 
-@include mx.select-style(vars.$red-200, vars.$white-100);
+@include sassy-mx.select-style(vars.$red-200, vars.$white-100);
+
+html[class="dark-mode"] {
+  @include sassy-mx.select-style(vars.$blue-200, vars.$white-100);
+}
 
 .o-background {
   --color-light: #{vars.$red-100};
@@ -45,7 +49,7 @@ body {
   height: 100%;
 
   html[class="dark-mode"] & {
-    --color-light: #637587;
+    --color-light: #{vars.$blue-100};
     --color-dark: #{vars.$blue-200};
   }
 

@@ -1,7 +1,7 @@
 @use 'sass:color';
-@use '../variables/variables' as vars;
+@use './../variables/variables' as vars;
 @use 'sassy-scss/functions' as sassy-fn;
-@use 'assy-scss/mixins' as sassy-mx;
+@use 'sassy-scss/mixins' as sassy-mx;
 
 $active: vars.$primary;
 $active-inner: #fff;
@@ -13,8 +13,10 @@ $disabled: #f6f8ff;
 $disables-inner: color.adjust(vars.$primary, $lightness: 38%);
 $input-padding-x: vars.$spacer * 0.75;
 $input-padding-y: vars.$spacer * 0.35;
-$icon-color: vars.$black-100;
+$icon-color: vars.$grey-100;
 $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>";
+
+
 
 @supports (-webkit-appearance: none) or (-moz-appearance: none) {
 	input,

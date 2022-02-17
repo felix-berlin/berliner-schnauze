@@ -1,5 +1,5 @@
 @use './../variables/variables' as vars;
-@use 'sassy-scss/mixins' as mx;
+@use 'sassy-scss/mixins' as sassy-mx;
 
 .c-start-header {
   --wrap-flex: wrap;
@@ -7,11 +7,11 @@
   display: flex;
   flex-wrap: var(--wrap-flex);
 
-  @include mx.breakpoint('xs') {
+  @include sassy-mx.breakpoint('xs') {
     --wrap-flex: nowrap;
   }
 
-  @include mx.breakpoint('xs') {
+  @include sassy-mx.breakpoint('xs') {
     padding-top: vars.$spacer * 4;
   }
 
@@ -22,23 +22,23 @@
     font-size: var(--size-font);
     margin: var(--margin);
 
-    @include mx.breakpoint('xxs') {
+    @include sassy-mx.breakpoint('xxs') {
       --size-font: 2rem;
     }
 
-    @include mx.breakpoint('xs') {
+    @include sassy-mx.breakpoint('xs') {
       --margin: 0 0 #{vars.$spacer * 3} 0;
     }
 
-    @include mx.breakpoint('sm') {
+    @include sassy-mx.breakpoint('sm') {
       align-self: center;
     }
 
-    @include mx.breakpoint('lg') {
+    @include sassy-mx.breakpoint('lg') {
       --size-font: 3rem;
     }
 
-    @include mx.breakpoint('xlg') {
+    @include sassy-mx.breakpoint('xlg') {
       --size-font: 3.5rem;
     }
   }

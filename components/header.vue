@@ -18,23 +18,6 @@
           :keyboard-focus="true"
         />
 
-        <Dropdown :modifier="[{'is-hidden': searchbarVisable}, 'c-menu-nav__item']" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Ändere den Website Farbmodus" :menu-min-width="false">
-          <template #title>
-            <span v-show="$colorMode.preference === 'dark'" class="u-icon-untouchable u-icon-wrapper">
-              <Moon />
-            </span>
-            <span v-show="$colorMode.preference === 'light'" class="u-icon-untouchable u-icon-wrapper">
-              <Sun />
-            </span>
-            <span v-show="$colorMode.preference === 'system'" class="u-icon-untouchable u-icon-wrapper">
-              <Laptop2 />
-            </span>
-          </template>
-          <template #content>
-            <ColorMode />
-          </template>
-        </Dropdown>
-
         <Dropdown :modifier="[{'is-hidden': searchbarVisable}, 'c-menu-nav__item c-menu-more']" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Website Menu Navigation">
           <template #title>
             <span class="u-icon-untouchable u-icon-wrapper">
@@ -59,13 +42,15 @@
         </Dropdown>
       </div>
 
+      <ColorModeSwitch />
+
       <SocialList modifier="c-social-list--desktop" list-link-modifier="c-menu-nav__item-link" list-modifier="u-list-vertical" />
     </nav>
   </header>
 </template>
 
 <script>
-import { Moon, Sun, Laptop2, Menu } from 'lucide-vue'
+import { Menu } from 'lucide-vue'
 import { mapGetters } from 'vuex'
 import Dropdown from './dropdown.vue'
 
@@ -73,9 +58,6 @@ export default {
   name: 'HeaderPart',
 
   components: {
-    Moon,
-    Sun,
-    Laptop2,
     Dropdown,
     Menu
   },

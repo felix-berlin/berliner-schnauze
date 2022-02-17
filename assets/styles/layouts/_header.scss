@@ -1,5 +1,5 @@
 @use '../variables/variables' as vars;
-@use 'sassy-scss/mixins' as mx;
+@use 'sassy-scss/mixins' as sassy-mx;
 
 .c-header {
   --color-background: #{vars.$red-200};
@@ -22,16 +22,16 @@
   width: 100%;
   padding: var(--padding-y-header) 0;
 
-  @include mx.breakpoint('xxs') {
+  @include sassy-mx.breakpoint('xxs') {
     --columns-header-inner: 2fr 1fr;
   }
 
-  @include mx.breakpoint('xs') {
+  @include sassy-mx.breakpoint('xs') {
     --columns-header-inner: 1fr 2fr;
   }
 
   &.has-searchbar {
-    @include mx.breakpoint('xs', 'max') {
+    @include sassy-mx.breakpoint('xs', 'max') {
       --areas-template:
         ' . logo logo . '
         ' . menu-nav menu-nav . '
@@ -59,11 +59,11 @@
       color: var(--color);
       font-size: var(--size-font);
 
-      @include mx.breakpoint('sm') {
+      @include sassy-mx.breakpoint('sm') {
         --size-font: 2rem;
       }
 
-      @include mx.breakpoint('lg') {
+      @include sassy-mx.breakpoint('lg') {
         --size-font: 2.5rem;
       }
     }

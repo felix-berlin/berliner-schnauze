@@ -1,4 +1,4 @@
-@use 'sassy-scss/mixins' as mx;
+@use 'sassy-scss/mixins' as sassy-mx;
 
 .c-scroll-to-top {
   --left-position: 50%;
@@ -17,7 +17,7 @@
     0px 0px 20px rgba(0, 0, 0, 0.1)
   ;
 
-  @include mx.breakpoint('md') {
+  @include sassy-mx.breakpoint('md') {
     --left-position: none;
     --bottom-position: none;
     --transform: translateY(-50%);

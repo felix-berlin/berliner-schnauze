@@ -1,5 +1,5 @@
 @use './../variables/variables' as vars;
-@use 'sassy-scss/mixins' as mx;
+@use 'sassy-scss/mixins' as sassy-mx;
 
 .c-footer {
   --space-walking: 40px;
@@ -27,7 +27,7 @@
       position: relative;
       bottom: calc(var(--to-bottom) * var(--space-walking));
 
-      @include mx.breakpoint('md') {
+      @include sassy-mx.breakpoint('md') {
         --to-bottom: -1.7;
       }
 
@@ -37,7 +37,7 @@
         flex: 0 0 var(--basis-flex);
         display: flex;
 
-        @include mx.breakpoint('md') {
+        @include sassy-mx.breakpoint('md') {
           --basis-flex: 40%;
         }
       }
@@ -52,11 +52,11 @@
       align-self: center;
       font-size: var(--size-font);
 
-      @include mx.breakpoint('xs') {
+      @include sassy-mx.breakpoint('xs') {
         --display: block;
       }
 
-      @include mx.breakpoint('lg') {
+      @include sassy-mx.breakpoint('lg') {
         --size-font: 3rem;
       }
     }
@@ -77,7 +77,7 @@
     grid-template-areas: var(--areas-template);
     padding-top: var(--space-walking);
 
-    @include mx.breakpoint('md') {
+    @include sassy-mx.breakpoint('md') {
       --areas-template: ' . . slogan nav . ';
       --columns-template: var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame);
     }
@@ -99,7 +99,7 @@
     align-items: center;
     padding: var(--padding);
 
-    @include mx.breakpoint('md') {
+    @include sassy-mx.breakpoint('md') {
       --color-background: transparent;
     }
   }
@@ -110,7 +110,7 @@
     grid-area: slogan;
     text-align: var(--align-text);
 
-    @include mx.breakpoint('md') {
+    @include sassy-mx.breakpoint('md') {
       --align-text: left;
     }
   }

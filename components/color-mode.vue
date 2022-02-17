@@ -30,7 +30,7 @@
 <script>
 import { Moon, Sun, Laptop2 } from 'lucide-vue'
 export default {
-  name: 'ColorModeSwitch',
+  name: 'ColorMode',
 
   components: {
     Moon,

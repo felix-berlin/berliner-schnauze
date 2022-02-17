@@ -1,5 +1,5 @@
 @use './../variables/variables' as vars;
-@use 'sassy-scss/mixins' as mx;
+@use 'sassy-scss/mixins' as sassy-mx;
 
 .c-social-list {
 
@@ -12,7 +12,7 @@
 
     display: var(--display);
 
-    @include mx.breakpoint('md') {
+    @include sassy-mx.breakpoint('md') {
       --display: flex;
     }
   }
@@ -24,7 +24,7 @@
     margin-bottom: vars.$spacer;
     padding-bottom: vars.$spacer * .7;
 
-    @include mx.breakpoint('md') {
+    @include sassy-mx.breakpoint('md') {
       display: none;
     }
   }

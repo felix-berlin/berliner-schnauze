@@ -1,5 +1,5 @@
 @use '../variables/variables' as vars;
-@use 'sassy-scss/mixins' as mx;
+@use 'sassy-scss/mixins' as sassy-mx;
 
 .c-word-list {
   --size-quote-icon: 32px;
@@ -47,7 +47,7 @@
       margin-bottom: vars.$spacer * 1.5;
     }
 
-    @include mx.breakpoint('sm') {
+    @include sassy-mx.breakpoint('sm') {
       --direction-flex: row;
     }
   }
@@ -71,7 +71,7 @@
     margin: 0;
     word-break: break-word;
 
-    @include mx.breakpoint('md') {
+    @include sassy-mx.breakpoint('md') {
       --size-font: 3rem;
     }
   }
@@ -82,7 +82,7 @@
     flex: 1 1;
     font-size: var(--font-size);
 
-    @include mx.breakpoint('md') {
+    @include sassy-mx.breakpoint('md') {
       --font-size: 1.125rem;
     }
 
@@ -93,7 +93,7 @@
       align-items: center;
       margin: var(--margin);
 
-      @include mx.breakpoint('sm') {
+      @include sassy-mx.breakpoint('sm') {
         --margin: 0;
       }
     }
@@ -103,7 +103,7 @@
 
       margin: var(--margin);
 
-      @include mx.breakpoint('sm') {
+      @include sassy-mx.breakpoint('sm') {
         --margin: 0 #{vars.$spacer};
       }
     }
@@ -118,7 +118,7 @@
     font-size: var(--size-font);
     word-break: break-word;
 
-    @include mx.breakpoint('md') {
+    @include sassy-mx.breakpoint('md') {
       --size-font: 1.8rem;
     }
 
@@ -131,13 +131,13 @@
       padding: var(--padding-y) var(--padding-x);
       gap: var(--gap);
 
-      @include mx.breakpoint('sm') {
+      @include sassy-mx.breakpoint('sm') {
         --gap: #{vars.$spacer};
         --padding-y: #{vars.$spacer * 1.5};
         --padding-x: 5%;
       }
 
-      @include mx.breakpoint('md') {
+      @include sassy-mx.breakpoint('md') {
         --padding-y: #{vars.$spacer * 2.5};
         --padding-x: 10%;
       }
@@ -174,7 +174,7 @@
     height: var(--size-quote-icon);
     fill: vars.$grey-100;
 
-    @include mx.breakpoint('md') {
+    @include sassy-mx.breakpoint('md') {
       --size-quote-icon: 44px;
     }
   }

@@ -1,6 +1,6 @@
 @use '../variables/variables' as vars;
-@use 'sassy-scss/mixins' as mx;
-@use 'sassy-scss/functions' as fn;
+@use 'sassy-scss/mixins' as sassy-mx;
+@use 'sassy-scss/functions' as sassy-fn;
 
 .c-word-search {
   --padding-y-input: .5rem;
@@ -95,7 +95,7 @@
     gap: vars.$spacer * .25;
     align-self: center;
 
-    @include mx.breakpoint('md') {
+    @include sassy-mx.breakpoint('md') {
       --display: flex;
     }
 
@@ -116,12 +116,12 @@
       &__search-button {
         --color-background: transparent;
         --color-border: transparent;
-        --color-box-shadow: #{fn.hex-to-rgb(vars.$red-100, 20%)};
+        --color-box-shadow: #{sassy-fn.hex-to-rgb(vars.$red-100, 20%)};
 
         transition: all .3s ease-in-out;
 
         html[class="dark-mode"] & {
-          --color-box-shadow: #{fn.hex-to-rgb(vars.$blue-100, 20%)};
+          --color-box-shadow: #{sassy-fn.hex-to-rgb(vars.$blue-100, 20%)};
         }
 
         &.has-searchbar {
@@ -145,7 +145,7 @@
 
       &__search-input {
         --color-border: #{vars.$red-100};
-        --color-outline: #{fn.hex-to-rgb(vars.$white-200, 50%)};
+        --color-outline: #{sassy-fn.hex-to-rgb(vars.$white-200, 50%)};
 
         html[class="dark-mode"] & {
           --color-border: #{vars.$blue-100};
@@ -156,7 +156,7 @@
 
   &--full-width {
 
-    @include mx.breakpoint('xs', 'max') {
+    @include sassy-mx.breakpoint('xs', 'max') {
       width: 100%;
     }
   }

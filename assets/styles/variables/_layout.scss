@@ -1,11 +1,11 @@
 @use './base' as base-vars;
-@use 'sassy-scss/mixins' as mx;
+@use 'sassy-scss/mixins' as sassy-mx;
 
 :root {
   --padding-y-header: #{base-vars.$spacer * .6};
   --spacing-main-frame: 20px;
 
-  @include mx.breakpoint('md') {
+  @include sassy-mx.breakpoint('md') {
     --spacing-main-frame: 100px;
   }
 }
