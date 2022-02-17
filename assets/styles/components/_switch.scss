@@ -7,8 +7,9 @@ input[type='checkbox'].c-switch {
 	&::after {
 		--color-background: #{vars.$grey-200};
     --size: 16px;
+    --left: 2px;
 
-		left: 1px;
+		left: var(--left);
 		top: 1px;
 		width: var(--size);
 		height: var(--size);
@@ -20,6 +21,10 @@ input[type='checkbox'].c-switch {
 	&:checked {
 		--color-background-after: #FFF;
 		--translate-x: 15px;
+
+    &::after {
+      --left: -2px;
+    }
 	}
 
 	&:disabled {

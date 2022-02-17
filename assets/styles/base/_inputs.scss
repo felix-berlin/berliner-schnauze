@@ -98,14 +98,15 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		--duration-transition-opacity: .2s;
 		--cursor: pointer;
     --spacing-inner: 0;
+    --height: 20px;
 
-		height: 20px;
+		height: var(--height);
 		display: inline-block;
 		vertical-align: top;
 		position: relative;
 		margin: 0;
 		cursor: var(--cursor);
-		border: 1px solid var(--color-border);
+		border: var(--width-border) solid var(--color-border);
 		transition: background .3s, border-color .3s, box-shadow .2s;
 
 		&::after {

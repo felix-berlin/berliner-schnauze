@@ -18,6 +18,8 @@
       --box-shadow-focus: 2px #{rgba(vars.$white-100, .3)};
       --color-background: #{rgba(vars.$red-100, .2)};
       --color-border: var(--white-100);
+      --width-border: 2px;
+      --height: 22px;
 
       html[class="dark-mode"] & {
         --color-background: #{rgba(vars.$blue-100, .2)};
