@@ -1,21 +1,20 @@
 <template>
-  <component
-    :is="type"
+  <button
     class="c-color-mode-button c-button c-button--center-icon"
     type="button"
-    :aria-label="'Ändere den Farbmodus zu ' + ($colorMode.value === 'light' ? 'dunkel' : 'hell')"
+    :aria-label="ariaLabel"
     @click="changeColorMode"
   >
-    <span v-if="$colorMode.value === 'dark'" class="c-button--center-icon">
+    <span v-show="$colorMode.value === 'dark'" class="c-button--center-icon">
       <Moon />
     </span>
-    <span v-if="$colorMode.value === 'light'" class="c-button--center-icon">
+    <span v-show="$colorMode.value === 'light'" class="c-button--center-icon">
       <Sun />
     </span>
-    <span v-if="$colorMode.value === 'system'" class="c-button--center-icon">
+    <span v-show="$colorMode.value === 'system'" class="c-button--center-icon">
       <Laptop2 />
     </span>
-  </component>
+  </button>
 </template>
 
 <script>
@@ -31,7 +30,7 @@ export default {
 
   data () {
     return {
-      type: 'button'
+      ariaLabel: 'Ändere den Farbmodus zu ' + (this.$colorMode.value === 'light' ? 'dunkel' : 'hell')
     }
   },
 
