@@ -103,8 +103,11 @@
       --color-background: var(--blue-100);
     }
 
-    @include sassy-mx.breakpoint('md') {
-      --color-background: transparent;
+    html &,
+    html[class="dark-mode"] & {
+      @include sassy-mx.breakpoint('md') {
+        --color-background: transparent;
+      }
     }
   }
 
