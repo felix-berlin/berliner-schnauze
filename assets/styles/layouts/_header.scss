@@ -22,11 +22,11 @@
   width: 100%;
   padding: var(--padding-y-header) 0;
 
-  @include sassy-mx.breakpoint('xxs') {
-    --columns-header-inner: 2fr 1fr;
+  @include sassy-mx.breakpoint('xs') {
+    --columns-header-inner: 1fr 1fr;
   }
 
-  @include sassy-mx.breakpoint('xs') {
+  @include sassy-mx.breakpoint('md') {
     --columns-header-inner: 1fr 2fr;
   }
 

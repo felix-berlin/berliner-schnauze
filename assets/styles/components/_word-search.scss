@@ -66,6 +66,11 @@
       outline-width: 2px;
       z-index: 2;
     }
+
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    display: none;
   }
 
   &__search-label {

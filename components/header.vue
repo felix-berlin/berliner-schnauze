@@ -18,12 +18,15 @@
           :keyboard-focus="true"
         />
 
-        <ColorModeButton class="c-menu-nav__item-button u-button-reset" />
+        <ColorModeButton class="c-menu-nav__item c-menu-nav__item-button u-button-reset" :class="{'is-hidden': searchbarVisable}" />
 
         <Dropdown :modifier="[{'is-hidden': searchbarVisable}, 'c-menu-nav__item c-menu-more']" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Website Menu Navigation">
           <template #title>
-            <span class="u-icon-untouchable u-icon-wrapper">
+            <span v-show="$device.isDesktop" class="u-icon-untouchable u-icon-wrapper">
               <Menu />
+            </span>
+            <span v-show="$device.isMobileOrTablet" class="u-icon-untouchable u-icon-wrapper">
+              <MoreVertical />
             </span>
           </template>
           <template #content>
@@ -50,7 +53,7 @@
 </template>
 
 <script>
-import { Menu } from 'lucide-vue'
+import { Menu, MoreVertical } from 'lucide-vue'
 import { mapGetters } from 'vuex'
 import Dropdown from './dropdown.vue'
 
@@ -59,7 +62,8 @@ export default {
 
   components: {
     Dropdown,
-    Menu
+    Menu,
+    MoreVertical
   },
 
   computed: {

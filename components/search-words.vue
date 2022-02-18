@@ -11,7 +11,12 @@
     </div>
     <!-- </transition> -->
     <button aria-label="Wortsuche betätigen" type="button" class="c-word-search__search-button u-button-reset c-button c-button--center-icon" :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'c-word-search__search-button--left': (searchButtonPosition != 'right'), 'has-searchbar': showSearchBar }, buttonModifier]" @click="buttonActions()">
-      <Search default-class="c-word-search__search-icon" />
+      <span v-show="searchLength === 0" class="c-button--center-icon">
+        <Search default-class="c-word-search__search-icon" />
+      </span>
+      <span v-show="searchLength > 0" class="c-button--center-icon">
+        <X />
+      </span>
     </button>
     <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap" :class="searchbarModifier" tag="div">
       <input
@@ -32,7 +37,7 @@
 </template>
 
 <script>
-import { Search, Command } from 'lucide-vue'
+import { Search, Command, X } from 'lucide-vue'
 import { mapState } from 'vuex'
 
 export default {
@@ -40,7 +45,8 @@ export default {
 
   components: {
     Search,
-    Command
+    Command,
+    X
   },
 
   props: {
@@ -92,7 +98,7 @@ export default {
       showSearchBar: true,
       timeoutId: null,
       pressedKeys: {},
-      searchLength: null,
+      searchLength: 0,
       scrollToResultsTriggert: false // Prevent scroll to results triggert more than one time
     }
   },
@@ -139,6 +145,14 @@ export default {
       this.searchLength = searchInput.target.value.length
 
       this.scrollToResults()
+    },
+
+    /**
+     * Reset search input and search store
+     */
+    resetSearch () {
+      this.$refs.search.value = '' // Reset input
+      this.$store.commit('updateSearch', '') // Reset store
     },
 
     focusSearch () {
@@ -193,7 +207,12 @@ export default {
       if (this.showSearchbarAfterClick) {
         this.showAndFocusSearchbar()
       }
-      this.focusSearch()
+      if (this.searchLength > 0) {
+        this.resetSearch()
+      }
+      if (this.searchLength === 0) {
+        this.focusSearch()
+      }
     },
 
     /**
