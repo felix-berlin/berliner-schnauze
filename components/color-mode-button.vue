@@ -1,5 +1,11 @@
 <template>
-  <component :is="type" class="c-color-mode-button c-button c-button--center-icon" type="button" @click="changeColorMode">
+  <component
+    :is="type"
+    class="c-color-mode-button c-button c-button--center-icon"
+    type="button"
+    :aria-label="'Ändere den Farbmodus zu ' + ($colorMode.value === 'light' ? 'dunkel' : 'hell')"
+    @click="changeColorMode"
+  >
     <span v-if="$colorMode.value === 'dark'" class="c-button--center-icon">
       <Moon />
     </span>
