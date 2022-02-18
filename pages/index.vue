@@ -3,7 +3,7 @@
     <main class="c-main">
       <header class="c-start-header">
         <h1 class="c-start-header__headline">
-          Na Keule,<br> keen'n Dunst vom Berlinern?<br><br> Dann mal uff-gepasst,<br> hier warten {{ berlinerWordCount }} Wörter auf dich!
+          Na Keule,<br> keen'n Dunst vom Berlinern?<br><br> Dann mal uff-gepasst,<br> hier warten <span v-if="getWordLoadingStatus" v-html="textLoading" /> <span v-if="!getWordLoadingStatus">{{ berlinerWordCount }}</span>  Wörter auf dich!
         </h1>
 
         <div class="c-start-header__image-wrap">
@@ -29,8 +29,14 @@ export default {
     WordList: () => import('@/components/word-list')
   },
 
+  data () {
+    return {
+      textLoading: '<span class="c-loader-text"><span>.</span><span>.</span><span>.</span></span>'
+    }
+  },
+
   computed: {
-    ...mapGetters(['berlinerWordCount'])
+    ...mapGetters(['berlinerWordCount', 'getWordLoadingStatus'])
   }
 
 }
