@@ -18,14 +18,20 @@
   }
 
   &--mobile-dropdown {
+    --color-border: var(--red-200);
+
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px dashed vars.$red-200;
+    border-bottom: 1px dashed var(--color-border);
     margin-bottom: vars.$spacer;
     padding-bottom: vars.$spacer * .7;
 
     @include sassy-mx.breakpoint('md') {
       display: none;
+    }
+
+    html[class="dark-mode"] & {
+      --color-border: var(--blue-200);
     }
   }
 }
