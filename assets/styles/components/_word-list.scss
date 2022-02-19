@@ -74,6 +74,10 @@
     @include sassy-mx.breakpoint('md') {
       --size-font: 3rem;
     }
+
+    @include sassy-mx.breakpoint('xlg') {
+      --size-font: 4.5rem;
+    }
   }
 
   &__translation {
@@ -84,6 +88,10 @@
 
     @include sassy-mx.breakpoint('md') {
       --font-size: 1.125rem;
+    }
+
+    @include sassy-mx.breakpoint('xlg') {
+      --font-size: 1.225rem;
     }
 
     &-wrapper {

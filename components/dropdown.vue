@@ -40,7 +40,7 @@ export default {
     },
     transition: {
       type: String,
-      default: 'fade'
+      default: 'fade-fast'
     },
     buttonAriaLabel: {
       type: String,

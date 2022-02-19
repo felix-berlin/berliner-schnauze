@@ -11,10 +11,10 @@
     </div>
     <!-- </transition> -->
     <button aria-label="Wortsuche betätigen" type="button" class="c-word-search__search-button u-button-reset c-button c-button--center-icon" :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'c-word-search__search-button--left': (searchButtonPosition != 'right'), 'has-searchbar': showSearchBar }, buttonModifier]" @click="buttonActions()">
-      <span v-show="searchLength === 0" class="c-button--center-icon">
+      <span v-show="toggleShowAndClearIcon" class="c-button--center-icon">
         <Search default-class="c-word-search__search-icon" />
       </span>
-      <span v-show="searchLength > 0" class="c-button--center-icon">
+      <span v-show="!toggleShowAndClearIcon" class="c-button--center-icon">
         <X />
       </span>
     </button>
@@ -99,7 +99,8 @@ export default {
       timeoutId: null,
       pressedKeys: {},
       searchLength: 0,
-      scrollToResultsTriggert: false // Prevent scroll to results triggert more than one time
+      scrollToResultsTriggert: false, // Prevent scroll to results triggert more than one time
+      toggleShowAndClearIcon: true
     }
   },
 
@@ -144,7 +145,18 @@ export default {
 
       this.searchLength = searchInput.target.value.length
 
+      this.toggleSearchClearIcons()
+
       this.scrollToResults()
+    },
+
+    toggleSearchClearIcons () {
+      if (this.searchLength === 0) {
+        this.toggleShowAndClearIcon = true
+      }
+      if (this.searchLength > 0) {
+        this.toggleShowAndClearIcon = false
+      }
     },
 
     /**
@@ -153,6 +165,8 @@ export default {
     resetSearch () {
       this.$refs.search.value = '' // Reset input
       this.$store.commit('updateSearch', '') // Reset store
+      this.searchLength = 0
+      this.toggleSearchClearIcons()
     },
 
     focusSearch () {
@@ -173,6 +187,7 @@ export default {
       const time = setTimeout(() => {
         if (this.showSearchbarAfterClick) {
           this.showSearchBar = false
+          this.toggleShowAndClearIcon = true
           this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
         }
       }, timeout)
@@ -235,7 +250,6 @@ export default {
 
       if (windowsCommand || macCommand) {
         stroke.preventDefault()
-
         this.showAndFocusSearchbar()
 
         this.pressedKeys = {}
