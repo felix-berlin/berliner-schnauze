@@ -16,16 +16,21 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Berlinerisch zu Deutsch Wörterbuch - Lerne die Berliner Sprache!',
+    title: 'Berlinerisch zu Deutsch Wörterbuch - Lerne die Berliner Sprache',
     htmlAttrs: {
       lang: 'de'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Berlinerisch ➡️ Hochdeutsch Wörterbuch. Keen Plan vom Berliner? Kein Problem, hier erfährste allet über die Berliner Sprache.' },
       { name: 'format-detection', content: 'telephone=no' },
-      { name: 'theme-color', content: '#F9F9F9' }
+      { name: 'theme-color', content: '#F9F9F9' },
+      { hid: 'description', name: 'description', content: 'Berlinerisch ➡️ Hochdeutsch Wörterbuch. Keen Plan vom Berliner? Kein Problem, hier erfährste allet über die Berliner Sprache.' },
+      { hid: 'og:title', property: 'og:title', content: 'Berlinerisch zu Deutsch Wörterbuch - Lerne die Berliner Sprache!' },
+      { hid: 'og:description', property: 'og:description', content: 'Berlinerisch ➡️ Hochdeutsch Wörterbuch. Keen Plan vom Berliner? Kein Problem, hier erfährste allet über die Berliner Sprache.' },
+      { hid: 'og:image', property: 'og:image', content: '/brown-bear-roar.png' },
+      { hid: 'og:url', property: 'og:url', content: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000' },
+      { hid: 'og:type', property: 'og:type', content: 'website' }
     ],
     link: [
       { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/apple-touch-icon.png' },
