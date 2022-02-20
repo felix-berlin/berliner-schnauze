@@ -22,7 +22,7 @@
         data-content-name="word"
       >
         <dl class="c-word-list__header">
-          <dt class="c-word-list__berlinerisch" data-content-piece v-text="item.berlinerisch" />
+          <dt class="c-word-list__berlinerisch" :data-content-piece="item.berlinerisch" v-text="item.berlinerisch" />
           <dd class="c-word-list__translation" v-html="item.translation" />
         </dl>
         <div class="c-word-list__divider-wrapper">

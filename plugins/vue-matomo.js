@@ -7,9 +7,12 @@ export default ({ app }) => {
     host: '//jebongt.de',
     siteId: 8,
     debug: true,
-    disableCookies: true,
-    enableHeartBeatTimer: true
+    disableCookies: process.env.NODE_ENV !== 'production',
+    enableHeartBeatTimer: true,
+    heartBeatTimerInterval: 5
   })
-  window._paq.push(['trackVisibleContentImpressions'])
-  window._paq.push(['logAllContentBlocksOnPage'])
+
+  // TODO: execute when content is loaded
+  // window._paq.push(['trackVisibleContentImpressions'])
+  // window._paq.push(['logAllContentBlocksOnPage'])
 }
