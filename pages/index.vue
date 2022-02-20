@@ -10,7 +10,15 @@
           <picture>
             <source srcset="~/static/brown-bear-roar.webp" type="image/webp">
             <source srcset="~/static/brown-bear-roar.png" type="image/png">
-            <img src="~/static/brown-bear-roar.png" class="c-start-header__image" alt="Brüllender Bär" decoding="async" loading="eager">
+            <img
+              src="~/static/brown-bear-roar.png"
+              class="c-start-header__image"
+              alt="Brüllender Bär"
+              decoding="async"
+              loading="eager"
+              width="900"
+              height="517"
+            >
           </picture>
         </div>
       </header>

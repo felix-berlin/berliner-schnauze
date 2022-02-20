@@ -6,7 +6,15 @@
           <source srcset="~/static/bear-walking.avif" type="image/avif">
           <source srcset="~/static/bear-walking.webp" type="image/webp">
           <source srcset="~/static/bear-walking.png" type="image/png">
-          <img src="~/static/bear-walking.png" class="c-footer__farewell-image" alt="Laufender Bär" decoding="async" loading="lazy">
+          <img
+            src="~/static/bear-walking.png"
+            class="c-footer__farewell-image"
+            alt="Laufender Bär"
+            decoding="async"
+            loading="lazy"
+            width="700"
+            height="451"
+          >
         </picture>
       </div>
       <p v-if="$store.state.scrollPositionY > 2000 && $route.name === 'index'" class="c-footer__farewell-text">

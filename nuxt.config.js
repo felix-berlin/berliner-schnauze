@@ -83,14 +83,8 @@ export default {
     // '@nuxt/image', // Speedkit comes with a own (modified) version of image
     '@nuxtjs/sitemap',
     'nuxt-speedkit',
-    '@nuxtjs/sentry'
-    // ['nuxt-matomo', {
-    //   matomoUrl: '//jebongt.de/',
-    //   siteId: 8,
-    //   cookies: false,
-    //   debug: true,
-    //   verbose: true
-    // }]
+    '@nuxtjs/sentry',
+    '@nuxtjs/robots'
     // '@dewib/xhr-cache'
   ],
 
@@ -103,6 +97,10 @@ export default {
       // Add native Sentry config here
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
     }
+  },
+
+  robots: {
+    UserAgent: '*'
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
