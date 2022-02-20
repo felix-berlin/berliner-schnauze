@@ -42,18 +42,14 @@
     min-width: 0;
   }
 
-  &__search-input {
-    --color-border: #{vars.$grey-100};
-    --color-background: #{vars.$white-200};
-    --size-font: 1.5rem;
+  &__search-input.c-input {
+    --color-border: var(--grey-100);
+    --color-background: var(--white-200);
     --color-outline: #{rgba(vars.$red-200, .7)};
+    --spacing-inner: var(--padding-y-input) var(--padding-x-input);
 
     height: 100%;
-    padding: var(--padding-y-input) var(--padding-x-input);
-    border: 1px solid var(--color-border);
-    background-color: var(--color-background);
     border-left: none;
-    font-size: var(--size-font);
     width: 100%;
 
     html[class="dark-mode"] & {
@@ -74,10 +70,13 @@
   }
 
   &__search-label {
+    --size-font: inherit;
+
     position: absolute;
     left: var(--padding-x-input);
     top: 50%;
     transform: translateY(-50%);
+    font-size: var(--size-font);
   }
 
   .c-word-search__search-input:focus ~ .c-word-search__search-label,
@@ -115,6 +114,11 @@
 
   &--nav-search {
     --margin: 0;
+
+    @include sassy-mx.breakpoint('xs') {
+      width: 100%;
+      justify-content: flex-end;
+    }
 
     .c-word-search {
 
@@ -164,5 +168,28 @@
     @include sassy-mx.breakpoint('xs', 'max') {
       width: 100%;
     }
+  }
+
+  &--large {
+
+    .c-word-search {
+
+      &__search-input {
+        --size-font: 1.5rem;
+
+        @include sassy-mx.breakpoint('md') {
+          --padding-y-input: .75rem;
+          --padding-x-input: .75rem;
+          --font-size: 2rem;
+        }
+      }
+
+      &__search-label {
+        @include sassy-mx.breakpoint('md') {
+          --size-font: 1.5rem;
+        }
+      }
+    }
+
   }
 }

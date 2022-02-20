@@ -1,6 +1,5 @@
 @use 'sass:color';
 
-@use './../components/button';
 @use './../variables/variables' as vars;
 @use 'sassy-scss/functions' as sassy-fn;
 
@@ -10,9 +9,13 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 
 @supports (-webkit-appearance: none) or (-moz-appearance: none) {
 
-	input:not([type='range']),
-	textarea,
-	select {
+  // input:not([type='range']),
+	// textarea,
+	// select
+  .c-input:not(.c-input--range),
+  .c-textarea,
+  .c-select,
+	 {
 		--spacing-inner: #{vars.$spacer * .55};
 		--color-border: var(--grey-200);
 		--color-border-hover: var(--red-200);
@@ -37,7 +40,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 			box-shadow: 0 0 0 var(--box-shadow-focus);
 		}
 
-		&:not([type='file']) {
+		&:not(.c-input--file) {
 			padding: var(--spacing-inner);
 		}
 
@@ -48,31 +51,37 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		}
 	}
 
-	textarea {
+	// textarea,
+  .c-textarea {
 		line-height: 1.35;
 	}
 
-	input[type='number'],
-	input[type='email'],
-	input[type='tel'] {
+
+	// input[type='number'],
+	// input[type='email'],
+	// input[type='tel'],
+  .c-input--number,
+  .c-input--email,
+  .c-input--tel {
 		--spacing-inner-vertical: #{vars.$spacer * .75};
 		--spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
 
 		padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
 	}
 
-	button,
-	input[type='submit'],
-	input[type='button'],
-	input[type='reset'],
-	input[type='color'] {
-		@extend .c-button;
+	// button,
+	// input[type='submit'],
+	// input[type='button'],
+	// input[type='reset'],
+	// input[type='color'] {
+	// 	@extend .c-button;
 
-		--spacing-inner-vertical: #{vars.$spacer * .75};
-		--spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
-	}
+	// 	--spacing-inner-vertical: #{vars.$spacer * .75};
+	// 	--spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
+	// }
 
-	select {
+	// select,
+  .c-select {
 		--spacing-inner-vertical: #{vars.$spacer};
 		--spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
 		--size-font: 1rem;
@@ -83,12 +92,12 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		cursor: pointer;
 	}
 
-	input[type='color'] {
+	.c-input--color {
 		padding: 0;
 	}
 
-	input[type='checkbox'],
-	input[type='radio'] {
+	.c-input--checkbox,
+	.c-input--radio {
 		--color-active: var(--red-200);
 		--color-inner-active: #FFF;
 		--color-border-disabled-checked: #{color.scale(vars.$red-200, $lightness: 60%)};
@@ -180,7 +189,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		}
 	}
 
-	input[type='checkbox'] {
+	.c-input--checkbox {
 
 		&:not(.c-switch) {
 
@@ -204,7 +213,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		}
 	}
 
-	input[type='radio'] {
+	.c-input--radio {
 		border-radius: 50%;
 
 		&::after {
@@ -235,7 +244,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		border-radius: 50%;
 	}
 
-	input[type='range'] {
+	.c-input--range {
 		$color-background-track: vars.$grey-200;
 		$color-background-thumb: vars.$red-200;
 		$height-track: .3rem;
@@ -281,7 +290,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		}
 	}
 
-	input[type='file'] {
+	.c-input--file {
 
 		&:not(:disabled) {
 			cursor: pointer;
@@ -311,7 +320,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		}
 	}
 
-	select {
+	.c-select {
 		--spacing-inner: #{vars.$spacer * .750} #{vars.$spacer * 4.5} #{vars.$spacer * .750} #{vars.$spacer * 1.5};
 
 		background: {
@@ -326,7 +335,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		}
 	}
 
-	fieldset {
+	.c-fieldset {
 		--spacing-after: #{vars.$spacer * 2};
 		--spacing-inner: #{vars.$spacer * 2};
 		--spacing-legend: calc(var(--spacing-inner) / 2);

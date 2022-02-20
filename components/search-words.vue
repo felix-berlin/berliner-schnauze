@@ -1,5 +1,5 @@
 <template>
-  <div class="c-word-search" :class="modifier">
+  <div class="c-word-search" :class="[{ 'c-word-search--large': searchbarType === 'large', 'c-word-search--nav-search': searchbarType === 'nav-search' }, modifier]">
     <!-- <transition name="fade-fast"> -->
     <div v-if="keyboardFocus" v-show="!showSearchBar && !$device.isMobileOrTablet" class="c-word-search__shortcut">
       <span v-show="$device.isMacOS" class="c-word-search__command-icon-wrap">
@@ -10,6 +10,7 @@
       <span>K</span>
     </div>
     <!-- </transition> -->
+
     <button aria-label="Wortsuche betätigen" type="button" class="c-word-search__search-button u-button-reset c-button c-button--center-icon" :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'c-word-search__search-button--left': (searchButtonPosition != 'right'), 'has-searchbar': showSearchBar }, buttonModifier]" @click="buttonActions()">
       <span v-show="toggleShowAndClearIcon" class="c-button--center-icon">
         <Search default-class="c-word-search__search-icon" />
@@ -18,13 +19,14 @@
         <X />
       </span>
     </button>
+
     <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap" :class="searchbarModifier" tag="div">
       <input
         :id="'wordSearch' + id"
         ref="search"
         key="input"
         type="search"
-        class="c-word-search__search-input"
+        class="c-word-search__search-input c-input"
         placeholder=" "
         :aria-label="searchAriaLabel"
         @input="updateSearch"
@@ -50,6 +52,14 @@ export default {
   },
 
   props: {
+    searchbarType: {
+      type: String,
+      default: '',
+      require: true,
+      validator (value) {
+        return ['nav-search', 'large'].includes(value)
+      }
+    },
     placeholder: {
       type: String,
       default: 'Suche'

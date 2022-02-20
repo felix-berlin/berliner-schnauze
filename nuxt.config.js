@@ -16,7 +16,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Berlinerisch zu Deutsch Wörterbuch - Lerne die Berliner Sprache',
+    title: 'Berlinerisch zu Hochdeutsch Wörterbuch - Berliner Dialekt',
     htmlAttrs: {
       lang: 'de'
     },

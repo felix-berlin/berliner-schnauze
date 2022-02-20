@@ -1,5 +1,5 @@
 <template>
-  <header class="c-header tset" :class="{'has-searchbar': searchbarVisable}">
+  <header class="c-header" :class="{'has-searchbar': searchbarVisable}">
     <div class="c-logo">
       <NuxtLink to="/" class="c-logo__link">
         Berliner Schnauze
@@ -10,7 +10,8 @@
       <div class="c-menu-nav__main-elements">
         <SearchWords
           v-if="$route.name === 'index'"
-          :modifier="[{'c-word-search--full-width': searchbarVisable}, 'c-menu-nav__item c-word-search--nav-search']"
+          searchbar-type="nav-search"
+          :modifier="[{'c-word-search--full-width': searchbarVisable}, 'c-menu-nav__item']"
           button-position="right"
           button-modifier="c-menu-nav__item-button"
           :show-searchbar-after-click="true"

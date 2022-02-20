@@ -1,7 +1,19 @@
 <template>
   <div class="c-scroll-to-top" :class="{'is-close-to-end': scrollCloseToEnd}">
     <transition name="fade">
-      <button v-show="$store.state.scrollPositionY >= showAtPosition" :aria-label="buttonAriaLabel" type="button" class="c-scroll-to-top__button c-button c-button--center-icon c-button--dashed-border " @click="scrollToTop">
+      <button
+        v-show="$store.state.scrollPositionY >= showAtPosition"
+        v-tooltip="{
+          content: tooltip,
+          disabled: (tooltip.length ? false : true) || hideTooltip,
+          theme: 'berliner-schnauze',
+          placement: 'auto'
+        }"
+        :aria-label="buttonAriaLabel"
+        type="button"
+        class="c-scroll-to-top__button c-button c-button--center-icon c-button--dashed-border "
+        @click="scrollToTop"
+      >
         <slot>Scroll to top</slot>
       </button>
     </transition>
@@ -20,6 +32,14 @@ export default {
     buttonAriaLabel: {
       type: String,
       default: ''
+    },
+    tooltip: {
+      default: '',
+      type: String
+    },
+    hideTooltip: {
+      type: Boolean,
+      default: false
     }
   },
 
