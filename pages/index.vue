@@ -3,7 +3,7 @@
     <main class="c-main">
       <header class="c-start-header">
         <h1 class="c-start-header__headline">
-          Na Keule,<br> keen'n Dunst vom Berlinern?<br><br> Dann mal uff-gepasst,<br> hier warten <span v-show="getWordLoadingStatus" class="c-loader-text"><span>.</span><span>.</span><span>.</span></span> <span v-show="!getWordLoadingStatus">{{ berlinerWordCount }}</span>  Wörter auf dich!
+          Na Keule,<br> keen'n Dunst vom Berlinern?<br><br> Dann mal uff-jepasst,<br> hier warten <span v-show="getWordLoadingStatus" class="c-loader-text"><span>.</span><span>.</span><span>.</span></span> <span v-show="!getWordLoadingStatus">{{ berlinerWordCount }}</span>  Wörter auf dich!
         </h1>
 
         <div class="c-start-header__image-wrap">
