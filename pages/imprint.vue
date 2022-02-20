@@ -25,6 +25,23 @@ export default {
       }).catch((error) => {
         this.$sentry.captureException(new Error(error))
       })
+  },
+
+  head () {
+    return {
+      title: 'Impressum - Berliner Schnauze',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Das Impressum von Berliner Schnauze.'
+        },
+        {
+          name: 'robots',
+          content: 'noindex, nofollow'
+        }
+      ]
+    }
   }
 }
 </script>

@@ -21,13 +21,10 @@
         data-track-content
         data-content-name="word"
       >
-        <div class="c-word-list__header">
-          <p class="c-word-list__berlinerisch" data-content-piece v-text="item.berlinerisch" />
-          <span class="c-word-list__translation-wrapper">
-            <span class="c-word-list__translation-spacer">᛫</span>
-            <span class="c-word-list__translation" v-html="item.translation" />
-          </span>
-        </div>
+        <dl class="c-word-list__header">
+          <dt class="c-word-list__berlinerisch" data-content-piece v-text="item.berlinerisch" />
+          <dd class="c-word-list__translation" v-html="item.translation" />
+        </dl>
         <div class="c-word-list__divider-wrapper">
           <div v-if="item.example" class="c-word-list__divider" />
           <div class="c-word-list__copy-buttons">
@@ -108,7 +105,6 @@ export default {
             'berlinerisch', 'translation'
           ]
         }
-
       }
     }
   },

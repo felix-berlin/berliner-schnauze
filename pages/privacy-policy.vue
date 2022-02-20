@@ -25,6 +25,23 @@ export default {
       }).catch((error) => {
         this.$sentry.captureException(new Error(error))
       })
+  },
+
+  head () {
+    return {
+      title: 'Datenschutzerklärung - Berliner Schnauze',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Die Datenschutzerklärung von Berliner Schnauze.'
+        },
+        {
+          name: 'robots',
+          content: 'noindex, nofollow'
+        }
+      ]
+    }
   }
 
 }

@@ -82,9 +82,29 @@
 
   &__translation {
     --font-size: 1rem;
+    --margin: #{vars.$spacer * .5} 0 0 0;
 
+    display: flex;
+    align-items: center;
+    margin: var(--margin);
     flex: 1 1;
     font-size: var(--font-size);
+    position: relative;
+
+    &::before {
+      --margin: 0 #{vars.$spacer * .5} 0 0;
+
+      content: '᛫';
+      margin: var(--margin);
+
+      @include sassy-mx.breakpoint('sm') {
+        --margin: 0 #{vars.$spacer};
+      }
+    }
+
+    @include sassy-mx.breakpoint('sm') {
+      --margin: 0;
+    }
 
     @include sassy-mx.breakpoint('md') {
       --font-size: 1.125rem;
@@ -92,28 +112,6 @@
 
     @include sassy-mx.breakpoint('xlg') {
       --font-size: 1.225rem;
-    }
-
-    &-wrapper {
-      --margin: #{vars.$spacer * .5} 0 0 0;
-
-      display: flex;
-      align-items: center;
-      margin: var(--margin);
-
-      @include sassy-mx.breakpoint('sm') {
-        --margin: 0;
-      }
-    }
-
-    &-spacer {
-      --margin: 0 #{vars.$spacer * .5} 0 0;
-
-      margin: var(--margin);
-
-      @include sassy-mx.breakpoint('sm') {
-        --margin: 0 #{vars.$spacer};
-      }
     }
   }
 

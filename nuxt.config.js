@@ -23,7 +23,7 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Berlinerisch zu Hochdeutsch Wörterbuch, von Berliner für alle.' },
+      { hid: 'description', name: 'description', content: 'Berlinerisch ➡️ Hochdeutsch Wörterbuch. Keen Plan vom Berliner? Kein Problem, hier erfährste allet über die Berliner Sprache.' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'theme-color', content: '#F9F9F9' }
     ],
