@@ -152,6 +152,11 @@ export default {
     }
 
   },
+  updated () {
+    window._paq.push(['trackVisibleContentImpressions'])
+    // Only for debugging
+    // window._paq.push(['logAllContentBlocksOnPage'])
+  },
 
   created () {
     this.fetchBerlinWords()

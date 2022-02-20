@@ -11,8 +11,4 @@ export default ({ app }) => {
     enableHeartBeatTimer: true,
     heartBeatTimerInterval: 5
   })
-
-  // TODO: execute when content is loaded
-  // window._paq.push(['trackVisibleContentImpressions'])
-  // window._paq.push(['logAllContentBlocksOnPage'])
 }
