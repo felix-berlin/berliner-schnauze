@@ -6,9 +6,10 @@
   --style-border: solid;
   --width-border: 1px;
   --color: #{vars.$grey-100};
+  --padding: #{vars.$spacer * .25};
 
   cursor: pointer;
-  padding: vars.$spacer * .25;
+  padding: var(--padding);
   background-color: var(--color-background);
   border: var(--width-border) var(--style-border) var(--color-border);
   color: var(--color);

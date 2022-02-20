@@ -172,14 +172,22 @@
 
   &--large {
 
+    @include sassy-mx.breakpoint('md') {
+      --padding-y-input: .75rem;
+      --padding-x-input: .75rem;
+    }
+
     .c-word-search {
+
+      &__search-button {
+        --padding: var(--padding-y-input) var(--padding-x-input);
+      }
 
       &__search-input {
         --size-font: 1.5rem;
 
         @include sassy-mx.breakpoint('md') {
-          --padding-y-input: .75rem;
-          --padding-x-input: .75rem;
+
           --font-size: 2rem;
         }
       }
