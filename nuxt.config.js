@@ -53,8 +53,6 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    // '@plugins/vue2-smooth-scroll',
-    // '@plugins/vue-waypoint',
     '@plugins/floating-vue',
     '@plugins/fuse',
     '@plugins/vue-uuid',
