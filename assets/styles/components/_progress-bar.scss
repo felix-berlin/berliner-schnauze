@@ -1,0 +1,9 @@
+.nuxt-progress {
+  --color-background: var(--red-100);
+
+  html[class="dark-mode"] & {
+    --color-background: var(--blue-100);
+  }
+
+  background-color: var(--color-background);
+}

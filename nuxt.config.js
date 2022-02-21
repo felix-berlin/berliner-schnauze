@@ -3,7 +3,7 @@ import { resolve } from 'path'
 export default {
   publicRuntimeConfig: {
     baseUrl: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
-    baseApiUrl: 'https://webshaped.de'
+    baseApiUrl: process.env.BASE_API_URL
   },
   privateRuntimeConfig: {},
 
@@ -113,7 +113,8 @@ export default {
   //   init: true, // Fetch the resource at nuxt start
   //   request: {
   //     method: 'get',
-  //     url: 'https://webshaped.de/wp-json/berlinerisch/v1/post'
+  //     url: 'http://www.mocky.io/v2/5d9e4c643200002a00329d0a'
+  //     // url: `${process.env.BASE_API_URL}/wp-json/berliner-schnauze/v1/words`
   //   }
   // },
 
@@ -132,8 +133,7 @@ export default {
   },
 
   loading: {
-    color: 'DodgerBlue',
-    height: '10px',
+    height: '3px',
     continuous: true,
     duration: 3000
   },
