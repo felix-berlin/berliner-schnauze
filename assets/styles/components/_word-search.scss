@@ -35,7 +35,6 @@
   }
 
   &__search-wrap {
-    position: relative;
     flex: 1 1 auto;
     display: flex;
     width: 1%;
@@ -48,9 +47,7 @@
     --color-outline: #{rgba(vars.$red-200, .7)};
     --spacing-inner: var(--padding-y-input) var(--padding-x-input);
 
-    height: 100%;
     border-left: none;
-    width: 100%;
 
     html[class="dark-mode"] & {
       --color-outline: #{rgba(vars.$blue-200, .7)};
@@ -67,21 +64,6 @@
 
   input[type="search"]::-webkit-search-cancel-button {
     display: none;
-  }
-
-  &__search-label {
-    --size-font: inherit;
-
-    position: absolute;
-    left: var(--padding-x-input);
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: var(--size-font);
-  }
-
-  .c-word-search__search-input:focus ~ .c-word-search__search-label,
-  .c-word-search__search-input:not(:placeholder-shown) ~ .c-word-search__search-label {
-    z-index: -1;
   }
 
   &__shortcut {

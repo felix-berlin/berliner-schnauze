@@ -1,51 +1,61 @@
 <template>
   <form class="c-suggest-word-form" novalidate="true" @submit.prevent="checkForm">
-    <!-- <p v-if="formErrors.length">
-      <b>Please correct the following error(s):</b>
-      <ul>
-        <li v-for="error in formErrors" :key="error">
-          {{ error }}
-        </li>
-      </ul>
-    </p> -->
-
     <label class="c-label" for="berliner-wort">Berliner Wort</label>
-    <input
-      id="berliner-wort"
-      v-model="formData['berliner-word']"
-      class="c-input"
-      type="text"
-      name="berliner-wort"
-      required
-    >
-    <p v-if="formErrors.berlinerWord">
-      Falsch
-    </p>
+    <div class="c-floating-label">
+      <Alert v-if="formErrors.berlinerWord.length" class="c-floating-label__label">
+        {{ formErrors.berlinerWord }}
+      </Alert>
+      <input
+        id="berliner-wort"
+        v-model="formData['berliner-word']"
+        class="c-input c-floating-label__input"
+        type="text"
+        name="berliner-wort"
+        required
+      >
+    </div>
 
     <label class="c-label" for="translation">Übersetzung in Hochdeutsche</label>
-    <input id="translation" v-model="formData.translation" class="c-input" type="text" name="translation">
-    <p v-if="formErrors.translation">
-      Falsch
-    </p>
+    <div class="c-floating-label">
+      <Alert v-if="formErrors.translation.length" class="c-floating-label__label">
+        {{ formErrors.translation }}
+      </Alert>
+      <input id="translation" v-model="formData.translation" class="c-input c-floating-label__input" type="text" name="translation">
+    </div>
 
     <label class="c-label" for="example">Schreibe einen Beispielsatz:</label>
-    <textarea
-      id="example"
-      v-model="formData.example"
-      class="c-textarea"
-      name="example"
-      cols="30"
-      rows="10"
-    />
+    <div class="c-floating-label">
+      <Alert v-if="formErrors.example.length" class="c-floating-label__label">
+        {{ formErrors.example }}
+      </Alert>
+      <textarea
+        id="example"
+        v-model="formData.example"
+        class="c-textarea c-floating-label__input"
+        name="example"
+        rows="4"
+      />
+    </div>
 
     <label class="c-label" for="user-name">Dein Name</label>
-    <input id="user-name" v-model="formData['user-name']" class="c-input" type="text" name="user-name">
-    <p v-if="formErrors.eMail">
-      Falsch
-    </p>
+    <div class="c-floating-label">
+      <Alert v-if="formErrors.name.length" class="c-floating-label__label">
+        {{ formErrors.name }}
+      </Alert>
+      <input id="user-name" v-model="formData['user-name']" class="c-input c-floating-label__input" type="text" name="user-name">
+    </div>
 
     <label class="c-label" for="user-email">Deine E-Mailadresse</label>
-    <input id="user-email" v-model="formData['user-mail']" class="c-input c-input--email" type="email" name="user-email">
+    <div class="c-floating-label">
+      <Alert v-if="formErrors.eMail.length" class="c-floating-label__label">
+        {{ formErrors.eMail }}
+      </Alert>
+      <input id="user-email" v-model="formData['user-mail']" class="c-input c-input--email c-floating-label__input" type="email" name="user-email">
+    </div>
+
+    <div v-if="formResponse.message.length">
+      {{ formResponse.message }}
+    </div>
 
     <button class="c-button" type="submit">
       Senden
@@ -67,9 +77,11 @@ export default {
         'user-name': ''
       },
       formErrors: {
-        berlinerWord: false,
-        translation: false,
-        eMail: false
+        berlinerWord: '',
+        translation: '',
+        example: '',
+        name: '',
+        eMail: ''
       },
       formResponse: {
         message: ''
@@ -101,11 +113,12 @@ export default {
      * Turns all given object values to false
      *
      * @param   {Object}  object  The object values you want to turn falsy
+     * @param   {Void}  to        Any data format
      *
      * @return  {Object}          returns object with falsy values
      */
-    negateObjectKeys (object) {
-      return Object.fromEntries(Object.keys(object).map(key => [key, false]))
+    convertObjectKeysTo (object, to) {
+      return Object.fromEntries(Object.keys(object).map(key => [key, to]))
     },
 
     /**
@@ -120,24 +133,35 @@ export default {
       return Object.values(object).every(v => v === checkFor)
     },
 
+    checkObjectValueLength (object) {
+      return Object.values(object).every(v => v.length === 0)
+    },
+
     /**
      * Validates the form
      *
      * @return  {Function}     Submit form
      */
     checkForm () {
-      // Reset all errors
-      this.formErrors = this.negateObjectKeys(this.formErrors)
+      for (const error in this.formErrors) {
+        this.formErrors[error] = ''
+      }
 
-      if (!this.formData['berliner-word']) { this.formErrors.berlinerWord = true }
-      if (!this.formData.translation) { this.formErrors.translation = true }
+      if (this.formData['berliner-word'].length <= 1) { this.formErrors.berlinerWord = 'Oh, ditt is aber een sehr kurzes Wort' }
+      if (!this.formData['berliner-word']) { this.formErrors.berlinerWord = 'Hey du hast ditt Wort vergessen.' }
+
+      if (this.formData.translation.length <= 1) { this.formErrors.translation = 'Ditt is aber ne kleene Übersetzung.' }
+      if (!this.formData.translation) { this.formErrors.translation = 'Ohne die Übersetzung wird dett etwas schwierig.' }
+
+      if (this.formData['user-name'] && this.formData['user-name'].length <= 1) { this.formErrors.name = 'Du hast nen sehr kleinen Namen' }
+      if (this.formData.example && this.formData.example.length <= 1) { this.formErrors.example = 'Mehr is dir nicht eingefallen?' }
 
       // If an e-mail address is given, validate it
       if (this.formData['user-mail'].length > 0 && !this.validEmail(this.formData['user-mail'])) {
-        this.formErrors.eMail = true
+        this.formErrors.eMail = 'Irgendwas läuft hier nicht'
       }
 
-      if (this.checkObjectValues(this.formErrors)) {
+      if (Object.values(this.formErrors).every(v => v.length === 0)) {
         this.formSubmit()
       }
     },

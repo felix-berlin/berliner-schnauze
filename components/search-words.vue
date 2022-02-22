@@ -20,20 +20,20 @@
       </span>
     </button>
 
-    <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap" :class="searchbarModifier" tag="div">
+    <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap c-floating-label" :class="searchbarModifier" tag="div">
       <input
         :id="'wordSearch' + id"
         ref="search"
         key="input"
         type="search"
-        class="c-word-search__search-input c-input"
+        class="c-word-search__search-input c-input c-floating-label__input"
         placeholder=" "
         :aria-label="searchAriaLabel"
         @input="updateSearch"
         @focus="resetTimeout"
         @blur="hideSearchbarAfterTime(5000)"
       >
-      <label key="label" class="c-word-search__search-label" :for="'wordSearch' + id" v-text="placeholder" />
+      <label key="label" class="c-word-search__search-label c-floating-label__label" :for="'wordSearch' + id" v-text="placeholder" />
     </transition-group>
   </div>
 </template>
