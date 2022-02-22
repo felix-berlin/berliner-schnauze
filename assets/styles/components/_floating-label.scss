@@ -19,5 +19,6 @@
     top: 50%;
     transform: translateY(-50%);
     font-size: var(--size-font);
+    pointer-events: none; // only needed when no <label> element is used
   }
 }

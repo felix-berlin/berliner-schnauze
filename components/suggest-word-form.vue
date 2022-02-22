@@ -2,55 +2,78 @@
   <form class="c-suggest-word-form" novalidate="true" @submit.prevent="checkForm">
     <label class="c-label" for="berliner-wort">Berliner Wort</label>
     <div class="c-floating-label">
-      <Alert v-if="formErrors.berlinerWord.length" class="c-floating-label__label">
-        {{ formErrors.berlinerWord }}
-      </Alert>
       <input
         id="berliner-wort"
         v-model="formData['berliner-word']"
         class="c-input c-floating-label__input"
         type="text"
         name="berliner-wort"
+        placeholder=" "
         required
       >
+      <Alert v-if="formErrors.berlinerWord.length" class="c-floating-label__label">
+        {{ formErrors.berlinerWord }}
+      </Alert>
     </div>
 
     <label class="c-label" for="translation">Übersetzung in Hochdeutsche</label>
     <div class="c-floating-label">
+      <input
+        id="translation"
+        v-model="formData.translation"
+        class="c-input c-floating-label__input"
+        type="text"
+        name="translation"
+        placeholder=" "
+      >
       <Alert v-if="formErrors.translation.length" class="c-floating-label__label">
         {{ formErrors.translation }}
       </Alert>
-      <input id="translation" v-model="formData.translation" class="c-input c-floating-label__input" type="text" name="translation">
     </div>
 
     <label class="c-label" for="example">Schreibe einen Beispielsatz:</label>
     <div class="c-floating-label">
-      <Alert v-if="formErrors.example.length" class="c-floating-label__label">
-        {{ formErrors.example }}
-      </Alert>
       <textarea
         id="example"
         v-model="formData.example"
         class="c-textarea c-floating-label__input"
         name="example"
         rows="4"
+        placeholder=" "
       />
+      <Alert v-if="formErrors.example.length" class="c-floating-label__label">
+        {{ formErrors.example }}
+      </Alert>
     </div>
 
     <label class="c-label" for="user-name">Dein Name</label>
     <div class="c-floating-label">
+      <input
+        id="user-name"
+        v-model="formData['user-name']"
+        class="c-input c-floating-label__input"
+        type="text"
+        name="user-name"
+        placeholder=" "
+      >
       <Alert v-if="formErrors.name.length" class="c-floating-label__label">
         {{ formErrors.name }}
       </Alert>
-      <input id="user-name" v-model="formData['user-name']" class="c-input c-floating-label__input" type="text" name="user-name">
     </div>
 
     <label class="c-label" for="user-email">Deine E-Mailadresse</label>
     <div class="c-floating-label">
+      <input
+        id="user-email"
+        v-model="formData['user-mail']"
+        class="c-input c-input--email c-floating-label__input"
+        type="email"
+        name="user-email"
+        placeholder=" "
+      >
       <Alert v-if="formErrors.eMail.length" class="c-floating-label__label">
         {{ formErrors.eMail }}
       </Alert>
-      <input id="user-email" v-model="formData['user-mail']" class="c-input c-input--email c-floating-label__input" type="email" name="user-email">
     </div>
 
     <div v-if="formResponse.message.length">
