@@ -1,84 +1,93 @@
 <template>
-  <form class="c-suggest-word-form" novalidate="true" @submit.prevent="checkForm">
-    <label class="c-label" for="berliner-wort">Berliner Wort</label>
-    <div class="c-floating-label">
-      <input
-        id="berliner-wort"
-        v-model="formData['berliner-word']"
-        class="c-input c-floating-label__input"
-        :class="{'c-input--error': formErrors.berlinerWord.length}"
-        type="text"
-        name="berliner-wort"
-        placeholder=" "
-        required
-      >
-      <Alert v-if="formErrors.berlinerWord.length" class="c-floating-label__label">
-        {{ formErrors.berlinerWord }}
-      </Alert>
+  <form class="c-suggest-word-form c-form" novalidate="true" @submit.prevent="checkForm">
+    <div class="c-form__group">
+      <div class="c-form__item is-vertical" :class="{'has-error': formErrors.berlinerWord.length}">
+        <label class="c-form__label c-label is-required" for="berliner-wort">Berliner Wort</label>
+        <div class="c-floating-label">
+          <input
+            id="berliner-wort"
+            v-model="formData['berliner-word']"
+            class="c-input c-form__input c-floating-label__input"
+            type="text"
+            name="berliner-wort"
+            placeholder=" "
+            required
+          >
+          <Alert v-if="formErrors.berlinerWord.length" class="c-floating-label__label">
+            {{ formErrors.berlinerWord }}
+          </Alert>
+        </div>
+      </div>
+
+      <div class="c-form__item is-vertical" :class="{'has-error': formErrors.translation.length}">
+        <label class="c-form__label c-label is-required" for="translation">Übersetzung in Hochdeutsche</label>
+        <div class="c-floating-label">
+          <input
+            id="translation"
+            v-model="formData.translation"
+            class="c-input c-form__input c-floating-label__input"
+            type="text"
+            name="translation"
+            placeholder=" "
+          >
+          <Alert v-if="formErrors.translation.length" class="c-floating-label__label">
+            {{ formErrors.translation }}
+          </Alert>
+        </div>
+      </div>
     </div>
 
-    <label class="c-label" for="translation">Übersetzung in Hochdeutsche</label>
-    <div class="c-floating-label">
-      <input
-        id="translation"
-        v-model="formData.translation"
-        class="c-input c-floating-label__input"
-        :class="{'c-input--error': formErrors.translation.length}"
-        type="text"
-        name="translation"
-        placeholder=" "
-      >
-      <Alert v-if="formErrors.translation.length" class="c-floating-label__label">
-        {{ formErrors.translation }}
-      </Alert>
+    <div class="c-form__item is-vertical" :class="{'c-textarea--error': formErrors.example.length}">
+      <label class="c-label c-form__label" for="example">Schreibe einen Beispielsatz:</label>
+      <div class="c-floating-label">
+        <textarea
+          id="example"
+          v-model="formData.example"
+          class="c-textarea c-floating-label__input"
+          name="example"
+          rows="4"
+          placeholder=" "
+        />
+        <Alert v-if="formErrors.example.length" class="c-floating-label__label">
+          {{ formErrors.example }}
+        </Alert>
+      </div>
     </div>
 
-    <label class="c-label" for="example">Schreibe einen Beispielsatz:</label>
-    <div class="c-floating-label">
-      <textarea
-        id="example"
-        v-model="formData.example"
-        class="c-textarea c-floating-label__input"
-        :class="{'c-textarea--error': formErrors.example.length}"
-        name="example"
-        rows="4"
-        placeholder=" "
-      />
-      <Alert v-if="formErrors.example.length" class="c-floating-label__label">
-        {{ formErrors.example }}
-      </Alert>
-    </div>
+    <div class="c-form__group">
+      <div class="c-form__item is-vertical" :class="{'has-error': formErrors.name.length}">
+        <label class="c-label c-form__label" for="user-name">Dein Name (optional)</label>
+        <div class="c-floating-label">
+          <input
+            id="user-name"
+            v-model="formData['user-name']"
+            class="c-input c-form__input c-floating-label__input"
+            type="text"
+            name="user-name"
+            placeholder=" "
+          >
+          <Alert v-if="formErrors.name.length" class="c-floating-label__label">
+            {{ formErrors.name }}
+          </Alert>
+        </div>
+      </div>
 
-    <label class="c-label" for="user-name">Dein Name</label>
-    <div class="c-floating-label">
-      <input
-        id="user-name"
-        v-model="formData['user-name']"
-        class="c-input c-floating-label__input"
-        :class="{'c-input--error': formErrors.name.length}"
-        type="text"
-        name="user-name"
-        placeholder=" "
-      >
-      <Alert v-if="formErrors.name.length" class="c-floating-label__label">
-        {{ formErrors.name }}
-      </Alert>
-    </div>
-
-    <label class="c-label" for="user-email">Deine E-Mailadresse</label>
-    <div class="c-floating-label">
-      <input
-        id="user-email"
-        v-model="formData['user-mail']"
-        class="c-input c-input--email c-floating-label__input"
-        :class="{'c-input--error': formErrors.eMail.length}"
-        type="email"
-        name="user-email"
-        placeholder=" "
-      >
-      <Alert v-if="formErrors.eMail.length" class="c-floating-label__label">
-        {{ formErrors.eMail }}
-      </Alert>
+      <div class="c-form__item is-vertical" :class="{'has-error': formErrors.eMail.length}">
+        <label class="c-label c-form__label" for="user-email">Deine E-Mailadresse (optional)</label>
+        <div class="c-floating-label">
+          <input
+            id="user-email"
+            v-model="formData['user-mail']"
+            class="c-input c-form__input c-input--email c-floating-label__input"
+            type="email"
+            name="user-email"
+            placeholder=" "
+          >
+          <Alert v-if="formErrors.eMail.length" class="c-floating-label__label">
+            {{ formErrors.eMail }}
+          </Alert>
+        </div>
+      </div>
     </div>
 
     <div v-if="formResponse.message.length">

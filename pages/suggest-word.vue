@@ -1,5 +1,6 @@
 <template>
   <main class="c-content">
+    <h1>Vermisste hier nen Wort oder ne Redewendung?</h1>
     <SuggestWordForm />
   </main>
 </template>

@@ -53,16 +53,6 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 
 			cursor: not-allowed;
 		}
-
-    &--error {
-
-      @include mx.dark-mode-override {
-        --box-shadow-focus: 2px #{rgba(vars.$warning, .3)};
-      }
-
-      border-color: vars.$warning;
-      background-color: color.adjust(vars.$warning, $lightness: 40%);
-    }
 	}
 
 	// textarea,

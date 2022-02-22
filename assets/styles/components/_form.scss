@@ -1,0 +1,129 @@
+@use 'sass:color';
+
+@use './../variables/variables' as vars;
+@use './../mixins/mixins' as mx;
+@use 'sassy-scss/mixins' as sassy-mx;
+
+.c-form {
+	width: 100%;
+	max-width: 1200px;
+
+	&__item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		&:not(:last-child) {
+			margin-bottom: vars.$spacer * 1.5;
+		}
+
+		.c-form__label {
+			order: -1;
+			margin-right: vars.$spacer;
+			// font-size: font.$text-m;
+			font-weight: 700;
+		}
+
+		&.is-vertical {
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+
+			.c-form__label {
+				margin: {
+					right: 0;
+					bottom: vars.$spacer * .5;
+				};
+			}
+		}
+
+		> * {
+			width: 100%;
+		}
+
+		input:not([type='range']),
+		textarea,
+		select {
+			--spacing-inner: #{vars.$spacer * .75};
+		}
+
+		select {
+			padding-right: vars.$spacer * 4;
+		}
+
+		&.has-error {
+
+			.c-form__input,
+			.c-form__select {
+				--color-border: #C00;
+
+        @include mx.dark-mode-override {
+          --box-shadow-focus: 2px #{rgba(vars.$warning, .3)};
+        }
+
+        border-color: vars.$warning;
+        background-color: color.adjust(vars.$warning, $lightness: 40%);
+
+			}
+		}
+	}
+
+	&__input {
+
+	}
+
+	&__label {
+
+		[required] + &,
+		[required] + &,
+		&.is-required {
+
+			&::after {
+				content: '*';
+				font-weight: 500;
+				// color: color.$theme;
+				transform: translateY(-.1em);
+				display: inline-block;
+			}
+		}
+	}
+
+	&__group {
+		display: flex;
+		flex-direction: column;
+		gap: vars.$spacer * 2;
+		margin-bottom: vars.$spacer * 2;
+
+		.c-form__item {
+			flex: 1;
+			margin-bottom: 0;
+		}
+
+		@include sassy-mx.breakpoint(md) {
+			flex-direction: row;
+		}
+	}
+
+	&__footer {
+		display: flex;
+		flex-direction: column;
+		gap: vars.$spacer;
+
+		@include sassy-mx.breakpoint(md) {
+			flex-direction: row;
+			align-items: center;
+		}
+
+		&-info {
+			// color: color.$gray-700;
+			// font-size: font.$text-s;
+		}
+	}
+
+	&__error {
+		color: #C00;
+		// font-size: font.$text-xs;
+		margin-top: vars.$spacer * .25;
+		font-weight: 500;
+	}
+}
