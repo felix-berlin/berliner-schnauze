@@ -1,5 +1,6 @@
 @use 'sass:string';
 @use './../variables/variables' as vars;
+@use './../mixins/mixins' as mx;
 @use 'sassy-scss/functions' as sassy-fn;
 
 .c-color-mode-switch {
@@ -21,7 +22,7 @@
       --width-border: 2px;
       --height: 22px;
 
-      html[class="dark-mode"] & {
+      @include mx.dark-mode {
         --color-background: #{rgba(vars.$blue-100, .2)};
       }
 

@@ -1,4 +1,5 @@
 @use '../variables/variables' as vars;
+@use '../mixins/mixins' as mx;
 @use 'sassy-scss/mixins' as sassy-mx;
 @use 'sassy-scss/functions' as sassy-fn;
 
@@ -49,7 +50,7 @@
 
     border-left: none;
 
-    html[class="dark-mode"] & {
+    @include mx.dark-mode {
       --color-outline: #{rgba(vars.$blue-200, .7)};
     }
 
@@ -85,7 +86,7 @@
       --display: flex;
     }
 
-    html[class="dark-mode"] & {
+    @include mx.dark-mode {
       --color-border: #{vars.$blue-100}
     }
   }
@@ -111,7 +112,7 @@
 
         transition: all .3s ease-in-out;
 
-        html[class="dark-mode"] & {
+        @include mx.dark-mode {
           --color-box-shadow: #{sassy-fn.hex-to-rgb(vars.$blue-100, 20%)};
         }
 
@@ -129,7 +130,7 @@
 
         color: var(--color);
 
-        html[class="dark-mode"] & {
+        @include mx.dark-mode {
           --color: #{vars.$blue-200};
         }
       }
@@ -138,7 +139,7 @@
         --color-border: #{vars.$red-100};
         --color-outline: #{sassy-fn.hex-to-rgb(vars.$white-200, 50%)};
 
-        html[class="dark-mode"] & {
+        @include mx.dark-mode {
           --color-border: #{vars.$blue-100};
         }
       }

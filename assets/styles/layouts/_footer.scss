@@ -1,4 +1,5 @@
 @use './../variables/variables' as vars;
+@use './../mixins/mixins' as mx;
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-footer {
@@ -82,7 +83,7 @@
       --columns-template: var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame);
     }
 
-    html[class="dark-mode"] & {
+    @include mx.dark-mode {
       --color-background: #{rgba(vars.$blue-200, .4)};
     }
   }
@@ -99,12 +100,17 @@
     align-items: center;
     padding: var(--padding);
 
-    html[class="dark-mode"] & {
+    @include mx.dark-mode {
       --color-background: var(--blue-100);
     }
 
-    html &,
-    html[class="dark-mode"] & {
+    @include mx.dark-mode-override {
+      @include sassy-mx.breakpoint('md') {
+        --color-background: transparent;
+      }
+    }
+
+    @include mx.dark-mode {
       @include sassy-mx.breakpoint('md') {
         --color-background: transparent;
       }

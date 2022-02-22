@@ -1,15 +1,16 @@
 @use "../../variables/variables" as vars;
+@use './../mixins/mixins' as mx;
 
 table {
   &.vgt-table {
-    html[class="dark-mode"] & {
+    @include mx.dark-mode {
       background-color: vars.$grey-100;
     }
 
     td {
-      html[class="dark-mode"] & {
+      @include mx.dark-mode {
         border-color: vars.$grey-100;
-        color: vars.$white;
+        color: vars.$white-100;
       }
     }
 
@@ -21,12 +22,12 @@ table {
           // background-color: linear-gradient();
         }
 
-        html[class="dark-mode"] & {
+        @include mx.dark-mode {
           border-color: vars.$grey-100;
           background-color: vars.$grey-100;
 
           &.is-active {
-            background: linear-gradient(35deg, vars.$grey-100 0%, vars.$grey-100 75%, vars.$highlight 100%);
+            background: linear-gradient(35deg, vars.$grey-100 0%, vars.$grey-100 75%, vars.$red-200 100%);
           }
         }
       }
@@ -39,12 +40,12 @@ table {
             // background-color: linear-gradient();
           }
 
-          html[class="dark-mode"] & {
+          @include mx.dark-mode {
             border-color: vars.$grey-100;
             background-color: vars.$grey-100;
 
             &.is-active {
-              background: linear-gradient(35deg, vars.$grey-100 0%, vars.$grey-100 75%, vars.$highlight 100%);
+              background: linear-gradient(35deg, vars.$grey-100 0%, vars.$grey-100 75%, vars.$red-200 100%);
             }
           }
         }

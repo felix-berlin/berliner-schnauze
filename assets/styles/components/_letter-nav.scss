@@ -1,8 +1,9 @@
-@use "../variables/variables" as vars;
+@use './../variables/variables' as vars;
+@use './../mixins/mixins' as mx;
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-letter-nav {
-  --color-background: #{vars.$white};
+  --color-background: #{vars.$white-100};
 
   background: var(--color-background);
   display: none;
@@ -11,7 +12,7 @@
     display: block;
   }
 
-  html[class="dark-mode"] & {
+  @include mx.dark-mode {
     --color-background: #{vars.$grey-100};
   }
 
@@ -27,7 +28,7 @@
       &.is-current {
 
         .c-letter-nav__link {
-          --color: #{vars.$highlight};
+          --color: #{vars.$red-200};
         }
 
       }
@@ -43,8 +44,8 @@
     font-family: vars.$berliner;
     text-decoration: none;
 
-    html[class="dark-mode"] & {
-      --color: #{vars.$white};
+    @include mx.dark-mode {
+      --color: #{vars.$white-100};
     }
   }
 }

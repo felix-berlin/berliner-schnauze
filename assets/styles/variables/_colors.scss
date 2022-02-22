@@ -1,6 +1,4 @@
 @use 'sassy-scss/functions' as sassy-fn;
-$white: #f7fff7;
-$highlight: #F33B1D;
 
 $white-100: #F9F9F9;
 $white-200: #F5F5F5;
@@ -26,7 +24,6 @@ $blue-colors: (
   'blue-200': $blue-200
 );
 
-
 // greys
 $grey-100: #4E545A;
 $grey-200: #373C40;
@@ -37,5 +34,11 @@ $grey-colors: (
   'grey-200': $grey-200
 );
 
-$all-colors: sassy-fn.map-collect($white-colors, $grey-colors, $red-colors, $blue-colors);
+$warning: #F33B1D;
+
+$alert-colors: (
+  'warning': $warning
+);
+
+$all-colors: sassy-fn.map-collect($white-colors, $grey-colors, $red-colors, $blue-colors, $alert-colors);
 $primary: $red-200;

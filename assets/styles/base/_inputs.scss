@@ -1,6 +1,7 @@
 @use 'sass:color';
 
 @use './../variables/variables' as vars;
+@use './../mixins/mixins' as mx;
 @use 'sassy-scss/functions' as sassy-fn;
 
 
@@ -12,10 +13,9 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   // input:not([type='range']),
 	// textarea,
 	// select
-  .c-input:not(.c-input--range),
+  .c-input,
   .c-textarea,
-  .c-select,
-	 {
+  .c-select {
 		--spacing-inner: #{vars.$spacer * .55};
 		--color-border: var(--grey-200);
 		--color-border-hover: var(--red-200);
@@ -36,6 +36,10 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		border: var(--width-border) solid var(--color-border);
 		appearance: none;
 
+    @include mx.dark-mode {
+      --box-shadow-focus: 2px #{rgba(vars.$blue-200, .3)};
+    }
+
 		&:focus {
 			box-shadow: 0 0 0 var(--box-shadow-focus);
 		}
@@ -49,6 +53,16 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 
 			cursor: not-allowed;
 		}
+
+    &--error {
+
+      @include mx.dark-mode-override {
+        --box-shadow-focus: 2px #{rgba(vars.$warning, .3)};
+      }
+
+      border-color: vars.$warning;
+      background-color: color.adjust(vars.$warning, $lightness: 40%);
+    }
 	}
 
 	// textarea,

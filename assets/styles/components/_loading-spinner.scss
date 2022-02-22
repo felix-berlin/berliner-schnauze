@@ -1,4 +1,5 @@
 @use './../variables/variables' as vars;
+@use './../mixins/mixins' as mx;
 @use 'sassy-scss/mixins' as sassy-mx;
 
 // @see: https://codepen.io/jenning/pen/YzNmzaV
@@ -23,7 +24,7 @@
     display: grid;
     place-items: center;
 
-    html[class="dark-mode"] & {
+    @include mx.dark-mode {
       --color: #{vars.$blue-200}
     }
 
