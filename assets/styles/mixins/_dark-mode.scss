@@ -1,11 +1,10 @@
 @mixin dark-mode() {
-  html[class="dark-mode"] & {
-    @content;
-  }
+	html[class='dark-mode'] & {
+		@content;
+	}
 }
-
 @mixin dark-mode-override {
-  html[class] & {
-    @content;
-  }
+	html[class] & {
+		@content;
+	}
 }

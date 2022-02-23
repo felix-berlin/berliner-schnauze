@@ -1,27 +1,26 @@
 @use './../variables/variables' as vars;
 
 .c-suggest-word-form {
+	&__button {
+		--padding: #{vars.$spacer * 0.75} #{vars.$spacer * 1.2};
 
-  &__button {
-    --padding: #{vars.$spacer * .75} #{vars.$spacer * 1.2};
+		font-size: 1.7rem;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-    font-size: 1.7rem;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+	&__success-message {
+		display: flex;
+		align-items: center;
+		color: var(--success);
+		gap: vars.$spacer * 0.5;
+	}
 
-  &__success-message {
-    display: flex;
-    align-items: center;
-    color: var(--success);
-    gap: vars.$spacer * .5;
-  }
-
-  &__success-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+	&__success-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 }

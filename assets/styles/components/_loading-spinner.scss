@@ -5,68 +5,68 @@
 // @see: https://codepen.io/jenning/pen/YzNmzaV
 
 .c-loader {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
 
-  &__spinner {
-    --color: #{vars.$red-200};
-    --size-bar: 0.8vmin;
+	&__spinner {
+		--color: #{vars.$red-200};
+		--size-bar: 0.8vmin;
 
-    @include sassy-mx.breakpoint('sm') {
-      --size-bar: 0.4vmin;
-    }
+		@include sassy-mx.breakpoint('sm') {
+			--size-bar: 0.4vmin;
+		}
 
-    display: block;
-    position: relative;
-    width: 50%;
-    display: grid;
-    place-items: center;
+		position: relative;
+		width: 50%;
+		display: grid;
+		place-items: center;
 
-    @include mx.dark-mode {
-      --color: #{vars.$blue-200}
-    }
+		@include mx.dark-mode {
+			--color: #{vars.$blue-200};
+		}
 
-    &::before,
-    &::after {
-      content: '';
-      box-sizing: border-box;
-      position: absolute;
-    }
+		&::before,
+		&::after {
+			content: '';
+			box-sizing: border-box;
+			position: absolute;
+		}
 
-    &--5 {
+		&--5 {
+			&::before,
+			&::after {
+				--height-bar: 8vmin;
 
-      &::before,
-      &::after {
-        --height-bar: 8vmin;
+				height: var(--height-bar);
+				width: var(--size-bar);
+				background-color: var(--color);
+				animation: loader-5 0.6s cubic-bezier(0, 0, 0.03, 0.9) infinite;
 
-        height: var(--height-bar);
-        width: var(--size-bar);
-        background-color: var(--color);
-        animation: loader-5 0.6s cubic-bezier(0, 0, 0.03, 0.9) infinite;
+				@include sassy-mx.breakpoint('sm') {
+					--height-bar: 3vmin;
+				}
+			}
 
-        @include sassy-mx.breakpoint('sm') {
-          --height-bar: 3vmin;
-        }
-      }
+			&::before {
+				left: calc(50% - 1vmin);
+				top: calc(50% - 3vmin);
+			}
 
-      &::before {
-        left: calc(50% - 1vmin);
-        top: calc(50% - 3vmin);
-      }
-
-      &::after {
-        left: calc(50% + 1vmin);
-        top: calc(50% - 1vmin);
-        animation-delay: 0.2s;
-      }
-    }
-  }
+			&::after {
+				left: calc(50% + 1vmin);
+				top: calc(50% - 1vmin);
+				animation-delay: 0.2s;
+			}
+		}
+	}
 }
 
 @keyframes loader-5 {
-	0%, 88%, 100% {
+	0%,
+	88%,
+	100% {
 		opacity: 0;
 	}
 
@@ -78,7 +78,8 @@
 		opacity: 1;
 	}
 
-	33%, 88% {
+	33%,
+	88% {
 		transform: translateY(3vmin);
 	}
 }

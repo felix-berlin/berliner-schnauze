@@ -1,12 +1,10 @@
 @use '../variables/variables.scss' as vars;
 
 .o-legal-pages {
-
-  @for $h from 1 to 6 {
-    h#{$h} {
-      font-family: 'Berlin';
-      font-weight: bold;
-    }
-  }
-
+	@for $h from 1 to 6 {
+		h#{$h} {
+			font-family: vars.$berlin;
+			font-weight: bold;
+		}
+	}
 }

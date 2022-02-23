@@ -3,49 +3,46 @@
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-letter-nav {
-  --color-background: #{vars.$white-100};
+	--color-background: #{vars.$white-100};
 
-  background: var(--color-background);
-  display: none;
+	background: var(--color-background);
+	display: none;
 
-  @include sassy-mx.breakpoint('lg') {
-    display: block;
-  }
+	@include sassy-mx.breakpoint('lg') {
+		display: block;
+	}
+	@include mx.dark-mode {
+		--color-background: #{vars.$grey-100};
+	}
 
-  @include mx.dark-mode {
-    --color-background: #{vars.$grey-100};
-  }
+	&__list {
+		display: flex;
+		justify-content: space-evenly;
 
-  &__list {
-    display: flex;
-    justify-content: space-evenly;
+		&-item {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
-    &-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+			&.is-current {
+				.c-letter-nav__link {
+					--color: #{vars.$red-200};
+				}
+			}
+		}
+	}
 
-      &.is-current {
+	&__link {
+		--color: #{vars.$grey-100};
 
-        .c-letter-nav__link {
-          --color: #{vars.$red-200};
-        }
+		padding: 1rem 0;
+		color: var(--color);
+		font-size: 1.8rem;
+		font-family: vars.$berliner;
+		text-decoration: none;
 
-      }
-    }
-  }
-
-  &__link {
-    --color: #{vars.$grey-100};
-
-    padding: 1rem 0;
-    color: var(--color);
-    font-size: 1.8rem;
-    font-family: vars.$berliner;
-    text-decoration: none;
-
-    @include mx.dark-mode {
-      --color: #{vars.$white-100};
-    }
-  }
+		@include mx.dark-mode {
+			--color: #{vars.$white-100};
+		}
+	}
 }

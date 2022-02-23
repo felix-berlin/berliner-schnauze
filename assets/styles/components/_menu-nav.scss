@@ -2,65 +2,63 @@
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-menu-nav {
-  display: flex;
-  justify-content: flex-end;
-  gap: vars.$spacer * 3;
-  grid-area: menu-nav;
-  // flex-wrap: wrap;
+	display: flex;
+	justify-content: flex-end;
+	gap: vars.$spacer * 3;
+	grid-area: menu-nav;
 
-  &__item-button,
-  &__item-link {
-    --color-icon: #{vars.$white-100};
-    --color-border: transparent;
+	// flex-wrap: wrap;
 
-    color: var(--color-icon);
-    border: 1px dashed var(--color-border);
-    transition: all .3s ease-in-out;
+	&__item-button,
+	&__item-link {
+		--color-icon: #{vars.$white-100};
+		--color-border: transparent;
 
-    &:hover {
-      --color-border: var(--color-icon);
-    }
-  }
+		color: var(--color-icon);
+		border: 1px dashed var(--color-border);
+		transition: all 0.3s ease-in-out;
 
-  &__item {
+		&:hover {
+			--color-border: var(--color-icon);
+		}
+	}
 
-    &.is-hidden {
-      @include sassy-mx.breakpoint('xs', 'max') {
-        display: none;
-      }
-    }
-  }
+	&__item {
+		&.is-hidden {
+			@include sassy-mx.breakpoint('xs', 'max') {
+				display: none;
+			}
+		}
+	}
 
-  &__item-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: vars.$spacer * .25;
+	&__item-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: vars.$spacer * 0.25;
+	}
 
-  }
-
-  &__main-elements {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    gap: vars.$spacer * .7;
-  }
+	&__main-elements {
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
+		gap: vars.$spacer * 0.7;
+	}
 }
 
 .c-menu-more {
+	&__list {
+		--size-font: 1.15rem;
+		--gap: #{vars.$spacer};
 
-  &__list {
-    --size-font: 1.15rem;
-    --gap: #{vars.$spacer};
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap);
+		font-size: var(--size-font);
 
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-    font-size: var(--size-font);
-
-    @include sassy-mx.breakpoint('md') {
-      --size-font: inherit;
-      --gap: #{vars.$spacer * .5};
-    }
-  }
+		@include sassy-mx.breakpoint('md') {
+			--size-font: inherit;
+			--gap: #{vars.$spacer * 0.5};
+		}
+	}
 }

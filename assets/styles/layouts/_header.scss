@@ -3,70 +3,67 @@
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-header {
-  --color-background: #{vars.$red-200};
-  --columns-header-inner: 1fr 2fr;
-  --areas-template: ' . logo menu-nav . ';
+	--color-background: #{vars.$red-200};
+	--columns-header-inner: 1fr 2fr;
+	--areas-template: ' . logo menu-nav . ';
 
-  grid-area: header;
-  display: grid;
-  grid-template-areas: var(--areas-template);
-  grid-template-columns: var(--spacing-main-frame) var(--columns-header-inner) var(--spacing-main-frame);
-  align-items: center;
-  background-color: var(--color-background);
-  box-shadow:
-    0px 0.5px 0.6px rgba(0, 0, 0, 0.08),
-    0px 4px 5px rgba(0, 0, 0, 0.16);
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  width: 100%;
-  padding: var(--padding-y-header) 0;
+	grid-area: header;
+	display: grid;
+	grid-template-areas: var(--areas-template);
+	grid-template-columns: var(--spacing-main-frame) var(--columns-header-inner) var(--spacing-main-frame);
+	align-items: center;
+	background-color: var(--color-background);
+	box-shadow:
+		0 0.5px 0.6px rgb(0 0 0 / 8%),
+		0 4px 5px rgb(0 0 0 / 16%);
+	position: sticky;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	width: 100%;
+	padding: var(--padding-y-header) 0;
 
-  @include sassy-mx.breakpoint('xs') {
-    --columns-header-inner: 1fr 1fr;
-  }
+	@include sassy-mx.breakpoint('xs') {
+		--columns-header-inner: 1fr 1fr;
+	}
+	@include sassy-mx.breakpoint('md') {
+		--columns-header-inner: 1fr 2fr;
+	}
 
-  @include sassy-mx.breakpoint('md') {
-    --columns-header-inner: 1fr 2fr;
-  }
+	&.has-searchbar {
+		@include sassy-mx.breakpoint('xs', 'max') {
+			--areas-template:
+				' . logo logo . '
+				' . menu-nav menu-nav . ';
 
-  &.has-searchbar {
-    @include sassy-mx.breakpoint('xs', 'max') {
-      --areas-template:
-        ' . logo logo . '
-        ' . menu-nav menu-nav . '
-      ;
+			.c-logo {
+				margin-bottom: vars.$spacer * 0.5;
+			}
+		}
+	}
 
-      .c-logo {
-        margin-bottom: vars.$spacer * .5;
-      }
-    }
-  }
+	@include mx.dark-mode {
+		--color-background: #{vars.$blue-200};
+	}
 
-  @include mx.dark-mode {
-    --color-background: #{vars.$blue-200}
-  }
+	.c-logo {
+		grid-area: logo;
 
-  .c-logo {
-    grid-area: logo;
+		&__link {
+			--color: #{vars.$white-100};
+			--size-font: 1.8rem;
 
-    &__link {
-      --color: #{vars.$white-100};
-      --size-font: 1.8rem;
+			font-family: vars.$berliner;
+			text-decoration: none;
+			color: var(--color);
+			font-size: var(--size-font);
 
-      font-family: vars.$berliner;
-      text-decoration: none;
-      color: var(--color);
-      font-size: var(--size-font);
-
-      @include sassy-mx.breakpoint('sm') {
-        --size-font: 2rem;
-      }
-
-      @include sassy-mx.breakpoint('lg') {
-        --size-font: 2.5rem;
-      }
-    }
-  }
+			@include sassy-mx.breakpoint('sm') {
+				--size-font: 2rem;
+			}
+			@include sassy-mx.breakpoint('lg') {
+				--size-font: 2.5rem;
+			}
+		}
+	}
 }

@@ -2,206 +2,199 @@
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-word-list {
-  --size-quote-icon: 32px;
+	--size-quote-icon: 32px;
 
-  &__list {
-    display: grid;
-    gap: vars.$spacer * 1.75;
-    position: relative;
-  }
+	&__list {
+		display: grid;
+		gap: vars.$spacer * 1.75;
+		position: relative;
+	}
 
-  &__word {
-    --color-background: #{vars.$white-100};
+	&__word {
+		--color-background: #{vars.$white-100};
 
-    padding: vars.$spacer;
-    background-color: var(--color-background);
-    border: 1px solid vars.$grey-100;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+		padding: vars.$spacer;
+		background-color: var(--color-background);
+		border: 1px solid vars.$grey-100;
+		display: flex;
+		flex-flow: column wrap;
 
-    &:hover {
+		&:hover {
+			.c-word-list__berlinerisch {
+				text-decoration-color: vars.$grey-100;
+			}
 
-      .c-word-list__berlinerisch {
-        text-decoration-color: vars.$grey-100;
-      }
+			.c-word-list__copy-buttons {
+				pointer-events: all;
+				opacity: 1;
+			}
+		}
 
-      .c-word-list__copy-buttons {
-        pointer-events: all;
-        opacity: 1;
-      }
-    }
+		&.is-focused {
+			border-color: vars.$red-200;
+		}
+	}
 
-    &.is-focused {
-      border-color: vars.$red-200;
-    }
-  }
+	&__header {
+		--direction-flex: column;
 
-  &__header {
-    --direction-flex: column;
+		display: flex;
+		flex-direction: var(--direction-flex);
 
-    display: flex;
-    flex-direction: var(--direction-flex);
+		.has-example & {
+			margin-bottom: vars.$spacer * 1.5;
+		}
 
-    .has-example & {
-      margin-bottom: vars.$spacer * 1.5;
-    }
+		@include sassy-mx.breakpoint('sm') {
+			--direction-flex: row;
+		}
+	}
 
-    @include sassy-mx.breakpoint('sm') {
-      --direction-flex: row;
-    }
-  }
+	&__berlinerisch {
+		--size-font: 1.5rem;
 
-  &__berlinerisch {
-    --size-font: 1.5rem;
+		font: {
+			family: vars.$berlin;
+			weight: 700;
+			size: var(--size-font);
+		}
+		text: {
+			decoration: underline;
+			decoration-color: transparent;
+			decoration-style: dashed;
+			decoration-thickness: from-font;
+			underline-position: from-font;
+		}
 
-    font: {
-      family: vars.$berlin;
-      weight: 700;
-      size: var(--size-font);
-    }
-    text: {
-      decoration: underline;
-      decoration-color: transparent;
-      decoration-style: dashed;
-      decoration-thickness: from-font;
-      underline-position: from-font;
-    }
-    transition: .3s;
-    margin: 0;
-    word-break: break-word;
+		transition: 0.3s;
+		margin: 0;
+		word-break: break-word;
 
-    @include sassy-mx.breakpoint('md') {
-      --size-font: 3rem;
-    }
+		@include sassy-mx.breakpoint('md') {
+			--size-font: 3rem;
+		}
+		@include sassy-mx.breakpoint('xlg') {
+			--size-font: 4.5rem;
+		}
+	}
 
-    @include sassy-mx.breakpoint('xlg') {
-      --size-font: 4.5rem;
-    }
-  }
+	&__translation {
+		--font-size: 1rem;
+		--margin: #{vars.$spacer * 0.5} 0 0 0;
 
-  &__translation {
-    --font-size: 1rem;
-    --margin: #{vars.$spacer * .5} 0 0 0;
+		display: flex;
+		align-items: center;
+		margin: var(--margin);
+		flex: 1 1;
+		font-size: var(--font-size);
+		position: relative;
 
-    display: flex;
-    align-items: center;
-    margin: var(--margin);
-    flex: 1 1;
-    font-size: var(--font-size);
-    position: relative;
+		&::before {
+			--margin: 0 #{vars.$spacer * 0.5} 0 0;
 
-    &::before {
-      --margin: 0 #{vars.$spacer * .5} 0 0;
+			content: '᛫';
+			margin: var(--margin);
 
-      content: '᛫';
-      margin: var(--margin);
+			@include sassy-mx.breakpoint('sm') {
+				--margin: 0 #{vars.$spacer};
+			}
+		}
 
-      @include sassy-mx.breakpoint('sm') {
-        --margin: 0 #{vars.$spacer};
-      }
-    }
+		@include sassy-mx.breakpoint('sm') {
+			--margin: 0;
+		}
+		@include sassy-mx.breakpoint('md') {
+			--font-size: 1.125rem;
+		}
+		@include sassy-mx.breakpoint('xlg') {
+			--font-size: 1.225rem;
+		}
+	}
 
-    @include sassy-mx.breakpoint('sm') {
-      --margin: 0;
-    }
+	&__example {
+		--size-font: 1.2rem;
 
-    @include sassy-mx.breakpoint('md') {
-      --font-size: 1.125rem;
-    }
+		font-style: italic;
+		flex-basis: 100%;
+		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
+		font-size: var(--size-font);
+		word-break: break-word;
 
-    @include sassy-mx.breakpoint('xlg') {
-      --font-size: 1.225rem;
-    }
-  }
+		@include sassy-mx.breakpoint('md') {
+			--size-font: 1.8rem;
+		}
 
-  &__example {
-    --size-font: 1.2rem;
+		&-wrapper {
+			--gap: #{vars.$spacer * 0.5};
+			--padding-y: #{vars.$spacer};
+			--padding-x: var(--padding-y);
 
-    font-style: italic;
-    flex-basis: 100%;
-    margin: calc(var(--size-quote-icon) + #{vars.$spacer * .5}) 0 0 0;
-    font-size: var(--size-font);
-    word-break: break-word;
+			display: flex;
+			padding: var(--padding-y) var(--padding-x);
+			gap: var(--gap);
 
-    @include sassy-mx.breakpoint('md') {
-      --size-font: 1.8rem;
-    }
+			@include sassy-mx.breakpoint('sm') {
+				--gap: #{vars.$spacer};
+				--padding-y: #{vars.$spacer * 1.5};
+				--padding-x: 5%;
+			}
+			@include sassy-mx.breakpoint('md') {
+				--padding-y: #{vars.$spacer * 2.5};
+				--padding-x: 10%;
+			}
+		}
+	}
 
-    &-wrapper {
-      --gap: #{vars.$spacer * .5};
-      --padding-y: #{vars.$spacer};
-      --padding-x: var(--padding-y);
+	&__copy-button {
+		--color-background: #{vars.$white-200};
 
-      display: flex;
-      padding: var(--padding-y) var(--padding-x);
-      gap: var(--gap);
+		&.is-success {
+			background: var(--success);
+			color: #fff;
 
-      @include sassy-mx.breakpoint('sm') {
-        --gap: #{vars.$spacer};
-        --padding-y: #{vars.$spacer * 1.5};
-        --padding-x: 5%;
-      }
+			// svg {
+			//   stroke: #fff;
+			// }
+		}
+	}
 
-      @include sassy-mx.breakpoint('md') {
-        --padding-y: #{vars.$spacer * 2.5};
-        --padding-x: 10%;
-      }
-    }
-  }
+	&__icon-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		transition: all 0.3 ease-in-out;
 
-  &__copy-button {
-    --color-background: #{vars.$white-200};
+		&.is-hidden {
+			display: none;
+		}
+	}
 
-    &.is-success {
-      background: var(--success);
-      color: #fff;
-      // svg {
-      //   stroke: #fff;
-      // }
-    }
-  }
+	&__quote-icon {
+		width: var(--size-quote-icon);
+		height: var(--size-quote-icon);
+		fill: vars.$grey-100;
 
-  &__icon-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all .3 ease-in-out;
+		@include sassy-mx.breakpoint('md') {
+			--size-quote-icon: 44px;
+		}
+	}
 
+	&__divider-wrapper {
+		position: relative;
+		display: flex;
+	}
 
+	&__divider {
+		border-top: 1px dashed;
+		width: 100%;
+	}
 
-    &.is-hidden {
-      display: none;
-    }
-  }
-
-  &__quote-icon {
-    width: var(--size-quote-icon);
-    height: var(--size-quote-icon);
-    fill: vars.$grey-100;
-
-    @include sassy-mx.breakpoint('md') {
-      --size-quote-icon: 44px;
-    }
-  }
-
-  &__divider-wrapper {
-    position: relative;
-    display: flex;
-  }
-
-  &__divider {
-    border-top: 1px dashed;
-    width: 100%;
-  }
-
-  &__copy-buttons {
-    transition: all .3s ease-in-out;
-    opacity: 0;
-    pointer-events: none;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+	&__copy-buttons {
+		transition: all 0.3s ease-in-out;
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
 }
-

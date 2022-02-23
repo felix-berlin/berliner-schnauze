@@ -1,46 +1,36 @@
 @use 'sassy-scss/functions' as sassy-fn;
 
-$white-100: #F9F9F9;
-$white-200: #F5F5F5;
-
+$white-100: #f9f9f9;
+$white-200: #f5f5f5;
 $white-colors: (
-  'white-100': $white-100,
-  'white-200': $white-200
+	'white-100': $white-100,
+	'white-200': $white-200
 );
-
-$red-100: #FFD6CF;
-$red-200: #F28F7F;
-
+$red-100: #ffd6cf;
+$red-200: #f28f7f;
 $red-colors: (
-  'red-100': $red-100,
-  'red-200': $red-200,
+	'red-100': $red-100,
+	'red-200': $red-200,
 );
-
 $blue-100: #637587;
 $blue-200: #2b333b;
-
 $blue-colors: (
-  'blue-100': $blue-100,
-  'blue-200': $blue-200
+	'blue-100': $blue-100,
+	'blue-200': $blue-200
 );
 
 // greys
-$grey-100: #4E545A;
-$grey-200: #373C40;
-
-
+$grey-100: #4e545a;
+$grey-200: #373c40;
 $grey-colors: (
-  'grey-100': $grey-100,
-  'grey-200': $grey-200
+	'grey-100': $grey-100,
+	'grey-200': $grey-200
 );
-
-$danger: #F33B1D;
-$success: #35A672;
-
+$danger: #f33b1d;
+$success: #35a672;
 $alert-colors: (
-  'danger': $danger,
-  'success': $success
+	'danger': $danger,
+	'success': $success
 );
-
 $all-colors: sassy-fn.map-collect($white-colors, $grey-colors, $red-colors, $blue-colors, $alert-colors);
 $primary: $red-200;
