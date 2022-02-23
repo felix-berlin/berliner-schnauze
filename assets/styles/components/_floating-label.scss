@@ -2,7 +2,7 @@
   position: relative;
 
   &__input:focus ~ .c-floating-label__label,
-  &__input:not(:placeholder-shown) ~ .c-floating-label__label {
+  &__input:not(:placeholder-shown) ~ .c-floating-label__label:has(.c-floating-label__label--center) {
     z-index: -1;
   }
 
@@ -13,12 +13,25 @@
 
   &__label {
     --size-font: inherit;
+    --position-left: var(--padding-x-input);
+    --offset: 5px;
 
     position: absolute;
-    left: var(--padding-x-input);
-    top: 50%;
-    transform: translateY(-50%);
+    left: var(--position-left);
     font-size: var(--size-font);
     pointer-events: none; // only needed when no <label> element is used
+
+    &--center {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &--top {
+      bottom: calc(100% + var(--offset));
+    }
+
+    &--bottom {
+      top: calc(100% + var(--offset));
+    }
   }
 }

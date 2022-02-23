@@ -58,11 +58,11 @@
 				--color-border: #C00;
 
         @include mx.dark-mode-override {
-          --box-shadow-focus: 2px #{rgba(vars.$warning, .3)};
+          --box-shadow-focus: 2px #{rgba(vars.$danger, .3)};
         }
 
-        border-color: vars.$warning;
-        background-color: color.adjust(vars.$warning, $lightness: 40%);
+        border-color: vars.$danger;
+        background-color: color.adjust(vars.$danger, $lightness: 40%);
 
 			}
 		}

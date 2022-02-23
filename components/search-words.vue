@@ -33,7 +33,7 @@
         @focus="resetTimeout"
         @blur="hideSearchbarAfterTime(5000)"
       >
-      <label key="label" class="c-word-search__search-label c-floating-label__label" :for="'wordSearch' + id" v-text="placeholder" />
+      <label key="label" class="c-word-search__search-label c-floating-label__label c-floating-label__label--center" :for="'wordSearch' + id" v-text="placeholder" />
     </transition-group>
   </div>
 </template>

@@ -1,0 +1,15 @@
+
+.c-alert {
+  --color: unset;
+  --size-font: inherit;
+
+  color: var(--color);
+
+  &--danger {
+    --color: var(--danger);
+  }
+
+  &.c-alert--small {
+    --size-font: .9rem;
+  }
+}

@@ -13,7 +13,7 @@
             placeholder=" "
             required
           >
-          <Alert v-if="formErrors.berlinerWord.length" class="c-floating-label__label">
+          <Alert v-if="formErrors.berlinerWord.length" type="danger" class="c-floating-label__label c-floating-label__label--bottom c-alert--small">
             {{ formErrors.berlinerWord }}
           </Alert>
         </div>
@@ -30,7 +30,7 @@
             name="translation"
             placeholder=" "
           >
-          <Alert v-if="formErrors.translation.length" class="c-floating-label__label">
+          <Alert v-if="formErrors.translation.length" type="danger" class="c-floating-label__label c-floating-label__label--bottom c-alert--small">
             {{ formErrors.translation }}
           </Alert>
         </div>
@@ -48,7 +48,7 @@
           rows="4"
           placeholder=" "
         />
-        <Alert v-if="formErrors.example.length" class="c-floating-label__label">
+        <Alert v-if="formErrors.example.length" type="danger" class="c-floating-label__label c-floating-label__label--bottom c-alert--small">
           {{ formErrors.example }}
         </Alert>
       </div>
@@ -66,7 +66,7 @@
             name="user-name"
             placeholder=" "
           >
-          <Alert v-if="formErrors.name.length" class="c-floating-label__label">
+          <Alert v-if="formErrors.name.length" type="danger" class="c-floating-label__label c-floating-label__label--bottom c-alert--small">
             {{ formErrors.name }}
           </Alert>
         </div>
@@ -83,26 +83,34 @@
             name="user-email"
             placeholder=" "
           >
-          <Alert v-if="formErrors.eMail.length" class="c-floating-label__label">
+          <Alert v-if="formErrors.eMail.length" type="danger" class="c-floating-label__label c-floating-label__label--bottom c-alert--small">
             {{ formErrors.eMail }}
           </Alert>
         </div>
       </div>
     </div>
 
-    <div v-if="formResponse.message.length">
-      {{ formResponse.message }}
-    </div>
-
     <button class="c-button" type="submit">
       Senden
     </button>
+
+    <transition name="fade">
+      <div v-if="formResponse.status === 'mail_sent'">
+        <span><Check /></span>{{ formResponse.message }}
+      </div>
+    </transition>
   </form>
 </template>
 
 <script>
+import { Check } from 'lucide-vue'
+
 export default {
   name: 'SuggestWordForm',
+
+  components: {
+    Check
+  },
 
   data () {
     return {
@@ -121,7 +129,8 @@ export default {
         eMail: ''
       },
       formResponse: {
-        message: ''
+        message: '',
+        status: ''
       }
     }
   },
@@ -141,6 +150,7 @@ export default {
         headers: { 'Content-Type': 'multipart/form-data' }
       }).then((response) => {
         this.formResponse.message = response.data.message
+        this.formResponse.status = response.data.status
       }).catch((error) => {
         this.$sentry.captureException(error)
       })

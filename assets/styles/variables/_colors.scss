@@ -34,10 +34,10 @@ $grey-colors: (
   'grey-200': $grey-200
 );
 
-$warning: #F33B1D;
+$danger: #F33B1D;
 
 $alert-colors: (
-  'warning': $warning
+  'danger': $danger
 );
 
 $all-colors: sassy-fn.map-collect($white-colors, $grey-colors, $red-colors, $blue-colors, $alert-colors);
