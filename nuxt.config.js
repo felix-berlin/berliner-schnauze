@@ -98,7 +98,8 @@ export default {
   },
 
   robots: {
-    UserAgent: '*'
+    UserAgent: '*',
+    Disallow: ''
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
