@@ -92,8 +92,11 @@
 
     <button class="c-button c-button--theme c-suggest-word-form__button" type="submit">
       <transition name="fade" mode="out-in">
-        <div v-if="formResponse.status === 'mail_sent'" key="success" class="c-suggest-word-form__success-message">
-          <span class="c-suggest-word-form__success-icon"><Check /></span><span>{{ formResponse.message }}</span>
+        <div v-if="formResponse.status === 'mail_sent'" key="success" class="c-suggest-word-form__message c-alert c-alert--success">
+          <span class="c-suggest-word-form__success-icon"><CheckCircle2 /></span><span>{{ formResponse.message }}</span>
+        </div>
+        <div v-if="formResponse.status !== 'mail_sent' && formResponse.status.length" key="success" class="c-suggest-word-form__message c-alert c-alert--danger">
+          <span class="c-suggest-word-form__success-icon"><AlertCircle /></span><span>{{ formResponse.message }}</span>
         </div>
         <span v-else key="button-text">Wort einreichen</span>
       </transition>
@@ -102,13 +105,14 @@
 </template>
 
 <script>
-import { Check } from 'lucide-vue'
+import { CheckCircle2, AlertCircle } from 'lucide-vue'
 
 export default {
   name: 'SuggestWordForm',
 
   components: {
-    Check
+    CheckCircle2,
+    AlertCircle
   },
 
   data () {
@@ -148,6 +152,7 @@ export default {
         data: formInputs,
         headers: { 'Content-Type': 'multipart/form-data' }
       }).then((response) => {
+        console.log(response)
         this.formResponse.message = response.data.message
         this.formResponse.status = response.data.status
         this.resetForm()

@@ -9,7 +9,11 @@
     --color: var(--danger);
   }
 
-  &.c-alert--small {
-    --size-font: .9rem;
-  }
+	&--success {
+		--color: var(--success);
+	}
+
+	&.c-alert--small {
+		--size-font: 0.9rem;
+	}
 }

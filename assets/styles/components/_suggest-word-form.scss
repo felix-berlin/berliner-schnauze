@@ -12,10 +12,9 @@
     justify-content: center;
   }
 
-  &__success-message {
+  &__message {
     display: flex;
     align-items: center;
-    color: var(--success);
     gap: vars.$spacer * .5;
   }
 
