@@ -55,7 +55,7 @@
 
 			.c-form__input,
 			.c-form__select {
-				--color-border: #C00;
+				--color-border: var(--danger);
 
         @include mx.dark-mode-override {
           --box-shadow-focus: 2px #{rgba(vars.$danger, .3)};
@@ -81,7 +81,7 @@
 			&::after {
 				content: '*';
 				font-weight: 500;
-				// color: color.$theme;
+				color: var(--danger);
 				transform: translateY(-.1em);
 				display: inline-block;
 			}
@@ -121,7 +121,7 @@
 	}
 
 	&__error {
-		color: #C00;
+		color: var(--danger);
 		// font-size: font.$text-xs;
 		margin-top: vars.$spacer * .25;
 		font-weight: 500;
