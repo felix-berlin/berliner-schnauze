@@ -1,4 +1,5 @@
 @use './../variables/variables' as vars;
+@use './../mixins/mixins' as mx;
 
 .c-button {
   --color-background: #{vars.$white-100};
@@ -13,6 +14,22 @@
   background-color: var(--color-background);
   border: var(--width-border) var(--style-border) var(--color-border);
   color: var(--color);
+
+  &--theme {
+    --color-background: var(--red-200);
+    --color: var(--white-100);
+
+    font-family: vars.$berliner;
+
+    &:hover {
+      --style-border: dashed;
+    }
+
+    @include mx.dark-mode {
+      --color-background: var(--blue-200);
+      --color-border: var(--white-100);
+    }
+  }
 
   &--dashed-border {
     --style-border: dashed;

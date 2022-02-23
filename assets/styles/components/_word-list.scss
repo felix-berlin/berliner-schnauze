@@ -154,7 +154,7 @@
     --color-background: #{vars.$white-200};
 
     &.is-success {
-      background: #35A672;
+      background: var(--success);
       color: #fff;
       // svg {
       //   stroke: #fff;

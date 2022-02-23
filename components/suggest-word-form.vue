@@ -90,15 +90,14 @@
       </div>
     </div>
 
-    <button class="c-button" type="submit">
-      Senden
+    <button class="c-button c-button--theme c-suggest-word-form__button" type="submit">
+      <transition name="fade" mode="out-in">
+        <div v-if="formResponse.status === 'mail_sent'" key="success" class="c-suggest-word-form__success-message">
+          <span class="c-suggest-word-form__success-icon"><Check /></span><span>{{ formResponse.message }}</span>
+        </div>
+        <span v-else key="button-text">Wort einreichen</span>
+      </transition>
     </button>
-
-    <transition name="fade">
-      <div v-if="formResponse.status === 'mail_sent'">
-        <span><Check /></span>{{ formResponse.message }}
-      </div>
-    </transition>
   </form>
 </template>
 
@@ -151,9 +150,19 @@ export default {
       }).then((response) => {
         this.formResponse.message = response.data.message
         this.formResponse.status = response.data.status
+        this.resetForm()
       }).catch((error) => {
         this.$sentry.captureException(error)
       })
+    },
+
+    resetForm () {
+      if (this.formResponse.status === 'mail_sent') {
+        setTimeout(() => {
+          this.formResponse.status = ''
+          this.formData = this.convertObjectKeysTo(this.formData, '')
+        }, 3000)
+      }
     },
 
     /**

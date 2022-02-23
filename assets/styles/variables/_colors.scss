@@ -35,9 +35,11 @@ $grey-colors: (
 );
 
 $danger: #F33B1D;
+$success: #35A672;
 
 $alert-colors: (
-  'danger': $danger
+  'danger': $danger,
+  'success': $success
 );
 
 $all-colors: sassy-fn.map-collect($white-colors, $grey-colors, $red-colors, $blue-colors, $alert-colors);
