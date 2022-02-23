@@ -179,6 +179,11 @@ export default {
       this.toggleSearchClearIcons()
     },
 
+    /**
+     * Focus the searchbar
+     *
+     * @return  {Functino}  Unfocus and focus the searchbar
+     */
     focusSearch () {
       this.$nextTick(function () {
         this.$refs.search.blur() // Make sure the searchbar is not allready focused

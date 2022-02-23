@@ -1,5 +1,9 @@
 <template>
-  <component :is="element" :class="[componentClass, componentClass + '--' + type]" role="alert">
+  <component
+    :is="element"
+    :class="[componentClass, componentClass + '--' + type]"
+    role="alert"
+  >
     <slot>
       Alert
     </slot>

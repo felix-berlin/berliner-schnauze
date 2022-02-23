@@ -3,8 +3,7 @@
     <!-- Search -->
     <SearchWords searchbar-type="large" :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
 
-    <!-- Filter -->
-    <!-- <a href="javascript:" @click="doSort('berlinerisch')">Berlinerisch<span v-if="sort.field=='berlinerisch'">({{ sort.desc?'desc':'asc' }})</span></a> -->
+    <SwitchSortDirection button-class="c-button--center-icon" />
 
     <!-- List -->
     <section ref="wordList" class="c-word-list__list">
@@ -64,7 +63,6 @@
         </div>
       </article>
     </section>
-    <!-- <Sidebar /> -->
   </div>
 </template>
 
@@ -89,6 +87,8 @@ export default {
       berlinWordsGrouped: this.berlinerWordsGrouped,
       groupNames: this.$store.state.groupNames,
       currentDictionaryPosition: '',
+      sortBy: 'name',
+      sortDirection: 'asc',
       intersectionOptions: {
         root: null,
         rootMargin: '0px 0px 0px 0px',
@@ -110,27 +110,14 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['berlinerWords', 'berlinerWordsGrouped', 'berlinerWordCount', 'getWordLoadingStatus', 'getWordSearch']),
-
-    sortedData () {
-      // if (!this.sort.field) {
-      //   return this.items
-      // }
-      return this.berlinerWords.concat().sort((a, b) => {
-        if (this.sort.desc) {
-          return a[this.sort.field] > b[this.sort.field] ? -1 : 1
-        } else {
-          return a[this.sort.field] > b[this.sort.field] ? 1 : -1
-        }
-      })
-    },
+    ...mapGetters(['berlinerWords', 'berlinerWordsGrouped', 'berlinerWordCount', 'getWordLoadingStatus', 'getWordSearch', 'sortedWords']),
 
     searchDataResults () {
       // Pre index all keys
-      const index = this.$fuse.createIndex(this.fuse.options.keys, this.berlinerWords)
+      const index = this.$fuse.createIndex(this.fuse.options.keys, this.sortedWords)
 
       // Init fuse
-      const fuse = new this.$fuse(this.berlinerWords, this.fuse.options, index)
+      const fuse = new this.$fuse(this.sortedWords, this.fuse.options, index)
 
       // Get the search running
       const results = fuse.search(this.getWordSearch)
@@ -190,6 +177,14 @@ export default {
   methods: {
     ...mapActions(['fetchBerlinWords', 'updateDictionaryPosition']),
 
+    /**
+     * Copy target word to the clipboard
+     *
+     * @param   {Number}  id     Word ID
+     * @param   {Number}  index  Word index
+     *
+     * @return  {Function}       Copy the word and toggle the icons
+     */
     copyNameToClipboard (id, index) {
       const getWord = document.querySelector('#word' + id + ' .c-word-list__berlinerisch').innerText
 
@@ -197,6 +192,14 @@ export default {
       this.toggleCopyIcons('copyWordLinkIcon', 'copyWordCheckIcon', 'copyWordButton', index)
     },
 
+    /**
+     * Copy the word url to the clipboard
+     *
+     * @param   {Number}  id     Word ID
+     * @param   {Number}  index  Word index
+     *
+     * @return  {Function}       Copy the word url and toggle the icons
+     */
     copyWordUrlToClipboard (id, index) {
       const getWordUrl = window.location.protocol + '//' + window.location.hostname + '#word' + id
 
@@ -205,6 +208,14 @@ export default {
       this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', 'copyUrlButton', index)
     },
 
+    /**
+     * Toggle word icon classes
+     *
+     * @param   {String}  linkIcon   LinkIcon ref
+     * @param   {String}  CheckIcon  Check icon ref
+     * @param   {String}  button     Button ref
+     * @param   {Number}  index      Current index
+     */
     toggleCopyIcons (linkIcon, CheckIcon, button, index) {
       this.$refs[button][index].classList.add('is-success')
       this.$refs[linkIcon][index].classList.add('is-hidden')
@@ -216,52 +227,17 @@ export default {
       }, 1500)
     },
 
+    /**
+     * Copy a given string to the clipboard
+     *
+     * @param   {String}  textToCopy  String to copy
+     */
     copyToClipboard (textToCopy) {
       try {
         navigator.clipboard.writeText(textToCopy)
-      } catch (err) {
-        console.error(err)
+      } catch (error) {
+        this.$sentry.captureException(error)
       }
-    },
-
-    doSort (field) {
-      if (field === this.sort.field) {
-        this.sort.desc = !this.sort.desc
-      } else {
-        this.sort.field = field
-        this.sort.desc = true
-      }
-    },
-
-    onWaypoint ({ going, direction, el }) {
-      const currentElementId = el.getAttribute('id')
-      const currentElementRow = el.closest('.vgt-row-header')
-
-      if (going === this.$waypointMap.GOING_IN) {
-        console.log('waypoint going in! ' + currentElementId)
-
-        // Save the current Element
-        this.currentDictionaryPosition = currentElementId
-
-        // Append a focus class to the active row
-        currentElementRow.classList.add('is-active')
-
-        // Remove the class after 2s
-        setTimeout(() => {
-          currentElementRow.classList.remove('is-active')
-        }, 2000)
-
-        // this.$store.commit('increment', { letter: currentElementId })
-        this.updateDictionaryPosition(currentElementId)
-      }
-
-      // if (going === this.$waypointMap.GOING_OUT) {
-      //   el.classList.remove('is-active')
-      // }
-
-      // if (direction === this.$waypointMap.DIRECTION_TOP) {
-      //   console.log('waypoint going top! ' + currentElementId)
-      // }
     }
   }
 

@@ -7,7 +7,8 @@ export const state = () => ({
   loadingWords: false,
   groupNames: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
   currentDictionaryPosition: '',
-  scrollPositionY: null
+  scrollPositionY: null,
+  wordSortDirection: 'asc'
 })
 
 export const getters = {
@@ -18,7 +19,16 @@ export const getters = {
   dictionaryPosition: state => state.currentDictionaryPosition,
   getWordSearch: state => state.searchWord,
   searchbarVisable: state => state.searchbarIsVisable,
-  getScrollPositionY: state => state.scrollPositionY
+  getScrollPositionY: state => state.scrollPositionY,
+  sortedWords (state) {
+    return [...state.words].sort((a, b) => {
+      if (state.wordSortDirection === 'desc') {
+        return a[state.wordSortDirection] > b[state.wordSortDirection] ? -1 : 1
+      } else {
+        return a[state.wordSortDirection] > b[state.wordSortDirection] ? 1 : -1
+      }
+    })
+  }
 }
 
 export const actions = {
@@ -42,67 +52,17 @@ export const actions = {
 
 export const mutations = {
   setBerlinWords (state, words) {
-    // const groupNames = state.groupNames
-
-    // Build group object for each letter
-    // groupNames.forEach((groupItem, index) => {
-    //   const groups = {
-    //     mode: 'span',
-    //     label: groupItem,
-    //     html: false,
-    //     children: []
-    //   }
-    //   state.wordGroups.push(groups)
-    // })
-
-    // Sort all word in there group
-    // words.forEach((word, index) => {
-    //   state.wordCount = index
-
-    //   const lowerWord = word.word.berlinerisch.toLowerCase()
-
-    //   groupNames.forEach((groupItem, index) => {
-    //     if (lowerWord.startsWith(groupItem.toLowerCase())) {
-    //       state.wordGroups[index].children.push(word) // einmal word entfernen für ganzes Objekt
-    //     }
-    //   })
-    // })
-
-    // words.forEach((word, index) => {
-    //   state.wordCount = index
-
-    //   const lowerWord = word.berlinerisch.charAt(0).toUpperCase()
-    //   word.group = lowerWord
-    //   console.log(word)
-
-    // groupNames.forEach((groupItem, index) => {
-    //   if (lowerWord.startsWith(groupItem.toLowerCase())) {
-    //     console.log(groupItem)
-    //     const group = { group: groupItem }
-
-    //     state.words[index] = { ...groupItem, ...group } // einmal word entfernen für ganzes Objekt
-    //   }
-    // })
-    // })
-
-    // words.forEach((word, index) => {
-    //   state.wordCount = index
-
-    //   const lowerWord = word.berlinerisch.charAt(0).toUpperCase()
-    //   word.group = lowerWord
-    //   console.log(word)
-    // })
-
     for (const index of words.keys()) {
       state.wordCount = index
     }
 
     state.words = words
   },
-  upWords: (state, w) => (state.berlinerWords = w),
+  upWords: (state, w) => (state.words = w),
   setDictionaryPosition: (state, position) => (state.currentDictionaryPosition = position),
   wordLoadingStatus: (state, status) => (state.loadingWords = status),
   updateSearch: (state, search) => (state.searchWord = search),
   updateSearchbarIsVisable: (state, visable) => (state.searchbarIsVisable = visable),
-  updateScrollPositionY: (state, position) => (state.scrollPositionY = position)
+  updateScrollPositionY: (state, position) => (state.scrollPositionY = position),
+  updateWordSortDirection: (state, direction) => (state.wordSortDirection = direction)
 }

@@ -152,7 +152,6 @@ export default {
         data: formInputs,
         headers: { 'Content-Type': 'multipart/form-data' }
       }).then((response) => {
-        console.log(response)
         this.formResponse.message = response.data.message
         this.formResponse.status = response.data.status
         this.resetForm()
