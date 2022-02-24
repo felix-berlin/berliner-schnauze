@@ -8,7 +8,7 @@
   background: var(--color-background);
   display: none;
 
-  @include sassy-mx.breakpoint('lg') {
+  @include mx.breakpoint('lg') {
     display: block;
   }
 

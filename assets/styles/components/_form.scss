@@ -99,7 +99,7 @@
 			margin-bottom: 0;
 		}
 
-		@include sassy-mx.breakpoint(md) {
+		@include mx.breakpoint(md) {
 			flex-direction: row;
 		}
 	}
@@ -109,7 +109,7 @@
 		flex-direction: column;
 		gap: vars.$spacer;
 
-		@include sassy-mx.breakpoint(md) {
+		@include mx.breakpoint(md) {
 			flex-direction: row;
 			align-items: center;
 		}

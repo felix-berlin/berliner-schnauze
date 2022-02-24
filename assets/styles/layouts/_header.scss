@@ -23,16 +23,16 @@
   width: 100%;
   padding: var(--padding-y-header) 0;
 
-  @include sassy-mx.breakpoint('xs') {
+  @include mx.breakpoint('xs') {
     --columns-header-inner: 1fr 1fr;
   }
 
-  @include sassy-mx.breakpoint('md') {
+  @include mx.breakpoint('md') {
     --columns-header-inner: 1fr 2fr;
   }
 
   &.has-searchbar {
-    @include sassy-mx.breakpoint('xs', 'max') {
+    @include mx.breakpoint('xs', 'max') {
       --areas-template:
         ' . logo logo . '
         ' . menu-nav menu-nav . '
@@ -60,11 +60,11 @@
       color: var(--color);
       font-size: var(--size-font);
 
-      @include sassy-mx.breakpoint('sm') {
+      @include mx.breakpoint('sm') {
         --size-font: 2rem;
       }
 
-      @include sassy-mx.breakpoint('lg') {
+      @include mx.breakpoint('lg') {
         --size-font: 2.5rem;
       }
     }

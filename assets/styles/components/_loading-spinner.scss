@@ -14,7 +14,7 @@
     --color: #{vars.$red-200};
     --size-bar: 0.8vmin;
 
-    @include sassy-mx.breakpoint('sm') {
+    @include mx.breakpoint('sm') {
       --size-bar: 0.4vmin;
     }
 
@@ -46,7 +46,7 @@
         background-color: var(--color);
         animation: loader-5 0.6s cubic-bezier(0, 0, 0.03, 0.9) infinite;
 
-        @include sassy-mx.breakpoint('sm') {
+        @include mx.breakpoint('sm') {
           --height-bar: 3vmin;
         }
       }

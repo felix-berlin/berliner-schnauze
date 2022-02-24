@@ -24,7 +24,7 @@
       0px 0.5px 0.6px rgba(0, 0, 0, 0.08),
       0px 4px 5px rgba(0, 0, 0, 0.16);
 
-    @include sassy-mx.breakpoint('sm') {
+    @include mx.breakpoint('sm') {
       --top: 160%;
     }
 

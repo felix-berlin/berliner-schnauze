@@ -1,5 +1,5 @@
 @use './../variables/variables' as vars;
-@use 'sassy-scss/mixins' as sassy-mx;
+@use './../mixins/mixins' as mx;
 
 .c-menu-nav {
   display: flex;
@@ -25,7 +25,7 @@
   &__item {
 
     &.is-hidden {
-      @include sassy-mx.breakpoint('xs', 'max') {
+      @include mx.breakpoint('xs', 'max') {
         display: none;
       }
     }
@@ -58,7 +58,7 @@
     gap: var(--gap);
     font-size: var(--size-font);
 
-    @include sassy-mx.breakpoint('md') {
+    @include mx.breakpoint('md') {
       --size-font: inherit;
       --gap: #{vars.$spacer * .5};
     }

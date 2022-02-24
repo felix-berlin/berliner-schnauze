@@ -82,7 +82,7 @@
     gap: vars.$spacer * .25;
     align-self: center;
 
-    @include sassy-mx.breakpoint('md') {
+    @include mx.breakpoint('md') {
       --display: flex;
     }
 
@@ -98,7 +98,7 @@
   &--nav-search {
     --margin: 0;
 
-    @include sassy-mx.breakpoint('xs') {
+    @include mx.breakpoint('xs') {
       width: 100%;
       justify-content: flex-end;
     }
@@ -148,14 +148,14 @@
 
   &--full-width {
 
-    @include sassy-mx.breakpoint('xs', 'max') {
+    @include mx.breakpoint('xs', 'max') {
       width: 100%;
     }
   }
 
   &--large {
 
-    @include sassy-mx.breakpoint('md') {
+    @include mx.breakpoint('md') {
       --padding-y-input: .75rem;
       --padding-x-input: .75rem;
     }
@@ -169,14 +169,14 @@
       &__search-input {
         --size-font: 1.5rem;
 
-        @include sassy-mx.breakpoint('md') {
+        @include mx.breakpoint('md') {
 
           --font-size: 2rem;
         }
       }
 
       &__search-label {
-        @include sassy-mx.breakpoint('md') {
+        @include mx.breakpoint('md') {
           --size-font: 1.5rem;
         }
       }

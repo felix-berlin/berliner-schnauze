@@ -13,7 +13,7 @@
 
     display: var(--display);
 
-    @include sassy-mx.breakpoint('md') {
+    @include mx.breakpoint('md') {
       --display: flex;
     }
   }
@@ -27,7 +27,7 @@
     margin-bottom: vars.$spacer;
     padding-bottom: vars.$spacer * .7;
 
-    @include sassy-mx.breakpoint('md') {
+    @include mx.breakpoint('md') {
       display: none;
     }
 

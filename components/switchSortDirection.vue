@@ -4,6 +4,7 @@
       <button
         v-if="$store.state.wordSortDirection === 'desc'"
         aria-label="Aufsteigen sortieren (A - Z)"
+        type="button"
         :class="[buttonClass, 'c-button']"
         @click="changeSortDirection('asc')"
       >
@@ -13,6 +14,7 @@
         v-else
         :class="[buttonClass, 'c-button']"
         aria-label="Absteigend sortieren (Z - A)"
+        type="button"
         @click="changeSortDirection('desc')"
       >
         <SortDesc />

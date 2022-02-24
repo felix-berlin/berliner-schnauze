@@ -1,5 +1,6 @@
 @use '../variables/variables' as vars;
-@use 'sassy-scss/mixins' as sassy-mx;
+@use './../mixins/mixins' as mx;
+
 
 .c-word-list {
   --size-quote-icon: 32px;
@@ -47,7 +48,7 @@
       margin-bottom: vars.$spacer * 1.5;
     }
 
-    @include sassy-mx.breakpoint('sm') {
+    @include mx.breakpoint('sm') {
       --direction-flex: row;
     }
   }
@@ -71,11 +72,11 @@
     margin: 0;
     word-break: break-word;
 
-    @include sassy-mx.breakpoint('md') {
+    @include mx.breakpoint('md') {
       --size-font: 3rem;
     }
 
-    @include sassy-mx.breakpoint('xlg') {
+    @include mx.breakpoint('xlg') {
       --size-font: 4.5rem;
     }
   }
@@ -97,20 +98,20 @@
       content: '᛫';
       margin: var(--margin);
 
-      @include sassy-mx.breakpoint('sm') {
+      @include mx.breakpoint('sm') {
         --margin: 0 #{vars.$spacer};
       }
     }
 
-    @include sassy-mx.breakpoint('sm') {
+    @include mx.breakpoint('sm') {
       --margin: 0;
     }
 
-    @include sassy-mx.breakpoint('md') {
+    @include mx.breakpoint('md') {
       --font-size: 1.125rem;
     }
 
-    @include sassy-mx.breakpoint('xlg') {
+    @include mx.breakpoint('xlg') {
       --font-size: 1.225rem;
     }
   }
@@ -124,7 +125,7 @@
     font-size: var(--size-font);
     word-break: break-word;
 
-    @include sassy-mx.breakpoint('md') {
+    @include mx.breakpoint('md') {
       --size-font: 1.8rem;
     }
 
@@ -137,13 +138,13 @@
       padding: var(--padding-y) var(--padding-x);
       gap: var(--gap);
 
-      @include sassy-mx.breakpoint('sm') {
+      @include mx.breakpoint('sm') {
         --gap: #{vars.$spacer};
         --padding-y: #{vars.$spacer * 1.5};
         --padding-x: 5%;
       }
 
-      @include sassy-mx.breakpoint('md') {
+      @include mx.breakpoint('md') {
         --padding-y: #{vars.$spacer * 2.5};
         --padding-x: 10%;
       }
@@ -180,7 +181,7 @@
     height: var(--size-quote-icon);
     fill: vars.$grey-100;
 
-    @include sassy-mx.breakpoint('md') {
+    @include mx.breakpoint('md') {
       --size-quote-icon: 44px;
     }
   }

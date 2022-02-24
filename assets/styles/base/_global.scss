@@ -1,8 +1,20 @@
 @use '../variables/variables' as vars;
+@use './../mixins/mixins' as mx;
 
 :root {
 	@each $name, $color in vars.$all-colors {
 		/* stylelint-disable-next-line custom-property-pattern */
 		--#{$name}: #{$color};
 	}
+
+  --padding-y-header: #{vars.$spacer * .6};
+  --spacing-main-frame: 20px;
+
+  @include mx.breakpoint('md') {
+    --spacing-main-frame: 100px;
+  }
+
+  @include mx.breakpoint('uhd') {
+    --spacing-main-frame: 15%;
+  }
 }

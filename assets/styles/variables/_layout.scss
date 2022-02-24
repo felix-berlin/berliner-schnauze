@@ -1,11 +1,21 @@
-@use './base' as base-vars;
-@use 'sassy-scss/mixins' as sassy-mx;
+// Breakpoint Vars
+$xxs: 375px; // Smartphone Portrait
+$xs: 568px; // Smartphone Landscape
+$sm: 768px; // Tablet Portrait
+$md: 1024px; // Tablet Landscape
+$lg: 1260px; // Kleinerer Desktop
+$xlg: 1440px; // Widescreen
+$fhd: 1920px; // Full HD
+$uhd: 2560px; // UHD
 
-:root {
-  --padding-y-header: #{base-vars.$spacer * .6};
-  --spacing-main-frame: 20px;
-
-  @include sassy-mx.breakpoint('md') {
-    --spacing-main-frame: 100px;
-  }
-}
+// Breakpoint Map
+$custom-breakpoints: (
+	'xxs': $xxs,
+	'xs': $xs,
+	'sm': $sm,
+	'md': $md,
+	'lg': $lg,
+	'xlg': $xlg,
+	'fhd': $fhd,
+  'uhd': $uhd
+);
