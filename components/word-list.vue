@@ -3,7 +3,7 @@
     <!-- Search -->
     <SearchWords searchbar-type="large" :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
 
-    <SwitchSortDirection button-class="c-button--center-icon" />
+    <!-- <SwitchSortDirection button-class="c-button--center-icon" /> -->
 
     <!-- List -->
     <section ref="wordList" class="c-word-list__list">
