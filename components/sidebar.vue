@@ -1,13 +1,13 @@
 <template>
   <aside class="c-sidebar">
-    <LetterNavigation />
+    <LetterFilter />
   </aside>
 </template>
 
 <script>
-import letterNavigation from './letter-navigation.vue'
+import LetterFilter from './letter-filter.vue'
 export default {
   name: 'SidebarPart',
-  components: { letterNavigation }
+  components: { LetterFilter }
 }
 </script>

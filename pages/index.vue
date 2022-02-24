@@ -37,14 +37,20 @@ export default {
     WordList: () => import('@/components/word-list')
   },
 
-  data () {
-    return {
-      textLoading: '<span class="c-loader-text"><span>.</span><span>.</span><span>.</span></span>'
-    }
-  },
+  // async asyncData ({ store, $sentry }) {
+  //   store.commit('wordLoadingStatus', true)
+
+  //   return await this.$axios.get(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/words`)
+  //     .then((res) => {
+  //       store.commit('setBerlinWords', res)
+  //       store.commit('wordLoadingStatus', false)
+  //     }).catch((error) => {
+  //       $sentry.captureException(error)
+  //     })
+  // },
 
   computed: {
-    ...mapGetters(['berlinerWordCount', 'getWordLoadingStatus'])
+    ...mapGetters(['berlinerWordCount', 'getWordLoadingStatus', 'setBerlinWords', 'wordLoadingStatus'])
   }
 
 }

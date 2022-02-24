@@ -3,17 +3,18 @@
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-letter-nav {
-	--color-background: #{vars.$white-100};
+	// --color-background: #{vars.$white-100};
 
-	background: var(--color-background);
-	display: none;
+	// background: var(--color-background);
 
-	@include mx.breakpoint('lg') {
-		display: block;
-	}
-	@include mx.dark-mode {
-		--color-background: #{vars.$grey-100};
-	}
+	// // display: none;
+
+	// @include mx.breakpoint('lg') {
+	// 	display: block;
+	// }
+	// @include mx.dark-mode {
+	// 	--color-background: #{vars.$grey-100};
+	// }
 
 	&__list {
 		display: flex;
@@ -32,17 +33,17 @@
 		}
 	}
 
-	&__link {
-		--color: #{vars.$grey-100};
+	// &__link {
+	// 	--color: #{vars.$grey-100};
 
-		padding: 1rem 0;
-		color: var(--color);
-		font-size: 1.8rem;
-		font-family: vars.$berliner;
-		text-decoration: none;
+	// 	padding: 1rem 0;
+	// 	color: var(--color);
+	// 	font-size: 1.8rem;
+	// 	font-family: vars.$berliner;
+	// 	text-decoration: none;
 
-		@include mx.dark-mode {
-			--color: #{vars.$white-100};
-		}
-	}
+	// 	@include mx.dark-mode {
+	// 		--color: #{vars.$white-100};
+	// 	}
+	// }
 }
