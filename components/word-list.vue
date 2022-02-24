@@ -146,7 +146,7 @@ export default {
   },
 
   created () {
-    this.fetchBerlinWords()
+    // this.fetchBerlinWords()
   },
 
   mounted () {

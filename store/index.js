@@ -32,7 +32,7 @@ export const getters = {
 }
 
 export const actions = {
-  async fetchBerlinWords ({ commit, $sentry }) {
+  async nuxtServerInit ({ commit, $sentry }) {
     commit('wordLoadingStatus', true)
 
     return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/words`)
