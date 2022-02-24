@@ -2,18 +2,18 @@
 @use './../variables/variables' as vars;
 
 .v-popper--theme-berliner-schnauze .v-popper__inner {
-  background: vars.$grey-100;
-  color: vars.$white-100;
-  padding: vars.$spacer * .5;
-  border: none;
-  border-radius: 0px;
-  max-width: 250px;
+	background: vars.$grey-100;
+	color: vars.$white-100;
+	padding: vars.$spacer * 0.5;
+	border: none;
+	border-radius: 0;
+	max-width: 250px;
 }
 
 .v-popper--theme-berliner-schnauze .v-popper__arrow-outer {
-  border-color: vars.$grey-100;
+	border-color: vars.$grey-100;
 }
 
 .v-popper--theme-berliner-schnauze .v-popper__arrow-inner {
-  visibility: hidden;
+	visibility: hidden;
 }

@@ -4,183 +4,174 @@
 @use 'sassy-scss/functions' as sassy-fn;
 
 .c-word-search {
-  --padding-y-input: .5rem;
-  --padding-x-input: .5rem;
-  --margin: 0 0 #{vars.$spacer * 1.5} 0;
+	--padding-y-input: 0.5rem;
+	--padding-x-input: 0.5rem;
+	--margin: 0 0 #{vars.$spacer * 1.5} 0;
 
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  margin: var(--margin);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	margin: var(--margin);
 
-  &__search-button {
-    --color-background: #{vars.$white-100};
-    --style-border: solid;
-    --color-border: #{vars.$grey-100};
-    --offset-x-box-shadow: 2px;
-    --color-box-shadow: rgb(0 0 0 / 20%);
+	&__search-button {
+		--color-background: #{vars.$white-100};
+		--style-border: solid;
+		--color-border: #{vars.$grey-100};
+		--offset-x-box-shadow: 2px;
+		--color-box-shadow: rgb(0 0 0 / 20%);
 
-    background-color: var(--color-background);
-    border: 1px var(--style-border) var(--color-border);
+		background-color: var(--color-background);
+		border: 1px var(--style-border) var(--color-border);
 
-    &--right {
-      order: 2;
-      --offset-x-boxshadow: -2px;
-    }
+		&--right {
+			order: 2;
 
-    &.has-searchbar {
-      position: relative;
-      z-index: 1;
-      box-shadow: var(--offset-x-box-shadow) 0px 0px 0px var(--color-box-shadow);
-    }
-  }
+			--offset-x-boxshadow: -2px;
+		}
 
-  &__search-wrap {
-    flex: 1 1 auto;
-    display: flex;
-    width: 1%;
-    min-width: 0;
-  }
+		&.has-searchbar {
+			position: relative;
+			z-index: 1;
+			box-shadow: var(--offset-x-box-shadow) 0 0 0 var(--color-box-shadow);
+		}
+	}
 
-  &__search-input.c-input {
-    --color-border: var(--grey-100);
-    --color-background: var(--white-200);
-    --color-outline: #{rgba(vars.$red-200, .7)};
-    --spacing-inner: var(--padding-y-input) var(--padding-x-input);
+	&__search-wrap {
+		flex: 1 1 auto;
+		display: flex;
+		width: 1%;
+		min-width: 0;
+	}
 
-    border-left: none;
+	&__search-input.c-input {
+		--color-border: var(--grey-100);
+		--color-background: var(--white-200);
+		--color-outline: #{rgba(vars.$red-200, 0.7)};
+		--spacing-inner: var(--padding-y-input) var(--padding-x-input);
 
-    @include mx.dark-mode {
-      --color-outline: #{rgba(vars.$blue-200, .7)};
-    }
+		border-left: none;
 
-    &:focus-visible {
-      outline-style: solid;
-      outline-color: var(--color-outline);
-      outline-width: 2px;
-      z-index: 2;
-    }
+		@include mx.dark-mode {
+			--color-outline: #{rgba(vars.$blue-200, 0.7)};
+		}
 
-  }
+		&:focus-visible {
+			outline: var(--color-outline) solid 2px;
+			z-index: 2;
+		}
+	}
 
-  input[type="search"]::-webkit-search-cancel-button {
-    display: none;
-  }
+	input[type='search']::-webkit-search-cancel-button {
+		display: none;
+	}
 
-  &__shortcut {
-    --display: none;
-    --color-border: #{vars.$red-100};
-    --color: #{vars.$white-100};
+	&__shortcut {
+		--display: none;
+		--color-border: #{vars.$red-100};
+		--color: #{vars.$white-100};
 
-    border: 1px dashed var(--color-border);
-    color: var(--color);
-    display: var(--display);
-    align-items: center;
-    justify-content: center;
-    padding: vars.$spacer * .35;
-    font-size: .6rem;
-    gap: vars.$spacer * .25;
-    align-self: center;
+		border: 1px dashed var(--color-border);
+		color: var(--color);
+		display: var(--display);
+		align-items: center;
+		justify-content: center;
+		padding: vars.$spacer * 0.35;
+		font-size: 0.6rem;
+		gap: vars.$spacer * 0.25;
+		align-self: center;
 
-    @include mx.breakpoint('md') {
-      --display: flex;
-    }
+		@include mx.breakpoint('md') {
+			--display: flex;
+		}
+		@include mx.dark-mode {
+			--color-border: #{vars.$blue-100};
+		}
+	}
 
-    @include mx.dark-mode {
-      --color-border: #{vars.$blue-100}
-    }
-  }
+	&__command-icon-wrap {
+		display: flex;
+	}
 
-  &__command-icon-wrap {
-    display: flex;
-  }
+	&--nav-search {
+		--margin: 0;
 
-  &--nav-search {
-    --margin: 0;
+		@include mx.breakpoint('xs') {
+			width: 100%;
+			justify-content: flex-end;
+		}
 
-    @include mx.breakpoint('xs') {
-      width: 100%;
-      justify-content: flex-end;
-    }
+		.c-word-search {
+			&__search-button {
+				--color-background: transparent;
+				--color-border: transparent;
+				--color-box-shadow: #{sassy-fn.hex-to-rgb(vars.$red-100, 20%)};
 
-    .c-word-search {
+				transition: all 0.3s ease-in-out;
 
-      &__search-button {
-        --color-background: transparent;
-        --color-border: transparent;
-        --color-box-shadow: #{sassy-fn.hex-to-rgb(vars.$red-100, 20%)};
+				@include mx.dark-mode {
+					--color-box-shadow: #{sassy-fn.hex-to-rgb(vars.$blue-100, 20%)};
+				}
 
-        transition: all .3s ease-in-out;
+				&.has-searchbar {
+					--color-border: #{vars.$white-100};
+					--style-border: dashed;
 
-        @include mx.dark-mode {
-          --color-box-shadow: #{sassy-fn.hex-to-rgb(vars.$blue-100, 20%)};
-        }
+					border-left: none;
+				}
+			}
 
-        &.has-searchbar {
-          --color-border: #{vars.$white-100};
-          --style-border: dashed;
+			&__search-label,
+			&__search-input {
+				--color: #{vars.$red-200};
 
-          border-left: none;
-        }
-      }
+				color: var(--color);
 
-      &__search-label,
-      &__search-input {
-        --color: #{vars.$red-200};
+				@include mx.dark-mode {
+					--color: #{vars.$blue-200};
+				}
+			}
 
-        color: var(--color);
+			&__search-input {
+				--color-border: #{vars.$red-100};
+				--color-outline: #{sassy-fn.hex-to-rgb(vars.$white-200, 50%)};
 
-        @include mx.dark-mode {
-          --color: #{vars.$blue-200};
-        }
-      }
+				@include mx.dark-mode {
+					--color-border: #{vars.$blue-100};
+				}
+			}
+		}
+	}
 
-      &__search-input {
-        --color-border: #{vars.$red-100};
-        --color-outline: #{sassy-fn.hex-to-rgb(vars.$white-200, 50%)};
+	&--full-width {
+		@include mx.breakpoint('xs', 'max') {
+			width: 100%;
+		}
+	}
 
-        @include mx.dark-mode {
-          --color-border: #{vars.$blue-100};
-        }
-      }
-    }
-  }
+	&--large {
+		@include mx.breakpoint('md') {
+			--padding-y-input: 0.75rem;
+			--padding-x-input: 0.75rem;
+		}
 
-  &--full-width {
+		.c-word-search {
+			&__search-button {
+				--padding: var(--padding-y-input) var(--padding-x-input);
+			}
 
-    @include mx.breakpoint('xs', 'max') {
-      width: 100%;
-    }
-  }
+			&__search-input {
+				--size-font: 1.5rem;
 
-  &--large {
+				@include mx.breakpoint('md') {
+					--font-size: 2rem;
+				}
+			}
 
-    @include mx.breakpoint('md') {
-      --padding-y-input: .75rem;
-      --padding-x-input: .75rem;
-    }
-
-    .c-word-search {
-
-      &__search-button {
-        --padding: var(--padding-y-input) var(--padding-x-input);
-      }
-
-      &__search-input {
-        --size-font: 1.5rem;
-
-        @include mx.breakpoint('md') {
-
-          --font-size: 2rem;
-        }
-      }
-
-      &__search-label {
-        @include mx.breakpoint('md') {
-          --size-font: 1.5rem;
-        }
-      }
-    }
-
-  }
+			&__search-label {
+				@include mx.breakpoint('md') {
+					--size-font: 1.5rem;
+				}
+			}
+		}
+	}
 }

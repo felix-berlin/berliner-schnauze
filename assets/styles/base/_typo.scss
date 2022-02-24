@@ -2,31 +2,31 @@
 @use './../mixins/mixins' as mx;
 
 @for $h from 1 to 6 {
-  h#{$h} {
-    font-family: vars.$berliner;
-    font-weight: normal;
-  }
+	h#{$h} {
+		font-family: vars.$berliner;
+		font-weight: normal;
+	}
 }
 
 html {
-  font-family: vars.$berlin;
+	font-family: vars.$berlin;
 }
 
 a {
-  --color: #{vars.$red-200};
+	--color: #{vars.$red-200};
 
-  color: var(--color);
-  text-decoration: none;
-  cursor: pointer;
+	color: var(--color);
+	text-decoration: none;
+	cursor: pointer;
 
-  @include mx.dark-mode {
-    --color: #{vars.$blue-200}
-  }
+	@include mx.dark-mode {
+		--color: #{vars.$blue-200};
+	}
 
-  &:hover {
-    text-decoration: underline;
-    text-decoration-style: dashed;
-    text-decoration-thickness: from-font;
-    text-underline-position: from-font;
-  }
+	&:hover {
+		text-decoration: underline;
+		text-decoration-style: dashed;
+		text-decoration-thickness: from-font;
+		text-underline-position: from-font;
+	}
 }

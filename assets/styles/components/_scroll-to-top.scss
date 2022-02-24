@@ -1,34 +1,31 @@
 @use './../mixins/mixins' as mx;
 
-
 .c-scroll-to-top {
-  --left-position: 50%;
-  --bottom-position: 10px;
-  --transform: translateX(-50%);
+	--left-position: 50%;
+	--bottom-position: 10px;
+	--transform: translateX(-50%);
 
-  position: fixed;
-  bottom: var(--bottom-position);
-  left: var(--left-position);
-  transform: var(--transform);
-  z-index: 99;
-  box-shadow:
-    0px 0px 0.9px rgba(0, 0, 0, 0.035),
-    0px 0px 2.5px rgba(0, 0, 0, 0.05),
-    0px 0px 6px rgba(0, 0, 0, 0.065),
-    0px 0px 20px rgba(0, 0, 0, 0.1)
-  ;
+	position: fixed;
+	bottom: var(--bottom-position);
+	left: var(--left-position);
+	transform: var(--transform);
+	z-index: 99;
+	box-shadow:
+		0 0 0.9px rgb(0 0 0 / 3.5%),
+		0 0 2.5px rgb(0 0 0 / 5%),
+		0 0 6px rgb(0 0 0 / 6.5%),
+		0 0 20px rgb(0 0 0 / 10%);
 
-  @include mx.breakpoint('md') {
-    --left-position: none;
-    --bottom-position: none;
-    --transform: translateY(-50%);
+	@include mx.breakpoint('md') {
+		--left-position: none;
+		--bottom-position: none;
+		--transform: translateY(-50%);
 
-    top: 50%;
-    right: 10px;
-  }
+		top: 50%;
+		right: 10px;
+	}
 
-  &.is-close-to-end {
-    opacity: 0;
-  }
+	&.is-close-to-end {
+		opacity: 0;
+	}
 }
-

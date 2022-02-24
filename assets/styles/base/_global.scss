@@ -7,14 +7,13 @@
 		--#{$name}: #{$color};
 	}
 
-  --padding-y-header: #{vars.$spacer * .6};
-  --spacing-main-frame: 20px;
+	--padding-y-header: #{vars.$spacer * 0.6};
+	--spacing-main-frame: 20px;
 
-  @include mx.breakpoint('md') {
-    --spacing-main-frame: 100px;
-  }
-
-  @include mx.breakpoint('uhd') {
-    --spacing-main-frame: 15%;
-  }
+	@include mx.breakpoint('md') {
+		--spacing-main-frame: 100px;
+	}
+	@include mx.breakpoint('uhd') {
+		--spacing-main-frame: 15%;
+	}
 }

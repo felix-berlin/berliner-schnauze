@@ -1,5 +1,4 @@
 @use 'sass:color';
-
 @use './../variables/variables' as vars;
 @use './../mixins/mixins' as mx;
 @use 'sassy-scss/mixins' as sassy-mx;
@@ -20,6 +19,7 @@
 		.c-form__label {
 			order: -1;
 			margin-right: vars.$spacer;
+
 			// font-size: font.$text-m;
 			font-weight: 700;
 		}
@@ -32,7 +32,7 @@
 			.c-form__label {
 				margin: {
 					right: 0;
-					bottom: vars.$spacer * .5;
+					bottom: vars.$spacer * 0.5;
 				};
 			}
 		}
@@ -44,7 +44,7 @@
 		input:not([type='range']),
 		textarea,
 		select {
-			--spacing-inner: #{vars.$spacer * .75};
+			--spacing-inner: #{vars.$spacer * 0.75};
 		}
 
 		select {
@@ -52,37 +52,28 @@
 		}
 
 		&.has-error {
-
 			.c-form__input,
 			.c-form__select {
 				--color-border: var(--danger);
 
-        @include mx.dark-mode-override {
-          --box-shadow-focus: 2px #{rgba(vars.$danger, .3)};
-        }
+				@include mx.dark-mode-override {
+					--box-shadow-focus: 2px #{rgba(vars.$danger, 0.3)};
+				}
 
-        border-color: vars.$danger;
-        background-color: color.adjust(vars.$danger, $lightness: 40%);
-
+				border-color: vars.$danger;
+				background-color: color.adjust(vars.$danger, $lightness: 40%);
 			}
 		}
 	}
 
-	&__input {
-
-	}
-
 	&__label {
-
-		[required] + &,
 		[required] + &,
 		&.is-required {
-
 			&::after {
 				content: '*';
 				font-weight: 500;
 				color: var(--danger);
-				transform: translateY(-.1em);
+				transform: translateY(-0.1em);
 				display: inline-block;
 			}
 		}
@@ -122,8 +113,9 @@
 
 	&__error {
 		color: var(--danger);
+
 		// font-size: font.$text-xs;
-		margin-top: vars.$spacer * .25;
+		margin-top: vars.$spacer * 0.25;
 		font-weight: 500;
 	}
 }

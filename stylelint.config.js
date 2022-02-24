@@ -1,5 +1,14 @@
 module.exports = {
-  customSyntax: 'postcss-html',
+  overrides: [
+    {
+      files: ['assets/**/*.{s?(a|c)ss,less,stylus}'],
+      customSyntax: 'postcss-scss'
+    },
+    {
+      files: ['components/**/*.vue', 'pages/**/*.vue'],
+      customSyntax: 'postcss-html'
+    }
+  ],
   extends: [
     'stylelint-config-standard',
     'stylelint-config-standard-scss'
@@ -39,6 +48,7 @@ module.exports = {
         ignore: ['custom-elements', 'default-namespace']
       }
     ],
-    'no-descending-specificity': null
+    'no-descending-specificity': null,
+    'function-no-unknown': null
   }
 }

@@ -3,36 +3,34 @@
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-social-list {
+	&__list {
+		gap: vars.$spacer * 0.25;
+	}
 
-  &__list {
-    gap: vars.$spacer * .25;
-  }
+	&--desktop {
+		--display: none;
 
-  &--desktop {
-    --display: none;
+		display: var(--display);
 
-    display: var(--display);
+		@include mx.breakpoint('md') {
+			--display: flex;
+		}
+	}
 
-    @include mx.breakpoint('md') {
-      --display: flex;
-    }
-  }
+	&--mobile-dropdown {
+		--color-border: var(--red-200);
 
-  &--mobile-dropdown {
-    --color-border: var(--red-200);
+		display: flex;
+		justify-content: space-between;
+		border-bottom: 1px dashed var(--color-border);
+		margin-bottom: vars.$spacer;
+		padding-bottom: vars.$spacer * 0.7;
 
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px dashed var(--color-border);
-    margin-bottom: vars.$spacer;
-    padding-bottom: vars.$spacer * .7;
-
-    @include mx.breakpoint('md') {
-      display: none;
-    }
-
-    @include mx.dark-mode {
-      --color-border: var(--blue-200);
-    }
-  }
+		@include mx.breakpoint('md') {
+			display: none;
+		}
+		@include mx.dark-mode {
+			--color-border: var(--blue-200);
+		}
+	}
 }
