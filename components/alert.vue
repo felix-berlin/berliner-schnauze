@@ -17,8 +17,7 @@ export default {
   props: {
     element: {
       type: String,
-      default: 'div',
-      require: true
+      default: 'div'
     },
     type: {
       type: String,
