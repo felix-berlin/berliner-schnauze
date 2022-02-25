@@ -2,7 +2,7 @@
 	position: relative;
 
 	&__input:focus ~ .c-floating-label__label,
-	&__input:not(:placeholder-shown) ~ .c-floating-label__label:has(.c-floating-label__label--center) {
+	&__input:not(:placeholder-shown) ~ .c-floating-label__label {
 		z-index: -1;
 	}
 
