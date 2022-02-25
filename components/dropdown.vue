@@ -81,6 +81,7 @@ export default {
       // Close if open and vice versa
       this.isOpen = !this.isOpen
     },
+
     catchOutsideClick (event, dropdown) {
       // When user clicks menu — do nothing
       if (dropdown === event.target) { return false }

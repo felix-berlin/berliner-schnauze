@@ -61,4 +61,14 @@
 			--gap: #{vars.$spacer * 0.5};
 		}
 	}
+
+	.c-dropdown {
+		&__menu {
+			--offset: 100%;
+
+			@include mx.breakpoint('sm') {
+				--offset: 60%;
+			}
+		}
+	}
 }

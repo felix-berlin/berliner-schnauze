@@ -4,11 +4,9 @@
 .c-word-list {
 	--size-quote-icon: 32px;
 
-	&__list {
-		display: grid;
-		gap: vars.$spacer * 1.75;
-		position: relative;
-	}
+	display: grid;
+	gap: vars.$spacer * 1.75;
+	position: relative;
 
 	&__word {
 		--color-background: #{vars.$white-100};

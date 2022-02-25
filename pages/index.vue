@@ -22,7 +22,20 @@
           </picture>
         </div>
       </header>
-      <WordList :critical="true" search-aria-label="Wortsuche" />
+      <SearchWords searchbar-type="large" :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
+
+      <LetterFilter />
+
+      <Dropdown menu-align="right" modifier="c-filter-dropdown">
+        <template #title>
+          Filter
+        </template>
+        <template #content>
+          <LetterFilter modifier="c-letter-filter--mobile" />
+        </template>
+      </Dropdown>
+
+      <WordList />
     </main>
   </div>
 </template>
@@ -34,7 +47,9 @@ export default {
   name: 'IndexPage',
 
   speedkitComponents: {
-    WordList: () => import('@/components/word-list')
+    WordList: () => import('@/components/word-list'),
+    SearchWords: () => import('@/components/search-words'),
+    LetterFilter: () => import('@/components/letter-filter')
   },
 
   // async asyncData ({ store, $sentry }) {
@@ -50,7 +65,7 @@ export default {
   // },
 
   computed: {
-    ...mapGetters(['berlinerWordCount', 'getWordLoadingStatus', 'setBerlinWords', 'wordLoadingStatus'])
+    ...mapGetters(['berlinerWordCount', 'getWordLoadingStatus'])
   }
 
 }

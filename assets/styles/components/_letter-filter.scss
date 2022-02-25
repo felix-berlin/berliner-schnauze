@@ -2,7 +2,11 @@
 @use './../mixins/mixins' as mx;
 @use 'sassy-scss/mixins' as sassy-mx;
 
-.c-letter-nav {
+.c-letter-filter {
+	--margin: 0 0 1.5rem 0;
+
+	margin: var(--margin);
+
 	// --color-background: #{vars.$white-100};
 
 	// background: var(--color-background);
@@ -18,7 +22,7 @@
 
 	&__list {
 		display: flex;
-		justify-content: space-evenly;
+		justify-content: space-between;
 
 		&-item {
 			display: flex;
@@ -26,11 +30,24 @@
 			justify-content: center;
 
 			&.is-current {
-				.c-letter-nav__link {
-					--color: #{vars.$red-200};
+				.c-letter-filter__button {
+					--color-background: var(--red-200);
+					--color: var(--white-100);
+
+					@include mx.dark-mode {
+						--color-background: var(--blue-200);
+					}
 				}
 			}
 		}
+	}
+
+	&__button {
+		--spacing: #{vars.$spacer * 0.5};
+		--size-font: 1.2rem;
+
+		font-size: var(--size-font);
+		padding: var(--spacing);
 	}
 
 	// &__link {
@@ -46,4 +63,10 @@
 	// 		--color: #{vars.$white-100};
 	// 	}
 	// }
+}
+
+.c-filter-dropdown {
+	@include mx.breakpoint('sm') {
+		display: none;
+	}
 }

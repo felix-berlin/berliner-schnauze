@@ -1,182 +1,60 @@
 <template>
-  <div class="c-word-list">
-    <!-- Search -->
-    <SearchWords searchbar-type="large" :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
-
-    <SwitchSortDirection button-class="c-button--center-icon" />
-
-    <LetterFilter />
-
-    <!-- List -->
-    <section ref="wordList" class="c-word-list__list">
-      <LoadingSpinner :show="getWordLoadingStatus" />
-      <article
-        v-for="(item, index) in searchDataResults"
-        :id="'word' + item.ID"
-        :ref="'word' + item.ID"
-        :key="item.ID"
-        :data-group="item.group"
-        class="c-word-list__word"
-        :class="{'has-translation': item.translation, 'has-example': item.example}"
-        data-track-content
-        data-content-name="word"
-      >
-        <dl class="c-word-list__header">
-          <dt class="c-word-list__berlinerisch" :data-content-piece="item.berlinerisch" v-text="item.berlinerisch" />
-          <dd class="c-word-list__translation" v-html="item.translation" />
-        </dl>
-        <div class="c-word-list__divider-wrapper">
-          <div v-if="item.example" class="c-word-list__divider" />
-          <div class="c-word-list__copy-buttons">
-            <button
-              ref="copyUrlButton"
-              aria-label="Link zum Wort kopieren"
-              type="button"
-              class="c-word-list__copy-button c-button c-button--center-icon"
-              @click="copyWordUrlToClipboard(item.ID, index)"
-            >
-              <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
-                <Link />
-              </span>
-              <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success is-hidden">
-                <CheckCircle2 />
-              </span>
-              <span ref="copyUrlErrorIcon" class="c-word-list__icon-button is-hidden">
-                <XCircle />
-              </span>
-            </button>
-            <button ref="copyWordButton" aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon" @click="copyNameToClipboard(item.ID, index)">
-              <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
-                <Copy />
-              </span>
-              <span ref="copyWordCheckIcon" class="c-word-list__icon-button is-hidden">
-                <CheckCircle2 />
-              </span>
-              <span ref="copyWordErrorIcon" class="c-word-list__icon-button is-hidden">
-                <XCircle />
-              </span>
-            </button>
-          </div>
+  <component :is="element" ref="wordList" class="c-word-list">
+    <LoadingSpinner :show="getWordLoadingStatus" />
+    <article
+      v-for="(item, index) in searchDataResults"
+      :id="'word' + item.ID"
+      :ref="'word' + item.ID"
+      :key="item.ID"
+      :data-group="item.group"
+      class="c-word-list__word"
+      :class="{'has-translation': item.translation, 'has-example': item.example}"
+      data-track-content
+      data-content-name="word"
+    >
+      <dl class="c-word-list__header">
+        <dt class="c-word-list__berlinerisch" :data-content-piece="item.berlinerisch" v-text="item.berlinerisch" />
+        <dd class="c-word-list__translation" v-html="item.translation" />
+      </dl>
+      <div class="c-word-list__divider-wrapper">
+        <div v-if="item.example" class="c-word-list__divider" />
+        <div class="c-word-list__copy-buttons">
+          <button
+            ref="copyUrlButton"
+            aria-label="Link zum Wort kopieren"
+            type="button"
+            class="c-word-list__copy-button c-button c-button--center-icon"
+            @click="copyWordUrlToClipboard(item.ID, index)"
+          >
+            <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
+              <Link />
+            </span>
+            <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success is-hidden">
+              <CheckCircle2 />
+            </span>
+            <span ref="copyUrlErrorIcon" class="c-word-list__icon-button is-hidden">
+              <XCircle />
+            </span>
+          </button>
+          <button ref="copyWordButton" aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon" @click="copyNameToClipboard(item.ID, index)">
+            <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
+              <Copy />
+            </span>
+            <span ref="copyWordCheckIcon" class="c-word-list__icon-button is-hidden">
+              <CheckCircle2 />
+            </span>
+            <span ref="copyWordErrorIcon" class="c-word-list__icon-button is-hidden">
+              <XCircle />
+            </span>
+          </button>
         </div>
-        <div v-if="item.example" class="c-word-list__example-wrapper">
-          <Quote :size="44" :stroke-width="0" class="c-word-list__quote-icon" />
-          <p class="c-word-list__example" v-html="item.example" />
-        </div>
-      </article>
-      <!-- <div v-if="$store.state.searchWord.length === 0">
-        <article
-          v-for="(item, index) in filter"
-          :id="'word' + item.ID"
-          :ref="'word' + item.ID"
-          :key="item.ID"
-          :data-group="item.group"
-          class="c-word-list__word"
-          :class="{'has-translation': item.translation, 'has-example': item.example}"
-          data-track-content
-          data-content-name="word"
-        >
-          <dl class="c-word-list__header">
-            <dt class="c-word-list__berlinerisch" :data-content-piece="item.berlinerisch" v-text="item.berlinerisch" />
-            <dd class="c-word-list__translation" v-html="item.translation" />
-          </dl>
-          <div class="c-word-list__divider-wrapper">
-            <div v-if="item.example" class="c-word-list__divider" />
-            <div class="c-word-list__copy-buttons">
-              <button
-                ref="copyUrlButton"
-                aria-label="Link zum Wort kopieren"
-                type="button"
-                class="c-word-list__copy-button c-button c-button--center-icon"
-                @click="copyWordUrlToClipboard(item.ID, index)"
-              >
-                <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
-                  <Link />
-                </span>
-                <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success is-hidden">
-                  <CheckCircle2 />
-                </span>
-                <span ref="copyUrlErrorIcon" class="c-word-list__icon-button is-hidden">
-                  <XCircle />
-                </span>
-              </button>
-              <button ref="copyWordButton" aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon" @click="copyNameToClipboard(item.ID, index)">
-                <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
-                  <Copy />
-                </span>
-                <span ref="copyWordCheckIcon" class="c-word-list__icon-button is-hidden">
-                  <CheckCircle2 />
-                </span>
-                <span ref="copyWordErrorIcon" class="c-word-list__icon-button is-hidden">
-                  <XCircle />
-                </span>
-              </button>
-            </div>
-          </div>
-          <div v-if="item.example" class="c-word-list__example-wrapper">
-            <Quote :size="44" :stroke-width="0" class="c-word-list__quote-icon" />
-            <p class="c-word-list__example" v-html="item.example" />
-          </div>
-        </article>
-      </div>-->
-
-      <!-- <div v-if="$store.state.searchWord.length">
-        <article
-          v-for="(item, index) in searchDataResults"
-
-          :id="'word' + item.ID"
-          :ref="'word' + item.ID"
-          :key="item.ID"
-          :data-group="item.group"
-          class="c-word-list__word"
-          :class="{'has-translation': item.translation, 'has-example': item.example}"
-          data-track-content
-          data-content-name="word"
-        >
-          <dl class="c-word-list__header">
-            <dt class="c-word-list__berlinerisch" :data-content-piece="item.berlinerisch" v-text="item.berlinerisch" />
-            <dd class="c-word-list__translation" v-html="item.translation" />
-          </dl>
-          <div class="c-word-list__divider-wrapper">
-            <div v-if="item.example" class="c-word-list__divider" />
-            <div class="c-word-list__copy-buttons">
-              <button
-                ref="copyUrlButton"
-                aria-label="Link zum Wort kopieren"
-                type="button"
-                class="c-word-list__copy-button c-button c-button--center-icon"
-                @click="copyWordUrlToClipboard(item.ID, index)"
-              >
-                <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
-                  <Link />
-                </span>
-                <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success is-hidden">
-                  <CheckCircle2 />
-                </span>
-                <span ref="copyUrlErrorIcon" class="c-word-list__icon-button is-hidden">
-                  <XCircle />
-                </span>
-              </button>
-              <button ref="copyWordButton" aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon" @click="copyNameToClipboard(item.ID, index)">
-                <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
-                  <Copy />
-                </span>
-                <span ref="copyWordCheckIcon" class="c-word-list__icon-button is-hidden">
-                  <CheckCircle2 />
-                </span>
-                <span ref="copyWordErrorIcon" class="c-word-list__icon-button is-hidden">
-                  <XCircle />
-                </span>
-              </button>
-            </div>
-          </div>
-          <div v-if="item.example" class="c-word-list__example-wrapper">
-            <Quote :size="44" :stroke-width="0" class="c-word-list__quote-icon" />
-            <p class="c-word-list__example" v-html="item.example" />
-          </div>
-        </article>
-      </div> -->
-    </section>
-  </div>
+      </div>
+      <div v-if="item.example" class="c-word-list__example-wrapper">
+        <Quote :size="44" :stroke-width="0" class="c-word-list__quote-icon" />
+        <p class="c-word-list__example" v-html="item.example" />
+      </div>
+    </article>
+  </component>
 </template>
 
 <script>
@@ -194,14 +72,15 @@ export default {
     XCircle
   },
 
+  props: {
+    element: {
+      type: String,
+      default: 'section'
+    }
+  },
+
   data () {
     return {
-      berlinWords: this.$store.state.words,
-      berlinWordsGrouped: this.berlinerWordsGrouped,
-      groupNames: this.$store.state.groupNames,
-      currentDictionaryPosition: '',
-      sortBy: 'name',
-      sortDirection: 'asc',
       intersectionOptions: {
         root: null,
         rootMargin: '0px 0px 0px 0px',
