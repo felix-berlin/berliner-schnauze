@@ -26,7 +26,7 @@
 
       <LetterFilter />
 
-      <Dropdown menu-align="right" modifier="c-filter-dropdown">
+      <Dropdown menu-align="right" :modifier="['c-filter-dropdown']">
         <template #title>
           Filter
         </template>

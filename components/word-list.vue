@@ -24,7 +24,7 @@
             aria-label="Link zum Wort kopieren"
             type="button"
             class="c-word-list__copy-button c-button c-button--center-icon"
-            @click="copyWordUrlToClipboard(item.ID, index)"
+            @click="copyWordPageUrlToClipboard(item.ID, index)"
           >
             <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
               <Link />
@@ -199,7 +199,17 @@ export default {
      * @return  {Function}       Copy the word url and toggle the icons
      */
     copyWordUrlToClipboard (id, index) {
-      const getWordUrl = window.location.protocol + '//' + window.location.hostname + '#word' + id
+      const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
+      const getWordUrl = window.location.protocol + '//' + window.location.hostname + port + '#word' + id
+
+      this.copyToClipboard(getWordUrl, 'url')
+
+      this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', 'copyUrlButton', index)
+    },
+
+    copyWordPageUrlToClipboard (id, index) {
+      const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
+      const getWordUrl = window.location.protocol + '//' + window.location.hostname + port + '/words/' + id
 
       this.copyToClipboard(getWordUrl, 'url')
 
