@@ -1,9 +1,11 @@
 <template>
   <main class="c-main c-content">
-    <h1>{{ words.berlinerisch }}</h1>
-    <!-- <p>{{ word[0].ID }}</p> -->
-    <b>{{ words.ID }}</b>
-    <!-- <p>{{ word[0].berlinerisch }}</p> -->
+    <dl class="c-word-list__header">
+      <dt class="c-word-list__berlinerisch" :data-content-piece="word.berlinerisch">
+        {{ word.berlinerisch }}
+      </dt>
+      <dd class="c-word-list__translation" v-html="word.translation" />
+    </dl>
   </main>
 </template>
 
@@ -23,7 +25,7 @@ export default {
   },
 
   computed: {
-    words () {
+    word () {
       return this.$store.state.words.find(word => word.ID === Number(this.$route.params.id))
     }
   },

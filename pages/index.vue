@@ -24,7 +24,7 @@
       </header>
       <SearchWords searchbar-type="large" :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
 
-      <LetterFilter />
+      <LetterFilter modifier="c-letter-filter--desktop" />
 
       <Dropdown menu-align="right" :modifier="['c-filter-dropdown']">
         <template #title>
