@@ -71,7 +71,8 @@ export default {
     '@nuxtjs/color-mode',
     'lucide-vue/nuxt',
     '@nuxtjs/device',
-    '@nuxtjs/html-validator'
+    '@nuxtjs/html-validator',
+    '@/modules/sitemapRouteGenerator'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
