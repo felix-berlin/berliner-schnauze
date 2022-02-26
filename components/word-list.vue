@@ -2,29 +2,33 @@
   <component :is="element" ref="wordList" class="c-word-list">
     <LoadingSpinner :show="getWordLoadingStatus" />
     <article
-      v-for="(item, index) in searchDataResults"
-      :id="'word' + item.ID"
-      :ref="'word' + item.ID"
-      :key="item.ID"
-      :data-group="item.group"
+      v-for="(word, index) in searchDataResults"
+      :id="'word' + word.ID"
+      :ref="'word' + word.ID"
+      :key="word.ID"
+      :data-group="word.group"
       class="c-word-list__word"
-      :class="{'has-translation': item.translation, 'has-example': item.example}"
+      :class="{'has-translation': word.translation, 'has-example': word.example}"
       data-track-content
       data-content-name="word"
     >
       <dl class="c-word-list__header">
-        <dt class="c-word-list__berlinerisch" :data-content-piece="item.berlinerisch" v-text="item.berlinerisch" />
-        <dd class="c-word-list__translation" v-html="item.translation" />
+        <dt class="c-word-list__berlinerisch" :data-content-piece="word.berlinerisch">
+          <NuxtLink :to="'words/' + word.ID">
+            {{ word.berlinerisch }}
+          </NuxtLink>
+        </dt>
+        <dd class="c-word-list__translation" v-html="word.translation" />
       </dl>
       <div class="c-word-list__divider-wrapper">
-        <div v-if="item.example" class="c-word-list__divider" />
+        <div v-if="word.example" class="c-word-list__divider" />
         <div class="c-word-list__copy-buttons">
           <button
             ref="copyUrlButton"
             aria-label="Link zum Wort kopieren"
             type="button"
             class="c-word-list__copy-button c-button c-button--center-icon"
-            @click="copyWordPageUrlToClipboard(item.ID, index)"
+            @click="copyWordPageUrlToClipboard(word.ID, index)"
           >
             <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
               <Link />
@@ -36,7 +40,7 @@
               <XCircle />
             </span>
           </button>
-          <button ref="copyWordButton" aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon" @click="copyNameToClipboard(item.ID, index)">
+          <button ref="copyWordButton" aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon" @click="copyNameToClipboard(word.ID, index)">
             <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
               <Copy />
             </span>
@@ -49,9 +53,9 @@
           </button>
         </div>
       </div>
-      <div v-if="item.example" class="c-word-list__example-wrapper">
+      <div v-if="word.example" class="c-word-list__example-wrapper">
         <Quote :size="44" :stroke-width="0" class="c-word-list__quote-icon" />
-        <p class="c-word-list__example" v-html="item.example" />
+        <p class="c-word-list__example" v-html="word.example" />
       </div>
     </article>
   </component>

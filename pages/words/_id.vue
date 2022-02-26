@@ -3,6 +3,7 @@
     <h1>{{ words.berlinerisch }}</h1>
     <!-- <p>{{ word[0].ID }}</p> -->
     <b>{{ words.ID }}</b>
+    <!-- <p>{{ word[0].berlinerisch }}</p> -->
   </main>
 </template>
 
