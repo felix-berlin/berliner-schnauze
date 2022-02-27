@@ -47,6 +47,7 @@ export default {
   methods: {
     filterByLetter (letter) {
       this.$store.commit('updateWordFilteredLetter', letter)
+      this.$emit('clearSearch')
     }
   }
 }

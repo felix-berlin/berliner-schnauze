@@ -22,20 +22,20 @@
           </picture>
         </div>
       </header>
-      <SearchWords searchbar-type="large" :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
+      <SearchWords :critical="true" searchbar-type="large" :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
 
-      <LetterFilter modifier="c-letter-filter--desktop" />
+      <LetterFilter :critical="true" modifier="c-letter-filter--desktop" @clearSearch="test" />
 
-      <Dropdown menu-align="right" :modifier="['c-filter-dropdown']">
+      <Dropdown :critical="true" menu-align="right" :modifier="['c-filter-dropdown']">
         <template #title>
           Filter
         </template>
         <template #content>
-          <LetterFilter modifier="c-letter-filter--mobile" />
+          <LetterFilter :critical="true" modifier="c-letter-filter--mobile" />
         </template>
       </Dropdown>
 
-      <WordList />
+      <WordList :critical="true" />
     </main>
   </div>
 </template>
@@ -49,7 +49,8 @@ export default {
   speedkitComponents: {
     WordList: () => import('@/components/word-list'),
     SearchWords: () => import('@/components/search-words'),
-    LetterFilter: () => import('@/components/letter-filter')
+    LetterFilter: () => import('@/components/letter-filter'),
+    DropDown: () => import('@/components/dropdown')
   },
 
   // async asyncData ({ store, $sentry }) {
@@ -66,6 +67,12 @@ export default {
 
   computed: {
     ...mapGetters(['berlinerWordCount', 'getWordLoadingStatus'])
+  },
+
+  methods: {
+    test () {
+      console.log('test clear')
+    }
   }
 
 }

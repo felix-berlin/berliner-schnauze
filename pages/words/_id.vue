@@ -1,15 +1,24 @@
 <template>
   <main class="c-main c-content">
-    <dl class="c-word-list__header">
-      <dt class="c-word-list__berlinerisch" :data-content-piece="word.berlinerisch">
-        {{ word.berlinerisch }}
-      </dt>
-      <dd class="c-word-list__translation" v-html="word.translation" />
-    </dl>
+    <button type="button" class="c-button" @click="$router.back()">
+      <ArrowLeft />
+    </button>
+
+    <h1>
+      {{ word.berlinerisch }}
+    </h1>
+    <h2>Bedeutung:</h2>
+    <p v-html="word.translation" />
+    <h2>
+      Beispiel:
+    </h2>
+    <p v-html="word.example" />
   </main>
 </template>
 
 <script>
+import { ArrowLeft } from 'lucide-vue'
+
 export default {
 
   // async asyncData ({ params, $axios, $config }) {
@@ -18,9 +27,35 @@ export default {
   //   return { word }
   // },
 
+  components: {
+    ArrowLeft
+  },
+
   data () {
     return {
-      id: ''
+    }
+  },
+
+  head () {
+    return {
+      title: this.word.berlinerisch + ' | Bedeutung, Definition, Beispiel - Berliner Schnauze',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.word.berlinerisch + ' | Bedeutung, Definition & Beispiel des Berliner Wort'
+        },
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: this.word.berlinerisch + ' | Bedeutung, Definition, Beispiel - Berliner Schnauze'
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.word.berlinerisch + ' | Bedeutung, Definition & Beispiel des Berliner Wort'
+        }
+      ]
     }
   },
 
@@ -28,12 +63,6 @@ export default {
     word () {
       return this.$store.state.words.find(word => word.ID === Number(this.$route.params.id))
     }
-  },
-
-  mounted () {
-    console.log(this.$store.state.words.find(word => word.ID === 4620))
-    console.log(this.$store.state.words.find(word => word.ID === Number(this.$route.params.id)))
-    console.log(this.$route.params.id)
   }
 
 }
