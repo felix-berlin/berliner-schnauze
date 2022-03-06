@@ -5,5 +5,3 @@
 
 > Small Berlinerisch to Hochdeutsch Dictionary.
 ---
-
-## Sorry for the ugly interface. **WORK IN PROGRESS**
