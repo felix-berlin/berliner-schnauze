@@ -1,6 +1,6 @@
 <template>
   <main class="c-main c-content">
-    <button type="button" class="c-button" @click="$router.back()">
+    <button type="button" aria-label="Zurück" class="c-button" @click="$router.back()">
       <ArrowLeft />
     </button>
 

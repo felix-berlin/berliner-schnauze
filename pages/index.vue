@@ -42,15 +42,16 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import speedkitHydrate from 'nuxt-speedkit/hydrate'
 
 export default {
   name: 'IndexPage',
 
-  speedkitComponents: {
-    WordList: () => import('@/components/word-list'),
-    SearchWords: () => import('@/components/search-words'),
-    LetterFilter: () => import('@/components/letter-filter'),
-    DropDown: () => import('@/components/dropdown')
+  components: {
+    WordList: speedkitHydrate(() => import('@/components/word-list')),
+    SearchWords: speedkitHydrate(() => import('@/components/search-words')),
+    LetterFilter: speedkitHydrate(() => import('@/components/letter-filter')),
+    Dropdown: speedkitHydrate(() => import('@/components/dropdown'))
   },
 
   // async asyncData ({ store, $sentry }) {

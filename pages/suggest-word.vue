@@ -6,12 +6,13 @@
 </template>
 
 <script>
+import speedkitHydrate from 'nuxt-speedkit/hydrate'
 
 export default {
   name: 'SuggestWordPage',
 
-  speedkitComponents: {
-    SuggestWordForm: () => import('@/components/suggest-word-form')
+  components: {
+    SuggestWordForm: speedkitHydrate(() => import('@/components/suggest-word-form'))
   },
 
   head () {

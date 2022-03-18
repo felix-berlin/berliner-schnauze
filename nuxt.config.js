@@ -92,6 +92,9 @@ export default {
     // https://sentry.nuxtjs.org/sentry/options
     dsn: 'https://f84fd7469c2e4ca7b3680f5e151d3499@o1131599.ingest.sentry.io/6176241',
     disabled: process.env.NODE_ENV === 'development',
+    tracing: {
+      tracesSampleRate: 0.2
+    },
     config: {
       // Add native Sentry config here
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/

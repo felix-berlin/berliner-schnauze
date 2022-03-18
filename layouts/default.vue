@@ -14,17 +14,16 @@
 
 <script>
 import { ChevronUp } from 'lucide-vue'
+import speedkitHydrate from 'nuxt-speedkit/hydrate'
+
 export default {
   name: 'IndexPage',
 
   components: {
-    ChevronUp
-  },
-
-  speedkitComponents: {
-    Header: () => import('@/components/header'),
-    ScrollToTop: () => import('@/components/scroll-to-top'),
-    Footer: () => import('@/components/footer')
+    ChevronUp,
+    Header: speedkitHydrate(() => import('@/components/header')),
+    ScrollToTop: speedkitHydrate(() => import('@/components/scroll-to-top')),
+    Footer: speedkitHydrate(() => import('@/components/footer'))
   }
 }
 </script>
