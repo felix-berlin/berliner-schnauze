@@ -141,41 +141,6 @@ export default {
     // window._paq.push(['logAllContentBlocksOnPage'])
   },
 
-  mounted () {
-    if (window.location.hash.length) {
-      const currentHash = window.location.hash
-      this.$nextTick(() => {
-        if (this.getWordLoadingStatus === true) {
-          // TODO: find a better way
-          setTimeout(() => {
-            const linkToElement = document.getElementById(currentHash.replace('#', ''))
-
-            // Add focus class
-            linkToElement.classList.add('is-focused')
-
-            // Scroll to Element
-            this.$smoothScrollTo(linkToElement, -200)
-
-            // Remoce focus class after time
-            setTimeout(() => {
-              linkToElement.classList.remove('is-focused')
-            }, 1500)
-          }, 1000)
-        }
-      })
-    }
-
-    // const filter =
-    // console.log(filter)
-
-    // for (const word in this.$store.state.words) {
-    //   // const child = word.group[index]
-    //   // const cLetter = child.charAt(0)
-    //   // console.log(index)
-    //   console.log(this.$store.state.words[word].group)
-    // }
-  },
-
   methods: {
     ...mapActions(['updateDictionaryPosition']),
 
