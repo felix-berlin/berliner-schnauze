@@ -8,7 +8,7 @@
         </button>
       </li>
       <li
-        v-for="(letter, index) in $store.state.groupNames"
+        v-for="(letter, index) in availableLetterGroups"
         :key="index"
         class="c-letter-filter__list-item"
         :class="{ 'is-current' : (letter === $store.state.wordFilteredByLetter) }"
@@ -47,7 +47,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getWordSearch'])
+    ...mapGetters(['getWordSearch', 'availableLetterGroups'])
   },
 
   watch: {

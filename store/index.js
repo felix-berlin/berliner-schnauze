@@ -5,7 +5,6 @@ export const state = () => ({
   searchWord: '',
   searchbarIsVisable: false,
   loadingWords: false,
-  groupNames: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
   scrollPositionY: null,
   wordFilteredByLetter: null,
   wordSortDirection: 'desc'
@@ -42,6 +41,16 @@ export const getters = {
       } else {
         return a[state.wordSortDirection] > b[state.wordSortDirection] ? 1 : -1
       }
+    })
+  },
+  availableLetterGroups (state) {
+    const groups = Array.from(new Set(state.words.map(item => item.group)))
+
+    // Sort by alphabet
+    return groups.sort(function (a, b) {
+      if (a < b) { return -1 }
+      if (a > b) { return 1 }
+      return 0
     })
   },
   getWordsFilteredByLetter (state) {
