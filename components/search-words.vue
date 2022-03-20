@@ -191,11 +191,13 @@ export default {
     /**
      * Focus the searchbar
      *
-     * @return  {Functino}  Unfocus and focus the searchbar
+     * @return  {Function}  Unfocus and focus the searchbar
      */
     focusSearch () {
       this.$nextTick(function () {
-        this.$refs.search.blur() // Make sure the searchbar is not allready focused
+        if (this.$refs.search === document.activeElement) {
+          this.$refs.search.blur() // Make sure the searchbar is not allready focused
+        }
         this.$refs.search.focus()
       })
     },

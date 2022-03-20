@@ -18,18 +18,14 @@
 		flex-flow: column wrap;
 
 		&:hover {
-			.c-word-list__berlinerisch {
-				text-decoration-color: vars.$grey-100;
+			.c-word-list__berlinerisch a {
+				--color-text-decoration: var(--grey-100);
 			}
 
 			.c-word-list__copy-buttons {
 				pointer-events: all;
 				opacity: 1;
 			}
-		}
-
-		&.is-focused {
-			border-color: vars.$red-200;
 		}
 	}
 
@@ -58,7 +54,6 @@
 		}
 		text: {
 			decoration: underline;
-			decoration-color: transparent;
 			decoration-style: dashed;
 			decoration-thickness: from-font;
 			underline-position: from-font;
@@ -73,6 +68,10 @@
 		}
 		@include mx.breakpoint('xlg') {
 			--size-font: 4.5rem;
+		}
+
+		a {
+			text-decoration-color: var(--color-text-decoration, transparent);
 		}
 	}
 
@@ -149,10 +148,6 @@
 		&.is-success {
 			background: var(--success);
 			color: #fff;
-
-			// svg {
-			//   stroke: #fff;
-			// }
 		}
 	}
 
