@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'LetterFilter',
 
@@ -44,10 +46,35 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters(['getWordSearch'])
+  },
+
+  watch: {
+    /**
+     * Reset the letter filter if the filter is set and a word search is present
+     *
+     * @param   {String}  search  the current search
+     *
+     * @return  {Funtion}          Reset the letter filter
+     */
+    getWordSearch (search) {
+      if (search.length && typeof this.$store.state.wordFilteredByLetter === 'string') {
+        this.filterByLetter(null)
+      }
+    }
+  },
+
   methods: {
+    /**
+     * Filter by letter X
+     *
+     * @param   {String}  letter  the letter to filter
+     *
+     * @return  {Function}          Set the letter in the store
+     */
     filterByLetter (letter) {
       this.$store.commit('updateWordFilteredLetter', letter)
-      this.$emit('clearSearch')
     }
   }
 }

@@ -32,6 +32,7 @@ export const getters = {
   berlinerWordCount: state => state.wordCount,
   getWordLoadingStatus: state => state.loadingWords,
   getWordSearch: state => state.searchWord,
+  getLetterFilter: state => state.wordFilteredByLetter,
   searchbarVisable: state => state.searchbarIsVisable,
   getScrollPositionY: state => state.scrollPositionY,
   getWordsSortedByDirection (state) {

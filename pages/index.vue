@@ -24,7 +24,7 @@
       </header>
       <SearchWords :critical="true" searchbar-type="large" :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
 
-      <LetterFilter :critical="true" modifier="c-letter-filter--desktop" @clearSearch="test" />
+      <LetterFilter :critical="true" modifier="c-letter-filter--desktop" />
 
       <Dropdown :critical="true" menu-align="right" :modifier="['c-filter-dropdown']">
         <template #title>
@@ -68,12 +68,6 @@ export default {
 
   computed: {
     ...mapGetters(['berlinerWordCount', 'getWordLoadingStatus'])
-  },
-
-  methods: {
-    test () {
-      console.log('test clear')
-    }
   }
 
 }

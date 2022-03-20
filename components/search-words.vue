@@ -40,7 +40,7 @@
 
 <script>
 import { Search, Command, X } from 'lucide-vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'SearchWords',
@@ -117,7 +117,16 @@ export default {
   computed: {
     ...mapState({
       search: state => state.searchWord
-    })
+    }),
+    ...mapGetters(['getLetterFilter'])
+  },
+
+  watch: {
+    getLetterFilter (newLetter, oldLetter) {
+      if (oldLetter !== newLetter) {
+        this.resetSearch()
+      }
+    }
   },
 
   created () {
