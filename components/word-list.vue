@@ -22,7 +22,7 @@
           <dd class="c-word-list__translation" v-html="word.translation" />
         </dl>
 
-        <Dropdown menu-align="left" :modifier="['c-word-list--word-option']" button-modifier="c-button--center-icon c-button--word-option c-button--dashed-border">
+        <Dropdown menu-align="left" :modifier="['c-word-list--word-option']" button-modifier="c-button--center-icon c-button--word-option c-button--dashed-border" button-aria-label="Wort Menu öffnen">
           <template #title>
             <span class="u-icon-untouchable c-button--center-icon">
               <MoreVertical :size="18" />

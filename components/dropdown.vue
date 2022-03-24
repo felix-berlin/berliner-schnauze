@@ -49,7 +49,8 @@ export default {
     },
     buttonAriaLabel: {
       type: String,
-      default: ''
+      default: '',
+      required: true
     },
     menuAlign: {
       type: String,
