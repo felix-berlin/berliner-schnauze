@@ -12,47 +12,61 @@
       data-track-content
       data-content-name="word"
     >
-      <dl class="c-word-list__header">
-        <dt class="c-word-list__berlinerisch" :data-content-piece="word.berlinerisch">
-          <NuxtLink :to="'words/' + word.ID">
-            {{ word.berlinerisch }}
-          </NuxtLink>
-        </dt>
-        <dd class="c-word-list__translation" v-html="word.translation" />
-      </dl>
-      <div class="c-word-list__divider-wrapper">
-        <div v-if="word.example" class="c-word-list__divider" />
-        <div class="c-word-list__copy-buttons">
-          <button
-            ref="copyUrlButton"
-            aria-label="Link zum Wort kopieren"
-            type="button"
-            class="c-word-list__copy-button c-button c-button--center-icon"
-            @click="copyWordPageUrlToClipboard(word.ID, index)"
-          >
-            <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
-              <Link />
+      <div class="c-word-list__header-wrapper">
+        <dl class="c-word-list__header">
+          <dt class="c-word-list__berlinerisch" :data-content-piece="word.berlinerisch">
+            <NuxtLink :to="'words/' + word.ID">
+              {{ word.berlinerisch }}
+            </NuxtLink>
+          </dt>
+          <dd class="c-word-list__translation" v-html="word.translation" />
+        </dl>
+
+        <Dropdown menu-align="left" :modifier="['c-word-list--word-option']" button-modifier="c-button--center-icon c-button--word-option c-button--dashed-border">
+          <template #title>
+            <span class="u-icon-untouchable c-button--center-icon">
+              <MoreVertical :size="18" />
             </span>
-            <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success is-hidden">
-              <CheckCircle2 />
-            </span>
-            <span ref="copyUrlErrorIcon" class="c-word-list__icon-button is-hidden">
-              <XCircle />
-            </span>
-          </button>
-          <button ref="copyWordButton" aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon" @click="copyNameToClipboard(word.ID, index)">
-            <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
-              <Copy />
-            </span>
-            <span ref="copyWordCheckIcon" class="c-word-list__icon-button is-hidden">
-              <CheckCircle2 />
-            </span>
-            <span ref="copyWordErrorIcon" class="c-word-list__icon-button is-hidden">
-              <XCircle />
-            </span>
-          </button>
-        </div>
+          </template>
+          <template #content>
+            <button
+              ref="
+              copyUrlButton"
+              aria-label="Link zum Wort kopieren"
+              type="button"
+              class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border"
+              @click="copyWordPageUrlToClipboard(word.ID, index)"
+            >
+              <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
+                <Link :size="18" />
+              </span>
+              <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success is-hidden">
+                <CheckCircle2 :size="18" />
+              </span>
+              <span ref="copyUrlErrorIcon" class="c-word-list__icon-button is-hidden">
+                <XCircle :size="18" />
+              </span>
+              <span class="c-word-list__copy-text">Link kopieren</span>
+            </button>
+            <button ref="copyWordButton" aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border" @click="copyNameToClipboard(word.ID, index)">
+              <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
+                <Copy :size="18" />
+              </span>
+              <span ref="copyWordCheckIcon" class="c-word-list__icon-button is-hidden">
+                <CheckCircle2 :size="18" />
+              </span>
+              <span ref="copyWordErrorIcon" class="c-word-list__icon-button is-hidden">
+                <XCircle :size="18" />
+              </span>
+              <span class="c-word-list__copy-text">Wort kopieren</span>
+            </button>
+            </morevertical></span>
+          </template>
+        </Dropdown>
       </div>
+
+      <div v-if="word.example" class="c-word-list__divider" />
+
       <div v-if="word.example" class="c-word-list__example-wrapper">
         <Quote :size="44" :stroke-width="0" class="c-word-list__quote-icon" />
         <p class="c-word-list__example" v-html="word.example" />
@@ -62,7 +76,7 @@
 </template>
 
 <script>
-import { Copy, Link, Quote, CheckCircle2, XCircle } from 'lucide-vue'
+import { Copy, Link, Quote, CheckCircle2, XCircle, MoreVertical } from 'lucide-vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -73,7 +87,8 @@ export default {
     Link,
     Quote,
     CheckCircle2,
-    XCircle
+    XCircle,
+    MoreVertical
   },
 
   props: {

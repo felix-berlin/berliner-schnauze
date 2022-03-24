@@ -21,11 +21,6 @@
 			.c-word-list__berlinerisch a {
 				--color-text-decoration: var(--grey-100);
 			}
-
-			.c-word-list__copy-buttons {
-				pointer-events: all;
-				opacity: 1;
-			}
 		}
 	}
 
@@ -34,6 +29,8 @@
 
 		display: flex;
 		flex-direction: var(--direction-flex);
+		flex: 1 1 auto;
+		margin-top: 0;
 
 		.has-example & {
 			margin-bottom: vars.$spacer * 1.5;
@@ -41,6 +38,11 @@
 
 		@include mx.breakpoint('sm') {
 			--direction-flex: row;
+		}
+
+		&-wrapper {
+			border-bottom: 1px dashed;
+			display: flex;
 		}
 	}
 
@@ -142,15 +144,6 @@
 		}
 	}
 
-	&__copy-button {
-		--color-background: #{vars.$white-200};
-
-		&.is-success {
-			background: var(--success);
-			color: #fff;
-		}
-	}
-
 	&__icon-button {
 		display: flex;
 		justify-content: center;
@@ -172,22 +165,27 @@
 		}
 	}
 
-	&__divider-wrapper {
-		position: relative;
-		display: flex;
+	&__copy-button {
+		--color-background: #{vars.$white-200};
+
+		gap: vars.$spacer * 0.2;
+
+		&.is-success {
+			background: var(--success);
+			color: #fff;
+		}
 	}
 
-	&__divider {
-		border-top: 1px dashed;
-		width: 100%;
-	}
+	.c-word-list--word-option {
+		.c-dropdown__menu {
+			@include mx.dark-mode-override {
+				--color-background: var(--white-200);
 
-	&__copy-buttons {
-		transition: all 0.3s ease-in-out;
-		opacity: 0;
-		pointer-events: none;
-		position: absolute;
-		left: 50%;
-		transform: translate(-50%, -50%);
+				padding: #{vars.$spacer * 0.25};
+				display: flex;
+				flex-direction: column;
+				gap: vars.$spacer * 0.25;
+			}
+		}
 	}
 }

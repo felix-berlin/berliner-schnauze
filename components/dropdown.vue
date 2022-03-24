@@ -14,7 +14,12 @@
     </button>
 
     <transition :name="transition">
-      <section v-if="isOpen" ref="menuContent" class="c-dropdown__menu" :class="[{ 'c-dropdown__menu--left': menuAlign === 'left', 'c-dropdown__menu--right': menuAlign === 'right', 'c-dropdown__menu--center': menuAlign === 'center', 'c-dropdown__menu--min-width': menuMinWidth }, menuModifier]">
+      <section
+        v-if="isOpen"
+        ref="menuContent"
+        class="c-dropdown__menu"
+        :class="[{ 'c-dropdown__menu--left': menuAlign === 'left', 'c-dropdown__menu--right': menuAlign === 'right', 'c-dropdown__menu--center': menuAlign === 'center', 'c-dropdown__menu--min-width': menuMinWidth, 'c-dropdown__menu--text-full-width': !menuMinWidth }, menuModifier]"
+      >
         <slot name="content" />
       </section>
     </transition>
@@ -55,7 +60,7 @@ export default {
     },
     menuMinWidth: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
 

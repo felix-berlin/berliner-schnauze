@@ -14,12 +14,13 @@
 	&__menu {
 		--color-background: #{vars.$red-100};
 		--offset: 0;
-		--width-min: 0;
+		--width-min: fit-content;
+		--padding: #{vars.$spacer vars.$spacer * 1.5};
 
 		position: absolute;
 		top: calc(100% + var(--offset));
 		background-color: var(--color-background);
-		padding: vars.$spacer vars.$spacer * 1.5;
+		padding: var(--padding);
 		box-shadow:
 			0 0.5px 0.6px rgb(0 0 0 / 8%),
 			0 4px 5px rgb(0 0 0 / 16%);
@@ -48,6 +49,10 @@
 
 		&--min-width {
 			--width-min: 175px;
+		}
+
+		&--text-full-width {
+			white-space: nowrap;
 		}
 	}
 }

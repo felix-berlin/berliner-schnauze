@@ -49,6 +49,16 @@
 		gap: vars.$spacer * 0.25;
 		margin: 1rem 0 1.5rem;
 	}
+
+	&--word-option {
+		--color-border: transparent;
+
+		transition: all 0.3s ease-in-out;
+
+		&:hover {
+			--color-border: var(--grey-100);
+		}
+	}
 }
 
 .u-button-reset {
