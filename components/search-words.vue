@@ -11,7 +11,13 @@
     </div>
     <!-- </transition> -->
 
-    <button aria-label="Wortsuche betätigen" type="button" class="c-word-search__search-button u-button-reset c-button c-button--center-icon" :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'c-word-search__search-button--left': (searchButtonPosition != 'right'), 'has-searchbar': showSearchBar }, buttonModifier]" @click="buttonActions()">
+    <button
+      aria-label="Wortsuche betätigen"
+      type="button"
+      class="c-word-search__search-button u-button-reset c-button c-button--center-icon"
+      :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'c-word-search__search-button--left': (searchButtonPosition != 'right'), 'has-searchbar': showSearchBar }, buttonModifier]"
+      @click="buttonActions()"
+    >
       <span v-show="toggleShowAndClearIcon" class="c-button--center-icon">
         <Search default-class="c-word-search__search-icon" />
       </span>
@@ -199,6 +205,7 @@ export default {
           this.$refs.search.blur() // Make sure the searchbar is not allready focused
         }
         this.$refs.search.focus()
+        this.scrollToResults()
       })
     },
 
