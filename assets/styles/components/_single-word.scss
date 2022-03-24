@@ -9,6 +9,9 @@
 	background-color: rgba(#fff, 0.6);
 	border: 1px dashed var(--grey-100);
 	padding: vars.$spacer * 1.5;
+	box-shadow:
+		0 0.5px 0.6px rgb(0 0 0 / 8%),
+		0 4px 5px rgb(0 0 0 / 16%);
 
 	&__word {
 		margin: 0;

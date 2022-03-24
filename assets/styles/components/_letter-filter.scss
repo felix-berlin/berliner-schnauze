@@ -7,32 +7,25 @@
 
 	margin: var(--margin);
 
-	// --color-background: #{vars.$white-100};
-
-	// background: var(--color-background);
-
-	// // display: none;
-
-	// @include mx.breakpoint('lg') {
-	// 	display: block;
-	// }
-	// @include mx.dark-mode {
-	// 	--color-background: #{vars.$grey-100};
-	// }
-
 	&__list {
-		display: flex;
-		justify-content: space-between;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(38px, 1fr));
+		gap: vars.$spacer * 0.5;
 
 		&-item {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			aspect-ratio: 1/1;
 
 			&.is-current {
 				.c-letter-filter__button {
 					--color-background: var(--red-200);
 					--color: var(--white-100);
+					--color-border: var(--white-100);
+					--style-border: dashed;
+
+					font-weight: 600;
 
 					@include mx.dark-mode {
 						--color-background: var(--blue-200);
@@ -49,35 +42,13 @@
 
 		font-size: var(--size-font);
 		padding: var(--spacing);
-		min-width: var(--width-min);
+		width: 100%;
+		height: 100%;
 
-		@include mx.breakpoint('lg') {
-			--size-font: 1.2rem;
-			--width-min: 2rem;
-		}
-		@include mx.breakpoint('xlg') {
-			--size-font: 1.5rem;
-			--width-min: 2.5rem;
-		}
-		@include mx.breakpoint('fhd') {
-			--size-font: 1.7rem;
-			--width-min: 3.5rem;
+		&:not(.c-letter-filter__button--all) {
+			text-transform: uppercase;
 		}
 	}
-
-	// &__link {
-	// 	--color: #{vars.$grey-100};
-
-	// 	padding: 1rem 0;
-	// 	color: var(--color);
-	// 	font-size: 1.8rem;
-	// 	font-family: vars.$berliner;
-	// 	text-decoration: none;
-
-	// 	@include mx.dark-mode {
-	// 		--color: #{vars.$white-100};
-	// 	}
-	// }
 
 	&--desktop {
 		@include mx.breakpoint('sm', 'max') {

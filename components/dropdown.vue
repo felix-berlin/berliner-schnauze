@@ -36,7 +36,7 @@ export default {
       default: () => []
     },
     buttonModifier: {
-      type: String,
+      type: [String, Object, Array],
       default: ''
     },
     menuModifier: {

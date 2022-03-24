@@ -8,11 +8,11 @@
       :key="word.ID"
       :data-group="word.group"
       class="c-word-list__word"
-      :class="{'has-translation': word.translation, 'has-example': word.example}"
+      :class="{'has-translation': word.translation, }"
       data-track-content
       data-content-name="word"
     >
-      <div class="c-word-list__header-wrapper">
+      <div :class="[{'has-example': word.example}, 'c-word-list__header-wrapper']">
         <dl class="c-word-list__header">
           <dt class="c-word-list__berlinerisch" :data-content-piece="word.berlinerisch">
             <NuxtLink :to="'words/' + word.ID">
@@ -60,7 +60,6 @@
               </span>
               <span class="c-word-list__copy-text">Wort kopieren</span>
             </button>
-            </morevertical></span>
           </template>
         </Dropdown>
       </div>

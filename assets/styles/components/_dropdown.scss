@@ -5,12 +5,6 @@
 .c-dropdown {
 	position: relative;
 
-	&__button {
-		&.is-active {
-			border-bottom: 1px dashed vars.$white-100;
-		}
-	}
-
 	&__menu {
 		--color-background: #{vars.$red-100};
 		--offset: 0;

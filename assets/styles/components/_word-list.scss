@@ -16,6 +16,9 @@
 		border: 1px solid vars.$grey-100;
 		display: flex;
 		flex-flow: column wrap;
+		box-shadow:
+			0 0.5px 0.6px rgb(0 0 0 / 8%),
+			0 4px 5px rgb(0 0 0 / 16%);
 
 		&:hover {
 			.c-word-list__berlinerisch a {
@@ -30,19 +33,23 @@
 		display: flex;
 		flex-direction: var(--direction-flex);
 		flex: 1 1 auto;
-		margin-top: 0;
-
-		.has-example & {
-			margin-bottom: vars.$spacer * 1.5;
-		}
+		margin: 0;
 
 		@include mx.breakpoint('sm') {
 			--direction-flex: row;
 		}
 
 		&-wrapper {
-			border-bottom: 1px dashed;
+			--bottom-border: none;
+
+			border-bottom: var(--bottom-border);
 			display: flex;
+
+			&.has-example {
+				padding-bottom: vars.$spacer * 1.5;
+
+				--bottom-border: 1px dashed var(--grey-100);
+			}
 		}
 	}
 
@@ -169,6 +176,10 @@
 		--color-background: #{vars.$white-200};
 
 		gap: vars.$spacer * 0.2;
+
+		&:hover {
+			--style-border: solid;
+		}
 
 		&.is-success {
 			background: var(--success);

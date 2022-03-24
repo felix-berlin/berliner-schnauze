@@ -69,6 +69,10 @@
 			@include mx.breakpoint('sm') {
 				--offset: 60%;
 			}
+
+			&.is-active {
+				border-bottom: 1px dashed vars.$white-100;
+			}
 		}
 	}
 }
