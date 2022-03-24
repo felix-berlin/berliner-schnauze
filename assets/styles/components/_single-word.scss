@@ -1,0 +1,81 @@
+@use '../variables/variables' as vars;
+@use '../mixins/mixins' as mx;
+@use 'sassy-scss/mixins' as sassy-mx;
+@use 'sassy-scss/functions' as sassy-fn;
+
+.c-single-word {
+	--size-quote-icon: 32px;
+
+	background-color: rgba(#fff, 0.6);
+	border: 1px dashed var(--grey-100);
+	padding: vars.$spacer * 1.5;
+
+	&__word {
+		margin: 0;
+		font: {
+			family: vars.$berlin;
+			size: 4rem;
+			weight: 700;
+		}
+		text: {
+			decoration: underline;
+			decoration-style: dashed;
+			decoration-thickness: from-font;
+			underline-position: from-font;
+		}
+	}
+
+	&__sub-headline {
+		margin: vars.$spacer * 2.25 0 vars.$spacer * 0.25 0;
+		font-size: 2rem;
+	}
+
+	&__translation {
+		margin-top: vars.$spacer * 1;
+		font-size: 1.5rem;
+	}
+
+	&__quote-icon {
+		width: var(--size-quote-icon);
+		height: var(--size-quote-icon);
+		fill: var(--grey-200);
+
+		@include mx.breakpoint('md') {
+			--size-quote-icon: 48px;
+		}
+	}
+
+	&__example {
+		--size-font: 1.7rem;
+
+		font-style: italic;
+		flex-basis: 100%;
+		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.25}) 0 0 0;
+		font-size: var(--size-font);
+		word-break: break-word;
+
+		@include mx.breakpoint('md') {
+			--size-font: 2.2rem;
+		}
+
+		&-wrapper {
+			--gap: #{vars.$spacer * 0.5};
+			--padding-y: #{vars.$spacer};
+			--padding-x: 0;
+
+			display: flex;
+			padding: var(--padding-y) var(--padding-x);
+			gap: var(--gap);
+
+			@include mx.breakpoint('sm') {
+				--gap: #{vars.$spacer};
+				--padding-y: #{vars.$spacer * 1.5};
+				--padding-x: 5%;
+			}
+			@include mx.breakpoint('md') {
+				--padding-y: #{vars.$spacer * 2.5};
+				--padding-x: 7%;
+			}
+		}
+	}
+}

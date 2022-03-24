@@ -34,6 +34,14 @@ export const getters = {
   getLetterFilter: state => state.wordFilteredByLetter,
   searchbarVisable: state => state.searchbarIsVisable,
   getScrollPositionY: state => state.scrollPositionY,
+
+  /**
+   * Get tge words array sorted desc or asc
+   *
+   * @param   {Array}  state  Array of objects
+   *
+   * @return  {Array}         Sorted array of objects
+   */
   getWordsSortedByDirection (state) {
     return [...state.words].sort((a, b) => {
       if (state.wordSortDirection === 'desc') {
@@ -43,7 +51,17 @@ export const getters = {
       }
     })
   },
+
+  /**
+   * Get a uniqe alphabetic list of all available letters
+   *
+   * @param   {Array}  state  vuex state function
+   *
+   * @return  {Array}         uniqe alphabetic list
+   */
   availableLetterGroups (state) {
+    // Loop throu array of objects and group by "group" key.
+    // Make a uniqe set of groups
     const groups = Array.from(new Set(state.words.map(item => item.group)))
 
     // Sort by alphabet

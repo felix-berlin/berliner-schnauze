@@ -1,23 +1,30 @@
 <template>
   <main class="c-main c-content">
-    <button type="button" aria-label="Zurück" class="c-button" @click="$router.back()">
-      <ArrowLeft />
+    <button type="button" aria-label="Zurück" class="c-button c-button--back u-button-reset" @click="$router.back()">
+      <ArrowLeft /> zurück
     </button>
 
-    <h1>
-      {{ word.berlinerisch }}
-    </h1>
-    <h2>Bedeutung:</h2>
-    <p v-html="word.translation" />
-    <h2>
-      Beispiel:
-    </h2>
-    <p v-html="word.example" />
+    <article class="c-single-word">
+      <h1 class="c-single-word__word">
+        {{ word.berlinerisch }}
+      </h1>
+      <h2 class="c-single-word__sub-headline">
+        Bedeutung:
+      </h2>
+      <p class="c-single-word__translation" v-html="word.translation" />
+      <h2 class="c-single-word__sub-headline">
+        Beispiel:
+      </h2>
+      <div class="c-single-word__example-wrapper">
+        <Quote :size="24" :stroke-width="0" class="c-single-word__quote-icon" />
+        <p class="c-single-word__example" v-html="word.example" />
+      </div>
+    </article>
   </main>
 </template>
 
 <script>
-import { ArrowLeft } from 'lucide-vue'
+import { ArrowLeft, Quote } from 'lucide-vue'
 
 export default {
 
@@ -28,7 +35,8 @@ export default {
   // },
 
   components: {
-    ArrowLeft
+    ArrowLeft,
+    Quote
   },
 
   data () {
