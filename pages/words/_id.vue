@@ -8,14 +8,14 @@
       <h1 class="c-single-word__word">
         {{ word.berlinerisch }}
       </h1>
-      <h2 class="c-single-word__sub-headline">
+      <h2 v-if="word.translation" class="c-single-word__sub-headline">
         Bedeutung:
       </h2>
-      <p class="c-single-word__translation" v-html="word.translation" />
-      <h2 class="c-single-word__sub-headline">
+      <p v-if="word.translation" class="c-single-word__translation" v-html="word.translation" />
+      <h2 v-if="word.example" class="c-single-word__sub-headline">
         Beispiel:
       </h2>
-      <div class="c-single-word__example-wrapper">
+      <div v-if="word.example" class="c-single-word__example-wrapper">
         <Quote :size="24" :stroke-width="0" class="c-single-word__quote-icon" />
         <p class="c-single-word__example" v-html="word.example" />
       </div>
