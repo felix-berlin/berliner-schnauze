@@ -84,7 +84,6 @@ export default {
     'nuxt-speedkit',
     '@nuxtjs/sentry',
     '@nuxtjs/robots'
-    // '@dewib/xhr-cache'
   ],
 
   sentry: {
@@ -111,17 +110,6 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseUrl: '/'
   },
-
-  // xhrCache: {
-  //   name: 'word-list',
-  //   maxAge: 3600 * 1000, // TTL of resource
-  //   init: true, // Fetch the resource at nuxt start
-  //   request: {
-  //     method: 'get',
-  //     url: 'http://www.mocky.io/v2/5d9e4c643200002a00329d0a'
-  //     // url: `${process.env.BASE_API_URL}/wp-json/berliner-schnauze/v1/words`
-  //   }
-  // },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
