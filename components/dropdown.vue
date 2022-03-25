@@ -62,6 +62,10 @@ export default {
     menuMinWidth: {
       type: Boolean,
       default: false
+    },
+    delayClose: {
+      type: Number,
+      default: 0
     }
   },
 
@@ -77,13 +81,19 @@ export default {
       const closeListerner = (e) => {
         // Check if user clicks outside of the menu
         // true — close the menu and remove EventListener
+
         if (self.catchOutsideClick(e, self.$refs.menuButton)) {
           window.removeEventListener('click', closeListerner)
-          self.isOpen = false
+
+          if (this.delayClose > 0) {
+            setTimeout(function () { self.isOpen = false }, this.delayClose)
+          } else { self.isOpen = false }
         }
       }
       // Add event listener to watch clicks outside the menu
+
       window.addEventListener('click', closeListerner)
+
       // Close if open and vice versa
       this.isOpen = !this.isOpen
     },
@@ -92,7 +102,9 @@ export default {
       // When user clicks menu — do nothing
       if (dropdown === event.target) { return false }
       // When user clicks outside of the menu — close the menu
-      if (this.isOpen && dropdown !== event.target) { return true }
+      if (this.isOpen && dropdown !== event.target) {
+        return true
+      }
     }
   }
 }

@@ -22,16 +22,22 @@
           <dd class="c-word-list__translation" v-html="word.translation" />
         </dl>
 
-        <Dropdown menu-align="left" :modifier="['c-word-list--word-option']" button-modifier="c-button--center-icon c-button--word-option c-button--dashed-border" button-aria-label="Wort Menu öffnen">
+        <Dropdown
+          menu-align="left"
+          :modifier="['c-word-list--word-option']"
+          button-modifier="c-button--center-icon c-button--word-option c-button--dashed-border"
+          button-aria-label="Wort Menu öffnen"
+          :delay-close="1600"
+        >
           <template #title>
             <span class="u-icon-untouchable c-button--center-icon">
               <MoreVertical :size="18" />
             </span>
           </template>
+
           <template #content>
             <button
-              ref="
-              copyUrlButton"
+              ref="copyUrlButton"
               aria-label="Link zum Wort kopieren"
               type="button"
               class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border"
@@ -48,7 +54,13 @@
               </span>
               <span class="c-word-list__copy-text">Link kopieren</span>
             </button>
-            <button ref="copyWordButton" aria-label="Wort kopieren" type="button" class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border" @click="copyNameToClipboard(word.ID, index)">
+            <button
+              ref="copyWordButton"
+              aria-label="Wort kopieren"
+              type="button"
+              class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border"
+              @click="copyNameToClipboard(word.ID, index)"
+            >
               <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
                 <Copy :size="18" />
               </span>
@@ -170,6 +182,7 @@ export default {
       const getWord = document.querySelector('#word' + id + ' .c-word-list__berlinerisch').innerText
 
       this.copyToClipboard(getWord, 'name')
+
       this.toggleCopyIcons('copyWordLinkIcon', 'copyWordCheckIcon', 'copyWordButton', index)
     },
 
@@ -181,20 +194,21 @@ export default {
      *
      * @return  {Function}       Copy the word url and toggle the icons
      */
-    copyWordUrlToClipboard (id, index) {
-      const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
-      const getWordUrl = window.location.protocol + '//' + window.location.hostname + port + '#word' + id
+    // copyWordUrlToClipboard (id, index) {
+    //   const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
+    //   const getWordUrl = window.location.protocol + '//' + window.location.hostname + port + '#word' + id
 
-      this.copyToClipboard(getWordUrl, 'url')
+    //   this.copyToClipboard(getWordUrl, 'url')
 
-      this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', 'copyUrlButton', index)
-    },
+    //   this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', 'copyUrlButton', index)
+    // },
 
     copyWordPageUrlToClipboard (id, index) {
-      const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
-      const getWordUrl = window.location.protocol + '//' + window.location.hostname + port + '/words/' + id
+      // const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
+      const getWordUrl = window.location.protocol + '//' + window.location.hostname + '/words/' + id
 
       this.copyToClipboard(getWordUrl, 'url')
+      // console.log(index)
 
       this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', 'copyUrlButton', index)
     },

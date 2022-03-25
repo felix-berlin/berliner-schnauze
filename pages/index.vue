@@ -27,7 +27,13 @@
       <LetterFilter :critical="true" modifier="c-letter-filter--desktop" />
 
       <div class="c-filter-dropdown">
-        <Dropdown :critical="true" menu-align="right" :modifier="['c-filter-dropdown__dropdown']" :button-modifier="[{'has-active-filter': getLetterFilter}, 'c-button--center-icon']">
+        <Dropdown
+          :critical="true"
+          menu-align="right"
+          :modifier="['c-filter-dropdown__dropdown']"
+          :button-modifier="[{'has-active-filter': getLetterFilter}, 'c-button--center-icon']"
+          button-aria-label="Filter"
+        >
           <template #title>
             <span class="u-icon-untouchable c-button--center-icon">
               <svg

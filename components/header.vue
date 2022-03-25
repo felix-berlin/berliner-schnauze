@@ -21,7 +21,11 @@
 
         <ColorModeButton class="c-menu-nav__item c-menu-nav__item-button u-button-reset" :class="{'is-hidden': searchbarVisable}" />
 
-        <Dropdown :modifier="[{'is-hidden': searchbarVisable}, 'c-menu-nav__item c-menu-more']" button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon" button-aria-label="Website Menu Navigation">
+        <Dropdown
+          :modifier="[{'is-hidden': searchbarVisable}, 'c-menu-nav__item c-menu-more']"
+          button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon"
+          button-aria-label="Website Menu Navigation"
+        >
           <template #title>
             <span v-show="$device.isDesktop" class="u-icon-untouchable u-icon-wrapper">
               <Menu />
