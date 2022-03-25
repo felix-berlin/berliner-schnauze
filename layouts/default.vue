@@ -2,7 +2,7 @@
   <div class="c-body">
     <Header :critical="true" />
     <Nuxt />
-    <ScrollToTop button-aria-label="Zurück zum Seitenanfang" tooltip="Zackig nach oben!">
+    <ScrollToTop button-aria-label="Zurück zum Seitenanfang" tooltip="Zackig nach oben!" :hide-tooltip="$device.isMobileOrTablet">
       <ChevronUp
         :size="32"
         default-class="c-scroll-to-top__icon"
