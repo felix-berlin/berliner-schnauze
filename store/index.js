@@ -135,8 +135,16 @@ export const actions = {
       })
   },
 
-  updateDictionaryPosition ({ commit }, position) {
-    commit('setDictionaryPosition', position)
+  /**
+   * Filter by letter
+   *
+   * @param   {Function}  commit
+   * @param   {String}  letter  the letter to filter
+   *
+   * @return  {Function}          Set the letter in the store
+   */
+  filterByLetter ({ commit }, letter) {
+    commit('updateWordFilteredLetter', letter)
   }
 }
 

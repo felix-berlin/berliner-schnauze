@@ -3,7 +3,7 @@
   <nav class="c-letter-filter" :class="modifier">
     <ul class="c-letter-filter__list u-list-reset">
       <li class="c-letter-filter__list-item" :class="{ 'is-current' : ($store.state.wordFilteredByLetter === null) }">
-        <button class="c-letter-filter__button c-letter-filter__button--all c-button" type="button" @click="filterByLetter(null)">
+        <button class="c-letter-filter__button c-letter-filter__button--all c-button" type="button" @click="$store.dispatch('filterByLetter', null)">
           Alle
         </button>
       </li>
@@ -18,7 +18,7 @@
           type="button"
           class="c-letter-filter__button c-button"
           :title="'Buchstabe: ' + letter"
-          @click="filterByLetter(letter)"
+          @click="$store.dispatch('filterByLetter', letter)"
         >
           {{ letter }}
         </button>
@@ -62,19 +62,6 @@ export default {
       if (search.length && typeof this.$store.state.wordFilteredByLetter === 'string') {
         this.filterByLetter(null)
       }
-    }
-  },
-
-  methods: {
-    /**
-     * Filter by letter X
-     *
-     * @param   {String}  letter  the letter to filter
-     *
-     * @return  {Function}          Set the letter in the store
-     */
-    filterByLetter (letter) {
-      this.$store.commit('updateWordFilteredLetter', letter)
     }
   }
 }

@@ -30,7 +30,7 @@
         <LetterFilter :critical="true" modifier="c-letter-filter--mobile" />
       </template>
     </Dropdown>
-    <div v-if="getLetterFilter" class="c-filter-dropdown__active-filter" @click="clearFilter(null)">
+    <div v-if="getLetterFilter" class="c-filter-dropdown__active-filter" @click="$store.dispatch('filterByLetter', null)">
       <span>{{ getLetterFilter }}</span><span><X :size="10" /></span>
     </div>
   </div>
@@ -49,12 +49,7 @@ export default {
 
   computed: {
     ...mapGetters(['getLetterFilter'])
-  },
-
-  methods: {
-    clearFilter (letter) {
-      this.$store.commit('updateWordFilteredLetter', letter)
-    }
   }
+
 }
 </script>
