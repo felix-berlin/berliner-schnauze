@@ -29,7 +29,7 @@
     <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap c-floating-label" :class="searchbarModifier" tag="div">
       <input
         :id="'wordSearch' + id"
-        ref="search"
+        :ref="'search' + id"
         key="input"
         type="search"
         class="c-word-search__search-input c-input c-floating-label__input"
@@ -188,7 +188,7 @@ export default {
      * Reset search input and search store
      */
     resetSearch () {
-      this.$refs.search.value = '' // Reset input
+      this.$refs['search' + this.id].value = '' // Reset input
       this.$store.commit('updateSearch', '') // Reset store
       this.searchLength = 0
       this.toggleSearchClearIcons()
@@ -201,10 +201,11 @@ export default {
      */
     focusSearch () {
       this.$nextTick(function () {
-        if (this.$refs.search === document.activeElement) {
-          this.$refs.search.blur() // Make sure the searchbar is not allready focused
-        }
-        this.$refs.search.focus()
+        // if (this.$refs.search === document.activeElement) {
+        //   this.$refs.search.blur() // Make sure the searchbar is not allready focused
+        // }
+        this.$refs['search' + this.id].blur()
+        this.$refs['search' + this.id].focus()
         this.scrollToResults()
       })
     },
@@ -297,7 +298,7 @@ export default {
     scrollToResults () {
       if ((this.$store.state.scrollPositionY > 200) && (this.searchLength > 0) && !this.scrollToResultsTriggert) {
         this.scrollToResultsTriggert = true
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        this.$smoothScrollTo(this.$refs['search' + this.id], 200)
       }
     }
   }

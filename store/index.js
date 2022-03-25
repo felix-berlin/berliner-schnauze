@@ -122,6 +122,14 @@ export const getters = {
 }
 
 export const actions = {
+  /**
+   * Fetch all words on sever init
+   *
+   * @param   {Function}  commit
+   * @param   {Function}  $sentry
+   *
+   * @return  {Function}
+   */
   async nuxtServerInit ({ commit, $sentry }) {
     commit('wordLoadingStatus', true)
 
