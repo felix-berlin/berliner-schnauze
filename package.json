@@ -21,7 +21,7 @@
     "core-js": "^3.21.1",
     "floating-vue": "^1.0.0-beta.14",
     "fuse.js": "^6.5.3",
-    "lucide-vue": "^0.17.14",
+    "lucide-vue": "^0.17.15",
     "nuxt": "^2.15.8",
     "nuxt-speedkit": "^2.0.6",
     "vue": "^2.6.14",
