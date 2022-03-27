@@ -19,7 +19,15 @@
               {{ word.berlinerisch }}
             </NuxtLink>
           </dt>
-          <dd class="c-word-list__translation" v-html="word.translation" />
+          <dd v-if="word.translations" class="c-word-list__translation">
+            {{
+              word.translations.map(x => {
+                let values = []
+                values += Object.values(x)
+                return values;
+              }).join(', ')
+            }}
+          </dd>
         </dl>
 
         <Dropdown
@@ -76,11 +84,30 @@
         </Dropdown>
       </div>
 
-      <div v-if="word.example" class="c-word-list__divider" />
+      <div v-if="word.examples" class="c-word-list__divider" />
 
-      <div v-if="word.example" class="c-word-list__example-wrapper">
+      <div v-if="word.examples" class="c-word-list__example-wrapper">
         <Quote :size="44" :stroke-width="0" class="c-word-list__quote-icon" />
-        <p class="c-word-list__example" v-html="word.example" />
+
+        <p
+          v-if="word.examples && word.examples.length === 1"
+          class="c-word-list__example lel"
+          v-text="word.examples[0].example"
+        />
+
+        <p
+          v-if="word.examples && word.examples.length === 1 && word.examples[0].example_explanation"
+          class="c-word-list__example lel"
+          v-text="word.examples[0].example_explanation"
+        />
+
+        <!-- If more than one example exist -->
+        <ol v-if="word.examples && word.examples.length > 1" class="c-word-list__examples neu">
+          <li v-for="(item, exampleIndex) in word.examples" :key="exampleIndex" class="c-word-list__example-item">
+            <span class="c-word-list__example-l">{{ item.example }}</span>
+            <span v-if="item.example_explanation" class="c-word-list__example-explanation">- {{ item.example_explanation }}</span>
+          </li>
+        </ol>
       </div>
     </article>
   </component>
@@ -222,14 +249,16 @@ export default {
      * @param   {Number}  index      Current index
      */
     toggleCopyIcons (linkIcon, CheckIcon, button, index) {
-      this.$refs[button][index].classList.add('is-success')
-      this.$refs[linkIcon][index].classList.add('is-hidden')
-      this.$refs[CheckIcon][index].classList.remove('is-hidden')
-      setTimeout(() => {
-        this.$refs[button][index].classList.remove('is-success')
-        this.$refs[CheckIcon][index].classList.add('is-hidden')
-        this.$refs[linkIcon][index].classList.remove('is-hidden')
-      }, 1500)
+      this.$nextTick(() => {
+        this.$refs[button][index].classList.add('is-success')
+        this.$refs[linkIcon][index].classList.add('is-hidden')
+        this.$refs[CheckIcon][index].classList.remove('is-hidden')
+        setTimeout(() => {
+          this.$refs[button][index].classList.remove('is-success')
+          this.$refs[CheckIcon][index].classList.add('is-hidden')
+          this.$refs[linkIcon][index].classList.remove('is-hidden')
+        }, 1500)
+      })
     },
 
     /**

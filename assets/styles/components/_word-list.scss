@@ -117,6 +117,34 @@
 		}
 	}
 
+	&__examples {
+		--size-font: 1.2rem;
+
+		font-style: italic;
+		flex-basis: 100%;
+		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
+		font-size: var(--size-font);
+		word-break: break-word;
+		padding-left: vars.$spacer;
+
+		@include mx.breakpoint('md') {
+			--size-font: 1.8rem;
+		}
+	}
+
+	&__example-item {
+		&:not(:last-of-type) {
+			margin-bottom: 1rem;
+		}
+	}
+
+	&__example-explanation {
+		display: block;
+		font-style: normal;
+		font-size: 1rem;
+		margin-top: vars.$spacer * 0.5;
+	}
+
 	&__example {
 		--size-font: 1.2rem;
 

@@ -32,6 +32,7 @@
     </div>
 
     <div class="c-footer__ground">
+      <p>App Version: {{ $config.appVersion }}</p>
       <p class="c-footer__slogan">
         Hergestellt mit🐻-Kräften in Berlin
       </p>
