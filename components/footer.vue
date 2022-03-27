@@ -47,7 +47,7 @@
     </div>
     <div class="c-footer__end">
       <div class="c-footer__end-content">
-        <p>Website Version: {{ $config.appVersion }}</p>
+        <!-- <p>Website Version: {{ $config.appVersion }}</p> -->
         <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
       </div>
     </div>
