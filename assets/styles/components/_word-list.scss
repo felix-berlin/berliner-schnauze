@@ -80,6 +80,8 @@
 		}
 
 		a {
+			--color: var(--blue-200);
+
 			text-decoration-color: var(--color-text-decoration, transparent);
 		}
 	}
@@ -126,12 +128,6 @@
 	}
 
 	&__examples {
-		--size-font: 1.2rem;
-
-		flex-basis: 100%;
-		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
-		font-size: var(--size-font);
-		word-break: break-word;
 		padding-left: vars.$spacer;
 
 		@include mx.breakpoint('md') {
@@ -151,6 +147,13 @@
 
 	&__examples,
 	&__example {
+		--size-font: 1.2rem;
+
+		font-size: var(--size-font);
+		flex-basis: 100%;
+		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
+		word-break: break-word;
+
 		&-explanation {
 			font-size: 1rem;
 			margin-top: vars.$spacer * 0.5;
@@ -158,13 +161,7 @@
 	}
 
 	&__example {
-		--size-font: 1.2rem;
-
 		font-style: italic;
-		flex-basis: 100%;
-		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
-		font-size: var(--size-font);
-		word-break: break-word;
 
 		@include mx.breakpoint('md') {
 			--size-font: 1.8rem;

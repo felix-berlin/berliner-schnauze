@@ -1,6 +1,6 @@
 <template>
   <component :is="wrapperElement" :class="rootBemClass + '__translations'">
-    <component :is="elements" v-for="(translation, translationIndex) in translations" :key="translationIndex" class="c-word-list__translation">
+    <component :is="elements" v-for="(translation, translationIndex) in translations" :key="translationIndex" :class="rootBemClass + '__translation'">
       {{ translation.translation }}
     </component>
   </component>

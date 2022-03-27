@@ -1,5 +1,5 @@
 <template>
-  <footer class="c-footer" style="height: 300px;">
+  <footer class="c-footer">
     <div class="c-footer__farewell">
       <div class="c-footer__farewell-image-wrapper">
         <picture>
@@ -32,7 +32,6 @@
     </div>
 
     <div class="c-footer__ground">
-      <p>App Version: {{ $config.appVersion }}</p>
       <p class="c-footer__slogan">
         Hergestellt mit🐻-Kräften in Berlin
       </p>
@@ -45,6 +44,12 @@
           Datenschutz
         </NuxtLink>
       </nav>
+    </div>
+    <div class="c-footer__end">
+      <div class="c-footer__end-content">
+        <p>Website Version: {{ $config.appVersion }}</p>
+        <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
+      </div>
     </div>
   </footer>
 </template>

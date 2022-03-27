@@ -37,11 +37,6 @@ export default {
     ArrowLeft
   },
 
-  data () {
-    return {
-    }
-  },
-
   head () {
     return {
       title: this.word.berlinerisch + ' | Bedeutung, Definition, Beispiel - Berliner Schnauze',

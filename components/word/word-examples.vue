@@ -2,7 +2,7 @@
   <component :is="element" v-if="examples" :class="rootBemClass + '__example-wrapper'">
     <Quote :size="44" :stroke-width="0" :class="rootBemClass + '__quote-icon'" />
 
-    <div :class="rootBemClass + '__example-single-wrapper'">
+    <div v-if="examples && examples.length === 1" :class="rootBemClass + '__example-single-wrapper'">
       <p
         v-if="examples && examples.length === 1"
         :class="rootBemClass + '__example'"

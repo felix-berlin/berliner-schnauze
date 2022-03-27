@@ -36,6 +36,10 @@
 	&__translation {
 		margin-top: vars.$spacer * 1;
 		font-size: 1.5rem;
+
+		&:not(:last-of-type) {
+			margin-bottom: 1rem;
+		}
 	}
 
 	&__quote-icon {
@@ -48,14 +52,41 @@
 		}
 	}
 
+	&__examples {
+		padding-left: vars.$spacer;
+
+		@include mx.breakpoint('md') {
+			--size-font: 1.8rem;
+		}
+
+		&-item {
+			font-style: italic;
+		}
+
+		&-list-item {
+			&:not(:last-of-type) {
+				margin-bottom: 1rem;
+			}
+		}
+	}
+
+	&__examples,
 	&__example {
 		--size-font: 1.7rem;
 
-		font-style: italic;
-		flex-basis: 100%;
-		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.25}) 0 0 0;
 		font-size: var(--size-font);
+		flex-basis: 100%;
+		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
 		word-break: break-word;
+
+		&-explanation {
+			font-size: 1rem;
+			margin-top: vars.$spacer * 0.5;
+		}
+	}
+
+	&__example {
+		font-style: italic;
 
 		@include mx.breakpoint('md') {
 			--size-font: 2.2rem;
