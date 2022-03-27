@@ -84,16 +84,27 @@
 		}
 	}
 
-	&__translation {
-		--font-size: 1rem;
+	&__translations {
 		--margin: #{vars.$spacer * 0.5} 0 0 0;
 
 		display: flex;
-		align-items: center;
+		flex-wrap: wrap;
 		margin: var(--margin);
 		flex: 1 1;
+
+		@include mx.breakpoint('sm') {
+			--margin: 0;
+		}
+	}
+
+	&__translation {
+		--font-size: 1rem;
+
+		display: flex;
+		align-items: center;
 		font-size: var(--font-size);
 		position: relative;
+		margin: 0;
 
 		&::before {
 			--margin: 0 #{vars.$spacer * 0.5} 0 0;
@@ -106,9 +117,6 @@
 			}
 		}
 
-		@include mx.breakpoint('sm') {
-			--margin: 0;
-		}
 		@include mx.breakpoint('md') {
 			--font-size: 1.125rem;
 		}
@@ -120,7 +128,6 @@
 	&__examples {
 		--size-font: 1.2rem;
 
-		font-style: italic;
 		flex-basis: 100%;
 		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
 		font-size: var(--size-font);
@@ -130,19 +137,24 @@
 		@include mx.breakpoint('md') {
 			--size-font: 1.8rem;
 		}
-	}
 
-	&__example-item {
-		&:not(:last-of-type) {
-			margin-bottom: 1rem;
+		&-item {
+			font-style: italic;
+		}
+
+		&-list-item {
+			&:not(:last-of-type) {
+				margin-bottom: 1rem;
+			}
 		}
 	}
 
-	&__example-explanation {
-		display: block;
-		font-style: normal;
-		font-size: 1rem;
-		margin-top: vars.$spacer * 0.5;
+	&__examples,
+	&__example {
+		&-explanation {
+			font-size: 1rem;
+			margin-top: vars.$spacer * 0.5;
+		}
 	}
 
 	&__example {

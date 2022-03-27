@@ -8,26 +8,19 @@
       :key="word.ID"
       :data-group="word.group"
       class="c-word-list__word"
-      :class="{'has-translation': word.translation, }"
+      :class="{'has-translation': word.translations, }"
       data-track-content
       data-content-name="word"
     >
-      <div :class="[{'has-example': word.example}, 'c-word-list__header-wrapper']">
+      <div :class="[{'has-example': word.examples}, 'c-word-list__header-wrapper']">
         <dl class="c-word-list__header">
           <dt class="c-word-list__berlinerisch" :data-content-piece="word.berlinerisch">
             <NuxtLink :to="'words/' + word.ID">
               {{ word.berlinerisch }}
             </NuxtLink>
           </dt>
-          <dd v-if="word.translations" class="c-word-list__translation">
-            {{
-              word.translations.map(x => {
-                let values = []
-                values += Object.values(x)
-                return values;
-              }).join(', ')
-            }}
-          </dd>
+
+          <WordTranslations :translations="word.translations" elements="dd" root-bem-class="c-word-list" />
         </dl>
 
         <Dropdown
@@ -84,37 +77,13 @@
         </Dropdown>
       </div>
 
-      <div v-if="word.examples" class="c-word-list__divider" />
-
-      <div v-if="word.examples" class="c-word-list__example-wrapper">
-        <Quote :size="44" :stroke-width="0" class="c-word-list__quote-icon" />
-
-        <p
-          v-if="word.examples && word.examples.length === 1"
-          class="c-word-list__example lel"
-          v-text="word.examples[0].example"
-        />
-
-        <p
-          v-if="word.examples && word.examples.length === 1 && word.examples[0].example_explanation"
-          class="c-word-list__example lel"
-          v-text="word.examples[0].example_explanation"
-        />
-
-        <!-- If more than one example exist -->
-        <ol v-if="word.examples && word.examples.length > 1" class="c-word-list__examples neu">
-          <li v-for="(item, exampleIndex) in word.examples" :key="exampleIndex" class="c-word-list__example-item">
-            <span class="c-word-list__example-l">{{ item.example }}</span>
-            <span v-if="item.example_explanation" class="c-word-list__example-explanation">- {{ item.example_explanation }}</span>
-          </li>
-        </ol>
-      </div>
+      <WordExamples :examples="word.examples" />
     </article>
   </component>
 </template>
 
 <script>
-import { Copy, Link, Quote, CheckCircle2, XCircle, MoreVertical } from 'lucide-vue'
+import { Copy, Link, CheckCircle2, XCircle, MoreVertical } from 'lucide-vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -123,7 +92,6 @@ export default {
   components: {
     Copy,
     Link,
-    Quote,
     CheckCircle2,
     XCircle,
     MoreVertical

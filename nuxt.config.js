@@ -13,6 +13,13 @@ export default {
     'sassy-scss': resolve(__dirname, './node_modules/@felix_berlin/sassy-scss/')
   },
 
+  components: {
+    dirs: [
+      '~/components',
+      '~/components/word'
+    ]
+  },
+
   target: 'static',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
