@@ -48,8 +48,8 @@ export default {
       default: 'c-word-list'
     },
     examples: {
-      type: [Object, Array, Boolean, Symbol],
-      default: null,
+      type: [Object, Array, Boolean],
+      default: () => [],
       required: true
     }
   }

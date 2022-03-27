@@ -13,6 +13,7 @@ export default {
     'sassy-scss': resolve(__dirname, './node_modules/@felix_berlin/sassy-scss/')
   },
 
+  // Auto import components: https://go.nuxtjs.dev/config-components
   components: {
     dirs: [
       '~/components',
@@ -67,9 +68,6 @@ export default {
     '@modules/smooth-scroll-to',
     { src: '~/plugins/vue-matomo.js', ssr: false }
   ],
-
-  // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
