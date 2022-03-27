@@ -130,10 +130,6 @@
 	&__examples {
 		padding-left: vars.$spacer;
 
-		@include mx.breakpoint('md') {
-			--size-font: 1.8rem;
-		}
-
 		&-item {
 			font-style: italic;
 		}
@@ -154,6 +150,10 @@
 		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
 		word-break: break-word;
 
+		@include mx.breakpoint('md') {
+			--size-font: 1.8rem;
+		}
+
 		&-explanation {
 			font-size: 1rem;
 			margin-top: vars.$spacer * 0.5;
@@ -162,10 +162,6 @@
 
 	&__example {
 		font-style: italic;
-
-		@include mx.breakpoint('md') {
-			--size-font: 1.8rem;
-		}
 
 		&-wrapper {
 			--gap: #{vars.$spacer * 0.5};
