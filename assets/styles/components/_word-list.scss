@@ -9,10 +9,8 @@
 	position: relative;
 
 	&__word {
-		--color-background: #{vars.$white-100};
-
 		padding: vars.$spacer;
-		background-color: var(--color-background);
+		background-color: var(--color-background, var(--white-100));
 		border: 1px solid vars.$grey-100;
 		display: flex;
 		flex-flow: column wrap;
@@ -28,10 +26,8 @@
 	}
 
 	&__header {
-		--direction-flex: column;
-
 		display: flex;
-		flex-direction: var(--direction-flex);
+		flex-direction: var(--direction-flex, column);
 		flex: 1 1 auto;
 		margin: 0;
 
@@ -40,9 +36,7 @@
 		}
 
 		&-wrapper {
-			--bottom-border: none;
-
-			border-bottom: var(--bottom-border);
+			border-bottom: var(--bottom-border, none);
 			display: flex;
 
 			&.has-example {
@@ -54,12 +48,10 @@
 	}
 
 	&__berlinerisch {
-		--size-font: 1.5rem;
-
 		font: {
 			family: vars.$berlin;
 			weight: 700;
-			size: var(--size-font);
+			size: var(--size-font, 1.5rem);
 		}
 		text: {
 			decoration: underline;
@@ -87,11 +79,9 @@
 	}
 
 	&__translations {
-		--margin: #{vars.$spacer * 0.5} 0 0 0;
-
 		display: flex;
 		flex-wrap: wrap;
-		margin: var(--margin);
+		margin: var(--margin, #{vars.$spacer * 0.5} 0 0 0);
 		flex: 1 1;
 
 		@include mx.breakpoint('sm') {
@@ -100,19 +90,15 @@
 	}
 
 	&__translation {
-		--font-size: 1rem;
-
 		display: flex;
 		align-items: center;
-		font-size: var(--font-size);
+		font-size: var(--font-size, 1rem);
 		position: relative;
 		margin: 0;
 
 		&::before {
-			--margin: 0 #{vars.$spacer * 0.5};
-
 			content: '᛫';
-			margin: var(--margin);
+			margin: var(--margin, 0 #{vars.$spacer * 0.5});
 
 			@include mx.breakpoint('sm') {
 				--margin: 0 #{vars.$spacer};
@@ -143,9 +129,7 @@
 
 	&__examples,
 	&__example {
-		--size-font: 1.2rem;
-
-		font-size: var(--size-font);
+		font-size: var(--size-font, 1.2rem);
 		flex-basis: 100%;
 		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
 		word-break: break-word;
@@ -164,13 +148,12 @@
 		font-style: italic;
 
 		&-wrapper {
-			--gap: #{vars.$spacer * 0.5};
 			--padding-y: #{vars.$spacer};
 			--padding-x: var(--padding-y);
 
 			display: flex;
 			padding: var(--padding-y) var(--padding-x);
-			gap: var(--gap);
+			gap: var(--gap, #{vars.$spacer * 0.5});
 
 			@include mx.breakpoint('sm') {
 				--gap: #{vars.$spacer};

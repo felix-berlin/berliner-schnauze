@@ -103,6 +103,15 @@ export default {
     config: {
       // Add native Sentry config here
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
+      publishRelease: {
+        authToken: '8fc545a2b1aa11ec9f8b8e13e9ebcce8',
+        org: 'Webshaped',
+        project: 'berliner-schnauze',
+        // Attach commits to the release (requires that the build triggered within a git repository).
+        setCommits: {
+          auto: true
+        }
+      }
     }
   },
 
