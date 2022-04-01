@@ -5,14 +5,14 @@
 
 body {
 	--color-body: #{vars.$grey-100};
-	--color-gradient-1: #{sassy-fn.hex-to-rgb(vars.$red-200, 50%)};
-	--color-gradient-2: #{sassy-fn.hex-to-rgb(vars.$red-100, 50%)};
-	--color-background: #{sassy-fn.hex-to-rgb(vars.$red-100, 10%)};
+	--color-gradient-body-1: #{sassy-fn.hex-to-rgb(vars.$red-200, 50%)};
+	--color-gradient-body-2: #{sassy-fn.hex-to-rgb(vars.$red-100, 50%)};
+	--color-background-body: #{sassy-fn.hex-to-rgb(vars.$red-100, 10%)};
 
 	margin: 0;
 	color: var(--color-body);
-	background-color: var(--color-background);
-	background-image: radial-gradient(var(--color-gradient-1) 1.1px, var(--color-gradient-2) 1.1px);
+	background-color: var(--color-background-body);
+	background-image: radial-gradient(var(--color-gradient-body-1) 1.1px, var(--color-gradient-body-2) 1.1px);
 	background-size: 22px 22px;
 
 	@include sassy-mx.feature('motion') {
@@ -20,9 +20,9 @@ body {
 	}
 	@include mx.dark-mode {
 		--color-body: #{vars.$grey-200};
-		--color-gradient-1: #{sassy-fn.hex-to-rgb(vars.$blue-200, 50%)};
-		--color-gradient-2: #{sassy-fn.hex-to-rgb(vars.$blue-100, 50%)};
-		--color-background: #{sassy-fn.hex-to-rgb(vars.$blue-100, 10%)};
+		--color-gradient-body-1: #{sassy-fn.hex-to-rgb(vars.$blue-200, 50%)};
+		--color-gradient-body-2: #{sassy-fn.hex-to-rgb(vars.$blue-100, 50%)};
+		--color-background-body: #{sassy-fn.hex-to-rgb(vars.$blue-100, 10%)};
 	}
 }
 

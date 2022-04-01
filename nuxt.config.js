@@ -4,7 +4,8 @@ export default {
   publicRuntimeConfig: {
     baseUrl: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
     baseApiUrl: process.env.BASE_API_URL,
-    appVersion: process.env.npm_package_version
+    appVersion: process.env.npm_package_version,
+    test: process.env.TEST
   },
   privateRuntimeConfig: {},
 
