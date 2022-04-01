@@ -7,7 +7,8 @@
           content: tooltip,
           disabled: (tooltip.length ? false : true) || hideTooltip,
           theme: 'berliner-schnauze',
-          placement: 'auto'
+          placement: 'auto',
+          distance: 12
         }"
         :aria-label="buttonAriaLabel"
         type="button"
