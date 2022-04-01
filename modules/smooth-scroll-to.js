@@ -7,7 +7,7 @@ import Vue from 'vue'
  * @param   {Number}  elementOffset  positive or negative offset
  */
 Vue.prototype.$smoothScrollTo = function (element, elementOffset = 0) {
-  const offset = element.getBoundingClientRect().top - window.pageYOffset - elementOffset
+  const elementPosition = element.getBoundingClientRect().top + window.pageYOffset - elementOffset
 
-  window.scrollTo({ top: offset, behavior: 'smooth' })
+  window.scrollTo({ top: elementPosition, behavior: 'smooth' })
 }

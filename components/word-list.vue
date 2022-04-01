@@ -106,15 +106,6 @@ export default {
 
   data () {
     return {
-      intersectionOptions: {
-        root: null,
-        rootMargin: '0px 0px 0px 0px',
-        threshold: 0.5 // [0.25, 0.75] if you want a 25% offset!
-      },
-      sort: {
-        field: '',
-        desc: false
-      },
       fuse: {
         search: '',
         options: {
@@ -203,7 +194,6 @@ export default {
       const getWordUrl = window.location.protocol + '//' + window.location.hostname + '/words/' + id
 
       this.copyToClipboard(getWordUrl, 'url')
-      // console.log(index)
 
       this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', 'copyUrlButton', index)
     },

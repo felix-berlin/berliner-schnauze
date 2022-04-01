@@ -116,6 +116,7 @@ export default {
       pressedKeys: {},
       searchLength: 0,
       scrollToResultsTriggert: false, // Prevent scroll to results triggert more than one time
+      scrollbarVisable: undefined,
       toggleShowAndClearIcon: true
     }
   },
@@ -124,7 +125,7 @@ export default {
     ...mapState({
       search: state => state.searchWord
     }),
-    ...mapGetters(['getLetterFilter'])
+    ...mapGetters(['getLetterFilter, updateScrollPositionY'])
   },
 
   watch: {
@@ -139,6 +140,17 @@ export default {
     if (this.showSearchbarAfterClick) {
       this.showSearchBar = false
     }
+
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === 'updateScrollPositionY') {
+        if (state.scrollPositionY < 200) {
+          this.scrollToResultsTriggert = false
+          this.scrollbarVisable = true
+        } else {
+          this.scrollbarVisable = false
+        }
+      }
+    })
   },
 
   mounted () {
@@ -146,14 +158,11 @@ export default {
       this.focusSearch()
     }
 
-    if (this.$store.state.scrollPositionY < 200) {
-      this.scrollToResultsTriggert = false
-    }
-
     window.addEventListener('keydown', this.triggerKeyboardSearch)
   },
 
   beforeDestroy () {
+    this.unsubscribe()
     window.addEventListener('keydown', this.triggerKeyboardSearch)
   },
 
@@ -204,7 +213,7 @@ export default {
         // if (this.$refs.search === document.activeElement) {
         //   this.$refs.search.blur() // Make sure the searchbar is not allready focused
         // }
-        this.$refs['search' + this.id].blur()
+        // this.$refs['search' + this.id].blur()
         this.$refs['search' + this.id].focus()
         this.scrollToResults()
       })
@@ -296,9 +305,9 @@ export default {
     },
 
     scrollToResults () {
-      if ((this.$store.state.scrollPositionY > 200) && (this.searchLength > 0) && !this.scrollToResultsTriggert) {
+      if (!this.scrollbarVisable && (this.searchLength > 0)) {
         this.scrollToResultsTriggert = true
-        this.$smoothScrollTo(this.$refs['search' + this.id], 200)
+        this.$smoothScrollTo(document.querySelector('.c-word-search--large'), 60)
       }
     }
   }

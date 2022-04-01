@@ -30,9 +30,9 @@ export default {
       required: true
     },
     translations: {
-      type: [Object, Array],
       default: null,
-      required: true
+      required: true,
+      validator: v => typeof v === 'object' || Array.isArray(v) || v === null
     }
   }
 }
