@@ -101,18 +101,18 @@ export default {
     tracing: {
       tracesSampleRate: 0.2
     },
+    publishRelease: {
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      org: 'webshaped',
+      project: 'berliner-schnauze',
+      // Attach commits to the release (requires that the build triggered within a git repository).
+      setCommits: {
+        auto: true
+      }
+    },
     config: {
       // Add native Sentry config here
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
-      publishRelease: {
-        authToken: process.env.SENTRY_AUTH_TOKEN,
-        org: 'Webshaped',
-        project: 'berliner-schnauze',
-        // Attach commits to the release (requires that the build triggered within a git repository).
-        setCommits: {
-          auto: true
-        }
-      }
     }
   },
 

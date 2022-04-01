@@ -39,7 +39,7 @@ export default {
 
   head () {
     return {
-      title: this.word.berlinerisch + ' | Bedeutung, Definition, Beispiel - Berliner Schnauze',
+      title: this.word.berlinerisch + ' | Bedeutung, Definition, Beispiel',
       meta: [
         {
           hid: 'description',
