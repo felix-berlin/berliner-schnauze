@@ -5,7 +5,7 @@ export default {
     baseUrl: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
     baseApiUrl: process.env.BASE_API_URL,
     appVersion: process.env.npm_package_version,
-    test: process.env.TEST
+    sentryAuthToken: process.env.SENTRY_AUTH_TOKEN
   },
   privateRuntimeConfig: {},
 
@@ -105,7 +105,7 @@ export default {
       // Add native Sentry config here
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
       publishRelease: {
-        authToken: '8fc545a2b1aa11ec9f8b8e13e9ebcce8',
+        authToken: process.env.SENTRY_AUTH_TOKEN,
         org: 'Webshaped',
         project: 'berliner-schnauze',
         // Attach commits to the release (requires that the build triggered within a git repository).
