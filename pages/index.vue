@@ -23,13 +23,13 @@
         </div>
       </header>
 
-      <SearchWords :critical="true" searchbar-type="large" :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
+      <SearchWords critical searchbar-type="large" :focus-on-page-load="true" placeholder="Durchsuche den Berliner-Wortschatz" />
 
-      <LetterFilter :critical="true" modifier="c-letter-filter--desktop" />
+      <LetterFilter critical modifier="c-letter-filter--desktop" />
 
       <FilterDropdown />
 
-      <WordList :critical="true" />
+      <WordList critical />
     </main>
   </div>
 </template>
