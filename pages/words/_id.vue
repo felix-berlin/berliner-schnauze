@@ -1,13 +1,15 @@
 <template>
   <main class="c-main c-content">
-    <button type="button" aria-label="Zurück" class="c-button c-button--back u-button-reset" @click="$router.back()">
+    <NuxtLink :to="'/'" class="c-button c-button--back u-button-reset">
       <ArrowLeft /> zurück
-    </button>
+    </NuxtLink>
 
     <article class="c-single-word">
-      <h1 class="c-single-word__word">
-        {{ word.berlinerisch }}
-      </h1>
+      <header class="c-single-word__header">
+        <h1 class="c-single-word__word">
+          {{ word.berlinerisch }}
+        </h1>
+      </header>
 
       <h2 v-if="word.translations" class="c-single-word__sub-headline">
         Bedeutung:
@@ -18,6 +20,15 @@
         Beispiel:
       </h2>
       <WordExamples :examples="word.examples" root-bem-class="c-single-word" />
+
+      <footer class="c-single-word__footer">
+        <p class="c-single-word__created">
+          Wort erstellt am: {{ formatedDate(word.post_date) }}
+        </p>
+        <p class="c-single-word__modified">
+          Bearbeitet am: {{ formatedDate(word.post_modified) }}
+        </p>
+      </footer>
     </article>
   </main>
 </template>
@@ -63,6 +74,14 @@ export default {
   computed: {
     word () {
       return this.$store.state.words.find(word => word.ID === Number(this.$route.params.id))
+    }
+  },
+
+  methods: {
+    formatedDate (date, locale = 'de-DE') {
+      const dateToFormat = new Date(date)
+
+      return dateToFormat.toLocaleString(locale, { year: 'numeric', month: 'long', day: 'numeric' })
     }
   }
 

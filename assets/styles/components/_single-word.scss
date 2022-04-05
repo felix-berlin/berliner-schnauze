@@ -112,4 +112,25 @@
 			}
 		}
 	}
+
+	&__footer {
+		display: flex;
+		flex-direction: var(--direction-flex, column);
+		gap: var(--spacing, #{vars.$spacer * 0.5});
+		margin-top: vars.$spacer * 2.5;
+
+		@include mx.breakpoint('xs') {
+			--spacing: #{vars.$spacer * 2};
+			--direction-flex: row;
+
+			justify-content: flex-end;
+		}
+	}
+
+	&__created,
+	&__modified {
+		margin: 0;
+		font-size: 0.8rem;
+		color: var(--blue-100);
+	}
 }
