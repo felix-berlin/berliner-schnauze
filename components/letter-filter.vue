@@ -14,10 +14,10 @@
         :class="{ 'is-current' : (letter === $store.state.wordFilteredByLetter) }"
       >
         <button
-          :aria-label="'Buchstabe: ' + letter"
+          :aria-label="'Filter nach Buchstabe ' + letter"
           type="button"
           class="c-letter-filter__button c-button"
-          :title="'Buchstabe: ' + letter"
+          :title="'Filter nach Buchstabe ' + letter"
           @click="$store.dispatch('filterByLetter', letter)"
         >
           {{ letter }}

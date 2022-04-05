@@ -118,6 +118,8 @@
 		flex-direction: var(--direction-flex, column);
 		gap: var(--spacing, #{vars.$spacer * 0.5});
 		margin-top: vars.$spacer * 2.5;
+		border-top: 1px dashed var(--grey-100);
+		padding-top: vars.$spacer * 1.5;
 
 		@include mx.breakpoint('xs') {
 			--spacing: #{vars.$spacer * 2};
