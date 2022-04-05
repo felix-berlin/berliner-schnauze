@@ -28,7 +28,7 @@
           :modifier="['c-word-list--word-option']"
           button-modifier="c-button--center-icon c-button--word-option c-button--dashed-border"
           button-aria-label="Wort Menu öffnen"
-          :delay-close="1600"
+          :delay-close="wordButtonClicked ? 1600 : 0"
         >
           <template #title>
             <span class="u-icon-untouchable c-button--center-icon">
@@ -42,16 +42,14 @@
               aria-label="Link zum Wort kopieren"
               type="button"
               class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border"
+              :class="{ 'is-success': wordLinkCopied === index }"
               @click="copyWordPageUrlToClipboard(word.ID, index)"
             >
-              <span ref="copyUrlLinkIcon" class="c-word-list__icon-button">
+              <span ref="copyUrlLinkIcon" class="c-word-list__icon-button" :class="{ 'is-hidden': wordLinkCopied === index }">
                 <Link :size="18" />
               </span>
-              <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success is-hidden">
+              <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success" :class="{ 'is-hidden': wordLinkCopied !== index }">
                 <CheckCircle2 :size="18" />
-              </span>
-              <span ref="copyUrlErrorIcon" class="c-word-list__icon-button is-hidden">
-                <XCircle :size="18" />
               </span>
               <span class="c-word-list__copy-text">Link kopieren</span>
             </button>
@@ -60,16 +58,14 @@
               aria-label="Wort kopieren"
               type="button"
               class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border"
+              :class="{ 'is-success': wordCopied === index }"
               @click="copyNameToClipboard(word.ID, index)"
             >
-              <span ref="copyWordLinkIcon" class="c-word-list__icon-button">
+              <span ref="copyWordLinkIcon" class="c-word-list__icon-button" :class="{ 'is-hidden': wordCopied === index }">
                 <Copy :size="18" />
               </span>
-              <span ref="copyWordCheckIcon" class="c-word-list__icon-button is-hidden">
+              <span ref="copyWordCheckIcon" class="c-word-list__icon-button" :class="{ 'is-hidden': wordCopied !== index }">
                 <CheckCircle2 :size="18" />
-              </span>
-              <span ref="copyWordErrorIcon" class="c-word-list__icon-button is-hidden">
-                <XCircle :size="18" />
               </span>
               <span class="c-word-list__copy-text">Wort kopieren</span>
             </button>
@@ -113,7 +109,10 @@ export default {
             'berlinerisch', 'translation'
           ]
         }
-      }
+      },
+      wordCopied: '',
+      wordLinkCopied: '',
+      wordButtonClicked: false
     }
   },
 
@@ -169,54 +168,27 @@ export default {
 
       this.copyToClipboard(getWord, 'name')
 
-      this.toggleCopyIcons('copyWordLinkIcon', 'copyWordCheckIcon', 'copyWordButton', index)
+      this.wordCopied = index
+      this.wordButtonClicked = true
+
+      setTimeout(() => {
+        this.wordCopied = null
+        this.wordButtonClicked = false
+      }, 1500)
     },
-
-    /**
-     * Copy the word url to the clipboard
-     *
-     * @param   {Number}  id     Word ID
-     * @param   {Number}  index  Word index
-     *
-     * @return  {Function}       Copy the word url and toggle the icons
-     */
-    // copyWordUrlToClipboard (id, index) {
-    //   const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
-    //   const getWordUrl = window.location.protocol + '//' + window.location.hostname + port + '#word' + id
-
-    //   this.copyToClipboard(getWordUrl, 'url')
-
-    //   this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', 'copyUrlButton', index)
-    // },
 
     copyWordPageUrlToClipboard (id, index) {
       // const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
       const getWordUrl = window.location.protocol + '//' + window.location.hostname + '/words/' + id
 
       this.copyToClipboard(getWordUrl, 'url')
+      this.wordLinkCopied = index
+      this.wordButtonClicked = true
 
-      this.toggleCopyIcons('copyUrlLinkIcon', 'copyUrlCheckIcon', 'copyUrlButton', index)
-    },
-
-    /**
-     * Toggle word icon classes
-     *
-     * @param   {String}  linkIcon   LinkIcon ref
-     * @param   {String}  CheckIcon  Check icon ref
-     * @param   {String}  button     Button ref
-     * @param   {Number}  index      Current index
-     */
-    toggleCopyIcons (linkIcon, CheckIcon, button, index) {
-      this.$nextTick(() => {
-        this.$refs[button][index].classList.add('is-success')
-        this.$refs[linkIcon][index].classList.add('is-hidden')
-        this.$refs[CheckIcon][index].classList.remove('is-hidden')
-        setTimeout(() => {
-          this.$refs[button][index].classList.remove('is-success')
-          this.$refs[CheckIcon][index].classList.add('is-hidden')
-          this.$refs[linkIcon][index].classList.remove('is-hidden')
-        }, 1500)
-      })
+      setTimeout(() => {
+        this.wordLinkCopied = null
+        this.wordButtonClicked = false
+      }, 1500)
     },
 
     /**

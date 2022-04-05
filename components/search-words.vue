@@ -228,7 +228,7 @@ export default {
      */
     hideSearchbarAfterTime (timeout) {
       const time = setTimeout(() => {
-        if (this.showSearchbarAfterClick) {
+        if (this.showSearchbarAfterClick && this.searchLength < 1) {
           this.showSearchBar = false
           this.toggleShowAndClearIcon = true
           this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
