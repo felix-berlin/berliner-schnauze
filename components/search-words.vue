@@ -289,7 +289,7 @@ export default {
 
       // Shortcuts per OS
       const windowsCommand = this.$device.isWindows && this.pressedKeys.Control && this.pressedKeys.k
-      const macCommand = this.$device.isMacOS && this.pressedKeys.command && this.pressedKeys.k
+      const macCommand = this.$device.isMacOS && this.pressedKeys.Meta && this.pressedKeys.k
 
       if (windowsCommand || macCommand) {
         stroke.preventDefault()
