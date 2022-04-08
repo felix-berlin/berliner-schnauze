@@ -37,19 +37,9 @@
           <template #content>
             <SocialList list-modifier="c-social-list--mobile-dropdown" :hide-tooltips="true" />
             <ul class="c-menu-more__list u-list-reset">
-              <li class="c-menu-more__item">
-                <NuxtLink to="/suggest-word">
-                  Wort vorschlagen
-                </NuxtLink>
-              </li>
-              <li class="c-menu-more__item">
-                <NuxtLink to="/imprint">
-                  Impressum
-                </NuxtLink>
-              </li>
-              <li class="c-menu-more__item">
-                <NuxtLink to="/privacy-policy">
-                  Datenschutz
+              <li v-for="(item, index) in menuItems" :key="index" class="c-menu-more__item">
+                <NuxtLink :to="item.link">
+                  {{ item.title }}
                 </NuxtLink>
               </li>
             </ul>
@@ -76,8 +66,28 @@ export default {
     MoreVertical
   },
 
+  data () {
+    return {
+      menuItems: [
+        {
+          title: 'Wort vorschlagen',
+          link: '/suggest-word'
+        },
+        {
+          title: 'Impressum',
+          link: '/imprint'
+        },
+        {
+          title: 'Datenschutz',
+          link: '/privacy-policy'
+        }
+      ]
+    }
+  },
+
   computed: {
     ...mapGetters(['searchbarVisable'])
   }
+
 }
 </script>
