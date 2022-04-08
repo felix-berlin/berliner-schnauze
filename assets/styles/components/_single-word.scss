@@ -38,11 +38,13 @@
 	}
 
 	&__translation {
-		margin-top: vars.$spacer * 1;
+		margin: 0;
 		font-size: 1.5rem;
 
-		&:not(:last-of-type) {
-			margin-bottom: 1rem;
+		&-item {
+			&:not(:last-of-type) {
+				margin-bottom: 1rem;
+			}
 		}
 	}
 

@@ -81,7 +81,10 @@
 	&__translations {
 		display: flex;
 		flex-wrap: wrap;
-		margin: var(--margin, #{vars.$spacer * 0.5} 0 0 0);
+		align-items: center;
+		column-gap: vars.$spacer * 2;
+		row-gap: vars.$spacer * 0.8;
+		margin: var(--margin, #{vars.$spacer * 1 0 0 0});
 		flex: 1 1;
 
 		@include mx.breakpoint('sm') {
@@ -90,20 +93,8 @@
 	}
 
 	&__translation {
-		display: flex;
-		align-items: center;
 		font-size: var(--font-size, 1rem);
-		position: relative;
-		margin: 0;
-
-		&::before {
-			content: '᛫';
-			margin: var(--margin, 0 #{vars.$spacer * 0.5});
-
-			@include mx.breakpoint('sm') {
-				--margin: 0 #{vars.$spacer};
-			}
-		}
+		margin-left: vars.$spacer * 0.6;
 
 		@include mx.breakpoint('md') {
 			--font-size: 1.125rem;
