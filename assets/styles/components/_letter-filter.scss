@@ -3,9 +3,7 @@
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-letter-filter {
-	--margin: 0 0 1.5rem 0;
-
-	margin: var(--margin);
+	margin: 0 0 vars.$spacer * 1.5 0;
 
 	&__list {
 		display: grid;
@@ -18,6 +16,7 @@
 			justify-content: center;
 			aspect-ratio: 1/1;
 
+			&:hover,
 			&.is-current {
 				.c-letter-filter__button {
 					--color-background: var(--red-200);

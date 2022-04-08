@@ -78,9 +78,7 @@
 
 	&__examples,
 	&__example {
-		--size-font: 1.7rem;
-
-		font-size: var(--size-font);
+		font-size: var(--size-font, 1.7rem);
 		flex-basis: 100%;
 		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
 		word-break: break-word;
@@ -99,13 +97,12 @@
 		}
 
 		&-wrapper {
-			--gap: #{vars.$spacer * 0.5};
 			--padding-y: #{vars.$spacer};
 			--padding-x: 0;
 
 			display: flex;
 			padding: var(--padding-y) var(--padding-x);
-			gap: var(--gap);
+			gap: var(--gap, #{vars.$spacer * 0.5});
 
 			@include mx.breakpoint('sm') {
 				--gap: #{vars.$spacer};
