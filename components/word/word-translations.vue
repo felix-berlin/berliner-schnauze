@@ -7,14 +7,9 @@
 </template>
 
 <script>
-import { Quote } from 'lucide-vue'
 
 export default {
   name: 'WordTranslations',
-
-  components: {
-    Quote
-  },
 
   props: {
     wrapperElement: {
