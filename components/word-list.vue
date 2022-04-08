@@ -20,7 +20,7 @@
             </NuxtLink>
           </dt>
 
-          <WordTranslations :translations="word.translations" root-bem-class="c-word-list" />
+          <WordTranslations :translations="word.translations" elements="dd" root-bem-class="c-word-list" />
         </dl>
 
         <Dropdown
