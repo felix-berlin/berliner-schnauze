@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { Copy, Link, CheckCircle2, XCircle, MoreVertical } from 'lucide-vue'
+import { Copy, Link, CheckCircle2, MoreVertical } from 'lucide-vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -89,7 +89,6 @@ export default {
     Copy,
     Link,
     CheckCircle2,
-    XCircle,
     MoreVertical
   },
 

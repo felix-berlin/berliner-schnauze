@@ -11,6 +11,10 @@
         </h1>
       </header>
 
+      <div v-if="word.learn_more" class="c-single-word__learn-more-wrapper">
+        <Info /> <a :href="word.learn_more" target="_blank" class="c-single-word__learn-more-link">Erfahre mehr über dieses Wort <span class="c-single-word__learn-more-link-icon"><ExternalLink :size="10" /></span></a>
+      </div>
+
       <h2 v-if="word.translations" class="c-single-word__sub-headline">
         Bedeutung:
       </h2>
@@ -20,6 +24,17 @@
         Beispiel:
       </h2>
       <WordExamples :examples="word.examples" root-bem-class="c-single-word" />
+
+      <div v-if="word.related_words" class="c-single-word__related-words-wrapper">
+        <h3>Verwandte Worte:</h3>
+        <ul class="c-single-word__related-words-list">
+          <li v-for="(related_word, index) in word.related_words" :key="index" class="c-single-word__related-word">
+            <nuxt-link :to="'/words/' + related_word.ID" class="c-single-word__related-word-link">
+              {{ related_word.post_title }}
+            </nuxt-link>
+          </li>
+        </ul>
+      </div>
 
       <footer class="c-single-word__footer">
         <p class="c-single-word__created">
@@ -34,7 +49,7 @@
 </template>
 
 <script>
-import { ArrowLeft } from 'lucide-vue'
+import { ArrowLeft, Info, ExternalLink } from 'lucide-vue'
 
 export default {
 
@@ -45,7 +60,9 @@ export default {
   // },
 
   components: {
-    ArrowLeft
+    ArrowLeft,
+    Info,
+    ExternalLink
   },
 
   head () {

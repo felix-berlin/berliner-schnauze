@@ -17,7 +17,7 @@
 		margin: 0;
 		font: {
 			family: vars.$berlin;
-			size: 4rem;
+			size: var(--size-font, 2rem);
 			weight: 700;
 		}
 		text: {
@@ -25,6 +25,10 @@
 			decoration-style: dashed;
 			decoration-thickness: from-font;
 			underline-position: from-font;
+		}
+
+		@include mx.breakpoint('md') {
+			--size-font: 4rem;
 		}
 	}
 
@@ -111,6 +115,36 @@
 				--padding-x: 7%;
 			}
 		}
+	}
+
+	&__learn-more {
+		&-wrapper {
+			display: flex;
+			align-items: center;
+			gap: vars.$spacer * 0.5;
+			margin-top: vars.$spacer * 1.5;
+		}
+
+		&-link {
+			display: flex;
+			gap: vars.$spacer * 0.2;
+			font-size: var(--size-font, 0.9rem);
+
+			@include mx.breakpoint('xxs') {
+				--size-font: 1rem;
+			}
+
+			&-icon {
+				display: inline-flex;
+			}
+		}
+	}
+
+	&__related-words-list {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: vars.$spacer * 2;
+		row-gap: vars.$spacer * 0.5;
 	}
 
 	&__footer {
