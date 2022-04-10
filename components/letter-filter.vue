@@ -47,7 +47,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getWordSearch', 'availableLetterGroups'])
+    ...mapGetters(['getWordSearch', 'availableLetterGroups', 'getLetterFilter'])
   },
 
   watch: {
@@ -60,7 +60,7 @@ export default {
      */
     getWordSearch (search) {
       if (search.length && typeof this.$store.state.wordFilteredByLetter === 'string') {
-        this.filterByLetter(null)
+        this.$store.dispatch('filterByLetter', null)
       }
     }
   }
