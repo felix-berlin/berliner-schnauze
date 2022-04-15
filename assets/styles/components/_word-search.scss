@@ -66,13 +66,9 @@
 	}
 
 	&__shortcut {
-		--display: none;
-		--color-border: #{vars.$red-100};
-		--color: #{vars.$white-100};
-
-		border: 1px dashed var(--color-border);
-		color: var(--color);
-		display: var(--display);
+		border: 1px dashed var(--color-border, var(--red-100));
+		color: var(--color, var(--white-100));
+		display: var(--display, none);
 		align-items: center;
 		justify-content: center;
 		padding: vars.$spacer * 0.35;

@@ -2,18 +2,11 @@
 @use './../mixins/mixins' as mx;
 
 .c-button {
-	--color-background: #{vars.$white-100};
-	--color-border: #{vars.$grey-100};
-	--style-border: solid;
-	--width-border: 1px;
-	--color: #{vars.$grey-100};
-	--padding: #{vars.$spacer * 0.25};
-
 	cursor: pointer;
-	padding: var(--padding);
-	background-color: var(--color-background);
-	border: var(--width-border) var(--style-border) var(--color-border);
-	color: var(--color);
+	padding: var(--padding, #{vars.$spacer * 0.25});
+	background-color: var(--color-background, var(--white-100));
+	border: var(--width-border, 1px) var(--style-border, solid) var(--color-border, var(--grey-100));
+	color: var(--color, var(--grey-100));
 	transition: all 0.3s ease-in-out;
 
 	&--theme {

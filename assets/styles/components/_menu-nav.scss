@@ -7,8 +7,6 @@
 	gap: vars.$spacer * 3;
 	grid-area: menu-nav;
 
-	// flex-wrap: wrap;
-
 	&__item-button,
 	&__item-link {
 		--color-icon: #{vars.$white-100};

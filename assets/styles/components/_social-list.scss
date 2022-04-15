@@ -8,9 +8,7 @@
 	}
 
 	&--desktop {
-		--display: none;
-
-		display: var(--display);
+		display: var(--display, none);
 
 		@include mx.breakpoint('md') {
 			--display: flex;
@@ -18,11 +16,9 @@
 	}
 
 	&--mobile-dropdown {
-		--color-border: var(--red-200);
-
 		display: flex;
 		justify-content: space-between;
-		border-bottom: 1px dashed var(--color-border);
+		border-bottom: 1px dashed var(--color-border, var(--red-200));
 		margin-bottom: vars.$spacer;
 		padding-bottom: vars.$spacer * 0.7;
 

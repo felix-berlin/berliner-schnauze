@@ -13,9 +13,7 @@ html {
 }
 
 a {
-	--color: #{vars.$red-200};
-
-	color: var(--color);
+	color: var(--color, #{vars.$red-200});
 	text-decoration: none;
 	cursor: pointer;
 

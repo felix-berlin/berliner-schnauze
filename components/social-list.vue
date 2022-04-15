@@ -6,7 +6,6 @@
           v-tooltip="{
             content: social.tooltip,
             disabled: (social.tooltip.length ? false : true) || hideTooltips,
-            theme: 'berliner-schnauze',
             distance: 18
           }"
           :href="social.link"

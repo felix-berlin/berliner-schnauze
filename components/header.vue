@@ -21,6 +21,28 @@
 
         <ColorModeButton class="c-menu-nav__item c-menu-nav__item-button u-button-reset" :class="{'is-hidden': searchbarVisable}" />
 
+        <VMenu placement="bottom-end">
+          <button type="button" class="c-dropdown__button c-button">
+            <span v-show="$device.isDesktop" class="u-icon-untouchable u-icon-wrapper">
+              <Menu />
+            </span>
+            <span v-show="$device.isMobileOrTablet" class="u-icon-untouchable u-icon-wrapper">
+              <MoreVertical />
+            </span>
+          </button>
+
+          <template #popper>
+            <SocialList list-modifier="c-social-list--mobile-dropdown" :hide-tooltips="true" />
+            <ul class="c-menu-more__list u-list-reset">
+              <li v-for="(item, index) in menuItems" :key="index" class="c-menu-more__item">
+                <NuxtLink :to="item.link">
+                  {{ item.title }}
+                </NuxtLink>
+              </li>
+            </ul>
+          </template>
+        </VMenu>
+
         <Dropdown
           :modifier="[{'is-hidden': searchbarVisable}, 'c-menu-nav__item c-menu-more']"
           button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon"

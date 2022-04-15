@@ -3,16 +3,14 @@
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-header {
-	--color-background: #{vars.$red-200};
-	--columns-header-inner: 1fr 2fr;
 	--areas-template: ' . logo menu-nav . ';
 
 	grid-area: header;
 	display: grid;
 	grid-template-areas: var(--areas-template);
-	grid-template-columns: var(--spacing-main-frame) var(--columns-header-inner) var(--spacing-main-frame);
+	grid-template-columns: var(--spacing-main-frame) var(--columns-header-inner, 1fr 2fr) var(--spacing-main-frame);
 	align-items: center;
-	background-color: var(--color-background);
+	background-color: var(--color-background, var(--red-200));
 	box-shadow:
 		0 0.5px 0.6px rgb(0 0 0 / 8%),
 		0 4px 5px rgb(0 0 0 / 16%);
@@ -51,12 +49,11 @@
 
 		&__link {
 			--color: #{vars.$white-100};
-			--size-font: 1.8rem;
 
 			font-family: vars.$berliner;
 			text-decoration: none;
-			color: var(--color);
-			font-size: var(--size-font);
+			color: var(--color, var(--white-100));
+			font-size: var(--size-font, 1.8rem);
 
 			@include mx.breakpoint('sm') {
 				--size-font: 2rem;

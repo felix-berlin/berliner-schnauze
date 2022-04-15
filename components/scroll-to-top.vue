@@ -6,7 +6,6 @@
         v-tooltip="{
           content: tooltip,
           disabled: (tooltip.length ? false : true) || hideTooltip,
-          theme: 'berliner-schnauze',
           placement: 'auto',
           distance: 12
         }"

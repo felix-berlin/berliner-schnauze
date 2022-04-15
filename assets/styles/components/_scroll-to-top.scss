@@ -1,14 +1,10 @@
 @use './../mixins/mixins' as mx;
 
 .c-scroll-to-top {
-	--left-position: 50%;
-	--bottom-position: 10px;
-	--transform: translateX(-50%);
-
 	position: fixed;
-	bottom: var(--bottom-position);
-	left: var(--left-position);
-	transform: var(--transform);
+	bottom: var(--bottom-position, 10px);
+	left: var(--left-position, 50%);
+	transform: var(--transform, translateX(-50%));
 	z-index: 99;
 	box-shadow:
 		0 0 0.9px rgb(0 0 0 / 3.5%),
