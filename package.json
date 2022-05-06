@@ -42,7 +42,7 @@
     "@nuxtjs/html-validator": "^0.6.0",
     "@nuxtjs/stylelint-module": "^4.1.0",
     "@nuxtjs/svg": "^0.4.0",
-    "@sentry/webpack-plugin": "^1.18.8",
+    "@sentry/webpack-plugin": "1.18.9",
     "eslint": "^8.12.0",
     "eslint-plugin-nuxt": "^3.2.0",
     "eslint-plugin-vue": "^8.6.0",
