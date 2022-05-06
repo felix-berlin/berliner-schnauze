@@ -5,9 +5,21 @@ export default {
     baseUrl: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
     baseApiUrl: process.env.BASE_API_URL,
     appVersion: process.env.npm_package_version,
+    sentry: {
+      config: {
+        environment: process.env.NODE_ENV
+      },
+      serverConfig: {
+      // Any server-specific config
+      },
+      clientConfig: {
+      // Any client-specific config
+      }
+    }
+  },
+  privateRuntimeConfig: {
     sentryAuthToken: process.env.SENTRY_AUTH_TOKEN
   },
-  privateRuntimeConfig: {},
 
   alias: {
     styles: resolve(__dirname, './assets/styles'),
@@ -97,9 +109,16 @@ export default {
     // Additional Module Options go here
     // https://sentry.nuxtjs.org/sentry/options
     dsn: 'https://f84fd7469c2e4ca7b3680f5e151d3499@o1131599.ingest.sentry.io/6176241',
-    disabled: process.env.NODE_ENV === 'development',
     tracing: {
-      tracesSampleRate: 0.2
+      tracesSampleRate: 0.2,
+      vueOptions: {
+        tracing: true,
+        tracingOptions: {
+          hooks: ['mount', 'update'],
+          timeout: 2000,
+          trackComponents: true
+        }
+      }
     },
     publishRelease: {
       authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -108,7 +127,8 @@ export default {
       // Attach commits to the release (requires that the build triggered within a git repository).
       setCommits: {
         auto: true
-      }
+      },
+      release: process.env.npm_package_version
     },
     config: {
       // Add native Sentry config here
