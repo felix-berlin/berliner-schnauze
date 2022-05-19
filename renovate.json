@@ -1,7 +1,7 @@
 {
   "extends": [
-    "config:base",
     ":preserveSemverRanges"
+    "config:base",
   ],
-  "assignees": ["felix-berlin"]
+  "reviewers": ["felix-berlin"]
 }
