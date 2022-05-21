@@ -1,0 +1,9 @@
+{
+  "extends": [
+    ":preserveSemverRanges",
+    "config:base"
+  ],
+  "reviewers": ["felix-berlin"],
+  "timezone": "Europe/Berlin",
+  "schedule": ["on friday and saturday"]
+}
