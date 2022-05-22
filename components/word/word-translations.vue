@@ -1,8 +1,6 @@
 <template>
-  <component :is="wrapperElement" :class="rootBemClass + '__translations'">
-    <component :is="elements" v-for="(translation, translationIndex) in translations" :key="translationIndex" :class="rootBemClass + '__translation'">
-      {{ translation.translation }}
-    </component>
+  <component :is="elements" :class="bemClass">
+    {{ translation.translation }}
   </component>
 </template>
 
@@ -12,22 +10,18 @@ export default {
   name: 'WordTranslations',
 
   props: {
-    wrapperElement: {
-      type: String,
-      default: 'div'
-    },
     elements: {
       type: String,
       default: 'p'
     },
-    rootBemClass: {
+    bemClass: {
       type: String,
       required: true
     },
-    translations: {
-      default: null,
-      required: true,
-      validator: v => typeof v === 'object' || Array.isArray(v) || v === null
+    translation: {
+      type: Object,
+      required: true
+      // validator: v => typeof v === 'object' || Array.isArray(v) || v === null
     }
   }
 }

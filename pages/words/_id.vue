@@ -18,7 +18,9 @@
       <h2 v-if="word.translations" class="c-single-word__sub-headline">
         Bedeutung:
       </h2>
-      <WordTranslations :translations="word.translations" elements="li" wrapper-element="ul" root-bem-class="c-single-word" />
+      <ul class="c-single-word">
+        <WordTranslations v-for="(translation, translationIndex) in translations" :key="translationIndex" :translation="translation" elements="li" bem-class="c-single-word__translation" />
+      </ul>
 
       <h2 v-if="word.examples" class="c-single-word__sub-headline">
         Beispiel:

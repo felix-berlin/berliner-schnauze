@@ -22,7 +22,7 @@
         <ColorModeButton class="c-menu-nav__item c-menu-nav__item-button u-button-reset" :class="{'is-hidden': searchbarVisable}" />
 
         <VMenu placement="bottom-end">
-          <button type="button" class="c-dropdown__button c-button">
+          <button type="button" class="c-dropdown__button c-button" aria-label="hier">
             <span v-show="$device.isDesktop" class="u-icon-untouchable u-icon-wrapper">
               <Menu />
             </span>

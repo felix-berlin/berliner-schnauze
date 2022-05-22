@@ -12,8 +12,7 @@ module.exports = {
     '@nuxtjs',
     'plugin:nuxt/recommended'
   ],
-  plugins: [
-  ],
+  plugins: ['promise'],
   // add your custom rules here
   rules: {}
 }

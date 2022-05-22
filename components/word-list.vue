@@ -1,95 +1,29 @@
 <template>
   <component :is="element" ref="wordList" class="c-word-list">
-    <LoadingSpinner :show="getWordLoadingStatus" />
-    <article
-      v-for="(word, index) in searchDataResults"
-      :id="'word' + word.ID"
-      :ref="'word' + word.ID"
-      :key="word.ID"
-      :data-group="word.group"
-      class="c-word-list__word"
-      :class="{'has-translation': word.translations, }"
-      data-track-content
-      data-content-name="word"
+    <!-- <WordSingle v-for="(word, index) in searchDataResults" :key="word.ID" :word="word" :index="index" /> -->
+    <virtual-list
+      :data-key="'ID'"
+      :data-sources="searchDataResults"
+      :data-component="item"
+      :page-mode="true"
+      :wrap-class="'c-word-list__list'"
+      :item-class="'c-word-list__item'"
     >
-      <div :class="[{'has-example': word.examples}, 'c-word-list__header-wrapper']">
-        <dl class="c-word-list__header">
-          <dt class="c-word-list__berlinerisch" :data-content-piece="word.berlinerisch">
-            <NuxtLink :to="'words/' + word.ID">
-              {{ word.berlinerisch }}
-            </NuxtLink>
-          </dt>
-
-          <WordTranslations :translations="word.translations" elements="dd" root-bem-class="c-word-list" />
-        </dl>
-
-        <Dropdown
-          menu-align="left"
-          :modifier="['c-word-list--word-option']"
-          button-modifier="c-button--center-icon c-button--word-option c-button--dashed-border"
-          button-aria-label="Wort Menu öffnen"
-          :delay-close="wordButtonClicked ? 1600 : 0"
-        >
-          <template #title>
-            <span class="u-icon-untouchable c-button--center-icon">
-              <MoreVertical :size="18" />
-            </span>
-          </template>
-
-          <template #content>
-            <button
-              ref="copyUrlButton"
-              aria-label="Link zum Wort kopieren"
-              type="button"
-              class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border"
-              :class="{ 'is-success': wordLinkCopied === index }"
-              @click="copyWordPageUrlToClipboard(word.ID, index)"
-            >
-              <span ref="copyUrlLinkIcon" class="c-word-list__icon-button" :class="{ 'is-hidden': wordLinkCopied === index }">
-                <Link :size="18" />
-              </span>
-              <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success" :class="{ 'is-hidden': wordLinkCopied !== index }">
-                <CheckCircle2 :size="18" />
-              </span>
-              <span class="c-word-list__copy-text">Link kopieren</span>
-            </button>
-            <button
-              ref="copyWordButton"
-              aria-label="Wort kopieren"
-              type="button"
-              class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border"
-              :class="{ 'is-success': wordCopied === index }"
-              @click="copyNameToClipboard(word.ID, index)"
-            >
-              <span ref="copyWordLinkIcon" class="c-word-list__icon-button" :class="{ 'is-hidden': wordCopied === index }">
-                <Copy :size="18" />
-              </span>
-              <span ref="copyWordCheckIcon" class="c-word-list__icon-button" :class="{ 'is-hidden': wordCopied !== index }">
-                <CheckCircle2 :size="18" />
-              </span>
-              <span class="c-word-list__copy-text">Wort kopieren</span>
-            </button>
-          </template>
-        </Dropdown>
-      </div>
-
-      <WordExamples :examples="word.examples" />
-    </article>
+      <LoadingSpinner :show="getWordLoadingStatus" />
+    </virtual-list>
   </component>
 </template>
 
 <script>
-import { Copy, Link, CheckCircle2, MoreVertical } from 'lucide-vue'
+import VirtualList from 'vue-virtual-scroll-list'
 import { mapGetters, mapActions } from 'vuex'
+import WordSingle from './word/word'
 
 export default {
   name: 'WordList',
 
   components: {
-    Copy,
-    Link,
-    CheckCircle2,
-    MoreVertical
+    VirtualList
   },
 
   props: {
@@ -109,9 +43,7 @@ export default {
           ]
         }
       },
-      wordCopied: '',
-      wordLinkCopied: '',
-      wordButtonClicked: false
+      item: WordSingle
     }
   },
 
@@ -152,56 +84,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['updateDictionaryPosition']),
-
-    /**
-     * Copy target word to the clipboard
-     *
-     * @param   {Number}  id     Word ID
-     * @param   {Number}  index  Word index
-     *
-     * @return  {Function}       Copy the word and toggle the icons
-     */
-    copyNameToClipboard (id, index) {
-      const getWord = document.querySelector('#word' + id + ' .c-word-list__berlinerisch').innerText
-
-      this.copyToClipboard(getWord, 'name')
-
-      this.wordCopied = index
-      this.wordButtonClicked = true
-
-      setTimeout(() => {
-        this.wordCopied = null
-        this.wordButtonClicked = false
-      }, 1500)
-    },
-
-    copyWordPageUrlToClipboard (id, index) {
-      // const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
-      const getWordUrl = window.location.protocol + '//' + window.location.hostname + '/words/' + id
-
-      this.copyToClipboard(getWordUrl, 'url')
-      this.wordLinkCopied = index
-      this.wordButtonClicked = true
-
-      setTimeout(() => {
-        this.wordLinkCopied = null
-        this.wordButtonClicked = false
-      }, 1500)
-    },
-
-    /**
-     * Copy a given string to the clipboard
-     *
-     * @param   {String}  textToCopy  String to copy
-     */
-    copyToClipboard (textToCopy) {
-      try {
-        navigator.clipboard.writeText(textToCopy)
-      } catch (error) {
-        this.$sentry.captureException(error)
-      }
-    }
+    ...mapActions(['updateDictionaryPosition'])
   }
 
 }
