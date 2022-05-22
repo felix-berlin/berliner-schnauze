@@ -94,6 +94,10 @@ export default {
     // VirtualList
   },
   props: {
+    // word: {
+    //   type: Object,
+    //   required: true,
+    // },
     index: {
       type: [String, Number],
       required: true

@@ -30,6 +30,7 @@
     "vue-template-compiler": "^2.6.14",
     "vue-uuid": "^2.1.0",
     "vue-virtual-scroll-list": "^2.3.3",
+    "vue-virtual-scroller": "^1.0.10",
     "webpack": "^4.46.0"
   },
   "devDependencies": {

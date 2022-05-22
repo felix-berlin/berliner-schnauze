@@ -1,7 +1,7 @@
 <template>
   <component :is="element" ref="wordList" class="c-word-list">
     <!-- <WordSingle v-for="(word, index) in searchDataResults" :key="word.ID" :word="word" :index="index" /> -->
-    <virtual-list
+    <!-- <virtual-list
       :data-key="'ID'"
       :data-sources="searchDataResults"
       :data-component="item"
@@ -10,20 +10,36 @@
       :item-class="'c-word-list__item'"
     >
       <LoadingSpinner :show="getWordLoadingStatus" />
-    </virtual-list>
+    </virtual-list> -->
+
+    <RecycleScroller
+      v-slot="{ item }"
+      class="scroller"
+      :items="searchDataResults"
+      :item-size="300"
+      :prerender="30"
+      :page-mode="true"
+      key-field="ID"
+    >
+      <WordSingle :source="item" :index="item.ID" />
+    </RecycleScroller>
   </component>
 </template>
 
 <script>
+import { RecycleScroller } from 'vue-virtual-scroller'
 import VirtualList from 'vue-virtual-scroll-list'
 import { mapGetters, mapActions } from 'vuex'
 import WordSingle from './word/word'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 export default {
   name: 'WordList',
 
   components: {
-    VirtualList
+    VirtualList,
+    RecycleScroller,
+    WordSingle
   },
 
   props: {
@@ -42,8 +58,7 @@ export default {
             'berlinerisch', 'translation'
           ]
         }
-      },
-      item: WordSingle
+      }
     }
   },
 
