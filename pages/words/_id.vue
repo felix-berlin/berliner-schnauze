@@ -18,8 +18,8 @@
       <h2 v-if="word.translations" class="c-single-word__sub-headline">
         Bedeutung:
       </h2>
-      <ul class="c-single-word">
-        <WordTranslations v-for="(translation, translationIndex) in translations" :key="translationIndex" :translation="translation" elements="li" bem-class="c-single-word__translation" />
+      <ul class="c-single-word__translation">
+        <WordTranslations v-for="(translation, translationIndex) in word.translations" :key="translationIndex" :translation="translation" elements="li" class="c-single-word__translation-item" />
       </ul>
 
       <h2 v-if="word.examples" class="c-single-word__sub-headline">

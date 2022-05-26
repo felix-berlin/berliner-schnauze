@@ -1,17 +1,17 @@
 <template>
-  <component :is="element" ref="wordList" class="c-word-list">
-    <!-- <WordSingle v-for="(word, index) in searchDataResults" :key="word.ID" :word="word" :index="index" /> -->
-    <virtual-list
-      :data-key="'ID'"
-      :data-sources="searchDataResults"
-      :data-component="item"
-      :page-mode="true"
-      :wrap-class="'c-word-list__list'"
-      :item-class="'c-word-list__item'"
-    >
-      <LoadingSpinner :show="getWordLoadingStatus" />
-    </virtual-list>
-  </component>
+  <!-- <WordSingle v-for="(word, index) in searchDataResults" :key="word.ID" :word="word" :index="index" /> -->
+  <virtual-list
+    ref="wordList"
+    class="c-word-list"
+    data-key="ID"
+    :data-sources="searchDataResults"
+    :data-component="item"
+    :page-mode="true"
+    wrap-class="c-word-list__list u-list-reset"
+    wrap-tag="ul"
+    item-class="c-word-list__item"
+    item-tag="li"
+  />
 </template>
 
 <script>
@@ -24,13 +24,6 @@ export default {
 
   components: {
     VirtualList
-  },
-
-  props: {
-    element: {
-      type: String,
-      default: 'section'
-    }
   },
 
   data () {

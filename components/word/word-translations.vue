@@ -1,5 +1,5 @@
 <template>
-  <component :is="elements" :class="bemClass">
+  <component :is="elements">
     {{ translation.translation }}
   </component>
 </template>
@@ -13,10 +13,6 @@ export default {
     elements: {
       type: String,
       default: 'p'
-    },
-    bemClass: {
-      type: String,
-      required: true
     },
     translation: {
       type: Object,

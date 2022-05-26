@@ -3,6 +3,7 @@
     <!-- <transition name="fade-fast"> -->
     <div v-if="keyboardFocus" v-show="!showSearchBar && !$device.isMobileOrTablet" class="c-word-search__shortcut">
       <span v-show="$device.isMacOS" class="c-word-search__command-icon-wrap">
+        <!-- eslint-disable-next-line -->
         <Command :size="12" class="c-word-search__command-icon" />
       </span>
       <span v-show="$device.isWindows">Control</span>
@@ -53,6 +54,7 @@ export default {
 
   components: {
     Search,
+    // eslint-disable-next-line
     Command,
     X
   },
@@ -154,7 +156,7 @@ export default {
   },
 
   mounted () {
-    if (this.focusOnPageLoad) {
+    if (this.focusOnPageLoad && this.$device.isDesktop) {
       this.focusSearch()
     }
 

@@ -21,7 +21,8 @@
 
         <ColorModeButton class="c-menu-nav__item c-menu-nav__item-button u-button-reset" :class="{'is-hidden': searchbarVisable}" />
 
-        <VMenu placement="bottom-end">
+        <!-- TODO: Exchange the Dropdown Component with VMenu -->
+        <!-- <VMenu placement="bottom-end">
           <button type="button" class="c-dropdown__button c-button" aria-label="hier">
             <span v-show="$device.isDesktop" class="u-icon-untouchable u-icon-wrapper">
               <Menu />
@@ -41,7 +42,7 @@
               </li>
             </ul>
           </template>
-        </VMenu>
+        </VMenu> -->
 
         <Dropdown
           :modifier="[{'is-hidden': searchbarVisable}, 'c-menu-nav__item c-menu-more']"
@@ -84,6 +85,7 @@ export default {
 
   components: {
     Dropdown,
+    // eslint-disable-next-line
     Menu,
     MoreVertical
   },

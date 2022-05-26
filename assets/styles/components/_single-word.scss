@@ -38,11 +38,12 @@
 	}
 
 	&__translation {
-		margin-top: vars.$spacer * 1;
-		font-size: 1.5rem;
+		display: flex;
+		flex-direction: column;
+		row-gap: vars.$spacer * 1;
 
-		&:not(:last-of-type) {
-			margin-bottom: 1rem;
+		&-item {
+			font-size: 1.5rem;
 		}
 	}
 
@@ -58,6 +59,9 @@
 
 	&__examples {
 		padding-left: vars.$spacer;
+		display: flex;
+		flex-direction: column;
+		row-gap: vars.$spacer;
 
 		@include mx.breakpoint('md') {
 			--size-font: 1.8rem;
@@ -65,12 +69,6 @@
 
 		&-item {
 			font-style: italic;
-		}
-
-		&-list-item {
-			&:not(:last-of-type) {
-				margin-bottom: 1rem;
-			}
 		}
 	}
 

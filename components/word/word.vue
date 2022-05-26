@@ -23,7 +23,7 @@
           :translation="translation"
           elements="dd"
           :child-element="false"
-          bem-class="c-word-list"
+          class="c-word-list__translation"
         />
       </dl>
 
