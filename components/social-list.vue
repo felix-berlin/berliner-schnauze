@@ -18,7 +18,6 @@
           <Github v-if="social.name === 'github'" />
           <Twitter v-if="social.name === 'twitter'" />
           <Facebook v-if="social.name === 'facebook'" />
-          <Send v-if="social.name === 'mail'" />
         </a>
       </li>
     </ul>
@@ -27,7 +26,7 @@
   </div>
 
 <script>
-import { Github, Facebook, Twitter, Send } from 'lucide-vue'
+import { Github, Facebook, Twitter } from 'lucide-vue'
 
 export default {
   name: 'SocialList',
@@ -35,8 +34,7 @@ export default {
   components: {
     Github,
     Facebook,
-    Twitter,
-    Send
+    Twitter
   },
 
   props: {
@@ -82,12 +80,6 @@ export default {
           link: 'https://www.facebook.com/Berliner.Schnauze030',
           ariaLabel: 'Folge Berliner Schnauze auf Facebook',
           tooltip: 'Altmodisch, aber auf Facebook gibt es Berliner Schnauze auch.'
-        },
-        {
-          name: 'mail',
-          link: 'mailto:mail@berliner-schnauze.wtf',
-          ariaLabel: 'Sende Berliner-Schnauze eine Nachricht per Mail',
-          tooltip: 'Du kennst noch andere Worte? Schreib mir eine Mail.'
         }
       ]
     }
