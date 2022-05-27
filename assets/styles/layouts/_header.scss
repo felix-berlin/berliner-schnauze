@@ -10,7 +10,7 @@
 	grid-template-areas: var(--areas-template);
 	grid-template-columns: var(--spacing-main-frame) var(--columns-header-inner, 1fr 2fr) var(--spacing-main-frame);
 	align-items: center;
-	background-color: var(--color-background, var(--red-200));
+	background-color: var(--primary);
 	box-shadow:
 		0 0.5px 0.6px rgb(0 0 0 / 8%),
 		0 4px 5px rgb(0 0 0 / 16%);
@@ -38,10 +38,6 @@
 				margin-bottom: vars.$spacer * 0.5;
 			}
 		}
-	}
-
-	@include mx.dark-mode {
-		--color-background: #{vars.$blue-200};
 	}
 
 	.c-logo {

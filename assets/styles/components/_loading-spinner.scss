@@ -11,7 +11,7 @@
 	left: 50%;
 
 	&__spinner {
-		--color: #{vars.$red-200};
+		--color: var(--primary);
 		--size-bar: 0.8vmin;
 
 		@include mx.breakpoint('sm') {
@@ -22,10 +22,6 @@
 		width: 50%;
 		display: grid;
 		place-items: center;
-
-		@include mx.dark-mode {
-			--color: #{vars.$blue-200};
-		}
 
 		&::before,
 		&::after {

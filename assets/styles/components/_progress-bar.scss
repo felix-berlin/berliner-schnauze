@@ -1,9 +1,5 @@
 @use './../mixins/mixins' as mx;
 
 .nuxt-progress {
-	background-color: var(--color-background, var(--red-100));
-
-	@include mx.dark-mode {
-		--color-background: var(--blue-100);
-	}
+	background-color: var(--secondary);
 }

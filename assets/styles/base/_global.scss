@@ -17,3 +17,13 @@
 		--spacing-main-frame: 15%;
 	}
 }
+
+html {
+	--primary: var(--red-200);
+	--secondary: var(--red-100);
+
+	&[class='dark-mode'] {
+		--primary: var(--blue-200);
+		--secondary: var(--blue-100);
+	}
+}

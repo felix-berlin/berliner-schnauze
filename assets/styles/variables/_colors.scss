@@ -33,4 +33,3 @@ $alert-colors: (
 	'success': $success
 );
 $all-colors: sassy-fn.map-collect($white-colors, $grey-colors, $red-colors, $blue-colors, $alert-colors);
-$primary: $red-200;

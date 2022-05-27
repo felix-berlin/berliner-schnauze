@@ -6,25 +6,16 @@
 	position: relative;
 
 	&__menu {
-		--color-background: #{vars.$red-100};
-		--offset: 0;
-		--width-min: fit-content;
-		--padding: #{vars.$spacer vars.$spacer * 1.5};
-
 		position: absolute;
-		top: calc(100% + var(--offset));
-		background-color: var(--color-background);
-		padding: var(--padding);
+		top: calc(100% + var(--offset, 0));
+		background-color: var(--color-background, var(--secondary));
+		padding: var(--padding, #{vars.$spacer vars.$spacer * 1.5});
 		box-shadow:
 			0 0.5px 0.6px rgb(0 0 0 / 8%),
 			0 4px 5px rgb(0 0 0 / 16%);
 		z-index: 10;
 		max-width: 100%;
-		min-width: var(--width-min);
-
-		@include mx.dark-mode {
-			--color-background: #{vars.$blue-100};
-		}
+		min-width: var(--width-min, fit-content);
 
 		&--left {
 			right: 0;

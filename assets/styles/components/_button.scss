@@ -10,7 +10,7 @@
 	transition: all 0.3s ease-in-out;
 
 	&--theme {
-		--color-background: var(--red-200);
+		--color-background: var(--primary);
 		--color: var(--white-100);
 
 		font-family: vars.$berliner;
@@ -20,7 +20,6 @@
 		}
 
 		@include mx.dark-mode {
-			--color-background: var(--blue-200);
 			--color-border: var(--white-100);
 		}
 	}

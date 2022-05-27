@@ -18,15 +18,12 @@
 	&--mobile-dropdown {
 		display: flex;
 		justify-content: space-between;
-		border-bottom: 1px dashed var(--color-border, var(--red-200));
+		border-bottom: 1px dashed var(--primary);
 		margin-bottom: vars.$spacer;
 		padding-bottom: vars.$spacer * 0.7;
 
 		@include mx.breakpoint('md') {
 			display: none;
-		}
-		@include mx.dark-mode {
-			--color-border: var(--blue-200);
 		}
 	}
 }

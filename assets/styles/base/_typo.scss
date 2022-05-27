@@ -13,13 +13,9 @@ html {
 }
 
 a {
-	color: var(--color, #{vars.$red-200});
+	color: var(--primary);
 	text-decoration: none;
 	cursor: pointer;
-
-	@include mx.dark-mode {
-		--color: #{vars.$blue-200};
-	}
 
 	&:hover {
 		text-decoration: underline;

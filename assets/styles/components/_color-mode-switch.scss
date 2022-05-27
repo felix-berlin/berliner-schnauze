@@ -15,14 +15,10 @@
 	input[type='checkbox'] {
 		&.c-color-mode-switch__toggle {
 			--box-shadow-focus: 2px #{rgba(vars.$white-100, 0.3)};
-			--color-background: #{rgba(vars.$red-100, 0.2)};
+			--color-background: #{rgba(var(--secondary), 0.2)};
 			--color-border: var(--white-100);
 			--width-border: 2px;
 			--height: 22px;
-
-			@include mx.dark-mode {
-				--color-background: #{rgba(vars.$blue-100, 0.2)};
-			}
 
 			&:hover:not(:checked):not(:disabled) {
 				--color-border: var(--white-100);

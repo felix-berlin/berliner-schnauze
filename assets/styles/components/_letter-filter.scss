@@ -19,16 +19,12 @@
 			&:hover,
 			&.is-current {
 				.c-letter-filter__button {
-					--color-background: var(--red-200);
+					--color-background: var(--primary);
 					--color: var(--white-100);
 					--color-border: var(--white-100);
 					--style-border: dashed;
 
 					font-weight: 600;
-
-					@include mx.dark-mode {
-						--color-background: var(--blue-200);
-					}
 				}
 			}
 		}
