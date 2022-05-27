@@ -78,11 +78,15 @@
     </div>
 
     <WordExamples :examples="source.examples" />
+
+    <NuxtLink v-if="source.learn_more || source.related_words" :to="'words/' + source.ID" class="c-word-list__learn-more c-button u-button-reset">
+      <Info :size="20" /> mehr erfahren
+    </NuxtLink>
   </article>
 </template>
 
 <script>
-import { Copy, CheckCircle2, MoreVertical } from 'lucide-vue'
+import { Copy, CheckCircle2, MoreVertical, Info } from 'lucide-vue'
 
 export default {
   name: 'WordSingle',
@@ -90,8 +94,8 @@ export default {
   components: {
     Copy,
     CheckCircle2,
-    MoreVertical
-    // VirtualList
+    MoreVertical,
+    Info
   },
   props: {
     index: {

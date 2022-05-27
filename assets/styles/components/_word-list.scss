@@ -80,17 +80,6 @@
 		}
 	}
 
-	&__translations {
-		display: flex;
-		flex-wrap: wrap;
-		margin: var(--margin, #{vars.$spacer * 0.5} 0 0 0);
-		flex: 1 1;
-
-		@include mx.breakpoint('sm') {
-			--margin: 0;
-		}
-	}
-
 	&__translation {
 		display: flex;
 		align-items: center;
@@ -104,6 +93,14 @@
 
 			@include mx.breakpoint('sm') {
 				--margin: 0 #{vars.$spacer};
+			}
+		}
+
+		&:first-of-type {
+			margin-top: var(--spacing-outer-top, #{vars.$spacer * 1});
+
+			@include mx.breakpoint('sm') {
+				--spacing-outer-top: 0;
 			}
 		}
 
@@ -216,5 +213,14 @@
 				gap: vars.$spacer * 0.25;
 			}
 		}
+	}
+
+	&__learn-more {
+		--padding: 0;
+
+		display: flex;
+		align-items: center;
+		gap: vars.$spacer * 0.25;
+		align-self: end;
 	}
 }

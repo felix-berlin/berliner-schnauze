@@ -11,7 +11,7 @@
         }"
         :aria-label="buttonAriaLabel"
         type="button"
-        class="c-scroll-to-top__button c-button c-button--center-icon c-button--dashed-border "
+        class="c-scroll-to-top__button c-button c-button--center-icon c-button--dashed-border"
         @click="scrollToTop"
       >
         <slot>Scroll to top</slot>
