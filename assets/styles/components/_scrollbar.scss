@@ -5,7 +5,11 @@ html {
 	--scrollbar-secondary: var(--secondary);
 	--scrollbar-tertiary: var(--secondary);
 	--scrollbar-width: 8px;
-	--scrollbar-button-bgc: #{rgba(var(--primary), 0.8)};
+	--scrollbar-button-bgc: #{rgba(vars.$red-200, 0.8)};
+
+	&[class='dark-mode'] {
+		--scrollbar-button-bgc: #{rgba(vars.$blue-200, 0.8)};
+	}
 
 	/* ----------  Mozilla Firefox  ---------- */
 

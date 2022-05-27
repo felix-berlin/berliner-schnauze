@@ -7,6 +7,7 @@
     :data-sources="searchDataResults"
     :data-component="item"
     :page-mode="true"
+    :estimate-size="270"
     wrap-class="c-word-list__list u-list-reset"
     wrap-tag="ul"
     item-class="c-word-list__item"
