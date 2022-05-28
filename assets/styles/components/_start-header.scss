@@ -4,6 +4,8 @@
 .c-start-header {
 	display: flex;
 	flex-wrap: var(--wrap-flex, wrap);
+	justify-content: space-between;
+	gap: vars.$spacer;
 
 	@include mx.breakpoint('xs') {
 		--wrap-flex: nowrap;
@@ -34,18 +36,8 @@
 	}
 
 	&__image-wrap {
-		flex: 1 0 40%;
 		display: flex;
 		align-items: flex-end;
 		justify-content: flex-end;
-
-		picture {
-			display: flex;
-		}
-	}
-
-	&__image {
-		max-width: 100%;
-		height: auto;
 	}
 }

@@ -2,20 +2,12 @@
   <footer class="c-footer">
     <div class="c-footer__farewell">
       <div class="c-footer__farewell-image-wrapper">
-        <picture>
-          <source srcset="~/static/bear-walking.avif" type="image/avif">
-          <source srcset="~/static/bear-walking.webp" type="image/webp">
-          <source srcset="~/static/bear-walking.png" type="image/png">
-          <img
-            src="~/static/bear-walking.png"
-            class="c-footer__farewell-image"
-            alt="Laufender Bär"
-            decoding="async"
-            loading="lazy"
-            width="700"
-            height="451"
-          >
-        </picture>
+        <speedkit-picture
+          v-bind="picture"
+          class="c-footer__farewell-image"
+          width="700"
+          height="451"
+        />
       </div>
       <p v-if="$store.state.scrollPositionY > 2000 && $route.name === 'index'" class="c-footer__farewell-text">
         Mensch, ditt war nen weiter Weg.
@@ -55,7 +47,29 @@
 </template>
 
 <script>
+import SpeedkitPicture from 'nuxt-speedkit/components/SpeedkitPicture'
+
 export default {
-  name: 'FooterPart'
+  name: 'FooterPart',
+
+  components: {
+    SpeedkitPicture
+  },
+
+  data () {
+    return {
+      picture: {
+        sources: [
+          {
+            src: '/bear-walking.png',
+            sizes: { sm: '100vw', md: '100vw', lg: '100vw', xl: '100vw', xxl: '700px' }
+          }
+        ],
+        formats: ['avif', 'webp', 'jpg|jpeg|png'],
+        title: 'laufender Bär',
+        alt: 'laufender Bär'
+      }
+    }
+  }
 }
 </script>

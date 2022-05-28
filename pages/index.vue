@@ -13,19 +13,12 @@
         </h1>
 
         <div class="c-start-header__image-wrap">
-          <picture>
-            <source srcset="~/static/brown-bear-roar.webp" type="image/webp">
-            <source srcset="~/static/brown-bear-roar.png" type="image/png">
-            <img
-              src="~/static/brown-bear-roar.png"
-              class="c-start-header__image"
-              alt="Brüllender Bär"
-              decoding="async"
-              loading="eager"
-              width="900"
-              height="517"
-            >
-          </picture>
+          <speedkit-picture
+            critical
+            v-bind="picture"
+            width="900"
+            height="517"
+          />
         </div>
       </header>
 
@@ -48,6 +41,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import speedkitHydrate from 'nuxt-speedkit/hydrate'
+import SpeedkitPicture from 'nuxt-speedkit/components/SpeedkitPicture'
 
 export default {
   name: 'IndexPage',
@@ -56,9 +50,24 @@ export default {
     WordList: speedkitHydrate(() => import('@/components/word-list')),
     SearchWords: speedkitHydrate(() => import('@/components/search-words')),
     LetterFilter: speedkitHydrate(() => import('@/components/letter-filter')),
-    FilterDropdown: speedkitHydrate(() => import('@/components/filter-dropdown'))
+    FilterDropdown: speedkitHydrate(() => import('@/components/filter-dropdown')),
+    SpeedkitPicture
   },
-
+  data () {
+    return {
+      picture: {
+        sources: [
+          {
+            src: '/brown-bear-roar.png',
+            sizes: { sm: '100vw', md: '40vw', lg: '40vw', xl: '50vw', xxl: '900px' }
+          }
+        ],
+        formats: ['avif', 'webp', 'jpg|jpeg|png'],
+        title: 'brüllender Bär',
+        alt: 'brüllender Bär'
+      }
+    }
+  },
   // async asyncData ({ store, $sentry }) {
   //   store.commit('wordLoadingStatus', true)
 
