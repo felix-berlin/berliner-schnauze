@@ -26,3 +26,8 @@ body {
 html[class='dark-mode'] {
 	@include sassy-mx.select-style(vars.$blue-200, vars.$white-100);
 }
+
+img {
+	max-width: 100%;
+	height: auto;
+}
