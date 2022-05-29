@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../variables/variables' as vars;
 @use '../mixins/mixins' as mx;
 @use 'sassy-scss/mixins' as sassy-mx;
@@ -46,10 +47,14 @@
 	&__search-input.c-input {
 		--color-border: var(--grey-100);
 		--color-background: var(--white-200);
-		--color-outline: #{rgba(var(--primary), 0.7)};
+		--color-outline: #{sassy-fn.hex-to-rgb(vars.$red-200, 50%)};
 		--spacing-inner: var(--padding-y-input) var(--padding-x-input);
 
 		border-left: none;
+
+		@include mx.dark-mode {
+			--color-outline: #{sassy-fn.hex-to-rgb(vars.$blue-200, 50%)};
+		}
 
 		&:focus-visible {
 			outline: var(--color-outline) solid 2px;
@@ -63,7 +68,7 @@
 
 	&__shortcut {
 		border: 1px dashed var(--secondary);
-		color: var(--secondary);
+		color: var(--color, #{color.scale(vars.$red-100, $lightness: 45%)});
 		display: var(--display, none);
 		align-items: center;
 		justify-content: center;
@@ -72,6 +77,9 @@
 		gap: vars.$spacer * 0.25;
 		align-self: center;
 
+		@include mx.dark-mode {
+			--color: #{color.scale(vars.$blue-100, $lightness: 45%)};
+		}
 		@include mx.breakpoint('md') {
 			--display: flex;
 		}
