@@ -133,7 +133,7 @@
 		&-content {
 			grid-area: content;
 			display: flex;
-			gap: vars.$spacer;
+			gap: vars.$spacer * 0.5;
 			padding: vars.$spacer * 0.5 0;
 			flex-wrap: wrap;
 			justify-content: var(--content-justify, center);
