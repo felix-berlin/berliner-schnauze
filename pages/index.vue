@@ -16,6 +16,7 @@
           <speedkit-picture
             critical
             v-bind="picture"
+            class="c-start-header__image"
             width="900"
             height="517"
           />

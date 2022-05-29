@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use './../variables/variables' as vars;
 @use './../mixins/mixins' as mx;
+@use 'sassy-scss/functions' as sassy-fn;
 
 .c-footer {
 	--space-walking: 40px;
@@ -18,23 +19,12 @@
 		display: flex;
 		gap: var(--gap, 5%);
 
-		&-image {
-			max-width: 100%;
-			height: auto;
-			position: relative;
-			bottom: calc(var(--to-bottom, -1.25) * var(--space-walking));
+		&-image-wrapper {
+			flex: 0 0 var(--basis-flex, 50%);
+			display: flex;
 
 			@include mx.breakpoint('md') {
-				--to-bottom: -1.7;
-			}
-
-			&-wrapper {
-				flex: 0 0 var(--basis-flex, 50%);
-				display: flex;
-
-				@include mx.breakpoint('md') {
-					--basis-flex: 40%;
-				}
+				--basis-flex: 40%;
 			}
 		}
 
@@ -53,17 +43,32 @@
 		}
 	}
 
+	.c-footer__farewell-image.nuxt-speedkit-picture {
+		max-width: 100%;
+		height: auto;
+		position: relative;
+		bottom: calc(var(--to-bottom, -1.25) * var(--space-walking));
+
+		@include mx.breakpoint('md') {
+			--to-bottom: -1.7;
+		}
+	}
+
 	&__ground {
 		--areas-template:
 			' . slogan slogan slogan . '
 			' nav nav nav nav nav ';
 
-		background-color: #{rgba(var(--primary), 0.4)};
+		background-color: var(--color-background, #{sassy-fn.hex-to-rgb(vars.$red-200, 40%)});
 		grid-area: ground;
 		display: grid;
 		grid-template-columns: var(--columns-template, var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame));
 		grid-template-areas: var(--areas-template);
 		padding-top: var(--space-walking);
+
+		@include mx.dark-mode {
+			--color-background: #{sassy-fn.hex-to-rgb(vars.$blue-200, 50%)};
+		}
 
 		a,
 		& {
@@ -128,7 +133,7 @@
 		&-content {
 			grid-area: content;
 			display: flex;
-			gap: vars.$spacer;
+			gap: vars.$spacer * 0.5;
 			padding: vars.$spacer * 0.5 0;
 			flex-wrap: wrap;
 			justify-content: var(--content-justify, center);

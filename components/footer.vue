@@ -9,18 +9,7 @@
           height="451"
         />
       </div>
-      <p v-if="$store.state.scrollPositionY > 2000 && $route.name === 'index'" class="c-footer__farewell-text">
-        Mensch, ditt war nen weiter Weg.
-      </p>
-      <p v-else-if="$route.name === 'index'" class="c-footer__farewell-text">
-        Knorke ditt du mich hier unten besuchst.
-      </p>
-      <p v-if="$route.name === 'imprint'" class="c-footer__farewell-text">
-        Na, allet klar?
-      </p>
-      <p v-if="$route.name === 'privacy-policy'" class="c-footer__farewell-text">
-        Keine Sorge, so viel weiß ich gar nicht über dich.
-      </p>
+      <p class="c-footer__farewell-text" v-text="farewellText()" />
     </div>
 
     <div class="c-footer__ground">
@@ -39,7 +28,7 @@
     </div>
     <div class="c-footer__end">
       <div class="c-footer__end-content">
-        <!-- <p>Website Version: {{ $config.appVersion }}</p> -->
+        <a href="https://github.com/felix-berlin/berliner-schnauze/releases">Website Version: {{ $config.appVersion }}</a>
         <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
       </div>
     </div>
@@ -68,6 +57,20 @@ export default {
         formats: ['avif', 'webp', 'jpg|jpeg|png'],
         title: 'laufender Bär',
         alt: 'laufender Bär'
+      }
+    }
+  },
+
+  methods: {
+    farewellText () {
+      if (this.$store.state.scrollPositionY > 2000 && this.$route.name === 'index') {
+        return 'Mensch, ditt war nen weiter Weg.'
+      } else if (this.$route.name === 'index') {
+        return 'Knorke ditt du mich hier unten besuchst.'
+      } else if (this.$route.name === 'imprint') {
+        return 'Na, allet klar?'
+      } else if (this.$route.name === 'privacy-policy') {
+        return 'Keine Sorge, so viel weiß ich gar nicht über dich.'
       }
     }
   }
