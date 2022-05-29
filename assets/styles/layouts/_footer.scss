@@ -44,9 +44,7 @@
 	}
 
 	.c-footer__farewell-image.nuxt-speedkit-picture {
-		max-width: 100%;
-		height: auto;
-		position: relative;
+		top: unset;
 		bottom: calc(var(--to-bottom, -1.25) * var(--space-walking));
 
 		@include mx.breakpoint('md') {
