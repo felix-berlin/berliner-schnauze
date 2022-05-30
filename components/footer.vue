@@ -2,12 +2,12 @@
   <footer class="c-footer">
     <div class="c-footer__farewell">
       <div class="c-footer__farewell-image-wrapper">
-        <speedkit-picture
+        <!-- <speedkit-picture
           v-bind="picture"
           class="c-footer__farewell-image"
           width="700"
           height="451"
-        />
+        /> -->
       </div>
       <p class="c-footer__farewell-text" v-text="farewellText()" />
     </div>
@@ -36,14 +36,14 @@
 </template>
 
 <script>
-import SpeedkitPicture from 'nuxt-speedkit/components/SpeedkitPicture'
+// import SpeedkitPicture from 'nuxt-speedkit/components/SpeedkitPicture'
 
 export default {
   name: 'FooterPart',
 
-  components: {
-    SpeedkitPicture
-  },
+  // components: {
+  //   SpeedkitPicture
+  // },
 
   data () {
     return {

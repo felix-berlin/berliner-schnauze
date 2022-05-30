@@ -25,7 +25,8 @@ export default defineNuxtConfig({
 
   alias: {
     styles: resolve(__dirname, './assets/styles'),
-    'sassy-scss': resolve(__dirname, './node_modules/@felix_berlin/sassy-scss/')
+    'sassy-scss': resolve(__dirname, './node_modules/@felix_berlin/sassy-scss/'),
+    tslib: 'tslib/tslib.es6.js'
   },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -88,7 +89,6 @@ export default defineNuxtConfig({
   buildModules: [
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
-    '@nuxtjs/svg',
     '@nuxtjs/color-mode',
     'lucide-vue/nuxt',
     '@nuxtjs/device',
@@ -103,7 +103,7 @@ export default defineNuxtConfig({
     // '@nuxt/image', // Speedkit comes with a own (modified) version of image
     '@nuxtjs/sitemap',
     'nuxt-speedkit',
-    '@nuxtjs/sentry',
+    // '@nuxtjs/sentry',
     '@nuxtjs/robots'
   ],
 

@@ -13,13 +13,13 @@
         </h1>
 
         <div class="c-start-header__image-wrap">
-          <speedkit-picture
+          <!-- <speedkit-picture
             critical
             v-bind="picture"
             class="c-start-header__image"
             width="900"
             height="517"
-          />
+          /> -->
         </div>
       </header>
 
@@ -42,7 +42,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import speedkitHydrate from 'nuxt-speedkit/hydrate'
-import SpeedkitPicture from 'nuxt-speedkit/components/SpeedkitPicture'
+// import SpeedkitPicture from 'nuxt-speedkit/components/SpeedkitPicture'
 
 export default {
   name: 'IndexPage',
@@ -51,8 +51,8 @@ export default {
     WordList: speedkitHydrate(() => import('@/components/word-list')),
     SearchWords: speedkitHydrate(() => import('@/components/search-words')),
     LetterFilter: speedkitHydrate(() => import('@/components/letter-filter')),
-    FilterDropdown: speedkitHydrate(() => import('@/components/filter-dropdown')),
-    SpeedkitPicture
+    FilterDropdown: speedkitHydrate(() => import('@/components/filter-dropdown'))
+    // SpeedkitPicture
   },
   data () {
     return {

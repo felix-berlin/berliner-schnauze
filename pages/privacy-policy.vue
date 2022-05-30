@@ -8,7 +8,7 @@
 export default {
   name: 'PrivacyPolicyPage',
 
-  async asyncData ({ $axios, $config, $sentry }) {
+  async useAsyncData ({ $axios, $config, $sentry }) {
     const privacyPolicy = await $axios.$get(`${$config.baseApiUrl}/wp-json/wp/v2/pages/4715`)
       .catch((error) => {
         $sentry.captureException(error)

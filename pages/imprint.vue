@@ -8,7 +8,7 @@
 export default {
   name: 'ImprintPage',
 
-  async asyncData ({ $axios, $config, $sentry }) {
+  async useAsyncData ({ $axios, $config, $sentry }) {
     const imprint = await $axios.$get(`${$config.baseApiUrl}/wp-json/wp/v2/pages/4712`)
       .catch((error) => {
         $sentry.captureException(error)
