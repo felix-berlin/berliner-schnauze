@@ -4,7 +4,7 @@
   "private": false,
   "scripts": {
     "dev": "nuxi dev",
-    "build": "nuxi build",
+    "build": "nuxt generate",
     "start": "nuxi preview",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
