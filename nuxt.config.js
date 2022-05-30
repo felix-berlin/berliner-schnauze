@@ -90,7 +90,8 @@ export default {
     'lucide-vue/nuxt',
     '@nuxtjs/device',
     '@nuxtjs/html-validator',
-    '@/modules/sitemap-route-generator'
+    '@/modules/sitemap-route-generator',
+    '@nuxtjs/pwa'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
