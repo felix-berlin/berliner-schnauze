@@ -86,7 +86,6 @@ export default {
   buildModules: [
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
-    '@nuxtjs/svg',
     '@nuxtjs/color-mode',
     'lucide-vue/nuxt',
     '@nuxtjs/device',
