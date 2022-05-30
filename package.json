@@ -1,7 +1,12 @@
 {
   "name": "berliner-schnauze",
+  "description": "Berliner Schnauze is an up-to-date Berlin dialect dictionary.",
   "version": "1.4.10",
   "private": false,
+  "author": {
+    "name": "Felix Scholze",
+    "email": "felix@webshaped.de"
+  },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",

@@ -68,6 +68,26 @@ export default {
     gzip: true
   },
 
+  pwa: {
+    meta: {
+      lang: 'de',
+      theme_color: '#2b333b'
+    },
+    manifest: {
+      name: 'Berliner Dialekt Wörterbuch - Berliner Schnauze',
+      short_name: 'Berliner Schnauze',
+      description: 'Berliner Schnauze is an up-to-date Berlin dialect dictionary.',
+      lang: 'de',
+      background_color: '#a9b3bd'
+    },
+    workbox: {
+      enabled: true,
+      config: {
+        debug: true
+      }
+    }
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~/assets/styles/app.scss'
