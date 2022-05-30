@@ -1,6 +1,8 @@
 import { resolve } from 'path'
+import { defineNuxtConfig } from '@nuxt/bridge'
 import { version } from './package.json'
-export default {
+
+export default defineNuxtConfig({
   publicRuntimeConfig: {
     baseUrl: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
     baseApiUrl: process.env.BASE_API_URL,
@@ -240,4 +242,4 @@ export default {
     usePrettier: true,
     failOnError: false
   }
-}
+})
