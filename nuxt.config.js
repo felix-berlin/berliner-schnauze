@@ -81,7 +81,7 @@ export default {
       background_color: '#a9b3bd',
       start_url: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
       id: '?standalone=true',
-      publicPath: process.env.NODE_ENV === 'production' ? 'https://pwa.berliner-schnauze.pages.dev/' : '/_nuxt/'
+      publicPath: process.env.NODE_ENV === 'production' ? 'https://pwa.berliner-schnauze.pages.dev/_nuxt/' : '/_nuxt/'
       // publicPath: process.env.NODE_ENV === 'production' ? process.env.BASE_URL + '/_nuxt/' : '/_nuxt/'
     },
     workbox: {
