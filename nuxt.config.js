@@ -79,17 +79,15 @@ export default {
       description: 'Berliner Schnauze is an up-to-date Berlin dialect dictionary.',
       lang: 'de',
       background_color: '#a9b3bd',
-      start_url: '/',
+      start_url: process.env.NODE_ENV === 'production' ? 'https://pwa.berliner-schnauze.pages.dev/' : 'http://localhost:3000/',
       crossorigin: 'use-credentials',
-      // start_url: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
-      id: '?standalone=true'
-      // publicPath: process.env.NODE_ENV === 'production' ? 'https://pwa.berliner-schnauze.pages.dev/_nuxt/' : '/_nuxt/'
-      // publicPath: process.env.NODE_ENV === 'production' ? process.env.BASE_URL + '/_nuxt/' : '/_nuxt/'
+      id: '?standalone=true',
+      display: 'standalone'
     },
     workbox: {
       enabled: true,
       config: {
-        debug: true
+        debug: process.env.NODE_ENV !== 'production'
       }
     }
   },
