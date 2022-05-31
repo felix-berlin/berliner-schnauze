@@ -92,3 +92,5 @@ sw.*
 .env
 
 sw.*
+
+static/workbox/*

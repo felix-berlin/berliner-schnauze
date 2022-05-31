@@ -86,8 +86,10 @@ export default {
     },
     workbox: {
       enabled: true,
+      workboxURL: 'workbox/workbox-sw.js',
       config: {
-        debug: process.env.NODE_ENV !== 'production'
+        debug: process.env.NODE_ENV !== 'production',
+        modulePathPrefix: '/workbox/'
       }
     }
   },
