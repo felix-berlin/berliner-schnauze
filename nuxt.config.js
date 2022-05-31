@@ -81,7 +81,8 @@ export default {
       background_color: '#a9b3bd',
       start_url: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
       id: '?standalone=true',
-      publicPath: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : '/_nuxt/'
+      publicPath: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : '/_nuxt/',
+      useWebmanifestExtension: true
     },
     workbox: {
       enabled: true,
@@ -90,6 +91,17 @@ export default {
       }
     }
   },
+
+  routes: [
+    {
+      src: '/sw.js',
+      continue: true,
+      headers: {
+        'Cache-Control': 'public, max-age=0, must-revalidate',
+        'Service-Worker-Allowed': '/'
+      }
+    }
+  ],
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
