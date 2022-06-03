@@ -51,7 +51,7 @@
     "eslint-plugin-vue": "9.0.1",
     "postcss-html": "1.4.1",
     "postcss-scss": "4.0.4",
-    "sass": "1.52.1",
+    "sass": "1.52.2",
     "sass-loader": "^10.2.1",
     "stylelint": "14.8.5",
     "stylelint-config-recommended-vue": "^1.4.0",
