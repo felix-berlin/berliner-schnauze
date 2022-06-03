@@ -86,12 +86,12 @@ export default {
     },
     workbox: {
       enabled: true,
-      // workboxURL: 'workbox/workbox-sw.js',
+      workboxURL: 'workbox/workbox-sw.js',
       // importScripts: ['/*'],
       preCaching: ['/suggest-word', '/imprint', '/privacy-policy'],
       config: {
-        debug: process.env.NODE_ENV !== 'production',
-        modulePathPrefix: '/workbox/'
+        debug: process.env.NODE_ENV !== 'production'
+        // modulePathPrefix: '/workbox/'
       }
     }
   },
