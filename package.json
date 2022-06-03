@@ -18,7 +18,7 @@
     "@nuxtjs/sentry": "^5.1.7",
     "@nuxtjs/sitemap": "^2.4.0",
     "@sentry/tracing": "6.19.7",
-    "core-js": "3.22.7",
+    "core-js": "3.22.8",
     "floating-vue": "1.0.0-beta.17",
     "fuse.js": "6.6.2",
     "lucide-vue": "0.57.0",
