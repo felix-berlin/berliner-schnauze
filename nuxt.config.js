@@ -86,7 +86,7 @@ export default {
     },
     workbox: {
       enabled: true,
-      workboxURL: 'workbox/workbox-sw.js',
+      // workboxURL: 'workbox/workbox-sw.js',
       // importScripts: ['/*'],
       preCaching: ['/suggest-word', '/imprint', '/privacy-policy'],
       config: {
