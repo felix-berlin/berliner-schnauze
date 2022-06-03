@@ -94,16 +94,16 @@ export default {
     }
   },
 
-  routes: [
-    {
-      src: '/sw.js',
-      continue: true,
-      headers: {
-        'Cache-Control': 'public, max-age=0, must-revalidate',
-        'Service-Worker-Allowed': '/'
-      }
-    }
-  ],
+  // routes: [
+  //   {
+  //     src: '/sw.js',
+  //     continue: true,
+  //     headers: {
+  //       'Cache-Control': 'public, max-age=0, must-revalidate',
+  //       'Service-Worker-Allowed': '/'
+  //     }
+  //   }
+  // ],
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
