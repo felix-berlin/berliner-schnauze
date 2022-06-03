@@ -90,8 +90,8 @@ export default {
       // importScripts: ['/*'],
       preCaching: ['/suggest-word', '/imprint', '/privacy-policy'],
       config: {
-        debug: process.env.NODE_ENV !== 'production'
-        // modulePathPrefix: '/workbox/'
+        debug: process.env.NODE_ENV !== 'production',
+        modulePathPrefix: '/workbox'
       }
     }
   },
