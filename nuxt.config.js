@@ -87,6 +87,7 @@ export default {
     workbox: {
       enabled: true,
       workboxURL: 'workbox/workbox-sw.js',
+      preCaching: ['/suggest-word', '/imprint', '/privacy-policy', '/workbox/workbox-sw.js'],
       config: {
         debug: process.env.NODE_ENV !== 'production',
         modulePathPrefix: '/workbox/'
