@@ -1,6 +1,6 @@
 
 <template>
-  <nav class="c-letter-filter" :class="modifier">
+  <nav class="c-letter-filter">
     <ul class="c-letter-filter__list u-list-reset">
       <li class="c-letter-filter__list-item" :class="{ 'is-current' : ($store.state.wordFilteredByLetter === null) }">
         <button class="c-letter-filter__button c-letter-filter__button--all c-button" type="button" @click="$store.dispatch('filterByLetter', null)">
@@ -32,13 +32,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'LetterFilter',
-
-  props: {
-    modifier: {
-      type: String,
-      default: ''
-    }
-  },
 
   data () {
     return {

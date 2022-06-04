@@ -27,7 +27,7 @@
         Filter
       </template>
       <template #content>
-        <LetterFilter :critical="true" modifier="c-letter-filter--mobile" />
+        <LetterFilter :critical="true" class="c-letter-filter--mobile" />
       </template>
     </Dropdown>
     <div v-if="getLetterFilter" class="c-filter-dropdown__active-filter" @click="$store.dispatch('filterByLetter', null)">

@@ -30,7 +30,7 @@
         placeholder="Durchsuche den Berliner-Wortschatz"
       />
 
-      <LetterFilter critical />
+      <LetterFilter critical class="c-letter-filter--desktop" />
 
       <FilterDropdown />
 
