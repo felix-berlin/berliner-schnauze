@@ -3,7 +3,12 @@
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-letter-filter {
+	display: var(--display, none);
 	margin: 0 0 vars.$spacer * 1.5 0;
+
+	@include mx.breakpoint('sm') {
+		--display: block;
+	}
 
 	&__list {
 		display: grid;
@@ -49,11 +54,5 @@
 		@include mx.breakpoint('sm', 'max') {
 			display: none;
 		}
-	}
-}
-
-.c-filter-dropdown {
-	@include mx.breakpoint('sm') {
-		display: none;
 	}
 }

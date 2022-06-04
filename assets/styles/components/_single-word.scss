@@ -9,6 +9,9 @@
 	background-color: rgba(#fff, 0.6);
 	border: 1px dashed var(--grey-100);
 	padding: vars.$spacer * 1.5;
+	display: flex;
+	flex-direction: column;
+	gap: 2.25rem;
 	box-shadow:
 		0 0.5px 0.6px rgb(0 0 0 / 8%),
 		0 4px 5px rgb(0 0 0 / 16%);
@@ -33,8 +36,24 @@
 	}
 
 	&__sub-headline {
-		margin: vars.$spacer * 2.25 0 vars.$spacer * 0.25 0;
+		margin: var(--spacing-outer, 0 0 vars.$spacer * 0.25 0);
 		font-size: 2rem;
+	}
+
+	&__word-type-wrapper {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 1rem;
+
+		.c-single-word__sub-headline {
+			--spacing-outer: 0;
+		}
+	}
+
+	&__word-type {
+		font-size: 1.5rem;
+		margin: 0;
 	}
 
 	&__translation {
@@ -51,6 +70,7 @@
 		width: var(--size-quote-icon);
 		height: var(--size-quote-icon);
 		fill: var(--grey-200);
+		flex: 0 0 auto;
 
 		@include mx.breakpoint('md') {
 			--size-quote-icon: 48px;

@@ -16,6 +16,7 @@
 		border: 1px solid vars.$grey-100;
 		display: flex;
 		flex-flow: column wrap;
+		gap: 1rem;
 		box-shadow:
 			0 0.5px 0.6px rgb(0 0 0 / 8%),
 			0 4px 5px rgb(0 0 0 / 16%);
@@ -29,12 +30,13 @@
 
 	&__header {
 		display: flex;
-		flex-direction: var(--direction-flex, column);
 		flex: 1 1 auto;
 		margin: 0;
+		flex-wrap: var(--warp-flex, wrap);
+		row-gap: #{vars.$spacer * 1};
 
 		@include mx.breakpoint('sm') {
-			--direction-flex: row;
+			--wrap-flex: no-wrap;
 		}
 
 		&-wrapper {
@@ -42,7 +44,7 @@
 			display: flex;
 
 			&.has-example {
-				padding-bottom: vars.$spacer * 1.5;
+				padding-bottom: vars.$spacer;
 
 				--bottom-border: 1px dashed var(--grey-100);
 			}
@@ -65,7 +67,11 @@
 		transition: 0.3s;
 		margin: 0;
 		word-break: break-word;
+		flex: var(--flex, 1 0 100%);
 
+		@include mx.breakpoint('sm') {
+			--flex: 0 1 auto;
+		}
 		@include mx.breakpoint('md') {
 			--size-font: 3rem;
 		}
@@ -96,14 +102,6 @@
 			}
 		}
 
-		&:first-of-type {
-			margin-top: var(--spacing-outer-top, #{vars.$spacer * 1});
-
-			@include mx.breakpoint('sm') {
-				--spacing-outer-top: 0;
-			}
-		}
-
 		@include mx.breakpoint('md') {
 			--font-size: 1.125rem;
 		}
@@ -113,16 +111,13 @@
 	}
 
 	&__examples {
+		display: flex;
+		flex-direction: column;
+		gap: vars.$spacer;
 		padding-left: vars.$spacer;
 
 		&-item {
 			font-style: italic;
-		}
-
-		&-list-item {
-			&:not(:last-of-type) {
-				margin-bottom: 1rem;
-			}
 		}
 	}
 
@@ -139,29 +134,33 @@
 
 		&-explanation {
 			font-size: 1rem;
-			margin-top: vars.$spacer * 0.5;
+			margin: 0;
 		}
+	}
+
+	&__single-example,
+	&__examples-list-item {
+		display: flex;
+		flex-direction: column;
+		gap: vars.$spacer * 0.5;
 	}
 
 	&__example {
 		font-style: italic;
 
 		&-wrapper {
-			--padding-y: #{vars.$spacer};
-			--padding-x: var(--padding-y);
+			--padding: 0 #{vars.$spacer} #{vars.$spacer} #{vars.$spacer};
 
 			display: flex;
-			padding: var(--padding-y) var(--padding-x);
+			padding: var(--padding);
 			gap: var(--gap, #{vars.$spacer * 0.5});
 
 			@include mx.breakpoint('sm') {
 				--gap: #{vars.$spacer};
-				--padding-y: #{vars.$spacer * 1.5};
-				--padding-x: 5%;
+				--padding: 0 5% #{vars.$spacer * 0.5} 5%;
 			}
 			@include mx.breakpoint('md') {
-				--padding-y: #{vars.$spacer * 2.5};
-				--padding-x: 10%;
+				--padding: 0 10% #{vars.$spacer * 0.5} 10%;
 			}
 		}
 	}
@@ -180,7 +179,8 @@
 	&__quote-icon {
 		width: var(--size-quote-icon);
 		height: var(--size-quote-icon);
-		fill: vars.$grey-100;
+		fill: var(--grey-200);
+		flex: 0 0 auto;
 
 		@include mx.breakpoint('md') {
 			--size-quote-icon: 44px;

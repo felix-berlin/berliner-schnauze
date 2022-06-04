@@ -15,17 +15,28 @@
         <Info /> <a :href="word.learn_more" target="_blank" class="c-single-word__learn-more-link">Erfahre mehr über dieses Wort <span class="c-single-word__learn-more-link-icon"><ExternalLink :size="10" /></span></a>
       </div>
 
-      <h2 v-if="word.translations" class="c-single-word__sub-headline">
-        Bedeutung:
-      </h2>
-      <ul class="c-single-word__translation">
-        <WordTranslations v-for="(translation, translationIndex) in word.translations" :key="translationIndex" :translation="translation" elements="li" class="c-single-word__translation-item" />
-      </ul>
+      <div class="c-single-word__word-type-wrapper">
+        <h2 v-if="word.word_type" class="c-single-word__sub-headline">
+          Wortart:
+        </h2>
+        <p class="c-single-word__word-type" v-text="word.word_type[0].name" />
+      </div>
 
-      <h2 v-if="word.examples" class="c-single-word__sub-headline">
-        Beispiel:
-      </h2>
-      <WordExamples :examples="word.examples" root-bem-class="c-single-word" />
+      <div class="c-single-word__translation-wrapper">
+        <h2 v-if="word.translations" class="c-single-word__sub-headline">
+          Bedeutung:
+        </h2>
+        <ul class="c-single-word__translation">
+          <WordTranslations v-for="(translation, translationIndex) in word.translations" :key="translationIndex" :translation="translation" elements="li" class="c-single-word__translation-item" />
+        </ul>
+      </div>
+
+      <div class="c-single-word__examples-wrapper">
+        <h2 v-if="word.examples" class="c-single-word__sub-headline">
+          Beispiel:
+        </h2>
+        <WordExamples :examples="word.examples" root-bem-class="c-single-word" />
+      </div>
 
       <div v-if="word.related_words" class="c-single-word__related-words-wrapper">
         <h3>Verwandte Worte:</h3>

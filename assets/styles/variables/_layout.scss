@@ -1,12 +1,14 @@
+@use './../functions/functions' as fn;
+
 // Breakpoint Vars
-$xxs: 375px; // Smartphone Portrait
-$xs: 568px; // Smartphone Landscape
-$sm: 768px; // Tablet Portrait
-$md: 1024px; // Tablet Landscape
-$lg: 1260px; // Kleinerer Desktop
-$xlg: 1440px; // Widescreen
-$fhd: 1920px; // Full HD
-$uhd: 2560px; // UHD
+$xxs: fn.px-to-rem(375); // Smartphone Portrait
+$xs: fn.px-to-rem(568); // Smartphone Landscape
+$sm: fn.px-to-rem(768); // Tablet Portrait
+$md: fn.px-to-rem(1024); // Tablet Landscape
+$lg: fn.px-to-rem(1260); // Kleinerer Desktop
+$xlg: fn.px-to-rem(1440); // Widescreen
+$fhd: fn.px-to-rem(1920); // Full HD
+$uhd: fn.px-to-rem(2560); // UHD
 
 // Breakpoint Map
 $custom-breakpoints: (

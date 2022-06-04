@@ -1,6 +1,6 @@
 {
   "name": "berliner-schnauze",
-  "version": "1.4.10",
+  "version": "1.4.11",
   "private": false,
   "scripts": {
     "dev": "nuxt",

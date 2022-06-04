@@ -3,10 +3,14 @@
 @use 'sassy-scss/mixins' as sassy-mx;
 
 .c-filter-dropdown {
-	display: flex;
+	display: var(--display, flex);
 	align-items: center;
 	margin-bottom: vars.$spacer * 1.5;
 	gap: vars.$spacer * 0.5;
+
+	@include mx.breakpoint('sm') {
+		--display: none;
+	}
 
 	.c-letter-filter__list {
 		display: grid;

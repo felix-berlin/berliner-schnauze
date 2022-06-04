@@ -30,11 +30,11 @@
         placeholder="Durchsuche den Berliner-Wortschatz"
       />
 
-      <LetterFilter critical modifier="c-letter-filter--desktop" />
+      <LetterFilter critical />
 
       <FilterDropdown />
 
-      <WordList critical />
+      <WordList />
     </main>
   </div>
 </template>
