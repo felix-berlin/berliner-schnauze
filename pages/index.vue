@@ -34,7 +34,7 @@
 
       <FilterDropdown />
 
-      <WordList />
+      <WordList critical />
     </main>
   </div>
 </template>
