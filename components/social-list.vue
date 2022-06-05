@@ -6,7 +6,8 @@
           v-tooltip="{
             content: social.tooltip,
             disabled: (social.tooltip.length ? false : true) || hideTooltips,
-            distance: 9
+            distance: 9,
+            container: '.c-menu-nav'
           }"
           :href="social.link"
           :aria-label="social.ariaLabel"
@@ -23,7 +24,6 @@
     </ul>
   </div>
 </template>
-  </div>
 
 <script>
 import { Github, Facebook, Twitter } from 'lucide-vue'
