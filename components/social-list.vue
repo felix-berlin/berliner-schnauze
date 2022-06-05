@@ -6,7 +6,7 @@
           v-tooltip="{
             content: social.tooltip,
             disabled: (social.tooltip.length ? false : true) || hideTooltips,
-            distance: 18
+            distance: 9
           }"
           :href="social.link"
           :aria-label="social.ariaLabel"

@@ -27,20 +27,21 @@
         />
       </dl>
 
-      <Dropdown
-        menu-align="left"
-        :modifier="['c-word-list--word-option']"
-        button-modifier="c-button--center-icon c-button--word-option c-button--dashed-border"
-        button-aria-label="Wort Menu öffnen"
-        :delay-close="wordButtonClicked ? 1600 : 0"
+      <VDropdown
+        placement="bottom-end"
+        class="c-word-list--word-option"
+        distance="9"
+        :delay="wordButtonClicked ? {hide: 10000} : {hide: 0}"
+        :shown="wordButtonClicked"
+        theme="word-options"
       >
-        <template #title>
+        <button type="button" class="c-button c-button--center-icon c-button--word-option c-button--dashed-border" aria-label="Website Menu Navigation">
           <span class="u-icon-untouchable c-button--center-icon">
             <MoreVertical :size="18" />
           </span>
-        </template>
+        </button>
 
-        <template #content>
+        <template #popper>
           <button
             ref="copyUrlButton"
             aria-label="Link zum Wort kopieren"
@@ -74,7 +75,7 @@
             <span class="c-word-list__copy-text">Wort kopieren</span>
           </button>
         </template>
-      </Dropdown>
+      </VDropdown>
     </div>
 
     <WordExamples :examples="source.examples" />
@@ -86,7 +87,7 @@
 </template>
 
 <script>
-import { Copy, CheckCircle2, MoreVertical, Info } from 'lucide-vue'
+import { Copy, CheckCircle2, MoreVertical, Info, Link } from 'lucide-vue'
 
 export default {
   name: 'WordSingle',
@@ -95,7 +96,9 @@ export default {
     Copy,
     CheckCircle2,
     MoreVertical,
-    Info
+    Info,
+    // eslint-disable-next-line
+    Link
   },
   props: {
     index: {

@@ -127,7 +127,7 @@ export default {
     ...mapState({
       search: state => state.searchWord
     }),
-    ...mapGetters(['getLetterFilter, updateScrollPositionY'])
+    ...mapGetters(['getLetterFilter, getScrollPositionY'])
   },
 
   watch: {
@@ -144,7 +144,7 @@ export default {
     }
 
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === 'updateScrollPositionY') {
+      if (mutation.type === 'getScrollPositionY') {
         if (state.scrollPositionY < 200) {
           this.scrollToResultsTriggert = false
           this.scrollbarVisable = true

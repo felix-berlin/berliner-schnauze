@@ -21,9 +21,8 @@
 
         <ColorModeButton class="c-menu-nav__item c-menu-nav__item-button u-button-reset" :class="{'is-hidden': searchbarVisable}" />
 
-        <!-- TODO: Exchange the Dropdown Component with VMenu -->
-        <!-- <VMenu placement="bottom-end">
-          <button type="button" class="c-dropdown__button c-button" aria-label="hier">
+        <VMenu placement="bottom-end" :distance="9" class="c-menu-nav__item c-menu-more">
+          <button type="button" class="c-button c-menu-nav__item-button u-button-reset c-button--center-icon" aria-label="Website Menu Navigation">
             <span v-show="$device.isDesktop" class="u-icon-untouchable u-icon-wrapper">
               <Menu />
             </span>
@@ -42,32 +41,7 @@
               </li>
             </ul>
           </template>
-        </VMenu> -->
-
-        <Dropdown
-          :modifier="[{'is-hidden': searchbarVisable}, 'c-menu-nav__item c-menu-more']"
-          button-modifier="c-menu-nav__item-button u-button-reset c-button--center-icon"
-          button-aria-label="Website Menu Navigation"
-        >
-          <template #title>
-            <span v-show="$device.isDesktop" class="u-icon-untouchable u-icon-wrapper">
-              <Menu />
-            </span>
-            <span v-show="$device.isMobileOrTablet" class="u-icon-untouchable u-icon-wrapper">
-              <MoreVertical />
-            </span>
-          </template>
-          <template #content>
-            <SocialList list-modifier="c-social-list--mobile-dropdown" :hide-tooltips="true" />
-            <ul class="c-menu-more__list u-list-reset">
-              <li v-for="(item, index) in menuItems" :key="index" class="c-menu-more__item">
-                <NuxtLink :to="item.link">
-                  {{ item.title }}
-                </NuxtLink>
-              </li>
-            </ul>
-          </template>
-        </Dropdown>
+        </VMenu>
       </div>
 
       <SocialList modifier="c-social-list--desktop" list-link-modifier="c-menu-nav__item-link" list-modifier="u-list-vertical" />
@@ -78,13 +52,11 @@
 <script>
 import { Menu, MoreVertical } from 'lucide-vue'
 import { mapGetters } from 'vuex'
-import Dropdown from './dropdown.vue'
 
 export default {
   name: 'HeaderPart',
 
   components: {
-    Dropdown,
     // eslint-disable-next-line
     Menu,
     MoreVertical

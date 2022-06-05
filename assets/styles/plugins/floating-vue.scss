@@ -1,19 +1,43 @@
 @use './../../../node_modules/floating-vue/dist/style.css';
 @use './../variables/variables' as vars;
+@use './../mixins/mixins' as mx;
 
-.v-popper--theme-berliner-schnauze .v-popper__inner {
-	background: vars.$grey-100;
-	color: vars.$white-100;
-	padding: vars.$spacer * 0.5;
-	border: none;
-	border-radius: 0;
-	max-width: 250px;
+.v-popper__popper {
+	--color-background: var(--secondary);
+
+	.v-popper__inner {
+		background-color: var(--color-background);
+		padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
+		color: var(--color, var(--primary));
+		border: none;
+		border-radius: 0;
+		max-width: 100%;
+		min-width: var(--width-min, fit-content);
+	}
+
+	.v-popper__arrow-inner,
+	.v-popper__arrow-outer {
+		border-color: var(--color-background);
+	}
 }
 
-.v-popper--theme-berliner-schnauze .v-popper__arrow-outer {
-	border-color: vars.$grey-100;
+.v-popper--theme-dropdown,
+.v-popper--theme-menu {
+	.v-popper__inner {
+		--padding: #{vars.$spacer vars.$spacer * 1.5};
+	}
 }
 
-.v-popper--theme-berliner-schnauze .v-popper__arrow-inner {
-	visibility: hidden;
+.v-popper--theme-word-options {
+	--color-background: var(--white-100);
+
+	.v-popper__inner {
+		--padding: #{vars.$spacer * 0.25};
+
+		> div {
+			display: flex;
+			flex-direction: column;
+			gap: vars.$spacer * 0.25;
+		}
+	}
 }

@@ -1,14 +1,14 @@
 
 <template>
   <div class="c-filter-dropdown">
-    <Dropdown
-      :critical="true"
-      menu-align="right"
-      :modifier="['c-filter-dropdown__dropdown']"
-      :button-modifier="[{'has-active-filter': getLetterFilter}, 'c-button--center-icon']"
-      button-aria-label="Filter"
+    <VDropdown
+      placement="bottom"
+      popper-class="c-filter-dropdown__dropdown"
+      distance="9"
+      container=".c-filter-dropdown"
+      :skidding="129"
     >
-      <template #title>
+      <button type="button" :class="[{'has-active-filter': getLetterFilter}, 'c-button c-button--center-icon c-filter-dropdown__button']" aria-label="Filter">
         <span class="u-icon-untouchable c-button--center-icon">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -25,11 +25,13 @@
           </svg>
         </span>
         Filter
-      </template>
-      <template #content>
+      </button>
+
+      <template #popper>
         <LetterFilter :critical="true" class="c-letter-filter--mobile" />
       </template>
-    </Dropdown>
+    </VDropdown>
+
     <div v-if="getLetterFilter" class="c-filter-dropdown__active-filter" @click="$store.dispatch('filterByLetter', null)">
       <span>{{ getLetterFilter }}</span><span><X :size="10" /></span>
     </div>

@@ -71,6 +71,13 @@ export const getters = {
       return 0
     })
   },
+
+  /**
+   * Returns all words filtered by letter
+   *
+   * @param {Array} state
+   * @returns Array
+   */
   getWordsFilteredByLetter (state) {
     return state.words.filter(item => item.group === state.wordFilteredByLetter)
   },

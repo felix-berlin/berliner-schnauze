@@ -29,12 +29,7 @@
 		}
 	}
 
-	.c-dropdown__menu {
-		--padding: #{vars.$spacer};
-		--offset: #{vars.$spacer * 0.5};
-	}
-
-	.c-dropdown__button {
+	&__button {
 		--padding: #{vars.$spacer * 0.25 vars.$spacer * 0.5};
 
 		gap: vars.$spacer * 0.25;
