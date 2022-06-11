@@ -12,6 +12,8 @@
           /> Wörter uff dich!
         </h1>
 
+        <show-random-word />
+
         <div class="c-start-header__image-wrap">
           <speedkit-picture
             critical

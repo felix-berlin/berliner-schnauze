@@ -79,6 +79,7 @@ export default {
     '@plugins/fuse',
     '@plugins/vue-uuid',
     '@modules/smooth-scroll-to',
+    '@modules/random-element',
     { src: '~/plugins/vue-matomo.js', ssr: false }
   ],
 
