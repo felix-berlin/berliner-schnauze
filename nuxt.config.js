@@ -90,7 +90,8 @@ export default {
     'lucide-vue/nuxt',
     '@nuxtjs/device',
     '@nuxtjs/html-validator',
-    '@/modules/sitemap-route-generator'
+    '@/modules/sitemap-route-generator',
+    'nuxt-graphql-request'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -103,6 +104,25 @@ export default {
     '@nuxtjs/sentry',
     '@nuxtjs/robots'
   ],
+
+  graphql: {
+    /**
+     * An Object of your GraphQL clients
+     */
+    clients: {
+      default: {
+        /**
+         * The client endpoint url
+         */
+        endpoint: process.env.BASE_API_URL + '/api',
+        /**
+         * Per-client options overrides
+         * See: https://github.com/prisma-labs/graphql-request#passing-more-options-to-fetch
+         */
+        options: {}
+      }
+    }
+  },
 
   sentry: {
     // Additional Module Options go here

@@ -1,3 +1,5 @@
+import { gql } from 'nuxt-graphql-request'
+
 export const state = () => ({
   words: [],
   wordGroups: [],
@@ -7,7 +9,8 @@ export const state = () => ({
   loadingWords: false,
   scrollPositionY: null,
   wordFilteredByLetter: null,
-  wordSortDirection: 'desc'
+  wordSortDirection: 'desc',
+  berlinWordsQl: []
 })
 
 // const sortFuctions = {
@@ -140,6 +143,45 @@ export const actions = {
   async nuxtServerInit ({ commit, $sentry }) {
     commit('wordLoadingStatus', true)
 
+    const query = gql`
+      query GetBerlinerWords {
+        berlinerWords(
+          where: {status: PUBLISH, orderby: {field: TITLE, order: ASC}, hasPassword: false}
+        ) {
+          nodes {
+            date
+            id
+            slug
+            modified
+            berlinerWordId
+            wordGroup
+            berlinerischWordTypes {
+              nodes {
+                name
+              }
+            }
+            wordProperties {
+              article
+              berlinerisch
+              learnMore
+              examples {
+                example
+                exampleExplanation
+              }
+              translations {
+                translation
+              }
+              alternativeWords {
+                alternativeWord
+              }
+            }
+          }
+        }
+      }
+      `
+    const words = await this.$graphql.default.request(query)
+    commit('setBerlinWordsQl', words)
+
     return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/words`)
       .then(res => res.json())
       .then((res) => {
@@ -176,5 +218,6 @@ export const mutations = {
   updateSearchbarIsVisable: (state, visable) => (state.searchbarIsVisable = visable),
   updateScrollPositionY: (state, position) => (state.scrollPositionY = position),
   updateWordSortDirection: (state, direction) => (state.wordSortDirection = direction),
-  updateWordFilteredLetter: (state, letter) => (state.wordFilteredByLetter = letter)
+  updateWordFilteredLetter: (state, letter) => (state.wordFilteredByLetter = letter),
+  setBerlinWordsQl: (state, words) => ({ ...state.berlinWordsQl, ...words })
 }
