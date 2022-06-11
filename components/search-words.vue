@@ -165,7 +165,7 @@ export default {
 
   beforeDestroy () {
     this.unsubscribe()
-    window.addEventListener('keydown', this.triggerKeyboardSearch)
+    window.removeEventListener('keydown', this.triggerKeyboardSearch)
   },
 
   methods: {

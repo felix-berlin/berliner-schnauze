@@ -23,10 +23,10 @@
 
         <VMenu placement="bottom-end" :distance="9" strategy="fixed" container=".c-menu-nav" class="c-menu-nav__item c-menu-more">
           <button type="button" class="c-button c-menu-nav__item-button u-button-reset c-button--center-icon" aria-label="Website Menu Navigation">
-            <span v-show="$device.isDesktop" class="u-icon-untouchable u-icon-wrapper">
+            <span v-show="$device.isDesktop" class="u-icon-untouchable u-icon-wrapper c-button--center-icon">
               <Menu />
             </span>
-            <span v-show="$device.isMobileOrTablet" class="u-icon-untouchable u-icon-wrapper">
+            <span v-show="$device.isMobileOrTablet" class="u-icon-untouchable u-icon-wrapper c-button--center-icon">
               <MoreVertical />
             </span>
           </button>
