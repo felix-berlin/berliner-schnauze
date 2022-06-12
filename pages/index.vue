@@ -12,7 +12,7 @@
           /> Wörter uff dich!
         </h1>
 
-        <show-random-word />
+        <WordOfTheDay critical />
 
         <div class="c-start-header__image-wrap">
           <speedkit-picture
@@ -54,6 +54,7 @@ export default {
     SearchWords: speedkitHydrate(() => import('@/components/search-words')),
     LetterFilter: speedkitHydrate(() => import('@/components/letter-filter')),
     FilterDropdown: speedkitHydrate(() => import('@/components/filter-dropdown')),
+    WordOfTheDay: speedkitHydrate(() => import('@/components/word-of-the-day')),
     SpeedkitPicture
   },
   data () {
