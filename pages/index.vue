@@ -71,6 +71,7 @@ export default {
       }
     }
   },
+
   // async asyncData ({ store, $sentry }) {
   //   store.commit('wordLoadingStatus', true)
 

@@ -66,7 +66,6 @@ export default {
     Menu,
     MoreVertical
   },
-
   data () {
     return {
       menuItems: [

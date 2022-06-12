@@ -44,7 +44,6 @@ export default {
   components: {
     SpeedkitPicture
   },
-
   data () {
     return {
       picture: {

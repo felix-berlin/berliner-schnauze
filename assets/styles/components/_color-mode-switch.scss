@@ -20,7 +20,7 @@
 			--width-border: 2px;
 			--height: 22px;
 
-			&:hover:not(:checked):not(:disabled) {
+			&:hover:not(:checked, :disabled) {
 				--color-border: var(--white-100);
 			}
 

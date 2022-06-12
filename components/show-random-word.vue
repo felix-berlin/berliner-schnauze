@@ -1,18 +1,32 @@
 <template>
   <div>
-    <p>{{ $store.state.wordOfTheDay }}</p>
-    <p>{{ timeToUpdate }}</p>
+    <!-- <p>{{ word.ID }}</p> -->
+    <h1 v-if="wort.length">
+      Nuxt Mountains
+    </h1>
+    <ul>
+      <li v-for="(mountain, index) of mountains" :key="index">
+        {{ mountain.title }}
+      </li>
+    </ul>
+    <p>
+      pending
+    </p>
+    <button @click="() => $fetch">
+      Refresh
+    </button>
+    <!-- <p>{{ timeToUpdate }}</p>
     <button @click="resetAtMidnight">
       RANDOM
     </button>
     <nuxt-link :to="'words/' + randomWord()">
       RANDOM
-    </nuxt-link>
+    </nuxt-link> -->
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 
 export default {
   name: 'ShowRandomWord',
@@ -21,87 +35,113 @@ export default {
     return {
       // wordOfTheDay: '',
       countDown: null,
-      timeToUpdate: null
+      timeToUpdate: null,
+      word: {},
+      mountains: [],
+      wort: {}
     }
+  },
+  fetchOnServer: false,
+  fetchKey: 'site-sidebar',
+  async fetch ({ $axios, $config }) {
+    this.mountains = await fetch(
+      'https://api.nuxtjs.dev/mountains'
+    ).then(res => res.json())
+    console.log('JA')
+    this.wort = await $axios.$get(`${$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
+      .then(res => res.json())
+
+    // this.word = wordOfTheDay
+    // console.log(wordOfTheDay)
+    // return { wordOfTheDay }
   },
 
   computed: {
-    ...mapGetters(['berlinerWords', 'resetAtMidnight2'])
+    // ...mapGetters(['berlinerWords'])
   },
 
-  created () {
-    this.countDown = this.resetAtMidnight()
-    this.countDownTimer()
+  async created () {
+    // this.countDown = this.resetAtMidnight()
+    // this.countDownTimer()
+    this.word = await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
+      .then(res => res.json())
   },
 
-  mounted () {
-    this.setWord()
-  },
+  // async mounted () {
+  //   // this.setWord()
+  //   this.mountains = await fetch(
+  //     'https://api.nuxtjs.dev/mountains'
+  //   ).then(res => res.json())
+
+  //   this.word = await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
+  //     .then(res => res.json())
+  // },
 
   methods: {
-    randomWord () {
-      return this.$randomElement(this.berlinerWords).berlinerisch
-    },
 
-    countDownTimer () {
-      if (this.countDown > 0) {
-        setTimeout(() => {
-          let milliseconds = this.resetAtMidnight()
-          milliseconds -= 1
+    // randomWord () {
+    //   return this.$randomElement(this.berlinerWords).berlinerisch
+    // },
 
-          this.timeToUpdate = this.convertMsToTime(milliseconds)
+    // countDownTimer () {
+    //   if (this.countDown > 0) {
+    //     setTimeout(() => {
+    //       let milliseconds = this.resetAtMidnight()
+    //       milliseconds -= 1
 
-          this.countDown -= 1
-          this.countDownTimer()
-        }, 1000)
-      }
-    },
+    //       this.timeToUpdate = this.convertMsToTime(milliseconds)
 
-    resetAtMidnight () {
-      const now = new Date()
-      const night = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + 1, // the next day, ...
-        0, 0, 0 // ...at 00:00:00 hours
-      )
+    //       this.countDown -= 1
+    //       this.countDownTimer()
+    //     }, 1000)
+    //   }
+    // },
 
-      // console.log(night.getTime() - now.getTime())
-      return night.getTime() - now.getTime()
-    },
+    // resetAtMidnight () {
+    //   const now = new Date()
+    //   const night = new Date(
+    //     now.getFullYear(),
+    //     now.getMonth(),
+    //     now.getDate() + 1, // the next day, ...
+    //     0, 0, 0 // ...at 00:00:00 hours
+    //   )
 
-    setWord () {
-      if (!this.$store.state.wordOfTheDay) {
-        console.log('no word')
-        this.$store.commit('updateWordOfTheDay', this.randomWord())
-      }
+    //   // console.log(night.getTime() - now.getTime())
+    //   return night.getTime() - now.getTime()
+    // },
 
-      setTimeout(function () {
-        this.wordOfTheDay = this.randomWord() //      <-- This is the function being called at midnight.
-        this.resetAtMidnight() //      Then, reset again next midnight.
-      }, this.resetAtMidnight())
-    },
+    // setWord () {
+    //   if (!this.$store.state.wordOfTheDay) {
+    //     // console.log('no word')
+    //     this.$store.commit('updateWordOfTheDay', this.randomWord())
+    //   }
 
-    padTo2Digits (num) {
-      return num.toString().padStart(2, '0')
-    },
+    //   setTimeout(function () {
+    //     this.wordOfTheDay = this.randomWord() //      <-- This is the function being called at midnight.
+    //     this.resetAtMidnight() //      Then, reset again next midnight.
+    //   }, this.resetAtMidnight())
+    // },
 
-    convertMsToTime (milliseconds) {
-      let seconds = Math.floor(milliseconds / 1000)
-      const minutes = Math.floor(seconds / 60)
-      let hours = Math.floor(minutes / 60)
+    // padTo2Digits (num) {
+    //   return num.toString().padStart(2, '0')
+    // },
 
-      seconds = seconds % 60
-      // minutes = minutes % 60
+    // convertMsToTime (milliseconds) {
+    //   let seconds = Math.floor(milliseconds / 1000)
+    //   const minutes = Math.floor(seconds / 60)
+    //   let hours = Math.floor(minutes / 60)
 
-      // 👇️ If you don't want to roll hours over, e.g. 24 to 00
-      // 👇️ comment (or remove) the line below
-      // commenting next line gets you `24:00:00` instead of `00:00:00`
-      // or `36:15:31` instead of `12:15:31`, etc.
-      hours = hours % 24
+    //   seconds = seconds % 60
+    //   // minutes = minutes % 60
 
-      return `${this.padTo2Digits(hours)}:${this.padTo2Digits(minutes)}:${this.padTo2Digits(seconds)}`
-    }
+    //   // 👇️ If you don't want to roll hours over, e.g. 24 to 00
+    //   // 👇️ comment (or remove) the line below
+    //   // commenting next line gets you `24:00:00` instead of `00:00:00`
+    //   // or `36:15:31` instead of `12:15:31`, etc.
+    //   hours = hours % 24
+
+    //   return `${this.padTo2Digits(hours)}:${this.padTo2Digits(minutes)}:${this.padTo2Digits(seconds)}`
+    // }
   }
 }
 </script>
