@@ -1,60 +1,33 @@
 <template>
   <div>
-    <p>{{ word.berlinerisch }}</p>
-    <h1 v-if="wort.length">
-      Nuxt Mountains
-    </h1>
-    <ul>
-      <li v-for="(mountain, index) of mountains" :key="index">
-        {{ mountain.title }}
-      </li>
-    </ul>
-    <p>
-      pending
-    </p>
-    <button @click="$fetch">
-      Refresh
-    </button>
-    <!-- <p>{{ timeToUpdate }}</p>
-    <button @click="resetAtMidnight">
-      RANDOM
-    </button>
-    <nuxt-link :to="'words/' + randomWord()">
-      RANDOM
-    </nuxt-link> -->
+    <p>Nächstes Update: {{ timeToUpdate }}</p>
+    <NuxtLink :to="'/words/' + wordOfTheDay.ID">
+      {{ wordOfTheDay.berlinerisch }}
+    </NuxtLink>
   </div>
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
-
 export default {
   name: 'WordOfTheDay',
   fetchOnServer: false,
-  fetchKey: 'site-sidebar',
+  fetchKey: 'word-of-the-day',
   data () {
     return {
-      // wordOfTheDay: '',
+      wordOfTheDay: [],
       countDown: null,
-      timeToUpdate: null,
-      word: [],
-      mountains: [],
-      wort: {},
-      state: this.$fetchState
+      timeToUpdate: null
     }
   },
 
   async fetch () {
-    this.word = await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
+    this.wordOfTheDay = await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
       .then(res => res.json())
       .catch((err) => { this.$sentry.captureException(err) })
   },
 
-  computed: {
-    // ...mapGetters(['berlinerWords'])
-  },
   activated () {
-    if (this.$fetchState.timestamp <= Date.now() - 10000) {
+    if (this.$fetchState.timestamp <= Date.now() - this.countDown) {
       this.$fetch()
     }
   },
@@ -62,10 +35,6 @@ export default {
   created () {
     this.countDown = this.resetAtMidnight()
     this.countDownTimer()
-  },
-
-  mounted () {
-
   },
 
   methods: {
@@ -93,33 +62,21 @@ export default {
         0, 0, 0 // ...at 00:00:00 hours
       )
 
-      // console.log(night.getTime() - now.getTime())
       return night.getTime() - now.getTime()
     },
 
-    // setWord () {
-    //   if (!this.$store.state.wordOfTheDay) {
-    //     // console.log('no word')
-    //     this.$store.commit('updateWordOfTheDay', this.randomWord())
-    //   }
-
-    //   setTimeout(function () {
-    //     this.wordOfTheDay = this.randomWord() //      <-- This is the function being called at midnight.
-    //     this.resetAtMidnight() //      Then, reset again next midnight.
-    //   }, this.resetAtMidnight())
-    // },
-
+    // @link: https://bobbyhadz.com/blog/javascript-convert-milliseconds-to-hours-minutes-seconds
     padTo2Digits (num) {
       return num.toString().padStart(2, '0')
     },
 
     convertMsToTime (milliseconds) {
       let seconds = Math.floor(milliseconds / 1000)
-      const minutes = Math.floor(seconds / 60)
+      let minutes = Math.floor(seconds / 60)
       let hours = Math.floor(minutes / 60)
 
       seconds = seconds % 60
-      // minutes = minutes % 60
+      minutes = minutes % 60
 
       // 👇️ If you don't want to roll hours over, e.g. 24 to 00
       // 👇️ comment (or remove) the line below
