@@ -1,20 +1,34 @@
 <template>
-  <div>
-    <p>Nächstes Update: {{ timeToUpdate }}</p>
-    <NuxtLink :to="'/words/' + wordOfTheDay.ID">
+  <div class="c-word-of-the-day">
+    <div class="c-word-of-the-day__icon">
+      <Crown />
+    </div>
+    <NuxtLink :to="'/words/' + wordOfTheDay.ID" class="c-word-of-the-day__word">
       {{ wordOfTheDay.berlinerisch }}
     </NuxtLink>
+    <p class="c-word-of-the-day__headline">
+      Wort des Tages:
+    </p>
+    <div class="c-word-of-the-day__update">
+      Neues Wort in: {{ timeToUpdate }}
+    </div>
   </div>
 </template>
 
 <script>
+import { Crown } from 'lucide-vue'
+
 export default {
   name: 'WordOfTheDay',
-  fetchOnServer: false,
   fetchKey: 'word-of-the-day',
+
+  components: {
+    Crown
+  },
+
   data () {
     return {
-      wordOfTheDay: [],
+      wordOfTheDay: {},
       countDown: null,
       timeToUpdate: null
     }

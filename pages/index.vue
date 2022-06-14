@@ -1,6 +1,7 @@
 <template>
   <div class="c-content">
     <main class="c-main">
+      <WordOfTheDay critical />
       <header class="c-start-header">
         <h1 class="c-start-header__headline">
           Na Keule,<br> keen'n Dunst vom Berlinern?<br><br> Dann mal uff-jepasst,<br> hier warten <span
@@ -11,8 +12,6 @@
             v-text="berlinerWordCount"
           /> Wörter uff dich!
         </h1>
-
-        <WordOfTheDay critical />
 
         <div class="c-start-header__image-wrap">
           <speedkit-picture

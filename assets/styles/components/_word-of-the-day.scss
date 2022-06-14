@@ -1,0 +1,22 @@
+@use '../variables/variables' as vars;
+
+.c-word-of-the-day {
+	background-color: #fff;
+	padding: vars.$spacer;
+	border: 1px solid var(--primary);
+
+	&__header {
+		display: flex;
+		align-items: center;
+		gap: vars.$spacer * 0.5;
+	}
+
+	&__headline {
+		margin: 0;
+	}
+
+	&__word {
+		font-family: vars.$berlin;
+		font-weight: 700;
+	}
+}
