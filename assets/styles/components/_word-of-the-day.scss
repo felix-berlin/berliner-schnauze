@@ -4,6 +4,10 @@
 	background-color: #fff;
 	padding: vars.$spacer;
 	border: 1px solid var(--primary);
+	max-width: min-content;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
 	&__header {
 		display: flex;
@@ -18,5 +22,11 @@
 	&__word {
 		font-family: vars.$berlin;
 		font-weight: 700;
+		font-size: 1.7rem;
+	}
+
+	&__update {
+		min-width: 105%;
+		text-align: center;
 	}
 }

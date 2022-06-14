@@ -1,13 +1,13 @@
 <template>
   <div class="c-word-of-the-day">
     <div class="c-word-of-the-day__icon">
-      <Crown />
+      <Crown :size="44" />
     </div>
     <NuxtLink :to="'/words/' + wordOfTheDay.ID" class="c-word-of-the-day__word">
       {{ wordOfTheDay.berlinerisch }}
     </NuxtLink>
     <p class="c-word-of-the-day__headline">
-      Wort des Tages:
+      Wort des Tages
     </p>
     <div class="c-word-of-the-day__update">
       Neues Wort in: {{ timeToUpdate }}
@@ -41,7 +41,7 @@ export default {
   },
 
   activated () {
-    if (this.$fetchState.timestamp <= Date.now() - this.countDown) {
+    if (this.$fetchState.timestamp <= this.countDown) {
       this.$fetch()
     }
   },
