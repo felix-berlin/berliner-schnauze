@@ -20,6 +20,7 @@ import { Crown } from 'lucide-vue'
 
 export default {
   name: 'WordOfTheDay',
+  fetchOnServer: false,
   fetchKey: 'word-of-the-day',
 
   components: {
