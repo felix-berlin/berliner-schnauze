@@ -3,20 +3,31 @@
     <div class="c-word-of-the-day__icon">
       <Crown :size="44" />
     </div>
-    <NuxtLink :to="'/words/' + wordOfTheDay.ID" class="c-word-of-the-day__word">
-      {{ wordOfTheDay.berlinerisch }}
-    </NuxtLink>
+
+    <transition name="fade-fast" mode="out-in">
+      <SingleLoader v-if="$fetchState.pending" key="loading" />
+      <div v-else key="word" class="c-word-of-the-day__word-wrap">
+        <NuxtLink :to="'/words/' + wordOfTheDay.ID" class="c-word-of-the-day__word c-loader-text">
+          {{ wordOfTheDay.berlinerisch }}
+        </NuxtLink>
+        <span v-tooltip="{ content: 'Klick auf das Wort um mehr zu erfahren', distance: 10, placement: 'right'}">
+          <Info :size="12" />
+        </span>
+      </div>
+    </transition>
+
     <p class="c-word-of-the-day__headline">
       Wort des Tages
     </p>
     <div class="c-word-of-the-day__update">
-      Neues Wort in: {{ timeToUpdate }}
+      Neues Wort in: <span>{{ timeToUpdate.hours }}</span> : <span>{{ timeToUpdate.minutes }}</span> : <span>{{ timeToUpdate.seconds }}</span>
     </div>
   </div>
 </template>
 
 <script>
-import { Crown } from 'lucide-vue'
+import { Crown, Info } from 'lucide-vue'
+import SingleLoader from './single-loader.vue'
 
 export default {
   name: 'WordOfTheDay',
@@ -24,14 +35,20 @@ export default {
   fetchKey: 'word-of-the-day',
 
   components: {
-    Crown
+    Crown,
+    SingleLoader,
+    Info
   },
 
   data () {
     return {
       wordOfTheDay: {},
       countDown: null,
-      timeToUpdate: null
+      timeToUpdate: {
+        hours: '00',
+        minutes: '00',
+        seconds: '00'
+      }
     }
   },
 
@@ -48,26 +65,32 @@ export default {
   },
 
   created () {
-    this.countDown = this.resetAtMidnight()
     this.countDownTimer()
   },
 
   methods: {
 
+    /**
+     * Create the countdown timer
+     *
+     * @return  {Void}
+     */
     countDownTimer () {
-      if (this.countDown > 0) {
-        setTimeout(() => {
-          let milliseconds = this.resetAtMidnight()
-          milliseconds -= 1
+      const timer = setInterval(() => {
+        let milliseconds = this.resetAtMidnight()
+        milliseconds -= 1
+        this.countDown = milliseconds
+        if (milliseconds <= 0) {
+          clearInterval(timer)
+        }
 
-          this.timeToUpdate = this.convertMsToTime(milliseconds)
-
-          this.countDown -= 1
-          this.countDownTimer()
-        }, 1000)
-      }
+        this.timeToUpdate = this.convertMsToTime(milliseconds, true)
+      }, 1000)
     },
 
+    /**
+    * Returns the milliseconds until midnight
+    */
     resetAtMidnight () {
       const now = new Date()
       const night = new Date(
@@ -80,24 +103,42 @@ export default {
       return night.getTime() - now.getTime()
     },
 
-    // @link: https://bobbyhadz.com/blog/javascript-convert-milliseconds-to-hours-minutes-seconds
+    /**
+     * Returns only two digits
+     *
+     * @param   {Number}  num  number to convert
+     *
+     * @return  {String}
+     */
     padTo2Digits (num) {
       return num.toString().padStart(2, '0')
     },
 
-    convertMsToTime (milliseconds) {
+    /**
+     * Converts milliseconds to hours, minutes and seconds
+     *
+     * @param   {Number}  milliseconds
+     * @param   {Boolean} singleValues  if true, return a object with only hours, minutes and seconds
+     * @see: https://bobbyhadz.com/blog/javascript-convert-milliseconds-to-hours-minutes-seconds
+     *
+     * @return  {String|Object} returns a string or an object with hours, minutes and seconds
+     */
+    convertMsToTime (milliseconds, singleValues = false) {
       let seconds = Math.floor(milliseconds / 1000)
       let minutes = Math.floor(seconds / 60)
       let hours = Math.floor(minutes / 60)
 
       seconds = seconds % 60
       minutes = minutes % 60
-
-      // 👇️ If you don't want to roll hours over, e.g. 24 to 00
-      // 👇️ comment (or remove) the line below
-      // commenting next line gets you `24:00:00` instead of `00:00:00`
-      // or `36:15:31` instead of `12:15:31`, etc.
       hours = hours % 24
+
+      if (singleValues) {
+        return {
+          hours: this.padTo2Digits(hours),
+          minutes: this.padTo2Digits(minutes),
+          seconds: this.padTo2Digits(seconds)
+        }
+      }
 
       return `${this.padTo2Digits(hours)}:${this.padTo2Digits(minutes)}:${this.padTo2Digits(seconds)}`
     }
