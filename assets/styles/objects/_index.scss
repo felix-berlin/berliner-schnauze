@@ -28,6 +28,9 @@
 	&__image-wrap {
 		flex: var(--flex, 0 1 64%);
 		margin-left: var(--spacing-outer-left, auto);
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-end;
 
 		@include mx.breakpoint('xs') {
 			--flex: 0 1 85%;
@@ -36,6 +39,10 @@
 			--spacing-outer-left: 0;
 			--flex: 0 1 50%;
 		}
+	}
+
+	.o-index__image.nuxt-speedkit-picture {
+		display: flex;
 	}
 
 	&__intro-wrap {
