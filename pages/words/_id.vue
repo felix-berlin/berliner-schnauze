@@ -15,8 +15,8 @@
         <Info /> <a :href="word.learn_more" target="_blank" class="c-single-word__learn-more-link">Erfahre mehr über dieses Wort <span class="c-single-word__learn-more-link-icon"><ExternalLink :size="10" /></span></a>
       </div>
 
-      <div class="c-single-word__word-type-wrapper">
-        <h2 v-if="word.word_type" class="c-single-word__sub-headline">
+      <div v-if="word.word_type" class="c-single-word__word-type-wrapper">
+        <h2 class="c-single-word__sub-headline">
           Wortart:
         </h2>
         <p class="c-single-word__word-type" v-text="word.word_type[0].name" />

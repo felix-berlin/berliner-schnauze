@@ -5,6 +5,10 @@
 .v-popper__popper {
 	--color-background: var(--secondary);
 
+	&:focus {
+		outline: none;
+	}
+
 	.v-popper__inner {
 		background-color: var(--color-background);
 		padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});

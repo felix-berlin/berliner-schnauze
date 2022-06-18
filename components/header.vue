@@ -34,6 +34,11 @@
           <template #popper>
             <SocialList list-modifier="c-social-list--mobile-dropdown" :hide-tooltips="true" />
             <ul class="c-menu-more__list u-list-reset">
+              <li class="c-menu-more__item">
+                <NuxtLink :to="'/words/' + randomWord()">
+                  Zufälliges Wort
+                </NuxtLink>
+              </li>
               <li v-for="(item, index) in menuItems" :key="index" class="c-menu-more__item">
                 <NuxtLink :to="item.link">
                   {{ item.title }}
@@ -61,7 +66,6 @@ export default {
     Menu,
     MoreVertical
   },
-
   data () {
     return {
       menuItems: [
@@ -82,7 +86,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['searchbarVisable'])
+    ...mapGetters(['searchbarVisable', 'berlinerWords'])
+  },
+
+  methods: {
+    randomWord () {
+      return this.$randomElement(this.berlinerWords).ID
+    }
   }
 
 }

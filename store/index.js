@@ -7,7 +7,8 @@ export const state = () => ({
   loadingWords: false,
   scrollPositionY: null,
   wordFilteredByLetter: null,
-  wordSortDirection: 'desc'
+  wordSortDirection: 'desc',
+  wordOfTheDay: ''
 })
 
 // const sortFuctions = {
@@ -176,5 +177,6 @@ export const mutations = {
   updateSearchbarIsVisable: (state, visable) => (state.searchbarIsVisable = visable),
   updateScrollPositionY: (state, position) => (state.scrollPositionY = position),
   updateWordSortDirection: (state, direction) => (state.wordSortDirection = direction),
-  updateWordFilteredLetter: (state, letter) => (state.wordFilteredByLetter = letter)
+  updateWordFilteredLetter: (state, letter) => (state.wordFilteredByLetter = letter),
+  updateWordOfTheDay: (state, word) => (state.wordOfTheDay = word)
 }

@@ -5,7 +5,6 @@
 .c-filter-dropdown {
 	display: var(--display, flex);
 	align-items: center;
-	margin-bottom: vars.$spacer * 1.5;
 	gap: vars.$spacer * 0.5;
 
 	@include mx.breakpoint('sm') {
