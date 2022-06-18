@@ -7,12 +7,10 @@
 .c-word-search {
 	--padding-y-input: 0.5rem;
 	--padding-x-input: 0.5rem;
-	--margin: 0 0 #{vars.$spacer * 1.5} 0;
 
 	display: flex;
 	flex-wrap: wrap;
 	align-items: stretch;
-	margin: var(--margin);
 
 	&__search-button {
 		--color-background: #{vars.$white-100};

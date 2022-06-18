@@ -47,9 +47,9 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'theme-color', content: '#F9F9F9' },
-      { hid: 'description', name: 'description', content: 'Aktuelles Berlinerisch / Berolinismus ➡️ Hochdeutsch Wörterbuch. Keen Plan vom Berliner Dialekt? Kein Problem, hier ist das aktuellste Berliner Sprache Wörterbuch.' },
+      { hid: 'description', name: 'description', content: 'Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.' },
       { hid: 'og:title', property: 'og:title', content: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch' },
-      { hid: 'og:description', property: 'og:description', content: 'Aktuelles Berlinerisch / Berolinismus ➡️ Hochdeutsch Wörterbuch. Keen Plan vom Berliner Dialekt? Kein Problem, hier ist das aktuellste Berliner Sprache Wörterbuch.' },
+      { hid: 'og:description', property: 'og:description', content: 'Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.' },
       { hid: 'og:image', property: 'og:image', content: '/brown-bear-roar.png' },
       { hid: 'og:url', property: 'og:url', content: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000' },
       { hid: 'og:type', property: 'og:type', content: 'website' }

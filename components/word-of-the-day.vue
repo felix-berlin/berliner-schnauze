@@ -1,24 +1,28 @@
 <template>
   <div class="c-word-of-the-day">
-    <div class="c-word-of-the-day__icon">
-      <Crown :size="44" />
-    </div>
-
-    <transition name="fade-fast" mode="out-in">
-      <SingleLoader v-if="$fetchState.pending" key="loading" />
-      <div v-else key="word" class="c-word-of-the-day__word-wrap">
-        <NuxtLink :to="'/words/' + wordOfTheDay.ID" class="c-word-of-the-day__word c-loader-text">
-          {{ wordOfTheDay.berlinerisch }}
-        </NuxtLink>
-        <span v-tooltip="{ content: 'Klick auf das Wort um mehr zu erfahren', distance: 10, placement: 'right'}">
-          <Info :size="12" />
-        </span>
+    <div class="c-word-of-the-day__content">
+      <div class="c-word-of-the-day__icon">
+        <Crown :size="80" />
       </div>
-    </transition>
 
-    <p class="c-word-of-the-day__headline">
-      Wort des Tages
-    </p>
+      <transition name="fade-fast" mode="out-in">
+        <SingleLoader v-if="$fetchState.pending" key="loading" />
+        <div v-else key="word" class="c-word-of-the-day__word-wrap">
+          <NuxtLink :to="'/words/' + wordOfTheDay.ID" class="c-word-of-the-day__word c-loader-text">
+            {{ wordOfTheDay.berlinerisch }}
+          </NuxtLink>
+          <span v-tooltip="{ content: 'Klick auf das Wort um mehr zu erfahren', distance: 10, placement: 'right'}">
+            <Info :size="12" />
+          </span>
+        </div>
+      </transition>
+
+      <hr class="c-word-of-the-day__divider">
+
+      <p class="c-word-of-the-day__headline">
+        Wort des Tages
+      </p>
+    </div>
     <div class="c-word-of-the-day__update">
       Neues Wort in: <span>{{ timeToUpdate.hours }}</span> : <span>{{ timeToUpdate.minutes }}</span> : <span>{{ timeToUpdate.seconds }}</span>
     </div>
