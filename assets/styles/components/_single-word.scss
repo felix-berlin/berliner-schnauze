@@ -35,6 +35,10 @@
 		}
 	}
 
+	&__word-article {
+		font-weight: 400;
+	}
+
 	&__sub-headline {
 		margin: var(--spacing-outer, 0 0 vars.$spacer * 0.25 0);
 		font-size: 2rem;

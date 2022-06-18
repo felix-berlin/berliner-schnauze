@@ -7,7 +7,7 @@
     <article class="c-single-word">
       <header class="c-single-word__header">
         <h1 class="c-single-word__word">
-          {{ word.berlinerisch }}
+          {{ word.berlinerisch }}<span v-if="word.article" class="c-single-word__word-article">, {{ word.article }}</span>
         </h1>
       </header>
 
