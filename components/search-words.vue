@@ -342,6 +342,7 @@ export default {
       if (this.pressedKeys.Escape) {
         this.showSearchBar = false
         this.$store.commit('updateSearchbarIsVisible', this.showSearchBar)
+        this.$refs['search' + this.id].blur()
       }
     },
 
