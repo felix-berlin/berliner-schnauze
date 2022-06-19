@@ -35,7 +35,7 @@
             <SocialList list-modifier="c-social-list--mobile-dropdown" :hide-tooltips="true" />
             <ul class="c-menu-more__list u-list-reset">
               <li class="c-menu-more__item">
-                <NuxtLink :to="'/word/' + randomWord()">
+                <NuxtLink :to="$routeToWord(randomWord())">
                   Zufälliges Wort
                 </NuxtLink>
               </li>

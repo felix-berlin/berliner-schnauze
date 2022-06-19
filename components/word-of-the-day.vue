@@ -8,7 +8,7 @@
       <transition name="fade-fast" mode="out-in">
         <SingleLoader v-if="$fetchState.pending" key="loading" />
         <div v-else key="word" class="c-word-of-the-day__word-wrap">
-          <NuxtLink :to="'/word/' + wordOfTheDay.post_name" class="c-word-of-the-day__word c-loader-text">
+          <NuxtLink :to="$routeToWord(wordOfTheDay.post_name)" class="c-word-of-the-day__word c-loader-text">
             {{ wordOfTheDay.berlinerisch }}
           </NuxtLink>
           <span v-tooltip="{ content: 'Klick auf das Wort um mehr zu erfahren', distance: 10, placement: 'right'}">

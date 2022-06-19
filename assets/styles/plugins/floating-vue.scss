@@ -36,12 +36,20 @@
 	--color-background: var(--white-100);
 
 	.v-popper__inner {
-		--padding: #{vars.$spacer * 0.25};
+		--padding: #{vars.$spacer * 0.4};
+
+		@include mx.breakpoint(sm) {
+			--gap: #{vars.$spacer * 0.25};
+		}
 
 		> div {
 			display: flex;
 			flex-direction: column;
-			gap: vars.$spacer * 0.25;
+			gap: var(--gap, #{vars.$spacer * 0.4});
+
+			@include mx.breakpoint(sm) {
+				--gap: #{vars.$spacer * 0.25};
+			}
 		}
 	}
 }

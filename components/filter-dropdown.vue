@@ -7,6 +7,7 @@
       distance="9"
       container=".c-filter-dropdown"
       :skidding="129"
+      :shown="hideDropdown"
     >
       <button type="button" :class="[{'has-active-filter': getLetterFilter}, 'c-button c-button--center-icon c-filter-dropdown__button']" aria-label="Filter">
         <span class="u-icon-untouchable c-button--center-icon">
@@ -49,9 +50,37 @@ export default {
     X
   },
 
+  data () {
+    return {
+      hideDropdown: false
+    }
+  },
+
   computed: {
     ...mapGetters(['getLetterFilter'])
-  }
+  },
 
+  created () {
+    /**
+     * Hide the dropdown when the user chooses a new
+     *
+     * @param   {Object}  state
+     * @param   {Object}  getters
+     * @param   {String}  newValue
+     * @param   {String}  oldValue
+     */
+    this.unwatch = this.$store.watch((state, getters) => getters.getLetterFilter, (newValue, oldValue) => {
+      if (newValue !== oldValue) {
+        this.hideDropdown = true
+        setTimeout(() => {
+          this.hideDropdown = false
+        }, 1000)
+      }
+    })
+  },
+
+  beforeDestroy () {
+    this.unwatch()
+  }
 }
 </script>
