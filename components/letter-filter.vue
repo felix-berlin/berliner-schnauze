@@ -49,7 +49,7 @@ export default {
      *
      * @param   {String}  search  the current search
      *
-     * @return  {Funtion}          Reset the letter filter
+     * @return  {Function}          Reset the letter filter
      */
     getWordSearch (search) {
       if (search.length && typeof this.$store.state.wordFilteredByLetter === 'string') {

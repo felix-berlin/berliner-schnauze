@@ -190,7 +190,9 @@
 	&__copy-button {
 		--color-background: #{vars.$white-200};
 
-		gap: vars.$spacer * 0.2;
+		gap: vars.$spacer * 0.3;
+		display: flex;
+		align-items: center;
 
 		&:hover {
 			--style-border: solid;

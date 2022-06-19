@@ -42,7 +42,7 @@
         <h3>Verwandte Worte:</h3>
         <ul class="c-single-word__related-words-list">
           <li v-for="(related_word, index) in word.related_words" :key="index" class="c-single-word__related-word">
-            <nuxt-link :to="'/words/' + related_word.ID" class="c-single-word__related-word-link">
+            <nuxt-link :to="$routeToWord(related_word.post_name)" class="c-single-word__related-word-link">
               {{ related_word.post_title }}
             </nuxt-link>
           </li>

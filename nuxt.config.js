@@ -78,8 +78,7 @@ export default {
     '@plugins/floating-vue',
     '@plugins/fuse',
     '@plugins/vue-uuid',
-    '@modules/smooth-scroll-to',
-    '@modules/random-element',
+    '@modules/utility-modules',
     { src: '~/plugins/vue-matomo.js', ssr: false }
   ],
 
