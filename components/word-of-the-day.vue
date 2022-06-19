@@ -1,7 +1,7 @@
 <template>
-  <div class="c-word-of-the-day">
+  <div class="c-word-of-the-day c-confetti" @mouseenter="celebrate = true" @mouseleave="celebrate = false">
     <div class="c-word-of-the-day__content">
-      <div class="c-word-of-the-day__icon">
+      <div class="c-word-of-the-day__crown-icon">
         <Crown :size="80" />
       </div>
 
@@ -11,7 +11,7 @@
           <NuxtLink :to="$routeToWord(wordOfTheDay.post_name)" class="c-word-of-the-day__word c-loader-text">
             {{ wordOfTheDay.berlinerisch }}
           </NuxtLink>
-          <span v-tooltip="{ content: 'Klick auf das Wort um mehr zu erfahren', distance: 10, placement: 'right'}">
+          <span v-tooltip="{ content: 'Klick auf das Wort um mehr zu erfahren', distance: 10 }" class="c-word-of-the-day__info-icon">
             <Info :size="12" />
           </span>
         </div>
@@ -26,6 +26,9 @@
     <div class="c-word-of-the-day__update">
       Neues Wort in: <span>{{ timeToUpdate.hours }}</span> : <span>{{ timeToUpdate.minutes }}</span> : <span>{{ timeToUpdate.seconds }}</span>
     </div>
+    <transition v-if="celebrate" name="fade">
+      <Confetti />
+    </transition>
   </div>
 </template>
 
@@ -52,7 +55,8 @@ export default {
         hours: '00',
         minutes: '00',
         seconds: '00'
-      }
+      },
+      celebrate: false
     }
   },
 

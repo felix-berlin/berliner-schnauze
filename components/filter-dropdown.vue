@@ -9,7 +9,7 @@
       :skidding="129"
       :shown="hideDropdown"
     >
-      <button type="button" :class="[{'has-active-filter': getLetterFilter}, 'c-button c-button--center-icon c-filter-dropdown__button']" aria-label="Filter">
+      <button type="button" :class="[{'has-active-filter': $store.getters.getLetterFilter}, 'c-button c-button--center-icon c-filter-dropdown__button']" aria-label="Filter">
         <span class="u-icon-untouchable c-button--center-icon">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -33,15 +33,14 @@
       </template>
     </VDropdown>
 
-    <div v-if="getLetterFilter" class="c-filter-dropdown__active-filter" @click="$store.dispatch('filterByLetter', null)">
-      <span>{{ getLetterFilter }}</span><span><X :size="10" /></span>
+    <div v-if="$store.getters.getLetterFilter" class="c-filter-dropdown__active-filter" @click="$store.dispatch('filterByLetter', null)">
+      <span>{{ $store.getters.getLetterFilter }}</span><span><X :size="10" /></span>
     </div>
   </div>
 </template>
 
 <script>
 import { X } from 'lucide-vue'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'FilterDropdown',
@@ -54,10 +53,6 @@ export default {
     return {
       hideDropdown: false
     }
-  },
-
-  computed: {
-    ...mapGetters(['getLetterFilter'])
   },
 
   created () {
