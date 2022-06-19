@@ -1,5 +1,5 @@
 <template>
-  <header class="c-header" :class="{'has-searchbar': searchbarVisable}">
+  <header class="c-header" :class="{'has-searchbar': searchbarVisible}">
     <div class="c-logo">
       <NuxtLink to="/" class="c-logo__link">
         Berliner Schnauze
@@ -10,8 +10,9 @@
       <div class="c-menu-nav__main-elements">
         <SearchWords
           v-if="$route.name === 'index'"
+          id="header"
           searchbar-type="nav-search"
-          :modifier="[{'c-word-search--full-width': searchbarVisable}, 'c-menu-nav__item']"
+          :modifier="[{'c-word-search--full-width': searchbarVisible}, 'c-menu-nav__item']"
           button-position="right"
           button-modifier="c-menu-nav__item-button"
           :show-searchbar-after-click="true"
@@ -19,7 +20,7 @@
           :keyboard-focus="true"
         />
 
-        <ColorModeButton class="c-menu-nav__item c-menu-nav__item-button u-button-reset" :class="{'is-hidden': searchbarVisable}" />
+        <ColorModeButton class="c-menu-nav__item c-menu-nav__item-button u-button-reset" :class="{'is-hidden': searchbarVisible}" />
 
         <VMenu placement="bottom-end" :distance="9" strategy="fixed" container=".c-menu-nav" class="c-menu-nav__item c-menu-more">
           <button type="button" class="c-button c-menu-nav__item-button u-button-reset c-button--center-icon" aria-label="Website Menu Navigation">
@@ -86,7 +87,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['searchbarVisable', 'berlinerWords'])
+    ...mapGetters(['searchbarVisible', 'berlinerWords'])
   },
 
   methods: {

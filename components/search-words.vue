@@ -47,7 +47,7 @@
 
 <script>
 import { Search, Command, X } from 'lucide-vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'SearchWords',
@@ -106,19 +106,22 @@ export default {
     searchbarModifier: {
       type: String,
       default: ''
+    },
+    id: {
+      type: String,
+      required: true
     }
   },
 
   data () {
     return {
-      id: this.$uuid.v4(),
       searchButtonPosition: this.buttonPosition,
       showSearchBar: true,
       timeoutId: null,
       pressedKeys: {},
       searchLength: 0,
       scrollToResultsTriggert: false, // Prevent scroll to results triggert more than one time
-      scrollbarVisable: undefined,
+      scrollbarVisible: undefined,
       toggleShowAndClearIcon: true
     }
   },
@@ -126,16 +129,7 @@ export default {
   computed: {
     ...mapState({
       search: state => state.searchWord
-    }),
-    ...mapGetters(['getLetterFilter, getScrollPositionY'])
-  },
-
-  watch: {
-    getLetterFilter (newLetter, oldLetter) {
-      if (oldLetter !== newLetter) {
-        this.resetSearch()
-      }
-    }
+    })
   },
 
   created () {
@@ -144,13 +138,44 @@ export default {
     }
 
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === 'getScrollPositionY') {
+      if (mutation.type === 'updateScrollPositionY') {
         if (state.scrollPositionY < 200) {
           this.scrollToResultsTriggert = false
-          this.scrollbarVisable = true
+          this.scrollbarVisible = true
         } else {
-          this.scrollbarVisable = false
+          this.scrollbarVisible = false
         }
+      }
+    })
+
+    /**
+     * When the letter filter changes, reset the searchbar
+     *
+     * @param   {String}  state
+     * @param   {String}  getters
+     * @param   {String}  newLetter
+     * @param   {String}  oldLetter
+     *
+     * @return  {Function}
+     */
+    this.unwatch = this.$store.watch((state, getters) => getters.getLetterFilter, (newLetter, oldLetter) => {
+      if (oldLetter !== newLetter) {
+        this.resetSearch()
+      }
+    })
+
+    /**
+     * When the user change the searchbar, then clear the previous search
+     *
+     * @param   {Void}  state
+     * @param   {String}  getters
+     * @param   {String}  newSearch
+     * @param   {String}  oldSearch
+     * @return  {String}
+     */
+    this.unwatch = this.$store.watch((state, getters) => getters.getActiveWordSearch, (newSearch, oldSearch) => {
+      if (oldSearch.length && oldSearch !== newSearch) {
+        this.$refs['search' + this.id].value = ''
       }
     })
   },
@@ -164,6 +189,7 @@ export default {
   },
 
   beforeDestroy () {
+    this.unwatch()
     this.unsubscribe()
     window.removeEventListener('keydown', this.triggerKeyboardSearch)
   },
@@ -184,14 +210,27 @@ export default {
       this.toggleSearchClearIcons()
 
       this.scrollToResults()
+
+      this.setActive()
     },
 
+    /**
+    * Toggle the clear icon
+    */
     toggleSearchClearIcons () {
       if (this.searchLength === 0) {
         this.toggleShowAndClearIcon = true
-      }
-      if (this.searchLength > 0) {
+      } else {
         this.toggleShowAndClearIcon = false
+      }
+    },
+
+    /**
+    * When user starts his search set the current search component as active
+    */
+    setActive () {
+      if (this.searchLength > 0) {
+        this.$store.commit('updateActiveWordSearch', this.id)
       }
     },
 
@@ -233,7 +272,7 @@ export default {
         if (this.showSearchbarAfterClick && this.searchLength < 1) {
           this.showSearchBar = false
           this.toggleShowAndClearIcon = true
-          this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
+          this.$store.commit('updateSearchbarIsVisible', this.showSearchBar)
         }
       }, timeout)
 
@@ -254,7 +293,7 @@ export default {
      */
     showAndFocusSearchbar () {
       this.showSearchBar = true
-      this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
+      this.$store.commit('updateSearchbarIsVisible', this.showSearchBar)
 
       // When searchbar is loaded focus it
       this.$nextTick(function () {
@@ -302,12 +341,12 @@ export default {
 
       if (this.pressedKeys.Escape) {
         this.showSearchBar = false
-        this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
+        this.$store.commit('updateSearchbarIsVisible', this.showSearchBar)
       }
     },
 
     scrollToResults () {
-      if (!this.scrollbarVisable && (this.searchLength > 0)) {
+      if (!this.scrollbarVisible && (this.searchLength > 0)) {
         this.scrollToResultsTriggert = true
         this.$smoothScrollTo(document.querySelector('.c-word-search--large'), 60)
       }

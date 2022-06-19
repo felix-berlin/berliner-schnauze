@@ -3,12 +3,13 @@ export const state = () => ({
   wordGroups: [],
   wordCount: '',
   searchWord: '',
-  searchbarIsVisable: false,
+  searchbarIsVisible: false,
   loadingWords: false,
   scrollPositionY: null,
   wordFilteredByLetter: null,
   wordSortDirection: 'desc',
-  wordOfTheDay: ''
+  wordOfTheDay: '',
+  activeWordSearch: ''
 })
 
 // const sortFuctions = {
@@ -33,8 +34,9 @@ export const getters = {
   getWordLoadingStatus: state => state.loadingWords,
   getWordSearch: state => state.searchWord,
   getLetterFilter: state => state.wordFilteredByLetter,
-  searchbarVisable: state => state.searchbarIsVisable,
+  searchbarVisible: state => state.searchbarIsVisible,
   getScrollPositionY: state => state.scrollPositionY,
+  getActiveWordSearch: state => state.activeWordSearch,
 
   /**
    * Get tge words array sorted desc or asc
@@ -174,9 +176,10 @@ export const mutations = {
   },
   wordLoadingStatus: (state, status) => (state.loadingWords = status),
   updateSearch: (state, search) => (state.searchWord = search),
-  updateSearchbarIsVisable: (state, visable) => (state.searchbarIsVisable = visable),
+  updateSearchbarIsVisible: (state, visible) => (state.searchbarIsVisible = visible),
   updateScrollPositionY: (state, position) => (state.scrollPositionY = position),
   updateWordSortDirection: (state, direction) => (state.wordSortDirection = direction),
   updateWordFilteredLetter: (state, letter) => (state.wordFilteredByLetter = letter),
-  updateWordOfTheDay: (state, word) => (state.wordOfTheDay = word)
+  updateWordOfTheDay: (state, word) => (state.wordOfTheDay = word),
+  updateActiveWordSearch: (state, word) => (state.activeWordSearch = word)
 }
