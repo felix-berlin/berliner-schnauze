@@ -1,11 +1,18 @@
 <template>
   <div class="c-confetti__wrapper">
-    <div v-for="index in 10" :key="index" class="c-confetti__piece" />
+    <div v-for="index in pieces" :key="index" class="c-confetti__piece" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ConfettiEffect'
+  name: 'ConfettiEffect',
+
+  props: {
+    pieces: {
+      type: Number,
+      default: 10
+    }
+  }
 }
 </script>
