@@ -26,7 +26,7 @@
 	}
 
 	&__word-wrap {
-		display: flex;
+		position: relative;
 	}
 
 	&__word {
@@ -36,7 +36,7 @@
 		word-break: break-all;
 	}
 
-	&__icon {
+	&__crown-icon {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -52,5 +52,12 @@
 
 	&__update {
 		font-size: 0.8rem;
+	}
+
+	&__info-icon {
+		position: absolute;
+		right: -18px;
+		top: 50%;
+		transform: translateY(-50%);
 	}
 }

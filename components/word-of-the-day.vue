@@ -1,7 +1,7 @@
 <template>
   <div class="c-word-of-the-day c-confetti" @mouseenter="celebrate = true" @mouseleave="celebrate = false">
     <div class="c-word-of-the-day__content">
-      <div class="c-word-of-the-day__icon">
+      <div class="c-word-of-the-day__crown-icon">
         <Crown :size="80" />
       </div>
 
@@ -11,7 +11,7 @@
           <NuxtLink :to="$routeToWord(wordOfTheDay.post_name)" class="c-word-of-the-day__word c-loader-text">
             {{ wordOfTheDay.berlinerisch }}
           </NuxtLink>
-          <span v-tooltip="{ content: 'Klick auf das Wort um mehr zu erfahren', distance: 10, placement: 'right'}">
+          <span v-tooltip="{ content: 'Klick auf das Wort um mehr zu erfahren', distance: 10 }" class="c-word-of-the-day__info-icon">
             <Info :size="12" />
           </span>
         </div>
