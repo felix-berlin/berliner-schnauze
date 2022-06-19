@@ -1,5 +1,5 @@
 <template>
-  <div class="c-word-of-the-day">
+  <div class="c-word-of-the-day c-confetti" @mouseenter="celebrate = true" @mouseleave="celebrate = false">
     <div class="c-word-of-the-day__content">
       <div class="c-word-of-the-day__icon">
         <Crown :size="80" />
@@ -26,6 +26,9 @@
     <div class="c-word-of-the-day__update">
       Neues Wort in: <span>{{ timeToUpdate.hours }}</span> : <span>{{ timeToUpdate.minutes }}</span> : <span>{{ timeToUpdate.seconds }}</span>
     </div>
+    <transition v-if="celebrate" name="fade">
+      <Confetti />
+    </transition>
   </div>
 </template>
 
@@ -52,7 +55,8 @@ export default {
         hours: '00',
         minutes: '00',
         seconds: '00'
-      }
+      },
+      celebrate: false
     }
   },
 

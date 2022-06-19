@@ -2,6 +2,7 @@
 	padding: 8px;
 
 	&__loader {
+		will-change: box-shadow;
 		width: 4px;
 		aspect-ratio: 1;
 		border-radius: 50%;
