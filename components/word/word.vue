@@ -12,7 +12,7 @@
     <div :class="[{'has-example': source.examples}, 'c-word-list__header-wrapper']">
       <dl class="c-word-list__header">
         <dt class="c-word-list__berlinerisch" :data-content-piece="source.berlinerisch">
-          <NuxtLink :to="'words/' + source.ID">
+          <NuxtLink :to="'word/' + source.post_name">
             {{ source.berlinerisch }}
           </NuxtLink>
         </dt>
@@ -48,7 +48,7 @@
             type="button"
             class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border"
             :class="{ 'is-success': wordLinkCopied === index }"
-            @click="copyWordPageUrlToClipboard(source.ID, index)"
+            @click="copyWordPageUrlToClipboard(source.post_name, index)"
           >
             <span ref="copyUrlLinkIcon" class="c-word-list__icon-button" :class="{ 'is-hidden': wordLinkCopied === index }">
               <Link :size="18" />
@@ -80,7 +80,7 @@
 
     <WordExamples :examples="source.examples" />
 
-    <NuxtLink v-if="source.learn_more || source.related_words || source.word_type" :to="'words/' + source.ID" class="c-word-list__learn-more c-button u-button-reset">
+    <NuxtLink v-if="source.learn_more || source.related_words || source.word_type" :to="'word/' + source.post_name" class="c-word-list__learn-more c-button u-button-reset">
       <Info :size="20" /> mehr erfahren
     </NuxtLink>
   </article>
@@ -144,9 +144,9 @@ export default {
       }, 1500)
     },
 
-    copyWordPageUrlToClipboard (id, index) {
+    copyWordPageUrlToClipboard (slug, index) {
       // const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
-      const getWordUrl = window.location.protocol + '//' + window.location.hostname + '/words/' + id
+      const getWordUrl = window.location.protocol + '//' + window.location.hostname + '/word/' + slug
 
       this.copyToClipboard(getWordUrl, 'url')
       this.wordLinkCopied = index
