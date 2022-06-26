@@ -1,12 +1,17 @@
 @use '../variables/variables' as vars;
+@use '../mixins/mixins.scss' as mx;
 
 .c-word-of-the-day {
-	background-color: rgb(0 0 0 / 10%);
+	background-color: var(--color-background, rgb(255 255 255 / 20%));
 	padding: vars.$spacer;
 	border: 1px solid var(--primary);
 	display: flex;
 	row-gap: vars.$spacer * 1.5;
 	flex-direction: column;
+
+	@include mx.dark-mode {
+		--color-background: rgb(0 0 0 / 10%);
+	}
 
 	&__content {
 		margin: auto;
