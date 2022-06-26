@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.2](https://github.com/felix-berlin/berliner-schnauze/compare/v1.9.1...v1.9.2) (2022-06-26)
+
+
+### Bug Fixes
+
+* version number ([a999aaa](https://github.com/felix-berlin/berliner-schnauze/commit/a999aaa15674c02502305436b6e3d54edf750065))
+
 ## [1.9.1](https://github.com/felix-berlin/berliner-schnauze/compare/v1.9.0...v1.9.1) (2022-06-26)
 
 
