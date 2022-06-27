@@ -1,4 +1,4 @@
-@use '../functions/functions' as fn;
+@use 'sassy-scss/functions' as sassy-fn;
 
 $yellow: #ffd300;
 $blue: #17d3ff;
@@ -30,10 +30,10 @@ $duration: 1000;
 		@for $i from 1 through 13 {
 			&:nth-child(#{$i}) {
 				left: $i * 7%;
-				transform: rotate(#{fn.random-num(-80, 80)}deg);
+				transform: rotate(#{sassy-fn.random-num(-80, 80)}deg);
 				animation: make-it-rain $duration * 1ms infinite ease-out;
-				animation-delay: #{fn.random-num(0, $duration * 0.5)}ms;
-				animation-duration: #{fn.random-num($duration * 0.7, $duration * 1.2)}ms;
+				animation-delay: #{sassy-fn.random-num(0, $duration * 0.5)}ms;
+				animation-duration: #{sassy-fn.random-num($duration * 0.7, $duration * 1.2)}ms;
 			}
 		}
 
