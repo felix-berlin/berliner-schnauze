@@ -1,14 +1,14 @@
-@use './../functions/functions' as fn;
+@use 'sassy-scss/functions' as sassy-fn;
 
 // Breakpoint Vars
-$xxs: fn.px-to-rem(375); // Smartphone Portrait
-$xs: fn.px-to-rem(568); // Smartphone Landscape
-$sm: fn.px-to-rem(768); // Tablet Portrait
-$md: fn.px-to-rem(1024); // Tablet Landscape
-$lg: fn.px-to-rem(1260); // Kleinerer Desktop
-$xlg: fn.px-to-rem(1440); // Widescreen
-$fhd: fn.px-to-rem(1920); // Full HD
-$uhd: fn.px-to-rem(2560); // UHD
+$xxs: sassy-fn.px-to-rem(375); // Smartphone Portrait
+$xs: sassy-fn.px-to-rem(568); // Smartphone Landscape
+$sm: sassy-fn.px-to-rem(768); // Tablet Portrait
+$md: sassy-fn.px-to-rem(1024); // Tablet Landscape
+$lg: sassy-fn.px-to-rem(1260); // Kleinerer Desktop
+$xlg: sassy-fn.px-to-rem(1440); // Widescreen
+$fhd: sassy-fn.px-to-rem(1920); // Full HD
+$uhd: sassy-fn.px-to-rem(2560); // UHD
 
 // Breakpoint Map
 $custom-breakpoints: (
