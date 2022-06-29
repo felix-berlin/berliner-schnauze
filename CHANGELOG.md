@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.10.0...v1.11.0) (2022-06-29)
+
+
+### Features
+
+* add error page ([a4f626a](https://github.com/felix-berlin/berliner-schnauze/commit/a4f626a277e17c805005c3b97f0731e2e2c1c6d2))
+
 # [1.10.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.9.2...v1.10.0) (2022-06-27)
 
 
