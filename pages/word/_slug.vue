@@ -51,10 +51,10 @@
 
       <footer class="c-single-word__footer">
         <p class="c-single-word__created">
-          Wort erstellt am: {{ formatedDate(word.post_date) }}
+          Wort erstellt am: {{ formattedDate(word.post_date) }}
         </p>
         <p class="c-single-word__modified">
-          Bearbeitet am: {{ formatedDate(word.post_modified) }}
+          Bearbeitet am: {{ formattedDate(word.post_modified) }}
         </p>
       </footer>
     </article>
@@ -108,8 +108,10 @@ export default {
   },
 
   methods: {
-    formatedDate (date, locale = 'de-DE') {
-      const dateToFormat = new Date(date)
+    formattedDate (date, locale = 'de-DE') {
+      const dumpSafariDateFormat = date.replace(/-/g, '/')
+
+      const dateToFormat = new Date(dumpSafariDateFormat)
 
       return dateToFormat.toLocaleString(locale, { year: 'numeric', month: 'long', day: 'numeric' })
     }
