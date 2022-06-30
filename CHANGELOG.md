@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.9.2...v1.10.0) (2022-06-27)
+
+
+### Bug Fixes
+
+* lint errors ([f5cc12a](https://github.com/felix-berlin/berliner-schnauze/commit/f5cc12a60e606795d89560860065ce323b2f6e05))
+
+
+### Features
+
+* update sassy-scss;  replace all scss functions with sassy functions ([84849d8](https://github.com/felix-berlin/berliner-schnauze/commit/84849d822431130e9f73d1a8a1a53c4a3d566e68))
+
 ## [1.9.2](https://github.com/felix-berlin/berliner-schnauze/compare/v1.9.1...v1.9.2) (2022-06-26)
 
 
