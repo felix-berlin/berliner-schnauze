@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.12.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.11.0...v1.12.0) (2022-07-01)
+
+
+### Features
+
+* **nav:** split menu nav in half ([799819e](https://github.com/felix-berlin/berliner-schnauze/commit/799819e01e4bc8dfc6a503b4e3a127a9ba2bad97))
+* **seo:** create router middleware ([65ecbe4](https://github.com/felix-berlin/berliner-schnauze/commit/65ecbe4be04c5da0d8e0f76a8eab0279e7f8c2cd))
+
 # [1.11.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.10.0...v1.11.0) (2022-06-29)
 
 
