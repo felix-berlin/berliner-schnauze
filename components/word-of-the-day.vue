@@ -1,11 +1,18 @@
 <template>
   <div
-    v-tooltip="{ content: 'Klick auf das Wort um mehr zu erfahren!', distance: 10, shown: showTooltip, placement: 'left' }"
     class="c-word-of-the-day c-confetti"
     @mouseenter="celebrate = true, showTooltip = true"
     @mouseleave="celebrate = false, showTooltip = false"
   >
-    <div class="c-word-of-the-day__content">
+    <div
+      v-tooltip="{
+        content: 'Klick auf das Wort um mehr zu erfahren!',
+        distance: 10,
+        shown: showTooltip,
+        placement: 'bottom'
+      }"
+      class="c-word-of-the-day__content"
+    >
       <div class="c-word-of-the-day__crown-icon">
         <Crown :size="80" />
       </div>
