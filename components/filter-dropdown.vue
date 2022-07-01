@@ -8,6 +8,7 @@
       container=".c-filter-dropdown"
       :skidding="129"
       :shown="hideDropdown"
+      :delay="{ show: 0, hide: 0 }"
     >
       <button type="button" :class="[{'has-active-filter': $store.getters.getLetterFilter}, 'c-button c-button--center-icon c-filter-dropdown__button']" aria-label="Filter">
         <span class="u-icon-untouchable c-button--center-icon">
@@ -69,7 +70,7 @@ export default {
         this.hideDropdown = true
         setTimeout(() => {
           this.hideDropdown = false
-        }, 1000)
+        }, 0)
       }
     })
   },
