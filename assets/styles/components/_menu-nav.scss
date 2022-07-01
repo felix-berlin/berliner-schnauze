@@ -9,11 +9,8 @@
 
 	&__item-button,
 	&__item-link {
-		--color-icon: #{vars.$white-100};
-		--color-border: transparent;
-
-		color: var(--color-icon);
-		border: 1px dashed var(--color-border);
+		color: var(--color-icon, vars.$white-100);
+		border: 1px dashed var(--color-border, transparent);
 		transition: all 0.3s ease-in-out;
 
 		&:hover {
@@ -46,17 +43,25 @@
 
 .c-menu-more {
 	&__list {
-		--size-font: 1.15rem;
-		--gap: #{vars.$spacer};
-
 		display: flex;
 		flex-direction: column;
-		gap: var(--gap);
-		font-size: var(--size-font);
+		gap: var(--gap, vars.$spacer);
+		font-size: var(--size-font, 1.15rem);
 
 		@include mx.breakpoint('md') {
 			--size-font: inherit;
 			--gap: #{vars.$spacer * 0.5};
+		}
+	}
+
+	&__item {
+		&.is-split {
+			border-top: 1px dashed var(--primary);
+			padding-top: var(--padding-top, vars.$spacer);
+
+			@include mx.breakpoint('md') {
+				--padding-top: #{vars.$spacer * 0.5};
+			}
 		}
 	}
 
