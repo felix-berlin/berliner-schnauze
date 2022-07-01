@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.12.0...v1.13.0) (2022-07-01)
+
+
+### Bug Fixes
+
+* date format for safari ([f6fc2ab](https://github.com/felix-berlin/berliner-schnauze/commit/f6fc2abb67fd0d252221986bcffa980e4059c8ab))
+* **filter dropdown:** removed hide delay ([cb72ce8](https://github.com/felix-berlin/berliner-schnauze/commit/cb72ce87e825c8ce6817acf5e0ec2051ee595ba4))
+* **single word:** learn more link spacing top ([21e6b17](https://github.com/felix-berlin/berliner-schnauze/commit/21e6b17a9435ca19f53cfa89d74f20aca4d22350))
+
+
+### Features
+
+* better word of the day tooltip position ([18c3393](https://github.com/felix-berlin/berliner-schnauze/commit/18c3393323d2808ba229d4dab341d3fcdca1ca18))
+
 # [1.12.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.11.0...v1.12.0) (2022-07-01)
 
 
