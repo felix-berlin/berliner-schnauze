@@ -15,14 +15,21 @@ html {
 a {
 	color: var(--primary);
 	cursor: pointer;
-	text-underline-position: from-font;
-	text-decoration: var(--decoration-text, underline dashed from-font);
+	text-decoration: var(--decoration-text, none);
+}
 
-	@include mx.breakpoint('xs') {
-		--decoration-text: none;
+.c-content {
+	a {
+		--decoration-text: underline dashed from-font;
 
-		&:hover {
-			--decoration-text: underline dashed from-font;
+		text-underline-position: from-font;
+
+		@include mx.breakpoint('xs') {
+			--decoration-text: none;
+
+			&:hover {
+				--decoration-text: underline dashed from-font;
+			}
 		}
 	}
 }

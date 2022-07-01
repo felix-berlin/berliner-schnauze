@@ -40,7 +40,7 @@
                   Zufälliges Wort
                 </NuxtLink>
               </li>
-              <li v-for="(item, index) in menuItems" :key="index" class="c-menu-more__item">
+              <li v-for="(item, index) in menuItems" :key="index" class="c-menu-more__item" :class="{ 'is-split': item.title === 'Impressum' }">
                 <NuxtLink :to="item.link">
                   {{ item.title }}
                 </NuxtLink>
