@@ -111,7 +111,9 @@ export default {
     formatedDate (date, locale = 'de-DE') {
       const dateToFormat = new Date(date)
 
-      return dateToFormat.toLocaleString(locale, { year: 'numeric', month: 'long', day: 'numeric' })
+      const fixDateForSafari = dateToFormat.replace(/-/g, '/')
+
+      return fixDateForSafari.toLocaleString(locale, { year: 'numeric', month: 'long', day: 'numeric' })
     }
   }
 
