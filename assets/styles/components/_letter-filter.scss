@@ -39,8 +39,10 @@
 		padding: var(--spacing);
 		width: 100%;
 		height: 100%;
+		color: #fff;
 
 		&:not(.c-letter-filter__button--all) {
+			color: var(--primary);
 			text-transform: uppercase;
 		}
 	}
