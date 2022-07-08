@@ -38,6 +38,7 @@ export const getters = {
   searchbarVisible: state => state.searchbarIsVisible,
   getScrollPositionY: state => state.scrollPositionY,
   getActiveWordSearch: state => state.activeWordSearch,
+  getWordOfTheDayLoadingStatus: state => state.loadingWordOfTheDay,
 
   /**
    * Get tge words array sorted desc or asc

@@ -18,7 +18,7 @@
       </div>
 
       <transition name="fade-fast" mode="out-in">
-        <SingleLoader v-if="$store.state.loadingWordOfTheDay" key="loading" />
+        <SingleLoader v-if="$store.getters.getWordOfTheDayLoadingStatus" key="loading" />
         <div v-else key="word" class="c-word-of-the-day__word-wrap">
           <NuxtLink :to="$routeToWord($store.state.wordOfTheDay.post_name)" class="c-word-of-the-day__word c-loader-text">
             {{ $store.state.wordOfTheDay.berlinerisch }}
@@ -57,7 +57,6 @@ export default {
 
   data () {
     return {
-      wordOfTheDay: {},
       countDown: null,
       timeToUpdate: {
         hours: '00',
