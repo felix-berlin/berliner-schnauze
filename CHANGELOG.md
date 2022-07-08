@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.14.3](https://github.com/felix-berlin/berliner-schnauze/compare/v1.14.2...v1.14.3) (2022-07-08)
+
+
+### Bug Fixes
+
+* word of the day loading status (3) ([89d6548](https://github.com/felix-berlin/berliner-schnauze/commit/89d65486f64219d8ec20985fc49c05943006f0aa))
+
 ## [1.14.2](https://github.com/felix-berlin/berliner-schnauze/compare/v1.14.1...v1.14.2) (2022-07-08)
 
 
