@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.14.5](https://github.com/felix-berlin/berliner-schnauze/compare/v1.14.4...v1.14.5) (2022-07-08)
+
+
+### Bug Fixes
+
+* filter dropdown text color ([d37e9ea](https://github.com/felix-berlin/berliner-schnauze/commit/d37e9ea77aa62294c4e0d74b1099d506fa716008))
+
 ## [1.14.4](https://github.com/felix-berlin/berliner-schnauze/compare/v1.14.3...v1.14.4) (2022-07-08)
 
 
