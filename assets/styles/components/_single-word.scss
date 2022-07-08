@@ -16,6 +16,17 @@
 		0 0.5px 0.6px rgb(0 0 0 / 8%),
 		0 4px 5px rgb(0 0 0 / 16%);
 
+	&__header {
+		position: relative;
+	}
+
+	&__crown {
+		display: flex;
+		position: absolute;
+		bottom: calc(100% - 10px);
+		color: vars.$gold;
+	}
+
 	&__word {
 		margin: 0;
 		font: {

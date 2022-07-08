@@ -18,10 +18,10 @@
       </div>
 
       <transition name="fade-fast" mode="out-in">
-        <SingleLoader v-if="$fetchState.pending" key="loading" />
+        <SingleLoader v-if="$store.state.loadingWordOfTheDay" key="loading" />
         <div v-else key="word" class="c-word-of-the-day__word-wrap">
-          <NuxtLink :to="$routeToWord(wordOfTheDay.post_name)" class="c-word-of-the-day__word c-loader-text">
-            {{ wordOfTheDay.berlinerisch }}
+          <NuxtLink :to="$routeToWord($store.state.wordOfTheDay.post_name)" class="c-word-of-the-day__word c-loader-text">
+            {{ $store.state.wordOfTheDay.berlinerisch }}
           </NuxtLink>
         </div>
       </transition>
@@ -47,8 +47,8 @@ import SingleLoader from './single-loader.vue'
 
 export default {
   name: 'WordOfTheDay',
-  fetchOnServer: false,
-  fetchKey: 'word-of-the-day',
+  // fetchOnServer: false,
+  // fetchKey: 'word-of-the-day',
 
   components: {
     Crown,
@@ -69,19 +69,24 @@ export default {
     }
   },
 
-  async fetch () {
-    this.wordOfTheDay = await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
-      .then(res => res.json())
-      .catch((err) => { this.$sentry.captureException(err) })
-  },
+  // async fetch () {
+  //   await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
+  //     .then(res => res.json())
+  //     .then((data) => {
+  //       this.wordOfTheDay = data
+  //       this.$store.commit('updateWordOfTheDay', data)
+  //     })
+  //     .catch((err) => { this.$sentry.captureException(err) })
+  // },
 
-  activated () {
-    if (this.$fetchState.timestamp <= this.countDown) {
-      this.$fetch()
-    }
-  },
+  // activated () {
+  //   if (this.$fetchState.timestamp <= this.countDown) {
+  //     this.$fetch()
+  //   }
+  // },
 
   created () {
+    this.$store.dispatch('loadWordOfTheDay')
     this.countDownTimer()
   },
 

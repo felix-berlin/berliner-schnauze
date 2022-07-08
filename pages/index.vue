@@ -44,16 +44,17 @@
 
       <SearchWords
         id="index"
+        critical
         searchbar-type="large"
         :focus-on-page-load="true"
         placeholder="Durchsuche den Berliner-Wortschatz"
       />
 
-      <LetterFilter class="c-letter-filter--desktop" />
+      <LetterFilter class="c-letter-filter--desktop" critical />
 
-      <FilterDropdown />
+      <FilterDropdown critical />
 
-      <WordList />
+      <WordList critical />
     </main>
   </div>
 </template>

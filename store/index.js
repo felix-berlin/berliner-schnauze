@@ -9,6 +9,7 @@ export const state = () => ({
   wordFilteredByLetter: null,
   wordSortDirection: 'desc',
   wordOfTheDay: '',
+  loadingWordOfTheDay: false,
   activeWordSearch: ''
 })
 
@@ -129,6 +130,8 @@ export const getters = {
   //     return child
   //   }
   // }
+  //
+
 }
 
 export const actions = {
@@ -153,6 +156,19 @@ export const actions = {
       })
   },
 
+  async loadWordOfTheDay ({ state, commit, $sentry }) {
+    if (state.wordOfTheDay) { return }
+
+    commit('wordOfTheDayLoadingStatus', true)
+    return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
+      .then(res => res.json())
+      .then((data) => {
+        commit('updateWordOfTheDay', data)
+        commit('wordOfTheDayLoadingStatus', false)
+      })
+      .catch((err) => { $sentry.captureException(err) })
+  },
+
   /**
    * Filter by letter
    *
@@ -175,6 +191,7 @@ export const mutations = {
     state.words = words
   },
   wordLoadingStatus: (state, status) => (state.loadingWords = status),
+  wordOfTheDayLoadingStatus: (state, status) => (state.loadingWordOfTheDay = status),
   updateSearch: (state, search) => (state.searchWord = search),
   updateSearchbarIsVisible: (state, visible) => (state.searchbarIsVisible = visible),
   updateScrollPositionY: (state, position) => (state.scrollPositionY = position),
