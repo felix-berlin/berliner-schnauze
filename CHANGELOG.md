@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.14.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.13.1...v1.14.0) (2022-07-08)
+
+
+### Bug Fixes
+
+* **elements:** dark mode color contrast tooltip color ([57d192c](https://github.com/felix-berlin/berliner-schnauze/commit/57d192c52fac259c6585814feb188144210a8faf))
+
+
+### Features
+
+* **elements:** add crown icon to the word of the day ([a532a1f](https://github.com/felix-berlin/berliner-schnauze/commit/a532a1f9ac2e4baabd93b6efb9f31617bf357d65))
+
 ## [1.13.1](https://github.com/felix-berlin/berliner-schnauze/compare/v1.13.0...v1.13.1) (2022-07-02)
 
 
