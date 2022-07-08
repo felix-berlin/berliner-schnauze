@@ -17,6 +17,10 @@
 		border-radius: 0;
 		max-width: 100%;
 		min-width: var(--width-min, fit-content);
+
+		@include mx.dark-mode {
+			--color: #fff;
+		}
 	}
 
 	.v-popper__arrow-inner,
