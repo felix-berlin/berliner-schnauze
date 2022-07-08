@@ -12,6 +12,16 @@
     <div :class="[{'has-example': source.examples}, 'c-word-list__header-wrapper']">
       <dl class="c-word-list__header">
         <dt class="c-word-list__berlinerisch" :data-content-piece="source.berlinerisch">
+          <span
+            v-if="isWordOfTheDay"
+            v-tooltip="{ content: `${source.berlinerisch} ist das heutige Wort des Tages`,
+                         distance: 10,
+                         placement: 'top'}"
+            class="c-word-list__crown"
+            aria-hidden="true"
+          >
+            <Crown />
+          </span>
           <NuxtLink :to="$routeToWord(source.post_name)">
             {{ source.berlinerisch }}
           </NuxtLink>
@@ -108,7 +118,7 @@
 </template>
 
 <script>
-import { Copy, CheckCircle2, MoreVertical, Info, Link, Share2 } from 'lucide-vue'
+import { Copy, CheckCircle2, MoreVertical, Info, Link, Share2, Crown } from 'lucide-vue'
 
 export default {
   name: 'WordSingle',
@@ -120,7 +130,8 @@ export default {
     Share2,
     Info,
     // eslint-disable-next-line
-    Link
+    Link,
+    Crown
   },
   props: {
     index: {
@@ -141,11 +152,14 @@ export default {
       wordLinkCopied: '',
       wordShared: '',
       wordButtonClicked: false,
-      canShare: null
+      canShare: null,
+      isWordOfTheDay: false
     }
   },
 
   mounted () {
+    this.isWordOfTheDay = this.source.ID === this.$store.state.wordOfTheDay.ID
+
     if (navigator.share) {
       this.canShare = true
     } else {
