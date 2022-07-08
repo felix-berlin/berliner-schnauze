@@ -157,11 +157,11 @@ export const actions = {
       })
   },
 
-  async loadWordOfTheDay ({ state, commit, $sentry }) {
+  loadWordOfTheDay ({ state, commit, $sentry }) {
     if (state.wordOfTheDay) { return }
 
     commit('wordOfTheDayLoadingStatus', true)
-    return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
+    return fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
       .then(res => res.json())
       .then((data) => {
         commit('updateWordOfTheDay', data)

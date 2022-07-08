@@ -85,11 +85,8 @@ export default {
   // },
 
   created () {
-    this.countDownTimer()
-  },
-
-  mounted () {
     this.$store.dispatch('loadWordOfTheDay')
+    this.countDownTimer()
   },
 
   methods: {
