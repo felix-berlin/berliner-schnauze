@@ -1,7 +1,7 @@
 module.exports = {
   overrides: [
     {
-      files: ['assets/**/*.{s?(a|c)ss,less,stylus}'],
+      files: ['assets/styles/**/*.{s?(a|c)ss,less,stylus}'],
       customSyntax: 'postcss-scss'
     }
     // {
