@@ -13,21 +13,6 @@ export const state = () => ({
   activeWordSearch: ''
 })
 
-// const sortFuctions = {
-//   wordsSortedByDirection (state) {
-//     return [...state.words].sort((a, b) => {
-//       if (state.wordSortDirection === 'desc') {
-//         return a[state.wordSortDirection] > b[state.wordSortDirection] ? -1 : 1
-//       } else {
-//         return a[state.wordSortDirection] > b[state.wordSortDirection] ? 1 : -1
-//       }
-//     })
-//   },
-//   wordsFilteredByLetter (state) {
-//     return state.words.filter(item => item.group === state.wordFilteredByLetter)
-//   }
-// }
-
 export const getters = {
   berlinerWords: state => state.words,
   berlinerWordsGrouped: state => state.wordGroups,
@@ -58,11 +43,11 @@ export const getters = {
   },
 
   /**
-   * Get a uniqe alphabetic list of all available letters
+   * Get a unique alphabetic list of all available letters
    *
    * @param   {Array}  state  vuex state function
    *
-   * @return  {Array}         uniqe alphabetic list
+   * @return  {Array}         unique alphabetic list
    */
   availableLetterGroups (state) {
     // Loop thou array of objects and group by "group" key.
@@ -86,53 +71,41 @@ export const getters = {
   getWordsFilteredByLetter (state) {
     return state.words.filter(item => item.group === state.wordFilteredByLetter)
   },
+
+  /**
+   * Return all filters together for the word list
+   *
+   * @param   {Object}  state  Vuex state function
+   *
+   * @return  {Array}         returns filtered words
+   */
   filter (state) {
-    // return state.words.filter((item) => {
-    //   // Filter by letter
-    //   if (state.wordFilteredByLetter !== null) {
-    //     return item.group === state.wordFilteredByLetter
-    //   }
-    //   // Return all words when no letter is choosen
-    //   return state.words
-    // })
+    /**
+     * Words sort asc or desc
+     *
+     * @param   {Array}  a  Direction A
+     * @param   {Array}  b  Direction B
+     *
+     * @return  {Array}     returns sorted words
+     */
+    const SortWordsAscDesc = [...state.words].sort((a, b) => {
+      if (state.wordSortDirection === 'desc') {
+        return a[state.wordSortDirection] > b[state.wordSortDirection] ? -1 : 1
+      } else {
+        return a[state.wordSortDirection] > b[state.wordSortDirection] ? 1 : -1
+      }
+    })
 
     if (state.wordFilteredByLetter !== null && state.searchWord.length === 0) {
-      return state.words.filter(item => item.group === state.wordFilteredByLetter)
+      /**
+       * Words filtered by letter
+       *
+       */
+      return SortWordsAscDesc.filter(item => item.group === state.wordFilteredByLetter)
     }
 
-    return state.words
-    // if (state.wordFilteredByLetter === null) {
-    //   return state.words.sort((a, b) => {
-    //     if (state.wordSortDirection === 'desc') {
-    //       return a[state.wordSortDirection] > b[state.wordSortDirection] ? -1 : 1
-    //     } else {
-    //       return a[state.wordSortDirection] > b[state.wordSortDirection] ? 1 : -1
-    //     }
-    //   })
-    // }
-
-    // const wordGroups = state.words.filter(item => item.group === state.wordFilteredByLetter)
-
-    // return wordGroups.sort((a, b) => {
-    //   if (state.wordSortDirection === 'desc') {
-    //     return a[state.wordSortDirection] > b[state.wordSortDirection] ? -1 : 1
-    //   } else {
-    //     return a[state.wordSortDirection] > b[state.wordSortDirection] ? 1 : -1
-    //   }
-    // })
+    return SortWordsAscDesc
   }
-  // letterList (state) {
-  //   // const only = state.words.map(word => word.group)
-  //   const list = state.words
-  //   // eslint-disable-next-line no-unreachable-loop
-  //   for (const [word, index] of list) {
-  //     const child = word.group[index]
-  //     // const cLetter = child.charAt(0)
-  //     return child
-  //   }
-  // }
-  //
-
 }
 
 export const actions = {

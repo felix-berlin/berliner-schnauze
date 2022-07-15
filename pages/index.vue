@@ -54,6 +54,7 @@
 
       <FilterDropdown critical />
 
+      <SortWordDirection />
       <WordList critical />
     </main>
   </div>
@@ -73,6 +74,7 @@ export default {
     LetterFilter: speedkitHydrate(() => import('@/components/letter-filter')),
     FilterDropdown: speedkitHydrate(() => import('@/components/filter-dropdown')),
     WordOfTheDay: speedkitHydrate(() => import('@/components/word-of-the-day')),
+    SortWordDirection: speedkitHydrate(() => import('@/components/sort-word-direction')),
     SpeedkitPicture
   },
   data () {
