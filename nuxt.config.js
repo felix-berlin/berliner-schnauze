@@ -168,7 +168,7 @@ export default {
 
   stylelint: {
     fix: true,
-    files: ['assets/**/*.{s?(a|c)ss,less,stylus}']
+    files: ['assets/styles/**/*.{s?(a|c)ss,less,stylus}']
   },
 
   loading: {
