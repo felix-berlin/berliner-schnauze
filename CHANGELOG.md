@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.14.6](https://github.com/felix-berlin/berliner-schnauze/compare/v1.14.5...v1.14.6) (2022-07-15)
+
+
+### Performance Improvements
+
+* **color-mode-button:** render only the used button ([49def3f](https://github.com/felix-berlin/berliner-schnauze/commit/49def3fad312888e6df9bacaf9ad8e440f25ee23))
+* reduced dom size ([fc8adae](https://github.com/felix-berlin/berliner-schnauze/commit/fc8adae86e812d84d8b24a0867dbc00fcacc8f23))
+
 ## [1.14.5](https://github.com/felix-berlin/berliner-schnauze/compare/v1.14.4...v1.14.5) (2022-07-08)
 
 
