@@ -5,17 +5,17 @@
     :aria-label="ariaLabel"
     @click="changeColorMode"
   >
-    <transition name="fade-fast" mode="out-in">
-      <span v-if="$colorMode.value === 'dark'" key="dark" class="c-button--center-icon">
+    <transition-group name="fade-out-in" tag="span" class="c-button--center-icon">
+      <span v-show="$colorMode.value === 'dark'" key="dark" class="c-button--center-icon">
         <Moon />
       </span>
-      <span v-if="$colorMode.value === 'light'" key="light" class="c-button--center-icon">
+      <span v-show="$colorMode.value === 'light'" key="light" class="c-button--center-icon">
         <Sun />
       </span>
-      <span v-if="$colorMode.value === 'system'" key="system" class="c-button--center-icon">
+      <span v-show="$colorMode.value === 'system'" key="system" class="c-button--center-icon">
         <Laptop2 />
       </span>
-    </transition>
+    </transition-group>
   </button>
 </template>
 
