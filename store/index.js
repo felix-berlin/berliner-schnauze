@@ -65,8 +65,8 @@ export const getters = {
    * @return  {Array}         uniqe alphabetic list
    */
   availableLetterGroups (state) {
-    // Loop throu array of objects and group by "group" key.
-    // Make a uniqe set of groups
+    // Loop thou array of objects and group by "group" key.
+    // Make a unique set of groups
     const groups = Array.from(new Set(state.words.map(item => item.group)))
 
     // Sort by alphabet
@@ -144,7 +144,7 @@ export const actions = {
    *
    * @return  {Function}
    */
-  async nuxtServerInit ({ commit, $sentry }) {
+  async nuxtServerInit ({ commit }) {
     commit('wordLoadingStatus', true)
 
     return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/words`)
@@ -153,7 +153,7 @@ export const actions = {
         commit('setBerlinWords', res)
         commit('wordLoadingStatus', false)
       }).catch((error) => {
-        $sentry.captureException(error)
+        console.warn(error)
       })
   },
 
