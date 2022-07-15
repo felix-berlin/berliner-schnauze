@@ -89,7 +89,7 @@ export default {
     '@nuxtjs/color-mode',
     'lucide-vue/nuxt',
     '@nuxtjs/device',
-    '@nuxtjs/html-validator',
+    // '@nuxtjs/html-validator',
     '@/modules/sitemap-route-generator'
   ],
 
@@ -140,10 +140,10 @@ export default {
     Disallow: ''
   },
 
-  router: {
-    // ran before every route on both client and server
-    middleware: ['middleware']
-  },
+  // router: {
+  //   // ran before every route on both client and server
+  //   middleware: ['middleware']
+  // },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -158,7 +158,8 @@ export default {
       if (isClient) {
         config.devtool = 'source-map'
       }
-    }
+    },
+    postcss: false // https://github.com/postcss/postcss/issues/1375
   },
 
   // image: {
