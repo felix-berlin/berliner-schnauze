@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.14.6...v1.15.0) (2022-07-16)
+
+
+### Bug Fixes
+
+* **button:** wrong color on active state ([c6d6d63](https://github.com/felix-berlin/berliner-schnauze/commit/c6d6d63f82437280987a8bbd5ee4158cb387dec0))
+* **color mode button:** remove transition ([04eb60d](https://github.com/felix-berlin/berliner-schnauze/commit/04eb60d62bd91e22aac4b0793f873f6b754a1502))
+* **color-mode-button:** Mismatching childNodes unsing transition-group ([02f2581](https://github.com/felix-berlin/berliner-schnauze/commit/02f2581daf1d63a03b6770144314d9a8f69cf561))
+
+
+### Features
+
+* **index:** removed desktop letter filter ([dc2be6c](https://github.com/felix-berlin/berliner-schnauze/commit/dc2be6c0fe8a219a4865b73c49ddf4109435ed23))
+* **search words:** aria label reacts on state ([a5a826c](https://github.com/felix-berlin/berliner-schnauze/commit/a5a826c856d7c420b27797f3b770967f32a0f5e8))
+* **sort word direction toggle:** add to index + styling ([b85138d](https://github.com/felix-berlin/berliner-schnauze/commit/b85138d951f3d0d4d66d7d4b64879958bc119fc4))
+* **sort word direction:** add sort function to the general filter function ([f415d2d](https://github.com/felix-berlin/berliner-schnauze/commit/f415d2d9c8a0b635df7f76a25917042c4fa20c67))
+
 ## [1.14.6](https://github.com/felix-berlin/berliner-schnauze/compare/v1.14.5...v1.14.6) (2022-07-15)
 
 
