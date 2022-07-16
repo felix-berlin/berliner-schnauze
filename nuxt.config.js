@@ -1,5 +1,7 @@
 import { resolve } from 'path'
+import axios from 'axios'
 import { version } from './package.json'
+
 export default {
   publicRuntimeConfig: {
     baseUrl: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
@@ -35,6 +37,19 @@ export default {
   },
 
   target: 'static',
+
+  generate: {
+    routes () {
+      return axios.get(`${process.env.BASE_API_URL}/wp-json/berliner-schnauze/v1/words`).then((res) => {
+        return res.data.map((word) => {
+          return {
+            route: '/word/' + word.post_name
+            // payload: word
+          }
+        })
+      })
+    }
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -107,7 +122,7 @@ export default {
   sentry: {
     // Additional Module Options go here
     // https://sentry.nuxtjs.org/sentry/options
-    dsn: 'https://f84fd7469c2e4ca7b3680f5e151d3499@o1131599.ingest.sentry.io/6176241',
+    dsn: process.env.SENTRY_DNS,
     tracing: {
       tracesSampleRate: 0.2,
       vueOptions: {
@@ -121,8 +136,8 @@ export default {
     },
     publishRelease: {
       authToken: process.env.SENTRY_AUTH_TOKEN,
-      org: 'webshaped',
-      project: 'berliner-schnauze',
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
       // Attach commits to the release (requires that the build triggered within a git repository).
       setCommits: {
         auto: true
@@ -175,12 +190,6 @@ export default {
     height: '3px',
     continuous: true,
     duration: 3000
-  },
-
-  toast: {
-    position: 'top-right',
-    containerClass: 'c-toast',
-    className: 'c-toast__item'
   },
 
   speedkit: {
