@@ -11,11 +11,14 @@
     </div>
 
     <button
-      aria-label="Wortsuche betätigen"
+      :aria-label="searchLength > 0 ? 'Wortsuche löschen' : 'Wortsuche betätigen'"
       type="button"
-      class="c-word-search__search-button u-button-reset c-button c-button--center-icon"
-      :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'c-word-search__search-button--left': (searchButtonPosition != 'right'), 'has-searchbar': showSearchBar }, buttonModifier]"
-      @click="buttonActions()"
+      :class="[ 'c-word-search__search-button u-button-reset c-button c-button--center-icon', buttonModifier,
+                { 'c-word-search__search-button--right': (searchButtonPosition != 'left'),
+                  'c-word-search__search-button--left': (searchButtonPosition != 'right'),
+                  'has-searchbar': showSearchBar }
+      ]"
+      @click="buttonActions"
     >
       <transition name="fade-fast" mode="out-in">
         <span v-if="toggleShowAndClearIcon" key="search" class="c-button--center-icon">
@@ -27,7 +30,13 @@
       </transition>
     </button>
 
-    <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap c-floating-label" :class="searchbarModifier" tag="div">
+    <transition-group
+      v-show="showSearchBar"
+      name="fade"
+      class="c-word-search__search-wrap c-floating-label"
+      :class="searchbarModifier"
+      tag="div"
+    >
       <input
         :id="'wordSearch' + id"
         :ref="'search' + id"
