@@ -152,7 +152,8 @@ export default {
 
   robots: {
     UserAgent: '*',
-    Disallow: ''
+    Disallow: '',
+    Sitemap: process.env.BASE_URL + '/sitemap.xml'
   },
 
   // router: {
