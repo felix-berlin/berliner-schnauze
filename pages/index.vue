@@ -50,11 +50,12 @@
         placeholder="Durchsuche den Berliner-Wortschatz"
       />
 
-      <LetterFilter class="c-letter-filter--desktop" critical />
+      <div class="o-index__filter-wrap">
+        <SortWordDirectionToggle critical />
 
-      <FilterDropdown critical />
+        <FilterDropdown critical />
+      </div>
 
-      <SortWordDirection />
       <WordList critical />
     </main>
   </div>
@@ -71,10 +72,9 @@ export default {
   components: {
     WordList: speedkitHydrate(() => import('@/components/word-list')),
     SearchWords: speedkitHydrate(() => import('@/components/search-words')),
-    LetterFilter: speedkitHydrate(() => import('@/components/letter-filter')),
     FilterDropdown: speedkitHydrate(() => import('@/components/filter-dropdown')),
     WordOfTheDay: speedkitHydrate(() => import('@/components/word-of-the-day')),
-    SortWordDirection: speedkitHydrate(() => import('@/components/sort-word-direction')),
+    SortWordDirectionToggle: speedkitHydrate(() => import('@/components/sort-word-direction-toggle')),
     SpeedkitPicture
   },
   data () {

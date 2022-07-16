@@ -46,16 +46,4 @@
 			--transform-text: none;
 		}
 	}
-
-	&--mobile {
-		--display: block;
-	}
-
-	&--desktop {
-		--display: none;
-
-		@include mx.breakpoint('sm') {
-			--display: block;
-		}
-	}
 }

@@ -6,11 +6,14 @@
       popper-class="c-filter-dropdown__dropdown"
       distance="9"
       container=".c-filter-dropdown"
-      :skidding="129"
       :shown="hideDropdown"
       :delay="{ show: 0, hide: 0 }"
     >
-      <button type="button" :class="[{'has-active-filter': $store.getters.getLetterFilter}, 'c-button c-button--center-icon c-filter-dropdown__button']" aria-label="Filter">
+      <button
+        type="button"
+        :class="['c-button c-button--center-icon c-button--filter', {'has-active-filter': $store.getters.getLetterFilter}]"
+        aria-label="Filter"
+      >
         <span class="u-icon-untouchable c-button--center-icon">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -26,11 +29,11 @@
             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
           </svg>
         </span>
-        Filter
+        alphabetisch
       </button>
 
       <template #popper>
-        <LetterFilter :critical="true" class="c-letter-filter--mobile" />
+        <LetterFilter :critical="true" />
       </template>
     </VDropdown>
 
