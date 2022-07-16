@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.16.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.15.0...v1.16.0) (2022-07-16)
+
+
+### Features
+
+* **robots.txt:** add sitemap URL ([9cb0b64](https://github.com/felix-berlin/berliner-schnauze/commit/9cb0b6427017d48819a1b3dc12952bf598b67e17))
+
 # [1.15.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.14.6...v1.15.0) (2022-07-16)
 
 
