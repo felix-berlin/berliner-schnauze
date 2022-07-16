@@ -52,6 +52,15 @@
 			--color-border: var(--grey-100);
 		}
 	}
+
+	&--filter {
+		--padding: #{vars.$spacer * 0.25 vars.$spacer * 0.5};
+
+		& > *,
+		& {
+			gap: vars.$spacer * 0.25;
+		}
+	}
 }
 
 .u-button-reset {

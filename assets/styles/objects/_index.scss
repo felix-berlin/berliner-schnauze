@@ -68,6 +68,11 @@
 		}
 	}
 
+	&__filter-wrap {
+		display: flex;
+		gap: vars.$spacer;
+	}
+
 	.c-word-of-the-day {
 		grid-area: wotd;
 		margin: var(--spacing-outer);
