@@ -127,7 +127,7 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.wordOfTheDay) { this.$store.dispatch('loadWordOfTheDay') }
+    this.$store.dispatch('loadWordOfTheDay')
   },
 
   methods: {
