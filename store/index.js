@@ -132,7 +132,7 @@ export const actions = {
   },
 
   async loadWordOfTheDay ({ commit, state, $sentry }) {
-    if (state.wordOfTheDay && typeof state.wordOfTheDay !== 'undefined') { return }
+    if (state.wordOfTheDay && typeof state.wordOfTheDay !== 'undefined') { return Promise.resolve() }
 
     commit('wordOfTheDayLoadingStatus', true)
     return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
