@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.18.1](https://github.com/felix-berlin/berliner-schnauze/compare/v1.18.0...v1.18.1) (2022-07-17)
+
+
+### Bug Fixes
+
+* mobile image sizes ([47df193](https://github.com/felix-berlin/berliner-schnauze/commit/47df1933bf08b7c23a10665953593615101348dd))
+
 # [1.18.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.17.0...v1.18.0) (2022-07-17)
 
 
