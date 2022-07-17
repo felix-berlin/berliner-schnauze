@@ -5,7 +5,7 @@
     </h2>
     <div class="c-related-words__words">
       <NuxtLink
-        v-for="(word, index) in randomWords($store.state.words, 8)"
+        v-for="(word, index) in xRandomWords($store.state.words, numberOfWords)"
         :key="index"
         :to="$routeToWord(word.post_name)"
         class="c-related-words__word"
@@ -13,6 +13,7 @@
       >
         {{ word.berlinerisch }}
       </NuxtLink>
+      <slot />
     </div>
   </section>
 </template>
@@ -20,6 +21,13 @@
 <script>
 export default {
   name: 'RelatedWords',
+
+  props: {
+    numberOfWords: {
+      type: Number,
+      default: 8
+    }
+  },
 
   methods: {
     /**
@@ -30,7 +38,7 @@ export default {
      *
      * @return  {Array}       Array of random items
      */
-    randomWords (arr, n) {
+    xRandomWords (arr, n) {
       const result = new Array(n)
       let len = arr.length
       const taken = new Array(len)
