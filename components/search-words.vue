@@ -1,33 +1,42 @@
 <template>
   <div class="c-word-search" :class="[{ 'c-word-search--large': searchbarType === 'large', 'c-word-search--nav-search': searchbarType === 'nav-search' }, modifier]">
-    <!-- <transition name="fade-fast"> -->
     <div v-if="keyboardFocus" v-show="!showSearchBar && !$device.isMobileOrTablet" class="c-word-search__shortcut">
-      <span v-show="$device.isMacOS" class="c-word-search__command-icon-wrap">
+      <span v-if="$device.isMacOS" class="c-word-search__command-icon-wrap">
         <!-- eslint-disable-next-line -->
         <Command :size="12" class="c-word-search__command-icon" />
       </span>
-      <span v-show="$device.isWindows">Control</span>
+      <span v-if="$device.isWindows">Control</span>
       <span class="c-word-search__shortcut-combine">+</span>
       <span>K</span>
     </div>
-    <!-- </transition> -->
 
     <button
-      aria-label="Wortsuche betätigen"
+      :aria-label="searchLength > 0 ? 'Wortsuche löschen' : 'Wortsuche betätigen'"
       type="button"
-      class="c-word-search__search-button u-button-reset c-button c-button--center-icon"
-      :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'c-word-search__search-button--left': (searchButtonPosition != 'right'), 'has-searchbar': showSearchBar }, buttonModifier]"
-      @click="buttonActions()"
+      :class="[ 'c-word-search__search-button u-button-reset c-button c-button--center-icon', buttonModifier,
+                { 'c-word-search__search-button--right': (searchButtonPosition != 'left'),
+                  'c-word-search__search-button--left': (searchButtonPosition != 'right'),
+                  'has-searchbar': showSearchBar }
+      ]"
+      @click="buttonActions"
     >
-      <span v-show="toggleShowAndClearIcon" class="c-button--center-icon">
-        <Search default-class="c-word-search__search-icon" />
-      </span>
-      <span v-show="!toggleShowAndClearIcon" class="c-button--center-icon">
-        <X />
-      </span>
+      <transition name="fade-fast" mode="out-in">
+        <span v-if="toggleShowAndClearIcon" key="search" class="c-button--center-icon">
+          <Search default-class="c-word-search__search-icon" />
+        </span>
+        <span v-if="!toggleShowAndClearIcon" key="del" class="c-button--center-icon">
+          <X />
+        </span>
+      </transition>
     </button>
 
-    <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap c-floating-label" :class="searchbarModifier" tag="div">
+    <transition-group
+      v-show="showSearchBar"
+      name="fade"
+      class="c-word-search__search-wrap c-floating-label"
+      :class="searchbarModifier"
+      tag="div"
+    >
       <input
         :id="'wordSearch' + id"
         :ref="'search' + id"

@@ -1,20 +1,27 @@
 <template>
   <div
-    v-tooltip="{ content: 'Klick auf das Wort um mehr zu erfahren!', distance: 10, shown: showTooltip, placement: 'left' }"
     class="c-word-of-the-day c-confetti"
     @mouseenter="celebrate = true, showTooltip = true"
     @mouseleave="celebrate = false, showTooltip = false"
   >
-    <div class="c-word-of-the-day__content">
+    <div
+      v-tooltip="{
+        content: 'Klick auf das Wort um mehr zu erfahren!',
+        distance: 10,
+        shown: showTooltip,
+        placement: 'bottom'
+      }"
+      class="c-word-of-the-day__content"
+    >
       <div class="c-word-of-the-day__crown-icon">
         <Crown :size="80" />
       </div>
 
       <transition name="fade-fast" mode="out-in">
-        <SingleLoader v-if="$fetchState.pending" key="loading" />
+        <SingleLoader v-if="$store.getters.getWordOfTheDayLoadingStatus" key="loading" />
         <div v-else key="word" class="c-word-of-the-day__word-wrap">
-          <NuxtLink :to="$routeToWord(wordOfTheDay.post_name)" class="c-word-of-the-day__word c-loader-text">
-            {{ wordOfTheDay.berlinerisch }}
+          <NuxtLink :to="$routeToWord($store.state.wordOfTheDay.post_name)" class="c-word-of-the-day__word c-loader-text">
+            {{ $store.state.wordOfTheDay.berlinerisch }}
           </NuxtLink>
         </div>
       </transition>
@@ -40,8 +47,8 @@ import SingleLoader from './single-loader.vue'
 
 export default {
   name: 'WordOfTheDay',
-  fetchOnServer: false,
-  fetchKey: 'word-of-the-day',
+  // fetchOnServer: false,
+  // fetchKey: 'word-of-the-day',
 
   components: {
     Crown,
@@ -50,7 +57,6 @@ export default {
 
   data () {
     return {
-      wordOfTheDay: {},
       countDown: null,
       timeToUpdate: {
         hours: '00',
@@ -62,19 +68,24 @@ export default {
     }
   },
 
-  async fetch () {
-    this.wordOfTheDay = await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
-      .then(res => res.json())
-      .catch((err) => { this.$sentry.captureException(err) })
-  },
+  // async fetch () {
+  //   await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
+  //     .then(res => res.json())
+  //     .then((data) => {
+  //       this.wordOfTheDay = data
+  //       this.$store.commit('updateWordOfTheDay', data)
+  //     })
+  //     .catch((err) => { this.$sentry.captureException(err) })
+  // },
 
-  activated () {
-    if (this.$fetchState.timestamp <= this.countDown) {
-      this.$fetch()
-    }
-  },
+  // activated () {
+  //   if (this.$fetchState.timestamp <= this.countDown) {
+  //     this.$fetch()
+  //   }
+  // },
 
   created () {
+    this.$store.dispatch('loadWordOfTheDay')
     this.countDownTimer()
   },
 

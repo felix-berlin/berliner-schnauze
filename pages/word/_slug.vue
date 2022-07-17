@@ -6,6 +6,16 @@
 
     <article class="c-single-word">
       <header class="c-single-word__header">
+        <span
+          v-if="isWordOfTheDay"
+          v-tooltip="{ content: `${word.berlinerisch} ist das heutige Wort des Tages`,
+                       distance: 10,
+                       placement: 'right'}"
+          class="c-single-word__crown"
+          aria-hidden="true"
+        >
+          <Crown />
+        </span>
         <h1 class="c-single-word__word">
           {{ word.berlinerisch }}<span v-if="word.article" class="c-single-word__word-article">, {{ word.article }}</span>
         </h1>
@@ -62,7 +72,7 @@
 </template>
 
 <script>
-import { ArrowLeft, Info, ExternalLink } from 'lucide-vue'
+import { ArrowLeft, Info, ExternalLink, Crown } from 'lucide-vue'
 
 export default {
 
@@ -75,7 +85,8 @@ export default {
   components: {
     ArrowLeft,
     Info,
-    ExternalLink
+    ExternalLink,
+    Crown
   },
 
   head () {
@@ -104,7 +115,15 @@ export default {
   computed: {
     word () {
       return this.$store.state.words.find(word => word.post_name === this.$route.params.slug)
+    },
+
+    isWordOfTheDay () {
+      return this.word.ID === this.$store.state.wordOfTheDay.ID
     }
+  },
+
+  created () {
+    this.$store.dispatch('loadWordOfTheDay')
   },
 
   methods: {

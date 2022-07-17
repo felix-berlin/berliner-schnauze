@@ -14,3 +14,32 @@
 .fade-fast-leave-active {
 	transition: opacity 0.2s ease-in;
 }
+
+/// Simulate out in Vue transition mode
+.fade-out-in-enter-active {
+	transition: opacity 0.5s ease-in;
+}
+
+.fade-out-in-leave-active {
+	transition: opacity 0.2s ease-out;
+}
+
+.fade-out-in-enter,
+.fade-out-in-leave-to,
+.fade-out-in-fast-enter,
+.fade-out-in-fast-leave-to {
+	opacity: 0;
+}
+
+.fade-out-in-fast-enter-active {
+	transition: opacity 0.2s ease-in;
+}
+
+.fade-out-in-fast-leave-active {
+	transition: opacity 0.1s ease-out;
+}
+
+.fade-out-in-leave-active,
+.fade-out-in-fast-leave-active {
+	position: absolute;
+}

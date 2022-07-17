@@ -44,16 +44,19 @@
 
       <SearchWords
         id="index"
+        critical
         searchbar-type="large"
         :focus-on-page-load="true"
         placeholder="Durchsuche den Berliner-Wortschatz"
       />
 
-      <LetterFilter class="c-letter-filter--desktop" />
+      <div class="o-index__filter-wrap">
+        <SortWordDirectionToggle critical />
 
-      <FilterDropdown />
+        <FilterDropdown critical />
+      </div>
 
-      <WordList />
+      <WordList critical />
     </main>
   </div>
 </template>
@@ -69,9 +72,9 @@ export default {
   components: {
     WordList: speedkitHydrate(() => import('@/components/word-list')),
     SearchWords: speedkitHydrate(() => import('@/components/search-words')),
-    LetterFilter: speedkitHydrate(() => import('@/components/letter-filter')),
     FilterDropdown: speedkitHydrate(() => import('@/components/filter-dropdown')),
     WordOfTheDay: speedkitHydrate(() => import('@/components/word-of-the-day')),
+    SortWordDirectionToggle: speedkitHydrate(() => import('@/components/sort-word-direction-toggle')),
     SpeedkitPicture
   },
   data () {
