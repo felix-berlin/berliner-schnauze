@@ -1,0 +1,7 @@
+@use '../variables/variables' as vars;
+
+.o-word {
+	display: flex;
+	flex-direction: column;
+	gap: vars.$spacer;
+}

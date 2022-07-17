@@ -1,5 +1,5 @@
 <template>
-  <main class="c-main c-content">
+  <main class="c-main c-content o-word">
     <NuxtLink :to="'/'" class="c-button c-button--back u-button-reset">
       <ArrowLeft /> zurück
     </NuxtLink>
@@ -68,11 +68,14 @@
         </p>
       </footer>
     </article>
+
+    <RelatedWords />
   </main>
 </template>
 
 <script>
 import { ArrowLeft, Info, ExternalLink, Crown } from 'lucide-vue'
+import speedkitHydrate from 'nuxt-speedkit/hydrate'
 
 export default {
 
@@ -86,7 +89,8 @@ export default {
     ArrowLeft,
     Info,
     ExternalLink,
-    Crown
+    Crown,
+    RelatedWords: speedkitHydrate(() => import('@/components/related-words'))
   },
 
   head () {
@@ -134,7 +138,8 @@ export default {
 
       return dateToFormat.toLocaleString(locale, { year: 'numeric', month: 'long', day: 'numeric' })
     }
-  }
 
+  }
 }
+
 </script>
