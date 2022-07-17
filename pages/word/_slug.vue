@@ -69,7 +69,9 @@
       </footer>
     </article>
 
-    <RelatedWords />
+    <RelatedWords :number-of-words="7">
+      <RandomWordButton class="c-related-words__word is-random" />
+    </RelatedWords>
   </main>
 </template>
 
@@ -90,7 +92,8 @@ export default {
     Info,
     ExternalLink,
     Crown,
-    RelatedWords: speedkitHydrate(() => import('@/components/related-words'))
+    RelatedWords: speedkitHydrate(() => import('@/components/related-words')),
+    RandomWordButton: speedkitHydrate(() => import('@/components/random-word-button'))
   },
 
   head () {
