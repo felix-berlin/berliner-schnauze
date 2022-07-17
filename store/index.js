@@ -132,16 +132,14 @@ export const actions = {
   },
 
   async loadWordOfTheDay ({ commit, state, $sentry }) {
-    if (!state.wordOfTheDay) {
-      commit('wordOfTheDayLoadingStatus', true)
-      return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
-        .then(res => res.json())
-        .then((data) => {
-          commit('updateWordOfTheDay', data)
-          commit('wordOfTheDayLoadingStatus', false)
-        })
-        .catch((err) => { $sentry.captureException(err) })
-    }
+    commit('wordOfTheDayLoadingStatus', true)
+    return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
+      .then(res => res.json())
+      .then((data) => {
+        commit('updateWordOfTheDay', data)
+        commit('wordOfTheDayLoadingStatus', false)
+      })
+      .catch((err) => { $sentry.captureException(err) })
   },
 
   /**

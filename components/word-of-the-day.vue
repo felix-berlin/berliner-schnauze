@@ -85,7 +85,7 @@ export default {
   // },
 
   created () {
-    this.$store.dispatch('loadWordOfTheDay')
+    if (!this.$store.state.wordOfTheDay) { this.$store.dispatch('loadWordOfTheDay') }
     this.countDownTimer()
   },
 
