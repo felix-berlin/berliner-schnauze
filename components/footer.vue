@@ -50,7 +50,7 @@ export default {
         sources: [
           {
             src: '/bear-walking.png',
-            sizes: { xs: '160px', sm: '100vw', md: '100vw', lg: '100vw', xl: '100vw', xxl: '700px' }
+            sizes: { xs: '140px', sm: '300px', md: '360px', lg: '330px', xl: '430px', xxl: '700px' }
           }
         ],
         formats: ['avif', 'webp', 'jpg|jpeg|png'],
