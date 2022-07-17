@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.17.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.16.0...v1.17.0) (2022-07-17)
+
+
+### Bug Fixes
+
+* Safari Date() format ([b8846ed](https://github.com/felix-berlin/berliner-schnauze/commit/b8846ed08ac5ab55897b220d70e2186a71ff15ae))
+
+
+### Features
+
+* **header:** menu icon transition ([d68963f](https://github.com/felix-berlin/berliner-schnauze/commit/d68963f027b8f9bc0798838421723d7da634decb))
+* **related post:** add related words component to single word page ([be00a84](https://github.com/felix-berlin/berliner-schnauze/commit/be00a84b1a772012c8d2c879407505b17fe31af5))
+
 # [1.16.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.15.0...v1.16.0) (2022-07-16)
 
 
