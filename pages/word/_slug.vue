@@ -1,5 +1,5 @@
 <template>
-  <main class="c-main c-content">
+  <main class="c-main c-content o-word">
     <NuxtLink :to="'/'" class="c-button c-button--back u-button-reset">
       <ArrowLeft /> zurück
     </NuxtLink>
@@ -61,18 +61,21 @@
 
       <footer class="c-single-word__footer">
         <p class="c-single-word__created">
-          Wort erstellt am: {{ formatedDate(word.post_date) }}
+          Wort erstellt am: {{ formattedDate(word.post_date) }}
         </p>
         <p class="c-single-word__modified">
-          Bearbeitet am: {{ formatedDate(word.post_modified) }}
+          Bearbeitet am: {{ formattedDate(word.post_modified) }}
         </p>
       </footer>
     </article>
+
+    <RelatedWords />
   </main>
 </template>
 
 <script>
 import { ArrowLeft, Info, ExternalLink, Crown } from 'lucide-vue'
+import speedkitHydrate from 'nuxt-speedkit/hydrate'
 
 export default {
 
@@ -86,7 +89,8 @@ export default {
     ArrowLeft,
     Info,
     ExternalLink,
-    Crown
+    Crown,
+    RelatedWords: speedkitHydrate(() => import('@/components/related-words'))
   },
 
   head () {
@@ -127,12 +131,15 @@ export default {
   },
 
   methods: {
-    formatedDate (date, locale = 'de-DE') {
-      const dateToFormat = new Date(date)
+    formattedDate (date, locale = 'de-DE') {
+      const dumpSafariDateFormat = date.replace(/-/g, '/')
+
+      const dateToFormat = new Date(dumpSafariDateFormat)
 
       return dateToFormat.toLocaleString(locale, { year: 'numeric', month: 'long', day: 'numeric' })
     }
-  }
 
+  }
 }
+
 </script>
