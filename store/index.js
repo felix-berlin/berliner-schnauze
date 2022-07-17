@@ -23,6 +23,7 @@ export const getters = {
   searchbarVisible: state => state.searchbarIsVisible,
   getScrollPositionY: state => state.scrollPositionY,
   getActiveWordSearch: state => state.activeWordSearch,
+  getWordOfTheDay: state => state.wordOfTheDay,
   getWordOfTheDayLoadingStatus: state => state.loadingWordOfTheDay,
 
   /**
@@ -130,7 +131,9 @@ export const actions = {
       })
   },
 
-  async loadWordOfTheDay ({ commit, $sentry }) {
+  async loadWordOfTheDay ({ commit, state, $sentry }) {
+    if (state.wordOfTheDay) { return }
+
     commit('wordOfTheDayLoadingStatus', true)
     return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
       .then(res => res.json())
