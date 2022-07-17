@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.18.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.17.0...v1.18.0) (2022-07-17)
+
+
+### Features
+
+* **random word button:** add random word button as last element in related words component ([7427701](https://github.com/felix-berlin/berliner-schnauze/commit/7427701b7b1262febc39b907697108ff6a0f4aed))
+
 # [1.17.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.16.0...v1.17.0) (2022-07-17)
 
 
