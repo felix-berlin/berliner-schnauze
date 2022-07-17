@@ -1,6 +1,6 @@
 <template>
   <main class="c-content o-legal-pages">
-    <div v-if="content.status === 'publish'" v-html="content.content.rendered" />
+    <div v-if="privacyPolicy.status === 'publish'" v-html="privacyPolicy.content.rendered" />
   </main>
 </template>
 
@@ -8,19 +8,13 @@
 export default {
   name: 'PrivacyPolicyPage',
 
-  data () {
-    return {
-      content: {}
-    }
-  },
-
-  async fetch () {
-    await fetch(`${this.$config.baseApiUrl}/wp-json/wp/v2/pages/4715`)
-      .then(res => res.json())
-      .then((data) => {
-        this.content = data
+  async asyncData ({ $axios, $config, $sentry }) {
+    const privacyPolicy = await $axios.$get(`${$config.baseApiUrl}/wp-json/wp/v2/pages/4715`)
+      .catch((error) => {
+        $sentry.captureException(error)
       })
-      .catch((error) => { this.$sentry.captureException(error) })
+
+    return { privacyPolicy }
   },
 
   head () {
