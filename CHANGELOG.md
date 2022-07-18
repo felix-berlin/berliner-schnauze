@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.18.3](https://github.com/felix-berlin/berliner-schnauze/compare/v1.18.2...v1.18.3) (2022-07-18)
+
+
+### Bug Fixes
+
+* **word of the day:** add missing Promise ([be294e0](https://github.com/felix-berlin/berliner-schnauze/commit/be294e03955cc28173b6f51a370f256319d874fa))
+* **word of the day:** caching condition ([4672ca7](https://github.com/felix-berlin/berliner-schnauze/commit/4672ca7ec4a656a041de08154824ea32d2d910e2))
+* **word of the day:** condition before init func ([f21894d](https://github.com/felix-berlin/berliner-schnauze/commit/f21894d08636fc007a5caa160ddcb6234b0f74ea))
+* **word of the day:** not load when caching active ([c098b6c](https://github.com/felix-berlin/berliner-schnauze/commit/c098b6c6dc32ed721bb83ba330f27a20ba5ede8b))
+* **word search:** it is no longer possible to have a active empty search when switching to a single page ([6a7c63d](https://github.com/felix-berlin/berliner-schnauze/commit/6a7c63d251c6aff6ce907531a4e214a75ebea8d2))
+
+
+### Performance Improvements
+
+* **word of the day:** cache first fetch ([4e3392b](https://github.com/felix-berlin/berliner-schnauze/commit/4e3392bc7f87ec5913794f7c9c5dc8ba5795abda))
+
 ## [1.18.2](https://github.com/felix-berlin/berliner-schnauze/compare/v1.18.1...v1.18.2) (2022-07-17)
 
 
