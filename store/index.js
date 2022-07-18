@@ -23,6 +23,7 @@ export const getters = {
   searchbarVisible: state => state.searchbarIsVisible,
   getScrollPositionY: state => state.scrollPositionY,
   getActiveWordSearch: state => state.activeWordSearch,
+  getWordOfTheDay: state => state.wordOfTheDay,
   getWordOfTheDayLoadingStatus: state => state.loadingWordOfTheDay,
 
   /**

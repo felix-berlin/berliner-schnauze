@@ -2,7 +2,6 @@
   <div class="c-word-search" :class="[{ 'c-word-search--large': searchbarType === 'large', 'c-word-search--nav-search': searchbarType === 'nav-search' }, modifier]">
     <div v-if="keyboardFocus" v-show="!showSearchBar && !$device.isMobileOrTablet" class="c-word-search__shortcut">
       <span v-if="$device.isMacOS" class="c-word-search__command-icon-wrap">
-        <!-- eslint-disable-next-line -->
         <Command :size="12" class="c-word-search__command-icon" />
       </span>
       <span v-if="$device.isWindows">Control</span>
@@ -45,6 +44,8 @@
         class="c-word-search__search-input c-input c-floating-label__input"
         placeholder=" "
         :aria-label="searchAriaLabel"
+        autocomplete="off"
+        :value="search"
         @input="updateSearch"
         @focus="resetTimeout"
         @blur="hideSearchbarAfterTime(5000)"
@@ -261,7 +262,7 @@ export default {
     focusSearch () {
       this.$nextTick(function () {
         // if (this.$refs.search === document.activeElement) {
-        //   this.$refs.search.blur() // Make sure the searchbar is not allready focused
+        //   this.$refs.search.blur() // Make sure the searchbar is not already focused
         // }
         // this.$refs['search' + this.id].blur()
         this.$refs['search' + this.id].focus()
@@ -272,7 +273,7 @@ export default {
     /**
      * Hide the searchbar after a given time
      *
-     * @param   {Number}  timeout  Timeout in millisecons
+     * @param   {Number}  timeout  Timeout in milliseconds
      *
      * @return  {Number}           Timeout ID
      */
