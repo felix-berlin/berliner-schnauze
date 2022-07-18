@@ -8,7 +8,7 @@
         default-class="c-scroll-to-top__icon"
       />
     </ScrollToTop>
-    <CookieConsent>
+    <CookieConsent @accept-cookies="cookiesAccepted">
       <template slot="content">
         <Cookie />
       </template>
@@ -37,6 +37,12 @@ export default {
     ScrollToTop: speedkitHydrate(() => import('@/components/scroll-to-top')),
     FooterPart: speedkitHydrate(() => import('@/components/footer')),
     CookieConsent: speedkitHydrate(() => import('@/components/cookie-consent'))
+  },
+
+  methods: {
+    cookiesAccepted (type) {
+      console.log(type)
+    }
   }
 }
 </script>

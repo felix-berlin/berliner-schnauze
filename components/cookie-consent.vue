@@ -22,12 +22,12 @@ export default {
 
   methods: {
     acceptCookies (type) {
-      console.log(type)
       if (!['accepted', 'none'].includes(type)) {
         console.error('Invalid type')
       }
 
       localStorage.setItem('cookieConsent', type)
+      this.$emit('accept-cookies', type)
     },
 
     clearStorage () {
