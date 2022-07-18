@@ -191,6 +191,11 @@ export default {
   },
 
   mounted () {
+    // Restore last search
+    if (localStorage.getItem('searchWord')) {
+      this.$store.commit('updateSearch', localStorage.getItem('searchWord'))
+    }
+
     if (this.focusOnPageLoad && this.$device.isDesktop) {
       this.focusSearch()
     }
@@ -214,6 +219,8 @@ export default {
      */
     updateSearch (searchInput) {
       this.$store.commit('updateSearch', searchInput.target.value)
+
+      localStorage.setItem('searchWord', searchInput.target.value)
 
       this.searchLength = searchInput.target.value.length
 
