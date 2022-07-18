@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.18.2](https://github.com/felix-berlin/berliner-schnauze/compare/v1.18.1...v1.18.2) (2022-07-17)
+
+
+### Bug Fixes
+
+* image dimentions for all sizes ([da9b678](https://github.com/felix-berlin/berliner-schnauze/commit/da9b678558a3e93fc758fe18bbf4223fe03e7d22))
+
+## [1.18.1](https://github.com/felix-berlin/berliner-schnauze/compare/v1.18.0...v1.18.1) (2022-07-17)
+
+
+### Bug Fixes
+
+* mobile image sizes ([47df193](https://github.com/felix-berlin/berliner-schnauze/commit/47df1933bf08b7c23a10665953593615101348dd))
+
+# [1.18.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.17.0...v1.18.0) (2022-07-17)
+
+
+### Features
+
+* **random word button:** add random word button as last element in related words component ([7427701](https://github.com/felix-berlin/berliner-schnauze/commit/7427701b7b1262febc39b907697108ff6a0f4aed))
+
 # [1.17.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.16.0...v1.17.0) (2022-07-17)
 
 

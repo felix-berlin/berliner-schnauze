@@ -83,7 +83,7 @@ export default {
         sources: [
           {
             src: '/brown-bear-roar.png',
-            sizes: { sm: '100vw', md: '40vw', lg: '40vw', xl: '50vw', xxl: '900px' }
+            sizes: { xs: '175px', sm: '325px', md: '330px', lg: '380px', xl: '540px', xxl: '900px' }
           }
         ],
         formats: ['avif', 'webp', 'jpg|jpeg|png'],

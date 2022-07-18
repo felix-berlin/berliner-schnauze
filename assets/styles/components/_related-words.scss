@@ -24,5 +24,9 @@
 				--style-border: solid;
 			}
 		}
+
+		&.is-random {
+			gap: vars.$spacer * 0.3;
+		}
 	}
 }
