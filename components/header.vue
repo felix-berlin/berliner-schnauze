@@ -26,7 +26,7 @@
           <button type="button" class="c-button c-menu-nav__item-button u-button-reset c-button--center-icon" aria-label="Website Menu Navigation">
             <transition name="fast" mode="out-in">
               <span v-if="$device.isDesktop" key="desktop" class="u-icon-untouchable u-icon-wrapper c-button--center-icon">
-                <Menu />
+                <MenuIcon />
               </span>
               <span v-if="$device.isMobileOrTablet" key="mobile" class="u-icon-untouchable u-icon-wrapper c-button--center-icon">
                 <MoreVertical />
@@ -43,9 +43,10 @@
                 </NuxtLink>
               </li>
               <li v-for="(item, index) in menuItems" :key="index" class="c-menu-more__item" :class="{ 'is-split': item.title === 'Impressum' }">
-                <NuxtLink :to="item.link">
+                <NuxtLink v-if="item.intern" :to="item.link">
                   {{ item.title }}
                 </NuxtLink>
+                <a v-else :href="item.link" target="_blank" v-text="item.title" />
               </li>
             </ul>
           </template>
@@ -58,15 +59,14 @@
 </template>
 
 <script>
-import { Menu, MoreVertical } from 'lucide-vue'
+import { Menu as MenuIcon, MoreVertical } from 'lucide-vue'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'HeaderPart',
 
   components: {
-    // eslint-disable-next-line
-    Menu,
+    MenuIcon,
     MoreVertical
   },
   data () {
@@ -74,15 +74,23 @@ export default {
       menuItems: [
         {
           title: 'Wort vorschlagen',
-          link: '/suggest-word'
+          link: '/suggest-word',
+          intern: true
+        },
+        {
+          title: 'tech. Fehler melden',
+          link: 'https://github.com/felix-berlin/berliner-schnauze/issues/new',
+          intern: false
         },
         {
           title: 'Impressum',
-          link: '/imprint'
+          link: '/imprint',
+          intern: true
         },
         {
           title: 'Datenschutz',
-          link: '/privacy-policy'
+          link: '/privacy-policy',
+          intern: true
         }
       ]
     }
