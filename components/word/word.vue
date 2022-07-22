@@ -82,7 +82,7 @@
             @click="copyWordPageUrlToClipboard(source.post_name, index)"
           >
             <span class="c-word-list__icon-button" :class="{ 'is-hidden': wordLinkCopied === index }">
-              <Link :size="18" />
+              <LinkIcon :size="18" />
             </span>
             <span class="c-word-list__icon-button" :class="{ 'is-hidden': wordLinkCopied !== index }">
               <CheckCircle2 :size="18" />
@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { Copy, CheckCircle2, MoreVertical, Info, Link, Share2, Crown } from 'lucide-vue'
+import { Copy, CheckCircle2, MoreVertical, Info, Link as LinkIcon, Share2, Crown } from 'lucide-vue'
 
 export default {
   name: 'WordSingle',
@@ -129,8 +129,7 @@ export default {
     MoreVertical,
     Share2,
     Info,
-    // eslint-disable-next-line
-    Link,
+    LinkIcon,
     Crown
   },
   props: {

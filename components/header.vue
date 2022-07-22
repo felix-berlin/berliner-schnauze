@@ -26,7 +26,7 @@
           <button type="button" class="c-button c-menu-nav__item-button u-button-reset c-button--center-icon" aria-label="Website Menu Navigation">
             <transition name="fast" mode="out-in">
               <span v-if="$device.isDesktop" key="desktop" class="u-icon-untouchable u-icon-wrapper c-button--center-icon">
-                <Menu />
+                <MenuIcon />
               </span>
               <span v-if="$device.isMobileOrTablet" key="mobile" class="u-icon-untouchable u-icon-wrapper c-button--center-icon">
                 <MoreVertical />
@@ -59,15 +59,14 @@
 </template>
 
 <script>
-import { Menu, MoreVertical } from 'lucide-vue'
+import { Menu as MenuIcon, MoreVertical } from 'lucide-vue'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'HeaderPart',
 
   components: {
-    // eslint-disable-next-line
-    Menu,
+    MenuIcon,
     MoreVertical
   },
   data () {
