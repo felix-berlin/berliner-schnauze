@@ -43,9 +43,10 @@
                 </NuxtLink>
               </li>
               <li v-for="(item, index) in menuItems" :key="index" class="c-menu-more__item" :class="{ 'is-split': item.title === 'Impressum' }">
-                <NuxtLink :to="item.link">
+                <NuxtLink v-if="item.intern" :to="item.link">
                   {{ item.title }}
                 </NuxtLink>
+                <a v-else :href="item.link" target="_blank" v-text="item.title" />
               </li>
             </ul>
           </template>
@@ -74,15 +75,23 @@ export default {
       menuItems: [
         {
           title: 'Wort vorschlagen',
-          link: '/suggest-word'
+          link: '/suggest-word',
+          intern: true
+        },
+        {
+          title: 'tech. Fehler melden',
+          link: 'https://github.com/felix-berlin/berliner-schnauze/issues/new',
+          intern: false
         },
         {
           title: 'Impressum',
-          link: '/imprint'
+          link: '/imprint',
+          intern: true
         },
         {
           title: 'Datenschutz',
-          link: '/privacy-policy'
+          link: '/privacy-policy',
+          intern: true
         }
       ]
     }
