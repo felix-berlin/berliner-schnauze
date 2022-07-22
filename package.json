@@ -1,6 +1,6 @@
 {
   "name": "berliner-schnauze",
-  "version": "1.18.3",
+  "version": "1.19.0",
   "private": false,
   "scripts": {
     "dev": "nuxt",
@@ -19,12 +19,12 @@
     "@nuxtjs/sentry": "^5.1.7",
     "@nuxtjs/sitemap": "^2.4.0",
     "@sentry/tracing": "6.19.7",
-    "core-js": "3.23.4",
+    "core-js": "3.23.5",
     "floating-vue": "1.0.0-beta.18",
     "fuse.js": "6.6.2",
-    "lucide-vue": "0.77.0",
+    "lucide-vue": "0.83.0",
     "nuxt": "^2.15.8",
-    "nuxt-speedkit": "2.0.16",
+    "nuxt-speedkit": "2.0.17",
     "vue": "^2.6.14",
     "vue-matomo": "^4.1.0",
     "vue-server-renderer": "^2.6.14",

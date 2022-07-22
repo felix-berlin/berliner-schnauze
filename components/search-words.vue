@@ -2,7 +2,7 @@
   <div class="c-word-search" :class="[{ 'c-word-search--large': searchbarType === 'large', 'c-word-search--nav-search': searchbarType === 'nav-search' }, modifier]">
     <div v-if="keyboardFocus" v-show="!showSearchBar && !$device.isMobileOrTablet" class="c-word-search__shortcut">
       <span v-if="$device.isMacOS" class="c-word-search__command-icon-wrap">
-        <Command :size="12" class="c-word-search__command-icon" />
+        <CommandIcon :size="12" class="c-word-search__command-icon" />
       </span>
       <span v-if="$device.isWindows">Control</span>
       <span class="c-word-search__shortcut-combine">+</span>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { Search, Command, X } from 'lucide-vue'
+import { Search, Command as CommandIcon, X } from 'lucide-vue'
 import { mapState } from 'vuex'
 
 export default {
@@ -64,8 +64,7 @@ export default {
 
   components: {
     Search,
-    // eslint-disable-next-line
-    Command,
+    CommandIcon,
     X
   },
 
@@ -191,6 +190,11 @@ export default {
   },
 
   mounted () {
+    // Restore last search
+    if (localStorage.getItem('searchWord')) {
+      this.$store.commit('updateSearch', localStorage.getItem('searchWord'))
+    }
+
     if (this.focusOnPageLoad && this.$device.isDesktop) {
       this.focusSearch()
     }
@@ -214,6 +218,8 @@ export default {
      */
     updateSearch (searchInput) {
       this.$store.commit('updateSearch', searchInput.target.value)
+
+      localStorage.setItem('searchWord', searchInput.target.value)
 
       this.searchLength = searchInput.target.value.length
 

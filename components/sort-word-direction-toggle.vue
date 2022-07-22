@@ -3,7 +3,7 @@
     type="button"
     class="c-sort-word-direction-toggle c-button c-button--center-icon c-button--filter"
     :aria-label="'sortiere ' + ($store.state.wordSortDirection === 'asc' ? 'aufsteigend' : 'absteigend')"
-    @click="$store.commit('updateWordSortDirection', $store.state.wordSortDirection === 'asc' ? 'desc' : 'asc')"
+    @click="updateSortDirection"
   >
     <transition name="fade-fast" mode="out-in">
       <span v-if="$store.state.wordSortDirection === 'asc'" key="asc" class="c-sort-word-direction-toggle__button c-button--center-icon">
@@ -27,6 +27,21 @@ export default {
   components: {
     SortAsc,
     SortDesc
+  },
+
+  mounted () {
+    // Restore sort direction from local storage
+    if (localStorage.getItem('wordSortDirection')) {
+      this.$store.commit('updateWordSortDirection', localStorage.getItem('wordSortDirection'))
+    }
+  },
+
+  methods: {
+    updateSortDirection () {
+      this.$store.commit('updateWordSortDirection', this.$store.state.wordSortDirection === 'asc' ? 'desc' : 'asc')
+
+      localStorage.setItem('wordSortDirection', this.$store.state.wordSortDirection)
+    }
   }
 }
 </script>

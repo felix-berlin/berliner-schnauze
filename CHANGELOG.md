@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.19.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.18.3...v1.19.0) (2022-07-18)
+
+
+### Features
+
+* **letter filter:** save and restore letter filter from local storage ([7923bdd](https://github.com/felix-berlin/berliner-schnauze/commit/7923bdd3034b20636aaa7f0797c471425862a272))
+* **search words:** save and restore word search from local storage ([a5811f6](https://github.com/felix-berlin/berliner-schnauze/commit/a5811f64db4b28ae1127baaef4ff86352a501880))
+
 ## [1.18.3](https://github.com/felix-berlin/berliner-schnauze/compare/v1.18.2...v1.18.3) (2022-07-18)
 
 
