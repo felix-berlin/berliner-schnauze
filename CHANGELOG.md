@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.20.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.19.0...v1.20.0) (2022-07-22)
+
+
+### Bug Fixes
+
+* **reserved component names:** import icons via alias ([d4dfcf2](https://github.com/felix-berlin/berliner-schnauze/commit/d4dfcf210eacb1fecb0632caf792fea5081c98a3))
+
+
+### Features
+
+* **header menu:** add report bug link to github issue ([9fb6476](https://github.com/felix-berlin/berliner-schnauze/commit/9fb647671383fa7668c73938ccf2b2c9184c3488))
+
 # [1.19.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.18.3...v1.19.0) (2022-07-18)
 
 
