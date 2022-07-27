@@ -40,7 +40,7 @@ export default {
   target: 'static',
 
   generate: {
-    fallback: true,
+    fallback: true, // enable fallback error pages in static mode
 
     routes () {
       return axios.get(`${process.env.BASE_API_URL}/wp-json/berliner-schnauze/v1/words`).then((res) => {
