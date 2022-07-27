@@ -19,6 +19,7 @@ export default {
       }
     }
   },
+
   privateRuntimeConfig: {
     sentryAuthToken: process.env.SENTRY_AUTH_TOKEN
   },
@@ -39,6 +40,8 @@ export default {
   target: 'static',
 
   generate: {
+    fallback: true,
+
     routes () {
       return axios.get(`${process.env.BASE_API_URL}/wp-json/berliner-schnauze/v1/words`).then((res) => {
         return res.data.map((word) => {
