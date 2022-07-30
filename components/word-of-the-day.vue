@@ -86,6 +86,9 @@ export default {
 
   created () {
     this.$store.dispatch('loadWordOfTheDay')
+  },
+
+  mounted () {
     this.countDownTimer()
   },
 
@@ -97,15 +100,13 @@ export default {
      * @return  {Void}
      */
     countDownTimer () {
-      const timer = setInterval(() => {
+      setTimeout(() => {
         let milliseconds = this.resetAtMidnight()
         milliseconds -= 1
         this.countDown = milliseconds
-        if (milliseconds <= 0) {
-          clearInterval(timer)
-        }
-
         this.timeToUpdate = this.convertMsToTime(milliseconds, true)
+
+        this.countDownTimer()
       }, 1000)
     },
 
