@@ -1,5 +1,4 @@
 import { resolve } from 'path'
-import axios from 'axios'
 import { version } from './package.json'
 
 export default {
@@ -40,18 +39,18 @@ export default {
   target: 'static',
 
   generate: {
-    fallback: true, // enable fallback error pages in static mode
+    fallback: true // enable fallback error pages in static mode
 
-    routes () {
-      return axios.get(`${process.env.BASE_API_URL}/wp-json/berliner-schnauze/v1/words`).then((res) => {
-        return res.data.map((word) => {
-          return {
-            route: '/word/' + word.post_name
-            // payload: word
-          }
-        })
-      })
-    }
+    // routes () {
+    //   return axios.get(`${process.env.BASE_API_URL}/wp-json/berliner-schnauze/v1/words`).then((res) => {
+    //     return res.data.map((word) => {
+    //       return {
+    //         route: '/word/' + word.post_name
+    //         // payload: word
+    //       }
+    //     })
+    //   })
+    // }
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
