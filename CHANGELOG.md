@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.20.2](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.1...v1.20.2) (2022-07-30)
+
+
+### Bug Fixes
+
+* axios import in nuxt.config ([347059f](https://github.com/felix-berlin/berliner-schnauze/commit/347059fabed0f4404e72918ab85df563a9ac3d62))
+* nuxt build finished but did not exit after 5s ([a25e79e](https://github.com/felix-berlin/berliner-schnauze/commit/a25e79e575bd23d397cf42dddc3d4eeb010244b9))
+
 ## [1.20.1](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.0...v1.20.1) (2022-07-27)
 
 
