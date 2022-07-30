@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.20.1](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.0...v1.20.1) (2022-07-27)
+
+
+### Bug Fixes
+
+* **error page:** static error pages ([7c9dd78](https://github.com/felix-berlin/berliner-schnauze/commit/7c9dd78df24597053a033b8616df6ea733754ee9))
+
 # [1.20.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.19.0...v1.20.0) (2022-07-22)
 
 
