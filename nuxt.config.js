@@ -107,7 +107,7 @@ export default {
     'lucide-vue/nuxt',
     '@nuxtjs/device',
     // '@nuxtjs/html-validator',
-    '@/modules/sitemap-route-generator'
+    '@/modules/sitemap-route-generator',
     'nuxt-graphql-request'
   ],
 

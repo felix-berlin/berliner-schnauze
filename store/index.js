@@ -12,7 +12,7 @@ export const state = () => ({
   wordSortDirection: 'desc',
   wordOfTheDay: '',
   loadingWordOfTheDay: false,
-  activeWordSearch: ''
+  activeWordSearch: '',
   berlinWordsQl: []
 })
 
@@ -161,6 +161,7 @@ export const actions = {
       }
       `
     const words = await this.$graphql.default.request(query)
+    console.log(words)
     commit('setBerlinWordsQl', words)
 
     return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/words`)
@@ -213,6 +214,6 @@ export const mutations = {
   updateWordSortDirection: (state, direction) => (state.wordSortDirection = direction),
   updateWordFilteredLetter: (state, letter) => (state.wordFilteredByLetter = letter),
   updateWordOfTheDay: (state, word) => (state.wordOfTheDay = word),
-  updateActiveWordSearch: (state, word) => (state.activeWordSearch = word)
-  setBerlinWordsQl: (state, words) => ({ ...state.berlinWordsQl, ...words })
+  updateActiveWordSearch: (state, word) => (state.activeWordSearch = word),
+  setBerlinWordsQl: (state, words) => (state.berlinWordsQl = words)
 }
