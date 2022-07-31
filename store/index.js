@@ -5,28 +5,16 @@ export const state = () => ({
   wordGroups: [],
   wordCount: '',
   searchWord: '',
-  searchbarIsVisable: false,
+  searchbarIsVisible: false,
   loadingWords: false,
   scrollPositionY: null,
   wordFilteredByLetter: null,
   wordSortDirection: 'desc',
+  wordOfTheDay: '',
+  loadingWordOfTheDay: false,
+  activeWordSearch: ''
   berlinWordsQl: []
 })
-
-// const sortFuctions = {
-//   wordsSortedByDirection (state) {
-//     return [...state.words].sort((a, b) => {
-//       if (state.wordSortDirection === 'desc') {
-//         return a[state.wordSortDirection] > b[state.wordSortDirection] ? -1 : 1
-//       } else {
-//         return a[state.wordSortDirection] > b[state.wordSortDirection] ? 1 : -1
-//       }
-//     })
-//   },
-//   wordsFilteredByLetter (state) {
-//     return state.words.filter(item => item.group === state.wordFilteredByLetter)
-//   }
-// }
 
 export const getters = {
   berlinerWords: state => state.words,
@@ -35,8 +23,11 @@ export const getters = {
   getWordLoadingStatus: state => state.loadingWords,
   getWordSearch: state => state.searchWord,
   getLetterFilter: state => state.wordFilteredByLetter,
-  searchbarVisable: state => state.searchbarIsVisable,
+  searchbarVisible: state => state.searchbarIsVisible,
   getScrollPositionY: state => state.scrollPositionY,
+  getActiveWordSearch: state => state.activeWordSearch,
+  getWordOfTheDay: state => state.wordOfTheDay,
+  getWordOfTheDayLoadingStatus: state => state.loadingWordOfTheDay,
 
   /**
    * Get tge words array sorted desc or asc
@@ -56,15 +47,15 @@ export const getters = {
   },
 
   /**
-   * Get a uniqe alphabetic list of all available letters
+   * Get a unique alphabetic list of all available letters
    *
    * @param   {Array}  state  vuex state function
    *
-   * @return  {Array}         uniqe alphabetic list
+   * @return  {Array}         unique alphabetic list
    */
   availableLetterGroups (state) {
-    // Loop throu array of objects and group by "group" key.
-    // Make a uniqe set of groups
+    // Loop thou array of objects and group by "group" key.
+    // Make a unique set of groups
     const groups = Array.from(new Set(state.words.map(item => item.group)))
 
     // Sort by alphabet
@@ -84,51 +75,41 @@ export const getters = {
   getWordsFilteredByLetter (state) {
     return state.words.filter(item => item.group === state.wordFilteredByLetter)
   },
+
+  /**
+   * Return all filters together for the word list
+   *
+   * @param   {Object}  state  Vuex state function
+   *
+   * @return  {Array}         returns filtered words
+   */
   filter (state) {
-    // return state.words.filter((item) => {
-    //   // Filter by letter
-    //   if (state.wordFilteredByLetter !== null) {
-    //     return item.group === state.wordFilteredByLetter
-    //   }
-    //   // Return all words when no letter is choosen
-    //   return state.words
-    // })
+    /**
+     * Words sort asc or desc
+     *
+     * @param   {Array}  a  Direction A
+     * @param   {Array}  b  Direction B
+     *
+     * @return  {Array}     returns sorted words
+     */
+    const SortWordsAscDesc = [...state.words].sort((a, b) => {
+      if (state.wordSortDirection === 'desc') {
+        return a[state.wordSortDirection] > b[state.wordSortDirection] ? -1 : 1
+      } else {
+        return a[state.wordSortDirection] > b[state.wordSortDirection] ? 1 : -1
+      }
+    })
 
     if (state.wordFilteredByLetter !== null && state.searchWord.length === 0) {
-      return state.words.filter(item => item.group === state.wordFilteredByLetter)
+      /**
+       * Words filtered by letter
+       *
+       */
+      return SortWordsAscDesc.filter(item => item.group === state.wordFilteredByLetter)
     }
 
-    return state.words
-    // if (state.wordFilteredByLetter === null) {
-    //   return state.words.sort((a, b) => {
-    //     if (state.wordSortDirection === 'desc') {
-    //       return a[state.wordSortDirection] > b[state.wordSortDirection] ? -1 : 1
-    //     } else {
-    //       return a[state.wordSortDirection] > b[state.wordSortDirection] ? 1 : -1
-    //     }
-    //   })
-    // }
-
-    // const wordGroups = state.words.filter(item => item.group === state.wordFilteredByLetter)
-
-    // return wordGroups.sort((a, b) => {
-    //   if (state.wordSortDirection === 'desc') {
-    //     return a[state.wordSortDirection] > b[state.wordSortDirection] ? -1 : 1
-    //   } else {
-    //     return a[state.wordSortDirection] > b[state.wordSortDirection] ? 1 : -1
-    //   }
-    // })
+    return SortWordsAscDesc
   }
-  // letterList (state) {
-  //   // const only = state.words.map(word => word.group)
-  //   const list = state.words
-  //   // eslint-disable-next-line no-unreachable-loop
-  //   for (const [word, index] of list) {
-  //     const child = word.group[index]
-  //     // const cLetter = child.charAt(0)
-  //     return child
-  //   }
-  // }
 }
 
 export const actions = {
@@ -140,7 +121,7 @@ export const actions = {
    *
    * @return  {Function}
    */
-  async nuxtServerInit ({ commit, $sentry }) {
+  async nuxtServerInit ({ commit }) {
     commit('wordLoadingStatus', true)
 
     const query = gql`
@@ -188,8 +169,19 @@ export const actions = {
         commit('setBerlinWords', res)
         commit('wordLoadingStatus', false)
       }).catch((error) => {
-        $sentry.captureException(error)
+        console.warn(error)
       })
+  },
+
+  async loadWordOfTheDay ({ commit, $sentry }) {
+    commit('wordOfTheDayLoadingStatus', true)
+    return await fetch(`${this.$config.baseApiUrl}/wp-json/berliner-schnauze/v1/word-of-the-day`)
+      .then(res => res.json())
+      .then((data) => {
+        commit('updateWordOfTheDay', data)
+        commit('wordOfTheDayLoadingStatus', false)
+      })
+      .catch((err) => { $sentry.captureException(err) })
   },
 
   /**
@@ -214,10 +206,13 @@ export const mutations = {
     state.words = words
   },
   wordLoadingStatus: (state, status) => (state.loadingWords = status),
+  wordOfTheDayLoadingStatus: (state, status) => (state.loadingWordOfTheDay = status),
   updateSearch: (state, search) => (state.searchWord = search),
-  updateSearchbarIsVisable: (state, visable) => (state.searchbarIsVisable = visable),
+  updateSearchbarIsVisible: (state, visible) => (state.searchbarIsVisible = visible),
   updateScrollPositionY: (state, position) => (state.scrollPositionY = position),
   updateWordSortDirection: (state, direction) => (state.wordSortDirection = direction),
   updateWordFilteredLetter: (state, letter) => (state.wordFilteredByLetter = letter),
+  updateWordOfTheDay: (state, word) => (state.wordOfTheDay = word),
+  updateActiveWordSearch: (state, word) => (state.activeWordSearch = word)
   setBerlinWordsQl: (state, words) => ({ ...state.berlinWordsQl, ...words })
 }

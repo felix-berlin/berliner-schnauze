@@ -1,0 +1,32 @@
+@use '../variables/variables' as vars;
+
+.c-related-words {
+	&__words {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 4fr));
+		gap: vars.$spacer;
+	}
+
+	&__word {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: rgba(#fff, 0.6);
+		padding: vars.$spacer * 1.5;
+		box-shadow:
+			0 0.5px 0.6px rgb(0 0 0 / 8%),
+			0 4px 5px rgb(0 0 0 / 16%);
+		border: 1px var(--style-border, dashed) var(--grey-100);
+		font-size: 1.2rem;
+
+		@media (hover: hover) {
+			&:hover {
+				--style-border: solid;
+			}
+		}
+
+		&.is-random {
+			gap: vars.$spacer * 0.3;
+		}
+	}
+}

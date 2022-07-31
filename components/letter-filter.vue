@@ -18,7 +18,7 @@
           type="button"
           class="c-letter-filter__button c-button"
           :title="'Filter nach Buchstabe ' + letter"
-          @click="$store.dispatch('filterByLetter', letter)"
+          @click="updateLetterFilter(letter)"
         >
           {{ letter }}
         </button>
@@ -49,12 +49,27 @@ export default {
      *
      * @param   {String}  search  the current search
      *
-     * @return  {Funtion}          Reset the letter filter
+     * @return  {Function}          Reset the letter filter
      */
     getWordSearch (search) {
       if (search.length && typeof this.$store.state.wordFilteredByLetter === 'string') {
         this.$store.dispatch('filterByLetter', null)
       }
+    }
+  },
+
+  mounted () {
+    // Restore letter filter from local storage
+    // if (localStorage.getItem('letterFilter')) {
+    //   this.$store.dispatch('filterByLetter', localStorage.getItem('letterFilter'))
+    // }
+  },
+
+  methods: {
+    updateLetterFilter (letter) {
+      this.$store.dispatch('filterByLetter', letter)
+
+      // localStorage.setItem('letterFilter', letter)
     }
   }
 }

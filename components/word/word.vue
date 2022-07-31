@@ -12,7 +12,17 @@
     <div :class="[{'has-example': source.examples}, 'c-word-list__header-wrapper']">
       <dl class="c-word-list__header">
         <dt class="c-word-list__berlinerisch" :data-content-piece="source.berlinerisch">
-          <NuxtLink :to="'words/' + source.ID">
+          <span
+            v-if="isWordOfTheDay"
+            v-tooltip="{ content: `${source.berlinerisch} ist das heutige Wort des Tages`,
+                         distance: 10,
+                         placement: 'top'}"
+            class="c-word-list__crown"
+            aria-hidden="true"
+          >
+            <Crown />
+          </span>
+          <NuxtLink :to="$routeToWord(source.post_name)">
             {{ source.berlinerisch }}
           </NuxtLink>
         </dt>
@@ -35,7 +45,11 @@
         :shown="wordButtonClicked"
         theme="word-options"
       >
-        <button type="button" class="c-button c-button--center-icon c-button--word-option c-button--dashed-border" aria-label="Website Menu Navigation">
+        <button
+          type="button"
+          class="c-button c-button--center-icon c-button--word-option c-button--dashed-border"
+          aria-label="Website Menu Navigation"
+        >
           <span class="u-icon-untouchable c-button--center-icon">
             <MoreVertical :size="18" />
           </span>
@@ -43,33 +57,50 @@
 
         <template #popper>
           <button
-            ref="copyUrlButton"
+            v-if="canShare"
+            aria-label="Wort teilen"
+            type="button"
+            class="c-word-list__copy-button c-button c-button--dashed-border"
+            :class="{ 'is-success': wordShared === index }"
+            @click="shareWord(source.post_name, index)"
+          >
+            <span class="c-word-list__icon-button" :class="{ 'is-hidden': wordShared === index }">
+              <Share2 :size="18" />
+            </span>
+            <span class="c-word-list__icon-button" :class="{ 'is-hidden': wordShared !== index }">
+              <CheckCircle2 :size="18" />
+            </span>
+            <span class="c-word-list__copy-text">Wort teilen</span>
+          </button>
+
+          <button
+            v-if="!canShare"
             aria-label="Link zum Wort kopieren"
             type="button"
-            class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border"
+            class="c-word-list__copy-button c-button c-button--dashed-border"
             :class="{ 'is-success': wordLinkCopied === index }"
-            @click="copyWordPageUrlToClipboard(source.ID, index)"
+            @click="copyWordPageUrlToClipboard(source.post_name, index)"
           >
-            <span ref="copyUrlLinkIcon" class="c-word-list__icon-button" :class="{ 'is-hidden': wordLinkCopied === index }">
-              <Link :size="18" />
+            <span class="c-word-list__icon-button" :class="{ 'is-hidden': wordLinkCopied === index }">
+              <LinkIcon :size="18" />
             </span>
-            <span ref="copyUrlCheckIcon" class="c-word-list__icon-button c-word-list__icon-button--success" :class="{ 'is-hidden': wordLinkCopied !== index }">
+            <span class="c-word-list__icon-button" :class="{ 'is-hidden': wordLinkCopied !== index }">
               <CheckCircle2 :size="18" />
             </span>
             <span class="c-word-list__copy-text">Link kopieren</span>
           </button>
+
           <button
-            ref="copyWordButton"
             aria-label="Wort kopieren"
             type="button"
-            class="c-word-list__copy-button c-button c-button--center-icon c-button--dashed-border"
+            class="c-word-list__copy-button c-button c-button--dashed-border"
             :class="{ 'is-success': wordCopied === index }"
-            @click="copyNameToClipboard(source.ID, index)"
+            @click="copyNameToClipboard(source.berlinerisch, index)"
           >
-            <span ref="copyWordLinkIcon" class="c-word-list__icon-button" :class="{ 'is-hidden': wordCopied === index }">
+            <span class="c-word-list__icon-button" :class="{ 'is-hidden': wordCopied === index }">
               <Copy :size="18" />
             </span>
-            <span ref="copyWordCheckIcon" class="c-word-list__icon-button" :class="{ 'is-hidden': wordCopied !== index }">
+            <span class="c-word-list__icon-button" :class="{ 'is-hidden': wordCopied !== index }">
               <CheckCircle2 :size="18" />
             </span>
             <span class="c-word-list__copy-text">Wort kopieren</span>
@@ -80,14 +111,14 @@
 
     <WordExamples :examples="source.examples" />
 
-    <NuxtLink v-if="source.learn_more || source.related_words || source.word_type" :to="'words/' + source.ID" class="c-word-list__learn-more c-button u-button-reset">
+    <NuxtLink v-if="source.learn_more || source.related_words || source.word_type" :to="$routeToWord(source.post_name)" class="c-word-list__learn-more c-button u-button-reset">
       <Info :size="20" /> mehr erfahren
     </NuxtLink>
   </article>
 </template>
 
 <script>
-import { Copy, CheckCircle2, MoreVertical, Info, Link } from 'lucide-vue'
+import { Copy, CheckCircle2, MoreVertical, Info, Link as LinkIcon, Share2, Crown } from 'lucide-vue'
 
 export default {
   name: 'WordSingle',
@@ -96,9 +127,10 @@ export default {
     Copy,
     CheckCircle2,
     MoreVertical,
+    Share2,
     Info,
-    // eslint-disable-next-line
-    Link
+    LinkIcon,
+    Crown
   },
   props: {
     index: {
@@ -117,7 +149,20 @@ export default {
     return {
       wordCopied: '',
       wordLinkCopied: '',
-      wordButtonClicked: false
+      wordShared: '',
+      wordButtonClicked: false,
+      canShare: null,
+      isWordOfTheDay: false
+    }
+  },
+
+  mounted () {
+    this.isWordOfTheDay = this.source.ID === this.$store.state.wordOfTheDay.ID
+
+    if (navigator.share) {
+      this.canShare = true
+    } else {
+      this.canShare = false
     }
   },
 
@@ -130,10 +175,8 @@ export default {
      *
      * @return  {Function}       Copy the word and toggle the icons
      */
-    copyNameToClipboard (id, index) {
-      const getWord = document.querySelector('#word' + id + ' .c-word-list__berlinerisch').innerText
-
-      this.copyToClipboard(getWord, 'name')
+    copyNameToClipboard (name, index) {
+      this.copyToClipboard(name)
 
       this.wordCopied = index
       this.wordButtonClicked = true
@@ -144,11 +187,8 @@ export default {
       }, 1500)
     },
 
-    copyWordPageUrlToClipboard (id, index) {
-      // const port = process.env.NODE_ENV === 'development' ? ':' + window.location.port : ''
-      const getWordUrl = window.location.protocol + '//' + window.location.hostname + '/words/' + id
-
-      this.copyToClipboard(getWordUrl, 'url')
+    copyWordPageUrlToClipboard (slug, index) {
+      this.copyToClipboard(this.$routeToWord(slug, true))
       this.wordLinkCopied = index
       this.wordButtonClicked = true
 
@@ -168,6 +208,27 @@ export default {
         navigator.clipboard.writeText(textToCopy)
       } catch (error) {
         this.$sentry.captureException(error)
+      }
+    },
+
+    shareWord (slug, index) {
+      const shareData = {
+        title: slug + ' - Berliner Schnauze',
+        text: 'Lerne mehr über das Berliner Wort: ' + slug,
+        url: this.$routeToWord(slug)
+      }
+      try {
+        navigator.share(shareData)
+      } catch (err) {
+        console.log(err)
+      } finally {
+        this.wordShared = index
+        this.wordButtonClicked = true
+
+        setTimeout(() => {
+          this.wordShared = null
+          this.wordButtonClicked = false
+        }, 1500)
       }
     }
   }

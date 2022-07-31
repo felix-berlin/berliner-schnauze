@@ -1,5 +1,6 @@
 import { resolve } from 'path'
 import { version } from './package.json'
+
 export default {
   publicRuntimeConfig: {
     baseUrl: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000',
@@ -17,6 +18,7 @@ export default {
       }
     }
   },
+
   privateRuntimeConfig: {
     sentryAuthToken: process.env.SENTRY_AUTH_TOKEN
   },
@@ -36,6 +38,21 @@ export default {
 
   target: 'static',
 
+  generate: {
+    fallback: true // enable fallback error pages in static mode
+
+    // routes () {
+    //   return axios.get(`${process.env.BASE_API_URL}/wp-json/berliner-schnauze/v1/words`).then((res) => {
+    //     return res.data.map((word) => {
+    //       return {
+    //         route: '/word/' + word.post_name
+    //         // payload: word
+    //       }
+    //     })
+    //   })
+    // }
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch',
@@ -47,9 +64,9 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { name: 'format-detection', content: 'telephone=no' },
       { name: 'theme-color', content: '#F9F9F9' },
-      { hid: 'description', name: 'description', content: 'Aktuelles Berlinerisch / Berolinismus ➡️ Hochdeutsch Wörterbuch. Keen Plan vom Berliner Dialekt? Kein Problem, hier ist das aktuellste Berliner Sprache Wörterbuch.' },
+      { hid: 'description', name: 'description', content: 'Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.' },
       { hid: 'og:title', property: 'og:title', content: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch' },
-      { hid: 'og:description', property: 'og:description', content: 'Aktuelles Berlinerisch / Berolinismus ➡️ Hochdeutsch Wörterbuch. Keen Plan vom Berliner Dialekt? Kein Problem, hier ist das aktuellste Berliner Sprache Wörterbuch.' },
+      { hid: 'og:description', property: 'og:description', content: 'Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.' },
       { hid: 'og:image', property: 'og:image', content: '/brown-bear-roar.png' },
       { hid: 'og:url', property: 'og:url', content: process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000' },
       { hid: 'og:type', property: 'og:type', content: 'website' }
@@ -78,7 +95,7 @@ export default {
     '@plugins/floating-vue',
     '@plugins/fuse',
     '@plugins/vue-uuid',
-    '@modules/smooth-scroll-to',
+    '@modules/utility-modules',
     { src: '~/plugins/vue-matomo.js', ssr: false }
   ],
 
@@ -89,8 +106,8 @@ export default {
     '@nuxtjs/color-mode',
     'lucide-vue/nuxt',
     '@nuxtjs/device',
-    '@nuxtjs/html-validator',
-    '@/modules/sitemap-route-generator',
+    // '@nuxtjs/html-validator',
+    '@/modules/sitemap-route-generator'
     'nuxt-graphql-request'
   ],
 
@@ -127,7 +144,7 @@ export default {
   sentry: {
     // Additional Module Options go here
     // https://sentry.nuxtjs.org/sentry/options
-    dsn: 'https://f84fd7469c2e4ca7b3680f5e151d3499@o1131599.ingest.sentry.io/6176241',
+    dsn: process.env.SENTRY_DNS,
     tracing: {
       tracesSampleRate: 0.2,
       vueOptions: {
@@ -141,8 +158,8 @@ export default {
     },
     publishRelease: {
       authToken: process.env.SENTRY_AUTH_TOKEN,
-      org: 'webshaped',
-      project: 'berliner-schnauze',
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
       // Attach commits to the release (requires that the build triggered within a git repository).
       setCommits: {
         auto: true
@@ -157,8 +174,14 @@ export default {
 
   robots: {
     UserAgent: '*',
-    Disallow: ''
+    Disallow: '',
+    Sitemap: process.env.BASE_URL + '/sitemap.xml'
   },
+
+  // router: {
+  //   // ran before every route on both client and server
+  //   middleware: ['middleware']
+  // },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -173,7 +196,8 @@ export default {
       if (isClient) {
         config.devtool = 'source-map'
       }
-    }
+    },
+    postcss: false // https://github.com/postcss/postcss/issues/1375
   },
 
   // image: {
@@ -182,19 +206,13 @@ export default {
 
   stylelint: {
     fix: true,
-    files: ['assets/**/*.{s?(a|c)ss,less,stylus}']
+    files: ['assets/styles/**/*.{s?(a|c)ss,less,stylus}']
   },
 
   loading: {
     height: '3px',
     continuous: true,
     duration: 3000
-  },
-
-  toast: {
-    position: 'top-right',
-    containerClass: 'c-toast',
-    className: 'c-toast__item'
   },
 
   speedkit: {

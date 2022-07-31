@@ -1,13 +1,23 @@
 <template>
-  <main class="c-main c-content">
+  <main class="c-main c-content o-word">
     <NuxtLink :to="'/'" class="c-button c-button--back u-button-reset">
       <ArrowLeft /> zurück
     </NuxtLink>
 
     <article class="c-single-word">
       <header class="c-single-word__header">
+        <span
+          v-if="isWordOfTheDay"
+          v-tooltip="{ content: `${word.berlinerisch} ist das heutige Wort des Tages`,
+                       distance: 10,
+                       placement: 'right'}"
+          class="c-single-word__crown"
+          aria-hidden="true"
+        >
+          <Crown />
+        </span>
         <h1 class="c-single-word__word">
-          {{ word.berlinerisch }}
+          {{ word.berlinerisch }}<span v-if="word.article" class="c-single-word__word-article">, {{ word.article }}</span>
         </h1>
       </header>
 
@@ -15,8 +25,8 @@
         <Info /> <a :href="word.learn_more" target="_blank" class="c-single-word__learn-more-link">Erfahre mehr über dieses Wort <span class="c-single-word__learn-more-link-icon"><ExternalLink :size="10" /></span></a>
       </div>
 
-      <div class="c-single-word__word-type-wrapper">
-        <h2 v-if="word.word_type" class="c-single-word__sub-headline">
+      <div v-if="word.word_type" class="c-single-word__word-type-wrapper">
+        <h2 class="c-single-word__sub-headline">
           Wortart:
         </h2>
         <p class="c-single-word__word-type" v-text="word.word_type[0].name" />
@@ -42,7 +52,7 @@
         <h3>Verwandte Worte:</h3>
         <ul class="c-single-word__related-words-list">
           <li v-for="(related_word, index) in word.related_words" :key="index" class="c-single-word__related-word">
-            <nuxt-link :to="'/words/' + related_word.ID" class="c-single-word__related-word-link">
+            <nuxt-link :to="$routeToWord(related_word.post_name)" class="c-single-word__related-word-link">
               {{ related_word.post_title }}
             </nuxt-link>
           </li>
@@ -51,18 +61,23 @@
 
       <footer class="c-single-word__footer">
         <p class="c-single-word__created">
-          Wort erstellt am: {{ formatedDate(word.post_date) }}
+          Wort erstellt am: {{ formattedDate(word.post_date) }}
         </p>
         <p class="c-single-word__modified">
-          Bearbeitet am: {{ formatedDate(word.post_modified) }}
+          Bearbeitet am: {{ formattedDate(word.post_modified) }}
         </p>
       </footer>
     </article>
+
+    <RelatedWords :number-of-words="7">
+      <RandomWordButton class="c-related-words__word is-random" />
+    </RelatedWords>
   </main>
 </template>
 
 <script>
-import { ArrowLeft, Info, ExternalLink } from 'lucide-vue'
+import { ArrowLeft, Info, ExternalLink, Crown } from 'lucide-vue'
+import speedkitHydrate from 'nuxt-speedkit/hydrate'
 
 export default {
 
@@ -75,7 +90,10 @@ export default {
   components: {
     ArrowLeft,
     Info,
-    ExternalLink
+    ExternalLink,
+    Crown,
+    RelatedWords: speedkitHydrate(() => import('@/components/related-words')),
+    RandomWordButton: speedkitHydrate(() => import('@/components/random-word-button'))
   },
 
   head () {
@@ -103,17 +121,28 @@ export default {
 
   computed: {
     word () {
-      return this.$store.state.words.find(word => word.ID === Number(this.$route.params.id))
+      return this.$store.state.words.find(word => word.post_name === this.$route.params.slug)
+    },
+
+    isWordOfTheDay () {
+      return this.word.ID === this.$store.state.wordOfTheDay.ID
     }
   },
 
+  created () {
+    this.$store.dispatch('loadWordOfTheDay')
+  },
+
   methods: {
-    formatedDate (date, locale = 'de-DE') {
-      const dateToFormat = new Date(date)
+    formattedDate (date, locale = 'de-DE') {
+      const dumpSafariDateFormat = date.replace(/-/g, '/')
+
+      const dateToFormat = new Date(dumpSafariDateFormat)
 
       return dateToFormat.toLocaleString(locale, { year: 'numeric', month: 'long', day: 'numeric' })
     }
-  }
 
+  }
 }
+
 </script>

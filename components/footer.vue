@@ -44,14 +44,13 @@ export default {
   components: {
     SpeedkitPicture
   },
-
   data () {
     return {
       picture: {
         sources: [
           {
             src: '/bear-walking.png',
-            sizes: { sm: '100vw', md: '100vw', lg: '100vw', xl: '100vw', xxl: '700px' }
+            sizes: { xs: '140px', sm: '300px', md: '360px', lg: '330px', xl: '430px', xxl: '700px' }
           }
         ],
         formats: ['avif', 'webp', 'jpg|jpeg|png'],

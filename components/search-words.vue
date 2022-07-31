@@ -1,33 +1,41 @@
 <template>
   <div class="c-word-search" :class="[{ 'c-word-search--large': searchbarType === 'large', 'c-word-search--nav-search': searchbarType === 'nav-search' }, modifier]">
-    <!-- <transition name="fade-fast"> -->
     <div v-if="keyboardFocus" v-show="!showSearchBar && !$device.isMobileOrTablet" class="c-word-search__shortcut">
-      <span v-show="$device.isMacOS" class="c-word-search__command-icon-wrap">
-        <!-- eslint-disable-next-line -->
-        <Command :size="12" class="c-word-search__command-icon" />
+      <span v-if="$device.isMacOS" class="c-word-search__command-icon-wrap">
+        <CommandIcon :size="12" class="c-word-search__command-icon" />
       </span>
-      <span v-show="$device.isWindows">Control</span>
+      <span v-if="$device.isWindows">Control</span>
       <span class="c-word-search__shortcut-combine">+</span>
       <span>K</span>
     </div>
-    <!-- </transition> -->
 
     <button
-      aria-label="Wortsuche betätigen"
+      :aria-label="searchLength > 0 ? 'Wortsuche löschen' : 'Wortsuche betätigen'"
       type="button"
-      class="c-word-search__search-button u-button-reset c-button c-button--center-icon"
-      :class="[{ 'c-word-search__search-button--right': (searchButtonPosition != 'left'), 'c-word-search__search-button--left': (searchButtonPosition != 'right'), 'has-searchbar': showSearchBar }, buttonModifier]"
-      @click="buttonActions()"
+      :class="[ 'c-word-search__search-button u-button-reset c-button c-button--center-icon', buttonModifier,
+                { 'c-word-search__search-button--right': (searchButtonPosition != 'left'),
+                  'c-word-search__search-button--left': (searchButtonPosition != 'right'),
+                  'has-searchbar': showSearchBar }
+      ]"
+      @click="buttonActions"
     >
-      <span v-show="toggleShowAndClearIcon" class="c-button--center-icon">
-        <Search default-class="c-word-search__search-icon" />
-      </span>
-      <span v-show="!toggleShowAndClearIcon" class="c-button--center-icon">
-        <X />
-      </span>
+      <transition name="fade-fast" mode="out-in">
+        <span v-if="toggleShowAndClearIcon" key="search" class="c-button--center-icon">
+          <Search default-class="c-word-search__search-icon" />
+        </span>
+        <span v-if="!toggleShowAndClearIcon" key="del" class="c-button--center-icon">
+          <X />
+        </span>
+      </transition>
     </button>
 
-    <transition-group v-show="showSearchBar" name="fade" class="c-word-search__search-wrap c-floating-label" :class="searchbarModifier" tag="div">
+    <transition-group
+      v-show="showSearchBar"
+      name="fade"
+      class="c-word-search__search-wrap c-floating-label"
+      :class="searchbarModifier"
+      tag="div"
+    >
       <input
         :id="'wordSearch' + id"
         :ref="'search' + id"
@@ -36,6 +44,8 @@
         class="c-word-search__search-input c-input c-floating-label__input"
         placeholder=" "
         :aria-label="searchAriaLabel"
+        autocomplete="off"
+        :value="search"
         @input="updateSearch"
         @focus="resetTimeout"
         @blur="hideSearchbarAfterTime(5000)"
@@ -46,16 +56,15 @@
 </template>
 
 <script>
-import { Search, Command, X } from 'lucide-vue'
-import { mapState, mapGetters } from 'vuex'
+import { Search, Command as CommandIcon, X } from 'lucide-vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'SearchWords',
 
   components: {
     Search,
-    // eslint-disable-next-line
-    Command,
+    CommandIcon,
     X
   },
 
@@ -106,19 +115,22 @@ export default {
     searchbarModifier: {
       type: String,
       default: ''
+    },
+    id: {
+      type: String,
+      required: true
     }
   },
 
   data () {
     return {
-      id: this.$uuid.v4(),
       searchButtonPosition: this.buttonPosition,
       showSearchBar: true,
       timeoutId: null,
       pressedKeys: {},
       searchLength: 0,
       scrollToResultsTriggert: false, // Prevent scroll to results triggert more than one time
-      scrollbarVisable: undefined,
+      scrollbarVisible: undefined,
       toggleShowAndClearIcon: true
     }
   },
@@ -126,16 +138,7 @@ export default {
   computed: {
     ...mapState({
       search: state => state.searchWord
-    }),
-    ...mapGetters(['getLetterFilter, getScrollPositionY'])
-  },
-
-  watch: {
-    getLetterFilter (newLetter, oldLetter) {
-      if (oldLetter !== newLetter) {
-        this.resetSearch()
-      }
-    }
+    })
   },
 
   created () {
@@ -144,18 +147,54 @@ export default {
     }
 
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === 'getScrollPositionY') {
+      if (mutation.type === 'updateScrollPositionY') {
         if (state.scrollPositionY < 200) {
           this.scrollToResultsTriggert = false
-          this.scrollbarVisable = true
+          this.scrollbarVisible = true
         } else {
-          this.scrollbarVisable = false
+          this.scrollbarVisible = false
         }
+      }
+    })
+
+    /**
+     * When the letter filter changes, reset the searchbar
+     *
+     * @param   {String}  state
+     * @param   {String}  getters
+     * @param   {String}  newLetter
+     * @param   {String}  oldLetter
+     *
+     * @return  {Function}
+     */
+    this.unwatch = this.$store.watch((state, getters) => getters.getLetterFilter, (newLetter, oldLetter) => {
+      if (oldLetter !== newLetter) {
+        this.resetSearch()
+      }
+    })
+
+    /**
+     * When the user change the searchbar, then clear the previous search
+     *
+     * @param   {Void}  state
+     * @param   {String}  getters
+     * @param   {String}  newSearch
+     * @param   {String}  oldSearch
+     * @return  {String}
+     */
+    this.unwatch = this.$store.watch((state, getters) => getters.getActiveWordSearch, (newSearch, oldSearch) => {
+      if (oldSearch.length && oldSearch !== newSearch) {
+        this.$refs['search' + this.id].value = ''
       }
     })
   },
 
   mounted () {
+    // Restore last search
+    if (localStorage.getItem('searchWord')) {
+      this.$store.commit('updateSearch', localStorage.getItem('searchWord'))
+    }
+
     if (this.focusOnPageLoad && this.$device.isDesktop) {
       this.focusSearch()
     }
@@ -164,8 +203,9 @@ export default {
   },
 
   beforeDestroy () {
+    this.unwatch()
     this.unsubscribe()
-    window.addEventListener('keydown', this.triggerKeyboardSearch)
+    window.removeEventListener('keydown', this.triggerKeyboardSearch)
   },
 
   methods: {
@@ -179,19 +219,34 @@ export default {
     updateSearch (searchInput) {
       this.$store.commit('updateSearch', searchInput.target.value)
 
+      localStorage.setItem('searchWord', searchInput.target.value)
+
       this.searchLength = searchInput.target.value.length
 
       this.toggleSearchClearIcons()
 
       this.scrollToResults()
+
+      this.setActive()
     },
 
+    /**
+    * Toggle the clear icon
+    */
     toggleSearchClearIcons () {
       if (this.searchLength === 0) {
         this.toggleShowAndClearIcon = true
-      }
-      if (this.searchLength > 0) {
+      } else {
         this.toggleShowAndClearIcon = false
+      }
+    },
+
+    /**
+    * When user starts his search set the current search component as active
+    */
+    setActive () {
+      if (this.searchLength > 0) {
+        this.$store.commit('updateActiveWordSearch', this.id)
       }
     },
 
@@ -213,7 +268,7 @@ export default {
     focusSearch () {
       this.$nextTick(function () {
         // if (this.$refs.search === document.activeElement) {
-        //   this.$refs.search.blur() // Make sure the searchbar is not allready focused
+        //   this.$refs.search.blur() // Make sure the searchbar is not already focused
         // }
         // this.$refs['search' + this.id].blur()
         this.$refs['search' + this.id].focus()
@@ -224,7 +279,7 @@ export default {
     /**
      * Hide the searchbar after a given time
      *
-     * @param   {Number}  timeout  Timeout in millisecons
+     * @param   {Number}  timeout  Timeout in milliseconds
      *
      * @return  {Number}           Timeout ID
      */
@@ -233,7 +288,7 @@ export default {
         if (this.showSearchbarAfterClick && this.searchLength < 1) {
           this.showSearchBar = false
           this.toggleShowAndClearIcon = true
-          this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
+          this.$store.commit('updateSearchbarIsVisible', this.showSearchBar)
         }
       }, timeout)
 
@@ -254,7 +309,7 @@ export default {
      */
     showAndFocusSearchbar () {
       this.showSearchBar = true
-      this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
+      this.$store.commit('updateSearchbarIsVisible', this.showSearchBar)
 
       // When searchbar is loaded focus it
       this.$nextTick(function () {
@@ -302,12 +357,13 @@ export default {
 
       if (this.pressedKeys.Escape) {
         this.showSearchBar = false
-        this.$store.commit('updateSearchbarIsVisable', this.showSearchBar)
+        this.$store.commit('updateSearchbarIsVisible', this.showSearchBar)
+        this.$refs['search' + this.id].blur()
       }
     },
 
     scrollToResults () {
-      if (!this.scrollbarVisable && (this.searchLength > 0)) {
+      if (!this.scrollbarVisible && (this.searchLength > 0)) {
         this.scrollToResultsTriggert = true
         this.$smoothScrollTo(document.querySelector('.c-word-search--large'), 60)
       }

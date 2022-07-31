@@ -1,0 +1,67 @@
+@use '../variables/variables' as vars;
+@use '../mixins/mixins.scss' as mx;
+
+.c-word-of-the-day {
+	background-color: var(--color-background, rgb(255 255 255 / 20%));
+	padding: vars.$spacer;
+	border: 1px solid var(--primary);
+	display: flex;
+	row-gap: vars.$spacer * 1.5;
+	flex-direction: column;
+
+	@include mx.dark-mode {
+		--color-background: rgb(0 0 0 / 10%);
+	}
+
+	&__content {
+		margin: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	&__header {
+		display: flex;
+		align-items: center;
+		gap: vars.$spacer * 0.5;
+	}
+
+	&__headline {
+		margin: 0;
+	}
+
+	&__word-wrap {
+		position: relative;
+	}
+
+	&__word {
+		font-family: vars.$berlin;
+		font-weight: 700;
+		font-size: clamp(1.2rem, 1.0857rem + 0.5714vw, 2rem);
+		word-break: break-all;
+	}
+
+	&__crown-icon {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: vars.$gold;
+	}
+
+	&__divider {
+		width: 100%;
+		border: none;
+		border-top: 1px solid var(--primary);
+	}
+
+	&__update {
+		font-size: 0.8rem;
+	}
+
+	&__info-icon {
+		position: absolute;
+		right: -18px;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+}

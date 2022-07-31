@@ -4,7 +4,6 @@
 
 .c-letter-filter {
 	display: var(--display);
-	margin: 0 0 vars.$spacer * 1.5 0;
 
 	&__list {
 		display: grid;
@@ -35,26 +34,16 @@
 		--spacing: #{vars.$spacer * 0.25};
 		--size-font: 1rem;
 		--width-min: 1.4rem;
+		--color: var(--primary);
 
 		font-size: var(--size-font);
 		padding: var(--spacing);
 		width: 100%;
 		height: 100%;
+		text-transform: var(--transform-text, uppercase);
 
-		&:not(.c-letter-filter__button--all) {
-			text-transform: uppercase;
-		}
-	}
-
-	&--mobile {
-		--display: block;
-	}
-
-	&--desktop {
-		--display: none;
-
-		@include mx.breakpoint('sm') {
-			--display: block;
+		&.c-letter-filter__button--all {
+			--transform-text: none;
 		}
 	}
 }

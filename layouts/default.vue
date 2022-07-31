@@ -1,6 +1,6 @@
 <template>
   <div class="c-body">
-    <Header :critical="true" />
+    <HeaderPart :critical="true" />
     <Nuxt />
     <ScrollToTop button-aria-label="Zurück zum Seitenanfang" tooltip="Zackig nach oben!" :hide-tooltip="$device.isMobileOrTablet">
       <ChevronUp
@@ -8,7 +8,7 @@
         default-class="c-scroll-to-top__icon"
       />
     </ScrollToTop>
-    <Footer />
+    <FooterPart />
   </div>
 </template>
 
@@ -21,9 +21,9 @@ export default {
 
   components: {
     ChevronUp,
-    Header: speedkitHydrate(() => import('@/components/header')),
+    HeaderPart: speedkitHydrate(() => import('@/components/header')),
     ScrollToTop: speedkitHydrate(() => import('@/components/scroll-to-top')),
-    Footer: speedkitHydrate(() => import('@/components/footer'))
+    FooterPart: speedkitHydrate(() => import('@/components/footer'))
   }
 }
 </script>

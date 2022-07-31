@@ -68,6 +68,7 @@
 		margin: 0;
 		word-break: break-word;
 		flex: var(--flex, 1 0 100%);
+		position: relative;
 
 		@include mx.breakpoint('sm') {
 			--flex: 0 1 auto;
@@ -84,6 +85,13 @@
 
 			text-decoration-color: var(--color-text-decoration, transparent);
 		}
+	}
+
+	&__crown {
+		display: flex;
+		position: absolute;
+		bottom: calc(100% - 10px);
+		color: vars.$gold;
 	}
 
 	&__translation {
@@ -190,7 +198,9 @@
 	&__copy-button {
 		--color-background: #{vars.$white-200};
 
-		gap: vars.$spacer * 0.2;
+		gap: vars.$spacer * 0.3;
+		display: flex;
+		align-items: center;
 
 		&:hover {
 			--style-border: solid;
