@@ -60,7 +60,7 @@
     "sass": "1.54.4",
     "sass-loader": "^10.3.1",
     "semantic-release": "^19.0.3",
-    "stylelint": "14.9.1",
+    "stylelint": "14.10.0",
     "stylelint-config-recommended-vue": "^1.4.0",
     "stylelint-config-standard": "^26.0.0",
     "stylelint-config-standard-scss": "^5.0.0"
