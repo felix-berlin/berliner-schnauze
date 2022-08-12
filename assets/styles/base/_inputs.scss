@@ -1,7 +1,7 @@
 @use 'sass:color';
 @use './../variables/variables' as vars;
 @use './../mixins/mixins' as mx;
-@use 'sassy-scss/functions' as sassy-fn;
+@use 'sass-butler/functions' as butler-fn;
 
 $icon-color: currentcolor;
 $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>";
@@ -89,7 +89,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 		font-weight: 500;
 		cursor: pointer;
 		background: {
-			image: url('#{sassy-fn.escape-svg($icon-chevron-down)}');
+			image: url('#{butler-fn.escape-svg($icon-chevron-down)}');
 			repeat: no-repeat;
 			position: right vars.$spacer * 1.5 center;
 			size: 16px 12px;

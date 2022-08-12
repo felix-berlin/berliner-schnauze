@@ -1,6 +1,6 @@
 @use './../variables/variables' as vars;
 @use './../mixins/mixins' as mx;
-@use 'sassy-scss/mixins' as sassy-mx;
+@use 'sass-butler/mixins' as butler-mx;
 
 .c-filter-dropdown {
 	display: flex;

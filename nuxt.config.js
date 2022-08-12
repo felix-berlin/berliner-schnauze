@@ -25,7 +25,7 @@ export default {
 
   alias: {
     styles: resolve(__dirname, './assets/styles'),
-    'sassy-scss': resolve(__dirname, './node_modules/@felix_berlin/sassy-scss/')
+    'sass-butler': resolve(__dirname, './node_modules/@felix_berlin/sass-butler/')
   },
 
   // Auto import components: https://go.nuxtjs.dev/config-components

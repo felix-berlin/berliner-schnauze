@@ -1,4 +1,4 @@
-@use 'sassy-scss/functions' as sassy-fn;
+@use 'sass-butler/functions' as butler-fn;
 
 $white-100: #f9f9f9;
 $white-200: #f5f5f5;
@@ -33,4 +33,4 @@ $alert-colors: (
 	'success': $success
 );
 $gold: #e1b125;
-$all-colors: sassy-fn.map-collect($white-colors, $grey-colors, $red-colors, $blue-colors, $alert-colors);
+$all-colors: butler-fn.map-collect($white-colors, $grey-colors, $red-colors, $blue-colors, $alert-colors);

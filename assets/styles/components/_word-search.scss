@@ -1,8 +1,8 @@
 @use 'sass:color';
 @use '../variables/variables' as vars;
 @use '../mixins/mixins' as mx;
-@use 'sassy-scss/mixins' as sassy-mx;
-@use 'sassy-scss/functions' as sassy-fn;
+@use 'sass-butler/mixins' as butler-mx;
+@use 'sass-butler/functions' as butler-fn;
 
 .c-word-search {
 	--padding-y-input: 0.5rem;
@@ -45,13 +45,13 @@
 	&__search-input.c-input {
 		--color-border: var(--grey-100);
 		--color-background: var(--white-200);
-		--color-outline: #{sassy-fn.hex-to-rgb(vars.$red-200, 50%)};
+		--color-outline: #{butler-fn.hex-to-rgb(vars.$red-200, 50%)};
 		--spacing-inner: var(--padding-y-input) var(--padding-x-input);
 
 		border-left: none;
 
 		@include mx.dark-mode {
-			--color-outline: #{sassy-fn.hex-to-rgb(vars.$blue-200, 50%)};
+			--color-outline: #{butler-fn.hex-to-rgb(vars.$blue-200, 50%)};
 		}
 
 		&:focus-visible {
@@ -99,12 +99,12 @@
 			&__search-button {
 				--color-background: transparent;
 				--color-border: transparent;
-				--color-box-shadow: #{sassy-fn.hex-to-rgb(vars.$red-100, 20%)};
+				--color-box-shadow: #{butler-fn.hex-to-rgb(vars.$red-100, 20%)};
 
 				transition: all 0.3s ease-in-out;
 
 				@include mx.dark-mode {
-					--color-box-shadow: #{sassy-fn.hex-to-rgb(vars.$blue-100, 20%)};
+					--color-box-shadow: #{butler-fn.hex-to-rgb(vars.$blue-100, 20%)};
 				}
 
 				&.has-searchbar {
@@ -122,7 +122,7 @@
 
 			&__search-input {
 				--color-border: var(--secondary);
-				--color-outline: #{sassy-fn.hex-to-rgb(vars.$white-200, 50%)};
+				--color-outline: #{butler-fn.hex-to-rgb(vars.$white-200, 50%)};
 			}
 		}
 	}

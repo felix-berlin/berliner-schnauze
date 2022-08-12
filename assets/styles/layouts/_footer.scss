@@ -1,7 +1,7 @@
 @use 'sass:map';
 @use './../variables/variables' as vars;
 @use './../mixins/mixins' as mx;
-@use 'sassy-scss/functions' as sassy-fn;
+@use 'sass-butler/functions' as butler-fn;
 
 .c-footer {
 	--space-walking: 40px;
@@ -57,7 +57,7 @@
 			' . slogan slogan slogan . '
 			' nav nav nav nav nav ';
 
-		background-color: var(--color-background, #{sassy-fn.hex-to-rgb(vars.$red-200, 40%)});
+		background-color: var(--color-background, #{butler-fn.hex-to-rgb(vars.$red-200, 40%)});
 		grid-area: ground;
 		display: grid;
 		grid-template-columns: var(--columns-template, var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame));
@@ -65,7 +65,7 @@
 		padding-top: var(--space-walking);
 
 		@include mx.dark-mode {
-			--color-background: #{sassy-fn.hex-to-rgb(vars.$blue-200, 50%)};
+			--color-background: #{butler-fn.hex-to-rgb(vars.$blue-200, 50%)};
 		}
 
 		a,

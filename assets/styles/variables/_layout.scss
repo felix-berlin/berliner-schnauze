@@ -1,14 +1,14 @@
-@use 'sassy-scss/functions' as sassy-fn;
+@use 'sass-butler/functions' as butler-fn;
 
 // Breakpoint Vars
-$xxs: sassy-fn.px-to-rem(375); // Smartphone Portrait
-$xs: sassy-fn.px-to-rem(568); // Smartphone Landscape
-$sm: sassy-fn.px-to-rem(768); // Tablet Portrait
-$md: sassy-fn.px-to-rem(1024); // Tablet Landscape
-$lg: sassy-fn.px-to-rem(1260); // Kleinerer Desktop
-$xlg: sassy-fn.px-to-rem(1440); // Widescreen
-$fhd: sassy-fn.px-to-rem(1920); // Full HD
-$uhd: sassy-fn.px-to-rem(2560); // UHD
+$xxs: butler-fn.px-to-rem(375); // Smartphone Portrait
+$xs: butler-fn.px-to-rem(568); // Smartphone Landscape
+$sm: butler-fn.px-to-rem(768); // Tablet Portrait
+$md: butler-fn.px-to-rem(1024); // Tablet Landscape
+$lg: butler-fn.px-to-rem(1260); // Kleinerer Desktop
+$xlg: butler-fn.px-to-rem(1440); // Widescreen
+$fhd: butler-fn.px-to-rem(1920); // Full HD
+$uhd: butler-fn.px-to-rem(2560); // UHD
 
 // Breakpoint Map
 $custom-breakpoints: (
