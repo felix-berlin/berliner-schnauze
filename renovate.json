@@ -1,6 +1,5 @@
 {
   "extends": [
-    ":preserveSemverRanges",
     "config:base"
   ],
   "reviewers": ["felix-berlin"],
