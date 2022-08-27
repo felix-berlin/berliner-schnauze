@@ -1,6 +1,6 @@
 @use './../../../node_modules/floating-vue/dist/style.css';
-@use './../variables/variables' as vars;
-@use './../mixins/mixins' as mx;
+@use '@styles/variables/variables' as vars;
+@use '@styles/mixins/mixins' as mx;
 
 .v-popper__popper {
 	--color-background: var(--secondary);
