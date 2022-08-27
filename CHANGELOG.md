@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.20.5](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.4...v1.20.5) (2022-08-27)
+
+
+### Performance Improvements
+
+* load header and footer in main file ([926ae50](https://github.com/felix-berlin/berliner-schnauze/commit/926ae504466dd2221975ab00575d8dc80b26c8e8))
+
 ## [1.20.4](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.3...v1.20.4) (2022-08-27)
 
 
