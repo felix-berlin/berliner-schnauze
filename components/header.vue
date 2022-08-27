@@ -108,7 +108,3 @@ export default {
 
 }
 </script>
-
-<style lang="scss">
-  @use '@styles/layouts/header';
-</style>
