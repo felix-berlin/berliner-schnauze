@@ -180,6 +180,7 @@ export default {
         config.devtool = 'source-map'
       }
     },
+    extractCSS: true,
     postcss: false // https://github.com/postcss/postcss/issues/1375
   },
 

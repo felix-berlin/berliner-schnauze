@@ -35,5 +35,6 @@ export default {
 </script>
 
 <style lang="scss">
+  @use '@styles/components/switch';
   @use '@styles/components/color-mode-switch';
 </style>

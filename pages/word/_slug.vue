@@ -149,4 +149,5 @@ export default {
 
 <style lang="scss">
   @use '@styles/objects/word';
+  @use '@styles/components/single-word';
 </style>
