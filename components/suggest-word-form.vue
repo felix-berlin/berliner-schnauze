@@ -241,3 +241,7 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  @use '@styles/components/suggest-word-form';
+</style>

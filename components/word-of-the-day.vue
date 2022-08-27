@@ -167,3 +167,8 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  @use '@styles/components/word-of-the-day';
+  @use '@styles/components/loading-text';
+</style>

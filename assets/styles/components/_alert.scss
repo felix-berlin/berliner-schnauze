@@ -1,15 +1,14 @@
+@use '@styles/variables/variables.scss' as vars;
+
 .c-alert {
-	--color: unset;
 	--size-font: inherit;
 
-	color: var(--color);
+	color: var(--color, unset);
 
-	&--danger {
-		--color: var(--danger);
-	}
-
-	&--success {
-		--color: var(--success);
+	@each $type, $color in vars.$alert-colors {
+		&--#{$type} {
+			--color: var(#{$color});
+		}
 	}
 
 	&.c-alert--small {

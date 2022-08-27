@@ -111,3 +111,7 @@ export default {
 
 }
 </script>
+
+<style lang="scss">
+  @use '@styles/objects/index';
+</style>

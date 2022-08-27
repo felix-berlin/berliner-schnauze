@@ -1,8 +1,8 @@
 @use 'sass:color';
-@use '../variables/variables' as vars;
-@use '../mixins/mixins' as mx;
-@use 'sass-butler/mixins' as butler-mx;
-@use 'sass-butler/functions' as butler-fn;
+@use '@styles/variables/variables' as vars;
+@use '@styles/mixins/mixins' as mx;
+@use '@sass-butler/mixins' as butler-mx;
+@use '@sass-butler/functions' as butler-fn;
 
 .c-word-search {
 	--padding-y-input: 0.5rem;

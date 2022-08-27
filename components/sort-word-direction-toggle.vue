@@ -45,3 +45,7 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  @use '@styles/components/sort-word-direction-toggle';
+</style>

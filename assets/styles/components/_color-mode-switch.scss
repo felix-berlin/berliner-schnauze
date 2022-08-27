@@ -1,7 +1,7 @@
 @use 'sass:string';
-@use './../variables/variables' as vars;
-@use './../mixins/mixins' as mx;
-@use 'sass-butler/functions' as butler-fn;
+@use '@styles/variables/variables' as vars;
+@use '@styles/mixins/mixins' as mx;
+@use '@sass-butler/functions' as butler-fn;
 
 .c-color-mode-switch {
 	$icon-color: vars.$white-100;

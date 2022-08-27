@@ -9,3 +9,7 @@ export default {
   name: 'SingleLoader'
 }
 </script>
+
+<style lang="scss">
+  @use '@styles/components/single-loader';
+</style>

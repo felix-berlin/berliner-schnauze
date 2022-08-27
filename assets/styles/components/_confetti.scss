@@ -1,4 +1,4 @@
-@use 'sass-butler/functions' as butler-fn;
+@use '@sass-butler/functions' as butler-fn;
 
 $yellow: #ffd300;
 $blue: #17d3ff;
@@ -65,7 +65,7 @@ $duration: 1000;
 }
 
 @keyframes make-it-rain {
-	from {
+	0% {
 		opacity: 0;
 	}
 
@@ -73,7 +73,7 @@ $duration: 1000;
 		opacity: 1;
 	}
 
-	to {
+	100% {
 		transform: translateY(200px);
 	}
 }

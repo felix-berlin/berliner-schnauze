@@ -1,4 +1,4 @@
-@use '../variables/variables.scss' as vars;
+@use '@styles/variables/variables.scss' as vars;
 
 .o-legal-pages {
 	@for $h from 1 to 6 {

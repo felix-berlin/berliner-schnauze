@@ -1,6 +1,6 @@
 @use '../variables/variables' as vars;
 @use './../mixins/mixins' as mx;
-@use 'sass-butler/mixins' as butler-mx;
+@use '@sass-butler/mixins' as butler-mx;
 
 .c-header {
 	--areas-template: ' . logo menu-nav . ';

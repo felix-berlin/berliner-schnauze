@@ -1,4 +1,4 @@
-@use 'sass-butler/functions' as butler-fn;
+@use '@sass-butler/functions' as butler-fn;
 
 // Breakpoint Vars
 $xxs: butler-fn.px-to-rem(375); // Smartphone Portrait

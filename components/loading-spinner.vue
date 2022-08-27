@@ -13,24 +13,10 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-
-  data () {
-    return {
-
-    }
-  },
-
-  mounted () {
-
-  },
-
-  beforeDestroy () {
-
-  },
-
-  methods: {
-
   }
 }
 </script>
+
+<style lang="scss">
+  @use '@styles/components/loading-spinner';
+</style>
