@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.20.3](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.2...v1.20.3) (2022-08-27)
+
+
+### Bug Fixes
+
+* js config & use of lucide vue ([75c5458](https://github.com/felix-berlin/berliner-schnauze/commit/75c54586b25c070fddb5de752f4f6b5a9934afe8))
+
+
+### Performance Improvements
+
+* load styles inside components ([027c1ff](https://github.com/felix-berlin/berliner-schnauze/commit/027c1ff6c1d84e7b05ef149e57b5d4bd885a7ee3))
+
 ## [1.20.2](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.1...v1.20.2) (2022-07-30)
 
 
