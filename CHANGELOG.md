@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.20.4](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.3...v1.20.4) (2022-08-27)
+
+
+### Performance Improvements
+
+* exstract css to files ([9d8d4dc](https://github.com/felix-berlin/berliner-schnauze/commit/9d8d4dcde630d7c1c9c41020b22ad9f65bf262b2))
+
 ## [1.20.3](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.2...v1.20.3) (2022-08-27)
 
 
