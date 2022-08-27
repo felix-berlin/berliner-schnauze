@@ -24,8 +24,8 @@ export default {
   },
 
   alias: {
-    styles: resolve(__dirname, './assets/styles'),
-    'sass-butler': resolve(__dirname, './node_modules/@felix_berlin/sass-butler/')
+    '@styles': resolve(__dirname, './assets/styles'),
+    '@sass-butler': resolve(__dirname, './node_modules/@felix_berlin/sass-butler/')
   },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -104,7 +104,6 @@ export default {
     '@nuxtjs/eslint-module',
     '@nuxtjs/stylelint-module',
     '@nuxtjs/color-mode',
-    'lucide-vue/nuxt',
     '@nuxtjs/device',
     // '@nuxtjs/html-validator',
     '@/modules/sitemap-route-generator'
