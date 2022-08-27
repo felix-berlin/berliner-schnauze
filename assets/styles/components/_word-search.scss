@@ -50,7 +50,7 @@
 
 		border-left: none;
 
-		@include mx.dark-mode {
+		@include butler-mx.dark-mode-class {
 			--color-outline: #{butler-fn.hex-to-rgb(vars.$blue-200, 50%)};
 		}
 
@@ -75,7 +75,7 @@
 		gap: vars.$spacer * 0.25;
 		align-self: center;
 
-		@include mx.dark-mode {
+		@include butler-mx.dark-mode-class {
 			--color: #{color.scale(vars.$blue-100, $lightness: 45%)};
 		}
 		@include mx.breakpoint('md') {
@@ -103,7 +103,7 @@
 
 				transition: all 0.3s ease-in-out;
 
-				@include mx.dark-mode {
+				@include butler-mx.dark-mode-class {
 					--color-box-shadow: #{butler-fn.hex-to-rgb(vars.$blue-100, 20%)};
 				}
 

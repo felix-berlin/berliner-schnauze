@@ -2,6 +2,7 @@
 @use '@styles/variables/variables' as vars;
 @use '@styles/mixins/mixins' as mx;
 @use '@sass-butler/functions' as butler-fn;
+@use '@sass-butler/mixins' as butler-mx;
 
 .c-footer {
 	--space-walking: 40px;
@@ -64,7 +65,7 @@
 		grid-template-areas: var(--areas-template);
 		padding-top: var(--space-walking);
 
-		@include mx.dark-mode {
+		@include butler-mx.dark-mode-class {
 			--color-background: #{butler-fn.hex-to-rgb(vars.$blue-200, 50%)};
 		}
 
@@ -72,7 +73,7 @@
 		& {
 			color: var(--color, var(--blue-200));
 
-			@include mx.dark-mode {
+			@include butler-mx.dark-mode-class {
 				--color: var(--white-200);
 			}
 		}
@@ -97,7 +98,7 @@
 				--color-background: transparent;
 			}
 		}
-		@include mx.dark-mode {
+		@include butler-mx.dark-mode-class {
 			@include mx.breakpoint('md') {
 				--color-background: transparent;
 			}

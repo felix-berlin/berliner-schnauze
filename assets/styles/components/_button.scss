@@ -1,5 +1,5 @@
-@use './../variables/variables' as vars;
-@use './../mixins/mixins' as mx;
+@use '@styles/variables/variables' as vars;
+@use '@sass-butler/mixins' as butler-mx;
 
 .c-button {
 	cursor: pointer;
@@ -19,7 +19,7 @@
 			--style-border: dashed;
 		}
 
-		@include mx.dark-mode {
+		@include butler-mx.dark-mode-class {
 			--color-border: var(--white-100);
 		}
 	}

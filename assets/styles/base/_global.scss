@@ -1,5 +1,5 @@
-@use '../variables/variables' as vars;
-@use './../mixins/mixins' as mx;
+@use '@styles/variables/variables' as vars;
+@use '@styles/mixins/mixins' as mx;
 
 :root {
 	@each $name, $color in vars.$all-colors {
@@ -22,7 +22,7 @@ html {
 	--primary: var(--red-200);
 	--secondary: var(--red-100);
 
-	&[class='dark-mode'] {
+	&[class='dark'] {
 		--primary: var(--blue-200);
 		--secondary: var(--blue-100);
 	}

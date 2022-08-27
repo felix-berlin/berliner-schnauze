@@ -1,5 +1,5 @@
-@use '../variables/variables' as vars;
-@use './../mixins/mixins' as mx;
+@use '@styles/variables/variables' as vars;
+@use '@styles/mixins/mixins' as mx;
 @use '@sass-butler/mixins' as butler-mx;
 
 .c-header {

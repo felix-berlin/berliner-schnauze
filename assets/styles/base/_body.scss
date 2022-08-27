@@ -1,5 +1,5 @@
-@use '../variables/variables' as vars;
-@use './../mixins/mixins' as mx;
+@use '@styles/variables/variables' as vars;
+@use '@styles/mixins/mixins' as mx;
 @use '@sass-butler/mixins' as butler-mx;
 @use '@sass-butler/functions' as butler-fn;
 
@@ -13,7 +13,7 @@ body {
 	@include butler-mx.feature('motion') {
 		transition: background-color 1s ease-in-out;
 	}
-	@include mx.dark-mode {
+	@include butler-mx.dark-mode-class {
 		--color-body: #{vars.$grey-200};
 		--color-gradient-body-1: #{butler-fn.hex-to-rgb(vars.$blue-200, 50%)};
 		--color-gradient-body-2: #{butler-fn.hex-to-rgb(vars.$blue-100, 50%)};
@@ -23,7 +23,7 @@ body {
 
 @include butler-mx.select-style(vars.$red-200, vars.$white-100);
 
-html[class='dark-mode'] {
+html[class='dark'] {
 	@include butler-mx.select-style(vars.$blue-200, vars.$white-100);
 }
 

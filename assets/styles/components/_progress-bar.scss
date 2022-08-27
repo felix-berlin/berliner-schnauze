@@ -1,4 +1,4 @@
-@use './../mixins/mixins' as mx;
+@use '@styles/mixins/mixins' as mx;
 
 .nuxt-progress {
 	background-color: var(--secondary);

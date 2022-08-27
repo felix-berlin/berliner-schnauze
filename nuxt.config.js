@@ -151,6 +151,10 @@ export default {
     }
   },
 
+  colorMode: {
+    classSuffix: ''
+  },
+
   robots: {
     UserAgent: '*',
     Disallow: '',
