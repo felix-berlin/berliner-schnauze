@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.18.9",
-    "@commitlint/cli": "17.1.1",
+    "@commitlint/cli": "17.1.2",
     "@commitlint/config-conventional": "17.1.0",
     "@felix_berlin/stylelint-config-felix-berlin": "1.0.0",
     "@nuxt/types": "2.15.8",
