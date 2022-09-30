@@ -44,7 +44,7 @@
     "@nuxtjs/device": "2.1.0",
     "@nuxtjs/eslint-config": "11.0.0",
     "@nuxtjs/eslint-module": "3.1.0",
-    "@nuxtjs/html-validator": "0.7.1",
+    "@nuxtjs/html-validator": "1.0.0",
     "@nuxtjs/stylelint-module": "4.1.0",
     "@semantic-release/changelog": "6.0.1",
     "@semantic-release/exec": "6.0.3",
