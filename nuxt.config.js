@@ -16,7 +16,8 @@ export default {
       clientConfig: {
       // Any client-specific config
       }
-    }
+    },
+    cfTurnstileSiteKey: process.env.CF_TURNSTILE_SITE_KEY
   },
 
   privateRuntimeConfig: {
@@ -77,6 +78,9 @@ export default {
       { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon/favicon-16x16.png' },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon/favicon.ico' }
     ]
+    // script: [
+    //   { src: 'https://challenges.cloudflare.com/turnstile/v0/api.js', async: true, defer: true }
+    // ]
   },
 
   // Sitemap
