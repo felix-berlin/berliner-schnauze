@@ -19,7 +19,7 @@
     "@nuxtjs/robots": "2.5.0",
     "@nuxtjs/sentry": "6.0.1",
     "@nuxtjs/sitemap": "2.4.0",
-    "@sentry/tracing": "7.17.1",
+    "@sentry/tracing": "7.17.2",
     "core-js": "3.26.0",
     "floating-vue": "1.0.0-beta.18",
     "fuse.js": "6.6.2",
