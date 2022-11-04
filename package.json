@@ -36,8 +36,8 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.19.1",
-    "@commitlint/cli": "17.1.2",
-    "@commitlint/config-conventional": "17.1.0",
+    "@commitlint/cli": "17.2.0",
+    "@commitlint/config-conventional": "17.2.0",
     "@felix_berlin/stylelint-config-felix-berlin": "1.0.0",
     "@nuxt/types": "2.15.8",
     "@nuxtjs/color-mode": "2.1.1",
