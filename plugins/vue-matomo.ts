@@ -1,8 +1,7 @@
-import Vue from 'vue'
 import VueMatomo from 'vue-matomo'
 
-export default ({ app }) => {
-  Vue.use(VueMatomo, {
+export default ({ vueApp }) => {
+  vueApp.use(VueMatomo, {
     router: app.router,
     host: '//jebongt.de',
     siteId: 8,
