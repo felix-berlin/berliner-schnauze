@@ -11,7 +11,8 @@ export default defineNuxtConfig({
     // 'nuxt-delay-hydration',
     '@nuxtjs/turnstile',
     '@nuxtjs/device',
-    '@nuxt/devtools'
+    '@nuxt/devtools',
+    '@pinia/nuxt'
     // ['@nuxtjs/stylelint-module', { /* module options */ }]
   ],
 
@@ -20,8 +21,12 @@ export default defineNuxtConfig({
   ],
 
   plugins: [
-    // { src: '~/plugins/vue-matomo.ts', ssr: false }
+
   ],
+
+  imports: {
+    dirs: ['stores']
+  },
 
   apollo: {
     clients: {
@@ -32,11 +37,7 @@ export default defineNuxtConfig({
   },
 
   pinia: {
-    autoImports: [
-      // automatically imports `defineStore`
-      'defineStore', // import { defineStore } from 'pinia'
-      ['defineStore', 'definePiniaStore'] // import { defineStore as definePiniaStore } from 'pinia'
-    ]
+    autoImports: ['defineStore', 'acceptHMRUpdate']
   },
 
   delayHydration: {

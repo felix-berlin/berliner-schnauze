@@ -20,6 +20,7 @@ query imprintPage {
 
 const { result } = useQuery(query)
 
+const store = useIndexStore()
 useServerSeoMeta({
   title: 'Impressum - Berliner Schnauze',
   ogTitle: 'Impressum - Berliner Schnauze',
