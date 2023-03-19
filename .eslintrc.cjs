@@ -14,5 +14,7 @@ module.exports = {
     '@nuxtjs/eslint-config-typescript'
   ],
   plugins: [],
-  rules: {}
+  rules: {
+    '@typescript-eslint/no-unused-vars': 'warn'
+  }
 }

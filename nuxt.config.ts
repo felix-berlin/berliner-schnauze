@@ -8,9 +8,10 @@ export default defineNuxtConfig({
     'nuxt-simple-sitemap',
     '@nuxtjs/apollo',
     '@nuxtjs/html-validator',
-    'nuxt-delay-hydration',
+    // 'nuxt-delay-hydration',
     '@nuxtjs/turnstile',
-    '@nuxtjs/device'
+    '@nuxtjs/device',
+    '@nuxt/devtools'
     // ['@nuxtjs/stylelint-module', { /* module options */ }]
   ],
 
@@ -19,7 +20,7 @@ export default defineNuxtConfig({
   ],
 
   plugins: [
-    { src: '~/plugins/vue-matomo.ts', ssr: false }
+    // { src: '~/plugins/vue-matomo.ts', ssr: false }
   ],
 
   apollo: {
@@ -41,11 +42,17 @@ export default defineNuxtConfig({
   delayHydration: {
     // enables nuxt-delay-hydration in dev mode for testing
     debug: process.env.NODE_ENV === 'development'
-  }
+  },
 
   // TODO: add key
   // turnstile: {
   //   siteKey: '<your-site-key>',
   // },
-
+  devtools: {
+    // Enable devtools (default: true)
+    enabled: false,
+    // VS Code Server options
+    vscode: {}
+    // ...other options
+  }
 })
