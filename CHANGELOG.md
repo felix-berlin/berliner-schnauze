@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.5](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2023-03-19)
+
+
+### Features
+
+* add default layout and main footer ([d870a40](https://github.com/felix-berlin/berliner-schnauze/commit/d870a40cb59357de8fbdab6ecd6235f94fabf0dc))
+
 # [2.0.0-beta.4](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2023-03-19)
 
 
