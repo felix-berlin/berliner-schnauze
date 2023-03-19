@@ -2,6 +2,8 @@ import { fileURLToPath } from 'node:url'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: true,
+
   modules: [
     '@nuxtjs/eslint-module',
     '@pinia/nuxt',
@@ -14,7 +16,8 @@ export default defineNuxtConfig({
     '@nuxtjs/turnstile',
     '@nuxtjs/device',
     '@nuxt/devtools',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxt/image-edge'
     // ['@nuxtjs/stylelint-module', { /* module options */ }]
   ],
 
