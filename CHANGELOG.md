@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.2](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2023-03-19)
+
+
+### Bug Fixes
+
+* **deps:** update ([ace6dfe](https://github.com/felix-berlin/berliner-schnauze/commit/ace6dfe4ba771cf8df86eb4c6b480ef98a4e2343))
+
+
+### Features
+
+* add imprint and index page; add gutenbergBlock component ([31f3b78](https://github.com/felix-berlin/berliner-schnauze/commit/31f3b78fc1f72e822b2aaf64102c278b42396828))
+
 # [2.0.0-beta.1](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.5...v2.0.0-beta.1) (2023-03-17)
 
 
