@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.4](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2023-03-19)
+
+
+### Features
+
+* add privacy-policy; add aliases ([5e71fd8](https://github.com/felix-berlin/berliner-schnauze/commit/5e71fd8ed5c9ea844fe3d110067f3405519f05e0))
+
 # [2.0.0-beta.3](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2023-03-19)
 
 
