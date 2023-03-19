@@ -8,7 +8,7 @@
 
 const query = gql`
 query imprintPage {
-  page(id: "4712", idType: DATABASE_ID) {
+  page(id: "4715", idType: DATABASE_ID) {
     content,
     blocks {
       name
@@ -20,12 +20,11 @@ query imprintPage {
 
 const { result } = useQuery(query)
 
-const store = useIndexStore()
 useServerSeoMeta({
-  title: 'Impressum - Berliner Schnauze',
-  ogTitle: 'Impressum - Berliner Schnauze',
-  description: 'Das Impressum von Berliner Schnauze.',
-  ogDescription: 'Das Impressum von Berliner Schnauze.'
+  title: 'Datenschutzerklärung - Berliner Schnauze',
+  ogTitle: 'Datenschutzerklärung - Berliner Schnauze',
+  description: 'Die Datenschutzerklärung von Berliner Schnauze.',
+  ogDescription: 'Die Datenschutzerklärung von Berliner Schnauze.'
 })
 </script>
 

@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
@@ -26,6 +28,12 @@ export default defineNuxtConfig({
 
   imports: {
     dirs: ['stores']
+  },
+
+  alias: {
+    '@images': fileURLToPath(new URL('./assets/images', import.meta.url)),
+    '@styles': fileURLToPath(new URL('./assets/styles', import.meta.url)),
+    '@sass-butler': fileURLToPath(new URL('./node_modules/@felix_berlin/sass-butler/', import.meta.url))
   },
 
   apollo: {
