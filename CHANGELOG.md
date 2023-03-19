@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.3](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2023-03-19)
+
+
+### Features
+
+* migrate vuex store to pinia ([4a27d2d](https://github.com/felix-berlin/berliner-schnauze/commit/4a27d2d02057db93d71843d080bfe9fe80750f8c))
+* **plugins:** add plugins ([2705029](https://github.com/felix-berlin/berliner-schnauze/commit/2705029ee8dc2c94ecf1448e2dd26b3f22276edb))
+
 # [2.0.0-beta.2](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2023-03-19)
 
 
