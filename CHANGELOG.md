@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.1](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.5...v2.0.0-beta.1) (2023-03-17)
+
+
+### Features
+
+* **nuxt:** del nuxt 2 project & add nuxt nuxt 3 ([8709e79](https://github.com/felix-berlin/berliner-schnauze/commit/8709e7956ffbcba57e057aa48af848ed9578c802))
+
+
+### BREAKING CHANGES
+
+* **nuxt:** start project from scratch
+
 ## [1.20.5](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.4...v1.20.5) (2022-08-27)
 
 
