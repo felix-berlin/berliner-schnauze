@@ -1,0 +1,13 @@
+overwrite: true
+schema: "https://cms.webshaped.de/api"
+documents: null
+generates:
+  src/types/generated/graphql.d.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+    config:
+      maybeValue: "T | null | undefined"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

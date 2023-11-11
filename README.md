@@ -1,42 +1,8 @@
-# Nuxt 3 Minimal Starter
+# Berliner Schnauze
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/felix-berlin/berliner-schnauze/cd?label=website%20build&style=flat-square)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/felix-berlin/berliner-schnauze?label=github&style=flat-square)
+![Website](https://img.shields.io/website?style=flat-square&url=https%3A%2F%2Fberliner-schnauze.wtf)
 
-## Setup
-
-Make sure to install the dependencies:
-
-```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install
-```
-
-## Development Server
-
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+> Small Berlinerisch to Hochdeutsch Dictionary.
+---

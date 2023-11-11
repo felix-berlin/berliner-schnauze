@@ -1,9 +1,33 @@
-node_modules
-*.log*
-.nuxt
-.nitro
-.cache
-.output
+# build output
+dist/
+dev-dist/
+.astro
+
+# test output
+coverage
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
 .env
-dist
+.env.production
+.env.development
+
+# macOS-specific files
 .DS_Store
+
+# Windows specific files
+.
+
+.idea
+/test-results/
+/playwright-report/
+/playwright/.cache/

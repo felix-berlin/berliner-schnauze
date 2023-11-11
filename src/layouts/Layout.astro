@@ -1,0 +1,36 @@
+---
+import "@styles/app.scss";
+
+import BaseHead from "@components/BaseHead.astro";
+import type { SeoProps } from "@components/BaseHead.astro";
+import type { Language } from "@ts_types/generated/graphql";
+
+export interface DefaultLayoutProps {
+  content: {
+    title: string;
+    seo: SeoProps;
+  };
+  contentClasses?: Array<string> | string;
+  bodyClasses?: Array<string> | string;
+}
+
+const {
+  content: { title, seo },
+  contentClasses,
+  bodyClasses,
+} = Astro.props as DefaultLayoutProps;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <BaseHead title={title} seo={seo} />
+
+    <slot name="head" />
+  </head>
+  <body class="o-body" class:list={bodyClasses}>
+    <main class="o-content" class:list={contentClasses}>
+      <slot />
+    </main>
+  </body>
+</html>

@@ -1,0 +1,131 @@
+---
+// import { pwaInfo } from "virtual:pwa-info";
+import { ViewTransitions } from "astro:transitions";
+
+export interface Title {
+  title: string;
+}
+
+export interface Seo {
+  title: string;
+  opengraphAuthor?: string;
+  opengraphDescription?: string;
+  opengraphPublisher?: string;
+  opengraphTitle?: string;
+  opengraphType?: string;
+  opengraphUrl?: string;
+  readingTime?: number;
+  opengraphSiteName?: string;
+  twitterDescription?: string;
+  twitterTitle?: string;
+  metaRobotsNofollow?: string;
+  metaRobotsNoindex?: string;
+  canonical?: string;
+  metaDesc?: string;
+  opengraphPublishedTime?: string;
+  opengraphModifiedTime?: string;
+  opengraphImage?: {
+    sourceUrl: string;
+  };
+}
+
+export interface SeoProps {
+  title: Title;
+  seo: Seo;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const { title, seo } = Astro.props as SeoProps & Title;
+---
+
+<!-- Block until theme class is set -->
+<script>
+  /**
+   * Check if dark theme is preferred or set by user
+   */
+  const isDarkTheme = (): string | boolean | null => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("darkMode")) {
+      return localStorage.getItem("darkMode");
+    }
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "true";
+    }
+    return "false";
+  };
+
+  /**
+   * Set dark theme class
+   */
+  const setDarkClass = () => {
+    const htmlClasses = document.documentElement.classList;
+
+    if (isDarkTheme() === "false") {
+      htmlClasses.remove("dark");
+    } else {
+      htmlClasses.add("dark");
+    }
+  };
+
+  setDarkClass();
+
+  document.addEventListener("astro:after-swap", setDarkClass);
+</script>
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#303956" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<meta name="msapplication-TileColor" content="#ffffff" />
+<meta name="theme-color" content="#ffffff" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+
+{seo?.title && <meta name="title" content={seo?.title} />}
+{seo?.opengraphDescription && <meta name="description" content={seo?.opengraphDescription} />}
+
+<!-- Open Graph / Facebook -->
+{seo?.opengraphType && <meta property="og:type" content={seo?.opengraphType} />}
+{seo?.opengraphUrl && <meta property="og:url" content={seo?.opengraphUrl} />}
+{seo?.opengraphTitle && <meta property="og:title" content={seo?.opengraphTitle} />}
+{
+  seo?.opengraphDescription && (
+    <meta property="og:description" content={seo?.opengraphDescription} />
+  )
+}
+{
+  seo?.opengraphImage?.sourceUrl && (
+    <meta property="og:image" content={seo?.opengraphImage?.sourceUrl} />
+  )
+}
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+{seo?.opengraphUrl && <meta property="twitter:url" content={seo?.opengraphUrl} />}
+{seo?.twitterTitle && <meta property="twitter:title" content={seo?.twitterTitle} />}
+{
+  seo?.twitterDescription && (
+    <meta property="twitter:description" content={seo?.twitterDescription} />
+  )
+}
+{
+  seo?.opengraphImage?.sourceUrl && (
+    <meta property="twitter:image" content={seo?.opengraphImage?.sourceUrl} />
+  )
+}
+
+<link rel="preconnect" href="//cms.webshaped.de" />
+<link rel="preconnect" href="//analytics.webshaped.de" />
+
+<!-- <link rel="manifest" href="/site.webmanifest" /> -->
+<!-- {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+<script src="/src/services/pwa.ts"></script> -->
+
+<ViewTransitions />
