@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.6](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2023-11-11)
+
+
+### Bug Fixes
+
+* release action ([3bff8d7](https://github.com/felix-berlin/berliner-schnauze/commit/3bff8d7984201f2bf3162abf17f82d6fefadb3be))
+
+
+### Features
+
+* add Modal, Search and SearchModal ([9bb796d](https://github.com/felix-berlin/berliner-schnauze/commit/9bb796d918316a93310d8d3c87e9a4c691729ade))
+* create word routes ([a99f507](https://github.com/felix-berlin/berliner-schnauze/commit/a99f50792b3dfbbc345fbe07e87d29b1cf4249d4))
+* migrate from nuxt 3 beta to astro ([36fdff1](https://github.com/felix-berlin/berliner-schnauze/commit/36fdff1f8b3c40a83b48c0a9e2c7ba83b179d475))
+
 # [2.0.0-beta.5](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2023-03-19)
 
 

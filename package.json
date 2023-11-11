@@ -1,7 +1,7 @@
 {
   "name": "berliner-schnauze",
   "type": "module",
-  "version": "2.0.0-beta.5",
+  "version": "2.0.0-beta.6",
   "homepage": "https://berliner-schnauze.wtf",
   "repository": {
     "type": "git",
@@ -52,7 +52,7 @@
     "preinstall": "npx only-allow pnpm",
     "postbuild": "pagefind --site dist/"
   },
-    "devDependencies": {
+  "devDependencies": {
     "@astrojs/check": "^0.3.1",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/client-preset": "^4.1.0",
