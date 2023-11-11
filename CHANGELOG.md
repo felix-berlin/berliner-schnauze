@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.7](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.6...v2.0.0-beta.7) (2023-11-11)
+
+
+### Bug Fixes
+
+* render word in html doc ([a61d9cc](https://github.com/felix-berlin/berliner-schnauze/commit/a61d9ccc778921ab61bf01f00bc653aecea3b6e6))
+
 # [2.0.0-beta.6](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2023-11-11)
 
 
