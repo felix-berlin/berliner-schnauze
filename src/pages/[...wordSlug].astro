@@ -1,25 +1,28 @@
 ---
-import { getWordsWithSlugs, getWordBySlug } from "@services/api";
+import { getAllWord } from "@services/api";
 
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
 
 export const getStaticPaths = async () => {
-  const postWithSlugs = await getWordsWithSlugs();
-  // console.log(postWithSlugs);
+  const allWords = await getAllWord();
 
-  return postWithSlugs.map(({ node }) => {
+  return allWords.map(({ node }) => {
     return {
       params: {
         wordSlug: node.slug,
+      },
+      props: {
+        word: node,
       },
     };
   });
 };
 
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { wordSlug }: any = Astro.params as Params;
-const word = await getWordBySlug(wordSlug);
+const { word } = Astro.props as Props;
 ---
 
-<p>{word.title}</p>
+<p>{word.slug}</p>
