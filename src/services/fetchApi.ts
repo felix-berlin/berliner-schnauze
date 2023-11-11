@@ -1,7 +1,4 @@
-export const fetchAPI = async (
-  query: string,
-  { variables } = { variables: {} },
-) => {
+export const fetchAPI = async (query: string, { variables } = { variables: {} }) => {
   const headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -13,7 +10,7 @@ export const fetchAPI = async (
     body: JSON.stringify({ query, variables }),
   }).then(async (response) => {
     if (response.ok) {
-      // console.log('response', response);
+      // console.log("response", response);
 
       return await response.json();
     } else {
