@@ -22,10 +22,10 @@ export const getStaticPaths = async () => {
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { wordSlug }: any = Astro.params as Params;
+const { wordSlug } = Astro.params as Params;
 const { word } = Astro.props as Props;
 ---
 
 <Layout content={word}>
-  <p>{word.slug}</p>
+  <p>{word.title}</p>
 </Layout>

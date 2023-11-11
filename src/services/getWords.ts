@@ -95,6 +95,24 @@ export const getAllWord = async (): Promise<WordEdge[]> => {
         edges {
           node {
             slug
+            title
+            wordGroup
+            modifiedGmt
+            berlinerWordId
+            wordProperties {
+              article
+              berlinerisch
+              learnMore
+              examples {
+                example
+                exampleExplanation
+                fieldGroupName
+              }
+              translations {
+                fieldGroupName
+                translation
+              }
+            }
             ${seo}
           }
           cursor

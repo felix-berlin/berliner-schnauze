@@ -1,10 +1,6 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "exclude": [
-    "node_modules",
-    "src/tests/**/*.spec.ts",
-    "src/tests/**/*.test.ts"
-  ],
+  "exclude": ["node_modules", "src/tests/**/*.spec.ts", "src/tests/**/*.test.ts"],
   "compilerOptions": {
     "jsx": "preserve",
     "baseUrl": ".",

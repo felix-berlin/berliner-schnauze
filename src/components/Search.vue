@@ -29,6 +29,7 @@ if (import.meta.env.DEV) {
 const initPagefind = (): void => {
   new PagefindUI({
     element: `#${props.id}`,
+    baseUrl: "/",
     resetStyles: false,
     showImages: false,
     bundlePath,
@@ -64,6 +65,7 @@ onUnmounted(() => {
   window.removeEventListener("keydown", (event) => triggerSearchViaKeyboard(event));
 });
 </script>
+
 <style lang="scss">
 @use "@pagefind/default-ui/css/ui.css";
 </style>
