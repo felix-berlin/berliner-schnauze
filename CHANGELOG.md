@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.15](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2023-11-12)
+
+
+### Bug Fixes
+
+* main header child compont persist ([46c7e06](https://github.com/felix-berlin/berliner-schnauze/commit/46c7e065f7ae325ca4063fe400d37d32462ac53a))
+
 # [2.0.0-beta.14](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2023-11-12)
 
 
