@@ -77,6 +77,6 @@ onUnmounted(() => {
 });
 </script>
 
-<!-- <style lang="scss">
+<style lang="scss">
 @use "@styles/components/searchbar.scss";
-</style> -->
+</style>

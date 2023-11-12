@@ -1,5 +1,5 @@
 import { atom, action, map } from "nanostores";
-
+import { persistentAtom } from "@nanostores/persistent";
 interface Translation {
   translation: string;
 }
@@ -57,4 +57,19 @@ export const getWordOfTheDay = action(wordOfTheDay, "getWordOfTheDay", async (st
     .catch((err) => {
       console.error(err);
     });
+});
+
+export type DarkMode = boolean;
+
+export const isDarkMode = persistentAtom<DarkMode>("darkMode", false, {
+  encode(value) {
+    return JSON.stringify(value);
+  },
+  decode(value) {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value;
+    }
+  },
 });

@@ -1,0 +1,33 @@
+@use "@styles/variables/colors";
+@use "@styles/variables/base";
+@use "@sass-butler/functions" as butler-fn;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-searchbar {
+  --color-button: var(--accent-color);
+
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  // border: 1px solid
+  //   var(
+  //     --color-border-searchbar,
+  //     #{butler-fn.hex-to-rgb(colors.$red-light, 30%)}
+  //   );
+
+  @include butler-mx.hover {
+    backdrop-filter: none;
+  }
+
+  &__slash-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+  }
+
+  &__search-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+}
