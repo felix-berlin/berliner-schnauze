@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.16](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2023-11-12)
+
+
+### Features
+
+* add fonts ([89d9686](https://github.com/felix-berlin/berliner-schnauze/commit/89d9686bb1af85e6fe4de9719d1bc11c0b31c768))
+
 # [2.0.0-beta.15](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2023-11-12)
 
 
