@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.8](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2023-11-11)
+
+
+### Features
+
+* get all the word data ([5f1a64c](https://github.com/felix-berlin/berliner-schnauze/commit/5f1a64c0a1fc2a4a70b42e6ade6a79fb47fd77ea))
+
 # [2.0.0-beta.7](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.6...v2.0.0-beta.7) (2023-11-11)
 
 
