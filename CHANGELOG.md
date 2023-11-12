@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.10](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2023-11-12)
+
+
+### Bug Fixes
+
+* whitespace ([72e1436](https://github.com/felix-berlin/berliner-schnauze/commit/72e14360afb50db8ba641cd4081feb63aecb1661))
+
 # [2.0.0-beta.9](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2023-11-12)
 
 
