@@ -3,6 +3,7 @@ import "@styles/objects/_index.scss";
 
 import Layout from "@layouts/Layout.astro";
 import Search from "@components/Search.vue";
+import WordOfTheDay from "@components/WordOfTheDay.vue";
 
 const content = {
   title: "Welcome to Astro",
@@ -52,7 +53,7 @@ const content = {
       <p>Da Du bereits soweit gekommen bist, huldige bitte das Wort des Tages. Danke!</p>
     </div>
 
-    <!-- <WordOfTheDay critical /> -->
+    <WordOfTheDay client:only="vue" />
   </section>
   <Search id="test-search" client:only="vue" />
 </Layout>

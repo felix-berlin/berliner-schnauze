@@ -3,15 +3,7 @@ import FloatingVue from "floating-vue";
 import { autoAnimatePlugin } from "@formkit/auto-animate/vue";
 import { devtools } from "@nanostores/vue/devtools";
 
-// import {
-//   currentWebmentionsCount,
-//   isDarkMode,
-//   guest,
-//   currentLanguage,
-//   installPrompt,
-//   isMobileBreakpoint,
-//   windowWidth,
-// } from "@stores/store";
+import { wordOfTheDay } from "@stores/index";
 
 export default (app: App) => {
   app.use(FloatingVue, {
@@ -26,13 +18,7 @@ export default (app: App) => {
     },
   });
   app.use(autoAnimatePlugin);
-  // app.use(devtools, {
-  //   currentWebmentionsCount,
-  //   isDarkMode,
-  //   guest,
-  //   currentLanguage,
-  //   installPrompt,
-  //   isMobileBreakpoint,
-  //   windowWidth,
-  // });
+  app.use(devtools, {
+    wordOfTheDay,
+  });
 };
