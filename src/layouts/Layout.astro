@@ -2,8 +2,8 @@
 import "@styles/app.scss";
 
 import BaseHead from "@components/BaseHead.astro";
+import ScrollToTop from "@components/ScrollToTop.vue";
 import type { SeoProps } from "@components/BaseHead.astro";
-import type { Language } from "@ts_types/generated/graphql";
 
 export interface DefaultLayoutProps {
   content: {
@@ -32,5 +32,6 @@ const {
     <main class="o-content" class:list={contentClasses}>
       <slot />
     </main>
+    <ScrollToTop />
   </body>
 </html>
