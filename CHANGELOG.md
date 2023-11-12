@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.11](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2023-11-12)
+
+
+### Bug Fixes
+
+* **WordOfTheDay:** type errors and a11y issues ([54e1609](https://github.com/felix-berlin/berliner-schnauze/commit/54e160999fe14c31d62701500c22d5bd2c50ebea))
+
+
+### Features
+
+* migrate ScrollToTop ([afbd8d3](https://github.com/felix-berlin/berliner-schnauze/commit/afbd8d3a20306ba74145d5130a5ffe3688e918d1))
+* start rebuilding the single page template ([50157f2](https://github.com/felix-berlin/berliner-schnauze/commit/50157f241f3a404915548028bbcd6bd64a25c4d5))
+
 # [2.0.0-beta.10](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2023-11-12)
 
 
