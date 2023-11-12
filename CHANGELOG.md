@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.14](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2023-11-12)
+
+
+### Features
+
+* add legal pages ([edfe174](https://github.com/felix-berlin/berliner-schnauze/commit/edfe1742e83b72de2f3e48019fcbe8baf2f58079))
+
 # [2.0.0-beta.13](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2023-11-12)
 
 
