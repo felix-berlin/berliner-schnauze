@@ -93,12 +93,12 @@ const menuItems = [
   },
   {
     title: "Impressum",
-    link: "/imprint",
+    link: "/impressum",
     intern: true,
   },
   {
     title: "Datenschutz",
-    link: "/privacy-policy",
+    link: "/datenschutz",
     intern: true,
   },
 ];

@@ -1,0 +1,32 @@
+---
+import ColorModeToggle from "@components/ColorModeToggle.vue";
+import SearchModal from "@components/SearchModal.vue";
+import SocialList from "@components/SocialList.vue";
+import MainMenu from "@components/header/MainMenu.vue";
+---
+
+<header class="c-header">
+  <div class="c-logo">
+    <a href="/" class="c-logo__link"> Berliner Schnauze</a>
+  </div>
+
+  <nav class="c-menu-nav">
+    <div class="c-menu-nav__main-elements">
+      <SearchModal class:list="c-menu-nav__item" client:only transition:persist />
+
+      <ColorModeToggle
+        classes={"c-menu-nav__item c-menu-nav__item-button u-button-reset"}
+        client:only="vue"
+        transition:persist
+      />
+
+      <MainMenu client:only="vue" transition:persist />
+    </div>
+
+    <SocialList
+      modifier="c-social-list--desktop"
+      list-link-modifier="c-menu-nav__item-link"
+      list-modifier="u-list-vertical"
+    />
+  </nav>
+</header>

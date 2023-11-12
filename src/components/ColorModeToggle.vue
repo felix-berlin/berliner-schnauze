@@ -1,5 +1,10 @@
 <template>
-  <button type="button" class="c-color-mode-toggle c-button c-button--icon" @click="toggleMode()">
+  <button
+    type="button"
+    class="c-color-mode-toggle c-button c-button--icon"
+    :class="classes"
+    @click="toggleMode()"
+  >
     <Transition name="fade" mode="out-in">
       <template v-if="isDark">
         <Moon focusable="false" aria-label="dunkles Farbschema aktivieren" />
@@ -17,6 +22,12 @@ import Moon from "virtual:icons/lucide/moon";
 import Sun from "virtual:icons/lucide/sun";
 import { useStore } from "@nanostores/vue";
 import { isDarkMode } from "@stores/index";
+
+interface ColorModeToggleProps {
+  classes?: string;
+}
+
+const { classes = "" } = defineProps<ColorModeToggleProps>();
 
 const isDark = useStore(isDarkMode);
 

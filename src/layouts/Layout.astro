@@ -4,7 +4,7 @@ import "@styles/app.scss";
 import BaseHead from "@components/BaseHead.astro";
 import ScrollToTop from "@components/ScrollToTop.vue";
 import Footer from "@components/Footer.astro";
-import MainHeader from "@components/header/MainHeader.vue";
+import MainHeader from "@components/header/MainHeader.astro";
 
 import type { SeoProps } from "@components/BaseHead.astro";
 
@@ -32,11 +32,11 @@ const {
     <slot name="head" />
   </head>
   <body class="o-body" class:list={bodyClasses}>
-    <MainHeader client:only="vue" />
+    <MainHeader transition:persist />
     <main class="o-content" class:list={contentClasses}>
       <slot />
     </main>
-    <ScrollToTop />
-    <Footer />
+    <ScrollToTop transition:persist />
+    <Footer transition:persist />
   </body>
 </html>

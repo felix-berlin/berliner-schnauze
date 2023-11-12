@@ -8,12 +8,6 @@
         :class="listItemModifier"
       >
         <a
-          v-tooltip="{
-            content: social.tooltip,
-            disabled: (social.tooltip.length ? false : true) || hideTooltips,
-            distance: 9,
-            container: '.c-menu-nav',
-          }"
           :href="social.link"
           :aria-label="social.ariaLabel"
           rel="noopener"
@@ -56,19 +50,16 @@ const list = [
     name: "github",
     link: "https://github.com/felix-berlin/berliner-schnauze",
     ariaLabel: "Link zum Github Projekt",
-    tooltip: "Juhu, Berliner Schnauze ist ein Open Source Projekt auf Github.",
   },
   {
     name: "twitter",
     link: "https://twitter.com/BLN_Schnauze",
     ariaLabel: "Folge Berliner Schnauze auf Twitter",
-    tooltip: "Verrückt, Berliner Schnauze gibts auch auf Twitter.",
   },
   {
     name: "facebook",
     link: "https://www.facebook.com/Berliner.Schnauze030",
     ariaLabel: "Folge Berliner Schnauze auf Facebook",
-    tooltip: "Altmodisch, aber auf Facebook gibt es Berliner Schnauze auch.",
   },
 ];
 </script>
