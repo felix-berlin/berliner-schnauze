@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeMount } from "vue";
 import type { Ref } from "vue";
-import Crown from "virtual:icons/lucide/crown ";
+import Crown from "virtual:icons/lucide/crown";
 import { useStore } from "@nanostores/vue";
 import { wordOfTheDay, getWordOfTheDay } from "@stores/index";
 import ConfettiEffect from "@components/ConfettiEffect.vue";
