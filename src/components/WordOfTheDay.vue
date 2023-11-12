@@ -1,8 +1,12 @@
 <template>
   <div
     class="c-word-of-the-day c-confetti"
-    @mouseenter="(celebrate = true), (showTooltip = true)"
-    @mouseleave="(celebrate = false), (showTooltip = false)"
+    role="textbox"
+    tabindex="0"
+    @mouseover="toggleCelebration(true)"
+    @mouseout="toggleCelebration(false)"
+    @focus="toggleCelebration(true)"
+    @blur="toggleCelebration(false)"
   >
     <div
       v-tooltip="{
@@ -21,10 +25,10 @@
         <SingleLoader v-if="currentWord.loading" key="loading" />
         <div v-else key="word" class="c-word-of-the-day__word-wrap">
           <a
-            :href="`/wort/${currentWord.word.post_name}`"
+            :href="`/wort/${currentWord?.word?.post_name}`"
             class="c-word-of-the-day__word c-loader-text"
           >
-            {{ currentWord.word.berlinerisch }}
+            {{ currentWord?.word?.berlinerisch }}
           </a>
         </div>
       </Transition>
@@ -56,7 +60,14 @@ const currentWord = useStore(wordOfTheDay);
 const celebrate = ref(false);
 const showTooltip = ref(false);
 const countDown = ref();
-const timeToUpdate: Ref<Object | String> = ref({
+
+interface TimeToUpdate {
+  hours: string;
+  minutes: string;
+  seconds: string;
+}
+
+const timeToUpdate: Ref<TimeToUpdate> = ref({
   hours: "00",
   minutes: "00",
   seconds: "00",
@@ -70,9 +81,9 @@ const timeToUpdate: Ref<Object | String> = ref({
 const countDownTimer = () => {
   setTimeout(() => {
     let milliseconds = resetAtMidnight();
-    milliseconds -= 1;
+    milliseconds--;
     countDown.value = milliseconds;
-    timeToUpdate.value = convertMsToTime(milliseconds, true);
+    timeToUpdate.value = convertMsToTime(milliseconds);
 
     countDownTimer();
   }, 1000);
@@ -117,7 +128,7 @@ const padTo2Digits = (num: number): string => {
  *
  * @return  {[type]}                returns a string or an object with hours, minutes and seconds
  */
-const convertMsToTime = (milliseconds: number, singleValues: boolean = false) => {
+const convertMsToTime = (milliseconds: number) => {
   let seconds = Math.floor(milliseconds / 1000);
   let minutes = Math.floor(seconds / 60);
   let hours = Math.floor(minutes / 60);
@@ -126,15 +137,23 @@ const convertMsToTime = (milliseconds: number, singleValues: boolean = false) =>
   minutes %= 60;
   hours %= 24;
 
-  if (singleValues) {
-    return {
-      hours: padTo2Digits(hours),
-      minutes: padTo2Digits(minutes),
-      seconds: padTo2Digits(seconds),
-    };
-  }
+  return {
+    hours: padTo2Digits(hours),
+    minutes: padTo2Digits(minutes),
+    seconds: padTo2Digits(seconds),
+  };
+};
 
-  return `${padTo2Digits(hours)}:${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`;
+/**
+ * Toggles the celebration
+ *
+ * @param   {boolean}  toggleValue
+ *
+ * @return  {void}
+ */
+const toggleCelebration = (toggleValue: boolean) => {
+  celebrate.value = toggleValue;
+  showTooltip.value = toggleValue;
 };
 
 onBeforeMount(() => {
