@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.12](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2023-11-12)
+
+
+### Features
+
+* add footer and missing images ([1c90d04](https://github.com/felix-berlin/berliner-schnauze/commit/1c90d0454df86e5c15b1cfd7df73b051a064906c))
+* add more elements to single page ([3f614c8](https://github.com/felix-berlin/berliner-schnauze/commit/3f614c8823db4fd1627d1bccb3190fbbe4b8d5bd))
+
 # [2.0.0-beta.11](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2023-11-12)
 
 
