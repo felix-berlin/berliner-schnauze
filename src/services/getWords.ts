@@ -1,4 +1,5 @@
 import { fetchAPI } from "@services/fetchApi";
+import { seo } from "@services/graphQlQueryParts";
 import type { RootQueryToBerlinerWordConnection, BerlinerWord } from "@ts_types/generated/graphql";
 
 type WordEdge = {
@@ -19,31 +20,6 @@ type BerlinerWordsData = {
     pageInfo: PageInfo;
   };
 };
-
-const seo = `
-  seo {
-    title
-    readingTime
-    canonical
-    metaDesc
-    opengraphSiteName
-    opengraphAuthor
-    opengraphDescription
-    opengraphPublisher
-    opengraphTitle
-    opengraphType
-    opengraphUrl
-    opengraphPublishedTime
-    opengraphModifiedTime
-    opengraphImage {
-      sourceUrl
-    }
-    twitterDescription
-    twitterTitle
-    metaRobotsNofollow
-    metaRobotsNoindex
-  }
-`;
 
 export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
   let allWords: WordEdge[] = [];
