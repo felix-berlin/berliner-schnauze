@@ -1,13 +1,13 @@
-.c-body {
-	display: grid;
-	grid-template-areas:
-		'header header header'
-		' . content . '
-		'footer footer footer';
-	grid-template-columns: var(--spacing-main-frame) 1fr var(--spacing-main-frame);
+.o-body {
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    " . content . "
+    "footer footer footer";
+  grid-template-columns: var(--spacing-main-frame) 1fr var(--spacing-main-frame);
 }
 
-.c-content {
-	grid-area: content;
-	min-height: 80vh;
+.o-content {
+  grid-area: content;
+  min-height: 80vh;
 }
