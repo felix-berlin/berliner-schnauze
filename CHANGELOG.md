@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.9](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2023-11-12)
+
+
+### Features
+
+* migrate WordOfTheDay and Child Components ([eb73c75](https://github.com/felix-berlin/berliner-schnauze/commit/eb73c75ffdbd76111d06a6b815a646c08cfb1efc))
+
 # [2.0.0-beta.8](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2023-11-11)
 
 
