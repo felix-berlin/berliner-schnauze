@@ -1,7 +1,33 @@
 import { atom, action, map } from "nanostores";
 
+interface Translation {
+  translation: string;
+}
+
+interface Example {
+  example: string;
+  example_explanation: string;
+}
+
+export interface Word {
+  ID: number;
+  post_date: string;
+  post_name: string;
+  post_modified: string;
+  berlinerisch: string;
+  article: null | string;
+  alternative_words: boolean;
+  translations: Translation[];
+  examples: Example[];
+  related_words: null | string;
+  learn_more: null | string;
+  group: string;
+  word_type: boolean;
+  exspires: number;
+}
+
 type WordOfTheDay = {
-  word?: string;
+  word?: Word;
   loading: boolean;
 };
 

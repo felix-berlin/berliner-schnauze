@@ -97,6 +97,7 @@ export const getAllWord = async (): Promise<WordEdge[]> => {
             slug
             title
             wordGroup
+            dateGmt
             modifiedGmt
             berlinerWordId
             wordProperties {

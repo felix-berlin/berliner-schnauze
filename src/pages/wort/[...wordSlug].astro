@@ -1,8 +1,20 @@
 ---
+// Styles
+import "@styles/objects/_word.scss";
+import "@styles/components/_single-word.scss";
+
+// Imports
 import { getAllWord } from "@services/api";
 import Layout from "@layouts/Layout.astro";
+import ArrowLeft from "~icons/lucide/arrow-left";
+import Info from "~icons/lucide/info";
+import ExternalLink from "~icons/lucide/external-link";
+import Crown from "~icons/lucide/crown";
+import WordExamples from "@components/word/WordExamples.vue";
 
+// Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
+import type { BerlinerWord } from "@ts_types/generated";
 
 export const getStaticPaths = async () => {
   const allWords = await getAllWord();
@@ -13,7 +25,7 @@ export const getStaticPaths = async () => {
         wordSlug: node.slug,
       },
       props: {
-        word: node,
+        word: node as BerlinerWord,
       },
     };
   });
@@ -24,8 +36,105 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { wordSlug } = Astro.params as Params;
 const { word } = Astro.props as Props;
+// console.log(word);
+
+const wordProps = word.wordProperties;
+
+const formattedDate = (date: Date, locale = "de-DE") => {
+  const dateToFormat = new Date(date);
+
+  return dateToFormat.toLocaleString(locale, { year: "numeric", month: "long", day: "numeric" });
+};
 ---
 
-<Layout content={word}>
-  <p>{word.title}</p>
+<Layout content={word} contentClasses="o-word">
+  <a href="/" class="c-button c-button--back u-button-reset">
+    <ArrowLeft /> zurück
+  </a>
+
+  <article class="c-single-word"></article>
+  <header class="c-single-word__header">
+    <!-- <span
+          v-if="isWordOfTheDay"
+          v-tooltip="{ content: `${word.berlinerisch} ist das heutige Wort des Tages`,
+                       distance: 10,
+                       placement: 'right'}"
+          class="c-single-word__crown"
+          aria-hidden="true"
+        >
+          <Crown />
+        </span> -->
+    <h1 class="c-single-word__word">
+      {wordProps.berlinerisch}
+
+      {wordProps.article && <span class="c-single-word__word-article">, {wordProps.article}</span>}
+    </h1>
+  </header>
+
+  {
+    word.wordProperties.learn_more && (
+      <div class="c-single-word__learn-more-wrapper">
+        <Info />{" "}
+        <a href={word.learn_more} target="_blank" class="c-single-word__learn-more-link">
+          Erfahre mehr über dieses Wort{" "}
+          <span class="c-single-word__learn-more-link-icon">
+            <ExternalLink width="10" height="10" />
+          </span>
+        </a>
+      </div>
+    )
+  }
+
+  {
+    wordProps.word_type && (
+      <div class="c-single-word__word-type-wrapper">
+        <h2 class="c-single-word__sub-headline">Wortart:</h2>
+        <p class="c-single-word__word-type">{wordProps.word_type[0].name}</p>
+      </div>
+    )
+  }
+
+  <div class="c-single-word__translation-wrapper">
+    {wordProps.translations && <h2 class="c-single-word__sub-headline">Bedeutung:</h2>}
+
+    <ul class="c-single-word__translation">
+      {
+        wordProps.translations.map((translation, translationIndex) => {
+          return <li class="c-single-word__translation-item">{translation.translation}</li>;
+        })
+      }
+    </ul>
+  </div>
+
+  <div class="c-single-word__examples-wrapper">
+    {wordProps.examples && <h2 class="c-single-word__sub-headline">Beispiele:</h2>}
+    <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
+  </div>
+
+  <!-- {
+        word.related_words &&
+        <div class="c-single-word__related-words-wrapper">
+          <h3>Verwandte Worte:</h3>
+          <ul class="c-single-word__related-words-list">
+            <li v-for="(related_word, index) in word.related_words" :key="index" class="c-single-word__related-word">
+              <nuxt-link :to="$routeToWord(related_word.post_name)" class="c-single-word__related-word-link">
+                {{ related_word.post_title }}
+              </nuxt-link>
+            </li>
+          </ul>
+        </div>
+      } -->
+
+  <footer class="c-single-word__footer">
+    <p class="c-single-word__created">
+      Wort erstellt am: {formattedDate(word.dateGmt)}
+    </p>
+    <p class="c-single-word__modified">
+      Bearbeitet am: {formattedDate(word.modifiedGmt)}
+    </p>
+  </footer>
 </Layout>
+
+<!-- <RelatedWords :number-of-words="7">
+      <RandomWordButton class="c-related-words__word is-random" />
+    </RelatedWords> -->
