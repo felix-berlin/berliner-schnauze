@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.17](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.16...v2.0.0-beta.17) (2023-11-12)
+
+
+### Bug Fixes
+
+* main grid ([fb33248](https://github.com/felix-berlin/berliner-schnauze/commit/fb3324898a80db8716a74a05144b703ba0a7b408))
+
 # [2.0.0-beta.16](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2023-11-12)
 
 
