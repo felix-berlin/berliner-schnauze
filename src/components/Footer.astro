@@ -1,0 +1,36 @@
+---
+import { version } from "../../package.json";
+import { Picture } from "astro:assets";
+import BearWalking from "@assets/images/bear-walking.png";
+---
+
+<footer class="c-footer">
+  <div class="c-footer__farewell">
+    <div class="c-footer__farewell-image-wrapper">
+      <Picture
+        src={BearWalking}
+        formats={["avif", "webp"]}
+        alt="Ein Bär der durch die Stadt läuft"
+        class="c-footer__farewell-image"
+      />
+    </div>
+    <p class="c-footer__farewell-text">Knorke ditt du mich hier unten besuchst.</p>
+  </div>
+
+  <div class="c-footer__ground">
+    <p class="c-footer__slogan">Hergestellt mit🐻-Kräften in Berlin</p>
+
+    <nav class="c-footer__nav">
+      <a href="/imprint"> Impressum</a>
+      <a href="/privacy-policy"> Datenschutz</a>
+    </nav>
+  </div>
+  <div class="c-footer__end">
+    <div class="c-footer__end-content">
+      <a href="https://github.com/felix-berlin/berliner-schnauze/releases"
+        >Website Version: {version}</a
+      >
+      <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
+    </div>
+  </div>
+</footer>

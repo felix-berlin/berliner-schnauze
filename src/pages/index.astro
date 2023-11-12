@@ -4,6 +4,8 @@ import "@styles/objects/_index.scss";
 import Layout from "@layouts/Layout.astro";
 import Search from "@components/Search.vue";
 import WordOfTheDay from "@components/WordOfTheDay.vue";
+import { Picture } from "astro:assets";
+import BrownBearRoar from "@assets/images/brown-bear-roar.png";
 
 const content = {
   title: "Welcome to Astro",
@@ -19,7 +21,15 @@ const content = {
       Na Keule,<br /> keen'n Dunst vom Berlinern?
     </h1>
 
-    <div class="o-index__image-wrap"></div>
+    <div class="o-index__image-wrap">
+      <Picture
+        class="o-index__image"
+        src={BrownBearRoar}
+        formats={["avif", "webp"]}
+        alt="Ein Bär der brüllt"
+        loading="eager"
+      />
+    </div>
   </header>
 
   <section class="o-index__intro-wrap">

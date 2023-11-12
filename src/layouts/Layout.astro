@@ -3,6 +3,8 @@ import "@styles/app.scss";
 
 import BaseHead from "@components/BaseHead.astro";
 import ScrollToTop from "@components/ScrollToTop.vue";
+import Footer from "@components/Footer.astro";
+
 import type { SeoProps } from "@components/BaseHead.astro";
 
 export interface DefaultLayoutProps {
@@ -33,5 +35,6 @@ const {
       <slot />
     </main>
     <ScrollToTop />
+    <Footer />
   </body>
 </html>
