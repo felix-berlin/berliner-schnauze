@@ -11,6 +11,8 @@ import Info from "~icons/lucide/info";
 import ExternalLink from "~icons/lucide/external-link";
 import Crown from "~icons/lucide/crown";
 import WordExamples from "@components/word/WordExamples.vue";
+import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
+import { routeToWord } from "@utils/helpers";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -54,16 +56,8 @@ const formattedDate = (date: Date, locale = "de-DE") => {
 
   <article class="c-single-word"></article>
   <header class="c-single-word__header">
-    <!-- <span
-          v-if="isWordOfTheDay"
-          v-tooltip="{ content: `${word.berlinerisch} ist das heutige Wort des Tages`,
-                       distance: 10,
-                       placement: 'right'}"
-          class="c-single-word__crown"
-          aria-hidden="true"
-        >
-          <Crown />
-        </span> -->
+    <IsWordOfTheDay wordId={word.berlinerWordId} word={wordProps.berlinerisch} client:only="vue" />
+
     <h1 class="c-single-word__word">
       {wordProps.berlinerisch}
 
@@ -111,19 +105,30 @@ const formattedDate = (date: Date, locale = "de-DE") => {
     <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
   </div>
 
-  <!-- {
-        word.related_words &&
-        <div class="c-single-word__related-words-wrapper">
-          <h3>Verwandte Worte:</h3>
-          <ul class="c-single-word__related-words-list">
-            <li v-for="(related_word, index) in word.related_words" :key="index" class="c-single-word__related-word">
-              <nuxt-link :to="$routeToWord(related_word.post_name)" class="c-single-word__related-word-link">
-                {{ related_word.post_title }}
-              </nuxt-link>
-            </li>
-          </ul>
-        </div>
-      } -->
+  {
+    word.related_words && (
+      <div class="c-single-word__related-words-wrapper">
+        <h3>Verwandte Worte:</h3>
+        <ul class="c-single-word__related-words-list">
+          {word.related_words.map((related_word, index) => {
+            return (
+              <li
+                v-for="(related_word, index) in word.related_words"
+                class="c-single-word__related-word"
+              >
+                <a
+                  href={routeToWord(related_word.post_name)}
+                  class="c-single-word__related-word-link"
+                >
+                  {related_word.post_title}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    )
+  }
 
   <footer class="c-single-word__footer">
     <p class="c-single-word__created">

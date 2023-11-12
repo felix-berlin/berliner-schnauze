@@ -25,7 +25,7 @@
         <SingleLoader v-if="currentWord.loading" key="loading" />
         <div v-else key="word" class="c-word-of-the-day__word-wrap">
           <a
-            :href="`/wort/${currentWord?.word?.post_name}`"
+            :href="routeToWord(currentWord?.word?.post_name)"
             class="c-word-of-the-day__word c-loader-text"
           >
             {{ currentWord?.word?.berlinerisch }}
@@ -55,6 +55,7 @@ import { useStore } from "@nanostores/vue";
 import { wordOfTheDay, getWordOfTheDay } from "@stores/index";
 import ConfettiEffect from "@components/ConfettiEffect.vue";
 import SingleLoader from "@components/SingleLoader.vue";
+import { routeToWord } from "@utils/helpers";
 
 const currentWord = useStore(wordOfTheDay);
 const celebrate = ref(false);
