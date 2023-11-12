@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.13](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2023-11-12)
+
+
+### Features
+
+* **Main Header:** add Main Components incl. Childs ([aa771e5](https://github.com/felix-berlin/berliner-schnauze/commit/aa771e52a3a3f91c86d817dc9e25e8af779fbaaf))
+
 # [2.0.0-beta.12](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2023-11-12)
 
 
