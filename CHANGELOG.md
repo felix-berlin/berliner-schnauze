@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.20](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2023-11-13)
+
+
+### Features
+
+* add WordList ([1d6f932](https://github.com/felix-berlin/berliner-schnauze/commit/1d6f932255c24d3bcd4aa95d8f826080e0016fe4))
+
 # [2.0.0-beta.19](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.18...v2.0.0-beta.19) (2023-11-13)
 
 
