@@ -2946,10 +2946,12 @@ export type CoreButtonBlockAttributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -2970,10 +2972,12 @@ export type CoreButtonBlockDeprecatedV1Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -2992,10 +2996,12 @@ export type CoreButtonBlockDeprecatedV2Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -3014,10 +3020,12 @@ export type CoreButtonBlockDeprecatedV3Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -3036,10 +3044,12 @@ export type CoreButtonBlockDeprecatedV4Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -3058,10 +3068,12 @@ export type CoreButtonBlockDeprecatedV5Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -3080,10 +3092,12 @@ export type CoreButtonBlockDeprecatedV6Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -3102,10 +3116,12 @@ export type CoreButtonBlockDeprecatedV7Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -3124,10 +3140,12 @@ export type CoreButtonBlockDeprecatedV8Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -3146,10 +3164,12 @@ export type CoreButtonBlockDeprecatedV9Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -3168,10 +3188,12 @@ export type CoreButtonBlockDeprecatedV10Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -3190,10 +3212,12 @@ export type CoreButtonBlockDeprecatedV11Attributes = {
   placeholder?: Maybe<Scalars['String']['output']>;
   rel?: Maybe<Scalars['String']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  tagName: Scalars['String']['output'];
   text?: Maybe<Scalars['String']['output']>;
   textAlign?: Maybe<Scalars['String']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
   url?: Maybe<Scalars['String']['output']>;
   width?: Maybe<Scalars['Float']['output']>;
 };
@@ -4547,6 +4571,7 @@ export type CoreDetailsBlockAttributes = {
   fontFamily?: Maybe<Scalars['String']['output']>;
   fontSize?: Maybe<Scalars['String']['output']>;
   gradient?: Maybe<Scalars['String']['output']>;
+  layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   showContent: Scalars['Boolean']['output'];
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
@@ -4768,8 +4793,14 @@ export type CoreFootnotesBlock = Block & {
 
 export type CoreFootnotesBlockAttributes = {
   __typename?: 'CoreFootnotesBlockAttributes';
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  borderColor?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
+  fontFamily?: Maybe<Scalars['String']['output']>;
+  fontSize?: Maybe<Scalars['String']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** core/freeform block */
@@ -5141,6 +5172,7 @@ export type CoreGroupBlockAttributes = {
   gradient?: Maybe<Scalars['String']['output']>;
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   settings?: Maybe<Scalars['BlockAttributesObject']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   tagName: Scalars['String']['output'];
@@ -5163,6 +5195,7 @@ export type CoreGroupBlockDeprecatedV1Attributes = {
   gradient?: Maybe<Scalars['String']['output']>;
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   settings?: Maybe<Scalars['BlockAttributesObject']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   tagName: Scalars['String']['output'];
@@ -5183,6 +5216,7 @@ export type CoreGroupBlockDeprecatedV2Attributes = {
   gradient?: Maybe<Scalars['String']['output']>;
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   settings?: Maybe<Scalars['BlockAttributesObject']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   tagName: Scalars['String']['output'];
@@ -5203,6 +5237,7 @@ export type CoreGroupBlockDeprecatedV3Attributes = {
   gradient?: Maybe<Scalars['String']['output']>;
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   settings?: Maybe<Scalars['BlockAttributesObject']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   tagName: Scalars['String']['output'];
@@ -5223,6 +5258,7 @@ export type CoreGroupBlockDeprecatedV4Attributes = {
   gradient?: Maybe<Scalars['String']['output']>;
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   settings?: Maybe<Scalars['BlockAttributesObject']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   tagName: Scalars['String']['output'];
@@ -5243,6 +5279,7 @@ export type CoreGroupBlockDeprecatedV5Attributes = {
   gradient?: Maybe<Scalars['String']['output']>;
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  metadata?: Maybe<Scalars['BlockAttributesObject']['output']>;
   settings?: Maybe<Scalars['BlockAttributesObject']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   tagName: Scalars['String']['output'];
@@ -5489,6 +5526,7 @@ export type CoreImageBlockAttributes = {
   height?: Maybe<Scalars['String']['output']>;
   href?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Float']['output']>;
+  lightbox?: Maybe<Scalars['BlockAttributesObject']['output']>;
   linkClass?: Maybe<Scalars['String']['output']>;
   linkDestination?: Maybe<Scalars['String']['output']>;
   linkTarget?: Maybe<Scalars['String']['output']>;
@@ -5502,7 +5540,7 @@ export type CoreImageBlockAttributes = {
   width?: Maybe<Scalars['String']['output']>;
 };
 
-export type CoreImageBlockAttributesUnion = CoreImageBlockAttributes | CoreImageBlockDeprecatedV1Attributes | CoreImageBlockDeprecatedV2Attributes | CoreImageBlockDeprecatedV3Attributes | CoreImageBlockDeprecatedV4Attributes | CoreImageBlockDeprecatedV5Attributes | CoreImageBlockDeprecatedV6Attributes | CoreImageBlockDeprecatedV7Attributes;
+export type CoreImageBlockAttributesUnion = CoreImageBlockAttributes | CoreImageBlockDeprecatedV1Attributes | CoreImageBlockDeprecatedV2Attributes | CoreImageBlockDeprecatedV3Attributes | CoreImageBlockDeprecatedV4Attributes | CoreImageBlockDeprecatedV5Attributes | CoreImageBlockDeprecatedV6Attributes | CoreImageBlockDeprecatedV7Attributes | CoreImageBlockDeprecatedV8Attributes;
 
 export type CoreImageBlockDeprecatedV1Attributes = {
   __typename?: 'CoreImageBlockDeprecatedV1Attributes';
@@ -5516,6 +5554,7 @@ export type CoreImageBlockDeprecatedV1Attributes = {
   height?: Maybe<Scalars['String']['output']>;
   href?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Float']['output']>;
+  lightbox?: Maybe<Scalars['BlockAttributesObject']['output']>;
   linkClass?: Maybe<Scalars['String']['output']>;
   linkDestination?: Maybe<Scalars['String']['output']>;
   linkTarget?: Maybe<Scalars['String']['output']>;
@@ -5541,6 +5580,7 @@ export type CoreImageBlockDeprecatedV2Attributes = {
   height?: Maybe<Scalars['String']['output']>;
   href?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Float']['output']>;
+  lightbox?: Maybe<Scalars['BlockAttributesObject']['output']>;
   linkClass?: Maybe<Scalars['String']['output']>;
   linkDestination?: Maybe<Scalars['String']['output']>;
   linkTarget?: Maybe<Scalars['String']['output']>;
@@ -5566,6 +5606,7 @@ export type CoreImageBlockDeprecatedV3Attributes = {
   height?: Maybe<Scalars['String']['output']>;
   href?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Float']['output']>;
+  lightbox?: Maybe<Scalars['BlockAttributesObject']['output']>;
   linkClass?: Maybe<Scalars['String']['output']>;
   linkDestination?: Maybe<Scalars['String']['output']>;
   linkTarget?: Maybe<Scalars['String']['output']>;
@@ -5591,6 +5632,7 @@ export type CoreImageBlockDeprecatedV4Attributes = {
   height?: Maybe<Scalars['String']['output']>;
   href?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Float']['output']>;
+  lightbox?: Maybe<Scalars['BlockAttributesObject']['output']>;
   linkClass?: Maybe<Scalars['String']['output']>;
   linkDestination?: Maybe<Scalars['String']['output']>;
   linkTarget?: Maybe<Scalars['String']['output']>;
@@ -5616,6 +5658,7 @@ export type CoreImageBlockDeprecatedV5Attributes = {
   height?: Maybe<Scalars['String']['output']>;
   href?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Float']['output']>;
+  lightbox?: Maybe<Scalars['BlockAttributesObject']['output']>;
   linkClass?: Maybe<Scalars['String']['output']>;
   linkDestination?: Maybe<Scalars['String']['output']>;
   linkTarget?: Maybe<Scalars['String']['output']>;
@@ -5641,6 +5684,7 @@ export type CoreImageBlockDeprecatedV6Attributes = {
   height?: Maybe<Scalars['String']['output']>;
   href?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Float']['output']>;
+  lightbox?: Maybe<Scalars['BlockAttributesObject']['output']>;
   linkClass?: Maybe<Scalars['String']['output']>;
   linkDestination?: Maybe<Scalars['String']['output']>;
   linkTarget?: Maybe<Scalars['String']['output']>;
@@ -5666,6 +5710,33 @@ export type CoreImageBlockDeprecatedV7Attributes = {
   height?: Maybe<Scalars['String']['output']>;
   href?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Float']['output']>;
+  lightbox?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  linkClass?: Maybe<Scalars['String']['output']>;
+  linkDestination?: Maybe<Scalars['String']['output']>;
+  linkTarget?: Maybe<Scalars['String']['output']>;
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  rel?: Maybe<Scalars['String']['output']>;
+  scale?: Maybe<Scalars['String']['output']>;
+  sizeSlug?: Maybe<Scalars['String']['output']>;
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
+  width?: Maybe<Scalars['String']['output']>;
+};
+
+export type CoreImageBlockDeprecatedV8Attributes = {
+  __typename?: 'CoreImageBlockDeprecatedV8Attributes';
+  align?: Maybe<Scalars['String']['output']>;
+  alt: Scalars['String']['output'];
+  anchor?: Maybe<Scalars['String']['output']>;
+  aspectRatio?: Maybe<Scalars['String']['output']>;
+  borderColor?: Maybe<Scalars['String']['output']>;
+  caption?: Maybe<Scalars['String']['output']>;
+  className?: Maybe<Scalars['String']['output']>;
+  height?: Maybe<Scalars['String']['output']>;
+  href?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  lightbox?: Maybe<Scalars['BlockAttributesObject']['output']>;
   linkClass?: Maybe<Scalars['String']['output']>;
   linkDestination?: Maybe<Scalars['String']['output']>;
   linkTarget?: Maybe<Scalars['String']['output']>;
@@ -5894,7 +5965,7 @@ export type CoreListBlockAttributes = {
   values: Scalars['String']['output'];
 };
 
-export type CoreListBlockAttributesUnion = CoreListBlockAttributes | CoreListBlockDeprecatedV1Attributes | CoreListBlockDeprecatedV2Attributes;
+export type CoreListBlockAttributesUnion = CoreListBlockAttributes | CoreListBlockDeprecatedV1Attributes | CoreListBlockDeprecatedV2Attributes | CoreListBlockDeprecatedV3Attributes;
 
 export type CoreListBlockDeprecatedV1Attributes = {
   __typename?: 'CoreListBlockDeprecatedV1Attributes';
@@ -5917,6 +5988,25 @@ export type CoreListBlockDeprecatedV1Attributes = {
 
 export type CoreListBlockDeprecatedV2Attributes = {
   __typename?: 'CoreListBlockDeprecatedV2Attributes';
+  anchor?: Maybe<Scalars['String']['output']>;
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  className?: Maybe<Scalars['String']['output']>;
+  fontFamily?: Maybe<Scalars['String']['output']>;
+  fontSize?: Maybe<Scalars['String']['output']>;
+  gradient?: Maybe<Scalars['String']['output']>;
+  lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  ordered: Scalars['Boolean']['output'];
+  placeholder?: Maybe<Scalars['String']['output']>;
+  reversed?: Maybe<Scalars['Boolean']['output']>;
+  start?: Maybe<Scalars['Float']['output']>;
+  style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  textColor?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
+  values: Scalars['String']['output'];
+};
+
+export type CoreListBlockDeprecatedV3Attributes = {
+  __typename?: 'CoreListBlockDeprecatedV3Attributes';
   anchor?: Maybe<Scalars['String']['output']>;
   backgroundColor?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
@@ -6350,6 +6440,7 @@ export type CoreNavigationBlock = Block & {
 export type CoreNavigationBlockAttributes = {
   __typename?: 'CoreNavigationBlockAttributes';
   align?: Maybe<Scalars['String']['output']>;
+  ariaLabel?: Maybe<Scalars['String']['output']>;
   backgroundColor?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
   customBackgroundColor?: Maybe<Scalars['String']['output']>;
@@ -6381,6 +6472,7 @@ export type CoreNavigationBlockAttributesUnion = CoreNavigationBlockAttributes |
 export type CoreNavigationBlockDeprecatedV1Attributes = {
   __typename?: 'CoreNavigationBlockDeprecatedV1Attributes';
   align?: Maybe<Scalars['String']['output']>;
+  ariaLabel?: Maybe<Scalars['String']['output']>;
   backgroundColor?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
   customBackgroundColor?: Maybe<Scalars['String']['output']>;
@@ -6410,6 +6502,7 @@ export type CoreNavigationBlockDeprecatedV1Attributes = {
 export type CoreNavigationBlockDeprecatedV2Attributes = {
   __typename?: 'CoreNavigationBlockDeprecatedV2Attributes';
   align?: Maybe<Scalars['String']['output']>;
+  ariaLabel?: Maybe<Scalars['String']['output']>;
   backgroundColor?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
   customBackgroundColor?: Maybe<Scalars['String']['output']>;
@@ -6439,6 +6532,7 @@ export type CoreNavigationBlockDeprecatedV2Attributes = {
 export type CoreNavigationBlockDeprecatedV3Attributes = {
   __typename?: 'CoreNavigationBlockDeprecatedV3Attributes';
   align?: Maybe<Scalars['String']['output']>;
+  ariaLabel?: Maybe<Scalars['String']['output']>;
   backgroundColor?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
   customBackgroundColor?: Maybe<Scalars['String']['output']>;
@@ -6468,6 +6562,7 @@ export type CoreNavigationBlockDeprecatedV3Attributes = {
 export type CoreNavigationBlockDeprecatedV4Attributes = {
   __typename?: 'CoreNavigationBlockDeprecatedV4Attributes';
   align?: Maybe<Scalars['String']['output']>;
+  ariaLabel?: Maybe<Scalars['String']['output']>;
   backgroundColor?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
   customBackgroundColor?: Maybe<Scalars['String']['output']>;
@@ -6497,6 +6592,7 @@ export type CoreNavigationBlockDeprecatedV4Attributes = {
 export type CoreNavigationBlockDeprecatedV5Attributes = {
   __typename?: 'CoreNavigationBlockDeprecatedV5Attributes';
   align?: Maybe<Scalars['String']['output']>;
+  ariaLabel?: Maybe<Scalars['String']['output']>;
   backgroundColor?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
   customBackgroundColor?: Maybe<Scalars['String']['output']>;
@@ -6526,6 +6622,7 @@ export type CoreNavigationBlockDeprecatedV5Attributes = {
 export type CoreNavigationBlockDeprecatedV6Attributes = {
   __typename?: 'CoreNavigationBlockDeprecatedV6Attributes';
   align?: Maybe<Scalars['String']['output']>;
+  ariaLabel?: Maybe<Scalars['String']['output']>;
   backgroundColor?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
   customBackgroundColor?: Maybe<Scalars['String']['output']>;
@@ -7132,12 +7229,15 @@ export type CorePostContentBlock = Block & {
 export type CorePostContentBlockAttributes = {
   __typename?: 'CorePostContentBlockAttributes';
   align?: Maybe<Scalars['String']['output']>;
+  backgroundColor?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
   fontFamily?: Maybe<Scalars['String']['output']>;
   fontSize?: Maybe<Scalars['String']['output']>;
+  gradient?: Maybe<Scalars['String']['output']>;
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  textColor?: Maybe<Scalars['String']['output']>;
 };
 
 /** core/post-date block */
@@ -7694,6 +7794,7 @@ export type CoreQueryBlockAttributes = {
   __typename?: 'CoreQueryBlockAttributes';
   align?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
+  enhancedPagination: Scalars['Boolean']['output'];
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   namespace?: Maybe<Scalars['String']['output']>;
@@ -7708,6 +7809,7 @@ export type CoreQueryBlockDeprecatedV1Attributes = {
   __typename?: 'CoreQueryBlockDeprecatedV1Attributes';
   align?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
+  enhancedPagination: Scalars['Boolean']['output'];
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   namespace?: Maybe<Scalars['String']['output']>;
@@ -7720,6 +7822,7 @@ export type CoreQueryBlockDeprecatedV2Attributes = {
   __typename?: 'CoreQueryBlockDeprecatedV2Attributes';
   align?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
+  enhancedPagination: Scalars['Boolean']['output'];
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   namespace?: Maybe<Scalars['String']['output']>;
@@ -7732,6 +7835,7 @@ export type CoreQueryBlockDeprecatedV3Attributes = {
   __typename?: 'CoreQueryBlockDeprecatedV3Attributes';
   align?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
+  enhancedPagination: Scalars['Boolean']['output'];
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   namespace?: Maybe<Scalars['String']['output']>;
@@ -7744,6 +7848,7 @@ export type CoreQueryBlockDeprecatedV4Attributes = {
   __typename?: 'CoreQueryBlockDeprecatedV4Attributes';
   align?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
+  enhancedPagination: Scalars['Boolean']['output'];
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   namespace?: Maybe<Scalars['String']['output']>;
@@ -7756,6 +7861,7 @@ export type CoreQueryBlockDeprecatedV5Attributes = {
   __typename?: 'CoreQueryBlockDeprecatedV5Attributes';
   align?: Maybe<Scalars['String']['output']>;
   className?: Maybe<Scalars['String']['output']>;
+  enhancedPagination: Scalars['Boolean']['output'];
   layout?: Maybe<Scalars['BlockAttributesObject']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
   namespace?: Maybe<Scalars['String']['output']>;
@@ -7932,6 +8038,7 @@ export type CoreQueryPaginationNumbersBlockAttributes = {
   fontSize?: Maybe<Scalars['String']['output']>;
   gradient?: Maybe<Scalars['String']['output']>;
   lock?: Maybe<Scalars['BlockAttributesObject']['output']>;
+  midSize: Scalars['Float']['output'];
   style?: Maybe<Scalars['BlockAttributesObject']['output']>;
   textColor?: Maybe<Scalars['String']['output']>;
 };
