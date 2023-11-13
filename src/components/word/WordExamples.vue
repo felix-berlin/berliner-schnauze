@@ -37,7 +37,7 @@ import Quote from "virtual:icons/lucide/quote";
 import type { BerlinerWord_Wordproperties } from "@ts_types/generated";
 
 interface WordExamplesProps {
-  examples: BerlinerWord_Wordproperties["examples"][];
+  examples?: BerlinerWord_Wordproperties["examples"][];
   element?: string;
   rootBemClass?: string;
 }

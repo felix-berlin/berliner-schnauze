@@ -2,18 +2,18 @@ import type { App } from "vue";
 import FloatingVue from "floating-vue";
 import { autoAnimatePlugin } from "@formkit/auto-animate/vue";
 import { devtools } from "@nanostores/vue/devtools";
-
+import VueVirtualScroller from "vue-virtual-scroller";
 import { wordOfTheDay } from "@stores/index";
 
 export default (app: App) => {
   app.use(FloatingVue, {
     themes: {
       ...FloatingVue.options.themes,
-      submenu: {
-        $extend: "menu",
-        distance: 8,
-        placement: "bottom-start",
-        popperClass: "c-menu__dropdown",
+      "word-options": {
+        $extend: "dropdown",
+        triggers: ["click"],
+        autoHide: true,
+        placement: "bottom",
       },
     },
   });
@@ -21,4 +21,5 @@ export default (app: App) => {
   app.use(devtools, {
     wordOfTheDay,
   });
+  app.use(VueVirtualScroller);
 };

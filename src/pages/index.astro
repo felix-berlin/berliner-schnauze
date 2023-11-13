@@ -6,6 +6,9 @@ import Search from "@components/Search.vue";
 import WordOfTheDay from "@components/WordOfTheDay.vue";
 import { Picture } from "astro:assets";
 import BrownBearRoar from "@assets/images/brown-bear-roar.png";
+import SingleWord from "@components/word/SingleWord.vue";
+import WordList from "@components/WordList.vue";
+import { getAllWord } from "@services/api";
 
 const content = {
   title: "Welcome to Astro",
@@ -13,6 +16,11 @@ const content = {
     title: "Welcome to Astro",
   },
 };
+
+const allWords = await getAllWord();
+const cleanWords = allWords.map((word) => {
+  return word.node;
+});
 ---
 
 <Layout content={content}>
@@ -65,5 +73,6 @@ const content = {
 
     <WordOfTheDay client:only="vue" />
   </section>
-  <Search id="test-search" client:only="vue" />
+
+  <WordList words={cleanWords} client:only="vue" />
 </Layout>

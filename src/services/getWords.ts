@@ -70,6 +70,7 @@ export const getAllWord = async (): Promise<WordEdge[]> => {
       }, where: {status: PUBLISH}) {
         edges {
           node {
+            id
             slug
             title
             wordGroup
