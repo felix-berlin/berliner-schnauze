@@ -54,90 +54,99 @@ const formattedDate = (date: Date, locale = "de-DE") => {
     <ArrowLeft /> zurück
   </a>
 
-  <article class="c-single-word"></article>
-  <header class="c-single-word__header">
-    <IsWordOfTheDay wordId={word.berlinerWordId} word={wordProps.berlinerisch} client:only="vue" />
+  <article class="c-single-word">
+    <header class="c-single-word__header">
+      <IsWordOfTheDay
+        wordId={word.berlinerWordId}
+        word={wordProps.berlinerisch}
+        client:only="vue"
+      />
 
-    <h1 class="c-single-word__word">
-      {wordProps.berlinerisch}
+      <h1 class="c-single-word__word">
+        {wordProps.berlinerisch}
 
-      {wordProps.article && <span class="c-single-word__word-article">, {wordProps.article}</span>}
-    </h1>
-  </header>
+        {
+          wordProps.article && (
+            <span class="c-single-word__word-article">, {wordProps.article}</span>
+          )
+        }
+      </h1>
+    </header>
 
-  {
-    word.wordProperties.learn_more && (
-      <div class="c-single-word__learn-more-wrapper">
-        <Info />{" "}
-        <a href={word.learn_more} target="_blank" class="c-single-word__learn-more-link">
-          Erfahre mehr über dieses Wort{" "}
-          <span class="c-single-word__learn-more-link-icon">
-            <ExternalLink width="10" height="10" />
-          </span>
-        </a>
-      </div>
-    )
-  }
+    {
+      word.wordProperties.learn_more && (
+        <div class="c-single-word__learn-more-wrapper">
+          <Info />{" "}
+          <a href={word.learn_more} target="_blank" class="c-single-word__learn-more-link">
+            Erfahre mehr über dieses Wort{" "}
+            <span class="c-single-word__learn-more-link-icon">
+              <ExternalLink width="10" height="10" />
+            </span>
+          </a>
+        </div>
+      )
+    }
 
-  {
-    wordProps.word_type && (
-      <div class="c-single-word__word-type-wrapper">
-        <h2 class="c-single-word__sub-headline">Wortart:</h2>
-        <p class="c-single-word__word-type">{wordProps.word_type[0].name}</p>
-      </div>
-    )
-  }
+    {
+      wordProps.word_type && (
+        <div class="c-single-word__word-type-wrapper">
+          <h2 class="c-single-word__sub-headline">Wortart:</h2>
+          <p class="c-single-word__word-type">{wordProps.word_type[0].name}</p>
+        </div>
+      )
+    }
 
-  <div class="c-single-word__translation-wrapper">
-    {wordProps.translations && <h2 class="c-single-word__sub-headline">Bedeutung:</h2>}
+    <div class="c-single-word__translation-wrapper">
+      {wordProps.translations && <h2 class="c-single-word__sub-headline">Bedeutung:</h2>}
 
-    <ul class="c-single-word__translation">
-      {
-        wordProps.translations.map((translation, translationIndex) => {
-          return <li class="c-single-word__translation-item">{translation.translation}</li>;
-        })
-      }
-    </ul>
-  </div>
+      <ul class="c-single-word__translation">
+        {
+          wordProps.translations.map((translation, translationIndex) => {
+            return <li class="c-single-word__translation-item">{translation.translation}</li>;
+          })
+        }
+      </ul>
+    </div>
 
-  <div class="c-single-word__examples-wrapper">
-    {wordProps.examples && <h2 class="c-single-word__sub-headline">Beispiele:</h2>}
-    <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
-  </div>
+    <div class="c-single-word__examples-wrapper">
+      {wordProps.examples && <h2 class="c-single-word__sub-headline">Beispiele:</h2>}
+      <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
+    </div>
 
-  {
-    word.related_words && (
-      <div class="c-single-word__related-words-wrapper">
-        <h3>Verwandte Worte:</h3>
-        <ul class="c-single-word__related-words-list">
-          {word.related_words.map((related_word, index) => {
-            return (
-              <li
-                v-for="(related_word, index) in word.related_words"
-                class="c-single-word__related-word"
-              >
-                <a
-                  href={routeToWord(related_word.post_name)}
-                  class="c-single-word__related-word-link"
+    {
+      word.related_words && (
+        <div class="c-single-word__related-words-wrapper">
+          <h3>Verwandte Worte:</h3>
+          <ul class="c-single-word__related-words-list">
+            {word.related_words.map((related_word, index) => {
+              return (
+                <li
+                  v-for="(related_word, index) in word.related_words"
+                  class="c-single-word__related-word"
                 >
-                  {related_word.post_title}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    )
-  }
+                  <a
+                    href={routeToWord(related_word.post_name)}
+                    class="c-single-word__related-word-link"
+                  >
+                    {related_word.post_title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )
+    }
 
-  <footer class="c-single-word__footer">
-    <p class="c-single-word__created">
-      Wort erstellt am: {formattedDate(word.dateGmt)}
-    </p>
-    <p class="c-single-word__modified">
-      Bearbeitet am: {formattedDate(word.modifiedGmt)}
-    </p>
-  </footer>
+    <footer class="c-single-word__footer">
+      <p class="c-single-word__created">
+        Wort erstellt am: {formattedDate(word.dateGmt)}
+      </p>
+      <p class="c-single-word__modified">
+        Bearbeitet am: {formattedDate(word.modifiedGmt)}
+      </p>
+    </footer>
+  </article>
 </Layout>
 
 <!-- <RelatedWords :number-of-words="7">
