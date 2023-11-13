@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.18](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.17...v2.0.0-beta.18) (2023-11-13)
+
+
+### Features
+
+* start working on SingleWord ([1880d55](https://github.com/felix-berlin/berliner-schnauze/commit/1880d559ed534786190b21911195d80670235b27))
+
 # [2.0.0-beta.17](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.16...v2.0.0-beta.17) (2023-11-12)
 
 
