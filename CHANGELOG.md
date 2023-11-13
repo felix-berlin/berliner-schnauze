@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.19](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.18...v2.0.0-beta.19) (2023-11-13)
+
+
+### Bug Fixes
+
+* SingleWord bgc ([13aead5](https://github.com/felix-berlin/berliner-schnauze/commit/13aead538677a8090dec073c69e8999375bfb609))
+
 # [2.0.0-beta.18](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.17...v2.0.0-beta.18) (2023-11-13)
 
 
