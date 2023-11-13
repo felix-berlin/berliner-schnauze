@@ -57,7 +57,10 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
   return allWords;
 };
 
-export const getAllWord = async (): Promise<WordEdge[]> => {
+export const getAllWord = async (
+  orderByField = "TITLE",
+  orderByType = "ASC",
+): Promise<WordEdge[]> => {
   let allWords: WordEdge[] = [];
   let cursor: string | null = null;
   const pageSize = 100;
@@ -67,7 +70,7 @@ export const getAllWord = async (): Promise<WordEdge[]> => {
     {
       berlinerWords(first: ${pageSize}, after: ${
         cursor ? `"${cursor}"` : null
-      }, where: {status: PUBLISH}) {
+      }, where: {status: PUBLISH, orderby: {field: ${orderByField}, order: ${orderByType}}}) {
         edges {
           node {
             id
