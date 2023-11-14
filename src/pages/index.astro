@@ -7,7 +7,7 @@ import WordOfTheDay from "@components/WordOfTheDay.vue";
 import { Picture } from "astro:assets";
 import BrownBearRoar from "@assets/images/brown-bear-roar.png";
 import SingleWord from "@components/word/SingleWord.vue";
-import WordList from "@components/WordList.vue";
+import WordSearchList from "@components/WordSearchList.vue";
 import { getAllWord } from "@services/api";
 
 const content = {
@@ -74,5 +74,5 @@ const cleanWords = allWords.map((word) => {
     <WordOfTheDay client:only="vue" />
   </section>
 
-  <WordList words={cleanWords} client:only="vue" />
+  <WordSearchList words={cleanWords} client:only="vue" />
 </Layout>

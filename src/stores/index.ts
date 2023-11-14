@@ -1,9 +1,8 @@
-import { atom, action, map } from "nanostores";
+import { atom, action, map, computed } from "nanostores";
 import { persistentAtom } from "@nanostores/persistent";
 interface Translation {
   translation: string;
 }
-
 interface Example {
   example: string;
   example_explanation: string;
@@ -73,3 +72,6 @@ export const isDarkMode = persistentAtom<DarkMode>("darkMode", false, {
     }
   },
 });
+
+export const words = map<Word[]>([]);
+export const searchWord = atom<string>("");
