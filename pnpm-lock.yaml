@@ -10,7 +10,7 @@ dependencies:
     version: 3.0.3
   '@astrojs/vue':
     specifier: ^3.0.4
-    version: 3.0.4(@babel/core@7.23.3)(astro@3.5.3)(vite@4.5.0)(vue@3.3.8)
+    version: 3.0.4(@babel/core@7.23.3)(astro@3.5.4)(vite@4.5.0)(vue@3.3.8)
   '@felix_berlin/sass-butler':
     specifier: 2.0.0
     version: 2.0.0
@@ -36,17 +36,20 @@ dependencies:
     specifier: ^10.6.1
     version: 10.6.1(vue@3.3.8)
   astro:
-    specifier: ^3.5.3
-    version: 3.5.3(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+    specifier: ^3.5.4
+    version: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
   astro-breadcrumbs:
     specifier: ^1.8.0
-    version: 1.8.0(astro@3.5.3)
+    version: 1.8.0(astro@3.5.4)
   astro-matomo:
     specifier: ^1.4.0
-    version: 1.4.0(astro@3.5.3)
+    version: 1.4.0(astro@3.5.4)
   floating-vue:
     specifier: 2.0.0-beta.24
     version: 2.0.0-beta.24(vue@3.3.8)
+  fuse.js:
+    specifier: ^7.0.0
+    version: 7.0.0
   nanostores:
     specifier: ^0.9.5
     version: 0.9.5
@@ -111,7 +114,7 @@ devDependencies:
     version: 6.11.0(eslint@8.53.0)(typescript@5.2.2)
   '@vite-pwa/astro':
     specifier: ^0.1.5
-    version: 0.1.5(astro@3.5.3)(vite-plugin-pwa@0.16.7)
+    version: 0.1.5(astro@3.5.4)(vite-plugin-pwa@0.16.7)
   '@vitejs/plugin-vue':
     specifier: ^4.4.1
     version: 4.4.1(vite@4.5.0)(vue@3.3.8)
@@ -125,8 +128,8 @@ devDependencies:
     specifier: ^6.5.1
     version: 6.5.1
   '@vue/test-utils':
-    specifier: ^2.4.1
-    version: 2.4.1(vue@3.3.8)
+    specifier: ^2.4.2
+    version: 2.4.2(vue@3.3.8)
   autoprefixer:
     specifier: ^10.4.16
     version: 10.4.16(postcss@8.4.31)
@@ -341,13 +344,13 @@ packages:
       - typescript
     dev: true
 
-  /@astrojs/markdown-remark@3.4.0(astro@3.5.3):
-    resolution: {integrity: sha512-uzLSKBQ4e70aH8gEbBHZ2pnv/KOJKB3WrXFBOF0U5Uwjcr2LNWeIBLjPRQjA4tbtteELh84YPBHny21mhvBGVA==}
+  /@astrojs/markdown-remark@3.5.0(astro@3.5.4):
+    resolution: {integrity: sha512-q7vdIqzYhxpsfghg2YmkmSXCfp4w7lBTYP+SSHw89wVhC5Riltr3u8w2otBRxNLSByNi+ht/gGkFC23Shetytw==}
     peerDependencies:
       astro: ^3.0.0
     dependencies:
       '@astrojs/prism': 3.0.0
-      astro: 3.5.3(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+      astro: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
       github-slugger: 2.0.0
       import-meta-resolve: 3.1.1
       mdast-util-definitions: 6.0.0
@@ -391,7 +394,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@astrojs/vue@3.0.4(@babel/core@7.23.3)(astro@3.5.3)(vite@4.5.0)(vue@3.3.8):
+  /@astrojs/vue@3.0.4(@babel/core@7.23.3)(astro@3.5.4)(vite@4.5.0)(vue@3.3.8):
     resolution: {integrity: sha512-+kuONslRcfXbwlZOwdl+9XYJ0HKfPQ8SHnmk4Uf3ZNscJfjptob3z0mrIaCRqIgNNWJHsY2xLZovishGQ+lAow==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
@@ -402,7 +405,7 @@ packages:
       '@vitejs/plugin-vue-jsx': 3.0.2(vite@4.5.0)(vue@3.3.8)
       '@vue/babel-plugin-jsx': 1.1.5(@babel/core@7.23.3)
       '@vue/compiler-sfc': 3.3.8
-      astro: 3.5.3(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+      astro: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
       vue: 3.3.8(typescript@5.2.2)
     transitivePeerDependencies:
       - '@babel/core'
@@ -4018,13 +4021,13 @@ packages:
   /@ungap/structured-clone@1.2.0:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
 
-  /@vite-pwa/astro@0.1.5(astro@3.5.3)(vite-plugin-pwa@0.16.7):
+  /@vite-pwa/astro@0.1.5(astro@3.5.4)(vite-plugin-pwa@0.16.7):
     resolution: {integrity: sha512-OjG32P67eGGTKlXwTqhJkdOmQOL+GBNaqi9sm2JSawkY+SgZ9V6whPMRjJZXtTjpPXrQs4XorJiLG9g3kRPRTA==}
     peerDependencies:
       astro: ^1.6.0 || ^2.0.0 || ^3.0.0
       vite-plugin-pwa: '>=0.16.5 <1'
     dependencies:
-      astro: 3.5.3(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+      astro: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
       vite-plugin-pwa: 0.16.7(vite@4.5.0)(workbox-build@7.0.0)(workbox-window@7.0.0)
     dev: true
 
@@ -4301,8 +4304,8 @@ packages:
   /@vue/shared@3.3.8:
     resolution: {integrity: sha512-8PGwybFwM4x8pcfgqEQFy70NaQxASvOC5DJwLQfpArw1UDfUXrJkdxD3BhVTMS+0Lef/TU7YO0Jvr0jJY8T+mw==}
 
-  /@vue/test-utils@2.4.1(vue@3.3.8):
-    resolution: {integrity: sha512-VO8nragneNzUZUah6kOjiFmD/gwRjUauG9DROh6oaOeFwX1cZRUNHhdeogE8635cISigXFTtGLUQWx5KCb0xeg==}
+  /@vue/test-utils@2.4.2(vue@3.3.8):
+    resolution: {integrity: sha512-07lLjpG1o9tEBoWQfVOFhDT7+WFCdDeECoeSdzOuVgIi6nxb2JDLGNNOV6+3crPpyg/jMlIocj96UROcgomiGg==}
     peerDependencies:
       '@vue/server-renderer': ^3.0.1
       vue: ^3.0.1
@@ -4312,7 +4315,7 @@ packages:
     dependencies:
       js-beautify: 1.14.9
       vue: 3.3.8(typescript@5.2.2)
-      vue-component-type-helpers: 1.8.4
+      vue-component-type-helpers: 1.8.22
     dev: true
 
   /@vueuse/core@10.6.1(vue@3.3.8):
@@ -4662,13 +4665,13 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /astro-breadcrumbs@1.8.0(astro@3.5.3):
+  /astro-breadcrumbs@1.8.0(astro@3.5.4):
     resolution: {integrity: sha512-f35nN4V0001l/6N90iUdcksIC/FZ6hN7CeowtiOiafa5UlA2qruQ6lnuwzzmvk0uirdo/8DXo7ixc5IZ5dqQhQ==}
     requiresBuild: true
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0
     dependencies:
-      astro: 3.5.3(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+      astro: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
     dev: false
 
   /astro-eslint-parser@0.16.0:
@@ -4687,23 +4690,23 @@ packages:
       - supports-color
     dev: true
 
-  /astro-matomo@1.4.0(astro@3.5.3):
+  /astro-matomo@1.4.0(astro@3.5.4):
     resolution: {integrity: sha512-FYhacdAqTj1Yf3oq6Abz2QRqqBD6RrqxOKDU23XCx9HY6BC1k5yLke5kFg2OaY8Oo5tZP/4mg3hiUSxYFU1xQQ==}
     requiresBuild: true
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0
     dependencies:
-      astro: 3.5.3(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+      astro: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
     dev: false
 
-  /astro@3.5.3(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2):
-    resolution: {integrity: sha512-08ya96yvQLdZjwYYpylzDTUGcyuA+Kw9zIT2RHfL7VzXtLTL1ZxhQjSo6CiTBH8Tcrdam88Fez+Q1awwKKajGw==}
+  /astro@3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2):
+    resolution: {integrity: sha512-tyOd2o9KDz9hDaHmYvnY7BbRxeQ1yDxoOW4AVlxAnmHOK6068k6Bivr/C4Wlc6ON40lZ/qIDG9gfNkiEhMEVow==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
     dependencies:
       '@astrojs/compiler': 2.3.0
       '@astrojs/internal-helpers': 0.2.1
-      '@astrojs/markdown-remark': 3.4.0(astro@3.5.3)
+      '@astrojs/markdown-remark': 3.5.0(astro@3.5.4)
       '@astrojs/telemetry': 3.0.4
       '@babel/core': 7.23.3
       '@babel/generator': 7.23.3
@@ -6667,6 +6670,11 @@ packages:
   /functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
     dev: true
+
+  /fuse.js@7.0.0:
+    resolution: {integrity: sha512-14F4hBIxqKvD4Zz/XjDc3y94mNZN6pRv3U13Udo0lNLCWRBUsrMv2xwcF/y/Z5sV6+FQW+/ow68cHpm4sunt8Q==}
+    engines: {node: '>=10'}
+    dev: false
 
   /gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -12279,8 +12287,8 @@ packages:
     resolution: {integrity: sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw==}
     dev: true
 
-  /vue-component-type-helpers@1.8.4:
-    resolution: {integrity: sha512-6bnLkn8O0JJyiFSIF0EfCogzeqNXpnjJ0vW/SZzNHfe6sPx30lTtTXlE5TFs2qhJlAtDFybStVNpL73cPe3OMQ==}
+  /vue-component-type-helpers@1.8.22:
+    resolution: {integrity: sha512-LK3wJHs3vJxHG292C8cnsRusgyC5SEZDCzDCD01mdE/AoREFMl2tzLRuzwyuEsOIz13tqgBcnvysN3Lxsa14Fw==}
     dev: true
 
   /vue-demi@0.14.6(vue@3.3.8):
