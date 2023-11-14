@@ -1,227 +1,231 @@
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
+@use "@styles/variables/variables" as vars;
+@use "@styles/mixins/mixins" as mx;
 
 .c-word-list {
-	--size-quote-icon: 32px;
+  --size-quote-icon: 32px;
 
-	&__list {
-		display: grid;
-		gap: vars.$spacer * 1.75;
-		position: relative;
-	}
+  height: 100%;
 
-	&__word {
-		padding: vars.$spacer;
-		background-color: var(--color-background, var(--white-100));
-		border: 1px solid vars.$grey-100;
-		display: flex;
-		flex-flow: column wrap;
-		gap: 1rem;
-		box-shadow:
-			0 0.5px 0.6px rgb(0 0 0 / 8%),
-			0 4px 5px rgb(0 0 0 / 16%);
+  &__item {
+    &:not(:last-of-type) {
+      .c-word-list__word-wrap {
+        padding-bottom: vars.$spacer * 1.75;
+      }
+    }
+  }
 
-		&:hover {
-			.c-word-list__berlinerisch a {
-				--color-text-decoration: var(--grey-100);
-			}
-		}
-	}
+  &__word {
+    padding: vars.$spacer;
+    background-color: var(--color-background, var(--white-100));
+    border: 1px solid vars.$grey-100;
+    display: flex;
+    flex-flow: column wrap;
+    gap: 1rem;
+    box-shadow:
+      0 0.5px 0.6px rgb(0 0 0 / 8%),
+      0 4px 5px rgb(0 0 0 / 16%);
 
-	&__header {
-		display: flex;
-		flex: 1 1 auto;
-		margin: 0;
-		flex-wrap: var(--warp-flex, wrap);
-		row-gap: #{vars.$spacer * 1};
+    &:hover {
+      .c-word-list__berlinerisch a {
+        --color-text-decoration: var(--grey-100);
+      }
+    }
+  }
 
-		@include mx.breakpoint('sm') {
-			--wrap-flex: no-wrap;
-		}
+  &__header {
+    display: flex;
+    flex: 1 1 auto;
+    margin: 0;
+    flex-wrap: var(--warp-flex, wrap);
+    row-gap: #{vars.$spacer * 1};
 
-		&-wrapper {
-			border-bottom: var(--bottom-border, none);
-			display: flex;
+    @include mx.breakpoint("sm") {
+      --wrap-flex: no-wrap;
+    }
 
-			&.has-example {
-				padding-bottom: vars.$spacer;
+    &-wrapper {
+      border-bottom: var(--bottom-border, none);
+      display: flex;
 
-				--bottom-border: 1px dashed var(--grey-100);
-			}
-		}
-	}
+      &.has-example {
+        padding-bottom: vars.$spacer;
 
-	&__berlinerisch {
-		font: {
-			family: vars.$berlin;
-			weight: 700;
-			size: var(--size-font, 1.5rem);
-		}
-		text: {
-			decoration: underline;
-			decoration-style: dashed;
-			decoration-thickness: from-font;
-			underline-position: from-font;
-		}
+        --bottom-border: 1px dashed var(--grey-100);
+      }
+    }
+  }
 
-		transition: 0.3s;
-		margin: 0;
-		word-break: break-word;
-		flex: var(--flex, 1 0 100%);
-		position: relative;
+  &__berlinerisch {
+    font: {
+      family: vars.$berlin;
+      weight: 700;
+      size: var(--size-font, 1.5rem);
+    }
+    text: {
+      decoration: underline;
+      decoration-style: dashed;
+      decoration-thickness: from-font;
+      underline-position: from-font;
+    }
 
-		@include mx.breakpoint('sm') {
-			--flex: 0 1 auto;
-		}
-		@include mx.breakpoint('md') {
-			--size-font: 3rem;
-		}
-		@include mx.breakpoint('xlg') {
-			--size-font: 4.5rem;
-		}
+    transition: 0.3s;
+    margin: 0;
+    word-break: break-word;
+    flex: var(--flex, 1 0 100%);
+    position: relative;
 
-		a {
-			--color: var(--blue-200);
+    @include mx.breakpoint("sm") {
+      --flex: 0 1 auto;
+    }
+    @include mx.breakpoint("md") {
+      --size-font: 3rem;
+    }
+    @include mx.breakpoint("xlg") {
+      --size-font: 4.5rem;
+    }
 
-			text-decoration-color: var(--color-text-decoration, transparent);
-		}
-	}
+    a {
+      --color: var(--blue-200);
 
-	&__crown {
-		display: flex;
-		position: absolute;
-		bottom: calc(100% - 10px);
-		color: vars.$gold;
-	}
+      text-decoration-color: var(--color-text-decoration, transparent);
+    }
+  }
 
-	&__translation {
-		display: flex;
-		align-items: center;
-		font-size: var(--font-size, 1rem);
-		position: relative;
-		margin: 0;
+  &__crown {
+    display: flex;
+    position: absolute;
+    bottom: calc(100% - 10px);
+    color: vars.$gold;
+  }
 
-		&::before {
-			content: '᛫';
-			margin: var(--margin, 0 #{vars.$spacer * 0.5});
+  &__translation {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size, 1rem);
+    position: relative;
+    margin: 0;
 
-			@include mx.breakpoint('sm') {
-				--margin: 0 #{vars.$spacer};
-			}
-		}
+    &::before {
+      content: "᛫";
+      margin: var(--margin, 0 #{vars.$spacer * 0.5});
 
-		@include mx.breakpoint('md') {
-			--font-size: 1.125rem;
-		}
-		@include mx.breakpoint('xlg') {
-			--font-size: 1.225rem;
-		}
-	}
+      @include mx.breakpoint("sm") {
+        --margin: 0 #{vars.$spacer};
+      }
+    }
 
-	&__examples {
-		display: flex;
-		flex-direction: column;
-		gap: vars.$spacer;
-		padding-left: vars.$spacer;
+    @include mx.breakpoint("md") {
+      --font-size: 1.125rem;
+    }
+    @include mx.breakpoint("xlg") {
+      --font-size: 1.225rem;
+    }
+  }
 
-		&-item {
-			font-style: italic;
-		}
-	}
+  &__examples {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer;
+    padding-left: vars.$spacer;
 
-	&__examples,
-	&__example {
-		font-size: var(--size-font, 1.2rem);
-		flex-basis: 100%;
-		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
-		word-break: break-word;
+    &-item {
+      font-style: italic;
+    }
+  }
 
-		@include mx.breakpoint('md') {
-			--size-font: 1.8rem;
-		}
+  &__examples,
+  &__example {
+    font-size: var(--size-font, 1.2rem);
+    flex-basis: 100%;
+    margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
+    word-break: break-word;
 
-		&-explanation {
-			font-size: 1rem;
-			margin: 0;
-		}
-	}
+    @include mx.breakpoint("md") {
+      --size-font: 1.8rem;
+    }
 
-	&__single-example,
-	&__examples-list-item {
-		display: flex;
-		flex-direction: column;
-		gap: vars.$spacer * 0.5;
-	}
+    &-explanation {
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
 
-	&__example {
-		font-style: italic;
+  &__single-example,
+  &__examples-list-item {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.5;
+  }
 
-		&-wrapper {
-			--padding: 0 #{vars.$spacer} #{vars.$spacer} #{vars.$spacer};
+  &__example {
+    font-style: italic;
 
-			display: flex;
-			padding: var(--padding);
-			gap: var(--gap, #{vars.$spacer * 0.5});
+    &-wrapper {
+      --padding: 0 #{vars.$spacer} #{vars.$spacer} #{vars.$spacer};
 
-			@include mx.breakpoint('sm') {
-				--gap: #{vars.$spacer};
-				--padding: 0 5% #{vars.$spacer * 0.5} 5%;
-			}
-			@include mx.breakpoint('md') {
-				--padding: 0 10% #{vars.$spacer * 0.5} 10%;
-			}
-		}
-	}
+      display: flex;
+      padding: var(--padding);
+      gap: var(--gap, #{vars.$spacer * 0.5});
 
-	&__icon-button {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		transition: all 0.3 ease-in-out;
+      @include mx.breakpoint("sm") {
+        --gap: #{vars.$spacer};
+        --padding: 0 5% #{vars.$spacer * 0.5} 5%;
+      }
+      @include mx.breakpoint("md") {
+        --padding: 0 10% #{vars.$spacer * 0.5} 10%;
+      }
+    }
+  }
 
-		&.is-hidden {
-			display: none;
-		}
-	}
+  &__icon-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3 ease-in-out;
 
-	&__quote-icon {
-		width: var(--size-quote-icon);
-		height: var(--size-quote-icon);
-		fill: var(--grey-200);
-		flex: 0 0 auto;
+    &.is-hidden {
+      display: none;
+    }
+  }
 
-		@include mx.breakpoint('md') {
-			--size-quote-icon: 44px;
-		}
-	}
+  &__quote-icon {
+    width: var(--size-quote-icon);
+    height: var(--size-quote-icon);
+    fill: var(--grey-200);
+    flex: 0 0 auto;
 
-	&__copy-button {
-		--color-background: #{vars.$white-200};
+    @include mx.breakpoint("md") {
+      --size-quote-icon: 44px;
+    }
+  }
 
-		gap: vars.$spacer * 0.3;
-		display: flex;
-		align-items: center;
+  &__copy-button {
+    --color-background: #{vars.$white-200};
 
-		&:hover {
-			--style-border: solid;
-		}
+    gap: vars.$spacer * 0.3;
+    display: flex;
+    align-items: center;
 
-		&.is-success {
-			background: var(--success);
-			color: #fff;
-		}
-	}
+    &:hover {
+      --style-border: solid;
+    }
 
-	.c-word-list--word-option {
-		align-self: start;
-	}
+    &.is-success {
+      background: var(--success);
+      color: #fff;
+    }
+  }
 
-	&__learn-more {
-		--padding: 0;
+  .c-word-list--word-option {
+    align-self: start;
+  }
 
-		display: flex;
-		align-items: center;
-		gap: vars.$spacer * 0.25;
-		align-self: end;
-	}
+  &__learn-more {
+    --padding: 0;
+
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.25;
+    align-self: end;
+  }
 }

@@ -1,5 +1,12 @@
 <template>
-  <DynamicScroller :items="wordSearchIndex" :min-item-size="54" class="scroller c-word-list">
+  <DynamicScroller
+    :items="wordSearchIndex"
+    :min-item-size="116"
+    class="c-word-list"
+    list-class="c-word-list__list"
+    item-class="c-word-list__item"
+    page-mode
+  >
     <template #default="{ item, index, active }">
       <DynamicScrollerItem
         :item="item"
@@ -7,7 +14,9 @@
         :size-dependencies="[item.id]"
         :data-index="index"
       >
-        <SingleWord :source="item" :index="index" />
+        <div class="c-word-list__word-wrap">
+          <SingleWord :source="item" :index="index" />
+        </div>
       </DynamicScrollerItem>
     </template>
   </DynamicScroller>
@@ -66,7 +75,4 @@ const wordSearchIndex = computed(() => {
 
 <style lang="scss">
 @use "@styles/components/word-list";
-.scroller {
-  height: 100%;
-}
 </style>
