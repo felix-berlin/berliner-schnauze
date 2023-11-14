@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.21](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.20...v2.0.0-beta.21) (2023-11-14)
+
+
+### Features
+
+* add order to getAllWords ([53a3fca](https://github.com/felix-berlin/berliner-schnauze/commit/53a3fca39b50c3ad267e45948d4d0f4fef4336d5))
+* combile new components to a functional search ([dbbb9ca](https://github.com/felix-berlin/berliner-schnauze/commit/dbbb9ca257476e9928c4f9625b4efb2f1255906e))
+
 # [2.0.0-beta.20](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2023-11-13)
 
 
