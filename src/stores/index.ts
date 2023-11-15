@@ -72,6 +72,3 @@ export const isDarkMode = persistentAtom<DarkMode>("darkMode", false, {
     }
   },
 });
-
-export const words = map<Word[]>([]);
-export const searchWord = atom<string>("");

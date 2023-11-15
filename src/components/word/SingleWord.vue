@@ -137,7 +137,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 import Copy from "virtual:icons/lucide/copy";
 import CheckCircle2 from "virtual:icons/lucide/check-circle-2";
 import MoreVertical from "virtual:icons/lucide/more-vertical";
