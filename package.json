@@ -40,7 +40,7 @@
     "@commitlint/config-conventional": "17.2.0",
     "@felix_berlin/stylelint-config-felix-berlin": "1.0.0",
     "@nuxt/types": "2.15.8",
-    "@nuxtjs/color-mode": "2.1.1",
+    "@nuxtjs/color-mode": "3.3.2",
     "@nuxtjs/device": "2.1.0",
     "@nuxtjs/eslint-config": "12.0.0",
     "@nuxtjs/eslint-module": "3.1.0",
