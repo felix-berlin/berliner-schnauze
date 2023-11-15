@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.24](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.23...v2.0.0-beta.24) (2023-11-15)
+
+
+### Features
+
+* save the search in local storage ([39dd215](https://github.com/felix-berlin/berliner-schnauze/commit/39dd215fbc20c8edd9b7c467bc829c1d4786ac45))
+
 # [2.0.0-beta.23](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.22...v2.0.0-beta.23) (2023-11-15)
 
 
