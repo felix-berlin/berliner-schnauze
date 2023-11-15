@@ -68,7 +68,7 @@ const { device } = new DeviceDetector();
 const menuItems = [
   {
     title: "Wort vorschlagen",
-    link: "/suggest-word",
+    link: "/wort-vorschlagen",
     intern: true,
   },
   {
