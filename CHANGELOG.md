@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.27](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.26...v2.0.0-beta.27) (2023-11-15)
+
+
+### Bug Fixes
+
+* close modal after transition ([c7222cb](https://github.com/felix-berlin/berliner-schnauze/commit/c7222cbb312cd6c6b9d628a4533cdd1ca7e3d769))
+
 # [2.0.0-beta.26](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.25...v2.0.0-beta.26) (2023-11-15)
 
 
