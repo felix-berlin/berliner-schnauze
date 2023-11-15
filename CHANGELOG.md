@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.25](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.24...v2.0.0-beta.25) (2023-11-15)
+
+
+### Features
+
+* add favicons ([57dd649](https://github.com/felix-berlin/berliner-schnauze/commit/57dd6491a359555e8af21b18005905e1d6fb3aad))
+
 # [2.0.0-beta.24](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.23...v2.0.0-beta.24) (2023-11-15)
 
 
