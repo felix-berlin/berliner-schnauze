@@ -6,12 +6,8 @@
 
   height: 100%;
 
-  &__item {
-    &:not(:last-of-type) {
-      .c-word-list__word-wrap {
-        padding-bottom: vars.$spacer * 1.75;
-      }
-    }
+  .c-word-list__word-wrap {
+    padding-bottom: vars.$spacer * 1.75;
   }
 
   &__word {

@@ -56,10 +56,8 @@ const wordSearchIndex = computed(() => {
   };
 
   const fuse = new Fuse(words, options);
-  console.log("index", fuse);
 
   const results = fuse.search(search);
-  console.log("results", results);
 
   const cleanResults = results.map((result) => {
     return result.item;

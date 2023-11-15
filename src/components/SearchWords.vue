@@ -10,7 +10,7 @@
       @click="buttonActions"
     >
       <Transition name="fade-fast" mode="out-in">
-        <span v-if="toggleShowAndClearIcon" key="search" class="c-button--center-icon">
+        <span v-if="searchLength === 0" key="search" class="c-button--center-icon">
           <Search default-class="c-word-search__search-icon" />
         </span>
         <span v-else key="del" class="c-button--center-icon">
@@ -34,7 +34,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import Search from "virtual:icons/lucide/search";
-import Command from "virtual:icons/lucide/command";
 import X from "virtual:icons/lucide/x";
 
 interface SearchWordsProps {
@@ -45,26 +44,34 @@ const { buttonPosition = "left" } = defineProps<SearchWordsProps>();
 
 const search = ref("");
 const searchLength = computed(() => search.value.length);
-const toggleShowAndClearIcon = ref(true);
 
 const emit = defineEmits(["update:search"]);
 
-const updateSearch = () => {
+/**
+ * Emits the search value to the parent component
+ *
+ * @return  {void}
+ */
+const updateSearch = (): void => {
   emit("update:search", search);
 };
 
-const buttonActions = () => {
-  if (searchLength.value > 0) {
-    search.value = "";
-  }
+/**
+ * Handles the button actions
+ *
+ * @return  {void}
+ */
+const buttonActions = (): void => {
+  if (searchLength.value > 0) resetSearch();
 };
 
-const toggleSearchClearIcons = () => {
-  if (searchLength.value === 0) {
-    toggleShowAndClearIcon.value = true;
-  } else {
-    toggleShowAndClearIcon.value = false;
-  }
+/**
+ * Resets the search value
+ *
+ * @return  {void}
+ */
+const resetSearch = (): void => {
+  search.value = "";
 };
 </script>
 
