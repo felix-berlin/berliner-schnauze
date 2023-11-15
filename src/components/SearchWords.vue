@@ -4,8 +4,8 @@
       :aria-label="searchLength > 0 ? 'Wortsuche löschen' : 'Wortsuche betätigen'"
       type="button"
       :class="[
-        'c-word-search__search-button u-button-reset c-button c-button--center-icon c-word-search__search-button--left',
-        'c-button--' + buttonPosition,
+        'c-word-search__search-button u-button-reset c-button c-button--center-icon',
+        `c-word-search__search-button--${buttonPosition}`,
       ]"
       @click="buttonActions"
     >
@@ -20,7 +20,7 @@
     </button>
 
     <input
-      v-model="search"
+      v-model="localSearch"
       type="search"
       class="c-word-search__search-input c-input"
       aria-label="Suche nach einem Berliner Word"
@@ -35,6 +35,7 @@
 import { ref, computed } from "vue";
 import Search from "virtual:icons/lucide/search";
 import X from "virtual:icons/lucide/x";
+import { useStorage } from "@vueuse/core";
 
 interface SearchWordsProps {
   buttonPosition?: "left" | "right";
@@ -42,8 +43,8 @@ interface SearchWordsProps {
 
 const { buttonPosition = "left" } = defineProps<SearchWordsProps>();
 
-const search = ref("");
-const searchLength = computed(() => search.value.length);
+const localSearch = useStorage("search", "");
+const searchLength = computed(() => localSearch.value.length);
 
 const emit = defineEmits(["update:search"]);
 
@@ -53,7 +54,7 @@ const emit = defineEmits(["update:search"]);
  * @return  {void}
  */
 const updateSearch = (): void => {
-  emit("update:search", search);
+  emit("update:search", localSearch);
 };
 
 /**
@@ -71,7 +72,7 @@ const buttonActions = (): void => {
  * @return  {void}
  */
 const resetSearch = (): void => {
-  search.value = "";
+  localSearch.value = "";
 };
 </script>
 
