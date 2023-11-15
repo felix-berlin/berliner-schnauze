@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.23](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.22...v2.0.0-beta.23) (2023-11-15)
+
+
+### Features
+
+* readd reset function ([4f12685](https://github.com/felix-berlin/berliner-schnauze/commit/4f1268565ff94696c69f4259051f2135765629c0))
+
 # [2.0.0-beta.22](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.21...v2.0.0-beta.22) (2023-11-14)
 
 
