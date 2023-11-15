@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.26](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.25...v2.0.0-beta.26) (2023-11-15)
+
+
+### Features
+
+* add wort vorschlagen page ([8b60c08](https://github.com/felix-berlin/berliner-schnauze/commit/8b60c0845b474457cb9f471795c5947c0fcdc803))
+
 # [2.0.0-beta.25](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.24...v2.0.0-beta.25) (2023-11-15)
 
 
