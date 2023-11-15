@@ -22,7 +22,6 @@ import Modal from "@components/Modal.vue";
 import Search from "@components/Search.vue";
 import SearchIcon from "virtual:icons/lucide/search";
 import SquareSlash from "virtual:icons/lucide/square-slash";
-import { useStore } from "@nanostores/vue";
 
 const searchId = "main-search";
 const searchVisible = ref(false);
@@ -35,6 +34,15 @@ const searchVisible = ref(false);
 const openSearch = (): void => {
   searchVisible.value = true;
   focusSearch();
+};
+
+/**
+ * Close the search modal
+ *
+ * @return  {void}
+ */
+const closeSearch = (): void => {
+  searchVisible.value = false;
 };
 
 /**
@@ -70,10 +78,14 @@ const openSearchViaKeyboard = (event: KeyboardEvent): void => {
 
 onMounted(() => {
   window.addEventListener("keydown", (event) => openSearchViaKeyboard(event));
+
+  document.addEventListener("astro:after-swap", () => closeSearch());
 });
 
 onUnmounted(() => {
   window.removeEventListener("keydown", (event) => openSearchViaKeyboard(event));
+
+  document.removeEventListener("astro:after-swap", () => closeSearch());
 });
 </script>
 
