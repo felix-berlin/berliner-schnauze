@@ -6,7 +6,6 @@
     list-class="c-word-list__list"
     item-class="c-word-list__item"
     :prerender="10"
-    page-mode
   >
     <template #default="{ item, index, active }">
       <DynamicScrollerItem
