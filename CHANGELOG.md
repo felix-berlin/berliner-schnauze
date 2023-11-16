@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.29](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.28...v2.0.0-beta.29) (2023-11-16)
+
+
+### Bug Fixes
+
+* suggest form ([ede4f97](https://github.com/felix-berlin/berliner-schnauze/commit/ede4f97a1e009bbee528a99c392c00518040eb91))
+
 # [2.0.0-beta.28](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.27...v2.0.0-beta.28) (2023-11-16)
 
 
