@@ -10,7 +10,7 @@ dependencies:
     version: 3.0.3
   '@astrojs/vue':
     specifier: ^3.0.4
-    version: 3.0.4(@babel/core@7.23.3)(astro@3.5.4)(vite@4.5.0)(vue@3.3.8)
+    version: 3.0.4(@babel/core@7.23.3)(astro@3.5.5)(vite@4.5.0)(vue@3.3.8)
   '@felix_berlin/sass-butler':
     specifier: 2.0.0
     version: 2.0.0
@@ -30,20 +30,20 @@ dependencies:
     specifier: ^0.10.0
     version: 0.10.0(@nanostores/logger@0.2.4)(@vue/devtools-api@6.5.1)(nanostores@0.9.5)(vue@3.3.8)
   '@pagefind/default-ui':
-    specifier: ^1.0.3
-    version: 1.0.3
+    specifier: ^1.0.4
+    version: 1.0.4
   '@vueuse/core':
     specifier: ^10.6.1
     version: 10.6.1(vue@3.3.8)
   astro:
-    specifier: ^3.5.4
-    version: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+    specifier: ^3.5.5
+    version: 3.5.5(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
   astro-breadcrumbs:
     specifier: ^1.8.0
-    version: 1.8.0(astro@3.5.4)
+    version: 1.8.0(astro@3.5.5)
   astro-matomo:
     specifier: ^1.4.0
-    version: 1.4.0(astro@3.5.4)
+    version: 1.4.0(astro@3.5.5)
   floating-vue:
     specifier: 2.0.0-beta.24
     version: 2.0.0-beta.24(vue@3.3.8)
@@ -54,8 +54,8 @@ dependencies:
     specifier: ^0.9.5
     version: 0.9.5
   pagefind:
-    specifier: ^1.0.3
-    version: 1.0.3
+    specifier: ^1.0.4
+    version: 1.0.4
   slugify:
     specifier: ^1.6.6
     version: 1.6.6
@@ -114,10 +114,10 @@ devDependencies:
     version: 6.11.0(eslint@8.53.0)(typescript@5.2.2)
   '@vite-pwa/astro':
     specifier: ^0.1.5
-    version: 0.1.5(astro@3.5.4)(vite-plugin-pwa@0.16.7)
+    version: 0.1.5(astro@3.5.5)(vite-plugin-pwa@0.16.7)
   '@vitejs/plugin-vue':
-    specifier: ^4.4.1
-    version: 4.4.1(vite@4.5.0)(vue@3.3.8)
+    specifier: ^4.5.0
+    version: 4.5.0(vite@4.5.0)(vue@3.3.8)
   '@vitest/coverage-v8':
     specifier: ^0.34.6
     version: 0.34.6(vitest@0.34.6)
@@ -344,13 +344,13 @@ packages:
       - typescript
     dev: true
 
-  /@astrojs/markdown-remark@3.5.0(astro@3.5.4):
+  /@astrojs/markdown-remark@3.5.0(astro@3.5.5):
     resolution: {integrity: sha512-q7vdIqzYhxpsfghg2YmkmSXCfp4w7lBTYP+SSHw89wVhC5Riltr3u8w2otBRxNLSByNi+ht/gGkFC23Shetytw==}
     peerDependencies:
       astro: ^3.0.0
     dependencies:
       '@astrojs/prism': 3.0.0
-      astro: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+      astro: 3.5.5(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
       github-slugger: 2.0.0
       import-meta-resolve: 3.1.1
       mdast-util-definitions: 6.0.0
@@ -394,18 +394,18 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@astrojs/vue@3.0.4(@babel/core@7.23.3)(astro@3.5.4)(vite@4.5.0)(vue@3.3.8):
+  /@astrojs/vue@3.0.4(@babel/core@7.23.3)(astro@3.5.5)(vite@4.5.0)(vue@3.3.8):
     resolution: {integrity: sha512-+kuONslRcfXbwlZOwdl+9XYJ0HKfPQ8SHnmk4Uf3ZNscJfjptob3z0mrIaCRqIgNNWJHsY2xLZovishGQ+lAow==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
       astro: ^3.0.0
       vue: ^3.2.30
     dependencies:
-      '@vitejs/plugin-vue': 4.4.1(vite@4.5.0)(vue@3.3.8)
+      '@vitejs/plugin-vue': 4.5.0(vite@4.5.0)(vue@3.3.8)
       '@vitejs/plugin-vue-jsx': 3.0.2(vite@4.5.0)(vue@3.3.8)
       '@vue/babel-plugin-jsx': 1.1.5(@babel/core@7.23.3)
       '@vue/compiler-sfc': 3.3.8
-      astro: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+      astro: 3.5.5(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
       vue: 3.3.8(typescript@5.2.2)
     transitivePeerDependencies:
       - '@babel/core'
@@ -3355,44 +3355,44 @@ packages:
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
     dev: true
 
-  /@pagefind/darwin-arm64@1.0.3:
-    resolution: {integrity: sha512-vsHDtvao3W4iFCxVc4S0BVhpj3E2MAoIVM7RmuQfGp1Ng22nGLRaMP6FguLO8TMabRJdvp4SVr227hL4WGKOHA==}
+  /@pagefind/darwin-arm64@1.0.4:
+    resolution: {integrity: sha512-2OcthvceX2xhm5XbgOmW+lT45oLuHqCmvFeFtxh1gsuP5cO8vcD8ZH8Laj4pXQFCcK6eAdSShx+Ztx/LsQWZFQ==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: false
     optional: true
 
-  /@pagefind/darwin-x64@1.0.3:
-    resolution: {integrity: sha512-NhEXHHYmB/hT6lx5rCcmnVTxH+uIkMAd43bzEqMwHQosqTZEIQfwihmV39H+m8yo7jFvz3zRbJNzhAh7G4PiwA==}
+  /@pagefind/darwin-x64@1.0.4:
+    resolution: {integrity: sha512-xkdvp0D9Ld/ZKsjo/y1bgfhTEU72ITimd2PMMQtts7jf6JPIOJbsiErCvm37m/qMFuPGEq/8d+fZ4pydOj08HQ==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: false
     optional: true
 
-  /@pagefind/default-ui@1.0.3:
-    resolution: {integrity: sha512-WieFJXvezyvjZh49I8j7a7Kz3LsXYY2Uep3IWvG5NG05mmiurURXjXc+KyrpIp/iAycSnjrC1TDJ8CdES/ee3A==}
+  /@pagefind/default-ui@1.0.4:
+    resolution: {integrity: sha512-edkcaPSKq67C49Vehjo+LQCpT615v4d7JRhfGzFPccePvdklaL+VXrfghN/uIfsdoG+HoLI1PcYy2iFcB9CTkw==}
     dev: false
 
-  /@pagefind/linux-arm64@1.0.3:
-    resolution: {integrity: sha512-RGsMt4AmGT8WxCSeP09arU7Za6Vf/We4TWHVSbY7vDMuwWql9Ngoib/q1cP9dIAIMdkXh9ePG/S3mGnJYsdzuQ==}
+  /@pagefind/linux-arm64@1.0.4:
+    resolution: {integrity: sha512-jGBrcCzIrMnNxLKVtogaQyajVfTAXM59KlBEwg6vTn8NW4fQ6nuFbbhlG4dTIsaamjEM5e8ZBEAKZfTB/qd9xw==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: false
     optional: true
 
-  /@pagefind/linux-x64@1.0.3:
-    resolution: {integrity: sha512-o+VCKaqImL42scSH1n5gUfppYSNyu3BuGTvtKKgWHmycbL+A3fkFH+ZOFbaLeN7LVTvJqJIOYbk4j2yaq9784Q==}
+  /@pagefind/linux-x64@1.0.4:
+    resolution: {integrity: sha512-LIn/QcvcEtLEBqKe5vpSbSC2O3fvqbRCWOTIklslqSORisCsvzsWbP6j+LYxE9q0oWIfkdMoWV1vrE/oCKRxHg==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: false
     optional: true
 
-  /@pagefind/windows-x64@1.0.3:
-    resolution: {integrity: sha512-S+Yq4FyvXJm4F+iN/wRiLvEEF8Xs9lTKGtQGaRHXJslQyl65dytDDPIULXJXIadrDbnMrnTt4C2YHmEUIyUIHg==}
+  /@pagefind/windows-x64@1.0.4:
+    resolution: {integrity: sha512-QlBCVeZfj9fc9sbUgdOz76ZDbeK4xZihOBAFqGuRJeChfM8pnVeH9iqSnXgO3+m9oITugTf7PicyRUFAG76xeQ==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
@@ -4021,13 +4021,13 @@ packages:
   /@ungap/structured-clone@1.2.0:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
 
-  /@vite-pwa/astro@0.1.5(astro@3.5.4)(vite-plugin-pwa@0.16.7):
+  /@vite-pwa/astro@0.1.5(astro@3.5.5)(vite-plugin-pwa@0.16.7):
     resolution: {integrity: sha512-OjG32P67eGGTKlXwTqhJkdOmQOL+GBNaqi9sm2JSawkY+SgZ9V6whPMRjJZXtTjpPXrQs4XorJiLG9g3kRPRTA==}
     peerDependencies:
       astro: ^1.6.0 || ^2.0.0 || ^3.0.0
       vite-plugin-pwa: '>=0.16.5 <1'
     dependencies:
-      astro: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+      astro: 3.5.5(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
       vite-plugin-pwa: 0.16.7(vite@4.5.0)(workbox-build@7.0.0)(workbox-window@7.0.0)
     dev: true
 
@@ -4047,11 +4047,11 @@ packages:
       - supports-color
     dev: false
 
-  /@vitejs/plugin-vue@4.4.1(vite@4.5.0)(vue@3.3.8):
-    resolution: {integrity: sha512-HCQG8VDFDM7YDAdcj5QI5DvUi+r6xvo9LgvYdk7LSkUNwdpempdB5horkMSZsbdey9Ywsf5aaU8kEPw9M5kREA==}
+  /@vitejs/plugin-vue@4.5.0(vite@4.5.0)(vue@3.3.8):
+    resolution: {integrity: sha512-a2WSpP8X8HTEww/U00bU4mX1QpLINNuz/2KMNpLsdu3BzOpak3AGI1CJYBTXcc4SPhaD0eNRUp7IyQK405L5dQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      vite: ^4.0.0
+      vite: ^4.0.0 || ^5.0.0
       vue: ^3.2.25
     dependencies:
       vite: 4.5.0(@types/node@20.9.0)(sass@1.69.5)
@@ -4665,13 +4665,13 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /astro-breadcrumbs@1.8.0(astro@3.5.4):
+  /astro-breadcrumbs@1.8.0(astro@3.5.5):
     resolution: {integrity: sha512-f35nN4V0001l/6N90iUdcksIC/FZ6hN7CeowtiOiafa5UlA2qruQ6lnuwzzmvk0uirdo/8DXo7ixc5IZ5dqQhQ==}
     requiresBuild: true
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0
     dependencies:
-      astro: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+      astro: 3.5.5(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
     dev: false
 
   /astro-eslint-parser@0.16.0:
@@ -4690,23 +4690,23 @@ packages:
       - supports-color
     dev: true
 
-  /astro-matomo@1.4.0(astro@3.5.4):
+  /astro-matomo@1.4.0(astro@3.5.5):
     resolution: {integrity: sha512-FYhacdAqTj1Yf3oq6Abz2QRqqBD6RrqxOKDU23XCx9HY6BC1k5yLke5kFg2OaY8Oo5tZP/4mg3hiUSxYFU1xQQ==}
     requiresBuild: true
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0
     dependencies:
-      astro: 3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
+      astro: 3.5.5(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2)
     dev: false
 
-  /astro@3.5.4(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2):
-    resolution: {integrity: sha512-tyOd2o9KDz9hDaHmYvnY7BbRxeQ1yDxoOW4AVlxAnmHOK6068k6Bivr/C4Wlc6ON40lZ/qIDG9gfNkiEhMEVow==}
+  /astro@3.5.5(@types/node@20.9.0)(sass@1.69.5)(typescript@5.2.2):
+    resolution: {integrity: sha512-zJDZhO8XheXzpqkZgBXlP8e3j8psf0A21fh5Bq4HNR6gOmgOnM62Pok3O2ClbGygabfl2Preeun0pBRFn5+y0A==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
     dependencies:
       '@astrojs/compiler': 2.3.0
       '@astrojs/internal-helpers': 0.2.1
-      '@astrojs/markdown-remark': 3.5.0(astro@3.5.4)
+      '@astrojs/markdown-remark': 3.5.0(astro@3.5.5)
       '@astrojs/telemetry': 3.0.4
       '@babel/core': 7.23.3
       '@babel/generator': 7.23.3
@@ -9337,15 +9337,15 @@ packages:
     resolution: {integrity: sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==}
     engines: {node: '>=6'}
 
-  /pagefind@1.0.3:
-    resolution: {integrity: sha512-ws7kmMxW6OuxzsOjj3YAx6TYq/54MiE3wfyBM3J5CInbZyBBvM2Z8c8IYvnMkBcb5v2EoB9DewXEekOEiDRu5g==}
+  /pagefind@1.0.4:
+    resolution: {integrity: sha512-oRIizYe+zSI2Jw4zcMU0ebDZm27751hRFiSOBLwc1OIYMrsZKk+3m8p9EVaOmc6zZdtqwwdilNUNxXvBeHcP9w==}
     hasBin: true
     optionalDependencies:
-      '@pagefind/darwin-arm64': 1.0.3
-      '@pagefind/darwin-x64': 1.0.3
-      '@pagefind/linux-arm64': 1.0.3
-      '@pagefind/linux-x64': 1.0.3
-      '@pagefind/windows-x64': 1.0.3
+      '@pagefind/darwin-arm64': 1.0.4
+      '@pagefind/darwin-x64': 1.0.4
+      '@pagefind/linux-arm64': 1.0.4
+      '@pagefind/linux-x64': 1.0.4
+      '@pagefind/windows-x64': 1.0.4
     dev: false
 
   /param-case@3.0.4:
