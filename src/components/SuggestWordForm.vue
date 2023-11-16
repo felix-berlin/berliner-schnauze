@@ -3,21 +3,21 @@
     <div class="c-form__group">
       <div
         class="c-form__item is-vertical"
-        :class="{ 'has-error': formErrors.berlinerWord.length }"
+        :class="{ 'has-error': formErrors.berlinerWord?.length }"
       >
-        <label class="c-form__label c-label is-required" for="berliner-wort">Berliner Wort</label>
+        <label class="c-form__label c-label is-required" for="berlinerWort">Berliner Wort</label>
         <div class="c-floating-label">
           <input
-            id="berliner-wort"
-            v-model="formData['berliner-word']"
+            id="berlinerWort"
+            v-model="formData.berlinerWord"
             class="c-input c-form__input c-floating-label__input"
             type="text"
-            name="berliner-wort"
+            name="berlinerWort"
             placeholder=" "
             required
           />
           <AlertBanner
-            v-if="formErrors.berlinerWord.length"
+            v-if="formErrors.berlinerWord?.length"
             type="danger"
             class="c-floating-label__label c-floating-label__label--bottom c-alert--small"
           >
@@ -26,7 +26,10 @@
         </div>
       </div>
 
-      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.translation.length }">
+      <div
+        class="c-form__item is-vertical"
+        :class="{ 'has-error': formErrors.translation?.length }"
+      >
         <label class="c-form__label c-label is-required" for="translation"
           >Übersetzung in Hochdeutsche</label
         >
@@ -40,7 +43,7 @@
             placeholder=" "
           />
           <AlertBanner
-            v-if="formErrors.translation.length"
+            v-if="formErrors.translation?.length"
             type="danger"
             class="c-floating-label__label c-floating-label__label--bottom c-alert--small"
           >
@@ -52,7 +55,7 @@
 
     <div
       class="c-form__item is-vertical"
-      :class="{ 'c-textarea--error': formErrors.example.length }"
+      :class="{ 'c-textarea--error': formErrors.example?.length }"
     >
       <label class="c-label c-form__label" for="example">Schreibe einen Beispielsatz:</label>
       <div class="c-floating-label">
@@ -65,7 +68,7 @@
           placeholder=" "
         />
         <AlertBanner
-          v-if="formErrors.example.length"
+          v-if="formErrors.example?.length"
           type="danger"
           class="c-floating-label__label c-floating-label__label--bottom c-alert--small"
         >
@@ -75,15 +78,15 @@
     </div>
 
     <div class="c-form__group">
-      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.name.length }">
-        <label class="c-label c-form__label" for="user-name">Dein Name (optional)</label>
+      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.name?.length }">
+        <label class="c-label c-form__label" for="userName">Dein Name (optional)</label>
         <div class="c-floating-label">
           <input
-            id="user-name"
-            v-model="formData['user-name']"
+            id="userName"
+            v-model="formData.userName"
             class="c-input c-form__input c-floating-label__input"
             type="text"
-            name="user-name"
+            name="userName"
             placeholder=" "
           />
           <AlertBanner
@@ -96,19 +99,19 @@
         </div>
       </div>
 
-      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.eMail.length }">
-        <label class="c-label c-form__label" for="user-email">Deine E-Mailadresse (optional)</label>
+      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.eMail?.length }">
+        <label class="c-label c-form__label" for="userEmail">Deine E-Mailadresse (optional)</label>
         <div class="c-floating-label">
           <input
-            id="user-email"
-            v-model="formData['user-mail']"
+            id="userEmail"
+            v-model="formData.userMail"
             class="c-input c-form__input c-input--email c-floating-label__input"
             type="email"
-            name="user-email"
+            name="userEmail"
             placeholder=" "
           />
           <AlertBanner
-            v-if="formErrors.eMail.length"
+            v-if="formErrors.eMail?.length"
             type="danger"
             class="c-floating-label__label c-floating-label__label--bottom c-alert--small"
           >
@@ -129,7 +132,7 @@
         ><span>{{ formResponse.message }}</span>
       </div>
       <div
-        v-if="formResponse.status !== 'mail_sent' && formResponse.status.length"
+        v-if="formResponse.status !== 'mail_sent' && formResponse.status?.length"
         key="success"
         class="c-suggest-word-form__message c-alert c-alert--danger"
       >
@@ -149,11 +152,11 @@ import AlertCircle from "virtual:icons/lucide/alert-circle";
 import AlertBanner from "@components/AlertBanner.vue";
 
 let formData = reactive({
-  "berliner-word": "",
+  berlinerWord: "",
   translation: "",
   example: "",
-  "user-mail": "",
-  "user-name": "",
+  userMail: "",
+  userName: "",
 });
 
 const formErrors = reactive({
@@ -169,22 +172,26 @@ const formResponse = reactive({
   status: "",
 });
 
-const formSubmit = () => {
+const postToContactForm7 = async () => {
   const formInputs = new FormData();
 
   for (const name in formData) {
     formInputs.append(name, formData[name]);
   }
 
-  fetch(`${import.meta.env.PUBLIC_WP_API}/wp-json/contact-form-7/v1/contact-forms/4733/feedback`, {
-    method: "POST",
-    headers: { "Content-Type": "multipart/form-data" },
-    body: formInputs,
-  })
+  await fetch(
+    `${import.meta.env.PUBLIC_WP_REST_API}/contact-form-7/v1/contact-forms/${
+      import.meta.env.PUBLIC_SUGGEST_WORD_FORM_ID
+    }/feedback`,
+    {
+      method: "POST",
+      body: formInputs,
+    },
+  )
     .then((response) => response.json())
     .then((response) => {
-      formResponse.message = response.data.message;
-      formResponse.status = response.data.status;
+      formResponse.message = response.message;
+      formResponse.status = response.status;
       resetForm();
     })
     .catch((error) => {
@@ -239,34 +246,34 @@ const checkForm = () => {
     formErrors[error] = "";
   }
 
-  if (formData["berliner-word"].length <= 1) {
+  if (formData.berlinerWord?.length <= 1) {
     formErrors.berlinerWord = "Oh, ditt is aber een sehr kurzes Wort";
   }
-  if (!formData["berliner-word"]) {
+  if (!formData.berlinerWord) {
     formErrors.berlinerWord = "Hey du hast ditt Wort vergessen.";
   }
 
-  if (formData.translation.length <= 1) {
+  if (formData.translation?.length <= 1) {
     formErrors.translation = "Ditt is aber ne kleene Übersetzung.";
   }
   if (!formData.translation) {
     formErrors.translation = "Ohne die Übersetzung wird dett etwas schwierig.";
   }
 
-  if (formData["user-name"] && formData["user-name"].length <= 1) {
+  if (formData.userName && formData.userName?.length <= 1) {
     formErrors.name = "Du hast nen sehr kleinen Namen";
   }
-  if (formData.example && formData.example.length <= 1) {
+  if (formData.example && formData.example?.length <= 1) {
     formErrors.example = "Mehr is dir nicht eingefallen?";
   }
 
   // If an e-mail address is given, validate it
-  if (formData["user-mail"].length > 0 && !validEmail(formData["user-mail"])) {
+  if (formData.userMail?.length > 0 && !validEmail(formData.userMail)) {
     formErrors.eMail = "Irgendwas läuft hier nicht";
   }
 
-  if (Object.values(formErrors).every((v) => v.length === 0)) {
-    formSubmit();
+  if (Object.values(formErrors).every((v) => v?.length === 0)) {
+    postToContactForm7();
   }
 };
 
