@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.28](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.27...v2.0.0-beta.28) (2023-11-16)
+
+
+### Features
+
+* migrate Alert and SuggestWordForm from Vue 2 to 3 ([465d6ae](https://github.com/felix-berlin/berliner-schnauze/commit/465d6aec988c04fc0c067e8501a9ed3f6f5876fd))
+
 # [2.0.0-beta.27](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.26...v2.0.0-beta.27) (2023-11-15)
 
 
