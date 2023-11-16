@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.30](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.29...v2.0.0-beta.30) (2023-11-16)
+
+
+### Features
+
+* **SuggestWordForm:** add types ([cfca507](https://github.com/felix-berlin/berliner-schnauze/commit/cfca50759d3920f65fb03e529f94ad9b8eba43d9))
+* **WordList:** remove page mode ([a266f37](https://github.com/felix-berlin/berliner-schnauze/commit/a266f37c3b98566044db88b02762ea7445c77bdc))
+
 # [2.0.0-beta.29](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.28...v2.0.0-beta.29) (2023-11-16)
 
 
