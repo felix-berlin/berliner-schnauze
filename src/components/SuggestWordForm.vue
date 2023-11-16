@@ -151,7 +151,16 @@ import CheckCircle2 from "virtual:icons/lucide/check-circle-2";
 import AlertCircle from "virtual:icons/lucide/alert-circle";
 import AlertBanner from "@components/AlertBanner.vue";
 
-let formData = reactive({
+interface FormData {
+  berlinerWord?: string;
+  translation?: string;
+  example?: string;
+  userMail?: string;
+  userName?: string;
+  [key: string]: string | undefined; // This is the index signature
+}
+
+let formData = reactive<FormData>({
   berlinerWord: "",
   translation: "",
   example: "",
@@ -159,7 +168,16 @@ let formData = reactive({
   userName: "",
 });
 
-const formErrors = reactive({
+interface FormErrors {
+  berlinerWord: string;
+  translation: string;
+  example: string;
+  name: string;
+  eMail: string;
+  [key: string]: string; // This is the index signature
+}
+
+const formErrors = reactive<FormErrors>({
   berlinerWord: "",
   translation: "",
   example: "",
@@ -172,7 +190,12 @@ const formResponse = reactive({
   status: "",
 });
 
-const postToContactForm7 = async () => {
+/**
+ * Posts the form data to the contact form 7 API
+ *
+ * @return  {Promise<void>}
+ */
+const postToContactForm7 = async (): Promise<void> => {
   const formInputs = new FormData();
 
   for (const name in formData) {
@@ -211,13 +234,16 @@ const resetForm = () => {
 /**
  * Turns all given object values to false
  *
- * @param   {Object}  object  The object values you want to turn falsy
- * @param   {Void}  to        Any data format
+ * @param   {}  object  The object values you want to turn falsy
+ * @param   {}  to        Any data format
  *
- * @return  {Object}          returns object with falsy values
+ * @return  {}          returns object with falsy values
  */
-const convertObjectKeysTo = (object, to) => {
-  return Object.fromEntries(Object.keys(object).map((key) => [key, to]));
+const convertObjectKeysTo = <T,>(
+  object: Record<string, T | undefined>,
+  to: T,
+): Record<string, T> => {
+  return Object.fromEntries(Object.keys(object).map((key) => [key, to])) as Record<string, T>;
 };
 
 /**
@@ -228,7 +254,7 @@ const convertObjectKeysTo = (object, to) => {
  *
  * @return  {Boolean}            Return if all are true or false
  */
-const checkObjectValues = (object, checkFor = false) => {
+const checkObjectValues = (object: object, checkFor: boolean = false): boolean => {
   return Object.values(object).every((v) => v === checkFor);
 };
 
@@ -239,21 +265,21 @@ const checkObjectValueLength = (object) => {
 /**
  * Validates the form
  *
- * @return  {Function}     Submit form
+ * @return  {void}     Submit form
  */
-const checkForm = () => {
+const checkForm = (): void => {
   for (const error in formErrors) {
     formErrors[error] = "";
   }
 
-  if (formData.berlinerWord?.length <= 1) {
+  if (formData?.berlinerWord?.length <= 1) {
     formErrors.berlinerWord = "Oh, ditt is aber een sehr kurzes Wort";
   }
   if (!formData.berlinerWord) {
     formErrors.berlinerWord = "Hey du hast ditt Wort vergessen.";
   }
 
-  if (formData.translation?.length <= 1) {
+  if (formData?.translation?.length <= 1) {
     formErrors.translation = "Ditt is aber ne kleene Übersetzung.";
   }
   if (!formData.translation) {
@@ -268,7 +294,7 @@ const checkForm = () => {
   }
 
   // If an e-mail address is given, validate it
-  if (formData.userMail?.length > 0 && !validEmail(formData.userMail)) {
+  if (formData?.userMail?.length > 0 && !validEmail(formData?.userMail)) {
     formErrors.eMail = "Irgendwas läuft hier nicht";
   }
 
