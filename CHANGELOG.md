@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.34](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.33...v2.0.0-beta.34) (2023-11-17)
+
+
+### Bug Fixes
+
+* remove unused props ([358d73a](https://github.com/felix-berlin/berliner-schnauze/commit/358d73a0b32dd99e9a449dcdc32268ef4f83cc23))
+
 # [2.0.0-beta.33](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.32...v2.0.0-beta.33) (2023-11-17)
 
 
