@@ -19,16 +19,13 @@ import type { BerlinerWord } from "@ts_types/generated";
 
 interface WordSearchListProps {
   words: BerlinerWord[];
+  availableLetterGroups: string[];
 }
 
-const { words } = defineProps<WordSearchListProps>();
+const props = defineProps<WordSearchListProps>();
 
-const availableWordGroups: string[] = Array.from(
-  new Set(words.map((word) => word.wordGroup)),
-).sort();
-
-$wordSearch.setKey("letterGroups", availableWordGroups);
-$wordSearch.setKey("wordList", words);
+$wordSearch.setKey("letterGroups", props.availableLetterGroups);
+$wordSearch.setKey("wordList", props.words);
 </script>
 
 <style scoped></style>

@@ -23,6 +23,10 @@ const cleanWords = allWords.map(({ node }) => {
   const { seo, title, berlinerWordId, wordGroup, dateGmt, modifiedGmt, ...cleanNode } = node;
   return cleanNode;
 });
+
+const availableWordGroups: string[] = Array.from(
+  new Set(allWords.map(({ node }) => node.wordGroup)),
+).sort();
 ---
 
 <Layout content={content} contentClasses="o-index">
@@ -76,5 +80,9 @@ const cleanWords = allWords.map(({ node }) => {
     <WordOfTheDay client:only="vue" />
   </section>
 
-  <WordSearchList words={cleanWords} client:only="vue" />
+  <WordSearchList
+    words={cleanWords}
+    availableLetterGroups={availableWordGroups}
+    client:only="vue"
+  />
 </Layout>
