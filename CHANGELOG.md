@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.36](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.35...v2.0.0-beta.36) (2023-11-17)
+
+
+### Performance Improvements
+
+* create letter group server side ([20d3b2b](https://github.com/felix-berlin/berliner-schnauze/commit/20d3b2bb5c7031ae429412fdaa9b903bb9b42ebb))
+
 # [2.0.0-beta.35](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.34...v2.0.0-beta.35) (2023-11-17)
 
 
