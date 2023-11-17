@@ -1,30 +1,30 @@
 <template>
   <nav class="c-letter-filter">
     <ul class="c-letter-filter__list u-list-reset">
-      <!-- <li
+      <li
         class="c-letter-filter__list-item"
-        :class="{ 'is-current': $store.state.wordFilteredByLetter === null }"
+        :class="{ 'is-current': wordSearchStore.activeLetterFilter === '' }"
       >
         <button
           class="c-letter-filter__button c-letter-filter__button--all c-button"
           type="button"
-          @click="$store.dispatch('filterByLetter', null)"
+          @click="setLetterFilter('')"
         >
           Alle
         </button>
-      </li> -->
+      </li>
       <li
-        v-for="(letter, index) in props.groups"
+        v-for="(letter, index) in wordSearchStore.letterGroups"
         :key="index"
         class="c-letter-filter__list-item"
-        :class="{ 'is-current': letter === wordFilteredByLetter }"
+        :class="{ 'is-current': letter === wordSearchStore.activeLetterFilter }"
       >
         <button
           :aria-label="'Filter nach Buchstabe ' + letter"
           type="button"
           class="c-letter-filter__button c-button"
           :title="'Filter nach Buchstabe ' + letter"
-          @click="updateLetterFilter(letter)"
+          @click="setLetterFilter(letter)"
         >
           {{ letter }}
         </button>
@@ -35,18 +35,10 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { useStore } from "@nanostores/vue";
+import { $wordSearch, setLetterFilter } from "@stores/index";
 
-interface LetterFilterProps {
-  groups: string[];
-}
-
-const props = defineProps<LetterFilterProps>();
-
-const wordFilteredByLetter = ref("");
-
-const updateLetterFilter = (letter: string): void => {
-  console.log("letter", letter);
-};
+const wordSearchStore = useStore($wordSearch);
 </script>
 
 <style lang="scss">

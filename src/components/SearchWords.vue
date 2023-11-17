@@ -35,7 +35,8 @@
 import { ref, computed } from "vue";
 import Search from "virtual:icons/lucide/search";
 import X from "virtual:icons/lucide/x";
-import { useStorage } from "@vueuse/core";
+import { $wordSearch, setSearch, searchLength as currentSearchLength } from "@stores/index";
+import { useStore, useVModel } from "@nanostores/vue";
 
 interface SearchWordsProps {
   buttonPosition?: "left" | "right";
@@ -43,10 +44,9 @@ interface SearchWordsProps {
 
 const { buttonPosition = "left" } = defineProps<SearchWordsProps>();
 
-const localSearch = useStorage("search", "");
-const searchLength = computed(() => localSearch.value.length);
-
-const emit = defineEmits(["update:search"]);
+// const localSearch = useStorage("search", "");
+const searchLength = useStore(currentSearchLength);
+const localSearch = useVModel($wordSearch, "search");
 
 /**
  * Emits the search value to the parent component
@@ -54,7 +54,7 @@ const emit = defineEmits(["update:search"]);
  * @return  {void}
  */
 const updateSearch = (): void => {
-  emit("update:search", localSearch);
+  setSearch(localSearch.value);
 };
 
 /**

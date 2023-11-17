@@ -12,7 +12,7 @@
         type="button"
         :class="[
           'c-button c-button--center-icon c-button--filter',
-          // { 'has-active-filter': $store.getters.getLetterFilter },
+          { 'has-active-filter': wordSearchStore.activeLetterFilter },
         ]"
         aria-label="Filter"
       >
@@ -23,18 +23,18 @@
       </button>
 
       <template #popper>
-        <LetterFilter :groups="props.groups" />
+        <LetterFilter />
       </template>
     </VDropdown>
 
-    <!-- <div
-      v-if="$store.getters.getLetterFilter"
+    <button
+      v-if="wordSearchStore.activeLetterFilter"
       class="c-filter-dropdown__active-filter"
-      @click="$store.dispatch('filterByLetter', null)"
+      @click="setLetterFilter('')"
     >
-      <span>{{ $store.getters.getLetterFilter }}</span
+      <span>{{ wordSearchStore.activeLetterFilter }}</span
       ><span><X :width="10" height="10" /></span>
-    </div> -->
+    </button>
   </div>
 </template>
 
@@ -42,16 +42,30 @@
 import { ref } from "vue";
 import X from "virtual:icons/lucide/x";
 import Filter from "virtual:icons/lucide/filter";
-import { useStorage } from "@vueuse/core";
 import LetterFilter from "@components/LetterFilter.vue";
+import { useStore } from "@nanostores/vue";
+import { onSet } from "nanostores";
+import { $wordSearch, setLetterFilter } from "@stores/index";
 
-interface AlphabeticalFilterDropdownProps {
-  groups: string[];
-}
-
-const props = defineProps<AlphabeticalFilterDropdownProps>();
-
+const wordSearchStore = useStore($wordSearch);
 const hideDropdown = ref(false);
+
+/**
+ * If the active letter filter changes, hide the dropdown
+ *
+ * @return  {void}
+ */
+onSet($wordSearch, ({ newValue }): void => {
+  if (wordSearchStore.value.activeLetterFilter === newValue.activeLetterFilter) {
+    return;
+  }
+
+  hideDropdown.value = true;
+
+  setTimeout(() => {
+    hideDropdown.value = false;
+  }, 0);
+});
 </script>
 
 <style lang="scss">

@@ -1,10 +1,10 @@
 <template>
-  <SearchWords @update:search="updateSearch($event)" />
+  <SearchWords />
   <div class="o-index__filter-wrap">
     <SortWordDirectionToggle />
-    <AlphabeticalFilterDropdown :groups="availableWordGroups" />
+    <AlphabeticalFilterDropdown />
   </div>
-  <WordList :words="words" :search="search.value" />
+  <WordList />
 </template>
 
 <script setup lang="ts">
@@ -13,25 +13,22 @@ import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import SortWordDirectionToggle from "@components/SortWordDirectionToggle.vue";
 import AlphabeticalFilterDropdown from "@components/AlphabeticalFilterDropdown.vue";
-import type { Word } from "@stores/index";
+import { useStore } from "@nanostores/vue";
+import { $wordSearch } from "@stores/index";
+import type { BerlinerWord } from "@ts_types/generated";
 
 interface WordSearchListProps {
-  words: Word[];
+  words: BerlinerWord[];
 }
 
 const { words } = defineProps<WordSearchListProps>();
-
-const search = ref<string>("");
 
 const availableWordGroups: string[] = Array.from(
   new Set(words.map((word) => word.wordGroup)),
 ).sort();
 
-const updateSearch = (event: string) => {
-  console.log("event", event);
-
-  search.value = event;
-};
+$wordSearch.setKey("letterGroups", availableWordGroups);
+$wordSearch.setKey("wordList", words);
 </script>
 
 <style scoped></style>
