@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.32](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.31...v2.0.0-beta.32) (2023-11-17)
+
+
+### Features
+
+* move all word search logic to nano stores + update components ([408a2b7](https://github.com/felix-berlin/berliner-schnauze/commit/408a2b76169d022d79ac22ae9999b3a5a714e375))
+
 # [2.0.0-beta.31](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.30...v2.0.0-beta.31) (2023-11-16)
 
 
