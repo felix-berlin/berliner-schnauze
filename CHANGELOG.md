@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.35](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.34...v2.0.0-beta.35) (2023-11-17)
+
+
+### Bug Fixes
+
+* **index:** spacing issues ([18a8c57](https://github.com/felix-berlin/berliner-schnauze/commit/18a8c57b960c56716e85ceb80cb687963545782b))
+
+
+### Features
+
+* **WordSearch:** persist all data ([155b5fe](https://github.com/felix-berlin/berliner-schnauze/commit/155b5fe7d7128ad881b10cb3915a208add121abf))
+
 # [2.0.0-beta.34](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.33...v2.0.0-beta.34) (2023-11-17)
 
 
