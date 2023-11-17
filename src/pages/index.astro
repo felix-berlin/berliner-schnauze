@@ -18,8 +18,10 @@ const content = {
 };
 
 const allWords = await getAllWord();
-const cleanWords = allWords.map((word) => {
-  return word.node;
+
+const cleanWords = allWords.map(({ node }) => {
+  const { seo, title, berlinerWordId, wordGroup, dateGmt, modifiedGmt, ...cleanNode } = node;
+  return cleanNode;
 });
 ---
 

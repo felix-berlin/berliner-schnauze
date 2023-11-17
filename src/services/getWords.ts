@@ -1,6 +1,10 @@
 import { fetchAPI } from "@services/fetchApi";
 import { seo } from "@services/graphQlQueryParts";
-import type { RootQueryToBerlinerWordConnection, BerlinerWord } from "@ts_types/generated/graphql";
+import type {
+  RootQueryToBerlinerWordConnection,
+  RootQueryToBerlinerWordConnectionEdge,
+  BerlinerWord,
+} from "@ts_types/generated/graphql";
 
 type WordEdge = {
   node: {
@@ -60,7 +64,7 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
 export const getAllWord = async (
   orderByField = "TITLE",
   orderByType = "ASC",
-): Promise<WordEdge[]> => {
+): Promise<RootQueryToBerlinerWordConnectionEdge["node"][]> => {
   let allWords: WordEdge[] = [];
   let cursor: string | null = null;
   const pageSize = 100;
