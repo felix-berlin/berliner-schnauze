@@ -84693,12 +84693,56 @@
         "description": "Asset enqueued by the CMS",
         "fields": [
           {
+            "name": "after",
+            "description": "The inline code to be run after the asset is loaded.",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "args",
-            "description": "@todo",
+            "description": "Deprecated",
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Use `EnqueuedAsset.media` instead."
+          },
+          {
+            "name": "before",
+            "description": "The inline code to be run before the asset is loaded.",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "conditional",
+            "description": "The HTML conditional comment for the enqueued asset. E.g. IE 6, lte IE 7, etc",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -84712,8 +84756,8 @@
               "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "OBJECT",
-                "name": "EnqueuedScript",
+                "kind": "INTERFACE",
+                "name": "EnqueuedAsset",
                 "ofType": null
               }
             },
@@ -84729,8 +84773,8 @@
               "name": "String",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use `EnqueuedScript.extraData` instead."
           },
           {
             "name": "handle",
@@ -84807,12 +84851,56 @@
         "description": "Script enqueued by the CMS",
         "fields": [
           {
+            "name": "after",
+            "description": "The inline code to be run after the asset is loaded.",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "args",
-            "description": "@todo",
+            "description": "Deprecated",
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Use `EnqueuedAsset.media` instead."
+          },
+          {
+            "name": "before",
+            "description": "The inline code to be run before the asset is loaded.",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "conditional",
+            "description": "The HTML conditional comment for the enqueued asset. E.g. IE 6, lte IE 7, etc",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -84843,6 +84931,18 @@
               "name": "String",
               "ofType": null
             },
+            "isDeprecated": true,
+            "deprecationReason": "Use `EnqueuedScript.extraData` instead."
+          },
+          {
+            "name": "extraData",
+            "description": "Extra data supplied to the enqueued script",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -84860,7 +84960,7 @@
           },
           {
             "name": "id",
-            "description": "The ID of the enqueued asset",
+            "description": "The global ID of the enqueued script",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -84887,8 +84987,20 @@
             "deprecationReason": null
           },
           {
+            "name": "strategy",
+            "description": "The loading strategy to use on the script tag",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ScriptLoadingStrategyEnum",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "version",
-            "description": "The version of the enqueued asset",
+            "description": "The version of the enqueued script",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -85212,12 +85324,56 @@
         "description": "Stylesheet enqueued by the CMS",
         "fields": [
           {
+            "name": "after",
+            "description": "The inline code to be run after the asset is loaded.",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "args",
-            "description": "@todo",
+            "description": "Deprecated",
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Use `EnqueuedAsset.media` instead."
+          },
+          {
+            "name": "before",
+            "description": "The inline code to be run before the asset is loaded.",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "conditional",
+            "description": "The HTML conditional comment for the enqueued asset. E.g. IE 6, lte IE 7, etc",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -85232,7 +85388,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "EnqueuedScript",
+                "name": "EnqueuedStylesheet",
                 "ofType": null
               }
             },
@@ -85248,8 +85404,8 @@
               "name": "String",
               "ofType": null
             },
-            "isDeprecated": false,
-            "deprecationReason": null
+            "isDeprecated": true,
+            "deprecationReason": "Use `EnqueuedScript.extraData` instead."
           },
           {
             "name": "handle",
@@ -85265,7 +85421,7 @@
           },
           {
             "name": "id",
-            "description": "The ID of the enqueued asset",
+            "description": "The global ID of the enqueued stylesheet",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -85275,6 +85431,54 @@
                 "name": "ID",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isRtl",
+            "description": "Whether the enqueued style is RTL or not",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "media",
+            "description": "The media attribute to use for the link",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "path",
+            "description": "The absolute path to the enqueued style. Set when the stylesheet is meant to load inline.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "rel",
+            "description": "The `rel` attribute to use for the link",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -85292,8 +85496,32 @@
             "deprecationReason": null
           },
           {
+            "name": "suffix",
+            "description": "Optional suffix, used in combination with RTL",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "title",
+            "description": "The title of the enqueued style. Used for preferred/alternate stylesheets.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "version",
-            "description": "The version of the enqueued asset",
+            "description": "The version of the enqueued style",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -126725,6 +126953,29 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ScriptLoadingStrategyEnum",
+        "description": "The strategy to use when loading the script",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ASYNC",
+            "description": "Use the script `async` attribute",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DEFER",
+            "description": "Use the script `defer` attribute",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
