@@ -8,6 +8,7 @@ interface WordGroups {
   activeLetterFilter: string;
   wordList: BerlinerWord[];
   search: string;
+  order: "asc" | "desc";
 }
 
 export const $wordSearch = map<WordGroups>({
@@ -15,10 +16,15 @@ export const $wordSearch = map<WordGroups>({
   activeLetterFilter: "",
   wordList: [],
   search: "",
+  order: "asc",
 });
 
 export const setLetterFilter = action($wordSearch, "setLetterFilter", (store, letter: string) => {
   store.setKey("activeLetterFilter", letter);
+});
+
+export const $wordListOrderToggle = action($wordSearch, "wordListOrderToggle", (store) => {
+  store.setKey("order", store.get().order === "asc" ? "desc" : "asc");
 });
 
 export const setSearch = action($wordSearch, "setSearch", (store, search: string) => {
@@ -38,13 +44,34 @@ export const searchLength = computed($wordSearch, (wordSearch) => {
  * @return  {[]}                   [return description]
  */
 export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
+  let filteredWordList = wordSearch.wordList;
+
+  // Filter by letter
+  if (wordSearch.activeLetterFilter !== "") {
+    filteredWordList = filteredWordList.filter((word) => {
+      return word.wordGroup === wordSearch.activeLetterFilter;
+    });
+  }
+
+  // Sort by order
+  if (wordSearch.order) {
+    // Reassign the filteredWordList to the sorted list, otherwise the DynamicScroller will not update
+    filteredWordList = [
+      ...filteredWordList.sort((a, b) =>
+        wordSearch.order === "asc"
+          ? a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch)
+          : b.wordProperties.berlinerisch.localeCompare(a.wordProperties.berlinerisch),
+      ),
+    ];
+  }
+
   // Fuse options
   const options = {
     keys: ["wordProperties.berlinerisch", "wordProperties.translation"],
   };
 
   // Init Fuse
-  const fuse = new Fuse(wordSearch.wordList, options);
+  const fuse = new Fuse(filteredWordList, options);
 
   // Start Fuse search
   const results = fuse.search(wordSearch.search);
@@ -62,7 +89,7 @@ export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
 
   // If there are no results or the search is empty, return the full word list
   if (cleanResults.length === 0 || wordSearch.search === "") {
-    return wordSearch.wordList;
+    return filteredWordList;
   }
 
   return cleanResults;

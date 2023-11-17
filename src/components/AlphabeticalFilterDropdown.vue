@@ -12,7 +12,7 @@
         type="button"
         :class="[
           'c-button c-button--center-icon c-button--filter',
-          { 'has-active-filter': wordSearchStore.activeLetterFilter },
+          { 'has-active-filter': wordSearch.activeLetterFilter },
         ]"
         aria-label="Filter"
       >
@@ -28,12 +28,12 @@
     </VDropdown>
 
     <button
-      v-if="wordSearchStore.activeLetterFilter"
+      v-if="wordSearch.activeLetterFilter"
       class="c-filter-dropdown__active-filter"
       @click="setLetterFilter('')"
     >
-      <span>{{ wordSearchStore.activeLetterFilter }}</span
-      ><span><X :width="10" height="10" /></span>
+      <span>{{ wordSearch.activeLetterFilter }}</span>
+      <span><X :width="10" height="10" /></span>
     </button>
   </div>
 </template>
@@ -47,7 +47,7 @@ import { useStore } from "@nanostores/vue";
 import { onSet } from "nanostores";
 import { $wordSearch, setLetterFilter } from "@stores/index";
 
-const wordSearchStore = useStore($wordSearch);
+const wordSearch = useStore($wordSearch);
 const hideDropdown = ref(false);
 
 /**
@@ -56,7 +56,7 @@ const hideDropdown = ref(false);
  * @return  {void}
  */
 onSet($wordSearch, ({ newValue }): void => {
-  if (wordSearchStore.value.activeLetterFilter === newValue.activeLetterFilter) {
+  if (wordSearch.value.activeLetterFilter === newValue.activeLetterFilter) {
     return;
   }
 

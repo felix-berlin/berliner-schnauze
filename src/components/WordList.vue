@@ -5,13 +5,12 @@
     class="c-word-list"
     list-class="c-word-list__list"
     item-class="c-word-list__item"
-    :prerender="10"
   >
     <template #default="{ item, index, active }">
       <DynamicScrollerItem
         :item="item"
         :active="active"
-        :size-dependencies="[item.id]"
+        :size-dependencies="[item.wordProperties.translations]"
         :data-index="index"
       >
         <div class="c-word-list__word-wrap">

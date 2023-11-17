@@ -2,12 +2,12 @@
   <button
     type="button"
     class="c-sort-word-direction-toggle c-button c-button--center-icon c-button--filter"
-    :aria-label="'sortiere ' + (wordSortDirection === 'asc' ? 'aufsteigend' : 'absteigend')"
-    @click="updateSortDirection"
+    :aria-label="'sortiere ' + (wordSearch.order === 'asc' ? 'aufsteigend' : 'absteigend')"
+    @click="$wordListOrderToggle"
   >
     <transition name="fade-fast" mode="out-in">
       <span
-        v-if="wordSortDirection === 'asc'"
+        v-if="wordSearch.order === 'asc'"
         key="asc"
         class="c-sort-word-direction-toggle__button c-button--center-icon"
       >
@@ -26,13 +26,10 @@
 import { ref, reactive } from "vue";
 import SortAsc from "virtual:icons/lucide/sort-asc";
 import SortDesc from "virtual:icons/lucide/sort-desc";
-import { useStorage } from "@vueuse/core";
+import { useStore } from "@nanostores/vue";
+import { $wordSearch, $wordListOrderToggle } from "@stores/index";
 
-const wordSortDirection = useStorage("wordSortDirection", "asc");
-
-const updateSortDirection = () => {
-  wordSortDirection.value = wordSortDirection.value === "asc" ? "desc" : "asc";
-};
+const wordSearch = useStore($wordSearch);
 </script>
 
 <style lang="scss">

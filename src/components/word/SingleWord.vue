@@ -2,7 +2,7 @@
   <article
     :id="'word' + source.wordProperties.id"
     :ref="'word' + source.wordProperties.id"
-    :key="source.ID"
+    :key="source.id"
     :data-group="source.wordProperties.group"
     class="c-word-list__word"
     :class="{ 'has-translation': source.wordProperties.translations }"
