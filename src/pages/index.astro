@@ -20,7 +20,7 @@ const content = {
 const allWords = await getAllWord();
 
 const cleanWords = allWords.map(({ node }) => {
-  const { seo, title, berlinerWordId, wordGroup, dateGmt, modifiedGmt, ...cleanNode } = node;
+  const { seo, title, berlinerWordId, dateGmt, modifiedGmt, ...cleanNode } = node;
   return cleanNode;
 });
 
