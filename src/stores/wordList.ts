@@ -1,5 +1,5 @@
 import { computed, action, map, deepMap } from "nanostores";
-import { persistentAtom } from "@nanostores/persistent";
+import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import Fuse from "fuse.js";
 import type { BerlinerWord } from "@ts_types/generated";
 
@@ -11,13 +11,26 @@ interface WordGroups {
   order: "asc" | "desc";
 }
 
-export const $wordSearch = map<WordGroups>({
-  letterGroups: [],
-  activeLetterFilter: "",
-  wordList: [],
-  search: "",
-  order: "asc",
-});
+export const $wordSearch = persistentMap<WordGroups>(
+  "wordSearch:",
+  {
+    letterGroups: [],
+    activeLetterFilter: "",
+    wordList: [],
+    search: "",
+    order: "asc",
+  },
+  {
+    encode: (value) => JSON.stringify(value),
+    decode(value) {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        return value;
+      }
+    },
+  },
+);
 
 export const setLetterFilter = action($wordSearch, "setLetterFilter", (store, letter: string) => {
   store.setKey("activeLetterFilter", letter);
