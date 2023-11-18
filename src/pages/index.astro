@@ -87,5 +87,9 @@ const availableWordGroups: string[] = Array.from(
     <WordOfTheDay client:load />
   </section>
 
-  <WordSearchList words={cleanWords} availableLetterGroups={availableWordGroups} client:load />
+  <WordSearchList
+    words={cleanWords}
+    availableLetterGroups={availableWordGroups}
+    client:only="vue"
+  />
 </Layout>
