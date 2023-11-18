@@ -4,11 +4,14 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-searchbar {
+  --color-border: var(--secondary);
+
   display: flex;
   align-items: center;
 
   @include butler-mx.breakpoint("md") {
     flex: 1 1 auto;
+    max-width: 200px;
   }
   @include butler-mx.breakpoint("md", "max") {
     --color-background: transparent;
