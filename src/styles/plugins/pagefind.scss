@@ -1,0 +1,15 @@
+@use "@styles/variables/variables" as vars;
+
+:root {
+  --pagefind-ui-scale: 0.8;
+  --pagefind-ui-primary: var(--primary);
+  --pagefind-ui-text: var(--color-body);
+  --pagefind-ui-background: var(--white-200);
+  --pagefind-ui-border: var(--grey-200);
+  --pagefind-ui-tag: var(--white-200);
+  --pagefind-ui-border-width: 2px;
+  --pagefind-ui-border-radius: 8px;
+  --pagefind-ui-image-border-radius: 8px;
+  --pagefind-ui-image-box-ratio: 3 / 2;
+  --pagefind-ui-font: #{vars.$berlin};
+}

@@ -1,0 +1,15 @@
+---
+import Layout from "@layouts/Layout.astro";
+import SuggestWordForm from "@components/SuggestWordForm.vue";
+
+const page = {
+  title: "Wort vorschlagen - Berliner Schnauze",
+  description: "",
+};
+---
+
+<Layout content={page}>
+  <h1>Vermisste hier nen Wort oder ne Redewendung?</h1>
+
+  <SuggestWordForm client:only="vue" />
+</Layout>

@@ -1,0 +1,95 @@
+---
+import "@styles/objects/_index.scss";
+
+import Layout from "@layouts/Layout.astro";
+import Search from "@components/Search.vue";
+import WordOfTheDay from "@components/WordOfTheDay.vue";
+import { Picture } from "astro:assets";
+import BrownBearRoar from "@assets/images/brown-bear-roar.png";
+import SingleWord from "@components/word/SingleWord.vue";
+import WordSearchList from "@components/WordSearchList.vue";
+import { getAllWord } from "@services/api";
+import { seoData } from "@utils/helpers";
+
+const content = {
+  title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
+  seo: {
+    opengraphDescription:
+      "Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.",
+    opengraphImage: {
+      sourceUrl: BrownBearRoar.src,
+    },
+  },
+};
+
+const allWords = await getAllWord();
+
+const wordCount = allWords.length;
+
+const cleanWords = allWords.map(({ node }) => {
+  const { seo, title, berlinerWordId, dateGmt, modifiedGmt, ...cleanNode } = node;
+  return cleanNode;
+});
+
+const availableWordGroups: string[] = Array.from(
+  new Set(allWords.map(({ node }) => node.wordGroup)),
+).sort();
+---
+
+<Layout content={seoData(content)} contentClasses="o-index">
+  <header class="o-index__header">
+    <h1 class="o-index__headline">
+      Na Keule,<br /> keen'n Dunst vom Berlinern?
+    </h1>
+
+    <div class="o-index__image-wrap">
+      <Picture
+        class="o-index__image"
+        src={BrownBearRoar}
+        formats={["avif", "webp"]}
+        alt="Ein Bär der brüllt"
+        loading="eager"
+      />
+    </div>
+  </header>
+
+  <section class="o-index__intro-wrap">
+    <div class="o-index__intro-text">
+      <p>
+        Ok, der Titel dieser Seite flunkert ein wenig.<br />
+         Wir Berliner haben streng genommen gar keinen Dialekt, sondern einen Metrolekt, was
+        natürlich viel besser als so ein langweiliger Dialekt ist. Wir sind schließlich die
+        Hauptstadt!
+      </p>
+
+      <p>
+        Genug rum geprallt, wir können noch viel mehr!<br />
+         Wenn man Wikipedia glauben schenken mag, hat unsere Mundart sogar das von den
+        Brandenburgern gesprochene <a href="https://www.wikiwand.com/de/Niederdeutsche_Sprache"
+          >Niederdeutsch</a
+        > auf dem Gewissen. Ein Fakt der uns sicher leid tut, uns aber auch stolz macht.
+      </p>
+
+      <p>
+        Stolz macht uns auch unsere Grammatik. Anders als der Ersteller dieser Seite, der dazu noch
+        keine einzige Info erstellt hat. Was ein Dulli. Na ja, <a
+          href="https://www.wikiwand.com/de/Berlinerische_Grammatik">hier</a
+        > kannst Du dich informieren.
+      </p>
+      <p>
+        So, jetzt aber ran an den Speck! Du bist sicher nicht wegen der Einleitung gekommen und
+        willst dir eher die <strong>{wordCount} Wörter</strong> ins Hirn meißeln.
+      </p>
+
+      <p>Da Du bereits soweit gekommen bist, huldige bitte das Wort des Tages. Danke!</p>
+    </div>
+
+    <WordOfTheDay client:only="vue" />
+  </section>
+
+  <WordSearchList
+    words={cleanWords}
+    availableLetterGroups={availableWordGroups}
+    client:only="vue"
+  />
+</Layout>

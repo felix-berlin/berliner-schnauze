@@ -1,0 +1,227 @@
+@use "@styles/variables/variables" as vars;
+@use "@styles/mixins/mixins" as mx;
+
+.c-word-list {
+  --size-quote-icon: 32px;
+
+  height: 100%;
+
+  .c-word-list__word-wrap {
+    padding-bottom: vars.$spacer * 1.75;
+  }
+
+  &__word {
+    padding: vars.$spacer;
+    background-color: var(--color-background, var(--white-100));
+    border: 1px solid vars.$grey-100;
+    display: flex;
+    flex-flow: column wrap;
+    gap: 1rem;
+    box-shadow:
+      0 0.5px 0.6px rgb(0 0 0 / 8%),
+      0 4px 5px rgb(0 0 0 / 16%);
+
+    &:hover {
+      .c-word-list__berlinerisch a {
+        --color-text-decoration: var(--grey-100);
+      }
+    }
+  }
+
+  &__header {
+    display: flex;
+    flex: 1 1 auto;
+    margin: 0;
+    flex-wrap: var(--warp-flex, wrap);
+    row-gap: #{vars.$spacer * 1};
+
+    @include mx.breakpoint("sm") {
+      --wrap-flex: no-wrap;
+    }
+
+    &-wrapper {
+      border-bottom: var(--bottom-border, none);
+      display: flex;
+
+      &.has-example {
+        padding-bottom: vars.$spacer;
+
+        --bottom-border: 1px dashed var(--grey-100);
+      }
+    }
+  }
+
+  &__berlinerisch {
+    font: {
+      family: vars.$berlin;
+      weight: 700;
+      size: var(--size-font, 1.5rem);
+    }
+    text: {
+      decoration: underline;
+      decoration-style: dashed;
+      decoration-thickness: from-font;
+      underline-position: from-font;
+    }
+
+    transition: 0.3s;
+    margin: 0;
+    word-break: break-word;
+    flex: var(--flex, 1 0 100%);
+    position: relative;
+
+    @include mx.breakpoint("sm") {
+      --flex: 0 1 auto;
+    }
+    @include mx.breakpoint("md") {
+      --size-font: 3rem;
+    }
+    @include mx.breakpoint("xlg") {
+      --size-font: 4.5rem;
+    }
+
+    a {
+      --color: var(--blue-200);
+
+      text-decoration-color: var(--color-text-decoration, transparent);
+    }
+  }
+
+  &__crown {
+    display: flex;
+    position: absolute;
+    bottom: calc(100% - 10px);
+    color: vars.$gold;
+  }
+
+  &__translation {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size, 1rem);
+    position: relative;
+    margin: 0;
+
+    &::before {
+      content: "᛫";
+      margin: var(--margin, 0 #{vars.$spacer * 0.5});
+
+      @include mx.breakpoint("sm") {
+        --margin: 0 #{vars.$spacer};
+      }
+    }
+
+    @include mx.breakpoint("md") {
+      --font-size: 1.125rem;
+    }
+    @include mx.breakpoint("xlg") {
+      --font-size: 1.225rem;
+    }
+  }
+
+  &__examples {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer;
+    padding-left: vars.$spacer;
+
+    &-item {
+      font-style: italic;
+    }
+  }
+
+  &__examples,
+  &__example {
+    font-size: var(--size-font, 1.2rem);
+    flex-basis: 100%;
+    margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
+    word-break: break-word;
+
+    @include mx.breakpoint("md") {
+      --size-font: 1.8rem;
+    }
+
+    &-explanation {
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+
+  &__single-example,
+  &__examples-list-item {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__example {
+    font-style: italic;
+
+    &-wrapper {
+      --padding: 0 #{vars.$spacer} #{vars.$spacer} #{vars.$spacer};
+
+      display: flex;
+      padding: var(--padding);
+      gap: var(--gap, #{vars.$spacer * 0.5});
+
+      @include mx.breakpoint("sm") {
+        --gap: #{vars.$spacer};
+        --padding: 0 5% #{vars.$spacer * 0.5} 5%;
+      }
+      @include mx.breakpoint("md") {
+        --padding: 0 10% #{vars.$spacer * 0.5} 10%;
+      }
+    }
+  }
+
+  &__icon-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3 ease-in-out;
+
+    &.is-hidden {
+      display: none;
+    }
+  }
+
+  &__quote-icon {
+    width: var(--size-quote-icon);
+    height: var(--size-quote-icon);
+    fill: var(--grey-200);
+    flex: 0 0 auto;
+
+    @include mx.breakpoint("md") {
+      --size-quote-icon: 44px;
+    }
+  }
+
+  &__copy-button {
+    --color-background: #{vars.$white-200};
+
+    gap: vars.$spacer * 0.3;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      --style-border: solid;
+    }
+
+    &.is-success {
+      background: var(--success);
+      color: #fff;
+    }
+  }
+
+  .c-word-list--word-option {
+    align-self: start;
+  }
+
+  &__learn-more {
+    --padding: 0;
+
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.25;
+    align-self: end;
+  }
+}

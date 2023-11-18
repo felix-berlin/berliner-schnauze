@@ -2,6 +2,343 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.42](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.41...v2.0.0-beta.42) (2023-11-18)
+
+
+### Bug Fixes
+
+* url ([bc13f9a](https://github.com/felix-berlin/berliner-schnauze/commit/bc13f9a9efbe1091f793a942b8c7583811594732))
+
+# [2.0.0-beta.41](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.40...v2.0.0-beta.41) (2023-11-18)
+
+
+### Bug Fixes
+
+* replace to with href ([75ddbf0](https://github.com/felix-berlin/berliner-schnauze/commit/75ddbf0de2fad197e17443f49465f1d285d31c2b))
+
+# [2.0.0-beta.40](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.39...v2.0.0-beta.40) (2023-11-18)
+
+
+### Features
+
+* add related words ([489b1b3](https://github.com/felix-berlin/berliner-schnauze/commit/489b1b30082c4b55113f5c29dfe684bbf550ce72))
+* update seo meta fields ([02645a7](https://github.com/felix-berlin/berliner-schnauze/commit/02645a75f54fc9bd99c0a9dd9f43b9594a8098f7))
+
+# [2.0.0-beta.39](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.38...v2.0.0-beta.39) (2023-11-18)
+
+
+### Features
+
+* **searchbar:** limit width & chg border color ([222ffb4](https://github.com/felix-berlin/berliner-schnauze/commit/222ffb4cd74c0ef8b940869222571512c9fd7d46))
+
+# [2.0.0-beta.38](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.37...v2.0.0-beta.38) (2023-11-18)
+
+
+### Bug Fixes
+
+* add missing modal styles ([641148f](https://github.com/felix-berlin/berliner-schnauze/commit/641148f5ed971e03d8eaad924aaa48adbf74e32d))
+* current filter highlight ([4746b79](https://github.com/felix-berlin/berliner-schnauze/commit/4746b79eb723073a683e2df745dba00e4058c15f))
+* footer links ([4b9b7bc](https://github.com/felix-berlin/berliner-schnauze/commit/4b9b7bc487ae26d59e96d4d33bd5faa23b1be64b))
+* hide large searchbar on mobile ([2f07b1c](https://github.com/felix-berlin/berliner-schnauze/commit/2f07b1cdea57a517e436f3540cd6847c1f2bf57b))
+* ScrollToTop ([c93e1a5](https://github.com/felix-berlin/berliner-schnauze/commit/c93e1a5664b03909e99a83ce0f6c3cd7a4db2d16))
+
+
+### Features
+
+* add own pagefind vars ([80bd9bc](https://github.com/felix-berlin/berliner-schnauze/commit/80bd9bcb8bee1b35a4d681c1246682ec2e01efbf))
+* remove mobile only icon ([c7f4a43](https://github.com/felix-berlin/berliner-schnauze/commit/c7f4a43a156d14ff4d23cf0470e921f28d128abb))
+
+# [2.0.0-beta.37](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.36...v2.0.0-beta.37) (2023-11-17)
+
+
+### Bug Fixes
+
+* **WordSearch:** missing wordGroup ([21ea2c1](https://github.com/felix-berlin/berliner-schnauze/commit/21ea2c19f8a7bcb3f1eeef1fff9f85d036472ed3))
+
+# [2.0.0-beta.36](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.35...v2.0.0-beta.36) (2023-11-17)
+
+
+### Performance Improvements
+
+* create letter group server side ([20d3b2b](https://github.com/felix-berlin/berliner-schnauze/commit/20d3b2bb5c7031ae429412fdaa9b903bb9b42ebb))
+
+# [2.0.0-beta.35](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.34...v2.0.0-beta.35) (2023-11-17)
+
+
+### Bug Fixes
+
+* **index:** spacing issues ([18a8c57](https://github.com/felix-berlin/berliner-schnauze/commit/18a8c57b960c56716e85ceb80cb687963545782b))
+
+
+### Features
+
+* **WordSearch:** persist all data ([155b5fe](https://github.com/felix-berlin/berliner-schnauze/commit/155b5fe7d7128ad881b10cb3915a208add121abf))
+
+# [2.0.0-beta.34](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.33...v2.0.0-beta.34) (2023-11-17)
+
+
+### Bug Fixes
+
+* remove unused props ([358d73a](https://github.com/felix-berlin/berliner-schnauze/commit/358d73a0b32dd99e9a449dcdc32268ef4f83cc23))
+
+# [2.0.0-beta.33](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.32...v2.0.0-beta.33) (2023-11-17)
+
+
+### Features
+
+* add oder sorting ([5888b7c](https://github.com/felix-berlin/berliner-schnauze/commit/5888b7c206d8c591dc28322c48c84ed63c4c9fba))
+
+# [2.0.0-beta.32](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.31...v2.0.0-beta.32) (2023-11-17)
+
+
+### Features
+
+* move all word search logic to nano stores + update components ([408a2b7](https://github.com/felix-berlin/berliner-schnauze/commit/408a2b76169d022d79ac22ae9999b3a5a714e375))
+
+# [2.0.0-beta.31](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.30...v2.0.0-beta.31) (2023-11-16)
+
+
+### Features
+
+* migrate all filter components to vue 3 ([ba78d03](https://github.com/felix-berlin/berliner-schnauze/commit/ba78d03a34c5af2e8947e5a2f801b720305ccdda))
+
+# [2.0.0-beta.30](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.29...v2.0.0-beta.30) (2023-11-16)
+
+
+### Features
+
+* **SuggestWordForm:** add types ([cfca507](https://github.com/felix-berlin/berliner-schnauze/commit/cfca50759d3920f65fb03e529f94ad9b8eba43d9))
+* **WordList:** remove page mode ([a266f37](https://github.com/felix-berlin/berliner-schnauze/commit/a266f37c3b98566044db88b02762ea7445c77bdc))
+
+# [2.0.0-beta.29](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.28...v2.0.0-beta.29) (2023-11-16)
+
+
+### Bug Fixes
+
+* suggest form ([ede4f97](https://github.com/felix-berlin/berliner-schnauze/commit/ede4f97a1e009bbee528a99c392c00518040eb91))
+
+# [2.0.0-beta.28](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.27...v2.0.0-beta.28) (2023-11-16)
+
+
+### Features
+
+* migrate Alert and SuggestWordForm from Vue 2 to 3 ([465d6ae](https://github.com/felix-berlin/berliner-schnauze/commit/465d6aec988c04fc0c067e8501a9ed3f6f5876fd))
+
+# [2.0.0-beta.27](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.26...v2.0.0-beta.27) (2023-11-15)
+
+
+### Bug Fixes
+
+* close modal after transition ([c7222cb](https://github.com/felix-berlin/berliner-schnauze/commit/c7222cbb312cd6c6b9d628a4533cdd1ca7e3d769))
+
+# [2.0.0-beta.26](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.25...v2.0.0-beta.26) (2023-11-15)
+
+
+### Features
+
+* add wort vorschlagen page ([8b60c08](https://github.com/felix-berlin/berliner-schnauze/commit/8b60c0845b474457cb9f471795c5947c0fcdc803))
+
+# [2.0.0-beta.25](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.24...v2.0.0-beta.25) (2023-11-15)
+
+
+### Features
+
+* add favicons ([57dd649](https://github.com/felix-berlin/berliner-schnauze/commit/57dd6491a359555e8af21b18005905e1d6fb3aad))
+
+# [2.0.0-beta.24](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.23...v2.0.0-beta.24) (2023-11-15)
+
+
+### Features
+
+* save the search in local storage ([39dd215](https://github.com/felix-berlin/berliner-schnauze/commit/39dd215fbc20c8edd9b7c467bc829c1d4786ac45))
+
+# [2.0.0-beta.23](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.22...v2.0.0-beta.23) (2023-11-15)
+
+
+### Features
+
+* readd reset function ([4f12685](https://github.com/felix-berlin/berliner-schnauze/commit/4f1268565ff94696c69f4259051f2135765629c0))
+
+# [2.0.0-beta.22](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.21...v2.0.0-beta.22) (2023-11-14)
+
+
+### Features
+
+* port the styles ([a25d387](https://github.com/felix-berlin/berliner-schnauze/commit/a25d387824d60fd96eadb8d866639fc1a56b7b96))
+
+# [2.0.0-beta.21](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.20...v2.0.0-beta.21) (2023-11-14)
+
+
+### Features
+
+* add order to getAllWords ([53a3fca](https://github.com/felix-berlin/berliner-schnauze/commit/53a3fca39b50c3ad267e45948d4d0f4fef4336d5))
+* combile new components to a functional search ([dbbb9ca](https://github.com/felix-berlin/berliner-schnauze/commit/dbbb9ca257476e9928c4f9625b4efb2f1255906e))
+
+# [2.0.0-beta.20](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.19...v2.0.0-beta.20) (2023-11-13)
+
+
+### Features
+
+* add WordList ([1d6f932](https://github.com/felix-berlin/berliner-schnauze/commit/1d6f932255c24d3bcd4aa95d8f826080e0016fe4))
+
+# [2.0.0-beta.19](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.18...v2.0.0-beta.19) (2023-11-13)
+
+
+### Bug Fixes
+
+* SingleWord bgc ([13aead5](https://github.com/felix-berlin/berliner-schnauze/commit/13aead538677a8090dec073c69e8999375bfb609))
+
+# [2.0.0-beta.18](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.17...v2.0.0-beta.18) (2023-11-13)
+
+
+### Features
+
+* start working on SingleWord ([1880d55](https://github.com/felix-berlin/berliner-schnauze/commit/1880d559ed534786190b21911195d80670235b27))
+
+# [2.0.0-beta.17](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.16...v2.0.0-beta.17) (2023-11-12)
+
+
+### Bug Fixes
+
+* main grid ([fb33248](https://github.com/felix-berlin/berliner-schnauze/commit/fb3324898a80db8716a74a05144b703ba0a7b408))
+
+# [2.0.0-beta.16](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2023-11-12)
+
+
+### Features
+
+* add fonts ([89d9686](https://github.com/felix-berlin/berliner-schnauze/commit/89d9686bb1af85e6fe4de9719d1bc11c0b31c768))
+
+# [2.0.0-beta.15](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2023-11-12)
+
+
+### Bug Fixes
+
+* main header child compont persist ([46c7e06](https://github.com/felix-berlin/berliner-schnauze/commit/46c7e065f7ae325ca4063fe400d37d32462ac53a))
+
+# [2.0.0-beta.14](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2023-11-12)
+
+
+### Features
+
+* add legal pages ([edfe174](https://github.com/felix-berlin/berliner-schnauze/commit/edfe1742e83b72de2f3e48019fcbe8baf2f58079))
+
+# [2.0.0-beta.13](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2023-11-12)
+
+
+### Features
+
+* **Main Header:** add Main Components incl. Childs ([aa771e5](https://github.com/felix-berlin/berliner-schnauze/commit/aa771e52a3a3f91c86d817dc9e25e8af779fbaaf))
+
+# [2.0.0-beta.12](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.11...v2.0.0-beta.12) (2023-11-12)
+
+
+### Features
+
+* add footer and missing images ([1c90d04](https://github.com/felix-berlin/berliner-schnauze/commit/1c90d0454df86e5c15b1cfd7df73b051a064906c))
+* add more elements to single page ([3f614c8](https://github.com/felix-berlin/berliner-schnauze/commit/3f614c8823db4fd1627d1bccb3190fbbe4b8d5bd))
+
+# [2.0.0-beta.11](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.10...v2.0.0-beta.11) (2023-11-12)
+
+
+### Bug Fixes
+
+* **WordOfTheDay:** type errors and a11y issues ([54e1609](https://github.com/felix-berlin/berliner-schnauze/commit/54e160999fe14c31d62701500c22d5bd2c50ebea))
+
+
+### Features
+
+* migrate ScrollToTop ([afbd8d3](https://github.com/felix-berlin/berliner-schnauze/commit/afbd8d3a20306ba74145d5130a5ffe3688e918d1))
+* start rebuilding the single page template ([50157f2](https://github.com/felix-berlin/berliner-schnauze/commit/50157f241f3a404915548028bbcd6bd64a25c4d5))
+
+# [2.0.0-beta.10](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2023-11-12)
+
+
+### Bug Fixes
+
+* whitespace ([72e1436](https://github.com/felix-berlin/berliner-schnauze/commit/72e14360afb50db8ba641cd4081feb63aecb1661))
+
+# [2.0.0-beta.9](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2023-11-12)
+
+
+### Features
+
+* migrate WordOfTheDay and Child Components ([eb73c75](https://github.com/felix-berlin/berliner-schnauze/commit/eb73c75ffdbd76111d06a6b815a646c08cfb1efc))
+
+# [2.0.0-beta.8](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.7...v2.0.0-beta.8) (2023-11-11)
+
+
+### Features
+
+* get all the word data ([5f1a64c](https://github.com/felix-berlin/berliner-schnauze/commit/5f1a64c0a1fc2a4a70b42e6ade6a79fb47fd77ea))
+
+# [2.0.0-beta.7](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.6...v2.0.0-beta.7) (2023-11-11)
+
+
+### Bug Fixes
+
+* render word in html doc ([a61d9cc](https://github.com/felix-berlin/berliner-schnauze/commit/a61d9ccc778921ab61bf01f00bc653aecea3b6e6))
+
+# [2.0.0-beta.6](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2023-11-11)
+
+
+### Bug Fixes
+
+* release action ([3bff8d7](https://github.com/felix-berlin/berliner-schnauze/commit/3bff8d7984201f2bf3162abf17f82d6fefadb3be))
+
+
+### Features
+
+* add Modal, Search and SearchModal ([9bb796d](https://github.com/felix-berlin/berliner-schnauze/commit/9bb796d918316a93310d8d3c87e9a4c691729ade))
+* create word routes ([a99f507](https://github.com/felix-berlin/berliner-schnauze/commit/a99f50792b3dfbbc345fbe07e87d29b1cf4249d4))
+* migrate from nuxt 3 beta to astro ([36fdff1](https://github.com/felix-berlin/berliner-schnauze/commit/36fdff1f8b3c40a83b48c0a9e2c7ba83b179d475))
+
+# [2.0.0-beta.5](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2023-03-19)
+
+
+### Features
+
+* add default layout and main footer ([d870a40](https://github.com/felix-berlin/berliner-schnauze/commit/d870a40cb59357de8fbdab6ecd6235f94fabf0dc))
+
+# [2.0.0-beta.4](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.3...v2.0.0-beta.4) (2023-03-19)
+
+
+### Features
+
+* add privacy-policy; add aliases ([5e71fd8](https://github.com/felix-berlin/berliner-schnauze/commit/5e71fd8ed5c9ea844fe3d110067f3405519f05e0))
+
+# [2.0.0-beta.3](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2023-03-19)
+
+
+### Features
+
+* migrate vuex store to pinia ([4a27d2d](https://github.com/felix-berlin/berliner-schnauze/commit/4a27d2d02057db93d71843d080bfe9fe80750f8c))
+* **plugins:** add plugins ([2705029](https://github.com/felix-berlin/berliner-schnauze/commit/2705029ee8dc2c94ecf1448e2dd26b3f22276edb))
+
+# [2.0.0-beta.2](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2023-03-19)
+
+
+### Bug Fixes
+
+* **deps:** update ([ace6dfe](https://github.com/felix-berlin/berliner-schnauze/commit/ace6dfe4ba771cf8df86eb4c6b480ef98a4e2343))
+
+
+### Features
+
+* add imprint and index page; add gutenbergBlock component ([31f3b78](https://github.com/felix-berlin/berliner-schnauze/commit/31f3b78fc1f72e822b2aaf64102c278b42396828))
+
+# [2.0.0-beta.1](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.5...v2.0.0-beta.1) (2023-03-17)
+
+
+### Features
+
+* **nuxt:** del nuxt 2 project & add nuxt nuxt 3 ([8709e79](https://github.com/felix-berlin/berliner-schnauze/commit/8709e7956ffbcba57e057aa48af848ed9578c802))
+
+
+### BREAKING CHANGES
+
+* **nuxt:** start project from scratch
+
 ## [1.20.5](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.4...v1.20.5) (2022-08-27)
 
 

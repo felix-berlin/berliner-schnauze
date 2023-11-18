@@ -1,0 +1,2 @@
+/suggest-word /wort-vorschlagen 301
+/word/* /wort/:splat 301

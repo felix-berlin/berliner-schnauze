@@ -1,0 +1,43 @@
+---
+import "@styles/app.scss";
+
+import BaseHead from "@components/BaseHead.astro";
+import ScrollToTop from "@components/ScrollToTop.vue";
+import Footer from "@components/Footer.astro";
+import MainHeader from "@components/header/MainHeader.astro";
+
+import type { SeoProps } from "@components/BaseHead.astro";
+
+export interface DefaultLayoutProps {
+  content: {
+    title: string;
+    seo: SeoProps;
+  };
+  contentClasses?: Array<string> | string;
+  bodyClasses?: Array<string> | string;
+}
+
+const {
+  content: { title, seo },
+  contentClasses,
+  bodyClasses,
+} = Astro.props as DefaultLayoutProps;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <BaseHead title={title} seo={seo} />
+
+    <slot name="head" />
+  </head>
+  <body class="o-body" class:list={bodyClasses}>
+    <MainHeader transition:persist />
+    <main class="o-content" class:list={contentClasses}>
+      <div id="docStart" style="position: absolute"></div>
+      <slot />
+    </main>
+    <ScrollToTop client:load />
+    <Footer transition:persist />
+  </body>
+</html>

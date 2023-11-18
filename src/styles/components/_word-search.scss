@@ -1,0 +1,159 @@
+@use "sass:color";
+@use "@styles/variables/variables" as vars;
+@use "@styles/mixins/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.c-word-search {
+  --padding-y-input: 0.5rem;
+  --padding-x-input: 0.5rem;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+
+  &__search-button {
+    --color-background: #{vars.$white-100};
+    --style-border: solid;
+    --color-border: #{vars.$grey-100};
+    --offset-x-box-shadow: 2px;
+    --color-box-shadow: rgb(0 0 0 / 20%);
+
+    background-color: var(--color-background);
+    border: 1px var(--style-border) var(--color-border);
+
+    &--right {
+      order: 2;
+
+      --offset-x-boxshadow: -2px;
+    }
+
+    &.has-searchbar {
+      position: relative;
+      z-index: 1;
+      box-shadow: var(--offset-x-box-shadow) 0 0 0 var(--color-box-shadow);
+    }
+  }
+
+  &__search-input.c-input {
+    --color-border: var(--grey-100);
+    --color-background: var(--white-200);
+    --color-outline: #{butler-fn.hex-to-rgb(vars.$red-200, 50%)};
+    --spacing-inner: var(--padding-y-input) var(--padding-x-input);
+
+    border-left: none;
+    flex: 1 1 auto;
+    display: flex;
+    width: 1%;
+    min-width: 0;
+
+    @include butler-mx.dark-mode-class {
+      --color-outline: #{butler-fn.hex-to-rgb(vars.$blue-200, 50%)};
+    }
+
+    &:focus-visible {
+      outline: var(--color-outline) solid 2px;
+      z-index: 2;
+    }
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  &__shortcut {
+    border: 1px dashed var(--secondary);
+    color: var(--color, #{color.scale(vars.$red-100, $lightness: 45%)});
+    display: var(--display, none);
+    align-items: center;
+    justify-content: center;
+    padding: vars.$spacer * 0.35;
+    font-size: 0.6rem;
+    gap: vars.$spacer * 0.25;
+    align-self: center;
+
+    @include butler-mx.dark-mode-class {
+      --color: #{color.scale(vars.$blue-100, $lightness: 45%)};
+    }
+    @include mx.breakpoint("md") {
+      --display: flex;
+    }
+  }
+
+  &__command-icon-wrap {
+    display: flex;
+  }
+
+  &--nav-search {
+    --margin: 0;
+
+    @include mx.breakpoint("xs") {
+      width: 100%;
+      justify-content: flex-end;
+    }
+
+    .c-word-search {
+      &__search-button {
+        --color-background: transparent;
+        --color-border: transparent;
+        --color-box-shadow: #{butler-fn.hex-to-rgb(vars.$red-100, 20%)};
+
+        transition: all 0.3s ease-in-out;
+
+        @include butler-mx.dark-mode-class {
+          --color-box-shadow: #{butler-fn.hex-to-rgb(vars.$blue-100, 20%)};
+        }
+
+        &.has-searchbar {
+          --color-border: #{vars.$white-100};
+          --style-border: dashed;
+
+          border-left: none;
+        }
+      }
+
+      &__search-label,
+      &__search-input {
+        color: var(--primary);
+      }
+
+      &__search-input {
+        --color-border: var(--secondary);
+        --color-outline: #{butler-fn.hex-to-rgb(vars.$white-200, 50%)};
+      }
+    }
+  }
+
+  &--full-width {
+    @include mx.breakpoint("xs", "max") {
+      width: 100%;
+    }
+  }
+
+  &--large {
+    @include mx.breakpoint("md") {
+      --padding-y-input: 0.75rem;
+      --padding-x-input: 0.75rem;
+    }
+
+    .c-word-search {
+      &__search-button {
+        --padding: var(--padding-y-input) var(--padding-x-input);
+      }
+
+      &__search-input {
+        --size-font: 1.5rem;
+
+        @include mx.breakpoint("md") {
+          --font-size: 2rem;
+        }
+      }
+
+      &__search-label {
+        @include mx.breakpoint("md") {
+          --size-font: 1.5rem;
+        }
+      }
+    }
+  }
+}
