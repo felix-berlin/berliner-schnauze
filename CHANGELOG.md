@@ -2,6 +2,87 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.5...v2.0.0) (2023-11-18)
+
+
+### Bug Fixes
+
+* add missing modal styles ([641148f](https://github.com/felix-berlin/berliner-schnauze/commit/641148f5ed971e03d8eaad924aaa48adbf74e32d))
+* close modal after transition ([c7222cb](https://github.com/felix-berlin/berliner-schnauze/commit/c7222cbb312cd6c6b9d628a4533cdd1ca7e3d769))
+* current filter highlight ([4746b79](https://github.com/felix-berlin/berliner-schnauze/commit/4746b79eb723073a683e2df745dba00e4058c15f))
+* **deps:** update ([ace6dfe](https://github.com/felix-berlin/berliner-schnauze/commit/ace6dfe4ba771cf8df86eb4c6b480ef98a4e2343))
+* footer links ([4b9b7bc](https://github.com/felix-berlin/berliner-schnauze/commit/4b9b7bc487ae26d59e96d4d33bd5faa23b1be64b))
+* hide large searchbar on mobile ([2f07b1c](https://github.com/felix-berlin/berliner-schnauze/commit/2f07b1cdea57a517e436f3540cd6847c1f2bf57b))
+* **index:** spacing issues ([18a8c57](https://github.com/felix-berlin/berliner-schnauze/commit/18a8c57b960c56716e85ceb80cb687963545782b))
+* main grid ([fb33248](https://github.com/felix-berlin/berliner-schnauze/commit/fb3324898a80db8716a74a05144b703ba0a7b408))
+* main header child compont persist ([46c7e06](https://github.com/felix-berlin/berliner-schnauze/commit/46c7e065f7ae325ca4063fe400d37d32462ac53a))
+* release action ([3bff8d7](https://github.com/felix-berlin/berliner-schnauze/commit/3bff8d7984201f2bf3162abf17f82d6fefadb3be))
+* remove unused props ([358d73a](https://github.com/felix-berlin/berliner-schnauze/commit/358d73a0b32dd99e9a449dcdc32268ef4f83cc23))
+* render word in html doc ([a61d9cc](https://github.com/felix-berlin/berliner-schnauze/commit/a61d9ccc778921ab61bf01f00bc653aecea3b6e6))
+* replace to with href ([75ddbf0](https://github.com/felix-berlin/berliner-schnauze/commit/75ddbf0de2fad197e17443f49465f1d285d31c2b))
+* ScrollToTop ([c93e1a5](https://github.com/felix-berlin/berliner-schnauze/commit/c93e1a5664b03909e99a83ce0f6c3cd7a4db2d16))
+* SingleWord bgc ([13aead5](https://github.com/felix-berlin/berliner-schnauze/commit/13aead538677a8090dec073c69e8999375bfb609))
+* suggest form ([ede4f97](https://github.com/felix-berlin/berliner-schnauze/commit/ede4f97a1e009bbee528a99c392c00518040eb91))
+* url ([bc13f9a](https://github.com/felix-berlin/berliner-schnauze/commit/bc13f9a9efbe1091f793a942b8c7583811594732))
+* whitespace ([72e1436](https://github.com/felix-berlin/berliner-schnauze/commit/72e14360afb50db8ba641cd4081feb63aecb1661))
+* **WordOfTheDay:** type errors and a11y issues ([54e1609](https://github.com/felix-berlin/berliner-schnauze/commit/54e160999fe14c31d62701500c22d5bd2c50ebea))
+* **WordSearch:** missing wordGroup ([21ea2c1](https://github.com/felix-berlin/berliner-schnauze/commit/21ea2c19f8a7bcb3f1eeef1fff9f85d036472ed3))
+
+
+### Features
+
+* add default layout and main footer ([d870a40](https://github.com/felix-berlin/berliner-schnauze/commit/d870a40cb59357de8fbdab6ecd6235f94fabf0dc))
+* add favicons ([57dd649](https://github.com/felix-berlin/berliner-schnauze/commit/57dd6491a359555e8af21b18005905e1d6fb3aad))
+* add fonts ([89d9686](https://github.com/felix-berlin/berliner-schnauze/commit/89d9686bb1af85e6fe4de9719d1bc11c0b31c768))
+* add footer and missing images ([1c90d04](https://github.com/felix-berlin/berliner-schnauze/commit/1c90d0454df86e5c15b1cfd7df73b051a064906c))
+* add imprint and index page; add gutenbergBlock component ([31f3b78](https://github.com/felix-berlin/berliner-schnauze/commit/31f3b78fc1f72e822b2aaf64102c278b42396828))
+* add legal pages ([edfe174](https://github.com/felix-berlin/berliner-schnauze/commit/edfe1742e83b72de2f3e48019fcbe8baf2f58079))
+* add Modal, Search and SearchModal ([9bb796d](https://github.com/felix-berlin/berliner-schnauze/commit/9bb796d918316a93310d8d3c87e9a4c691729ade))
+* add more elements to single page ([3f614c8](https://github.com/felix-berlin/berliner-schnauze/commit/3f614c8823db4fd1627d1bccb3190fbbe4b8d5bd))
+* add oder sorting ([5888b7c](https://github.com/felix-berlin/berliner-schnauze/commit/5888b7c206d8c591dc28322c48c84ed63c4c9fba))
+* add order to getAllWords ([53a3fca](https://github.com/felix-berlin/berliner-schnauze/commit/53a3fca39b50c3ad267e45948d4d0f4fef4336d5))
+* add own pagefind vars ([80bd9bc](https://github.com/felix-berlin/berliner-schnauze/commit/80bd9bcb8bee1b35a4d681c1246682ec2e01efbf))
+* add privacy-policy; add aliases ([5e71fd8](https://github.com/felix-berlin/berliner-schnauze/commit/5e71fd8ed5c9ea844fe3d110067f3405519f05e0))
+* add related words ([489b1b3](https://github.com/felix-berlin/berliner-schnauze/commit/489b1b30082c4b55113f5c29dfe684bbf550ce72))
+* add WordList ([1d6f932](https://github.com/felix-berlin/berliner-schnauze/commit/1d6f932255c24d3bcd4aa95d8f826080e0016fe4))
+* add wort vorschlagen page ([8b60c08](https://github.com/felix-berlin/berliner-schnauze/commit/8b60c0845b474457cb9f471795c5947c0fcdc803))
+* combile new components to a functional search ([dbbb9ca](https://github.com/felix-berlin/berliner-schnauze/commit/dbbb9ca257476e9928c4f9625b4efb2f1255906e))
+* create word routes ([a99f507](https://github.com/felix-berlin/berliner-schnauze/commit/a99f50792b3dfbbc345fbe07e87d29b1cf4249d4))
+* get all the word data ([5f1a64c](https://github.com/felix-berlin/berliner-schnauze/commit/5f1a64c0a1fc2a4a70b42e6ade6a79fb47fd77ea))
+* **Main Header:** add Main Components incl. Childs ([aa771e5](https://github.com/felix-berlin/berliner-schnauze/commit/aa771e52a3a3f91c86d817dc9e25e8af779fbaaf))
+* migrate Alert and SuggestWordForm from Vue 2 to 3 ([465d6ae](https://github.com/felix-berlin/berliner-schnauze/commit/465d6aec988c04fc0c067e8501a9ed3f6f5876fd))
+* migrate all filter components to vue 3 ([ba78d03](https://github.com/felix-berlin/berliner-schnauze/commit/ba78d03a34c5af2e8947e5a2f801b720305ccdda))
+* migrate from nuxt 3 beta to astro ([36fdff1](https://github.com/felix-berlin/berliner-schnauze/commit/36fdff1f8b3c40a83b48c0a9e2c7ba83b179d475))
+* migrate ScrollToTop ([afbd8d3](https://github.com/felix-berlin/berliner-schnauze/commit/afbd8d3a20306ba74145d5130a5ffe3688e918d1))
+* migrate vuex store to pinia ([4a27d2d](https://github.com/felix-berlin/berliner-schnauze/commit/4a27d2d02057db93d71843d080bfe9fe80750f8c))
+* migrate WordOfTheDay and Child Components ([eb73c75](https://github.com/felix-berlin/berliner-schnauze/commit/eb73c75ffdbd76111d06a6b815a646c08cfb1efc))
+* move all word search logic to nano stores + update components ([408a2b7](https://github.com/felix-berlin/berliner-schnauze/commit/408a2b76169d022d79ac22ae9999b3a5a714e375))
+* next major release, migration to Astro and Vue 3 ([e229f36](https://github.com/felix-berlin/berliner-schnauze/commit/e229f369671e53fc34300d60e4e7367ba687dacc))
+* **nuxt:** del nuxt 2 project & add nuxt nuxt 3 ([8709e79](https://github.com/felix-berlin/berliner-schnauze/commit/8709e7956ffbcba57e057aa48af848ed9578c802))
+* **plugins:** add plugins ([2705029](https://github.com/felix-berlin/berliner-schnauze/commit/2705029ee8dc2c94ecf1448e2dd26b3f22276edb))
+* port the styles ([a25d387](https://github.com/felix-berlin/berliner-schnauze/commit/a25d387824d60fd96eadb8d866639fc1a56b7b96))
+* readd reset function ([4f12685](https://github.com/felix-berlin/berliner-schnauze/commit/4f1268565ff94696c69f4259051f2135765629c0))
+* remove mobile only icon ([c7f4a43](https://github.com/felix-berlin/berliner-schnauze/commit/c7f4a43a156d14ff4d23cf0470e921f28d128abb))
+* save the search in local storage ([39dd215](https://github.com/felix-berlin/berliner-schnauze/commit/39dd215fbc20c8edd9b7c467bc829c1d4786ac45))
+* **searchbar:** limit width & chg border color ([222ffb4](https://github.com/felix-berlin/berliner-schnauze/commit/222ffb4cd74c0ef8b940869222571512c9fd7d46))
+* start rebuilding the single page template ([50157f2](https://github.com/felix-berlin/berliner-schnauze/commit/50157f241f3a404915548028bbcd6bd64a25c4d5))
+* start working on SingleWord ([1880d55](https://github.com/felix-berlin/berliner-schnauze/commit/1880d559ed534786190b21911195d80670235b27))
+* **SuggestWordForm:** add types ([cfca507](https://github.com/felix-berlin/berliner-schnauze/commit/cfca50759d3920f65fb03e529f94ad9b8eba43d9))
+* update seo meta fields ([02645a7](https://github.com/felix-berlin/berliner-schnauze/commit/02645a75f54fc9bd99c0a9dd9f43b9594a8098f7))
+* **WordList:** remove page mode ([a266f37](https://github.com/felix-berlin/berliner-schnauze/commit/a266f37c3b98566044db88b02762ea7445c77bdc))
+* **WordSearch:** persist all data ([155b5fe](https://github.com/felix-berlin/berliner-schnauze/commit/155b5fe7d7128ad881b10cb3915a208add121abf))
+
+
+### Performance Improvements
+
+* create letter group server side ([20d3b2b](https://github.com/felix-berlin/berliner-schnauze/commit/20d3b2bb5c7031ae429412fdaa9b903bb9b42ebb))
+
+
+### BREAKING CHANGES
+
+* Migrate from Nuxt 2 and Vue 2 to Astro in combination with Vue 3, Nanostores and Typescript
+* **nuxt:** start project from scratch
+
 # [2.0.0-beta.42](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.41...v2.0.0-beta.42) (2023-11-18)
 
 
