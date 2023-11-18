@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.40](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.39...v2.0.0-beta.40) (2023-11-18)
+
+
+### Features
+
+* add related words ([489b1b3](https://github.com/felix-berlin/berliner-schnauze/commit/489b1b30082c4b55113f5c29dfe684bbf550ce72))
+* update seo meta fields ([02645a7](https://github.com/felix-berlin/berliner-schnauze/commit/02645a75f54fc9bd99c0a9dd9f43b9594a8098f7))
+
 # [2.0.0-beta.39](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.38...v2.0.0-beta.39) (2023-11-18)
 
 
