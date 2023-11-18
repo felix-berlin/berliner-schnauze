@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.1...v2.0.2) (2023-11-18)
+
+
+### Bug Fixes
+
+* **WordList:** render issues ([e540b4d](https://github.com/felix-berlin/berliner-schnauze/commit/e540b4d2b53f54514e61b4b9c87ad8361cbf5ca5))
+
 ## [2.0.1](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0...v2.0.1) (2023-11-18)
 
 
