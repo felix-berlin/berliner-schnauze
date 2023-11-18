@@ -17,6 +17,7 @@ $icon-more-vertical: url("data:image/svg+xml;charset=utf-8,#{$lucide-more-vertic
   --size-quote-icon: 32px;
 
   height: 100%;
+  overflow: hidden auto;
 
   .c-word-list__word-wrap {
     padding-bottom: vars.$spacer * 1.75;
