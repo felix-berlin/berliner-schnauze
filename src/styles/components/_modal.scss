@@ -1,0 +1,57 @@
+@use "@styles/variables/base";
+
+.c-modal {
+  border: none;
+  inset: 0;
+  background-color: var(--color-background-modal, var(--secondary));
+  width: max(400px, 80%);
+
+  &::backdrop {
+    background-color: var(--color-background-modal, rgb(0 0 0 / 30%));
+    backdrop-filter: blur(4px);
+    animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  }
+
+  &[open] {
+    animation: slide-in-fwd-top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+
+    &:has(.c-modal__close) {
+      display: flex;
+      flex-direction: column;
+
+      .c-modal__close {
+        align-self: flex-end;
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  &--top {
+    margin: 7rem auto auto;
+  }
+}
+
+.u-disable-scroll {
+  overflow: hidden !important;
+}
+
+@keyframes slide-in-fwd-top {
+  0% {
+    transform: translateZ(-1400px) translateY(-800px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateZ(0) translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
