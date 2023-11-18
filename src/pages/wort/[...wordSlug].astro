@@ -12,7 +12,9 @@ import ExternalLink from "~icons/lucide/external-link";
 import Crown from "~icons/lucide/crown";
 import WordExamples from "@components/word/WordExamples.vue";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
-import { routeToWord } from "@utils/helpers";
+import RelatedWords from "@components/RelatedWords.vue";
+import RandomWordButton from "@components/RandomWordButton.vue";
+import { routeToWord, seoData } from "@utils/helpers";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -28,6 +30,7 @@ export const getStaticPaths = async () => {
       },
       props: {
         word: node as BerlinerWord,
+        allWords: allWords.map((word) => word.node),
       },
     };
   });
@@ -37,8 +40,7 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { wordSlug } = Astro.params as Params;
-const { word } = Astro.props as Props;
-// console.log(word);
+const { word, allWords } = Astro.props as Props;
 
 const wordProps = word.wordProperties;
 
@@ -49,7 +51,7 @@ const formattedDate = (date: Date, locale = "de-DE") => {
 };
 ---
 
-<Layout content={word} contentClasses="o-word">
+<Layout content={seoData(word)} contentClasses="o-word">
   <a href="/" class="c-button c-button--back u-button-reset">
     <ArrowLeft /> zurück
   </a>
@@ -147,8 +149,8 @@ const formattedDate = (date: Date, locale = "de-DE") => {
       </p>
     </footer>
   </article>
-</Layout>
 
-<!-- <RelatedWords :number-of-words="7">
-      <RandomWordButton class="c-related-words__word is-random" />
-    </RelatedWords> -->
+  <RelatedWords words={allWords}>
+    <RandomWordButton words={allWords} class="c-related-words__word is-random" />
+  </RelatedWords>
+</Layout>
