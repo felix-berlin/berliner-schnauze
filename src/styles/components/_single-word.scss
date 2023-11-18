@@ -1,201 +1,201 @@
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
-@use '@sass-butler/mixins' as butler-mx;
-@use '@sass-butler/functions' as butler-fn;
+@use "@styles/variables/variables" as vars;
+@use "@styles/mixins/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
 
 .c-single-word {
-	--size-quote-icon: 32px;
+  --size-quote-icon: 32px;
 
-	background-color: rgba(#fff, 0.6);
-	border: 1px dashed var(--grey-100);
-	padding: vars.$spacer * 1.5;
-	display: flex;
-	flex-direction: column;
-	gap: 2.25rem;
-	box-shadow:
-		0 0.5px 0.6px rgb(0 0 0 / 8%),
-		0 4px 5px rgb(0 0 0 / 16%);
+  background-color: rgba(#fff, 0.6);
+  border: 1px dashed var(--grey-100);
+  padding: vars.$spacer * 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+  box-shadow:
+    0 0.5px 0.6px rgb(0 0 0 / 8%),
+    0 4px 5px rgb(0 0 0 / 16%);
 
-	&__header {
-		position: relative;
-	}
+  &__header {
+    position: relative;
+  }
 
-	&__crown {
-		display: flex;
-		position: absolute;
-		bottom: calc(100% - 10px);
-		color: vars.$gold;
-	}
+  &__crown {
+    display: flex;
+    position: absolute;
+    bottom: calc(100% - 10px);
+    color: vars.$gold;
+  }
 
-	&__word {
-		margin: 0;
-		font: {
-			family: vars.$berlin;
-			size: var(--size-font, 2rem);
-			weight: 700;
-		}
-		text: {
-			decoration: underline;
-			decoration-style: dashed;
-			decoration-thickness: from-font;
-			underline-position: from-font;
-		}
+  &__word {
+    margin: 0;
+    font: {
+      family: vars.$berlin;
+      size: var(--size-font, 2rem);
+      weight: 700;
+    }
+    text: {
+      decoration: underline;
+      decoration-style: dashed;
+      decoration-thickness: from-font;
+      underline-position: from-font;
+    }
 
-		@include mx.breakpoint('md') {
-			--size-font: 4rem;
-		}
-	}
+    @include mx.breakpoint("md") {
+      --size-font: 4rem;
+    }
+  }
 
-	&__word-article {
-		font-weight: 400;
-	}
+  &__word-article {
+    font-weight: 400;
+  }
 
-	&__sub-headline {
-		margin: var(--spacing-outer, 0 0 vars.$spacer * 0.25 0);
-		font-size: 2rem;
-	}
+  &__sub-headline {
+    margin: var(--spacing-outer, 0 0 vars.$spacer * 0.25 0);
+    font-size: 2rem;
+  }
 
-	&__word-type-wrapper {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 1rem;
+  &__word-type-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 
-		.c-single-word__sub-headline {
-			--spacing-outer: 0;
-		}
-	}
+    .c-single-word__sub-headline {
+      --spacing-outer: 0;
+    }
+  }
 
-	&__word-type {
-		font-size: 1.5rem;
-		margin: 0;
-	}
+  &__word-type {
+    font-size: 1.5rem;
+    margin: 0;
+  }
 
-	&__translation {
-		display: flex;
-		flex-direction: column;
-		row-gap: vars.$spacer * 1;
+  &__translation {
+    display: flex;
+    flex-direction: column;
+    row-gap: vars.$spacer * 1;
 
-		&-item {
-			font-size: 1.5rem;
-		}
-	}
+    &-item {
+      font-size: 1.5rem;
+    }
+  }
 
-	&__quote-icon {
-		width: var(--size-quote-icon);
-		height: var(--size-quote-icon);
-		fill: var(--grey-200);
-		flex: 0 0 auto;
+  &__quote-icon {
+    width: var(--size-quote-icon);
+    height: var(--size-quote-icon);
+    fill: var(--grey-200);
+    flex: 0 0 auto;
 
-		@include mx.breakpoint('md') {
-			--size-quote-icon: 48px;
-		}
-	}
+    @include mx.breakpoint("md") {
+      --size-quote-icon: 48px;
+    }
+  }
 
-	&__examples {
-		padding-left: vars.$spacer;
-		display: flex;
-		flex-direction: column;
-		row-gap: vars.$spacer;
+  &__examples {
+    padding-left: vars.$spacer;
+    display: flex;
+    flex-direction: column;
+    row-gap: vars.$spacer;
 
-		@include mx.breakpoint('md') {
-			--size-font: 1.8rem;
-		}
+    @include mx.breakpoint("md") {
+      --size-font: 1.8rem;
+    }
 
-		&-item {
-			font-style: italic;
-		}
-	}
+    &-item {
+      font-style: italic;
+    }
+  }
 
-	&__examples,
-	&__example {
-		font-size: var(--size-font, 1.7rem);
-		flex-basis: 100%;
-		margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
-		word-break: break-word;
+  &__examples,
+  &__example {
+    font-size: var(--size-font, 1.7rem);
+    flex-basis: 100%;
+    margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
+    word-break: break-word;
 
-		&-explanation {
-			font-size: 1rem;
-			margin-top: vars.$spacer * 0.5;
-		}
-	}
+    &-explanation {
+      font-size: 1rem;
+      margin-top: vars.$spacer * 0.5;
+    }
+  }
 
-	&__example {
-		font-style: italic;
+  &__example {
+    font-style: italic;
 
-		@include mx.breakpoint('md') {
-			--size-font: 2.2rem;
-		}
+    @include mx.breakpoint("md") {
+      --size-font: 2.2rem;
+    }
 
-		&-wrapper {
-			--padding-y: #{vars.$spacer};
-			--padding-x: 0;
+    &-wrapper {
+      --padding-y: #{vars.$spacer};
+      --padding-x: 0;
 
-			display: flex;
-			padding: var(--padding-y) var(--padding-x);
-			gap: var(--gap, #{vars.$spacer * 0.5});
+      display: flex;
+      padding: var(--padding-y) var(--padding-x);
+      gap: var(--gap, #{vars.$spacer * 0.5});
 
-			@include mx.breakpoint('sm') {
-				--gap: #{vars.$spacer};
-				--padding-y: #{vars.$spacer * 1.5};
-				--padding-x: 5%;
-			}
-			@include mx.breakpoint('md') {
-				--padding-y: #{vars.$spacer * 2.5};
-				--padding-x: 7%;
-			}
-		}
-	}
+      @include mx.breakpoint("sm") {
+        --gap: #{vars.$spacer};
+        --padding-y: #{vars.$spacer * 1.5};
+        --padding-x: 5%;
+      }
+      @include mx.breakpoint("md") {
+        --padding-y: #{vars.$spacer * 2.5};
+        --padding-x: 7%;
+      }
+    }
+  }
 
-	&__learn-more {
-		&-wrapper {
-			display: flex;
-			align-items: center;
-			gap: vars.$spacer * 0.5;
-		}
+  &__learn-more {
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      gap: vars.$spacer * 0.5;
+    }
 
-		&-link {
-			display: flex;
-			gap: vars.$spacer * 0.2;
-			font-size: var(--size-font, 0.9rem);
+    &-link {
+      display: flex;
+      gap: vars.$spacer * 0.2;
+      font-size: var(--size-font, 0.9rem);
 
-			@include mx.breakpoint('xxs') {
-				--size-font: 1rem;
-			}
+      @include mx.breakpoint("xxs") {
+        --size-font: 1rem;
+      }
 
-			&-icon {
-				display: inline-flex;
-			}
-		}
-	}
+      &-icon {
+        display: inline-flex;
+      }
+    }
+  }
 
-	&__related-words-list {
-		display: flex;
-		flex-wrap: wrap;
-		column-gap: vars.$spacer * 2;
-		row-gap: vars.$spacer * 0.5;
-	}
+  &__related-words-list {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: vars.$spacer * 2;
+    row-gap: vars.$spacer * 0.5;
+  }
 
-	&__footer {
-		display: flex;
-		flex-direction: var(--direction-flex, column);
-		gap: var(--spacing, #{vars.$spacer * 0.5});
-		margin-top: vars.$spacer * 2.5;
-		border-top: 1px dashed var(--grey-100);
-		padding-top: vars.$spacer * 1.5;
+  &__footer {
+    display: flex;
+    flex-direction: var(--direction-flex, column);
+    gap: var(--spacing, #{vars.$spacer * 0.5});
+    margin-top: vars.$spacer * 2.5;
+    border-top: 1px dashed var(--grey-100);
+    padding-top: vars.$spacer * 1.5;
 
-		@include mx.breakpoint('xs') {
-			--spacing: #{vars.$spacer * 2};
-			--direction-flex: row;
+    @include mx.breakpoint("xs") {
+      --spacing: #{vars.$spacer * 2};
+      --direction-flex: row;
 
-			justify-content: flex-end;
-		}
-	}
+      justify-content: flex-end;
+    }
+  }
 
-	&__created,
-	&__modified {
-		margin: 0;
-		font-size: 0.8rem;
-		color: var(--blue-100);
-	}
+  &__created,
+  &__modified {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--blue-100);
+  }
 }

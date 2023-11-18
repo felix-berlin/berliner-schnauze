@@ -1,5 +1,17 @@
 @use "@styles/variables/variables" as vars;
 @use "@styles/mixins/mixins" as mx;
+@use "@sass-butler/functions" as butler-fn;
+
+$lucide-more-vertical: "<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='#{vars.$grey-100}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-more-vertical'><circle cx='12' cy='12' r='1'/><circle cx='12' cy='5' r='1'/><circle cx='12' cy='19' r='1'/></svg>";
+
+$icon-more-vertical: url("data:image/svg+xml;charset=utf-8,#{$lucide-more-vertical}");
+.icon-lucide-more-vertical {
+  background-image: butler-fn.escape-svg($icon-more-vertical);
+  width: 18px;
+  height: 18px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
 .c-word-list {
   --size-quote-icon: 32px;
