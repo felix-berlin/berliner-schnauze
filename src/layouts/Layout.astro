@@ -34,9 +34,10 @@ const {
   <body class="o-body" class:list={bodyClasses}>
     <MainHeader transition:persist />
     <main class="o-content" class:list={contentClasses}>
+      <div id="docStart" style="position: absolute"></div>
       <slot />
     </main>
-    <ScrollToTop transition:persist />
+    <ScrollToTop client:load />
     <Footer transition:persist />
   </body>
 </html>

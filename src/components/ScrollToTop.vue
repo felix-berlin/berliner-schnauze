@@ -1,5 +1,5 @@
 <template>
-  <Transition v-once name="fade">
+  <Transition name="fade">
     <button
       v-show="isScrolled"
       v-tooltip="{
@@ -19,10 +19,11 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, ref } from "vue";
+import { onMounted, onBeforeUnmount, ref } from "vue";
 import ChevronUp from "virtual:icons/lucide/chevron-up";
 
 interface ScrollToTopProps {
+  showAtPosition?: number;
   buttonAriaLabel?: string;
   tooltip?: string;
   hideTooltip?: boolean;
@@ -38,19 +39,21 @@ const {
 const observer = ref<IntersectionObserver | null>(null);
 const isScrolled = ref(false);
 
-const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-  for (const entry in entries) {
-    isScrolled.value = !entries[0].isIntersecting;
-  }
+const handleIntersect = ([entry]: IntersectionObserverEntry[]) => {
+  isScrolled.value = !entry.isIntersecting;
 };
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
-onBeforeMount(() => {
-  observer.value = new IntersectionObserver(handleIntersect);
-  const body = document.querySelector("body");
+onMounted(() => {
+  observer.value = new IntersectionObserver(handleIntersect, {
+    rootMargin: `${showAtPosition}px 0px 0px 0px`,
+  });
+
+  const body = document.querySelector("#docStart");
+
   if (body) {
     observer.value.observe(body);
   }
@@ -62,5 +65,5 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss">
-@use "@styles/components/_scroll-to-top.scss";
+@use "@styles/components/scroll-to-top.scss";
 </style>
