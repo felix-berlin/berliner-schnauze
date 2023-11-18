@@ -5,7 +5,7 @@
       <a
         v-for="(word, index) in xRandomWords(words, numberOfWords)"
         :key="index"
-        :to="routeToWord(word.slug)"
+        :href="routeToWord(word.slug)"
         class="c-related-words__word"
         :title="'Erfahre mehr über ' + word.wordProperties.berlinerisch"
       >
