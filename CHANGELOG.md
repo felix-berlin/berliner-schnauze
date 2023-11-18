@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.39](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.38...v2.0.0-beta.39) (2023-11-18)
+
+
+### Features
+
+* **searchbar:** limit width & chg border color ([222ffb4](https://github.com/felix-berlin/berliner-schnauze/commit/222ffb4cd74c0ef8b940869222571512c9fd7d46))
+
 # [2.0.0-beta.38](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.37...v2.0.0-beta.38) (2023-11-18)
 
 
