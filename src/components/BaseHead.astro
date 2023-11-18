@@ -7,7 +7,7 @@ export interface Title {
 }
 
 export interface Seo {
-  title: string;
+  title?: string;
   opengraphAuthor?: string;
   opengraphDescription?: string;
   opengraphPublisher?: string;
@@ -92,9 +92,14 @@ const { title, seo } = Astro.props as SeoProps & Title;
 {seo?.opengraphDescription && <meta name="description" content={seo?.opengraphDescription} />}
 
 <!-- Open Graph / Facebook -->
+{seo?.opengraphSiteName && <meta property="og:site_name" content={seo?.opengraphSiteName} />}
 {seo?.opengraphType && <meta property="og:type" content={seo?.opengraphType} />}
 {seo?.opengraphUrl && <meta property="og:url" content={seo?.opengraphUrl} />}
-{seo?.opengraphTitle && <meta property="og:title" content={seo?.opengraphTitle} />}
+{
+  (seo?.opengraphTitle || seo?.title || title) && (
+    <meta property="og:title" content={seo?.opengraphTitle || seo?.title || title} />
+  )
+}
 {
   seo?.opengraphDescription && (
     <meta property="og:description" content={seo?.opengraphDescription} />
@@ -105,14 +110,25 @@ const { title, seo } = Astro.props as SeoProps & Title;
     <meta property="og:image" content={seo?.opengraphImage?.sourceUrl} />
   )
 }
+<!-- <meta property="og:image:width" content={""} />
+<meta property="og:image:height" content={""} />
+<meta property="og:image:alt" content={""} />
+<meta property="og:image:type" content={""} /> -->
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 {seo?.opengraphUrl && <meta property="twitter:url" content={seo?.opengraphUrl} />}
-{seo?.twitterTitle && <meta property="twitter:title" content={seo?.twitterTitle} />}
 {
-  seo?.twitterDescription && (
-    <meta property="twitter:description" content={seo?.twitterDescription} />
+  (seo?.twitterTitle || seo?.title || title) && (
+    <meta property="twitter:title" content={seo?.twitterTitle || seo?.title || title} />
+  )
+}
+{
+  (seo?.twitterDescription || seo?.opengraphDescription) && (
+    <meta
+      property="twitter:description"
+      content={seo?.twitterDescription || seo?.opengraphDescription}
+    />
   )
 }
 {
@@ -122,7 +138,6 @@ const { title, seo } = Astro.props as SeoProps & Title;
 }
 
 <link rel="preconnect" href="//cms.webshaped.de" />
-<link rel="preconnect" href="//analytics.webshaped.de" />
 
 <!-- <link rel="manifest" href="/site.webmanifest" /> -->
 <!-- {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}

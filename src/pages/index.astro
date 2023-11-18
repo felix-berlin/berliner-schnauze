@@ -9,15 +9,22 @@ import BrownBearRoar from "@assets/images/brown-bear-roar.png";
 import SingleWord from "@components/word/SingleWord.vue";
 import WordSearchList from "@components/WordSearchList.vue";
 import { getAllWord } from "@services/api";
+import { seoData } from "@utils/helpers";
 
 const content = {
-  title: "Welcome to Astro",
+  title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
   seo: {
-    title: "Welcome to Astro",
+    opengraphDescription:
+      "Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.",
+    opengraphImage: {
+      sourceUrl: BrownBearRoar.src,
+    },
   },
 };
 
 const allWords = await getAllWord();
+
+const wordCount = allWords.length;
 
 const cleanWords = allWords.map(({ node }) => {
   const { seo, title, berlinerWordId, dateGmt, modifiedGmt, ...cleanNode } = node;
@@ -29,7 +36,7 @@ const availableWordGroups: string[] = Array.from(
 ).sort();
 ---
 
-<Layout content={content} contentClasses="o-index">
+<Layout content={seoData(content, Astro.url.href)} contentClasses="o-index">
   <header class="o-index__header">
     <h1 class="o-index__headline">
       Na Keule,<br /> keen'n Dunst vom Berlinern?
@@ -69,10 +76,10 @@ const availableWordGroups: string[] = Array.from(
           href="https://www.wikiwand.com/de/Berlinerische_Grammatik">hier</a
         > kannst Du dich informieren.
       </p>
-      <!-- <p>
+      <p>
         So, jetzt aber ran an den Speck! Du bist sicher nicht wegen der Einleitung gekommen und
-        willst dir eher die <strong>{{ berlinerWordCount }} Wörter</strong> ins Hirn meißeln.
-      </p> -->
+        willst dir eher die <strong>{wordCount} Wörter</strong> ins Hirn meißeln.
+      </p>
 
       <p>Da Du bereits soweit gekommen bist, huldige bitte das Wort des Tages. Danke!</p>
     </div>
