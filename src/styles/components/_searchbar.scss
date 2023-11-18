@@ -4,19 +4,27 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-searchbar {
-  --color-button: var(--accent-color);
-
   display: flex;
   align-items: center;
-  flex: 1 1 auto;
-  // border: 1px solid
-  //   var(
-  //     --color-border-searchbar,
-  //     #{butler-fn.hex-to-rgb(colors.$red-light, 30%)}
-  //   );
 
-  @include butler-mx.hover {
-    backdrop-filter: none;
+  @include butler-mx.breakpoint("md") {
+    flex: 1 1 auto;
+  }
+  @include butler-mx.breakpoint("md", "max") {
+    --color-background: transparent;
+
+    justify-content: center;
+    color: var(--white-100);
+    border: none;
+  }
+
+  &__slash-icon,
+  &__label {
+    display: none;
+
+    @include butler-mx.breakpoint("md") {
+      display: block;
+    }
   }
 
   &__slash-icon {
@@ -26,8 +34,10 @@
   }
 
   &__search-icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
+    @include butler-mx.breakpoint("md") {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+    }
   }
 }

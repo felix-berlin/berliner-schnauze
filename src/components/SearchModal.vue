@@ -91,4 +91,5 @@ onUnmounted(() => {
 
 <style lang="scss">
 @use "@styles/components/searchbar.scss";
+@use "@styles/plugins/pagefind.scss";
 </style>

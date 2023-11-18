@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="c-color-mode-toggle c-button c-button--icon"
+    class="c-color-mode-toggle c-button c-button--center-icon"
     :class="classes"
     @click="toggleMode()"
   >

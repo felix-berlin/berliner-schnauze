@@ -2,7 +2,7 @@
   <dialog :id="uidHelper('modal')" ref="modal" class="c-modal" :class="[`c-modal--${position}`]">
     <button
       v-if="showCloseButton"
-      class="c-modal__close c-button c-button--icon"
+      class="c-modal__close c-button c-button--theme c-button--center-icon"
       type="submit"
       aria-label="schließen"
       @click="closeModal"
@@ -120,6 +120,6 @@ watch(
 );
 </script>
 
-<!-- <style lang="scss">
+<style lang="scss">
 @use "@styles/components/modal";
-</style> -->
+</style>
