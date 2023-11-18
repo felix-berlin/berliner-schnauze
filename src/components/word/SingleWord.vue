@@ -54,9 +54,7 @@
           class="c-button c-button--center-icon c-button--word-option c-button--dashed-border"
           aria-label="Website Menu Navigation"
         >
-          <span class="u-icon-untouchable c-button--center-icon">
-            <MoreVertical width="18" height="18" />
-          </span>
+          <span class="u-icon-untouchable c-button--center-icon icon-lucide-more-vertical"> </span>
         </button>
 
         <template #popper>
@@ -140,7 +138,6 @@
 import { ref } from "vue";
 import Copy from "virtual:icons/lucide/copy";
 import CheckCircle2 from "virtual:icons/lucide/check-circle-2";
-import MoreVertical from "virtual:icons/lucide/more-vertical";
 import Info from "virtual:icons/lucide/info";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
@@ -187,7 +184,7 @@ const shareWord = (slug: string, index: number) => {
 };
 
 const copyWordPageUrlToClipboard = (slug: string, index: number) => {
-  usingClipboard.copy(routeToWord(slug));
+  usingClipboard.copy(import.meta.env.PUBLIC_SITE_URL + routeToWord(slug));
   wordLinkCopied.value = index;
   wordButtonClicked.value = true;
 

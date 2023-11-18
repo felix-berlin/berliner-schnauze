@@ -8,13 +8,13 @@ export const randomElement = (elements) => {
   return elements[Math.floor(Math.random() * elements.length)];
 };
 
-export const seoData = (data, baseUrl: string = import.meta.env.SITE_URL): SeoProps => {
+export const seoData = (data, baseUrl: string = import.meta.env.PUBLIC_SITE_URL): SeoProps => {
   return {
     title: data.title,
     seo: {
       ...data.seo,
       opengraphUrl: baseUrl,
-      opengraphSiteName: import.meta.env.SITE_NAME,
+      opengraphSiteName: import.meta.env.PUBLIC_SITE_NAME,
     },
   };
 };
