@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.41](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.40...v2.0.0-beta.41) (2023-11-18)
+
+
+### Bug Fixes
+
+* replace to with href ([75ddbf0](https://github.com/felix-berlin/berliner-schnauze/commit/75ddbf0de2fad197e17443f49465f1d285d31c2b))
+
 # [2.0.0-beta.40](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.39...v2.0.0-beta.40) (2023-11-18)
 
 
