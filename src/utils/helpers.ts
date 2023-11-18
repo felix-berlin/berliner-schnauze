@@ -8,7 +8,7 @@ export const randomElement = (elements) => {
   return elements[Math.floor(Math.random() * elements.length)];
 };
 
-export const seoData = (data, baseUrl?: string): SeoProps => {
+export const seoData = (data, baseUrl: string = import.meta.env.SITE_URL): SeoProps => {
   return {
     title: data.title,
     seo: {

@@ -7,7 +7,7 @@ import allAlias from "./alias.ts";
 
 // https://astro.build/config
 export default defineConfig({
-  site: import.meta.env.DEV ? "http://localhost:4321" : import.meta.env.SITE_URL,
+  site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   prefetch: true,
   integrations: [
     vue({
