@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.37](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.36...v2.0.0-beta.37) (2023-11-17)
+
+
+### Bug Fixes
+
+* **WordSearch:** missing wordGroup ([21ea2c1](https://github.com/felix-berlin/berliner-schnauze/commit/21ea2c19f8a7bcb3f1eeef1fff9f85d036472ed3))
+
 # [2.0.0-beta.36](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.35...v2.0.0-beta.36) (2023-11-17)
 
 
