@@ -6,6 +6,7 @@
     class="c-word-list"
     list-class="c-word-list__list"
     item-class="c-word-list__item"
+    page-mode
   >
     <template #default="{ item, index, active }">
       <DynamicScrollerItem
