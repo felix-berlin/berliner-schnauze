@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0...v2.0.1) (2023-11-18)
+
+
+### Performance Improvements
+
+* load more vertical icon as background image ([ef22697](https://github.com/felix-berlin/berliner-schnauze/commit/ef226970f82b18c94d0141f66fbc7ce92292f6d8))
+* minimize buffer size ([2e70488](https://github.com/felix-berlin/berliner-schnauze/commit/2e70488939e0164a624c973215b5cdce6b479982))
+* performance-optimizations ([66b8af9](https://github.com/felix-berlin/berliner-schnauze/commit/66b8af95a2d2562f498241b609051efe0032d826))
+* **WordList:** activate page-mode ([b4fa392](https://github.com/felix-berlin/berliner-schnauze/commit/b4fa3922df2ccbb38cab3028e932ca6befbf65c1))
+* **WordOfTheDay:** from vue only to load ([6144c50](https://github.com/felix-berlin/berliner-schnauze/commit/6144c50d992b4eb04de401ed1eeae32aff1eba2d))
+* **WordSearchList:** from vue only to load ([fe61119](https://github.com/felix-berlin/berliner-schnauze/commit/fe611195facd2d6c8eb30f8dd67135fbabb3769c))
+* **WordSearchList:** move back to client only ([67f1b21](https://github.com/felix-berlin/berliner-schnauze/commit/67f1b21518f30c35bb48c62f84c7fe882762727c))
+
 # [2.0.0](https://github.com/felix-berlin/berliner-schnauze/compare/v1.20.5...v2.0.0) (2023-11-18)
 
 
