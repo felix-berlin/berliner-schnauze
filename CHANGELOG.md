@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.38](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.37...v2.0.0-beta.38) (2023-11-18)
+
+
+### Bug Fixes
+
+* add missing modal styles ([641148f](https://github.com/felix-berlin/berliner-schnauze/commit/641148f5ed971e03d8eaad924aaa48adbf74e32d))
+* current filter highlight ([4746b79](https://github.com/felix-berlin/berliner-schnauze/commit/4746b79eb723073a683e2df745dba00e4058c15f))
+* footer links ([4b9b7bc](https://github.com/felix-berlin/berliner-schnauze/commit/4b9b7bc487ae26d59e96d4d33bd5faa23b1be64b))
+* hide large searchbar on mobile ([2f07b1c](https://github.com/felix-berlin/berliner-schnauze/commit/2f07b1cdea57a517e436f3540cd6847c1f2bf57b))
+* ScrollToTop ([c93e1a5](https://github.com/felix-berlin/berliner-schnauze/commit/c93e1a5664b03909e99a83ce0f6c3cd7a4db2d16))
+
+
+### Features
+
+* add own pagefind vars ([80bd9bc](https://github.com/felix-berlin/berliner-schnauze/commit/80bd9bcb8bee1b35a4d681c1246682ec2e01efbf))
+* remove mobile only icon ([c7f4a43](https://github.com/felix-berlin/berliner-schnauze/commit/c7f4a43a156d14ff4d23cf0470e921f28d128abb))
+
 # [2.0.0-beta.37](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.0-beta.36...v2.0.0-beta.37) (2023-11-17)
 
 
