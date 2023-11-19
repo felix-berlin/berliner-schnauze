@@ -68,6 +68,9 @@ dependencies:
   vue-virtual-scroller:
     specifier: 2.0.0-beta.8
     version: 2.0.0-beta.8(vue@3.3.8)
+  vue3-virtual-scroll-list:
+    specifier: ^0.2.1
+    version: 0.2.1(vue@3.3.8)
 
 devDependencies:
   '@astrojs/check':
@@ -3633,7 +3636,7 @@ packages:
       lodash-es: 4.17.21
       nerf-dart: 1.0.0
       normalize-url: 8.0.0
-      npm: 10.2.3
+      npm: 10.2.4
       rc: 1.2.8
       read-pkg: 9.0.0
       registry-auth-token: 5.0.2
@@ -9018,8 +9021,8 @@ packages:
     dependencies:
       path-key: 4.0.0
 
-  /npm@10.2.3:
-    resolution: {integrity: sha512-GbUui/rHTl0mW8HhJSn4A0Xg89yCR3I9otgJT1i0z1QBPOVlgbh6rlcUTpHT8Gut9O1SJjWRUU0nEcAymhG2tQ==}
+  /npm@10.2.4:
+    resolution: {integrity: sha512-umEuYneVEYO9KoEEI8n2sSGmNQeqco/3BSeacRlqIkCzw4E7XGtYSWMeJobxzr6hZ2n9cM+u5TsMTcC5bAgoWA==}
     engines: {node: ^18.17.0 || >=20.5.0}
     hasBin: true
     dev: true
@@ -12372,6 +12375,14 @@ packages:
       vue: 3.3.8(typescript@5.2.2)
       vue-observe-visibility: 2.0.0-alpha.1(vue@3.3.8)
       vue-resize: 2.0.0-alpha.1(vue@3.3.8)
+    dev: false
+
+  /vue3-virtual-scroll-list@0.2.1(vue@3.3.8):
+    resolution: {integrity: sha512-G4KxITUOy9D4ro15zOp40D6ogmMefzjIyMsBKqN3xGbV1P6dlKYMx+BBXCKm3Nr/6iipcUKM272Sh2AJRyWMyQ==}
+    peerDependencies:
+      vue: '>=3.0.0'
+    dependencies:
+      vue: 3.3.8(typescript@5.2.2)
     dev: false
 
   /vue@3.3.8(typescript@5.2.2):
