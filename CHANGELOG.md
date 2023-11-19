@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.4](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.3...v2.0.4) (2023-11-19)
+
+
+### Bug Fixes
+
+* **SingleWord:** wrong props ([277d2a8](https://github.com/felix-berlin/berliner-schnauze/commit/277d2a8d340aa9db20d65d0f4d5829b257209709))
+
 ## [2.0.3](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.2...v2.0.3) (2023-11-19)
 
 
