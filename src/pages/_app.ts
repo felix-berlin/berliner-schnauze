@@ -2,7 +2,7 @@ import type { App } from "vue";
 import FloatingVue from "floating-vue";
 import { autoAnimatePlugin } from "@formkit/auto-animate/vue";
 import { devtools } from "@nanostores/vue/devtools";
-import VueVirtualScroller from "vue-virtual-scroller";
+// import VueVirtualScroller from "vue-virtual-scroller";
 import {
   wordOfTheDay,
   isDarkMode,
@@ -31,5 +31,5 @@ export default (app: App) => {
     $filteredWordList,
     searchLength,
   });
-  app.use(VueVirtualScroller);
+  // app.use(VueVirtualScroller);
 };
