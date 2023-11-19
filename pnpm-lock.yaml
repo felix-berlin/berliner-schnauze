@@ -12,8 +12,8 @@ dependencies:
     specifier: ^3.0.4
     version: 3.0.4(@babel/core@7.23.3)(astro@3.5.5)(vite@4.5.0)(vue@3.3.8)
   '@felix_berlin/sass-butler':
-    specifier: 2.0.0
-    version: 2.0.0
+    specifier: 2.6.0
+    version: 2.6.0
   '@formkit/auto-animate':
     specifier: ^0.8.1
     version: 0.8.1
@@ -2459,9 +2459,10 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@felix_berlin/sass-butler@2.0.0:
-    resolution: {integrity: sha512-tOdt5whLC37m6OePrTMVLn2uWmuIjYYqtqpmiIz8ZrGosGEthaztR0sgOrNF3arWvE+CeuxNPWlq056LCRBKAA==}
+  /@felix_berlin/sass-butler@2.6.0:
+    resolution: {integrity: sha512-oRw+BPyX85OQDOIBKQrNTqVpms+T2Bq3DJOlsvElzD5gJDjfKRmC43Q8H3xTjWg4OXiGhn4BWL6eUlHQFKISBQ==}
     engines: {node: '>=12'}
+    requiresBuild: true
     dev: false
 
   /@floating-ui/core@1.5.0:
