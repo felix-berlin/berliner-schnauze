@@ -47,7 +47,7 @@
     "test:unit": "vitest",
     "test:unit:coverage": "vitest run --coverage",
     "format": "npx prettier --write .",
-    "gql:generate": "gql-gen --config codegen.yml",
+    "gql:generate": "gql-gen --config codegen.ts",
     "predev": "pnpm run gql:generate",
     "preinstall": "npx only-allow pnpm",
     "postbuild": "pagefind --site dist/"
@@ -113,6 +113,7 @@
     "astro": "^3.5.5",
     "astro-breadcrumbs": "^1.8.0",
     "astro-matomo": "^1.4.0",
+    "dotenv": "^16.3.1",
     "floating-vue": "2.0.0-beta.24",
     "fuse.js": "^7.0.0",
     "nanostores": "^0.9.5",
