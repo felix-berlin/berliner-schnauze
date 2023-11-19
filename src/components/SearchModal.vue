@@ -1,5 +1,10 @@
 <template>
-  <button class="c-searchbar c-button c-button--outline" type="button" @click="openSearch">
+  <button
+    class="c-searchbar c-button c-button--outline"
+    type="button"
+    aria-label="Suche aktivieren"
+    @click="openSearch"
+  >
     <SearchIcon class="c-searchbar__search-icon" />
     <span class="c-searchbar__label">Suche</span>
     <SquareSlash class="c-searchbar__slash-icon" />

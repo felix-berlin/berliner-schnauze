@@ -14,7 +14,6 @@
           'c-button c-button--center-icon c-button--filter',
           { 'has-active-filter': wordSearch.activeLetterFilter },
         ]"
-        aria-label="Filter"
       >
         <span class="u-icon-untouchable c-button--center-icon">
           <Filter />

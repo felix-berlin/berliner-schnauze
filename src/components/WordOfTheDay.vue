@@ -1,7 +1,7 @@
 <template>
   <div
     class="c-word-of-the-day c-confetti"
-    role="textbox"
+    role="link"
     tabindex="0"
     @mouseover="toggleCelebration(true)"
     @mouseout="toggleCelebration(false)"
