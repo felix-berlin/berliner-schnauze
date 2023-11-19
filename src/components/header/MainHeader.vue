@@ -61,7 +61,6 @@
 <script setup lang="ts">
 import MenuIcon from "virtual:icons/lucide/menu";
 import { routeToWord, randomElement } from "@utils/helpers.ts";
-import { DeviceDetector } from "@utils/device.ts";
 import ColorModeToggle from "@components/ColorModeToggle.vue";
 import SearchModal from "@components/SearchModal.vue";
 import SocialList from "@components/SocialList.vue";
@@ -93,8 +92,6 @@ const randomWord = () => {
   // TODO: Implement random word
   // return randomElement(berlinerWords).post_name;
 };
-
-const { device } = new DeviceDetector();
 </script>
 
 <style scoped></style>
