@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.3](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.2...v2.0.3) (2023-11-19)
+
+
+### Bug Fixes
+
+* **MainMenu:** missing mobile menu icon ([4ffc29e](https://github.com/felix-berlin/berliner-schnauze/commit/4ffc29e9fb37c1f9b398ffabf49d6213ebd5529d))
+
 ## [2.0.2](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.1...v2.0.2) (2023-11-18)
 
 
