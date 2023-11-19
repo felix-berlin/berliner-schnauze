@@ -1,7 +1,7 @@
 {
   "name": "berliner-schnauze",
   "type": "module",
-  "version": "2.0.2",
+  "version": "2.0.1",
   "homepage": "https://berliner-schnauze.wtf",
   "repository": {
     "type": "git",
@@ -102,7 +102,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.0.3",
     "@astrojs/vue": "^3.0.4",
-    "@felix_berlin/sass-butler": "2.6.0",
+    "@felix_berlin/sass-butler": "2.0.0",
     "@formkit/auto-animate": "^0.8.1",
     "@iconify-json/lucide": "^1.1.141",
     "@iconify-json/tabler": "^1.1.96",
