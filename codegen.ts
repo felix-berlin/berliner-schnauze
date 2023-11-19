@@ -8,7 +8,7 @@ const config: CodegenConfig = {
     {
       "https://cms.webshaped.de/api": {
         headers: {
-          Authorization: `Bearer ${import.meta.env.WP_AUTH_REFRESH_TOKEN}`,
+          Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
         },
       },
     },

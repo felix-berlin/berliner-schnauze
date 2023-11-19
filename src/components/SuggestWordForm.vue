@@ -208,6 +208,9 @@ const postToContactForm7 = async (): Promise<void> => {
     }/feedback`,
     {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+      },
       body: formInputs,
     },
   )

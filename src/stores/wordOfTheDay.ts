@@ -47,7 +47,12 @@ export const wordOfTheDay = map<WordOfTheDay>({
  * @return  {[type]}                   [return description]
  */
 export const getWordOfTheDay = action(wordOfTheDay, "getWordOfTheDay", async (store, add) => {
-  return await fetch(`${import.meta.env.PUBLIC_WP_REST_API}/berliner-schnauze/v1/word-of-the-day`)
+  return await fetch(`${import.meta.env.PUBLIC_WP_REST_API}/berliner-schnauze/v1/word-of-the-day`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+    },
+  })
     .then((res) => res.json())
     .then((data) => {
       wordOfTheDay.setKey("word", data);

@@ -2,7 +2,7 @@ export const fetchAPI = async (query: string, { variables } = { variables: {} })
   const headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: `Bearer ${import.meta.env.WP_AUTH_REFRESH_TOKEN}`,
+    Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
   };
 
   return await fetch(import.meta.env.PUBLIC_WP_API, {
