@@ -92,10 +92,16 @@ export const getAllWord = async (
                 example
                 exampleExplanation
                 fieldGroupName
+                exampleAudio {
+                  mediaItemUrl
+                }
               }
               translations {
                 fieldGroupName
                 translation
+              }
+              berlinerischAudio {
+                mediaItemUrl
               }
             }
             ${seo}

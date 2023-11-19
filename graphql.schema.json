@@ -3286,6 +3286,18 @@
             "deprecationReason": null
           },
           {
+            "name": "berlinerischAudio",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "MediaItem",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "examples",
             "description": "",
             "args": [],
@@ -3438,6 +3450,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "exampleAudio",
+            "description": "",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "MediaItem",
               "ofType": null
             },
             "isDeprecated": false,

@@ -15,7 +15,9 @@
         v-text="'– ' + examples[0].example_explanation"
       />
     </div>
-
+    <audio controls :src="examples[0].exampleAudio.mediaItemUrl">
+      <track kind="caption" srclang="de" />
+    </audio>
     <!-- If more than one example exist -->
     <ol v-if="examples && examples.length > 1" :class="rootBemClass + '__examples'">
       <li
