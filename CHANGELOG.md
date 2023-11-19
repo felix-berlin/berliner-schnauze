@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.6](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.5...v2.0.6) (2023-11-19)
+
+
+### Bug Fixes
+
+* hopefully fix hydration error ([9e48060](https://github.com/felix-berlin/berliner-schnauze/commit/9e48060957d36d3890cf8d58aa3456f34491b4f8))
+
 ## [2.0.5](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.4...v2.0.5) (2023-11-19)
 
 
