@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.5](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.4...v2.0.5) (2023-11-19)
+
+
+### Bug Fixes
+
+* a11y issues ([7f055cb](https://github.com/felix-berlin/berliner-schnauze/commit/7f055cbc4b69adc256a55e63780a21bf6cff15c9))
+
 ## [2.0.4](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.3...v2.0.4) (2023-11-19)
 
 
