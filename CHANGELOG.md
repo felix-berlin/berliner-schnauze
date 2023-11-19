@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/felix-berlin/berliner-schnauze/compare/v2.1.0...v2.1.1) (2023-11-19)
+
+
+### Bug Fixes
+
+* add  missing auth headers ([a431fb9](https://github.com/felix-berlin/berliner-schnauze/commit/a431fb9c57232c384ceae8bc0aa21b0ff4776df8))
+
 # [2.1.0](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.6...v2.1.0) (2023-11-19)
 
 
