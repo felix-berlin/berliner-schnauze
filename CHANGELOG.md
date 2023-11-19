@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.6...v2.1.0) (2023-11-19)
+
+
+### Features
+
+* add jwt auth ([5c519d1](https://github.com/felix-berlin/berliner-schnauze/commit/5c519d1bb511a40e837d4620168e27fbb61f0793))
+
 ## [2.0.6](https://github.com/felix-berlin/berliner-schnauze/compare/v2.0.5...v2.0.6) (2023-11-19)
 
 
