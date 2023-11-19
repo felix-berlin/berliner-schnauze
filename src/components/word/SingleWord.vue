@@ -1,15 +1,17 @@
 <template>
   <article
-    :id="'word' + source.wordProperties.id"
-    :ref="'word' + source.wordProperties.id"
+    :id="`word-${source.id}`"
+    :ref="`word-${source.id}`"
     :key="source.id"
-    :data-group="source.wordProperties.group"
+    :data-group="source.wordGroup"
     class="c-word-list__word"
     :class="{ 'has-translation': source.wordProperties.translations }"
     data-track-content
     data-content-name="word"
   >
-    <div :class="[{ 'has-example': source.examples }, 'c-word-list__header-wrapper']">
+    <div
+      :class="[{ 'has-example': source.wordProperties.examples }, 'c-word-list__header-wrapper']"
+    >
       <dl class="c-word-list__header">
         <dt
           class="c-word-list__berlinerisch"
