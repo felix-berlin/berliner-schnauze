@@ -15,7 +15,7 @@
         v-text="'– ' + examples[0].example_explanation"
       />
     </div>
-    <audio controls :src="examples[0].exampleAudio.mediaItemUrl">
+    <audio v-if="examples[0].exampleAudio" controls :src="examples[0].exampleAudio.mediaItemUrl">
       <track kind="caption" srclang="de" />
     </audio>
     <!-- If more than one example exist -->
