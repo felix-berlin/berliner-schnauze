@@ -4,6 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import matomo from "astro-matomo";
 import Icons from "unplugin-icons/vite";
 import allAlias from "./alias.ts";
+import AstroPWA from "@vite-pwa/astro";
 
 // https://astro.build/config
 export default defineConfig({
@@ -26,6 +27,41 @@ export default defineConfig({
       debug: true,
       heartBeatTimer: 5,
       disableCookies: true,
+    }),
+    AstroPWA({
+      mode: import.meta.env.DEV ? "development" : "production",
+      base: "/",
+      scope: "/",
+      includeAssets: ["favicon.icon"],
+      registerType: "autoUpdate",
+      manifest: {
+        name: "Berliner Schnauze",
+        short_name: "BLN Schnauze",
+        theme_color: "#ffffff",
+        icons: [
+          {
+            src: "favicons/android-chrome-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "favicons/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+      },
+      workbox: {
+        navigateFallback: "/",
+        globPatterns: ["**/*.{css,js,html,svg,png,ico,txt}"],
+      },
+      devOptions: {
+        enabled: true,
+        navigateFallbackAllowlist: [/^\//],
+      },
+      experimental: {
+        directoryAndTrailingSlashHandler: true,
+      },
     }),
   ],
   vite: {

@@ -1,5 +1,5 @@
 ---
-// import { pwaInfo } from "virtual:pwa-info";
+import { pwaInfo } from "virtual:pwa-info";
 import { ViewTransitions } from "astro:transitions";
 
 export interface Title {
@@ -139,8 +139,7 @@ const { title, seo } = Astro.props as SeoProps & Title;
 
 <link rel="preconnect" href="//cms.webshaped.de" />
 
-<!-- <link rel="manifest" href="/site.webmanifest" /> -->
-<!-- {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
-<script src="/src/services/pwa.ts"></script> -->
-
 <ViewTransitions />
+
+{pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+<script src="/src/services/pwa.ts"></script>
