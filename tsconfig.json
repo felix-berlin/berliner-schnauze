@@ -16,12 +16,7 @@
       "@services/*": ["src/services/*"],
       "@assets/*": ["src/assets/*"]
     },
-    "types": [
-      "vitest/globals",
-      "unplugin-icons/types/astro",
-      "vite-plugin-pwa/info",
-      "vite-plugin-pwa/vanillajs"
-    ],
+    "types": ["vitest/globals", "unplugin-icons/types/astro", "vite-plugin-pwa/info"],
     // https://bobbyhadz.com/blog/typescript-module-can-only-be-default-imported-esmoduleinterop
     "esModuleInterop": true
   }
