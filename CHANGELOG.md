@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/felix-berlin/berliner-schnauze/compare/v2.1.1...v2.1.2) (2023-11-23)
+
+
+### Bug Fixes
+
+* meta title and add cononical ([3ac19e8](https://github.com/felix-berlin/berliner-schnauze/commit/3ac19e89761a76497357dcdf7c99917a3648ca0e))
+* **style:** imports ([ad45fcf](https://github.com/felix-berlin/berliner-schnauze/commit/ad45fcfd92b91f3b893ca6d6baf1286256ed6a8a))
+
 ## [2.1.1](https://github.com/felix-berlin/berliner-schnauze/compare/v2.1.0...v2.1.1) (2023-11-19)
 
 
