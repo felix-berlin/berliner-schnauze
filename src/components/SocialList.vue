@@ -10,6 +10,7 @@
         <a
           :href="social.link"
           :aria-label="social.ariaLabel"
+          :title="social.ariaLabel"
           rel="noopener"
           target="_blank"
           class="c-social-list__link"
@@ -34,16 +35,10 @@ interface SocialListProps {
   listModifier?: string;
   listLinkModifier?: string;
   listItemModifier?: string;
-  hideTooltips?: boolean;
 }
 
-const {
-  modifier,
-  listModifier,
-  listLinkModifier,
-  listItemModifier,
-  hideTooltips = false,
-} = defineProps<SocialListProps>();
+const { modifier, listModifier, listLinkModifier, listItemModifier } =
+  defineProps<SocialListProps>();
 
 const list = [
   {
