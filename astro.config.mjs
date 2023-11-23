@@ -33,7 +33,7 @@ export default defineConfig({
       Icons({
         iconCustomizer(collection, icon, props) {
           // customize all icons in this collection
-          if (collection === "tabler" || collection === "lucide") {
+          if (collection === "lucide") {
             props.width = "24";
             props.height = "24";
           }

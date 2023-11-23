@@ -94,4 +94,6 @@ const randomWord = () => {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+@use "@styles/components/menu-nav";
+</style>

@@ -529,6 +529,7 @@ export type BerlinerWord_Wordproperties = AcfFieldGroup & {
   alternativeWords?: Maybe<Array<Maybe<BerlinerWord_Wordproperties_AlternativeWords>>>;
   article?: Maybe<Scalars['String']['output']>;
   berlinerisch?: Maybe<Scalars['String']['output']>;
+  berlinerischAudio?: Maybe<MediaItem>;
   examples?: Maybe<Array<Maybe<BerlinerWord_Wordproperties_Examples>>>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']['output']>;
@@ -551,6 +552,7 @@ export type BerlinerWord_Wordproperties_AlternativeWords = AcfFieldGroup & {
 export type BerlinerWord_Wordproperties_Examples = AcfFieldGroup & {
   __typename?: 'BerlinerWord_Wordproperties_examples';
   example?: Maybe<Scalars['String']['output']>;
+  exampleAudio?: Maybe<MediaItem>;
   exampleExplanation?: Maybe<Scalars['String']['output']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']['output']>;
