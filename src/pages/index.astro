@@ -2,13 +2,11 @@
 import "@styles/objects/_index.scss";
 
 import Layout from "@layouts/Layout.astro";
-import Search from "@components/Search.vue";
 import WordOfTheDay from "@components/WordOfTheDay.vue";
 import { Picture } from "astro:assets";
 import BrownBearRoar from "@assets/images/brown-bear-roar.png";
-import SingleWord from "@components/word/SingleWord.vue";
 import WordSearchList from "@components/WordSearchList.vue";
-import { getAllWord } from "@services/api";
+import { getAllWords } from "@services/api";
 import { seoData } from "@utils/helpers";
 
 const content = {
@@ -22,7 +20,7 @@ const content = {
   },
 };
 
-const allWords = await getAllWord();
+const allWords = await getAllWords();
 
 const wordCount = allWords.length;
 

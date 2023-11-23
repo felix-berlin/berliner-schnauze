@@ -4,7 +4,7 @@ import "@styles/objects/_word.scss";
 import "@styles/components/_single-word.scss";
 
 // Imports
-import { getAllWord } from "@services/api";
+import { getAllWords } from "@services/api";
 import Layout from "@layouts/Layout.astro";
 import ArrowLeft from "~icons/lucide/arrow-left";
 import Info from "~icons/lucide/info";
@@ -21,7 +21,7 @@ import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
 import type { BerlinerWord } from "@ts_types/generated";
 
 export const getStaticPaths = async () => {
-  const allWords = await getAllWord();
+  const allWords = await getAllWords();
 
   return allWords.map(({ node }) => {
     return {
