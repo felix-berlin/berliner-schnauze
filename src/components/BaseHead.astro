@@ -34,7 +34,7 @@ export interface SeoProps {
   seo: Seo;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = Astro.url.href;
 const { title, seo } = Astro.props as SeoProps & Title;
 ---
 
@@ -86,9 +86,9 @@ const { title, seo } = Astro.props as SeoProps & Title;
 <meta name="generator" content={Astro.generator} />
 
 <!-- Primary Meta Tags -->
-<title>{title}</title>
+<title>{seo?.title || title}</title>
+<link rel="canonical" href={canonicalURL} />
 
-{seo?.title && <meta name="title" content={seo?.title} />}
 {seo?.opengraphDescription && <meta name="description" content={seo?.opengraphDescription} />}
 
 <!-- Open Graph / Facebook -->
