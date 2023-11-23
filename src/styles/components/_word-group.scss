@@ -1,0 +1,14 @@
+.c-word-group {
+  &__group {
+    font-size: 2.5rem;
+  }
+
+  &__link {
+    font-size: 1.2rem;
+    line-height: 1.6;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

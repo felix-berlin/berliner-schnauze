@@ -1,5 +1,6 @@
 ---
 import "@styles/objects/_word-index.scss";
+import "@styles/components/_word-group.scss";
 
 import Layout from "@layouts/Layout.astro";
 import { seoData, routeToWord } from "@utils/helpers";
@@ -24,10 +25,10 @@ const groupedWords = await getGroupedWords();
 const sortedGroups = Object.keys(groupedWords).sort();
 
 const content = {
-  title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
+  title: "Berlinerisch Wort-Index - Berlinerisch zu Hochdeutsch",
   seo: {
     opengraphDescription:
-      "Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.",
+      "Alle Berliner Worte in der Übersicht. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.",
   },
 };
 ---
@@ -36,14 +37,17 @@ const content = {
   <h1>Wort-Index</h1>
   {
     sortedGroups.map((group) => (
-      <section>
-        <h2 title={group}>{group}</h2>
-        <ul>
+      <section class="c-word-group">
+        <h2 title={group} class="c-word-group__group">
+          {group}
+        </h2>
+        <ul class="c-word-group__list">
           {groupedWords[group].map((word) => (
             <li>
               <a
                 href={routeToWord(word.slug)}
                 title={`Zur ${word.wordProperties.berlinerisch} Seite`}
+                class="c-word-group__link"
               >
                 {word.wordProperties.berlinerisch}
               </a>

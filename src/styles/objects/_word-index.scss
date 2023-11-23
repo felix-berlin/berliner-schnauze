@@ -1,6 +1,6 @@
 .o-word-index {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
 
   h1 {
     grid-column: 1 / -1;
