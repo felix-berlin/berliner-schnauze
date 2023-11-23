@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/felix-berlin/berliner-schnauze/compare/v2.1.2...v2.2.0) (2023-11-23)
+
+
+### Features
+
+* add pwa config ([b37a861](https://github.com/felix-berlin/berliner-schnauze/commit/b37a861d97fc192715bcce82a3ec2b4992e654f5))
+* **pwa:** add describtion ([6057130](https://github.com/felix-berlin/berliner-schnauze/commit/60571306936309751183af338c182eb4ea58d5f4))
+* **pwa:** add missing favicons ([54e29c3](https://github.com/felix-berlin/berliner-schnauze/commit/54e29c3cbd07ab12a1cc18710c767c9a9f5b028d))
+* **pwa:** add more icons, screenshots and colors ([bfa2dd2](https://github.com/felix-berlin/berliner-schnauze/commit/bfa2dd282984395d72ca1ddc51c53e0138701579))
+
 ## [2.1.2](https://github.com/felix-berlin/berliner-schnauze/compare/v2.1.1...v2.1.2) (2023-11-23)
 
 
