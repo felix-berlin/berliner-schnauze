@@ -32,11 +32,12 @@ export default defineConfig({
       mode: import.meta.env.DEV ? "development" : "production",
       base: "/",
       scope: "/",
-      includeAssets: ["favicon.icon"],
+      includeAssets: ["favicon.ico"],
       registerType: "autoUpdate",
       manifest: {
         name: "Berliner Schnauze",
         short_name: "BLN Schnauze",
+        description: "Berlinerisch Wörterbuch",
         theme_color: "#ffffff",
         icons: [
           {
