@@ -48,6 +48,7 @@
     "test:unit:coverage": "vitest run --coverage",
     "format": "npx prettier --write .",
     "gql:generate": "gql-gen --config codegen.ts",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal public/favicon.svg",
     "predev": "pnpm run gql:generate",
     "preinstall": "npx only-allow pnpm",
     "postbuild": "pagefind --site dist/"
