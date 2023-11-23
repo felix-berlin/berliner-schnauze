@@ -61,7 +61,7 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
   return allWords;
 };
 
-export const getAllWord = async (
+export const getAllWords = async (
   orderByField = "TITLE",
   orderByType = "ASC",
 ): Promise<RootQueryToBerlinerWordConnectionEdge["node"][]> => {
@@ -99,6 +99,49 @@ export const getAllWord = async (
               }
             }
             ${seo}
+          }
+          cursor
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+    `).then((res) => res.data);
+
+    allWords = [...allWords, ...data?.berlinerWords.edges];
+    cursor = data?.berlinerWords.pageInfo.endCursor;
+
+    if (!data?.berlinerWords.pageInfo.hasNextPage) {
+      break;
+    }
+  }
+
+  return allWords;
+};
+
+export const getAllWordsLinks = async (
+  orderByField = "TITLE",
+  orderByType = "ASC",
+): Promise<RootQueryToBerlinerWordConnectionEdge["node"][]> => {
+  let allWords: WordEdge[] = [];
+  let cursor: string | null = null;
+  const pageSize = 100;
+
+  while (true) {
+    const data: BerlinerWordsData = await fetchAPI(`
+    {
+      berlinerWords(first: ${pageSize}, after: ${
+        cursor ? `"${cursor}"` : null
+      }, where: {status: PUBLISH, orderby: {field: ${orderByField}, order: ${orderByType}}}) {
+        edges {
+          node {
+            slug
+            wordGroup
+            wordProperties {
+              berlinerisch
+            }
           }
           cursor
         }

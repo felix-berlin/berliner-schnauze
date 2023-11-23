@@ -67,7 +67,7 @@ export default defineConfig({
             form_factor: "wide",
           },
           {
-            src: "screenshots/berliner-schnauze.wtf_ narrow.png",
+            src: "screenshots/berliner-schnauze.wtf_narrow.png",
             sizes: "850x1716",
             type: "image/png",
             form_factor: "narrow",
@@ -80,7 +80,7 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,svg,png,jpg,jpeg,gif,webp,avif,woff,woff2,ttf,eot,ico}"],
       },
       devOptions: {
-        enabled: true,
+        enabled: false,
         navigateFallbackAllowlist: [/^\//],
       },
       experimental: {

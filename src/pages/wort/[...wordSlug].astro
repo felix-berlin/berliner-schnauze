@@ -4,7 +4,7 @@ import "@styles/objects/_word.scss";
 import "@styles/components/_single-word.scss";
 
 // Imports
-import { getAllWord } from "@services/api";
+import { getAllWords } from "@services/api";
 import Layout from "@layouts/Layout.astro";
 import ArrowLeft from "~icons/lucide/arrow-left";
 import Info from "~icons/lucide/info";
@@ -14,6 +14,7 @@ import WordExamples from "@components/word/WordExamples.vue";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import RelatedWords from "@components/RelatedWords.vue";
 import RandomWordButton from "@components/RandomWordButton.vue";
+import NavigateBack from "@components/NavigateBack.vue";
 import { routeToWord, seoData } from "@utils/helpers";
 
 // Types
@@ -21,7 +22,7 @@ import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
 import type { BerlinerWord } from "@ts_types/generated";
 
 export const getStaticPaths = async () => {
-  const allWords = await getAllWord();
+  const allWords = await getAllWords();
 
   return allWords.map(({ node }) => {
     return {
@@ -52,9 +53,9 @@ const formattedDate = (date: Date, locale = "de-DE") => {
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
-  <a href="/" class="c-button c-button--back u-button-reset">
+  <NavigateBack client:load>
     <ArrowLeft /> zurück
-  </a>
+  </NavigateBack>
 
   <article class="c-single-word">
     <header class="c-single-word__header">
