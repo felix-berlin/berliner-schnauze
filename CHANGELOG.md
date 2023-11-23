@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/felix-berlin/berliner-schnauze/compare/v2.2.0...v2.3.0) (2023-11-23)
+
+
+### Bug Fixes
+
+* **word-group:** display list in line with group headline ([b06b6b1](https://github.com/felix-berlin/berliner-schnauze/commit/b06b6b1ca4444b984aced55843c062076deaf20c))
+
+
+### Features
+
+* **single-word:** add NavigateBack component button ([0a7c950](https://github.com/felix-berlin/berliner-schnauze/commit/0a7c950a37eaf2664a4ed2a26b005ee092dd189f))
+* **word-index:** add styling ([6158893](https://github.com/felix-berlin/berliner-schnauze/commit/615889377c19121fd694e20e231137d77f9c1aae))
+* **word-index:** create index page with all words ([223fd2a](https://github.com/felix-berlin/berliner-schnauze/commit/223fd2a879dba9420427a6303a4a9f5075032707))
+
 # [2.2.0](https://github.com/felix-berlin/berliner-schnauze/compare/v2.1.2...v2.2.0) (2023-11-23)
 
 
