@@ -1,12 +1,17 @@
 import { computed, action, map, deepMap } from "nanostores";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import Fuse from "fuse.js";
-import type { BerlinerWord } from "@ts_types/generated/graphql";
+import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
+
+export type CleanBerlinerWord = Omit<
+  BerlinerWord,
+  "seo" | "title" | "berlinerWordId" | "dateGmt" | "modifiedGmt"
+>;
 
 interface WordGroups {
-  letterGroups: string[];
+  letterGroups: Maybe<string>[];
   activeLetterFilter: string;
-  wordList: BerlinerWord[];
+  wordList: CleanBerlinerWord[];
   search: string;
   order: "asc" | "desc";
 }
@@ -70,11 +75,16 @@ export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
   if (wordSearch.order) {
     // Reassign the filteredWordList to the sorted list, otherwise the DynamicScroller will not update
     filteredWordList = [
-      ...filteredWordList.sort((a, b) =>
-        wordSearch.order === "asc"
-          ? a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch)
-          : b.wordProperties.berlinerisch.localeCompare(a.wordProperties.berlinerisch),
-      ),
+      ...filteredWordList.sort((a, b) => {
+        if (a?.wordProperties?.berlinerisch && b?.wordProperties?.berlinerisch) {
+          return wordSearch.order === "asc"
+            ? a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch)
+            : b.wordProperties.berlinerisch.localeCompare(a.wordProperties.berlinerisch);
+        } else {
+          // Default behavior when either is undefined
+          return 0;
+        }
+      }),
     ];
   }
 
@@ -94,9 +104,9 @@ export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
    *
    * @param   {Array}  result  [result description]
    *
-   * @return  {BerlinerWord[]}          [return description]
+   * @return  {CleanBerlinerWord[]}          [return description]
    */
-  const cleanResults = results.map((result): BerlinerWord[] => {
+  const cleanResults = results.map((result): CleanBerlinerWord => {
     return result.item;
   });
 

@@ -15,11 +15,12 @@ import SortWordDirectionToggle from "@components/SortWordDirectionToggle.vue";
 import AlphabeticalFilterDropdown from "@components/AlphabeticalFilterDropdown.vue";
 import { useStore } from "@nanostores/vue";
 import { $wordSearch } from "@stores/index";
-import type { BerlinerWord } from "@ts_types/generated/graphql";
+import type { Maybe } from "@ts_types/generated/graphql";
+import type { CleanBerlinerWord } from "@stores/index";
 
 interface WordSearchListProps {
-  words: BerlinerWord[];
-  availableLetterGroups: string[];
+  words: CleanBerlinerWord[];
+  availableLetterGroups: Maybe<string>[];
 }
 
 const props = defineProps<WordSearchListProps>();

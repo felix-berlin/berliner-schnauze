@@ -13,7 +13,7 @@
       :aria-label="buttonAriaLabel"
       @click="scrollToTop"
     >
-      <ChevronUp :size="24" class="c-to-top__icon u-ignore-click" />
+      <ChevronUp :width="24" :height="24" class="c-to-top__icon u-ignore-click" />
     </button>
   </Transition>
 </template>

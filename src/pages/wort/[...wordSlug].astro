@@ -105,8 +105,8 @@ const formattedDate = (date: string, locale = "de-DE") => {
 
       <ul class="c-single-word__translation">
         {
-          wordProps?.translations?.map((translation: BerlinerWord["translations"]) => {
-            return <li class="c-single-word__translation-item">{translation.translation}</li>;
+          wordProps?.translations?.map((translation) => {
+            return <li class="c-single-word__translation-item">{translation?.translation}</li>;
           })
         }
       </ul>
@@ -128,10 +128,10 @@ const formattedDate = (date: string, locale = "de-DE") => {
         <div class="c-single-word__related-words-wrapper">
           <h3>Verwandte Worte:</h3>
           <ul class="c-single-word__related-words-list">
-            {wordProps.relatedWords.map((word: BerlinerWord): BerlinerWord[] => {
+            {wordProps.relatedWords.map((word): BerlinerWord[] => {
               return (
                 <li class="c-single-word__related-word">
-                  <a href={routeToWord(word.slug!)} class="c-single-word__related-word-link">
+                  <a href={routeToWord(word?.slug!)} class="c-single-word__related-word-link">
                     {word?.wordProperties?.berlinerisch}
                   </a>
                 </li>
@@ -144,10 +144,10 @@ const formattedDate = (date: string, locale = "de-DE") => {
 
     <footer class="c-single-word__footer">
       <p class="c-single-word__created">
-        Wort erstellt am: {formattedDate(word.dateGmt)}
+        Wort erstellt am: {formattedDate(word.dateGmt!)}
       </p>
       <p class="c-single-word__modified">
-        Bearbeitet am: {formattedDate(word.modifiedGmt)}
+        Bearbeitet am: {formattedDate(word.modifiedGmt!)}
       </p>
     </footer>
   </article>

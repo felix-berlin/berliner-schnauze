@@ -8,6 +8,8 @@ import BrownBearRoar from "@assets/images/brown-bear-roar.png";
 import WordSearchList from "@components/WordSearchList.vue";
 import { getAllWords } from "@services/api";
 import { seoData } from "@utils/helpers";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
+import type { CleanBerlinerWord } from "@stores/index";
 
 const content = {
   title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
@@ -24,14 +26,12 @@ const allWords = await getAllWords();
 
 const wordCount = allWords.length;
 
-const cleanWords = allWords.map(({ node }) => {
+const cleanWords = allWords.map(({ node }): CleanBerlinerWord => {
   const { seo, title, berlinerWordId, dateGmt, modifiedGmt, ...cleanNode } = node;
   return cleanNode;
 });
 
-const availableWordGroups: string[] = Array.from(
-  new Set(allWords.map(({ node }) => node.wordGroup)),
-).sort();
+const availableWordGroups = Array.from(new Set(allWords.map(({ node }) => node.wordGroup))).sort();
 ---
 
 <Layout content={seoData(content)} contentClasses="o-index">

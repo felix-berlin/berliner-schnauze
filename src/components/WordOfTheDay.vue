@@ -18,7 +18,7 @@
       class="c-word-of-the-day__content"
     >
       <div class="c-word-of-the-day__crown-icon">
-        <Crown :size="80" />
+        <Crown :width="80" :height="80" />
       </div>
 
       <Transition v-if="!currentWord.error" name="fade-fast" mode="out-in">

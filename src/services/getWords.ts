@@ -4,7 +4,7 @@ import type {
   RootQueryToBerlinerWordConnection,
   RootQueryToBerlinerWordConnectionEdge,
   BerlinerWord,
-} from "@ts_types/generated/graphql/graphql";
+} from "@ts_types/generated/graphql";
 
 type WordEdge = {
   node: {
@@ -50,7 +50,7 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
     }
     `).then((res) => res.data);
 
-    allWords = [...allWords, ...data?.berlinerWords.edges];
+    allWords = [...allWords, ...data.berlinerWords.edges];
     cursor = data?.berlinerWords.pageInfo.endCursor;
 
     if (!data?.berlinerWords.pageInfo.hasNextPage) {
@@ -125,7 +125,7 @@ export const getAllWords = async (
     }
     `).then((res) => res.data);
 
-    allWords = [...allWords, ...data?.berlinerWords.edges];
+    allWords = [...allWords, ...data.berlinerWords.edges];
     cursor = data?.berlinerWords.pageInfo.endCursor;
 
     if (!data?.berlinerWords.pageInfo.hasNextPage) {
@@ -133,7 +133,7 @@ export const getAllWords = async (
     }
   }
 
-  return allWords;
+  return allWords as RootQueryToBerlinerWordConnectionEdge[];
 };
 
 export const getAllWordsLinks = async (
@@ -168,7 +168,7 @@ export const getAllWordsLinks = async (
     }
     `).then((res) => res.data);
 
-    allWords = [...allWords, ...data?.berlinerWords.edges];
+    allWords = [...allWords, ...data.berlinerWords.edges];
     cursor = data?.berlinerWords.pageInfo.endCursor;
 
     if (!data?.berlinerWords.pageInfo.hasNextPage) {
@@ -176,7 +176,7 @@ export const getAllWordsLinks = async (
     }
   }
 
-  return allWords;
+  return allWords as RootQueryToBerlinerWordConnectionEdge[];
 };
 
 export const getWordBySlug = async (slug: string): Promise<BerlinerWord> => {
