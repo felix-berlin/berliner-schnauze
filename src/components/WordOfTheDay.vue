@@ -33,7 +33,7 @@
         </div>
       </Transition>
 
-      <div v-if="currentWord.error" class="c-word-of-the-day__word-wrap">
+      <div v-if="currentWord.error" class="c-word-of-the-day__word-wrap is-error">
         Ditt kann ne wahr sein, es ist ein Fehler aufgetreten.
       </div>
 
@@ -45,9 +45,9 @@
       Neues Wort in: <span>{{ timeToUpdate.hours }}</span> :
       <span>{{ timeToUpdate.minutes }}</span> : <span>{{ timeToUpdate.seconds }}</span>
     </div>
-    <transition v-if="celebrate" name="fade">
+    <Transition v-if="celebrate" name="fade">
       <ConfettiEffect />
-    </transition>
+    </Transition>
   </div>
 </template>
 
