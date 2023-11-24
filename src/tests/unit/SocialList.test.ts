@@ -10,6 +10,6 @@ describe("SocialList", () => {
 
   it("contains the .social-list class", () => {
     const wrapper = mount(SocialList);
-    expect(wrapper.classes()).toContain("social-list");
+    expect(wrapper.classes()).toContain("c-social-list");
   });
 });
