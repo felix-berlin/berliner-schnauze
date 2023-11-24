@@ -6,13 +6,13 @@
       <p
         v-if="examples && examples.length === 1"
         :class="rootBemClass + '__example'"
-        v-text="examples[0].example"
+        v-text="examples[0]?.example"
       />
 
       <p
-        v-if="examples && examples.length === 1 && examples[0].example_explanation"
+        v-if="examples && examples.length === 1 && examples[0]?.exampleExplanation"
         :class="rootBemClass + '__example-explanation'"
-        v-text="'– ' + examples[0].example_explanation"
+        v-text="'– ' + examples[0].exampleExplanation"
       />
     </div>
 
@@ -24,8 +24,8 @@
         :class="rootBemClass + '__examples-list-item'"
       >
         <span :class="rootBemClass + '__examples-item'">{{ item.example }}</span>
-        <div v-if="item.example_explanation" :class="rootBemClass + '__examples-explanation'">
-          – {{ item.example_explanation }}
+        <div v-if="item?.exampleExplanation" :class="rootBemClass + '__examples-explanation'">
+          – {{ item.exampleExplanation }}
         </div>
       </li>
     </ol>
@@ -34,10 +34,10 @@
 
 <script setup lang="ts">
 import Quote from "virtual:icons/lucide/quote";
-import type { BerlinerWord_Wordproperties } from "@ts_types/generated";
+import type { BerlinerWord_Wordproperties_Examples } from "@ts_types/generated/graphql";
 
 interface WordExamplesProps {
-  examples?: BerlinerWord_Wordproperties["examples"][];
+  examples?: BerlinerWord_Wordproperties_Examples;
   element?: string;
   rootBemClass?: string;
 }

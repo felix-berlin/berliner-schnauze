@@ -18,10 +18,11 @@ import { onBeforeMount, computed } from "vue";
 import Crown from "virtual:icons/lucide/crown";
 import { useStore } from "@nanostores/vue";
 import { wordOfTheDay, getWordOfTheDay } from "@stores/index";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
 
 interface IsWordOfTheDayProps {
   wordId: number;
-  word: string;
+  word: BerlinerWord["wordProperties"];
 }
 
 const { wordId, word } = defineProps<IsWordOfTheDayProps>();

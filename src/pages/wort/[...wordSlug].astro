@@ -19,7 +19,7 @@ import { routeToWord, seoData } from "@utils/helpers";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
-import type { BerlinerWord } from "@ts_types/generated";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
 
 export const getStaticPaths = async () => {
   const allWords = await getAllWords();
@@ -43,9 +43,10 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { wordSlug } = Astro.params as Params;
 const { word, allWords } = Astro.props as Props;
 
-const wordProps = word.wordProperties;
+const wordProps: BerlinerWord["wordProperties"] = word.wordProperties;
 
-const formattedDate = (date: Date, locale = "de-DE") => {
+const formattedDate = (date: string, locale = "de-DE") => {
+  if (!date) return;
   const dateToFormat = new Date(date);
 
   return dateToFormat.toLocaleString(locale, { year: "numeric", month: "long", day: "numeric" });
@@ -61,15 +62,15 @@ const formattedDate = (date: Date, locale = "de-DE") => {
     <header class="c-single-word__header">
       <IsWordOfTheDay
         wordId={word.berlinerWordId}
-        word={wordProps.berlinerisch}
+        word={wordProps?.berlinerisch}
         client:only="vue"
       />
 
       <h1 class="c-single-word__word">
-        {wordProps.berlinerisch}
+        {wordProps?.berlinerisch}
 
         {
-          wordProps.article && (
+          wordProps?.article && (
             <span class="c-single-word__word-article">, {wordProps.article}</span>
           )
         }
@@ -77,10 +78,10 @@ const formattedDate = (date: Date, locale = "de-DE") => {
     </header>
 
     {
-      word.wordProperties.learn_more && (
+      wordProps?.learnMore && (
         <div class="c-single-word__learn-more-wrapper">
           <Info />{" "}
-          <a href={word.learn_more} target="_blank" class="c-single-word__learn-more-link">
+          <a href={wordProps?.learnMore} target="_blank" class="c-single-word__learn-more-link">
             Erfahre mehr über dieses Wort{" "}
             <span class="c-single-word__learn-more-link-icon">
               <ExternalLink width="10" height="10" />
@@ -91,20 +92,20 @@ const formattedDate = (date: Date, locale = "de-DE") => {
     }
 
     {
-      wordProps.word_type && (
+      word?.berlinerischWordTypes && word?.berlinerischWordTypes.nodes.length > 0 && (
         <div class="c-single-word__word-type-wrapper">
           <h2 class="c-single-word__sub-headline">Wortart:</h2>
-          <p class="c-single-word__word-type">{wordProps.word_type[0].name}</p>
+          <p class="c-single-word__word-type">{word?.berlinerischWordTypes.nodes[0].name}</p>
         </div>
       )
     }
 
     <div class="c-single-word__translation-wrapper">
-      {wordProps.translations && <h2 class="c-single-word__sub-headline">Bedeutung:</h2>}
+      {wordProps?.translations && <h2 class="c-single-word__sub-headline">Bedeutung:</h2>}
 
       <ul class="c-single-word__translation">
         {
-          wordProps.translations.map((translation, translationIndex) => {
+          wordProps?.translations?.map((translation: BerlinerWord["translations"]) => {
             return <li class="c-single-word__translation-item">{translation.translation}</li>;
           })
         }
@@ -112,26 +113,26 @@ const formattedDate = (date: Date, locale = "de-DE") => {
     </div>
 
     <div class="c-single-word__examples-wrapper">
-      {wordProps.examples && <h2 class="c-single-word__sub-headline">Beispiele:</h2>}
-      <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
+      {
+        wordProps?.examples && (
+          <>
+            <h2 class="c-single-word__sub-headline">Beispiele:</h2>
+            <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
+          </>
+        )
+      }
     </div>
 
     {
-      word.related_words && (
+      wordProps?.relatedWords && (
         <div class="c-single-word__related-words-wrapper">
           <h3>Verwandte Worte:</h3>
           <ul class="c-single-word__related-words-list">
-            {word.related_words.map((related_word, index) => {
+            {wordProps.relatedWords.map((word: BerlinerWord): BerlinerWord[] => {
               return (
-                <li
-                  v-for="(related_word, index) in word.related_words"
-                  class="c-single-word__related-word"
-                >
-                  <a
-                    href={routeToWord(related_word.post_name)}
-                    class="c-single-word__related-word-link"
-                  >
-                    {related_word.post_title}
+                <li class="c-single-word__related-word">
+                  <a href={routeToWord(word.slug!)} class="c-single-word__related-word-link">
+                    {word?.wordProperties?.berlinerisch}
                   </a>
                 </li>
               );
@@ -152,6 +153,6 @@ const formattedDate = (date: Date, locale = "de-DE") => {
   </article>
 
   <RelatedWords words={allWords}>
-    <RandomWordButton words={allWords} class="c-related-words__word is-random" />
+    <RandomWordButton words={allWords} class:list="c-related-words__word is-random" />
   </RelatedWords>
 </Layout>

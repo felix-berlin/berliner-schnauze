@@ -1,7 +1,7 @@
 import { computed, action, map, deepMap } from "nanostores";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import Fuse from "fuse.js";
-import type { BerlinerWord } from "@ts_types/generated";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
 
 interface WordGroups {
   letterGroups: string[];

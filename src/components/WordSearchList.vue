@@ -15,7 +15,7 @@ import SortWordDirectionToggle from "@components/SortWordDirectionToggle.vue";
 import AlphabeticalFilterDropdown from "@components/AlphabeticalFilterDropdown.vue";
 import { useStore } from "@nanostores/vue";
 import { $wordSearch } from "@stores/index";
-import type { BerlinerWord } from "@ts_types/generated";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
 
 interface WordSearchListProps {
   words: BerlinerWord[];

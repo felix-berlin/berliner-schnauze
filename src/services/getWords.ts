@@ -4,7 +4,7 @@ import type {
   RootQueryToBerlinerWordConnection,
   RootQueryToBerlinerWordConnectionEdge,
   BerlinerWord,
-} from "@ts_types/generated/graphql";
+} from "@ts_types/generated/graphql/graphql";
 
 type WordEdge = {
   node: {
@@ -64,7 +64,7 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
 export const getAllWords = async (
   orderByField = "TITLE",
   orderByType = "ASC",
-): Promise<RootQueryToBerlinerWordConnectionEdge["node"][]> => {
+): Promise<RootQueryToBerlinerWordConnectionEdge[]> => {
   let allWords: WordEdge[] = [];
   let cursor: string | null = null;
   const pageSize = 100;
@@ -97,6 +97,21 @@ export const getAllWords = async (
                 fieldGroupName
                 translation
               }
+              relatedWords {
+                ... on BerlinerWord {
+                  id
+                  wordProperties {
+                    berlinerisch
+                  }
+                  slug
+                }
+              }
+            }
+            berlinerischWordTypes {
+              nodes {
+                slug
+                name
+              }
             }
             ${seo}
           }
@@ -124,7 +139,7 @@ export const getAllWords = async (
 export const getAllWordsLinks = async (
   orderByField = "TITLE",
   orderByType = "ASC",
-): Promise<RootQueryToBerlinerWordConnectionEdge["node"][]> => {
+): Promise<RootQueryToBerlinerWordConnectionEdge[]> => {
   let allWords: WordEdge[] = [];
   let cursor: string | null = null;
   const pageSize = 100;

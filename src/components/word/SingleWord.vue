@@ -148,7 +148,7 @@ import WordExamples from "@components/word/WordExamples.vue";
 import { routeToWord } from "@utils/helpers";
 import { useClipboard, useShare } from "@vueuse/core";
 
-import type { BerlinerWord_Wordproperties } from "@ts_types/generated";
+import type { BerlinerWord_Wordproperties } from "@ts_types/generated/graphql";
 
 interface WordProps {
   source: BerlinerWord_Wordproperties;

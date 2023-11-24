@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { routeToWord } from "@utils/helpers";
-import type { BerlinerWord } from "@ts_types/generated";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
 
 interface RelatedWordsProps {
   numberOfWords?: number;
@@ -26,6 +26,7 @@ interface RelatedWordsProps {
 }
 
 const { numberOfWords = 7, words } = defineProps<RelatedWordsProps>();
+
 /**
  * Get x random items from an array
  *
@@ -34,7 +35,7 @@ const { numberOfWords = 7, words } = defineProps<RelatedWordsProps>();
  *
  * @return  {Array}       Array of random items
  */
-const xRandomWords = (arr, n) => {
+const xRandomWords = (arr: BerlinerWord[], n: number): BerlinerWord[] => {
   const result = new Array(n);
   let len = arr.length;
   const taken = new Array(len);

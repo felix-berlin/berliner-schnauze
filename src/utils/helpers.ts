@@ -1,10 +1,24 @@
 import type { Seo, SeoProps } from "@components/BaseHead.astro";
 
-export const routeToWord = (word: string) => {
+/**
+ * Returns the route to a word
+ *
+ * @param   {string}  word
+ *
+ * @return  {string}
+ */
+export const routeToWord = (word: string | undefined): string => {
+  if (typeof word !== "string") {
+    console.error("routeToWord: word is not a string");
+
+    return "/wort";
+  }
+
   return `/wort/${word}`;
 };
 
-export const randomElement = (elements) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const randomElement = (elements: any[]): any => {
   return elements[Math.floor(Math.random() * elements.length)];
 };
 
