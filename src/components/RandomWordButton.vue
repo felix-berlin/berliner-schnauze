@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { routeToWord, randomElement } from "@utils/helpers";
 import Dices from "virtual:icons/lucide/dices";
-import type { BerlinerWord } from "@ts_types/generated";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
 
 interface RelatedWordsProps {
   words: BerlinerWord[];

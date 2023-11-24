@@ -50,7 +50,7 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
     }
     `).then((res) => res.data);
 
-    allWords = [...allWords, ...data?.berlinerWords.edges];
+    allWords = [...allWords, ...data.berlinerWords.edges];
     cursor = data?.berlinerWords.pageInfo.endCursor;
 
     if (!data?.berlinerWords.pageInfo.hasNextPage) {
@@ -64,7 +64,7 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
 export const getAllWords = async (
   orderByField = "TITLE",
   orderByType = "ASC",
-): Promise<RootQueryToBerlinerWordConnectionEdge["node"][]> => {
+): Promise<RootQueryToBerlinerWordConnectionEdge[]> => {
   let allWords: WordEdge[] = [];
   let cursor: string | null = null;
   const pageSize = 100;
@@ -97,6 +97,21 @@ export const getAllWords = async (
                 fieldGroupName
                 translation
               }
+              relatedWords {
+                ... on BerlinerWord {
+                  id
+                  wordProperties {
+                    berlinerisch
+                  }
+                  slug
+                }
+              }
+            }
+            berlinerischWordTypes {
+              nodes {
+                slug
+                name
+              }
             }
             ${seo}
           }
@@ -110,7 +125,7 @@ export const getAllWords = async (
     }
     `).then((res) => res.data);
 
-    allWords = [...allWords, ...data?.berlinerWords.edges];
+    allWords = [...allWords, ...data.berlinerWords.edges];
     cursor = data?.berlinerWords.pageInfo.endCursor;
 
     if (!data?.berlinerWords.pageInfo.hasNextPage) {
@@ -118,13 +133,13 @@ export const getAllWords = async (
     }
   }
 
-  return allWords;
+  return allWords as RootQueryToBerlinerWordConnectionEdge[];
 };
 
 export const getAllWordsLinks = async (
   orderByField = "TITLE",
   orderByType = "ASC",
-): Promise<RootQueryToBerlinerWordConnectionEdge["node"][]> => {
+): Promise<RootQueryToBerlinerWordConnectionEdge[]> => {
   let allWords: WordEdge[] = [];
   let cursor: string | null = null;
   const pageSize = 100;
@@ -153,7 +168,7 @@ export const getAllWordsLinks = async (
     }
     `).then((res) => res.data);
 
-    allWords = [...allWords, ...data?.berlinerWords.edges];
+    allWords = [...allWords, ...data.berlinerWords.edges];
     cursor = data?.berlinerWords.pageInfo.endCursor;
 
     if (!data?.berlinerWords.pageInfo.hasNextPage) {
@@ -161,7 +176,7 @@ export const getAllWordsLinks = async (
     }
   }
 
-  return allWords;
+  return allWords as RootQueryToBerlinerWordConnectionEdge[];
 };
 
 export const getWordBySlug = async (slug: string): Promise<BerlinerWord> => {

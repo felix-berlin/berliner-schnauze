@@ -5,13 +5,17 @@ import "@styles/components/_word-group.scss";
 import Layout from "@layouts/Layout.astro";
 import { seoData, routeToWord } from "@utils/helpers";
 import { getAllWordsLinks } from "@services/api";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
 
-async function getGroupedWords() {
+async function getGroupedWords(): Promise<Record<string, BerlinerWord[]>> {
   const allWords = await getAllWordsLinks();
-  const groupedWords = {};
+
+  const groupedWords: Record<string, BerlinerWord[]> = {};
 
   allWords.forEach(({ node }) => {
     const group = node.wordGroup;
+    if (!group) return;
+
     if (!groupedWords[group]) {
       groupedWords[group] = [];
     }
@@ -45,11 +49,11 @@ const content = {
           {groupedWords[group].map((word) => (
             <li>
               <a
-                href={routeToWord(word.slug)}
-                title={`Zur ${word.wordProperties.berlinerisch} Seite`}
+                href={routeToWord(word.slug!)}
+                title={`Zur ${word.wordProperties?.berlinerisch} Seite`}
                 class="c-word-group__link"
               >
-                {word.wordProperties.berlinerisch}
+                {word.wordProperties?.berlinerisch}
               </a>
             </li>
           ))}

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Modal > renders correctly 1`] = `
+"<dialog id=\\"modal-undefined\\" class=\\"c-modal c-modal--undefined\\">
+  <!--v-if-->
+</dialog>"
+`;

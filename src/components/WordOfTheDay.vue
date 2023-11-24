@@ -18,10 +18,10 @@
       class="c-word-of-the-day__content"
     >
       <div class="c-word-of-the-day__crown-icon">
-        <Crown :size="80" />
+        <Crown :width="80" :height="80" />
       </div>
 
-      <Transition name="fade-fast" mode="out-in">
+      <Transition v-if="!currentWord.error" name="fade-fast" mode="out-in">
         <SingleLoader v-if="currentWord.loading" key="loading" />
         <div v-else key="word" class="c-word-of-the-day__word-wrap">
           <a
@@ -32,6 +32,10 @@
           </a>
         </div>
       </Transition>
+
+      <div v-if="currentWord.error" class="c-word-of-the-day__word-wrap">
+        Ditt kann ne wahr sein, es ist ein Fehler aufgetreten.
+      </div>
 
       <hr class="c-word-of-the-day__divider" />
 
@@ -124,12 +128,13 @@ const padTo2Digits = (num: number): string => {
  * Converts milliseconds to hours, minutes and seconds
  *
  * @param   {number}  milliseconds
- * @param   {boolean}  singleValues  if true, return a object with only hours, minutes and seconds
  * @see: https://bobbyhadz.com/blog/javascript-convert-milliseconds-to-hours-minutes-seconds
  *
  * @return  {[type]}                returns a string or an object with hours, minutes and seconds
  */
-const convertMsToTime = (milliseconds: number) => {
+const convertMsToTime = (
+  milliseconds: number,
+): { hours: string; minutes: string; seconds: string } => {
   let seconds = Math.floor(milliseconds / 1000);
   let minutes = Math.floor(seconds / 60);
   let hours = Math.floor(minutes / 60);

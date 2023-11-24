@@ -28,11 +28,13 @@ export interface Word {
 type WordOfTheDay = {
   word?: Word;
   loading: boolean;
+  error: boolean;
 };
 
 export const wordOfTheDay = map<WordOfTheDay>({
   word: {},
   loading: true,
+  error: false,
 });
 
 /**
@@ -41,24 +43,30 @@ export const wordOfTheDay = map<WordOfTheDay>({
  * @param   {[type]}  wordOfTheDay     [wordOfTheDay description]
  * @param   {[type]}  getWordOfTheDay  [getWordOfTheDay description]
  * @param   {[type]}  async            [async description]
- * @param   {[type]}  store            [store description]
- * @param   {[type]}  add              [add description]
  *
  * @return  {[type]}                   [return description]
  */
-export const getWordOfTheDay = action(wordOfTheDay, "getWordOfTheDay", async (store, add) => {
+export const getWordOfTheDay = action(wordOfTheDay, "getWordOfTheDay", async () => {
   return await fetch(`${import.meta.env.PUBLIC_WP_REST_API}/berliner-schnauze/v1/word-of-the-day`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
     },
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) {
+        wordOfTheDay.setKey("error", true);
+
+        throw new Error("Failed to fetch Word of the Day");
+      }
+
+      return res.json();
+    })
     .then((data) => {
       wordOfTheDay.setKey("word", data);
       wordOfTheDay.setKey("loading", false);
     })
     .catch((err) => {
-      console.error(err);
+      console.error("Failed to fetch Word of the Day: ", err);
     });
 });

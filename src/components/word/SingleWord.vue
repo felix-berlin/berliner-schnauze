@@ -5,22 +5,22 @@
     :key="source.id"
     :data-group="source.wordGroup"
     class="c-word-list__word"
-    :class="{ 'has-translation': source.wordProperties.translations }"
+    :class="{ 'has-translation': source.wordProperties?.translations }"
     data-track-content
     data-content-name="word"
   >
     <div
-      :class="[{ 'has-example': source.wordProperties.examples }, 'c-word-list__header-wrapper']"
+      :class="[{ 'has-example': source.wordProperties?.examples }, 'c-word-list__header-wrapper']"
     >
       <dl class="c-word-list__header">
         <dt
           class="c-word-list__berlinerisch"
-          :data-content-piece="source.wordProperties.berlinerisch"
+          :data-content-piece="source.wordProperties?.berlinerisch"
         >
           <span
             v-if="isWordOfTheDay"
             v-tooltip="{
-              content: `${source.wordProperties.berlinerisch} ist das heutige Wort des Tages`,
+              content: `${source.wordProperties?.berlinerisch} ist das heutige Wort des Tages`,
               distance: 10,
               placement: 'top',
             }"
@@ -29,17 +29,17 @@
           >
             <Crown />
           </span>
-          <a :href="routeToWord(source.slug)">
-            {{ source.wordProperties.berlinerisch }}
+          <a :href="routeToWord(source.slug!)">
+            {{ source.wordProperties?.berlinerisch }}
           </a>
         </dt>
 
         <dd
-          v-for="(translation, translationIndex) in source.wordProperties.translations"
+          v-for="(translation, translationIndex) in source.wordProperties?.translations"
           :key="translationIndex"
           class="c-word-list__translation"
         >
-          {{ translation.translation }}
+          {{ translation?.translation }}
         </dd>
       </dl>
 
@@ -66,7 +66,7 @@
             type="button"
             class="c-word-list__copy-button c-button c-button--dashed-border"
             :class="{ 'is-success': wordShared === index }"
-            @click="shareWord(source.slug, index)"
+            @click="shareWord(source.slug!, index)"
           >
             <span class="c-word-list__icon-button" :class="{ 'is-hidden': wordShared === index }">
               <Share2 width="18" height="18" />
@@ -83,7 +83,7 @@
             type="button"
             class="c-word-list__copy-button c-button c-button--dashed-border"
             :class="{ 'is-success': wordLinkCopied === index }"
-            @click="copyWordPageUrlToClipboard(source.slug, index)"
+            @click="copyWordPageUrlToClipboard(source.slug!, index)"
           >
             <span
               class="c-word-list__icon-button"
@@ -106,7 +106,7 @@
             type="button"
             class="c-word-list__copy-button c-button c-button--dashed-border"
             :class="{ 'is-success': wordCopied === index }"
-            @click="copyNameToClipboard(source.wordProperties.berlinerisch, index)"
+            @click="copyNameToClipboard(source.wordProperties?.berlinerisch!, index)"
           >
             <span class="c-word-list__icon-button" :class="{ 'is-hidden': wordCopied === index }">
               <Copy width="18" height="18" />
@@ -120,18 +120,18 @@
       </VDropdown>
     </div>
 
-    <WordExamples :examples="source.wordProperties.examples" />
+    <WordExamples :examples="source.wordProperties?.examples!" />
 
     <a
       v-if="
-        source.wordProperties.learn_more ||
-        source.wordProperties.related_words ||
-        source.wordProperties.word_type
+        source.wordProperties?.learnMore ||
+        source.wordProperties?.relatedWords ||
+        source.berlinerischWordTypes
       "
-      :href="routeToWord(source.slug)"
+      :href="routeToWord(source.slug!)"
       class="c-word-list__learn-more c-button u-button-reset"
     >
-      <Info :size="20" /> mehr erfahren
+      <Info :width="20" :height="20" /> mehr erfahren
     </a>
   </article>
 </template>
@@ -148,10 +148,11 @@ import WordExamples from "@components/word/WordExamples.vue";
 import { routeToWord } from "@utils/helpers";
 import { useClipboard, useShare } from "@vueuse/core";
 
-import type { BerlinerWord_Wordproperties } from "@ts_types/generated";
+import type { BerlinerWord_Wordproperties } from "@ts_types/generated/graphql";
+import type { CleanBerlinerWord } from "@stores/index";
 
 interface WordProps {
-  source: BerlinerWord_Wordproperties;
+  source: CleanBerlinerWord;
   index: number;
 }
 
