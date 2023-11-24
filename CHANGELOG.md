@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/felix-berlin/berliner-schnauze/compare/v2.3.0...v2.3.1) (2023-11-24)
+
+
+### Bug Fixes
+
+* mostly all type error ([bf42d5e](https://github.com/felix-berlin/berliner-schnauze/commit/bf42d5e54b32118821a09c26ee5beb900fc95b44))
+* **single page:** load and render missing data ([e4a646c](https://github.com/felix-berlin/berliner-schnauze/commit/e4a646c8073f88463059a875ebf5a37069608916))
+* **WordOfTheDay:** show error message when fetch fails ([bc74772](https://github.com/felix-berlin/berliner-schnauze/commit/bc74772465aa2df3a7ae31f94ebfa976324544ae))
+
 # [2.3.0](https://github.com/felix-berlin/berliner-schnauze/compare/v2.2.0...v2.3.0) (2023-11-23)
 
 
