@@ -2,11 +2,6 @@
 @use "@styles/mixins/mixins" as mx;
 
 :root {
-  @each $name, $color in vars.$all-colors {
-    /* stylelint-disable-next-line custom-property-pattern */
-    --#{$name}: #{$color};
-  }
-
   --padding-y-header: #{vars.$spacer * 0.6};
   --spacing-main-frame: 20px;
 

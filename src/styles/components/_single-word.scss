@@ -6,7 +6,7 @@
 .c-single-word {
   --size-quote-icon: 32px;
 
-  background-color: rgba(#fff, 0.6);
+  background-color: var(--color-background, rgba(#fff, 0.6));
   border: 1px dashed var(--grey-100);
   padding: vars.$spacer * 1.5;
   display: flex;
@@ -15,6 +15,10 @@
   box-shadow:
     0 0.5px 0.6px rgb(0 0 0 / 8%),
     0 4px 5px rgb(0 0 0 / 16%);
+
+  @include butler-mx.dark-mode-class {
+    --color-background: var(--new-blue-400);
+  }
 
   &__header {
     position: relative;
@@ -172,8 +176,7 @@
   &__related-words-list {
     display: flex;
     flex-wrap: wrap;
-    column-gap: vars.$spacer * 2;
-    row-gap: vars.$spacer * 0.5;
+    gap: vars.$spacer * 0.5 vars.$spacer * 2;
   }
 
   &__footer {

@@ -24,7 +24,7 @@ body {
     --color-body: #{vars.$yellow-500};
     --color-gradient-body-1: #{butler-fn.hex-to-rgb(map.get(vars.$blue-shades, "blue-400"), 30%)};
     --color-gradient-body-2: color-mix(in srgb, var(--blue) 70%, transparent);
-    --color-background-body: color-mix(in srgb, var(--blue) 90%, white);
+    --color-background-body: var(--new-blue-300);
   }
 }
 

@@ -10,7 +10,7 @@
   transition: all 0.3s ease-in-out;
 
   @include butler-mx.dark-mode-class {
-    --color-background: color-mix(in srgb, var(--blue) 90%, black);
+    --color-background: var(--new-blue-600);
     --color: var(--yellow-500);
     --color-border: color-mix(in srgb, var(--blue) 80%, white);
   }

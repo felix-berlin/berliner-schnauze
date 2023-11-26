@@ -67,5 +67,6 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss">
+@use "@styles/components/search.scss";
 @use "@pagefind/default-ui/css/ui.css";
 </style>

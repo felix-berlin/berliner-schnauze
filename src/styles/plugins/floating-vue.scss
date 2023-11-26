@@ -7,7 +7,7 @@
   --color-background: var(--secondary);
 
   @include butler-mx.dark-mode-class {
-    --color-background: color-mix(in srgb, var(--blue) 86%, white);
+    --color-background: var(--new-blue-200);
   }
 
   &:focus {

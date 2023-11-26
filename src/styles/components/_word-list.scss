@@ -52,7 +52,7 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
     }
 
     @include butler-mx.dark-mode-class {
-      --color-background: color-mix(in srgb, var(--blue) 92%, white);
+      --color-background: var(--new-blue-400);
     }
   }
 

@@ -1,10 +1,15 @@
 @use "@styles/variables/base";
+@use "@sass-butler/mixins" as butler-mx;
 
 .c-modal {
   border: none;
   inset: 0;
   background-color: var(--color-background-modal, var(--secondary));
   width: max(400px, 80%);
+
+  @include butler-mx.dark-mode-class {
+    --color-background-modal: var(--new-blue-400);
+  }
 
   &::backdrop {
     background-color: var(--color-background-modal, rgb(0 0 0 / 30%));

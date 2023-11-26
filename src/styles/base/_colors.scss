@@ -1,0 +1,14 @@
+@use "@styles/variables/variables" as vars;
+
+:root {
+  @each $name, $color in vars.$all-colors {
+    /* stylelint-disable-next-line custom-property-pattern */
+    --#{$name}: #{$color};
+  }
+
+  --new-blue-200: color-mix(in srgb, var(--blue) 86%, white);
+  --new-blue-300: color-mix(in srgb, var(--blue) 90%, white);
+  --new-blue-400: color-mix(in srgb, var(--blue) 92%, white);
+  --new-blue-500: var(--blue);
+  --new-blue-600: color-mix(in srgb, var(--blue) 90%, black);
+}
