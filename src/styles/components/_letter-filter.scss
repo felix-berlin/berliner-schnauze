@@ -7,21 +7,19 @@
 
   &__list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(38px, 1fr));
-    gap: vars.$spacer * 0.5;
+    grid-template-columns: repeat(5, minmax(45px, 1fr));
+    gap: 1rem;
 
     .c-letter-filter__list-item {
       display: flex;
       align-items: center;
       justify-content: center;
-      aspect-ratio: 1/1;
+      aspect-ratio: 1;
 
       &:hover,
       &.is-current {
         .c-letter-filter__button {
-          --color-background: var(--primary);
-          --color: var(--white-100);
-          --color-border: var(--white-100);
+          --color-border: var(--orange-500);
           --style-border: dashed;
 
           font-weight: 600;
@@ -34,7 +32,7 @@
     --spacing: #{vars.$spacer * 0.25};
     --size-font: 1rem;
     --width-min: 1.4rem;
-    --color: var(--primary);
+    --color: var(--yellow-500);
 
     font-size: var(--size-font);
     padding: var(--spacing);

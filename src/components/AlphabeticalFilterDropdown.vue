@@ -28,11 +28,12 @@
 
     <button
       v-if="wordSearch.activeLetterFilter"
-      class="c-filter-dropdown__active-filter"
+      type="button"
+      class="c-filter-dropdown__active-filter c-button c-button--center-icon"
       @click="setLetterFilter('')"
     >
       <span>{{ wordSearch.activeLetterFilter }}</span>
-      <span><X :width="10" height="10" /></span>
+      <X width="10" height="10" />
     </button>
   </div>
 </template>

@@ -24,7 +24,7 @@
           type="button"
           class="c-letter-filter__button c-button"
           :title="'Filter nach Buchstabe ' + letter"
-          @click="setLetterFilter(letter)"
+          @click="setLetterFilter(letter!)"
         >
           {{ letter }}
         </button>
