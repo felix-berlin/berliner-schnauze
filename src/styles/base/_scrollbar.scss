@@ -1,30 +1,31 @@
-@use '@styles/variables/variables' as vars;
+@use "sass:map";
+@use "@styles/variables/variables" as vars;
 
 html {
-	--scrollbar-primary: var(--primary);
-	--scrollbar-secondary: var(--secondary);
-	--scrollbar-tertiary: var(--secondary);
-	--scrollbar-width: 8px;
-	--scrollbar-button-bgc: #{rgba(vars.$red-200, 0.8)};
+  --scrollbar-primary: var(--primary);
+  --scrollbar-secondary: var(--secondary);
+  --scrollbar-tertiary: var(--secondary);
+  --scrollbar-width: 8px;
+  --scrollbar-button-bgc: #{rgba(vars.$red-200, 0.8)};
 
-	&[class='dark'] {
-		--scrollbar-button-bgc: #{rgba(vars.$blue-200, 0.8)};
-	}
+  &[class="dark"] {
+    --scrollbar-button-bgc: #{rgba(map.get(vars.$blue-shades, "blue-200"), 0.8)};
+  }
 
-	/* ----------  Mozilla Firefox  ---------- */
+  /* ----------  Mozilla Firefox  ---------- */
 
-	/**
+  /**
 	 * Firefox Supports only:
 	 * the default width or thin,
 	 * the background color and the thumb color
 	 * */
 
-	scrollbar-width: thin;
-	scrollbar-color: var(--scrollbar-primary) var(--scrollbar-secondary);
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-primary) var(--scrollbar-secondary);
 
-	/* ----------  Webkit-Browsers: Chrome, Opera, Safari  ---------- */
+  /* ----------  Webkit-Browsers: Chrome, Opera, Safari  ---------- */
 
-	/**
+  /**
 	 * Pseudo-Classes:
 	 *
 	 * :horizontal
@@ -39,85 +40,85 @@ html {
 	 * :corner-present
 	 * :window-inactive
 	 * */
-	// The whole scrollbar
-	&::-webkit-scrollbar {
-		width: var(--scrollbar-width);
-	}
+  // The whole scrollbar
+  &::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+  }
 
-	/**
+  /**
 	 * Scrollbar Button
 	 *
 	 * The down and up buttons on top and bottom of the scrollbar
 	 * */
-	&::-webkit-scrollbar-button {
-		background-color: var(--scrollbar-button-bgc);
+  &::-webkit-scrollbar-button {
+    background-color: var(--scrollbar-button-bgc);
 
-		&:hover {
-			--scrollbar-button-bgc: var(--scrollbar-primary);
-		}
+    &:hover {
+      --scrollbar-button-bgc: var(--scrollbar-primary);
+    }
 
-		// &:window-inactive {
-		//   background-color: $scrollbar-button-element-inactive;
-		// }
-	}
+    // &:window-inactive {
+    //   background-color: $scrollbar-button-element-inactive;
+    // }
+  }
 
-	/**
+  /**
 	 * Scrollbar Track
 	 *
 	 * Section between the down and up buttons
 	 * On the track moves to the thumb
 	 * */
-	&::-webkit-scrollbar-track {
-		--scrollbar-track-bgc: #{rgba(vars.$red-200, 0.3)};
-		--scrollbar-track-bc: var(--scrollbar-tertiary);
-		--scrollbar-track-border-width: var(--scrollbar-width);
+  &::-webkit-scrollbar-track {
+    --scrollbar-track-bgc: #{rgba(vars.$red-200, 0.3)};
+    --scrollbar-track-bc: var(--scrollbar-tertiary);
+    --scrollbar-track-border-width: var(--scrollbar-width);
 
-		background-color: var(--white-100);
-		border: var(--scrollbar-track-border-width) solid var(--scrollbar-track-bc);
+    background-color: var(--white-100);
+    border: var(--scrollbar-track-border-width) solid var(--scrollbar-track-bc);
 
-		// &:hover {
-		//   --scrollbar-track-bgc: rgba(251, 208, 7, 0.5);
-		// }
-	}
+    // &:hover {
+    //   --scrollbar-track-bgc: rgba(251, 208, 7, 0.5);
+    // }
+  }
 
-	/**
+  /**
 	 * Scrollbar Track Piece
 	 *
 	 * The free acrea between thumb and track
 	 * */
-	// &::-webkit-scrollbar-track-piece {
-	// }
+  // &::-webkit-scrollbar-track-piece {
+  // }
 
-	/**
+  /**
 	 *  Scroolbar Thumb
 	 *
 	 * The thumb moves on the track and shows the actuall position on the page
 	 * */
-	&::-webkit-scrollbar-thumb {
-		--scrollbara-thumb-bgc: var(--scrollbar-primary);
+  &::-webkit-scrollbar-thumb {
+    --scrollbara-thumb-bgc: var(--scrollbar-primary);
 
-		background-color: var(--scrollbara-thumb-bgc);
+    background-color: var(--scrollbara-thumb-bgc);
 
-		// &:window-inactive {
-		//   /* Select the thumb when the browser window isn't in focus */
-		//   background-color: $scrollbar-thumb-element-inactive;
-		// }
-	}
+    // &:window-inactive {
+    //   /* Select the thumb when the browser window isn't in focus */
+    //   background-color: $scrollbar-thumb-element-inactive;
+    // }
+  }
 
-	/**
+  /**
 	 * Scrollbar Corner
 	 *
 	 * Corner on the bottom
 	 * */
-	&::-webkit-scrollbar-corner {
-		background: transparent;
-	}
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 
-	/**
+  /**
 	 * Scrollbar Resizer
 	 *
 	 * The resizer is locaated in the corner
 	 * */
-	// &::-webkit-resizer {
-	// }
+  // &::-webkit-resizer {
+  // }
 }

@@ -1,36 +1,158 @@
-@use '@sass-butler/functions' as butler-fn;
+@use "sass:color";
+@use "sass:map";
+@use "@sass-butler/functions" as butler-fn;
 
+/// White colors
 $white-100: #f9f9f9;
 $white-200: #f5f5f5;
+$white-300: #faf6fa;
 $white-colors: (
-	'white-100': $white-100,
-	'white-200': $white-200
-);
-$red-100: #ffd6cf;
-$red-200: #f28f7f;
-$red-colors: (
-	'red-100': $red-100,
-	'red-200': $red-200,
-);
-$blue-100: #637587;
-$blue-200: #2b333b;
-$blue-colors: (
-	'blue-100': $blue-100,
-	'blue-200': $blue-200
+  "white-100": $white-100,
+  "white-200": $white-200,
 );
 
-// greys
+$r: #cf3119;
+
+/// Red Berlin
+$red-berlin-500: #f2391d;
+$red-berlin-600: #d5331a;
+$red-berlin-700: #b92c16;
+
+/// Red colors
+$red-100: #ffd6cf;
+$red-200: #f28f7f;
+$red-500: #cf3018;
+$red-colors: (
+  "red-100": $red-100,
+  "red-200": $red-200,
+);
+
+/// Orange colors
+
+$orange-100: #fcead7;
+$orange-200: #fad0b0;
+$orange-300: #f0ac85;
+$orange-400: #e28964;
+$orange-500: #cf5736;
+$orange-600: #b23b27;
+$orange-700: #95231b;
+$orange-800: #781111;
+$orange-900: #630a11;
+$orange-colors: (
+  "orange-100": $orange-100,
+  "orange-200": $orange-200,
+  "orange-300": $orange-300,
+  "orange-400": $orange-400,
+  "orange-500": $orange-500,
+  "orange-600": $orange-600,
+  "orange-700": $orange-700,
+  "orange-800": $orange-800,
+  "orange-900": $orange-900,
+);
+
+/// Yellow colors
+$yellow-500: #e3e3d2;
+
+$yellow-colors: (
+  "yellow-500": $yellow-500,
+);
+
+/// Blue colors
+// $blue-100: #637587;
+// $blue-200: #2b333b;
+// $blue-100: #e7f1f5;
+// $blue-200: #d1e2eb;
+// $blue-300: #a4b7c4;
+// $blue-400: #6d7c89;
+// $t: #40474f;
+// $blue-base: #2b333b;
+// $blue-600: #1f2832;
+// $blue-700: #151d2a;
+// $blue-800: #0d1422;
+// $blue-900: #080e1c;
+
+$blue-shades: butler-fn.generate-color-shades(#2b333b, 5, 0.7, 0.3, "blue");
+
+$blues-tints: ();
+$num-shades: 5;
+$lighten-percent: 5;
+/// Generate shades for light mode
+@for $i from 1 through $num-shades {
+  $shade: color.adjust(#2b333b, $lightness: calc((1% * ($i * $lighten-percent))));
+  $blues-tints: map.merge($blues-tints, ("blue-tints-" + $i * 100: $shade));
+}
+$test-tint: (
+  "blue-tints-100": #36404a,
+  "blue-tints-200": #414d59,
+  "blue-tints-300": #4b5967,
+  "blue-tints-400": #566676,
+  "blue-tints-500": #617385,
+);
+$t: (
+  "blue-tints-100": #535353,
+  "blue-tints-200": #6c6c6c,
+  "blue-tints-300": gray,
+  "blue-tints-400": #8e8e8e,
+  "blue-tints-500": #909090,
+);
+
+// @debug $blues-tints;
+
+$blues-shades: ();
+$num-shades: 5;
+$darken-percent: 4;
+/// Generate shades for light mode
+@for $i from 1 through $num-shades {
+  $shade: color.adjust(#2b333b, $lightness: calc(-1% * ($darken-percent * $i)));
+  $blues-shades: map.merge($blues-shades, ("blue-tints-" + $i * 100: $shade));
+}
+$e: (
+  "blue-tints-100": #22292f,
+  "blue-tints-200": #1a1f23,
+  "blue-tints-300": #111418,
+  "blue-tints-400": #090a0c,
+  "blue-tints-500": black,
+);
+
+// @debug $blues-shades;
+// $blue-colors: (
+//   "blue-100": $blue-100,
+//   "blue-200": $blue-200,
+//   "blue-300": $blue-300,
+//   "blue-400": $blue-400,
+//   "blue-500": $blue-base,
+//   "blue-600": $blue-600,
+//   "blue-700": $blue-700,
+//   "blue-800": $blue-800,
+//   "blue-900": $blue-900,
+// );
+
+/// TODO: Create manuell List for BLUE colors
+/// 92%
+/// 86%
+
+// Grey colors
 $grey-100: #4e545a;
 $grey-200: #373c40;
 $grey-colors: (
-	'grey-100': $grey-100,
-	'grey-200': $grey-200
+  "grey-100": $grey-100,
+  "grey-200": $grey-200,
 );
-$danger: #f33b1d;
+$danger: hsl(8deg 89% 53%);
 $success: #35a672;
 $alert-colors: (
-	'danger': $danger,
-	'success': $success
+  "danger": $danger,
+  "success": $success,
 );
 $gold: #e1b125;
-$all-colors: butler-fn.map-collect($white-colors, $grey-colors, $red-colors, $blue-colors, $alert-colors);
+
+/// All colors
+$all-colors: butler-fn.map-collect(
+  $white-colors,
+  $grey-colors,
+  $red-colors,
+  $orange-colors,
+  $yellow-colors,
+  $blue-shades,
+  $alert-colors
+);

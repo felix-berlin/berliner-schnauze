@@ -41,6 +41,10 @@
     }
   }
 
+  &__image {
+    filter: drop-shadow(0 0 25px rgb(255 255 255 / 20%));
+  }
+
   &__intro-wrap {
     display: grid;
     gap: vars.$spacer * 1.5 vars.$spacer * 3;

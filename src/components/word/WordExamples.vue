@@ -37,7 +37,7 @@ import Quote from "virtual:icons/lucide/quote";
 import type { Maybe, BerlinerWord_Wordproperties_Examples } from "@ts_types/generated/graphql";
 
 interface WordExamplesProps {
-  examples: Maybe<BerlinerWord_Wordproperties_Examples>[];
+  examples?: Maybe<BerlinerWord_Wordproperties_Examples>[];
   element?: string;
   rootBemClass?: string;
 }

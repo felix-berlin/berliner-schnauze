@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:map";
 @use "@styles/variables/variables" as vars;
 @use "@styles/mixins/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
@@ -48,7 +49,16 @@
     min-width: 0;
 
     @include butler-mx.dark-mode-class {
-      --color-outline: #{butler-fn.hex-to-rgb(vars.$blue-200, 50%)};
+      --color-outline: #{butler-fn.hex-to-rgb(map.get(vars.$blue-shades, "blue-200"), 50%)};
+      --color-background: color-mix(in srgb, var(--blue) 70%, white);
+    }
+
+    &::placeholder {
+      color: var(--color-placeholder, var(--grey-100));
+
+      @include butler-mx.dark-mode-class {
+        --color-placeholder: color-mix(in srgb, var(--yellow-500) 60%, transparent);
+      }
     }
 
     &:focus-visible {
@@ -73,7 +83,7 @@
     align-self: center;
 
     @include butler-mx.dark-mode-class {
-      --color: #{color.scale(vars.$blue-100, $lightness: 45%)};
+      --color: #{color.scale(map.get(vars.$blue-shades, "blue-100"), $lightness: 45%)};
     }
     @include mx.breakpoint("md") {
       --display: flex;
@@ -101,7 +111,7 @@
         transition: all 0.3s ease-in-out;
 
         @include butler-mx.dark-mode-class {
-          --color-box-shadow: #{butler-fn.hex-to-rgb(vars.$blue-100, 20%)};
+          --color-box-shadow: #{butler-fn.hex-to-rgb(map.get(vars.$blue-shades, "blue-100"), 20%)};
         }
 
         &.has-searchbar {

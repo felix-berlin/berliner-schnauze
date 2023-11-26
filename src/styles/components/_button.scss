@@ -4,10 +4,16 @@
 .c-button {
   cursor: pointer;
   padding: var(--padding, #{vars.$spacer * 0.25});
-  background-color: var(--color-background, var(--white-100));
+  background-color: var(--color-background, var(--blue-100));
   border: var(--width-border, 1px) var(--style-border, solid) var(--color-border, var(--grey-100));
   color: var(--color, var(--grey-100));
   transition: all 0.3s ease-in-out;
+
+  @include butler-mx.dark-mode-class {
+    --color-background: color-mix(in srgb, var(--blue) 90%, black);
+    --color: var(--yellow-500);
+    --color-border: color-mix(in srgb, var(--blue) 80%, white);
+  }
 
   &--theme {
     --color-background: var(--primary);
@@ -45,8 +51,7 @@
 
   &--word-option {
     --color-border: transparent;
-
-    transition: all 0.3s ease-in-out;
+    --color-background: transparent;
 
     &:hover {
       --color-border: var(--grey-100);

@@ -49,6 +49,7 @@
     "format": "npx prettier --write .",
     "gql:generate": "gql-gen --config codegen.ts",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal public/favicon.svg",
+    "browserslist:update": "npx browserslist@latest --update-db",
     "predev": "pnpm run gql:generate",
     "preinstall": "npx only-allow pnpm",
     "postbuild": "pagefind --site dist/"
@@ -71,7 +72,7 @@
     "@vite-pwa/astro": "^0.1.5",
     "@vitejs/plugin-vue": "^4.5.0",
     "@vitest/coverage-v8": "^0.34.6",
-    "@vue/compiler-sfc": "^3.3.8",
+    "@vue/compiler-sfc": "^3.3.9",
     "@vue/devtools-api": "^6.5.1",
     "@vue/test-utils": "^2.4.2",
     "autoprefixer": "^10.4.16",
@@ -103,7 +104,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.0.3",
     "@astrojs/vue": "^3.0.4",
-    "@felix_berlin/sass-butler": "2.0.0",
+    "@felix_berlin/sass-butler": "2.6.3",
     "@formkit/auto-animate": "^0.8.1",
     "@iconify-json/lucide": "^1.1.141",
     "@nanostores/persistent": "^0.9.1",
@@ -120,8 +121,7 @@
     "pagefind": "^1.0.4",
     "slugify": "^1.6.6",
     "typescript": "^5.3.2",
-    "vue": "^3.3.8",
-    "vue-virtual-scroller": "2.0.0-beta.8",
+    "vue": "^3.3.9",
     "vue3-virtual-scroll-list": "^0.2.1"
   }
 }

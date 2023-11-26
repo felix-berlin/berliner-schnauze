@@ -1,62 +1,62 @@
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
-@use '@sass-butler/mixins' as butler-mx;
+@use "@styles/variables/variables" as vars;
+@use "@styles/mixins/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 .c-header {
-	--areas-template: ' . logo menu-nav . ';
+  --areas-template: " . logo menu-nav . ";
 
-	grid-area: header;
-	display: grid;
-	grid-template-areas: var(--areas-template);
-	grid-template-columns: var(--spacing-main-frame) var(--columns-header-inner, 1fr 2fr) var(--spacing-main-frame);
-	align-items: center;
-	background-color: var(--primary);
-	box-shadow:
-		0 0.5px 0.6px rgb(0 0 0 / 8%),
-		0 4px 5px rgb(0 0 0 / 16%);
-	position: sticky;
-	top: 0;
-	left: 0;
-	z-index: 11000;
-	width: 100%;
-	padding: var(--padding-y-header) 0;
+  grid-area: header;
+  display: grid;
+  grid-template-areas: var(--areas-template);
+  grid-template-columns: var(--spacing-main-frame) var(--columns-header-inner, 1fr 2fr) var(
+      --spacing-main-frame
+    );
+  align-items: center;
+  background-color: var(--blue);
+  box-shadow:
+    0 0.5px 0.6px rgb(0 0 0 / 8%),
+    0 4px 5px rgb(0 0 0 / 16%);
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 11000;
+  width: 100%;
+  padding: var(--padding-y-header) 0;
 
-	@include mx.breakpoint('xs') {
-		--columns-header-inner: 1fr 1fr;
-	}
-	@include mx.breakpoint('md') {
-		--columns-header-inner: 1fr 2fr;
-	}
+  @include mx.breakpoint("xs") {
+    --columns-header-inner: 1fr 1fr;
+  }
+  @include mx.breakpoint("md") {
+    --columns-header-inner: 1fr 2fr;
+  }
 
-	&.has-searchbar {
-		@include mx.breakpoint('xs', 'max') {
-			--areas-template:
-				' . logo logo . '
-				' . menu-nav menu-nav . ';
+  &.has-searchbar {
+    @include mx.breakpoint("xs", "max") {
+      --areas-template: " . logo logo . " " . menu-nav menu-nav . ";
 
-			.c-logo {
-				margin-bottom: vars.$spacer * 0.5;
-			}
-		}
-	}
+      .c-logo {
+        margin-bottom: vars.$spacer * 0.5;
+      }
+    }
+  }
 
-	.c-logo {
-		grid-area: logo;
+  .c-logo {
+    grid-area: logo;
 
-		&__link {
-			--color: #{vars.$white-100};
+    &__link {
+      --color: color(display-p3 0.7549 0.3701 0.2507 / 100%);
 
-			font-family: vars.$berliner;
-			text-decoration: none;
-			color: var(--color, var(--white-100));
-			font-size: var(--size-font, 1.8rem);
+      font-family: vars.$berliner;
+      text-decoration: none;
+      color: var(--color, var(--white-100));
+      font-size: var(--size-font, 1.8rem);
 
-			@include mx.breakpoint('sm') {
-				--size-font: 2rem;
-			}
-			@include mx.breakpoint('lg') {
-				--size-font: 2.5rem;
-			}
-		}
-	}
+      @include mx.breakpoint("sm") {
+        --size-font: 2rem;
+      }
+      @include mx.breakpoint("lg") {
+        --size-font: 2.5rem;
+      }
+    }
+  }
 }

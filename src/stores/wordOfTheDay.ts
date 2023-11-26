@@ -40,11 +40,10 @@ export const wordOfTheDay = map<WordOfTheDay>({
 /**
  * Get word of the day
  *
- * @param   {[type]}  wordOfTheDay     [wordOfTheDay description]
- * @param   {[type]}  getWordOfTheDay  [getWordOfTheDay description]
- * @param   {[type]}  async            [async description]
+ * @param   {[type]}  wordOfTheDay
+ * @param   {[type]}  getWordOfTheDay
  *
- * @return  {[type]}                   [return description]
+ * @return  {Promise<void>}
  */
 export const getWordOfTheDay = action(wordOfTheDay, "getWordOfTheDay", async () => {
   return await fetch(`${import.meta.env.PUBLIC_WP_REST_API}/berliner-schnauze/v1/word-of-the-day`, {
