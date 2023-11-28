@@ -22,7 +22,7 @@
         <!-- <li class="c-menu-more__item">
           <a :href="routeToWord(randomWord())"> Zufälliges Wort </a>
         </li> -->
-        <li>
+        <li class="c-menu-more__item">
           <InstallApp></InstallApp>
         </li>
         <li

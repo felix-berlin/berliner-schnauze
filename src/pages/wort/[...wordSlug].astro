@@ -2,6 +2,7 @@
 // Styles
 import "@styles/objects/_word.scss";
 import "@styles/components/_single-word.scss";
+import "astro-breadcrumbs/breadcrumbs.scss";
 
 // Imports
 import { getAllWords } from "@services/api";
@@ -10,12 +11,14 @@ import ArrowLeft from "~icons/lucide/arrow-left";
 import Info from "~icons/lucide/info";
 import ExternalLink from "~icons/lucide/external-link";
 import Crown from "~icons/lucide/crown";
+import ChevronRight from "~icons/lucide/chevron-right";
 import WordExamples from "@components/word/WordExamples.vue";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import RelatedWords from "@components/RelatedWords.vue";
 import RandomWordButton from "@components/RandomWordButton.vue";
 import NavigateBack from "@components/NavigateBack.vue";
 import { routeToWord, seoData } from "@utils/helpers";
+import { Breadcrumbs } from "astro-breadcrumbs";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -54,9 +57,13 @@ const formattedDate = (date: string, locale = "de-DE") => {
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
-  <NavigateBack client:load>
+  <Breadcrumbs indexText="start">
+    <ChevronRight slot="separator" width="20" height="20" />
+  </Breadcrumbs>
+
+  <!-- <NavigateBack client:load>
     <ArrowLeft /> zurück
-  </NavigateBack>
+  </NavigateBack> -->
 
   <article class="c-single-word">
     <header class="c-single-word__header">

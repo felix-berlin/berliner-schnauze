@@ -1,7 +1,11 @@
-@use '@styles/variables/variables' as vars;
+@use "@styles/variables/variables" as vars;
 
 .o-word {
-	display: flex;
-	flex-direction: column;
-	gap: vars.$spacer;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacer;
+
+  .c-breadcrumbs {
+    margin: 20px 0 15px;
+  }
 }

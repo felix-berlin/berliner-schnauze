@@ -1,12 +1,12 @@
 <template>
   <button
     v-if="showButton"
-    class="c-install-button c-button"
-    :class="cssClass"
+    class="c-install-button"
+    :class="cssClasses"
     @click="triggerPwaInstall()"
   >
     <Download v-if="showIcon" :width="iconSize" :height="iconSize" />
-    <template v-if="showText"> App installieren </template>
+    <slot v-if="showText"> App installieren </slot>
   </button>
 </template>
 
@@ -19,14 +19,14 @@ export interface InstallAppProps {
   showIcon?: boolean;
   showText?: boolean;
   iconSize?: number;
-  cssClass?: object | string | Array<string>;
+  cssClasses?: object | string | Array<string>;
 }
 
 const {
   showIcon = false,
   showText = true,
   iconSize = 16,
-  cssClass = "",
+  cssClasses = "c-button",
 } = defineProps<InstallAppProps>();
 
 useStore($installPrompt);
