@@ -3,6 +3,7 @@ import { persistentAtom } from "@nanostores/persistent";
 
 export * from "@stores/wordList";
 export * from "@stores/wordOfTheDay";
+export * from "@stores/installApp";
 
 export type DarkMode = boolean;
 

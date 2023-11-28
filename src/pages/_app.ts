@@ -9,6 +9,8 @@ import {
   $wordSearch,
   $filteredWordList,
   searchLength,
+  $installPrompt,
+  $showInstallButton,
 } from "@stores/index";
 
 export default (app: App) => {
@@ -30,6 +32,8 @@ export default (app: App) => {
     $wordSearch,
     $filteredWordList,
     searchLength,
+    $installPrompt,
+    $showInstallButton,
   });
   // app.use(VueVirtualScroller);
 };

@@ -22,6 +22,9 @@
         <!-- <li class="c-menu-more__item">
           <a :href="routeToWord(randomWord())"> Zufälliges Wort </a>
         </li> -->
+        <li>
+          <InstallApp></InstallApp>
+        </li>
         <li
           v-for="(item, index) in menuItems"
           :key="index"
@@ -42,6 +45,7 @@
 import MenuIcon from "virtual:icons/lucide/menu";
 import { routeToWord, randomElement } from "@utils/helpers.ts";
 import SocialList from "@components/SocialList.vue";
+import InstallApp from "@components/InstallApp.vue";
 
 // const randomWord = () => {
 //   // TODO: Implement random word
