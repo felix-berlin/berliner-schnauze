@@ -6,13 +6,14 @@
     @click="toggleMode()"
   >
     <Transition name="fade" mode="out-in">
-      <template v-if="isDark">
-        <Moon focusable="false" aria-label="dunkles Farbschema aktivieren" />
-      </template>
+      <Moon v-if="isDark" key="dark" focusable="false" aria-label="dunkles Farbschema aktivieren" />
 
-      <template v-else-if="!isDark">
-        <Sun focusable="false" aria-label="helles Farbschema aktivieren" />
-      </template>
+      <Sun
+        v-else-if="!isDark"
+        key="light"
+        focusable="false"
+        aria-label="helles Farbschema aktivieren"
+      />
     </Transition>
   </button>
 </template>
