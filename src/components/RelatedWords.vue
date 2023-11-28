@@ -1,15 +1,15 @@
 <template>
   <section class="c-related-words">
-    <h2 class="c-related-words__headline">Lust mehr Wörter kennen zu lernen?</h2>
+    <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
     <div class="c-related-words__words">
       <a
-        v-for="(word, index) in xRandomWords(words, numberOfWords)"
-        :key="index"
-        :href="routeToWord(word.slug)"
+        v-for="word in xRandomWords(words, numberOfWords)"
+        :key="word.id"
+        :href="routeToWord(word.slug!)"
         class="c-related-words__word"
-        :title="'Erfahre mehr über ' + word.wordProperties.berlinerisch"
+        :title="`Erfahre mehr über ${word.wordProperties?.berlinerisch}`"
       >
-        {{ word.wordProperties.berlinerisch }}
+        {{ word.wordProperties?.berlinerisch }}
       </a>
       <slot />
     </div>

@@ -14,16 +14,16 @@
         </button>
       </li>
       <li
-        v-for="(letter, index) in wordSearchStore.letterGroups"
-        :key="index"
+        v-for="letter in wordSearchStore.letterGroups"
+        :key="letter!"
         class="c-letter-filter__list-item"
         :class="{ 'is-current': letter === wordSearchStore.activeLetterFilter }"
       >
         <button
-          :aria-label="'Filter nach Buchstabe ' + letter"
+          :aria-label="`Filter nach Buchstabe ${letter}`"
           type="button"
           class="c-letter-filter__button c-button"
-          :title="'Filter nach Buchstabe ' + letter"
+          :title="`Filter nach Buchstabe ${letter}`"
           @click="setLetterFilter(letter!)"
         >
           {{ letter }}

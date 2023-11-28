@@ -26,8 +26,8 @@
           <InstallApp></InstallApp>
         </li>
         <li
-          v-for="(item, index) in menuItems"
-          :key="index"
+          v-for="item in menuItems"
+          :key="item.title"
           class="c-menu-more__item"
           :class="{ 'is-split': item.title === 'Impressum' }"
         >
