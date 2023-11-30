@@ -142,6 +142,8 @@
       <span v-else key="button-text">Wort einreichen</span>
       <!-- </Transition> -->
     </button>
+
+    <TurnStile :site-key="turnstileSiteKey" @verify="isVerified = $event" />
   </form>
 </template>
 
@@ -150,6 +152,7 @@ import { ref, reactive } from "vue";
 import CheckCircle2 from "virtual:icons/lucide/check-circle-2";
 import AlertCircle from "virtual:icons/lucide/alert-circle";
 import AlertBanner from "@components/AlertBanner.vue";
+import TurnStile from "@components/TurnStile.vue";
 
 interface FormData {
   berlinerWord?: string;
@@ -190,6 +193,9 @@ const formResponse = reactive({
   status: "",
 });
 
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const isVerified = ref(false);
+
 /**
  * Posts the form data to the contact form 7 API
  *
@@ -225,7 +231,12 @@ const postToContactForm7 = async (): Promise<void> => {
     });
 };
 
-const resetForm = () => {
+/**
+ * Resets the form after a successful submission
+ *
+ * @return  {void}  [return description]
+ */
+const resetForm = (): void => {
   if (formResponse.status === "mail_sent") {
     setTimeout(() => {
       formResponse.status = "";
@@ -301,7 +312,7 @@ const checkForm = (): void => {
     formErrors.eMail = "Irgendwas läuft hier nicht";
   }
 
-  if (Object.values(formErrors).every((v) => v?.length === 0)) {
+  if (Object.values(formErrors).every((v) => v?.length === 0) && isVerified.value) {
     postToContactForm7();
   }
 };
