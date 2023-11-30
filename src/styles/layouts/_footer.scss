@@ -27,6 +27,10 @@
       @include mx.breakpoint("md") {
         --basis-flex: 40%;
       }
+
+      img {
+        filter: drop-shadow(0 0 25px rgb(255 255 255 / 20%));
+      }
     }
 
     &-text {
@@ -67,18 +71,8 @@
     padding-top: var(--space-walking);
 
     @include butler-mx.dark-mode-class {
-      --color-background: #{butler-fn.hex-to-rgb(map.get(vars.$blue-shades, "blue-200"), 50%)};
+      --color-background: var(--new-blue-200);
     }
-
-    a,
-    & {
-      color: var(--color, var(--blue-200));
-
-      @include butler-mx.dark-mode-class {
-        --color: var(--white-200);
-      }
-    }
-
     @include mx.breakpoint("md") {
       --areas-template: " . . slogan nav . ";
       --columns-template: var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame);
@@ -120,7 +114,7 @@
 
     grid-area: end;
     display: grid;
-    background-color: var(--primary);
+    background-color: var(--color-background, var(--primary));
     grid-template-columns: var(
       --columns-template,
       var(--spacing-main-frame) 1fr var(--spacing-main-frame)
@@ -128,9 +122,8 @@
     grid-template-areas: var(--areas-template);
     font-size: 0.8rem;
 
-    a,
-    & {
-      color: var(--white-200);
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--blue);
     }
 
     &-content {
