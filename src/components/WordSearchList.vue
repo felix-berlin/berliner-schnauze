@@ -1,10 +1,12 @@
 <template>
-  <SearchWords />
-  <div class="o-index__filter-wrap">
-    <SortWordDirectionToggle />
-    <AlphabeticalFilterDropdown />
-  </div>
-  <WordList />
+  <search class="c-word-search-list">
+    <SearchWords />
+    <div class="o-index__filter-wrap">
+      <SortWordDirectionToggle />
+      <AlphabeticalFilterDropdown />
+    </div>
+    <WordList />
+  </search>
 </template>
 
 <script setup lang="ts">
