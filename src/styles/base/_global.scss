@@ -12,15 +12,3 @@
     --spacing-main-frame: 15%;
   }
 }
-
-html {
-  --primary: var(--blue-100);
-  --secondary: var(--red-500);
-  --accent: var(--orange-400);
-
-  &[class="dark"] {
-    --primary: var(--blue-500);
-    --secondary: var(--blue-400);
-    --accent: var(--orange-500);
-  }
-}

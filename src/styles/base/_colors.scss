@@ -12,3 +12,15 @@
   --new-blue-500: var(--blue);
   --new-blue-600: color-mix(in srgb, var(--blue) 90%, black);
 }
+
+html {
+  --primary: var(--blue-100);
+  --secondary: var(--red-500);
+  --accent: var(--orange-400);
+
+  &[class="dark"] {
+    --primary: var(--blue-500);
+    --secondary: var(--blue-400);
+    --accent: var(--orange-500);
+  }
+}
