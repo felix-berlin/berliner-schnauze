@@ -1,4 +1,5 @@
-@use "@styles/variables/variables" as vars;
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
 
 :root {
   @each $name, $color in vars.$all-colors {
@@ -18,7 +19,7 @@ html {
   --secondary: var(--red-500);
   --accent: var(--orange-400);
 
-  &[class="dark"] {
+  @include butler-mx.dark-mode-class {
     --primary: var(--blue-500);
     --secondary: var(--blue-400);
     --accent: var(--orange-500);

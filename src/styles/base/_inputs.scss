@@ -1,351 +1,354 @@
-@use 'sass:color';
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
-@use '@sass-butler/functions' as butler-fn;
+@use "sass:color";
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/functions" as butler-fn;
 
 $icon-color: currentcolor;
 $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>";
 
 @supports (-webkit-appearance: none) or (-moz-appearance: none) {
-	// input:not([type='range']),
-	// textarea,
-	// select
-	.c-input,
-	.c-textarea,
-	.c-select {
-		--spacing-inner: #{vars.$spacer * 0.55};
-		--color-border: var(--grey-200);
-		--color-border-hover: var(--red-200);
-		--size-font: 1rem;
-		--box-shadow-focus: 2px #{rgba(var(--primary), 0.3)};
-		--color-background: #fff;
-		--color-background-disabled: var(--grey-200);
-		--width-border: 1px;
+  // input:not([type='range']),
+  // textarea,
+  // select
+  .c-input,
+  .c-textarea,
+  .c-select {
+    --spacing-inner: #{vars.$spacer * 0.55};
+    --color-border: var(--grey-200);
+    --color-border-hover: var(--red-200);
+    --size-font: 1rem;
+    --box-shadow-focus: 2px #{rgba(var(--primary), 0.3)};
+    --color-background: #fff;
+    --color-background-disabled: var(--grey-200);
+    --width-border: 1px;
 
-		font-size: var(--size-font);
-		box-shadow: 0 0 0 1px transparent;
-		transition: {
-			property: border-color, color, background-color, box-shadow;
-			duration: 200ms;
-		}
+    font-size: var(--size-font);
+    box-shadow: 0 0 0 1px transparent;
+    transition: {
+      property: border-color, color, background-color, box-shadow;
+      duration: 200ms;
+    }
 
-		background-color: var(--color-background);
-		outline: none;
-		border: var(--width-border) solid var(--color-border);
-		appearance: none;
+    background-color: var(--color-background);
+    outline: none;
+    border: var(--width-border) solid var(--color-border);
+    appearance: none;
 
-		&:focus {
-			box-shadow: 0 0 0 var(--box-shadow-focus);
-		}
+    &:focus {
+      box-shadow: 0 0 0 var(--box-shadow-focus);
+    }
 
-		&:not(.c-input--file) {
-			padding: var(--spacing-inner);
-		}
+    &:not(.c-input--file) {
+      padding: var(--spacing-inner);
+    }
 
-		&:disabled {
-			--color-background: var(--color-background-disabled);
+    &:disabled {
+      --color-background: var(--color-background-disabled);
 
-			cursor: not-allowed;
-		}
-	}
+      cursor: not-allowed;
+    }
+  }
 
-	// textarea,
-	.c-textarea {
-		line-height: 1.35;
-	}
+  // textarea,
+  .c-textarea {
+    line-height: 1.35;
+  }
 
-	// input[type='number'],
-	// input[type='email'],
-	// input[type='tel'],
-	.c-input--number,
-	.c-input--email,
-	.c-input--tel {
-		--spacing-inner-vertical: #{vars.$spacer * 0.75};
-		--spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
+  // input[type='number'],
+  // input[type='email'],
+  // input[type='tel'],
+  .c-input--number,
+  .c-input--email,
+  .c-input--tel {
+    --spacing-inner-vertical: #{vars.$spacer * 0.75};
+    --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
 
-		padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
-	}
+    padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
+  }
 
-	// button,
-	// input[type='submit'],
-	// input[type='button'],
-	// input[type='reset'],
-	// input[type='color'] {
-	// 	@extend .c-button;
+  // button,
+  // input[type='submit'],
+  // input[type='button'],
+  // input[type='reset'],
+  // input[type='color'] {
+  // 	@extend .c-button;
 
-	// 	--spacing-inner-vertical: #{vars.$spacer * .75};
-	// 	--spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
-	// }
+  // 	--spacing-inner-vertical: #{vars.$spacer * .75};
+  // 	--spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
+  // }
 
-	// select,
-	.c-select {
-		--spacing-inner-vertical: #{vars.$spacer};
-		--spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
-		--size-font: 1rem;
-		--spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75} #{vars.$spacer * 1.5};
+  // select,
+  .c-select {
+    --spacing-inner-vertical: #{vars.$spacer};
+    --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
+    --size-font: 1rem;
+    --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75} #{vars.$spacer *
+      1.5};
 
-		padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
-		font-size: var(--size-font);
-		font-weight: 500;
-		cursor: pointer;
-		background: {
-			image: url('#{butler-fn.escape-svg($icon-chevron-down)}');
-			repeat: no-repeat;
-			position: right vars.$spacer * 1.5 center;
-			size: 16px 12px;
-		}
+    padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
+    font-size: var(--size-font);
+    font-weight: 500;
+    cursor: pointer;
+    background: {
+      image: url("#{butler-fn.escape-svg($icon-chevron-down)}");
+      repeat: no-repeat;
+      position: right vars.$spacer * 1.5 center;
+      size: 16px 12px;
+    }
 
-		&:not(:disabled):hover {
-			--color-hover-background: var(--grey-200);
-		}
-	}
+    &:not(:disabled):hover {
+      --color-hover-background: var(--grey-200);
+    }
+  }
 
-	.c-input--color {
-		padding: 0;
-	}
+  .c-input--color {
+    padding: 0;
+  }
 
-	.c-input--checkbox,
-	.c-input--radio {
-		--color-active: var(--red-200);
-		--color-inner-active: #fff;
-		--color-border-disabled-checked: #{color.scale(vars.$red-200, $lightness: 60%)};
-		--color-background-disabled-checked: #{color.scale(vars.$red-200, $lightness: 80%)};
-		--duration-transition-transform: 0.3s;
-		--timing-transition-transform: ease;
-		--duration-transition-opacity: 0.2s;
-		--cursor: pointer;
-		--spacing-inner: 0;
-		--height: 20px;
+  .c-input--checkbox,
+  .c-input--radio {
+    --color-active: var(--red-200);
+    --color-inner-active: #fff;
+    --color-border-disabled-checked: #{color.scale(vars.$red-200, $lightness: 60%)};
+    --color-background-disabled-checked: #{color.scale(vars.$red-200, $lightness: 80%)};
+    --duration-transition-transform: 0.3s;
+    --timing-transition-transform: ease;
+    --duration-transition-opacity: 0.2s;
+    --cursor: pointer;
+    --spacing-inner: 0;
+    --height: 20px;
 
-		height: var(--height);
-		display: inline-block;
-		vertical-align: top;
-		position: relative;
-		margin: 0;
-		cursor: var(--cursor);
-		border: var(--width-border) solid var(--color-border);
-		transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
+    height: var(--height);
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    margin: 0;
+    cursor: var(--cursor);
+    border: var(--width-border) solid var(--color-border);
+    transition:
+      background 0.3s,
+      border-color 0.3s,
+      box-shadow 0.2s;
 
-		&::after {
-			content: '';
-			display: block;
-			left: 0;
-			top: 0;
-			position: absolute;
-			transition: transform var(--duration-transition-transform) var(--timing-transition-transform), opacity var(--duration-transition-opacity);
-		}
+    &::after {
+      content: "";
+      display: block;
+      left: 0;
+      top: 0;
+      position: absolute;
+      transition:
+        transform var(--duration-transition-transform) var(--timing-transition-transform),
+        opacity var(--duration-transition-opacity);
+    }
 
-		&:checked {
-			--color-background: var(--color-active);
-			--color-border: var(--color-active);
-			--duration-transition-opacity: 0.3s;
-			--duration-transition-transform: 0.6s;
-			--timing-transition-transform: cubic-bezier(0.2, 0.85, 0.32, 1.2);
-		}
+    &:checked {
+      --color-background: var(--color-active);
+      --color-border: var(--color-active);
+      --duration-transition-opacity: 0.3s;
+      --duration-transition-transform: 0.6s;
+      --timing-transition-transform: cubic-bezier(0.2, 0.85, 0.32, 1.2);
+    }
 
-		&:disabled {
-			--color-background: var(--color-background-disabled);
-			--cursor: not-allowed;
+    &:disabled {
+      --color-background: var(--color-background-disabled);
+      --cursor: not-allowed;
 
-			opacity: 0.9;
+      opacity: 0.9;
 
-			&:checked {
-				--color-background: var(--color-background-disabled-checked);
-				--color-border: var(--color-border-disabled-checked);
-			}
+      &:checked {
+        --color-background: var(--color-background-disabled-checked);
+        --color-border: var(--color-border-disabled-checked);
+      }
 
-			& + label {
-				--cursor: not-allowed;
-			}
-		}
+      & + label {
+        --cursor: not-allowed;
+      }
+    }
 
-		&:hover {
-			&:not(:checked) {
-				&:not(:disabled) {
-					--color-border: var(--color-border-hover);
-				}
-			}
-		}
+    &:hover {
+      &:not(:checked) {
+        &:not(:disabled) {
+          --color-border: var(--color-border-hover);
+        }
+      }
+    }
 
-		&:focus {
-			box-shadow: 0 0 0 var(--box-shadow-focus);
-		}
+    &:focus {
+      box-shadow: 0 0 0 var(--box-shadow-focus);
+    }
 
-		&:not(.c-switch) {
-			width: 21px;
+    &:not(.c-switch) {
+      width: 21px;
 
-			&::after {
-				opacity: var(--opacity, 0);
-			}
+      &::after {
+        opacity: var(--opacity, 0);
+      }
 
-			&:checked {
-				--opacity: 1;
-			}
-		}
+      &:checked {
+        --opacity: 1;
+      }
+    }
 
-		& + label {
-			--cursor: pointer;
+    & + label {
+      --cursor: pointer;
 
-			font-size: 14px;
-			line-height: 21px;
-			display: inline-block;
-			vertical-align: top;
-			cursor: var(--cursor);
-			margin-left: 4px;
-		}
-	}
+      font-size: 14px;
+      line-height: 21px;
+      display: inline-block;
+      vertical-align: top;
+      cursor: var(--cursor);
+      margin-left: 4px;
+    }
+  }
 
-	.c-input--checkbox {
-		&:not(.c-switch) {
-			&::after {
-				width: 5px;
-				height: 9px;
-				left: 7px;
-				top: 4px;
-				transform: rotate(var(--rotate, 20deg));
-				border: {
-					top: 0;
-					right: 2px solid var(--color-inner-active);
-					bottom: 2px solid var(--color-inner-active);
-					left: 0;
-				}
-			}
+  .c-input--checkbox {
+    &:not(.c-switch) {
+      &::after {
+        width: 5px;
+        height: 9px;
+        left: 7px;
+        top: 4px;
+        transform: rotate(var(--rotate, 20deg));
+        border: {
+          inset: 0 2px solid var(--color-inner-active) 2px solid var(--color-inner-active) 0;
+        }
+      }
 
-			&:checked {
-				--rotate: 43deg;
-			}
-		}
-	}
+      &:checked {
+        --rotate: 43deg;
+      }
+    }
+  }
 
-	.c-input--radio {
-		border-radius: 50%;
+  .c-input--radio {
+    border-radius: 50%;
 
-		&::after {
-			width: 19px;
-			height: 19px;
-			border-radius: 50%;
-			background: var(--color-inner-active);
-			opacity: 0;
-			transform: scale(var(--scale, 0.7));
-		}
+    &::after {
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      background: var(--color-inner-active);
+      opacity: 0;
+      transform: scale(var(--scale, 0.7));
+    }
 
-		&:checked {
-			--scale: 0.5;
-		}
-	}
+    &:checked {
+      --scale: 0.5;
+    }
+  }
 
-	%track {
-		background-color: vars.$grey-200;
-		width: 100%;
-		height: 0.3rem;
-	}
+  %track {
+    background-color: vars.$grey-200;
+    width: 100%;
+    height: 0.3rem;
+  }
 
-	%thumb {
-		background-color: var(--color-background-thumb);
-		width: var(--size-thumb);
-		height: var(--size-thumb);
-		margin-top: calc(-1 * var(--height-track) - 0.05rem); // -1 * to negate the value
-		border-radius: 50%;
-	}
+  %thumb {
+    background-color: var(--color-background-thumb);
+    width: var(--size-thumb);
+    height: var(--size-thumb);
+    margin-top: calc(-1 * var(--height-track) - 0.05rem); // -1 * to negate the value
+    border-radius: 50%;
+  }
 
-	.c-input--range {
-		$color-background-track: vars.$grey-200;
-		$color-background-thumb: vars.$red-200;
-		$height-track: 0.3rem;
-		$size-thumb: 1rem;
+  .c-input--range {
+    $color-background-track: vars.$grey-200;
+    $color-background-thumb: vars.$red-200;
+    $height-track: 0.3rem;
+    $size-thumb: 1rem;
 
-		--color-background-track: var(--grey-200);
-		--color-background-thumb: var(--red-200);
-		--height-track: 0.3rem;
-		--size-thumb: 1rem;
+    --color-background-track: var(--grey-200);
+    --color-background-thumb: var(--red-200);
+    --height-track: 0.3rem;
+    --size-thumb: 1rem;
 
-		appearance: none;
-		background-color: transparent; // Mozilla need this
+    appearance: none;
+    background-color: transparent; // Mozilla need this
 
-		&::-webkit-slider-runnable-track {
-			background-color: vars.$grey-200;
-			width: 100%;
-			height: $height-track;
-		}
+    &::-webkit-slider-runnable-track {
+      background-color: vars.$grey-200;
+      width: 100%;
+      height: $height-track;
+    }
 
-		&::-moz-range-thumb {
-			background-color: $color-background-thumb;
-			width: $size-thumb;
-			height: $size-thumb;
-			margin-top: -($height-track - 0.05rem);
-			border-radius: 50%;
-			border-color: transparent; // Mozilla need this
-			border-width: 0; // Mozilla need this
-			appearance: none;
-		}
+    &::-moz-range-thumb {
+      background-color: $color-background-thumb;
+      width: $size-thumb;
+      height: $size-thumb;
+      margin-top: -($height-track - 0.05rem);
+      border-radius: 50%;
+      border-color: transparent; // Mozilla need this
+      border-width: 0; // Mozilla need this
+      appearance: none;
+    }
 
-		&::-moz-range-track {
-			background-color: vars.$grey-200;
-			width: 100%;
-			height: $height-track;
-		}
+    &::-moz-range-track {
+      background-color: vars.$grey-200;
+      width: 100%;
+      height: $height-track;
+    }
 
-		&::-webkit-slider-thumb {
-			background-color: $color-background-thumb;
-			width: $size-thumb;
-			height: $size-thumb;
-			margin-top: -($height-track - 0.05rem);
-			border-radius: 50%;
-		}
-	}
+    &::-webkit-slider-thumb {
+      background-color: $color-background-thumb;
+      width: $size-thumb;
+      height: $size-thumb;
+      margin-top: -($height-track - 0.05rem);
+      border-radius: 50%;
+    }
+  }
 
-	.c-input--file {
-		&:not(:disabled) {
-			cursor: pointer;
+  .c-input--file {
+    &:not(:disabled) {
+      cursor: pointer;
 
-			&:hover {
-				&::file-selector-button {
-					--width-border: 0;
-					--color-border-hover: var(--grey-200);
+      &:hover {
+        &::file-selector-button {
+          --width-border: 0;
+          --color-border-hover: var(--grey-200);
 
-					border-inline-end-width: 1px;
-				}
-			}
-		}
+          border-inline-end-width: 1px;
+        }
+      }
+    }
 
-		&::file-selector-button {
-			// FIXME: Herausfinden, warum die gesamte .c-button Klasse entfernt wird, wenn dieses Pseudo-Element extended wird — Autoprefixer
-			// @extend .c-button;
+    &::file-selector-button {
+      // FIXME: Herausfinden, warum die gesamte .c-button Klasse entfernt wird, wenn dieses Pseudo-Element extended wird — Autoprefixer
+      // @extend .c-button;
 
-			--width-border: 0;
+      --width-border: 0;
 
-			margin-inline-end: vars.$spacer;
-			border-inline-end-width: 1px;
-			border-color: inherit;
-			border-top-right-radius: 0;
-			border-bottom-right-radius: 0;
-		}
-	}
+      margin-inline-end: vars.$spacer;
+      border-inline-end-width: 1px;
+      border-color: inherit;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
 
-	.c-fieldset {
-		--spacing-after: #{vars.$spacer * 2};
-		--spacing-inner: #{vars.$spacer * 2};
-		--spacing-legend: calc(var(--spacing-inner) / 2);
-		--color-border: #{vars.$grey-200};
-		--width-border: 2px;
-		--style-border: solid;
+  .c-fieldset {
+    --spacing-after: #{vars.$spacer * 2};
+    --spacing-inner: #{vars.$spacer * 2};
+    --spacing-legend: calc(var(--spacing-inner) / 2);
+    --color-border: #{vars.$grey-200};
+    --width-border: 2px;
+    --style-border: solid;
 
-		padding: var(--spacing-inner);
-		margin-bottom: var(--spacing-after);
-		border: var(--width-border) var(--style-border) var(--color-border);
+    padding: var(--spacing-inner);
+    margin-bottom: var(--spacing-after);
+    border: var(--width-border) var(--style-border) var(--color-border);
 
-		legend {
-			font-weight: 600;
-			padding: 0 var(--spacing-legend);
-			margin-left: calc(-1 * var(--spacing-legend));
-		}
-	}
+    legend {
+      font-weight: 600;
+      padding: 0 var(--spacing-legend);
+      margin-left: calc(-1 * var(--spacing-legend));
+    }
+  }
 }
 
 .u-check {
-	display: block;
+  display: block;
 
-	&:not(:last-of-type) {
-		margin-bottom: vars.$spacer;
-	}
+  &:not(:last-of-type) {
+    margin-bottom: vars.$spacer;
+  }
 }

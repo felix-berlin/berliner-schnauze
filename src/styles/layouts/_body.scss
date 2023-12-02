@@ -1,13 +1,5 @@
-.o-body {
-  display: grid;
-  grid-template-areas:
-    "header header header"
-    " . content . "
-    "footer footer footer";
-  grid-template-columns: var(--spacing-main-frame) 1fr var(--spacing-main-frame);
-}
+@use "@styles/variables" as vars;
 
 .o-content {
-  grid-area: content;
   min-height: 80vh;
 }

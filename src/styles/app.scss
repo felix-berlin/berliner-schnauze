@@ -1,7 +1,7 @@
-@use 'base/base';
-@use 'utilities/utilities';
-@use 'layouts/layout';
-@use 'components/components';
+@use "base";
+@use "utilities";
+@use "layouts";
+@use "components";
 
 // Plugins
-@use 'plugins/floating-vue';
+@use "plugins/floating-vue";

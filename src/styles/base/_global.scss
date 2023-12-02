@@ -1,5 +1,5 @@
-@use "@styles/variables/variables" as vars;
-@use "@styles/mixins/mixins" as mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 
 :root {
   --padding-y-header: #{vars.$spacer * 0.6};
@@ -11,4 +11,13 @@
   @include mx.breakpoint("uhd") {
     --spacing-main-frame: 15%;
   }
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+picture {
+  display: contents;
 }

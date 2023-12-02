@@ -1,5 +1,5 @@
-@use "@styles/variables/variables" as vars;
-@use "@styles/mixins/mixins" as mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-filter-dropdown {

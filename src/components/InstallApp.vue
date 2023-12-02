@@ -1,8 +1,8 @@
 <template>
   <button
-    v-if="showButton"
     class="c-install-button"
     :class="cssClasses"
+    :disabled="!showButton"
     @click="triggerPwaInstall()"
   >
     <Download v-if="showIcon" :width="iconSize" :height="iconSize" />

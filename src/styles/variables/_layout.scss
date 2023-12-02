@@ -1,4 +1,4 @@
-@use '@sass-butler/functions' as butler-fn;
+@use "@sass-butler/functions" as butler-fn;
 
 // Breakpoint Vars
 $xxs: butler-fn.px-to-rem(375); // Smartphone Portrait
@@ -12,12 +12,14 @@ $uhd: butler-fn.px-to-rem(2560); // UHD
 
 // Breakpoint Map
 $custom-breakpoints: (
-	'xxs': $xxs,
-	'xs': $xs,
-	'sm': $sm,
-	'md': $md,
-	'lg': $lg,
-	'xlg': $xlg,
-	'fhd': $fhd,
-	'uhd': $uhd
+  "xxs": $xxs,
+  "xs": $xs,
+  "sm": $sm,
+  "md": $md,
+  "lg": $lg,
+  "xlg": $xlg,
+  "fhd": $fhd,
+  "uhd": $uhd,
 );
+
+$body-max-width: 1366px;

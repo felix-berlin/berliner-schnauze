@@ -1,67 +1,67 @@
-@use '@styles/variables/variables' as vars;
-@use '@sass-butler/mixins' as butler-mx;
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
 
 .c-word-of-the-day {
-	background-color: var(--color-background, rgb(255 255 255 / 20%));
-	padding: vars.$spacer;
-	border: 1px solid var(--primary);
-	display: flex;
-	row-gap: vars.$spacer * 1.5;
-	flex-direction: column;
+  background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 20%, transparent));
+  padding: vars.$spacer;
+  border: 1px solid var(--primary);
+  display: flex;
+  row-gap: vars.$spacer * 1.5;
+  flex-direction: column;
 
-	@include butler-mx.dark-mode-class {
-		--color-background: rgb(0 0 0 / 10%);
-	}
+  @include butler-mx.dark-mode-class {
+    --color-background: rgb(0 0 0 / 10%);
+  }
 
-	&__content {
-		margin: auto;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
+  &__content {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-	&__header {
-		display: flex;
-		align-items: center;
-		gap: vars.$spacer * 0.5;
-	}
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.5;
+  }
 
-	&__headline {
-		margin: 0;
-	}
+  &__headline {
+    margin: 0;
+  }
 
-	&__word-wrap {
-		position: relative;
-	}
+  &__word-wrap {
+    position: relative;
+  }
 
-	&__word {
-		font-family: vars.$berlin;
-		font-weight: 700;
-		font-size: clamp(1.2rem, 1.0857rem + 0.5714vw, 2rem);
-		word-break: break-all;
-	}
+  &__word {
+    font-family: vars.$berlin;
+    font-weight: 700;
+    font-size: clamp(1.2rem, 1.0857rem + 0.5714vw, 2rem);
+    word-break: break-all;
+  }
 
-	&__crown-icon {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		color: vars.$gold;
-	}
+  &__crown-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: vars.$gold;
+  }
 
-	&__divider {
-		width: 100%;
-		border: none;
-		border-top: 1px solid var(--primary);
-	}
+  &__divider {
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--primary);
+  }
 
-	&__update {
-		font-size: 0.8rem;
-	}
+  &__update {
+    font-size: 0.8rem;
+  }
 
-	&__info-icon {
-		position: absolute;
-		right: -18px;
-		top: 50%;
-		transform: translateY(-50%);
-	}
+  &__info-icon {
+    position: absolute;
+    right: -18px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }

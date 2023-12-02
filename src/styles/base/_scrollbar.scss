@@ -1,5 +1,5 @@
 @use "sass:map";
-@use "@styles/variables/variables" as vars;
+@use "@styles/variables" as vars;
 
 html {
   --scrollbar-primary: var(--primary);

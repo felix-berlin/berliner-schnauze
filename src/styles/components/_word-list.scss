@@ -1,6 +1,6 @@
 @use "sass:color";
-@use "@styles/variables/variables" as vars;
-@use "@styles/mixins/mixins" as mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/functions" as butler-fn;
 @use "@sass-butler/mixins" as butler-mx;
 
@@ -36,7 +36,7 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
 
   &__word {
     padding: vars.$spacer;
-    background-color: var(--color-background, var(--blue-100));
+    background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
     border: 1px solid vars.$grey-100;
     display: flex;
     flex-flow: column wrap;

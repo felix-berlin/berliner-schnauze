@@ -1,61 +1,61 @@
-@use 'sass:string';
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
-@use '@sass-butler/functions' as butler-fn;
+@use "sass:string";
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/functions" as butler-fn;
 
 .c-color-mode-switch {
-	$icon-color: vars.$white-100;
-	$system-icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='12' rx='2' ry='2'></rect><line x1='2' y1='20' x2='22' y2='20'></line></svg>";
-	$light-icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='4'></circle><path d='M12 2v2'></path><path d='M12 20v2'></path><path d='M5 5l1.5 1.5'></path><path d='M17.5 17.5L19 19'></path><path d='M2 12h2'></path><path d='M20 12h2'></path><path d='M5 19l1.5-1.5'></path><path d='M17.5 6.5L19 5'></path></svg>";
-	$dark-icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z'></path></svg>";
+  $icon-color: vars.$white-100;
+  $system-icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='12' rx='2' ry='2'></rect><line x1='2' y1='20' x2='22' y2='20'></line></svg>";
+  $light-icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='4'></circle><path d='M12 2v2'></path><path d='M12 20v2'></path><path d='M5 5l1.5 1.5'></path><path d='M17.5 17.5L19 19'></path><path d='M2 12h2'></path><path d='M20 12h2'></path><path d='M5 19l1.5-1.5'></path><path d='M17.5 6.5L19 5'></path></svg>";
+  $dark-icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z'></path></svg>";
 
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 
-	input[type='checkbox'] {
-		&.c-color-mode-switch__toggle {
-			--box-shadow-focus: 2px #{rgba(vars.$white-100, 0.3)};
-			--color-background: #{rgba(var(--secondary), 0.2)};
-			--color-border: var(--white-100);
-			--width-border: 2px;
-			--height: 22px;
+  input[type="checkbox"] {
+    &.c-color-mode-switch__toggle {
+      --box-shadow-focus: 2px #{rgba(vars.$white-100, 0.3)};
+      --color-background: #{rgba(var(--secondary), 0.2)};
+      --color-border: var(--white-100);
+      --width-border: 2px;
+      --height: 22px;
 
-			&:hover:not(:checked, :disabled) {
-				--color-border: var(--white-100);
-			}
+      &:hover:not(:checked, :disabled) {
+        --color-border: var(--white-100);
+      }
 
-			&::after {
-				--color-background: transparent;
+      &::after {
+        --color-background: transparent;
 
-				background-image: var(--image-background);
-				background-size: 85%;
-				background-position: center;
-				background-repeat: no-repeat;
-			}
+        background-image: var(--image-background);
+        background-size: 85%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
 
-			&:checked {
-				--color-border: var(--white-100);
-				--color-background: #{rgba(vars.$red-100, 0.2)};
-				--color-background-after: transparent;
-			}
+      &:checked {
+        --color-border: var(--white-100);
+        --color-background: #{rgba(vars.$red-100, 0.2)};
+        --color-background-after: transparent;
+      }
 
-			&.is-system {
-				&::after {
-					--image-background: #{url(butler-fn.escape-svg($system-icon))};
-				}
-			}
+      &.is-system {
+        &::after {
+          --image-background: #{url(butler-fn.escape-svg($system-icon))};
+        }
+      }
 
-			&.is-light {
-				&::after {
-					--image-background: #{url(butler-fn.escape-svg($light-icon))};
-				}
-			}
+      &.is-light {
+        &::after {
+          --image-background: #{url(butler-fn.escape-svg($light-icon))};
+        }
+      }
 
-			&.is-dark {
-				&::after {
-					--image-background: #{url(butler-fn.escape-svg($dark-icon))};
-				}
-			}
-		}
-	}
+      &.is-dark {
+        &::after {
+          --image-background: #{url(butler-fn.escape-svg($dark-icon))};
+        }
+      }
+    }
+  }
 }

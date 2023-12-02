@@ -18,25 +18,11 @@
 
     <template #popper>
       <SocialList list-modifier="c-social-list--mobile-dropdown" :hide-tooltips="true" />
-      <ul class="c-menu-more__list u-list-reset">
-        <!-- <li class="c-menu-more__item">
-          <a :href="routeToWord(randomWord())"> Zufälliges Wort </a>
-        </li> -->
-        <li class="c-menu-more__item">
-          <InstallApp></InstallApp>
-        </li>
-        <li
-          v-for="item in menuItems"
-          :key="item.title"
-          class="c-menu-more__item"
-          :class="{ 'is-split': item.title === 'Impressum' }"
-        >
-          <a v-if="item.intern" :href="item.link">
-            {{ item.title }}
-          </a>
-          <a v-else :href="item.link" target="_blank" v-text="item.title" />
-        </li>
-      </ul>
+      <NavList
+        :items="menuItems"
+        classes-ul="c-menu-more__list u-list-reset"
+        classes-li="c-menu-more__item"
+      />
     </template>
   </VMenu>
 </template>
@@ -46,32 +32,27 @@ import MenuIcon from "virtual:icons/lucide/menu";
 import { routeToWord, randomElement } from "@utils/helpers.ts";
 import SocialList from "@components/SocialList.vue";
 import InstallApp from "@components/InstallApp.vue";
+import NavList from "@components/NavList.vue";
+import type { DefineComponent } from "vue";
 
 // const randomWord = () => {
 //   // TODO: Implement random word
 //   // return randomElement(berlinerWords).post_name;
 // };
+interface ItemObject {
+  link: string;
+  title: string;
+}
 
-const menuItems = [
+const menuItems: (ItemObject | DefineComponent)[] = [
+  InstallApp as DefineComponent,
   {
     title: "Wort vorschlagen",
     link: "/wort-vorschlagen",
-    intern: true,
   },
   {
     title: "tech. Fehler melden",
     link: "https://github.com/felix-berlin/berliner-schnauze/issues/new",
-    intern: false,
-  },
-  {
-    title: "Impressum",
-    link: "/impressum",
-    intern: true,
-  },
-  {
-    title: "Datenschutz",
-    link: "/datenschutz",
-    intern: true,
   },
 ];
 </script>

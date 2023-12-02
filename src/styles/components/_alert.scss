@@ -1,17 +1,17 @@
-@use '@styles/variables/variables.scss' as vars;
+@use "@styles/variables" as vars;
 
 .c-alert {
-	--size-font: inherit;
+  --size-font: inherit;
 
-	color: var(--color, unset);
+  color: var(--color, unset);
 
-	@each $type, $color in vars.$alert-colors {
-		&--#{$type} {
-			--color: var(#{$color});
-		}
-	}
+  @each $type, $color in vars.$alert-colors {
+    &--#{$type} {
+      --color: var(#{$color});
+    }
+  }
 
-	&.c-alert--small {
-		--size-font: 0.9rem;
-	}
+  &.c-alert--small {
+    --size-font: 0.9rem;
+  }
 }

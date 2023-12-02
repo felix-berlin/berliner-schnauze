@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "sass:map";
-@use "@styles/variables/variables" as vars;
-@use "@styles/mixins/mixins" as mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
@@ -37,7 +37,7 @@
   }
 
   &__search-input.c-input {
-    --color-border: var(--grey-100);
+    --color-border: var(--color-border, var(--blue));
     --color-background: var(--white-200);
     --color-outline: #{butler-fn.hex-to-rgb(vars.$red-200, 50%)};
     --spacing-inner: var(--padding-y-input) var(--padding-x-input);
@@ -51,6 +51,7 @@
     @include butler-mx.dark-mode-class {
       --color-outline: color-mix(in srgb, var(--accent) 40%, transparent);
       --color-background: color-mix(in srgb, var(--blue) 70%, white);
+      --color-border: color-mix(in srgb, var(--blue) 60%, white);
     }
 
     &::placeholder {

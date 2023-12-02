@@ -2,10 +2,48 @@
 import { version } from "../../package.json";
 import { Picture } from "astro:assets";
 import BearWalking from "@assets/images/bear-walking.png";
+import InstallApp from "@components/InstallApp.vue";
+import NavList from "@components/NavList.vue";
+import type { DefineComponent } from "vue";
+
+// const randomWord = () => {
+//   // TODO: Implement random word
+//   // return randomElement(berlinerWords).post_name;
+// };
+
+const navMenu1 = [
+  {
+    title: "Wort vorschlagen",
+    link: "/wort-vorschlagen",
+  },
+  {
+    title: "Wort Index",
+    link: "/wort",
+  },
+  {
+    title: "Changelog",
+    link: "https://github.com/felix-berlin/berliner-schnauze/releases",
+  },
+  {
+    title: "tech. Fehler melden",
+    link: "https://github.com/felix-berlin/berliner-schnauze/issues/new",
+  },
+];
+
+const navMenu2 = [
+  {
+    title: "Impressum",
+    link: "/impressum",
+  },
+  {
+    title: "Datenschutz",
+    link: "/datenschutz",
+  },
+];
 ---
 
 <footer class="c-footer">
-  <div class="c-footer__farewell">
+  <div class="c-footer__farewell u-max-body-width">
     <div class="c-footer__farewell-image-wrapper">
       <Picture
         src={BearWalking}
@@ -19,19 +57,29 @@ import BearWalking from "@assets/images/bear-walking.png";
   </div>
 
   <div class="c-footer__ground">
-    <p class="c-footer__slogan">Hergestellt mit🐻-Kräften in Berlin</p>
+    <div class="c-footer__wrapper u-max-body-width">
+      <p class="c-footer__slogan">Hergestellt mit🐻-Kräften in Berlin</p>
 
-    <nav class="c-footer__nav">
-      <a href="/impressum"> Impressum</a>
-      <a href="/datenschutz"> Datenschutz</a>
-    </nav>
-  </div>
-  <div class="c-footer__end">
-    <div class="c-footer__end-content">
-      <a href="https://github.com/felix-berlin/berliner-schnauze/releases"
-        >Website Version: {version}</a
-      >
-      <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
+      <div class="c-footer__ground-navs">
+        <NavList
+          items={navMenu1}
+          classesNav={"c-footer__nav"}
+          classesUl={"c-footer__nav-list u-list-reset"}
+        />
+        <NavList
+          items={navMenu2}
+          classesNav={"c-footer__nav is-legal"}
+          classesUl={"c-footer__nav-list u-list-reset"}
+        />
+      </div>
     </div>
   </div>
 </footer>
+<div class="c-footer__end">
+  <div class="c-footer__end-content">
+    <a href="https://github.com/felix-berlin/berliner-schnauze/releases"
+      >Website Version: {version}</a
+    >
+    <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
+  </div>
+</div>
