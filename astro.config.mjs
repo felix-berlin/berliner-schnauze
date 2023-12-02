@@ -16,6 +16,11 @@ export default defineConfig({
       script: {
         propsDestructure: true,
       },
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag === "search",
+        },
+      },
     }),
     sitemap({
       lastmod: new Date(),
