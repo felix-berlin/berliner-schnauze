@@ -70,7 +70,7 @@
     "@typescript-eslint/parser": "^6.12.0",
     "@vite-pwa/astro": "^0.1.5",
     "@vitejs/plugin-vue": "^4.5.0",
-    "@vitest/coverage-v8": "^0.34.6",
+    "@vitest/coverage-v8": "^1.0.0",
     "@vue/compiler-sfc": "^3.3.8",
     "@vue/devtools-api": "^6.5.1",
     "@vue/test-utils": "^2.4.2",
@@ -97,7 +97,7 @@
     "stylelint-config-standard": "^34.0.0",
     "ts-node": "^10.9.1",
     "unplugin-icons": "^0.17.4",
-    "vitest": "^0.34.6",
+    "vitest": "^1.0.0",
     "vue-tsc": "^1.8.22"
   },
   "dependencies": {
