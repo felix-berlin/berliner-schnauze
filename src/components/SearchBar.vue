@@ -6,11 +6,11 @@
 import { onMounted, onUnmounted } from "vue";
 import { PagefindUI } from "@pagefind/default-ui";
 
-export interface SearchProps {
+export interface SearchBarProps {
   id: string;
 }
 
-const props = defineProps<SearchProps>();
+const props = defineProps<SearchBarProps>();
 
 let bundlePath = `${import.meta.env.BASE_URL}pagefind/`;
 
