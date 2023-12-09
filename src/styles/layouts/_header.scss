@@ -24,12 +24,8 @@
 
     display: grid;
     grid-template-areas: var(--areas-template);
-    grid-template-columns: var(--columns-header-inner, 1fr 1fr);
+    grid-template-columns: var(--columns-header-inner, 1fr max-content);
     align-items: center;
-
-    @include mx.breakpoint("md") {
-      --columns-header-inner: 1fr 2fr;
-    }
   }
 
   .c-logo {

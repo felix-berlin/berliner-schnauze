@@ -12,9 +12,12 @@
   @include butler-mx.breakpoint("md") {
     flex: 1 1 auto;
     max-width: 200px;
+    min-width: 150px;
   }
   @include butler-mx.breakpoint("md", "max") {
-    --color-background: transparent;
+    @include butler-mx.dark-mode-class {
+      --color-background: transparent;
+    }
 
     justify-content: center;
     color: var(--white-100);
