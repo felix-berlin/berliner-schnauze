@@ -1,5 +1,10 @@
 <template>
-  <dialog :id="uidHelper('modal')" ref="modal" class="c-modal" :class="[`c-modal--${position}`]">
+  <dialog
+    :id="uidHelper('modal')"
+    ref="modal"
+    class="c-modal"
+    :class="[`c-modal--${position}`, { 'has-close-on-click-outside': closeOnClickOutside }]"
+  >
     <button
       v-if="showCloseButton"
       class="c-modal__close c-button c-button--theme c-button--center-icon"

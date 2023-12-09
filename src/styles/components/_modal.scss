@@ -31,6 +31,12 @@
     }
   }
 
+  &.has-close-on-click-outside {
+    &::backdrop {
+      cursor: pointer;
+    }
+  }
+
   &--top {
     margin: 7rem auto auto;
   }
