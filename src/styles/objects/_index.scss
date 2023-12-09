@@ -69,6 +69,7 @@
 
   &__filter-wrap {
     display: flex;
+    flex-wrap: wrap;
     gap: vars.$spacer;
   }
 
