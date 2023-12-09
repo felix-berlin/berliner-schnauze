@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="c-sort-word-direction-toggle c-button c-button--center-icon c-button--filter"
+    class="c-sort-word-direction-toggle c-button c-button--center-icon c-button--filter c-button--dashed-border"
     :aria-label="'sortiere ' + (wordSearch.order === 'asc' ? 'aufsteigend' : 'absteigend')"
     @click="$wordListOrderToggle"
   >

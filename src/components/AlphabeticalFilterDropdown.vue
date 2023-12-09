@@ -11,7 +11,7 @@
       <button
         type="button"
         :class="[
-          'c-button c-button--center-icon c-button--filter',
+          'c-button c-button--center-icon c-button--filter c-button--dashed-border',
           { 'has-active-filter': wordSearch.activeLetterFilter },
         ]"
       >

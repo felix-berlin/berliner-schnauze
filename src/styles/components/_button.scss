@@ -20,6 +20,10 @@
     opacity: 0.5;
   }
 
+  @include butler-mx.hover {
+    box-shadow: 0px 0px 12px 0px var(--orange-500);
+  }
+
   &--theme {
     --color-background: var(--primary);
     --color: var(--white-100);
@@ -68,6 +72,12 @@
     & > *,
     & {
       gap: vars.$spacer * 0.25;
+    }
+
+    &.is-active {
+      @include butler-mx.dark-mode-class {
+        --color-border: var(--orange-500);
+      }
     }
   }
 }
