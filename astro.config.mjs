@@ -6,6 +6,9 @@ import Icons from "unplugin-icons/vite";
 import allAlias from "./alias.ts";
 import AstroPWA from "@vite-pwa/astro";
 
+import sentry from "@sentry/astro";
+import spotlightjs from "@spotlightjs/astro";
+
 // https://astro.build/config
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
@@ -92,6 +95,8 @@ export default defineConfig({
         directoryAndTrailingSlashHandler: true,
       },
     }),
+    sentry(),
+    spotlightjs(),
   ],
   vite: {
     plugins: [
