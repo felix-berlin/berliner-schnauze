@@ -14,6 +14,7 @@ interface WordGroups {
   wordList: CleanBerlinerWord[];
   search: string;
   order: "asc" | "desc";
+  berolinismus: boolean;
 }
 
 export const $wordSearch = persistentMap<WordGroups>(
@@ -24,6 +25,7 @@ export const $wordSearch = persistentMap<WordGroups>(
     wordList: [],
     search: "",
     order: "asc",
+    berolinismus: false,
   },
   {
     encode: (value) => JSON.stringify(value),
@@ -47,6 +49,10 @@ export const $wordListOrderToggle = action($wordSearch, "wordListOrderToggle", (
 
 export const setSearch = action($wordSearch, "setSearch", (store, search: string) => {
   store.setKey("search", search);
+});
+
+export const $toggleBerolinismus = action($wordSearch, "toggleBerolinismus", (store) => {
+  store.setKey("berolinismus", !store.get().berolinismus);
 });
 
 export const searchLength = computed($wordSearch, (wordSearch) => {
@@ -86,6 +92,13 @@ export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
         }
       }),
     ];
+  }
+
+  // Sort by Berolinismus
+  if (wordSearch.berolinismus) {
+    filteredWordList = filteredWordList.filter((word) => {
+      return word.wordProperties?.berolinismus === true;
+    });
   }
 
   // Fuse options

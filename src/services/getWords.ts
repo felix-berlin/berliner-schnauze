@@ -88,6 +88,7 @@ export const getAllWords = async (
               article
               berlinerisch
               learnMore
+              berolinismus
               examples {
                 example
                 exampleExplanation

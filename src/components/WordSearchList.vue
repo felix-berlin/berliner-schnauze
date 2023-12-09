@@ -4,6 +4,7 @@
     <div class="o-index__filter-wrap">
       <SortWordDirectionToggle />
       <AlphabeticalFilterDropdown />
+      <BerolinismusToggle />
     </div>
     <WordList />
   </search>
@@ -15,6 +16,7 @@ import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import SortWordDirectionToggle from "@components/SortWordDirectionToggle.vue";
 import AlphabeticalFilterDropdown from "@components/AlphabeticalFilterDropdown.vue";
+import BerolinismusToggle from "@components/BerolinismusToggle.vue";
 import { useStore } from "@nanostores/vue";
 import { $wordSearch } from "@stores/index";
 import type { Maybe } from "@ts_types/generated/graphql";

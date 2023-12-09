@@ -24,7 +24,7 @@
       type="search"
       class="c-word-search__search-input c-input"
       aria-label="Suche nach einem Berliner Word"
-      placeholder="Durchsuche den Berliner-Wortschatz"
+      placeholder="Durchsuche den Berliner-Jargon"
       autocomplete="off"
       @input="updateSearch()"
     />

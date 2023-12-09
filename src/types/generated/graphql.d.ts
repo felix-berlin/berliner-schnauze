@@ -530,6 +530,7 @@ export type BerlinerWord_Wordproperties = AcfFieldGroup & {
   article?: Maybe<Scalars['String']['output']>;
   berlinerisch?: Maybe<Scalars['String']['output']>;
   berlinerischAudio?: Maybe<MediaItem>;
+  berolinismus?: Maybe<Scalars['Boolean']['output']>;
   examples?: Maybe<Array<Maybe<BerlinerWord_Wordproperties_Examples>>>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']['output']>;
