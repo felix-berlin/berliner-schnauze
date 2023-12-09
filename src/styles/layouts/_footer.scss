@@ -8,6 +8,7 @@
   --space-walking: 40px;
 
   &__farewell {
+    margin-top: 60px;
     grid-area: farewell;
     display: flex;
     gap: var(--gap, 5%);
@@ -89,15 +90,7 @@
   }
 
   &__end {
-    --areas-template: " . content . ";
-
-    display: grid;
     background-color: var(--color-background, var(--primary));
-    grid-template-columns: var(
-      --columns-template,
-      var(--spacing-main-frame) 1fr var(--spacing-main-frame)
-    );
-    grid-template-areas: var(--areas-template);
     font-size: 0.8rem;
 
     @include butler-mx.dark-mode-class {
@@ -108,7 +101,8 @@
       grid-area: content;
       display: flex;
       gap: vars.$spacer * 0.5;
-      padding: vars.$spacer * 0.5 0;
+      padding-top: vars.$spacer * 0.5;
+      padding-bottom: vars.$spacer * 0.5;
       flex-wrap: wrap;
       justify-content: var(--content-justify, center);
 
