@@ -1,5 +1,6 @@
 @use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
 
 .c-word-of-the-day {
   background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 20%, transparent));
@@ -37,7 +38,7 @@
   &__word {
     font-family: vars.$berlin;
     font-weight: 700;
-    font-size: clamp(1.2rem, 1.0857rem + 0.5714vw, 2rem);
+    font-size: butler-fn.fluid(19, 32, 320, 1260);
     word-break: break-all;
   }
 

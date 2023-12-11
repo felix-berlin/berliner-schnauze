@@ -83,7 +83,7 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
     font: {
       family: vars.$berlin;
       weight: 700;
-      size: var(--size-font, 1.5rem);
+      size: butler-fn.fluid(24, 72, 320, 1260);
     }
 
     transition: 0.3s;
@@ -94,12 +94,6 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
 
     @include mx.breakpoint("sm") {
       --flex: 0 1 auto;
-    }
-    @include mx.breakpoint("md") {
-      --size-font: 3rem;
-    }
-    @include mx.breakpoint("xlg") {
-      --size-font: 4.5rem;
     }
 
     a {
@@ -129,7 +123,7 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
   &__translation {
     display: flex;
     align-items: center;
-    font-size: var(--font-size, 1rem);
+    font-size: butler-fn.fluid(16, 20, 320, 1260);
     position: relative;
     margin: 0;
 
@@ -140,13 +134,6 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
       @include mx.breakpoint("sm") {
         --margin: 0 #{vars.$spacer};
       }
-    }
-
-    @include mx.breakpoint("md") {
-      --font-size: 1.125rem;
-    }
-    @include mx.breakpoint("xlg") {
-      --font-size: 1.225rem;
     }
   }
 
@@ -163,14 +150,10 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
 
   &__examples,
   &__example {
-    font-size: var(--size-font, 1.2rem);
+    font-size: butler-fn.fluid(19, 29, 320, 1260);
     flex-basis: 100%;
     margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
     word-break: break-word;
-
-    @include mx.breakpoint("md") {
-      --size-font: 1.8rem;
-    }
 
     &-explanation {
       font-size: 1rem;
