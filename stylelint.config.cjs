@@ -4,7 +4,6 @@ module.exports = {
   extends: [
     "stylelint-config-standard",
     "stylelint-config-recommended-scss",
-    "stylelint-config-recommended-vue",
     "stylelint-config-recommended-vue/scss",
     "stylelint-config-prettier-scss",
   ],
@@ -24,11 +23,7 @@ module.exports = {
     "at-rule-empty-line-before": [
       "always",
       {
-        except: [
-          "after-same-name",
-          "blockless-after-blockless",
-          "first-nested",
-        ],
+        except: ["after-same-name", "blockless-after-blockless", "first-nested"],
         ignore: ["after-comment"],
         ignoreAtRules: ["else"],
       },
