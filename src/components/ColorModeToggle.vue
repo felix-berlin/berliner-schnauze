@@ -2,7 +2,7 @@
   <button
     type="button"
     class="c-color-mode-toggle c-button c-button--center-icon"
-    :class="classes"
+    :class="cssClasses"
     @click="toggleMode()"
   >
     <Transition name="fade" mode="out-in">
@@ -25,10 +25,11 @@ import { useStore } from "@nanostores/vue";
 import { isDarkMode } from "@stores/index";
 
 interface ColorModeToggleProps {
-  classes?: string;
+  cssClasses?: string[] | string;
+  toggleClasses?: string[];
 }
 
-const { classes = "" } = defineProps<ColorModeToggleProps>();
+const { cssClasses, toggleClasses = ["dark"] } = defineProps<ColorModeToggleProps>();
 
 const isDark = useStore(isDarkMode);
 
@@ -41,9 +42,9 @@ const toggleMode = (): void => {
   isDarkMode.set(!isDark.value);
 
   if (isDark.value) {
-    document.querySelector("html")?.classList.add("dark");
+    document.querySelector("html")?.classList.add(...toggleClasses);
   } else {
-    document.querySelector("html")?.classList.remove("dark");
+    document.querySelector("html")?.classList.remove(...toggleClasses);
   }
 };
 </script>

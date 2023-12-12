@@ -11,7 +11,7 @@
       class="c-button c-menu-nav__item-button u-button-reset c-button--center-icon"
       aria-label="Website Menu Navigation"
     >
-      <span class="u-icon-untouchable u-icon-wrapper c-button--center-icon">
+      <span class="u-icon-wrapper c-button--center-icon">
         <MenuIcon />
       </span>
     </button>

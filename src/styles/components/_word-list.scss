@@ -4,21 +4,18 @@
 @use "@sass-butler/functions" as butler-fn;
 @use "@sass-butler/mixins" as butler-mx;
 
-$lucide-more-vertical: "<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-more-vertical'><circle cx='12' cy='12' r='1'/><circle cx='12' cy='5' r='1'/><circle cx='12' cy='19' r='1'/></svg>";
+$lucide-more-vertical: "<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='1'/><circle cx='12' cy='5' r='1'/><circle cx='12' cy='19' r='1'/></svg>";
 
 $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
 
-.icon-lucide-more-vertical {
-  mask: butler-fn.escape-svg($icon-more-vertical);
-  background-color: var(--yellow-500);
+.c-icon {
+  background-color: var(--_color-icon, var(--blue));
   width: 18px;
   height: 18px;
   background-repeat: no-repeat;
   background-position: center;
-  stroke: var(--blue-base);
-
-  @include butler-mx.dark-mode-class {
-    stroke: vars.$yellow-500;
+  &--lucide-more-vertical {
+    mask: butler-fn.escape-svg($icon-more-vertical);
   }
 }
 
@@ -36,23 +33,25 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
 
   &__word {
     padding: vars.$spacer;
-    background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
-    border: 1px solid vars.$grey-100;
+    background-color: var(--_color-background, color-mix(in srgb, var(--orange-100) 30%, white));
+    border: 1px solid var(--_color-border, var(--orange-200));
     display: flex;
     flex-flow: column wrap;
     gap: 1rem;
     box-shadow:
-      0 0.5px 0.6px rgb(0 0 0 / 8%),
-      0 4px 5px rgb(0 0 0 / 16%);
+      0 0.5px 0.6px color-mix(in srgb, var(--_color-box-shadow, var(--orange-500)) 8%, transparent),
+      0 4px 5px color-mix(in srgb, var(--_color-box-shadow, var(--orange-500)) 16%, transparent);
 
-    &:hover {
+    @include butler-mx.hover {
       .c-word-list__berlinerisch a {
         --color-text-decoration: var(--grey-100);
       }
     }
 
     @include butler-mx.dark-mode-class {
-      --color-background: var(--new-blue-400);
+      --_color-background: var(--new-blue-400);
+      --_color-border: var(--new-blue-200);
+      --_color-box-shadow: black;
     }
   }
 
@@ -60,21 +59,21 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
     display: flex;
     flex: 1 1 auto;
     margin: 0;
-    flex-wrap: var(--warp-flex, wrap);
+    flex-wrap: var(--_warp-flex, wrap);
     row-gap: #{vars.$spacer * 1};
 
     @include mx.breakpoint("sm") {
-      --wrap-flex: no-wrap;
+      --_wrap-flex: no-wrap;
     }
 
     &-wrapper {
-      border-bottom: var(--bottom-border, none);
+      border-bottom: var(--_bottom-border, none);
       display: flex;
 
       &.has-example {
         padding-bottom: vars.$spacer;
 
-        --bottom-border: 1px dashed var(--grey-100);
+        --bottom-border: 1px dashed var(--_grey-100);
       }
     }
   }
@@ -107,7 +106,7 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
 
       transition: 0.3s text-decoration ease;
 
-      &:hover {
+      @include butler-mx.hover {
         text-decoration-color: inherit;
       }
     }
@@ -129,10 +128,10 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
 
     &::before {
       content: "᛫";
-      margin: var(--margin, 0 #{vars.$spacer * 0.5});
+      margin: var(--_margin, 0 #{vars.$spacer * 0.5});
 
       @include mx.breakpoint("sm") {
-        --margin: 0 #{vars.$spacer};
+        --_margin: 0 #{vars.$spacer};
       }
     }
   }
@@ -217,7 +216,7 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
     display: flex;
     align-items: center;
 
-    &:hover {
+    @include butler-mx.hover {
       --style-border: solid;
     }
 
@@ -227,10 +226,6 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
     }
   }
 
-  .c-word-list--word-option {
-    align-self: start;
-  }
-
   &__learn-more {
     --padding: 0;
 
@@ -238,5 +233,13 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
     align-items: center;
     gap: vars.$spacer * 0.25;
     align-self: end;
+  }
+
+  &__options {
+    &-icon {
+      @include butler-mx.dark-mode-class {
+        --_color-icon: var(--yellow-500);
+      }
+    }
   }
 }

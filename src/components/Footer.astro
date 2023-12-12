@@ -1,5 +1,5 @@
 ---
-import { version } from "../../package.json";
+import { version, funding } from "../../package.json";
 import { Picture } from "astro:assets";
 import BearWalking from "@assets/images/bear-walking.png";
 import InstallApp from "@components/InstallApp.vue";
@@ -10,6 +10,36 @@ import type { DefineComponent } from "vue";
 //   // TODO: Implement random word
 //   // return randomElement(berlinerWords).post_name;
 // };
+//
+//
+const socialMenu = [
+  {
+    title: "Github",
+    link: "https://github.com/felix-berlin/berliner-schnauze",
+  },
+  {
+    title: "Twitter",
+    link: "https://twitter.com/BLN_Schnauze",
+  },
+  {
+    title: "Facebook",
+    link: "https://www.facebook.com/Berliner.Schnauze030",
+  },
+];
+const fundingMenu = [
+  {
+    title: "GitHub Sponsors",
+    link: funding.find((f) => f.type === "GitHub Sponsors")?.url!,
+  },
+  {
+    title: "Ko-fi",
+    link: funding.find((f) => f.type === "Ko-fi")?.url!,
+  },
+  {
+    title: "PayPal",
+    link: funding.find((f) => f.type === "PayPal")?.url!,
+  },
+];
 
 const navMenu1 = [
   {
@@ -61,16 +91,41 @@ const navMenu2 = [
       <p class="c-footer__slogan">Hergestellt mit🐻-Kräften in Berlin</p>
 
       <div class="c-footer__ground-navs">
-        <NavList
-          items={navMenu1}
-          classesNav={"c-footer__nav"}
-          classesUl={"c-footer__nav-list u-list-reset"}
-        />
-        <NavList
-          items={navMenu2}
-          classesNav={"c-footer__nav is-legal"}
-          classesUl={"c-footer__nav-list u-list-reset"}
-        />
+        <div>
+          <h3>Seiten</h3>
+          <NavList
+            items={navMenu1}
+            classesNav={"c-footer__nav"}
+            classesUl={"c-footer__nav-list u-list-reset"}
+          />
+        </div>
+
+        <div>
+          <h3>Projekt unterstützen</h3>
+          <NavList
+            items={fundingMenu}
+            classesNav={"c-footer__nav"}
+            classesUl={"c-footer__nav-list u-list-reset"}
+          />
+        </div>
+
+        <div>
+          <h3>Social Media</h3>
+          <NavList
+            items={socialMenu}
+            classesNav={"c-footer__nav"}
+            classesUl={"c-footer__nav-list u-list-reset"}
+          />
+        </div>
+
+        <div>
+          <h3>Andere</h3>
+          <NavList
+            items={navMenu2}
+            classesNav={"c-footer__nav is-legal"}
+            classesUl={"c-footer__nav-list u-list-reset"}
+          />
+        </div>
       </div>
     </div>
   </div>

@@ -34,11 +34,11 @@
     &__link {
       font-family: vars.$berliner;
       text-decoration: none;
-      color: var(--color, var(--blue));
-      font-size: butler-fn.fluid(32, 40, 320, 1260);
+      color: var(--_color, var(--blue));
+      font-size: butler-fn.fluid(25, 40, 320, 1260);
 
       @include butler-mx.dark-mode-class {
-        --color: var(--yellow-500);
+        --_color: var(--yellow-500);
       }
     }
   }

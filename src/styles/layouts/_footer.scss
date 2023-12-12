@@ -39,18 +39,18 @@
   }
 
   &__ground {
-    background-color: var(--color-background, #{butler-fn.hex-to-rgb(vars.$red-200, 40%)});
+    background-color: var(--_color-background, color-mix(in srgb, var(--orange-200) 60%, white));
     padding: 25px 0;
 
     @include butler-mx.dark-mode-class {
-      --color-background: var(--new-blue-400);
+      --_color-background: var(--new-blue-400);
     }
 
     .c-footer__wrapper {
       --areas-template: " slogan slogan " " nav-lists nav-lists ";
 
       display: grid;
-      grid-template-columns: var(--columns-template, 1fr 1fr);
+      grid-template-columns: var(--columns-template, 1fr 3fr);
       grid-template-areas: var(--areas-template);
 
       @include mx.breakpoint("md") {
@@ -90,11 +90,11 @@
   }
 
   &__end {
-    background-color: var(--color-background, var(--primary));
+    background-color: var(--_color-background, var(--orange-200));
     font-size: 0.8rem;
 
     @include butler-mx.dark-mode-class {
-      --color-background: var(--blue);
+      --_color-background: var(--blue);
     }
 
     &-content {

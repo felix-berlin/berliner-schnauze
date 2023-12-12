@@ -15,7 +15,7 @@
           { 'has-active-filter': wordSearch.activeLetterFilter },
         ]"
       >
-        <span class="u-icon-untouchable c-button--center-icon">
+        <span class="c-button--center-icon">
           <Filter />
         </span>
         alphabetisch

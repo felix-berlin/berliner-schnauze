@@ -45,7 +45,7 @@
 
       <VDropdown
         placement="bottom-end"
-        class="c-word-list--word-option"
+        class="c-word-list__options-dropdown"
         distance="9"
         :delay="wordButtonClicked ? { hide: 10000 } : { hide: 0 }"
         :shown="wordButtonClicked"
@@ -53,10 +53,13 @@
       >
         <button
           type="button"
-          class="c-button c-button--center-icon c-button--word-option c-button--dashed-border"
+          class="c-word-list__options c-button c-button--center-icon c-button--dashed-border"
           aria-label="Website Menu Navigation"
         >
-          <span class="u-icon-untouchable c-button--center-icon icon-lucide-more-vertical"> </span>
+          <span
+            class="c-word-list__options-icon c-button--center-icon c-icon c-icon--lucide-more-vertical"
+          >
+          </span>
         </button>
 
         <template #popper>

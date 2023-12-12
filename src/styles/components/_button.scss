@@ -5,10 +5,9 @@
   cursor: pointer;
   padding: var(--padding, #{vars.$spacer * 0.25});
   background-color: var(--color-background, var(--orange-300));
-  border: var(--width-border, 1px) var(--style-border, solid) var(--color-border, var(--grey-100));
+  border: var(--width-border, 1px) var(--style-border, solid) var(--color-border, var(--orange-600));
   color: var(--color, var(--blue));
   transition: all 0.3s ease-in-out;
-
   @include butler-mx.dark-mode-class {
     --color-background: var(--new-blue-600);
     --color: var(--yellow-500);
@@ -21,7 +20,10 @@
   }
 
   @include butler-mx.hover {
-    box-shadow: 0px 0px 12px 0px var(--orange-500);
+    box-shadow: 0px 0px 12px 0px var(--color-box-shadow, var(--blue));
+    @include butler-mx.dark-mode-class {
+      --color-box-shadow: var(--orange-500);
+    }
   }
 
   &--theme {
@@ -30,7 +32,7 @@
 
     font-family: vars.$berliner;
 
-    &:hover {
+    @include butler-mx.hover {
       --style-border: dashed;
     }
 
@@ -57,15 +59,6 @@
     gap: vars.$spacer * 0.25;
   }
 
-  &--word-option {
-    --color-border: transparent;
-    --color-background: transparent;
-
-    &:hover {
-      --color-border: var(--grey-100);
-    }
-  }
-
   &--filter {
     --padding: #{vars.$spacer * 0.25 vars.$spacer * 0.5};
 
@@ -75,6 +68,7 @@
     }
 
     &.is-active {
+      --color-border: var(--blue);
       @include butler-mx.dark-mode-class {
         --color-border: var(--orange-500);
       }
