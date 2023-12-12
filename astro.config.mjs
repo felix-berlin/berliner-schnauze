@@ -5,7 +5,6 @@ import matomo from "astro-matomo";
 import Icons from "unplugin-icons/vite";
 import allAlias from "./alias.ts";
 import AstroPWA from "@vite-pwa/astro";
-
 import sentry from "@sentry/astro";
 import spotlightjs from "@spotlightjs/astro";
 
@@ -95,7 +94,13 @@ export default defineConfig({
         directoryAndTrailingSlashHandler: true,
       },
     }),
-    sentry(),
+    sentry({
+      dsn: import.meta.env.SENTRY_DNS,
+      sourceMapsUploadOptions: {
+        project: import.meta.env.SENTRY_PROJECT,
+        authToken: import.meta.env.SENTRY_AUTH_TOKEN,
+      },
+    }),
     spotlightjs(),
   ],
   vite: {
