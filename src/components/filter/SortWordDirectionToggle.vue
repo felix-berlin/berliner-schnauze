@@ -12,11 +12,11 @@
         class="c-sort-word-direction-toggle__button c-button--center-icon"
       >
         <SortAsc />
-        <span>aufsteigend</span>
+        <span>aufsteigend (A - Z)</span>
       </span>
       <span v-else key="desc" class="c-sort-word-direction-toggle__button c-button--center-icon">
         <SortDesc />
-        <span>absteigend</span>
+        <span>absteigend (Z - A)</span>
       </span>
     </transition>
   </button>

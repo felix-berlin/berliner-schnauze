@@ -92,11 +92,12 @@ export const getAllWords = async (
               examples {
                 example
                 exampleExplanation
-                fieldGroupName
               }
               translations {
-                fieldGroupName
                 translation
+              }
+              alternativeWords {
+                alternativeWord
               }
               relatedWords {
                 ... on BerlinerWord {
@@ -110,7 +111,6 @@ export const getAllWords = async (
             }
             berlinerischWordTypes {
               nodes {
-                slug
                 name
               }
             }

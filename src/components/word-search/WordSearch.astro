@@ -1,0 +1,55 @@
+---
+import "@styles/components/_filter-search.scss";
+import WordSearchList from "@components/word-search/WordSearchList.vue";
+import SortWordDirectionToggle from "@components/filter/SortWordDirectionToggle.vue";
+import LetterFilter from "@components/filter/LetterFilter.vue";
+import AlphabeticalFilterDropdown from "@components/filter/AlphabeticalFilterDropdown.vue";
+import BerolinismusToggle from "@components/filter/BerolinismusToggle.vue";
+import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
+import type { CleanBerlinerWord } from "@stores/index";
+
+interface WordSearchProps {
+  words: BerlinerWord[];
+}
+
+const { words } = Astro.props as WordSearchProps;
+
+const cleanWords = words.map(({ node }): CleanBerlinerWord => {
+  const { seo, title, berlinerWordId, dateGmt, modifiedGmt, ...cleanNode } = node;
+  return cleanNode;
+});
+
+const availableWordGroups = Array.from(new Set(words.map(({ node }) => node.wordGroup))).sort();
+
+const wordTypes = Array.from(
+  new Set(
+    words
+      .map(({ node }) => node.berlinerischWordTypes?.nodes)
+      .flat()
+      .map((node) => node?.name),
+  ),
+).sort();
+---
+
+<section class="c-filter-search">
+  <aside>
+    <h2>Sortiere nach:</h2>
+    <SortWordDirectionToggle client:only="vue" />
+    <h2>Filter nach:</h2>
+    <h3>Berolinismus</h3>
+    <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
+    <BerolinismusToggle client:only="vue" />
+    <h3>Alphabetisch</h3>
+    <LetterFilter client:only="vue" />
+    <!-- <AlphabeticalFilterDropdown client:only="vue" /> -->
+    <h3>Worttyp</h3>
+    <WordTypeFilter client:only="vue" />
+  </aside>
+  <WordSearchList
+    words={cleanWords}
+    availableLetterGroups={availableWordGroups}
+    wordTypes={wordTypes}
+    client:only="vue"
+  />
+</section>

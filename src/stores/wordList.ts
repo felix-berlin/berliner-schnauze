@@ -11,6 +11,8 @@ export type CleanBerlinerWord = Omit<
 interface WordGroups {
   letterGroups: Maybe<string>[];
   activeLetterFilter: string;
+  wordTypes: Maybe<string>[];
+  activeWordTypeFilter: string;
   wordList: CleanBerlinerWord[];
   search: string;
   order: "asc" | "desc";
@@ -22,6 +24,8 @@ export const $wordSearch = persistentMap<WordGroups>(
   {
     letterGroups: [],
     activeLetterFilter: "",
+    wordTypes: [],
+    activeWordTypeFilter: "",
     wordList: [],
     search: "",
     order: "asc",
@@ -42,6 +46,14 @@ export const $wordSearch = persistentMap<WordGroups>(
 export const setLetterFilter = action($wordSearch, "setLetterFilter", (store, letter: string) => {
   store.setKey("activeLetterFilter", letter);
 });
+
+export const setWordTypeFilter = action(
+  $wordSearch,
+  "setLetterFilter",
+  (store, wordType: string) => {
+    store.setKey("activeWordTypeFilter", wordType);
+  },
+);
 
 export const $wordListOrderToggle = action($wordSearch, "wordListOrderToggle", (store) => {
   store.setKey("order", store.get().order === "asc" ? "desc" : "asc");
@@ -77,6 +89,16 @@ export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
     });
   }
 
+  // Filter by word type
+  if (wordSearch.activeWordTypeFilter !== "") {
+    filteredWordList = filteredWordList.filter(
+      (word) =>
+        word.berlinerischWordTypes?.nodes.some(
+          (word) => word.name === wordSearch.activeWordTypeFilter,
+        ),
+    );
+  }
+
   // Sort by order
   if (wordSearch.order) {
     // Reassign the filteredWordList to the sorted list, otherwise the DynamicScroller will not update
@@ -103,7 +125,11 @@ export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
 
   // Fuse options
   const options = {
-    keys: ["wordProperties.berlinerisch", "wordProperties.translation"],
+    keys: [
+      "wordProperties.berlinerisch",
+      "wordProperties.translations.translation",
+      "wordProperties.alternativeWords.alternativeWord",
+    ],
   };
 
   // Init Fuse

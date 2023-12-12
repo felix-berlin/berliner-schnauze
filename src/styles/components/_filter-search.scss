@@ -1,0 +1,10 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.c-filter-search {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: vars.$spacer * 1.5;
+}
