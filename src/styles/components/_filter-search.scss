@@ -21,31 +21,23 @@
   }
 
   &__filter {
-    display: var(--display, none);
-
-    &:where(.is-open) {
-      --display: block;
-
-      max-width: var(--width-max, 100lvw);
-
-      @include butler-mx.breakpoint("xs") {
-        --width-max: 50lvw;
-      }
-      @include butler-mx.breakpoint("md", "max") {
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        height: 100%;
-        background-color: var(--new-blue-200);
-        overflow-x: auto;
-        padding: 60px vars.$spacer * 1.5 vars.$spacer * 1.5;
-      }
-    }
-
     @include butler-mx.breakpoint("md") {
-      --display: block;
+      display: block !important;
+    }
+    @include butler-mx.breakpoint("md", "max") {
+      max-width: var(--width-max, 100lvw);
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      background-color: var(--new-blue-200);
+      overflow-x: auto;
+      padding: 60px vars.$spacer * 1.5 vars.$spacer * 1.5;
+    }
+    @include butler-mx.breakpoint("xs") {
+      --width-max: 50lvw;
     }
   }
 
@@ -68,4 +60,19 @@
   .c-word-search {
     grid-area: search;
   }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(-100%);
+}
+
+.slide-leave-from,
+.slide-enter-to {
+  transform: translateX(0);
 }

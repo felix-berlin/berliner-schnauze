@@ -1,11 +1,7 @@
 ---
 import "@styles/components/_filter-search.scss";
 import WordSearchList from "@components/word-search/WordSearchList.vue";
-import SortWordDirectionToggle from "@components/filter/SortWordDirectionToggle.vue";
-import LetterFilter from "@components/filter/LetterFilter.vue";
-import AlphabeticalFilterDropdown from "@components/filter/AlphabeticalFilterDropdown.vue";
-import BerolinismusToggle from "@components/filter/BerolinismusToggle.vue";
-import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
+import WordFilter from "@components/word-search/WordFilter.vue";
 import type { BerlinerWord } from "@ts_types/generated/graphql";
 import type { CleanBerlinerWord } from "@stores/index";
 
@@ -33,19 +29,7 @@ const wordTypes = Array.from(
 ---
 
 <section class="c-filter-search">
-  <aside class="c-filter-search__filter">
-    <h2>Sortiere nach:</h2>
-    <SortWordDirectionToggle client:only="vue" />
-    <h2>Filter nach:</h2>
-    <h3>Berolinismus</h3>
-    <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
-    <BerolinismusToggle client:load />
-    <h3>Alphabetisch</h3>
-    <LetterFilter client:only="vue" />
-    <!-- <AlphabeticalFilterDropdown client:only="vue" /> -->
-    <h3>Worttyp</h3>
-    <WordTypeFilter client:only="vue" />
-  </aside>
+  <WordFilter client:only="vue" />
   <WordSearchList
     words={cleanWords}
     availableLetterGroups={availableWordGroups}

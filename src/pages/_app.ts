@@ -11,6 +11,7 @@ import {
   searchLength,
   $installPrompt,
   $showInstallButton,
+  $showWordListFilterFlyout,
 } from "@stores/index";
 
 export default (app: App) => {
@@ -34,6 +35,7 @@ export default (app: App) => {
     searchLength,
     $installPrompt,
     $showInstallButton,
+    $showWordListFilterFlyout,
   });
   // app.use(VueVirtualScroller);
 };

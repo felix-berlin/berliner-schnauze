@@ -1,4 +1,4 @@
-import { computed, action, map, deepMap } from "nanostores";
+import { computed, action, atom, map, deepMap } from "nanostores";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import Fuse from "fuse.js";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
@@ -40,6 +40,16 @@ export const $wordSearch = persistentMap<WordGroups>(
         return value;
       }
     },
+  },
+);
+
+export const $showWordListFilterFlyout = atom<boolean>(false);
+
+export const $toggleWordListFilterFlyout = action(
+  $showWordListFilterFlyout,
+  "toggleWordListFilterFlyout",
+  (store) => {
+    store.set(!store.get());
   },
 );
 
