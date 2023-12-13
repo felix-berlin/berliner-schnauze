@@ -1,6 +1,14 @@
 <template>
   <transition name="slide">
     <aside v-show="showWordListFilterFlyout" ref="wordListFilter" class="c-filter-search__filter">
+      <button
+        class="c-filter-search__close c-button c-button--center-icon"
+        type="button"
+        aria-label="schließen"
+        @click="$toggleWordListFilterFlyout"
+      >
+        <X />
+      </button>
       <h2>Sortiere nach:</h2>
       <SortWordDirectionToggle client:only="vue" />
       <h2>Filter nach:</h2>
@@ -26,6 +34,7 @@ import BerolinismusToggle from "@components/filter/BerolinismusToggle.vue";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import { $toggleWordListFilterFlyout, $showWordListFilterFlyout } from "@stores/index";
 import { useStore } from "@nanostores/vue";
+import X from "virtual:icons/lucide/x";
 
 const wordListFilter = ref<HTMLElement | null>(null);
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
