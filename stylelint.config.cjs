@@ -17,7 +17,6 @@ module.exports = {
   // add your custom config here
   // https://stylelint.io/user-guide/configuration
   rules: {
-    "max-line-length": null,
     "selector-class-pattern": null,
     "at-rule-empty-line-before": [
       "always",
