@@ -1,12 +1,10 @@
 <template>
   <nav class="c-word-type-filter">
     <ul class="c-word-type-filter__list u-list-reset">
-      <li
-        class="c-word-type-filter__list-item"
-        :class="{ 'is-current': wordSearch.activeWordTypeFilter === '' }"
-      >
+      <li class="c-word-type-filter__list-item">
         <button
-          class="c-word-type-filter__button c-word-type-filter__button--all c-button"
+          class="c-word-type-filter__button is-all c-button c-button--filter"
+          :class="{ 'is-current': wordSearch.activeWordTypeFilter === '' }"
           type="button"
           @click="setWordTypeFilter('')"
         >
@@ -17,12 +15,12 @@
         v-for="wordType in wordSearch.wordTypes"
         :key="wordType!"
         class="c-word-type-filter__list-item"
-        :class="{ 'is-current': wordType === wordSearch.activeWordTypeFilter }"
       >
         <button
           :aria-label="`Filter nach Buchstabe ${wordType}`"
           type="button"
-          class="c-word-type-filter__button c-button"
+          class="c-word-type-filter__button c-button c-button--filter"
+          :class="{ 'is-current': wordType === wordSearch.activeWordTypeFilter }"
           :title="`Filter nach Buchstabe ${wordType}`"
           @click="setWordTypeFilter(wordType!)"
         >
@@ -41,4 +39,6 @@ import { $wordSearch, setWordTypeFilter } from "@stores/index";
 const wordSearch = useStore($wordSearch);
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@use "@styles/components/word-type-filter";
+</style>

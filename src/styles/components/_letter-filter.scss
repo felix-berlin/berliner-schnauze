@@ -9,23 +9,13 @@
     display: grid;
     grid-template-columns: repeat(5, minmax(45px, 1fr));
     gap: 1rem;
+  }
 
-    .c-letter-filter__list-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      aspect-ratio: 1;
-
-      &:hover,
-      &.is-current {
-        .c-letter-filter__button {
-          --color-border: var(--orange-500);
-          --style-border: dashed;
-
-          font-weight: 600;
-        }
-      }
-    }
+  &__list-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
   }
 
   &__button {
@@ -40,7 +30,7 @@
     height: 100%;
     text-transform: var(--transform-text, uppercase);
 
-    &.c-letter-filter__button--all {
+    &.is-all {
       --transform-text: none;
     }
   }

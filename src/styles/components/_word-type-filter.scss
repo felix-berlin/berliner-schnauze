@@ -1,0 +1,11 @@
+.c-word-type-filter {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap, 0.5rem);
+  }
+
+  &__button {
+    font-size: 1.1rem;
+  }
+}

@@ -8,6 +8,7 @@
   border: var(--width-border, 1px) var(--style-border, solid) var(--color-border, var(--orange-600));
   color: var(--color, var(--blue));
   transition: all 0.3s ease-in-out;
+
   @include butler-mx.dark-mode-class {
     --color-background: var(--new-blue-600);
     --color: var(--yellow-500);
@@ -20,7 +21,8 @@
   }
 
   @include butler-mx.hover {
-    box-shadow: 0px 0px 12px 0px var(--color-box-shadow, var(--blue));
+    box-shadow: 0 0 12px 0 var(--color-box-shadow, var(--blue));
+
     @include butler-mx.dark-mode-class {
       --color-box-shadow: var(--orange-500);
     }
@@ -35,7 +37,6 @@
     @include butler-mx.hover {
       --style-border: dashed;
     }
-
     @include butler-mx.dark-mode-class {
       --color-border: var(--white-100);
     }
@@ -67,8 +68,12 @@
       gap: vars.$spacer * 0.25;
     }
 
-    &.is-active {
+    &:hover,
+    &.is-active,
+    &.is-current {
       --color-border: var(--blue);
+      --style-border: dashed;
+
       @include butler-mx.dark-mode-class {
         --color-border: var(--orange-500);
       }

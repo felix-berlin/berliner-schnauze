@@ -47,11 +47,13 @@
     display: flex;
     width: 1%;
     min-width: 0;
+    color: var(--color);
 
     @include butler-mx.dark-mode-class {
       --color-outline: color-mix(in srgb, var(--accent) 40%, transparent);
       --color-background: color-mix(in srgb, var(--blue) 70%, white);
       --color-border: color-mix(in srgb, var(--blue) 60%, white);
+      --color: var(--color-body);
     }
 
     &::placeholder {

@@ -32,9 +32,13 @@
       top: 0;
       bottom: 0;
       height: 100%;
-      background-color: var(--new-blue-200);
+      background-color: var(--color-background);
       overflow-x: auto;
       padding: 60px vars.$spacer * 1.5 vars.$spacer * 1.5;
+
+      @include butler-mx.dark-mode-class {
+        --color-background: var(--new-blue-200);
+      }
     }
     @include butler-mx.breakpoint("xs") {
       --width-max: 50lvw;

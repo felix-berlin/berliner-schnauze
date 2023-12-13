@@ -30,7 +30,7 @@ import { useStore } from "@nanostores/vue";
 const wordListFilter = ref<HTMLElement | null>(null);
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
 
-onClickOutside(wordListFilter, (event) => {
+onClickOutside(wordListFilter, () => {
   if (showWordListFilterFlyout.value) {
     $toggleWordListFilterFlyout();
   }
