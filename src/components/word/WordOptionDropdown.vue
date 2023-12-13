@@ -98,6 +98,14 @@ const wordShared = ref<number | null>(null);
 const usingClipboard = useClipboard({ word });
 const usingShare = useShare();
 
+/**
+ * Share the word
+ *
+ * @param   {string}  slug
+ * @param   {number}  index
+ *
+ * @return  {void}
+ */
 const shareWord = (slug: string, index: number) => {
   const shareData = {
     title: `${slug} - Berliner Schnauze`,
@@ -116,7 +124,15 @@ const shareWord = (slug: string, index: number) => {
   }, 1500);
 };
 
-const copyWordPageUrlToClipboard = (slug: string, index: number) => {
+/**
+ * Copy the word page url to the clipboard
+ *
+ * @param   {string}  slug
+ * @param   {number}  index
+ *
+ * @return  {void}
+ */
+const copyWordPageUrlToClipboard = (slug: string, index: number): void => {
   usingClipboard.copy(import.meta.env.PUBLIC_SITE_URL + routeToWord(slug));
   wordLinkCopied.value = index;
   wordButtonClicked.value = true;
@@ -127,7 +143,15 @@ const copyWordPageUrlToClipboard = (slug: string, index: number) => {
   }, 1500);
 };
 
-const copyNameToClipboard = (name: string, index: number) => {
+/**
+ * Copy the word to the clipboard
+ *
+ * @param   {string}  name
+ * @param   {number}  index
+ *
+ * @return  {void}
+ */
+const copyNameToClipboard = (name: string, index: number): void => {
   usingClipboard.copy(name);
 
   wordCopied.value = index;
