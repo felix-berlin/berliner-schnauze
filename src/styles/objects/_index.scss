@@ -82,10 +82,4 @@
       --spacing-outer: #{vars.$spacer * 1.5};
     }
   }
-
-  .c-word-search-list {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
 }

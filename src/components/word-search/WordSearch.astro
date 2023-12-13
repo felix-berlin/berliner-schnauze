@@ -33,13 +33,13 @@ const wordTypes = Array.from(
 ---
 
 <section class="c-filter-search">
-  <aside>
+  <aside class="c-filter-search__filter">
     <h2>Sortiere nach:</h2>
     <SortWordDirectionToggle client:only="vue" />
     <h2>Filter nach:</h2>
     <h3>Berolinismus</h3>
     <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
-    <BerolinismusToggle client:only="vue" />
+    <BerolinismusToggle client:load />
     <h3>Alphabetisch</h3>
     <LetterFilter client:only="vue" />
     <!-- <AlphabeticalFilterDropdown client:only="vue" /> -->
@@ -51,5 +51,6 @@ const wordTypes = Array.from(
     availableLetterGroups={availableWordGroups}
     wordTypes={wordTypes}
     client:only="vue"
+    cssClass={"c-filter-search__list"}
   />
 </section>

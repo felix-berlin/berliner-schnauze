@@ -5,6 +5,67 @@
 
 .c-filter-search {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: [start] 1fr [end];
   gap: vars.$spacer * 1.5;
+
+  @include butler-mx.breakpoint("md") {
+    grid-template-columns: [start] 1fr 3fr [end];
+  }
+
+  .c-word-search-filter-toggle {
+    grid-area: filter-toggle;
+
+    @include butler-mx.breakpoint("md") {
+      display: none;
+    }
+  }
+
+  &__filter {
+    display: var(--display, none);
+
+    &:where(.is-open) {
+      --display: block;
+
+      max-width: var(--width-max, 100lvw);
+
+      @include butler-mx.breakpoint("xs") {
+        --width-max: 50lvw;
+      }
+      @include butler-mx.breakpoint("md", "max") {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100%;
+        background-color: var(--new-blue-200);
+        overflow-x: auto;
+        padding: 60px vars.$spacer * 1.5 vars.$spacer * 1.5;
+      }
+    }
+
+    @include butler-mx.breakpoint("md") {
+      --display: block;
+    }
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-template-areas: "filter-toggle search" "list list";
+    gap: vars.$spacer * 1.5 vars.$spacer;
+
+    @include butler-mx.breakpoint("md") {
+      grid-template-columns: 1fr;
+      grid-template-areas: "search" "list";
+    }
+  }
+
+  .c-word-list {
+    grid-area: list;
+  }
+
+  .c-word-search {
+    grid-area: search;
+  }
 }

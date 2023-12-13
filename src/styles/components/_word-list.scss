@@ -236,6 +236,10 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
   }
 
   &__options {
+    &-dropdown {
+      align-self: flex-start;
+    }
+
     &-icon {
       @include butler-mx.dark-mode-class {
         --_color-icon: var(--yellow-500);
