@@ -17,11 +17,11 @@
         class="c-word-type-filter__list-item"
       >
         <button
-          :aria-label="`Filter nach Buchstabe ${wordType}`"
+          :aria-label="`Filter nach Worttyp ${wordType}`"
           type="button"
           class="c-word-type-filter__button c-button c-button--filter"
           :class="{ 'is-current': wordType === wordSearch.activeWordTypeFilter }"
-          :title="`Filter nach Buchstabe ${wordType}`"
+          :title="`Filter nach Worttyp ${wordType}`"
           @click="setWordTypeFilter(wordType!)"
         >
           {{ wordType }}
