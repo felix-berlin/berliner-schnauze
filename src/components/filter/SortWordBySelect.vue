@@ -68,4 +68,6 @@ const onSelect = (selected: SelectOption): void => {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+@use "@styles/plugins/vue-multiselect";
+</style>

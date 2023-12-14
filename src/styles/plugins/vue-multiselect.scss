@@ -1,0 +1,51 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.multiselect {
+  @include butler-mx.dark-mode-class {
+    color: var(--yellow-500);
+  }
+
+  &__tags {
+    @include butler-mx.dark-mode-class {
+      border-radius: 0;
+    }
+  }
+
+  &__tags,
+  &__content-wrapper {
+    @include butler-mx.dark-mode-class {
+      border-color: color-mix(in srgb, var(--blue) 80%, white);
+    }
+  }
+
+  &__content-wrapper {
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-200);
+    }
+  }
+
+  &__tags,
+  &__single {
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-600);
+    }
+  }
+
+  &__option {
+    &--selected {
+      @include butler-mx.dark-mode-class {
+        background: var(--blue);
+        color: var(--yellow-500);
+      }
+    }
+
+    &--disabled {
+      @include butler-mx.dark-mode-class {
+        background: var(--new-blue-300) !important;
+      }
+    }
+  }
+}
