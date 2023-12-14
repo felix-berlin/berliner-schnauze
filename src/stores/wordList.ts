@@ -5,7 +5,7 @@ import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
 
 export type CleanBerlinerWord = Omit<BerlinerWord, "seo" | "title" | "berlinerWordId">;
 
-export interface WordList {
+export type WordList = {
   letterGroups: Maybe<string>[];
   activeLetterFilter: string;
   wordTypes: Maybe<string>[];
@@ -17,7 +17,7 @@ export interface WordList {
   modifiedDateOrder: "asc" | "desc";
   activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
   berolinismus: boolean;
-}
+};
 
 export const $wordSearch = persistentMap<WordList>(
   "wordSearch:",
@@ -116,6 +116,15 @@ export const $wordListModifiedDateOrderToggle = action(
   "wordListModifiedDateOrderToggle",
   (store) => {
     store.setKey("modifiedDateOrder", store.get().modifiedDateOrder === "asc" ? "desc" : "asc");
+  },
+);
+
+export const $setSortOrder = action(
+  $wordSearch,
+  "setSortOder",
+  (store, category: WordList["activeOrderCategory"], orderName: string, order: "asc" | "desc") => {
+    store.setKey("activeOrderCategory", category);
+    store.setKey(orderName, order);
   },
 );
 

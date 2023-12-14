@@ -109,11 +109,11 @@
     "@nanostores/persistent": "^0.9.1",
     "@nanostores/vue": "^0.10.0",
     "@pagefind/default-ui": "^1.0.4",
-    "@sentry/astro": "^7.86.0",
-    "@sentry/vue": "^7.86.0",
-    "@spotlightjs/astro": "^1.0.3",
+    "@sentry/astro": "^7.87.0",
+    "@sentry/vue": "^7.87.0",
+    "@spotlightjs/astro": "^1.0.6",
     "@vueuse/core": "^10.7.0",
-    "astro": "^4.0.4",
+    "astro": "^4.0.5",
     "astro-breadcrumbs": "^1.8.1",
     "astro-matomo": "^1.4.1",
     "dotenv": "^16.3.1",
@@ -123,6 +123,7 @@
     "pagefind": "^1.0.4",
     "typescript": "^5.3.3",
     "vue": "^3.3.11",
+    "vue-multiselect": "3.0.0-beta.3",
     "vue3-virtual-scroll-list": "^0.2.1"
   }
 }
