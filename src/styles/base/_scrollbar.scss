@@ -1,7 +1,7 @@
 @use "sass:map";
 @use "@styles/variables" as vars;
 
-html {
+html * {
   --scrollbar-primary: var(--primary);
   --scrollbar-secondary: var(--secondary);
   --scrollbar-tertiary: var(--secondary);
