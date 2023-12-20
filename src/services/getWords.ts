@@ -100,12 +100,14 @@ export const getAllWords = async (
                 alternativeWord
               }
               relatedWords {
-                ... on BerlinerWord {
-                  id
-                  wordProperties {
-                    berlinerisch
+                nodes {
+                  ... on BerlinerWord {
+                    id
+                    wordProperties {
+                      berlinerisch
+                    }
+                    slug
                   }
-                  slug
                 }
               }
             }
@@ -124,7 +126,11 @@ export const getAllWords = async (
         }
       }
     }
-    `).then((res) => res.data);
+    `)
+      .then((res) => res.data)
+      .catch((err) => {
+        console.error("error: ", err);
+      });
 
     allWords = [...allWords, ...data.berlinerWords.edges];
     cursor = data?.berlinerWords.pageInfo.endCursor;
