@@ -1,8 +1,11 @@
 @use "@styles/variables" as vars;
 
 input[type="checkbox"].c-switch {
-  width: 35px;
-  border-radius: 20px;
+  --height: 22px;
+
+  width: 34px;
+  border-radius: 14px;
+  position: relative;
 
   &::after {
     --color-background: #{vars.$grey-200};
@@ -10,11 +13,11 @@ input[type="checkbox"].c-switch {
     --left: 2px;
 
     left: var(--left);
-    top: 1px;
+    top: 50%;
     width: var(--size);
     height: var(--size);
     background: var(--color-background-after, var(--color-background));
-    transform: translateX(var(--translate-x, 0));
+    transform: translate(var(--translate-x, 0), -50%);
     border-radius: 50%;
   }
 
