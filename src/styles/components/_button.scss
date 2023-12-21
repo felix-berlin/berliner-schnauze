@@ -21,7 +21,7 @@
   }
 
   @include butler-mx.hover {
-    box-shadow: 0 0 12px 0 var(--color-box-shadow, var(--blue));
+    box-shadow: 0 0 12px 0 var(--color-box-shadow, color-mix(in srgb, var(--orange-500) 60%, white));
 
     @include butler-mx.dark-mode-class {
       --color-box-shadow: var(--orange-500);

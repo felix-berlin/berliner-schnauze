@@ -8,7 +8,7 @@
   >
     <button
       type="button"
-      class="c-button c-menu-nav__item-button u-button-reset c-button--center-icon"
+      class="c-button c-menu-nav__item-button c-button--center-icon"
       aria-label="Website Menu Navigation"
     >
       <span class="u-icon-wrapper c-button--center-icon">
