@@ -15,9 +15,11 @@
 
       <h2>Filter nach:</h2>
 
-      <h3>Berolinismus</h3>
-      <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
-      <BerolinismusSwitch />
+      <div class="c-filter-search__berolinismus">
+        <h3>Berolinismus</h3>
+        <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
+        <BerolinismusSwitch />
+      </div>
 
       <h3>Alphabetisch</h3>
       <LetterFilter />

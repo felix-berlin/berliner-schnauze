@@ -4,8 +4,8 @@
     class="c-word-search-filter-toggle c-button c-button--center-icon"
     @click="$toggleWordListFilterFlyout"
   >
-    <Filter />
-    <span>Filter</span>
+    <Filter class="c-word-search-filter-toggle__icon" />
+    <span class="c-word-search-filter-toggle__text">Filter</span>
   </button>
 </template>
 
@@ -14,4 +14,6 @@ import Filter from "virtual:icons/lucide/filter";
 import { $toggleWordListFilterFlyout } from "@stores/index";
 </script>
 
-<style scoped></style>
+<style lang="scss">
+@use "@styles/components/word-search-filter-toggle";
+</style>

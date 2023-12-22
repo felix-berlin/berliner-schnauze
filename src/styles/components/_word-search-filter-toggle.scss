@@ -1,0 +1,22 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.c-word-search-filter-toggle {
+  --padding: #{vars.$spacer * 0.25 vars.$spacer * 0.5};
+
+  gap: var(--gap, vars.$spacer * 0.5);
+
+  @include mx.breakpoint("md") {
+    --padding: #{vars.$spacer * 0.25 vars.$spacer};
+  }
+
+  &__text {
+    display: var(--display, none);
+
+    @include mx.breakpoint("xs") {
+      --display: block;
+    }
+  }
+}

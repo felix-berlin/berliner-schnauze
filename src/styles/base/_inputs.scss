@@ -13,7 +13,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   --color-border: var(--grey-200);
   --color-border-hover: var(--red-200);
   --size-font: 1rem;
-  --box-shadow-focus: 2px #{rgba(var(--primary), 0.3)};
+  --box-shadow-focus: 2px rgb(var(--primary) 0.3);
   --color-background: #fff;
   --color-background-disabled: var(--grey-200);
   --width-border: 1px;

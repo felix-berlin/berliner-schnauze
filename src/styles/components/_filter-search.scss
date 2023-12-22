@@ -35,6 +35,8 @@
       background-color: var(--color-background);
       overflow-x: auto;
       padding: 85px vars.$spacer * 1.5 vars.$spacer * 1.5;
+      display: flex;
+      flex-direction: column;
 
       @include butler-mx.dark-mode-class {
         --color-background: var(--new-blue-200);
@@ -43,9 +45,33 @@
     @include butler-mx.breakpoint("xs") {
       --width-max: 50lvw;
     }
+
+    :where(h2) {
+      margin-top: 0;
+    }
+
+    :where(h2:not(:first-of-type)) {
+      margin-top: vars.$spacer * 2;
+    }
+
+    :where(h3) {
+      margin-top: vars.$spacer * 1.5;
+    }
+  }
+
+  &__berolinismus {
+    :where(i) {
+      font-size: 0.7rem;
+    }
+
+    .c-berolinismus-switch {
+      margin-top: vars.$spacer * 0.7;
+    }
   }
 
   &__close {
+    align-self: flex-end;
+
     @include butler-mx.breakpoint("md") {
       display: none;
     }

@@ -12,6 +12,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: stretch;
+  align-self: flex-start;
 
   &__search-button {
     --color-background: #{vars.$white-100};
@@ -27,12 +28,6 @@
       order: 2;
 
       --offset-x-boxshadow: -2px;
-    }
-
-    &.has-searchbar {
-      position: relative;
-      z-index: 1;
-      box-shadow: var(--offset-x-box-shadow) 0 0 0 var(--color-box-shadow);
     }
   }
 
@@ -74,29 +69,6 @@
     display: none;
   }
 
-  &__shortcut {
-    border: 1px dashed var(--secondary);
-    color: var(--color, #{color.scale(vars.$red-100, $lightness: 45%)});
-    display: var(--display, none);
-    align-items: center;
-    justify-content: center;
-    padding: vars.$spacer * 0.35;
-    font-size: 0.6rem;
-    gap: vars.$spacer * 0.25;
-    align-self: center;
-
-    @include butler-mx.dark-mode-class {
-      --color: #{color.scale(map.get(vars.$blue-shades, "blue-100"), $lightness: 45%)};
-    }
-    @include mx.breakpoint("md") {
-      --display: flex;
-    }
-  }
-
-  &__command-icon-wrap {
-    display: flex;
-  }
-
   &--large {
     @include mx.breakpoint("md") {
       --padding-y-input: 0.75rem;
@@ -109,11 +81,7 @@
       }
 
       &__search-input {
-        --size-font: 1.5rem;
-
-        @include mx.breakpoint("md") {
-          --font-size: 2rem;
-        }
+        --size-font: #{butler-fn.fluid(16, 32, 320, 1260)};
       }
 
       &__search-label {

@@ -14,6 +14,7 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
   height: 18px;
   background-repeat: no-repeat;
   background-position: center;
+
   &--lucide-more-vertical {
     mask: butler-fn.escape-svg($icon-more-vertical);
   }
@@ -47,7 +48,6 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
         --color-text-decoration: var(--grey-100);
       }
     }
-
     @include butler-mx.dark-mode-class {
       --_color-background: var(--new-blue-400);
       --_color-border: var(--new-blue-200);
@@ -128,10 +128,10 @@ $icon-more-vertical: url("data:image/svg+xml,#{$lucide-more-vertical}");
 
     &::before {
       content: "᛫";
-      margin: var(--_margin, 0 #{vars.$spacer * 0.5});
+      margin: var(--margin, 0 #{vars.$spacer * 0.5});
 
       @include mx.breakpoint("sm") {
-        --_margin: 0 #{vars.$spacer};
+        --margin: 0 #{vars.$spacer};
       }
     }
   }

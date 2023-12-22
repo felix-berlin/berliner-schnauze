@@ -37,4 +37,8 @@ input[type="checkbox"].c-switch {
       }
     }
   }
+
+  + label {
+    margin-left: vars.$spacer * 0.5;
+  }
 }
