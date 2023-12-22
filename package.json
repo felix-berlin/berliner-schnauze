@@ -55,7 +55,7 @@
     "postbuild": "pagefind --site dist/"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.3.3",
+    "@astrojs/check": "^0.3.4",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-codegen/client-preset": "^4.1.0",
     "@graphql-codegen/introspection": "^4.0.0",
@@ -98,21 +98,21 @@
     "ts-node": "^10.9.2",
     "unplugin-icons": "^0.18.1",
     "vitest": "^1.1.0",
-    "vue-tsc": "^1.8.25"
+    "vue-tsc": "^1.8.26"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.0.3",
     "@astrojs/vue": "^4.0.5",
     "@felix_berlin/sass-butler": "2.6.3",
     "@formkit/auto-animate": "^0.8.1",
-    "@iconify-json/lucide": "^1.1.147",
+    "@iconify-json/lucide": "^1.1.148",
     "@nanostores/persistent": "^0.9.1",
     "@nanostores/vue": "^0.10.0",
-    "@orama/orama": "2.0.0-beta.10",
+    "@orama/orama": "2.0.0-beta.11",
     "@pagefind/default-ui": "^1.0.4",
-    "@sentry/astro": "^7.90.0",
-    "@sentry/vue": "^7.90.0",
-    "@spotlightjs/astro": "^1.0.8",
+    "@sentry/astro": "^7.91.0",
+    "@sentry/vue": "^7.91.0",
+    "@spotlightjs/astro": "^1.0.9",
     "@vueuse/core": "^10.7.0",
     "astro": "^4.0.7",
     "astro-breadcrumbs": "^1.8.1",
