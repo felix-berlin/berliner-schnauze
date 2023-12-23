@@ -69,7 +69,7 @@
     }
   }
 
-  &__close {
+  .c-filter-search__close {
     align-self: flex-end;
 
     @include butler-mx.breakpoint("md") {
