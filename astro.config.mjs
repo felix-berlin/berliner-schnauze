@@ -12,6 +12,9 @@ import spotlightjs from "@spotlightjs/astro";
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   prefetch: true,
+  image: {
+    domains: ["upload.wikimedia.org"],
+  },
   integrations: [
     vue({
       appEntrypoint: "/src/pages/_app",

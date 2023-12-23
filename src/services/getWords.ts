@@ -110,6 +110,9 @@ export const getAllWords = async (
                   }
                 }
               }
+              wikimediaFiles {
+                wikimediaFile
+              }
             }
             berlinerischWordTypes {
               nodes {

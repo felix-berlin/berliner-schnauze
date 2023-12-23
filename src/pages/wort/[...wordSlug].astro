@@ -19,6 +19,8 @@ import RandomWordButton from "@components/RandomWordButton.vue";
 import NavigateBack from "@components/NavigateBack.vue";
 import { routeToWord, seoData } from "@utils/helpers";
 import { Breadcrumbs } from "astro-breadcrumbs";
+import { Picture } from "astro:assets";
+import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -55,20 +57,37 @@ const formattedDate = (date: string, locale = "de-DE") => {
   return dateToFormat.toLocaleString(locale, { year: "numeric", month: "long", day: "numeric" });
 };
 
+const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
+  return (
+    word?.alternativeWord +
+    (wordProps?.alternativeWords && index !== wordProps?.alternativeWords?.length - 1 ? ", " : "")
+  );
+});
+
 /**
  * TODO: Fix RelatedWords (allways returns null)
  */
 // console.log(wordProps?.relatedWords?.nodes);
+
+/**
+ * Create a list of all wikimedia files
+ */
+const createWikimediaFileList = async () => {
+  let files = [];
+  for (const file of wordProps?.wikimediaFiles!) {
+    const img = await fetchWikimediaAPI(file.wikimediaFile);
+    files.push(img);
+  }
+  return files;
+};
+
+const wikimediaFiles = await createWikimediaFileList();
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
   <Breadcrumbs indexText="start">
     <ChevronRight slot="separator" width="20" height="20" />
   </Breadcrumbs>
-
-  <!-- <NavigateBack client:load>
-    <ArrowLeft /> zurück
-  </NavigateBack> -->
 
   <article class="c-single-word">
     <header class="c-single-word__header">
@@ -88,6 +107,33 @@ const formattedDate = (date: string, locale = "de-DE") => {
         }
       </h1>
     </header>
+
+    {
+      wordProps?.wikimediaFiles && (
+        <div class="c-single-word__image-wrapper">
+          {wikimediaFiles.map((file) => {
+            return (
+              <Picture
+                src={file.original.url}
+                alt={wordProps?.berlinerisch!}
+                width={file.original.width}
+                height={file.original.height}
+                class="c-single-word__image"
+              />
+            );
+          })}
+        </div>
+      )
+    }
+
+    {
+      wordProps?.alternativeWords && (
+        <div class="c-single-word__alternative-words-wrapper">
+          <h2>Selbe Bedeutung wie:</h2>
+          <p class="c-single-word__alternative-word">{alternativeWords}</p>
+        </div>
+      )
+    }
 
     {
       wordProps?.learnMore && (

@@ -20329,6 +20329,8 @@ export type WordProperties = AcfFieldGroup & AcfFieldGroupFields & WordPropertie
   relatedWords?: Maybe<AcfContentNodeConnection>;
   /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   translations?: Maybe<Array<Maybe<WordPropertiesTranslations>>>;
+  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
+  wikimediaFiles?: Maybe<Array<Maybe<WordPropertiesWikimediaFiles>>>;
 };
 
 
@@ -20417,6 +20419,29 @@ export type WordPropertiesTranslations_Fields = {
   translation?: Maybe<Scalars['String']['output']>;
 };
 
+/** The &quot;WordPropertiesWikimediaFiles&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
+export type WordPropertiesWikimediaFiles = AcfFieldGroup & AcfFieldGroupFields & WordPropertiesWikimediaFiles_Fields & {
+  __typename?: 'WordPropertiesWikimediaFiles';
+  /**
+   * The name of the field group
+   * @deprecated Use __typename instead
+   */
+  fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;WordPropertiesWikimediaFiles&quot; Field Group */
+  wikimediaFile?: Maybe<Scalars['String']['output']>;
+};
+
+/** Interface representing fields of the ACF &quot;WordPropertiesWikimediaFiles&quot; Field Group */
+export type WordPropertiesWikimediaFiles_Fields = {
+  /**
+   * The name of the field group
+   * @deprecated Use __typename instead
+   */
+  fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;WordPropertiesWikimediaFiles&quot; Field Group */
+  wikimediaFile?: Maybe<Scalars['String']['output']>;
+};
+
 /** Interface representing fields of the ACF &quot;WordProperties&quot; Field Group */
 export type WordProperties_Fields = {
   /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
@@ -20442,6 +20467,8 @@ export type WordProperties_Fields = {
   relatedWords?: Maybe<AcfContentNodeConnection>;
   /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   translations?: Maybe<Array<Maybe<WordPropertiesTranslations>>>;
+  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
+  wikimediaFiles?: Maybe<Array<Maybe<WordPropertiesWikimediaFiles>>>;
 };
 
 

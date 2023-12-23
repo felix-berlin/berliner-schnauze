@@ -151,6 +151,16 @@
     }
   }
 
+  &__image-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: vars.$spacer * 1.5;
+
+    picture > source {
+      display: none;
+    }
+  }
+
   &__learn-more {
     &-wrapper {
       display: flex;
