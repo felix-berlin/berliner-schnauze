@@ -9,7 +9,7 @@
   display: flex;
   align-items: center;
 
-  @include butler-mx.breakpoint("md") {
+  @include butler-mx.breakpoint("sm") {
     flex: 1 1 auto;
     max-width: 200px;
     min-width: 150px;
@@ -21,14 +21,13 @@
 
     justify-content: center;
     color: var(--white-100);
-    border: none;
   }
 
   &__slash-icon,
   &__label {
     display: none;
 
-    @include butler-mx.breakpoint("md") {
+    @include butler-mx.breakpoint("sm") {
       display: block;
     }
   }
