@@ -54,6 +54,11 @@ const formattedDate = (date: string, locale = "de-DE") => {
 
   return dateToFormat.toLocaleString(locale, { year: "numeric", month: "long", day: "numeric" });
 };
+
+/**
+ * TODO: Fix RelatedWords (allways returns null)
+ */
+// console.log(wordProps?.relatedWords?.nodes);
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
@@ -131,11 +136,11 @@ const formattedDate = (date: string, locale = "de-DE") => {
     </div>
 
     {
-      wordProps?.relatedWords && (
+      wordProps?.relatedWords?.nodes && (
         <div class="c-single-word__related-words-wrapper">
           <h3>Verwandte Worte:</h3>
           <ul class="c-single-word__related-words-list">
-            {wordProps.relatedWords.map((word): BerlinerWord[] => {
+            {wordProps.relatedWords.nodes.map((word): BerlinerWord[] => {
               return (
                 <li class="c-single-word__related-word">
                   <a href={routeToWord(word?.slug!)} class="c-single-word__related-word-link">

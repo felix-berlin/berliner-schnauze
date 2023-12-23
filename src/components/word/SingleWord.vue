@@ -50,7 +50,7 @@
     <a
       v-if="
         source.wordProperties?.learnMore ||
-        source.wordProperties?.relatedWords ||
+        source.wordProperties?.relatedWords.nodes ||
         source.berlinerischWordTypes
       "
       :href="routeToWord(source.slug!)"
