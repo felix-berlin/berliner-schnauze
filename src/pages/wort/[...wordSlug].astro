@@ -84,6 +84,7 @@ const createWikimediaFileList = async () => {
 };
 
 const wikimediaFiles = await createWikimediaFileList();
+console.log(wikimediaFiles);
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
@@ -120,6 +121,7 @@ const wikimediaFiles = await createWikimediaFileList();
                 alt={wordProps?.berlinerisch!}
                 width={file.preferred.width}
                 height={file.preferred.height}
+                formats={["avif", "webp"]}
                 widths={[327, 455, 637]}
                 class="c-single-word__image"
               />
