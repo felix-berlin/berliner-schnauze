@@ -6,7 +6,7 @@
 
 body {
   margin: 0;
-  color: var(--color-body, var(--blue));
+  color: var(--color-body);
   background-color: var(
     --color-background-body,
     color-mix(in srgb, var(--orange-100) 5%, transparent)
@@ -25,7 +25,6 @@ body {
     transition: background-color 0.7s ease-in-out;
   }
   @include butler-mx.dark-mode-class {
-    --color-body: #{vars.$yellow-500};
     --color-gradient-body-1: color-mix(in srgb, var(--new-blue-400) 98%, white);
     --color-gradient-body-2: color-mix(in srgb, var(--blue) 70%, transparent);
     --color-background-body: var(--new-blue-300);

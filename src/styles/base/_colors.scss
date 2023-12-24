@@ -3,7 +3,6 @@
 
 :root {
   @each $name, $color in vars.$all-colors {
-    /* stylelint-disable-next-line custom-property-pattern */
     --#{$name}: #{$color};
   }
 
@@ -18,10 +17,12 @@ html {
   --primary: var(--blue-100);
   --secondary: var(--red-500);
   --accent: var(--orange-400);
+  --color-body: var(--blue);
 
-  @include butler-mx.dark-mode-class {
+  &[class~="dark"] {
     --primary: var(--blue-500);
     --secondary: var(--blue-400);
     --accent: var(--orange-500);
+    --color-body: #{vars.$yellow-500};
   }
 }
