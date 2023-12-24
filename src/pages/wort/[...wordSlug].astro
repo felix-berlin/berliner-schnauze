@@ -116,10 +116,10 @@ const wikimediaFiles = await createWikimediaFileList();
           {wikimediaFiles?.map((file) => {
             return (
               <Picture
-                src={file.original.url}
+                src={file.preferred.url}
                 alt={wordProps?.berlinerisch!}
-                width={file.original.width}
-                height={file.original.height}
+                width={file.preferred.width}
+                height={file.preferred.height}
                 widths={[327, 455, 637]}
                 class="c-single-word__image"
               />
