@@ -73,6 +73,8 @@ const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
  * Create a list of all wikimedia files
  */
 const createWikimediaFileList = async () => {
+  if (!wordProps?.wikimediaFiles) return;
+
   let files = [];
   for (const file of wordProps?.wikimediaFiles!) {
     const img = await fetchWikimediaAPI(file.wikimediaFile);
