@@ -111,15 +111,16 @@ const wikimediaFiles = await createWikimediaFileList();
     </header>
 
     {
-      wordProps?.wikimediaFiles && (
+      wordProps?.wikimediaFiles && wikimediaFiles && (
         <div class="c-single-word__image-wrapper">
-          {wikimediaFiles.map((file) => {
+          {wikimediaFiles?.map((file) => {
             return (
               <Picture
                 src={file.original.url}
                 alt={wordProps?.berlinerisch!}
                 width={file.original.width}
                 height={file.original.height}
+                widths={[327, 455, 637]}
                 class="c-single-word__image"
               />
             );
