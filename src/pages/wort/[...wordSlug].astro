@@ -78,7 +78,7 @@ const createWikimediaFileList = async () => {
   let files = [];
   for (const file of wordProps?.wikimediaFiles!) {
     const img = await fetchWikimediaAPI(file.wikimediaFile);
-    files.push(img);
+    files.push({ image: img, description: file?.description, caption: file?.caption });
   }
   return files;
 };
@@ -115,12 +115,25 @@ console.log(wikimediaFiles);
       wordProps?.wikimediaFiles && wikimediaFiles && (
         <div class="c-single-word__image-wrapper">
           {wikimediaFiles?.map((file) => {
-            return (
+            return file.caption ? (
+              <figure>
+                <Picture
+                  src={file.image.preferred.url}
+                  alt={file.description ?? wordProps?.berlinerisch!}
+                  width={file.image.preferred.width}
+                  height={file.image.preferred.height}
+                  formats={["avif", "webp"]}
+                  widths={[327, 455, 637]}
+                  class="c-single-word__image"
+                />
+                <figcaption>{file.caption}</figcaption>
+              </figure>
+            ) : (
               <Picture
-                src={file.preferred.url}
-                alt={wordProps?.berlinerisch!}
-                width={file.preferred.width}
-                height={file.preferred.height}
+                src={file.image.preferred.url}
+                alt={file.description ?? wordProps?.berlinerisch!}
+                width={file.image.preferred.width}
+                height={file.image.preferred.height}
                 formats={["avif", "webp"]}
                 widths={[327, 455, 637]}
                 class="c-single-word__image"

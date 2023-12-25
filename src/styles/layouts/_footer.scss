@@ -39,11 +39,11 @@
   }
 
   &__ground {
-    background-color: var(--_color-background, color-mix(in srgb, var(--orange-200) 60%, white));
+    background-color: var(--color-background, color-mix(in srgb, var(--orange-200) 60%, white));
     padding: 25px 0;
 
     @include butler-mx.dark-mode-class {
-      --_color-background: var(--new-blue-400);
+      --color-background: var(--new-blue-400);
     }
 
     .c-footer__wrapper {
@@ -90,11 +90,11 @@
   }
 
   &__end {
-    background-color: var(--_color-background, var(--orange-200));
+    background-color: var(--color-background, var(--orange-200));
     font-size: 0.8rem;
 
     @include butler-mx.dark-mode-class {
-      --_color-background: var(--blue);
+      --color-background: var(--blue);
     }
 
     &-content {

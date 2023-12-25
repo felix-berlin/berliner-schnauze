@@ -112,6 +112,8 @@ export const getAllWords = async (
               }
               wikimediaFiles {
                 wikimediaFile
+                description
+                caption
               }
             }
             berlinerischWordTypes {
