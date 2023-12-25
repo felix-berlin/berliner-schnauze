@@ -80,6 +80,7 @@
   &__list {
     display: grid;
     grid-template-columns: min-content 1fr;
+    grid-template-rows: min-content;
     grid-template-areas: "filter-toggle search" "list list";
     gap: vars.$spacer * 1.5 vars.$spacer;
 
