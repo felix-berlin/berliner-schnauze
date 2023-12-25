@@ -1,6 +1,7 @@
-import { computed, action, atom, map, deepMap } from "nanostores";
+import { computed, action, atom } from "nanostores";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import Fuse from "fuse.js";
+import { useViewTransition } from "@utils/helpers";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
 
 export type CleanBerlinerWord = Omit<BerlinerWord, "seo" | "title" | "berlinerWordId">;
@@ -56,15 +57,22 @@ export const $toggleWordListFilterFlyout = action(
   },
 );
 
+/**
+ * Set the active letter to filter the word list
+ *
+ * @param   {string}  letter           [letter description]
+ *
+ * @return  {void}                   [return description]
+ */
 export const setLetterFilter = action($wordSearch, "setLetterFilter", (store, letter: string) => {
-  store.setKey("activeLetterFilter", letter);
+  useViewTransition(() => store.setKey("activeLetterFilter", letter));
 });
 
 export const setWordTypeFilter = action(
   $wordSearch,
   "setLetterFilter",
   (store, wordType: string) => {
-    store.setKey("activeWordTypeFilter", wordType);
+    useViewTransition(() => store.setKey("activeWordTypeFilter", wordType));
   },
 );
 
@@ -133,7 +141,7 @@ export const setSearch = action($wordSearch, "setSearch", (store, search: string
 });
 
 export const $toggleBerolinismus = action($wordSearch, "toggleBerolinismus", (store) => {
-  store.setKey("berolinismus", !store.get().berolinismus);
+  useViewTransition(() => store.setKey("berolinismus", !store.get().berolinismus));
 });
 
 export const searchLength = computed($wordSearch, (wordSearch) => {

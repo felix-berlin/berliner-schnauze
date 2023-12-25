@@ -14,12 +14,12 @@ import { $wordSearch } from "@stores/index";
 import type { Maybe } from "@ts_types/generated/graphql";
 import type { CleanBerlinerWord } from "@stores/index";
 
-interface WordSearchListProps {
+type WordSearchListProps = {
   words: CleanBerlinerWord[];
   availableLetterGroups: Maybe<string>[];
   wordTypes: Maybe<string>[];
   cssClass: string;
-}
+};
 
 const props = defineProps<WordSearchListProps>();
 

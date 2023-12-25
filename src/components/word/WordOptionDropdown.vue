@@ -106,7 +106,7 @@ const usingShare = useShare();
  *
  * @return  {void}
  */
-const shareWord = (slug: string, index: number) => {
+const shareWord = (slug: string, index: number): void => {
   const shareData = {
     title: `${slug} - Berliner Schnauze`,
     text: `Lerne mehr über das Berliner Wort: ${slug}`,
