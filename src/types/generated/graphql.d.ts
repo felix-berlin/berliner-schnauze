@@ -20422,6 +20422,10 @@ export type WordPropertiesTranslations_Fields = {
 /** The &quot;WordPropertiesWikimediaFiles&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type WordPropertiesWikimediaFiles = AcfFieldGroup & AcfFieldGroupFields & WordPropertiesWikimediaFiles_Fields & {
   __typename?: 'WordPropertiesWikimediaFiles';
+  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;WordPropertiesWikimediaFiles&quot; Field Group */
+  caption?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;WordPropertiesWikimediaFiles&quot; Field Group */
+  description?: Maybe<Scalars['String']['output']>;
   /**
    * The name of the field group
    * @deprecated Use __typename instead
@@ -20433,6 +20437,10 @@ export type WordPropertiesWikimediaFiles = AcfFieldGroup & AcfFieldGroupFields &
 
 /** Interface representing fields of the ACF &quot;WordPropertiesWikimediaFiles&quot; Field Group */
 export type WordPropertiesWikimediaFiles_Fields = {
+  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;WordPropertiesWikimediaFiles&quot; Field Group */
+  caption?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;WordPropertiesWikimediaFiles&quot; Field Group */
+  description?: Maybe<Scalars['String']['output']>;
   /**
    * The name of the field group
    * @deprecated Use __typename instead
