@@ -4,7 +4,7 @@ import Fuse from "fuse.js";
 import { useViewTransition } from "@utils/helpers";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
 
-export type CleanBerlinerWord = Omit<BerlinerWord, "seo" | "title" | "berlinerWordId">;
+export type CleanBerlinerWord = Omit<BerlinerWord, "seo" | "title">;
 
 export type WordList = {
   letterGroups: Maybe<string>[];

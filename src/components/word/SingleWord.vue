@@ -17,18 +17,11 @@
           class="c-word-list__berlinerisch"
           :data-content-piece="source.wordProperties?.berlinerisch"
         >
-          <span
-            v-if="isWordOfTheDay"
-            v-tooltip="{
-              content: `${source.wordProperties?.berlinerisch} ist das heutige Wort des Tages`,
-              distance: 10,
-              placement: 'top',
-            }"
+          <IsWordOfTheDay
+            :word="source.wordProperties?.berlinerisch"
+            :word-id="source.berlinerWordId"
             class="c-word-list__crown"
-            aria-hidden="true"
-          >
-            <Crown />
-          </span>
+          />
           <a :href="routeToWord(source.slug!)">
             {{ source.wordProperties?.berlinerisch }}
           </a>
@@ -62,22 +55,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import Info from "virtual:icons/lucide/info";
-import Crown from "virtual:icons/lucide/crown";
 import WordExamples from "@components/word/WordExamples.vue";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
+import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import { routeToWord } from "@utils/helpers";
 import type { CleanBerlinerWord } from "@stores/index";
 
-interface WordProps {
+type WordProps = {
   source: CleanBerlinerWord;
   index: number;
-}
+};
 
 const { source, index } = defineProps<WordProps>();
-
-const isWordOfTheDay = ref<boolean>(false);
 </script>
 
 <style scoped></style>

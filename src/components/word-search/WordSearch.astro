@@ -12,7 +12,7 @@ interface WordSearchProps {
 const { words } = Astro.props as WordSearchProps;
 
 const cleanWords = words.map(({ node }): CleanBerlinerWord => {
-  const { seo, title, berlinerWordId, ...cleanNode } = node;
+  const { seo, title, ...cleanNode } = node;
   return cleanNode;
 });
 

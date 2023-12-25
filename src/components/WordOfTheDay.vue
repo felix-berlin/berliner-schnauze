@@ -56,12 +56,12 @@ import { ref, onMounted, onBeforeMount } from "vue";
 import type { Ref } from "vue";
 import Crown from "virtual:icons/lucide/crown";
 import { useStore } from "@nanostores/vue";
-import { wordOfTheDay, getWordOfTheDay } from "@stores/index";
+import { $wordOfTheDay, getWordOfTheDay } from "@stores/index";
 import ConfettiEffect from "@components/ConfettiEffect.vue";
 import SingleLoader from "@components/SingleLoader.vue";
 import { routeToWord } from "@utils/helpers";
 
-const currentWord = useStore(wordOfTheDay);
+const currentWord = useStore($wordOfTheDay);
 const celebrate = ref(false);
 const showTooltip = ref(false);
 const countDown = ref();

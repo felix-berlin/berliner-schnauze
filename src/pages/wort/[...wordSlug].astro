@@ -21,6 +21,7 @@ import { routeToWord, seoData } from "@utils/helpers";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import { Picture } from "astro:assets";
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
+import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -77,7 +78,7 @@ const createWikimediaFileList = async () => {
 
   let files = [];
   for (const file of wordProps?.wikimediaFiles!) {
-    const img = await fetchWikimediaAPI(file.wikimediaFile);
+    const img = await fetchWikimediaAPI(file?.wikimediaFile!);
     files.push({ image: img, description: file?.description, caption: file?.caption });
   }
   return files;
@@ -110,6 +111,8 @@ console.log(wikimediaFiles);
         }
       </h1>
     </header>
+
+    <WordOptionDropdown index={0} word={word} client:only="vue" />
 
     {
       wordProps?.wikimediaFiles && wikimediaFiles && (
