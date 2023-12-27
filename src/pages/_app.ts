@@ -3,6 +3,7 @@ import FloatingVue from "floating-vue";
 import { autoAnimatePlugin } from "@formkit/auto-animate/vue";
 import { devtools } from "@nanostores/vue/devtools";
 // import VueVirtualScroller from "vue-virtual-scroller";
+
 import {
   $wordOfTheDay,
   isDarkMode,
@@ -12,6 +13,7 @@ import {
   $installPrompt,
   $showInstallButton,
   $showWordListFilterFlyout,
+  $toastNotify,
 } from "@stores/index";
 
 export default (app: App) => {
@@ -36,6 +38,7 @@ export default (app: App) => {
     $installPrompt,
     $showInstallButton,
     $showWordListFilterFlyout,
+    $toastNotify,
   });
   // app.use(VueVirtualScroller);
 };

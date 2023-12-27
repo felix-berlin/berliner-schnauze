@@ -1,0 +1,25 @@
+.c-toast-notify {
+  // position: relative;
+  opacity: 0;
+  transform: translateX(50px);
+  transition:
+    transform 0.3s allow-discrete,
+    opacity 0.3s allow-discrete,
+    display 0.3s allow-discrete;
+
+  &:popover-open {
+    @starting-style {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    display: flex;
+    gap: 1rem;
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  &__close {
+    align-self: center;
+  }
+}
