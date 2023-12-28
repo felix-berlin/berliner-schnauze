@@ -1,33 +1,43 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-toast-notify {
-  opacity: 0;
-  transform: translateX(50px);
-  transition:
-    transform 0.3s allow-discrete,
-    opacity 0.3s allow-discrete,
-    display 0.3s allow-discrete;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--color);
+  background-color: var(--color-background, var(--orange-300));
+  border: 1px solid var(--color-border);
+  padding: 0.7rem 1.4rem;
+
+  @include butler-mx.dark-mode-class {
+    --color: var(--color-body);
+    --color-background: var(--new-blue-600);
+    --color-border: color-mix(in srgb, var(--blue) 80%, white);
+  }
+
+  /**
+   * Important for exit animation
+   * @see: https://developer.chrome.com/blog/entry-exit-animations?hl=de#animating_elements_to_and_from_the_top-layer
+   */
+  @include butler-mx.feature("motion") {
+    opacity: 0;
+    transform: translateX(150px);
+    transition:
+      transform 0.3s,
+      opacity 0.3s,
+      display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete;
+  }
 
   &:popover-open {
-    @starting-style {
-      transform: translateX(100%);
-      opacity: 0;
-    }
+    @include butler-mx.feature("motion") {
+      @starting-style {
+        transform: translateX(100%);
+        opacity: 0;
+      }
 
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    opacity: 1;
-    transform: translateX(0);
-    color: var(--color);
-    background-color: var(--color-background);
-    border: 1px solid var(--color-border);
-    padding: 0.7rem 1.4rem;
-
-    @include butler-mx.dark-mode-class {
-      --color: var(--color-body);
-      --color-background: var(--new-blue-600);
-      --color-border: color-mix(in srgb, var(--blue) 80%, white);
+      opacity: 1;
+      transform: translateX(0);
     }
   }
 

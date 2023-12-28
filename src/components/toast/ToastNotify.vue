@@ -1,5 +1,7 @@
 <template>
   <div
+    v-if="isSupported"
+    :id="`toast-${id}`"
     ref="toast"
     popover="manual"
     class="c-toast-notify is-newest"
@@ -22,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, nextTick, reactive } from "vue";
+import { ref, onMounted, onBeforeMount, watch, nextTick, reactive } from "vue";
 import { useSwipe } from "@vueuse/core";
 import { removeToastById } from "@stores/index";
 import Info from "virtual:icons/lucide/info";
@@ -30,21 +32,7 @@ import Error from "virtual:icons/lucide/x-circle";
 import Warning from "virtual:icons/lucide/alert-circle";
 import Success from "virtual:icons/lucide/check-circle-2";
 import Close from "virtual:icons/lucide/x";
-
-type ToastNotifyProps = {
-  message: string;
-  id: number;
-  status?: "info" | "success" | "warning" | "error";
-  showStatusIcon?: boolean;
-  showClose?: boolean;
-  closeOnSwipe?: boolean;
-  closeAfterTimeout?: boolean;
-  closeTimeout?: number;
-  position?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
-  outerSpacing?: string;
-  gapBetween?: number;
-  initOffset?: number;
-};
+import type { ToastNotify } from "@stores/index";
 
 type Position = "bottom" | "left" | "right" | "top";
 
@@ -53,8 +41,8 @@ type StylePositionType = {
 };
 
 const {
-  message,
   id,
+  message,
   status = "info",
   showStatusIcon = true,
   position = "top-right",
@@ -63,12 +51,12 @@ const {
   initOffset = 100,
   showClose = true,
   closeOnSwipe = true,
-} = defineProps<ToastNotifyProps>();
+} = defineProps<ToastNotify>();
 
 const toast = ref();
 const isSupported = ref(false);
 const isOpen = ref(false);
-const { isSwiping, direction, lengthX } = useSwipe(toast);
+const { isSwiping } = useSwipe(toast);
 const stylePosition: StylePositionType = reactive({
   bottom: "auto",
   left: "auto",
@@ -98,10 +86,10 @@ const supportsPopover = (): boolean => {
  * @return  {void}
  */
 const hideToast = async (): Promise<void> => {
-  // toast.value.hidePopover();
-  removeToastById(id);
   await nextTick();
-  setDynamicPosition();
+  setDynamicPosition(); // Recalculate the position of the toasts
+
+  removeToastById(id);
 };
 
 /**
@@ -149,12 +137,16 @@ const setDynamicPosition = (): void => {
 
     // Calculate the offset for the next toast
     const toastHeight = toast.getBoundingClientRect().height;
+
     offset += toastHeight + gapBetween; // 10 is the margin between toasts
   });
 };
 
-onMounted(async () => {
+onBeforeMount(() => {
   isSupported.value = supportsPopover();
+});
+
+onMounted(async () => {
   showToast();
 
   setPosition();

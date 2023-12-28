@@ -85,7 +85,7 @@ const shareWord = (slug: string): void => {
   };
 
   usingShare.share(shareData);
-  createToastNotify({ message: "Wort geteilt" }, "success");
+  createToastNotify({ message: "Wort geteilt", status: "success" });
 };
 
 /**
@@ -97,7 +97,10 @@ const shareWord = (slug: string): void => {
  */
 const copyWordPageUrlToClipboard = (slug: string): void => {
   usingClipboard.copy(import.meta.env.PUBLIC_SITE_URL + routeToWord(slug));
-  createToastNotify({ message: "Link kopiert" }, "success");
+  createToastNotify({
+    message: "Link kopiert",
+    status: "success",
+  });
 };
 
 /**
@@ -109,7 +112,7 @@ const copyWordPageUrlToClipboard = (slug: string): void => {
  */
 const copyNameToClipboard = (name: string): void => {
   usingClipboard.copy(name);
-  createToastNotify({ message: "Wort kopiert" }, "success");
+  createToastNotify({ message: "Wort kopiert", status: "success" });
 };
 </script>
 

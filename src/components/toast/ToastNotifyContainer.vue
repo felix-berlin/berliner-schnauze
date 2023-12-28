@@ -1,11 +1,20 @@
 <template>
-  <ToastNotify
-    v-for="toast in toastStore"
-    :id="toast.id"
-    :key="toast.id"
-    :message="toast.message"
-    :status="toast.status"
-  />
+  <Teleport :to="teleportTarget" :disabled="teleportDisabled">
+    <ToastNotify
+      v-for="toast in toastStore"
+      :id="toast.id"
+      :key="toast.id"
+      :status="toast?.status"
+      :message="toast.message"
+      :show-status-icon="toast?.showStatusIcon"
+      :position="toast?.position"
+      :show-close="toast?.showClose"
+      :close-on-swipe="toast?.closeOnSwipe"
+      :outer-spacing="toast?.outerSpacing"
+      :gap-between="toast?.gapBetween"
+      :init-offset="toast?.initOffset"
+    />
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -14,6 +23,14 @@ import { useStore } from "@nanostores/vue";
 import { $toastNotify } from "@stores/index";
 
 const toastStore = useStore($toastNotify);
+
+export type ToastNotifyContainerProps = {
+  teleportTarget?: string;
+  teleportDisabled?: boolean;
+};
+
+const { teleportTarget = "body", teleportDisabled = false } =
+  defineProps<ToastNotifyContainerProps>();
 </script>
 
 <style lang="scss"></style>
