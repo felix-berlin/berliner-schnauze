@@ -90,6 +90,12 @@
     }
   }
 
+  &__headline-wrap {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.5;
+  }
+
   .c-word-list {
     grid-area: list;
   }

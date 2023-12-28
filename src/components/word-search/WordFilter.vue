@@ -24,7 +24,10 @@
       <h3>Alphabetisch</h3>
       <LetterFilter />
 
-      <h3>Worttyp</h3>
+      <div class="c-filter-search__headline-wrap">
+        <h3>Worttyp</h3>
+        <BadgeTag> Beta </BadgeTag>
+      </div>
       <WordTypeFilter />
     </aside>
   </transition>
@@ -39,6 +42,7 @@ import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
 import { $toggleWordListFilterFlyout, $showWordListFilterFlyout } from "@stores/index";
 import { useStore } from "@nanostores/vue";
+import BadgeTag from "@components/BadgeTag.vue";
 import X from "virtual:icons/lucide/x";
 
 const wordListFilter = ref<HTMLElement | null>(null);
