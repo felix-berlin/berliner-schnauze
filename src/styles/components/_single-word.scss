@@ -22,6 +22,12 @@
 
   &__header {
     position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .c-options-dropdown {
+    align-self: flex-start;
   }
 
   &__crown {

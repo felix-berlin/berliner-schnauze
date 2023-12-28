@@ -1,0 +1,32 @@
+@use "sass:color";
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/functions" as butler-fn;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-options-dropdown {
+  align-self: flex-start;
+
+  &__options-icon {
+    @include butler-mx.dark-mode-class {
+      --color-icon: var(--yellow-500);
+    }
+  }
+
+  &__copy-button {
+    --color-background: #{vars.$white-200};
+
+    gap: vars.$spacer * 0.3;
+    display: flex;
+    align-items: center;
+
+    @include butler-mx.hover {
+      --style-border: solid;
+    }
+
+    &.is-success {
+      background: var(--success);
+      color: #fff;
+    }
+  }
+}

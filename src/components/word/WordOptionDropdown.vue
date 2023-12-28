@@ -1,17 +1,12 @@
 <template>
-  <VDropdown
-    placement="bottom-end"
-    class="c-word-list__options-dropdown"
-    distance="9"
-    theme="word-options"
-  >
+  <VDropdown placement="bottom-end" class="c-options-dropdown" distance="9" theme="word-options">
     <button
       type="button"
-      class="c-word-list__options c-button c-button--center-icon c-button--dashed-border"
+      class="c-options-dropdown__options c-button c-button--center-icon c-button--dashed-border"
       aria-label="Website Menu Navigation"
     >
       <span
-        class="c-word-list__options-icon c-button--center-icon c-icon c-icon--lucide-more-vertical"
+        class="c-options-dropdown__options-icon c-button--center-icon c-icon c-icon--lucide-more-vertical"
       >
       </span>
     </button>
@@ -21,36 +16,36 @@
         v-if="usingShare.isSupported"
         aria-label="Wort teilen"
         type="button"
-        class="c-word-list__copy-button c-button c-button--dashed-border"
+        class="c-options-dropdown__copy-button c-button c-button--dashed-border"
         @click="shareWord(word.slug!)"
       >
-        <Share2 width="18" height="18" class="c-word-list__icon-button" />
+        <Share2 width="18" height="18" class="c-options-dropdown__icon-button" />
 
-        <span class="c-word-list__copy-text">Wort teilen</span>
+        <span class="c-options-dropdown__copy-text">Wort teilen</span>
       </button>
 
       <button
         v-if="usingShare.isSupported"
         aria-label="Link zum Wort kopieren"
         type="button"
-        class="c-word-list__copy-button c-button c-button--dashed-border"
+        class="c-options-dropdown__copy-button c-button c-button--dashed-border"
         @click="copyWordPageUrlToClipboard(word.slug!)"
       >
-        <Link width="18" height="18" class="c-word-list__icon-button" />
+        <Link width="18" height="18" class="c-options-dropdown__icon-button" />
 
-        <span class="c-word-list__copy-text">Link kopieren</span>
+        <span class="c-options-dropdown__copy-text">Link kopieren</span>
       </button>
 
       <button
         v-if="usingClipboard.isSupported"
         aria-label="Wort kopieren"
         type="button"
-        class="c-word-list__copy-button c-button c-button--dashed-border"
+        class="c-options-dropdown__copy-button c-button c-button--dashed-border"
         @click="copyNameToClipboard(word.wordProperties?.berlinerisch!)"
       >
-        <Copy width="18" height="18" class="c-word-list__icon-button" />
+        <Copy width="18" height="18" class="c-options-dropdown__icon-button" />
 
-        <span class="c-word-list__copy-text">Wort kopieren</span>
+        <span class="c-options-dropdown__copy-text">Wort kopieren</span>
       </button>
     </template>
   </VDropdown>
@@ -118,4 +113,7 @@ const copyNameToClipboard = (name: string): void => {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+@use "@styles/components/icons";
+@use "@styles/components/options-dropdown";
+</style>

@@ -110,9 +110,8 @@ console.log(wikimediaFiles);
           )
         }
       </h1>
+      <WordOptionDropdown word={word} client:only="vue" />
     </header>
-
-    <WordOptionDropdown index={0} word={word} client:only="vue" />
 
     {
       wordProps?.wikimediaFiles && wikimediaFiles && (
