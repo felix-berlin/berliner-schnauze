@@ -35,7 +35,7 @@
           {{ translation?.translation }}
         </dd>
       </dl>
-      <WordOptionDropdown :index="index" :word="source" />
+      <WordOptionDropdown :word="source" />
     </div>
 
     <WordExamples :examples="source.wordProperties?.examples!" />

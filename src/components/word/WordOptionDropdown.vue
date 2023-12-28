@@ -72,8 +72,6 @@ interface WordProps {
 
 const { word } = defineProps<WordProps>();
 
-const wordButtonClicked = ref<boolean>(false);
-
 const usingClipboard = useClipboard({ word });
 const usingShare = useShare();
 
