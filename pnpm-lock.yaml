@@ -27,8 +27,8 @@ dependencies:
     specifier: ^0.10.0
     version: 0.10.0(@nanostores/logger@0.2.4)(@vue/devtools-api@6.5.1)(nanostores@0.9.5)(vue@3.3.13)
   '@orama/orama':
-    specifier: 2.0.0-beta.11
-    version: 2.0.0-beta.11
+    specifier: 2.0.0-beta.12
+    version: 2.0.0-beta.12
   '@pagefind/default-ui':
     specifier: ^1.0.4
     version: 1.0.4
@@ -3843,8 +3843,8 @@ packages:
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
     dev: true
 
-  /@orama/orama@2.0.0-beta.11:
-    resolution: {integrity: sha512-yNi4LY9NSH626LB2eb80AZENKfDTWUBlL6aWoUPuWF6+hydRlqL6U87Rc/ELp4q/0Y5Gvnnd+NkpJsPGiilkZQ==}
+  /@orama/orama@2.0.0-beta.12:
+    resolution: {integrity: sha512-svPT72gxR1zyF7bMz+itmZBdZB1ndI97YdzArCqo5esIfWy1u5Ht/K8EEYJ/EuC35Di3j9czjCzhL1e/zVEARQ==}
     engines: {node: '>= 16.0.0'}
     dev: false
 

@@ -108,7 +108,7 @@
     "@iconify-json/lucide": "^1.1.149",
     "@nanostores/persistent": "^0.9.1",
     "@nanostores/vue": "^0.10.0",
-    "@orama/orama": "2.0.0-beta.11",
+    "@orama/orama": "2.0.0-beta.12",
     "@pagefind/default-ui": "^1.0.4",
     "@sentry/astro": "^7.91.0",
     "@sentry/vue": "^7.91.0",
