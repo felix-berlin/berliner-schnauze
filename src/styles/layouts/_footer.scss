@@ -47,22 +47,20 @@
     }
 
     .c-footer__wrapper {
-      --areas-template: " slogan slogan " " nav-lists nav-lists ";
-
       display: grid;
-      grid-template-columns: var(--columns-template, 1fr 3fr);
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       grid-template-areas: var(--areas-template);
-
-      @include mx.breakpoint("md") {
-        --areas-template: " slogan nav-lists ";
-      }
+      gap: 1rem;
     }
 
-    &-navs {
-      grid-area: nav-lists;
-      display: flex;
-      gap: var(--gap, 75px);
-      justify-content: flex-end;
+    &-image {
+      grid-area: image;
+      mix-blend-mode: multiply;
+
+      @include butler-mx.dark-mode-class {
+        mix-blend-mode: lighten;
+        filter: invert(1);
+      }
     }
   }
 

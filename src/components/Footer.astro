@@ -2,6 +2,7 @@
 import { version, funding } from "../../package.json";
 import { Picture } from "astro:assets";
 import BearWalking from "@assets/images/bear-walking.png";
+import CafeAchteck from "@assets/images/800px-Berlin_Cafe_Achteck_BusB.jpg";
 import InstallApp from "@components/InstallApp.vue";
 import NavList from "@components/NavList.vue";
 import type { DefineComponent } from "vue";
@@ -88,44 +89,48 @@ const navMenu2 = [
 
   <div class="c-footer__ground">
     <div class="c-footer__wrapper u-max-body-width">
-      <p class="c-footer__slogan">Hergestellt mit🐻-Kräften in Berlin</p>
+      <!-- <Picture
+        src={CafeAchteck}
+        formats={["avif", "webp"]}
+        widths={[140, 700, CafeAchteck.width]}
+        alt="Technische Zeichnung eines Café Achtecks"
+        class="c-footer__ground-image"
+      /> -->
 
-      <div class="c-footer__ground-navs">
-        <div>
-          <h3>Seiten</h3>
-          <NavList
-            items={navMenu1}
-            classesNav={"c-footer__nav"}
-            classesUl={"c-footer__nav-list u-list-reset"}
-          />
-        </div>
+      <div>
+        <h3>Seiten</h3>
+        <NavList
+          items={navMenu1}
+          classesNav={"c-footer__nav"}
+          classesUl={"c-footer__nav-list u-list-reset"}
+        />
+      </div>
 
-        <div>
-          <h3>Projekt unterstützen</h3>
-          <NavList
-            items={fundingMenu}
-            classesNav={"c-footer__nav"}
-            classesUl={"c-footer__nav-list u-list-reset"}
-          />
-        </div>
+      <div>
+        <h3>Projekt unterstützen</h3>
+        <NavList
+          items={fundingMenu}
+          classesNav={"c-footer__nav"}
+          classesUl={"c-footer__nav-list u-list-reset"}
+        />
+      </div>
 
-        <div>
-          <h3>Social Media</h3>
-          <NavList
-            items={socialMenu}
-            classesNav={"c-footer__nav"}
-            classesUl={"c-footer__nav-list u-list-reset"}
-          />
-        </div>
+      <div>
+        <h3>Social Media</h3>
+        <NavList
+          items={socialMenu}
+          classesNav={"c-footer__nav"}
+          classesUl={"c-footer__nav-list u-list-reset"}
+        />
+      </div>
 
-        <div>
-          <h3>Andere</h3>
-          <NavList
-            items={navMenu2}
-            classesNav={"c-footer__nav is-legal"}
-            classesUl={"c-footer__nav-list u-list-reset"}
-          />
-        </div>
+      <div>
+        <h3>Andere</h3>
+        <NavList
+          items={navMenu2}
+          classesNav={"c-footer__nav is-legal"}
+          classesUl={"c-footer__nav-list u-list-reset"}
+        />
       </div>
     </div>
   </div>
@@ -136,5 +141,6 @@ const navMenu2 = [
       >Website Version: {version}</a
     >
     <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
+    <p>Hergestellt mit🐻-Kräften in Berlin</p>
   </div>
 </div>
