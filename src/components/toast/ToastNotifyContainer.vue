@@ -1,17 +1,15 @@
 <template>
-  <Teleport to="body">
-    <ToastNotify
-      v-for="toast in toastStore"
-      :id="toast.id"
-      :key="toast.id"
-      :message="toast.message"
-    />
-  </Teleport>
+  <ToastNotify
+    v-for="toast in toastStore"
+    :id="toast.id"
+    :key="toast.id"
+    :message="toast.message"
+  />
 </template>
 
 <script setup lang="ts">
 import { reactive, watchEffect, ref, defineAsyncComponent } from "vue";
-import ToastNotify from "@components/ToastNotify.vue";
+import ToastNotify from "@components/toast/ToastNotify.vue";
 import { useStore } from "@nanostores/vue";
 import { $toastNotify } from "@stores/index";
 

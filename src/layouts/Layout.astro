@@ -5,6 +5,7 @@ import BaseHead from "@components/BaseHead.astro";
 import ScrollToTop from "@components/ScrollToTop.vue";
 import Footer from "@components/Footer.astro";
 import MainHeader from "@components/header/MainHeader.astro";
+import ToastNotifyContainer from "@components/toast/ToastNotifyContainer.vue";
 
 import type { SeoProps } from "@components/BaseHead.astro";
 
@@ -38,6 +39,7 @@ const {
       <slot />
     </main>
     <ScrollToTop client:load />
+    <ToastNotifyContainer client:only="vue" />
     <Footer transition:persist />
   </body>
 </html>

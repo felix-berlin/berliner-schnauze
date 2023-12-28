@@ -31,7 +31,7 @@ export const addToast = action(
 
     const toast = createToast(message, status);
 
-    store.set([...store.get(), toast]);
+    store.set([toast, ...store.get()]);
 
     if (timeout !== null) {
       setTimeout(() => {

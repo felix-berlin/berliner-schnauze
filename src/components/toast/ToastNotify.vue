@@ -106,7 +106,7 @@ const setPosition = () => {
 
 const setDynamicPosition = () => {
   const toasts = document.querySelectorAll(".c-toast-notify");
-  let offset = 5; // initial offset
+  let offset = 20; // initial offset
 
   toasts.forEach((toast, index) => {
     if (!toast || !toast.style) {
