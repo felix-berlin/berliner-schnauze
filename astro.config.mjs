@@ -18,9 +18,6 @@ export default defineConfig({
   integrations: [
     vue({
       appEntrypoint: "/src/pages/_app",
-      script: {
-        propsDestructure: true,
-      },
       template: {
         compilerOptions: {
           isCustomElement: (tag) => tag === "search",
