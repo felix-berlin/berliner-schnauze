@@ -7,7 +7,7 @@
         aria-label="schließen"
         @click="$toggleWordListFilterFlyout"
       >
-        <X />
+        <X width="18" height="18" />
       </button>
 
       <h2>Sortiere nach:</h2>
@@ -29,6 +29,15 @@
         <BadgeTag> Beta </BadgeTag>
       </div>
       <WordTypeFilter />
+
+      <button
+        type="button"
+        class="c-filter-search__reset c-button c-button--center-icon"
+        @click="resetAll"
+      >
+        <FilterReset width="18" height="18" />
+        Zurücksetzen
+      </button>
     </aside>
   </transition>
 </template>
@@ -40,11 +49,11 @@ import LetterFilter from "@components/filter/LetterFilter.vue";
 import BerolinismusSwitch from "@components/filter/BerolinismusSwitch.vue";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
-import { $toggleWordListFilterFlyout, $showWordListFilterFlyout } from "@stores/index";
+import { $toggleWordListFilterFlyout, $showWordListFilterFlyout, resetAll } from "@stores/index";
 import { useStore } from "@nanostores/vue";
 import BadgeTag from "@components/BadgeTag.vue";
 import X from "virtual:icons/lucide/x";
-
+import FilterReset from "virtual:icons/lucide/filter-x";
 const wordListFilter = ref<HTMLElement | null>(null);
 
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);

@@ -77,6 +77,13 @@
     }
   }
 
+  &__reset {
+    --padding: 0.5rem;
+
+    gap: 0.7rem;
+    margin-top: 3rem;
+  }
+
   &__list {
     display: grid;
     grid-template-columns: min-content 1fr;

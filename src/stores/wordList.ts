@@ -66,6 +66,7 @@ export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
 });
 
 export const resetAll = action($wordSearch, "resetAll", (store) => {
+  store.setKey("search", "");
   store.setKey("activeLetterFilter", "");
   store.setKey("activeWordTypeFilter", "");
   store.setKey("alphabeticalOrder", "asc");
