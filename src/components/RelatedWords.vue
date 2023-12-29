@@ -2,16 +2,18 @@
   <section class="c-related-words">
     <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
     <div class="c-related-words__words">
-      <a
-        v-for="word in xRandomWords(words, numberOfWords)"
-        :key="word.id"
-        :href="routeToWord(word.slug!)"
-        class="c-related-words__word"
-        :title="`Erfahre mehr über ${word.wordProperties?.berlinerisch}`"
-      >
-        {{ word.wordProperties?.berlinerisch }}
-      </a>
-      <slot />
+      <template v-for="word in xRandomWords(words, numberOfWords)">
+        <a
+          v-if="word"
+          :key="word.id"
+          :href="routeToWord(word.slug)"
+          class="c-related-words__word"
+          :title="`Erfahre mehr über ${word.wordProperties?.berlinerisch}`"
+        >
+          {{ word.wordProperties?.berlinerisch }}
+        </a>
+      </template>
+      <slot></slot>
     </div>
   </section>
 </template>
@@ -25,7 +27,7 @@ interface RelatedWordsProps {
   words: BerlinerWord[];
 }
 
-const { numberOfWords = 7, words } = defineProps<RelatedWordsProps>();
+const { words, numberOfWords = 7 } = defineProps<RelatedWordsProps>();
 
 /**
  * Get x random items from an array

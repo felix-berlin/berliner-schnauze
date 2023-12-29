@@ -1,6 +1,6 @@
 <template>
-  <Component :is="element" v-if="examples" :class="`${rootBemClass}__example-wrapper`">
-    <Quote width="44" height="44" :stroke-width="0" :class="`${rootBemClass}__quote-icon`" />
+  <div v-if="examples" :class="`${rootBemClass}__example-wrapper`">
+    <Quote :width="44" :height="44" :stroke-width="0" :class="`${rootBemClass}__quote-icon`" />
 
     <div v-if="examples && examples.length === 1" :class="`${rootBemClass}__single-example`">
       <p
@@ -29,24 +29,19 @@
         </div>
       </li>
     </ol>
-  </Component>
+  </div>
 </template>
 
 <script setup lang="ts">
 import Quote from "virtual:icons/lucide/quote";
-import type { Maybe, BerlinerWord_Wordproperties_Examples } from "@ts_types/generated/graphql";
+import type { Maybe, WordPropertiesExamples } from "@ts_types/generated/graphql";
 
 interface WordExamplesProps {
-  examples?: Maybe<BerlinerWord_Wordproperties_Examples>[];
-  element?: string;
+  examples?: Maybe<WordPropertiesExamples>[];
   rootBemClass?: string;
 }
 
-const {
-  examples,
-  element = "div",
-  rootBemClass = "c-word-list",
-} = defineProps<WordExamplesProps>();
+const { examples, rootBemClass = "c-word-list" } = defineProps<WordExamplesProps>();
 </script>
 
 <style scoped></style>

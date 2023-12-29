@@ -158,9 +158,9 @@ console.log(wikimediaFiles);
     {
       wordProps?.learnMore && (
         <div class="c-single-word__learn-more-wrapper">
-          <Info />{" "}
+          <Info />
           <a href={wordProps?.learnMore} target="_blank" class="c-single-word__learn-more-link">
-            Erfahre mehr über dieses Wort{" "}
+            Erfahre mehr über dieses Wort
             <span class="c-single-word__learn-more-link-icon">
               <ExternalLink width="10" height="10" />
             </span>
@@ -190,19 +190,17 @@ console.log(wikimediaFiles);
       </ul>
     </div>
 
-    <div class="c-single-word__examples-wrapper">
-      {
-        wordProps?.examples && (
-          <>
-            <h2 class="c-single-word__sub-headline">Beispiele:</h2>
-            <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
-          </>
-        )
-      }
-    </div>
+    {
+      wordProps?.examples && (
+        <div class="c-single-word__examples-wrapper">
+          <h2 class="c-single-word__sub-headline">Beispiele:</h2>
+          <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
+        </div>
+      )
+    }
 
     {
-      wordProps?.relatedWords?.nodes && (
+      wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
         <div class="c-single-word__related-words-wrapper">
           <h3>Verwandte Worte:</h3>
           <ul class="c-single-word__related-words-list">
