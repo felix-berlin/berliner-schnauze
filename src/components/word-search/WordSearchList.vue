@@ -11,7 +11,7 @@ import { onMounted } from "vue";
 import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
-import { $wordSearch, createToastNotify } from "@stores/index";
+import { $wordSearch } from "@stores/index";
 import type { Maybe } from "@ts_types/generated/graphql";
 import type { CleanBerlinerWord } from "@stores/index";
 

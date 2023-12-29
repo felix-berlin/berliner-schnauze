@@ -14,6 +14,7 @@ import {
   $showInstallButton,
   $showWordListFilterFlyout,
   $toastNotify,
+  $activeFilterCount,
 } from "@stores/index";
 
 export default (app: App) => {
@@ -39,6 +40,7 @@ export default (app: App) => {
     $showInstallButton,
     $showWordListFilterFlyout,
     $toastNotify,
+    $activeFilterCount,
   });
   // app.use(VueVirtualScroller);
 };

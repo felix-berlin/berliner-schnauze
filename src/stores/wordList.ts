@@ -47,6 +47,34 @@ export const $wordSearch = persistentMap<WordList>(
   },
 );
 
+export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
+  let count = 0;
+
+  if (wordSearch.activeLetterFilter !== "") {
+    count++;
+  }
+
+  if (wordSearch.activeWordTypeFilter !== "") {
+    count++;
+  }
+
+  if (wordSearch.berolinismus) {
+    count++;
+  }
+
+  return count;
+});
+
+export const resetAll = action($wordSearch, "resetAll", (store) => {
+  store.setKey("activeLetterFilter", "");
+  store.setKey("activeWordTypeFilter", "");
+  store.setKey("alphabeticalOrder", "asc");
+  store.setKey("dateOrder", "asc");
+  store.setKey("modifiedDateOrder", "asc");
+  store.setKey("activeOrderCategory", "alphabetical");
+  store.setKey("berolinismus", false);
+});
+
 export const $showWordListFilterFlyout = atom<boolean>(false);
 
 export const $toggleWordListFilterFlyout = action(
