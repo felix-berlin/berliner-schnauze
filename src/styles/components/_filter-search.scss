@@ -92,13 +92,18 @@
     display: grid;
     grid-template-columns: min-content 1fr;
     grid-template-rows: min-content;
-    grid-template-areas: "filter-toggle search" "list list";
+    grid-template-areas: "filter-toggle search" "result-count result-count" "list list";
     gap: vars.$spacer * 1.5 vars.$spacer;
 
     @include butler-mx.breakpoint("md") {
       grid-template-columns: 1fr;
-      grid-template-areas: "search" "list";
+      grid-template-areas: "search" "result-count" "list";
     }
+  }
+
+  .c-word-search-list__result-count {
+    grid-area: result-count;
+    margin: 0;
   }
 
   &__headline-wrap {

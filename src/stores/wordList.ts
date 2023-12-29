@@ -294,3 +294,7 @@ export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
 
   return cleanResults;
 });
+
+export const $searchResultCount = computed($filteredWordList, (filteredWordList) => {
+  return filteredWordList.length;
+});
