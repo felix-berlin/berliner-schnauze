@@ -1,12 +1,13 @@
 <template>
-  <search class="c-word-search-list" :class="props.cssClass">
+  <!-- TODO: replace by <search></search>  -->
+  <div class="c-word-search-list" :class="props.cssClass" role="search">
     <WordSearchFilterToggle />
     <SearchWords />
 
     <p class="c-word-search-list__result-count">{{ searchResultCount }} Ergebnisse</p>
 
     <WordList />
-  </search>
+  </div>
 </template>
 
 <script setup lang="ts">

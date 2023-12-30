@@ -17,9 +17,10 @@
     :disable-scroll="true"
     @close="searchVisible = false"
   >
-    <search>
+    <!-- TODO: replace by <search></search>  -->
+    <div role="search">
       <SearchBar id="main-search" />
-    </search>
+    </div>
   </Modal>
 </template>
 
