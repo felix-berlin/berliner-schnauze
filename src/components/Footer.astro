@@ -6,6 +6,7 @@ import CafeAchteck from "@assets/images/800px-Berlin_Cafe_Achteck_BusB.jpg";
 import NavList from "@components/NavList.vue";
 import InstallApp from "@components/InstallApp.vue";
 import type { DefineComponent } from "vue";
+import Download from "virtual:icons/lucide/download";
 
 // const randomWord = () => {
 //   // TODO: Implement random word
@@ -89,7 +90,13 @@ const navMenu2 = [
 
   <div class="c-footer__ground">
     <div class="c-footer__wrapper u-max-body-width">
-      <InstallApp client:only="vue" />
+      <div class="c-footer__ground-app-install">
+        <h3>Installiere die App</h3>
+        <p>Mit der Berliner Schnauze App bleibst Du immer informiert, ob online oder offline.</p>
+        <InstallApp showIcon={true} client:only="vue" cssClasses={"c-button--center-icon c-button"}>
+          <Download width={16} height={16} /> App installieren
+        </InstallApp>
+      </div>
 
       <div>
         <h3>Seiten</h3>

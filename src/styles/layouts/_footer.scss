@@ -48,7 +48,7 @@
 
     .c-footer__wrapper {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       grid-template-areas: var(--areas-template);
       gap: 1rem;
     }
@@ -61,6 +61,12 @@
         mix-blend-mode: lighten;
         filter: invert(1);
       }
+    }
+
+    .c-install-button {
+      --padding: 0.5rem 1rem;
+
+      gap: 0.5rem;
     }
   }
 
