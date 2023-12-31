@@ -18,10 +18,8 @@ export default defineConfig({
   integrations: [
     vue({
       appEntrypoint: "/src/pages/_app",
-      template: {
-        compilerOptions: {
-          isCustomElement: (tag) => tag === "search",
-        },
+      script: {
+        propsDestructure: true,
       },
     }),
     sitemap({

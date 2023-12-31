@@ -3,8 +3,8 @@ import { version, funding } from "../../package.json";
 import { Picture } from "astro:assets";
 import BearWalking from "@assets/images/bear-walking.png";
 import CafeAchteck from "@assets/images/800px-Berlin_Cafe_Achteck_BusB.jpg";
-import InstallApp from "@components/InstallApp.vue";
 import NavList from "@components/NavList.vue";
+import InstallApp from "@components/InstallApp.vue";
 import type { DefineComponent } from "vue";
 
 // const randomWord = () => {
@@ -89,13 +89,7 @@ const navMenu2 = [
 
   <div class="c-footer__ground">
     <div class="c-footer__wrapper u-max-body-width">
-      <!-- <Picture
-        src={CafeAchteck}
-        formats={["avif", "webp"]}
-        widths={[140, 700, CafeAchteck.width]}
-        alt="Technische Zeichnung eines Café Achtecks"
-        class="c-footer__ground-image"
-      /> -->
+      <InstallApp client:only="vue" />
 
       <div>
         <h3>Seiten</h3>
