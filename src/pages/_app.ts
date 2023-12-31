@@ -6,7 +6,7 @@ import { devtools } from "@nanostores/vue/devtools";
 
 import {
   $wordOfTheDay,
-  isDarkMode,
+  $isDarkMode,
   $wordSearch,
   $filteredWordList,
   searchLength,
@@ -32,7 +32,7 @@ export default (app: App) => {
   app.use(autoAnimatePlugin);
   app.use(devtools, {
     $wordOfTheDay,
-    isDarkMode,
+    $isDarkMode,
     $wordSearch,
     $filteredWordList,
     searchLength,
