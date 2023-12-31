@@ -5,6 +5,7 @@
     strategy="fixed"
     container=".c-menu-nav"
     class="c-menu-nav__item c-menu-more"
+    :triggers="['click', 'hover', 'touch']"
   >
     <button
       type="button"
