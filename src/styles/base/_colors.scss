@@ -18,11 +18,13 @@ html {
   --secondary: var(--red-500);
   --accent: var(--orange-400);
   --color-body: var(--blue);
+  --floating-color-background: color-mix(in srgb, var(--orange-100) 50%, white);
 
   &[class~="dark"] {
     --primary: var(--blue-500);
     --secondary: var(--blue-400);
     --accent: var(--orange-500);
     --color-body: #{vars.$yellow-500};
+    --floating-color-background: var(--new-blue-200);
   }
 }

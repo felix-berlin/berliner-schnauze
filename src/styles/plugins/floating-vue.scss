@@ -4,11 +4,7 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .v-popper__popper {
-  --color-background: var(--secondary);
-
-  @include butler-mx.dark-mode-class {
-    --color-background: var(--new-blue-200);
-  }
+  --color-background: var(--floating-color-background);
 
   &:focus {
     outline: none;
@@ -17,15 +13,11 @@
   .v-popper__inner {
     background-color: var(--color-background);
     padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
-    color: var(--color, var(--primary));
+    color: var(--color, var(--color-body));
     border: none;
     border-radius: 0;
     max-width: 100%;
     min-width: var(--width-min, fit-content);
-
-    @include butler-mx.dark-mode-class {
-      --color: var(--yellow-500);
-    }
   }
 
   .v-popper__arrow-inner,

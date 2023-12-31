@@ -20,7 +20,6 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import VueMultiselect from "vue-multiselect";
-import "vue-multiselect/dist/vue-multiselect.css";
 import { $setSortOrder } from "@stores/index";
 import type { WordList } from "@stores/index";
 
@@ -69,5 +68,6 @@ const onSelect = (selected: SelectOption): void => {
 </script>
 
 <style lang="scss">
+@use "vue-multiselect/dist/vue-multiselect.css" as *;
 @use "@styles/plugins/vue-multiselect";
 </style>

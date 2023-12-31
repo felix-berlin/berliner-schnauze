@@ -8,6 +8,8 @@
   align-self: flex-start;
 
   &__options-icon {
+    --color-icon: var(--color-body);
+
     @include butler-mx.dark-mode-class {
       --color-icon: var(--yellow-500);
     }
@@ -22,11 +24,6 @@
 
     @include butler-mx.hover {
       --style-border: solid;
-    }
-
-    &.is-success {
-      background: var(--success);
-      color: #fff;
     }
   }
 }

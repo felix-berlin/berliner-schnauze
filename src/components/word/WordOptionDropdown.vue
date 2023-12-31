@@ -2,7 +2,7 @@
   <VDropdown placement="bottom-end" class="c-options-dropdown" distance="9" theme="word-options">
     <button
       type="button"
-      class="c-options-dropdown__options c-button c-button--center-icon c-button--dashed-border"
+      class="c-options-dropdown__options c-button c-button--center-icon"
       aria-label="Website Menu Navigation"
     >
       <span
@@ -16,7 +16,7 @@
         v-if="usingShare.isSupported"
         aria-label="Wort teilen"
         type="button"
-        class="c-options-dropdown__copy-button c-button c-button--dashed-border"
+        class="c-options-dropdown__copy-button c-button"
         @click="shareWord(word.slug!)"
       >
         <Share2 width="18" height="18" class="c-options-dropdown__icon-button" />
@@ -28,7 +28,7 @@
         v-if="usingShare.isSupported"
         aria-label="Link zum Wort kopieren"
         type="button"
-        class="c-options-dropdown__copy-button c-button c-button--dashed-border"
+        class="c-options-dropdown__copy-button c-button"
         @click="copyWordPageUrlToClipboard(word.slug!)"
       >
         <Link width="18" height="18" class="c-options-dropdown__icon-button" />
@@ -40,7 +40,7 @@
         v-if="usingClipboard.isSupported"
         aria-label="Wort kopieren"
         type="button"
-        class="c-options-dropdown__copy-button c-button c-button--dashed-border"
+        class="c-options-dropdown__copy-button c-button"
         @click="copyNameToClipboard(word.wordProperties?.berlinerisch!)"
       >
         <Copy width="18" height="18" class="c-options-dropdown__icon-button" />

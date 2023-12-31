@@ -4,7 +4,7 @@
 .c-button {
   cursor: pointer;
   padding: var(--padding, #{vars.$spacer * 0.25});
-  background-color: var(--color-background, var(--orange-300));
+  background-color: var(--color-background, var(--orange-100));
   border: var(--width-border, 1px) var(--style-border, solid) var(--color-border, var(--orange-600));
   color: var(--color, var(--blue));
   transition: all 0.3s ease-in-out;

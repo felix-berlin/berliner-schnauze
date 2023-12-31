@@ -39,23 +39,10 @@
     </div>
 
     <WordExamples :examples="source.wordProperties?.examples!" />
-
-    <a
-      v-if="
-        source.wordProperties?.learnMore ||
-        source.wordProperties?.relatedWords?.nodes ||
-        source.berlinerischWordTypes
-      "
-      :href="routeToWord(source.slug!)"
-      class="c-word-list__learn-more c-button u-button-reset"
-    >
-      <Info :width="20" :height="20" /> mehr erfahren
-    </a>
   </article>
 </template>
 
 <script setup lang="ts">
-import Info from "virtual:icons/lucide/info";
 import WordExamples from "@components/word/WordExamples.vue";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";

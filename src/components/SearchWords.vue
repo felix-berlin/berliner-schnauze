@@ -4,7 +4,7 @@
       :aria-label="searchLength > 0 ? 'Wortsuche löschen' : 'Wortsuche betätigen'"
       type="button"
       :class="[
-        'c-word-search__search-button u-button-reset c-button c-button--center-icon',
+        'c-word-search__search-button c-button c-button--center-icon',
         `c-word-search__search-button--${buttonPosition}`,
       ]"
       @click="buttonActions"

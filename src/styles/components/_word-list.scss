@@ -24,8 +24,8 @@
     flex-flow: column wrap;
     gap: 1rem;
     box-shadow:
-      0 0.5px 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-500)) 8%, transparent),
-      0 4px 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-500)) 16%, transparent);
+      0 0.5px 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 8%, transparent),
+      0 4px 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent);
 
     @include butler-mx.hover {
       .c-word-list__berlinerisch a {
@@ -191,15 +191,6 @@
     @include mx.breakpoint("md") {
       --size-quote-icon: 44px;
     }
-  }
-
-  &__learn-more {
-    --padding: 0;
-
-    display: flex;
-    align-items: center;
-    gap: vars.$spacer * 0.25;
-    align-self: end;
   }
 
   &__options {

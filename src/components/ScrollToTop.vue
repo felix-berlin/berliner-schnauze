@@ -9,7 +9,7 @@
         distance: 12,
       }"
       type="button"
-      class="c-scroll-to-top c-button c-button--center-icon c-button--dashed-border"
+      class="c-scroll-to-top c-button c-button--center-icon"
       :aria-label="buttonAriaLabel"
       @click="scrollToTop"
     >

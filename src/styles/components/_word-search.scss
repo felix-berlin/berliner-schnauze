@@ -15,26 +15,19 @@
   align-self: flex-start;
 
   &__search-button {
-    --color-background: #{vars.$white-100};
     --style-border: solid;
-    --color-border: #{vars.$grey-100};
     --offset-x-box-shadow: 2px;
     --color-box-shadow: rgb(0 0 0 / 20%);
 
-    background-color: var(--color-background);
-    border: 1px var(--style-border) var(--color-border);
-
     &--right {
       order: 2;
-
-      --offset-x-boxshadow: -2px;
     }
   }
 
   &__search-input.c-input {
-    --color-border: var(--color-border, var(--blue));
-    --color-background: var(--white-200);
-    --color-outline: #{butler-fn.hex-to-rgb(vars.$red-200, 50%)};
+    --color-border: var(--orange-600);
+    --color-background: color-mix(in srgb, var(--orange-100) 30%, white);
+    --color-outline: color-mix(in srgb, var(--accent) 40%, transparent);
     --spacing-inner: var(--padding-y-input) var(--padding-x-input);
 
     border-left: none;
@@ -42,13 +35,11 @@
     display: flex;
     width: 1%;
     min-width: 0;
-    color: var(--color);
+    color: var(--color, var(--color-body));
 
     @include butler-mx.dark-mode-class {
-      --color-outline: color-mix(in srgb, var(--accent) 40%, transparent);
       --color-background: color-mix(in srgb, var(--blue) 70%, white);
       --color-border: color-mix(in srgb, var(--blue) 60%, white);
-      --color: var(--color-body);
     }
 
     &::placeholder {
