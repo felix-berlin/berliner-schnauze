@@ -4,7 +4,9 @@
     <WordSearchFilterToggle />
     <SearchWords />
 
-    <p class="c-word-search-list__result-count">{{ searchResultCount }} Ergebnisse</p>
+    <p class="c-word-search-list__result-count">
+      {{ searchResultCount }} Ergebnis<temaplate v-if="searchResultCount > 1">se</temaplate>
+    </p>
 
     <WordList />
   </div>
