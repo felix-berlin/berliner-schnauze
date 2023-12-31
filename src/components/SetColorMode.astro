@@ -32,9 +32,7 @@
 
   setDarkClass();
 
-  if (typeof localStorage !== "undefined" && !localStorage.getItem("darkMode")) {
-    localStorage.setItem("darkMode", isDarkTheme());
-  }
+  localStorage.setItem("darkMode", isDarkTheme());
 
   document.addEventListener("astro:after-swap", setDarkClass);
 </script>
