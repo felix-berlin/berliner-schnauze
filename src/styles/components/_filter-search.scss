@@ -91,9 +91,7 @@
 
   &__list {
     display: grid;
-    grid-template-columns: min-content 1fr;
-    grid-template-rows: min-content;
-    grid-template-areas: "filter-toggle search" "result-count result-count" "list list";
+    grid-template: "filter-toggle search" min-content "result-count result-count" min-content "list list" 1fr / min-content 1fr;
     gap: vars.$spacer * 1.5 vars.$spacer;
 
     @include butler-mx.breakpoint("md") {
