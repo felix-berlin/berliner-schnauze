@@ -5,7 +5,7 @@
     <SearchWords />
 
     <p class="c-word-search-list__result-count">
-      {{ searchResultCount }} Ergebnis<temaplate v-if="searchResultCount > 1">se</temaplate>
+      {{ searchResultCount }} Ergebnis<template v-if="searchResultCount > 1">se</template>
     </p>
 
     <WordList />
