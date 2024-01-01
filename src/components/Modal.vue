@@ -5,17 +5,19 @@
     class="c-modal"
     :class="[`c-modal--${position}`, { 'has-close-on-click-outside': closeOnClickOutside }]"
   >
-    <button
-      v-if="showCloseButton"
-      class="c-modal__close c-button c-button--theme c-button--center-icon"
-      type="submit"
-      aria-label="schließen"
-      @click="closeModal"
-    >
-      <X />
-    </button>
+    <div class="c-modal__container">
+      <button
+        v-if="showCloseButton"
+        class="c-modal__close c-button c-button--theme c-button--center-icon"
+        type="submit"
+        aria-label="schließen"
+        @click="closeModal"
+      >
+        <X />
+      </button>
 
-    <slot />
+      <slot />
+    </div>
   </dialog>
 </template>
 

@@ -4,11 +4,21 @@
 .c-modal {
   border: none;
   inset: 0;
-  background-color: var(--color-background-modal, var(--secondary));
+  background-color: var(--color-background-modal, var(--floating-color-background));
   width: max(400px, 80%);
 
-  @include butler-mx.dark-mode-class {
-    --color-background-modal: var(--new-blue-400);
+  /**
+   * Important for exit animation
+   * @see: https://developer.chrome.com/blog/entry-exit-animations?hl=de#animating_elements_to_and_from_the_top-layer
+   */
+  @include butler-mx.feature("motion") {
+    opacity: 0;
+    transform: translateY(-100%);
+    transition:
+      transform 0.3s,
+      opacity 0.3s,
+      display 0.3s allow-discrete,
+      overlay 0.3s allow-discrete;
   }
 
   &::backdrop {
@@ -18,7 +28,17 @@
   }
 
   &[open] {
-    animation: slide-in-fwd-top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    // animation: slide-in-fwd-top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+
+    @include butler-mx.feature("motion") {
+      @starting-style {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     &:has(.c-modal__close) {
       display: flex;
@@ -29,6 +49,10 @@
         margin-bottom: 15px;
       }
     }
+  }
+
+  &__container {
+    min-height: 50dvh;
   }
 
   &.has-close-on-click-outside {
@@ -44,25 +68,4 @@
 
 .u-disable-scroll {
   overflow: hidden !important;
-}
-
-@keyframes slide-in-fwd-top {
-  0% {
-    transform: translateZ(-1400px) translateY(-800px);
-    opacity: 0;
-  }
-
-  100% {
-    transform: translateZ(0) translateY(0);
-    opacity: 1;
-  }
-}
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
 }
