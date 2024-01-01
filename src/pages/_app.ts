@@ -1,6 +1,5 @@
 import type { App } from "vue";
 import FloatingVue from "floating-vue";
-import { autoAnimatePlugin } from "@formkit/auto-animate/vue";
 import { devtools } from "@nanostores/vue/devtools";
 // import VueVirtualScroller from "vue-virtual-scroller";
 
@@ -29,7 +28,6 @@ export default (app: App) => {
       },
     },
   });
-  app.use(autoAnimatePlugin);
   app.use(devtools, {
     $wordOfTheDay,
     $isDarkMode,
