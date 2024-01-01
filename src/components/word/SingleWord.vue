@@ -9,9 +9,7 @@
     data-track-content
     data-content-name="word"
   >
-    <div
-      :class="[{ 'has-example': source.wordProperties?.examples }, 'c-word-list__header-wrapper']"
-    >
+    <div :class="'c-word-list__header-wrapper'">
       <dl class="c-word-list__header">
         <dt
           class="c-word-list__berlinerisch"
@@ -38,7 +36,7 @@
       <WordOptionDropdown :word="source" class="c-word-list__options-dropdown" />
     </div>
 
-    <WordExamples :examples="source.wordProperties?.examples!" />
+    <!-- <WordExamples :examples="source.wordProperties?.examples!" /> -->
   </article>
 </template>
 

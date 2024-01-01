@@ -54,7 +54,7 @@
       border-bottom: var(--bottom-border, none);
       display: flex;
 
-      &.has-example {
+      :has(.c-word-list__example-wrapper) & {
         padding-bottom: vars.$spacer;
 
         --bottom-border: 1px dashed var(--grey-100);
