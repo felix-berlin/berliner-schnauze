@@ -1,12 +1,11 @@
 <template>
-  <!-- <DynamicScroller
+  <DynamicScroller
     :items="filteredWordList"
     :min-item-size="116"
     :buffer="100"
     class="c-word-list"
     list-class="c-word-list__list"
     item-class="c-word-list__item"
-    page-mode
   >
     <template #default="{ item, index, active }">
       <DynamicScrollerItem
@@ -20,8 +19,8 @@
         </div>
       </DynamicScrollerItem>
     </template>
-  </DynamicScroller> -->
-  <VirtualList
+  </DynamicScroller>
+  <!-- <VirtualList
     ref="wordList"
     class="c-word-list"
     data-key="id"
@@ -34,18 +33,16 @@
     item-class="c-word-list__item"
     item-tag="li"
   >
-  </VirtualList>
+  </VirtualList> -->
 </template>
 
 <script setup lang="ts">
 import { shallowRef } from "vue";
-// import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 import SingleWord from "@components/word/SingleWord.vue";
-// import { words as wordList } from "@stores/index";
 import { useStore } from "@nanostores/vue";
 import { $filteredWordList } from "@stores/index";
 import VirtualList from "vue3-virtual-scroll-list";
-
+import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 const SingleWordItem = shallowRef(SingleWord);
 const filteredWordList = useStore($filteredWordList);
 </script>
