@@ -6,7 +6,7 @@
 .c-single-word {
   --size-quote-icon: 32px;
 
-  background-color: var(--color-background, rgba(#fff, 0.6));
+  background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
   border: 1px dashed var(--grey-100);
   padding: vars.$spacer * 1.5;
   display: flex;
