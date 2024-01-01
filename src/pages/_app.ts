@@ -1,7 +1,7 @@
 import type { App } from "vue";
 import FloatingVue from "floating-vue";
 import { devtools } from "@nanostores/vue/devtools";
-import VueVirtualScroller from "vue-virtual-scroller";
+// import VueVirtualScroller from "vue-virtual-scroller";
 
 import {
   $wordOfTheDay,
@@ -40,5 +40,5 @@ export default (app: App) => {
     $toastNotify,
     $activeFilterCount,
   });
-  app.use(VueVirtualScroller);
+  // app.use(VueVirtualScroller);
 };
