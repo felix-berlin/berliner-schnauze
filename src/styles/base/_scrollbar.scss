@@ -1,15 +1,17 @@
 @use "sass:map";
 @use "@styles/variables" as vars;
 
-html * {
-  --scrollbar-primary: var(--primary);
-  --scrollbar-secondary: var(--secondary);
-  --scrollbar-tertiary: var(--secondary);
+html {
+  --scrollbar-primary: var(--orange-400);
+  --scrollbar-tertiary: var(--orange-200);
   --scrollbar-width: 8px;
-  --scrollbar-button-bgc: #{rgba(vars.$red-200, 0.8)};
+  --scrollbar-button-bgc: var(--orange-400);
 
-  &[class="dark"] {
-    --scrollbar-button-bgc: #{rgba(map.get(vars.$blue-shades, "blue-200"), 0.8)};
+  &.dark {
+    --scrollbar-primary: var(--blue-400);
+    --scrollbar-tertiary: var(--blue-200);
+    --scrollbar-button-bgc: var(--blue-400);
+    --color-background-track: var(--blue-100);
   }
 
   /* ----------  Mozilla Firefox  ---------- */
@@ -21,7 +23,7 @@ html * {
 	 * */
 
   scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-primary) var(--scrollbar-secondary);
+  scrollbar-color: var(--blue-800) var(--blue-100);
 
   /* ----------  Webkit-Browsers: Chrome, Opera, Safari  ---------- */
 
@@ -69,16 +71,11 @@ html * {
 	 * On the track moves to the thumb
 	 * */
   &::-webkit-scrollbar-track {
-    --scrollbar-track-bgc: #{rgba(vars.$red-200, 0.3)};
-    --scrollbar-track-bc: var(--scrollbar-tertiary);
     --scrollbar-track-border-width: var(--scrollbar-width);
 
-    background-color: var(--white-100);
-    border: var(--scrollbar-track-border-width) solid var(--scrollbar-track-bc);
-
-    // &:hover {
-    //   --scrollbar-track-bgc: rgba(251, 208, 7, 0.5);
-    // }
+    background-color: var(--color-background-track, var(--orange-100));
+    border: var(--scrollbar-track-border-width) solid
+      var(--scrollbar-track-bc, var(--scrollbar-tertiary));
   }
 
   /**
@@ -92,12 +89,10 @@ html * {
   /**
 	 *  Scroolbar Thumb
 	 *
-	 * The thumb moves on the track and shows the actuall position on the page
+	 * The thumb moves on the track and shows the actual position on the page
 	 * */
   &::-webkit-scrollbar-thumb {
-    --scrollbara-thumb-bgc: var(--scrollbar-primary);
-
-    background-color: var(--scrollbara-thumb-bgc);
+    background-color: var(--scrollbar-thumb-bgc, var(--scrollbar-primary));
 
     // &:window-inactive {
     //   /* Select the thumb when the browser window isn't in focus */
