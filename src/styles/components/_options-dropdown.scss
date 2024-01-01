@@ -9,21 +9,11 @@
 
   &__options-icon {
     --color-icon: var(--color-body);
-
-    @include butler-mx.dark-mode-class {
-      --color-icon: var(--yellow-500);
-    }
   }
 
   &__copy-button {
-    --color-background: #{vars.$white-200};
-
     gap: vars.$spacer * 0.3;
     display: flex;
     align-items: center;
-
-    @include butler-mx.hover {
-      --style-border: solid;
-    }
   }
 }
