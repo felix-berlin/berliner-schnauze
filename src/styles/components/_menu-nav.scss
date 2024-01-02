@@ -52,6 +52,13 @@
       --size-font: inherit;
       --gap: #{vars.$spacer * 0.5};
     }
+
+    .c-install-button {
+      --padding: 0;
+
+      border: none;
+      font-size: inherit;
+    }
   }
 
   &__item {

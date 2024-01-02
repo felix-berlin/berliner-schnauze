@@ -52,8 +52,8 @@ const menuItems: (ItemObject | DefineComponent)[] = [
     link: "/wort-vorschlagen",
   },
   {
-    title: "tech. Fehler melden",
-    link: "https://github.com/felix-berlin/berliner-schnauze/issues/new",
+    title: "Wort Index",
+    link: "/wort",
   },
 ];
 </script>
