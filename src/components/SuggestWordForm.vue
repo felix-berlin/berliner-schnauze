@@ -121,26 +121,11 @@
       </div>
     </div>
 
-    <button class="c-button c-button--theme c-suggest-word-form__button" type="submit">
-      <!-- <Transition name="fade" mode="out-in"> -->
-      <div
-        v-if="formResponse.status === 'mail_sent'"
-        key="success"
-        class="c-suggest-word-form__message c-alert c-alert--success"
-      >
-        <span class="c-suggest-word-form__success-icon"><CheckCircle2 /></span
-        ><span>{{ formResponse.message }}</span>
-      </div>
-      <div
-        v-if="formResponse.status !== 'mail_sent' && formResponse.status?.length"
-        key="success"
-        class="c-suggest-word-form__message c-alert c-alert--danger"
-      >
-        <span class="c-suggest-word-form__success-icon"><AlertCircle /></span
-        ><span>{{ formResponse.message }}</span>
-      </div>
-      <span v-else key="button-text">Wort einreichen</span>
-      <!-- </Transition> -->
+    <button class="c-button c-suggest-word-form__button" type="submit">
+      <Transition name="fade" mode="out-in">
+        <span v-if="!isSending">Wort einreichen</span>
+        <span v-else>Wort wird gesendet</span>
+      </Transition>
     </button>
 
     <TurnStile :site-key="turnstileSiteKey" @verify="isVerified = $event" />
@@ -148,11 +133,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import CheckCircle2 from "virtual:icons/lucide/check-circle-2";
-import AlertCircle from "virtual:icons/lucide/alert-circle";
+import { ref, reactive, watch } from "vue";
 import AlertBanner from "@components/AlertBanner.vue";
 import TurnStile from "@components/TurnStile.vue";
+import { createToastNotify } from "@stores/index";
 
 interface FormData {
   berlinerWord?: string;
@@ -195,6 +179,7 @@ const formResponse = reactive({
 
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 const isVerified = ref(false);
+const isSending = ref(false);
 
 /**
  * Posts the form data to the contact form 7 API
@@ -286,14 +271,14 @@ const checkForm = (): void => {
     formErrors[error] = "";
   }
 
-  if (formData?.berlinerWord?.length <= 1) {
+  if (formData?.berlinerWord && formData?.berlinerWord?.length <= 1) {
     formErrors.berlinerWord = "Oh, ditt is aber een sehr kurzes Wort";
   }
   if (!formData.berlinerWord) {
     formErrors.berlinerWord = "Hey du hast ditt Wort vergessen.";
   }
 
-  if (formData?.translation?.length <= 1) {
+  if (formData?.translation && formData?.translation?.length <= 1) {
     formErrors.translation = "Ditt is aber ne kleene Übersetzung.";
   }
   if (!formData.translation) {
@@ -308,11 +293,13 @@ const checkForm = (): void => {
   }
 
   // If an e-mail address is given, validate it
-  if (formData?.userMail?.length > 0 && !validEmail(formData?.userMail)) {
+  if (formData?.userMail && formData?.userMail?.length > 0 && !validEmail(formData?.userMail)) {
     formErrors.eMail = "Irgendwas läuft hier nicht";
   }
 
+  // If there are no errors and the user is verified, submit the form
   if (Object.values(formErrors).every((v) => v?.length === 0) && isVerified.value) {
+    isSending.value = true;
     postToContactForm7();
   }
 };
@@ -330,6 +317,21 @@ const validEmail = (email: string): boolean => {
 
   return re.test(email);
 };
+
+watch(
+  () => formResponse.status,
+  () => {
+    if (formResponse.status === "mail_sent") {
+      createToastNotify({ message: formResponse.message, status: "success" });
+    }
+
+    if (formResponse.status !== "mail_sent" && formResponse.status?.length) {
+      createToastNotify({ message: formResponse.message, status: "error" });
+    }
+
+    isSending.value = false;
+  },
+);
 </script>
 
 <style lang="scss">

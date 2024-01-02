@@ -4,6 +4,8 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
+import { useStore } from "@nanostores/vue";
+import { $isDarkMode } from "@stores/index";
 
 interface TurnStileProps {
   wrapperId?: string;
@@ -11,6 +13,8 @@ interface TurnStileProps {
 }
 
 const { wrapperId = "turnstileWrapper", siteKey } = defineProps<TurnStileProps>();
+
+const isDarkMode = useStore($isDarkMode);
 
 const emit = defineEmits<{
   verify: [response: boolean];
@@ -47,6 +51,7 @@ const renderTurnstile = (): void => {
       callback: (response: string) => emit("verify", checkVerification(response)),
       "expired-callback": emit("expire", true),
       "error-callback": emit("fail", true),
+      theme: isDarkMode ? "dark" : "light",
     });
   };
 };
