@@ -58,6 +58,11 @@
 
       border: none;
       font-size: inherit;
+      background: none;
+
+      &:hover {
+        box-shadow: none;
+      }
     }
   }
 
