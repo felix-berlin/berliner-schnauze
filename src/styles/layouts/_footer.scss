@@ -104,13 +104,14 @@
     &-content {
       grid-area: content;
       display: flex;
-      gap: vars.$spacer * 0.5;
+      gap: vars.$spacer * 0.5 vars.$spacer * 1.25;
       padding-top: vars.$spacer * 0.5;
       padding-bottom: vars.$spacer * 0.5;
       flex-wrap: wrap;
       justify-content: var(--content-justify, center);
+      align-items: baseline;
 
-      @include mx.breakpoint("md") {
+      @include mx.breakpoint("sm") {
         --content-justify: flex-start;
       }
 
