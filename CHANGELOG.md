@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.0.2...v3.1.0) (2024-01-02)
+
+
+### Bug Fixes
+
+* **scroll to top:** needs to hide under flyout ([5c89471](https://github.com/felix-berlin/berliner-schnauze/commit/5c89471849e5ff625b6d7181de2237bf7b5318b8))
+* **scrollbar:** custom scrollbar styles everywhere ([7939ae0](https://github.com/felix-berlin/berliner-schnauze/commit/7939ae002db1c0d98bf5b892099c8073e466b1d4))
+
+
+### Features
+
+* **PWA:** hide button if installed ([6ec81d5](https://github.com/felix-berlin/berliner-schnauze/commit/6ec81d57978d502ad65af5fb843507f8d7e4a055))
+
 ## [3.0.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.0.1...v3.0.2) (2024-01-02)
 
 
