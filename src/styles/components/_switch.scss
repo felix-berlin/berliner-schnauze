@@ -8,7 +8,7 @@ input[type="checkbox"].c-switch {
   position: relative;
 
   &::after {
-    --color-background: #{vars.$grey-200};
+    --color-background: var(--blue);
     --size: 16px;
     --left: 2px;
 

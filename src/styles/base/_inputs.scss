@@ -2,6 +2,7 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/functions" as butler-fn;
+@use "@sass-butler/mixins" as butler-mx;
 
 $icon-color: currentcolor;
 $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>";
@@ -10,13 +11,17 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 .c-textarea,
 .c-select {
   --spacing-inner: #{vars.$spacer * 0.55};
-  --color-border: var(--grey-200);
+  --color-border: var(--blue);
   --color-border-hover: var(--red-200);
   --size-font: 1rem;
-  --box-shadow-focus: 2px rgb(var(--primary) 0.3);
-  --color-background: #fff;
+  --box-shadow-focus: 2px rgb(var(--orange-600) 0.3);
+  --color-background: color-mix(in srgb, var(--orange-100) 30%, white);
   --color-background-disabled: var(--grey-200);
   --width-border: 1px;
+
+  @include butler-mx.dark-mode-class {
+    --color-background: color-mix(in srgb, var(--blue) 70%, white);
+  }
 
   font-size: var(--size-font);
   box-shadow: 0 0 0 1px transparent;
@@ -29,6 +34,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   outline: none;
   border: var(--width-border) solid var(--color-border);
   appearance: none;
+  color: var(--color, var(--color-body));
 
   &:focus {
     box-shadow: 0 0 0 var(--box-shadow-focus);
@@ -98,10 +104,10 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 
 .c-input--checkbox,
 .c-input--radio {
-  --color-active: var(--red-200);
+  --color-active: var(--orange-400);
   --color-inner-active: #fff;
-  --color-border-disabled-checked: #{color.scale(vars.$red-200, $lightness: 60%)};
-  --color-background-disabled-checked: #{color.scale(vars.$red-200, $lightness: 80%)};
+  --color-border-disabled-checked: color-mix(in srgb, var(--orange-400) 60%, white);
+  --color-background-disabled-checked: color-mix(in srgb, var(--orange-400) 80%, white);
   --duration-transition-transform: 0.3s;
   --timing-transition-transform: ease;
   --duration-transition-opacity: 0.2s;
@@ -121,6 +127,10 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     border-color 0.3s,
     box-shadow 0.2s;
 
+  @include butler-mx.dark-mode-class {
+    --color-background: color-mix(in srgb, var(--blue) 30%, white);
+  }
+
   &::after {
     content: "";
     display: block;
@@ -138,6 +148,10 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     --duration-transition-opacity: 0.3s;
     --duration-transition-transform: 0.6s;
     --timing-transition-transform: cubic-bezier(0.2, 0.85, 0.32, 1.2);
+
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--color-active);
+    }
   }
 
   &:disabled {

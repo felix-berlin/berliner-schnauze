@@ -19,8 +19,6 @@
     .c-form__label {
       order: -1;
       margin-right: vars.$spacer;
-
-      // font-size: font.$text-m;
       font-weight: 700;
     }
 
@@ -113,8 +111,6 @@
 
   &__error {
     color: var(--danger);
-
-    // font-size: font.$text-xs;
     margin-top: vars.$spacer * 0.25;
     font-weight: 500;
   }
