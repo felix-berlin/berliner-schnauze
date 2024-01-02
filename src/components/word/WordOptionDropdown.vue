@@ -25,7 +25,7 @@
       </button>
 
       <button
-        v-if="usingShare.isSupported"
+        v-if="usingClipboard.isSupported"
         aria-label="Link zum Wort kopieren"
         type="button"
         class="c-options-dropdown__copy-button c-button"
@@ -67,7 +67,7 @@ interface WordProps {
 
 const { word } = defineProps<WordProps>();
 
-const usingClipboard = useClipboard({ word });
+const usingClipboard = useClipboard();
 const usingShare = useShare();
 
 /**
