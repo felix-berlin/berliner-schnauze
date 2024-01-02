@@ -25,6 +25,15 @@ const defaultTimeout = 5000;
 export const $toastNotify = atom<ToastNotify[]>([]);
 
 /**
+ * Checks if the browser supports the popover
+ *
+ * @return  {boolean}
+ */
+export const supportsPopover = (): boolean => {
+  return Object.prototype.hasOwnProperty.call(HTMLElement.prototype, "popover");
+};
+
+/**
  * Finds the current toast by id and hides it
  *
  * @param   {ToastPayload[]}  id
@@ -59,6 +68,8 @@ export const createToastNotify = action(
   $toastNotify,
   "createToastNotify",
   (store, payload: ToastPayload) => {
+    if (!supportsPopover()) return;
+
     const { timeout } = payload;
 
     const toast = createToast(payload);
