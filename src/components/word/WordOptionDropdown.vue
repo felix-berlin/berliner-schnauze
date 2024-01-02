@@ -13,7 +13,7 @@
 
     <template #popper>
       <button
-        v-if="usingShare.isSupported"
+        v-if="shareIsSupported"
         aria-label="Wort teilen"
         type="button"
         class="c-options-dropdown__copy-button c-button"
@@ -25,7 +25,7 @@
       </button>
 
       <button
-        v-if="usingClipboard.isSupported"
+        v-if="clipBoardIsSupported"
         aria-label="Link zum Wort kopieren"
         type="button"
         class="c-options-dropdown__copy-button c-button"
@@ -37,7 +37,7 @@
       </button>
 
       <button
-        v-if="usingClipboard.isSupported"
+        v-if="clipBoardIsSupported"
         aria-label="Wort kopieren"
         type="button"
         class="c-options-dropdown__copy-button c-button"
@@ -67,8 +67,8 @@ interface WordProps {
 
 const { word } = defineProps<WordProps>();
 
-const usingClipboard = useClipboard();
-const usingShare = useShare();
+const { text, copy, copied, isSupported: clipBoardIsSupported } = useClipboard();
+const { share, isSupported: shareIsSupported } = useShare();
 
 /**
  * Share the word
@@ -84,7 +84,7 @@ const shareWord = (slug: string): void => {
     url: routeToWord(slug),
   };
 
-  usingShare.share(shareData).catch((err) => err);
+  share(shareData).catch((err) => err);
   createToastNotify({ message: "Wort geteilt", status: "success" });
 };
 
@@ -96,7 +96,7 @@ const shareWord = (slug: string): void => {
  * @return  {void}
  */
 const copyWordPageUrlToClipboard = (slug: string): void => {
-  usingClipboard.copy(import.meta.env.PUBLIC_SITE_URL + routeToWord(slug));
+  copy(import.meta.env.PUBLIC_SITE_URL + routeToWord(slug));
   createToastNotify({
     message: "Link kopiert",
     status: "success",
@@ -111,7 +111,7 @@ const copyWordPageUrlToClipboard = (slug: string): void => {
  * @return  {void}
  */
 const copyNameToClipboard = (name: string): void => {
-  usingClipboard.copy(name);
+  copy(name);
   createToastNotify({ message: "Wort kopiert", status: "success" });
 };
 </script>
