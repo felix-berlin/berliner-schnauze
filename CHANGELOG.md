@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.0.0...v3.0.1) (2024-01-02)
+
+
+### Bug Fixes
+
+* **menu nav:** app install button styles on dark mode ([adf15da](https://github.com/felix-berlin/berliner-schnauze/commit/adf15da724781b724d0c86845578af1fde56bcd5))
+
 # [3.0.0](https://github.com/felix-berlin/berliner-schnauze/compare/v2.3.1...v3.0.0) (2024-01-02)
 
 
