@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeMount, watch, nextTick, reactive } from "vue";
 import { useSwipe } from "@vueuse/core";
-import { removeToastById } from "@stores/index";
+import { removeToastById, supportsPopover } from "@stores/index";
 import Info from "virtual:icons/lucide/info";
 import Error from "virtual:icons/lucide/x-circle";
 import Warning from "virtual:icons/lucide/alert-circle";
@@ -69,15 +69,6 @@ const toastIconMap = {
   warning: Warning,
   success: Success,
   info: Info,
-};
-
-/**
- * Checks if the browser supports the popover
- *
- * @return  {boolean}
- */
-const supportsPopover = (): boolean => {
-  return Object.prototype.hasOwnProperty.call(HTMLElement.prototype, "popover");
 };
 
 /**
@@ -147,6 +138,8 @@ onBeforeMount(() => {
 });
 
 onMounted(async () => {
+  if (!isSupported.value) return;
+
   showToast();
 
   setPosition();
