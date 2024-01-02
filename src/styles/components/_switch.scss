@@ -1,37 +1,44 @@
-@use '@styles/variables/variables' as vars;
+@use "@styles/variables" as vars;
 
-input[type='checkbox'].c-switch {
-	width: 35px;
-	border-radius: 20px;
+input[type="checkbox"].c-switch {
+  --height: 22px;
 
-	&::after {
-		--color-background: #{vars.$grey-200};
-		--size: 16px;
-		--left: 2px;
+  width: 34px;
+  border-radius: 14px;
+  position: relative;
 
-		left: var(--left);
-		top: 1px;
-		width: var(--size);
-		height: var(--size);
-		background: var(--color-background-after, var(--color-background));
-		transform: translateX(var(--translate-x, 0));
-		border-radius: 50%;
-	}
+  &::after {
+    --color-background: var(--blue);
+    --size: 16px;
+    --left: 2px;
 
-	&:checked {
-		--color-background-after: #fff;
-		--translate-x: 15px;
+    left: var(--left);
+    top: 50%;
+    width: var(--size);
+    height: var(--size);
+    background: var(--color-background-after, var(--color-background));
+    transform: translate(var(--translate-x, 0), -50%);
+    border-radius: 50%;
+  }
 
-		&::after {
-			--left: -2px;
-		}
-	}
+  &:checked {
+    --color-background-after: #fff;
+    --translate-x: 15px;
 
-	&:disabled {
-		&:not(:checked) {
-			&::after {
-				opacity: 0.6;
-			}
-		}
-	}
+    &::after {
+      --left: -2px;
+    }
+  }
+
+  &:disabled {
+    &:not(:checked) {
+      &::after {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  + label {
+    margin-left: vars.$spacer * 0.5;
+  }
 }

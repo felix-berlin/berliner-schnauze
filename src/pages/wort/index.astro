@@ -1,11 +1,14 @@
 ---
 import "@styles/objects/_word-index.scss";
 import "@styles/components/_word-group.scss";
+import "astro-breadcrumbs/breadcrumbs.scss";
 
 import Layout from "@layouts/Layout.astro";
 import { seoData, routeToWord } from "@utils/helpers";
 import { getAllWordsLinks } from "@services/api";
 import type { BerlinerWord } from "@ts_types/generated/graphql";
+import { Breadcrumbs } from "astro-breadcrumbs";
+import ChevronRight from "~icons/lucide/chevron-right";
 
 async function getGroupedWords(): Promise<Record<string, BerlinerWord[]>> {
   const allWords = await getAllWordsLinks();
@@ -38,6 +41,10 @@ const content = {
 ---
 
 <Layout content={seoData(content)} contentClasses="o-word-index">
+  <Breadcrumbs indexText="start">
+    <ChevronRight slot="separator" width="20" height="20" />
+  </Breadcrumbs>
+
   <h1>Wort-Index</h1>
   {
     sortedGroups.map((group) => (

@@ -1,62 +1,45 @@
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
-@use '@sass-butler/mixins' as butler-mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
 
 .c-header {
-	--areas-template: ' . logo menu-nav . ';
+  background-color: var(--color-background, var(--orange-200));
+  box-shadow:
+    0 0.5px 0.6px rgb(0 0 0 / 8%),
+    0 4px 5px rgb(0 0 0 / 16%);
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 11000;
+  width: 100%;
+  padding: var(--padding-y-header) 0;
 
-	grid-area: header;
-	display: grid;
-	grid-template-areas: var(--areas-template);
-	grid-template-columns: var(--spacing-main-frame) var(--columns-header-inner, 1fr 2fr) var(--spacing-main-frame);
-	align-items: center;
-	background-color: var(--primary);
-	box-shadow:
-		0 0.5px 0.6px rgb(0 0 0 / 8%),
-		0 4px 5px rgb(0 0 0 / 16%);
-	position: sticky;
-	top: 0;
-	left: 0;
-	z-index: 11000;
-	width: 100%;
-	padding: var(--padding-y-header) 0;
+  @include butler-mx.dark-mode-class {
+    --color-background: var(--blue);
+  }
 
-	@include mx.breakpoint('xs') {
-		--columns-header-inner: 1fr 1fr;
-	}
-	@include mx.breakpoint('md') {
-		--columns-header-inner: 1fr 2fr;
-	}
+  &__wrapper {
+    --areas-template: "logo menu-nav";
 
-	&.has-searchbar {
-		@include mx.breakpoint('xs', 'max') {
-			--areas-template:
-				' . logo logo . '
-				' . menu-nav menu-nav . ';
+    display: grid;
+    grid-template-areas: var(--areas-template);
+    grid-template-columns: var(--columns-header-inner, 1fr max-content);
+    align-items: center;
+  }
 
-			.c-logo {
-				margin-bottom: vars.$spacer * 0.5;
-			}
-		}
-	}
+  .c-logo {
+    grid-area: logo;
 
-	.c-logo {
-		grid-area: logo;
+    &__link {
+      font-family: vars.$berliner;
+      text-decoration: none;
+      color: var(--_color, var(--blue));
+      font-size: butler-fn.fluid(25, 40, 320, 1260);
 
-		&__link {
-			--color: #{vars.$white-100};
-
-			font-family: vars.$berliner;
-			text-decoration: none;
-			color: var(--color, var(--white-100));
-			font-size: var(--size-font, 1.8rem);
-
-			@include mx.breakpoint('sm') {
-				--size-font: 2rem;
-			}
-			@include mx.breakpoint('lg') {
-				--size-font: 2.5rem;
-			}
-		}
-	}
+      @include butler-mx.dark-mode-class {
+        --_color: var(--yellow-500);
+      }
+    }
+  }
 }

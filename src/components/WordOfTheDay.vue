@@ -33,7 +33,7 @@
         </div>
       </Transition>
 
-      <div v-if="currentWord.error" class="c-word-of-the-day__word-wrap">
+      <div v-if="currentWord.error" class="c-word-of-the-day__word-wrap is-error">
         Ditt kann ne wahr sein, es ist ein Fehler aufgetreten.
       </div>
 
@@ -45,9 +45,9 @@
       Neues Wort in: <span>{{ timeToUpdate.hours }}</span> :
       <span>{{ timeToUpdate.minutes }}</span> : <span>{{ timeToUpdate.seconds }}</span>
     </div>
-    <transition v-if="celebrate" name="fade">
+    <Transition v-if="celebrate" name="fade">
       <ConfettiEffect />
-    </transition>
+    </Transition>
   </div>
 </template>
 
@@ -56,12 +56,12 @@ import { ref, onMounted, onBeforeMount } from "vue";
 import type { Ref } from "vue";
 import Crown from "virtual:icons/lucide/crown";
 import { useStore } from "@nanostores/vue";
-import { wordOfTheDay, getWordOfTheDay } from "@stores/index";
+import { $wordOfTheDay, getWordOfTheDay } from "@stores/index";
 import ConfettiEffect from "@components/ConfettiEffect.vue";
 import SingleLoader from "@components/SingleLoader.vue";
 import { routeToWord } from "@utils/helpers";
 
-const currentWord = useStore(wordOfTheDay);
+const currentWord = useStore($wordOfTheDay);
 const celebrate = ref(false);
 const showTooltip = ref(false);
 const countDown = ref();

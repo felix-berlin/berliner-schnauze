@@ -17,14 +17,17 @@
     :disable-scroll="true"
     @close="searchVisible = false"
   >
-    <Search id="main-search" />
+    <!-- TODO: replace by <search></search>  -->
+    <div role="search">
+      <SearchBar id="main-search" />
+    </div>
   </Modal>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, onUnmounted } from "vue";
 import Modal from "@components/Modal.vue";
-import Search from "@components/Search.vue";
+import SearchBar from "@components/SearchBar.vue";
 import SearchIcon from "virtual:icons/lucide/search";
 import SquareSlash from "virtual:icons/lucide/square-slash";
 

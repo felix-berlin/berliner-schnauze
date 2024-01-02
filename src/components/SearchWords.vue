@@ -4,7 +4,7 @@
       :aria-label="searchLength > 0 ? 'Wortsuche löschen' : 'Wortsuche betätigen'"
       type="button"
       :class="[
-        'c-word-search__search-button u-button-reset c-button c-button--center-icon',
+        'c-word-search__search-button c-button c-button--center-icon',
         `c-word-search__search-button--${buttonPosition}`,
       ]"
       @click="buttonActions"
@@ -24,7 +24,7 @@
       type="search"
       class="c-word-search__search-input c-input"
       aria-label="Suche nach einem Berliner Word"
-      placeholder="Durchsuche den Berliner-Wortschatz"
+      placeholder="Durchsuche den Berliner-Jargon"
       autocomplete="off"
       @input="updateSearch()"
     />

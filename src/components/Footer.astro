@@ -1,11 +1,81 @@
 ---
-import { version } from "../../package.json";
+import { version, funding } from "../../package.json";
 import { Picture } from "astro:assets";
 import BearWalking from "@assets/images/bear-walking.png";
+import CafeAchteck from "@assets/images/800px-Berlin_Cafe_Achteck_BusB.jpg";
+import NavList from "@components/NavList.vue";
+import InstallApp from "@components/InstallApp.vue";
+import type { DefineComponent } from "vue";
+import Download from "virtual:icons/lucide/download";
+
+// const randomWord = () => {
+//   // TODO: Implement random word
+//   // return randomElement(berlinerWords).post_name;
+// };
+//
+//
+const socialMenu = [
+  {
+    title: "Github",
+    link: "https://github.com/felix-berlin/berliner-schnauze",
+  },
+  {
+    title: "Twitter",
+    link: "https://twitter.com/BLN_Schnauze",
+  },
+  {
+    title: "Facebook",
+    link: "https://www.facebook.com/Berliner.Schnauze030",
+  },
+];
+const fundingMenu = [
+  {
+    title: "GitHub Sponsors",
+    link: funding.find((f) => f.type === "GitHub Sponsors")?.url!,
+  },
+  {
+    title: "Ko-fi",
+    link: funding.find((f) => f.type === "Ko-fi")?.url!,
+  },
+  {
+    title: "PayPal",
+    link: funding.find((f) => f.type === "PayPal")?.url!,
+  },
+];
+
+const navMenu1 = [
+  {
+    title: "Wort vorschlagen",
+    link: "/wort-vorschlagen",
+  },
+  {
+    title: "Wort Index",
+    link: "/wort",
+  },
+  {
+    title: "Changelog",
+    link: "https://github.com/felix-berlin/berliner-schnauze/releases",
+  },
+  {
+    title: "tech. Fehler melden",
+    link: "https://github.com/felix-berlin/berliner-schnauze/issues/new",
+  },
+];
+
+const navMenu2 = [
+  {
+    title: "Impressum",
+    link: "/impressum",
+  },
+  {
+    title: "Datenschutz",
+    link: "/datenschutz",
+  },
+];
 ---
 
 <footer class="c-footer">
-  <div class="c-footer__farewell">
+  <div class="c-footer__farewell u-max-body-width">
     <div class="c-footer__farewell-image-wrapper">
       <Picture
         src={BearWalking}
@@ -19,19 +89,59 @@ import BearWalking from "@assets/images/bear-walking.png";
   </div>
 
   <div class="c-footer__ground">
-    <p class="c-footer__slogan">Hergestellt mit🐻-Kräften in Berlin</p>
+    <div class="c-footer__wrapper u-max-body-width">
+      <div class="c-footer__ground-app-install">
+        <h2>Installiere die App</h2>
+        <p>Mit der Berliner Schnauze App bleibst Du immer informiert, ob online oder offline.</p>
+        <InstallApp showIcon={true} client:only="vue" cssClasses={"c-button--center-icon c-button"}>
+          <Download width={16} height={16} /> App installieren
+        </InstallApp>
+      </div>
 
-    <nav class="c-footer__nav">
-      <a href="/impressum"> Impressum</a>
-      <a href="/datenschutz"> Datenschutz</a>
-    </nav>
-  </div>
-  <div class="c-footer__end">
-    <div class="c-footer__end-content">
-      <a href="https://github.com/felix-berlin/berliner-schnauze/releases"
-        >Website Version: {version}</a
-      >
-      <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
+      <div>
+        <h2>Seiten</h2>
+        <NavList
+          items={navMenu1}
+          classesNav={"c-footer__nav"}
+          classesUl={"c-footer__nav-list u-list-reset"}
+        />
+      </div>
+
+      <div>
+        <h2>Projekt unterstützen</h2>
+        <NavList
+          items={fundingMenu}
+          classesNav={"c-footer__nav"}
+          classesUl={"c-footer__nav-list u-list-reset"}
+        />
+      </div>
+
+      <div>
+        <h2>Social Media</h2>
+        <NavList
+          items={socialMenu}
+          classesNav={"c-footer__nav"}
+          classesUl={"c-footer__nav-list u-list-reset"}
+        />
+      </div>
+
+      <div>
+        <h2>Andere</h2>
+        <NavList
+          items={navMenu2}
+          classesNav={"c-footer__nav is-legal"}
+          classesUl={"c-footer__nav-list u-list-reset"}
+        />
+      </div>
     </div>
   </div>
 </footer>
+<div class="c-footer__end">
+  <div class="c-footer__end-content u-max-body-width">
+    <a href="https://github.com/felix-berlin/berliner-schnauze/releases"
+      >Website Version: {version}</a
+    >
+    <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
+    <p>Hergestellt mit🐻-Kräften in Berlin</p>
+  </div>
+</div>

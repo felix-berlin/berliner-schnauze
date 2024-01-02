@@ -1,29 +1,29 @@
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
-@use '@sass-butler/mixins' as butler-mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 .c-social-list {
-	&__list {
-		gap: vars.$spacer * 0.25;
-	}
+  &__list {
+    gap: vars.$spacer * 0.25;
+  }
 
-	&--desktop {
-		display: var(--display, none);
+  &--desktop {
+    display: var(--display, none);
 
-		@include mx.breakpoint('md') {
-			--display: flex;
-		}
-	}
+    @include mx.breakpoint("md") {
+      --display: flex;
+    }
+  }
 
-	&--mobile-dropdown {
-		display: flex;
-		justify-content: space-between;
-		border-bottom: 1px dashed var(--primary);
-		margin-bottom: vars.$spacer;
-		padding-bottom: vars.$spacer * 0.7;
+  &--mobile-dropdown {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed var(--primary);
+    margin-bottom: vars.$spacer;
+    padding-bottom: vars.$spacer * 0.7;
 
-		@include mx.breakpoint('md') {
-			display: none;
-		}
-	}
+    @include mx.breakpoint("md") {
+      display: none;
+    }
+  }
 }

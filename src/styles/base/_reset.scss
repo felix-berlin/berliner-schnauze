@@ -1,10 +1,24 @@
 html {
-	// Normalize boxsizing
-	box-sizing: border-box;
+  // Normalize boxsizing
+  box-sizing: border-box;
 }
 
 *,
 *::before,
 *::after {
-	box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+  font-style: italic;
+  background-repeat: no-repeat;
+  background-size: cover;
+  shape-margin: 0.75rem;
+}
+
+button {
+  font-family: inherit;
 }

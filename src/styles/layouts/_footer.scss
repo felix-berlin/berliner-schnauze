@@ -1,149 +1,127 @@
-@use 'sass:map';
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
-@use '@sass-butler/functions' as butler-fn;
-@use '@sass-butler/mixins' as butler-mx;
+@use "sass:map";
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/functions" as butler-fn;
+@use "@sass-butler/mixins" as butler-mx;
 
 .c-footer {
-	--space-walking: 40px;
+  --space-walking: 40px;
 
-	grid-area: footer;
-	display: grid;
-	grid-template-columns: var(--spacing-main-frame) 1fr 2fr var(--spacing-main-frame);
-	grid-template-areas:
-		' . farewell farewell . '
-		' ground ground ground ground '
-		' end end end end';
+  &__farewell {
+    margin-top: 60px;
+    grid-area: farewell;
+    display: flex;
+    gap: var(--gap, 5%);
 
-	&__farewell {
-		grid-area: farewell;
-		display: flex;
-		gap: var(--gap, 5%);
+    &-image-wrapper {
+      flex: 0 0 var(--basis-flex, 50%);
+      display: flex;
 
-		&-image-wrapper {
-			flex: 0 0 var(--basis-flex, 50%);
-			display: flex;
+      @include mx.breakpoint("md") {
+        --basis-flex: 40%;
+      }
 
-			@include mx.breakpoint('md') {
-				--basis-flex: 40%;
-			}
-		}
+      img {
+        filter: drop-shadow(0 0 25px rgb(255 255 255 / 20%));
+      }
+    }
 
-		&-text {
-			display: var(--display, none);
-			font-family: vars.$berliner;
-			align-self: center;
-			font-size: var(--size-font, 2rem);
+    &-text {
+      display: var(--display, none);
+      font-family: vars.$berliner;
+      align-self: center;
+      font-size: butler-fn.fluid(32, 48, 320, 1260);
 
-			@include mx.breakpoint('xs') {
-				--display: block;
-			}
-			@include mx.breakpoint('lg') {
-				--size-font: 3rem;
-			}
-		}
-	}
+      @include mx.breakpoint("xs") {
+        --display: block;
+      }
+    }
+  }
 
-	.c-footer__farewell-image.nuxt-speedkit-picture {
-		top: unset;
-		bottom: calc(var(--to-bottom, -1.25) * var(--space-walking));
+  &__ground {
+    background-color: var(--color-background, color-mix(in srgb, var(--orange-200) 60%, white));
+    padding: 25px 0;
 
-		@include mx.breakpoint('md') {
-			--to-bottom: -1.7;
-		}
-	}
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--new-blue-400);
+    }
 
-	&__ground {
-		--areas-template:
-			' . slogan slogan slogan . '
-			' nav nav nav nav nav ';
+    .c-footer__wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      grid-template-areas: var(--areas-template);
+      gap: 1rem;
+    }
 
-		background-color: var(--color-background, #{butler-fn.hex-to-rgb(vars.$red-200, 40%)});
-		grid-area: ground;
-		display: grid;
-		grid-template-columns: var(--columns-template, var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame));
-		grid-template-areas: var(--areas-template);
-		padding-top: var(--space-walking);
+    &-image {
+      grid-area: image;
+      mix-blend-mode: multiply;
 
-		@include butler-mx.dark-mode-class {
-			--color-background: #{butler-fn.hex-to-rgb(vars.$blue-200, 50%)};
-		}
+      @include butler-mx.dark-mode-class {
+        mix-blend-mode: lighten;
+        filter: invert(1);
+      }
+    }
 
-		a,
-		& {
-			color: var(--color, var(--blue-200));
+    .c-install-button {
+      --padding: 0.5rem 1rem;
 
-			@include butler-mx.dark-mode-class {
-				--color: var(--white-200);
-			}
-		}
+      gap: 0.5rem;
+    }
 
-		@include mx.breakpoint('md') {
-			--areas-template: ' . . slogan nav . ';
-			--columns-template: var(--spacing-main-frame) 2fr 1fr 1fr var(--spacing-main-frame);
-		}
-	}
+    h2 {
+      font-size: 1.2rem;
+    }
+  }
 
-	&__nav {
-		grid-area: nav;
-		background-color: var(--color-background, var(--secondary));
-		display: flex;
-		justify-content: center;
-		gap: vars.$spacer;
-		align-items: center;
-		padding: var(--padding, #{vars.$spacer * 0.5} 0);
+  &__nav {
+    background-color: var(--color-background, var(--secondary));
 
-		@include mx.dark-mode-override {
-			@include mx.breakpoint('md') {
-				--color-background: transparent;
-			}
-		}
-		@include butler-mx.dark-mode-class {
-			@include mx.breakpoint('md') {
-				--color-background: transparent;
-			}
-		}
-	}
+    &-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-	&__slogan {
-		grid-area: slogan;
-		text-align: var(--align-text, center);
+    &.is-legal {
+      grid-area: nav-legal;
+    }
+  }
 
-		@include mx.breakpoint('md') {
-			--align-text: left;
-		}
-	}
+  &__slogan {
+    grid-area: slogan;
+    text-align: var(--align-text, center);
 
-	&__end {
-		--areas-template: ' . content . ';
+    @include mx.breakpoint("md") {
+      --align-text: left;
+    }
+  }
 
-		grid-area: end;
-		display: grid;
-		background-color: var(--primary);
-		grid-template-columns: var(--columns-template, var(--spacing-main-frame) 1fr var(--spacing-main-frame));
-		grid-template-areas: var(--areas-template);
-		font-size: 0.8rem;
+  &__end {
+    background-color: var(--color-background, var(--orange-200));
+    font-size: 0.8rem;
 
-		a,
-		& {
-			color: var(--white-200);
-		}
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--blue);
+    }
 
-		&-content {
-			grid-area: content;
-			display: flex;
-			gap: vars.$spacer * 0.5;
-			padding: vars.$spacer * 0.5 0;
-			flex-wrap: wrap;
-			justify-content: var(--content-justify, center);
+    &-content {
+      grid-area: content;
+      display: flex;
+      gap: vars.$spacer * 0.5 vars.$spacer * 1.25;
+      padding-top: vars.$spacer * 0.5;
+      padding-bottom: vars.$spacer * 0.5;
+      flex-wrap: wrap;
+      justify-content: var(--content-justify, center);
+      align-items: baseline;
 
-			@include mx.breakpoint('md') {
-				--content-justify: flex-start;
-			}
+      @include mx.breakpoint("sm") {
+        --content-justify: flex-start;
+      }
 
-			p {
-				margin: 0;
-			}
-		}
-	}
+      p {
+        margin: 0;
+      }
+    }
+  }
 }

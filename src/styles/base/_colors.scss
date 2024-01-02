@@ -1,0 +1,30 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+:root {
+  @each $name, $color in vars.$all-colors {
+    --#{$name}: #{$color};
+  }
+
+  --new-blue-200: color-mix(in srgb, var(--blue) 86%, white);
+  --new-blue-300: color-mix(in srgb, var(--blue) 90%, white);
+  --new-blue-400: color-mix(in srgb, var(--blue) 92%, white);
+  --new-blue-500: var(--blue);
+  --new-blue-600: color-mix(in srgb, var(--blue) 90%, black);
+}
+
+html {
+  --primary: var(--blue-100);
+  --secondary: var(--red-500);
+  --accent: var(--orange-400);
+  --color-body: var(--blue);
+  --floating-color-background: color-mix(in srgb, var(--orange-100) 50%, white);
+
+  &[class~="dark"] {
+    --primary: var(--blue-500);
+    --secondary: var(--blue-400);
+    --accent: var(--orange-500);
+    --color-body: #{vars.$yellow-500};
+    --floating-color-background: var(--new-blue-200);
+  }
+}

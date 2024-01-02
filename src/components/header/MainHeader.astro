@@ -8,26 +8,28 @@ import MainMenu from "@components/header/MainMenu.vue";
 ---
 
 <header class="c-header">
-  <div class="c-logo">
-    <a href="/" class="c-logo__link"> Berliner Schnauze</a>
-  </div>
-
-  <nav class="c-menu-nav">
-    <div class="c-menu-nav__main-elements">
-      <SearchModal class:list="c-menu-nav__item" client:only />
-
-      <ColorModeToggle
-        classes={"c-menu-nav__item c-menu-nav__item-button u-button-reset"}
-        client:only="vue"
-      />
-
-      <MainMenu client:only="vue" />
+  <div class="c-header__wrapper u-max-body-width">
+    <div class="c-logo">
+      <a href="/" class="c-logo__link"> Berliner Schnauze</a>
     </div>
 
-    <SocialList
-      modifier="c-social-list--desktop"
-      list-link-modifier="c-menu-nav__item-link"
-      list-modifier="u-list-vertical"
-    />
-  </nav>
+    <nav class="c-menu-nav">
+      <div class="c-menu-nav__main-elements">
+        <SearchModal class:list="c-menu-nav__item" client:load />
+
+        <ColorModeToggle
+          cssClasses={"c-menu-nav__item c-menu-nav__item-button"}
+          client:only="vue"
+        />
+
+        <MainMenu client:only="vue" />
+      </div>
+
+      <SocialList
+        modifier="c-social-list--desktop"
+        list-link-modifier="c-menu-nav__item-link"
+        list-modifier="u-list-vertical"
+      />
+    </nav>
+  </div>
 </header>

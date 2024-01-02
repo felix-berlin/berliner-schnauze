@@ -2,8 +2,8 @@
   <div class="c-social-list" :class="modifier">
     <ul class="c-social-list__list u-list-reset" :class="listModifier">
       <li
-        v-for="(social, index) in list"
-        :key="index"
+        v-for="social in list"
+        :key="social.name"
         class="c-social-list__item"
         :class="listItemModifier"
       >

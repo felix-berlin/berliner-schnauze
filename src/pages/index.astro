@@ -5,11 +5,9 @@ import Layout from "@layouts/Layout.astro";
 import WordOfTheDay from "@components/WordOfTheDay.vue";
 import { Picture } from "astro:assets";
 import BrownBearRoar from "@assets/images/brown-bear-roar.png";
-import WordSearchList from "@components/WordSearchList.vue";
 import { getAllWords } from "@services/api";
 import { seoData } from "@utils/helpers";
-import type { BerlinerWord } from "@ts_types/generated/graphql";
-import type { CleanBerlinerWord } from "@stores/index";
+import WordSearch from "@components/word-search/WordSearch.astro";
 
 const content = {
   title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
@@ -25,13 +23,6 @@ const content = {
 const allWords = await getAllWords();
 
 const wordCount = allWords.length;
-
-const cleanWords = allWords.map(({ node }): CleanBerlinerWord => {
-  const { seo, title, berlinerWordId, dateGmt, modifiedGmt, ...cleanNode } = node;
-  return cleanNode;
-});
-
-const availableWordGroups = Array.from(new Set(allWords.map(({ node }) => node.wordGroup))).sort();
 ---
 
 <Layout content={seoData(content)} contentClasses="o-index">
@@ -45,7 +36,7 @@ const availableWordGroups = Array.from(new Set(allWords.map(({ node }) => node.w
         class="o-index__image"
         src={BrownBearRoar}
         formats={["avif", "webp"]}
-        widths={[180, 215, 247, 333, 384, 620, 900, BrownBearRoar.width]}
+        widths={[179, 215, 247, 270, 322, 489, 620, 673, BrownBearRoar.width]}
         alt="Ein Bär der brüllt"
         loading="eager"
       />
@@ -56,17 +47,15 @@ const availableWordGroups = Array.from(new Set(allWords.map(({ node }) => node.w
     <div class="o-index__intro-text">
       <p>
         Ok, der Titel dieser Seite flunkert ein wenig.<br />
-         Wir Berliner haben streng genommen gar keinen Dialekt, sondern einen Metrolekt, was
-        natürlich viel besser als so ein langweiliger Dialekt ist. Wir sind schließlich die
-        Hauptstadt!
+        Wir Berliner haben streng genommen gar keinen Dialekt, sondern einen Metrolekt, was natürlich
+        viel besser als so ein langweiliger Dialekt ist. Wir sind schließlich die Hauptstadt!
       </p>
 
       <p>
         Genug rum geprallt, wir können noch viel mehr!<br />
-         Wenn man Wikipedia glauben schenken mag, hat unsere Mundart sogar das von den
-        Brandenburgern gesprochene <a href="https://www.wikiwand.com/de/Niederdeutsche_Sprache"
-          >Niederdeutsch</a
-        > auf dem Gewissen. Ein Fakt der uns sicher leid tut, uns aber auch stolz macht.
+        Wenn man Wikipedia glauben schenken mag, hat unsere Mundart sogar das von den Brandenburgern
+        gesprochene <a href="https://www.wikiwand.com/de/Niederdeutsche_Sprache">Niederdeutsch</a> auf
+        dem Gewissen. Ein Fakt der uns sicher leid tut, uns aber auch stolz macht.
       </p>
 
       <p>
@@ -83,12 +72,58 @@ const availableWordGroups = Array.from(new Set(allWords.map(({ node }) => node.w
       <p>Da Du bereits soweit gekommen bist, huldige bitte das Wort des Tages. Danke!</p>
     </div>
 
+    <!-- <div>
+      <h2>Hier ein paar Fakten zur unser Mundart</h2>
+
+      <div>
+        <h3>Häufig kürzer als Hochdeutsch</h3>
+        <p>
+          Wir Berliner halten uns kurz, einfache Vokale sprechen wa meist verkürzt aus. Aus "mal"
+          wird z.B. "ma".
+        </p>
+      </div>
+      <div>
+        <h3>Wie verbreitet ist Berlinerisch?</h3>
+        <p>
+          Längst nicht jeder in Berlin spricht Dialekt. Laut <a
+            href="https://de.statista.com/statistik/daten/studie/1116703/umfrage/verbreitung-berliner-dialekt/"
+            >dieser Umfrage</a
+          > sprechen bis zu 62% der Berliner im Heimischen Dialekt.
+        </p>
+      </div>
+      <div>
+        <h3>A statt (e)r</h3>
+        <p>
+          Wortendungen auf "-er" werden von uns konsequent durch "a" ausgetauscht: "seiner" ->
+          "seina", "Alter" -> "Alta"
+        </p>
+      </div>
+      <div>
+        <h3>Syntaktische Besonderheiten</h3>
+        <p>
+          <a
+            href="https://islk.kuwi.tu-dortmund.de/storages/islk-kuwi/r/Personal_Freywald/Literatur/freywald2017_syntax_berlinisch_korrigiert.pdf"
+            >TU Dortmund</a
+          >
+        </p>
+      </div>
+      <div>
+        <h3>Viele Bezeichnungen für ein und das Selbe</h3>
+        <p>
+          Der Berliner Metrolekt wird häufig auch als Berlinisch, Berliner Jargon, Berlinerisch oder
+          Berliner Mundart bezeichnet.
+        </p>
+      </div>
+    </div> -->
+
     <WordOfTheDay client:only="vue" />
   </section>
 
-  <WordSearchList
+  <!-- <WordSearchList
     words={cleanWords}
     availableLetterGroups={availableWordGroups}
+    wordTypes={wordTypes}
     client:only="vue"
-  />
+  /> -->
+  <WordSearch words={allWords} />
 </Layout>

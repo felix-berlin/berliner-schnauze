@@ -1,55 +1,54 @@
-@use './../../../node_modules/floating-vue/dist/style.css';
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
+@use "./../../../node_modules/floating-vue/dist/style.css";
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 .v-popper__popper {
-	--color-background: var(--secondary);
+  --color-background: var(--floating-color-background);
 
-	&:focus {
-		outline: none;
-	}
+  &:focus {
+    outline: none;
+  }
 
-	.v-popper__inner {
-		background-color: var(--color-background);
-		padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
-		color: var(--color, var(--primary));
-		border: none;
-		border-radius: 0;
-		max-width: 100%;
-		min-width: var(--width-min, fit-content);
-	}
+  .v-popper__inner {
+    background-color: var(--color-background);
+    padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
+    color: var(--color, var(--color-body));
+    border: none;
+    border-radius: 0;
+    max-width: 100%;
+    min-width: var(--width-min, fit-content);
+  }
 
-	.v-popper__arrow-inner,
-	.v-popper__arrow-outer {
-		border-color: var(--color-background);
-	}
+  .v-popper__arrow-inner,
+  .v-popper__arrow-outer {
+    border-color: var(--color-background);
+  }
 }
 
 .v-popper--theme-dropdown,
 .v-popper--theme-menu {
-	.v-popper__inner {
-		--padding: #{vars.$spacer vars.$spacer * 1.5};
-	}
+  .v-popper__inner {
+    --padding: #{vars.$spacer vars.$spacer * 1.5};
+  }
 }
 
 .v-popper--theme-word-options {
-	--color-background: var(--white-100);
+  .v-popper__inner {
+    --padding: #{vars.$spacer * 0.4};
 
-	.v-popper__inner {
-		--padding: #{vars.$spacer * 0.4};
+    @include mx.breakpoint(sm) {
+      --gap: #{vars.$spacer * 0.25};
+    }
 
-		@include mx.breakpoint(sm) {
-			--gap: #{vars.$spacer * 0.25};
-		}
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap, #{vars.$spacer * 0.4});
 
-		> div {
-			display: flex;
-			flex-direction: column;
-			gap: var(--gap, #{vars.$spacer * 0.4});
-
-			@include mx.breakpoint(sm) {
-				--gap: #{vars.$spacer * 0.25};
-			}
-		}
-	}
+      @include mx.breakpoint(sm) {
+        --gap: #{vars.$spacer * 0.25};
+      }
+    }
+  }
 }

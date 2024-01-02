@@ -11,11 +11,11 @@
       <button
         type="button"
         :class="[
-          'c-button c-button--center-icon c-button--filter',
+          'c-button c-button--center-icon c-button--filter c-button--dashed-border',
           { 'has-active-filter': wordSearch.activeLetterFilter },
         ]"
       >
-        <span class="u-icon-untouchable c-button--center-icon">
+        <span class="c-button--center-icon">
           <Filter />
         </span>
         alphabetisch
@@ -28,11 +28,12 @@
 
     <button
       v-if="wordSearch.activeLetterFilter"
-      class="c-filter-dropdown__active-filter"
+      type="button"
+      class="c-filter-dropdown__active-filter c-button c-button--center-icon"
       @click="setLetterFilter('')"
     >
       <span>{{ wordSearch.activeLetterFilter }}</span>
-      <span><X :width="10" height="10" /></span>
+      <X width="10" height="10" />
     </button>
   </div>
 </template>
@@ -41,7 +42,7 @@
 import { ref } from "vue";
 import X from "virtual:icons/lucide/x";
 import Filter from "virtual:icons/lucide/filter";
-import LetterFilter from "@components/LetterFilter.vue";
+import LetterFilter from "@components/filter/LetterFilter.vue";
 import { useStore } from "@nanostores/vue";
 import { onSet } from "nanostores";
 import { $wordSearch, setLetterFilter } from "@stores/index";

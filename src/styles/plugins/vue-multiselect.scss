@@ -1,0 +1,68 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.multiselect {
+  @include butler-mx.dark-mode-class {
+    color: var(--yellow-500);
+  }
+
+  &__tags {
+    border-radius: 0;
+  }
+
+  &__tags,
+  &__content-wrapper {
+    border-color: var(--color-border, var(--orange-600));
+
+    @include butler-mx.dark-mode-class {
+      --color-border: color-mix(in srgb, var(--blue) 80%, white);
+    }
+  }
+
+  &__content-wrapper {
+    background: var(--color-background, var(--orange-100));
+
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--new-blue-200);
+    }
+  }
+
+  &__tags,
+  &__single {
+    background: var(--color-background, var(--orange-100));
+
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--new-blue-600);
+    }
+  }
+
+  &__option {
+    &--selected {
+      background: var(--color-background, var(--orange-300));
+      color: var(--color, var(--color-body));
+
+      @include butler-mx.dark-mode-class {
+        --color-background: var(--blue);
+      }
+
+      &::after {
+        color: var(--color, var(--orange-100));
+
+        @include butler-mx.dark-mode-class {
+          --color: var(--new-blue-200);
+        }
+      }
+    }
+
+    &--disabled {
+      background: var(--color-background, var(--orange-200)) !important;
+      color: var(--color, var(--color-body)) !important;
+
+      @include butler-mx.dark-mode-class {
+        --color-background: var(--new-blue-300) !important;
+      }
+    }
+  }
+}

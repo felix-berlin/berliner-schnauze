@@ -88,28 +88,36 @@ export const getAllWords = async (
               article
               berlinerisch
               learnMore
+              berolinismus
               examples {
                 example
                 exampleExplanation
-                fieldGroupName
               }
               translations {
-                fieldGroupName
                 translation
               }
+              alternativeWords {
+                alternativeWord
+              }
               relatedWords {
-                ... on BerlinerWord {
-                  id
-                  wordProperties {
-                    berlinerisch
+                nodes {
+                  ... on BerlinerWord {
+                    id
+                    wordProperties {
+                      berlinerisch
+                    }
+                    slug
                   }
-                  slug
                 }
+              }
+              wikimediaFiles {
+                wikimediaFile
+                description
+                caption
               }
             }
             berlinerischWordTypes {
               nodes {
-                slug
                 name
               }
             }
@@ -123,7 +131,11 @@ export const getAllWords = async (
         }
       }
     }
-    `).then((res) => res.data);
+    `)
+      .then((res) => res.data)
+      .catch((err) => {
+        console.error("error: ", err);
+      });
 
     allWords = [...allWords, ...data.berlinerWords.edges];
     cursor = data?.berlinerWords.pageInfo.endCursor;

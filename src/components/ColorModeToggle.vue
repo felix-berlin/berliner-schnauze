@@ -2,17 +2,23 @@
   <button
     type="button"
     class="c-color-mode-toggle c-button c-button--center-icon"
-    :class="classes"
+    :class="cssClasses"
     @click="toggleMode()"
   >
     <Transition name="fade" mode="out-in">
-      <template v-if="isDark">
-        <Moon focusable="false" aria-label="dunkles Farbschema aktivieren" />
-      </template>
+      <Moon
+        v-if="isDarkMode"
+        key="dark"
+        focusable="false"
+        aria-label="dunkles Farbschema aktivieren"
+      />
 
-      <template v-else-if="!isDark">
-        <Sun focusable="false" aria-label="helles Farbschema aktivieren" />
-      </template>
+      <Sun
+        v-else-if="!isDarkMode"
+        key="light"
+        focusable="false"
+        aria-label="helles Farbschema aktivieren"
+      />
     </Transition>
   </button>
 </template>
@@ -21,15 +27,16 @@
 import Moon from "virtual:icons/lucide/moon";
 import Sun from "virtual:icons/lucide/sun";
 import { useStore } from "@nanostores/vue";
-import { isDarkMode } from "@stores/index";
+import { $isDarkMode, setDarkMode } from "@stores/index";
 
 interface ColorModeToggleProps {
-  classes?: string;
+  cssClasses?: string[] | string;
+  toggleClasses?: string[];
 }
 
-const { classes = "" } = defineProps<ColorModeToggleProps>();
+const { cssClasses, toggleClasses = ["dark"] } = defineProps<ColorModeToggleProps>();
 
-const isDark = useStore(isDarkMode);
+const isDarkMode = useStore($isDarkMode);
 
 /**
  * Toggle the color mode.
@@ -37,12 +44,12 @@ const isDark = useStore(isDarkMode);
  * @return  {void}
  */
 const toggleMode = (): void => {
-  isDarkMode.set(!isDark.value);
+  setDarkMode(!isDarkMode.value);
 
-  if (isDark.value) {
-    document.querySelector("html")?.classList.add("dark");
+  if (isDarkMode.value) {
+    document.querySelector("html")?.classList.add(...toggleClasses);
   } else {
-    document.querySelector("html")?.classList.remove("dark");
+    document.querySelector("html")?.classList.remove(...toggleClasses);
   }
 };
 </script>

@@ -1,0 +1,135 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.c-filter-search {
+  display: grid;
+  grid-template-columns: [start] 1fr [end];
+  gap: vars.$spacer * 1.5;
+
+  @include butler-mx.breakpoint("md") {
+    grid-template-columns: [start] 1fr 3fr [end];
+  }
+
+  .c-word-search-filter-toggle {
+    grid-area: filter-toggle;
+
+    @include butler-mx.breakpoint("md") {
+      display: none;
+    }
+  }
+
+  &__filter {
+    @include butler-mx.breakpoint("md") {
+      display: block !important;
+    }
+    @include butler-mx.breakpoint("md", "max") {
+      max-width: var(--width-max, 100lvw);
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      background-color: var(--color-background, var(--floating-color-background));
+      overflow-x: auto;
+      padding: 85px vars.$spacer * 1.5 vars.$spacer * 1.5;
+      display: flex;
+      flex-direction: column;
+      box-shadow:
+        0.5px 0 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-500)) 8%, transparent),
+        4px 0 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-500)) 16%, transparent);
+
+      @include butler-mx.dark-mode-class {
+        --color-box-shadow: black;
+      }
+    }
+    @include butler-mx.breakpoint("xs") {
+      --width-max: 50lvw;
+    }
+
+    :where(h2) {
+      margin-top: 0;
+    }
+
+    :where(h2:not(:first-of-type)) {
+      margin-top: vars.$spacer * 2;
+    }
+
+    :where(h3) {
+      margin-top: vars.$spacer * 1.5;
+    }
+  }
+
+  &__berolinismus {
+    :where(i) {
+      font-size: 0.7rem;
+    }
+
+    .c-berolinismus-switch {
+      margin-top: vars.$spacer * 0.7;
+    }
+  }
+
+  .c-filter-search__close {
+    align-self: flex-end;
+
+    @include butler-mx.breakpoint("md") {
+      display: none;
+    }
+  }
+
+  &__reset {
+    --padding: 0.5rem;
+
+    gap: 0.7rem;
+    margin-top: 3rem;
+    width: 100%;
+  }
+
+  &__list {
+    display: grid;
+    grid-template: "filter-toggle search" min-content "result-count result-count" min-content "list list" 1fr / min-content 1fr;
+    gap: vars.$spacer * 1.5 vars.$spacer;
+
+    @include butler-mx.breakpoint("md") {
+      grid-template-columns: 1fr;
+      grid-template-areas: "search" "result-count" "list";
+    }
+  }
+
+  .c-word-search-list__result-count {
+    grid-area: result-count;
+    margin: 0;
+  }
+
+  &__headline-wrap {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.5;
+  }
+
+  .c-word-list {
+    grid-area: list;
+  }
+
+  .c-word-search {
+    grid-area: search;
+  }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(-100%);
+}
+
+.slide-leave-from,
+.slide-enter-to {
+  transform: translateX(0);
+}

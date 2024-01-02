@@ -1,0 +1,11 @@
+@use "@styles/variables" as vars;
+@forward "list";
+@forward "transitions";
+
+.u-max-body-width {
+  $spacing-outer: 20px;
+
+  max-width: vars.$body-max-width + $spacing-outer;
+  margin: 0 auto;
+  padding: 0 $spacing-outer;
+}

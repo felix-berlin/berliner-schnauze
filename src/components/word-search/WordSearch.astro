@@ -1,0 +1,40 @@
+---
+import "@styles/components/_filter-search.scss";
+import WordSearchList from "@components/word-search/WordSearchList.vue";
+import WordFilter from "@components/word-search/WordFilter.vue";
+import type { RootQueryToBerlinerWordConnectionEdge } from "@ts_types/generated/graphql";
+import type { CleanBerlinerWord } from "@stores/index";
+
+interface WordSearchProps {
+  words: RootQueryToBerlinerWordConnectionEdge[];
+}
+
+const { words } = Astro.props as WordSearchProps;
+
+const cleanWords = words.map(({ node }): CleanBerlinerWord => {
+  const { seo, title, ...cleanNode } = node;
+  return cleanNode;
+});
+
+const availableWordGroups = Array.from(new Set(words.map(({ node }) => node.wordGroup))).sort();
+
+const wordTypes = Array.from(
+  new Set(
+    words
+      .map(({ node }) => node.berlinerischWordTypes?.nodes)
+      .flat()
+      .map((node) => node?.name),
+  ),
+).sort();
+---
+
+<section class="c-filter-search">
+  <WordFilter client:only="vue" />
+  <WordSearchList
+    words={cleanWords}
+    availableLetterGroups={availableWordGroups}
+    wordTypes={wordTypes}
+    client:only="vue"
+    cssClass={"c-filter-search__list"}
+  />
+</section>

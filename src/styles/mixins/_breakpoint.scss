@@ -1,4 +1,4 @@
-@use '@styles/variables/variables' as vars;
-@forward '@sass-butler/mixins/breakpoint' with (
-	$breakpoints: vars.$custom-breakpoints
+@use "@styles/variables" as vars;
+@forward "@sass-butler/mixins/breakpoint" with (
+  $breakpoints: vars.$custom-breakpoints
 );

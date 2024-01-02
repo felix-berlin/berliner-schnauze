@@ -1,5 +1,5 @@
-@use "@styles/variables/variables" as vars;
-@use "@styles/mixins/mixins" as mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-filter-dropdown {
@@ -7,36 +7,13 @@
   align-items: center;
   gap: vars.$spacer * 0.5;
 
-  .c-letter-filter__list {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(45px, 1fr));
-    gap: 1rem;
-
-    &-item {
-      aspect-ratio: 1/1;
-    }
-
-    .c-letter-filter__button {
-      --color-background: var(--white-100);
-
-      width: 100%;
-      height: 100%;
-    }
-  }
-
-  &__button {
-    --padding: #{vars.$spacer * 0.25 vars.$spacer * 0.5};
-
-    gap: vars.$spacer * 0.25;
-    font-weight: 600;
-  }
-
   &__active-filter {
-    background-color: var(--primary);
+    --color-background: var(--orange-500);
+
     color: var(--white-100);
     display: flex;
     gap: 0.25rem;
     padding: 0.15rem 0.45rem;
-    border: 1px dashed var(--white-100);
+    border: 1px dashed var(--orange-500);
   }
 }

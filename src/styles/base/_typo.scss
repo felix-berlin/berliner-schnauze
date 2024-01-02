@@ -1,5 +1,5 @@
-@use "@styles/variables/variables" as vars;
-@use "@styles/mixins/mixins" as mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 
 @font-face {
   font-weight: normal;
@@ -8,7 +8,6 @@
   src: url("/fonts/BerlinerRegular.woff2") format("woff2");
   font-display: swap;
 }
-
 @font-face {
   font-weight: 400;
   font-style: normal;
@@ -16,7 +15,6 @@
   src: url("/fonts/Berlin.woff2") format("woff2");
   font-display: swap;
 }
-
 @font-face {
   font-weight: 400;
   font-style: italic;
@@ -24,7 +22,6 @@
   src: url("/fonts/Berlin-Italic.woff2") format("woff2");
   font-display: swap;
 }
-
 @font-face {
   font-weight: 700;
   font-style: normal;
@@ -32,7 +29,6 @@
   src: url("/fonts/Berlin-Bold.woff2") format("woff2");
   font-display: swap;
 }
-
 @font-face {
   font-weight: 900;
   font-style: normal;
@@ -51,10 +47,11 @@
 html {
   font-family: vars.$berlin;
   font-weight: normal;
+  letter-spacing: 1px;
 }
 
 a {
-  color: var(--primary);
+  color: inherit;
   cursor: pointer;
   text-decoration: var(--decoration-text, none);
 }

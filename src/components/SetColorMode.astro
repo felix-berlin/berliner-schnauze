@@ -1,0 +1,38 @@
+---
+
+---
+
+<!-- Block until theme class is set -->
+<script is:inline>
+  /**
+   * Check if dark theme is preferred or set by user
+   */
+  const isDarkTheme = () => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("darkMode")) {
+      return localStorage.getItem("darkMode");
+    }
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "true";
+    }
+    return "false";
+  };
+
+  /**
+   * Set dark theme class
+   */
+  const setDarkClass = () => {
+    const htmlClasses = document.documentElement.classList;
+
+    if (isDarkTheme() === "false") {
+      htmlClasses.remove("dark");
+    } else {
+      htmlClasses.add("dark");
+    }
+  };
+
+  setDarkClass();
+
+  localStorage.setItem("darkMode", isDarkTheme());
+
+  document.addEventListener("astro:after-swap", setDarkClass);
+</script>

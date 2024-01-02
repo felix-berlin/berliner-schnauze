@@ -6,7 +6,7 @@
       distance: 10,
       placement: 'right',
     }"
-    class="c-single-word__crown"
+    class="c-word-of-the-day-crown"
     aria-hidden="true"
   >
     <Crown />
@@ -17,24 +17,26 @@
 import { onBeforeMount, computed } from "vue";
 import Crown from "virtual:icons/lucide/crown";
 import { useStore } from "@nanostores/vue";
-import { wordOfTheDay, getWordOfTheDay } from "@stores/index";
-import type { BerlinerWord_Wordproperties } from "@ts_types/generated/graphql";
+import { $wordOfTheDay, getWordOfTheDay } from "@stores/index";
+import type { WordProperties } from "@ts_types/generated/graphql";
 
 interface IsWordOfTheDayProps {
   wordId: number;
-  word: BerlinerWord_Wordproperties["berlinerisch"];
+  word: WordProperties["berlinerisch"];
 }
 
 const { wordId, word } = defineProps<IsWordOfTheDayProps>();
 
-const dailyWord = useStore(wordOfTheDay);
+const wordOfTheDay = useStore($wordOfTheDay);
 
 const isWordOfTheDay = computed(() => {
-  return wordId === dailyWord?.value?.word?.ID;
+  return wordId === wordOfTheDay?.value?.word?.ID;
 });
 
 onBeforeMount(() => {
-  getWordOfTheDay();
+  if (!wordOfTheDay.value?.word?.ID) {
+    getWordOfTheDay();
+  }
 });
 </script>
 

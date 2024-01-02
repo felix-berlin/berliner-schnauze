@@ -1,6 +1,7 @@
 ---
 import { pwaInfo } from "virtual:pwa-info";
 import { ViewTransitions } from "astro:transitions";
+import SetColorMode from "@components/SetColorMode.astro";
 
 export interface Title {
   title: string;
@@ -38,38 +39,7 @@ const canonicalURL = Astro.url.href;
 const { title, seo } = Astro.props as SeoProps & Title;
 ---
 
-<!-- Block until theme class is set -->
-<script>
-  /**
-   * Check if dark theme is preferred or set by user
-   */
-  const isDarkTheme = (): string | boolean | null => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("darkMode")) {
-      return localStorage.getItem("darkMode");
-    }
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "true";
-    }
-    return "false";
-  };
-
-  /**
-   * Set dark theme class
-   */
-  const setDarkClass = () => {
-    const htmlClasses = document.documentElement.classList;
-
-    if (isDarkTheme() === "false") {
-      htmlClasses.remove("dark");
-    } else {
-      htmlClasses.add("dark");
-    }
-  };
-
-  setDarkClass();
-
-  document.addEventListener("astro:after-swap", setDarkClass);
-</script>
+<SetColorMode />
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />

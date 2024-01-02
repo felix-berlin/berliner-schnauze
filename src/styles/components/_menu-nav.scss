@@ -1,81 +1,88 @@
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
 
 .c-menu-nav {
-	display: flex;
-	justify-content: flex-end;
-	gap: vars.$spacer * 3;
-	grid-area: menu-nav;
+  display: flex;
+  justify-content: flex-end;
+  gap: vars.$spacer * 3;
+  grid-area: menu-nav;
 
-	&__item-button,
-	&__item-link {
-		color: var(--color-icon, vars.$white-100);
-		border: 1px dashed var(--color-border, transparent);
-		transition: all 0.3s ease-in-out;
+  &__item-button,
+  &__item-link {
+    transition: all 0.3s ease-in-out;
 
-		&:hover {
-			--color-border: var(--color-icon);
-		}
-	}
+    &:hover {
+      --color-border: var(--color-icon);
+    }
+  }
 
-	&__item {
-		&.is-hidden {
-			@include mx.breakpoint('xs', 'max') {
-				display: none;
-			}
-		}
-	}
+  &__item {
+    &.is-hidden {
+      @include mx.breakpoint("xs", "max") {
+        display: none;
+      }
+    }
+  }
 
-	&__item-link {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: vars.$spacer * 0.25;
-	}
+  &__item-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: vars.$spacer * 0.25;
+  }
 
-	&__main-elements {
-		display: flex;
-		justify-content: flex-end;
-		width: 100%;
-		gap: vars.$spacer * 0.7;
-	}
+  &__main-elements {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    gap: vars.$spacer * 0.7;
+  }
 }
 
 .c-menu-more {
-	&__list {
-		display: flex;
-		flex-direction: column;
-		gap: var(--gap, vars.$spacer);
-		font-size: var(--size-font, 1.15rem);
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap, vars.$spacer);
+    font-size: var(--size-font, 1.15rem);
 
-		@include mx.breakpoint('md') {
-			--size-font: inherit;
-			--gap: #{vars.$spacer * 0.5};
-		}
-	}
+    @include mx.breakpoint("md") {
+      --size-font: inherit;
+      --gap: #{vars.$spacer * 0.5};
+    }
 
-	&__item {
-		&.is-split {
-			border-top: 1px dashed var(--primary);
-			padding-top: var(--padding-top, vars.$spacer);
+    .c-install-button {
+      --padding: 0;
 
-			@include mx.breakpoint('md') {
-				--padding-top: #{vars.$spacer * 0.5};
-			}
-		}
-	}
+      border: none;
+      font-size: inherit;
+    }
+  }
 
-	.c-dropdown {
-		&__menu {
-			--offset: 100%;
+  &__item {
+    &.is-split {
+      border-top: 1px dashed var(--primary);
+      padding-top: var(--padding-top, vars.$spacer);
 
-			@include mx.breakpoint('sm') {
-				--offset: 60%;
-			}
+      @include mx.breakpoint("md") {
+        --padding-top: #{vars.$spacer * 0.5};
+      }
+    }
+  }
 
-			&.is-active {
-				border-bottom: 1px dashed vars.$white-100;
-			}
-		}
-	}
+  .c-dropdown {
+    &__menu {
+      --offset: 100%;
+
+      @include mx.breakpoint("sm") {
+        --offset: 60%;
+      }
+
+      &.is-active {
+        border-bottom: 1px dashed vars.$white-100;
+      }
+    }
+  }
 }

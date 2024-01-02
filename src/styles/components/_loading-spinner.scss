@@ -1,78 +1,78 @@
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
-@use '@sass-butler/mixins' as butler-mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 // @see: https://codepen.io/jenning/pen/YzNmzaV
 
 .c-loader {
-	position: absolute;
-	transform: translate(-50%, -50%);
-	top: 50%;
-	left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
 
-	&__spinner {
-		--color: var(--primary);
-		--size-bar: 0.8vmin;
+  &__spinner {
+    --color: var(--primary);
+    --size-bar: 0.8vmin;
 
-		@include mx.breakpoint('sm') {
-			--size-bar: 0.4vmin;
-		}
+    @include mx.breakpoint("sm") {
+      --size-bar: 0.4vmin;
+    }
 
-		position: relative;
-		width: 50%;
-		display: grid;
-		place-items: center;
+    position: relative;
+    width: 50%;
+    display: grid;
+    place-items: center;
 
-		&::before,
-		&::after {
-			content: '';
-			box-sizing: border-box;
-			position: absolute;
-		}
+    &::before,
+    &::after {
+      content: "";
+      box-sizing: border-box;
+      position: absolute;
+    }
 
-		&--5 {
-			&::before,
-			&::after {
-				--height-bar: 8vmin;
+    &--5 {
+      &::before,
+      &::after {
+        --height-bar: 8vmin;
 
-				height: var(--height-bar);
-				width: var(--size-bar);
-				background-color: var(--color);
-				animation: loader-5 0.6s cubic-bezier(0, 0, 0.03, 0.9) infinite;
+        height: var(--height-bar);
+        width: var(--size-bar);
+        background-color: var(--color);
+        animation: loader-5 0.6s cubic-bezier(0, 0, 0.03, 0.9) infinite;
 
-				@include mx.breakpoint('sm') {
-					--height-bar: 3vmin;
-				}
-			}
+        @include mx.breakpoint("sm") {
+          --height-bar: 3vmin;
+        }
+      }
 
-			&::before {
-				left: calc(50% - 1vmin);
-				top: calc(50% - 3vmin);
-			}
+      &::before {
+        left: calc(50% - 1vmin);
+        top: calc(50% - 3vmin);
+      }
 
-			&::after {
-				left: calc(50% + 1vmin);
-				top: calc(50% - 1vmin);
-				animation-delay: 0.2s;
-			}
-		}
-	}
+      &::after {
+        left: calc(50% + 1vmin);
+        top: calc(50% - 1vmin);
+        animation-delay: 0.2s;
+      }
+    }
+  }
 }
 
 @keyframes loader-5 {
-	100% {
-		opacity: 0;
-	}
+  100% {
+    opacity: 0;
+  }
 
-	0% {
-		transform: translateY(-6vmin);
-	}
+  0% {
+    transform: translateY(-6vmin);
+  }
 
-	33% {
-		opacity: 1;
-	}
+  33% {
+    opacity: 1;
+  }
 
-	88% {
-		transform: translateY(3vmin);
-	}
+  88% {
+    transform: translateY(3vmin);
+  }
 }

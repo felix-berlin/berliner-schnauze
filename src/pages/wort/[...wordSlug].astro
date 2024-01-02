@@ -2,6 +2,7 @@
 // Styles
 import "@styles/objects/_word.scss";
 import "@styles/components/_single-word.scss";
+import "astro-breadcrumbs/breadcrumbs.scss";
 
 // Imports
 import { getAllWords } from "@services/api";
@@ -10,12 +11,17 @@ import ArrowLeft from "~icons/lucide/arrow-left";
 import Info from "~icons/lucide/info";
 import ExternalLink from "~icons/lucide/external-link";
 import Crown from "~icons/lucide/crown";
+import ChevronRight from "~icons/lucide/chevron-right";
 import WordExamples from "@components/word/WordExamples.vue";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import RelatedWords from "@components/RelatedWords.vue";
 import RandomWordButton from "@components/RandomWordButton.vue";
 import NavigateBack from "@components/NavigateBack.vue";
 import { routeToWord, seoData } from "@utils/helpers";
+import { Breadcrumbs } from "astro-breadcrumbs";
+import { Picture } from "astro:assets";
+import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
+import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -51,12 +57,41 @@ const formattedDate = (date: string, locale = "de-DE") => {
 
   return dateToFormat.toLocaleString(locale, { year: "numeric", month: "long", day: "numeric" });
 };
+
+const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
+  return (
+    word?.alternativeWord +
+    (wordProps?.alternativeWords && index !== wordProps?.alternativeWords?.length - 1 ? ", " : "")
+  );
+});
+
+/**
+ * TODO: Fix RelatedWords (allways returns null)
+ */
+// console.log(wordProps?.relatedWords?.nodes);
+
+/**
+ * Create a list of all wikimedia files
+ */
+const createWikimediaFileList = async () => {
+  if (!wordProps?.wikimediaFiles) return;
+
+  let files = [];
+  for (const file of wordProps?.wikimediaFiles!) {
+    const img = await fetchWikimediaAPI(file?.wikimediaFile!);
+    files.push({ image: img, description: file?.description, caption: file?.caption });
+  }
+  return files;
+};
+
+const wikimediaFiles = await createWikimediaFileList();
+console.log(wikimediaFiles);
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
-  <NavigateBack client:load>
-    <ArrowLeft /> zurück
-  </NavigateBack>
+  <Breadcrumbs indexText="start">
+    <ChevronRight slot="separator" width="20" height="20" />
+  </Breadcrumbs>
 
   <article class="c-single-word">
     <header class="c-single-word__header">
@@ -75,14 +110,57 @@ const formattedDate = (date: string, locale = "de-DE") => {
           )
         }
       </h1>
+      <WordOptionDropdown word={word} client:only="vue" />
     </header>
+
+    {
+      wordProps?.wikimediaFiles && wikimediaFiles && (
+        <div class="c-single-word__image-wrapper">
+          {wikimediaFiles?.map((file) => {
+            return file.caption ? (
+              <figure>
+                <Picture
+                  src={file.image.preferred.url}
+                  alt={file.description ?? wordProps?.berlinerisch!}
+                  width={file.image.preferred.width}
+                  height={file.image.preferred.height}
+                  formats={["avif", "webp"]}
+                  widths={[327, 455, 637]}
+                  class="c-single-word__image"
+                />
+                <figcaption>{file.caption}</figcaption>
+              </figure>
+            ) : (
+              <Picture
+                src={file.image.preferred.url}
+                alt={file.description ?? wordProps?.berlinerisch!}
+                width={file.image.preferred.width}
+                height={file.image.preferred.height}
+                formats={["avif", "webp"]}
+                widths={[327, 455, 637]}
+                class="c-single-word__image"
+              />
+            );
+          })}
+        </div>
+      )
+    }
+
+    {
+      wordProps?.alternativeWords && (
+        <div class="c-single-word__alternative-words-wrapper">
+          <h2>Selbe Bedeutung wie:</h2>
+          <p class="c-single-word__alternative-word">{alternativeWords}</p>
+        </div>
+      )
+    }
 
     {
       wordProps?.learnMore && (
         <div class="c-single-word__learn-more-wrapper">
-          <Info />{" "}
+          <Info />
           <a href={wordProps?.learnMore} target="_blank" class="c-single-word__learn-more-link">
-            Erfahre mehr über dieses Wort{" "}
+            Erfahre mehr über dieses Wort
             <span class="c-single-word__learn-more-link-icon">
               <ExternalLink width="10" height="10" />
             </span>
@@ -112,23 +190,21 @@ const formattedDate = (date: string, locale = "de-DE") => {
       </ul>
     </div>
 
-    <div class="c-single-word__examples-wrapper">
-      {
-        wordProps?.examples && (
-          <>
-            <h2 class="c-single-word__sub-headline">Beispiele:</h2>
-            <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
-          </>
-        )
-      }
-    </div>
+    {
+      wordProps?.examples && (
+        <div class="c-single-word__examples-wrapper">
+          <h2 class="c-single-word__sub-headline">Beispiele:</h2>
+          <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
+        </div>
+      )
+    }
 
     {
-      wordProps?.relatedWords && (
+      wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
         <div class="c-single-word__related-words-wrapper">
           <h3>Verwandte Worte:</h3>
           <ul class="c-single-word__related-words-list">
-            {wordProps.relatedWords.map((word): BerlinerWord[] => {
+            {wordProps.relatedWords.nodes.map((word): BerlinerWord[] => {
               return (
                 <li class="c-single-word__related-word">
                   <a href={routeToWord(word?.slug!)} class="c-single-word__related-word-link">

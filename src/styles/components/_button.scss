@@ -1,13 +1,32 @@
-@use "@styles/variables/variables" as vars;
+@use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-button {
   cursor: pointer;
   padding: var(--padding, #{vars.$spacer * 0.25});
-  background-color: var(--color-background, var(--white-100));
-  border: var(--width-border, 1px) var(--style-border, solid) var(--color-border, var(--grey-100));
-  color: var(--color, var(--grey-100));
+  background-color: var(--color-background, var(--orange-100));
+  border: var(--width-border, 1px) var(--style-border, solid) var(--color-border, var(--orange-600));
+  color: var(--color, var(--blue));
   transition: all 0.3s ease-in-out;
+
+  @include butler-mx.dark-mode-class {
+    --color-background: var(--new-blue-600);
+    --color: var(--yellow-500);
+    --color-border: color-mix(in srgb, var(--blue) 80%, white);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  @include butler-mx.hover {
+    box-shadow: 0 0 12px 0 var(--color-box-shadow, color-mix(in srgb, var(--orange-500) 60%, white));
+
+    @include butler-mx.dark-mode-class {
+      --color-box-shadow: var(--orange-500);
+    }
+  }
 
   &--theme {
     --color-background: var(--primary);
@@ -15,10 +34,9 @@
 
     font-family: vars.$berliner;
 
-    &:hover {
+    @include butler-mx.hover {
       --style-border: dashed;
     }
-
     @include butler-mx.dark-mode-class {
       --color-border: var(--white-100);
     }
@@ -40,17 +58,6 @@
     display: flex;
     align-items: center;
     gap: vars.$spacer * 0.25;
-    margin: 0.5rem 0 0;
-  }
-
-  &--word-option {
-    --color-border: transparent;
-
-    transition: all 0.3s ease-in-out;
-
-    &:hover {
-      --color-border: var(--grey-100);
-    }
   }
 
   &--filter {
@@ -59,6 +66,20 @@
     & > *,
     & {
       gap: vars.$spacer * 0.25;
+    }
+
+    &:hover,
+    &.is-active,
+    &.is-current {
+      --color-border: var(--yellow-500);
+      --style-border: dashed;
+      --color-background: var(--orange-500);
+      --color: var(--yellow-500);
+
+      @include butler-mx.dark-mode-class {
+        --color-border: var(--yellow-500);
+        --color-background: var(--orange-500);
+      }
     }
   }
 }

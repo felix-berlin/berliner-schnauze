@@ -8,7 +8,10 @@
       <div class="c-menu-nav__main-elements">
         <SearchModal class="c-menu-nav__item" />
 
-        <ColorModeToggle class="c-menu-nav__item c-menu-nav__item-button u-button-reset" />
+        <ColorModeToggle
+          class="c-menu-nav__item c-menu-nav__item-button u-button-reset"
+          :toggle-classes="['dark', 'cc--darkmode']"
+        />
 
         <VMenu
           placement="bottom-end"
@@ -22,7 +25,7 @@
             class="c-button c-menu-nav__item-button u-button-reset c-button--center-icon"
             aria-label="Website Menu Navigation"
           >
-            <span class="u-icon-untouchable u-icon-wrapper c-button--center-icon">
+            <span class="u-icon-wrapper c-button--center-icon">
               <MenuIcon />
             </span>
           </button>

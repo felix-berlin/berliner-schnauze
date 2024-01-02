@@ -1,33 +1,38 @@
-@use '@styles/variables/variables' as vars;
-@use '@styles/mixins/mixins' as mx;
-@use '@sass-butler/mixins' as butler-mx;
-@use '@sass-butler/functions' as butler-fn;
+@use "sass:map";
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
 
 body {
-	margin: 0;
-	color: var(--color-body, #{vars.$grey-100});
-	background-color: var(--color-background-body, #{butler-fn.hex-to-rgb(vars.$red-100, 10%)});
-	background-image: radial-gradient(var(--color-gradient-body-1, #{butler-fn.hex-to-rgb(vars.$red-200, 50%)}) 1.1px, var(--color-gradient-body-2, #{butler-fn.hex-to-rgb(vars.$red-100, 50%)}) 1.1px);
-	background-size: 22px 22px;
+  margin: 0;
+  color: var(--color-body);
+  background-color: var(
+    --color-background-body,
+    color-mix(in srgb, var(--orange-100) 5%, transparent)
+  );
+  // background-image: radial-gradient(
+  //   var(--color-gradient-body-1, color-mix(in srgb, var(--blue) 30%, transparent)) 1.1px,
+  //   var(--color-gradient-body-2, #{butler-fn.hex-to-rgb(#cad2d9, 50%)}) 1.1px
+  // );
+  background-image: radial-gradient(
+    var(--color-gradient-body-1, color-mix(in srgb, var(--blue) 15%, transparent)) 1.1px,
+    var(--color-gradient-body-2, color-mix(in srgb, var(--orange-100) 10%, white)) 1.1px
+  );
+  background-size: 22px 22px;
 
-	@include butler-mx.feature('motion') {
-		transition: background-color 1s ease-in-out;
-	}
-	@include butler-mx.dark-mode-class {
-		--color-body: #{vars.$grey-200};
-		--color-gradient-body-1: #{butler-fn.hex-to-rgb(vars.$blue-200, 50%)};
-		--color-gradient-body-2: #{butler-fn.hex-to-rgb(vars.$blue-100, 50%)};
-		--color-background-body: #{butler-fn.hex-to-rgb(vars.$blue-100, 10%)};
-	}
+  @include butler-mx.feature("motion") {
+    transition: background-color 0.7s ease-in-out;
+  }
+  @include butler-mx.dark-mode-class {
+    --color-gradient-body-1: color-mix(in srgb, var(--new-blue-400) 98%, white);
+    --color-gradient-body-2: color-mix(in srgb, var(--blue) 70%, transparent);
+    --color-background-body: var(--new-blue-300);
+  }
 }
 
 @include butler-mx.select-style(vars.$red-200, vars.$white-100);
 
-html[class='dark'] {
-	@include butler-mx.select-style(vars.$blue-200, vars.$white-100);
-}
-
-img {
-	width: 100%;
-	height: auto;
+html[class="dark"] {
+  @include butler-mx.select-style(map.get(vars.$blue-shades, "blue-200"), vars.$white-100);
 }

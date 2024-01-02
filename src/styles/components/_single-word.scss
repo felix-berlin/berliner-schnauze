@@ -1,12 +1,12 @@
-@use "@styles/variables/variables" as vars;
-@use "@styles/mixins/mixins" as mx;
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
 .c-single-word {
   --size-quote-icon: 32px;
 
-  background-color: rgba(#fff, 0.6);
+  background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
   border: 1px dashed var(--grey-100);
   padding: vars.$spacer * 1.5;
   display: flex;
@@ -16,8 +16,18 @@
     0 0.5px 0.6px rgb(0 0 0 / 8%),
     0 4px 5px rgb(0 0 0 / 16%);
 
+  @include butler-mx.dark-mode-class {
+    --color-background: var(--new-blue-400);
+  }
+
   &__header {
     position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .c-options-dropdown {
+    align-self: flex-start;
   }
 
   &__crown {
@@ -147,6 +157,16 @@
     }
   }
 
+  &__image-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: vars.$spacer * 1.5;
+
+    picture > source {
+      display: none;
+    }
+  }
+
   &__learn-more {
     &-wrapper {
       display: flex;
@@ -172,8 +192,7 @@
   &__related-words-list {
     display: flex;
     flex-wrap: wrap;
-    column-gap: vars.$spacer * 2;
-    row-gap: vars.$spacer * 0.5;
+    gap: vars.$spacer * 0.5 vars.$spacer * 2;
   }
 
   &__footer {

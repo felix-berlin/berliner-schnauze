@@ -1,12 +1,10 @@
 <template>
   <nav class="c-letter-filter">
     <ul class="c-letter-filter__list u-list-reset">
-      <li
-        class="c-letter-filter__list-item"
-        :class="{ 'is-current': wordSearchStore.activeLetterFilter === '' }"
-      >
+      <li class="c-letter-filter__list-item">
         <button
-          class="c-letter-filter__button c-letter-filter__button--all c-button"
+          class="c-letter-filter__button is-all c-button c-button--filter"
+          :class="{ 'is-current': wordSearchStore.activeLetterFilter === '' }"
           type="button"
           @click="setLetterFilter('')"
         >
@@ -14,17 +12,17 @@
         </button>
       </li>
       <li
-        v-for="(letter, index) in wordSearchStore.letterGroups"
-        :key="index"
+        v-for="letter in wordSearchStore.letterGroups"
+        :key="letter!"
         class="c-letter-filter__list-item"
-        :class="{ 'is-current': letter === wordSearchStore.activeLetterFilter }"
       >
         <button
-          :aria-label="'Filter nach Buchstabe ' + letter"
+          :aria-label="`Filter nach Buchstabe ${letter}`"
           type="button"
-          class="c-letter-filter__button c-button"
-          :title="'Filter nach Buchstabe ' + letter"
-          @click="setLetterFilter(letter)"
+          class="c-letter-filter__button c-button c-button--filter"
+          :class="{ 'is-current': letter === wordSearchStore.activeLetterFilter }"
+          :title="`Filter nach Buchstabe ${letter}`"
+          @click="setLetterFilter(letter!)"
         >
           {{ letter }}
         </button>

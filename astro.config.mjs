@@ -5,11 +5,16 @@ import matomo from "astro-matomo";
 import Icons from "unplugin-icons/vite";
 import allAlias from "./alias.ts";
 import AstroPWA from "@vite-pwa/astro";
+import sentry from "@sentry/astro";
+import spotlightjs from "@spotlightjs/astro";
 
 // https://astro.build/config
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   prefetch: true,
+  image: {
+    domains: ["upload.wikimedia.org"],
+  },
   integrations: [
     vue({
       appEntrypoint: "/src/pages/_app",
@@ -87,6 +92,15 @@ export default defineConfig({
         directoryAndTrailingSlashHandler: true,
       },
     }),
+    sentry({
+      dsn: import.meta.env.SENTRY_DNS,
+      tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
+      sourceMapsUploadOptions: {
+        project: import.meta.env.SENTRY_PROJECT,
+        authToken: import.meta.env.SENTRY_AUTH_TOKEN,
+      },
+    }),
+    spotlightjs(),
   ],
   vite: {
     plugins: [

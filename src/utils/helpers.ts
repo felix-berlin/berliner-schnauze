@@ -33,3 +33,26 @@ export const seoData = (data, baseUrl: string = import.meta.env.PUBLIC_SITE_URL)
     },
   };
 };
+
+/**
+ * A wrapper for startViewTransition that checks if the method exists.
+ * If it doesn't exist, it will just call the callback function.
+ * Users with reduced motion will also not see the transition.
+ *
+ * @param   {void}  fn
+ *
+ * @return  {void}
+ */
+export const useViewTransition = (fn: () => void): void => {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!document.startViewTransition || reducedMotion) {
+    fn();
+
+    return;
+  }
+
+  document.startViewTransition(() => {
+    fn();
+  });
+};

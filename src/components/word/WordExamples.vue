@@ -1,52 +1,55 @@
 <template>
-  <Component :is="element" v-if="examples" :class="`${rootBemClass}__example-wrapper`">
-    <Quote width="44" height="44" :stroke-width="0" :class="`${rootBemClass}__quote-icon`" />
+  <div v-if="examples" :class="`${props.rootBemClass}__example-wrapper`">
+    <Quote
+      :width="44"
+      :height="44"
+      :stroke-width="0"
+      :class="`${props.rootBemClass}__quote-icon`"
+    />
 
-    <div v-if="examples && examples.length === 1" :class="`${rootBemClass}__single-example`">
+    <div v-if="examples && examples.length === 1" :class="`${props.rootBemClass}__single-example`">
       <p
         v-if="examples && examples.length === 1"
-        :class="`${rootBemClass}__example`"
+        :class="`${props.rootBemClass}__example`"
         v-text="examples[0]?.example"
       />
 
       <p
         v-if="examples && examples.length === 1 && examples[0]?.exampleExplanation"
-        :class="`${rootBemClass}__example-explanation`"
+        :class="`${props.rootBemClass}__example-explanation`"
         v-text="'– ' + examples[0].exampleExplanation"
       />
     </div>
 
     <!-- If more than one example exist -->
-    <ol v-if="examples && examples.length > 1" :class="`${rootBemClass}__examples`">
+    <ol v-if="examples && examples.length > 1" :class="`${props.rootBemClass}__examples`">
       <li
         v-for="(item, exampleIndex) in examples"
         :key="exampleIndex"
-        :class="`${rootBemClass}__examples-list-item`"
+        :class="`${props.rootBemClass}__examples-list-item`"
       >
-        <span :class="rootBemClass + '__examples-item'">{{ item?.example }}</span>
-        <div v-if="item?.exampleExplanation" :class="`${rootBemClass}__examples-explanation`">
+        <span :class="props.rootBemClass + '__examples-item'">{{ item?.example }}</span>
+        <div v-if="item?.exampleExplanation" :class="`${props.rootBemClass}__examples-explanation`">
           – {{ item.exampleExplanation }}
         </div>
       </li>
     </ol>
-  </Component>
+  </div>
 </template>
 
 <script setup lang="ts">
 import Quote from "virtual:icons/lucide/quote";
-import type { Maybe, BerlinerWord_Wordproperties_Examples } from "@ts_types/generated/graphql";
+import type { Maybe, WordPropertiesExamples } from "@ts_types/generated/graphql";
 
 interface WordExamplesProps {
-  examples: Maybe<BerlinerWord_Wordproperties_Examples>[];
-  element?: string;
+  examples?: Maybe<WordPropertiesExamples>[];
   rootBemClass?: string;
 }
 
-const {
-  examples,
-  element = "div",
-  rootBemClass = "c-word-list",
-} = defineProps<WordExamplesProps>();
+const props = withDefaults(defineProps<WordExamplesProps>(), {
+  examples: () => [],
+  rootBemClass: "c-word-list",
+});
 </script>
 
 <style scoped></style>
