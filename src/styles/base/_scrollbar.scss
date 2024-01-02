@@ -1,6 +1,7 @@
 @use "sass:map";
 @use "@styles/variables" as vars;
 
+// TODO: Refactor this
 html {
   --scrollbar-primary: var(--orange-400);
   --scrollbar-tertiary: var(--orange-200);

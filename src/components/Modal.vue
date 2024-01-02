@@ -8,7 +8,7 @@
     <div class="c-modal__container">
       <button
         v-if="showCloseButton"
-        class="c-modal__close c-button c-button--theme c-button--center-icon"
+        class="c-modal__close c-button c-button--center-icon"
         type="submit"
         aria-label="schließen"
         @click="closeModal"

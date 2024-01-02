@@ -41,8 +41,10 @@
     }
 
     &:has(.c-modal__close) {
-      display: flex;
-      flex-direction: column;
+      .c-modal__container {
+        display: flex;
+        flex-direction: column;
+      }
 
       .c-modal__close {
         align-self: flex-end;
@@ -52,7 +54,7 @@
   }
 
   &__container {
-    min-height: 50dvh;
+    min-height: 30dvh;
   }
 
   &.has-close-on-click-outside {
