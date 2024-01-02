@@ -71,11 +71,14 @@
     &:hover,
     &.is-active,
     &.is-current {
-      --color-border: var(--blue);
+      --color-border: var(--yellow-500);
       --style-border: dashed;
+      --color-background: var(--orange-500);
+      --color: var(--yellow-500);
 
       @include butler-mx.dark-mode-class {
-        --color-border: var(--orange-500);
+        --color-border: var(--yellow-500);
+        --color-background: var(--orange-500);
       }
     }
   }
