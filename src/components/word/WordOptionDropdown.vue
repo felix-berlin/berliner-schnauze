@@ -84,7 +84,7 @@ const shareWord = (slug: string): void => {
     url: routeToWord(slug),
   };
 
-  usingShare.share(shareData);
+  usingShare.share(shareData).catch((err) => err);
   createToastNotify({ message: "Wort geteilt", status: "success" });
 };
 
