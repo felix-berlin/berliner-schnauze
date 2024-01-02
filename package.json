@@ -102,7 +102,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.0.4",
-    "@astrojs/vue": "^4.0.6",
+    "@astrojs/vue": "^4.0.7",
     "@felix_berlin/sass-butler": "2.6.3",
     "@iconify-json/lucide": "^1.1.150",
     "@nanostores/persistent": "^0.9.1",
@@ -112,7 +112,7 @@
     "@sentry/vue": "^7.91.0",
     "@spotlightjs/astro": "^1.0.9",
     "@vueuse/core": "^10.7.1",
-    "astro": "^4.0.8",
+    "astro": "^4.0.9",
     "astro-breadcrumbs": "^1.8.1",
     "astro-matomo": "^1.4.1",
     "dotenv": "^16.3.1",
