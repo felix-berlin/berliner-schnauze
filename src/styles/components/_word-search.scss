@@ -43,10 +43,10 @@
     }
 
     &::placeholder {
-      color: var(--color-placeholder, var(--grey-100));
+      color: var(--color-placeholder, color-mix(in srgb, var(--blue) 80%, transparent));
 
       @include butler-mx.dark-mode-class {
-        --color-placeholder: color-mix(in srgb, var(--yellow-500) 60%, transparent);
+        --color-placeholder: color-mix(in srgb, var(--yellow-500) 80%, transparent);
       }
     }
 
