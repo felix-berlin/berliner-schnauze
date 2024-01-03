@@ -9,7 +9,7 @@ interface ConfettiProps {
   pieces?: number;
 }
 
-const { pieces = 10 }: ConfettiProps = defineProps<ConfettiProps>();
+const { pieces = 10 } = defineProps<ConfettiProps>();
 </script>
 
 <style lang="scss">
