@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.0.2...v3.1.0) (2024-01-02)
+
+
+### Bug Fixes
+
+* **scroll to top:** needs to hide under flyout ([5c89471](https://github.com/felix-berlin/berliner-schnauze/commit/5c89471849e5ff625b6d7181de2237bf7b5318b8))
+* **scrollbar:** custom scrollbar styles everywhere ([7939ae0](https://github.com/felix-berlin/berliner-schnauze/commit/7939ae002db1c0d98bf5b892099c8073e466b1d4))
+
+
+### Features
+
+* **PWA:** hide button if installed ([6ec81d5](https://github.com/felix-berlin/berliner-schnauze/commit/6ec81d57978d502ad65af5fb843507f8d7e4a055))
+
+## [3.0.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.0.1...v3.0.2) (2024-01-02)
+
+
+### Bug Fixes
+
+* catch error ([1283b61](https://github.com/felix-berlin/berliner-schnauze/commit/1283b617688a21b351de369c44cb699a9990b07a))
+* **ToastNotify:** prevent errors -> eary return if unsupported ([e4ae52e](https://github.com/felix-berlin/berliner-schnauze/commit/e4ae52ea68b1ad4635057263e1cbf4888081631a))
+* **WordOptionDropdown:** hide unsupported features ([99a5ec2](https://github.com/felix-berlin/berliner-schnauze/commit/99a5ec267f2ed413ef0460f8ee0337a86a8fe5a1))
+* **WordOptionDropdown:** hydration error ([2763868](https://github.com/felix-berlin/berliner-schnauze/commit/27638682d20437ddad0b1ebafb2ba2ebd4215d24))
+
 ## [3.0.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.0.0...v3.0.1) (2024-01-02)
 
 

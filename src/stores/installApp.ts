@@ -11,6 +11,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 export const $installPrompt = atom<BeforeInstallPromptEvent | null>(null);
 export const $showInstallButton = atom<boolean>(false);
+export const $isPwaInstalled = atom<boolean>(false);
 
 /**
  * Sets the install prompt event.
@@ -20,6 +21,8 @@ export const $showInstallButton = atom<boolean>(false);
  * @return  {void}
  */
 onMount($installPrompt, () => {
+  $isPwaInstalled.set(isPwaInstalled());
+
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
 
@@ -27,6 +30,17 @@ onMount($installPrompt, () => {
     $showInstallButton.set(true);
   });
 });
+
+/**
+ * Checks if the PWA is already installed.
+ *
+ * @return  {boolean}
+ */
+export const isPwaInstalled: () => boolean = () => {
+  return (
+    window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
+  );
+};
 
 /**
  * Triggers the PWA install prompt.

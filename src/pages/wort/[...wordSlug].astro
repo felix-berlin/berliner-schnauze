@@ -7,16 +7,13 @@ import "astro-breadcrumbs/breadcrumbs.scss";
 // Imports
 import { getAllWords } from "@services/api";
 import Layout from "@layouts/Layout.astro";
-import ArrowLeft from "~icons/lucide/arrow-left";
 import Info from "~icons/lucide/info";
 import ExternalLink from "~icons/lucide/external-link";
-import Crown from "~icons/lucide/crown";
 import ChevronRight from "~icons/lucide/chevron-right";
 import WordExamples from "@components/word/WordExamples.vue";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import RelatedWords from "@components/RelatedWords.vue";
 import RandomWordButton from "@components/RandomWordButton.vue";
-import NavigateBack from "@components/NavigateBack.vue";
 import { routeToWord, seoData } from "@utils/helpers";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import { Picture } from "astro:assets";
