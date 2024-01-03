@@ -82,10 +82,9 @@ const createWikimediaFileList = async () => {
 };
 
 const wikimediaFiles = await createWikimediaFileList();
-console.log(wikimediaFiles);
 ---
 
-<Layout content={seoData(word)} contentClasses="o-word">
+<Layout content={seoData(word)} contentClasses="o-word" word={word}>
   <Breadcrumbs indexText="start">
     <ChevronRight slot="separator" width="20" height="20" />
   </Breadcrumbs>

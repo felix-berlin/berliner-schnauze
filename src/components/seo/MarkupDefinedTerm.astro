@@ -1,0 +1,28 @@
+---
+import type { BerlinerWord } from "@ts_types/generated/graphql";
+
+const { data } = Astro.props as BerlinerWord;
+
+const createDefinedTerm = (data: BerlinerWord) => {
+  const wordProperties = data?.wordProperties || {};
+  const alternativeWords = wordProperties.alternativeWords?.map((a) => a?.alternativeWord) || [];
+
+  const definedTerm: { [key: string]: any } = {
+    "@context": "https://schema.org",
+    "@type": "DefinedTerm",
+  };
+
+  if (data?.title) definedTerm.name = data.title;
+  if (alternativeWords.length > 0) definedTerm.alternateName = alternativeWords;
+  if (wordProperties.berlinerisch) definedTerm.description = wordProperties.berlinerisch;
+  if (data?.slug) definedTerm.termCode = data.slug;
+  if (data?.id) definedTerm.identifier = data.id;
+  if (wordProperties?.wikimediaFiles && wordProperties?.wikimediaFiles?.length > 0) {
+    definedTerm.image = wordProperties?.wikimediaFiles.map((f) => f?.wikimediaFile);
+  }
+
+  return JSON.stringify(definedTerm);
+};
+---
+
+{data && <script type="application/ld+json" set:html={createDefinedTerm(data)} />}

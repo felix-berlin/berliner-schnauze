@@ -8,6 +8,7 @@ import MainHeader from "@components/header/MainHeader.astro";
 import ToastNotifyContainer from "@components/toast/ToastNotifyContainer.vue";
 
 import type { SeoProps } from "@components/BaseHead.astro";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
 
 export interface DefaultLayoutProps {
   content: {
@@ -16,19 +17,21 @@ export interface DefaultLayoutProps {
   };
   contentClasses?: Array<string> | string;
   bodyClasses?: Array<string> | string;
+  word?: BerlinerWord;
 }
 
 const {
   content: { title, seo },
   contentClasses,
   bodyClasses,
+  word,
 } = Astro.props as DefaultLayoutProps;
 ---
 
 <!doctype html>
 <html lang="de">
   <head>
-    <BaseHead title={title} seo={seo} />
+    <BaseHead title={title} seo={seo} word={word} />
 
     <slot name="head" />
   </head>

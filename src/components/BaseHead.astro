@@ -2,6 +2,8 @@
 import { pwaInfo } from "virtual:pwa-info";
 import { ViewTransitions } from "astro:transitions";
 import SetColorMode from "@components/SetColorMode.astro";
+import MarkupDefinedTerm from "@components/seo/MarkupDefinedTerm.astro";
+import type { BerlinerWord } from "@ts_types/generated/graphql";
 
 export interface Title {
   title: string;
@@ -33,10 +35,11 @@ export interface Seo {
 export interface SeoProps {
   title: Title;
   seo: Seo;
+  word?: BerlinerWord;
 }
 
 const canonicalURL = Astro.url.href;
-const { title, seo } = Astro.props as SeoProps & Title;
+const { title, seo, word } = Astro.props as SeoProps & Title;
 ---
 
 <SetColorMode />
@@ -108,6 +111,8 @@ const { title, seo } = Astro.props as SeoProps & Title;
 }
 
 <link rel="preconnect" href="//cms.webshaped.de" />
+
+<MarkupDefinedTerm data={word} />
 
 <ViewTransitions />
 
