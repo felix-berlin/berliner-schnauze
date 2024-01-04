@@ -303,18 +303,18 @@ export const $searchResultCount = computed($filteredWordList, (filteredWordList)
   return filteredWordList.length;
 });
 
-const getLocalWords = async () => {
-  return await fetch("http://localhost:4321/api/getWords.json").then((res) => res.json());
-};
+// const getLocalWords = async () => {
+//   return await fetch("/api/getWords.json").then((res) => res.json());
+// };
 
 // $wordSearch.setKey("wordList", await getLocalWords());
-onMount($wordSearch, () => {
-  task(async () => {
-    console.log(await getLocalWords());
-    const wordData = await getLocalWords();
+// onMount($wordSearch, () => {
+// task(async () => {
+//   console.log(await getLocalWords());
+// });
+// const wordData = await getLocalWords();
 
-    $wordSearch.setKey("wordList", wordData.words);
-    $wordSearch.setKey("letterGroups", wordData.wordGroups);
-    $wordSearch.setKey("wordTypes", wordData.wordTypes);
-  });
-});
+// $wordSearch.setKey("wordList", wordData.words);
+// $wordSearch.setKey("letterGroups", wordData.wordGroups);
+// $wordSearch.setKey("wordTypes", wordData.wordTypes);
+// });
