@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.1.0...v3.2.0) (2024-01-04)
+
+
+### Features
+
+* add simple 404 page ([9ccba84](https://github.com/felix-berlin/berliner-schnauze/commit/9ccba84441f409511254b57cfc6ccccc97cfdaba))
+
 # [3.1.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.0.2...v3.1.0) (2024-01-02)
 
 
