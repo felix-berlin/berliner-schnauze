@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.2.0...v3.2.1) (2024-01-04)
+
+
+### Bug Fixes
+
+* await word of the day ([e307dba](https://github.com/felix-berlin/berliner-schnauze/commit/e307dbad670db6031e94587e1b77d85c2ae077d9))
+
 # [3.2.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.1.0...v3.2.0) (2024-01-04)
 
 
