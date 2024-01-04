@@ -28,7 +28,10 @@ const props = defineProps<WordSearchListProps>();
 const searchResultCount = useStore($searchResultCount);
 
 const getLocalWords = async () => {
-  const url = import.meta.env.DEV ? "http://localhost:4321" : import.meta.env.PUBLIC_SITE_URL;
+  // const url = import.meta.env.DEV ? "http://localhost:4321" : import.meta.env.PUBLIC_SITE_URL;
+  const url = import.meta.env.DEV
+    ? "http://localhost:4321"
+    : "https://feature-from--local-data.berliner-schnauze.pages.dev";
   return await fetch(`${url}/api/getWords.json`).then((res) => res.json());
 };
 
