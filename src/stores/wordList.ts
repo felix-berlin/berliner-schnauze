@@ -1,8 +1,12 @@
-import { computed, action, atom } from "nanostores";
+import { computed, action, atom, onMount, task } from "nanostores";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import Fuse from "fuse.js";
 import { useViewTransition } from "@utils/helpers";
-import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
+import type {
+  Maybe,
+  BerlinerWord,
+  RootQueryToBerlinerWordConnectionEdge,
+} from "@ts_types/generated/graphql";
 
 export type CleanBerlinerWord = Omit<BerlinerWord, "seo" | "title">;
 
@@ -297,4 +301,20 @@ export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
 
 export const $searchResultCount = computed($filteredWordList, (filteredWordList) => {
   return filteredWordList.length;
+});
+
+const getLocalWords = async () => {
+  return await fetch("http://localhost:4321/api/getWords.json").then((res) => res.json());
+};
+
+// $wordSearch.setKey("wordList", await getLocalWords());
+onMount($wordSearch, () => {
+  task(async () => {
+    console.log(await getLocalWords());
+    const wordData = await getLocalWords();
+
+    $wordSearch.setKey("wordList", wordData.words);
+    $wordSearch.setKey("letterGroups", wordData.wordGroups);
+    $wordSearch.setKey("wordTypes", wordData.wordTypes);
+  });
 });

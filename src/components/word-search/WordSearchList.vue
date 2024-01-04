@@ -13,29 +13,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
 import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
-import { $wordSearch, $searchResultCount } from "@stores/index";
+import { $searchResultCount } from "@stores/index";
 import { useStore } from "@nanostores/vue";
-import type { Maybe } from "@ts_types/generated/graphql";
-import type { CleanBerlinerWord } from "@stores/index";
 
 type WordSearchListProps = {
-  words: CleanBerlinerWord[];
-  availableLetterGroups: Maybe<string>[];
-  wordTypes: Maybe<string>[];
   cssClass: string;
 };
 
 const props = defineProps<WordSearchListProps>();
 
 const searchResultCount = useStore($searchResultCount);
-
-$wordSearch.setKey("letterGroups", props.availableLetterGroups);
-$wordSearch.setKey("wordTypes", props.wordTypes);
-$wordSearch.setKey("wordList", props.words);
 </script>
 
 <style lang="scss">
