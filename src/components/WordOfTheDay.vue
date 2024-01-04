@@ -162,8 +162,8 @@ const toggleCelebration = (toggleValue: boolean) => {
   showTooltip.value = toggleValue;
 };
 
-onBeforeMount(() => {
-  getWordOfTheDay();
+onBeforeMount(async () => {
+  await getWordOfTheDay();
 });
 
 onMounted(() => {
