@@ -28,7 +28,8 @@ const props = defineProps<WordSearchListProps>();
 const searchResultCount = useStore($searchResultCount);
 
 const getLocalWords = async () => {
-  return await fetch("http://localhost:4321/api/getWords.json").then((res) => res.json());
+  const url = import.meta.env.DEV ? "http://localhost:4321" : import.meta.env.PUBLIC_SITE_URL;
+  return await fetch(`${url}/api/getWords.json`).then((res) => res.json());
 };
 
 const wordData = await getLocalWords();
