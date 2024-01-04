@@ -12,7 +12,7 @@ import type { SeoProps } from "@components/BaseHead.astro";
 export interface DefaultLayoutProps {
   content: {
     title: string;
-    seo: SeoProps;
+    seo?: SeoProps;
   };
   contentClasses?: Array<string> | string;
   bodyClasses?: Array<string> | string;
