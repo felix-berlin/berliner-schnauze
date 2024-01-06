@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.2.1...v3.2.2) (2024-01-06)
+
+
+### Bug Fixes
+
+* **MainHeader:** remove class list ([24596f3](https://github.com/felix-berlin/berliner-schnauze/commit/24596f34e41c75f05eaa2fe74db8e47cb8e0c48d))
+
 ## [3.2.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.2.0...v3.2.1) (2024-01-04)
 
 
