@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.2.2...v3.3.0) (2024-01-06)
+
+
+### Features
+
+* **carbon-badge:** add component to footer ([f1b97d0](https://github.com/felix-berlin/berliner-schnauze/commit/f1b97d080f491ec4f0a24a191b2c85de7b7096f3))
+
 ## [3.2.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.2.1...v3.2.2) (2024-01-06)
 
 
