@@ -6,7 +6,11 @@ import allAlias from "./alias.ts";
 
 export default defineConfig({
   plugins: [
-    Vue(),
+    Vue({
+      script: {
+        propsDestructure: true,
+      },
+    }),
     Icons({
       iconCustomizer(collection, icon, props) {
         // customize all icons in this collection
@@ -18,9 +22,7 @@ export default defineConfig({
     }), // chooses the compiler automatically
   ],
   test: {
-    include: [
-      "src/tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-    ],
+    include: ["src/tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     exclude: ["src/tests/unit/__needsFix/*"],
     globals: true,
     environment: "jsdom",

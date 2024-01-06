@@ -11,7 +11,7 @@
   </button>
 
   <Modal
-    :uid="searchId"
+    ref="searchModal"
     :open="searchVisible"
     position="top"
     :disable-scroll="true"
@@ -26,13 +26,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, onUnmounted } from "vue";
+import type { Ref } from "vue";
 import Modal from "@components/Modal.vue";
 import SearchBar from "@components/SearchBar.vue";
 import SearchIcon from "virtual:icons/lucide/search";
 import SquareSlash from "virtual:icons/lucide/square-slash";
 
-const searchId = "main-search";
 const searchVisible = ref(false);
+const searchModal: Ref<InstanceType<typeof Modal> | null> = ref(null);
 
 /**
  * Open the search modal
@@ -60,7 +61,13 @@ const closeSearch = (): void => {
  */
 const focusSearch = (): void => {
   nextTick(() => {
-    const inputElement = document?.querySelector(`#${searchId} input`) as HTMLInputElement;
+    // Get the root DOM element of the component
+    const rootElement = searchModal.value?.$el;
+
+    // Find the <input> element within the component
+    const inputElement = rootElement?.querySelector("input");
+
+    // Focus the <input> element
     inputElement?.focus();
   });
 };

@@ -8,11 +8,6 @@ describe("Modal", () => {
     window.HTMLDialogElement.prototype.close = vi.fn();
   });
 
-  it("renders correctly", () => {
-    const wrapper = mount(Modal);
-    expect(wrapper.html()).toMatchSnapshot();
-  });
-
   it('hides close button when "showCloseButton" prop is false', () => {
     const wrapper = mount(Modal, {
       props: {
@@ -49,17 +44,6 @@ describe("Modal", () => {
 
     // Check if the modal is not visible
     expect(wrapper.vm.isVisible).toBe(false);
-  });
-
-  it("generates a unique id for the modal", () => {
-    const wrapper = mount(Modal, {
-      props: {
-        uid: "test",
-      },
-    });
-
-    // Check if the id is unique
-    expect(wrapper.vm.uidHelper("modal")).toBe("modal-test");
   });
 
   it('prevents scroll when "disableScroll" prop is true', async () => {

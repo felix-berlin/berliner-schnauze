@@ -1,6 +1,6 @@
 <template>
   <dialog
-    :id="uidHelper('modal')"
+    :id="uid"
     ref="modal"
     class="c-modal"
     :class="[`c-modal--${position}`, { 'has-close-on-click-outside': closeOnClickOutside }]"
@@ -26,7 +26,7 @@ import { ref, onMounted, watch, onUnmounted } from "vue";
 import X from "virtual:icons/lucide/x";
 
 export interface ModalProps {
-  uid: string;
+  uid?: string;
   open?: boolean;
   showCloseButton?: boolean;
   disableScroll?: boolean;
@@ -36,7 +36,7 @@ export interface ModalProps {
 }
 
 const {
-  uid,
+  uid = crypto.randomUUID(),
   open = false,
   showCloseButton = true,
   disableScroll = false,
@@ -70,17 +70,6 @@ const closeModal = (): void => {
   isVisible.value = false;
   emit("close");
   preventScroll(false);
-};
-
-/**
- * Generate a unique id for the modal
- *
- * @param   {string}  id  Name of the HTML ID
- *
- * @return  {string}      Unique ID
- */
-const uidHelper = (id: string): string => {
-  return `${id}-${uid}`;
 };
 
 /**

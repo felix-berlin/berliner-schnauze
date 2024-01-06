@@ -113,7 +113,7 @@
       padding-bottom: vars.$spacer * 0.5;
       flex-wrap: wrap;
       justify-content: var(--content-justify, center);
-      align-items: baseline;
+      align-items: center;
 
       @include mx.breakpoint("sm") {
         --content-justify: flex-start;
