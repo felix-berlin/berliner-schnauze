@@ -92,14 +92,15 @@ export default defineConfig({
         directoryAndTrailingSlashHandler: true,
       },
     }),
-    sentry({
-      dsn: import.meta.env.SENTRY_DNS,
-      tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
-      sourceMapsUploadOptions: {
-        project: import.meta.env.SENTRY_PROJECT,
-        authToken: import.meta.env.SENTRY_AUTH_TOKEN,
-      },
-    }),
+    sentry(),
+    // sentry({
+    //   dsn: import.meta.env.SENTRY_DNS,
+    //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
+    //   sourceMapsUploadOptions: {
+    //     project: import.meta.env.SENTRY_PROJECT,
+    //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
+    //   },
+    // }),
     spotlightjs(),
   ],
   vite: {
