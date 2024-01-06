@@ -1,6 +1,6 @@
 <template>
   <button
-    v-if="hideIfInstalled && !isPwaInstalled"
+    v-show="hideIfInstalled && !isPwaInstalled"
     v-tooltip="{
       content: 'Entschuldige die App kann leider nicht installiert werden.',
       disabled: showButton,
