@@ -3,7 +3,7 @@ import { action, atom } from "nanostores";
 export type ToastStatus = "success" | "error" | "info" | "warning";
 
 export type ToastNotify = {
-  id: number;
+  id?: number;
   message: string;
   status?: ToastStatus;
   showStatusIcon?: boolean;

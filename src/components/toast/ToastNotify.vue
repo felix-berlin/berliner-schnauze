@@ -41,8 +41,8 @@ type StylePositionType = {
 };
 
 const {
-  id,
   message,
+  id = crypto.randomUUID(),
   status = "info",
   showStatusIcon = true,
   position = "top-right",
