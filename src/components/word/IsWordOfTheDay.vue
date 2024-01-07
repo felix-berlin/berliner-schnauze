@@ -2,7 +2,7 @@
   <span
     v-if="isWordOfTheDay"
     v-tooltip="{
-      content: `${word} ist das heutige Wort des Tages`,
+      content: `${word}, ist das heutige Wort des Tages`,
       distance: 10,
       placement: 'right',
     }"
@@ -40,4 +40,4 @@ onBeforeMount(() => {
 });
 </script>
 
-<style scoped></style>
+<style lang="scss"></style>
