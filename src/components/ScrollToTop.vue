@@ -54,6 +54,12 @@ onMounted(() => {
 
   const body = document.querySelector("#docStart");
 
+  const footerElement = document.querySelector(".c-footer__ground");
+
+  if (footerElement) {
+    observer.value.observe(footerElement);
+  }
+
   if (body) {
     observer.value.observe(body);
   }
