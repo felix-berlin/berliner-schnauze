@@ -26,6 +26,12 @@
     justify-content: space-between;
   }
 
+  .c-word-of-the-day-crown {
+    position: absolute;
+    top: -15px;
+    color: vars.$gold;
+  }
+
   .c-options-dropdown {
     align-self: flex-start;
   }

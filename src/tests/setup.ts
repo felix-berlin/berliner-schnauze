@@ -35,3 +35,7 @@ const ResizeObserverMock = vi.fn(() => ({
   disconnect: vi.fn(),
 }));
 vi.stubGlobal("ResizeObserver", ResizeObserverMock);
+// Mock the HTMLDialogElement.prototype.showModal() method
+global.HTMLDialogElement.prototype.showModal = () => {};
+// Mock the HTMLDialogElement.prototype.close() method
+global.HTMLDialogElement.prototype.close = () => {};

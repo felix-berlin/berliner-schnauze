@@ -29,10 +29,6 @@
     height: 100%;
     text-transform: var(--transform-text, uppercase);
 
-    @include butler-mx.dark-mode-class {
-      --color: var(--yellow-500);
-    }
-
     &.is-all {
       --transform-text: none;
     }

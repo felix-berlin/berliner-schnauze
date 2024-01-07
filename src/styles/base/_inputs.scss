@@ -104,7 +104,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 
 .c-input--checkbox,
 .c-input--radio {
-  --color-active: var(--orange-400);
+  --color-active: var(--orange-500);
   --color-inner-active: #fff;
   --color-border-disabled-checked: color-mix(in srgb, var(--orange-400) 60%, white);
   --color-background-disabled-checked: color-mix(in srgb, var(--orange-400) 80%, white);
