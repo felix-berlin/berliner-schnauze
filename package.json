@@ -44,7 +44,7 @@
     "lint:js": "eslint --ext .ts,.js,.astro,.vue src/ --ignore-path .gitignore --ignore-pattern '/src/tests/*'",
     "lint:style": "stylelint \"**/*.{scss,sass}\" --ignore-path .gitignore",
     "lint": "pnpm run lint:js && pnpm run lint:style",
-    "test:unit": "vitest",
+    "test:unit": "vitest --coverage",
     "test:unit:coverage": "vitest run --coverage",
     "format": "npx prettier --write .",
     "gql:generate": "gql-gen --config codegen.ts",
@@ -103,7 +103,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.0.4",
     "@astrojs/vue": "^4.0.8",
-    "@felix_berlin/sass-butler": "2.6.3",
+    "@felix_berlin/sass-butler": "3.0.0",
     "@iconify-json/lucide": "^1.1.151",
     "@nanostores/persistent": "^0.9.1",
     "@nanostores/vue": "^0.10.0",
