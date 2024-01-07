@@ -1,25 +1,22 @@
 <template>
-  <VueMultiselect
+  <select
+    id="sort"
     v-model="selected"
-    :options="options"
-    track-by="name"
-    label="name"
-    group-label="sortType"
-    group-values="sorts"
-    :searchable="false"
-    :allow-empty="false"
-    select-label="Drücke Enter zum Auswählen"
-    select-group-label="Drücke Enter zum Auswählen der Gruppe"
-    selected-label="Ausgewählt"
-    deselect-label="Drücke Enter zum Entfernen"
-    deselect-group-label="Drücke Enter zum Entfernen der Gruppe"
-    @select="onSelect"
-  />
+    name="sort"
+    aria-labelledby="sort-headline"
+    class="c-select"
+    @change="$setSortOrder(selected.category, `${selected.category}Order`, selected.sort)"
+  >
+    <optgroup v-for="group in options" :key="group.sortType" :label="group.sortType">
+      <option v-for="option in group.sorts" :key="option.name" :value="option">
+        {{ option.name }}
+      </option>
+    </optgroup>
+  </select>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import VueMultiselect from "vue-multiselect";
 import { $setSortOrder } from "@stores/index";
 import type { WordList } from "@stores/index";
 
@@ -47,27 +44,13 @@ const options = reactive([
   },
 ]);
 
-const selected = ref(options[0].sorts[0]);
+const selected = ref(options[0].sorts[0] as SelectOption);
 
 type SelectOption = {
   name: string;
   category: WordList["activeOrderCategory"];
   sort: "asc" | "desc";
 };
-
-/**
- * On multiselect select
- *
- * @param   {SelectOption}  selected
- *
- * @return  {void}
- */
-const onSelect = (selected: SelectOption): void => {
-  $setSortOrder(selected.category, `${selected.category}Order`, selected.sort);
-};
 </script>
 
-<style lang="scss">
-@use "vue-multiselect/dist/vue-multiselect.css" as *;
-@use "@styles/plugins/vue-multiselect";
-</style>
+<style lang="scss"></style>

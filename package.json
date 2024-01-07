@@ -122,7 +122,6 @@
     "pagefind": "^1.0.4",
     "typescript": "^5.3.3",
     "vue": "^3.4.5",
-    "vue-multiselect": "3.0.0-beta.3",
     "vue3-virtual-scroll-list": "^0.2.1"
   }
 }

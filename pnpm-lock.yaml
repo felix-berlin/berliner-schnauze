@@ -68,9 +68,6 @@ dependencies:
   vue:
     specifier: ^3.4.5
     version: 3.4.5(typescript@5.3.3)
-  vue-multiselect:
-    specifier: 3.0.0-beta.3
-    version: 3.0.0-beta.3
   vue3-virtual-scroll-list:
     specifier: ^0.2.1
     version: 0.2.1(vue@3.4.5)
@@ -12944,11 +12941,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /vue-multiselect@3.0.0-beta.3:
-    resolution: {integrity: sha512-P7Fx+ovVF7WMERSZ0lw6N3p4H4bnQ3NcaY3ORjzFPv0r/6lpIqvFWmK9Xnwze9mgAvmNV1foI1VWrBmjnfBTLQ==}
-    engines: {node: '>= 4.0.0', npm: '>= 3.0.0'}
-    dev: false
 
   /vue-resize@2.0.0-alpha.1(vue@3.4.5):
     resolution: {integrity: sha512-7+iqOueLU7uc9NrMfrzbG8hwMqchfVfSzpVlCMeJQe4pyibqyoifDNbKTZvwxZKDvGkB+PdFeKvnGZMoEb8esg==}
