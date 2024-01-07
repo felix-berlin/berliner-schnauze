@@ -31,7 +31,7 @@ interface ScrollToTopProps {
 
 const {
   showAtPosition = 500,
-  buttonAriaLabel,
+  buttonAriaLabel = "nach oben scrollen",
   tooltip,
   hideTooltip = false,
 } = defineProps<ScrollToTopProps>();
