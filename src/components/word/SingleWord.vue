@@ -41,9 +41,9 @@
 </template>
 
 <script setup lang="ts">
+import { defineAsyncComponent } from "vue";
 import WordExamples from "@components/word/WordExamples.vue";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
-import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import { routeToWord } from "@utils/helpers";
 import type { CleanBerlinerWord } from "@stores/index";
 
@@ -53,6 +53,8 @@ type WordProps = {
 };
 
 const { source, index } = defineProps<WordProps>();
+
+const IsWordOfTheDay = defineAsyncComponent(() => import("@components/word/IsWordOfTheDay.vue"));
 </script>
 
 <style scoped></style>
