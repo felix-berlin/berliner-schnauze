@@ -14,10 +14,10 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, computed } from "vue";
+import { computed } from "vue";
 import Crown from "virtual:icons/lucide/crown";
 import { useStore } from "@nanostores/vue";
-import { $wordOfTheDay, getWordOfTheDay } from "@stores/index";
+import { $wordOfTheDay } from "@stores/index";
 import type { WordProperties } from "@ts_types/generated/graphql";
 
 interface IsWordOfTheDayProps {
@@ -31,12 +31,6 @@ const wordOfTheDay = useStore($wordOfTheDay);
 
 const isWordOfTheDay = computed(() => {
   return wordId === wordOfTheDay?.value?.word?.ID;
-});
-
-onBeforeMount(() => {
-  if (!wordOfTheDay.value?.word?.ID) {
-    getWordOfTheDay();
-  }
 });
 </script>
 

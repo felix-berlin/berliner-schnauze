@@ -1,4 +1,5 @@
-import { action, map } from "nanostores";
+import { action, onMount } from "nanostores";
+import { persistentMap } from "@nanostores/persistent";
 
 interface Translation {
   translation: string;
@@ -29,13 +30,28 @@ type WordOfTheDay = {
   word?: Word;
   loading: boolean;
   error: boolean;
+  timestamp: number;
 };
 
-export const $wordOfTheDay = map<WordOfTheDay>({
-  word: {},
-  loading: true,
-  error: false,
-});
+export const $wordOfTheDay = persistentMap<WordOfTheDay>(
+  "wordOfTheDay:",
+  {
+    word: {},
+    loading: true,
+    error: false,
+    timestamp: 0,
+  },
+  {
+    encode: (value) => JSON.stringify(value),
+    decode(value) {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        return value;
+      }
+    },
+  },
+);
 
 /**
  * Get word of the day
@@ -59,6 +75,9 @@ export const getWordOfTheDay = action($wordOfTheDay, "getWordOfTheDay", async (s
         throw new Error("Failed to fetch Word of the Day");
       }
 
+      const timeOfFetch = new Date().getTime();
+      store.setKey("timestamp", timeOfFetch);
+
       return res.json();
     })
     .then((data) => {
@@ -68,4 +87,8 @@ export const getWordOfTheDay = action($wordOfTheDay, "getWordOfTheDay", async (s
     .catch((err) => {
       console.error("Failed to fetch Word of the Day: ", err);
     });
+});
+
+onMount($wordOfTheDay, () => {
+  getWordOfTheDay();
 });
