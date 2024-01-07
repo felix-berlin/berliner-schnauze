@@ -1,26 +1,37 @@
-import { describe, it, expect, afterEach } from "vitest";
+import { describe, it, expect, afterEach, beforeAll } from "vitest";
 import { JSDOM } from "jsdom";
 import { cleanStores, keepMount, allTasks } from "nanostores";
-import { $wordOfTheDay, getWordOfTheDay } from "@stores/index"; // replace with your actual file path
+import { $wordOfTheDay, getWordOfTheDay } from "@stores/index";
+import {
+  useTestStorageEngine,
+  setTestStorageKey,
+  cleanTestStorage,
+  getTestStorage,
+} from "@nanostores/persistent";
 
 describe("Word of the Day", () => {
-  afterEach(() => {
-    cleanStores($wordOfTheDay);
-    $wordOfTheDay.set({ word: {}, loading: true, error: false });
+  beforeAll(() => {
+    useTestStorageEngine();
   });
 
+  afterEach(() => {
+    cleanTestStorage();
+    setTestStorageKey("wordOfTheDay:word", "{}");
+    setTestStorageKey("wordOfTheDay:loading", "true");
+    setTestStorageKey("wordOfTheDay:error", "false");
+    setTestStorageKey("wordOfTheDay:timestamp", "0");
+  });
   it("$wordOfTheDay should have initial state", () => {
     expect($wordOfTheDay.get()).toEqual({
       word: {},
       loading: true,
       error: false,
+      timestamp: 0,
     });
   });
 
   it("$wordOfTheDay should handle error state", () => {
-    const wordOfTheDayData = { word: {}, loading: false, error: true };
-    keepMount($wordOfTheDay);
-    $wordOfTheDay.set(wordOfTheDayData);
+    setTestStorageKey("wordOfTheDay:error", "true");
 
     expect($wordOfTheDay.get().error).toBe(true);
   });
