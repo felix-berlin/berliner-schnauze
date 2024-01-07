@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.3.1...v3.4.0) (2024-01-07)
+
+
+### Bug Fixes
+
+* **ScrollToTop:** add aria label ([0d8391c](https://github.com/felix-berlin/berliner-schnauze/commit/0d8391c564a2bfb350e6dc5fc8a9b0f60ec2cddf))
+* **ScrollToTop:** also observe footer ([4d2ee5d](https://github.com/felix-berlin/berliner-schnauze/commit/4d2ee5d4880bfa201545a39037272055d82cac99))
+
+
+### Features
+
+* workbox fallback ([f06bba7](https://github.com/felix-berlin/berliner-schnauze/commit/f06bba78bc7d8a27a8d13e5dab30b68c0b6c95fa))
+
+
+### Performance Improvements
+
+* cache word of the day ([a1703d4](https://github.com/felix-berlin/berliner-schnauze/commit/a1703d45b62972167c1efa0862b18865981e4f3e))
+* disable sentry ([ba13629](https://github.com/felix-berlin/berliner-schnauze/commit/ba13629363cbc15f4b0b80d4bf38e99326712432))
+* **SingleWord:** load IsWordOfTheDay async ([88c067a](https://github.com/felix-berlin/berliner-schnauze/commit/88c067a032a74eb4a0408599e23a2312da0a0541))
+
 ## [3.3.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.3.0...v3.3.1) (2024-01-07)
 
 
