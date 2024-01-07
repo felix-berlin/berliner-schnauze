@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.3.0...v3.3.1) (2024-01-07)
+
+
+### Bug Fixes
+
+* filter colors ([eff2133](https://github.com/felix-berlin/berliner-schnauze/commit/eff213387f481fd9aaa56890c40d081a1a1d5b8a))
+* **IsWordOfTheDayCrown:** Single Page Position ([a838f86](https://github.com/felix-berlin/berliner-schnauze/commit/a838f8607b4c9d4a4d076ad7bb7d0f260c494129))
+* **SearchModal:** vue only render ([a1cca6b](https://github.com/felix-berlin/berliner-schnauze/commit/a1cca6b5d1be25caa6f75458c2d3412a8945a4bb))
+
 # [3.3.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.2.2...v3.3.0) (2024-01-06)
 
 
