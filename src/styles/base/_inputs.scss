@@ -36,7 +36,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   appearance: none;
   color: var(--color, var(--color-body));
 
-  &:focus {
+  &:focus-within {
     box-shadow: 0 0 0 var(--box-shadow-focus);
   }
 
@@ -79,8 +79,12 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   --spacing-inner-vertical: #{vars.$spacer};
   --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
   --size-font: 1rem;
-  --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75} #{vars.$spacer *
-    1.5};
+  --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75} #{vars.$spacer};
+  --color-background: var(--orange-100);
+
+  @include butler-mx.dark-mode-class {
+    --color-background: var(--new-blue-600);
+  }
 
   padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
   font-size: var(--size-font);

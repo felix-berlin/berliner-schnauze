@@ -81,7 +81,7 @@ export default defineConfig({
       },
       workbox: {
         globDirectory: "dist",
-        navigateFallback: null,
+        navigateFallback: "/404",
         globPatterns: ["**/*.{js,css,svg,png,jpg,jpeg,gif,webp,avif,woff,woff2,ttf,eot,ico}"],
       },
       devOptions: {
@@ -92,7 +92,7 @@ export default defineConfig({
         directoryAndTrailingSlashHandler: true,
       },
     }),
-    sentry(),
+    // sentry(),
     // sentry({
     //   dsn: import.meta.env.SENTRY_DNS,
     //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],

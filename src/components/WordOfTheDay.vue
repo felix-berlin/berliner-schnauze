@@ -52,11 +52,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount } from "vue";
+import { ref, onMounted } from "vue";
 import type { Ref } from "vue";
 import Crown from "virtual:icons/lucide/crown";
 import { useStore } from "@nanostores/vue";
-import { $wordOfTheDay, getWordOfTheDay } from "@stores/index";
+import { $wordOfTheDay } from "@stores/index";
 import ConfettiEffect from "@components/ConfettiEffect.vue";
 import SingleLoader from "@components/SingleLoader.vue";
 import { routeToWord } from "@utils/helpers";
@@ -161,10 +161,6 @@ const toggleCelebration = (toggleValue: boolean) => {
   celebrate.value = toggleValue;
   showTooltip.value = toggleValue;
 };
-
-onBeforeMount(async () => {
-  await getWordOfTheDay();
-});
 
 onMounted(() => {
   countDownTimer();

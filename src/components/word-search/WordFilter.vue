@@ -10,7 +10,7 @@
         <X width="18" height="18" />
       </button>
 
-      <h2>Sortiere nach:</h2>
+      <h2 id="sort-headline">Sortiere nach:</h2>
       <SortWordBySelect />
 
       <h2>Filter nach:</h2>

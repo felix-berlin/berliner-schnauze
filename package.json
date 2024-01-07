@@ -83,7 +83,7 @@
     "eslint-plugin-vue": "^9.19.2",
     "eslint-plugin-vuejs-accessibility": "^2.2.0",
     "graphql-config": "^5.0.3",
-    "jsdom": "^23.1.0",
+    "jsdom": "^23.2.0",
     "postcss-html": "^1.5.0",
     "postcss-preset-env": "^9.3.0",
     "postcss-scss": "^4.0.9",
@@ -122,7 +122,6 @@
     "pagefind": "^1.0.4",
     "typescript": "^5.3.3",
     "vue": "^3.4.5",
-    "vue-multiselect": "3.0.0-beta.3",
     "vue3-virtual-scroll-list": "^0.2.1"
   }
 }
