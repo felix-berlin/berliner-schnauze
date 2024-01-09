@@ -14838,6 +14838,8 @@ export type RootMutation = {
   resetUserPassword?: Maybe<ResetUserPasswordPayload>;
   /** The restoreComment mutation */
   restoreComment?: Maybe<RestoreCommentPayload>;
+  /** The sendEmail mutation */
+  sendEmail?: Maybe<SendEmailPayload>;
   /** Send password reset email to user */
   sendPasswordResetEmail?: Maybe<SendPasswordResetEmailPayload>;
   /** The updateBerlinerWord mutation */
@@ -15046,6 +15048,12 @@ export type RootMutationResetUserPasswordArgs = {
 /** The root mutation */
 export type RootMutationRestoreCommentArgs = {
   input: RestoreCommentInput;
+};
+
+
+/** The root mutation */
+export type RootMutationSendEmailArgs = {
+  input: SendEmailInput;
 };
 
 
@@ -17712,6 +17720,39 @@ export enum ScriptLoadingStrategyEnum {
   /** Use the script `defer` attribute */
   Defer = 'DEFER'
 }
+
+/** Input for the sendEmail mutation. */
+export type SendEmailInput = {
+  /** Body of email */
+  body?: InputMaybe<Scalars['String']['input']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** Who to send the email from */
+  from?: InputMaybe<Scalars['String']['input']>;
+  /** Reply to address */
+  replyTo?: InputMaybe<Scalars['String']['input']>;
+  /** Subject of email */
+  subject?: InputMaybe<Scalars['String']['input']>;
+  /** Who to send the email to */
+  to?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** The payload for the sendEmail mutation. */
+export type SendEmailPayload = {
+  __typename?: 'SendEmailPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** Message */
+  message?: Maybe<Scalars['String']['output']>;
+  /** Origin that sent the request */
+  origin?: Maybe<Scalars['String']['output']>;
+  /** reply To address used */
+  replyTo?: Maybe<Scalars['String']['output']>;
+  /** Was the email sent */
+  sent?: Maybe<Scalars['Boolean']['output']>;
+  /** Who the email got sent to */
+  to?: Maybe<Scalars['String']['output']>;
+};
 
 /** Input for the sendPasswordResetEmail mutation. */
 export type SendPasswordResetEmailInput = {

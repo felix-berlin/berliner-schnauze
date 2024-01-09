@@ -101,7 +101,7 @@ export default defineConfig({
     //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
     //   },
     // }),
-    spotlightjs(),
+    // spotlightjs(),
   ],
   vite: {
     plugins: [
