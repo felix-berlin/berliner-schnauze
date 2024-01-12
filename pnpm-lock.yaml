@@ -51,8 +51,8 @@ dependencies:
     specifier: ^16.3.1
     version: 16.3.1
   floating-vue:
-    specifier: 5.0.2
-    version: 5.0.2(vue@3.4.7)
+    specifier: 5.0.3
+    version: 5.0.3(vue@3.4.7)
   fuse.js:
     specifier: ^7.0.0
     version: 7.0.0
@@ -7342,8 +7342,8 @@ packages:
     resolution: {integrity: sha512-xU99gDEnciIwJdGcBmNHnzTJ/w5AT+VFJOu6sTB6WM8diOYNA3Sa+K1DiEBQ7XH4QikQq3iFW1U+jRVcotQnBw==}
     engines: {node: '>=8'}
 
-  /floating-vue@5.0.2(vue@3.4.7):
-    resolution: {integrity: sha512-CY6emiecyIIvdoK4xYN8mDSNRWutetR+rM10mu6VGrTCqxSdvHyF6TX/zslIgXDC2eIjEkcrpAMg3Mxh724t9w==}
+  /floating-vue@5.0.3(vue@3.4.7):
+    resolution: {integrity: sha512-AM7yczIuFACI6T2l8z0ozpTSqHDagcxiQCCanUqvm7Zxtk4CUJNyF6nSuBkkeEYX6hDyTAcmNHe2NJ5x54qnnw==}
     peerDependencies:
       '@nuxt/kit': ^3.2.0
       vue: ^3.2.0
