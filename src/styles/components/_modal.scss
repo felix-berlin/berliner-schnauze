@@ -1,11 +1,11 @@
-@use "@styles/variables/base";
+@use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-modal {
   border: none;
   inset: 0;
   background-color: var(--color-background-modal, var(--floating-color-background));
-  width: max(400px, 80%);
+  width: max(400px, vars.$body-max-width);
 
   /**
    * Important for exit animation
