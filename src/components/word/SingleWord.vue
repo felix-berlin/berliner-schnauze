@@ -33,7 +33,14 @@
           {{ translation?.translation }}
         </dd>
       </dl>
-      <WordOptionDropdown :word="source" class="c-word-list__options-dropdown" />
+      <WordOptionDropdown :word="source" class="c-word-list__options-dropdown">
+        <template #after>
+          <a :href="routeToWord(source.slug!)" class="c-options-dropdown__copy-button c-button">
+            <BookOpen width="18" height="18" class="c-options-dropdown__icon-button" />
+            <span class="c-options-dropdown__copy-text">Mehr erfahren</span>
+          </a>
+        </template>
+      </WordOptionDropdown>
     </div>
 
     <!-- <WordExamples :examples="source.wordProperties?.examples!" /> -->
@@ -42,7 +49,8 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue";
-import WordExamples from "@components/word/WordExamples.vue";
+// import WordExamples from "@components/word/WordExamples.vue";
+import BookOpen from "virtual:icons/lucide/book-open";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import { routeToWord } from "@utils/helpers";
 import type { CleanBerlinerWord } from "@stores/index";

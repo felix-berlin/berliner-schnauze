@@ -12,6 +12,8 @@
     </button>
 
     <template #popper>
+      <slot name="before"></slot>
+
       <button
         v-if="shareIsSupported"
         aria-label="Wort teilen"
@@ -47,6 +49,8 @@
 
         <span class="c-options-dropdown__copy-text">Wort kopieren</span>
       </button>
+
+      <slot name="after"></slot>
     </template>
   </VDropdown>
 </template>
