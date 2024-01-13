@@ -1,6 +1,7 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/functions" as butler-fn;
+@use "@sass-butler/mixins" as butler-mx;
 
 .o-index {
   display: flex;
@@ -43,7 +44,13 @@
   }
 
   &__image {
-    filter: drop-shadow(0 0 25px rgb(255 255 255 / 20%));
+    filter: drop-shadow(
+      0 0 25px var(--color-shadow, color-mix(in srgb, var(--orange-500) 40%, transparent))
+    );
+
+    @include butler-mx.dark-mode-class {
+      --color-shadow: rgb(255 255 255 / 20%);
+    }
   }
 
   &__intro-wrap {
