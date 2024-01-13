@@ -6,6 +6,14 @@
 .v-popper__popper {
   --color-background: var(--floating-color-background);
 
+  box-shadow:
+    0 0.5px 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 8%, transparent),
+    0 4px 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent);
+
+  @include butler-mx.dark-mode-class {
+    --color-box-shadow: black;
+  }
+
   &:focus {
     outline: none;
   }
@@ -35,19 +43,34 @@
 
 .v-popper--theme-word-options {
   .v-popper__inner {
-    --padding: #{vars.$spacer * 0.4};
-
-    @include mx.breakpoint(sm) {
-      --gap: #{vars.$spacer * 0.25};
-    }
+    --padding: #{vars.$spacer * 0.5} #{vars.$spacer * 0.6};
 
     > div {
       display: flex;
       flex-direction: column;
       gap: var(--gap, #{vars.$spacer * 0.4});
+    }
+  }
+}
 
-      @include mx.breakpoint(sm) {
-        --gap: #{vars.$spacer * 0.25};
+.v-popper--theme-dropdown,
+.v-popper--theme-word-options {
+  .v-popper__inner {
+    a,
+    .c-button {
+      --color-border: transparent;
+
+      transition: border 200ms ease-in-out;
+      border-bottom: 1px dashed var(--color-border, transparent);
+
+      @include butler-mx.hover {
+        --color-border: var(--blue);
+
+        box-shadow: none;
+
+        @include butler-mx.dark-mode-class {
+          --color-border: var(--yellow-500);
+        }
       }
     }
   }
