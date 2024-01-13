@@ -8,6 +8,7 @@ import BrownBearRoar from "@assets/images/brown-bear-roar.png";
 import { getAllWords } from "@services/api";
 import { seoData } from "@utils/helpers";
 import WordSearch from "@components/word-search/WordSearch.astro";
+import FactCard from "@components/FactCard.astro";
 
 const content = {
   title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
@@ -19,6 +20,33 @@ const content = {
     },
   },
 };
+
+const facts = [
+  {
+    headline: "Häufig kürzer als Hochdeutsch",
+    text: 'Wir Berliner halten uns kurz, einfache Vokale sprechen wa meist verkürzt aus. Aus "mal" wird z.B. "ma".',
+  },
+  {
+    headline: "Wie verbreitet ist Berlinisch?",
+    text: "Längst nicht jeder in Berlin spricht Dialekt. Laut <a href='https://de.statista.com/statistik/daten/studie/1116703/umfrage/verbreitung-berliner-dialekt/'>dieser Umfrage</a> sprechen bis zu <strong>62%</strong> der Berliner im Heimischen Dialekt.",
+  },
+  {
+    headline: "A statt (e)r",
+    text: "Wortendungen auf '-er' werden von uns konsequent durch 'a' ausgetauscht: 'seiner' -> 'seina', 'Alter' -> 'Alta'",
+  },
+  {
+    headline: "Syntaktische Besonderheiten",
+    text: "TU Dortmund",
+  },
+  {
+    headline: "Viele Bezeichnungen für ein und das Selbe",
+    text: "Der Berliner Metrolekt wird häufig auch als <strong>Berlinisch</strong>, <strong>Berliner Jargon</strong>, <strong>Berlinerisch</strong> oder <strong>Berliner Mundart</strong> bezeichnet.",
+  },
+  {
+    headline: "Kein Dialekt",
+    text: "Sprachwissenschaftlich gesehen ist Berlinerisch kein Dialekt, sondern ein Metrolekt. Eine in großstädtischen Zentren entstehende Stadtsprache.",
+  },
+];
 
 const allWords = await getAllWords();
 
@@ -45,7 +73,16 @@ const wordCount = allWords.length;
 
   <section class="o-index__intro-wrap">
     <div class="o-index__intro-text">
-      <p>
+      <h2>Fakten zur Berliner Mundart</h2>
+
+      <FactCard headline={facts[0].headline} text={facts[0].text} />
+      <FactCard headline={facts[1].headline} text={facts[1].text} />
+      <FactCard headline={facts[2].headline} text={facts[2].text} />
+      <FactCard headline={facts[3].headline} text={facts[3].text} />
+      <FactCard headline={facts[4].headline} text={facts[4].text} />
+      <FactCard headline={facts[5].headline} text={facts[5].text} />
+
+      <!-- <p>
         Ok, der Titel dieser Seite flunkert ein wenig.<br />
         Wir Berliner haben streng genommen gar keinen Dialekt, sondern einen Metrolekt, was natürlich
         viel besser als so ein langweiliger Dialekt ist. Wir sind schließlich die Hauptstadt!
@@ -69,19 +106,18 @@ const wordCount = allWords.length;
         willst dir eher die <strong>{wordCount} Wörter</strong> ins Hirn meißeln.
       </p>
 
-      <p>Da Du bereits soweit gekommen bist, huldige bitte das Wort des Tages. Danke!</p>
+      <p>Da Du bereits soweit gekommen bist, huldige bitte das Wort des Tages. Danke!</p> -->
     </div>
 
-    <!-- <div>
-      <h2>Hier ein paar Fakten zur unser Mundart</h2>
+    <div>
+      <h2>Fakten zur Berliner Mundart</h2>
 
-      <div>
-        <h3>Häufig kürzer als Hochdeutsch</h3>
-        <p>
-          Wir Berliner halten uns kurz, einfache Vokale sprechen wa meist verkürzt aus. Aus "mal"
-          wird z.B. "ma".
-        </p>
-      </div>
+      <FactCard headline={facts[0].headline} text={facts[0].text} />
+      <FactCard headline={facts[1].headline} text={facts[1].text} />
+      <FactCard headline={facts[2].headline} text={facts[2].text} />
+      <FactCard headline={facts[3].headline} text={facts[3].text} />
+      <FactCard headline={facts[4].headline} text={facts[4].text} />
+
       <div>
         <h3>Wie verbreitet ist Berlinerisch?</h3>
         <p>
@@ -114,7 +150,7 @@ const wordCount = allWords.length;
           Berliner Mundart bezeichnet.
         </p>
       </div>
-    </div> -->
+    </div>
 
     <WordOfTheDay client:only="vue" />
   </section>
