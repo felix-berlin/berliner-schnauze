@@ -4,7 +4,8 @@
     v-tooltip="{
       content: 'Entschuldige die App kann leider nicht installiert werden.',
       disabled: showButton,
-      placement: tooltipPlacement,
+      placement: 'top',
+      ...tooltipProps,
     }"
     class="c-install-button"
     :class="cssClasses"
@@ -30,14 +31,14 @@ export interface InstallAppProps {
   showText?: boolean;
   iconSize?: number;
   cssClasses?: object | string | Array<string>;
-  tooltipPlacement?: string;
+  tooltipProps?: object;
   hideIfInstalled?: boolean;
 }
 
 const {
+  tooltipProps,
   showText = true,
   cssClasses = "c-button",
-  tooltipPlacement = "top",
   hideIfInstalled = true,
 } = defineProps<InstallAppProps>();
 

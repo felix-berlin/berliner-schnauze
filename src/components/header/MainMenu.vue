@@ -46,7 +46,15 @@ interface ItemObject {
 }
 
 const menuItems: (ItemObject | DefineComponent)[] = [
-  InstallApp as DefineComponent,
+  {
+    component: InstallApp as DefineComponent,
+    props: {
+      tooltipProps: {
+        placement: "left",
+        container: ".c-menu-nav",
+      },
+    },
+  },
   {
     title: "Wort vorschlagen",
     link: "/wort-vorschlagen",

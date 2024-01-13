@@ -8,13 +8,13 @@
         class="c-nav-list__list-item"
         :class="classesLi"
       >
-        <component :is="item" v-if="isVueComponent(item)" />
         <a
-          v-else
+          v-if="typeof item?.link === 'string'"
           :href="item.link"
           :target="isExternalLink(item.link) ? '_blank' : '_self'"
           v-text="item.title"
         />
+        <component :is="item.component" v-else v-bind="item.props" />
       </li>
       <slot name="after" />
     </ul>
@@ -30,7 +30,12 @@ interface ItemObject {
 }
 
 interface NavListProps {
-  items: (ItemObject | DefineComponent)[];
+  items:
+    | {
+        component: DefineComponent;
+        props: object;
+      }[]
+    | ItemObject[];
   classesNav?: string;
   classesUl?: string;
   classesLi?: string;
