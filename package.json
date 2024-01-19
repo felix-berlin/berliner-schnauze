@@ -102,7 +102,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.0.4",
     "@astrojs/vue": "^4.0.8",
-    "@felix_berlin/sass-butler": "3.0.0",
+    "@felix_berlin/sass-butler": "3.0.1",
     "@iconify-json/lucide": "^1.1.152",
     "@nanostores/persistent": "^0.9.1",
     "@nanostores/vue": "^0.10.0",
