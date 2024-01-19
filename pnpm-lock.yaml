@@ -12,8 +12,8 @@ dependencies:
     specifier: ^4.0.8
     version: 4.0.8(@babel/core@7.23.6)(astro@4.1.1)(vite@5.0.10)(vue@3.4.7)
   '@felix_berlin/sass-butler':
-    specifier: 3.0.0
-    version: 3.0.0
+    specifier: 3.0.1
+    version: 3.0.1
   '@iconify-json/lucide':
     specifier: ^1.1.152
     version: 1.1.152
@@ -2764,10 +2764,9 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@felix_berlin/sass-butler@3.0.0:
-    resolution: {integrity: sha512-Juc96EwZtoabcao3Of5x6/qgAbsxzjK5t2VCPTxwUE8oEo9Ug63sMbs+1mKHHtYIpZzz7lppP1Q34hSdXTfQ1A==}
+  /@felix_berlin/sass-butler@3.0.1:
+    resolution: {integrity: sha512-E6Kd7Asl2zL43mbCTSlDzCj2SVUIa5r1o8IiQ62KF602NV0gqwsvScIhU+SQg8Yw14p/gTZluT4tk1m923Xikw==}
     engines: {node: '>=12'}
-    requiresBuild: true
     dev: false
 
   /@floating-ui/core@1.5.0:
