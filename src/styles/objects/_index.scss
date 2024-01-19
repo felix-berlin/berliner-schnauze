@@ -4,14 +4,8 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .o-index {
-  display: flex;
-  flex-direction: column;
-  row-gap: vars.$spacer * 1.5;
-
   &__header {
     display: flex;
-    border-bottom: 1px solid var(--primary);
-    align-items: flex-end;
     justify-content: space-between;
     margin-top: 5%;
     flex-wrap: var(--wrap-flex, wrap);
@@ -33,6 +27,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
+    margin-top: 80px;
 
     @include mx.breakpoint("xs") {
       --flex: 0 1 85%;
@@ -82,11 +77,12 @@
   }
 
   .c-word-of-the-day {
-    grid-area: wotd;
-    margin: var(--spacing-outer);
-
     @include mx.breakpoint("sm") {
       --spacing-outer: #{vars.$spacer * 1.5};
     }
+  }
+
+  .c-facts-grid {
+    margin: 1.5rem 0 3rem;
   }
 }

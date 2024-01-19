@@ -1,0 +1,19 @@
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.c-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+
+  &__headline-wrap {
+    font-size: butler-fn.fluid(20, 24, 320, 1260);
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--new-blue-200);
+  }
+
+  &__headline {
+    margin: 0 0 0 1.5rem;
+  }
+}

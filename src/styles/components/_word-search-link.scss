@@ -1,0 +1,15 @@
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.c-word-search-link {
+  background: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
+  border: 1px solid var(--color-border, var(--orange-600));
+  padding: var(--spacing-inner, 1rem 1.5rem);
+  display: flex;
+  align-items: center;
+
+  @include butler-mx.dark-mode-class {
+    --color-background: color-mix(in srgb, var(--blue) 70%, white);
+    --color-border: color-mix(in srgb, var(--blue) 60%, white);
+  }
+}

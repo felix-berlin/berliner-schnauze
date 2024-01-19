@@ -9,6 +9,8 @@ import { getAllWords } from "@services/api";
 import { seoData } from "@utils/helpers";
 import WordSearch from "@components/word-search/WordSearch.astro";
 import FactCard from "@components/FactCard.astro";
+import WordSearchLink from "@components/WordSearchLink.astro";
+import "@styles/components/_facts-grid.scss";
 
 const content = {
   title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
@@ -31,26 +33,24 @@ const facts = [
     text: "Längst nicht jeder in Berlin spricht Dialekt. Laut <a href='https://de.statista.com/statistik/daten/studie/1116703/umfrage/verbreitung-berliner-dialekt/'>dieser Umfrage</a> sprechen bis zu <strong>62%</strong> der Berliner im Heimischen Dialekt.",
   },
   {
-    headline: "A statt (e)r",
+    headline: "Ausgetauschte Wortendungen",
     text: "Wortendungen auf '-er' werden von uns konsequent durch 'a' ausgetauscht: 'seiner' -> 'seina', 'Alter' -> 'Alta'",
   },
   {
     headline: "Syntaktische Besonderheiten",
-    text: "TU Dortmund",
+    text: "<a href='https://islk.kuwi.tu-dortmund.de/storages/islk-kuwi/r/Personal_Freywald/Literatur/freywald2017_syntax_berlinisch_korrigiert.pdf'>TU Dortmund</a>",
   },
   {
     headline: "Viele Bezeichnungen für ein und das Selbe",
     text: "Der Berliner Metrolekt wird häufig auch als <strong>Berlinisch</strong>, <strong>Berliner Jargon</strong>, <strong>Berlinerisch</strong> oder <strong>Berliner Mundart</strong> bezeichnet.",
   },
   {
-    headline: "Kein Dialekt",
+    headline: "Ist Berlinerisch ein Dialekt?",
     text: "Sprachwissenschaftlich gesehen ist Berlinerisch kein Dialekt, sondern ein Metrolekt. Eine in großstädtischen Zentren entstehende Stadtsprache.",
   },
 ];
 
 const allWords = await getAllWords();
-
-const wordCount = allWords.length;
 ---
 
 <Layout content={seoData(content)} contentClasses="o-index">
@@ -71,95 +71,21 @@ const wordCount = allWords.length;
     </div>
   </header>
 
-  <section class="o-index__intro-wrap">
-    <div class="o-index__intro-text">
-      <h2>Fakten zur Berliner Mundart</h2>
+  <WordSearchLink />
 
-      <FactCard headline={facts[0].headline} text={facts[0].text} />
-      <FactCard headline={facts[1].headline} text={facts[1].text} />
-      <FactCard headline={facts[2].headline} text={facts[2].text} />
-      <FactCard headline={facts[3].headline} text={facts[3].text} />
-      <FactCard headline={facts[4].headline} text={facts[4].text} />
-      <FactCard headline={facts[5].headline} text={facts[5].text} />
-
-      <!-- <p>
-        Ok, der Titel dieser Seite flunkert ein wenig.<br />
-        Wir Berliner haben streng genommen gar keinen Dialekt, sondern einen Metrolekt, was natürlich
-        viel besser als so ein langweiliger Dialekt ist. Wir sind schließlich die Hauptstadt!
-      </p>
-
-      <p>
-        Genug rum geprallt, wir können noch viel mehr!<br />
-        Wenn man Wikipedia glauben schenken mag, hat unsere Mundart sogar das von den Brandenburgern
-        gesprochene <a href="https://www.wikiwand.com/de/Niederdeutsche_Sprache">Niederdeutsch</a> auf
-        dem Gewissen. Ein Fakt der uns sicher leid tut, uns aber auch stolz macht.
-      </p>
-
-      <p>
-        Stolz macht uns auch unsere Grammatik. Anders als der Ersteller dieser Seite, der dazu noch
-        keine einzige Info erstellt hat. Was ein Dulli. Na ja, <a
-          href="https://www.wikiwand.com/de/Berlinerische_Grammatik">hier</a
-        > kannst Du dich informieren.
-      </p>
-      <p>
-        So, jetzt aber ran an den Speck! Du bist sicher nicht wegen der Einleitung gekommen und
-        willst dir eher die <strong>{wordCount} Wörter</strong> ins Hirn meißeln.
-      </p>
-
-      <p>Da Du bereits soweit gekommen bist, huldige bitte das Wort des Tages. Danke!</p> -->
+  <section class="c-facts-grid">
+    <div class="c-facts-grid__headline-wrap">
+      <h2 class="c-facts-grid__headline">Fakten zur Berliner Mundart</h2>
     </div>
 
-    <div>
-      <h2>Fakten zur Berliner Mundart</h2>
-
-      <FactCard headline={facts[0].headline} text={facts[0].text} />
-      <FactCard headline={facts[1].headline} text={facts[1].text} />
-      <FactCard headline={facts[2].headline} text={facts[2].text} />
-      <FactCard headline={facts[3].headline} text={facts[3].text} />
-      <FactCard headline={facts[4].headline} text={facts[4].text} />
-
-      <div>
-        <h3>Wie verbreitet ist Berlinerisch?</h3>
-        <p>
-          Längst nicht jeder in Berlin spricht Dialekt. Laut <a
-            href="https://de.statista.com/statistik/daten/studie/1116703/umfrage/verbreitung-berliner-dialekt/"
-            >dieser Umfrage</a
-          > sprechen bis zu 62% der Berliner im Heimischen Dialekt.
-        </p>
-      </div>
-      <div>
-        <h3>A statt (e)r</h3>
-        <p>
-          Wortendungen auf "-er" werden von uns konsequent durch "a" ausgetauscht: "seiner" ->
-          "seina", "Alter" -> "Alta"
-        </p>
-      </div>
-      <div>
-        <h3>Syntaktische Besonderheiten</h3>
-        <p>
-          <a
-            href="https://islk.kuwi.tu-dortmund.de/storages/islk-kuwi/r/Personal_Freywald/Literatur/freywald2017_syntax_berlinisch_korrigiert.pdf"
-            >TU Dortmund</a
-          >
-        </p>
-      </div>
-      <div>
-        <h3>Viele Bezeichnungen für ein und das Selbe</h3>
-        <p>
-          Der Berliner Metrolekt wird häufig auch als Berlinisch, Berliner Jargon, Berlinerisch oder
-          Berliner Mundart bezeichnet.
-        </p>
-      </div>
-    </div>
-
+    <FactCard headline={facts[0].headline} text={facts[0].text} />
+    <FactCard headline={facts[1].headline} text={facts[1].text} />
+    <FactCard headline={facts[2].headline} text={facts[2].text} />
+    <!-- <FactCard headline={facts[3].headline} text={facts[3].text} /> -->
+    <FactCard headline={facts[4].headline} text={facts[4].text} />
+    <FactCard headline={facts[5].headline} text={facts[5].text} />
     <WordOfTheDay client:only="vue" />
   </section>
 
-  <!-- <WordSearchList
-    words={cleanWords}
-    availableLetterGroups={availableWordGroups}
-    wordTypes={wordTypes}
-    client:only="vue"
-  /> -->
   <WordSearch words={allWords} />
 </Layout>
