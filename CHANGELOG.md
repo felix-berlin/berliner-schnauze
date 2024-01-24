@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.5.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.4.0...v3.5.0) (2024-01-24)
+
+
+### Bug Fixes
+
+* **index:** better spacings ([a8dfb76](https://github.com/felix-berlin/berliner-schnauze/commit/a8dfb761a40108e4924ab5a4292680de0dfa48e1))
+* **index:** missing dropshadow on light mode ([741145e](https://github.com/felix-berlin/berliner-schnauze/commit/741145ef193e836c19c91e67d91934e8efaf3433))
+* missing letter spacing for buttons ([96d565a](https://github.com/felix-berlin/berliner-schnauze/commit/96d565a3c751efbd0120e554610bf590105f0218))
+* **modal:** max width ([2579c77](https://github.com/felix-berlin/berliner-schnauze/commit/2579c77ff97885ac669aafe77d4e152c863f5644))
+* **NavList:** better props handling ([83d3851](https://github.com/felix-berlin/berliner-schnauze/commit/83d3851d69c2d6bc2e51c62a916e71d25f834f6c))
+* **select:** border and chevron styles ([e700290](https://github.com/felix-berlin/berliner-schnauze/commit/e700290edc159526f5539d7aa67f252a3219c7ef))
+* **word-search-link:** better mobile styles ([2b2276f](https://github.com/felix-berlin/berliner-schnauze/commit/2b2276f406b48facb2b9eca2c891510468f694a2))
+
+
+### Features
+
+* add click ripple effect and scroll to search function ([bb8fa0d](https://github.com/felix-berlin/berliner-schnauze/commit/bb8fa0d8d78bd16ceed0c39736d1e21a4143a9cb))
+* add facts card ([e797f56](https://github.com/felix-berlin/berliner-schnauze/commit/e797f56feba0f92f8c77bee1d1e3e96efde8e7d7))
+* add new word option button ([e0ea1e9](https://github.com/felix-berlin/berliner-schnauze/commit/e0ea1e90ca5de7cee267bc4b8de5203e96c56aa3))
+* add smooth scroll ([56f5eb2](https://github.com/felix-berlin/berliner-schnauze/commit/56f5eb20049c9fc81131d30533b973a6ad82a7e0))
+* basic implementation of new index layout ([364ed91](https://github.com/felix-berlin/berliner-schnauze/commit/364ed91bcb4ed2e22a31d9bcd9ddc4827cc25143))
+* better dropdown styles ([40b84ce](https://github.com/felix-berlin/berliner-schnauze/commit/40b84ce67515e07cd767c6b54d62287fc8dad918))
+* **menu-nav:** better spacing ([f3eb10d](https://github.com/felix-berlin/berliner-schnauze/commit/f3eb10d0d2dee0d2fd41eae4ea95bd58517a4ae6))
+* **search:** add scroll offset ([67b8baf](https://github.com/felix-berlin/berliner-schnauze/commit/67b8bafed76bbc08994b5a709788f2c0634d6e97))
+
 # [3.4.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.3.1...v3.4.0) (2024-01-07)
 
 
