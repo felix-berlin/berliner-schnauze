@@ -48,28 +48,6 @@
     }
   }
 
-  &__intro-wrap {
-    display: grid;
-    gap: vars.$spacer * 1.5 vars.$spacer * 3;
-    grid-template-columns: var(--columns-grid-template, 1fr);
-    grid-template-areas: var(--areas-grid-template, "text" "wotd");
-
-    @include mx.breakpoint("sm") {
-      --columns-grid-template: 2fr 1fr;
-      --areas-grid-template: "text wotd";
-    }
-  }
-
-  &__intro-text {
-    font-size: butler-fn.fluid(19, 26, 320, 1260);
-    line-height: 1.3;
-    grid-area: text;
-
-    a {
-      --decoration-text: underline dashed from-font;
-    }
-  }
-
   &__filter-wrap {
     display: flex;
     flex-wrap: wrap;
@@ -83,6 +61,6 @@
   }
 
   .c-facts-grid {
-    margin: 1.5rem 0 3rem;
+    margin: 3rem 0 10rem;
   }
 }

@@ -6,7 +6,7 @@
 .c-filter-search {
   display: grid;
   grid-template-columns: [start] 1fr [end];
-  gap: vars.$spacer * 1.5;
+  gap: vars.$spacer * 1.5 vars.$spacer * 3;
 
   @include butler-mx.breakpoint("md") {
     grid-template-columns: [start] 1fr 3fr [end];
@@ -92,6 +92,7 @@
     display: grid;
     grid-template: "filter-toggle search" min-content "result-count result-count" min-content "list list" 1fr / min-content 1fr;
     gap: vars.$spacer * 1.5 vars.$spacer;
+    margin-top: -60px;
 
     @include butler-mx.breakpoint("md") {
       grid-template-columns: 1fr;

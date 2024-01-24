@@ -11,9 +11,11 @@
     display: flex;
     align-items: center;
     border: 1px solid var(--new-blue-200);
+    min-height: 180px;
   }
 
   &__headline {
     margin: 0 0 0 1.5rem;
+    line-height: 1.2;
   }
 }
