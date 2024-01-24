@@ -81,7 +81,7 @@ export default defineConfig({
       },
       workbox: {
         globDirectory: "dist",
-        // navigateFallback: "/404",
+        navigateFallback: "/",
         globPatterns: ["**/*.{js,css,svg,png,jpg,jpeg,gif,webp,avif,woff,woff2,ttf,eot,ico}"],
       },
       devOptions: {
