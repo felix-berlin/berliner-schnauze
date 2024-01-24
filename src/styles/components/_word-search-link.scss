@@ -11,6 +11,7 @@
   font-size: butler-fn.fluid(16, 32, 320, 1260);
   display: flex;
   gap: 1rem;
+  text-align: left;
 
   @include butler-mx.dark-mode-class {
     --color-background: color-mix(in srgb, var(--blue) 70%, white);
@@ -44,7 +45,7 @@
     left: 6px;
     top: 5px;
     border-radius: 50%;
-    border: 1px solid #ffffff59;
+    border: 1px solid rgb(255 255 255 / 34.9%);
     animation: ripple-effect 1s linear;
   }
 }
