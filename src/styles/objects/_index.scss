@@ -1,16 +1,11 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/functions" as butler-fn;
+@use "@sass-butler/mixins" as butler-mx;
 
 .o-index {
-  display: flex;
-  flex-direction: column;
-  row-gap: vars.$spacer * 1.5;
-
   &__header {
     display: flex;
-    border-bottom: 1px solid var(--primary);
-    align-items: flex-end;
     justify-content: space-between;
     margin-top: 5%;
     flex-wrap: var(--wrap-flex, wrap);
@@ -32,6 +27,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
+    margin-top: 80px;
 
     @include mx.breakpoint("xs") {
       --flex: 0 1 85%;
@@ -43,28 +39,12 @@
   }
 
   &__image {
-    filter: drop-shadow(0 0 25px rgb(255 255 255 / 20%));
-  }
+    filter: drop-shadow(
+      0 0 25px var(--color-shadow, color-mix(in srgb, var(--orange-500) 40%, transparent))
+    );
 
-  &__intro-wrap {
-    display: grid;
-    gap: vars.$spacer * 1.5 vars.$spacer * 3;
-    grid-template-columns: var(--columns-grid-template, 1fr);
-    grid-template-areas: var(--areas-grid-template, "text" "wotd");
-
-    @include mx.breakpoint("sm") {
-      --columns-grid-template: 2fr 1fr;
-      --areas-grid-template: "text wotd";
-    }
-  }
-
-  &__intro-text {
-    font-size: butler-fn.fluid(19, 26, 320, 1260);
-    line-height: 1.3;
-    grid-area: text;
-
-    a {
-      --decoration-text: underline dashed from-font;
+    @include butler-mx.dark-mode-class {
+      --color-shadow: rgb(255 255 255 / 20%);
     }
   }
 
@@ -75,11 +55,12 @@
   }
 
   .c-word-of-the-day {
-    grid-area: wotd;
-    margin: var(--spacing-outer);
-
     @include mx.breakpoint("sm") {
       --spacing-outer: #{vars.$spacer * 1.5};
     }
+  }
+
+  .c-facts-grid {
+    margin: 3rem 0 10rem;
   }
 }

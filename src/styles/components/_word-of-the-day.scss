@@ -5,7 +5,7 @@
 .c-word-of-the-day {
   background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 20%, transparent));
   padding: vars.$spacer;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--new-blue-200);
   display: flex;
   row-gap: vars.$spacer * 1.5;
   flex-direction: column;

@@ -1,0 +1,58 @@
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.c-word-search-link {
+  background: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
+  border: 2px solid var(--color-border, var(--orange-600));
+  padding: var(--spacing-inner, 1rem 1.5rem);
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  font-size: butler-fn.fluid(16, 32, 320, 1260);
+  display: flex;
+  gap: 1rem;
+  text-align: left;
+
+  @include butler-mx.dark-mode-class {
+    --color-background: color-mix(in srgb, var(--blue) 70%, white);
+    --color-border: color-mix(in srgb, var(--blue) 60%, white);
+
+    color: var(--yellow-500);
+  }
+
+  &__icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    color: var(--color-icon, var(--orange-400));
+
+    @include butler-mx.dark-mode-class {
+      --color-icon: var(--orange-200);
+    }
+  }
+}
+
+.u-ripple {
+  &::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    position: absolute;
+    left: 6px;
+    top: 5px;
+    border-radius: 50%;
+    border: 1px solid rgb(255 255 255 / 34.9%);
+    animation: ripple-effect 1s linear;
+  }
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(15);
+    opacity: 0.01;
+  }
+}

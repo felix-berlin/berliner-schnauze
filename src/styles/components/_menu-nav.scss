@@ -39,6 +39,17 @@
     width: 100%;
     gap: vars.$spacer * 0.7;
   }
+
+  .c-nav-list__list-item {
+    a,
+    button {
+      padding: 0.25rem;
+    }
+
+    a {
+      display: block;
+    }
+  }
 }
 
 .c-menu-more {

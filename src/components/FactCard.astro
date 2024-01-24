@@ -1,0 +1,15 @@
+---
+import "@styles/components/_fact-card.scss";
+
+type FactCardProps = {
+  headline: string;
+  text: string;
+};
+
+const { headline, text } = Astro.props as FactCardProps;
+---
+
+<div class="c-fact-card">
+  <h3 class="c-fact-card__headline" set:html={headline} />
+  <p class="c-fact-card__text" set:html={text} />
+</div>

@@ -1,0 +1,35 @@
+---
+import MousePointerClick from "virtual:icons/lucide/mouse-pointer-click";
+import "@styles/components/_word-search-link.scss";
+---
+
+<button class="c-word-search-link"
+  >Berliner Mundart durchsuchen <span class:list={"c-word-search-link__icon-wrap"}>
+    <MousePointerClick class:list={"c-word-search-link__icon"} width="30" height="30" />
+  </span>
+</button>
+
+<script>
+  const searchLink = document.querySelector(".c-word-search-link");
+
+  searchLink?.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    const searchBar = document.querySelector(".c-word-search__search-input") as HTMLInputElement;
+
+    searchBar.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    searchBar.focus({ preventScroll: true });
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const isReduced = window.matchMedia(`(prefers-reduced-motion: reduce)`);
+
+    if (isReduced.matches) return;
+
+    const searchLink = document.querySelector(".c-word-search-link__icon-wrap");
+
+    searchLink?.classList.add("u-ripple");
+    setTimeout(() => searchLink?.classList.remove("u-ripple"), 2000);
+  });
+</script>
