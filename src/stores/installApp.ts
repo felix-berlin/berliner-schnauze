@@ -21,14 +21,16 @@ export const $isPwaInstalled = atom<boolean>(false);
  * @return  {void}
  */
 onMount($installPrompt, () => {
-  $isPwaInstalled.set(isPwaInstalled());
+  $showInstallButton.set(true);
 
-  window.addEventListener("beforeinstallprompt", (event) => {
-    // event.preventDefault();
+  // $isPwaInstalled.set(true);
 
-    $installPrompt.set(event as BeforeInstallPromptEvent);
-    $showInstallButton.set(true);
-  });
+  // window.addEventListener("beforeinstallprompt", (event) => {
+  //   // event.preventDefault();
+
+  //   $installPrompt.set(event as BeforeInstallPromptEvent);
+  //   $showInstallButton.set(true);
+  // });
 });
 
 /**
@@ -36,7 +38,7 @@ onMount($installPrompt, () => {
  *
  * @return  {boolean}
  */
-export const isPwaInstalled: () => boolean = () => {
+export const isPwaInstalled: () => boolean = (): boolean => {
   return (
     window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
   );
