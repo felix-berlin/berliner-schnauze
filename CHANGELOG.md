@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.5.0...v3.5.1) (2024-01-24)
+
+
+### Bug Fixes
+
+* **pwa:** remove fallback ([dfb40a0](https://github.com/felix-berlin/berliner-schnauze/commit/dfb40a05c2b6e2a84f752839850d71d6003de535))
+
 # [3.5.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.4.0...v3.5.0) (2024-01-24)
 
 
