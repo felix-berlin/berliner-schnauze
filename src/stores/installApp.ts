@@ -21,16 +21,16 @@ export const $isPwaInstalled = atom<boolean>(false);
  * @return  {void}
  */
 onMount($installPrompt, () => {
-  $showInstallButton.set(true);
+  $isPwaInstalled.set(false);
 
-  // $isPwaInstalled.set(true);
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
 
-  // window.addEventListener("beforeinstallprompt", (event) => {
-  //   // event.preventDefault();
+    console.log("beforeinstallprompt fired", event);
 
-  //   $installPrompt.set(event as BeforeInstallPromptEvent);
-  //   $showInstallButton.set(true);
-  // });
+    $installPrompt.set(event as BeforeInstallPromptEvent);
+    $showInstallButton.set(true);
+  });
 });
 
 /**
@@ -38,7 +38,12 @@ onMount($installPrompt, () => {
  *
  * @return  {boolean}
  */
-export const isPwaInstalled: () => boolean = (): boolean => {
+export const isPwaInstalled: () => boolean = () => {
+  console.log(
+    "isPwaInstalled",
+    window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true,
+  );
+
   return (
     window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
   );
@@ -56,7 +61,7 @@ export const triggerPwaInstall: () => Promise<void> = action(
     if (!$installPrompt.get()) return;
 
     await $installPrompt?.get()?.prompt();
-    // console.log(`Install prompt was: ${result?.outcome}`);
+    console.log(`Install prompt was: ${result?.outcome}`);
 
     disableInAppInstallPrompt();
   },
