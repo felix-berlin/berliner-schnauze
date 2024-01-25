@@ -39,6 +39,9 @@ const canonicalURL = Astro.url.href;
 const { title, seo } = Astro.props as SeoProps & Title;
 ---
 
+<title>
+  {seo?.title || title}
+</title>
 <SetColorMode />
 
 <!-- Global Metadata -->
@@ -56,7 +59,7 @@ const { title, seo } = Astro.props as SeoProps & Title;
 <meta name="generator" content={Astro.generator} />
 
 <!-- Primary Meta Tags -->
-<title>{seo?.title || title}</title>
+
 <link rel="canonical" href={canonicalURL} />
 
 {seo?.opengraphDescription && <meta name="description" content={seo?.opengraphDescription} />}
