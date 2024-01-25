@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.5.1...v3.5.2) (2024-01-25)
+
+
+### Bug Fixes
+
+* favicon path ([afb9032](https://github.com/felix-berlin/berliner-schnauze/commit/afb9032acae20942396c31260a064be328d2eaec))
+* title generation and manifest link ([749a0d7](https://github.com/felix-berlin/berliner-schnauze/commit/749a0d72670216e2a8269c43f1c00a5ec88068c9))
+* try pwa install ([cc20c38](https://github.com/felix-berlin/berliner-schnauze/commit/cc20c38e63e43d2b4c2ece8c036dd0b7a09b8a06))
+
+
+### Reverts
+
+* pwa debug ([77019a5](https://github.com/felix-berlin/berliner-schnauze/commit/77019a556946708042bec09cb6e1a8a980377971))
+
 ## [3.5.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.5.0...v3.5.1) (2024-01-24)
 
 
