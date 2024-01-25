@@ -21,12 +21,10 @@ export const $isPwaInstalled = atom<boolean>(false);
  * @return  {void}
  */
 onMount($installPrompt, () => {
-  $isPwaInstalled.set(false);
+  $isPwaInstalled.set(isPwaInstalled());
 
   window.addEventListener("beforeinstallprompt", (event) => {
-    event.preventDefault();
-
-    console.log("beforeinstallprompt fired", event);
+    // event.preventDefault();
 
     $installPrompt.set(event as BeforeInstallPromptEvent);
     $showInstallButton.set(true);
@@ -39,11 +37,6 @@ onMount($installPrompt, () => {
  * @return  {boolean}
  */
 export const isPwaInstalled: () => boolean = () => {
-  console.log(
-    "isPwaInstalled",
-    window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true,
-  );
-
   return (
     window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
   );
