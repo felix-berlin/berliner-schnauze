@@ -37,7 +37,7 @@ export default defineConfig({
       mode: import.meta.env.DEV ? "development" : "production",
       base: "/",
       scope: "/",
-      includeAssets: ["favicon.ico"],
+      includeAssets: ["favicons/favicon.ico"],
       registerType: "autoUpdate",
       manifest: {
         name: "Berliner Schnauze",
