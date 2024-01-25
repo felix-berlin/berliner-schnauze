@@ -24,7 +24,7 @@ onMount($installPrompt, () => {
   $isPwaInstalled.set(isPwaInstalled());
 
   window.addEventListener("beforeinstallprompt", (event) => {
-    // event.preventDefault();
+    event.preventDefault();
 
     $installPrompt.set(event as BeforeInstallPromptEvent);
     $showInstallButton.set(true);
@@ -54,7 +54,7 @@ export const triggerPwaInstall: () => Promise<void> = action(
     if (!$installPrompt.get()) return;
 
     await $installPrompt?.get()?.prompt();
-    console.log(`Install prompt was: ${result?.outcome}`);
+    // console.log(`Install prompt was: ${result?.outcome}`);
 
     disableInAppInstallPrompt();
   },
