@@ -5,16 +5,16 @@ import { getPageById } from "@services/api";
 import type { InferGetStaticParamsType, InferGetStaticPropsType, GetStaticPaths } from "astro";
 
 export const getStaticPaths = async () => {
-  const privacy: any = await getPageById("berliner-schnauze-datenschutz");
-  const imprint: any = await getPageById("berliner-schnauze-impressum");
+  const privacy: any = await getPageById("datenschutz");
+  const imprint: any = await getPageById("impressum");
 
   const pages = [privacy, imprint];
 
   return pages.map((page) => {
     let betterSlug;
-    if (page.slug === "berliner-schnauze-datenschutz") {
+    if (page.slug === "datenschutz") {
       betterSlug = "datenschutz";
-    } else if (page.slug === "berliner-schnauze-impressum") {
+    } else if (page.slug === "impressum") {
       betterSlug = "impressum";
     }
 

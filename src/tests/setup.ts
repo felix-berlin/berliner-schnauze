@@ -15,7 +15,7 @@ import {
 } from "floating-vue";
 
 beforeAll(() => {
-  vi.stubEnv("PUBLIC_WP_API", "https://cms.webshaped.de/api");
+  vi.stubEnv("PUBLIC_WP_API", "https://cms.berliner-schnauze.wtf/api");
 
   config.global.components = {
     VDropdown,
