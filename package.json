@@ -112,7 +112,7 @@
     "@spotlightjs/astro": "^1.0.11",
     "@vueuse/core": "^10.7.2",
     "astro": "^4.2.6",
-    "astro-breadcrumbs": "^1.8.1",
+    "astro-breadcrumbs": "^2.0.0",
     "astro-matomo": "^1.4.1",
     "dotenv": "^16.4.1",
     "floating-vue": "5.2.2",
