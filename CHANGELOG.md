@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.6.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.5.2...v3.6.0) (2024-02-02)
+
+
+### Features
+
+* add truncated breadcrumbs ([d0e9fa3](https://github.com/felix-berlin/berliner-schnauze/commit/d0e9fa39fa6f9934fe6d7ff7c09f1030cbfb0708))
+
 ## [3.5.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.5.1...v3.5.2) (2024-01-25)
 
 
