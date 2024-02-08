@@ -119,6 +119,7 @@
     "fuse.js": "^7.0.0",
     "nanostores": "^0.9.5",
     "pagefind": "^1.0.4",
+    "photoswipe": "^5.4.3",
     "typescript": "^5.3.3",
     "vue": "^3.4.16",
     "vue3-virtual-scroll-list": "^0.2.1"

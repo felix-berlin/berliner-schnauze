@@ -19,6 +19,7 @@ import { Breadcrumbs } from "astro-breadcrumbs";
 import { Picture } from "astro:assets";
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
+import ImageGallery from "@components/ImageGallery.vue";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -112,10 +113,24 @@ console.log(wikimediaFiles);
 
     {
       wordProps?.wikimediaFiles && wikimediaFiles && (
-        <div class="c-single-word__image-wrapper">
-          {wikimediaFiles?.map((file) => {
-            return file.caption ? (
-              <figure>
+        <>
+          <ImageGallery images={wikimediaFiles} client:only="vue" />
+          <div class="c-single-word__image-wrapper">
+            {wikimediaFiles?.map((file) => {
+              return file.caption ? (
+                <figure>
+                  <Picture
+                    src={file.image.preferred.url}
+                    alt={file.description ?? wordProps?.berlinerisch!}
+                    width={file.image.preferred.width}
+                    height={file.image.preferred.height}
+                    formats={["avif", "webp"]}
+                    widths={[327, 455, 637]}
+                    class="c-single-word__image"
+                  />
+                  <figcaption>{file.caption}</figcaption>
+                </figure>
+              ) : (
                 <Picture
                   src={file.image.preferred.url}
                   alt={file.description ?? wordProps?.berlinerisch!}
@@ -125,21 +140,10 @@ console.log(wikimediaFiles);
                   widths={[327, 455, 637]}
                   class="c-single-word__image"
                 />
-                <figcaption>{file.caption}</figcaption>
-              </figure>
-            ) : (
-              <Picture
-                src={file.image.preferred.url}
-                alt={file.description ?? wordProps?.berlinerisch!}
-                width={file.image.preferred.width}
-                height={file.image.preferred.height}
-                formats={["avif", "webp"]}
-                widths={[327, 455, 637]}
-                class="c-single-word__image"
-              />
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </>
       )
     }
 
