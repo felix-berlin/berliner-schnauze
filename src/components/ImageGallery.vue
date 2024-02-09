@@ -1,5 +1,5 @@
 <template>
-  <div class="pswp-gallery">
+  <div :id="id" class="pswp-gallery">
     <a
       v-for="(image, key) in images"
       :key="key"
@@ -22,16 +22,17 @@ import { onMounted, onUnmounted, ref } from "vue";
 
 type ImageGalleryProps = {
   images: string[];
+  id: string;
 };
 
-const { images } = defineProps<ImageGalleryProps>();
+const { images, id = crypto.randomUUID() } = defineProps<ImageGalleryProps>();
 
 const lightbox = ref<PhotoSwipeLightbox | null>(null);
 
 onMounted(() => {
   if (!lightbox.value) {
     lightbox.value = new PhotoSwipeLightbox({
-      gallerySelector: ".pswp-gallery",
+      gallerySelector: `#${id}`,
       childSelector: "a",
       pswpModule: () => import("photoswipe"),
     });

@@ -19,7 +19,7 @@ import { Breadcrumbs } from "astro-breadcrumbs";
 import { Picture } from "astro:assets";
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
-import ImageGallery from "@components/ImageGallery.vue";
+import ImageGallery from "@components/ImageGallery.astro";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -48,6 +48,7 @@ const { wordSlug } = Astro.params as Params;
 const { word, allWords } = Astro.props as Props;
 
 const wordProps: BerlinerWord["wordProperties"] = word.wordProperties;
+console.log(wordProps);
 
 const formattedDate = (date: string, locale = "de-DE") => {
   if (!date) return;
@@ -83,7 +84,7 @@ const createWikimediaFileList = async () => {
 };
 
 const wikimediaFiles = await createWikimediaFileList();
-console.log(wikimediaFiles);
+// console.log(wikimediaFiles);
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
@@ -111,42 +112,8 @@ console.log(wikimediaFiles);
       <WordOptionDropdown word={word} client:only="vue" />
     </header>
 
-    {
-      wordProps?.wikimediaFiles && wikimediaFiles && (
-        <>
-          <ImageGallery images={wikimediaFiles} client:only="vue" />
-          <div class="c-single-word__image-wrapper">
-            {wikimediaFiles?.map((file) => {
-              return file.caption ? (
-                <figure>
-                  <Picture
-                    src={file.image.preferred.url}
-                    alt={file.description ?? wordProps?.berlinerisch!}
-                    width={file.image.preferred.width}
-                    height={file.image.preferred.height}
-                    formats={["avif", "webp"]}
-                    widths={[327, 455, 637]}
-                    class="c-single-word__image"
-                  />
-                  <figcaption>{file.caption}</figcaption>
-                </figure>
-              ) : (
-                <Picture
-                  src={file.image.preferred.url}
-                  alt={file.description ?? wordProps?.berlinerisch!}
-                  width={file.image.preferred.width}
-                  height={file.image.preferred.height}
-                  formats={["avif", "webp"]}
-                  widths={[327, 455, 637]}
-                  class="c-single-word__image"
-                />
-              );
-            })}
-          </div>
-        </>
-      )
-    }
-
+    <!-- {wordProps?.wikimediaFiles && wikimediaFiles &&  />} -->
+    <ImageGallery images={wordProps?.images} widths={[327, 455, 637]} />
     {
       wordProps?.alternativeWords && (
         <div class="c-single-word__alternative-words-wrapper">

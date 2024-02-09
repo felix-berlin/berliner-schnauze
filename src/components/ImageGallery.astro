@@ -1,0 +1,90 @@
+---
+import type { WordProperties, MediaItem } from "@ts_types/generated/graphql";
+import "photoswipe/style.css";
+import { Picture, getImage } from "astro:assets";
+
+type ImageGalleryProps = {
+  images: WordProperties["images"];
+  id?: string;
+  widths?: number[];
+};
+
+const { images, id = `gallery-${crypto.randomUUID()}`, widths } = Astro.props as ImageGalleryProps;
+
+const imageList = images?.nodes as Array<MediaItem>;
+
+const webP = await getImage({
+  src: imageList[0].sourceUrl,
+  format: "webp",
+  width: imageList[0].mediaDetails?.width,
+  height: imageList[0].mediaDetails?.height,
+});
+
+console.log(webP);
+---
+
+{
+  images && images?.nodes && (
+    <image-gallery data-id={id}>
+      <div class="c-image-gallery" id={id}>
+        {imageList?.map((image) => {
+          return (
+            <figure>
+              <a
+                href={image.sourceUrl}
+                data-pswp-width={image.mediaDetails?.width}
+                data-pswp-height={image.mediaDetails?.height}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Bild in Originalgröße öffnen"
+              >
+                <Picture
+                  src={image.sourceUrl!}
+                  alt={image.altText!}
+                  width={image.mediaDetails?.width!}
+                  height={image.mediaDetails?.height!}
+                  formats={["avif", "webp"]}
+                  widths={widths}
+                  class="c-image-gallery__image"
+                />
+              </a>
+              {image?.caption && <figcaption set:html={image.caption} />}
+            </figure>
+          );
+        })}
+      </div>
+    </image-gallery>
+  )
+}
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+
+  class ImageGallery extends HTMLElement {
+    lightbox: PhotoSwipeLightbox | null = null;
+
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      if (!this.lightbox) {
+        this.lightbox = new PhotoSwipeLightbox({
+          gallery: `#${this.dataset.id}`,
+          children: "a",
+          pswpModule: () => import("photoswipe"),
+        });
+      }
+
+      this.lightbox.init();
+    }
+
+    disconnectedCallback() {
+      if (this.lightbox) {
+        this.lightbox.destroy();
+        this.lightbox = null;
+      }
+    }
+  }
+
+  customElements.define("image-gallery", ImageGallery);
+</script>

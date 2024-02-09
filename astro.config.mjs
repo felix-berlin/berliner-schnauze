@@ -13,7 +13,7 @@ export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   prefetch: true,
   image: {
-    domains: ["upload.wikimedia.org"],
+    domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
   integrations: [
     vue({
@@ -118,6 +118,10 @@ export default defineConfig({
 
     resolve: {
       alias: allAlias,
+    },
+
+    css: {
+      preprocessorMaxWorkers: true,
     },
   },
 });

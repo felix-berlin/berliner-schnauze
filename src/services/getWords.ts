@@ -115,6 +115,18 @@ export const getAllWords = async (
                 description
                 caption
               }
+              images {
+                nodes {
+                  sourceUrl
+                  mediaDetails {
+                    height
+                    width
+                  }
+                  caption(format: RAW)
+                  altText
+                  description
+                }
+              }
             }
             berlinerischWordTypes {
               nodes {
