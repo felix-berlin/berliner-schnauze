@@ -55,7 +55,7 @@
     "postbuild": "pagefind --site dist/"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.5.1",
+    "@astrojs/check": "^0.5.2",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.2.2",
     "@graphql-codegen/introspection": "^4.0.2",
@@ -66,13 +66,13 @@
     "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@types/jsdom": "^21.1.6",
-    "@types/node": "^20.11.16",
+    "@types/node": "^20.11.17",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vite-pwa/astro": "^0.2.0",
     "@vitejs/plugin-vue": "^5.0.3",
     "@vitest/coverage-v8": "^1.2.2",
-    "@vue/compiler-sfc": "^3.4.16",
+    "@vue/compiler-sfc": "^3.4.18",
     "@vue/devtools-api": "^6.5.1",
     "@vue/test-utils": "^2.4.4",
     "autoprefixer": "^10.4.17",
@@ -121,7 +121,7 @@
     "pagefind": "^1.0.4",
     "photoswipe": "^5.4.3",
     "typescript": "^5.3.3",
-    "vue": "^3.4.16",
+    "vue": "^3.4.18",
     "vue3-virtual-scroll-list": "^0.2.1"
   }
 }
