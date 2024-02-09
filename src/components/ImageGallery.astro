@@ -1,7 +1,7 @@
 ---
 import type { WordProperties, MediaItem } from "@ts_types/generated/graphql";
 import "photoswipe/style.css";
-import { Picture, getImage } from "astro:assets";
+import { Picture } from "astro:assets";
 
 type ImageGalleryProps = {
   images: WordProperties["images"];
@@ -13,14 +13,15 @@ const { images, id = `gallery-${crypto.randomUUID()}`, widths } = Astro.props as
 
 const imageList = images?.nodes as Array<MediaItem>;
 
-const webP = await getImage({
-  src: imageList[0].sourceUrl,
-  format: "webp",
-  width: imageList[0].mediaDetails?.width,
-  height: imageList[0].mediaDetails?.height,
-});
+// const webP = await getImage({
+//   src: imageList[0].sourceUrl,
+//   format: "webp",
+//   width: imageList[0].mediaDetails?.width,
+//   height: imageList[0].mediaDetails?.height,
+// });
 
-console.log(webP);
+// console.log(webP);
+// console.log(images && images?.nodes);
 ---
 
 {
