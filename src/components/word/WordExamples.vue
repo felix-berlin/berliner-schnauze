@@ -19,6 +19,8 @@
         :class="`${props.rootBemClass}__example-explanation`"
         v-text="'– ' + examples[0].exampleExplanation"
       />
+
+      <AudioPlayerList :audio="examples[0]?.exampleAudio"></AudioPlayerList>
     </div>
 
     <!-- If more than one example exist -->
@@ -39,6 +41,7 @@
 
 <script setup lang="ts">
 import Quote from "virtual:icons/lucide/quote";
+import AudioPlayerList from "@components/AudioPlayerList.vue";
 import type { Maybe, WordPropertiesExamples } from "@ts_types/generated/graphql";
 
 interface WordExamplesProps {

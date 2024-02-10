@@ -87,11 +87,27 @@ export const getAllWords = async (
             wordProperties {
               article
               berlinerisch
+              berlinerischAudio {
+                audio {
+                  node {
+                    mediaItemUrl
+                  }
+                }
+                gender
+              }
               learnMore
               berolinismus
               examples {
                 example
                 exampleExplanation
+                exampleAudio {
+                  gender
+                  audio {
+                    node {
+                      mediaItemUrl
+                    }
+                  }
+                }
               }
               translations {
                 translation
