@@ -48,7 +48,7 @@ const { wordSlug } = Astro.params as Params;
 const { word, allWords } = Astro.props as Props;
 
 const wordProps: BerlinerWord["wordProperties"] = word.wordProperties;
-console.log(wordProps);
+// console.log(wordProps);
 
 const formattedDate = (date: string, locale = "de-DE") => {
   if (!date) return;
@@ -113,7 +113,11 @@ const wikimediaFiles = await createWikimediaFileList();
     </header>
 
     <!-- {wordProps?.wikimediaFiles && wikimediaFiles &&  />} -->
-    <ImageGallery images={wordProps?.images} widths={[327, 455, 637]} />
+    <ImageGallery
+      images={wordProps?.images}
+      widths={[327, 455, 637]}
+      sizes="(max-width: 320px) 327px, (max-width: 1386px) 637px"
+    />
     {
       wordProps?.alternativeWords && (
         <div class="c-single-word__alternative-words-wrapper">
