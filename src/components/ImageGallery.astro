@@ -86,8 +86,11 @@ const lightboxImageList = await Promise.all(
                   class="c-image-gallery__image"
                 />
               </a>
-              {image?.caption && (
-                <figcaption set:html={image.caption} class="c-image-gallery__caption" />
+              {(image?.caption || image?.description) && (
+                <figcaption class="c-image-gallery__caption">
+                  <p>{image.caption}</p>
+                  <i class="c-image-gallery__description">{image.description}</i>
+                </figcaption>
               )}
             </figure>
           );
