@@ -140,7 +140,7 @@ export const getAllWords = async (
                   }
                   caption(format: RAW)
                   altText
-                  description
+                  description(format: RAW)
                 }
               }
             }

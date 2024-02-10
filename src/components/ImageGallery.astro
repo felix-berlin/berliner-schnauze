@@ -40,13 +40,15 @@ const lightboxImageList = await Promise.all(
         width: image.mediaDetails?.width,
         height: image.mediaDetails?.height,
         widths: lightboxWidths || null,
-        sizes: lightboxSizes || null,
+        sizes: `${lightboxSizes}, ${image.mediaDetails?.width!}px` || null,
       });
     }
 
     return images;
   }),
 );
+
+console.log(images);
 ---
 
 {
