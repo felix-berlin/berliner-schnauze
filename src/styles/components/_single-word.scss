@@ -9,9 +9,11 @@
   background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
   border: 1px dashed var(--grey-100);
   padding: vars.$spacer * 1.5;
-  display: flex;
-  flex-direction: column;
-  gap: 2.25rem;
+  display: grid;
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
   box-shadow:
     0 0.5px 0.6px rgb(0 0 0 / 8%),
     0 4px 5px rgb(0 0 0 / 16%);
@@ -19,11 +21,41 @@
   @include butler-mx.dark-mode-class {
     --color-background: var(--new-blue-400);
   }
+  @include mx.breakpoint("md") {
+    grid-template-areas:
+      "header header"
+      "main main"
+      "footer footer";
+  }
+
+  &:has(.c-single-word__gallery-wrap) {
+    grid-template-areas:
+      "header"
+      "main"
+      "gallery"
+      "footer";
+
+    @include mx.breakpoint("md") {
+      grid-template-areas:
+        "header header"
+        "main gallery"
+        "footer footer";
+      grid-template-columns: 1fr 1fr;
+    }
+  }
 
   &__header {
     position: relative;
     display: flex;
     justify-content: space-between;
+    grid-area: header;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+    grid-area: main;
   }
 
   .c-word-of-the-day-crown {
@@ -163,10 +195,27 @@
     }
   }
 
-  &__image-wrapper {
+  &__gallery-wrap {
+    grid-area: gallery;
+  }
+
+  .c-image-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: vars.$spacer * 1.5;
+
+    .c-image-gallery__item {
+      margin: 0;
+      display: block;
+      padding: var(--spacing-inner, 10px);
+      background: #fff;
+    }
+
+    .c-image-gallery__caption {
+      color: var(--blue-400);
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
 
     picture > source {
       display: none;
@@ -179,7 +228,6 @@
       position: relative;
       filter: grayscale(1) blur(1px) contrast(1.2) sepia(1) blur(0.25px);
       mask: radial-gradient(#000, #000a);
-      border: 10px solid #fff;
 
       &::before {
         content: "";
@@ -234,6 +282,7 @@
   }
 
   &__footer {
+    grid-area: footer;
     display: flex;
     flex-direction: var(--direction-flex, column);
     gap: var(--spacing, #{vars.$spacer * 0.5});
