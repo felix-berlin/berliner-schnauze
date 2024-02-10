@@ -1,13 +1,17 @@
 ---
 import type { WordProperties, MediaItem } from "@ts_types/generated/graphql";
 import "photoswipe/style.css";
-import { Picture } from "astro:assets";
+import { Picture, getImage } from "astro:assets";
+import type { GetImageResult } from "astro:assets";
 
 type ImageGalleryProps = {
   images: WordProperties["images"];
   id?: string;
   widths: number[];
   sizes: string;
+  formats?: string[];
+  lightboxSizes?: string;
+  lightboxWidths?: number[];
 };
 
 const {
@@ -15,32 +19,57 @@ const {
   id = `gallery-${crypto.randomUUID()}`,
   widths,
   sizes,
+  formats = ["avif", "webp", "jpeg"],
+  lightboxSizes,
+  lightboxWidths,
 } = Astro.props as ImageGalleryProps;
 
 const imageList = images?.nodes as Array<MediaItem>;
 
-// const webP = await getImage({
-//   src: imageList[0].sourceUrl,
-//   format: "webp",
-//   width: imageList[0].mediaDetails?.width,
-//   height: imageList[0].mediaDetails?.height,
-// });
+/**
+ * Generate lightbox images
+ */
+const lightboxImageList = await Promise.all(
+  imageList.map(async (image) => {
+    const images: { [key: string]: GetImageResult } = {};
 
-// console.log(webP);
-// console.log(images && images?.nodes);
+    for (const format of formats) {
+      images[format] = await getImage({
+        src: image.sourceUrl,
+        format: format,
+        width: image.mediaDetails?.width,
+        height: image.mediaDetails?.height,
+        widths: lightboxWidths || null,
+        sizes: lightboxSizes || null,
+      });
+    }
+
+    return images;
+  }),
+);
 ---
 
 {
   images && images?.nodes && (
-    <image-gallery data-id={id}>
+    <image-gallery data-id={id} data-formats={formats}>
       <div class="c-image-gallery" id={id}>
-        {imageList?.map((image) => {
+        {imageList?.map((image, index) => {
           return (
-            <figure>
+            <figure class="c-image-gallery__item">
               <a
-                href={image.sourceUrl}
-                data-pswp-width={image.mediaDetails?.width}
-                data-pswp-height={image.mediaDetails?.height}
+                href={lightboxImageList[index].jpeg.src}
+                data-pswp-webp-src={
+                  !!lightboxImageList[0].webp.srcSet.attribute
+                    ? lightboxImageList[0].webp.srcSet.attribute
+                    : lightboxImageList[index].webp.src
+                }
+                data-pswp-avif-src={
+                  !!lightboxImageList[0].avif.srcSet.attribute
+                    ? lightboxImageList[0].avif.srcSet.attribute
+                    : lightboxImageList[index].avif.src
+                }
+                data-pswp-width={lightboxImageList[index].jpeg.attributes.width}
+                data-pswp-height={lightboxImageList[index].jpeg.attributes.height}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Bild in Originalgröße öffnen"
@@ -51,13 +80,15 @@ const imageList = images?.nodes as Array<MediaItem>;
                   alt={image.altText!}
                   width={image.mediaDetails?.width!}
                   height={image.mediaDetails?.height!}
-                  formats={["avif", "webp"]}
+                  formats={formats}
                   widths={widths}
                   sizes={`${sizes}, ${image.mediaDetails?.width!}px`}
                   class="c-image-gallery__image"
                 />
               </a>
-              {image?.caption && <figcaption set:html={image.caption} />}
+              {image?.caption && (
+                <figcaption set:html={image.caption} class="c-image-gallery__caption" />
+              )}
             </figure>
           );
         })}
@@ -67,6 +98,7 @@ const imageList = images?.nodes as Array<MediaItem>;
 }
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import type { Content } from "photoswipe/lightbox";
 
   class ImageGallery extends HTMLElement {
     lightbox: PhotoSwipeLightbox | null = null;
@@ -82,6 +114,64 @@ const imageList = images?.nodes as Array<MediaItem>;
           children: ".c-image-gallery__link",
           pswpModule: () => import("photoswipe"),
         });
+
+        // Parse data-pswp-webp-src attribute
+        this.lightbox.addFilter("itemData", (itemData, index) => {
+          const webpSrc = itemData.element?.dataset.pswpWebpSrc;
+          const avifSrc = itemData.element?.dataset.pswpAvifSrc;
+          if (webpSrc) itemData.webpSrc = webpSrc;
+          if (avifSrc) itemData.avifSrc = avifSrc;
+          return itemData;
+        });
+
+        // use <picture> instead of <img>
+        this.lightbox.on("contentLoad", (e) => {
+          const { content, isLazy } = e;
+
+          if (content.data.webpSrc || content.data.avifSrc) {
+            // prevent to stop the default behavior
+            e.preventDefault();
+
+            const formats = this.dataset.formats?.split(",") || [];
+
+            content.pictureElement = this.createPictureElement(content, formats);
+
+            content.state = "loading";
+
+            if (content.element?.complete) {
+              content.onLoaded();
+            } else {
+              content.element.onload = () => {
+                content.onLoaded();
+              };
+
+              content.element.onerror = () => {
+                content.onError();
+              };
+            }
+          }
+        });
+
+        // by default PhotoSwipe appends <img>,
+        // but we want to append <picture>
+        this.lightbox.on("contentAppend", (e) => {
+          const { content } = e;
+          if (content.pictureElement && !content.pictureElement.parentNode) {
+            e.preventDefault();
+            content.slide?.container.appendChild(content.pictureElement);
+          }
+        });
+
+        // for next/prev navigation with <picture>
+        // by default PhotoSwipe removes <img>,
+        // but we want to remove <picture>
+        this.lightbox.on("contentRemove", (e) => {
+          const { content } = e;
+          if (content.pictureElement && content.pictureElement.parentNode) {
+            e.preventDefault();
+            content.pictureElement.remove();
+          }
+        });
       }
 
       this.lightbox.init();
@@ -92,6 +182,34 @@ const imageList = images?.nodes as Array<MediaItem>;
         this.lightbox.destroy();
         this.lightbox = null;
       }
+    }
+
+    /**
+     * Create picture element
+     *
+     * @param content
+     * @param formats
+     */
+    createPictureElement(content: Content, formats: string[]) {
+      content.pictureElement = document.createElement("picture");
+
+      formats.forEach((format) => {
+        if (content.data[`${format}Src`]) {
+          const source = document.createElement("source");
+          source.srcset = content.data[`${format}Src`];
+          source.type = `image/${format}`;
+          content.pictureElement.appendChild(source);
+        }
+      });
+
+      content.element = document.createElement("img");
+      content.element.src = content.data.src || "";
+      content.element.setAttribute("alt", "");
+      content.element.className = "pswp__img";
+
+      content.pictureElement.appendChild(content.element);
+
+      return content.pictureElement;
     }
   }
 
