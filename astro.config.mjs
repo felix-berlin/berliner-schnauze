@@ -120,8 +120,8 @@ export default defineConfig({
       alias: allAlias,
     },
 
-    // css: {
-    //   preprocessorMaxWorkers: true,
-    // },
+    css: {
+      preprocessorMaxWorkers: true,
+    },
   },
 });
