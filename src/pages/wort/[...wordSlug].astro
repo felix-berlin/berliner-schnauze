@@ -5,7 +5,7 @@ import "@styles/components/_single-word.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 
 // Imports
-import { getAllWords } from "@services/api";
+import { getAllWords } from "@services/api.ts";
 import Layout from "@layouts/Layout.astro";
 import Info from "~icons/lucide/info";
 import ExternalLink from "~icons/lucide/external-link";
@@ -14,7 +14,7 @@ import WordExamples from "@components/word/WordExamples.vue";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import RelatedWords from "@components/RelatedWords.vue";
 import RandomWordButton from "@components/RandomWordButton.vue";
-import { routeToWord, seoData } from "@utils/helpers";
+import { routeToWord, seoData } from "@utils/helpers.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import { Picture } from "astro:assets";
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
@@ -23,7 +23,7 @@ import ImageGallery from "@components/ImageGallery.astro";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
-import type { BerlinerWord } from "@ts_types/generated/graphql";
+import type { BerlinerWord } from "@ts_types/generated/graphql.ts";
 
 export const getStaticPaths = async () => {
   const allWords = await getAllWords();

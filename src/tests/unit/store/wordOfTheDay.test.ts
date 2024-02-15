@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach, beforeAll } from "vitest";
 import { JSDOM } from "jsdom";
 import { cleanStores, keepMount, allTasks } from "nanostores";
-import { $wordOfTheDay, getWordOfTheDay } from "@stores/index";
+import { $wordOfTheDay, getWordOfTheDay } from "@stores/index.ts";
 import {
   useTestStorageEngine,
   setTestStorageKey,

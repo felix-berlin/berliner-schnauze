@@ -17,8 +17,8 @@
 import { computed } from "vue";
 import Crown from "virtual:icons/lucide/crown";
 import { useStore } from "@nanostores/vue";
-import { $wordOfTheDay } from "@stores/index";
-import type { WordProperties } from "@ts_types/generated/graphql";
+import { $wordOfTheDay } from "@stores/index.ts";
+import type { WordProperties } from "@ts_types/generated/graphql.ts";
 
 interface IsWordOfTheDayProps {
   wordId: number;

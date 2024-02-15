@@ -52,8 +52,8 @@ import { defineAsyncComponent } from "vue";
 // import WordExamples from "@components/word/WordExamples.vue";
 import BookOpen from "virtual:icons/lucide/book-open";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
-import { routeToWord } from "@utils/helpers";
-import type { CleanBerlinerWord } from "@stores/index";
+import { routeToWord } from "@utils/helpers.ts";
+import type { CleanBerlinerWord } from "@stores/index.ts";
 
 type WordProps = {
   source: CleanBerlinerWord;

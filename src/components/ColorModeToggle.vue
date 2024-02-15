@@ -27,7 +27,7 @@
 import Moon from "virtual:icons/lucide/moon";
 import Sun from "virtual:icons/lucide/sun";
 import { useStore } from "@nanostores/vue";
-import { $isDarkMode, setDarkMode } from "@stores/index";
+import { $isDarkMode, setDarkMode } from "@stores/index.ts";
 
 interface ColorModeToggleProps {
   cssClasses?: string[] | string;

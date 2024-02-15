@@ -29,8 +29,8 @@
 <script setup lang="ts">
 import SortAsc from "virtual:icons/lucide/sort-asc";
 import SortDesc from "virtual:icons/lucide/sort-desc";
-import type { WordList } from "@stores/index";
-import { setActiveOrderCategory, $wordSearch } from "@stores/index";
+import type { WordList } from "@stores/index.ts";
+import { setActiveOrderCategory, $wordSearch } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
 
 interface SortWordByProps {

@@ -4,7 +4,7 @@ import "@styles/components/_word-group.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 
 import Layout from "@layouts/Layout.astro";
-import { seoData, routeToWord } from "@utils/helpers";
+import { seoData, routeToWord } from "@utils/helpers.ts";
 import { getAllWordsLinks } from "@services/api";
 import type { BerlinerWord } from "@ts_types/generated/graphql";
 import { Breadcrumbs } from "astro-breadcrumbs";

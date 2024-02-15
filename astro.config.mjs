@@ -17,7 +17,7 @@ export default defineConfig({
   },
   integrations: [
     vue({
-      appEntrypoint: "/src/pages/_app",
+      appEntrypoint: "src/pages/_app",
       script: {
         propsDestructure: true,
       },
@@ -92,7 +92,6 @@ export default defineConfig({
         directoryAndTrailingSlashHandler: true,
       },
     }),
-    // sentry(),
     // sentry({
     //   dsn: import.meta.env.SENTRY_DNS,
     //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
@@ -101,7 +100,8 @@ export default defineConfig({
     //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
     //   },
     // }),
-    // spotlightjs(),
+    sentry(),
+    spotlightjs(),
   ],
   vite: {
     plugins: [
@@ -120,8 +120,8 @@ export default defineConfig({
       alias: allAlias,
     },
 
-    css: {
-      preprocessorMaxWorkers: true,
-    },
+    // css: {
+    //   preprocessorMaxWorkers: true,
+    // },
   },
 });

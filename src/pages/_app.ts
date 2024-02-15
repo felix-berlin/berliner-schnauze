@@ -14,7 +14,7 @@ import {
   $showWordListFilterFlyout,
   $toastNotify,
   $activeFilterCount,
-} from "@stores/index";
+} from "../stores/index";
 
 export default (app: App) => {
   app.use(FloatingVue, {

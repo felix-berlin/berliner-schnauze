@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { useStore } from "@nanostores/vue";
-import { $wordSearch, $toggleBerolinismus } from "@stores/index";
+import { $wordSearch, $toggleBerolinismus } from "@stores/index.ts";
 import PawPrint from "virtual:icons/lucide/paw-print";
 
 const wordSearch = useStore($wordSearch);

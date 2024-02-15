@@ -60,10 +60,10 @@ import { ref } from "vue";
 import Copy from "virtual:icons/lucide/copy";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
-import { routeToWord } from "@utils/helpers";
+import { routeToWord } from "@utils/helpers.ts";
 import { useClipboard, useShare } from "@vueuse/core";
-import type { CleanBerlinerWord } from "@stores/index";
-import { createToastNotify } from "@stores/index";
+import type { CleanBerlinerWord } from "@stores/index.ts";
+import { createToastNotify } from "@stores/index.ts";
 
 interface WordProps {
   word: CleanBerlinerWord;

@@ -1,10 +1,10 @@
-import { fetchAPI } from "@services/fetchApi";
-import { seo } from "@services/graphQlQueryParts";
+import { fetchAPI } from "@services/fetchApi.ts";
+import { seo } from "@services/graphQlQueryParts.ts";
 import type {
   RootQueryToBerlinerWordConnection,
   RootQueryToBerlinerWordConnectionEdge,
   BerlinerWord,
-} from "@ts_types/generated/graphql";
+} from "@ts_types/generated/graphql.ts";
 
 type WordEdge = {
   node: {

@@ -19,8 +19,8 @@
 </template>
 
 <script setup lang="ts">
-import { routeToWord } from "@utils/helpers";
-import type { BerlinerWord } from "@ts_types/generated/graphql";
+import { routeToWord } from "@utils/helpers.ts";
+import type { BerlinerWord } from "@ts_types/generated/graphql.ts";
 
 interface RelatedWordsProps {
   numberOfWords?: number;

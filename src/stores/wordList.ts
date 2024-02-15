@@ -1,7 +1,7 @@
 import { computed, action, atom } from "nanostores";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import Fuse from "fuse.js";
-import { useViewTransition } from "@utils/helpers";
+import { useViewTransition } from "@utils/helpers.ts";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
 
 export type CleanBerlinerWord = Omit<BerlinerWord, "seo" | "title">;
@@ -197,11 +197,10 @@ export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
 
   // Filter by word type
   if (wordSearch.activeWordTypeFilter !== "") {
-    filteredWordList = filteredWordList.filter(
-      (word) =>
-        word.berlinerischWordTypes?.nodes.some(
-          (word) => word.name === wordSearch.activeWordTypeFilter,
-        ),
+    filteredWordList = filteredWordList.filter((word) =>
+      word.berlinerischWordTypes?.nodes.some(
+        (word) => word.name === wordSearch.activeWordTypeFilter,
+      ),
     );
   }
 
