@@ -81,7 +81,7 @@ export default defineConfig({
       },
       workbox: {
         globDirectory: "dist",
-        navigateFallback: "/",
+        // navigateFallback: "/",
         globPatterns: ["**/*"],
       },
       devOptions: {
