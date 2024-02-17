@@ -37,7 +37,7 @@ export default defineConfig({
       mode: import.meta.env.DEV ? "development" : "production",
       base: "/",
       scope: "/",
-      includeAssets: ["favicons/favicon.ico"],
+      includeAssets: ["**/*"],
       registerType: "autoUpdate",
       manifest: {
         name: "Berliner Schnauze",
@@ -82,7 +82,7 @@ export default defineConfig({
       workbox: {
         globDirectory: "dist",
         navigateFallback: "/",
-        globPatterns: ["**/*.{js,css,svg,png,jpg,jpeg,gif,webp,avif,woff,woff2,ttf,eot,ico}"],
+        globPatterns: ["**/*"],
       },
       devOptions: {
         enabled: false,
