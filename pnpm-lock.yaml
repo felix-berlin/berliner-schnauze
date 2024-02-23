@@ -18,8 +18,8 @@ dependencies:
     specifier: ^1.1.162
     version: 1.1.162
   '@nanostores/persistent':
-    specifier: ^0.9.1
-    version: 0.9.1(nanostores@0.9.5)
+    specifier: ^0.10.0
+    version: 0.10.1(nanostores@0.9.5)
   '@nanostores/vue':
     specifier: ^0.10.0
     version: 0.10.0(@nanostores/logger@0.2.4)(@vue/devtools-api@6.5.1)(nanostores@0.9.5)(vue@3.4.15)
@@ -3622,11 +3622,11 @@ packages:
     dependencies:
       nanostores: 0.9.5
 
-  /@nanostores/persistent@0.9.1(nanostores@0.9.5):
-    resolution: {integrity: sha512-ow57Hxm5VMaI5GHET/cVk8hX/iKMmbhcGrB9owfN8p8OHiiJgUlYxe1giacwlAALJXAh2t8bxXh42hHb64BCEA==}
-    engines: {node: ^16.0.0 || ^18.0.0 || >=20.0.0}
+  /@nanostores/persistent@0.10.1(nanostores@0.9.5):
+    resolution: {integrity: sha512-BMYj47ONmkrPkHfomimtBAwtDNNjO57lw0uk7jB35GHVwixmqWtlK6DVAAbioqwJn9WEaWSB/9Ss5ukBG0NHlQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      nanostores: ^0.9.0
+      nanostores: ^0.9.0 || ^0.10.0
     dependencies:
       nanostores: 0.9.5
     dev: false
@@ -13318,6 +13318,7 @@ packages:
 
   /workbox-google-analytics@7.0.0:
     resolution: {integrity: sha512-MEYM1JTn/qiC3DbpvP2BVhyIH+dV/5BjHk756u9VbwuAhu0QHyKscTnisQuz21lfRpOwiS9z4XdqeVAKol0bzg==}
+    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
     dependencies:
       workbox-background-sync: 7.0.0
       workbox-core: 7.0.0

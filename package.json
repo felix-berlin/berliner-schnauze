@@ -104,7 +104,7 @@
     "@astrojs/vue": "^4.0.8",
     "@felix_berlin/sass-butler": "3.0.1",
     "@iconify-json/lucide": "^1.1.162",
-    "@nanostores/persistent": "^0.9.1",
+    "@nanostores/persistent": "^0.10.0",
     "@nanostores/vue": "^0.10.0",
     "@pagefind/default-ui": "^1.0.4",
     "@sentry/astro": "^7.99.0",
