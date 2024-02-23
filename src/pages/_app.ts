@@ -1,20 +1,23 @@
 import type { App } from "vue";
 import FloatingVue from "floating-vue";
-import { devtools } from "@nanostores/vue/devtools";
+
+// TODO: enable devtools when https://github.com/nanostores/logger/issues/18 is fixed
+
+// import { devtools } from "@nanostores/vue/devtools";
 // import VueVirtualScroller from "vue-virtual-scroller";
 
-import {
-  $wordOfTheDay,
-  $isDarkMode,
-  $wordSearch,
-  $filteredWordList,
-  searchLength,
-  $installPrompt,
-  $showInstallButton,
-  $showWordListFilterFlyout,
-  $toastNotify,
-  $activeFilterCount,
-} from "../stores/index";
+// import {
+//   $wordOfTheDay,
+//   $isDarkMode,
+//   $wordSearch,
+//   $filteredWordList,
+//   searchLength,
+//   $installPrompt,
+//   $showInstallButton,
+//   $showWordListFilterFlyout,
+//   $toastNotify,
+//   $activeFilterCount,
+// } from "../stores/index";
 
 export default (app: App) => {
   app.use(FloatingVue, {
@@ -28,17 +31,17 @@ export default (app: App) => {
       },
     },
   });
-  app.use(devtools, {
-    $wordOfTheDay,
-    $isDarkMode,
-    $wordSearch,
-    $filteredWordList,
-    searchLength,
-    $installPrompt,
-    $showInstallButton,
-    $showWordListFilterFlyout,
-    $toastNotify,
-    $activeFilterCount,
-  });
+  // app.use(devtools, {
+  //   $wordOfTheDay,
+  //   $isDarkMode,
+  //   $wordSearch,
+  //   $filteredWordList,
+  //   searchLength,
+  //   $installPrompt,
+  //   $showInstallButton,
+  //   $showWordListFilterFlyout,
+  //   $toastNotify,
+  //   $activeFilterCount,
+  // });
   // app.use(VueVirtualScroller);
 };

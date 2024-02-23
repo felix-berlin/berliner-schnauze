@@ -1,4 +1,4 @@
-import { computed, action, atom } from "nanostores";
+import { computed, atom } from "nanostores";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import Fuse from "fuse.js";
 import { useViewTransition } from "@utils/helpers.ts";
@@ -65,26 +65,22 @@ export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
   return count;
 });
 
-export const resetAll = action($wordSearch, "resetAll", (store) => {
-  store.setKey("search", "");
-  store.setKey("activeLetterFilter", "");
-  store.setKey("activeWordTypeFilter", "");
-  store.setKey("alphabeticalOrder", "asc");
-  store.setKey("dateOrder", "asc");
-  store.setKey("modifiedDateOrder", "asc");
-  store.setKey("activeOrderCategory", "alphabetical");
-  store.setKey("berolinismus", false);
-});
+export const resetAll = () => {
+  $wordSearch.setKey("search", "");
+  $wordSearch.setKey("activeLetterFilter", "");
+  $wordSearch.setKey("activeWordTypeFilter", "");
+  $wordSearch.setKey("alphabeticalOrder", "asc");
+  $wordSearch.setKey("dateOrder", "asc");
+  $wordSearch.setKey("modifiedDateOrder", "asc");
+  $wordSearch.setKey("activeOrderCategory", "alphabetical");
+  $wordSearch.setKey("berolinismus", false);
+};
 
 export const $showWordListFilterFlyout = atom<boolean>(false);
 
-export const $toggleWordListFilterFlyout = action(
-  $showWordListFilterFlyout,
-  "toggleWordListFilterFlyout",
-  (store) => {
-    store.set(!store.get());
-  },
-);
+export const $toggleWordListFilterFlyout = () => {
+  $showWordListFilterFlyout.set(!$showWordListFilterFlyout.get());
+};
 
 /**
  * Set the active letter to filter the word list
@@ -93,25 +89,17 @@ export const $toggleWordListFilterFlyout = action(
  *
  * @return  {void}                   [return description]
  */
-export const setLetterFilter = action($wordSearch, "setLetterFilter", (store, letter: string) => {
-  useViewTransition(() => store.setKey("activeLetterFilter", letter));
-});
+export const setLetterFilter = (letter: string) => {
+  useViewTransition(() => $wordSearch.setKey("activeLetterFilter", letter));
+};
 
-export const setWordTypeFilter = action(
-  $wordSearch,
-  "setLetterFilter",
-  (store, wordType: string) => {
-    useViewTransition(() => store.setKey("activeWordTypeFilter", wordType));
-  },
-);
+export const setWordTypeFilter = (wordType: string) => {
+  useViewTransition(() => $wordSearch.setKey("activeWordTypeFilter", wordType));
+};
 
-export const setActiveOrderCategory = action(
-  $wordSearch,
-  "setActiveOrderCategory",
-  (store, orderCategory: WordList["activeOrderCategory"]) => {
-    store.setKey("activeOrderCategory", orderCategory);
-  },
-);
+export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCategory"]) => {
+  $wordSearch.setKey("activeOrderCategory", orderCategory);
+};
 
 /**
  * Toggle order by name
@@ -122,9 +110,12 @@ export const setActiveOrderCategory = action(
  *
  * @return  {void}
  */
-export const $alphabeticalOrderToggle = action($wordSearch, "wordListOrderToggle", (store) => {
-  store.setKey("alphabeticalOrder", store.get().alphabeticalOrder === "asc" ? "desc" : "asc");
-});
+export const $alphabeticalOrderToggle = (): void => {
+  $wordSearch.setKey(
+    "alphabeticalOrder",
+    $wordSearch.get().alphabeticalOrder === "asc" ? "desc" : "asc",
+  );
+};
 
 /**
  * Toggle order by date
@@ -135,9 +126,9 @@ export const $alphabeticalOrderToggle = action($wordSearch, "wordListOrderToggle
  *
  * @return  {void}
  */
-export const $wordListDateOrderToggle = action($wordSearch, "wordListDateOrderToggle", (store) => {
-  store.setKey("dateOrder", store.get().dateOrder === "asc" ? "desc" : "asc");
-});
+export const $wordListDateOrderToggle = (): void => {
+  $wordSearch.setKey("dateOrder", $wordSearch.get().dateOrder === "asc" ? "desc" : "asc");
+};
 
 /**
  * Toggle order by modified date
@@ -148,30 +139,29 @@ export const $wordListDateOrderToggle = action($wordSearch, "wordListDateOrderTo
  *
  * @return  {void}
  */
-export const $wordListModifiedDateOrderToggle = action(
-  $wordSearch,
-  "wordListModifiedDateOrderToggle",
-  (store) => {
-    store.setKey("modifiedDateOrder", store.get().modifiedDateOrder === "asc" ? "desc" : "asc");
-  },
-);
+export const $wordListModifiedDateOrderToggle = (): void => {
+  $wordSearch.setKey(
+    "modifiedDateOrder",
+    $wordSearch.get().modifiedDateOrder === "asc" ? "desc" : "asc",
+  );
+};
 
-export const $setSortOrder = action(
-  $wordSearch,
-  "setSortOder",
-  (store, category: WordList["activeOrderCategory"], orderName: string, order: "asc" | "desc") => {
-    store.setKey("activeOrderCategory", category);
-    store.setKey(orderName, order);
-  },
-);
+export const $setSortOrder = (
+  category: WordList["activeOrderCategory"],
+  orderName: string,
+  order: "asc" | "desc",
+) => {
+  $wordSearch.setKey("activeOrderCategory", category);
+  $wordSearch.setKey(orderName, order);
+};
 
-export const setSearch = action($wordSearch, "setSearch", (store, search: string) => {
-  store.setKey("search", search);
-});
+export const setSearch = (search: string) => {
+  $wordSearch.setKey("search", search);
+};
 
-export const $toggleBerolinismus = action($wordSearch, "toggleBerolinismus", (store) => {
-  useViewTransition(() => store.setKey("berolinismus", !store.get().berolinismus));
-});
+export const $toggleBerolinismus = () => {
+  useViewTransition(() => $wordSearch.setKey("berolinismus", !$wordSearch.get().berolinismus));
+};
 
 export const searchLength = computed($wordSearch, (wordSearch) => {
   return wordSearch.search.length;
