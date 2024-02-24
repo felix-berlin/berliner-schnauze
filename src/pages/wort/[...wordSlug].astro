@@ -93,8 +93,9 @@ const lightboxWidths = [327, 455, 637];
 const lightboxSizes = "(max-width: 320px) 327px, (max-width: 1386px) 637px";
 
 if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
-  galleryWidths = [503, 435];
-  gallerySizes = "(max-width: 70rem) 503px, (max-width: 64rem) 435px";
+  galleryWidths = [503, 435, 307];
+  gallerySizes =
+    "(max-width: 70rem) 503px, (max-width: 64rem) 435px, (max-width: 48rem) 307px, (max-width: 35.5rem) 435px, (max-width: 27.2rem) 307px";
 }
 
 console.log(galleryWidths, gallerySizes);
@@ -212,6 +213,7 @@ console.log(galleryWidths, gallerySizes);
             sizes={gallerySizes}
             lightboxWidths={lightboxWidths}
             lightboxSizes={lightboxSizes}
+            loading="eager"
           />
         </section>
       )

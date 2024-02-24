@@ -12,6 +12,7 @@ type ImageGalleryProps = {
   formats?: string[];
   lightboxSizes?: string;
   lightboxWidths?: number[];
+  loading?: "lazy" | "eager";
 };
 
 const {
@@ -22,6 +23,7 @@ const {
   formats = ["avif", "webp", "jpeg"],
   lightboxSizes,
   lightboxWidths,
+  loading = "lazy",
 } = Astro.props as ImageGalleryProps;
 
 const imageList = images?.nodes as Array<MediaItem>;
@@ -61,10 +63,12 @@ console.log(sizes);
             <figure class="c-image-gallery__item">
               <a
                 href={lightboxImageList[index].jpeg.src}
-                data-pswp-webp-src={lightboxImageList[index].webp.src}
-                data-pswp-avif-src={lightboxImageList[index].avif.src}
+                data-pswp-webp-srcset={lightboxImageList[index].webp.srcSet.attribute}
+                data-pswp-avif-srcset={lightboxImageList[index].avif.srcSet.attribute}
+                data-pswp-srcset={lightboxImageList[index].jpeg.srcSet.attribute}
                 data-pswp-width={lightboxImageList[index].jpeg.attributes.width}
                 data-pswp-height={lightboxImageList[index].jpeg.attributes.height}
+                data-pswp-sizes={lightboxImageList[index].jpeg.attributes.sizes}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Bild in Originalgröße öffnen"
@@ -79,6 +83,7 @@ console.log(sizes);
                   widths={widths}
                   sizes={`${sizes}, ${image.mediaDetails?.width!}px`}
                   class="c-image-gallery__image"
+                  loading={loading}
                 />
               </a>
               {(image?.caption || image?.description) && (
@@ -113,12 +118,17 @@ console.log(sizes);
           pswpModule: () => import("photoswipe"),
         });
 
-        // Parse data-pswp-webp-src attribute
+        // Parse data-pswp attributes
         this.lightbox.addFilter("itemData", (itemData, index) => {
-          const webpSrc = itemData.element?.dataset.pswpWebpSrc;
-          const avifSrc = itemData.element?.dataset.pswpAvifSrc;
-          if (webpSrc) itemData.webpSrc = webpSrc;
-          if (avifSrc) itemData.avifSrc = avifSrc;
+          const webpSrcSet = itemData.element?.dataset.pswpWebpSrcset;
+          const avifSrcSet = itemData.element?.dataset.pswpAvifSrcset;
+          const sizes = itemData.element?.dataset.pswpSizes;
+          const srcSet = itemData.element?.dataset.pswpSrcset;
+
+          if (webpSrcSet) itemData.webpSrcSet = webpSrcSet;
+          if (avifSrcSet) itemData.avifSrcSet = avifSrcSet;
+          if (sizes) itemData.sizes = sizes;
+          if (srcSet) itemData.srcSet = srcSet;
           return itemData;
         });
 
@@ -126,7 +136,7 @@ console.log(sizes);
         this.lightbox.on("contentLoad", (e) => {
           const { content, isLazy } = e;
 
-          if (content.data.webpSrc || content.data.avifSrc) {
+          if (content.data.webpSrcSet || content.data.avifSrcSet) {
             // prevent to stop the default behavior
             e.preventDefault();
 
@@ -192,17 +202,22 @@ console.log(sizes);
       content.pictureElement = document.createElement("picture");
 
       formats.forEach((format) => {
-        if (content.data[`${format}Src`]) {
+        if (content.data[`${format}SrcSet`]) {
           const source = document.createElement("source");
-          source.srcset = content.data[`${format}Src`];
+          source.srcset = content.data[`${format}SrcSet`];
           source.type = `image/${format}`;
+          source.sizes = content.data.sizes || "";
           content.pictureElement.appendChild(source);
         }
       });
 
       content.element = document.createElement("img");
       content.element.src = content.data.src || "";
+      content.element.srcset = content.data.srcSet || "";
       content.element.setAttribute("alt", "");
+      content.element.decoding = "async";
+      content.element.loading = "lazy";
+      content.element.sizes = content.data.sizes || "";
       content.element.className = "pswp__img";
 
       content.pictureElement.appendChild(content.element);
