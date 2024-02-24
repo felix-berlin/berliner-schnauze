@@ -48,7 +48,8 @@ const lightboxImageList = await Promise.all(
   }),
 );
 
-console.log(images);
+// console.log(lightboxImageList);
+console.log(sizes);
 ---
 
 {
@@ -60,16 +61,8 @@ console.log(images);
             <figure class="c-image-gallery__item">
               <a
                 href={lightboxImageList[index].jpeg.src}
-                data-pswp-webp-src={
-                  !!lightboxImageList[0].webp.srcSet.attribute
-                    ? lightboxImageList[0].webp.srcSet.attribute
-                    : lightboxImageList[index].webp.src
-                }
-                data-pswp-avif-src={
-                  !!lightboxImageList[0].avif.srcSet.attribute
-                    ? lightboxImageList[0].avif.srcSet.attribute
-                    : lightboxImageList[index].avif.src
-                }
+                data-pswp-webp-src={lightboxImageList[index].webp.src}
+                data-pswp-avif-src={lightboxImageList[index].avif.src}
                 data-pswp-width={lightboxImageList[index].jpeg.attributes.width}
                 data-pswp-height={lightboxImageList[index].jpeg.attributes.height}
                 target="_blank"
@@ -90,7 +83,7 @@ console.log(images);
               </a>
               {(image?.caption || image?.description) && (
                 <figcaption class="c-image-gallery__caption">
-                  <p>{image.caption}</p>
+                  <p set:html={image.caption} />
                   <i class="c-image-gallery__description">{image.description}</i>
                 </figcaption>
               )}
