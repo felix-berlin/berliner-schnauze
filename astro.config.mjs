@@ -12,6 +12,9 @@ import spotlightjs from "@spotlightjs/astro";
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   prefetch: true,
+  redirects: {
+    "/word/[...wordSlug]": "/wort/[...wordSlug]",
+  },
   image: {
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
