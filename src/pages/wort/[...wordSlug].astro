@@ -122,7 +122,11 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
           )
         }
       </h1>
-      <WordOptionDropdown word={word} client:only="vue" />
+      <WordOptionDropdown
+        berlinerisch={word.wordProperties?.berlinerisch}
+        slug={word.slug}
+        client:only="vue"
+      />
     </header>
     <main class="c-single-word__main">
       {

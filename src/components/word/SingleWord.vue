@@ -33,7 +33,11 @@
           {{ translation?.translation }}
         </dd>
       </dl>
-      <WordOptionDropdown :word="source" class="c-word-list__options-dropdown">
+      <WordOptionDropdown
+        :berlinerisch="source.wordProperties?.berlinerisch"
+        :slug="source.slug"
+        class="c-word-list__options-dropdown"
+      >
         <template #after>
           <a :href="routeToWord(source.slug!)" class="c-options-dropdown__copy-button c-button">
             <BookOpen width="18" height="18" class="c-options-dropdown__icon-button" />
