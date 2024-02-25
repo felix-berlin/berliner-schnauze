@@ -70,7 +70,7 @@ interface WordProps {
   slug: BerlinerWord["slug"];
 }
 
-const { word } = defineProps<WordProps>();
+const { berlinerisch, slug } = defineProps<WordProps>();
 
 const { text, copy, copied, isSupported: clipBoardIsSupported } = useClipboard();
 const { share, isSupported: shareIsSupported } = useShare();
