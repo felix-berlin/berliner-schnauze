@@ -26,6 +26,7 @@
     grid-template-areas:
       "header header"
       "main main"
+      "learn-more learn-more"
       "footer footer";
   }
 
@@ -34,22 +35,51 @@
       "header"
       "main"
       "gallery"
+      "learn-more"
       "footer";
 
     @include mx.breakpoint("md") {
       grid-template-areas:
         "header header"
         "main gallery"
+        "learn-more learn-more"
         "footer footer";
       grid-template-columns: 1fr 1fr;
     }
   }
 
   &__header {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
     grid-area: header;
+    display: flex;
+    flex-wrap: wrap;
+
+    @include mx.breakpoint("sm") {
+      justify-content: space-between;
+    }
+    @include mx.breakpoint("sm", "max") {
+      gap: 1rem 0;
+    }
+
+    .c-options-dropdown {
+      @include mx.breakpoint("sm", "max") {
+        order: 1;
+        flex: 1 0 100%;
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+
+    .c-badge {
+      --color-background: var(--accent);
+    }
+
+    .c-tooltip {
+      align-self: flex-start;
+
+      @include mx.breakpoint("sm", "max") {
+        order: 3;
+      }
+    }
   }
 
   &__main {
@@ -59,14 +89,8 @@
     grid-area: main;
   }
 
-  .c-word-of-the-day-crown {
-    position: absolute;
-    top: -15px;
-    color: vars.$gold;
-  }
-
   .c-options-dropdown {
-    align-self: flex-start;
+    margin-left: auto;
   }
 
   &__crown {
@@ -78,9 +102,13 @@
 
   &__word {
     margin: 0;
+
+    @include mx.breakpoint("sm", "max") {
+      order: 2;
+    }
     font: {
       family: vars.$berlin;
-      size: var(--size-font, 2rem);
+      size: butler-fn.fluid(32, 64, 320, 1260);
       weight: 700;
     }
     text: {
@@ -88,10 +116,6 @@
       decoration-style: dashed;
       decoration-thickness: from-font;
       underline-position: from-font;
-    }
-
-    @include mx.breakpoint("md") {
-      --size-font: 4rem;
     }
   }
 
@@ -202,16 +226,18 @@
 
   .c-image-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: vars.$spacer * 1.5;
+
+    @include mx.breakpoint("xxs") {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
 
     .c-image-gallery__item {
       margin: 0;
-      display: block;
       padding: var(--spacing-inner, 10px);
       background: #fff;
       width: fit-content;
-      box-shadow: 0 3px 1px
+      box-shadow: 0 3px 3px
         color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent);
 
       @include butler-mx.dark-mode-class {
@@ -266,19 +292,21 @@
   }
 
   &__learn-more {
-    &-wrapper {
-      display: flex;
-      align-items: center;
-      gap: vars.$spacer * 0.5;
-    }
-
     &-link {
+      grid-area: learn-more;
       display: flex;
       gap: vars.$spacer * 0.2;
       font-size: var(--size-font, 0.9rem);
+      margin-top: 2.5rem;
 
+      @include butler-mx.hover {
+        --decoration-text: underline dashed;
+      }
       @include mx.breakpoint("xxs") {
         --size-font: 1rem;
+      }
+      @include mx.breakpoint("md") {
+        justify-self: flex-end;
       }
 
       &-icon {
@@ -298,8 +326,7 @@
     display: flex;
     flex-direction: var(--direction-flex, column);
     gap: var(--spacing, #{vars.$spacer * 0.5});
-    margin-top: vars.$spacer * 2.5;
-    border-top: 1px dashed var(--grey-100);
+    border-top: 1px dashed var(--new-blue-200);
     padding-top: vars.$spacer * 1.5;
 
     @include mx.breakpoint("xs") {
@@ -314,6 +341,6 @@
   &__modified {
     margin: 0;
     font-size: 0.8rem;
-    color: var(--blue-100);
+    color: color-mix(in srgb, var(--blue) 60%, white);
   }
 }

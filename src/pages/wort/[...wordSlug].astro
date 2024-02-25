@@ -7,7 +7,6 @@ import "@styles/plugins/astro-breadcrumbs.scss";
 // Imports
 import { getAllWords } from "@services/api.ts";
 import Layout from "@layouts/Layout.astro";
-import Info from "~icons/lucide/info";
 import ExternalLink from "~icons/lucide/external-link";
 import ChevronRight from "~icons/lucide/chevron-right";
 import WordExamples from "@components/word/WordExamples.vue";
@@ -16,10 +15,11 @@ import RelatedWords from "@components/RelatedWords.vue";
 import RandomWordButton from "@components/RandomWordButton.vue";
 import { routeToWord, seoData } from "@utils/helpers.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
-import { Picture } from "astro:assets";
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import ImageGallery from "@components/ImageGallery.astro";
+import ToolTip from "@components/ToolTip.vue";
+import BadgeTag from "@components/BadgeTag.vue";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -48,7 +48,6 @@ const { wordSlug } = Astro.params as Params;
 const { word, allWords } = Astro.props as Props;
 
 const wordProps: BerlinerWord["wordProperties"] = word.wordProperties;
-// console.log(wordProps);
 
 const formattedDate = (date: string, locale = "de-DE") => {
   if (!date) return;
@@ -105,14 +104,15 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
     <ChevronRight slot="separator" width="20" height="20" />
   </Breadcrumbs>
 
+  <IsWordOfTheDay
+    wordId={word.berlinerWordId}
+    word={wordProps?.berlinerisch}
+    iconSize={50}
+    tooltipPlacement="top"
+    client:only="vue"
+  />
   <article class="c-single-word">
     <header class="c-single-word__header">
-      <IsWordOfTheDay
-        wordId={word.berlinerWordId}
-        word={wordProps?.berlinerisch}
-        client:only="vue"
-      />
-
       <h1 class="c-single-word__word">
         {wordProps?.berlinerisch}
 
@@ -122,6 +122,23 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
           )
         }
       </h1>
+      {
+        wordProps?.berolinismus && (
+          <ToolTip client:only="vue">
+            <BadgeTag> Berolinismus </BadgeTag>
+            <Fragment slot="content">
+              {word.wordProperties?.berlinerisch} gehört zu den Berlinismen.{" "}
+              <>
+                <br />
+                <br />
+                <strong>Berolinismus</strong>
+              </>{" "}
+              sind humorvolle Spitznamen und Eigenheiten, die bestimmte Orte und Gebäude in Berlin
+              charakterisieren und das lokale Flair der Stadt prägen.
+            </Fragment>
+          </ToolTip>
+        )
+      }
       <WordOptionDropdown
         berlinerisch={word.wordProperties?.berlinerisch}
         slug={word.slug}
@@ -134,20 +151,6 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
           <div class="c-single-word__alternative-words-wrapper">
             <h2>Selbe Bedeutung wie:</h2>
             <p class="c-single-word__alternative-word">{alternativeWords}</p>
-          </div>
-        )
-      }
-
-      {
-        wordProps?.learnMore && (
-          <div class="c-single-word__learn-more-wrapper">
-            <Info />
-            <a href={wordProps?.learnMore} target="_blank" class="c-single-word__learn-more-link">
-              Erfahre mehr über dieses Wort
-              <span class="c-single-word__learn-more-link-icon">
-                <ExternalLink width="10" height="10" />
-              </span>
-            </a>
           </div>
         )
       }
@@ -219,6 +222,22 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
             loading="eager"
           />
         </section>
+      )
+    }
+
+    {
+      wordProps?.learnMore && (
+        <a
+          href={wordProps?.learnMore}
+          target="_blank"
+          class="c-single-word__learn-more-link"
+          title="mehr zu diesen Wort auf Wikipedia"
+        >
+          Erfahre mehr über dieses Wort
+          <span class="c-single-word__learn-more-link-icon">
+            <ExternalLink width="10" height="10" />
+          </span>
+        </a>
       )
     }
 
