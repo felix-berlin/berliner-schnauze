@@ -1,13 +1,17 @@
 <template>
-  <div v-for="(item, index) in audio" :key="index">
-    <figure>
-      <figcaption>Listen to the T-Rex:</figcaption>
-      <audio controls controlslist="nodownload" :src="item?.audio?.node.mediaItemUrl"></audio>
-    </figure>
+  <div v-for="(item, index) in audio" :key="index" class="c-audio-list">
+    <div class="c-audio-list__item">
+      <span class="c-audio-list__gender">{{ item?.gender === "female" ? "♀" : "♂" }}</span>
+      <AudioPlayer
+        :audio="item?.audio?.node.mediaItemUrl"
+        class="c-audio-list__audio-player"
+      ></AudioPlayer>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import AudioPlayer from "@components/AudioPlayer.vue";
 import type {
   Maybe,
   WordPropertiesBerlinerischAudio,
