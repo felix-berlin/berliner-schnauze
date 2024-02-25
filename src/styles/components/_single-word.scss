@@ -211,6 +211,12 @@
       padding: var(--spacing-inner, 10px);
       background: #fff;
       width: fit-content;
+      box-shadow: 0 3px 1px
+        color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent);
+
+      @include butler-mx.dark-mode-class {
+        --color-border: var(--new-blue-200);
+      }
     }
 
     .c-image-gallery__link {
