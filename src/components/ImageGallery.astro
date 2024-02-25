@@ -101,7 +101,11 @@ console.log(sizes);
 }
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
-  import type { Content } from "photoswipe/lightbox";
+  import type { Content as PhotoSwipeContent } from "photoswipe/lightbox";
+
+  interface Content extends PhotoSwipeContent {
+    pictureElement?: HTMLPictureElement;
+  }
 
   class ImageGallery extends HTMLElement {
     lightbox: PhotoSwipeLightbox | null = null;
@@ -145,17 +149,18 @@ console.log(sizes);
             content.pictureElement = this.createPictureElement(content, formats);
 
             content.state = "loading";
-
-            if (content.element?.complete) {
-              content.onLoaded();
-            } else {
-              content.element.onload = () => {
+            if (content.element && content.element instanceof HTMLImageElement) {
+              if (content.element?.complete) {
                 content.onLoaded();
-              };
+              } else {
+                content.element.onload = () => {
+                  content.onLoaded();
+                };
 
-              content.element.onerror = () => {
-                content.onError();
-              };
+                content.element.onerror = () => {
+                  content.onError();
+                };
+              }
             }
           }
         });
@@ -207,18 +212,21 @@ console.log(sizes);
           source.srcset = content.data[`${format}SrcSet`];
           source.type = `image/${format}`;
           source.sizes = content.data.sizes || "";
-          content.pictureElement.appendChild(source);
+          content.pictureElement?.appendChild(source);
         }
       });
 
       content.element = document.createElement("img");
-      content.element.src = content.data.src || "";
-      content.element.srcset = content.data.srcSet || "";
-      content.element.setAttribute("alt", "");
-      content.element.decoding = "async";
-      content.element.loading = "lazy";
-      content.element.sizes = content.data.sizes || "";
-      content.element.className = "pswp__img";
+
+      if (content.element instanceof HTMLImageElement) {
+        content.element.src = content.data.src || "";
+        content.element.srcset = content.data.srcSet || "";
+        content.element.setAttribute("alt", "");
+        content.element.decoding = "async";
+        content.element.loading = "lazy";
+        content.element.sizes = content.data.sizes || "";
+        content.element.className = "pswp__img";
+      }
 
       content.pictureElement.appendChild(content.element);
 
