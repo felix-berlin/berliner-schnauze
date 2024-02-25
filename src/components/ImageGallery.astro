@@ -37,7 +37,7 @@ const lightboxImageList = await Promise.all(
 
     for (const format of formats) {
       images[format] = await getImage({
-        src: image.sourceUrl,
+        src: image.sourceUrl!,
         format: format,
         width: image.mediaDetails?.width,
         height: image.mediaDetails?.height,
@@ -49,9 +49,6 @@ const lightboxImageList = await Promise.all(
     return images;
   }),
 );
-
-// console.log(lightboxImageList);
-console.log(sizes);
 ---
 
 {

@@ -86,19 +86,18 @@ const createWikimediaFileList = async () => {
 const wikimediaFiles = await createWikimediaFileList();
 // console.log(wikimediaFiles);
 
-let galleryWidths = [336, 447, 914];
+let galleryWidths = [316, 457, 658, 429, 525];
 let gallerySizes =
-  "(max-width: 425px) 336px, (max-width: 568px) 447px, (max-width: 768px) 914px, (max-width: 1024px) 447px";
-const lightboxWidths = [327, 455, 637];
-const lightboxSizes = "(max-width: 320px) 327px, (max-width: 1386px) 637px";
+  "(max-width: 80rem) 525px, (max-width: 64rem) 429px, (max-width: 48rem) 658px, (max-width: 35.49rem) 457px, (max-width: 26.6rem) 316px";
+const lightboxWidths = [425, 567, 768, 896];
+const lightboxSizes =
+  "(max-width: 26.6rem) 425px, (max-width: 35.49rem) 567px, (max-width: 48rem) 768px, (max-width: 64rem) 896px";
 
 if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
   galleryWidths = [503, 435, 307];
   gallerySizes =
     "(max-width: 70rem) 503px, (max-width: 64rem) 435px, (max-width: 48rem) 307px, (max-width: 35.5rem) 435px, (max-width: 27.2rem) 307px";
 }
-
-console.log(galleryWidths, gallerySizes);
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
