@@ -10,6 +10,7 @@
   border: 1px dashed var(--grey-100);
   padding: vars.$spacer * 1.5;
   display: grid;
+  gap: 2.25rem;
   grid-template-areas:
     "header"
     "main"
@@ -209,6 +210,11 @@
       display: block;
       padding: var(--spacing-inner, 10px);
       background: #fff;
+      width: fit-content;
+    }
+
+    .c-image-gallery__link {
+      cursor: zoom-in;
     }
 
     .c-image-gallery__caption {
