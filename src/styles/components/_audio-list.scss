@@ -1,0 +1,34 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-audio-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap, 0.25rem);
+
+  &__item {
+    display: flex;
+  }
+
+  &__gender {
+    --border: var(--width-border, 1px) var(--style-border, solid)
+      var(--color-border, var(--orange-600));
+
+    display: flex;
+    align-items: center;
+    padding: 0 3px;
+    background-color: var(--color-background, var(--orange-100));
+    color: var(--color, var(--blue));
+    border: {
+      left: var(--border);
+      top: var(--border);
+      bottom: var(--border);
+    }
+
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--new-blue-500);
+      --color: var(--yellow-500);
+      --color-border: color-mix(in srgb, var(--blue) 80%, white);
+    }
+  }
+}
