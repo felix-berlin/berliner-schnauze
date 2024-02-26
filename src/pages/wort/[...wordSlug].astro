@@ -125,7 +125,11 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
       </h1>
       {
         word.wordProperties?.berlinerischAudio && (
-          <AudioPlayerList audio={word.wordProperties?.berlinerischAudio} client:only="vue" />
+          <AudioPlayerList
+            audio={word.wordProperties?.berlinerischAudio}
+            isType="berlinerisch"
+            client:only="vue"
+          />
         )
       }
 

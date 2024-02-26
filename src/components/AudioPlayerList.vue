@@ -1,6 +1,13 @@
 <template>
-  <div v-for="(item, index) in audio" :key="index" class="c-audio-list">
-    <div class="c-audio-list__item">
+  <div class="c-audio-list">
+    <div
+      v-for="(item, index) in audio"
+      :key="index"
+      v-tooltip="
+        `Höre dir ${isType === 'example' ? 'das Beispiel' : 'das Wort'} mit einer ${item?.gender === 'female' ? 'weiblichen' : 'männlichen'} Stimme an.`
+      "
+      class="c-audio-list__item"
+    >
       <span class="c-audio-list__gender">{{ item?.gender === "female" ? "♀" : "♂" }}</span>
       <AudioPlayer
         :audio="item?.audio?.node.mediaItemUrl"
@@ -22,9 +29,12 @@ type AudioPlayerListProps = {
   audio:
     | Maybe<Maybe<WordPropertiesExamplesExampleAudio>[]>
     | Maybe<Maybe<WordPropertiesBerlinerischAudio>[]>;
+  isType: "example" | "berlinerisch";
 };
 
-const { audio } = defineProps<AudioPlayerListProps>();
+const { audio, isType } = defineProps<AudioPlayerListProps>();
 </script>
 
-<style scoped></style>
+<style lang="scss">
+@use "@styles/components/audio-list";
+</style>

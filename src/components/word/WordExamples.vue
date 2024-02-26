@@ -20,7 +20,11 @@
         v-text="'– ' + examples[0].exampleExplanation"
       />
 
-      <AudioPlayerList :audio="examples[0]?.exampleAudio"></AudioPlayerList>
+      <AudioPlayerList
+        v-if="examples[0]?.exampleAudio"
+        :audio="examples[0]?.exampleAudio"
+        is-type="example"
+      />
     </div>
 
     <!-- If more than one example exist -->
@@ -34,6 +38,11 @@
         <div v-if="item?.exampleExplanation" :class="`${props.rootBemClass}__examples-explanation`">
           – {{ item.exampleExplanation }}
         </div>
+        <AudioPlayerList
+          v-if="examples[exampleIndex]?.exampleAudio"
+          :audio="examples[exampleIndex]?.exampleAudio"
+          is-type="example"
+        />
       </li>
     </ol>
   </div>
