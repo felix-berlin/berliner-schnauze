@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { useVModel } from "@nanostores/vue";
-import { $wordSearch } from "@stores/index";
+import { $wordSearch } from "@stores/index.ts";
 
 const berolinismus = useVModel($wordSearch, "berolinismus");
 </script>

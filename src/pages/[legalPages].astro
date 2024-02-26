@@ -1,7 +1,7 @@
 ---
 import "@styles/objects/_legal-pages.scss";
 import Layout from "@layouts/Layout.astro";
-import { getPageById } from "@services/api";
+import { getPageById } from "@services/api.ts";
 import type { InferGetStaticParamsType, InferGetStaticPropsType, GetStaticPaths } from "astro";
 
 export const getStaticPaths = async () => {

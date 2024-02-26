@@ -23,7 +23,7 @@ import {
   $showInstallButton,
   $isPwaInstalled,
   triggerPwaInstall,
-} from "@stores/index";
+} from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
 
 export interface InstallAppProps {

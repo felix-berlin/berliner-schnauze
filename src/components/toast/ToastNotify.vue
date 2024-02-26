@@ -26,13 +26,13 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeMount, watch, nextTick, reactive } from "vue";
 import { useSwipe } from "@vueuse/core";
-import { removeToastById, supportsPopover } from "@stores/index";
+import { removeToastById, supportsPopover } from "@stores/index.ts";
 import Info from "virtual:icons/lucide/info";
 import Error from "virtual:icons/lucide/x-circle";
 import Warning from "virtual:icons/lucide/alert-circle";
 import Success from "virtual:icons/lucide/check-circle-2";
 import Close from "virtual:icons/lucide/x";
-import type { ToastNotify } from "@stores/index";
+import type { ToastNotify } from "@stores/index.ts";
 
 type Position = "bottom" | "left" | "right" | "top";
 

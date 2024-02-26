@@ -3,7 +3,7 @@ import "@styles/components/_filter-search.scss";
 import WordSearchList from "@components/word-search/WordSearchList.vue";
 import WordFilter from "@components/word-search/WordFilter.vue";
 import type { RootQueryToBerlinerWordConnectionEdge } from "@ts_types/generated/graphql";
-import type { CleanBerlinerWord } from "@stores/index";
+import type { CleanBerlinerWord } from "@stores/index.ts";
 
 interface WordSearchProps {
   words: RootQueryToBerlinerWordConnectionEdge[];

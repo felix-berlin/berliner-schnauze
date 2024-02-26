@@ -41,9 +41,9 @@
 import { shallowRef } from "vue";
 // import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 import SingleWord from "@components/word/SingleWord.vue";
-// import { words as wordList } from "@stores/index";
+// import { words as wordList } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
-import { $filteredWordList } from "@stores/index";
+import { $filteredWordList } from "@stores/index.ts";
 import VirtualList from "vue3-virtual-scroll-list";
 
 const SingleWordItem = shallowRef(SingleWord);

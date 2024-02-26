@@ -13,11 +13,11 @@ export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   prefetch: true,
   image: {
-    domains: ["upload.wikimedia.org"],
+    domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
   integrations: [
     vue({
-      appEntrypoint: "/src/pages/_app",
+      appEntrypoint: "src/pages/_app",
       script: {
         propsDestructure: true,
       },
@@ -37,7 +37,7 @@ export default defineConfig({
       mode: import.meta.env.DEV ? "development" : "production",
       base: "/",
       scope: "/",
-      includeAssets: ["favicons/favicon.ico"],
+      includeAssets: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
       registerType: "autoUpdate",
       manifest: {
         name: "Berliner Schnauze",
@@ -81,8 +81,8 @@ export default defineConfig({
       },
       workbox: {
         globDirectory: "dist",
-        navigateFallback: "/",
-        globPatterns: ["**/*.{js,css,svg,png,jpg,jpeg,gif,webp,avif,woff,woff2,ttf,eot,ico}"],
+        // navigateFallback: "/",
+        globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
       },
       devOptions: {
         enabled: false,
@@ -92,7 +92,6 @@ export default defineConfig({
         directoryAndTrailingSlashHandler: true,
       },
     }),
-    // sentry(),
     // sentry({
     //   dsn: import.meta.env.SENTRY_DNS,
     //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
@@ -101,7 +100,8 @@ export default defineConfig({
     //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
     //   },
     // }),
-    // spotlightjs(),
+    sentry(),
+    spotlightjs(),
   ],
   vite: {
     plugins: [
@@ -118,6 +118,10 @@ export default defineConfig({
 
     resolve: {
       alias: allAlias,
+    },
+
+    css: {
+      preprocessorMaxWorkers: true,
     },
   },
 });

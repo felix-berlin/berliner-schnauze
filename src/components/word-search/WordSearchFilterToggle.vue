@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import Filter from "virtual:icons/lucide/filter";
-import { $toggleWordListFilterFlyout, $activeFilterCount } from "@stores/index";
+import { $toggleWordListFilterFlyout, $activeFilterCount } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
 
 const activeFilterCount = useStore($activeFilterCount);

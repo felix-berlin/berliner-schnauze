@@ -3,9 +3,16 @@
 .o-word {
   display: flex;
   flex-direction: column;
-  gap: vars.$spacer;
+  gap: 2rem;
 
   .c-breadcrumbs {
     margin: 20px 0 15px;
+  }
+
+  .c-word-of-the-day-crown {
+    align-self: center;
+    color: vars.$gold;
+    bottom: -2rem;
+    position: relative;
   }
 }

@@ -136,7 +136,7 @@
 import { ref, reactive, watch } from "vue";
 import AlertBanner from "@components/AlertBanner.vue";
 import TurnStile from "@components/TurnStile.vue";
-import { createToastNotify } from "@stores/index";
+import { createToastNotify } from "@stores/index.ts";
 
 interface FormData {
   berlinerWord?: string;

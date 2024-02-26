@@ -4,8 +4,8 @@ import "@styles/components/_word-group.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 
 import Layout from "@layouts/Layout.astro";
-import { seoData, routeToWord } from "@utils/helpers";
-import { getAllWordsLinks } from "@services/api";
+import { seoData, routeToWord } from "@utils/helpers.ts";
+import { getAllWordsLinks } from "@services/api.ts";
 import type { BerlinerWord } from "@ts_types/generated/graphql";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import ChevronRight from "~icons/lucide/chevron-right";

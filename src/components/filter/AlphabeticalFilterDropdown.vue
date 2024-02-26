@@ -45,7 +45,7 @@ import Filter from "virtual:icons/lucide/filter";
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import { useStore } from "@nanostores/vue";
 import { onSet } from "nanostores";
-import { $wordSearch, setLetterFilter } from "@stores/index";
+import { $wordSearch, setLetterFilter } from "@stores/index.ts";
 
 const wordSearch = useStore($wordSearch);
 const hideDropdown = ref(false);

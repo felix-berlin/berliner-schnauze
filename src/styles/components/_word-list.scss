@@ -25,7 +25,7 @@
     gap: 1rem;
     box-shadow:
       0 0.5px 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 8%, transparent),
-      0 4px 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent);
+      0 2px 3px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent);
 
     @include butler-mx.hover {
       .c-word-list__berlinerisch a {

@@ -35,7 +35,7 @@
 import { ref, computed } from "vue";
 import Search from "virtual:icons/lucide/search";
 import X from "virtual:icons/lucide/x";
-import { $wordSearch, setSearch, searchLength as currentSearchLength } from "@stores/index";
+import { $wordSearch, setSearch, searchLength as currentSearchLength } from "@stores/index.ts";
 import { useStore, useVModel } from "@nanostores/vue";
 
 interface SearchWordsProps {

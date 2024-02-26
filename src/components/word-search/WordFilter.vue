@@ -49,7 +49,7 @@ import LetterFilter from "@components/filter/LetterFilter.vue";
 import BerolinismusSwitch from "@components/filter/BerolinismusSwitch.vue";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
-import { $toggleWordListFilterFlyout, $showWordListFilterFlyout, resetAll } from "@stores/index";
+import { $toggleWordListFilterFlyout, $showWordListFilterFlyout, resetAll } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
 import BadgeTag from "@components/BadgeTag.vue";
 import X from "virtual:icons/lucide/x";

@@ -19624,8 +19624,6 @@ export type WordProperties = AcfFieldGroup & AcfFieldGroupFields & WordPropertie
   berlinerischAudio?: Maybe<Array<Maybe<WordPropertiesBerlinerischAudio>>>;
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   berolinismus?: Maybe<Scalars['Boolean']['output']>;
-  /** Field of the &quot;gallery&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
-  bilder?: Maybe<AcfMediaItemConnection>;
   /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   examples?: Maybe<Array<Maybe<WordPropertiesExamples>>>;
   /**
@@ -19633,6 +19631,8 @@ export type WordProperties = AcfFieldGroup & AcfFieldGroupFields & WordPropertie
    * @deprecated Use __typename instead
    */
   fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;gallery&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
+  images?: Maybe<AcfMediaItemConnection>;
   /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   infoText?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
@@ -19647,7 +19647,7 @@ export type WordProperties = AcfFieldGroup & AcfFieldGroupFields & WordPropertie
 
 
 /** The &quot;WordProperties&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type WordPropertiesBilderArgs = {
+export type WordPropertiesImagesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -19718,8 +19718,8 @@ export type WordPropertiesExamples = AcfFieldGroup & AcfFieldGroupFields & WordP
   __typename?: 'WordPropertiesExamples';
   /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
   example?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
-  exampleAudio?: Maybe<AcfMediaItemConnectionEdge>;
+  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
+  exampleAudio?: Maybe<Array<Maybe<WordPropertiesExamplesExampleAudio>>>;
   /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
   exampleExplanation?: Maybe<Scalars['String']['output']>;
   /**
@@ -19729,12 +19729,39 @@ export type WordPropertiesExamples = AcfFieldGroup & AcfFieldGroupFields & WordP
   fieldGroupName?: Maybe<Scalars['String']['output']>;
 };
 
+/** The &quot;WordPropertiesExamplesExampleAudio&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
+export type WordPropertiesExamplesExampleAudio = AcfFieldGroup & AcfFieldGroupFields & WordPropertiesExamplesExampleAudio_Fields & {
+  __typename?: 'WordPropertiesExamplesExampleAudio';
+  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamplesExampleAudio&quot; Field Group */
+  audio?: Maybe<AcfMediaItemConnectionEdge>;
+  /**
+   * The name of the field group
+   * @deprecated Use __typename instead
+   */
+  fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;radio&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamplesExampleAudio&quot; Field Group */
+  gender?: Maybe<Scalars['String']['output']>;
+};
+
+/** Interface representing fields of the ACF &quot;WordPropertiesExamplesExampleAudio&quot; Field Group */
+export type WordPropertiesExamplesExampleAudio_Fields = {
+  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamplesExampleAudio&quot; Field Group */
+  audio?: Maybe<AcfMediaItemConnectionEdge>;
+  /**
+   * The name of the field group
+   * @deprecated Use __typename instead
+   */
+  fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;radio&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamplesExampleAudio&quot; Field Group */
+  gender?: Maybe<Scalars['String']['output']>;
+};
+
 /** Interface representing fields of the ACF &quot;WordPropertiesExamples&quot; Field Group */
 export type WordPropertiesExamples_Fields = {
   /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
   example?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
-  exampleAudio?: Maybe<AcfMediaItemConnectionEdge>;
+  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
+  exampleAudio?: Maybe<Array<Maybe<WordPropertiesExamplesExampleAudio>>>;
   /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
   exampleExplanation?: Maybe<Scalars['String']['output']>;
   /**
@@ -19810,8 +19837,6 @@ export type WordProperties_Fields = {
   berlinerischAudio?: Maybe<Array<Maybe<WordPropertiesBerlinerischAudio>>>;
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   berolinismus?: Maybe<Scalars['Boolean']['output']>;
-  /** Field of the &quot;gallery&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
-  bilder?: Maybe<AcfMediaItemConnection>;
   /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   examples?: Maybe<Array<Maybe<WordPropertiesExamples>>>;
   /**
@@ -19819,6 +19844,8 @@ export type WordProperties_Fields = {
    * @deprecated Use __typename instead
    */
   fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;gallery&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
+  images?: Maybe<AcfMediaItemConnection>;
   /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   infoText?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
@@ -19833,7 +19860,7 @@ export type WordProperties_Fields = {
 
 
 /** Interface representing fields of the ACF &quot;WordProperties&quot; Field Group */
-export type WordProperties_FieldsBilderArgs = {
+export type WordProperties_FieldsImagesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;

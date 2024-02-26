@@ -1,4 +1,4 @@
-import { action, onMount } from "nanostores";
+import { onMount } from "nanostores";
 import { persistentMap } from "@nanostores/persistent";
 
 interface Translation {
@@ -61,7 +61,7 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
  *
  * @return  {Promise<void>}
  */
-export const getWordOfTheDay = action($wordOfTheDay, "getWordOfTheDay", async (store) => {
+export const getWordOfTheDay = async (): Promise<void> => {
   return await fetch(`${import.meta.env.PUBLIC_WP_REST_API}/berliner-schnauze/v1/word-of-the-day`, {
     headers: {
       "Content-Type": "application/json",
@@ -70,24 +70,24 @@ export const getWordOfTheDay = action($wordOfTheDay, "getWordOfTheDay", async (s
   })
     .then((res) => {
       if (!res.ok) {
-        store.setKey("error", true);
+        $wordOfTheDay.setKey("error", true);
 
         throw new Error("Failed to fetch Word of the Day");
       }
 
       const timeOfFetch = new Date().getTime();
-      store.setKey("timestamp", timeOfFetch);
+      $wordOfTheDay.setKey("timestamp", timeOfFetch);
 
       return res.json();
     })
     .then((data) => {
-      store.setKey("word", data);
-      store.setKey("loading", false);
+      $wordOfTheDay.setKey("word", data);
+      $wordOfTheDay.setKey("loading", false);
     })
     .catch((err) => {
       console.error("Failed to fetch Word of the Day: ", err);
     });
-});
+};
 
 onMount($wordOfTheDay, () => {
   getWordOfTheDay();

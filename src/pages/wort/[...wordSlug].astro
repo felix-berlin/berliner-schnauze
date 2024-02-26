@@ -5,24 +5,26 @@ import "@styles/components/_single-word.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 
 // Imports
-import { getAllWords } from "@services/api";
+import { getAllWords } from "@services/api.ts";
 import Layout from "@layouts/Layout.astro";
-import Info from "~icons/lucide/info";
 import ExternalLink from "~icons/lucide/external-link";
 import ChevronRight from "~icons/lucide/chevron-right";
 import WordExamples from "@components/word/WordExamples.vue";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import RelatedWords from "@components/RelatedWords.vue";
 import RandomWordButton from "@components/RandomWordButton.vue";
-import { routeToWord, seoData } from "@utils/helpers";
+import { routeToWord, seoData } from "@utils/helpers.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
-import { Picture } from "astro:assets";
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
+import ImageGallery from "@components/ImageGallery.astro";
+import ToolTip from "@components/ToolTip.vue";
+import BadgeTag from "@components/BadgeTag.vue";
+import AudioPlayerList from "@components/AudioPlayerList.vue";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
-import type { BerlinerWord } from "@ts_types/generated/graphql";
+import type { BerlinerWord } from "@ts_types/generated/graphql.ts";
 
 export const getStaticPaths = async () => {
   const allWords = await getAllWords();
@@ -82,7 +84,20 @@ const createWikimediaFileList = async () => {
 };
 
 const wikimediaFiles = await createWikimediaFileList();
-console.log(wikimediaFiles);
+// console.log(wikimediaFiles);
+
+let galleryWidths = [316, 457, 658, 429, 525];
+let gallerySizes =
+  "(max-width: 80rem) 525px, (max-width: 64rem) 429px, (max-width: 48rem) 658px, (max-width: 35.49rem) 457px, (max-width: 26.6rem) 316px";
+const lightboxWidths = [425, 567, 768, 896];
+const lightboxSizes =
+  "(max-width: 26.6rem) 425px, (max-width: 35.49rem) 567px, (max-width: 48rem) 768px, (max-width: 64rem) 896px";
+
+if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
+  galleryWidths = [503, 435, 307];
+  gallerySizes =
+    "(max-width: 70rem) 503px, (max-width: 64rem) 435px, (max-width: 48rem) 307px, (max-width: 35.5rem) 435px, (max-width: 27.2rem) 307px";
+}
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
@@ -90,14 +105,15 @@ console.log(wikimediaFiles);
     <ChevronRight slot="separator" width="20" height="20" />
   </Breadcrumbs>
 
+  <IsWordOfTheDay
+    wordId={word.berlinerWordId}
+    word={wordProps?.berlinerisch}
+    iconSize={50}
+    tooltipPlacement="top"
+    client:only="vue"
+  />
   <article class="c-single-word">
     <header class="c-single-word__header">
-      <IsWordOfTheDay
-        wordId={word.berlinerWordId}
-        word={wordProps?.berlinerisch}
-        client:only="vue"
-      />
-
       <h1 class="c-single-word__word">
         {wordProps?.berlinerisch}
 
@@ -107,111 +123,131 @@ console.log(wikimediaFiles);
           )
         }
       </h1>
-      <WordOptionDropdown word={word} client:only="vue" />
+      {
+        word.wordProperties?.berlinerischAudio && (
+          <AudioPlayerList
+            audio={word.wordProperties?.berlinerischAudio}
+            isType="berlinerisch"
+            client:only="vue"
+          />
+        )
+      }
+
+      {
+        wordProps?.berolinismus && (
+          <ToolTip client:only="vue">
+            <BadgeTag> Berolinismus </BadgeTag>
+            <Fragment slot="content">
+              {word.wordProperties?.berlinerisch} gehört zu den Berlinismen.
+              <br />
+              <br />
+              <strong>Berolinismus</strong>
+              sind humorvolle Spitznamen und Eigenheiten, die bestimmte Orte und Gebäude in Berlin
+              charakterisieren und das lokale Flair der Stadt prägen.
+            </Fragment>
+          </ToolTip>
+        )
+      }
+      <WordOptionDropdown
+        berlinerisch={word.wordProperties?.berlinerisch}
+        slug={word.slug}
+        client:only="vue"
+      />
     </header>
+    <main class="c-single-word__main">
+      {
+        wordProps?.alternativeWords && (
+          <div class="c-single-word__alternative-words-wrapper">
+            <h2>Selbe Bedeutung wie:</h2>
+            <p class="c-single-word__alternative-word">{alternativeWords}</p>
+          </div>
+        )
+      }
+
+      {
+        word?.berlinerischWordTypes && word?.berlinerischWordTypes.nodes.length > 0 && (
+          <div class="c-single-word__word-type-wrapper">
+            <h2 class="c-single-word__sub-headline">Wortart:</h2>
+            <p class="c-single-word__word-type">{word?.berlinerischWordTypes.nodes[0].name}</p>
+          </div>
+        )
+      }
+      {
+        wordProps?.translations && (
+          <div class="c-single-word__translation-wrapper">
+            <h2 class="c-single-word__sub-headline">Bedeutung:</h2>
+
+            <ul class="c-single-word__translation">
+              {wordProps?.translations?.map((translation) => {
+                return <li class="c-single-word__translation-item">{translation?.translation}</li>;
+              })}
+            </ul>
+          </div>
+        )
+      }
+
+      {
+        wordProps?.examples && (
+          <div class="c-single-word__examples-wrapper">
+            <h2 class="c-single-word__sub-headline">Beispiele:</h2>
+            <WordExamples
+              examples={wordProps.examples}
+              rootBemClass="c-single-word"
+              client:only="vue"
+            />
+          </div>
+        )
+      }
+
+      {
+        wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
+          <div class="c-single-word__related-words-wrapper">
+            <h3>Verwandte Worte:</h3>
+            <ul class="c-single-word__related-words-list">
+              {wordProps.relatedWords.nodes.map((word): BerlinerWord[] => {
+                return (
+                  <li class="c-single-word__related-word">
+                    <a href={routeToWord(word?.slug!)} class="c-single-word__related-word-link">
+                      {word?.wordProperties?.berlinerisch}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )
+      }
+    </main>
 
     {
-      wordProps?.wikimediaFiles && wikimediaFiles && (
-        <div class="c-single-word__image-wrapper">
-          {wikimediaFiles?.map((file) => {
-            return file.caption ? (
-              <figure>
-                <Picture
-                  src={file.image.preferred.url}
-                  alt={file.description ?? wordProps?.berlinerisch!}
-                  width={file.image.preferred.width}
-                  height={file.image.preferred.height}
-                  formats={["avif", "webp"]}
-                  widths={[327, 455, 637]}
-                  class="c-single-word__image"
-                />
-                <figcaption>{file.caption}</figcaption>
-              </figure>
-            ) : (
-              <Picture
-                src={file.image.preferred.url}
-                alt={file.description ?? wordProps?.berlinerisch!}
-                width={file.image.preferred.width}
-                height={file.image.preferred.height}
-                formats={["avif", "webp"]}
-                widths={[327, 455, 637]}
-                class="c-single-word__image"
-              />
-            );
-          })}
-        </div>
-      )
-    }
-
-    {
-      wordProps?.alternativeWords && (
-        <div class="c-single-word__alternative-words-wrapper">
-          <h2>Selbe Bedeutung wie:</h2>
-          <p class="c-single-word__alternative-word">{alternativeWords}</p>
-        </div>
+      wordProps?.images && (
+        <section class="c-single-word__gallery-wrap">
+          <h2>Bilder:</h2>
+          <ImageGallery
+            images={wordProps?.images}
+            widths={galleryWidths}
+            sizes={gallerySizes}
+            lightboxWidths={lightboxWidths}
+            lightboxSizes={lightboxSizes}
+            loading="eager"
+          />
+        </section>
       )
     }
 
     {
       wordProps?.learnMore && (
-        <div class="c-single-word__learn-more-wrapper">
-          <Info />
-          <a href={wordProps?.learnMore} target="_blank" class="c-single-word__learn-more-link">
-            Erfahre mehr über dieses Wort
-            <span class="c-single-word__learn-more-link-icon">
-              <ExternalLink width="10" height="10" />
-            </span>
-          </a>
-        </div>
-      )
-    }
-
-    {
-      word?.berlinerischWordTypes && word?.berlinerischWordTypes.nodes.length > 0 && (
-        <div class="c-single-word__word-type-wrapper">
-          <h2 class="c-single-word__sub-headline">Wortart:</h2>
-          <p class="c-single-word__word-type">{word?.berlinerischWordTypes.nodes[0].name}</p>
-        </div>
-      )
-    }
-
-    <div class="c-single-word__translation-wrapper">
-      {wordProps?.translations && <h2 class="c-single-word__sub-headline">Bedeutung:</h2>}
-
-      <ul class="c-single-word__translation">
-        {
-          wordProps?.translations?.map((translation) => {
-            return <li class="c-single-word__translation-item">{translation?.translation}</li>;
-          })
-        }
-      </ul>
-    </div>
-
-    {
-      wordProps?.examples && (
-        <div class="c-single-word__examples-wrapper">
-          <h2 class="c-single-word__sub-headline">Beispiele:</h2>
-          <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
-        </div>
-      )
-    }
-
-    {
-      wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
-        <div class="c-single-word__related-words-wrapper">
-          <h3>Verwandte Worte:</h3>
-          <ul class="c-single-word__related-words-list">
-            {wordProps.relatedWords.nodes.map((word): BerlinerWord[] => {
-              return (
-                <li class="c-single-word__related-word">
-                  <a href={routeToWord(word?.slug!)} class="c-single-word__related-word-link">
-                    {word?.wordProperties?.berlinerisch}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        <a
+          href={wordProps?.learnMore}
+          target="_blank"
+          class="c-single-word__learn-more-link"
+          title="mehr zu diesen Wort auf Wikipedia"
+        >
+          Erfahre mehr über dieses Wort
+          <span class="c-single-word__learn-more-link-icon">
+            <ExternalLink width="10" height="10" />
+          </span>
+        </a>
       )
     }
 

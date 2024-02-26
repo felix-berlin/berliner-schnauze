@@ -1,4 +1,4 @@
-import { action, atom } from "nanostores";
+import { atom } from "nanostores";
 
 export type ToastStatus = "success" | "error" | "info" | "warning";
 
@@ -64,34 +64,30 @@ const createToast = (payload: ToastPayload): ToastNotify => ({
  *
  * @return  {void}                      [return description]
  */
-export const createToastNotify = action(
-  $toastNotify,
-  "createToastNotify",
-  (store, payload: ToastPayload) => {
-    if (!supportsPopover()) return;
+export const createToastNotify = (payload: ToastPayload): void => {
+  if (!supportsPopover()) return;
 
-    const { timeout } = payload;
+  const { timeout } = payload;
 
-    const toast = createToast(payload);
+  const toast = createToast(payload);
 
-    store.set([toast, ...store.get()]);
+  $toastNotify.set([toast, ...$toastNotify.get()]);
 
-    if (timeout !== null) {
-      setTimeout(
-        () => {
-          const currentToast = store.get().find((t) => t.id === toast.id);
+  if (timeout !== null) {
+    setTimeout(
+      () => {
+        const currentToast = $toastNotify.get().find((t) => t.id === toast.id);
 
-          hidePopover(currentToast?.id);
-        },
-        (timeout ?? defaultTimeout) - removeToastTimeout,
-      );
+        hidePopover(currentToast?.id);
+      },
+      (timeout ?? defaultTimeout) - removeToastTimeout,
+    );
 
-      setTimeout(() => {
-        store.set(store.get().filter((t) => t.id !== toast.id));
-      }, timeout ?? defaultTimeout);
-    }
-  },
-);
+    setTimeout(() => {
+      $toastNotify.set($toastNotify.get().filter((t) => t.id !== toast.id));
+    }, timeout ?? defaultTimeout);
+  }
+};
 
 /**
  * Removes a toast from the toastNotify store
@@ -100,12 +96,12 @@ export const createToastNotify = action(
  *
  * @return  {void}
  */
-export const removeToastById = action($toastNotify, "removeToastById", (store, id: number) => {
-  const currentToast = store.get().find((t) => t.id === id);
+export const removeToastById = (id: number): void => {
+  const currentToast = $toastNotify.get().find((t) => t.id === id);
 
   hidePopover(currentToast?.id);
 
   setTimeout(() => {
-    store.set(store.get().filter((t) => t.id !== id));
+    $toastNotify.set($toastNotify.get().filter((t) => t.id !== id));
   }, removeToastTimeout);
-});
+};

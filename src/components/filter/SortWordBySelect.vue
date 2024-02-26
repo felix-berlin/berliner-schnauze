@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { $setSortOrder } from "@stores/index";
-import type { WordList } from "@stores/index";
+import { $setSortOrder } from "@stores/index.ts";
+import type { WordList } from "@stores/index.ts";
 
 const options = reactive([
   {
