@@ -3,51 +3,73 @@
     ref="audioButton"
     type="button"
     :aria-label="isPlaying ? 'Stop audio' : 'Play audio'"
-    class="c-audio-player__button c-button c-button--center-icon"
+    class="c-audio-player c-button c-button--center-icon"
     @click="togglePlayStop"
   >
-    <Transition name="fade" mode="out-in">
-      <PlayCircle v-if="!isPlaying" key="play" />
-      <PauseCircle v-else key="pause" />
-    </Transition>
+    <div class="c-audio-player__actions">
+      <Transition name="fade" mode="out-in">
+        <Play v-if="!isPlaying" key="play" />
+        <Pause v-else key="pause" />
+      </Transition>
+    </div>
+    <div class="c-audio-player__progress" :style="fillStyle"></div>
   </button>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
-import PlayCircle from "virtual:icons/lucide/play-circle";
-import PauseCircle from "virtual:icons/lucide/pause-circle";
-import type {
-  Maybe,
-  WordPropertiesBerlinerischAudio,
-  WordPropertiesExamplesExampleAudio,
-} from "@ts_types/generated/graphql";
+import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
+import Play from "virtual:icons/lucide/play";
+import Pause from "virtual:icons/lucide/pause";
+import type { MediaItem } from "@ts_types/generated/graphql";
 
 type AudioPlayerListProps = {
-  audio:
-    | Maybe<Maybe<WordPropertiesExamplesExampleAudio>[]>
-    | Maybe<Maybe<WordPropertiesBerlinerischAudio>[]>;
+  audio: MediaItem["mediaItemUrl"];
 };
 
 const { audio } = defineProps<AudioPlayerListProps>();
 
-const audioFile = new Audio(audio);
+const audioFile: HTMLAudioElement | null = audio ? new Audio(audio) : null;
 const isPlaying = ref(false);
 const audioButton = ref<HTMLButtonElement | null>(null);
+const progress = ref(0);
 
-const togglePlayStop = () => {
-  if (isPlaying.value) {
-    audioFile.pause();
-    isPlaying.value = false;
-  } else {
-    audioFile.play();
-    isPlaying.value = true;
+let animationFrameId: number | null = null;
+
+const fillStyle = computed(() => ({
+  height: `${progress.value}%`,
+}));
+
+const updateProgress = () => {
+  if (audioFile && isPlaying.value) {
+    progress.value = (audioFile.currentTime / audioFile.duration) * 100;
+    animationFrameId = requestAnimationFrame(updateProgress);
   }
 };
 
+const playAudio = () => {
+  audioFile?.play();
+  isPlaying.value = true;
+  animationFrameId = requestAnimationFrame(updateProgress);
+};
+
+const stopAudio = () => {
+  audioFile?.pause();
+  isPlaying.value = false;
+  if (animationFrameId !== null) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+};
+
+const togglePlayStop = () => {
+  isPlaying.value ? stopAudio() : playAudio();
+};
+
 onMounted(() => {
-  audioFile.addEventListener("ended", () => {
+  audioFile?.addEventListener("timeupdate", updateProgress);
+  audioFile?.addEventListener("ended", () => {
     isPlaying.value = false;
+    progress.value = 0; // Reset progress
   });
 
   nextTick(() => {
@@ -56,10 +78,36 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  audioFile.removeEventListener("ended", () => {
+  audioFile?.removeEventListener("timeupdate", updateProgress);
+  audioFile?.removeEventListener("ended", () => {
     isPlaying.value = false;
+    progress.value = 0; // Reset progress
   });
+
+  if (animationFrameId !== null) {
+    cancelAnimationFrame(animationFrameId);
+  }
 });
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.c-audio-player {
+  position: relative;
+
+  &__actions {
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--accent);
+    transition: height 0.1s linear;
+  }
+}
+</style>
