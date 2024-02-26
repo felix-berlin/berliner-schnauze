@@ -2,7 +2,7 @@
   <button
     ref="audioButton"
     type="button"
-    :aria-label="isPlaying ? 'Stop audio' : 'Play audio'"
+    :aria-label="isPlaying ? 'Audio stoppen' : 'Audio abspielen'"
     class="c-audio-player c-button c-button--center-icon"
     @click="togglePlayStop"
   >
