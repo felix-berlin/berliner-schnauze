@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.7.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.6.0...v3.7.0) (2024-02-26)
+
+
+### Bug Fixes
+
+* adjust sizes if there are more than 1 ([787e252](https://github.com/felix-berlin/berliner-schnauze/commit/787e25278933e71cb06d5efea3c36b29222f881c))
+* **AudioPlayer:** exchange label with german ([e222d4f](https://github.com/felix-berlin/berliner-schnauze/commit/e222d4fbdd9f028b07d59f1204aad2c79105fc23))
+* better asset caching ([2786464](https://github.com/felix-berlin/berliner-schnauze/commit/278646451f95ca325debb90bf5f5dd8cbdba1398))
+* **custom scrollbar:** broken styles and missing firefox styles ([a859312](https://github.com/felix-berlin/berliner-schnauze/commit/a8593124ea00eba7f725c851daaabedd7db7fe08))
+* **ImageGallery:** lightbox item count ([4f3e6f5](https://github.com/felix-berlin/berliner-schnauze/commit/4f3e6f5136d1b158b61e486fc64065293924cc75))
+* **ImageGallery:** ts errors ([f2cc60b](https://github.com/felix-berlin/berliner-schnauze/commit/f2cc60b90bf7cf15455f3177a70bdd539160261e))
+* migrate to nanostores 0.10.0 -> remove actions ([7b8b698](https://github.com/felix-berlin/berliner-schnauze/commit/7b8b6988bfbc976fbc7106b59890fbc59f3fbe66))
+* move redirect to astro ([2ca0e30](https://github.com/felix-berlin/berliner-schnauze/commit/2ca0e30faed222dd9feaae6373071122947fea8f))
+* **pwa:** remove fallback url ([048dfa7](https://github.com/felix-berlin/berliner-schnauze/commit/048dfa7885dade8b5b0b0f2999b49efd09513223))
+* remove astro redirects ([409ad0d](https://github.com/felix-berlin/berliner-schnauze/commit/409ad0d7b6f6bb3ea13be9955fac0bfed3e75483))
+* remove get image ([1eae66a](https://github.com/felix-berlin/berliner-schnauze/commit/1eae66a8cbca51eef2c5d99194bf18c5b1feab4b))
+* remove redirect ([8d51e48](https://github.com/felix-berlin/berliner-schnauze/commit/8d51e48f6823a07a792d0b3a31d1ed0968e8444c))
+* **single pages:** better spacing and image widths ([12e4019](https://github.com/felix-berlin/berliner-schnauze/commit/12e40192853c0945a9f7359fac573ffd5417d9d7))
+* size for 64rem ([20528c1](https://github.com/felix-berlin/berliner-schnauze/commit/20528c1e3bbf92158c22f7afc01f55f129bbe9ca))
+* **WordOptionDropdown:** add missing prop declaration ([df5b7f7](https://github.com/felix-berlin/berliner-schnauze/commit/df5b7f7a213e9a8e3740f9e1950a362196667447))
+
+
+### Features
+
+* add gallery astro component ([abff390](https://github.com/felix-berlin/berliner-schnauze/commit/abff390f493aaaf42ea1e6cddee52c178b13fcc2))
+* add option to show test data ([876f235](https://github.com/felix-berlin/berliner-schnauze/commit/876f235077c5f3bda1560d0074a605efd0c178a1))
+* **AudioPlayer:** add custom audio player component ([6589ff7](https://github.com/felix-berlin/berliner-schnauze/commit/6589ff7750346def3e84b26f63c8a8d6f8f044bc))
+* **AudioPlayer:** add progress animation ([b413766](https://github.com/felix-berlin/berliner-schnauze/commit/b41376657ca5e5428d96af2dd7b2dbc6d6a50401))
+* **AudioPlayerList:** add Component and render ([a15e938](https://github.com/felix-berlin/berliner-schnauze/commit/a15e938eddc87a0ab85e7a50ec307f960646cbc2))
+* **AudioPlayerList:** add styles ([5691750](https://github.com/felix-berlin/berliner-schnauze/commit/5691750dccb0971f9efa0588b5bd623d5b88d6c3))
+* **AudioPlayerList:** add tooltip ([0edef46](https://github.com/felix-berlin/berliner-schnauze/commit/0edef46ed797bfb0e06dc198b9ac62d3d34bb970))
+* finalize responsive image lightbox ([be99936](https://github.com/felix-berlin/berliner-schnauze/commit/be999368559c8b6e67685bd09de8f91e016fa20e))
+* **ImageGallery:** add lightbox ([46c1369](https://github.com/felix-berlin/berliner-schnauze/commit/46c1369fe9cdc3db5c53d7a684e4d789a06ec448))
+* **ImageGallery:** add responsive image in lightbox ([8a3c86e](https://github.com/felix-berlin/berliner-schnauze/commit/8a3c86e048bd067940bff14fda85d9be9021c409))
+* **ImageGallery:** render description ([12db8ca](https://github.com/felix-berlin/berliner-schnauze/commit/12db8caae495cd593718ac69d227eded5fdea607))
+* **IsWordOfTheDay:** add more props ([cb67c2d](https://github.com/felix-berlin/berliner-schnauze/commit/cb67c2d435e4322d32c18062f82ec58728b53468))
+* **pwa:** cache all assets ([e66ddcd](https://github.com/felix-berlin/berliner-schnauze/commit/e66ddcde88abdb295c69800a992b631afd4932f8))
+* **pwa:** notify user when app is offline ready ([41610b9](https://github.com/felix-berlin/berliner-schnauze/commit/41610b95229ed30b66f6611bfec255112246dc0a))
+* **pwa:** update favicons ([b8722bf](https://github.com/felix-berlin/berliner-schnauze/commit/b8722bff8e5bbbc5a19637caae3c9291473ceb69))
+* **singel pages:** reorder elements + better responsive design ([4706afd](https://github.com/felix-berlin/berliner-schnauze/commit/4706afd1ea84b4e27b2978b20b7c6b6b3d3da15d))
+* **single page:** add new layout with gallery on side ([760eb3e](https://github.com/felix-berlin/berliner-schnauze/commit/760eb3ef5c69ea230e5aa71b83ee3f83c06d1020))
+* **single page:** add old image style ([f802b5d](https://github.com/felix-berlin/berliner-schnauze/commit/f802b5d013743e333d6608e3d95b541d1af63274))
+* **single page:** final image sizes ([fcc3414](https://github.com/felix-berlin/berliner-schnauze/commit/fcc3414c16b06092bf0a9ca378d1b9bcf2bf0f4e))
+* **single pages:** add audio player list to main word ([b881747](https://github.com/felix-berlin/berliner-schnauze/commit/b881747904b4d4bcba6c232dec1240b98f4539e4))
+* **single pages:** add header audio player list styles ([6d50633](https://github.com/felix-berlin/berliner-schnauze/commit/6d50633bf80c97018ad5ea43a0a6fbb7f9dbb82c))
+* **single pages:** add image shadow ([72e2a73](https://github.com/felix-berlin/berliner-schnauze/commit/72e2a73d1d5d09663b9b7b504ff5b962ede2884b))
+* **ToolTip:** add wrapper component ([0656100](https://github.com/felix-berlin/berliner-schnauze/commit/0656100195300100ce6693b6f6cf25d4a3ccc602))
+* **word list:** reduce box shadow ([3d4b37a](https://github.com/felix-berlin/berliner-schnauze/commit/3d4b37a91def5e85a559d0002a16aafd906e3e89))
+
+
+### Performance Improvements
+
+* **WordOptionDropdown:** prevent larg html output; pass only nessary data ([2bd9dd3](https://github.com/felix-berlin/berliner-schnauze/commit/2bd9dd35facccb6fb03ca5aa32042116dbaafc16))
+
 # [3.6.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.5.2...v3.6.0) (2024-02-02)
 
 
