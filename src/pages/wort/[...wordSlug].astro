@@ -20,6 +20,7 @@ import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import ImageGallery from "@components/ImageGallery.astro";
 import ToolTip from "@components/ToolTip.vue";
 import BadgeTag from "@components/BadgeTag.vue";
+import AudioPlayerList from "@components/AudioPlayerList.vue";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -123,16 +124,20 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
         }
       </h1>
       {
+        word.wordProperties?.berlinerischAudio && (
+          <AudioPlayerList audio={word.wordProperties?.berlinerischAudio} client:only="vue" />
+        )
+      }
+
+      {
         wordProps?.berolinismus && (
           <ToolTip client:only="vue">
             <BadgeTag> Berolinismus </BadgeTag>
             <Fragment slot="content">
-              {word.wordProperties?.berlinerisch} gehört zu den Berlinismen.{" "}
-              <>
-                <br />
-                <br />
-                <strong>Berolinismus</strong>
-              </>{" "}
+              {word.wordProperties?.berlinerisch} gehört zu den Berlinismen.
+              <br />
+              <br />
+              <strong>Berolinismus</strong>
               sind humorvolle Spitznamen und Eigenheiten, die bestimmte Orte und Gebäude in Berlin
               charakterisieren und das lokale Flair der Stadt prägen.
             </Fragment>
@@ -163,18 +168,19 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
           </div>
         )
       }
+      {
+        wordProps?.translations && (
+          <div class="c-single-word__translation-wrapper">
+            <h2 class="c-single-word__sub-headline">Bedeutung:</h2>
 
-      <div class="c-single-word__translation-wrapper">
-        {wordProps?.translations && <h2 class="c-single-word__sub-headline">Bedeutung:</h2>}
-
-        <ul class="c-single-word__translation">
-          {
-            wordProps?.translations?.map((translation) => {
-              return <li class="c-single-word__translation-item">{translation?.translation}</li>;
-            })
-          }
-        </ul>
-      </div>
+            <ul class="c-single-word__translation">
+              {wordProps?.translations?.map((translation) => {
+                return <li class="c-single-word__translation-item">{translation?.translation}</li>;
+              })}
+            </ul>
+          </div>
+        )
+      }
 
       {
         wordProps?.examples && (
