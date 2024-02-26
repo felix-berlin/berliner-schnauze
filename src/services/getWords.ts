@@ -64,6 +64,7 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
 export const getAllWords = async (
   orderByField = "TITLE",
   orderByType = "ASC",
+  stati = import.meta.env.SHOW_TEST_CONTENT ? "[PUBLISH]" : "[DRAFT, PUBLISH]",
 ): Promise<RootQueryToBerlinerWordConnectionEdge[]> => {
   let allWords: WordEdge[] = [];
   let cursor: string | null = null;
@@ -72,9 +73,10 @@ export const getAllWords = async (
   while (true) {
     const data: BerlinerWordsData = await fetchAPI(`
     {
-      berlinerWords(first: ${pageSize}, after: ${
-        cursor ? `"${cursor}"` : null
-      }, where: {status: PUBLISH, orderby: {field: ${orderByField}, order: ${orderByType}}}) {
+      berlinerWords(
+        first: ${pageSize},
+        after: ${cursor ? `"${cursor}"` : null},
+        where: {orderby: {field: ${orderByField}, order: ${orderByType}}, stati: ${stati}}) {
         edges {
           node {
             id
