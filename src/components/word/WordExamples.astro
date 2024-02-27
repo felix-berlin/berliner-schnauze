@@ -26,7 +26,7 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
         )}
 
         {examples[0]?.exampleAudio && (
-          <AudioPlayerList audio={examples[0]?.exampleAudio} isType="example" client:load />
+          <AudioPlayerList audio={examples[0]?.exampleAudio} isType="example" client:only="vue" />
         )}
       </div>
     )
@@ -44,7 +44,7 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
               </div>
             )}
             {item?.exampleAudio && (
-              <AudioPlayerList audio={item?.exampleAudio} isType="example" client:load />
+              <AudioPlayerList audio={item?.exampleAudio} isType="example" client:only="vue" />
             )}
           </li>
         ))}
