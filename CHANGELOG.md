@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.7.3...v3.7.4) (2024-02-27)
+
+
+### Bug Fixes
+
+* **MainHeader:** hydration error ([6516bf2](https://github.com/felix-berlin/berliner-schnauze/commit/6516bf233e0adb537e00d8ce9750a26e6a0a7aac))
+
 ## [3.7.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.7.2...v3.7.3) (2024-02-27)
 
 
