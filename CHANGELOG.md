@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.7.4...v3.7.5) (2024-02-27)
+
+
+### Bug Fixes
+
+* **pagefind:** css vars ([b271dbe](https://github.com/felix-berlin/berliner-schnauze/commit/b271dbec682eda04aa6aa11ce31c6bf7dca0cf4e))
+* **SearchBar:** styles ([d2a92d4](https://github.com/felix-berlin/berliner-schnauze/commit/d2a92d4270a41f965b56e343dceb73988561da8a))
+
+
+### Performance Improvements
+
+* **SearchModal:** load searchbar async ([fbaab85](https://github.com/felix-berlin/berliner-schnauze/commit/fbaab8540a0bc6228b5757f74695b6ab0482e103))
+
 ## [3.7.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.7.3...v3.7.4) (2024-02-27)
 
 
