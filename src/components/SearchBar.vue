@@ -32,6 +32,8 @@ const initPagefind = (): void => {
     baseUrl: "/",
     resetStyles: false,
     showImages: false,
+    autofocus: true,
+    excerptLength: 15,
     bundlePath,
   });
 };
