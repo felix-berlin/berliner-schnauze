@@ -3,7 +3,7 @@
     class="c-searchbar c-button c-button--outline"
     type="button"
     aria-label="Suche aktivieren"
-    @click="openSearch"
+    @click="getModalLoaded"
   >
     <SearchIcon class="c-searchbar__search-icon" />
     <span class="c-searchbar__label">Suche</span>
@@ -11,11 +11,13 @@
   </button>
 
   <Modal
+    v-if="loadModal"
     ref="searchModal"
     :open="searchVisible"
     position="top"
     :disable-scroll="true"
     @close="searchVisible = false"
+    @mounted="modalMounted = true"
   >
     <!-- TODO: replace by <search></search>  -->
     <div role="search">
@@ -25,15 +27,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, onUnmounted } from "vue";
+import { ref, onMounted, nextTick, onUnmounted, defineAsyncComponent, watch } from "vue";
 import type { Ref } from "vue";
-import Modal from "@components/Modal.vue";
-import SearchBar from "@components/SearchBar.vue";
+// import Modal from "@components/Modal.vue";
+// import SearchBar from "@components/SearchBar.vue";
 import SearchIcon from "virtual:icons/lucide/search";
 import SquareSlash from "virtual:icons/lucide/square-slash";
 
+const Modal = defineAsyncComponent(() => import("@components/Modal.vue"));
+
+const SearchBar = defineAsyncComponent(() => import("@components/SearchBar.vue"));
+
+const loadModal = ref(false);
+const modalMounted = ref(false);
 const searchVisible = ref(false);
 const searchModal: Ref<InstanceType<typeof Modal> | null> = ref(null);
+
+/**
+ * Trigger the async modal to load
+ *
+ * @return  {void}
+ */
+const getModalLoaded = (): void => {
+  loadModal.value = true;
+};
 
 /**
  * Open the search modal
@@ -86,7 +103,7 @@ const openSearchViaKeyboard = (event: KeyboardEvent): void => {
 
   if (event.key === "/" || event.key === ".") {
     event.preventDefault();
-    openSearch();
+    getModalLoaded();
     focusSearch();
   }
 };
@@ -101,6 +118,16 @@ onUnmounted(() => {
   window.removeEventListener("keydown", (event) => openSearchViaKeyboard(event));
 
   document.removeEventListener("astro:after-swap", () => closeSearch());
+});
+
+/**
+ * Watch if modal is mounted
+ * If true, open the search
+ */
+watch(modalMounted, (value) => {
+  if (value) {
+    openSearch();
+  }
 });
 </script>
 

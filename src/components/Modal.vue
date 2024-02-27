@@ -45,7 +45,7 @@ const {
 } = defineProps<ModalProps>();
 
 const modal = ref<HTMLDialogElement | null>(null);
-const emit = defineEmits(["close", "open"]);
+const emit = defineEmits(["close", "open", "mounted"]);
 const isVisible = ref(open);
 
 /**
@@ -99,6 +99,8 @@ onMounted(() => {
   if (closeOnClickOutside) modal.value?.addEventListener("click", onClickOutside);
 
   modal.value?.addEventListener("close", () => closeModal());
+
+  emit("mounted");
 });
 
 onUnmounted(() => {
