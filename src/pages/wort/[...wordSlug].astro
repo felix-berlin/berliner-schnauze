@@ -257,7 +257,19 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
       </p>
     </footer>
   </article>
+  <script>
+    // Astro will do the job of bundling everything for you
+    import { getOramaDB, search } from "@orama/plugin-astro/client";
 
+    // We load the DB that we generated at build time, this is an asynchronous
+    // operation, so we must either await, or rely on `.then` calls.
+    const db = await getOramaDB("mydb");
+
+    // Now we can search inside our DB. Of course, feel free to use it in more
+    // interesting ways.
+    console.log("Search Results");
+    console.log(await search(db, { term: "knorke" }));
+  </script>
   <RelatedWords words={allWords}>
     <RandomWordButton words={allWords} class:list="c-related-words__word is-random" />
   </RelatedWords>

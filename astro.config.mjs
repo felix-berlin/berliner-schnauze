@@ -7,6 +7,7 @@ import allAlias from "./alias.ts";
 import AstroPWA from "@vite-pwa/astro";
 import sentry from "@sentry/astro";
 import spotlightjs from "@spotlightjs/astro";
+import orama from "@orama/plugin-astro";
 
 // https://astro.build/config
 export default defineConfig({
@@ -90,6 +91,20 @@ export default defineConfig({
       },
       experimental: {
         directoryAndTrailingSlashHandler: true,
+      },
+    }),
+    orama({
+      // We can generate more than one DB, with different configurations
+      mydb: {
+        // Required. Only pages matching this path regex will be indexed
+        pathMatcher: /wort\/.*/,
+
+        // Optional. 'english' by default
+        language: "german",
+
+        // Optional. ['body'] by default. Use it to constraint what is used to
+        // index a page.
+        contentSelectors: ["h1", "main"],
       },
     }),
     // sentry({

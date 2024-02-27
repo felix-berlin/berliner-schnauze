@@ -107,6 +107,7 @@
     "@iconify-json/lucide": "^1.1.169",
     "@nanostores/persistent": "^0.10.1",
     "@nanostores/vue": "^0.10.0",
+    "@orama/plugin-astro": "^2.0.8",
     "@pagefind/default-ui": "^1.0.4",
     "@sentry/astro": "^7.103.0",
     "@sentry/vue": "^7.103.0",
