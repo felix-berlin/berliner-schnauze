@@ -1,0 +1,54 @@
+---
+import Quote from "virtual:icons/lucide/quote";
+import AudioPlayerList from "@components/AudioPlayerList.vue";
+import type { Maybe, WordPropertiesExamples } from "@ts_types/generated/graphql";
+
+interface WordExamplesProps {
+  examples?: Maybe<WordPropertiesExamples>[];
+  rootBemClass?: string;
+}
+
+const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamplesProps;
+---
+
+<div class={rootBemClass + "__example-wrapper"}>
+  <Quote width={44} height={44} stroke-width={0} class={rootBemClass + "__quote-icon"} />
+
+  {
+    examples && examples.length === 1 && (
+      <div class={rootBemClass + "__single-example"}>
+        <p class={rootBemClass + "__example"}>{examples[0]?.example}</p>
+
+        {examples[0]?.exampleExplanation && (
+          <p class={rootBemClass + "__example-explanation"}>
+            {"– " + examples[0].exampleExplanation}
+          </p>
+        )}
+
+        {examples[0]?.exampleAudio && (
+          <AudioPlayerList audio={examples[0]?.exampleAudio} isType="example" client:load />
+        )}
+      </div>
+    )
+  }
+
+  {
+    examples && examples.length > 1 && (
+      <ol class={rootBemClass + "__examples"}>
+        {examples.map((item) => (
+          <li class={rootBemClass + "__examples-list-item"}>
+            <span class={rootBemClass + "__examples-item"}>{item?.example}</span>
+            {item?.exampleExplanation && (
+              <div class={rootBemClass + "__examples-explanation"}>
+                {"– " + item.exampleExplanation}
+              </div>
+            )}
+            {item?.exampleAudio && (
+              <AudioPlayerList audio={item?.exampleAudio} isType="example" client:load />
+            )}
+          </li>
+        ))}
+      </ol>
+    )
+  }
+</div>
