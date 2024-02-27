@@ -29,11 +29,11 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick, onUnmounted, defineAsyncComponent, watch } from "vue";
 import type { Ref } from "vue";
-import SearchBar from "@components/SearchBar.vue";
 import SearchIcon from "virtual:icons/lucide/search";
 import SquareSlash from "virtual:icons/lucide/square-slash";
 
 const Modal = defineAsyncComponent(() => import("@components/Modal.vue"));
+const SearchBar = defineAsyncComponent(() => import("@components/SearchBar.vue"));
 
 const loadModal = ref(false);
 const modalMounted = ref(false);
