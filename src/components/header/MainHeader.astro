@@ -15,14 +15,14 @@ import MainMenu from "@components/header/MainMenu.vue";
 
     <nav class="c-menu-nav">
       <div class="c-menu-nav__main-elements">
-        <SearchModal client:only="vue" />
+        <SearchModal client:load />
 
         <ColorModeToggle
           cssClasses={"c-menu-nav__item c-menu-nav__item-button"}
           client:only="vue"
         />
 
-        <MainMenu client:only="vue" />
+        <MainMenu client:load />
       </div>
 
       <SocialList
