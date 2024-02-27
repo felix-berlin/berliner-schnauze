@@ -102,7 +102,6 @@ export default defineConfig({
     // }),
     // sentry(),
     // spotlightjs(),
-    (await import("astro-critters")).default(),
   ],
   vite: {
     plugins: [
