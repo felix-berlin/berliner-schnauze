@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.7.0...v3.7.1) (2024-02-27)
+
+
+### Bug Fixes
+
+* if modal is already loaded open search directly ([b882877](https://github.com/felix-berlin/berliner-schnauze/commit/b882877293121bcb47942ff3ab41104aa7be3e99))
+
+
+### Performance Improvements
+
+* add missing sizes to index image and footer image ([ec42ae3](https://github.com/felix-berlin/berliner-schnauze/commit/ec42ae39af5848a56c24405457d1240220faa981))
+* disable sentry, add critters ([ad7f922](https://github.com/felix-berlin/berliner-schnauze/commit/ad7f922c81bfc148f65517811571722bb7cffb58))
+* **MainHeader:** prerender components ([7e8c826](https://github.com/felix-berlin/berliner-schnauze/commit/7e8c82692dc494b3ac3675148d784cc0be2a32f8))
+* remove critters ([685d58b](https://github.com/felix-berlin/berliner-schnauze/commit/685d58b81b038d256b8329335da75af917dc348d))
+* **SearchModal:** load child components dynamicly ([967435f](https://github.com/felix-berlin/berliner-schnauze/commit/967435fa04d0bf77b2023c769184ba08de192af9))
+* **WordExamples:** load mostly static ([146c20f](https://github.com/felix-berlin/berliner-schnauze/commit/146c20f1a9315d3b24c00f1ff157d88a5afe81a7))
+
 # [3.7.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.6.0...v3.7.0) (2024-02-26)
 
 
