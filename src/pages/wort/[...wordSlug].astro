@@ -111,7 +111,7 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
     word={wordProps?.berlinerisch}
     iconSize={50}
     tooltipPlacement="top"
-    client:load
+    client:only="vue"
   />
   <article class="c-single-word">
     <header class="c-single-word__header">
@@ -152,7 +152,7 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
       <WordOptionDropdown
         berlinerisch={word.wordProperties?.berlinerisch}
         slug={word.slug}
-        client:load
+        client:only="vue"
       />
     </header>
     <main class="c-single-word__main">
