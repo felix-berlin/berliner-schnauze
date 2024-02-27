@@ -5,7 +5,7 @@ html:root {
   --pagefind-ui-scale: 0.8;
   --pagefind-ui-primary: var(--primary);
   --pagefind-ui-text: var(--color-body);
-  --pagefind-ui-background: var(--color-background, var(--orange-100));
+  --pagefind-ui-background: var(--orange-100);
   --pagefind-ui-border: var(--color, var(--blue));
   --pagefind-ui-tag: var(--white-200);
   --pagefind-ui-border-width: 2px;
@@ -15,7 +15,7 @@ html:root {
   --pagefind-ui-font: #{vars.$berlin};
 
   &.dark {
-    --pagefind-ui-background: --color-background: var(--new-blue-600);
+    --pagefind-ui-background: var(--new-blue-600);
     --pagefind-ui-border: color-mix(in srgb, var(--blue) 80%, white);
   }
 }
