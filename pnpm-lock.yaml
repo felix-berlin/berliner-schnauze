@@ -74,9 +74,6 @@ dependencies:
   vue:
     specifier: ^3.4.21
     version: 3.4.21(typescript@5.3.3)
-  vue3-virtual-scroll-list:
-    specifier: ^0.2.1
-    version: 0.2.1(vue@3.4.21)
 
 devDependencies:
   '@astrojs/check':
@@ -12758,14 +12755,6 @@ packages:
       semver: 7.5.4
       typescript: 5.3.3
     dev: true
-
-  /vue3-virtual-scroll-list@0.2.1(vue@3.4.21):
-    resolution: {integrity: sha512-G4KxITUOy9D4ro15zOp40D6ogmMefzjIyMsBKqN3xGbV1P6dlKYMx+BBXCKm3Nr/6iipcUKM272Sh2AJRyWMyQ==}
-    peerDependencies:
-      vue: '>=3.0.0'
-    dependencies:
-      vue: 3.4.21(typescript@5.3.3)
-    dev: false
 
   /vue@3.4.21(typescript@5.3.3):
     resolution: {integrity: sha512-5hjyV/jLEIKD/jYl4cavMcnzKwjMKohureP8ejn3hhEjwhWIhWeuzL2kJAjzl/WyVsgPY56Sy4Z40C3lVshxXA==}
