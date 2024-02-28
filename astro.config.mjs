@@ -11,7 +11,7 @@ import spotlightjs from "@spotlightjs/astro";
 // https://astro.build/config
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
-  prefetch: true,
+  prefetch: false,
   image: {
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
