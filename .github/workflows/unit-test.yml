@@ -39,3 +39,5 @@ jobs:
         uses: codecov/codecov-action@v4.1.0
         with:
           directory: ./coverage
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
