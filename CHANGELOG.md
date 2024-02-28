@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.7.6](https://github.com/felix-berlin/berliner-schnauze/compare/v3.7.5...v3.7.6) (2024-02-28)
+
+
+### Performance Improvements
+
+* disable prefetch ([699b1fc](https://github.com/felix-berlin/berliner-schnauze/commit/699b1fccfacff705c2ea17f7475eeee596866b0c))
+* remove unused styles and optimize markup ([1361fdb](https://github.com/felix-berlin/berliner-schnauze/commit/1361fdb0b57574366cc971fc01756d5f12bb0e2d))
+* use virtua als scroll list ([afb6dad](https://github.com/felix-berlin/berliner-schnauze/commit/afb6dad52ae9ea5608852f2fd896e16c81e0616a))
+
 ## [3.7.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.7.4...v3.7.5) (2024-02-27)
 
 
