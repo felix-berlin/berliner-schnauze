@@ -21,7 +21,7 @@
       </DynamicScrollerItem>
     </template>
   </DynamicScroller> -->
-  <VirtualList
+  <!-- <VirtualList
     ref="wordList"
     class="c-word-list"
     data-key="id"
@@ -34,7 +34,11 @@
     item-class="c-word-list__item"
     item-tag="li"
   >
-  </VirtualList>
+  </VirtualList> -->
+
+  <WindowVirtualizer v-slot="item" :data="filteredWordList" class="c-word-list">
+    <SingleWord :source="item" :style="{ 'margin-bottom': '1.75rem' }" />
+  </WindowVirtualizer>
 </template>
 
 <script setup lang="ts">
@@ -45,6 +49,7 @@ import SingleWord from "@components/word/SingleWord.vue";
 import { useStore } from "@nanostores/vue";
 import { $filteredWordList } from "@stores/index.ts";
 import VirtualList from "vue3-virtual-scroll-list";
+import { VList, WindowVirtualizer } from "virtua/vue";
 
 const SingleWordItem = shallowRef(SingleWord);
 const filteredWordList = useStore($filteredWordList);

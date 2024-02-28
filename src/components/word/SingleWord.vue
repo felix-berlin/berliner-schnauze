@@ -61,7 +61,7 @@ import type { CleanBerlinerWord } from "@stores/index.ts";
 
 type WordProps = {
   source: CleanBerlinerWord;
-  index: number;
+  index?: number;
 };
 
 const { source, index } = defineProps<WordProps>();

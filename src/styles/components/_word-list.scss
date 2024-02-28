@@ -7,11 +7,6 @@
 .c-word-list {
   --size-quote-icon: 32px;
 
-  &__list {
-    display: grid;
-    gap: 1.75rem;
-  }
-
   .c-word-list__word-wrap {
     padding-bottom: vars.$spacer * 1.75;
   }
