@@ -9,45 +9,41 @@
     data-track-content
     data-content-name="word"
   >
-    <div :class="'c-word-list__header-wrapper'">
-      <dl class="c-word-list__header">
-        <dt
-          class="c-word-list__berlinerisch"
-          :data-content-piece="source.wordProperties?.berlinerisch"
-        >
-          <IsWordOfTheDay
-            :word="source.wordProperties?.berlinerisch"
-            :word-id="source.berlinerWordId"
-            class="c-word-list__crown"
-          />
-          <a :href="routeToWord(source.slug!)">
-            {{ source.wordProperties?.berlinerisch }}
-          </a>
-        </dt>
-
-        <dd
-          v-for="(translation, translationIndex) in source.wordProperties?.translations"
-          :key="translationIndex"
-          class="c-word-list__translation"
-        >
-          {{ translation?.translation }}
-        </dd>
-      </dl>
-      <WordOptionDropdown
-        :berlinerisch="source.wordProperties?.berlinerisch"
-        :slug="source.slug"
-        class="c-word-list__options-dropdown"
+    <dl class="c-word-list__header">
+      <dt
+        class="c-word-list__berlinerisch"
+        :data-content-piece="source.wordProperties?.berlinerisch"
       >
-        <template #after>
-          <a :href="routeToWord(source.slug!)" class="c-options-dropdown__copy-button c-button">
-            <BookOpen width="18" height="18" class="c-options-dropdown__icon-button" />
-            <span class="c-options-dropdown__copy-text">Mehr erfahren</span>
-          </a>
-        </template>
-      </WordOptionDropdown>
-    </div>
+        <IsWordOfTheDay
+          :word="source.wordProperties?.berlinerisch"
+          :word-id="source.berlinerWordId"
+          class="c-word-list__crown"
+        />
+        <a :href="routeToWord(source.slug!)">
+          {{ source.wordProperties?.berlinerisch }}
+        </a>
+      </dt>
 
-    <!-- <WordExamples :examples="source.wordProperties?.examples!" /> -->
+      <dd
+        v-for="(translation, translationIndex) in source.wordProperties?.translations"
+        :key="translationIndex"
+        class="c-word-list__translation"
+      >
+        {{ translation?.translation }}
+      </dd>
+    </dl>
+    <WordOptionDropdown
+      :berlinerisch="source.wordProperties?.berlinerisch"
+      :slug="source.slug"
+      class="c-word-list__options-dropdown"
+    >
+      <template #after>
+        <a :href="routeToWord(source.slug!)" class="c-options-dropdown__copy-button c-button">
+          <BookOpen width="18" height="18" class="c-options-dropdown__icon-button" />
+          <span class="c-options-dropdown__copy-text">Mehr erfahren</span>
+        </a>
+      </template>
+    </WordOptionDropdown>
   </article>
 </template>
 
@@ -61,7 +57,7 @@ import type { CleanBerlinerWord } from "@stores/index.ts";
 
 type WordProps = {
   source: CleanBerlinerWord;
-  index: number;
+  index?: number;
 };
 
 const { source, index } = defineProps<WordProps>();
