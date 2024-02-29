@@ -26,6 +26,7 @@ import Hypher from "hypher";
 import german from "hyphenation.de";
 import nlp from "compromise";
 import de from "de-compromise";
+import natural from "natural";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -105,8 +106,6 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 }
 
 const hypher = new Hypher(german);
-
-console.log(hypher.hyphenate("Knorke"));
 
 const coloredConsonantsAndVowels = (word: string) => {
   let html = "";
@@ -204,15 +203,18 @@ const translateNlpTags = (tags: WordTags[]): WordTags[] => {
 };
 
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!));
-console.log(getWordType("Zahnklempner mit Zahnklempnerin"));
 
-console.log(wordTags);
-//
-// let doc = nlp("ditt");
+const wordToCompareObject = word;
+const wordToCompare = wordToCompareObject.wordProperties?.berlinerisch;
+const wordListToCompare = allWords.filter((word) => word.id !== wordToCompareObject?.id);
+const similarSoundingWords = wordListToCompare.map((word) => {
+  return {
+    word: word,
+    isSimilar: natural.SoundEx.compare(word.wordProperties?.berlinerisch!, wordToCompare!),
+  };
+});
 
-// let tags = doc.out("tags");
-
-// console.log(tags);
+console.log(similarSoundingWords.find((word) => word.isSimilar));
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
@@ -270,78 +272,93 @@ console.log(wordTags);
       />
     </header>
     <main class="c-single-word__main">
-      {
-        wordProps?.alternativeWords && (
-          <div class="c-single-word__alternative-words-wrapper">
-            <h2>Selbe Bedeutung wie:</h2>
-            <p class="c-single-word__alternative-word">{alternativeWords}</p>
-          </div>
-        )
-      }
+      <section>
+        <h2>Etymologie</h2>
 
-      {
-        word?.berlinerischWordTypes && word?.berlinerischWordTypes.nodes.length > 0 && (
-          <div class="c-single-word__word-type-wrapper">
-            <h2 class="c-single-word__sub-headline">Wortart:</h2>
-            <p class="c-single-word__word-type">{word?.berlinerischWordTypes.nodes[0].name}</p>
-          </div>
-        )
-      }
+        {
+          wordProps?.alternativeWords && (
+            <div class="c-single-word__alternative-words-wrapper">
+              <h2>Selbe Bedeutung wie:</h2>
+              <p class="c-single-word__alternative-word">{alternativeWords}</p>
+            </div>
+          )
+        }
 
-      {
-        wordProps?.translations && (
-          <div class="c-single-word__translation-wrapper">
-            <h2 class="c-single-word__sub-headline">Bedeutung:</h2>
+        {
+          wordProps?.translations && (
+            <div class="c-single-word__translation-wrapper">
+              <h2 class="c-single-word__sub-headline">Bedeutung:</h2>
 
-            <ul class="c-single-word__translation">
-              {wordProps?.translations?.map((translation) => {
-                return <li class="c-single-word__translation-item">{translation?.translation}</li>;
-              })}
-            </ul>
-          </div>
-        )
-      }
+              <ul class="c-single-word__translation">
+                {wordProps?.translations?.map((translation) => {
+                  return (
+                    <li class="c-single-word__translation-item">{translation?.translation}</li>
+                  );
+                })}
+              </ul>
+            </div>
+          )
+        }
+      </section>
 
       {
         wordProps?.examples && (
-          <div class="c-single-word__examples-wrapper">
+          <section class="c-single-word__examples-wrapper">
             <h2 class="c-single-word__sub-headline">Beispiele:</h2>
             <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
-          </div>
+          </section>
         )
       }
 
-      <div class="c-single-word__syllables">
-        <h2>Silben und Silbentrennung</h2>
+      <section>
+        <h2>Orthographie</h2>
 
-        <h3>Silbentrennung:</h3>
-        <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).join(" | ")}</p>
+        <div class="c-single-word__syllables">
+          <h3>Silben und Silbentrennung</h3>
 
-        <h3>Anzahl der Silben:</h3>
-        <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).length}</p>
-      </div>
-      <div class="c-single-word__consonants-vowels">
-        <h2>Konsonanten und Vokale</h2>
-        <div set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch!)} />
+          <h3>Silbentrennung:</h3>
+          <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).join(" | ")}</p>
 
-        <p>
-          enhält {countLetters(word.wordProperties?.berlinerisch!).vowels}
-          <span class="is-vowel">Vokale</span> und {
-            countLetters(word.wordProperties?.berlinerisch!).consonants
-          }
-          <span class="is-consonat">Konsonanten</span>
-        </p>
-      </div>
+          <h3>Anzahl der Silben:</h3>
+          <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).length}</p>
+        </div>
+      </section>
 
-      <div>
-        <h2>Grammtik</h2>
+      <section>
+        <h2>Quantitative Linguistik</h2>
 
-        {
-          wordTags.length > 0 &&
-            Object.keys(wordTags[0]).map((key) => {
+        <div class="c-single-word__consonants-vowels">
+          <h3>Konsonanten und Vokale</h3>
+          <div set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch!)} />
+
+          <p>
+            enhält {countLetters(word.wordProperties?.berlinerisch!).vowels}
+            <span class="is-vowel">Vokale</span> und {
+              countLetters(word.wordProperties?.berlinerisch!).consonants
+            }
+            <span class="is-consonant">Konsonanten</span>
+          </p>
+        </div>
+
+        <div>
+          <h3>Länge nach Buchstaben</h3>
+          <p>
+            "{word.wordProperties?.berlinerisch}" umfasst {
+              word.wordProperties?.berlinerisch?.length
+            } Buchstaben
+          </p>
+        </div>
+      </section>
+
+      {
+        wordTags.length > 0 && (
+          <section>
+            <h2>Grammtik</h2>
+            <h3>Wortart</h3>
+            {Object.keys(wordTags[0]).map((key) => {
               return (
                 <div>
-                  <h3>{key}</h3>
+                  <h4>{key}</h4>
                   {wordTags[0][key].length === 1 ? (
                     <p>{wordTags[0][key][0]}</p>
                   ) : (
@@ -353,9 +370,41 @@ console.log(wordTags);
                   )}
                 </div>
               );
-            })
-        }
-      </div>
+            })}
+          </section>
+        )
+      }
+
+      <!-- {
+        word?.berlinerischWordTypes && word?.berlinerischWordTypes.nodes.length > 0 && (
+          <div class="c-single-word__word-type-wrapper">
+            <h2 class="c-single-word__sub-headline">Wortart:</h2>
+            <p class="c-single-word__word-type">{word?.berlinerischWordTypes.nodes[0].name}</p>
+          </div>
+        )
+      } -->
+
+      {
+        similarSoundingWords.find((word) => word.isSimilar) && (
+          <section>
+            <h2>Phonologie</h2>
+            <h3>Ähnlich klingende Wörter</h3>
+            {similarSoundingWords.some((result) => result.isSimilar) ? (
+              <ul>
+                {similarSoundingWords
+                  .filter((result) => result.isSimilar)
+                  .map((result) => (
+                    <li>
+                      <a href={routeToWord(result.word?.slug!)}>
+                        {result.word?.wordProperties?.berlinerisch}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            ) : null}
+          </section>
+        )
+      }
 
       {
         wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
