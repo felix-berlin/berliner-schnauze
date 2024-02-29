@@ -149,6 +149,16 @@
     margin: 0;
   }
 
+  &__consonants-vowels {
+    .is-consonant {
+      color: vars.$success;
+    }
+
+    .is-vowel {
+      color: vars.$danger;
+    }
+  }
+
   &__translation {
     display: flex;
     flex-direction: column;

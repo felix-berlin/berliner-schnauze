@@ -113,9 +113,9 @@ const coloredConsonantsAndVowels = (word: string) => {
 
   for (let char of word) {
     if ("aeiouäöü".includes(char.toLowerCase())) {
-      html += `<span style="color: blue;">${char}</span>`;
+      html += `<span class="is-vowel">${char}</span>`; // Vowels
     } else {
-      html += `<span style="color: red;">${char}</span>`;
+      html += `<span class="is-consonant">${char}</span>`; // Consonants
     }
   }
 
@@ -320,14 +320,16 @@ console.log(wordTags);
         <h3>Anzahl der Silben:</h3>
         <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).length}</p>
       </div>
-      <div>
+      <div class="c-single-word__consonants-vowels">
         <h2>Konsonanten und Vokale</h2>
         <div set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch!)} />
 
         <p>
-          enhält {countLetters(word.wordProperties?.berlinerisch!).vowels} Vokale und {
+          enhält {countLetters(word.wordProperties?.berlinerisch!).vowels}
+          <span class="is-vowel">Vokale</span> und {
             countLetters(word.wordProperties?.berlinerisch!).consonants
-          } Konsonanten
+          }
+          <span class="is-consonat">Konsonanten</span>
         </p>
       </div>
 
