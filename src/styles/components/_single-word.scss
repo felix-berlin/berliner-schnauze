@@ -182,11 +182,11 @@
 
   &__consonants-vowels {
     .is-consonant {
-      color: vars.$success;
+      color: var(--orange-500);
     }
 
     .is-vowel {
-      color: vars.$danger;
+      color: #cfc536;
     }
   }
 
