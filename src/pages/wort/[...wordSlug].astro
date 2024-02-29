@@ -14,14 +14,23 @@ import WordExamples from "@components/word/WordExamples.astro";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import RelatedWords from "@components/RelatedWords.vue";
 import RandomWordButton from "@components/RandomWordButton.vue";
-import { routeToWord, seoData } from "@utils/helpers.ts";
+import { routeToWord, seoData, formattedDate } from "@utils/helpers.ts";
+import {
+  coloredConsonantsAndVowels,
+  countLetters,
+  getWordType,
+  translateNlpTags,
+  similarSoundingWords,
+  createWikimediaFileList,
+} from "@utils/wordHelper.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
-import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import ImageGallery from "@components/ImageGallery.astro";
 import ToolTip from "@components/ToolTip.vue";
 import BadgeTag from "@components/BadgeTag.vue";
 import AudioPlayerList from "@components/AudioPlayerList.vue";
+import Hypher from "hypher";
+import german from "hyphenation.de";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -51,13 +60,6 @@ const { word, allWords } = Astro.props as Props;
 
 const wordProps: BerlinerWord["wordProperties"] = word.wordProperties;
 
-const formattedDate = (date: string, locale = "de-DE") => {
-  if (!date) return;
-  const dateToFormat = new Date(date);
-
-  return dateToFormat.toLocaleString(locale, { year: "numeric", month: "long", day: "numeric" });
-};
-
 const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
   return (
     word?.alternativeWord +
@@ -65,26 +67,7 @@ const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
   );
 });
 
-/**
- * TODO: Fix RelatedWords (allways returns null)
- */
-// console.log(wordProps?.relatedWords?.nodes);
-
-/**
- * Create a list of all wikimedia files
- */
-const createWikimediaFileList = async () => {
-  if (!wordProps?.wikimediaFiles) return;
-
-  let files = [];
-  for (const file of wordProps?.wikimediaFiles!) {
-    const img = await fetchWikimediaAPI(file?.wikimediaFile!);
-    files.push({ image: img, description: file?.description, caption: file?.caption });
-  }
-  return files;
-};
-
-const wikimediaFiles = await createWikimediaFileList();
+// const wikimediaFiles = await createWikimediaFileList(wordProps?.wikimediaFiles!);
 // console.log(wikimediaFiles);
 
 let galleryWidths = [316, 457, 658, 429, 525];
@@ -99,6 +82,10 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
   gallerySizes =
     "(max-width: 70rem) 503px, (max-width: 64rem) 435px, (max-width: 48rem) 307px, (max-width: 35.5rem) 435px, (max-width: 27.2rem) 307px";
 }
+
+const hypher = new Hypher(german);
+
+const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!));
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
@@ -156,43 +143,141 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
       />
     </header>
     <main class="c-single-word__main">
+      <section>
+        <h2>Etymologie</h2>
+
+        {
+          wordProps?.alternativeWords && (
+            <div class="c-single-word__alternative-words-wrapper">
+              <h3>Selbe Bedeutung wie:</h3>
+              <p class="c-single-word__alternative-word">{alternativeWords}</p>
+            </div>
+          )
+        }
+
+        {
+          wordProps?.translations && (
+            <div class="c-single-word__translation-wrapper">
+              <h3 class="c-single-word__sub-headline">Bedeutung:</h3>
+
+              <ul class="c-single-word__translation">
+                {wordProps?.translations?.map((translation) => {
+                  return (
+                    <li class="c-single-word__translation-item">{translation?.translation}</li>
+                  );
+                })}
+              </ul>
+            </div>
+          )
+        }
+      </section>
+
       {
-        wordProps?.alternativeWords && (
-          <div class="c-single-word__alternative-words-wrapper">
-            <h2>Selbe Bedeutung wie:</h2>
-            <p class="c-single-word__alternative-word">{alternativeWords}</p>
-          </div>
+        wordProps?.examples && (
+          <section class="c-single-word__examples-wrapper">
+            <h2 class="c-single-word__sub-headline">Beispiele:</h2>
+            <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
+          </section>
         )
       }
 
+      <section>
+        <h2>Orthographie</h2>
+
+        <div class="c-single-word__syllables">
+          <h3>Silben und Silbentrennung</h3>
+
+          <h3>Silbentrennung:</h3>
+          <p
+            set:html={hypher
+              .hyphenate(word.wordProperties?.berlinerisch)
+              .join(" <span class='is-divider'>|</span> ")}
+          />
+
+          <h3>Anzahl der Silben:</h3>
+          <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).length}</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Quantitative Linguistik</h2>
+
+        <div class="c-single-word__consonants-vowels">
+          <h3>Konsonanten und Vokale</h3>
+          <div set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch!)} />
+
+          <p>
+            enhält {countLetters(word.wordProperties?.berlinerisch!).vowels}
+            <span class="is-vowel">Vokale</span> und {
+              countLetters(word.wordProperties?.berlinerisch!).consonants
+            }
+            <span class="is-consonant">Konsonanten</span>
+          </p>
+        </div>
+
+        <div>
+          <h3>Länge nach Buchstaben</h3>
+          <p>
+            "{word.wordProperties?.berlinerisch}" umfasst {
+              word.wordProperties?.berlinerisch?.length
+            } Buchstaben
+          </p>
+        </div>
+      </section>
+
       {
+        wordTags.length > 0 && (
+          <section>
+            <h2>Grammtik</h2>
+            <h3>Wortart {Object.keys(wordTags[0]).length > 1 ? "pro Wort" : ""}</h3>
+            {Object.keys(wordTags[0]).map((key) => {
+              return (
+                <div>
+                  <h4>{key}</h4>
+                  {wordTags[0][key].length === 1 ? (
+                    <p>{wordTags[0][key][0]}</p>
+                  ) : (
+                    <ul>
+                      {wordTags[0][key].map((tag) => (
+                        <li>{tag}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
+          </section>
+        )
+      }
+
+      <!-- {
         word?.berlinerischWordTypes && word?.berlinerischWordTypes.nodes.length > 0 && (
           <div class="c-single-word__word-type-wrapper">
             <h2 class="c-single-word__sub-headline">Wortart:</h2>
             <p class="c-single-word__word-type">{word?.berlinerischWordTypes.nodes[0].name}</p>
           </div>
         )
-      }
-      {
-        wordProps?.translations && (
-          <div class="c-single-word__translation-wrapper">
-            <h2 class="c-single-word__sub-headline">Bedeutung:</h2>
-
-            <ul class="c-single-word__translation">
-              {wordProps?.translations?.map((translation) => {
-                return <li class="c-single-word__translation-item">{translation?.translation}</li>;
-              })}
-            </ul>
-          </div>
-        )
-      }
+      } -->
 
       {
-        wordProps?.examples && (
-          <div class="c-single-word__examples-wrapper">
-            <h2 class="c-single-word__sub-headline">Beispiele:</h2>
-            <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
-          </div>
+        similarSoundingWords(allWords, word).find((word) => word.isSimilar) && (
+          <section>
+            <h2>Phonologie</h2>
+            <h3>Ähnlich klingende Wörter</h3>
+            {similarSoundingWords(allWords, word).some((result) => result.isSimilar) ? (
+              <ul>
+                {similarSoundingWords(allWords, word)
+                  .filter((result) => result.isSimilar)
+                  .map((result) => (
+                    <li>
+                      <a href={routeToWord(result.word?.slug!)}>
+                        {result.word?.wordProperties?.berlinerisch}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            ) : null}
+          </section>
         )
       }
 

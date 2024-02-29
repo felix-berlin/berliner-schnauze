@@ -34,6 +34,12 @@ export const seoData = (data, baseUrl: string = import.meta.env.PUBLIC_SITE_URL)
   };
 };
 
+declare global {
+  interface Document {
+    startViewTransition?: (callback: () => void) => void;
+  }
+}
+
 /**
  * A wrapper for startViewTransition that checks if the method exists.
  * If it doesn't exist, it will just call the callback function.
@@ -55,4 +61,11 @@ export const useViewTransition = (fn: () => void): void => {
   document.startViewTransition(() => {
     fn();
   });
+};
+
+export const formattedDate = (date: string, locale = "de-DE") => {
+  if (!date) return;
+  const dateToFormat = new Date(date);
+
+  return dateToFormat.toLocaleString(locale, { year: "numeric", month: "long", day: "numeric" });
 };
