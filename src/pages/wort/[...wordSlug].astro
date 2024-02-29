@@ -14,9 +14,9 @@ import WordExamples from "@components/word/WordExamples.astro";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import RelatedWords from "@components/RelatedWords.vue";
 import RandomWordButton from "@components/RandomWordButton.vue";
-import { routeToWord, seoData } from "@utils/helpers.ts";
+import { routeToWord, seoData, formattedDate } from "@utils/helpers.ts";
+import { coloredConsonantsAndVowels, countLetters, getWordType, translateNlpTags, similarSoundingWords, createWikimediaFileList } from "@utils/wordHelper.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
-import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import ImageGallery from "@components/ImageGallery.astro";
 import ToolTip from "@components/ToolTip.vue";
@@ -24,8 +24,6 @@ import BadgeTag from "@components/BadgeTag.vue";
 import AudioPlayerList from "@components/AudioPlayerList.vue";
 import Hypher from "hypher";
 import german from "hyphenation.de";
-import nlp from "de-compromise";
-import natural from "natural";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -55,13 +53,6 @@ const { word, allWords } = Astro.props as Props;
 
 const wordProps: BerlinerWord["wordProperties"] = word.wordProperties;
 
-const formattedDate = (date: string, locale = "de-DE") => {
-  if (!date) return;
-  const dateToFormat = new Date(date);
-
-  return dateToFormat.toLocaleString(locale, { year: "numeric", month: "long", day: "numeric" });
-};
-
 const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
   return (
     word?.alternativeWord +
@@ -69,26 +60,8 @@ const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
   );
 });
 
-/**
- * TODO: Fix RelatedWords (allways returns null)
- */
-// console.log(wordProps?.relatedWords?.nodes);
 
-/**
- * Create a list of all wikimedia files
- */
-const createWikimediaFileList = async () => {
-  if (!wordProps?.wikimediaFiles) return;
-
-  let files = [];
-  for (const file of wordProps?.wikimediaFiles!) {
-    const img = await fetchWikimediaAPI(file?.wikimediaFile!);
-    files.push({ image: img, description: file?.description, caption: file?.caption });
-  }
-  return files;
-};
-
-const wikimediaFiles = await createWikimediaFileList();
+// const wikimediaFiles = await createWikimediaFileList(wordProps?.wikimediaFiles!);
 // console.log(wikimediaFiles);
 
 let galleryWidths = [316, 457, 658, 429, 525];
@@ -106,115 +79,7 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 
 const hypher = new Hypher(german);
 
-const coloredConsonantsAndVowels = (word: string) => {
-  let html = "";
-
-  for (let char of word) {
-    if ("aeiouäöü".includes(char.toLowerCase())) {
-      html += `<span class="is-vowel">${char}</span>`; // Vowels
-    } else {
-      html += `<span class="is-consonant">${char}</span>`; // Consonants
-    }
-  }
-
-  return html;
-};
-
-const countLetters = (word: string) => {
-  let vowelsCount = 0;
-  let consonantsCount = 0;
-
-  for (let char of word) {
-    if ("aeiouäöü".includes(char.toLowerCase())) {
-      vowelsCount++;
-    } else if (char.match(/[a-zäöüß]/i)) {
-      consonantsCount++;
-    }
-  }
-
-  return {
-    vowels: vowelsCount,
-    consonants: consonantsCount,
-  };
-};
-
-type TagTranslations = {
-  [key: string]: string;
-};
-
-type WordTags = {
-  [key: string]: string[];
-};
-
-const getWordType = (word: string): WordTags[] => {
-  const doc = nlp(word);
-
-  return doc.out("tags");
-};
-
-const translateNlpTags = (tags: WordTags[]): WordTags[] => {
-  let tagTranslations: TagTranslations = {
-    Noun: "Nomen",
-    Singular: "Einzahl",
-    Plural: "Mehrzahl",
-    Verb: "Verb",
-    Adjective: "Adjektiv",
-    ProperNoun: "Eigenname",
-    Pronoun: "Pronomen",
-    Determiner: "Artikel",
-    Adverb: "Adverb",
-    Conjunction: "Konjunktion",
-    Preposition: "Präposition",
-    Interjection: "Interjektion",
-    Auxiliary: "Hilfsverb",
-    Negative: "Negation",
-    Particle: "Partikel",
-    Possessive: "Possessivpronomen",
-    QuestionWord: "Fragepronomen",
-    Date: "Datum",
-    Time: "Zeit",
-    Value: "Wert",
-    Phone: "Telefon",
-    Email: "E-Mail",
-    URL: "URL",
-    Hashtag: "Hashtag",
-    Emoji: "Emoji",
-    Emoticon: "Emoticon",
-    Acronym: "Akronym",
-    Abbreviation: "Abkürzung",
-    Honorific: "Anrede",
-    Actor: "Schauspieler",
-    PresentTense: "Präsens",
-    Infinitive: "Infinitiv",
-    NeuterNoun: "Neutrum",
-  };
-
-  let translatedTags: WordTags[] = tags.map((tag: WordTags) => {
-    let translatedTag: WordTags = {};
-    for (let word in tag) {
-      let englishTags = tag[word];
-      let germanTags = englishTags.map((englishTag) => tagTranslations[englishTag] || englishTag);
-      translatedTag[word] = germanTags;
-    }
-    return translatedTag;
-  });
-
-  return translatedTags;
-};
-
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!));
-
-const wordToCompareObject = word;
-const wordToCompare = wordToCompareObject.wordProperties?.berlinerisch;
-const wordListToCompare = allWords.filter((word) => word.id !== wordToCompareObject?.id);
-const similarSoundingWords = wordListToCompare.map((word) => {
-  return {
-    word: word,
-    isSimilar: natural.SoundEx.compare(word.wordProperties?.berlinerisch!, wordToCompare!),
-  };
-});
-
-console.log(similarSoundingWords.find((word) => word.isSimilar));
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
@@ -385,13 +250,13 @@ console.log(similarSoundingWords.find((word) => word.isSimilar));
       } -->
 
       {
-        similarSoundingWords.find((word) => word.isSimilar) && (
+        similarSoundingWords(allWords, word).find((word) => word.isSimilar) && (
           <section>
             <h2>Phonologie</h2>
             <h3>Ähnlich klingende Wörter</h3>
-            {similarSoundingWords.some((result) => result.isSimilar) ? (
+            {similarSoundingWords(allWords, word).some((result) => result.isSimilar) ? (
               <ul>
-                {similarSoundingWords
+                {similarSoundingWords(allWords, word)
                   .filter((result) => result.isSimilar)
                   .map((result) => (
                     <li>
