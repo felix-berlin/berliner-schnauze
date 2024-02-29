@@ -186,6 +186,7 @@ const translateNlpTags = (tags: WordTags[]): WordTags[] => {
     Actor: "Schauspieler",
     PresentTense: "Präsens",
     Infinitive: "Infinitiv",
+    NeuterNoun: "Neutrum",
   };
 
   let translatedTags: WordTags[] = tags.map((tag: WordTags) => {
@@ -353,15 +354,15 @@ console.log(similarSoundingWords.find((word) => word.isSimilar));
         wordTags.length > 0 && (
           <section>
             <h2>Grammtik</h2>
-            <h3>Wortart</h3>
+            <h3>Wortart {Object.keys(wordTags[0]).length > 1 ? "pro Wort" : ""}</h3>
             {Object.keys(wordTags[0]).map((key) => {
               return (
                 <div>
-                  <h4>{key}</h4>
                   {wordTags[0][key].length === 1 ? (
                     <p>{wordTags[0][key][0]}</p>
-                  ) : (
-                    <ul>
+                    ) : (
+                      <h4>{key}</h4>
+                      <ul>
                       {wordTags[0][key].map((tag) => (
                         <li>{tag}</li>
                       ))}
