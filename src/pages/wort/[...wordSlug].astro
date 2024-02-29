@@ -22,6 +22,10 @@ import ImageGallery from "@components/ImageGallery.astro";
 import ToolTip from "@components/ToolTip.vue";
 import BadgeTag from "@components/BadgeTag.vue";
 import AudioPlayerList from "@components/AudioPlayerList.vue";
+import Hypher from "hypher";
+import german from "hyphenation.de";
+import nlp from "compromise";
+import de from "de-compromise";
 
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
@@ -99,6 +103,116 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
   gallerySizes =
     "(max-width: 70rem) 503px, (max-width: 64rem) 435px, (max-width: 48rem) 307px, (max-width: 35.5rem) 435px, (max-width: 27.2rem) 307px";
 }
+
+const hypher = new Hypher(german);
+
+console.log(hypher.hyphenate("Knorke"));
+
+const coloredConsonantsAndVowels = (word: string) => {
+  let html = "";
+
+  for (let char of word) {
+    if ("aeiouäöü".includes(char.toLowerCase())) {
+      html += `<span style="color: blue;">${char}</span>`;
+    } else {
+      html += `<span style="color: red;">${char}</span>`;
+    }
+  }
+
+  return html;
+};
+
+const countLetters = (word: string) => {
+  let vowelsCount = 0;
+  let consonantsCount = 0;
+
+  for (let char of word) {
+    if ("aeiouäöü".includes(char.toLowerCase())) {
+      vowelsCount++;
+    } else if (char.match(/[a-zäöüß]/i)) {
+      consonantsCount++;
+    }
+  }
+
+  return {
+    vowels: vowelsCount,
+    consonants: consonantsCount,
+  };
+};
+
+type TagTranslations = {
+  [key: string]: string;
+};
+
+type WordTags = {
+  [key: string]: string[];
+};
+
+nlp.extend(de);
+
+const getWordType = (word: string): WordTags[] => {
+  const doc = nlp(word);
+
+  return doc.out("tags");
+};
+
+const translateNlpTags = (tags: WordTags[]): WordTags[] => {
+  let tagTranslations: TagTranslations = {
+    Noun: "Nomen",
+    Singular: "Einzahl",
+    Plural: "Mehrzahl",
+    Verb: "Verb",
+    Adjective: "Adjektiv",
+    ProperNoun: "Eigenname",
+    Pronoun: "Pronomen",
+    Determiner: "Artikel",
+    Adverb: "Adverb",
+    Conjunction: "Konjunktion",
+    Preposition: "Präposition",
+    Interjection: "Interjektion",
+    Auxiliary: "Hilfsverb",
+    Negative: "Negation",
+    Particle: "Partikel",
+    Possessive: "Possessivpronomen",
+    QuestionWord: "Fragepronomen",
+    Date: "Datum",
+    Time: "Zeit",
+    Value: "Wert",
+    Phone: "Telefon",
+    Email: "E-Mail",
+    URL: "URL",
+    Hashtag: "Hashtag",
+    Emoji: "Emoji",
+    Emoticon: "Emoticon",
+    Acronym: "Akronym",
+    Abbreviation: "Abkürzung",
+    Honorific: "Anrede",
+    Actor: "Schauspieler",
+  };
+
+  let translatedTags: WordTags[] = tags.map((tag: WordTags) => {
+    let translatedTag: WordTags = {};
+    for (let word in tag) {
+      let englishTags = tag[word];
+      let germanTags = englishTags.map((englishTag) => tagTranslations[englishTag] || englishTag);
+      translatedTag[word] = germanTags;
+    }
+    return translatedTag;
+  });
+
+  return translatedTags;
+};
+
+const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!));
+console.log(getWordType("Zahnklempner mit Zahnklempnerin"));
+
+console.log(wordTags);
+//
+// let doc = nlp("ditt");
+
+// let tags = doc.out("tags");
+
+// console.log(tags);
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
@@ -173,6 +287,7 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
           </div>
         )
       }
+
       {
         wordProps?.translations && (
           <div class="c-single-word__translation-wrapper">
@@ -195,6 +310,50 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
           </div>
         )
       }
+
+      <div class="c-single-word__syllables">
+        <h2>Silben und Silbentrennung</h2>
+
+        <h3>Silbentrennung:</h3>
+        <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).join(" | ")}</p>
+
+        <h3>Anzahl der Silben:</h3>
+        <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).length}</p>
+      </div>
+      <div>
+        <h2>Konsonanten und Vokale</h2>
+        <div set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch!)} />
+
+        <p>
+          enhält {countLetters(word.wordProperties?.berlinerisch!).vowels} Vokale und {
+            countLetters(word.wordProperties?.berlinerisch!).consonants
+          } Konsonanten
+        </p>
+      </div>
+
+      <div>
+        <h2>Grammtik</h2>
+
+        {
+          wordTags.length > 0 &&
+            Object.keys(wordTags[0]).map((key) => {
+              return (
+                <div>
+                  <h3>{key}</h3>
+                  {wordTags[0][key].length === 1 ? (
+                    <p>{wordTags[0][key][0]}</p>
+                  ) : (
+                    <ul>
+                      {wordTags[0][key].map((tag) => (
+                        <li>{tag}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })
+        }
+      </div>
 
       {
         wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
