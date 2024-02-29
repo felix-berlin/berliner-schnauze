@@ -15,7 +15,14 @@ import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import RelatedWords from "@components/RelatedWords.vue";
 import RandomWordButton from "@components/RandomWordButton.vue";
 import { routeToWord, seoData, formattedDate } from "@utils/helpers.ts";
-import { coloredConsonantsAndVowels, countLetters, getWordType, translateNlpTags, similarSoundingWords, createWikimediaFileList } from "@utils/wordHelper.ts";
+import {
+  coloredConsonantsAndVowels,
+  countLetters,
+  getWordType,
+  translateNlpTags,
+  similarSoundingWords,
+  createWikimediaFileList,
+} from "@utils/wordHelper.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import ImageGallery from "@components/ImageGallery.astro";
@@ -59,7 +66,6 @@ const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
     (wordProps?.alternativeWords && index !== wordProps?.alternativeWords?.length - 1 ? ", " : "")
   );
 });
-
 
 // const wikimediaFiles = await createWikimediaFileList(wordProps?.wikimediaFiles!);
 // console.log(wikimediaFiles);
@@ -143,7 +149,7 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!
         {
           wordProps?.alternativeWords && (
             <div class="c-single-word__alternative-words-wrapper">
-              <h2>Selbe Bedeutung wie:</h2>
+              <h3>Selbe Bedeutung wie:</h3>
               <p class="c-single-word__alternative-word">{alternativeWords}</p>
             </div>
           )
@@ -152,7 +158,7 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!
         {
           wordProps?.translations && (
             <div class="c-single-word__translation-wrapper">
-              <h2 class="c-single-word__sub-headline">Bedeutung:</h2>
+              <h3 class="c-single-word__sub-headline">Bedeutung:</h3>
 
               <ul class="c-single-word__translation">
                 {wordProps?.translations?.map((translation) => {
@@ -182,7 +188,11 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!
           <h3>Silben und Silbentrennung</h3>
 
           <h3>Silbentrennung:</h3>
-          <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).join(" | ")}</p>
+          <p
+            set:html={hypher
+              .hyphenate(word.wordProperties?.berlinerisch)
+              .join(" <span class='is-divider'>|</span> ")}
+          />
 
           <h3>Anzahl der Silben:</h3>
           <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).length}</p>
@@ -223,11 +233,11 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!
             {Object.keys(wordTags[0]).map((key) => {
               return (
                 <div>
+                  <h4>{key}</h4>
                   {wordTags[0][key].length === 1 ? (
                     <p>{wordTags[0][key][0]}</p>
-                    ) : (
-                      <h4>{key}</h4>
-                      <ul>
+                  ) : (
+                    <ul>
                       {wordTags[0][key].map((tag) => (
                         <li>{tag}</li>
                       ))}
