@@ -24,8 +24,7 @@ import BadgeTag from "@components/BadgeTag.vue";
 import AudioPlayerList from "@components/AudioPlayerList.vue";
 import Hypher from "hypher";
 import german from "hyphenation.de";
-import nlp from "compromise";
-import de from "de-compromise";
+import nlp from "de-compromise";
 import natural from "natural";
 
 // Types
@@ -147,8 +146,6 @@ type WordTags = {
   [key: string]: string[];
 };
 
-nlp.extend(de);
-
 const getWordType = (word: string): WordTags[] => {
   const doc = nlp(word);
 
@@ -187,6 +184,8 @@ const translateNlpTags = (tags: WordTags[]): WordTags[] => {
     Abbreviation: "Abkürzung",
     Honorific: "Anrede",
     Actor: "Schauspieler",
+    PresentTense: "Präsens",
+    Infinitive: "Infinitiv",
   };
 
   let translatedTags: WordTags[] = tags.map((tag: WordTags) => {
