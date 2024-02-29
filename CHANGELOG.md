@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.8.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.7.6...v3.8.0) (2024-02-29)
+
+
+### Bug Fixes
+
+* better spacings ([6dc72af](https://github.com/felix-berlin/berliner-schnauze/commit/6dc72af67fdeaa80481789872546aea005307e9c))
+* wrong nlp lang ([a19be39](https://github.com/felix-berlin/berliner-schnauze/commit/a19be39c4a0d7b2e885a784917e02690a70b8053))
+
+
+### Features
+
+* add consonants-vowels colors ([8a1a117](https://github.com/felix-berlin/berliner-schnauze/commit/8a1a11716376903ddb8e78668db1e1d3e12691a7))
+* add similarSoundingWords and better doc order ([113903b](https://github.com/felix-berlin/berliner-schnauze/commit/113903b53a3f0c4b009c2a9f7a10803ac5f0a727))
+* add syllables and hyphenation, consonants and vowels and Grammar ([530bf73](https://github.com/felix-berlin/berliner-schnauze/commit/530bf73c77865bdd86ea6411d635f0831f2b94e0))
+* dont print word type key if only one ([9bd4f2e](https://github.com/felix-berlin/berliner-schnauze/commit/9bd4f2eb91b3e4ea4c1af9cbe5e5385d4f9bf336))
+
 ## [3.7.6](https://github.com/felix-berlin/berliner-schnauze/compare/v3.7.5...v3.7.6) (2024-02-28)
 
 
