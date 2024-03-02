@@ -22,6 +22,7 @@ import {
   translateNlpTags,
   similarSoundingWords,
   createWikimediaFileList,
+  capitalizeFirstLetter,
 } from "@utils/wordHelper.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
@@ -204,7 +205,7 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!
 
         <div class="c-single-word__consonants-vowels">
           <h3>Konsonanten und Vokale</h3>
-          <div set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch!)} />
+          <p set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch!)} />
 
           <p>
             enhält {countLetters(word.wordProperties?.berlinerisch!).vowels}
@@ -230,9 +231,10 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!
             <h2>Grammtik</h2>
             <h3>Wortart {Object.keys(wordTags[0]).length > 1 ? "pro Wort" : ""}</h3>
             {Object.keys(wordTags[0]).map((key) => {
+              const isNomenPresent = wordTags[0][key].includes("Nomen");
               return (
                 <div>
-                  <h4>{key}</h4>
+                  <h4>{isNomenPresent ? capitalizeFirstLetter(key) : key}</h4>
                   {wordTags[0][key].length === 1 ? (
                     <p>{wordTags[0][key][0]}</p>
                   ) : (
