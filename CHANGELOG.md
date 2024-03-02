@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.8.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.8.0...v3.8.1) (2024-03-02)
+
+
+### Bug Fixes
+
+* german tag translation, capitalize Nomen words ([d05c420](https://github.com/felix-berlin/berliner-schnauze/commit/d05c4201a7dfa5fb186464df11b16ea087de16bd))
+* word overflow & disable image effect ([f7fde29](https://github.com/felix-berlin/berliner-schnauze/commit/f7fde291256c9203f02cc934d8eb1bab52c30254))
+
 # [3.8.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.7.6...v3.8.0) (2024-02-29)
 
 
