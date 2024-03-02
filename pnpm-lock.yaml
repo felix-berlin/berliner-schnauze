@@ -10,7 +10,7 @@ dependencies:
     version: 3.1.1
   '@astrojs/vue':
     specifier: ^4.0.8
-    version: 4.0.8(@babel/core@7.24.0)(astro@4.4.7)(vite@5.1.4)(vue@3.4.21)
+    version: 4.0.8(@babel/core@7.24.0)(astro@4.4.9)(vite@5.1.4)(vue@3.4.21)
   '@felix_berlin/sass-butler':
     specifier: 3.0.1
     version: 3.0.1
@@ -28,25 +28,25 @@ dependencies:
     version: 1.0.4
   '@sentry/astro':
     specifier: ^7.103.0
-    version: 7.103.0(astro@4.4.7)
+    version: 7.103.0(astro@4.4.9)
   '@sentry/vue':
     specifier: ^7.103.0
     version: 7.103.0(vue@3.4.21)
   '@spotlightjs/astro':
     specifier: ^1.0.16
-    version: 1.0.16(@sentry/astro@7.103.0)(astro@4.4.7)
+    version: 1.0.16(@sentry/astro@7.103.0)(astro@4.4.9)
   '@vueuse/core':
     specifier: ^10.9.0
     version: 10.9.0(vue@3.4.21)
   astro:
     specifier: ^4.4.6
-    version: 4.4.7(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
+    version: 4.4.9(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
   astro-breadcrumbs:
     specifier: ^2.0.2
-    version: 2.0.2(astro@4.4.7)
+    version: 2.0.2(astro@4.4.9)
   astro-matomo:
     specifier: ^1.4.2
-    version: 1.4.2(astro@4.4.7)
+    version: 1.4.2(astro@4.4.9)
   compromise:
     specifier: ^14.12.0
     version: 14.12.0
@@ -138,7 +138,7 @@ devDependencies:
     version: 0.2.4
   '@vite-pwa/astro':
     specifier: ^0.3.0
-    version: 0.3.0(@vite-pwa/assets-generator@0.2.4)(astro@4.4.7)(vite-plugin-pwa@0.19.2)
+    version: 0.3.0(@vite-pwa/assets-generator@0.2.4)(astro@4.4.9)(vite-plugin-pwa@0.19.2)
   '@vitejs/plugin-vue':
     specifier: ^5.0.4
     version: 5.0.4(vite@5.1.4)(vue@3.4.21)
@@ -235,8 +235,8 @@ packages:
     resolution: {integrity: sha512-lFMjJTrFL3j7L9yBxwYfCq2k6qqwHyzuUl/XBnif78PWTJYyL/dfowQHWE3sp6U6ZzqWiiIZnpTMO96zhkjwtg==}
     engines: {node: '>=6.0.0'}
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.22
+      '@jridgewell/gen-mapping': 0.3.5
+      '@jridgewell/trace-mapping': 0.3.25
     dev: true
 
   /@ampproject/remapping@2.3.0:
@@ -244,7 +244,7 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
-      '@jridgewell/trace-mapping': 0.3.24
+      '@jridgewell/trace-mapping': 0.3.25
 
   /@antfu/install-pkg@0.1.1:
     resolution: {integrity: sha512-LyB/8+bSfa0DFGC06zpCEfs89/XoWZwws5ygEa5D+Xsm3OfI+aXQ86VgVG7Acyef+rSZ5HE7J8rrxzrQeM3PjQ==}
@@ -425,7 +425,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@astrojs/vue@4.0.8(@babel/core@7.24.0)(astro@4.4.7)(vite@5.1.4)(vue@3.4.21):
+  /@astrojs/vue@4.0.8(@babel/core@7.24.0)(astro@4.4.9)(vite@5.1.4)(vue@3.4.21):
     resolution: {integrity: sha512-RnNA4wFy4HvQxU4vswH3c6sa7Br1F/JVzWdQvHYLP4CEe5OZ6yhEqxAUUo3LDkF+sNn23XznFLOPqZak6ziBwg==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
@@ -436,7 +436,7 @@ packages:
       '@vitejs/plugin-vue-jsx': 3.1.0(vite@5.1.4)(vue@3.4.21)
       '@vue/babel-plugin-jsx': 1.1.5(@babel/core@7.24.0)
       '@vue/compiler-sfc': 3.4.21
-      astro: 4.4.7(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
+      astro: 4.4.9(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
       vue: 3.4.21(typescript@5.3.3)
     transitivePeerDependencies:
       - '@babel/core'
@@ -3198,15 +3198,6 @@ packages:
       '@sinclair/typebox': 0.27.8
     dev: true
 
-  /@jridgewell/gen-mapping@0.3.3:
-    resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==}
-    engines: {node: '>=6.0.0'}
-    dependencies:
-      '@jridgewell/set-array': 1.1.2
-      '@jridgewell/sourcemap-codec': 1.4.15
-      '@jridgewell/trace-mapping': 0.3.22
-    dev: true
-
   /@jridgewell/gen-mapping@0.3.5:
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
     engines: {node: '>=6.0.0'}
@@ -3215,19 +3206,9 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
       '@jridgewell/trace-mapping': 0.3.24
 
-  /@jridgewell/resolve-uri@3.1.1:
-    resolution: {integrity: sha512-dSYZh7HhCDtCKm4QakX0xFpsRDqjjtZf/kjI/v3T3Nwt5r8/qz/M19F9ySyOqU94SXBmeG9ttTul+YnR4LOxFA==}
-    engines: {node: '>=6.0.0'}
-    dev: true
-
   /@jridgewell/resolve-uri@3.1.2:
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
     engines: {node: '>=6.0.0'}
-
-  /@jridgewell/set-array@1.1.2:
-    resolution: {integrity: sha512-xnkseuNADM0gt2bs+BvhO0p78Mk762YnZdsuzFV018NoG1Sj1SCQvpSqa7XUaTam5vAGasABV9qXASMKnFMwMw==}
-    engines: {node: '>=6.0.0'}
-    dev: true
 
   /@jridgewell/set-array@1.2.1:
     resolution: {integrity: sha512-R8gLRTZeyp03ymzP/6Lil/28tGeGEzhx1q2k703KGWRAI1VdvPIXdG70VJc2pAMw3NA6JKL5hhFu1sJX0Mnn/A==}
@@ -3237,21 +3218,20 @@ packages:
     resolution: {integrity: sha512-UTYAUj/wviwdsMfzoSJspJxbkH5o1snzwX0//0ENX1u/55kkZZkcTZP6u9bwKGkv+dkk9at4m1Cpt0uY80kcpQ==}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
-      '@jridgewell/trace-mapping': 0.3.24
+      '@jridgewell/trace-mapping': 0.3.25
     dev: true
 
   /@jridgewell/sourcemap-codec@1.4.15:
     resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
 
-  /@jridgewell/trace-mapping@0.3.22:
-    resolution: {integrity: sha512-Wf963MzWtA2sjrNt+g18IAln9lKnlRp+K2eH4jjIoF1wYeq3aMREpG09xhlhdzS0EjwU7qmUJYangWa+151vZw==}
-    dependencies:
-      '@jridgewell/resolve-uri': 3.1.1
-      '@jridgewell/sourcemap-codec': 1.4.15
-    dev: true
-
   /@jridgewell/trace-mapping@0.3.24:
     resolution: {integrity: sha512-+VaWXDa6+l6MhflBvVXjIEAzb59nQ2JUK3bwRp2zRpPtU+8TFRy9Gg/5oIcNlkEL5PGlBFGfemUVvIgLnTzq7Q==}
+    dependencies:
+      '@jridgewell/resolve-uri': 3.1.2
+      '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@jridgewell/trace-mapping@0.3.25:
+    resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
@@ -3851,7 +3831,7 @@ packages:
       '@sentry/utils': 7.103.0
     dev: false
 
-  /@sentry/astro@7.103.0(astro@4.4.7):
+  /@sentry/astro@7.103.0(astro@4.4.9):
     resolution: {integrity: sha512-JfTTsERAriH82pNlfqy457YCIuiP4s22WtHfQnjERd6vDq5zAyR9RMSoExBYUBjlUxg1CWeZm2RTUU5Pc9n1Yg==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
@@ -3863,7 +3843,7 @@ packages:
       '@sentry/types': 7.103.0
       '@sentry/utils': 7.103.0
       '@sentry/vite-plugin': 2.10.2
-      astro: 4.4.7(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
+      astro: 4.4.9(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -4062,16 +4042,16 @@ packages:
     engines: {node: '>=18'}
     dev: true
 
-  /@spotlightjs/astro@1.0.16(@sentry/astro@7.103.0)(astro@4.4.7):
+  /@spotlightjs/astro@1.0.16(@sentry/astro@7.103.0)(astro@4.4.9):
     resolution: {integrity: sha512-mgNdfEZmc8DHHvSqoRDrxVtLQQft/fGFvXNMnrz7gPvTrEvsE2I2zodGQ+LUz6wtM1XBx5RCbXdyip8Oxfg1Mg==}
     peerDependencies:
       '@sentry/astro': '>=7.84.0'
       astro: '>=3.4.0 || >=4.0.0-beta'
     dependencies:
-      '@sentry/astro': 7.103.0(astro@4.4.7)
+      '@sentry/astro': 7.103.0(astro@4.4.9)
       '@spotlightjs/overlay': 1.7.0
       '@spotlightjs/sidecar': 1.4.0
-      astro: 4.4.7(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
+      astro: 4.4.9(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
       source-map: 0.7.4
     dev: false
 
@@ -4394,7 +4374,7 @@ packages:
       unconfig: 0.3.11
     dev: true
 
-  /@vite-pwa/astro@0.3.0(@vite-pwa/assets-generator@0.2.4)(astro@4.4.7)(vite-plugin-pwa@0.19.2):
+  /@vite-pwa/astro@0.3.0(@vite-pwa/assets-generator@0.2.4)(astro@4.4.9)(vite-plugin-pwa@0.19.2):
     resolution: {integrity: sha512-2fH9ifzMW8dmeydJ6SuttLR5FCDvSoaTpyxblasR6icsJbR1he4igJhauw4jvmQXOb99Psl+bsBSoUwsdSnSJA==}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.4
@@ -4405,7 +4385,7 @@ packages:
         optional: true
     dependencies:
       '@vite-pwa/assets-generator': 0.2.4
-      astro: 4.4.7(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
+      astro: 4.4.9(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
       vite-plugin-pwa: 0.19.2(@vite-pwa/assets-generator@0.2.4)(vite@5.1.4)(workbox-build@7.0.0)(workbox-window@7.0.0)
     dev: true
 
@@ -5124,12 +5104,12 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /astro-breadcrumbs@2.0.2(astro@4.4.7):
+  /astro-breadcrumbs@2.0.2(astro@4.4.9):
     resolution: {integrity: sha512-tKhTHH0N70G1+8FO7Rg/gE6ZRLIS//kZO5SR0jzLJpMgWeigzBN8L5VKXx3Ur1p/QW99y2Qc+ewQ0YhdkTgnEw==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.4.7(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
+      astro: 4.4.9(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
     dev: false
 
   /astro-eslint-parser@0.16.3:
@@ -5149,16 +5129,16 @@ packages:
       - supports-color
     dev: true
 
-  /astro-matomo@1.4.2(astro@4.4.7):
+  /astro-matomo@1.4.2(astro@4.4.9):
     resolution: {integrity: sha512-65TtRKaNmGWSAaPAV84dTweOt/6aVMaPLQxJkkiSWdDFr8oScf3Sg0zzs+tE5Ca+VZdLT8QLZgdrcVJG4uX2KA==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.4.7(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
+      astro: 4.4.9(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
     dev: false
 
-  /astro@4.4.7(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3):
-    resolution: {integrity: sha512-qzMCqCm9x4PZmZaCfVCVyTRKXNJe7FWE8BPLcLlJMmJzoPssqcVR3jtJnIBrx5uhGTLi5hsnwqVm0AMwpsId9Q==}
+  /astro@4.4.9(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3):
+    resolution: {integrity: sha512-FTWhzKjao7rHHiF/CqPqPS18AFad+fmUcYUFhWWIsYETHcc9g0IIIiv6cHXUE7g6mEZf7ycAa+WdboeEHUhraQ==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
     dependencies:
@@ -8913,16 +8893,9 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /lru-cache@10.0.2:
-    resolution: {integrity: sha512-Yj9mA8fPiVgOUpByoTZO5pNrcl5Yk37FcSHsUINpAsaBIEZIuqcCclDZJCVxqQShDsmYX8QG63svJiTbOATZwg==}
-    engines: {node: 14 || >=16.14}
-    dependencies:
-      semver: 7.5.4
-
   /lru-cache@10.2.0:
     resolution: {integrity: sha512-2bIM8x+VAf6JT4bKAljS1qUWgMsqZRPGJS6FSahIMPVvctcNhyVp7AJu7quxOW9jwkryBReKZY5tY5JYv2n/7Q==}
     engines: {node: 14 || >=16.14}
-    dev: true
 
   /lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -10142,7 +10115,7 @@ packages:
     resolution: {integrity: sha512-MkhCqzzBEpPvxxQ71Md0b1Kk51W01lrYvlMzSUaIzNsODdd7mqhiimSZlr+VegAz5Z6Vzt9Xg2ttE//XBhH3EQ==}
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
-      lru-cache: 10.0.2
+      lru-cache: 10.2.0
       minipass: 7.0.4
 
   /path-to-regexp@6.2.1:
@@ -11369,6 +11342,7 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
+    dev: true
 
   /semver@7.6.0:
     resolution: {integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==}
@@ -12758,7 +12732,7 @@ packages:
     resolution: {integrity: sha512-/EH/sDgxU2eGxajKdwLCDmQ4FWq+kpi3uCmBGpw1xJtnAxEjlD8j8PEiGWpCIMIs3ciNAgH0d3TTJiUkYzyZjA==}
     engines: {node: '>=10.12.0'}
     dependencies:
-      '@jridgewell/trace-mapping': 0.3.22
+      '@jridgewell/trace-mapping': 0.3.25
       '@types/istanbul-lib-coverage': 2.0.6
       convert-source-map: 2.0.0
     dev: true
