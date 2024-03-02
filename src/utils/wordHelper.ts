@@ -53,6 +53,8 @@ type WordTags = {
 export const getWordType = (word: string): WordTags[] => {
   const doc = nlp(word);
 
+  console.log(doc.out("tags"));
+
   return doc.out("tags");
 };
 
@@ -168,6 +170,32 @@ export const similarSoundingWords = (allWords: BerlinerWord[], currentWord: Berl
       ),
     };
   });
+};
+
+export const similarWords = (
+  allWords: BerlinerWord[],
+  currentWord: BerlinerWord,
+  needsSimilarity?: number,
+) => {
+  if (!currentWord || !allWords) {
+    return [];
+  }
+
+  const allWordsWithoutCurrent = allWords.filter((word) => word.id !== currentWord?.id);
+  const similarWords = allWordsWithoutCurrent.map((word) => {
+    return {
+      word: word,
+      isSimilar: natural.JaroWinklerDistance(
+        word.wordProperties.berlinerisch,
+        currentWord.wordProperties?.berlinerisch,
+        false,
+      ),
+    };
+  });
+
+  if (needsSimilarity) return similarWords.filter((word) => word.isSimilar >= needsSimilarity);
+
+  return similarWords;
 };
 
 export const createWikimediaFileList = async (wikimediaFiles: WordPropertiesWikimediaFiles[]) => {
