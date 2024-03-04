@@ -133,10 +133,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from "vue";
+import { ref, reactive } from "vue";
 import AlertBanner from "@components/AlertBanner.vue";
 import TurnStile from "@components/TurnStile.vue";
 import { createToastNotify } from "@stores/index.ts";
+import { sendEmail } from "@services/sendMail.ts";
+import type { SendEmailPayload } from "@ts_types/generated/graphql.ts";
 
 interface FormData {
   berlinerWord?: string;
@@ -173,48 +175,111 @@ const formErrors = reactive<FormErrors>({
 });
 
 const formResponse = reactive({
-  message: "",
-  status: "",
+  sent: false,
 });
 
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 const isVerified = ref(false);
 const isSending = ref(false);
 
+const sendMail = async (): Promise<void> => {
+  const createBody = `
+  <p>Ein neues Berliner Wort wurde eingereicht:</p>
+  <p>Berliner Wort: <strong>${formData.berlinerWord}</strong></p>
+  <p>Übersetzung: <strong>${formData.translation}</strong></p>
+  <p>Beispiel: <strong>${formData.example}</strong></p>
+  <p>Name: <strong>${formData.userName}</strong></p>
+  <p>E-Mail: <strong>${formData.userMail}</strong></p>
+`;
+
+  await sendEmail({
+    to: "mail@berliner-schnauze.wtf",
+    from: formData.userMail,
+    subject: "Wortvorschlag - Berliner Schnauze",
+    body: createBody,
+    clientMutationId: "newSuggestedWord",
+  })
+    .then((response) => {
+      const { sendEmail } = response;
+      if (sendEmail.sent) {
+        formResponse.sent = sendEmail.sent;
+
+        createToastNotify({ message: "Dein Wortvorschlag wurde versandt", status: "success" });
+
+        isSending.value = false;
+      }
+      resetForm();
+      console.log("response: ", sendEmail);
+    })
+    .catch((error) => {
+      console.error("Send E-Mail failed", error.cause);
+
+      createToastNotify({
+        message: "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
+        status: "error",
+        timeout: null,
+      });
+    });
+};
+
 /**
  * Posts the form data to the contact form 7 API
  *
  * @return  {Promise<void>}
  */
-const postToContactForm7 = async (): Promise<void> => {
-  const formInputs = new FormData();
+// const postToContactForm7 = async (): Promise<void> => {
+//   const formInputs = new FormData();
 
-  for (const name in formData) {
-    formInputs.append(name, formData[name]);
-  }
+//   for (const name in formData) {
+//     if (formData[name] !== undefined) {
+//       formInputs.append(name, formData[name]);
+//     }
+//   }
 
-  await fetch(
-    `${import.meta.env.PUBLIC_WP_REST_API}/contact-form-7/v1/contact-forms/${
-      import.meta.env.PUBLIC_SUGGEST_WORD_FORM_ID
-    }/feedback`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
-      },
-      body: formInputs,
-    },
-  )
-    .then((response) => response.json())
-    .then((response) => {
-      formResponse.message = response.message;
-      formResponse.status = response.status;
-      resetForm();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
+//   await fetch(`${import.meta.env.PUBLIC_WP_REST_API}`, {
+//     headers: {
+//       Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+//     },
+//   })
+//     .then((response) => response.json())
+//     .then((data) => console.log(data))
+//     .catch((error) => console.error("Error:", error));
+
+//   await fetch(
+//     `${import.meta.env.PUBLIC_WP_REST_API}/contact-form-7/v1/contact-forms/${
+//       import.meta.env.PUBLIC_SUGGEST_WORD_FORM_ID
+//     }/feedback`,
+//     {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+//       },
+//       body: formInputs,
+//     },
+//   )
+//     .then((response) => {
+//       if (!response.ok) {
+//         console.log("response: ", response, response.json());
+
+//         throw new Error(`HTTP error! status: ${response.status}`);
+//       }
+//       return response.json();
+//     })
+//     .then((response) => {
+//       formResponse.message = response.message;
+//       formResponse.status = response.status;
+//       resetForm();
+//     })
+//     .catch((error) => {
+//       console.error("unknown form error: ", error);
+
+//       createToastNotify({
+//         message: "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
+//         status: "error",
+//         timeout: null,
+//       });
+//     });
+// };
 
 /**
  * Resets the form after a successful submission
@@ -222,9 +287,9 @@ const postToContactForm7 = async (): Promise<void> => {
  * @return  {void}  [return description]
  */
 const resetForm = (): void => {
-  if (formResponse.status === "mail_sent") {
+  if (formResponse.sent) {
     setTimeout(() => {
-      formResponse.status = "";
+      formResponse.sent = false;
       formData = convertObjectKeysTo(formData, "");
     }, 3000);
   }
@@ -300,7 +365,8 @@ const checkForm = (): void => {
   // If there are no errors and the user is verified, submit the form
   if (Object.values(formErrors).every((v) => v?.length === 0) && isVerified.value) {
     isSending.value = true;
-    postToContactForm7();
+    sendMail();
+    // postToContactForm7();
   }
 };
 
@@ -317,21 +383,6 @@ const validEmail = (email: string): boolean => {
 
   return re.test(email);
 };
-
-watch(
-  () => formResponse.status,
-  () => {
-    if (formResponse.status === "mail_sent") {
-      createToastNotify({ message: formResponse.message, status: "success" });
-    }
-
-    if (formResponse.status !== "mail_sent" && formResponse.status?.length) {
-      createToastNotify({ message: formResponse.message, status: "error" });
-    }
-
-    isSending.value = false;
-  },
-);
 </script>
 
 <style lang="scss">
