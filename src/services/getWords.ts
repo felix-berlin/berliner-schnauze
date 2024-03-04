@@ -64,7 +64,7 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
 export const getAllWords = async (
   orderByField = "TITLE",
   orderByType = "ASC",
-  stati = import.meta.env.SHOW_TEST_CONTENT ? "[PUBLISH]" : "[DRAFT, PUBLISH]",
+  stati = import.meta.env.SHOW_TEST_CONTENT ? "[DRAFT, PUBLISH]" : "[PUBLISH]",
 ): Promise<RootQueryToBerlinerWordConnectionEdge[]> => {
   let allWords: WordEdge[] = [];
   let cursor: string | null = null;
