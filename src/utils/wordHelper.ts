@@ -53,8 +53,6 @@ type WordTags = {
 export const getWordType = (word: string): WordTags[] => {
   const doc = nlp(word);
 
-  console.log(doc.out("tags"));
-
   return doc.out("tags");
 };
 
