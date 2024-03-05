@@ -140,7 +140,7 @@ import { createToastNotify } from "@stores/index.ts";
 import { sendEmail } from "@services/sendMail.ts";
 import type { SendEmailPayload } from "@ts_types/generated/graphql.ts";
 
-interface FormData {
+export interface FormData {
   berlinerWord?: string;
   translation?: string;
   example?: string;
@@ -223,65 +223,6 @@ const sendMail = async (): Promise<void> => {
 };
 
 /**
- * Posts the form data to the contact form 7 API
- *
- * @return  {Promise<void>}
- */
-// const postToContactForm7 = async (): Promise<void> => {
-//   const formInputs = new FormData();
-
-//   for (const name in formData) {
-//     if (formData[name] !== undefined) {
-//       formInputs.append(name, formData[name]);
-//     }
-//   }
-
-//   await fetch(`${import.meta.env.PUBLIC_WP_REST_API}`, {
-//     headers: {
-//       Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
-//     },
-//   })
-//     .then((response) => response.json())
-//     .then((data) => console.log(data))
-//     .catch((error) => console.error("Error:", error));
-
-//   await fetch(
-//     `${import.meta.env.PUBLIC_WP_REST_API}/contact-form-7/v1/contact-forms/${
-//       import.meta.env.PUBLIC_SUGGEST_WORD_FORM_ID
-//     }/feedback`,
-//     {
-//       method: "POST",
-//       headers: {
-//         Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
-//       },
-//       body: formInputs,
-//     },
-//   )
-//     .then((response) => {
-//       if (!response.ok) {
-//         console.log("response: ", response, response.json());
-
-//         throw new Error(`HTTP error! status: ${response.status}`);
-//       }
-//       return response.json();
-//     })
-//     .then((response) => {
-//       formResponse.message = response.message;
-//       formResponse.status = response.status;
-//       resetForm();
-//     })
-//     .catch((error) => {
-//       console.error("unknown form error: ", error);
-
-//       createToastNotify({
-//         message: "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
-//         status: "error",
-//         timeout: null,
-//       });
-//     });
-// };
-
-/**
  * Resets the form after a successful submission
  *
  * @return  {void}  [return description]
@@ -308,22 +249,6 @@ const convertObjectKeysTo = <T,>(
   to: T,
 ): Record<string, T> => {
   return Object.fromEntries(Object.keys(object).map((key) => [key, to])) as Record<string, T>;
-};
-
-/**
- * Checks if all object values are true || false
- *
- * @param   {Object}  object    The object to check
- * @param   {Boolean}  checkFor  Boolean your are checking for
- *
- * @return  {Boolean}            Return if all are true or false
- */
-const checkObjectValues = (object: object, checkFor: boolean = false): boolean => {
-  return Object.values(object).every((v) => v === checkFor);
-};
-
-const checkObjectValueLength = (object) => {
-  return Object.values(object).every((v) => v.length === 0);
 };
 
 /**
@@ -366,7 +291,6 @@ const checkForm = (): void => {
   if (Object.values(formErrors).every((v) => v?.length === 0) && isVerified.value) {
     isSending.value = true;
     sendMail();
-    // postToContactForm7();
   }
 };
 
