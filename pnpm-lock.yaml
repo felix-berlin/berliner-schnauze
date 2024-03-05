@@ -44,6 +44,9 @@ dependencies:
   astro-breadcrumbs:
     specifier: ^2.0.2
     version: 2.0.2(astro@4.4.11)
+  astro-env:
+    specifier: ^0.0.5
+    version: 0.0.5(astro@4.4.11)(typescript@5.3.3)(zod@3.22.4)
   astro-matomo:
     specifier: ^1.4.2
     version: 1.4.2(astro@4.4.11)
@@ -83,6 +86,9 @@ dependencies:
   typescript:
     specifier: ^5.3.3
     version: 5.3.3
+  vanilla-cookieconsent:
+    specifier: v3.0.0
+    version: 3.0.0
   virtua:
     specifier: ^0.28.0
     version: 0.28.0(vue@3.4.21)
@@ -5126,6 +5132,19 @@ packages:
       astro: 4.4.11(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
     dev: false
 
+  /astro-env@0.0.5(astro@4.4.11)(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-YboEdvUFnXcD6qMOMQfltwSoOEYuVt3H3+DTwgUpTYyTYpxrPgyjSIDhIU6nYQYCrfdct0STtnC4hDfBvILc+g==}
+    peerDependencies:
+      astro: ^4.0.0
+    dependencies:
+      astro: 4.4.11(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
+      astro-integration-kit: 0.0.2(astro@4.4.11)
+      zod-to-ts: 1.2.0(typescript@5.3.3)(zod@3.22.4)
+    transitivePeerDependencies:
+      - typescript
+      - zod
+    dev: false
+
   /astro-eslint-parser@0.16.3:
     resolution: {integrity: sha512-CGaBseNtunAV2DCpwBXqTKq8+9Tw65XZetMaC0FsMoZuLj0gxNIkbCf2QyKYScVrNOU7/ayfNdVw8ZCSHBiqCg==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -5142,6 +5161,14 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /astro-integration-kit@0.0.2(astro@4.4.11):
+    resolution: {integrity: sha512-QZReb4Y4svJ9kPEi/+fnSM6teFHt22omBafeXkVPKnQRjTuN+cSxLAU3RMrLcdmaLMyTXnGieu5XCPKbEUTiyg==}
+    peerDependencies:
+      astro: ^4.0.0
+    dependencies:
+      astro: 4.4.11(@types/node@20.11.24)(sass@1.71.1)(typescript@5.3.3)
+    dev: false
 
   /astro-matomo@1.4.2(astro@4.4.11):
     resolution: {integrity: sha512-65TtRKaNmGWSAaPAV84dTweOt/6aVMaPLQxJkkiSWdDFr8oScf3Sg0zzs+tE5Ca+VZdLT8QLZgdrcVJG4uX2KA==}
@@ -12795,6 +12822,10 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /vanilla-cookieconsent@3.0.0:
+    resolution: {integrity: sha512-oeK7FivRDb424mt3/UT8DG98Pu5m6Uuye7JsdzO6HnYkstW5QHXhkslXyUpE3phtKz3NEeIo7hzLUtfRNRMfbQ==}
+    dev: false
+
   /vfile-location@5.0.2:
     resolution: {integrity: sha512-NXPYyxyBSH7zB5U6+3uDdd6Nybz6o6/od9rk8bp9H8GR3L+cm/fC0uUTbqBmUTnMCUDslAGBOIKNfvvb+gGlDg==}
     dependencies:
@@ -13799,6 +13830,16 @@ packages:
   /yocto-queue@1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
+
+  /zod-to-ts@1.2.0(typescript@5.3.3)(zod@3.22.4):
+    resolution: {integrity: sha512-x30XE43V+InwGpvTySRNz9kB7qFU8DlyEy7BsSTCHPH1R0QasMmHWZDCzYm6bVXtj/9NNJAZF3jW8rzFvH5OFA==}
+    peerDependencies:
+      typescript: ^4.9.4 || ^5.0.2
+      zod: ^3
+    dependencies:
+      typescript: 5.3.3
+      zod: 3.22.4
+    dev: false
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}

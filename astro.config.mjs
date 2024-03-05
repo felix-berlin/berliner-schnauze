@@ -7,6 +7,17 @@ import allAlias from "./alias.ts";
 import AstroPWA from "@vite-pwa/astro";
 import sentry from "@sentry/astro";
 import spotlightjs from "@spotlightjs/astro";
+import astroEnv from "astro-env";
+import { z } from "astro/zod";
+
+const envBoolean = (envVar) => {
+  return z
+    .string()
+    .refine((val) => val === "true" || val === "false", {
+      message: `${envVar} must be either 'true' or 'false'`,
+    })
+    .transform((val) => val === "true");
+};
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,6 +27,26 @@ export default defineConfig({
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
   integrations: [
+    astroEnv({
+      schema: z.object({
+        PUBLIC_WP_API: z.string().url(),
+        PUBLIC_WP_REST_API: z.string().url(),
+        WP_AUTH_USER: z.string(),
+        WP_AUTH_PASS: z.string(),
+        PUBLIC_WP_AUTH_REFRESH_TOKEN: z.string(),
+        PUBLIC_SUGGEST_WORD_FORM_ID: z.string(),
+        ENABLE_ANALYTICS: envBoolean("ENABLE_ANALYTICS"),
+        PUBLIC_SITE_NAME: z.string(),
+        PUBLIC_SITE_URL: z.string().url(),
+        PUBLIC_TURNSTILE_SITE_KEY: z.string(),
+        SENTRY_AUTH_TOKEN: z.optional(z.string()),
+        SENRTY_DNS: z.optional(z.string().url()),
+        SENTRY_PROJECT: z.optional(z.string()),
+        WIKIMEDIA_API_AUTH_TOKEN: z.string(),
+        SHOW_TEST_DATA: envBoolean("SHOW_TEST_DATA"),
+        PWA_DEBUG: envBoolean("PWA_DEBUG"),
+      }),
+    }),
     vue({
       appEntrypoint: "src/pages/_app",
       script: {
@@ -85,7 +116,7 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
       },
       devOptions: {
-        enabled: false,
+        enabled: import.meta.env.PWA_DEBUG,
         navigateFallbackAllowlist: [/^\//],
       },
       experimental: {

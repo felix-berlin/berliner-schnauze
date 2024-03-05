@@ -116,6 +116,7 @@
     "@vueuse/core": "^10.9.0",
     "astro": "^4.4.11",
     "astro-breadcrumbs": "^2.0.2",
+    "astro-env": "^0.0.5",
     "astro-matomo": "^1.4.2",
     "compromise": "^14.12.0",
     "de-compromise": "^0.0.10",
@@ -129,6 +130,7 @@
     "pagefind": "^1.0.4",
     "photoswipe": "^5.4.3",
     "typescript": "^5.3.3",
+    "vanilla-cookieconsent": "v3.0.0",
     "virtua": "^0.28.0",
     "vue": "^3.4.21"
   }
