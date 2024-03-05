@@ -31,8 +31,8 @@ export default defineConfig({
       schema: z.object({
         PUBLIC_WP_API: z.string().url(),
         PUBLIC_WP_REST_API: z.string().url(),
-        WP_AUTH_USER: z.string(),
-        WP_AUTH_PASS: z.string(),
+        WP_AUTH_USER: z.optional(z.string()),
+        WP_AUTH_PASS: z.optional(z.string()),
         PUBLIC_WP_AUTH_REFRESH_TOKEN: z.string(),
         PUBLIC_SUGGEST_WORD_FORM_ID: z.string(),
         ENABLE_ANALYTICS: envBoolean("ENABLE_ANALYTICS"),
@@ -44,7 +44,7 @@ export default defineConfig({
         SENTRY_PROJECT: z.optional(z.string()),
         WIKIMEDIA_API_AUTH_TOKEN: z.string(),
         SHOW_TEST_DATA: envBoolean("SHOW_TEST_DATA"),
-        PWA_DEBUG: envBoolean("PWA_DEBUG"),
+        PWA_DEBUG: z.optional(envBoolean("PWA_DEBUG")),
       }),
     }),
     vue({
@@ -116,7 +116,7 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
       },
       devOptions: {
-        enabled: import.meta.env.PWA_DEBUG,
+        enabled: import.meta.env.PWA_DEBUG ?? false,
         navigateFallbackAllowlist: [/^\//],
       },
       experimental: {
