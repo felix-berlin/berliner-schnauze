@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.9.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.8.3...v3.9.0) (2024-03-05)
+
+
+### Features
+
+* create similarWords fn ([b51b22a](https://github.com/felix-berlin/berliner-schnauze/commit/b51b22a38be3aed2cfc1c9b333bc311af6496060))
+
 ## [3.8.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.8.2...v3.8.3) (2024-03-05)
 
 
