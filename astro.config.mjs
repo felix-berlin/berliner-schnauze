@@ -6,6 +6,7 @@ import Icons from "unplugin-icons/vite";
 import allAlias from "./alias.ts";
 import AstroPWA from "@vite-pwa/astro";
 import sentry from "@sentry/astro";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
 import astroEnv from "astro-env";
 import { z } from "astro/zod";
@@ -145,6 +146,11 @@ export default defineConfig({
           }
         },
       }), // chooses the compiler automatically
+      sentryVitePlugin({
+        authToken: import.meta.env.SENTRY_AUTH_TOKEN,
+        org: "webshaped",
+        project: import.meta.env.SENTRY_PROJECT,
+      }),
     ],
 
     resolve: {
