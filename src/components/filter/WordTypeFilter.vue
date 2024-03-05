@@ -32,7 +32,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
 import { useStore } from "@nanostores/vue";
 import { $wordSearch, setWordTypeFilter } from "@stores/index.ts";
 
