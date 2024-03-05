@@ -2,6 +2,7 @@
 import { pwaInfo } from "virtual:pwa-info";
 import { ViewTransitions } from "astro:transitions";
 import SetColorMode from "@components/SetColorMode.astro";
+import SentryBrowser from "@components/SentryBrowser.astro";
 
 export interface Title {
   title: string;
@@ -114,6 +115,8 @@ const { title, seo } = Astro.props as SeoProps & Title;
 <link rel="preconnect" href="//cms.berliner-schnauze.wtf" />
 
 <ViewTransitions />
+
+<SentryBrowser />
 
 {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
 <script src="/src/services/pwa.ts"></script>

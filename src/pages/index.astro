@@ -88,5 +88,7 @@ const allWords = await getAllWords();
     <WordOfTheDay client:only="vue" />
   </section>
 
+  <button onclick="throw new Error('This is a test error')"> Throw test error </button>
+
   <WordSearch words={allWords} />
 </Layout>
