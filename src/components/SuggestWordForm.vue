@@ -209,7 +209,6 @@ const sendMail = async (): Promise<void> => {
         isSending.value = false;
       }
       resetForm();
-      console.log("response: ", sendEmail);
     })
     .catch((error) => {
       console.error("Send E-Mail failed", error.cause);

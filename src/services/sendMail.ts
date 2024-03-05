@@ -11,8 +11,6 @@ import type { FormData } from "@components/SuggestWordForm.vue";
  * @return  {Promise<SendEmailPayload>}
  */
 export const sendEmail = async (input: SendEmailInput): Promise<SendEmailPayload> => {
-  console.log(input.body);
-
   const data = await fetchAPI(
     `
   mutation SendEmail($input: SendEmailInput!) {
