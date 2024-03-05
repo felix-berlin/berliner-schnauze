@@ -1,0 +1,60 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LetterFilter.vue > renders correctly 1`] = `
+<nav
+  class="c-letter-filter"
+>
+  <ul
+    class="c-letter-filter__list u-list-reset"
+  >
+    <li
+      class="c-letter-filter__list-item"
+    >
+      <button
+        class="c-letter-filter__button is-all c-button c-button--filter is-current"
+        type="button"
+      >
+         Alle 
+      </button>
+    </li>
+    
+    <li
+      class="c-letter-filter__list-item"
+    >
+      <button
+        aria-label="Filter nach Buchstabe a"
+        class="c-letter-filter__button c-button c-button--filter"
+        title="Filter nach Buchstabe a"
+        type="button"
+      >
+        a
+      </button>
+    </li>
+    <li
+      class="c-letter-filter__list-item"
+    >
+      <button
+        aria-label="Filter nach Buchstabe b"
+        class="c-letter-filter__button c-button c-button--filter"
+        title="Filter nach Buchstabe b"
+        type="button"
+      >
+        b
+      </button>
+    </li>
+    <li
+      class="c-letter-filter__list-item"
+    >
+      <button
+        aria-label="Filter nach Buchstabe c"
+        class="c-letter-filter__button c-button c-button--filter"
+        title="Filter nach Buchstabe c"
+        type="button"
+      >
+        c
+      </button>
+    </li>
+    
+  </ul>
+</nav>
+`;

@@ -29,6 +29,7 @@ export default defineConfig({
     setupFiles: ["src/tests/setup.ts"],
     coverage: {
       include: ["src/**"],
+      exclude: ["src/types/**", "src/env.d.ts", "src/pages/_app.ts"],
       reportsDirectory: "./tests/unit/coverage",
     },
   },

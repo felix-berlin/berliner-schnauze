@@ -6,7 +6,7 @@
         <a
           v-if="word"
           :key="word.id"
-          :href="routeToWord(word.slug)"
+          :href="routeToWord(word.slug!)"
           class="c-related-words__word"
           :title="`Erfahre mehr über ${word.wordProperties?.berlinerisch}`"
         >
