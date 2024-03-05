@@ -46,6 +46,7 @@
     "lint": "pnpm run lint:js && pnpm run lint:style",
     "test:unit": "vitest --coverage",
     "test:unit:coverage": "vitest run --coverage",
+    "vitest:update": "vitest --update",
     "format": "npx prettier --write .",
     "gql:generate": "gql-gen --config codegen.ts",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicons/favicon.svg",
