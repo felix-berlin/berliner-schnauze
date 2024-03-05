@@ -5,6 +5,7 @@ dev-dist/
 
 # test output
 coverage
+/tests/unit/coverage
 
 # dependencies
 node_modules/
