@@ -18,6 +18,13 @@ export const routeToWord = (word: string | undefined): string => {
   return `/wort/${word}`;
 };
 
+/**
+ * Returns a random element from the given array
+ *
+ * @param   {any[]}  elements  [elements description]
+ *
+ * @return  {any}              [return description]
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const randomElement = (elements: any[]): any => {
   return elements[Math.floor(Math.random() * elements.length)];
@@ -63,9 +70,50 @@ export const useViewTransition = (fn: () => void): void => {
   });
 };
 
+/**
+ * Formats a date to a human readable string
+ *
+ * @param   {string}  date
+ * @param   {string}  locale
+ *
+ * @return  {string | undefined}
+ */
 export const formattedDate = (date: string, locale = "de-DE") => {
   if (!date) return;
   const dateToFormat = new Date(date);
 
   return dateToFormat.toLocaleString(locale, { year: "numeric", month: "long", day: "numeric" });
+};
+
+/**
+ * Checks if all object values are true || false
+ *
+ * @param   {Object}  object    The object to check
+ * @param   {Boolean}  checkFor  Boolean your are checking for
+ *
+ * @return  {Boolean}            Return if all are true or false
+ */
+export const checkObjectValues = (object: object, checkFor: boolean = false): boolean => {
+  return Object.values(object).every((v) => v === checkFor);
+};
+
+/**
+ * Checks if all values in the given object are empty strings.
+ *
+ * @param {Object} object - The object to check.
+ * @returns {boolean} Returns true if all values in the object are empty strings, false otherwise.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const checkObjectValueLength = (obj: Record<string, any>): boolean => {
+  return Object.values(obj).every((v) => {
+    if (typeof v === "string" || Array.isArray(v)) {
+      return v.length === 0;
+    } else if (v === null || v === undefined) {
+      return true;
+    } else if (typeof v === "object") {
+      return Object.keys(v).length === 0;
+    } else {
+      return false;
+    }
+  });
 };
