@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.10.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.9.0...v3.10.0) (2024-03-06)
+
+
+### Features
+
+* add sentry browser ([ddb5e7f](https://github.com/felix-berlin/berliner-schnauze/commit/ddb5e7ff96e16a5865dead814dd76e172cadd1b3))
+* add sentry sourcemap tool ([cd76934](https://github.com/felix-berlin/berliner-schnauze/commit/cd7693410cb543742ccf5c54402cd2bac6513cd3))
+
 # [3.9.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.8.3...v3.9.0) (2024-03-05)
 
 
