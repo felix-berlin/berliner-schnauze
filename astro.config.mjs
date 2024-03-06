@@ -10,6 +10,13 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
 import astroEnv from "astro-env";
 import { z } from "astro/zod";
+import { loadEnv } from "vite";
+
+const { SENTRY_AUTH_TOKEN, SENTRY_PROJECT, PWA_DEBUG } = loadEnv(
+  process.env.NODE_ENV,
+  process.cwd(),
+  "",
+);
 
 const envBoolean = (envVar) => {
   return z
@@ -41,7 +48,7 @@ export default defineConfig({
         PUBLIC_SITE_URL: z.string().url(),
         PUBLIC_TURNSTILE_SITE_KEY: z.string(),
         SENTRY_AUTH_TOKEN: z.optional(z.string()),
-        SENRTY_DNS: z.optional(z.string().url()),
+        PUBLIC_SENRTY_DNS: z.optional(z.string().url()),
         SENTRY_PROJECT: z.optional(z.string()),
         WIKIMEDIA_API_AUTH_TOKEN: z.string(),
         SHOW_TEST_DATA: envBoolean("SHOW_TEST_DATA"),
@@ -117,7 +124,7 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
       },
       devOptions: {
-        enabled: import.meta.env.PWA_DEBUG ?? false,
+        enabled: PWA_DEBUG ?? false,
         navigateFallbackAllowlist: [/^\//],
       },
       experimental: {
@@ -147,9 +154,9 @@ export default defineConfig({
         },
       }), // chooses the compiler automatically
       sentryVitePlugin({
-        authToken: import.meta.env.SENTRY_AUTH_TOKEN,
+        authToken: SENTRY_AUTH_TOKEN,
         org: "webshaped",
-        project: import.meta.env.SENTRY_PROJECT,
+        project: SENTRY_PROJECT,
       }),
     ],
 
