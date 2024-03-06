@@ -6,7 +6,6 @@
   import * as Sentry from "@sentry/browser";
   import { version } from "../../package.json";
 
-  console.log("dns", import.meta.env.PUBLIC_SENRTY_DNS);
   Sentry.init({
     dsn: import.meta.env.PUBLIC_SENRTY_DNS,
 
