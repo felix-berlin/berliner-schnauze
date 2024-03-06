@@ -56,6 +56,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.5.6",
+    "@eclass/semantic-release-sentry-releases": "^3.1.0",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.2.4",
     "@graphql-codegen/introspection": "^4.0.3",

@@ -7,7 +7,9 @@
   import { version } from "../../package.json";
 
   Sentry.init({
-    dsn: import.meta.env.PUBLIC_SENRTY_DNS,
+    dsn: import.meta.env.PUBLIC_SENTRY_DNS,
+
+    environment: import.meta.env.PUBLIC_SENTRY_ENVIRONMENT,
 
     // Alternatively, use `process.env.npm_package_version` for a dynamic release version
     // if your build tool supports it.
