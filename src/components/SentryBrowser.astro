@@ -7,7 +7,9 @@
   import { version } from "../../package.json";
 
   Sentry.init({
-    dsn: import.meta.env.PUBLIC_SENRTY_DNS,
+    dsn: import.meta.env.PUBLIC_SENTRY_DNS,
+
+    environment: import.meta.env.PUBLIC_SENTRY_ENVIRONMENT,
 
     // Alternatively, use `process.env.npm_package_version` for a dynamic release version
     // if your build tool supports it.
@@ -17,7 +19,7 @@
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
+    tracesSampleRate: import.meta.env.PUBLIC_SENTRY_TRACES_SAMPLE_RATE,
 
     // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
     // tracePropagationTargets: ["localhost", /^https:\/\/berliner-schnauze\.wtf/],

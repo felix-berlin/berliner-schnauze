@@ -12,7 +12,7 @@ import astroEnv from "astro-env";
 import { z } from "astro/zod";
 import { loadEnv } from "vite";
 
-const { SENTRY_AUTH_TOKEN, SENTRY_PROJECT, PWA_DEBUG } = loadEnv(
+const { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, PWA_DEBUG } = loadEnv(
   process.env.NODE_ENV,
   process.cwd(),
   "",
@@ -47,9 +47,13 @@ export default defineConfig({
         PUBLIC_SITE_NAME: z.string(),
         PUBLIC_SITE_URL: z.string().url(),
         PUBLIC_TURNSTILE_SITE_KEY: z.string(),
-        SENTRY_AUTH_TOKEN: z.optional(z.string()),
-        PUBLIC_SENRTY_DNS: z.optional(z.string().url()),
-        SENTRY_PROJECT: z.optional(z.string()),
+        SENTRY_AUTH_TOKEN: z.string(),
+        SENTRY_DNS: z.optional(z.string().url()),
+        PUBLIC_SENTRY_DNS: z.optional(z.string().url()),
+        SENTRY_PROJECT: z.string(),
+        SENTRY_ORG: z.string(),
+        PUBLIC_SENTRY_ENVIRONMENT: z.string(),
+        PUBLIC_SENTRY_TRACES_SAMPLE_RATE: z.string().transform((value) => parseFloat(value)),
         WIKIMEDIA_API_AUTH_TOKEN: z.string(),
         SHOW_TEST_DATA: envBoolean("SHOW_TEST_DATA"),
         PWA_DEBUG: z.optional(envBoolean("PWA_DEBUG")),
@@ -155,7 +159,7 @@ export default defineConfig({
       }), // chooses the compiler automatically
       sentryVitePlugin({
         authToken: SENTRY_AUTH_TOKEN,
-        org: "webshaped",
+        org: SENTRY_ORG,
         project: SENTRY_PROJECT,
       }),
     ],
