@@ -53,6 +53,7 @@ export default defineConfig({
         SENTRY_PROJECT: z.string(),
         SENTRY_ORG: z.string(),
         PUBLIC_SENTRY_ENVIRONMENT: z.string(),
+        PUBLIC_SENTRY_TRACES_SAMPLE_RATE: z.string().transform((value) => parseFloat(value)),
         WIKIMEDIA_API_AUTH_TOKEN: z.string(),
         SHOW_TEST_DATA: envBoolean("SHOW_TEST_DATA"),
         PWA_DEBUG: z.optional(envBoolean("PWA_DEBUG")),
