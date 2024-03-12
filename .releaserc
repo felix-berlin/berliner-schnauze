@@ -45,12 +45,6 @@
       {
         "message": "Release <%= nextRelease.version %> - <%= new Date().toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' }) %> [skip ci]\n\n<%= nextRelease.notes %>"
       }
-    ],
-    [
-      "@eclass/semantic-release-sentry-releases",
-      {
-        "tagsUrl": "https://github.com/felix-berlin/berliner-schnauze/releases/tag/"
-      }
     ]
   ],
   "dryRun": false

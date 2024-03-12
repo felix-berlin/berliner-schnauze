@@ -56,7 +56,6 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.5.7",
-    "@eclass/semantic-release-sentry-releases": "^3.1.0",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.2.4",
     "@graphql-codegen/introspection": "^4.0.3",
@@ -117,7 +116,7 @@
     "@sentry/vue": "^7.106.1",
     "@spotlightjs/astro": "^1.0.16",
     "@vueuse/core": "^10.9.0",
-    "astro": "^4.5.1",
+    "astro": "^4.5.2",
     "astro-breadcrumbs": "^2.2.0",
     "astro-env": "^0.0.5",
     "astro-matomo": "^1.4.2",
