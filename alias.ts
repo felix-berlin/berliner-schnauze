@@ -10,6 +10,7 @@ export default {
   "@ts_types": fileURLToPath(new URL("./src/types/", import.meta.url)),
   "@features": fileURLToPath(new URL("./src/features/", import.meta.url)),
   "@services": fileURLToPath(new URL("./src/services/", import.meta.url)),
+  "@plugins": fileURLToPath(new URL("./src/plugins/", import.meta.url)),
   "@sass-butler": fileURLToPath(
     new URL("node_modules/@felix_berlin/sass-butler/", import.meta.url),
   ),
