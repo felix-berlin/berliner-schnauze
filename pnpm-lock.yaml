@@ -10,7 +10,7 @@ dependencies:
     version: 3.1.1
   '@astrojs/vue':
     specifier: ^4.0.8
-    version: 4.0.8(@babel/core@7.24.0)(astro@4.5.1)(vite@5.1.6)(vue@3.4.21)
+    version: 4.0.8(@babel/core@7.24.0)(astro@4.5.2)(vite@5.1.6)(vue@3.4.21)
   '@felix_berlin/sass-butler':
     specifier: 3.0.1
     version: 3.0.1
@@ -28,7 +28,7 @@ dependencies:
     version: 1.0.4
   '@sentry/astro':
     specifier: ^7.106.1
-    version: 7.106.1(astro@4.5.1)
+    version: 7.106.1(astro@4.5.2)
   '@sentry/vite-plugin':
     specifier: ^2.14.3
     version: 2.14.3
@@ -37,22 +37,22 @@ dependencies:
     version: 7.106.1(vue@3.4.21)
   '@spotlightjs/astro':
     specifier: ^1.0.16
-    version: 1.0.16(@sentry/astro@7.106.1)(astro@4.5.1)
+    version: 1.0.16(@sentry/astro@7.106.1)(astro@4.5.2)
   '@vueuse/core':
     specifier: ^10.9.0
     version: 10.9.0(vue@3.4.21)
   astro:
-    specifier: ^4.5.1
-    version: 4.5.1(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
+    specifier: ^4.5.2
+    version: 4.5.2(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
   astro-breadcrumbs:
     specifier: ^2.2.0
-    version: 2.2.0(astro@4.5.1)
+    version: 2.2.0(astro@4.5.2)
   astro-env:
     specifier: ^0.0.5
-    version: 0.0.5(astro@4.5.1)(typescript@5.4.2)(zod@3.22.4)
+    version: 0.0.5(astro@4.5.2)(typescript@5.4.2)(zod@3.22.4)
   astro-matomo:
     specifier: ^1.4.2
-    version: 1.4.2(astro@4.5.1)
+    version: 1.4.2(astro@4.5.2)
   compromise:
     specifier: ^14.12.0
     version: 14.12.0
@@ -150,7 +150,7 @@ devDependencies:
     version: 0.2.4
   '@vite-pwa/astro':
     specifier: ^0.3.0
-    version: 0.3.0(@vite-pwa/assets-generator@0.2.4)(astro@4.5.1)(vite-plugin-pwa@0.19.2)
+    version: 0.3.0(@vite-pwa/assets-generator@0.2.4)(astro@4.5.2)(vite-plugin-pwa@0.19.2)
   '@vitejs/plugin-vue':
     specifier: ^5.0.4
     version: 5.0.4(vite@5.1.6)(vue@3.4.21)
@@ -443,7 +443,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@astrojs/vue@4.0.8(@babel/core@7.24.0)(astro@4.5.1)(vite@5.1.6)(vue@3.4.21):
+  /@astrojs/vue@4.0.8(@babel/core@7.24.0)(astro@4.5.2)(vite@5.1.6)(vue@3.4.21):
     resolution: {integrity: sha512-RnNA4wFy4HvQxU4vswH3c6sa7Br1F/JVzWdQvHYLP4CEe5OZ6yhEqxAUUo3LDkF+sNn23XznFLOPqZak6ziBwg==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
@@ -454,7 +454,7 @@ packages:
       '@vitejs/plugin-vue-jsx': 3.1.0(vite@5.1.6)(vue@3.4.21)
       '@vue/babel-plugin-jsx': 1.1.5(@babel/core@7.24.0)
       '@vue/compiler-sfc': 3.4.21
-      astro: 4.5.1(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
+      astro: 4.5.2(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
       vue: 3.4.21(typescript@5.4.2)
     transitivePeerDependencies:
       - '@babel/core'
@@ -3884,7 +3884,7 @@ packages:
       '@sentry/types': 7.106.1
       '@sentry/utils': 7.106.1
 
-  /@sentry/astro@7.106.1(astro@4.5.1):
+  /@sentry/astro@7.106.1(astro@4.5.2):
     resolution: {integrity: sha512-kEWMD/wfRCH0pc0o9djtj39UDbKDLmPym+Rj7jUifLqTOKNasbr7J8jaA9Xj831AOBOsHL0/G4CvJgQgRaEwbw==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
@@ -3896,7 +3896,7 @@ packages:
       '@sentry/types': 7.106.1
       '@sentry/utils': 7.106.1
       '@sentry/vite-plugin': 2.14.3
-      astro: 4.5.1(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
+      astro: 4.5.2(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -4128,16 +4128,16 @@ packages:
     resolution: {integrity: sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==}
     dev: true
 
-  /@spotlightjs/astro@1.0.16(@sentry/astro@7.106.1)(astro@4.5.1):
+  /@spotlightjs/astro@1.0.16(@sentry/astro@7.106.1)(astro@4.5.2):
     resolution: {integrity: sha512-mgNdfEZmc8DHHvSqoRDrxVtLQQft/fGFvXNMnrz7gPvTrEvsE2I2zodGQ+LUz6wtM1XBx5RCbXdyip8Oxfg1Mg==}
     peerDependencies:
       '@sentry/astro': '>=7.84.0'
       astro: '>=3.4.0 || >=4.0.0-beta'
     dependencies:
-      '@sentry/astro': 7.106.1(astro@4.5.1)
+      '@sentry/astro': 7.106.1(astro@4.5.2)
       '@spotlightjs/overlay': 1.7.0
       '@spotlightjs/sidecar': 1.4.0
-      astro: 4.5.1(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
+      astro: 4.5.2(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
       source-map: 0.7.4
     dev: false
 
@@ -4470,7 +4470,7 @@ packages:
       unconfig: 0.3.11
     dev: true
 
-  /@vite-pwa/astro@0.3.0(@vite-pwa/assets-generator@0.2.4)(astro@4.5.1)(vite-plugin-pwa@0.19.2):
+  /@vite-pwa/astro@0.3.0(@vite-pwa/assets-generator@0.2.4)(astro@4.5.2)(vite-plugin-pwa@0.19.2):
     resolution: {integrity: sha512-2fH9ifzMW8dmeydJ6SuttLR5FCDvSoaTpyxblasR6icsJbR1he4igJhauw4jvmQXOb99Psl+bsBSoUwsdSnSJA==}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.4
@@ -4481,7 +4481,7 @@ packages:
         optional: true
     dependencies:
       '@vite-pwa/assets-generator': 0.2.4
-      astro: 4.5.1(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
+      astro: 4.5.2(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
       vite-plugin-pwa: 0.19.2(@vite-pwa/assets-generator@0.2.4)(vite@5.1.6)(workbox-build@7.0.0)(workbox-window@7.0.0)
     dev: true
 
@@ -5178,21 +5178,21 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /astro-breadcrumbs@2.2.0(astro@4.5.1):
+  /astro-breadcrumbs@2.2.0(astro@4.5.2):
     resolution: {integrity: sha512-+qI0nAmoTJTbywZl/ql/PSVkBQG/HG2yPur5Gwb/3u5XiCRXuukwJAMpGLEUbySxtiUw4Q6IuKYm2PKzpGeq5Q==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.5.1(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
+      astro: 4.5.2(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
     dev: false
 
-  /astro-env@0.0.5(astro@4.5.1)(typescript@5.4.2)(zod@3.22.4):
+  /astro-env@0.0.5(astro@4.5.2)(typescript@5.4.2)(zod@3.22.4):
     resolution: {integrity: sha512-YboEdvUFnXcD6qMOMQfltwSoOEYuVt3H3+DTwgUpTYyTYpxrPgyjSIDhIU6nYQYCrfdct0STtnC4hDfBvILc+g==}
     peerDependencies:
       astro: ^4.0.0
     dependencies:
-      astro: 4.5.1(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
-      astro-integration-kit: 0.0.2(astro@4.5.1)
+      astro: 4.5.2(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
+      astro-integration-kit: 0.0.2(astro@4.5.2)
       zod-to-ts: 1.2.0(typescript@5.4.2)(zod@3.22.4)
     transitivePeerDependencies:
       - typescript
@@ -5216,24 +5216,24 @@ packages:
       - supports-color
     dev: true
 
-  /astro-integration-kit@0.0.2(astro@4.5.1):
+  /astro-integration-kit@0.0.2(astro@4.5.2):
     resolution: {integrity: sha512-QZReb4Y4svJ9kPEi/+fnSM6teFHt22omBafeXkVPKnQRjTuN+cSxLAU3RMrLcdmaLMyTXnGieu5XCPKbEUTiyg==}
     peerDependencies:
       astro: ^4.0.0
     dependencies:
-      astro: 4.5.1(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
+      astro: 4.5.2(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
     dev: false
 
-  /astro-matomo@1.4.2(astro@4.5.1):
+  /astro-matomo@1.4.2(astro@4.5.2):
     resolution: {integrity: sha512-65TtRKaNmGWSAaPAV84dTweOt/6aVMaPLQxJkkiSWdDFr8oScf3Sg0zzs+tE5Ca+VZdLT8QLZgdrcVJG4uX2KA==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.5.1(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
+      astro: 4.5.2(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2)
     dev: false
 
-  /astro@4.5.1(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2):
-    resolution: {integrity: sha512-xqSBxeDZFUUgHl+npNwgoe6taTOCI8sJNwqWJaK3t/vcCHdfYJX00Tr9g43w/cYKPoTN4wKbNktbKYJZAbE3ZQ==}
+  /astro@4.5.2(@types/node@20.11.26)(sass@1.71.1)(typescript@5.4.2):
+    resolution: {integrity: sha512-Nq3GojlwXJ3XD047khraCWu/6aqGFfcyq7Q0blpTBSZnCz2s4Zri04PHvUkbKF7TK2UljkFuTXKP0CE4ZuJi9Q==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
     dependencies:
