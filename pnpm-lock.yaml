@@ -93,8 +93,8 @@ dependencies:
     specifier: 3.0.0
     version: 3.0.0
   virtua:
-    specifier: ^0.28.0
-    version: 0.28.0(vue@3.4.21)
+    specifier: ^0.29.0
+    version: 0.29.0(vue@3.4.21)
   vue:
     specifier: ^3.4.21
     version: 3.4.21(typescript@5.4.2)
@@ -13603,8 +13603,8 @@ packages:
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
 
-  /virtua@0.28.0(vue@3.4.21):
-    resolution: {integrity: sha512-aJLdLmow2bkCeuR6fwLEg1M6h4RR3Ob1TOQ9U9a4c5Csz8E871z+e0FeDwq2z95TBDYG87CRj5uJmw6NQ5DBQw==}
+  /virtua@0.29.0(vue@3.4.21):
+    resolution: {integrity: sha512-V7gxQDUGgxe32cLyYhZ+hOxtZLuqKV9icqomE8qAN5HILf1TMuisCEZJVbr+k7GI7K+oOkYdKFiBX23cdXSXmg==}
     peerDependencies:
       react: '>=16.14.0'
       react-dom: '>=16.14.0'
