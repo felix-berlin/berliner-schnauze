@@ -22,7 +22,7 @@ dependencies:
     version: 0.10.1(nanostores@0.10.0)
   '@nanostores/vue':
     specifier: ^0.10.0
-    version: 0.10.0(@nanostores/logger@0.2.4)(@vue/devtools-api@6.6.1)(nanostores@0.10.0)(vue@3.4.21)
+    version: 0.10.0(@nanostores/logger@0.3.0)(@vue/devtools-api@6.6.1)(nanostores@0.10.0)(vue@3.4.21)
   '@pagefind/default-ui':
     specifier: ^1.0.4
     version: 1.0.4
@@ -119,8 +119,8 @@ devDependencies:
     specifier: ^4.2.0
     version: 4.2.0(graphql@16.8.1)
   '@nanostores/logger':
-    specifier: ^0.2.4
-    version: 0.2.4(nanostores@0.10.0)
+    specifier: ^0.3.0
+    version: 0.3.0(nanostores@0.10.0)
   '@semantic-release/changelog':
     specifier: ^6.0.3
     version: 6.0.3(semantic-release@23.0.7)
@@ -3872,11 +3872,11 @@ packages:
       sparse-bitfield: 3.0.3
     dev: false
 
-  /@nanostores/logger@0.2.4(nanostores@0.10.0):
-    resolution: {integrity: sha512-yFRp/R67DVLBDE0QqhnZr9wF1CtdiugOyioom2At3Gnui4LgDbqiizhnvnZIhN+bcpffZtpo0C1p8PK3E4JELg==}
+  /@nanostores/logger@0.3.0(nanostores@0.10.0):
+    resolution: {integrity: sha512-4h56UQaB2rEuAOKm/XtrOwg7TE4s54LudqyhlJqgfFI6X+pKwNTqScZWQxoPyprV9ovSBLHGyHb4NipFn+NW9w==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      nanostores: '>=0.9.2'
+      nanostores: '>=0.10.2'
     dependencies:
       nanostores: 0.10.0
 
@@ -3889,7 +3889,7 @@ packages:
       nanostores: 0.10.0
     dev: false
 
-  /@nanostores/vue@0.10.0(@nanostores/logger@0.2.4)(@vue/devtools-api@6.6.1)(nanostores@0.10.0)(vue@3.4.21):
+  /@nanostores/vue@0.10.0(@nanostores/logger@0.3.0)(@vue/devtools-api@6.6.1)(nanostores@0.10.0)(vue@3.4.21):
     resolution: {integrity: sha512-832RAUbzRfHPs1CdqVEwfvgB2+RD/INji4Zo8bUSEfRO2pQRMMeq479gydnohGpRaa0oNwlfKo7TGFXCghq/1g==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
@@ -3903,7 +3903,7 @@ packages:
       '@vue/devtools-api':
         optional: true
     dependencies:
-      '@nanostores/logger': 0.2.4(nanostores@0.10.0)
+      '@nanostores/logger': 0.3.0(nanostores@0.10.0)
       '@vue/devtools-api': 6.6.1
       nanostores: 0.10.0
       vue: 3.4.21(typescript@5.4.4)
