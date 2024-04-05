@@ -37,7 +37,7 @@ dependencies:
     version: 7.109.0(vue@3.4.21)
   '@spotlightjs/astro':
     specifier: ^1.0.19
-    version: 1.0.19(@sentry/astro@7.109.0)(astro@4.5.16)
+    version: 1.0.20(@sentry/astro@7.109.0)(astro@4.5.16)
   '@vueuse/core':
     specifier: ^10.9.0
     version: 10.9.0(vue@3.4.21)
@@ -150,7 +150,7 @@ devDependencies:
     version: 0.2.4
   '@vite-pwa/astro':
     specifier: ^0.3.1
-    version: 0.3.1(@vite-pwa/assets-generator@0.2.4)(astro@4.5.16)(vite-plugin-pwa@0.19.7)
+    version: 0.3.1(@vite-pwa/assets-generator@0.2.4)(astro@4.5.16)(vite-plugin-pwa@0.19.8)
   '@vitejs/plugin-vue':
     specifier: ^5.0.4
     version: 5.0.4(vite@5.2.7)(vue@3.4.21)
@@ -4775,21 +4775,21 @@ packages:
     resolution: {integrity: sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==}
     dev: true
 
-  /@spotlightjs/astro@1.0.19(@sentry/astro@7.109.0)(astro@4.5.16):
-    resolution: {integrity: sha512-7b2UIhJGBCoh5+ay68/8JkoD5sSAYpUu7oc2i0qtXLE9znSSD+H1EiQsMjUouYwC73h8lCqgYQSvo/jHvFwqxw==}
+  /@spotlightjs/astro@1.0.20(@sentry/astro@7.109.0)(astro@4.5.16):
+    resolution: {integrity: sha512-3j4GqodpdaNPcsP2KbQylg2dF2nlRLe1z8UH/TgWx1MZJM16V2WP474nHUeP54kVmBaFwaJmF9OCkCMBqfKYfw==}
     peerDependencies:
       '@sentry/astro': '>=7.84.0'
       astro: '>=3.4.0 || >=4.0.0-beta'
     dependencies:
       '@sentry/astro': 7.109.0(astro@4.5.16)
-      '@spotlightjs/overlay': 1.8.2
+      '@spotlightjs/overlay': 1.8.3
       '@spotlightjs/sidecar': 1.4.0
       astro: 4.5.16(@types/node@20.12.4)(sass@1.72.0)(typescript@5.4.4)
       source-map: 0.7.4
     dev: false
 
-  /@spotlightjs/overlay@1.8.2:
-    resolution: {integrity: sha512-g3pzaJFKK67pBIl72qSNoFJIfP/dmdFoSPWZZQW6MKAdU7IOY5yf3BB52xEc6iSfeLGG/KpYNThefpobX3hb7Q==}
+  /@spotlightjs/overlay@1.8.3:
+    resolution: {integrity: sha512-6b5tBspOOEd6Gj0l4xgdUwR4Ydn2dNX9lqJ/WSzIu1lqkI96w2lqf69IGzEo6jb9aPtfTtu8nx5K2SD6JXH2SA==}
     dev: false
 
   /@spotlightjs/sidecar@1.4.0:
@@ -4900,6 +4900,12 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
+  /@types/node@20.12.5:
+    resolution: {integrity: sha512-BD+BjQ9LS/D8ST9p5uqBxghlN+S42iuNxjsUGjeZobe/ciXzk2qb1B6IXc6AnRLS+yFJRpN2IPEHMzwspfDJNw==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
+
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
     dev: true
@@ -4907,7 +4913,7 @@ packages:
   /@types/resolve@1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 20.12.4
+      '@types/node': 20.12.5
     dev: true
 
   /@types/sax@1.2.7:
@@ -5123,7 +5129,7 @@ packages:
       unconfig: 0.3.11
     dev: true
 
-  /@vite-pwa/astro@0.3.1(@vite-pwa/assets-generator@0.2.4)(astro@4.5.16)(vite-plugin-pwa@0.19.7):
+  /@vite-pwa/astro@0.3.1(@vite-pwa/assets-generator@0.2.4)(astro@4.5.16)(vite-plugin-pwa@0.19.8):
     resolution: {integrity: sha512-rSzbYnNZU4L4QBzwO7HTDy06WbWnQ/PPOd0rzVTlOxYz/PPzbXXgnOvMY/4yNRCq7Lhc68sq2fRQ2JEAynmESw==}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.4
@@ -5135,7 +5141,7 @@ packages:
     dependencies:
       '@vite-pwa/assets-generator': 0.2.4
       astro: 4.5.16(@types/node@20.12.4)(sass@1.72.0)(typescript@5.4.4)
-      vite-plugin-pwa: 0.19.7(@vite-pwa/assets-generator@0.2.4)(vite@5.2.7)(workbox-build@7.0.0)(workbox-window@7.0.0)
+      vite-plugin-pwa: 0.19.8(@vite-pwa/assets-generator@0.2.4)(vite@5.2.7)(workbox-build@7.0.0)(workbox-window@7.0.0)
     dev: true
 
   /@vitejs/plugin-vue-jsx@3.1.0(vite@5.2.7)(vue@3.4.21):
@@ -9435,7 +9441,7 @@ packages:
     resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.12.4
+      '@types/node': 20.12.5
       merge-stream: 2.0.0
       supports-color: 7.2.0
     dev: true
@@ -14177,8 +14183,8 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-pwa@0.19.7(@vite-pwa/assets-generator@0.2.4)(vite@5.2.7)(workbox-build@7.0.0)(workbox-window@7.0.0):
-    resolution: {integrity: sha512-18TECxoGPQE7tVZzKxbf5Icrl5688n1JGMPSgGotTsh89vLDxevY7ICfD3CFVfonZXh8ckuyJXg0NXE5+FAl2A==}
+  /vite-plugin-pwa@0.19.8(@vite-pwa/assets-generator@0.2.4)(vite@5.2.7)(workbox-build@7.0.0)(workbox-window@7.0.0):
+    resolution: {integrity: sha512-e1oK0dfhzhDhY3VBuML6c0h8Xfx6EkOVYqolj7g+u8eRfdauZe5RLteCIA/c5gH0CBQ0CNFAuv/AFTx4Z7IXTw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@vite-pwa/assets-generator': ^0.2.4
