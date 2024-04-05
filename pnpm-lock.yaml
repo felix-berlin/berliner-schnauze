@@ -90,8 +90,8 @@ dependencies:
     specifier: ^5.4.3
     version: 5.4.4
   vanilla-cookieconsent:
-    specifier: 3.0.0
-    version: 3.0.0
+    specifier: 3.0.1
+    version: 3.0.1
   virtua:
     specifier: ^0.29.1
     version: 0.29.1(vue@3.4.21)
@@ -14099,8 +14099,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /vanilla-cookieconsent@3.0.0:
-    resolution: {integrity: sha512-oeK7FivRDb424mt3/UT8DG98Pu5m6Uuye7JsdzO6HnYkstW5QHXhkslXyUpE3phtKz3NEeIo7hzLUtfRNRMfbQ==}
+  /vanilla-cookieconsent@3.0.1:
+    resolution: {integrity: sha512-gqc4x7O9t1I4xWr7x6/jtQWPr4PZK26SmeA0iyTv1WyoECfAGnu5JEOExmMEP+5Fz66AT9OiCBO3GII4wDQHLw==}
     dev: false
 
   /vfile-location@5.0.2:
