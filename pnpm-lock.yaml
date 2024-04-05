@@ -16,7 +16,7 @@ dependencies:
     version: 3.0.1
   '@iconify-json/lucide':
     specifier: ^1.1.178
-    version: 1.1.178
+    version: 1.1.179
   '@nanostores/persistent':
     specifier: ^0.10.1
     version: 0.10.1(nanostores@0.10.0)
@@ -3851,8 +3851,8 @@ packages:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
     dev: true
 
-  /@iconify-json/lucide@1.1.178:
-    resolution: {integrity: sha512-IW5Z3ytfOPtcAlIgeMCGNrbPD/wfOBOyUAXEUgNhGTWxJICtbeHQkmL4mEoJmScSkjpZvyevxOC9kfdJG8VBtg==}
+  /@iconify-json/lucide@1.1.179:
+    resolution: {integrity: sha512-dGdR+vkDWzNoX2sky5Pl6u3M3Ar82uwmgRNiThppEghOlAeM7iPM1HbxEYJzMDlvZl0Q8WHPgp29bonpS+sLBQ==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: false
