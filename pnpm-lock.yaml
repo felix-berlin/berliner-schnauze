@@ -19,10 +19,10 @@ dependencies:
     version: 1.1.179
   '@nanostores/persistent':
     specifier: ^0.10.1
-    version: 0.10.1(nanostores@0.10.0)
+    version: 0.10.1(nanostores@0.10.3)
   '@nanostores/vue':
     specifier: ^0.10.0
-    version: 0.10.0(@nanostores/logger@0.2.4)(@vue/devtools-api@6.6.1)(nanostores@0.10.0)(vue@3.4.21)
+    version: 0.10.0(@nanostores/logger@0.2.4)(@vue/devtools-api@6.6.1)(nanostores@0.10.3)(vue@3.4.21)
   '@pagefind/default-ui':
     specifier: ^1.0.4
     version: 1.0.4
@@ -76,7 +76,7 @@ dependencies:
     version: 0.2.5
   nanostores:
     specifier: ^0.10.0
-    version: 0.10.0
+    version: 0.10.3
   natural:
     specifier: ^6.12.0
     version: 6.12.0
@@ -120,7 +120,7 @@ devDependencies:
     version: 4.2.0(graphql@16.8.1)
   '@nanostores/logger':
     specifier: ^0.2.4
-    version: 0.2.4(nanostores@0.10.0)
+    version: 0.2.4(nanostores@0.10.3)
   '@semantic-release/changelog':
     specifier: ^6.0.3
     version: 6.0.3(semantic-release@23.0.7)
@@ -3872,24 +3872,24 @@ packages:
       sparse-bitfield: 3.0.3
     dev: false
 
-  /@nanostores/logger@0.2.4(nanostores@0.10.0):
+  /@nanostores/logger@0.2.4(nanostores@0.10.3):
     resolution: {integrity: sha512-yFRp/R67DVLBDE0QqhnZr9wF1CtdiugOyioom2At3Gnui4LgDbqiizhnvnZIhN+bcpffZtpo0C1p8PK3E4JELg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       nanostores: '>=0.9.2'
     dependencies:
-      nanostores: 0.10.0
+      nanostores: 0.10.3
 
-  /@nanostores/persistent@0.10.1(nanostores@0.10.0):
+  /@nanostores/persistent@0.10.1(nanostores@0.10.3):
     resolution: {integrity: sha512-BMYj47ONmkrPkHfomimtBAwtDNNjO57lw0uk7jB35GHVwixmqWtlK6DVAAbioqwJn9WEaWSB/9Ss5ukBG0NHlQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       nanostores: ^0.9.0 || ^0.10.0
     dependencies:
-      nanostores: 0.10.0
+      nanostores: 0.10.3
     dev: false
 
-  /@nanostores/vue@0.10.0(@nanostores/logger@0.2.4)(@vue/devtools-api@6.6.1)(nanostores@0.10.0)(vue@3.4.21):
+  /@nanostores/vue@0.10.0(@nanostores/logger@0.2.4)(@vue/devtools-api@6.6.1)(nanostores@0.10.3)(vue@3.4.21):
     resolution: {integrity: sha512-832RAUbzRfHPs1CdqVEwfvgB2+RD/INji4Zo8bUSEfRO2pQRMMeq479gydnohGpRaa0oNwlfKo7TGFXCghq/1g==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
@@ -3903,9 +3903,9 @@ packages:
       '@vue/devtools-api':
         optional: true
     dependencies:
-      '@nanostores/logger': 0.2.4(nanostores@0.10.0)
+      '@nanostores/logger': 0.2.4(nanostores@0.10.3)
       '@vue/devtools-api': 6.6.1
-      nanostores: 0.10.0
+      nanostores: 0.10.3
       vue: 3.4.21(typescript@5.4.4)
     dev: false
 
@@ -10592,8 +10592,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  /nanostores@0.10.0:
-    resolution: {integrity: sha512-Poy5+9wFXOD0jAstn4kv9n686U2BFw48z/W8lms8cS8lcbRz7BU20JxZ3e/kkKQVfRrkm4yLWCUA6GQINdvJCQ==}
+  /nanostores@0.10.3:
+    resolution: {integrity: sha512-Nii8O1XqmawqSCf9o2aWqVxhKRN01+iue9/VEd1TiJCr9VT5XxgPFbF1Edl1XN6pwJcZRsl8Ki+z01yb/T/C2g==}
     engines: {node: ^18.0.0 || >=20.0.0}
 
   /napi-build-utils@1.0.2:
