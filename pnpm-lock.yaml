@@ -25,7 +25,7 @@ dependencies:
     version: 0.10.0(@nanostores/logger@0.2.4)(@vue/devtools-api@6.6.1)(nanostores@0.10.0)(vue@3.4.21)
   '@pagefind/default-ui':
     specifier: ^1.0.4
-    version: 1.0.4
+    version: 1.1.0
   '@sentry/astro':
     specifier: ^7.109.0
     version: 7.109.0(astro@4.5.16)
@@ -4052,8 +4052,8 @@ packages:
     dev: false
     optional: true
 
-  /@pagefind/default-ui@1.0.4:
-    resolution: {integrity: sha512-edkcaPSKq67C49Vehjo+LQCpT615v4d7JRhfGzFPccePvdklaL+VXrfghN/uIfsdoG+HoLI1PcYy2iFcB9CTkw==}
+  /@pagefind/default-ui@1.1.0:
+    resolution: {integrity: sha512-+XiAJAK++C64nQcD7s3Prdmd5S92lT05fwjOxm0L1jj80jbL+tmvcqkkFnPpoqhnicIPgcAX/Y5W0HRZnBt35w==}
     dev: false
 
   /@pagefind/linux-arm64@1.0.4:
