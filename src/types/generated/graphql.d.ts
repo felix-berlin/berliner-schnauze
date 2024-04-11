@@ -273,6 +273,8 @@ export type BerlinerWord = ContentNode & DatabaseIdentifier & HierarchicalConten
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the berlinerisch object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the berlinerisch object. */
   id: Scalars['ID']['output'];
   /** Whether the node is a Comment */
@@ -303,6 +305,8 @@ export type BerlinerWord = ContentNode & DatabaseIdentifier & HierarchicalConten
   parentDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** The globally unique identifier of the parent node. */
   parentId?: Maybe<Scalars['ID']['output']>;
+  /** The password for the berlinerisch object. */
+  password?: Maybe<Scalars['String']['output']>;
   /** Connection between the BerlinerWord type and the berlinerWord type */
   preview?: Maybe<BerlinerWordToPreviewConnectionEdge>;
   /** The database id of the preview node */
@@ -1239,6 +1243,8 @@ export type BlockEditorPreview = ContentNode & DatabaseIdentifier & Node & NodeW
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the wgg_preview object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the wgg_preview object. */
   id: Scalars['ID']['output'];
   /** Whether the node is a Comment */
@@ -1264,6 +1270,8 @@ export type BlockEditorPreview = ContentNode & DatabaseIdentifier & Node & NodeW
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** The password for the wgg_preview object. */
+  password?: Maybe<Scalars['String']['output']>;
   /**
    * Connection between the BlockEditorPreview type and the BlockEditorPreview type
    * @deprecated The &quot;BlockEditorPreview&quot; Type is not publicly queryable and does not support previews. This field will be removed in the future.
@@ -10892,6 +10900,8 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   fileSize?: Maybe<Scalars['Int']['output']>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the attachment object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the attachment object. */
   id: Scalars['ID']['output'];
   /** Whether the node is a Comment */
@@ -10935,6 +10945,8 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   parentDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** The globally unique identifier of the parent node. */
   parentId?: Maybe<Scalars['ID']['output']>;
+  /** The password for the attachment object. */
+  password?: Maybe<Scalars['String']['output']>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** Whether the object is a node in the preview state */
@@ -11732,6 +11744,8 @@ export enum MimeTypeEnum {
   AudioXMsWma = 'AUDIO_X_MS_WMA',
   /** audio/x-realaudio mime type. */
   AudioXRealaudio = 'AUDIO_X_REALAUDIO',
+  /** image/avif mime type. */
+  ImageAvif = 'IMAGE_AVIF',
   /** image/bmp mime type. */
   ImageBmp = 'IMAGE_BMP',
   /** image/gif mime type. */
@@ -12108,6 +12122,8 @@ export type Page = BlockEditorContentNode & ContentNode & DatabaseIdentifier & H
   featuredImageId?: Maybe<Scalars['ID']['output']>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the page object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the page object. */
   id: Scalars['ID']['output'];
   /** Whether the node is a Comment */
@@ -12149,6 +12165,8 @@ export type Page = BlockEditorContentNode & ContentNode & DatabaseIdentifier & H
   parentDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** The globally unique identifier of the parent node. */
   parentId?: Maybe<Scalars['ID']['output']>;
+  /** The password for the page object. */
+  password?: Maybe<Scalars['String']['output']>;
   /** Connection between the Page type and the page type */
   preview?: Maybe<PageToPreviewConnectionEdge>;
   /** Previewed gutenberg blocks */
@@ -12618,6 +12636,8 @@ export type Post = BlockEditorContentNode & ContentNode & DatabaseIdentifier & M
   featuredImageId?: Maybe<Scalars['ID']['output']>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the post object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the post object. */
   id: Scalars['ID']['output'];
   /** Whether the node is a Comment */
@@ -12646,6 +12666,8 @@ export type Post = BlockEditorContentNode & ContentNode & DatabaseIdentifier & M
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** The password for the post object. */
+  password?: Maybe<Scalars['String']['output']>;
   /** Whether the pings are open or closed for this particular post. */
   pingStatus?: Maybe<Scalars['String']['output']>;
   /** URLs that have been pinged. */
@@ -14101,6 +14123,8 @@ export type ReusableBlock = BlockEditorContentNode & ContentNode & DatabaseIdent
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the wp_block object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the wp_block object. */
   id: Scalars['ID']['output'];
   /** Whether the node is a Comment */
@@ -14127,6 +14151,8 @@ export type ReusableBlock = BlockEditorContentNode & ContentNode & DatabaseIdent
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** The password for the wp_block object. */
+  password?: Maybe<Scalars['String']['output']>;
   /**
    * Connection between the ReusableBlock type and the ReusableBlock type
    * @deprecated The &quot;ReusableBlock&quot; Type is not publicly queryable and does not support previews. This field will be removed in the future.
