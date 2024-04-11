@@ -1,5 +1,4 @@
-import type { Seo, SeoProps } from "@components/BaseHead.astro";
-import type { BerlinerWord } from "@ts_types/generated/graphql";
+import type { SeoProps } from "@components/BaseHead.astro";
 
 /**
  * Returns the route to a word
