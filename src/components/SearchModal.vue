@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, onUnmounted, defineAsyncComponent, watch } from "vue";
+import { ref, onMounted, onUnmounted, defineAsyncComponent } from "vue";
 import type { Ref } from "vue";
 import SearchIcon from "virtual:icons/lucide/search";
 import SquareSlash from "virtual:icons/lucide/square-slash";
@@ -58,7 +58,6 @@ const getModalLoaded = (): void => {
  */
 const openSearch = (): void => {
   searchVisible.value = true;
-  focusSearch();
 };
 
 /**
@@ -71,24 +70,6 @@ const closeSearch = (): void => {
 };
 
 /**
- * Focus the search input
- *
- * @return  {void}
- */
-const focusSearch = (): void => {
-  nextTick(() => {
-    // Get the root DOM element of the component
-    const rootElement = searchModal.value?.$el;
-
-    // Find the <input> element within the component
-    const inputElement = rootElement?.querySelector("input");
-
-    // Focus the <input> element
-    inputElement?.focus();
-  });
-};
-
-/**
  * Open the search modal via keyboard
  *
  * @param   {KeyboardEvent}  event  Keyboard event
@@ -96,14 +77,9 @@ const focusSearch = (): void => {
  * @return  {void}
  */
 const openSearchViaKeyboard = (event: KeyboardEvent): void => {
-  // If input or textarea is focused, do nothing
-  if (document.activeElement?.tagName === "INPUT" || document.activeElement?.tagName === "TEXTAREA")
-    return;
-
   if (event.key === "/" || event.key === ".") {
     event.preventDefault();
     getModalLoaded();
-    focusSearch();
   }
 };
 
@@ -117,16 +93,6 @@ onUnmounted(() => {
   window.removeEventListener("keydown", (event) => openSearchViaKeyboard(event));
 
   document.removeEventListener("astro:after-swap", () => closeSearch());
-});
-
-/**
- * Watch if modal is mounted
- * If true, open the search
- */
-watch(modalMounted, (value) => {
-  if (value) {
-    openSearch();
-  }
 });
 </script>
 
