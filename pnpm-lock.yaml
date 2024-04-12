@@ -43,7 +43,7 @@ dependencies:
     version: 10.9.0(vue@3.4.21)
   astro:
     specifier: ^4.6.0
-    version: 4.6.0(@types/node@20.12.7)(sass@1.74.1)(typescript@5.4.5)
+    version: 4.6.0(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5)
   astro-breadcrumbs:
     specifier: ^2.2.0
     version: 2.2.0(astro@4.6.0)
@@ -210,7 +210,7 @@ devDependencies:
     version: 0.13.0
   sass:
     specifier: ^1.74.1
-    version: 1.74.1
+    version: 1.75.0
   semantic-release:
     specifier: ^23.0.8
     version: 23.0.8(typescript@5.4.5)
@@ -234,10 +234,10 @@ devDependencies:
     version: 0.18.5(@vue/compiler-sfc@3.4.21)
   vite:
     specifier: ^5.2.8
-    version: 5.2.8(@types/node@20.12.7)(sass@1.74.1)
+    version: 5.2.8(@types/node@20.12.7)(sass@1.75.0)
   vitest:
     specifier: ^1.5.0
-    version: 1.5.0(@types/node@20.12.7)(jsdom@24.0.0)(sass@1.74.1)
+    version: 1.5.0(@types/node@20.12.7)(jsdom@24.0.0)(sass@1.75.0)
   vue-tsc:
     specifier: ^2.0.12
     version: 2.0.12(typescript@5.4.5)
@@ -452,7 +452,7 @@ packages:
       '@vitejs/plugin-vue': 5.0.4(vite@5.2.8)(vue@3.4.21)
       '@vitejs/plugin-vue-jsx': 3.1.0(vite@5.2.8)(vue@3.4.21)
       '@vue/compiler-sfc': 3.4.21
-      astro: 4.6.0(@types/node@20.12.7)(sass@1.74.1)(typescript@5.4.5)
+      astro: 4.6.0(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5)
       vue: 3.4.21(typescript@5.4.5)
     transitivePeerDependencies:
       - supports-color
@@ -4540,7 +4540,7 @@ packages:
       '@sentry/types': 7.110.0
       '@sentry/utils': 7.110.0
       '@sentry/vite-plugin': 2.16.1
-      astro: 4.6.0(@types/node@20.12.7)(sass@1.74.1)(typescript@5.4.5)
+      astro: 4.6.0(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -4782,7 +4782,7 @@ packages:
       '@sentry/astro': 7.110.0(astro@4.6.0)
       '@spotlightjs/overlay': 1.8.3
       '@spotlightjs/sidecar': 1.4.0
-      astro: 4.6.0(@types/node@20.12.7)(sass@1.74.1)(typescript@5.4.5)
+      astro: 4.6.0(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5)
       source-map: 0.7.4
     dev: false
 
@@ -5149,7 +5149,7 @@ packages:
         optional: true
     dependencies:
       '@vite-pwa/assets-generator': 0.2.4
-      astro: 4.6.0(@types/node@20.12.7)(sass@1.74.1)(typescript@5.4.5)
+      astro: 4.6.0(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5)
       vite-plugin-pwa: 0.19.8(@vite-pwa/assets-generator@0.2.4)(vite@5.2.8)(workbox-build@7.0.0)(workbox-window@7.0.0)
     dev: true
 
@@ -5163,7 +5163,7 @@ packages:
       '@babel/core': 7.24.4
       '@babel/plugin-transform-typescript': 7.24.4(@babel/core@7.24.4)
       '@vue/babel-plugin-jsx': 1.2.2(@babel/core@7.24.4)
-      vite: 5.2.8(@types/node@20.12.7)(sass@1.74.1)
+      vite: 5.2.8(@types/node@20.12.7)(sass@1.75.0)
       vue: 3.4.21(typescript@5.4.5)
     transitivePeerDependencies:
       - supports-color
@@ -5176,7 +5176,7 @@ packages:
       vite: ^5.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 5.2.8(@types/node@20.12.7)(sass@1.74.1)
+      vite: 5.2.8(@types/node@20.12.7)(sass@1.75.0)
       vue: 3.4.21(typescript@5.4.5)
 
   /@vitest/coverage-v8@1.5.0(vitest@1.5.0):
@@ -5197,7 +5197,7 @@ packages:
       std-env: 3.7.0
       strip-literal: 2.0.0
       test-exclude: 6.0.0
-      vitest: 1.5.0(@types/node@20.12.7)(jsdom@24.0.0)(sass@1.74.1)
+      vitest: 1.5.0(@types/node@20.12.7)(jsdom@24.0.0)(sass@1.75.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -5865,7 +5865,7 @@ packages:
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.6.0(@types/node@20.12.7)(sass@1.74.1)(typescript@5.4.5)
+      astro: 4.6.0(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5)
     dev: false
 
   /astro-env@0.0.5(astro@4.6.0)(typescript@5.4.5)(zod@3.22.4):
@@ -5873,7 +5873,7 @@ packages:
     peerDependencies:
       astro: ^4.0.0
     dependencies:
-      astro: 4.6.0(@types/node@20.12.7)(sass@1.74.1)(typescript@5.4.5)
+      astro: 4.6.0(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5)
       astro-integration-kit: 0.0.2(astro@4.6.0)
       zod-to-ts: 1.2.0(typescript@5.4.5)(zod@3.22.4)
     transitivePeerDependencies:
@@ -5907,7 +5907,7 @@ packages:
     peerDependencies:
       astro: ^4.0.0
     dependencies:
-      astro: 4.6.0(@types/node@20.12.7)(sass@1.74.1)(typescript@5.4.5)
+      astro: 4.6.0(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5)
     dev: false
 
   /astro-matomo@1.4.2(astro@4.6.0):
@@ -5915,10 +5915,10 @@ packages:
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
-      astro: 4.6.0(@types/node@20.12.7)(sass@1.74.1)(typescript@5.4.5)
+      astro: 4.6.0(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5)
     dev: false
 
-  /astro@4.6.0(@types/node@20.12.7)(sass@1.74.1)(typescript@5.4.5):
+  /astro@4.6.0(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5):
     resolution: {integrity: sha512-zys+COED1Zs/PurkgAFc/f93e2jACMv7XeC+CyDNBgdE9v2b7rlVPRu054j2nTrQTzGQ7kst2/waQrDbs6e1aA==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
@@ -5979,7 +5979,7 @@ packages:
       tsconfck: 3.0.3(typescript@5.4.5)
       unist-util-visit: 5.0.0
       vfile: 6.0.1
-      vite: 5.2.8(@types/node@20.12.7)(sass@1.74.1)
+      vite: 5.2.8(@types/node@20.12.7)(sass@1.75.0)
       vitefu: 0.2.5(vite@5.2.8)
       which-pm: 2.1.1
       yargs-parser: 21.1.1
@@ -12533,8 +12533,8 @@ packages:
       suf-log: 2.5.3
     dev: true
 
-  /sass@1.74.1:
-    resolution: {integrity: sha512-w0Z9p/rWZWelb88ISOLyvqTWGmtmu2QJICqDBGyNnfG4OUnPX9BBjjYIXUpXCMOOg5MQWNpqzt876la1fsTvUA==}
+  /sass@1.75.0:
+    resolution: {integrity: sha512-ShMYi3WkrDWxExyxSZPst4/okE9ts46xZmJDSawJQrnte7M1V9fScVB+uNXOVKRBt0PggHOwoZcn8mYX4trnBw==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
@@ -14216,7 +14216,7 @@ packages:
       vue: 3.4.21(typescript@5.4.5)
     dev: false
 
-  /vite-node@1.5.0(@types/node@20.12.7)(sass@1.74.1):
+  /vite-node@1.5.0(@types/node@20.12.7)(sass@1.75.0):
     resolution: {integrity: sha512-tV8h6gMj6vPzVCa7l+VGq9lwoJjW8Y79vst8QZZGiuRAfijU+EEWuc0kFpmndQrWhMMhet1jdSF+40KSZUqIIw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -14225,7 +14225,7 @@ packages:
       debug: 4.3.4
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.2.8(@types/node@20.12.7)(sass@1.74.1)
+      vite: 5.2.8(@types/node@20.12.7)(sass@1.75.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -14253,14 +14253,14 @@ packages:
       debug: 4.3.4
       fast-glob: 3.3.2
       pretty-bytes: 6.1.1
-      vite: 5.2.8(@types/node@20.12.7)(sass@1.74.1)
+      vite: 5.2.8(@types/node@20.12.7)(sass@1.75.0)
       workbox-build: 7.0.0
       workbox-window: 7.0.0
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /vite@5.2.8(@types/node@20.12.7)(sass@1.74.1):
+  /vite@5.2.8(@types/node@20.12.7)(sass@1.75.0):
     resolution: {integrity: sha512-OyZR+c1CE8yeHw5V5t59aXsUPPVTHMDjEZz8MgguLL/Q7NblxhZUlTu9xSPqlsUO/y+X7dlU05jdhvyycD55DA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -14292,7 +14292,7 @@ packages:
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.14.0
-      sass: 1.74.1
+      sass: 1.75.0
     optionalDependencies:
       fsevents: 2.3.3
 
@@ -14304,9 +14304,9 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.2.8(@types/node@20.12.7)(sass@1.74.1)
+      vite: 5.2.8(@types/node@20.12.7)(sass@1.75.0)
 
-  /vitest@1.5.0(@types/node@20.12.7)(jsdom@24.0.0)(sass@1.74.1):
+  /vitest@1.5.0(@types/node@20.12.7)(jsdom@24.0.0)(sass@1.75.0):
     resolution: {integrity: sha512-d8UKgR0m2kjdxDWX6911uwxout6GHS0XaGH1cksSIVVG8kRlE7G7aBw7myKQCvDI5dT4j7ZMa+l706BIORMDLw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -14350,8 +14350,8 @@ packages:
       strip-literal: 2.0.0
       tinybench: 2.6.0
       tinypool: 0.8.3
-      vite: 5.2.8(@types/node@20.12.7)(sass@1.74.1)
-      vite-node: 1.5.0(@types/node@20.12.7)(sass@1.74.1)
+      vite: 5.2.8(@types/node@20.12.7)(sass@1.75.0)
+      vite-node: 1.5.0(@types/node@20.12.7)(sass@1.75.0)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
@@ -14894,6 +14894,7 @@ packages:
 
   /workbox-google-analytics@7.0.0:
     resolution: {integrity: sha512-MEYM1JTn/qiC3DbpvP2BVhyIH+dV/5BjHk756u9VbwuAhu0QHyKscTnisQuz21lfRpOwiS9z4XdqeVAKol0bzg==}
+    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
     dependencies:
       workbox-background-sync: 7.0.0
       workbox-core: 7.0.0
