@@ -46,7 +46,7 @@ dependencies:
     version: 4.6.1(@types/node@20.12.7)(sass@1.75.0)(typescript@5.4.5)
   astro-breadcrumbs:
     specifier: ^2.2.0
-    version: 2.2.0(astro@4.6.1)
+    version: 2.3.0(astro@4.6.1)
   astro-env:
     specifier: ^0.0.5
     version: 0.0.5(astro@4.6.1)(typescript@5.4.5)(zod@3.22.4)
@@ -5853,8 +5853,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /astro-breadcrumbs@2.2.0(astro@4.6.1):
-    resolution: {integrity: sha512-+qI0nAmoTJTbywZl/ql/PSVkBQG/HG2yPur5Gwb/3u5XiCRXuukwJAMpGLEUbySxtiUw4Q6IuKYm2PKzpGeq5Q==}
+  /astro-breadcrumbs@2.3.0(astro@4.6.1):
+    resolution: {integrity: sha512-C0qqRtJX30ZlNrh42ojSWo3PR3EEGuGG+u+Knk8zO5ugtzaHqOus0HGXAdUC3PGIaFUQoaEmhJfbQ3TAQjM9hQ==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
     dependencies:
