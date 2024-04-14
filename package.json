@@ -134,7 +134,7 @@
     "photoswipe": "^5.4.3",
     "typescript": "^5.4.5",
     "vanilla-cookieconsent": "3.0.1",
-    "virtua": "^0.30.0",
+    "virtua": "^0.29.2",
     "vue": "^3.4.21"
   }
 }
