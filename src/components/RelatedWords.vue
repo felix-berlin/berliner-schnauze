@@ -1,6 +1,8 @@
 <template>
   <section class="c-related-words">
-    <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
+    <h2 class="c-related-words__headline">
+      Bock mehr Wörter kennen zu lernen?
+    </h2>
     <div class="c-related-words__words">
       <template v-for="word in xRandomWords(words, numberOfWords)">
         <a
@@ -13,7 +15,7 @@
           {{ word.wordProperties?.berlinerisch }}
         </a>
       </template>
-      <slot></slot>
+      <slot />
     </div>
   </section>
 </template>

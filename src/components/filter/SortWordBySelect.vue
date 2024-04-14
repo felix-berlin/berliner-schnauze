@@ -7,8 +7,16 @@
     class="c-select"
     @change="$setSortOrder(selected.category, `${selected.category}Order`, selected.sort)"
   >
-    <optgroup v-for="group in options" :key="group.sortType" :label="group.sortType">
-      <option v-for="option in group.sorts" :key="option.name" :value="option">
+    <optgroup
+      v-for="group in options"
+      :key="group.sortType"
+      :label="group.sortType"
+    >
+      <option
+        v-for="option in group.sorts"
+        :key="option.name"
+        :value="option"
+      >
         {{ option.name }}
       </option>
     </optgroup>

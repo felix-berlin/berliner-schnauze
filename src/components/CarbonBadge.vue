@@ -1,6 +1,12 @@
 <template>
-  <a class="c-carbon-badge" :href="url">
-    <Leaf width="16" height="16" />
+  <a
+    class="c-carbon-badge"
+    :href="url"
+  >
+    <Leaf
+      width="16"
+      height="16"
+    />
     <span v-text="text" />
   </a>
 </template>

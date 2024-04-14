@@ -5,7 +5,10 @@
     :class="cssClasses"
     @click="toggleMode()"
   >
-    <Transition name="fade" mode="out-in">
+    <Transition
+      name="fade"
+      mode="out-in"
+    >
       <Moon
         v-if="isDarkMode"
         key="dark"

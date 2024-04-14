@@ -12,9 +12,14 @@
     :disabled="!showButton"
     @click="triggerPwaInstall()"
   >
-    <slot v-if="showText"> App installieren </slot>
+    <slot v-if="showText">
+      App installieren
+    </slot>
   </button>
-  <slot v-if="isPwaInstalled" name="installed"></slot>
+  <slot
+    v-if="isPwaInstalled"
+    name="installed"
+  />
 </template>
 
 <script setup lang="ts">

@@ -200,7 +200,7 @@ export const createWikimediaFileList = async (wikimediaFiles: WordPropertiesWiki
   if (!wikimediaFiles) return;
 
   const files = [];
-  for (const file of wikimediaFiles!) {
+  for (const file of wikimediaFiles) {
     const img = await fetchWikimediaAPI(file?.wikimediaFile);
     files.push({ image: img, description: file?.description, caption: file?.caption });
   }

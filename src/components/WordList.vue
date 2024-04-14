@@ -39,8 +39,15 @@
   >
   </VirtualList> -->
 
-  <WindowVirtualizer v-slot="item" :data="filteredWordList" class="c-word-list">
-    <SingleWord :source="item" :style="{ 'margin-bottom': '1.75rem' }" />
+  <WindowVirtualizer
+    v-slot="item"
+    :data="filteredWordList"
+    class="c-word-list"
+  >
+    <SingleWord
+      :source="item"
+      :style="{ 'margin-bottom': '1.75rem' }"
+    />
   </WindowVirtualizer>
 </template>
 

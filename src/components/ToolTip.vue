@@ -1,8 +1,13 @@
 <template>
-  <VTooltip client:only="vue" class="c-tooltip">
+  <VTooltip
+    client:only="vue"
+    class="c-tooltip"
+  >
     <slot />
 
-    <template #popper><slot name="content" /></template>
+    <template #popper>
+      <slot name="content" />
+    </template>
   </VTooltip>
 </template>
 

@@ -1,16 +1,25 @@
 <template>
   <transition name="slide">
-    <aside v-show="showWordListFilterFlyout" ref="wordListFilter" class="c-filter-search__filter">
+    <aside
+      v-show="showWordListFilterFlyout"
+      ref="wordListFilter"
+      class="c-filter-search__filter"
+    >
       <button
         class="c-filter-search__close c-button c-button--center-icon"
         type="button"
         aria-label="schließen"
         @click="$toggleWordListFilterFlyout"
       >
-        <X width="18" height="18" />
+        <X
+          width="18"
+          height="18"
+        />
       </button>
 
-      <h2 id="sort-headline">Sortiere nach:</h2>
+      <h2 id="sort-headline">
+        Sortiere nach:
+      </h2>
       <SortWordBySelect />
 
       <h2>Filter nach:</h2>
@@ -35,7 +44,10 @@
         class="c-filter-search__reset c-button c-button--center-icon"
         @click="resetAll"
       >
-        <FilterReset width="18" height="18" />
+        <FilterReset
+          width="18"
+          height="18"
+        />
         Zurücksetzen
       </button>
     </aside>

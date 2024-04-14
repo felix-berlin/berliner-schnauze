@@ -7,7 +7,10 @@
   >
     <div class="c-word-search-filter-toggle__icon-wrapper">
       <Filter class="c-word-search-filter-toggle__icon" />
-      <span v-if="activeFilterCount > 0" class="c-word-search-filter-toggle__counter">
+      <span
+        v-if="activeFilterCount > 0"
+        class="c-word-search-filter-toggle__counter"
+      >
         {{ activeFilterCount }}
       </span>
     </div>

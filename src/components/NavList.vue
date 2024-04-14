@@ -1,6 +1,12 @@
 <template>
-  <nav class="c-nav-list" :class="classesNav">
-    <ul class="c-nav-list__list" :class="classesUl">
+  <nav
+    class="c-nav-list"
+    :class="classesNav"
+  >
+    <ul
+      class="c-nav-list__list"
+      :class="classesUl"
+    >
       <slot name="before" />
       <li
         v-for="(item, index) in items"
@@ -14,7 +20,11 @@
           :target="isExternalLink(item.link) ? '_blank' : '_self'"
           v-text="item.title"
         />
-        <component :is="item.component" v-else v-bind="item.props" />
+        <component
+          :is="item.component"
+          v-else
+          v-bind="item.props"
+        />
       </li>
       <slot name="after" />
     </ul>

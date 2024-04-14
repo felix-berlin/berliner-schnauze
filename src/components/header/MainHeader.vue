@@ -1,7 +1,10 @@
 <template>
   <header class="c-header">
     <div class="c-logo">
-      <a href="/" class="c-logo__link"> Berliner Schnauze </a>
+      <a
+        href="/"
+        class="c-logo__link"
+      > Berliner Schnauze </a>
     </div>
 
     <nav class="c-menu-nav">
@@ -31,7 +34,10 @@
           </button>
 
           <template #popper>
-            <SocialList list-modifier="c-social-list--mobile-dropdown" :hide-tooltips="true" />
+            <SocialList
+              list-modifier="c-social-list--mobile-dropdown"
+              :hide-tooltips="true"
+            />
             <ul class="c-menu-more__list u-list-reset">
               <!-- <li class="c-menu-more__item">
                 <a :href="routeToWord(randomWord())"> Zufälliges Wort </a>
@@ -42,10 +48,18 @@
                 class="c-menu-more__item"
                 :class="{ 'is-split': item.title === 'Impressum' }"
               >
-                <a v-if="item.intern" :href="item.link">
+                <a
+                  v-if="item.intern"
+                  :href="item.link"
+                >
                   {{ item.title }}
                 </a>
-                <a v-else :href="item.link" target="_blank" v-text="item.title" />
+                <a
+                  v-else
+                  :href="item.link"
+                  target="_blank"
+                  v-text="item.title"
+                />
               </li>
             </ul>
           </template>

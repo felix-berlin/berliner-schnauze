@@ -1,5 +1,8 @@
 <template>
-  <div :id="id" class="pswp-gallery">
+  <div
+    :id="id"
+    class="pswp-gallery"
+  >
     <a
       v-for="(image, key) in images"
       :key="key"
@@ -10,7 +13,10 @@
       rel="noreferrer"
       aria-label="Bild in Originalgröße öffnen"
     >
-      <img :src="image.image.preferred.url" alt="" />
+      <img
+        :src="image.image.preferred.url"
+        alt=""
+      >
     </a>
   </div>
 </template>

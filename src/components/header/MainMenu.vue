@@ -18,7 +18,10 @@
     </button>
 
     <template #popper>
-      <SocialList list-modifier="c-social-list--mobile-dropdown" :hide-tooltips="true" />
+      <SocialList
+        list-modifier="c-social-list--mobile-dropdown"
+        :hide-tooltips="true"
+      />
       <NavList
         :items="menuItems"
         classes-ul="c-menu-more__list u-list-reset"
