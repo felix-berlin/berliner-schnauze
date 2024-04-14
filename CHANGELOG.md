@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.11.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.10.3...v3.11.0) (2024-04-14)
+
+
+### Features
+
+* **color modes:** dynamic theme color ([90bde77](https://github.com/felix-berlin/berliner-schnauze/commit/90bde7734710a195ce9d34aa19c2b013183cc412))
+
 ## [3.10.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.10.2...v3.10.3) (2024-04-14)
 
 
