@@ -1,5 +1,10 @@
 <template>
-  <VDropdown placement="bottom-end" class="c-options-dropdown" distance="9" theme="word-options">
+  <VDropdown
+    placement="bottom-end"
+    class="c-options-dropdown"
+    distance="9"
+    theme="word-options"
+  >
     <button
       type="button"
       class="c-options-dropdown__options c-button c-button--center-icon"
@@ -7,12 +12,11 @@
     >
       <span
         class="c-options-dropdown__options-icon c-button--center-icon c-icon c-icon--lucide-more-vertical"
-      >
-      </span>
+      />
     </button>
 
     <template #popper>
-      <slot name="before"></slot>
+      <slot name="before" />
 
       <button
         v-if="shareIsSupported"
@@ -21,7 +25,11 @@
         class="c-options-dropdown__copy-button c-button"
         @click="shareWord(slug)"
       >
-        <Share2 width="18" height="18" class="c-options-dropdown__icon-button" />
+        <Share2
+          width="18"
+          height="18"
+          class="c-options-dropdown__icon-button"
+        />
 
         <span class="c-options-dropdown__copy-text">Wort teilen</span>
       </button>
@@ -33,7 +41,11 @@
         class="c-options-dropdown__copy-button c-button"
         @click="copyWordPageUrlToClipboard(slug)"
       >
-        <Link width="18" height="18" class="c-options-dropdown__icon-button" />
+        <Link
+          width="18"
+          height="18"
+          class="c-options-dropdown__icon-button"
+        />
 
         <span class="c-options-dropdown__copy-text">Link kopieren</span>
       </button>
@@ -45,12 +57,16 @@
         class="c-options-dropdown__copy-button c-button"
         @click="copyNameToClipboard(berlinerisch)"
       >
-        <Copy width="18" height="18" class="c-options-dropdown__icon-button" />
+        <Copy
+          width="18"
+          height="18"
+          class="c-options-dropdown__icon-button"
+        />
 
         <span class="c-options-dropdown__copy-text">Wort kopieren</span>
       </button>
 
-      <slot name="after"></slot>
+      <slot name="after" />
     </template>
   </VDropdown>
 </template>

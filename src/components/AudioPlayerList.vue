@@ -12,7 +12,7 @@
       <AudioPlayer
         :audio="item?.audio?.node.mediaItemUrl"
         class="c-audio-list__audio-player"
-      ></AudioPlayer>
+      />
     </div>
   </div>
 </template>

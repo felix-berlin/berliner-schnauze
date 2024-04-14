@@ -1,6 +1,12 @@
 <template>
-  <div class="c-social-list" :class="modifier">
-    <ul class="c-social-list__list u-list-reset" :class="listModifier">
+  <div
+    class="c-social-list"
+    :class="modifier"
+  >
+    <ul
+      class="c-social-list__list u-list-reset"
+      :class="listModifier"
+    >
       <li
         v-for="social in list"
         :key="social.name"

@@ -5,7 +5,7 @@
       v-model="berolinismus"
       type="checkbox"
       class="c-input c-input--checkbox c-switch"
-    />
+    >
     <label for="berolinismusSwitch">Berolinismus</label>
   </div>
 </template>

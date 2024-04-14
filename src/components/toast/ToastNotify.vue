@@ -8,9 +8,15 @@
     :class="`c-toast-notify--${status} c-toast-notify--${position}`"
     :style="stylePosition"
   >
-    <Component :is="toastIconMap[status]" v-if="showStatusIcon" class="c-toast-notify__icon" />
+    <Component
+      :is="toastIconMap[status]"
+      v-if="showStatusIcon"
+      class="c-toast-notify__icon"
+    />
 
-    <div class="c-toast-notify__message">{{ message }}</div>
+    <div class="c-toast-notify__message">
+      {{ message }}
+    </div>
 
     <button
       v-if="showClose"
@@ -18,7 +24,10 @@
       class="c-toast-notify__close c-button c-button--center-icon"
       @click="hideToast()"
     >
-      <Close :width="12" :height="12" />
+      <Close
+        :width="12"
+        :height="12"
+      />
     </button>
   </div>
 </template>

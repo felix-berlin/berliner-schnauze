@@ -9,7 +9,10 @@
     class="c-word-of-the-day-crown"
     aria-hidden="true"
   >
-    <Crown :width="iconSize" :height="iconSize" />
+    <Crown
+      :width="iconSize"
+      :height="iconSize"
+    />
   </span>
 </template>
 

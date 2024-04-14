@@ -58,7 +58,7 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { wordSlug } = Astro.params as Params;
-const { word, allWords } = Astro.props as Props;
+const { word, allWords } = Astro.props;
 
 const wordProps: BerlinerWord["wordProperties"] = word.wordProperties;
 
@@ -291,7 +291,7 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!
               {wordProps.relatedWords.nodes.map((word): BerlinerWord[] => {
                 return (
                   <li class="c-single-word__related-word">
-                    <a href={routeToWord(word?.slug!)} class="c-single-word__related-word-link">
+                    <a href={routeToWord(word?.slug)} class="c-single-word__related-word-link">
                       {word?.wordProperties?.berlinerisch}
                     </a>
                   </li>

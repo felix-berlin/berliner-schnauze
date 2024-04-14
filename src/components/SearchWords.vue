@@ -9,11 +9,22 @@
       ]"
       @click="buttonActions"
     >
-      <Transition name="fade-fast" mode="out-in">
-        <span v-if="searchLength === 0" key="search" class="c-button--center-icon">
+      <Transition
+        name="fade-fast"
+        mode="out-in"
+      >
+        <span
+          v-if="searchLength === 0"
+          key="search"
+          class="c-button--center-icon"
+        >
           <Search default-class="c-word-search__search-icon" />
         </span>
-        <span v-else key="del" class="c-button--center-icon">
+        <span
+          v-else
+          key="del"
+          class="c-button--center-icon"
+        >
           <X />
         </span>
       </Transition>
@@ -27,7 +38,7 @@
       placeholder="Durchsuche den Berliner-Jargon"
       autocomplete="off"
       @input="updateSearch()"
-    />
+    >
   </div>
 </template>
 

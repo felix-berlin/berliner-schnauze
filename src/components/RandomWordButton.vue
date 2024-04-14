@@ -1,5 +1,8 @@
 <template>
-  <a :href="routeToWord(randomElement(words).slug)" class="c-random-word-button">
+  <a
+    :href="routeToWord(randomElement(words).slug)"
+    class="c-random-word-button"
+  >
     <Dices /> <span>zufälliges Wort</span>
   </a>
 </template>

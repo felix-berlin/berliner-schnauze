@@ -9,7 +9,10 @@
       setActiveOrderCategory(orderCategory);
     "
   >
-    <transition name="fade-fast" mode="out-in">
+    <transition
+      name="fade-fast"
+      mode="out-in"
+    >
       <span
         v-if="orderType === 'asc'"
         key="asc"
@@ -18,7 +21,11 @@
         <SortAsc />
         <span><slot name="asc-text">aufsteigend</slot></span>
       </span>
-      <span v-else key="desc" class="c-sort-word-direction-toggle__button c-button--center-icon">
+      <span
+        v-else
+        key="desc"
+        class="c-sort-word-direction-toggle__button c-button--center-icon"
+      >
         <SortDesc />
         <span><slot name="desc-text">absteigend</slot></span>
       </span>

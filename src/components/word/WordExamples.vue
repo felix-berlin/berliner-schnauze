@@ -1,5 +1,8 @@
 <template>
-  <div v-if="examples" :class="`${props.rootBemClass}__example-wrapper`">
+  <div
+    v-if="examples"
+    :class="`${props.rootBemClass}__example-wrapper`"
+  >
     <Quote
       :width="44"
       :height="44"
@@ -7,7 +10,10 @@
       :class="`${props.rootBemClass}__quote-icon`"
     />
 
-    <div v-if="examples && examples.length === 1" :class="`${props.rootBemClass}__single-example`">
+    <div
+      v-if="examples && examples.length === 1"
+      :class="`${props.rootBemClass}__single-example`"
+    >
       <p
         v-if="examples && examples.length === 1"
         :class="`${props.rootBemClass}__example`"
@@ -28,14 +34,20 @@
     </div>
 
     <!-- If more than one example exist -->
-    <ol v-if="examples && examples.length > 1" :class="`${props.rootBemClass}__examples`">
+    <ol
+      v-if="examples && examples.length > 1"
+      :class="`${props.rootBemClass}__examples`"
+    >
       <li
         v-for="(item, exampleIndex) in examples"
         :key="exampleIndex"
         :class="`${props.rootBemClass}__examples-list-item`"
       >
         <span :class="props.rootBemClass + '__examples-item'">{{ item?.example }}</span>
-        <div v-if="item?.exampleExplanation" :class="`${props.rootBemClass}__examples-explanation`">
+        <div
+          v-if="item?.exampleExplanation"
+          :class="`${props.rootBemClass}__examples-explanation`"
+        >
           – {{ item.exampleExplanation }}
         </div>
         <AudioPlayerList

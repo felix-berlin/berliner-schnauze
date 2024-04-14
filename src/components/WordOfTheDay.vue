@@ -18,12 +18,26 @@
       class="c-word-of-the-day__content"
     >
       <div class="c-word-of-the-day__crown-icon">
-        <Crown :width="80" :height="80" />
+        <Crown
+          :width="80"
+          :height="80"
+        />
       </div>
 
-      <Transition v-if="!currentWord.error" name="fade-fast" mode="out-in">
-        <SingleLoader v-if="currentWord.loading" key="loading" />
-        <div v-else key="word" class="c-word-of-the-day__word-wrap">
+      <Transition
+        v-if="!currentWord.error"
+        name="fade-fast"
+        mode="out-in"
+      >
+        <SingleLoader
+          v-if="currentWord.loading"
+          key="loading"
+        />
+        <div
+          v-else
+          key="word"
+          class="c-word-of-the-day__word-wrap"
+        >
           <a
             :href="routeToWord(currentWord?.word?.post_name)"
             class="c-word-of-the-day__word c-loader-text"
@@ -33,19 +47,27 @@
         </div>
       </Transition>
 
-      <div v-if="currentWord.error" class="c-word-of-the-day__word-wrap is-error">
+      <div
+        v-if="currentWord.error"
+        class="c-word-of-the-day__word-wrap is-error"
+      >
         Ditt kann ne wahr sein, es ist ein Fehler aufgetreten.
       </div>
 
-      <hr class="c-word-of-the-day__divider" />
+      <hr class="c-word-of-the-day__divider">
 
-      <p class="c-word-of-the-day__headline">Wort des Tages</p>
+      <p class="c-word-of-the-day__headline">
+        Wort des Tages
+      </p>
     </div>
     <div class="c-word-of-the-day__update">
       Neues Wort in: <span>{{ timeToUpdate.hours }}</span> :
       <span>{{ timeToUpdate.minutes }}</span> : <span>{{ timeToUpdate.seconds }}</span>
     </div>
-    <Transition v-if="celebrate" name="fade">
+    <Transition
+      v-if="celebrate"
+      name="fade"
+    >
       <ConfettiEffect />
     </Transition>
   </div>

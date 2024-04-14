@@ -1,10 +1,17 @@
 <template>
   <div class="c-dropdown">
-    <button :popovertarget="dropdownId" popovertargetaction="toggle">
-      <slot></slot>
+    <button
+      :popovertarget="dropdownId"
+      popovertargetaction="toggle"
+    >
+      <slot />
     </button>
-    <div :id="dropdownId" :anchor="dropdownId" popover>
-      <slot name="content"></slot>
+    <div
+      :id="dropdownId"
+      :anchor="dropdownId"
+      popover
+    >
+      <slot name="content" />
     </div>
   </div>
 </template>

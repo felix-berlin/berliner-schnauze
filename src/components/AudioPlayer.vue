@@ -7,12 +7,24 @@
     @click="togglePlayStop"
   >
     <div class="c-audio-player__actions">
-      <Transition name="fade" mode="out-in">
-        <Play v-if="!isPlaying" key="play" />
-        <Pause v-else key="pause" />
+      <Transition
+        name="fade"
+        mode="out-in"
+      >
+        <Play
+          v-if="!isPlaying"
+          key="play"
+        />
+        <Pause
+          v-else
+          key="pause"
+        />
       </Transition>
     </div>
-    <div class="c-audio-player__progress" :style="fillStyle"></div>
+    <div
+      class="c-audio-player__progress"
+      :style="fillStyle"
+    />
   </button>
 </template>
 

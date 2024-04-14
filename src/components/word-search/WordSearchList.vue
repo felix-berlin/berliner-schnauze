@@ -1,11 +1,17 @@
 <template>
   <!-- TODO: replace by <search></search>  -->
-  <div class="c-word-search-list" :class="props.cssClass" role="search">
+  <div
+    class="c-word-search-list"
+    :class="props.cssClass"
+    role="search"
+  >
     <WordSearchFilterToggle />
     <SearchWords />
 
     <p class="c-word-search-list__result-count">
-      {{ searchResultCount }} Ergebnis<template v-if="searchResultCount > 1">se</template>
+      {{ searchResultCount }} Ergebnis<template v-if="searchResultCount > 1">
+        se
+      </template>
     </p>
 
     <WordList />
