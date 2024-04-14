@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.10.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.10.0...v3.10.1) (2024-04-11)
+
+
+### Bug Fixes
+
+* **nano stores dev tools:** enable again ([6ce9b95](https://github.com/felix-berlin/berliner-schnauze/commit/6ce9b95a51a815ad045f953b7f76863530302b42))
+
 # [3.10.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.9.0...v3.10.0) (2024-03-06)
 
 
