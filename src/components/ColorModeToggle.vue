@@ -5,10 +5,7 @@
     :class="cssClasses"
     @click="toggleMode()"
   >
-    <Transition
-      name="fade"
-      mode="out-in"
-    >
+    <Transition name="fade" mode="out-in">
       <Moon
         v-if="isDarkMode"
         key="dark"
@@ -48,12 +45,26 @@ const isDarkMode = useStore($isDarkMode);
  */
 const toggleMode = (): void => {
   setDarkMode(!isDarkMode.value);
+  updateThemeColor();
+
+  const htmlClasses = document.querySelector("html")?.classList;
 
   if (isDarkMode.value) {
-    document.querySelector("html")?.classList.add(...toggleClasses);
+    htmlClasses?.add(...toggleClasses);
   } else {
-    document.querySelector("html")?.classList.remove(...toggleClasses);
+    htmlClasses?.remove(...toggleClasses);
   }
+};
+
+/**
+ * Update meta theme color.
+ *
+ * @return  {void}
+ */
+const updateThemeColor = (): void => {
+  const metaThemeColor = document.querySelector("meta[name=theme-color]");
+  const themeColor = isDarkMode.value ? "#2b333b" : "#fad0b0";
+  metaThemeColor?.setAttribute("content", themeColor);
 };
 </script>
 
