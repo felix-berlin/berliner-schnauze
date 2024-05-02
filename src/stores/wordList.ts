@@ -1,4 +1,4 @@
-import { computed, atom } from "nanostores";
+import { computed, atom, map, onSet } from "nanostores";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import Fuse from "fuse.js";
 import { useViewTransition } from "@utils/helpers.ts";
@@ -167,6 +167,43 @@ export const searchLength = computed($wordSearch, (wordSearch) => {
   return wordSearch.search.length;
 });
 
+export const $filteredWordList = atom<Word[]>([]);
+
+let filterWorker;
+
+// export function mount() {
+if (typeof Worker !== "undefined") {
+  console.log("Web worker is supported");
+
+  filterWorker = new Worker(new URL("/filterWorker.js", import.meta.url));
+
+  filterWorker.onmessage = function (event: MessageEvent<Word[]>) {
+    $filteredWordList.set(event.data);
+  };
+
+  filterWorker.postMessage({
+    wordList: $wordSearch.get().wordList,
+    wordSearch: $wordSearch.get(),
+  });
+}
+// }
+
+export function updateFilteredWordList(wordList: Word[], wordSearch: WordSearch) {
+  if (filterWorker) {
+    filterWorker.postMessage({ wordList, wordSearch });
+  }
+}
+// updateFilteredWordList($wordSearch.get().wordList, $wordSearch.get().search);
+// Update the filtered list whenever $wordSearch changes
+onSet($wordSearch, ({ newValue, abort }) => {
+  updateFilteredWordList(newValue.wordList, newValue);
+});
+
+// filterWorker.onmessage = function (event: MessageEvent<Word[]>) {
+//   // Update $filteredWordList with the data received from the worker
+//   $filteredWordList.set(event.data);
+// };
+
 /**
  * This computed stores the actual word list, which can be filtered by letter, order and search.
  *
@@ -175,114 +212,122 @@ export const searchLength = computed($wordSearch, (wordSearch) => {
  *
  * @return  {[]}                   [return description]
  */
-export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
-  let filteredWordList = wordSearch.wordList;
+// export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
+//   let filteredWordList = wordSearch.wordList;
 
-  // Filter by letter
-  if (wordSearch.activeLetterFilter !== "") {
-    filteredWordList = filteredWordList.filter((word) => {
-      return word.wordGroup === wordSearch.activeLetterFilter;
-    });
-  }
+//   // Ensure filteredWordList is defined and is an array
+//   if (!Array.isArray(filteredWordList)) {
+//     filteredWordList = [];
+//   }
 
-  // Filter by word type
-  if (wordSearch.activeWordTypeFilter !== "") {
-    filteredWordList = filteredWordList.filter((word) =>
-      word.berlinerischWordTypes?.nodes.some(
-        (word) => word.name === wordSearch.activeWordTypeFilter,
-      ),
-    );
-  }
+//   // Combine filters
+//   filteredWordList = filteredWordList.filter((word) => {
+//     let pass = true;
 
-  // Sort by Berolinismus
-  if (wordSearch.berolinismus) {
-    filteredWordList = filteredWordList.filter((word) => {
-      return word.wordProperties?.berolinismus === true;
-    });
-  }
+//     // Filter by letter
+//     if (wordSearch.activeLetterFilter !== "") {
+//       pass = pass && word.wordGroup === wordSearch.activeLetterFilter;
+//     }
 
-  // Sort by order
-  if (wordSearch.activeOrderCategory === "alphabetical") {
-    // Reassign the filteredWordList to the sorted list, otherwise the DynamicScroller will not update
-    filteredWordList = [
-      ...filteredWordList.sort((a, b) => {
-        if (a?.wordProperties?.berlinerisch && b?.wordProperties?.berlinerisch) {
-          return wordSearch.alphabeticalOrder === "asc"
-            ? a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch)
-            : b.wordProperties.berlinerisch.localeCompare(a.wordProperties.berlinerisch);
-        } else {
-          // Default behavior when either is undefined
-          return 0;
-        }
-      }),
-    ];
-  }
+//     // Filter by word type
+//     if (wordSearch.activeWordTypeFilter !== "") {
+//       pass =
+//         pass &&
+//         word.berlinerischWordTypes?.nodes.some(
+//           (wordType) => wordType.name === wordSearch.activeWordTypeFilter,
+//         );
+//     }
 
-  // Sort by date
-  if (wordSearch.activeOrderCategory === "date") {
-    filteredWordList = [
-      ...filteredWordList.sort((a, b) => {
-        if (a?.dateGmt && b?.dateGmt) {
-          return wordSearch.dateOrder === "asc"
-            ? new Date(a.dateGmt).getTime() - new Date(b.dateGmt).getTime()
-            : new Date(b.dateGmt).getTime() - new Date(a.dateGmt).getTime();
-        } else {
-          // Default behavior when either is undefined
-          return 0;
-        }
-      }),
-    ];
-  }
+//     // Filter by Berolinismus
+//     if (wordSearch.berolinismus) {
+//       pass = pass && word.wordProperties?.berolinismus === true;
+//     }
 
-  // // Sort by modified date
-  if (wordSearch.activeOrderCategory === "modifiedDate") {
-    filteredWordList = [
-      ...filteredWordList.sort((a, b) => {
-        if (a?.modifiedGmt && b?.modifiedGmt) {
-          return wordSearch.modifiedDateOrder === "asc"
-            ? new Date(a.modifiedGmt).getTime() - new Date(b.modifiedGmt).getTime()
-            : new Date(b.modifiedGmt).getTime() - new Date(a.modifiedGmt).getTime();
-        } else {
-          // Default behavior when either is undefined
-          return 0;
-        }
-      }),
-    ];
-  }
+//     return pass;
+//   });
 
-  // Fuse options
-  const options = {
-    keys: [
-      "wordProperties.berlinerisch",
-      "wordProperties.translations.translation",
-      "wordProperties.alternativeWords.alternativeWord",
-    ],
-  };
+//   // Sort by order
+//   if (wordSearch.activeOrderCategory === "alphabetical") {
+//     // Reassign the filteredWordList to the sorted list, otherwise the DynamicScroller will not update
+//     filteredWordList = [
+//       ...filteredWordList.sort((a, b) => {
+//         if (a?.wordProperties?.berlinerisch && b?.wordProperties?.berlinerisch) {
+//           return wordSearch.alphabeticalOrder === "asc"
+//             ? a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch)
+//             : b.wordProperties.berlinerisch.localeCompare(a.wordProperties.berlinerisch);
+//         } else {
+//           // Default behavior when either is undefined
+//           return 0;
+//         }
+//       }),
+//     ];
+//   }
 
-  // Init Fuse
-  const fuse = new Fuse(filteredWordList, options);
+//   // Sort by date
+//   if (wordSearch.activeOrderCategory === "date") {
+//     filteredWordList = [
+//       ...filteredWordList.sort((a, b) => {
+//         if (a?.dateGmt && b?.dateGmt) {
+//           return wordSearch.dateOrder === "asc"
+//             ? new Date(a.dateGmt).getTime() - new Date(b.dateGmt).getTime()
+//             : new Date(b.dateGmt).getTime() - new Date(a.dateGmt).getTime();
+//         } else {
+//           // Default behavior when either is undefined
+//           return 0;
+//         }
+//       }),
+//     ];
+//   }
 
-  // Start Fuse search
-  const results = fuse.search(wordSearch.search);
+//   // Sort by modified date
+//   if (wordSearch.activeOrderCategory === "modifiedDate") {
+//     filteredWordList = [
+//       ...filteredWordList.sort((a, b) => {
+//         if (a?.modifiedGmt && b?.modifiedGmt) {
+//           return wordSearch.modifiedDateOrder === "asc"
+//             ? new Date(a.modifiedGmt).getTime() - new Date(b.modifiedGmt).getTime()
+//             : new Date(b.modifiedGmt).getTime() - new Date(a.modifiedGmt).getTime();
+//         } else {
+//           // Default behavior when either is undefined
+//           return 0;
+//         }
+//       }),
+//     ];
+//   }
 
-  /**
-   * Fuse adds a score to each result, which we don't need.
-   *
-   * @param   {Array}  result  [result description]
-   *
-   * @return  {CleanBerlinerWord[]}          [return description]
-   */
-  const cleanResults = results.map((result): CleanBerlinerWord => {
-    return result.item;
-  });
+//   // Fuse options
+//   const options = {
+//     keys: [
+//       "wordProperties.berlinerisch",
+//       "wordProperties.translations.translation",
+//       "wordProperties.alternativeWords.alternativeWord",
+//     ],
+//   };
 
-  // If there are no results or the search is empty, return the full word list
-  if (cleanResults.length === 0 || wordSearch.search === "") {
-    return filteredWordList;
-  }
+//   // Init Fuse
+//   const fuse = new Fuse(filteredWordList, options);
 
-  return cleanResults;
-});
+//   // Start Fuse search
+//   const results = fuse.search(wordSearch.search);
+
+//   /**
+//    * Fuse adds a score to each result, which we don't need.
+//    *
+//    * @param   {Array}  result  [result description]
+//    *
+//    * @return  {CleanBerlinerWord[]}          [return description]
+//    */
+//   const cleanResults = results.map((result): CleanBerlinerWord => {
+//     return result.item;
+//   });
+
+//   // If there are no results or the search is empty, return the full word list
+//   if (cleanResults.length === 0 || wordSearch.search === "") {
+//     return filteredWordList;
+//   }
+
+//   return cleanResults;
+// });
 
 export const $searchResultCount = computed($filteredWordList, (filteredWordList) => {
   return filteredWordList.length;

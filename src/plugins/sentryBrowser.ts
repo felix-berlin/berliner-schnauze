@@ -17,7 +17,7 @@ Sentry.init({
   tracesSampleRate: import.meta.env.PUBLIC_SENTRY_TRACES_SAMPLE_RATE,
 
   // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
-  // tracePropagationTargets: ["localhost", /^https:\/\/berliner-schnauze\.wtf/],
+  tracePropagationTargets: ["localhost", /^https:\/\/berliner-schnauze\.wtf/],
 
   // Capture Replay for 10% of all sessions,
   // plus for 100% of sessions with an error
