@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.0...v3.11.1) (2024-05-02)
+
+
+### Bug Fixes
+
+* Cannot read properties of null ([78b0152](https://github.com/felix-berlin/berliner-schnauze/commit/78b0152a19e0522d277a2a400bb46b8772b79cd4))
+
 # [3.11.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.10.3...v3.11.0) (2024-04-14)
 
 
