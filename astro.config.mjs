@@ -11,8 +11,10 @@ import spotlightjs from "@spotlightjs/astro";
 import astroEnv from "astro-env";
 import { z } from "astro/zod";
 import { loadEnv } from "vite";
+import { defineConfig } from "vite";
+import { codecovVitePlugin } from "@codecov/vite-plugin";
 
-const { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, PWA_DEBUG } = loadEnv(
+const { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, PWA_DEBUG, CODECOV_TOKEN } = loadEnv(
   process.env.NODE_ENV,
   process.cwd(),
   "",
@@ -57,6 +59,7 @@ export default defineConfig({
         WIKIMEDIA_API_AUTH_TOKEN: z.string(),
         SHOW_TEST_DATA: envBoolean("SHOW_TEST_DATA"),
         PWA_DEBUG: z.optional(envBoolean("PWA_DEBUG")),
+        CODECOV_TOKEN: z.optional(z.string()),
       }),
     }),
     vue({
@@ -161,6 +164,11 @@ export default defineConfig({
         authToken: SENTRY_AUTH_TOKEN,
         org: SENTRY_ORG,
         project: SENTRY_PROJECT,
+      }),
+      codecovVitePlugin({
+        enableBundleAnalysis: CODECOV_TOKEN !== undefined,
+        bundleName: "berliner-schnauze",
+        uploadToken: CODECOV_TOKEN,
       }),
     ],
 
