@@ -41,23 +41,25 @@ const searchVisible = ref(false);
 const searchModal: Ref<InstanceType<typeof Modal> | null> = ref(null);
 
 /**
- * Trigger the async modal to load
+ * This function is responsible for loading and displaying the modal.
+ * If the modal is already mounted, it will be displayed immediately.
+ * If the modal is not yet mounted, it will trigger the loading of the modal.
+ * It will then keep retrying to display the modal every 100ms until the modal is mounted.
  *
  * @return  {void}
  */
 const getModalLoaded = (): void => {
-  if (loadModal.value) openSearch();
-
-  loadModal.value = true;
-};
-
-/**
- * Open the search modal
- *
- * @return  {void}
- */
-const openSearch = (): void => {
-  searchVisible.value = true;
+  // If the modal is already mounted, display it immediately
+  if (modalMounted.value) {
+    searchVisible.value = true;
+  } else {
+    // If the modal is not yet loading, trigger the loading of the modal
+    if (!loadModal.value) {
+      loadModal.value = true;
+    }
+    // Retry to display the modal every 100ms until it is mounted
+    setTimeout(getModalLoaded, 100);
+  }
 };
 
 /**
