@@ -25,7 +25,10 @@ describe("SearchModal", () => {
 
     await wrapper.find("button").trigger("click");
 
-    await wrapper.vm.$nextTick();
+    // Wait for the modal to load and open
+    while (!wrapper.vm.searchVisible) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
 
     expect(wrapper.vm.searchVisible).toBe(true);
   });
