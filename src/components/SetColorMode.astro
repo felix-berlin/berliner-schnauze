@@ -41,7 +41,12 @@
     metaThemeColor.setAttribute("content", themeColor);
   };
 
-  setThemeColor();
+  /**
+   * Needs to be set on load because theme-color meta tag comes later in the loading sequence
+   */
+  window.onload = function () {
+    setThemeColor();
+  };
 
   setDarkClass();
 
