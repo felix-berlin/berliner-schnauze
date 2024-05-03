@@ -1,52 +1,42 @@
 import Fuse from "fuse.js";
 
-declare const self: DedicatedWorkerGlobalScope;
-
-interface Word {
-  wordGroup: string;
-  berlinerischWordTypes?: { nodes: { name: string }[] };
-  wordProperties?: { berolinismus: boolean };
-  dateGmt?: string;
-  modifiedGmt?: string;
-}
-
-interface WordSearch {
-  activeLetterFilter: string;
-  activeWordTypeFilter: string;
-  berolinismus: boolean;
-  dateOrder?: string;
-  modifiedDateOrder?: string;
-  activeOrderCategory?: string;
-}
-
-self.onmessage = (event: MessageEvent<{ wordList: Word[]; wordSearch: WordSearch }>) => {
+self.onmessage = (event) => {
   const { wordList, wordSearch } = event.data;
-  console.log("Worker received message");
+  console.log("Worker received data", wordSearch);
+  // console.log("filteredWordList:", filteredWordList);
 
-  let filteredWordList = wordList.filter((word) => {
-    let pass = true;
+  // if (!wordSearch) {
+  //   console.error("wordSearch is undefined");
+  //   return;
+  // }
 
-    // Filter by letter
-    if (wordSearch.activeLetterFilter !== "") {
-      pass = pass && word.wordGroup === wordSearch.activeLetterFilter;
-    }
+  let filteredWordList = wordList;
+  if (wordSearch.activeLetterFilter || wordSearch.activeWordTypeFilter || wordSearch.berolinismus) {
+    filteredWordList = wordList.filter((word) => {
+      let pass = true;
 
-    // Filter by word type
-    if (wordSearch.activeWordTypeFilter !== "") {
-      pass =
-        pass &&
-        word.berlinerischWordTypes?.nodes.some(
-          (wordType) => wordType.name === wordSearch.activeWordTypeFilter,
-        );
-    }
+      // Filter by letter
+      if (wordSearch.activeLetterFilter !== "") {
+        pass = pass && word.wordGroup === wordSearch.activeLetterFilter;
+      }
 
-    // Filter by Berolinismus
-    if (wordSearch.berolinismus) {
-      pass = pass && word.wordProperties?.berolinismus === true;
-    }
+      // Filter by word type
+      if (wordSearch.activeWordTypeFilter !== "") {
+        pass =
+          pass &&
+          word.berlinerischWordTypes?.nodes.some(
+            (wordType) => wordType.name === wordSearch.activeWordTypeFilter,
+          );
+      }
 
-    return pass;
-  });
+      // Filter by Berolinismus
+      if (wordSearch.berolinismus) {
+        pass = pass && word.wordProperties?.berolinismus === true;
+      }
+
+      return pass;
+    });
+  }
 
   // Sort by date
   if (wordSearch.activeOrderCategory === "date") {
@@ -73,6 +63,7 @@ self.onmessage = (event: MessageEvent<{ wordList: Word[]; wordSearch: WordSearch
       }
     });
   }
+  console.log("filteredWordList:", filteredWordList.length, filteredWordList);
 
   // Fuse options
   const options = {
@@ -85,14 +76,16 @@ self.onmessage = (event: MessageEvent<{ wordList: Word[]; wordSearch: WordSearch
 
   // Init Fuse
   const fuse = new Fuse(filteredWordList, options);
-
   // Start Fuse search
   const results = fuse.search(wordSearch.search);
+  console.log("fuse", results.length, results);
 
   // Fuse adds a score to each result, which we don't need.
   const cleanResults = results.map((result) => {
     return result.item;
   });
+
+  console.log("Worker sending data", cleanResults.length, cleanResults);
 
   // If there are no results or the search is empty, return the full word list
   if (cleanResults.length === 0 || wordSearch.search === "") {

@@ -3,6 +3,7 @@ import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import Fuse from "fuse.js";
 import { useViewTransition } from "@utils/helpers.ts";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
+import filterWorker from "../services/filterWorker?worker";
 
 export type CleanBerlinerWord = Omit<BerlinerWord, "seo" | "title">;
 
@@ -169,19 +170,19 @@ export const searchLength = computed($wordSearch, (wordSearch) => {
 
 export const $filteredWordList = atom<Word[]>([]);
 
-let filterWorker;
+let filterWorkerInstance;
 
 // export function mount() {
 if (typeof Worker !== "undefined") {
   console.log("Web worker is supported");
 
-  filterWorker = new Worker(new URL("/filterWorker.js", import.meta.url));
+  filterWorkerInstance = new filterWorker();
 
-  filterWorker.onmessage = function (event: MessageEvent<Word[]>) {
+  filterWorkerInstance.onmessage = function (event: MessageEvent<Word[]>) {
     $filteredWordList.set(event.data);
   };
 
-  filterWorker.postMessage({
+  filterWorkerInstance.postMessage({
     wordList: $wordSearch.get().wordList,
     wordSearch: $wordSearch.get(),
   });
@@ -189,8 +190,8 @@ if (typeof Worker !== "undefined") {
 // }
 
 export function updateFilteredWordList(wordList: Word[], wordSearch: WordSearch) {
-  if (filterWorker) {
-    filterWorker.postMessage({ wordList, wordSearch });
+  if (filterWorkerInstance) {
+    filterWorkerInstance.postMessage({ wordList, wordSearch });
   }
 }
 // updateFilteredWordList($wordSearch.get().wordList, $wordSearch.get().search);
