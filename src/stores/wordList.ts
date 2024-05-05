@@ -1,4 +1,4 @@
-import { computed, atom, onSet } from "nanostores";
+import { computed, atom, onSet, onStop } from "nanostores";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
 import { useViewTransition } from "@utils/helpers.ts";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
@@ -189,10 +189,17 @@ export function updateFilteredWordList(wordList: Word[], wordSearch: WordSearch)
     filterWorkerInstance.postMessage({ wordList, wordSearch });
   }
 }
+
 // updateFilteredWordList($wordSearch.get().wordList, $wordSearch.get().search);
 // Update the filtered list whenever $wordSearch changes
 onSet($wordSearch, ({ newValue, abort }) => {
   updateFilteredWordList(newValue.wordList, newValue);
+});
+
+onStop($wordSearch, () => {
+  if (filterWorkerInstance) {
+    filterWorkerInstance.terminate();
+  }
 });
 
 export const $searchResultCount = computed($filteredWordList, (filteredWordList) => {
