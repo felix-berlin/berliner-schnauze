@@ -2,13 +2,7 @@ import Fuse from "fuse.js";
 
 self.onmessage = (event) => {
   const { wordList, wordSearch } = event.data;
-  console.log("Worker received data", wordSearch);
-  // console.log("filteredWordList:", filteredWordList);
-
-  // if (!wordSearch) {
-  //   console.error("wordSearch is undefined");
-  //   return;
-  // }
+  // console.log("Worker received data", wordSearch);
 
   let filteredWordList = wordList;
   if (wordSearch.activeLetterFilter || wordSearch.activeWordTypeFilter || wordSearch.berolinismus) {
@@ -38,59 +32,58 @@ self.onmessage = (event) => {
     });
   }
 
-  // Sort by date
-  if (wordSearch.activeOrderCategory === "date") {
-    filteredWordList.sort((a, b) => {
-      if (a.dateGmt && b.dateGmt) {
-        return wordSearch.dateOrder === "asc"
+  // Combine all sorting into a single function
+  filteredWordList.sort((a, b) => {
+    let result = 0;
+
+    if (
+      wordSearch.activeOrderCategory === "alphabetical" &&
+      a?.wordProperties?.berlinerisch &&
+      b?.wordProperties?.berlinerisch
+    ) {
+      result =
+        wordSearch.alphabeticalOrder === "asc"
+          ? a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch)
+          : b.wordProperties.berlinerisch.localeCompare(a.wordProperties.berlinerisch);
+    }
+
+    if (result === 0 && wordSearch.activeOrderCategory === "date" && a.dateGmt && b.dateGmt) {
+      result =
+        wordSearch.dateOrder === "asc"
           ? new Date(a.dateGmt).getTime() - new Date(b.dateGmt).getTime()
           : new Date(b.dateGmt).getTime() - new Date(a.dateGmt).getTime();
-      } else {
-        return 0;
-      }
-    });
-  }
+    }
 
-  // Sort by modified date
-  if (wordSearch.activeOrderCategory === "modifiedDate") {
-    filteredWordList.sort((a, b) => {
-      if (a.modifiedGmt && b.modifiedGmt) {
-        return wordSearch.modifiedDateOrder === "asc"
+    if (
+      result === 0 &&
+      wordSearch.activeOrderCategory === "modifiedDate" &&
+      a.modifiedGmt &&
+      b.modifiedGmt
+    ) {
+      result =
+        wordSearch.modifiedDateOrder === "asc"
           ? new Date(a.modifiedGmt).getTime() - new Date(b.modifiedGmt).getTime()
           : new Date(b.modifiedGmt).getTime() - new Date(a.modifiedGmt).getTime();
-      } else {
-        return 0;
-      }
-    });
-  }
-  console.log("filteredWordList:", filteredWordList.length, filteredWordList);
+    }
 
-  // Fuse options
-  const options = {
-    keys: [
-      "wordProperties.berlinerisch",
-      "wordProperties.translations.translation",
-      "wordProperties.alternativeWords.alternativeWord",
-    ],
-  };
-
-  // Init Fuse
-  const fuse = new Fuse(filteredWordList, options);
-  // Start Fuse search
-  const results = fuse.search(wordSearch.search);
-  console.log("fuse", results.length, results);
-
-  // Fuse adds a score to each result, which we don't need.
-  const cleanResults = results.map((result) => {
-    return result.item;
+    return result;
   });
 
-  console.log("Worker sending data", cleanResults.length, cleanResults);
+  // Only use Fuse.js if a search term is provided
+  if (wordSearch.search !== "") {
+    const options = {
+      keys: [
+        "wordProperties.berlinerisch",
+        "wordProperties.translations.translation",
+        "wordProperties.alternativeWords.alternativeWord",
+      ],
+    };
 
-  // If there are no results or the search is empty, return the full word list
-  if (cleanResults.length === 0 || wordSearch.search === "") {
-    self.postMessage(filteredWordList);
-  } else {
-    self.postMessage(cleanResults);
+    const fuse = new Fuse(filteredWordList, options);
+    const results = fuse.search(wordSearch.search);
+
+    filteredWordList = results.map((result) => result.item);
   }
+
+  self.postMessage(filteredWordList);
 };
