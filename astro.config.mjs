@@ -79,7 +79,7 @@ export default defineConfig({
       debug: import.meta.env.DEV,
       heartBeatTimer: 5,
       disableCookies: true,
-      partytown: true,
+      partytown: false,
     }),
     AstroPWA({
       mode: import.meta.env.DEV ? "development" : "production",
@@ -148,11 +148,11 @@ export default defineConfig({
     //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
     //   },
     // }),
-    partytown({
-      config: {
-        forward: ["_paq.push", "_paq.trackEvent"],
-      },
-    }),
+    // partytown({
+    //   config: {
+    //     forward: ["_paq.push"],
+    //   },
+    // }),
     // sentry(),
     // spotlightjs(),
   ],
