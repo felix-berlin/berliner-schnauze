@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@astrojs/partytown':
+        specifier: ^2.1.0
+        version: 2.1.0
       '@astrojs/sitemap':
         specifier: ^3.1.4
         version: 3.1.4
@@ -54,8 +57,8 @@ importers:
         specifier: ^0.0.5
         version: 0.0.5(astro@4.7.1(@types/node@20.12.8)(sass@1.76.0)(terser@5.31.0)(typescript@5.4.5))(typescript@5.4.5)(zod@3.23.6)
       astro-matomo:
-        specifier: ^1.4.2
-        version: 1.4.2(astro@4.7.1(@types/node@20.12.8)(sass@1.76.0)(terser@5.31.0)(typescript@5.4.5))
+        specifier: ^1.5.0
+        version: 1.5.0(astro@4.7.1(@types/node@20.12.8)(sass@1.76.0)(terser@5.31.0)(typescript@5.4.5))
       compromise:
         specifier: ^14.13.0
         version: 14.13.0
@@ -310,6 +313,9 @@ packages:
 
   '@astrojs/markdown-remark@5.1.0':
     resolution: {integrity: sha512-S6Z3K2hOB7MfjeDoHsotnP/q2UsnEDB8NlNAaCjMDsGBZfTUbWxyLW3CaphEWw08f6KLZi2ibK9yC3BaMhh2NQ==}
+
+  '@astrojs/partytown@2.1.0':
+    resolution: {integrity: sha512-9fjvTx2hTQpirUh1HnZZtFQaBz2R5ixrrmU/Zam3VZ9CoR3frqtnqg/Dt/i5C3UAlwiN0i8VuKxPx5cHP8yY5A==}
 
   '@astrojs/prism@3.1.0':
     resolution: {integrity: sha512-Z9IYjuXSArkAUx3N6xj6+Bnvx8OdUSHA8YoOgyepp3+zJmtVYJIl/I18GozdJVW1p5u/CNpl3Km7/gwTJK85cw==}
@@ -967,6 +973,11 @@ packages:
 
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
+
+  '@builder.io/partytown@0.10.2':
+    resolution: {integrity: sha512-A9U+4PREWcS+CCYzKGIPovtGB/PBgnH/8oQyCE6Nr9drDJk6cMPpLQIEajpGPmG9tYF7N3FkRvhXm/AS9+0iKg==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
 
   '@canvas/image-data@1.0.0':
     resolution: {integrity: sha512-BxOqI5LgsIQP1odU5KMwV9yoijleOPzHL18/YvNqF9KFSGF2K/DLlYAbDQsWqd/1nbaFuSkYD/191dpMtNh4vw==}
@@ -3004,8 +3015,8 @@ packages:
     peerDependencies:
       astro: ^4.0.0
 
-  astro-matomo@1.4.2:
-    resolution: {integrity: sha512-65TtRKaNmGWSAaPAV84dTweOt/6aVMaPLQxJkkiSWdDFr8oScf3Sg0zzs+tE5Ca+VZdLT8QLZgdrcVJG4uX2KA==}
+  astro-matomo@1.5.0:
+    resolution: {integrity: sha512-wy3CVrYTFC9bJ4jWvL9DLnJ5w9DOuVpdes3+7EOCplFV0cxBnzXv8aHP1eAHbxBMYfAhju2Kkov0OH7ptxAZXg==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
 
@@ -7863,6 +7874,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@astrojs/partytown@2.1.0':
+    dependencies:
+      '@builder.io/partytown': 0.10.2
+      mrmime: 2.0.0
+
   '@astrojs/prism@3.1.0':
     dependencies:
       prismjs: 1.29.0
@@ -8668,6 +8684,8 @@ snapshots:
       to-fast-properties: 2.0.0
 
   '@bcoe/v8-coverage@0.2.3': {}
+
+  '@builder.io/partytown@0.10.2': {}
 
   '@canvas/image-data@1.0.0': {}
 
@@ -10991,7 +11009,7 @@ snapshots:
     dependencies:
       astro: 4.7.1(@types/node@20.12.8)(sass@1.76.0)(terser@5.31.0)(typescript@5.4.5)
 
-  astro-matomo@1.4.2(astro@4.7.1(@types/node@20.12.8)(sass@1.76.0)(terser@5.31.0)(typescript@5.4.5)):
+  astro-matomo@1.5.0(astro@4.7.1(@types/node@20.12.8)(sass@1.76.0)(terser@5.31.0)(typescript@5.4.5)):
     dependencies:
       astro: 4.7.1(@types/node@20.12.8)(sass@1.76.0)(terser@5.31.0)(typescript@5.4.5)
 

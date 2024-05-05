@@ -107,6 +107,7 @@
     "wrangler": "^3.53.1"
   },
   "dependencies": {
+    "@astrojs/partytown": "^2.1.0",
     "@astrojs/sitemap": "^3.1.4",
     "@astrojs/vue": "^4.1.0",
     "@felix_berlin/sass-butler": "3.0.1",
@@ -122,7 +123,7 @@
     "astro": "^4.7.1",
     "astro-breadcrumbs": "^2.3.0",
     "astro-env": "^0.0.5",
-    "astro-matomo": "^1.4.2",
+    "astro-matomo": "^1.5.0",
     "compromise": "^14.13.0",
     "de-compromise": "^0.0.10",
     "dotenv": "^16.4.5",
