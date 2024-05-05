@@ -1,6 +1,5 @@
-import { computed, atom, map, onSet } from "nanostores";
+import { computed, atom, onSet } from "nanostores";
 import { persistentAtom, persistentMap } from "@nanostores/persistent";
-import Fuse from "fuse.js";
 import { useViewTransition } from "@utils/helpers.ts";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
 import filterWorker from "../services/filterWorker?worker";
@@ -172,10 +171,7 @@ export const $filteredWordList = atom<Word[]>([]);
 
 let filterWorkerInstance;
 
-// export function mount() {
 if (typeof Worker !== "undefined") {
-  console.log("Web worker is supported");
-
   filterWorkerInstance = new filterWorker();
 
   filterWorkerInstance.onmessage = function (event: MessageEvent<Word[]>) {
@@ -187,7 +183,6 @@ if (typeof Worker !== "undefined") {
     wordSearch: $wordSearch.get(),
   });
 }
-// }
 
 export function updateFilteredWordList(wordList: Word[], wordSearch: WordSearch) {
   if (filterWorkerInstance) {
@@ -199,136 +194,6 @@ export function updateFilteredWordList(wordList: Word[], wordSearch: WordSearch)
 onSet($wordSearch, ({ newValue, abort }) => {
   updateFilteredWordList(newValue.wordList, newValue);
 });
-
-// filterWorker.onmessage = function (event: MessageEvent<Word[]>) {
-//   // Update $filteredWordList with the data received from the worker
-//   $filteredWordList.set(event.data);
-// };
-
-/**
- * This computed stores the actual word list, which can be filtered by letter, order and search.
- *
- * @param   {[type]}  $wordSearch  [$wordSearch description]
- * @param   {[type]}  wordSearch   [wordSearch description]
- *
- * @return  {[]}                   [return description]
- */
-// export const $filteredWordList = computed([$wordSearch], (wordSearch) => {
-//   let filteredWordList = wordSearch.wordList;
-
-//   // Ensure filteredWordList is defined and is an array
-//   if (!Array.isArray(filteredWordList)) {
-//     filteredWordList = [];
-//   }
-
-//   // Combine filters
-//   filteredWordList = filteredWordList.filter((word) => {
-//     let pass = true;
-
-//     // Filter by letter
-//     if (wordSearch.activeLetterFilter !== "") {
-//       pass = pass && word.wordGroup === wordSearch.activeLetterFilter;
-//     }
-
-//     // Filter by word type
-//     if (wordSearch.activeWordTypeFilter !== "") {
-//       pass =
-//         pass &&
-//         word.berlinerischWordTypes?.nodes.some(
-//           (wordType) => wordType.name === wordSearch.activeWordTypeFilter,
-//         );
-//     }
-
-//     // Filter by Berolinismus
-//     if (wordSearch.berolinismus) {
-//       pass = pass && word.wordProperties?.berolinismus === true;
-//     }
-
-//     return pass;
-//   });
-
-//   // Sort by order
-//   if (wordSearch.activeOrderCategory === "alphabetical") {
-//     // Reassign the filteredWordList to the sorted list, otherwise the DynamicScroller will not update
-//     filteredWordList = [
-//       ...filteredWordList.sort((a, b) => {
-//         if (a?.wordProperties?.berlinerisch && b?.wordProperties?.berlinerisch) {
-//           return wordSearch.alphabeticalOrder === "asc"
-//             ? a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch)
-//             : b.wordProperties.berlinerisch.localeCompare(a.wordProperties.berlinerisch);
-//         } else {
-//           // Default behavior when either is undefined
-//           return 0;
-//         }
-//       }),
-//     ];
-//   }
-
-//   // Sort by date
-//   if (wordSearch.activeOrderCategory === "date") {
-//     filteredWordList = [
-//       ...filteredWordList.sort((a, b) => {
-//         if (a?.dateGmt && b?.dateGmt) {
-//           return wordSearch.dateOrder === "asc"
-//             ? new Date(a.dateGmt).getTime() - new Date(b.dateGmt).getTime()
-//             : new Date(b.dateGmt).getTime() - new Date(a.dateGmt).getTime();
-//         } else {
-//           // Default behavior when either is undefined
-//           return 0;
-//         }
-//       }),
-//     ];
-//   }
-
-//   // Sort by modified date
-//   if (wordSearch.activeOrderCategory === "modifiedDate") {
-//     filteredWordList = [
-//       ...filteredWordList.sort((a, b) => {
-//         if (a?.modifiedGmt && b?.modifiedGmt) {
-//           return wordSearch.modifiedDateOrder === "asc"
-//             ? new Date(a.modifiedGmt).getTime() - new Date(b.modifiedGmt).getTime()
-//             : new Date(b.modifiedGmt).getTime() - new Date(a.modifiedGmt).getTime();
-//         } else {
-//           // Default behavior when either is undefined
-//           return 0;
-//         }
-//       }),
-//     ];
-//   }
-
-//   // Fuse options
-//   const options = {
-//     keys: [
-//       "wordProperties.berlinerisch",
-//       "wordProperties.translations.translation",
-//       "wordProperties.alternativeWords.alternativeWord",
-//     ],
-//   };
-
-//   // Init Fuse
-//   const fuse = new Fuse(filteredWordList, options);
-
-//   // Start Fuse search
-//   const results = fuse.search(wordSearch.search);
-
-//   /**
-//    * Fuse adds a score to each result, which we don't need.
-//    *
-//    * @param   {Array}  result  [result description]
-//    *
-//    * @return  {CleanBerlinerWord[]}          [return description]
-//    */
-//   const cleanResults = results.map((result): CleanBerlinerWord => {
-//     return result.item;
-//   });
-
-//   // If there are no results or the search is empty, return the full word list
-//   if (cleanResults.length === 0 || wordSearch.search === "") {
-//     return filteredWordList;
-//   }
-
-//   return cleanResults;
-// });
 
 export const $searchResultCount = computed($filteredWordList, (filteredWordList) => {
   return filteredWordList.length;
