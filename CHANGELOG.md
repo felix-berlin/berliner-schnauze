@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.4...v3.11.5) (2024-05-09)
+
+
+### Bug Fixes
+
+* missing await on Promises ([fca090e](https://github.com/felix-berlin/berliner-schnauze/commit/fca090e532e6fbc02c540a9e4bf91a7c0237ff84))
+
 ## [3.11.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.3...v3.11.4) (2024-05-09)
 
 
