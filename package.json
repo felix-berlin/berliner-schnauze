@@ -106,7 +106,7 @@
     "vitest": "^1.6.0",
     "vue-eslint-parser": "^9.4.2",
     "vue-tsc": "^2.0.16",
-    "wrangler": "^3.53.1"
+    "wrangler": "^3.55.0"
   },
   "dependencies": {
     "@astrojs/partytown": "^2.1.0",
@@ -122,7 +122,7 @@
     "@sentry/vue": "^7.114.0",
     "@spotlightjs/astro": "^1.0.20",
     "@vueuse/core": "^10.9.0",
-    "astro": "^4.8.1",
+    "astro": "^4.8.2",
     "astro-breadcrumbs": "^2.3.0",
     "astro-env": "^0.0.5",
     "astro-matomo": "^1.5.0",
