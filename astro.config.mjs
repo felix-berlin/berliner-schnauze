@@ -188,7 +188,7 @@ export default defineConfig({
     },
 
     build: {
-      sourcemap: true,
+      sourcemap: true, // This is needed for sentryVitePlugin
     },
   },
 });
