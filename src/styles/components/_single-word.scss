@@ -73,10 +73,6 @@
       }
     }
 
-    .c-badge {
-      --color-background: var(--accent);
-    }
-
     .c-tooltip {
       align-self: flex-start;
 
@@ -185,12 +181,24 @@
   }
 
   &__consonants-vowels {
+    &-word {
+      letter-spacing: 3px;
+    }
+
     .is-consonant {
-      color: var(--orange-500);
+      color: var(--orange-600);
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-300);
+      }
     }
 
     .is-vowel {
-      color: #cfc536;
+      color: #435e6b;
+
+      @include butler-mx.dark-mode-class {
+        color: #cfc536;
+      }
     }
   }
 
@@ -388,6 +396,10 @@
   &__modified {
     margin: 0;
     font-size: 0.8rem;
-    color: color-mix(in srgb, var(--blue) 60%, white);
+    color: color-mix(in srgb, var(--blue) 70%, white);
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
+    }
   }
 }

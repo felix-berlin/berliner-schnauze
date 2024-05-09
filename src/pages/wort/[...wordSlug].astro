@@ -206,7 +206,10 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!
 
         <div class="c-single-word__consonants-vowels">
           <h3>Konsonanten und Vokale</h3>
-          <p set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch!)} />
+          <p
+            class="c-single-word__consonants-vowels-word"
+            set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch!)}
+          />
 
           <p>
             enhält {countLetters(word.wordProperties?.berlinerisch!).vowels}
