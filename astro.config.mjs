@@ -13,6 +13,7 @@ import { z } from "astro/zod";
 import { loadEnv } from "vite";
 import { defineConfig } from "vite";
 import { codecovVitePlugin } from "@codecov/vite-plugin";
+import partytown from "@astrojs/partytown";
 
 const { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, PWA_DEBUG, CODECOV_TOKEN } = loadEnv(
   process.env.NODE_ENV,
@@ -78,6 +79,7 @@ export default defineConfig({
       debug: import.meta.env.DEV,
       heartBeatTimer: 5,
       disableCookies: true,
+      partytown: false,
     }),
     AstroPWA({
       mode: import.meta.env.DEV ? "development" : "production",
@@ -144,6 +146,11 @@ export default defineConfig({
     //   sourceMapsUploadOptions: {
     //     project: import.meta.env.SENTRY_PROJECT,
     //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
+    //   },
+    // }),
+    // partytown({
+    //   config: {
+    //     forward: ["_paq.push"],
     //   },
     // }),
     // sentry(),

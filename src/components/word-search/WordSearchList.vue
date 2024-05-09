@@ -1,17 +1,11 @@
 <template>
   <!-- TODO: replace by <search></search>  -->
-  <div
-    class="c-word-search-list"
-    :class="props.cssClass"
-    role="search"
-  >
+  <div class="c-word-search-list" :class="props.cssClass" role="search">
     <WordSearchFilterToggle />
     <SearchWords />
 
     <p class="c-word-search-list__result-count">
-      {{ searchResultCount }} Ergebnis<template v-if="searchResultCount > 1">
-        se
-      </template>
+      {{ searchResultCount }} {{ searchResultCount === 1 ? "Ergebnis" : "Ergebnisse" }}
     </p>
 
     <WordList />
@@ -19,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
 import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
