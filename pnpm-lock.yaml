@@ -171,12 +171,18 @@ importers:
       '@vue/test-utils':
         specifier: ^2.4.6
         version: 2.4.6
+      astro-eslint-parser:
+        specifier: ^1.0.2
+        version: 1.0.2(typescript@5.4.5)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.38)
       eslint:
         specifier: ^9.2.0
         version: 9.2.0
+      eslint-config-prettier:
+        specifier: ^9.1.0
+        version: 9.1.0(eslint@9.2.0)
       eslint-plugin-astro:
         specifier: ^1.1.2
         version: 1.1.2(eslint@9.2.0)(typescript@5.4.5)
@@ -4029,6 +4035,12 @@ packages:
     engines: {node: '>=12'}
     peerDependencies:
       eslint: '>=6.0.0'
+
+  eslint-config-prettier@9.1.0:
+    resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
+    hasBin: true
+    peerDependencies:
+      eslint: '>=7.0.0'
 
   eslint-plugin-astro@1.1.2:
     resolution: {integrity: sha512-bVKnu0SH5hMxiw0k/gOpbQxZMztW8EYOv1WnK+ofOP1offosmexbYz087kqZ7kFYe2j7Yoz6UIJxisdjFgdTbw==}
@@ -11410,7 +11422,7 @@ snapshots:
       espree: 10.0.1
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.6.0
+      semver: 7.6.1
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -12472,6 +12484,10 @@ snapshots:
     dependencies:
       eslint: 9.2.0
       semver: 7.6.0
+
+  eslint-config-prettier@9.1.0(eslint@9.2.0):
+    dependencies:
+      eslint: 9.2.0
 
   eslint-plugin-astro@1.1.2(eslint@9.2.0)(typescript@5.4.5):
     dependencies:
