@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.3...v3.11.4) (2024-05-09)
+
+
+### Performance Improvements
+
+* make sure there is only one active worker ([ca07c3e](https://github.com/felix-berlin/berliner-schnauze/commit/ca07c3eaafdd45338942b4c5ed62c23b0b09fa4a))
+
 ## [3.11.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.2...v3.11.3) (2024-05-09)
 
 
