@@ -1,4 +1,4 @@
-import { computed, atom, onSet, onStop, onMount } from "nanostores";
+import { computed, atom, onSet, onStop } from "nanostores";
 import { persistentMap } from "@nanostores/persistent";
 import { useViewTransition } from "@utils/helpers.ts";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
@@ -212,11 +212,12 @@ onSet($wordSearch, ({ newValue, abort }) => {
 });
 
 onStop($wordSearch, () => {
-  if (filterWorkerInstance && isWorkerBusy) {
-    filterWorkerInstance.terminate();
-    filterWorkerInstance = undefined;
-    isWorkerBusy = false;
+  if (!(filterWorkerInstance && isWorkerBusy)) {
+    return;
   }
+  filterWorkerInstance.terminate();
+  filterWorkerInstance = undefined;
+  isWorkerBusy = false;
 });
 
 export const $searchResultCount = computed($filteredWordList, (filteredWordList) => {

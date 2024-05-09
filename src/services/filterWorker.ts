@@ -8,8 +8,6 @@ type WordSearchEvent = {
 self.onmessage = (event: WordSearchEvent) => {
   const wordSearch = event.data;
 
-  console.log("WordSearch", wordSearch);
-
   let filteredWordList = wordSearch.wordList || [];
   if (wordSearch.activeLetterFilter || wordSearch.activeWordTypeFilter || wordSearch.berolinismus) {
     filteredWordList = wordSearch.wordList.filter((word) => {
