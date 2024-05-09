@@ -84,8 +84,8 @@ importers:
         specifier: ^0.10.3
         version: 0.10.3
       natural:
-        specifier: ^6.12.0
-        version: 6.12.0
+        specifier: ^7.0.5
+        version: 7.0.5
       pagefind:
         specifier: ^1.1.0
         version: 1.1.0
@@ -5597,8 +5597,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  natural@6.12.0:
-    resolution: {integrity: sha512-ZV/cuaxOvJ7CSxQRYHc6nlx7ql6hVPQc20N5ubdqVbotWnnqsNc+0/QG+ACIC3XPQ4rfrQrdC/1k47v1cSszTQ==}
+  natural@7.0.5:
+    resolution: {integrity: sha512-tWYWy4d/24SqHTtHVkUPTH1Lj5nnjWnHxthvFKKqH1ApCQd27eZEgHxiq6ce+bfN37RdXiLMqdo3T0h/5OcZ2A==}
     engines: {node: '>=0.4.10'}
 
   neo-async@2.6.2:
@@ -14322,7 +14322,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  natural@6.12.0:
+  natural@7.0.5:
     dependencies:
       afinn-165: 1.0.4
       afinn-165-financialmarketnews: 3.0.0

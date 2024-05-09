@@ -158,11 +158,13 @@ export const similarSoundingWords = (allWords: BerlinerWord[], currentWord: Berl
     return [];
   }
 
+  const SoundEx = natural.SoundEx;
+
   const allWordsWithoutCurrent = allWords.filter((word) => word.id !== currentWord?.id);
   return allWordsWithoutCurrent.map((word) => {
     return {
       word: word,
-      isSimilar: natural.SoundEx.compare(
+      isSimilar: new SoundEx().compare(
         word.wordProperties?.berlinerisch,
         currentWord.wordProperties?.berlinerisch,
       ),
