@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.2...v3.11.3) (2024-05-09)
+
+
+### Bug Fixes
+
+* a11y color contrast ([0ad5b50](https://github.com/felix-berlin/berliner-schnauze/commit/0ad5b50308868b0c741d04bdacfc13424d0e4be9))
+* broken filter ([578b76c](https://github.com/felix-berlin/berliner-schnauze/commit/578b76c4f87ab9a19efaa4d13e67888ae50ab886))
+* missing terminate for worker ([bee5911](https://github.com/felix-berlin/berliner-schnauze/commit/bee5911a675c0c41235f28a0c8d95634709546ec))
+* wording ([6e96b7f](https://github.com/felix-berlin/berliner-schnauze/commit/6e96b7f281b704bfe2e03cc5628463f6ad1b7909))
+
+
+### Performance Improvements
+
+* add partytown and config for matomo ([f6d3d27](https://github.com/felix-berlin/berliner-schnauze/commit/f6d3d27b68e0d021dd2afab10f66fe724d4fdaa5))
+* better types and perf improvements ([59e892b](https://github.com/felix-berlin/berliner-schnauze/commit/59e892ba17b5a7472d05e14def907c504052a2ed))
+* **filterWorker:** combine sort, use fuse only when search is used ([b045d7d](https://github.com/felix-berlin/berliner-schnauze/commit/b045d7d359c342a72c0f512745903211ae62a875))
+* move filter and sort to own worker ([0e9d8d7](https://github.com/felix-berlin/berliner-schnauze/commit/0e9d8d72c97e689bd9b380c1b0c8b4fc7a279315))
+
 ## [3.11.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.1...v3.11.2) (2024-05-02)
 
 
