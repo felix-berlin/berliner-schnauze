@@ -1,4 +1,4 @@
-import { computed, atom, onSet, onStop } from "nanostores";
+import { computed, atom, onSet, onStop, task } from "nanostores";
 import { persistentMap } from "@nanostores/persistent";
 import { useViewTransition } from "@utils/helpers.ts";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
@@ -55,6 +55,21 @@ export const $wordSearch = persistentMap<WordList>(
     },
   },
 );
+
+const getLocalWords = async () => {
+  // const url = import.meta.env.DEV ? "http://localhost:4321" : import.meta.env.PUBLIC_SITE_URL;
+  const url = import.meta.env.DEV
+    ? "http://localhost:4321"
+    : "https://feature-from--local-data.berliner-schnauze.pages.dev";
+  return await fetch(`${url}/api/getWords.json`).then((res) => res.json());
+};
+
+task(async () => {
+  const wordData = await getLocalWords();
+  $wordSearch.setKey("wordList", wordData.words);
+  $wordSearch.setKey("letterGroups", wordData.wordGroups);
+  $wordSearch.setKey("wordTypes", wordData.wordTypes);
+});
 
 export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
   let count = 0;
