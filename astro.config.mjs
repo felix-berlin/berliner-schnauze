@@ -186,5 +186,9 @@ export default defineConfig({
     css: {
       preprocessorMaxWorkers: true,
     },
+
+    build: {
+      sourcemap: true,
+    },
   },
 });
