@@ -1,10 +1,10 @@
-import { fetchAPI } from "@services/fetchApi";
-import { seo } from "@services/graphQlQueryParts";
+import { fetchAPI } from "@services/fetchApi.ts";
+import { seo } from "@services/graphQlQueryParts.ts";
 import type {
   RootQueryToBerlinerWordConnection,
   RootQueryToBerlinerWordConnectionEdge,
   BerlinerWord,
-} from "@ts_types/generated/graphql";
+} from "@ts_types/generated/graphql.ts";
 
 type WordEdge = {
   node: {
@@ -64,6 +64,7 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
 export const getAllWords = async (
   orderByField = "TITLE",
   orderByType = "ASC",
+  stati = import.meta.env.SHOW_TEST_CONTENT ? "[DRAFT, PUBLISH]" : "[PUBLISH]",
 ): Promise<RootQueryToBerlinerWordConnectionEdge[]> => {
   let allWords: WordEdge[] = [];
   let cursor: string | null = null;
@@ -72,9 +73,10 @@ export const getAllWords = async (
   while (true) {
     const data: BerlinerWordsData = await fetchAPI(`
     {
-      berlinerWords(first: ${pageSize}, after: ${
-        cursor ? `"${cursor}"` : null
-      }, where: {status: PUBLISH, orderby: {field: ${orderByField}, order: ${orderByType}}}) {
+      berlinerWords(
+        first: ${pageSize},
+        after: ${cursor ? `"${cursor}"` : null},
+        where: {orderby: {field: ${orderByField}, order: ${orderByType}}, stati: ${stati}}) {
         edges {
           node {
             id
@@ -87,11 +89,27 @@ export const getAllWords = async (
             wordProperties {
               article
               berlinerisch
+              berlinerischAudio {
+                audio {
+                  node {
+                    mediaItemUrl
+                  }
+                }
+                gender
+              }
               learnMore
               berolinismus
               examples {
                 example
                 exampleExplanation
+                exampleAudio {
+                  gender
+                  audio {
+                    node {
+                      mediaItemUrl
+                    }
+                  }
+                }
               }
               translations {
                 translation
@@ -114,6 +132,18 @@ export const getAllWords = async (
                 wikimediaFile
                 description
                 caption
+              }
+              images {
+                nodes {
+                  sourceUrl
+                  mediaDetails {
+                    height
+                    width
+                  }
+                  caption(format: RAW)
+                  altText
+                  description(format: RAW)
+                }
               }
             }
             berlinerischWordTypes {

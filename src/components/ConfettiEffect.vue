@@ -1,6 +1,10 @@
 <template>
   <div class="c-confetti__wrapper">
-    <div v-for="index in pieces" :key="index" class="c-confetti__piece" />
+    <div
+      v-for="index in pieces"
+      :key="index"
+      class="c-confetti__piece"
+    />
   </div>
 </template>
 

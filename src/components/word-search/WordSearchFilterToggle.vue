@@ -7,7 +7,10 @@
   >
     <div class="c-word-search-filter-toggle__icon-wrapper">
       <Filter class="c-word-search-filter-toggle__icon" />
-      <span v-if="activeFilterCount > 0" class="c-word-search-filter-toggle__counter">
+      <span
+        v-if="activeFilterCount > 0"
+        class="c-word-search-filter-toggle__counter"
+      >
         {{ activeFilterCount }}
       </span>
     </div>
@@ -17,7 +20,7 @@
 
 <script setup lang="ts">
 import Filter from "virtual:icons/lucide/filter";
-import { $toggleWordListFilterFlyout, $activeFilterCount } from "@stores/index";
+import { $toggleWordListFilterFlyout, $activeFilterCount } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
 
 const activeFilterCount = useStore($activeFilterCount);

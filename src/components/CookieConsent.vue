@@ -1,6 +1,10 @@
 <template>
   <div>
-    <button type="button" class="c-button" @click="CookieConsent.showPreferences()">
+    <button
+      type="button"
+      class="c-button"
+      @click="CookieConsent.showPreferences()"
+    >
       Cookie Einstellungen
     </button>
   </div>

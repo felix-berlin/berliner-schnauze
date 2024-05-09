@@ -1,4 +1,4 @@
-import { atom, onMount, action } from "nanostores";
+import { atom, onMount } from "nanostores";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: Array<string>;
@@ -47,25 +47,21 @@ export const isPwaInstalled: () => boolean = () => {
  *
  * @return  {Promise<void>}
  */
-export const triggerPwaInstall: () => Promise<void> = action(
-  $installPrompt,
-  "triggerPwaInstall",
-  async () => {
-    if (!$installPrompt.get()) return;
+export const triggerPwaInstall = async (): Promise<void> => {
+  if (!$installPrompt.get()) return;
 
-    await $installPrompt?.get()?.prompt();
-    // console.log(`Install prompt was: ${result?.outcome}`);
+  await $installPrompt?.get()?.prompt();
+  // console.log(`Install prompt was: ${result?.outcome}`);
 
-    disableInAppInstallPrompt();
-  },
-);
+  disableInAppInstallPrompt();
+};
 
 /**
  * Disables the PWA install prompt.
  *
  * @return  {void}
  */
-export const disableInAppInstallPrompt = action($installPrompt, "disableInAppInstallPrompt", () => {
+export const disableInAppInstallPrompt = (): void => {
   $installPrompt.set(null);
   $showInstallButton.set(false);
-});
+};

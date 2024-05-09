@@ -4,7 +4,7 @@
 @use "@sass-butler/functions" as butler-fn;
 @use "@sass-butler/mixins" as butler-mx;
 
-$icon-color: currentcolor;
+$icon-color: #2b333b;
 $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$icon-color}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>";
 
 .c-input,
@@ -36,7 +36,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   appearance: none;
   color: var(--color, var(--color-body));
 
-  &:focus {
+  &:focus-within {
     box-shadow: 0 0 0 var(--box-shadow-focus);
   }
 
@@ -79,13 +79,22 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   --spacing-inner-vertical: #{vars.$spacer};
   --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
   --size-font: 1rem;
-  --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75} #{vars.$spacer *
-    1.5};
+  --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75} #{vars.$spacer};
+  --color-background: var(--orange-100);
+  --color-border: var(--orange-600);
+
+  @include butler-mx.dark-mode-class {
+    --color-background: var(--new-blue-600);
+    --color-border: color-mix(in srgb, var(--blue) 80%, white);
+
+    background-blend-mode: screen;
+  }
 
   padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
   font-size: var(--size-font);
   font-weight: 500;
   cursor: pointer;
+
   background: {
     image: url("#{butler-fn.escape-svg($icon-chevron-down)}");
     repeat: no-repeat;
@@ -104,7 +113,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 
 .c-input--checkbox,
 .c-input--radio {
-  --color-active: var(--orange-400);
+  --color-active: var(--orange-500);
   --color-inner-active: #fff;
   --color-border-disabled-checked: color-mix(in srgb, var(--orange-400) 60%, white);
   --color-background-disabled-checked: color-mix(in srgb, var(--orange-400) 80%, white);

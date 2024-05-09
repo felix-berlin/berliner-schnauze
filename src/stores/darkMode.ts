@@ -1,5 +1,4 @@
 import { persistentAtom } from "@nanostores/persistent";
-import { action } from "nanostores";
 
 export type DarkMode = boolean;
 
@@ -16,6 +15,6 @@ export const $isDarkMode = persistentAtom<DarkMode>("darkMode", false, {
   },
 });
 
-export const setDarkMode = action($isDarkMode, "setDarkMode", (store, value: DarkMode) => {
-  store.set(value);
-});
+export const setDarkMode = (value: DarkMode) => {
+  $isDarkMode.set(value);
+};

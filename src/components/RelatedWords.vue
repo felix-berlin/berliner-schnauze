@@ -1,26 +1,28 @@
 <template>
   <section class="c-related-words">
-    <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
+    <h2 class="c-related-words__headline">
+      Bock mehr Wörter kennen zu lernen?
+    </h2>
     <div class="c-related-words__words">
       <template v-for="word in xRandomWords(words, numberOfWords)">
         <a
           v-if="word"
           :key="word.id"
-          :href="routeToWord(word.slug)"
+          :href="routeToWord(word.slug!)"
           class="c-related-words__word"
           :title="`Erfahre mehr über ${word.wordProperties?.berlinerisch}`"
         >
           {{ word.wordProperties?.berlinerisch }}
         </a>
       </template>
-      <slot></slot>
+      <slot />
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { routeToWord } from "@utils/helpers";
-import type { BerlinerWord } from "@ts_types/generated/graphql";
+import { routeToWord } from "@utils/helpers.ts";
+import type { BerlinerWord } from "@ts_types/generated/graphql.ts";
 
 interface RelatedWordsProps {
   numberOfWords?: number;

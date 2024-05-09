@@ -1,2 +1,2 @@
-export * from "@services/getWords";
-export * from "@services/getPage";
+export * from "@services/getWords.ts";
+export * from "@services/getPage.ts";

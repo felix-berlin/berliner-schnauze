@@ -6,18 +6,65 @@ import Icons from "unplugin-icons/vite";
 import allAlias from "./alias.ts";
 import AstroPWA from "@vite-pwa/astro";
 import sentry from "@sentry/astro";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
+import astroEnv from "astro-env";
+import { z } from "astro/zod";
+import { loadEnv } from "vite";
+import { defineConfig } from "vite";
+import { codecovVitePlugin } from "@codecov/vite-plugin";
+import partytown from "@astrojs/partytown";
+
+const { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, PWA_DEBUG, CODECOV_TOKEN } = loadEnv(
+  process.env.NODE_ENV,
+  process.cwd(),
+  "",
+);
+
+const envBoolean = (envVar) => {
+  return z
+    .string()
+    .refine((val) => val === "true" || val === "false", {
+      message: `${envVar} must be either 'true' or 'false'`,
+    })
+    .transform((val) => val === "true");
+};
 
 // https://astro.build/config
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
-  prefetch: true,
+  prefetch: false,
   image: {
-    domains: ["upload.wikimedia.org"],
+    domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
   integrations: [
+    astroEnv({
+      schema: z.object({
+        PUBLIC_WP_API: z.string().url(),
+        PUBLIC_WP_REST_API: z.string().url(),
+        WP_AUTH_USER: z.optional(z.string()),
+        WP_AUTH_PASS: z.optional(z.string()),
+        PUBLIC_WP_AUTH_REFRESH_TOKEN: z.string(),
+        PUBLIC_SUGGEST_WORD_FORM_ID: z.string(),
+        ENABLE_ANALYTICS: envBoolean("ENABLE_ANALYTICS"),
+        PUBLIC_SITE_NAME: z.string(),
+        PUBLIC_SITE_URL: z.string().url(),
+        PUBLIC_TURNSTILE_SITE_KEY: z.string(),
+        SENTRY_AUTH_TOKEN: z.string(),
+        SENTRY_DNS: z.optional(z.string().url()),
+        PUBLIC_SENTRY_DNS: z.optional(z.string().url()),
+        SENTRY_PROJECT: z.string(),
+        SENTRY_ORG: z.string(),
+        PUBLIC_SENTRY_ENVIRONMENT: z.string(),
+        PUBLIC_SENTRY_TRACES_SAMPLE_RATE: z.string().transform((value) => parseFloat(value)),
+        WIKIMEDIA_API_AUTH_TOKEN: z.string(),
+        SHOW_TEST_DATA: envBoolean("SHOW_TEST_DATA"),
+        PWA_DEBUG: z.optional(envBoolean("PWA_DEBUG")),
+        CODECOV_TOKEN: z.optional(z.string()),
+      }),
+    }),
     vue({
-      appEntrypoint: "/src/pages/_app",
+      appEntrypoint: "src/pages/_app",
       script: {
         propsDestructure: true,
       },
@@ -32,12 +79,13 @@ export default defineConfig({
       debug: import.meta.env.DEV,
       heartBeatTimer: 5,
       disableCookies: true,
+      partytown: false,
     }),
     AstroPWA({
       mode: import.meta.env.DEV ? "development" : "production",
       base: "/",
       scope: "/",
-      includeAssets: ["favicon.ico"],
+      includeAssets: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
       registerType: "autoUpdate",
       manifest: {
         name: "Berliner Schnauze",
@@ -81,26 +129,32 @@ export default defineConfig({
       },
       workbox: {
         globDirectory: "dist",
-        navigateFallback: null,
-        globPatterns: ["**/*.{js,css,svg,png,jpg,jpeg,gif,webp,avif,woff,woff2,ttf,eot,ico}"],
+        // navigateFallback: "/",
+        globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
       },
       devOptions: {
-        enabled: false,
+        enabled: PWA_DEBUG ?? false,
         navigateFallbackAllowlist: [/^\//],
       },
       experimental: {
         directoryAndTrailingSlashHandler: true,
       },
     }),
-    sentry({
-      dsn: import.meta.env.SENTRY_DNS,
-      tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
-      sourceMapsUploadOptions: {
-        project: import.meta.env.SENTRY_PROJECT,
-        authToken: import.meta.env.SENTRY_AUTH_TOKEN,
-      },
-    }),
-    spotlightjs(),
+    // sentry({
+    //   dsn: import.meta.env.SENTRY_DNS,
+    //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
+    //   sourceMapsUploadOptions: {
+    //     project: import.meta.env.SENTRY_PROJECT,
+    //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
+    //   },
+    // }),
+    // partytown({
+    //   config: {
+    //     forward: ["_paq.push"],
+    //   },
+    // }),
+    // sentry(),
+    // spotlightjs(),
   ],
   vite: {
     plugins: [
@@ -113,10 +167,24 @@ export default defineConfig({
           }
         },
       }), // chooses the compiler automatically
+      sentryVitePlugin({
+        authToken: SENTRY_AUTH_TOKEN,
+        org: SENTRY_ORG,
+        project: SENTRY_PROJECT,
+      }),
+      codecovVitePlugin({
+        enableBundleAnalysis: CODECOV_TOKEN !== undefined,
+        bundleName: "berliner-schnauze",
+        uploadToken: CODECOV_TOKEN,
+      }),
     ],
 
     resolve: {
       alias: allAlias,
+    },
+
+    css: {
+      preprocessorMaxWorkers: true,
     },
   },
 });

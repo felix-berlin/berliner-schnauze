@@ -1,0 +1,33 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.c-fact-card {
+  background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 20%, transparent));
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--new-blue-200);
+
+  @include butler-mx.dark-mode-class {
+    --color-background: rgb(0 0 0 / 10%);
+  }
+
+  &__headline {
+    font-size: butler-fn.fluid(18, 24, 320, 1260);
+    line-height: 1.2;
+    margin-bottom: 0;
+
+    &::first-letter {
+      initial-letter: 2;
+      margin-right: 0.25rem;
+    }
+  }
+
+  &__text {
+    margin-top: 1.5rem;
+    line-height: 1.5;
+  }
+
+  a {
+    text-decoration: underline dashed;
+  }
+}

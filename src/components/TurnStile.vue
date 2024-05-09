@@ -1,11 +1,14 @@
 <template>
-  <div :id="wrapperId" class="c-turnstile"></div>
+  <div
+    :id="wrapperId"
+    class="c-turnstile"
+  />
 </template>
 
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useStore } from "@nanostores/vue";
-import { $isDarkMode } from "@stores/index";
+import { $isDarkMode } from "@stores/index.ts";
 
 interface TurnStileProps {
   wrapperId?: string;

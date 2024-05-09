@@ -15,7 +15,7 @@ import {
 } from "floating-vue";
 
 beforeAll(() => {
-  vi.stubEnv("PUBLIC_WP_API", "https://cms.webshaped.de/api");
+  vi.stubEnv("PUBLIC_WP_API", "https://cms.berliner-schnauze.wtf/api");
 
   config.global.components = {
     VDropdown,
@@ -35,3 +35,7 @@ const ResizeObserverMock = vi.fn(() => ({
   disconnect: vi.fn(),
 }));
 vi.stubGlobal("ResizeObserver", ResizeObserverMock);
+// Mock the HTMLDialogElement.prototype.showModal() method
+global.HTMLDialogElement.prototype.showModal = () => {};
+// Mock the HTMLDialogElement.prototype.close() method
+global.HTMLDialogElement.prototype.close = () => {};

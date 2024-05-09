@@ -74,11 +74,10 @@
       --color-border: var(--yellow-500);
       --style-border: dashed;
       --color-background: var(--orange-500);
-      --color: var(--yellow-500);
+      --color: black;
 
       @include butler-mx.dark-mode-class {
-        --color-border: var(--yellow-500);
-        --color-background: var(--orange-500);
+        --color: black;
       }
     }
   }

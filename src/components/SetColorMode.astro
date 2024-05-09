@@ -30,6 +30,24 @@
     }
   };
 
+  /**
+   * Update meta theme color.
+   *
+   * @return  {void}
+   */
+  const setThemeColor = () => {
+    const metaThemeColor = document.querySelector("meta[name=theme-color]");
+    const themeColor = isDarkTheme() === "true" ? "#2b333b" : "#fad0b0";
+    metaThemeColor.setAttribute("content", themeColor);
+  };
+
+  /**
+   * Needs to be set on load because theme-color meta tag comes later in the loading sequence
+   */
+  window.onload = function () {
+    setThemeColor();
+  };
+
   setDarkClass();
 
   localStorage.setItem("darkMode", isDarkTheme());

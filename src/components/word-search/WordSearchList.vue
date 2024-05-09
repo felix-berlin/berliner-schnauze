@@ -5,7 +5,7 @@
     <SearchWords />
 
     <p class="c-word-search-list__result-count">
-      {{ searchResultCount }} Ergebnis<template v-if="searchResultCount > 1">se</template>
+      {{ searchResultCount }} {{ searchResultCount === 1 ? "Ergebnis" : "Ergebnisse" }}
     </p>
 
     <WordList />
@@ -16,7 +16,7 @@
 import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
-import { $wordSearch, $searchResultCount } from "@stores/index";
+import { $wordSearch, $searchResultCount } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
 
 type WordSearchListProps = {

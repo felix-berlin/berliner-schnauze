@@ -5,8 +5,8 @@ import BearWalking from "@assets/images/bear-walking.png";
 import CafeAchteck from "@assets/images/800px-Berlin_Cafe_Achteck_BusB.jpg";
 import NavList from "@components/NavList.vue";
 import InstallApp from "@components/InstallApp.vue";
-import type { DefineComponent } from "vue";
 import Download from "virtual:icons/lucide/download";
+import CarbonBadge from "@components/CarbonBadge.vue";
 
 // const randomWord = () => {
 //   // TODO: Implement random word
@@ -80,7 +80,8 @@ const navMenu2 = [
       <Picture
         src={BearWalking}
         formats={["avif", "webp"]}
-        widths={[140, 168, 193, 364, 330, 496, 700, BearWalking.width]}
+        widths={[140, 168, 193, 264, 364, 394, 538, BearWalking.width]}
+        sizes={`(max-width: 20rem) 140px, (max-width: 23.43rem) 168px, (max-width: 26.56rem) 193px, (max-width: 35.44rem) 264px, (max-width: 48rem) 364px, (max-width: 64rem) 394px, (max-width: 90rem) 538px, ${BearWalking.width}px`}
         alt="Ein Bär der durch die Stadt läuft"
         class="c-footer__farewell-image"
       />
@@ -143,6 +144,7 @@ const navMenu2 = [
       >Website Version: {version}</a
     >
     <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
+    <CarbonBadge />
     <p>Hergestellt mit🐻-Kräften in Berlin</p>
   </div>
 </div>

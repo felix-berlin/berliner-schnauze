@@ -1,5 +1,10 @@
 <template>
-  <VDropdown placement="bottom-end" class="c-options-dropdown" distance="9" theme="word-options">
+  <VDropdown
+    placement="bottom-end"
+    class="c-options-dropdown"
+    distance="9"
+    theme="word-options"
+  >
     <button
       type="button"
       class="c-options-dropdown__options c-button c-button--center-icon"
@@ -7,19 +12,24 @@
     >
       <span
         class="c-options-dropdown__options-icon c-button--center-icon c-icon c-icon--lucide-more-vertical"
-      >
-      </span>
+      />
     </button>
 
     <template #popper>
+      <slot name="before" />
+
       <button
         v-if="shareIsSupported"
         aria-label="Wort teilen"
         type="button"
         class="c-options-dropdown__copy-button c-button"
-        @click="shareWord(word.slug!)"
+        @click="shareWord(slug)"
       >
-        <Share2 width="18" height="18" class="c-options-dropdown__icon-button" />
+        <Share2
+          width="18"
+          height="18"
+          class="c-options-dropdown__icon-button"
+        />
 
         <span class="c-options-dropdown__copy-text">Wort teilen</span>
       </button>
@@ -29,9 +39,13 @@
         aria-label="Link zum Wort kopieren"
         type="button"
         class="c-options-dropdown__copy-button c-button"
-        @click="copyWordPageUrlToClipboard(word.slug!)"
+        @click="copyWordPageUrlToClipboard(slug)"
       >
-        <Link width="18" height="18" class="c-options-dropdown__icon-button" />
+        <Link
+          width="18"
+          height="18"
+          class="c-options-dropdown__icon-button"
+        />
 
         <span class="c-options-dropdown__copy-text">Link kopieren</span>
       </button>
@@ -41,12 +55,18 @@
         aria-label="Wort kopieren"
         type="button"
         class="c-options-dropdown__copy-button c-button"
-        @click="copyNameToClipboard(word.wordProperties?.berlinerisch!)"
+        @click="copyNameToClipboard(berlinerisch)"
       >
-        <Copy width="18" height="18" class="c-options-dropdown__icon-button" />
+        <Copy
+          width="18"
+          height="18"
+          class="c-options-dropdown__icon-button"
+        />
 
         <span class="c-options-dropdown__copy-text">Wort kopieren</span>
       </button>
+
+      <slot name="after" />
     </template>
   </VDropdown>
 </template>
@@ -56,16 +76,17 @@ import { ref } from "vue";
 import Copy from "virtual:icons/lucide/copy";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
-import { routeToWord } from "@utils/helpers";
+import { routeToWord } from "@utils/helpers.ts";
 import { useClipboard, useShare } from "@vueuse/core";
-import type { CleanBerlinerWord } from "@stores/index";
-import { createToastNotify } from "@stores/index";
+import type { BerlinerWord } from "@stores/index.ts";
+import { createToastNotify } from "@stores/index.ts";
 
 interface WordProps {
-  word: CleanBerlinerWord;
+  berlinerisch: BerlinerWord["wordProperties"]["berlinerisch"];
+  slug: BerlinerWord["slug"];
 }
 
-const { word } = defineProps<WordProps>();
+const { berlinerisch, slug } = defineProps<WordProps>();
 
 const { text, copy, copied, isSupported: clipBoardIsSupported } = useClipboard();
 const { share, isSupported: shareIsSupported } = useShare();

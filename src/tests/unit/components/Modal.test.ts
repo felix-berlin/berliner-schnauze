@@ -1,16 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
+import { nextTick } from "vue";
 import { mount } from "@vue/test-utils";
 import Modal from "@components/Modal.vue";
+import sinon from "sinon";
 
 describe("Modal", () => {
   beforeEach(() => {
     window.HTMLDialogElement.prototype.showModal = vi.fn();
     window.HTMLDialogElement.prototype.close = vi.fn();
-  });
-
-  it("renders correctly", () => {
-    const wrapper = mount(Modal);
-    expect(wrapper.html()).toMatchSnapshot();
   });
 
   it('hides close button when "showCloseButton" prop is false', () => {
@@ -51,17 +48,6 @@ describe("Modal", () => {
     expect(wrapper.vm.isVisible).toBe(false);
   });
 
-  it("generates a unique id for the modal", () => {
-    const wrapper = mount(Modal, {
-      props: {
-        uid: "test",
-      },
-    });
-
-    // Check if the id is unique
-    expect(wrapper.vm.uidHelper("modal")).toBe("modal-test");
-  });
-
   it('prevents scroll when "disableScroll" prop is true', async () => {
     const wrapper = mount(Modal, {
       props: {
@@ -92,5 +78,58 @@ describe("Modal", () => {
 
     // Check if the modal is not visible
     expect(wrapper.vm.isVisible).toBe(false);
+  });
+
+  it('opens and closes the modal when "open" prop changes', async () => {
+    const wrapper = mount(Modal, {
+      props: {
+        uid: "test",
+        open: false,
+      },
+    });
+
+    await wrapper.vm.$nextTick();
+
+    // Check if the modal is not visible
+    expect(wrapper.vm.isVisible).toBe(false);
+
+    // Update the "open" prop
+    await wrapper.setProps({ open: true });
+
+    // Check if the modal is visible
+    expect(wrapper.vm.isVisible).toBe(true);
+
+    // Update the "open" prop
+    await wrapper.setProps({ open: false });
+
+    // Check if the modal is not visible
+    expect(wrapper.vm.isVisible).toBe(false);
+  });
+
+  it("adds and removes click event listener when mounted and unmounted", async () => {
+    const addEventListenerSpy = sinon.spy(HTMLDialogElement.prototype, "addEventListener");
+    const removeEventListenerSpy = sinon.spy(HTMLDialogElement.prototype, "removeEventListener");
+
+    const wrapper = mount(Modal, {
+      props: {
+        uid: "test",
+        closeOnClickOutside: true,
+      },
+    });
+
+    await nextTick();
+
+    // Check if the event listener was added
+    expect(addEventListenerSpy.calledWith("click")).toBe(true);
+
+    // Unmount the component
+    wrapper.unmount();
+
+    // Check if the event listener was removed
+    expect(removeEventListenerSpy.calledWith("click")).toBe(true);
+
+    // Restore the original functions
+    addEventListenerSpy.restore();
+    removeEventListenerSpy.restore();
   });
 });

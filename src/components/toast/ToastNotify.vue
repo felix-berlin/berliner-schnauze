@@ -8,9 +8,15 @@
     :class="`c-toast-notify--${status} c-toast-notify--${position}`"
     :style="stylePosition"
   >
-    <Component :is="toastIconMap[status]" v-if="showStatusIcon" class="c-toast-notify__icon" />
+    <Component
+      :is="toastIconMap[status]"
+      v-if="showStatusIcon"
+      class="c-toast-notify__icon"
+    />
 
-    <div class="c-toast-notify__message">{{ message }}</div>
+    <div class="c-toast-notify__message">
+      {{ message }}
+    </div>
 
     <button
       v-if="showClose"
@@ -18,7 +24,10 @@
       class="c-toast-notify__close c-button c-button--center-icon"
       @click="hideToast()"
     >
-      <Close :width="12" :height="12" />
+      <Close
+        :width="12"
+        :height="12"
+      />
     </button>
   </div>
 </template>
@@ -26,13 +35,13 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeMount, watch, nextTick, reactive } from "vue";
 import { useSwipe } from "@vueuse/core";
-import { removeToastById, supportsPopover } from "@stores/index";
+import { removeToastById, supportsPopover } from "@stores/index.ts";
 import Info from "virtual:icons/lucide/info";
 import Error from "virtual:icons/lucide/x-circle";
 import Warning from "virtual:icons/lucide/alert-circle";
 import Success from "virtual:icons/lucide/check-circle-2";
 import Close from "virtual:icons/lucide/x";
-import type { ToastNotify } from "@stores/index";
+import type { ToastNotify } from "@stores/index.ts";
 
 type Position = "bottom" | "left" | "right" | "top";
 
@@ -41,8 +50,8 @@ type StylePositionType = {
 };
 
 const {
-  id,
   message,
+  id = crypto.randomUUID(),
   status = "info",
   showStatusIcon = true,
   position = "top-right",

@@ -1,0 +1,235 @@
+---
+import type { WordProperties, MediaItem } from "@ts_types/generated/graphql";
+import "photoswipe/style.css";
+import { Picture, getImage } from "astro:assets";
+import type { GetImageResult } from "astro:assets";
+
+type ImageGalleryProps = {
+  images: WordProperties["images"];
+  id?: string;
+  widths: number[];
+  sizes: string;
+  formats?: string[];
+  lightboxSizes?: string;
+  lightboxWidths?: number[];
+  loading?: "lazy" | "eager";
+};
+
+const {
+  images,
+  id = `gallery-${crypto.randomUUID()}`,
+  widths,
+  sizes,
+  formats = ["avif", "webp", "jpeg"],
+  lightboxSizes,
+  lightboxWidths,
+  loading = "lazy",
+} = Astro.props as ImageGalleryProps;
+
+const imageList = images?.nodes as Array<MediaItem>;
+
+/**
+ * Generate lightbox images
+ */
+const lightboxImageList = await Promise.all(
+  imageList.map(async (image) => {
+    const images: { [key: string]: GetImageResult } = {};
+
+    for (const format of formats) {
+      images[format] = await getImage({
+        src: image.sourceUrl!,
+        format: format,
+        width: image.mediaDetails?.width,
+        height: image.mediaDetails?.height,
+        widths: lightboxWidths || null,
+        sizes: `${lightboxSizes}, ${image.mediaDetails?.width!}px` || null,
+      });
+    }
+
+    return images;
+  }),
+);
+---
+
+{
+  images && images?.nodes && (
+    <image-gallery data-id={id} data-formats={formats}>
+      <div class="c-image-gallery" id={id}>
+        {imageList?.map((image, index) => {
+          return (
+            <figure class="c-image-gallery__item">
+              <a
+                href={lightboxImageList[index].jpeg.src}
+                data-pswp-webp-srcset={lightboxImageList[index].webp.srcSet.attribute}
+                data-pswp-avif-srcset={lightboxImageList[index].avif.srcSet.attribute}
+                data-pswp-srcset={lightboxImageList[index].jpeg.srcSet.attribute}
+                data-pswp-width={lightboxImageList[index].jpeg.attributes.width}
+                data-pswp-height={lightboxImageList[index].jpeg.attributes.height}
+                data-pswp-sizes={lightboxImageList[index].jpeg.attributes.sizes}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Bild in Originalgröße öffnen"
+                class="c-image-gallery__link"
+              >
+                <Picture
+                  src={image.sourceUrl!}
+                  alt={image.altText!}
+                  width={image.mediaDetails?.width!}
+                  height={image.mediaDetails?.height!}
+                  formats={formats}
+                  widths={widths}
+                  sizes={`${sizes}, ${image.mediaDetails?.width!}px`}
+                  class="c-image-gallery__image"
+                  loading={loading}
+                />
+              </a>
+              {(image?.caption || image?.description) && (
+                <figcaption class="c-image-gallery__caption">
+                  <p set:html={image.caption} />
+                  <i class="c-image-gallery__description">{image.description}</i>
+                </figcaption>
+              )}
+            </figure>
+          );
+        })}
+      </div>
+    </image-gallery>
+  )
+}
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import type { Content as PhotoSwipeContent } from "photoswipe/lightbox";
+
+  interface Content extends PhotoSwipeContent {
+    pictureElement?: HTMLPictureElement;
+  }
+
+  class ImageGallery extends HTMLElement {
+    lightbox: PhotoSwipeLightbox | null = null;
+
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      if (!this.lightbox) {
+        this.lightbox = new PhotoSwipeLightbox({
+          gallery: `#${this.dataset.id}`,
+          children: ".c-image-gallery__link",
+          pswpModule: () => import("photoswipe"),
+        });
+
+        // Parse data-pswp attributes
+        this.lightbox.addFilter("itemData", (itemData, index) => {
+          const webpSrcSet = itemData.element?.dataset.pswpWebpSrcset;
+          const avifSrcSet = itemData.element?.dataset.pswpAvifSrcset;
+          const sizes = itemData.element?.dataset.pswpSizes;
+          const srcSet = itemData.element?.dataset.pswpSrcset;
+
+          if (webpSrcSet) itemData.webpSrcSet = webpSrcSet;
+          if (avifSrcSet) itemData.avifSrcSet = avifSrcSet;
+          if (sizes) itemData.sizes = sizes;
+          if (srcSet) itemData.srcSet = srcSet;
+          return itemData;
+        });
+
+        // use <picture> instead of <img>
+        this.lightbox.on("contentLoad", (e) => {
+          const { content, isLazy } = e;
+
+          if (content.data.webpSrcSet || content.data.avifSrcSet) {
+            // prevent to stop the default behavior
+            e.preventDefault();
+
+            const formats = this.dataset.formats?.split(",") || [];
+
+            content.pictureElement = this.createPictureElement(content, formats);
+
+            content.state = "loading";
+            if (content.element && content.element instanceof HTMLImageElement) {
+              if (content.element?.complete) {
+                content.onLoaded();
+              } else {
+                content.element.onload = () => {
+                  content.onLoaded();
+                };
+
+                content.element.onerror = () => {
+                  content.onError();
+                };
+              }
+            }
+          }
+        });
+
+        // by default PhotoSwipe appends <img>,
+        // but we want to append <picture>
+        this.lightbox.on("contentAppend", (e) => {
+          const { content } = e;
+          if (content.pictureElement && !content.pictureElement.parentNode) {
+            e.preventDefault();
+            content.slide?.container.appendChild(content.pictureElement);
+          }
+        });
+
+        // for next/prev navigation with <picture>
+        // by default PhotoSwipe removes <img>,
+        // but we want to remove <picture>
+        this.lightbox.on("contentRemove", (e) => {
+          const { content } = e;
+          if (content.pictureElement && content.pictureElement.parentNode) {
+            e.preventDefault();
+            content.pictureElement.remove();
+          }
+        });
+      }
+
+      this.lightbox.init();
+    }
+
+    disconnectedCallback() {
+      if (this.lightbox) {
+        this.lightbox.destroy();
+        this.lightbox = null;
+      }
+    }
+
+    /**
+     * Create picture element
+     *
+     * @param content
+     * @param formats
+     */
+    createPictureElement(content: Content, formats: string[]) {
+      content.pictureElement = document.createElement("picture");
+
+      formats.forEach((format) => {
+        if (content.data[`${format}SrcSet`]) {
+          const source = document.createElement("source");
+          source.srcset = content.data[`${format}SrcSet`];
+          source.type = `image/${format}`;
+          source.sizes = content.data.sizes || "";
+          content.pictureElement?.appendChild(source);
+        }
+      });
+
+      content.element = document.createElement("img");
+
+      if (content.element instanceof HTMLImageElement) {
+        content.element.src = content.data.src || "";
+        content.element.srcset = content.data.srcSet || "";
+        content.element.setAttribute("alt", "");
+        content.element.decoding = "async";
+        content.element.loading = "lazy";
+        content.element.sizes = content.data.sizes || "";
+        content.element.className = "pswp__img";
+      }
+
+      content.pictureElement.appendChild(content.element);
+
+      return content.pictureElement;
+    }
+  }
+
+  customElements.define("image-gallery", ImageGallery);
+</script>

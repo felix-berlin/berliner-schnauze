@@ -1,11 +1,11 @@
 ---
 import "@styles/objects/_word-index.scss";
 import "@styles/components/_word-group.scss";
-import "astro-breadcrumbs/breadcrumbs.scss";
+import "@styles/plugins/astro-breadcrumbs.scss";
 
 import Layout from "@layouts/Layout.astro";
-import { seoData, routeToWord } from "@utils/helpers";
-import { getAllWordsLinks } from "@services/api";
+import { seoData, routeToWord } from "@utils/helpers.ts";
+import { getAllWordsLinks } from "@services/api.ts";
 import type { BerlinerWord } from "@ts_types/generated/graphql";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import ChevronRight from "~icons/lucide/chevron-right";
@@ -41,7 +41,7 @@ const content = {
 ---
 
 <Layout content={seoData(content)} contentClasses="o-word-index">
-  <Breadcrumbs indexText="start">
+  <Breadcrumbs indexText="Start">
     <ChevronRight slot="separator" width="20" height="20" />
   </Breadcrumbs>
 

@@ -9,11 +9,22 @@
       ]"
       @click="buttonActions"
     >
-      <Transition name="fade-fast" mode="out-in">
-        <span v-if="searchLength === 0" key="search" class="c-button--center-icon">
+      <Transition
+        name="fade-fast"
+        mode="out-in"
+      >
+        <span
+          v-if="searchLength === 0"
+          key="search"
+          class="c-button--center-icon"
+        >
           <Search default-class="c-word-search__search-icon" />
         </span>
-        <span v-else key="del" class="c-button--center-icon">
+        <span
+          v-else
+          key="del"
+          class="c-button--center-icon"
+        >
           <X />
         </span>
       </Transition>
@@ -27,7 +38,7 @@
       placeholder="Durchsuche den Berliner-Jargon"
       autocomplete="off"
       @input="updateSearch()"
-    />
+    >
   </div>
 </template>
 
@@ -35,7 +46,7 @@
 import { ref, computed } from "vue";
 import Search from "virtual:icons/lucide/search";
 import X from "virtual:icons/lucide/x";
-import { $wordSearch, setSearch, searchLength as currentSearchLength } from "@stores/index";
+import { $wordSearch, setSearch, searchLength as currentSearchLength } from "@stores/index.ts";
 import { useStore, useVModel } from "@nanostores/vue";
 
 interface SearchWordsProps {

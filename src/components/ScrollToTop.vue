@@ -13,7 +13,11 @@
       :aria-label="buttonAriaLabel"
       @click="scrollToTop"
     >
-      <ChevronUp :width="24" :height="24" class="c-to-top__icon u-ignore-click" />
+      <ChevronUp
+        :width="24"
+        :height="24"
+        class="c-to-top__icon u-ignore-click"
+      />
     </button>
   </Transition>
 </template>
@@ -31,7 +35,7 @@ interface ScrollToTopProps {
 
 const {
   showAtPosition = 500,
-  buttonAriaLabel,
+  buttonAriaLabel = "nach oben scrollen",
   tooltip,
   hideTooltip = false,
 } = defineProps<ScrollToTopProps>();
@@ -53,6 +57,12 @@ onMounted(() => {
   });
 
   const body = document.querySelector("#docStart");
+
+  const footerElement = document.querySelector(".c-footer__ground");
+
+  if (footerElement) {
+    observer.value.observe(footerElement);
+  }
 
   if (body) {
     observer.value.observe(body);

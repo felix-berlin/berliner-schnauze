@@ -18,7 +18,10 @@
     </button>
 
     <template #popper>
-      <SocialList list-modifier="c-social-list--mobile-dropdown" :hide-tooltips="true" />
+      <SocialList
+        list-modifier="c-social-list--mobile-dropdown"
+        :hide-tooltips="true"
+      />
       <NavList
         :items="menuItems"
         classes-ul="c-menu-more__list u-list-reset"
@@ -46,7 +49,15 @@ interface ItemObject {
 }
 
 const menuItems: (ItemObject | DefineComponent)[] = [
-  InstallApp as DefineComponent,
+  {
+    component: InstallApp as DefineComponent,
+    props: {
+      tooltipProps: {
+        placement: "left",
+        container: ".c-menu-nav",
+      },
+    },
+  },
   {
     title: "Wort vorschlagen",
     link: "/wort-vorschlagen",

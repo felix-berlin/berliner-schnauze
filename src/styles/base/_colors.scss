@@ -18,7 +18,7 @@ html {
   --secondary: var(--red-500);
   --accent: var(--orange-400);
   --color-body: var(--blue);
-  --floating-color-background: color-mix(in srgb, var(--orange-100) 50%, white);
+  --floating-color-background: color-mix(in srgb, var(--orange-200) 50%, white);
 
   &[class~="dark"] {
     --primary: var(--blue-500);

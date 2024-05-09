@@ -13,12 +13,11 @@ describe("ConfettiEffect.vue", () => {
     expect(wrapper.findAll(".c-confetti__piece").length).toBe(pieces);
   });
 
-  // TODO: Fix this test - fails maybe because of propsDestructure?
-  // it("renders 10 pieces by default", () => {
-  //   const wrapper = mount(ConfettiEffect);
+  it("renders 10 pieces by default", () => {
+    const wrapper = mount(ConfettiEffect);
 
-  //   expect(wrapper.findAll(".c-confetti__piece").length).toBe(10);
-  // });
+    expect(wrapper.findAll(".c-confetti__piece").length).toBe(10);
+  });
 
   it("has the correct class for the wrapper", () => {
     const wrapper = mount(ConfettiEffect);

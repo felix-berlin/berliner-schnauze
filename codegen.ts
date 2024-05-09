@@ -5,7 +5,7 @@ dotenv.config();
 const config: CodegenConfig = {
   schema: [
     {
-      "https://cms.webshaped.de/api": {
+      "https://cms.berliner-schnauze.wtf/api": {
         headers: {
           Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
         },

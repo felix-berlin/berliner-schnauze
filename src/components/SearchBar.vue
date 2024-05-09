@@ -1,5 +1,8 @@
 <template>
-  <div :id="id" class="c-search"></div>
+  <div
+    :id="id"
+    class="c-search"
+  />
 </template>
 
 <script setup lang="ts">
@@ -32,6 +35,8 @@ const initPagefind = (): void => {
     baseUrl: "/",
     resetStyles: false,
     showImages: false,
+    autofocus: true,
+    excerptLength: 15,
     bundlePath,
   });
 };

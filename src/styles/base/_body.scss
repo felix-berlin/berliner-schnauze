@@ -36,3 +36,11 @@ body {
 html[class="dark"] {
   @include butler-mx.select-style(map.get(vars.$blue-shades, "blue-200"), vars.$white-100);
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+:target {
+  scroll-margin-top: 100px;
+}

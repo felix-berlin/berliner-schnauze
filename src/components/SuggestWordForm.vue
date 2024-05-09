@@ -1,11 +1,18 @@
 <template>
-  <form class="c-suggest-word-form c-form" novalidate="true" @submit.prevent="checkForm">
+  <form
+    class="c-suggest-word-form c-form"
+    novalidate="true"
+    @submit.prevent="checkForm"
+  >
     <div class="c-form__group">
       <div
         class="c-form__item is-vertical"
         :class="{ 'has-error': formErrors.berlinerWord?.length }"
       >
-        <label class="c-form__label c-label is-required" for="berlinerWort">Berliner Wort</label>
+        <label
+          class="c-form__label c-label is-required"
+          for="berlinerWort"
+        >Berliner Wort</label>
         <div class="c-floating-label">
           <input
             id="berlinerWort"
@@ -15,7 +22,7 @@
             name="berlinerWort"
             placeholder=" "
             required
-          />
+          >
           <AlertBanner
             v-if="formErrors.berlinerWord?.length"
             type="danger"
@@ -30,9 +37,10 @@
         class="c-form__item is-vertical"
         :class="{ 'has-error': formErrors.translation?.length }"
       >
-        <label class="c-form__label c-label is-required" for="translation"
-          >Übersetzung in Hochdeutsche</label
-        >
+        <label
+          class="c-form__label c-label is-required"
+          for="translation"
+        >Übersetzung in Hochdeutsche</label>
         <div class="c-floating-label">
           <input
             id="translation"
@@ -41,7 +49,7 @@
             type="text"
             name="translation"
             placeholder=" "
-          />
+          >
           <AlertBanner
             v-if="formErrors.translation?.length"
             type="danger"
@@ -57,7 +65,10 @@
       class="c-form__item is-vertical"
       :class="{ 'c-textarea--error': formErrors.example?.length }"
     >
-      <label class="c-label c-form__label" for="example">Schreibe einen Beispielsatz:</label>
+      <label
+        class="c-label c-form__label"
+        for="example"
+      >Schreibe einen Beispielsatz:</label>
       <div class="c-floating-label">
         <textarea
           id="example"
@@ -78,8 +89,14 @@
     </div>
 
     <div class="c-form__group">
-      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.name?.length }">
-        <label class="c-label c-form__label" for="userName">Dein Name (optional)</label>
+      <div
+        class="c-form__item is-vertical"
+        :class="{ 'has-error': formErrors.name?.length }"
+      >
+        <label
+          class="c-label c-form__label"
+          for="userName"
+        >Dein Name (optional)</label>
         <div class="c-floating-label">
           <input
             id="userName"
@@ -88,7 +105,7 @@
             type="text"
             name="userName"
             placeholder=" "
-          />
+          >
           <AlertBanner
             v-if="formErrors.name.length"
             type="danger"
@@ -99,8 +116,14 @@
         </div>
       </div>
 
-      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.eMail?.length }">
-        <label class="c-label c-form__label" for="userEmail">Deine E-Mailadresse (optional)</label>
+      <div
+        class="c-form__item is-vertical"
+        :class="{ 'has-error': formErrors.eMail?.length }"
+      >
+        <label
+          class="c-label c-form__label"
+          for="userEmail"
+        >Deine E-Mailadresse (optional)</label>
         <div class="c-floating-label">
           <input
             id="userEmail"
@@ -109,7 +132,7 @@
             type="email"
             name="userEmail"
             placeholder=" "
-          />
+          >
           <AlertBanner
             v-if="formErrors.eMail?.length"
             type="danger"
@@ -121,24 +144,35 @@
       </div>
     </div>
 
-    <button class="c-button c-suggest-word-form__button" type="submit">
-      <Transition name="fade" mode="out-in">
+    <button
+      class="c-button c-suggest-word-form__button"
+      type="submit"
+    >
+      <Transition
+        name="fade"
+        mode="out-in"
+      >
         <span v-if="!isSending">Wort einreichen</span>
         <span v-else>Wort wird gesendet</span>
       </Transition>
     </button>
 
-    <TurnStile :site-key="turnstileSiteKey" @verify="isVerified = $event" />
+    <TurnStile
+      :site-key="turnstileSiteKey"
+      @verify="isVerified = $event"
+    />
   </form>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from "vue";
+import { ref, reactive } from "vue";
 import AlertBanner from "@components/AlertBanner.vue";
 import TurnStile from "@components/TurnStile.vue";
-import { createToastNotify } from "@stores/index";
+import { createToastNotify } from "@stores/index.ts";
+import { sendEmail } from "@services/sendMail.ts";
+import type { SendEmailPayload } from "@ts_types/generated/graphql.ts";
 
-interface FormData {
+export interface FormData {
   berlinerWord?: string;
   translation?: string;
   example?: string;
@@ -173,46 +207,49 @@ const formErrors = reactive<FormErrors>({
 });
 
 const formResponse = reactive({
-  message: "",
-  status: "",
+  sent: false,
 });
 
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 const isVerified = ref(false);
 const isSending = ref(false);
 
-/**
- * Posts the form data to the contact form 7 API
- *
- * @return  {Promise<void>}
- */
-const postToContactForm7 = async (): Promise<void> => {
-  const formInputs = new FormData();
+const sendMail = async (): Promise<void> => {
+  const createBody = `
+  <p>Ein neues Berliner Wort wurde eingereicht:</p>
+  <p>Berliner Wort: <strong>${formData.berlinerWord}</strong></p>
+  <p>Übersetzung: <strong>${formData.translation}</strong></p>
+  <p>Beispiel: <strong>${formData.example}</strong></p>
+  <p>Name: <strong>${formData.userName}</strong></p>
+  <p>E-Mail: <strong>${formData.userMail}</strong></p>
+`;
 
-  for (const name in formData) {
-    formInputs.append(name, formData[name]);
-  }
-
-  await fetch(
-    `${import.meta.env.PUBLIC_WP_REST_API}/contact-form-7/v1/contact-forms/${
-      import.meta.env.PUBLIC_SUGGEST_WORD_FORM_ID
-    }/feedback`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
-      },
-      body: formInputs,
-    },
-  )
-    .then((response) => response.json())
+  await sendEmail({
+    to: "mail@berliner-schnauze.wtf",
+    from: formData.userMail,
+    subject: "Wortvorschlag - Berliner Schnauze",
+    body: createBody,
+    clientMutationId: "newSuggestedWord",
+  })
     .then((response) => {
-      formResponse.message = response.message;
-      formResponse.status = response.status;
+      const { sendEmail } = response;
+      if (sendEmail.sent) {
+        formResponse.sent = sendEmail.sent;
+
+        createToastNotify({ message: "Dein Wortvorschlag wurde versandt", status: "success" });
+
+        isSending.value = false;
+      }
       resetForm();
     })
     .catch((error) => {
-      console.error(error);
+      console.error("Send E-Mail failed", error.cause);
+
+      createToastNotify({
+        message: "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
+        status: "error",
+        timeout: null,
+      });
     });
 };
 
@@ -222,9 +259,9 @@ const postToContactForm7 = async (): Promise<void> => {
  * @return  {void}  [return description]
  */
 const resetForm = (): void => {
-  if (formResponse.status === "mail_sent") {
+  if (formResponse.sent) {
     setTimeout(() => {
-      formResponse.status = "";
+      formResponse.sent = false;
       formData = convertObjectKeysTo(formData, "");
     }, 3000);
   }
@@ -243,22 +280,6 @@ const convertObjectKeysTo = <T,>(
   to: T,
 ): Record<string, T> => {
   return Object.fromEntries(Object.keys(object).map((key) => [key, to])) as Record<string, T>;
-};
-
-/**
- * Checks if all object values are true || false
- *
- * @param   {Object}  object    The object to check
- * @param   {Boolean}  checkFor  Boolean your are checking for
- *
- * @return  {Boolean}            Return if all are true or false
- */
-const checkObjectValues = (object: object, checkFor: boolean = false): boolean => {
-  return Object.values(object).every((v) => v === checkFor);
-};
-
-const checkObjectValueLength = (object) => {
-  return Object.values(object).every((v) => v.length === 0);
 };
 
 /**
@@ -300,7 +321,7 @@ const checkForm = (): void => {
   // If there are no errors and the user is verified, submit the form
   if (Object.values(formErrors).every((v) => v?.length === 0) && isVerified.value) {
     isSending.value = true;
-    postToContactForm7();
+    sendMail();
   }
 };
 
@@ -317,21 +338,6 @@ const validEmail = (email: string): boolean => {
 
   return re.test(email);
 };
-
-watch(
-  () => formResponse.status,
-  () => {
-    if (formResponse.status === "mail_sent") {
-      createToastNotify({ message: formResponse.message, status: "success" });
-    }
-
-    if (formResponse.status !== "mail_sent" && formResponse.status?.length) {
-      createToastNotify({ message: formResponse.message, status: "error" });
-    }
-
-    isSending.value = false;
-  },
-);
 </script>
 
 <style lang="scss">

@@ -4,7 +4,7 @@ import WordSearchList from "@components/word-search/WordSearchList.vue";
 import WordFilter from "@components/word-search/WordFilter.vue";
 ---
 
-<section class="c-filter-search">
+<section class="c-filter-search" id="wordListing">
   <WordFilter client:only="vue" />
   <WordSearchList client:only="vue" cssClass={"c-filter-search__list"} />
 </section>

@@ -9,9 +9,12 @@
   background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
   border: 1px dashed var(--grey-100);
   padding: vars.$spacer * 1.5;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 2.25rem;
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
   box-shadow:
     0 0.5px 0.6px rgb(0 0 0 / 8%),
     0 4px 5px rgb(0 0 0 / 16%);
@@ -19,15 +22,80 @@
   @include butler-mx.dark-mode-class {
     --color-background: var(--new-blue-400);
   }
+  @include mx.breakpoint("md") {
+    grid-template-areas:
+      "header header"
+      "main main"
+      "learn-more learn-more"
+      "footer footer";
+  }
+
+  &:has(.c-single-word__gallery-wrap) {
+    grid-template-areas:
+      "header"
+      "main"
+      "gallery"
+      "learn-more"
+      "footer";
+
+    @include mx.breakpoint("md") {
+      grid-template-areas:
+        "header header"
+        "main gallery"
+        "learn-more learn-more"
+        "footer footer";
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  * {
+    word-break: break-word;
+  }
 
   &__header {
-    position: relative;
+    grid-area: header;
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+
+    @include mx.breakpoint("sm") {
+      justify-content: space-between;
+    }
+    @include mx.breakpoint("sm", "max") {
+      gap: 1rem 0;
+    }
+
+    .c-options-dropdown {
+      @include mx.breakpoint("sm", "max") {
+        order: 1;
+        flex: 1 0 100%;
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+
+    .c-tooltip {
+      align-self: flex-start;
+
+      @include mx.breakpoint("sm", "max") {
+        order: 3;
+      }
+    }
+
+    .c-audio-list {
+      align-self: center;
+      margin-left: 10px;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+    grid-area: main;
   }
 
   .c-options-dropdown {
-    align-self: flex-start;
+    margin-left: auto;
   }
 
   &__crown {
@@ -39,9 +107,13 @@
 
   &__word {
     margin: 0;
+
+    @include mx.breakpoint("sm", "max") {
+      order: 2;
+    }
     font: {
       family: vars.$berlin;
-      size: var(--size-font, 2rem);
+      size: butler-fn.fluid(32, 64, 320, 1260);
       weight: 700;
     }
     text: {
@@ -50,19 +122,46 @@
       decoration-thickness: from-font;
       underline-position: from-font;
     }
-
-    @include mx.breakpoint("md") {
-      --size-font: 4rem;
-    }
   }
 
   &__word-article {
     font-weight: 400;
   }
 
-  &__sub-headline {
+  h2 {
     margin: var(--spacing-outer, 0 0 vars.$spacer * 0.25 0);
     font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  h4 {
+    font-size: 1.25rem;
+  }
+
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: vars.$berlin;
+    font-weight: 700;
+    margin-block: 1.5em 1em;
+  }
+
+  :where(p, a, li) {
+    font-size: 1.15rem;
+  }
+
+  :where(li) {
+    line-height: 1.5;
+  }
+
+  &__syllables {
+    .is-divider {
+      font-weight: 700;
+    }
   }
 
   &__word-type-wrapper {
@@ -81,14 +180,32 @@
     margin: 0;
   }
 
+  &__consonants-vowels {
+    &-word {
+      letter-spacing: 3px;
+    }
+
+    .is-consonant {
+      color: var(--orange-600);
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-300);
+      }
+    }
+
+    .is-vowel {
+      color: #435e6b;
+
+      @include butler-mx.dark-mode-class {
+        color: #cfc536;
+      }
+    }
+  }
+
   &__translation {
     display: flex;
     flex-direction: column;
     row-gap: vars.$spacer * 1;
-
-    &-item {
-      font-size: 1.5rem;
-    }
   }
 
   &__quote-icon {
@@ -157,30 +274,94 @@
     }
   }
 
-  &__image-wrapper {
+  &__gallery-wrap {
+    grid-area: gallery;
+  }
+
+  .c-image-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: vars.$spacer * 1.5;
 
-    picture > source {
-      display: none;
+    @include mx.breakpoint("xxs") {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
+
+    .c-image-gallery__item {
+      margin: 0;
+      padding: var(--spacing-inner, 10px);
+      background: #fff;
+      width: fit-content;
+      box-shadow: 0 3px 3px
+        color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent);
+      height: fit-content;
+
+      @include butler-mx.dark-mode-class {
+        --color-border: var(--new-blue-200);
+      }
+    }
+
+    .c-image-gallery__link {
+      cursor: zoom-in;
+    }
+
+    .c-image-gallery__caption {
+      color: var(--blue-400);
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    // picture > source {
+    //   display: none;
+    // }
+
+    // @see example 1: https://codepen.io/highplainsdrifter/pen/DZZWRE
+    // @see example 2:https://alvaromontoro.com/blog/68020/old-photo-effect-with-css
+    // picture {
+    //   display: block;
+    //   position: relative;
+    //   filter: grayscale(1) blur(1px) contrast(1.2) sepia(1) blur(0.25px);
+    //   mask: radial-gradient(#000, #000a);
+
+    //   &::before {
+    //     content: "";
+    //     position: absolute;
+    //     width: 100%;
+    //     height: 100%;
+    //     mask: radial-gradient(farthest-side, #0000 30%, #000);
+    //     backdrop-filter: blur(5px) sepia(90%);
+    //   }
+
+    //   &::after {
+    //     content: "";
+    //     position: absolute;
+    //     left: 0;
+    //     width: 100%;
+    //     height: 100%;
+    //     opacity: 0.6;
+    //     background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='noise' x='0%' y='0%' width='100%' height='100%'><feTurbulence baseFrequency='0.5' /></filter><rect x='0' y='0' width='100%' height='100%' filter='url(%23noise)' /></svg>"),
+    //       #f003;
+    //     filter: grayscale(100%) contrast(150%);
+    //     mix-blend-mode: darken;
+    //   }
+    // }
   }
 
   &__learn-more {
-    &-wrapper {
-      display: flex;
-      align-items: center;
-      gap: vars.$spacer * 0.5;
-    }
-
     &-link {
+      grid-area: learn-more;
       display: flex;
       gap: vars.$spacer * 0.2;
       font-size: var(--size-font, 0.9rem);
+      margin-top: 2.5rem;
 
+      @include butler-mx.hover {
+        --decoration-text: underline dashed;
+      }
       @include mx.breakpoint("xxs") {
         --size-font: 1rem;
+      }
+      @include mx.breakpoint("md") {
+        justify-self: flex-end;
       }
 
       &-icon {
@@ -196,11 +377,11 @@
   }
 
   &__footer {
+    grid-area: footer;
     display: flex;
     flex-direction: var(--direction-flex, column);
     gap: var(--spacing, #{vars.$spacer * 0.5});
-    margin-top: vars.$spacer * 2.5;
-    border-top: 1px dashed var(--grey-100);
+    border-top: 1px dashed var(--new-blue-200);
     padding-top: vars.$spacer * 1.5;
 
     @include mx.breakpoint("xs") {
@@ -215,6 +396,10 @@
   &__modified {
     margin: 0;
     font-size: 0.8rem;
-    color: var(--blue-100);
+    color: color-mix(in srgb, var(--blue) 70%, white);
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
+    }
   }
 }

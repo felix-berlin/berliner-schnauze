@@ -5,6 +5,7 @@ dev-dist/
 
 # test output
 coverage
+/tests/unit/coverage
 
 # dependencies
 node_modules/
@@ -34,3 +35,6 @@ pnpm-debug.log*
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Wrangler
+.wrangler

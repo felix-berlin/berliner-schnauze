@@ -154,12 +154,39 @@ export type AcfLink = {
 };
 
 /** Connection between the WordProperties type and the MediaItem type */
+export type AcfMediaItemConnection = Connection & MediaItemConnection & {
+  __typename?: 'AcfMediaItemConnection';
+  /** Edges for the AcfMediaItemConnection connection */
+  edges: Array<AcfMediaItemConnectionEdge>;
+  /** The nodes of the connection, without the edges */
+  nodes: Array<MediaItem>;
+  /** Information about pagination in a connection. */
+  pageInfo: AcfMediaItemConnectionPageInfo;
+};
+
+/** Connection between the WordPropertiesBerlinerischAudio type and the MediaItem type */
 export type AcfMediaItemConnectionEdge = Edge & MediaItemConnectionEdge & OneToOneConnection & {
   __typename?: 'AcfMediaItemConnectionEdge';
   /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
   cursor?: Maybe<Scalars['String']['output']>;
   /** The node of the connection, without the edges */
   node: MediaItem;
+};
+
+/** Page Info on the &quot;AcfMediaItemConnection&quot; */
+export type AcfMediaItemConnectionPageInfo = MediaItemConnectionPageInfo & PageInfo & WpPageInfo & {
+  __typename?: 'AcfMediaItemConnectionPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** Raw schema for page */
+  seo?: Maybe<SeoPostTypePageInfo>;
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+  total?: Maybe<Scalars['Int']['output']>;
 };
 
 /** Options Page registered by ACF */
@@ -246,10 +273,18 @@ export type BerlinerWord = ContentNode & DatabaseIdentifier & HierarchicalConten
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the berlinerisch object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the berlinerisch object. */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is a node in the preview state */
   isPreview?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the object is restricted from the current viewer */
@@ -270,6 +305,8 @@ export type BerlinerWord = ContentNode & DatabaseIdentifier & HierarchicalConten
   parentDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** The globally unique identifier of the parent node. */
   parentId?: Maybe<Scalars['ID']['output']>;
+  /** The password for the berlinerisch object. */
+  password?: Maybe<Scalars['String']['output']>;
   /** Connection between the BerlinerWord type and the berlinerWord type */
   preview?: Maybe<BerlinerWordToPreviewConnectionEdge>;
   /** The database id of the preview node */
@@ -626,10 +663,16 @@ export type BerlinerischWordType = DatabaseIdentifier & HierarchicalNode & Hiera
   enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
   /** Connection between the TermNode type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
-  /** The unique resource identifier path */
+  /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
@@ -1200,10 +1243,18 @@ export type BlockEditorPreview = ContentNode & DatabaseIdentifier & Node & NodeW
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the wgg_preview object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the wgg_preview object. */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is a node in the preview state */
   isPreview?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the object is restricted from the current viewer */
@@ -1219,6 +1270,8 @@ export type BlockEditorPreview = ContentNode & DatabaseIdentifier & Node & NodeW
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** The password for the wgg_preview object. */
+  password?: Maybe<Scalars['String']['output']>;
   /**
    * Connection between the BlockEditorPreview type and the BlockEditorPreview type
    * @deprecated The &quot;BlockEditorPreview&quot; Type is not publicly queryable and does not support previews. This field will be removed in the future.
@@ -1332,41 +1385,6 @@ export type BlockEditorPreviewToPreviewConnectionEdge = BlockEditorPreviewConnec
   node: BlockEditorPreview;
 };
 
-/** The &quot;BlockPrismCodeHighlight&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type BlockPrismCodeHighlight = AcfFieldGroup & AcfFieldGroupFields & BlockPrismCodeHighlight_Fields & {
-  __typename?: 'BlockPrismCodeHighlight';
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;BlockPrismCodeHighlight&quot; Field Group */
-  code?: Maybe<Scalars['String']['output']>;
-  /** You can find all available (shiki) languages here: https://github.com/shikijs/shiki/blob/main/docs/languages.md */
-  customLanguage?: Maybe<Scalars['String']['output']>;
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;BlockPrismCodeHighlight&quot; Field Group */
-  language?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;BlockPrismCodeHighlight&quot; Field Group */
-  useCustomLanguage?: Maybe<Scalars['Boolean']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;BlockPrismCodeHighlight&quot; Field Group */
-export type BlockPrismCodeHighlight_Fields = {
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;BlockPrismCodeHighlight&quot; Field Group */
-  code?: Maybe<Scalars['String']['output']>;
-  /** You can find all available (shiki) languages here: https://github.com/shikijs/shiki/blob/main/docs/languages.md */
-  customLanguage?: Maybe<Scalars['String']['output']>;
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;BlockPrismCodeHighlight&quot; Field Group */
-  language?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;BlockPrismCodeHighlight&quot; Field Group */
-  useCustomLanguage?: Maybe<Scalars['Boolean']['output']>;
-};
-
 /** The category type */
 export type Category = DatabaseIdentifier & HierarchicalNode & HierarchicalTermNode & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
   __typename?: 'Category';
@@ -1391,16 +1409,20 @@ export type Category = DatabaseIdentifier & HierarchicalNode & HierarchicalTermN
   enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
   /** Connection between the TermNode type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
-  /** The unique resource identifier path */
+  /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
-  /** List available translations for this post */
-  language?: Maybe<Language>;
   /** The link to the term */
   link?: Maybe<Scalars['String']['output']>;
   /** The human friendly name of the object. */
@@ -1425,10 +1447,6 @@ export type Category = DatabaseIdentifier & HierarchicalNode & HierarchicalTermN
   termGroupId?: Maybe<Scalars['Int']['output']>;
   /** The taxonomy ID that the object is associated with */
   termTaxonomyId?: Maybe<Scalars['Int']['output']>;
-  /** Get specific translation version of this object */
-  translation?: Maybe<Category>;
-  /** List all translated versions of this term */
-  translations?: Maybe<Array<Maybe<Category>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -1488,12 +1506,6 @@ export type CategoryPostsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<CategoryToPostConnectionWhereArgs>;
-};
-
-
-/** The category type */
-export type CategoryTranslationArgs = {
-  language: LanguageCodeEnum;
 };
 
 /** Connection to category Nodes */
@@ -1858,7 +1870,7 @@ export type CategoryToTaxonomyConnectionEdge = Edge & OneToOneConnection & Taxon
 };
 
 /** A Comment object */
-export type Comment = DatabaseIdentifier & Node & {
+export type Comment = DatabaseIdentifier & Node & UniformResourceIdentifiable & {
   __typename?: 'Comment';
   /** User agent used to post the comment. This field is equivalent to WP_Comment-&gt;comment_agent and the value matching the &quot;comment_agent&quot; column in SQL. */
   agent?: Maybe<Scalars['String']['output']>;
@@ -1888,10 +1900,22 @@ export type Comment = DatabaseIdentifier & Node & {
   dateGmt?: Maybe<Scalars['String']['output']>;
   /** The globally unique identifier for the comment object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
+  /** Whether the node is a Content Node */
+  isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
+  /** Whether the node is a Term */
+  isTermNode: Scalars['Boolean']['output'];
   /** Karma value for the comment. This field is equivalent to WP_Comment-&gt;comment_karma and the value matching the &quot;comment_karma&quot; column in SQL. */
   karma?: Maybe<Scalars['Int']['output']>;
+  /** The permalink of the comment */
+  link?: Maybe<Scalars['String']['output']>;
   /** Connection between the Comment type and the Comment type */
   parent?: Maybe<CommentToParentCommentConnectionEdge>;
   /** The database id of the parent comment node or null if it is the root comment */
@@ -1904,6 +1928,8 @@ export type Comment = DatabaseIdentifier & Node & {
   status?: Maybe<CommentStatusEnum>;
   /** Type of comment. This field is equivalent to WP_Comment-&gt;comment_type and the value matching the &quot;comment_type&quot; column in SQL. */
   type?: Maybe<Scalars['String']['output']>;
+  /** The unique resource identifier path */
+  uri?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -2257,13 +2283,11 @@ export enum CommentsConnectionOrderbyEnum {
   UserId = 'USER_ID'
 }
 
-export type CompanyInformations = AcfOptionsPage & Node & WithAcfOptionsCompanyInformations & {
+export type CompanyInformations = AcfOptionsPage & Node & {
   __typename?: 'CompanyInformations';
   /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
   menuTitle?: Maybe<Scalars['String']['output']>;
-  /** Fields of the OptionsCompanyInformations ACF Field Group */
-  optionsCompanyInformations?: Maybe<OptionsCompanyInformations>;
   pageTitle?: Maybe<Scalars['String']['output']>;
   parentId?: Maybe<Scalars['String']['output']>;
 };
@@ -2340,10 +2364,16 @@ export type ContentNode = {
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
-  /** The unique resource identifier path */
+  /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is a node in the preview state */
   isPreview?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the object is restricted from the current viewer */
@@ -2567,6 +2597,8 @@ export type ContentType = Node & UniformResourceIdentifiable & {
   hierarchical?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the post-type object. */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
   /** Whether this page is set to the static front page. */
@@ -9570,7 +9602,6 @@ export type CreateCategoryInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The description of the category object */
   description?: InputMaybe<Scalars['String']['input']>;
-  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the category object to mutate */
   name: Scalars['String']['input'];
   /** The ID of the category that should be set as the parent */
@@ -9647,7 +9678,6 @@ export type CreateMediaItemInput = {
   filePath?: InputMaybe<Scalars['String']['input']>;
   /** The file type of the mediaItem */
   fileType?: InputMaybe<MimeTypeEnum>;
-  language?: InputMaybe<LanguageCodeEnum>;
   /** The ID of the parent object */
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** The ping status for the mediaItem */
@@ -9681,7 +9711,6 @@ export type CreatePageInput = {
   content?: InputMaybe<Scalars['String']['input']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']['input']>;
-  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -9744,7 +9773,6 @@ export type CreatePostInput = {
   date?: InputMaybe<Scalars['String']['input']>;
   /** The excerpt of the object */
   excerpt?: InputMaybe<Scalars['String']['input']>;
-  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
@@ -9784,7 +9812,6 @@ export type CreateReusableBlockInput = {
   content?: InputMaybe<Scalars['String']['input']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']['input']>;
-  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
@@ -9814,7 +9841,6 @@ export type CreateTagInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   /** The description of the post_tag object */
   description?: InputMaybe<Scalars['String']['input']>;
-  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the post_tag object to mutate */
   name: Scalars['String']['input'];
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
@@ -10461,8 +10487,14 @@ export type HierarchicalContentNode = {
   guid?: Maybe<Scalars['String']['output']>;
   /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is a node in the preview state */
   isPreview?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the object is restricted from the current viewer */
@@ -10724,8 +10756,14 @@ export type HierarchicalTermNode = {
   enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
   /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
@@ -10767,322 +10805,6 @@ export type HierarchicalTermNodeEnqueuedStylesheetsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
-
-/** The &quot;Hosting&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type Hosting = AcfFieldGroup & AcfFieldGroupFields & Hosting_Fields & {
-  __typename?: 'Hosting';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  h112?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  h122?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  hostingPakete?: Maybe<HostingHostingPakete>;
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  infoElemente?: Maybe<HostingInfoElemente>;
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  matomo?: Maybe<HostingMatomo>;
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  rabatt?: Maybe<HostingRabatt>;
-};
-
-/** The &quot;HostingHostingPakete&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type HostingHostingPakete = AcfFieldGroup & AcfFieldGroupFields & HostingHostingPakete_Fields & {
-  __typename?: 'HostingHostingPakete';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingHostingPakete&quot; Field Group */
-  paketLInhalte?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingHostingPakete&quot; Field Group */
-  paketLUnterschrift?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingHostingPakete&quot; Field Group */
-  paketXlInhalte?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingHostingPakete&quot; Field Group */
-  paketXlUnterschrift?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;HostingHostingPakete&quot; Field Group */
-export type HostingHostingPakete_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingHostingPakete&quot; Field Group */
-  paketLInhalte?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingHostingPakete&quot; Field Group */
-  paketLUnterschrift?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingHostingPakete&quot; Field Group */
-  paketXlInhalte?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingHostingPakete&quot; Field Group */
-  paketXlUnterschrift?: Maybe<Scalars['String']['output']>;
-};
-
-/** The &quot;HostingInfoElemente&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type HostingInfoElemente = AcfFieldGroup & AcfFieldGroupFields & HostingInfoElemente_Fields & {
-  __typename?: 'HostingInfoElemente';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement16H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement16Text?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement26H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement26Text?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement36H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement36Text?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement46H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement46Text?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement56H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement56Text?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement66H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement66Text?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;HostingInfoElemente&quot; Field Group */
-export type HostingInfoElemente_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement16H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement16Text?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement26H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement26Text?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement36H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement36Text?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement46H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement46Text?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement56H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement56Text?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement66H?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingInfoElemente&quot; Field Group */
-  infoElement66Text?: Maybe<Scalars['String']['output']>;
-};
-
-/** The &quot;HostingMatomo&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type HostingMatomo = AcfFieldGroup & AcfFieldGroupFields & HostingMatomo_Fields & {
-  __typename?: 'HostingMatomo';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingMatomo&quot; Field Group */
-  matomoH?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingMatomo&quot; Field Group */
-  matomoText?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;HostingMatomo&quot; Field Group */
-export type HostingMatomo_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingMatomo&quot; Field Group */
-  matomoH?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingMatomo&quot; Field Group */
-  matomoText?: Maybe<Scalars['String']['output']>;
-};
-
-/** The &quot;HostingRabatt&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type HostingRabatt = AcfFieldGroup & AcfFieldGroupFields & HostingRabatt_Fields & {
-  __typename?: 'HostingRabatt';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;HostingRabatt&quot; Field Group */
-  rabattAuswahl?: Maybe<Scalars['Boolean']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingRabatt&quot; Field Group */
-  rabattHeadline?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingRabatt&quot; Field Group */
-  rabattText?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;HostingRabatt&quot; Field Group */
-export type HostingRabatt_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;HostingRabatt&quot; Field Group */
-  rabattAuswahl?: Maybe<Scalars['Boolean']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;HostingRabatt&quot; Field Group */
-  rabattHeadline?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;HostingRabatt&quot; Field Group */
-  rabattText?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;Hosting&quot; Field Group */
-export type Hosting_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  h112?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  h122?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  hostingPakete?: Maybe<HostingHostingPakete>;
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  infoElemente?: Maybe<HostingInfoElemente>;
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  matomo?: Maybe<HostingMatomo>;
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;Hosting&quot; Field Group */
-  rabatt?: Maybe<HostingRabatt>;
-};
-
-/** The &quot;Kunden&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type Kunden = AcfFieldGroup & AcfFieldGroupFields & Kunden_Fields & {
-  __typename?: 'Kunden';
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  bewertung?: Maybe<KundenBewertung>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  branche?: Maybe<Scalars['String']['output']>;
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  geschaeftsform?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;image&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  logo?: Maybe<AcfMediaItemConnectionEdge>;
-  /** Field of the &quot;range&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  logogroesse?: Maybe<Scalars['Float']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  nameGeschaeftsfuehrung?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  standort?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  unternehmensname?: Maybe<Scalars['String']['output']>;
-};
-
-/** The &quot;KundenBewertung&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type KundenBewertung = AcfFieldGroup & AcfFieldGroupFields & KundenBewertung_Fields & {
-  __typename?: 'KundenBewertung';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;KundenBewertung&quot; Field Group */
-  kundenstimme?: Maybe<Scalars['String']['output']>;
-  /** blockquote cite=&quot;&quot; */
-  quelle?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;KundenBewertung&quot; Field Group */
-  verfasser?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;KundenBewertung&quot; Field Group */
-export type KundenBewertung_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;KundenBewertung&quot; Field Group */
-  kundenstimme?: Maybe<Scalars['String']['output']>;
-  /** blockquote cite=&quot;&quot; */
-  quelle?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;KundenBewertung&quot; Field Group */
-  verfasser?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;Kunden&quot; Field Group */
-export type Kunden_Fields = {
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  bewertung?: Maybe<KundenBewertung>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  branche?: Maybe<Scalars['String']['output']>;
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  geschaeftsform?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;image&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  logo?: Maybe<AcfMediaItemConnectionEdge>;
-  /** Field of the &quot;range&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  logogroesse?: Maybe<Scalars['Float']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  nameGeschaeftsfuehrung?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  standort?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Kunden&quot; Field Group */
-  unternehmensname?: Maybe<Scalars['String']['output']>;
-};
-
-/** Language (Polylang) */
-export type Language = {
-  __typename?: 'Language';
-  /** Language code (Polylang) */
-  code?: Maybe<LanguageCodeEnum>;
-  /** Language term front page URL */
-  homeUrl?: Maybe<Scalars['String']['output']>;
-  /** Language ID (Polylang) */
-  id: Scalars['ID']['output'];
-  /** Language locale (Polylang) */
-  locale?: Maybe<Scalars['String']['output']>;
-  /** Human readable language name (Polylang) */
-  name?: Maybe<Scalars['String']['output']>;
-  /** Language term slug. Prefer the &quot;code&quot; field if possible (Polylang) */
-  slug?: Maybe<Scalars['String']['output']>;
-};
-
-/** Enum of all available language codes */
-export enum LanguageCodeEnum {
-  De = 'DE',
-  En = 'EN'
-}
-
-/** Filter item by specific language, default language or list all languages */
-export enum LanguageCodeFilterEnum {
-  All = 'ALL',
-  De = 'DE',
-  Default = 'DEFAULT',
-  En = 'EN'
-}
 
 /** Input for the login mutation. */
 export type LoginInput = {
@@ -11178,18 +10900,24 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   fileSize?: Maybe<Scalars['Int']['output']>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the attachment object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the attachment object. */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is a node in the preview state */
   isPreview?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
-  /** Polylang language */
-  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -11217,6 +10945,8 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   parentDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** The globally unique identifier of the parent node. */
   parentId?: Maybe<Scalars['ID']['output']>;
+  /** The password for the attachment object. */
+  password?: Maybe<Scalars['String']['output']>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** Whether the object is a node in the preview state */
@@ -11237,10 +10967,6 @@ export type MediaItem = ContentNode & DatabaseIdentifier & HierarchicalContentNo
   template?: Maybe<ContentTemplate>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']['output']>;
-  /** Get specific translation version of this object */
-  translation?: Maybe<MediaItem>;
-  /** List all translated versions of this post */
-  translations?: Maybe<Array<Maybe<MediaItem>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -11333,12 +11059,6 @@ export type MediaItemSrcSetArgs = {
 /** The mediaItem type */
 export type MediaItemTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
-};
-
-
-/** The mediaItem type */
-export type MediaItemTranslationArgs = {
-  language: LanguageCodeEnum;
 };
 
 /** Connection to mediaItem Nodes */
@@ -11731,10 +11451,16 @@ export type MenuItemConnectionPageInfo = {
 export type MenuItemLinkable = {
   /** The unique identifier stored in the database */
   databaseId: Scalars['Int']['output'];
-  /** The unique resource identifier path */
+  /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
   /** The unique resource identifier path */
@@ -11830,12 +11556,8 @@ export type MenuItemToMenuItemLinkableConnectionEdge = Edge & MenuItemLinkableCo
 export enum MenuLocationEnum {
   /** Put the menu in the primary-menu location */
   PrimaryMenu = 'PRIMARY_MENU',
-  /** Put the menu in the primary-menu___en location */
-  PrimaryMenuEn = 'PRIMARY_MENU___EN',
   /** Put the menu in the secondary-menu location */
-  SecondaryMenu = 'SECONDARY_MENU',
-  /** Put the menu in the secondary-menu___en location */
-  SecondaryMenuEn = 'SECONDARY_MENU___EN'
+  SecondaryMenu = 'SECONDARY_MENU'
 }
 
 /** The Type of Identifier used to fetch a single node. Default is "ID". To be used along with the "id" field. */
@@ -12022,6 +11744,8 @@ export enum MimeTypeEnum {
   AudioXMsWma = 'AUDIO_X_MS_WMA',
   /** audio/x-realaudio mime type. */
   AudioXRealaudio = 'AUDIO_X_REALAUDIO',
+  /** image/avif mime type. */
+  ImageAvif = 'IMAGE_AVIF',
   /** image/bmp mime type. */
   ImageBmp = 'IMAGE_BMP',
   /** image/gif mime type. */
@@ -12346,7 +12070,7 @@ export enum OrderEnum {
 }
 
 /** The page type */
-export type Page = BlockEditorContentNode & ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithFeaturedImage & NodeWithPageAttributes & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & WithAcfHosting & WithAcfStartseite & {
+export type Page = BlockEditorContentNode & ContentNode & DatabaseIdentifier & HierarchicalContentNode & HierarchicalNode & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithFeaturedImage & NodeWithPageAttributes & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & Previewable & UniformResourceIdentifiable & {
   __typename?: 'Page';
   /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
   ancestors?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
@@ -12398,10 +12122,12 @@ export type Page = BlockEditorContentNode & ContentNode & DatabaseIdentifier & H
   featuredImageId?: Maybe<Scalars['ID']['output']>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
-  /** Fields of the Hosting ACF Field Group */
-  hosting?: Maybe<Hosting>;
+  /** Whether the page object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the page object. */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
   /** Whether this page is set to the static front page. */
@@ -12418,8 +12144,6 @@ export type Page = BlockEditorContentNode & ContentNode & DatabaseIdentifier & H
   isRevision?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
-  /** Polylang language */
-  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -12441,6 +12165,8 @@ export type Page = BlockEditorContentNode & ContentNode & DatabaseIdentifier & H
   parentDatabaseId?: Maybe<Scalars['Int']['output']>;
   /** The globally unique identifier of the parent node. */
   parentId?: Maybe<Scalars['ID']['output']>;
+  /** The password for the page object. */
+  password?: Maybe<Scalars['String']['output']>;
   /** Connection between the Page type and the page type */
   preview?: Maybe<PageToPreviewConnectionEdge>;
   /** Previewed gutenberg blocks */
@@ -12459,18 +12185,12 @@ export type Page = BlockEditorContentNode & ContentNode & DatabaseIdentifier & H
   seo?: Maybe<PostTypeSeo>;
   /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
   slug?: Maybe<Scalars['String']['output']>;
-  /** Fields of the Startseite ACF Field Group */
-  startseite?: Maybe<Startseite>;
   /** The current status of the object */
   status?: Maybe<Scalars['String']['output']>;
   /** The template assigned to a node of content */
   template?: Maybe<ContentTemplate>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']['output']>;
-  /** Get specific translation version of this object */
-  translation?: Maybe<Page>;
-  /** List all translated versions of this post */
-  translations?: Maybe<Array<Maybe<Page>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -12543,12 +12263,6 @@ export type PageRevisionsArgs = {
 /** The page type */
 export type PageTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
-};
-
-
-/** The page type */
-export type PageTranslationArgs = {
-  language: LanguageCodeEnum;
 };
 
 /** Connection to page Nodes */
@@ -12869,121 +12583,6 @@ export enum PluginStatusEnum {
   Upgrade = 'UPGRADE'
 }
 
-/** The &quot;Portfolio&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type Portfolio = AcfFieldGroup & AcfFieldGroupFields & Portfolio_Fields & {
-  __typename?: 'Portfolio';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;post_object&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  kundenauswahl?: Maybe<AcfContentNodeConnection>;
-  /** Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  projektAuswahl?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  projektBilder?: Maybe<Array<Maybe<PortfolioProjektBilder>>>;
-  /** Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  projektUrl?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  projektbeschreibung?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  realisierteObjekte?: Maybe<Array<Maybe<PortfolioRealisierteObjekte>>>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  team?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  vomLoopAusschliesen?: Maybe<Scalars['Boolean']['output']>;
-};
-
-
-/** The &quot;Portfolio&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type PortfolioKundenauswahlArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** The &quot;PortfolioProjektBilder&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type PortfolioProjektBilder = AcfFieldGroup & AcfFieldGroupFields & PortfolioProjektBilder_Fields & {
-  __typename?: 'PortfolioProjektBilder';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;image&quot; Field Type added to the schema as part of the &quot;PortfolioProjektBilder&quot; Field Group */
-  projektBild?: Maybe<AcfMediaItemConnectionEdge>;
-};
-
-/** Interface representing fields of the ACF &quot;PortfolioProjektBilder&quot; Field Group */
-export type PortfolioProjektBilder_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;image&quot; Field Type added to the schema as part of the &quot;PortfolioProjektBilder&quot; Field Group */
-  projektBild?: Maybe<AcfMediaItemConnectionEdge>;
-};
-
-/** The &quot;PortfolioRealisierteObjekte&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type PortfolioRealisierteObjekte = AcfFieldGroup & AcfFieldGroupFields & PortfolioRealisierteObjekte_Fields & {
-  __typename?: 'PortfolioRealisierteObjekte';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;PortfolioRealisierteObjekte&quot; Field Group */
-  realisiertesObjekt?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;PortfolioRealisierteObjekte&quot; Field Group */
-export type PortfolioRealisierteObjekte_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;PortfolioRealisierteObjekte&quot; Field Group */
-  realisiertesObjekt?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;Portfolio&quot; Field Group */
-export type Portfolio_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;post_object&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  kundenauswahl?: Maybe<AcfContentNodeConnection>;
-  /** Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  projektAuswahl?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  projektBilder?: Maybe<Array<Maybe<PortfolioProjektBilder>>>;
-  /** Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  projektUrl?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  projektbeschreibung?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  realisierteObjekte?: Maybe<Array<Maybe<PortfolioRealisierteObjekte>>>;
-  /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  team?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;Portfolio&quot; Field Group */
-  vomLoopAusschliesen?: Maybe<Scalars['Boolean']['output']>;
-};
-
-
-/** Interface representing fields of the ACF &quot;Portfolio&quot; Field Group */
-export type Portfolio_FieldsKundenauswahlArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
 /** The post type */
 export type Post = BlockEditorContentNode & ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithAuthor & NodeWithComments & NodeWithContentEditor & NodeWithExcerpt & NodeWithFeaturedImage & NodeWithRevisions & NodeWithTemplate & NodeWithTitle & NodeWithTrackbacks & Previewable & UniformResourceIdentifiable & {
   __typename?: 'Post';
@@ -13037,10 +12636,18 @@ export type Post = BlockEditorContentNode & ContentNode & DatabaseIdentifier & M
   featuredImageId?: Maybe<Scalars['ID']['output']>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the post object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the post object. */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is a node in the preview state */
   isPreview?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the object is restricted from the current viewer */
@@ -13051,8 +12658,6 @@ export type Post = BlockEditorContentNode & ContentNode & DatabaseIdentifier & M
   isSticky: Scalars['Boolean']['output'];
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
-  /** Polylang language */
-  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -13061,6 +12666,8 @@ export type Post = BlockEditorContentNode & ContentNode & DatabaseIdentifier & M
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** The password for the post object. */
+  password?: Maybe<Scalars['String']['output']>;
   /** Whether the pings are open or closed for this particular post. */
   pingStatus?: Maybe<Scalars['String']['output']>;
   /** URLs that have been pinged. */
@@ -13102,10 +12709,6 @@ export type Post = BlockEditorContentNode & ContentNode & DatabaseIdentifier & M
   title?: Maybe<Scalars['String']['output']>;
   /** URLs queued to be pinged. */
   toPing?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  /** Get specific translation version of this object */
-  translation?: Maybe<Post>;
-  /** List all translated versions of this post */
-  translations?: Maybe<Array<Maybe<Post>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -13206,12 +12809,6 @@ export type PostTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
 };
 
-
-/** The post type */
-export type PostTranslationArgs = {
-  language: LanguageCodeEnum;
-};
-
 /** Set relationships between the post to categories */
 export type PostCategoriesInput = {
   /** If true, this will append the category to existing related categories. If false, this will replace existing relationships. Default true. */
@@ -13280,10 +12877,16 @@ export type PostFormat = DatabaseIdentifier & Node & TermNode & UniformResourceI
   enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
   /** Connection between the TermNode type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
-  /** The unique resource identifier path */
+  /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
@@ -14520,10 +14123,18 @@ export type ReusableBlock = BlockEditorContentNode & ContentNode & DatabaseIdent
   enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
   /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
   guid?: Maybe<Scalars['String']['output']>;
+  /** Whether the wp_block object is password protected. */
+  hasPassword?: Maybe<Scalars['Boolean']['output']>;
   /** The globally unique identifier of the wp_block object. */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is a node in the preview state */
   isPreview?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the object is restricted from the current viewer */
@@ -14532,8 +14143,6 @@ export type ReusableBlock = BlockEditorContentNode & ContentNode & DatabaseIdent
   isRevision?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
-  /** Polylang language */
-  language?: Maybe<Language>;
   /** The user that most recently edited the node */
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
@@ -14542,6 +14151,8 @@ export type ReusableBlock = BlockEditorContentNode & ContentNode & DatabaseIdent
   modified?: Maybe<Scalars['String']['output']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']['output']>;
+  /** The password for the wp_block object. */
+  password?: Maybe<Scalars['String']['output']>;
   /**
    * Connection between the ReusableBlock type and the ReusableBlock type
    * @deprecated The &quot;ReusableBlock&quot; Type is not publicly queryable and does not support previews. This field will be removed in the future.
@@ -14578,10 +14189,6 @@ export type ReusableBlock = BlockEditorContentNode & ContentNode & DatabaseIdent
   template?: Maybe<ContentTemplate>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']['output']>;
-  /** Get specific translation version of this object */
-  translation?: Maybe<ReusableBlock>;
-  /** List all translated versions of this post */
-  translations?: Maybe<Array<Maybe<ReusableBlock>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -14636,12 +14243,6 @@ export type ReusableBlockRevisionsArgs = {
 /** The ReusableBlock type */
 export type ReusableBlockTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
-};
-
-
-/** The ReusableBlock type */
-export type ReusableBlockTranslationArgs = {
-  language: LanguageCodeEnum;
 };
 
 /** Connection to ReusableBlock Nodes */
@@ -14838,6 +14439,8 @@ export type RootMutation = {
   resetUserPassword?: Maybe<ResetUserPasswordPayload>;
   /** The restoreComment mutation */
   restoreComment?: Maybe<RestoreCommentPayload>;
+  /** The sendEmail mutation */
+  sendEmail?: Maybe<SendEmailPayload>;
   /** Send password reset email to user */
   sendPasswordResetEmail?: Maybe<SendPasswordResetEmailPayload>;
   /** The updateBerlinerWord mutation */
@@ -15050,6 +14653,12 @@ export type RootMutationRestoreCommentArgs = {
 
 
 /** The root mutation */
+export type RootMutationSendEmailArgs = {
+  input: SendEmailInput;
+};
+
+
+/** The root mutation */
 export type RootMutationSendPasswordResetEmailArgs = {
   input: SendPasswordResetEmailInput;
 };
@@ -15178,14 +14787,10 @@ export type RootQuery = WithAcfOptionsPageCompanyInformations & WithAcfOptionsPa
   contentType?: Maybe<ContentType>;
   /** Connection between the RootQuery type and the ContentType type */
   contentTypes?: Maybe<RootQueryToContentTypeConnection>;
-  /** Get language list */
-  defaultLanguage?: Maybe<Language>;
   /** Fields of the &#039;DiscussionSettings&#039; settings group */
   discussionSettings?: Maybe<DiscussionSettings>;
   /** Fields of the &#039;GeneralSettings&#039; settings group */
   generalSettings?: Maybe<GeneralSettings>;
-  /** List available languages */
-  languages?: Maybe<Array<Maybe<Language>>>;
   /** An object of the mediaItem Type.  */
   mediaItem?: Maybe<MediaItem>;
   /**
@@ -15269,8 +14874,6 @@ export type RootQuery = WithAcfOptionsPageCompanyInformations & WithAcfOptionsPa
   themeGeneralSettings?: Maybe<ThemeGeneralSettings>;
   /** Connection between the RootQuery type and the Theme type */
   themes?: Maybe<RootQueryToThemeConnection>;
-  /** Translate string using pll_translate_string() (Polylang) */
-  translateString?: Maybe<Scalars['String']['output']>;
   /** Returns a user */
   user?: Maybe<User>;
   /** Returns a user role */
@@ -15716,13 +15319,6 @@ export type RootQueryThemesArgs = {
 
 
 /** The root entry point into the Graph */
-export type RootQueryTranslateStringArgs = {
-  language: LanguageCodeEnum;
-  string: Scalars['String']['input'];
-};
-
-
-/** The root entry point into the Graph */
 export type RootQueryUserArgs = {
   id: Scalars['ID']['input'];
   idType?: InputMaybe<UserNodeIdTypeEnum>;
@@ -16049,10 +15645,6 @@ export type RootQueryToCategoryConnectionWhereArgs = {
   hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
   /** Array of term ids to include. Default empty array. */
   include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-  /** Filter by Categorys by language code (Polylang) */
-  language?: InputMaybe<LanguageCodeFilterEnum>;
-  /** Filter Categorys by one or more languages (Polylang) */
-  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Array of names to return term(s) for. Default empty. */
   name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Retrieve terms where the name is LIKE the input value. Default empty. */
@@ -16225,10 +15817,6 @@ export type RootQueryToContentNodeConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-  /** Filter content nodes by language code (Polylang) */
-  language?: InputMaybe<LanguageCodeFilterEnum>;
-  /** Filter content nodes by one or more languages (Polylang) */
-  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -16419,10 +16007,6 @@ export type RootQueryToMediaItemConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-  /** Filter by MediaItems by language code (Polylang) */
-  language?: InputMaybe<LanguageCodeFilterEnum>;
-  /** Filter MediaItems by one or more languages (Polylang) */
-  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -16537,7 +16121,6 @@ export type RootQueryToMenuItemConnectionPageInfo = MenuItemConnectionPageInfo &
 export type RootQueryToMenuItemConnectionWhereArgs = {
   /** The database ID of the object */
   id?: InputMaybe<Scalars['Int']['input']>;
-  language?: InputMaybe<LanguageCodeFilterEnum>;
   /** The menu location for the menu being queried */
   location?: InputMaybe<MenuLocationEnum>;
   /** The database ID of the parent menu object */
@@ -16600,10 +16183,6 @@ export type RootQueryToPageConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-  /** Filter by Pages by language code (Polylang) */
-  language?: InputMaybe<LanguageCodeFilterEnum>;
-  /** Filter Pages by one or more languages (Polylang) */
-  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -16740,10 +16319,6 @@ export type RootQueryToPostConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-  /** Filter by Posts by language code (Polylang) */
-  language?: InputMaybe<LanguageCodeFilterEnum>;
-  /** Filter Posts by one or more languages (Polylang) */
-  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -16912,10 +16487,6 @@ export type RootQueryToReusableBlockConnectionWhereArgs = {
   id?: InputMaybe<Scalars['Int']['input']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-  /** Filter by ReusableBlocks by language code (Polylang) */
-  language?: InputMaybe<LanguageCodeFilterEnum>;
-  /** Filter ReusableBlocks by one or more languages (Polylang) */
-  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Get objects with a specific mimeType property */
   mimeType?: InputMaybe<MimeTypeEnum>;
   /** Slug / post_name of the object */
@@ -17076,10 +16647,6 @@ export type RootQueryToTagConnectionWhereArgs = {
   hierarchical?: InputMaybe<Scalars['Boolean']['input']>;
   /** Array of term ids to include. Default empty array. */
   include?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-  /** Filter by Tags by language code (Polylang) */
-  language?: InputMaybe<LanguageCodeFilterEnum>;
-  /** Filter Tags by one or more languages (Polylang) */
-  languages?: InputMaybe<Array<LanguageCodeEnum>>;
   /** Array of names to return term(s) for. Default empty. */
   name?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Retrieve terms where the name is LIKE the input value. Default empty. */
@@ -17713,6 +17280,39 @@ export enum ScriptLoadingStrategyEnum {
   Defer = 'DEFER'
 }
 
+/** Input for the sendEmail mutation. */
+export type SendEmailInput = {
+  /** Body of email */
+  body?: InputMaybe<Scalars['String']['input']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** Who to send the email from */
+  from?: InputMaybe<Scalars['String']['input']>;
+  /** Reply to address */
+  replyTo?: InputMaybe<Scalars['String']['input']>;
+  /** Subject of email */
+  subject?: InputMaybe<Scalars['String']['input']>;
+  /** Who to send the email to */
+  to?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** The payload for the sendEmail mutation. */
+export type SendEmailPayload = {
+  __typename?: 'SendEmailPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** Message */
+  message?: Maybe<Scalars['String']['output']>;
+  /** Origin that sent the request */
+  origin?: Maybe<Scalars['String']['output']>;
+  /** reply To address used */
+  replyTo?: Maybe<Scalars['String']['output']>;
+  /** Was the email sent */
+  sent?: Maybe<Scalars['Boolean']['output']>;
+  /** Who the email got sent to */
+  to?: Maybe<Scalars['String']['output']>;
+};
+
 /** Input for the sendPasswordResetEmail mutation. */
 export type SendPasswordResetEmailInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -17803,117 +17403,6 @@ export type SocialAdvanced_Fields = {
   mastodon?: Maybe<Scalars['String']['output']>;
 };
 
-/** The &quot;Startseite&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type Startseite = AcfFieldGroup & AcfFieldGroupFields & Startseite_Fields & {
-  __typename?: 'Startseite';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;Startseite&quot; Field Group */
-  leistungen?: Maybe<Array<Maybe<StartseiteLeistungen>>>;
-};
-
-/** The &quot;StartseiteLeistungen&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type StartseiteLeistungen = AcfFieldGroup & AcfFieldGroupFields & StartseiteLeistungen_Fields & {
-  __typename?: 'StartseiteLeistungen';
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;StartseiteLeistungen&quot; Field Group */
-  beschreibungLeistung?: Maybe<Scalars['String']['output']>;
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Name der .svg Datei inklusive der Dateiendung. */
-  iconLeistung?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;StartseiteLeistungen&quot; Field Group */
-  linkLeistungen?: Maybe<StartseiteLeistungenLinkLeistungen>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;StartseiteLeistungen&quot; Field Group */
-  linkTitleLeistung?: Maybe<Scalars['String']['output']>;
-  /** Name der Leistung | h tag mit angeben */
-  uberschriftLeistung?: Maybe<Scalars['String']['output']>;
-};
-
-/** The &quot;StartseiteLeistungenLinkLeistungen&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type StartseiteLeistungenLinkLeistungen = AcfFieldGroup & AcfFieldGroupFields & StartseiteLeistungenLinkLeistungen_Fields & {
-  __typename?: 'StartseiteLeistungenLinkLeistungen';
-  /** Die Domain muss nicht angeben werden. Lediglich am Anfang und Ende ein /. */
-  customLinkLeistung?: Maybe<Scalars['String']['output']>;
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;StartseiteLeistungenLinkLeistungen&quot; Field Group */
-  linkAuswahlLeistung?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  /** Field of the &quot;page_link&quot; Field Type added to the schema as part of the &quot;StartseiteLeistungenLinkLeistungen&quot; Field Group */
-  seitenLinkLeistung?: Maybe<AcfContentNodeConnection>;
-};
-
-
-/** The &quot;StartseiteLeistungenLinkLeistungen&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type StartseiteLeistungenLinkLeistungenSeitenLinkLeistungArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** Interface representing fields of the ACF &quot;StartseiteLeistungenLinkLeistungen&quot; Field Group */
-export type StartseiteLeistungenLinkLeistungen_Fields = {
-  /** Die Domain muss nicht angeben werden. Lediglich am Anfang und Ende ein /. */
-  customLinkLeistung?: Maybe<Scalars['String']['output']>;
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;StartseiteLeistungenLinkLeistungen&quot; Field Group */
-  linkAuswahlLeistung?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  /** Field of the &quot;page_link&quot; Field Type added to the schema as part of the &quot;StartseiteLeistungenLinkLeistungen&quot; Field Group */
-  seitenLinkLeistung?: Maybe<AcfContentNodeConnection>;
-};
-
-
-/** Interface representing fields of the ACF &quot;StartseiteLeistungenLinkLeistungen&quot; Field Group */
-export type StartseiteLeistungenLinkLeistungen_FieldsSeitenLinkLeistungArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
-/** Interface representing fields of the ACF &quot;StartseiteLeistungen&quot; Field Group */
-export type StartseiteLeistungen_Fields = {
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;StartseiteLeistungen&quot; Field Group */
-  beschreibungLeistung?: Maybe<Scalars['String']['output']>;
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Name der .svg Datei inklusive der Dateiendung. */
-  iconLeistung?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;group&quot; Field Type added to the schema as part of the &quot;StartseiteLeistungen&quot; Field Group */
-  linkLeistungen?: Maybe<StartseiteLeistungenLinkLeistungen>;
-  /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;StartseiteLeistungen&quot; Field Group */
-  linkTitleLeistung?: Maybe<Scalars['String']['output']>;
-  /** Name der Leistung | h tag mit angeben */
-  uberschriftLeistung?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;Startseite&quot; Field Group */
-export type Startseite_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;Startseite&quot; Field Group */
-  leistungen?: Maybe<Array<Maybe<StartseiteLeistungen>>>;
-};
-
 /** The tag type */
 export type Tag = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
   __typename?: 'Tag';
@@ -17929,16 +17418,20 @@ export type Tag = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & Unif
   enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
   /** Connection between the TermNode type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
-  /** The unique resource identifier path */
+  /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
-  /** List available translations for this post */
-  language?: Maybe<Language>;
   /** The link to the term */
   link?: Maybe<Scalars['String']['output']>;
   /** The human friendly name of the object. */
@@ -17962,10 +17455,6 @@ export type Tag = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & Unif
   termGroupId?: Maybe<Scalars['Int']['output']>;
   /** The taxonomy ID that the object is associated with */
   termTaxonomyId?: Maybe<Scalars['Int']['output']>;
-  /** Get specific translation version of this object */
-  translation?: Maybe<Tag>;
-  /** List all translated versions of this term */
-  translations?: Maybe<Array<Maybe<Tag>>>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']['output']>;
 };
@@ -18006,12 +17495,6 @@ export type TagPostsArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<TagToPostConnectionWhereArgs>;
-};
-
-
-/** The tag type */
-export type TagTranslationArgs = {
-  language: LanguageCodeEnum;
 };
 
 /** Connection to tag Nodes */
@@ -18478,10 +17961,16 @@ export type TermNode = {
   enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
   /** Connection between the TermNode type and the EnqueuedStylesheet type */
   enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
-  /** The unique resource identifier path */
+  /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
@@ -18728,10 +18217,16 @@ export type ThemeGeneralSettings = AcfOptionsPage & Node & {
 
 /** Any node that has a URI */
 export type UniformResourceIdentifiable = {
-  /** The unique resource identifier path */
+  /** The globally unique ID for the object */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean']['output'];
   /** The unique resource identifier path */
@@ -18845,7 +18340,6 @@ export type UpdateCategoryInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the category object to update */
   id: Scalars['ID']['input'];
-  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the category object to mutate */
   name?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the category that should be set as the parent */
@@ -18926,7 +18420,6 @@ export type UpdateMediaItemInput = {
   fileType?: InputMaybe<MimeTypeEnum>;
   /** The ID of the mediaItem object */
   id: Scalars['ID']['input'];
-  language?: InputMaybe<LanguageCodeEnum>;
   /** The ID of the parent object */
   parentId?: InputMaybe<Scalars['ID']['input']>;
   /** The ping status for the mediaItem */
@@ -18964,7 +18457,6 @@ export type UpdatePageInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
-  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the parent object */
@@ -19033,7 +18525,6 @@ export type UpdatePostInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
-  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
@@ -19077,7 +18568,6 @@ export type UpdateReusableBlockInput = {
   id: Scalars['ID']['input'];
   /** Override the edit lock when another user is editing the post */
   ignoreEditLock?: InputMaybe<Scalars['Boolean']['input']>;
-  language?: InputMaybe<LanguageCodeEnum>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']['input']>;
   /** The password used to protect the content of the object */
@@ -19168,7 +18658,6 @@ export type UpdateTagInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the tag object to update */
   id: Scalars['ID']['input'];
-  language?: InputMaybe<LanguageCodeEnum>;
   /** The name of the post_tag object to mutate */
   name?: InputMaybe<Scalars['String']['input']>;
   /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
@@ -19266,10 +18755,16 @@ export type User = Commenter & DatabaseIdentifier & Node & UniformResourceIdenti
   firstName?: Maybe<Scalars['String']['output']>;
   /** The globally unique identifier for the user object. */
   id: Scalars['ID']['output'];
+  /** Whether the node is a Comment */
+  isComment: Scalars['Boolean']['output'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean']['output'];
+  /** Whether the node represents the front page. */
+  isFrontPage: Scalars['Boolean']['output'];
   /** Whether the JWT User secret has been revoked. If the secret has been revoked, auth tokens will not be issued until an admin, or user with proper capabilities re-issues a secret for the user. */
   isJwtAuthSecretRevoked: Scalars['Boolean']['output'];
+  /** Whether  the node represents the blog page. */
+  isPostsPage: Scalars['Boolean']['output'];
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']['output']>;
   /** Whether the node is a Term */
@@ -20228,51 +19723,10 @@ export type WpPageInfo = {
   total?: Maybe<Scalars['Int']['output']>;
 };
 
-/** The &quot;Wartung&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
-export type Wartung = AcfFieldGroup & AcfFieldGroupFields & Wartung_Fields & {
-  __typename?: 'Wartung';
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;Wartung&quot; Field Group */
-  startHeader?: Maybe<Scalars['String']['output']>;
-};
-
-/** Interface representing fields of the ACF &quot;Wartung&quot; Field Group */
-export type Wartung_Fields = {
-  /**
-   * The name of the field group
-   * @deprecated Use __typename instead
-   */
-  fieldGroupName?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;Wartung&quot; Field Group */
-  startHeader?: Maybe<Scalars['String']['output']>;
-};
-
-/** Provides access to fields of the &quot;BlockPrismCodeHighlight&quot; ACF Field Group via the &quot;blockPrismCodeHighlight&quot; field */
-export type WithAcfBlockPrismCodeHighlight = {
-  /** Fields of the BlockPrismCodeHighlight ACF Field Group */
-  blockPrismCodeHighlight?: Maybe<BlockPrismCodeHighlight>;
-};
-
 /** Provides access to fields of the &quot;GithubRawData&quot; ACF Field Group via the &quot;githubRawData&quot; field */
 export type WithAcfGithubRawData = {
   /** Fields of the GithubRawData ACF Field Group */
   githubRawData?: Maybe<GithubRawData>;
-};
-
-/** Provides access to fields of the &quot;Hosting&quot; ACF Field Group via the &quot;hosting&quot; field */
-export type WithAcfHosting = {
-  /** Fields of the Hosting ACF Field Group */
-  hosting?: Maybe<Hosting>;
-};
-
-/** Provides access to fields of the &quot;OptionsCompanyInformations&quot; ACF Field Group via the &quot;optionsCompanyInformations&quot; field */
-export type WithAcfOptionsCompanyInformations = {
-  /** Fields of the OptionsCompanyInformations ACF Field Group */
-  optionsCompanyInformations?: Maybe<OptionsCompanyInformations>;
 };
 
 /** Access point for the &quot;CompanyInformations&quot; ACF Options Page */
@@ -20291,12 +19745,6 @@ export type WithAcfSocialAdvanced = {
   socialAdvanced?: Maybe<SocialAdvanced>;
 };
 
-/** Provides access to fields of the &quot;Startseite&quot; ACF Field Group via the &quot;startseite&quot; field */
-export type WithAcfStartseite = {
-  /** Fields of the Startseite ACF Field Group */
-  startseite?: Maybe<Startseite>;
-};
-
 /** Provides access to fields of the &quot;WordProperties&quot; ACF Field Group via the &quot;wordProperties&quot; field */
 export type WithAcfWordProperties = {
   /** Fields of the WordProperties ACF Field Group */
@@ -20312,8 +19760,8 @@ export type WordProperties = AcfFieldGroup & AcfFieldGroupFields & WordPropertie
   article?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   berlinerisch?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
-  berlinerischAudio?: Maybe<AcfMediaItemConnectionEdge>;
+  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
+  berlinerischAudio?: Maybe<Array<Maybe<WordPropertiesBerlinerischAudio>>>;
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   berolinismus?: Maybe<Scalars['Boolean']['output']>;
   /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
@@ -20323,6 +19771,10 @@ export type WordProperties = AcfFieldGroup & AcfFieldGroupFields & WordPropertie
    * @deprecated Use __typename instead
    */
   fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;gallery&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
+  images?: Maybe<AcfMediaItemConnection>;
+  /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
+  infoText?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   learnMore?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;relationship&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
@@ -20331,6 +19783,15 @@ export type WordProperties = AcfFieldGroup & AcfFieldGroupFields & WordPropertie
   translations?: Maybe<Array<Maybe<WordPropertiesTranslations>>>;
   /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   wikimediaFiles?: Maybe<Array<Maybe<WordPropertiesWikimediaFiles>>>;
+};
+
+
+/** The &quot;WordProperties&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
+export type WordPropertiesImagesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -20365,13 +19826,40 @@ export type WordPropertiesAlternativeWords_Fields = {
   fieldGroupName?: Maybe<Scalars['String']['output']>;
 };
 
+/** The &quot;WordPropertiesBerlinerischAudio&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
+export type WordPropertiesBerlinerischAudio = AcfFieldGroup & AcfFieldGroupFields & WordPropertiesBerlinerischAudio_Fields & {
+  __typename?: 'WordPropertiesBerlinerischAudio';
+  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordPropertiesBerlinerischAudio&quot; Field Group */
+  audio?: Maybe<AcfMediaItemConnectionEdge>;
+  /**
+   * The name of the field group
+   * @deprecated Use __typename instead
+   */
+  fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;radio&quot; Field Type added to the schema as part of the &quot;WordPropertiesBerlinerischAudio&quot; Field Group */
+  gender?: Maybe<Scalars['String']['output']>;
+};
+
+/** Interface representing fields of the ACF &quot;WordPropertiesBerlinerischAudio&quot; Field Group */
+export type WordPropertiesBerlinerischAudio_Fields = {
+  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordPropertiesBerlinerischAudio&quot; Field Group */
+  audio?: Maybe<AcfMediaItemConnectionEdge>;
+  /**
+   * The name of the field group
+   * @deprecated Use __typename instead
+   */
+  fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;radio&quot; Field Type added to the schema as part of the &quot;WordPropertiesBerlinerischAudio&quot; Field Group */
+  gender?: Maybe<Scalars['String']['output']>;
+};
+
 /** The &quot;WordPropertiesExamples&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type WordPropertiesExamples = AcfFieldGroup & AcfFieldGroupFields & WordPropertiesExamples_Fields & {
   __typename?: 'WordPropertiesExamples';
   /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
   example?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
-  exampleAudio?: Maybe<AcfMediaItemConnectionEdge>;
+  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
+  exampleAudio?: Maybe<Array<Maybe<WordPropertiesExamplesExampleAudio>>>;
   /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
   exampleExplanation?: Maybe<Scalars['String']['output']>;
   /**
@@ -20381,12 +19869,39 @@ export type WordPropertiesExamples = AcfFieldGroup & AcfFieldGroupFields & WordP
   fieldGroupName?: Maybe<Scalars['String']['output']>;
 };
 
+/** The &quot;WordPropertiesExamplesExampleAudio&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
+export type WordPropertiesExamplesExampleAudio = AcfFieldGroup & AcfFieldGroupFields & WordPropertiesExamplesExampleAudio_Fields & {
+  __typename?: 'WordPropertiesExamplesExampleAudio';
+  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamplesExampleAudio&quot; Field Group */
+  audio?: Maybe<AcfMediaItemConnectionEdge>;
+  /**
+   * The name of the field group
+   * @deprecated Use __typename instead
+   */
+  fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;radio&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamplesExampleAudio&quot; Field Group */
+  gender?: Maybe<Scalars['String']['output']>;
+};
+
+/** Interface representing fields of the ACF &quot;WordPropertiesExamplesExampleAudio&quot; Field Group */
+export type WordPropertiesExamplesExampleAudio_Fields = {
+  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamplesExampleAudio&quot; Field Group */
+  audio?: Maybe<AcfMediaItemConnectionEdge>;
+  /**
+   * The name of the field group
+   * @deprecated Use __typename instead
+   */
+  fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;radio&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamplesExampleAudio&quot; Field Group */
+  gender?: Maybe<Scalars['String']['output']>;
+};
+
 /** Interface representing fields of the ACF &quot;WordPropertiesExamples&quot; Field Group */
 export type WordPropertiesExamples_Fields = {
   /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
   example?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
-  exampleAudio?: Maybe<AcfMediaItemConnectionEdge>;
+  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
+  exampleAudio?: Maybe<Array<Maybe<WordPropertiesExamplesExampleAudio>>>;
   /** Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;WordPropertiesExamples&quot; Field Group */
   exampleExplanation?: Maybe<Scalars['String']['output']>;
   /**
@@ -20458,8 +19973,8 @@ export type WordProperties_Fields = {
   article?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   berlinerisch?: Maybe<Scalars['String']['output']>;
-  /** Field of the &quot;file&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
-  berlinerischAudio?: Maybe<AcfMediaItemConnectionEdge>;
+  /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
+  berlinerischAudio?: Maybe<Array<Maybe<WordPropertiesBerlinerischAudio>>>;
   /** Field of the &quot;true_false&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   berolinismus?: Maybe<Scalars['Boolean']['output']>;
   /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
@@ -20469,6 +19984,10 @@ export type WordProperties_Fields = {
    * @deprecated Use __typename instead
    */
   fieldGroupName?: Maybe<Scalars['String']['output']>;
+  /** Field of the &quot;gallery&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
+  images?: Maybe<AcfMediaItemConnection>;
+  /** Field of the &quot;wysiwyg&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
+  infoText?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   learnMore?: Maybe<Scalars['String']['output']>;
   /** Field of the &quot;relationship&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
@@ -20477,6 +19996,15 @@ export type WordProperties_Fields = {
   translations?: Maybe<Array<Maybe<WordPropertiesTranslations>>>;
   /** Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group */
   wikimediaFiles?: Maybe<Array<Maybe<WordPropertiesWikimediaFiles>>>;
+};
+
+
+/** Interface representing fields of the ACF &quot;WordProperties&quot; Field Group */
+export type WordProperties_FieldsImagesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
