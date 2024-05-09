@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.11.6](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.5...v3.11.6) (2024-05-09)
+
+
+### Bug Fixes
+
+* SoundEx import ([7ac29a1](https://github.com/felix-berlin/berliner-schnauze/commit/7ac29a1b30d2a7d90b0c84cf5070428050440375))
+
 ## [3.11.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.4...v3.11.5) (2024-05-09)
 
 
