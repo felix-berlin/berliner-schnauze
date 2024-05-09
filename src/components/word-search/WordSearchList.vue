@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
 import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
