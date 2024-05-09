@@ -1,10 +1,5 @@
 <template>
-  <VDropdown
-    placement="bottom-end"
-    class="c-options-dropdown"
-    distance="9"
-    theme="word-options"
-  >
+  <VDropdown placement="bottom-end" class="c-options-dropdown" distance="9" theme="word-options">
     <button
       type="button"
       class="c-options-dropdown__options c-button c-button--center-icon"
@@ -25,11 +20,7 @@
         class="c-options-dropdown__copy-button c-button"
         @click="shareWord(slug)"
       >
-        <Share2
-          width="18"
-          height="18"
-          class="c-options-dropdown__icon-button"
-        />
+        <Share2 width="18" height="18" class="c-options-dropdown__icon-button" />
 
         <span class="c-options-dropdown__copy-text">Wort teilen</span>
       </button>
@@ -41,11 +32,7 @@
         class="c-options-dropdown__copy-button c-button"
         @click="copyWordPageUrlToClipboard(slug)"
       >
-        <Link
-          width="18"
-          height="18"
-          class="c-options-dropdown__icon-button"
-        />
+        <Link width="18" height="18" class="c-options-dropdown__icon-button" />
 
         <span class="c-options-dropdown__copy-text">Link kopieren</span>
       </button>
@@ -57,11 +44,7 @@
         class="c-options-dropdown__copy-button c-button"
         @click="copyNameToClipboard(berlinerisch)"
       >
-        <Copy
-          width="18"
-          height="18"
-          class="c-options-dropdown__icon-button"
-        />
+        <Copy width="18" height="18" class="c-options-dropdown__icon-button" />
 
         <span class="c-options-dropdown__copy-text">Wort kopieren</span>
       </button>
@@ -116,8 +99,8 @@ const shareWord = (slug: string): void => {
  *
  * @return  {void}
  */
-const copyWordPageUrlToClipboard = (slug: string): void => {
-  copy(import.meta.env.PUBLIC_SITE_URL + routeToWord(slug));
+const copyWordPageUrlToClipboard = async (slug: string): Promise<void> => {
+  await copy(import.meta.env.PUBLIC_SITE_URL + routeToWord(slug));
   createToastNotify({
     message: "Link kopiert",
     status: "success",
@@ -131,8 +114,8 @@ const copyWordPageUrlToClipboard = (slug: string): void => {
  *
  * @return  {void}
  */
-const copyNameToClipboard = (name: string): void => {
-  copy(name);
+const copyNameToClipboard = async (name: string): Promise<void> => {
+  await copy(name);
   createToastNotify({ message: "Wort kopiert", status: "success" });
 };
 </script>

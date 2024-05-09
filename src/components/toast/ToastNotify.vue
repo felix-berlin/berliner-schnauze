@@ -8,11 +8,7 @@
     :class="`c-toast-notify--${status} c-toast-notify--${position}`"
     :style="stylePosition"
   >
-    <Component
-      :is="toastIconMap[status]"
-      v-if="showStatusIcon"
-      class="c-toast-notify__icon"
-    />
+    <Component :is="toastIconMap[status]" v-if="showStatusIcon" class="c-toast-notify__icon" />
 
     <div class="c-toast-notify__message">
       {{ message }}
@@ -24,10 +20,7 @@
       class="c-toast-notify__close c-button c-button--center-icon"
       @click="hideToast()"
     >
-      <Close
-        :width="12"
-        :height="12"
-      />
+      <Close :width="12" :height="12" />
     </button>
   </div>
 </template>
@@ -157,9 +150,9 @@ onMounted(async () => {
   setDynamicPosition();
 });
 
-watch(isSwiping, () => {
+watch(isSwiping, async () => {
   if (isSwiping.value && closeOnSwipe) {
-    hideToast();
+    await hideToast();
   }
 });
 </script>

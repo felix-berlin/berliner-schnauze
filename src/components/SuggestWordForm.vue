@@ -1,18 +1,11 @@
 <template>
-  <form
-    class="c-suggest-word-form c-form"
-    novalidate="true"
-    @submit.prevent="checkForm"
-  >
+  <form class="c-suggest-word-form c-form" novalidate="true" @submit.prevent="checkForm">
     <div class="c-form__group">
       <div
         class="c-form__item is-vertical"
         :class="{ 'has-error': formErrors.berlinerWord?.length }"
       >
-        <label
-          class="c-form__label c-label is-required"
-          for="berlinerWort"
-        >Berliner Wort</label>
+        <label class="c-form__label c-label is-required" for="berlinerWort">Berliner Wort</label>
         <div class="c-floating-label">
           <input
             id="berlinerWort"
@@ -22,7 +15,7 @@
             name="berlinerWort"
             placeholder=" "
             required
-          >
+          />
           <AlertBanner
             v-if="formErrors.berlinerWord?.length"
             type="danger"
@@ -37,10 +30,9 @@
         class="c-form__item is-vertical"
         :class="{ 'has-error': formErrors.translation?.length }"
       >
-        <label
-          class="c-form__label c-label is-required"
-          for="translation"
-        >Übersetzung in Hochdeutsche</label>
+        <label class="c-form__label c-label is-required" for="translation"
+          >Übersetzung in Hochdeutsche</label
+        >
         <div class="c-floating-label">
           <input
             id="translation"
@@ -49,7 +41,7 @@
             type="text"
             name="translation"
             placeholder=" "
-          >
+          />
           <AlertBanner
             v-if="formErrors.translation?.length"
             type="danger"
@@ -65,10 +57,7 @@
       class="c-form__item is-vertical"
       :class="{ 'c-textarea--error': formErrors.example?.length }"
     >
-      <label
-        class="c-label c-form__label"
-        for="example"
-      >Schreibe einen Beispielsatz:</label>
+      <label class="c-label c-form__label" for="example">Schreibe einen Beispielsatz:</label>
       <div class="c-floating-label">
         <textarea
           id="example"
@@ -89,14 +78,8 @@
     </div>
 
     <div class="c-form__group">
-      <div
-        class="c-form__item is-vertical"
-        :class="{ 'has-error': formErrors.name?.length }"
-      >
-        <label
-          class="c-label c-form__label"
-          for="userName"
-        >Dein Name (optional)</label>
+      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.name?.length }">
+        <label class="c-label c-form__label" for="userName">Dein Name (optional)</label>
         <div class="c-floating-label">
           <input
             id="userName"
@@ -105,7 +88,7 @@
             type="text"
             name="userName"
             placeholder=" "
-          >
+          />
           <AlertBanner
             v-if="formErrors.name.length"
             type="danger"
@@ -116,14 +99,8 @@
         </div>
       </div>
 
-      <div
-        class="c-form__item is-vertical"
-        :class="{ 'has-error': formErrors.eMail?.length }"
-      >
-        <label
-          class="c-label c-form__label"
-          for="userEmail"
-        >Deine E-Mailadresse (optional)</label>
+      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.eMail?.length }">
+        <label class="c-label c-form__label" for="userEmail">Deine E-Mailadresse (optional)</label>
         <div class="c-floating-label">
           <input
             id="userEmail"
@@ -132,7 +109,7 @@
             type="email"
             name="userEmail"
             placeholder=" "
-          >
+          />
           <AlertBanner
             v-if="formErrors.eMail?.length"
             type="danger"
@@ -144,23 +121,14 @@
       </div>
     </div>
 
-    <button
-      class="c-button c-suggest-word-form__button"
-      type="submit"
-    >
-      <Transition
-        name="fade"
-        mode="out-in"
-      >
+    <button class="c-button c-suggest-word-form__button" type="submit">
+      <Transition name="fade" mode="out-in">
         <span v-if="!isSending">Wort einreichen</span>
         <span v-else>Wort wird gesendet</span>
       </Transition>
     </button>
 
-    <TurnStile
-      :site-key="turnstileSiteKey"
-      @verify="isVerified = $event"
-    />
+    <TurnStile :site-key="turnstileSiteKey" @verify="isVerified = $event" />
   </form>
 </template>
 
@@ -287,7 +255,7 @@ const convertObjectKeysTo = <T,>(
  *
  * @return  {void}     Submit form
  */
-const checkForm = (): void => {
+const checkForm = async (): Promise<void> => {
   for (const error in formErrors) {
     formErrors[error] = "";
   }
@@ -321,7 +289,7 @@ const checkForm = (): void => {
   // If there are no errors and the user is verified, submit the form
   if (Object.values(formErrors).every((v) => v?.length === 0) && isVerified.value) {
     isSending.value = true;
-    sendMail();
+    await sendMail();
   }
 };
 

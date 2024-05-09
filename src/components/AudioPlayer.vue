@@ -7,24 +7,12 @@
     @click="togglePlayStop"
   >
     <div class="c-audio-player__actions">
-      <Transition
-        name="fade"
-        mode="out-in"
-      >
-        <Play
-          v-if="!isPlaying"
-          key="play"
-        />
-        <Pause
-          v-else
-          key="pause"
-        />
+      <Transition name="fade" mode="out-in">
+        <Play v-if="!isPlaying" key="play" />
+        <Pause v-else key="pause" />
       </Transition>
     </div>
-    <div
-      class="c-audio-player__progress"
-      :style="fillStyle"
-    />
+    <div class="c-audio-player__progress" :style="fillStyle" />
   </button>
 </template>
 
@@ -58,8 +46,8 @@ const updateProgress = () => {
   }
 };
 
-const playAudio = () => {
-  audioFile?.play();
+const playAudio = async () => {
+  await audioFile?.play();
   isPlaying.value = true;
   animationFrameId = requestAnimationFrame(updateProgress);
 };
@@ -73,8 +61,8 @@ const stopAudio = () => {
   }
 };
 
-const togglePlayStop = () => {
-  isPlaying.value ? stopAudio() : playAudio();
+const togglePlayStop = async () => {
+  isPlaying.value ? stopAudio() : await playAudio();
 };
 
 onMounted(() => {
@@ -84,7 +72,7 @@ onMounted(() => {
     progress.value = 0; // Reset progress
   });
 
-  nextTick(() => {
+  void nextTick(() => {
     audioButton.value?.focus();
   });
 });

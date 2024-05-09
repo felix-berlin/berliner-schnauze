@@ -1,4 +1,4 @@
-import { onMount } from "nanostores";
+import { onMount, task } from "nanostores";
 import { persistentMap } from "@nanostores/persistent";
 
 interface Translation {
@@ -90,5 +90,7 @@ export const getWordOfTheDay = async (): Promise<void> => {
 };
 
 onMount($wordOfTheDay, () => {
-  getWordOfTheDay();
+  task(async () => {
+    await getWordOfTheDay();
+  });
 });
