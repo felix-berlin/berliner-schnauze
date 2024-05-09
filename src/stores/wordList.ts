@@ -188,8 +188,16 @@ export const updateFilteredWordList = (wordSearch: WordList) => {
   if (keys.length < 11) {
     return;
   }
-  if (!(!filterWorkerInstance || wordSearch !== lastPostedWordSearch)) {
+
+  // If a worker is already busy or the wordSearch is the same as the last one, don't create a new worker
+  if (isWorkerBusy || wordSearch === lastPostedWordSearch) {
     return;
+  }
+
+  // If a worker already exists, terminate it before creating a new one
+  if (filterWorkerInstance) {
+    filterWorkerInstance.terminate();
+    filterWorkerInstance = undefined;
   }
 
   if (typeof Worker !== "undefined") {
