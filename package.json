@@ -109,7 +109,7 @@
   "dependencies": {
     "@astrojs/partytown": "^2.1.0",
     "@astrojs/sitemap": "^3.1.4",
-    "@astrojs/vue": "^4.1.0",
+    "@astrojs/vue": "^4.2.0",
     "@felix_berlin/sass-butler": "3.0.1",
     "@iconify-json/lucide": "^1.1.187",
     "@nanostores/persistent": "^0.10.1",
@@ -120,7 +120,7 @@
     "@sentry/vue": "^7.114.0",
     "@spotlightjs/astro": "^1.0.20",
     "@vueuse/core": "^10.9.0",
-    "astro": "^4.7.1",
+    "astro": "^4.8.0",
     "astro-breadcrumbs": "^2.3.0",
     "astro-env": "^0.0.5",
     "astro-matomo": "^1.5.0",
