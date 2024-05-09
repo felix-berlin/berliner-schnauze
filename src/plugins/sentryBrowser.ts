@@ -9,7 +9,7 @@ Sentry.init({
   // Alternatively, use `process.env.npm_package_version` for a dynamic release version
   // if your build tool supports it.
   release: version,
-  integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
+  integrations: [Sentry.browserTracingIntegration({ enableInp: true }), Sentry.replayIntegration()],
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
