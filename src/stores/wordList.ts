@@ -1,10 +1,19 @@
-import { computed, atom, onSet, onStop } from "nanostores";
-import { persistentAtom, persistentMap } from "@nanostores/persistent";
+import { computed, atom, onSet, onStop, onMount } from "nanostores";
+import { persistentMap } from "@nanostores/persistent";
 import { useViewTransition } from "@utils/helpers.ts";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
 import filterWorker from "../services/filterWorker?worker";
 
-export type CleanBerlinerWord = Omit<BerlinerWord, "seo" | "title">;
+export type CleanBerlinerWord = {
+  berlinerWordId: BerlinerWord["berlinerWordId"];
+  berlinerischWordTypes: BerlinerWord["berlinerischWordTypes"];
+  dateGmt: BerlinerWord["dateGmt"];
+  id: BerlinerWord["id"];
+  modifiedGmt: BerlinerWord["modifiedGmt"];
+  slug: BerlinerWord["slug"];
+  wordGroup: BerlinerWord["wordGroup"];
+  wordProperties: BerlinerWord["wordProperties"];
+};
 
 export type WordList = {
   letterGroups: Maybe<string>[];
@@ -167,38 +176,46 @@ export const searchLength = computed($wordSearch, (wordSearch) => {
   return wordSearch.search.length;
 });
 
-export const $filteredWordList = atom<Word[]>([]);
+// Atom to store the filtered word list
+export const $filteredWordList = atom<CleanBerlinerWord[]>([]);
 
-let filterWorkerInstance;
+let filterWorkerInstance: Worker | undefined;
+let lastPostedWordSearch: WordList | undefined;
+let isWorkerBusy = false;
 
-if (typeof Worker !== "undefined") {
-  filterWorkerInstance = new filterWorker();
-
-  filterWorkerInstance.onmessage = function (event: MessageEvent<Word[]>) {
-    $filteredWordList.set(event.data);
-  };
-
-  filterWorkerInstance.postMessage({
-    wordList: $wordSearch.get().wordList,
-    wordSearch: $wordSearch.get(),
-  });
-}
-
-export function updateFilteredWordList(wordList: Word[], wordSearch: WordSearch) {
-  if (filterWorkerInstance) {
-    filterWorkerInstance.postMessage({ wordList, wordSearch });
+export const updateFilteredWordList = (wordSearch: WordList) => {
+  const keys = Object.keys(wordSearch);
+  if (keys.length < 11) {
+    return;
   }
-}
+  if (!(!filterWorkerInstance || wordSearch !== lastPostedWordSearch)) {
+    return;
+  }
 
-// updateFilteredWordList($wordSearch.get().wordList, $wordSearch.get().search);
-// Update the filtered list whenever $wordSearch changes
+  if (typeof Worker !== "undefined") {
+    filterWorkerInstance = new filterWorker();
+
+    filterWorkerInstance.onmessage = (event: MessageEvent<CleanBerlinerWord[]>) => {
+      $filteredWordList.set(event.data);
+      isWorkerBusy = false; // Worker is no longer busy after sending a message
+    };
+  }
+
+  filterWorkerInstance?.postMessage(wordSearch);
+  isWorkerBusy = true; // Worker is busy after receiving a message
+
+  lastPostedWordSearch = wordSearch;
+};
+
 onSet($wordSearch, ({ newValue, abort }) => {
-  updateFilteredWordList(newValue.wordList, newValue);
+  updateFilteredWordList(newValue);
 });
 
 onStop($wordSearch, () => {
-  if (filterWorkerInstance) {
+  if (filterWorkerInstance && isWorkerBusy) {
     filterWorkerInstance.terminate();
+    filterWorkerInstance = undefined;
+    isWorkerBusy = false;
   }
 });
 

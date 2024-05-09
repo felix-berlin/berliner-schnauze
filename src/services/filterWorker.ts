@@ -1,12 +1,18 @@
+import type { WordList } from "@stores/wordList.ts";
 import Fuse from "fuse.js";
 
-self.onmessage = (event) => {
-  const { wordList, wordSearch } = event.data;
-  // console.log("Worker received data", wordSearch);
+type WordSearchEvent = {
+  data: WordList;
+};
 
-  let filteredWordList = wordList;
+self.onmessage = (event: WordSearchEvent) => {
+  const wordSearch = event.data;
+
+  console.log("WordSearch", wordSearch);
+
+  let filteredWordList = wordSearch.wordList || [];
   if (wordSearch.activeLetterFilter || wordSearch.activeWordTypeFilter || wordSearch.berolinismus) {
-    filteredWordList = wordList.filter((word) => {
+    filteredWordList = wordSearch.wordList.filter((word) => {
       let pass = true;
 
       // Filter by letter
@@ -18,9 +24,10 @@ self.onmessage = (event) => {
       if (wordSearch.activeWordTypeFilter !== "") {
         pass =
           pass &&
-          word.berlinerischWordTypes?.nodes.some(
+          (word.berlinerischWordTypes?.nodes.some(
             (wordType) => wordType.name === wordSearch.activeWordTypeFilter,
-          );
+          ) ??
+            false);
       }
 
       // Filter by Berolinismus
@@ -28,7 +35,7 @@ self.onmessage = (event) => {
         pass = pass && word.wordProperties?.berolinismus === true;
       }
 
-      return pass;
+      return pass || [];
     });
   }
 
@@ -47,12 +54,15 @@ self.onmessage = (event) => {
           : b.wordProperties.berlinerisch.localeCompare(a.wordProperties.berlinerisch);
     }
 
+    const aDate = a.dateGmt ? new Date(a.dateGmt).getTime() : 0;
+    const bDate = b.dateGmt ? new Date(b.dateGmt).getTime() : 0;
+
     if (result === 0 && wordSearch.activeOrderCategory === "date" && a.dateGmt && b.dateGmt) {
-      result =
-        wordSearch.dateOrder === "asc"
-          ? new Date(a.dateGmt).getTime() - new Date(b.dateGmt).getTime()
-          : new Date(b.dateGmt).getTime() - new Date(a.dateGmt).getTime();
+      result = wordSearch.dateOrder === "asc" ? aDate - bDate : bDate - aDate;
     }
+
+    const aModifiedDate = a.modifiedGmt ? new Date(a.modifiedGmt).getTime() : 0;
+    const bModifiedDate = b.modifiedGmt ? new Date(b.modifiedGmt).getTime() : 0;
 
     if (
       result === 0 &&
@@ -62,8 +72,8 @@ self.onmessage = (event) => {
     ) {
       result =
         wordSearch.modifiedDateOrder === "asc"
-          ? new Date(a.modifiedGmt).getTime() - new Date(b.modifiedGmt).getTime()
-          : new Date(b.modifiedGmt).getTime() - new Date(a.modifiedGmt).getTime();
+          ? aModifiedDate - bModifiedDate
+          : bModifiedDate - aModifiedDate;
     }
 
     return result;
