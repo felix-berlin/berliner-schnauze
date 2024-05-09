@@ -8,7 +8,7 @@ type WordSearchEvent = {
 self.onmessage = (event: WordSearchEvent) => {
   const wordSearch = event.data;
 
-  let filteredWordList = wordSearch.wordList || [];
+  let filteredWordList = wordSearch.wordList;
   if (wordSearch.activeLetterFilter || wordSearch.activeWordTypeFilter || wordSearch.berolinismus) {
     filteredWordList = wordSearch.wordList.filter((word) => {
       let pass = true;
@@ -33,7 +33,7 @@ self.onmessage = (event: WordSearchEvent) => {
         pass = pass && word.wordProperties?.berolinismus === true;
       }
 
-      return pass || [];
+      return pass;
     });
   }
 
