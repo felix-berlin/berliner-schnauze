@@ -74,12 +74,13 @@ export default defineConfig({
     }),
     matomo({
       enabled: import.meta.env.PROD,
-      host: "https://analytics.webshaped.de/",
+      host: "https://analytics.berliner-schnauze.wtf/",
       siteId: 8,
       debug: import.meta.env.DEV,
       heartBeatTimer: 5,
       disableCookies: true,
-      partytown: false,
+      partytown: true,
+      crossOrigin: "anonymous",
     }),
     AstroPWA({
       mode: import.meta.env.DEV ? "development" : "production",
@@ -148,11 +149,11 @@ export default defineConfig({
     //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
     //   },
     // }),
-    // partytown({
-    //   config: {
-    //     forward: ["_paq.push"],
-    //   },
-    // }),
+    partytown({
+      config: {
+        forward: ["_paq.push"],
+      },
+    }),
     // sentry(),
     // spotlightjs(),
   ],

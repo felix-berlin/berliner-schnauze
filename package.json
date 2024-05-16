@@ -125,7 +125,7 @@
     "astro": "^4.8.5",
     "astro-breadcrumbs": "^2.3.0",
     "astro-env": "^0.0.5",
-    "astro-matomo": "^1.5.0",
+    "astro-matomo": "^1.6.0",
     "compromise": "^14.13.0",
     "de-compromise": "^0.0.10",
     "dotenv": "^16.4.5",

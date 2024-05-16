@@ -57,8 +57,8 @@ importers:
         specifier: ^0.0.5
         version: 0.0.5(astro@4.8.5(@types/node@20.12.12)(sass@1.77.1)(terser@5.31.0)(typescript@5.4.5))(typescript@5.4.5)(zod@3.23.8)
       astro-matomo:
-        specifier: ^1.5.0
-        version: 1.5.0(astro@4.8.5(@types/node@20.12.12)(sass@1.77.1)(terser@5.31.0)(typescript@5.4.5))
+        specifier: ^1.6.0
+        version: 1.6.0(astro@4.8.5(@types/node@20.12.12)(sass@1.77.1)(terser@5.31.0)(typescript@5.4.5))
       compromise:
         specifier: ^14.13.0
         version: 14.13.0
@@ -3496,8 +3496,8 @@ packages:
     peerDependencies:
       astro: ^4.0.0
 
-  astro-matomo@1.5.0:
-    resolution: {integrity: sha512-wy3CVrYTFC9bJ4jWvL9DLnJ5w9DOuVpdes3+7EOCplFV0cxBnzXv8aHP1eAHbxBMYfAhju2Kkov0OH7ptxAZXg==}
+  astro-matomo@1.6.0:
+    resolution: {integrity: sha512-iUKSlA1zv1mBKH86wQ1xhu+1wfu55qmyAk3hIY1VxbL+TmrFqdid0sd8cI2b/7dQEX+LUWX9AKqB0JdGfu0+Ew==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
 
@@ -12167,7 +12167,7 @@ snapshots:
     dependencies:
       astro: 4.8.5(@types/node@20.12.12)(sass@1.77.1)(terser@5.31.0)(typescript@5.4.5)
 
-  astro-matomo@1.5.0(astro@4.8.5(@types/node@20.12.12)(sass@1.77.1)(terser@5.31.0)(typescript@5.4.5)):
+  astro-matomo@1.6.0(astro@4.8.5(@types/node@20.12.12)(sass@1.77.1)(terser@5.31.0)(typescript@5.4.5)):
     dependencies:
       astro: 4.8.5(@types/node@20.12.12)(sass@1.77.1)(terser@5.31.0)(typescript@5.4.5)
 
