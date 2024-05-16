@@ -173,7 +173,7 @@ export const $toggleBerolinismus = () => {
 };
 
 export const searchLength = computed($wordSearch, (wordSearch) => {
-  return wordSearch.search.length;
+  return wordSearch?.search ? wordSearch.search.length : 0;
 });
 
 // Atom to store the filtered word list
@@ -229,5 +229,5 @@ onStop($wordSearch, () => {
 });
 
 export const $searchResultCount = computed($filteredWordList, (filteredWordList) => {
-  return filteredWordList.length;
+  return filteredWordList?.length ? filteredWordList.length : 0;
 });
