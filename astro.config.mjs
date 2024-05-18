@@ -11,7 +11,6 @@ import spotlightjs from "@spotlightjs/astro";
 import astroEnv from "astro-env";
 import { z } from "astro/zod";
 import { loadEnv } from "vite";
-import { defineConfig } from "vite";
 import { codecovVitePlugin } from "@codecov/vite-plugin";
 import partytown from "@astrojs/partytown";
 

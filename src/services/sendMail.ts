@@ -36,7 +36,7 @@ export const sendEmail = async (input: SendEmailInput): Promise<SendEmailPayload
       return Promise.reject(new Error("Send E-Mail failed", { cause: res.errors }));
     }
 
-    return res.data;
+    return res.data as SendEmailPayload;
   });
 
   return data;

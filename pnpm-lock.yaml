@@ -48,7 +48,7 @@ importers:
         specifier: ^10.9.0
         version: 10.9.0(vue@3.4.27(typescript@5.4.5))
       astro:
-        specifier: ^4.8.5
+        specifier: ^4.8.6
         version: 4.8.6(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0)(typescript@5.4.5)
       astro-breadcrumbs:
         specifier: ^2.3.0
@@ -57,7 +57,7 @@ importers:
         specifier: ^0.0.5
         version: 0.0.5(astro@4.8.6(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0)(typescript@5.4.5))(typescript@5.4.5)(zod@3.23.8)
       astro-matomo:
-        specifier: ^1.5.0
+        specifier: ^1.6.0
         version: 1.6.0(astro@4.8.6(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0)(typescript@5.4.5))
       compromise:
         specifier: ^14.13.0
@@ -112,22 +112,22 @@ importers:
         specifier: 0.0.1-beta.6
         version: 0.0.1-beta.6(vite@5.2.11(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0))
       '@eslint/js':
-        specifier: ^9.2.0
+        specifier: ^9.3.0
         version: 9.3.0
       '@graphql-codegen/cli':
         specifier: ^5.0.2
         version: 5.0.2(@types/node@20.12.12)(graphql@16.8.1)(typescript@5.4.5)
       '@graphql-codegen/client-preset':
-        specifier: ^4.2.5
+        specifier: ^4.2.6
         version: 4.2.6(graphql@16.8.1)
       '@graphql-codegen/introspection':
         specifier: ^4.0.3
         version: 4.0.3(graphql@16.8.1)
       '@graphql-codegen/typescript':
-        specifier: ^4.0.6
+        specifier: ^4.0.7
         version: 4.0.7(graphql@16.8.1)
       '@graphql-codegen/typescript-operations':
-        specifier: ^4.2.0
+        specifier: ^4.2.1
         version: 4.2.1(graphql@16.8.1)
       '@nanostores/logger':
         specifier: ^0.3.0
@@ -178,7 +178,7 @@ importers:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.38)
       eslint:
-        specifier: ^9.2.0
+        specifier: ^9.3.0
         version: 9.3.0
       eslint-config-prettier:
         specifier: ^9.1.0
@@ -217,7 +217,7 @@ importers:
         specifier: ^0.13.0
         version: 0.13.0
       sass:
-        specifier: ^1.77.1
+        specifier: ^1.77.2
         version: 1.77.2
       semantic-release:
         specifier: ^23.1.1
@@ -256,7 +256,7 @@ importers:
         specifier: ^2.0.19
         version: 2.0.19(typescript@5.4.5)
       wrangler:
-        specifier: ^3.56.0
+        specifier: ^3.57.0
         version: 3.57.0
 
 packages:
@@ -3706,11 +3706,8 @@ packages:
     resolution: {integrity: sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==}
     engines: {node: '>=14.16'}
 
-  caniuse-lite@1.0.30001615:
-    resolution: {integrity: sha512-1IpazM5G3r38meiae0bHRnPhz+CBQ3ZLqbQMtrg+AsTPKAXgW38JNsXkyZ+v8waCsDmPq87lmfun5Q2AGysNEQ==}
-
-  caniuse-lite@1.0.30001617:
-    resolution: {integrity: sha512-mLyjzNI9I+Pix8zwcrpxEbGlfqOkF9kM3ptzmKNw5tizSyYwMe+nGLTqMK9cO+0E+Bh6TsBxNAaHWEM8xwSsmA==}
+  caniuse-lite@1.0.30001620:
+    resolution: {integrity: sha512-WJvYsOjd1/BYUY6SNGUosK9DUidBPDTnOARHp3fSmFO1ekdxaY6nKRttEVrfMmYi80ctS0kz1wiWmm14fVc3ew==}
 
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -8223,7 +8220,6 @@ packages:
 
   workbox-google-analytics@7.0.0:
     resolution: {integrity: sha512-MEYM1JTn/qiC3DbpvP2BVhyIH+dV/5BjHk756u9VbwuAhu0QHyKscTnisQuz21lfRpOwiS9z4XdqeVAKol0bzg==}
-    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
 
   workbox-navigation-preload@7.0.0:
     resolution: {integrity: sha512-juWCSrxo/fiMz3RsvDspeSLGmbgC0U9tKqcUPZBCf35s64wlaLXyn2KdHHXVQrb2cqF7I0Hc9siQalainmnXJA==}
@@ -12303,7 +12299,7 @@ snapshots:
   autoprefixer@10.4.19(postcss@8.4.38):
     dependencies:
       browserslist: 4.23.0
-      caniuse-lite: 1.0.30001615
+      caniuse-lite: 1.0.30001620
       fraction.js: 4.3.7
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -12458,7 +12454,7 @@ snapshots:
 
   browserslist@4.23.0:
     dependencies:
-      caniuse-lite: 1.0.30001617
+      caniuse-lite: 1.0.30001620
       electron-to-chromium: 1.4.763
       node-releases: 2.0.14
       update-browserslist-db: 1.0.15(browserslist@4.23.0)
@@ -12511,9 +12507,7 @@ snapshots:
 
   camelcase@7.0.1: {}
 
-  caniuse-lite@1.0.30001615: {}
-
-  caniuse-lite@1.0.30001617: {}
+  caniuse-lite@1.0.30001620: {}
 
   capital-case@1.0.4:
     dependencies:
