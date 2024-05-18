@@ -82,6 +82,7 @@ export default defineConfig({
       partytown: false,
     }),
     AstroPWA({
+      $schema: "https://json.schemastore.org/web-manifest-combined.json",
       mode: import.meta.env.DEV ? "development" : "production",
       base: "/",
       scope: "/",
