@@ -109,8 +109,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0(prettier-plugin-astro@0.13.0)(prettier@3.2.5)(typescript@5.4.5)
       '@codecov/vite-plugin':
-        specifier: 0.0.1-beta.6
-        version: 0.0.1-beta.6(vite@5.2.11(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0))
+        specifier: 0.0.1-beta.8
+        version: 0.0.1-beta.8(vite@5.2.11(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0))
       '@eslint/js':
         specifier: ^9.3.0
         version: 9.3.0
@@ -1037,12 +1037,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@codecov/bundler-plugin-core@0.0.1-beta.6':
-    resolution: {integrity: sha512-dGk/s90fZm7D1O00gRtuE2gqM/CW9nglaPzcIT0v10VOV2tj+aHRrdB+yjas+RW8QP8Qf/sMqSmjkufP1iqggw==}
+  '@codecov/bundler-plugin-core@0.0.1-beta.8':
+    resolution: {integrity: sha512-3yxNa4N+pZxqU60XQxJ10sDKUWcDf/YaQSvODrgxLfKG/peZhSdbd92uRc7PYi73szu7lr1CVZIvVerod9C4Uw==}
     engines: {node: '>=18.0.0'}
 
-  '@codecov/vite-plugin@0.0.1-beta.6':
-    resolution: {integrity: sha512-eIi3M9R1om/T+6FoZGaffWMmwSZ0nx1fIGgidFRFkQdXtKAwHU0//YjCXOg17vJsPXlaSatM81EQBU/qmSXQ1Q==}
+  '@codecov/vite-plugin@0.0.1-beta.8':
+    resolution: {integrity: sha512-bMpn2k4w0HUnmbzQmaE8nzsVKqX72eUQVB5VlU7j+Pr225cCqj3DxWQpYibC+LAUzytZKxVEMZnrYOMTQSXHDA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       vite: 4.x || 5.x
@@ -9380,16 +9380,17 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20240512.0':
     optional: true
 
-  '@codecov/bundler-plugin-core@0.0.1-beta.6':
+  '@codecov/bundler-plugin-core@0.0.1-beta.8':
     dependencies:
       chalk: 4.1.2
       semver: 7.6.2
       unplugin: 1.10.1
       zod: 3.23.8
 
-  '@codecov/vite-plugin@0.0.1-beta.6(vite@5.2.11(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0))':
+  '@codecov/vite-plugin@0.0.1-beta.8(vite@5.2.11(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0))':
     dependencies:
-      '@codecov/bundler-plugin-core': 0.0.1-beta.6
+      '@codecov/bundler-plugin-core': 0.0.1-beta.8
+      unplugin: 1.10.1
       vite: 5.2.11(@types/node@20.12.12)(sass@1.77.2)(terser@5.31.0)
 
   '@colors/colors@1.5.0':
