@@ -34,7 +34,7 @@
     }
   ],
   "scripts": {
-    "dev": "astro dev",
+    "dev": "infisical run -- astro dev",
     "start": "astro dev",
     "build": "astro build",
     "build:strict": "astro check && tsc --noEmit && vue-tsc --noEmit && astro build",
@@ -50,7 +50,7 @@
     "gql:generate": "gql-gen --config codegen.ts",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicons/favicon.svg",
     "browserslist:update": "npx update-browserslist-db@latest",
-    "predev": "pnpm run gql:generate",
+    "predev": "infisical run -- pnpm run gql:generate",
     "preinstall": "npx only-allow pnpm",
     "postbuild": "pagefind --site dist/",
     "server:pages": "npx wrangler pages dev ./dist"
