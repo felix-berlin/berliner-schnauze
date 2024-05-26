@@ -58,7 +58,7 @@ export const sendEmailViaContactForm7 = async (formData: FormData): Promise<void
 
   await fetch(`${import.meta.env.PUBLIC_WP_REST_API}`, {
     headers: {
-      Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+      Authorization: `Bearer ${import.meta.env.VITE_WP_AUTH_REFRESH_TOKEN}`,
     },
   })
     .then((response) => response.json())
@@ -72,7 +72,7 @@ export const sendEmailViaContactForm7 = async (formData: FormData): Promise<void
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+        Authorization: `Bearer ${import.meta.env.VITE_WP_AUTH_REFRESH_TOKEN}`,
       },
       body: formInputs,
     },

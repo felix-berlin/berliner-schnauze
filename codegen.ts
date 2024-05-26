@@ -7,7 +7,7 @@ const config: CodegenConfig = {
     {
       "https://cms.berliner-schnauze.wtf/api": {
         headers: {
-          Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+          Authorization: `Bearer ${import.meta.env.VITE_WP_AUTH_REFRESH_TOKEN}`,
         },
       },
     },

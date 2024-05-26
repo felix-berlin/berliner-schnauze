@@ -65,7 +65,7 @@ export const getWordOfTheDay = async (): Promise<void> => {
   return await fetch(`${import.meta.env.PUBLIC_WP_REST_API}/berliner-schnauze/v1/word-of-the-day`, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+      Authorization: `Bearer ${import.meta.env.VITE_WP_AUTH_REFRESH_TOKEN}`,
     },
   })
     .then((res) => {
