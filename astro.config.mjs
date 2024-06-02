@@ -14,6 +14,9 @@ import { loadEnv } from "vite";
 import { codecovVitePlugin } from "@codecov/vite-plugin";
 import partytown from "@astrojs/partytown";
 
+console.log("TEST ENV", import.meta.env.VITE_TEST);
+console.log("TEST ENV", import.meta.env);
+
 const { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, PWA_DEBUG, CODECOV_TOKEN } = loadEnv(
   process.env.NODE_ENV,
   process.cwd(),
