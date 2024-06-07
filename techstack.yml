@@ -1,0 +1,512 @@
+repo_name: felix-berlin/berliner-schnauze
+report_id: 6531eb3580865b5e361284e640845cc6
+version: 0.1
+repo_type: Public
+timestamp: '2024-06-07T13:18:40+00:00'
+requested_by: renovate[bot]
+provider: github
+branch: main
+detected_tools_count: 38
+tools:
+- name: JavaScript
+  description: Lightweight, interpreted, object-oriented language with first-class
+    functions
+  website_url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze
+  detection_source: Repo Metadata
+- name: TypeScript
+  description: A superset of JavaScript that compiles to clean JavaScript output
+  website_url: http://www.typescriptlang.org
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1612/bynNY5dJ.jpg
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze
+  detection_source: Repo Metadata
+- name: Autoprefixer
+  description: PostCSS plugin to parse CSS and add vendor prefixes to CSS rules
+  website_url: https://github.com/postcss/autoprefixer
+  open_source: false
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: CSS Pre-processors / Extensions
+  image_url: https://img.stackshare.io/service/2202/72d087642cfce6fef6f2dabec5bf49e8_400x400.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-03-28 23:59:01.000000000 Z
+- name: Node.js
+  description: A platform built on Chrome's JavaScript runtime for easily building
+    fast, scalable network applications
+  website_url: http://nodejs.org/
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Frameworks (Full Stack)
+  image_url: https://img.stackshare.io/service/1011/n1JRsFeB_400x400.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2023-11-14 22:56:19.000000000 Z
+- name: Sass
+  description: Syntactically Awesome Style Sheets
+  website_url: http://sass-lang.com/
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: CSS Pre-processors / Extensions
+  image_url: https://img.stackshare.io/service/1171/jCR2zNJV.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2022-01-22 21:13:21.000000000 Z
+- name: Vue.js
+  description: A progressive framework for building user interfaces
+  website_url: http://vuejs.org/
+  version: 3.4.27
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Javascript MVC Frameworks
+  image_url: https://img.stackshare.io/service/3837/paeckCWC.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2023-11-14 22:56:19.000000000 Z
+- name: GraphQL
+  description: A data query language and runtime
+  website_url: http://graphql.org/
+  open_source: false
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Query Languages
+  image_url: https://img.stackshare.io/service/3820/12972006.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-05-18 13:04:34.000000000 Z
+- name: Dotenv
+  description: Loads environment variables from .env for Nodejs projects
+  website_url: https://github.com/motdotla/dotenv
+  license: BSD-2-Clause
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Server Configuration and Automation
+  image_url: https://img.stackshare.io/service/8067/default_90dcb1286af7685c68df319c764b80704df1155b.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-02-20 15:45:23.000000000 Z
+- name: ESLint
+  description: The fully pluggable JavaScript code quality tool
+  website_url: http://eslint.org/
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Code Review
+  image_url: https://img.stackshare.io/service/3337/Q4L7Jncy.jpg
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2022-01-22 21:13:21.000000000 Z
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze
+  detection_source: Repo Metadata
+- name: GitHub Actions
+  description: Automate your workflow from idea to production
+  website_url: https://github.com/features/actions
+  open_source: false
+  hosted_saas: true
+  category: Build, Test, Deploy
+  sub_category: Continuous Integration
+  image_url: https://img.stackshare.io/service/11563/actions.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/.github/workflows/codeql-analysis.yml
+  detection_source: ".github/workflows/codeql-analysis.yml"
+  last_updated_by: renovate[bot]
+  last_updated_on: 2024-01-02 01:29:24.000000000 Z
+- name: Prettier
+  description: Prettier is an opinionated code formatter.
+  website_url: https://prettier.io/
+  version: 3.3.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Code Review
+  image_url: https://img.stackshare.io/service/7035/default_66f265943abed56bcdbfca1c866a4261b1fbb063.jpg
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: Sentry
+  description: See performance issues, fix errors faster, and optimize code health.
+  website_url: https://sentry.io/welcome/?utm_source=stackshare&utm_medium=link&utm_campaign=profile
+  open_source: true
+  hosted_saas: true
+  category: Monitoring
+  sub_category: Exception Monitoring
+  image_url: https://img.stackshare.io/service/191/default_9262326592c97828a2a4299dec085a3674dd05f4.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: SinonJS
+  description: Standalone test spies, stubs and mocks for JavaScript
+  website_url: http://sinonjs.org/
+  version: 18.0.0
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Javascript Testing Framework
+  image_url: https://img.stackshare.io/service/3509/logo.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-05-16 21:08:15.000000000 Z
+- name: Stylelint
+  description: A mighty, modern CSS linter
+  website_url: http://stylelint.io/
+  version: 16.6.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Code Review
+  image_url: https://img.stackshare.io/service/5446/V9JsvPul_400x400.jpg
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: Vite
+  description: Native-ESM powered web dev build tool
+  website_url: https://vitejs.dev/
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: JS Build Tools / JS Task Runners
+  image_url: https://img.stackshare.io/service/21547/default_1aeac791cde11ff66cc0b20dcc6144eeb185c905.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2022-01-22 21:13:21.000000000 Z
+- name: jsdom
+  description: A JavaScript implementation of the WHATWG DOM and HTML standards, for
+    use with node.js
+  website_url: https://github.com/jsdom/jsdom
+  version: 24.1.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Headless Browsers
+  image_url: https://img.stackshare.io/service/7054/preview.jpeg
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: npm
+  description: The package manager for JavaScript.
+  website_url: https://www.npmjs.com/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Front End Package Manager
+  image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2022-01-22 21:13:21.000000000 Z
+- name: semantic-release
+  description: Fully automated version management and package publishing
+  website_url: https://github.com/semantic-release/semantic-release
+  open_source: false
+  hosted_saas: false
+  image_url: https://img.stackshare.io/service/10156/12867925.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-05-12 10:34:09.000000000 Z
+- name: "@semantic-release/changelog"
+  description: Semantic-release plugin to create or update a changelog file
+  package_url: https://www.npmjs.com/@semantic-release/changelog
+  version: 6.0.3
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16473/default_482cf308e8fc087eee8e154f29cc142c834abc51.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: "@semantic-release/git"
+  description: Semantic-release plugin to commit release assets to the project's git
+    repository
+  package_url: https://www.npmjs.com/@semantic-release/git
+  version: 10.0.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16388/default_3d8bf87f0e09f3da6536330e02ffa89677f8784b.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-05-12 10:34:09.000000000 Z
+- name: "@sentry/browser"
+  description: Official Sentry SDK for browsers
+  package_url: https://www.npmjs.com/@sentry/browser
+  version: 8.7.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/18385/default_3918a37cf2f76449e061a2c79fb02113faa1391a.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: "@types/jsdom"
+  description: TypeScript definitions for jsdom
+  package_url: https://www.npmjs.com/@types/jsdom
+  version: 21.1.7
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/17003/default_88e2e076a71afdc1de87ad42c80c1606f2689af1.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: "@types/node"
+  description: TypeScript definitions for Node.js
+  package_url: https://www.npmjs.com/@types/node
+  version: 20.14.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15809/default_5e5e8ac63beda29f31f1844df64d4b8247570a66.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: "@vue/test-utils"
+  description: Utilities for testing Vue components
+  package_url: https://www.npmjs.com/@vue/test-utils
+  version: 2.4.6
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16231/default_41f04716a804e853d5c38a5b81ee0ea8a842ad82.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: compromise
+  description: Modest natural language processing
+  package_url: https://www.npmjs.com/compromise
+  version: 14.13.0
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/npm/image.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-05-09 10:04:16.000000000 Z
+- name: eslint-config-prettier
+  description: Turns off all rules that are unnecessary or might conflict with Prettier
+  package_url: https://www.npmjs.com/eslint-config-prettier
+  version: 9.1.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15879/default_0b10af8ca19c215f781dc07442e75bdc831089d0.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: eslint-plugin-jsx-a11y
+  description: Static AST checker for accessibility rules on JSX elements
+  package_url: https://www.npmjs.com/eslint-plugin-jsx-a11y
+  version: 6.8.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15845/default_6743ba96cf149a3c3c68a185199f9705d6eff80e.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: eslint-plugin-vue
+  description: Official ESLint plugin for Vue.js
+  package_url: https://www.npmjs.com/eslint-plugin-vue
+  version: 9.26.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15950/default_f49d4c116f8ea0155f4d92673b084378bba02760.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: fuse.js
+  description: Lightweight fuzzy-search
+  package_url: https://www.npmjs.com/fuse.js
+  version: 7.0.0
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/17405/default_c11ea7d401c11f11d89301d0302509ab7d72e5ac.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2023-11-14 22:56:19.000000000 Z
+- name: natural
+  description: General natural language
+  package_url: https://www.npmjs.com/natural
+  version: 7.0.6
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/18160/default_0bb0f4fd59640311a8af225b57652f46ca85cd80.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: postcss-preset-env
+  description: Convert modern CSS into something browsers understand
+  package_url: https://www.npmjs.com/postcss-preset-env
+  version: 9.5.14
+  license: CC0-1.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16373/default_92302d1bbf4c0f67b862869662b4f69002c94aad.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: postcss-scss
+  description: SCSS parser for PostCSS
+  package_url: https://www.npmjs.com/postcss-scss
+  version: 4.0.9
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16233/default_dc80ff0a17bac19253430a4f0f586714841116db.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: semantic-release
+  description: Automated semver compliant package publishing
+  package_url: https://www.npmjs.com/semantic-release
+  version: 23.1.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15935/default_b45165a5d30e541ab11711a34a78209b3e8ed7fd.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-05-12 10:34:09.000000000 Z
+- name: stylelint-config-recommended-scss
+  description: Recommended shareable SCSS config for stylelint
+  package_url: https://www.npmjs.com/stylelint-config-recommended-scss
+  version: 14.0.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/18141/default_3e053d4b47b1198323e0d3094fad02237b4d3c17.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: stylelint-config-standard
+  description: Standard shareable config for stylelint
+  package_url: https://www.npmjs.com/stylelint-config-standard
+  version: 36.0.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16266/default_9924e5da1d50ea01e52b48e4fae4b1347af5e4ff.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: vite
+  description: Native-ESM powered web dev build tool
+  package_url: https://www.npmjs.com/vite
+  version: 5.2.12
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/npm/image.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2024-06-02 22:19:36.000000000 Z
+- name: vue
+  description: Vue
+  package_url: https://www.npmjs.com/vue
+  version: 3.4.27
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15844/default_b71c906aeda030a5e2f1fe40bf12a93be52404ab.png
+  detection_source_url: https://github.com/felix-berlin/berliner-schnauze/blob/main/package.json
+  detection_source: package.json
+  last_updated_by: Felix Scholze
+  last_updated_on: 2022-01-22 21:13:21.000000000 Z
