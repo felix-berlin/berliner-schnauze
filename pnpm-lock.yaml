@@ -54,8 +54,8 @@ importers:
         specifier: ^2.3.1
         version: 2.3.1(astro@4.10.1(@types/node@20.14.2)(sass@1.77.4)(terser@5.31.1)(typescript@5.4.5))
       astro-env:
-        specifier: ^0.0.5
-        version: 0.0.5(astro@4.10.1(@types/node@20.14.2)(sass@1.77.4)(terser@5.31.1)(typescript@5.4.5))(typescript@5.4.5)(zod@3.23.8)
+        specifier: ^0.0.6
+        version: 0.0.6(astro@4.10.1(@types/node@20.14.2)(sass@1.77.4)(terser@5.31.1)(typescript@5.4.5))(typescript@5.4.5)(zod@3.23.8)
       astro-matomo:
         specifier: ^1.6.0
         version: 1.6.0(astro@4.10.1(@types/node@20.14.2)(sass@1.77.4)(terser@5.31.1)(typescript@5.4.5))
@@ -3633,8 +3633,8 @@ packages:
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
 
-  astro-env@0.0.5:
-    resolution: {integrity: sha512-YboEdvUFnXcD6qMOMQfltwSoOEYuVt3H3+DTwgUpTYyTYpxrPgyjSIDhIU6nYQYCrfdct0STtnC4hDfBvILc+g==}
+  astro-env@0.0.6:
+    resolution: {integrity: sha512-7jeOpCBFCmCgmcdFIEvk4iMWsfKhpetmpUaf/+aZnw8bAf6zsm1ueB+w01D6nVo0VJcqGSYCIGHdKz258X+6rQ==}
     deprecated: 'Astro 4.10 now has astro:env in experimental: https://astro.build/blog/astro-4100/'
     peerDependencies:
       astro: ^4.0.0
@@ -12612,7 +12612,7 @@ snapshots:
     dependencies:
       astro: 4.10.1(@types/node@20.14.2)(sass@1.77.4)(terser@5.31.1)(typescript@5.4.5)
 
-  astro-env@0.0.5(astro@4.10.1(@types/node@20.14.2)(sass@1.77.4)(terser@5.31.1)(typescript@5.4.5))(typescript@5.4.5)(zod@3.23.8):
+  astro-env@0.0.6(astro@4.10.1(@types/node@20.14.2)(sass@1.77.4)(terser@5.31.1)(typescript@5.4.5))(typescript@5.4.5)(zod@3.23.8):
     dependencies:
       astro: 4.10.1(@types/node@20.14.2)(sass@1.77.4)(terser@5.31.1)(typescript@5.4.5)
       astro-integration-kit: 0.0.2(astro@4.10.1(@types/node@20.14.2)(sass@1.77.4)(terser@5.31.1)(typescript@5.4.5))

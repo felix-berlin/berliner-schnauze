@@ -124,7 +124,7 @@
     "@vueuse/core": "^10.10.0",
     "astro": "^4.9.2",
     "astro-breadcrumbs": "^2.3.1",
-    "astro-env": "^0.0.5",
+    "astro-env": "^0.0.6",
     "astro-matomo": "^1.6.0",
     "compromise": "^14.13.0",
     "de-compromise": "^0.0.10",
