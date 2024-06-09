@@ -55,11 +55,7 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
 
 /**
  * Get word of the day
- *
- * @param   {[type]}  wordOfTheDay
- * @param   {[type]}  getWordOfTheDay
- *
- * @return  {Promise<void>}
+ * @return {Promise<void>}
  */
 export const getWordOfTheDay = async (): Promise<void> => {
   return await fetch(`${import.meta.env.PUBLIC_WP_REST_API}/berliner-schnauze/v1/word-of-the-day`, {
@@ -91,6 +87,8 @@ export const getWordOfTheDay = async (): Promise<void> => {
 
 onMount($wordOfTheDay, () => {
   task(async () => {
-    await getWordOfTheDay();
+    await getWordOfTheDay().catch((err) => {
+      console.error("Failed to fetch Word of the Day: ", err);
+    });
   });
 });
