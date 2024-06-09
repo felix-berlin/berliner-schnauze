@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import vue from "@astrojs/vue";
 import sitemap from "@astrojs/sitemap";
 import matomo from "astro-matomo";
@@ -8,26 +8,14 @@ import AstroPWA from "@vite-pwa/astro";
 import sentry from "@sentry/astro";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
-import astroEnv from "astro-env";
-import { z } from "astro/zod";
 import { loadEnv } from "vite";
 import { codecovVitePlugin } from "@codecov/vite-plugin";
 import partytown from "@astrojs/partytown";
-
 const { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, PWA_DEBUG, CODECOV_TOKEN } = loadEnv(
   process.env.NODE_ENV,
   process.cwd(),
   "",
 );
-
-const envBoolean = (envVar) => {
-  return z
-    .string()
-    .refine((val) => val === "true" || val === "false", {
-      message: `${envVar} must be either 'true' or 'false'`,
-    })
-    .transform((val) => val === "true");
-};
 
 // https://astro.build/config
 export default defineConfig({
@@ -37,31 +25,6 @@ export default defineConfig({
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
   integrations: [
-    astroEnv({
-      schema: z.object({
-        PUBLIC_WP_API: z.string().url(),
-        PUBLIC_WP_REST_API: z.string().url(),
-        WP_AUTH_USER: z.optional(z.string()),
-        WP_AUTH_PASS: z.optional(z.string()),
-        PUBLIC_WP_AUTH_REFRESH_TOKEN: z.string(),
-        PUBLIC_SUGGEST_WORD_FORM_ID: z.string(),
-        ENABLE_ANALYTICS: envBoolean("ENABLE_ANALYTICS"),
-        PUBLIC_SITE_NAME: z.string(),
-        PUBLIC_SITE_URL: z.string().url(),
-        PUBLIC_TURNSTILE_SITE_KEY: z.string(),
-        SENTRY_AUTH_TOKEN: z.string(),
-        SENTRY_DNS: z.optional(z.string().url()),
-        PUBLIC_SENTRY_DNS: z.optional(z.string().url()),
-        SENTRY_PROJECT: z.string(),
-        SENTRY_ORG: z.string(),
-        PUBLIC_SENTRY_ENVIRONMENT: z.string(),
-        PUBLIC_SENTRY_TRACES_SAMPLE_RATE: z.string().transform((value) => parseFloat(value)),
-        WIKIMEDIA_API_AUTH_TOKEN: z.string(),
-        SHOW_TEST_DATA: envBoolean("SHOW_TEST_DATA"),
-        PWA_DEBUG: z.optional(envBoolean("PWA_DEBUG")),
-        CODECOV_TOKEN: z.optional(z.string()),
-      }),
-    }),
     vue({
       appEntrypoint: "src/pages/_app",
       script: {
@@ -138,6 +101,104 @@ export default defineConfig({
       },
       experimental: {
         directoryAndTrailingSlashHandler: true,
+        /* eslint-disable */
+        env: {
+          schema: {
+            schema: {
+              PUBLIC_WP_API: envField.string({
+                context: "client",
+                access: "public",
+              }),
+              PUBLIC_WP_REST_API: envField.string({
+                context: "client",
+                access: "public",
+              }),
+              WP_AUTH_USER: envField.string({
+                context: "server",
+                access: "secret",
+                optional: true,
+              }),
+              WP_AUTH_PASS: envField.string({
+                context: "server",
+                access: "secret",
+                optional: true,
+              }),
+              PUBLIC_WP_AUTH_REFRESH_TOKEN: envField.string({
+                context: "client",
+                access: "public",
+              }),
+              PUBLIC_SUGGEST_WORD_FORM_ID: envField.string({
+                context: "client",
+                access: "public",
+              }),
+              ENABLE_ANALYTICS: envField.boolean({
+                context: "server",
+                access: "public",
+              }),
+              PUBLIC_SITE_NAME: envField.string({
+                context: "client",
+                access: "public",
+              }),
+              PUBLIC_SITE_URL: envField.string({
+                context: "client",
+                access: "public",
+              }),
+              PUBLIC_TURNSTILE_SITE_KEY: envField.string({
+                context: "client",
+                access: "public",
+              }),
+              SENTRY_AUTH_TOKEN: envField.string({
+                context: "server",
+                access: "secret",
+              }),
+              SENTRY_DNS: envField.string({
+                context: "server",
+                access: "public",
+                optional: true,
+              }),
+              PUBLIC_SENTRY_DNS: envField.string({
+                context: "client",
+                access: "public",
+                optional: true,
+              }),
+              SENTRY_PROJECT: envField.string({
+                context: "server",
+                access: "public",
+              }),
+              SENTRY_ORG: envField.string({
+                context: "server",
+                access: "public",
+              }),
+              PUBLIC_SENTRY_ENVIRONMENT: envField.string({
+                context: "client",
+                access: "public",
+              }),
+              PUBLIC_SENTRY_TRACES_SAMPLE_RATE: envField.string({
+                context: "client",
+                access: "public",
+              }),
+              WIKIMEDIA_API_AUTH_TOKEN: envField.string({
+                context: "server",
+                access: "secret",
+              }),
+              SHOW_TEST_DATA: envField.boolean({
+                context: "server",
+                access: "public",
+              }),
+              PWA_DEBUG: envField.string({
+                context: "server",
+                access: "public",
+                optional: true,
+              }),
+              CODECOV_TOKEN: envField.string({
+                context: "server",
+                access: "secret",
+                optional: true,
+              }),
+            },
+          },
+        },
+        /* eslint-enable */
       },
     }),
     // sentry({

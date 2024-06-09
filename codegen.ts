@@ -1,13 +1,13 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
-import * as dotenv from "dotenv";
-dotenv.config();
+import { loadEnv } from "vite";
+const { PUBLIC_WP_AUTH_REFRESH_TOKEN } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
 const config: CodegenConfig = {
   schema: [
     {
       "https://cms.berliner-schnauze.wtf/api": {
         headers: {
-          Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+          Authorization: `Bearer ${PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
         },
       },
     },
