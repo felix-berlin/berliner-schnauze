@@ -38,3 +38,5 @@ pnpm-debug.log*
 
 # Wrangler
 .wrangler
+
+src/utils/supportedBrowsers.js
