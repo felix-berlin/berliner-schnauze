@@ -54,11 +54,10 @@ const { title, seo } = Astro.props as SeoProps & Title;
 <ViewTransitions />
 
 <script src="../plugins/sentryBrowser.ts"></script>
+<script src="/src/lib/unsupportedBrowser.ts"></script>
 
 {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
 <script src="/src/services/pwa.ts"></script>
-
-<script src="/src/lib/unsupportedBrowser.ts"></script>
 
 <!-- Favicon -->
 <link rel="icon" href="/favicons/favicon.ico" sizes="48x48" />
