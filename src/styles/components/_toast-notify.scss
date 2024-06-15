@@ -8,6 +8,7 @@
   background-color: var(--color-background, var(--orange-300));
   border: 1px solid var(--color-border);
   padding: 0.7rem 1.4rem;
+  max-width: 88vw;
 
   @include butler-mx.dark-mode-class {
     --color: var(--color-body);
@@ -39,6 +40,10 @@
       opacity: 1;
       transform: translateX(0);
     }
+  }
+
+  &__icon {
+    flex: 1 0 auto;
   }
 
   &__close {
