@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.12.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.8...v3.12.0) (2024-06-15)
+
+
+### Features
+
+* gen supportedBrowsers regex ([7a3bdcf](https://github.com/felix-berlin/berliner-schnauze/commit/7a3bdcfb569dd5dca33bfee4d69110a16a8ddcd4))
+* show unsupported browser message to user ([1781586](https://github.com/felix-berlin/berliner-schnauze/commit/178158642a0338d82bc8b6e721577904afd4d628))
+
 ## [3.11.8](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.7...v3.11.8) (2024-05-18)
 
 
