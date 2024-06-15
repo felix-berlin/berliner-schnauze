@@ -34,9 +34,9 @@
     }
   ],
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
+    "dev": "pnpm run supportedBrowsers && astro dev",
+    "start": "pnpm run supportedBrowsers && astro dev",
+    "build": "pnpm run supportedBrowsers && astro build",
     "build:strict": "astro check && tsc --noEmit && vue-tsc --noEmit && astro build",
     "preview": "astro preview",
     "astro": "astro",
