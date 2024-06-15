@@ -27,7 +27,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies 🛠️
-        run: npm install
+        run: pnpm install
 
       - name: Build 🏗️
         run: npm run build
