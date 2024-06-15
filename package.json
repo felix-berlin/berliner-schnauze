@@ -120,7 +120,7 @@
     "@sentry/astro": "^8.8.0",
     "@sentry/vite-plugin": "^2.18.0",
     "@sentry/vue": "^8.8.0",
-    "@spotlightjs/astro": "^1.0.20",
+    "@spotlightjs/astro": "^2.0.0",
     "@vueuse/core": "^10.10.0",
     "astro": "^4.10.1",
     "astro-breadcrumbs": "^2.3.1",
