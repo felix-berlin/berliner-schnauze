@@ -103,8 +103,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0(prettier-plugin-astro@0.14.0)(prettier@3.3.2)(typescript@5.4.5)
       '@codecov/vite-plugin':
-        specifier: 0.0.1-beta.9
-        version: 0.0.1-beta.9(vite@5.3.1(@types/node@20.14.2)(sass@1.77.5)(terser@5.31.1))
+        specifier: 0.0.1-beta.10
+        version: 0.0.1-beta.10(vite@5.3.1(@types/node@20.14.2)(sass@1.77.5)(terser@5.31.1))
       '@eslint/js':
         specifier: ^9.5.0
         version: 9.5.0
@@ -1031,12 +1031,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@codecov/bundler-plugin-core@0.0.1-beta.9':
-    resolution: {integrity: sha512-zxMpUhhplvjuwNVmLtOi64d7LGPAhoLsQwVky9Rkx8oRHaDKqDvuisrs+NP5mIE9tQYPnGZKgiv0gnEJ3AHULw==}
+  '@codecov/bundler-plugin-core@0.0.1-beta.10':
+    resolution: {integrity: sha512-fOgy02gc0Z0ipKVe8QqN7mcmzQYjHb2UzT6RtHR+tqyYwpe1r1Kg5E/pbIOXKLaJGXK+AaOX23qtgp6kvUn+iA==}
     engines: {node: '>=18.0.0'}
 
-  '@codecov/vite-plugin@0.0.1-beta.9':
-    resolution: {integrity: sha512-SbJagAnmiFb1YRdTjDOt5fisc7GTRLPJIbth/rvSFIuX9HZLM0Effb/XniLBQrD/IL5znL/7e75Lhcez2ryKnA==}
+  '@codecov/vite-plugin@0.0.1-beta.10':
+    resolution: {integrity: sha512-ZoNKEGTMUIwQbwjxu/YUMaGlBUw24c2rZG0E0Lsa2SjZ+DBL+yTe2Kz+7vB6rzW+2Y/EpxxqVWCVjjK03Z7l1w==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       vite: 4.x || 5.x
@@ -8187,6 +8187,7 @@ packages:
 
   workbox-google-analytics@7.0.0:
     resolution: {integrity: sha512-MEYM1JTn/qiC3DbpvP2BVhyIH+dV/5BjHk756u9VbwuAhu0QHyKscTnisQuz21lfRpOwiS9z4XdqeVAKol0bzg==}
+    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
 
   workbox-navigation-preload@7.0.0:
     resolution: {integrity: sha512-juWCSrxo/fiMz3RsvDspeSLGmbgC0U9tKqcUPZBCf35s64wlaLXyn2KdHHXVQrb2cqF7I0Hc9siQalainmnXJA==}
@@ -9386,16 +9387,16 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20240610.1':
     optional: true
 
-  '@codecov/bundler-plugin-core@0.0.1-beta.9':
+  '@codecov/bundler-plugin-core@0.0.1-beta.10':
     dependencies:
       chalk: 4.1.2
       semver: 7.6.2
       unplugin: 1.10.1
       zod: 3.23.8
 
-  '@codecov/vite-plugin@0.0.1-beta.9(vite@5.3.1(@types/node@20.14.2)(sass@1.77.5)(terser@5.31.1))':
+  '@codecov/vite-plugin@0.0.1-beta.10(vite@5.3.1(@types/node@20.14.2)(sass@1.77.5)(terser@5.31.1))':
     dependencies:
-      '@codecov/bundler-plugin-core': 0.0.1-beta.9
+      '@codecov/bundler-plugin-core': 0.0.1-beta.10
       unplugin: 1.10.1
       vite: 5.3.1(@types/node@20.14.2)(sass@1.77.5)(terser@5.31.1)
 
