@@ -37,7 +37,7 @@ importers:
         version: 8.11.0(astro@4.11.0(@types/node@20.14.8)(sass@1.77.6)(terser@5.31.1)(typescript@5.5.2))
       '@sentry/vite-plugin':
         specifier: ^2.19.0
-        version: 2.19.0
+        version: 2.20.0
       '@sentry/vue':
         specifier: ^8.11.0
         version: 8.11.0(vue@3.4.30(typescript@5.5.2))
@@ -2706,16 +2706,16 @@ packages:
     peerDependencies:
       astro: '>=3.x || >=4.0.0-beta'
 
-  '@sentry/babel-plugin-component-annotate@2.19.0':
-    resolution: {integrity: sha512-N2k8cMYu/7X6mzAH5j6bMeNcXQBJLL0lVAF63TDS57hUiT1v2uEqbeYFdH2CZBHb2LepLbMRXmvErIwy76FLTw==}
+  '@sentry/babel-plugin-component-annotate@2.20.0':
+    resolution: {integrity: sha512-HN/5+cGvI3NqBeW8rLRVGMpF1PADZpAi3h9LI6YBawJPxEz/ftJoryJ6/rXzV6pAPq/7hTEOhTqWPq8iXuM1dw==}
     engines: {node: '>= 14'}
 
   '@sentry/browser@8.11.0':
     resolution: {integrity: sha512-++5IrBpzkaAptNjAYnGTnQ2lCjmU6nlu/ABFjUTgi7Vu+ZNiY8qYKEUw65mSxD3EoFLt8IwtjvfAwSMVTB2q8w==}
     engines: {node: '>=14.18'}
 
-  '@sentry/bundler-plugin-core@2.19.0':
-    resolution: {integrity: sha512-PGTwpue2k4HnLlCuvLeg+cILPWHJorzheNq8KVlXed8mpb8kxKeY9EWQFxBqPS+XyktOMAxZmCMZfKdnHNaJVQ==}
+  '@sentry/bundler-plugin-core@2.20.0':
+    resolution: {integrity: sha512-boshDF6AwCTL7LBOjDQxINjCWELOU0eamBvD0ibSjT5bjXnqRjJItoUpmggu8D7PvhKlb6H9OjzB5yiHbmve4A==}
     engines: {node: '>= 14'}
 
   '@sentry/cli-darwin@2.32.1':
@@ -2790,8 +2790,8 @@ packages:
     resolution: {integrity: sha512-iDt5YVMYNgT151bPYVGo8XlpM0MHWy8DH+czmAiAlFTV7ns7lAeHGF6tsFYo7wOZOPDHxtF6F2CM7AvuYnOZGw==}
     engines: {node: '>=14.18'}
 
-  '@sentry/vite-plugin@2.19.0':
-    resolution: {integrity: sha512-xmntz/bvRwhhU9q2thZas1vQQch9CLMyD8oCfYlNqN57t5XKhIs2dsCU/uS7HCnxIXuuUb/cZtIS7AXVg16fFA==}
+  '@sentry/vite-plugin@2.20.0':
+    resolution: {integrity: sha512-ZWze5B+fG7z4GbL4/XmH5oZIhDus7FbyJd3dggfkdiiIjbAy1QdGHMLBDNzCATSUvjYKYI9wPLWvOh9t7f+EUw==}
     engines: {node: '>= 14'}
 
   '@sentry/vue@8.11.0':
@@ -11194,13 +11194,13 @@ snapshots:
       '@sentry/node': 8.11.0
       '@sentry/types': 8.11.0
       '@sentry/utils': 8.11.0
-      '@sentry/vite-plugin': 2.19.0
+      '@sentry/vite-plugin': 2.20.0
       astro: 4.11.0(@types/node@20.14.8)(sass@1.77.6)(terser@5.31.1)(typescript@5.5.2)
     transitivePeerDependencies:
       - encoding
       - supports-color
 
-  '@sentry/babel-plugin-component-annotate@2.19.0': {}
+  '@sentry/babel-plugin-component-annotate@2.20.0': {}
 
   '@sentry/browser@8.11.0':
     dependencies:
@@ -11212,10 +11212,10 @@ snapshots:
       '@sentry/types': 8.11.0
       '@sentry/utils': 8.11.0
 
-  '@sentry/bundler-plugin-core@2.19.0':
+  '@sentry/bundler-plugin-core@2.20.0':
     dependencies:
       '@babel/core': 7.24.7
-      '@sentry/babel-plugin-component-annotate': 2.19.0
+      '@sentry/babel-plugin-component-annotate': 2.20.0
       '@sentry/cli': 2.32.1
       dotenv: 16.4.5
       find-up: 5.0.0
@@ -11322,9 +11322,9 @@ snapshots:
     dependencies:
       '@sentry/types': 8.11.0
 
-  '@sentry/vite-plugin@2.19.0':
+  '@sentry/vite-plugin@2.20.0':
     dependencies:
-      '@sentry/bundler-plugin-core': 2.19.0
+      '@sentry/bundler-plugin-core': 2.20.0
       unplugin: 1.0.1
     transitivePeerDependencies:
       - encoding
@@ -12023,14 +12023,14 @@ snapshots:
 
   abbrev@2.0.0: {}
 
-  acorn-import-assertions@1.9.0(acorn@8.11.3):
+  acorn-import-assertions@1.9.0(acorn@8.12.0):
     dependencies:
-      acorn: 8.11.3
+      acorn: 8.12.0
     optional: true
 
-  acorn-import-attributes@1.9.5(acorn@8.11.3):
+  acorn-import-attributes@1.9.5(acorn@8.12.0):
     dependencies:
-      acorn: 8.11.3
+      acorn: 8.12.0
 
   acorn-jsx@5.3.2(acorn@8.11.3):
     dependencies:
@@ -14143,23 +14143,23 @@ snapshots:
 
   import-in-the-middle@1.4.2:
     dependencies:
-      acorn: 8.11.3
-      acorn-import-assertions: 1.9.0(acorn@8.11.3)
+      acorn: 8.12.0
+      acorn-import-assertions: 1.9.0(acorn@8.12.0)
       cjs-module-lexer: 1.3.1
       module-details-from-path: 1.0.3
     optional: true
 
   import-in-the-middle@1.7.4:
     dependencies:
-      acorn: 8.11.3
-      acorn-import-attributes: 1.9.5(acorn@8.11.3)
+      acorn: 8.12.0
+      acorn-import-attributes: 1.9.5(acorn@8.12.0)
       cjs-module-lexer: 1.3.1
       module-details-from-path: 1.0.3
 
   import-in-the-middle@1.8.0:
     dependencies:
-      acorn: 8.11.3
-      acorn-import-attributes: 1.9.5(acorn@8.11.3)
+      acorn: 8.12.0
+      acorn-import-attributes: 1.9.5(acorn@8.12.0)
       cjs-module-lexer: 1.3.1
       module-details-from-path: 1.0.3
 
@@ -15139,7 +15139,7 @@ snapshots:
 
   mlly@1.7.1:
     dependencies:
-      acorn: 8.11.3
+      acorn: 8.12.0
       pathe: 1.1.2
       pkg-types: 1.1.1
       ufo: 1.5.3
@@ -17324,7 +17324,7 @@ snapshots:
 
   unplugin@1.0.1:
     dependencies:
-      acorn: 8.11.3
+      acorn: 8.12.0
       chokidar: 3.6.0
       webpack-sources: 3.2.3
       webpack-virtual-modules: 0.5.0
