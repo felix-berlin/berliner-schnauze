@@ -37,7 +37,7 @@ importers:
         version: 8.12.0(astro@4.11.1(@types/node@20.14.9)(sass@1.77.6)(terser@5.31.1)(typescript@5.5.2))
       '@sentry/vite-plugin':
         specifier: ^2.19.0
-        version: 2.20.0
+        version: 2.20.1
       '@sentry/vue':
         specifier: ^8.11.0
         version: 8.12.0(vue@3.4.30(typescript@5.5.2))
@@ -2729,16 +2729,16 @@ packages:
     peerDependencies:
       astro: '>=3.x || >=4.0.0-beta'
 
-  '@sentry/babel-plugin-component-annotate@2.20.0':
-    resolution: {integrity: sha512-HN/5+cGvI3NqBeW8rLRVGMpF1PADZpAi3h9LI6YBawJPxEz/ftJoryJ6/rXzV6pAPq/7hTEOhTqWPq8iXuM1dw==}
+  '@sentry/babel-plugin-component-annotate@2.20.1':
+    resolution: {integrity: sha512-4mhEwYTK00bIb5Y9UWIELVUfru587Vaeg0DQGswv4aIRHIiMKLyNqCEejaaybQ/fNChIZOKmvyqXk430YVd7Qg==}
     engines: {node: '>= 14'}
 
   '@sentry/browser@8.12.0':
     resolution: {integrity: sha512-H82dmr7KQWoS2DQc5dJko5wNepltcEro1EM4mBeL2YmVbNRtoZzD3HQTpbxJJuFsTvEMZevvez5HFlpUgxmIwQ==}
     engines: {node: '>=14.18'}
 
-  '@sentry/bundler-plugin-core@2.20.0':
-    resolution: {integrity: sha512-boshDF6AwCTL7LBOjDQxINjCWELOU0eamBvD0ibSjT5bjXnqRjJItoUpmggu8D7PvhKlb6H9OjzB5yiHbmve4A==}
+  '@sentry/bundler-plugin-core@2.20.1':
+    resolution: {integrity: sha512-6ipbmGzHekxeRCbp7eoefr6bdd/lW4cNA9eNnrmd9+PicubweGaZZbH2NjhFHsaxzgOezwipDHjrTaap2kTHgw==}
     engines: {node: '>= 14'}
 
   '@sentry/cli-darwin@2.32.1':
@@ -2813,8 +2813,8 @@ packages:
     resolution: {integrity: sha512-pwYMoOmexz3vsNSOJGPvD2qwp/fsPcr8mkFk67wMM37Y+30KQ8pF4Aq1cc+HBRIn1tKmenzFDPTczSdVPFxm3Q==}
     engines: {node: '>=14.18'}
 
-  '@sentry/vite-plugin@2.20.0':
-    resolution: {integrity: sha512-ZWze5B+fG7z4GbL4/XmH5oZIhDus7FbyJd3dggfkdiiIjbAy1QdGHMLBDNzCATSUvjYKYI9wPLWvOh9t7f+EUw==}
+  '@sentry/vite-plugin@2.20.1':
+    resolution: {integrity: sha512-IOYAJRcV+Uqn0EL8rxcoCvE77PbtGzKjP+B6iIgDZ229AWbpfbpWY8zHCcufwdDzb5PtgOhWWHT74iAsNyij/A==}
     engines: {node: '>= 14'}
 
   '@sentry/vue@8.12.0':
@@ -5560,6 +5560,10 @@ packages:
 
   lru-cache@10.2.2:
     resolution: {integrity: sha512-9hp3Vp2/hFQUiIwKo8XCeFVnrg8Pk3TYNPIR7tJADKi5YfcF7vEaK7avFHTlSy3kOKYaJQaalfEo6YuXdceBOQ==}
+    engines: {node: 14 || >=16.14}
+
+  lru-cache@10.3.0:
+    resolution: {integrity: sha512-CQl19J/g+Hbjbv4Y3mFNNXFEL/5t/KCg8POCuUqd4rMKjGG+j1ybER83hxV58zL+dFI1PTkt3GNFSHRt+d8qEQ==}
     engines: {node: 14 || >=16.14}
 
   lru-cache@5.1.1:
@@ -11233,13 +11237,13 @@ snapshots:
       '@sentry/node': 8.12.0
       '@sentry/types': 8.12.0
       '@sentry/utils': 8.12.0
-      '@sentry/vite-plugin': 2.20.0
+      '@sentry/vite-plugin': 2.20.1
       astro: 4.11.1(@types/node@20.14.9)(sass@1.77.6)(terser@5.31.1)(typescript@5.5.2)
     transitivePeerDependencies:
       - encoding
       - supports-color
 
-  '@sentry/babel-plugin-component-annotate@2.20.0': {}
+  '@sentry/babel-plugin-component-annotate@2.20.1': {}
 
   '@sentry/browser@8.12.0':
     dependencies:
@@ -11251,10 +11255,10 @@ snapshots:
       '@sentry/types': 8.12.0
       '@sentry/utils': 8.12.0
 
-  '@sentry/bundler-plugin-core@2.20.0':
+  '@sentry/bundler-plugin-core@2.20.1':
     dependencies:
       '@babel/core': 7.24.7
-      '@sentry/babel-plugin-component-annotate': 2.20.0
+      '@sentry/babel-plugin-component-annotate': 2.20.1
       '@sentry/cli': 2.32.1
       dotenv: 16.4.5
       find-up: 5.0.0
@@ -11361,9 +11365,9 @@ snapshots:
     dependencies:
       '@sentry/types': 8.12.0
 
-  '@sentry/vite-plugin@2.20.0':
+  '@sentry/vite-plugin@2.20.1':
     dependencies:
-      '@sentry/bundler-plugin-core': 2.20.0
+      '@sentry/bundler-plugin-core': 2.20.1
       unplugin: 1.0.1
     transitivePeerDependencies:
       - encoding
@@ -14739,6 +14743,8 @@ snapshots:
 
   lru-cache@10.2.2: {}
 
+  lru-cache@10.3.0: {}
+
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
@@ -15615,7 +15621,7 @@ snapshots:
 
   path-scurry@1.11.1:
     dependencies:
-      lru-cache: 10.2.2
+      lru-cache: 10.3.0
       minipass: 7.1.2
 
   path-to-regexp@6.2.2: {}
