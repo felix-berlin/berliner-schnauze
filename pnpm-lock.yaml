@@ -93,8 +93,8 @@ importers:
         specifier: 3.0.1
         version: 3.0.1
       virtua:
-        specifier: ^0.31.0
-        version: 0.31.0(vue@3.4.31(typescript@5.5.2))
+        specifier: ^0.33.0
+        version: 0.33.2(vue@3.4.31(typescript@5.5.2))
       vue:
         specifier: ^3.4.29
         version: 3.4.31(typescript@5.5.2)
@@ -7712,8 +7712,8 @@ packages:
   vfile@6.0.1:
     resolution: {integrity: sha512-1bYqc7pt6NIADBJ98UiG0Bn/CHIVOoZ/IyEkqIruLg0mE1BKzkOXY2D6CSqQIcKqgadppE5lrxgWXJmXd7zZJw==}
 
-  virtua@0.31.0:
-    resolution: {integrity: sha512-E7xGz1OKz4E/YRjIYfCyEHgg1XrASvkYLn5hhpPV6WEbGnMMmG1MF5VyumKRKmpNke3Tu3b7wfUNM8K0HVPlgw==}
+  virtua@0.33.2:
+    resolution: {integrity: sha512-4NgtryQH/idQ3oKkwM6DRCoCsn+IrjrStGcDOARPdlY7zIg0AtTcUq24nysM8YyHoS6KhqcVe8A3+lHJidNQWA==}
     peerDependencies:
       react: '>=16.14.0'
       react-dom: '>=16.14.0'
@@ -17218,7 +17218,7 @@ snapshots:
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
 
-  virtua@0.31.0(vue@3.4.31(typescript@5.5.2)):
+  virtua@0.33.2(vue@3.4.31(typescript@5.5.2)):
     optionalDependencies:
       vue: 3.4.31(typescript@5.5.2)
 
