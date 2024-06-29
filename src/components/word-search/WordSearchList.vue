@@ -8,6 +8,8 @@
       {{ searchResultCount }} {{ searchResultCount === 1 ? "Ergebnis" : "Ergebnisse" }}
     </p>
 
+    <WordSuggestHint v-if="searchResultCount === 0" />
+
     <WordList />
   </div>
 </template>
@@ -16,6 +18,7 @@
 import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
+import WordSuggestHint from "@components/WordSuggestHint.vue";
 import { $wordSearch, $searchResultCount } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
 import type { Maybe } from "@ts_types/generated/graphql.ts";
