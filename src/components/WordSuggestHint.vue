@@ -1,7 +1,9 @@
 <template>
   <div class="c-word-suggest-hint">
     <p>Dieses Wort ist anscheinend noch nicht Teil des Wörterbuchs. Möchtest du es hinzufügen?</p>
-    <button type="button" class="c-button" @click="getModalLoaded">Wort hinzufügen</button>
+    <button type="button" class="c-button c-button--center-icon" @click="getModalLoaded">
+      <CirclePlus />Wort hinzufügen
+    </button>
 
     <Modal
       v-if="loadModal"
@@ -11,16 +13,21 @@
       @close="showModal = false"
       @mounted="modalMounted = true"
     >
-      <SuggestWordForm />
+      <SuggestWordForm :berliner-word="wordSearch.search" />
     </Modal>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, defineAsyncComponent } from "vue";
+import CirclePlus from "virtual:icons/lucide/circle-plus";
+import { $wordSearch } from "@stores/index.ts";
+import { useStore } from "@nanostores/vue";
 
 const Modal = defineAsyncComponent(() => import("@components/Modal.vue"));
 const SuggestWordForm = defineAsyncComponent(() => import("@components/SuggestWordForm.vue"));
+
+const wordSearch = useStore($wordSearch);
 
 const showModal = ref(false);
 const loadModal = ref(false);

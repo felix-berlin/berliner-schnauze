@@ -140,6 +140,10 @@ import { createToastNotify } from "@stores/index.ts";
 import { sendEmail } from "@services/sendMail.ts";
 import type { SendEmailPayload } from "@ts_types/generated/graphql.ts";
 
+const props = defineProps<{
+  berlinerWord?: string;
+}>();
+
 export interface FormData {
   berlinerWord?: string;
   translation?: string;
@@ -181,6 +185,10 @@ const formResponse = reactive({
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 const isVerified = ref(false);
 const isSending = ref(false);
+
+if (props.berlinerWord) {
+  formData.berlinerWord = props.berlinerWord;
+}
 
 const sendMail = async (): Promise<void> => {
   const createBody = `
