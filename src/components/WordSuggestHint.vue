@@ -1,8 +1,15 @@
 <template>
   <div class="c-word-suggest-hint">
-    <p>Dieses Wort ist anscheinend noch nicht Teil des Wörterbuchs. Möchtest du es hinzufügen?</p>
-    <button type="button" class="c-button c-button--center-icon" @click="getModalLoaded">
-      <CirclePlus />Wort hinzufügen
+    <strong
+      >Dieses Wort ist anscheinend noch nicht Teil des Wörterbuchs.<br />
+      Möchtest du es hinzufügen?</strong
+    >
+    <button
+      type="button"
+      class="c-button c-button--center-icon c-word-suggest-hint__button"
+      @click="getModalLoaded"
+    >
+      <Plus width="18" height="18" />Wort hinzufügen
     </button>
 
     <Modal
@@ -20,7 +27,7 @@
 
 <script setup lang="ts">
 import { ref, defineAsyncComponent } from "vue";
-import CirclePlus from "virtual:icons/lucide/circle-plus";
+import Plus from "virtual:icons/lucide/plus";
 import { $wordSearch } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
 
@@ -56,4 +63,6 @@ const getModalLoaded = (): void => {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+@use "@styles/components/word-suggest-hint";
+</style>

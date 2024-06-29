@@ -1,0 +1,16 @@
+@use "@styles/variables" as vars;
+
+.c-word-suggest-hint {
+  grid-area: list;
+  border-top: 1px solid var(--new-blue-200);
+  line-height: 1.7;
+  padding-top: vars.$spacer * 1.5;
+
+  &__button {
+    --padding: 0.5rem 1rem;
+
+    gap: vars.$spacer * 0.5;
+    display: flex;
+    margin-top: vars.$spacer * 1;
+  }
+}
