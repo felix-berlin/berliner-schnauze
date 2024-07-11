@@ -5,6 +5,13 @@
   border-top: 1px solid var(--new-blue-200);
   line-height: 1.7;
   padding-top: vars.$spacer * 1.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__text {
+    text-align: center;
+  }
 
   &__button {
     --padding: 0.5rem 1rem;

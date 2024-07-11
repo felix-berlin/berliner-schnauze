@@ -1,6 +1,6 @@
 <template>
   <div class="c-word-suggest-hint">
-    <strong
+    <strong class="c-word-suggest-hint__text"
       >Dieses Wort ist anscheinend noch nicht Teil des Wörterbuchs.<br />
       Möchtest du es hinzufügen?</strong
     >
