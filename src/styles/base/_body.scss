@@ -6,7 +6,7 @@
 
 body {
   margin: 0;
-  color: var(--color-body);
+
   background-color: var(
     --color-background-body,
     color-mix(in srgb, var(--orange-100) 5%, transparent)
@@ -29,6 +29,11 @@ body {
     --color-gradient-body-2: color-mix(in srgb, var(--blue) 70%, transparent);
     --color-background-body: var(--new-blue-300);
   }
+}
+
+body,
+dialog {
+  color: var(--color-body);
 }
 
 @include butler-mx.select-style(vars.$red-200, vars.$white-100);
