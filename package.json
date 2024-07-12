@@ -140,7 +140,7 @@
     "photoswipe": "^5.4.4",
     "typescript": "^5.5.2",
     "vanilla-cookieconsent": "3.0.1",
-    "virtua": "^0.31.0",
+    "virtua": "^0.33.0",
     "vue": "^3.4.29"
   }
 }
