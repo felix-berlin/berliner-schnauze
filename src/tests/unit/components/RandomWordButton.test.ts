@@ -19,6 +19,6 @@ describe("RandomWordButton.vue", () => {
 
     // Check that the rendered href contains one of the word slugs
     const href = wrapper.find("a").attributes("href");
-    expect(words.some((word) => href.includes(word.slug))).toBe(true);
+    expect(words.some((word) => href?.includes(word.slug))).toBe(true);
   });
 });

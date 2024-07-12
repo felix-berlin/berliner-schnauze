@@ -90,19 +90,32 @@
 
   &__list {
     display: grid;
-    grid-template: "filter-toggle search" min-content "result-count result-count" min-content "list list" 1fr / min-content 1fr;
+    grid-template: "filter-toggle search" min-content "result-count result-count" "no-result no-result" min-content "list list" 1fr / min-content 1fr;
     gap: vars.$spacer * 1.5 vars.$spacer;
     margin-top: -60px;
 
     @include butler-mx.breakpoint("md") {
       grid-template-columns: 1fr;
-      grid-template-areas: "search" "result-count" "list";
+      grid-template-areas: "search" "result-count" "no-result" "list";
     }
   }
 
   .c-word-search-list__result-count {
     grid-area: result-count;
     margin: 0;
+  }
+
+  .c-word-search-list__no-result {
+    grid-area: no-result;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: vars.$spacer 0 vars.$spacer * 0.5;
+
+    p {
+      margin-bottom: 0;
+    }
   }
 
   &__headline-wrap {

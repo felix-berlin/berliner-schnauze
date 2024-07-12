@@ -1,5 +1,5 @@
-/* eslint-env node */
-module.exports = {
+/** @type {import('stylelint').Config} */
+export default {
   customSyntax: "postcss-scss",
   extends: [
     "stylelint-config-standard",

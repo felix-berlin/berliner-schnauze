@@ -8,6 +8,13 @@
       {{ searchResultCount }} {{ searchResultCount === 1 ? "Ergebnis" : "Ergebnisse" }}
     </p>
 
+    <div v-if="searchResultCount === 0" class="c-word-search-list__no-result">
+      <SearchX width="50" height="50" />
+      <p>Da biste anjemeiat. Keen Treffer.</p>
+    </div>
+
+    <WordSuggestHint v-if="searchResultCount === 0" />
+
     <WordList />
   </div>
 </template>
@@ -16,8 +23,10 @@
 import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
+import WordSuggestHint from "@components/WordSuggestHint.vue";
 import { $wordSearch, $searchResultCount } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
+import SearchX from "virtual:icons/lucide/search-x";
 import type { Maybe } from "@ts_types/generated/graphql.ts";
 import type { CleanBerlinerWord } from "@stores/index.ts";
 
