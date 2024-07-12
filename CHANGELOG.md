@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.13.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.12.0...v3.13.0) (2024-07-12)
+
+
+### Bug Fixes
+
+* dialog color styles ([d864c66](https://github.com/felix-berlin/berliner-schnauze/commit/d864c66b8ad2b2387bf5ff6e618bb42f80211502))
+* missing deps ([86e34aa](https://github.com/felix-berlin/berliner-schnauze/commit/86e34aa8a835abd4e6e3957841bc8abe938c54ef))
+
+
+### Features
+
+* add styles for WordSuggestHint ([992b1d4](https://github.com/felix-berlin/berliner-schnauze/commit/992b1d41e7f8f775a6aed5f21c784db5d96ffc4b))
+* add WordSuggestHint component ([b56467b](https://github.com/felix-berlin/berliner-schnauze/commit/b56467bcce4a6c530b3891c9f54a4bda3e0d6379))
+* **word suggest hint:** center elements and text ([37a405c](https://github.com/felix-berlin/berliner-schnauze/commit/37a405c8c8fd16b88c9f0d5adbb36f1831a86984))
+* **WordSuggestHint:** set current search to form ([65eb302](https://github.com/felix-berlin/berliner-schnauze/commit/65eb302eb34ec9f03cdaee1b6b801a3787401b2e))
+
 # [3.12.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.11.8...v3.12.0) (2024-06-15)
 
 
