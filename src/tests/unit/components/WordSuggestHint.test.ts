@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import WordSuggestHint from "/home/felix/workspace/berliner-schnauze/src/components/WordSuggestHint.vue";
+import WordSuggestHint from "@components/WordSuggestHint.vue";
 
 vi.mock("@nanostores/vue", () => ({
   useStore: () => ({
