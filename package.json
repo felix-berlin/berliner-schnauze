@@ -99,7 +99,7 @@
     "sass": "1.77.6",
     "semantic-release": "^24.0.0",
     "sinon": "^18.0.0",
-    "stylelint": "^16.6.1",
+    "stylelint": "^16.7.0",
     "stylelint-config-prettier-scss": "^1.0.0",
     "stylelint-config-recommended-scss": "^14.1.0",
     "stylelint-config-standard": "^36.0.1",
@@ -116,12 +116,12 @@
     "@astrojs/sitemap": "^3.1.6",
     "@astrojs/vue": "^4.5.0",
     "@felix_berlin/sass-butler": "3.0.1",
-    "@iconify-json/lucide": "^1.1.199",
+    "@iconify-json/lucide": "^1.1.200",
     "@nanostores/persistent": "^0.10.1",
     "@nanostores/vue": "^0.10.0",
     "@pagefind/default-ui": "^1.1.0",
     "@sentry/astro": "^8.17.0",
-    "@sentry/vite-plugin": "^2.21.0",
+    "@sentry/vite-plugin": "^2.21.1",
     "@sentry/vue": "^8.17.0",
     "@spotlightjs/astro": "^2.0.0",
     "@vueuse/core": "^10.11.0",
@@ -140,7 +140,7 @@
     "photoswipe": "^5.4.4",
     "typescript": "^5.5.3",
     "vanilla-cookieconsent": "3.0.1",
-    "virtua": "^0.33.2",
+    "virtua": "^0.33.3",
     "vue": "^3.4.31"
   }
 }
