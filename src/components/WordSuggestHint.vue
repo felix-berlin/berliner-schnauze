@@ -31,7 +31,9 @@ import Plus from "virtual:icons/lucide/plus";
 import { $wordSearch } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const Modal = defineAsyncComponent(() => import("@components/Modal.vue"));
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const SuggestWordForm = defineAsyncComponent(() => import("@components/SuggestWordForm.vue"));
 
 const wordSearch = useStore($wordSearch);

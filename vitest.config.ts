@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import { defineConfig } from "vite";
+import { defineConfig, coverageConfigDefaults } from "vitest/config";
 import Vue from "@vitejs/plugin-vue";
 import Icons from "unplugin-icons/vite";
 import allAlias from "./alias.ts";
@@ -26,10 +26,15 @@ export default defineConfig({
     exclude: ["src/tests/unit/__needsFix/*"],
     globals: true,
     environment: "jsdom",
-    setupFiles: ["src/tests/setup.ts"],
+    setupFiles: ["src/tests/setup.ts", "@vitest/web-worker"],
     coverage: {
       include: ["src/**"],
-      exclude: ["src/types/**", "src/env.d.ts", "src/pages/_app.ts"],
+      exclude: [
+        "src/types/**",
+        "src/env.d.ts",
+        "src/pages/_app.ts",
+        ...coverageConfigDefaults.exclude,
+      ],
       reportsDirectory: "./tests/unit/coverage",
     },
   },

@@ -155,7 +155,13 @@ importers:
         version: 5.0.5(vite@5.3.3(@types/node@20.14.10)(sass@1.77.6)(terser@5.31.2))(vue@3.4.31(typescript@5.5.3))
       '@vitest/coverage-v8':
         specifier: ^2.0.2
-        version: 2.0.2(vitest@2.0.2(@types/node@20.14.10)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2))
+        version: 2.0.2(vitest@2.0.2(@types/node@20.14.10)(@vitest/ui@2.0.2)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2))
+      '@vitest/ui':
+        specifier: ^2.0.2
+        version: 2.0.2(vitest@2.0.2)
+      '@vitest/web-worker':
+        specifier: ^2.0.2
+        version: 2.0.2(vitest@2.0.2(@types/node@20.14.10)(@vitest/ui@2.0.2)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2))
       '@vue/compiler-sfc':
         specifier: ^3.4.31
         version: 3.4.31
@@ -245,7 +251,7 @@ importers:
         version: 5.3.3(@types/node@20.14.10)(sass@1.77.6)(terser@5.31.2)
       vitest:
         specifier: ^2.0.2
-        version: 2.0.2(@types/node@20.14.10)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2)
+        version: 2.0.2(@types/node@20.14.10)(@vitest/ui@2.0.2)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2)
       vue-eslint-parser:
         specifier: ^9.4.3
         version: 9.4.3(eslint@9.6.0)
@@ -3015,8 +3021,18 @@ packages:
   '@vitest/spy@2.0.2':
     resolution: {integrity: sha512-MgwJ4AZtCgqyp2d7WcQVE8aNG5vQ9zu9qMPYQHjsld/QVsrvg78beNrXdO4HYkP0lDahCO3P4F27aagIag+SGQ==}
 
+  '@vitest/ui@2.0.2':
+    resolution: {integrity: sha512-VwxFTOC2GcNPexQlR9PFb8drWCLA+nLWTWlAS4oba1xbTJYJ8H5vY8OUFOTMb7YQXF0Vsc5IfmLpYkb2dcVgOA==}
+    peerDependencies:
+      vitest: 2.0.2
+
   '@vitest/utils@2.0.2':
     resolution: {integrity: sha512-pxCY1v7kmOCWYWjzc0zfjGTA3Wmn8PKnlPvSrsA643P1NHl1fOyXj2Q9SaNlrlFE+ivCsxM80Ov3AR82RmHCWQ==}
+
+  '@vitest/web-worker@2.0.2':
+    resolution: {integrity: sha512-mwnTvkxI0QHkWeTI9QgKHBk6c5CGFh5MDVlmWAZUCEWfqJvj393eLfz+YFK09cIPlCiGG/+IIjI83+UV3Qf80w==}
+    peerDependencies:
+      vitest: 2.0.2
 
   '@volar/kit@2.4.0-alpha.15':
     resolution: {integrity: sha512-ZCBErTebCVdzpSo/0wBlrjnZfqQfVIaHUJa3kOQe3TbVR/8Ny/3mij9gSkBTUcSyVtlUFpJpJo/B8aQp0xt/mQ==}
@@ -4380,6 +4396,9 @@ packages:
 
   fbjs@3.0.5:
     resolution: {integrity: sha512-ztsSx77JBtkuMrEypfhgc3cI0+0h+svqeie7xHbh1k/IKdcydnvadp/mUaGgjAOXQmQSxsqgaRhS3q9fy+1kxg==}
+
+  fflate@0.8.2:
+    resolution: {integrity: sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==}
 
   figures@2.0.0:
     resolution: {integrity: sha512-Oa2M9atig69ZkfwiApY8F2Yy+tzMbazyvqv21R0NsSC8floSOC09BbT1ITWAdoMGQvJ/aZnR1KMwdx9tvHnTNA==}
@@ -11731,7 +11750,7 @@ snapshots:
       vite: 5.3.3(@types/node@20.14.10)(sass@1.77.6)(terser@5.31.2)
       vue: 3.4.31(typescript@5.5.3)
 
-  '@vitest/coverage-v8@2.0.2(vitest@2.0.2(@types/node@20.14.10)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2))':
+  '@vitest/coverage-v8@2.0.2(vitest@2.0.2(@types/node@20.14.10)(@vitest/ui@2.0.2)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -11746,7 +11765,7 @@ snapshots:
       strip-literal: 2.1.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.0.2(@types/node@20.14.10)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2)
+      vitest: 2.0.2(@types/node@20.14.10)(@vitest/ui@2.0.2)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -11776,12 +11795,30 @@ snapshots:
     dependencies:
       tinyspy: 3.0.0
 
+  '@vitest/ui@2.0.2(vitest@2.0.2)':
+    dependencies:
+      '@vitest/utils': 2.0.2
+      fast-glob: 3.3.2
+      fflate: 0.8.2
+      flatted: 3.3.1
+      pathe: 1.1.2
+      sirv: 2.0.4
+      tinyrainbow: 1.2.0
+      vitest: 2.0.2(@types/node@20.14.10)(@vitest/ui@2.0.2)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2)
+
   '@vitest/utils@2.0.2':
     dependencies:
       '@vitest/pretty-format': 2.0.2
       estree-walker: 3.0.3
       loupe: 3.1.1
       tinyrainbow: 1.2.0
+
+  '@vitest/web-worker@2.0.2(vitest@2.0.2(@types/node@20.14.10)(@vitest/ui@2.0.2)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2))':
+    dependencies:
+      debug: 4.3.5
+      vitest: 2.0.2(@types/node@20.14.10)(@vitest/ui@2.0.2)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2)
+    transitivePeerDependencies:
+      - supports-color
 
   '@volar/kit@2.4.0-alpha.15(typescript@5.5.3)':
     dependencies:
@@ -13578,6 +13615,8 @@ snapshots:
       ua-parser-js: 1.0.38
     transitivePeerDependencies:
       - encoding
+
+  fflate@0.8.2: {}
 
   figures@2.0.0:
     dependencies:
@@ -17498,7 +17537,7 @@ snapshots:
     optionalDependencies:
       vite: 5.3.3(@types/node@20.14.10)(sass@1.77.6)(terser@5.31.2)
 
-  vitest@2.0.2(@types/node@20.14.10)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2):
+  vitest@2.0.2(@types/node@20.14.10)(@vitest/ui@2.0.2)(jsdom@24.1.0)(sass@1.77.6)(terser@5.31.2):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.2
@@ -17521,6 +17560,7 @@ snapshots:
       why-is-node-running: 2.2.2
     optionalDependencies:
       '@types/node': 20.14.10
+      '@vitest/ui': 2.0.2(vitest@2.0.2)
       jsdom: 24.1.0
     transitivePeerDependencies:
       - less

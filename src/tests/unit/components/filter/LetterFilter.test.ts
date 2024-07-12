@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import { nextTick } from "vue";
 import { $wordSearch, setLetterFilter } from "@stores/index.ts";
@@ -18,7 +18,7 @@ vi.mock("@stores/index.ts", () => ({
 }));
 
 describe("LetterFilter.vue", () => {
-  let wrapper;
+  let wrapper: VueWrapper<any, any>;
 
   beforeEach(() => {
     wrapper = mount(LetterFilter);
