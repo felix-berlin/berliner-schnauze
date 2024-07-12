@@ -37,7 +37,7 @@ importers:
         version: 8.13.0(astro@4.11.5(@types/node@20.14.10)(sass@1.77.8)(terser@5.31.2)(typescript@5.5.3))
       '@sentry/vite-plugin':
         specifier: ^2.19.0
-        version: 2.20.1
+        version: 2.21.1
       '@sentry/vue':
         specifier: ^8.11.0
         version: 8.13.0(vue@3.4.31(typescript@5.5.3))
@@ -2628,16 +2628,16 @@ packages:
     peerDependencies:
       astro: '>=3.x || >=4.0.0-beta'
 
-  '@sentry/babel-plugin-component-annotate@2.20.1':
-    resolution: {integrity: sha512-4mhEwYTK00bIb5Y9UWIELVUfru587Vaeg0DQGswv4aIRHIiMKLyNqCEejaaybQ/fNChIZOKmvyqXk430YVd7Qg==}
+  '@sentry/babel-plugin-component-annotate@2.21.1':
+    resolution: {integrity: sha512-u1L8gZ4He0WdyiIsohYkA/YOY1b6Oa5yIMRtfZZ9U5TiWYLgOfMWyb88X0GotZeghSbgxrse/yI4WeHnhAUQDQ==}
     engines: {node: '>= 14'}
 
   '@sentry/browser@8.13.0':
     resolution: {integrity: sha512-/tp7HZ5qjwDLtwooPMoexdAi2PG7gMNY0bHeMlwy20hs8mclC8RW8ZiJA6czXHfgnbmvxfrHaY53IJyz//JnlA==}
     engines: {node: '>=14.18'}
 
-  '@sentry/bundler-plugin-core@2.20.1':
-    resolution: {integrity: sha512-6ipbmGzHekxeRCbp7eoefr6bdd/lW4cNA9eNnrmd9+PicubweGaZZbH2NjhFHsaxzgOezwipDHjrTaap2kTHgw==}
+  '@sentry/bundler-plugin-core@2.21.1':
+    resolution: {integrity: sha512-F8FdL/bS8cy1SY1Gw0Mfo3ROTqlrq9Lvt5QGvhXi22dpVcDkWmoTWE2k+sMEnXOa8SdThMc/gyC8lMwHGd3kFQ==}
     engines: {node: '>= 14'}
 
   '@sentry/cli-darwin@2.32.1':
@@ -2712,8 +2712,8 @@ packages:
     resolution: {integrity: sha512-PxV0v9VbGWH9zP37P5w2msLUFDr287nYjoY2XVF+RSolyiTs1CQNI5ZMUO3o4MsSac/dpXxjyrZXQd72t/jRYA==}
     engines: {node: '>=14.18'}
 
-  '@sentry/vite-plugin@2.20.1':
-    resolution: {integrity: sha512-IOYAJRcV+Uqn0EL8rxcoCvE77PbtGzKjP+B6iIgDZ229AWbpfbpWY8zHCcufwdDzb5PtgOhWWHT74iAsNyij/A==}
+  '@sentry/vite-plugin@2.21.1':
+    resolution: {integrity: sha512-i2PqeLafGBcSROnmr9mS0dL2/JBJji/4rJZ2U2A+tqtAhDAAaCUNalbn6xLp/hawLExt/wRuBj1J7j46sGDOaA==}
     engines: {node: '>= 14'}
 
   '@sentry/vue@8.13.0':
@@ -11156,13 +11156,13 @@ snapshots:
       '@sentry/node': 8.13.0
       '@sentry/types': 8.13.0
       '@sentry/utils': 8.13.0
-      '@sentry/vite-plugin': 2.20.1
+      '@sentry/vite-plugin': 2.21.1
       astro: 4.11.5(@types/node@20.14.10)(sass@1.77.8)(terser@5.31.2)(typescript@5.5.3)
     transitivePeerDependencies:
       - encoding
       - supports-color
 
-  '@sentry/babel-plugin-component-annotate@2.20.1': {}
+  '@sentry/babel-plugin-component-annotate@2.21.1': {}
 
   '@sentry/browser@8.13.0':
     dependencies:
@@ -11174,10 +11174,10 @@ snapshots:
       '@sentry/types': 8.13.0
       '@sentry/utils': 8.13.0
 
-  '@sentry/bundler-plugin-core@2.20.1':
+  '@sentry/bundler-plugin-core@2.21.1':
     dependencies:
       '@babel/core': 7.24.8
-      '@sentry/babel-plugin-component-annotate': 2.20.1
+      '@sentry/babel-plugin-component-annotate': 2.21.1
       '@sentry/cli': 2.32.1
       dotenv: 16.4.5
       find-up: 5.0.0
@@ -11284,9 +11284,9 @@ snapshots:
     dependencies:
       '@sentry/types': 8.13.0
 
-  '@sentry/vite-plugin@2.20.1':
+  '@sentry/vite-plugin@2.21.1':
     dependencies:
-      '@sentry/bundler-plugin-core': 2.20.1
+      '@sentry/bundler-plugin-core': 2.21.1
       unplugin: 1.0.1
     transitivePeerDependencies:
       - encoding
