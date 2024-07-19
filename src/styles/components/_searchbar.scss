@@ -15,11 +15,11 @@
     min-width: 150px;
   }
   @include butler-mx.breakpoint("md", "max") {
+    justify-content: center;
+
     @include butler-mx.dark-mode-class {
       --color-background: transparent;
     }
-
-    justify-content: center;
   }
 
   &__slash-icon,

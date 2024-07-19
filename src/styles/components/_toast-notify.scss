@@ -32,13 +32,14 @@
 
   &:popover-open {
     @include butler-mx.feature("motion") {
+      opacity: 1;
+      transform: translateX(0);
+
+
       @starting-style {
         transform: translateX(100%);
         opacity: 0;
       }
-
-      opacity: 1;
-      transform: translateX(0);
     }
   }
 
