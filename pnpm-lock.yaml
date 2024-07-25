@@ -22,7 +22,7 @@ importers:
         version: 3.0.1
       '@iconify-json/lucide':
         specifier: ^1.1.200
-        version: 1.1.200
+        version: 1.1.202
       '@nanostores/persistent':
         specifier: ^0.10.1
         version: 0.10.1(nanostores@0.10.3)
@@ -1864,8 +1864,8 @@ packages:
     resolution: {integrity: sha512-d2CGZR2o7fS6sWB7DG/3a95bGKQyHMACZ5aW8qGkkqQpUoZV6C0X7Pc7l4ZNMZkfNBf4VWNe9E1jRsf0G146Ew==}
     engines: {node: '>=18.18'}
 
-  '@iconify-json/lucide@1.1.200':
-    resolution: {integrity: sha512-imZeWdgMcJ6xZ15U0h35kehDcrVShvrTui3RvuY/ZUxFGC23wxPt1OQXiu+KQ/GEiujGEeOtQ1BL3Jf+7dQiqw==}
+  '@iconify-json/lucide@1.1.202':
+    resolution: {integrity: sha512-1qvuylRBiruk1/zS2mvFjM8jn+pAIKsoWeRC5Q36oEkU+59G+PxVu1naRGWw3fLmbG2TE5l39FW6ppFug8XN/Q==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -10150,7 +10150,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.3.0': {}
 
-  '@iconify-json/lucide@1.1.200':
+  '@iconify-json/lucide@1.1.202':
     dependencies:
       '@iconify/types': 2.0.0
 
