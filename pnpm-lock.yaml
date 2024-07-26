@@ -43,7 +43,7 @@ importers:
         version: 8.20.0(vue@3.4.34(typescript@5.5.4))
       '@spotlightjs/astro':
         specifier: ^2.0.0
-        version: 2.0.0(@sentry/astro@8.20.0(astro@4.12.2(@types/node@20.14.12)(sass@1.77.8)(terser@5.31.3)(typescript@5.5.4)))(astro@4.12.2(@types/node@20.14.12)(sass@1.77.8)(terser@5.31.3)(typescript@5.5.4))
+        version: 2.1.1(@sentry/astro@8.20.0(astro@4.12.2(@types/node@20.14.12)(sass@1.77.8)(terser@5.31.3)(typescript@5.5.4)))(astro@4.12.2(@types/node@20.14.12)(sass@1.77.8)(terser@5.31.3)(typescript@5.5.4))
       '@vueuse/core':
         specifier: ^10.11.0
         version: 10.11.0(vue@3.4.34(typescript@5.5.4))
@@ -2761,17 +2761,21 @@ packages:
   '@sinonjs/text-encoding@0.7.2':
     resolution: {integrity: sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==}
 
-  '@spotlightjs/astro@2.0.0':
-    resolution: {integrity: sha512-dM7yC99seOWgTK24YmzYKFCCK51Jc2pQBsBIeKqSk/B5XqfWLqCymQlOkm6PVeFcmjIMR5uYuoW4wUTUlwhrvQ==}
+  '@spotlightjs/astro@2.1.1':
+    resolution: {integrity: sha512-zjRIndOWUb4egpfomSuMxpcPXcPVztcXYd0oIsFismWZ1K/jVyTgsgRR5SgKbOzXwvoiOz1AHDUzSUy5lEWM8g==}
     peerDependencies:
       '@sentry/astro': '>=7.84.0'
-      astro: '>=3.4.0 || >=4.0.0-beta'
+      astro: '>=4.0.0'
 
-  '@spotlightjs/overlay@2.0.0':
-    resolution: {integrity: sha512-6P2Kwko9NPxat+Z5/QxWHr9+PLZtbXb/Bi2bdFmKc1yWTBVTJcbvntU9Xy+Qd8L4tFFFfqSORiXg7L4Bk6z4Jw==}
+  '@spotlightjs/overlay@2.1.0':
+    resolution: {integrity: sha512-4A718MNG81N1q81lH45BppN/Z94lEHa9U8dUtfjpBdnSngJnwz6Ku3gmFhQQfEOcei+xtPdLgCVP3ODfu0etsg==}
 
-  '@spotlightjs/sidecar@1.4.0':
-    resolution: {integrity: sha512-onj/phrNtDI8a79zc8jfxJ5BITQk5klO4xSoQXxiYeQWTZcegVeO8VftOVfWPBnMY/axnh+ltxJm/cHaV5SP6Q==}
+  '@spotlightjs/sidecar@1.5.0':
+    resolution: {integrity: sha512-ASGHrRKQ40+kN/SAVEVD5GY3tt7gJM4lziEALHKb5rBXKHKIDqCckgEY4n8FhzpTo1N8azVFVHEIriPtpWTEsg==}
+    hasBin: true
+
+  '@spotlightjs/spotlight@2.1.1':
+    resolution: {integrity: sha512-i67sfCEIXvsHMtGMfE7U0F0MQMcrMRc54ToyaqvzZZ4aRCcUpPdl50KChcixY1ksuI7KiiP0q4h+NbjOzrrX7w==}
     hasBin: true
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
@@ -11285,17 +11289,22 @@ snapshots:
 
   '@sinonjs/text-encoding@0.7.2': {}
 
-  '@spotlightjs/astro@2.0.0(@sentry/astro@8.20.0(astro@4.12.2(@types/node@20.14.12)(sass@1.77.8)(terser@5.31.3)(typescript@5.5.4)))(astro@4.12.2(@types/node@20.14.12)(sass@1.77.8)(terser@5.31.3)(typescript@5.5.4))':
+  '@spotlightjs/astro@2.1.1(@sentry/astro@8.20.0(astro@4.12.2(@types/node@20.14.12)(sass@1.77.8)(terser@5.31.3)(typescript@5.5.4)))(astro@4.12.2(@types/node@20.14.12)(sass@1.77.8)(terser@5.31.3)(typescript@5.5.4))':
     dependencies:
       '@sentry/astro': 8.20.0(astro@4.12.2(@types/node@20.14.12)(sass@1.77.8)(terser@5.31.3)(typescript@5.5.4))
-      '@spotlightjs/overlay': 2.0.0
-      '@spotlightjs/sidecar': 1.4.0
+      '@spotlightjs/spotlight': 2.1.1
       astro: 4.12.2(@types/node@20.14.12)(sass@1.77.8)(terser@5.31.3)(typescript@5.5.4)
+
+  '@spotlightjs/overlay@2.1.0': {}
+
+  '@spotlightjs/sidecar@1.5.0': {}
+
+  '@spotlightjs/spotlight@2.1.1':
+    dependencies:
+      '@spotlightjs/overlay': 2.1.0
+      '@spotlightjs/sidecar': 1.5.0
+      import-meta-resolve: 4.1.0
       source-map: 0.7.4
-
-  '@spotlightjs/overlay@2.0.0': {}
-
-  '@spotlightjs/sidecar@1.4.0': {}
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
     dependencies:
