@@ -108,9 +108,6 @@
   &__word {
     margin: 0;
 
-    @include mx.breakpoint("sm", "max") {
-      order: 2;
-    }
     font: {
       family: vars.$berlin;
       size: butler-fn.fluid(32, 64, 320, 1260);
@@ -121,6 +118,9 @@
       decoration-style: dashed;
       decoration-thickness: from-font;
       underline-position: from-font;
+    }
+    @include mx.breakpoint("sm", "max") {
+      order: 2;
     }
   }
 
