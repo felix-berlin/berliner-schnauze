@@ -28,7 +28,7 @@ importers:
         version: 0.10.2(nanostores@0.10.3)
       '@nanostores/vue':
         specifier: ^0.10.0
-        version: 0.10.0(@nanostores/logger@0.3.0(nanostores@0.10.3))(@vue/devtools-api@6.6.3)(nanostores@0.10.3)(vue@3.4.37(typescript@5.5.4))
+        version: 0.10.0(@nanostores/logger@0.4.0(nanostores@0.10.3))(@vue/devtools-api@6.6.3)(nanostores@0.10.3)(vue@3.4.37(typescript@5.5.4))
       '@pagefind/default-ui':
         specifier: ^1.1.0
         version: 1.1.0
@@ -124,8 +124,8 @@ importers:
         specifier: ^4.2.3
         version: 4.2.3(graphql@16.9.0)
       '@nanostores/logger':
-        specifier: ^0.3.0
-        version: 0.3.0(nanostores@0.10.3)
+        specifier: ^0.4.0
+        version: 0.4.0(nanostores@0.10.3)
       '@semantic-release/changelog':
         specifier: ^6.0.3
         version: 6.0.3(semantic-release@24.0.0(typescript@5.5.4))
@@ -2027,8 +2027,8 @@ packages:
   '@mongodb-js/saslprep@1.1.8':
     resolution: {integrity: sha512-qKwC/M/nNNaKUBMQ0nuzm47b7ZYWQHN3pcXq4IIcoSBc2hOIrflAxJduIvvqmhoz3gR2TacTAs8vlsCVPkiEdQ==}
 
-  '@nanostores/logger@0.3.0':
-    resolution: {integrity: sha512-4h56UQaB2rEuAOKm/XtrOwg7TE4s54LudqyhlJqgfFI6X+pKwNTqScZWQxoPyprV9ovSBLHGyHb4NipFn+NW9w==}
+  '@nanostores/logger@0.4.0':
+    resolution: {integrity: sha512-8ipUQgX9udy3Uc9X9b7CFDZQR7DAKa+ZbZlIOcs3F0F1nDEYejffV2UoTQ1oYQ1F+DTXrNZIyZWhw+IWuSqvRQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       nanostores: '>=0.10.2'
@@ -10344,7 +10344,7 @@ snapshots:
     dependencies:
       sparse-bitfield: 3.0.3
 
-  '@nanostores/logger@0.3.0(nanostores@0.10.3)':
+  '@nanostores/logger@0.4.0(nanostores@0.10.3)':
     dependencies:
       nanostores: 0.10.3
 
@@ -10352,12 +10352,12 @@ snapshots:
     dependencies:
       nanostores: 0.10.3
 
-  '@nanostores/vue@0.10.0(@nanostores/logger@0.3.0(nanostores@0.10.3))(@vue/devtools-api@6.6.3)(nanostores@0.10.3)(vue@3.4.37(typescript@5.5.4))':
+  '@nanostores/vue@0.10.0(@nanostores/logger@0.4.0(nanostores@0.10.3))(@vue/devtools-api@6.6.3)(nanostores@0.10.3)(vue@3.4.37(typescript@5.5.4))':
     dependencies:
       nanostores: 0.10.3
       vue: 3.4.37(typescript@5.5.4)
     optionalDependencies:
-      '@nanostores/logger': 0.3.0(nanostores@0.10.3)
+      '@nanostores/logger': 0.4.0(nanostores@0.10.3)
       '@vue/devtools-api': 6.6.3
 
   '@nodelib/fs.scandir@2.1.5':
