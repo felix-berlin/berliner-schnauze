@@ -25,7 +25,7 @@ importers:
         version: 1.1.205
       '@nanostores/persistent':
         specifier: ^0.10.1
-        version: 0.10.1(nanostores@0.10.3)
+        version: 0.10.2(nanostores@0.10.3)
       '@nanostores/vue':
         specifier: ^0.10.0
         version: 0.10.0(@nanostores/logger@0.3.0(nanostores@0.10.3))(@vue/devtools-api@6.6.3)(nanostores@0.10.3)(vue@3.4.35(typescript@5.5.4))
@@ -2069,11 +2069,11 @@ packages:
     peerDependencies:
       nanostores: '>=0.10.2'
 
-  '@nanostores/persistent@0.10.1':
-    resolution: {integrity: sha512-BMYj47ONmkrPkHfomimtBAwtDNNjO57lw0uk7jB35GHVwixmqWtlK6DVAAbioqwJn9WEaWSB/9Ss5ukBG0NHlQ==}
+  '@nanostores/persistent@0.10.2':
+    resolution: {integrity: sha512-BEndnLhRC+yP7gXTESepBbSj8XNl8OXK9hu4xAgKC7MWJHKXnEqJMqY47LUyHxK6vYgFnisyHmqq+vq8AUFyIg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      nanostores: ^0.9.0 || ^0.10.0
+      nanostores: ^0.9.0 || ^0.10.0 || ^0.11.0
 
   '@nanostores/vue@0.10.0':
     resolution: {integrity: sha512-832RAUbzRfHPs1CdqVEwfvgB2+RD/INji4Zo8bUSEfRO2pQRMMeq479gydnohGpRaa0oNwlfKo7TGFXCghq/1g==}
@@ -10442,7 +10442,7 @@ snapshots:
     dependencies:
       nanostores: 0.10.3
 
-  '@nanostores/persistent@0.10.1(nanostores@0.10.3)':
+  '@nanostores/persistent@0.10.2(nanostores@0.10.3)':
     dependencies:
       nanostores: 0.10.3
 
