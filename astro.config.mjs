@@ -101,7 +101,6 @@ export default defineConfig({
       },
       experimental: {
         directoryAndTrailingSlashHandler: true,
-        /* eslint-disable */
         env: {
           schema: {
             schema: {
@@ -198,7 +197,6 @@ export default defineConfig({
             },
           },
         },
-        /* eslint-enable */
       },
     }),
     // sentry({
@@ -232,6 +230,7 @@ export default defineConfig({
         authToken: SENTRY_AUTH_TOKEN,
         org: SENTRY_ORG,
         project: SENTRY_PROJECT,
+        applicationKey: "berliner-schnauze",
       }),
       codecovVitePlugin({
         enableBundleAnalysis: CODECOV_TOKEN !== undefined,
