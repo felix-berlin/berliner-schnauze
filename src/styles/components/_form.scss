@@ -54,12 +54,12 @@
       .c-form__select {
         --color-border: var(--danger);
 
+        border-color: vars.$danger;
+        background-color: color.adjust(vars.$danger, $lightness: 40%);
+
         @include mx.dark-mode-override {
           --box-shadow-focus: 2px #{rgba(vars.$danger, 0.3)};
         }
-
-        border-color: vars.$danger;
-        background-color: color.adjust(vars.$danger, $lightness: 40%);
       }
     }
   }
