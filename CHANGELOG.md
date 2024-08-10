@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.13.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.13.0...v3.13.1) (2024-08-10)
+
+
+### Bug Fixes
+
+* FE errors after thirdPartyErrorFilterIntegration setup ([abf8e65](https://github.com/felix-berlin/berliner-schnauze/commit/abf8e652be64ed483947ed559b8933b5269f86f2))
+
 # [3.13.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.12.0...v3.13.0) (2024-07-12)
 
 
