@@ -9,22 +9,7 @@ Sentry.init({
   // Alternatively, use `process.env.npm_package_version` for a dynamic release version
   // if your build tool supports it.
   release: version,
-  integrations: [
-    Sentry.browserTracingIntegration({ enableInp: true }),
-    Sentry.replayIntegration(),
-    Sentry.thirdPartyErrorFilterIntegration({
-      // Specify the application keys that you specified in the Sentry bundler plugin
-      filterKeys: ["berliner-schnauze"],
-
-      // Defines how to handle errors that contain third party stack frames.
-      // Possible values are:
-      // - 'drop-error-if-contains-third-party-frames'
-      // - 'drop-error-if-exclusively-contains-third-party-frames'
-      // - 'apply-tag-if-contains-third-party-frames'
-      // - 'apply-tag-if-exclusively-contains-third-party-frames'
-      behaviour: "apply-tag-if-exclusively-contains-third-party-frames",
-    }),
-  ],
+  integrations: [Sentry.browserTracingIntegration({ enableInp: true }), Sentry.replayIntegration()],
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.

@@ -96,7 +96,9 @@ export const createToastNotify = (payload: ToastPayload): void => {
  *
  * @return  {void}
  */
-export const removeToastById = (id: number): void => {
+export const removeToastById = (
+  id: number | `${string}-${string}-${string}-${string}-${string}`,
+): void => {
   const currentToast = $toastNotify.get().find((t) => t.id === id);
 
   hidePopover(currentToast?.id);

@@ -49,11 +49,12 @@ const { title, seo } = Astro.props as SeoProps & Title;
 
 <link rel="preconnect" href="//cms.berliner-schnauze.wtf" />
 
+<script src="../plugins/sentryBrowser.ts"></script>
+
 <SetColorMode />
 
 <ViewTransitions />
 
-<script src="../plugins/sentryBrowser.ts"></script>
 <script src="/src/lib/unsupportedBrowser.ts"></script>
 
 {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
