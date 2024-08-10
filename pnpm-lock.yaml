@@ -165,9 +165,6 @@ importers:
       '@vue/compiler-sfc':
         specifier: ^3.4.37
         version: 3.4.37
-      '@vue/devtools-api':
-        specifier: ^6.6.3
-        version: 6.6.3
       '@vue/test-utils':
         specifier: ^2.4.6
         version: 2.4.6
@@ -12033,7 +12030,8 @@ snapshots:
       de-indent: 1.0.2
       he: 1.2.0
 
-  '@vue/devtools-api@6.6.3': {}
+  '@vue/devtools-api@6.6.3':
+    optional: true
 
   '@vue/devtools-core@7.3.6(vite@5.4.0(@types/node@22.2.0)(sass@1.77.8)(terser@5.31.3))(vue@3.4.37(typescript@5.5.4))':
     dependencies:

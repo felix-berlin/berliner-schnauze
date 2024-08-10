@@ -30,6 +30,9 @@ export default defineConfig({
       script: {
         propsDestructure: true,
       },
+      devtools: {
+        launchEditor: "code",
+      },
     }),
     sitemap({
       lastmod: new Date(),
@@ -230,7 +233,6 @@ export default defineConfig({
         authToken: SENTRY_AUTH_TOKEN,
         org: SENTRY_ORG,
         project: SENTRY_PROJECT,
-        applicationKey: "berliner-schnauze",
       }),
       codecovVitePlugin({
         enableBundleAnalysis: CODECOV_TOKEN !== undefined,
