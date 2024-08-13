@@ -105,25 +105,25 @@
     "stylelint-config-prettier-scss": "^1.0.0",
     "stylelint-config-recommended-scss": "^14.1.0",
     "stylelint-config-standard": "^36.0.1",
-    "typescript-eslint": "^8.0.1",
+    "typescript-eslint": "^8.1.0",
     "unplugin-icons": "^0.19.2",
     "vite": "^5.4.0",
     "vitest": "^2.0.5",
     "vue-eslint-parser": "^9.4.3",
     "vue-tsc": "^2.0.29",
-    "wrangler": "^3.70.0"
+    "wrangler": "^3.71.0"
   },
   "dependencies": {
     "@astrojs/partytown": "^2.1.1",
     "@astrojs/sitemap": "^3.1.6",
     "@astrojs/vue": "^4.5.0",
     "@felix_berlin/sass-butler": "3.0.1",
-    "@iconify-json/lucide": "^1.1.205",
+    "@iconify-json/lucide": "^1.1.206",
     "@nanostores/persistent": "^0.10.2",
     "@nanostores/vue": "^0.10.0",
     "@pagefind/default-ui": "^1.1.0",
     "@sentry/astro": "^8.25.0",
-    "@sentry/vite-plugin": "^2.22.0",
+    "@sentry/vite-plugin": "^2.22.1",
     "@sentry/vue": "^8.25.0",
     "@spotlightjs/astro": "^2.1.6",
     "@vueuse/core": "^10.11.1",
@@ -142,7 +142,7 @@
     "photoswipe": "^5.4.4",
     "typescript": "^5.5.4",
     "vanilla-cookieconsent": "3.0.1",
-    "virtua": "^0.33.4",
+    "virtua": "^0.33.5",
     "vue": "^3.4.37"
   }
 }
