@@ -33,22 +33,27 @@ import BadgeTag from "@components/BadgeTag.vue";
 import AudioPlayerList from "@components/AudioPlayerList.vue";
 import Hypher from "hypher";
 import german from "hyphenation.de";
-
+import { getCollection, getEntry } from "astro:content";
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
 import type { BerlinerWord } from "@ts_types/generated/graphql.ts";
 
-export const getStaticPaths = async () => {
-  const allWords = await getAllWords();
+// const allWordsCollection = await getCollection("words");
 
-  return allWords.map(({ node }) => {
+// console.log(allWordsCollection[0].data);
+
+export const getStaticPaths = async () => {
+  const wordCollection = await getCollection("words");
+  const words = wordCollection.map(({ data }) => data.word);
+
+  return words.map((word) => {
     return {
       params: {
-        wordSlug: node.slug,
+        wordSlug: word.slug,
       },
       props: {
-        word: node as BerlinerWord,
-        allWords: allWords.map((word) => word.node),
+        word: word as BerlinerWord,
+        allWords: words,
       },
     };
   });
@@ -87,7 +92,7 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 
 const hypher = new Hypher(german);
 
-const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!));
+const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ""));
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
