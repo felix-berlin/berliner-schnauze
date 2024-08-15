@@ -11,6 +11,7 @@ import WordSearch from "@components/word-search/WordSearch.astro";
 import FactCard from "@components/FactCard.astro";
 import WordSearchLink from "@components/WordSearchLink.astro";
 import "@styles/components/_facts-grid.scss";
+import { getCollection, getEntries } from "astro:content";
 
 const content = {
   title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
@@ -50,7 +51,11 @@ const facts = [
   },
 ];
 
-const allWords = await getAllWords();
+// TODO: cleanup
+// const allWords = await getAllWords();
+
+const wordCollection = await getCollection("words");
+const words = wordCollection.map(({ data }) => data.word);
 ---
 
 <Layout content={seoData(content)} contentClasses="o-index">
@@ -88,5 +93,5 @@ const allWords = await getAllWords();
     <WordOfTheDay client:only="vue" />
   </section>
 
-  <WordSearch words={allWords} />
+  <WordSearch words={words} />
 </Layout>

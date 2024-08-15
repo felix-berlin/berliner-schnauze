@@ -33,18 +33,19 @@ import BadgeTag from "@components/BadgeTag.vue";
 import AudioPlayerList from "@components/AudioPlayerList.vue";
 import Hypher from "hypher";
 import german from "hyphenation.de";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
 // Types
 import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
 import type { BerlinerWord } from "@ts_types/generated/graphql.ts";
 
+// TODO: cleanup
 // const allWordsCollection = await getCollection("words");
 
 // console.log(allWordsCollection[0].data);
 
 export const getStaticPaths = async () => {
   const wordCollection = await getCollection("words");
-  const words = wordCollection.map(({ data }) => data.word);
+  const words = wordCollection.map(({ data }) => data.word) as BerlinerWord[];
 
   return words.map((word) => {
     return {
@@ -52,7 +53,7 @@ export const getStaticPaths = async () => {
         wordSlug: word.slug,
       },
       props: {
-        word: word as BerlinerWord,
+        word: word,
         allWords: words,
       },
     };

@@ -11,19 +11,19 @@ interface WordSearchProps {
 
 const { words } = Astro.props as WordSearchProps;
 
-const cleanWords = words.map(({ node }): CleanBerlinerWord => {
-  const { seo, title, ...cleanNode } = node;
+const cleanWords = words.map((word): CleanBerlinerWord => {
+  const { seo, title, ...cleanNode } = word;
   return cleanNode;
 });
 
-const availableWordGroups = Array.from(new Set(words.map(({ node }) => node.wordGroup))).sort();
+const availableWordGroups = Array.from(new Set(words.map((word) => word.wordGroup))).sort();
 
 const wordTypes = Array.from(
   new Set(
     words
-      .map(({ node }) => node.berlinerischWordTypes?.nodes)
+      .map((word) => word.berlinerischWordTypes?.nodes)
       .flat()
-      .map((node) => node?.name),
+      .map((word) => word?.name),
   ),
 ).sort();
 ---
