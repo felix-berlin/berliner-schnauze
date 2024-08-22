@@ -32,6 +32,8 @@ export default tseslint.config(
       "**/node_modules/",
       "**/__snapshots__/",
       "src/types/generated/",
+      "**/*.config.{mjs,cjs,ts,js}",
+      "**/*.test.ts",
     ],
     languageOptions: {
       parser: vueParser,

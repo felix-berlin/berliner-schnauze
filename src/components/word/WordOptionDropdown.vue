@@ -55,7 +55,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import Copy from "virtual:icons/lucide/copy";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";

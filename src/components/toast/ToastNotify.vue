@@ -55,7 +55,7 @@ const {
   closeOnSwipe = true,
 } = defineProps<ToastNotify>();
 
-const toast = ref();
+const toast = ref<HTMLElement | null>(null);
 const isSupported = ref(false);
 const isOpen = ref(false);
 const { isSwiping } = useSwipe(toast);
@@ -92,7 +92,7 @@ const hideToast = async (): Promise<void> => {
  */
 const showToast = (): void => {
   isOpen.value = true;
-  toast.value.showPopover();
+  toast.value?.showPopover();
 };
 
 /**
@@ -100,7 +100,7 @@ const showToast = (): void => {
  *
  * @return  {void}
  */
-const setPosition = () => {
+const setPosition = (): void => {
   const positions = position.split("-");
 
   positions.forEach((pos) => {

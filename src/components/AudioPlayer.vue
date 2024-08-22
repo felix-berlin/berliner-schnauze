@@ -62,7 +62,11 @@ const stopAudio = () => {
 };
 
 const togglePlayStop = async () => {
-  isPlaying.value ? stopAudio() : await playAudio();
+  if (isPlaying.value) {
+    stopAudio();
+  } else {
+    await playAudio();
+  }
 };
 
 onMounted(() => {

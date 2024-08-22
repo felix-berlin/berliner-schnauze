@@ -87,7 +87,7 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 
 const hypher = new Hypher(german);
 
-const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!));
+const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch));
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
@@ -208,13 +208,13 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!
           <h3>Konsonanten und Vokale</h3>
           <p
             class="c-single-word__consonants-vowels-word"
-            set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch!)}
+            set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch)}
           />
 
           <p>
-            enhält {countLetters(word.wordProperties?.berlinerisch!).vowels}
+            enhält {countLetters(word.wordProperties?.berlinerisch).vowels}
             <span class="is-vowel">Vokale</span> und {
-              countLetters(word.wordProperties?.berlinerisch!).consonants
+              countLetters(word.wordProperties?.berlinerisch).consonants
             }
             <span class="is-consonant">Konsonanten</span>
           </p>
@@ -275,7 +275,7 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch!
                   .filter((result) => result.isSimilar)
                   .map((result) => (
                     <li>
-                      <a href={routeToWord(result.word?.slug!)}>
+                      <a href={routeToWord(result.word?.slug)}>
                         {result.word?.wordProperties?.berlinerisch}
                       </a>
                     </li>
