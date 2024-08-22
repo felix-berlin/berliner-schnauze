@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import ScrollToTop from "/home/felix/workspace/berliner-schnauze/src/components/ScrollToTop.vue";
+import ScrollToTop from "@components/ScrollToTop.vue";
 
 describe("ScrollToTop.vue", () => {
   let intersectionObserverMock: any;
