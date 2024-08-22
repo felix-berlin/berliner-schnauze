@@ -46,6 +46,7 @@
     "lint": "pnpm run lint:js && pnpm run lint:style",
     "test:unit": "vitest --coverage",
     "test:unit:ui": "vitest --coverage --ui",
+    "test:ci": "vitest --coverage --reporter=junit",
     "vitest:update": "vitest --update",
     "format": "npx prettier --write .",
     "gql:generate": "gql-gen --config codegen.ts",

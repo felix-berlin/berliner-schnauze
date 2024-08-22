@@ -28,13 +28,7 @@ jobs:
         run: pnpm i
 
       - name: Run Vitest (with coverage report) 🧪
-        run: pnpm dlx vitest --coverage --reporter=junit
-
-      - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+        run: pnpm run test:ci
 
       - name: Codecov
         uses: codecov/codecov-action@v4.5.0
@@ -42,3 +36,9 @@ jobs:
           directory: ./tests/unit/coverage
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
