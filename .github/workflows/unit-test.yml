@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup pnpm 🛠️
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
 
       - name: Setup Node.js 🔧
         uses: actions/setup-node@v4
@@ -28,7 +28,7 @@ jobs:
         run: pnpm i
 
       - name: Run Vitest (with coverage report) 🧪
-        run: vitest --coverage --reporter=junit
+        run: pnpm dlx vitest --coverage --reporter=junit
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
