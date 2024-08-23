@@ -33,6 +33,8 @@ export default defineConfig({
         "src/types/**",
         "src/env.d.ts",
         "src/pages/_app.ts",
+        "src/plugins/**",
+        "src/utils/supportedBrowsers.mjs",
         ...coverageConfigDefaults.exclude,
       ],
       reportsDirectory: "./tests/unit/coverage",
