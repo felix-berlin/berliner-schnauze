@@ -7,7 +7,7 @@ import { createToastNotify } from "@stores/index.ts";
  * @return  {boolean}
  */
 const isBrowserSupported = (): boolean => {
-  return supportedBrowsers.test(navigator.userAgent);
+  return (supportedBrowsers as RegExp).test(navigator.userAgent);
 };
 
 /**

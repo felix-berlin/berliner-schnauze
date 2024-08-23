@@ -19,6 +19,7 @@
     "types": [
       "vitest/globals",
       "unplugin-icons/types/astro",
+      "unplugin-icons/types/vue",
       "vite-plugin-pwa/client",
       "vite-plugin-pwa/info",
       "vite-plugin-pwa/pwa-assets"

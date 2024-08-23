@@ -49,7 +49,7 @@ export const $wordSearch = persistentMap<WordList>(
     decode(value) {
       try {
         return JSON.parse(value);
-      } catch (e) {
+      } catch {
         return value;
       }
     },
@@ -112,12 +112,7 @@ export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCateg
 
 /**
  * Toggle order by name
- *
- * @param   {MapStore<WordList>}  $wordSearch
- * @param   {String}  wordListOrderToggle
- * @param   {Function}  store
- *
- * @return  {void}
+ * @return {void}
  */
 export const $alphabeticalOrderToggle = (): void => {
   $wordSearch.setKey(
@@ -128,12 +123,8 @@ export const $alphabeticalOrderToggle = (): void => {
 
 /**
  * Toggle order by date
- *
- * @param   {MapStore<WordList>}  $wordSearch
- * @param   {String}  wordListDateOrderToggle
- * @param   {Function}  store
- *
- * @return  {void}
+ * @param {MapStore<WordList>} $wordSearch
+ * @return {void}
  */
 export const $wordListDateOrderToggle = (): void => {
   $wordSearch.setKey("dateOrder", $wordSearch.get().dateOrder === "asc" ? "desc" : "asc");
@@ -141,12 +132,8 @@ export const $wordListDateOrderToggle = (): void => {
 
 /**
  * Toggle order by modified date
- *
- * @param   {MapStore<WordList>}  $wordSearch
- * @param   {String}  wordListModifiedDateOrderToggle
- * @param   {Function}  store
- *
- * @return  {void}
+ * @param {MapStore<WordList>} $wordSearch
+ * @return {void}
  */
 export const $wordListModifiedDateOrderToggle = (): void => {
   $wordSearch.setKey(
