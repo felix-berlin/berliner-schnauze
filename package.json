@@ -58,7 +58,7 @@
     "server:pages": "npx wrangler pages dev ./dist",
     "supportedBrowsers": "echo \"export default $(browserslist-useragent-regexp --allowHigherVersions);\" > src/utils/supportedBrowsers.mjs"
   },
-  "packageManager": "pnpm@9.8.0",
+  "packageManager": "pnpm@9.9.0",
   "devDependencies": {
     "@astrojs/check": "^0.9.3",
     "@codecov/vite-plugin": "0.0.1-beta.10",
