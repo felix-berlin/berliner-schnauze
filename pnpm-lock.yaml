@@ -191,7 +191,7 @@ importers:
         version: 6.10.0(eslint@9.9.1(jiti@1.21.6))
       eslint-plugin-vue:
         specifier: ^9.27.0
-        version: 9.27.0(eslint@9.9.1(jiti@1.21.6))
+        version: 9.28.0(eslint@9.9.1(jiti@1.21.6))
       eslint-plugin-vuejs-accessibility:
         specifier: ^2.4.1
         version: 2.4.1(eslint@9.9.1(jiti@1.21.6))
@@ -4239,8 +4239,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-vue@9.27.0:
-    resolution: {integrity: sha512-5Dw3yxEyuBSXTzT5/Ge1X5kIkRTQ3nvBn/VwPwInNiZBSJOO/timWMUaflONnFBzU6NhB68lxnCda7ULV5N7LA==}
+  eslint-plugin-vue@9.28.0:
+    resolution: {integrity: sha512-ShrihdjIhOTxs+MfWun6oJWuk+g/LAhN+CiuOl/jjkG3l0F2AuK5NMTaWqyvBgkFtpYmyks6P4603mLmhNJW8g==}
     engines: {node: ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.2.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
@@ -7562,10 +7562,6 @@ packages:
 
   type-fest@4.25.0:
     resolution: {integrity: sha512-bRkIGlXsnGBRBQRAY56UXBm//9qH4bmJfFvq83gSz41N282df+fjy8ofcEgc1sM8geNt5cl6mC2g9Fht1cs8Aw==}
-    engines: {node: '>=16'}
-
-  type-fest@4.26.0:
-    resolution: {integrity: sha512-OduNjVJsFbifKb57UqZ2EMP1i4u64Xwow3NYXUtBbD4vIwJdQd4+xl8YDou1dlm4DVrtwT/7Ky8z8WyCULVfxw==}
     engines: {node: '>=16'}
 
   typed-array-buffer@1.0.2:
@@ -13336,7 +13332,7 @@ snapshots:
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.0
 
-  eslint-plugin-vue@9.27.0(eslint@9.9.1(jiti@1.21.6)):
+  eslint-plugin-vue@9.28.0(eslint@9.9.1(jiti@1.21.6)):
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@9.9.1(jiti@1.21.6))
       eslint: 9.9.1(jiti@1.21.6)
@@ -15543,7 +15539,7 @@ snapshots:
     dependencies:
       '@babel/code-frame': 7.24.7
       index-to-position: 0.1.2
-      type-fest: 4.26.0
+      type-fest: 4.25.0
 
   parse-latin@7.0.0:
     dependencies:
@@ -16063,7 +16059,7 @@ snapshots:
       '@types/normalize-package-data': 2.4.4
       normalize-package-data: 6.0.2
       parse-json: 8.1.0
-      type-fest: 4.26.0
+      type-fest: 4.25.0
       unicorn-magic: 0.1.0
 
   readable-stream@2.3.8:
@@ -17135,8 +17131,6 @@ snapshots:
   type-fest@2.19.0: {}
 
   type-fest@4.25.0: {}
-
-  type-fest@4.26.0: {}
 
   typed-array-buffer@1.0.2:
     dependencies:
