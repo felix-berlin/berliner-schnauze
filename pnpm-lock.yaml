@@ -103,8 +103,8 @@ importers:
         specifier: ^0.9.3
         version: 0.9.3(prettier-plugin-astro@0.14.1)(prettier@3.3.3)(typescript@5.5.4)
       '@codecov/vite-plugin':
-        specifier: 0.0.1-beta.10
-        version: 0.0.1-beta.10(vite@5.4.3(@types/node@22.5.4)(sass@1.78.0)(terser@5.31.6))
+        specifier: 0.0.1-beta.12
+        version: 0.0.1-beta.12(vite@5.4.3(@types/node@22.5.4)(sass@1.78.0)(terser@5.31.6))
       '@eslint/js':
         specifier: ^9.9.0
         version: 9.9.1
@@ -1075,12 +1075,12 @@ packages:
     resolution: {integrity: sha512-nYh4r8JwOOjYIdH2zub++CmIKlkYFlpxI1nBHimoiHcytJXD/b7ldJ21TtfzUZMCgI78mxVlymMHA/ReaOxKlA==}
     engines: {node: '>=16.7.0'}
 
-  '@codecov/bundler-plugin-core@0.0.1-beta.10':
-    resolution: {integrity: sha512-fOgy02gc0Z0ipKVe8QqN7mcmzQYjHb2UzT6RtHR+tqyYwpe1r1Kg5E/pbIOXKLaJGXK+AaOX23qtgp6kvUn+iA==}
+  '@codecov/bundler-plugin-core@0.0.1-beta.12':
+    resolution: {integrity: sha512-QZOVp90ZtSCj6p5AO8rnSzee7E4T6PeA5XXd8/miggK5Mi9OtcuB0N1zTPDp3ry5lLLbeWTcdxNVGGnqMHfz8w==}
     engines: {node: '>=18.0.0'}
 
-  '@codecov/vite-plugin@0.0.1-beta.10':
-    resolution: {integrity: sha512-ZoNKEGTMUIwQbwjxu/YUMaGlBUw24c2rZG0E0Lsa2SjZ+DBL+yTe2Kz+7vB6rzW+2Y/EpxxqVWCVjjK03Z7l1w==}
+  '@codecov/vite-plugin@0.0.1-beta.12':
+    resolution: {integrity: sha512-pV7sljJE7rz8Vg3nopXN47L5p5muJRFWmV6iBimW3tNB2OR+YwXl2OYCZopOlEAYurNFjq+WAhyc3lWelso4pA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       vite: 4.x || 5.x
@@ -9495,16 +9495,16 @@ snapshots:
 
   '@cloudflare/workers-shared@0.4.1': {}
 
-  '@codecov/bundler-plugin-core@0.0.1-beta.10':
+  '@codecov/bundler-plugin-core@0.0.1-beta.12':
     dependencies:
       chalk: 4.1.2
       semver: 7.6.3
       unplugin: 1.12.2
       zod: 3.23.8
 
-  '@codecov/vite-plugin@0.0.1-beta.10(vite@5.4.3(@types/node@22.5.4)(sass@1.78.0)(terser@5.31.6))':
+  '@codecov/vite-plugin@0.0.1-beta.12(vite@5.4.3(@types/node@22.5.4)(sass@1.78.0)(terser@5.31.6))':
     dependencies:
-      '@codecov/bundler-plugin-core': 0.0.1-beta.10
+      '@codecov/bundler-plugin-core': 0.0.1-beta.12
       unplugin: 1.12.2
       vite: 5.4.3(@types/node@22.5.4)(sass@1.78.0)(terser@5.31.6)
 
