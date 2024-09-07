@@ -39,20 +39,13 @@
   >
   </VirtualList> -->
 
-  <WindowVirtualizer
-    v-slot="item"
-    :data="filteredWordList"
-    class="c-word-list"
-  >
-    <SingleWord
-      :source="item"
-      :style="{ 'margin-bottom': '1.75rem' }"
-    />
+  <WindowVirtualizer v-slot="{ item, index }" :data="mutableFilteredWordList" class="c-word-list">
+    <SingleWord :key="index" :source="item" :style="{ 'margin-bottom': '1.75rem' }" />
   </WindowVirtualizer>
 </template>
 
 <script setup lang="ts">
-// import { shallowRef } from "vue";
+import { computed } from "vue";
 // import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 import SingleWord from "@components/word/SingleWord.vue";
 // import { words as wordList } from "@stores/index.ts";
@@ -63,6 +56,7 @@ import { WindowVirtualizer } from "virtua/vue";
 
 // const SingleWordItem = shallowRef(SingleWord);
 const filteredWordList = useStore($filteredWordList);
+const mutableFilteredWordList = computed(() => [...filteredWordList.value]);
 </script>
 
 <style lang="scss">
