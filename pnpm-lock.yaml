@@ -43,7 +43,7 @@ importers:
         version: 8.29.0(vue@3.5.4(typescript@5.6.2))
       '@spotlightjs/astro':
         specifier: ^2.1.7
-        version: 2.1.7(@sentry/astro@8.29.0(astro@4.15.4(@types/node@22.5.4)(rollup@2.79.1)(sass@1.78.0)(terser@5.32.0)(typescript@5.6.2)))(astro@4.15.4(@types/node@22.5.4)(rollup@2.79.1)(sass@1.78.0)(terser@5.32.0)(typescript@5.6.2))
+        version: 2.1.9(@sentry/astro@8.29.0(astro@4.15.4(@types/node@22.5.4)(rollup@2.79.1)(sass@1.78.0)(terser@5.32.0)(typescript@5.6.2)))(astro@4.15.4(@types/node@22.5.4)(rollup@2.79.1)(sass@1.78.0)(terser@5.32.0)(typescript@5.6.2))
       '@vueuse/core':
         specifier: ^11.0.3
         version: 11.0.3(vue@3.5.4(typescript@5.6.2))
@@ -2737,23 +2737,23 @@ packages:
   '@sinonjs/text-encoding@0.7.3':
     resolution: {integrity: sha512-DE427ROAphMQzU4ENbliGYrBSYPXF+TtLg9S8vzeA+OF4ZKzoDdzfL8sxuMUGS/lgRhM6j1URSk9ghf7Xo1tyA==}
 
-  '@spotlightjs/astro@2.1.7':
-    resolution: {integrity: sha512-mNx5Mijwx2Tzg74gLqckbN8IqkeATyCB1b2odtR/ytQrdBfmOrYcd2okinhUG1NOFVo97SmCsTGArgyKb32fZg==}
+  '@spotlightjs/astro@2.1.9':
+    resolution: {integrity: sha512-jUZJSKoXqKD1KzClO4P/20v9uxd5ctepwRAS5YPPPWXm0ebS1NAa62flu5H9DD3boRCd79Z/0Xs5SGNypmtmiA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@sentry/astro': '>=7.84.0'
       astro: '>=4.0.0'
 
-  '@spotlightjs/overlay@2.4.0':
-    resolution: {integrity: sha512-spV+/tKQ+H77Y4WK6kwwOXa6UbBo3WwZ4Z5YQ7tz2p0VcOQArfVwlsFAbwfr8NiHFwuV1I9b72wkjKfr4JCx6w==}
+  '@spotlightjs/overlay@2.5.1':
+    resolution: {integrity: sha512-LJ52eXpooPAuIersx5KS4AwwO1+xeGMSmbPU7ASojxWt9E1ZXbwr2nwHeXeXydLXGnYZFEsUMRdmTeagXOmEWw==}
 
-  '@spotlightjs/sidecar@1.7.0':
-    resolution: {integrity: sha512-XTasirfq6FCAmShtFGgw/hM/q5yWOKjpLN7WKrRdASD+aj5uPt1p1WUbpMBA0NaC7Acu1gvMKFgqhcJnDzaWIg==}
+  '@spotlightjs/sidecar@1.8.0':
+    resolution: {integrity: sha512-c3w5OJieAEE0nee4jGrI7KCkQ9h7cB9Mz72W5YFdG2zlj3J9BjPR3Vlx9IkkUCBnWvLfCKgmUcOFbyNuDKzSVQ==}
     engines: {node: '>=18'}
     hasBin: true
 
-  '@spotlightjs/spotlight@2.3.2':
-    resolution: {integrity: sha512-FU7MpD9eRgEJtjcOq6CKp+fx/y43EXq6/FUuITJUSQowVBx/cM78LUX1PXI5UBOqqovOabtwD+e5/iJRdX/Ucg==}
+  '@spotlightjs/spotlight@2.4.1':
+    resolution: {integrity: sha512-4xf41PxW0IL3aviCWjehB5WH7DvLvm6vDzxLAAaWjW23ZFZiiNpRJmBqA9AU3yZZzDOw+HnEEqCQve4Zl0QenA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -6691,8 +6691,8 @@ packages:
     resolution: {integrity: sha512-fmfw4XgoDke3kdI6h4xcUz1dG8uaiv5q9gcEwLS4Pnth2kxT+GZ7YehS1JTMGBQmtV7Y4GFGbs2re2NqhdozUg==}
     engines: {node: '>= 0.4'}
 
-  regenerate-unicode-properties@10.1.1:
-    resolution: {integrity: sha512-X007RyZLsCJVVrjgEFVpLUTZwyOZk3oiL75ZcuYjlIWd6rNJtOjkBwQc5AsRrpbKVkxN6sklw/k/9m2jJYOf8Q==}
+  regenerate-unicode-properties@10.2.0:
+    resolution: {integrity: sha512-DqHn3DwbmmPVzeKj9woBadqmXxLvQoQIwu7nopMc72ztvxVmVk2SBhSnx67zuye5TP+lJsb/TBQsjLKhnDf3MA==}
     engines: {node: '>=4'}
 
   regenerate@1.4.2:
@@ -7621,8 +7621,8 @@ packages:
   unenv-nightly@2.0.0-1724863496.70db6f1:
     resolution: {integrity: sha512-r+VIl1gnsI4WQxluruSQhy8alpAf1AsLRLm4sEKp3otCyTIVD6I6wHEYzeQnwsyWgaD4+3BD4A/eqrgOpdTzhw==}
 
-  unicode-canonical-property-names-ecmascript@2.0.0:
-    resolution: {integrity: sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ==}
+  unicode-canonical-property-names-ecmascript@2.0.1:
+    resolution: {integrity: sha512-dA8WbNeb2a6oQzAQ55YlT5vQAWGV9WXOsi3SskE3bcCdM0P4SDd+24zS/OCacdRq5BkdsRj9q3Pg6YyQoxIGqg==}
     engines: {node: '>=4'}
 
   unicode-emoji-modifier-base@1.0.0:
@@ -7633,8 +7633,8 @@ packages:
     resolution: {integrity: sha512-5kaZCrbp5mmbz5ulBkDkbY0SsPOjKqVS35VpL9ulMPfSl0J0Xsm+9Evphv9CoIZFwre7aJoa94AY6seMKGVN5Q==}
     engines: {node: '>=4'}
 
-  unicode-match-property-value-ecmascript@2.1.0:
-    resolution: {integrity: sha512-qxkjQt6qjg/mYscYMC0XKRn3Rh0wFPlfxB0xkt9CfyTvpX1Ra0+rAmdX2QyAobptSEvuy4RtpPRui6XkV+8wjA==}
+  unicode-match-property-value-ecmascript@2.2.0:
+    resolution: {integrity: sha512-4IehN3V/+kkr5YeSSDDQG8QLqO26XpL2XP3GQtqwlT/QYSECAwFztxVHjlbh0+gjJ3XmNLS0zDsbgs9jWKExLg==}
     engines: {node: '>=4'}
 
   unicode-property-aliases-ecmascript@2.1.0:
@@ -11358,24 +11358,24 @@ snapshots:
 
   '@sinonjs/text-encoding@0.7.3': {}
 
-  '@spotlightjs/astro@2.1.7(@sentry/astro@8.29.0(astro@4.15.4(@types/node@22.5.4)(rollup@2.79.1)(sass@1.78.0)(terser@5.32.0)(typescript@5.6.2)))(astro@4.15.4(@types/node@22.5.4)(rollup@2.79.1)(sass@1.78.0)(terser@5.32.0)(typescript@5.6.2))':
+  '@spotlightjs/astro@2.1.9(@sentry/astro@8.29.0(astro@4.15.4(@types/node@22.5.4)(rollup@2.79.1)(sass@1.78.0)(terser@5.32.0)(typescript@5.6.2)))(astro@4.15.4(@types/node@22.5.4)(rollup@2.79.1)(sass@1.78.0)(terser@5.32.0)(typescript@5.6.2))':
     dependencies:
       '@sentry/astro': 8.29.0(astro@4.15.4(@types/node@22.5.4)(rollup@2.79.1)(sass@1.78.0)(terser@5.32.0)(typescript@5.6.2))
-      '@spotlightjs/spotlight': 2.3.2
+      '@spotlightjs/spotlight': 2.4.1
       astro: 4.15.4(@types/node@22.5.4)(rollup@2.79.1)(sass@1.78.0)(terser@5.32.0)(typescript@5.6.2)
 
-  '@spotlightjs/overlay@2.4.0': {}
+  '@spotlightjs/overlay@2.5.1': {}
 
-  '@spotlightjs/sidecar@1.7.0':
+  '@spotlightjs/sidecar@1.8.0':
     dependencies:
       kleur: 4.1.5
       launch-editor: 2.9.1
       source-map: 0.7.4
 
-  '@spotlightjs/spotlight@2.3.2':
+  '@spotlightjs/spotlight@2.4.1':
     dependencies:
-      '@spotlightjs/overlay': 2.4.0
-      '@spotlightjs/sidecar': 1.7.0
+      '@spotlightjs/overlay': 2.5.1
+      '@spotlightjs/sidecar': 1.8.0
       import-meta-resolve: 4.1.0
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
@@ -16073,7 +16073,7 @@ snapshots:
       globalthis: 1.0.4
       which-builtin-type: 1.1.4
 
-  regenerate-unicode-properties@10.1.1:
+  regenerate-unicode-properties@10.2.0:
     dependencies:
       regenerate: 1.4.2
 
@@ -16098,10 +16098,10 @@ snapshots:
     dependencies:
       '@babel/regjsgen': 0.8.0
       regenerate: 1.4.2
-      regenerate-unicode-properties: 10.1.1
+      regenerate-unicode-properties: 10.2.0
       regjsparser: 0.9.1
       unicode-match-property-ecmascript: 2.0.0
-      unicode-match-property-value-ecmascript: 2.1.0
+      unicode-match-property-value-ecmascript: 2.2.0
 
   registry-auth-token@5.0.2:
     dependencies:
@@ -17191,16 +17191,16 @@ snapshots:
       pathe: 1.1.2
       ufo: 1.5.4
 
-  unicode-canonical-property-names-ecmascript@2.0.0: {}
+  unicode-canonical-property-names-ecmascript@2.0.1: {}
 
   unicode-emoji-modifier-base@1.0.0: {}
 
   unicode-match-property-ecmascript@2.0.0:
     dependencies:
-      unicode-canonical-property-names-ecmascript: 2.0.0
+      unicode-canonical-property-names-ecmascript: 2.0.1
       unicode-property-aliases-ecmascript: 2.1.0
 
-  unicode-match-property-value-ecmascript@2.1.0: {}
+  unicode-match-property-value-ecmascript@2.2.0: {}
 
   unicode-property-aliases-ecmascript@2.1.0: {}
 
