@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.13.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.13.1...v3.13.2) (2024-09-13)
+
+
+### Bug Fixes
+
+* **single word:** mobile spacing ([61547be](https://github.com/felix-berlin/berliner-schnauze/commit/61547be1116bec7ec7aa1c0d373c0b7903c0f3dc))
+
 ## [3.13.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.13.0...v3.13.1) (2024-08-10)
 
 
