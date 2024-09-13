@@ -101,7 +101,7 @@
     "prettier-plugin-astro": "^0.14.1",
     "sass": "1.78.0",
     "semantic-release": "^24.1.0",
-    "sinon": "^18.0.0",
+    "sinon": "^19.0.0",
     "stylelint": "^16.9.0",
     "stylelint-config-prettier-scss": "^1.0.0",
     "stylelint-config-recommended-scss": "^14.1.0",
