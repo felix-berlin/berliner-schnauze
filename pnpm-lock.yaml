@@ -152,7 +152,7 @@ importers:
         version: 0.4.3(@vite-pwa/assets-generator@0.2.6)(astro@4.15.8(@types/node@22.5.5)(rollup@2.79.1)(sass@1.78.0)(terser@5.33.0)(typescript@5.6.2))(vite-plugin-pwa@0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.5(@types/node@22.5.5)(sass@1.78.0)(terser@5.33.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0))
       '@vitejs/plugin-vue':
         specifier: ^5.1.3
-        version: 5.1.3(vite@5.4.5(@types/node@22.5.5)(sass@1.78.0)(terser@5.33.0))(vue@3.5.6(typescript@5.6.2))
+        version: 5.1.4(vite@5.4.5(@types/node@22.5.5)(sass@1.78.0)(terser@5.33.0))(vue@3.5.6(typescript@5.6.2))
       '@vitest/coverage-v8':
         specifier: ^2.1.1
         version: 2.1.1(vitest@2.1.1(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0)(sass@1.78.0)(terser@5.33.0))
@@ -2916,8 +2916,8 @@ packages:
       vite: ^5.0.0
       vue: ^3.0.0
 
-  '@vitejs/plugin-vue@5.1.3':
-    resolution: {integrity: sha512-3xbWsKEKXYlmX82aOHufFQVnkbMC/v8fLpWwh6hWOUrK5fbbtBh9Q/WWse27BFgSy2/e2c0fz5Scgya9h2GLhw==}
+  '@vitejs/plugin-vue@5.1.4':
+    resolution: {integrity: sha512-N2XSI2n3sQqp5w7Y/AN/L2XDjBIRGqXko+eDp42sydYSBeJuSm5a1sLf8zakmo8u7tA8NmBgoDLA1HeOESjp9A==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       vite: ^5.0.0
@@ -8473,7 +8473,7 @@ snapshots:
 
   '@astrojs/vue@4.5.1(astro@4.15.8(@types/node@22.5.5)(rollup@2.79.1)(sass@1.78.0)(terser@5.33.0)(typescript@5.6.2))(rollup@2.79.1)(vite@5.4.5(@types/node@22.5.5)(sass@1.78.0)(terser@5.33.0))(vue@3.5.6(typescript@5.6.2))':
     dependencies:
-      '@vitejs/plugin-vue': 5.1.3(vite@5.4.5(@types/node@22.5.5)(sass@1.78.0)(terser@5.33.0))(vue@3.5.6(typescript@5.6.2))
+      '@vitejs/plugin-vue': 5.1.4(vite@5.4.5(@types/node@22.5.5)(sass@1.78.0)(terser@5.33.0))(vue@3.5.6(typescript@5.6.2))
       '@vitejs/plugin-vue-jsx': 4.0.1(vite@5.4.5(@types/node@22.5.5)(sass@1.78.0)(terser@5.33.0))(vue@3.5.6(typescript@5.6.2))
       '@vue/compiler-sfc': 3.5.6
       astro: 4.15.8(@types/node@22.5.5)(rollup@2.79.1)(sass@1.78.0)(terser@5.33.0)(typescript@5.6.2)
@@ -11522,7 +11522,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitejs/plugin-vue@5.1.3(vite@5.4.5(@types/node@22.5.5)(sass@1.78.0)(terser@5.33.0))(vue@3.5.6(typescript@5.6.2))':
+  '@vitejs/plugin-vue@5.1.4(vite@5.4.5(@types/node@22.5.5)(sass@1.78.0)(terser@5.33.0))(vue@3.5.6(typescript@5.6.2))':
     dependencies:
       vite: 5.4.5(@types/node@22.5.5)(sass@1.78.0)(terser@5.33.0)
       vue: 3.5.6(typescript@5.6.2)
