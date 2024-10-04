@@ -137,7 +137,7 @@ importers:
         version: 10.0.1(semantic-release@24.1.2(typescript@5.6.2))
       '@sentry/browser':
         specifier: ^8.32.0
-        version: 8.32.0
+        version: 8.33.0
       '@types/jsdom':
         specifier: ^21.1.7
         version: 21.1.7
@@ -2843,16 +2843,32 @@ packages:
     resolution: {integrity: sha512-DpUGhk5O1OVjT0fo9wsbEdO1R/S9gGBRDtn9+FFVeRtieJHwXpeZiLK+tZhTOvaILmtSoTPUEY3L5sK4j5Xq9g==}
     engines: {node: '>=14.18'}
 
+  '@sentry-internal/browser-utils@8.33.0':
+    resolution: {integrity: sha512-zwjmD+XI3pgxxiqKGLXYDGSd+zfO7az9zzbLn1le8Vv9cRL2lZyMLcwiwEaTpwz3B0pPONeDZMT8+bzMGRs8zw==}
+    engines: {node: '>=14.18'}
+
   '@sentry-internal/feedback@8.32.0':
     resolution: {integrity: sha512-XB7hiVJQW1tNzpoXIHbvm3rjipIt7PZiJJtFg2vxaqu/FzdgOcYqQiwIKivJVAKuRZ9rIeJtK1jdXQFOc/TRJA==}
+    engines: {node: '>=14.18'}
+
+  '@sentry-internal/feedback@8.33.0':
+    resolution: {integrity: sha512-KSW/aiNgmJc8PDl2NsM+ONvGure4tPaluj7O1Nw+947Dh8W6CJnQ9srB7xPyoYYWyQW8Hyl1vzxY9W0J+fjlhA==}
     engines: {node: '>=14.18'}
 
   '@sentry-internal/replay-canvas@8.32.0':
     resolution: {integrity: sha512-oBbhtDBkD+5z/T0NVJ5VenBWAid/S9QdVrod/UqxVqU7F8N+E9/INFQI48zCWr4iVlUMcszJPDElvJEsMDvvBQ==}
     engines: {node: '>=14.18'}
 
+  '@sentry-internal/replay-canvas@8.33.0':
+    resolution: {integrity: sha512-9fEhMP+gQYQrtn/SQd1Vd7U7emTSGBpLKc5h5f0iV0yDmjYAhNVbq4RgPTYAgnBEcdVo3qgboL6UIz9Dv+dYRQ==}
+    engines: {node: '>=14.18'}
+
   '@sentry-internal/replay@8.32.0':
     resolution: {integrity: sha512-yiEUnn2yyo1AIQIFNeRX3tdK8fmyKIkxdFS1WiVQmeYI/hFwYBTZPly0FcO/g3xnRMSA2tvrS+hZEaaXfK4WhA==}
+    engines: {node: '>=14.18'}
+
+  '@sentry-internal/replay@8.33.0':
+    resolution: {integrity: sha512-GFBaDA4yhlEf3wTXOVXnJVG/diuKxeqZuXcuhsAwJb+YcFR0NhgsRn3wIGuYOZZF8GBXzx9PFnb9yIuFgx5Nbw==}
     engines: {node: '>=14.18'}
 
   '@sentry/astro@8.32.0':
@@ -2867,6 +2883,10 @@ packages:
 
   '@sentry/browser@8.32.0':
     resolution: {integrity: sha512-AEKFj64g4iYwEMRvVcxiY0FswmClRXCP1IEvCqujn8OBS8AjMOr1z/RwYieEs0D90yNNB3YEqF8adrKENblJmw==}
+    engines: {node: '>=14.18'}
+
+  '@sentry/browser@8.33.0':
+    resolution: {integrity: sha512-qu/g20ZskywEU8BWc4Fts1kXFFBtw1vS+XvPq7Ta9zCeRG5dlXhhYDVQ4/v4nAL/cs0o6aLCq73m109CFF0Kig==}
     engines: {node: '>=14.18'}
 
   '@sentry/bundler-plugin-core@2.22.5':
@@ -2923,6 +2943,10 @@ packages:
     resolution: {integrity: sha512-+xidTr0lZ0c755tq4k75dXPEb8PA+qvIefW3U9+dQMORLokBrYoKYMf5zZTG2k/OfSJS6OSxatUj36NFuCs3aA==}
     engines: {node: '>=14.18'}
 
+  '@sentry/core@8.33.0':
+    resolution: {integrity: sha512-618PQGHQLBVCpAq1s+e/rpIUaLUnj19IPUgn97rUGXLLna8ETIAoyQoG70wz4q9niw4Z4GlS5kZNrael2O3+2w==}
+    engines: {node: '>=14.18'}
+
   '@sentry/node@8.32.0':
     resolution: {integrity: sha512-a2PoFA9j/HmJVGF/zXJhLP6QhRHGye/2EznQdHOELsH1BkeMgBaXl7D52r2E/b7qki647lXrdbspB6jid8NycA==}
     engines: {node: '>=14.18'}
@@ -2941,8 +2965,16 @@ packages:
     resolution: {integrity: sha512-hxckvN2MzS5SgGDgVQ0/QpZXk13Vrq4BtZLwXhPhyeTmZtUiUfWvcL5TFQqLinfKdTKPe9q2MxeAJ0D4LalhMg==}
     engines: {node: '>=14.18'}
 
+  '@sentry/types@8.33.0':
+    resolution: {integrity: sha512-V/A+72ZdnfGtXeXIpz1kUo3LRdq3WKEYYFUR2RKpCdPh9yeOrHq6u/rmzTWx49+om0yhZN+JhVoxDzt75UoFRg==}
+    engines: {node: '>=14.18'}
+
   '@sentry/utils@8.32.0':
     resolution: {integrity: sha512-t1WVERhgmYURxbBj9J4/H2P2X+VKqm7B3ce9iQyrZbdf5NekhcU4jHIecPUWCPHjQkFIqkVTorqeBmDTlg/UmQ==}
+    engines: {node: '>=14.18'}
+
+  '@sentry/utils@8.33.0':
+    resolution: {integrity: sha512-TdwtGdevJij2wq2x/hDUr+x5TXt47ZhWxZ8zluai/lnIDTUB3Xs/L9yHtj1J+H9hr8obkMASE9IanUrWXzrP6Q==}
     engines: {node: '>=14.18'}
 
   '@sentry/vite-plugin@2.22.5':
@@ -11785,11 +11817,23 @@ snapshots:
       '@sentry/types': 8.32.0
       '@sentry/utils': 8.32.0
 
+  '@sentry-internal/browser-utils@8.33.0':
+    dependencies:
+      '@sentry/core': 8.33.0
+      '@sentry/types': 8.33.0
+      '@sentry/utils': 8.33.0
+
   '@sentry-internal/feedback@8.32.0':
     dependencies:
       '@sentry/core': 8.32.0
       '@sentry/types': 8.32.0
       '@sentry/utils': 8.32.0
+
+  '@sentry-internal/feedback@8.33.0':
+    dependencies:
+      '@sentry/core': 8.33.0
+      '@sentry/types': 8.33.0
+      '@sentry/utils': 8.33.0
 
   '@sentry-internal/replay-canvas@8.32.0':
     dependencies:
@@ -11798,12 +11842,26 @@ snapshots:
       '@sentry/types': 8.32.0
       '@sentry/utils': 8.32.0
 
+  '@sentry-internal/replay-canvas@8.33.0':
+    dependencies:
+      '@sentry-internal/replay': 8.33.0
+      '@sentry/core': 8.33.0
+      '@sentry/types': 8.33.0
+      '@sentry/utils': 8.33.0
+
   '@sentry-internal/replay@8.32.0':
     dependencies:
       '@sentry-internal/browser-utils': 8.32.0
       '@sentry/core': 8.32.0
       '@sentry/types': 8.32.0
       '@sentry/utils': 8.32.0
+
+  '@sentry-internal/replay@8.33.0':
+    dependencies:
+      '@sentry-internal/browser-utils': 8.33.0
+      '@sentry/core': 8.33.0
+      '@sentry/types': 8.33.0
+      '@sentry/utils': 8.33.0
 
   '@sentry/astro@8.32.0(astro@4.15.9(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2))':
     dependencies:
@@ -11829,6 +11887,16 @@ snapshots:
       '@sentry/core': 8.32.0
       '@sentry/types': 8.32.0
       '@sentry/utils': 8.32.0
+
+  '@sentry/browser@8.33.0':
+    dependencies:
+      '@sentry-internal/browser-utils': 8.33.0
+      '@sentry-internal/feedback': 8.33.0
+      '@sentry-internal/replay': 8.33.0
+      '@sentry-internal/replay-canvas': 8.33.0
+      '@sentry/core': 8.33.0
+      '@sentry/types': 8.33.0
+      '@sentry/utils': 8.33.0
 
   '@sentry/bundler-plugin-core@2.22.5':
     dependencies:
@@ -11889,6 +11957,11 @@ snapshots:
       '@sentry/types': 8.32.0
       '@sentry/utils': 8.32.0
 
+  '@sentry/core@8.33.0':
+    dependencies:
+      '@sentry/types': 8.33.0
+      '@sentry/utils': 8.33.0
+
   '@sentry/node@8.32.0':
     dependencies:
       '@opentelemetry/api': 1.9.0
@@ -11941,9 +12014,15 @@ snapshots:
 
   '@sentry/types@8.32.0': {}
 
+  '@sentry/types@8.33.0': {}
+
   '@sentry/utils@8.32.0':
     dependencies:
       '@sentry/types': 8.32.0
+
+  '@sentry/utils@8.33.0':
+    dependencies:
+      '@sentry/types': 8.33.0
 
   '@sentry/vite-plugin@2.22.5':
     dependencies:
