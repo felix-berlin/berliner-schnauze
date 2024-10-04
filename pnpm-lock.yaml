@@ -43,7 +43,7 @@ importers:
         version: 8.32.0(vue@3.5.11(typescript@5.6.2))
       '@spotlightjs/astro':
         specifier: ^2.1.10
-        version: 2.1.10(@sentry/astro@8.32.0(astro@4.15.11(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2)))(astro@4.15.11(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2))
+        version: 2.1.11(@sentry/astro@8.32.0(astro@4.15.11(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2)))(astro@4.15.11(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2))
       '@vueuse/core':
         specifier: ^11.1.0
         version: 11.1.0(vue@3.5.11(typescript@5.6.2))
@@ -3032,23 +3032,23 @@ packages:
   '@sinonjs/text-encoding@0.7.3':
     resolution: {integrity: sha512-DE427ROAphMQzU4ENbliGYrBSYPXF+TtLg9S8vzeA+OF4ZKzoDdzfL8sxuMUGS/lgRhM6j1URSk9ghf7Xo1tyA==}
 
-  '@spotlightjs/astro@2.1.10':
-    resolution: {integrity: sha512-HMCL9ZE/Mkp3k9Y72+JanI650aDOUPdNvi/GVnXI9ldJCHcRi9+8yn70TY932o/cw5zqfXn+EFI/QbPytEvYrA==}
+  '@spotlightjs/astro@2.1.11':
+    resolution: {integrity: sha512-UmzPTaeGZRE3fhk4vHwtaJ5A+tWmVmXYDP/P96J25jYwLj9ceNoYew3wfDsTT8WPljd5UcoU8wB2yAmsxMvxxQ==}
     engines: {node: '>=18'}
     peerDependencies:
       '@sentry/astro': '>=7.84.0'
       astro: '>=4.0.0'
 
-  '@spotlightjs/overlay@2.5.2':
-    resolution: {integrity: sha512-2YCxkTCRWn9Q4x6Aan0b43EvUJEgQBLvcws1c97LO7Cgnb0iKjiLIRW0Fa8f6PO8r9AcDvaFzhk5Z93YIkwlGQ==}
+  '@spotlightjs/overlay@2.6.0':
+    resolution: {integrity: sha512-UnvWi6J8MTxhUHaBxd+k2mVyQh+0sJ5MImb/UfnEOA0WhNaFl2Foo/R7ByoOIDzDGT42+mZtfEyhJzNZ5naAaQ==}
 
   '@spotlightjs/sidecar@1.8.0':
     resolution: {integrity: sha512-c3w5OJieAEE0nee4jGrI7KCkQ9h7cB9Mz72W5YFdG2zlj3J9BjPR3Vlx9IkkUCBnWvLfCKgmUcOFbyNuDKzSVQ==}
     engines: {node: '>=18'}
     hasBin: true
 
-  '@spotlightjs/spotlight@2.4.2':
-    resolution: {integrity: sha512-d7wEvG6fyP9OsqgJ3fD2YZ2zjtD9MzIuOpqTg+LAT1FXl7yBK9LRrLW/LU6OvwRdDCzUsbnxUv0giJ5DjV+2Lw==}
+  '@spotlightjs/spotlight@2.5.0':
+    resolution: {integrity: sha512-tOlefTjOUuNGyHtt1+r1IdY5vq9Hq9Vi2HqPENZ9orS/12KMEK6rVFliWT0/IXJLH5LdunNGaw3kan08bsA+NQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -12096,13 +12096,13 @@ snapshots:
 
   '@sinonjs/text-encoding@0.7.3': {}
 
-  '@spotlightjs/astro@2.1.10(@sentry/astro@8.32.0(astro@4.15.11(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2)))(astro@4.15.11(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2))':
+  '@spotlightjs/astro@2.1.11(@sentry/astro@8.32.0(astro@4.15.11(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2)))(astro@4.15.11(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2))':
     dependencies:
       '@sentry/astro': 8.32.0(astro@4.15.11(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2))
-      '@spotlightjs/spotlight': 2.4.2
+      '@spotlightjs/spotlight': 2.5.0
       astro: 4.15.11(@types/node@22.7.4)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2)
 
-  '@spotlightjs/overlay@2.5.2': {}
+  '@spotlightjs/overlay@2.6.0': {}
 
   '@spotlightjs/sidecar@1.8.0':
     dependencies:
@@ -12110,9 +12110,9 @@ snapshots:
       launch-editor: 2.9.1
       source-map: 0.7.4
 
-  '@spotlightjs/spotlight@2.4.2':
+  '@spotlightjs/spotlight@2.5.0':
     dependencies:
-      '@spotlightjs/overlay': 2.5.2
+      '@spotlightjs/overlay': 2.6.0
       '@spotlightjs/sidecar': 1.8.0
       import-meta-resolve: 4.1.0
 
