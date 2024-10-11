@@ -58,7 +58,7 @@ importers:
         version: 1.6.0(astro@4.16.0(@types/node@22.7.5)(rollup@2.79.2)(sass@1.79.4)(terser@5.34.1)(typescript@5.6.2))
       compromise:
         specifier: ^14.14.0
-        version: 14.14.0
+        version: 14.14.2
       de-compromise:
         specifier: ^0.0.10
         version: 0.0.10
@@ -3841,8 +3841,8 @@ packages:
   compare-func@2.0.0:
     resolution: {integrity: sha512-zHig5N+tPWARooBnb0Zx1MFcdfpyJrfTJ3Y5L+IFvUm8rM74hHz66z0gw0x4tijh5CorKkKUCnW82R2vmpeCRA==}
 
-  compromise@14.14.0:
-    resolution: {integrity: sha512-0plNVaC0bGWZY3TeijP1xndyaAmjqBY1SSfsc/7ruVLTIfRCSHFLSd/uuK7ZTcaT/4y2u0lVn0et4tmmC98mRg==}
+  compromise@14.14.2:
+    resolution: {integrity: sha512-g2Qe4zn8TmL7xQFR5Tx7i1txTUnzTPxhE7hDCQM+LDIfvYcriKzqH7eD2J/apUr/hRxvfKbRJ/yYXtN1cgD+Ug==}
     engines: {node: '>=12.0.0'}
 
   compromise@14.8.2:
@@ -12949,7 +12949,7 @@ snapshots:
       array-ify: 1.0.0
       dot-prop: 5.3.0
 
-  compromise@14.14.0:
+  compromise@14.14.2:
     dependencies:
       efrt: 2.7.0
       grad-school: 0.0.5
