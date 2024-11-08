@@ -31,7 +31,7 @@ importers:
         version: 0.10.0(@nanostores/logger@0.4.0(nanostores@0.11.3))(@vue/devtools-api@6.6.3)(nanostores@0.11.3)(vue@3.5.12(typescript@5.6.3))
       '@pagefind/default-ui':
         specifier: ^1.1.1
-        version: 1.1.1
+        version: 1.2.0
       '@sentry/astro':
         specifier: ^8.36.0
         version: 8.36.0(astro@4.16.10(@types/node@22.8.6)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
@@ -2367,8 +2367,8 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@pagefind/default-ui@1.1.1':
-    resolution: {integrity: sha512-ZM0zDatWDnac/VGHhQCiM7UgA4ca8jpjA+VfuTJyHJBaxGqZMQnm4WoTz9E0KFcue1Bh9kxpu7uWFZfwpZZk0A==}
+  '@pagefind/default-ui@1.2.0':
+    resolution: {integrity: sha512-MDSbm34veKpzFP5eJMh/pcPdrOc4FZKUsbpDsbdjSLC2ZeuTjsfDBNu9MGZaNUvGKUdlKk5JozQkVO/dzdSxrQ==}
 
   '@pagefind/linux-arm64@1.1.1':
     resolution: {integrity: sha512-H5P6wDoCoAbdsWp0Zx0DxnLUrwTGWGLu/VI1rcN2CyFdY2EGSvPQsbGBMrseKRNuIrJDFtxHHHyjZ7UbzaM9EA==}
@@ -10929,7 +10929,7 @@ snapshots:
   '@pagefind/darwin-x64@1.1.1':
     optional: true
 
-  '@pagefind/default-ui@1.1.1': {}
+  '@pagefind/default-ui@1.2.0': {}
 
   '@pagefind/linux-arm64@1.1.1':
     optional: true
