@@ -6,8 +6,8 @@
 .c-menu-nav {
   display: flex;
   justify-content: flex-end;
-  gap: vars.$spacer * 3;
   grid-area: menu-nav;
+  gap: vars.$spacer * 0.7;
 
   &__item-button,
   &__item-link {
@@ -31,13 +31,6 @@
     align-items: center;
     justify-content: center;
     padding: vars.$spacer * 0.25;
-  }
-
-  &__main-elements {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    gap: vars.$spacer * 0.7;
   }
 
   .c-nav-list__list-item {

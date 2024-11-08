@@ -1,12 +1,6 @@
 <template>
-  <div
-    class="c-social-list"
-    :class="modifier"
-  >
-    <ul
-      class="c-social-list__list u-list-reset"
-      :class="listModifier"
-    >
+  <div class="c-social-list" :class="modifier">
+    <ul class="c-social-list__list u-list-reset" :class="listModifier">
       <li
         v-for="social in list"
         :key="social.name"
@@ -23,7 +17,6 @@
           :class="listLinkModifier"
         >
           <Github v-if="social.name === 'github'" />
-          <Twitter v-if="social.name === 'twitter'" />
           <Facebook v-if="social.name === 'facebook'" />
         </a>
       </li>
@@ -34,7 +27,6 @@
 <script setup lang="ts">
 import Github from "virtual:icons/lucide/github";
 import Facebook from "virtual:icons/lucide/facebook";
-import Twitter from "virtual:icons/lucide/twitter";
 
 interface SocialListProps {
   modifier?: string;
@@ -53,9 +45,9 @@ const list = [
     ariaLabel: "Link zum Github Projekt",
   },
   {
-    name: "twitter",
-    link: "https://twitter.com/BLN_Schnauze",
-    ariaLabel: "Folge Berliner Schnauze auf Twitter",
+    name: "mastodon",
+    link: "https://mastodon.social/@berliner_schnauze",
+    ariaLabel: "Folge Berliner Schnauze auf Mastodon",
   },
   {
     name: "facebook",
