@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.14.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.13.2...v3.14.0) (2024-11-08)
+
+
+### Features
+
+* remove twitter; add mastodon; remove social link from header ([764d605](https://github.com/felix-berlin/berliner-schnauze/commit/764d6056b0a2a73d8d084913a0c18c9cc5e83dc6))
+
 ## [3.13.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.13.1...v3.13.2) (2024-09-13)
 
 
