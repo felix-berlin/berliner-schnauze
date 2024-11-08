@@ -18,10 +18,6 @@
     </button>
 
     <template #popper>
-      <SocialList
-        list-modifier="c-social-list--mobile-dropdown"
-        :hide-tooltips="true"
-      />
       <NavList
         :items="menuItems"
         classes-ul="c-menu-more__list u-list-reset"
@@ -34,7 +30,6 @@
 <script setup lang="ts">
 import MenuIcon from "virtual:icons/lucide/menu";
 import { routeToWord, randomElement } from "@utils/helpers.ts";
-import SocialList from "@components/SocialList.vue";
 import InstallApp from "@components/InstallApp.vue";
 import NavList from "@components/NavList.vue";
 import type { DefineComponent } from "vue";
