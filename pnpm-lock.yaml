@@ -16,7 +16,7 @@ importers:
         version: 3.2.1
       '@astrojs/vue':
         specifier: ^4.5.2
-        version: 4.5.2(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))(rollup@2.79.2)(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))
+        version: 4.5.2(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))(rollup@2.79.2)(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))
       '@felix_berlin/sass-butler':
         specifier: 3.0.1
         version: 3.0.1
@@ -34,7 +34,7 @@ importers:
         version: 1.2.0
       '@sentry/astro':
         specifier: ^8.37.1
-        version: 8.37.1(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
+        version: 8.37.1(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
       '@sentry/vite-plugin':
         specifier: ^2.22.6
         version: 2.22.6
@@ -43,19 +43,19 @@ importers:
         version: 8.37.1(vue@3.5.12(typescript@5.6.3))
       '@spotlightjs/astro':
         specifier: ^2.1.11
-        version: 2.1.11(@sentry/astro@8.37.1(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)))(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
+        version: 2.1.11(@sentry/astro@8.37.1(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)))(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
       '@vueuse/core':
         specifier: ^11.2.0
         version: 11.2.0(vue@3.5.12(typescript@5.6.3))
       astro:
         specifier: ^4.16.10
-        version: 4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
+        version: 4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
       astro-breadcrumbs:
         specifier: ^3.2.0
-        version: 3.2.0(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
+        version: 3.2.0(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
       astro-matomo:
         specifier: ^1.6.0
-        version: 1.6.0(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
+        version: 1.6.0(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
       compromise:
         specifier: ^14.14.2
         version: 14.14.2
@@ -149,7 +149,7 @@ importers:
         version: 0.2.6
       '@vite-pwa/astro':
         specifier: ^0.4.3
-        version: 0.4.3(@vite-pwa/assets-generator@0.2.6)(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))(vite-plugin-pwa@0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0))
+        version: 0.4.3(@vite-pwa/assets-generator@0.2.6)(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))(vite-plugin-pwa@0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0))
       '@vitejs/plugin-vue':
         specifier: ^5.1.4
         version: 5.1.4(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))
@@ -2813,17 +2813,17 @@ packages:
       pinia:
         optional: true
 
-  '@shikijs/core@1.22.2':
-    resolution: {integrity: sha512-bvIQcd8BEeR1yFvOYv6HDiyta2FFVePbzeowf5pPS1avczrPK+cjmaxxh0nx5QzbON7+Sv0sQfQVciO7bN72sg==}
+  '@shikijs/core@1.23.0':
+    resolution: {integrity: sha512-J4Fo22oBlfRHAXec+1AEzcowv+Qdf4ZQkuP/X/UHYH9+KA9LvyFXSXyS+HxuBRFfon+u7bsmKdRBjoZlbDVRkQ==}
 
-  '@shikijs/engine-javascript@1.22.2':
-    resolution: {integrity: sha512-iOvql09ql6m+3d1vtvP8fLCVCK7BQD1pJFmHIECsujB0V32BJ0Ab6hxk1ewVSMFA58FI0pR2Had9BKZdyQrxTw==}
+  '@shikijs/engine-javascript@1.23.0':
+    resolution: {integrity: sha512-CcrppseWShG+8Efp1iil9divltuXVdCaU4iu+CKvzTGZO5RmXyAiSx668M7VbX8+s/vt1ZKu75Vn/jWi8O3G/Q==}
 
-  '@shikijs/engine-oniguruma@1.22.2':
-    resolution: {integrity: sha512-GIZPAGzQOy56mGvWMoZRPggn0dTlBf1gutV5TdceLCZlFNqWmuc7u+CzD0Gd9vQUTgLbrt0KLzz6FNprqYAxlA==}
+  '@shikijs/engine-oniguruma@1.23.0':
+    resolution: {integrity: sha512-gS8bZLqVvmZXX+E5JUMJICsBp+kx6gj79MH/UEpKHKIqnUzppgbmEn6zLa6mB5D+sHse2gFei3YYJxQe1EzZXQ==}
 
-  '@shikijs/types@1.22.2':
-    resolution: {integrity: sha512-NCWDa6LGZqTuzjsGfXOBWfjS/fDIbDdmVDug+7ykVe1IKT4c1gakrvlfFYp5NhAXH/lyqLM8wsAPo5wNy73Feg==}
+  '@shikijs/types@1.23.0':
+    resolution: {integrity: sha512-HiwzsihRao+IbPk7FER/EQT/D0dEEK3n5LAtHDzL5iRT+JMblA7y9uitUnjEnHeLkKigNM+ZplrP7MuEyyc5kA==}
 
   '@shikijs/vscode-textmate@9.3.0':
     resolution: {integrity: sha512-jn7/7ky30idSkd/O5yDBfAnVt+JJpepofP/POZ1iMOxK59cOfqIgg/Dj0eFsjOTMw+4ycJN0uhZH/Eb0bs/EUA==}
@@ -3407,8 +3407,8 @@ packages:
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
 
-  astro@4.16.12:
-    resolution: {integrity: sha512-NnFeIKhGW6MdXCQT2hRariUwfxqJUIRs6qKqaovaQkTojzxh2r1L8C49qanKc+huH9wK2C94VZB2T/tosyRl1A==}
+  astro@4.16.13:
+    resolution: {integrity: sha512-Mtd76+BC0zLWqoXpf9xc731AhdH4MNh5JFHYdLRvSH0Nqn48hA64dPGh/cWsJvh/DZFmC0NTZusM1Qq2gyNaVg==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
@@ -4169,6 +4169,9 @@ packages:
 
   emmet@2.4.11:
     resolution: {integrity: sha512-23QPJB3moh/U9sT4rQzGgeyyGIrcM+GH5uVYg2C6wZIxAIJq7Ng3QLT79tl8FUwDXhyq9SusfknOrofAKqvgyQ==}
+
+  emoji-regex-xs@1.0.0:
+    resolution: {integrity: sha512-LRlerrMYoIDrT6jgpeZ2YYl/L8EulRTt5hQcYjy5AInh7HWXKimpqx68aknBFpGL2+/IcogTcaydJEgaTmOpDg==}
 
   emoji-regex@10.4.0:
     resolution: {integrity: sha512-EC+0oUMY1Rqm4O6LLrgjtYDvcVYTy7chDnM4Q7030tP4Kwj3u/pR6gP9ygnp2CJMK5Gq+9Q2oqmrFJAz01DXjw==}
@@ -6092,8 +6095,8 @@ packages:
     resolution: {integrity: sha512-VXJjc87FScF88uafS3JllDgvAm+c/Slfz06lorj2uAY34rlUu0Nt+v8wreiImcrgAjjIHp1rXpTDlLOGw29WwQ==}
     engines: {node: '>=18'}
 
-  oniguruma-to-js@0.4.3:
-    resolution: {integrity: sha512-X0jWUcAlxORhOqqBREgPMgnshB7ZGYszBNspP+tS9hPD3l13CdaXcHbgImoHUHlrvGx/7AvFEkTRhAGYh+jzjQ==}
+  oniguruma-to-es@0.1.2:
+    resolution: {integrity: sha512-sBYKVJlIMB0WPO+tSu/NNB1ytSFeHyyJZ3Ayxfx3f/QUuXu0lvZk0VB4K7npmdlHSC0ldqanzh/sUSlAbgCTfw==}
 
   open@10.1.0:
     resolution: {integrity: sha512-mnkeQ1qP5Ue2wd+aivTD3NHd/lZ96Lu0jgf0pwktLPtx6cTZiH7tyeGRRHs0zX0rbrahXPnXlUnbeXyaBBuIaw==}
@@ -6736,6 +6739,12 @@ packages:
   regenerator-transform@0.15.2:
     resolution: {integrity: sha512-hfMp2BoF0qOk3uc5V20ALGDS2ddjQaLrdl7xrGXvAIow7qeWRM2VA2HuCHkUKk9slq3VwEwLNK3DFBqDfPGYtg==}
 
+  regex-recursion@4.2.1:
+    resolution: {integrity: sha512-QHNZyZAeKdndD1G3bKAbBEKOSSK4KOHQrAJ01N1LJeb0SoH4DJIeFhp0uUpETgONifS4+P3sOgoA1dhzgrQvhA==}
+
+  regex-utilities@2.3.0:
+    resolution: {integrity: sha512-8VhliFJAWRaUiVvREIiW2NXXTmHs4vMNnSzuJVhscgmGav3g9VDxLrQndI3dZZVVdp0ZO/5v0xmX516/7M9cng==}
+
   regex@4.4.0:
     resolution: {integrity: sha512-uCUSuobNVeqUupowbdZub6ggI5/JZkYyJdDogddJr60L764oxC2pMZov1fQ3wM9bdyzUILDG+Sqx6NAKAz9rKQ==}
 
@@ -7029,8 +7038,8 @@ packages:
   shell-quote@1.8.1:
     resolution: {integrity: sha512-6j1W9l1iAs/4xYBI1SYOVZyFcCis9b4KCLQ8fgAGG07QvzaRLVVRQvAy85yNmmZSjYjg4MWh4gNvlPujU/5LpA==}
 
-  shiki@1.22.2:
-    resolution: {integrity: sha512-3IZau0NdGKXhH2bBlUk4w1IHNxPh6A5B2sUpyY+8utLu2j/h1QpFkAaUA1bAMxOWWGtTWcAh531vnS4NJKS/lA==}
+  shiki@1.23.0:
+    resolution: {integrity: sha512-xfdu9DqPkIpExH29cmiTlgo0/jBki5la1Tkfhsv+Wu5TT3APLNHslR1acxuKJOCWqVdSc+pIbs/2ozjVRGppdg==}
 
   shimmer@1.2.1:
     resolution: {integrity: sha512-sQTKC1Re/rM6XyFM6fIAGHRPVGvyXfgzIDvzoq608vM+jeyVD0Tu1E6Np0Kc2zAIFWIj963V2800iF/9LPieQw==}
@@ -7588,6 +7597,10 @@ packages:
 
   type-fest@4.26.1:
     resolution: {integrity: sha512-yOGpmOAL7CkKe/91I5O3gPICmJNLJ1G4zFYVAsRHg7M64biSnPtRj0WNQt++bRkjYOqjWXrhnUw1utzmVErAdg==}
+    engines: {node: '>=16'}
+
+  type-fest@4.27.0:
+    resolution: {integrity: sha512-3IMSWgP7C5KSQqmo1wjhKrwsvXAtF33jO3QY+Uy++ia7hqvgSK6iXbbg5PbDBc1P2ZbNEDgejOrN4YooXvhwCw==}
     engines: {node: '>=16'}
 
   typed-array-buffer@1.0.2:
@@ -8552,7 +8565,7 @@ snapshots:
       remark-parse: 11.0.0
       remark-rehype: 11.1.1
       remark-smartypants: 3.0.2
-      shiki: 1.22.2
+      shiki: 1.23.0
       unified: 11.0.5
       unist-util-remove-position: 5.0.0
       unist-util-visit: 5.0.0
@@ -8588,12 +8601,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/vue@4.5.2(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))(rollup@2.79.2)(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))':
+  '@astrojs/vue@4.5.2(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))(rollup@2.79.2)(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))':
     dependencies:
       '@vitejs/plugin-vue': 5.1.4(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))
       '@vitejs/plugin-vue-jsx': 4.0.1(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))
       '@vue/compiler-sfc': 3.5.12
-      astro: 4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
+      astro: 4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
       vite-plugin-vue-devtools: 7.6.3(rollup@2.79.2)(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))
       vue: 3.5.12(typescript@5.6.3)
     transitivePeerDependencies:
@@ -11258,7 +11271,7 @@ snapshots:
       '@sentry/types': 8.37.1
       '@sentry/utils': 8.37.1
 
-  '@sentry/astro@8.37.1(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))':
+  '@sentry/astro@8.37.1(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))':
     dependencies:
       '@sentry/browser': 8.37.1
       '@sentry/core': 8.37.1
@@ -11266,7 +11279,7 @@ snapshots:
       '@sentry/types': 8.37.1
       '@sentry/utils': 8.37.1
       '@sentry/vite-plugin': 2.22.6
-      astro: 4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
+      astro: 4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -11415,27 +11428,27 @@ snapshots:
       '@sentry/utils': 8.37.1
       vue: 3.5.12(typescript@5.6.3)
 
-  '@shikijs/core@1.22.2':
+  '@shikijs/core@1.23.0':
     dependencies:
-      '@shikijs/engine-javascript': 1.22.2
-      '@shikijs/engine-oniguruma': 1.22.2
-      '@shikijs/types': 1.22.2
+      '@shikijs/engine-javascript': 1.23.0
+      '@shikijs/engine-oniguruma': 1.23.0
+      '@shikijs/types': 1.23.0
       '@shikijs/vscode-textmate': 9.3.0
       '@types/hast': 3.0.4
       hast-util-to-html: 9.0.3
 
-  '@shikijs/engine-javascript@1.22.2':
+  '@shikijs/engine-javascript@1.23.0':
     dependencies:
-      '@shikijs/types': 1.22.2
+      '@shikijs/types': 1.23.0
       '@shikijs/vscode-textmate': 9.3.0
-      oniguruma-to-js: 0.4.3
+      oniguruma-to-es: 0.1.2
 
-  '@shikijs/engine-oniguruma@1.22.2':
+  '@shikijs/engine-oniguruma@1.23.0':
     dependencies:
-      '@shikijs/types': 1.22.2
+      '@shikijs/types': 1.23.0
       '@shikijs/vscode-textmate': 9.3.0
 
-  '@shikijs/types@1.22.2':
+  '@shikijs/types@1.23.0':
     dependencies:
       '@shikijs/vscode-textmate': 9.3.0
       '@types/hast': 3.0.4
@@ -11464,11 +11477,11 @@ snapshots:
 
   '@sinonjs/text-encoding@0.7.3': {}
 
-  '@spotlightjs/astro@2.1.11(@sentry/astro@8.37.1(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)))(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))':
+  '@spotlightjs/astro@2.1.11(@sentry/astro@8.37.1(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)))(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))':
     dependencies:
-      '@sentry/astro': 8.37.1(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
+      '@sentry/astro': 8.37.1(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))
       '@spotlightjs/spotlight': 2.5.0
-      astro: 4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
+      astro: 4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
 
   '@spotlightjs/overlay@2.6.0': {}
 
@@ -11698,9 +11711,9 @@ snapshots:
       sharp-ico: 0.1.5
       unconfig: 0.3.13
 
-  '@vite-pwa/astro@0.4.3(@vite-pwa/assets-generator@0.2.6)(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))(vite-plugin-pwa@0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0))':
+  '@vite-pwa/astro@0.4.3(@vite-pwa/assets-generator@0.2.6)(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3))(vite-plugin-pwa@0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0))':
     dependencies:
-      astro: 4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
+      astro: 4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
       vite-plugin-pwa: 0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.9.0)(sass@1.80.6)(terser@5.36.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0)
     optionalDependencies:
       '@vite-pwa/assets-generator': 0.2.6
@@ -12179,9 +12192,9 @@ snapshots:
 
   astral-regex@2.0.0: {}
 
-  astro-breadcrumbs@3.2.0(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)):
+  astro-breadcrumbs@3.2.0(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)):
     dependencies:
-      astro: 4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
+      astro: 4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
 
   astro-eslint-parser@1.0.3(typescript@5.6.3):
     dependencies:
@@ -12202,11 +12215,11 @@ snapshots:
       - supports-color
       - typescript
 
-  astro-matomo@1.6.0(astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)):
+  astro-matomo@1.6.0(astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)):
     dependencies:
-      astro: 4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
+      astro: 4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3)
 
-  astro@4.16.12(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3):
+  astro@4.16.13(@types/node@22.9.0)(rollup@2.79.2)(sass@1.80.6)(terser@5.36.0)(typescript@5.6.3):
     dependencies:
       '@astrojs/compiler': 2.10.3
       '@astrojs/internal-helpers': 0.4.1
@@ -12257,7 +12270,7 @@ snapshots:
       prompts: 2.4.2
       rehype: 13.0.2
       semver: 7.6.3
-      shiki: 1.22.2
+      shiki: 1.23.0
       tinyexec: 0.3.1
       tsconfck: 3.1.4(typescript@5.6.3)
       unist-util-visit: 5.0.0
@@ -12445,7 +12458,7 @@ snapshots:
       chalk: 5.3.0
       cli-boxes: 3.0.0
       string-width: 7.2.0
-      type-fest: 4.26.1
+      type-fest: 4.27.0
       widest-line: 5.0.0
       wrap-ansi: 9.0.0
 
@@ -13073,6 +13086,8 @@ snapshots:
     dependencies:
       '@emmetio/abbreviation': 2.3.3
       '@emmetio/css-abbreviation': 2.1.8
+
+  emoji-regex-xs@1.0.0: {}
 
   emoji-regex@10.4.0: {}
 
@@ -15342,9 +15357,11 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  oniguruma-to-js@0.4.3:
+  oniguruma-to-es@0.1.2:
     dependencies:
+      emoji-regex-xs: 1.0.0
       regex: 4.4.0
+      regex-recursion: 4.2.1
 
   open@10.1.0:
     dependencies:
@@ -16051,6 +16068,12 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.26.0
 
+  regex-recursion@4.2.1:
+    dependencies:
+      regex-utilities: 2.3.0
+
+  regex-utilities@2.3.0: {}
+
   regex@4.4.0: {}
 
   regexp-tree@0.1.27: {}
@@ -16478,12 +16501,12 @@ snapshots:
 
   shell-quote@1.8.1: {}
 
-  shiki@1.22.2:
+  shiki@1.23.0:
     dependencies:
-      '@shikijs/core': 1.22.2
-      '@shikijs/engine-javascript': 1.22.2
-      '@shikijs/engine-oniguruma': 1.22.2
-      '@shikijs/types': 1.22.2
+      '@shikijs/core': 1.23.0
+      '@shikijs/engine-javascript': 1.23.0
+      '@shikijs/engine-oniguruma': 1.23.0
+      '@shikijs/types': 1.23.0
       '@shikijs/vscode-textmate': 9.3.0
       '@types/hast': 3.0.4
 
@@ -17083,6 +17106,8 @@ snapshots:
   type-fest@2.19.0: {}
 
   type-fest@4.26.1: {}
+
+  type-fest@4.27.0: {}
 
   typed-array-buffer@1.0.2:
     dependencies:
