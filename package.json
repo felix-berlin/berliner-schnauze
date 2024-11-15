@@ -61,7 +61,7 @@
   "packageManager": "pnpm@9.12.3",
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
-    "@codecov/vite-plugin": "1.2.1",
+    "@codecov/vite-plugin": "1.4.0",
     "@eslint/js": "^9.14.0",
     "@graphql-codegen/cli": "^5.0.3",
     "@graphql-codegen/client-preset": "^4.5.0",
