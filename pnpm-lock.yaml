@@ -43,7 +43,7 @@ importers:
         version: 8.40.0(vue@3.5.13(typescript@5.7.2))
       '@spotlightjs/astro':
         specifier: ^2.1.11
-        version: 2.1.11(@sentry/astro@8.40.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)))(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
+        version: 2.1.15(@sentry/astro@8.40.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)))(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
       '@vueuse/core':
         specifier: ^11.2.0
         version: 11.3.0(vue@3.5.13(typescript@5.7.2))
@@ -2894,23 +2894,23 @@ packages:
   '@sinonjs/text-encoding@0.7.3':
     resolution: {integrity: sha512-DE427ROAphMQzU4ENbliGYrBSYPXF+TtLg9S8vzeA+OF4ZKzoDdzfL8sxuMUGS/lgRhM6j1URSk9ghf7Xo1tyA==}
 
-  '@spotlightjs/astro@2.1.11':
-    resolution: {integrity: sha512-UmzPTaeGZRE3fhk4vHwtaJ5A+tWmVmXYDP/P96J25jYwLj9ceNoYew3wfDsTT8WPljd5UcoU8wB2yAmsxMvxxQ==}
+  '@spotlightjs/astro@2.1.15':
+    resolution: {integrity: sha512-v/6vanhj/87Xlqv0vFnjDoCGDeG0vUkFIXNzNz+t4baLFoP4B0Lr/49wkbolIs+faMM3iVdBXlkQhOQ1M5KOQA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@sentry/astro': '>=7.84.0'
       astro: '>=4.0.0'
 
-  '@spotlightjs/overlay@2.6.0':
-    resolution: {integrity: sha512-UnvWi6J8MTxhUHaBxd+k2mVyQh+0sJ5MImb/UfnEOA0WhNaFl2Foo/R7ByoOIDzDGT42+mZtfEyhJzNZ5naAaQ==}
+  '@spotlightjs/overlay@2.7.1':
+    resolution: {integrity: sha512-YuQ8IFC44AA0cLFxANnpdKVCgAbHxcn7OwxmGuatMjNOa9sjvmg+2Ipo0/idHjeuYgvEypTxEqsT6lNvd9lG5g==}
 
-  '@spotlightjs/sidecar@1.8.0':
-    resolution: {integrity: sha512-c3w5OJieAEE0nee4jGrI7KCkQ9h7cB9Mz72W5YFdG2zlj3J9BjPR3Vlx9IkkUCBnWvLfCKgmUcOFbyNuDKzSVQ==}
+  '@spotlightjs/sidecar@1.9.1':
+    resolution: {integrity: sha512-qISdnZc5gMvhr7kTjgp+E+bw8KBo+WC8nLeO0LFWa7h2DMEuWhdNWizQIBDUrgUaOmG9hTt1UF37EZdTfNtbDA==}
     engines: {node: '>=18'}
     hasBin: true
 
-  '@spotlightjs/spotlight@2.5.0':
-    resolution: {integrity: sha512-tOlefTjOUuNGyHtt1+r1IdY5vq9Hq9Vi2HqPENZ9orS/12KMEK6rVFliWT0/IXJLH5LdunNGaw3kan08bsA+NQ==}
+  '@spotlightjs/spotlight@2.6.3':
+    resolution: {integrity: sha512-TguYMj9f6VkubATShwqCvrCvQUKak9/n/giWfJgGnNAUnEVsiNj+PUdexGGMrTrr+FwqSNXvZPnztV/LE2E7Tw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -3868,6 +3868,10 @@ packages:
 
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
+
+  commander@9.5.0:
+    resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
+    engines: {node: ^12.20.0 || >=14}
 
   common-ancestor-path@1.0.1:
     resolution: {integrity: sha512-L3sHRo1pXXEqX8VU28kfgUY+YGsk09hPqZiZmLacNib6XNTCM8ubYeT7ryXQw8asB1sKgcU5lkB7ONug08aB8w==}
@@ -5625,6 +5629,10 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
+  macho-unsign@2.0.6:
+    resolution: {integrity: sha512-YkIVGFnpVHJMMwfy4bHo79Vy05ddVk/PZGSCmmiCT4zepx+FMP/JAt9hOoXuc31s2bbcOtnzznOGca5fRhgZOg==}
+    engines: {node: '>=18.12.0'}
+
   magic-string@0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
 
@@ -6503,6 +6511,10 @@ packages:
   pkg-types@1.2.1:
     resolution: {integrity: sha512-sQoqa8alT3nHjGuTjuKgOnvjo4cljkufdtLMnO2LBP/wRwuDlo1tkaEdMxCRhyGRPacv/ztlZgDPm2b7FAmEvw==}
 
+  portable-executable-signature@2.0.6:
+    resolution: {integrity: sha512-VV+1GuJca0cJ0PFwnCW/xK8Ro9DDX38e4iUDh6ngPjd9vj7VLiemh9rSlqquvcVGtClkVzYaV/UseMVnUrxS/Q==}
+    engines: {node: '>=18.12.0'}
+
   portfinder@1.0.32:
     resolution: {integrity: sha512-on2ZJVVDXRADWE6jnQaX0ioEylzgBpQk8r55NE4wjXW1ZxO+BgDlY6DXwj20i0V8eB4SenDQ00WEaxfiIQPcxg==}
     engines: {node: '>= 0.12.0'}
@@ -6726,6 +6738,11 @@ packages:
   postgres-interval@1.2.0:
     resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
     engines: {node: '>=0.10.0'}
+
+  postject@1.0.0-alpha.6:
+    resolution: {integrity: sha512-b9Eb8h2eVqNE8edvKdwqkrY6O7kAwmI8kcnBv1NScolYJbo59XUF0noFq+lxbC1yN20bmC0WBEbDC5H/7ASb0A==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
 
   prebuild-install@7.1.2:
     resolution: {integrity: sha512-UnNke3IQb6sgarcZIDU3gbMeTp/9SSU1DAIkil7PrqG1vZlBtY5msYccSKSHDqa3hNg436IXK+SNImReuA1wEQ==}
@@ -7161,6 +7178,10 @@ packages:
 
   shell-quote@1.8.1:
     resolution: {integrity: sha512-6j1W9l1iAs/4xYBI1SYOVZyFcCis9b4KCLQ8fgAGG07QvzaRLVVRQvAy85yNmmZSjYjg4MWh4gNvlPujU/5LpA==}
+
+  shell-quote@1.8.2:
+    resolution: {integrity: sha512-AzqKpGKjrj7EM6rKVQEPpB288oCfnrEIuyoT9cyF4nmGa7V8Zk6f7RRqYisX8X9m+Q7bd632aZW4ky7EhbQztA==}
+    engines: {node: '>= 0.4'}
 
   shiki@1.23.1:
     resolution: {integrity: sha512-8kxV9TH4pXgdKGxNOkrSMydn1Xf6It8lsle0fiqxf7a1149K1WGtdOu3Zb91T5r1JpvRPxqxU3C2XdZZXQnrig==}
@@ -11682,25 +11703,28 @@ snapshots:
 
   '@sinonjs/text-encoding@0.7.3': {}
 
-  '@spotlightjs/astro@2.1.11(@sentry/astro@8.40.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)))(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))':
+  '@spotlightjs/astro@2.1.15(@sentry/astro@8.40.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)))(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))':
     dependencies:
       '@sentry/astro': 8.40.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
-      '@spotlightjs/spotlight': 2.5.0
+      '@spotlightjs/spotlight': 2.6.3
       astro: 4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
 
-  '@spotlightjs/overlay@2.6.0': {}
+  '@spotlightjs/overlay@2.7.1': {}
 
-  '@spotlightjs/sidecar@1.8.0':
+  '@spotlightjs/sidecar@1.9.1':
     dependencies:
       kleur: 4.1.5
       launch-editor: 2.9.1
       source-map: 0.7.4
 
-  '@spotlightjs/spotlight@2.5.0':
+  '@spotlightjs/spotlight@2.6.3':
     dependencies:
-      '@spotlightjs/overlay': 2.6.0
-      '@spotlightjs/sidecar': 1.8.0
+      '@spotlightjs/overlay': 2.7.1
+      '@spotlightjs/sidecar': 1.9.1
       import-meta-resolve: 4.1.0
+      macho-unsign: 2.0.6
+      portable-executable-signature: 2.0.6
+      postject: 1.0.0-alpha.6
 
   '@surma/rollup-plugin-off-main-thread@2.2.3':
     dependencies:
@@ -12979,6 +13003,8 @@ snapshots:
   commander@10.0.1: {}
 
   commander@2.20.3: {}
+
+  commander@9.5.0: {}
 
   common-ancestor-path@1.0.1: {}
 
@@ -14833,7 +14859,7 @@ snapshots:
   launch-editor@2.9.1:
     dependencies:
       picocolors: 1.1.1
-      shell-quote: 1.8.1
+      shell-quote: 1.8.2
 
   leven@3.1.0: {}
 
@@ -14949,6 +14975,8 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  macho-unsign@2.0.6: {}
 
   magic-string@0.25.9:
     dependencies:
@@ -15926,6 +15954,8 @@ snapshots:
       mlly: 1.7.2
       pathe: 1.1.2
 
+  portable-executable-signature@2.0.6: {}
+
   portfinder@1.0.32:
     dependencies:
       async: 2.6.4
@@ -16204,6 +16234,10 @@ snapshots:
   postgres-interval@1.2.0:
     dependencies:
       xtend: 4.0.2
+
+  postject@1.0.0-alpha.6:
+    dependencies:
+      commander: 9.5.0
 
   prebuild-install@7.1.2:
     dependencies:
@@ -16797,6 +16831,8 @@ snapshots:
   shebang-regex@3.0.0: {}
 
   shell-quote@1.8.1: {}
+
+  shell-quote@1.8.2: {}
 
   shiki@1.23.1:
     dependencies:
