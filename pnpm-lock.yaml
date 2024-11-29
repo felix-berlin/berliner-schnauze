@@ -52,7 +52,7 @@ importers:
         version: 4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
       astro-breadcrumbs:
         specifier: ^3.2.0
-        version: 3.2.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
+        version: 3.2.2(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
       astro-matomo:
         specifier: ^1.6.0
         version: 1.6.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
@@ -3471,8 +3471,8 @@ packages:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
     engines: {node: '>=8'}
 
-  astro-breadcrumbs@3.2.0:
-    resolution: {integrity: sha512-TrXitr0GQjJsW/MAlvRPSWOjilpj7lY4Px1QEfDHPT0nGoBk+mNBiJARx0h8GvpuK7h0hAG6dYa+fFpoW5bbcw==}
+  astro-breadcrumbs@3.2.2:
+    resolution: {integrity: sha512-3sjVjuCuJvDGbo3N+SgN0ZorKpmAYPbgsPR9X0pK+FPTTB+/KB+zlnMelX533MUNRkhijeiNqY/7WKWEAblebw==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
 
@@ -12459,7 +12459,7 @@ snapshots:
 
   astral-regex@2.0.0: {}
 
-  astro-breadcrumbs@3.2.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)):
+  astro-breadcrumbs@3.2.2(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)):
     dependencies:
       astro: 4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
 
