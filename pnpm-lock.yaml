@@ -16,7 +16,7 @@ importers:
         version: 3.2.1
       '@astrojs/vue':
         specifier: ^4.5.2
-        version: 4.5.3(@types/node@22.9.3)(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(vue@3.5.13(typescript@5.7.2))
+        version: 4.5.3(@types/node@22.9.3)(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(vue@3.5.13(typescript@5.7.2))
       '@felix_berlin/sass-butler':
         specifier: 3.0.1
         version: 3.0.1
@@ -34,7 +34,7 @@ importers:
         version: 1.2.0
       '@sentry/astro':
         specifier: ^8.37.1
-        version: 8.40.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
+        version: 8.40.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
       '@sentry/vite-plugin':
         specifier: ^2.22.6
         version: 2.22.6
@@ -43,19 +43,19 @@ importers:
         version: 8.40.0(vue@3.5.13(typescript@5.7.2))
       '@spotlightjs/astro':
         specifier: ^2.1.11
-        version: 2.1.15(@sentry/astro@8.40.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)))(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
+        version: 2.1.15(@sentry/astro@8.40.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)))(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
       '@vueuse/core':
         specifier: ^11.2.0
         version: 11.3.0(vue@3.5.13(typescript@5.7.2))
       astro:
         specifier: ^4.16.10
-        version: 4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
+        version: 4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
       astro-breadcrumbs:
         specifier: ^3.2.0
-        version: 3.2.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
+        version: 3.2.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
       astro-matomo:
         specifier: ^1.6.0
-        version: 1.6.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
+        version: 1.6.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
       compromise:
         specifier: ^14.14.2
         version: 14.14.2
@@ -149,7 +149,7 @@ importers:
         version: 0.2.6
       '@vite-pwa/astro':
         specifier: ^0.4.3
-        version: 0.4.3(@vite-pwa/assets-generator@0.2.6)(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))(vite-plugin-pwa@0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0))
+        version: 0.4.3(@vite-pwa/assets-generator@0.2.6)(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))(vite-plugin-pwa@0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0))
       '@vitejs/plugin-vue':
         specifier: ^5.1.4
         version: 5.2.1(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))(vue@3.5.13(typescript@5.7.2))
@@ -2855,17 +2855,17 @@ packages:
       pinia:
         optional: true
 
-  '@shikijs/core@1.23.1':
-    resolution: {integrity: sha512-NuOVgwcHgVC6jBVH5V7iblziw6iQbWWHrj5IlZI3Fqu2yx9awH7OIQkXIcsHsUmY19ckwSgUMgrqExEyP5A0TA==}
+  '@shikijs/core@1.24.0':
+    resolution: {integrity: sha512-6pvdH0KoahMzr6689yh0QJ3rCgF4j1XsXRHNEeEN6M4xJTfQ6QPWrmHzIddotg+xPJUPEPzYzYCKzpYyhTI6Gw==}
 
-  '@shikijs/engine-javascript@1.23.1':
-    resolution: {integrity: sha512-i/LdEwT5k3FVu07SiApRFwRcSJs5QM9+tod5vYCPig1Ywi8GR30zcujbxGQFJHwYD7A5BUqagi8o5KS+LEVgBg==}
+  '@shikijs/engine-javascript@1.24.0':
+    resolution: {integrity: sha512-ZA6sCeSsF3Mnlxxr+4wGEJ9Tto4RHmfIS7ox8KIAbH0MTVUkw3roHPHZN+LlJMOHJJOVupe6tvuAzRpN8qK1vA==}
 
-  '@shikijs/engine-oniguruma@1.23.1':
-    resolution: {integrity: sha512-KQ+lgeJJ5m2ISbUZudLR1qHeH3MnSs2mjFg7bnencgs5jDVPeJ2NVDJ3N5ZHbcTsOIh0qIueyAJnwg7lg7kwXQ==}
+  '@shikijs/engine-oniguruma@1.24.0':
+    resolution: {integrity: sha512-Eua0qNOL73Y82lGA4GF5P+G2+VXX9XnuUxkiUuwcxQPH4wom+tE39kZpBFXfUuwNYxHSkrSxpB1p4kyRW0moSg==}
 
-  '@shikijs/types@1.23.1':
-    resolution: {integrity: sha512-98A5hGyEhzzAgQh2dAeHKrWW4HfCMeoFER2z16p5eJ+vmPeF6lZ/elEne6/UCU551F/WqkopqRsr1l2Yu6+A0g==}
+  '@shikijs/types@1.24.0':
+    resolution: {integrity: sha512-aptbEuq1Pk88DMlCe+FzXNnBZ17LCiLIGWAeCWhoFDzia5Q5Krx3DgnULLiouSdd6+LUM39XwXGppqYE0Ghtug==}
 
   '@shikijs/vscode-textmate@9.3.0':
     resolution: {integrity: sha512-jn7/7ky30idSkd/O5yDBfAnVt+JJpepofP/POZ1iMOxK59cOfqIgg/Dj0eFsjOTMw+4ycJN0uhZH/Eb0bs/EUA==}
@@ -3485,8 +3485,8 @@ packages:
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0
 
-  astro@4.16.14:
-    resolution: {integrity: sha512-2IuLkIp4idyspugq+F52rHZyNqHHi2AdQzuKp3SGytg/YAm50dNeWhP/7l+enjgWZLloLq5xsH5gVQpoDFoyFg==}
+  astro@4.16.16:
+    resolution: {integrity: sha512-H1CttrV6+JFrDBQx0Mcbq5i5AeLhCbztB786+9wEu3svWL/QPNeCGqF0dgNORAYmP+rODGCPu/y9qKSh87iLuA==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
@@ -5639,8 +5639,8 @@ packages:
   magic-string@0.30.12:
     resolution: {integrity: sha512-Ea8I3sQMVXr8JhN4z+H/d8zwo+tYDgHE9+5G4Wnrwhs0gaK9fXTKx0Tw5Xwsd/bCPTTZNRAdpyzvoeORe9LYpw==}
 
-  magic-string@0.30.13:
-    resolution: {integrity: sha512-8rYBO+MsWkgjDSOvLomYnzhdwEG51olQ4zL5KXnNJWV5MNmrb4rTZdrtkhxjnD/QyZUqR/Z/XDsUs/4ej2nx0g==}
+  magic-string@0.30.14:
+    resolution: {integrity: sha512-5c99P1WKTed11ZC0HMJOj6CDIue6F8ySu+bJL+85q1zBEIY8IklrJ1eiKC2NDRh3Ct3FcvmJPyQHb9erXMTJNw==}
 
   magic-string@0.30.8:
     resolution: {integrity: sha512-ISQTe55T2ao7XtlAStud6qwYPZjE4GK1S/BeVPus4jrq6JuOnQ00YKQC581RWhR122W7msZV263KzVeLoqidyQ==}
@@ -6223,8 +6223,8 @@ packages:
     resolution: {integrity: sha512-VXJjc87FScF88uafS3JllDgvAm+c/Slfz06lorj2uAY34rlUu0Nt+v8wreiImcrgAjjIHp1rXpTDlLOGw29WwQ==}
     engines: {node: '>=18'}
 
-  oniguruma-to-es@0.4.1:
-    resolution: {integrity: sha512-rNcEohFz095QKGRovP/yqPIKc+nP+Sjs4YTHMv33nMePGKrq/r2eu9Yh4646M5XluGJsUnmwoXuiXE69KDs+fQ==}
+  oniguruma-to-es@0.7.0:
+    resolution: {integrity: sha512-HRaRh09cE0gRS3+wi2zxekB+I5L8C/gN60S+vb11eADHUaB/q4u8wGGOX3GvwvitG8ixaeycZfeoyruKQzUgNg==}
 
   open@10.1.0:
     resolution: {integrity: sha512-mnkeQ1qP5Ue2wd+aivTD3NHd/lZ96Lu0jgf0pwktLPtx6cTZiH7tyeGRRHs0zX0rbrahXPnXlUnbeXyaBBuIaw==}
@@ -6880,8 +6880,8 @@ packages:
   regenerator-transform@0.15.2:
     resolution: {integrity: sha512-hfMp2BoF0qOk3uc5V20ALGDS2ddjQaLrdl7xrGXvAIow7qeWRM2VA2HuCHkUKk9slq3VwEwLNK3DFBqDfPGYtg==}
 
-  regex-recursion@4.2.1:
-    resolution: {integrity: sha512-QHNZyZAeKdndD1G3bKAbBEKOSSK4KOHQrAJ01N1LJeb0SoH4DJIeFhp0uUpETgONifS4+P3sOgoA1dhzgrQvhA==}
+  regex-recursion@4.3.0:
+    resolution: {integrity: sha512-5LcLnizwjcQ2ALfOj95MjcatxyqF5RPySx9yT+PaXu3Gox2vyAtLDjHB8NTJLtMGkvyau6nI3CfpwFCjPUIs/A==}
 
   regex-utilities@2.3.0:
     resolution: {integrity: sha512-8VhliFJAWRaUiVvREIiW2NXXTmHs4vMNnSzuJVhscgmGav3g9VDxLrQndI3dZZVVdp0ZO/5v0xmX516/7M9cng==}
@@ -7183,8 +7183,8 @@ packages:
     resolution: {integrity: sha512-AzqKpGKjrj7EM6rKVQEPpB288oCfnrEIuyoT9cyF4nmGa7V8Zk6f7RRqYisX8X9m+Q7bd632aZW4ky7EhbQztA==}
     engines: {node: '>= 0.4'}
 
-  shiki@1.23.1:
-    resolution: {integrity: sha512-8kxV9TH4pXgdKGxNOkrSMydn1Xf6It8lsle0fiqxf7a1149K1WGtdOu3Zb91T5r1JpvRPxqxU3C2XdZZXQnrig==}
+  shiki@1.24.0:
+    resolution: {integrity: sha512-qIneep7QRwxRd5oiHb8jaRzH15V/S8F3saCXOdjwRLgozZJr5x2yeBhQtqkO3FSzQDwYEFAYuifg4oHjpDghrg==}
 
   shimmer@1.2.1:
     resolution: {integrity: sha512-sQTKC1Re/rM6XyFM6fIAGHRPVGvyXfgzIDvzoq608vM+jeyVD0Tu1E6Np0Kc2zAIFWIj963V2800iF/9LPieQw==}
@@ -7737,8 +7737,8 @@ packages:
     resolution: {integrity: sha512-yOGpmOAL7CkKe/91I5O3gPICmJNLJ1G4zFYVAsRHg7M64biSnPtRj0WNQt++bRkjYOqjWXrhnUw1utzmVErAdg==}
     engines: {node: '>=16'}
 
-  type-fest@4.27.0:
-    resolution: {integrity: sha512-3IMSWgP7C5KSQqmo1wjhKrwsvXAtF33jO3QY+Uy++ia7hqvgSK6iXbbg5PbDBc1P2ZbNEDgejOrN4YooXvhwCw==}
+  type-fest@4.29.0:
+    resolution: {integrity: sha512-RPYt6dKyemXJe7I6oNstcH24myUGSReicxcHTvCLgzm4e0n8y05dGvcGB15/SoPRBmhlMthWQ9pvKyL81ko8nQ==}
     engines: {node: '>=16'}
 
   typed-array-buffer@1.0.2:
@@ -8096,10 +8096,10 @@ packages:
       terser:
         optional: true
 
-  vitefu@1.0.3:
-    resolution: {integrity: sha512-iKKfOMBHob2WxEJbqbJjHAkmYgvFDPhuqrO82om83S8RLk+17FtyMBfcyeH8GqD0ihShtkMW/zzJgiA51hCNCQ==}
+  vitefu@1.0.4:
+    resolution: {integrity: sha512-y6zEE3PQf6uu/Mt6DTJ9ih+kyJLr4XcSgHR2zUkM8SWDhuixEJxfJ6CZGMHh1Ec3vPLoEA0IHU5oWzVqw8ulow==}
     peerDependencies:
-      vite: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0-beta.0
+      vite: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
     peerDependenciesMeta:
       vite:
         optional: true
@@ -8727,7 +8727,7 @@ snapshots:
       remark-parse: 11.0.0
       remark-rehype: 11.1.1
       remark-smartypants: 3.0.2
-      shiki: 1.23.1
+      shiki: 1.24.0
       unified: 11.0.5
       unist-util-remove-position: 5.0.0
       unist-util-visit: 5.0.0
@@ -8763,12 +8763,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/vue@4.5.3(@types/node@22.9.3)(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(vue@3.5.13(typescript@5.7.2))':
+  '@astrojs/vue@4.5.3(@types/node@22.9.3)(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(vue@3.5.13(typescript@5.7.2))':
     dependencies:
       '@vitejs/plugin-vue': 5.2.1(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))(vue@3.5.13(typescript@5.7.2))
       '@vitejs/plugin-vue-jsx': 4.1.0(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))(vue@3.5.13(typescript@5.7.2))
       '@vue/compiler-sfc': 3.5.13
-      astro: 4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
+      astro: 4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
       vite: 5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0)
       vite-plugin-vue-devtools: 7.6.4(rollup@2.79.2)(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))(vue@3.5.13(typescript@5.7.2))
       vue: 3.5.13(typescript@5.7.2)
@@ -11505,14 +11505,14 @@ snapshots:
       '@sentry/core': 8.40.0
       '@sentry/types': 8.40.0
 
-  '@sentry/astro@8.40.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))':
+  '@sentry/astro@8.40.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))':
     dependencies:
       '@sentry/browser': 8.40.0
       '@sentry/core': 8.40.0
       '@sentry/node': 8.40.0
       '@sentry/types': 8.40.0
       '@sentry/vite-plugin': 2.22.6
-      astro: 4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
+      astro: 4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -11654,27 +11654,27 @@ snapshots:
       '@sentry/types': 8.40.0
       vue: 3.5.13(typescript@5.7.2)
 
-  '@shikijs/core@1.23.1':
+  '@shikijs/core@1.24.0':
     dependencies:
-      '@shikijs/engine-javascript': 1.23.1
-      '@shikijs/engine-oniguruma': 1.23.1
-      '@shikijs/types': 1.23.1
+      '@shikijs/engine-javascript': 1.24.0
+      '@shikijs/engine-oniguruma': 1.24.0
+      '@shikijs/types': 1.24.0
       '@shikijs/vscode-textmate': 9.3.0
       '@types/hast': 3.0.4
       hast-util-to-html: 9.0.3
 
-  '@shikijs/engine-javascript@1.23.1':
+  '@shikijs/engine-javascript@1.24.0':
     dependencies:
-      '@shikijs/types': 1.23.1
+      '@shikijs/types': 1.24.0
       '@shikijs/vscode-textmate': 9.3.0
-      oniguruma-to-es: 0.4.1
+      oniguruma-to-es: 0.7.0
 
-  '@shikijs/engine-oniguruma@1.23.1':
+  '@shikijs/engine-oniguruma@1.24.0':
     dependencies:
-      '@shikijs/types': 1.23.1
+      '@shikijs/types': 1.24.0
       '@shikijs/vscode-textmate': 9.3.0
 
-  '@shikijs/types@1.23.1':
+  '@shikijs/types@1.24.0':
     dependencies:
       '@shikijs/vscode-textmate': 9.3.0
       '@types/hast': 3.0.4
@@ -11703,11 +11703,11 @@ snapshots:
 
   '@sinonjs/text-encoding@0.7.3': {}
 
-  '@spotlightjs/astro@2.1.15(@sentry/astro@8.40.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)))(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))':
+  '@spotlightjs/astro@2.1.15(@sentry/astro@8.40.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)))(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))':
     dependencies:
-      '@sentry/astro': 8.40.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
+      '@sentry/astro': 8.40.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))
       '@spotlightjs/spotlight': 2.6.3
-      astro: 4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
+      astro: 4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
 
   '@spotlightjs/overlay@2.7.1': {}
 
@@ -11978,9 +11978,9 @@ snapshots:
       sharp-ico: 0.1.5
       unconfig: 0.3.13
 
-  '@vite-pwa/astro@0.4.3(@vite-pwa/assets-generator@0.2.6)(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))(vite-plugin-pwa@0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0))':
+  '@vite-pwa/astro@0.4.3(@vite-pwa/assets-generator@0.2.6)(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2))(vite-plugin-pwa@0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0))':
     dependencies:
-      astro: 4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
+      astro: 4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
       vite-plugin-pwa: 0.19.8(@vite-pwa/assets-generator@0.2.6)(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))(workbox-build@7.0.0(@types/babel__core@7.20.5))(workbox-window@7.0.0)
     optionalDependencies:
       '@vite-pwa/assets-generator': 0.2.6
@@ -12459,9 +12459,9 @@ snapshots:
 
   astral-regex@2.0.0: {}
 
-  astro-breadcrumbs@3.2.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)):
+  astro-breadcrumbs@3.2.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)):
     dependencies:
-      astro: 4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
+      astro: 4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
 
   astro-eslint-parser@1.1.0(typescript@5.7.2):
     dependencies:
@@ -12482,11 +12482,11 @@ snapshots:
       - supports-color
       - typescript
 
-  astro-matomo@1.6.0(astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)):
+  astro-matomo@1.6.0(astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)):
     dependencies:
-      astro: 4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
+      astro: 4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2)
 
-  astro@4.16.14(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2):
+  astro@4.16.16(@types/node@22.9.3)(rollup@2.79.2)(sass@1.81.0)(terser@5.36.0)(typescript@5.7.2):
     dependencies:
       '@astrojs/compiler': 2.10.3
       '@astrojs/internal-helpers': 0.4.1
@@ -12525,7 +12525,7 @@ snapshots:
       http-cache-semantics: 4.1.1
       js-yaml: 4.1.0
       kleur: 4.1.5
-      magic-string: 0.30.13
+      magic-string: 0.30.14
       magicast: 0.3.5
       micromatch: 4.0.8
       mrmime: 2.0.0
@@ -12537,13 +12537,13 @@ snapshots:
       prompts: 2.4.2
       rehype: 13.0.2
       semver: 7.6.3
-      shiki: 1.23.1
+      shiki: 1.24.0
       tinyexec: 0.3.1
       tsconfck: 3.1.4(typescript@5.7.2)
       unist-util-visit: 5.0.0
       vfile: 6.0.3
       vite: 5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0)
-      vitefu: 1.0.3(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))
+      vitefu: 1.0.4(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0))
       which-pm: 3.0.0
       xxhash-wasm: 1.1.0
       yargs-parser: 21.1.1
@@ -12725,7 +12725,7 @@ snapshots:
       chalk: 5.3.0
       cli-boxes: 3.0.0
       string-width: 7.2.0
-      type-fest: 4.27.0
+      type-fest: 4.29.0
       widest-line: 5.0.0
       wrap-ansi: 9.0.0
 
@@ -12796,7 +12796,7 @@ snapshots:
   camel-case@4.1.2:
     dependencies:
       pascal-case: 3.1.2
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   camelcase@5.3.1: {}
 
@@ -12809,7 +12809,7 @@ snapshots:
   capital-case@1.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
       upper-case-first: 2.0.2
 
   capnp-ts@0.7.0:
@@ -13041,7 +13041,7 @@ snapshots:
   constant-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
       upper-case: 2.0.2
 
   conventional-changelog-angular@8.0.0:
@@ -13322,7 +13322,7 @@ snapshots:
   dot-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   dot-prop@5.3.0:
     dependencies:
@@ -14308,7 +14308,7 @@ snapshots:
   header-case@2.0.4:
     dependencies:
       capital-case: 1.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   highlight.js@10.7.3: {}
 
@@ -14986,7 +14986,7 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  magic-string@0.30.13:
+  magic-string@0.30.14:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
 
@@ -15551,7 +15551,7 @@ snapshots:
   no-case@3.0.4:
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   node-abi@3.71.0:
     dependencies:
@@ -15668,11 +15668,11 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  oniguruma-to-es@0.4.1:
+  oniguruma-to-es@0.7.0:
     dependencies:
       emoji-regex-xs: 1.0.0
       regex: 5.0.2
-      regex-recursion: 4.2.1
+      regex-recursion: 4.3.0
 
   open@10.1.0:
     dependencies:
@@ -15790,7 +15790,7 @@ snapshots:
   param-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   parent-module@1.0.1:
     dependencies:
@@ -15818,7 +15818,7 @@ snapshots:
     dependencies:
       '@babel/code-frame': 7.26.2
       index-to-position: 0.1.2
-      type-fest: 4.27.0
+      type-fest: 4.26.1
 
   parse-latin@7.0.0:
     dependencies:
@@ -15846,14 +15846,14 @@ snapshots:
   pascal-case@3.1.2:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   path-browserify@1.0.1: {}
 
   path-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   path-exists@3.0.0: {}
 
@@ -16341,7 +16341,7 @@ snapshots:
       '@types/normalize-package-data': 2.4.4
       normalize-package-data: 6.0.2
       parse-json: 8.1.0
-      type-fest: 4.27.0
+      type-fest: 4.26.1
       unicorn-magic: 0.1.0
 
   readable-stream@2.3.8:
@@ -16397,7 +16397,7 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.26.0
 
-  regex-recursion@4.2.1:
+  regex-recursion@4.3.0:
     dependencies:
       regex-utilities: 2.3.0
 
@@ -16753,7 +16753,7 @@ snapshots:
   sentence-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
       upper-case-first: 2.0.2
 
   serialize-javascript@4.0.0:
@@ -16834,12 +16834,12 @@ snapshots:
 
   shell-quote@1.8.2: {}
 
-  shiki@1.23.1:
+  shiki@1.24.0:
     dependencies:
-      '@shikijs/core': 1.23.1
-      '@shikijs/engine-javascript': 1.23.1
-      '@shikijs/engine-oniguruma': 1.23.1
-      '@shikijs/types': 1.23.1
+      '@shikijs/core': 1.24.0
+      '@shikijs/engine-javascript': 1.24.0
+      '@shikijs/engine-oniguruma': 1.24.0
+      '@shikijs/types': 1.24.0
       '@shikijs/vscode-textmate': 9.3.0
       '@types/hast': 3.0.4
 
@@ -16927,7 +16927,7 @@ snapshots:
   snake-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   source-map-js@1.2.1: {}
 
@@ -17432,7 +17432,7 @@ snapshots:
 
   type-fest@4.26.1: {}
 
-  type-fest@4.27.0: {}
+  type-fest@4.29.0: {}
 
   typed-array-buffer@1.0.2:
     dependencies:
@@ -17801,7 +17801,7 @@ snapshots:
       '@vue/babel-plugin-jsx': 1.2.5(@babel/core@7.26.0)
       '@vue/compiler-dom': 3.5.13
       kolorist: 1.8.0
-      magic-string: 0.30.13
+      magic-string: 0.30.14
       vite: 5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0)
     transitivePeerDependencies:
       - supports-color
@@ -17817,7 +17817,7 @@ snapshots:
       sass: 1.81.0
       terser: 5.36.0
 
-  vitefu@1.0.3(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0)):
+  vitefu@1.0.4(vite@5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0)):
     optionalDependencies:
       vite: 5.4.11(@types/node@22.9.3)(sass@1.81.0)(terser@5.36.0)
 
