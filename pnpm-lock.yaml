@@ -43,7 +43,7 @@ importers:
         version: 8.41.0(vue@3.5.13(typescript@5.7.2))
       '@spotlightjs/astro':
         specifier: ^2.1.11
-        version: 2.1.15(@sentry/astro@8.41.0(astro@4.16.17(@types/node@22.10.1)(rollup@2.79.2)(sass@1.81.0)(terser@5.37.0)(typescript@5.7.2)))(astro@4.16.17(@types/node@22.10.1)(rollup@2.79.2)(sass@1.81.0)(terser@5.37.0)(typescript@5.7.2))
+        version: 2.2.0(@sentry/astro@8.41.0(astro@4.16.17(@types/node@22.10.1)(rollup@2.79.2)(sass@1.81.0)(terser@5.37.0)(typescript@5.7.2)))(astro@4.16.17(@types/node@22.10.1)(rollup@2.79.2)(sass@1.81.0)(terser@5.37.0)(typescript@5.7.2))
       '@vueuse/core':
         specifier: ^11.2.0
         version: 11.3.0(vue@3.5.13(typescript@5.7.2))
@@ -2896,23 +2896,23 @@ packages:
   '@sinonjs/text-encoding@0.7.3':
     resolution: {integrity: sha512-DE427ROAphMQzU4ENbliGYrBSYPXF+TtLg9S8vzeA+OF4ZKzoDdzfL8sxuMUGS/lgRhM6j1URSk9ghf7Xo1tyA==}
 
-  '@spotlightjs/astro@2.1.15':
-    resolution: {integrity: sha512-v/6vanhj/87Xlqv0vFnjDoCGDeG0vUkFIXNzNz+t4baLFoP4B0Lr/49wkbolIs+faMM3iVdBXlkQhOQ1M5KOQA==}
+  '@spotlightjs/astro@2.2.0':
+    resolution: {integrity: sha512-nXb8zlkkmhA/ksO3m57E/3Eli6WhmT0eL45AM1YurgXHblCqAlVnoBPQ7SeQEHytnMRq3LP238DZC2a4f7kPRw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@sentry/astro': '>=7.84.0'
       astro: '>=4.0.0'
 
-  '@spotlightjs/overlay@2.7.1':
-    resolution: {integrity: sha512-YuQ8IFC44AA0cLFxANnpdKVCgAbHxcn7OwxmGuatMjNOa9sjvmg+2Ipo0/idHjeuYgvEypTxEqsT6lNvd9lG5g==}
+  '@spotlightjs/overlay@2.8.0':
+    resolution: {integrity: sha512-4FGJ8rhjXE/avG0PEPT/Na37Iq+ZucbSvANWNIsS5+fVSurvWH884OFaXNbtzzRfHMPk4333XQlYZaT8NXgidg==}
 
-  '@spotlightjs/sidecar@1.9.1':
-    resolution: {integrity: sha512-qISdnZc5gMvhr7kTjgp+E+bw8KBo+WC8nLeO0LFWa7h2DMEuWhdNWizQIBDUrgUaOmG9hTt1UF37EZdTfNtbDA==}
+  '@spotlightjs/sidecar@1.9.2':
+    resolution: {integrity: sha512-xGHyyXotXLwNjM9XbIY7tK1jX8t8b7gX3h7UNqB9Hcd8YJW2mRl/ZJUedXQh6oK/TY8+mLZo8xyE7uJ70iljOA==}
     engines: {node: '>=18'}
     hasBin: true
 
-  '@spotlightjs/spotlight@2.6.3':
-    resolution: {integrity: sha512-TguYMj9f6VkubATShwqCvrCvQUKak9/n/giWfJgGnNAUnEVsiNj+PUdexGGMrTrr+FwqSNXvZPnztV/LE2E7Tw==}
+  '@spotlightjs/spotlight@2.7.0':
+    resolution: {integrity: sha512-wQkn1z2aMisNfeEK5J675Unzee9WVtKn4PfW6aPpc/hVR497BiU3z+JzO22bkPwFdn8eG8u1u1+Se1c8/rrgmw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -4246,6 +4246,10 @@ packages:
     resolution: {integrity: sha512-2QF/g9/zTaPDc3BjNcVTGoBbXBgYfMTTceLaYcFJ/W9kggFUkhxD/hMEeuLKbugyef9SqAx8cpgwlIP/jinUTA==}
     engines: {node: '>=4'}
 
+  dunder-proto@1.0.0:
+    resolution: {integrity: sha512-9+Sj30DIu+4KvHqMfLUGLFYL2PkURSYMVXJyXe92nFRvlYq5hBjLEhblKB+vkd/WVlUYMWigiY07T91Fkk0+4A==}
+    engines: {node: '>= 0.4'}
+
   duplexer2@0.1.4:
     resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}
 
@@ -4325,6 +4329,10 @@ packages:
 
   es-define-property@1.0.0:
     resolution: {integrity: sha512-jxayLKShrEqqzJ0eumQbVhTYQM27CfT1T35+gCgDFoL82JLsXqTJ76zv6A0YLOgEnLUMvLzsDsGIrl8NFpT2gQ==}
+    engines: {node: '>= 0.4'}
+
+  es-define-property@1.0.1:
+    resolution: {integrity: sha512-e3nRfgfUZ4rNGL232gUgX06QNyyez04KdjFrF+LTRoOXmrOgFKDg4BCdsjW8EnT69eqdYGmRpJwiPVYNrCaW3g==}
     engines: {node: '>= 0.4'}
 
   es-errors@1.3.0:
@@ -4736,6 +4744,10 @@ packages:
     resolution: {integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==}
     engines: {node: '>= 0.4'}
 
+  get-intrinsic@1.2.5:
+    resolution: {integrity: sha512-Y4+pKa7XeRUPWFNvOOYHkRYrfzW07oraURSvjDmRVOJ748OrVmeXtpE4+GCEHncjCjkTxPNRt8kEbxDhsn6VTg==}
+    engines: {node: '>= 0.4'}
+
   get-own-enumerable-property-symbols@3.0.2:
     resolution: {integrity: sha512-I0UBV/XOz1XkIJHEUDMZAbzCThU/H8DxmSfmdGcKPnVhu2VfFqr34jr9777IyaTYvxjedWhqVIilEDsCdP5G6g==}
 
@@ -4911,8 +4923,8 @@ packages:
     resolution: {integrity: sha512-SJ1amZAJUiZS+PhsVLf5tGydlaVB8EdFpaSO4gmiUKUOxk8qzn5AIy4ZeJUmh22znIdk/uMAUT2pl3FxzVUH+Q==}
     engines: {node: '>= 0.4'}
 
-  has-proto@1.1.0:
-    resolution: {integrity: sha512-QLdzI9IIO1Jg7f9GT1gXpPpXArAn6cS31R1eEZqz08Gc+uQ8/XiqHWt17Fiw+2p6oTTIq5GXEpQkAlA88YRl/Q==}
+  has-proto@1.2.0:
+    resolution: {integrity: sha512-KIL7eQPfHQRC8+XluaIw7BHUwwqL19bQn4hzNgdr+1wXoU0KKj6rufu47lhY7KbJR2C6T6+PfyN0Ea7wkSS+qQ==}
     engines: {node: '>= 0.4'}
 
   has-symbols@1.0.3:
@@ -6918,8 +6930,8 @@ packages:
   redis@4.7.0:
     resolution: {integrity: sha512-zvmkHEAdGMn+hMRXuMBtu4Vo5P6rHQjLoHftu+lBqq8ZTA3RCVC/WzD790bkKKiNFp7d5/9PcSD19fJyyRvOdQ==}
 
-  reflect.getprototypeof@1.0.7:
-    resolution: {integrity: sha512-bMvFGIUKlc/eSfXNX+aZ+EL95/EgZzuwA0OBPTbZZDEJw/0AkentjMuM1oiRfwHrshqk4RzdgiTg5CcDalXN5g==}
+  reflect.getprototypeof@1.0.8:
+    resolution: {integrity: sha512-B5dj6usc5dkk8uFliwjwDHM8To5/QwdKz9JcBZ8Ic4G1f0YmeeJTtE/ZTdgRFPAfxZFiUaPhZ1Jcs4qeagItGQ==}
     engines: {node: '>= 0.4'}
 
   regenerate-unicode-properties@10.2.0:
@@ -11771,24 +11783,24 @@ snapshots:
 
   '@sinonjs/text-encoding@0.7.3': {}
 
-  '@spotlightjs/astro@2.1.15(@sentry/astro@8.41.0(astro@4.16.17(@types/node@22.10.1)(rollup@2.79.2)(sass@1.81.0)(terser@5.37.0)(typescript@5.7.2)))(astro@4.16.17(@types/node@22.10.1)(rollup@2.79.2)(sass@1.81.0)(terser@5.37.0)(typescript@5.7.2))':
+  '@spotlightjs/astro@2.2.0(@sentry/astro@8.41.0(astro@4.16.17(@types/node@22.10.1)(rollup@2.79.2)(sass@1.81.0)(terser@5.37.0)(typescript@5.7.2)))(astro@4.16.17(@types/node@22.10.1)(rollup@2.79.2)(sass@1.81.0)(terser@5.37.0)(typescript@5.7.2))':
     dependencies:
       '@sentry/astro': 8.41.0(astro@4.16.17(@types/node@22.10.1)(rollup@2.79.2)(sass@1.81.0)(terser@5.37.0)(typescript@5.7.2))
-      '@spotlightjs/spotlight': 2.6.3
+      '@spotlightjs/spotlight': 2.7.0
       astro: 4.16.17(@types/node@22.10.1)(rollup@2.79.2)(sass@1.81.0)(terser@5.37.0)(typescript@5.7.2)
 
-  '@spotlightjs/overlay@2.7.1': {}
+  '@spotlightjs/overlay@2.8.0': {}
 
-  '@spotlightjs/sidecar@1.9.1':
+  '@spotlightjs/sidecar@1.9.2':
     dependencies:
       kleur: 4.1.5
       launch-editor: 2.9.1
       source-map: 0.7.4
 
-  '@spotlightjs/spotlight@2.6.3':
+  '@spotlightjs/spotlight@2.7.0':
     dependencies:
-      '@spotlightjs/overlay': 2.7.1
-      '@spotlightjs/sidecar': 1.9.1
+      '@spotlightjs/overlay': 2.8.0
+      '@spotlightjs/sidecar': 1.9.2
       import-meta-resolve: 4.1.0
       macho-unsign: 2.0.6
       portable-executable-signature: 2.0.6
@@ -12863,8 +12875,8 @@ snapshots:
   call-bind@1.0.8:
     dependencies:
       call-bind-apply-helpers: 1.0.0
-      es-define-property: 1.0.0
-      get-intrinsic: 1.2.4
+      es-define-property: 1.0.1
+      get-intrinsic: 1.2.5
       set-function-length: 1.2.2
 
   callsites@3.1.0: {}
@@ -13408,6 +13420,12 @@ snapshots:
 
   dset@3.1.4: {}
 
+  dunder-proto@1.0.0:
+    dependencies:
+      call-bind-apply-helpers: 1.0.0
+      es-errors: 1.3.0
+      gopd: 1.2.0
+
   duplexer2@0.1.4:
     dependencies:
       readable-stream: 2.3.8
@@ -13529,18 +13547,18 @@ snapshots:
       data-view-buffer: 1.0.1
       data-view-byte-length: 1.0.1
       data-view-byte-offset: 1.0.0
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
       es-errors: 1.3.0
       es-object-atoms: 1.0.0
       es-set-tostringtag: 2.0.3
       es-to-primitive: 1.3.0
       function.prototype.name: 1.1.6
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.2.5
       get-symbol-description: 1.0.2
       globalthis: 1.0.4
       gopd: 1.2.0
       has-property-descriptors: 1.0.2
-      has-proto: 1.1.0
+      has-proto: 1.2.0
       has-symbols: 1.1.0
       hasown: 2.0.2
       internal-slot: 1.0.7
@@ -13572,6 +13590,8 @@ snapshots:
   es-define-property@1.0.0:
     dependencies:
       get-intrinsic: 1.2.4
+
+  es-define-property@1.0.1: {}
 
   es-errors@1.3.0: {}
 
@@ -14085,6 +14105,17 @@ snapshots:
       has-symbols: 1.0.3
       hasown: 2.0.2
 
+  get-intrinsic@1.2.5:
+    dependencies:
+      call-bind-apply-helpers: 1.0.0
+      dunder-proto: 1.0.0
+      es-define-property: 1.0.1
+      es-errors: 1.3.0
+      function-bind: 1.1.2
+      gopd: 1.2.0
+      has-symbols: 1.1.0
+      hasown: 2.0.2
+
   get-own-enumerable-property-symbols@3.0.2: {}
 
   get-source@2.0.12:
@@ -14284,9 +14315,9 @@ snapshots:
 
   has-proto@1.0.3: {}
 
-  has-proto@1.1.0:
+  has-proto@1.2.0:
     dependencies:
-      call-bind: 1.0.8
+      dunder-proto: 1.0.0
 
   has-symbols@1.0.3: {}
 
@@ -14777,7 +14808,7 @@ snapshots:
   is-weakset@2.0.3:
     dependencies:
       call-bind: 1.0.8
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.2.5
 
   is-what@4.1.16: {}
 
@@ -16493,13 +16524,14 @@ snapshots:
       '@redis/search': 1.2.0(@redis/client@1.6.0)
       '@redis/time-series': 1.1.0(@redis/client@1.6.0)
 
-  reflect.getprototypeof@1.0.7:
+  reflect.getprototypeof@1.0.8:
     dependencies:
       call-bind: 1.0.8
       define-properties: 1.2.1
+      dunder-proto: 1.0.0
       es-abstract: 1.23.5
       es-errors: 1.3.0
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.2.5
       gopd: 1.2.0
       which-builtin-type: 1.2.0
 
@@ -17165,7 +17197,7 @@ snapshots:
       es-abstract: 1.23.5
       es-errors: 1.3.0
       es-object-atoms: 1.0.0
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.2.5
       gopd: 1.2.0
       has-symbols: 1.1.0
       internal-slot: 1.0.7
@@ -17585,9 +17617,9 @@ snapshots:
       call-bind: 1.0.8
       for-each: 0.3.3
       gopd: 1.2.0
-      has-proto: 1.1.0
+      has-proto: 1.2.0
       is-typed-array: 1.1.13
-      reflect.getprototypeof: 1.0.7
+      reflect.getprototypeof: 1.0.8
 
   typed-array-length@1.0.6:
     dependencies:
@@ -17605,7 +17637,7 @@ snapshots:
       gopd: 1.2.0
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
-      reflect.getprototypeof: 1.0.7
+      reflect.getprototypeof: 1.0.8
 
   typesafe-path@0.2.2: {}
 
