@@ -121,7 +121,7 @@
     "@felix_berlin/sass-butler": "3.0.1",
     "@iconify-json/lucide": "^1.2.12",
     "@nanostores/persistent": "^0.10.2",
-    "@nanostores/vue": "^0.10.0",
+    "@nanostores/vue": "^0.11.0",
     "@pagefind/default-ui": "^1.2.0",
     "@sentry/astro": "^8.37.1",
     "@sentry/vite-plugin": "^2.22.6",
