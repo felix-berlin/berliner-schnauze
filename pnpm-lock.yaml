@@ -18,8 +18,8 @@ importers:
         specifier: ^4.5.2
         version: 4.5.3(@types/node@22.10.2)(astro@4.16.17(@types/node@22.10.2)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2))(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(vue@3.5.13(typescript@5.7.2))
       '@felix_berlin/sass-butler':
-        specifier: 3.0.1
-        version: 3.0.1
+        specifier: 3.1.0
+        version: 3.1.0(sass@1.83.0)
       '@iconify-json/lucide':
         specifier: ^1.2.12
         version: 1.2.18
@@ -1608,9 +1608,11 @@ packages:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
 
-  '@felix_berlin/sass-butler@3.0.1':
-    resolution: {integrity: sha512-E6Kd7Asl2zL43mbCTSlDzCj2SVUIa5r1o8IiQ62KF602NV0gqwsvScIhU+SQg8Yw14p/gTZluT4tk1m923Xikw==}
+  '@felix_berlin/sass-butler@3.1.0':
+    resolution: {integrity: sha512-lkCwUSBrsE5EX085aRONhTj3aJU4q8MRR6S4JQuFbMJmDhtlNtHndhhEbNVtk+6DDQJ+oDnEokQyVRQ6wXXGIA==}
     engines: {node: '>=12'}
+    peerDependencies:
+      sass: '>=1.79.0'
 
   '@floating-ui/core@1.6.8':
     resolution: {integrity: sha512-7XJ9cPU+yI2QeLS+FCSlqNFZJq8arvswefkZrYI1yQBbftw6FyrZOxYSh+9S7z7TpeWlRt9zJ5IhM1WIL334jA==}
@@ -10372,7 +10374,9 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
-  '@felix_berlin/sass-butler@3.0.1': {}
+  '@felix_berlin/sass-butler@3.1.0(sass@1.83.0)':
+    dependencies:
+      sass: 1.83.0
 
   '@floating-ui/core@1.6.8':
     dependencies:

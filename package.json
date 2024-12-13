@@ -118,7 +118,7 @@
     "@astrojs/partytown": "^2.1.2",
     "@astrojs/sitemap": "^3.2.1",
     "@astrojs/vue": "^4.5.2",
-    "@felix_berlin/sass-butler": "3.0.1",
+    "@felix_berlin/sass-butler": "3.1.0",
     "@iconify-json/lucide": "^1.2.12",
     "@nanostores/persistent": "^0.10.2",
     "@nanostores/vue": "^0.10.0",
