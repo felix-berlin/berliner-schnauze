@@ -9,8 +9,8 @@ import sentry from "@sentry/astro";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
 import { loadEnv } from "vite";
-import { codecovVitePlugin } from "@codecov/vite-plugin";
 import partytown from "@astrojs/partytown";
+import codecovplugin from "@codecov/astro-plugin";
 const { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, PWA_DEBUG, CODECOV_TOKEN } = loadEnv(
   process.env.NODE_ENV,
   process.cwd(),
@@ -34,11 +34,9 @@ export default defineConfig({
       devtools: {
         launchEditor: "code",
       },
-    }),
-    sitemap({
+    }), sitemap({
       lastmod: new Date(),
-    }),
-    matomo({
+    }), matomo({
       enabled: import.meta.env.PROD,
       host: "https://analytics.webshaped.de/",
       siteId: 8,
@@ -46,7 +44,21 @@ export default defineConfig({
       heartBeatTimer: 5,
       disableCookies: true,
       partytown: false,
-    }),
+    }), // sentry({
+    //   dsn: import.meta.env.SENTRY_DNS,
+    //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
+    //   sourceMapsUploadOptions: {
+    //     project: import.meta.env.SENTRY_PROJECT,
+    //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
+    //   },
+    // }),
+    // partytown({
+    //   config: {
+    //     forward: ["_paq.push"],
+    //   },
+    // }),
+    // sentry(),
+    // spotlightjs(),
     AstroPWA({
       $schema: "https://json.schemastore.org/web-manifest-combined.json",
       mode: import.meta.env.DEV ? "development" : "production",
@@ -203,21 +215,11 @@ export default defineConfig({
         },
       },
     }),
-    // sentry({
-    //   dsn: import.meta.env.SENTRY_DNS,
-    //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
-    //   sourceMapsUploadOptions: {
-    //     project: import.meta.env.SENTRY_PROJECT,
-    //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
-    //   },
-    // }),
-    // partytown({
-    //   config: {
-    //     forward: ["_paq.push"],
-    //   },
-    // }),
-    // sentry(),
-    // spotlightjs(),
+    codecovplugin({
+      enableBundleAnalysis: true,
+      bundleName: "berliner-schnauze-bundle",
+      uploadToken: CODECOV_TOKEN,
+    })
   ],
   vite: {
     plugins: [
@@ -234,11 +236,6 @@ export default defineConfig({
         authToken: SENTRY_AUTH_TOKEN,
         org: SENTRY_ORG,
         project: SENTRY_PROJECT,
-      }),
-      codecovVitePlugin({
-        enableBundleAnalysis: CODECOV_TOKEN !== undefined,
-        bundleName: "berliner-schnauze",
-        uploadToken: CODECOV_TOKEN,
       }),
     ],
 
