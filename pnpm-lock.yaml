@@ -42,11 +42,11 @@ importers:
         specifier: ^8.45.0
         version: 8.45.0(vue@3.5.13(typescript@5.7.2))
       '@spotlightjs/astro':
-        specifier: ^2.2.2
-        version: 2.2.2(@sentry/astro@8.45.0(astro@5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0)))(astro@5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0))
+        specifier: ^2.3.0
+        version: 2.3.0(@sentry/astro@8.45.0(astro@5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0)))(astro@5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0))
       '@vueuse/core':
-        specifier: ^11.2.0
-        version: 11.3.0(vue@3.5.13(typescript@5.7.2))
+        specifier: ^12.0.0
+        version: 12.0.0(typescript@5.7.2)
       astro:
         specifier: ^5.0.5
         version: 5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0)
@@ -93,8 +93,8 @@ importers:
         specifier: 3.0.1
         version: 3.0.1
       virtua:
-        specifier: ^0.36.2
-        version: 0.36.2(vue@3.5.13(typescript@5.7.2))
+        specifier: ^0.39.2
+        version: 0.39.2(vue@3.5.13(typescript@5.7.2))
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.2)
@@ -2967,31 +2967,13 @@ packages:
     engines: {node: '>= 10'}
     hasBin: true
 
-  '@sentry/core@8.44.0':
-    resolution: {integrity: sha512-C43eW9Mr1WGpxCeI6pXUl7TeTwR2TwWhuU8wHx2s5eoATDQwbjz9l+JXXjVJf5YXXEwNOZL2WAx/f0diLA5rTQ==}
-    engines: {node: '>=14.18'}
-
   '@sentry/core@8.45.0':
     resolution: {integrity: sha512-4YTuBipWSh4JrtSYS5GxUQBAcAgOIkEoFfFbwVcr3ivijOacJLRXTBn3rpcy1CKjBq0PHDGR+2RGRYC+bNAMxg==}
-    engines: {node: '>=14.18'}
-
-  '@sentry/node@8.44.0':
-    resolution: {integrity: sha512-mONfSnPwbkQEr0o5mhuJdLbxeEjyjt9VbYYXmXvHF/gQD7nzLYKkc6mA2rl74ITBZdyyKOTO7OmsSHMfD0f+ZA==}
     engines: {node: '>=14.18'}
 
   '@sentry/node@8.45.0':
     resolution: {integrity: sha512-a+4csASc7zQlSAGt5AMVTUFn3Rz0qyiU90Hq1ejWLEF11i2FI73TrPVmyYT9bb+/AhzZV0vqmmrL5HVvxp/UGA==}
     engines: {node: '>=14.18'}
-
-  '@sentry/opentelemetry@8.44.0':
-    resolution: {integrity: sha512-zOqDrsLJr6femKKs7Sp00FvsiextrDWNzNfNab3RACCmK3Ezj37Eoag23FHbxjCDuPouqIxLy3cxOygwnb/IoQ==}
-    engines: {node: '>=14.18'}
-    peerDependencies:
-      '@opentelemetry/api': ^1.9.0
-      '@opentelemetry/core': ^1.29.0
-      '@opentelemetry/instrumentation': ^0.56.0
-      '@opentelemetry/sdk-trace-base': ^1.29.0
-      '@opentelemetry/semantic-conventions': ^1.28.0
 
   '@sentry/opentelemetry@8.45.0':
     resolution: {integrity: sha512-qk8TBqk0EO7ggMdun16Wfb38IBN+VQBKwdbs7rbUfKOmXudsDAcz3gg7QfCO7qHoCK8c+fY3cIKoVrQkJ879+Q==}
@@ -3056,23 +3038,23 @@ packages:
   '@sinonjs/text-encoding@0.7.3':
     resolution: {integrity: sha512-DE427ROAphMQzU4ENbliGYrBSYPXF+TtLg9S8vzeA+OF4ZKzoDdzfL8sxuMUGS/lgRhM6j1URSk9ghf7Xo1tyA==}
 
-  '@spotlightjs/astro@2.2.2':
-    resolution: {integrity: sha512-kFuORqfxi6GNZfjwdDMownt2vG3fIjMIY7/HLzYKIchtHzJBH9gTZZmBDkuinGcsdnrOQPTpx83Y7IShGzW4EQ==}
+  '@spotlightjs/astro@2.3.0':
+    resolution: {integrity: sha512-OnBYS4rDgkigxQkTpH5aGFQzReuF1CKagOSHudyTQBcd17zdNLKSujeBAUJBhH7VoNz9mu6q2+weGW8sWlH4og==}
     engines: {node: '>=18'}
     peerDependencies:
       '@sentry/astro': '>=7.84.0'
       astro: '>=4.0.0'
 
-  '@spotlightjs/overlay@2.8.1':
-    resolution: {integrity: sha512-Sk8dRut57sUrry5ssmZEb3i6dGoYFnVRt+Ox20AXz+r9VA/Z63zvLJZlvjmEgRS+dMAG6B0iyOd6C307EDObow==}
+  '@spotlightjs/overlay@2.9.0':
+    resolution: {integrity: sha512-toZW0hmFgx51yiEkz2+csXiwKWSBzFF1VD0JmEHdQrD76+n3YfEmkVxUqqmcB/s8vC32i/9ti0QQRbQzjACbow==}
 
-  '@spotlightjs/sidecar@1.9.4':
-    resolution: {integrity: sha512-pdPAK+W2XQyTBUyro6n4M2lhmGkm70jBL3pIDVgRa0hQMOMZ3Jv7owSSL1RP4AI4h0rVc3W9r0hOuwS+iDw33w==}
+  '@spotlightjs/sidecar@1.10.0':
+    resolution: {integrity: sha512-aGqj3kp09OmxVwr30J3vAVfN+aCAZQ1jF6YyyQJ4vWGzymxYJJCTO1U4Amh5NgPxLw02OCWPqQ5c7cKSHvn4WQ==}
     engines: {node: '>=18'}
     hasBin: true
 
-  '@spotlightjs/spotlight@2.8.1':
-    resolution: {integrity: sha512-ohkn0zTV7CEsnWgy7eF6/fnDCJMCqm97OGJJ8LHqWVEYTr8WbN2is0kPNJYtBnF+I7rGkdIR5zQ0DO0Rv9dr0A==}
+  '@spotlightjs/spotlight@2.9.0':
+    resolution: {integrity: sha512-SQeToiN6Fykl++VkQhbn8aomPtIBW9qQOKyeEHxoOQGzK5irsU0O0fCUOfZHh8loV34K3m5ua8Ic1sIPR2tGlg==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -3435,14 +3417,14 @@ packages:
   '@vue/test-utils@2.4.6':
     resolution: {integrity: sha512-FMxEjOpYNYiFe0GkaHsnJPXFHxQ6m4t8vI/ElPGpMWxZKpmRvQ33OIrvRXemy6yha03RxhOlQuy+gZMC3CQSow==}
 
-  '@vueuse/core@11.3.0':
-    resolution: {integrity: sha512-7OC4Rl1f9G8IT6rUfi9JrKiXy4bfmHhZ5x2Ceojy0jnd3mHNEvV4JaRygH362ror6/NZ+Nl+n13LPzGiPN8cKA==}
+  '@vueuse/core@12.0.0':
+    resolution: {integrity: sha512-C12RukhXiJCbx4MGhjmd/gH52TjJsc3G0E0kQj/kb19H3Nt6n1CA4DRWuTdWWcaFRdlTe0npWDS942mvacvNBw==}
 
-  '@vueuse/metadata@11.3.0':
-    resolution: {integrity: sha512-pwDnDspTqtTo2HwfLw4Rp6yywuuBdYnPYDq+mO38ZYKGebCUQC/nVj/PXSiK9HX5otxLz8Fn7ECPbjiRz2CC3g==}
+  '@vueuse/metadata@12.0.0':
+    resolution: {integrity: sha512-Yzimd1D3sjxTDOlF05HekU5aSGdKjxhuhRFHA7gDWLn57PRbBIh+SF5NmjhJ0WRgF3my7T8LBucyxdFJjIfRJQ==}
 
-  '@vueuse/shared@11.3.0':
-    resolution: {integrity: sha512-P8gSSWQeucH5821ek2mn/ciCk+MS/zoRKqdQIM3bHq6p7GXDAJLmnRRKmF5F65sAVJIfzQlwR3aDzwCn10s8hA==}
+  '@vueuse/shared@12.0.0':
+    resolution: {integrity: sha512-3i6qtcq2PIio5i/vVYidkkcgvmTjCqrf26u+Fd4LhnbBmIT6FN8y6q/GJERp8lfcB9zVEfjdV0Br0443qZuJpw==}
 
   '@whatwg-node/fetch@0.9.23':
     resolution: {integrity: sha512-7xlqWel9JsmxahJnYVUj/LLxWcnA93DR4c9xlw3U814jWTiYalryiH1qToik1hOxweKKRLi4haXHM5ycRksPBA==}
@@ -8219,8 +8201,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  virtua@0.36.2:
-    resolution: {integrity: sha512-v2u2nPi0bvFMq+6cIzIdcSXtBC+tu/RVey6fL814XjZXk5Wdq1cGGfbZLV0QSZw5Wtj6j/GTh3VHlkw5NbYktg==}
+  virtua@0.39.2:
+    resolution: {integrity: sha512-KhDYmfDe36L1W5ir1b5+jeV40+u4bb5bRiZggWwGinreGXKnxxcLGdk+yVZlO5dNdBq/nxj4v4w6yxuwgLXSBg==}
     peerDependencies:
       react: '>=16.14.0'
       react-dom: '>=16.14.0'
@@ -8497,17 +8479,6 @@ packages:
 
   vue-component-type-helpers@2.1.10:
     resolution: {integrity: sha512-lfgdSLQKrUmADiSV6PbBvYgQ33KF3Ztv6gP85MfGaGaSGMTXORVaHT1EHfsqCgzRNBstPKYDmvAV9Do5CmJ07A==}
-
-  vue-demi@0.14.10:
-    resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
-    engines: {node: '>=12'}
-    hasBin: true
-    peerDependencies:
-      '@vue/composition-api': ^1.0.0-rc.1
-      vue: ^3.0.0-0 || ^2.6.0
-    peerDependenciesMeta:
-      '@vue/composition-api':
-        optional: true
 
   vue-eslint-parser@9.4.3:
     resolution: {integrity: sha512-2rYRLWlIpaiN8xbPiDyXZXRgLGOtWxERV7ND5fFAv5qo1D2N9Fu9MNajBNc6o13lZ+24DAWCkQCvj4klgmcITg==}
@@ -11927,49 +11898,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@sentry/core@8.44.0': {}
-
   '@sentry/core@8.45.0': {}
-
-  '@sentry/node@8.44.0':
-    dependencies:
-      '@opentelemetry/api': 1.9.0
-      '@opentelemetry/context-async-hooks': 1.29.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/core': 1.29.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation': 0.56.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-amqplib': 0.45.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-connect': 0.42.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-dataloader': 0.15.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-express': 0.46.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-fastify': 0.43.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-fs': 0.18.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-generic-pool': 0.42.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-graphql': 0.46.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-hapi': 0.44.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-http': 0.56.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-ioredis': 0.46.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-kafkajs': 0.6.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-knex': 0.43.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-koa': 0.46.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-lru-memoizer': 0.43.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-mongodb': 0.50.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-mongoose': 0.45.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-mysql': 0.44.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-mysql2': 0.44.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-nestjs-core': 0.43.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-pg': 0.49.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-redis-4': 0.45.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-tedious': 0.17.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation-undici': 0.9.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/resources': 1.29.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-base': 1.29.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.28.0
-      '@prisma/instrumentation': 5.19.1
-      '@sentry/core': 8.44.0
-      '@sentry/opentelemetry': 8.44.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.29.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.29.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.28.0)
-      import-in-the-middle: 1.11.3
-    transitivePeerDependencies:
-      - supports-color
 
   '@sentry/node@8.45.0':
     dependencies:
@@ -12010,15 +11939,6 @@ snapshots:
       import-in-the-middle: 1.11.3
     transitivePeerDependencies:
       - supports-color
-
-  '@sentry/opentelemetry@8.44.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.29.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.29.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.28.0)':
-    dependencies:
-      '@opentelemetry/api': 1.9.0
-      '@opentelemetry/core': 1.29.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/instrumentation': 0.56.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/sdk-trace-base': 1.29.0(@opentelemetry/api@1.9.0)
-      '@opentelemetry/semantic-conventions': 1.28.0
-      '@sentry/core': 8.44.0
 
   '@sentry/opentelemetry@8.45.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.29.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.29.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.28.0)':
     dependencies:
@@ -12092,30 +12012,30 @@ snapshots:
 
   '@sinonjs/text-encoding@0.7.3': {}
 
-  '@spotlightjs/astro@2.2.2(@sentry/astro@8.45.0(astro@5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0)))(astro@5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0))':
+  '@spotlightjs/astro@2.3.0(@sentry/astro@8.45.0(astro@5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0)))(astro@5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0))':
     dependencies:
       '@sentry/astro': 8.45.0(astro@5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0))
-      '@spotlightjs/spotlight': 2.8.1
+      '@spotlightjs/spotlight': 2.9.0
       astro: 5.0.5(@types/node@22.10.2)(jiti@2.4.0)(rollup@2.79.2)(sass@1.83.0)(terser@5.37.0)(typescript@5.7.2)(yaml@2.6.0)
     transitivePeerDependencies:
       - supports-color
 
-  '@spotlightjs/overlay@2.8.1': {}
+  '@spotlightjs/overlay@2.9.0': {}
 
-  '@spotlightjs/sidecar@1.9.4':
+  '@spotlightjs/sidecar@1.10.0':
     dependencies:
-      '@sentry/node': 8.44.0
+      '@sentry/node': 8.45.0
       kleur: 4.1.5
       launch-editor: 2.9.1
       source-map: 0.7.4
     transitivePeerDependencies:
       - supports-color
 
-  '@spotlightjs/spotlight@2.8.1':
+  '@spotlightjs/spotlight@2.9.0':
     dependencies:
-      '@sentry/node': 8.44.0
-      '@spotlightjs/overlay': 2.8.1
-      '@spotlightjs/sidecar': 1.9.4
+      '@sentry/node': 8.45.0
+      '@spotlightjs/overlay': 2.9.0
+      '@spotlightjs/sidecar': 1.10.0
       import-meta-resolve: 4.1.0
       macho-unsign: 2.0.6
       portable-executable-signature: 2.0.6
@@ -12655,24 +12575,22 @@ snapshots:
       js-beautify: 1.15.1
       vue-component-type-helpers: 2.1.10
 
-  '@vueuse/core@11.3.0(vue@3.5.13(typescript@5.7.2))':
+  '@vueuse/core@12.0.0(typescript@5.7.2)':
     dependencies:
       '@types/web-bluetooth': 0.0.20
-      '@vueuse/metadata': 11.3.0
-      '@vueuse/shared': 11.3.0(vue@3.5.13(typescript@5.7.2))
-      vue-demi: 0.14.10(vue@3.5.13(typescript@5.7.2))
+      '@vueuse/metadata': 12.0.0
+      '@vueuse/shared': 12.0.0(typescript@5.7.2)
+      vue: 3.5.13(typescript@5.7.2)
     transitivePeerDependencies:
-      - '@vue/composition-api'
-      - vue
+      - typescript
 
-  '@vueuse/metadata@11.3.0': {}
+  '@vueuse/metadata@12.0.0': {}
 
-  '@vueuse/shared@11.3.0(vue@3.5.13(typescript@5.7.2))':
+  '@vueuse/shared@12.0.0(typescript@5.7.2)':
     dependencies:
-      vue-demi: 0.14.10(vue@3.5.13(typescript@5.7.2))
+      vue: 3.5.13(typescript@5.7.2)
     transitivePeerDependencies:
-      - '@vue/composition-api'
-      - vue
+      - typescript
 
   '@whatwg-node/fetch@0.9.23':
     dependencies:
@@ -18244,7 +18162,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  virtua@0.36.2(vue@3.5.13(typescript@5.7.2)):
+  virtua@0.39.2(vue@3.5.13(typescript@5.7.2)):
     optionalDependencies:
       vue: 3.5.13(typescript@5.7.2)
 
@@ -18508,10 +18426,6 @@ snapshots:
   vscode-uri@3.0.8: {}
 
   vue-component-type-helpers@2.1.10: {}
-
-  vue-demi@0.14.10(vue@3.5.13(typescript@5.7.2)):
-    dependencies:
-      vue: 3.5.13(typescript@5.7.2)
 
   vue-eslint-parser@9.4.3(eslint@9.17.0(jiti@2.4.0)):
     dependencies:
