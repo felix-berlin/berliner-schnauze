@@ -9,8 +9,8 @@ import sentry from "@sentry/astro";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
 import { loadEnv } from "vite";
-import { codecovVitePlugin } from "@codecov/vite-plugin";
 import partytown from "@astrojs/partytown";
+import codecovplugin from "@codecov/astro-plugin";
 const { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, PWA_DEBUG, CODECOV_TOKEN } = loadEnv(
   process.env.NODE_ENV,
   process.cwd(),
@@ -25,6 +25,100 @@ export default defineConfig({
   image: {
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
+  env: {
+    schema: {
+      PUBLIC_WP_API: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_WP_REST_API: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      WP_AUTH_USER: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      WP_AUTH_PASS: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      PUBLIC_WP_AUTH_REFRESH_TOKEN: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_SUGGEST_WORD_FORM_ID: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      ENABLE_ANALYTICS: envField.boolean({
+        context: "server",
+        access: "public",
+      }),
+      PUBLIC_SITE_NAME: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_SITE_URL: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_TURNSTILE_SITE_KEY: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      SENTRY_AUTH_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+      SENTRY_DNS: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+      PUBLIC_SENTRY_DNS: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
+      SENTRY_PROJECT: envField.string({
+        context: "server",
+        access: "public",
+      }),
+      SENTRY_ORG: envField.string({
+        context: "server",
+        access: "public",
+      }),
+      PUBLIC_SENTRY_ENVIRONMENT: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_SENTRY_TRACES_SAMPLE_RATE: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      WIKIMEDIA_API_AUTH_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+      SHOW_TEST_DATA: envField.boolean({
+        context: "server",
+        access: "public",
+      }),
+      PWA_DEBUG: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+      CODECOV_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+    },
+  },
   integrations: [
     vue({
       appEntrypoint: "src/pages/_app",
@@ -34,11 +128,9 @@ export default defineConfig({
       devtools: {
         launchEditor: "code",
       },
-    }),
-    sitemap({
+    }), sitemap({
       lastmod: new Date(),
-    }),
-    matomo({
+    }), matomo({
       enabled: import.meta.env.PROD,
       host: "https://analytics.webshaped.de/",
       siteId: 8,
@@ -46,7 +138,21 @@ export default defineConfig({
       heartBeatTimer: 5,
       disableCookies: true,
       partytown: false,
-    }),
+    }), // sentry({
+    //   dsn: import.meta.env.SENTRY_DNS,
+    //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
+    //   sourceMapsUploadOptions: {
+    //     project: import.meta.env.SENTRY_PROJECT,
+    //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
+    //   },
+    // }),
+    // partytown({
+    //   config: {
+    //     forward: ["_paq.push"],
+    //   },
+    // }),
+    // sentry(),
+    // spotlightjs(),
     AstroPWA({
       $schema: "https://json.schemastore.org/web-manifest-combined.json",
       mode: import.meta.env.DEV ? "development" : "production",
@@ -103,121 +209,12 @@ export default defineConfig({
         enabled: PWA_DEBUG ?? false,
         navigateFallbackAllowlist: [/^\//],
       },
-      experimental: {
-        directoryAndTrailingSlashHandler: true,
-        env: {
-          schema: {
-            schema: {
-              PUBLIC_WP_API: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              PUBLIC_WP_REST_API: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              WP_AUTH_USER: envField.string({
-                context: "server",
-                access: "secret",
-                optional: true,
-              }),
-              WP_AUTH_PASS: envField.string({
-                context: "server",
-                access: "secret",
-                optional: true,
-              }),
-              PUBLIC_WP_AUTH_REFRESH_TOKEN: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              PUBLIC_SUGGEST_WORD_FORM_ID: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              ENABLE_ANALYTICS: envField.boolean({
-                context: "server",
-                access: "public",
-              }),
-              PUBLIC_SITE_NAME: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              PUBLIC_SITE_URL: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              PUBLIC_TURNSTILE_SITE_KEY: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              SENTRY_AUTH_TOKEN: envField.string({
-                context: "server",
-                access: "secret",
-              }),
-              SENTRY_DNS: envField.string({
-                context: "server",
-                access: "public",
-                optional: true,
-              }),
-              PUBLIC_SENTRY_DNS: envField.string({
-                context: "client",
-                access: "public",
-                optional: true,
-              }),
-              SENTRY_PROJECT: envField.string({
-                context: "server",
-                access: "public",
-              }),
-              SENTRY_ORG: envField.string({
-                context: "server",
-                access: "public",
-              }),
-              PUBLIC_SENTRY_ENVIRONMENT: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              PUBLIC_SENTRY_TRACES_SAMPLE_RATE: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              WIKIMEDIA_API_AUTH_TOKEN: envField.string({
-                context: "server",
-                access: "secret",
-              }),
-              SHOW_TEST_DATA: envField.boolean({
-                context: "server",
-                access: "public",
-              }),
-              PWA_DEBUG: envField.string({
-                context: "server",
-                access: "public",
-                optional: true,
-              }),
-              CODECOV_TOKEN: envField.string({
-                context: "server",
-                access: "secret",
-                optional: true,
-              }),
-            },
-          },
-        },
-      },
     }),
-    // sentry({
-    //   dsn: import.meta.env.SENTRY_DNS,
-    //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
-    //   sourceMapsUploadOptions: {
-    //     project: import.meta.env.SENTRY_PROJECT,
-    //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
-    //   },
-    // }),
-    // partytown({
-    //   config: {
-    //     forward: ["_paq.push"],
-    //   },
-    // }),
-    // sentry(),
-    // spotlightjs(),
+    codecovplugin({
+      enableBundleAnalysis: true,
+      bundleName: "berliner-schnauze-bundle",
+      uploadToken: CODECOV_TOKEN,
+    })
   ],
   vite: {
     plugins: [
@@ -234,11 +231,6 @@ export default defineConfig({
         authToken: SENTRY_AUTH_TOKEN,
         org: SENTRY_ORG,
         project: SENTRY_PROJECT,
-      }),
-      codecovVitePlugin({
-        enableBundleAnalysis: CODECOV_TOKEN !== undefined,
-        bundleName: "berliner-schnauze",
-        uploadToken: CODECOV_TOKEN,
       }),
     ],
 
