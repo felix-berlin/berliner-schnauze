@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.14.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.14.0...v3.14.1) (2024-12-15)
+
+
+### Bug Fixes
+
+* app install error ([2981f45](https://github.com/felix-berlin/berliner-schnauze/commit/2981f45d653201d99dd00c391c796b2a3be889b2))
+
 # [3.14.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.13.2...v3.14.0) (2024-11-08)
 
 
