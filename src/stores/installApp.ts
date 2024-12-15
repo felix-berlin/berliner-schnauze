@@ -24,8 +24,6 @@ onMount($installPrompt, () => {
   $isPwaInstalled.set(isPwaInstalled());
 
   window.addEventListener("beforeinstallprompt", (event) => {
-    event.preventDefault();
-
     $installPrompt.set(event as BeforeInstallPromptEvent);
     $showInstallButton.set(true);
   });
