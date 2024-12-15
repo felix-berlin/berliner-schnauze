@@ -25,6 +25,100 @@ export default defineConfig({
   image: {
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
+  env: {
+    schema: {
+      PUBLIC_WP_API: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_WP_REST_API: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      WP_AUTH_USER: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      WP_AUTH_PASS: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      PUBLIC_WP_AUTH_REFRESH_TOKEN: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_SUGGEST_WORD_FORM_ID: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      ENABLE_ANALYTICS: envField.boolean({
+        context: "server",
+        access: "public",
+      }),
+      PUBLIC_SITE_NAME: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_SITE_URL: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_TURNSTILE_SITE_KEY: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      SENTRY_AUTH_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+      SENTRY_DNS: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+      PUBLIC_SENTRY_DNS: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
+      SENTRY_PROJECT: envField.string({
+        context: "server",
+        access: "public",
+      }),
+      SENTRY_ORG: envField.string({
+        context: "server",
+        access: "public",
+      }),
+      PUBLIC_SENTRY_ENVIRONMENT: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      PUBLIC_SENTRY_TRACES_SAMPLE_RATE: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      WIKIMEDIA_API_AUTH_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+      SHOW_TEST_DATA: envField.boolean({
+        context: "server",
+        access: "public",
+      }),
+      PWA_DEBUG: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+      CODECOV_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+    },
+  },
   integrations: [
     vue({
       appEntrypoint: "src/pages/_app",
@@ -114,105 +208,6 @@ export default defineConfig({
       devOptions: {
         enabled: PWA_DEBUG ?? false,
         navigateFallbackAllowlist: [/^\//],
-      },
-      experimental: {
-        directoryAndTrailingSlashHandler: true,
-        env: {
-          schema: {
-            schema: {
-              PUBLIC_WP_API: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              PUBLIC_WP_REST_API: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              WP_AUTH_USER: envField.string({
-                context: "server",
-                access: "secret",
-                optional: true,
-              }),
-              WP_AUTH_PASS: envField.string({
-                context: "server",
-                access: "secret",
-                optional: true,
-              }),
-              PUBLIC_WP_AUTH_REFRESH_TOKEN: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              PUBLIC_SUGGEST_WORD_FORM_ID: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              ENABLE_ANALYTICS: envField.boolean({
-                context: "server",
-                access: "public",
-              }),
-              PUBLIC_SITE_NAME: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              PUBLIC_SITE_URL: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              PUBLIC_TURNSTILE_SITE_KEY: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              SENTRY_AUTH_TOKEN: envField.string({
-                context: "server",
-                access: "secret",
-              }),
-              SENTRY_DNS: envField.string({
-                context: "server",
-                access: "public",
-                optional: true,
-              }),
-              PUBLIC_SENTRY_DNS: envField.string({
-                context: "client",
-                access: "public",
-                optional: true,
-              }),
-              SENTRY_PROJECT: envField.string({
-                context: "server",
-                access: "public",
-              }),
-              SENTRY_ORG: envField.string({
-                context: "server",
-                access: "public",
-              }),
-              PUBLIC_SENTRY_ENVIRONMENT: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              PUBLIC_SENTRY_TRACES_SAMPLE_RATE: envField.string({
-                context: "client",
-                access: "public",
-              }),
-              WIKIMEDIA_API_AUTH_TOKEN: envField.string({
-                context: "server",
-                access: "secret",
-              }),
-              SHOW_TEST_DATA: envField.boolean({
-                context: "server",
-                access: "public",
-              }),
-              PWA_DEBUG: envField.string({
-                context: "server",
-                access: "public",
-                optional: true,
-              }),
-              CODECOV_TOKEN: envField.string({
-                context: "server",
-                access: "secret",
-                optional: true,
-              }),
-            },
-          },
-        },
       },
     }),
     codecovplugin({

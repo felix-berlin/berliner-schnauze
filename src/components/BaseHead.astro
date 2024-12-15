@@ -1,6 +1,6 @@
 ---
 import { pwaInfo } from "virtual:pwa-info";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import SetColorMode from "@components/SetColorMode.astro";
 
 export interface Title {
@@ -53,7 +53,7 @@ const { title, seo } = Astro.props as SeoProps & Title;
 
 <SetColorMode />
 
-<ViewTransitions />
+<ClientRouter />
 
 <script src="/src/lib/unsupportedBrowser.ts"></script>
 
