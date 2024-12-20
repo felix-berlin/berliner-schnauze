@@ -27,7 +27,7 @@ export default defineConfig({
   env: {
     schema: {
       WP_API: envField.string({
-        context: "server",
+        context: "client",
         access: "public",
       }),
       WP_REST_API: envField.string({
