@@ -1,26 +1,8 @@
 /// <reference types="vitest" />
-import { defineConfig, coverageConfigDefaults } from "vitest/config";
-import Vue from "@vitejs/plugin-vue";
-import Icons from "unplugin-icons/vite";
-import allAlias from "./alias.ts";
+import { getViteConfig } from "astro/config";
+import { coverageConfigDefaults } from "vitest/config";
 
-export default defineConfig({
-  plugins: [
-    Vue({
-      script: {
-        propsDestructure: true,
-      },
-    }),
-    Icons({
-      iconCustomizer(collection, icon, props) {
-        // customize all icons in this collection
-        if (collection === "tabler" || collection === "lucide") {
-          props.width = "24";
-          props.height = "24";
-        }
-      },
-    }), // chooses the compiler automatically
-  ],
+export default getViteConfig({
   test: {
     include: ["src/tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     exclude: ["src/tests/unit/__needsFix/*"],
@@ -39,8 +21,5 @@ export default defineConfig({
       ],
       reportsDirectory: "./tests/unit/coverage",
     },
-  },
-  resolve: {
-    alias: allAlias,
   },
 });

@@ -3,7 +3,6 @@ import vue from "@astrojs/vue";
 import sitemap from "@astrojs/sitemap";
 import matomo from "astro-matomo";
 import Icons from "unplugin-icons/vite";
-import allAlias from "./alias.ts";
 import AstroPWA from "@vite-pwa/astro";
 import sentry from "@sentry/astro";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
@@ -128,9 +127,11 @@ export default defineConfig({
       devtools: {
         launchEditor: "code",
       },
-    }), sitemap({
+    }),
+    sitemap({
       lastmod: new Date(),
-    }), matomo({
+    }),
+    matomo({
       enabled: import.meta.env.PROD,
       host: "https://analytics.webshaped.de/",
       siteId: 8,
@@ -214,7 +215,7 @@ export default defineConfig({
       enableBundleAnalysis: true,
       bundleName: "berliner-schnauze-bundle",
       uploadToken: CODECOV_TOKEN,
-    })
+    }),
   ],
   vite: {
     plugins: [
@@ -234,17 +235,8 @@ export default defineConfig({
       }),
     ],
 
-    resolve: {
-      alias: allAlias,
-    },
-
     css: {
       preprocessorMaxWorkers: true,
-      preprocessorOptions: {
-        scss: {
-          api: "modern-compiler",
-        },
-      },
     },
 
     build: {
