@@ -76,7 +76,7 @@
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.10.2",
     "@vite-pwa/assets-generator": "^0.2.6",
-    "@vite-pwa/astro": "^0.4.3",
+    "@vite-pwa/astro": "^0.5.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vitest/coverage-v8": "^2.1.8",
     "@vitest/ui": "^2.1.8",
