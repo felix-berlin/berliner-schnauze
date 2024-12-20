@@ -1,4 +1,4 @@
-import { WIKIMEDIA_API_AUTH_TOKEN } from "astro:env/server";
+import { WIKIMEDIA_API_AUTH_TOKEN } from "astro:env/client";
 
 export const fetchWikimediaAPI = async (file: string) => {
   const headers = {

@@ -5,7 +5,7 @@ import type {
   RootQueryToBerlinerWordConnectionEdge,
   BerlinerWord,
 } from "@ts_types/generated/graphql.ts";
-import { SHOW_TEST_DATA } from "astro:env/server";
+import { SHOW_TEST_DATA } from "astro:env/client";
 
 type WordEdge = {
   node: {
