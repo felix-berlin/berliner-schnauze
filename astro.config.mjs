@@ -99,6 +99,7 @@ export default defineConfig({
       WIKIMEDIA_API_AUTH_TOKEN: envField.string({
         context: "server",
         access: "secret",
+        optional: true,
       }),
       SHOW_TEST_DATA: envField.boolean({
         context: "server",
