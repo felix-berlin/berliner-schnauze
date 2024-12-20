@@ -1,10 +1,11 @@
 import * as Sentry from "@sentry/browser";
 import { version } from "../../package.json";
+import { SENTRY_DNS, SENTRY_ENVIRONMENT, SENTRY_TRACES_SAMPLE_RATE } from "astro:env/client";
 
 Sentry.init({
-  dsn: import.meta.env.PUBLIC_SENTRY_DNS,
+  dsn: SENTRY_DNS,
 
-  environment: import.meta.env.PUBLIC_SENTRY_ENVIRONMENT,
+  environment: SENTRY_ENVIRONMENT,
 
   // Alternatively, use `process.env.npm_package_version` for a dynamic release version
   // if your build tool supports it.
@@ -14,7 +15,7 @@ Sentry.init({
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
-  tracesSampleRate: Number(import.meta.env.PUBLIC_SENTRY_TRACES_SAMPLE_RATE),
+  tracesSampleRate: Number(SENTRY_TRACES_SAMPLE_RATE),
 
   // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
   tracePropagationTargets: ["localhost", /^https:\/\/berliner-schnauze\.wtf/],

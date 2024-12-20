@@ -26,11 +26,11 @@ export default defineConfig({
   },
   env: {
     schema: {
-      PUBLIC_WP_API: envField.string({
-        context: "client",
+      WP_API: envField.string({
+        context: "server",
         access: "public",
       }),
-      PUBLIC_WP_REST_API: envField.string({
+      WP_REST_API: envField.string({
         context: "client",
         access: "public",
       }),
@@ -44,27 +44,30 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
-      PUBLIC_WP_AUTH_REFRESH_TOKEN: envField.string({
+      WP_AUTH_REFRESH_TOKEN: envField.string({
         context: "client",
         access: "public",
       }),
-      PUBLIC_SUGGEST_WORD_FORM_ID: envField.string({
+      SUGGEST_WORD_FORM_ID: envField.string({
         context: "client",
         access: "public",
       }),
       ENABLE_ANALYTICS: envField.boolean({
         context: "server",
         access: "public",
+        default: true,
       }),
-      PUBLIC_SITE_NAME: envField.string({
+      SITE_NAME: envField.string({
         context: "client",
         access: "public",
+        default: "Berliner Schnauze",
       }),
-      PUBLIC_SITE_URL: envField.string({
+      SITE_URL: envField.string({
         context: "client",
         access: "public",
+        default: "https://berliner-schnauze.wtf",
       }),
-      PUBLIC_TURNSTILE_SITE_KEY: envField.string({
+      TURNSTILE_SITE_KEY: envField.string({
         context: "client",
         access: "public",
       }),
@@ -73,11 +76,6 @@ export default defineConfig({
         access: "secret",
       }),
       SENTRY_DNS: envField.string({
-        context: "server",
-        access: "public",
-        optional: true,
-      }),
-      PUBLIC_SENTRY_DNS: envField.string({
         context: "client",
         access: "public",
         optional: true,
@@ -90,11 +88,11 @@ export default defineConfig({
         context: "server",
         access: "public",
       }),
-      PUBLIC_SENTRY_ENVIRONMENT: envField.string({
+      SENTRY_ENVIRONMENT: envField.string({
         context: "client",
         access: "public",
       }),
-      PUBLIC_SENTRY_TRACES_SAMPLE_RATE: envField.string({
+      SENTRY_TRACES_SAMPLE_RATE: envField.number({
         context: "client",
         access: "public",
       }),
@@ -105,11 +103,12 @@ export default defineConfig({
       SHOW_TEST_DATA: envField.boolean({
         context: "server",
         access: "public",
+        default: false,
       }),
-      PWA_DEBUG: envField.string({
+      PWA_DEBUG: envField.boolean({
         context: "server",
         access: "public",
-        optional: true,
+        default: false,
       }),
       CODECOV_TOKEN: envField.string({
         context: "server",
@@ -121,9 +120,6 @@ export default defineConfig({
   integrations: [
     vue({
       appEntrypoint: "src/pages/_app",
-      script: {
-        propsDestructure: true,
-      },
       devtools: {
         launchEditor: "code",
       },

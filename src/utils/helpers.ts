@@ -1,4 +1,5 @@
 import type { SeoProps } from "@components/BaseHead.astro";
+import { SITE_NAME, SITE_URL } from "astro:env/client";
 
 /**
  * Returns the route to a word
@@ -29,13 +30,13 @@ export const randomElement = (elements: any[]): any => {
   return elements[Math.floor(Math.random() * elements.length)];
 };
 
-export const seoData = (data, baseUrl: string = import.meta.env.PUBLIC_SITE_URL): SeoProps => {
+export const seoData = (data, baseUrl: string = SITE_URL): SeoProps => {
   return {
     title: data.title,
     seo: {
       ...data.seo,
       opengraphUrl: baseUrl,
-      opengraphSiteName: import.meta.env.PUBLIC_SITE_NAME,
+      opengraphSiteName: SITE_NAME,
     },
   };
 };

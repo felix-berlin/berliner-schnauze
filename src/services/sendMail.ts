@@ -1,6 +1,7 @@
 import { fetchAPI } from "@services/fetchApi.ts";
 import type { SendEmailPayload, SendEmailInput } from "@ts_types/generated/graphql.ts";
 import type { FormData } from "@components/SuggestWordForm.vue";
+import { WP_REST_API, SUGGEST_WORD_FORM_ID } from "astro:env/client";
 
 /**
  * Sends an email using the sendEmail mutation
@@ -56,27 +57,22 @@ export const sendEmailViaContactForm7 = async (formData: FormData): Promise<void
     }
   }
 
-  await fetch(`${import.meta.env.PUBLIC_WP_REST_API}`, {
+  await fetch(`${WP_REST_API}`, {
     headers: {
-      Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+      Authorization: `Bearer ${import.meta.env.WP_AUTH_REFRESH_TOKEN}`,
     },
   })
     .then((response) => response.json())
     .then((data) => console.log(data))
     .catch((error) => console.error("Error:", error));
 
-  await fetch(
-    `${import.meta.env.PUBLIC_WP_REST_API}/contact-form-7/v1/contact-forms/${
-      import.meta.env.PUBLIC_SUGGEST_WORD_FORM_ID
-    }/feedback`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
-      },
-      body: formInputs,
+  await fetch(`${WP_REST_API}/contact-form-7/v1/contact-forms/${SUGGEST_WORD_FORM_ID}/feedback`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${import.meta.env.WP_AUTH_REFRESH_TOKEN}`,
     },
-  ).then((response) => {
+    body: formInputs,
+  }).then((response) => {
     if (!response.ok) {
       console.log("response: ", response, response.json());
       return Promise.reject(new Error("Send E-Mail failed", { cause: response.status }));
