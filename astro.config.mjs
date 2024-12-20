@@ -3,7 +3,6 @@ import vue from "@astrojs/vue";
 import sitemap from "@astrojs/sitemap";
 import matomo from "astro-matomo";
 import Icons from "unplugin-icons/vite";
-import allAlias from "./alias.ts";
 import AstroPWA from "@vite-pwa/astro";
 import sentry from "@sentry/astro";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
@@ -27,11 +26,11 @@ export default defineConfig({
   },
   env: {
     schema: {
-      PUBLIC_WP_API: envField.string({
+      WP_API: envField.string({
         context: "client",
         access: "public",
       }),
-      PUBLIC_WP_REST_API: envField.string({
+      WP_REST_API: envField.string({
         context: "client",
         access: "public",
       }),
@@ -45,27 +44,30 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
-      PUBLIC_WP_AUTH_REFRESH_TOKEN: envField.string({
+      WP_AUTH_REFRESH_TOKEN: envField.string({
         context: "client",
         access: "public",
       }),
-      PUBLIC_SUGGEST_WORD_FORM_ID: envField.string({
+      SUGGEST_WORD_FORM_ID: envField.string({
         context: "client",
         access: "public",
       }),
       ENABLE_ANALYTICS: envField.boolean({
         context: "server",
         access: "public",
+        default: true,
       }),
-      PUBLIC_SITE_NAME: envField.string({
+      SITE_NAME: envField.string({
         context: "client",
         access: "public",
+        default: "Berliner Schnauze",
       }),
-      PUBLIC_SITE_URL: envField.string({
+      SITE_URL: envField.string({
         context: "client",
         access: "public",
+        default: "https://berliner-schnauze.wtf",
       }),
-      PUBLIC_TURNSTILE_SITE_KEY: envField.string({
+      TURNSTILE_SITE_KEY: envField.string({
         context: "client",
         access: "public",
       }),
@@ -74,11 +76,6 @@ export default defineConfig({
         access: "secret",
       }),
       SENTRY_DNS: envField.string({
-        context: "server",
-        access: "public",
-        optional: true,
-      }),
-      PUBLIC_SENTRY_DNS: envField.string({
         context: "client",
         access: "public",
         optional: true,
@@ -91,26 +88,28 @@ export default defineConfig({
         context: "server",
         access: "public",
       }),
-      PUBLIC_SENTRY_ENVIRONMENT: envField.string({
+      SENTRY_ENVIRONMENT: envField.string({
         context: "client",
         access: "public",
       }),
-      PUBLIC_SENTRY_TRACES_SAMPLE_RATE: envField.string({
+      SENTRY_TRACES_SAMPLE_RATE: envField.number({
         context: "client",
         access: "public",
       }),
       WIKIMEDIA_API_AUTH_TOKEN: envField.string({
-        context: "server",
-        access: "secret",
-      }),
-      SHOW_TEST_DATA: envField.boolean({
-        context: "server",
-        access: "public",
-      }),
-      PWA_DEBUG: envField.string({
-        context: "server",
+        context: "client",
         access: "public",
         optional: true,
+      }),
+      SHOW_TEST_DATA: envField.boolean({
+        context: "client",
+        access: "public",
+        default: false,
+      }),
+      PWA_DEBUG: envField.boolean({
+        context: "server",
+        access: "public",
+        default: false,
       }),
       CODECOV_TOKEN: envField.string({
         context: "server",
@@ -122,15 +121,14 @@ export default defineConfig({
   integrations: [
     vue({
       appEntrypoint: "src/pages/_app",
-      script: {
-        propsDestructure: true,
-      },
       devtools: {
         launchEditor: "code",
       },
-    }), sitemap({
+    }),
+    sitemap({
       lastmod: new Date(),
-    }), matomo({
+    }),
+    matomo({
       enabled: import.meta.env.PROD,
       host: "https://analytics.webshaped.de/",
       siteId: 8,
@@ -214,7 +212,7 @@ export default defineConfig({
       enableBundleAnalysis: true,
       bundleName: "berliner-schnauze-bundle",
       uploadToken: CODECOV_TOKEN,
-    })
+    }),
   ],
   vite: {
     plugins: [
@@ -234,17 +232,8 @@ export default defineConfig({
       }),
     ],
 
-    resolve: {
-      alias: allAlias,
-    },
-
     css: {
       preprocessorMaxWorkers: true,
-      preprocessorOptions: {
-        scss: {
-          api: "modern-compiler",
-        },
-      },
     },
 
     build: {

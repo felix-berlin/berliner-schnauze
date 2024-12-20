@@ -15,7 +15,9 @@
       "@ts_types/*": ["src/types/*"],
       "@features/*": ["src/features/*"],
       "@services/*": ["src/services/*"],
-      "@assets/*": ["src/assets/*"]
+      "@assets/*": ["src/assets/*"],
+      "@styles/*": ["src/styles/*"],
+      "@sass-butler/*": ["node_modules/@felix_berlin/sass-butler/*"]
     },
     "types": [
       "vitest/globals",

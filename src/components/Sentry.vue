@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { createApp, onBeforeMount } from "vue";
 import * as Sentry from "@sentry/vue";
+import { SENTRY_DNS } from "astro:env/client";
 
 const app = createApp({});
 
 const sentryInit = () => {
   Sentry.init({
     app,
-    dsn: import.meta.env.SENTRY_DNS,
+    dsn: SENTRY_DNS,
     integrations: [new Sentry.BrowserTracing()],
 
     // Set tracesSampleRate to 1.0 to capture 100%

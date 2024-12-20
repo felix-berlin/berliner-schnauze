@@ -1,46 +1,78 @@
 /// <reference types="vitest" />
-import { defineConfig, coverageConfigDefaults } from "vitest/config";
-import Vue from "@vitejs/plugin-vue";
-import Icons from "unplugin-icons/vite";
-import allAlias from "./alias.ts";
+import { getViteConfig, envField } from "astro/config";
+import { coverageConfigDefaults } from "vitest/config";
 
-export default defineConfig({
-  plugins: [
-    Vue({
-      script: {
-        propsDestructure: true,
+export default getViteConfig(
+  {
+    test: {
+      include: ["src/tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+      exclude: ["src/tests/unit/__needsFix/*"],
+      globals: true,
+      environment: "jsdom",
+      setupFiles: ["src/tests/setup.ts", "@vitest/web-worker"],
+      coverage: {
+        include: ["src/**"],
+        exclude: [
+          "src/types/**",
+          "src/env.d.ts",
+          "src/pages/_app.ts",
+          "src/plugins/**",
+          "src/utils/supportedBrowsers.mjs",
+          ...coverageConfigDefaults.exclude,
+        ],
+        reportsDirectory: "./tests/unit/coverage",
       },
-    }),
-    Icons({
-      iconCustomizer(collection, icon, props) {
-        // customize all icons in this collection
-        if (collection === "tabler" || collection === "lucide") {
-          props.width = "24";
-          props.height = "24";
-        }
-      },
-    }), // chooses the compiler automatically
-  ],
-  test: {
-    include: ["src/tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    exclude: ["src/tests/unit/__needsFix/*"],
-    globals: true,
-    environment: "jsdom",
-    setupFiles: ["src/tests/setup.ts", "@vitest/web-worker"],
-    coverage: {
-      include: ["src/**"],
-      exclude: [
-        "src/types/**",
-        "src/env.d.ts",
-        "src/pages/_app.ts",
-        "src/plugins/**",
-        "src/utils/supportedBrowsers.mjs",
-        ...coverageConfigDefaults.exclude,
-      ],
-      reportsDirectory: "./tests/unit/coverage",
     },
   },
-  resolve: {
-    alias: allAlias,
+  {
+    env: {
+      schema: {
+        WP_API: envField.string({
+          context: "client",
+          access: "public",
+          default: "https://berliner-schnauze.test/api",
+        }),
+        WP_REST_API: envField.string({
+          context: "client",
+          access: "public",
+          default: "https://berliner-schnauze.test/wp-json",
+        }),
+        WP_AUTH_REFRESH_TOKEN: envField.string({
+          context: "client",
+          access: "public",
+          default: "not-a-real-token",
+        }),
+        SUGGEST_WORD_FORM_ID: envField.string({
+          context: "client",
+          access: "public",
+          default: "1111",
+        }),
+        TURNSTILE_SITE_KEY: envField.string({
+          context: "client",
+          access: "public",
+          default: "not-a-real-key",
+        }),
+        SENTRY_PROJECT: envField.string({
+          context: "server",
+          access: "public",
+          default: "not-a-real-project",
+        }),
+        SENTRY_ORG: envField.string({
+          context: "server",
+          access: "public",
+          default: "not-a-real-org",
+        }),
+        SENTRY_ENVIRONMENT: envField.string({
+          context: "client",
+          access: "public",
+          default: "development",
+        }),
+        SENTRY_TRACES_SAMPLE_RATE: envField.number({
+          context: "client",
+          access: "public",
+          default: 0.1,
+        }),
+      },
+    },
   },
-});
+);

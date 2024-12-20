@@ -5,6 +5,7 @@ import type {
   RootQueryToBerlinerWordConnectionEdge,
   BerlinerWord,
 } from "@ts_types/generated/graphql.ts";
+import { SHOW_TEST_DATA } from "astro:env/client";
 
 type WordEdge = {
   node: {
@@ -64,7 +65,7 @@ export const getWordsWithSlugs = async (): Promise<WordEdge[]> => {
 export const getAllWords = async (
   orderByField = "TITLE",
   orderByType = "ASC",
-  stati = import.meta.env.SHOW_TEST_CONTENT ? "[DRAFT, PUBLISH]" : "[PUBLISH]",
+  stati = SHOW_TEST_DATA ? "[DRAFT, PUBLISH]" : "[PUBLISH]",
 ): Promise<RootQueryToBerlinerWordConnectionEdge[]> => {
   let allWords: WordEdge[] = [];
   let cursor: string | null = null;

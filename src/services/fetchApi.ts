@@ -1,11 +1,13 @@
+import { WP_AUTH_REFRESH_TOKEN, WP_API } from "astro:env/client";
+
 export const fetchAPI = async (query: string, { variables } = { variables: {} }) => {
   const headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization: `Bearer ${import.meta.env.PUBLIC_WP_AUTH_REFRESH_TOKEN}`,
+    Authorization: `Bearer ${WP_AUTH_REFRESH_TOKEN}`,
   };
 
-  return await fetch(import.meta.env.PUBLIC_WP_API, {
+  return await fetch(WP_API, {
     method: "POST",
     headers,
     body: JSON.stringify({ query, variables }),

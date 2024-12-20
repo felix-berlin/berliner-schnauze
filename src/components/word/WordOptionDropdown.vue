@@ -62,6 +62,7 @@ import { routeToWord } from "@utils/helpers.ts";
 import { useClipboard, useShare } from "@vueuse/core";
 import type { BerlinerWord } from "@stores/index.ts";
 import { createToastNotify } from "@stores/index.ts";
+import { SITE_URL } from "astro:env/client";
 
 interface WordProps {
   berlinerisch: BerlinerWord["wordProperties"]["berlinerisch"];
@@ -99,7 +100,7 @@ const shareWord = (slug: string): void => {
  * @return  {void}
  */
 const copyWordPageUrlToClipboard = async (slug: string): Promise<void> => {
-  await copy(import.meta.env.PUBLIC_SITE_URL + routeToWord(slug));
+  await copy(SITE_URL + routeToWord(slug));
   createToastNotify({
     message: "Link kopiert",
     status: "success",

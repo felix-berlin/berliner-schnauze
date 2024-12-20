@@ -139,6 +139,7 @@ import TurnStile from "@components/TurnStile.vue";
 import { createToastNotify } from "@stores/index.ts";
 import { sendEmail } from "@services/sendMail.ts";
 import type { SendEmailPayload } from "@ts_types/generated/graphql.ts";
+import { TURNSTILE_SITE_KEY } from "astro:env/client";
 
 const props = defineProps<{
   berlinerWord?: string;
@@ -182,7 +183,7 @@ const formResponse = reactive({
   sent: false,
 });
 
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const turnstileSiteKey = TURNSTILE_SITE_KEY;
 const isVerified = ref(false);
 const isSending = ref(false);
 
