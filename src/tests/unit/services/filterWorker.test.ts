@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
 import "@vitest/web-worker";
-import filterWorker from "../../../services/filterWorker.ts?worker";
+import filterWorker from "../../../services/filterWorker?worker";
 
 let worker = new filterWorker();
-worker = new Worker(new URL("../../../services/filterWorker.ts?worker", import.meta.url));
+worker = new Worker(new URL("../../../services/filterWorker?worker", import.meta.url));
 
 describe("filterWorker", () => {
   it("should filter words by activeLetterFilter", () => {
