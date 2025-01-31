@@ -2204,6 +2204,8 @@ export type CommentToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -2301,6 +2303,8 @@ export type CommentToParentCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -10339,6 +10343,8 @@ export type EnqueuedAsset = {
    * @deprecated Use `EnqueuedScript.extraData` instead.
    */
   extra?: Maybe<Scalars['String']['output']>;
+  /** The loading group to which this asset belongs. */
+  group?: Maybe<Scalars['Int']['output']>;
   /** The handle of the enqueued asset */
   handle?: Maybe<Scalars['String']['output']>;
   /** The ID of the enqueued asset */
@@ -10372,6 +10378,10 @@ export type EnqueuedScript = EnqueuedAsset & Node & {
   extra?: Maybe<Scalars['String']['output']>;
   /** Extra data supplied to the enqueued script */
   extraData?: Maybe<Scalars['String']['output']>;
+  /** The loading group to which this asset belongs. */
+  group?: Maybe<Scalars['Int']['output']>;
+  /** The location where this script should be loaded */
+  groupLocation?: Maybe<ScriptLoadingGroupLocationEnum>;
   /** The handle of the enqueued asset */
   handle?: Maybe<Scalars['String']['output']>;
   /** The global ID of the enqueued script */
@@ -10438,6 +10448,8 @@ export type EnqueuedStylesheet = EnqueuedAsset & Node & {
    * @deprecated Use `EnqueuedScript.extraData` instead.
    */
   extra?: Maybe<Scalars['String']['output']>;
+  /** The loading group to which this asset belongs. */
+  group?: Maybe<Scalars['Int']['output']>;
   /** The handle of the enqueued asset */
   handle?: Maybe<Scalars['String']['output']>;
   /** The global ID of the enqueued stylesheet */
@@ -11345,6 +11357,8 @@ export type MediaItemToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -12504,6 +12518,8 @@ export type PageToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -13611,6 +13627,8 @@ export type PostToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -16009,6 +16027,8 @@ export type RootQueryToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -17515,6 +17535,14 @@ export type SafeSvgSvgIconBlockAttributes = {
   textColor?: Maybe<Scalars['String']['output']>;
   type: Scalars['String']['output'];
 };
+
+/** Location in the document where the script to be loaded */
+export enum ScriptLoadingGroupLocationEnum {
+  /** A script to be loaded in document at right before the closing `<body>` tag */
+  Footer = 'FOOTER',
+  /** A script to be loaded in document `<head>` tag */
+  Header = 'HEADER'
+}
 
 /** The strategy to use when loading the script */
 export enum ScriptLoadingStrategyEnum {
@@ -19458,6 +19486,8 @@ export type UserToCommentConnectionWhereArgs = {
   search?: InputMaybe<Scalars['String']['input']>;
   /** Comment status to limit results by. */
   status?: InputMaybe<Scalars['String']['input']>;
+  /** One or more Comment Statuses to limit results by */
+  statusIn?: InputMaybe<Array<InputMaybe<CommentStatusEnum>>>;
   /** Include comments for a specific user ID. */
   userId?: InputMaybe<Scalars['ID']['input']>;
 };
