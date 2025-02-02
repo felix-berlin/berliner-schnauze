@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.14.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.14.1...v3.14.2) (2025-02-02)
+
+
+### Bug Fixes
+
+* **matomo:** use view transition support for matomo ([932fb2e](https://github.com/felix-berlin/berliner-schnauze/commit/932fb2e52b2216ad7fa1ba3d636793f8e7ff199d))
+
 ## [3.14.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.14.0...v3.14.1) (2024-12-15)
 
 
