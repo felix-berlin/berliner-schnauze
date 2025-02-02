@@ -136,6 +136,9 @@ export default defineConfig({
       heartBeatTimer: 5,
       disableCookies: true,
       partytown: false,
+      viewTransition: {
+        contentElement: "main",
+      },
     }), // sentry({
     //   dsn: import.meta.env.SENTRY_DNS,
     //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],

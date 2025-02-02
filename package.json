@@ -131,7 +131,7 @@
     "@vueuse/core": "^12.5.0",
     "astro": "^5.2.3",
     "astro-breadcrumbs": "^3.3.1",
-    "astro-matomo": "^1.7.0",
+    "astro-matomo": "^1.8.0",
     "compromise": "^14.14.4",
     "de-compromise": "^0.0.10",
     "floating-vue": "5.2.2",

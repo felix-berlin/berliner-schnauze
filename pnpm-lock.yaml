@@ -54,8 +54,8 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1(astro@5.2.3(@types/node@22.13.0)(jiti@2.4.2)(rollup@2.79.2)(sass@1.83.4)(terser@5.37.0)(typescript@5.7.3)(yaml@2.7.0))
       astro-matomo:
-        specifier: ^1.7.0
-        version: 1.7.0(astro@5.2.3(@types/node@22.13.0)(jiti@2.4.2)(rollup@2.79.2)(sass@1.83.4)(terser@5.37.0)(typescript@5.7.3)(yaml@2.7.0))
+        specifier: ^1.8.0
+        version: 1.8.0(astro@5.2.3(@types/node@22.13.0)(jiti@2.4.2)(rollup@2.79.2)(sass@1.83.4)(terser@5.37.0)(typescript@5.7.3)(yaml@2.7.0))
       compromise:
         specifier: ^14.14.4
         version: 14.14.4
@@ -3450,8 +3450,8 @@ packages:
     resolution: {integrity: sha512-3oqANMjrvJ+IE5pwlUWsH/4UztmYf/GTL0HPUkWnYBNAHiGVGrOh2EbegxS5niAwlO0w9dRYk0CkCPlJcu8c3Q==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  astro-matomo@1.7.0:
-    resolution: {integrity: sha512-TpgiP4X1ZiAFnPn73eOQtbEj0bRJX46q2a4oClswYtjZXbqaCnWFSfZjRByEk6RQsLXFAgBqvBUL0XF1VRSf4A==}
+  astro-matomo@1.8.0:
+    resolution: {integrity: sha512-yg7XgTEyYrVqVIWi/MiQtlbHdczIa2P/E+a/x3dW/oa3H4haH7rwcgvBLtsCWu++MAJYs+D956rz8Nl9nNvC6Q==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
 
@@ -12472,7 +12472,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  astro-matomo@1.7.0(astro@5.2.3(@types/node@22.13.0)(jiti@2.4.2)(rollup@2.79.2)(sass@1.83.4)(terser@5.37.0)(typescript@5.7.3)(yaml@2.7.0)):
+  astro-matomo@1.8.0(astro@5.2.3(@types/node@22.13.0)(jiti@2.4.2)(rollup@2.79.2)(sass@1.83.4)(terser@5.37.0)(typescript@5.7.3)(yaml@2.7.0)):
     dependencies:
       astro: 5.2.3(@types/node@22.13.0)(jiti@2.4.2)(rollup@2.79.2)(sass@1.83.4)(terser@5.37.0)(typescript@5.7.3)(yaml@2.7.0)
 
