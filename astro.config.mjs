@@ -10,11 +10,14 @@ import spotlightjs from "@spotlightjs/astro";
 import { loadEnv } from "vite";
 import partytown from "@astrojs/partytown";
 import codecovplugin from "@codecov/astro-plugin";
-const { SENTRY_AUTH_TOKEN, SENTRY_ORG, SENTRY_PROJECT, PWA_DEBUG, CODECOV_TOKEN } = loadEnv(
-  process.env.NODE_ENV,
-  process.cwd(),
-  "",
-);
+const {
+  SENTRY_AUTH_TOKEN,
+  SENTRY_ORG,
+  SENTRY_PROJECT,
+  PWA_DEBUG,
+  CODECOV_TOKEN,
+  WP_AUTH_REFRESH_TOKEN,
+} = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
 // https://astro.build/config
 export default defineConfig({
