@@ -250,6 +250,13 @@ export default defineConfig({
         authToken: SENTRY_AUTH_TOKEN,
         org: SENTRY_ORG,
         project: SENTRY_PROJECT,
+        sourcemaps: {
+          filesToDeleteAfterUpload: ["dist/**/*.map"],
+        },
+        bundleSizeOptimizations: {
+          excludeDebugStatements: true,
+        },
+        debug: false,
       }),
       visualizerPlugin,
     ],
