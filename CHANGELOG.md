@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.14.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.14.2...v3.14.3) (2025-03-30)
+
+
+### Performance Improvements
+
+* make sure vue devtools are not exported on prod ([d2bc8f9](https://github.com/felix-berlin/berliner-schnauze/commit/d2bc8f94f641f9c060e3fdcd0493c2b428339a77))
+
 ## [3.14.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.14.1...v3.14.2) (2025-02-02)
 
 
