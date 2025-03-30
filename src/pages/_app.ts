@@ -3,18 +3,7 @@ import FloatingVue from "floating-vue";
 import { devtools } from "@nanostores/vue/devtools";
 // import VueVirtualScroller from "vue-virtual-scroller";
 
-import {
-  $wordOfTheDay,
-  $isDarkMode,
-  $wordSearch,
-  $filteredWordList,
-  searchLength,
-  $installPrompt,
-  $showInstallButton,
-  $showWordListFilterFlyout,
-  $toastNotify,
-  $activeFilterCount,
-} from "../stores/index";
+import * as store from "../stores/index";
 
 export default (app: App) => {
   app.use(FloatingVue, {
@@ -28,17 +17,9 @@ export default (app: App) => {
       },
     },
   });
-  app.use(devtools, {
-    $wordOfTheDay,
-    $isDarkMode,
-    $wordSearch,
-    $filteredWordList,
-    searchLength,
-    $installPrompt,
-    $showInstallButton,
-    $showWordListFilterFlyout,
-    $toastNotify,
-    $activeFilterCount,
-  });
+  if (process.env.NODE_ENV !== "production") {
+    app.use(devtools, store);
+  }
+
   // app.use(VueVirtualScroller);
 };

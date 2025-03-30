@@ -40,3 +40,4 @@ pnpm-debug.log*
 .wrangler
 
 src/utils/supportedBrowsers.mjs
+stats.html
