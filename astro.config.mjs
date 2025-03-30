@@ -10,6 +10,8 @@ import spotlightjs from "@spotlightjs/astro";
 import { loadEnv } from "vite";
 import partytown from "@astrojs/partytown";
 import codecovplugin from "@codecov/astro-plugin";
+import { visualizer } from "rollup-plugin-visualizer";
+
 const {
   SENTRY_AUTH_TOKEN,
   SENTRY_ORG,
@@ -17,7 +19,15 @@ const {
   PWA_DEBUG,
   CODECOV_TOKEN,
   WP_AUTH_REFRESH_TOKEN,
+  BUNDLE_ANALYZER_OPEN,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+
+const visualizerPlugin = visualizer({
+  open: BUNDLE_ANALYZER_OPEN === "true",
+  template: "treemap",
+  gzipSize: true,
+  brotliSize: true,
+});
 
 // https://astro.build/config
 export default defineConfig({
@@ -118,6 +128,11 @@ export default defineConfig({
         context: "server",
         access: "secret",
         optional: true,
+      }),
+      BUNDLE_ANALYZER_OPEN: envField.boolean({
+        context: "server",
+        access: "public",
+        default: false,
       }),
     },
   },
@@ -236,6 +251,7 @@ export default defineConfig({
         org: SENTRY_ORG,
         project: SENTRY_PROJECT,
       }),
+      visualizerPlugin,
     ],
 
     css: {
