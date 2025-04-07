@@ -139,9 +139,9 @@ export default defineConfig({
   integrations: [
     vue({
       appEntrypoint: "src/pages/_app",
-      devtools: {
-        launchEditor: "code",
-      },
+      // devtools: {
+      //   launchEditor: "code",
+      // },
     }),
     sitemap({
       lastmod: new Date(),
