@@ -24,7 +24,7 @@ import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
 import WordSuggestHint from "@components/WordSuggestHint.vue";
-import { $wordSearch, $searchResultCount } from "@stores/index.ts";
+import { $wordSearch, $searchResultCount } from "@stores/index";
 import { useStore } from "@nanostores/vue";
 import SearchX from "virtual:icons/lucide/search-x";
 import type { Maybe } from "@ts_types/generated/graphql.ts";

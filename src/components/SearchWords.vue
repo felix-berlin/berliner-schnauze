@@ -9,22 +9,11 @@
       ]"
       @click="buttonActions"
     >
-      <Transition
-        name="fade-fast"
-        mode="out-in"
-      >
-        <span
-          v-if="searchLength === 0"
-          key="search"
-          class="c-button--center-icon"
-        >
+      <Transition name="fade-fast" mode="out-in">
+        <span v-if="searchLength === 0" key="search" class="c-button--center-icon">
           <Search default-class="c-word-search__search-icon" />
         </span>
-        <span
-          v-else
-          key="del"
-          class="c-button--center-icon"
-        >
+        <span v-else key="del" class="c-button--center-icon">
           <X />
         </span>
       </Transition>
@@ -38,16 +27,22 @@
       placeholder="Durchsuche den Berliner-Jargon"
       autocomplete="off"
       @input="updateSearch()"
-    >
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
 import Search from "virtual:icons/lucide/search";
 import X from "virtual:icons/lucide/x";
-import { $wordSearch, setSearch, searchLength as currentSearchLength } from "@stores/index.ts";
+import {
+  $wordSearch,
+  setSearch,
+  searchLength as currentSearchLength,
+  setMatomoSearch,
+  $searchResultCount,
+} from "@stores/index";
 import { useStore, useVModel } from "@nanostores/vue";
+import { useDebounceFn } from "@vueuse/core";
 
 interface SearchWordsProps {
   buttonPosition?: "left" | "right";
@@ -57,15 +52,21 @@ const { buttonPosition = "left" } = defineProps<SearchWordsProps>();
 
 // const localSearch = useStorage("search", "");
 const searchLength = useStore(currentSearchLength);
+const searchResultCount = useStore($searchResultCount);
 const localSearch = useVModel($wordSearch, "search");
+
+const trackWordSearchListSearch = (search: string) => {
+  setMatomoSearch(search, "Word Search List", searchResultCount.value);
+};
+
+const debouncedTrackSearch = useDebounceFn(trackWordSearchListSearch, 1000, { maxWait: 5000 });
 
 /**
  * Emits the search value to the parent component
- *
- * @return  {void}
  */
-const updateSearch = (): void => {
+const updateSearch = async (): Promise<void> => {
   setSearch(localSearch.value);
+  await debouncedTrackSearch(localSearch.value);
 };
 
 /**
