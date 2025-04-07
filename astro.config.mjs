@@ -37,6 +37,9 @@ export default defineConfig({
   image: {
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
+  experimental: {
+    responsiveImages: true,
+  },
   env: {
     schema: {
       WP_API: envField.string({
@@ -139,9 +142,9 @@ export default defineConfig({
   integrations: [
     vue({
       appEntrypoint: "src/pages/_app",
-      devtools: {
-        launchEditor: "code",
-      },
+      // devtools: {
+      //   launchEditor: "code",
+      // },
     }),
     sitemap({
       lastmod: new Date(),
@@ -234,6 +237,7 @@ export default defineConfig({
       bundleName: "berliner-schnauze-bundle",
       uploadToken: CODECOV_TOKEN,
     }),
+    (await import("@playform/inline")).default(),
   ],
   vite: {
     plugins: [

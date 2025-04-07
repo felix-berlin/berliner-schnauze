@@ -1,13 +1,12 @@
 <template>
-  <div
-    :id="id"
-    class="c-search"
-  />
+  <div :id="id" class="c-search" />
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, ref, nextTick } from "vue";
 import { PagefindUI } from "@pagefind/default-ui";
+import { setMatomoSearch } from "@stores/index";
+import { useDebounceFn } from "@vueuse/core";
 
 export interface SearchBarProps {
   id: string;
@@ -23,6 +22,8 @@ if (import.meta.env.DEV) {
     "If there are no search results, make sure you have run `npm run build` and that the `dist/pagefind` folder exists.",
   );
 }
+
+const searchInputValue = ref("");
 
 /**
  * Initialize Pagefind
@@ -60,10 +61,41 @@ const triggerSearchViaKeyboard = (event: KeyboardEvent): void => {
   }
 };
 
-onMounted(() => {
+const trackWordSearchListSearch = (search: string) => {
+  setMatomoSearch(search, "Word Page Search");
+};
+
+const debouncedTrackSearch = useDebounceFn(trackWordSearchListSearch, 1000, { maxWait: 5000 });
+
+/**
+ * Watch the input element for changes
+ */
+const watchSearchInput = () => {
+  const inputElement = document.querySelector(
+    `#${props.id} .pagefind-ui__search-input`,
+  ) as HTMLInputElement;
+
+  if (inputElement) {
+    inputElement.addEventListener("input", () => {
+      searchInputValue.value = inputElement.value;
+
+      debouncedTrackSearch(searchInputValue.value).catch((error) => {
+        console.error("Error in debouncedTrackSearch:", error);
+      });
+    });
+  } else {
+    console.warn("Search input element not found.");
+  }
+};
+
+onMounted(async () => {
   initPagefind();
 
   window.addEventListener("keydown", (event) => triggerSearchViaKeyboard(event));
+
+  await nextTick(() => {
+    watchSearchInput();
+  });
 });
 
 onUnmounted(() => {

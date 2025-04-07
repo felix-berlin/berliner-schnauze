@@ -151,6 +151,30 @@ export const $setSortOrder = (
   $wordSearch.setKey(orderName, order);
 };
 
+/**
+ * Track search events in Matomo
+ *
+ */
+export const setMatomoSearch = (
+  searchKey: string,
+  searchCategory: string | boolean = false,
+  numberOfResults: number | boolean = false,
+) => {
+  const _paq = (window._paq = window._paq || []);
+
+  if (searchKey.length > 0) {
+    _paq.push([
+      "trackSiteSearch",
+      // Search keyword searched for
+      searchKey,
+      // Search category selected in your search engine. If you do not need this, set to false
+      searchCategory,
+      // Number of results on the Search results page. Zero indicates a 'No Result Search Keyword'. Set to false if you don't know
+      numberOfResults,
+    ]);
+  }
+};
+
 export const setSearch = (search: string) => {
   $wordSearch.setKey("search", search);
 };
