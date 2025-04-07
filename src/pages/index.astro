@@ -64,10 +64,9 @@ const allWords = await getAllWords();
         class="o-index__image"
         src={BrownBearRoar}
         formats={["avif", "webp"]}
-        widths={[179, 215, 247, 288, 337, 425, 644, BrownBearRoar.width]}
-        sizes={`(max-width: 20rem) 179px, (max-width: 23.43rem) 215px, (max-width: 26.56rem) 247px, (max-width: 35.44rem) 337px, (max-width: 48rem) 288px, (max-width: 64rem) 425px, (max-width: 90rem) 644px, ${BrownBearRoar.width}px`}
+        layout="responsive"
+        priority={true}
         alt="Ein Bär der brüllt"
-        loading="eager"
       />
     </div>
   </header>

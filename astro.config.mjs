@@ -37,6 +37,9 @@ export default defineConfig({
   image: {
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
   },
+  experimental: {
+    responsiveImages: true,
+  },
   env: {
     schema: {
       WP_API: envField.string({
