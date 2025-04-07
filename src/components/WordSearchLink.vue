@@ -23,7 +23,7 @@ const scrollToWordSearch = () => {
       searchBar.scrollIntoView({ behavior: "smooth", block: "start" });
       searchBar.focus({ preventScroll: true });
     } else if (retries > 0) {
-      setTimeout(() => findSearchBar(retries - 1), 100); // Retry after 200ms
+      setTimeout(() => findSearchBar(retries - 1), 100); // Retry after 100ms
     } else {
       console.error("Search bar element not found after multiple attempts.");
     }
