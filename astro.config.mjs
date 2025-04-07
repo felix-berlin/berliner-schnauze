@@ -237,6 +237,7 @@ export default defineConfig({
       bundleName: "berliner-schnauze-bundle",
       uploadToken: CODECOV_TOKEN,
     }),
+    (await import("@playform/inline")).default(),
   ],
   vite: {
     plugins: [
