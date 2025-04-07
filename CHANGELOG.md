@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.15.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.14.3...v3.15.0) (2025-04-07)
+
+
+### Bug Fixes
+
+* disable background transition ([e2141d7](https://github.com/felix-berlin/berliner-schnauze/commit/e2141d701c4c874d25aae44eecb9b74b191df448))
+
+
+### Features
+
+* add global setMatomoSearch function ([2c5edc3](https://github.com/felix-berlin/berliner-schnauze/commit/2c5edc362b5bfd88bfbedac240b2b87f73f47efb))
+* replace WordSearchLink by Vue component ([2f82d56](https://github.com/felix-berlin/berliner-schnauze/commit/2f82d56832c948f043cead7e9d9accbb89280b9a))
+* send page search to matomo ([0da7623](https://github.com/felix-berlin/berliner-schnauze/commit/0da76231d248d2fc41a921dc3a8b2c85bb99f1fa))
+* track word list search via matomo ([b9109e3](https://github.com/felix-berlin/berliner-schnauze/commit/b9109e332b7bdf83cc77229e505f8c41db76cc2c))
+
+
+### Performance Improvements
+
+* **index:** enable responsive images ([0d2eb39](https://github.com/felix-berlin/berliner-schnauze/commit/0d2eb391966b2a339b3b52536b469e52c090902e))
+* inline all styles ([5f92c8c](https://github.com/felix-berlin/berliner-schnauze/commit/5f92c8c0c6a2fa5243634b83d75c6f5fbfdd8736))
+
 ## [3.14.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.14.2...v3.14.3) (2025-03-30)
 
 
