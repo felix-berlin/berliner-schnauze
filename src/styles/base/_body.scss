@@ -21,9 +21,9 @@ body {
   );
   background-size: 22px 22px;
 
-  @include butler-mx.feature("motion") {
-    transition: background-color 0.7s ease-in-out;
-  }
+  // @include butler-mx.feature("motion") {
+  //   transition: background-color 0.7s ease-in-out;
+  // }
   @include butler-mx.dark-mode-class {
     --color-gradient-body-1: color-mix(in srgb, var(--new-blue-400) 98%, white);
     --color-gradient-body-2: color-mix(in srgb, var(--blue) 70%, transparent);
