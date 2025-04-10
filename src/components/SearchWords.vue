@@ -38,9 +38,9 @@ import {
   $wordSearch,
   setSearch,
   searchLength as currentSearchLength,
-  setMatomoSearch,
   $searchResultCount,
 } from "@stores/index";
+import { setMatomoSearch } from "@utils/analytics";
 import { useStore, useVModel } from "@nanostores/vue";
 import { useDebounceFn } from "@vueuse/core";
 

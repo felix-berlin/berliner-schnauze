@@ -13,11 +13,7 @@
       :aria-label="buttonAriaLabel"
       @click="scrollToTop"
     >
-      <ChevronUp
-        :width="24"
-        :height="24"
-        class="c-to-top__icon u-ignore-click"
-      />
+      <ChevronUp :width="24" :height="24" class="c-to-top__icon u-ignore-click" />
     </button>
   </Transition>
 </template>
@@ -25,6 +21,7 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from "vue";
 import ChevronUp from "virtual:icons/lucide/chevron-up";
+import { trackEvent } from "@utils/analytics";
 
 interface ScrollToTopProps {
   showAtPosition?: number;
@@ -49,6 +46,7 @@ const handleIntersect = ([entry]: IntersectionObserverEntry[]) => {
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
+  trackEvent("Scroll to Top", "Clicked", "Scroll to Top Button");
 };
 
 onMounted(() => {

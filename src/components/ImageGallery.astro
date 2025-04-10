@@ -47,7 +47,7 @@ const lightboxImageList = await Promise.all(
     }
 
     return images;
-  }),
+  })
 );
 ---
 
@@ -99,6 +99,7 @@ const lightboxImageList = await Promise.all(
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import type { Content as PhotoSwipeContent } from "photoswipe/lightbox";
+  import { trackEvent } from "@utils/analytics";
 
   interface Content extends PhotoSwipeContent {
     pictureElement?: HTMLPictureElement;
@@ -181,6 +182,14 @@ const lightboxImageList = await Promise.all(
             e.preventDefault();
             content.pictureElement.remove();
           }
+        });
+
+        this.lightbox.on("change", () => {
+          trackEvent("Lightbox", "Opened", "Image Gallery");
+        });
+
+        this.lightbox.on("afterInit", () => {
+          trackEvent("Lightbox", "Slide switched", "Image Gallery");
         });
       }
 

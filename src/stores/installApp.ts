@@ -1,4 +1,5 @@
 import { atom, onMount } from "nanostores";
+import { trackEvent } from "@utils/analytics";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: Array<string>;
@@ -34,7 +35,7 @@ onMount($installPrompt, () => {
  *
  * @return  {boolean}
  */
-export const isPwaInstalled: () => boolean = () => {
+export const isPwaInstalled: () => boolean = (): boolean => {
   return (
     window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
   );
@@ -49,7 +50,7 @@ export const triggerPwaInstall = async (): Promise<void> => {
   if (!$installPrompt.get()) return;
 
   await $installPrompt?.get()?.prompt();
-  // console.log(`Install prompt was: ${result?.outcome}`);
+  trackEvent("App", "Click On Install Button", "PWA Prompt");
 
   disableInAppInstallPrompt();
 };

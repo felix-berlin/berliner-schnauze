@@ -3,6 +3,7 @@ import { persistentMap } from "@nanostores/persistent";
 import { useViewTransition } from "@utils/helpers.ts";
 import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
 import filterWorker from "../services/filterWorker?worker";
+import { trackEvent } from "@utils/analytics";
 
 export type CleanBerlinerWord = {
   berlinerWordId: BerlinerWord["berlinerWordId"];
@@ -83,6 +84,8 @@ export const resetAll = () => {
   $wordSearch.setKey("modifiedDateOrder", "asc");
   $wordSearch.setKey("activeOrderCategory", "alphabetical");
   $wordSearch.setKey("berolinismus", false);
+
+  trackEvent("WordList", "Reset", "All filters reset");
 };
 
 export const $showWordListFilterFlyout = atom<boolean>(false);
@@ -100,10 +103,14 @@ export const $toggleWordListFilterFlyout = () => {
  */
 export const setLetterFilter = (letter: string) => {
   useViewTransition(() => $wordSearch.setKey("activeLetterFilter", letter));
+
+  trackEvent("WordList", "Filter", `Letter: ${letter}`);
 };
 
 export const setWordTypeFilter = (wordType: string) => {
   useViewTransition(() => $wordSearch.setKey("activeWordTypeFilter", wordType));
+
+  trackEvent("WordList", "Filter", `Word Type: ${wordType}`);
 };
 
 export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCategory"]) => {
@@ -149,30 +156,8 @@ export const $setSortOrder = (
 ) => {
   $wordSearch.setKey("activeOrderCategory", category);
   $wordSearch.setKey(orderName, order);
-};
 
-/**
- * Track search events in Matomo
- *
- */
-export const setMatomoSearch = (
-  searchKey: string,
-  searchCategory: string | boolean = false,
-  numberOfResults: number | boolean = false,
-) => {
-  const _paq = (window._paq = window._paq || []);
-
-  if (searchKey.length > 0) {
-    _paq.push([
-      "trackSiteSearch",
-      // Search keyword searched for
-      searchKey,
-      // Search category selected in your search engine. If you do not need this, set to false
-      searchCategory,
-      // Number of results on the Search results page. Zero indicates a 'No Result Search Keyword'. Set to false if you don't know
-      numberOfResults,
-    ]);
-  }
+  trackEvent("WordList", "Sort Order", `${category}: ${order}`);
 };
 
 export const setSearch = (search: string) => {
@@ -181,6 +166,8 @@ export const setSearch = (search: string) => {
 
 export const $toggleBerolinismus = () => {
   useViewTransition(() => $wordSearch.setKey("berolinismus", !$wordSearch.get().berolinismus));
+
+  trackEvent("WordList", "Filter", `Berolinismus: ${$wordSearch.get().berolinismus}`);
 };
 
 export const searchLength = computed($wordSearch, (wordSearch) => {

@@ -31,6 +31,7 @@ import { ref, onMounted, onUnmounted, defineAsyncComponent } from "vue";
 import type { Ref } from "vue";
 import SearchIcon from "virtual:icons/lucide/search";
 import SquareSlash from "virtual:icons/lucide/square-slash";
+import { trackEvent } from "@utils/analytics";
 
 const Modal = defineAsyncComponent(() => import("@components/Modal.vue"));
 const SearchBar = defineAsyncComponent(() => import("@components/SearchBar.vue"));
@@ -60,6 +61,8 @@ const getModalLoaded = (): void => {
     // Retry to display the modal every 100ms until it is mounted
     setTimeout(getModalLoaded, 100);
   }
+
+  trackEvent("Search", "Open Search Modal", "Search Modal Opened");
 };
 
 /**
@@ -82,6 +85,8 @@ const openSearchViaKeyboard = (event: KeyboardEvent): void => {
   if (event.key === "/" || event.key === ".") {
     event.preventDefault();
     getModalLoaded();
+
+    trackEvent("Search", "Open Search Modal via Keyboard", "Search Modal Opened via Keyboard");
   }
 };
 

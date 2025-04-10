@@ -12,17 +12,13 @@
     :disabled="!showButton"
     @click="triggerPwaInstall()"
   >
-    <slot v-if="showText">
-      App installieren
-    </slot>
+    <slot v-if="showText"> App installieren </slot>
   </button>
-  <slot
-    v-if="isPwaInstalled"
-    name="installed"
-  />
+  <slot v-if="isPwaInstalled" name="installed" />
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
 import {
   $installPrompt,
   $showInstallButton,
@@ -30,6 +26,7 @@ import {
   triggerPwaInstall,
 } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
+import { trackEvent } from "@utils/analytics";
 
 export interface InstallAppProps {
   showIcon?: boolean;
@@ -50,6 +47,12 @@ const {
 useStore($installPrompt);
 const showButton = useStore($showInstallButton);
 const isPwaInstalled = useStore($isPwaInstalled);
+
+onMounted(() => {
+  if (isPwaInstalled) {
+    trackEvent("App", "Is installed", "PWA");
+  }
+});
 </script>
 
 <style scoped></style>
