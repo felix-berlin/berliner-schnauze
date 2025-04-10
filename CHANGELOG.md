@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.16.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.15.0...v3.16.0) (2025-04-10)
+
+
+### Features
+
+* add events ([790f904](https://github.com/felix-berlin/berliner-schnauze/commit/790f9042491c7a5b03e2d1ab4c73ada92fdf6887))
+* add installed event ([ac2281b](https://github.com/felix-berlin/berliner-schnauze/commit/ac2281ba64fa03a95b2e334c05bbb87c946c2210))
+* create new analytic util functions ([b9ae291](https://github.com/felix-berlin/berliner-schnauze/commit/b9ae2918b8ac3ef25706efb0027368b8d7db779c))
+
 # [3.15.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.14.3...v3.15.0) (2025-04-07)
 
 
