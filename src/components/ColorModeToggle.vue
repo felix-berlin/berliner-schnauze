@@ -45,9 +45,10 @@ const isDarkMode = useStore($isDarkMode);
  * @return  {void}
  */
 const toggleMode = (): void => {
-  setDarkMode(!isDarkMode.value);
+  const newMode = !isDarkMode.value; // Capture the intended new mode
+  setDarkMode(newMode);
   updateThemeColor();
-  trackEvent("Color Mode", isDarkMode.value ? "Light Mode" : "Dark Mode", "Toggle Color Mode");
+  trackEvent("Color Mode", newMode ? "Dark Mode" : "Light Mode", "Toggle Color Mode");
 
   const htmlClasses = document.querySelector("html")?.classList;
 
