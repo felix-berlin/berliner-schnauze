@@ -140,6 +140,7 @@ import { createToastNotify } from "@stores/index.ts";
 import { sendEmail } from "@services/sendMail.ts";
 import type { SendEmailPayload } from "@ts_types/generated/graphql.ts";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
+import { trackEvent } from "@utils/analytics";
 
 const props = defineProps<{
   berlinerWord?: string;
@@ -214,6 +215,8 @@ const sendMail = async (): Promise<void> => {
         formResponse.sent = sendEmail.sent;
 
         createToastNotify({ message: "Dein Wortvorschlag wurde versandt", status: "success" });
+
+        trackEvent("Form", "Send", "Word Suggestion");
 
         isSending.value = false;
       }

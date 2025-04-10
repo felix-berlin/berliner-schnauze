@@ -11,6 +11,7 @@
 import { onMounted, ref } from "vue";
 import MousePointerClick from "virtual:icons/lucide/mouse-pointer-click";
 import { usePreferredReducedMotion } from "@vueuse/core";
+import { trackEvent } from "@utils/analytics";
 
 const searchLinkIconWrapClass = ref("");
 const preferredMotion = usePreferredReducedMotion();
@@ -30,6 +31,7 @@ const scrollToWordSearch = () => {
   };
 
   findSearchBar();
+  trackEvent("Search", "Click Search Link", "Search Link Clicked");
 };
 
 const showClickEffect = () => {

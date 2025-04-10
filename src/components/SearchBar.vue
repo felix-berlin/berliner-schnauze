@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, nextTick } from "vue";
 import { PagefindUI } from "@pagefind/default-ui";
-import { setMatomoSearch } from "@stores/index";
+import { setMatomoSearch } from "@utils/analytics";
 import { useDebounceFn } from "@vueuse/core";
 
 export interface SearchBarProps {

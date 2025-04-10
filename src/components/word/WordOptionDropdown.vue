@@ -63,6 +63,7 @@ import { useClipboard, useShare } from "@vueuse/core";
 import type { BerlinerWord } from "@stores/index.ts";
 import { createToastNotify } from "@stores/index.ts";
 import { SITE_URL } from "astro:env/client";
+import { trackEvent } from "@utils/analytics";
 
 interface WordProps {
   berlinerisch: BerlinerWord["wordProperties"]["berlinerisch"];
@@ -90,6 +91,8 @@ const shareWord = (slug: string): void => {
 
   share(shareData).catch((err) => err);
   createToastNotify({ message: "Wort geteilt", status: "success" });
+
+  trackEvent("Word Share", "Word shared", `Word: ${slug}`);
 };
 
 /**
@@ -105,6 +108,8 @@ const copyWordPageUrlToClipboard = async (slug: string): Promise<void> => {
     message: "Link kopiert",
     status: "success",
   });
+
+  trackEvent("Word Copy Link", "Word link copied", `Word: ${slug}`);
 };
 
 /**
@@ -117,6 +122,8 @@ const copyWordPageUrlToClipboard = async (slug: string): Promise<void> => {
 const copyNameToClipboard = async (name: string): Promise<void> => {
   await copy(name);
   createToastNotify({ message: "Wort kopiert", status: "success" });
+
+  trackEvent("Word Copy", "Word copied", `Word: ${name}`);
 };
 </script>
 

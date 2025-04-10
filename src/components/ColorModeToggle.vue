@@ -28,6 +28,7 @@ import Moon from "virtual:icons/lucide/moon";
 import Sun from "virtual:icons/lucide/sun";
 import { useStore } from "@nanostores/vue";
 import { $isDarkMode, setDarkMode } from "@stores/index.ts";
+import { trackEvent } from "@utils/analytics";
 
 interface ColorModeToggleProps {
   cssClasses?: string[] | string;
@@ -44,8 +45,10 @@ const isDarkMode = useStore($isDarkMode);
  * @return  {void}
  */
 const toggleMode = (): void => {
-  setDarkMode(!isDarkMode.value);
+  const newMode = !isDarkMode.value; // Capture the intended new mode
+  setDarkMode(newMode);
   updateThemeColor();
+  trackEvent("Color Mode", newMode ? "Dark Mode" : "Light Mode", "Toggle Color Mode");
 
   const htmlClasses = document.querySelector("html")?.classList;
 
