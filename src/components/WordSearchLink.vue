@@ -10,11 +10,23 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import MousePointerClick from "virtual:icons/lucide/mouse-pointer-click";
-import { usePreferredReducedMotion } from "@vueuse/core";
+import { usePreferredReducedMotion, useBreakpoints } from "@vueuse/core";
 import { trackEvent } from "@utils/analytics";
 
 const searchLinkIconWrapClass = ref("");
 const preferredMotion = usePreferredReducedMotion();
+const breakpoints = useBreakpoints({
+  xxs: 375,
+  xs: 568,
+  sm: 768,
+  md: 1024,
+  lg: 1260,
+  xlg: 1440,
+  fhd: 1920,
+  uhd: 2560,
+});
+
+const largerThanSm = breakpoints.greater("sm");
 
 const scrollToWordSearch = () => {
   const findSearchBar = (retries = 5) => {
@@ -22,7 +34,10 @@ const scrollToWordSearch = () => {
 
     if (searchBar) {
       searchBar.scrollIntoView({ behavior: "smooth", block: "start" });
-      searchBar.focus({ preventScroll: true });
+
+      if (largerThanSm.value) {
+        searchBar.focus({ preventScroll: true });
+      }
     } else if (retries > 0) {
       setTimeout(() => findSearchBar(retries - 1), 100); // Retry after 100ms
     } else {
