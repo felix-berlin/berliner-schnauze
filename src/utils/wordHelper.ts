@@ -162,12 +162,17 @@ export const similarSoundingWords = (allWords: BerlinerWord[], currentWord: Berl
 
   const allWordsWithoutCurrent = allWords.filter((word) => word.id !== currentWord?.id);
   return allWordsWithoutCurrent.map((word) => {
+    const currentBerlinerisch = currentWord.wordProperties?.berlinerisch;
+    const wordBerlinerisch = word.wordProperties?.berlinerisch;
+
+    const isSimilar =
+      currentBerlinerisch && wordBerlinerisch
+        ? new SoundEx().compare(wordBerlinerisch, currentBerlinerisch)
+        : false;
+
     return {
       word: word,
-      isSimilar: new SoundEx().compare(
-        word.wordProperties?.berlinerisch,
-        currentWord.wordProperties?.berlinerisch,
-      ),
+      isSimilar: isSimilar,
     };
   });
 };
