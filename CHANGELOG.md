@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.16.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.16.0...v3.16.1) (2025-04-27)
+
+
+### Bug Fixes
+
+* only focus searchabr on larger devices ([59d7df6](https://github.com/felix-berlin/berliner-schnauze/commit/59d7df6611a7b9175cda2fd5bd1ac049b7cb523f))
+* **soundEx:** Cannot read properties of null ([9029719](https://github.com/felix-berlin/berliner-schnauze/commit/9029719be942bacc96ce65a95c44d655358244f7))
+
 # [3.16.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.15.0...v3.16.0) (2025-04-10)
 
 
