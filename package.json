@@ -59,7 +59,7 @@
     "supportedBrowsers": "echo \"export default $(browserslist-useragent-regexp --allowHigherVersions);\" > src/utils/supportedBrowsers.mjs",
     "refreshAuthToken": "node ./src/utils/refreshToken.js"
   },
-  "packageManager": "pnpm@10.9.0",
+  "packageManager": "pnpm@10.10.0",
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@codecov/astro-plugin": "1.9.0",
