@@ -20894,10 +20894,9 @@ export type YoastSeoBreadcrumbsBlockAttributes = {
 export type PostTypeSeoFragmentFragment = {
   __typename?: "PostTypeSEO";
   title?: string | null;
+  readingTime?: number | null;
   canonical?: string | null;
   metaDesc?: string | null;
-  metaRobotsNofollow?: string | null;
-  metaRobotsNoindex?: string | null;
   opengraphSiteName?: string | null;
   opengraphAuthor?: string | null;
   opengraphDescription?: string | null;
@@ -20909,8 +20908,129 @@ export type PostTypeSeoFragmentFragment = {
   opengraphModifiedTime?: string | null;
   twitterDescription?: string | null;
   twitterTitle?: string | null;
+  metaRobotsNofollow?: string | null;
+  metaRobotsNoindex?: string | null;
   opengraphImage?: { __typename?: "MediaItem"; sourceUrl?: string | null } | null;
 } & { " $fragmentName"?: "PostTypeSeoFragmentFragment" };
+
+export type GetAllWordsQueryVariables = Exact<{
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  field?: InputMaybe<PostObjectsConnectionOrderbyEnum>;
+  order?: InputMaybe<OrderEnum>;
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>> | InputMaybe<PostStatusEnum>>;
+}>;
+
+export type GetAllWordsQuery = {
+  __typename?: "RootQuery";
+  berlinerWords?: {
+    __typename?: "RootQueryToBerlinerWordConnection";
+    edges: Array<{
+      __typename?: "RootQueryToBerlinerWordConnectionEdge";
+      cursor?: string | null;
+      node: {
+        __typename?: "BerlinerWord";
+        id: string;
+        slug?: string | null;
+        title?: string | null;
+        wordGroup?: string | null;
+        dateGmt?: string | null;
+        modifiedGmt?: string | null;
+        berlinerWordId: number;
+        wordProperties?: {
+          __typename?: "WordProperties";
+          article?: string | null;
+          berlinerisch?: string | null;
+          learnMore?: string | null;
+          berolinismus?: boolean | null;
+          berlinerischAudio?: Array<{
+            __typename?: "WordPropertiesBerlinerischAudio";
+            gender?: string | null;
+            audio?: {
+              __typename?: "AcfMediaItemConnectionEdge";
+              node: { __typename?: "MediaItem"; mediaItemUrl?: string | null };
+            } | null;
+          } | null> | null;
+          examples?: Array<{
+            __typename?: "WordPropertiesExamples";
+            example?: string | null;
+            exampleExplanation?: string | null;
+            exampleAudio?: Array<{
+              __typename?: "WordPropertiesExamplesExampleAudio";
+              gender?: string | null;
+              audio?: {
+                __typename?: "AcfMediaItemConnectionEdge";
+                node: { __typename?: "MediaItem"; mediaItemUrl?: string | null };
+              } | null;
+            } | null> | null;
+          } | null> | null;
+          translations?: Array<{
+            __typename?: "WordPropertiesTranslations";
+            translation?: string | null;
+          } | null> | null;
+          alternativeWords?: Array<{
+            __typename?: "WordPropertiesAlternativeWords";
+            alternativeWord?: string | null;
+          } | null> | null;
+          relatedWords?: {
+            __typename?: "AcfContentNodeConnection";
+            nodes: Array<
+              | {
+                  __typename?: "BerlinerWord";
+                  id: string;
+                  slug?: string | null;
+                  wordProperties?: {
+                    __typename?: "WordProperties";
+                    berlinerisch?: string | null;
+                  } | null;
+                }
+              | { __typename?: "BlockEditorPreview" }
+              | { __typename?: "MediaItem" }
+              | { __typename?: "Page" }
+              | { __typename?: "Post" }
+              | { __typename?: "ReusableBlock" }
+            >;
+          } | null;
+          wikimediaFiles?: Array<{
+            __typename?: "WordPropertiesWikimediaFiles";
+            wikimediaFile?: string | null;
+            description?: string | null;
+            caption?: string | null;
+          } | null> | null;
+          images?: {
+            __typename?: "AcfMediaItemConnection";
+            nodes: Array<{
+              __typename?: "MediaItem";
+              sourceUrl?: string | null;
+              caption?: string | null;
+              altText?: string | null;
+              description?: string | null;
+              mediaDetails?: {
+                __typename?: "MediaDetails";
+                height?: number | null;
+                width?: number | null;
+              } | null;
+            }>;
+          } | null;
+        } | null;
+        berlinerischWordTypes?: {
+          __typename?: "BerlinerWordToBerlinerischWordTypeConnection";
+          nodes: Array<{ __typename?: "BerlinerischWordType"; name?: string | null }>;
+        } | null;
+        seo?:
+          | ({ __typename?: "PostTypeSEO" } & {
+              " $fragmentRefs"?: { PostTypeSeoFragmentFragment: PostTypeSeoFragmentFragment };
+            })
+          | null;
+      };
+    }>;
+    pageInfo: {
+      __typename?: "RootQueryToBerlinerWordConnectionPageInfo";
+      endCursor?: string | null;
+      hasNextPage: boolean;
+    };
+  } | null;
+};
 
 export type GetPagesBySlugsQueryVariables = Exact<{
   slugs?: InputMaybe<
@@ -20947,10 +21067,9 @@ export const PostTypeSeoFragmentFragmentDoc = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "readingTime" } },
           { kind: "Field", name: { kind: "Name", value: "canonical" } },
           { kind: "Field", name: { kind: "Name", value: "metaDesc" } },
-          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
-          { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphSiteName" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphAuthor" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphDescription" } },
@@ -20970,11 +21089,487 @@ export const PostTypeSeoFragmentFragmentDoc = {
           },
           { kind: "Field", name: { kind: "Name", value: "twitterDescription" } },
           { kind: "Field", name: { kind: "Name", value: "twitterTitle" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
         ],
       },
     },
   ],
 } as unknown as DocumentNode<PostTypeSeoFragmentFragment, unknown>;
+export const GetAllWordsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetAllWords" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+          defaultValue: { kind: "StringValue", value: "", block: false },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          defaultValue: { kind: "IntValue", value: "100" },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "field" } },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "PostObjectsConnectionOrderbyEnum" },
+          },
+          defaultValue: { kind: "EnumValue", value: "TITLE" },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "order" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "OrderEnum" } },
+          defaultValue: { kind: "EnumValue", value: "ASC" },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "stati" } },
+          type: {
+            kind: "ListType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "PostStatusEnum" } },
+          },
+          defaultValue: { kind: "EnumValue", value: "PUBLISH" },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "berlinerWords" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "after" },
+                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "orderby" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "field" },
+                            value: { kind: "Variable", name: { kind: "Name", value: "field" } },
+                          },
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "order" },
+                            value: { kind: "Variable", name: { kind: "Name", value: "order" } },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "stati" },
+                      value: { kind: "Variable", name: { kind: "Name", value: "stati" } },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "edges" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "node" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            { kind: "Field", name: { kind: "Name", value: "id" } },
+                            { kind: "Field", name: { kind: "Name", value: "slug" } },
+                            { kind: "Field", name: { kind: "Name", value: "title" } },
+                            { kind: "Field", name: { kind: "Name", value: "wordGroup" } },
+                            { kind: "Field", name: { kind: "Name", value: "dateGmt" } },
+                            { kind: "Field", name: { kind: "Name", value: "modifiedGmt" } },
+                            { kind: "Field", name: { kind: "Name", value: "berlinerWordId" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "wordProperties" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  { kind: "Field", name: { kind: "Name", value: "article" } },
+                                  { kind: "Field", name: { kind: "Name", value: "berlinerisch" } },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "berlinerischAudio" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "audio" },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: { kind: "Name", value: "node" },
+                                                selectionSet: {
+                                                  kind: "SelectionSet",
+                                                  selections: [
+                                                    {
+                                                      kind: "Field",
+                                                      name: { kind: "Name", value: "mediaItemUrl" },
+                                                    },
+                                                  ],
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                        { kind: "Field", name: { kind: "Name", value: "gender" } },
+                                      ],
+                                    },
+                                  },
+                                  { kind: "Field", name: { kind: "Name", value: "learnMore" } },
+                                  { kind: "Field", name: { kind: "Name", value: "berolinismus" } },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "examples" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        { kind: "Field", name: { kind: "Name", value: "example" } },
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "exampleExplanation" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "exampleAudio" },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: { kind: "Name", value: "gender" },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: { kind: "Name", value: "audio" },
+                                                selectionSet: {
+                                                  kind: "SelectionSet",
+                                                  selections: [
+                                                    {
+                                                      kind: "Field",
+                                                      name: { kind: "Name", value: "node" },
+                                                      selectionSet: {
+                                                        kind: "SelectionSet",
+                                                        selections: [
+                                                          {
+                                                            kind: "Field",
+                                                            name: {
+                                                              kind: "Name",
+                                                              value: "mediaItemUrl",
+                                                            },
+                                                          },
+                                                        ],
+                                                      },
+                                                    },
+                                                  ],
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "translations" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "translation" },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "alternativeWords" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "alternativeWord" },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "relatedWords" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "nodes" },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "InlineFragment",
+                                                typeCondition: {
+                                                  kind: "NamedType",
+                                                  name: { kind: "Name", value: "BerlinerWord" },
+                                                },
+                                                selectionSet: {
+                                                  kind: "SelectionSet",
+                                                  selections: [
+                                                    {
+                                                      kind: "Field",
+                                                      name: { kind: "Name", value: "id" },
+                                                    },
+                                                    {
+                                                      kind: "Field",
+                                                      name: {
+                                                        kind: "Name",
+                                                        value: "wordProperties",
+                                                      },
+                                                      selectionSet: {
+                                                        kind: "SelectionSet",
+                                                        selections: [
+                                                          {
+                                                            kind: "Field",
+                                                            name: {
+                                                              kind: "Name",
+                                                              value: "berlinerisch",
+                                                            },
+                                                          },
+                                                        ],
+                                                      },
+                                                    },
+                                                    {
+                                                      kind: "Field",
+                                                      name: { kind: "Name", value: "slug" },
+                                                    },
+                                                  ],
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "wikimediaFiles" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "wikimediaFile" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "description" },
+                                        },
+                                        { kind: "Field", name: { kind: "Name", value: "caption" } },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "images" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "nodes" },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "Field",
+                                                name: { kind: "Name", value: "sourceUrl" },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: { kind: "Name", value: "mediaDetails" },
+                                                selectionSet: {
+                                                  kind: "SelectionSet",
+                                                  selections: [
+                                                    {
+                                                      kind: "Field",
+                                                      name: { kind: "Name", value: "height" },
+                                                    },
+                                                    {
+                                                      kind: "Field",
+                                                      name: { kind: "Name", value: "width" },
+                                                    },
+                                                  ],
+                                                },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: { kind: "Name", value: "caption" },
+                                                arguments: [
+                                                  {
+                                                    kind: "Argument",
+                                                    name: { kind: "Name", value: "format" },
+                                                    value: { kind: "EnumValue", value: "RAW" },
+                                                  },
+                                                ],
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: { kind: "Name", value: "altText" },
+                                              },
+                                              {
+                                                kind: "Field",
+                                                name: { kind: "Name", value: "description" },
+                                                arguments: [
+                                                  {
+                                                    kind: "Argument",
+                                                    name: { kind: "Name", value: "format" },
+                                                    value: { kind: "EnumValue", value: "RAW" },
+                                                  },
+                                                ],
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "berlinerischWordTypes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "nodes" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        { kind: "Field", name: { kind: "Name", value: "name" } },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "seo" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "FragmentSpread",
+                                    name: { kind: "Name", value: "PostTypeSeoFragment" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "cursor" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "pageInfo" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PostTypeSeoFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "PostTypeSEO" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "readingTime" } },
+          { kind: "Field", name: { kind: "Name", value: "canonical" } },
+          { kind: "Field", name: { kind: "Name", value: "metaDesc" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphSiteName" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphAuthor" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublisher" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphTitle" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphType" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphUrl" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublishedTime" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphModifiedTime" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "opengraphImage" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [{ kind: "Field", name: { kind: "Name", value: "sourceUrl" } }],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "twitterDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "twitterTitle" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAllWordsQuery, GetAllWordsQueryVariables>;
 export const GetPagesBySlugsDocument = {
   kind: "Document",
   definitions: [
@@ -21057,10 +21652,9 @@ export const GetPagesBySlugsDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "readingTime" } },
           { kind: "Field", name: { kind: "Name", value: "canonical" } },
           { kind: "Field", name: { kind: "Name", value: "metaDesc" } },
-          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
-          { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphSiteName" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphAuthor" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphDescription" } },
@@ -21080,6 +21674,8 @@ export const GetPagesBySlugsDocument = {
           },
           { kind: "Field", name: { kind: "Name", value: "twitterDescription" } },
           { kind: "Field", name: { kind: "Name", value: "twitterTitle" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
         ],
       },
     },

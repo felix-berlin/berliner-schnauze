@@ -3,10 +3,9 @@ import { graphql } from "@/gql";
 export const PostTypeSeoFragment = graphql(`
   fragment PostTypeSeoFragment on PostTypeSEO {
     title
+    readingTime
     canonical
     metaDesc
-    metaRobotsNofollow
-    metaRobotsNoindex
     opengraphSiteName
     opengraphAuthor
     opengraphDescription
@@ -21,5 +20,7 @@ export const PostTypeSeoFragment = graphql(`
     }
     twitterDescription
     twitterTitle
+    metaRobotsNofollow
+    metaRobotsNoindex
   }
 `);

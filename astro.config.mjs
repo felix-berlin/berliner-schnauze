@@ -11,6 +11,7 @@ import { loadEnv } from "vite";
 import partytown from "@astrojs/partytown";
 import codecovplugin from "@codecov/astro-plugin";
 import { visualizer } from "rollup-plugin-visualizer";
+import graphqlLoader from "vite-plugin-graphql-loader";
 
 const {
   SENTRY_AUTH_TOKEN,
@@ -262,6 +263,7 @@ export default defineConfig({
         },
         debug: false,
       }),
+      graphqlLoader({ sourceMapOptions: { hires: true } }),
       visualizerPlugin,
     ],
 
