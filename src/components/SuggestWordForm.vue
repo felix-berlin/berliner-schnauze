@@ -138,7 +138,7 @@ import AlertBanner from "@components/AlertBanner.vue";
 import TurnStile from "@components/TurnStile.vue";
 import { createToastNotify } from "@stores/index.ts";
 import { sendEmail } from "@services/sendMail.ts";
-import type { SendEmailPayload } from "@ts_types/generated/graphql.ts";
+import type { SendEmailPayload } from "@/gql/graphql.ts";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import { trackEvent } from "@utils/analytics";
 

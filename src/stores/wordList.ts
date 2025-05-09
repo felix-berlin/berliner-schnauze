@@ -1,7 +1,7 @@
 import { computed, atom, onSet, onStop } from "nanostores";
 import { persistentMap } from "@nanostores/persistent";
 import { useViewTransition } from "@utils/helpers.ts";
-import type { Maybe, BerlinerWord } from "@ts_types/generated/graphql";
+import type { Maybe, BerlinerWord } from "@/gql/graphql";
 import filterWorker from "../services/filterWorker?worker";
 import { trackEvent } from "@utils/analytics";
 

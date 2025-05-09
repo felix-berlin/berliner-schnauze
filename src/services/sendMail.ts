@@ -1,5 +1,5 @@
 import { fetchAPI } from "@services/fetchApi.ts";
-import type { SendEmailPayload, SendEmailInput } from "@ts_types/generated/graphql.ts";
+import type { SendEmailPayload, SendEmailInput } from "@/gql/graphql.ts";
 import type { FormData } from "@components/SuggestWordForm.vue";
 import { WP_REST_API, SUGGEST_WORD_FORM_ID, WP_AUTH_REFRESH_TOKEN } from "astro:env/client";
 

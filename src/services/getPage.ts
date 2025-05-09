@@ -1,6 +1,6 @@
 import { fetchAPI } from "@services/fetchApi.ts";
 import { seo } from "@services/graphQlQueryParts.ts";
-import type { RootQuery } from "@ts_types/generated/graphql.ts";
+import type { RootQuery } from "@/gql/graphql.ts";
 
 export const getPageById = async (id: string, idType = "URI"): Promise<RootQuery["page"]> => {
   const data = await fetchAPI(`

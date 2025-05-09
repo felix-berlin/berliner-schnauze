@@ -1,28 +1,36 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 import { loadEnv } from "vite";
-const { WP_AUTH_REFRESH_TOKEN } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+
+const { WP_AUTH_REFRESH_TOKEN, WP_API } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
 const config: CodegenConfig = {
   schema: [
     {
-      "https://cms.berliner-schnauze.wtf/api": {
+      [WP_API]: {
         headers: {
           Authorization: `Bearer ${WP_AUTH_REFRESH_TOKEN}`,
         },
       },
     },
   ],
+  documents: ["src/**/*.{graphql,js,ts,jsx,tsx}", "!src/gql/**/*"],
+  ignoreNoDocuments: true, // for better experience with the watcher
   generates: {
-    "src/types/generated/graphql.d.ts": {
-      plugins: ["typescript", "typescript-operations"],
+    "./src/gql/": {
+      preset: "client",
       config: {
-        maybeValue: "T | null | undefined",
+        useTypeImports: true,
+      },
+      plugins: [],
+    },
+    "./schema.graphql": {
+      plugins: ["schema-ast"],
+      config: {
+        includeDirectives: true,
       },
     },
-    "./graphql.schema.json": {
-      plugins: ["introspection"],
-    },
   },
+  hooks: { afterAllFileWrite: ["prettier --write"] },
 };
 
 export default config;

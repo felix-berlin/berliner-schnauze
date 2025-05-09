@@ -9,10 +9,7 @@
       class="c-audio-list__item"
     >
       <span class="c-audio-list__gender">{{ item?.gender === "female" ? "♀" : "♂" }}</span>
-      <AudioPlayer
-        :audio="item?.audio?.node.mediaItemUrl"
-        class="c-audio-list__audio-player"
-      />
+      <AudioPlayer :audio="item?.audio?.node.mediaItemUrl" class="c-audio-list__audio-player" />
     </div>
   </div>
 </template>
@@ -23,7 +20,7 @@ import type {
   Maybe,
   WordPropertiesBerlinerischAudio,
   WordPropertiesExamplesExampleAudio,
-} from "@ts_types/generated/graphql";
+} from "@/gql/graphql";
 
 type AudioPlayerListProps = {
   audio:

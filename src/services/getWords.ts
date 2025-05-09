@@ -4,7 +4,7 @@ import type {
   RootQueryToBerlinerWordConnection,
   RootQueryToBerlinerWordConnectionEdge,
   BerlinerWord,
-} from "@ts_types/generated/graphql.ts";
+} from "@/gql/graphql.ts";
 import { SHOW_TEST_DATA } from "astro:env/client";
 
 type WordEdge = {
