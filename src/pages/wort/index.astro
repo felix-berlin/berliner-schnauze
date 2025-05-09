@@ -5,15 +5,15 @@ import "@styles/plugins/astro-breadcrumbs.scss";
 
 import Layout from "@layouts/Layout.astro";
 import { seoData, routeToWord } from "@utils/helpers.ts";
-import { getAllWordsLinks } from "@services/api.ts";
-import type { BerlinerWord } from "@ts_types/generated/graphql";
+import { fetchAllWordsLinks } from "@services/api.ts";
+import type { BerlinerWord, RootQueryToBerlinerWordConnectionEdge } from "@/gql/graphql";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import ChevronRight from "~icons/lucide/chevron-right";
 
-async function getGroupedWords(): Promise<Record<string, BerlinerWord[]>> {
-  const allWords = await getAllWordsLinks();
+async function getGroupedWords(): Promise<Record<string, RootQueryToBerlinerWordConnectionEdge[]>> {
+  const allWords = await fetchAllWordsLinks();
 
-  const groupedWords: Record<string, BerlinerWord[]> = {};
+  const groupedWords: Record<string, RootQueryToBerlinerWordConnectionEdge[]> = {};
 
   allWords.forEach(({ node }) => {
     const group = node.wordGroup;
@@ -56,7 +56,7 @@ const content = {
           {groupedWords[group].map((word) => (
             <li>
               <a
-                href={routeToWord(word.slug!)}
+                href={routeToWord(word.slug)}
                 title={`Zur ${word.wordProperties?.berlinerisch} Seite`}
                 class="c-word-group__link"
               >

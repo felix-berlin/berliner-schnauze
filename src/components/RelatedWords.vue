@@ -1,8 +1,6 @@
 <template>
   <section class="c-related-words">
-    <h2 class="c-related-words__headline">
-      Bock mehr Wörter kennen zu lernen?
-    </h2>
+    <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
     <div class="c-related-words__words">
       <template v-for="word in xRandomWords(words, numberOfWords)">
         <a
@@ -22,7 +20,7 @@
 
 <script setup lang="ts">
 import { routeToWord } from "@utils/helpers.ts";
-import type { BerlinerWord } from "@ts_types/generated/graphql.ts";
+import type { BerlinerWord } from "@/gql/graphql.ts";
 
 interface RelatedWordsProps {
   numberOfWords?: number;

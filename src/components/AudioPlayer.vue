@@ -20,7 +20,7 @@
 import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
 import Play from "virtual:icons/lucide/play";
 import Pause from "virtual:icons/lucide/pause";
-import type { MediaItem } from "@ts_types/generated/graphql";
+import type { MediaItem } from "@/gql/graphql";
 
 type AudioPlayerListProps = {
   audio: MediaItem["mediaItemUrl"];

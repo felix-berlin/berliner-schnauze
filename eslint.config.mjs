@@ -9,6 +9,7 @@ import tsEslintParser from "@typescript-eslint/parser";
 import vueParser from "vue-eslint-parser";
 import url from "node:url";
 import eslintConfigPrettier from "eslint-config-prettier";
+import graphqlPlugin from "@graphql-eslint/eslint-plugin";
 
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
@@ -73,6 +74,15 @@ export default tseslint.config(
         parser: tsEslintParser,
         extraFileExtensions: [".astro"],
       },
+    },
+  },
+  {
+    files: ["**/*.graphql"],
+    languageOptions: {
+      parser: graphqlPlugin.parser,
+    },
+    plugins: {
+      "@graphql-eslint": graphqlPlugin,
     },
   },
 );

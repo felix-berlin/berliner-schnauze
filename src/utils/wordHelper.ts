@@ -1,7 +1,7 @@
 import nlp from "de-compromise";
 import natural from "natural";
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
-import type { BerlinerWord, WordPropertiesWikimediaFiles } from "@ts_types/generated/graphql.ts";
+import type { BerlinerWord, WordPropertiesWikimediaFiles } from "@/gql/graphql.ts";
 
 /**
  * Returns the word with vowels and consonants colored.

@@ -9,10 +9,7 @@
     class="c-word-of-the-day-crown"
     aria-hidden="true"
   >
-    <Crown
-      :width="iconSize"
-      :height="iconSize"
-    />
+    <Crown :width="iconSize" :height="iconSize" />
   </span>
 </template>
 
@@ -21,7 +18,7 @@ import { computed } from "vue";
 import Crown from "virtual:icons/lucide/crown";
 import { useStore } from "@nanostores/vue";
 import { $wordOfTheDay } from "@stores/index.ts";
-import type { WordProperties } from "@ts_types/generated/graphql.ts";
+import type { WordProperties } from "@/gql/graphql.ts";
 
 interface IsWordOfTheDayProps {
   wordId: number;

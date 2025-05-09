@@ -12,12 +12,12 @@
       "@lib/*": ["src/lib/*"],
       "@utils/*": ["src/utils/*"],
       "@stores/*": ["src/stores/*"],
-      "@ts_types/*": ["src/types/*"],
       "@features/*": ["src/features/*"],
       "@services/*": ["src/services/*"],
       "@assets/*": ["src/assets/*"],
       "@styles/*": ["src/styles/*"],
-      "@sass-butler/*": ["node_modules/@felix_berlin/sass-butler/*"]
+      "@sass-butler/*": ["node_modules/@felix_berlin/sass-butler/*"],
+      "@/*": ["src/*"]
     },
     "types": [
       "vitest/globals",
@@ -28,6 +28,12 @@
       "vite-plugin-pwa/pwa-assets"
     ],
     // https://bobbyhadz.com/blog/typescript-module-can-only-be-default-imported-esmoduleinterop
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "./schema.graphql"
+      }
+    ]
   }
 }

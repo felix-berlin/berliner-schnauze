@@ -27,7 +27,7 @@ import WordSuggestHint from "@components/WordSuggestHint.vue";
 import { $wordSearch, $searchResultCount } from "@stores/index";
 import { useStore } from "@nanostores/vue";
 import SearchX from "virtual:icons/lucide/search-x";
-import type { Maybe } from "@ts_types/generated/graphql.ts";
+import type { Maybe } from "@/gql/graphql.ts";
 import type { CleanBerlinerWord } from "@stores/index.ts";
 
 type WordSearchListProps = {

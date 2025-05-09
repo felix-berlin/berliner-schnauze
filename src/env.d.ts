@@ -3,6 +3,8 @@
 /// <reference types="../.astro/astro-env.d.ts" />
 
 declare module "@pagefind/default-ui";
+declare module "*.gql";
+declare module "*.graphql";
 
 declare global {
   interface Window {
