@@ -1,4 +1,5 @@
 /* eslint-disable */
+import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -20889,3 +20890,198 @@ export type YoastSeoBreadcrumbsBlockAttributes = {
   className?: Maybe<Scalars["String"]["output"]>;
   lock?: Maybe<Scalars["BlockAttributesObject"]["output"]>;
 };
+
+export type PostTypeSeoFragmentFragment = {
+  __typename?: "PostTypeSEO";
+  title?: string | null;
+  canonical?: string | null;
+  metaDesc?: string | null;
+  metaRobotsNofollow?: string | null;
+  metaRobotsNoindex?: string | null;
+  opengraphSiteName?: string | null;
+  opengraphAuthor?: string | null;
+  opengraphDescription?: string | null;
+  opengraphPublisher?: string | null;
+  opengraphTitle?: string | null;
+  opengraphType?: string | null;
+  opengraphUrl?: string | null;
+  opengraphPublishedTime?: string | null;
+  opengraphModifiedTime?: string | null;
+  twitterDescription?: string | null;
+  twitterTitle?: string | null;
+  opengraphImage?: { __typename?: "MediaItem"; sourceUrl?: string | null } | null;
+} & { " $fragmentName"?: "PostTypeSeoFragmentFragment" };
+
+export type GetPagesBySlugsQueryVariables = Exact<{
+  slugs?: InputMaybe<
+    Array<InputMaybe<Scalars["String"]["input"]>> | InputMaybe<Scalars["String"]["input"]>
+  >;
+}>;
+
+export type GetPagesBySlugsQuery = {
+  __typename?: "RootQuery";
+  pages?: {
+    __typename?: "RootQueryToPageConnection";
+    nodes: Array<{
+      __typename?: "Page";
+      slug?: string | null;
+      title?: string | null;
+      content?: string | null;
+      seo?:
+        | ({ __typename?: "PostTypeSEO" } & {
+            " $fragmentRefs"?: { PostTypeSeoFragmentFragment: PostTypeSeoFragmentFragment };
+          })
+        | null;
+    }>;
+  } | null;
+};
+
+export const PostTypeSeoFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PostTypeSeoFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "PostTypeSEO" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "canonical" } },
+          { kind: "Field", name: { kind: "Name", value: "metaDesc" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphSiteName" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphAuthor" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublisher" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphTitle" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphType" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphUrl" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublishedTime" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphModifiedTime" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "opengraphImage" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [{ kind: "Field", name: { kind: "Name", value: "sourceUrl" } }],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "twitterDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "twitterTitle" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<PostTypeSeoFragmentFragment, unknown>;
+export const GetPagesBySlugsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetPagesBySlugs" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "slugs" } },
+          type: {
+            kind: "ListType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+          },
+          defaultValue: { kind: "ListValue", values: [] },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "pages" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "nameIn" },
+                      value: { kind: "Variable", name: { kind: "Name", value: "slugs" } },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nodes" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "slug" } },
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "content" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "seo" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "FragmentSpread",
+                              name: { kind: "Name", value: "PostTypeSeoFragment" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PostTypeSeoFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "PostTypeSEO" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "canonical" } },
+          { kind: "Field", name: { kind: "Name", value: "metaDesc" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphSiteName" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphAuthor" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublisher" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphTitle" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphType" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphUrl" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublishedTime" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphModifiedTime" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "opengraphImage" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [{ kind: "Field", name: { kind: "Name", value: "sourceUrl" } }],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "twitterDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "twitterTitle" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetPagesBySlugsQuery, GetPagesBySlugsQueryVariables>;

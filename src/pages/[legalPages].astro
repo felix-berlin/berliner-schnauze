@@ -1,14 +1,33 @@
 ---
 import "@styles/objects/_legal-pages.scss";
 import Layout from "@layouts/Layout.astro";
-import { getPageById } from "@services/api.ts";
 import type { InferGetStaticParamsType, InferGetStaticPropsType, GetStaticPaths } from "astro";
+import { GetPagesBySlugsDocument } from "@/gql/graphql.ts";
+import { WP_API } from "astro:env/client";
+import { Client, cacheExchange, fetchExchange } from "@urql/core";
 
-export const getStaticPaths = async () => {
-  const privacy: any = await getPageById("datenschutz");
-  const imprint: any = await getPageById("impressum");
+export const getStaticPaths = (async () => {
+  const client = new Client({
+    url: WP_API,
+    fetchOptions: {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+    exchanges: [cacheExchange, fetchExchange],
+  });
 
-  const pages = [privacy, imprint];
+  const pagesResponse = await client
+    .query(GetPagesBySlugsDocument, {
+      slugs: ["datenschutz", "impressum"],
+    })
+    .toPromise();
+
+  const pages = pagesResponse?.data?.pages?.nodes;
+
+  if (!pages) {
+    return;
+  }
 
   return pages.map((page) => {
     let betterSlug;
@@ -27,12 +46,12 @@ export const getStaticPaths = async () => {
       },
     };
   });
-};
+}) satisfies GetStaticPaths;
 
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { legalPages }: any = Astro.params as Params;
+const { legalPages } = Astro.params as Params;
 const { page } = Astro.props;
 ---
 
