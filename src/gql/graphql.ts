@@ -20913,6 +20913,30 @@ export type PostTypeSeoFragmentFragment = {
   opengraphImage?: { __typename?: "MediaItem"; sourceUrl?: string | null } | null;
 } & { " $fragmentName"?: "PostTypeSeoFragmentFragment" };
 
+export type GetPagesBySlugsQueryVariables = Exact<{
+  slugs?: InputMaybe<
+    Array<InputMaybe<Scalars["String"]["input"]>> | InputMaybe<Scalars["String"]["input"]>
+  >;
+}>;
+
+export type GetPagesBySlugsQuery = {
+  __typename?: "RootQuery";
+  pages?: {
+    __typename?: "RootQueryToPageConnection";
+    nodes: Array<{
+      __typename?: "Page";
+      slug?: string | null;
+      title?: string | null;
+      content?: string | null;
+      seo?:
+        | ({ __typename?: "PostTypeSEO" } & {
+            " $fragmentRefs"?: { PostTypeSeoFragmentFragment: PostTypeSeoFragmentFragment };
+          })
+        | null;
+    }>;
+  } | null;
+};
+
 export type GetAllWordsQueryVariables = Exact<{
   after?: InputMaybe<Scalars["String"]["input"]>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
@@ -21032,27 +21056,33 @@ export type GetAllWordsQuery = {
   } | null;
 };
 
-export type GetPagesBySlugsQueryVariables = Exact<{
-  slugs?: InputMaybe<
-    Array<InputMaybe<Scalars["String"]["input"]>> | InputMaybe<Scalars["String"]["input"]>
-  >;
+export type GetAllWordsLinksQueryVariables = Exact<{
+  after?: InputMaybe<Scalars["String"]["input"]>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  field?: InputMaybe<PostObjectsConnectionOrderbyEnum>;
+  order?: InputMaybe<OrderEnum>;
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>> | InputMaybe<PostStatusEnum>>;
 }>;
 
-export type GetPagesBySlugsQuery = {
+export type GetAllWordsLinksQuery = {
   __typename?: "RootQuery";
-  pages?: {
-    __typename?: "RootQueryToPageConnection";
-    nodes: Array<{
-      __typename?: "Page";
-      slug?: string | null;
-      title?: string | null;
-      content?: string | null;
-      seo?:
-        | ({ __typename?: "PostTypeSEO" } & {
-            " $fragmentRefs"?: { PostTypeSeoFragmentFragment: PostTypeSeoFragmentFragment };
-          })
-        | null;
+  berlinerWords?: {
+    __typename?: "RootQueryToBerlinerWordConnection";
+    edges: Array<{
+      __typename?: "RootQueryToBerlinerWordConnectionEdge";
+      cursor?: string | null;
+      node: {
+        __typename?: "BerlinerWord";
+        slug?: string | null;
+        wordGroup?: string | null;
+        wordProperties?: { __typename?: "WordProperties"; berlinerisch?: string | null } | null;
+      };
     }>;
+    pageInfo: {
+      __typename?: "RootQueryToBerlinerWordConnectionPageInfo";
+      endCursor?: string | null;
+      hasNextPage: boolean;
+    };
   } | null;
 };
 
@@ -21096,6 +21126,117 @@ export const PostTypeSeoFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<PostTypeSeoFragmentFragment, unknown>;
+export const GetPagesBySlugsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetPagesBySlugs" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "slugs" } },
+          type: {
+            kind: "ListType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+          },
+          defaultValue: { kind: "ListValue", values: [] },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "pages" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "nameIn" },
+                      value: { kind: "Variable", name: { kind: "Name", value: "slugs" } },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nodes" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "slug" } },
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "content" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "seo" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "FragmentSpread",
+                              name: { kind: "Name", value: "PostTypeSeoFragment" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PostTypeSeoFragment" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "PostTypeSEO" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "readingTime" } },
+          { kind: "Field", name: { kind: "Name", value: "canonical" } },
+          { kind: "Field", name: { kind: "Name", value: "metaDesc" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphSiteName" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphAuthor" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublisher" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphTitle" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphType" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphUrl" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublishedTime" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphModifiedTime" } },
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "opengraphImage" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [{ kind: "Field", name: { kind: "Name", value: "sourceUrl" } }],
+            },
+          },
+          { kind: "Field", name: { kind: "Name", value: "twitterDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "twitterTitle" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetPagesBySlugsQuery, GetPagesBySlugsQueryVariables>;
 export const GetAllWordsDocument = {
   kind: "Document",
   definitions: [
@@ -21570,22 +21711,49 @@ export const GetAllWordsDocument = {
     },
   ],
 } as unknown as DocumentNode<GetAllWordsQuery, GetAllWordsQueryVariables>;
-export const GetPagesBySlugsDocument = {
+export const GetAllWordsLinksDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "GetPagesBySlugs" },
+      name: { kind: "Name", value: "GetAllWordsLinks" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "slugs" } },
+          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+          defaultValue: { kind: "StringValue", value: "", block: false },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          defaultValue: { kind: "IntValue", value: "100" },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "field" } },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "PostObjectsConnectionOrderbyEnum" },
+          },
+          defaultValue: { kind: "EnumValue", value: "TITLE" },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "order" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "OrderEnum" } },
+          defaultValue: { kind: "EnumValue", value: "ASC" },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "stati" } },
           type: {
             kind: "ListType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+            type: { kind: "NamedType", name: { kind: "Name", value: "PostStatusEnum" } },
           },
-          defaultValue: { kind: "ListValue", values: [] },
+          defaultValue: { kind: "EnumValue", value: "PUBLISH" },
         },
       ],
       selectionSet: {
@@ -21593,8 +21761,18 @@ export const GetPagesBySlugsDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "pages" },
+            name: { kind: "Name", value: "berlinerWords" },
             arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "after" },
+                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
+              },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "where" },
@@ -21603,8 +21781,27 @@ export const GetPagesBySlugsDocument = {
                   fields: [
                     {
                       kind: "ObjectField",
-                      name: { kind: "Name", value: "nameIn" },
-                      value: { kind: "Variable", name: { kind: "Name", value: "slugs" } },
+                      name: { kind: "Name", value: "orderby" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "field" },
+                            value: { kind: "Variable", name: { kind: "Name", value: "field" } },
+                          },
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "order" },
+                            value: { kind: "Variable", name: { kind: "Name", value: "order" } },
+                          },
+                        ],
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "stati" },
+                      value: { kind: "Variable", name: { kind: "Name", value: "stati" } },
                     },
                   ],
                 },
@@ -21615,26 +21812,43 @@ export const GetPagesBySlugsDocument = {
               selections: [
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "nodes" },
+                  name: { kind: "Name", value: "edges" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "slug" } },
-                      { kind: "Field", name: { kind: "Name", value: "title" } },
-                      { kind: "Field", name: { kind: "Name", value: "content" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "seo" },
+                        name: { kind: "Name", value: "node" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
+                            { kind: "Field", name: { kind: "Name", value: "slug" } },
+                            { kind: "Field", name: { kind: "Name", value: "wordGroup" } },
                             {
-                              kind: "FragmentSpread",
-                              name: { kind: "Name", value: "PostTypeSeoFragment" },
+                              kind: "Field",
+                              name: { kind: "Name", value: "wordProperties" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  { kind: "Field", name: { kind: "Name", value: "berlinerisch" } },
+                                ],
+                              },
                             },
                           ],
                         },
                       },
+                      { kind: "Field", name: { kind: "Name", value: "cursor" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "pageInfo" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
                     ],
                   },
                 },
@@ -21644,40 +21858,5 @@ export const GetPagesBySlugsDocument = {
         ],
       },
     },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "PostTypeSeoFragment" },
-      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "PostTypeSEO" } },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "title" } },
-          { kind: "Field", name: { kind: "Name", value: "readingTime" } },
-          { kind: "Field", name: { kind: "Name", value: "canonical" } },
-          { kind: "Field", name: { kind: "Name", value: "metaDesc" } },
-          { kind: "Field", name: { kind: "Name", value: "opengraphSiteName" } },
-          { kind: "Field", name: { kind: "Name", value: "opengraphAuthor" } },
-          { kind: "Field", name: { kind: "Name", value: "opengraphDescription" } },
-          { kind: "Field", name: { kind: "Name", value: "opengraphPublisher" } },
-          { kind: "Field", name: { kind: "Name", value: "opengraphTitle" } },
-          { kind: "Field", name: { kind: "Name", value: "opengraphType" } },
-          { kind: "Field", name: { kind: "Name", value: "opengraphUrl" } },
-          { kind: "Field", name: { kind: "Name", value: "opengraphPublishedTime" } },
-          { kind: "Field", name: { kind: "Name", value: "opengraphModifiedTime" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphImage" },
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "sourceUrl" } }],
-            },
-          },
-          { kind: "Field", name: { kind: "Name", value: "twitterDescription" } },
-          { kind: "Field", name: { kind: "Name", value: "twitterTitle" } },
-          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
-          { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
-        ],
-      },
-    },
   ],
-} as unknown as DocumentNode<GetPagesBySlugsQuery, GetPagesBySlugsQueryVariables>;
+} as unknown as DocumentNode<GetAllWordsLinksQuery, GetAllWordsLinksQueryVariables>;

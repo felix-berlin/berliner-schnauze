@@ -5,7 +5,7 @@ import "@styles/components/_single-word.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 
 // Imports
-import { getAllWords } from "@services/api.ts";
+import { fetchAllWords } from "@services/api.ts";
 import Layout from "@layouts/Layout.astro";
 import ExternalLink from "~icons/lucide/external-link";
 import ChevronRight from "~icons/lucide/chevron-right";
@@ -35,11 +35,11 @@ import Hypher from "hypher";
 import german from "hyphenation.de";
 
 // Types
-import type { InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
+import type { InferGetStaticParamsType, InferGetStaticPropsType, GetStaticPaths } from "astro";
 import type { BerlinerWord } from "@/gql/graphql.ts";
 
-export const getStaticPaths = async () => {
-  const allWords = await getAllWords();
+export const getStaticPaths = (async () => {
+  const allWords = await fetchAllWords();
 
   return allWords.map(({ node }) => {
     return {
@@ -52,7 +52,7 @@ export const getStaticPaths = async () => {
       },
     };
   });
-};
+}) satisfies GetStaticPaths;
 
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;

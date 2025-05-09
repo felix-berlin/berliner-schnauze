@@ -5,7 +5,7 @@ import Layout from "@layouts/Layout.astro";
 import WordOfTheDay from "@components/WordOfTheDay.vue";
 import { Picture } from "astro:assets";
 import BrownBearRoar from "@assets/images/brown-bear-roar.png";
-import { getAllWords } from "@services/api.ts";
+import { fetchAllWords } from "@services/api.ts";
 import { seoData } from "@utils/helpers.ts";
 import WordSearch from "@components/word-search/WordSearch.astro";
 import FactCard from "@components/FactCard.astro";
@@ -50,7 +50,7 @@ const facts = [
   },
 ];
 
-const allWords = await getAllWords();
+const allWords = await fetchAllWords();
 ---
 
 <Layout content={seoData(content)} contentClasses="o-index">
