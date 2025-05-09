@@ -100,7 +100,7 @@
     "eslint-plugin-vue": "^10.1.0",
     "eslint-plugin-vuejs-accessibility": "^2.4.1",
     "graphql": "^16.11.0",
-    "graphql-config": "latest",
+    "graphql-config": "^5.1.5",
     "jsdom": "^26.1.0",
     "postcss-html": "^1.8.0",
     "postcss-preset-env": "^10.1.6",
