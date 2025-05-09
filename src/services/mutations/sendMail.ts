@@ -1,47 +1,16 @@
-import { fetchAPI } from "@services/fetchApi.ts";
-import type { SendEmailPayload, SendEmailInput } from "@/gql/graphql.ts";
 import type { FormData } from "@components/SuggestWordForm.vue";
 import { WP_REST_API, SUGGEST_WORD_FORM_ID, WP_AUTH_REFRESH_TOKEN } from "astro:env/client";
+import { graphql } from "@/gql";
 
-/**
- * Sends an email using the sendEmail mutation
- * @see https://github.com/ashhitch/wp-graphql-send-mail
- *
- * @param   {SendEmailInput<SendEmailPayload>}  input
- *
- * @return  {Promise<SendEmailPayload>}
- */
-export const sendEmail = async (input: SendEmailInput): Promise<SendEmailPayload> => {
-  const data = await fetchAPI(
-    `
-  mutation SendEmail($input: SendEmailInput!) {
+export const SendEmail = graphql(`
+  mutation SendEmail($input: SendEmailInput = {}) {
     sendEmail(input: $input) {
+      message
       origin
       sent
-      message
     }
-  }`,
-    {
-      variables: {
-        input: {
-          to: input.to,
-          from: input.from,
-          subject: input.subject,
-          body: input.body,
-          clientMutationId: input.clientMutationId,
-        },
-      },
-    },
-  ).then((res) => {
-    if (res.errors) {
-      return Promise.reject(new Error("Send E-Mail failed", { cause: res.errors }));
-    }
-
-    return res.data as SendEmailPayload;
-  });
-
-  return data;
-};
+  }
+`);
 
 /**
  * Posts the form data to the contact form 7 API

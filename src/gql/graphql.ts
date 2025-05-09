@@ -20913,6 +20913,20 @@ export type PostTypeSeoFragmentFragment = {
   opengraphImage?: { __typename?: "MediaItem"; sourceUrl?: string | null } | null;
 } & { " $fragmentName"?: "PostTypeSeoFragmentFragment" };
 
+export type SendEmailMutationVariables = Exact<{
+  input?: InputMaybe<SendEmailInput>;
+}>;
+
+export type SendEmailMutation = {
+  __typename?: "RootMutation";
+  sendEmail?: {
+    __typename?: "SendEmailPayload";
+    message?: string | null;
+    origin?: string | null;
+    sent?: boolean | null;
+  } | null;
+};
+
 export type GetPagesBySlugsQueryVariables = Exact<{
   slugs?: InputMaybe<
     Array<InputMaybe<Scalars["String"]["input"]>> | InputMaybe<Scalars["String"]["input"]>
@@ -21126,6 +21140,48 @@ export const PostTypeSeoFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<PostTypeSeoFragmentFragment, unknown>;
+export const SendEmailDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "SendEmail" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "SendEmailInput" } },
+          defaultValue: { kind: "ObjectValue", fields: [] },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "sendEmail" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "message" } },
+                { kind: "Field", name: { kind: "Name", value: "origin" } },
+                { kind: "Field", name: { kind: "Name", value: "sent" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SendEmailMutation, SendEmailMutationVariables>;
 export const GetPagesBySlugsDocument = {
   kind: "Document",
   definitions: [

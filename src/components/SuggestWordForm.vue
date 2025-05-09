@@ -137,10 +137,10 @@ import { ref, reactive } from "vue";
 import AlertBanner from "@components/AlertBanner.vue";
 import TurnStile from "@components/TurnStile.vue";
 import { createToastNotify } from "@stores/index.ts";
-import { sendEmail } from "@services/sendMail.ts";
-import type { SendEmailPayload } from "@/gql/graphql.ts";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import { trackEvent } from "@utils/analytics";
+import { useMutation } from "@urql/vue";
+import { SendEmailDocument } from "@/gql/graphql.ts";
 
 const props = defineProps<{
   berlinerWord?: string;
@@ -180,19 +180,17 @@ const formErrors = reactive<FormErrors>({
   eMail: "",
 });
 
-const formResponse = reactive({
-  sent: false,
-});
-
 const turnstileSiteKey = TURNSTILE_SITE_KEY;
 const isVerified = ref(false);
 const isSending = ref(false);
+
+const sendMailMutation = useMutation(SendEmailDocument);
 
 if (props.berlinerWord) {
   formData.berlinerWord = props.berlinerWord;
 }
 
-const sendMail = async (): Promise<void> => {
+const sendMail = async () => {
   const createBody = `
   <p>Ein neues Berliner Wort wurde eingereicht:</p>
   <p>Berliner Wort: <strong>${formData.berlinerWord}</strong></p>
@@ -202,34 +200,37 @@ const sendMail = async (): Promise<void> => {
   <p>E-Mail: <strong>${formData.userMail}</strong></p>
 `;
 
-  await sendEmail({
-    to: "mail@berliner-schnauze.wtf",
-    from: formData.userMail,
-    subject: "Wortvorschlag - Berliner Schnauze",
-    body: createBody,
-    clientMutationId: "newSuggestedWord",
-  })
+  await sendMailMutation
+    .executeMutation({
+      input: {
+        body: createBody,
+        clientMutationId: "newSuggestedWord",
+        from: formData.userMail,
+        subject: "Wortvorschlag - Berliner Schnauze",
+        to: "mail@berliner-schnauze.wtf",
+      },
+    })
     .then((response) => {
-      const { sendEmail } = response;
-      if (sendEmail.sent) {
-        formResponse.sent = sendEmail.sent;
+      const { data, error } = response;
+      const sent = data?.sendEmail?.sent;
 
+      if (sent) {
         createToastNotify({ message: "Dein Wortvorschlag wurde versandt", status: "success" });
 
         trackEvent("Form", "Send", "Word Suggestion");
 
         isSending.value = false;
       }
-      resetForm();
-    })
-    .catch((error) => {
-      console.error("Send E-Mail failed", error.cause);
 
-      createToastNotify({
-        message: "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
-        status: "error",
-        timeout: null,
-      });
+      if (error || !sent) {
+        createToastNotify({
+          message: "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
+          status: "error",
+          timeout: null,
+        });
+      }
+
+      resetForm();
     });
 };
 
@@ -239,9 +240,8 @@ const sendMail = async (): Promise<void> => {
  * @return  {void}  [return description]
  */
 const resetForm = (): void => {
-  if (formResponse.sent) {
+  if (sendMailMutation.data?.value?.sendEmail?.sent) {
     setTimeout(() => {
-      formResponse.sent = false;
       formData = convertObjectKeysTo(formData, "");
     }, 3000);
   }
