@@ -1,0 +1,18 @@
+@use "@sass-butler/mixins" as butler-mx;
+
+@mixin skeleton-loader {
+  --color-skeleton: 255, 255, 255;
+
+  @include butler-mx.dark-mode-class {
+    --color-skeleton: 0, 0, 0;
+  }
+
+  background: linear-gradient(
+    90deg,
+    rgba(var(--color-skeleton), 0.1) 25%,
+    rgba(var(--color-skeleton), 0.2) 50%,
+    rgba(var(--color-skeleton), 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: 1.5s shine linear infinite;
+}

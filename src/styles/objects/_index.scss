@@ -39,6 +39,7 @@
   }
 
   &__image {
+    margin-top: 80px;
     filter: drop-shadow(
       0 0 25px var(--color-shadow, color-mix(in srgb, var(--orange-500) 40%, transparent))
     );
@@ -62,5 +63,22 @@
 
   .c-facts-grid {
     margin: 3rem 0 10rem;
+  }
+}
+
+.image-placeholder-wrap:not(.loaded) {
+  position: relative;
+  min-height: var(--min-height-placeholder, 300px);
+  @include mx.skeleton-loader;
+
+  .o-index__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .o-index__image {
+    opacity: 1;
   }
 }
