@@ -59,7 +59,7 @@ const allWords = await fetchAllWords();
       Na Keule,<br /> keen'n Dunst vom Berlinern?
     </h1>
 
-    <div class="o-index__image-wrap">
+    <div class="o-index__image-wrap image-placeholder-wrap">
       <Picture
         class="o-index__image"
         src={BrownBearRoar}
@@ -89,3 +89,32 @@ const allWords = await fetchAllWords();
 
   <WordSearch words={allWords} />
 </Layout>
+
+<script>
+  function handleImagePlaceholder() {
+    const wrapper = document.querySelector(".image-placeholder-wrap");
+    const img = wrapper?.querySelector("img");
+    if (img && wrapper) {
+      // Remove loaded class before loading new image
+      wrapper.classList.remove("loaded");
+      img.addEventListener(
+        "load",
+        () => {
+          wrapper.classList.add("loaded");
+        },
+        { once: true }
+      );
+      // If cached
+      if (img.complete) {
+        wrapper.classList.add("loaded");
+      }
+    }
+  }
+
+  if (typeof window !== "undefined") {
+    window.addEventListener("DOMContentLoaded", handleImagePlaceholder);
+
+    // Astro View Transitions: listen for navigation events
+    document.addEventListener("astro:after-swap", handleImagePlaceholder);
+  }
+</script>

@@ -7,15 +7,7 @@
     class="c-menu-nav__item c-menu-more"
     :triggers="['click', 'hover', 'touch']"
   >
-    <button
-      type="button"
-      class="c-button c-menu-nav__item-button c-button--center-icon"
-      aria-label="Website Menu Navigation"
-    >
-      <span class="u-icon-wrapper c-button--center-icon">
-        <MenuIcon />
-      </span>
-    </button>
+    <MainMenuButton />
 
     <template #popper>
       <NavList
@@ -28,11 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import MenuIcon from "virtual:icons/lucide/menu";
-import { routeToWord, randomElement } from "@utils/helpers.ts";
 import InstallApp from "@components/InstallApp.vue";
 import NavList from "@components/NavList.vue";
 import type { DefineComponent } from "vue";
+import MainMenuButton from "@components/MainMenuButton.vue";
 
 // const randomWord = () => {
 //   // TODO: Implement random word

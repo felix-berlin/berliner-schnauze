@@ -1,4 +1,6 @@
 @use "@styles/variables" as vars;
+
+@forward "animations";
 @forward "list";
 @forward "transitions";
 

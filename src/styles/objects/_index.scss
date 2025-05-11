@@ -64,3 +64,20 @@
     margin: 3rem 0 10rem;
   }
 }
+
+.image-placeholder-wrap:not(.loaded) {
+  position: relative;
+  min-height: var(--min-height-placeholder, 300px);
+  @include mx.skeleton-loader;
+
+  .o-index__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .o-index__image {
+    opacity: 1;
+  }
+}
