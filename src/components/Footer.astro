@@ -2,7 +2,6 @@
 import { version, funding } from "../../package.json";
 import { Picture } from "astro:assets";
 import BearWalking from "@assets/images/bear-walking.png";
-import CafeAchteck from "@assets/images/800px-Berlin_Cafe_Achteck_BusB.jpg";
 import NavList from "@components/NavList.vue";
 import InstallApp from "@components/InstallApp.vue";
 import Download from "virtual:icons/lucide/download";
@@ -32,15 +31,15 @@ const socialMenu = [
 const fundingMenu = [
   {
     title: "GitHub Sponsors",
-    link: funding.find((f) => f.type === "GitHub Sponsors")?.url!,
+    link: funding.find((f) => f.type === "GitHub Sponsors")?.url,
   },
   {
     title: "Ko-fi",
-    link: funding.find((f) => f.type === "Ko-fi")?.url!,
+    link: funding.find((f) => f.type === "Ko-fi")?.url,
   },
   {
     title: "PayPal",
-    link: funding.find((f) => f.type === "PayPal")?.url!,
+    link: funding.find((f) => f.type === "PayPal")?.url,
   },
 ];
 
@@ -81,7 +80,7 @@ const navMenu2 = [
       <Picture
         src={BearWalking}
         formats={["avif", "webp"]}
-        layout="responsive"
+        layout="constrained"
         alt="Ein Bär der durch die Stadt läuft"
         class="c-footer__farewell-image"
       />
