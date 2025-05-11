@@ -24,7 +24,7 @@ export interface Word {
   learn_more?: null | string;
   group?: string;
   word_type?: boolean;
-  exspires?: number;
+  expires?: number;
 }
 
 type WordOfTheDay = {
@@ -86,8 +86,8 @@ export const getWordOfTheDay = async (): Promise<void> => {
     });
 };
 
-onMount($wordOfTheDay, () => {
-  task(async () => {
+onMount($wordOfTheDay, async () => {
+  await task(async () => {
     await getWordOfTheDay().catch((err) => {
       console.error("Failed to fetch Word of the Day: ", err);
     });
