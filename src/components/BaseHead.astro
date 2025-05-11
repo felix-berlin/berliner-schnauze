@@ -2,6 +2,10 @@
 import { pwaInfo } from "virtual:pwa-info";
 import { ClientRouter } from "astro:transitions";
 import SetColorMode from "@components/SetColorMode.astro";
+import BerlinerRegular from "/fonts/BerlinerRegular.woff2";
+import Berlin from "/fonts/Berlin.woff2";
+import BerlinBold from "/fonts/Berlin-Bold.woff2";
+import BerlinItalic from "/fonts/Berlin-Italic.woff2";
 
 export interface Title {
   title: string;
@@ -47,6 +51,10 @@ const { title, seo } = Astro.props as SeoProps & Title;
   {seo?.title || title}
 </title>
 
+<link rel="preload" href={BerlinerRegular} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={Berlin} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={BerlinBold} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={BerlinItalic} as="font" type="font/woff2" crossorigin />
 <link rel="preconnect" href="//cms.berliner-schnauze.wtf" />
 
 <script src="../plugins/sentryBrowser.ts"></script>
