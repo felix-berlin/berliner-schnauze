@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.16.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.16.2...v3.16.3) (2025-05-11)
+
+
+### Bug Fixes
+
+* **Footer:** loop condition ([47e0265](https://github.com/felix-berlin/berliner-schnauze/commit/47e02652ff557a9d950368559d28ad2b2f326ed6))
+* type and add missing await ([62f121b](https://github.com/felix-berlin/berliner-schnauze/commit/62f121b549c9cb2429584fda74f55aed30c191cb))
+* **WordOfTheDay:** make word link a little bigger ([9826668](https://github.com/felix-berlin/berliner-schnauze/commit/9826668b8b1ad0d3ca1d9bb524f6d560520d6042))
+
+
+### Performance Improvements
+
+* fix layout image format; ([b757089](https://github.com/felix-berlin/berliner-schnauze/commit/b757089e645099336fda26a210aaaff42510156d))
+
 ## [3.16.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.16.1...v3.16.2) (2025-05-09)
 
 
