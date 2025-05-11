@@ -37,6 +37,10 @@ export default defineConfig({
   prefetch: false,
   image: {
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
+    experimentalBreakpoints: [
+      180, 320, 480, 640, 750, 828, 960, 1080, 1280, 1668, 1920, 2048, 2560, 3200, 3840, 4480, 5120,
+      6016,
+    ],
   },
   experimental: {
     responsiveImages: true,
