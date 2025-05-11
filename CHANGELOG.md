@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.16.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.16.4...v3.16.5) (2025-05-11)
+
+
+### Bug Fixes
+
+* add missing astro page transition handling for img placeholder ([2a6d116](https://github.com/felix-berlin/berliner-schnauze/commit/2a6d116f311a6f3d2f94f9457a3554f7fbb9025b))
+* remove double margins on first index images ([a00a880](https://github.com/felix-berlin/berliner-schnauze/commit/a00a880b852fdb88b15c4d5ee7913ce04f3676aa))
+
+
+### Performance Improvements
+
+* add more responsive image breakpoints ([c70a5a7](https://github.com/felix-berlin/berliner-schnauze/commit/c70a5a76b74c280bd3da6d9a5900087ca247cfc8))
+* add skeleton loader; index above the fold image uses placeholder image ([ec028e6](https://github.com/felix-berlin/berliner-schnauze/commit/ec028e6c7b0106dce5a4016deb56ac4aa99170c5))
+* split up elements from MainHeader to create static fallback components ([831075e](https://github.com/felix-berlin/berliner-schnauze/commit/831075e92c37e8896ca7e56216f86b63e1913846))
+
 ## [3.16.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.16.3...v3.16.4) (2025-05-11)
 
 
