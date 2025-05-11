@@ -39,7 +39,6 @@
   }
 
   &__image {
-    margin-top: 80px;
     filter: drop-shadow(
       0 0 25px var(--color-shadow, color-mix(in srgb, var(--orange-500) 40%, transparent))
     );
