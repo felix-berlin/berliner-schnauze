@@ -35,7 +35,7 @@ interface ColorModeToggleProps {
   toggleClasses?: string[];
 }
 
-const { cssClasses, toggleClasses = ["dark"] } = defineProps<ColorModeToggleProps>();
+const { cssClasses = "", toggleClasses = ["dark"] } = defineProps<ColorModeToggleProps>();
 
 const isDarkMode = useStore($isDarkMode);
 
