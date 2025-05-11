@@ -39,6 +39,8 @@
     font-family: vars.$berlin;
     font-weight: 700;
     font-size: butler-fn.fluid(19, 32, 320, 1260);
+    padding: 0.5rem;
+    display: block;
     word-break: break-all;
   }
 
