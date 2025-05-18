@@ -4,6 +4,7 @@ import WordSearchList from "@components/word-search/WordSearchList.vue";
 import WordFilter from "@components/word-search/WordFilter.vue";
 import type { RootQueryToBerlinerWordConnectionEdge } from "@/gql/graphql";
 import type { CleanBerlinerWord } from "@stores/index.ts";
+import WordSearchNew from "@components/word-search/WordSearchNew.vue";
 
 interface WordSearchProps {
   words: RootQueryToBerlinerWordConnectionEdge[];
@@ -28,7 +29,9 @@ const wordTypes = Array.from(
 ).sort();
 ---
 
-<section class="c-filter-search" id="wordListing">
+<WordSearchNew words={cleanWords} client:only="vue" />
+<hr />
+<!-- <section class="c-filter-search" id="wordListing">
   <WordFilter client:only="vue" />
   <WordSearchList
     words={cleanWords}
@@ -37,4 +40,4 @@ const wordTypes = Array.from(
     client:only="vue"
     cssClass={"c-filter-search__list"}
   />
-</section>
+</section> -->

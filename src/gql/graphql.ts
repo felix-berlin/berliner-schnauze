@@ -352,7 +352,7 @@ export type BerlinerWord = ContentNode &
     title?: Maybe<Scalars["String"]["output"]>;
     /** The unique resource identifier path */
     uri?: Maybe<Scalars["String"]["output"]>;
-    /** Example field added to the Post Type */
+    /** The words letter group */
     wordGroup?: Maybe<Scalars["String"]["output"]>;
     /** Fields of the WordProperties ACF Field Group */
     wordProperties?: Maybe<WordProperties>;
@@ -15481,6 +15481,8 @@ export type RootQuery = WithAcfOptionsPageCompanyInformations &
     users?: Maybe<RootQueryToUserConnection>;
     /** Returns the current user */
     viewer?: Maybe<User>;
+    /** Get the Berliner Schnauze Word of the Day plus expires */
+    wordOfTheDay?: Maybe<WordOfTheDayPayload>;
     /** Fields of the &#039;WritingSettings&#039; settings group */
     writingSettings?: Maybe<WritingSettings>;
   };
@@ -20446,6 +20448,15 @@ export type WithAcfSocialAdvanced = {
 export type WithAcfWordProperties = {
   /** Fields of the WordProperties ACF Field Group */
   wordProperties?: Maybe<WordProperties>;
+};
+
+/** Word of the Day plus expires */
+export type WordOfTheDayPayload = {
+  __typename?: "WordOfTheDayPayload";
+  /** Seconds until midnight */
+  expires?: Maybe<Scalars["Int"]["output"]>;
+  /** The Berliner Schnauze Word */
+  word?: Maybe<BerlinerWord>;
 };
 
 /** The &quot;WordProperties&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */

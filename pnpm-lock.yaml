@@ -29,6 +29,15 @@ importers:
       '@nanostores/vue':
         specifier: ^1.0.0
         version: 1.0.0(@nanostores/logger@1.0.0(nanostores@1.0.1))(@vue/devtools-api@7.7.6)(nanostores@1.0.1)(vue@3.5.14(typescript@5.8.3))
+      '@orama/orama':
+        specifier: ^3.1.7
+        version: 3.1.7
+      '@orama/plugin-match-highlight':
+        specifier: ^3.1.7
+        version: 3.1.7
+      '@orama/stemmers':
+        specifier: ^3.1.7
+        version: 3.1.7
       '@pagefind/default-ui':
         specifier: ^1.3.0
         version: 1.3.0
@@ -2537,6 +2546,17 @@ packages:
     engines: {node: '>=14'}
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
+
+  '@orama/orama@3.1.7':
+    resolution: {integrity: sha512-6yB0117ZjsgNevZw3LP+bkrZa9mU/POPVaXgzMPOBbBc35w2P3R+1vMMhEfC06kYCpd5bf0jodBaTkYQW5TVeQ==}
+    engines: {node: '>= 20.0.0'}
+
+  '@orama/plugin-match-highlight@3.1.7':
+    resolution: {integrity: sha512-2FrtLqojt5B0BcMsIPEr3H4Ym8t9n9PsvNSn9pw0lukTom+9TSVWkKGd2pg0WT/C+9KDHSydl/z9vyUCD4OsPQ==}
+
+  '@orama/stemmers@3.1.7':
+    resolution: {integrity: sha512-wOE0xCbtD2cbbCCScXDEzLXZ4eC4NegsyDsf7ahGm4NSkOCai0XnukCFBHz+cVu4KQ2Q9v71U/E3I/hwjjWHww==}
+    engines: {node: '>= 20.0.0'}
 
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
@@ -11546,6 +11566,14 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
+
+  '@orama/orama@3.1.7': {}
+
+  '@orama/plugin-match-highlight@3.1.7':
+    dependencies:
+      '@orama/orama': 3.1.7
+
+  '@orama/stemmers@3.1.7': {}
 
   '@oslojs/encoding@1.1.0': {}
 

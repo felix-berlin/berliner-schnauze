@@ -648,7 +648,7 @@ type BerlinerWord implements ContentNode & DatabaseIdentifier & HierarchicalCont
   """
   uri: String
   """
-  Example field added to the Post Type
+  The words letter group
   """
   wordGroup: String
   """
@@ -24020,6 +24020,10 @@ type RootQuery implements WithAcfOptionsPageCompanyInformations & WithAcfOptions
   """
   viewer: User
   """
+  Get the Berliner Schnauze Word of the Day plus expires
+  """
+  wordOfTheDay: WordOfTheDayPayload
+  """
   Fields of the &#039;WritingSettings&#039; settings group
   """
   writingSettings: WritingSettings
@@ -31684,6 +31688,20 @@ interface WithAcfWordProperties {
   Fields of the WordProperties ACF Field Group
   """
   wordProperties: WordProperties
+}
+
+"""
+Word of the Day plus expires
+"""
+type WordOfTheDayPayload {
+  """
+  Seconds until midnight
+  """
+  expires: Int
+  """
+  The Berliner Schnauze Word
+  """
+  word: BerlinerWord
 }
 
 """
