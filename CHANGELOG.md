@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.16.6](https://github.com/felix-berlin/berliner-schnauze/compare/v3.16.5...v3.16.6) (2025-05-18)
+
+
+### Bug Fixes
+
+* typos ([608536e](https://github.com/felix-berlin/berliner-schnauze/commit/608536e793599101d955ed13ad65d34db3f79e1b))
+
+
+### Performance Improvements
+
+* **head:** use astro capo ([2297cf9](https://github.com/felix-berlin/berliner-schnauze/commit/2297cf93edf386c78b47ee1b9b0d888ecb5bf315))
+
 ## [3.16.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.16.4...v3.16.5) (2025-05-11)
 
 
