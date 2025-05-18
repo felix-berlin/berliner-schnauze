@@ -212,7 +212,7 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch)
           />
 
           <p>
-            enhält {countLetters(word.wordProperties?.berlinerisch).vowels}
+            enthält {countLetters(word.wordProperties?.berlinerisch).vowels}
             <span class="is-vowel">Vokale</span> und {
               countLetters(word.wordProperties?.berlinerisch).consonants
             }
@@ -232,7 +232,7 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch)
       {
         wordTags.length > 0 && (
           <section>
-            <h2>Grammtik</h2>
+            <h2>Grammatik</h2>
             <h3>Wortart {Object.keys(wordTags[0]).length > 1 ? "pro Wort" : ""}</h3>
             {Object.keys(wordTags[0]).map((key) => {
               const isNomenPresent = wordTags[0][key].includes("Nomen");
