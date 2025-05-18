@@ -12,7 +12,7 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4
       '@astrojs/sitemap':
-        specifier: ^3.3.1
+        specifier: ^3.4.0
         version: 3.4.0
       '@astrojs/vue':
         specifier: ^5.0.13
@@ -21,7 +21,7 @@ importers:
         specifier: 3.1.0
         version: 3.1.0(sass@1.89.0)
       '@iconify-json/lucide':
-        specifier: ^1.2.42
+        specifier: ^1.2.44
         version: 1.2.44
       '@nanostores/persistent':
         specifier: ^1.0.0
@@ -33,7 +33,7 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0
       '@sentry/astro':
-        specifier: ^9.17.0
+        specifier: ^9.19.0
         version: 9.19.0(astro@5.7.13(@types/node@22.15.18)(jiti@2.4.2)(rollup@2.79.2)(sass@1.89.0)(terser@5.39.2)(typescript@5.8.3)(yaml@2.7.1))
       '@sentry/vite-plugin':
         specifier: ^3.4.0
@@ -48,14 +48,17 @@ importers:
         specifier: ^1.4.3
         version: 1.4.3(@urql/core@5.1.1(graphql@16.11.0))(vue@3.5.14(typescript@5.8.3))
       '@vueuse/core':
-        specifier: ^13.1.0
+        specifier: ^13.2.0
         version: 13.2.0(vue@3.5.14(typescript@5.8.3))
       astro:
-        specifier: ^5.7.12
+        specifier: ^5.7.13
         version: 5.7.13(@types/node@22.15.18)(jiti@2.4.2)(rollup@2.79.2)(sass@1.89.0)(terser@5.39.2)(typescript@5.8.3)(yaml@2.7.1)
       astro-breadcrumbs:
         specifier: ^3.3.1
         version: 3.3.1(astro@5.7.13(@types/node@22.15.18)(jiti@2.4.2)(rollup@2.79.2)(sass@1.89.0)(terser@5.39.2)(typescript@5.8.3)(yaml@2.7.1))
+      astro-capo:
+        specifier: ^0.0.1
+        version: 0.0.1(astro@5.7.13(@types/node@22.15.18)(jiti@2.4.2)(rollup@2.79.2)(sass@1.89.0)(terser@5.39.2)(typescript@5.8.3)(yaml@2.7.1))
       astro-matomo:
         specifier: ^1.8.1
         version: 1.8.1(astro@5.7.13(@types/node@22.15.18)(jiti@2.4.2)(rollup@2.79.2)(sass@1.89.0)(terser@5.39.2)(typescript@5.8.3)(yaml@2.7.1))
@@ -96,10 +99,10 @@ importers:
         specifier: 3.1.0
         version: 3.1.0
       virtua:
-        specifier: ^0.41.0
+        specifier: ^0.41.2
         version: 0.41.2(vue@3.5.14(typescript@5.8.3))
       vue:
-        specifier: ^3.5.13
+        specifier: ^3.5.14
         version: 3.5.14(typescript@5.8.3)
     devDependencies:
       '@0no-co/graphqlsp':
@@ -112,7 +115,7 @@ importers:
         specifier: ^1.9.0
         version: 1.9.0(astro@5.7.13(@types/node@22.15.18)(jiti@2.4.2)(rollup@2.79.2)(sass@1.89.0)(terser@5.39.2)(typescript@5.8.3)(yaml@2.7.1))(vite@6.3.5(@types/node@22.15.18)(jiti@2.4.2)(sass@1.89.0)(terser@5.39.2)(yaml@2.7.1))
       '@eslint/js':
-        specifier: ^9.26.0
+        specifier: ^9.27.0
         version: 9.27.0
       '@graphql-codegen/cli':
         specifier: ^5.0.6
@@ -151,13 +154,13 @@ importers:
         specifier: ^10.0.1
         version: 10.0.1(semantic-release@24.2.4(typescript@5.8.3))
       '@sentry/browser':
-        specifier: ^9.17.0
+        specifier: ^9.19.0
         version: 9.19.0
       '@types/jsdom':
         specifier: ^21.1.7
         version: 21.1.7
       '@types/node':
-        specifier: ^22.15.17
+        specifier: ^22.15.18
         version: 22.15.18
       '@vite-pwa/assets-generator':
         specifier: ^1.0.0
@@ -178,7 +181,7 @@ importers:
         specifier: 3.1.3
         version: 3.1.3(vitest@3.1.3)
       '@vue/compiler-sfc':
-        specifier: ^3.5.13
+        specifier: ^3.5.14
         version: 3.5.14
       '@vue/devtools-api':
         specifier: ^7.7.6
@@ -196,7 +199,7 @@ importers:
         specifier: ^4.1.3
         version: 4.1.3(browserslist@4.24.5)
       eslint:
-        specifier: ^9.26.0
+        specifier: ^9.27.0
         version: 9.27.0(jiti@2.4.2)
       eslint-config-prettier:
         specifier: ^10.1.5
@@ -244,7 +247,7 @@ importers:
         specifier: 1.89.0
         version: 1.89.0
       semantic-release:
-        specifier: ^24.2.3
+        specifier: ^24.2.4
         version: 24.2.4(typescript@5.8.3)
       sharp:
         specifier: ^0.34.1
@@ -259,8 +262,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0(stylelint@16.19.1(typescript@5.8.3))
       stylelint-config-recommended-scss:
-        specifier: ^15.0.0
-        version: 15.0.0(postcss@8.5.3)(stylelint@16.19.1(typescript@5.8.3))
+        specifier: ^15.0.1
+        version: 15.0.1(postcss@8.5.3)(stylelint@16.19.1(typescript@5.8.3))
       stylelint-config-standard:
         specifier: ^38.0.0
         version: 38.0.0(stylelint@16.19.1(typescript@5.8.3))
@@ -268,7 +271,7 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
       typescript-eslint:
-        specifier: ^8.32.0
+        specifier: ^8.32.1
         version: 8.32.1(eslint@9.27.0(jiti@2.4.2))(typescript@5.8.3)
       unplugin-icons:
         specifier: ^22.1.0
@@ -289,7 +292,7 @@ importers:
         specifier: ^2.2.10
         version: 2.2.10(typescript@5.8.3)
       wrangler:
-        specifier: ^4.14.4
+        specifier: ^4.15.2
         version: 4.15.2
 
 packages:
@@ -3725,6 +3728,11 @@ packages:
     resolution: {integrity: sha512-O3wWzlc4HOU//ePefcwk2F4yQn830buVUVn6h7+sGmVq7+xvv9JmHTcmihU18ISte72ELnJlG2U8s58nIuPXfg==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
+
+  astro-capo@0.0.1:
+    resolution: {integrity: sha512-KyQD1mzgEQnbqrKpYdoIZMAYejkOcIJocdGuQBH9Yzr4KqGzIR8P2DDNbV/FQXaSyq900lCZwWJH45tBIQCG8w==}
+    peerDependencies:
+      astro: '>= 2.8'
 
   astro-eslint-parser@1.2.2:
     resolution: {integrity: sha512-JepyLROIad6f44uyqMF6HKE2QbunNzp3mYKRcPoDGt0QkxXmH222FAFC64WTyQu2Kg8NNEXHTN/sWuUId9sSxw==}
@@ -7611,9 +7619,9 @@ packages:
     peerDependencies:
       stylelint: '>=15.0.0'
 
-  stylelint-config-recommended-scss@15.0.0:
-    resolution: {integrity: sha512-LCxdFHly0NCJbMsgPpaAPkTf1xclU+SMpTsShlsAv1SLs8KDnaO8OhJGp8XEC8JyOzFHfmVYTXU6V1y8IahfRg==}
-    engines: {node: '>=22'}
+  stylelint-config-recommended-scss@15.0.1:
+    resolution: {integrity: sha512-V24bxkNkFGggqPVJlP9iXaBabwSGEG7QTz+PyxrRtjPkcF+/NsWtB3tKYvFYEmczRkWiIEfuFMhGpJFj9Fxe6Q==}
+    engines: {node: '>=20'}
     peerDependencies:
       postcss: ^8.3.3
       stylelint: ^16.16.0
@@ -13033,6 +13041,11 @@ snapshots:
     dependencies:
       astro: 5.7.13(@types/node@22.15.18)(jiti@2.4.2)(rollup@2.79.2)(sass@1.89.0)(terser@5.39.2)(typescript@5.8.3)(yaml@2.7.1)
 
+  astro-capo@0.0.1(astro@5.7.13(@types/node@22.15.18)(jiti@2.4.2)(rollup@2.79.2)(sass@1.89.0)(terser@5.39.2)(typescript@5.8.3)(yaml@2.7.1)):
+    dependencies:
+      astro: 5.7.13(@types/node@22.15.18)(jiti@2.4.2)(rollup@2.79.2)(sass@1.89.0)(terser@5.39.2)(typescript@5.8.3)(yaml@2.7.1)
+      ultrahtml: 1.6.0
+
   astro-eslint-parser@1.2.2:
     dependencies:
       '@astrojs/compiler': 2.11.0
@@ -17589,7 +17602,7 @@ snapshots:
     dependencies:
       stylelint: 16.19.1(typescript@5.8.3)
 
-  stylelint-config-recommended-scss@15.0.0(postcss@8.5.3)(stylelint@16.19.1(typescript@5.8.3)):
+  stylelint-config-recommended-scss@15.0.1(postcss@8.5.3)(stylelint@16.19.1(typescript@5.8.3)):
     dependencies:
       postcss-scss: 4.0.9(postcss@8.5.3)
       stylelint: 16.19.1(typescript@5.8.3)

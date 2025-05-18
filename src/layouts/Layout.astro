@@ -1,6 +1,6 @@
 ---
 import "@styles/app.scss";
-
+import { Head } from "astro-capo";
 import BaseHead from "@components/BaseHead.astro";
 import ScrollToTop from "@components/ScrollToTop.vue";
 import Footer from "@components/Footer.astro";
@@ -27,11 +27,11 @@ const {
 
 <!doctype html>
 <html lang="de">
-  <head>
+  <Head>
     <BaseHead title={title} seo={seo} />
 
     <slot name="head" />
-  </head>
+  </Head>
   <body class="o-body" class:list={bodyClasses}>
     <MainHeader transition:persist />
     <main class="o-content u-max-body-width" class:list={contentClasses}>
