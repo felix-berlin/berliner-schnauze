@@ -126,6 +126,7 @@ const db: Orama<typeof wordSchema> = create({
 await insertMultiple(db, testData);
 
 const wordSearch = useStore($wordSearch);
+const orama = useStore($oramaSearchResults);
 
 const searchQuery = ref("");
 const searchResults = ref<Results<WordDocument> | null>(null);
