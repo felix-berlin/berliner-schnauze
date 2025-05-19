@@ -15,7 +15,7 @@
 
     <WordSuggestHint v-if="searchResultCount === 0" />
 
-    <WordList />
+    <!-- <WordList /> -->
   </div>
 </template>
 

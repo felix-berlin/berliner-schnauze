@@ -29,10 +29,11 @@ const wordTypes = Array.from(
 ).sort();
 ---
 
-<WordSearchNew words={cleanWords} client:only="vue" />
 <hr />
-<!-- <section class="c-filter-search" id="wordListing">
+<section class="c-filter-search" id="wordListing">
   <WordFilter client:only="vue" />
+
+  <WordSearchNew words={cleanWords} client:only="vue" />
   <WordSearchList
     words={cleanWords}
     availableLetterGroups={availableWordGroups}
@@ -40,4 +41,4 @@ const wordTypes = Array.from(
     client:only="vue"
     cssClass={"c-filter-search__list"}
   />
-</section> -->
+</section>

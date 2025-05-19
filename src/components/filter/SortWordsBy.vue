@@ -3,29 +3,22 @@
     type="button"
     class="c-sort-word-direction-toggle c-button c-button--center-icon c-button--filter c-button--dashed-border"
     :class="{ 'is-active': orderCategory === wordSearch.activeOrderCategory }"
-    :aria-label="'sortiere ' + (orderType === 'asc' ? 'aufsteigend' : 'absteigend')"
+    :aria-label="'sortiere ' + (orderType === 'ASC' ? 'aufsteigend' : 'absteigend')"
     @click="
       toggleFn();
       setActiveOrderCategory(orderCategory);
     "
   >
-    <transition
-      name="fade-fast"
-      mode="out-in"
-    >
+    <transition name="fade-fast" mode="out-in">
       <span
-        v-if="orderType === 'asc'"
-        key="asc"
+        v-if="orderType === 'ASC'"
+        key="ASC"
         class="c-sort-word-direction-toggle__button c-button--center-icon"
       >
         <SortAsc />
         <span><slot name="asc-text">aufsteigend</slot></span>
       </span>
-      <span
-        v-else
-        key="desc"
-        class="c-sort-word-direction-toggle__button c-button--center-icon"
-      >
+      <span v-else key="DESC" class="c-sort-word-direction-toggle__button c-button--center-icon">
         <SortDesc />
         <span><slot name="desc-text">absteigend</slot></span>
       </span>
@@ -42,7 +35,7 @@ import { useStore } from "@nanostores/vue";
 
 interface SortWordByProps {
   orderCategory: WordList["activeOrderCategory"];
-  orderType: "asc" | "desc";
+  orderType: "ASC" | "DESC";
   toggleFn: () => void;
 }
 

@@ -23,9 +23,9 @@ export type WordList = {
   activeWordTypeFilter: string;
   wordList: CleanBerlinerWord[];
   search: string;
-  alphabeticalOrder: "asc" | "desc";
-  dateOrder: "asc" | "desc";
-  modifiedDateOrder: "asc" | "desc";
+  alphabeticalOrder: "ASC" | "DESC";
+  dateOrder: "ASC" | "DESC";
+  modifiedDateOrder: "ASC" | "DESC";
   activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
   berolinismus: boolean;
 };
@@ -39,9 +39,9 @@ export const $wordSearch = persistentMap<WordList>(
     activeWordTypeFilter: "",
     wordList: [],
     search: "",
-    alphabeticalOrder: "asc",
-    dateOrder: "asc",
-    modifiedDateOrder: "asc",
+    alphabeticalOrder: "ASC",
+    dateOrder: "ASC",
+    modifiedDateOrder: "ASC",
     activeOrderCategory: "alphabetical",
     berolinismus: false,
   },
@@ -79,9 +79,9 @@ export const resetAll = () => {
   $wordSearch.setKey("search", "");
   $wordSearch.setKey("activeLetterFilter", "");
   $wordSearch.setKey("activeWordTypeFilter", "");
-  $wordSearch.setKey("alphabeticalOrder", "asc");
-  $wordSearch.setKey("dateOrder", "asc");
-  $wordSearch.setKey("modifiedDateOrder", "asc");
+  $wordSearch.setKey("alphabeticalOrder", "ASC");
+  $wordSearch.setKey("dateOrder", "ASC");
+  $wordSearch.setKey("modifiedDateOrder", "ASC");
   $wordSearch.setKey("activeOrderCategory", "alphabetical");
   $wordSearch.setKey("berolinismus", false);
 
@@ -97,9 +97,9 @@ export const $toggleWordListFilterFlyout = () => {
 /**
  * Set the active letter to filter the word list
  *
- * @param   {string}  letter           [letter description]
+ * @param   {string}  letter           [letter DESCription]
  *
- * @return  {void}                   [return description]
+ * @return  {void}                   [return DESCription]
  */
 export const setLetterFilter = (letter: string) => {
   useViewTransition(() => $wordSearch.setKey("activeLetterFilter", letter));
@@ -124,7 +124,7 @@ export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCateg
 export const $alphabeticalOrderToggle = (): void => {
   $wordSearch.setKey(
     "alphabeticalOrder",
-    $wordSearch.get().alphabeticalOrder === "asc" ? "desc" : "asc",
+    $wordSearch.get().alphabeticalOrder === "ASC" ? "DESC" : "ASC",
   );
 };
 
@@ -134,7 +134,7 @@ export const $alphabeticalOrderToggle = (): void => {
  * @return {void}
  */
 export const $wordListDateOrderToggle = (): void => {
-  $wordSearch.setKey("dateOrder", $wordSearch.get().dateOrder === "asc" ? "desc" : "asc");
+  $wordSearch.setKey("dateOrder", $wordSearch.get().dateOrder === "ASC" ? "DESC" : "ASC");
 };
 
 /**
@@ -145,14 +145,14 @@ export const $wordListDateOrderToggle = (): void => {
 export const $wordListModifiedDateOrderToggle = (): void => {
   $wordSearch.setKey(
     "modifiedDateOrder",
-    $wordSearch.get().modifiedDateOrder === "asc" ? "desc" : "asc",
+    $wordSearch.get().modifiedDateOrder === "ASC" ? "DESC" : "ASC",
   );
 };
 
 export const $setSortOrder = (
   category: WordList["activeOrderCategory"],
   orderName: string,
-  order: "asc" | "desc",
+  order: "ASC" | "DESC",
 ) => {
   $wordSearch.setKey("activeOrderCategory", category);
   $wordSearch.setKey(orderName, order);
