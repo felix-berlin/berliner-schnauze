@@ -3,17 +3,16 @@
     class="c-searchbar c-button c-button--outline"
     type="button"
     aria-label="Suche aktivieren"
-    @click="clickCallback"
+    @click="clickCallback()"
   >
     <SearchIcon class="c-searchbar__search-icon" />
     <span class="c-searchbar__label">Suche</span>
-    <SquareSlash class="c-searchbar__slash-icon" />
+    <kbd class="c-searchbar__slash-icon">/</kbd>
   </button>
 </template>
 
 <script setup lang="ts">
 import SearchIcon from "virtual:icons/lucide/search";
-import SquareSlash from "virtual:icons/lucide/square-slash";
 
 const { clickCallback } = defineProps({
   clickCallback: {
