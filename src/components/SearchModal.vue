@@ -68,7 +68,3 @@ const keys = useMagicKeys();
 const shiftSlash = keys["Shift+/"];
 whenever(shiftSlash, () => openSearchViaKeyboard());
 </script>
-
-<style lang="scss">
-@use "@styles/plugins/pagefind.scss";
-</style>
