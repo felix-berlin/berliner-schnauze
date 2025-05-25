@@ -72,13 +72,8 @@ export const useViewTransition = (fn: () => void): void => {
 
 /**
  * Formats a date to a human readable string
- *
- * @param   {string}  date
- * @param   {string}  locale
- *
- * @return  {string | undefined}
  */
-export const formattedDate = (date: string, locale = "de-DE") => {
+export const formattedDate = (date?: string, locale = "de-DE") => {
   if (!date) return;
   const dateToFormat = new Date(date);
 
