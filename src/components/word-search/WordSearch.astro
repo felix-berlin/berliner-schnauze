@@ -2,26 +2,16 @@
 import "@styles/components/_filter-search.scss";
 import WordSearchList from "@components/word-search/WordSearchList.vue";
 import WordFilter from "@components/word-search/WordFilter.vue";
-import type { RootQueryToBerlinerWordConnectionEdge } from "@/gql/graphql";
-import type { CleanBerlinerWord } from "@stores/index.ts";
 import WordSearchNew from "@components/word-search/WordSearchNew.vue";
+import { fetchAllWords } from "@services/api.ts";
 
-interface WordSearchProps {
-  words: RootQueryToBerlinerWordConnectionEdge[];
-}
+const allWords = await fetchAllWords();
 
-const { words } = Astro.props as WordSearchProps;
-
-const cleanWords = words.map(({ node }): CleanBerlinerWord => {
-  const { seo, title, ...cleanNode } = node;
-  return cleanNode;
-});
-
-const availableWordGroups = Array.from(new Set(words.map(({ node }) => node.wordGroup))).sort();
+const availableWordGroups = Array.from(new Set(allWords.map(({ node }) => node.wordGroup))).sort();
 
 const wordTypes = Array.from(
   new Set(
-    words
+    allWords
       .map(({ node }) => node.berlinerischWordTypes?.nodes)
       .flat()
       .map((node) => node?.name)
@@ -29,13 +19,10 @@ const wordTypes = Array.from(
 ).sort();
 ---
 
-<hr />
 <section class="c-filter-search" id="wordListing">
   <WordFilter client:only="vue" />
 
-  <WordSearchNew words={cleanWords} client:only="vue" />
   <WordSearchList
-    words={cleanWords}
     availableLetterGroups={availableWordGroups}
     wordTypes={wordTypes}
     client:only="vue"

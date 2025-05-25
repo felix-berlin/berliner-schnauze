@@ -1,8 +1,8 @@
 <template>
   <article
-    :id="`word-${source.id}`"
-    :ref="`word-${source.id}`"
-    :key="source.id"
+    :id="`word-${source.berlinerWordId}`"
+    :ref="`word-${source.berlinerWordId}`"
+    :key="source.berlinerWordId"
     :data-group="source.wordGroup"
     class="c-word-list__word"
     :class="{ 'has-translation': source.wordProperties?.translations }"
@@ -29,7 +29,7 @@
         :key="translationIndex"
         class="c-word-list__translation"
       >
-        {{ translation?.translation }}
+        {{ translation }}
       </dd>
     </dl>
     <WordOptionDropdown
@@ -38,15 +38,8 @@
       class="c-word-list__options-dropdown"
     >
       <template #after>
-        <a
-          :href="routeToWord(source.slug!)"
-          class="c-options-dropdown__copy-button c-button"
-        >
-          <BookOpen
-            width="18"
-            height="18"
-            class="c-options-dropdown__icon-button"
-          />
+        <a :href="routeToWord(source.slug!)" class="c-options-dropdown__copy-button c-button">
+          <BookOpen width="18" height="18" class="c-options-dropdown__icon-button" />
           <span class="c-options-dropdown__copy-text">Mehr erfahren</span>
         </a>
       </template>
@@ -61,9 +54,10 @@ import BookOpen from "virtual:icons/lucide/book-open";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import { routeToWord } from "@utils/helpers.ts";
 import type { CleanBerlinerWord } from "@stores/index.ts";
+import type { OramaSearchIndex } from "@/pages/api/search-index.json.ts";
 
 type WordProps = {
-  source: CleanBerlinerWord;
+  source: OramaSearchIndex;
   index?: number;
 };
 
