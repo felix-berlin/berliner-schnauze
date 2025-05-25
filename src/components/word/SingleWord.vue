@@ -33,6 +33,7 @@
       </dd>
     </dl>
     <WordOptionDropdown
+      v-if="showDropdown"
       :berlinerisch="source.wordProperties?.berlinerisch"
       :slug="source.slug"
       class="c-word-list__options-dropdown"
@@ -53,17 +54,15 @@ import { defineAsyncComponent } from "vue";
 import BookOpen from "virtual:icons/lucide/book-open";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import { routeToWord } from "@utils/helpers.ts";
-import type { CleanBerlinerWord } from "@stores/index.ts";
 import type { OramaSearchIndex } from "@/pages/api/search-index.json.ts";
 
 type WordProps = {
   source: OramaSearchIndex;
   index?: number;
+  showDropdown?: boolean;
 };
 
-const { source, index } = defineProps<WordProps>();
+const { source, index, showDropdown = true } = defineProps<WordProps>();
 
 const IsWordOfTheDay = defineAsyncComponent(() => import("@components/word/IsWordOfTheDay.vue"));
 </script>
-
-<style scoped></style>
