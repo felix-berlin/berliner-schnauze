@@ -1,7 +1,13 @@
 <template>
-  <WindowVirtualizer
+  <component
+    :is="virtualizerComponent"
     ref="virtualizerRef"
     v-slot="{ item, index }"
+    v-bind="
+      !useWindowVirtualizer
+        ? { style: { width: '100%', height: '100%', 'min-height': '900px' } }
+        : {}
+    "
     :data="mutableOramaSearch"
     class="c-word-list"
     aria-live="polite"
@@ -19,7 +25,7 @@
       :show-dropdown="showDropdown"
       @click.prevent="goToWord(item.slug!)"
     />
-  </WindowVirtualizer>
+  </component>
 </template>
 
 <script setup lang="ts">
@@ -27,16 +33,17 @@ import { computed, ref, nextTick, watchEffect, useTemplateRef } from "vue";
 import SingleWord from "@components/word/SingleWord.vue";
 import { useStore } from "@nanostores/vue";
 import { $oramaSearchResults } from "@stores/index.ts";
-import { WindowVirtualizer } from "virtua/vue";
+import { WindowVirtualizer, VList } from "virtua/vue";
 import { routeToWord } from "@utils/helpers.ts";
 import { onKeyStroke } from "@vueuse/core";
 import type { ComponentPublicInstance } from "vue";
 
-const { showDropdown = true } = defineProps<{
+const { showDropdown = true, useWindowVirtualizer = true } = defineProps<{
   useWindowVirtualizer?: boolean;
   showDropdown?: boolean;
-  scrollRef?: string;
 }>();
+
+const virtualizerComponent = useWindowVirtualizer ? WindowVirtualizer : VList;
 
 const oramaSearch = useStore($oramaSearchResults);
 const mutableOramaSearch = computed(
