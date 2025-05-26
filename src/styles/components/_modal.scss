@@ -76,6 +76,8 @@
     height: 70svh;
 
     .c-modal__container {
+      display: flex;
+      flex-direction: column;
       height: 100%;
       gap: 2rem;
     }

@@ -20,6 +20,7 @@
     </button>
 
     <input
+      ref="searchInput"
       v-model="localSearch"
       type="search"
       class="c-word-search__search-input c-input"
@@ -32,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import { useTemplateRef } from "vue";
 import Search from "virtual:icons/lucide/search";
 import X from "virtual:icons/lucide/x";
 import {
@@ -46,6 +48,7 @@ import { useDebounceFn } from "@vueuse/core";
 
 interface SearchWordsProps {
   buttonPosition?: "left" | "right";
+  initFocus?: boolean;
 }
 
 const { buttonPosition = "left" } = defineProps<SearchWordsProps>();
@@ -54,6 +57,8 @@ const { buttonPosition = "left" } = defineProps<SearchWordsProps>();
 const searchLength = useStore(currentSearchLength);
 const searchResultCount = useStore($searchResultCount);
 const localSearch = useVModel($wordSearch, "search");
+
+const searchInput = useTemplateRef("searchInput");
 
 const trackWordSearchListSearch = (search: string) => {
   setMatomoSearch(search, "Word Search List", searchResultCount.value);
@@ -86,6 +91,16 @@ const buttonActions = (): void => {
 const resetSearch = (): void => {
   localSearch.value = "";
 };
+
+const focusSearchInput = () => {
+  if (searchInput.value) {
+    searchInput.value.focus();
+  }
+};
+
+defineExpose({
+  focusSearchInput,
+});
 </script>
 
 <style lang="scss">
