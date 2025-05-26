@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, onUnmounted } from "vue";
+import { ref, onMounted, watch, onUnmounted, useTemplateRef } from "vue";
 import X from "virtual:icons/lucide/x";
 
 export interface ModalProps {
@@ -44,7 +44,7 @@ const {
   position = "center",
 } = defineProps<ModalProps>();
 
-const modal = ref<HTMLDialogElement | null>(null);
+const modal = useTemplateRef("modal");
 const emit = defineEmits(["close", "open", "mounted"]);
 const isVisible = ref(open);
 
