@@ -6,7 +6,7 @@
   inset: 0;
   background-color: var(--color-background-modal, var(--floating-color-background));
   width: max(400px, vars.$body-max-width);
-  max-height: 80dvh;
+  max-height: 80svh;
   margin: auto;
 
   /**
@@ -54,7 +54,6 @@
 
       .c-modal__close {
         align-self: flex-end;
-        margin-bottom: 15px;
       }
     }
   }
@@ -71,6 +70,37 @@
 
   &--top {
     margin-top: 6rem;
+  }
+
+  &--search {
+    height: 70svh;
+
+    .c-modal__container {
+      height: 100%;
+      gap: 2rem;
+    }
+
+    .c-search-container {
+      flex: 1 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      gap: 1rem;
+    }
+
+    .c-word-search {
+      width: 100%;
+    }
+
+    .c-word-list {
+      flex: 1 0 100%;
+    }
+
+    footer {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
   }
 }
 

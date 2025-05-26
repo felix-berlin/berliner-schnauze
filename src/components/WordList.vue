@@ -1,13 +1,9 @@
 <template>
   <component
     :is="virtualizerComponent"
-    ref="virtualizerRef"
+    ref="virtualizer"
     v-slot="{ item, index }"
-    v-bind="
-      !useWindowVirtualizer
-        ? { style: { width: '100%', height: '100%', 'min-height': '900px' } }
-        : {}
-    "
+    v-bind="!useWindowVirtualizer ? { style: { width: '100%', height: '100%' } } : {}"
     :data="mutableOramaSearch"
     class="c-word-list"
     aria-live="polite"
@@ -52,7 +48,7 @@ const mutableOramaSearch = computed(
 
 const activeIndex = ref(0);
 const resultRefs = ref<HTMLElement[]>([]);
-const virtualizerRef = useTemplateRef("virtualizerRef");
+const virtualizerRef = useTemplateRef("virtualizer");
 const showActive = ref(false);
 let hideActiveTimeout: ReturnType<typeof setTimeout> | null = null;
 const ACTIVE_TIMEOUT = 1500; // ms

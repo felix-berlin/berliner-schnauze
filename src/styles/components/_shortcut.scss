@@ -1,0 +1,22 @@
+.c-shortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  &__key {
+    background-color: color-mix(in srgb, var(--blue) 35%, white);
+    border-radius: 0.15rem;
+    padding: 0.1rem;
+    color: var(--blue);
+  }
+
+  kbd {
+    display: flex;
+    align-items: center;
+
+    &:not(:has(svg)) {
+      height: 24px;
+      font-weight: 600;
+    }
+  }
+}
