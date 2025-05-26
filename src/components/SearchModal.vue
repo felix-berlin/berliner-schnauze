@@ -2,18 +2,18 @@
   <SearchBarModal :click-callback="getModalLoaded"></SearchBarModal>
   <Modal
     v-if="loadModal"
-    ref="searchModal"
     :open="searchVisible"
     position="top"
     :disable-scroll="true"
+    class="has-hidden-overflow"
     @close="searchVisible = false"
     @mounted="modalMounted = true"
   >
     <!-- TODO: replace by <search></search>  -->
     <div role="search">
       <!-- <SearchBar id="main-search" /> -->
-      <SearchWords></SearchWords>
-      <WordList :show-dropdown="false" />
+      <SearchWords />
+      <WordList :show-dropdown="false" :use-window-virtualizer="false" />
     </div>
 
     <footer>
@@ -29,12 +29,12 @@ import { ref, defineAsyncComponent } from "vue";
 import { trackEvent } from "@utils/analytics";
 import SearchBarModal from "@components/SearchBarModal.vue";
 import { useMagicKeys, whenever } from "@vueuse/core";
-import SearchWords from "@components/SearchWords.vue";
 import ArrowUpIcon from "virtual:icons/lucide/arrow-up";
 import ArrowDownIcon from "virtual:icons/lucide/arrow-down";
-import WordList from "@components/WordList.vue";
 
 const Modal = defineAsyncComponent(() => import("@components/Modal.vue"));
+const SearchWords = defineAsyncComponent(() => import("@components/SearchWords.vue"));
+const WordList = defineAsyncComponent(() => import("@components/WordList.vue"));
 
 const loadModal = ref(false);
 const modalMounted = ref(false);
