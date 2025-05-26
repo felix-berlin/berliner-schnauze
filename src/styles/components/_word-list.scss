@@ -32,6 +32,11 @@
       --color-border: var(--new-blue-200);
       --color-box-shadow: black;
     }
+
+    &.is-active {
+      outline: 2px solid var(--color-body);
+      outline-offset: 4px;
+    }
   }
 
   &__header {
