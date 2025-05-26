@@ -34,8 +34,8 @@
     }
   ],
   "scripts": {
-    "dev": "pnpm run supportedBrowsers && astro dev",
-    "start": "pnpm run supportedBrowsers && astro dev",
+    "dev": "astro dev",
+    "start": "astro dev",
     "build": "pnpm run supportedBrowsers && astro build",
     "build:strict": "astro check && tsc --noEmit && vue-tsc --noEmit && astro build",
     "preview": "astro preview",
@@ -53,7 +53,7 @@
     "gql:generate:watch": "graphql-codegen --config codegen.ts --watch",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/favicons/favicon.svg",
     "browserslist:update": "npx update-browserslist-db@latest",
-    "predev": "pnpm run gql:generate",
+    "predev": "pnpm run gql:generate && pnpm run supportedBrowsers",
     "preinstall": "npx only-allow pnpm",
     "server:pages": "npx wrangler pages dev ./dist",
     "supportedBrowsers": "echo \"export default $(browserslist-useragent-regexp --allowHigherVersions);\" > src/utils/supportedBrowsers.mjs",
