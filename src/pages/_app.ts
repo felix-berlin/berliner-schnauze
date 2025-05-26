@@ -3,8 +3,6 @@ import FloatingVue from "floating-vue";
 import { devtools } from "@nanostores/vue/devtools";
 import urql, { cacheExchange, fetchExchange } from "@urql/vue";
 import { WP_API } from "astro:env/client";
-// import VueVirtualScroller from "vue-virtual-scroller";
-
 import * as store from "../stores/index";
 
 export default (app: App) => {
@@ -31,6 +29,4 @@ export default (app: App) => {
   if (process.env.NODE_ENV !== "production") {
     app.use(devtools, store);
   }
-
-  // app.use(VueVirtualScroller);
 };
