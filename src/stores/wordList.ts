@@ -10,7 +10,6 @@ import {
   searchWithHighlight,
 } from "@orama/plugin-match-highlight";
 import type { TypedDocument, Orama, Results, SearchParams } from "@orama/orama";
-import { SITE_URL } from "astro:env/client";
 import type { OramaSearchIndex } from "@/pages/api/search-index.json.ts";
 
 export type CleanBerlinerWord = {
@@ -271,7 +270,7 @@ function getSortBy(wordSearch: WordList): SortByType {
 
 export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
   task<Results<WordDocument> | null>(async () => {
-    const response = await fetch(`${SITE_URL}/api/search-index.json`);
+    const response = await fetch("/api/search-index.json");
     const oramaSearchIndex = (await response.json()) as OramaSearchIndex[];
 
     const resultLimit = oramaSearchIndex.length;
