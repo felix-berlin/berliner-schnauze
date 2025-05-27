@@ -13,7 +13,8 @@
       :ref="setResultRef"
       :key="index"
       :index="index"
-      :source="item"
+      :source="item.document"
+      :positions="item.positions"
       :style="{ 'margin-bottom': singleWordGap }"
       :class="{ 'is-active': showActive && index === activeIndex }"
       role="listitem"
@@ -47,9 +48,7 @@ const {
 const virtualizerComponent = useWindowVirtualizer ? WindowVirtualizer : VList;
 
 const oramaSearch = useStore($oramaSearchResults);
-const mutableOramaSearch = computed(
-  () => oramaSearch.value?.hits?.map((hit) => hit.document) ?? [],
-);
+const mutableOramaSearch = computed(() => oramaSearch.value?.hits?.map((hit) => hit) ?? []);
 
 const activeIndex = ref(0);
 const resultRefs = ref<HTMLElement[]>([]);
@@ -114,7 +113,8 @@ onKeyStroke("ArrowUp", (e) => {
 
 onKeyStroke("Enter", (e) => {
   if (!mutableOramaSearch.value.length) return;
-  const slug = mutableOramaSearch.value[activeIndex.value]?.slug;
+  const slug = mutableOramaSearch.value[activeIndex.value].document?.slug;
+
   if (slug) goToWord(slug);
   e.preventDefault();
 });

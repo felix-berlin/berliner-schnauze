@@ -19,9 +19,15 @@
           :word-id="source.berlinerWordId"
           class="c-word-list__crown"
         />
-        <a :href="routeToWord(source.slug!)">
-          {{ source.wordProperties?.berlinerisch }}
-        </a>
+        <a
+          :href="routeToWord(source.slug!)"
+          v-html="
+            highlightMatches(
+              source.wordProperties?.berlinerisch ?? '',
+              positions?.['wordProperties.berlinerisch'],
+            )
+          "
+        />
       </dt>
 
       <dd
@@ -60,9 +66,42 @@ type WordProps = {
   source: OramaSearchIndex;
   index?: number;
   showDropdown?: boolean;
+  positions: Record<string, { start: number; length: number }[]> | undefined;
 };
 
-const { source, index, showDropdown = true } = defineProps<WordProps>();
+const { source, index, showDropdown = true, positions } = defineProps<WordProps>();
 
 const IsWordOfTheDay = defineAsyncComponent(() => import("@components/word/IsWordOfTheDay.vue"));
+
+const highlightMatches = (
+  text: string,
+  matchesObj?: Record<string, { start: number; length: number }[]>,
+): string => {
+  if (!matchesObj || typeof matchesObj !== "object") return text;
+
+  // Flatten all match arrays from the object
+  const allMatches = Object.values(matchesObj).flat().filter(Boolean);
+
+  if (!Array.isArray(allMatches) || allMatches.length === 0) return text;
+
+  // Sort matches by start index
+  const sorted = [...allMatches].sort((a, b) => a.start - b.start);
+
+  let result = "";
+  let lastIndex = 0;
+  for (const match of sorted) {
+    result += text.slice(lastIndex, match.start);
+    result += `<mark class="highlight">${text.slice(match.start, match.start + match.length)}</mark>`;
+    lastIndex = match.start + match.length;
+  }
+  result += text.slice(lastIndex);
+  return result;
+};
 </script>
+
+<style scoped lang="scss">
+.highlight {
+  background: yellow;
+  color: inherit;
+}
+</style>

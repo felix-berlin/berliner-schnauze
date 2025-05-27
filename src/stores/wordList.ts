@@ -186,7 +186,7 @@ export const searchLength = computed($wordSearch, (wordSearch) => {
  */
 
 const wordSchema = {
-  berlinerischWordTypes: "string[]",
+  berlinerischWordTypes: "enum[]",
   dateGmt: "string",
   modifiedGmt: "string",
   wordGroup: "string",
