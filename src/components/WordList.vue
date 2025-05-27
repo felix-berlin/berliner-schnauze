@@ -20,7 +20,6 @@
       role="listitem"
       tabindex="0"
       :show-dropdown="showDropdown"
-      @click.prevent="goToWord(item.slug!)"
     />
   </component>
 </template>
