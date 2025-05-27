@@ -1,7 +1,7 @@
 <template>
   <!-- TODO: replace by <search></search>  -->
   <div role="search" class="c-search-container">
-    <SearchWords ref="searchWords" :init-focus="true" />
+    <SearchWords ref="searchWords" :auto-focus="true" />
 
     <p class="c-word-search-list__result-count">
       {{ searchResultCount }} {{ searchResultCount === 1 ? "Ergebnis" : "Ergebnisse" }}

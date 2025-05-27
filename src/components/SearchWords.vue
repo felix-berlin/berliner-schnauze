@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTemplateRef } from "vue";
+import { useTemplateRef, onMounted } from "vue";
 import Search from "virtual:icons/lucide/search";
 import X from "virtual:icons/lucide/x";
 import {
@@ -48,12 +48,11 @@ import { useDebounceFn } from "@vueuse/core";
 
 interface SearchWordsProps {
   buttonPosition?: "left" | "right";
-  initFocus?: boolean;
+  autoFocus?: boolean;
 }
 
-const { buttonPosition = "left" } = defineProps<SearchWordsProps>();
+const { buttonPosition = "left", autoFocus = false } = defineProps<SearchWordsProps>();
 
-// const localSearch = useStorage("search", "");
 const searchLength = useStore(currentSearchLength);
 const searchResultCount = useStore($searchResultCount);
 const localSearch = useVModel($wordSearch, "search");
@@ -97,6 +96,12 @@ const focusSearchInput = () => {
     searchInput.value.focus();
   }
 };
+
+onMounted(() => {
+  if (autoFocus) {
+    focusSearchInput();
+  }
+});
 
 defineExpose({
   focusSearchInput,
