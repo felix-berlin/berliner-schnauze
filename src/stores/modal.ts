@@ -97,16 +97,6 @@ export const close = () => {
   }
 };
 
-export const onClickOutside = (event: MouseEvent) => {
-  const dialog = $element.get();
-  console.log(event.target, dialog, !event.composedPath().includes(dialog));
-
-  // Only close if the click was on the dialog backdrop, not on modal content
-  if (event.target === dialog && $props.get().closeOnClickOutside) {
-    // close();
-  }
-};
-
 export const updateProps = (newProps: Partial<ModalProps>) => {
   $props.set({ ...$props.get(), ...newProps });
 };

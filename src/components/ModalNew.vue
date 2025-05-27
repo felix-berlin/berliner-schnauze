@@ -11,9 +11,8 @@
     ]"
     :style="`--width-modal: ${props.width}`"
     aria-modal="true"
-    tabindex="0"
-    @click="onClickOutside($event)"
-    @keydown.esc="onKeyDown"
+    autofocus
+    :closedby="props.closeOnClickOutside ? 'any' : 'closerequest'"
   >
     <template v-if="hasView">
       <ModalCloseButton v-if="props.showCloseButton" />
@@ -34,15 +33,7 @@
 import { useTemplateRef, onMounted, computed } from "vue";
 import ModalCloseButton from "@/components/ModalCloseButton.vue";
 import { useStore } from "@nanostores/vue";
-import {
-  $element,
-  $view,
-  $props,
-  $viewIsComponent,
-  $isOpen,
-  close,
-  onClickOutside,
-} from "@stores/modal.ts";
+import { $element, $view, $props, $viewIsComponent, $isOpen } from "@stores/modal.ts";
 
 const view = useStore($view);
 const props = useStore($props);
@@ -52,12 +43,6 @@ const isOpen = useStore($isOpen);
 const currentModal = useTemplateRef("currentModal");
 
 const hasView = computed(() => view.value && Object.keys(view.value).length > 0);
-
-const onKeyDown = (event: KeyboardEvent) => {
-  if (event.key === "Escape" && props.closeOnClickOutside) {
-    close();
-  }
-};
 
 onMounted(() => {
   $element.set(currentModal.value);
