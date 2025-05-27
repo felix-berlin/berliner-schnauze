@@ -1,0 +1,44 @@
+.c-modal--search {
+  height: 70svh;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 2rem;
+
+  .c-search-container {
+    flex: 1 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 1rem;
+  }
+
+  .c-word-search {
+    width: 100%;
+  }
+
+  .c-word-search-list {
+    &__result-count {
+      margin: 0;
+    }
+  }
+
+  .c-word-list {
+    flex: 1 0 100%;
+
+    &__word {
+      box-shadow: none;
+
+      &.is-active {
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+    }
+  }
+
+  footer {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+}

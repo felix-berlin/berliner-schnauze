@@ -6,7 +6,7 @@ import ScrollToTop from "@components/ScrollToTop.vue";
 import Footer from "@components/Footer.astro";
 import MainHeader from "@components/header/MainHeader.astro";
 import ToastNotifyContainer from "@components/toast/ToastNotifyContainer.vue";
-import ModalNew from "@components/ModalNew.vue";
+import Modal from "@components/Modal.vue";
 
 import type { SeoProps } from "@components/BaseHead.astro";
 
@@ -41,7 +41,7 @@ const {
     </main>
     <ScrollToTop client:load />
     <ToastNotifyContainer client:only="vue" />
-    <ModalNew client:only="vue" />
+    <Modal client:only="vue" />
     <Footer transition:persist />
   </body>
 </html>
