@@ -231,6 +231,23 @@ export default defineConfig({
         globDirectory: "dist",
         // navigateFallback: "/",
         globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
+        runtimeCaching: [
+          {
+            urlPattern: /\/api\/search-index\.json$/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "api-search-index",
+              networkTimeoutSeconds: 10,
+              expiration: {
+                maxEntries: 5,
+                maxAgeSeconds: 60 * 60, // 1 hour
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
       },
       devOptions: {
         enabled: PWA_DEBUG ?? false,
