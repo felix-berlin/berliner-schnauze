@@ -3,9 +3,11 @@ import { fetchAllWords } from "@services/api.ts";
 import type { BerlinerWord } from "@/gql/graphql.ts";
 
 function makeOramaSearchIndex(node: BerlinerWord) {
-  const examples = Array.isArray(node.wordProperties?.examples)
-    ? node.wordProperties.examples.map((e) => e?.example).filter((ex) => typeof ex === "string")
-    : [];
+  // At the moment, we are not using examples in the search index.
+  //
+  // const examples = Array.isArray(node.wordProperties?.examples)
+  //   ? node.wordProperties.examples.map((e) => e?.example).filter((ex) => typeof ex === "string")
+  //   : [];
 
   const translations = Array.isArray(node.wordProperties?.translations)
     ? node.wordProperties.translations
@@ -26,7 +28,6 @@ function makeOramaSearchIndex(node: BerlinerWord) {
       berlinerisch: node.wordProperties?.berlinerisch,
       berolinismus: node.wordProperties?.berolinismus,
       translations,
-      examples,
     },
   };
 }

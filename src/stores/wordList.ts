@@ -194,7 +194,6 @@ const wordSchema = {
     berlinerisch: "string",
     berolinismus: "boolean",
     translations: "string[]",
-    examples: "string[]",
   },
 } as const;
 
@@ -284,12 +283,9 @@ export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
 
     const params: SearchParams<Orama<typeof wordSchema>> = {
       term: wordSearch.search,
-      properties: [
-        "wordProperties.berlinerisch",
-        "wordProperties.translations",
-        "wordProperties.examples",
-      ],
+      properties: ["wordProperties.berlinerisch", "wordProperties.translations"],
       limit: wordSearch.resultLimit ?? resultLimit ?? 10,
+      threshold: 0.5,
       sortBy,
       ...(Object.keys(where).length > 0 ? { where } : {}),
     };
