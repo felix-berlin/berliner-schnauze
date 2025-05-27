@@ -19,6 +19,9 @@
     --offset-x-box-shadow: 2px;
     --color-box-shadow: rgb(0 0 0 / 20%);
 
+    height: 100%;
+    aspect-ratio: 1;
+
     &--right {
       order: 2;
     }
