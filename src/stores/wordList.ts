@@ -267,10 +267,17 @@ function getSortBy(wordSearch: WordList): SortByType {
   };
 }
 
+let searchIndexCache: OramaSearchIndex[] | null = null;
+
 export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
   task<Results<WordDocument> | null>(async () => {
-    const response = await fetch("/api/search-index.json");
-    const oramaSearchIndex = (await response.json()) as OramaSearchIndex[];
+    // Only fetch if not cached
+    if (!searchIndexCache) {
+      const response = await fetch("/api/search-index.json");
+      searchIndexCache = (await response.json()) as OramaSearchIndex[];
+    }
+
+    const oramaSearchIndex = searchIndexCache;
 
     const resultLimit = oramaSearchIndex.length;
 
