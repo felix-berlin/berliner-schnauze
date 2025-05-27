@@ -14,11 +14,11 @@ type ModalProps = {
 type ModalView = {
   component?: object;
   props?: Record<string, any>;
-  events?: Record<string, Function>;
+  events?: Record<string, (...args: any[]) => void>;
 };
 
 type ModalSettings = {
-  view?: ModalView;
+  view?: ModalView | string;
   props?: Partial<ModalProps>;
 };
 
@@ -35,7 +35,7 @@ const propsDefault: ModalProps = {
 export const $isOpen = atom(false);
 export const $view = atom<ModalView>({});
 export const $props = map<ModalProps>({ ...propsDefault });
-export const $element = atom<HTMLElement | null>(null);
+export const $element = atom<HTMLDialogElement | null>(null);
 export const $viewIsComponent = atom(false);
 export const $onCloseCallback = atom<null | (() => void)>(null);
 export const $scrollPosition = atom<number>(0);
@@ -64,7 +64,6 @@ export const open = (
   callback: null | (() => void) = null,
 ) => {
   $props.set({ ...$props.get(), ...settings.props });
-  $isOpen.set(true);
   $viewIsComponent.set(isVueComponent(settings.view?.component));
   $view.set(markRaw(settings.view || {}));
 
@@ -73,12 +72,10 @@ export const open = (
     if (el) el.showModal();
   });
 
-  preventScroll(true);
   $onCloseCallback.set(callback);
 };
 
 export const close = () => {
-  $isOpen.set(false);
   $view.set({});
   $props.set({ ...propsDefault });
   $viewIsComponent.set(false);
@@ -86,8 +83,6 @@ export const close = () => {
   const el = $element.get();
 
   if (el) el.close();
-
-  preventScroll(false);
 
   const cb = $onCloseCallback.get();
 

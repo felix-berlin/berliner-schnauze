@@ -71,39 +71,6 @@
   &--top {
     margin-top: 6rem;
   }
-
-  &--search {
-    height: 70svh;
-
-    .c-modal__container {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      gap: 2rem;
-    }
-
-    .c-search-container {
-      flex: 1 0;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      gap: 1rem;
-    }
-
-    .c-word-search {
-      width: 100%;
-    }
-
-    .c-word-list {
-      flex: 1 0 100%;
-    }
-
-    footer {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-    }
-  }
 }
 
 .u-disable-scroll {

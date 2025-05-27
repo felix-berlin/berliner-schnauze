@@ -1,119 +1,74 @@
 <template>
   <dialog
-    :id="uid"
-    ref="modal"
+    :id="props.uid"
+    ref="currentModal"
     class="c-modal"
-    :class="[`c-modal--${position}`, { 'has-close-on-click-outside': closeOnClickOutside }]"
+    :class="[
+      `c-modal--${props.position}`,
+      { 'has-close-on-click-outside': props.closeOnClickOutside },
+      [props.class],
+    ]"
+    :style="`--width-modal: ${props.width}`"
+    aria-modal="true"
+    :closedby="props.closeOnClickOutside ? 'any' : 'closerequest'"
   >
-    <div class="c-modal__container">
-      <button
-        v-if="showCloseButton"
-        class="c-modal__close c-button c-button--center-icon"
-        type="submit"
-        aria-label="schließen"
-        @click="closeModal"
-      >
-        <X />
-      </button>
+    <template v-if="hasView">
+      <ModalCloseButton v-if="props.showCloseButton" />
 
-      <slot />
-    </div>
+      <Component
+        :is="view?.component"
+        v-bind="view?.props"
+        v-if="viewIsComponent"
+        v-on="view?.events || {}"
+      />
+
+      <div v-else v-html="view" />
+    </template>
   </dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, onUnmounted, useTemplateRef } from "vue";
-import X from "virtual:icons/lucide/x";
+import { useTemplateRef, onMounted, computed } from "vue";
+import ModalCloseButton from "@/components/ModalCloseButton.vue";
+import { useStore } from "@nanostores/vue";
+import {
+  $element,
+  $view,
+  $props,
+  $viewIsComponent,
+  $isOpen,
+  preventScroll,
+} from "@stores/modal.ts";
+import { useMutationObserver } from "@vueuse/core";
 
-export interface ModalProps {
-  uid?: string;
-  open?: boolean;
-  showCloseButton?: boolean;
-  disableScroll?: boolean;
-  closeOnClickOutside?: boolean;
-  transition?: string | "slide-fade-right" | "fade";
-  position?: "center" | "top" | "bottom";
-}
+const view = useStore($view);
+const props = useStore($props);
+const viewIsComponent = useStore($viewIsComponent);
 
-const {
-  uid = crypto.randomUUID(),
-  open = false,
-  showCloseButton = true,
-  disableScroll = false,
-  closeOnClickOutside = true,
-  position = "center",
-} = defineProps<ModalProps>();
+const currentModal = useTemplateRef("currentModal");
 
-const modal = useTemplateRef("modal");
-const emit = defineEmits(["close", "open", "mounted"]);
-const isVisible = ref(open);
-
-/**
- * Open the modal
- *
- * @return  {void}
- */
-const openModal = (): void => {
-  modal?.value?.showModal();
-  isVisible.value = true;
-  emit("open");
-  preventScroll(true);
-};
-
-/**
- * Close the modal
- *
- * @return  {void}
- */
-const closeModal = (): void => {
-  modal?.value?.close();
-  isVisible.value = false;
-  emit("close");
-  preventScroll(false);
-};
-
-/**
- * Toggle disable scroll on body
- *
- * @param   {boolean}  status  yes/no
- *
- * @return  {void}
- */
-const preventScroll = (status: boolean): void => {
-  if (disableScroll && status) document.body.classList.add("u-disable-scroll");
-  if (disableScroll && !status) document.body.classList.remove("u-disable-scroll");
-};
-
-/**
- * Close the modal when clicking outside of it
- *
- * @param   {MouseEvent}  event  Click event
- *
- * @return  {void}
- */
-const onClickOutside = (event: MouseEvent): void => {
-  if (event.target === modal.value) closeModal();
-};
+const hasView = computed(() => view.value && Object.keys(view.value).length > 0);
 
 onMounted(() => {
-  if (closeOnClickOutside) modal.value?.addEventListener("click", onClickOutside);
-
-  modal.value?.addEventListener("close", () => closeModal());
-
-  emit("mounted");
+  $element.set(currentModal.value);
 });
 
-onUnmounted(() => {
-  if (closeOnClickOutside) modal.value?.removeEventListener("click", onClickOutside);
+useMutationObserver(
+  currentModal,
+  (mutations) => {
+    if (!mutations[0]) return;
+    const open = !!mutations[0].target?.open;
+    $isOpen.set(open);
 
-  modal.value?.removeEventListener("close", () => closeModal());
-});
-
-watch(
-  () => open,
-  (value) => {
-    if (value) openModal();
-    if (!value) closeModal();
+    if (open && props.value.disableScroll) {
+      preventScroll(true);
+    }
+    if (!open && props.value.disableScroll) {
+      preventScroll(false);
+    }
+  },
+  {
+    attributes: true,
   },
 );
 </script>
