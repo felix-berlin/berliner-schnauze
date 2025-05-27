@@ -14,7 +14,7 @@
       :key="index"
       :index="index"
       :source="item"
-      :style="{ 'margin-bottom': '1.75rem' }"
+      :style="{ 'margin-bottom': singleWordGap }"
       :class="{ 'is-active': showActive && index === activeIndex }"
       role="listitem"
       tabindex="0"
@@ -34,9 +34,14 @@ import { routeToWord } from "@utils/helpers.ts";
 import { onKeyStroke } from "@vueuse/core";
 import type { ComponentPublicInstance } from "vue";
 
-const { showDropdown = true, useWindowVirtualizer = true } = defineProps<{
+const {
+  showDropdown = true,
+  useWindowVirtualizer = true,
+  singleWordGap = "1.75rem",
+} = defineProps<{
   useWindowVirtualizer?: boolean;
   showDropdown?: boolean;
+  singleWordGap?: string;
 }>();
 
 const virtualizerComponent = useWindowVirtualizer ? WindowVirtualizer : VList;
@@ -51,7 +56,7 @@ const resultRefs = ref<HTMLElement[]>([]);
 const virtualizerRef = useTemplateRef("virtualizer");
 const showActive = ref(false);
 let hideActiveTimeout: ReturnType<typeof setTimeout> | null = null;
-const ACTIVE_TIMEOUT = 1500; // ms
+const ACTIVE_TIMEOUT = 3500; // ms
 
 const showActiveWithTimeout = () => {
   showActive.value = true;
@@ -86,7 +91,6 @@ const focusActive = () => {
     const el = resultRefs.value[activeIndex.value];
     if (el && typeof el.focus === "function") {
       el.focus();
-      // el.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
   });
 };
