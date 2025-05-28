@@ -2,6 +2,70 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.17.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.16.6...v3.17.0) (2025-05-28)
+
+
+### Bug Fixes
+
+* **_app:** remove unused VueVirtualScroller import and related code ([2b7e24e](https://github.com/felix-berlin/berliner-schnauze/commit/2b7e24eba21adf76f88ac91f4a6a547704468e14))
+* **404:** remove unused SearchBar component from 404 page ([7437bfa](https://github.com/felix-berlin/berliner-schnauze/commit/7437bfafdd951141e7db75dfe2d7e5558652a9fc))
+* **config:** update cache expiration maxAgeSeconds to 3 hours ([41ae24b](https://github.com/felix-berlin/berliner-schnauze/commit/41ae24b1c11b06c33342b02eb60bcbbd0b7f1d4c))
+* **devtools:** restructure devtools integration for improved state management ([545e7f4](https://github.com/felix-berlin/berliner-schnauze/commit/545e7f4e5362beb240ba36dbeb71d577c96bdbde))
+* **header:** conditionally render SearchModalTrigger based on index page ([4c67854](https://github.com/felix-berlin/berliner-schnauze/commit/4c67854586fe703babc66ae595a21df8a9e0040a))
+* improve conditional rendering for word creation and modification dates ([e7db48c](https://github.com/felix-berlin/berliner-schnauze/commit/e7db48c503629538eb1fc7a01f670581c9d5423f))
+* **modal:** correct modal display property placement for search modal ([a9d1fff](https://github.com/felix-berlin/berliner-schnauze/commit/a9d1fff666896493f29dec3febc68a85ef52388b))
+* **modal:** enhance modal close behavior and reset state ([9fff308](https://github.com/felix-berlin/berliner-schnauze/commit/9fff308da5386889c2d0beff37448463dd14264c))
+* **modal:** remove unnecessary class for search modal and clean up styles ([5e31881](https://github.com/felix-berlin/berliner-schnauze/commit/5e31881817c26c53cf6392e659b63f6f3905e556))
+* **modal:** update display properties for modal and search modal for consistency ([28cc95b](https://github.com/felix-berlin/berliner-schnauze/commit/28cc95b197f7baa5ed01dd9fc7ba83c70eb79b3e))
+* **modal:** update display property for modal components ([7a701b1](https://github.com/felix-berlin/berliner-schnauze/commit/7a701b1c625ca572b854d4bc3ec4a7a852728264))
+* **related-words:** add role attributes for accessibility in related words component ([2339249](https://github.com/felix-berlin/berliner-schnauze/commit/2339249e0174bffdef555bc982537dc68d715208))
+* **search-modal:** conditionally render WordList based on searchResultCount ([80c7e44](https://github.com/felix-berlin/berliner-schnauze/commit/80c7e4428b77fdfb1bd456c4bc21ae05a06ae964))
+* **SearchBarModal:** correct click callback invocation and update slash icon ([70e8da7](https://github.com/felix-berlin/berliner-schnauze/commit/70e8da7dc70f15e15c9dcf462845ab3a006e84db))
+* **SearchModal:** add ref to search modal and clean up template structure ([3e8fdbc](https://github.com/felix-berlin/berliner-schnauze/commit/3e8fdbc81ae0c79d32b2a2c6ff7366dacab6b3a5))
+* **SearchModal:** update WordList component props and clean up imports ([e98786d](https://github.com/felix-berlin/berliner-schnauze/commit/e98786d00c20877355d3b5ae44b1cc67c9307e9c))
+* **search:** update tracking label from "Word Search List" to "Word Search" ([5ba3200](https://github.com/felix-berlin/berliner-schnauze/commit/5ba3200d42108f2e6cc3191c5eb1751b95368267))
+* **shortcut:** update background color for shortcut key and adjust dark mode styling ([2e6f0cb](https://github.com/felix-berlin/berliner-schnauze/commit/2e6f0cbf5d0500304ece2133d28a839334628e5a))
+* **SingleWord:** ensure dropdown visibility is controlled by showDropdown prop ([60d6cfd](https://github.com/felix-berlin/berliner-schnauze/commit/60d6cfdb67ba8dd3073c16c76574a9fc377337d0))
+* **tests:** standardize orderType casing to 'ASC' in SortWordBySelect and SortWordsBy tests ([6a1f5b7](https://github.com/felix-berlin/berliner-schnauze/commit/6a1f5b70d84c79af280a319764e45c0b8a48f6df))
+* **word-filter:** add closeOnClickOutside prop to control flyout behavior ([9c2f95c](https://github.com/felix-berlin/berliner-schnauze/commit/9c2f95c80e1ba326938372217fb05f65133cae83))
+* **word-search:** ensure search button maintains height and aspect ratio ([ad72c74](https://github.com/felix-berlin/berliner-schnauze/commit/ad72c745b0d4a3d968b1ea268d6ff50fd7e9e2fa))
+* **word-search:** update layout to include shortcuts in the search filter ([359838c](https://github.com/felix-berlin/berliner-schnauze/commit/359838ca9d3fbe706c49e8d7c7a962893cb534c9))
+* **word-suggest-hint:** refactor modal handling to simplify opening suggestion form ([abaaef2](https://github.com/felix-berlin/berliner-schnauze/commit/abaaef2401b42f89586a7793f60df1694ed26848))
+* **WordList:** remove click event handler from list item component ([097f605](https://github.com/felix-berlin/berliner-schnauze/commit/097f605cda831f5e664d45a7b4f37926fcf474f6))
+* **wordList:** update API fetch URL to use relative path ([f5f9fb8](https://github.com/felix-berlin/berliner-schnauze/commit/f5f9fb85014fad9fa884975d7e2e1a7b3c199ea0))
+* **WordList:** update source and positions mapping for search results ([2f224e3](https://github.com/felix-berlin/berliner-schnauze/commit/2f224e367ea785f494f24a92698fd673c9cfccda))
+* **wordOfTheDay:** ensure error state is set on fetch failure ([c08d2f2](https://github.com/felix-berlin/berliner-schnauze/commit/c08d2f2e8802000d5efa2a4c290a89c90a7822de))
+
+
+### Features
+
+* add basic orama search component ([c49fbe3](https://github.com/felix-berlin/berliner-schnauze/commit/c49fbe39ce404c48fe7dd4b5333ed8c841db72f3))
+* add orama search to store ([3a2618e](https://github.com/felix-berlin/berliner-schnauze/commit/3a2618efe9d588813ad012c274e72ab2719313e2))
+* add search index api endpoint ([d98a48d](https://github.com/felix-berlin/berliner-schnauze/commit/d98a48d65f8520126c3d0e242663f4e0a3c0c9fc))
+* add working orama search to WordSearchNew ([74ae0d4](https://github.com/felix-berlin/berliner-schnauze/commit/74ae0d4b4915ac9a327fe49767842539caffc6be))
+* **caching:** update search index API pattern and add caching for word of the day API ([9e198fe](https://github.com/felix-berlin/berliner-schnauze/commit/9e198fe63cbdb94c9a97dbe450a2b7925be226f6))
+* **header:** update SearchModalTrigger to use client:only for improved performance ([ba672b5](https://github.com/felix-berlin/berliner-schnauze/commit/ba672b5b34a8f7b70e35283a194ef9cd9b9e84bb))
+* **instructions:** add project overview and guidelines for testing and Vue.js TypeScript ([2eb94be](https://github.com/felix-berlin/berliner-schnauze/commit/2eb94bef4d7bf773eee0cffe59d3c16543f53320))
+* **modal:** implement modal component with close button and state management ([60e7a18](https://github.com/felix-berlin/berliner-schnauze/commit/60e7a18cd1bd13249fba87465410afd8889b9b81))
+* **PWA:** add runtime caching for search index API response ([d35f30b](https://github.com/felix-berlin/berliner-schnauze/commit/d35f30b05e2205bdcc4d2b04eb429d38aec4f81c))
+* **search-modal:** add NoSearchResults component and integrate into WordSearchList for improved user feedback ([2de5253](https://github.com/felix-berlin/berliner-schnauze/commit/2de5253c9f1b4ac492ee128b6a1041ccdc3fcb1d))
+* **search-modal:** enhance layout and styling for improved user experience ([8f892c8](https://github.com/felix-berlin/berliner-schnauze/commit/8f892c8ec16e21c18dfec01f9b01eef672d65ab4))
+* **search:** implement caching for search index API response ([46d3ef5](https://github.com/felix-berlin/berliner-schnauze/commit/46d3ef51905e04c6d44b94fcf4de150093639278))
+* **SearchModal:** enhance modal layout and add keyboard shortcuts for navigation ([3faff20](https://github.com/felix-berlin/berliner-schnauze/commit/3faff200786b052f031ae32dc30f2fb330cea1b0))
+* **SearchModal:** enhance search modal layout and functionality with result count display and focus handling ([a3db040](https://github.com/felix-berlin/berliner-schnauze/commit/a3db04015daaa25e405a198e6a0bca7668d0618a))
+* **search:** refactor search modal to use separate components for result count and shortcuts ([fa7ab08](https://github.com/felix-berlin/berliner-schnauze/commit/fa7ab0883b7866d588b86584a6aebe918cd8ecac))
+* **SearchWords:** add autoFocus prop to enable automatic input focus ([34ecfd0](https://github.com/felix-berlin/berliner-schnauze/commit/34ecfd0fa22b6e3c817a1717baa96cfa8e771a2c))
+* **shortcuts:** replace SearchShortcuts with individual shortcut components for improved modularity ([fbd6197](https://github.com/felix-berlin/berliner-schnauze/commit/fbd6197c692d68a579c52353a6ca78bb82d5cfe8))
+* **store:** replace fuse search by orama search ([d6e24c4](https://github.com/felix-berlin/berliner-schnauze/commit/d6e24c4b44a6b2e816a17bdef214db9e269e11e8))
+* **word search:** update word search components to work with new search engine ([f5c1ec0](https://github.com/felix-berlin/berliner-schnauze/commit/f5c1ec00c555e8841e464f2a6f6643e4fae8e32b))
+* **word-search:** add SetWordData component to manage word groups and types ([1903c9f](https://github.com/felix-berlin/berliner-schnauze/commit/1903c9f841dd9f7223616a78fd1da637361e63e8))
+* **WordList:** allow dynamic selection of virtualizer component based on props ([4837676](https://github.com/felix-berlin/berliner-schnauze/commit/483767667d0973f55001339ba714bda95114b27f))
+* **WordList:** enhance accessibility with keyboard navigation and active item styling ([8bc5274](https://github.com/felix-berlin/berliner-schnauze/commit/8bc5274aa1f151d55ed987ecec786cc29586da92))
+
+# Changelog
+
+All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
 ## [3.16.6](https://github.com/felix-berlin/berliner-schnauze/compare/v3.16.5...v3.16.6) (2025-05-18)
 
 
