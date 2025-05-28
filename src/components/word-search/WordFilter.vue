@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { useTemplateRef } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import BerolinismusSwitch from "@components/filter/BerolinismusSwitch.vue";
@@ -54,7 +54,8 @@ import { useStore } from "@nanostores/vue";
 import BadgeTag from "@components/BadgeTag.vue";
 import X from "virtual:icons/lucide/x";
 import FilterReset from "virtual:icons/lucide/filter-x";
-const wordListFilter = ref<HTMLElement | null>(null);
+
+const wordListFilter = useTemplateRef("wordListFilter");
 
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
 
