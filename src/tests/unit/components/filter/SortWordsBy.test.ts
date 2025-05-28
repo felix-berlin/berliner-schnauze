@@ -26,7 +26,7 @@ describe("SortWordsBy.vue", () => {
     const wrapper = mount(SortWordsBy, {
       props: {
         orderCategory: "date",
-        orderType: "asc",
+        orderType: "ASC",
         toggleFn: mockToggleFn,
       },
       global: {
@@ -49,7 +49,7 @@ describe("SortWordsBy.vue", () => {
     const wrapper = mount(SortWordsBy, {
       props: {
         orderCategory: "date",
-        orderType: "asc",
+        orderType: "ASC",
         toggleFn: mockToggleFn,
       },
       global: {
@@ -74,7 +74,7 @@ describe("SortWordsBy.vue", () => {
     const wrapper = mount(SortWordsBy, {
       props: {
         orderCategory: "date",
-        orderType: "asc",
+        orderType: "ASC",
         toggleFn: mockToggleFn,
       },
       global: {

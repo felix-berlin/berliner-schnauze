@@ -16,7 +16,7 @@ describe("SortWordBySelect.vue", () => {
   it("calls $setSortOrder when an option is selected", async () => {
     const wrapper = mount(SortWordBySelect);
     const select = wrapper.find("select");
-    await select.setValue({ name: "Alphabetisch (A - Z)", category: "alphabetical", sort: "asc" });
-    expect($setSortOrder).toHaveBeenCalledWith("alphabetical", "alphabeticalOrder", "asc");
+    await select.setValue({ name: "Alphabetisch (A - Z)", category: "alphabetical", sort: "ASC" });
+    expect($setSortOrder).toHaveBeenCalledWith("alphabetical", "alphabeticalOrder", "ASC");
   });
 });
