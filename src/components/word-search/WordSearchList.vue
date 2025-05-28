@@ -6,7 +6,10 @@
 
     <SearchResultCount />
 
-    <div class="c-filter-search__shortcuts"><SearchShortcuts /></div>
+    <div class="c-filter-search__shortcuts">
+      <ShortcutSelect />
+      <ShortcutNavigating />
+    </div>
 
     <div v-if="searchResultCount === 0" class="c-word-search-list__no-result">
       <SearchX width="50" height="50" />
@@ -27,7 +30,8 @@ import WordSearchFilterToggle from "@components/word-search/WordSearchFilterTogg
 import { $wordSearch, $searchResultCount } from "@stores/index";
 import SearchX from "virtual:icons/lucide/search-x";
 import type { Maybe } from "@/gql/graphql.ts";
-import SearchShortcuts from "@components/word-search/SearchShortcuts.vue";
+import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue";
+import ShortcutNavigating from "@components/word-search/shortcuts/ShortcutNavigating.vue";
 import SearchResultCount from "@components/word-search/SearchResultCount.vue";
 import { useStore } from "@nanostores/vue";
 

@@ -14,14 +14,18 @@
   </div>
 
   <footer>
-    <SearchShortcuts />
+    <ShortcutSelect />
+    <ShortcutNavigating />
+    <ShortcutClose />
   </footer>
 </template>
 
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue";
-import SearchShortcuts from "@components/word-search/SearchShortcuts.vue";
 import SearchResultCount from "@components/word-search/SearchResultCount.vue";
+import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue";
+import ShortcutNavigating from "@components/word-search/shortcuts/ShortcutNavigating.vue";
+import ShortcutClose from "@components/word-search/shortcuts/ShortcutClose.vue";
 
 const SearchWords = defineAsyncComponent(() => import("@components/SearchWords.vue"));
 const WordList = defineAsyncComponent(() => import("@components/WordList.vue"));
