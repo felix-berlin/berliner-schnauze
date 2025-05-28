@@ -1,13 +1,19 @@
+@use "@sass-butler/mixins" as butler-mx;
+
 .c-shortcut {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
 
   &__key {
-    background-color: color-mix(in srgb, var(--blue) 35%, white);
+    background-color: var(--orange-300);
     border-radius: 0.15rem;
     padding: 0.1rem;
     color: var(--blue);
+
+    @include butler-mx.dark-mode-class {
+      background-color: color-mix(in srgb, var(--blue) 35%, white);
+    }
   }
 
   kbd {
