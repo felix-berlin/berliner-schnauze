@@ -1,8 +1,32 @@
+@use "@styles/variables" as vars;
+
 .c-modal.c-modal--search {
-  height: 70svh;
   height: 100%;
+  max-height: 90svh;
   gap: 2rem;
   container: search-modal / inline-size;
+
+  .c-modal__header {
+    display: flex;
+
+    @container (width < 670px) {
+      flex-wrap: wrap;
+      row-gap: 1rem;
+    }
+
+    .c-word-search-filter-toggle {
+      @container (width < 670px) {
+        order: 2;
+        width: 100%;
+      }
+
+      &__text {
+        @container (width < 670px) {
+          --display: block;
+        }
+      }
+    }
+  }
 
   .c-search-container {
     flex: 1 0;
@@ -14,11 +38,31 @@
 
   .c-word-search {
     width: 100%;
+
+    &__search-input {
+      transition: all 0.3s ease-in-out;
+
+      &:focus-within {
+        margin: 2px;
+      }
+    }
   }
 
   .c-word-search-list {
     &__result-count {
       margin: 0;
+    }
+
+    &__no-result {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: auto 0;
+
+      p {
+        margin-bottom: 0;
+      }
     }
   }
 
@@ -42,6 +86,55 @@
       @container (width < 670px) {
         font-size: 0.8rem;
       }
+    }
+  }
+
+  // TODO: here are a lot of duplicated styles from _filter-search.scss
+  .c-filter-search {
+    &__filter {
+      overflow-y: scroll;
+      display: flex;
+      flex-direction: column;
+
+      :where(h2) {
+        margin-top: 0;
+      }
+
+      :where(h2:not(:first-of-type)) {
+        margin-top: vars.$spacer * 2;
+      }
+
+      :where(h3) {
+        margin-top: vars.$spacer * 1.5;
+      }
+    }
+
+    &__reset {
+      --padding: 0.5rem;
+
+      margin-top: 2rem;
+      width: 100%;
+      gap: 0.7rem;
+    }
+
+    &__berolinismus {
+      :where(i) {
+        font-size: 0.7rem;
+      }
+
+      .c-berolinismus-switch {
+        margin-top: vars.$spacer * 0.7;
+      }
+    }
+
+    &__headline-wrap {
+      display: flex;
+      align-items: center;
+      gap: vars.$spacer * 0.5;
+    }
+
+    &__close {
+      align-self: flex-end;
     }
   }
 
