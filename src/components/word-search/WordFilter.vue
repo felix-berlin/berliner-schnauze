@@ -1,25 +1,16 @@
 <template>
   <transition name="slide">
-    <aside
-      v-show="showWordListFilterFlyout"
-      ref="wordListFilter"
-      class="c-filter-search__filter"
-    >
+    <aside v-show="showWordListFilterFlyout" ref="wordListFilter" class="c-filter-search__filter">
       <button
         class="c-filter-search__close c-button c-button--center-icon"
         type="button"
         aria-label="schließen"
         @click="$toggleWordListFilterFlyout"
       >
-        <X
-          width="18"
-          height="18"
-        />
+        <X width="18" height="18" />
       </button>
 
-      <h2 id="sort-headline">
-        Sortiere nach:
-      </h2>
+      <h2 id="sort-headline">Sortiere nach:</h2>
       <SortWordBySelect />
 
       <h2>Filter nach:</h2>
@@ -44,10 +35,7 @@
         class="c-filter-search__reset c-button c-button--center-icon"
         @click="resetAll"
       >
-        <FilterReset
-          width="18"
-          height="18"
-        />
+        <FilterReset width="18" height="18" />
         Zurücksetzen
       </button>
     </aside>
@@ -55,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { useTemplateRef } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import BerolinismusSwitch from "@components/filter/BerolinismusSwitch.vue";
@@ -66,12 +54,17 @@ import { useStore } from "@nanostores/vue";
 import BadgeTag from "@components/BadgeTag.vue";
 import X from "virtual:icons/lucide/x";
 import FilterReset from "virtual:icons/lucide/filter-x";
-const wordListFilter = ref<HTMLElement | null>(null);
+
+const { closeOnClickOutside = true } = defineProps<{
+  closeOnClickOutside?: boolean;
+}>();
+
+const wordListFilter = useTemplateRef("wordListFilter");
 
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
 
 onClickOutside(wordListFilter, () => {
-  if (showWordListFilterFlyout.value) {
+  if (showWordListFilterFlyout.value && closeOnClickOutside) {
     $toggleWordListFilterFlyout();
   }
 });

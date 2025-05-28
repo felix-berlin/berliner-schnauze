@@ -47,7 +47,7 @@ export const getStaticPaths = (async () => {
         wordSlug: node.slug,
       },
       props: {
-        word: node as BerlinerWord,
+        word: node,
         allWords: allWords.map((word) => word.node),
       },
     };
@@ -102,7 +102,7 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch)
     tooltipPlacement="top"
     client:only="vue"
   />
-  <article class="c-single-word" data-pagefind-body>
+  <article class="c-single-word">
     <header class="c-single-word__header">
       <h1 class="c-single-word__word">
         {wordProps?.berlinerisch}
@@ -341,12 +341,16 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch)
     }
 
     <footer class="c-single-word__footer">
-      <p class="c-single-word__created">
-        Wort erstellt am: {formattedDate(word.dateGmt)}
-      </p>
-      <p class="c-single-word__modified">
-        Bearbeitet am: {formattedDate(word.modifiedGmt)}
-      </p>
+      {
+        word?.dateGmt && (
+          <p class="c-single-word__created">Wort erstellt am: {formattedDate(word.dateGmt)}</p>
+        )
+      }
+      {
+        word?.modifiedGmt && (
+          <p class="c-single-word__modified">Bearbeitet am: {formattedDate(word.modifiedGmt)}</p>
+        )
+      }
     </footer>
   </article>
 

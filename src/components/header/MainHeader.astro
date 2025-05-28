@@ -2,11 +2,12 @@
 import "@styles/components/_menu-nav.scss";
 
 import ColorModeToggle from "@components/ColorModeToggle.vue";
-import SearchModal from "@components/SearchModal.vue";
 import MainMenu from "@components/header/MainMenu.vue";
-import SearchBarModal from "@components/SearchBarModal.vue";
+import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue";
 import SunMoonIcon from "virtual:icons/lucide/sun-moon";
 import MainMenuButton from "@components/MainMenuButton.vue";
+
+const isIndex = Astro.url.pathname === "/";
 ---
 
 <header class="c-header">
@@ -16,9 +17,13 @@ import MainMenuButton from "@components/MainMenuButton.vue";
     </div>
 
     <nav class="c-menu-nav">
-      <SearchModal client:only="vue">
-        <SearchBarModal slot="fallback" />
-      </SearchModal>
+      {
+        !isIndex && (
+          <SearchModalTrigger client:only="vue">
+            <SearchModalTrigger slot="fallback" />
+          </SearchModalTrigger>
+        )
+      }
 
       <ColorModeToggle cssClasses={"c-menu-nav__item c-menu-nav__item-button"} client:only="vue">
         <button

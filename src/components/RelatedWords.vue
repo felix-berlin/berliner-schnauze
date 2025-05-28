@@ -1,7 +1,7 @@
 <template>
   <section class="c-related-words">
     <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
-    <div class="c-related-words__words">
+    <div class="c-related-words__words" role="list">
       <template v-for="word in xRandomWords(words, numberOfWords)">
         <a
           v-if="word"
@@ -9,6 +9,7 @@
           :href="routeToWord(word.slug!)"
           class="c-related-words__word"
           :title="`Erfahre mehr über ${word.wordProperties?.berlinerisch}`"
+          role="listitem"
         >
           {{ word.wordProperties?.berlinerisch }}
         </a>

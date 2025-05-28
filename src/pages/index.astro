@@ -5,7 +5,6 @@ import Layout from "@layouts/Layout.astro";
 import WordOfTheDay from "@components/WordOfTheDay.vue";
 import { Picture } from "astro:assets";
 import BrownBearRoar from "@assets/images/brown-bear-roar.png";
-import { fetchAllWords } from "@services/api.ts";
 import { seoData } from "@utils/helpers.ts";
 import WordSearch from "@components/word-search/WordSearch.astro";
 import FactCard from "@components/FactCard.astro";
@@ -49,8 +48,6 @@ const facts = [
     text: "Sprachwissenschaftlich gesehen ist Berlinerisch <strong>kein Dialekt</strong>, sondern ein <strong><a href='https://www.wikiwand.com/de/Metrolekt'>Metrolekt</a></strong>. Eine in großstädtischen Zentren entstehende Stadtsprache.",
   },
 ];
-
-const allWords = await fetchAllWords();
 ---
 
 <Layout content={seoData(content)} contentClasses="o-index">
@@ -87,7 +84,7 @@ const allWords = await fetchAllWords();
     <WordOfTheDay client:only="vue" />
   </section>
 
-  <WordSearch words={allWords} />
+  <WordSearch />
 </Layout>
 
 <script>

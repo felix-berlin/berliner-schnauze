@@ -2,11 +2,12 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-modal {
+  display: var(--modal-display, none);
   border: none;
   inset: 0;
   background-color: var(--color-background-modal, var(--floating-color-background));
   width: max(400px, vars.$body-max-width);
-  max-height: 80dvh;
+  max-height: 80svh;
   margin: auto;
 
   /**
@@ -30,6 +31,9 @@
   }
 
   &[open] {
+    --modal-display: flex;
+    display: flex;
+    flex-direction: column;
     // animation: slide-in-fwd-top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 
     @include butler-mx.feature("motion") {
@@ -43,20 +47,10 @@
     }
 
     &:has(.c-modal__close) {
-      .c-modal__container {
-        display: flex;
-        flex-direction: column;
-      }
-
       .c-modal__close {
         align-self: flex-end;
-        margin-bottom: 15px;
       }
     }
-  }
-
-  &__container {
-    min-height: 30dvh;
   }
 
   &.has-close-on-click-outside {

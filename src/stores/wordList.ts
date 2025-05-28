@@ -1,9 +1,16 @@
-import { computed, atom, onSet, onStop } from "nanostores";
+import { computed, atom, task } from "nanostores";
 import { persistentMap } from "@nanostores/persistent";
 import { useViewTransition } from "@utils/helpers.ts";
 import type { Maybe, BerlinerWord } from "@/gql/graphql";
-import filterWorker from "../services/filterWorker?worker";
 import { trackEvent } from "@utils/analytics";
+import { create, search, insertMultiple } from "@orama/orama";
+import { stemmer, language } from "@orama/stemmers/german";
+import {
+  afterInsert as highlightAfterInsert,
+  searchWithHighlight,
+} from "@orama/plugin-match-highlight";
+import type { TypedDocument, Orama, Results, SearchParams } from "@orama/orama";
+import type { OramaSearchIndex } from "@/pages/api/search-index.json.ts";
 
 export type CleanBerlinerWord = {
   berlinerWordId: BerlinerWord["berlinerWordId"];
@@ -21,13 +28,13 @@ export type WordList = {
   activeLetterFilter: string;
   wordTypes: Maybe<string>[];
   activeWordTypeFilter: string;
-  wordList: CleanBerlinerWord[];
   search: string;
-  alphabeticalOrder: "asc" | "desc";
-  dateOrder: "asc" | "desc";
-  modifiedDateOrder: "asc" | "desc";
+  alphabeticalOrder: "ASC" | "DESC";
+  dateOrder: "ASC" | "DESC";
+  modifiedDateOrder: "ASC" | "DESC";
   activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
   berolinismus: boolean;
+  resultLimit?: number;
 };
 
 export const $wordSearch = persistentMap<WordList>(
@@ -37,13 +44,13 @@ export const $wordSearch = persistentMap<WordList>(
     activeLetterFilter: "",
     wordTypes: [],
     activeWordTypeFilter: "",
-    wordList: [],
     search: "",
-    alphabeticalOrder: "asc",
-    dateOrder: "asc",
-    modifiedDateOrder: "asc",
+    alphabeticalOrder: "ASC",
+    dateOrder: "ASC",
+    modifiedDateOrder: "ASC",
     activeOrderCategory: "alphabetical",
     berolinismus: false,
+    resultLimit: undefined,
   },
   {
     encode: (value) => JSON.stringify(value),
@@ -79,9 +86,9 @@ export const resetAll = () => {
   $wordSearch.setKey("search", "");
   $wordSearch.setKey("activeLetterFilter", "");
   $wordSearch.setKey("activeWordTypeFilter", "");
-  $wordSearch.setKey("alphabeticalOrder", "asc");
-  $wordSearch.setKey("dateOrder", "asc");
-  $wordSearch.setKey("modifiedDateOrder", "asc");
+  $wordSearch.setKey("alphabeticalOrder", "ASC");
+  $wordSearch.setKey("dateOrder", "ASC");
+  $wordSearch.setKey("modifiedDateOrder", "ASC");
   $wordSearch.setKey("activeOrderCategory", "alphabetical");
   $wordSearch.setKey("berolinismus", false);
 
@@ -97,9 +104,9 @@ export const $toggleWordListFilterFlyout = () => {
 /**
  * Set the active letter to filter the word list
  *
- * @param   {string}  letter           [letter description]
+ * @param   {string}  letter           [letter DESCription]
  *
- * @return  {void}                   [return description]
+ * @return  {void}                   [return DESCription]
  */
 export const setLetterFilter = (letter: string) => {
   useViewTransition(() => $wordSearch.setKey("activeLetterFilter", letter));
@@ -124,7 +131,7 @@ export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCateg
 export const $alphabeticalOrderToggle = (): void => {
   $wordSearch.setKey(
     "alphabeticalOrder",
-    $wordSearch.get().alphabeticalOrder === "asc" ? "desc" : "asc",
+    $wordSearch.get().alphabeticalOrder === "ASC" ? "DESC" : "ASC",
   );
 };
 
@@ -134,7 +141,7 @@ export const $alphabeticalOrderToggle = (): void => {
  * @return {void}
  */
 export const $wordListDateOrderToggle = (): void => {
-  $wordSearch.setKey("dateOrder", $wordSearch.get().dateOrder === "asc" ? "desc" : "asc");
+  $wordSearch.setKey("dateOrder", $wordSearch.get().dateOrder === "ASC" ? "DESC" : "ASC");
 };
 
 /**
@@ -145,14 +152,14 @@ export const $wordListDateOrderToggle = (): void => {
 export const $wordListModifiedDateOrderToggle = (): void => {
   $wordSearch.setKey(
     "modifiedDateOrder",
-    $wordSearch.get().modifiedDateOrder === "asc" ? "desc" : "asc",
+    $wordSearch.get().modifiedDateOrder === "ASC" ? "DESC" : "ASC",
   );
 };
 
 export const $setSortOrder = (
   category: WordList["activeOrderCategory"],
   orderName: string,
-  order: "asc" | "desc",
+  order: "ASC" | "DESC",
 ) => {
   $wordSearch.setKey("activeOrderCategory", category);
   $wordSearch.setKey(orderName, order);
@@ -174,58 +181,126 @@ export const searchLength = computed($wordSearch, (wordSearch) => {
   return wordSearch?.search ? wordSearch.search.length : 0;
 });
 
-// Atom to store the filtered word list
-export const $filteredWordList = atom<CleanBerlinerWord[]>([]);
+/**
+ * ORAMA
+ */
 
-let filterWorkerInstance: Worker | undefined;
-let lastPostedWordSearch: WordList | undefined;
-let isWorkerBusy = false;
+const wordSchema = {
+  berlinerischWordTypes: "enum[]",
+  dateGmt: "string",
+  modifiedGmt: "string",
+  wordGroup: "string",
+  wordProperties: {
+    berlinerisch: "string",
+    berolinismus: "boolean",
+    translations: "string[]",
+  },
+} as const;
 
-export const updateFilteredWordList = (wordSearch: WordList) => {
-  const keys = Object.keys(wordSearch);
-  if (keys.length < 11) {
-    return;
-  }
+type WordDocument = TypedDocument<Orama<typeof wordSchema>>;
 
-  // If a worker is already busy or the wordSearch is the same as the last one, don't create a new worker
-  if (isWorkerBusy || wordSearch === lastPostedWordSearch) {
-    return;
-  }
+let db: Orama<typeof wordSchema> | null = null;
 
-  // If a worker already exists, terminate it before creating a new one
-  if (filterWorkerInstance) {
-    filterWorkerInstance.terminate();
-    filterWorkerInstance = undefined;
-  }
+async function initOrama(words: OramaSearchIndex[]) {
+  db = create({
+    schema: wordSchema,
+    components: {
+      tokenizer: {
+        stemming: true,
+        stemmerSkipProperties: [
+          "wordGroup",
+          "modifiedGmt",
+          "dateGmt",
+          "wordProperties.berolinismus",
+          "berlinerischWordTypes",
+        ],
+        language,
+        stemmer,
+      },
+    },
+    plugins: [
+      {
+        name: "highlight",
+        afterInsert: highlightAfterInsert,
+      },
+    ],
+  });
 
-  if (typeof Worker !== "undefined") {
-    filterWorkerInstance = new filterWorker();
+  await insertMultiple(db, words);
+}
 
-    filterWorkerInstance.onmessage = (event: MessageEvent<CleanBerlinerWord[]>) => {
-      $filteredWordList.set(event.data);
-      isWorkerBusy = false; // Worker is no longer busy after sending a message
+function buildWhere(wordSearch: WordList): Record<string, unknown> {
+  const where: Record<string, unknown> = {};
+  if (wordSearch.berolinismus) where["wordProperties.berolinismus"] = true;
+  if (wordSearch.activeLetterFilter) where.wordGroup = wordSearch.activeLetterFilter;
+  if (wordSearch.activeWordTypeFilter)
+    where.berlinerischWordTypes = wordSearch.activeWordTypeFilter;
+  return where;
+}
+
+type SortByType =
+  | { property: string; order: "ASC" | "DESC" }
+  | ((a: [string, number, WordDocument], b: [string, number, WordDocument]) => number);
+
+function getSortBy(wordSearch: WordList): SortByType {
+  if (wordSearch.activeOrderCategory === "date") {
+    return (a, b) => {
+      const aDate = new Date(a[2].dateGmt);
+      const bDate = new Date(b[2].dateGmt);
+      return wordSearch.dateOrder === "ASC"
+        ? aDate.getTime() - bDate.getTime()
+        : bDate.getTime() - aDate.getTime();
     };
   }
-
-  filterWorkerInstance?.postMessage(wordSearch);
-  isWorkerBusy = true; // Worker is busy after receiving a message
-
-  lastPostedWordSearch = wordSearch;
-};
-
-onSet($wordSearch, ({ newValue, abort }) => {
-  updateFilteredWordList(newValue);
-});
-
-onStop($wordSearch, () => {
-  if (!(filterWorkerInstance && isWorkerBusy)) {
-    return;
+  if (wordSearch.activeOrderCategory === "modifiedDate") {
+    return (a, b) => {
+      const aDate = new Date(a[2].modifiedGmt);
+      const bDate = new Date(b[2].modifiedGmt);
+      return wordSearch.modifiedDateOrder === "ASC"
+        ? aDate.getTime() - bDate.getTime()
+        : bDate.getTime() - aDate.getTime();
+    };
   }
-  filterWorkerInstance.terminate();
-  filterWorkerInstance = undefined;
-  isWorkerBusy = false;
-});
+  return {
+    property: "wordProperties.berlinerisch",
+    order: wordSearch.alphabeticalOrder,
+  };
+}
 
-export const $searchResultCount = computed($filteredWordList, (filteredWordList) => {
-  return filteredWordList?.length ? filteredWordList.length : 0;
+let searchIndexCache: OramaSearchIndex[] | null = null;
+
+export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
+  task<Results<WordDocument> | null>(async () => {
+    // Only fetch if not cached
+    if (!searchIndexCache) {
+      const response = await fetch("/api/search-index.json");
+      searchIndexCache = (await response.json()) as OramaSearchIndex[];
+    }
+
+    const oramaSearchIndex = searchIndexCache;
+
+    const resultLimit = oramaSearchIndex.length;
+
+    if (!db) {
+      await initOrama(oramaSearchIndex);
+    }
+
+    const where = buildWhere(wordSearch);
+    const sortBy = getSortBy(wordSearch);
+
+    const params: SearchParams<Orama<typeof wordSchema>> = {
+      term: wordSearch.search,
+      properties: ["wordProperties.berlinerisch", "wordProperties.translations"],
+      limit: wordSearch.resultLimit ?? resultLimit ?? 10,
+      threshold: 0.5,
+      sortBy,
+      ...(Object.keys(where).length > 0 ? { where } : {}),
+    };
+
+    return db ? await searchWithHighlight(db, params) : null;
+  }),
+);
+
+export const $searchResultCount = computed($oramaSearchResults, (oramaSearchResults) => {
+  return oramaSearchResults?.count ?? 0;
 });

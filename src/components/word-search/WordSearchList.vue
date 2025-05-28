@@ -4,14 +4,14 @@
     <WordSearchFilterToggle />
     <SearchWords />
 
-    <p class="c-word-search-list__result-count">
-      {{ searchResultCount }} {{ searchResultCount === 1 ? "Ergebnis" : "Ergebnisse" }}
-    </p>
+    <SearchResultCount />
 
-    <div v-if="searchResultCount === 0" class="c-word-search-list__no-result">
-      <SearchX width="50" height="50" />
-      <p>Da biste anjemeiat. Keen Treffer.</p>
+    <div class="c-filter-search__shortcuts">
+      <ShortcutSelect />
+      <ShortcutNavigating />
     </div>
+
+    <NoSearchResults />
 
     <WordSuggestHint v-if="searchResultCount === 0" />
 
@@ -20,30 +20,26 @@
 </template>
 
 <script setup lang="ts">
+import { defineAsyncComponent } from "vue";
 import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
-import WordSuggestHint from "@components/WordSuggestHint.vue";
-import { $wordSearch, $searchResultCount } from "@stores/index";
+import { $searchResultCount } from "@stores/index";
+import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue";
+import ShortcutNavigating from "@components/word-search/shortcuts/ShortcutNavigating.vue";
+import SearchResultCount from "@components/word-search/SearchResultCount.vue";
 import { useStore } from "@nanostores/vue";
-import SearchX from "virtual:icons/lucide/search-x";
-import type { Maybe } from "@/gql/graphql.ts";
-import type { CleanBerlinerWord } from "@stores/index.ts";
+import NoSearchResults from "@components/word-search/NoSearchResults.vue";
 
 type WordSearchListProps = {
-  words: CleanBerlinerWord[];
-  availableLetterGroups: Maybe<string>[];
-  wordTypes: Maybe<string>[];
   cssClass: string;
 };
 
 const props = defineProps<WordSearchListProps>();
 
-const searchResultCount = useStore($searchResultCount);
+const WordSuggestHint = defineAsyncComponent(() => import("@components/WordSuggestHint.vue"));
 
-$wordSearch.setKey("letterGroups", props.availableLetterGroups);
-$wordSearch.setKey("wordTypes", props.wordTypes);
-$wordSearch.setKey("wordList", props.words);
+const searchResultCount = useStore($searchResultCount);
 </script>
 
 <style lang="scss">

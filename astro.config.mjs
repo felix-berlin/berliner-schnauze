@@ -231,6 +231,39 @@ export default defineConfig({
         globDirectory: "dist",
         // navigateFallback: "/",
         globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
+        runtimeCaching: [
+          {
+            urlPattern: /.*\/api\/search-index\.json$/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "api-search-index",
+              networkTimeoutSeconds: 10,
+              expiration: {
+                maxEntries: 5,
+                maxAgeSeconds: 10_800, // 3 hours
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern:
+              /^https:\/\/cms\.berliner-schnauze\.wtf\/wp-json\/berliner-schnauze\/v1\/word-of-the-day$/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "api-word-of-the-day",
+              networkTimeoutSeconds: 10,
+              expiration: {
+                maxEntries: 1,
+                maxAgeSeconds: 10_800, // 3 hours
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
       },
       devOptions: {
         enabled: PWA_DEBUG ?? false,

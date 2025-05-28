@@ -6,6 +6,9 @@ import ScrollToTop from "@components/ScrollToTop.vue";
 import Footer from "@components/Footer.astro";
 import MainHeader from "@components/header/MainHeader.astro";
 import ToastNotifyContainer from "@components/toast/ToastNotifyContainer.vue";
+import Modal from "@components/Modal.vue";
+import { fetchAllWords } from "@services/api.ts";
+import SetWordData from "@components/word-search/SetWordData.vue";
 
 import type { SeoProps } from "@components/BaseHead.astro";
 
@@ -23,6 +26,18 @@ const {
   contentClasses,
   bodyClasses,
 } = Astro.props as DefaultLayoutProps;
+
+const allWords = await fetchAllWords();
+const availableWordGroups = Array.from(new Set(allWords.map(({ node }) => node.wordGroup))).sort();
+
+const wordTypes = Array.from(
+  new Set(
+    allWords
+      .map(({ node }) => node.berlinerischWordTypes?.nodes)
+      .flat()
+      .map((node) => node?.name)
+  )
+).sort();
 ---
 
 <!doctype html>
@@ -40,6 +55,12 @@ const {
     </main>
     <ScrollToTop client:load />
     <ToastNotifyContainer client:only="vue" />
+    <Modal client:only="vue" />
+    <SetWordData
+      availableLetterGroups={availableWordGroups}
+      wordTypes={wordTypes}
+      client:only="vue"
+    />
     <Footer transition:persist />
   </body>
 </html>

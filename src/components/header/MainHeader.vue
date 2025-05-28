@@ -58,7 +58,7 @@
 import MenuIcon from "virtual:icons/lucide/menu";
 import { routeToWord, randomElement } from "@utils/helpers.ts";
 import ColorModeToggle from "@components/ColorModeToggle.vue";
-import SearchModal from "@components/SearchModal.vue";
+import SearchModal from "@components/modals/search/SearchModal.vue";
 
 const menuItems = [
   {

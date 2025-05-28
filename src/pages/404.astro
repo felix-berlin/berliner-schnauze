@@ -1,12 +1,10 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import SearchBar from "@components/SearchBar.vue";
 ---
 
 <Layout content={{ title: "Seite konnte nicht gefunden werden" }}>
   <section class="o-not-found">
     <h1>Blöd jelaufen, die Seite gibts nicht.</h1>
-    <SearchBar id="Search404" client:only="vue" />
   </section>
 </Layout>
 

@@ -20,6 +20,7 @@
     </button>
 
     <input
+      ref="searchInput"
       v-model="localSearch"
       type="search"
       class="c-word-search__search-input c-input"
@@ -32,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import { useTemplateRef, onMounted } from "vue";
 import Search from "virtual:icons/lucide/search";
 import X from "virtual:icons/lucide/x";
 import {
@@ -46,17 +48,19 @@ import { useDebounceFn } from "@vueuse/core";
 
 interface SearchWordsProps {
   buttonPosition?: "left" | "right";
+  autoFocus?: boolean;
 }
 
-const { buttonPosition = "left" } = defineProps<SearchWordsProps>();
+const { buttonPosition = "left", autoFocus = false } = defineProps<SearchWordsProps>();
 
-// const localSearch = useStorage("search", "");
 const searchLength = useStore(currentSearchLength);
 const searchResultCount = useStore($searchResultCount);
 const localSearch = useVModel($wordSearch, "search");
 
+const searchInput = useTemplateRef("searchInput");
+
 const trackWordSearchListSearch = (search: string) => {
-  setMatomoSearch(search, "Word Search List", searchResultCount.value);
+  setMatomoSearch(search, "Word Search", searchResultCount.value);
 };
 
 const debouncedTrackSearch = useDebounceFn(trackWordSearchListSearch, 1000, { maxWait: 5000 });
@@ -86,6 +90,22 @@ const buttonActions = (): void => {
 const resetSearch = (): void => {
   localSearch.value = "";
 };
+
+const focusSearchInput = () => {
+  if (searchInput.value) {
+    searchInput.value.focus();
+  }
+};
+
+onMounted(() => {
+  if (autoFocus) {
+    focusSearchInput();
+  }
+});
+
+defineExpose({
+  focusSearchInput,
+});
 </script>
 
 <style lang="scss">

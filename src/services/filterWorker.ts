@@ -47,7 +47,7 @@ self.onmessage = (event: WordSearchEvent) => {
       b?.wordProperties?.berlinerisch
     ) {
       result =
-        wordSearch.alphabeticalOrder === "asc"
+        wordSearch.alphabeticalOrder === "ASC"
           ? a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch)
           : b.wordProperties.berlinerisch.localeCompare(a.wordProperties.berlinerisch);
     }
@@ -56,7 +56,7 @@ self.onmessage = (event: WordSearchEvent) => {
     const bDate = b.dateGmt ? new Date(b.dateGmt).getTime() : 0;
 
     if (result === 0 && wordSearch.activeOrderCategory === "date" && a.dateGmt && b.dateGmt) {
-      result = wordSearch.dateOrder === "asc" ? aDate - bDate : bDate - aDate;
+      result = wordSearch.dateOrder === "ASC" ? aDate - bDate : bDate - aDate;
     }
 
     const aModifiedDate = a.modifiedGmt ? new Date(a.modifiedGmt).getTime() : 0;
@@ -69,7 +69,7 @@ self.onmessage = (event: WordSearchEvent) => {
       b.modifiedGmt
     ) {
       result =
-        wordSearch.modifiedDateOrder === "asc"
+        wordSearch.modifiedDateOrder === "ASC"
           ? aModifiedDate - bModifiedDate
           : bModifiedDate - aModifiedDate;
     }

@@ -32,6 +32,10 @@
       --color-border: var(--new-blue-200);
       --color-box-shadow: black;
     }
+
+    &.is-active {
+      outline: 2px solid var(--color-body);
+    }
   }
 
   &__header {
@@ -134,6 +138,16 @@
     &-icon {
       @include butler-mx.dark-mode-class {
         --color-icon: var(--yellow-500);
+      }
+    }
+  }
+
+  &--small {
+    .c-word-list__berlinerisch {
+      font: {
+        family: vars.$berlin;
+        weight: 700;
+        size: butler-fn.fluid(18, 24, 320, 1260);
       }
     }
   }

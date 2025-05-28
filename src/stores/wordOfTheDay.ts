@@ -82,6 +82,8 @@ export const getWordOfTheDay = async (): Promise<void> => {
       $wordOfTheDay.setKey("loading", false);
     })
     .catch((err) => {
+      $wordOfTheDay.setKey("error", true);
+
       console.error("Failed to fetch Word of the Day: ", err);
     });
 };

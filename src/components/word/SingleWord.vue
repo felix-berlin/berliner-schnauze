@@ -1,8 +1,8 @@
 <template>
   <article
-    :id="`word-${source.id}`"
-    :ref="`word-${source.id}`"
-    :key="source.id"
+    :id="`word-${source.berlinerWordId}`"
+    :ref="`word-${source.berlinerWordId}`"
+    :key="source.berlinerWordId"
     :data-group="source.wordGroup"
     class="c-word-list__word"
     :class="{ 'has-translation': source.wordProperties?.translations }"
@@ -19,9 +19,15 @@
           :word-id="source.berlinerWordId"
           class="c-word-list__crown"
         />
-        <a :href="routeToWord(source.slug!)">
-          {{ source.wordProperties?.berlinerisch }}
-        </a>
+        <a
+          :href="routeToWord(source.slug!)"
+          v-html="
+            highlightMatches(
+              source.wordProperties?.berlinerisch ?? '',
+              positions?.['wordProperties.berlinerisch'],
+            )
+          "
+        />
       </dt>
 
       <dd
@@ -29,24 +35,18 @@
         :key="translationIndex"
         class="c-word-list__translation"
       >
-        {{ translation?.translation }}
+        {{ translation }}
       </dd>
     </dl>
     <WordOptionDropdown
+      v-if="showDropdown"
       :berlinerisch="source.wordProperties?.berlinerisch"
       :slug="source.slug"
       class="c-word-list__options-dropdown"
     >
       <template #after>
-        <a
-          :href="routeToWord(source.slug!)"
-          class="c-options-dropdown__copy-button c-button"
-        >
-          <BookOpen
-            width="18"
-            height="18"
-            class="c-options-dropdown__icon-button"
-          />
+        <a :href="routeToWord(source.slug!)" class="c-options-dropdown__copy-button c-button">
+          <BookOpen width="18" height="18" class="c-options-dropdown__icon-button" />
           <span class="c-options-dropdown__copy-text">Mehr erfahren</span>
         </a>
       </template>
@@ -60,16 +60,48 @@ import { defineAsyncComponent } from "vue";
 import BookOpen from "virtual:icons/lucide/book-open";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import { routeToWord } from "@utils/helpers.ts";
-import type { CleanBerlinerWord } from "@stores/index.ts";
+import type { OramaSearchIndex } from "@/pages/api/search-index.json.ts";
 
 type WordProps = {
-  source: CleanBerlinerWord;
+  source: OramaSearchIndex;
   index?: number;
+  showDropdown?: boolean;
+  positions: Record<string, { start: number; length: number }[]> | undefined;
 };
 
-const { source, index } = defineProps<WordProps>();
+const { source, index, showDropdown = true, positions } = defineProps<WordProps>();
 
 const IsWordOfTheDay = defineAsyncComponent(() => import("@components/word/IsWordOfTheDay.vue"));
+
+const highlightMatches = (
+  text: string,
+  matchesObj?: Record<string, { start: number; length: number }[]>,
+): string => {
+  if (!matchesObj || typeof matchesObj !== "object") return text;
+
+  // Flatten all match arrays from the object
+  const allMatches = Object.values(matchesObj).flat().filter(Boolean);
+
+  if (!Array.isArray(allMatches) || allMatches.length === 0) return text;
+
+  // Sort matches by start index
+  const sorted = [...allMatches].sort((a, b) => a.start - b.start);
+
+  let result = "";
+  let lastIndex = 0;
+  for (const match of sorted) {
+    result += text.slice(lastIndex, match.start);
+    result += `<mark class="highlight">${text.slice(match.start, match.start + match.length)}</mark>`;
+    lastIndex = match.start + match.length;
+  }
+  result += text.slice(lastIndex);
+  return result;
+};
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.highlight {
+  background: yellow;
+  color: inherit;
+}
+</style>
