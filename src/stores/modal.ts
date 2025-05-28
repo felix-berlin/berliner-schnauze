@@ -76,13 +76,10 @@ export const open = (
 };
 
 export const close = () => {
-  $view.set({});
-  $props.set({ ...propsDefault });
-  $viewIsComponent.set(false);
-
   const el = $element.get();
 
   if (el) el.close();
+  resetModal();
 
   const cb = $onCloseCallback.get();
 
@@ -90,6 +87,18 @@ export const close = () => {
     cb();
     $onCloseCallback.set(null);
   }
+};
+
+export const resetModal = () => {
+  if ($props.get().disableScroll) {
+    preventScroll(false);
+  }
+  // Give the animation time to finish
+  setTimeout(() => {
+    $view.set({});
+    $props.set({ ...propsDefault });
+    $viewIsComponent.set(false);
+  }, 500);
 };
 
 export const updateProps = (newProps: Partial<ModalProps>) => {

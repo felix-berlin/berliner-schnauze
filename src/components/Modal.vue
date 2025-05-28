@@ -11,6 +11,7 @@
     :style="`--width-modal: ${props.width}`"
     aria-modal="true"
     :closedby="props.closeOnClickOutside ? 'any' : 'closerequest'"
+    @close="resetModal"
   >
     <template v-if="hasView">
       <ModalCloseButton v-if="props.showCloseButton" />
@@ -38,6 +39,7 @@ import {
   $viewIsComponent,
   $isOpen,
   preventScroll,
+  resetModal,
 } from "@stores/modal.ts";
 import { useMutationObserver } from "@vueuse/core";
 
@@ -62,9 +64,6 @@ useMutationObserver(
 
     if (open && props.value.disableScroll) {
       preventScroll(true);
-    }
-    if (!open && props.value.disableScroll) {
-      preventScroll(false);
     }
   },
   {
