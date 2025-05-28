@@ -24,7 +24,7 @@ const openSearchModal = () => {
       component: defineAsyncComponent(() => import("@components/modals/search/SearchModal.vue")),
     },
     props: {
-      class: "has-hidden-overflow c-modal--search",
+      class: "c-modal--search",
       showCloseButton: false,
     },
   });

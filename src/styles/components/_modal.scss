@@ -30,10 +30,6 @@
     animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   }
 
-  &.has-hidden-overflow {
-    overflow: hidden;
-  }
-
   &[open] {
     --modal-display: block;
     // animation: slide-in-fwd-top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
