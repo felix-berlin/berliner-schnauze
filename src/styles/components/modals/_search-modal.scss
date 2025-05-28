@@ -2,6 +2,7 @@
   height: 70svh;
   height: 100%;
   gap: 2rem;
+  container: search-modal / inline-size;
 
   .c-search-container {
     flex: 1 0;
@@ -32,11 +33,23 @@
         margin-right: 2px;
       }
     }
+
+    &__header {
+      row-gap: 0.25rem;
+    }
+
+    &__translation {
+      @container (width < 670px) {
+        font-size: 0.8rem;
+      }
+    }
   }
 
   footer {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    flex-wrap: wrap;
+    column-gap: 2rem;
+    row-gap: 1rem;
   }
 }
