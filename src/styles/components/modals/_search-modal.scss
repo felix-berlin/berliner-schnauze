@@ -1,9 +1,12 @@
-.c-modal--search {
-  --modal-display: flex;
+.c-modal.c-modal--search {
   height: 70svh;
   flex-direction: column;
   height: 100%;
   gap: 2rem;
+
+  &[open] {
+    --modal-display: flex;
+  }
 
   .c-search-container {
     flex: 1 0;
