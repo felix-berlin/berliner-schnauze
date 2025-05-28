@@ -2,30 +2,10 @@
 import "@styles/components/_filter-search.scss";
 import WordSearchList from "@components/word-search/WordSearchList.vue";
 import WordFilter from "@components/word-search/WordFilter.vue";
-import WordSearchNew from "@components/word-search/WordSearchNew.vue";
-import { fetchAllWords } from "@services/api.ts";
-
-const allWords = await fetchAllWords();
-
-const availableWordGroups = Array.from(new Set(allWords.map(({ node }) => node.wordGroup))).sort();
-
-const wordTypes = Array.from(
-  new Set(
-    allWords
-      .map(({ node }) => node.berlinerischWordTypes?.nodes)
-      .flat()
-      .map((node) => node?.name)
-  )
-).sort();
 ---
 
 <section class="c-filter-search" id="wordListing">
   <WordFilter client:only="vue" />
 
-  <WordSearchList
-    availableLetterGroups={availableWordGroups}
-    wordTypes={wordTypes}
-    client:only="vue"
-    cssClass={"c-filter-search__list"}
-  />
+  <WordSearchList client:only="vue" cssClass={"c-filter-search__list"} />
 </section>
