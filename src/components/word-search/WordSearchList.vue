@@ -6,7 +6,7 @@
 
     <SearchResultCount />
 
-    <SearchShortcuts />
+    <div class="c-filter-search__shortcuts"><SearchShortcuts /></div>
 
     <div v-if="searchResultCount === 0" class="c-word-search-list__no-result">
       <SearchX width="50" height="50" />
