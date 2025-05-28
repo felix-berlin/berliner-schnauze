@@ -6,6 +6,8 @@ import MainMenu from "@components/header/MainMenu.vue";
 import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue";
 import SunMoonIcon from "virtual:icons/lucide/sun-moon";
 import MainMenuButton from "@components/MainMenuButton.vue";
+
+const isIndex = Astro.url.pathname === "/";
 ---
 
 <header class="c-header">
@@ -15,7 +17,7 @@ import MainMenuButton from "@components/MainMenuButton.vue";
     </div>
 
     <nav class="c-menu-nav">
-      <SearchModalTrigger client:load />
+      {!isIndex && <SearchModalTrigger client:load />}
 
       <ColorModeToggle cssClasses={"c-menu-nav__item c-menu-nav__item-button"} client:only="vue">
         <button
