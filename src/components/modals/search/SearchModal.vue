@@ -14,6 +14,7 @@
       <NoSearchResults />
 
       <WordList
+        v-if="searchResultCount > 0"
         class="c-word-list--small"
         single-word-gap=".5rem"
         :show-dropdown="false"
