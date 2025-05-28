@@ -55,12 +55,16 @@ import BadgeTag from "@components/BadgeTag.vue";
 import X from "virtual:icons/lucide/x";
 import FilterReset from "virtual:icons/lucide/filter-x";
 
+const { closeOnClickOutside = true } = defineProps<{
+  closeOnClickOutside?: boolean;
+}>();
+
 const wordListFilter = useTemplateRef("wordListFilter");
 
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
 
 onClickOutside(wordListFilter, () => {
-  if (showWordListFilterFlyout.value) {
+  if (showWordListFilterFlyout.value && closeOnClickOutside) {
     $toggleWordListFilterFlyout();
   }
 });
