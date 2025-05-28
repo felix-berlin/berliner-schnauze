@@ -60,7 +60,7 @@ const localSearch = useVModel($wordSearch, "search");
 const searchInput = useTemplateRef("searchInput");
 
 const trackWordSearchListSearch = (search: string) => {
-  setMatomoSearch(search, "Word Search List", searchResultCount.value);
+  setMatomoSearch(search, "Word Search", searchResultCount.value);
 };
 
 const debouncedTrackSearch = useDebounceFn(trackWordSearchListSearch, 1000, { maxWait: 5000 });
