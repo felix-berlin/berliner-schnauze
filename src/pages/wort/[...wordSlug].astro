@@ -99,7 +99,7 @@ const schemaJson = () =>
       name: "Berliner Schnauze Wörterbuch",
       url: `${Astro.url.origin}/wort`,
     },
-    description: wordProps?.translations?.map((t) => t?.translation).join("; "),
+    description: (wordProps?.translations ?? []).map((t) => t?.translation).join("; "),
     alternateName: wordProps?.alternativeWords?.map((w) => w?.alternativeWord).join(", "),
     url: Astro.url.href,
     identifier: word.id,
