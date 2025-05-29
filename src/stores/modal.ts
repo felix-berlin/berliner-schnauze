@@ -94,11 +94,13 @@ export const resetModal = () => {
     preventScroll(false);
   }
   // Give the animation time to finish
-  setTimeout(() => {
-    $view.set({});
-    $props.set({ ...propsDefault });
-    $viewIsComponent.set(false);
-  }, 500);
+  if (typeof window !== "undefined") {
+    setTimeout(() => {
+      $view.set({});
+      $props.set({ ...propsDefault });
+      $viewIsComponent.set(false);
+    }, 500);
+  }
 };
 
 export const updateProps = (newProps: Partial<ModalProps>) => {
