@@ -7,6 +7,10 @@
 .c-word-list {
   --size-quote-icon: 32px;
 
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
   .is-highlight {
     background: var(--orange-300);
     color: var(--blue);

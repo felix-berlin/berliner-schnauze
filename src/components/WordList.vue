@@ -7,7 +7,8 @@
     :data="mutableOramaSearch"
     class="c-word-list"
     aria-live="polite"
-    role="list"
+    as="ul"
+    item="li"
   >
     <SingleWord
       :ref="setResultRef"
@@ -17,7 +18,6 @@
       :positions="item.positions"
       :style="{ 'margin-bottom': singleWordGap }"
       :class="{ 'is-active': showActive && index === activeIndex }"
-      role="listitem"
       tabindex="0"
       :show-dropdown="showDropdown"
     />
