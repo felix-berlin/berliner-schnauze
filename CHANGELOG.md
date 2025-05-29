@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.17.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.17.1...v3.17.2) (2025-05-29)
+
+
+### Bug Fixes
+
+* **modal:** ensure resetModal handles window context before setting state ([af5086d](https://github.com/felix-berlin/berliner-schnauze/commit/af5086df18a2b82f8400057130c0c21cb1a07392))
+
 ## [3.17.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.17.0...v3.17.1) (2025-05-29)
 
 
