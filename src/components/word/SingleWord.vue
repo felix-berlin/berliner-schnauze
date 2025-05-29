@@ -91,17 +91,10 @@ const highlightMatches = (
   let lastIndex = 0;
   for (const match of sorted) {
     result += text.slice(lastIndex, match.start);
-    result += `<mark class="highlight">${text.slice(match.start, match.start + match.length)}</mark>`;
+    result += `<mark class="is-highlight">${text.slice(match.start, match.start + match.length)}</mark>`;
     lastIndex = match.start + match.length;
   }
   result += text.slice(lastIndex);
   return result;
 };
 </script>
-
-<style scoped lang="scss">
-.highlight {
-  background: yellow;
-  color: inherit;
-}
-</style>

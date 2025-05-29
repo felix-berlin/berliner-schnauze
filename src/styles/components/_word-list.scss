@@ -7,6 +7,11 @@
 .c-word-list {
   --size-quote-icon: 32px;
 
+  .is-highlight {
+    background: var(--orange-300);
+    color: var(--blue);
+  }
+
   .c-word-list__word-wrap {
     padding-bottom: vars.$spacer * 1.75;
   }
