@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.17.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.17.0...v3.17.1) (2025-05-29)
+
+
+### Bug Fixes
+
+* **hightlight:** add custom colors to marker ([ab2619d](https://github.com/felix-berlin/berliner-schnauze/commit/ab2619d3225c2eae37a2a5cf223ae879176d3f67))
+* **wordList:** enum filters; make wordGroup enum ([99e8d7e](https://github.com/felix-berlin/berliner-schnauze/commit/99e8d7e495fdd39c05a67faf39c9a509b4c68742))
+* **WordSearchList:** add missing shortcut styles ([2551d61](https://github.com/felix-berlin/berliner-schnauze/commit/2551d6193cd50fb4818fb6c067a67a6d34ea53d5))
+
 # [3.17.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.16.6...v3.17.0) (2025-05-28)
 
 
