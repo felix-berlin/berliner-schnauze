@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.19.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.18.0...v3.19.0) (2025-05-29)
+
+
+### Features
+
+* **word index:** add structured data to word index ([899de46](https://github.com/felix-berlin/berliner-schnauze/commit/899de4673db119328ce3302dcf56bb813b542eb3))
+* **word:** add structured data to single word ([e4a8072](https://github.com/felix-berlin/berliner-schnauze/commit/e4a807262a29ebb49033098be76d929cf6ef86b9))
+
 # [3.18.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.17.2...v3.18.0) (2025-05-29)
 
 
