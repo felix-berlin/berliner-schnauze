@@ -88,9 +88,29 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 const hypher = new Hypher(german);
 
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch));
+
+const schemaJson = () =>
+  JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "DefinedTerm",
+    name: wordProps?.berlinerisch,
+    inDefinedTermSet: {
+      "@type": "DefinedTermSet",
+      name: "Berliner Schnauze Wörterbuch",
+      url: `${Astro.url.origin}/wort`,
+    },
+    description: wordProps?.translations?.map((t) => t?.translation).join("; "),
+    alternateName: wordProps?.alternativeWords?.map((w) => w?.alternativeWord).join(", "),
+    url: Astro.url.href,
+    identifier: word.id,
+    sameAs: wordProps?.learnMore || undefined,
+  });
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={schemaJson()} />
+  </Fragment>
   <Breadcrumbs indexText="Start" truncated={true} linkTextFormat="capitalized">
     <ChevronRight slot="separator" width="20" height="20" />
   </Breadcrumbs>
