@@ -189,7 +189,7 @@ const wordSchema = {
   berlinerischWordTypes: "enum[]",
   dateGmt: "string",
   modifiedGmt: "string",
-  wordGroup: "string",
+  wordGroup: "enum",
   wordProperties: {
     berlinerisch: "string",
     berolinismus: "boolean",
@@ -232,9 +232,12 @@ async function initOrama(words: OramaSearchIndex[]) {
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
   const where: Record<string, unknown> = {};
   if (wordSearch.berolinismus) where["wordProperties.berolinismus"] = true;
-  if (wordSearch.activeLetterFilter) where.wordGroup = wordSearch.activeLetterFilter;
-  if (wordSearch.activeWordTypeFilter)
-    where.berlinerischWordTypes = wordSearch.activeWordTypeFilter;
+  if (wordSearch.activeLetterFilter) {
+    where.wordGroup = { eq: wordSearch.activeLetterFilter };
+  }
+  if (wordSearch.activeWordTypeFilter) {
+    where.berlinerischWordTypes = { containsAny: [wordSearch.activeWordTypeFilter] };
+  }
   return where;
 }
 
@@ -290,7 +293,7 @@ export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
 
     const params: SearchParams<Orama<typeof wordSchema>> = {
       term: wordSearch.search,
-      properties: ["wordProperties.berlinerisch", "wordProperties.translations"],
+      properties: "*",
       limit: wordSearch.resultLimit ?? resultLimit ?? 10,
       threshold: 0.5,
       sortBy,
