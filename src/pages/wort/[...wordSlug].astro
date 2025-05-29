@@ -100,7 +100,7 @@ const schemaJson = () =>
       url: `${Astro.url.origin}/wort`,
     },
     description: (wordProps?.translations ?? []).map((t) => t?.translation).join("; "),
-    alternateName: wordProps?.alternativeWords?.map((w) => w?.alternativeWord).join(", "),
+    alternateName: (wordProps?.alternativeWords ?? []).map((w) => w?.alternativeWord).join(", "),
     url: Astro.url.href,
     identifier: word.id,
     sameAs: wordProps?.learnMore || undefined,
