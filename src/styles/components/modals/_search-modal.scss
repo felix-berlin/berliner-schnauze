@@ -8,6 +8,7 @@
 
   .c-modal__header {
     display: flex;
+    gap: 1rem;
 
     @container (width < 670px) {
       flex-wrap: wrap;
@@ -135,6 +136,11 @@
 
     &__close {
       align-self: flex-end;
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
     }
   }
 
@@ -144,5 +150,23 @@
     flex-wrap: wrap;
     column-gap: 2rem;
     row-gap: 1rem;
+
+    .c-shortcut {
+      @container (width < 650px) {
+        display: none;
+      }
+    }
+
+    .c-modal__close {
+      width: 100%;
+
+      @container (width > 500px) {
+        width: auto;
+        margin-left: auto;
+      }
+
+      @container (width > 650px) {
+      }
+    }
   }
 }
