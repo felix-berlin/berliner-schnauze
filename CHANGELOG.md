@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.18.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.17.2...v3.18.0) (2025-05-29)
+
+
+### Bug Fixes
+
+* remove unused container query ([1e4a8f9](https://github.com/felix-berlin/berliner-schnauze/commit/1e4a8f93e2b05f6344ed421468e7aeb4be0c7dc1))
+* **SearchModal:** improve ui by missing close button, spacing and hidden shortcuts on mobile ([f74bd67](https://github.com/felix-berlin/berliner-schnauze/commit/f74bd67182f579d8b9d07930f98c5e504051c438))
+* **WordList:** make native list element ([7536238](https://github.com/felix-berlin/berliner-schnauze/commit/75362383a175d30596a3ca42320ce8f184e63d46))
+
+
+### Features
+
+* **ModalCloseButton:** add prefix suffix and default slot ([3772b1f](https://github.com/felix-berlin/berliner-schnauze/commit/3772b1f34b37f377f146f849b5a08becf57a8894))
+
 ## [3.17.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.17.1...v3.17.2) (2025-05-29)
 
 
