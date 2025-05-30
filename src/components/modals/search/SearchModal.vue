@@ -19,6 +19,7 @@
         single-word-gap=".5rem"
         :show-dropdown="false"
         :use-window-virtualizer="false"
+        :item-size="60"
       />
     </template>
   </div>

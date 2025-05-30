@@ -31,12 +31,9 @@
       </dt>
 
       <dd
-        v-for="(translation, translationIndex) in source.wordProperties?.translations"
-        :key="translationIndex"
-        class="c-word-list__translation"
-      >
-        {{ translation }}
-      </dd>
+        class="c-word-list__translation c-word-list__translation--single-line"
+        v-html="(source.wordProperties?.translations ?? []).join('<span>᛫</span>')"
+      />
     </dl>
     <WordOptionDropdown
       v-if="showDropdown"
