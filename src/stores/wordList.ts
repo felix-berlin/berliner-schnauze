@@ -1,4 +1,4 @@
-import { computed, atom, task } from "nanostores";
+import { computed, atom, task, onMount } from "nanostores";
 import { persistentMap } from "@nanostores/persistent";
 import { useViewTransition } from "@utils/helpers.ts";
 import type { Maybe, BerlinerWord } from "@/gql/graphql";
@@ -10,7 +10,7 @@ import {
   searchWithHighlight,
 } from "@orama/plugin-match-highlight";
 import type { TypedDocument, Orama, Results, SearchParams } from "@orama/orama";
-import type { OramaSearchIndex } from "@/pages/api/search-index.json.ts";
+import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 export type CleanBerlinerWord = {
   berlinerWordId: BerlinerWord["berlinerWordId"];
@@ -181,6 +181,25 @@ export const searchLength = computed($wordSearch, (wordSearch) => {
   return wordSearch?.search ? wordSearch.search.length : 0;
 });
 
+const getSearchMeta = async () => {
+  const response = await fetch("/api/search/meta.json");
+  const meta = (await response.json()) as {
+    availableWordGroups: string[];
+    wordTypes: string[];
+  };
+  return meta;
+};
+
+onMount($wordSearch, async () => {
+  await task(async () => {
+    // Fetch search meta data on mount
+    await getSearchMeta().then((meta) => {
+      $wordSearch.setKey("letterGroups", meta.availableWordGroups);
+      $wordSearch.setKey("wordTypes", meta.wordTypes);
+    });
+  });
+});
+
 /**
  * ORAMA
  */
@@ -276,7 +295,7 @@ export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
   task<Results<WordDocument> | null>(async () => {
     // Only fetch if not cached
     if (!searchIndexCache) {
-      const response = await fetch("/api/search-index.json");
+      const response = await fetch("/api/search/index.json");
       searchIndexCache = (await response.json()) as OramaSearchIndex[];
     }
 

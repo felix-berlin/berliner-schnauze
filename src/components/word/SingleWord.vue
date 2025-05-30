@@ -60,7 +60,7 @@ import { defineAsyncComponent } from "vue";
 import BookOpen from "virtual:icons/lucide/book-open";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import { routeToWord } from "@utils/helpers.ts";
-import type { OramaSearchIndex } from "@/pages/api/search-index.json.ts";
+import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 type WordProps = {
   source: OramaSearchIndex;
