@@ -156,4 +156,18 @@
       }
     }
   }
+
+  &--large {
+    .c-word-list__header {
+      @include mx.breakpoint("xs", "max") {
+        flex-wrap: wrap;
+      }
+    }
+
+    .c-word-list__berlinerisch {
+      @include mx.breakpoint("xs", "max") {
+        flex: 1 0 100%;
+      }
+    }
+  }
 }
