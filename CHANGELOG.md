@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.20.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.19.0...v3.20.0) (2025-05-30)
+
+
+### Features
+
+* **SingleWord:** limit translations by element width; set item size ([26959b3](https://github.com/felix-berlin/berliner-schnauze/commit/26959b3fada7e1e852c2f6532508caad94394bb6))
+
+
+### Performance Improvements
+
+* **api:** remove SetWordData; add new meta endpoint; rename index endpoint; ([cfe4490](https://github.com/felix-berlin/berliner-schnauze/commit/cfe4490eada9b8e0bfa934d8b5b76629762a36ef))
+* try esnext build ([f9339d3](https://github.com/felix-berlin/berliner-schnauze/commit/f9339d36315ad3d0d63e53ec6e0bd65b9d94c1f8))
+* update browserslist ([9f1369c](https://github.com/felix-berlin/berliner-schnauze/commit/9f1369c2c5f6344fbcbd9bbcc8d27269d0144295))
+
 # [3.19.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.18.0...v3.19.0) (2025-05-29)
 
 
