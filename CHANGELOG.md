@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.20.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.19.0...v3.20.0) (2025-05-30)
+
+
+### Features
+
+* **SingleWord:** limit translations by element width; set item size ([26959b3](https://github.com/felix-berlin/berliner-schnauze/commit/26959b3fada7e1e852c2f6532508caad94394bb6))
+
+
+### Performance Improvements
+
+* **api:** remove SetWordData; add new meta endpoint; rename index endpoint; ([cfe4490](https://github.com/felix-berlin/berliner-schnauze/commit/cfe4490eada9b8e0bfa934d8b5b76629762a36ef))
+* try esnext build ([f9339d3](https://github.com/felix-berlin/berliner-schnauze/commit/f9339d36315ad3d0d63e53ec6e0bd65b9d94c1f8))
+* update browserslist ([9f1369c](https://github.com/felix-berlin/berliner-schnauze/commit/9f1369c2c5f6344fbcbd9bbcc8d27269d0144295))
+
+# [3.19.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.18.0...v3.19.0) (2025-05-29)
+
+
+### Features
+
+* **word index:** add structured data to word index ([899de46](https://github.com/felix-berlin/berliner-schnauze/commit/899de4673db119328ce3302dcf56bb813b542eb3))
+* **word:** add structured data to single word ([e4a8072](https://github.com/felix-berlin/berliner-schnauze/commit/e4a807262a29ebb49033098be76d929cf6ef86b9))
+
+# [3.18.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.17.2...v3.18.0) (2025-05-29)
+
+
+### Bug Fixes
+
+* remove unused container query ([1e4a8f9](https://github.com/felix-berlin/berliner-schnauze/commit/1e4a8f93e2b05f6344ed421468e7aeb4be0c7dc1))
+* **SearchModal:** improve ui by missing close button, spacing and hidden shortcuts on mobile ([f74bd67](https://github.com/felix-berlin/berliner-schnauze/commit/f74bd67182f579d8b9d07930f98c5e504051c438))
+* **WordList:** make native list element ([7536238](https://github.com/felix-berlin/berliner-schnauze/commit/75362383a175d30596a3ca42320ce8f184e63d46))
+
+
+### Features
+
+* **ModalCloseButton:** add prefix suffix and default slot ([3772b1f](https://github.com/felix-berlin/berliner-schnauze/commit/3772b1f34b37f377f146f849b5a08becf57a8894))
+
 ## [3.17.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.17.1...v3.17.2) (2025-05-29)
 
 

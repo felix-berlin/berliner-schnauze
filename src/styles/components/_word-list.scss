@@ -7,6 +7,10 @@
 .c-word-list {
   --size-quote-icon: 32px;
 
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
   .is-highlight {
     background: var(--orange-300);
     color: var(--blue);
@@ -45,14 +49,10 @@
 
   &__header {
     display: flex;
-    flex: 1 1 auto;
+    align-items: center;
     margin: 0;
-    flex-wrap: var(--warp-flex, wrap);
     row-gap: #{vars.$spacer * 1};
-
-    @include mx.breakpoint("sm") {
-      --wrap-flex: no-wrap;
-    }
+    overflow: hidden;
   }
 
   &__berlinerisch {
@@ -64,13 +64,7 @@
 
     transition: 0.3s;
     margin: 0;
-    word-break: break-word;
-    flex: var(--flex, 1 0 100%);
-    position: relative;
-
-    @include mx.breakpoint("sm") {
-      --flex: 0 1 auto;
-    }
+    white-space: nowrap;
 
     a {
       text: {
@@ -97,19 +91,23 @@
   }
 
   &__translation {
-    display: flex;
-    align-items: center;
     font-size: butler-fn.fluid(16, 20, 320, 1260);
-    position: relative;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
+    span,
     &::before {
-      content: "᛫";
       margin: var(--margin, 0 #{vars.$spacer * 0.5});
 
       @include mx.breakpoint("sm") {
         --margin: 0 #{vars.$spacer};
       }
+    }
+
+    &::before {
+      content: "᛫";
     }
   }
 

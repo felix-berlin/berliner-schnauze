@@ -19,6 +19,7 @@
         single-word-gap=".5rem"
         :show-dropdown="false"
         :use-window-virtualizer="false"
+        :item-size="60"
       />
     </template>
   </div>
@@ -27,6 +28,9 @@
     <ShortcutSelect />
     <ShortcutNavigating />
     <ShortcutClose />
+    <ModalCloseButton>
+      <template #suffix>schließen</template>
+    </ModalCloseButton>
   </footer>
 </template>
 
@@ -41,6 +45,7 @@ import WordFilter from "@components/word-search/WordFilter.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
 import { $showWordListFilterFlyout, $searchResultCount } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
+import ModalCloseButton from "@components/ModalCloseButton.vue";
 
 const SearchWords = defineAsyncComponent(() => import("@components/SearchWords.vue"));
 const WordList = defineAsyncComponent(() => import("@components/WordList.vue"));

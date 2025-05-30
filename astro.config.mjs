@@ -233,10 +233,25 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
         runtimeCaching: [
           {
-            urlPattern: /.*\/api\/search-index\.json$/,
+            urlPattern: /.*\/api\/search\/index\.json$/,
             handler: "NetworkFirst",
             options: {
               cacheName: "api-search-index",
+              networkTimeoutSeconds: 10,
+              expiration: {
+                maxEntries: 5,
+                maxAgeSeconds: 10_800, // 3 hours
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /.*\/api\/search\/meta\.json$/,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "api-search-meta",
               networkTimeoutSeconds: 10,
               expiration: {
                 maxEntries: 5,
@@ -310,6 +325,7 @@ export default defineConfig({
 
     build: {
       sourcemap: true, // This is needed for sentryVitePlugin
+      target: "esnext",
     },
   },
 });

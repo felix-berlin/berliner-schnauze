@@ -51,6 +51,17 @@
         align-self: flex-end;
       }
     }
+
+    .c-modal__close {
+      &.has-suffix,
+      &.has-prefix {
+        gap: 0.25rem;
+      }
+
+      &.has-suffix {
+        padding-right: 0.5rem;
+      }
+    }
   }
 
   &.has-close-on-click-outside {

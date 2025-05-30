@@ -5,9 +5,11 @@
     v-slot="{ item, index }"
     v-bind="!useWindowVirtualizer ? { style: { width: '100%', height: '100%' } } : {}"
     :data="mutableOramaSearch"
+    :item-size="itemSize"
     class="c-word-list"
     aria-live="polite"
-    role="list"
+    as="ul"
+    item="li"
   >
     <SingleWord
       :ref="setResultRef"
@@ -17,7 +19,6 @@
       :positions="item.positions"
       :style="{ 'margin-bottom': singleWordGap }"
       :class="{ 'is-active': showActive && index === activeIndex }"
-      role="listitem"
       tabindex="0"
       :show-dropdown="showDropdown"
     />
@@ -38,10 +39,12 @@ const {
   showDropdown = true,
   useWindowVirtualizer = true,
   singleWordGap = "1.75rem",
+  itemSize = 110,
 } = defineProps<{
   useWindowVirtualizer?: boolean;
   showDropdown?: boolean;
   singleWordGap?: string;
+  itemSize?: number;
 }>();
 
 const virtualizerComponent = useWindowVirtualizer ? WindowVirtualizer : VList;

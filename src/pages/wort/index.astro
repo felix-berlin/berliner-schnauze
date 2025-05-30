@@ -38,9 +38,21 @@ const content = {
       "Alle Berliner Worte in der Übersicht. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.",
   },
 };
+
+const schemaJson = () =>
+  JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    name: "Berliner Schnauze Wörterbuch",
+    url: "https://berliner-schnauze.de/wort",
+    description: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch.",
+  });
 ---
 
 <Layout content={seoData(content)} contentClasses="o-word-index">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={schemaJson()} />
+  </Fragment>
   <Breadcrumbs indexText="Start">
     <ChevronRight slot="separator" width="20" height="20" />
   </Breadcrumbs>
