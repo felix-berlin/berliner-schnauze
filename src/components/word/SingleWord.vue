@@ -31,12 +31,9 @@
       </dt>
 
       <dd
-        v-for="(translation, translationIndex) in source.wordProperties?.translations"
-        :key="translationIndex"
-        class="c-word-list__translation"
-      >
-        {{ translation }}
-      </dd>
+        class="c-word-list__translation c-word-list__translation--single-line"
+        v-html="(source.wordProperties?.translations ?? []).join('<span>᛫</span>')"
+      />
     </dl>
     <WordOptionDropdown
       v-if="showDropdown"
@@ -60,7 +57,7 @@ import { defineAsyncComponent } from "vue";
 import BookOpen from "virtual:icons/lucide/book-open";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import { routeToWord } from "@utils/helpers.ts";
-import type { OramaSearchIndex } from "@/pages/api/search-index.json.ts";
+import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 type WordProps = {
   source: OramaSearchIndex;
