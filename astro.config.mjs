@@ -325,6 +325,7 @@ export default defineConfig({
 
     build: {
       sourcemap: true, // This is needed for sentryVitePlugin
+      target: "esnext",
     },
   },
 });
