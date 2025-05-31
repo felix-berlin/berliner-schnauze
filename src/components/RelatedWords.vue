@@ -1,21 +1,19 @@
 <template>
   <section class="c-related-words">
     <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
-    <div class="c-related-words__words" role="list">
-      <template v-for="word in xRandomWords(words, numberOfWords)">
+    <ul class="c-related-words__words u-list-reset">
+      <li v-for="word in xRandomWords(words, numberOfWords)" :key="word.id">
         <a
           v-if="word"
-          :key="word.id"
           :href="routeToWord(word.slug!)"
           class="c-related-words__word"
           :title="`Erfahre mehr über ${word.wordProperties?.berlinerisch}`"
-          role="listitem"
         >
           {{ word.wordProperties?.berlinerisch }}
         </a>
-      </template>
+      </li>
       <slot />
-    </div>
+    </ul>
   </section>
 </template>
 
