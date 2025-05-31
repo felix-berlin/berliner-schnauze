@@ -10,6 +10,10 @@
   padding: 0.7rem 1.4rem;
   max-width: 88vw;
 
+  @include butler-mx.breakpoint("xs") {
+    max-width: 400px;
+  }
+
   @include butler-mx.dark-mode-class {
     --color: var(--color-body);
     --color-background: var(--new-blue-600);
@@ -34,7 +38,6 @@
     @include butler-mx.feature("motion") {
       opacity: 1;
       transform: translateX(0);
-
 
       @starting-style {
         transform: translateX(100%);
