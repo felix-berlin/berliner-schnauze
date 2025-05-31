@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.20.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.20.2...v3.20.3) (2025-05-31)
+
+
+### Bug Fixes
+
+* **toast:** add missing aria labels ([9dfc72e](https://github.com/felix-berlin/berliner-schnauze/commit/9dfc72e4cbc56fb5e05eb04fcc20b68033a137ef))
+* **toast:** max width on desktop ([aa3e9ea](https://github.com/felix-berlin/berliner-schnauze/commit/aa3e9eacfbc057aa5f1299b63f9f2a9ea3e1c43a))
+
+
+### Performance Improvements
+
+* load conditial components async ([5c01a2b](https://github.com/felix-berlin/berliner-schnauze/commit/5c01a2b23a62df6b842a42e3bd8c955672b73270))
+* **toast:** load icon dynamic ([7e41e86](https://github.com/felix-berlin/berliner-schnauze/commit/7e41e86353e662bd53f9974c7e5c261c809624ae))
+
 ## [3.20.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.20.1...v3.20.2) (2025-05-31)
 
 
