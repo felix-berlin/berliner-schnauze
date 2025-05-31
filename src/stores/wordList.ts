@@ -292,22 +292,22 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
   if (wordSearch.similarSoundingWords) {
     where["wordProperties.similarSoundingWords"] = true;
   }
-  if (wordSearch.characterCount) {
+  if (wordSearch.characterCount !== undefined && wordSearch.characterCount !== null) {
     where["wordProperties.characterLength"] = {
       gte: wordSearch.characterCount,
     };
   }
-  if (wordSearch.consonantsCount) {
+  if (wordSearch.consonantsCount !== undefined && wordSearch.consonantsCount !== null) {
     where["wordProperties.consonantsCount"] = {
       gte: wordSearch.consonantsCount,
     };
   }
-  if (wordSearch.vowelsCount) {
+  if (wordSearch.vowelsCount !== undefined && wordSearch.vowelsCount !== null) {
     where["wordProperties.vowelsCount"] = {
       gte: wordSearch.vowelsCount,
     };
   }
-  if (wordSearch.syllablesCount) {
+  if (wordSearch.syllablesCount !== undefined && wordSearch.syllablesCount !== null) {
     where["wordProperties.syllablesCount"] = {
       gte: wordSearch.syllablesCount,
     };

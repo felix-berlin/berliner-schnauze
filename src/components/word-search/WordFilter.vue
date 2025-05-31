@@ -48,6 +48,11 @@
         <WordSwitch switch-type="multipleMeanings" label="Mehrere Bedeutungen" />
       </div>
 
+      <WordRangeSlider range-type="characterCount" label="Zeichen-Anzahl" />
+      <WordRangeSlider range-type="consonantsCount" label="Konsonanten-Anzahl" />
+      <WordRangeSlider range-type="vowelsCount" label="Vokale-Anzahl" />
+      <WordRangeSlider range-type="syllablesCount" label="Silben-Anzahl" />
+
       <button
         type="button"
         class="c-filter-search__reset c-button c-button--center-icon"
@@ -65,6 +70,7 @@ import { useTemplateRef } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import WordSwitch from "@components/filter/WordSwitch.vue";
+import WordRangeSlider from "@components/filter/WordRangeSlider.vue";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
 import { $toggleWordListFilterFlyout, $showWordListFilterFlyout, resetAll } from "@stores/index.ts";
