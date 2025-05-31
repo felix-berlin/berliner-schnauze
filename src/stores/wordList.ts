@@ -36,7 +36,7 @@ export type WordList = {
   berolinismus: boolean;
   audioBerlinerisch: boolean;
   audioExamples?: boolean;
-  multibleMeanings?: boolean;
+  multipleMeanings?: boolean;
   similarSoundingWords?: boolean;
   characterCount?: number;
   consonantsCount?: number;
@@ -60,7 +60,7 @@ export const $wordSearch = persistentMap<WordList>(
     berolinismus: false,
     audioBerlinerisch: false,
     audioExamples: false,
-    multibleMeanings: false,
+    multipleMeanings: false,
     similarSoundingWords: false,
     characterCount: undefined,
     consonantsCount: undefined,
@@ -86,7 +86,7 @@ export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
     "berolinismus",
     "audioBerlinerisch",
     "audioExamples",
-    "multibleMeanings",
+    "multipleMeanings",
     "similarSoundingWords",
   ];
   const numberKeys: (keyof WordList)[] = [
@@ -288,7 +288,7 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
   if (wordSearch.berolinismus) where["wordProperties.berolinismus"] = true;
   if (wordSearch.audioBerlinerisch) where["wordProperties.audioBerlinerisch"] = true;
   if (wordSearch.audioExamples) where["wordProperties.audioExamples"] = true;
-  if (wordSearch.multibleMeanings) where["wordProperties.multipleMeanings"] = true;
+  if (wordSearch.multipleMeanings) where["wordProperties.multipleMeanings"] = true;
   if (wordSearch.similarSoundingWords) {
     where["wordProperties.similarSoundingWords"] = true;
   }
