@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.20.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.20.3...v3.20.4) (2025-05-31)
+
+
+### Bug Fixes
+
+* make related words list element ([da1e76f](https://github.com/felix-berlin/berliner-schnauze/commit/da1e76f4a3fea350389b475bc5e5052be396c155))
+
 ## [3.20.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.20.2...v3.20.3) (2025-05-31)
 
 
