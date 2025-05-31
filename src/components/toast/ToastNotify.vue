@@ -9,6 +9,7 @@
     :style="stylePosition"
   >
     <Component :is="toastIconMap[status]" v-if="showStatusIcon" class="c-toast-notify__icon" />
+      aria-hidden="true"
 
     <div class="c-toast-notify__message">
       {{ message }}
@@ -18,6 +19,7 @@
       v-if="showClose"
       type="button"
       class="c-toast-notify__close c-button c-button--center-icon"
+      aria-label="schließen"
       @click="hideToast()"
     >
       <Close :width="12" :height="12" />
