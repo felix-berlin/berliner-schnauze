@@ -34,6 +34,14 @@ export type WordList = {
   modifiedDateOrder: "ASC" | "DESC";
   activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
   berolinismus: boolean;
+  audioBerlinerisch: boolean;
+  audioExamples?: boolean;
+  multibleMeanings?: boolean;
+  similarSoundingWords?: boolean;
+  characterCount?: number;
+  consonantsCount?: number;
+  vowelsCount?: number;
+  syllablesCount?: number;
   resultLimit?: number;
 };
 
@@ -50,6 +58,14 @@ export const $wordSearch = persistentMap<WordList>(
     modifiedDateOrder: "ASC",
     activeOrderCategory: "alphabetical",
     berolinismus: false,
+    audioBerlinerisch: false,
+    audioExamples: false,
+    multibleMeanings: false,
+    similarSoundingWords: false,
+    characterCount: undefined,
+    consonantsCount: undefined,
+    vowelsCount: undefined,
+    syllablesCount: undefined,
     resultLimit: undefined,
   },
   {
@@ -65,19 +81,30 @@ export const $wordSearch = persistentMap<WordList>(
 );
 
 export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
+  // List all filter keys that should count as "active" if truthy
+  const booleanKeys: (keyof WordList)[] = [
+    "berolinismus",
+    "audioBerlinerisch",
+    "audioExamples",
+    "multibleMeanings",
+    "similarSoundingWords",
+  ];
+  const numberKeys: (keyof WordList)[] = [
+    "characterCount",
+    "consonantsCount",
+    "vowelsCount",
+    "syllablesCount",
+  ];
+
   let count = 0;
 
-  if (wordSearch.activeLetterFilter !== "") {
-    count++;
-  }
+  if (wordSearch.activeLetterFilter !== "") count++;
+  if (wordSearch.activeWordTypeFilter !== "") count++;
 
-  if (wordSearch.activeWordTypeFilter !== "") {
-    count++;
-  }
-
-  if (wordSearch.berolinismus) {
-    count++;
-  }
+  count += booleanKeys.filter((key) => !!wordSearch[key]).length;
+  count += numberKeys.filter(
+    (key) => wordSearch[key] !== undefined && wordSearch[key] !== null,
+  ).length;
 
   return count;
 });
@@ -213,6 +240,14 @@ const wordSchema = {
     berlinerisch: "string",
     berolinismus: "boolean",
     translations: "string[]",
+    syllablesCount: "number",
+    multipleMeanings: "boolean",
+    characterLength: "number",
+    audioBerlinerisch: "boolean",
+    audioExamples: "boolean",
+    consonantsCount: "number",
+    vowelsCount: "number",
+    similarSoundingWords: "boolean",
   },
 } as const;
 
@@ -251,6 +286,32 @@ async function initOrama(words: OramaSearchIndex[]) {
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
   const where: Record<string, unknown> = {};
   if (wordSearch.berolinismus) where["wordProperties.berolinismus"] = true;
+  if (wordSearch.audioBerlinerisch) where["wordProperties.audioBerlinerisch"] = true;
+  if (wordSearch.audioExamples) where["wordProperties.audioExamples"] = true;
+  if (wordSearch.multibleMeanings) where["wordProperties.multipleMeanings"] = true;
+  if (wordSearch.similarSoundingWords) {
+    where["wordProperties.similarSoundingWords"] = true;
+  }
+  if (wordSearch.characterCount) {
+    where["wordProperties.characterLength"] = {
+      gte: wordSearch.characterCount,
+    };
+  }
+  if (wordSearch.consonantsCount) {
+    where["wordProperties.consonantsCount"] = {
+      gte: wordSearch.consonantsCount,
+    };
+  }
+  if (wordSearch.vowelsCount) {
+    where["wordProperties.vowelsCount"] = {
+      gte: wordSearch.vowelsCount,
+    };
+  }
+  if (wordSearch.syllablesCount) {
+    where["wordProperties.syllablesCount"] = {
+      gte: wordSearch.syllablesCount,
+    };
+  }
   if (wordSearch.activeLetterFilter) {
     where.wordGroup = { eq: wordSearch.activeLetterFilter };
   }
