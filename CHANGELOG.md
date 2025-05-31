@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.20.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.20.1...v3.20.2) (2025-05-31)
+
+
+### Bug Fixes
+
+* **imageGallery:** missing caption and description ([595d227](https://github.com/felix-berlin/berliner-schnauze/commit/595d2271617f3293b5126ec7cf5a629965402ca4))
+
 ## [3.20.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.20.0...v3.20.1) (2025-05-30)
 
 
