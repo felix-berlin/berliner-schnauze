@@ -15,18 +15,6 @@
 
       <h2>Filter nach:</h2>
 
-      <div class="c-filter-search__berolinismus">
-        <h3>Berolinismus</h3>
-        <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
-        <BerolinismusSwitch />
-      </div>
-
-      <div class="c-filter-search__berolinismus">
-        <h3>Beispiel Audio</h3>
-        <i>Zeige Wörter dessen Beispiele Audio Beispiele haben.</i>
-        <AudioExamplesSwitch />
-      </div>
-
       <h3>Alphabetisch</h3>
       <LetterFilter />
 
@@ -35,6 +23,30 @@
         <BadgeTag> Beta </BadgeTag>
       </div>
       <WordTypeFilter />
+
+      <div class="c-filter-search__switch">
+        <h3>Berolinismus</h3>
+        <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
+        <WordSwitch switch-type="berolinismus" label="Berolinismus" />
+      </div>
+
+      <div class="c-filter-search__switch">
+        <h3>Beispiel Audio</h3>
+        <i>Zeige Wörter dessen Beispiele Audio Beispiele haben.</i>
+        <WordSwitch switch-type="audioExamples" label="Beispiele Audio" />
+      </div>
+
+      <div class="c-filter-search__switch">
+        <h3>Berlinerisch Audio</h3>
+        <i>Zeige Wörter mit Berlinerisch Audio Beispielen.</i>
+        <WordSwitch switch-type="audioBerlinerisch" label="Berlinerisch Audio" />
+      </div>
+
+      <div class="c-filter-search__switch">
+        <h3>Mehrere Bedeutungen</h3>
+        <i>Zeige Wörter die mehrere Bedeutungen haben.</i>
+        <WordSwitch switch-type="multipleMeanings" label="Mehrere Bedeutungen" />
+      </div>
 
       <button
         type="button"
@@ -52,8 +64,7 @@
 import { useTemplateRef } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import LetterFilter from "@components/filter/LetterFilter.vue";
-import BerolinismusSwitch from "@components/filter/BerolinismusSwitch.vue";
-import AudioExamplesSwitch from "@components/filter/AudioExamplesSwitch.vue";
+import WordSwitch from "@components/filter/WordSwitch.vue";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
 import { $toggleWordListFilterFlyout, $showWordListFilterFlyout, resetAll } from "@stores/index.ts";
