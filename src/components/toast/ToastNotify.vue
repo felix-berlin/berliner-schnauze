@@ -8,8 +8,12 @@
     :class="`c-toast-notify--${status} c-toast-notify--${position}`"
     :style="stylePosition"
   >
-    <Component :is="toastIconMap[status]" v-if="showStatusIcon" class="c-toast-notify__icon" />
+    <Component
+      :is="toastIconMap[status]"
+      v-if="showStatusIcon"
+      class="c-toast-notify__icon"
       aria-hidden="true"
+    />
 
     <div class="c-toast-notify__message">
       {{ message }}
@@ -28,15 +32,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount, watch, nextTick, reactive } from "vue";
+import {
+  ref,
+  onMounted,
+  onBeforeMount,
+  watch,
+  nextTick,
+  reactive,
+  defineAsyncComponent,
+} from "vue";
 import { useSwipe } from "@vueuse/core";
 import { removeToastById, supportsPopover } from "@stores/index.ts";
-import Info from "virtual:icons/lucide/info";
-import Error from "virtual:icons/lucide/x-circle";
-import Warning from "virtual:icons/lucide/alert-circle";
-import Success from "virtual:icons/lucide/check-circle-2";
-import Close from "virtual:icons/lucide/x";
 import type { ToastNotify } from "@stores/index.ts";
+
+const Close = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
 
 type Position = "bottom" | "left" | "right" | "top";
 
@@ -69,10 +78,10 @@ const stylePosition: StylePositionType = reactive({
 });
 
 const toastIconMap = {
-  error: Error,
-  warning: Warning,
-  success: Success,
-  info: Info,
+  error: defineAsyncComponent(() => import("virtual:icons/lucide/x-circle")),
+  warning: defineAsyncComponent(() => import("virtual:icons/lucide/alert-circle")),
+  success: defineAsyncComponent(() => import("virtual:icons/lucide/check-circle-2")),
+  info: defineAsyncComponent(() => import("virtual:icons/lucide/info")),
 };
 
 /**
