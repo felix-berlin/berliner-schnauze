@@ -14,18 +14,13 @@
     max="40"
   />
 
-  <button
-    v-if="typeof rangeValue !== 'undefined'"
-    type="button"
-    class="c-button c-button--center-icon"
-    @click="resetRange"
-  >
+  <button v-if="notSet" type="button" class="c-button c-button--center-icon" @click="resetRange">
     <RotateCcwIcon /> reset
   </button>
 </template>
 
 <script setup lang="ts">
-import { useId } from "vue";
+import { useId, computed } from "vue";
 import { useVModel } from "@nanostores/vue";
 import { $wordSearch } from "@stores/index.ts";
 import RotateCcwIcon from "virtual:icons/lucide/rotate-ccw";
@@ -42,6 +37,8 @@ const id = useId();
 const resetRange = () => {
   rangeValue.value = undefined;
 };
+
+const notSet = computed(() => typeof rangeValue.value === "undefined");
 </script>
 
 <style scoped></style>
