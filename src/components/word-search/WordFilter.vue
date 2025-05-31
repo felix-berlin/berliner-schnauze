@@ -21,6 +21,12 @@
         <BerolinismusSwitch />
       </div>
 
+      <div class="c-filter-search__berolinismus">
+        <h3>Beispiel Audio</h3>
+        <i>Zeige Wörter dessen Beispiele Audio Beispiele haben.</i>
+        <AudioExamplesSwitch />
+      </div>
+
       <h3>Alphabetisch</h3>
       <LetterFilter />
 
@@ -47,6 +53,7 @@ import { useTemplateRef } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import BerolinismusSwitch from "@components/filter/BerolinismusSwitch.vue";
+import AudioExamplesSwitch from "@components/filter/AudioExamplesSwitch.vue";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
 import { $toggleWordListFilterFlyout, $showWordListFilterFlyout, resetAll } from "@stores/index.ts";
