@@ -53,9 +53,7 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue";
-// import WordExamples from "@components/word/WordExamples.vue";
 import BookOpen from "virtual:icons/lucide/book-open";
-import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import { routeToWord } from "@utils/helpers.ts";
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
@@ -69,6 +67,9 @@ type WordProps = {
 const { source, index, showDropdown = true, positions } = defineProps<WordProps>();
 
 const IsWordOfTheDay = defineAsyncComponent(() => import("@components/word/IsWordOfTheDay.vue"));
+const WordOptionDropdown = defineAsyncComponent(
+  () => import("@components/word/WordOptionDropdown.vue"),
+);
 
 const highlightMatches = (
   text: string,

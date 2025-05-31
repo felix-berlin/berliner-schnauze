@@ -133,14 +133,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import AlertBanner from "@components/AlertBanner.vue";
+import { ref, reactive, defineAsyncComponent } from "vue";
 import TurnStile from "@components/TurnStile.vue";
 import { createToastNotify } from "@stores/index.ts";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import { trackEvent } from "@utils/analytics";
 import { useMutation } from "@urql/vue";
 import { SendEmailDocument } from "@/gql/graphql.ts";
+
+const AlertBanner = defineAsyncComponent(() => import("@components/AlertBanner.vue"));
 
 const props = defineProps<{
   berlinerWord?: string;

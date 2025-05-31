@@ -5,6 +5,7 @@
       :height="44"
       :stroke-width="0"
       :class="`${props.rootBemClass}__quote-icon`"
+      aria-hidden="true"
     />
 
     <div v-if="examples && examples.length === 1" :class="`${props.rootBemClass}__single-example`">
@@ -49,9 +50,11 @@
 </template>
 
 <script setup lang="ts">
+import { defineAsyncComponent } from "vue";
 import Quote from "virtual:icons/lucide/quote";
-import AudioPlayerList from "@components/AudioPlayerList.vue";
 import type { Maybe, WordPropertiesExamples } from "@/gql/graphql";
+
+const AudioPlayerList = defineAsyncComponent(() => import("@components/AudioPlayerList.vue"));
 
 interface WordExamplesProps {
   examples?: Maybe<WordPropertiesExamples>[];
