@@ -107,7 +107,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
     "rollup-plugin-visualizer": "^6.0.1",
-    "sass": "1.89.0",
+    "sass": "1.89.1",
     "semantic-release": "^24.2.5",
     "sharp": "^0.34.2",
     "sinon": "^20.0.0",
