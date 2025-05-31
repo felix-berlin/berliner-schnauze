@@ -2,7 +2,7 @@
 import type { WordProperties, MediaItem } from "@/gql/graphql";
 import "photoswipe/style.css";
 import { Picture, getImage } from "astro:assets";
-import type { GetImageResult } from "astro:assets";
+import type { GetImageResult } from "astro";
 
 type ImageGalleryProps = {
   images: WordProperties["images"];
@@ -33,15 +33,15 @@ const imageList = images?.nodes as Array<MediaItem>;
  */
 const lightboxImageList = await Promise.all(
   imageList.map(async (image) => {
-    const images: { [key: string]: GetImageResult } = {};
+    const images: Record<string, GetImageResult> = {};
 
     for (const format of formats) {
       images[format] = await getImage({
         src: image.sourceUrl!,
         format: format,
-        width: image.mediaDetails?.width,
-        height: image.mediaDetails?.height,
-        widths: lightboxWidths || null,
+        width: image.mediaDetails?.width || undefined,
+        height: image.mediaDetails?.height || undefined,
+        widths: lightboxWidths || undefined,
         sizes: `${lightboxSizes}, ${image.mediaDetails?.width!}px` || null,
       });
     }
@@ -72,13 +72,13 @@ const lightboxImageList = await Promise.all(
                 class="c-image-gallery__link"
               >
                 <Picture
-                  src={image.sourceUrl!}
-                  alt={image.altText!}
-                  width={image.mediaDetails?.width!}
-                  height={image.mediaDetails?.height!}
+                  src={image.sourceUrl}
+                  alt={image.altText}
+                  width={image.mediaDetails?.width}
+                  height={image.mediaDetails?.height}
                   formats={formats}
                   widths={widths}
-                  sizes={`${sizes}, ${image.mediaDetails?.width!}px`}
+                  sizes={`${sizes}, ${image.mediaDetails?.width}px`}
                   class="c-image-gallery__image"
                   loading={loading}
                 />
@@ -86,7 +86,9 @@ const lightboxImageList = await Promise.all(
               {(image?.caption || image?.description) && (
                 <figcaption class="c-image-gallery__caption">
                   <p set:html={image.caption} />
-                  <i class="c-image-gallery__description">{image.description}</i>
+                  <i class="c-image-gallery__description">
+                    <Fragment set:html={image.description} />
+                  </i>
                 </figcaption>
               )}
             </figure>

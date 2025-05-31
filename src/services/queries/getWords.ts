@@ -163,9 +163,9 @@ export const GetAllWords = graphql(`
                   height
                   width
                 }
-                caption(format: RAW)
+                caption(format: RENDERED)
                 altText
-                description(format: RAW)
+                description(format: RENDERED)
               }
             }
           }

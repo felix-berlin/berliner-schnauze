@@ -21657,7 +21657,7 @@ export const GetAllWordsDocument = {
                                                   {
                                                     kind: "Argument",
                                                     name: { kind: "Name", value: "format" },
-                                                    value: { kind: "EnumValue", value: "RAW" },
+                                                    value: { kind: "EnumValue", value: "RENDERED" },
                                                   },
                                                 ],
                                               },
@@ -21672,7 +21672,7 @@ export const GetAllWordsDocument = {
                                                   {
                                                     kind: "Argument",
                                                     name: { kind: "Name", value: "format" },
-                                                    value: { kind: "EnumValue", value: "RAW" },
+                                                    value: { kind: "EnumValue", value: "RENDERED" },
                                                   },
                                                 ],
                                               },
