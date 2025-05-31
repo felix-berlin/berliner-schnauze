@@ -31,15 +31,15 @@
       </div>
 
       <div class="c-filter-search__switch">
-        <h3>Beispiel Audio</h3>
-        <i>Zeige Wörter dessen Beispiele Audio Beispiele haben.</i>
-        <WordSwitch switch-type="audioExamples" label="Beispiele Audio" />
+        <h3>Beispiel Hörprobe(n)</h3>
+        <i>Zeige Wörter dessen Beispiel(e) Hörprobe(n) haben.</i>
+        <WordSwitch switch-type="audioExamples" label="Beispiele Hörprobe(n)" />
       </div>
 
       <div class="c-filter-search__switch">
-        <h3>Berlinerisch Audio</h3>
-        <i>Zeige Wörter mit Berlinerisch Audio Beispielen.</i>
-        <WordSwitch switch-type="audioBerlinerisch" label="Berlinerisch Audio" />
+        <h3>Berlinerisch Hörprobe(n)</h3>
+        <i>Zeige Wörter mit Berlinerisch Hörprobe(n).</i>
+        <WordSwitch switch-type="audioBerlinerisch" label="Berlinerisch Hörprobe(n)" />
       </div>
 
       <div class="c-filter-search__switch">
