@@ -33,7 +33,7 @@
       <div class="c-filter-search__switch">
         <h3>Beispiel Hörprobe(n)</h3>
         <i>Zeige Wörter dessen Beispiel(e) Hörprobe(n) haben.</i>
-        <WordSwitch switch-type="audioExamples" label="Beispiele Hörprobe(n)" />
+        <WordSwitch switch-type="audioExamples" label="Beispiel Hörprobe(n)" />
       </div>
 
       <div class="c-filter-search__switch">
