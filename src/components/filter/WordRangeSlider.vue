@@ -1,27 +1,48 @@
 <template>
-  <div class="c-word-range-slider">
-    <input :id="id" v-model="rangeValue" type="range" max="40" />
-    <label :for="id">{{ label }}</label>
-  </div>
+  <fieldset class="c-word-range-slider">
+    <legend :id="`${id}-legend`">{{ label }}</legend>
+    <input
+      :id="id"
+      v-model="rangeValue"
+      type="range"
+      :max="getMinMax.max"
+      :min="getMinMax.min"
+      class="c-input c-input--range"
+      :aria-labelledby="`${id}-legend`"
+      :aria-controls="`${id}-number`"
+    />
 
-  <input
-    v-model="rangeValue"
-    type="number"
-    :aria-label="`Anzahl der ${label}`"
-    placeholder="Alle"
-    class="c-input c-input--number"
-    min="0"
-    max="40"
-  />
+    <input
+      :id="`${id}-number`"
+      v-model="rangeValue"
+      type="number"
+      :aria-label="`Anzahl der ${label}`"
+      class="c-input c-input--number"
+      placeholder="-"
+      :max="getMinMax.max"
+      :min="getMinMax.min"
+      :aria-labelledby="`${id}-legend`"
+      :aria-controls="id"
+    />
 
-  <button v-if="notSet" type="button" class="c-button c-button--center-icon" @click="resetRange">
-    <RotateCcwIcon /> reset
-  </button>
+    <transition name="fade">
+      <button
+        v-if="!hasRangeSet"
+        type="button"
+        class="c-button c-button--center-icon"
+        :aria-describedby="`${id}-legend`"
+        aria-label="Filter zurücksetzen"
+        @click="resetRange"
+      >
+        <RotateCcwIcon width="20" height="20" />
+      </button>
+    </transition>
+  </fieldset>
 </template>
 
 <script setup lang="ts">
 import { useId, computed } from "vue";
-import { useVModel } from "@nanostores/vue";
+import { useVModel, useStore } from "@nanostores/vue";
 import { $wordSearch } from "@stores/index.ts";
 import RotateCcwIcon from "virtual:icons/lucide/rotate-ccw";
 
@@ -31,6 +52,19 @@ const { rangeType, label } = defineProps<{
 }>();
 
 const rangeValue = useVModel($wordSearch, rangeType);
+const wordSearch = useStore($wordSearch);
+
+const getMinMax = computed(() => {
+  // Map prop to correct key in the object
+  const keyMap = {
+    characterCount: "characterLength",
+    consonantsCount: "consonantsCount",
+    vowelsCount: "vowelsCount",
+    syllablesCount: "syllablesCount",
+  } as const;
+  const key = keyMap[rangeType];
+  return wordSearch.value.rangeFilterMinMax?.[key] ?? { min: 0, max: 0 };
+});
 
 const id = useId();
 
@@ -38,7 +72,9 @@ const resetRange = () => {
   rangeValue.value = undefined;
 };
 
-const notSet = computed(() => typeof rangeValue.value === "undefined");
+const hasRangeSet = computed(() => typeof rangeValue.value === "undefined");
 </script>
 
-<style scoped></style>
+<style lang="scss">
+@use "@styles/components/word-range-slider.scss";
+</style>

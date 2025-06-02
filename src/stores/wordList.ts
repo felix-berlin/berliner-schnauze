@@ -23,6 +23,13 @@ export type CleanBerlinerWord = {
   wordProperties: BerlinerWord["wordProperties"];
 };
 
+export type RangeFilterMinMax = {
+  characterLength: { min: number; max: number };
+  consonantsCount: { min: number; max: number };
+  vowelsCount: { min: number; max: number };
+  syllablesCount: { min: number; max: number };
+};
+
 export type WordList = {
   letterGroups: Maybe<string>[];
   activeLetterFilter: string;
@@ -43,6 +50,7 @@ export type WordList = {
   vowelsCount?: number;
   syllablesCount?: number;
   resultLimit?: number;
+  rangeFilterMinMax?: RangeFilterMinMax;
 };
 
 export const $wordSearch = persistentMap<WordList>(
@@ -213,6 +221,7 @@ const getSearchMeta = async () => {
   const meta = (await response.json()) as {
     availableWordGroups: string[];
     wordTypes: string[];
+    rangeFilterMinMax: RangeFilterMinMax;
   };
   return meta;
 };
@@ -221,8 +230,11 @@ onMount($wordSearch, async () => {
   await task(async () => {
     // Fetch search meta data on mount
     await getSearchMeta().then((meta) => {
+      console.log("hier", meta.rangeFilterMinMax);
+
       $wordSearch.setKey("letterGroups", meta.availableWordGroups);
       $wordSearch.setKey("wordTypes", meta.wordTypes);
+      $wordSearch.setKey("rangeFilterMinMax", meta.rangeFilterMinMax);
     });
   });
 });
@@ -292,22 +304,22 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
   if (wordSearch.similarSoundingWords) {
     where["wordProperties.similarSoundingWords"] = true;
   }
-  if (wordSearch.characterCount !== undefined && wordSearch.characterCount !== null) {
+  if (wordSearch.characterCount != null) {
     where["wordProperties.characterLength"] = {
       gte: wordSearch.characterCount,
     };
   }
-  if (wordSearch.consonantsCount !== undefined && wordSearch.consonantsCount !== null) {
+  if (wordSearch.consonantsCount != null) {
     where["wordProperties.consonantsCount"] = {
       gte: wordSearch.consonantsCount,
     };
   }
-  if (wordSearch.vowelsCount !== undefined && wordSearch.vowelsCount !== null) {
+  if (wordSearch.vowelsCount != null) {
     where["wordProperties.vowelsCount"] = {
       gte: wordSearch.vowelsCount,
     };
   }
-  if (wordSearch.syllablesCount !== undefined && wordSearch.syllablesCount !== null) {
+  if (wordSearch.syllablesCount != null) {
     where["wordProperties.syllablesCount"] = {
       gte: wordSearch.syllablesCount,
     };
