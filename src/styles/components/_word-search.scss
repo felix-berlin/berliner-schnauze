@@ -43,14 +43,6 @@
       --color-border: color-mix(in srgb, var(--blue) 60%, white);
     }
 
-    &::placeholder {
-      color: var(--color-placeholder, color-mix(in srgb, var(--blue) 80%, transparent));
-
-      @include butler-mx.dark-mode-class {
-        --color-placeholder: color-mix(in srgb, var(--yellow-500) 80%, transparent);
-      }
-    }
-
     &:focus-within {
       outline: var(--color-outline) solid 2px;
       z-index: 2;
