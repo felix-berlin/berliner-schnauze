@@ -165,6 +165,7 @@ const schemaJson = () =>
       />
     </header>
     <main class="c-single-word__main">
+      {wordProps?.infoText && <section set:html={wordProps?.infoText} />}
       <section>
         <h2>Etymologie</h2>
 
