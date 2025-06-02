@@ -83,7 +83,7 @@ export const close = () => {
 
   const cb = $onCloseCallback.get();
 
-  if (cb) {
+  if (typeof cb === "function") {
     cb();
     $onCloseCallback.set(null);
   }
