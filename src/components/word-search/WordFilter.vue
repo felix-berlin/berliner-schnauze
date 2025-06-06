@@ -15,12 +15,6 @@
 
       <h2>Filter nach:</h2>
 
-      <div class="c-filter-search__berolinismus">
-        <h3>Berolinismus</h3>
-        <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
-        <BerolinismusSwitch />
-      </div>
-
       <h3>Alphabetisch</h3>
       <LetterFilter />
 
@@ -29,6 +23,35 @@
         <BadgeTag> Beta </BadgeTag>
       </div>
       <WordTypeFilter />
+
+      <div class="c-filter-search__switch">
+        <h3>Berolinismus</h3>
+        <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
+        <WordSwitch switch-type="berolinismus" label="Berolinismus" />
+      </div>
+
+      <div class="c-filter-search__switch">
+        <h3>Beispiel Hörprobe(n)</h3>
+        <i>Zeige Wörter dessen Beispiel(e) Hörprobe(n) haben.</i>
+        <WordSwitch switch-type="audioExamples" label="Beispiel Hörprobe(n)" />
+      </div>
+
+      <div class="c-filter-search__switch">
+        <h3>Berlinerisch Hörprobe(n)</h3>
+        <i>Zeige Wörter mit Berlinerisch Hörprobe(n).</i>
+        <WordSwitch switch-type="audioBerlinerisch" label="Berlinerisch Hörprobe(n)" />
+      </div>
+
+      <div class="c-filter-search__switch">
+        <h3>Mehrere Bedeutungen</h3>
+        <i>Zeige Wörter die mehrere Bedeutungen haben.</i>
+        <WordSwitch switch-type="multipleMeanings" label="Mehrere Bedeutungen" />
+      </div>
+
+      <WordRangeSlider range-type="characterCount" label="Zeichen-Anzahl" />
+      <WordRangeSlider range-type="consonantsCount" label="Konsonanten-Anzahl" />
+      <WordRangeSlider range-type="vowelsCount" label="Vokale-Anzahl" />
+      <WordRangeSlider range-type="syllablesCount" label="Silben-Anzahl" />
 
       <button
         type="button"
@@ -46,7 +69,8 @@
 import { useTemplateRef } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import LetterFilter from "@components/filter/LetterFilter.vue";
-import BerolinismusSwitch from "@components/filter/BerolinismusSwitch.vue";
+import WordSwitch from "@components/filter/WordSwitch.vue";
+import WordRangeSlider from "@components/filter/WordRangeSlider.vue";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
 import { $toggleWordListFilterFlyout, $showWordListFilterFlyout, resetAll } from "@stores/index.ts";

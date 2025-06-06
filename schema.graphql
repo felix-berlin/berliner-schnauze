@@ -20396,10 +20396,6 @@ enum PostStatusEnum {
   """
   DRAFT
   """
-  Objects with the flamingo-spam status
-  """
-  FLAMINGO_SPAM
-  """
   Objects with the future status
   """
   FUTURE

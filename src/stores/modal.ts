@@ -2,7 +2,7 @@ import { atom, map } from "nanostores";
 import { markRaw, nextTick, isVNode } from "vue";
 
 type ModalProps = {
-  uid: string;
+  uid?: string | undefined;
   showCloseButton: boolean;
   disableScroll: boolean;
   closeOnClickOutside: boolean;
@@ -23,7 +23,7 @@ type ModalSettings = {
 };
 
 const propsDefault: ModalProps = {
-  uid: crypto.randomUUID(),
+  uid: undefined,
   showCloseButton: true,
   disableScroll: true,
   closeOnClickOutside: true,
@@ -83,7 +83,7 @@ export const close = () => {
 
   const cb = $onCloseCallback.get();
 
-  if (cb) {
+  if (typeof cb === "function") {
     cb();
     $onCloseCallback.set(null);
   }

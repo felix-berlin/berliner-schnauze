@@ -2,6 +2,8 @@
 
 ---
 
+<meta name="theme-color" content="#fad0b0" />
+
 <!-- Block until theme class is set -->
 <script is:inline>
   /**
@@ -47,6 +49,10 @@
   window.onload = function () {
     setThemeColor();
   };
+
+  document.addEventListener("astro:after-swap", () => {
+    setThemeColor();
+  });
 
   setDarkClass();
 

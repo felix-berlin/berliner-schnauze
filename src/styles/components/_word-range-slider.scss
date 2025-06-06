@@ -1,0 +1,22 @@
+.c-word-range-slider {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: row;
+
+  .c-input--number {
+    width: calc(var(--spacing-inner) * 2 + 3ch);
+    text-align: center;
+
+    // Remove number input spinners for Chrome, Safari, Edge, Opera
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    // Remove number input spinners for Firefox
+    &[type="number"] {
+      -moz-appearance: textfield;
+    }
+  }
+}

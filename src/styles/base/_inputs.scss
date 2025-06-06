@@ -48,6 +48,14 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 
     cursor: not-allowed;
   }
+
+  &::placeholder {
+    color: var(--color-placeholder, color-mix(in srgb, var(--blue) 80%, transparent));
+
+    @include butler-mx.dark-mode-class {
+      --color-placeholder: color-mix(in srgb, var(--yellow-500) 80%, transparent);
+    }
+  }
 }
 
 .c-textarea {
@@ -78,7 +86,8 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   --spacing-inner-vertical: #{vars.$spacer};
   --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
   --size-font: 1rem;
-  --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75} #{vars.$spacer};
+  --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75}
+    #{vars.$spacer};
   --color-background: var(--orange-100);
   --color-border: var(--orange-600);
 
@@ -281,7 +290,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   background-color: transparent; // Mozilla need this
 
   &::-webkit-slider-runnable-track {
-    background-color: vars.$grey-200;
+    background-color: var(--new-blue-600);
     width: 100%;
     height: $height-track;
   }
@@ -290,7 +299,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     background-color: $color-background-thumb;
     width: $size-thumb;
     height: $size-thumb;
-    margin-top: -($height-track - 0.05rem);
+    margin-top: -($height-track + 0.05rem);
     border-radius: 50%;
     border-color: transparent; // Mozilla need this
     border-width: 0; // Mozilla need this
@@ -307,7 +316,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     background-color: $color-background-thumb;
     width: $size-thumb;
     height: $size-thumb;
-    margin-top: -($height-track - 0.05rem);
+    margin-top: -($height-track + 0.05rem);
     border-radius: 50%;
   }
 }

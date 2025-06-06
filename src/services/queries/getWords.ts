@@ -156,6 +156,7 @@ export const GetAllWords = graphql(`
               description
               caption
             }
+            infoText
             images {
               nodes {
                 sourceUrl
