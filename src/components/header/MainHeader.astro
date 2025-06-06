@@ -17,13 +17,7 @@ const isIndex = Astro.url.pathname === "/";
     </div>
 
     <nav class="c-menu-nav">
-      {
-        !isIndex && (
-          <SearchModalTrigger client:only="vue">
-            <SearchModalTrigger slot="fallback" />
-          </SearchModalTrigger>
-        )
-      }
+      {!isIndex && <SearchModalTrigger client:load />}
 
       <ColorModeToggle cssClasses={"c-menu-nav__item c-menu-nav__item-button"} client:only="vue">
         <button
