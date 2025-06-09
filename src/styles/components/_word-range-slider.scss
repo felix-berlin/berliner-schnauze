@@ -2,6 +2,10 @@
   display: flex;
   gap: 0.5rem;
   flex-direction: row;
+  border: none;
+  padding-block: 0;
+  padding-inline: 0;
+  margin-inline: 0;
 
   .c-input--number {
     width: calc(var(--spacing-inner) * 2 + 3ch);

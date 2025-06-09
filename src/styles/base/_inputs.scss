@@ -318,6 +318,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     height: $size-thumb;
     margin-top: -($height-track + 0.05rem);
     border-radius: 50%;
+    appearance: none;
   }
 }
 
