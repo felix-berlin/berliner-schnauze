@@ -230,8 +230,6 @@ onMount($wordSearch, async () => {
   await task(async () => {
     // Fetch search meta data on mount
     await getSearchMeta().then((meta) => {
-      console.log("hier", meta.rangeFilterMinMax);
-
       $wordSearch.setKey("letterGroups", meta.availableWordGroups);
       $wordSearch.setKey("wordTypes", meta.wordTypes);
       $wordSearch.setKey("rangeFilterMinMax", meta.rangeFilterMinMax);
