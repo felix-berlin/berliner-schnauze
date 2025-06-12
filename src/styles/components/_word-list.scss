@@ -43,7 +43,7 @@
     }
 
     &.is-active {
-      outline: 2px solid var(--color-body);
+      outline: 2px dashed var(--color-body);
     }
   }
 
