@@ -1,1 +1,5 @@
 @use "astro-breadcrumbs/breadcrumbs.scss" with($truncated: true);
+
+.c-breadcrumbs {
+  margin-block: 20px 15px;
+}
