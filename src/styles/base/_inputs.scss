@@ -23,12 +23,18 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   box-shadow: 0 0 0 1px transparent;
   background-color: var(--color-background);
   outline: none;
-  border: var(--width-border) solid var(--color-border);
   appearance: none;
   color: var(--color, var(--color-body));
   transition: {
     property: border-color, color, background-color, box-shadow;
     duration: 200ms;
+  }
+
+  &:not(.c-input--range) {
+    border: var(--width-border) solid var(--color-border);
+  }
+  &:not(.c-input--file, .c-input--range) {
+    padding: var(--spacing-inner);
   }
 
   @include butler-mx.dark-mode-class {
@@ -37,10 +43,6 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 
   &:focus-within {
     box-shadow: 0 0 0 var(--box-shadow-focus);
-  }
-
-  &:not(.c-input--file) {
-    padding: var(--spacing-inner);
   }
 
   &:disabled {
@@ -277,7 +279,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 
 .c-input--range {
   $color-background-track: vars.$grey-200;
-  $color-background-thumb: vars.$red-200;
+  $color-background-thumb: vars.$orange-500;
   $height-track: 0.3rem;
   $size-thumb: 1rem;
 

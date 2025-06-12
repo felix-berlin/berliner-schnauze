@@ -1,6 +1,6 @@
 <template>
   <fieldset class="c-word-range-slider">
-    <legend :id="`${id}-legend`">{{ label }}</legend>
+    <legend :id="`${id}-legend`" class="c-word-range-slider__legend">{{ label }}</legend>
     <input
       :id="id"
       v-model="rangeValue"
@@ -29,7 +29,7 @@
       <button
         v-if="!hasRangeSet"
         type="button"
-        class="c-button c-button--center-icon"
+        class="c-button c-button--center-icon c-word-range-slider__reset-button"
         :aria-describedby="`${id}-legend`"
         aria-label="Filter zurücksetzen"
         @click="resetRange"

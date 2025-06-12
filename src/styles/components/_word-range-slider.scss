@@ -7,6 +7,10 @@
   padding-inline: 0;
   margin-inline: 0;
 
+  &__legend {
+    margin-block-end: 0.5rem;
+  }
+
   .c-input--number {
     width: calc(var(--spacing-inner) * 2 + 3ch);
     text-align: center;
@@ -22,5 +26,9 @@
     &[type="number"] {
       -moz-appearance: textfield;
     }
+  }
+
+  &__reset-button {
+    width: 37px;
   }
 }
