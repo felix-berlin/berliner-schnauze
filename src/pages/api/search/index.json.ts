@@ -3,10 +3,26 @@ import { fetchAllWords } from "@services/api.ts";
 import type { BerlinerWord } from "@/gql/graphql.ts";
 import Hypher from "hypher";
 import german from "hyphenation.de";
-import { countLetters, similarSoundingWords } from "@utils/wordHelper.ts";
+import {
+  countLetters,
+  similarSoundingWords,
+  translateNlpTags,
+  getWordType,
+} from "@utils/wordHelper.ts";
 
 // Create Hypher instance once
 const hypher = new Hypher(german);
+
+function extractWordTypes(wordTags: any): string[] {
+  // wordTags can be an array of objects or a single object
+  const tagObjs = Array.isArray(wordTags) ? wordTags : [wordTags];
+  // Collect all type arrays, flatten, deduplicate
+  return Array.from(
+    new Set(
+      tagObjs.flatMap((obj) => (obj && typeof obj === "object" ? Object.values(obj).flat() : [])),
+    ),
+  );
+}
 
 function makeOramaSearchIndex(node: BerlinerWord, allWords, similarWordsMap: Map<string, boolean>) {
   const translations = Array.isArray(node.wordProperties?.translations)
@@ -15,7 +31,8 @@ function makeOramaSearchIndex(node: BerlinerWord, allWords, similarWordsMap: Map
         .filter((tr) => typeof tr === "string")
     : [];
 
-  const berlinerischWordTypes = node?.berlinerischWordTypes?.nodes.map((type) => type.name);
+  // Manually curated word types
+  // const berlinerischWordTypes = node?.berlinerischWordTypes?.nodes.map((type) => type.name);
 
   const berlinerisch = node.wordProperties?.berlinerisch || "";
   const syllablesCount = berlinerisch ? hypher.hyphenate(berlinerisch).length : 0;
@@ -24,8 +41,11 @@ function makeOramaSearchIndex(node: BerlinerWord, allWords, similarWordsMap: Map
   // Use precomputed similar words map
   const hasSimilarSounding = similarWordsMap.get(berlinerisch) || false;
 
+  const wordTags = translateNlpTags(getWordType(berlinerisch));
+  const wordTypes = extractWordTypes(wordTags);
+
   return {
-    berlinerischWordTypes,
+    berlinerischWordTypes: wordTypes,
     dateGmt: node.dateGmt,
     modifiedGmt: node.modifiedGmt,
     wordGroup: node.wordGroup,

@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { fetchAllWords } from "@services/api.ts";
 import Hypher from "hypher";
 import german from "hyphenation.de";
-import { countLetters } from "@utils/wordHelper.ts";
+import { countLetters, translateNlpTags, getWordType } from "@utils/wordHelper.ts";
 
 const hypher = new Hypher(german);
 
@@ -15,12 +15,32 @@ export const GET: APIRoute = async () => {
     .filter(Boolean)
     .sort();
 
-  const wordTypes = Array.from(
+  // The manually curated word groups
+  // const wordTypesCategories = Array.from(
+  //   new Set(
+  //     allWords
+  //       .map(({ node }) => node.berlinerischWordTypes?.nodes)
+  //       .flat()
+  //       .map((node) => node?.name),
+  //   ),
+  // ).sort();
+
+  // The word types are derived from the NLP tags
+  const wordTypes: string[] = Array.from(
     new Set(
       allWords
-        .map(({ node }) => node.berlinerischWordTypes?.nodes)
-        .flat()
-        .map((node) => node?.name),
+        .flatMap(({ node }) => {
+          // Get all type objects for each word
+          const typeObj = translateNlpTags(getWordType(node.wordProperties?.berlinerisch || ""));
+          // typeObj can be an object or array of objects
+          // Normalize to array of objects
+          const typeObjs = Array.isArray(typeObj) ? typeObj : [typeObj];
+          // Extract all values (arrays of types) from each object, flatten, and return
+          return typeObjs.flatMap((obj) =>
+            obj && typeof obj === "object" ? Object.values(obj).flat() : [],
+          );
+        })
+        .filter(Boolean),
     ),
   ).sort();
 

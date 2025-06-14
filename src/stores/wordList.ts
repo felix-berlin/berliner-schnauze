@@ -1,7 +1,7 @@
 import { computed, atom, task, onMount } from "nanostores";
 import { persistentMap } from "@nanostores/persistent";
 import { useViewTransition } from "@utils/helpers.ts";
-import type { Maybe, BerlinerWord } from "@/gql/graphql";
+import type { BerlinerWord } from "@/gql/graphql";
 import { trackEvent } from "@utils/analytics";
 import { create, search, insertMultiple } from "@orama/orama";
 import { stemmer, language } from "@orama/stemmers/german";
@@ -31,10 +31,10 @@ export type RangeFilterMinMax = {
 };
 
 export type WordList = {
-  letterGroups: Maybe<string>[];
+  letterGroups: string[];
   activeLetterFilter: string;
-  wordTypes: Maybe<string>[];
-  activeWordTypeFilter: string;
+  wordTypes: string[];
+  activeWordTypeFilter: string[];
   search: string;
   alphabeticalOrder: "ASC" | "DESC";
   dateOrder: "ASC" | "DESC";
@@ -59,7 +59,7 @@ export const $wordSearch = persistentMap<WordList>(
     letterGroups: [],
     activeLetterFilter: "",
     wordTypes: [],
-    activeWordTypeFilter: "",
+    activeWordTypeFilter: [],
     search: "",
     alphabeticalOrder: "ASC",
     dateOrder: "ASC",
@@ -107,7 +107,7 @@ export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
   let count = 0;
 
   if (wordSearch.activeLetterFilter !== "") count++;
-  if (wordSearch.activeWordTypeFilter !== "") count++;
+  if (wordSearch.activeWordTypeFilter?.length) count++;
 
   count += booleanKeys.filter((key) => !!wordSearch[key]).length;
   count += numberKeys.filter(
@@ -120,7 +120,7 @@ export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
 export const resetAll = () => {
   $wordSearch.setKey("search", "");
   $wordSearch.setKey("activeLetterFilter", "");
-  $wordSearch.setKey("activeWordTypeFilter", "");
+  $wordSearch.setKey("activeWordTypeFilter", []);
   $wordSearch.setKey("alphabeticalOrder", "ASC");
   $wordSearch.setKey("dateOrder", "ASC");
   $wordSearch.setKey("modifiedDateOrder", "ASC");
@@ -149,10 +149,26 @@ export const setLetterFilter = (letter: string) => {
   trackEvent("WordList", "Filter", `Letter: ${letter}`);
 };
 
-export const setWordTypeFilter = (wordType: string) => {
-  useViewTransition(() => $wordSearch.setKey("activeWordTypeFilter", wordType));
+function toggleInArray<T>(arr: T[], item: T): T[] {
+  const index = arr.indexOf(item);
+  if (index === -1) {
+    // Not in array, add it
+    return [...arr, item];
+  } else {
+    // Already in array, remove it
+    return arr.filter((_, i) => i !== index);
+  }
+}
 
-  trackEvent("WordList", "Filter", `Word Type: ${wordType}`);
+export const setWordTypeFilter = (wordType: string) => {
+  useViewTransition(() =>
+    $wordSearch.setKey(
+      "activeWordTypeFilter",
+      toggleInArray($wordSearch.get().activeWordTypeFilter, wordType),
+    ),
+  );
+
+  trackEvent("WordList", "Filter", `Word Type: ${wordType.split(" ").join(", ")}`);
 };
 
 export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCategory"]) => {
@@ -325,8 +341,11 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
   if (wordSearch.activeLetterFilter) {
     where.wordGroup = { eq: wordSearch.activeLetterFilter };
   }
-  if (wordSearch.activeWordTypeFilter) {
-    where.berlinerischWordTypes = { containsAny: [wordSearch.activeWordTypeFilter] };
+  if (
+    Array.isArray(wordSearch.activeWordTypeFilter) &&
+    wordSearch.activeWordTypeFilter.length > 0
+  ) {
+    where.berlinerischWordTypes = { containsAny: wordSearch.activeWordTypeFilter };
   }
   return where;
 }
