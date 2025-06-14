@@ -22,6 +22,12 @@
         <h3>Worttyp</h3>
         <BadgeTag> Beta </BadgeTag>
       </div>
+
+      <i>
+        Redewendungen und Wörter können unterschiedliche Worttypen beinhalten, Du kannst hier
+        deshalb nach mehreren Typen filtern.
+      </i>
+
       <WordTypeFilter />
 
       <div class="c-filter-search__switch">
