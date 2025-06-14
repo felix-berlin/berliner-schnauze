@@ -20,6 +20,7 @@
     </button>
 
     <input
+      id="wordSearch"
       ref="searchInput"
       v-model="localSearch"
       type="search"

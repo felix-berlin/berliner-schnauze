@@ -1,0 +1,34 @@
+.c-word-range-slider {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: row;
+  border: none;
+  padding-block: 0;
+  padding-inline: 0;
+  margin-inline: 0;
+
+  &__legend {
+    margin-block-end: 0.5rem;
+  }
+
+  .c-input--number {
+    width: calc(var(--spacing-inner) * 2 + 3ch);
+    text-align: center;
+
+    // Remove number input spinners for Chrome, Safari, Edge, Opera
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    // Remove number input spinners for Firefox
+    &[type="number"] {
+      -moz-appearance: textfield;
+    }
+  }
+
+  &__reset-button {
+    width: 37px;
+  }
+}

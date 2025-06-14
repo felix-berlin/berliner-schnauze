@@ -1,7 +1,7 @@
 import { computed, atom, task, onMount } from "nanostores";
 import { persistentMap } from "@nanostores/persistent";
 import { useViewTransition } from "@utils/helpers.ts";
-import type { Maybe, BerlinerWord } from "@/gql/graphql";
+import type { BerlinerWord } from "@/gql/graphql";
 import { trackEvent } from "@utils/analytics";
 import { create, search, insertMultiple } from "@orama/orama";
 import { stemmer, language } from "@orama/stemmers/german";
@@ -23,18 +23,34 @@ export type CleanBerlinerWord = {
   wordProperties: BerlinerWord["wordProperties"];
 };
 
+export type RangeFilterMinMax = {
+  characterLength: { min: number; max: number };
+  consonantsCount: { min: number; max: number };
+  vowelsCount: { min: number; max: number };
+  syllablesCount: { min: number; max: number };
+};
+
 export type WordList = {
-  letterGroups: Maybe<string>[];
+  letterGroups: string[];
   activeLetterFilter: string;
-  wordTypes: Maybe<string>[];
-  activeWordTypeFilter: string;
+  wordTypes: string[];
+  activeWordTypeFilter: string[];
   search: string;
   alphabeticalOrder: "ASC" | "DESC";
   dateOrder: "ASC" | "DESC";
   modifiedDateOrder: "ASC" | "DESC";
   activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
   berolinismus: boolean;
+  audioBerlinerisch: boolean;
+  audioExamples?: boolean;
+  multipleMeanings?: boolean;
+  similarSoundingWords?: boolean;
+  characterCount?: number;
+  consonantsCount?: number;
+  vowelsCount?: number;
+  syllablesCount?: number;
   resultLimit?: number;
+  rangeFilterMinMax?: RangeFilterMinMax;
 };
 
 export const $wordSearch = persistentMap<WordList>(
@@ -43,13 +59,21 @@ export const $wordSearch = persistentMap<WordList>(
     letterGroups: [],
     activeLetterFilter: "",
     wordTypes: [],
-    activeWordTypeFilter: "",
+    activeWordTypeFilter: [],
     search: "",
     alphabeticalOrder: "ASC",
     dateOrder: "ASC",
     modifiedDateOrder: "ASC",
     activeOrderCategory: "alphabetical",
     berolinismus: false,
+    audioBerlinerisch: false,
+    audioExamples: false,
+    multipleMeanings: false,
+    similarSoundingWords: false,
+    characterCount: undefined,
+    consonantsCount: undefined,
+    vowelsCount: undefined,
+    syllablesCount: undefined,
     resultLimit: undefined,
   },
   {
@@ -65,19 +89,30 @@ export const $wordSearch = persistentMap<WordList>(
 );
 
 export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
+  // List all filter keys that should count as "active" if truthy
+  const booleanKeys: (keyof WordList)[] = [
+    "berolinismus",
+    "audioBerlinerisch",
+    "audioExamples",
+    "multipleMeanings",
+    "similarSoundingWords",
+  ];
+  const numberKeys: (keyof WordList)[] = [
+    "characterCount",
+    "consonantsCount",
+    "vowelsCount",
+    "syllablesCount",
+  ];
+
   let count = 0;
 
-  if (wordSearch.activeLetterFilter !== "") {
-    count++;
-  }
+  if (wordSearch.activeLetterFilter !== "") count++;
+  if (wordSearch.activeWordTypeFilter?.length) count++;
 
-  if (wordSearch.activeWordTypeFilter !== "") {
-    count++;
-  }
-
-  if (wordSearch.berolinismus) {
-    count++;
-  }
+  count += booleanKeys.filter((key) => !!wordSearch[key]).length;
+  count += numberKeys.filter(
+    (key) => wordSearch[key] !== undefined && wordSearch[key] !== null,
+  ).length;
 
   return count;
 });
@@ -85,7 +120,7 @@ export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
 export const resetAll = () => {
   $wordSearch.setKey("search", "");
   $wordSearch.setKey("activeLetterFilter", "");
-  $wordSearch.setKey("activeWordTypeFilter", "");
+  $wordSearch.setKey("activeWordTypeFilter", []);
   $wordSearch.setKey("alphabeticalOrder", "ASC");
   $wordSearch.setKey("dateOrder", "ASC");
   $wordSearch.setKey("modifiedDateOrder", "ASC");
@@ -114,10 +149,26 @@ export const setLetterFilter = (letter: string) => {
   trackEvent("WordList", "Filter", `Letter: ${letter}`);
 };
 
-export const setWordTypeFilter = (wordType: string) => {
-  useViewTransition(() => $wordSearch.setKey("activeWordTypeFilter", wordType));
+function toggleInArray<T>(arr: T[], item: T): T[] {
+  const index = arr.indexOf(item);
+  if (index === -1) {
+    // Not in array, add it
+    return [...arr, item];
+  } else {
+    // Already in array, remove it
+    return arr.filter((_, i) => i !== index);
+  }
+}
 
-  trackEvent("WordList", "Filter", `Word Type: ${wordType}`);
+export const setWordTypeFilter = (wordType: string) => {
+  useViewTransition(() =>
+    $wordSearch.setKey(
+      "activeWordTypeFilter",
+      toggleInArray($wordSearch.get().activeWordTypeFilter, wordType),
+    ),
+  );
+
+  trackEvent("WordList", "Filter", `Word Type: ${wordType.split(" ").join(", ")}`);
 };
 
 export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCategory"]) => {
@@ -186,6 +237,7 @@ const getSearchMeta = async () => {
   const meta = (await response.json()) as {
     availableWordGroups: string[];
     wordTypes: string[];
+    rangeFilterMinMax: RangeFilterMinMax;
   };
   return meta;
 };
@@ -196,6 +248,7 @@ onMount($wordSearch, async () => {
     await getSearchMeta().then((meta) => {
       $wordSearch.setKey("letterGroups", meta.availableWordGroups);
       $wordSearch.setKey("wordTypes", meta.wordTypes);
+      $wordSearch.setKey("rangeFilterMinMax", meta.rangeFilterMinMax);
     });
   });
 });
@@ -213,6 +266,14 @@ const wordSchema = {
     berlinerisch: "string",
     berolinismus: "boolean",
     translations: "string[]",
+    syllablesCount: "number",
+    multipleMeanings: "boolean",
+    characterLength: "number",
+    audioBerlinerisch: "boolean",
+    audioExamples: "boolean",
+    consonantsCount: "number",
+    vowelsCount: "number",
+    similarSoundingWords: "boolean",
   },
 } as const;
 
@@ -251,11 +312,40 @@ async function initOrama(words: OramaSearchIndex[]) {
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
   const where: Record<string, unknown> = {};
   if (wordSearch.berolinismus) where["wordProperties.berolinismus"] = true;
+  if (wordSearch.audioBerlinerisch) where["wordProperties.audioBerlinerisch"] = true;
+  if (wordSearch.audioExamples) where["wordProperties.audioExamples"] = true;
+  if (wordSearch.multipleMeanings) where["wordProperties.multipleMeanings"] = true;
+  if (wordSearch.similarSoundingWords) {
+    where["wordProperties.similarSoundingWords"] = true;
+  }
+  if (wordSearch.characterCount != null) {
+    where["wordProperties.characterLength"] = {
+      gte: wordSearch.characterCount,
+    };
+  }
+  if (wordSearch.consonantsCount != null) {
+    where["wordProperties.consonantsCount"] = {
+      gte: wordSearch.consonantsCount,
+    };
+  }
+  if (wordSearch.vowelsCount != null) {
+    where["wordProperties.vowelsCount"] = {
+      gte: wordSearch.vowelsCount,
+    };
+  }
+  if (wordSearch.syllablesCount != null) {
+    where["wordProperties.syllablesCount"] = {
+      gte: wordSearch.syllablesCount,
+    };
+  }
   if (wordSearch.activeLetterFilter) {
     where.wordGroup = { eq: wordSearch.activeLetterFilter };
   }
-  if (wordSearch.activeWordTypeFilter) {
-    where.berlinerischWordTypes = { containsAny: [wordSearch.activeWordTypeFilter] };
+  if (
+    Array.isArray(wordSearch.activeWordTypeFilter) &&
+    wordSearch.activeWordTypeFilter.length > 0
+  ) {
+    where.berlinerischWordTypes = { containsAny: wordSearch.activeWordTypeFilter };
   }
   return where;
 }

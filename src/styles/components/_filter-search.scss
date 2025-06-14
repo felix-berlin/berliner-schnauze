@@ -62,12 +62,12 @@
     }
   }
 
-  &__berolinismus {
+  &__switch {
     :where(i) {
       font-size: 0.7rem;
     }
 
-    .c-berolinismus-switch {
+    .c-word-switch {
       margin-top: vars.$spacer * 0.7;
     }
   }
@@ -140,6 +140,10 @@
 
   .c-word-search {
     grid-area: search;
+  }
+
+  .c-word-range-slider {
+    margin-block-start: 1.5rem;
   }
 }
 

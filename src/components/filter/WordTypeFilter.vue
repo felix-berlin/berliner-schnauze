@@ -4,7 +4,7 @@
       <li class="c-word-type-filter__list-item">
         <button
           class="c-word-type-filter__button is-all c-button c-button--filter"
-          :class="{ 'is-current': wordSearch.activeWordTypeFilter === '' }"
+          :class="{ 'is-current': !wordSearch.activeWordTypeFilter?.length }"
           type="button"
           @click="setWordTypeFilter('')"
         >
@@ -20,7 +20,7 @@
           :aria-label="`Filter nach Worttyp ${wordType}`"
           type="button"
           class="c-word-type-filter__button c-button c-button--filter"
-          :class="{ 'is-current': wordType === wordSearch.activeWordTypeFilter }"
+          :class="{ 'is-current': wordSearch.activeWordTypeFilter.includes(wordType) }"
           :title="`Filter nach Worttyp ${wordType}`"
           @click="setWordTypeFilter(wordType!)"
         >

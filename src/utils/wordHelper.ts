@@ -137,6 +137,13 @@ const tagTranslations: TagTranslations = {
   Auxiliary: "Hilfsverb",
   Negative: "Negation",
   Acronym: "Akronym",
+  SecondPerson: "Zweite Person",
+  ThirdPerson: "Dritte Person",
+  FirstPerson: "Erste Person",
+  FemaleNoun: "Weibliches Nomen",
+  MaleNoun: "Männliches Nomen",
+  TextCardinal: "Text-Kardinalzahl",
+  NeuterNoun: "Neutrum Nomen",
 };
 
 export const translateNlpTags = (tags: WordTags[]): WordTags[] => {
