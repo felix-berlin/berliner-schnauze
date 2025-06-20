@@ -14,9 +14,9 @@
     <NoSearchResults />
 
     <WordSuggestHint v-if="searchResultCount === 0" />
-
-    <WordList class="c-word-list--large" />
   </div>
+  
+  <WordList class="c-word-list--large" :use-window-virtualizer="false" :item-size="60" />
 </template>
 
 <script setup lang="ts">

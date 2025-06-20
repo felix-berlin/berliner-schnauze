@@ -7,9 +7,21 @@
   display: grid;
   grid-template-columns: [start] 1fr [end];
   gap: vars.$spacer * 1.5 vars.$spacer * 3;
+  overflow: hidden;
+  height: 100vh;
+  grid-template-rows: min-content 1fr auto;
+  grid-template-areas:
+    "list-header"
+    "list"
+    "filter";
 
   @include butler-mx.breakpoint("md") {
     grid-template-columns: [start] 1fr 3fr [end];
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "filter list-header"
+      "filter list";
+    height: auto;
   }
 
   .c-word-search-filter-toggle {
@@ -21,6 +33,8 @@
   }
 
   &__filter {
+    grid-area: filter;
+
     @include butler-mx.breakpoint("md") {
       display: block !important;
     }
@@ -90,13 +104,23 @@
 
   &__list {
     display: grid;
-    grid-template: "filter-toggle search" min-content "shortcuts shortcuts" "result-count result-count" "no-result no-result" min-content "list list" 1fr / min-content 1fr;
+    grid-template-areas:
+      "filter-toggle search"
+      "shortcuts shortcuts"
+      "result-count result-count"
+      "no-result no-result"
+      "suggest-hint suggest-hint";
     gap: vars.$spacer * 1.5 vars.$spacer;
-    margin-top: -60px;
+    grid-area: list-header;
+    grid-template-columns: min-content 1fr;
 
     @include butler-mx.breakpoint("md") {
       grid-template-columns: 1fr max-content;
-      grid-template-areas: "search search" "result-count shortcuts" "no-result no-result" "list list";
+      grid-template-areas:
+        "search search"
+        "result-count shortcuts"
+        "no-result no-result"
+        "suggest-hint suggest-hint";
     }
   }
 
