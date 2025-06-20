@@ -10,6 +10,7 @@ import vueParser from "vue-eslint-parser";
 import url from "node:url";
 import eslintConfigPrettier from "eslint-config-prettier";
 import graphqlPlugin from "@graphql-eslint/eslint-plugin";
+import perfectionist from "eslint-plugin-perfectionist";
 
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
@@ -22,6 +23,7 @@ export default tseslint.config(
   jsxA11y.flatConfigs.recommended,
   ...pluginVue.configs["flat/recommended"],
   ...pluginVueA11y.configs["flat/recommended"],
+  perfectionist.configs["recommended-natural"],
   eslintConfigPrettier,
   {
     // files: ["**/*.ts", "**/*.js", "**/*.astro", "**/*.vue"],
