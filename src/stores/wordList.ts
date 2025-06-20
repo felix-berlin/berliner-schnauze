@@ -1,20 +1,22 @@
-import { computed, atom, task, onMount } from "nanostores";
+import type { Orama, Results, SearchParams, TypedDocument } from "@orama/orama";
+
 import { persistentMap } from "@nanostores/persistent";
-import { useViewTransition } from "@utils/helpers.ts";
-import type { BerlinerWord } from "@/gql/graphql";
-import { trackEvent } from "@utils/analytics";
-import { create, search, insertMultiple } from "@orama/orama";
-import { stemmer, language } from "@orama/stemmers/german";
+import { create, insertMultiple } from "@orama/orama";
 import {
   afterInsert as highlightAfterInsert,
   searchWithHighlight,
 } from "@orama/plugin-match-highlight";
-import type { TypedDocument, Orama, Results, SearchParams } from "@orama/orama";
+import { language, stemmer } from "@orama/stemmers/german";
+import { trackEvent } from "@utils/analytics";
+import { useViewTransition } from "@utils/helpers.ts";
+import { atom, computed, onMount, task } from "nanostores";
+
+import type { BerlinerWord } from "@/gql/graphql";
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 export type CleanBerlinerWord = {
-  berlinerWordId: BerlinerWord["berlinerWordId"];
   berlinerischWordTypes: BerlinerWord["berlinerischWordTypes"];
+  berlinerWordId: BerlinerWord["berlinerWordId"];
   dateGmt: BerlinerWord["dateGmt"];
   id: BerlinerWord["id"];
   modifiedGmt: BerlinerWord["modifiedGmt"];
@@ -24,60 +26,59 @@ export type CleanBerlinerWord = {
 };
 
 export type RangeFilterMinMax = {
-  characterLength: { min: number; max: number };
-  consonantsCount: { min: number; max: number };
-  vowelsCount: { min: number; max: number };
-  syllablesCount: { min: number; max: number };
+  characterLength: { max: number; min: number };
+  consonantsCount: { max: number; min: number };
+  syllablesCount: { max: number; min: number };
+  vowelsCount: { max: number; min: number };
 };
 
 export type WordList = {
-  letterGroups: string[];
   activeLetterFilter: string;
-  wordTypes: string[];
-  activeWordTypeFilter: string[];
-  search: string;
-  alphabeticalOrder: "ASC" | "DESC";
-  dateOrder: "ASC" | "DESC";
-  modifiedDateOrder: "ASC" | "DESC";
   activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
-  berolinismus: boolean;
+  activeWordTypeFilter: string[];
+  alphabeticalOrder: "ASC" | "DESC";
   audioBerlinerisch: boolean;
   audioExamples?: boolean;
-  multipleMeanings?: boolean;
-  similarSoundingWords?: boolean;
+  berolinismus: boolean;
   characterCount?: number;
   consonantsCount?: number;
-  vowelsCount?: number;
-  syllablesCount?: number;
-  resultLimit?: number;
+  dateOrder: "ASC" | "DESC";
+  letterGroups: string[];
+  modifiedDateOrder: "ASC" | "DESC";
+  multipleMeanings?: boolean;
   rangeFilterMinMax?: RangeFilterMinMax;
+  resultLimit?: number;
+  search: string;
+  similarSoundingWords?: boolean;
+  syllablesCount?: number;
+  vowelsCount?: number;
+  wordTypes: string[];
 };
 
 export const $wordSearch = persistentMap<WordList>(
   "wordSearch:",
   {
-    letterGroups: [],
     activeLetterFilter: "",
-    wordTypes: [],
-    activeWordTypeFilter: [],
-    search: "",
-    alphabeticalOrder: "ASC",
-    dateOrder: "ASC",
-    modifiedDateOrder: "ASC",
     activeOrderCategory: "alphabetical",
-    berolinismus: false,
+    activeWordTypeFilter: [],
+    alphabeticalOrder: "ASC",
     audioBerlinerisch: false,
     audioExamples: false,
-    multipleMeanings: false,
-    similarSoundingWords: false,
+    berolinismus: false,
     characterCount: undefined,
     consonantsCount: undefined,
-    vowelsCount: undefined,
-    syllablesCount: undefined,
+    dateOrder: "ASC",
+    letterGroups: [],
+    modifiedDateOrder: "ASC",
+    multipleMeanings: false,
     resultLimit: undefined,
+    search: "",
+    similarSoundingWords: false,
+    syllablesCount: undefined,
+    vowelsCount: undefined,
+    wordTypes: [],
   },
   {
-    encode: (value) => JSON.stringify(value),
     decode(value) {
       try {
         return JSON.parse(value);
@@ -85,6 +86,7 @@ export const $wordSearch = persistentMap<WordList>(
         return value;
       }
     },
+    encode: (value) => JSON.stringify(value),
   },
 );
 
@@ -118,14 +120,23 @@ export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
 });
 
 export const resetAll = () => {
-  $wordSearch.setKey("search", "");
   $wordSearch.setKey("activeLetterFilter", "");
+  $wordSearch.setKey("activeOrderCategory", "alphabetical");
   $wordSearch.setKey("activeWordTypeFilter", []);
   $wordSearch.setKey("alphabeticalOrder", "ASC");
-  $wordSearch.setKey("dateOrder", "ASC");
-  $wordSearch.setKey("modifiedDateOrder", "ASC");
-  $wordSearch.setKey("activeOrderCategory", "alphabetical");
+  $wordSearch.setKey("audioBerlinerisch", false);
+  $wordSearch.setKey("audioExamples", false);
   $wordSearch.setKey("berolinismus", false);
+  $wordSearch.setKey("characterCount", undefined);
+  $wordSearch.setKey("consonantsCount", undefined);
+  $wordSearch.setKey("dateOrder", "ASC");
+  $wordSearch.setKey("letterGroups", []);
+  $wordSearch.setKey("modifiedDateOrder", "ASC");
+  $wordSearch.setKey("multipleMeanings", false);
+  $wordSearch.setKey("search", "");
+  $wordSearch.setKey("similarSoundingWords", false);
+  $wordSearch.setKey("syllablesCount", undefined);
+  $wordSearch.setKey("vowelsCount", undefined);
 
   trackEvent("WordList", "Reset", "All filters reset");
 };
@@ -236,8 +247,8 @@ const getSearchMeta = async () => {
   const response = await fetch("/api/search/meta.json");
   const meta = (await response.json()) as {
     availableWordGroups: string[];
-    wordTypes: string[];
     rangeFilterMinMax: RangeFilterMinMax;
+    wordTypes: string[];
   };
   return meta;
 };
@@ -263,51 +274,27 @@ const wordSchema = {
   modifiedGmt: "string",
   wordGroup: "enum",
   wordProperties: {
-    berlinerisch: "string",
-    berolinismus: "boolean",
-    translations: "string[]",
-    syllablesCount: "number",
-    multipleMeanings: "boolean",
-    characterLength: "number",
     audioBerlinerisch: "boolean",
     audioExamples: "boolean",
+    berlinerisch: "string",
+    berolinismus: "boolean",
+    characterLength: "number",
     consonantsCount: "number",
-    vowelsCount: "number",
+    multipleMeanings: "boolean",
     similarSoundingWords: "boolean",
+    syllablesCount: "number",
+    translations: "string[]",
+    vowelsCount: "number",
   },
 } as const;
 
 type WordDocument = TypedDocument<Orama<typeof wordSchema>>;
 
-let db: Orama<typeof wordSchema> | null = null;
+let db: null | Orama<typeof wordSchema> = null;
 
-async function initOrama(words: OramaSearchIndex[]) {
-  db = create({
-    schema: wordSchema,
-    components: {
-      tokenizer: {
-        stemming: true,
-        stemmerSkipProperties: [
-          "wordGroup",
-          "modifiedGmt",
-          "dateGmt",
-          "wordProperties.berolinismus",
-          "berlinerischWordTypes",
-        ],
-        language,
-        stemmer,
-      },
-    },
-    plugins: [
-      {
-        name: "highlight",
-        afterInsert: highlightAfterInsert,
-      },
-    ],
-  });
-
-  await insertMultiple(db, words);
-}
+type SortByType =
+  | ((a: [string, number, WordDocument], b: [string, number, WordDocument]) => number)
+  | { order: "ASC" | "DESC"; property: string };
 
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
   const where: Record<string, unknown> = {};
@@ -350,10 +337,6 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
   return where;
 }
 
-type SortByType =
-  | { property: string; order: "ASC" | "DESC" }
-  | ((a: [string, number, WordDocument], b: [string, number, WordDocument]) => number);
-
 function getSortBy(wordSearch: WordList): SortByType {
   if (wordSearch.activeOrderCategory === "date") {
     return (a, b) => {
@@ -374,15 +357,43 @@ function getSortBy(wordSearch: WordList): SortByType {
     };
   }
   return {
-    property: "wordProperties.berlinerisch",
     order: wordSearch.alphabeticalOrder,
+    property: "wordProperties.berlinerisch",
   };
 }
 
-let searchIndexCache: OramaSearchIndex[] | null = null;
+async function initOrama(words: OramaSearchIndex[]) {
+  db = create({
+    components: {
+      tokenizer: {
+        language,
+        stemmer,
+        stemmerSkipProperties: [
+          "wordGroup",
+          "modifiedGmt",
+          "dateGmt",
+          "wordProperties.berolinismus",
+          "berlinerischWordTypes",
+        ],
+        stemming: true,
+      },
+    },
+    plugins: [
+      {
+        afterInsert: highlightAfterInsert,
+        name: "highlight",
+      },
+    ],
+    schema: wordSchema,
+  });
+
+  await insertMultiple(db, words);
+}
+
+let searchIndexCache: null | OramaSearchIndex[] = null;
 
 export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
-  task<Results<WordDocument> | null>(async () => {
+  task<null | Results<WordDocument>>(async () => {
     // Only fetch if not cached
     if (!searchIndexCache) {
       const response = await fetch("/api/search/index.json");
@@ -401,11 +412,11 @@ export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
     const sortBy = getSortBy(wordSearch);
 
     const params: SearchParams<Orama<typeof wordSchema>> = {
-      term: wordSearch.search,
-      properties: "*",
       limit: wordSearch.resultLimit ?? resultLimit ?? 10,
-      threshold: 0.5,
+      properties: "*",
       sortBy,
+      term: wordSearch.search,
+      threshold: 0.5,
       ...(Object.keys(where).length > 0 ? { where } : {}),
     };
 
