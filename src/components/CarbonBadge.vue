@@ -15,13 +15,13 @@
 import Leaf from "virtual:icons/lucide/leaf";
 
 interface GreenHostedProps {
-  url?: string;
   text?: string;
+  url?: string;
 }
 
 const {
-  url = "https://www.websitecarbon.com/website/berliner-schnauze-wtf/",
   text = "umweltschonend",
+  url = "https://www.websitecarbon.com/website/berliner-schnauze-wtf/",
 } = defineProps<GreenHostedProps>();
 </script>
 

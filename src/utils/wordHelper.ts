@@ -1,6 +1,7 @@
+import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 import nlp from "de-compromise";
 import natural from "natural";
-import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
+
 import type { BerlinerWord, WordPropertiesWikimediaFiles } from "@/gql/graphql.ts";
 
 /**
@@ -37,8 +38,8 @@ export const countLetters = (word: string) => {
   }
 
   return {
-    vowels: vowelsCount,
     consonants: consonantsCount,
+    vowels: vowelsCount,
   };
 };
 
@@ -57,93 +58,93 @@ export const getWordType = (word: string): WordTags[] => {
 };
 
 const tagTranslations: TagTranslations = {
-  Noun: "Nomen",
-  Singular: "Einzahl",
-  Person: "Person",
-  FirstName: "Vorname",
-  MaleName: "Männlicher Name",
-  FemaleName: "Weiblicher Name",
-  LastName: "Nachname",
-  Place: "Ort",
-  Country: "Land",
-  City: "Stadt",
-  Region: "Region",
-  Address: "Adresse",
-  Organization: "Organisation",
-  SportsTeam: "Sportteam",
-  Company: "Unternehmen",
-  School: "Schule",
-  ProperNoun: "Eigenname",
-  Honorific: "Anrede",
-  Plural: "Mehrzahl",
-  Uncountable: "Unzählbar",
-  Pronoun: "Pronomen",
-  Actor: "Schauspieler",
+  Abbreviation: "Abkürzung",
+  Acronym: "Akronym",
   Activity: "Aktivität",
-  Unit: "Einheit",
-  Demonym: "Demonym",
-  Possessive: "Possessivpronomen",
-  Verb: "Verb",
-  PresentTense: "Präsens",
-  Infinitive: "Infinitiv",
-  Gerund: "Gerundium",
-  PastTense: "Präteritum",
-  PerfectTense: "Perfekt",
-  FuturePerfect: "Futur II",
-  Pluperfect: "Plusquamperfekt",
-  Copula: "Kopula",
-  Modal: "Modalverb",
-  Participle: "Partizip",
-  Particle: "Partikel",
-  PhrasalVerb: "Phrasalverb",
-  Value: "Wert",
-  Ordinal: "Ordinalzahl",
-  Cardinal: "Kardinalzahl",
-  RomanNumeral: "Römische Zahl",
-  Multiple: "Mehrfach",
-  Fraction: "Bruchzahl",
-  TextValue: "Textwert",
-  NumericValue: "Numerischer Wert",
-  Percent: "Prozent",
-  Money: "Geld",
-  Date: "Datum",
-  Month: "Monat",
-  WeekDay: "Wochentag",
-  RelativeDay: "Relativer Tag",
-  Year: "Jahr",
-  Duration: "Dauer",
-  Time: "Zeit",
-  Holiday: "Feiertag",
+  Actor: "Schauspieler",
+  Address: "Adresse",
   Adjective: "Adjektiv",
+  Adverb: "Adverb",
+  AtMention: "@Erwähnung",
+  Auxiliary: "Hilfsverb",
+  Cardinal: "Kardinalzahl",
+  City: "Stadt",
+  Company: "Unternehmen",
   Comparable: "Vergleichbar",
   Comparative: "Komparativ",
-  Superlative: "Superlativ",
-  Contraction: "Kontraktion",
-  Adverb: "Adverb",
-  Currency: "Währung",
-  Determiner: "Artikel",
   Conjunction: "Konjunktion",
-  Preposition: "Präposition",
-  QuestionWord: "Fragepronomen",
-  Expression: "Ausdruck",
-  Abbreviation: "Abkürzung",
-  URL: "URL",
-  Hashtag: "Hashtag",
-  PhoneNumber: "Telefonnummer",
-  AtMention: "@Erwähnung",
+  Contraction: "Kontraktion",
+  Copula: "Kopula",
+  Country: "Land",
+  Currency: "Währung",
+  Date: "Datum",
+  Demonym: "Demonym",
+  Determiner: "Artikel",
+  Duration: "Dauer",
+  Email: "E-Mail",
   Emoji: "Emoji",
   Emoticon: "Emoticon",
-  Email: "E-Mail",
-  Auxiliary: "Hilfsverb",
-  Negative: "Negation",
-  Acronym: "Akronym",
-  SecondPerson: "Zweite Person",
-  ThirdPerson: "Dritte Person",
-  FirstPerson: "Erste Person",
+  Expression: "Ausdruck",
+  FemaleName: "Weiblicher Name",
   FemaleNoun: "Weibliches Nomen",
+  FirstName: "Vorname",
+  FirstPerson: "Erste Person",
+  Fraction: "Bruchzahl",
+  FuturePerfect: "Futur II",
+  Gerund: "Gerundium",
+  Hashtag: "Hashtag",
+  Holiday: "Feiertag",
+  Honorific: "Anrede",
+  Infinitive: "Infinitiv",
+  LastName: "Nachname",
+  MaleName: "Männlicher Name",
   MaleNoun: "Männliches Nomen",
-  TextCardinal: "Text-Kardinalzahl",
+  Modal: "Modalverb",
+  Money: "Geld",
+  Month: "Monat",
+  Multiple: "Mehrfach",
+  Negative: "Negation",
   NeuterNoun: "Neutrum Nomen",
+  Noun: "Nomen",
+  NumericValue: "Numerischer Wert",
+  Ordinal: "Ordinalzahl",
+  Organization: "Organisation",
+  Participle: "Partizip",
+  Particle: "Partikel",
+  PastTense: "Präteritum",
+  Percent: "Prozent",
+  PerfectTense: "Perfekt",
+  Person: "Person",
+  PhoneNumber: "Telefonnummer",
+  PhrasalVerb: "Phrasalverb",
+  Place: "Ort",
+  Pluperfect: "Plusquamperfekt",
+  Plural: "Mehrzahl",
+  Possessive: "Possessivpronomen",
+  Preposition: "Präposition",
+  PresentTense: "Präsens",
+  Pronoun: "Pronomen",
+  ProperNoun: "Eigenname",
+  QuestionWord: "Fragepronomen",
+  Region: "Region",
+  RelativeDay: "Relativer Tag",
+  RomanNumeral: "Römische Zahl",
+  School: "Schule",
+  SecondPerson: "Zweite Person",
+  Singular: "Einzahl",
+  SportsTeam: "Sportteam",
+  Superlative: "Superlativ",
+  TextCardinal: "Text-Kardinalzahl",
+  TextValue: "Textwert",
+  ThirdPerson: "Dritte Person",
+  Time: "Zeit",
+  Uncountable: "Unzählbar",
+  Unit: "Einheit",
+  URL: "URL",
+  Value: "Wert",
+  Verb: "Verb",
+  WeekDay: "Wochentag",
+  Year: "Jahr",
 };
 
 export const translateNlpTags = (tags: WordTags[]): WordTags[] => {
@@ -178,8 +179,8 @@ export const similarSoundingWords = (allWords: BerlinerWord[], currentWord: Berl
         : false;
 
     return {
-      word: word,
       isSimilar: isSimilar,
+      word: word,
     };
   });
 };
@@ -196,12 +197,12 @@ export const similarWords = (
   const allWordsWithoutCurrent = allWords.filter((word) => word.id !== currentWord?.id);
   const similarWords = allWordsWithoutCurrent.map((word) => {
     return {
-      word: word,
       isSimilar: natural.JaroWinklerDistance(
         word.wordProperties.berlinerisch,
         currentWord.wordProperties?.berlinerisch,
         false,
       ),
+      word: word,
     };
   });
 
@@ -216,7 +217,7 @@ export const createWikimediaFileList = async (wikimediaFiles: WordPropertiesWiki
   const files = [];
   for (const file of wikimediaFiles) {
     const img = await fetchWikimediaAPI(file?.wikimediaFile);
-    files.push({ image: img, description: file?.description, caption: file?.caption });
+    files.push({ caption: file?.caption, description: file?.description, image: img });
   }
   return files;
 };

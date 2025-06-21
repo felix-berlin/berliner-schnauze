@@ -72,18 +72,18 @@
 </template>
 
 <script setup lang="ts">
-import { useTemplateRef } from "vue";
-import { onClickOutside } from "@vueuse/core";
-import LetterFilter from "@components/filter/LetterFilter.vue";
-import WordSwitch from "@components/filter/WordSwitch.vue";
-import WordRangeSlider from "@components/filter/WordRangeSlider.vue";
-import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
-import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
-import { $toggleWordListFilterFlyout, $showWordListFilterFlyout, resetAll } from "@stores/index.ts";
-import { useStore } from "@nanostores/vue";
 import BadgeTag from "@components/BadgeTag.vue";
-import X from "virtual:icons/lucide/x";
+import LetterFilter from "@components/filter/LetterFilter.vue";
+import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
+import WordRangeSlider from "@components/filter/WordRangeSlider.vue";
+import WordSwitch from "@components/filter/WordSwitch.vue";
+import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
+import { useStore } from "@nanostores/vue";
+import { $showWordListFilterFlyout, $toggleWordListFilterFlyout, resetAll } from "@stores/index.ts";
+import { onClickOutside } from "@vueuse/core";
 import FilterReset from "virtual:icons/lucide/filter-x";
+import X from "virtual:icons/lucide/x";
+import { useTemplateRef } from "vue";
 
 const { closeOnClickOutside = true } = defineProps<{
   closeOnClickOutside?: boolean;

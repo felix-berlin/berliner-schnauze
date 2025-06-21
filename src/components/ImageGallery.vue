@@ -27,19 +27,19 @@ import "photoswipe/style.css";
 import { onMounted, onUnmounted, ref } from "vue";
 
 type ImageGalleryProps = {
-  images: string[];
   id: string;
+  images: string[];
 };
 
-const { images, id = crypto.randomUUID() } = defineProps<ImageGalleryProps>();
+const { id = crypto.randomUUID(), images } = defineProps<ImageGalleryProps>();
 
-const lightbox = ref<PhotoSwipeLightbox | null>(null);
+const lightbox = ref<null | PhotoSwipeLightbox>(null);
 
 onMounted(() => {
   if (!lightbox.value) {
     lightbox.value = new PhotoSwipeLightbox({
-      gallerySelector: `#${id}`,
       childSelector: "a",
+      gallerySelector: `#${id}`,
       pswpModule: () => import("photoswipe"),
     });
   }

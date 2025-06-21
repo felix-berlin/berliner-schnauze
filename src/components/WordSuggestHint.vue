@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from "vue";
-import Plus from "virtual:icons/lucide/plus";
 import { open } from "@stores/modal.ts";
+import Plus from "virtual:icons/lucide/plus";
+import { defineAsyncComponent } from "vue";
 
 const openWordSuggestionModal = () => {
   open({

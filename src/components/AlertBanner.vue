@@ -10,15 +10,15 @@
 
 <script setup lang="ts">
 interface AlertBannerProps {
-  type?: "success" | "danger" | "warning" | "info";
-  element?: string;
   componentClass?: string;
+  element?: string;
+  type?: "danger" | "info" | "success" | "warning";
 }
 
 const {
-  type = "warning",
-  element = "div",
   componentClass = "c-alert",
+  element = "div",
+  type = "warning",
 } = defineProps<AlertBannerProps>();
 </script>
 

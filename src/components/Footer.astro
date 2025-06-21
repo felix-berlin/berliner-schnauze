@@ -1,11 +1,12 @@
 ---
-import { version, funding } from "../../package.json";
-import { Picture } from "astro:assets";
 import BearWalking from "@assets/images/bear-walking.png";
-import NavList from "@components/NavList.vue";
-import InstallApp from "@components/InstallApp.vue";
-import Download from "virtual:icons/lucide/download";
 import CarbonBadge from "@components/CarbonBadge.vue";
+import InstallApp from "@components/InstallApp.vue";
+import NavList from "@components/NavList.vue";
+import { Picture } from "astro:assets";
+import Download from "virtual:icons/lucide/download";
+
+import { funding, version } from "../../package.json";
 
 // const randomWord = () => {
 //   // TODO: Implement random word
@@ -15,61 +16,61 @@ import CarbonBadge from "@components/CarbonBadge.vue";
 //
 const socialMenu = [
   {
-    title: "Github",
     link: "https://github.com/felix-berlin/berliner-schnauze",
+    title: "Github",
   },
   {
-    title: "Mastodon",
     link: "https://mastodon.social/@berliner_schnauze",
     rel: "me",
+    title: "Mastodon",
   },
   {
-    title: "Facebook",
     link: "https://www.facebook.com/Berliner.Schnauze030",
+    title: "Facebook",
   },
 ];
 const fundingMenu = [
   {
-    title: "GitHub Sponsors",
     link: funding.find((f) => f.type === "GitHub Sponsors")?.url,
+    title: "GitHub Sponsors",
   },
   {
-    title: "Ko-fi",
     link: funding.find((f) => f.type === "Ko-fi")?.url,
+    title: "Ko-fi",
   },
   {
-    title: "PayPal",
     link: funding.find((f) => f.type === "PayPal")?.url,
+    title: "PayPal",
   },
 ];
 
 const navMenu1 = [
   {
-    title: "Wort vorschlagen",
     link: "/wort-vorschlagen",
+    title: "Wort vorschlagen",
   },
   {
-    title: "Wort Index",
     link: "/wort",
+    title: "Wort Index",
   },
   {
-    title: "Changelog",
     link: "https://github.com/felix-berlin/berliner-schnauze/releases",
+    title: "Changelog",
   },
   {
-    title: "tech. Fehler melden",
     link: "https://github.com/felix-berlin/berliner-schnauze/issues/new",
+    title: "tech. Fehler melden",
   },
 ];
 
 const navMenu2 = [
   {
-    title: "Impressum",
     link: "/impressum",
+    title: "Impressum",
   },
   {
-    title: "Datenschutz",
     link: "/datenschutz",
+    title: "Datenschutz",
   },
 ];
 ---
@@ -78,11 +79,11 @@ const navMenu2 = [
   <div class="c-footer__farewell u-max-body-width">
     <div class="c-footer__farewell-image-wrapper">
       <Picture
-        src={BearWalking}
-        formats={["avif", "webp"]}
-        layout="constrained"
         alt="Ein Bär der durch die Stadt läuft"
         class="c-footer__farewell-image"
+        formats={["avif", "webp"]}
+        layout="constrained"
+        src={BearWalking}
       />
     </div>
     <p class="c-footer__farewell-text">Knorke ditt du mich hier unten besuchst.</p>
@@ -93,8 +94,8 @@ const navMenu2 = [
       <div class="c-footer__ground-app-install">
         <h2>Installiere die App</h2>
         <p>Mit der Berliner Schnauze App bleibst Du immer informiert, ob online oder offline.</p>
-        <InstallApp showIcon={true} client:only="vue" cssClasses={"c-button--center-icon c-button"}>
-          <Download width={16} height={16} /> App installieren
+        <InstallApp client:only="vue" cssClasses={"c-button--center-icon c-button"} showIcon={true}>
+          <Download height={16} width={16} /> App installieren
           <p slot="installed">Du nutzt bereits die App.</p>
         </InstallApp>
       </div>
@@ -102,36 +103,36 @@ const navMenu2 = [
       <div>
         <h2>Seiten</h2>
         <NavList
-          items={navMenu1}
           classesNav={"c-footer__nav"}
           classesUl={"c-footer__nav-list u-list-reset"}
+          items={navMenu1}
         />
       </div>
 
       <div>
         <h2>Projekt unterstützen</h2>
         <NavList
-          items={fundingMenu}
           classesNav={"c-footer__nav"}
           classesUl={"c-footer__nav-list u-list-reset"}
+          items={fundingMenu}
         />
       </div>
 
       <div>
         <h2>Social Media</h2>
         <NavList
-          items={socialMenu}
           classesNav={"c-footer__nav"}
           classesUl={"c-footer__nav-list u-list-reset"}
+          items={socialMenu}
         />
       </div>
 
       <div>
         <h2>Andere</h2>
         <NavList
-          items={navMenu2}
           classesNav={"c-footer__nav is-legal"}
           classesUl={"c-footer__nav-list u-list-reset"}
+          items={navMenu2}
         />
       </div>
     </div>

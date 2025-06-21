@@ -5,8 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { $searchResultCount } from "@stores/index";
 import { useStore } from "@nanostores/vue";
+import { $searchResultCount } from "@stores/index";
 
 const searchResultCount = useStore($searchResultCount);
 </script>

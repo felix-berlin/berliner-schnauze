@@ -6,8 +6,8 @@
 </template>
 
 <script setup lang="ts">
-import { $searchResultCount } from "@stores/index";
 import { useStore } from "@nanostores/vue";
+import { $searchResultCount } from "@stores/index";
 import SearchXIcon from "virtual:icons/lucide/search-x";
 
 const searchResultCount = useStore($searchResultCount);

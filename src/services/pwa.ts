@@ -1,16 +1,9 @@
-import { registerSW } from "virtual:pwa-register";
 import { createToastNotify } from "@stores/index.ts";
 import { trackEvent } from "@utils/analytics";
+import { registerSW } from "virtual:pwa-register";
 
 registerSW({
   immediate: true,
-  onRegisteredSW(swScriptUrl) {
-    if (import.meta.env.DEV) {
-      console.log("SW registered: ", swScriptUrl);
-    }
-
-    trackEvent("App", "Service Worker registered", "PWA");
-  },
   onOfflineReady() {
     if (import.meta.env.DEV) {
       console.log("PWA application ready to work offline");
@@ -18,11 +11,18 @@ registerSW({
 
     createToastNotify({
       message: "Berliner Schnauze kann jetzt offline genutzt werden.",
+      showClose: true,
       status: "success",
       timeout: null,
-      showClose: true,
     });
 
     trackEvent("App", "Is Offline ready", "PWA");
+  },
+  onRegisteredSW(swScriptUrl) {
+    if (import.meta.env.DEV) {
+      console.log("SW registered: ", swScriptUrl);
+    }
+
+    trackEvent("App", "Service Worker registered", "PWA");
   },
 });

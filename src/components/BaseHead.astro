@@ -1,61 +1,62 @@
 ---
-import { pwaInfo } from "virtual:pwa-info";
-import { ClientRouter } from "astro:transitions";
 import SetColorMode from "@components/SetColorMode.astro";
-import BerlinerRegular from "/fonts/BerlinerRegular.woff2";
-import Berlin from "/fonts/Berlin.woff2";
+import { ClientRouter } from "astro:transitions";
+import { pwaInfo } from "virtual:pwa-info";
+
 import BerlinBold from "/fonts/Berlin-Bold.woff2";
 import BerlinItalic from "/fonts/Berlin-Italic.woff2";
+import Berlin from "/fonts/Berlin.woff2";
+import BerlinerRegular from "/fonts/BerlinerRegular.woff2";
+
+export interface Seo {
+  canonical?: string;
+  metaDesc?: string;
+  metaRobotsNofollow?: string;
+  metaRobotsNoindex?: string;
+  opengraphAuthor?: string;
+  opengraphDescription?: string;
+  opengraphImage?: {
+    sourceUrl: string;
+  };
+  opengraphModifiedTime?: string;
+  opengraphPublishedTime?: string;
+  opengraphPublisher?: string;
+  opengraphSiteName?: string;
+  opengraphTitle?: string;
+  opengraphType?: string;
+  opengraphUrl?: string;
+  readingTime?: number;
+  title?: string;
+  twitterDescription?: string;
+  twitterTitle?: string;
+}
+
+export interface SeoProps {
+  seo: Seo;
+  title: Title;
+}
 
 export interface Title {
   title: string;
 }
 
-export interface Seo {
-  title?: string;
-  opengraphAuthor?: string;
-  opengraphDescription?: string;
-  opengraphPublisher?: string;
-  opengraphTitle?: string;
-  opengraphType?: string;
-  opengraphUrl?: string;
-  readingTime?: number;
-  opengraphSiteName?: string;
-  twitterDescription?: string;
-  twitterTitle?: string;
-  metaRobotsNofollow?: string;
-  metaRobotsNoindex?: string;
-  canonical?: string;
-  metaDesc?: string;
-  opengraphPublishedTime?: string;
-  opengraphModifiedTime?: string;
-  opengraphImage?: {
-    sourceUrl: string;
-  };
-}
-
-export interface SeoProps {
-  title: Title;
-  seo: Seo;
-}
-
 const canonicalURL = Astro.url.href;
-const { title, seo } = Astro.props as SeoProps & Title;
+const { seo, title } = Astro.props as SeoProps & Title;
 ---
 
 <!-- By Capo.js order -> https://rviscomi.github.io/capo.js/ --><!-- Global Metadata -->
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
 
 <title>
   {seo?.title || title}
 </title>
 
-<link rel="preload" href={BerlinerRegular} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={Berlin} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={BerlinBold} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={BerlinItalic} as="font" type="font/woff2" crossorigin />
-<link rel="preconnect" href="//cms.berliner-schnauze.wtf" />
+<link as="font" crossorigin href={BerlinerRegular} rel="preload" type="font/woff2" />
+<link as="font" crossorigin href={Berlin} rel="preload" type="font/woff2" />
+<link as="font" crossorigin href={BerlinBold} rel="preload" type="font/woff2" />
+<link as="font" crossorigin href={BerlinItalic} rel="preload" type="font/woff2" />
+<link href="//cms.berliner-schnauze.wtf" rel="preconnect" />
 
 <script src="../plugins/sentryBrowser.ts"></script>
 
@@ -69,38 +70,38 @@ const { title, seo } = Astro.props as SeoProps & Title;
 <script src="/src/services/pwa.ts"></script>
 
 <!-- Favicon -->
-<link rel="icon" href="/favicons/favicon.ico" sizes="48x48" />
-<link rel="icon" href="/favicons/favicon.svg" sizes="any" type="image/svg+xml" />
-<link rel="apple-touch-icon" href="/favicons/apple-touch-icon-180x180.png" />
-<link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#303956" />
+<link href="/favicons/favicon.ico" rel="icon" sizes="48x48" />
+<link href="/favicons/favicon.svg" rel="icon" sizes="any" type="image/svg+xml" />
+<link href="/favicons/apple-touch-icon-180x180.png" rel="apple-touch-icon" />
+<link color="#303956" href="/favicons/safari-pinned-tab.svg" rel="mask-icon" />
 
-<link rel="sitemap" href="/sitemap-index.xml" />
-<link rel="canonical" href={canonicalURL} />
+<link href="/sitemap-index.xml" rel="sitemap" />
+<link href={canonicalURL} rel="canonical" />
 
-<meta name="msapplication-TileColor" content="#ffffff" />
-<meta name="generator" content={Astro.generator} />
+<meta content="#ffffff" name="msapplication-TileColor" />
+<meta content={Astro.generator} name="generator" />
 
 <!-- Primary Meta Tags -->
 
-{seo?.opengraphDescription && <meta name="description" content={seo?.opengraphDescription} />}
+{seo?.opengraphDescription && <meta content={seo?.opengraphDescription} name="description" />}
 
 <!-- Open Graph / Facebook -->
-{seo?.opengraphSiteName && <meta property="og:site_name" content={seo?.opengraphSiteName} />}
-{seo?.opengraphType && <meta property="og:type" content={seo?.opengraphType} />}
-{seo?.opengraphUrl && <meta property="og:url" content={seo?.opengraphUrl} />}
+{seo?.opengraphSiteName && <meta content={seo?.opengraphSiteName} property="og:site_name" />}
+{seo?.opengraphType && <meta content={seo?.opengraphType} property="og:type" />}
+{seo?.opengraphUrl && <meta content={seo?.opengraphUrl} property="og:url" />}
 {
   (seo?.opengraphTitle || seo?.title || title) && (
-    <meta property="og:title" content={seo?.opengraphTitle || seo?.title || title} />
+    <meta content={seo?.opengraphTitle || seo?.title || title} property="og:title" />
   )
 }
 {
   seo?.opengraphDescription && (
-    <meta property="og:description" content={seo?.opengraphDescription} />
+    <meta content={seo?.opengraphDescription} property="og:description" />
   )
 }
 {
   seo?.opengraphImage?.sourceUrl && (
-    <meta property="og:image" content={seo?.opengraphImage?.sourceUrl} />
+    <meta content={seo?.opengraphImage?.sourceUrl} property="og:image" />
   )
 }
 <!-- <meta property="og:image:width" content={""} />
@@ -109,26 +110,26 @@ const { title, seo } = Astro.props as SeoProps & Title;
 <meta property="og:image:type" content={""} /> -->
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-{seo?.opengraphUrl && <meta property="twitter:url" content={seo?.opengraphUrl} />}
+<meta content="summary_large_image" property="twitter:card" />
+{seo?.opengraphUrl && <meta content={seo?.opengraphUrl} property="twitter:url" />}
 {
   (seo?.twitterTitle || seo?.title || title) && (
-    <meta property="twitter:title" content={seo?.twitterTitle || seo?.title || title} />
+    <meta content={seo?.twitterTitle || seo?.title || title} property="twitter:title" />
   )
 }
 {
   (seo?.twitterDescription || seo?.opengraphDescription) && (
     <meta
-      property="twitter:description"
       content={seo?.twitterDescription || seo?.opengraphDescription}
+      property="twitter:description"
     />
   )
 }
 {
   seo?.opengraphImage?.sourceUrl && (
-    <meta property="twitter:image" content={seo?.opengraphImage?.sourceUrl} />
+    <meta content={seo?.opengraphImage?.sourceUrl} property="twitter:image" />
   )
 }
 
 <!-- Mastodon -->
-<meta name="fediverse:creator" content="@berliner_schnauze@mastodon.social" />
+<meta content="@berliner_schnauze@mastodon.social" name="fediverse:creator" />

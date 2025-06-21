@@ -1,6 +1,7 @@
 ---
-import Quote from "virtual:icons/lucide/quote";
 import AudioPlayerList from "@components/AudioPlayerList.vue";
+import Quote from "virtual:icons/lucide/quote";
+
 import type { Maybe, WordPropertiesExamples } from "@/gql/graphql";
 
 interface WordExamplesProps {
@@ -12,7 +13,7 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
 ---
 
 <div class={rootBemClass + "__example-wrapper"}>
-  <Quote width={44} height={44} stroke-width={0} class={rootBemClass + "__quote-icon"} />
+  <Quote class={rootBemClass + "__quote-icon"} height={44} stroke-width={0} width={44} />
 
   {
     examples && examples.length === 1 && (
@@ -26,7 +27,7 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
         )}
 
         {examples[0]?.exampleAudio && (
-          <AudioPlayerList audio={examples[0]?.exampleAudio} isType="example" client:only="vue" />
+          <AudioPlayerList audio={examples[0]?.exampleAudio} client:only="vue" isType="example" />
         )}
       </div>
     )
@@ -44,7 +45,7 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
               </div>
             )}
             {item?.exampleAudio && (
-              <AudioPlayerList audio={item?.exampleAudio} isType="example" client:only="vue" />
+              <AudioPlayerList audio={item?.exampleAudio} client:only="vue" isType="example" />
             )}
           </li>
         ))}

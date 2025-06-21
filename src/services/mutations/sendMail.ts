@@ -1,5 +1,7 @@
 import type { FormData } from "@components/SuggestWordForm.vue";
-import { WP_REST_API, SUGGEST_WORD_FORM_ID, WP_AUTH_REFRESH_TOKEN } from "astro:env/client";
+
+import { SUGGEST_WORD_FORM_ID, WP_AUTH_REFRESH_TOKEN, WP_REST_API } from "astro:env/client";
+
 import { graphql } from "@/gql";
 
 export const SendEmail = graphql(`
@@ -36,11 +38,11 @@ export const sendEmailViaContactForm7 = async (formData: FormData): Promise<void
     .catch((error) => console.error("Error:", error));
 
   await fetch(`${WP_REST_API}/contact-form-7/v1/contact-forms/${SUGGEST_WORD_FORM_ID}/feedback`, {
-    method: "POST",
+    body: formInputs,
     headers: {
       Authorization: `Bearer ${WP_AUTH_REFRESH_TOKEN}`,
     },
-    body: formInputs,
+    method: "POST",
   }).then((response) => {
     if (!response.ok) {
       console.log("response: ", response, response.json());

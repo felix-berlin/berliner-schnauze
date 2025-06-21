@@ -31,15 +31,15 @@ interface ItemObject {
 }
 
 interface NavListProps {
+  classesLi?: string;
+  classesNav?: string;
+  classesUl?: string;
   items:
+    | ItemObject[]
     | {
         component: DefineComponent;
         props: object;
-      }[]
-    | ItemObject[];
-  classesNav?: string;
-  classesUl?: string;
-  classesLi?: string;
+      }[];
 }
 
 const { items } = defineProps<NavListProps>();

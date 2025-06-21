@@ -12,20 +12,20 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from "vue";
-import SearchIcon from "virtual:icons/lucide/search";
 import { open } from "@stores/modal.ts";
-import { useMagicKeys, whenever } from "@vueuse/core";
 import { trackEvent } from "@utils/analytics";
+import { useMagicKeys, whenever } from "@vueuse/core";
+import SearchIcon from "virtual:icons/lucide/search";
+import { defineAsyncComponent } from "vue";
 
 const openSearchModal = () => {
   open({
-    view: {
-      component: defineAsyncComponent(() => import("@components/modals/search/SearchModal.vue")),
-    },
     props: {
       class: "c-modal--search",
       showCloseButton: false,
+    },
+    view: {
+      component: defineAsyncComponent(() => import("@components/modals/search/SearchModal.vue")),
     },
   });
 };
@@ -42,10 +42,10 @@ const openSearchViaKeyboard = (): void => {
 };
 
 const keys = useMagicKeys({
-  passive: false,
   onEventFired(e) {
     if (e.shiftKey && e.key === "/" && e.type === "keydown") e.preventDefault();
   },
+  passive: false,
 });
 
 const shiftSlash = keys["Shift+/"];

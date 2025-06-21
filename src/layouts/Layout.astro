@@ -1,35 +1,35 @@
 ---
 import "@styles/app.scss";
-import { Head } from "astro-capo";
-import BaseHead from "@components/BaseHead.astro";
-import ScrollToTop from "@components/ScrollToTop.vue";
-import Footer from "@components/Footer.astro";
-import MainHeader from "@components/header/MainHeader.astro";
-import ToastNotifyContainer from "@components/toast/ToastNotifyContainer.vue";
-import Modal from "@components/Modal.vue";
-
 import type { SeoProps } from "@components/BaseHead.astro";
 
+import BaseHead from "@components/BaseHead.astro";
+import Footer from "@components/Footer.astro";
+import MainHeader from "@components/header/MainHeader.astro";
+import Modal from "@components/Modal.vue";
+import ScrollToTop from "@components/ScrollToTop.vue";
+import ToastNotifyContainer from "@components/toast/ToastNotifyContainer.vue";
+import { Head } from "astro-capo";
+
 export interface DefaultLayoutProps {
+  bodyClasses?: Array<string> | string;
   content: {
-    title: string;
     seo?: SeoProps;
+    title: string;
   };
   contentClasses?: Array<string> | string;
-  bodyClasses?: Array<string> | string;
 }
 
 const {
-  content: { title, seo },
-  contentClasses,
   bodyClasses,
+  content: { seo, title },
+  contentClasses,
 } = Astro.props as DefaultLayoutProps;
 ---
 
 <!doctype html>
 <html lang="de">
   <Head>
-    <BaseHead title={title} seo={seo} />
+    <BaseHead seo={seo} title={title} />
 
     <slot name="head" />
   </Head>

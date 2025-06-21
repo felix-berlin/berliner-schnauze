@@ -35,17 +35,17 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from "vue";
-import SearchResultCount from "@components/word-search/SearchResultCount.vue";
-import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue";
-import ShortcutNavigating from "@components/word-search/shortcuts/ShortcutNavigating.vue";
-import ShortcutClose from "@components/word-search/shortcuts/ShortcutClose.vue";
+import ModalCloseButton from "@components/ModalCloseButton.vue";
 import NoSearchResults from "@components/word-search/NoSearchResults.vue";
+import SearchResultCount from "@components/word-search/SearchResultCount.vue";
+import ShortcutClose from "@components/word-search/shortcuts/ShortcutClose.vue";
+import ShortcutNavigating from "@components/word-search/shortcuts/ShortcutNavigating.vue";
+import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue";
 import WordFilter from "@components/word-search/WordFilter.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
-import { $showWordListFilterFlyout, $searchResultCount } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
-import ModalCloseButton from "@components/ModalCloseButton.vue";
+import { $searchResultCount, $showWordListFilterFlyout } from "@stores/index.ts";
+import { defineAsyncComponent } from "vue";
 
 const SearchWords = defineAsyncComponent(() => import("@components/SearchWords.vue"));
 const WordList = defineAsyncComponent(() => import("@components/WordList.vue"));

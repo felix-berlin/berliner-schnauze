@@ -20,10 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import InstallApp from "@components/InstallApp.vue";
-import NavList from "@components/NavList.vue";
 import type { DefineComponent } from "vue";
+
+import InstallApp from "@components/InstallApp.vue";
 import MainMenuButton from "@components/MainMenuButton.vue";
+import NavList from "@components/NavList.vue";
 
 // const randomWord = () => {
 //   // TODO: Implement random word
@@ -34,23 +35,23 @@ interface ItemObject {
   title: string;
 }
 
-const menuItems: (ItemObject | DefineComponent)[] = [
+const menuItems: (DefineComponent | ItemObject)[] = [
   {
     component: InstallApp as DefineComponent,
     props: {
       tooltipProps: {
-        placement: "left",
         container: ".c-menu-nav",
+        placement: "left",
       },
     },
   },
   {
-    title: "Wort vorschlagen",
     link: "/wort-vorschlagen",
+    title: "Wort vorschlagen",
   },
   {
-    title: "Wort Index",
     link: "/wort",
+    title: "Wort Index",
   },
 ];
 </script>

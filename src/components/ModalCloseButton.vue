@@ -19,9 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { useSlots } from "vue";
 import { close } from "@stores/index.ts";
 import X from "virtual:icons/lucide/x";
+import { useSlots } from "vue";
 
 const emit = defineEmits(["close"]);
 const slots = useSlots();

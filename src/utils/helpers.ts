@@ -1,4 +1,5 @@
 import type { SeoProps } from "@components/BaseHead.astro";
+
 import { SITE_NAME, SITE_URL } from "astro:env/client";
 
 /**
@@ -32,12 +33,12 @@ export const randomElement = (elements: any[]): any => {
 
 export const seoData = (data, baseUrl: string = SITE_URL): SeoProps => {
   return {
-    title: data.title,
     seo: {
       ...data.seo,
-      opengraphUrl: baseUrl,
       opengraphSiteName: SITE_NAME,
+      opengraphUrl: baseUrl,
     },
+    title: data.title,
   };
 };
 
@@ -77,7 +78,7 @@ export const formattedDate = (date?: string, locale = "de-DE") => {
   if (!date) return;
   const dateToFormat = new Date(date);
 
-  return dateToFormat.toLocaleString(locale, { year: "numeric", month: "long", day: "numeric" });
+  return dateToFormat.toLocaleString(locale, { day: "numeric", month: "long", year: "numeric" });
 };
 
 /**

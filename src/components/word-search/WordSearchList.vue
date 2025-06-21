@@ -20,16 +20,16 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from "vue";
-import WordList from "@components/WordList.vue";
 import SearchWords from "@components/SearchWords.vue";
-import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
-import { $searchResultCount } from "@stores/index";
-import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue";
-import ShortcutNavigating from "@components/word-search/shortcuts/ShortcutNavigating.vue";
-import SearchResultCount from "@components/word-search/SearchResultCount.vue";
-import { useStore } from "@nanostores/vue";
 import NoSearchResults from "@components/word-search/NoSearchResults.vue";
+import SearchResultCount from "@components/word-search/SearchResultCount.vue";
+import ShortcutNavigating from "@components/word-search/shortcuts/ShortcutNavigating.vue";
+import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue";
+import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
+import WordList from "@components/WordList.vue";
+import { useStore } from "@nanostores/vue";
+import { $searchResultCount } from "@stores/index";
+import { defineAsyncComponent } from "vue";
 
 type WordSearchListProps = {
   cssClass: string;

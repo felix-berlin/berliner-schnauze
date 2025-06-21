@@ -1,23 +1,23 @@
 import { atom } from "nanostores";
 
-export type ToastStatus = "success" | "error" | "info" | "warning";
-
 export type ToastNotify = {
-  id?: number;
-  message: string;
-  status?: ToastStatus;
-  showStatusIcon?: boolean;
-  showClose?: boolean;
   closeOnSwipe?: boolean;
-  position?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
-  outerSpacing?: string;
   gapBetween?: number;
+  id?: number;
   initOffset?: number;
+  message: string;
+  outerSpacing?: string;
+  position?: "bottom-left" | "bottom-right" | "top-left" | "top-right";
+  showClose?: boolean;
+  showStatusIcon?: boolean;
+  status?: ToastStatus;
 };
 
 export type ToastPayload = Omit<ToastNotify, "id"> & {
-  timeout?: number | null; // If null, toast will not be removed automatically
+  timeout?: null | number; // If null, toast will not be removed automatically
 };
+
+export type ToastStatus = "error" | "info" | "success" | "warning";
 
 const removeToastTimeout = 400;
 const defaultTimeout = 5000;
@@ -97,7 +97,7 @@ export const createToastNotify = (payload: ToastPayload): void => {
  * @return  {void}
  */
 export const removeToastById = (
-  id: number | `${string}-${string}-${string}-${string}-${string}`,
+  id: `${string}-${string}-${string}-${string}-${string}` | number,
 ): void => {
   const currentToast = $toastNotify.get().find((t) => t.id === id);
 

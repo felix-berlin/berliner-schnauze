@@ -1,49 +1,48 @@
-import { onMount, task } from "nanostores";
 import { persistentMap } from "@nanostores/persistent";
-import { WP_REST_API, WP_AUTH_REFRESH_TOKEN } from "astro:env/client";
+import { WP_AUTH_REFRESH_TOKEN, WP_REST_API } from "astro:env/client";
+import { onMount, task } from "nanostores";
 
-interface Translation {
-  translation: string;
+export interface Word {
+  alternative_words?: boolean;
+  article?: null | string;
+  berlinerisch?: string;
+  examples?: Example[];
+  expires?: number;
+  group?: string;
+  ID?: number;
+  learn_more?: null | string;
+  post_date?: string;
+  post_modified?: string;
+  post_name?: string;
+  related_words?: null | string;
+  translations?: Translation[];
+  word_type?: boolean;
 }
 interface Example {
   example: string;
   example_explanation: string;
 }
 
-export interface Word {
-  ID?: number;
-  post_date?: string;
-  post_name?: string;
-  post_modified?: string;
-  berlinerisch?: string;
-  article?: null | string;
-  alternative_words?: boolean;
-  translations?: Translation[];
-  examples?: Example[];
-  related_words?: null | string;
-  learn_more?: null | string;
-  group?: string;
-  word_type?: boolean;
-  expires?: number;
+interface Translation {
+  translation: string;
 }
 
 type WordOfTheDay = {
-  word?: Word;
-  loading: boolean;
   error: boolean;
+  loading: boolean;
   timestamp: number;
+  word?: Word;
 };
 
 export const $wordOfTheDay = persistentMap<WordOfTheDay>(
   "wordOfTheDay:",
   {
-    word: {},
-    loading: true,
     error: false,
+    loading: true,
     timestamp: 0,
+    word: {},
   },
   {
-    encode: (value) => JSON.stringify(value),
     decode(value) {
       try {
         return JSON.parse(value);
@@ -51,6 +50,7 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
         return value;
       }
     },
+    encode: (value) => JSON.stringify(value),
   },
 );
 
@@ -61,8 +61,8 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
 export const getWordOfTheDay = async (): Promise<void> => {
   return await fetch(`${WP_REST_API}/berliner-schnauze/v1/word-of-the-day`, {
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${WP_AUTH_REFRESH_TOKEN}`,
+      "Content-Type": "application/json",
     },
   })
     .then((res) => {

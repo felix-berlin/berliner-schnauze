@@ -1,4 +1,5 @@
 import type { WordList } from "@stores/wordList.ts";
+
 import Fuse from "fuse.js";
 
 type WordSearchEvent = {

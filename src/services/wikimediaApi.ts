@@ -2,9 +2,9 @@ import { WIKIMEDIA_API_AUTH_TOKEN } from "astro:env/client";
 
 export const fetchWikimediaAPI = async (file: string) => {
   const headers = {
-    "Content-Type": "application/json",
     Accept: "application/json",
     Authorization: WIKIMEDIA_API_AUTH_TOKEN,
+    "Content-Type": "application/json",
     "User-Agent": "Berliner Schnauze",
   };
 
@@ -12,8 +12,8 @@ export const fetchWikimediaAPI = async (file: string) => {
   const url = `${baseUrl}${file}`;
 
   return await fetch(url, {
-    method: "GET",
     headers,
+    method: "GET",
   })
     .then(async (response) => {
       if (response.ok) {

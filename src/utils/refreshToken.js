@@ -3,17 +3,17 @@ import fs from "fs";
 import path from "path";
 
 export async function refreshToken() {
-  const { WP_REST_API, WP_AUTH_USER, WP_AUTH_PASS } = process.env;
+  const { WP_AUTH_PASS, WP_AUTH_USER, WP_REST_API } = process.env;
 
   const response = await fetch(WP_REST_API + "/jwt-auth/v1/token", {
-    method: "POST",
+    body: JSON.stringify({
+      password: WP_AUTH_PASS,
+      username: WP_AUTH_USER,
+    }),
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      username: WP_AUTH_USER,
-      password: WP_AUTH_PASS,
-    }),
+    method: "POST",
   });
 
   if (!response.ok) {

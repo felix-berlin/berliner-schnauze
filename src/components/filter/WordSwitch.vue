@@ -11,13 +11,13 @@
 </template>
 
 <script setup lang="ts">
-import { useId } from "vue";
 import { useVModel } from "@nanostores/vue";
 import { $wordSearch } from "@stores/index.ts";
+import { useId } from "vue";
 
-const { switchType, label } = defineProps<{
-  switchType: "berolinismus" | "audioBerlinerisch" | "audioExamples" | "multipleMeanings";
+const { label, switchType } = defineProps<{
   label: string;
+  switchType: "audioBerlinerisch" | "audioExamples" | "berolinismus" | "multipleMeanings";
 }>();
 
 const typeOfSwitch = useVModel($wordSearch, switchType);

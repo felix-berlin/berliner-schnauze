@@ -26,25 +26,26 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, nextTick, watchEffect, useTemplateRef } from "vue";
+import type { ComponentPublicInstance } from "vue";
+
 import SingleWord from "@components/word/SingleWord.vue";
 import { useStore } from "@nanostores/vue";
 import { $oramaSearchResults } from "@stores/index.ts";
-import { WindowVirtualizer, VList } from "virtua/vue";
 import { routeToWord } from "@utils/helpers.ts";
 import { onKeyStroke } from "@vueuse/core";
-import type { ComponentPublicInstance } from "vue";
+import { VList, WindowVirtualizer } from "virtua/vue";
+import { computed, nextTick, ref, useTemplateRef, watchEffect } from "vue";
 
 const {
-  showDropdown = true,
-  useWindowVirtualizer = true,
-  singleWordGap = "1.75rem",
   itemSize = 110,
+  showDropdown = true,
+  singleWordGap = "1.75rem",
+  useWindowVirtualizer = true,
 } = defineProps<{
-  useWindowVirtualizer?: boolean;
+  itemSize?: number;
   showDropdown?: boolean;
   singleWordGap?: string;
-  itemSize?: number;
+  useWindowVirtualizer?: boolean;
 }>();
 
 const virtualizerComponent = useWindowVirtualizer ? WindowVirtualizer : VList;
@@ -56,7 +57,7 @@ const activeIndex = ref(0);
 const resultRefs = ref<HTMLElement[]>([]);
 const virtualizerRef = useTemplateRef("virtualizer");
 const showActive = ref(false);
-let hideActiveTimeout: ReturnType<typeof setTimeout> | null = null;
+let hideActiveTimeout: null | ReturnType<typeof setTimeout> = null;
 const ACTIVE_TIMEOUT = 3500; // ms
 
 const showActiveWithTimeout = () => {
@@ -72,7 +73,7 @@ watchEffect(() => {
   resultRefs.value = [];
 });
 
-const setResultRef = (el: Element | ComponentPublicInstance | null) => {
+const setResultRef = (el: ComponentPublicInstance | Element | null) => {
   if (el instanceof HTMLElement) resultRefs.value.push(el);
 };
 

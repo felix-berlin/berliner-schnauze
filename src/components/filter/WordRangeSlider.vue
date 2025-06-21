@@ -41,14 +41,14 @@
 </template>
 
 <script setup lang="ts">
-import { useId, computed } from "vue";
-import { useVModel, useStore } from "@nanostores/vue";
+import { useStore, useVModel } from "@nanostores/vue";
 import { $wordSearch } from "@stores/index.ts";
 import RotateCcwIcon from "virtual:icons/lucide/rotate-ccw";
+import { computed, useId } from "vue";
 
-const { rangeType, label } = defineProps<{
-  rangeType: "characterCount" | "consonantsCount" | "vowelsCount" | "syllablesCount";
+const { label, rangeType } = defineProps<{
   label: string;
+  rangeType: "characterCount" | "consonantsCount" | "syllablesCount" | "vowelsCount";
 }>();
 
 const rangeValue = useVModel($wordSearch, rangeType);
@@ -59,11 +59,11 @@ const getMinMax = computed(() => {
   const keyMap = {
     characterCount: "characterLength",
     consonantsCount: "consonantsCount",
-    vowelsCount: "vowelsCount",
     syllablesCount: "syllablesCount",
+    vowelsCount: "vowelsCount",
   } as const;
   const key = keyMap[rangeType];
-  return wordSearch.value.rangeFilterMinMax?.[key] ?? { min: 0, max: 0 };
+  return wordSearch.value.rangeFilterMinMax?.[key] ?? { max: 0, min: 0 };
 });
 
 const id = useId();

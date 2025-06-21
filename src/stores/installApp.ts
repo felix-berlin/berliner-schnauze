@@ -1,13 +1,13 @@
-import { atom, onMount } from "nanostores";
 import { trackEvent } from "@utils/analytics";
+import { atom, onMount } from "nanostores";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: Array<string>;
+  prompt(): Promise<void>;
   readonly userChoice: Promise<{
     outcome: "accepted" | "dismissed";
     platform: string;
   }>;
-  prompt(): Promise<void>;
 }
 
 export const $installPrompt = atom<BeforeInstallPromptEvent | null>(null);

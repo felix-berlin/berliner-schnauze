@@ -32,18 +32,19 @@
 </template>
 
 <script setup lang="ts">
-import {
-  ref,
-  onMounted,
-  onBeforeMount,
-  watch,
-  nextTick,
-  reactive,
-  defineAsyncComponent,
-} from "vue";
-import { useSwipe } from "@vueuse/core";
-import { removeToastById, supportsPopover } from "@stores/index.ts";
 import type { ToastNotify } from "@stores/index.ts";
+
+import { removeToastById, supportsPopover } from "@stores/index.ts";
+import { useSwipe } from "@vueuse/core";
+import {
+  defineAsyncComponent,
+  nextTick,
+  onBeforeMount,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 
 const Close = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
 
@@ -54,16 +55,16 @@ type StylePositionType = {
 };
 
 const {
-  message,
-  id = crypto.randomUUID(),
-  status = "info",
-  showStatusIcon = true,
-  position = "top-right",
-  outerSpacing = "20px",
-  gapBetween = 10,
-  initOffset = 100,
-  showClose = true,
   closeOnSwipe = true,
+  gapBetween = 10,
+  id = crypto.randomUUID(),
+  initOffset = 100,
+  message,
+  outerSpacing = "20px",
+  position = "top-right",
+  showClose = true,
+  showStatusIcon = true,
+  status = "info",
 } = defineProps<ToastNotify>();
 
 const toast = ref<HTMLElement | null>(null);
@@ -79,9 +80,9 @@ const stylePosition: StylePositionType = reactive({
 
 const toastIconMap = {
   error: defineAsyncComponent(() => import("virtual:icons/lucide/x-circle")),
-  warning: defineAsyncComponent(() => import("virtual:icons/lucide/alert-circle")),
-  success: defineAsyncComponent(() => import("virtual:icons/lucide/check-circle-2")),
   info: defineAsyncComponent(() => import("virtual:icons/lucide/info")),
+  success: defineAsyncComponent(() => import("virtual:icons/lucide/check-circle-2")),
+  warning: defineAsyncComponent(() => import("virtual:icons/lucide/alert-circle")),
 };
 
 /**

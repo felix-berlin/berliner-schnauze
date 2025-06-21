@@ -1,17 +1,21 @@
 import type { APIRoute } from "astro";
+
 import { fetchAllWords } from "@services/api.ts";
-import type { BerlinerWord } from "@/gql/graphql.ts";
-import Hypher from "hypher";
-import german from "hyphenation.de";
 import {
   countLetters,
+  getWordType,
   similarSoundingWords,
   translateNlpTags,
-  getWordType,
 } from "@utils/wordHelper.ts";
+import german from "hyphenation.de";
+import Hypher from "hypher";
+
+import type { BerlinerWord } from "@/gql/graphql.ts";
 
 // Create Hypher instance once
 const hypher = new Hypher(german);
+
+export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
 
 function extractWordTypes(wordTags: any): string[] {
   // wordTags can be an array of objects or a single object
@@ -46,30 +50,28 @@ function makeOramaSearchIndex(node: BerlinerWord, allWords, similarWordsMap: Map
 
   return {
     berlinerischWordTypes: wordTypes,
+    berlinerWordId: node.berlinerWordId,
     dateGmt: node.dateGmt,
     modifiedGmt: node.modifiedGmt,
-    wordGroup: node.wordGroup,
     slug: node.slug,
-    berlinerWordId: node.berlinerWordId,
+    wordGroup: node.wordGroup,
     wordProperties: {
-      berlinerisch,
-      berolinismus: node.wordProperties?.berolinismus,
-      translations,
-      syllablesCount,
-      multipleMeanings: !!node.wordProperties?.alternativeWords,
-      characterLength: berlinerisch.length,
       audioBerlinerisch: !!node.wordProperties?.berlinerischAudio,
       audioExamples:
         Array.isArray(node?.wordProperties?.examples) &&
         node.wordProperties.examples.some((e) => !!e?.exampleAudio?.length),
+      berlinerisch,
+      berolinismus: node.wordProperties?.berolinismus,
+      characterLength: berlinerisch.length,
       consonantsCount: consonants,
-      vowelsCount: vowels,
+      multipleMeanings: !!node.wordProperties?.alternativeWords,
       similarSoundingWords: hasSimilarSounding,
+      syllablesCount,
+      translations,
+      vowelsCount: vowels,
     },
   };
 }
-
-export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
 
 export const GET: APIRoute = async () => {
   const allWords = await fetchAllWords();

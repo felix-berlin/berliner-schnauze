@@ -34,25 +34,25 @@
 </template>
 
 <script setup lang="ts">
-import { useTemplateRef, onMounted } from "vue";
-import Search from "virtual:icons/lucide/search";
-import X from "virtual:icons/lucide/x";
+import { useStore, useVModel } from "@nanostores/vue";
 import {
-  $wordSearch,
-  setSearch,
-  searchLength as currentSearchLength,
   $searchResultCount,
+  $wordSearch,
+  searchLength as currentSearchLength,
+  setSearch,
 } from "@stores/index";
 import { setMatomoSearch } from "@utils/analytics";
-import { useStore, useVModel } from "@nanostores/vue";
 import { useDebounceFn } from "@vueuse/core";
+import Search from "virtual:icons/lucide/search";
+import X from "virtual:icons/lucide/x";
+import { onMounted, useTemplateRef } from "vue";
 
 interface SearchWordsProps {
-  buttonPosition?: "left" | "right";
   autoFocus?: boolean;
+  buttonPosition?: "left" | "right";
 }
 
-const { buttonPosition = "left", autoFocus = false } = defineProps<SearchWordsProps>();
+const { autoFocus = false, buttonPosition = "left" } = defineProps<SearchWordsProps>();
 
 const searchLength = useStore(currentSearchLength);
 const searchResultCount = useStore($searchResultCount);

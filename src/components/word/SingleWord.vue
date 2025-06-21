@@ -52,19 +52,20 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from "vue";
-import BookOpen from "virtual:icons/lucide/book-open";
 import { routeToWord } from "@utils/helpers.ts";
+import BookOpen from "virtual:icons/lucide/book-open";
+import { defineAsyncComponent } from "vue";
+
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 type WordProps = {
-  source: OramaSearchIndex;
   index?: number;
+  positions: Record<string, { length: number; start: number; }[]> | undefined;
   showDropdown?: boolean;
-  positions: Record<string, { start: number; length: number }[]> | undefined;
+  source: OramaSearchIndex;
 };
 
-const { source, index, showDropdown = true, positions } = defineProps<WordProps>();
+const { index, positions, showDropdown = true, source } = defineProps<WordProps>();
 
 const IsWordOfTheDay = defineAsyncComponent(() => import("@components/word/IsWordOfTheDay.vue"));
 const WordOptionDropdown = defineAsyncComponent(
@@ -73,7 +74,7 @@ const WordOptionDropdown = defineAsyncComponent(
 
 const highlightMatches = (
   text: string,
-  matchesObj?: Record<string, { start: number; length: number }[]>,
+  matchesObj?: Record<string, { length: number; start: number; }[]>,
 ): string => {
   if (!matchesObj || typeof matchesObj !== "object") return text;
 

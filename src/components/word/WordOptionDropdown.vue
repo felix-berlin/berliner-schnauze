@@ -55,15 +55,16 @@
 </template>
 
 <script setup lang="ts">
+import type { BerlinerWord } from "@stores/index.ts";
+
+import { createToastNotify } from "@stores/index.ts";
+import { trackEvent } from "@utils/analytics";
+import { routeToWord } from "@utils/helpers.ts";
+import { useClipboard, useShare } from "@vueuse/core";
+import { SITE_URL } from "astro:env/client";
 import Copy from "virtual:icons/lucide/copy";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
-import { routeToWord } from "@utils/helpers.ts";
-import { useClipboard, useShare } from "@vueuse/core";
-import type { BerlinerWord } from "@stores/index.ts";
-import { createToastNotify } from "@stores/index.ts";
-import { SITE_URL } from "astro:env/client";
-import { trackEvent } from "@utils/analytics";
 
 interface WordProps {
   berlinerisch: BerlinerWord["wordProperties"]["berlinerisch"];
@@ -72,8 +73,8 @@ interface WordProps {
 
 const { berlinerisch, slug } = defineProps<WordProps>();
 
-const { text, copy, copied, isSupported: clipBoardIsSupported } = useClipboard();
-const { share, isSupported: shareIsSupported } = useShare();
+const { copied, copy, isSupported: clipBoardIsSupported, text } = useClipboard();
+const { isSupported: shareIsSupported, share } = useShare();
 
 /**
  * Share the word
@@ -84,8 +85,8 @@ const { share, isSupported: shareIsSupported } = useShare();
  */
 const shareWord = (slug: string): void => {
   const shareData = {
-    title: `${slug} - Berliner Schnauze`,
     text: `Lerne mehr über das Berliner Wort: ${slug}`,
+    title: `${slug} - Berliner Schnauze`,
     url: routeToWord(slug),
   };
 

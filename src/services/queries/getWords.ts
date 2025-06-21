@@ -1,27 +1,29 @@
-import type {
-  RootQueryToBerlinerWordConnectionEdge,
-  GetAllWordsQueryVariables,
-} from "@/gql/graphql.ts";
+import { cacheExchange, Client, fetchExchange } from "@urql/core";
 import { SHOW_TEST_DATA } from "astro:env/client";
+import { WP_API } from "astro:env/client";
+
+import type {
+  GetAllWordsQueryVariables,
+  RootQueryToBerlinerWordConnectionEdge,
+} from "@/gql/graphql.ts";
+
 import { graphql } from "@/gql";
 import {
   GetAllWordsDocument,
   GetAllWordsLinksDocument,
-  PostObjectsConnectionOrderbyEnum,
   OrderEnum,
+  PostObjectsConnectionOrderbyEnum,
   PostStatusEnum,
 } from "@/gql/graphql.ts";
-import { WP_API } from "astro:env/client";
-import { Client, cacheExchange, fetchExchange } from "@urql/core";
 
 const client = new Client({
-  url: WP_API,
+  exchanges: [cacheExchange, fetchExchange],
   fetchOptions: {
     headers: {
       "Content-Type": "application/json",
     },
   },
-  exchanges: [cacheExchange, fetchExchange],
+  url: WP_API,
 });
 
 const fetchPaginatedWords = async (
@@ -41,8 +43,8 @@ const fetchPaginatedWords = async (
 
     const variables: GetAllWordsQueryVariables = {
       after: cursor,
-      first: pageSize,
       field: orderByField,
+      first: pageSize,
       order: orderByType,
       stati,
     };

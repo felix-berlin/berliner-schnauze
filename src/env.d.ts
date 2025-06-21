@@ -7,7 +7,7 @@ declare module "*.graphql";
 
 declare global {
   interface Window {
-    _paq: Array<(string | number | boolean | null | undefined | object)[]>;
+    _paq: Array<(boolean | null | number | object | string | undefined)[]>;
   }
 }
 

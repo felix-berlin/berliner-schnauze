@@ -17,9 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
-import Play from "virtual:icons/lucide/play";
 import Pause from "virtual:icons/lucide/pause";
+import Play from "virtual:icons/lucide/play";
+import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
+
 import type { MediaItem } from "@/gql/graphql";
 
 type AudioPlayerListProps = {
@@ -33,7 +34,7 @@ const isPlaying = ref(false);
 const audioButton = ref<HTMLButtonElement | null>(null);
 const progress = ref(0);
 
-let animationFrameId: number | null = null;
+let animationFrameId: null | number = null;
 
 const fillStyle = computed(() => ({
   height: `${progress.value}%`,

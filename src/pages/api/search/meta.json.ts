@@ -1,8 +1,9 @@
 import type { APIRoute } from "astro";
+
 import { fetchAllWords } from "@services/api.ts";
-import Hypher from "hypher";
+import { countLetters, getWordType, translateNlpTags } from "@utils/wordHelper.ts";
 import german from "hyphenation.de";
-import { countLetters, translateNlpTags, getWordType } from "@utils/wordHelper.ts";
+import Hypher from "hypher";
 
 const hypher = new Hypher(german);
 
@@ -64,21 +65,21 @@ export const GET: APIRoute = async () => {
 
   // Helper to get min/max
   const getMinMax = (arr: number[]) => ({
-    min: arr.length ? Math.min(...arr) : 0,
     max: arr.length ? Math.max(...arr) : 0,
+    min: arr.length ? Math.min(...arr) : 0,
   });
 
   const minMax = {
     characterLength: getMinMax(characterLengths),
     consonantsCount: getMinMax(consonantsCounts),
-    vowelsCount: getMinMax(vowelsCounts),
     syllablesCount: getMinMax(syllablesCounts),
+    vowelsCount: getMinMax(vowelsCounts),
   };
 
   const meta = {
     availableWordGroups,
-    wordTypes,
     rangeFilterMinMax: minMax,
+    wordTypes,
   };
 
   return new Response(JSON.stringify(meta));

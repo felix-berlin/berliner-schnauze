@@ -42,13 +42,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import X from "virtual:icons/lucide/x";
-import Filter from "virtual:icons/lucide/filter";
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import { useStore } from "@nanostores/vue";
-import { onSet } from "nanostores";
 import { $wordSearch, setLetterFilter } from "@stores/index.ts";
+import { onSet } from "nanostores";
+import Filter from "virtual:icons/lucide/filter";
+import X from "virtual:icons/lucide/x";
+import { ref } from "vue";
 
 const wordSearch = useStore($wordSearch);
 const hideDropdown = ref(false);

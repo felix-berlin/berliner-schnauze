@@ -27,11 +27,12 @@
 </template>
 
 <script setup lang="ts">
+import type { WordList } from "@stores/index.ts";
+
+import { useStore } from "@nanostores/vue";
+import { $wordSearch, setActiveOrderCategory } from "@stores/index.ts";
 import SortAsc from "virtual:icons/lucide/sort-asc";
 import SortDesc from "virtual:icons/lucide/sort-desc";
-import type { WordList } from "@stores/index.ts";
-import { setActiveOrderCategory, $wordSearch } from "@stores/index.ts";
-import { useStore } from "@nanostores/vue";
 
 interface SortWordByProps {
   orderCategory: WordList["activeOrderCategory"];

@@ -7,8 +7,8 @@
 </template>
 
 <script setup lang="ts">
-import ArrowUpIcon from "virtual:icons/lucide/arrow-up";
 import ArrowDownIcon from "virtual:icons/lucide/arrow-down";
+import ArrowUpIcon from "virtual:icons/lucide/arrow-up";
 </script>
 
 <style scoped></style>

@@ -6,23 +6,23 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
 import { useStore } from "@nanostores/vue";
 import { $isDarkMode } from "@stores/index.ts";
+import { onMounted } from "vue";
 
 interface TurnStileProps {
-  wrapperId?: string;
   siteKey: string;
+  wrapperId?: string;
 }
 
-const { wrapperId = "turnstileWrapper", siteKey } = defineProps<TurnStileProps>();
+const { siteKey, wrapperId = "turnstileWrapper" } = defineProps<TurnStileProps>();
 
 const isDarkMode = useStore($isDarkMode);
 
 const emit = defineEmits<{
-  verify: [response: boolean];
   expire: [expired: boolean];
   fail: [error: boolean];
+  verify: [response: boolean];
 }>();
 
 /**
@@ -50,10 +50,10 @@ const createTurnstileScriptTag = (): void => {
 const renderTurnstile = (): void => {
   window.onloadTurnstileCallback = function () {
     turnstile.render(`#${wrapperId}`, {
-      sitekey: siteKey,
       callback: (response: string) => emit("verify", checkVerification(response)),
-      "expired-callback": emit("expire", true),
       "error-callback": emit("fail", true),
+      "expired-callback": emit("expire", true),
+      sitekey: siteKey,
       theme: isDarkMode ? "dark" : "light",
     });
   };

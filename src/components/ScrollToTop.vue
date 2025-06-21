@@ -19,22 +19,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref } from "vue";
-import ChevronUp from "virtual:icons/lucide/chevron-up";
 import { trackEvent } from "@utils/analytics";
+import ChevronUp from "virtual:icons/lucide/chevron-up";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 
 interface ScrollToTopProps {
-  showAtPosition?: number;
   buttonAriaLabel?: string;
-  tooltip?: string;
   hideTooltip?: boolean;
+  showAtPosition?: number;
+  tooltip?: string;
 }
 
 const {
-  showAtPosition = 500,
   buttonAriaLabel = "nach oben scrollen",
-  tooltip,
   hideTooltip = false,
+  showAtPosition = 500,
+  tooltip,
 } = defineProps<ScrollToTopProps>();
 
 const observer = ref<IntersectionObserver | null>(null);
@@ -45,7 +45,7 @@ const handleIntersect = ([entry]: IntersectionObserverEntry[]) => {
 };
 
 const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ behavior: "smooth", top: 0 });
   trackEvent("Scroll to Top", "Clicked", "Scroll to Top Button");
 };
 
