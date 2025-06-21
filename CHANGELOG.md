@@ -2,6 +2,55 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.21.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.20.4...v3.21.0) (2025-06-21)
+
+
+### Bug Fixes
+
+* **astro images:** responsive image config ([4f24538](https://github.com/felix-berlin/berliner-schnauze/commit/4f245386ddc2b32b5bd5a0b8c14b0039d1e0e179))
+* **breadcrumbs:** add global spacing styles ([dad339d](https://github.com/felix-berlin/berliner-schnauze/commit/dad339d2e6cf78e6d84f305ed25d47d4efe685ed))
+* **button with states:** make class naming more clear ([1f4767a](https://github.com/felix-berlin/berliner-schnauze/commit/1f4767affd7c1aff8f3ad90722b47c924de4df5b))
+* **filter search:** style <i> general; center span inside button ([a2bbc8a](https://github.com/felix-berlin/berliner-schnauze/commit/a2bbc8ac8a270bf0982c523ffd3189cf95010f80))
+* filter wording ([6c272d3](https://github.com/felix-berlin/berliner-schnauze/commit/6c272d383d359f6a35a041251c57ce5a91938d50))
+* **modal:** Uncaught TypeError: o is not a function ([c2af7ae](https://github.com/felix-berlin/berliner-schnauze/commit/c2af7ae26821698c8931bfa1b6f48e7af5f63baa))
+* remove default range and fieldset styles ([f06f96f](https://github.com/felix-berlin/berliner-schnauze/commit/f06f96f54baef0102fed1935f0cf13c7cf31b206))
+* **search modal:** styles ([88c5da8](https://github.com/felix-berlin/berliner-schnauze/commit/88c5da8450c2951e4f3caf72596ec470ba849ac7))
+* **search word:** add missing id ([af7eea0](https://github.com/felix-berlin/berliner-schnauze/commit/af7eea01ef86e87ee579693efbd68bbdc40e0232))
+* **theme color:** after page transition ([01a61b2](https://github.com/felix-berlin/berliner-schnauze/commit/01a61b21dfcf923bbf81fe2baf156e1bae0bd994))
+* **word filter:** missing resets ([f036e46](https://github.com/felix-berlin/berliner-schnauze/commit/f036e46b4ed367c9e62cd15a09fbdb4e86100d72))
+* **word list:** active styles ([e5475aa](https://github.com/felix-berlin/berliner-schnauze/commit/e5475aa703ac801643a8a9c2e7cb8ac688de6508))
+* **word list:** reset should not reset letter groups ([1d1a8db](https://github.com/felix-berlin/berliner-schnauze/commit/1d1a8dba309b42b3487cf07462e65245d605620f))
+* wrong class names ([e54f464](https://github.com/felix-berlin/berliner-schnauze/commit/e54f4640ef7fc3000b9b997201990039298a23ba))
+
+
+### Features
+
+* add AudioExamplesSwitch to WordFilter ([f36a1c8](https://github.com/felix-berlin/berliner-schnauze/commit/f36a1c87f504e3d73c255318b65c72331966f9c7))
+* add basic word range slider styles ([2077d08](https://github.com/felix-berlin/berliner-schnauze/commit/2077d085058c241ff107b922f2e6da0f035a0372))
+* add WordRangeSlider ([19d2a87](https://github.com/felix-berlin/berliner-schnauze/commit/19d2a875321b7ae7bd4fe02378b10c9d12324565))
+* add WordRangeSlider for all new filter to WordFilter ([ec0ce04](https://github.com/felix-berlin/berliner-schnauze/commit/ec0ce040bb6d9ca2e9b140c71da12e93785e4016))
+* **api:** search index comes with more filter data ([833450c](https://github.com/felix-berlin/berliner-schnauze/commit/833450cc4dfbc41bdf678230068c3b13d03ca2e9))
+* **ButtonWithStates:** add new component and implement in WordFilter ([e96f790](https://github.com/felix-berlin/berliner-schnauze/commit/e96f790861d978ad249245566b681b45e7ebaab5))
+* create general word switch component ([034f6b8](https://github.com/felix-berlin/berliner-schnauze/commit/034f6b881262df82e6d3ca938a824f21595a310e))
+* **filter:** use NLP wordTypes instead of curated; make it possible to filter more then one type ([a0a313c](https://github.com/felix-berlin/berliner-schnauze/commit/a0a313c334024710be365cc3ad5a8d3d70a07f6f))
+* make placeholder search input styles global ([25cca68](https://github.com/felix-berlin/berliner-schnauze/commit/25cca68260a41c8a8d212b5293dec33bece18da6))
+* **meta:** calc min and max for range filters ([46cdb9d](https://github.com/felix-berlin/berliner-schnauze/commit/46cdb9db7966d212667e8a9318f3f2afa97b0b4d))
+* **word filter:** show close button at the bottom ([5fc396e](https://github.com/felix-berlin/berliner-schnauze/commit/5fc396e1963729ada3f0d718aa4b1cf8b2e5ad7f))
+* **word list:** change active styles to dashed line ([3f72ebe](https://github.com/felix-berlin/berliner-schnauze/commit/3f72ebe015b42697be4e1b6971338e845427ae57))
+* **word list:** limit results height to max 100vh ([46afc83](https://github.com/felix-berlin/berliner-schnauze/commit/46afc83e49f89ce645c1963045d6e9ff8b4968cf))
+* **word search slider:** add styles for filter search ([bb4a9ca](https://github.com/felix-berlin/berliner-schnauze/commit/bb4a9ca9ef123df3e94ec0154f85bd6dbaf446e0))
+* **word type filter:** add info text ([72fe645](https://github.com/felix-berlin/berliner-schnauze/commit/72fe64535ef712f0215f8965235e654753e0b7ab))
+* **word type filter:** add x icon on select item hover ([d79f5c0](https://github.com/felix-berlin/berliner-schnauze/commit/d79f5c09add8d51be700c6dcebdbf5314614929f))
+* **word:** add info text ([182c576](https://github.com/felix-berlin/berliner-schnauze/commit/182c576d5da694a85b7e5980580f52b57ae6d161))
+* **WordFilter:** add all new switch filter ([1a71576](https://github.com/felix-berlin/berliner-schnauze/commit/1a71576fb022fb20d28054dcaafd6f23ff012e38))
+* **wordList:** implement filter logic for the new props ([c0a91db](https://github.com/felix-berlin/berliner-schnauze/commit/c0a91dbffee9f93afb57115faf82c992cd230895))
+
+
+### Performance Improvements
+
+* load modal idle; prerender SearchModalTrigger ([e2c09fa](https://github.com/felix-berlin/berliner-schnauze/commit/e2c09fabe8c393ac5a4d8ca9d5c6b587be1789bd))
+* optimize search endpoint ([94b30f0](https://github.com/felix-berlin/berliner-schnauze/commit/94b30f098462d9a710d42ed6a3859446f24a03e1))
+
 ## [3.20.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.20.3...v3.20.4) (2025-05-31)
 
 
