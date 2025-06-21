@@ -59,20 +59,25 @@
       <WordRangeSlider range-type="vowelsCount" label="Vokale-Anzahl" />
       <WordRangeSlider range-type="syllablesCount" label="Silben-Anzahl" />
 
-      <button
+      <ButtonWithStates
         type="button"
-        class="c-filter-search__reset c-button c-button--center-icon"
-        @click="resetAll"
+        class="c-button--center-icon c-filter-search__reset"
+        :state="ready ? 'normal' : 'success'"
+        @click="
+          resetAll();
+          start();
+        "
       >
         <FilterReset width="18" height="18" />
         Zurücksetzen
-      </button>
+      </ButtonWithStates>
     </aside>
   </transition>
 </template>
 
 <script setup lang="ts">
 import BadgeTag from "@components/BadgeTag.vue";
+import ButtonWithStates from "@components/ButtonWithStates.vue";
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
 import WordRangeSlider from "@components/filter/WordRangeSlider.vue";
@@ -81,6 +86,7 @@ import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import { useStore } from "@nanostores/vue";
 import { $showWordListFilterFlyout, $toggleWordListFilterFlyout, resetAll } from "@stores/index.ts";
 import { onClickOutside } from "@vueuse/core";
+import { useTimeout } from "@vueuse/core";
 import FilterReset from "virtual:icons/lucide/filter-x";
 import X from "virtual:icons/lucide/x";
 import { useTemplateRef } from "vue";
@@ -90,6 +96,7 @@ const { closeOnClickOutside = true } = defineProps<{
 }>();
 
 const wordListFilter = useTemplateRef("wordListFilter");
+const { ready, start } = useTimeout(1200, { controls: true });
 
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
 
