@@ -76,14 +76,10 @@
     }
   }
 
-  &__switch {
-    :where(i) {
-      font-size: 0.7rem;
-    }
-
-    .c-word-switch {
-      margin-top: vars.$spacer * 0.7;
-    }
+  :where(i) {
+    font-size: 0.7rem;
+    margin-block-end: vars.$spacer * 0.7;
+    display: block;
   }
 
   .c-filter-search__close {
@@ -97,9 +93,14 @@
   &__reset {
     --padding: 0.5rem;
 
-    gap: 0.7rem;
     margin-top: 3rem;
     width: 100%;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   }
 
   &__list {
