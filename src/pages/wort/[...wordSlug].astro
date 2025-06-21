@@ -4,38 +4,39 @@ import "@styles/objects/_word.scss";
 import "@styles/components/_single-word.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 
-// Imports
-import { fetchAllWords } from "@services/api.ts";
-import Layout from "@layouts/Layout.astro";
-import ExternalLink from "~icons/lucide/external-link";
-import ChevronRight from "~icons/lucide/chevron-right";
+// Types
+import type { GetStaticPaths, InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
+
+import AudioPlayerList from "@components/AudioPlayerList.vue";
+import BadgeTag from "@components/BadgeTag.vue";
+import ImageGallery from "@components/ImageGallery.astro";
+import RandomWordButton from "@components/RandomWordButton.vue";
+import RelatedWords from "@components/RelatedWords.vue";
+import ToolTip from "@components/ToolTip.vue";
+import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 // import WordExamples from "@components/word/WordExamples.vue";
 import WordExamples from "@components/word/WordExamples.astro";
-import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
-import RelatedWords from "@components/RelatedWords.vue";
-import RandomWordButton from "@components/RandomWordButton.vue";
-import { routeToWord, seoData, formattedDate } from "@utils/helpers.ts";
+import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
+import Layout from "@layouts/Layout.astro";
+// Imports
+import { fetchAllWords } from "@services/api.ts";
+import { formattedDate, routeToWord, seoData } from "@utils/helpers.ts";
 import {
+  capitalizeFirstLetter,
   coloredConsonantsAndVowels,
   countLetters,
-  getWordType,
-  translateNlpTags,
-  similarSoundingWords,
   createWikimediaFileList,
-  capitalizeFirstLetter,
+  getWordType,
+  similarSoundingWords,
   similarWords,
+  translateNlpTags,
 } from "@utils/wordHelper.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
-import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
-import ImageGallery from "@components/ImageGallery.astro";
-import ToolTip from "@components/ToolTip.vue";
-import BadgeTag from "@components/BadgeTag.vue";
-import AudioPlayerList from "@components/AudioPlayerList.vue";
-import Hypher from "hypher";
 import german from "hyphenation.de";
+import Hypher from "hypher";
+import ChevronRight from "~icons/lucide/chevron-right";
+import ExternalLink from "~icons/lucide/external-link";
 
-// Types
-import type { InferGetStaticParamsType, InferGetStaticPropsType, GetStaticPaths } from "astro";
 import type { BerlinerWord } from "@/gql/graphql.ts";
 
 export const getStaticPaths = (async () => {
@@ -47,8 +48,8 @@ export const getStaticPaths = (async () => {
         wordSlug: node.slug,
       },
       props: {
-        word: node,
         allWords: allWords.map((word) => word.node),
+        word: node,
       },
     };
   });
@@ -58,7 +59,7 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { wordSlug } = Astro.params as Params;
-const { word, allWords } = Astro.props;
+const { allWords, word } = Astro.props;
 
 const wordProps: BerlinerWord["wordProperties"] = word.wordProperties;
 
@@ -93,34 +94,34 @@ const schemaJson = () =>
   JSON.stringify({
     "@context": "https://schema.org",
     "@type": "DefinedTerm",
-    name: wordProps?.berlinerisch,
+    alternateName: (wordProps?.alternativeWords ?? []).map((w) => w?.alternativeWord).join(", "),
+    description: (wordProps?.translations ?? []).map((t) => t?.translation).join("; "),
+    identifier: word.id,
     inDefinedTermSet: {
       "@type": "DefinedTermSet",
       name: "Berliner Schnauze Wörterbuch",
       url: `${Astro.url.origin}/wort`,
     },
-    description: (wordProps?.translations ?? []).map((t) => t?.translation).join("; "),
-    alternateName: (wordProps?.alternativeWords ?? []).map((w) => w?.alternativeWord).join(", "),
-    url: Astro.url.href,
-    identifier: word.id,
+    name: wordProps?.berlinerisch,
     sameAs: wordProps?.learnMore || undefined,
+    url: Astro.url.href,
   });
 ---
 
 <Layout content={seoData(word)} contentClasses="o-word">
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={schemaJson()} />
+    <script set:html={schemaJson()} type="application/ld+json" />
   </Fragment>
-  <Breadcrumbs indexText="Start" truncated={true} linkTextFormat="capitalized">
-    <ChevronRight slot="separator" width="20" height="20" />
+  <Breadcrumbs indexText="Start" linkTextFormat="capitalized" truncated={true}>
+    <ChevronRight height="20" slot="separator" width="20" />
   </Breadcrumbs>
 
   <IsWordOfTheDay
-    wordId={word.berlinerWordId}
-    word={wordProps?.berlinerisch}
+    client:only="vue"
     iconSize={50}
     tooltipPlacement="top"
-    client:only="vue"
+    word={wordProps?.berlinerisch}
+    wordId={word.berlinerWordId}
   />
   <article class="c-single-word">
     <header class="c-single-word__header">
@@ -137,8 +138,8 @@ const schemaJson = () =>
         word.wordProperties?.berlinerischAudio && (
           <AudioPlayerList
             audio={word.wordProperties?.berlinerischAudio}
-            isType="berlinerisch"
             client:only="vue"
+            isType="berlinerisch"
           />
         )
       }
@@ -160,11 +161,12 @@ const schemaJson = () =>
       }
       <WordOptionDropdown
         berlinerisch={word.wordProperties?.berlinerisch}
-        slug={word.slug}
         client:only="vue"
+        slug={word.slug}
       />
     </header>
     <main class="c-single-word__main">
+      {wordProps?.infoText && <section set:html={wordProps?.infoText} />}
       <section>
         <h2>Etymologie</h2>
 
@@ -316,7 +318,7 @@ const schemaJson = () =>
                 .map((word): BerlinerWord[] => {
                   return (
                     <li class="c-single-word__related-word">
-                      <a href={routeToWord(word?.slug)} class="c-single-word__related-word-link">
+                      <a class="c-single-word__related-word-link" href={routeToWord(word?.slug)}>
                         {word?.wordProperties?.berlinerisch}
                       </a>
                     </li>
@@ -334,11 +336,11 @@ const schemaJson = () =>
           <h2>Bilder:</h2>
           <ImageGallery
             images={wordProps?.images}
-            widths={galleryWidths}
-            sizes={gallerySizes}
-            lightboxWidths={lightboxWidths}
             lightboxSizes={lightboxSizes}
+            lightboxWidths={lightboxWidths}
             loading="eager"
+            sizes={gallerySizes}
+            widths={galleryWidths}
           />
         </section>
       )
@@ -347,14 +349,14 @@ const schemaJson = () =>
     {
       wordProps?.learnMore && (
         <a
+          class="c-single-word__learn-more-link"
           href={wordProps?.learnMore}
           target="_blank"
-          class="c-single-word__learn-more-link"
           title="mehr zu diesen Wort auf Wikipedia"
         >
           Erfahre mehr über dieses Wort
           <span class="c-single-word__learn-more-link-icon">
-            <ExternalLink width="10" height="10" />
+            <ExternalLink height="10" width="10" />
           </span>
         </a>
       )
@@ -376,7 +378,7 @@ const schemaJson = () =>
 
   <RelatedWords words={allWords}>
     <li>
-      <RandomWordButton words={allWords} class:list="c-related-words__word is-random" />
+      <RandomWordButton class:list="c-related-words__word is-random" words={allWords} />
     </li>
   </RelatedWords>
 </Layout>

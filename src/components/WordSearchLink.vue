@@ -8,22 +8,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import MousePointerClick from "virtual:icons/lucide/mouse-pointer-click";
-import { usePreferredReducedMotion, useBreakpoints } from "@vueuse/core";
 import { trackEvent } from "@utils/analytics";
+import { useBreakpoints, usePreferredReducedMotion } from "@vueuse/core";
+import MousePointerClick from "virtual:icons/lucide/mouse-pointer-click";
+import { onMounted, ref } from "vue";
 
 const searchLinkIconWrapClass = ref("");
 const preferredMotion = usePreferredReducedMotion();
 const breakpoints = useBreakpoints({
-  xxs: 375,
-  xs: 568,
-  sm: 768,
-  md: 1024,
-  lg: 1260,
-  xlg: 1440,
   fhd: 1920,
+  lg: 1260,
+  md: 1024,
+  sm: 768,
   uhd: 2560,
+  xlg: 1440,
+  xs: 568,
+  xxs: 375,
 });
 
 const largerThanSm = breakpoints.greater("sm");

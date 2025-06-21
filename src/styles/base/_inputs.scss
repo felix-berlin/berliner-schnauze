@@ -23,12 +23,18 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   box-shadow: 0 0 0 1px transparent;
   background-color: var(--color-background);
   outline: none;
-  border: var(--width-border) solid var(--color-border);
   appearance: none;
   color: var(--color, var(--color-body));
   transition: {
     property: border-color, color, background-color, box-shadow;
     duration: 200ms;
+  }
+
+  &:not(.c-input--range) {
+    border: var(--width-border) solid var(--color-border);
+  }
+  &:not(.c-input--file, .c-input--range) {
+    padding: var(--spacing-inner);
   }
 
   @include butler-mx.dark-mode-class {
@@ -39,14 +45,18 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     box-shadow: 0 0 0 var(--box-shadow-focus);
   }
 
-  &:not(.c-input--file) {
-    padding: var(--spacing-inner);
-  }
-
   &:disabled {
     --color-background: var(--color-background-disabled);
 
     cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: var(--color-placeholder, color-mix(in srgb, var(--blue) 80%, transparent));
+
+    @include butler-mx.dark-mode-class {
+      --color-placeholder: color-mix(in srgb, var(--yellow-500) 80%, transparent);
+    }
   }
 }
 
@@ -78,7 +88,8 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   --spacing-inner-vertical: #{vars.$spacer};
   --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
   --size-font: 1rem;
-  --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75} #{vars.$spacer};
+  --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75}
+    #{vars.$spacer};
   --color-background: var(--orange-100);
   --color-border: var(--orange-600);
 
@@ -268,7 +279,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
 
 .c-input--range {
   $color-background-track: vars.$grey-200;
-  $color-background-thumb: vars.$red-200;
+  $color-background-thumb: vars.$orange-500;
   $height-track: 0.3rem;
   $size-thumb: 1rem;
 
@@ -281,7 +292,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   background-color: transparent; // Mozilla need this
 
   &::-webkit-slider-runnable-track {
-    background-color: vars.$grey-200;
+    background-color: var(--new-blue-600);
     width: 100%;
     height: $height-track;
   }
@@ -290,7 +301,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     background-color: $color-background-thumb;
     width: $size-thumb;
     height: $size-thumb;
-    margin-top: -($height-track - 0.05rem);
+    margin-top: -($height-track + 0.05rem);
     border-radius: 50%;
     border-color: transparent; // Mozilla need this
     border-width: 0; // Mozilla need this
@@ -307,8 +318,9 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     background-color: $color-background-thumb;
     width: $size-thumb;
     height: $size-thumb;
-    margin-top: -($height-track - 0.05rem);
+    margin-top: -($height-track + 0.05rem);
     border-radius: 50%;
+    appearance: none;
   }
 }
 

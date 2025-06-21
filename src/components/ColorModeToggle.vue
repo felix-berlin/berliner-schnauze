@@ -33,7 +33,7 @@ const Moon = defineAsyncComponent(() => import("virtual:icons/lucide/moon"));
 const Sun = defineAsyncComponent(() => import("virtual:icons/lucide/sun"));
 
 interface ColorModeToggleProps {
-  cssClasses?: string[] | string;
+  cssClasses?: string | string[];
   toggleClasses?: string[];
 }
 

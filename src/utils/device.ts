@@ -1,13 +1,13 @@
 export class DeviceDetector {
+  device: { isDesktop: boolean; isMobile: boolean; isTablet: boolean; };
   userAgent: string;
-  device: { isMobile: boolean; isTablet: boolean; isDesktop: boolean };
 
   constructor() {
     this.userAgent = navigator.userAgent;
     this.device = {
+      isDesktop: true,
       isMobile: false,
       isTablet: false,
-      isDesktop: true,
     };
     this.detectDevice();
   }

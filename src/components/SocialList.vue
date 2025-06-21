@@ -25,34 +25,34 @@
 </template>
 
 <script setup lang="ts">
-import Github from "virtual:icons/lucide/github";
 import Facebook from "virtual:icons/lucide/facebook";
+import Github from "virtual:icons/lucide/github";
 
 interface SocialListProps {
-  modifier?: string;
-  listModifier?: string;
-  listLinkModifier?: string;
   listItemModifier?: string;
+  listLinkModifier?: string;
+  listModifier?: string;
+  modifier?: string;
 }
 
-const { modifier, listModifier, listLinkModifier, listItemModifier } =
+const { listItemModifier, listLinkModifier, listModifier, modifier } =
   defineProps<SocialListProps>();
 
 const list = [
   {
-    name: "github",
-    link: "https://github.com/felix-berlin/berliner-schnauze",
     ariaLabel: "Link zum Github Projekt",
+    link: "https://github.com/felix-berlin/berliner-schnauze",
+    name: "github",
   },
   {
-    name: "mastodon",
-    link: "https://mastodon.social/@berliner_schnauze",
     ariaLabel: "Folge Berliner Schnauze auf Mastodon",
+    link: "https://mastodon.social/@berliner_schnauze",
+    name: "mastodon",
   },
   {
-    name: "facebook",
-    link: "https://www.facebook.com/Berliner.Schnauze030",
     ariaLabel: "Folge Berliner Schnauze auf Facebook",
+    link: "https://www.facebook.com/Berliner.Schnauze030",
+    name: "facebook",
   },
 ];
 </script>

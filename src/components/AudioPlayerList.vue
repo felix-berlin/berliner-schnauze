@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import AudioPlayer from "@components/AudioPlayer.vue";
+
 import type {
   Maybe,
   WordPropertiesBerlinerischAudio,
@@ -24,9 +25,9 @@ import type {
 
 type AudioPlayerListProps = {
   audio:
-    | Maybe<Maybe<WordPropertiesExamplesExampleAudio>[]>
-    | Maybe<Maybe<WordPropertiesBerlinerischAudio>[]>;
-  isType: "example" | "berlinerisch";
+    | Maybe<Maybe<WordPropertiesBerlinerischAudio>[]>
+    | Maybe<Maybe<WordPropertiesExamplesExampleAudio>[]>;
+  isType: "berlinerisch" | "example";
 };
 
 const { audio, isType } = defineProps<AudioPlayerListProps>();

@@ -1,20 +1,22 @@
-import { computed, atom, task, onMount } from "nanostores";
+import type { Orama, Results, SearchParams, TypedDocument } from "@orama/orama";
+
 import { persistentMap } from "@nanostores/persistent";
-import { useViewTransition } from "@utils/helpers.ts";
-import type { Maybe, BerlinerWord } from "@/gql/graphql";
-import { trackEvent } from "@utils/analytics";
-import { create, search, insertMultiple } from "@orama/orama";
-import { stemmer, language } from "@orama/stemmers/german";
+import { create, insertMultiple } from "@orama/orama";
 import {
   afterInsert as highlightAfterInsert,
   searchWithHighlight,
 } from "@orama/plugin-match-highlight";
-import type { TypedDocument, Orama, Results, SearchParams } from "@orama/orama";
+import { language, stemmer } from "@orama/stemmers/german";
+import { trackEvent } from "@utils/analytics";
+import { useViewTransition } from "@utils/helpers.ts";
+import { atom, computed, onMount, task } from "nanostores";
+
+import type { BerlinerWord } from "@/gql/graphql";
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 export type CleanBerlinerWord = {
-  berlinerWordId: BerlinerWord["berlinerWordId"];
   berlinerischWordTypes: BerlinerWord["berlinerischWordTypes"];
+  berlinerWordId: BerlinerWord["berlinerWordId"];
   dateGmt: BerlinerWord["dateGmt"];
   id: BerlinerWord["id"];
   modifiedGmt: BerlinerWord["modifiedGmt"];
@@ -23,37 +25,60 @@ export type CleanBerlinerWord = {
   wordProperties: BerlinerWord["wordProperties"];
 };
 
+export type RangeFilterMinMax = {
+  characterLength: { max: number; min: number };
+  consonantsCount: { max: number; min: number };
+  syllablesCount: { max: number; min: number };
+  vowelsCount: { max: number; min: number };
+};
+
 export type WordList = {
-  letterGroups: Maybe<string>[];
   activeLetterFilter: string;
-  wordTypes: Maybe<string>[];
-  activeWordTypeFilter: string;
-  search: string;
-  alphabeticalOrder: "ASC" | "DESC";
-  dateOrder: "ASC" | "DESC";
-  modifiedDateOrder: "ASC" | "DESC";
   activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
+  activeWordTypeFilter: string[];
+  alphabeticalOrder: "ASC" | "DESC";
+  audioBerlinerisch: boolean;
+  audioExamples?: boolean;
   berolinismus: boolean;
+  characterCount?: number;
+  consonantsCount?: number;
+  dateOrder: "ASC" | "DESC";
+  letterGroups: string[];
+  modifiedDateOrder: "ASC" | "DESC";
+  multipleMeanings?: boolean;
+  rangeFilterMinMax?: RangeFilterMinMax;
   resultLimit?: number;
+  search: string;
+  similarSoundingWords?: boolean;
+  syllablesCount?: number;
+  vowelsCount?: number;
+  wordTypes: string[];
 };
 
 export const $wordSearch = persistentMap<WordList>(
   "wordSearch:",
   {
-    letterGroups: [],
     activeLetterFilter: "",
-    wordTypes: [],
-    activeWordTypeFilter: "",
-    search: "",
-    alphabeticalOrder: "ASC",
-    dateOrder: "ASC",
-    modifiedDateOrder: "ASC",
     activeOrderCategory: "alphabetical",
+    activeWordTypeFilter: [],
+    alphabeticalOrder: "ASC",
+    audioBerlinerisch: false,
+    audioExamples: false,
     berolinismus: false,
+    characterCount: undefined,
+    consonantsCount: undefined,
+    dateOrder: "ASC",
+    letterGroups: [],
+    modifiedDateOrder: "ASC",
+    multipleMeanings: false,
     resultLimit: undefined,
+    search: "",
+    similarSoundingWords: false,
+    syllablesCount: undefined,
+    vowelsCount: undefined,
+    wordTypes: [],
   },
   {
-    encode: (value) => JSON.stringify(value),
     decode(value) {
       try {
         return JSON.parse(value);
@@ -61,36 +86,56 @@ export const $wordSearch = persistentMap<WordList>(
         return value;
       }
     },
+    encode: (value) => JSON.stringify(value),
   },
 );
 
 export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
+  // List all filter keys that should count as "active" if truthy
+  const booleanKeys: (keyof WordList)[] = [
+    "berolinismus",
+    "audioBerlinerisch",
+    "audioExamples",
+    "multipleMeanings",
+    "similarSoundingWords",
+  ];
+  const numberKeys: (keyof WordList)[] = [
+    "characterCount",
+    "consonantsCount",
+    "vowelsCount",
+    "syllablesCount",
+  ];
+
   let count = 0;
 
-  if (wordSearch.activeLetterFilter !== "") {
-    count++;
-  }
+  if (wordSearch.activeLetterFilter !== "") count++;
+  if (wordSearch.activeWordTypeFilter?.length) count++;
 
-  if (wordSearch.activeWordTypeFilter !== "") {
-    count++;
-  }
-
-  if (wordSearch.berolinismus) {
-    count++;
-  }
+  count += booleanKeys.filter((key) => !!wordSearch[key]).length;
+  count += numberKeys.filter(
+    (key) => wordSearch[key] !== undefined && wordSearch[key] !== null,
+  ).length;
 
   return count;
 });
 
 export const resetAll = () => {
-  $wordSearch.setKey("search", "");
   $wordSearch.setKey("activeLetterFilter", "");
-  $wordSearch.setKey("activeWordTypeFilter", "");
+  $wordSearch.setKey("activeOrderCategory", "alphabetical");
+  $wordSearch.setKey("activeWordTypeFilter", []);
   $wordSearch.setKey("alphabeticalOrder", "ASC");
+  $wordSearch.setKey("audioBerlinerisch", false);
+  $wordSearch.setKey("audioExamples", false);
+  $wordSearch.setKey("berolinismus", false);
+  $wordSearch.setKey("characterCount", undefined);
+  $wordSearch.setKey("consonantsCount", undefined);
   $wordSearch.setKey("dateOrder", "ASC");
   $wordSearch.setKey("modifiedDateOrder", "ASC");
-  $wordSearch.setKey("activeOrderCategory", "alphabetical");
-  $wordSearch.setKey("berolinismus", false);
+  $wordSearch.setKey("multipleMeanings", false);
+  $wordSearch.setKey("search", "");
+  $wordSearch.setKey("similarSoundingWords", false);
+  $wordSearch.setKey("syllablesCount", undefined);
+  $wordSearch.setKey("vowelsCount", undefined);
 
   trackEvent("WordList", "Reset", "All filters reset");
 };
@@ -114,10 +159,26 @@ export const setLetterFilter = (letter: string) => {
   trackEvent("WordList", "Filter", `Letter: ${letter}`);
 };
 
-export const setWordTypeFilter = (wordType: string) => {
-  useViewTransition(() => $wordSearch.setKey("activeWordTypeFilter", wordType));
+function toggleInArray<T>(arr: T[], item: T): T[] {
+  const index = arr.indexOf(item);
+  if (index === -1) {
+    // Not in array, add it
+    return [...arr, item];
+  } else {
+    // Already in array, remove it
+    return arr.filter((_, i) => i !== index);
+  }
+}
 
-  trackEvent("WordList", "Filter", `Word Type: ${wordType}`);
+export const setWordTypeFilter = (wordType: string) => {
+  useViewTransition(() =>
+    $wordSearch.setKey(
+      "activeWordTypeFilter",
+      toggleInArray($wordSearch.get().activeWordTypeFilter, wordType),
+    ),
+  );
+
+  trackEvent("WordList", "Filter", `Word Type: ${wordType.split(" ").join(", ")}`);
 };
 
 export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCategory"]) => {
@@ -185,6 +246,7 @@ const getSearchMeta = async () => {
   const response = await fetch("/api/search/meta.json");
   const meta = (await response.json()) as {
     availableWordGroups: string[];
+    rangeFilterMinMax: RangeFilterMinMax;
     wordTypes: string[];
   };
   return meta;
@@ -196,6 +258,7 @@ onMount($wordSearch, async () => {
     await getSearchMeta().then((meta) => {
       $wordSearch.setKey("letterGroups", meta.availableWordGroups);
       $wordSearch.setKey("wordTypes", meta.wordTypes);
+      $wordSearch.setKey("rangeFilterMinMax", meta.rangeFilterMinMax);
     });
   });
 });
@@ -210,59 +273,68 @@ const wordSchema = {
   modifiedGmt: "string",
   wordGroup: "enum",
   wordProperties: {
+    audioBerlinerisch: "boolean",
+    audioExamples: "boolean",
     berlinerisch: "string",
     berolinismus: "boolean",
+    characterLength: "number",
+    consonantsCount: "number",
+    multipleMeanings: "boolean",
+    similarSoundingWords: "boolean",
+    syllablesCount: "number",
     translations: "string[]",
+    vowelsCount: "number",
   },
 } as const;
 
 type WordDocument = TypedDocument<Orama<typeof wordSchema>>;
 
-let db: Orama<typeof wordSchema> | null = null;
+let db: null | Orama<typeof wordSchema> = null;
 
-async function initOrama(words: OramaSearchIndex[]) {
-  db = create({
-    schema: wordSchema,
-    components: {
-      tokenizer: {
-        stemming: true,
-        stemmerSkipProperties: [
-          "wordGroup",
-          "modifiedGmt",
-          "dateGmt",
-          "wordProperties.berolinismus",
-          "berlinerischWordTypes",
-        ],
-        language,
-        stemmer,
-      },
-    },
-    plugins: [
-      {
-        name: "highlight",
-        afterInsert: highlightAfterInsert,
-      },
-    ],
-  });
-
-  await insertMultiple(db, words);
-}
+type SortByType =
+  | ((a: [string, number, WordDocument], b: [string, number, WordDocument]) => number)
+  | { order: "ASC" | "DESC"; property: string };
 
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
   const where: Record<string, unknown> = {};
   if (wordSearch.berolinismus) where["wordProperties.berolinismus"] = true;
+  if (wordSearch.audioBerlinerisch) where["wordProperties.audioBerlinerisch"] = true;
+  if (wordSearch.audioExamples) where["wordProperties.audioExamples"] = true;
+  if (wordSearch.multipleMeanings) where["wordProperties.multipleMeanings"] = true;
+  if (wordSearch.similarSoundingWords) {
+    where["wordProperties.similarSoundingWords"] = true;
+  }
+  if (wordSearch.characterCount != null) {
+    where["wordProperties.characterLength"] = {
+      gte: wordSearch.characterCount,
+    };
+  }
+  if (wordSearch.consonantsCount != null) {
+    where["wordProperties.consonantsCount"] = {
+      gte: wordSearch.consonantsCount,
+    };
+  }
+  if (wordSearch.vowelsCount != null) {
+    where["wordProperties.vowelsCount"] = {
+      gte: wordSearch.vowelsCount,
+    };
+  }
+  if (wordSearch.syllablesCount != null) {
+    where["wordProperties.syllablesCount"] = {
+      gte: wordSearch.syllablesCount,
+    };
+  }
   if (wordSearch.activeLetterFilter) {
     where.wordGroup = { eq: wordSearch.activeLetterFilter };
   }
-  if (wordSearch.activeWordTypeFilter) {
-    where.berlinerischWordTypes = { containsAny: [wordSearch.activeWordTypeFilter] };
+  if (
+    Array.isArray(wordSearch.activeWordTypeFilter) &&
+    wordSearch.activeWordTypeFilter.length > 0
+  ) {
+    where.berlinerischWordTypes = { containsAny: wordSearch.activeWordTypeFilter };
   }
   return where;
 }
-
-type SortByType =
-  | { property: string; order: "ASC" | "DESC" }
-  | ((a: [string, number, WordDocument], b: [string, number, WordDocument]) => number);
 
 function getSortBy(wordSearch: WordList): SortByType {
   if (wordSearch.activeOrderCategory === "date") {
@@ -284,15 +356,43 @@ function getSortBy(wordSearch: WordList): SortByType {
     };
   }
   return {
-    property: "wordProperties.berlinerisch",
     order: wordSearch.alphabeticalOrder,
+    property: "wordProperties.berlinerisch",
   };
 }
 
-let searchIndexCache: OramaSearchIndex[] | null = null;
+async function initOrama(words: OramaSearchIndex[]) {
+  db = create({
+    components: {
+      tokenizer: {
+        language,
+        stemmer,
+        stemmerSkipProperties: [
+          "wordGroup",
+          "modifiedGmt",
+          "dateGmt",
+          "wordProperties.berolinismus",
+          "berlinerischWordTypes",
+        ],
+        stemming: true,
+      },
+    },
+    plugins: [
+      {
+        afterInsert: highlightAfterInsert,
+        name: "highlight",
+      },
+    ],
+    schema: wordSchema,
+  });
+
+  await insertMultiple(db, words);
+}
+
+let searchIndexCache: null | OramaSearchIndex[] = null;
 
 export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
-  task<Results<WordDocument> | null>(async () => {
+  task<null | Results<WordDocument>>(async () => {
     // Only fetch if not cached
     if (!searchIndexCache) {
       const response = await fetch("/api/search/index.json");
@@ -311,11 +411,11 @@ export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
     const sortBy = getSortBy(wordSearch);
 
     const params: SearchParams<Orama<typeof wordSchema>> = {
-      term: wordSearch.search,
-      properties: "*",
       limit: wordSearch.resultLimit ?? resultLimit ?? 10,
-      threshold: 0.5,
+      properties: "*",
       sortBy,
+      term: wordSearch.search,
+      threshold: 0.5,
       ...(Object.keys(where).length > 0 ? { where } : {}),
     };
 

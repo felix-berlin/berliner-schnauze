@@ -133,12 +133,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, defineAsyncComponent } from "vue";
 import TurnStile from "@components/TurnStile.vue";
 import { createToastNotify } from "@stores/index.ts";
-import { TURNSTILE_SITE_KEY } from "astro:env/client";
-import { trackEvent } from "@utils/analytics";
 import { useMutation } from "@urql/vue";
+import { trackEvent } from "@utils/analytics";
+import { TURNSTILE_SITE_KEY } from "astro:env/client";
+import { defineAsyncComponent, reactive, ref } from "vue";
+
 import { SendEmailDocument } from "@/gql/graphql.ts";
 
 const AlertBanner = defineAsyncComponent(() => import("@components/AlertBanner.vue"));
@@ -148,37 +149,37 @@ const props = defineProps<{
 }>();
 
 export interface FormData {
+  [key: string]: string | undefined; // This is the index signature
   berlinerWord?: string;
-  translation?: string;
   example?: string;
+  translation?: string;
   userMail?: string;
   userName?: string;
-  [key: string]: string | undefined; // This is the index signature
 }
 
 let formData = reactive<FormData>({
   berlinerWord: "",
-  translation: "",
   example: "",
+  translation: "",
   userMail: "",
   userName: "",
 });
 
 interface FormErrors {
+  [key: string]: string; // This is the index signature
   berlinerWord: string;
-  translation: string;
+  eMail: string;
   example: string;
   name: string;
-  eMail: string;
-  [key: string]: string; // This is the index signature
+  translation: string;
 }
 
 const formErrors = reactive<FormErrors>({
   berlinerWord: "",
-  translation: "",
+  eMail: "",
   example: "",
   name: "",
-  eMail: "",
+  translation: "",
 });
 
 const turnstileSiteKey = TURNSTILE_SITE_KEY;

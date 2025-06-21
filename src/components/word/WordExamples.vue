@@ -50,8 +50,9 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from "vue";
 import Quote from "virtual:icons/lucide/quote";
+import { defineAsyncComponent } from "vue";
+
 import type { Maybe, WordPropertiesExamples } from "@/gql/graphql";
 
 const AudioPlayerList = defineAsyncComponent(() => import("@components/AudioPlayerList.vue"));

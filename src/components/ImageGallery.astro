@@ -1,29 +1,31 @@
 ---
-import type { WordProperties, MediaItem } from "@/gql/graphql";
-import "photoswipe/style.css";
-import { Picture, getImage } from "astro:assets";
 import type { GetImageResult } from "astro";
 
+import "photoswipe/style.css";
+import { getImage, Picture } from "astro:assets";
+
+import type { MediaItem, WordProperties } from "@/gql/graphql";
+
 type ImageGalleryProps = {
-  images: WordProperties["images"];
-  id?: string;
-  widths: number[];
-  sizes: string;
   formats?: string[];
+  id?: string;
+  images: WordProperties["images"];
   lightboxSizes?: string;
   lightboxWidths?: number[];
-  loading?: "lazy" | "eager";
+  loading?: "eager" | "lazy";
+  sizes: string;
+  widths: number[];
 };
 
 const {
-  images,
-  id = `gallery-${crypto.randomUUID()}`,
-  widths,
-  sizes,
   formats = ["avif", "webp", "jpeg"],
+  id = `gallery-${crypto.randomUUID()}`,
+  images,
   lightboxSizes,
   lightboxWidths,
   loading = "lazy",
+  sizes,
+  widths,
 } = Astro.props as ImageGalleryProps;
 
 const imageList = images?.nodes as Array<MediaItem>;
@@ -37,12 +39,12 @@ const lightboxImageList = await Promise.all(
 
     for (const format of formats) {
       images[format] = await getImage({
-        src: image.sourceUrl!,
         format: format,
-        width: image.mediaDetails?.width || undefined,
         height: image.mediaDetails?.height || undefined,
-        widths: lightboxWidths || undefined,
         sizes: `${lightboxSizes}, ${image.mediaDetails?.width!}px` || null,
+        src: image.sourceUrl!,
+        width: image.mediaDetails?.width || undefined,
+        widths: lightboxWidths || undefined,
       });
     }
 
@@ -53,34 +55,34 @@ const lightboxImageList = await Promise.all(
 
 {
   images && images?.nodes && (
-    <image-gallery data-id={id} data-formats={formats}>
+    <image-gallery data-formats={formats} data-id={id}>
       <div class="c-image-gallery" id={id}>
         {imageList?.map((image, index) => {
           return (
             <figure class="c-image-gallery__item">
               <a
-                href={lightboxImageList[index].jpeg.src}
-                data-pswp-webp-srcset={lightboxImageList[index].webp.srcSet.attribute}
-                data-pswp-avif-srcset={lightboxImageList[index].avif.srcSet.attribute}
-                data-pswp-srcset={lightboxImageList[index].jpeg.srcSet.attribute}
-                data-pswp-width={lightboxImageList[index].jpeg.attributes.width}
-                data-pswp-height={lightboxImageList[index].jpeg.attributes.height}
-                data-pswp-sizes={lightboxImageList[index].jpeg.attributes.sizes}
-                target="_blank"
-                rel="noreferrer"
                 aria-label="Bild in Originalgröße öffnen"
                 class="c-image-gallery__link"
+                data-pswp-avif-srcset={lightboxImageList[index].avif.srcSet.attribute}
+                data-pswp-height={lightboxImageList[index].jpeg.attributes.height}
+                data-pswp-sizes={lightboxImageList[index].jpeg.attributes.sizes}
+                data-pswp-srcset={lightboxImageList[index].jpeg.srcSet.attribute}
+                data-pswp-webp-srcset={lightboxImageList[index].webp.srcSet.attribute}
+                data-pswp-width={lightboxImageList[index].jpeg.attributes.width}
+                href={lightboxImageList[index].jpeg.src}
+                rel="noreferrer"
+                target="_blank"
               >
                 <Picture
-                  src={image.sourceUrl}
                   alt={image.altText}
-                  width={image.mediaDetails?.width}
-                  height={image.mediaDetails?.height}
-                  formats={formats}
-                  widths={widths}
-                  sizes={`${sizes}, ${image.mediaDetails?.width}px`}
                   class="c-image-gallery__image"
+                  formats={formats}
+                  height={image.mediaDetails?.height}
                   loading={loading}
+                  sizes={`${sizes}, ${image.mediaDetails?.width}px`}
+                  src={image.sourceUrl}
+                  width={image.mediaDetails?.width}
+                  widths={widths}
                 />
               </a>
               {(image?.caption || image?.description) && (

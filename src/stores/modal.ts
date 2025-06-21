@@ -1,34 +1,34 @@
 import { atom, map } from "nanostores";
-import { markRaw, nextTick, isVNode } from "vue";
+import { isVNode, markRaw, nextTick } from "vue";
 
 type ModalProps = {
-  uid: string;
-  showCloseButton: boolean;
-  disableScroll: boolean;
-  closeOnClickOutside: boolean;
-  position: string;
   class: string;
+  closeOnClickOutside: boolean;
+  disableScroll: boolean;
+  position: string;
+  showCloseButton: boolean;
+  uid?: string | undefined;
   width: string;
+};
+
+type ModalSettings = {
+  props?: Partial<ModalProps>;
+  view?: ModalView | string;
 };
 
 type ModalView = {
   component?: object;
-  props?: Record<string, any>;
   events?: Record<string, (...args: any[]) => void>;
-};
-
-type ModalSettings = {
-  view?: ModalView | string;
-  props?: Partial<ModalProps>;
+  props?: Record<string, any>;
 };
 
 const propsDefault: ModalProps = {
-  uid: crypto.randomUUID(),
-  showCloseButton: true,
-  disableScroll: true,
-  closeOnClickOutside: true,
-  position: "center",
   class: "",
+  closeOnClickOutside: true,
+  disableScroll: true,
+  position: "center",
+  showCloseButton: true,
+  uid: undefined,
   width: "800px",
 };
 
@@ -37,7 +37,7 @@ export const $view = atom<ModalView>({});
 export const $props = map<ModalProps>({ ...propsDefault });
 export const $element = atom<HTMLDialogElement | null>(null);
 export const $viewIsComponent = atom(false);
-export const $onCloseCallback = atom<null | (() => void)>(null);
+export const $onCloseCallback = atom<(() => void) | null>(null);
 export const $scrollPosition = atom<number>(0);
 
 export const isVueComponent = (content: any): boolean => {
@@ -60,8 +60,8 @@ export const preventScroll = (status: boolean) => {
 };
 
 export const open = (
-  settings: ModalSettings = { view: $view.get(), props: $props.get() },
-  callback: null | (() => void) = null,
+  settings: ModalSettings = { props: $props.get(), view: $view.get() },
+  callback: (() => void) | null = null,
 ) => {
   $props.set({ ...$props.get(), ...settings.props });
   $viewIsComponent.set(isVueComponent(settings.view?.component));
@@ -83,7 +83,7 @@ export const close = () => {
 
   const cb = $onCloseCallback.get();
 
-  if (cb) {
+  if (typeof cb === "function") {
     cb();
     $onCloseCallback.set(null);
   }

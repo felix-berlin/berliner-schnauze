@@ -29,19 +29,20 @@
 </template>
 
 <script setup lang="ts">
-import { useTemplateRef, onMounted, computed } from "vue";
-import ModalCloseButton from "@/components/ModalCloseButton.vue";
 import { useStore } from "@nanostores/vue";
 import {
   $element,
-  $view,
-  $props,
-  $viewIsComponent,
   $isOpen,
+  $props,
+  $view,
+  $viewIsComponent,
   preventScroll,
   resetModal,
 } from "@stores/modal.ts";
 import { useMutationObserver } from "@vueuse/core";
+import { computed, onMounted, useTemplateRef } from "vue";
+
+import ModalCloseButton from "@/components/ModalCloseButton.vue";
 
 const view = useStore($view);
 const props = useStore($props);

@@ -1,5 +1,5 @@
-import supportedBrowsers from "@utils/supportedBrowsers";
 import { createToastNotify } from "@stores/index.ts";
+import supportedBrowsers from "@utils/supportedBrowsers";
 
 /**
  * Checks if the current browser is supported
@@ -20,9 +20,9 @@ const checkBrowserSupport = (): void => {
     createToastNotify({
       message:
         "Dein Browser scheint veraltet zu sein. Möglicherweise funktioniert dadurch diese Seite nicht korrekt. Bitte aktualisiere deinen Browser.",
+      showClose: true,
       status: "error",
       timeout: null,
-      showClose: true,
     });
   }
 };

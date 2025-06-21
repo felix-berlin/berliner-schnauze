@@ -1,7 +1,7 @@
 @use "@styles/variables" as vars;
 
 .c-word-suggest-hint {
-  grid-area: list;
+  grid-area: suggest-hint;
   border-top: 1px solid var(--new-blue-200);
   line-height: 1.7;
   padding-top: vars.$spacer * 1.5;

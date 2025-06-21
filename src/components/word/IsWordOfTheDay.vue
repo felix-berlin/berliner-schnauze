@@ -14,24 +14,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import Crown from "virtual:icons/lucide/crown";
 import { useStore } from "@nanostores/vue";
 import { $wordOfTheDay } from "@stores/index.ts";
+import Crown from "virtual:icons/lucide/crown";
+import { computed } from "vue";
+
 import type { WordProperties } from "@/gql/graphql.ts";
 
 interface IsWordOfTheDayProps {
-  wordId: number;
-  word: WordProperties["berlinerisch"];
   iconSize?: number;
-  tooltipPlacement?: "top" | "right" | "bottom" | "left";
+  tooltipPlacement?: "bottom" | "left" | "right" | "top";
+  word: WordProperties["berlinerisch"];
+  wordId: number;
 }
 
 const {
-  wordId,
-  word,
   iconSize = 24,
   tooltipPlacement = "right",
+  word,
+  wordId,
 } = defineProps<IsWordOfTheDayProps>();
 
 const wordOfTheDay = useStore($wordOfTheDay);

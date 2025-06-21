@@ -7,9 +7,20 @@
   display: grid;
   grid-template-columns: [start] 1fr [end];
   gap: vars.$spacer * 1.5 vars.$spacer * 3;
+  height: 100vh;
+  grid-template-rows: min-content 1fr auto;
+  grid-template-areas:
+    "list-header"
+    "list"
+    "filter";
 
   @include butler-mx.breakpoint("md") {
     grid-template-columns: [start] 1fr 3fr [end];
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "filter list-header"
+      "filter list";
+    height: auto;
   }
 
   .c-word-search-filter-toggle {
@@ -21,6 +32,8 @@
   }
 
   &__filter {
+    grid-area: filter;
+
     @include butler-mx.breakpoint("md") {
       display: block !important;
     }
@@ -62,41 +75,54 @@
     }
   }
 
-  &__berolinismus {
-    :where(i) {
-      font-size: 0.7rem;
-    }
+  :where(i) {
+    font-size: 0.7rem;
+    margin-block-end: vars.$spacer * 0.7;
+    display: block;
+  }
 
-    .c-berolinismus-switch {
-      margin-top: vars.$spacer * 0.7;
+  &__close,
+  &__reset {
+    --padding: 0.5rem;
+
+    span,
+    &.is-bottom {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
   }
 
-  .c-filter-search__close {
-    align-self: flex-end;
-
-    @include butler-mx.breakpoint("md") {
-      display: none;
+  &__close {
+    &.is-top {
+      align-self: flex-end;
     }
   }
 
   &__reset {
-    --padding: 0.5rem;
-
-    gap: 0.7rem;
-    margin-top: 3rem;
+    margin-block: 3rem 0.5rem;
     width: 100%;
   }
 
   &__list {
     display: grid;
-    grid-template: "filter-toggle search" min-content "shortcuts shortcuts" "result-count result-count" "no-result no-result" min-content "list list" 1fr / min-content 1fr;
+    grid-template-areas:
+      "filter-toggle search"
+      "shortcuts shortcuts"
+      "result-count result-count"
+      "no-result no-result"
+      "suggest-hint suggest-hint";
     gap: vars.$spacer * 1.5 vars.$spacer;
-    margin-top: -60px;
+    grid-area: list-header;
+    grid-template-columns: min-content 1fr;
 
     @include butler-mx.breakpoint("md") {
       grid-template-columns: 1fr max-content;
-      grid-template-areas: "search search" "result-count shortcuts" "no-result no-result" "list list";
+      grid-template-areas:
+        "search search"
+        "result-count shortcuts"
+        "no-result no-result"
+        "suggest-hint suggest-hint";
     }
   }
 
@@ -140,6 +166,10 @@
 
   .c-word-search {
     grid-area: search;
+  }
+
+  .c-word-range-slider {
+    margin-block-start: 1.5rem;
   }
 }
 

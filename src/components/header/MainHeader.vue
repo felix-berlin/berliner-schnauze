@@ -55,31 +55,31 @@
 </template>
 
 <script setup lang="ts">
-import MenuIcon from "virtual:icons/lucide/menu";
-import { routeToWord, randomElement } from "@utils/helpers.ts";
 import ColorModeToggle from "@components/ColorModeToggle.vue";
 import SearchModal from "@components/modals/search/SearchModal.vue";
+import { randomElement, routeToWord } from "@utils/helpers.ts";
+import MenuIcon from "virtual:icons/lucide/menu";
 
 const menuItems = [
   {
-    title: "Wort vorschlagen",
+    intern: true,
     link: "/suggest-word",
-    intern: true,
+    title: "Wort vorschlagen",
   },
   {
-    title: "tech. Fehler melden",
-    link: "https://github.com/felix-berlin/berliner-schnauze/issues/new",
     intern: false,
+    link: "https://github.com/felix-berlin/berliner-schnauze/issues/new",
+    title: "tech. Fehler melden",
   },
   {
-    title: "Impressum",
+    intern: true,
     link: "/impressum",
-    intern: true,
+    title: "Impressum",
   },
   {
-    title: "Datenschutz",
-    link: "/datenschutz",
     intern: true,
+    link: "/datenschutz",
+    title: "Datenschutz",
   },
 ];
 

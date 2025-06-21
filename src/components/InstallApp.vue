@@ -18,28 +18,28 @@
 </template>
 
 <script setup lang="ts">
+import { useStore } from "@nanostores/vue";
 import {
   $installPrompt,
-  $showInstallButton,
   $isPwaInstalled,
+  $showInstallButton,
   triggerPwaInstall,
 } from "@stores/index.ts";
-import { useStore } from "@nanostores/vue";
 
 export interface InstallAppProps {
+  cssClasses?: Array<string> | object | string;
+  hideIfInstalled?: boolean;
+  iconSize?: number;
   showIcon?: boolean;
   showText?: boolean;
-  iconSize?: number;
-  cssClasses?: object | string | Array<string>;
   tooltipProps?: object;
-  hideIfInstalled?: boolean;
 }
 
 const {
-  tooltipProps,
-  showText = true,
   cssClasses = "c-button",
   hideIfInstalled = true,
+  showText = true,
+  tooltipProps,
 } = defineProps<InstallAppProps>();
 
 useStore($installPrompt);

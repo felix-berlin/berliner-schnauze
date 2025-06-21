@@ -12,8 +12,8 @@ const isBrowser = (): boolean => typeof window !== "undefined";
  */
 export const setMatomoSearch = (
   searchKey: string,
-  searchCategory: string | boolean = false,
-  numberOfResults: number | boolean = false,
+  searchCategory: boolean | string = false,
+  numberOfResults: boolean | number = false,
 ): void => {
   if (isBrowser() && searchKey.length > 0) {
     const _paq = (window._paq = window._paq || []);
@@ -43,7 +43,7 @@ export const trackEvent = (
   }
   const _paq = (window._paq = window._paq || []);
 
-  const eventData: (string | number)[] = [category, action, name];
+  const eventData: (number | string)[] = [category, action, name];
   if (value !== undefined) {
     eventData.push(value);
   }

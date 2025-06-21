@@ -72,11 +72,6 @@
 
     &__word {
       box-shadow: none;
-
-      &.is-active {
-        margin-left: 2px;
-        margin-right: 2px;
-      }
     }
 
     &__header {
@@ -108,24 +103,32 @@
       :where(h3) {
         margin-top: vars.$spacer * 1.5;
       }
+
+      :where(i) {
+        font-size: 0.7rem;
+        margin-block-end: vars.$spacer * 0.7;
+        display: block;
+      }
+
+      .c-word-range-slider {
+        margin-block-start: 1.5rem;
+      }
     }
 
+    &__close,
     &__reset {
       --padding: 0.5rem;
 
-      margin-top: 2rem;
-      width: 100%;
-      gap: 0.7rem;
+      span,
+      &.is-bottom {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
     }
 
-    &__berolinismus {
-      :where(i) {
-        font-size: 0.7rem;
-      }
-
-      .c-berolinismus-switch {
-        margin-top: vars.$spacer * 0.7;
-      }
+    &__reset {
+      margin-block: 3rem 0.5rem;
     }
 
     &__headline-wrap {
@@ -135,11 +138,13 @@
     }
 
     &__close {
-      align-self: flex-end;
+      &.is-top {
+        align-self: flex-end;
 
-      svg {
-        width: 1.5rem;
-        height: 1.5rem;
+        svg {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
       }
     }
   }

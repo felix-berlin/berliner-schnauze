@@ -43,7 +43,9 @@
     }
 
     &.is-active {
-      outline: 2px solid var(--color-body);
+      outline: 2px dashed var(--color-body);
+      margin-left: 2px;
+      margin-right: 2px;
     }
   }
 

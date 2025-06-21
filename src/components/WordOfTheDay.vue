@@ -74,14 +74,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import type { Ref } from "vue";
-import Crown from "virtual:icons/lucide/crown";
-import { useStore } from "@nanostores/vue";
-import { $wordOfTheDay } from "@stores/index.ts";
+
 import ConfettiEffect from "@components/ConfettiEffect.vue";
 import SingleLoader from "@components/SingleLoader.vue";
+import { useStore } from "@nanostores/vue";
+import { $wordOfTheDay } from "@stores/index.ts";
 import { routeToWord } from "@utils/helpers.ts";
+import Crown from "virtual:icons/lucide/crown";
+import { onMounted, ref } from "vue";
 
 const currentWord = useStore($wordOfTheDay);
 const celebrate = ref(false);

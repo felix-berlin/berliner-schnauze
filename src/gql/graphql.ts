@@ -13750,8 +13750,6 @@ export enum PostStatusEnum {
   DpRewriteRepublish = "DP_REWRITE_REPUBLISH",
   /** Content that is saved but not yet published or visible to the public */
   Draft = "DRAFT",
-  /** Objects with the flamingo-spam status */
-  FlamingoSpam = "FLAMINGO_SPAM",
   /** Objects with the future status */
   Future = "FUTURE",
   /** Content that inherits its status from a parent object */
@@ -20992,6 +20990,7 @@ export type GetAllWordsQuery = {
           berlinerisch?: string | null;
           learnMore?: string | null;
           berolinismus?: boolean | null;
+          infoText?: string | null;
           berlinerischAudio?: Array<{
             __typename?: "WordPropertiesBerlinerischAudio";
             gender?: string | null;
@@ -21617,6 +21616,7 @@ export const GetAllWordsDocument = {
                                       ],
                                     },
                                   },
+                                  { kind: "Field", name: { kind: "Name", value: "infoText" } },
                                   {
                                     kind: "Field",
                                     name: { kind: "Name", value: "images" },
