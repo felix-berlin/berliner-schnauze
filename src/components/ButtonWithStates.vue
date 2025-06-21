@@ -2,7 +2,7 @@
   <button
     class="c-button"
     :disabled="computedState === 'loading'"
-    :class="`c-button--${computedState}`"
+    :class="`c-button--state-${computedState}`"
   >
     <Transition name="fade" mode="out-in">
       <span :key="computedState">
