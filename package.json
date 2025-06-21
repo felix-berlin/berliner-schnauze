@@ -44,7 +44,7 @@
     "lint:js": "eslint src/ --ignore-pattern 'src/tests/*'",
     "lint:style": "stylelint \"**/*.{scss,sass}\" --ignore-path .gitignore",
     "lint": "pnpm run lint:js && pnpm run lint:style",
-    "test:unit": "vitest run --coverage",
+    "test:unit": "vitest run --coverage --watch",
     "test:unit:ui": "vitest --coverage --ui",
     "test:ci": "vitest --coverage --reporter=junit",
     "vitest:update": "vitest --update",
