@@ -130,7 +130,6 @@ export const resetAll = () => {
   $wordSearch.setKey("characterCount", undefined);
   $wordSearch.setKey("consonantsCount", undefined);
   $wordSearch.setKey("dateOrder", "ASC");
-  $wordSearch.setKey("letterGroups", []);
   $wordSearch.setKey("modifiedDateOrder", "ASC");
   $wordSearch.setKey("multipleMeanings", false);
   $wordSearch.setKey("search", "");
