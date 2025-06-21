@@ -7,7 +7,6 @@
   display: grid;
   grid-template-columns: [start] 1fr [end];
   gap: vars.$spacer * 1.5 vars.$spacer * 3;
-  overflow: hidden;
   height: 100vh;
   grid-template-rows: min-content 1fr auto;
   grid-template-areas:
@@ -82,25 +81,27 @@
     display: block;
   }
 
-  .c-filter-search__close {
-    align-self: flex-end;
-
-    @include butler-mx.breakpoint("md") {
-      display: none;
-    }
-  }
-
+  &__close,
   &__reset {
     --padding: 0.5rem;
 
-    margin-top: 3rem;
-    width: 100%;
-
-    span {
+    span,
+    &.is-bottom {
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
+  }
+
+  &__close {
+    &.is-top {
+      align-self: flex-end;
+    }
+  }
+
+  &__reset {
+    margin-block: 3rem 0.5rem;
+    width: 100%;
   }
 
   &__list {

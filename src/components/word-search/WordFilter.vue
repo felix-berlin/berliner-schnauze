@@ -2,7 +2,8 @@
   <transition name="slide">
     <aside v-show="showWordListFilterFlyout" ref="wordListFilter" class="c-filter-search__filter">
       <button
-        class="c-filter-search__close c-button c-button--center-icon"
+        v-if="showWordListFilterFlyout"
+        class="c-filter-search__close c-button c-button--center-icon is-top"
         type="button"
         aria-label="schließen"
         @click="$toggleWordListFilterFlyout"
@@ -71,6 +72,16 @@
         <FilterReset width="18" height="18" />
         Zurücksetzen
       </ButtonWithStates>
+
+      <button
+        v-if="showWordListFilterFlyout"
+        class="c-filter-search__close c-button c-button--center-icon is-bottom"
+        type="button"
+        @click="$toggleWordListFilterFlyout"
+      >
+        <X width="18" height="18" />
+        Schließen
+      </button>
     </aside>
   </transition>
 </template>
