@@ -1,5 +1,5 @@
 @mixin dark-mode-override {
-	html[class] & {
-		@content;
-	}
+  html[class] & {
+    @content;
+  }
 }

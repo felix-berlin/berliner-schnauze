@@ -60,7 +60,7 @@ import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 type WordProps = {
   index?: number;
-  positions: Record<string, { length: number; start: number; }[]> | undefined;
+  positions: Record<string, { length: number; start: number }[]> | undefined;
   showDropdown?: boolean;
   source: OramaSearchIndex;
 };
@@ -74,7 +74,7 @@ const WordOptionDropdown = defineAsyncComponent(
 
 const highlightMatches = (
   text: string,
-  matchesObj?: Record<string, { length: number; start: number; }[]>,
+  matchesObj?: Record<string, { length: number; start: number }[]>,
 ): string => {
   if (!matchesObj || typeof matchesObj !== "object") return text;
 

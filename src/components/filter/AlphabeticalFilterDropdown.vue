@@ -33,10 +33,7 @@
       @click="setLetterFilter('')"
     >
       <span>{{ wordSearch.activeLetterFilter }}</span>
-      <X
-        width="10"
-        height="10"
-      />
+      <X width="10" height="10" />
     </button>
   </div>
 </template>

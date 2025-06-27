@@ -1,37 +1,37 @@
 .c-floating-label {
-	position: relative;
+  position: relative;
 
-	&__input:focus ~ .c-floating-label__label,
-	&__input:not(:placeholder-shown) ~ .c-floating-label__label {
-		z-index: -1;
-	}
+  &__input:focus ~ .c-floating-label__label,
+  &__input:not(:placeholder-shown) ~ .c-floating-label__label {
+    z-index: -1;
+  }
 
-	&__input {
-		height: 100%;
-		width: 100%;
-	}
+  &__input {
+    height: 100%;
+    width: 100%;
+  }
 
-	&__label {
-		--size-font: inherit;
-		--position-left: var(--padding-x-input);
-		--offset: 5px;
+  &__label {
+    --size-font: inherit;
+    --position-left: var(--padding-x-input);
+    --offset: 5px;
 
-		position: absolute;
-		left: var(--position-left);
-		font-size: var(--size-font);
-		pointer-events: none; // only needed when no <label> element is used
+    position: absolute;
+    left: var(--position-left);
+    font-size: var(--size-font);
+    pointer-events: none; // only needed when no <label> element is used
 
-		&--center {
-			top: 50%;
-			transform: translateY(-50%);
-		}
+    &--center {
+      top: 50%;
+      transform: translateY(-50%);
+    }
 
-		&--top {
-			bottom: calc(100% + var(--offset));
-		}
+    &--top {
+      bottom: calc(100% + var(--offset));
+    }
 
-		&--bottom {
-			top: calc(100% + var(--offset));
-		}
-	}
+    &--bottom {
+      top: calc(100% + var(--offset));
+    }
+  }
 }

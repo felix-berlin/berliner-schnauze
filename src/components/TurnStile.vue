@@ -1,8 +1,5 @@
 <template>
-  <div
-    :id="wrapperId"
-    class="c-turnstile"
-  />
+  <div :id="wrapperId" class="c-turnstile" />
 </template>
 
 <script setup lang="ts">
