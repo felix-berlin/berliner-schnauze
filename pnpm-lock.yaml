@@ -75,8 +75,8 @@ importers:
         specifier: ^0.0.10
         version: 0.0.10
       dotenv:
-        specifier: ^16.6.0
-        version: 16.6.1
+        specifier: ^17.0.0
+        version: 17.0.0
       floating-vue:
         specifier: 5.2.2
         version: 5.2.2(vue@3.5.17(typescript@5.8.3))
@@ -4787,6 +4787,10 @@ packages:
 
   dotenv@16.6.1:
     resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+    engines: {node: '>=12'}
+
+  dotenv@17.0.0:
+    resolution: {integrity: sha512-A0BJ5lrpJVSfnMMXjmeO0xUnoxqsBHWCoqqTnGwGYVdnctqXXUEhJOO7LxmgxJon9tEZFGpe0xPRX0h2v3AANQ==}
     engines: {node: '>=12'}
 
   dset@3.1.4:
@@ -14508,6 +14512,8 @@ snapshots:
       is-obj: 2.0.0
 
   dotenv@16.6.1: {}
+
+  dotenv@17.0.0: {}
 
   dset@3.1.4: {}
 
