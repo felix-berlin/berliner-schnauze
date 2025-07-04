@@ -34,7 +34,7 @@ importers:
         version: 3.1.10
       '@orama/plugin-match-highlight':
         specifier: ^3.1.9
-        version: 3.1.9
+        version: 3.1.10
       '@orama/stemmers':
         specifier: ^3.1.9
         version: 3.1.9
@@ -2757,12 +2757,8 @@ packages:
     resolution: {integrity: sha512-YNou2xlCIgPhMDe1TBEmp1wsAPFCL7Fd11rct7YfXYYiNAVBNL2rWoEydJRDJFVmqgt0l6mzSg35sDQ3i8yfKQ==}
     engines: {node: '>= 20.0.0'}
 
-  '@orama/orama@3.1.9':
-    resolution: {integrity: sha512-UXQYvN0DYl5EMOXX3O0Rwke+0R0Pd7PW/hOVwgpPd6KKJPb3RP74m3PEbEFjdTzZVLUW81o7herYXD2h4PVcGQ==}
-    engines: {node: '>= 20.0.0'}
-
-  '@orama/plugin-match-highlight@3.1.9':
-    resolution: {integrity: sha512-0Gbde1m9nUzTJjxSkNsVRPVZn786uRJrA/p+yq14TwpHys9yy+27DjDrHmhNSWiMR6mzPTMicARhjl839cSHzQ==}
+  '@orama/plugin-match-highlight@3.1.10':
+    resolution: {integrity: sha512-+8j19JdapZRYfEEUA+Y0VTNlBAJ7/aSX4FTod89qGTnDmPqvU8uuuou/m94WvtRIT9JWTgDVXrD+UHLlokZ8+A==}
 
   '@orama/stemmers@3.1.9':
     resolution: {integrity: sha512-Akl+Cy+/0mv4YHkYmu9m7dOQvXpgRK0Fcx+43/F21S2sCQARIelFwMndpKF17unSYu7ag6FJEkolHAIXKjUrnQ==}
@@ -12109,11 +12105,9 @@ snapshots:
 
   '@orama/orama@3.1.10': {}
 
-  '@orama/orama@3.1.9': {}
-
-  '@orama/plugin-match-highlight@3.1.9':
+  '@orama/plugin-match-highlight@3.1.10':
     dependencies:
-      '@orama/orama': 3.1.9
+      '@orama/orama': 3.1.10
 
   '@orama/stemmers@3.1.9': {}
 
