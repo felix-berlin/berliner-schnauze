@@ -28,7 +28,7 @@ importers:
         version: 1.1.0(nanostores@1.0.1)
       '@nanostores/vue':
         specifier: ^1.0.0
-        version: 1.0.0(@nanostores/logger@1.0.0(nanostores@1.0.1))(@vue/devtools-api@7.7.7)(nanostores@1.0.1)(vue@3.5.17(typescript@5.8.3))
+        version: 1.0.1(@nanostores/logger@1.0.0(nanostores@1.0.1))(@vue/devtools-api@7.7.7)(nanostores@1.0.1)(vue@3.5.17(typescript@5.8.3))
       '@orama/orama':
         specifier: ^3.1.10
         version: 3.1.10
@@ -2283,8 +2283,8 @@ packages:
     peerDependencies:
       nanostores: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^1.0.0
 
-  '@nanostores/vue@1.0.0':
-    resolution: {integrity: sha512-+WtqBD0YXZoMmk7rjRrm0yd2F8e2O3yOk6jR3vpUREBj7UaKEEKpMrPpkpcltboL5ShlYYP0QkSwkpaMwmigOQ==}
+  '@nanostores/vue@1.0.1':
+    resolution: {integrity: sha512-0VwubMTMvEdWQhVN4BAvDZ+vHQH3O1G9BaOfgrjfF4erqBsWScoK/zyaBeRfFjptNOb25947EFPHBZwEf9JcMg==}
     engines: {node: ^20.0.0 || >=22.0.0}
     peerDependencies:
       '@nanostores/logger': ^0.4.0 || ^1.0.0
@@ -11528,7 +11528,7 @@ snapshots:
     dependencies:
       nanostores: 1.0.1
 
-  '@nanostores/vue@1.0.0(@nanostores/logger@1.0.0(nanostores@1.0.1))(@vue/devtools-api@7.7.7)(nanostores@1.0.1)(vue@3.5.17(typescript@5.8.3))':
+  '@nanostores/vue@1.0.1(@nanostores/logger@1.0.0(nanostores@1.0.1))(@vue/devtools-api@7.7.7)(nanostores@1.0.1)(vue@3.5.17(typescript@5.8.3))':
     dependencies:
       nanostores: 1.0.1
       vue: 3.5.17(typescript@5.8.3)
