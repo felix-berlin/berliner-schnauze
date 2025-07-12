@@ -59,7 +59,7 @@
     "supportedBrowsers": "echo \"export default $(browserslist-useragent-regexp --allowHigherVersions);\" > src/utils/supportedBrowsers.mjs",
     "refreshAuthToken": "node ./src/utils/refreshToken.js"
   },
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@10.13.1",
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.13.0",
     "@astrojs/check": "^0.9.4",
