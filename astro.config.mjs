@@ -34,7 +34,6 @@ const visualizerPlugin = visualizer({
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   trailingSlash: "never",
-  prefetch: false,
   image: {
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
     breakpoints: [
