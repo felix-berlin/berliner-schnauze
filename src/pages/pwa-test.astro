@@ -1,0 +1,33 @@
+---
+import PWATestPanel from "@components/PWATestPanel.vue";
+import Layout from "@layouts/Layout.astro";
+
+const content = {
+  seo: {
+    description: "Testen Sie die PWA-Funktionalitäten dieser Seite.",
+    title: "PWA Test",
+  },
+};
+---
+
+<Layout content={content} contentClasses="o-index">
+  <main>
+    <PWATestPanel client:only="vue" />
+  </main>
+</Layout>
+
+<style>
+  body {
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-family-base);
+    margin: 0;
+    padding: 1rem;
+    min-height: 100vh;
+  }
+
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+</style>
