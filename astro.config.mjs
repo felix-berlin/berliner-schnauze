@@ -34,7 +34,10 @@ const visualizerPlugin = visualizer({
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   trailingSlash: "never",
-  prefetch: false,
+  prefetch: true,
+  build: {
+    format: "file",
+  },
   image: {
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
     breakpoints: [
@@ -291,6 +294,10 @@ export default defineConfig({
     (await import("@playform/inline")).default(),
   ],
   vite: {
+    experimental: {
+      enableNativePlugin: false,
+    },
+
     plugins: [
       Icons({
         iconCustomizer(collection, icon, props) {
@@ -319,11 +326,13 @@ export default defineConfig({
 
     css: {
       preprocessorMaxWorkers: true,
+      transformer: "postcss",
     },
 
     build: {
       sourcemap: true, // This is needed for sentryVitePlugin
       target: "esnext",
+      cssMinify: "esbuild",
     },
   },
 });
