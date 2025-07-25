@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.21.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.21.0...v3.21.1) (2025-07-25)
+
+
+### Performance Improvements
+
+* use prefetch; build in file mode; disable enableNativePlugin ([cf16bb7](https://github.com/felix-berlin/berliner-schnauze/commit/cf16bb72287cc45b64e37101f11e4abe231df601))
+
 # [3.21.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.20.4...v3.21.0) (2025-06-21)
 
 
