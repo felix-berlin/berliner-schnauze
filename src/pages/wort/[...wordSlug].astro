@@ -20,7 +20,7 @@ import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import Layout from "@layouts/Layout.astro";
 // Imports
 import { fetchAllWords } from "@services/api.ts";
-import { formattedDate, routeToWord, seoData } from "@utils/helpers.ts";
+import { formattedDate, removeFileExtension, routeToWord, seoData } from "@utils/helpers.ts";
 import {
   capitalizeFirstLetter,
   coloredConsonantsAndVowels,
@@ -104,7 +104,7 @@ const schemaJson = () =>
     },
     name: wordProps?.berlinerisch,
     sameAs: wordProps?.learnMore || undefined,
-    url: Astro.url.href,
+    url: removeFileExtension(Astro.url.href),
   });
 ---
 

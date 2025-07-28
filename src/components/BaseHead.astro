@@ -3,6 +3,8 @@ import SetColorMode from "@components/SetColorMode.astro";
 import { ClientRouter } from "astro:transitions";
 import { pwaInfo } from "virtual:pwa-info";
 
+import { removeFileExtension } from "@/utils/helpers";
+
 import BerlinBold from "/fonts/Berlin-Bold.woff2";
 import BerlinItalic from "/fonts/Berlin-Italic.woff2";
 import Berlin from "/fonts/Berlin.woff2";
@@ -40,8 +42,8 @@ export interface Title {
   title: string;
 }
 
-const canonicalURL = Astro.url.href;
 const { seo, title } = Astro.props as SeoProps & Title;
+const canonicalURL = removeFileExtension(Astro.url.href);
 ---
 
 <!-- By Capo.js order -> https://rviscomi.github.io/capo.js/ --><!-- Global Metadata -->

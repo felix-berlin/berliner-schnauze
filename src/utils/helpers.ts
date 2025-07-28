@@ -113,3 +113,12 @@ export const checkObjectValueLength = (obj: Record<string, any>): boolean => {
     }
   });
 };
+
+/**
+ * Removes file extensions (like .html) from URLs
+ * @param url - The URL to clean
+ * @returns URL without file extension
+ */
+export const removeFileExtension = (url: string): string => {
+  return url.replace(/\.(html|htm|php)$/, "");
+};
