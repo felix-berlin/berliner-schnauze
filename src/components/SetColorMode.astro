@@ -2,8 +2,6 @@
 
 ---
 
-<meta content="#fad0b0" name="theme-color" />
-
 <!-- Block until theme class is set -->
 <script is:inline>
   /**
@@ -19,6 +17,15 @@
     return "false";
   };
 
+  const createThemeColorMetaTag = () => {
+    // Set theme color immediately to prevent blinking
+    const themeColor = isDarkTheme() === "true" ? "#2b333b" : "#fad0b0";
+    const metaThemeColor = document.createElement("meta");
+    metaThemeColor.setAttribute("name", "theme-color");
+    metaThemeColor.setAttribute("content", themeColor);
+    document.head.appendChild(metaThemeColor);
+  };
+
   /**
    * Set dark theme class
    */
@@ -32,31 +39,13 @@
     }
   };
 
-  /**
-   * Update meta theme color.
-   *
-   * @return  {void}
-   */
-  const setThemeColor = () => {
-    const metaThemeColor = document.querySelector("meta[name=theme-color]");
-    const themeColor = isDarkTheme() === "true" ? "#2b333b" : "#fad0b0";
-    metaThemeColor.setAttribute("content", themeColor);
-  };
-
-  /**
-   * Needs to be set on load because theme-color meta tag comes later in the loading sequence
-   */
-  window.onload = function () {
-    setThemeColor();
-  };
-
-  document.addEventListener("astro:after-swap", () => {
-    setThemeColor();
-  });
-
   setDarkClass();
+  createThemeColorMetaTag();
 
   localStorage.setItem("darkMode", isDarkTheme());
 
-  document.addEventListener("astro:after-swap", setDarkClass);
+  document.addEventListener("astro:after-swap", () => {
+    setDarkClass();
+    createThemeColorMetaTag();
+  });
 </script>
