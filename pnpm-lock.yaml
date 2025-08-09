@@ -51,11 +51,11 @@ importers:
         specifier: ^3.2.5
         version: 3.2.6(@sentry/astro@9.44.0(astro@5.12.9(@types/node@24.2.1)(jiti@2.4.2)(rollup@2.79.2)(sass@1.90.0)(terser@5.43.1)(typescript@5.9.2)(yaml@2.8.0)))(astro@5.12.9(@types/node@24.2.1)(jiti@2.4.2)(rollup@2.79.2)(sass@1.90.0)(terser@5.43.1)(typescript@5.9.2)(yaml@2.8.0))
       '@urql/core':
-        specifier: ^5.2.0
-        version: 5.2.0(graphql@16.11.0)
+        specifier: ^6.0.0
+        version: 6.0.0(graphql@16.11.0)
       '@urql/vue':
         specifier: ^1.4.3
-        version: 1.4.3(@urql/core@5.2.0(graphql@16.11.0))(vue@3.5.18(typescript@5.9.2))
+        version: 1.4.3(@urql/core@6.0.0(graphql@16.11.0))(vue@3.5.18(typescript@5.9.2))
       '@vueuse/core':
         specifier: ^13.6.0
         version: 13.6.0(vue@3.5.18(typescript@5.9.2))
@@ -305,14 +305,6 @@ importers:
         version: 4.28.1
 
 packages:
-
-  '@0no-co/graphql.web@1.1.2':
-    resolution: {integrity: sha512-N2NGsU5FLBhT8NZ+3l2YrzZSHITjNXNuDhC4iDiikv0IujaJ0Xc6xIxQZ/Ek3Cb+rgPjnLHYyJm11tInuJn+cw==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-    peerDependenciesMeta:
-      graphql:
-        optional: true
 
   '@0no-co/graphql.web@1.2.0':
     resolution: {integrity: sha512-/1iHy9TTr63gE1YcR5idjx8UREz1s0kFhydf3bBLCXyqjhkIc6igAzTOx3zPifCwFR87tsh/4Pa9cNts6d2otw==}
@@ -3897,8 +3889,8 @@ packages:
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
 
-  '@urql/core@5.2.0':
-    resolution: {integrity: sha512-/n0ieD0mvvDnVAXEQgX/7qJiVcvYvNkOHeBvkwtylfjydar123caCXcl58PXFY11oU1oquJocVXHxLAbtv4x1A==}
+  '@urql/core@6.0.0':
+    resolution: {integrity: sha512-LdK7d7B14s/LAljPptoZ9DTZ0lFJXCTy8jSxVr1L98JZYELHEesb5nZVsnqy0jrcrF1KW7juKWZzT5VfZra8XA==}
 
   '@urql/vue@1.4.3':
     resolution: {integrity: sha512-+zdMQFBHL1V+tdTKzAqhiIP14cJ6GAUDux7uhC3rAt/rQhaVcdRmLuf0dhco04UHC+rdkd6sZ4epemL9VeTfRA==}
@@ -9750,10 +9742,6 @@ packages:
 
 snapshots:
 
-  '@0no-co/graphql.web@1.1.2(graphql@16.11.0)':
-    optionalDependencies:
-      graphql: 16.11.0
-
   '@0no-co/graphql.web@1.2.0(graphql@16.11.0)':
     optionalDependencies:
       graphql: 16.11.0
@@ -14008,16 +13996,16 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@urql/core@5.2.0(graphql@16.11.0)':
+  '@urql/core@6.0.0(graphql@16.11.0)':
     dependencies:
-      '@0no-co/graphql.web': 1.1.2(graphql@16.11.0)
+      '@0no-co/graphql.web': 1.2.0(graphql@16.11.0)
       wonka: 6.3.5
     transitivePeerDependencies:
       - graphql
 
-  '@urql/vue@1.4.3(@urql/core@5.2.0(graphql@16.11.0))(vue@3.5.18(typescript@5.9.2))':
+  '@urql/vue@1.4.3(@urql/core@6.0.0(graphql@16.11.0))(vue@3.5.18(typescript@5.9.2))':
     dependencies:
-      '@urql/core': 5.2.0(graphql@16.11.0)
+      '@urql/core': 6.0.0(graphql@16.11.0)
       vue: 3.5.18(typescript@5.9.2)
       wonka: 6.3.5
 
