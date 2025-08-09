@@ -54,8 +54,8 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0(graphql@16.11.0)
       '@urql/vue':
-        specifier: ^1.4.3
-        version: 1.4.3(@urql/core@5.2.0(graphql@16.11.0))(vue@3.5.18(typescript@5.9.2))
+        specifier: ^2.0.0
+        version: 2.0.0(@urql/core@5.2.0(graphql@16.11.0))(vue@3.5.18(typescript@5.9.2))
       '@vueuse/core':
         specifier: ^13.6.0
         version: 13.6.0(vue@3.5.18(typescript@5.9.2))
@@ -3900,11 +3900,11 @@ packages:
   '@urql/core@5.2.0':
     resolution: {integrity: sha512-/n0ieD0mvvDnVAXEQgX/7qJiVcvYvNkOHeBvkwtylfjydar123caCXcl58PXFY11oU1oquJocVXHxLAbtv4x1A==}
 
-  '@urql/vue@1.4.3':
-    resolution: {integrity: sha512-+zdMQFBHL1V+tdTKzAqhiIP14cJ6GAUDux7uhC3rAt/rQhaVcdRmLuf0dhco04UHC+rdkd6sZ4epemL9VeTfRA==}
+  '@urql/vue@2.0.0':
+    resolution: {integrity: sha512-9eW8IfEPwnGHxvqfH2t8cBSI5eKPyLq2dizFVYIRGHi4ydMw5Q+vuMD+VP0I9zo0818zZ9b8TGLiyAmOzvyoAQ==}
     peerDependencies:
-      '@urql/core': ^5.0.0
-      vue: ^2.7.0 || ^3.0.0
+      '@urql/core': ^6.0.0
+      vue: ^3.2.0
 
   '@vite-pwa/assets-generator@1.0.0':
     resolution: {integrity: sha512-tWRF/tsqGkND5+dDVnJz7DzQkIRjtTRRYvA3y6l4FwTwK47OK72p1X7ResSz6T7PimIZMuFd+arsB8NRIG+Sww==}
@@ -14015,7 +14015,7 @@ snapshots:
     transitivePeerDependencies:
       - graphql
 
-  '@urql/vue@1.4.3(@urql/core@5.2.0(graphql@16.11.0))(vue@3.5.18(typescript@5.9.2))':
+  '@urql/vue@2.0.0(@urql/core@5.2.0(graphql@16.11.0))(vue@3.5.18(typescript@5.9.2))':
     dependencies:
       '@urql/core': 5.2.0(graphql@16.11.0)
       vue: 3.5.18(typescript@5.9.2)
