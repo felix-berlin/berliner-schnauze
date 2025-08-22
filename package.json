@@ -93,7 +93,7 @@
     "@vitest/ui": "3.2.4",
     "@vitest/web-worker": "3.2.4",
     "@vue/compiler-sfc": "^3.5.18",
-    "@vue/devtools-api": "^7.7.7",
+    "@vue/devtools-api": "^8.0.0",
     "@vue/test-utils": "^2.4.6",
     "astro-eslint-parser": "^1.2.2",
     "autoprefixer": "^10.4.21",
