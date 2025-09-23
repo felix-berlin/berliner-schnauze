@@ -582,7 +582,7 @@ type BerlinerWord implements ContentNode & DatabaseIdentifier & HierarchicalCont
   """
   password: String
   """
-  Connection between the BerlinerWord type and the berlinerWord type
+  Connection between the berlinerWord type and the berlinerWord type
   """
   preview: BerlinerWordToPreviewConnectionEdge
   """
@@ -920,7 +920,7 @@ input BerlinerWordToBerlinerischWordTypeConnectionWhereArgs {
 }
 
 """
-Connection between the BerlinerWord type and the berlinerWord type
+Connection between the berlinerWord type and the berlinerWord type
 """
 type BerlinerWordToPreviewConnectionEdge implements BerlinerWordConnectionEdge & Edge & OneToOneConnection {
   """
@@ -17098,7 +17098,7 @@ enum MenuItemNodeIdTypeEnum {
 }
 
 """
-Deprecated in favor of MenuItemLinkeable Interface
+Deprecated in favor of MenuItemLinkable Interface
 """
 union MenuItemObjectUnion = BerlinerWord | BerlinerischWordType | Category | Page | Post | Tag
 
@@ -18418,7 +18418,7 @@ type Page implements BlockEditorContentNode & ContentNode & DatabaseIdentifier &
   """
   password: String
   """
-  Connection between the Page type and the page type
+  Connection between the page type and the page type
   """
   preview: PageToPreviewConnectionEdge
   """
@@ -18778,7 +18778,7 @@ input PageToCommentConnectionWhereArgs {
 }
 
 """
-Connection between the Page type and the page type
+Connection between the page type and the page type
 """
 type PageToPreviewConnectionEdge implements Edge & OneToOneConnection & PageConnectionEdge {
   """
@@ -19398,7 +19398,7 @@ type Post implements BlockEditorContentNode & ContentNode & DatabaseIdentifier &
   """
   postId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
   """
-  Connection between the Post type and the post type
+  Connection between the post type and the post type
   """
   preview: PostToPreviewConnectionEdge
   """
@@ -20804,7 +20804,7 @@ input PostToCommentConnectionWhereArgs {
 }
 
 """
-Connection between the Post type and the post type
+Connection between the post type and the post type
 """
 type PostToParentConnectionEdge implements Edge & OneToOneConnection & PostConnectionEdge {
   """
@@ -20821,7 +20821,7 @@ type PostToParentConnectionEdge implements Edge & OneToOneConnection & PostConne
 }
 
 """
-Connection between the Post type and the post type
+Connection between the post type and the post type
 """
 type PostToPostConnection implements Connection & PostConnection {
   """
@@ -21035,7 +21035,7 @@ input PostToPostFormatConnectionWhereArgs {
 }
 
 """
-Connection between the Post type and the post type
+Connection between the post type and the post type
 """
 type PostToPreviewConnectionEdge implements Edge & OneToOneConnection & PostConnectionEdge {
   """

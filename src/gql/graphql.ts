@@ -1,7 +1,7 @@
 /* eslint-disable */
 import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
+export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -332,7 +332,7 @@ export type BerlinerWord = ContentNode &
     parentId?: Maybe<Scalars["ID"]["output"]>;
     /** The password for the berlinerisch object. */
     password?: Maybe<Scalars["String"]["output"]>;
-    /** Connection between the BerlinerWord type and the berlinerWord type */
+    /** Connection between the berlinerWord type and the berlinerWord type */
     preview?: Maybe<BerlinerWordToPreviewConnectionEdge>;
     /** The database id of the preview node */
     previewRevisionDatabaseId?: Maybe<Scalars["Int"]["output"]>;
@@ -565,7 +565,7 @@ export type BerlinerWordToBerlinerischWordTypeConnectionWhereArgs = {
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
-/** Connection between the BerlinerWord type and the berlinerWord type */
+/** Connection between the berlinerWord type and the berlinerWord type */
 export type BerlinerWordToPreviewConnectionEdge = BerlinerWordConnectionEdge &
   Edge &
   OneToOneConnection & {
@@ -11875,7 +11875,7 @@ export enum MenuItemNodeIdTypeEnum {
   Id = "ID",
 }
 
-/** Deprecated in favor of MenuItemLinkeable Interface */
+/** Deprecated in favor of MenuItemLinkable Interface */
 export type MenuItemObjectUnion =
   | BerlinerWord
   | BerlinerischWordType
@@ -12604,7 +12604,7 @@ export type Page = BlockEditorContentNode &
     parentId?: Maybe<Scalars["ID"]["output"]>;
     /** The password for the page object. */
     password?: Maybe<Scalars["String"]["output"]>;
-    /** Connection between the Page type and the page type */
+    /** Connection between the page type and the page type */
     preview?: Maybe<PageToPreviewConnectionEdge>;
     /** Previewed gutenberg blocks */
     previewBlocks?: Maybe<Array<Block>>;
@@ -12851,7 +12851,7 @@ export type PageToCommentConnectionWhereArgs = {
   userId?: InputMaybe<Scalars["ID"]["input"]>;
 };
 
-/** Connection between the Page type and the page type */
+/** Connection between the page type and the page type */
 export type PageToPreviewConnectionEdge = Edge &
   OneToOneConnection &
   PageConnectionEdge & {
@@ -13143,7 +13143,7 @@ export type Post = BlockEditorContentNode &
      * @deprecated Deprecated in favor of the databaseId field
      */
     postId: Scalars["Int"]["output"];
-    /** Connection between the Post type and the post type */
+    /** Connection between the post type and the post type */
     preview?: Maybe<PostToPreviewConnectionEdge>;
     /** Previewed gutenberg blocks */
     previewBlocks?: Maybe<Array<Block>>;
@@ -13980,7 +13980,7 @@ export type PostToCommentConnectionWhereArgs = {
   userId?: InputMaybe<Scalars["ID"]["input"]>;
 };
 
-/** Connection between the Post type and the post type */
+/** Connection between the post type and the post type */
 export type PostToParentConnectionEdge = Edge &
   OneToOneConnection &
   PostConnectionEdge & {
@@ -13994,7 +13994,7 @@ export type PostToParentConnectionEdge = Edge &
     node: Post;
   };
 
-/** Connection between the Post type and the post type */
+/** Connection between the post type and the post type */
 export type PostToPostConnection = Connection &
   PostConnection & {
     __typename?: "PostToPostConnection";
@@ -14126,7 +14126,7 @@ export type PostToPostFormatConnectionWhereArgs = {
   updateTermMetaCache?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
-/** Connection between the Post type and the post type */
+/** Connection between the post type and the post type */
 export type PostToPreviewConnectionEdge = Edge &
   OneToOneConnection &
   PostConnectionEdge & {
