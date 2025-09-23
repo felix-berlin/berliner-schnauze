@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.21.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.21.2...v3.21.3) (2025-09-23)
+
+
+### Bug Fixes
+
+* **pwa:** build error ([f3f1e39](https://github.com/felix-berlin/berliner-schnauze/commit/f3f1e39d90d029592f4d16d836cb871cb0ff02ee))
+
 ## [3.21.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.21.1...v3.21.2) (2025-07-28)
 
 
