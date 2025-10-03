@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.21.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.21.3...v3.21.4) (2025-10-03)
+
+
+### Bug Fixes
+
+* workbox max file size ([5593142](https://github.com/felix-berlin/berliner-schnauze/commit/55931423076c1b760e6c2c5de2d7d2f9e62aa691))
+
 ## [3.21.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.21.2...v3.21.3) (2025-09-23)
 
 
