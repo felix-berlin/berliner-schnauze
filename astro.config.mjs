@@ -232,6 +232,8 @@ export default defineConfig({
         globDirectory: "dist",
         // navigateFallback: "/",
         globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
+        // Increase the file size limit to 15 MB to accommodate large images
+        maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // 15 MB
         runtimeCaching: [
           {
             urlPattern: /.*\/api\/search\/index\.json$/,
