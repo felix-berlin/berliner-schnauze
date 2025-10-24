@@ -163,7 +163,7 @@
     "natural": "^8.1.0",
     "photoswipe": "^5.4.4",
     "vanilla-cookieconsent": "3.1.0",
-    "virtua": "^0.44.0",
+    "virtua": "^0.46.0",
     "vite-plugin-pwa": "^1.0.3",
     "vue": "^3.5.22",
     "workbox-build": "^7.3.0",
