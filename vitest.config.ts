@@ -1,6 +1,5 @@
 /// <reference types="vitest" />
 import { getViteConfig, envField } from "astro/config";
-import { coverageConfigDefaults } from "vitest/config";
 
 export default getViteConfig(
   {
@@ -10,16 +9,16 @@ export default getViteConfig(
       environment: "jsdom",
       setupFiles: ["src/tests/setup.ts", "@vitest/web-worker"],
       coverage: {
-        include: ["src/**"],
+        include: ["src/**/*.{js,jsx,ts,tsx,vue,astro}"],
         exclude: [
           "src/types/**",
-          "scr/gql/**",
+          "src/gql/**",
+          "src/tests/**",
           "src/env.d.ts",
           "src/pages/_app.ts",
           "src/plugins/**",
           "src/utils/supportedBrowsers.mjs",
           "codegen.ts",
-          ...coverageConfigDefaults.exclude,
         ],
         reportsDirectory: "./tests/unit/coverage",
       },

@@ -1,25 +1,24 @@
-import { afterAll, afterEach, beforeAll, vi } from "vitest";
 import { config } from "@vue/test-utils";
-// import { setupServer } from "msw/node";
-// import { graphql, http } from "msw";
-// import { useAutoAnimate } from "@formkit/auto-animate/vue";
-
 import {
-  // Directives
-  VTooltip,
+  Tooltip,
   VClosePopper,
   // Components
   Dropdown as VDropdown,
-  Tooltip,
   Menu as VMenu,
+  // Directives
+  VTooltip,
 } from "floating-vue";
+// import { setupServer } from "msw/node";
+// import { graphql, http } from "msw";
+// import { useAutoAnimate } from "@formkit/auto-animate/vue";
+import { beforeAll, vi } from "vitest";
 
 beforeAll(() => {
   vi.stubEnv("WP_API", "https://cms.berliner-schnauze.wtf/api");
 
   config.global.components = {
-    VDropdown,
     Tooltip,
+    VDropdown,
     VMenu,
   };
   config.global.directives = {
@@ -29,11 +28,13 @@ beforeAll(() => {
   };
 });
 
-const ResizeObserverMock = vi.fn(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
+const ResizeObserverMock = vi.fn(function () {
+  return {
+    disconnect: vi.fn(),
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+  };
+});
 vi.stubGlobal("ResizeObserver", ResizeObserverMock);
 // Mock the HTMLDialogElement.prototype.showModal() method
 global.HTMLDialogElement.prototype.showModal = () => {};
