@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.22.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.21.4...v3.22.0) (2025-11-09)
+
+
+### Features
+
+* boost berlinerisch and add tolerance to 1 ([5a039bd](https://github.com/felix-berlin/berliner-schnauze/commit/5a039bdaf9878ba3a8ed40bca3677d973474674b))
+
 ## [3.21.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.21.3...v3.21.4) (2025-10-03)
 
 
