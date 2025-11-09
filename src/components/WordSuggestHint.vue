@@ -15,14 +15,21 @@
 </template>
 
 <script setup lang="ts">
+import { useStore } from "@nanostores/vue";
 import { open } from "@stores/modal.ts";
+import { $wordSearch } from "@stores/wordList.ts";
 import Plus from "virtual:icons/lucide/plus";
 import { defineAsyncComponent } from "vue";
+
+const wordSearch = useStore($wordSearch);
 
 const openWordSuggestionModal = () => {
   open({
     view: {
       component: defineAsyncComponent(() => import("@components/SuggestWordForm.vue")),
+      props: {
+        berlinerWord: wordSearch.value.search || undefined,
+      },
     },
   });
 };
