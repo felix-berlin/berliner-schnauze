@@ -20,14 +20,16 @@ describe("AudioPlayer.vue", () => {
     audioPlayMock = vi.fn();
     audioPauseMock = vi.fn();
 
-    vi.spyOn(window, "Audio").mockImplementation(() => ({
-      play: audioPlayMock,
-      pause: audioPauseMock,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      currentTime: 0,
-      duration: 100,
-    }));
+    vi.spyOn(window, "Audio").mockImplementation(function (this: any) {
+      return {
+        play: audioPlayMock,
+        pause: audioPauseMock,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        currentTime: 0,
+        duration: 100,
+      };
+    } as any);
   });
 
   afterEach(() => {

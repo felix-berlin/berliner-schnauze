@@ -4,14 +4,23 @@ import ScrollToTop from "@components/ScrollToTop.vue";
 
 describe("ScrollToTop.vue", () => {
   let intersectionObserverMock: any;
+  let observeMock: any;
+  let disconnectMock: any;
 
   beforeEach(() => {
-    intersectionObserverMock = vi.fn((callback: any) => ({
-      observe: vi.fn(),
-      disconnect: vi.fn(),
-      takeRecords: vi.fn(),
-      unobserve: vi.fn(),
-    }));
+    observeMock = vi.fn();
+    disconnectMock = vi.fn();
+
+    intersectionObserverMock = vi.fn(function (callback: any) {
+      // Store the callback so we can call it later
+      this.callback = callback;
+      return {
+        observe: observeMock,
+        disconnect: disconnectMock,
+        takeRecords: vi.fn(),
+        unobserve: vi.fn(),
+      };
+    });
 
     vi.stubGlobal("IntersectionObserver", intersectionObserverMock);
   });

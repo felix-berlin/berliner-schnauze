@@ -34,7 +34,7 @@ const {
   buttonAriaLabel = "nach oben scrollen",
   hideTooltip = false,
   showAtPosition = 500,
-  tooltip,
+  tooltip = "",
 } = defineProps<ScrollToTopProps>();
 
 const observer = ref<IntersectionObserver | null>(null);
