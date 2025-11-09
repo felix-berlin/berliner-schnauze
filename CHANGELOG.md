@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.23.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.22.0...v3.23.0) (2025-11-09)
+
+
+### Features
+
+* prefill SuggestWordForm ([910ef70](https://github.com/felix-berlin/berliner-schnauze/commit/910ef7050617a27e5a2e5d9bd01ee88073358291))
+
 # [3.22.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.21.4...v3.22.0) (2025-11-09)
 
 
