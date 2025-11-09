@@ -411,11 +411,16 @@ export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
     const sortBy = getSortBy(wordSearch);
 
     const params: SearchParams<Orama<typeof wordSchema>> = {
+      boost: {
+        "wordProperties.berlinerisch": 2.5,
+        "wordProperties.translations": 1,
+      },
       limit: wordSearch.resultLimit ?? resultLimit ?? 10,
       properties: "*",
       sortBy,
       term: wordSearch.search,
       threshold: 0.5,
+      tolerance: 1,
       ...(Object.keys(where).length > 0 ? { where } : {}),
     };
 
