@@ -66,7 +66,7 @@ importers:
         version: 5.15.9(@types/node@24.10.3)(jiti@2.6.1)(rollup@2.79.2)(sass@1.96.0)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.2)
       astro-breadcrumbs:
         specifier: ^3.3.1
-        version: 3.3.1(astro@5.15.9(@types/node@24.10.3)(jiti@2.6.1)(rollup@2.79.2)(sass@1.96.0)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.2))
+        version: 3.3.3(astro@5.15.9(@types/node@24.10.3)(jiti@2.6.1)(rollup@2.79.2)(sass@1.96.0)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.2))
       astro-capo:
         specifier: ^0.0.1
         version: 0.0.1(astro@5.15.9(@types/node@24.10.3)(jiti@2.6.1)(rollup@2.79.2)(sass@1.96.0)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.2))
@@ -4737,8 +4737,8 @@ packages:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
     engines: {node: '>=8'}
 
-  astro-breadcrumbs@3.3.1:
-    resolution: {integrity: sha512-O3wWzlc4HOU//ePefcwk2F4yQn830buVUVn6h7+sGmVq7+xvv9JmHTcmihU18ISte72ELnJlG2U8s58nIuPXfg==}
+  astro-breadcrumbs@3.3.3:
+    resolution: {integrity: sha512-Fs1EGNQWwDXGwWd4aGhLhUUPik0GcxqjgGMS8yLve2DeMO1JNb1j/Oz81VIo4xzx9H9b987T+pJYJ7x+ojxGFw==}
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
 
@@ -15467,7 +15467,7 @@ snapshots:
 
   astral-regex@2.0.0: {}
 
-  astro-breadcrumbs@3.3.1(astro@5.15.9(@types/node@24.10.3)(jiti@2.6.1)(rollup@2.79.2)(sass@1.96.0)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.2)):
+  astro-breadcrumbs@3.3.3(astro@5.15.9(@types/node@24.10.3)(jiti@2.6.1)(rollup@2.79.2)(sass@1.96.0)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.2)):
     dependencies:
       astro: 5.15.9(@types/node@24.10.3)(jiti@2.6.1)(rollup@2.79.2)(sass@1.96.0)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.2)
 
