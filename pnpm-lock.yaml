@@ -36,7 +36,7 @@ importers:
         version: 1.0.1(@nanostores/logger@1.0.0(nanostores@1.1.0))(@vue/devtools-api@8.0.5)(nanostores@1.1.0)(vue@3.5.25(typescript@5.9.3))
       '@orama/orama':
         specifier: ^3.1.16
-        version: 3.1.16
+        version: 3.1.17
       '@orama/plugin-match-highlight':
         specifier: ^3.1.16
         version: 3.1.16
@@ -3225,6 +3225,10 @@ packages:
 
   '@orama/orama@3.1.16':
     resolution: {integrity: sha512-scSmQBD8eANlMUOglxHrN1JdSW8tDghsPuS83otqealBiIeMukCQMOf/wc0JJjDXomqwNdEQFLXLGHrU6PGxuA==}
+    engines: {node: '>= 20.0.0'}
+
+  '@orama/orama@3.1.17':
+    resolution: {integrity: sha512-APwpZ+FTGMryo4QEeD6ti+Ei8suBkvxe8PeWdUcQHVfJDpjpt4c1dKojjNswcBmdeWSiiTYcnkKKH+yuo6727g==}
     engines: {node: '>= 20.0.0'}
 
   '@orama/plugin-match-highlight@3.1.16':
@@ -13719,6 +13723,8 @@ snapshots:
       '@opentelemetry/core': 2.2.0(@opentelemetry/api@1.9.0)
 
   '@orama/orama@3.1.16': {}
+
+  '@orama/orama@3.1.17': {}
 
   '@orama/plugin-match-highlight@3.1.16':
     dependencies:
