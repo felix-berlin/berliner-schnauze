@@ -42,7 +42,7 @@ importers:
         version: 3.1.17
       '@orama/stemmers':
         specifier: ^3.1.16
-        version: 3.1.16
+        version: 3.1.17
       '@sentry/astro':
         specifier: ^10.23.0
         version: 10.30.0(astro@5.15.9(@types/node@24.10.3)(jiti@2.6.1)(rollup@2.79.2)(sass@1.96.0)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.2))
@@ -3230,8 +3230,8 @@ packages:
   '@orama/plugin-match-highlight@3.1.17':
     resolution: {integrity: sha512-NZo7H1bmII5heCjT2Fux0YcIN4lwkmKg17iQrRmH07K/FS93+h9KtJe4sOR0hk5SN6BdxLiC9Ty0Jy7mYaitPg==}
 
-  '@orama/stemmers@3.1.16':
-    resolution: {integrity: sha512-DdkAkhDvWD12HZez+kniLxRK4hxf1f1y+7OHxv47HIdZPYUx1Y+7Z7dX/8nM7+jrq7sa7M0wLCYOpdhVXOYEBg==}
+  '@orama/stemmers@3.1.17':
+    resolution: {integrity: sha512-bGQxWcaZkXHNvkICnmfovtU/JX2O70/zicNNhStoA79a0Lr8Tz3jiUogox3uRPvoRjxfq+vJ5j/iR5WQ35A51A==}
     engines: {node: '>= 20.0.0'}
 
   '@oslojs/encoding@1.1.0':
@@ -13724,7 +13724,7 @@ snapshots:
     dependencies:
       '@orama/orama': 3.1.17
 
-  '@orama/stemmers@3.1.16': {}
+  '@orama/stemmers@3.1.17': {}
 
   '@oslojs/encoding@1.1.0': {}
 
