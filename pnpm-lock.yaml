@@ -39,7 +39,7 @@ importers:
         version: 3.1.17
       '@orama/plugin-match-highlight':
         specifier: ^3.1.16
-        version: 3.1.16
+        version: 3.1.17
       '@orama/stemmers':
         specifier: ^3.1.16
         version: 3.1.16
@@ -3223,16 +3223,12 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
 
-  '@orama/orama@3.1.16':
-    resolution: {integrity: sha512-scSmQBD8eANlMUOglxHrN1JdSW8tDghsPuS83otqealBiIeMukCQMOf/wc0JJjDXomqwNdEQFLXLGHrU6PGxuA==}
-    engines: {node: '>= 20.0.0'}
-
   '@orama/orama@3.1.17':
     resolution: {integrity: sha512-APwpZ+FTGMryo4QEeD6ti+Ei8suBkvxe8PeWdUcQHVfJDpjpt4c1dKojjNswcBmdeWSiiTYcnkKKH+yuo6727g==}
     engines: {node: '>= 20.0.0'}
 
-  '@orama/plugin-match-highlight@3.1.16':
-    resolution: {integrity: sha512-7ssvb+Q/YCJj7P43dlysglYABG0AF0zgVVhb/fJs18UzcdHvnJF1Q9XQZEBheL90Go8nTicrygUG0+PdjI5GaA==}
+  '@orama/plugin-match-highlight@3.1.17':
+    resolution: {integrity: sha512-NZo7H1bmII5heCjT2Fux0YcIN4lwkmKg17iQrRmH07K/FS93+h9KtJe4sOR0hk5SN6BdxLiC9Ty0Jy7mYaitPg==}
 
   '@orama/stemmers@3.1.16':
     resolution: {integrity: sha512-DdkAkhDvWD12HZez+kniLxRK4hxf1f1y+7OHxv47HIdZPYUx1Y+7Z7dX/8nM7+jrq7sa7M0wLCYOpdhVXOYEBg==}
@@ -13722,13 +13718,11 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 2.2.0(@opentelemetry/api@1.9.0)
 
-  '@orama/orama@3.1.16': {}
-
   '@orama/orama@3.1.17': {}
 
-  '@orama/plugin-match-highlight@3.1.16':
+  '@orama/plugin-match-highlight@3.1.17':
     dependencies:
-      '@orama/orama': 3.1.16
+      '@orama/orama': 3.1.17
 
   '@orama/stemmers@3.1.16': {}
 
