@@ -157,6 +157,7 @@
     "@spotlightjs/astro": "^3.2.6",
     "@urql/core": "^6.0.1",
     "@urql/vue": "^2.0.0",
+    "@vueform/multiselect": "^2.6.11",
     "@vueuse/core": "^14.1.0",
     "astro": "^5.16.6",
     "astro-breadcrumbs": "^3.3.3",

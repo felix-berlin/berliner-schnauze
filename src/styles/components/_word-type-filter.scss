@@ -1,13 +1,27 @@
+@use "@sass-butler/mixins" as butler-mx;
+
 .c-word-type-filter {
-  &__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--gap, 0.8rem);
-  }
+  &__select {
+    --ms-radius: 0;
+    --ms-bg: var(--orange-100);
+    --ms-border-color: var(--orange-600);
+    --ms-ring-color: color-mix(in srgb, var(--orange-100) 80%, white);
+    --ms-placeholder-color: var(--blue);
+    --ms-dropdown-bg: var(--orange-100);
+    --ms-option-bg-pointed: var(--orange-500);
+    --ms-option-color-pointed: #000;
+    --ms-option-bg-selected: var(--orange-600);
+    --ms-option-bg-selected-pointed: var(--orange-600);
+    --ms-option-color-selected-pointed: #000;
+    --ms-dropdown-border-color: var(--orange-600);
 
-  &__button {
-    --padding: 0.5rem 1rem;
-
-    font-size: 1.1rem;
+    @include butler-mx.dark-mode-class {
+      --ms-bg: var(--new-blue-600);
+      --ms-border-color: color-mix(in srgb, var(--blue) 80%, white);
+      --ms-placeholder-color: var(--yellow-500);
+      --ms-dropdown-bg: var(--new-blue-600);
+      --ms-ring-color: color-mix(in srgb, var(--blue) 90%, white);
+      --ms-dropdown-border-color: color-mix(in srgb, var(--blue) 80%, white);
+    }
   }
 }

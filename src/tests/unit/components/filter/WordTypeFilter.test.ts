@@ -1,41 +1,46 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
+import { describe, it, expect, vi } from "vitest";
+import { shallowMount, type VueWrapper } from "@vue/test-utils";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
-import { useStore } from "@nanostores/vue";
-import { $wordSearch, setWordTypeFilter } from "@stores/index.ts";
+
+// Mock analytics
+vi.mock("@utils/analytics", () => ({
+  trackEvent: vi.fn(),
+}));
+
+const mockWordSearch = {
+  wordTypes: ["Substantiv", "Verb", "Adjektiv"],
+  activeWordTypeFilter: ["Substantiv"],
+};
 
 vi.mock("@nanostores/vue", () => ({
-  useStore: () => ({
-    wordTypes: ["type1", "type2", "type3"],
-    activeWordTypeFilter: "type1",
-  }),
+  useStore: vi.fn(() => mockWordSearch),
+  useVModel: vi.fn(() => ({ value: mockWordSearch.activeWordTypeFilter })),
 }));
 
 vi.mock("@stores/index.ts", () => ({
-  $wordSearch: vi.fn(),
-  setWordTypeFilter: vi.fn(),
+  $wordSearch: {
+    get: vi.fn(() => mockWordSearch),
+  },
 }));
 
 describe("WordTypeFilter.vue", () => {
-  let wrapper;
+  let wrapper: VueWrapper;
 
-  beforeEach(() => {
-    wrapper = mount(WordTypeFilter);
+  it("renders the WordTypeFilter component with Multiselect", () => {
+    wrapper = shallowMount(WordTypeFilter);
+
+    expect(wrapper.find(".c-word-type-filter").exists()).toBe(true);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+    expect(multiselect.exists()).toBe(true);
   });
 
-  it("renders the correct number of word types", () => {
-    const buttons = wrapper.findAll(".c-word-type-filter__button");
-    expect(buttons.length).toBe(4); // +1 for the "Alle" button
-  });
+  it("passes correct props to Multiselect", () => {
+    wrapper = shallowMount(WordTypeFilter);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
 
-  it("sets the correct word type as active", () => {
-    const activeButton = wrapper.find(".is-current");
-    expect(activeButton.text()).toBe("type1");
-  });
-
-  it("calls setWordTypeFilter when a button is clicked", async () => {
-    const button = wrapper.find(".c-word-type-filter__button"); // Get the first button
-    await button.trigger("click");
-    expect(setWordTypeFilter).toHaveBeenCalled();
+    const attrs = multiselect.attributes();
+    expect(attrs.mode).toBe("multiple");
+    expect(attrs.locale).toBe("de");
+    expect(attrs.placeholder).toBe("Worttypen filtern");
   });
 });
