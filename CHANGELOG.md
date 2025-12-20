@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.24.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.23.0...v3.24.0) (2025-12-20)
+
+
+### Features
+
+* add selection tracking to WordTypeFilter dropdown ([c48f0e9](https://github.com/felix-berlin/berliner-schnauze/commit/c48f0e9d706d2caf84d7b5157ad6d9b48d9874c0))
+* replace WordTypeFilter list with dropdown using @vueform/multiselect ([09312df](https://github.com/felix-berlin/berliner-schnauze/commit/09312df1ae4939cb0798e401c12ed5c41311e3ca))
+* update onSelect function to handle multiple word types in WordTypeFilter ([e6c743d](https://github.com/felix-berlin/berliner-schnauze/commit/e6c743d80b01eb47ad11cb53915db5719d886165))
+
 # [3.23.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.22.0...v3.23.0) (2025-11-09)
 
 
