@@ -21704,7 +21704,7 @@ type ReadingSettings {
   """
   postsPerPage: Int
   """
-  Was auf der Startseite angezeigt werden soll
+  Was auf der Homepage angezeigt werden soll
   """
   showOnFront: String
 }
@@ -29627,7 +29627,7 @@ input UpdateSettingsInput {
   """
   readingSettingsPostsPerPage: Int
   """
-  Was auf der Startseite angezeigt werden soll
+  Was auf der Homepage angezeigt werden soll
   """
   readingSettingsShowOnFront: String
   """
