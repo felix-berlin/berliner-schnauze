@@ -14518,7 +14518,7 @@ export type ReadingSettings = {
   pageOnFront?: Maybe<Scalars["Int"]["output"]>;
   /** Maximal angezeigte Beiträge. */
   postsPerPage?: Maybe<Scalars["Int"]["output"]>;
-  /** Was auf der Startseite angezeigt werden soll */
+  /** Was auf der Homepage angezeigt werden soll */
   showOnFront?: Maybe<Scalars["String"]["output"]>;
 };
 
@@ -19288,7 +19288,7 @@ export type UpdateSettingsInput = {
   readingSettingsPageOnFront?: InputMaybe<Scalars["Int"]["input"]>;
   /** Maximal angezeigte Beiträge. */
   readingSettingsPostsPerPage?: InputMaybe<Scalars["Int"]["input"]>;
-  /** Was auf der Startseite angezeigt werden soll */
+  /** Was auf der Homepage angezeigt werden soll */
   readingSettingsShowOnFront?: InputMaybe<Scalars["String"]["input"]>;
   /** Standard-Beitragskategorie. */
   writingSettingsDefaultCategory?: InputMaybe<Scalars["Int"]["input"]>;
