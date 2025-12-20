@@ -24,8 +24,8 @@ import Multiselect from '@vueform/multiselect';
 const wordSearch = useStore($wordSearch);
 const value = useVModel($wordSearch, 'activeWordTypeFilter');
 
-const onSelect = (value: string) => {
-  trackEvent("WordList", "Filter", `Word Type: ${value}`);
+const onSelect = (value: string[]) => {
+  trackEvent("WordList", "Filter", `Word Type: ${value.join(", ")}`);
 };
 </script>
 
