@@ -118,7 +118,7 @@
     "graphql-config": "^5.1.5",
     "jsdom": "^27.3.0",
     "postcss-html": "^1.8.0",
-    "postcss-preset-env": "^10.5.0",
+    "postcss-preset-env": "^11.0.0",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.7.4",
     "prettier-plugin-astro": "^0.14.1",
