@@ -60,7 +60,7 @@
     "supportedBrowsers": "echo \"export default $(browserslist-useragent-regexp --allowHigherVersions);\" > src/utils/supportedBrowsers.mjs",
     "refreshAuthToken": "node ./src/utils/refreshToken.js"
   },
-  "packageManager": "pnpm@10.28.2",
+  "packageManager": "pnpm@10.29.1",
   "pnpm": {
     "overrides": {
       "vite": "npm:rolldown-vite@latest",
