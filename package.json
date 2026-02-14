@@ -130,7 +130,7 @@
     "stylelint": "^17.0.0",
     "stylelint-config-prettier-scss": "^1.0.0",
     "stylelint-config-recommended-scss": "^16.0.2",
-    "stylelint-config-standard": "^39.0.1",
+    "stylelint-config-standard": "^40.0.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.50.1",
     "unplugin-icons": "^23.0.0",
