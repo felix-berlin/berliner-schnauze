@@ -3588,7 +3588,7 @@ type CommentAuthor implements Commenter & DatabaseIdentifier & Node {
   """
   databaseId: Int!
   """
-  The email for the comment author
+  The email for the comment author.
   """
   email: String
   """
@@ -3894,7 +3894,7 @@ type CommentToCommenterConnectionEdge implements CommenterConnectionEdge & Edge 
   """
   cursor: String
   """
-  The email address representing the author for this particular comment
+  Email address representing the author for this particular comment
   """
   email: String
   """
@@ -15156,6 +15156,19 @@ type GeneralSettings {
   """
   language: String
   """
+  The media item representing the site icon configured in site settings, used as the site&#039;s favicon and app icon.
+  """
+  siteIcon: GeneralSettingsToMediaItemConnectionEdge
+  """
+  Site icon URL configured in site settings, used as the site&#039;s favicon and app icon.
+  """
+  siteIconUrl(
+    """
+    Size of the site icon in pixels. Defaults to 512. Max 512.
+    """
+    size: Int
+  ): String
+  """
   Die Zahl eines Wochentages, mit dem die Woche beginnen sollte.
   """
   startOfWeek: Int
@@ -15175,6 +15188,20 @@ type GeneralSettings {
   Website-URL.
   """
   url: String
+}
+
+"""
+Connection between the GeneralSettings type and the MediaItem type
+"""
+type GeneralSettingsToMediaItemConnectionEdge implements Edge & MediaItemConnectionEdge & OneToOneConnection {
+  """
+  Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+  """
+  cursor: String
+  """
+  The node of the connection, without the edges
+  """
+  node: MediaItem!
 }
 
 """
@@ -29823,6 +29850,10 @@ A registered user account. Users can be assigned roles, author content, and have
 """
 type User implements Commenter & DatabaseIdentifier & Node & UniformResourceIdentifiable & WithAcfSocialAdvanced {
   """
+  The admin color scheme preference for the user. Possible values include &quot;fresh&quot;, &quot;light&quot;, &quot;blue&quot;, &quot;coffee&quot;, &quot;ectoplasm&quot;, &quot;midnight&quot;, &quot;ocean&quot;, &quot;sunrise&quot;. Default is &quot;fresh&quot;.
+  """
+  adminColor: String
+  """
   Avatar object for user. The avatar object can be retrieved in different sizes by specifying the size argument.
   """
   avatar(
@@ -29959,6 +29990,18 @@ type User implements Commenter & DatabaseIdentifier & Node & UniformResourceIden
   First name of the user. This is equivalent to the WP_User-&gt;user_first_name property.
   """
   firstName: String
+  """
+  Whether the user has enabled keyboard shortcuts for comment moderation. Defaults to false.
+  """
+  hasCommentShortcutsEnabled: Boolean
+  """
+  Whether the user has enabled the visual editor. When enabled, the WYSIWYG editor is used for content editing. Defaults to true.
+  """
+  hasRichEditingEnabled: Boolean
+  """
+  Whether the user has enabled syntax highlighting when editing code within the post editor. Defaults to true.
+  """
+  hasSyntaxHighlightingEnabled: Boolean
   """
   The globally unique identifier for the user object.
   """

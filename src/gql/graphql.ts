@@ -2117,7 +2117,7 @@ export type CommentAuthor = Commenter &
     avatar?: Maybe<Avatar>;
     /** The unique identifier stored in the database */
     databaseId: Scalars["Int"]["output"];
-    /** The email for the comment author */
+    /** The email for the comment author. */
     email?: Maybe<Scalars["String"]["output"]>;
     /** The globally unique identifier for the comment author object */
     id: Scalars["ID"]["output"];
@@ -2298,7 +2298,7 @@ export type CommentToCommenterConnectionEdge = CommenterConnectionEdge &
     __typename?: "CommentToCommenterConnectionEdge";
     /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
     cursor?: Maybe<Scalars["String"]["output"]>;
-    /** The email address representing the author for this particular comment */
+    /** Email address representing the author for this particular comment */
     email?: Maybe<Scalars["String"]["output"]>;
     /** IP address of the author at the time of making this comment. This field is equivalent to WP_Comment-&gt;comment_author_IP and the value matching the &quot;comment_author_IP&quot; column in SQL. */
     ipAddress?: Maybe<Scalars["String"]["output"]>;
@@ -10783,6 +10783,10 @@ export type GeneralSettings = {
   email?: Maybe<Scalars["String"]["output"]>;
   /** WordPress-Ländercode. */
   language?: Maybe<Scalars["String"]["output"]>;
+  /** The media item representing the site icon configured in site settings, used as the site&#039;s favicon and app icon. */
+  siteIcon?: Maybe<GeneralSettingsToMediaItemConnectionEdge>;
+  /** Site icon URL configured in site settings, used as the site&#039;s favicon and app icon. */
+  siteIconUrl?: Maybe<Scalars["String"]["output"]>;
   /** Die Zahl eines Wochentages, mit dem die Woche beginnen sollte. */
   startOfWeek?: Maybe<Scalars["Int"]["output"]>;
   /** Ein Zeitformat für alle zeitbasierten Zeichenfolgen. */
@@ -10794,6 +10798,22 @@ export type GeneralSettings = {
   /** Website-URL. */
   url?: Maybe<Scalars["String"]["output"]>;
 };
+
+/** The general setting type */
+export type GeneralSettingsSiteIconUrlArgs = {
+  size?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
+/** Connection between the GeneralSettings type and the MediaItem type */
+export type GeneralSettingsToMediaItemConnectionEdge = Edge &
+  MediaItemConnectionEdge &
+  OneToOneConnection & {
+    __typename?: "GeneralSettingsToMediaItemConnectionEdge";
+    /** Opaque reference to the nodes position in the connection. Value can be used with pagination args. */
+    cursor?: Maybe<Scalars["String"]["output"]>;
+    /** The node of the connection, without the edges */
+    node: MediaItem;
+  };
 
 /** The &quot;GithubRawData&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;. */
 export type GithubRawData = AcfFieldGroup &
@@ -19400,6 +19420,8 @@ export type User = Commenter &
   UniformResourceIdentifiable &
   WithAcfSocialAdvanced & {
     __typename?: "User";
+    /** The admin color scheme preference for the user. Possible values include &quot;fresh&quot;, &quot;light&quot;, &quot;blue&quot;, &quot;coffee&quot;, &quot;ectoplasm&quot;, &quot;midnight&quot;, &quot;ocean&quot;, &quot;sunrise&quot;. Default is &quot;fresh&quot;. */
+    adminColor?: Maybe<Scalars["String"]["output"]>;
     /** Avatar object for user. The avatar object can be retrieved in different sizes by specifying the size argument. */
     avatar?: Maybe<Avatar>;
     /** Connection between the User type and the BlockEditorPreview type */
@@ -19424,6 +19446,12 @@ export type User = Commenter &
     extraCapabilities?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>;
     /** First name of the user. This is equivalent to the WP_User-&gt;user_first_name property. */
     firstName?: Maybe<Scalars["String"]["output"]>;
+    /** Whether the user has enabled keyboard shortcuts for comment moderation. Defaults to false. */
+    hasCommentShortcutsEnabled?: Maybe<Scalars["Boolean"]["output"]>;
+    /** Whether the user has enabled the visual editor. When enabled, the WYSIWYG editor is used for content editing. Defaults to true. */
+    hasRichEditingEnabled?: Maybe<Scalars["Boolean"]["output"]>;
+    /** Whether the user has enabled syntax highlighting when editing code within the post editor. Defaults to true. */
+    hasSyntaxHighlightingEnabled?: Maybe<Scalars["Boolean"]["output"]>;
     /** The globally unique identifier for the user object. */
     id: Scalars["ID"]["output"];
     /** Whether the node is a Comment */
