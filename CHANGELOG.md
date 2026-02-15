@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.25.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.24.1...v3.25.0) (2026-02-15)
+
+
+### Features
+
+* add Node.js engines constraint for --env-file compatibility ([548bd74](https://github.com/felix-berlin/berliner-schnauze/commit/548bd74b33aded7516efb85b43a7992ff8656643))
+
 ## [3.24.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.24.0...v3.24.1) (2026-02-15)
 
 
