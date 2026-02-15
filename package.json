@@ -61,6 +61,9 @@
     "refreshAuthToken": "node --env-file=.env ./src/utils/refreshToken.js"
   },
   "packageManager": "pnpm@10.29.3",
+  "engines": {
+    "node": ">=20.6.0"
+  },
   "pnpm": {
     "overrides": {
       "vite": "npm:rolldown-vite@latest",
