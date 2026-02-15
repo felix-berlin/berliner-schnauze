@@ -15,7 +15,7 @@ export async function refreshToken() {
       `Error: Missing required environment variables: ${missingVars.join(", ")}`,
     );
     console.error(
-      "\nPlease use the npm script instead: pnpm run refreshAuthToken",
+      "\nPlease use the package manager script: pnpm run refreshAuthToken",
     );
     console.error(
       "Or run with: node --env-file=.env ./src/utils/refreshToken.js",
