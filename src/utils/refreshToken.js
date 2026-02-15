@@ -4,6 +4,25 @@ import path from "path";
 export async function refreshToken() {
   const { WP_AUTH_PASS, WP_AUTH_USER, WP_REST_API } = process.env;
 
+  // Validate required environment variables
+  const missingVars = [];
+  if (!WP_AUTH_USER) missingVars.push("WP_AUTH_USER");
+  if (!WP_AUTH_PASS) missingVars.push("WP_AUTH_PASS");
+  if (!WP_REST_API) missingVars.push("WP_REST_API");
+
+  if (missingVars.length > 0) {
+    console.error(
+      `Error: Missing required environment variables: ${missingVars.join(", ")}`,
+    );
+    console.error(
+      "\nPlease use the npm script instead: pnpm run refreshAuthToken",
+    );
+    console.error(
+      "Or run with: node --env-file=.env ./src/utils/refreshToken.js",
+    );
+    process.exit(1);
+  }
+
   const response = await fetch(WP_REST_API + "/jwt-auth/v1/token", {
     body: JSON.stringify({
       password: WP_AUTH_PASS,
