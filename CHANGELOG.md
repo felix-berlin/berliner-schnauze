@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.24.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.24.0...v3.24.1) (2026-02-15)
+
+
+### Bug Fixes
+
+* remove dotenv dep ([cb6e5d6](https://github.com/felix-berlin/berliner-schnauze/commit/cb6e5d6c02313a9b54934b7392604d9f343c4536))
+
 # [3.24.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.23.0...v3.24.0) (2025-12-20)
 
 
