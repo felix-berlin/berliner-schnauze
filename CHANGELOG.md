@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.26.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.25.0...v3.26.0) (2026-02-15)
+
+
+### Bug Fixes
+
+* improve error message consistency in refreshToken script ([1a0c9af](https://github.com/felix-berlin/berliner-schnauze/commit/1a0c9afa3a7fcce6f344b869ae89f6e6e4cc0224))
+
+
+### Features
+
+* add env var validation to refreshToken script ([c18c8c4](https://github.com/felix-berlin/berliner-schnauze/commit/c18c8c4a458462c2afb1e759572de2bdc8f1f6bf))
+
 # [3.25.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.24.1...v3.25.0) (2026-02-15)
 
 
