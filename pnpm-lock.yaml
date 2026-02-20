@@ -105,7 +105,7 @@ importers:
         version: 3.1.0
       virtua:
         specifier: ^0.48.5
-        version: 0.48.5(vue@3.5.28(typescript@5.9.3))
+        version: 0.48.6(vue@3.5.28(typescript@5.9.3))
       vite-plugin-pwa:
         specifier: ^1.2.0
         version: 1.2.0(@vite-pwa/assets-generator@1.0.2)(rolldown-vite@7.3.1(@types/node@25.2.3)(esbuild@0.27.3)(jiti@2.6.1)(sass@1.97.3)(terser@5.44.1)(yaml@2.8.2))(workbox-build@7.4.0(@types/babel__core@7.20.5))(workbox-window@7.4.0)
@@ -8969,8 +8969,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  virtua@0.48.5:
-    resolution: {integrity: sha512-REjLvX8tGzNQYyJ+remkpK3a7CI0tXPyiyxvL419X+FbBUIa3Org7Bd1OWYXdC6jXqhuW5JFOtGD6qQrM2JnjQ==}
+  virtua@0.48.6:
+    resolution: {integrity: sha512-Cl4uMvMV5c9RuOy9zhkFMYwx/V4YLBMYLRSWkO8J46opQZ3P7KMq0CqCVOOAKUckjl/r//D2jWTBGYWzmgtzrQ==}
     peerDependencies:
       react: '>=16.14.0'
       react-dom: '>=16.14.0'
@@ -19617,7 +19617,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  virtua@0.48.5(vue@3.5.28(typescript@5.9.3)):
+  virtua@0.48.6(vue@3.5.28(typescript@5.9.3)):
     optionalDependencies:
       vue: 3.5.28(typescript@5.9.3)
 
