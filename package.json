@@ -95,7 +95,7 @@
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
     "@sentry/browser": "^10.38.0",
-    "@types/jsdom": "^27.0.0",
+    "@types/jsdom": "^28.0.0",
     "@types/node": "^25.2.3",
     "@vite-pwa/assets-generator": "^1.0.2",
     "@vite-pwa/astro": "^1.2.0",
