@@ -39,7 +39,6 @@ import {
   $searchResultCount,
   $wordSearch,
   searchLength as currentSearchLength,
-  setSearch,
 } from "@stores/index";
 import { setMatomoSearch } from "@utils/analytics";
 import { useDebounceFn } from "@vueuse/core";
@@ -70,7 +69,6 @@ const debouncedTrackSearch = useDebounceFn(trackWordSearchListSearch, 1000, { ma
  * Emits the search value to the parent component
  */
 const updateSearch = async (): Promise<void> => {
-  setSearch(localSearch.value);
   await debouncedTrackSearch(localSearch.value);
 };
 
