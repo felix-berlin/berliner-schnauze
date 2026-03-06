@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.26.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.26.0...v3.26.1) (2026-03-06)
+
+
+### Performance Improvements
+
+* remove unused setSearch import from SearchWords component ([72aac3f](https://github.com/felix-berlin/berliner-schnauze/commit/72aac3f0d2d6d9c0778bba92934a05e2c73316bf))
+
 # [3.26.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.25.0...v3.26.0) (2026-02-15)
 
 
