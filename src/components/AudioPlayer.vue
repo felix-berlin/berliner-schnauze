@@ -35,6 +35,10 @@ const audioButton = ref<HTMLButtonElement | null>(null);
 const progress = ref(0);
 
 let animationFrameId: null | number = null;
+const handleEnded = () => {
+  isPlaying.value = false;
+  progress.value = 0;
+};
 
 const fillStyle = computed(() => ({
   height: `${progress.value}%`,
@@ -42,7 +46,7 @@ const fillStyle = computed(() => ({
 
 const updateProgress = () => {
   if (audioFile && isPlaying.value) {
-    progress.value = (audioFile.currentTime / audioFile.duration) * 100;
+    progress.value = audioFile.duration ? (audioFile.currentTime / audioFile.duration) * 100 : 0;
     animationFrameId = requestAnimationFrame(updateProgress);
   }
 };
@@ -71,11 +75,7 @@ const togglePlayStop = async () => {
 };
 
 onMounted(() => {
-  audioFile?.addEventListener("timeupdate", updateProgress);
-  audioFile?.addEventListener("ended", () => {
-    isPlaying.value = false;
-    progress.value = 0; // Reset progress
-  });
+  audioFile?.addEventListener("ended", handleEnded);
 
   void nextTick(() => {
     audioButton.value?.focus();
@@ -83,11 +83,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  audioFile?.removeEventListener("timeupdate", updateProgress);
-  audioFile?.removeEventListener("ended", () => {
-    isPlaying.value = false;
-    progress.value = 0; // Reset progress
-  });
+  audioFile?.removeEventListener("ended", handleEnded);
 
   if (animationFrameId !== null) {
     cancelAnimationFrame(animationFrameId);
