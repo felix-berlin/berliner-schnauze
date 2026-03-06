@@ -4,48 +4,56 @@
 
 <!-- Block until theme class is set -->
 <script is:inline>
-  /**
-   * Check if dark theme is preferred or set by user
-   */
-  const isDarkTheme = () => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("darkMode")) {
-      return localStorage.getItem("darkMode");
-    }
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "true";
-    }
-    return "false";
+  const STORAGE_KEY = 'darkMode';
+  const DARK_CLASS = 'dark';
+
+  const getPreferredDarkMode = () => {
+    const persistedValue = localStorage.getItem(STORAGE_KEY);
+
+    if (persistedValue === 'true') return true;
+    if (persistedValue === 'false') return false;
+
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
   };
 
-  const createThemeColorMetaTag = () => {
-    // Set theme color immediately to prevent blinking
-    const themeColor = isDarkTheme() === "true" ? "#2b333b" : "#fad0b0";
-    const metaThemeColor = document.createElement("meta");
-    metaThemeColor.setAttribute("name", "theme-color");
-    metaThemeColor.setAttribute("content", themeColor);
-    document.head.appendChild(metaThemeColor);
-  };
+  const upsertThemeColorMeta = (targetDocument, isDark) => {
+    const themeColor = isDark ? '#2b333b' : '#fad0b0';
+    const metaThemeColor =
+      targetDocument.querySelector("meta[name='theme-color']") ||
+      targetDocument.createElement('meta');
 
-  /**
-   * Set dark theme class
-   */
-  const setDarkClass = () => {
-    const htmlClasses = document.documentElement.classList;
+    metaThemeColor.setAttribute('name', 'theme-color');
+    metaThemeColor.setAttribute('content', themeColor);
 
-    if (isDarkTheme() === "false") {
-      htmlClasses.remove("dark");
-    } else {
-      htmlClasses.add("dark");
+    if (!metaThemeColor.parentElement) {
+      targetDocument.head.appendChild(metaThemeColor);
     }
   };
 
-  setDarkClass();
-  createThemeColorMetaTag();
+  const applyThemeToDocument = (targetDocument) => {
+    const isDarkMode = getPreferredDarkMode();
 
-  localStorage.setItem("darkMode", isDarkTheme());
+    // Set class and native form controls color scheme before first paint.
+    targetDocument.documentElement.classList.toggle(DARK_CLASS, isDarkMode);
+    targetDocument.documentElement.style.colorScheme = isDarkMode ? 'dark' : 'light';
 
-  document.addEventListener("astro:after-swap", () => {
-    setDarkClass();
-    createThemeColorMetaTag();
+    upsertThemeColorMeta(targetDocument, isDarkMode);
+
+    if (localStorage.getItem(STORAGE_KEY) === null) {
+      localStorage.setItem(STORAGE_KEY, String(isDarkMode));
+    }
+  };
+
+  const applyTheme = () => applyThemeToDocument(document);
+
+  applyTheme();
+
+  document.addEventListener('astro:before-swap', (event) => {
+    const newDocument = event?.newDocument || event?.detail?.newDocument;
+    if (newDocument) {
+      applyThemeToDocument(newDocument);
+    }
   });
+
+  document.addEventListener('astro:after-swap', applyTheme);
 </script>

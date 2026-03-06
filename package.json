@@ -164,7 +164,6 @@
     "@vueuse/core": "^14.2.1",
     "astro": "^5.18.0",
     "astro-breadcrumbs": "^3.3.3",
-    "astro-capo": "^0.0.1",
     "astro-matomo": "^1.9.0",
     "compromise": "^14.15.0",
     "de-compromise": "^0.0.10",
