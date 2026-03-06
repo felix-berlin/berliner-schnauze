@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.26.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.26.1...v3.26.2) (2026-03-06)
+
+
+### Bug Fixes
+
+* **theme toggle:** prevent flickering when using darkmode; remove capo ([ebce1ca](https://github.com/felix-berlin/berliner-schnauze/commit/ebce1ca5b7b6b9c3a20767eaf4d70c4421760624))
+
 ## [3.26.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.26.0...v3.26.1) (2026-03-06)
 
 
