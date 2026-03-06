@@ -1,14 +1,10 @@
 import type { APIRoute } from "astro";
 
 import { fetchAllWords } from "@services/api.ts";
-import {
-  countLetters,
-  getWordType,
-  similarSoundingWords,
-  translateNlpTags,
-} from "@utils/wordHelper.ts";
+import { countLetters, getWordType, translateNlpTags } from "@utils/wordHelper.ts";
 import german from "hyphenation.de";
 import Hypher from "hypher";
+import natural from "natural";
 
 import type { BerlinerWord } from "@/gql/graphql.ts";
 
@@ -28,7 +24,7 @@ function extractWordTypes(wordTags: any): string[] {
   );
 }
 
-function makeOramaSearchIndex(node: BerlinerWord, allWords, similarWordsMap: Map<string, boolean>) {
+function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, boolean>) {
   const translations = Array.isArray(node.wordProperties?.translations)
     ? node.wordProperties.translations
         .map((t) => t?.translation)
@@ -51,17 +47,19 @@ function makeOramaSearchIndex(node: BerlinerWord, allWords, similarWordsMap: Map
   return {
     berlinerischWordTypes: wordTypes,
     berlinerWordId: node.berlinerWordId,
-    dateGmt: node.dateGmt,
-    modifiedGmt: node.modifiedGmt,
+    dateGmt: node.dateGmt ?? "",
+    dateTs: node.dateGmt ? Date.parse(node.dateGmt) : 0,
+    modifiedGmt: node.modifiedGmt ?? "",
+    modifiedTs: node.modifiedGmt ? Date.parse(node.modifiedGmt) : 0,
     slug: node.slug,
-    wordGroup: node.wordGroup,
+    wordGroup: node.wordGroup ?? "",
     wordProperties: {
       audioBerlinerisch: !!node.wordProperties?.berlinerischAudio,
       audioExamples:
         Array.isArray(node?.wordProperties?.examples) &&
         node.wordProperties.examples.some((e) => !!e?.exampleAudio?.length),
       berlinerisch,
-      berolinismus: node.wordProperties?.berolinismus,
+      berolinismus: !!node.wordProperties?.berolinismus,
       characterLength: berlinerisch.length,
       consonantsCount: consonants,
       multipleMeanings: !!node.wordProperties?.alternativeWords,
@@ -76,19 +74,31 @@ function makeOramaSearchIndex(node: BerlinerWord, allWords, similarWordsMap: Map
 export const GET: APIRoute = async () => {
   const allWords = await fetchAllWords();
 
-  // Precompute similar sounding words for all berlinerisch words
-  const similarWordsMap = new Map<string, boolean>();
+  // Precompute similar sounding words in O(n) by grouping identical SoundEx codes.
+  const soundEx = new natural.SoundEx();
+  const codeCounts = new Map<string, number>();
+
   for (const { node } of allWords) {
     const berlinerisch = node.wordProperties?.berlinerisch;
-    if (berlinerisch && !similarWordsMap.has(berlinerisch)) {
-      const similar = similarSoundingWords(allWords, berlinerisch).some((word) => word.isSimilar);
-      similarWordsMap.set(berlinerisch, similar);
-    }
+
+    if (!berlinerisch) continue;
+
+    const code = soundEx.process(berlinerisch);
+    codeCounts.set(code, (codeCounts.get(code) ?? 0) + 1);
   }
 
-  const oramaSearchIndex = allWords.map(({ node }) =>
-    makeOramaSearchIndex(node, allWords, similarWordsMap),
-  );
+  const similarWordsMap = new Map<string, boolean>();
+
+  for (const { node } of allWords) {
+    const berlinerisch = node.wordProperties?.berlinerisch;
+
+    if (!berlinerisch || similarWordsMap.has(berlinerisch)) continue;
+
+    const code = soundEx.process(berlinerisch);
+    similarWordsMap.set(berlinerisch, (codeCounts.get(code) ?? 0) > 1);
+  }
+
+  const oramaSearchIndex = allWords.map(({ node }) => makeOramaSearchIndex(node, similarWordsMap));
 
   return new Response(JSON.stringify(oramaSearchIndex));
 };

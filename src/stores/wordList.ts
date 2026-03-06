@@ -270,7 +270,9 @@ onMount($wordSearch, async () => {
 const wordSchema = {
   berlinerischWordTypes: "enum[]",
   dateGmt: "string",
+  dateTs: "number",
   modifiedGmt: "string",
+  modifiedTs: "number",
   wordGroup: "enum",
   wordProperties: {
     audioBerlinerisch: "boolean",
@@ -339,20 +341,14 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
 function getSortBy(wordSearch: WordList): SortByType {
   if (wordSearch.activeOrderCategory === "date") {
     return (a, b) => {
-      const aDate = new Date(a[2].dateGmt);
-      const bDate = new Date(b[2].dateGmt);
-      return wordSearch.dateOrder === "ASC"
-        ? aDate.getTime() - bDate.getTime()
-        : bDate.getTime() - aDate.getTime();
+      return wordSearch.dateOrder === "ASC" ? a[2].dateTs - b[2].dateTs : b[2].dateTs - a[2].dateTs;
     };
   }
   if (wordSearch.activeOrderCategory === "modifiedDate") {
     return (a, b) => {
-      const aDate = new Date(a[2].modifiedGmt);
-      const bDate = new Date(b[2].modifiedGmt);
       return wordSearch.modifiedDateOrder === "ASC"
-        ? aDate.getTime() - bDate.getTime()
-        : bDate.getTime() - aDate.getTime();
+        ? a[2].modifiedTs - b[2].modifiedTs
+        : b[2].modifiedTs - a[2].modifiedTs;
     };
   }
   return {
@@ -369,7 +365,9 @@ async function initOrama(words: OramaSearchIndex[]) {
         stemmer,
         stemmerSkipProperties: [
           "wordGroup",
+          "modifiedTs",
           "modifiedGmt",
+          "dateTs",
           "dateGmt",
           "wordProperties.berolinismus",
           "berlinerischWordTypes",
