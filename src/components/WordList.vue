@@ -34,7 +34,7 @@ import { $oramaSearchResults } from "@stores/index.ts";
 import { routeToWord } from "@utils/helpers.ts";
 import { onKeyStroke } from "@vueuse/core";
 import { VList, WindowVirtualizer } from "virtua/vue";
-import { computed, nextTick, ref, useTemplateRef, watchEffect } from "vue";
+import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 
 const {
   itemSize = 110,
@@ -51,7 +51,7 @@ const {
 const virtualizerComponent = useWindowVirtualizer ? WindowVirtualizer : VList;
 
 const oramaSearch = useStore($oramaSearchResults);
-const mutableOramaSearch = computed(() => oramaSearch.value?.hits?.map((hit) => hit) ?? []);
+const mutableOramaSearch = computed(() => oramaSearch.value?.hits ?? []);
 
 const activeIndex = ref(0);
 const resultRefs = ref<HTMLElement[]>([]);
@@ -68,8 +68,8 @@ const showActiveWithTimeout = () => {
   }, ACTIVE_TIMEOUT);
 };
 
-// Always clear refs array before each render cycle
-watchEffect(() => {
+// Clear refs when result data changes, not on every render side effect.
+watch(mutableOramaSearch, () => {
   resultRefs.value = [];
 });
 
