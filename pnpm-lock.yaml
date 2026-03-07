@@ -33,7 +33,7 @@ importers:
         version: 1.3.3(nanostores@1.1.1)
       '@nanostores/vue':
         specifier: ^1.0.1
-        version: 1.0.1(@nanostores/logger@1.0.0(nanostores@1.1.1))(@vue/devtools-api@8.0.7)(nanostores@1.1.1)(vue@3.5.29(typescript@5.9.3))
+        version: 1.0.1(@nanostores/logger@1.1.0(nanostores@1.1.1))(@vue/devtools-api@8.0.7)(nanostores@1.1.1)(vue@3.5.29(typescript@5.9.3))
       '@orama/orama':
         specifier: ^3.1.18
         version: 3.1.18
@@ -151,7 +151,7 @@ importers:
         version: 4.4.0(@types/node@25.3.5)(crossws@0.3.5)(eslint@10.0.3(jiti@2.6.1))(graphql@16.13.1)(typescript@5.9.3)
       '@nanostores/logger':
         specifier: ^1.0.0
-        version: 1.0.0(nanostores@1.1.1)
+        version: 1.1.0(nanostores@1.1.1)
       '@playform/inline':
         specifier: ^0.1.2
         version: 0.1.2(@types/node@25.3.5)(jiti@2.6.1)(rollup@2.79.2)(sass@1.97.3)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.2)
@@ -2395,8 +2395,8 @@ packages:
   '@mongodb-js/saslprep@1.4.6':
     resolution: {integrity: sha512-y+x3H1xBZd38n10NZF/rEBlvDOOMQ6LKUTHqr8R9VkJ+mmQOYtJFxIlkkK8fZrtOiL6VixbOBWMbZGBdal3Z1g==}
 
-  '@nanostores/logger@1.0.0':
-    resolution: {integrity: sha512-QPqkNJWKO9Ya9ne8TeKq8Sv+yZDbgFos5IMCj+mmDxUeUGDqtC7o+YStibECI2B2TnVNF/iuz/Kt3Q64RGJbOQ==}
+  '@nanostores/logger@1.1.0':
+    resolution: {integrity: sha512-p+wBEP5SNQFreL3DWwbITOC8mNUZxDNN3rz/7gDQeyrfuL3pqXOilRnr9wtYbt+FFVQ6U72fB3DtOOzFmLmB7w==}
     engines: {node: ^20.0.0 || >=22.0.0}
     peerDependencies:
       nanostores: ^0.10.0 || ^0.11.0 || ^1.0.0
@@ -11770,7 +11770,7 @@ snapshots:
     dependencies:
       sparse-bitfield: 3.0.3
 
-  '@nanostores/logger@1.0.0(nanostores@1.1.1)':
+  '@nanostores/logger@1.1.0(nanostores@1.1.1)':
     dependencies:
       nanostores: 1.1.1
 
@@ -11778,12 +11778,12 @@ snapshots:
     dependencies:
       nanostores: 1.1.1
 
-  '@nanostores/vue@1.0.1(@nanostores/logger@1.0.0(nanostores@1.1.1))(@vue/devtools-api@8.0.7)(nanostores@1.1.1)(vue@3.5.29(typescript@5.9.3))':
+  '@nanostores/vue@1.0.1(@nanostores/logger@1.1.0(nanostores@1.1.1))(@vue/devtools-api@8.0.7)(nanostores@1.1.1)(vue@3.5.29(typescript@5.9.3))':
     dependencies:
       nanostores: 1.1.1
       vue: 3.5.29(typescript@5.9.3)
     optionalDependencies:
-      '@nanostores/logger': 1.0.0(nanostores@1.1.1)
+      '@nanostores/logger': 1.1.0(nanostores@1.1.1)
       '@vue/devtools-api': 8.0.7
 
   '@napi-rs/wasm-runtime@1.1.0':
