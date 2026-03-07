@@ -42,5 +42,10 @@ describe("WordTypeFilter.vue", () => {
     expect(attrs.mode).toBe("multiple");
     expect(attrs.locale).toBe("de");
     expect(attrs.placeholder).toBe("Worttypen filtern");
+
+    const aria = multiselect.props("aria") as Record<string, string | undefined>;
+    expect(aria["aria-label"]).toBe("Worttypen filtern");
+    expect(aria["aria-multiselectable"]).toBeUndefined();
+    expect(aria["aria-placeholder"]).toBeUndefined();
   });
 });
