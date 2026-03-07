@@ -27,10 +27,8 @@
 import { useStore } from "@nanostores/vue";
 import { $isDarkMode, setDarkMode } from "@stores/index.ts";
 import { trackEvent } from "@utils/analytics";
-import { defineAsyncComponent } from "vue";
-
-const Moon = defineAsyncComponent(() => import("virtual:icons/lucide/moon"));
-const Sun = defineAsyncComponent(() => import("virtual:icons/lucide/sun"));
+import Moon from "virtual:icons/lucide/moon";
+import Sun from "virtual:icons/lucide/sun";
 
 interface ColorModeToggleProps {
   cssClasses?: string | string[];

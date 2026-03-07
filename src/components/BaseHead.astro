@@ -61,14 +61,12 @@ const canonicalURL = removeFileExtension(Astro.url.href);
 <link as='font' crossorigin href={BerlinItalic} rel='preload' type='font/woff2' />
 <link href='//cms.berliner-schnauze.wtf' rel='preconnect' />
 
-<script src='../plugins/sentryBrowser.ts'></script>
-
 <ClientRouter />
 
-<script src='/src/lib/unsupportedBrowser.ts'></script>
-
 {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
-<script src='/src/services/pwa.ts'></script>
+<script is:inline type='module'>
+  import '/src/plugins/baseHeadBootstrap.ts';
+</script>
 
 <!-- Favicon -->
 <link href='/favicons/favicon.ico' rel='icon' sizes='48x48' />

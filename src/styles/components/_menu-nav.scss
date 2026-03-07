@@ -5,6 +5,7 @@
 
 .c-menu-nav {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   grid-area: menu-nav;
   gap: vars.$spacer * 0.7;
@@ -15,6 +16,24 @@
 
     &:hover {
       --color-border: var(--color-icon);
+    }
+  }
+
+  &__item-button {
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    svg,
+    .u-icon-wrapper {
+      inline-size: 24px;
+      block-size: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
   }
 
