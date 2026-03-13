@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.27.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.26.2...v3.27.0) (2026-03-13)
+
+
+### Features
+
+* **deps:** upgrade to astro v6 ([3d70014](https://github.com/felix-berlin/berliner-schnauze/commit/3d70014e4017c28af03da7ca213e283974edf4c6))
+* test queuedRendering ([5a4a749](https://github.com/felix-berlin/berliner-schnauze/commit/5a4a749b01bdf355bf644c3aa1eb31b42c546959))
+
 ## [3.26.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.26.1...v3.26.2) (2026-03-06)
 
 
