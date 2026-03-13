@@ -151,6 +151,12 @@ export default defineConfig({
       }),
     },
   },
+  experimental: {
+    queuedRendering: {
+      enabled: true,
+      contentCache: true,
+    },
+  },
   integrations: [
     vue({
       appEntrypoint: "src/pages/_app",
