@@ -155,7 +155,7 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.57.0",
     "unplugin-icons": "^23.0.1",
-    "vite": "npm:rolldown-vite@latest",
+    "vite": "^8.0.0",
     "vite-plugin-graphql-loader": "^4.0.4",
     "vitest": "4.1.0",
     "vue-eslint-parser": "^10.4.0",
@@ -163,12 +163,11 @@
     "wrangler": "^4.73.0"
   },
   "engines": {
-    "node": ">=20.6.0"
+    "node": ">=22.12.0"
   },
   "packageManager": "pnpm@10.32.1",
   "pnpm": {
     "overrides": {
-      "vite": "npm:rolldown-vite@latest",
       "@vitejs/plugin-vue": "^6.0.5",
       "@vitejs/plugin-vue-jsx": "^5.1.5"
     },

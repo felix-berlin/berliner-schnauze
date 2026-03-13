@@ -8,6 +8,7 @@ import spotlightjs from "@spotlightjs/astro";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField } from "astro/config";
+import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
@@ -29,6 +30,11 @@ const visualizerPlugin = visualizer({
   gzipSize: true,
   brotliSize: true,
 });
+
+const sassAliases = {
+  "@sass-butler/": new URL("./node_modules/@felix_berlin/sass-butler/", import.meta.url),
+  "@styles/": new URL("./src/styles/", import.meta.url),
+};
 
 // https://astro.build/config
 export default defineConfig({
@@ -296,8 +302,10 @@ export default defineConfig({
     (await import("@playform/inline")).default(),
   ],
   vite: {
-    experimental: {
-      enableNativePlugin: false,
+    resolve: {
+      alias: {
+        "@styles": fileURLToPath(new URL("./src/styles", import.meta.url)),
+      },
     },
 
     plugins: [
@@ -329,6 +337,22 @@ export default defineConfig({
     css: {
       preprocessorMaxWorkers: true,
       transformer: "postcss",
+      preprocessorOptions: {
+        scss: {
+          importers: [
+            {
+              findFileUrl(url) {
+                for (const [prefix, base] of Object.entries(sassAliases)) {
+                  if (url.startsWith(prefix)) {
+                    return new URL(url.slice(prefix.length), base);
+                  }
+                }
+                return null;
+              },
+            },
+          ],
+        },
+      },
     },
 
     build: {
