@@ -2,23 +2,15 @@
 import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = T | null | undefined;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
   [_ in K]?: never;
 };
 export type Incremental<T> =
   | T
-  | {
-      [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
-    };
+  | { [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
@@ -10783,7 +10775,7 @@ export type EnqueuedStylesheetConnectionPageInfo = {
 /** The general setting type */
 export type GeneralSettings = {
   __typename?: "GeneralSettings";
-  /** Ein Zeitformat für alle datumsbasierten Zeichenfolgen. */
+  /** Ein Datumsformat für alle datumsbasierten Zeichenfolgen. */
   dateFormat?: Maybe<Scalars["String"]["output"]>;
   /** Website-Untertitel. */
   description?: Maybe<Scalars["String"]["output"]>;
@@ -19292,7 +19284,7 @@ export type UpdateSettingsInput = {
   discussionSettingsDefaultCommentStatus?: InputMaybe<Scalars["String"]["input"]>;
   /** Link-Benachrichtigungen von anderen Blogs (Pingbacks und Trackbacks) zu neuen Beiträgen erlauben. */
   discussionSettingsDefaultPingStatus?: InputMaybe<Scalars["String"]["input"]>;
-  /** Ein Zeitformat für alle datumsbasierten Zeichenfolgen. */
+  /** Ein Datumsformat für alle datumsbasierten Zeichenfolgen. */
   generalSettingsDateFormat?: InputMaybe<Scalars["String"]["input"]>;
   /** Website-Untertitel. */
   generalSettingsDescription?: InputMaybe<Scalars["String"]["input"]>;
@@ -20955,10 +20947,7 @@ export type PostTypeSeoFragmentFragment = {
   twitterTitle?: string | null;
   metaRobotsNofollow?: string | null;
   metaRobotsNoindex?: string | null;
-  opengraphImage?: {
-    __typename?: "MediaItem";
-    sourceUrl?: string | null;
-  } | null;
+  opengraphImage?: { __typename?: "MediaItem"; sourceUrl?: string | null } | null;
 } & { " $fragmentName"?: "PostTypeSeoFragmentFragment" };
 
 export type SendEmailMutationVariables = Exact<{
@@ -20992,9 +20981,7 @@ export type GetPagesBySlugsQuery = {
       content?: string | null;
       seo?:
         | ({ __typename?: "PostTypeSEO" } & {
-            " $fragmentRefs"?: {
-              PostTypeSeoFragmentFragment: PostTypeSeoFragmentFragment;
-            };
+            " $fragmentRefs"?: { PostTypeSeoFragmentFragment: PostTypeSeoFragmentFragment };
           })
         | null;
     }>;
@@ -21049,10 +21036,7 @@ export type GetAllWordsQuery = {
               gender?: string | null;
               audio?: {
                 __typename?: "AcfMediaItemConnectionEdge";
-                node: {
-                  __typename?: "MediaItem";
-                  mediaItemUrl?: string | null;
-                };
+                node: { __typename?: "MediaItem"; mediaItemUrl?: string | null };
               } | null;
             } | null> | null;
           } | null> | null;
@@ -21107,16 +21091,11 @@ export type GetAllWordsQuery = {
         } | null;
         berlinerischWordTypes?: {
           __typename?: "BerlinerWordToBerlinerischWordTypeConnection";
-          nodes: Array<{
-            __typename?: "BerlinerischWordType";
-            name?: string | null;
-          }>;
+          nodes: Array<{ __typename?: "BerlinerischWordType"; name?: string | null }>;
         } | null;
         seo?:
           | ({ __typename?: "PostTypeSEO" } & {
-              " $fragmentRefs"?: {
-                PostTypeSeoFragmentFragment: PostTypeSeoFragmentFragment;
-              };
+              " $fragmentRefs"?: { PostTypeSeoFragmentFragment: PostTypeSeoFragmentFragment };
             })
           | null;
       };
@@ -21148,10 +21127,7 @@ export type GetAllWordsLinksQuery = {
         __typename?: "BerlinerWord";
         slug?: string | null;
         wordGroup?: string | null;
-        wordProperties?: {
-          __typename?: "WordProperties";
-          berlinerisch?: string | null;
-        } | null;
+        wordProperties?: { __typename?: "WordProperties"; berlinerisch?: string | null } | null;
       };
     }>;
     pageInfo: {
@@ -21168,10 +21144,7 @@ export const PostTypeSeoFragmentFragmentDoc = {
     {
       kind: "FragmentDefinition",
       name: { kind: "Name", value: "PostTypeSeoFragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "PostTypeSEO" },
-      },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "PostTypeSEO" } },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
@@ -21181,25 +21154,13 @@ export const PostTypeSeoFragmentFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "metaDesc" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphSiteName" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphAuthor" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphDescription" },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphPublisher" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "opengraphDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublisher" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphTitle" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphType" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphUrl" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphPublishedTime" },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphModifiedTime" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublishedTime" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphModifiedTime" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "opengraphImage" },
@@ -21208,15 +21169,9 @@ export const PostTypeSeoFragmentFragmentDoc = {
               selections: [{ kind: "Field", name: { kind: "Name", value: "sourceUrl" } }],
             },
           },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "twitterDescription" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "twitterDescription" } },
           { kind: "Field", name: { kind: "Name", value: "twitterTitle" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "metaRobotsNofollow" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
           { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
         ],
       },
@@ -21233,14 +21188,8 @@ export const SendEmailDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "input" },
-          },
-          type: {
-            kind: "NamedType",
-            name: { kind: "Name", value: "SendEmailInput" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "SendEmailInput" } },
           defaultValue: { kind: "ObjectValue", fields: [] },
         },
       ],
@@ -21254,10 +21203,7 @@ export const SendEmailDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "input" },
-                },
+                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
               },
             ],
             selectionSet: {
@@ -21284,16 +21230,10 @@ export const GetPagesBySlugsDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "slugs" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "slugs" } },
           type: {
             kind: "ListType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "String" },
-            },
+            type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
           },
           defaultValue: { kind: "ListValue", values: [] },
         },
@@ -21314,10 +21254,7 @@ export const GetPagesBySlugsDocument = {
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "nameIn" },
-                      value: {
-                        kind: "Variable",
-                        name: { kind: "Name", value: "slugs" },
-                      },
+                      value: { kind: "Variable", name: { kind: "Name", value: "slugs" } },
                     },
                   ],
                 },
@@ -21334,10 +21271,7 @@ export const GetPagesBySlugsDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "slug" } },
                       { kind: "Field", name: { kind: "Name", value: "title" } },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "content" },
-                      },
+                      { kind: "Field", name: { kind: "Name", value: "content" } },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "seo" },
@@ -21346,10 +21280,7 @@ export const GetPagesBySlugsDocument = {
                           selections: [
                             {
                               kind: "FragmentSpread",
-                              name: {
-                                kind: "Name",
-                                value: "PostTypeSeoFragment",
-                              },
+                              name: { kind: "Name", value: "PostTypeSeoFragment" },
                             },
                           ],
                         },
@@ -21366,10 +21297,7 @@ export const GetPagesBySlugsDocument = {
     {
       kind: "FragmentDefinition",
       name: { kind: "Name", value: "PostTypeSeoFragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "PostTypeSEO" },
-      },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "PostTypeSEO" } },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
@@ -21379,25 +21307,13 @@ export const GetPagesBySlugsDocument = {
           { kind: "Field", name: { kind: "Name", value: "metaDesc" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphSiteName" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphAuthor" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphDescription" },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphPublisher" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "opengraphDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublisher" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphTitle" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphType" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphUrl" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphPublishedTime" },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphModifiedTime" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublishedTime" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphModifiedTime" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "opengraphImage" },
@@ -21406,15 +21322,9 @@ export const GetPagesBySlugsDocument = {
               selections: [{ kind: "Field", name: { kind: "Name", value: "sourceUrl" } }],
             },
           },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "twitterDescription" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "twitterDescription" } },
           { kind: "Field", name: { kind: "Name", value: "twitterTitle" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "metaRobotsNofollow" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
           { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
         ],
       },
@@ -21431,28 +21341,19 @@ export const GetAllWordsDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "after" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
           defaultValue: { kind: "StringValue", value: "", block: false },
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "first" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
           type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
           defaultValue: { kind: "IntValue", value: "100" },
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "field" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "field" } },
           type: {
             kind: "NamedType",
             name: { kind: "Name", value: "PostObjectsConnectionOrderbyEnum" },
@@ -21461,28 +21362,16 @@ export const GetAllWordsDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "order" },
-          },
-          type: {
-            kind: "NamedType",
-            name: { kind: "Name", value: "OrderEnum" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "order" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "OrderEnum" } },
           defaultValue: { kind: "EnumValue", value: "ASC" },
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "stati" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "stati" } },
           type: {
             kind: "ListType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "PostStatusEnum" },
-            },
+            type: { kind: "NamedType", name: { kind: "Name", value: "PostStatusEnum" } },
           },
           defaultValue: { kind: "EnumValue", value: "PUBLISH" },
         },
@@ -21497,18 +21386,12 @@ export const GetAllWordsDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "first" },
-                },
+                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "after" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "after" },
-                },
+                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
               },
               {
                 kind: "Argument",
@@ -21525,18 +21408,12 @@ export const GetAllWordsDocument = {
                           {
                             kind: "ObjectField",
                             name: { kind: "Name", value: "field" },
-                            value: {
-                              kind: "Variable",
-                              name: { kind: "Name", value: "field" },
-                            },
+                            value: { kind: "Variable", name: { kind: "Name", value: "field" } },
                           },
                           {
                             kind: "ObjectField",
                             name: { kind: "Name", value: "order" },
-                            value: {
-                              kind: "Variable",
-                              name: { kind: "Name", value: "order" },
-                            },
+                            value: { kind: "Variable", name: { kind: "Name", value: "order" } },
                           },
                         ],
                       },
@@ -21544,10 +21421,7 @@ export const GetAllWordsDocument = {
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "stati" },
-                      value: {
-                        kind: "Variable",
-                        name: { kind: "Name", value: "stati" },
-                      },
+                      value: { kind: "Variable", name: { kind: "Name", value: "stati" } },
                     },
                   ],
                 },
@@ -21568,84 +21442,42 @@ export const GetAllWordsDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "id" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "slug" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "title" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "wordGroup" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "dateGmt" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "modifiedGmt" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "berlinerWordId" },
-                            },
+                            { kind: "Field", name: { kind: "Name", value: "id" } },
+                            { kind: "Field", name: { kind: "Name", value: "slug" } },
+                            { kind: "Field", name: { kind: "Name", value: "title" } },
+                            { kind: "Field", name: { kind: "Name", value: "wordGroup" } },
+                            { kind: "Field", name: { kind: "Name", value: "dateGmt" } },
+                            { kind: "Field", name: { kind: "Name", value: "modifiedGmt" } },
+                            { kind: "Field", name: { kind: "Name", value: "berlinerWordId" } },
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "wordProperties" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
+                                  { kind: "Field", name: { kind: "Name", value: "article" } },
+                                  { kind: "Field", name: { kind: "Name", value: "berlinerisch" } },
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "article" },
-                                  },
-                                  {
-                                    kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "berlinerisch",
-                                    },
-                                  },
-                                  {
-                                    kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "berlinerischAudio",
-                                    },
+                                    name: { kind: "Name", value: "berlinerischAudio" },
                                     selectionSet: {
                                       kind: "SelectionSet",
                                       selections: [
                                         {
                                           kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "audio",
-                                          },
+                                          name: { kind: "Name", value: "audio" },
                                           selectionSet: {
                                             kind: "SelectionSet",
                                             selections: [
                                               {
                                                 kind: "Field",
-                                                name: {
-                                                  kind: "Name",
-                                                  value: "node",
-                                                },
+                                                name: { kind: "Name", value: "node" },
                                                 selectionSet: {
                                                   kind: "SelectionSet",
                                                   selections: [
                                                     {
                                                       kind: "Field",
-                                                      name: {
-                                                        kind: "Name",
-                                                        value: "mediaItemUrl",
-                                                      },
+                                                      name: { kind: "Name", value: "mediaItemUrl" },
                                                     },
                                                   ],
                                                 },
@@ -21653,78 +21485,42 @@ export const GetAllWordsDocument = {
                                             ],
                                           },
                                         },
-                                        {
-                                          kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "gender",
-                                          },
-                                        },
+                                        { kind: "Field", name: { kind: "Name", value: "gender" } },
                                       ],
                                     },
                                   },
-                                  {
-                                    kind: "Field",
-                                    name: { kind: "Name", value: "learnMore" },
-                                  },
-                                  {
-                                    kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "berolinismus",
-                                    },
-                                  },
+                                  { kind: "Field", name: { kind: "Name", value: "learnMore" } },
+                                  { kind: "Field", name: { kind: "Name", value: "berolinismus" } },
                                   {
                                     kind: "Field",
                                     name: { kind: "Name", value: "examples" },
                                     selectionSet: {
                                       kind: "SelectionSet",
                                       selections: [
+                                        { kind: "Field", name: { kind: "Name", value: "example" } },
                                         {
                                           kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "example",
-                                          },
+                                          name: { kind: "Name", value: "exampleExplanation" },
                                         },
                                         {
                                           kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "exampleExplanation",
-                                          },
-                                        },
-                                        {
-                                          kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "exampleAudio",
-                                          },
+                                          name: { kind: "Name", value: "exampleAudio" },
                                           selectionSet: {
                                             kind: "SelectionSet",
                                             selections: [
                                               {
                                                 kind: "Field",
-                                                name: {
-                                                  kind: "Name",
-                                                  value: "gender",
-                                                },
+                                                name: { kind: "Name", value: "gender" },
                                               },
                                               {
                                                 kind: "Field",
-                                                name: {
-                                                  kind: "Name",
-                                                  value: "audio",
-                                                },
+                                                name: { kind: "Name", value: "audio" },
                                                 selectionSet: {
                                                   kind: "SelectionSet",
                                                   selections: [
                                                     {
                                                       kind: "Field",
-                                                      name: {
-                                                        kind: "Name",
-                                                        value: "node",
-                                                      },
+                                                      name: { kind: "Name", value: "node" },
                                                       selectionSet: {
                                                         kind: "SelectionSet",
                                                         selections: [
@@ -21749,57 +21545,39 @@ export const GetAllWordsDocument = {
                                   },
                                   {
                                     kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "translations",
-                                    },
+                                    name: { kind: "Name", value: "translations" },
                                     selectionSet: {
                                       kind: "SelectionSet",
                                       selections: [
                                         {
                                           kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "translation",
-                                          },
+                                          name: { kind: "Name", value: "translation" },
                                         },
                                       ],
                                     },
                                   },
                                   {
                                     kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "alternativeWords",
-                                    },
+                                    name: { kind: "Name", value: "alternativeWords" },
                                     selectionSet: {
                                       kind: "SelectionSet",
                                       selections: [
                                         {
                                           kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "alternativeWord",
-                                          },
+                                          name: { kind: "Name", value: "alternativeWord" },
                                         },
                                       ],
                                     },
                                   },
                                   {
                                     kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "relatedWords",
-                                    },
+                                    name: { kind: "Name", value: "relatedWords" },
                                     selectionSet: {
                                       kind: "SelectionSet",
                                       selections: [
                                         {
                                           kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "nodes",
-                                          },
+                                          name: { kind: "Name", value: "nodes" },
                                           selectionSet: {
                                             kind: "SelectionSet",
                                             selections: [
@@ -21807,20 +21585,14 @@ export const GetAllWordsDocument = {
                                                 kind: "InlineFragment",
                                                 typeCondition: {
                                                   kind: "NamedType",
-                                                  name: {
-                                                    kind: "Name",
-                                                    value: "BerlinerWord",
-                                                  },
+                                                  name: { kind: "Name", value: "BerlinerWord" },
                                                 },
                                                 selectionSet: {
                                                   kind: "SelectionSet",
                                                   selections: [
                                                     {
                                                       kind: "Field",
-                                                      name: {
-                                                        kind: "Name",
-                                                        value: "id",
-                                                      },
+                                                      name: { kind: "Name", value: "id" },
                                                     },
                                                     {
                                                       kind: "Field",
@@ -21843,10 +21615,7 @@ export const GetAllWordsDocument = {
                                                     },
                                                     {
                                                       kind: "Field",
-                                                      name: {
-                                                        kind: "Name",
-                                                        value: "slug",
-                                                      },
+                                                      name: { kind: "Name", value: "slug" },
                                                     },
                                                   ],
                                                 },
@@ -21859,41 +21628,23 @@ export const GetAllWordsDocument = {
                                   },
                                   {
                                     kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "wikimediaFiles",
-                                    },
+                                    name: { kind: "Name", value: "wikimediaFiles" },
                                     selectionSet: {
                                       kind: "SelectionSet",
                                       selections: [
                                         {
                                           kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "wikimediaFile",
-                                          },
+                                          name: { kind: "Name", value: "wikimediaFile" },
                                         },
                                         {
                                           kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "description",
-                                          },
+                                          name: { kind: "Name", value: "description" },
                                         },
-                                        {
-                                          kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "caption",
-                                          },
-                                        },
+                                        { kind: "Field", name: { kind: "Name", value: "caption" } },
                                       ],
                                     },
                                   },
-                                  {
-                                    kind: "Field",
-                                    name: { kind: "Name", value: "infoText" },
-                                  },
+                                  { kind: "Field", name: { kind: "Name", value: "infoText" } },
                                   {
                                     kind: "Field",
                                     name: { kind: "Name", value: "images" },
@@ -21902,90 +21653,54 @@ export const GetAllWordsDocument = {
                                       selections: [
                                         {
                                           kind: "Field",
-                                          name: {
-                                            kind: "Name",
-                                            value: "nodes",
-                                          },
+                                          name: { kind: "Name", value: "nodes" },
                                           selectionSet: {
                                             kind: "SelectionSet",
                                             selections: [
                                               {
                                                 kind: "Field",
-                                                name: {
-                                                  kind: "Name",
-                                                  value: "sourceUrl",
-                                                },
+                                                name: { kind: "Name", value: "sourceUrl" },
                                               },
                                               {
                                                 kind: "Field",
-                                                name: {
-                                                  kind: "Name",
-                                                  value: "mediaDetails",
-                                                },
+                                                name: { kind: "Name", value: "mediaDetails" },
                                                 selectionSet: {
                                                   kind: "SelectionSet",
                                                   selections: [
                                                     {
                                                       kind: "Field",
-                                                      name: {
-                                                        kind: "Name",
-                                                        value: "height",
-                                                      },
+                                                      name: { kind: "Name", value: "height" },
                                                     },
                                                     {
                                                       kind: "Field",
-                                                      name: {
-                                                        kind: "Name",
-                                                        value: "width",
-                                                      },
+                                                      name: { kind: "Name", value: "width" },
                                                     },
                                                   ],
                                                 },
                                               },
                                               {
                                                 kind: "Field",
-                                                name: {
-                                                  kind: "Name",
-                                                  value: "caption",
-                                                },
+                                                name: { kind: "Name", value: "caption" },
                                                 arguments: [
                                                   {
                                                     kind: "Argument",
-                                                    name: {
-                                                      kind: "Name",
-                                                      value: "format",
-                                                    },
-                                                    value: {
-                                                      kind: "EnumValue",
-                                                      value: "RENDERED",
-                                                    },
+                                                    name: { kind: "Name", value: "format" },
+                                                    value: { kind: "EnumValue", value: "RENDERED" },
                                                   },
                                                 ],
                                               },
                                               {
                                                 kind: "Field",
-                                                name: {
-                                                  kind: "Name",
-                                                  value: "altText",
-                                                },
+                                                name: { kind: "Name", value: "altText" },
                                               },
                                               {
                                                 kind: "Field",
-                                                name: {
-                                                  kind: "Name",
-                                                  value: "description",
-                                                },
+                                                name: { kind: "Name", value: "description" },
                                                 arguments: [
                                                   {
                                                     kind: "Argument",
-                                                    name: {
-                                                      kind: "Name",
-                                                      value: "format",
-                                                    },
-                                                    value: {
-                                                      kind: "EnumValue",
-                                                      value: "RENDERED",
-                                                    },
+                                                    name: { kind: "Name", value: "format" },
+                                                    value: { kind: "EnumValue", value: "RENDERED" },
                                                   },
                                                 ],
                                               },
@@ -22000,10 +21715,7 @@ export const GetAllWordsDocument = {
                             },
                             {
                               kind: "Field",
-                              name: {
-                                kind: "Name",
-                                value: "berlinerischWordTypes",
-                              },
+                              name: { kind: "Name", value: "berlinerischWordTypes" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
@@ -22013,10 +21725,7 @@ export const GetAllWordsDocument = {
                                     selectionSet: {
                                       kind: "SelectionSet",
                                       selections: [
-                                        {
-                                          kind: "Field",
-                                          name: { kind: "Name", value: "name" },
-                                        },
+                                        { kind: "Field", name: { kind: "Name", value: "name" } },
                                       ],
                                     },
                                   },
@@ -22031,10 +21740,7 @@ export const GetAllWordsDocument = {
                                 selections: [
                                   {
                                     kind: "FragmentSpread",
-                                    name: {
-                                      kind: "Name",
-                                      value: "PostTypeSeoFragment",
-                                    },
+                                    name: { kind: "Name", value: "PostTypeSeoFragment" },
                                   },
                                 ],
                               },
@@ -22042,10 +21748,7 @@ export const GetAllWordsDocument = {
                           ],
                         },
                       },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "cursor" },
-                      },
+                      { kind: "Field", name: { kind: "Name", value: "cursor" } },
                     ],
                   },
                 },
@@ -22055,14 +21758,8 @@ export const GetAllWordsDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endCursor" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "hasNextPage" },
-                      },
+                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
                     ],
                   },
                 },
@@ -22075,10 +21772,7 @@ export const GetAllWordsDocument = {
     {
       kind: "FragmentDefinition",
       name: { kind: "Name", value: "PostTypeSeoFragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "PostTypeSEO" },
-      },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "PostTypeSEO" } },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
@@ -22088,25 +21782,13 @@ export const GetAllWordsDocument = {
           { kind: "Field", name: { kind: "Name", value: "metaDesc" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphSiteName" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphAuthor" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphDescription" },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphPublisher" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "opengraphDescription" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublisher" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphTitle" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphType" } },
           { kind: "Field", name: { kind: "Name", value: "opengraphUrl" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphPublishedTime" },
-          },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "opengraphModifiedTime" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "opengraphPublishedTime" } },
+          { kind: "Field", name: { kind: "Name", value: "opengraphModifiedTime" } },
           {
             kind: "Field",
             name: { kind: "Name", value: "opengraphImage" },
@@ -22115,15 +21797,9 @@ export const GetAllWordsDocument = {
               selections: [{ kind: "Field", name: { kind: "Name", value: "sourceUrl" } }],
             },
           },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "twitterDescription" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "twitterDescription" } },
           { kind: "Field", name: { kind: "Name", value: "twitterTitle" } },
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "metaRobotsNofollow" },
-          },
+          { kind: "Field", name: { kind: "Name", value: "metaRobotsNofollow" } },
           { kind: "Field", name: { kind: "Name", value: "metaRobotsNoindex" } },
         ],
       },
@@ -22140,28 +21816,19 @@ export const GetAllWordsLinksDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "after" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
           defaultValue: { kind: "StringValue", value: "", block: false },
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "first" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
           type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
           defaultValue: { kind: "IntValue", value: "100" },
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "field" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "field" } },
           type: {
             kind: "NamedType",
             name: { kind: "Name", value: "PostObjectsConnectionOrderbyEnum" },
@@ -22170,28 +21837,16 @@ export const GetAllWordsLinksDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "order" },
-          },
-          type: {
-            kind: "NamedType",
-            name: { kind: "Name", value: "OrderEnum" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "order" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "OrderEnum" } },
           defaultValue: { kind: "EnumValue", value: "ASC" },
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "stati" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "stati" } },
           type: {
             kind: "ListType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "PostStatusEnum" },
-            },
+            type: { kind: "NamedType", name: { kind: "Name", value: "PostStatusEnum" } },
           },
           defaultValue: { kind: "EnumValue", value: "PUBLISH" },
         },
@@ -22206,18 +21861,12 @@ export const GetAllWordsLinksDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "first" },
-                },
+                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "after" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "after" },
-                },
+                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
               },
               {
                 kind: "Argument",
@@ -22234,18 +21883,12 @@ export const GetAllWordsLinksDocument = {
                           {
                             kind: "ObjectField",
                             name: { kind: "Name", value: "field" },
-                            value: {
-                              kind: "Variable",
-                              name: { kind: "Name", value: "field" },
-                            },
+                            value: { kind: "Variable", name: { kind: "Name", value: "field" } },
                           },
                           {
                             kind: "ObjectField",
                             name: { kind: "Name", value: "order" },
-                            value: {
-                              kind: "Variable",
-                              name: { kind: "Name", value: "order" },
-                            },
+                            value: { kind: "Variable", name: { kind: "Name", value: "order" } },
                           },
                         ],
                       },
@@ -22253,10 +21896,7 @@ export const GetAllWordsLinksDocument = {
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "stati" },
-                      value: {
-                        kind: "Variable",
-                        name: { kind: "Name", value: "stati" },
-                      },
+                      value: { kind: "Variable", name: { kind: "Name", value: "stati" } },
                     },
                   ],
                 },
@@ -22277,37 +21917,22 @@ export const GetAllWordsLinksDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "slug" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "wordGroup" },
-                            },
+                            { kind: "Field", name: { kind: "Name", value: "slug" } },
+                            { kind: "Field", name: { kind: "Name", value: "wordGroup" } },
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "wordProperties" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
-                                  {
-                                    kind: "Field",
-                                    name: {
-                                      kind: "Name",
-                                      value: "berlinerisch",
-                                    },
-                                  },
+                                  { kind: "Field", name: { kind: "Name", value: "berlinerisch" } },
                                 ],
                               },
                             },
                           ],
                         },
                       },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "cursor" },
-                      },
+                      { kind: "Field", name: { kind: "Name", value: "cursor" } },
                     ],
                   },
                 },
@@ -22317,14 +21942,8 @@ export const GetAllWordsLinksDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "endCursor" },
-                      },
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "hasNextPage" },
-                      },
+                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
                     ],
                   },
                 },

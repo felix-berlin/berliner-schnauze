@@ -1,7 +1,6 @@
 import WordSuggestHint from "@components/WordSuggestHint.vue";
 import * as modalStore from "@stores/modal.ts";
 import { mount } from "@vue/test-utils";
-import { atom, map } from "nanostores";
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 
 // Mock the stores
@@ -9,12 +8,15 @@ vi.mock("@stores/modal.ts", () => ({
   open: vi.fn(),
 }));
 
-vi.mock("@stores/wordList.ts", () => ({
-  $wordSearch: map({
-    search: "",
-    filters: {},
-  }),
-}));
+vi.mock("@stores/wordList.ts", async () => {
+  const { map } = await import("nanostores");
+  return {
+    $wordSearch: map({
+      search: "",
+      filters: {},
+    }),
+  };
+});
 
 // Mock the icon component
 vi.mock("virtual:icons/lucide/plus", () => ({

@@ -8,6 +8,9 @@ export default getViteConfig(
       globals: true,
       environment: "jsdom",
       setupFiles: ["src/tests/setup.ts", "@vitest/web-worker"],
+      outputFile: {
+        junit: "./tests/unit/junit-report.xml",
+      },
       coverage: {
         include: ["src/**/*.{js,jsx,ts,tsx,vue,astro}"],
         exclude: [
