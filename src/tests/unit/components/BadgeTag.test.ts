@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { mount } from "@vue/test-utils";
 import BadgeTag from "@components/BadgeTag.vue";
+import { mount } from "@vue/test-utils";
+import { describe, it, expect } from "vitest";
 
 describe("BadgeTag.vue", () => {
   it("renders slot content when passed", () => {

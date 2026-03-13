@@ -1,6 +1,6 @@
+import ScrollToTop from "@components/ScrollToTop.vue";
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import ScrollToTop from "@components/ScrollToTop.vue";
 
 describe("ScrollToTop.vue", () => {
   let intersectionObserverMock: any;
@@ -52,6 +52,9 @@ describe("ScrollToTop.vue", () => {
     window.scrollTo = vi.fn();
 
     await wrapper.find("button").trigger("click");
-    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+    expect(window.scrollTo).toHaveBeenCalledWith({
+      top: 0,
+      behavior: "smooth",
+    });
   });
 });

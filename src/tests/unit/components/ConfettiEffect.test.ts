@@ -1,6 +1,6 @@
+import ConfettiEffect from "@components/ConfettiEffect.vue";
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
-import ConfettiEffect from "@components/ConfettiEffect.vue";
 
 describe("ConfettiEffect.vue", () => {
   it("renders the correct number of pieces when passed", () => {

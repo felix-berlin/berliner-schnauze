@@ -1,9 +1,9 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import SortWordsBy from "@components/filter/SortWordsBy.vue";
+import * as store from "@stores/index.ts";
+import { mount } from "@vue/test-utils";
 import SortAsc from "virtual:icons/lucide/sort-asc";
 import SortDesc from "virtual:icons/lucide/sort-desc";
-import * as store from "@stores/index.ts";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 globalThis.fetch = vi.fn(() =>
   Promise.resolve({

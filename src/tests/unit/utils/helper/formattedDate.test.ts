@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { formattedDate } from "@utils/helpers";
+import { describe, it, expect } from "vitest";
 
 describe("formattedDate", () => {
   it("should return undefined if no date is provided", () => {

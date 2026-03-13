@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { checkObjectValueLength } from "@utils/helpers";
+import { describe, it, expect } from "vitest";
 
 describe("checkObjectValueLength", () => {
   it("should return true if all values in the object have a length of 0", () => {

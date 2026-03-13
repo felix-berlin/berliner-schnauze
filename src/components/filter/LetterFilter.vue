@@ -20,7 +20,9 @@
           :aria-label="`Filter nach Buchstabe ${letter}`"
           type="button"
           class="c-letter-filter__button c-button c-button--filter"
-          :class="{ 'is-current': letter === wordSearchStore.activeLetterFilter }"
+          :class="{
+            'is-current': letter === wordSearchStore.activeLetterFilter,
+          }"
           :title="`Filter nach Buchstabe ${letter}`"
           @click="setLetterFilter(letter!)"
         >

@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { coloredConsonantsAndVowels } from "@utils/wordHelper";
+import { describe, it, expect } from "vitest";
 
 describe("coloredConsonantsAndVowels", () => {
   it("should correctly color vowels and consonants", () => {

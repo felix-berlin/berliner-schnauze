@@ -1,8 +1,8 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { atom, map } from "nanostores";
 import WordSuggestHint from "@components/WordSuggestHint.vue";
 import * as modalStore from "@stores/modal.ts";
+import { mount } from "@vue/test-utils";
+import { atom, map } from "nanostores";
+import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 
 // Mock the stores
 vi.mock("@stores/modal.ts", () => ({

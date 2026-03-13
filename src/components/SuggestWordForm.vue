@@ -217,7 +217,10 @@ const sendMail = async () => {
       const sent = data?.sendEmail?.sent;
 
       if (sent) {
-        createToastNotify({ message: "Dein Wortvorschlag wurde versandt", status: "success" });
+        createToastNotify({
+          message: "Dein Wortvorschlag wurde versandt",
+          status: "success",
+        });
 
         trackEvent("Form", "Send", "Word Suggestion");
 
@@ -257,7 +260,7 @@ const resetForm = (): void => {
  *
  * @return  {}          returns object with falsy values
  */
-const convertObjectKeysTo = <T,>(
+const convertObjectKeysTo = <T>(
   object: Record<string, T | undefined>,
   to: T,
 ): Record<string, T> => {

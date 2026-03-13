@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { countLetters } from "@utils/wordHelper";
+import { describe, it, expect } from "vitest";
 
 describe("countLetters", () => {
   it("should correctly count vowels and consonants in a word", () => {

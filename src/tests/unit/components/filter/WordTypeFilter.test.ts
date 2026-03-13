@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
-import { shallowMount, type VueWrapper } from "@vue/test-utils";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
+import { shallowMount, type VueWrapper } from "@vue/test-utils";
+import { describe, it, expect, vi } from "vitest";
 
 // Mock analytics
 vi.mock("@utils/analytics", () => ({

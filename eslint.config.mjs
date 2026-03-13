@@ -1,15 +1,15 @@
 import eslint from "@eslint/js";
-import tseslint from "typescript-eslint";
-import eslintPluginAstro from "eslint-plugin-astro";
+import graphqlPlugin from "@graphql-eslint/eslint-plugin";
+import tsEslintParser from "@typescript-eslint/parser";
 import astroEslintParser from "astro-eslint-parser";
+import eslintPluginAstro from "eslint-plugin-astro";
 import jsxA11y from "eslint-plugin-jsx-a11y";
+import perfectionist from "eslint-plugin-perfectionist";
 import pluginVue from "eslint-plugin-vue";
 import pluginVueA11y from "eslint-plugin-vuejs-accessibility";
-import tsEslintParser from "@typescript-eslint/parser";
-import vueParser from "vue-eslint-parser";
 import url from "node:url";
-import graphqlPlugin from "@graphql-eslint/eslint-plugin";
-import perfectionist from "eslint-plugin-perfectionist";
+import tseslint from "typescript-eslint";
+import vueParser from "vue-eslint-parser";
 
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 

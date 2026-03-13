@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
-import { mount } from "@vue/test-utils";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
+import { mount } from "@vue/test-utils";
+import { describe, it, expect, vi } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@nanostores/vue", () => ({

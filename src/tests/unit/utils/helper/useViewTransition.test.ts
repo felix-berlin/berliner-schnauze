@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { useViewTransition } from "@utils/helpers";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
 describe("useViewTransition", () => {
   let fn;

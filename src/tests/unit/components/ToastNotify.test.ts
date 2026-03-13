@@ -1,6 +1,6 @@
+import ToastNotify from "@components/toast/ToastNotify.vue";
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach } from "vitest";
-import ToastNotify from "@components/toast/ToastNotify.vue";
 
 describe("ToastNotify.vue", () => {
   let wrapper;

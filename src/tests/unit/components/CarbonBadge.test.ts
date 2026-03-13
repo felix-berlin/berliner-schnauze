@@ -1,6 +1,6 @@
+import CarbonBadge from "@components/CarbonBadge.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, test } from "vitest";
-import CarbonBadge from "@components/CarbonBadge.vue";
 
 describe("CarbonBadge.vue", () => {
   test("renders default props correctly", () => {

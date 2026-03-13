@@ -38,8 +38,16 @@ const options = reactive([
   },
   {
     sorts: [
-      { category: "modifiedDate", name: "zuletzt bearbeitet (neueste zuerst)", sort: "DESC" },
-      { category: "modifiedDate", name: "zuletzt bearbeitet (älteste zuerst)", sort: "ASC" },
+      {
+        category: "modifiedDate",
+        name: "zuletzt bearbeitet (neueste zuerst)",
+        sort: "DESC",
+      },
+      {
+        category: "modifiedDate",
+        name: "zuletzt bearbeitet (älteste zuerst)",
+        sort: "ASC",
+      },
     ],
     sortType: "Änderungsdatum",
   },

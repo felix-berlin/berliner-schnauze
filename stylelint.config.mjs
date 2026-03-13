@@ -17,11 +17,7 @@ export default {
     "at-rule-empty-line-before": [
       "always",
       {
-        except: [
-          "after-same-name",
-          "blockless-after-blockless",
-          "first-nested",
-        ],
+        except: ["after-same-name", "blockless-after-blockless", "first-nested"],
         ignore: ["after-comment"],
         ignoreAtRules: ["else"],
       },

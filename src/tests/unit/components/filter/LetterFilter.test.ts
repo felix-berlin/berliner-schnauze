@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mount, VueWrapper } from "@vue/test-utils";
 import LetterFilter from "@components/filter/LetterFilter.vue";
-import { nextTick } from "vue";
-import { $wordSearch, setLetterFilter } from "@stores/index.ts";
 import { useStore } from "@nanostores/vue";
+import { $wordSearch, setLetterFilter } from "@stores/index.ts";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { nextTick } from "vue";
 
 vi.mock("@nanostores/vue", () => ({
   useStore: () => ({

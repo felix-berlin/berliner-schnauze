@@ -1,9 +1,9 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, beforeEach, vi } from "vitest";
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import { useStore } from "@nanostores/vue";
 import { $wordOfTheDay } from "@stores/index.ts";
+import { mount } from "@vue/test-utils";
 import Crown from "virtual:icons/lucide/crown";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
 vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(),

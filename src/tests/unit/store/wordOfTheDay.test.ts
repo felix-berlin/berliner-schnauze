@@ -1,13 +1,13 @@
-import { describe, it, expect, afterEach, beforeAll } from "vitest";
-import { JSDOM } from "jsdom";
-import { cleanStores, keepMount, allTasks } from "nanostores";
-import { $wordOfTheDay, getWordOfTheDay } from "@stores/index.ts";
 import {
   useTestStorageEngine,
   setTestStorageKey,
   cleanTestStorage,
   getTestStorage,
 } from "@nanostores/persistent";
+import { $wordOfTheDay, getWordOfTheDay } from "@stores/index.ts";
+import { JSDOM } from "jsdom";
+import { cleanStores, keepMount, allTasks } from "nanostores";
+import { describe, it, expect, afterEach, beforeAll } from "vitest";
 
 describe("Word of the Day", () => {
   beforeAll(() => {

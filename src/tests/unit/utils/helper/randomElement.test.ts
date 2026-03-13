@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { randomElement } from "@utils/helpers";
+import { describe, it, expect } from "vitest";
 
 describe("randomElement", () => {
   it("should return a random element from the array", () => {

@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { mount } from "@vue/test-utils";
 import RandomWordButton from "@components/RandomWordButton.vue";
+import { mount } from "@vue/test-utils";
+import { describe, it, expect } from "vitest";
 
 describe("RandomWordButton.vue", () => {
   it("renders a random word when passed", () => {
