@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
 import { getWordType } from "@utils/wordHelper";
 import nlp from "de-compromise";
+import { describe, it, expect } from "vitest";
 
 describe("getWordType", () => {
   it("should return the correct word type", () => {

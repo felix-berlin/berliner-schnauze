@@ -11,15 +11,9 @@ export async function refreshToken() {
   if (!WP_REST_API) missingVars.push("WP_REST_API");
 
   if (missingVars.length > 0) {
-    console.error(
-      `Error: Missing required environment variables: ${missingVars.join(", ")}`,
-    );
-    console.error(
-      "\nPlease use the package manager script: pnpm run refreshAuthToken",
-    );
-    console.error(
-      "Or run with: node --env-file=.env ./src/utils/refreshToken.js",
-    );
+    console.error(`Error: Missing required environment variables: ${missingVars.join(", ")}`);
+    console.error("\nPlease use the package manager script: pnpm run refreshAuthToken");
+    console.error("Or run with: node --env-file=.env ./src/utils/refreshToken.js");
     process.exit(1);
   }
 

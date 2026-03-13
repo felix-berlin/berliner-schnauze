@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { checkObjectValues } from "@utils/helpers";
+import { describe, it, expect } from "vitest";
 
 describe("checkObjectValues", () => {
   it("should return true when all object values match the checkFor value", () => {

@@ -78,7 +78,11 @@ export const formattedDate = (date?: string, locale = "de-DE") => {
   if (!date) return;
   const dateToFormat = new Date(date);
 
-  return dateToFormat.toLocaleString(locale, { day: "numeric", month: "long", year: "numeric" });
+  return dateToFormat.toLocaleString(locale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 };
 
 /**

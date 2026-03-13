@@ -1,16 +1,16 @@
-import { defineConfig, envField } from "astro/config";
-import vue from "@astrojs/vue";
+import partytown from "@astrojs/partytown";
 import sitemap from "@astrojs/sitemap";
-import matomo from "astro-matomo";
-import Icons from "unplugin-icons/vite";
-import AstroPWA from "@vite-pwa/astro";
+import vue from "@astrojs/vue";
+import codecovplugin from "@codecov/astro-plugin";
 import sentry from "@sentry/astro";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
-import { loadEnv } from "vite";
-import partytown from "@astrojs/partytown";
-import codecovplugin from "@codecov/astro-plugin";
+import AstroPWA from "@vite-pwa/astro";
+import matomo from "astro-matomo";
+import { defineConfig, envField } from "astro/config";
 import { visualizer } from "rollup-plugin-visualizer";
+import Icons from "unplugin-icons/vite";
+import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
 
 const {

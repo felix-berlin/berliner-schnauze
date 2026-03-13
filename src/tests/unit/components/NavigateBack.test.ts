@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
-import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
 import NavigateBack from "@components/NavigateBack.vue";
+import { mount } from "@vue/test-utils";
+import { describe, it, expect, vi } from "vitest";
+import { nextTick } from "vue";
 
 describe("NavigateBack.vue", () => {
   it("calls navigateBack when button is clicked", async () => {
@@ -9,7 +9,10 @@ describe("NavigateBack.vue", () => {
     const originalHistoryLength = window.history.length;
     const originalHistoryBack = window.history.back;
 
-    Object.defineProperty(window.history, "length", { value: 2, writable: true });
+    Object.defineProperty(window.history, "length", {
+      value: 2,
+      writable: true,
+    });
     window.history.back = vi.fn();
 
     const wrapper = mount(NavigateBack);

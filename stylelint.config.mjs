@@ -1,11 +1,7 @@
 /** @type {import('stylelint').Config} */
 export default {
   customSyntax: "postcss-scss",
-  extends: [
-    "stylelint-config-standard",
-    "stylelint-config-recommended-scss",
-    "stylelint-config-prettier-scss",
-  ],
+  extends: ["stylelint-config-standard", "stylelint-config-recommended-scss"],
   overrides: [
     {
       customSyntax: "postcss-html",

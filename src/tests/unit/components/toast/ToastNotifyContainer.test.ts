@@ -1,9 +1,9 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, afterEach, beforeEach } from "vitest";
-import ToastNotifyContainer from "@components/toast/ToastNotifyContainer.vue";
 import ToastNotify from "@components/toast/ToastNotify.vue";
-import { cleanStores, keepMount } from "nanostores";
+import ToastNotifyContainer from "@components/toast/ToastNotifyContainer.vue";
 import { $toastNotify } from "@stores/index.ts";
+import { mount } from "@vue/test-utils";
+import { cleanStores, keepMount } from "nanostores";
+import { describe, it, expect, afterEach, beforeEach } from "vitest";
 
 // Mock store data
 const mockToasts = [

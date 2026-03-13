@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
 import { $setSortOrder } from "@stores/index.ts";
+import { mount } from "@vue/test-utils";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 vi.mock("@stores/index.ts", () => ({
   $setSortOrder: vi.fn(),
@@ -16,7 +16,11 @@ describe("SortWordBySelect.vue", () => {
   it("calls $setSortOrder when an option is selected", async () => {
     const wrapper = mount(SortWordBySelect);
     const select = wrapper.find("select");
-    await select.setValue({ name: "Alphabetisch (A - Z)", category: "alphabetical", sort: "ASC" });
+    await select.setValue({
+      name: "Alphabetisch (A - Z)",
+      category: "alphabetical",
+      sort: "ASC",
+    });
     expect($setSortOrder).toHaveBeenCalledWith("alphabetical", "alphabeticalOrder", "ASC");
   });
 });

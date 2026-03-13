@@ -43,7 +43,8 @@
     </div>
     <div class="c-word-of-the-day__update">
       Neues Wort in: <span>{{ timeToUpdate.hours }}</span> :
-      <span>{{ timeToUpdate.minutes }}</span> : <span>{{ timeToUpdate.seconds }}</span>
+      <span>{{ timeToUpdate.minutes }}</span> :
+      <span>{{ timeToUpdate.seconds }}</span>
     </div>
     <Transition v-if="celebrate" name="fade">
       <ConfettiEffect />

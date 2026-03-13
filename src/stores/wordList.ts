@@ -333,7 +333,9 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
     Array.isArray(wordSearch.activeWordTypeFilter) &&
     wordSearch.activeWordTypeFilter.length > 0
   ) {
-    where.berlinerischWordTypes = { containsAny: wordSearch.activeWordTypeFilter };
+    where.berlinerischWordTypes = {
+      containsAny: wordSearch.activeWordTypeFilter,
+    };
   }
   return where;
 }

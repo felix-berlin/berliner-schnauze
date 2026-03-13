@@ -5,6 +5,7 @@ import type {
   TypedDocumentNode,
 } from "@graphql-typed-document-node/core";
 import type { FragmentDefinitionNode } from "graphql";
+
 import type { Incremental } from "./graphql";
 
 export type FragmentType<TDocumentType extends DocumentTypeDecoration<any, any>> =
@@ -80,7 +81,9 @@ export function isFragmentReady<TQuery, TFrag>(
   data: FragmentType<TypedDocumentNode<Incremental<TFrag>, any>> | null | undefined,
 ): data is FragmentType<typeof fragmentNode> {
   const deferredFields = (
-    queryNode as { __meta__?: { deferredFields: Record<string, (keyof TFrag)[]> } }
+    queryNode as {
+      __meta__?: { deferredFields: Record<string, (keyof TFrag)[]> };
+    }
   ).__meta__?.deferredFields;
 
   if (!deferredFields) return true;

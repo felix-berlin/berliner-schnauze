@@ -1,7 +1,7 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeAll, beforeEach } from "vitest";
 import ToastNotify from "@components/toast/ToastNotify.vue";
 import { removeToastById, supportsPopover } from "@stores/index.ts";
+import { mount } from "@vue/test-utils";
+import { describe, it, expect, vi, beforeAll, beforeEach } from "vitest";
 
 vi.mock("@stores/index.ts", () => ({
   supportsPopover: vi.fn(() => true),

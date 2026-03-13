@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { translateNlpTags } from "@utils/wordHelper";
+import { describe, it, expect } from "vitest";
 
 describe("translateNlpTags", () => {
   it("should translate English tags to German", () => {

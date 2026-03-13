@@ -1,7 +1,6 @@
-import { describe, it, expect } from "vitest";
 import { similarWords } from "@utils/wordHelper";
-
 import * as natural from "natural";
+import { describe, it, expect } from "vitest";
 
 describe("similarWords", () => {
   const mockWords = [

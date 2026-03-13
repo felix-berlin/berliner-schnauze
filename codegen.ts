@@ -1,9 +1,28 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
+
 import { loadEnv } from "vite";
 
-const { WP_AUTH_REFRESH_TOKEN, WP_API } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+const { WP_API, WP_AUTH_REFRESH_TOKEN } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
 const config: CodegenConfig = {
+  documents: ["src/**/*.{graphql,js,ts,jsx,tsx,vue}", "!src/gql/**/*"],
+  generates: {
+    "./schema.graphql": {
+      config: {
+        includeDirectives: true,
+      },
+      plugins: ["schema-ast"],
+    },
+    "./src/gql/": {
+      config: {
+        useTypeImports: true,
+      },
+      plugins: [],
+      preset: "client",
+    },
+  },
+  hooks: { afterAllFileWrite: ["oxfmt"] },
+  ignoreNoDocuments: true, // for better experience with the watcher
   schema: [
     {
       [WP_API]: {
@@ -13,24 +32,6 @@ const config: CodegenConfig = {
       },
     },
   ],
-  documents: ["src/**/*.{graphql,js,ts,jsx,tsx,vue}", "!src/gql/**/*"],
-  ignoreNoDocuments: true, // for better experience with the watcher
-  generates: {
-    "./src/gql/": {
-      preset: "client",
-      config: {
-        useTypeImports: true,
-      },
-      plugins: [],
-    },
-    "./schema.graphql": {
-      plugins: ["schema-ast"],
-      config: {
-        includeDirectives: true,
-      },
-    },
-  },
-  hooks: { afterAllFileWrite: ["prettier --write"] },
 };
 
 export default config;

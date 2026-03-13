@@ -1,8 +1,8 @@
-import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import AudioPlayer from "@components/AudioPlayer.vue";
-import Play from "virtual:icons/lucide/play";
+import { mount } from "@vue/test-utils";
 import Pause from "virtual:icons/lucide/pause";
+import Play from "virtual:icons/lucide/play";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 vi.mock("virtual:icons/lucide/play", () => ({
   default: { template: "<div>Play Icon</div>" },

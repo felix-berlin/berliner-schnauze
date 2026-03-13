@@ -1,6 +1,6 @@
+import AlertBanner from "@components/AlertBanner.vue";
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
-import AlertBanner from "@components/AlertBanner.vue";
 
 describe("AlertBanner.vue", () => {
   it("renders with default props", () => {

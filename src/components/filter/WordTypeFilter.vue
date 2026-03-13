@@ -19,10 +19,10 @@
 import { useStore, useVModel } from "@nanostores/vue";
 import { $wordSearch } from "@stores/index.ts";
 import { trackEvent } from "@utils/analytics";
-import Multiselect from '@vueform/multiselect';
+import Multiselect from "@vueform/multiselect";
 
 const wordSearch = useStore($wordSearch);
-const value = useVModel($wordSearch, 'activeWordTypeFilter');
+const value = useVModel($wordSearch, "activeWordTypeFilter");
 
 const onSelect = (value: string[]) => {
   trackEvent("WordList", "Filter", `Word Type: ${value.join(", ")}`);

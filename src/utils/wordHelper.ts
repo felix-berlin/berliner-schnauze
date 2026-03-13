@@ -217,7 +217,11 @@ export const createWikimediaFileList = async (wikimediaFiles: WordPropertiesWiki
   const files = [];
   for (const file of wikimediaFiles) {
     const img = await fetchWikimediaAPI(file?.wikimediaFile);
-    files.push({ caption: file?.caption, description: file?.description, image: img });
+    files.push({
+      caption: file?.caption,
+      description: file?.description,
+      image: img,
+    });
   }
   return files;
 };

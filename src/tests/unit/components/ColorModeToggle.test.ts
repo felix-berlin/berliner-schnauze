@@ -1,8 +1,8 @@
+// @ts-ignore: Unresolved import
+import ColorModeToggle from "@components/ColorModeToggle.vue";
 import { mount } from "@vue/test-utils";
 import { JSDOM } from "jsdom";
 import { it, expect, describe } from "vitest";
-// @ts-ignore: Unresolved import
-import ColorModeToggle from "@components/ColorModeToggle.vue";
 
 describe("ColorModeToggle", async () => {
   it("renders the correct type", async () => {

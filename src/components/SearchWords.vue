@@ -63,7 +63,9 @@ const trackWordSearchListSearch = (search: string) => {
   setMatomoSearch(search, "Word Search", searchResultCount.value);
 };
 
-const debouncedTrackSearch = useDebounceFn(trackWordSearchListSearch, 1000, { maxWait: 5000 });
+const debouncedTrackSearch = useDebounceFn(trackWordSearchListSearch, 1000, {
+  maxWait: 5000,
+});
 
 /**
  * Emits the search value to the parent component

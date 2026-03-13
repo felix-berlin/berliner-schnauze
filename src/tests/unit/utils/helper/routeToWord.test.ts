@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import { routeToWord } from "@utils/helpers";
+import { describe, it, expect } from "vitest";
 
 describe("routeToWord", () => {
   it("should return '/wort' when input is not a string", () => {
