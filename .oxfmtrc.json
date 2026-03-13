@@ -13,5 +13,5 @@
       "unknown"
     ]
   },
-  "ignorePatterns": [".astro", "coverage", "dist", "CHANGELOG.md", "schema.graphql"]
+  "ignorePatterns": ["**/*.astro", "coverage", "dist", "CHANGELOG.md", "schema.graphql"]
 }
