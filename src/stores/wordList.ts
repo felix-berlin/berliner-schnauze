@@ -1,5 +1,6 @@
 import type { Orama, Results, SearchParams, TypedDocument } from "@orama/orama";
 
+import { type AsyncValue, computedAsync } from "@nanostores/async";
 import { persistentMap } from "@nanostores/persistent";
 import { create, insertMultiple } from "@orama/orama";
 import {
@@ -219,7 +220,7 @@ export const $wordListModifiedDateOrderToggle = (): void => {
 
 export const $setSortOrder = (
   category: WordList["activeOrderCategory"],
-  orderName: string,
+  orderName: "alphabeticalOrder" | "dateOrder" | "modifiedDateOrder",
   order: "ASC" | "DESC",
 ) => {
   $wordSearch.setKey("activeOrderCategory", category);
@@ -252,14 +253,13 @@ const getSearchMeta = async () => {
   return meta;
 };
 
-onMount($wordSearch, async () => {
-  await task(async () => {
+onMount($wordSearch, () => {
+  void task(async () => {
     // Fetch search meta data on mount
-    await getSearchMeta().then((meta) => {
-      $wordSearch.setKey("letterGroups", meta.availableWordGroups);
-      $wordSearch.setKey("wordTypes", meta.wordTypes);
-      $wordSearch.setKey("rangeFilterMinMax", meta.rangeFilterMinMax);
-    });
+    const meta = await getSearchMeta();
+    $wordSearch.setKey("letterGroups", meta.availableWordGroups);
+    $wordSearch.setKey("wordTypes", meta.wordTypes);
+    $wordSearch.setKey("rangeFilterMinMax", meta.rangeFilterMinMax);
   });
 });
 
@@ -294,7 +294,7 @@ type WordDocument = TypedDocument<Orama<typeof wordSchema>>;
 let db: null | Orama<typeof wordSchema> = null;
 
 type SortByType =
-  | ((a: [string, number, WordDocument], b: [string, number, WordDocument]) => number)
+  | ((a: [number, number, WordDocument], b: [number, number, WordDocument]) => number)
   | { order: "ASC" | "DESC"; property: string };
 
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
@@ -391,8 +391,9 @@ async function initOrama(words: OramaSearchIndex[]) {
 
 let searchIndexCache: null | OramaSearchIndex[] = null;
 
-export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
-  task<null | Results<WordDocument>>(async () => {
+const $oramaSearchResultsAsync = computedAsync(
+  [$wordSearch],
+  async (wordSearch: WordList): Promise<null | Results<WordDocument>> => {
     // Only fetch if not cached
     if (!searchIndexCache) {
       const response = await fetch("/api/search/index.json");
@@ -425,7 +426,16 @@ export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
     };
 
     return db ? await searchWithHighlight(db, params) : null;
-  }),
+  },
+);
+
+export const $oramaSearchResults = computed(
+  $oramaSearchResultsAsync,
+  (oramaSearchResultsAsync: AsyncValue<null | Results<WordDocument>>) => {
+    if (oramaSearchResultsAsync.state !== "ready") return null;
+
+    return oramaSearchResultsAsync.value;
+  },
 );
 
 export const $searchResultCount = computed($oramaSearchResults, (oramaSearchResults) => {
