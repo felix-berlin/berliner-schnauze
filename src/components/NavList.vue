@@ -9,13 +9,13 @@
         :class="classesLi"
       >
         <a
-          v-if="typeof item?.link === 'string'"
+          v-if="isLinkItem(item)"
           :href="item.link"
-          :rel="item?.rel ? item.rel : null"
+          :rel="item?.rel ? item.rel : undefined"
           :target="isExternalLink(item.link) ? '_blank' : '_self'"
           v-text="item.title"
         />
-        <component :is="item.component" v-else v-bind="item.props" />
+        <component :is="item.component" v-else-if="isComponentItem(item)" v-bind="item.props" />
       </li>
       <slot name="after" />
     </ul>
@@ -23,41 +23,41 @@
 </template>
 
 <script setup lang="ts">
-import type { DefineComponent } from "vue";
+import type { Component } from "vue";
+
+interface ComponentItem {
+  component: Component;
+  props?: Record<string, unknown>;
+}
+
 
 interface ItemObject {
   link: string;
+  rel?: string;
   title: string;
 }
+
 
 interface NavListProps {
   classesLi?: string;
   classesNav?: string;
   classesUl?: string;
-  items:
-    | ItemObject[]
-    | {
-        component: DefineComponent;
-        props: object;
-      }[];
+  items: (ComponentItem | ItemObject)[];
 }
 
-const { items } = defineProps<NavListProps>();
 
-/**
- * Checks if the item is a Vue component
- *
- * @param   {DefineComponent}  item
- *
- * @return  {item}
- */
-const isVueComponent = (item: DefineComponent | ItemObject): item is DefineComponent => {
-  return (
-    {}.propertyIsEnumerable.call(item, "render") ||
-    {}.propertyIsEnumerable.call(item, "setup") ||
-    {}.propertyIsEnumerable.call(item, "components")
-  );
+const { classesLi = "", classesNav = "", classesUl = "" } = defineProps<NavListProps>();
+
+
+const isLinkItem = (item: ComponentItem | ItemObject): item is ItemObject => {
+  return "link" in item;
 };
+
+
+const isComponentItem = (item: ComponentItem | ItemObject): item is ComponentItem => {
+  return "component" in item;
+};
+
 
 /**
  * Checks if the link is an external link

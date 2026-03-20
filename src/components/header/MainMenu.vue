@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DefineComponent } from "vue";
+import type { Component } from "vue";
 
 import InstallApp from "@components/InstallApp.vue";
 import MainMenuButton from "@components/MainMenuButton.vue";
@@ -30,14 +30,21 @@ import NavList from "@components/NavList.vue";
 //   // TODO: Implement random word
 //   // return randomElement(berlinerWords).post_name;
 // };
+interface ComponentItem {
+  component: Component;
+  props?: Record<string, unknown>;
+}
+
+
 interface ItemObject {
   link: string;
   title: string;
 }
 
-const menuItems: (DefineComponent | ItemObject)[] = [
+
+const menuItems: (ComponentItem | ItemObject)[] = [
   {
-    component: InstallApp as DefineComponent,
+    component: InstallApp as Component,
     props: {
       tooltipProps: {
         container: ".c-menu-nav",
