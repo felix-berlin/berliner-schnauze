@@ -21,7 +21,7 @@ const config: CodegenConfig = {
       preset: "client",
     },
   },
-  hooks: { afterAllFileWrite: ["oxfmt"] },
+  hooks: { afterAllFileWrite: ["pnpm exec oxfmt --no-error-on-unmatched-pattern"] },
   ignoreNoDocuments: true, // for better experience with the watcher
   schema: [
     {
