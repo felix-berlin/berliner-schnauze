@@ -53,6 +53,12 @@ export default tseslint.config(
   {
     files: ["**/*.vue"],
     rules: {
+      // Keep formatting ownership in oxfmt to avoid formatter/linter ping-pong.
+      "vue/first-attribute-linebreak": "off",
+      "vue/html-closing-bracket-newline": "off",
+      "vue/max-attributes-per-line": "off",
+      "vue/multiline-html-element-content-newline": "off",
+      "vue/singleline-html-element-content-newline": "off",
       "vuejs-accessibility/label-has-for": [
         "error",
         {
