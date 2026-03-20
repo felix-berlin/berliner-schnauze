@@ -4,6 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import { pwaInfo } from 'virtual:pwa-info';
 
 import { removeFileExtension } from '@/utils/helpers';
+import deferredHeadScripts from '@/scripts/deferredHeadScripts.ts?url';
 
 import BerlinBold from '/fonts/Berlin-Bold.woff2';
 import BerlinItalic from '/fonts/Berlin-Italic.woff2';
@@ -59,16 +60,15 @@ const canonicalURL = removeFileExtension(Astro.url.href);
 <link as='font' crossorigin href={Berlin} rel='preload' type='font/woff2' />
 <link as='font' crossorigin href={BerlinBold} rel='preload' type='font/woff2' />
 <link as='font' crossorigin href={BerlinItalic} rel='preload' type='font/woff2' />
+<link href='//cms.berliner-schnauze.wtf' rel='dns-prefetch' />
 <link href='//cms.berliner-schnauze.wtf' rel='preconnect' />
+<link href='//o1131599.ingest.us.sentry.io' rel='dns-prefetch' />
 
-<script src='../plugins/sentryBrowser.ts'></script>
+<script src={deferredHeadScripts} type='module'></script>
 
 <ClientRouter />
 
-<script src='/src/lib/unsupportedBrowser.ts'></script>
-
 {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
-<script src='/src/services/pwa.ts'></script>
 
 <!-- Favicon -->
 <link href='/favicons/favicon.ico' rel='icon' sizes='48x48' />
