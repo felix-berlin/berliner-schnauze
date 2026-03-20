@@ -4,10 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@vitejs/plugin-vue': ^6.0.5
-  '@vitejs/plugin-vue-jsx': ^5.1.5
-
 importers:
 
   .:
