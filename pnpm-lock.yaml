@@ -29,10 +29,10 @@ importers:
         version: 1.2.98
       '@nanostores/persistent':
         specifier: ^1.3.3
-        version: 1.3.3(nanostores@1.1.1)
+        version: 1.3.3(nanostores@1.2.0)
       '@nanostores/vue':
         specifier: ^1.1.0
-        version: 1.1.0(@nanostores/logger@1.1.0(nanostores@1.1.1))(@vue/devtools-api@8.1.0)(nanostores@1.1.1)(vue@3.5.30(typescript@5.9.3))
+        version: 1.1.0(@nanostores/logger@1.1.0(nanostores@1.2.0))(@vue/devtools-api@8.1.0)(nanostores@1.2.0)(vue@3.5.30(typescript@5.9.3))
       '@orama/orama':
         specifier: ^3.1.18
         version: 3.1.18
@@ -89,7 +89,7 @@ importers:
         version: 0.2.5
       nanostores:
         specifier: ^1.1.1
-        version: 1.1.1
+        version: 1.2.0
       natural:
         specifier: ^8.1.1
         version: 8.1.1
@@ -150,7 +150,7 @@ importers:
         version: 4.4.0(@types/node@25.5.0)(crossws@0.3.5)(eslint@10.1.0(jiti@2.6.1))(graphql@16.13.1)(typescript@5.9.3)
       '@nanostores/logger':
         specifier: ^1.1.0
-        version: 1.1.0(nanostores@1.1.1)
+        version: 1.1.0(nanostores@1.2.0)
       '@playform/inline':
         specifier: ^0.1.4
         version: 0.1.4(@types/node@25.5.0)(jiti@2.6.1)(lightningcss@1.32.0)(rollup@4.59.0)(sass@1.98.0)(terser@5.44.1)(typescript@5.9.3)(yaml@2.8.2)
@@ -7093,8 +7093,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanostores@1.1.1:
-    resolution: {integrity: sha512-EYJqS25r2iBeTtGQCHidXl1VfZ1jXM7Q04zXJOrMlxVVmD0ptxJaNux92n1mJ7c5lN3zTq12MhH/8x59nP+qmg==}
+  nanostores@1.2.0:
+    resolution: {integrity: sha512-F0wCzbsH80G7XXo0Jd9/AVQC7ouWY6idUCTnMwW5t/Rv9W8qmO6endavDwg7TNp5GbugwSukFMVZqzPSrSMndg==}
     engines: {node: ^20.0.0 || >=22.0.0}
 
   natural-compare@1.4.0:
@@ -12172,20 +12172,20 @@ snapshots:
     dependencies:
       sparse-bitfield: 3.0.3
 
-  '@nanostores/logger@1.1.0(nanostores@1.1.1)':
+  '@nanostores/logger@1.1.0(nanostores@1.2.0)':
     dependencies:
-      nanostores: 1.1.1
+      nanostores: 1.2.0
 
-  '@nanostores/persistent@1.3.3(nanostores@1.1.1)':
+  '@nanostores/persistent@1.3.3(nanostores@1.2.0)':
     dependencies:
-      nanostores: 1.1.1
+      nanostores: 1.2.0
 
-  '@nanostores/vue@1.1.0(@nanostores/logger@1.1.0(nanostores@1.1.1))(@vue/devtools-api@8.1.0)(nanostores@1.1.1)(vue@3.5.30(typescript@5.9.3))':
+  '@nanostores/vue@1.1.0(@nanostores/logger@1.1.0(nanostores@1.2.0))(@vue/devtools-api@8.1.0)(nanostores@1.2.0)(vue@3.5.30(typescript@5.9.3))':
     dependencies:
-      nanostores: 1.1.1
+      nanostores: 1.2.0
       vue: 3.5.30(typescript@5.9.3)
     optionalDependencies:
-      '@nanostores/logger': 1.1.0(nanostores@1.1.1)
+      '@nanostores/logger': 1.1.0(nanostores@1.2.0)
       '@vue/devtools-api': 8.1.0
 
   '@napi-rs/wasm-runtime@1.1.1':
@@ -17500,7 +17500,7 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  nanostores@1.1.1: {}
+  nanostores@1.2.0: {}
 
   natural-compare@1.4.0: {}
 
