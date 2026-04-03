@@ -56,7 +56,7 @@ importers:
         version: 6.0.1(graphql@16.13.2)
       '@urql/vue':
         specifier: ^2.0.0
-        version: 2.0.0(@urql/core@6.0.1(graphql@16.13.2))(vue@3.5.32(typescript@5.9.3))
+        version: 2.1.0(@urql/core@6.0.1(graphql@16.13.2))(vue@3.5.32(typescript@5.9.3))
       '@vueform/multiselect':
         specifier: ^2.6.11
         version: 2.6.11
@@ -4240,8 +4240,8 @@ packages:
   '@urql/core@6.0.1':
     resolution: {integrity: sha512-FZDiQk6jxbj5hixf2rEPv0jI+IZz0EqqGW8mJBEug68/zHTtT+f34guZDmyjJZyiWbj0vL165LoMr/TkeDHaug==}
 
-  '@urql/vue@2.0.0':
-    resolution: {integrity: sha512-9eW8IfEPwnGHxvqfH2t8cBSI5eKPyLq2dizFVYIRGHi4ydMw5Q+vuMD+VP0I9zo0818zZ9b8TGLiyAmOzvyoAQ==}
+  '@urql/vue@2.1.0':
+    resolution: {integrity: sha512-fRsMOSJze7d9y2NUd31ekZMUWDoc+HYv/jFcO9iPpRFCFlqcuqto5r0v54jDB6C7MEo+xLsqRQGuxe0NM0J8YA==}
     peerDependencies:
       '@urql/core': ^6.0.0
       vue: ^3.2.0
@@ -9552,6 +9552,9 @@ packages:
   wonka@6.3.5:
     resolution: {integrity: sha512-SSil+ecw6B4/Dm7Pf2sAshKQ5hWFvfyGlfPbEd6A14dOH6VDjrmbY86u6nZvy9omGwwIPFR8V41+of1EezgoUw==}
 
+  wonka@6.3.6:
+    resolution: {integrity: sha512-MXH+6mDHAZ2GuMpgKS055FR6v0xVP3XwquxIMYXgiW+FejHQlMGlvVRZT4qMCxR+bEo/FCtIdKxwej9WV3YQag==}
+
   word-wrap@1.2.5:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
     engines: {node: '>=0.10.0'}
@@ -14113,11 +14116,11 @@ snapshots:
     transitivePeerDependencies:
       - graphql
 
-  '@urql/vue@2.0.0(@urql/core@6.0.1(graphql@16.13.2))(vue@3.5.32(typescript@5.9.3))':
+  '@urql/vue@2.1.0(@urql/core@6.0.1(graphql@16.13.2))(vue@3.5.32(typescript@5.9.3))':
     dependencies:
       '@urql/core': 6.0.1(graphql@16.13.2)
       vue: 3.5.32(typescript@5.9.3)
-      wonka: 6.3.5
+      wonka: 6.3.6
 
   '@vite-pwa/assets-generator@1.0.2':
     dependencies:
@@ -20223,6 +20226,8 @@ snapshots:
       stackback: 0.0.2
 
   wonka@6.3.5: {}
+
+  wonka@6.3.6: {}
 
   word-wrap@1.2.5: {}
 
