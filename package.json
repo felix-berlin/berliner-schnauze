@@ -140,7 +140,7 @@
     "graphql-config": "^5.1.6",
     "jsdom": "^28.1.0",
     "lint-staged": "^16.3.3",
-    "oxfmt": "^0.40.0",
+    "oxfmt": "^0.43.0",
     "postcss-html": "^1.8.1",
     "postcss-preset-env": "^11.2.0",
     "postcss-scss": "^4.0.9",
