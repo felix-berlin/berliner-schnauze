@@ -117,7 +117,7 @@ importers:
     devDependencies:
       '@0no-co/graphqlsp':
         specifier: ^1.15.2
-        version: 1.15.3(graphql@16.13.2)(typescript@5.9.3)
+        version: 1.15.4(graphql@16.13.2)(typescript@5.9.3)
       '@astrojs/check':
         specifier: ^0.9.7
         version: 0.9.7(prettier-plugin-astro@0.14.1)(prettier@3.8.1)(typescript@5.9.3)
@@ -315,8 +315,8 @@ packages:
       graphql:
         optional: true
 
-  '@0no-co/graphqlsp@1.15.3':
-    resolution: {integrity: sha512-rap58Wh1qbRnGpPGwB60P6rvKF6G+mgo1kPeDySWIAcqkGMjuyQdrZPcHS6w7mKOT8i/f1UQmjow6+7vfuEXKw==}
+  '@0no-co/graphqlsp@1.15.4':
+    resolution: {integrity: sha512-Nt1DVHcZ08lKRKwhiU0amXH77fSdrO6DzyjLE0DkCxfbM/N1SAs32d76y1xtCzM5H9eT0iDS7SdksgRXWJu05g==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
       typescript: ^5.0.0 || ^6.0.0
@@ -9894,7 +9894,7 @@ snapshots:
     optionalDependencies:
       graphql: 16.13.2
 
-  '@0no-co/graphqlsp@1.15.3(graphql@16.13.2)(typescript@5.9.3)':
+  '@0no-co/graphqlsp@1.15.4(graphql@16.13.2)(typescript@5.9.3)':
     dependencies:
       '@gql.tada/internal': 1.0.9(graphql@16.13.2)(typescript@5.9.3)
       graphql: 16.13.2
