@@ -138,7 +138,7 @@
     "eslint-plugin-vuejs-accessibility": "^2.5.0",
     "graphql": "^16.13.1",
     "graphql-config": "^5.1.6",
-    "jsdom": "^28.1.0",
+    "jsdom": "^29.0.0",
     "lint-staged": "^16.3.3",
     "oxfmt": "^0.45.0",
     "postcss-html": "^1.8.1",
