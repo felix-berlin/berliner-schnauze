@@ -1,0 +1,128 @@
+<div class='c-fact-card c-word-of-the-day c-word-of-the-day-skeleton' aria-hidden='true'>
+  <div class='c-word-of-the-day__content'>
+    <div class='c-word-of-the-day__crown-icon'>
+      <span class='c-word-of-the-day-skeleton__icon'></span>
+    </div>
+
+    <div class='c-word-of-the-day__word-wrap'>
+      <span class='c-word-of-the-day-skeleton__word'></span>
+    </div>
+
+    <hr class='c-word-of-the-day__divider' />
+
+    <p class='c-word-of-the-day__headline'>
+      <span class='c-word-of-the-day-skeleton__headline'></span>
+    </p>
+  </div>
+
+  <div class='c-word-of-the-day__update c-fact-card__text'>
+    <span class='c-word-of-the-day-skeleton__timer'></span>
+  </div>
+</div>
+
+<style lang='scss'>
+  @use '@styles/variables' as vars;
+
+  @keyframes shine {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: calc(200% + 100vw) 0;
+    }
+  }
+
+  @mixin skeleton-loader {
+    --color-skeleton: 255, 255, 255;
+
+    @include butler-mx.dark-mode-class {
+      --color-skeleton: 0, 0, 0;
+    }
+
+    background: linear-gradient(
+      90deg,
+      rgba(var(--color-skeleton), 0.1) 25%,
+      rgba(var(--color-skeleton), 0.2) 50%,
+      rgba(var(--color-skeleton), 0.1) 75%
+    );
+    background-size: 200% 100%;
+    animation: 1.5s shine linear infinite;
+  }
+
+  .c-word-of-the-day-skeleton {
+    display: flex;
+    row-gap: vars.$spacer * 1.5;
+    flex-direction: column;
+
+    .c-word-of-the-day__content {
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: min(100%, 18rem);
+    }
+
+    .c-word-of-the-day__crown-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .c-word-of-the-day__word-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .c-word-of-the-day__divider {
+      width: 100%;
+      border: none;
+      border-top: 1px solid var(--primary);
+      margin: 0.25rem 0 0.75rem;
+    }
+
+    .c-word-of-the-day__headline {
+      margin: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .c-word-of-the-day__update {
+      font-size: 0.8rem;
+      margin-top: 0;
+    }
+
+    &__icon,
+    &__word,
+    &__headline,
+    &__timer {
+      @include skeleton-loader;
+      display: block;
+      border-radius: 4px;
+    }
+
+    &__icon {
+      width: 80px;
+      height: 80px;
+    }
+
+    &__word {
+      width: min(100%, 180px);
+      height: 48px;
+    }
+
+    &__headline {
+      width: 140px;
+      height: 20px;
+    }
+
+    &__timer {
+      width: 150px;
+      height: 18px;
+    }
+  }
+</style>

@@ -1,66 +1,67 @@
 ---
-import "@styles/objects/_index.scss";
-import BrownBearRoar from "@assets/images/brown-bear-roar.png";
-import FactCard from "@components/FactCard.astro";
-import WordSearch from "@components/word-search/WordSearch.astro";
-import WordOfTheDay from "@components/WordOfTheDay.vue";
-import WordSearchLink from "@components/WordSearchLink.vue";
-import Layout from "@layouts/Layout.astro";
-import { seoData } from "@utils/helpers.ts";
-import { Picture } from "astro:assets";
-import "@styles/components/_facts-grid.scss";
+import '@styles/objects/_index.scss';
+import BrownBearRoar from '@assets/images/brown-bear-roar.png';
+import FactCard from '@components/FactCard.astro';
+import WordSearch from '@components/word-search/WordSearch.astro';
+import WordOfTheDay from '@components/WordOfTheDay.vue';
+import WordOfTheDaySkeleton from '@components/WordOfTheDaySkeleton.astro';
+import WordSearchLink from '@components/WordSearchLink.vue';
+import Layout from '@layouts/Layout.astro';
+import { seoData } from '@utils/helpers.ts';
+import { Picture } from 'astro:assets';
+import '@styles/components/_facts-grid.scss';
 
 const content = {
   seo: {
     opengraphDescription:
-      "Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.",
+      'Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.',
     opengraphImage: {
       sourceUrl: BrownBearRoar.src,
     },
   },
-  title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
+  title: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch',
 };
 
 const facts = [
   {
-    headline: "Häufig kürzer als Hochdeutsch",
+    headline: 'Häufig kürzer als Hochdeutsch',
     text: 'Wir Berliner halten uns kurz, einfache Vokale sprechen wa meist verkürzt aus. Aus "mal" wird z.B. "ma".',
   },
   {
-    headline: "Wie verbreitet ist Berlinisch?",
+    headline: 'Wie verbreitet ist Berlinisch?',
     text: "Dialekt sprechen in Berlin bei weitem nicht alle. Laut <a href='https://de.statista.com/statistik/daten/studie/1116703/umfrage/verbreitung-berliner-dialekt/'>dieser Umfrage</a> sprechen bis zu <strong>62%</strong> der Berliner im heimischen Dialekt.",
   },
   {
-    headline: "Ausgetauschte Wortendungen",
+    headline: 'Ausgetauschte Wortendungen',
     text: "Wortendungen auf <strong>'-er'</strong> werden von uns konsequent durch <strong>'a'</strong> ausgetauscht: 'seiner' -> 'seina', 'Alter' -> 'Alta'",
   },
   {
-    headline: "Syntaktische Besonderheiten",
+    headline: 'Syntaktische Besonderheiten',
     text: "<a href='https://islk.kuwi.tu-dortmund.de/storages/islk-kuwi/r/Personal_Freywald/Literatur/freywald2017_syntax_berlinisch_korrigiert.pdf'>TU Dortmund</a>",
   },
   {
-    headline: "Viele Bezeichnungen für ein und das Selbe",
-    text: "Der Berliner Metrolekt wird häufig auch als <strong>Berlinisch</strong>, <strong>Berliner Jargon</strong>, <strong>Berlinerisch</strong> oder <strong>Berliner Mundart</strong> bezeichnet.",
+    headline: 'Viele Bezeichnungen für ein und das Selbe',
+    text: 'Der Berliner Metrolekt wird häufig auch als <strong>Berlinisch</strong>, <strong>Berliner Jargon</strong>, <strong>Berlinerisch</strong> oder <strong>Berliner Mundart</strong> bezeichnet.',
   },
   {
-    headline: "Ist Berlinerisch ein Dialekt?",
+    headline: 'Ist Berlinerisch ein Dialekt?',
     text: "Sprachwissenschaftlich gesehen ist Berlinerisch <strong>kein Dialekt</strong>, sondern ein <strong><a href='https://www.wikiwand.com/de/Metrolekt'>Metrolekt</a></strong>. Eine in großstädtischen Zentren entstehende Stadtsprache.",
   },
 ];
 ---
 
-<Layout content={seoData(content)} contentClasses="o-index">
-  <header class="o-index__header">
-    <h1 class="o-index__headline">
+<Layout content={seoData(content)} contentClasses='o-index'>
+  <header class='o-index__header'>
+    <h1 class='o-index__headline'>
       Na Keule,<br /> keen'n Dunst vom Berlinern?
     </h1>
 
-    <div class="o-index__image-wrap image-placeholder-wrap">
+    <div class='o-index__image-wrap image-placeholder-wrap'>
       <Picture
-        alt="Ein Bär der brüllt"
-        class="o-index__image"
-        formats={["avif", "webp"]}
-        layout="constrained"
+        alt='Ein Bär der brüllt'
+        class='o-index__image'
+        formats={['avif', 'webp']}
+        layout='constrained'
         priority={true}
         src={BrownBearRoar}
       />
@@ -69,9 +70,9 @@ const facts = [
 
   <WordSearchLink client:load />
 
-  <section class="c-facts-grid">
-    <div class="c-facts-grid__headline-wrap">
-      <h2 class="c-facts-grid__headline">Fakten zur Berliner Mundart</h2>
+  <section class='c-facts-grid'>
+    <div class='c-facts-grid__headline-wrap'>
+      <h2 class='c-facts-grid__headline'>Fakten zur Berliner Mundart</h2>
     </div>
 
     <FactCard headline={facts[0].headline} text={facts[0].text} />
@@ -80,7 +81,9 @@ const facts = [
     <!-- <FactCard headline={facts[3].headline} text={facts[3].text} /> -->
     <FactCard headline={facts[4].headline} text={facts[4].text} />
     <FactCard headline={facts[5].headline} text={facts[5].text} />
-    <WordOfTheDay client:only="vue" />
+    <WordOfTheDay client:only='vue'>
+      <WordOfTheDaySkeleton slot='fallback' />
+    </WordOfTheDay>
   </section>
 
   <WordSearch />
@@ -88,29 +91,29 @@ const facts = [
 
 <script>
   function handleImagePlaceholder() {
-    const wrapper = document.querySelector(".image-placeholder-wrap");
-    const img = wrapper?.querySelector("img");
+    const wrapper = document.querySelector('.image-placeholder-wrap');
+    const img = wrapper?.querySelector('img');
     if (img && wrapper) {
       // Remove loaded class before loading new image
-      wrapper.classList.remove("loaded");
+      wrapper.classList.remove('loaded');
       img.addEventListener(
-        "load",
+        'load',
         () => {
-          wrapper.classList.add("loaded");
+          wrapper.classList.add('loaded');
         },
         { once: true },
       );
       // If cached
       if (img.complete) {
-        wrapper.classList.add("loaded");
+        wrapper.classList.add('loaded');
       }
     }
   }
 
-  if (typeof window !== "undefined") {
-    window.addEventListener("DOMContentLoaded", handleImagePlaceholder);
+  if (typeof window !== 'undefined') {
+    window.addEventListener('DOMContentLoaded', handleImagePlaceholder);
 
     // Astro View Transitions: listen for navigation events
-    document.addEventListener("astro:after-swap", handleImagePlaceholder);
+    document.addEventListener('astro:after-swap', handleImagePlaceholder);
   }
 </script>
