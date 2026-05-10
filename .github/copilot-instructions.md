@@ -48,7 +48,7 @@ pnpm test:unit:ui             # Run tests with Vitest UI for debugging
 
 ```bash
 pnpm typechecking              # Runs astro check + tsc + vue-tsc
-pnpm lint                      # ESLint (JS/TS/Vue) + Stylelint (SCSS)
+pnpm lint                      # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS)
 pnpm test:unit                 # Full test suite with coverage
 pnpm build                     # Generates supportedBrowsers.mjs, then builds
 ```

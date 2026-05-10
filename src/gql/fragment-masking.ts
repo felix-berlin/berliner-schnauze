@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* oxlint-disable */
 import type {
   ResultOf,
   DocumentTypeDecoration,

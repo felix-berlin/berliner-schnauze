@@ -1,0 +1,482 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "typescript",
+    "jsx-a11y",
+    "vue"
+  ],
+  "jsPlugins": [
+    "eslint-plugin-astro",
+    "eslint-plugin-perfectionist"
+  ],
+  "categories": {
+    "correctness": "off"
+  },
+  "env": {
+    "builtin": true,
+    "browser": true
+  },
+  "globals": {
+    "AudioWorkletGlobalScope": "readonly",
+    "AudioWorkletProcessor": "readonly",
+    "currentFrame": "readonly",
+    "currentTime": "readonly",
+    "registerProcessor": "readonly",
+    "sampleRate": "readonly",
+    "WorkletGlobalScope": "readonly"
+  },
+  "ignorePatterns": [
+    "src/tests",
+    "**/coverage/",
+    "dist/",
+    "**/dev-dist/",
+    "**/node_modules/",
+    "**/__snapshots__/",
+    "src/types/generated/",
+    "**/*.config.{mjs,cjs,ts,js}",
+    "**/*.test.ts"
+  ],
+  "rules": {
+    "constructor-super": "error",
+    "for-direction": "error",
+    "getter-return": "error",
+    "no-async-promise-executor": "error",
+    "no-case-declarations": "error",
+    "no-class-assign": "error",
+    "no-compare-neg-zero": "error",
+    "no-cond-assign": "error",
+    "no-const-assign": "error",
+    "no-constant-binary-expression": "error",
+    "no-constant-condition": "error",
+    "no-control-regex": "error",
+    "no-debugger": "error",
+    "no-delete-var": "error",
+    "no-dupe-class-members": "error",
+    "no-dupe-else-if": "error",
+    "no-dupe-keys": "error",
+    "no-duplicate-case": "error",
+    "no-empty": "error",
+    "no-empty-character-class": "error",
+    "no-empty-pattern": "error",
+    "no-empty-static-block": "error",
+    "no-ex-assign": "error",
+    "no-extra-boolean-cast": "error",
+    "no-fallthrough": "error",
+    "no-func-assign": "error",
+    "no-global-assign": "error",
+    "no-import-assign": "error",
+    "no-invalid-regexp": "error",
+    "no-irregular-whitespace": "error",
+    "no-loss-of-precision": "error",
+    "no-misleading-character-class": "error",
+    "no-new-native-nonconstructor": "error",
+    "no-nonoctal-decimal-escape": "error",
+    "no-obj-calls": "error",
+    "no-prototype-builtins": "error",
+    "no-redeclare": "error",
+    "no-regex-spaces": "error",
+    "no-self-assign": "error",
+    "no-setter-return": "error",
+    "no-shadow-restricted-names": "error",
+    "no-sparse-arrays": "error",
+    "no-this-before-super": "error",
+    "no-unassigned-vars": "error",
+    "no-unexpected-multiline": "error",
+    "no-unreachable": "error",
+    "no-unsafe-finally": "error",
+    "no-unsafe-negation": "error",
+    "no-unsafe-optional-chaining": "error",
+    "no-unused-labels": "error",
+    "no-unused-private-class-members": "error",
+    "no-unused-vars": "error",
+    "no-useless-backreference": "error",
+    "no-useless-catch": "error",
+    "no-useless-escape": "error",
+    "no-with": "error",
+    "preserve-caught-error": "error",
+    "require-yield": "error",
+    "use-isnan": "error",
+    "valid-typeof": "error",
+    "no-array-constructor": "error",
+    "no-unused-expressions": "error",
+    "astro/missing-client-only-directive-value": "error",
+    "astro/no-conflict-set-directives": "error",
+    "astro/no-deprecated-astro-canonicalurl": "error",
+    "astro/no-deprecated-astro-fetchcontent": "error",
+    "astro/no-deprecated-astro-resolve": "error",
+    "astro/no-deprecated-getentrybyslug": "error",
+    "astro/no-unused-define-vars-in-style": "error",
+    "astro/valid-compile": "error",
+    "jsx-a11y/alt-text": "error",
+    "jsx-a11y/anchor-has-content": "error",
+    "jsx-a11y/anchor-is-valid": "error",
+    "jsx-a11y/aria-activedescendant-has-tabindex": "error",
+    "jsx-a11y/aria-props": "error",
+    "jsx-a11y/aria-proptypes": "error",
+    "jsx-a11y/aria-role": "error",
+    "jsx-a11y/aria-unsupported-elements": "error",
+    "jsx-a11y/autocomplete-valid": "error",
+    "jsx-a11y/click-events-have-key-events": "error",
+    "jsx-a11y/heading-has-content": "error",
+    "jsx-a11y/html-has-lang": "error",
+    "jsx-a11y/iframe-has-title": "error",
+    "jsx-a11y/img-redundant-alt": "error",
+    "jsx-a11y/interactive-supports-focus": [
+      "error",
+      {
+        "tabbable": [
+          "button",
+          "checkbox",
+          "link",
+          "searchbox",
+          "spinbutton",
+          "switch",
+          "textbox"
+        ]
+      }
+    ],
+    "jsx-a11y/label-has-associated-control": "error",
+    "jsx-a11y/media-has-caption": "error",
+    "jsx-a11y/mouse-events-have-key-events": "error",
+    "jsx-a11y/no-access-key": "error",
+    "jsx-a11y/no-autofocus": "error",
+    "jsx-a11y/no-distracting-elements": "error",
+    "jsx-a11y/no-noninteractive-tabindex": [
+      "error",
+      {
+        "tags": [],
+        "roles": [
+          "tabpanel"
+        ],
+        "allowExpressionValues": true
+      }
+    ],
+    "jsx-a11y/no-redundant-roles": "error",
+    "jsx-a11y/no-static-element-interactions": [
+      "error",
+      {
+        "allowExpressionValues": true,
+        "handlers": [
+          "onClick",
+          "onMouseDown",
+          "onMouseUp",
+          "onKeyPress",
+          "onKeyDown",
+          "onKeyUp"
+        ]
+      }
+    ],
+    "jsx-a11y/role-has-required-aria-props": "error",
+    "jsx-a11y/role-supports-aria-props": "error",
+    "jsx-a11y/scope": "error",
+    "jsx-a11y/tabindex-no-positive": "error",
+    "vue/no-arrow-functions-in-watch": "error",
+    "vue/no-deprecated-data-object-declaration": "error",
+    "vue/no-deprecated-delete-set": "error",
+    "vue/no-deprecated-destroyed-lifecycle": "error",
+    "vue/no-deprecated-events-api": "error",
+    "vue/no-deprecated-model-definition": "error",
+    "vue/no-deprecated-vue-config-keycodes": "error",
+    "vue/no-export-in-script-setup": "error",
+    "vue/no-lifecycle-after-await": "error",
+    "vue/prefer-import-from-vue": "error",
+    "vue/return-in-computed-property": "error",
+    "vue/valid-define-emits": "error",
+    "vue/valid-define-props": "error",
+    "vue/no-multiple-slot-args": "warn",
+    "vue/no-required-prop-with-default": "warn",
+    "perfectionist/sort-variable-declarations": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-intersection-types": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-import-attributes": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-export-attributes": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-heritage-clauses": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-array-includes": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-named-imports": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-named-exports": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-object-types": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-union-types": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-switch-case": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-decorators": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-interfaces": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-jsx-props": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-modules": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-classes": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-exports": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-objects": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-enums": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-sets": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "perfectionist/sort-maps": [
+      "error",
+      {
+        "type": "natural",
+        "order": "asc"
+      }
+    ],
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-duplicate-enum-values": "error",
+    "typescript/no-empty-object-type": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-extra-non-null-assertion": "error",
+    "typescript/no-misused-new": "error",
+    "typescript/no-namespace": "error",
+    "typescript/no-non-null-asserted-optional-chain": "error",
+    "typescript/no-require-imports": "error",
+    "typescript/no-this-alias": "error",
+    "typescript/no-unnecessary-type-constraint": "error",
+    "typescript/no-unsafe-declaration-merging": "error",
+    "typescript/no-unsafe-function-type": "error",
+    "typescript/no-wrapper-object-types": "error",
+    "typescript/prefer-as-const": "error",
+    "typescript/prefer-namespace-keyword": "error",
+    "typescript/triple-slash-reference": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.mts",
+        "**/*.cts"
+      ],
+      "rules": {
+        "constructor-super": "off",
+        "getter-return": "off",
+        "no-class-assign": "off",
+        "no-const-assign": "off",
+        "no-dupe-class-members": "off",
+        "no-dupe-keys": "off",
+        "no-func-assign": "off",
+        "no-import-assign": "off",
+        "no-new-native-nonconstructor": "off",
+        "no-obj-calls": "off",
+        "no-redeclare": "off",
+        "no-setter-return": "off",
+        "no-this-before-super": "off",
+        "no-unreachable": "off",
+        "no-unsafe-negation": "off",
+        "no-var": "error",
+        "no-with": "off",
+        "prefer-const": "error",
+        "prefer-rest-params": "error",
+        "prefer-spread": "error"
+      }
+    },
+    {
+      "files": [
+        "*.astro",
+        "**/*.astro"
+      ],
+      "globals": {
+        "Fragment": "readonly"
+      },
+      "env": {
+        "astro": true,
+        "node": true
+      }
+    },
+    {
+      "files": [
+        "**/*.astro/*.js",
+        "*.astro/*.js",
+        "**/*.astro/*.ts",
+        "*.astro/*.ts"
+      ],
+      "globals": {
+        "AudioWorkletGlobalScope": "readonly",
+        "AudioWorkletProcessor": "readonly",
+        "currentFrame": "readonly",
+        "currentTime": "readonly",
+        "registerProcessor": "readonly",
+        "sampleRate": "readonly",
+        "WorkletGlobalScope": "readonly"
+      }
+    },
+    {
+      "files": [
+        "*.vue",
+        "**/*.vue"
+      ],
+      "rules": {
+        "vuejs-accessibility/alt-text": "error",
+        "vuejs-accessibility/anchor-has-content": "error",
+        "vuejs-accessibility/aria-props": "error",
+        "vuejs-accessibility/aria-role": "error",
+        "vuejs-accessibility/aria-unsupported-elements": "error",
+        "vuejs-accessibility/click-events-have-key-events": "error",
+        "vuejs-accessibility/form-control-has-label": "error",
+        "vuejs-accessibility/heading-has-content": "error",
+        "vuejs-accessibility/iframe-has-title": "error",
+        "vuejs-accessibility/interactive-supports-focus": "error",
+        "vuejs-accessibility/label-has-for": "error",
+        "vuejs-accessibility/media-has-caption": "error",
+        "vuejs-accessibility/mouse-events-have-key-events": "error",
+        "vuejs-accessibility/no-access-key": "error",
+        "vuejs-accessibility/no-autofocus": "error",
+        "vuejs-accessibility/no-distracting-elements": "error",
+        "vuejs-accessibility/no-redundant-roles": "error",
+        "vuejs-accessibility/no-static-element-interactions": "error",
+        "vuejs-accessibility/role-has-required-aria-props": "error",
+        "vuejs-accessibility/tabindex-no-positive": "error"
+      },
+      "jsPlugins": [
+        "eslint-plugin-vuejs-accessibility"
+      ],
+      "globals": {
+        "AudioWorkletGlobalScope": "readonly",
+        "AudioWorkletProcessor": "readonly",
+        "currentFrame": "readonly",
+        "currentTime": "readonly",
+        "registerProcessor": "readonly",
+        "sampleRate": "readonly",
+        "WorkletGlobalScope": "readonly"
+      }
+    },
+    {
+      "files": [
+        "**/*.vue"
+      ],
+      "rules": {
+        "vuejs-accessibility/label-has-for": [
+          "error",
+          {
+            "components": [
+              "VLabel"
+            ],
+            "controlComponents": [
+              "VInput"
+            ],
+            "required": {
+              "every": [
+                "id"
+              ]
+            },
+            "allowChildren": false
+          }
+        ]
+      },
+      "jsPlugins": [
+        "eslint-plugin-vuejs-accessibility"
+      ]
+    }
+  ]
+}

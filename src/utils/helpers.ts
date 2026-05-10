@@ -26,7 +26,7 @@ export const routeToWord = (word: string | undefined): string => {
  *
  * @return  {any}              [return description]
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export const randomElement = (elements: any[]): any => {
   return elements[Math.floor(Math.random() * elements.length)];
 };
@@ -103,7 +103,7 @@ export const checkObjectValues = (object: object, checkFor: boolean = false): bo
  * @param {Object} object - The object to check.
  * @returns {boolean} Returns true if all values in the object are empty strings, false otherwise.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 export const checkObjectValueLength = (obj: Record<string, any>): boolean => {
   return Object.values(obj).every((v) => {
     if (typeof v === "string" || Array.isArray(v)) {
