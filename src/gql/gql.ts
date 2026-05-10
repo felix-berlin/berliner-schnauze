@@ -1,6 +1,6 @@
 import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 
-/* eslint-disable */
+/* oxlint-disable */
 import * as types from "./graphql";
 
 /**
