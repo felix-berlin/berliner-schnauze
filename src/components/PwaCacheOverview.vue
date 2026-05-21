@@ -105,12 +105,24 @@ import Trash2 from 'virtual:icons/lucide/trash-2'
 import X from 'virtual:icons/lucide/x'
 import { onMounted } from 'vue'
 
-const { buckets, isLoading, isCacheAvailable, totalSizeBytes, onlineStatus, loadCaches, clearBucket, clearAll, reSync } =
+const { buckets, clearAll, clearBucket, isCacheAvailable, isLoading, loadCaches, onlineStatus, reSync, totalSizeBytes } =
   useCacheStorage()
 
 onMounted(() => {
   loadCaches()
 })
+
+function confirmClearAll(): void {
+  if (window.confirm('Alle Caches wirklich leeren?')) {
+    clearAll()
+  }
+}
+
+function confirmClearBucket(name: string): void {
+  if (window.confirm(`Cache „${getBucketDisplayName(name)}" wirklich leeren?`)) {
+    clearBucket(name)
+  }
+}
 
 function formatRelativeTime(date: Date): string {
   const diff = Date.now() - date.getTime()
@@ -121,18 +133,6 @@ function formatRelativeTime(date: Date): string {
   if (hours < 1) return `vor ${minutes} Min.`
   if (days < 1) return `vor ${hours} Std.`
   return `vor ${days} Tg.`
-}
-
-function confirmClearBucket(name: string): void {
-  if (window.confirm(`Cache „${getBucketDisplayName(name)}" wirklich leeren?`)) {
-    clearBucket(name)
-  }
-}
-
-function confirmClearAll(): void {
-  if (window.confirm('Alle Caches wirklich leeren?')) {
-    clearAll()
-  }
 }
 </script>
 

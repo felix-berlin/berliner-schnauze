@@ -60,10 +60,10 @@
     height: 4rem;
     border-radius: 0.5rem;
     background: var(--color-surface-2, #1e2a35);
-    animation: pulse 1.5s ease-in-out infinite;
+    animation: c-pwa-cache-pulse 1.5s ease-in-out infinite;
   }
 
-  @keyframes pulse {
+  @keyframes c-pwa-cache-pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
   }
