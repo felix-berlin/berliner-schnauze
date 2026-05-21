@@ -139,8 +139,107 @@
     &:hover { opacity: 1; }
   }
 
+  &__bucket-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.5;
+
+    &:hover { opacity: 1; }
+  }
+
   &__bucket-meta {
     font-size: 0.8rem;
     opacity: 0.6;
+  }
+
+  &__urls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--new-blue-200);
+  }
+
+  &__url {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    font-family: monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-block-end: 1.5rem;
+    background-color: color-mix(in srgb, var(--orange-100) 20%, transparent);
+    border: 1px solid var(--new-blue-200);
+
+    @include butler-mx.dark-mode-class {
+      background-color: rgb(0 0 0 / 10%);
+    }
+  }
+
+  &__info-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 1.25rem;
+
+    & + & {
+      border-top: 1px solid var(--new-blue-200);
+    }
+  }
+
+  &__info-label {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    min-width: 9rem;
+    flex-shrink: 0;
+  }
+
+  &__info-value {
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    &.is-sw-active { color: vars.$success; }
+    &.is-sw-waiting,
+    &.is-sw-installing { color: vars.$gold; }
+    &.is-installed { color: vars.$success; }
+  }
+
+  &__info-sub {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    font-family: monospace;
+  }
+
+  &__quota-bar {
+    display: inline-block;
+    width: 6rem;
+    height: 0.4rem;
+    background-color: color-mix(in srgb, currentcolor 20%, transparent);
+    border: 1px solid var(--new-blue-200);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  &__quota-fill {
+    display: block;
+    height: 100%;
+    background-color: vars.$success;
+    transition: width 0.3s ease;
   }
 }

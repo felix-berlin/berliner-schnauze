@@ -45,7 +45,8 @@ onMount($installPrompt, () => {
  */
 export const isPwaInstalled: () => boolean = (): boolean => {
   return (
-    window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true
+    window.matchMedia("(display-mode: standalone)").matches ||
+    (window.navigator as Navigator & { standalone?: boolean }).standalone === true
   );
 };
 

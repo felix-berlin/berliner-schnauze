@@ -162,6 +162,22 @@ describe('useCacheStorage — loadCaches', () => {
     await result.loadCaches()
     const wotd = result.buckets.value.find((b) => b.name === 'api-word-of-the-day')!
     expect(wotd.lastModified).toBeNull()
+    expect(wotd.oldestEntry).toBeNull()
+    unmount()
+  })
+
+  it('tracks oldest and newest entry dates across multiple entries', async () => {
+    vi.stubGlobal('caches', makeMockCacheStorage({
+      'api-search-index': [
+        { url: 'https://example.com/a', size: 100, dateStr: 'Thu, 01 Jan 2026 08:00:00 GMT' },
+        { url: 'https://example.com/b', size: 100, dateStr: 'Thu, 01 Jan 2026 12:00:00 GMT' },
+      ],
+    }))
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await result.loadCaches()
+    const bucket = result.buckets.value.find((b) => b.name === 'api-search-index')!
+    expect(bucket.lastModified?.toISOString()).toBe('2026-01-01T12:00:00.000Z')
+    expect(bucket.oldestEntry?.toISOString()).toBe('2026-01-01T08:00:00.000Z')
     unmount()
   })
 
@@ -305,6 +321,90 @@ describe('useCacheStorage — onlineStatus', () => {
     window.dispatchEvent(new Event('offline'))
     window.dispatchEvent(new Event('online'))
     expect(result.onlineStatus.value).toBe('online')
+    unmount()
+  })
+})
+
+describe('useCacheStorage — storageQuota', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('populates storageQuota from navigator.storage.estimate', async () => {
+    vi.stubGlobal('caches', makeMockCacheStorage({}))
+    vi.stubGlobal('navigator', {
+      onLine: true,
+      serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 1024, quota: 1_000_000 }) },
+    })
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await result.loadCaches()
+    expect(result.storageQuota.value).toEqual({ usedBytes: 1024, quotaBytes: 1_000_000 })
+    unmount()
+  })
+
+  it('leaves storageQuota null when estimate unavailable', async () => {
+    vi.stubGlobal('caches', makeMockCacheStorage({}))
+    vi.stubGlobal('navigator', {
+      onLine: true,
+      serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+      storage: {},
+    })
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await result.loadCaches()
+    expect(result.storageQuota.value).toBeNull()
+    unmount()
+  })
+})
+
+describe('useCacheStorage — swInfo', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('reports active when SW registration is active', async () => {
+    vi.stubGlobal('caches', makeMockCacheStorage({}))
+    vi.stubGlobal('navigator', {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: {
+        getRegistration: vi.fn().mockResolvedValue({
+          active: { scriptURL: 'https://example.com/sw.js', state: 'activated' },
+          waiting: null,
+          installing: null,
+          scope: 'https://example.com/',
+        }),
+      },
+    })
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await result.loadCaches()
+    expect(result.swInfo.value?.status).toBe('active')
+    expect(result.swInfo.value?.scriptURL).toBe('https://example.com/sw.js')
+    unmount()
+  })
+
+  it('reports not-registered when no SW registration found', async () => {
+    vi.stubGlobal('caches', makeMockCacheStorage({}))
+    vi.stubGlobal('navigator', {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+    })
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await result.loadCaches()
+    expect(result.swInfo.value?.status).toBe('not-registered')
+    unmount()
+  })
+
+  it('reports not-supported when serviceWorker absent from navigator', async () => {
+    vi.stubGlobal('caches', makeMockCacheStorage({}))
+    vi.stubGlobal('navigator', {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+    })
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await result.loadCaches()
+    expect(result.swInfo.value?.status).toBe('not-supported')
     unmount()
   })
 })

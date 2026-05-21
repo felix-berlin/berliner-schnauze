@@ -1,11 +1,26 @@
 import { createToastNotify } from '@stores/index'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 export interface CacheBucket {
   name: string
   entryCount: number
   totalSizeBytes: number
   lastModified: Date | null
+  oldestEntry: Date | null
   urls: string[]
+}
+
+export interface StorageQuota {
+  usedBytes: number
+  quotaBytes: number
+}
+
+export type SwStatus = 'not-supported' | 'not-registered' | 'installing' | 'waiting' | 'active'
+
+export interface SwInfo {
+  status: SwStatus
+  scriptURL: string | null
+  scope: string | null
 }
 
 const BUCKET_NAME_MAP: Record<string, string> = {
@@ -29,32 +44,71 @@ export function getBucketDisplayName(name: string): string {
   return name
 }
 
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-
 export function useCacheStorage() {
   const buckets = ref<CacheBucket[]>([])
   const isLoading = ref(false)
-  const isCacheAvailable = computed(
-    () => typeof window !== 'undefined' && 'caches' in window,
-  )
+  const storageQuota = ref<StorageQuota | null>(null)
+  const swInfo = ref<SwInfo | null>(null)
+
+  const isCacheAvailable = typeof window !== 'undefined' && 'caches' in window
   const totalSizeBytes = computed(() =>
     buckets.value.reduce((sum, b) => sum + b.totalSizeBytes, 0),
   )
+
+  async function loadStorageQuota(): Promise<void> {
+    if (!navigator.storage?.estimate) return
+    try {
+      const est = await navigator.storage.estimate()
+      storageQuota.value = { quotaBytes: est.quota ?? 0, usedBytes: est.usage ?? 0 }
+    } catch {
+      // API unavailable
+    }
+  }
+
+  async function loadSwInfo(): Promise<void> {
+    if (!('serviceWorker' in navigator)) {
+      swInfo.value = { scope: null, scriptURL: null, status: 'not-supported' }
+      return
+    }
+    try {
+      const reg = await navigator.serviceWorker.getRegistration()
+      if (!reg) {
+        swInfo.value = { scope: null, scriptURL: null, status: 'not-registered' }
+        return
+      }
+      const status: SwStatus = reg.installing
+        ? 'installing'
+        : reg.waiting
+          ? 'waiting'
+          : reg.active
+            ? 'active'
+            : 'not-registered'
+      const worker = reg.active ?? reg.waiting ?? reg.installing
+      swInfo.value = { scope: reg.scope ?? null, scriptURL: worker?.scriptURL ?? null, status }
+    } catch {
+      swInfo.value = { scope: null, scriptURL: null, status: 'not-registered' }
+    }
+  }
 
   async function loadCaches(): Promise<void> {
     if (typeof caches === 'undefined' || !caches) return
     isLoading.value = true
     try {
-      const cacheNames = await caches.keys()
+      const [cacheNames] = await Promise.all([
+        caches.keys(),
+        loadStorageQuota(),
+        loadSwInfo(),
+      ])
       const results = await Promise.all(
         cacheNames.map(async (name): Promise<CacheBucket> => {
           const cache = await caches.open(name)
-          if (!cache) return { name, entryCount: 0, totalSizeBytes: 0, lastModified: null, urls: [] }
+          if (!cache) return { entryCount: 0, lastModified: null, name, oldestEntry: null, totalSizeBytes: 0, urls: [] }
           const requests = await cache.keys()
           const urls = requests.map((req) => req.url)
 
           let totalSizeBytes = 0
           let lastModified: Date | null = null
+          let oldestEntry: Date | null = null
 
           for (const request of requests) {
             const response = await cache.match(request)
@@ -67,13 +121,15 @@ export function useCacheStorage() {
               // opaque/CORS response — skip size
             }
 
-            if (!lastModified) {
-              const dateHeader = response.headers.get('Date')
-              if (dateHeader) lastModified = new Date(dateHeader)
+            const dateHeader = response.headers.get('Date')
+            if (dateHeader) {
+              const date = new Date(dateHeader)
+              if (!lastModified || date > lastModified) lastModified = date
+              if (!oldestEntry || date < oldestEntry) oldestEntry = date
             }
           }
 
-          return { name, entryCount: requests.length, totalSizeBytes, lastModified, urls }
+          return { entryCount: requests.length, lastModified, name, oldestEntry, totalSizeBytes, urls }
         }),
       )
       buckets.value = results
@@ -92,8 +148,8 @@ export function useCacheStorage() {
     try {
       // HEAD request bypasses Workbox precache (GET-only) so DevTools offline blocks it
       await fetch('/favicon.ico', {
-        method: 'HEAD',
         cache: 'no-store',
+        method: 'HEAD',
         signal: AbortSignal.timeout(2000),
       })
       onlineStatus.value = 'online'
@@ -102,17 +158,18 @@ export function useCacheStorage() {
     }
   }
 
+  const handleOnline = () => { onlineStatus.value = 'online' }
+  const handleOffline = () => { onlineStatus.value = 'offline' }
+
   onMounted(() => {
-    const handleOnline = () => { onlineStatus.value = 'online' }
-    const handleOffline = () => { onlineStatus.value = 'offline' }
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
-    onUnmounted(() => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    })
-
     void verifyConnectivity()
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('online', handleOnline)
+    window.removeEventListener('offline', handleOffline)
   })
 
   async function clearBucket(name: string): Promise<void> {
@@ -131,8 +188,8 @@ export function useCacheStorage() {
   function reSync(): void {
     createToastNotify({
       message: 'Cache wird aktualisiert…',
-      status: 'info',
       showClose: false,
+      status: 'info',
       timeout: 2000,
     })
     setTimeout(() => location.reload(), 800)
@@ -140,13 +197,15 @@ export function useCacheStorage() {
 
   return {
     buckets,
-    isLoading,
-    isCacheAvailable,
-    totalSizeBytes,
-    onlineStatus,
-    loadCaches,
-    clearBucket,
     clearAll,
+    clearBucket,
+    isCacheAvailable,
+    isLoading,
+    loadCaches,
+    onlineStatus,
     reSync,
+    storageQuota,
+    swInfo,
+    totalSizeBytes,
   }
 }
