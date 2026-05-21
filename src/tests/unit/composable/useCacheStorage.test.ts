@@ -189,3 +189,97 @@ describe('useCacheStorage — loadCaches', () => {
     unmount()
   })
 })
+
+describe('useCacheStorage — clearBucket', () => {
+  let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>
+
+  beforeEach(() => {
+    mockCacheStorage = makeMockCacheStorage({
+      'api-search-index': [{ url: 'https://example.com/api/search/index.json', size: 100 }],
+      'api-word-of-the-day': [{ url: 'https://example.com/api/wotd', size: 50 }],
+    })
+    vi.stubGlobal('caches', mockCacheStorage)
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('calls caches.delete with the bucket name', async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await result.clearBucket('api-search-index')
+    expect(mockCacheStorage.delete).toHaveBeenCalledWith('api-search-index')
+    unmount()
+  })
+
+  it('reloads buckets after clearing', async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await result.clearBucket('api-search-index')
+    // caches.keys() was called again (second call = after clear)
+    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2)
+    unmount()
+  })
+})
+
+describe('useCacheStorage — clearAll', () => {
+  let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>
+
+  beforeEach(() => {
+    mockCacheStorage = makeMockCacheStorage({
+      'api-search-index': [{ url: 'https://example.com/a', size: 100 }],
+      'workbox-precache-v2': [{ url: 'https://example.com/b', size: 200 }],
+    })
+    vi.stubGlobal('caches', mockCacheStorage)
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('deletes all cache buckets', async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await result.clearAll()
+    expect(mockCacheStorage.delete).toHaveBeenCalledWith('api-search-index')
+    expect(mockCacheStorage.delete).toHaveBeenCalledWith('workbox-precache-v2')
+    unmount()
+  })
+
+  it('reloads after clearing all', async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await result.clearAll()
+    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2)
+    unmount()
+  })
+})
+
+describe('useCacheStorage — onlineStatus', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('is "online" initially when navigator.onLine is true', () => {
+    vi.stubGlobal('navigator', { onLine: true, serviceWorker: null })
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    expect(result.onlineStatus.value).toBe('online')
+    unmount()
+  })
+
+  it('updates to "offline" on offline event', async () => {
+    vi.stubGlobal('navigator', { onLine: true, serviceWorker: null })
+    vi.stubGlobal('caches', makeMockCacheStorage({}))
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    window.dispatchEvent(new Event('offline'))
+    expect(result.onlineStatus.value).toBe('offline')
+    unmount()
+  })
+
+  it('updates to "online" on online event', async () => {
+    vi.stubGlobal('navigator', { onLine: false, serviceWorker: null })
+    vi.stubGlobal('caches', makeMockCacheStorage({}))
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    window.dispatchEvent(new Event('offline'))
+    window.dispatchEvent(new Event('online'))
+    expect(result.onlineStatus.value).toBe('online')
+    unmount()
+  })
+})

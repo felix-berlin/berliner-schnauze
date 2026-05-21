@@ -1,3 +1,5 @@
+import { createToastNotify } from '@stores/index'
+
 export interface CacheBucket {
   name: string
   entryCount: number
@@ -47,6 +49,7 @@ export function useCacheStorage() {
       const results = await Promise.all(
         cacheNames.map(async (name): Promise<CacheBucket> => {
           const cache = await caches.open(name)
+          if (!cache) return { name, entryCount: 0, totalSizeBytes: 0, lastModified: null, urls: [] }
           const requests = await cache.keys()
           const urls = requests.map((req) => req.url)
 
@@ -83,6 +86,8 @@ export function useCacheStorage() {
     typeof navigator !== 'undefined' && !navigator.onLine ? 'offline' : 'online',
   )
 
+  const initialLoad = loadCaches()
+
   onMounted(() => {
     const handleOnline = () => {
       onlineStatus.value = 'online'
@@ -98,6 +103,31 @@ export function useCacheStorage() {
     })
   })
 
+  async function clearBucket(name: string): Promise<void> {
+    if (typeof caches === 'undefined' || !caches) return
+    await caches.delete(name)
+    await loadCaches()
+  }
+
+  async function clearAll(): Promise<void> {
+    if (typeof caches === 'undefined' || !caches) return
+    await initialLoad
+    const names = buckets.value.map((b) => b.name)
+    await Promise.all(names.map((name) => caches.delete(name)))
+    await loadCaches()
+  }
+
+  function reSync(): void {
+    createToastNotify({
+      message: 'Cache wird aktualisiert…',
+      status: 'info',
+      showClose: false,
+      timeout: 2000,
+    })
+    navigator.serviceWorker?.controller?.postMessage({ type: 'SKIP_WAITING' })
+    setTimeout(() => location.reload(), 800)
+  }
+
   return {
     buckets,
     isLoading,
@@ -105,5 +135,8 @@ export function useCacheStorage() {
     totalSizeBytes,
     onlineStatus,
     loadCaches,
+    clearBucket,
+    clearAll,
+    reSync,
   }
 }
