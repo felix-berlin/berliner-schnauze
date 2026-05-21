@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { createApp } from 'vue'
+import { createApp, nextTick } from 'vue'
 import { formatBytes, getBucketDisplayName } from '@composables/useCacheStorage'
 import { useCacheStorage } from '@composables/useCacheStorage'
 
@@ -255,17 +255,41 @@ describe('useCacheStorage — clearAll', () => {
 describe('useCacheStorage — onlineStatus', () => {
   afterEach(() => {
     vi.unstubAllGlobals()
+    vi.restoreAllMocks()
   })
 
-  it('is "online" initially when navigator.onLine is true', () => {
+  it('resolves "online" when fetch succeeds', async () => {
     vi.stubGlobal('navigator', { onLine: true, serviceWorker: null })
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }))
     const { result, unmount } = withSetup(() => useCacheStorage())
+    await nextTick()
     expect(result.onlineStatus.value).toBe('online')
     unmount()
   })
 
-  it('updates to "offline" on offline event', async () => {
+  it('resolves "offline" when fetch fails', async () => {
     vi.stubGlobal('navigator', { onLine: true, serviceWorker: null })
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')))
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await nextTick()
+    expect(result.onlineStatus.value).toBe('offline')
+    unmount()
+  })
+
+  it('resolves "offline" without fetch when navigator.onLine is false', async () => {
+    vi.stubGlobal('navigator', { onLine: false, serviceWorker: null })
+    const fetchSpy = vi.fn()
+    vi.stubGlobal('fetch', fetchSpy)
+    const { result, unmount } = withSetup(() => useCacheStorage())
+    await nextTick()
+    expect(result.onlineStatus.value).toBe('offline')
+    expect(fetchSpy).not.toHaveBeenCalled()
+    unmount()
+  })
+
+  it('updates to "offline" on offline event', () => {
+    vi.stubGlobal('navigator', { onLine: true, serviceWorker: null })
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }))
     vi.stubGlobal('caches', makeMockCacheStorage({}))
     const { result, unmount } = withSetup(() => useCacheStorage())
     window.dispatchEvent(new Event('offline'))
@@ -273,8 +297,9 @@ describe('useCacheStorage — onlineStatus', () => {
     unmount()
   })
 
-  it('updates to "online" on online event', async () => {
-    vi.stubGlobal('navigator', { onLine: false, serviceWorker: null })
+  it('updates to "online" on online event', () => {
+    vi.stubGlobal('navigator', { onLine: true, serviceWorker: null })
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }))
     vi.stubGlobal('caches', makeMockCacheStorage({}))
     const { result, unmount } = withSetup(() => useCacheStorage())
     window.dispatchEvent(new Event('offline'))

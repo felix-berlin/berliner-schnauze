@@ -82,23 +82,37 @@ export function useCacheStorage() {
     }
   }
 
-  const onlineStatus = ref<'online' | 'offline'>(
-    typeof navigator !== 'undefined' && !navigator.onLine ? 'offline' : 'online',
-  )
+  const onlineStatus = ref<'online' | 'offline'>('online')
 
-  onMounted(() => {
-    const handleOnline = () => {
-      onlineStatus.value = 'online'
+  async function verifyConnectivity(): Promise<void> {
+    if (!navigator.onLine) {
+      onlineStatus.value = 'offline'
+      return
     }
-    const handleOffline = () => {
+    try {
+      // HEAD request bypasses Workbox precache (GET-only) so DevTools offline blocks it
+      await fetch('/favicon.ico', {
+        method: 'HEAD',
+        cache: 'no-store',
+        signal: AbortSignal.timeout(2000),
+      })
+      onlineStatus.value = 'online'
+    } catch {
       onlineStatus.value = 'offline'
     }
+  }
+
+  onMounted(() => {
+    const handleOnline = () => { onlineStatus.value = 'online' }
+    const handleOffline = () => { onlineStatus.value = 'offline' }
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
     onUnmounted(() => {
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
     })
+
+    void verifyConnectivity()
   })
 
   async function clearBucket(name: string): Promise<void> {

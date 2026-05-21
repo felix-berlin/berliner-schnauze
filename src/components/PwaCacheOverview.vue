@@ -99,29 +99,48 @@
 
 <script setup lang="ts">
 import { formatBytes, getBucketDisplayName, useCacheStorage } from '@composables/useCacheStorage'
+import { close, open } from '@stores/modal'
 import RefreshCw from 'virtual:icons/lucide/refresh-cw'
 import RotateCcw from 'virtual:icons/lucide/rotate-ccw'
 import Trash2 from 'virtual:icons/lucide/trash-2'
 import X from 'virtual:icons/lucide/x'
-import { onMounted } from 'vue'
+import { defineAsyncComponent, onMounted } from 'vue'
 
 const { buckets, clearAll, clearBucket, isCacheAvailable, isLoading, loadCaches, onlineStatus, reSync, totalSizeBytes } =
   useCacheStorage()
+
+const ConfirmDialog = defineAsyncComponent(() => import('@components/ConfirmDialog.vue'))
 
 onMounted(() => {
   loadCaches()
 })
 
 function confirmClearAll(): void {
-  if (window.confirm('Alle Caches wirklich leeren?')) {
-    clearAll()
-  }
+  open({
+    props: { width: '400px' },
+    view: {
+      component: ConfirmDialog,
+      props: { message: 'Alle Caches wirklich leeren?' },
+      events: {
+        confirm: () => { close(); clearAll() },
+        cancel: () => close(),
+      },
+    },
+  })
 }
 
 function confirmClearBucket(name: string): void {
-  if (window.confirm(`Cache „${getBucketDisplayName(name)}" wirklich leeren?`)) {
-    clearBucket(name)
-  }
+  open({
+    props: { width: '400px' },
+    view: {
+      component: ConfirmDialog,
+      props: { message: `Cache „${getBucketDisplayName(name)}" wirklich leeren?` },
+      events: {
+        confirm: () => { close(); clearBucket(name) },
+        cancel: () => close(),
+      },
+    },
+  })
 }
 
 function formatRelativeTime(date: Date): string {

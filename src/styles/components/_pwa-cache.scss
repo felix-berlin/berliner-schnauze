@@ -1,3 +1,8 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
 .c-pwa-cache {
   &__header {
     display: flex;
@@ -11,36 +16,43 @@
   }
 
   &__status {
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-family: vars.$berliner;
+    font-size: butler-fn.fluid(14, 18, 320, 1260);
 
-    &.is-online { color: var(--color-success, #4caf50); }
-    &.is-offline { color: var(--color-error, #f44336); }
+    &.is-online { color: vars.$success; }
+    &.is-offline { color: vars.$danger; }
   }
 
   &__stats {
     display: flex;
     gap: 1rem;
     margin-block-end: 1.5rem;
+    flex-wrap: wrap;
   }
 
   &__stat {
     display: flex;
     flex-direction: column;
-    padding: 0.75rem 1rem;
-    background: var(--color-surface-2, #1e2a35);
-    border-radius: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: color-mix(in srgb, var(--orange-100) 20%, transparent);
+    border: 1px solid var(--new-blue-200);
     min-width: 8rem;
+
+    @include butler-mx.dark-mode-class {
+      background-color: rgb(0 0 0 / 10%);
+    }
   }
 
   &__stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-family: vars.$berliner;
+    font-size: butler-fn.fluid(20, 28, 320, 1260);
+    line-height: 1.2;
   }
 
   &__stat-label {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     opacity: 0.7;
+    margin-top: 0.25rem;
   }
 
   &__actions {
@@ -58,26 +70,25 @@
 
   &__skeleton-row {
     height: 4rem;
-    border-radius: 0.5rem;
-    background: var(--color-surface-2, #1e2a35);
-    animation: c-pwa-cache-pulse 1.5s ease-in-out infinite;
-  }
-
-  @keyframes c-pwa-cache-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    @include mx.skeleton-loader;
   }
 
   &__empty {
     padding: 2rem;
     text-align: center;
     opacity: 0.6;
+    font-family: vars.$berliner;
+    font-size: butler-fn.fluid(16, 20, 320, 1260);
   }
 
   &__unavailable {
-    padding: 1rem;
-    background: var(--color-surface-2, #1e2a35);
-    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    background-color: color-mix(in srgb, var(--orange-100) 20%, transparent);
+    border: 1px solid var(--new-blue-200);
+
+    @include butler-mx.dark-mode-class {
+      background-color: rgb(0 0 0 / 10%);
+    }
   }
 
   &__list {
@@ -87,9 +98,13 @@
   }
 
   &__bucket {
-    padding: 0.75rem 1rem;
-    background: var(--color-surface-2, #1e2a35);
-    border-radius: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background-color: color-mix(in srgb, var(--orange-100) 20%, transparent);
+    border: 1px solid var(--new-blue-200);
+
+    @include butler-mx.dark-mode-class {
+      background-color: rgb(0 0 0 / 10%);
+    }
   }
 
   &__bucket-header {
@@ -101,7 +116,8 @@
 
   &__bucket-name {
     flex: 1;
-    font-weight: 600;
+    font-family: vars.$berliner;
+    font-size: butler-fn.fluid(15, 19, 320, 1260);
   }
 
   &__bucket-size {
@@ -117,9 +133,8 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    border-radius: 0.25rem;
     color: inherit;
-    opacity: 0.6;
+    opacity: 0.5;
 
     &:hover { opacity: 1; }
   }
