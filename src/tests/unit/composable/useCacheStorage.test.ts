@@ -215,8 +215,8 @@ describe('useCacheStorage — clearBucket', () => {
   it('reloads buckets after clearing', async () => {
     const { result, unmount } = withSetup(() => useCacheStorage())
     await result.clearBucket('api-search-index')
-    // caches.keys() was called again (second call = after clear)
-    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2)
+    // caches.keys() was called once (inside loadCaches after clear)
+    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(1)
     unmount()
   })
 })
@@ -247,7 +247,7 @@ describe('useCacheStorage — clearAll', () => {
   it('reloads after clearing all', async () => {
     const { result, unmount } = withSetup(() => useCacheStorage())
     await result.clearAll()
-    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(3)
+    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2)
     unmount()
   })
 })

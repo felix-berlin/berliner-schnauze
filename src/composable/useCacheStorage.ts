@@ -86,8 +86,6 @@ export function useCacheStorage() {
     typeof navigator !== 'undefined' && !navigator.onLine ? 'offline' : 'online',
   )
 
-  const initialLoad = loadCaches()
-
   onMounted(() => {
     const handleOnline = () => {
       onlineStatus.value = 'online'
@@ -123,7 +121,6 @@ export function useCacheStorage() {
       showClose: false,
       timeout: 2000,
     })
-    navigator.serviceWorker?.controller?.postMessage({ type: 'SKIP_WAITING' })
     setTimeout(() => location.reload(), 800)
   }
 
