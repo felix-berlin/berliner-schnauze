@@ -26,3 +26,84 @@ export function getBucketDisplayName(name: string): string {
   }
   return name
 }
+
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+
+export function useCacheStorage() {
+  const buckets = ref<CacheBucket[]>([])
+  const isLoading = ref(false)
+  const isCacheAvailable = computed(
+    () => typeof window !== 'undefined' && 'caches' in window,
+  )
+  const totalSizeBytes = computed(() =>
+    buckets.value.reduce((sum, b) => sum + b.totalSizeBytes, 0),
+  )
+
+  async function loadCaches(): Promise<void> {
+    if (typeof caches === 'undefined' || !caches) return
+    isLoading.value = true
+    try {
+      const cacheNames = await caches.keys()
+      const results = await Promise.all(
+        cacheNames.map(async (name): Promise<CacheBucket> => {
+          const cache = await caches.open(name)
+          const requests = await cache.keys()
+          const urls = requests.map((req) => req.url)
+
+          let totalSizeBytes = 0
+          let lastModified: Date | null = null
+
+          for (const request of requests) {
+            const response = await cache.match(request)
+            if (!response) continue
+
+            try {
+              const blob = await response.clone().blob()
+              totalSizeBytes += blob.size
+            } catch {
+              // opaque/CORS response — skip size
+            }
+
+            if (!lastModified) {
+              const dateHeader = response.headers.get('Date')
+              if (dateHeader) lastModified = new Date(dateHeader)
+            }
+          }
+
+          return { name, entryCount: requests.length, totalSizeBytes, lastModified, urls }
+        }),
+      )
+      buckets.value = results
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const onlineStatus = ref<'online' | 'offline'>(
+    typeof navigator !== 'undefined' && !navigator.onLine ? 'offline' : 'online',
+  )
+
+  onMounted(() => {
+    const handleOnline = () => {
+      onlineStatus.value = 'online'
+    }
+    const handleOffline = () => {
+      onlineStatus.value = 'offline'
+    }
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+    onUnmounted(() => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    })
+  })
+
+  return {
+    buckets,
+    isLoading,
+    isCacheAvailable,
+    totalSizeBytes,
+    onlineStatus,
+    loadCaches,
+  }
+}
