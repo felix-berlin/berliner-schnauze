@@ -20,7 +20,7 @@ pnpm test:unit:ui            # Vitest UI for debugging
 
 # Linting & type checking
 pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS)
-pnpm typechecking            # astro check + tsc + vue-tsc
+pnpm typechecking            # astro check + tsc + vue-tsc  (slow — run targeted, not after every edit)
 
 # Build
 pnpm build                   # Production build (Cloudflare Pages output)
@@ -28,6 +28,16 @@ pnpm build:strict            # Strict build with full type checking
 
 # GraphQL
 pnpm gql:generate            # One-shot codegen run
+
+# Formatting
+pnpm format                  # Format with oxfmt
+pnpm format:check            # Check formatting without writing
+
+# Cloudflare Pages local preview (run after build)
+pnpm server:pages            # Serve ./dist with Wrangler Pages
+
+# WordPress auth
+pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (needs .env)
 ```
 
 Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
@@ -48,18 +58,21 @@ Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
 Always use TypeScript path aliases — never relative paths like `../../stores/`:
 
 | Alias | Maps to |
-|---|---|
+| --- | --- |
 | `@components/*` | `src/components/` |
 | `@stores/*` | `src/stores/` |
 | `@utils/*` | `src/utils/` |
 | `@services/*` | `src/services/` |
 | `@composables/*` | `src/composable/` |
 | `@layouts/*` | `src/layouts/` |
+| `@lib/*` | `src/lib/` |
+| `@assets/*` | `src/assets/` |
+| `@styles/*` | `src/styles/` |
 | `@/*` | `src/` |
 
 ## Key Conventions
 
-**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordSearch`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS.
+**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordList`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS.
 
 **Vue components**: Use Composition API with `<script setup lang="ts">`. SCSS scoped styles with `<style lang="scss">` and `@use "@styles/..."`.
 
@@ -75,13 +88,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 ## Environment Variables
 
-Configured via Astro's `env` schema in `astro.config.mjs`. Import from `astro:env/client` or `astro:env/server`:
-
-```typescript
-import { WP_API, TURNSTILE_SITE_KEY } from "astro:env/client";
-```
-
-Key variables: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`. See `.env.example` for the full list.
+Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`. Full list in `.env.example`.
 
 ## Testing
 

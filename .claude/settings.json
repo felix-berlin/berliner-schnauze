@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.ts|*.tsx|*.js|*.mjs|*.cjs|*.vue|*.astro) out=$(pnpm exec oxlint \"$file\" --deny-warnings 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; esac"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); base=$(basename \"$file\"); case \"$base\" in .env|.env.*) if [ \"$base\" != \".env.example\" ]; then echo 'BLOCKED: Do not edit .env files. Use .env.example instead.'; exit 2; fi;; esac"
+          }
+        ]
+      }
+    ]
+  }
+}

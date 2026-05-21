@@ -42,3 +42,5 @@ pnpm-debug.log*
 src/utils/supportedBrowsers.mjs
 stats.html
 tests/unit/junit-report.xml
+
+.claude/settings.local.json
