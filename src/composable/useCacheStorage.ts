@@ -111,8 +111,7 @@ export function useCacheStorage() {
 
   async function clearAll(): Promise<void> {
     if (typeof caches === 'undefined' || !caches) return
-    await initialLoad
-    const names = buckets.value.map((b) => b.name)
+    const names = await caches.keys()
     await Promise.all(names.map((name) => caches.delete(name)))
     await loadCaches()
   }

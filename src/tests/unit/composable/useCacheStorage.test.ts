@@ -247,7 +247,7 @@ describe('useCacheStorage — clearAll', () => {
   it('reloads after clearing all', async () => {
     const { result, unmount } = withSetup(() => useCacheStorage())
     await result.clearAll()
-    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2)
+    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(3)
     unmount()
   })
 })
