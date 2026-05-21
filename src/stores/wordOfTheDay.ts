@@ -46,7 +46,7 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
     decode(value) {
       try {
         return JSON.parse(value);
-      } catch (e) {
+      } catch  {
         return value;
       }
     },
@@ -83,8 +83,8 @@ export const getWordOfTheDay = async (): Promise<void> => {
     });
 };
 
-onMount($wordOfTheDay, async () => {
-  await task(async () => {
+onMount($wordOfTheDay, () => {
+  void task(async () => {
     await getWordOfTheDay().catch((err) => {
       console.error("Failed to fetch Word of the Day: ", err);
     });

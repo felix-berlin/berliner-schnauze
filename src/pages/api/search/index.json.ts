@@ -45,8 +45,8 @@ function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, b
   const wordTypes = extractWordTypes(wordTags);
 
   return {
-    berlinerischWordTypes: wordTypes,
     berlinerWordId: node.berlinerWordId,
+    berlinerischWordTypes: wordTypes,
     dateGmt: node.dateGmt ?? "",
     dateTs: node.dateGmt ? Date.parse(node.dateGmt) : 0,
     modifiedGmt: node.modifiedGmt ?? "",

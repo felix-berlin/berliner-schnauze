@@ -18,8 +18,8 @@ type ModalSettings = {
 
 type ModalView = {
   component?: object;
-  events?: Record<string, (...args: any[]) => void>;
-  props?: Record<string, any>;
+  events?: Record<string, (...args: unknown[]) => void>;
+  props?: Record<string, unknown>;
 };
 
 const propsDefault: ModalProps = {
@@ -40,13 +40,11 @@ export const $viewIsComponent = atom(false);
 export const $onCloseCallback = atom<(() => void) | null>(null);
 export const $scrollPosition = atom<number>(0);
 
-export const isVueComponent = (content: any): boolean => {
+export const isVueComponent = (content: unknown): boolean => {
+  if (!content || typeof content !== "object") return false;
+  const obj = content as Record<string, unknown>;
   return (
-    content &&
-    typeof content === "object" &&
-    (typeof content.render === "function" ||
-      typeof content.setup === "function" ||
-      isVNode(content))
+    typeof obj.render === "function" || typeof obj.setup === "function" || isVNode(content)
   );
 };
 
@@ -64,8 +62,9 @@ export const open = (
   callback: (() => void) | null = null,
 ) => {
   $props.set({ ...$props.get(), ...settings.props });
-  $viewIsComponent.set(isVueComponent(settings.view?.component));
-  $view.set(markRaw(settings.view || {}));
+  const view = typeof settings.view === "object" ? settings.view : {};
+  $viewIsComponent.set(isVueComponent(view.component));
+  $view.set(markRaw(view));
 
   void nextTick(() => {
     const el = $element.get();

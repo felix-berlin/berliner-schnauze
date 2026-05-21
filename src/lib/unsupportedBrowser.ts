@@ -1,5 +1,5 @@
 import { createToastNotify } from "@stores/index.ts";
-import supportedBrowsers from "@utils/supportedBrowsers";
+import supportedBrowsers from "@utils/supportedBrowsers.mjs";
 
 /**
  * Checks if the current browser is supported

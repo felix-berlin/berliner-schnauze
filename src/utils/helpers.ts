@@ -31,7 +31,7 @@ export const randomElement = (elements: any[]): any => {
   return elements[Math.floor(Math.random() * elements.length)];
 };
 
-export const seoData = (data, baseUrl: string = SITE_URL): SeoProps => {
+export const seoData = (data: { seo?: Record<string, unknown>; title: { title: string } }, baseUrl: string = SITE_URL): SeoProps => {
   return {
     seo: {
       ...data.seo,
@@ -42,11 +42,6 @@ export const seoData = (data, baseUrl: string = SITE_URL): SeoProps => {
   };
 };
 
-declare global {
-  interface Document {
-    startViewTransition?: (callback: () => void) => void;
-  }
-}
 
 /**
  * A wrapper for startViewTransition that checks if the method exists.

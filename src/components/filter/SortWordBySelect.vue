@@ -23,20 +23,21 @@ import { reactive, ref } from "vue";
 
 const options = reactive([
   {
+    sortType: "Alphabetisch",
     sorts: [
       { category: "alphabetical", name: "Alphabetisch (A - Z)", sort: "ASC" },
       { category: "alphabetical", name: "Alphabetisch (Z - A)", sort: "DESC" },
     ],
-    sortType: "Alphabetisch",
   },
   {
+    sortType: "Datum",
     sorts: [
       { category: "date", name: "neuste zuerst", sort: "DESC" },
       { category: "date", name: "älteste zuerst", sort: "ASC" },
     ],
-    sortType: "Datum",
   },
   {
+    sortType: "Änderungsdatum",
     sorts: [
       {
         category: "modifiedDate",
@@ -49,7 +50,6 @@ const options = reactive([
         sort: "ASC",
       },
     ],
-    sortType: "Änderungsdatum",
   },
 ]);
 

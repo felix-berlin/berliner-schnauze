@@ -41,7 +41,7 @@ const lightboxImageList = await Promise.all(
       images[format] = await getImage({
         format: format,
         height: image.mediaDetails?.height || undefined,
-        sizes: `${lightboxSizes}, ${image.mediaDetails?.width!}px` || null,
+        sizes: `${lightboxSizes}, ${image.mediaDetails?.width}px`,
         src: image.sourceUrl!,
         width: image.mediaDetails?.width || undefined,
         widths: lightboxWidths || undefined,
@@ -119,8 +119,8 @@ const lightboxImageList = await Promise.all(
     connectedCallback() {
       if (!this.lightbox) {
         this.lightbox = new PhotoSwipeLightbox({
-          gallery: `#${this.dataset.id}`,
           children: ".c-image-gallery__link",
+          gallery: `#${this.dataset.id}`,
           pswpModule: () => import("photoswipe"),
         });
 

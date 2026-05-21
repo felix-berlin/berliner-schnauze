@@ -1,5 +1,3 @@
-import type { FormData } from "@components/SuggestWordForm.vue";
-
 import { SUGGEST_WORD_FORM_ID, WP_AUTH_REFRESH_TOKEN, WP_REST_API } from "astro:env/client";
 
 import { graphql } from "@/gql";
@@ -19,7 +17,7 @@ export const SendEmail = graphql(`
  *
  * @return  {Promise<void>}
  */
-export const sendEmailViaContactForm7 = async (formData: FormData): Promise<void> => {
+export const sendEmailViaContactForm7 = async (formData: Record<string, string | undefined>): Promise<void> => {
   const formInputs = new FormData();
 
   for (const name in formData) {

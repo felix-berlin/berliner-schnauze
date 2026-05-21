@@ -23,6 +23,9 @@ importers:
       '@felix_berlin/sass-butler':
         specifier: 3.1.1
         version: 3.1.1(sass@1.99.0)
+      '@graphql-typed-document-node/core':
+        specifier: ^3.2.0
+        version: 3.2.0(graphql@16.14.0)
       '@iconify-json/lucide':
         specifier: ^1.2.109
         version: 1.2.109
