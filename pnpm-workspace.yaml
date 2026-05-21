@@ -11,3 +11,5 @@ minimumReleaseAgeExclude:
   - miniflare@4.20260520.0
   - vite@8.0.14
   - wrangler@4.93.1
+  - '@iconify-json/lucide@1.2.109'
+  - astro@6.3.7

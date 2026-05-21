@@ -4,6 +4,9 @@ import { WP_API } from "astro:env/client";
 
 import type {
   GetAllWordsQueryVariables,
+  OrderEnum,
+  PostObjectsConnectionOrderbyEnum,
+  PostStatusEnum,
   RootQueryToBerlinerWordConnectionEdge,
 } from "@/gql/graphql.ts";
 
@@ -11,9 +14,6 @@ import { graphql } from "@/gql";
 import {
   GetAllWordsDocument,
   GetAllWordsLinksDocument,
-  OrderEnum,
-  PostObjectsConnectionOrderbyEnum,
-  PostStatusEnum,
 } from "@/gql/graphql.ts";
 
 const client = new Client({
@@ -28,11 +28,11 @@ const client = new Client({
 
 const fetchPaginatedWords = async (
   queryDocument: any,
-  orderByField = PostObjectsConnectionOrderbyEnum.Title,
-  orderByType = OrderEnum.Asc,
-  stati = SHOW_TEST_DATA
-    ? [PostStatusEnum.Draft, PostStatusEnum.Publish]
-    : [PostStatusEnum.Publish],
+  orderByField: PostObjectsConnectionOrderbyEnum = 'TITLE',
+  orderByType: OrderEnum = 'ASC',
+  stati: PostStatusEnum[] = SHOW_TEST_DATA
+    ? ['DRAFT', 'PUBLISH']
+    : ['PUBLISH'],
 ) => {
   let allWords: RootQueryToBerlinerWordConnectionEdge[] = [];
   let cursor = null;
@@ -70,21 +70,21 @@ const fetchPaginatedWords = async (
 };
 
 export const fetchAllWords = async (
-  orderByField = PostObjectsConnectionOrderbyEnum.Title,
-  orderByType = OrderEnum.Asc,
-  stati = SHOW_TEST_DATA
-    ? [PostStatusEnum.Draft, PostStatusEnum.Publish]
-    : [PostStatusEnum.Publish],
+  orderByField: PostObjectsConnectionOrderbyEnum = 'TITLE',
+  orderByType: OrderEnum = 'ASC',
+  stati: PostStatusEnum[] = SHOW_TEST_DATA
+    ? ['DRAFT', 'PUBLISH']
+    : ['PUBLISH'],
 ) => {
   return fetchPaginatedWords(GetAllWordsDocument, orderByField, orderByType, stati);
 };
 
 export const fetchAllWordsLinks = async (
-  orderByField = PostObjectsConnectionOrderbyEnum.Title,
-  orderByType = OrderEnum.Asc,
-  stati = SHOW_TEST_DATA
-    ? [PostStatusEnum.Draft, PostStatusEnum.Publish]
-    : [PostStatusEnum.Publish],
+  orderByField: PostObjectsConnectionOrderbyEnum = 'TITLE',
+  orderByType: OrderEnum = 'ASC',
+  stati: PostStatusEnum[] = SHOW_TEST_DATA
+    ? ['DRAFT', 'PUBLISH']
+    : ['PUBLISH'],
 ) => {
   return fetchPaginatedWords(GetAllWordsLinksDocument, orderByField, orderByType, stati);
 };

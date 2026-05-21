@@ -21,7 +21,6 @@ const config: CodegenConfig = {
       preset: "client",
     },
   },
-  hooks: { afterAllFileWrite: ["oxfmt"] },
   ignoreNoDocuments: true, // for better experience with the watcher
   schema: [
     {
