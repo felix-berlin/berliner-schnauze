@@ -3,11 +3,11 @@ import { SHOW_TEST_DATA } from "astro:env/client";
 import { WP_API } from "astro:env/client";
 
 import type {
+  GetAllWordsQuery,
   GetAllWordsQueryVariables,
   OrderEnum,
   PostObjectsConnectionOrderbyEnum,
   PostStatusEnum,
-  RootQueryToBerlinerWordConnectionEdge,
 } from "@/gql/graphql.ts";
 
 import { graphql } from "@/gql";
@@ -27,14 +27,14 @@ const client = new Client({
 });
 
 const fetchPaginatedWords = async (
-  queryDocument: any,
+  queryDocument: typeof GetAllWordsDocument | typeof GetAllWordsLinksDocument,
   orderByField: PostObjectsConnectionOrderbyEnum = 'TITLE',
   orderByType: OrderEnum = 'ASC',
   stati: PostStatusEnum[] = SHOW_TEST_DATA
     ? ['DRAFT', 'PUBLISH']
     : ['PUBLISH'],
 ) => {
-  let allWords: RootQueryToBerlinerWordConnectionEdge[] = [];
+  let allWords: NonNullable<GetAllWordsQuery['berlinerWords']>['edges'] = [];
   let cursor = null;
   const pageSize = 100;
 
