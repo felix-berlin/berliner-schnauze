@@ -10564,7 +10564,7 @@ type DeleteUserPayload {
 
 """The discussion setting type"""
 type DiscussionSettings {
-  """Erlaube Besuchern, neue Beiträge zu kommentieren."""
+  """Erlaubt Personen, neue Beiträge zu kommentieren."""
   defaultCommentStatus: String
   """
   Link-Benachrichtigungen von anderen Blogs (Pingbacks und Trackbacks) zu neuen Beiträgen erlauben.
@@ -12203,8 +12203,6 @@ Media file type classification based on MIME standards. Used to identify and fil
 enum MimeTypeEnum {
   """application/java mime type."""
   APPLICATION_JAVA
-  """application/javascript mime type."""
-  APPLICATION_JAVASCRIPT
   """application/msword mime type."""
   APPLICATION_MSWORD
   """application/octet-stream mime type."""
@@ -12367,8 +12365,6 @@ enum MimeTypeEnum {
   TEXT_CSS
   """text/csv mime type."""
   TEXT_CSV
-  """text/html mime type."""
-  TEXT_HTML
   """text/plain mime type."""
   TEXT_PLAIN
   """text/richtext mime type."""
@@ -15049,7 +15045,7 @@ type ReadingSettings {
   Die ID der Seite, auf der die neuesten Beiträge angezeigt werden sollen
   """
   pageForPosts: Int
-  """Die ID der Seite, die auf der Startseite angezeigt werden soll"""
+  """Die ID der Seite, die auf der Homepage angezeigt werden soll"""
   pageOnFront: Int
   """Maximal angezeigte Beiträge."""
   postsPerPage: Int
@@ -20107,7 +20103,7 @@ input UpdateSettingsInput {
   This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions.
   """
   clientMutationId: String
-  """Erlaube Besuchern, neue Beiträge zu kommentieren."""
+  """Erlaubt Personen, neue Beiträge zu kommentieren."""
   discussionSettingsDefaultCommentStatus: String
   """
   Link-Benachrichtigungen von anderen Blogs (Pingbacks und Trackbacks) zu neuen Beiträgen erlauben.
@@ -20137,7 +20133,7 @@ input UpdateSettingsInput {
   Die ID der Seite, auf der die neuesten Beiträge angezeigt werden sollen
   """
   readingSettingsPageForPosts: Int
-  """Die ID der Seite, die auf der Startseite angezeigt werden soll"""
+  """Die ID der Seite, die auf der Homepage angezeigt werden soll"""
   readingSettingsPageOnFront: Int
   """Maximal angezeigte Beiträge."""
   readingSettingsPostsPerPage: Int
