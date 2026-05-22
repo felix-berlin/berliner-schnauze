@@ -1,4 +1,4 @@
-import type { SeoProps } from "@components/BaseHead.astro";
+import type { SeoProps } from "@/types/seo";
 
 import { SITE_NAME, SITE_URL } from "astro:env/client";
 

@@ -18,7 +18,7 @@
         aria-label="Wort teilen"
         type="button"
         class="c-options-dropdown__copy-button c-button"
-        @click="shareWord(slug)"
+        @click="shareWord(slug ?? '')"
       >
         <Share2 width="18" height="18" class="c-options-dropdown__icon-button" />
 
@@ -30,7 +30,7 @@
         aria-label="Link zum Wort kopieren"
         type="button"
         class="c-options-dropdown__copy-button c-button"
-        @click="copyWordPageUrlToClipboard(slug)"
+        @click="copyWordPageUrlToClipboard(slug ?? '')"
       >
         <Link width="18" height="18" class="c-options-dropdown__icon-button" />
 
@@ -42,7 +42,7 @@
         aria-label="Wort kopieren"
         type="button"
         class="c-options-dropdown__copy-button c-button"
-        @click="copyNameToClipboard(berlinerisch)"
+        @click="copyNameToClipboard(berlinerisch ?? '')"
       >
         <Copy width="18" height="18" class="c-options-dropdown__icon-button" />
 
@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BerlinerWord } from "@stores/index.ts";
+import type { BerlinerWord, WordProperties } from "@/gql/entity-types";
 
 import { createToastNotify } from "@stores/index.ts";
 import { trackEvent } from "@utils/analytics";
@@ -67,7 +67,7 @@ import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
 
 interface WordProps {
-  berlinerisch: BerlinerWord["wordProperties"]["berlinerisch"];
+  berlinerisch: WordProperties["berlinerisch"];
   slug: BerlinerWord["slug"];
 }
 

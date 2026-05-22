@@ -60,7 +60,7 @@ import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 type WordProps = {
   index?: number;
-  positions: Record<string, { length: number; start: number }[]> | undefined;
+  positions: Record<string, Record<string, { length: number; start: number }[]>> | undefined;
   showDropdown?: boolean;
   source: OramaSearchIndex;
 };

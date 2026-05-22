@@ -60,7 +60,7 @@ useMutationObserver(
   currentModal,
   (mutations) => {
     if (!mutations[0]) return;
-    const open = !!mutations[0].target?.open;
+    const open = !!(mutations[0].target as HTMLDialogElement | null)?.open;
     $isOpen.set(open);
 
     if (open && props.value.disableScroll) {

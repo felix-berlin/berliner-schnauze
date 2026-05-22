@@ -2,7 +2,7 @@ import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 import nlp from "de-compromise";
 import natural from "natural";
 
-import type { BerlinerWord, WordPropertiesWikimediaFiles } from "@/gql/graphql.ts";
+import type { BerlinerWord, WordPropertiesWikimediaFiles } from "@/gql/entity-types";
 
 /**
  * Returns the word with vowels and consonants colored.
@@ -198,9 +198,8 @@ export const similarWords = (
   const similarWords = allWordsWithoutCurrent.map((word) => {
     return {
       isSimilar: natural.JaroWinklerDistance(
-        word.wordProperties.berlinerisch,
-        currentWord.wordProperties?.berlinerisch,
-        false,
+        word.wordProperties?.berlinerisch ?? "",
+        currentWord.wordProperties?.berlinerisch ?? "",
       ),
       word: word,
     };
@@ -216,7 +215,7 @@ export const createWikimediaFileList = async (wikimediaFiles: WordPropertiesWiki
 
   const files = [];
   for (const file of wikimediaFiles) {
-    const img = await fetchWikimediaAPI(file?.wikimediaFile);
+    const img = await fetchWikimediaAPI(file?.wikimediaFile ?? "");
     files.push({
       caption: file?.caption,
       description: file?.description,

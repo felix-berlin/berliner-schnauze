@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { routeToWord } from "@utils/helpers.ts";
 
-import type { BerlinerWord } from "@/gql/graphql.ts";
+import type { BerlinerWord } from "@/gql/entity-types";
 
 interface RelatedWordsProps {
   numberOfWords?: number;

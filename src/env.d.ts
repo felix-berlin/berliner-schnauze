@@ -5,14 +5,27 @@
 
 declare module "*.gql";
 declare module "*.graphql";
-declare module "hyphenation.de";
-declare module "hypher";
-declare module "de-compromise";
+
+interface TurnstileInstance {
+  render(
+    selector: string,
+    options: {
+      callback?: (response: string) => void;
+      "error-callback"?: unknown;
+      "expired-callback"?: unknown;
+      sitekey: string;
+      theme?: "auto" | "dark" | "light";
+    },
+  ): string | undefined;
+}
 
 declare global {
   interface Window {
     _paq: Array<(boolean | null | number | object | string | undefined)[]>;
+    onloadTurnstileCallback: (() => void) | undefined;
+    turnstile: TurnstileInstance | null | undefined;
   }
+  const turnstile: TurnstileInstance;
 }
 
 export {};

@@ -21,7 +21,7 @@ import Pause from "virtual:icons/lucide/pause";
 import Play from "virtual:icons/lucide/play";
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 
-import type { MediaItem } from "@/gql/graphql";
+import type { MediaItem } from "@/gql/entity-types";
 
 type AudioPlayerListProps = {
   audio: MediaItem["mediaItemUrl"];

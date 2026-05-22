@@ -53,7 +53,7 @@ const fetchPaginatedWords = async (
     const data = response.data?.berlinerWords;
     if (!data) break;
 
-    allWords = [...allWords, ...data.edges];
+    allWords = [...allWords, ...(data.edges as typeof allWords)];
     cursor = data.pageInfo.endCursor;
 
     if (!data.pageInfo.hasNextPage) {

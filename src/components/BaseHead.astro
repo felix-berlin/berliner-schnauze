@@ -4,43 +4,14 @@ import { ClientRouter } from 'astro:transitions';
 import { pwaInfo } from 'virtual:pwa-info';
 
 import { removeFileExtension } from '@/utils/helpers';
+import type { Seo, SeoProps, Title } from '@/types/seo';
+
+export type { Seo, SeoProps, Title };
 
 import BerlinBold from '/fonts/Berlin-Bold.woff2';
 import BerlinItalic from '/fonts/Berlin-Italic.woff2';
 import Berlin from '/fonts/Berlin.woff2';
 import BerlinerRegular from '/fonts/BerlinerRegular.woff2';
-
-export interface Seo {
-  canonical?: string;
-  metaDesc?: string;
-  metaRobotsNofollow?: string;
-  metaRobotsNoindex?: string;
-  opengraphAuthor?: string;
-  opengraphDescription?: string;
-  opengraphImage?: {
-    sourceUrl: string;
-  };
-  opengraphModifiedTime?: string;
-  opengraphPublishedTime?: string;
-  opengraphPublisher?: string;
-  opengraphSiteName?: string;
-  opengraphTitle?: string;
-  opengraphType?: string;
-  opengraphUrl?: string;
-  readingTime?: number;
-  title?: string;
-  twitterDescription?: string;
-  twitterTitle?: string;
-}
-
-export interface SeoProps {
-  seo: Seo;
-  title: Title;
-}
-
-export interface Title {
-  title: string;
-}
 
 const { seo, title } = Astro.props as SeoProps & Title;
 const canonicalURL = removeFileExtension(Astro.url.href);

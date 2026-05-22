@@ -53,7 +53,7 @@
 import Quote from "virtual:icons/lucide/quote";
 import { defineAsyncComponent } from "vue";
 
-import type { Maybe, WordPropertiesExamples } from "@/gql/graphql";
+import type { Maybe, WordPropertiesExamples } from "@/gql/entity-types";
 
 const AudioPlayerList = defineAsyncComponent(() => import("@components/AudioPlayerList.vue"));
 
