@@ -159,7 +159,7 @@ export default defineConfig({
   },
   integrations: [
     vue({
-      appEntrypoint: "src/pages/_app",
+      appEntrypoint: "/src/pages/_app",
       // devtools: {
       //   launchEditor: "code",
       // },
