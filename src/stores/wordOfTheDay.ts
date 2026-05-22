@@ -46,7 +46,7 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
     decode(value) {
       try {
         return JSON.parse(value);
-      } catch  {
+      } catch {
         return value;
       }
     },

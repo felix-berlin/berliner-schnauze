@@ -19,8 +19,12 @@
     font-family: vars.$berliner;
     font-size: butler-fn.fluid(14, 18, 320, 1260);
 
-    &.is-online { color: vars.$success; }
-    &.is-offline { color: vars.$danger; }
+    &.is-online {
+      color: vars.$success;
+    }
+    &.is-offline {
+      color: vars.$danger;
+    }
   }
 
   &__stats {
@@ -136,7 +140,9 @@
     color: inherit;
     opacity: 0.5;
 
-    &:hover { opacity: 1; }
+    &:hover {
+      opacity: 1;
+    }
   }
 
   &__bucket-toggle {
@@ -150,7 +156,9 @@
     color: inherit;
     opacity: 0.5;
 
-    &:hover { opacity: 1; }
+    &:hover {
+      opacity: 1;
+    }
   }
 
   &__bucket-meta {
@@ -214,10 +222,16 @@
     gap: 0.5rem;
     flex-wrap: wrap;
 
-    &.is-sw-active { color: vars.$success; }
+    &.is-sw-active {
+      color: vars.$success;
+    }
     &.is-sw-waiting,
-    &.is-sw-installing { color: vars.$gold; }
-    &.is-installed { color: vars.$success; }
+    &.is-sw-installing {
+      color: vars.$gold;
+    }
+    &.is-installed {
+      color: vars.$success;
+    }
   }
 
   &__info-sub {

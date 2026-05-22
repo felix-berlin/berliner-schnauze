@@ -43,9 +43,7 @@ export const $scrollPosition = atom<number>(0);
 export const isVueComponent = (content: unknown): boolean => {
   if (!content || typeof content !== "object") return false;
   const obj = content as Record<string, unknown>;
-  return (
-    typeof obj.render === "function" || typeof obj.setup === "function" || isVNode(content)
-  );
+  return typeof obj.render === "function" || typeof obj.setup === "function" || isVNode(content);
 };
 
 export const preventScroll = (status: boolean) => {

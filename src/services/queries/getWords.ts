@@ -11,10 +11,7 @@ import type {
 } from "@/gql/graphql.ts";
 
 import { graphql } from "@/gql";
-import {
-  GetAllWordsDocument,
-  GetAllWordsLinksDocument,
-} from "@/gql/graphql.ts";
+import { GetAllWordsDocument, GetAllWordsLinksDocument } from "@/gql/graphql.ts";
 
 const client = new Client({
   exchanges: [cacheExchange, fetchExchange],
@@ -28,13 +25,11 @@ const client = new Client({
 
 const fetchPaginatedWords = async (
   queryDocument: typeof GetAllWordsDocument | typeof GetAllWordsLinksDocument,
-  orderByField: PostObjectsConnectionOrderbyEnum = 'TITLE',
-  orderByType: OrderEnum = 'ASC',
-  stati: PostStatusEnum[] = SHOW_TEST_DATA
-    ? ['DRAFT', 'PUBLISH']
-    : ['PUBLISH'],
+  orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
+  orderByType: OrderEnum = "ASC",
+  stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
 ) => {
-  let allWords: NonNullable<GetAllWordsQuery['berlinerWords']>['edges'] = [];
+  let allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
   let cursor = null;
   const pageSize = 100;
 
@@ -70,21 +65,17 @@ const fetchPaginatedWords = async (
 };
 
 export const fetchAllWords = async (
-  orderByField: PostObjectsConnectionOrderbyEnum = 'TITLE',
-  orderByType: OrderEnum = 'ASC',
-  stati: PostStatusEnum[] = SHOW_TEST_DATA
-    ? ['DRAFT', 'PUBLISH']
-    : ['PUBLISH'],
+  orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
+  orderByType: OrderEnum = "ASC",
+  stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
 ) => {
   return fetchPaginatedWords(GetAllWordsDocument, orderByField, orderByType, stati);
 };
 
 export const fetchAllWordsLinks = async (
-  orderByField: PostObjectsConnectionOrderbyEnum = 'TITLE',
-  orderByType: OrderEnum = 'ASC',
-  stati: PostStatusEnum[] = SHOW_TEST_DATA
-    ? ['DRAFT', 'PUBLISH']
-    : ['PUBLISH'],
+  orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
+  orderByType: OrderEnum = "ASC",
+  stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
 ) => {
   return fetchPaginatedWords(GetAllWordsLinksDocument, orderByField, orderByType, stati);
 };

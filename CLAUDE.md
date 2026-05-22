@@ -57,18 +57,18 @@ Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
 
 Always use TypeScript path aliases — never relative paths like `../../stores/`:
 
-| Alias | Maps to |
-| --- | --- |
-| `@components/*` | `src/components/` |
-| `@stores/*` | `src/stores/` |
-| `@utils/*` | `src/utils/` |
-| `@services/*` | `src/services/` |
+| Alias            | Maps to           |
+| ---------------- | ----------------- |
+| `@components/*`  | `src/components/` |
+| `@stores/*`      | `src/stores/`     |
+| `@utils/*`       | `src/utils/`      |
+| `@services/*`    | `src/services/`   |
 | `@composables/*` | `src/composable/` |
-| `@layouts/*` | `src/layouts/` |
-| `@lib/*` | `src/lib/` |
-| `@assets/*` | `src/assets/` |
-| `@styles/*` | `src/styles/` |
-| `@/*` | `src/` |
+| `@layouts/*`     | `src/layouts/`    |
+| `@lib/*`         | `src/lib/`        |
+| `@assets/*`      | `src/assets/`     |
+| `@styles/*`      | `src/styles/`     |
+| `@/*`            | `src/`            |
 
 ## Key Conventions
 

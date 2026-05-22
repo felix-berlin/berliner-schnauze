@@ -17,7 +17,9 @@ export const SendEmail = graphql(`
  *
  * @return  {Promise<void>}
  */
-export const sendEmailViaContactForm7 = async (formData: Record<string, string | undefined>): Promise<void> => {
+export const sendEmailViaContactForm7 = async (
+  formData: Record<string, string | undefined>,
+): Promise<void> => {
   const formInputs = new FormData();
 
   for (const name in formData) {

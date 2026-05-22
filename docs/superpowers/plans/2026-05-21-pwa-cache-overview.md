@@ -12,19 +12,20 @@
 
 ## File Map
 
-| Action | Path | Responsibility |
-|---|---|---|
-| Create | `src/composable/useCacheStorage.ts` | Cache API logic, reactive state, all actions |
-| Create | `src/components/PwaCacheOverview.vue` | Full cache overview UI, `client:only="vue"` |
-| Create | `src/pages/pwa.astro` | Static Astro page at `/pwa` |
-| Create | `src/tests/unit/composable/useCacheStorage.test.ts` | Unit tests for composable |
-| Modify | `src/components/Footer.astro` | Add `/pwa` link to `navMenu1` |
+| Action | Path                                                | Responsibility                               |
+| ------ | --------------------------------------------------- | -------------------------------------------- |
+| Create | `src/composable/useCacheStorage.ts`                 | Cache API logic, reactive state, all actions |
+| Create | `src/components/PwaCacheOverview.vue`               | Full cache overview UI, `client:only="vue"`  |
+| Create | `src/pages/pwa.astro`                               | Static Astro page at `/pwa`                  |
+| Create | `src/tests/unit/composable/useCacheStorage.test.ts` | Unit tests for composable                    |
+| Modify | `src/components/Footer.astro`                       | Add `/pwa` link to `navMenu1`                |
 
 ---
 
 ### Task 1: Types and helper functions
 
 **Files:**
+
 - Create: `src/composable/useCacheStorage.ts`
 - Create: `src/tests/unit/composable/useCacheStorage.test.ts`
 
@@ -33,52 +34,52 @@
 Create `src/tests/unit/composable/useCacheStorage.test.ts`:
 
 ```ts
-import { describe, it, expect } from 'vitest'
-import { formatBytes, getBucketDisplayName } from '@composables/useCacheStorage'
+import { describe, it, expect } from "vitest";
+import { formatBytes, getBucketDisplayName } from "@composables/useCacheStorage";
 
-describe('formatBytes', () => {
+describe("formatBytes", () => {
   it('returns "0 B" for 0', () => {
-    expect(formatBytes(0)).toBe('0 B')
-  })
+    expect(formatBytes(0)).toBe("0 B");
+  });
 
-  it('returns bytes for values under 1 KB', () => {
-    expect(formatBytes(500)).toBe('500 B')
-  })
+  it("returns bytes for values under 1 KB", () => {
+    expect(formatBytes(500)).toBe("500 B");
+  });
 
-  it('formats KB range', () => {
-    expect(formatBytes(2048)).toBe('2,0 KB')
-  })
+  it("formats KB range", () => {
+    expect(formatBytes(2048)).toBe("2,0 KB");
+  });
 
-  it('formats MB range', () => {
-    expect(formatBytes(1_048_576)).toBe('1,0 MB')
-  })
+  it("formats MB range", () => {
+    expect(formatBytes(1_048_576)).toBe("1,0 MB");
+  });
 
-  it('formats fractional MB', () => {
-    expect(formatBytes(3_250_000)).toBe('3,1 MB')
-  })
-})
+  it("formats fractional MB", () => {
+    expect(formatBytes(3_250_000)).toBe("3,1 MB");
+  });
+});
 
-describe('getBucketDisplayName', () => {
-  it('maps api-search-index', () => {
-    expect(getBucketDisplayName('api-search-index')).toBe('Suchindex')
-  })
+describe("getBucketDisplayName", () => {
+  it("maps api-search-index", () => {
+    expect(getBucketDisplayName("api-search-index")).toBe("Suchindex");
+  });
 
-  it('maps api-search-meta', () => {
-    expect(getBucketDisplayName('api-search-meta')).toBe('Such-Metadaten')
-  })
+  it("maps api-search-meta", () => {
+    expect(getBucketDisplayName("api-search-meta")).toBe("Such-Metadaten");
+  });
 
-  it('maps api-word-of-the-day', () => {
-    expect(getBucketDisplayName('api-word-of-the-day')).toBe('Wort des Tages')
-  })
+  it("maps api-word-of-the-day", () => {
+    expect(getBucketDisplayName("api-word-of-the-day")).toBe("Wort des Tages");
+  });
 
-  it('maps workbox-precache with versioned suffix', () => {
-    expect(getBucketDisplayName('workbox-precache-v2-https://example.com/')).toBe('App-Dateien')
-  })
+  it("maps workbox-precache with versioned suffix", () => {
+    expect(getBucketDisplayName("workbox-precache-v2-https://example.com/")).toBe("App-Dateien");
+  });
 
-  it('returns raw name for unknown cache', () => {
-    expect(getBucketDisplayName('my-custom-cache')).toBe('my-custom-cache')
-  })
-})
+  it("returns raw name for unknown cache", () => {
+    expect(getBucketDisplayName("my-custom-cache")).toBe("my-custom-cache");
+  });
+});
 ```
 
 - [ ] **Step 2: Run tests to verify they fail**
@@ -95,32 +96,32 @@ Create `src/composable/useCacheStorage.ts`:
 
 ```ts
 export interface CacheBucket {
-  name: string
-  entryCount: number
-  totalSizeBytes: number
-  lastModified: Date | null
-  urls: string[]
+  name: string;
+  entryCount: number;
+  totalSizeBytes: number;
+  lastModified: Date | null;
+  urls: string[];
 }
 
 const BUCKET_NAME_MAP: Record<string, string> = {
-  'api-search-index': 'Suchindex',
-  'api-search-meta': 'Such-Metadaten',
-  'api-word-of-the-day': 'Wort des Tages',
-  'workbox-precache': 'App-Dateien',
-}
+  "api-search-index": "Suchindex",
+  "api-search-meta": "Such-Metadaten",
+  "api-word-of-the-day": "Wort des Tages",
+  "workbox-precache": "App-Dateien",
+};
 
 export function formatBytes(bytes: number): string {
-  if (bytes === 0) return '0 B'
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1).replace('.', ',')} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(1).replace('.', ',')} MB`
+  if (bytes === 0) return "0 B";
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1).replace(".", ",")} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1).replace(".", ",")} MB`;
 }
 
 export function getBucketDisplayName(name: string): string {
   for (const [prefix, displayName] of Object.entries(BUCKET_NAME_MAP)) {
-    if (name.startsWith(prefix)) return displayName
+    if (name.startsWith(prefix)) return displayName;
   }
-  return name
+  return name;
 }
 ```
 
@@ -154,6 +155,7 @@ git commit -m "feat: add CacheBucket type and cache helper functions"
 ### Task 2: `useCacheStorage` — `loadCaches` + reactive state
 
 **Files:**
+
 - Modify: `src/composable/useCacheStorage.ts`
 - Modify: `src/tests/unit/composable/useCacheStorage.test.ts`
 
@@ -162,22 +164,22 @@ git commit -m "feat: add CacheBucket type and cache helper functions"
 Append to `src/tests/unit/composable/useCacheStorage.test.ts`:
 
 ```ts
-import { vi, beforeEach, afterEach } from 'vitest'
-import { createApp } from 'vue'
-import { useCacheStorage } from '@composables/useCacheStorage'
+import { vi, beforeEach, afterEach } from "vitest";
+import { createApp } from "vue";
+import { useCacheStorage } from "@composables/useCacheStorage";
 
 // Helper: mounts a composable inside a Vue app (needed for onMounted/onUnmounted)
 function withSetup<T>(composable: () => T): { result: T; unmount: () => void } {
-  let result!: T
+  let result!: T;
   const app = createApp({
     setup() {
-      result = composable()
-      return () => null
+      result = composable();
+      return () => null;
     },
-  })
-  const el = document.createElement('div')
-  app.mount(el)
-  return { result, unmount: () => app.unmount() }
+  });
+  const el = document.createElement("div");
+  app.mount(el);
+  return { result, unmount: () => app.unmount() };
 }
 
 // Helper: builds a mock CacheStorage
@@ -186,7 +188,7 @@ function makeMockCacheStorage(
 ) {
   const cacheInstances = Object.fromEntries(
     Object.entries(data).map(([name, entries]) => {
-      const requests = entries.map((e) => new Request(e.url))
+      const requests = entries.map((e) => new Request(e.url));
       const responseMap = new Map(
         entries.map((e) => [
           e.url,
@@ -194,120 +196,122 @@ function makeMockCacheStorage(
             headers: e.dateStr ? { Date: e.dateStr } : {},
           }),
         ]),
-      )
+      );
       return [
         name,
         {
           keys: vi.fn().mockResolvedValue(requests),
-          match: vi.fn().mockImplementation((req: Request) =>
-            Promise.resolve(responseMap.get(req.url) ?? null),
-          ),
+          match: vi
+            .fn()
+            .mockImplementation((req: Request) =>
+              Promise.resolve(responseMap.get(req.url) ?? null),
+            ),
           delete: vi.fn().mockResolvedValue(true),
         },
-      ]
+      ];
     }),
-  )
+  );
 
   return {
     keys: vi.fn().mockResolvedValue(Object.keys(data)),
-    open: vi.fn().mockImplementation((name: string) =>
-      Promise.resolve(cacheInstances[name]),
-    ),
+    open: vi.fn().mockImplementation((name: string) => Promise.resolve(cacheInstances[name])),
     delete: vi.fn().mockImplementation((name: string) => {
-      delete cacheInstances[name]
-      return Promise.resolve(true)
+      delete cacheInstances[name];
+      return Promise.resolve(true);
     }),
     has: vi.fn(),
     match: vi.fn(),
-  }
+  };
 }
 
-describe('useCacheStorage — loadCaches', () => {
-  let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>
+describe("useCacheStorage — loadCaches", () => {
+  let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>;
 
   beforeEach(() => {
     mockCacheStorage = makeMockCacheStorage({
-      'api-search-index': [
-        { url: 'https://example.com/api/search/index.json', size: 1024, dateStr: 'Thu, 01 Jan 2026 10:00:00 GMT' },
+      "api-search-index": [
+        {
+          url: "https://example.com/api/search/index.json",
+          size: 1024,
+          dateStr: "Thu, 01 Jan 2026 10:00:00 GMT",
+        },
       ],
-      'api-word-of-the-day': [
-        { url: 'https://example.com/api/word-of-the-day', size: 512 },
-      ],
-    })
-    vi.stubGlobal('caches', mockCacheStorage)
-  })
+      "api-word-of-the-day": [{ url: "https://example.com/api/word-of-the-day", size: 512 }],
+    });
+    vi.stubGlobal("caches", mockCacheStorage);
+  });
 
   afterEach(() => {
-    vi.unstubAllGlobals()
-  })
+    vi.unstubAllGlobals();
+  });
 
-  it('populates buckets with correct names', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.loadCaches()
+  it("populates buckets with correct names", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
     expect(result.buckets.value.map((b) => b.name)).toEqual([
-      'api-search-index',
-      'api-word-of-the-day',
-    ])
-    unmount()
-  })
+      "api-search-index",
+      "api-word-of-the-day",
+    ]);
+    unmount();
+  });
 
-  it('counts entries per bucket', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.loadCaches()
-    const idx = result.buckets.value.find((b) => b.name === 'api-search-index')!
-    expect(idx.entryCount).toBe(1)
-    unmount()
-  })
+  it("counts entries per bucket", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const idx = result.buckets.value.find((b) => b.name === "api-search-index")!;
+    expect(idx.entryCount).toBe(1);
+    unmount();
+  });
 
-  it('sums total size in bytes', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.loadCaches()
-    const idx = result.buckets.value.find((b) => b.name === 'api-search-index')!
-    expect(idx.totalSizeBytes).toBe(1024)
-    unmount()
-  })
+  it("sums total size in bytes", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const idx = result.buckets.value.find((b) => b.name === "api-search-index")!;
+    expect(idx.totalSizeBytes).toBe(1024);
+    unmount();
+  });
 
-  it('reads lastModified from Date header', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.loadCaches()
-    const idx = result.buckets.value.find((b) => b.name === 'api-search-index')!
-    expect(idx.lastModified).toBeInstanceOf(Date)
-    expect(idx.lastModified?.toISOString()).toBe('2026-01-01T10:00:00.000Z')
-    unmount()
-  })
+  it("reads lastModified from Date header", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const idx = result.buckets.value.find((b) => b.name === "api-search-index")!;
+    expect(idx.lastModified).toBeInstanceOf(Date);
+    expect(idx.lastModified?.toISOString()).toBe("2026-01-01T10:00:00.000Z");
+    unmount();
+  });
 
-  it('sets lastModified to null when no Date header', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.loadCaches()
-    const wotd = result.buckets.value.find((b) => b.name === 'api-word-of-the-day')!
-    expect(wotd.lastModified).toBeNull()
-    unmount()
-  })
+  it("sets lastModified to null when no Date header", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const wotd = result.buckets.value.find((b) => b.name === "api-word-of-the-day")!;
+    expect(wotd.lastModified).toBeNull();
+    unmount();
+  });
 
-  it('computes correct totalSizeBytes across all buckets', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.loadCaches()
-    expect(result.totalSizeBytes.value).toBe(1024 + 512)
-    unmount()
-  })
+  it("computes correct totalSizeBytes across all buckets", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.totalSizeBytes.value).toBe(1024 + 512);
+    unmount();
+  });
 
-  it('sets isLoading false after completion', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    const promise = result.loadCaches()
-    expect(result.isLoading.value).toBe(true)
-    await promise
-    expect(result.isLoading.value).toBe(false)
-    unmount()
-  })
+  it("sets isLoading false after completion", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    const promise = result.loadCaches();
+    expect(result.isLoading.value).toBe(true);
+    await promise;
+    expect(result.isLoading.value).toBe(false);
+    unmount();
+  });
 
-  it('returns empty buckets when caches API unavailable', async () => {
-    vi.stubGlobal('caches', undefined)
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.loadCaches()
-    expect(result.buckets.value).toEqual([])
-    unmount()
-  })
-})
+  it("returns empty buckets when caches API unavailable", async () => {
+    vi.stubGlobal("caches", undefined);
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.buckets.value).toEqual([]);
+    unmount();
+  });
+});
 ```
 
 - [ ] **Step 2: Run tests to verify they fail**
@@ -323,70 +327,74 @@ Expected: FAIL — `useCacheStorage is not a function` (not exported yet)
 Append to `src/composable/useCacheStorage.ts` (after the helper functions):
 
 ```ts
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from "vue";
 
 export function useCacheStorage() {
-  const buckets = ref<CacheBucket[]>([])
-  const isLoading = ref(false)
-  const isCacheAvailable = ref(typeof window !== 'undefined' && 'caches' in window)
+  const buckets = ref<CacheBucket[]>([]);
+  const isLoading = ref(false);
+  const isCacheAvailable = ref(typeof window !== "undefined" && "caches" in window);
   const totalSizeBytes = computed(() =>
     buckets.value.reduce((sum, b) => sum + b.totalSizeBytes, 0),
-  )
+  );
 
   async function loadCaches(): Promise<void> {
-    if (!isCacheAvailable.value) return
-    isLoading.value = true
+    if (!isCacheAvailable.value) return;
+    isLoading.value = true;
     try {
-      const cacheNames = await caches.keys()
+      const cacheNames = await caches.keys();
       const results = await Promise.all(
         cacheNames.map(async (name): Promise<CacheBucket> => {
-          const cache = await caches.open(name)
-          const requests = await cache.keys()
-          const urls = requests.map((req) => req.url)
+          const cache = await caches.open(name);
+          const requests = await cache.keys();
+          const urls = requests.map((req) => req.url);
 
-          let totalSizeBytes = 0
-          let lastModified: Date | null = null
+          let totalSizeBytes = 0;
+          let lastModified: Date | null = null;
 
           for (const request of requests) {
-            const response = await cache.match(request)
-            if (!response) continue
+            const response = await cache.match(request);
+            if (!response) continue;
 
             try {
-              const blob = await response.clone().blob()
-              totalSizeBytes += blob.size
+              const blob = await response.clone().blob();
+              totalSizeBytes += blob.size;
             } catch {
               // opaque/CORS response — skip size
             }
 
             if (!lastModified) {
-              const dateHeader = response.headers.get('Date')
-              if (dateHeader) lastModified = new Date(dateHeader)
+              const dateHeader = response.headers.get("Date");
+              if (dateHeader) lastModified = new Date(dateHeader);
             }
           }
 
-          return { name, entryCount: requests.length, totalSizeBytes, lastModified, urls }
+          return { name, entryCount: requests.length, totalSizeBytes, lastModified, urls };
         }),
-      )
-      buckets.value = results
+      );
+      buckets.value = results;
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 
-  const onlineStatus = ref<'online' | 'offline'>(
-    typeof navigator !== 'undefined' && !navigator.onLine ? 'offline' : 'online',
-  )
+  const onlineStatus = ref<"online" | "offline">(
+    typeof navigator !== "undefined" && !navigator.onLine ? "offline" : "online",
+  );
 
   onMounted(() => {
-    const handleOnline = () => { onlineStatus.value = 'online' }
-    const handleOffline = () => { onlineStatus.value = 'offline' }
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
+    const handleOnline = () => {
+      onlineStatus.value = "online";
+    };
+    const handleOffline = () => {
+      onlineStatus.value = "offline";
+    };
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
     onUnmounted(() => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    })
-  })
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    });
+  });
 
   return {
     buckets,
@@ -395,7 +403,7 @@ export function useCacheStorage() {
     totalSizeBytes,
     onlineStatus,
     loadCaches,
-  }
+  };
 }
 ```
 
@@ -419,6 +427,7 @@ git commit -m "feat: implement useCacheStorage loadCaches and reactive state"
 ### Task 3: `useCacheStorage` — actions (`clearBucket`, `clearAll`, `reSync`) + `onlineStatus`
 
 **Files:**
+
 - Modify: `src/composable/useCacheStorage.ts`
 - Modify: `src/tests/unit/composable/useCacheStorage.test.ts`
 
@@ -427,99 +436,99 @@ git commit -m "feat: implement useCacheStorage loadCaches and reactive state"
 Append to `src/tests/unit/composable/useCacheStorage.test.ts`:
 
 ```ts
-describe('useCacheStorage — clearBucket', () => {
-  let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>
+describe("useCacheStorage — clearBucket", () => {
+  let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>;
 
   beforeEach(() => {
     mockCacheStorage = makeMockCacheStorage({
-      'api-search-index': [{ url: 'https://example.com/api/search/index.json', size: 100 }],
-      'api-word-of-the-day': [{ url: 'https://example.com/api/wotd', size: 50 }],
-    })
-    vi.stubGlobal('caches', mockCacheStorage)
-  })
+      "api-search-index": [{ url: "https://example.com/api/search/index.json", size: 100 }],
+      "api-word-of-the-day": [{ url: "https://example.com/api/wotd", size: 50 }],
+    });
+    vi.stubGlobal("caches", mockCacheStorage);
+  });
 
   afterEach(() => {
-    vi.unstubAllGlobals()
-  })
+    vi.unstubAllGlobals();
+  });
 
-  it('calls caches.delete with the bucket name', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.clearBucket('api-search-index')
-    expect(mockCacheStorage.delete).toHaveBeenCalledWith('api-search-index')
-    unmount()
-  })
+  it("calls caches.delete with the bucket name", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearBucket("api-search-index");
+    expect(mockCacheStorage.delete).toHaveBeenCalledWith("api-search-index");
+    unmount();
+  });
 
-  it('reloads buckets after clearing', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.clearBucket('api-search-index')
+  it("reloads buckets after clearing", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearBucket("api-search-index");
     // caches.keys() was called again (second call = after clear)
-    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2)
-    unmount()
-  })
-})
+    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2);
+    unmount();
+  });
+});
 
-describe('useCacheStorage — clearAll', () => {
-  let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>
+describe("useCacheStorage — clearAll", () => {
+  let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>;
 
   beforeEach(() => {
     mockCacheStorage = makeMockCacheStorage({
-      'api-search-index': [{ url: 'https://example.com/a', size: 100 }],
-      'workbox-precache-v2': [{ url: 'https://example.com/b', size: 200 }],
-    })
-    vi.stubGlobal('caches', mockCacheStorage)
-  })
+      "api-search-index": [{ url: "https://example.com/a", size: 100 }],
+      "workbox-precache-v2": [{ url: "https://example.com/b", size: 200 }],
+    });
+    vi.stubGlobal("caches", mockCacheStorage);
+  });
 
   afterEach(() => {
-    vi.unstubAllGlobals()
-  })
+    vi.unstubAllGlobals();
+  });
 
-  it('deletes all cache buckets', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.clearAll()
-    expect(mockCacheStorage.delete).toHaveBeenCalledWith('api-search-index')
-    expect(mockCacheStorage.delete).toHaveBeenCalledWith('workbox-precache-v2')
-    unmount()
-  })
+  it("deletes all cache buckets", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearAll();
+    expect(mockCacheStorage.delete).toHaveBeenCalledWith("api-search-index");
+    expect(mockCacheStorage.delete).toHaveBeenCalledWith("workbox-precache-v2");
+    unmount();
+  });
 
-  it('reloads after clearing all', async () => {
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    await result.clearAll()
-    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2)
-    unmount()
-  })
-})
+  it("reloads after clearing all", async () => {
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearAll();
+    expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2);
+    unmount();
+  });
+});
 
-describe('useCacheStorage — onlineStatus', () => {
+describe("useCacheStorage — onlineStatus", () => {
   afterEach(() => {
-    vi.unstubAllGlobals()
-  })
+    vi.unstubAllGlobals();
+  });
 
   it('is "online" initially when navigator.onLine is true', () => {
-    vi.stubGlobal('navigator', { onLine: true, serviceWorker: null })
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    expect(result.onlineStatus.value).toBe('online')
-    unmount()
-  })
+    vi.stubGlobal("navigator", { onLine: true, serviceWorker: null });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    expect(result.onlineStatus.value).toBe("online");
+    unmount();
+  });
 
   it('updates to "offline" on offline event', async () => {
-    vi.stubGlobal('navigator', { onLine: true, serviceWorker: null })
-    vi.stubGlobal('caches', makeMockCacheStorage({}))
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    window.dispatchEvent(new Event('offline'))
-    expect(result.onlineStatus.value).toBe('offline')
-    unmount()
-  })
+    vi.stubGlobal("navigator", { onLine: true, serviceWorker: null });
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    window.dispatchEvent(new Event("offline"));
+    expect(result.onlineStatus.value).toBe("offline");
+    unmount();
+  });
 
   it('updates to "online" on online event', async () => {
-    vi.stubGlobal('navigator', { onLine: false, serviceWorker: null })
-    vi.stubGlobal('caches', makeMockCacheStorage({}))
-    const { result, unmount } = withSetup(() => useCacheStorage())
-    window.dispatchEvent(new Event('offline'))
-    window.dispatchEvent(new Event('online'))
-    expect(result.onlineStatus.value).toBe('online')
-    unmount()
-  })
-})
+    vi.stubGlobal("navigator", { onLine: false, serviceWorker: null });
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    window.dispatchEvent(new Event("offline"));
+    window.dispatchEvent(new Event("online"));
+    expect(result.onlineStatus.value).toBe("online");
+    unmount();
+  });
+});
 ```
 
 - [ ] **Step 2: Run tests to verify they fail**
@@ -535,34 +544,34 @@ Expected: FAIL — `result.clearBucket is not a function`, `result.clearAll is n
 In `src/composable/useCacheStorage.ts`, add this import at the top:
 
 ```ts
-import { createToastNotify } from '@stores/index'
+import { createToastNotify } from "@stores/index";
 ```
 
 Then add these functions inside `useCacheStorage()`, before the `return` statement:
 
 ```ts
 async function clearBucket(name: string): Promise<void> {
-  if (!isCacheAvailable.value) return
-  await caches.delete(name)
-  await loadCaches()
+  if (!isCacheAvailable.value) return;
+  await caches.delete(name);
+  await loadCaches();
 }
 
 async function clearAll(): Promise<void> {
-  if (!isCacheAvailable.value) return
-  const names = await caches.keys()
-  await Promise.all(names.map((name) => caches.delete(name)))
-  await loadCaches()
+  if (!isCacheAvailable.value) return;
+  const names = await caches.keys();
+  await Promise.all(names.map((name) => caches.delete(name)));
+  await loadCaches();
 }
 
 function reSync(): void {
   createToastNotify({
-    message: 'Cache wird aktualisiert…',
-    status: 'info',
+    message: "Cache wird aktualisiert…",
+    status: "info",
     showClose: false,
     timeout: 2000,
-  })
-  navigator.serviceWorker?.controller?.postMessage({ type: 'SKIP_WAITING' })
-  setTimeout(() => location.reload(), 800)
+  });
+  navigator.serviceWorker?.controller?.postMessage({ type: "SKIP_WAITING" });
+  setTimeout(() => location.reload(), 800);
 }
 ```
 
@@ -588,6 +597,7 @@ git commit -m "feat: add clearBucket, clearAll, reSync and onlineStatus to useCa
 ### Task 4: `PwaCacheOverview.vue` component
 
 **Files:**
+
 - Create: `src/components/PwaCacheOverview.vue`
 
 The component is pure presentation over the composable — no unit test needed. The composable is fully tested.
@@ -605,7 +615,7 @@ Create `src/components/PwaCacheOverview.vue`:
         class="c-pwa-cache__status"
         :class="onlineStatus === 'online' ? 'is-online' : 'is-offline'"
       >
-        {{ onlineStatus === 'online' ? '● Online' : '○ Offline' }}
+        {{ onlineStatus === "online" ? "● Online" : "○ Offline" }}
       </span>
     </div>
 
@@ -617,7 +627,9 @@ Create `src/components/PwaCacheOverview.vue`:
       <div class="c-pwa-cache__stats">
         <div class="c-pwa-cache__stat">
           <span class="c-pwa-cache__stat-value">{{ buckets.length }}</span>
-          <span class="c-pwa-cache__stat-label">{{ buckets.length === 1 ? 'Cache' : 'Caches' }} gecacht</span>
+          <span class="c-pwa-cache__stat-label"
+            >{{ buckets.length === 1 ? "Cache" : "Caches" }} gecacht</span
+          >
         </div>
         <div class="c-pwa-cache__stat">
           <span class="c-pwa-cache__stat-value">{{ formatBytes(totalSizeBytes) }}</span>
@@ -644,11 +656,7 @@ Create `src/components/PwaCacheOverview.vue`:
           <Trash2 width="16" height="16" />
           Alles leeren
         </button>
-        <button
-          type="button"
-          class="c-button c-button--center-icon"
-          @click="reSync"
-        >
+        <button type="button" class="c-button c-button--center-icon" @click="reSync">
           <RotateCcw width="16" height="16" />
           Re-sync
         </button>
@@ -663,11 +671,7 @@ Create `src/components/PwaCacheOverview.vue`:
       </div>
 
       <ul v-else class="c-pwa-cache__list u-list-reset">
-        <li
-          v-for="bucket in buckets"
-          :key="bucket.name"
-          class="c-pwa-cache__bucket"
-        >
+        <li v-for="bucket in buckets" :key="bucket.name" class="c-pwa-cache__bucket">
           <div class="c-pwa-cache__bucket-header">
             <span class="c-pwa-cache__bucket-name">
               {{ getBucketDisplayName(bucket.name) }}
@@ -685,7 +689,7 @@ Create `src/components/PwaCacheOverview.vue`:
             </button>
           </div>
           <div class="c-pwa-cache__bucket-meta">
-            {{ bucket.entryCount }} {{ bucket.entryCount === 1 ? 'Eintrag' : 'Einträge' }}
+            {{ bucket.entryCount }} {{ bucket.entryCount === 1 ? "Eintrag" : "Einträge" }}
             <template v-if="bucket.lastModified">
               · zuletzt: {{ formatRelativeTime(bucket.lastModified) }}
             </template>
@@ -697,67 +701,76 @@ Create `src/components/PwaCacheOverview.vue`:
 </template>
 
 <script setup lang="ts">
-import { open } from '@stores/modal'
-import { formatBytes, getBucketDisplayName, useCacheStorage } from '@composables/useCacheStorage'
-import RefreshCw from 'virtual:icons/lucide/refresh-cw'
-import RotateCcw from 'virtual:icons/lucide/rotate-ccw'
-import Trash2 from 'virtual:icons/lucide/trash-2'
-import X from 'virtual:icons/lucide/x'
-import { defineAsyncComponent, onMounted } from 'vue'
+import { open } from "@stores/modal";
+import { formatBytes, getBucketDisplayName, useCacheStorage } from "@composables/useCacheStorage";
+import RefreshCw from "virtual:icons/lucide/refresh-cw";
+import RotateCcw from "virtual:icons/lucide/rotate-ccw";
+import Trash2 from "virtual:icons/lucide/trash-2";
+import X from "virtual:icons/lucide/x";
+import { defineAsyncComponent, onMounted } from "vue";
 
-const { buckets, isLoading, isCacheAvailable, totalSizeBytes, onlineStatus, loadCaches, clearBucket, clearAll, reSync } =
-  useCacheStorage()
+const {
+  buckets,
+  isLoading,
+  isCacheAvailable,
+  totalSizeBytes,
+  onlineStatus,
+  loadCaches,
+  clearBucket,
+  clearAll,
+  reSync,
+} = useCacheStorage();
 
 onMounted(() => {
-  loadCaches()
-})
+  loadCaches();
+});
 
 function formatRelativeTime(date: Date): string {
-  const diff = Date.now() - date.getTime()
-  const minutes = Math.floor(diff / 60_000)
-  const hours = Math.floor(diff / 3_600_000)
-  const days = Math.floor(diff / 86_400_000)
-  if (minutes < 1) return 'gerade eben'
-  if (hours < 1) return `vor ${minutes} Min.`
-  if (days < 1) return `vor ${hours} Std.`
-  return `vor ${days} Tg.`
+  const diff = Date.now() - date.getTime();
+  const minutes = Math.floor(diff / 60_000);
+  const hours = Math.floor(diff / 3_600_000);
+  const days = Math.floor(diff / 86_400_000);
+  if (minutes < 1) return "gerade eben";
+  if (hours < 1) return `vor ${minutes} Min.`;
+  if (days < 1) return `vor ${hours} Std.`;
+  return `vor ${days} Tg.`;
 }
 
 function confirmClearBucket(name: string): void {
   open({
-    props: { width: '400px' },
+    props: { width: "400px" },
     view: {
-      component: defineAsyncComponent(() => import('@components/ConfirmDialog.vue')),
+      component: defineAsyncComponent(() => import("@components/ConfirmDialog.vue")),
       props: {
         message: `Cache „${getBucketDisplayName(name)}" wirklich leeren?`,
-        confirmLabel: 'Leeren',
+        confirmLabel: "Leeren",
       },
       events: {
         confirm: () => clearBucket(name),
       },
     },
-  })
+  });
 }
 
 function confirmClearAll(): void {
   open({
-    props: { width: '400px' },
+    props: { width: "400px" },
     view: {
-      component: defineAsyncComponent(() => import('@components/ConfirmDialog.vue')),
+      component: defineAsyncComponent(() => import("@components/ConfirmDialog.vue")),
       props: {
-        message: 'Alle Caches wirklich leeren?',
-        confirmLabel: 'Alle leeren',
+        message: "Alle Caches wirklich leeren?",
+        confirmLabel: "Alle leeren",
       },
       events: {
         confirm: () => clearAll(),
       },
     },
-  })
+  });
 }
 </script>
 
 <style lang="scss">
-@use '@styles/components/pwa-cache';
+@use "@styles/components/pwa-cache";
 </style>
 ```
 
@@ -766,13 +779,13 @@ function confirmClearAll(): void {
 > ```ts
 > function confirmClearBucket(name: string): void {
 >   if (window.confirm(`Cache „${getBucketDisplayName(name)}" wirklich leeren?`)) {
->     clearBucket(name)
+>     clearBucket(name);
 >   }
 > }
 >
 > function confirmClearAll(): void {
->   if (window.confirm('Alle Caches wirklich leeren?')) {
->     clearAll()
+>   if (window.confirm("Alle Caches wirklich leeren?")) {
+>     clearAll();
 >   }
 > }
 > ```
@@ -798,8 +811,12 @@ Create `src/styles/components/_pwa-cache.scss`:
     font-size: 0.875rem;
     font-weight: 600;
 
-    &.is-online { color: var(--color-success, #4caf50); }
-    &.is-offline { color: var(--color-error, #f44336); }
+    &.is-online {
+      color: var(--color-success, #4caf50);
+    }
+    &.is-offline {
+      color: var(--color-error, #f44336);
+    }
   }
 
   &__stats {
@@ -848,8 +865,13 @@ Create `src/styles/components/_pwa-cache.scss`:
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.4;
+    }
   }
 
   &__empty {
@@ -905,7 +927,9 @@ Create `src/styles/components/_pwa-cache.scss`:
     color: inherit;
     opacity: 0.6;
 
-    &:hover { opacity: 1; }
+    &:hover {
+      opacity: 1;
+    }
   }
 
   &__bucket-meta {
@@ -935,6 +959,7 @@ git commit -m "feat: add PwaCacheOverview Vue component and SCSS"
 ### Task 5: Astro page + footer link
 
 **Files:**
+
 - Create: `src/pages/pwa.astro`
 - Modify: `src/components/Footer.astro`
 
@@ -965,26 +990,26 @@ In `src/components/Footer.astro`, add `/pwa` to `navMenu1` (the "Seiten" list):
 ```ts
 const navMenu1 = [
   {
-    link: '/wort-vorschlagen',
-    title: 'Wort vorschlagen',
+    link: "/wort-vorschlagen",
+    title: "Wort vorschlagen",
   },
   {
-    link: '/wort',
-    title: 'Wort Index',
+    link: "/wort",
+    title: "Wort Index",
   },
   {
-    link: '/pwa',
-    title: 'Offline-Cache',
+    link: "/pwa",
+    title: "Offline-Cache",
   },
   {
-    link: 'https://github.com/felix-berlin/berliner-schnauze/releases',
-    title: 'Changelog',
+    link: "https://github.com/felix-berlin/berliner-schnauze/releases",
+    title: "Changelog",
   },
   {
-    link: 'https://github.com/felix-berlin/berliner-schnauze/issues/new',
-    title: 'tech. Fehler melden',
+    link: "https://github.com/felix-berlin/berliner-schnauze/issues/new",
+    title: "tech. Fehler melden",
   },
-]
+];
 ```
 
 - [ ] **Step 3: Build and verify**
@@ -1016,24 +1041,24 @@ git commit -m "feat: add /pwa page and footer link for offline cache overview"
 
 ## Spec Coverage Check
 
-| Spec requirement | Task |
-|---|---|
-| `/pwa` Astro page | Task 5 |
-| `PwaCacheOverview.vue` client:only="vue" | Task 4 |
-| `useCacheStorage` composable | Tasks 2–3 |
-| `CacheBucket` type | Task 1 |
-| `loadCaches()` with size + lastModified | Task 2 |
-| `clearAll()` | Task 3 |
-| `clearBucket(name)` | Task 3 |
-| `reSync()` with toast + postMessage | Task 3 |
-| `onlineStatus` reactive | Task 2–3 |
-| `formatBytes()` helper | Task 1 |
-| `getBucketDisplayName()` mapping | Task 1 |
-| Cache unavailable banner | Task 4 |
-| Opaque response error handling (try/catch in blob()) | Task 2 |
-| Empty state UI | Task 4 |
-| Loading skeleton | Task 4 |
-| Confirm dialogs for delete | Task 4 |
-| Toast before reSync | Task 3 |
-| Footer link | Task 5 |
-| Tests for all composable logic | Tasks 1–3 |
+| Spec requirement                                     | Task      |
+| ---------------------------------------------------- | --------- |
+| `/pwa` Astro page                                    | Task 5    |
+| `PwaCacheOverview.vue` client:only="vue"             | Task 4    |
+| `useCacheStorage` composable                         | Tasks 2–3 |
+| `CacheBucket` type                                   | Task 1    |
+| `loadCaches()` with size + lastModified              | Task 2    |
+| `clearAll()`                                         | Task 3    |
+| `clearBucket(name)`                                  | Task 3    |
+| `reSync()` with toast + postMessage                  | Task 3    |
+| `onlineStatus` reactive                              | Task 2–3  |
+| `formatBytes()` helper                               | Task 1    |
+| `getBucketDisplayName()` mapping                     | Task 1    |
+| Cache unavailable banner                             | Task 4    |
+| Opaque response error handling (try/catch in blob()) | Task 2    |
+| Empty state UI                                       | Task 4    |
+| Loading skeleton                                     | Task 4    |
+| Confirm dialogs for delete                           | Task 4    |
+| Toast before reSync                                  | Task 3    |
+| Footer link                                          | Task 5    |
+| Tests for all composable logic                       | Tasks 1–3 |
