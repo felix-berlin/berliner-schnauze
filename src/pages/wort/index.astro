@@ -8,12 +8,14 @@ import { routeToWord, seoData } from "@utils/helpers.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import ChevronRight from "~icons/lucide/chevron-right";
 
-import type { RootQueryToBerlinerWordConnectionEdge } from "@/gql/graphql";
+import type { GetAllWordsLinksQuery } from "@/gql/graphql";
 
-async function getGroupedWords(): Promise<Record<string, RootQueryToBerlinerWordConnectionEdge[]>> {
+type WordLinkNode = NonNullable<GetAllWordsLinksQuery["berlinerWords"]>["edges"][number]["node"];
+
+async function getGroupedWords(): Promise<Record<string, WordLinkNode[]>> {
   const allWords = await fetchAllWordsLinks();
 
-  const groupedWords: Record<string, RootQueryToBerlinerWordConnectionEdge[]> = {};
+  const groupedWords: Record<string, WordLinkNode[]> = {};
 
   allWords.forEach(({ node }) => {
     const group = node.wordGroup;
@@ -69,7 +71,7 @@ const schemaJson = () =>
             <li>
               <a
                 class="c-word-group__link"
-                href={routeToWord(word.slug)}
+                href={routeToWord(word.slug ?? undefined)}
                 title={`Zur ${word.wordProperties?.berlinerisch} Seite`}
               >
                 {word.wordProperties?.berlinerisch}

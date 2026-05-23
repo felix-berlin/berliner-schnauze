@@ -4,7 +4,9 @@ import type { GetImageResult } from "astro";
 import "photoswipe/style.css";
 import { getImage, Picture } from "astro:assets";
 
-import type { MediaItem, WordProperties } from "@/gql/graphql";
+import type { WordProperties } from "@/gql/entity-types";
+
+type ImageNode = NonNullable<NonNullable<WordProperties["images"]>["nodes"]>[number];
 
 type ImageGalleryProps = {
   formats?: string[];
@@ -28,7 +30,7 @@ const {
   widths,
 } = Astro.props as ImageGalleryProps;
 
-const imageList = images?.nodes as Array<MediaItem>;
+const imageList = images?.nodes as Array<ImageNode>;
 
 /**
  * Generate lightbox images
@@ -74,14 +76,14 @@ const lightboxImageList = await Promise.all(
                 target="_blank"
               >
                 <Picture
-                  alt={image.altText}
+                  alt={image.altText ?? ''}
                   class="c-image-gallery__image"
                   formats={formats}
-                  height={image.mediaDetails?.height}
+                  height={image.mediaDetails?.height ?? 0}
                   loading={loading}
                   sizes={`${sizes}, ${image.mediaDetails?.width}px`}
-                  src={image.sourceUrl}
-                  width={image.mediaDetails?.width}
+                  src={image.sourceUrl!}
+                  width={image.mediaDetails?.width ?? 0}
                   widths={widths}
                 />
               </a>

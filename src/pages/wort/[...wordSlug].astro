@@ -37,7 +37,7 @@ import Hypher from "hypher";
 import ChevronRight from "~icons/lucide/chevron-right";
 import ExternalLink from "~icons/lucide/external-link";
 
-import type { BerlinerWord } from "@/gql/graphql.ts";
+import type { BerlinerWord } from "@/gql/entity-types";
 
 export const getStaticPaths = (async () => {
   const allWords = await fetchAllWords();
@@ -45,7 +45,7 @@ export const getStaticPaths = (async () => {
   return allWords.map(({ node }) => {
     return {
       params: {
-        wordSlug: node.slug,
+        wordSlug: node.slug ?? undefined,
       },
       props: {
         allWords: allWords.map((word) => word.node),
@@ -88,7 +88,7 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 
 const hypher = new Hypher(german);
 
-const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch));
+const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
 
 const schemaJson = () =>
   JSON.stringify({
@@ -108,7 +108,7 @@ const schemaJson = () =>
   });
 ---
 
-<Layout content={seoData(word)} contentClasses="o-word">
+<Layout content={seoData({ seo: word.seo ?? undefined, title: word.title ?? '' })} contentClasses="o-word">
   <Fragment slot="head">
     <script set:html={schemaJson()} type="application/ld+json" />
   </Fragment>
@@ -120,7 +120,7 @@ const schemaJson = () =>
     client:only="vue"
     iconSize={50}
     tooltipPlacement="top"
-    word={wordProps?.berlinerisch}
+    word={wordProps?.berlinerisch ?? null}
     wordId={word.berlinerWordId}
   />
   <article class="c-single-word">
@@ -160,7 +160,7 @@ const schemaJson = () =>
         )
       }
       <WordOptionDropdown
-        berlinerisch={word.wordProperties?.berlinerisch}
+        berlinerisch={word.wordProperties?.berlinerisch ?? null}
         client:only="vue"
         slug={word.slug}
       />
@@ -230,13 +230,13 @@ const schemaJson = () =>
           <h3>Konsonanten und Vokale</h3>
           <p
             class="c-single-word__consonants-vowels-word"
-            set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch)}
+            set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch ?? '')}
           />
 
           <p>
-            enthält {countLetters(word.wordProperties?.berlinerisch).vowels}
+            enthält {countLetters(word.wordProperties?.berlinerisch ?? '').vowels}
             <span class="is-vowel">Vokale</span> und {
-              countLetters(word.wordProperties?.berlinerisch).consonants
+              countLetters(word.wordProperties?.berlinerisch ?? '').consonants
             }
             <span class="is-consonant">Konsonanten</span>
           </p>
@@ -297,7 +297,7 @@ const schemaJson = () =>
                   .filter((result) => result.isSimilar)
                   .map((result) => (
                     <li>
-                      <a href={routeToWord(result.word?.slug)}>
+                      <a href={routeToWord(result.word?.slug ?? undefined)}>
                         {result.word?.wordProperties?.berlinerisch}
                       </a>
                     </li>
@@ -318,7 +318,7 @@ const schemaJson = () =>
                 .map((word): BerlinerWord[] => {
                   return (
                     <li class="c-single-word__related-word">
-                      <a class="c-single-word__related-word-link" href={routeToWord(word?.slug)}>
+                      <a class="c-single-word__related-word-link" href={routeToWord(word?.slug ?? undefined)}>
                         {word?.wordProperties?.berlinerisch}
                       </a>
                     </li>

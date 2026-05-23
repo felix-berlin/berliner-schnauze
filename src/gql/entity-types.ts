@@ -1,23 +1,9 @@
-import type { GetAllWordsQuery } from "./graphql";
-
-type WordEdge = NonNullable<NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"][number]>;
-
-export type BerlinerWord = WordEdge["node"];
+export type { BerlinerWordFragment as BerlinerWord } from "./graphql";
+export type { WordPropertiesFragment as WordProperties } from "./graphql";
+export type { MediaItemFragment as MediaItem } from "./graphql";
+export type { WordPropertiesBerlinerischAudioFragment as WordPropertiesBerlinerischAudio } from "./graphql";
+export type { WordPropertiesExamplesFragment as WordPropertiesExamples } from "./graphql";
+export type { WordPropertiesExamplesExampleAudioFragment as WordPropertiesExamplesExampleAudio } from "./graphql";
+export type { WordPropertiesWikimediaFilesFragment as WordPropertiesWikimediaFiles } from "./graphql";
 
 export type Maybe<T> = T | null;
-
-export type WordProperties = NonNullable<BerlinerWord["wordProperties"]>;
-
-type BerlinerischAudioArr = NonNullable<WordProperties["berlinerischAudio"]>;
-export type WordPropertiesBerlinerischAudio = NonNullable<BerlinerischAudioArr[number]>;
-
-type ExamplesArr = NonNullable<WordProperties["examples"]>;
-export type WordPropertiesExamples = NonNullable<ExamplesArr[number]>;
-
-type ExampleAudioArr = NonNullable<WordPropertiesExamples["exampleAudio"]>;
-export type WordPropertiesExamplesExampleAudio = NonNullable<ExampleAudioArr[number]>;
-
-type WikimediaFilesArr = NonNullable<WordProperties["wikimediaFiles"]>;
-export type WordPropertiesWikimediaFiles = NonNullable<WikimediaFilesArr[number]>;
-
-export type MediaItem = NonNullable<NonNullable<WordPropertiesBerlinerischAudio["audio"]>["node"]>;

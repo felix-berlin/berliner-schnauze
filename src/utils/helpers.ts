@@ -32,7 +32,7 @@ export const randomElement = (elements: any[]): any => {
 };
 
 export const seoData = (
-  data: { seo?: Record<string, unknown>; title: { title: string } },
+  data: { seo?: Record<string, unknown>; title: string },
   baseUrl: string = SITE_URL,
 ): SeoProps => {
   return {
@@ -41,7 +41,7 @@ export const seoData = (
       opengraphSiteName: SITE_NAME,
       opengraphUrl: baseUrl,
     },
-    title: data.title,
+    title: { title: data.title },
   };
 };
 

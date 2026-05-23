@@ -23,6 +23,9 @@ const config: CodegenConfig = {
       },
       plugins: [],
       preset: "client",
+      presetConfig: {
+        fragmentMasking: false,
+      },
     },
   },
   ignoreNoDocuments: true, // for better experience with the watcher
