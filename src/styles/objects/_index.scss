@@ -68,6 +68,7 @@
 .image-placeholder-wrap:not(.loaded) {
   position: relative;
   min-height: var(--min-height-placeholder, 300px);
+
   @include mx.skeleton-loader;
 
   .o-index__image {
@@ -77,6 +78,7 @@
     opacity: 0;
     transition: opacity 0.3s;
   }
+
   .o-index__image {
     opacity: 1;
   }

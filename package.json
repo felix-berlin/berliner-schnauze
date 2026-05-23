@@ -43,7 +43,7 @@
     "typechecking": "astro check && tsc --noEmit && vue-tsc --noEmit",
     "lint:js": "pnpm run lint:js:oxlint",
     "lint:js:oxlint": "oxlint src/ --deny-warnings --fix --fix-suggestions",
-    "lint:style": "stylelint \"**/*.{scss,sass}\" --ignore-path .gitignore",
+    "lint:style": "stylelint \"**/*.{scss,sass}\" --ignore-path .gitignore --fix",
     "lint": "pnpm run lint:js && pnpm run lint:style",
     "test:unit": "vitest run --coverage",
     "test:unit:watch": "vitest --coverage",

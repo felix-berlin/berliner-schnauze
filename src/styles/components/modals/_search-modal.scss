@@ -153,8 +153,7 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    column-gap: 2rem;
-    row-gap: 1rem;
+    gap: 1rem 2rem;
 
     .c-shortcut {
       @container (width < 650px) {

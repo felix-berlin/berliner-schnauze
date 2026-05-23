@@ -31,5 +31,8 @@ export default {
     "no-descending-specificity": null,
     "function-no-unknown": null,
     "scss/at-extend-no-missing-placeholder": null,
+    "custom-property-pattern": "^(_?[a-z][a-z0-9]*)(-[a-z0-9]+)*$",
+    "value-keyword-case": null,
+    "declaration-block-no-redundant-longhand-properties": null,
   },
 };

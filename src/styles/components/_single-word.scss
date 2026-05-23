@@ -50,7 +50,7 @@
   }
 
   * {
-    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   &__header {
@@ -120,6 +120,7 @@
       decoration-thickness: from-font;
       underline-position: from-font;
     }
+
     @include mx.breakpoint("sm", "max") {
       order: 2;
     }
@@ -240,7 +241,7 @@
     font-size: var(--size-font, 1.7rem);
     flex-basis: 100%;
     margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
-    word-break: break-word;
+    overflow-wrap: break-word;
 
     &-explanation {
       font-size: 1rem;

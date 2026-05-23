@@ -22,6 +22,7 @@
     &.is-online {
       color: vars.$success;
     }
+
     &.is-offline {
       color: vars.$danger;
     }
@@ -74,6 +75,7 @@
 
   &__skeleton-row {
     height: 4rem;
+
     @include mx.skeleton-loader;
   }
 
@@ -225,10 +227,12 @@
     &.is-sw-active {
       color: vars.$success;
     }
+
     &.is-sw-waiting,
     &.is-sw-installing {
       color: vars.$gold;
     }
+
     &.is-installed {
       color: vars.$success;
     }
