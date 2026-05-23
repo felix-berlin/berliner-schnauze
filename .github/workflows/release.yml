@@ -6,30 +6,14 @@ on:
       - beta
 
 jobs:
-  # lint:
-  #   name: Lint
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: "lts/*"
-  #         cache: "npm"
-
-  #     - name: Install dependencies
-  #       run: npm ci --ignore-scripts
-
-  #     - name: Lint
-  #       run: npm run lint
-
   release:
     name: Release
-    # needs: lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write  # required for GitHub OIDC with Infisical
 
     steps:
       - name: Checkout ✅
@@ -54,12 +38,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npx semantic-release
 
+      - name: Fetch secrets from Infisical 🔐
+        uses: infisical/secrets-action@v1
+        with:
+          method: oidc
+          project-slug: berliner-schnauze
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+
       - name: Create Sentry release
         uses: getsentry/action-release@v3
         env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-          # SENTRY_URL: https://sentry.io/
+          SENTRY_AUTH_TOKEN: ${{ env.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ env.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
         with:
-          environment: production
+          environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
