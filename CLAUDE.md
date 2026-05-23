@@ -10,8 +10,8 @@ Berliner Schnauze is a Berlin dialect translator web app. Data lives in a WordPr
 
 ```bash
 # Development
-pnpm dev                     # Start dev server (auto-runs codegen + supportedBrowsers via predev)
-pnpm gql:generate:watch      # Run in parallel with dev to regenerate types on schema changes
+pnpm dev                     # Start dev server (requires infisical login; auto-runs codegen + supportedBrowsers via predev)
+pnpm gql:generate:watch      # Run in parallel with dev to regenerate types on schema changes (requires infisical login)
 
 # Testing
 pnpm test:unit               # Run full test suite with coverage
@@ -41,6 +41,12 @@ pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (needs .env)
 ```
 
 Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
+
+## Secrets
+
+Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical login` once before local development. The `dev`, `gql:generate`, and `gql:generate:watch` scripts automatically inject secrets via `infisical run --`.
+
+For Cloudflare Pages builds, env vars are configured separately in the CF Pages dashboard.
 
 ## Architecture
 
