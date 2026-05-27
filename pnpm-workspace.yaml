@@ -14,3 +14,4 @@ minimumReleaseAgeExclude:
   - wrangler@4.93.1
   - "@iconify-json/lucide@1.2.109"
   - astro@6.3.7
+  - '@infisical/cli@0.43.87'

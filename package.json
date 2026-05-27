@@ -109,7 +109,7 @@
     "@graphql-codegen/schema-ast": "^6.0.0",
     "@graphql-codegen/typescript": "^6.0.1",
     "@graphql-codegen/typescript-operations": "^6.0.2",
-    "@infisical/cli": "^0.43.86",
+    "@infisical/cli": "^0.43.87",
     "@nanostores/logger": "^1.1.0",
     "@playform/inline": "^0.1.4",
     "@semantic-release/changelog": "^6.0.3",
@@ -135,8 +135,8 @@
     "graphql-config": "^5.1.6",
     "graphql-sock": "^1.0.1",
     "jsdom": "^29.1.1",
-    "oxfmt": "^0.51.0",
-    "oxlint": "^1.66.0",
+    "oxfmt": "^0.52.0",
+    "oxlint": "^1.67.0",
     "oxlint-tsgolint": "^0.23.0",
     "postcss-html": "^1.8.1",
     "postcss-preset-env": "^11.3.0",
@@ -160,5 +160,5 @@
   "engines": {
     "node": ">=22.12.0"
   },
-  "packageManager": "pnpm@11.2.2"
+  "packageManager": "pnpm@11.4.0"
 }
