@@ -20,7 +20,7 @@ jobs:
           method: oidc
           identity-id: 5f0ad8b7-0224-48ca-b233-abbd59f2eb68
           project-slug: berliner-schnauze
-          env-slug: prod
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
 
       - name: Checkout ✅
         uses: actions/checkout@v6
