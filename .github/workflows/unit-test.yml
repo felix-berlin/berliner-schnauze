@@ -6,15 +6,19 @@ on:
       - main
       - beta
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   lint:
     name: Run unit tests
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
+      - name: Checkout ✅
+        uses: actions/checkout@v6
+
       - name: Fetch secrets from Infisical 🔐
         uses: Infisical/secrets-action@v1.0.16
         with:
@@ -22,9 +26,6 @@ jobs:
           identity-id: 5f0ad8b7-0224-48ca-b233-abbd59f2eb68
           project-slug: berliner-schnauze
           env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
-
-      - name: Checkout ✅
-        uses: actions/checkout@v6
 
       - name: Setup pnpm 🛠️
         uses: pnpm/action-setup@v6
