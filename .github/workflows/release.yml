@@ -5,6 +5,10 @@ on:
       - main
       - beta
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   release:
     name: Release
@@ -13,9 +17,14 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-      id-token: write  # required for GitHub OIDC with Infisical
 
     steps:
+      - name: Checkout ✅
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+
       - name: Fetch secrets from Infisical (root) 🔐
         uses: Infisical/secrets-action@v1.0.16
         with:
@@ -34,12 +43,6 @@ jobs:
           env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
           domain: "https://infisical.kasimir.dev"
           secret-path: "/GitHub"
-
-      - name: Checkout ✅
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GH_TOKEN }}
 
       - name: Setup pnpm 🛠️
         uses: pnpm/action-setup@v6
