@@ -57,3 +57,5 @@ jobs:
           report_type: test_results
           files: ./tests/unit/junit-report.xml
           token: ${{ env.CODECOV_TOKEN }}
+        env:
+          CODECOV_TOKEN: ${{ env.CODECOV_TOKEN }}
