@@ -44,3 +44,8 @@ stats.html
 tests/unit/junit-report.xml
 
 .claude/settings.local.json
+
+# Graphify
+graphify-out/manifest.json
+graphify-out/cost.json
+graphify-out/cache/

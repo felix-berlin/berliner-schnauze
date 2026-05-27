@@ -5,31 +5,18 @@ on:
       - main
       - beta
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
-  # lint:
-  #   name: Lint
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: "lts/*"
-  #         cache: "npm"
-
-  #     - name: Install dependencies
-  #       run: npm ci --ignore-scripts
-
-  #     - name: Lint
-  #       run: npm run lint
-
   release:
     name: Release
-    # needs: lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
 
     steps:
       - name: Checkout ✅
@@ -37,6 +24,25 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
+
+      - name: Fetch secrets from Infisical (root) 🔐
+        uses: Infisical/secrets-action@v1.0.16
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+          domain: "https://infisical.kasimir.dev"
+
+      - name: Fetch secrets from Infisical (/GitHub) 🔐
+        uses: Infisical/secrets-action@v1.0.16
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+          domain: "https://infisical.kasimir.dev"
+          secret-path: "/GitHub"
 
       - name: Setup pnpm 🛠️
         uses: pnpm/action-setup@v6
@@ -52,14 +58,17 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GIT_AUTHOR_NAME: ${{ env.GIT_AUTHOR_NAME }}
+          GIT_AUTHOR_EMAIL: ${{ env.GIT_AUTHOR_EMAIL }}
+          GIT_COMMITTER_NAME: ${{ env.GIT_COMMITTER_NAME }}
+          GIT_COMMITTER_EMAIL: ${{ env.GIT_COMMITTER_EMAIL }}
         run: npx semantic-release
 
       - name: Create Sentry release
         uses: getsentry/action-release@v3
         env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-          # SENTRY_URL: https://sentry.io/
+          SENTRY_AUTH_TOKEN: ${{ env.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ env.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
         with:
-          environment: production
+          environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}

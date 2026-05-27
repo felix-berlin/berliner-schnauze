@@ -10,8 +10,8 @@ Berliner Schnauze is a Berlin dialect translator web app. Data lives in a WordPr
 
 ```bash
 # Development
-pnpm dev                     # Start dev server (auto-runs codegen + supportedBrowsers via predev)
-pnpm gql:generate:watch      # Run in parallel with dev to regenerate types on schema changes
+pnpm dev                     # Start dev server (requires infisical login; auto-runs codegen + supportedBrowsers via predev)
+pnpm gql:generate:watch      # Run in parallel with dev to regenerate types on schema changes (requires infisical login)
 
 # Testing
 pnpm test:unit               # Run full test suite with coverage
@@ -41,6 +41,12 @@ pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (needs .env)
 ```
 
 Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
+
+## Secrets
+
+Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical login` once before local development. The `dev`, `gql:generate`, and `gql:generate:watch` scripts automatically inject secrets via `infisical run --`.
+
+For Cloudflare Pages builds, env vars are configured separately in the CF Pages dashboard.
 
 ## Architecture
 
@@ -95,3 +101,13 @@ Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mj
 - Tests live in `src/tests/unit/` using Vitest + jsdom + Sinon
 - Vue component tests use `@vue/test-utils`
 - Coverage excludes `src/gql/`, `src/types/`, `src/tests/`, `src/plugins/`
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
