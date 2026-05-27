@@ -16,6 +16,23 @@ jobs:
       id-token: write  # required for GitHub OIDC with Infisical
 
     steps:
+      - name: Fetch secrets from Infisical (root) 🔐
+        uses: Infisical/secrets-action@v1.0.16
+        with:
+          method: oidc
+          identity-id: 5f0ad8b7-0224-48ca-b233-abbd59f2eb68
+          project-slug: berliner-schnauze
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+
+      - name: Fetch secrets from Infisical (/GitHub) 🔐
+        uses: Infisical/secrets-action@v1.0.16
+        with:
+          method: oidc
+          identity-id: 5f0ad8b7-0224-48ca-b233-abbd59f2eb68
+          project-slug: berliner-schnauze
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+          secret-path: /GitHub
+
       - name: Checkout ✅
         uses: actions/checkout@v6
         with:
@@ -36,14 +53,11 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GIT_AUTHOR_NAME: ${{ env.GIT_AUTHOR_NAME }}
+          GIT_AUTHOR_EMAIL: ${{ env.GIT_AUTHOR_EMAIL }}
+          GIT_COMMITTER_NAME: ${{ env.GIT_COMMITTER_NAME }}
+          GIT_COMMITTER_EMAIL: ${{ env.GIT_COMMITTER_EMAIL }}
         run: npx semantic-release
-
-      - name: Fetch secrets from Infisical 🔐
-        uses: infisical/secrets-action@v1
-        with:
-          method: oidc
-          project-slug: berliner-schnauze
-          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
 
       - name: Create Sentry release
         uses: getsentry/action-release@v3
