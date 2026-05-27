@@ -2,6 +2,7 @@ overrides:
   "@vitejs/plugin-vue": "^6.0.7"
 
 allowBuilds:
+  '@infisical/cli': true
   "@parcel/watcher": true
   "@sentry/cli": true
   esbuild: true
