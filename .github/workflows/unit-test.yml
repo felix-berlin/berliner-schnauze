@@ -22,9 +22,9 @@ jobs:
       - name: Fetch secrets from Infisical 🔐
         uses: Infisical/secrets-action@v1.0.16
         with:
-          method: oidc
-          identity-id: 5f0ad8b7-0224-48ca-b233-abbd59f2eb68
-          project-slug: berliner-schnauze
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
           env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
 
       - name: Setup pnpm 🛠️
