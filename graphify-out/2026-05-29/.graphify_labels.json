@@ -46,16 +46,13 @@
   "44": "Toast Popover Concepts",
   "45": "Device Detection",
   "46": "Audio Player Components",
-  "47": "Community 47",
   "48": "Dark Mode Store",
   "49": "Search Modal State",
   "50": "AlertBanner Tests",
   "51": "Navigate Back",
   "52": "SingleLoader Tests",
-  "53": "Community 53",
   "54": "Modal Close Button",
   "55": "Env & Window Types",
-  "56": "Community 56",
   "57": "ConfettiEffect Tests",
   "58": "SocialList Tests",
   "59": "TurnStile Tests",
@@ -94,7 +91,5 @@
   "92": "WordList Type Utils",
   "93": "SendEmail Service",
   "94": "SendMail CF7 Service",
-  "95": "Supported Browsers Regex",
-  "96": "Community 96",
-  "97": "Community 97"
+  "95": "Supported Browsers Regex"
 }
