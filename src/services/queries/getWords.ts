@@ -64,20 +64,27 @@ const fetchPaginatedWords = async (
   return allWords;
 };
 
+type WordEdges = NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"];
+
+let _allWordsCache: Promise<WordEdges> | null = null;
+let _allWordsLinksCache: Promise<WordEdges> | null = null;
+
 export const fetchAllWords = async (
   orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
   orderByType: OrderEnum = "ASC",
   stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
-) => {
-  return fetchPaginatedWords(GetAllWordsDocument, orderByField, orderByType, stati);
+): Promise<WordEdges> => {
+  _allWordsCache ??= fetchPaginatedWords(GetAllWordsDocument, orderByField, orderByType, stati);
+  return _allWordsCache;
 };
 
 export const fetchAllWordsLinks = async (
   orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
   orderByType: OrderEnum = "ASC",
   stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
-) => {
-  return fetchPaginatedWords(GetAllWordsLinksDocument, orderByField, orderByType, stati);
+): Promise<WordEdges> => {
+  _allWordsLinksCache ??= fetchPaginatedWords(GetAllWordsLinksDocument, orderByField, orderByType, stati);
+  return _allWordsLinksCache;
 };
 
 export const GetAllWords = graphql(`
