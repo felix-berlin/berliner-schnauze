@@ -1,4 +1,4 @@
-import type { SeoProps } from "@/types/seo";
+import type { Seo } from "@/types/seo";
 
 import { SITE_NAME, SITE_URL } from "astro:env/client";
 
@@ -34,14 +34,14 @@ export const randomElement = (elements: any[]): any => {
 export const seoData = (
   data: { seo?: Record<string, unknown>; title: string },
   baseUrl: string = SITE_URL,
-): SeoProps => {
+): { seo: Seo; title: string } => {
   return {
     seo: {
       ...data.seo,
       opengraphSiteName: SITE_NAME,
       opengraphUrl: baseUrl,
     },
-    title: { title: data.title },
+    title: data.title,
   };
 };
 
