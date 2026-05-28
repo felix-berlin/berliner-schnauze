@@ -3,7 +3,6 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 
 export interface CacheBucket {
   name: string;
-  entryCount: number;
   totalSizeBytes: number;
   lastModified: Date | null;
   oldestEntry: Date | null;
@@ -17,11 +16,9 @@ export interface StorageQuota {
 
 export type SwStatus = "not-supported" | "not-registered" | "installing" | "waiting" | "active";
 
-export interface SwInfo {
-  status: SwStatus;
-  scriptURL: string | null;
-  scope: string | null;
-}
+export type SwInfo =
+  | { status: "not-supported" | "not-registered" }
+  | { status: "installing" | "waiting" | "active"; scriptURL: string; scope: string };
 
 const BUCKET_NAME_MAP: Record<string, string> = {
   "api-search-index": "Suchindex",
@@ -47,6 +44,7 @@ export function getBucketDisplayName(name: string): string {
 export function useCacheStorage() {
   const buckets = ref<CacheBucket[]>([]);
   const isLoading = ref(false);
+  const loadError = ref<string | null>(null);
   const storageQuota = ref<StorageQuota | null>(null);
   const swInfo = ref<SwInfo | null>(null);
 
@@ -59,54 +57,53 @@ export function useCacheStorage() {
     if (!navigator.storage?.estimate) return;
     try {
       const est = await navigator.storage.estimate();
-      storageQuota.value = { quotaBytes: est.quota ?? 0, usedBytes: est.usage ?? 0 };
+      if (typeof est.usage === "number" && typeof est.quota === "number") {
+        storageQuota.value = { quotaBytes: est.quota, usedBytes: est.usage };
+      }
     } catch {
-      // API unavailable
+      // storage.estimate() blocked by permissions policy or unavailable
     }
   }
 
   async function loadSwInfo(): Promise<void> {
     if (!("serviceWorker" in navigator)) {
-      swInfo.value = { scope: null, scriptURL: null, status: "not-supported" };
+      swInfo.value = { status: "not-supported" };
       return;
     }
     try {
       const reg = await navigator.serviceWorker.getRegistration();
-      if (!reg) {
-        swInfo.value = { scope: null, scriptURL: null, status: "not-registered" };
+      if (!reg || (!reg.installing && !reg.waiting && !reg.active)) {
+        swInfo.value = { status: "not-registered" };
         return;
       }
-      const status: SwStatus = reg.installing
+      const status: "installing" | "waiting" | "active" = reg.installing
         ? "installing"
         : reg.waiting
           ? "waiting"
-          : reg.active
-            ? "active"
-            : "not-registered";
+          : "active";
       const worker = reg.active ?? reg.waiting ?? reg.installing;
-      swInfo.value = { scope: reg.scope ?? null, scriptURL: worker?.scriptURL ?? null, status };
+      swInfo.value = {
+        scope: reg.scope ?? "",
+        scriptURL: worker?.scriptURL ?? "",
+        status,
+      };
     } catch {
-      swInfo.value = { scope: null, scriptURL: null, status: "not-registered" };
+      swInfo.value = { status: "not-registered" };
     }
   }
 
   async function loadCaches(): Promise<void> {
     if (typeof caches === "undefined" || !caches) return;
     isLoading.value = true;
+    loadError.value = null;
     try {
       const [cacheNames] = await Promise.all([caches.keys(), loadStorageQuota(), loadSwInfo()]);
-      const results = await Promise.all(
+      const settled = await Promise.allSettled(
         cacheNames.map(async (name): Promise<CacheBucket> => {
           const cache = await caches.open(name);
           if (!cache)
-            return {
-              entryCount: 0,
-              lastModified: null,
-              name,
-              oldestEntry: null,
-              totalSizeBytes: 0,
-              urls: [],
-            };
+            return { lastModified: null, name, oldestEntry: null, totalSizeBytes: 0, urls: [] };
+
           const requests = await cache.keys();
           const urls = requests.map((req) => req.url);
 
@@ -114,36 +111,32 @@ export function useCacheStorage() {
           let lastModified: Date | null = null;
           let oldestEntry: Date | null = null;
 
-          for (const request of requests) {
-            const response = await cache.match(request);
-            if (!response) continue;
-
-            try {
-              const blob = await response.clone().blob();
-              totalSizeBytes += blob.size;
-            } catch {
-              // opaque/CORS response — skip size
-            }
-
-            const dateHeader = response.headers.get("Date");
-            if (dateHeader) {
+          await Promise.all(
+            requests.map(async (request) => {
+              const response = await cache.match(request);
+              if (!response) return;
+              try {
+                const blob = await response.clone().blob();
+                totalSizeBytes += blob.size;
+              } catch {
+                // opaque/CORS response — skip size
+              }
+              const dateHeader = response.headers.get("Date");
+              if (!dateHeader) return;
               const date = new Date(dateHeader);
               if (!lastModified || date > lastModified) lastModified = date;
               if (!oldestEntry || date < oldestEntry) oldestEntry = date;
-            }
-          }
+            }),
+          );
 
-          return {
-            entryCount: requests.length,
-            lastModified,
-            name,
-            oldestEntry,
-            totalSizeBytes,
-            urls,
-          };
+          return { lastModified, name, oldestEntry, totalSizeBytes, urls };
         }),
       );
-      buckets.value = results;
+      buckets.value = settled
+        .filter((r): r is PromiseFulfilledResult<CacheBucket> => r.status === "fulfilled")
+        .map((r) => r.value);
+    } catch {
+      loadError.value = "Cache-Daten konnten nicht geladen werden.";
     } finally {
       isLoading.value = false;
     }
@@ -176,6 +169,8 @@ export function useCacheStorage() {
     onlineStatus.value = "offline";
   };
 
+  let reSyncTimer: ReturnType<typeof setTimeout> | null = null;
+
   onMounted(() => {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
@@ -185,18 +180,41 @@ export function useCacheStorage() {
   onUnmounted(() => {
     window.removeEventListener("online", handleOnline);
     window.removeEventListener("offline", handleOffline);
+    if (reSyncTimer !== null) clearTimeout(reSyncTimer);
   });
 
   async function clearBucket(name: string): Promise<void> {
     if (typeof caches === "undefined" || !caches) return;
-    await caches.delete(name);
+    try {
+      await caches.delete(name);
+    } catch {
+      createToastNotify({
+        message: `Cache „${getBucketDisplayName(name)}" konnte nicht geleert werden.`,
+        status: "error",
+      });
+      return;
+    }
     await loadCaches();
   }
 
   async function clearAll(): Promise<void> {
     if (typeof caches === "undefined" || !caches) return;
-    const names = await caches.keys();
-    await Promise.all(names.map((name) => caches.delete(name)));
+    try {
+      const names = await caches.keys();
+      const results = await Promise.allSettled(names.map((name) => caches.delete(name)));
+      const failCount = results.filter((r) => r.status === "rejected").length;
+      if (failCount > 0) {
+        createToastNotify({
+          message: `${failCount} Cache(s) konnten nicht geleert werden.`,
+          status: "error",
+        });
+      }
+    } catch {
+      createToastNotify({
+        message: "Caches konnten nicht geleert werden.",
+        status: "error",
+      });
+    }
     await loadCaches();
   }
 
@@ -207,7 +225,7 @@ export function useCacheStorage() {
       status: "info",
       timeout: 2000,
     });
-    setTimeout(() => location.reload(), 800);
+    reSyncTimer = setTimeout(() => location.reload(), 2100);
   }
 
   return {
@@ -217,6 +235,7 @@ export function useCacheStorage() {
     isCacheAvailable,
     isLoading,
     loadCaches,
+    loadError,
     onlineStatus,
     reSync,
     storageQuota,

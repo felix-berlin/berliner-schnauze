@@ -15,3 +15,17 @@ minimumReleaseAgeExclude:
   - "@iconify-json/lucide@1.2.109"
   - astro@6.3.7
   - '@infisical/cli@0.43.87'
+  - '@astrojs/internal-helpers@0.10.0'
+  - '@astrojs/markdown-remark@7.2.0'
+  - '@iconify-json/lucide@1.2.110'
+  - '@sentry-internal/browser-utils@10.55.0'
+  - '@sentry-internal/feedback@10.55.0'
+  - '@sentry-internal/replay-canvas@10.55.0'
+  - '@sentry-internal/replay@10.55.0'
+  - '@sentry/astro@10.55.0'
+  - '@sentry/browser@10.55.0'
+  - '@sentry/core@10.55.0'
+  - '@sentry/node-core@10.55.0'
+  - '@sentry/node@10.55.0'
+  - '@sentry/opentelemetry@10.55.0'
+  - astro@6.4.2

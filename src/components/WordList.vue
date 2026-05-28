@@ -54,7 +54,7 @@ const virtualizerComponent = useWindowVirtualizer ? WindowVirtualizer : VList;
 const oramaSearch = useStore($oramaSearchResults);
 const mutableOramaSearch = computed(
   () =>
-    (oramaSearch.value?.hits ?? []) as unknown as {
+    (oramaSearch.value?.state === "ready" ? (oramaSearch.value.value?.hits ?? []) : []) as unknown as {
       document: OramaSearchIndex;
       id: string;
       positions: Record<string, Record<string, { length: number; start: number }[]>>;

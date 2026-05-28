@@ -1,6 +1,6 @@
 import type { Orama, SearchParamsFullText, TypedDocument } from "@orama/orama";
-import type { SearchResultWithHighlight } from "@orama/plugin-match-highlight";
 
+import { computedAsync } from "@nanostores/async";
 import { persistentMap } from "@nanostores/persistent";
 import { create, insertMultiple } from "@orama/orama";
 import {
@@ -392,43 +392,40 @@ async function initOrama(words: OramaSearchIndex[]) {
 
 let searchIndexCache: null | OramaSearchIndex[] = null;
 
-export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
-  task<null | SearchResultWithHighlight<WordDocument>>(async () => {
-    // Only fetch if not cached
-    if (!searchIndexCache) {
-      const response = await fetch("/api/search/index.json");
-      searchIndexCache = (await response.json()) as OramaSearchIndex[];
-    }
+export const $oramaSearchResults = computedAsync([$wordSearch], async (wordSearch) => {
+  if (!searchIndexCache) {
+    const response = await fetch("/api/search/index.json");
+    searchIndexCache = (await response.json()) as OramaSearchIndex[];
+  }
 
-    const oramaSearchIndex = searchIndexCache;
+  const oramaSearchIndex = searchIndexCache;
+  const resultLimit = oramaSearchIndex.length;
 
-    const resultLimit = oramaSearchIndex.length;
+  if (!db) {
+    await initOrama(oramaSearchIndex);
+  }
 
-    if (!db) {
-      await initOrama(oramaSearchIndex);
-    }
+  const where = buildWhere(wordSearch);
+  const sortBy = getSortBy(wordSearch);
 
-    const where = buildWhere(wordSearch);
-    const sortBy = getSortBy(wordSearch);
+  const params: SearchParamsFullText<Orama<typeof wordSchema>> = {
+    boost: {
+      "wordProperties.berlinerisch": 2.5,
+      "wordProperties.translations": 1,
+    },
+    limit: wordSearch.resultLimit ?? resultLimit ?? 10,
+    properties: "*",
+    sortBy,
+    term: wordSearch.search,
+    threshold: 0.5,
+    tolerance: 1,
+    ...(Object.keys(where).length > 0 ? { where } : {}),
+  };
 
-    const params: SearchParamsFullText<Orama<typeof wordSchema>> = {
-      boost: {
-        "wordProperties.berlinerisch": 2.5,
-        "wordProperties.translations": 1,
-      },
-      limit: wordSearch.resultLimit ?? resultLimit ?? 10,
-      properties: "*",
-      sortBy,
-      term: wordSearch.search,
-      threshold: 0.5,
-      tolerance: 1,
-      ...(Object.keys(where).length > 0 ? { where } : {}),
-    };
-
-    return db ? await searchWithHighlight(db, params) : null;
-  }),
-);
+  return db ? await searchWithHighlight(db, params) : null;
+});
 
 export const $searchResultCount = computed($oramaSearchResults, (oramaSearchResults) => {
-  return oramaSearchResults?.count ?? 0;
+  if (oramaSearchResults.state !== "ready") return 0;
+  return oramaSearchResults.value?.count ?? 0;
 });

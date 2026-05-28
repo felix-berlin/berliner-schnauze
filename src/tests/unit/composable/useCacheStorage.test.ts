@@ -3,6 +3,8 @@ import { useCacheStorage } from "@composables/useCacheStorage";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createApp, nextTick } from "vue";
 
+vi.mock("@stores/index", () => ({ createToastNotify: vi.fn() }));
+
 // Helper: mounts a composable inside a Vue app (needed for onMounted/onUnmounted)
 function withSetup<T>(composable: () => T): { result: T; unmount: () => void } {
   let result!: T;
@@ -134,11 +136,11 @@ describe("useCacheStorage — loadCaches", () => {
     unmount();
   });
 
-  it("counts entries per bucket", async () => {
+  it("counts entries per bucket via urls.length", async () => {
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
     const idx = result.buckets.value.find((b) => b.name === "api-search-index")!;
-    expect(idx.entryCount).toBe(1);
+    expect(idx.urls.length).toBe(1);
     unmount();
   });
 
@@ -383,8 +385,11 @@ describe("useCacheStorage — swInfo", () => {
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
-    expect(result.swInfo.value?.status).toBe("active");
-    expect(result.swInfo.value?.scriptURL).toBe("https://example.com/sw.js");
+    expect(result.swInfo.value).toMatchObject({
+      status: "active",
+      scriptURL: "https://example.com/sw.js",
+      scope: "https://example.com/",
+    });
     unmount();
   });
 
@@ -411,5 +416,179 @@ describe("useCacheStorage — swInfo", () => {
     await result.loadCaches();
     expect(result.swInfo.value?.status).toBe("not-supported");
     unmount();
+  });
+
+  it("reports waiting when reg.waiting is set and reg.installing is null", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: {
+        getRegistration: vi.fn().mockResolvedValue({
+          active: null,
+          waiting: { scriptURL: "https://example.com/sw.js" },
+          installing: null,
+          scope: "https://example.com/",
+        }),
+      },
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.swInfo.value).toMatchObject({ status: "waiting", scriptURL: "https://example.com/sw.js" });
+    unmount();
+  });
+
+  it("reports installing when reg.installing is set", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: {
+        getRegistration: vi.fn().mockResolvedValue({
+          active: null,
+          waiting: null,
+          installing: { scriptURL: "https://example.com/sw.js" },
+          scope: "https://example.com/",
+        }),
+      },
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.swInfo.value).toMatchObject({ status: "installing" });
+    unmount();
+  });
+
+  it("reports not-registered when getRegistration throws", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: { getRegistration: vi.fn().mockRejectedValue(new Error("SW error")) },
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.swInfo.value?.status).toBe("not-registered");
+    unmount();
+  });
+});
+
+describe("useCacheStorage — loadCaches error handling", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("sets loadError when caches.keys() throws", async () => {
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockRejectedValue(new DOMException("SecurityError")),
+      open: vi.fn(),
+      delete: vi.fn(),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.loadError.value).toBeTruthy();
+    unmount();
+  });
+
+  it("resets isLoading to false when caches.keys() throws", async () => {
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockRejectedValue(new DOMException("SecurityError")),
+      open: vi.fn(),
+      delete: vi.fn(),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.isLoading.value).toBe(false);
+    unmount();
+  });
+});
+
+describe("useCacheStorage — storageQuota error handling", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("leaves storageQuota null when estimate throws", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+      storage: { estimate: vi.fn().mockRejectedValue(new DOMException("NotAllowedError")) },
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.storageQuota.value).toBeNull();
+    unmount();
+  });
+});
+
+describe("useCacheStorage — clearBucket guard", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("is a safe no-op when caches API unavailable", async () => {
+    vi.stubGlobal("caches", undefined);
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearBucket("api-search-index");
+    expect(result.buckets.value).toEqual([]);
+    unmount();
+  });
+});
+
+describe("useCacheStorage — reSync", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  it("schedules page reload after 2100 ms", () => {
+    vi.useFakeTimers();
+    const reloadSpy = vi.fn();
+    vi.stubGlobal("location", { reload: reloadSpy });
+    vi.stubGlobal("navigator", { onLine: true, serviceWorker: null });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true }));
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    result.reSync();
+    expect(reloadSpy).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(2100);
+    expect(reloadSpy).toHaveBeenCalledOnce();
+    unmount();
+  });
+
+  it("cancels reload timer on unmount", () => {
+    vi.useFakeTimers();
+    const reloadSpy = vi.fn();
+    vi.stubGlobal("location", { reload: reloadSpy });
+    vi.stubGlobal("navigator", { onLine: true, serviceWorker: null });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true }));
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    result.reSync();
+    unmount();
+    vi.advanceTimersByTime(2100);
+    expect(reloadSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe("useCacheStorage — cleanup", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("removes online and offline listeners on unmount", () => {
+    vi.stubGlobal("navigator", { onLine: true, serviceWorker: null });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true }));
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    const removeSpy = vi.spyOn(window, "removeEventListener");
+    const { unmount } = withSetup(() => useCacheStorage());
+    unmount();
+    expect(removeSpy).toHaveBeenCalledWith("online", expect.any(Function));
+    expect(removeSpy).toHaveBeenCalledWith("offline", expect.any(Function));
   });
 });

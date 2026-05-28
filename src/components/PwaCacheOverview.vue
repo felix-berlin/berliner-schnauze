@@ -40,8 +40,8 @@
           <span class="c-pwa-cache__info-value" :class="`is-sw-${swInfo?.status ?? 'unknown'}`">
             <component :is="swStatusIcon" v-if="swStatusIcon" width="14" height="14" />
             {{ swStatusLabel }}
-            <span v-if="swInfo?.scriptURL" class="c-pwa-cache__info-sub">
-              {{ formatUrl(swInfo.scriptURL) }}
+            <span v-if="swScriptURL" class="c-pwa-cache__info-sub">
+              {{ formatUrl(swScriptURL) }}
             </span>
           </span>
         </div>
@@ -97,6 +97,10 @@
         <div v-for="n in 3" :key="n" class="c-pwa-cache__skeleton-row" />
       </div>
 
+      <div v-else-if="loadError" class="c-pwa-cache__unavailable">
+        <p>{{ loadError }}</p>
+      </div>
+
       <div v-else-if="buckets.length === 0" class="c-pwa-cache__empty">
         <p>Noch nichts gecacht.</p>
       </div>
@@ -131,7 +135,7 @@
             </button>
           </div>
           <div class="c-pwa-cache__bucket-meta">
-            {{ bucket.entryCount }} {{ bucket.entryCount === 1 ? "Eintrag" : "Einträge" }}
+            {{ bucket.urls.length }} {{ bucket.urls.length === 1 ? "Eintrag" : "Einträge" }}
             <template v-if="bucket.lastModified">
               · neu: {{ formatRelativeTime(bucket.lastModified) }}
             </template>
@@ -162,18 +166,19 @@ import { formatBytes, getBucketDisplayName, useCacheStorage } from "@composables
 import { useStore } from "@nanostores/vue";
 import { $isPwaInstalled } from "@stores/index";
 import { close, open } from "@stores/modal";
-import ChevronDown from "virtual:icons/lucide/chevron-down";
-import ChevronUp from "virtual:icons/lucide/chevron-up";
-import Circle from "virtual:icons/lucide/circle";
-import CircleCheck from "virtual:icons/lucide/circle-check";
-import CircleX from "virtual:icons/lucide/circle-x";
-import Clock from "virtual:icons/lucide/clock";
-import Loader from "virtual:icons/lucide/loader";
-import RefreshCw from "virtual:icons/lucide/refresh-cw";
-import RotateCcw from "virtual:icons/lucide/rotate-ccw";
-import Trash2 from "virtual:icons/lucide/trash-2";
-import X from "virtual:icons/lucide/x";
 import { type Component, computed, defineAsyncComponent, onMounted, ref } from "vue";
+
+const ChevronDown = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
+const ChevronUp = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-up"));
+const Circle = defineAsyncComponent(() => import("virtual:icons/lucide/circle"));
+const CircleCheck = defineAsyncComponent(() => import("virtual:icons/lucide/circle-check"));
+const CircleX = defineAsyncComponent(() => import("virtual:icons/lucide/circle-x"));
+const Clock = defineAsyncComponent(() => import("virtual:icons/lucide/clock"));
+const Loader = defineAsyncComponent(() => import("virtual:icons/lucide/loader"));
+const RefreshCw = defineAsyncComponent(() => import("virtual:icons/lucide/refresh-cw"));
+const RotateCcw = defineAsyncComponent(() => import("virtual:icons/lucide/rotate-ccw"));
+const Trash2 = defineAsyncComponent(() => import("virtual:icons/lucide/trash-2"));
+const X = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
 
 const {
   buckets,
@@ -182,6 +187,7 @@ const {
   isCacheAvailable,
   isLoading,
   loadCaches,
+  loadError,
   onlineStatus,
   reSync,
   storageQuota,
@@ -202,7 +208,7 @@ const storageQuotaPercent = computed(() => {
 
 const SW_STATUS_LABELS: Readonly<Record<SwStatus, string>> = {
   active: "Aktiv",
-  installing: "Installiert",
+  installing: "Wird installiert",
   "not-registered": "Nicht registriert",
   "not-supported": "Nicht unterstützt",
   waiting: "Wartend",
@@ -218,6 +224,12 @@ const SW_STATUS_ICONS: Readonly<Record<SwStatus, Component>> = {
 
 const swStatusLabel = computed(() => (swInfo.value ? SW_STATUS_LABELS[swInfo.value.status] : "…"));
 const swStatusIcon = computed(() => (swInfo.value ? SW_STATUS_ICONS[swInfo.value.status] : null));
+const swScriptURL = computed((): string | null => {
+  const info = swInfo.value;
+  if (!info) return null;
+  if (info.status === "not-supported" || info.status === "not-registered") return null;
+  return info.scriptURL || null;
+});
 
 onMounted(() => {
   loadCaches();
