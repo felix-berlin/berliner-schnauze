@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.29.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.28.0...v3.29.0) (2026-05-29)
+
+
+### Bug Fixes
+
+* **pwa:** address race condition, type safety, and test gaps in cache UI ([79263cf](https://github.com/felix-berlin/berliner-schnauze/commit/79263cf10307e2b8f97c54aed3aad47d05ba6f9e))
+
+
+### Features
+
+* **pwa:** add per-entry metadata and file-type breakdown to cache UI ([5df4872](https://github.com/felix-berlin/berliner-schnauze/commit/5df4872fac8fd4a257056ded19f98c12155098a1))
+
 # [3.28.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.27.0...v3.28.0) (2026-05-29)
 
 
