@@ -8,7 +8,7 @@
 import { randomElement, routeToWord } from "@utils/helpers.ts";
 import Dices from "virtual:icons/lucide/dices";
 
-import type { BerlinerWord } from "@/gql/graphql.ts";
+import type { BerlinerWord } from "@/gql/entity-types";
 
 interface RelatedWordsProps {
   words: BerlinerWord[];

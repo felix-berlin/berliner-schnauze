@@ -1,5 +1,6 @@
-import type { Orama, Results, SearchParams, TypedDocument } from "@orama/orama";
+import type { Orama, SearchParamsFullText, TypedDocument } from "@orama/orama";
 
+import { computedAsync } from "@nanostores/async";
 import { persistentMap } from "@nanostores/persistent";
 import { create, insertMultiple } from "@orama/orama";
 import {
@@ -11,7 +12,7 @@ import { trackEvent } from "@utils/analytics";
 import { useViewTransition } from "@utils/helpers.ts";
 import { atom, computed, onMount, task } from "nanostores";
 
-import type { BerlinerWord } from "@/gql/graphql";
+import type { BerlinerWord } from "@/gql/entity-types";
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 export type CleanBerlinerWord = {
@@ -223,7 +224,7 @@ export const $setSortOrder = (
   order: "ASC" | "DESC",
 ) => {
   $wordSearch.setKey("activeOrderCategory", category);
-  $wordSearch.setKey(orderName, order);
+  $wordSearch.setKey(orderName as keyof WordList, order);
 
   trackEvent("WordList", "Sort Order", `${category}: ${order}`);
 };
@@ -252,8 +253,8 @@ const getSearchMeta = async () => {
   return meta;
 };
 
-onMount($wordSearch, async () => {
-  await task(async () => {
+onMount($wordSearch, () => {
+  void task(async () => {
     // Fetch search meta data on mount
     await getSearchMeta().then((meta) => {
       $wordSearch.setKey("letterGroups", meta.availableWordGroups);
@@ -294,7 +295,7 @@ type WordDocument = TypedDocument<Orama<typeof wordSchema>>;
 let db: null | Orama<typeof wordSchema> = null;
 
 type SortByType =
-  | ((a: [string, number, WordDocument], b: [string, number, WordDocument]) => number)
+  | ((a: [number, number, WordDocument], b: [number, number, WordDocument]) => number)
   | { order: "ASC" | "DESC"; property: string };
 
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
@@ -391,43 +392,40 @@ async function initOrama(words: OramaSearchIndex[]) {
 
 let searchIndexCache: null | OramaSearchIndex[] = null;
 
-export const $oramaSearchResults = computed([$wordSearch], (wordSearch) =>
-  task<null | Results<WordDocument>>(async () => {
-    // Only fetch if not cached
-    if (!searchIndexCache) {
-      const response = await fetch("/api/search/index.json");
-      searchIndexCache = (await response.json()) as OramaSearchIndex[];
-    }
+export const $oramaSearchResults = computedAsync([$wordSearch], async (wordSearch) => {
+  if (!searchIndexCache) {
+    const response = await fetch("/api/search/index.json");
+    searchIndexCache = (await response.json()) as OramaSearchIndex[];
+  }
 
-    const oramaSearchIndex = searchIndexCache;
+  const oramaSearchIndex = searchIndexCache;
+  const resultLimit = oramaSearchIndex.length;
 
-    const resultLimit = oramaSearchIndex.length;
+  if (!db) {
+    await initOrama(oramaSearchIndex);
+  }
 
-    if (!db) {
-      await initOrama(oramaSearchIndex);
-    }
+  const where = buildWhere(wordSearch);
+  const sortBy = getSortBy(wordSearch);
 
-    const where = buildWhere(wordSearch);
-    const sortBy = getSortBy(wordSearch);
+  const params: SearchParamsFullText<Orama<typeof wordSchema>> = {
+    boost: {
+      "wordProperties.berlinerisch": 2.5,
+      "wordProperties.translations": 1,
+    },
+    limit: wordSearch.resultLimit ?? resultLimit ?? 10,
+    properties: "*",
+    sortBy,
+    term: wordSearch.search,
+    threshold: 0.5,
+    tolerance: 1,
+    ...(Object.keys(where).length > 0 ? { where } : {}),
+  };
 
-    const params: SearchParams<Orama<typeof wordSchema>> = {
-      boost: {
-        "wordProperties.berlinerisch": 2.5,
-        "wordProperties.translations": 1,
-      },
-      limit: wordSearch.resultLimit ?? resultLimit ?? 10,
-      properties: "*",
-      sortBy,
-      term: wordSearch.search,
-      threshold: 0.5,
-      tolerance: 1,
-      ...(Object.keys(where).length > 0 ? { where } : {}),
-    };
-
-    return db ? await searchWithHighlight(db, params) : null;
-  }),
-);
+  return db ? await searchWithHighlight(db, params) : null;
+});
 
 export const $searchResultCount = computed($oramaSearchResults, (oramaSearchResults) => {
-  return oramaSearchResults?.count ?? 0;
+  if (oramaSearchResults.state !== "ready") return 0;
+  return oramaSearchResults.value?.count ?? 0;
 });

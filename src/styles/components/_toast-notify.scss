@@ -13,7 +13,6 @@
   @include butler-mx.breakpoint("xs") {
     max-width: 400px;
   }
-
   @include butler-mx.dark-mode-class {
     --color: var(--color-body);
     --color-background: var(--new-blue-600);

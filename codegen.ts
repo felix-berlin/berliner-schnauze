@@ -2,7 +2,11 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 
 import { loadEnv } from "vite";
 
-const { WP_API, WP_AUTH_REFRESH_TOKEN } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+const { WP_API, WP_AUTH_REFRESH_TOKEN } = loadEnv(
+  process.env.NODE_ENV ?? "development",
+  process.cwd(),
+  "",
+);
 
 const config: CodegenConfig = {
   documents: ["src/**/*.{graphql,js,ts,jsx,tsx,vue}", "!src/gql/**/*"],
@@ -19,6 +23,9 @@ const config: CodegenConfig = {
       },
       plugins: [],
       preset: "client",
+      presetConfig: {
+        fragmentMasking: false,
+      },
     },
   },
   ignoreNoDocuments: true, // for better experience with the watcher

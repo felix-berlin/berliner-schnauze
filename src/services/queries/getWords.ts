@@ -11,10 +11,7 @@ import type {
 } from "@/gql/graphql.ts";
 
 import { graphql } from "@/gql";
-import {
-  GetAllWordsDocument,
-  GetAllWordsLinksDocument,
-} from "@/gql/graphql.ts";
+import { GetAllWordsDocument, GetAllWordsLinksDocument } from "@/gql/graphql.ts";
 
 const client = new Client({
   exchanges: [cacheExchange, fetchExchange],
@@ -28,13 +25,11 @@ const client = new Client({
 
 const fetchPaginatedWords = async (
   queryDocument: typeof GetAllWordsDocument | typeof GetAllWordsLinksDocument,
-  orderByField: PostObjectsConnectionOrderbyEnum = 'TITLE',
-  orderByType: OrderEnum = 'ASC',
-  stati: PostStatusEnum[] = SHOW_TEST_DATA
-    ? ['DRAFT', 'PUBLISH']
-    : ['PUBLISH'],
+  orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
+  orderByType: OrderEnum = "ASC",
+  stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
 ) => {
-  let allWords: NonNullable<GetAllWordsQuery['berlinerWords']>['edges'] = [];
+  let allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
   let cursor = null;
   const pageSize = 100;
 
@@ -58,7 +53,7 @@ const fetchPaginatedWords = async (
     const data = response.data?.berlinerWords;
     if (!data) break;
 
-    allWords = [...allWords, ...data.edges];
+    allWords = [...allWords, ...(data.edges as typeof allWords)];
     cursor = data.pageInfo.endCursor;
 
     if (!data.pageInfo.hasNextPage) {
@@ -69,24 +64,27 @@ const fetchPaginatedWords = async (
   return allWords;
 };
 
+type WordEdges = NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"];
+
+let _allWordsCache: Promise<WordEdges> | null = null;
+let _allWordsLinksCache: Promise<WordEdges> | null = null;
+
 export const fetchAllWords = async (
-  orderByField: PostObjectsConnectionOrderbyEnum = 'TITLE',
-  orderByType: OrderEnum = 'ASC',
-  stati: PostStatusEnum[] = SHOW_TEST_DATA
-    ? ['DRAFT', 'PUBLISH']
-    : ['PUBLISH'],
-) => {
-  return fetchPaginatedWords(GetAllWordsDocument, orderByField, orderByType, stati);
+  orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
+  orderByType: OrderEnum = "ASC",
+  stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
+): Promise<WordEdges> => {
+  _allWordsCache ??= fetchPaginatedWords(GetAllWordsDocument, orderByField, orderByType, stati);
+  return _allWordsCache;
 };
 
 export const fetchAllWordsLinks = async (
-  orderByField: PostObjectsConnectionOrderbyEnum = 'TITLE',
-  orderByType: OrderEnum = 'ASC',
-  stati: PostStatusEnum[] = SHOW_TEST_DATA
-    ? ['DRAFT', 'PUBLISH']
-    : ['PUBLISH'],
-) => {
-  return fetchPaginatedWords(GetAllWordsLinksDocument, orderByField, orderByType, stati);
+  orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
+  orderByType: OrderEnum = "ASC",
+  stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
+): Promise<WordEdges> => {
+  _allWordsLinksCache ??= fetchPaginatedWords(GetAllWordsLinksDocument, orderByField, orderByType, stati);
+  return _allWordsLinksCache;
 };
 
 export const GetAllWords = graphql(`
@@ -104,82 +102,7 @@ export const GetAllWords = graphql(`
     ) {
       edges {
         node {
-          id
-          slug
-          title
-          wordGroup
-          dateGmt
-          modifiedGmt
-          berlinerWordId
-          wordProperties {
-            article
-            berlinerisch
-            berlinerischAudio {
-              audio {
-                node {
-                  mediaItemUrl
-                }
-              }
-              gender
-            }
-            learnMore
-            berolinismus
-            examples {
-              example
-              exampleExplanation
-              exampleAudio {
-                gender
-                audio {
-                  node {
-                    mediaItemUrl
-                  }
-                }
-              }
-            }
-            translations {
-              translation
-            }
-            alternativeWords {
-              alternativeWord
-            }
-            relatedWords {
-              nodes {
-                ... on BerlinerWord {
-                  id
-                  wordProperties {
-                    berlinerisch
-                  }
-                  slug
-                }
-              }
-            }
-            wikimediaFiles {
-              wikimediaFile
-              description
-              caption
-            }
-            infoText
-            images {
-              nodes {
-                sourceUrl
-                mediaDetails {
-                  height
-                  width
-                }
-                caption(format: RENDERED)
-                altText
-                description(format: RENDERED)
-              }
-            }
-          }
-          berlinerischWordTypes {
-            nodes {
-              name
-            }
-          }
-          seo {
-            ...PostTypeSeoFragment
-          }
+          ...BerlinerWord
         }
         cursor
       }

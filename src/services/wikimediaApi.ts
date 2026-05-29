@@ -1,12 +1,14 @@
 import { WIKIMEDIA_API_AUTH_TOKEN } from "astro:env/client";
 
 export const fetchWikimediaAPI = async (file: string) => {
-  const headers = {
+  const headers: Record<string, string> = {
     Accept: "application/json",
-    Authorization: WIKIMEDIA_API_AUTH_TOKEN,
     "Content-Type": "application/json",
     "User-Agent": "Berliner Schnauze",
   };
+  if (WIKIMEDIA_API_AUTH_TOKEN) {
+    headers.Authorization = WIKIMEDIA_API_AUTH_TOKEN;
+  }
 
   const baseUrl = "https://api.wikimedia.org/core/v1/commons/file/";
   const url = `${baseUrl}${file}`;

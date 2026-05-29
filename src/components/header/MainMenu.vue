@@ -35,7 +35,7 @@ interface ItemObject {
   title: string;
 }
 
-const menuItems: (DefineComponent | ItemObject)[] = [
+const menuItems: (ItemObject | { component: DefineComponent; props: object })[] = [
   {
     component: InstallApp as DefineComponent,
     props: {

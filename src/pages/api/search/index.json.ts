@@ -6,7 +6,7 @@ import german from "hyphenation.de";
 import Hypher from "hypher";
 import natural from "natural";
 
-import type { BerlinerWord } from "@/gql/graphql.ts";
+import type { BerlinerWord } from "@/gql/entity-types";
 
 // Create Hypher instance once
 const hypher = new Hypher(german);
@@ -19,7 +19,7 @@ function extractWordTypes(wordTags: any): string[] {
   // Collect all type arrays, flatten, deduplicate
   return Array.from(
     new Set(
-      tagObjs.flatMap((obj) => (obj && typeof obj === "object" ? Object.values(obj).flat() : [])),
+      tagObjs.flatMap((obj) => (obj && typeof obj === "object" ? (Object.values(obj as Record<string, string[]>).flat() as string[]) : [])),
     ),
   );
 }
@@ -28,7 +28,7 @@ function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, b
   const translations = Array.isArray(node.wordProperties?.translations)
     ? node.wordProperties.translations
         .map((t) => t?.translation)
-        .filter((tr) => typeof tr === "string")
+        .filter((tr): tr is string => typeof tr === "string")
     : [];
 
   // Manually curated word types
@@ -45,8 +45,8 @@ function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, b
   const wordTypes = extractWordTypes(wordTags);
 
   return {
-    berlinerischWordTypes: wordTypes,
     berlinerWordId: node.berlinerWordId,
+    berlinerischWordTypes: wordTypes,
     dateGmt: node.dateGmt ?? "",
     dateTs: node.dateGmt ? Date.parse(node.dateGmt) : 0,
     modifiedGmt: node.modifiedGmt ?? "",

@@ -9,9 +9,9 @@
         :class="classesLi"
       >
         <a
-          v-if="typeof item?.link === 'string'"
+          v-if="'link' in item"
           :href="item.link"
-          :rel="item?.rel ? item.rel : null"
+          :rel="item.rel"
           :target="isExternalLink(item.link) ? '_blank' : '_self'"
           v-text="item.title"
         />
@@ -28,18 +28,20 @@ import type { DefineComponent } from "vue";
 interface ItemObject {
   link: string;
   title: string;
+  rel?: string;
 }
 
 interface NavListProps {
   classesLi?: string;
   classesNav?: string;
   classesUl?: string;
-  items:
-    | ItemObject[]
+  items: (
+    | ItemObject
     | {
         component: DefineComponent;
         props: object;
-      }[];
+      }
+  )[];
 }
 
 const { items } = defineProps<NavListProps>();

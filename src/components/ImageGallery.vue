@@ -22,7 +22,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 
 type ImageGalleryProps = {
   id: string;
-  images: string[];
+  images: { image: { preferred: { url: string; width: number; height: number } } }[];
 };
 
 const { id = crypto.randomUUID(), images } = defineProps<ImageGalleryProps>();

@@ -1,5 +1,5 @@
-/// <reference types="vitest" />
 import { getViteConfig, envField } from "astro/config";
+import { mergeConfig } from "vitest/config";
 
 export default getViteConfig(
   {

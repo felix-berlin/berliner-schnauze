@@ -1,14 +1,11 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "typescript",
-    "jsx-a11y",
-    "vue"
-  ],
-  "jsPlugins": [
-    "eslint-plugin-astro",
-    "eslint-plugin-perfectionist"
-  ],
+  "plugins": ["typescript", "jsx-a11y", "vue", "import", "vitest"],
+  "jsPlugins": ["eslint-plugin-astro"],
+  "options": {
+    "typeAware": true,
+    "typeCheck": true
+  },
   "categories": {
     "correctness": "off"
   },
@@ -37,6 +34,7 @@
     "**/*.test.ts"
   ],
   "rules": {
+    "sort-keys": "error",
     "constructor-super": "error",
     "for-direction": "error",
     "getter-return": "error",
@@ -124,15 +122,7 @@
     "jsx-a11y/interactive-supports-focus": [
       "error",
       {
-        "tabbable": [
-          "button",
-          "checkbox",
-          "link",
-          "searchbox",
-          "spinbutton",
-          "switch",
-          "textbox"
-        ]
+        "tabbable": ["button", "checkbox", "link", "searchbox", "spinbutton", "switch", "textbox"]
       }
     ],
     "jsx-a11y/label-has-associated-control": "error",
@@ -145,9 +135,7 @@
       "error",
       {
         "tags": [],
-        "roles": [
-          "tabpanel"
-        ],
+        "roles": ["tabpanel"],
         "allowExpressionValues": true
       }
     ],
@@ -156,14 +144,7 @@
       "error",
       {
         "allowExpressionValues": true,
-        "handlers": [
-          "onClick",
-          "onMouseDown",
-          "onMouseUp",
-          "onKeyPress",
-          "onKeyDown",
-          "onKeyUp"
-        ]
+        "handlers": ["onClick", "onMouseDown", "onMouseUp", "onKeyPress", "onKeyDown", "onKeyUp"]
       }
     ],
     "jsx-a11y/role-has-required-aria-props": "error",
@@ -185,153 +166,7 @@
     "vue/valid-define-props": "error",
     "vue/no-multiple-slot-args": "warn",
     "vue/no-required-prop-with-default": "warn",
-    "perfectionist/sort-variable-declarations": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-intersection-types": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-import-attributes": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-export-attributes": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-heritage-clauses": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-array-includes": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-named-imports": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-named-exports": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-object-types": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-union-types": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-switch-case": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-decorators": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-interfaces": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-jsx-props": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-modules": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-classes": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-exports": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-objects": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-enums": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-sets": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
-    "perfectionist/sort-maps": [
-      "error",
-      {
-        "type": "natural",
-        "order": "asc"
-      }
-    ],
+    "import/no-cycle": ["error", { "maxDepth": 3 }],
     "typescript/ban-ts-comment": "error",
     "typescript/no-duplicate-enum-values": "error",
     "typescript/no-empty-object-type": "error",
@@ -352,12 +187,7 @@
   },
   "overrides": [
     {
-      "files": [
-        "**/*.ts",
-        "**/*.tsx",
-        "**/*.mts",
-        "**/*.cts"
-      ],
+      "files": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
       "rules": {
         "constructor-super": "off",
         "getter-return": "off",
@@ -382,10 +212,7 @@
       }
     },
     {
-      "files": [
-        "*.astro",
-        "**/*.astro"
-      ],
+      "files": ["*.astro", "**/*.astro"],
       "globals": {
         "Fragment": "readonly"
       },
@@ -395,12 +222,7 @@
       }
     },
     {
-      "files": [
-        "**/*.astro/*.js",
-        "*.astro/*.js",
-        "**/*.astro/*.ts",
-        "*.astro/*.ts"
-      ],
+      "files": ["**/*.astro/*.js", "*.astro/*.js", "**/*.astro/*.ts", "*.astro/*.ts"],
       "globals": {
         "AudioWorkletGlobalScope": "readonly",
         "AudioWorkletProcessor": "readonly",
@@ -410,73 +232,6 @@
         "sampleRate": "readonly",
         "WorkletGlobalScope": "readonly"
       }
-    },
-    {
-      "files": [
-        "*.vue",
-        "**/*.vue"
-      ],
-      "rules": {
-        "vuejs-accessibility/alt-text": "error",
-        "vuejs-accessibility/anchor-has-content": "error",
-        "vuejs-accessibility/aria-props": "error",
-        "vuejs-accessibility/aria-role": "error",
-        "vuejs-accessibility/aria-unsupported-elements": "error",
-        "vuejs-accessibility/click-events-have-key-events": "error",
-        "vuejs-accessibility/form-control-has-label": "error",
-        "vuejs-accessibility/heading-has-content": "error",
-        "vuejs-accessibility/iframe-has-title": "error",
-        "vuejs-accessibility/interactive-supports-focus": "error",
-        "vuejs-accessibility/label-has-for": "error",
-        "vuejs-accessibility/media-has-caption": "error",
-        "vuejs-accessibility/mouse-events-have-key-events": "error",
-        "vuejs-accessibility/no-access-key": "error",
-        "vuejs-accessibility/no-autofocus": "error",
-        "vuejs-accessibility/no-distracting-elements": "error",
-        "vuejs-accessibility/no-redundant-roles": "error",
-        "vuejs-accessibility/no-static-element-interactions": "error",
-        "vuejs-accessibility/role-has-required-aria-props": "error",
-        "vuejs-accessibility/tabindex-no-positive": "error"
-      },
-      "jsPlugins": [
-        "eslint-plugin-vuejs-accessibility"
-      ],
-      "globals": {
-        "AudioWorkletGlobalScope": "readonly",
-        "AudioWorkletProcessor": "readonly",
-        "currentFrame": "readonly",
-        "currentTime": "readonly",
-        "registerProcessor": "readonly",
-        "sampleRate": "readonly",
-        "WorkletGlobalScope": "readonly"
-      }
-    },
-    {
-      "files": [
-        "**/*.vue"
-      ],
-      "rules": {
-        "vuejs-accessibility/label-has-for": [
-          "error",
-          {
-            "components": [
-              "VLabel"
-            ],
-            "controlComponents": [
-              "VInput"
-            ],
-            "required": {
-              "every": [
-                "id"
-              ]
-            },
-            "allowChildren": false
-          }
-        ]
-      },
-      "jsPlugins": [
-        "eslint-plugin-vuejs-accessibility"
-      ]
     }
   ]
 }

@@ -36,7 +36,7 @@ const scrollToWordSearch = () => {
       searchBar.scrollIntoView({ behavior: "smooth", block: "start" });
 
       if (largerThanSm.value) {
-        searchBar.focus({ preventScroll: true });
+        (searchBar as HTMLElement).focus({ preventScroll: true });
       }
     } else if (retries > 0) {
       setTimeout(() => findSearchBar(retries - 1), 100); // Retry after 100ms

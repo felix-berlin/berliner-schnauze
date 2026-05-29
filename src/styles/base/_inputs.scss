@@ -33,6 +33,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   &:not(.c-input--range) {
     border: var(--width-border) solid var(--color-border);
   }
+
   &:not(.c-input--file, .c-input--range) {
     padding: var(--spacing-inner);
   }
@@ -97,14 +98,11 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   font-size: var(--size-font);
   font-weight: 500;
   cursor: pointer;
-
-  & {
-    background: {
-      image: url("#{butler-fn.escape-svg($icon-chevron-down)}");
-      repeat: no-repeat;
-      position: right vars.$spacer * 1.5 center;
-      size: 16px 12px;
-    }
+  background: {
+    image: url("#{butler-fn.escape-svg($icon-chevron-down)}");
+    repeat: no-repeat;
+    position: right vars.$spacer * 1.5 center;
+    size: 16px 12px;
   }
 
   @include butler-mx.dark-mode-class {

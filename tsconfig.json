@@ -1,23 +1,22 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "node_modules", "src/tests/**/*.spec.ts", "src/tests/**/*.test.ts"],
+  "exclude": ["dist", "node_modules", "src/tests/**/*.spec.ts", "src/tests/**/*.test.ts", "vitest.config.ts"],
   "compilerOptions": {
     "jsx": "preserve",
-    "baseUrl": ".",
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@composables/*": ["src/composable/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@lib/*": ["src/lib/*"],
-      "@utils/*": ["src/utils/*"],
-      "@stores/*": ["src/stores/*"],
-      "@features/*": ["src/features/*"],
-      "@services/*": ["src/services/*"],
-      "@assets/*": ["src/assets/*"],
-      "@styles/*": ["src/styles/*"],
-      "@sass-butler/*": ["node_modules/@felix_berlin/sass-butler/*"],
-      "@/*": ["src/*"]
+      "@components/*": ["./src/components/*"],
+      "@composables/*": ["./src/composable/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@stores/*": ["./src/stores/*"],
+      "@features/*": ["./src/features/*"],
+      "@services/*": ["./src/services/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@sass-butler/*": ["./node_modules/@felix_berlin/sass-butler/*"],
+      "@/*": ["./src/*"]
     },
     "types": [
       "vitest/globals",

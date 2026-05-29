@@ -31,15 +31,15 @@ const socialMenu = [
 ];
 const fundingMenu = [
   {
-    link: funding.find((f) => f.type === "GitHub Sponsors")?.url,
+    link: funding.find((f) => f.type === "GitHub Sponsors")?.url ?? '',
     title: "GitHub Sponsors",
   },
   {
-    link: funding.find((f) => f.type === "Ko-fi")?.url,
+    link: funding.find((f) => f.type === "Ko-fi")?.url ?? '',
     title: "Ko-fi",
   },
   {
-    link: funding.find((f) => f.type === "PayPal")?.url,
+    link: funding.find((f) => f.type === "PayPal")?.url ?? '',
     title: "PayPal",
   },
 ];
@@ -52,6 +52,10 @@ const navMenu1 = [
   {
     link: "/wort",
     title: "Wort Index",
+  },
+  {
+    link: "/pwa",
+    title: "Offline-Cache",
   },
   {
     link: "https://github.com/felix-berlin/berliner-schnauze/releases",

@@ -1,0 +1,297 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+.c-pwa-cache {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-block-end: 1.5rem;
+  }
+
+  &__status {
+    font-family: vars.$berliner;
+    font-size: butler-fn.fluid(14, 18, 320, 1260);
+
+    &.is-online {
+      color: vars.$success;
+    }
+
+    &.is-offline {
+      color: vars.$danger;
+    }
+  }
+
+  &__stats {
+    display: flex;
+    gap: 1rem;
+    margin-block-end: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 1.25rem;
+    background-color: color-mix(in srgb, var(--orange-100) 20%, transparent);
+    border: 1px solid var(--new-blue-200);
+    min-width: 8rem;
+
+    @include butler-mx.dark-mode-class {
+      background-color: rgb(0 0 0 / 10%);
+    }
+  }
+
+  &__stat-value {
+    font-family: vars.$berliner;
+    font-size: butler-fn.fluid(20, 28, 320, 1260);
+    line-height: 1.2;
+  }
+
+  &__stat-label {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: 0.25rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-block-end: 2rem;
+
+    .c-button {
+      --padding: 0.5rem 1rem;
+
+      gap: 0.5rem;
+    }
+  }
+
+  &__skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__skeleton-row {
+    height: 4rem;
+
+    @include mx.skeleton-loader;
+  }
+
+  &__empty {
+    padding: 2rem;
+    text-align: center;
+    opacity: 0.6;
+    font-family: vars.$berliner;
+    font-size: butler-fn.fluid(16, 20, 320, 1260);
+  }
+
+  &__unavailable {
+    padding: 1rem 1.25rem;
+    background-color: color-mix(in srgb, var(--orange-100) 20%, transparent);
+    border: 1px solid var(--new-blue-200);
+
+    @include butler-mx.dark-mode-class {
+      background-color: rgb(0 0 0 / 10%);
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__bucket {
+    padding: 0.75rem 1.25rem;
+    background-color: color-mix(in srgb, var(--orange-100) 20%, transparent);
+    border: 1px solid var(--new-blue-200);
+
+    @include butler-mx.dark-mode-class {
+      background-color: rgb(0 0 0 / 10%);
+    }
+
+    .c-accordion__item {
+      border: none;
+
+      &:first-child {
+        border: none;
+      }
+    }
+  }
+
+  &__bucket-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block-end: 0.25rem;
+
+    .c-accordion__trigger {
+      width: auto;
+      padding: 0.25rem;
+    }
+
+    .c-accordion__trigger-label {
+      display: none;
+    }
+  }
+
+  &__bucket-name {
+    flex: 1;
+    font-family: vars.$berliner;
+    font-size: butler-fn.fluid(15, 19, 320, 1260);
+  }
+
+  &__bucket-size {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  &__bucket-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__bucket-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    svg {
+      @include butler-mx.feature("motion") {
+        transition: transform 0.25s ease;
+      }
+
+      .is-open & {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &__bucket-meta {
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+
+  &__urls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--new-blue-200);
+    overflow: hidden;
+  }
+
+  &__url {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    font-family: monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__info-grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    margin-block-end: 1.5rem;
+    background-color: color-mix(in srgb, var(--orange-100) 20%, transparent);
+    border: 1px solid var(--new-blue-200);
+
+    @include butler-mx.dark-mode-class {
+      background-color: rgb(0 0 0 / 10%);
+    }
+  }
+
+  &__info-row {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-block: 0.4rem;
+
+    & + & {
+      border-top: 1px solid var(--new-blue-200);
+    }
+  }
+
+  &__info-label {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    padding-inline: 1.25rem;
+  }
+
+  &__info-value {
+    padding-inline: 1.25rem;
+  }
+
+  &__info-value {
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    &.is-sw-active {
+      color: vars.$success;
+    }
+
+    &.is-sw-waiting,
+    &.is-sw-installing {
+      color: vars.$gold;
+    }
+
+    &.is-installed {
+      color: vars.$success;
+    }
+  }
+
+  &__info-sub {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    font-family: monospace;
+  }
+
+  &__quota-bar {
+    display: inline-block;
+    width: 6rem;
+    height: 0.4rem;
+    background-color: color-mix(in srgb, currentcolor 20%, transparent);
+    border: 1px solid var(--new-blue-200);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  &__quota-fill {
+    display: block;
+    height: 100%;
+    background-color: vars.$success;
+    transition: width 0.3s ease;
+  }
+}

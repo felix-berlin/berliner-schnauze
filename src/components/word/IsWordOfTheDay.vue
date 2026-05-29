@@ -19,7 +19,7 @@ import { $wordOfTheDay } from "@stores/index.ts";
 import Crown from "virtual:icons/lucide/crown";
 import { computed } from "vue";
 
-import type { WordProperties } from "@/gql/graphql.ts";
+import type { WordProperties } from "@/gql/entity-types";
 
 interface IsWordOfTheDayProps {
   iconSize?: number;

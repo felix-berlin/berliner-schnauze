@@ -35,6 +35,7 @@ import { routeToWord } from "@utils/helpers.ts";
 import { onKeyStroke } from "@vueuse/core";
 import { VList, WindowVirtualizer } from "virtua/vue";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
+import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 const {
   itemSize = 110,
@@ -51,7 +52,15 @@ const {
 const virtualizerComponent = useWindowVirtualizer ? WindowVirtualizer : VList;
 
 const oramaSearch = useStore($oramaSearchResults);
-const mutableOramaSearch = computed(() => oramaSearch.value?.hits ?? []);
+const mutableOramaSearch = computed(
+  () =>
+    (oramaSearch.value?.state === "ready" ? (oramaSearch.value.value?.hits ?? []) : []) as unknown as {
+      document: OramaSearchIndex;
+      id: string;
+      positions: Record<string, Record<string, { length: number; start: number }[]>>;
+      score: number;
+    }[],
+);
 
 const activeIndex = ref(0);
 const resultRefs = ref<HTMLElement[]>([]);
@@ -85,7 +94,7 @@ const focusActive = () => {
   // 1. Scroll the virtualizer to the active index
   virtualizerRef.value?.scrollToIndex?.(activeIndex.value, {
     align: "center",
-    behavior: "smooth",
+    smooth: true,
   });
 
   // 2. Wait for DOM update, then focus and scroll the element

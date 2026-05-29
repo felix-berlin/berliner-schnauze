@@ -1,5 +1,5 @@
 import { persistentMap } from "@nanostores/persistent";
-import { WP_AUTH_REFRESH_TOKEN, WP_REST_API } from "astro:env/client";
+import { WP_REST_API } from "astro:env/client";
 import { onMount, task } from "nanostores";
 
 export interface Word {
@@ -46,7 +46,7 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
     decode(value) {
       try {
         return JSON.parse(value);
-      } catch (e) {
+      } catch {
         return value;
       }
     },
@@ -59,12 +59,7 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
  * @return {Promise<void>}
  */
 export const getWordOfTheDay = async (): Promise<void> => {
-  return await fetch(`${WP_REST_API}/berliner-schnauze/v1/word-of-the-day`, {
-    headers: {
-      Authorization: `Bearer ${WP_AUTH_REFRESH_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-  })
+  return await fetch(`${WP_REST_API}/berliner-schnauze/v1/word-of-the-day`)
     .then((res) => {
       if (!res.ok) {
         $wordOfTheDay.setKey("error", true);
@@ -88,8 +83,8 @@ export const getWordOfTheDay = async (): Promise<void> => {
     });
 };
 
-onMount($wordOfTheDay, async () => {
-  await task(async () => {
+onMount($wordOfTheDay, () => {
+  void task(async () => {
     await getWordOfTheDay().catch((err) => {
       console.error("Failed to fetch Word of the Day: ", err);
     });
