@@ -6,7 +6,7 @@
   border: none;
   inset: 0;
   background-color: var(--color-background-modal, var(--floating-color-background));
-  width: max(400px, vars.$body-max-width);
+  width: var(--width-modal, max(400px, vars.$body-max-width));
   max-height: 80svh;
   margin: auto;
 
