@@ -2,12 +2,31 @@ import { useEventListener, useTimeoutFn } from "@vueuse/core";
 import { createToastNotify } from "@stores/index";
 import { computed, onMounted, ref } from "vue";
 
+export interface CacheEntry {
+  contentType: string | null;
+  date: Date | null;
+  size: number | null;
+  url: string;
+}
+
+export type FileExtType =
+  | "avif" | "css" | "html" | "jpg" | "js" | "json"
+  | "other" | "png" | "svg" | "woff" | "woff2" | "webp"
+  | (string & {});
+
+export interface FileTypeBreakdown {
+  count: number;
+  sizeBytes: number;
+  type: FileExtType;
+}
+
 export interface CacheBucket {
+  /** Sorted descending by sizeBytes. */
+  dateRange: { lastModified: Date; oldestEntry: Date } | null;
   name: string;
   totalSizeBytes: number;
-  lastModified: Date | null;
-  oldestEntry: Date | null;
-  urls: string[];
+  typeBreakdown: FileTypeBreakdown[];
+  urls: CacheEntry[];
 }
 
 export interface StorageQuota {
@@ -42,6 +61,38 @@ export function getBucketDisplayName(name: string): string {
   return name;
 }
 
+export const CONTENT_TYPE_TO_EXT: Readonly<Record<string, FileExtType>> = {
+  "application/javascript": "js",
+  "application/json": "json",
+  "font/woff": "woff",
+  "font/woff2": "woff2",
+  "image/avif": "avif",
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/svg+xml": "svg",
+  "image/webp": "webp",
+  "text/css": "css",
+  "text/html": "html",
+  "text/javascript": "js",
+};
+
+export function getEntryType(url: string, contentType: string | null): FileExtType {
+  if (contentType) {
+    const type = contentType.split(";")[0].trim();
+    if (CONTENT_TYPE_TO_EXT[type]) return CONTENT_TYPE_TO_EXT[type];
+  }
+  try {
+    const pathname = new URL(url).pathname;
+    const lastSegment = pathname.split("/").pop() ?? "";
+    const dotIndex = lastSegment.lastIndexOf(".");
+    if (dotIndex < 1) return "other";
+    const ext = lastSegment.slice(dotIndex + 1).toLowerCase();
+    return ext.length > 0 && ext.length <= 6 ? ext : "other";
+  } catch {
+    return "other";
+  }
+}
+
 export function useCacheStorage() {
   const buckets = ref<CacheBucket[]>([]);
   const isLoading = ref(false);
@@ -61,8 +112,10 @@ export function useCacheStorage() {
       if (typeof est.usage === "number" && typeof est.quota === "number") {
         storageQuota.value = { quotaBytes: est.quota, usedBytes: est.usage };
       }
-    } catch {
-      // storage.estimate() blocked by permissions policy or unavailable
+    } catch (err) {
+      if (!(err instanceof DOMException && err.name === "NotAllowedError")) {
+        console.warn("[useCacheStorage] storage.estimate() failed unexpectedly:", err);
+      }
     }
   }
 
@@ -88,7 +141,8 @@ export function useCacheStorage() {
         scriptURL: worker?.scriptURL ?? "",
         status,
       };
-    } catch {
+    } catch (err) {
+      console.warn("[useCacheStorage] serviceWorker.getRegistration() failed:", err);
       swInfo.value = { status: "not-registered" };
     }
   }
@@ -103,40 +157,72 @@ export function useCacheStorage() {
         cacheNames.map(async (name): Promise<CacheBucket> => {
           const cache = await caches.open(name);
           if (!cache)
-            return { lastModified: null, name, oldestEntry: null, totalSizeBytes: 0, urls: [] };
+            return { dateRange: null, name, totalSizeBytes: 0, typeBreakdown: [], urls: [] };
 
           const requests = await cache.keys();
-          const urls = requests.map((req) => req.url);
 
-          let totalSizeBytes = 0;
-          let lastModified: Date | null = null;
-          let oldestEntry: Date | null = null;
-
-          await Promise.all(
-            requests.map(async (request) => {
+          const urls = await Promise.all(
+            requests.map(async (request): Promise<CacheEntry> => {
+              const url = request.url;
               const response = await cache.match(request);
-              if (!response) return;
+              if (!response) return { contentType: null, date: null, size: null, url };
+
+              let size: number | null = null;
               try {
                 const blob = await response.clone().blob();
-                totalSizeBytes += blob.size;
-              } catch {
-                // opaque/CORS response — skip size
+                size = blob.size;
+              } catch (err) {
+                if (!(err instanceof TypeError)) {
+                  console.warn("[useCacheStorage] Unexpected blob() error for", url, err);
+                }
               }
+
+              const contentType = response.headers.get("Content-Type");
               const dateHeader = response.headers.get("Date");
-              if (!dateHeader) return;
-              const date = new Date(dateHeader);
-              if (!lastModified || date > lastModified) lastModified = date;
-              if (!oldestEntry || date < oldestEntry) oldestEntry = date;
+              if (!dateHeader) return { contentType, date: null, size, url };
+              const parsed = new Date(dateHeader);
+              const date = isNaN(parsed.getTime()) ? null : parsed;
+              return { contentType, date, size, url };
             }),
           );
 
-          return { lastModified, name, oldestEntry, totalSizeBytes, urls };
+          // Accumulate after Promise.all (race-free — no shared mutation inside callbacks)
+          let totalSizeBytes = 0;
+          let dateRange: { lastModified: Date; oldestEntry: Date } | null = null;
+          for (const entry of urls) {
+            if (entry.size !== null) totalSizeBytes += entry.size;
+            if (entry.date) {
+              if (dateRange) {
+                if (entry.date > dateRange.lastModified) dateRange.lastModified = entry.date;
+                if (entry.date < dateRange.oldestEntry) dateRange.oldestEntry = entry.date;
+              } else {
+                dateRange = { lastModified: entry.date, oldestEntry: entry.date };
+              }
+            }
+          }
+
+          const typeMap = new Map<string, FileTypeBreakdown>();
+          for (const entry of urls) {
+            const type = getEntryType(entry.url, entry.contentType);
+            const existing = typeMap.get(type) ?? { count: 0, sizeBytes: 0, type };
+            existing.count++;
+            existing.sizeBytes += entry.size ?? 0;
+            typeMap.set(type, existing);
+          }
+          const typeBreakdown = [...typeMap.values()].sort((a, b) => b.sizeBytes - a.sizeBytes);
+
+          return { dateRange, name, totalSizeBytes, typeBreakdown, urls };
         }),
       );
+      const rejected = settled.filter((r): r is PromiseRejectedResult => r.status === "rejected");
+      if (rejected.length > 0) {
+        rejected.forEach((r) => console.error("[useCacheStorage] Failed to load cache bucket:", r.reason));
+      }
       buckets.value = settled
         .filter((r): r is PromiseFulfilledResult<CacheBucket> => r.status === "fulfilled")
         .map((r) => r.value);
-    } catch {
+    } catch (err) {
+      console.error("[useCacheStorage] loadCaches failed:", err);
       loadError.value = "Cache-Daten konnten nicht geladen werden.";
     } finally {
       isLoading.value = false;

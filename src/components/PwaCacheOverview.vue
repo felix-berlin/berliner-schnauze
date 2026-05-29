@@ -9,9 +9,12 @@
     <template v-else>
       <PwaCacheStats
         :bucket-count="buckets.length"
-        :total-size-bytes="totalSizeBytes"
         :storage-quota="storageQuota"
+        :total-entry-count="totalEntryCount"
+        :total-size-bytes="totalSizeBytes"
       />
+
+      <PwaCacheTypeBar :buckets="buckets" />
 
       <PwaCacheInfoGrid
         :sw-info="swInfo"
@@ -66,6 +69,7 @@ import PwaCacheBucketList from "@components/PwaCacheBucketList.vue";
 import PwaCacheHeader from "@components/PwaCacheHeader.vue";
 import PwaCacheInfoGrid from "@components/PwaCacheInfoGrid.vue";
 import PwaCacheStats from "@components/PwaCacheStats.vue";
+import PwaCacheTypeBar from "@components/PwaCacheTypeBar.vue";
 
 const Circle = defineAsyncComponent(() => import("virtual:icons/lucide/circle"));
 const CircleCheck = defineAsyncComponent(() => import("virtual:icons/lucide/circle-check"));
@@ -91,6 +95,8 @@ const {
 const ConfirmDialog = defineAsyncComponent(() => import("@components/ConfirmDialog.vue"));
 
 const isPwaInstalled = useStore($isPwaInstalled);
+
+const totalEntryCount = computed(() => buckets.value.reduce((sum, b) => sum + b.urls.length, 0));
 
 const storageQuotaPercent = computed(() => {
   if (!storageQuota.value || storageQuota.value.quotaBytes === 0) return 0;
