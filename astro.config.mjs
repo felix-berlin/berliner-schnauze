@@ -297,7 +297,7 @@ export default defineConfig({
       },
       devOptions: {
         enabled: PWA_DEBUG ?? false,
-        navigateFallbackAllowlist: [/^\//],
+        // navigateFallbackAllowlist: [/^\//],
       },
     }),
     codecovplugin({
