@@ -14,9 +14,8 @@ vi.mock("virtua/vue", () => ({
 
 function makeBucket(name: string, urls: string[] = [], sizeBytes = 1024): CacheBucket {
   return {
-    lastModified: new Date("2026-01-15T12:00:00Z"),
+    dateRange: { lastModified: new Date("2026-01-15T12:00:00Z"), oldestEntry: new Date("2026-01-01T12:00:00Z") },
     name,
-    oldestEntry: new Date("2026-01-01T12:00:00Z"),
     totalSizeBytes: sizeBytes,
     typeBreakdown: [],
     urls: urls.map((url) => ({ contentType: null, date: null, size: null, url })),
@@ -88,9 +87,8 @@ describe("PwaCacheBucketList", () => {
 
   it("shows age for entry with date", async () => {
     const bucket: CacheBucket = {
-      lastModified: new Date("2026-01-15T12:00:00Z"),
+      dateRange: { lastModified: new Date("2026-01-15T12:00:00Z"), oldestEntry: new Date("2026-01-01T12:00:00Z") },
       name: "api-search-index",
-      oldestEntry: new Date("2026-01-01T12:00:00Z"),
       totalSizeBytes: 1024,
       typeBreakdown: [],
       urls: [{ contentType: null, date: new Date("2026-01-15T12:00:00Z"), size: null, url: "https://a.com/x" }],
@@ -111,5 +109,51 @@ describe("PwaCacheBucketList", () => {
     const buckets = [makeBucket("api-search-index", ["https://a.com"])];
     const wrapper = mount(PwaCacheBucketList, { props: { buckets } });
     expect(wrapper.find(".c-pwa-cache__bucket-meta").text()).toContain("neu:");
+  });
+
+  it("shows formatted size for entry with size", async () => {
+    const bucket: CacheBucket = {
+      dateRange: null,
+      name: "api-search-index",
+      totalSizeBytes: 2048,
+      typeBreakdown: [],
+      urls: [{ contentType: null, date: null, size: 2048, url: "https://a.com/x" }],
+    };
+    const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
+    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
+    expect(wrapper.find(".c-pwa-cache__url-size").text()).toContain("KB");
+  });
+
+  it("omits size span when entry size is null", async () => {
+    const buckets = [makeBucket("api-search-index", ["https://a.com/x"])];
+    const wrapper = mount(PwaCacheBucketList, { props: { buckets } });
+    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
+    expect(wrapper.find(".c-pwa-cache__url-size").exists()).toBe(false);
+  });
+
+  it("shows known content type label uppercased", async () => {
+    const bucket: CacheBucket = {
+      dateRange: null,
+      name: "api-search-index",
+      totalSizeBytes: 0,
+      typeBreakdown: [],
+      urls: [{ contentType: "application/json", date: null, size: null, url: "https://a.com/x" }],
+    };
+    const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
+    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
+    expect(wrapper.find(".c-pwa-cache__url-type").text()).toBe("JSON");
+  });
+
+  it("shows extracted subtype for unknown content type", async () => {
+    const bucket: CacheBucket = {
+      dateRange: null,
+      name: "api-search-index",
+      totalSizeBytes: 0,
+      typeBreakdown: [],
+      urls: [{ contentType: "application/x-custom", date: null, size: null, url: "https://a.com/x" }],
+    };
+    const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
+    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
+    expect(wrapper.find(".c-pwa-cache__url-type").text()).toBe("X-CUSTOM");
   });
 });

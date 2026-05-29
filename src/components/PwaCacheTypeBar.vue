@@ -72,7 +72,7 @@ const segments = computed((): Segment[] => {
       ? [...top, ["sonstige", rest.reduce((sum, [, s]) => sum + s, 0)]]
       : top;
 
-  return entries
+  const segs = entries
     .map(([type, sizeBytes], i) => ({
       color: COLORS[i % COLORS.length],
       percent: Math.round((sizeBytes / total) * 100),
@@ -80,5 +80,10 @@ const segments = computed((): Segment[] => {
       type,
     }))
     .filter((seg) => seg.percent > 0);
+
+  const diff = 100 - segs.reduce((sum, s) => sum + s.percent, 0);
+  if (segs.length > 0) segs[0].percent += diff;
+
+  return segs;
 });
 </script>

@@ -65,6 +65,42 @@ describe("PwaCacheTypeBar", () => {
     expect(labels.length).toBeLessThanOrEqual(8);
   });
 
+  it("does not add sonstige when types equal MAX_TYPES exactly", () => {
+    const types = ["js", "css", "avif", "webp", "woff2", "html", "json"].map(
+      (type, i) => ({ count: 1, sizeBytes: 100 - i, type }),
+    );
+    const wrapper = mount(PwaCacheTypeBar, { props: { buckets: [makeBucket(types)] } });
+    const labels = wrapper.findAll(".c-pwa-type-bar__legend-type").map((el) => el.text());
+    expect(labels).not.toContain("SONSTIGE");
+    expect(labels).toHaveLength(7);
+  });
+
+  it("omits segments that round to 0%", () => {
+    const bucket = makeBucket([
+      { count: 1, sizeBytes: 100_000, type: "js" },
+      { count: 1, sizeBytes: 1, type: "other" },
+    ]);
+    const wrapper = mount(PwaCacheTypeBar, { props: { buckets: [bucket] } });
+    const labels = wrapper.findAll(".c-pwa-type-bar__legend-type").map((el) => el.text());
+    expect(labels).not.toContain("OTHER");
+  });
+
+  it("percents sum to 100 after rounding adjustment", () => {
+    const bucket = makeBucket([
+      { count: 1, sizeBytes: 100, type: "js" },
+      { count: 1, sizeBytes: 100, type: "css" },
+      { count: 1, sizeBytes: 100, type: "html" },
+    ]);
+    const wrapper = mount(PwaCacheTypeBar, { props: { buckets: [bucket] } });
+    const segments = wrapper.findAll(".c-pwa-type-bar__segment");
+    const total = segments.reduce((sum, s) => {
+      const w = s.attributes("style") ?? "";
+      const match = w.match(/width:\s*([\d.]+)%/);
+      return sum + (match ? parseFloat(match[1]) : 0);
+    }, 0);
+    expect(total).toBe(100);
+  });
+
   it("assigns unique colors to each segment", () => {
     const bucket = makeBucket([
       { count: 1, sizeBytes: 100, type: "js" },

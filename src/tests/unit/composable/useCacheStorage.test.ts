@@ -1,4 +1,4 @@
-import { formatBytes, getBucketDisplayName } from "@composables/useCacheStorage";
+import { formatBytes, getBucketDisplayName, getEntryType } from "@composables/useCacheStorage";
 import { useCacheStorage } from "@composables/useCacheStorage";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createApp, nextTick } from "vue";
@@ -21,18 +21,18 @@ function withSetup<T>(composable: () => T): { result: T; unmount: () => void } {
 
 // Helper: builds a mock CacheStorage
 function makeMockCacheStorage(
-  data: Record<string, Array<{ url: string; dateStr?: string; size?: number }>>,
+  data: Record<string, Array<{ url: string; dateStr?: string; size?: number; contentType?: string }>>,
 ) {
   const cacheInstances = Object.fromEntries(
     Object.entries(data).map(([name, entries]) => {
       const requests = entries.map((e) => new Request(e.url));
       const responseMap = new Map(
-        entries.map((e) => [
-          e.url,
-          new Response(new Uint8Array(e.size ?? 100), {
-            headers: e.dateStr ? { Date: e.dateStr } : {},
-          }),
-        ]),
+        entries.map((e) => {
+          const headers: Record<string, string> = {};
+          if (e.dateStr) headers.Date = e.dateStr;
+          if (e.contentType) headers["Content-Type"] = e.contentType;
+          return [e.url, new Response(new Uint8Array(e.size ?? 100), { headers })];
+        }),
       );
       return [
         name,
@@ -105,6 +105,40 @@ describe("getBucketDisplayName", () => {
   });
 });
 
+describe("getEntryType", () => {
+  it("prefers Content-Type over URL extension", () => {
+    expect(getEntryType("https://example.com/data.json", "application/javascript")).toBe("js");
+  });
+
+  it("strips charset suffix from Content-Type", () => {
+    expect(getEntryType("https://example.com/page", "text/html; charset=utf-8")).toBe("html");
+  });
+
+  it("falls through to URL extension when contentType is null", () => {
+    expect(getEntryType("https://example.com/app.js", null)).toBe("js");
+  });
+
+  it("returns other when URL has no dot", () => {
+    expect(getEntryType("https://example.com/pwa", null)).toBe("other");
+  });
+
+  it("returns other for dot at position 0 (.hidden files)", () => {
+    expect(getEntryType("https://example.com/.hidden", null)).toBe("other");
+  });
+
+  it("returns other for extension longer than 6 chars", () => {
+    expect(getEntryType("https://example.com/file.toolong", null)).toBe("other");
+  });
+
+  it("returns other for unknown Content-Type with no URL extension", () => {
+    expect(getEntryType("https://example.com/api/data", "application/x-custom-type")).toBe("other");
+  });
+
+  it("returns other for malformed URL", () => {
+    expect(getEntryType("not a url at all", null)).toBe("other");
+  });
+});
+
 describe("useCacheStorage — loadCaches", () => {
   let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>;
 
@@ -152,21 +186,20 @@ describe("useCacheStorage — loadCaches", () => {
     unmount();
   });
 
-  it("reads lastModified from Date header", async () => {
+  it("reads lastModified from Date header via dateRange", async () => {
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
     const idx = result.buckets.value.find((b) => b.name === "api-search-index")!;
-    expect(idx.lastModified).toBeInstanceOf(Date);
-    expect(idx.lastModified?.toISOString()).toBe("2026-01-01T10:00:00.000Z");
+    expect(idx.dateRange?.lastModified).toBeInstanceOf(Date);
+    expect(idx.dateRange?.lastModified.toISOString()).toBe("2026-01-01T10:00:00.000Z");
     unmount();
   });
 
-  it("sets lastModified to null when no Date header", async () => {
+  it("sets dateRange to null when no Date header", async () => {
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
     const wotd = result.buckets.value.find((b) => b.name === "api-word-of-the-day")!;
-    expect(wotd.lastModified).toBeNull();
-    expect(wotd.oldestEntry).toBeNull();
+    expect(wotd.dateRange).toBeNull();
     unmount();
   });
 
@@ -183,8 +216,8 @@ describe("useCacheStorage — loadCaches", () => {
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
     const bucket = result.buckets.value.find((b) => b.name === "api-search-index")!;
-    expect(bucket.lastModified?.toISOString()).toBe("2026-01-01T12:00:00.000Z");
-    expect(bucket.oldestEntry?.toISOString()).toBe("2026-01-01T08:00:00.000Z");
+    expect(bucket.dateRange?.lastModified.toISOString()).toBe("2026-01-01T12:00:00.000Z");
+    expect(bucket.dateRange?.oldestEntry.toISOString()).toBe("2026-01-01T08:00:00.000Z");
     unmount();
   });
 
@@ -209,6 +242,44 @@ describe("useCacheStorage — loadCaches", () => {
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
     expect(result.buckets.value).toEqual([]);
+    unmount();
+  });
+
+  it("populates typeBreakdown sorted descending by sizeBytes", async () => {
+    vi.stubGlobal(
+      "caches",
+      makeMockCacheStorage({
+        "api-search-index": [
+          { url: "https://example.com/a.js", size: 500, contentType: "application/javascript" },
+          { url: "https://example.com/b.css", size: 200, contentType: "text/css" },
+        ],
+      }),
+    );
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const bucket = result.buckets.value.find((b) => b.name === "api-search-index")!;
+    expect(bucket.typeBreakdown[0].type).toBe("js");
+    expect(bucket.typeBreakdown[0].sizeBytes).toBe(500);
+    expect(bucket.typeBreakdown[1].type).toBe("css");
+    unmount();
+  });
+
+  it("aggregates count and sizeBytes for same type", async () => {
+    vi.stubGlobal(
+      "caches",
+      makeMockCacheStorage({
+        "api-search-index": [
+          { url: "https://example.com/a.json", size: 300, contentType: "application/json" },
+          { url: "https://example.com/b.json", size: 200, contentType: "application/json" },
+        ],
+      }),
+    );
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const bucket = result.buckets.value.find((b) => b.name === "api-search-index")!;
+    expect(bucket.typeBreakdown).toHaveLength(1);
+    expect(bucket.typeBreakdown[0].count).toBe(2);
+    expect(bucket.typeBreakdown[0].sizeBytes).toBe(500);
     unmount();
   });
 });
