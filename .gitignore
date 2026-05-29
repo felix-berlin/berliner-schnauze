@@ -43,7 +43,9 @@ src/utils/supportedBrowsers.mjs
 stats.html
 tests/unit/junit-report.xml
 
+# AI
 .claude/settings.local.json
+.playwright-mcp
 
 # Graphify
 graphify-out/manifest.json
