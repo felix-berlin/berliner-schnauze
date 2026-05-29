@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.28.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.27.0...v3.28.0) (2026-05-29)
+
+
+### Bug Fixes
+
+* app entry point ([0475f2f](https://github.com/felix-berlin/berliner-schnauze/commit/0475f2f0df58e092c5fa597314028ad5b84f7d3d))
+* clearAll uses caches.keys() directly instead of stale buckets state ([a118729](https://github.com/felix-berlin/berliner-schnauze/commit/a118729507cfa764c9a43e994ac6ae4aa01309e1))
+* **modal:** css width var was never used ([28cdb29](https://github.com/felix-berlin/berliner-schnauze/commit/28cdb29c3f504e7eaaeb7e568ec8e963e59c882d))
+* pwa cache page styles ([52cf456](https://github.com/felix-berlin/berliner-schnauze/commit/52cf456caef32efb797f42becc0de2e4db103d70))
+* **pwa:** address code review findings and migrate to nanostores/async ([f20bc97](https://github.com/felix-berlin/berliner-schnauze/commit/f20bc973bc00497b1cb3f467d9158a9488df7b1b))
+* **pwa:** improve verifyConnectivity reliability ([ae97823](https://github.com/felix-berlin/berliner-schnauze/commit/ae9782355de11b52c1de2c679f4b9d347b1ddebd))
+* remove double loadCaches call and simplify reSync to avoid misleading SW message ([1bd08bb](https://github.com/felix-berlin/berliner-schnauze/commit/1bd08bb3e52958d3436043177db81c2dae10fe9d))
+* resolve all TypeScript 6 type errors across the codebase ([0491a5e](https://github.com/felix-berlin/berliner-schnauze/commit/0491a5e68d053e246b7b7a8f59e17d4183bf2da1))
+* resolve linter errors in PwaCacheOverview component ([9b6e51f](https://github.com/felix-berlin/berliner-schnauze/commit/9b6e51f0728c90c9d92f26b8041957f42f7fd7c1))
+* **seo:** fix title rendering as [object Object] on index page ([f0006d3](https://github.com/felix-berlin/berliner-schnauze/commit/f0006d3c89665a3a937031a119e96c57a9a86daf))
+* some type errors ([cdbdc36](https://github.com/felix-berlin/berliner-schnauze/commit/cdbdc3614cb04b5562ac3f38b05f76e31ec60476))
+* **style:** errors and deprecations ([8497d8d](https://github.com/felix-berlin/berliner-schnauze/commit/8497d8db8e6ee313308ad81f147a9c02185fcc58))
+* **types:** resolve all 25 typechecking errors after fragment refactor ([d412934](https://github.com/felix-berlin/berliner-schnauze/commit/d4129343e65dca1ea302afdc81f599d296bc160e))
+
+
+### Features
+
+* add /pwa page and footer link for offline cache overview ([64b7c30](https://github.com/felix-berlin/berliner-schnauze/commit/64b7c30a5abccf51c11831c2206c6493e5a9ad6f))
+* add CacheBucket type and cache helper functions ([6e9caff](https://github.com/felix-berlin/berliner-schnauze/commit/6e9caff91a8a0724fe4a2db7d4b08791f7848aba))
+* add clearBucket, clearAll, reSync and onlineStatus to useCacheStorage ([d96c8b2](https://github.com/felix-berlin/berliner-schnauze/commit/d96c8b2afe2ab8477cd2ec9c0394daa919010cff))
+* add initial project configuration and memory maintenance documentation ([3d7deaf](https://github.com/felix-berlin/berliner-schnauze/commit/3d7deaf08854fde17a1f5539a97d26234973dbf1))
+* add new accordion components ([a0e6ad4](https://github.com/felix-berlin/berliner-schnauze/commit/a0e6ad4c82180841d94527354aa73db67ef255f1))
+* add PwaCacheOverview Vue component and SCSS ([1b800d2](https://github.com/felix-berlin/berliner-schnauze/commit/1b800d272d359957e32e7643241b6448bc64783b))
+* enhance PWA cache overview with storage quota and service worker details ([16dc052](https://github.com/felix-berlin/berliner-schnauze/commit/16dc052864602e01e495df6824a3a784c15de5ba))
+* polish /pwa page UI and improve offline detection ([9feee8e](https://github.com/felix-berlin/berliner-schnauze/commit/9feee8ea1ac9a9a7a914d8a49def1f19335adc8e))
+* **pwa:** split PwaCacheOverview into focused sub-components ([38642a2](https://github.com/felix-berlin/berliner-schnauze/commit/38642a238ca46433d6660ad43ed7972edae9caee))
+* **useCacheStorage:** implement loadCaches and reactive state ([506fee4](https://github.com/felix-berlin/berliner-schnauze/commit/506fee492a07e8b01d3b0ac23e6accd705396870))
+
+
+### Performance Improvements
+
+* **api:** deduplicate concurrent fetchAllWords/fetchAllWordsLinks calls ([059ed9d](https://github.com/felix-berlin/berliner-schnauze/commit/059ed9d4f1617c75fbfa3fa50e8ba9d736ab0e4b))
+
 # [3.27.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.26.2...v3.27.0) (2026-03-13)
 
 
