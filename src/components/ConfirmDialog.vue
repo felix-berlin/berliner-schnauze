@@ -5,11 +5,7 @@
       <button type="button" class="c-button c-button--center-icon" @click="emit('cancel')">
         Abbrechen
       </button>
-      <button
-        type="button"
-        class="c-button c-button--center-icon c-button--theme"
-        @click="emit('confirm')"
-      >
+      <button type="button" class="c-button c-button--center-icon" @click="emit('confirm')">
         Bestätigen
       </button>
     </div>
@@ -37,6 +33,10 @@ const emit = defineEmits<{ confirm: []; cancel: [] }>();
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
+
+    .c-button {
+      --padding: 0.5rem 1rem;
+    }
   }
 }
 </style>
