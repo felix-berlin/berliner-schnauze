@@ -320,13 +320,14 @@ describe("useCacheStorage — onlineStatus", () => {
     unmount();
   });
 
-  it('updates to "online" on online event', () => {
+  it('updates to "online" on online event', async () => {
     vi.stubGlobal("navigator", { onLine: true, serviceWorker: null });
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true }));
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     const { result, unmount } = withSetup(() => useCacheStorage());
     window.dispatchEvent(new Event("offline"));
     window.dispatchEvent(new Event("online"));
+    await Promise.resolve();
     expect(result.onlineStatus.value).toBe("online");
     unmount();
   });

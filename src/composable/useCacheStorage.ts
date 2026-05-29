@@ -150,11 +150,10 @@ export function useCacheStorage() {
       return;
     }
     try {
-      // HEAD request bypasses Workbox precache (GET-only) so DevTools offline blocks it
-      await fetch("/favicon.ico", {
-        cache: "no-store",
+      // HEAD bypasses Workbox precache (GET-only); /ping is a static file so SW never caches it
+      await fetch("/ping", {
         method: "HEAD",
-        signal: AbortSignal.timeout(2000),
+        signal: AbortSignal.timeout(3000),
       });
       onlineStatus.value = "online";
     } catch {
@@ -163,7 +162,7 @@ export function useCacheStorage() {
   }
 
   const handleOnline = () => {
-    onlineStatus.value = "online";
+    void verifyConnectivity();
   };
   const handleOffline = () => {
     onlineStatus.value = "offline";
