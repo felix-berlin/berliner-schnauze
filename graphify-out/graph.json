@@ -98,85 +98,238 @@
   },
   "nodes": [
     {
+      "label": "ConfirmDialog.vue",
+      "file_type": "code",
+      "source_file": "src/components/ConfirmDialog.vue",
+      "source_location": "L1",
+      "id": "src_components_confirmdialog_vue",
+      "community": 78,
+      "norm_label": "confirmdialog.vue"
+    },
+    {
+      "label": "PwaCacheActions.test.ts",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheActions.test.ts",
+      "source_location": "L1",
+      "community": 73,
+      "norm_label": "pwacacheactions.test.ts",
+      "id": "src_tests_unit_components_pwacacheactions_test_ts"
+    },
+    {
+      "label": "wrapper",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheActions.test.ts",
+      "source_location": "L7",
+      "community": 73,
+      "norm_label": "wrapper",
+      "id": "components_pwacacheactions_test_wrapper"
+    },
+    {
+      "label": "PwaCacheBucketList.test.ts",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheBucketList.test.ts",
+      "source_location": "L1",
+      "community": 7,
+      "norm_label": "pwacachebucketlist.test.ts",
+      "id": "src_tests_unit_components_pwacachebucketlist_test_ts"
+    },
+    {
+      "label": "makeBucket()",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheBucketList.test.ts",
+      "source_location": "L6",
+      "community": 7,
+      "norm_label": "makebucket()",
+      "id": "components_pwacachebucketlist_test_makebucket"
+    },
+    {
+      "label": "buckets",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheBucketList.test.ts",
+      "source_location": "L18",
+      "community": 7,
+      "norm_label": "buckets",
+      "id": "components_pwacachebucketlist_test_buckets"
+    },
+    {
+      "label": "wrapper",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheBucketList.test.ts",
+      "source_location": "L19",
+      "community": 7,
+      "norm_label": "wrapper",
+      "id": "components_pwacachebucketlist_test_wrapper"
+    },
+    {
+      "label": "urls",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheBucketList.test.ts",
+      "source_location": "L30",
+      "community": 7,
+      "norm_label": "urls",
+      "id": "components_pwacachebucketlist_test_urls"
+    },
+    {
+      "label": "PwaCacheHeader.test.ts",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheHeader.test.ts",
+      "source_location": "L1",
+      "community": 56,
+      "norm_label": "pwacacheheader.test.ts",
+      "id": "src_tests_unit_components_pwacacheheader_test_ts"
+    },
+    {
+      "label": "wrapper",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheHeader.test.ts",
+      "source_location": "L7",
+      "community": 56,
+      "norm_label": "wrapper",
+      "id": "components_pwacacheheader_test_wrapper"
+    },
+    {
+      "label": "status",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheHeader.test.ts",
+      "source_location": "L13",
+      "community": 56,
+      "norm_label": "status",
+      "id": "components_pwacacheheader_test_status"
+    },
+    {
+      "label": "PwaCacheInfoGrid.test.ts",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheInfoGrid.test.ts",
+      "source_location": "L1",
+      "community": 33,
+      "norm_label": "pwacacheinfogrid.test.ts",
+      "id": "src_tests_unit_components_pwacacheinfogrid_test_ts"
+    },
+    {
+      "label": "defaultProps",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheInfoGrid.test.ts",
+      "source_location": "L5",
+      "community": 33,
+      "norm_label": "defaultprops",
+      "id": "components_pwacacheinfogrid_test_defaultprops"
+    },
+    {
+      "label": "wrapper",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheInfoGrid.test.ts",
+      "source_location": "L17",
+      "community": 33,
+      "norm_label": "wrapper",
+      "id": "components_pwacacheinfogrid_test_wrapper"
+    },
+    {
+      "label": "bar",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheInfoGrid.test.ts",
+      "source_location": "L56",
+      "community": 33,
+      "norm_label": "bar",
+      "id": "components_pwacacheinfogrid_test_bar"
+    },
+    {
+      "label": "PwaCacheStats.test.ts",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheStats.test.ts",
+      "source_location": "L1",
+      "community": 98,
+      "norm_label": "pwacachestats.test.ts",
+      "id": "src_tests_unit_components_pwacachestats_test_ts"
+    },
+    {
+      "label": "wrapper",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/PwaCacheStats.test.ts",
+      "source_location": "L7",
+      "community": 98,
+      "norm_label": "wrapper",
+      "id": "components_pwacachestats_test_wrapper"
+    },
+    {
       "label": "installApp.ts",
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L1",
-      "id": "src_stores_installapp_ts",
       "community": 34,
-      "norm_label": "installapp.ts"
+      "norm_label": "installapp.ts",
+      "id": "src_stores_installapp_ts"
     },
     {
       "label": "BeforeInstallPromptEvent",
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L4",
-      "id": "stores_installapp_beforeinstallpromptevent",
       "community": 34,
-      "norm_label": "beforeinstallpromptevent"
+      "norm_label": "beforeinstallpromptevent",
+      "id": "stores_installapp_beforeinstallpromptevent"
     },
     {
       "label": "$installPrompt",
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L13",
-      "id": "stores_installapp_installprompt",
       "community": 34,
-      "norm_label": "$installprompt"
+      "norm_label": "$installprompt",
+      "id": "stores_installapp_installprompt"
     },
     {
       "label": "$showInstallButton",
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L14",
-      "id": "stores_installapp_showinstallbutton",
       "community": 34,
-      "norm_label": "$showinstallbutton"
+      "norm_label": "$showinstallbutton",
+      "id": "stores_installapp_showinstallbutton"
     },
     {
       "label": "$isPwaInstalled",
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L15",
-      "id": "stores_installapp_ispwainstalled",
       "community": 34,
-      "norm_label": "$ispwainstalled"
+      "norm_label": "$ispwainstalled",
+      "id": "stores_installapp_ispwainstalled"
     },
     {
       "label": "handleBeforeInstallPrompt()",
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L24",
-      "id": "stores_installapp_handlebeforeinstallprompt",
       "community": 34,
-      "norm_label": "handlebeforeinstallprompt()"
+      "norm_label": "handlebeforeinstallprompt()",
+      "id": "stores_installapp_handlebeforeinstallprompt"
     },
     {
       "label": "handleAppInstalled()",
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L29",
-      "id": "stores_installapp_handleappinstalled",
       "community": 34,
-      "norm_label": "handleappinstalled()"
+      "norm_label": "handleappinstalled()",
+      "id": "stores_installapp_handleappinstalled"
     },
     {
       "label": "triggerPwaInstall()",
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L46",
-      "id": "stores_installapp_triggerpwainstall",
       "community": 34,
-      "norm_label": "triggerpwainstall()"
+      "norm_label": "triggerpwainstall()",
+      "id": "stores_installapp_triggerpwainstall"
     },
     {
       "label": "disableInAppInstallPrompt()",
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L53",
-      "id": "stores_installapp_disableinappinstallprompt",
       "community": 34,
-      "norm_label": "disableinappinstallprompt()"
+      "norm_label": "disableinappinstallprompt()",
+      "id": "stores_installapp_disableinappinstallprompt"
     },
     {
       "label": "useCacheStorage.ts",
@@ -255,7 +408,7 @@
       "file_type": "code",
       "source_file": "src/composable/useCacheStorage.ts",
       "source_location": "L45",
-      "community": 7,
+      "community": 14,
       "norm_label": "usecachestorage()",
       "id": "composable_usecachestorage_usecachestorage"
     },
@@ -885,7 +1038,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L157",
-      "community": 73,
+      "community": 3,
       "norm_label": "setletterfilter()",
       "id": "stores_wordlist_setletterfilter"
     },
@@ -903,7 +1056,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L174",
-      "community": 73,
+      "community": 3,
       "norm_label": "setwordtypefilter()",
       "id": "stores_wordlist_setwordtypefilter"
     },
@@ -948,7 +1101,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L221",
-      "community": 99,
+      "community": 48,
       "norm_label": "$setsortorder()",
       "id": "stores_wordlist_setsortorder"
     },
@@ -966,7 +1119,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L236",
-      "community": 73,
+      "community": 3,
       "norm_label": "$toggleberolinismus()",
       "id": "stores_wordlist_toggleberolinismus"
     },
@@ -1101,7 +1254,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L1",
-      "community": 7,
+      "community": 106,
       "norm_label": "unsupportedbrowser.ts",
       "id": "src_lib_unsupportedbrowser_ts"
     },
@@ -1110,7 +1263,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L9",
-      "community": 7,
+      "community": 106,
       "norm_label": "isbrowsersupported()",
       "id": "lib_unsupportedbrowser_isbrowsersupported"
     },
@@ -1119,7 +1272,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L18",
-      "community": 7,
+      "community": 106,
       "norm_label": "checkbrowsersupport()",
       "id": "lib_unsupportedbrowser_checkbrowsersupport"
     },
@@ -1129,7 +1282,7 @@
       "source_file": "src/layouts/Layout.astro",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 1,
+      "community": 22,
       "norm_label": "@layouts/layout.astro",
       "id": "src_layouts_layout_astro"
     },
@@ -1138,7 +1291,7 @@
       "file_type": "code",
       "source_file": "src/styles/app.scss",
       "confidence": "EXTRACTED",
-      "community": 1,
+      "community": 22,
       "norm_label": "@styles/app.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_app_scss"
     },
@@ -1178,7 +1331,7 @@
       "source_file": "src/components/Modal.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 1,
+      "community": 22,
       "norm_label": "modal.vue",
       "id": "src_components_modal_vue"
     },
@@ -1188,7 +1341,7 @@
       "source_file": "src/components/ScrollToTop.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 1,
+      "community": 22,
       "norm_label": "scrolltotop.vue",
       "id": "src_components_scrolltotop_vue"
     },
@@ -1207,7 +1360,7 @@
       "file_type": "code",
       "source_file": "src/gql/entity-types.ts",
       "source_location": "L1",
-      "community": 8,
+      "community": 4,
       "norm_label": "entity-types.ts",
       "id": "src_gql_entity_types_ts"
     },
@@ -1216,7 +1369,7 @@
       "file_type": "code",
       "source_file": "src/gql/entity-types.ts",
       "source_location": "L9",
-      "community": 33,
+      "community": 13,
       "norm_label": "maybe",
       "id": "gql_entity_types_maybe"
     },
@@ -1379,7 +1532,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L86",
-      "community": 8,
+      "community": 4,
       "norm_label": "mediaitemfragment",
       "id": "gql_graphql_mediaitemfragment"
     },
@@ -1388,7 +1541,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L88",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesberlinerischaudiofragment",
       "id": "gql_graphql_wordpropertiesberlinerischaudiofragment"
     },
@@ -1397,7 +1550,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L90",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesexamplesexampleaudiofragment",
       "id": "gql_graphql_wordpropertiesexamplesexampleaudiofragment"
     },
@@ -1406,7 +1559,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L92",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesexamplesfragment",
       "id": "gql_graphql_wordpropertiesexamplesfragment"
     },
@@ -1415,7 +1568,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L94",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertieswikimediafilesfragment",
       "id": "gql_graphql_wordpropertieswikimediafilesfragment"
     },
@@ -1424,7 +1577,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L96",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesfragment",
       "id": "gql_graphql_wordpropertiesfragment"
     },
@@ -1433,7 +1586,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L101",
-      "community": 8,
+      "community": 4,
       "norm_label": "berlinerwordfragment",
       "id": "gql_graphql_berlinerwordfragment"
     },
@@ -1676,7 +1829,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort-vorschlagen.astro",
       "source_location": "L1",
-      "community": 1,
+      "community": 22,
       "norm_label": "wort-vorschlagen.astro",
       "id": "src_pages_wort_vorschlagen_astro"
     },
@@ -1685,7 +1838,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort-vorschlagen.astro",
       "source_location": "L6",
-      "community": 1,
+      "community": 22,
       "norm_label": "page",
       "id": "pages_wort_vorschlagen_page"
     },
@@ -1767,7 +1920,7 @@
       "file_type": "code",
       "source_file": "src/pages/404.astro",
       "source_location": "L1",
-      "community": 1,
+      "community": 22,
       "norm_label": "404.astro",
       "id": "src_pages_404_astro"
     },
@@ -1776,7 +1929,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L1",
-      "community": 9,
+      "community": 22,
       "norm_label": "index.astro",
       "id": "src_pages_index_astro"
     },
@@ -1785,7 +1938,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L13",
-      "community": 9,
+      "community": 22,
       "norm_label": "content",
       "id": "pages_index_content"
     },
@@ -1794,7 +1947,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L24",
-      "community": 9,
+      "community": 22,
       "norm_label": "facts",
       "id": "pages_index_facts"
     },
@@ -1803,7 +1956,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L91",
-      "community": 9,
+      "community": 22,
       "norm_label": "wrapper",
       "id": "pages_index_wrapper"
     },
@@ -1812,7 +1965,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L92",
-      "community": 9,
+      "community": 22,
       "norm_label": "img",
       "id": "pages_index_img"
     },
@@ -1821,7 +1974,7 @@
       "file_type": "code",
       "source_file": "src/styles/objects/_index.scss",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 22,
       "norm_label": "@styles/objects/_index.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss"
     },
@@ -1830,7 +1983,7 @@
       "file_type": "code",
       "source_file": "src/assets/images/brown-bear-roar.png",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 22,
       "norm_label": "@assets/images/brown-bear-roar.png",
       "id": "home_felix_workspace_berliner_schnauze_src_assets_images_brown_bear_roar_png"
     },
@@ -1840,7 +1993,7 @@
       "source_file": "src/components/FactCard.astro",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 9,
+      "community": 22,
       "norm_label": "factcard.astro",
       "id": "src_components_factcard_astro"
     },
@@ -1860,7 +2013,7 @@
       "source_file": "src/components/WordOfTheDay.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 9,
+      "community": 22,
       "norm_label": "wordoftheday.vue",
       "id": "src_components_wordoftheday_vue"
     },
@@ -1870,7 +2023,7 @@
       "source_file": "src/components/WordSearchLink.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 24,
+      "community": 22,
       "norm_label": "wordsearchlink.vue",
       "id": "src_components_wordsearchlink_vue"
     },
@@ -1880,7 +2033,7 @@
       "source_file": "src/utils/helpers.ts",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 26,
+      "community": 5,
       "norm_label": "helpers.ts",
       "id": "src_utils_helpers_ts"
     },
@@ -1898,7 +2051,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_facts-grid.scss",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 22,
       "norm_label": "@styles/components/_facts-grid.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss"
     },
@@ -2025,7 +2178,7 @@
       "source_file": "src/components/AudioPlayerList.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 33,
+      "community": 13,
       "norm_label": "@components/audioplayerlist.vue",
       "id": "src_components_audioplayerlist_vue"
     },
@@ -2035,7 +2188,7 @@
       "source_file": "src/components/BadgeTag.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 18,
+      "community": 108,
       "norm_label": "badgetag.vue",
       "id": "src_components_badgetag_vue"
     },
@@ -2045,7 +2198,7 @@
       "source_file": "src/components/ImageGallery.astro",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 47,
+      "community": 24,
       "norm_label": "imagegallery.astro",
       "id": "src_components_imagegallery_astro"
     },
@@ -2095,7 +2248,7 @@
       "source_file": "src/components/word/WordExamples.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 33,
+      "community": 4,
       "norm_label": "wordexamples.vue",
       "id": "src_components_word_wordexamples_vue"
     },
@@ -2105,7 +2258,7 @@
       "source_file": "src/components/word/WordExamples.astro",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 33,
+      "community": 13,
       "norm_label": "wordexamples.astro",
       "id": "src_components_word_wordexamples_astro"
     },
@@ -2153,7 +2306,7 @@
       "file_type": "code",
       "source_file": "hyphenation.de",
       "confidence": "EXTRACTED",
-      "community": 10,
+      "community": 17,
       "norm_label": "hyphenation.de",
       "id": "hyphenation_de"
     },
@@ -2162,7 +2315,7 @@
       "file_type": "code",
       "source_file": "hypher",
       "confidence": "EXTRACTED",
-      "community": 10,
+      "community": 17,
       "norm_label": "hypher",
       "id": "hypher"
     },
@@ -2189,7 +2342,7 @@
       "file_type": "code",
       "source_file": "src/gql/entity-types",
       "confidence": "EXTRACTED",
-      "community": 33,
+      "community": 13,
       "norm_label": "@/gql/entity-types",
       "id": "home_felix_workspace_berliner_schnauze_src_gql_entity_types"
     },
@@ -2261,7 +2414,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/meta.json.ts",
       "source_location": "L1",
-      "community": 10,
+      "community": 17,
       "norm_label": "meta.json.ts",
       "id": "src_pages_api_search_meta_json_ts"
     },
@@ -2270,7 +2423,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/meta.json.ts",
       "source_location": "L8",
-      "community": 10,
+      "community": 17,
       "norm_label": "hypher",
       "id": "search_meta_json_hypher"
     },
@@ -2279,7 +2432,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/meta.json.ts",
       "source_location": "L10",
-      "community": 10,
+      "community": 17,
       "norm_label": "get()",
       "id": "search_meta_json_get"
     },
@@ -2288,7 +2441,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L1",
-      "community": 10,
+      "community": 17,
       "norm_label": "index.json.ts",
       "id": "src_pages_api_search_index_json_ts"
     },
@@ -2297,7 +2450,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L12",
-      "community": 10,
+      "community": 17,
       "norm_label": "hypher",
       "id": "search_index_json_hypher"
     },
@@ -2306,7 +2459,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L14",
-      "community": 10,
+      "community": 18,
       "norm_label": "oramasearchindex",
       "id": "search_index_json_oramasearchindex"
     },
@@ -2315,7 +2468,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L16",
-      "community": 10,
+      "community": 17,
       "norm_label": "extractwordtypes()",
       "id": "search_index_json_extractwordtypes"
     },
@@ -2324,7 +2477,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L27",
-      "community": 10,
+      "community": 17,
       "norm_label": "makeoramasearchindex()",
       "id": "search_index_json_makeoramasearchindex"
     },
@@ -2333,7 +2486,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L74",
-      "community": 10,
+      "community": 17,
       "norm_label": "get()",
       "id": "search_index_json_get"
     },
@@ -2369,7 +2522,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/BadgeTag.test.ts",
       "source_location": "L1",
-      "community": 18,
+      "community": 108,
       "norm_label": "badgetag.test.ts",
       "id": "src_tests_unit_components_badgetag_test_ts"
     },
@@ -2378,7 +2531,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/BadgeTag.test.ts",
       "source_location": "L8",
-      "community": 18,
+      "community": 108,
       "norm_label": "wrapper",
       "id": "components_badgetag_test_wrapper"
     },
@@ -2405,7 +2558,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ScrollToTop.test.ts",
       "source_location": "L1",
-      "community": 1,
+      "community": 22,
       "norm_label": "scrolltotop.test.ts",
       "id": "src_tests_unit_components_scrolltotop_test_ts"
     },
@@ -2414,7 +2567,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ScrollToTop.test.ts",
       "source_location": "L29",
-      "community": 1,
+      "community": 22,
       "norm_label": "wrapper",
       "id": "components_scrolltotop_test_wrapper"
     },
@@ -2711,7 +2864,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L1",
-      "community": 56,
+      "community": 100,
       "norm_label": "sortwordsby.test.ts",
       "id": "src_tests_unit_components_filter_sortwordsby_test_ts"
     },
@@ -2720,7 +2873,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L15",
-      "community": 56,
+      "community": 100,
       "norm_label": "mocktogglefn",
       "id": "filter_sortwordsby_test_mocktogglefn"
     },
@@ -2729,7 +2882,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L16",
-      "community": 56,
+      "community": 100,
       "norm_label": "mocksetactiveordercategory",
       "id": "filter_sortwordsby_test_mocksetactiveordercategory"
     },
@@ -2738,7 +2891,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L17",
-      "community": 56,
+      "community": 100,
       "norm_label": "mockwordsearch",
       "id": "filter_sortwordsby_test_mockwordsearch"
     },
@@ -2747,7 +2900,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L35",
-      "community": 56,
+      "community": 100,
       "norm_label": "wrapper",
       "id": "filter_sortwordsby_test_wrapper"
     },
@@ -2756,7 +2909,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L1",
-      "community": 99,
+      "community": 48,
       "norm_label": "sortwordbyselect.test.ts",
       "id": "src_tests_unit_components_filter_sortwordbyselect_test_ts"
     },
@@ -2765,7 +2918,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L12",
-      "community": 99,
+      "community": 48,
       "norm_label": "wrapper",
       "id": "filter_sortwordbyselect_test_wrapper"
     },
@@ -2774,7 +2927,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L18",
-      "community": 99,
+      "community": 48,
       "norm_label": "select",
       "id": "filter_sortwordbyselect_test_select"
     },
@@ -2819,7 +2972,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
       "source_location": "L1",
-      "community": 73,
+      "community": 3,
       "norm_label": "letterfilter.test.ts",
       "id": "src_tests_unit_components_filter_letterfilter_test_ts"
     },
@@ -2828,7 +2981,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
       "source_location": "L32",
-      "community": 73,
+      "community": 3,
       "norm_label": "button",
       "id": "filter_letterfilter_test_button"
     },
@@ -2891,7 +3044,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotify.test.ts",
       "source_location": "L1",
-      "community": 7,
+      "community": 9,
       "norm_label": "toastnotify.test.ts",
       "id": "src_tests_unit_components_toast_toastnotify_test_ts"
     },
@@ -2900,7 +3053,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L1",
-      "community": 10,
+      "community": 26,
       "norm_label": "getwordtype.test.ts",
       "id": "src_tests_unit_utils_getwordtype_test_ts"
     },
@@ -2909,7 +3062,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L8",
-      "community": 10,
+      "community": 26,
       "norm_label": "doc",
       "id": "utils_getwordtype_test_doc"
     },
@@ -2918,7 +3071,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L9",
-      "community": 10,
+      "community": 26,
       "norm_label": "expectedtags",
       "id": "utils_getwordtype_test_expectedtags"
     },
@@ -2927,7 +3080,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L11",
-      "community": 10,
+      "community": 26,
       "norm_label": "result",
       "id": "utils_getwordtype_test_result"
     },
@@ -2936,7 +3089,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L1",
-      "community": 10,
+      "community": 47,
       "norm_label": "translatenlptags.test.ts",
       "id": "src_tests_unit_utils_translatenlptags_test_ts"
     },
@@ -2945,7 +3098,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L6",
-      "community": 10,
+      "community": 47,
       "norm_label": "englishtags",
       "id": "utils_translatenlptags_test_englishtags"
     },
@@ -2954,7 +3107,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L12",
-      "community": 10,
+      "community": 47,
       "norm_label": "expectedgermantags",
       "id": "utils_translatenlptags_test_expectedgermantags"
     },
@@ -2963,7 +3116,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L24",
-      "community": 10,
+      "community": 47,
       "norm_label": "expectedtags",
       "id": "utils_translatenlptags_test_expectedtags"
     },
@@ -3062,7 +3215,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L1",
-      "community": 100,
+      "community": 5,
       "norm_label": "randomelement.test.ts",
       "id": "src_tests_unit_utils_helper_randomelement_test_ts"
     },
@@ -3071,7 +3224,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L6",
-      "community": 100,
+      "community": 5,
       "norm_label": "elements",
       "id": "helper_randomelement_test_elements"
     },
@@ -3080,7 +3233,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L7",
-      "community": 100,
+      "community": 5,
       "norm_label": "result",
       "id": "helper_randomelement_test_result"
     },
@@ -3089,7 +3242,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/useViewTransition.test.ts",
       "source_location": "L1",
-      "community": 73,
+      "community": 3,
       "norm_label": "useviewtransition.test.ts",
       "id": "src_tests_unit_utils_helper_useviewtransition_test_ts"
     },
@@ -3098,7 +3251,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValueLength.test.ts",
       "source_location": "L1",
-      "community": 26,
+      "community": 5,
       "norm_label": "checkobjectvaluelength.test.ts",
       "id": "src_tests_unit_utils_helper_checkobjectvaluelength_test_ts"
     },
@@ -3107,7 +3260,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValueLength.test.ts",
       "source_location": "L6",
-      "community": 26,
+      "community": 5,
       "norm_label": "testobject",
       "id": "helper_checkobjectvaluelength_test_testobject"
     },
@@ -3116,7 +3269,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/formattedDate.test.ts",
       "source_location": "L1",
-      "community": 26,
+      "community": 5,
       "norm_label": "formatteddate.test.ts",
       "id": "src_tests_unit_utils_helper_formatteddate_test_ts"
     },
@@ -3125,7 +3278,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L1",
-      "community": 4,
+      "community": 5,
       "norm_label": "routetoword.test.ts",
       "id": "src_tests_unit_utils_helper_routetoword_test_ts"
     },
@@ -3134,7 +3287,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L6",
-      "community": 4,
+      "community": 5,
       "norm_label": "result",
       "id": "helper_routetoword_test_result"
     },
@@ -3143,7 +3296,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValues.test.ts",
       "source_location": "L1",
-      "community": 26,
+      "community": 5,
       "norm_label": "checkobjectvalues.test.ts",
       "id": "src_tests_unit_utils_helper_checkobjectvalues_test_ts"
     },
@@ -3152,7 +3305,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValues.test.ts",
       "source_location": "L6",
-      "community": 26,
+      "community": 5,
       "norm_label": "testobject",
       "id": "helper_checkobjectvalues_test_testobject"
     },
@@ -3360,7 +3513,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L16",
-      "community": 24,
+      "community": 22,
       "norm_label": "searchlinkiconwrapclass",
       "id": "components_wordsearchlink_searchlinkiconwrapclass"
     },
@@ -3369,7 +3522,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L17",
-      "community": 24,
+      "community": 22,
       "norm_label": "preferredmotion",
       "id": "components_wordsearchlink_preferredmotion"
     },
@@ -3378,7 +3531,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L18",
-      "community": 24,
+      "community": 22,
       "norm_label": "breakpoints",
       "id": "components_wordsearchlink_breakpoints"
     },
@@ -3387,7 +3540,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L29",
-      "community": 24,
+      "community": 22,
       "norm_label": "largerthansm",
       "id": "components_wordsearchlink_largerthansm"
     },
@@ -3396,7 +3549,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L31",
-      "community": 24,
+      "community": 22,
       "norm_label": "scrolltowordsearch()",
       "id": "components_wordsearchlink_scrolltowordsearch"
     },
@@ -3405,7 +3558,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L52",
-      "community": 24,
+      "community": 22,
       "norm_label": "showclickeffect()",
       "id": "components_wordsearchlink_showclickeffect"
     },
@@ -3417,15 +3570,6 @@
       "community": 58,
       "norm_label": "sociallist.vue",
       "id": "src_components_sociallist_vue"
-    },
-    {
-      "label": "ConfirmDialog.vue",
-      "file_type": "code",
-      "source_file": "src/components/ConfirmDialog.vue",
-      "source_location": "L1",
-      "community": 78,
-      "norm_label": "confirmdialog.vue",
-      "id": "src_components_confirmdialog_vue"
     },
     {
       "label": "AudioPlayer.vue",
@@ -3541,7 +3685,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_fact-card.scss",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 22,
       "norm_label": "@styles/components/_fact-card.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_fact_card_scss"
     },
@@ -3770,7 +3914,7 @@
       "file_type": "code",
       "source_file": "src/components/WordOfTheDay.vue",
       "source_location": "L90",
-      "community": 9,
+      "community": 22,
       "norm_label": "milliseconds",
       "id": "components_wordoftheday_milliseconds"
     },
@@ -3824,7 +3968,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.astro",
       "source_location": "L1",
-      "community": 24,
+      "community": 22,
       "norm_label": "wordsearchlink.astro",
       "id": "src_components_wordsearchlink_astro"
     },
@@ -3833,7 +3977,7 @@
       "file_type": "code",
       "source_file": "virtual:icons/lucide/mouse-pointer-click",
       "confidence": "EXTRACTED",
-      "community": 24,
+      "community": 22,
       "norm_label": "virtual:icons/lucide/mouse-pointer-click",
       "id": "mouse_pointer_click"
     },
@@ -3842,7 +3986,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_word-search-link.scss",
       "confidence": "EXTRACTED",
-      "community": 24,
+      "community": 22,
       "norm_label": "@styles/components/_word-search-link.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_word_search_link_scss"
     },
@@ -3860,7 +4004,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L40",
-      "community": 47,
+      "community": 24,
       "norm_label": "getimageresult",
       "id": "components_imagegallery_getimageresult"
     },
@@ -3869,7 +4013,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L117",
-      "community": 47,
+      "community": 24,
       "norm_label": "constructor()",
       "id": "components_imagegallery_constructor"
     },
@@ -3878,7 +4022,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L121",
-      "community": 47,
+      "community": 24,
       "norm_label": "connectedcallback()",
       "id": "components_imagegallery_connectedcallback"
     },
@@ -3887,7 +4031,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L205",
-      "community": 47,
+      "community": 24,
       "norm_label": "disconnectedcallback()",
       "id": "components_imagegallery_disconnectedcallback"
     },
@@ -3896,7 +4040,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L218",
-      "community": 47,
+      "community": 24,
       "norm_label": "createpictureelement()",
       "id": "components_imagegallery_createpictureelement"
     },
@@ -3905,7 +4049,7 @@
       "file_type": "code",
       "source_file": "photoswipe",
       "confidence": "EXTRACTED",
-      "community": 47,
+      "community": 24,
       "norm_label": "photoswipe",
       "id": "photoswipe"
     },
@@ -3914,7 +4058,7 @@
       "file_type": "code",
       "source_file": "photoswipe/style.css",
       "confidence": "EXTRACTED",
-      "community": 47,
+      "community": 24,
       "norm_label": "photoswipe/style.css",
       "id": "style_css"
     },
@@ -3923,7 +4067,7 @@
       "file_type": "code",
       "source_file": "photoswipe/lightbox",
       "confidence": "EXTRACTED",
-      "community": 47,
+      "community": 24,
       "norm_label": "photoswipe/lightbox",
       "id": "lightbox"
     },
@@ -3932,7 +4076,7 @@
       "file_type": "code",
       "source_file": "src/utils/analytics",
       "confidence": "EXTRACTED",
-      "community": 47,
+      "community": 24,
       "norm_label": "@utils/analytics",
       "id": "home_felix_workspace_berliner_schnauze_src_utils_analytics"
     },
@@ -4170,7 +4314,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/LetterFilter.vue",
       "source_location": "L1",
-      "community": 73,
+      "community": 3,
       "norm_label": "letterfilter.vue",
       "id": "src_components_filter_letterfilter_vue"
     },
@@ -4206,7 +4350,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordsBy.vue",
       "source_location": "L1",
-      "community": 17,
+      "community": 100,
       "norm_label": "sortwordsby.vue",
       "id": "src_components_filter_sortwordsby_vue"
     },
@@ -4215,7 +4359,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordsBy.vue",
       "source_location": "L45",
-      "community": 17,
+      "community": 100,
       "norm_label": "wordsearch",
       "id": "filter_sortwordsby_wordsearch"
     },
@@ -4224,7 +4368,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/BerolinismusToggle.vue",
       "source_location": "L1",
-      "community": 17,
+      "community": 99,
       "norm_label": "berolinismustoggle.vue",
       "id": "src_components_filter_berolinismustoggle_vue"
     },
@@ -4233,7 +4377,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/BerolinismusToggle.vue",
       "source_location": "L18",
-      "community": 17,
+      "community": 99,
       "norm_label": "wordsearch",
       "id": "filter_berolinismustoggle_wordsearch"
     },
@@ -4242,7 +4386,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/AlphabeticalFilterDropdown.vue",
       "source_location": "L1",
-      "community": 17,
+      "community": 99,
       "norm_label": "alphabeticalfilterdropdown.vue",
       "id": "src_components_filter_alphabeticalfilterdropdown_vue"
     },
@@ -4251,7 +4395,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/AlphabeticalFilterDropdown.vue",
       "source_location": "L50",
-      "community": 17,
+      "community": 99,
       "norm_label": "wordsearch",
       "id": "filter_alphabeticalfilterdropdown_wordsearch"
     },
@@ -4260,7 +4404,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/AlphabeticalFilterDropdown.vue",
       "source_location": "L51",
-      "community": 17,
+      "community": 99,
       "norm_label": "hidedropdown",
       "id": "filter_alphabeticalfilterdropdown_hidedropdown"
     },
@@ -4269,7 +4413,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/AlphabeticalFilterDropdown.vue",
       "source_location": "L59",
-      "community": 17,
+      "community": 99,
       "norm_label": "if()",
       "id": "filter_alphabeticalfilterdropdown_if"
     },
@@ -4305,7 +4449,7 @@
       "file_type": "code",
       "source_file": "src/components/word/WordExamples.vue",
       "source_location": "L58",
-      "community": 33,
+      "community": 4,
       "norm_label": "audioplayerlist",
       "id": "word_wordexamples_audioplayerlist"
     },
@@ -4314,7 +4458,7 @@
       "file_type": "code",
       "source_file": "src/components/word/WordExamples.vue",
       "source_location": "L65",
-      "community": 33,
+      "community": 4,
       "norm_label": "props",
       "id": "word_wordexamples_props"
     },
@@ -4323,7 +4467,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L1",
-      "community": 10,
+      "community": 18,
       "norm_label": "singleword.vue",
       "id": "src_components_word_singleword_vue"
     },
@@ -4332,7 +4476,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L70",
-      "community": 10,
+      "community": 18,
       "norm_label": "iswordoftheday",
       "id": "word_singleword_iswordoftheday"
     },
@@ -4341,7 +4485,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L71",
-      "community": 10,
+      "community": 18,
       "norm_label": "wordoptiondropdown",
       "id": "word_singleword_wordoptiondropdown"
     },
@@ -4350,7 +4494,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L75",
-      "community": 10,
+      "community": 18,
       "norm_label": "highlightmatches()",
       "id": "word_singleword_highlightmatches"
     },
@@ -4377,7 +4521,7 @@
       "file_type": "code",
       "source_file": "virtual:icons/lucide/quote",
       "confidence": "EXTRACTED",
-      "community": 33,
+      "community": 13,
       "norm_label": "virtual:icons/lucide/quote",
       "id": "quote"
     },
@@ -4458,7 +4602,7 @@
       "file_type": "code",
       "source_file": "src/utils/supportedBrowsers.mjs",
       "source_location": "L1",
-      "community": 7,
+      "community": 106,
       "norm_label": "supportedbrowsers.mjs",
       "id": "src_utils_supportedbrowsers_mjs"
     },
@@ -4512,7 +4656,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L28",
-      "community": 10,
+      "community": 17,
       "norm_label": "countletters()",
       "id": "utils_wordhelper_countletters"
     },
@@ -4539,7 +4683,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L54",
-      "community": 10,
+      "community": 17,
       "norm_label": "getwordtype()",
       "id": "utils_wordhelper_getwordtype"
     },
@@ -4548,7 +4692,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L150",
-      "community": 10,
+      "community": 17,
       "norm_label": "translatenlptags()",
       "id": "utils_wordhelper_translatenlptags"
     },
@@ -4656,7 +4800,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L12",
-      "community": 4,
+      "community": 5,
       "norm_label": "routetoword()",
       "id": "utils_helpers_routetoword"
     },
@@ -4665,7 +4809,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L30",
-      "community": 100,
+      "community": 5,
       "norm_label": "randomelement()",
       "id": "utils_helpers_randomelement"
     },
@@ -4674,7 +4818,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L34",
-      "community": 26,
+      "community": 22,
       "norm_label": "seodata()",
       "id": "utils_helpers_seodata"
     },
@@ -4683,7 +4827,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L57",
-      "community": 73,
+      "community": 3,
       "norm_label": "useviewtransition()",
       "id": "utils_helpers_useviewtransition"
     },
@@ -4692,7 +4836,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L74",
-      "community": 26,
+      "community": 5,
       "norm_label": "formatteddate()",
       "id": "utils_helpers_formatteddate"
     },
@@ -4701,7 +4845,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L93",
-      "community": 26,
+      "community": 5,
       "norm_label": "checkobjectvalues()",
       "id": "utils_helpers_checkobjectvalues"
     },
@@ -4710,7 +4854,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L104",
-      "community": 26,
+      "community": 5,
       "norm_label": "checkobjectvaluelength()",
       "id": "utils_helpers_checkobjectvaluelength"
     },
@@ -4890,7 +5034,7 @@
       "file_type": "code",
       "source_file": "src/stores/index.ts",
       "source_location": "L1",
-      "community": 17,
+      "community": 37,
       "norm_label": "index.ts",
       "id": "src_stores_index_ts"
     },
@@ -4899,7 +5043,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L1",
-      "community": 105,
+      "community": 107,
       "norm_label": "darkmode.ts",
       "id": "src_stores_darkmode_ts"
     },
@@ -4908,7 +5052,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L3",
-      "community": 105,
+      "community": 107,
       "norm_label": "darkmode",
       "id": "stores_darkmode_darkmode"
     },
@@ -4917,7 +5061,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L5",
-      "community": 105,
+      "community": 107,
       "norm_label": "$isdarkmode",
       "id": "stores_darkmode_isdarkmode"
     },
@@ -4926,7 +5070,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L18",
-      "community": 105,
+      "community": 107,
       "norm_label": "setdarkmode()",
       "id": "stores_darkmode_setdarkmode"
     },
@@ -4935,7 +5079,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L1",
-      "community": 98,
+      "community": 105,
       "norm_label": "wordoftheday.ts",
       "id": "src_stores_wordoftheday_ts"
     },
@@ -4944,7 +5088,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L5",
-      "community": 98,
+      "community": 105,
       "norm_label": "word",
       "id": "stores_wordoftheday_word"
     },
@@ -4953,7 +5097,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L21",
-      "community": 98,
+      "community": 105,
       "norm_label": "example",
       "id": "stores_wordoftheday_example"
     },
@@ -4962,7 +5106,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L26",
-      "community": 98,
+      "community": 105,
       "norm_label": "translation",
       "id": "stores_wordoftheday_translation"
     },
@@ -4971,7 +5115,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L30",
-      "community": 98,
+      "community": 105,
       "norm_label": "wordoftheday",
       "id": "stores_wordoftheday_wordoftheday"
     },
@@ -4980,7 +5124,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L61",
-      "community": 98,
+      "community": 105,
       "norm_label": "getwordoftheday()",
       "id": "stores_wordoftheday_getwordoftheday"
     },
@@ -4989,7 +5133,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L1",
-      "community": 7,
+      "community": 9,
       "norm_label": "toastnotify.ts",
       "id": "src_stores_toastnotify_ts"
     },
@@ -5007,7 +5151,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L16",
-      "community": 7,
+      "community": 9,
       "norm_label": "toastpayload",
       "id": "stores_toastnotify_toastpayload"
     },
@@ -5016,7 +5160,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L20",
-      "community": 7,
+      "community": 9,
       "norm_label": "toaststatus",
       "id": "stores_toastnotify_toaststatus"
     },
@@ -5025,7 +5169,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L32",
-      "community": 7,
+      "community": 9,
       "norm_label": "supportspopover()",
       "id": "stores_toastnotify_supportspopover"
     },
@@ -5034,7 +5178,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L43",
-      "community": 7,
+      "community": 9,
       "norm_label": "hidepopover()",
       "id": "stores_toastnotify_hidepopover"
     },
@@ -5043,7 +5187,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L55",
-      "community": 7,
+      "community": 9,
       "norm_label": "createtoast()",
       "id": "stores_toastnotify_createtoast"
     },
@@ -5052,7 +5196,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L67",
-      "community": 7,
+      "community": 14,
       "norm_label": "createtoastnotify()",
       "id": "stores_toastnotify_createtoastnotify"
     },
@@ -5061,7 +5205,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L99",
-      "community": 7,
+      "community": 9,
       "norm_label": "removetoastbyid()",
       "id": "stores_toastnotify_removetoastbyid"
     },
@@ -5268,7 +5412,7 @@
       "file_type": "code",
       "source_file": "src/services/queries/getWords.ts",
       "source_location": "L67",
-      "community": 10,
+      "community": 17,
       "norm_label": "fetchallwords()",
       "id": "queries_getwords_fetchallwords"
     },
@@ -5339,7 +5483,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "randomwordbutton",
       "id": "components_randomwordbutton_randomwordbutton"
     },
@@ -5443,7 +5587,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 109,
       "norm_label": "imagegallery",
       "id": "components_imagegallery_imagegallery"
     },
@@ -5456,7 +5600,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 17,
+      "community": 99,
       "norm_label": "searchwords",
       "id": "components_searchwords_searchwords"
     },
@@ -5565,19 +5709,6 @@
       "id": "components_sociallist_sociallist"
     },
     {
-      "label": "ConfirmDialog",
-      "file_type": "code",
-      "source_file": "src/components/ConfirmDialog.vue",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "community": 12,
-      "norm_label": "confirmdialog",
-      "id": "components_confirmdialog_confirmdialog"
-    },
-    {
       "label": "AudioPlayer",
       "file_type": "code",
       "source_file": "src/components/AudioPlayer.vue",
@@ -5599,7 +5730,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "relatedwords",
       "id": "components_relatedwords_relatedwords"
     },
@@ -5651,7 +5782,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 17,
+      "community": 99,
       "norm_label": "$wordsearch",
       "id": "stores_index_wordsearch"
     },
@@ -5729,7 +5860,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 106,
       "norm_label": "createtoastnotify",
       "id": "stores_index_createtoastnotify"
     },
@@ -5755,7 +5886,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "berlinerword",
       "id": "gql_entitytypes_berlinerword"
     },
@@ -5859,7 +5990,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 22,
       "norm_label": "setcolormode",
       "id": "components_setcolormode_setcolormode"
     },
@@ -5872,7 +6003,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 22,
       "norm_label": "themeinitializationlogic",
       "id": "components_setcolormode_themelogic"
     },
@@ -5924,7 +6055,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 22,
       "norm_label": "basehead",
       "id": "components_basehead_basehead"
     },
@@ -5937,7 +6068,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 22,
       "norm_label": "seoprops",
       "id": "components_basehead_seoprops"
     },
@@ -6119,7 +6250,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 1,
       "norm_label": "scrolltotop",
       "id": "components_scrolltotop_scrolltotop"
     },
@@ -6132,7 +6263,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 1,
       "norm_label": "scrolltotopprops",
       "id": "components_scrolltotop_scrolltotopprops"
     },
@@ -6158,7 +6289,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 109,
       "norm_label": "imagegallerycustomelement",
       "id": "components_imagegallery_imagegalleryce"
     },
@@ -6171,7 +6302,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 109,
       "norm_label": "imagegalleryprops",
       "id": "components_imagegallery_imagegalleryprops"
     },
@@ -6886,7 +7017,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 14,
       "norm_label": "registersw() call",
       "id": "services_pwa_registersw"
     },
@@ -7042,7 +7173,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "wort-vorschlagen page (suggest word form)",
       "id": "pages_wort_vorschlagen_wortvorschlagenpage"
     },
@@ -7055,7 +7186,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "[legalpages] dynamic route (datenschutz/impressum)",
       "id": "pages_legalpages_legalpagesroute"
     },
@@ -7068,7 +7199,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "_app.ts: global vue client setup (urql, floatingvue, devtools)",
       "id": "pages_app_setupvueclient"
     },
@@ -7081,7 +7212,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "404 not found page",
       "id": "pages_404_notfoundpage"
     },
@@ -7094,7 +7225,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "index homepage (facts grid, search, word of the day)",
       "id": "pages_index_homepage"
     },
@@ -7107,7 +7238,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "pwa cache management page",
       "id": "pages_pwa_pwacachepage"
     },
@@ -7120,7 +7251,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "[...wordslug] word detail page (ssg per word)",
       "id": "pages_wort_wordslugpage"
     },
@@ -7133,7 +7264,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "wort/index word index page (grouped alphabetically)",
       "id": "pages_wort_wordindexpage"
     },
@@ -7146,7 +7277,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "api/search/meta.json: search metadata api route",
       "id": "pages_api_searchmetaroute"
     },
@@ -7159,7 +7290,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "api/search/index.json: orama search index builder",
       "id": "pages_api_searchindexroute"
     },
@@ -7172,7 +7303,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "fragment-masking.ts: usefragment / makefragmentdata / isfragmentready",
       "id": "gql_fragmentmasking_usefragment"
     },
@@ -7185,7 +7316,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "gql.ts: graphql() typed document map function",
       "id": "gql_gql_graphqlfunction"
     },
@@ -7198,7 +7329,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "graphql.ts: codegen-generated gql types and fragments",
       "id": "gql_graphql_generatedtypes"
     },
@@ -7211,7 +7342,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "gql/index.ts: barrel re-export of gql.ts",
       "id": "gql_index_gqlbarrel"
     },
@@ -7224,7 +7355,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "seo.ts: seo / title / seoprops interfaces",
       "id": "types_seo_seotypes"
     },
@@ -7237,7 +7368,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "vendor.d.ts: ambient module declarations (hypher, hyphenation.de, de-compromise)",
       "id": "types_vendor_vendordeclarations"
     },
@@ -7250,7 +7381,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "layout.astro: root page layout shell (basehead, header, footer, modal, toast)",
       "id": "layouts_layout_layoutastro"
     },
@@ -7263,7 +7394,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "defaultlayoutprops interface (content, seo, title, bodyclasses, contentclasses)",
       "id": "layouts_layout_defaultlayoutprops"
     },
@@ -7276,7 +7407,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "sentrybrowser.ts: sentry browser init with tracing + replay",
       "id": "plugins_sentrybrowser_sentryinit"
     },
@@ -7289,7 +7420,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "env.d.ts: global ambient types (turnstile, window._paq, astro refs)",
       "id": "src_env_globalambient"
     },
@@ -7302,7 +7433,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 5,
       "norm_label": "oramasearchindex type (returntype of makeoramasearchindex)",
       "id": "pages_api_ormasearchindex_type"
     },
@@ -8297,6 +8428,127 @@
   ],
   "links": [
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheActions.test.ts",
+      "source_location": "L49",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacacheactions_test_ts",
+      "target": "components_pwacacheactions_test_wrapper"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheBucketList.test.ts",
+      "source_location": "L80",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacachebucketlist_test_ts",
+      "target": "components_pwacachebucketlist_test_buckets"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheBucketList.test.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacachebucketlist_test_ts",
+      "target": "components_pwacachebucketlist_test_makebucket"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheBucketList.test.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacachebucketlist_test_ts",
+      "target": "components_pwacachebucketlist_test_urls"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheBucketList.test.ts",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacachebucketlist_test_ts",
+      "target": "components_pwacachebucketlist_test_wrapper"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheBucketList.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacachebucketlist_test_ts",
+      "target": "composable_usecachestorage_cachebucket"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheHeader.test.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacacheheader_test_ts",
+      "target": "components_pwacacheheader_test_status"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheHeader.test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacacheheader_test_ts",
+      "target": "components_pwacacheheader_test_wrapper"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheInfoGrid.test.ts",
+      "source_location": "L56",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacacheinfogrid_test_ts",
+      "target": "components_pwacacheinfogrid_test_bar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheInfoGrid.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacacheinfogrid_test_ts",
+      "target": "components_pwacacheinfogrid_test_defaultprops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheInfoGrid.test.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacacheinfogrid_test_ts",
+      "target": "components_pwacacheinfogrid_test_wrapper"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/PwaCacheStats.test.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_pwacachestats_test_ts",
+      "target": "components_pwacachestats_test_wrapper"
+    },
+    {
       "relation": "re_exports",
       "context": "export",
       "confidence": "EXTRACTED",
@@ -8344,9 +8596,9 @@
       "source_file": "src/stores/installApp.ts",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_stores_installapp_ts",
-      "target": "stores_installapp_handleappinstalled",
-      "confidence_score": 1.0
+      "target": "stores_installapp_handleappinstalled"
     },
     {
       "relation": "contains",
@@ -8354,9 +8606,9 @@
       "source_file": "src/stores/installApp.ts",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_stores_installapp_ts",
-      "target": "stores_installapp_handlebeforeinstallprompt",
-      "confidence_score": 1.0
+      "target": "stores_installapp_handlebeforeinstallprompt"
     },
     {
       "relation": "contains",
@@ -8999,26 +9251,6 @@
       "confidence_score": 1.0,
       "source": "src_pages_pwa_astro",
       "target": "src_components_pwacacheoverview_vue"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "components_pwacacheoverview_confirmclearall",
-      "target": "components_confirmdialog_confirmdialog"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "components_pwacacheoverview_confirmclearbucket",
-      "target": "components_confirmdialog_confirmdialog"
     },
     {
       "relation": "contains",
@@ -19229,5 +19461,5 @@
       "source_file": "src/pages/api/search/index.json.ts"
     }
   ],
-  "built_at_commit": "1757e39450cb992b6cbe363555ce8b10ef8f5186"
+  "built_at_commit": "52cf456caef32efb797f42becc0de2e4db103d70"
 }

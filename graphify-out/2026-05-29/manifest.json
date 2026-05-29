@@ -665,9 +665,9 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/stores/installApp.ts": {
-    "mtime": 1779402089.03957,
-    "ast_hash": "91111e474c59cee7464e40abfb41a7ee",
-    "semantic_hash": "91111e474c59cee7464e40abfb41a7ee"
+    "mtime": 1780070737.0508065,
+    "ast_hash": "12d427da8e8ec74a554a9fe8e4c56112",
+    "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/stores/modal.ts": {
     "mtime": 1779456887.4992769,
@@ -807,6 +807,31 @@
   "/home/felix/workspace/berliner-schnauze/src/components/PwaCacheBucketList.vue": {
     "mtime": 1780065236.9037716,
     "ast_hash": "63dcaa2bd801f7d57380dfb1f47e14c8",
+    "semantic_hash": ""
+  },
+  "/home/felix/workspace/berliner-schnauze/src/tests/unit/components/PwaCacheInfoGrid.test.ts": {
+    "mtime": 1780071148.7947366,
+    "ast_hash": "26acef59cc1aa6d4cae38f086fc7e9a4",
+    "semantic_hash": ""
+  },
+  "/home/felix/workspace/berliner-schnauze/src/tests/unit/components/PwaCacheBucketList.test.ts": {
+    "mtime": 1780071179.514731,
+    "ast_hash": "67aef003fe823baab7930e7ce28f8f26",
+    "semantic_hash": ""
+  },
+  "/home/felix/workspace/berliner-schnauze/src/tests/unit/components/PwaCacheStats.test.ts": {
+    "mtime": 1780071134.2547393,
+    "ast_hash": "d887b56e0ed5179b6356dd750f5b55ab",
+    "semantic_hash": ""
+  },
+  "/home/felix/workspace/berliner-schnauze/src/tests/unit/components/PwaCacheHeader.test.ts": {
+    "mtime": 1780071123.5427413,
+    "ast_hash": "35d5e1be1642c5984ac0bee706806d9d",
+    "semantic_hash": ""
+  },
+  "/home/felix/workspace/berliner-schnauze/src/tests/unit/components/PwaCacheActions.test.ts": {
+    "mtime": 1780071160.4467347,
+    "ast_hash": "eb27d7ac404dae50acdad8dff2e7fe8c",
     "semantic_hash": ""
   }
 }
