@@ -98,312 +98,6 @@
   },
   "nodes": [
     {
-      "label": "PwaCacheOverview.vue",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L1",
-      "id": "src_components_pwacacheoverview_vue",
-      "community": 12,
-      "norm_label": "pwacacheoverview.vue"
-    },
-    {
-      "label": "ChevronUp",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L172",
-      "id": "components_pwacacheoverview_chevronup",
-      "community": 12,
-      "norm_label": "chevronup"
-    },
-    {
-      "label": "Circle",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L173",
-      "id": "components_pwacacheoverview_circle",
-      "community": 12,
-      "norm_label": "circle"
-    },
-    {
-      "label": "CircleCheck",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L174",
-      "id": "components_pwacacheoverview_circlecheck",
-      "community": 12,
-      "norm_label": "circlecheck"
-    },
-    {
-      "label": "CircleX",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L175",
-      "id": "components_pwacacheoverview_circlex",
-      "community": 12,
-      "norm_label": "circlex"
-    },
-    {
-      "label": "Clock",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L176",
-      "id": "components_pwacacheoverview_clock",
-      "community": 12,
-      "norm_label": "clock"
-    },
-    {
-      "label": "Loader",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L177",
-      "id": "components_pwacacheoverview_loader",
-      "community": 12,
-      "norm_label": "loader"
-    },
-    {
-      "label": "RefreshCw",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L178",
-      "id": "components_pwacacheoverview_refreshcw",
-      "community": 12,
-      "norm_label": "refreshcw"
-    },
-    {
-      "label": "RotateCcw",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L179",
-      "id": "components_pwacacheoverview_rotateccw",
-      "community": 12,
-      "norm_label": "rotateccw"
-    },
-    {
-      "label": "Trash2",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L180",
-      "id": "components_pwacacheoverview_trash2",
-      "community": 12,
-      "norm_label": "trash2"
-    },
-    {
-      "label": "X",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L181",
-      "id": "components_pwacacheoverview_x",
-      "community": 12,
-      "norm_label": "x"
-    },
-    {
-      "label": "{\n  buckets,\n  clearAll,\n  clearBucket,\n  isCacheAvailable,\n  isLoading,\n  loadCaches,\n  loadError,\n  onlineStatus,\n  reSync,\n  storageQuota,\n  swInfo,\n  totalSizeBytes,\n}",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L183",
-      "id": "components_pwacacheoverview_buckets_clearall_clearbucket_iscacheavailable_isloading_loadcaches_loaderror_onlinestatus_resync_storagequota_swinfo_totalsizebytes",
-      "community": 12,
-      "norm_label": "{\n  buckets,\n  clearall,\n  clearbucket,\n  iscacheavailable,\n  isloading,\n  loadcaches,\n  loaderror,\n  onlinestatus,\n  resync,\n  storagequota,\n  swinfo,\n  totalsizebytes,\n}"
-    },
-    {
-      "label": "ConfirmDialog",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L198",
-      "id": "components_pwacacheoverview_confirmdialog",
-      "community": 12,
-      "norm_label": "confirmdialog"
-    },
-    {
-      "label": "isPwaInstalled",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L200",
-      "id": "components_pwacacheoverview_ispwainstalled",
-      "community": 12,
-      "norm_label": "ispwainstalled"
-    },
-    {
-      "label": "storageQuotaPercent",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L204",
-      "id": "components_pwacacheoverview_storagequotapercent",
-      "community": 12,
-      "norm_label": "storagequotapercent"
-    },
-    {
-      "label": "string",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L209",
-      "id": "components_pwacacheoverview_string",
-      "community": 12,
-      "norm_label": "string"
-    },
-    {
-      "label": "Component",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L217",
-      "id": "components_pwacacheoverview_component",
-      "community": 12,
-      "norm_label": "component"
-    },
-    {
-      "label": "swStatusLabel",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L225",
-      "id": "components_pwacacheoverview_swstatuslabel",
-      "community": 12,
-      "norm_label": "swstatuslabel"
-    },
-    {
-      "label": "swStatusIcon",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L226",
-      "id": "components_pwacacheoverview_swstatusicon",
-      "community": 12,
-      "norm_label": "swstatusicon"
-    },
-    {
-      "label": "swScriptURL",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L227",
-      "id": "components_pwacacheoverview_swscripturl",
-      "community": 12,
-      "norm_label": "swscripturl"
-    },
-    {
-      "label": "toggleBucket()",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L238",
-      "id": "components_pwacacheoverview_togglebucket",
-      "community": 12,
-      "norm_label": "togglebucket()"
-    },
-    {
-      "label": "formatUrl()",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L245",
-      "id": "components_pwacacheoverview_formaturl",
-      "community": 12,
-      "norm_label": "formaturl()"
-    },
-    {
-      "label": "confirmClearAll()",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L254",
-      "id": "components_pwacacheoverview_confirmclearall",
-      "community": 12,
-      "norm_label": "confirmclearall()"
-    },
-    {
-      "label": "confirmClearBucket()",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L271",
-      "id": "components_pwacacheoverview_confirmclearbucket",
-      "community": 12,
-      "norm_label": "confirmclearbucket()"
-    },
-    {
-      "label": "formatRelativeTime()",
-      "file_type": "code",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L288",
-      "id": "components_pwacacheoverview_formatrelativetime",
-      "community": 12,
-      "norm_label": "formatrelativetime()"
-    },
-    {
-      "label": "WordList.vue",
-      "file_type": "code",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L1",
-      "id": "src_components_wordlist_vue",
-      "community": 31,
-      "norm_label": "wordlist.vue"
-    },
-    {
-      "label": "oramaSearch",
-      "file_type": "code",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L54",
-      "id": "components_wordlist_oramasearch",
-      "community": 31,
-      "norm_label": "oramasearch"
-    },
-    {
-      "label": "mutableOramaSearch",
-      "file_type": "code",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L55",
-      "id": "components_wordlist_mutableoramasearch",
-      "community": 31,
-      "norm_label": "mutableoramasearch"
-    },
-    {
-      "label": "activeIndex",
-      "file_type": "code",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L65",
-      "id": "components_wordlist_activeindex",
-      "community": 31,
-      "norm_label": "activeindex"
-    },
-    {
-      "label": "virtualizerRef",
-      "file_type": "code",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L67",
-      "id": "components_wordlist_virtualizerref",
-      "community": 31,
-      "norm_label": "virtualizerref"
-    },
-    {
-      "label": "showActive",
-      "file_type": "code",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L68",
-      "id": "components_wordlist_showactive",
-      "community": 31,
-      "norm_label": "showactive"
-    },
-    {
-      "label": "showActiveWithTimeout()",
-      "file_type": "code",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L72",
-      "id": "components_wordlist_showactivewithtimeout",
-      "community": 31,
-      "norm_label": "showactivewithtimeout()"
-    },
-    {
-      "label": "goToWord()",
-      "file_type": "code",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L89",
-      "id": "components_wordlist_gotoword",
-      "community": 31,
-      "norm_label": "gotoword()"
-    },
-    {
-      "label": "focusActive()",
-      "file_type": "code",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L93",
-      "id": "components_wordlist_focusactive",
-      "community": 31,
-      "norm_label": "focusactive()"
-    },
-    {
       "label": "useCacheStorage.ts",
       "file_type": "code",
       "source_file": "src/composable/useCacheStorage.ts",
@@ -481,269 +175,8 @@
       "source_file": "src/composable/useCacheStorage.ts",
       "source_location": "L44",
       "id": "composable_usecachestorage_usecachestorage",
-      "community": 7,
+      "community": 24,
       "norm_label": "usecachestorage()"
-    },
-    {
-      "label": "wordList.ts",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L1",
-      "id": "src_stores_wordlist_ts",
-      "community": 3,
-      "norm_label": "wordlist.ts"
-    },
-    {
-      "label": "CleanBerlinerWord",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L18",
-      "id": "stores_wordlist_cleanberlinerword",
-      "community": 3,
-      "norm_label": "cleanberlinerword"
-    },
-    {
-      "label": "RangeFilterMinMax",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L29",
-      "id": "stores_wordlist_rangefilterminmax",
-      "community": 3,
-      "norm_label": "rangefilterminmax"
-    },
-    {
-      "label": "WordList",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L36",
-      "id": "stores_wordlist_wordlist",
-      "community": 3,
-      "norm_label": "wordlist"
-    },
-    {
-      "label": "$wordSearch",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L59",
-      "id": "stores_wordlist_wordsearch",
-      "community": 3,
-      "norm_label": "$wordsearch"
-    },
-    {
-      "label": "$activeFilterCount",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L94",
-      "id": "stores_wordlist_activefiltercount",
-      "community": 3,
-      "norm_label": "$activefiltercount"
-    },
-    {
-      "label": "resetAll()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L123",
-      "id": "stores_wordlist_resetall",
-      "community": 26,
-      "norm_label": "resetall()"
-    },
-    {
-      "label": "$showWordListFilterFlyout",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L144",
-      "id": "stores_wordlist_showwordlistfilterflyout",
-      "community": 3,
-      "norm_label": "$showwordlistfilterflyout"
-    },
-    {
-      "label": "$toggleWordListFilterFlyout()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L146",
-      "id": "stores_wordlist_togglewordlistfilterflyout",
-      "community": 3,
-      "norm_label": "$togglewordlistfilterflyout()"
-    },
-    {
-      "label": "setLetterFilter()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L157",
-      "id": "stores_wordlist_setletterfilter",
-      "community": 3,
-      "norm_label": "setletterfilter()"
-    },
-    {
-      "label": "toggleInArray()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L163",
-      "id": "stores_wordlist_toggleinarray",
-      "community": 3,
-      "norm_label": "toggleinarray()"
-    },
-    {
-      "label": "setWordTypeFilter()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L174",
-      "id": "stores_wordlist_setwordtypefilter",
-      "community": 3,
-      "norm_label": "setwordtypefilter()"
-    },
-    {
-      "label": "setActiveOrderCategory()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L185",
-      "id": "stores_wordlist_setactiveordercategory",
-      "community": 3,
-      "norm_label": "setactiveordercategory()"
-    },
-    {
-      "label": "$alphabeticalOrderToggle()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L193",
-      "id": "stores_wordlist_alphabeticalordertoggle",
-      "community": 3,
-      "norm_label": "$alphabeticalordertoggle()"
-    },
-    {
-      "label": "$wordListDateOrderToggle()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L205",
-      "id": "stores_wordlist_wordlistdateordertoggle",
-      "community": 3,
-      "norm_label": "$wordlistdateordertoggle()"
-    },
-    {
-      "label": "$wordListModifiedDateOrderToggle()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L214",
-      "id": "stores_wordlist_wordlistmodifieddateordertoggle",
-      "community": 3,
-      "norm_label": "$wordlistmodifieddateordertoggle()"
-    },
-    {
-      "label": "$setSortOrder()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L221",
-      "id": "stores_wordlist_setsortorder",
-      "community": 53,
-      "norm_label": "$setsortorder()"
-    },
-    {
-      "label": "setSearch()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L232",
-      "id": "stores_wordlist_setsearch",
-      "community": 3,
-      "norm_label": "setsearch()"
-    },
-    {
-      "label": "$toggleBerolinismus()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L236",
-      "id": "stores_wordlist_toggleberolinismus",
-      "community": 3,
-      "norm_label": "$toggleberolinismus()"
-    },
-    {
-      "label": "searchLength",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L242",
-      "id": "stores_wordlist_searchlength",
-      "community": 3,
-      "norm_label": "searchlength"
-    },
-    {
-      "label": "getSearchMeta()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L246",
-      "id": "stores_wordlist_getsearchmeta",
-      "community": 3,
-      "norm_label": "getsearchmeta()"
-    },
-    {
-      "label": "wordSchema",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L271",
-      "id": "stores_wordlist_wordschema",
-      "community": 3,
-      "norm_label": "wordschema"
-    },
-    {
-      "label": "WordDocument",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L293",
-      "id": "stores_wordlist_worddocument",
-      "community": 3,
-      "norm_label": "worddocument"
-    },
-    {
-      "label": "SortByType",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L297",
-      "id": "stores_wordlist_sortbytype",
-      "community": 3,
-      "norm_label": "sortbytype"
-    },
-    {
-      "label": "buildWhere()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L301",
-      "id": "stores_wordlist_buildwhere",
-      "community": 3,
-      "norm_label": "buildwhere()"
-    },
-    {
-      "label": "getSortBy()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L344",
-      "id": "stores_wordlist_getsortby",
-      "community": 3,
-      "norm_label": "getsortby()"
-    },
-    {
-      "label": "initOrama()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L363",
-      "id": "stores_wordlist_initorama",
-      "community": 3,
-      "norm_label": "initorama()"
-    },
-    {
-      "label": "$oramaSearchResults",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L395",
-      "id": "stores_wordlist_oramasearchresults",
-      "community": 3,
-      "norm_label": "$oramasearchresults"
-    },
-    {
-      "label": "$searchResultCount",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L428",
-      "id": "stores_wordlist_searchresultcount",
-      "community": 3,
-      "norm_label": "$searchresultcount"
     },
     {
       "label": "useCacheStorage.test.ts",
@@ -803,7 +236,7 @@
       "label": "reloadSpy",
       "file_type": "code",
       "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L550",
+      "source_location": "L551",
       "id": "composable_usecachestorage_test_reloadspy",
       "community": 7,
       "norm_label": "reloadspy"
@@ -812,7 +245,7 @@
       "label": "removeSpy",
       "file_type": "code",
       "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L588",
+      "source_location": "L589",
       "id": "composable_usecachestorage_test_removespy",
       "community": 7,
       "norm_label": "removespy"
@@ -821,10 +254,730 @@
       "label": "{ unmount }",
       "file_type": "code",
       "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L589",
+      "source_location": "L590",
       "id": "composable_usecachestorage_test_unmount",
       "community": 7,
       "norm_label": "{ unmount }"
+    },
+    {
+      "label": "PwaCacheActions.vue",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheActions.vue",
+      "source_location": "L1",
+      "community": 101,
+      "norm_label": "pwacacheactions.vue",
+      "id": "src_components_pwacacheactions_vue"
+    },
+    {
+      "label": "RotateCcw",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheActions.vue",
+      "source_location": "L32",
+      "community": 101,
+      "norm_label": "rotateccw",
+      "id": "components_pwacacheactions_rotateccw"
+    },
+    {
+      "label": "Trash2",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheActions.vue",
+      "source_location": "L33",
+      "community": 101,
+      "norm_label": "trash2",
+      "id": "components_pwacacheactions_trash2"
+    },
+    {
+      "label": "PwaCacheBucketList.vue",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L1",
+      "community": 7,
+      "norm_label": "pwacachebucketlist.vue",
+      "id": "src_components_pwacachebucketlist_vue"
+    },
+    {
+      "label": "ChevronDown",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L81",
+      "community": 7,
+      "norm_label": "chevrondown",
+      "id": "components_pwacachebucketlist_chevrondown"
+    },
+    {
+      "label": "X",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L82",
+      "community": 7,
+      "norm_label": "x",
+      "id": "components_pwacachebucketlist_x"
+    },
+    {
+      "label": "formatUrl()",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L84",
+      "community": 7,
+      "norm_label": "formaturl()",
+      "id": "components_pwacachebucketlist_formaturl"
+    },
+    {
+      "label": "formatRelativeTime()",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L93",
+      "community": 7,
+      "norm_label": "formatrelativetime()",
+      "id": "components_pwacachebucketlist_formatrelativetime"
+    },
+    {
+      "label": "PwaCacheHeader.vue",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheHeader.vue",
+      "source_location": "L1",
+      "community": 102,
+      "norm_label": "pwacacheheader.vue",
+      "id": "src_components_pwacacheheader_vue"
+    },
+    {
+      "label": "PwaCacheInfoGrid.vue",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheInfoGrid.vue",
+      "source_location": "L1",
+      "community": 103,
+      "norm_label": "pwacacheinfogrid.vue",
+      "id": "src_components_pwacacheinfogrid_vue"
+    },
+    {
+      "label": "PwaCacheOverview.vue",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L1",
+      "community": 12,
+      "norm_label": "pwacacheoverview.vue",
+      "id": "src_components_pwacacheoverview_vue"
+    },
+    {
+      "label": "CircleCheck",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L71",
+      "community": 12,
+      "norm_label": "circlecheck",
+      "id": "components_pwacacheoverview_circlecheck"
+    },
+    {
+      "label": "CircleX",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L72",
+      "community": 12,
+      "norm_label": "circlex",
+      "id": "components_pwacacheoverview_circlex"
+    },
+    {
+      "label": "Clock",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L73",
+      "community": 12,
+      "norm_label": "clock",
+      "id": "components_pwacacheoverview_clock"
+    },
+    {
+      "label": "Loader",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L74",
+      "community": 12,
+      "norm_label": "loader",
+      "id": "components_pwacacheoverview_loader"
+    },
+    {
+      "label": "{\n  buckets,\n  clearAll,\n  clearBucket,\n  isCacheAvailable,\n  isLoading,\n  loadCaches,\n  loadError,\n  onlineStatus,\n  reSync,\n  storageQuota,\n  swInfo,\n  totalSizeBytes,\n}",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L76",
+      "community": 12,
+      "norm_label": "{\n  buckets,\n  clearall,\n  clearbucket,\n  iscacheavailable,\n  isloading,\n  loadcaches,\n  loaderror,\n  onlinestatus,\n  resync,\n  storagequota,\n  swinfo,\n  totalsizebytes,\n}",
+      "id": "components_pwacacheoverview_buckets_clearall_clearbucket_iscacheavailable_isloading_loadcaches_loaderror_onlinestatus_resync_storagequota_swinfo_totalsizebytes"
+    },
+    {
+      "label": "ConfirmDialog",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L91",
+      "community": 12,
+      "norm_label": "confirmdialog",
+      "id": "components_pwacacheoverview_confirmdialog"
+    },
+    {
+      "label": "isPwaInstalled",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L93",
+      "community": 12,
+      "norm_label": "ispwainstalled",
+      "id": "components_pwacacheoverview_ispwainstalled"
+    },
+    {
+      "label": "storageQuotaPercent",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L95",
+      "community": 12,
+      "norm_label": "storagequotapercent",
+      "id": "components_pwacacheoverview_storagequotapercent"
+    },
+    {
+      "label": "string",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L100",
+      "community": 12,
+      "norm_label": "string",
+      "id": "components_pwacacheoverview_string"
+    },
+    {
+      "label": "Component",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L108",
+      "community": 12,
+      "norm_label": "component",
+      "id": "components_pwacacheoverview_component"
+    },
+    {
+      "label": "swStatusLabel",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L116",
+      "community": 12,
+      "norm_label": "swstatuslabel",
+      "id": "components_pwacacheoverview_swstatuslabel"
+    },
+    {
+      "label": "swStatusIcon",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L117",
+      "community": 12,
+      "norm_label": "swstatusicon",
+      "id": "components_pwacacheoverview_swstatusicon"
+    },
+    {
+      "label": "swScriptURL",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L118",
+      "community": 12,
+      "norm_label": "swscripturl",
+      "id": "components_pwacacheoverview_swscripturl"
+    },
+    {
+      "label": "confirmClearAll()",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L128",
+      "community": 12,
+      "norm_label": "confirmclearall()",
+      "id": "components_pwacacheoverview_confirmclearall"
+    },
+    {
+      "label": "confirmClearBucket()",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L145",
+      "community": 12,
+      "norm_label": "confirmclearbucket()",
+      "id": "components_pwacacheoverview_confirmclearbucket"
+    },
+    {
+      "label": "PwaCacheStats.vue",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheStats.vue",
+      "source_location": "L1",
+      "community": 104,
+      "norm_label": "pwacachestats.vue",
+      "id": "src_components_pwacachestats_vue"
+    },
+    {
+      "label": "Accordion.test.ts",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L1",
+      "community": 28,
+      "norm_label": "accordion.test.ts",
+      "id": "src_tests_unit_components_accordion_accordion_test_ts"
+    },
+    {
+      "label": "components",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L9",
+      "community": 28,
+      "norm_label": "components",
+      "id": "accordion_accordion_test_components"
+    },
+    {
+      "label": "mountAccordion()",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L11",
+      "community": 28,
+      "norm_label": "mountaccordion()",
+      "id": "accordion_accordion_test_mountaccordion"
+    },
+    {
+      "label": "wrapper",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L17",
+      "community": 28,
+      "norm_label": "wrapper",
+      "id": "accordion_accordion_test_wrapper"
+    },
+    {
+      "label": "mountTrigger()",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L160",
+      "community": 28,
+      "norm_label": "mounttrigger()",
+      "id": "accordion_accordion_test_mounttrigger"
+    },
+    {
+      "label": "triggerControls",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L220",
+      "community": 28,
+      "norm_label": "triggercontrols",
+      "id": "accordion_accordion_test_triggercontrols"
+    },
+    {
+      "label": "contentId",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L221",
+      "community": 28,
+      "norm_label": "contentid",
+      "id": "accordion_accordion_test_contentid"
+    },
+    {
+      "label": "triggerId",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L271",
+      "community": 28,
+      "norm_label": "triggerid",
+      "id": "accordion_accordion_test_triggerid"
+    },
+    {
+      "label": "labelledBy",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L272",
+      "community": 28,
+      "norm_label": "labelledby",
+      "id": "accordion_accordion_test_labelledby"
+    },
+    {
+      "label": "AccordionContent.vue",
+      "file_type": "code",
+      "source_file": "src/components/accordion/AccordionContent.vue",
+      "source_location": "L1",
+      "community": 25,
+      "norm_label": "accordioncontent.vue",
+      "id": "src_components_accordion_accordioncontent_vue"
+    },
+    {
+      "label": "AccordionHeader.vue",
+      "file_type": "code",
+      "source_file": "src/components/accordion/AccordionHeader.vue",
+      "source_location": "L1",
+      "community": 25,
+      "norm_label": "accordionheader.vue",
+      "id": "src_components_accordion_accordionheader_vue"
+    },
+    {
+      "label": "AccordionItem.vue",
+      "file_type": "code",
+      "source_file": "src/components/accordion/AccordionItem.vue",
+      "source_location": "L1",
+      "community": 25,
+      "norm_label": "accordionitem.vue",
+      "id": "src_components_accordion_accordionitem_vue"
+    },
+    {
+      "label": "AccordionTrigger.vue",
+      "file_type": "code",
+      "source_file": "src/components/accordion/AccordionTrigger.vue",
+      "source_location": "L1",
+      "community": 25,
+      "norm_label": "accordiontrigger.vue",
+      "id": "src_components_accordion_accordiontrigger_vue"
+    },
+    {
+      "label": "BaseAccordion.vue",
+      "file_type": "code",
+      "source_file": "src/components/accordion/BaseAccordion.vue",
+      "source_location": "L1",
+      "community": 25,
+      "norm_label": "baseaccordion.vue",
+      "id": "src_components_accordion_baseaccordion_vue"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "src/components/accordion/index.ts",
+      "source_location": "L1",
+      "community": 25,
+      "norm_label": "index.ts",
+      "id": "src_components_accordion_index_ts"
+    },
+    {
+      "label": "WordList.vue",
+      "file_type": "code",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L1",
+      "community": 31,
+      "norm_label": "wordlist.vue",
+      "id": "src_components_wordlist_vue"
+    },
+    {
+      "label": "oramaSearch",
+      "file_type": "code",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L54",
+      "community": 31,
+      "norm_label": "oramasearch",
+      "id": "components_wordlist_oramasearch"
+    },
+    {
+      "label": "mutableOramaSearch",
+      "file_type": "code",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L55",
+      "community": 31,
+      "norm_label": "mutableoramasearch",
+      "id": "components_wordlist_mutableoramasearch"
+    },
+    {
+      "label": "activeIndex",
+      "file_type": "code",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L65",
+      "community": 31,
+      "norm_label": "activeindex",
+      "id": "components_wordlist_activeindex"
+    },
+    {
+      "label": "virtualizerRef",
+      "file_type": "code",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L67",
+      "community": 31,
+      "norm_label": "virtualizerref",
+      "id": "components_wordlist_virtualizerref"
+    },
+    {
+      "label": "showActive",
+      "file_type": "code",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L68",
+      "community": 31,
+      "norm_label": "showactive",
+      "id": "components_wordlist_showactive"
+    },
+    {
+      "label": "showActiveWithTimeout()",
+      "file_type": "code",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L72",
+      "community": 31,
+      "norm_label": "showactivewithtimeout()",
+      "id": "components_wordlist_showactivewithtimeout"
+    },
+    {
+      "label": "goToWord()",
+      "file_type": "code",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L89",
+      "community": 31,
+      "norm_label": "gotoword()",
+      "id": "components_wordlist_gotoword"
+    },
+    {
+      "label": "focusActive()",
+      "file_type": "code",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L93",
+      "community": 31,
+      "norm_label": "focusactive()",
+      "id": "components_wordlist_focusactive"
+    },
+    {
+      "label": "wordList.ts",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L1",
+      "community": 3,
+      "norm_label": "wordlist.ts",
+      "id": "src_stores_wordlist_ts"
+    },
+    {
+      "label": "CleanBerlinerWord",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L18",
+      "community": 3,
+      "norm_label": "cleanberlinerword",
+      "id": "stores_wordlist_cleanberlinerword"
+    },
+    {
+      "label": "RangeFilterMinMax",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L29",
+      "community": 3,
+      "norm_label": "rangefilterminmax",
+      "id": "stores_wordlist_rangefilterminmax"
+    },
+    {
+      "label": "WordList",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L36",
+      "community": 3,
+      "norm_label": "wordlist",
+      "id": "stores_wordlist_wordlist"
+    },
+    {
+      "label": "$wordSearch",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L59",
+      "community": 3,
+      "norm_label": "$wordsearch",
+      "id": "stores_wordlist_wordsearch"
+    },
+    {
+      "label": "$activeFilterCount",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L94",
+      "community": 3,
+      "norm_label": "$activefiltercount",
+      "id": "stores_wordlist_activefiltercount"
+    },
+    {
+      "label": "resetAll()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L123",
+      "community": 26,
+      "norm_label": "resetall()",
+      "id": "stores_wordlist_resetall"
+    },
+    {
+      "label": "$showWordListFilterFlyout",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L144",
+      "community": 3,
+      "norm_label": "$showwordlistfilterflyout",
+      "id": "stores_wordlist_showwordlistfilterflyout"
+    },
+    {
+      "label": "$toggleWordListFilterFlyout()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L146",
+      "community": 3,
+      "norm_label": "$togglewordlistfilterflyout()",
+      "id": "stores_wordlist_togglewordlistfilterflyout"
+    },
+    {
+      "label": "setLetterFilter()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L157",
+      "community": 3,
+      "norm_label": "setletterfilter()",
+      "id": "stores_wordlist_setletterfilter"
+    },
+    {
+      "label": "toggleInArray()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L163",
+      "community": 3,
+      "norm_label": "toggleinarray()",
+      "id": "stores_wordlist_toggleinarray"
+    },
+    {
+      "label": "setWordTypeFilter()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L174",
+      "community": 3,
+      "norm_label": "setwordtypefilter()",
+      "id": "stores_wordlist_setwordtypefilter"
+    },
+    {
+      "label": "setActiveOrderCategory()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L185",
+      "community": 3,
+      "norm_label": "setactiveordercategory()",
+      "id": "stores_wordlist_setactiveordercategory"
+    },
+    {
+      "label": "$alphabeticalOrderToggle()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L193",
+      "community": 3,
+      "norm_label": "$alphabeticalordertoggle()",
+      "id": "stores_wordlist_alphabeticalordertoggle"
+    },
+    {
+      "label": "$wordListDateOrderToggle()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L205",
+      "community": 3,
+      "norm_label": "$wordlistdateordertoggle()",
+      "id": "stores_wordlist_wordlistdateordertoggle"
+    },
+    {
+      "label": "$wordListModifiedDateOrderToggle()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L214",
+      "community": 3,
+      "norm_label": "$wordlistmodifieddateordertoggle()",
+      "id": "stores_wordlist_wordlistmodifieddateordertoggle"
+    },
+    {
+      "label": "$setSortOrder()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L221",
+      "community": 48,
+      "norm_label": "$setsortorder()",
+      "id": "stores_wordlist_setsortorder"
+    },
+    {
+      "label": "setSearch()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L232",
+      "community": 3,
+      "norm_label": "setsearch()",
+      "id": "stores_wordlist_setsearch"
+    },
+    {
+      "label": "$toggleBerolinismus()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L236",
+      "community": 3,
+      "norm_label": "$toggleberolinismus()",
+      "id": "stores_wordlist_toggleberolinismus"
+    },
+    {
+      "label": "searchLength",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L242",
+      "community": 3,
+      "norm_label": "searchlength",
+      "id": "stores_wordlist_searchlength"
+    },
+    {
+      "label": "getSearchMeta()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L246",
+      "community": 3,
+      "norm_label": "getsearchmeta()",
+      "id": "stores_wordlist_getsearchmeta"
+    },
+    {
+      "label": "wordSchema",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L271",
+      "community": 3,
+      "norm_label": "wordschema",
+      "id": "stores_wordlist_wordschema"
+    },
+    {
+      "label": "WordDocument",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L293",
+      "community": 3,
+      "norm_label": "worddocument",
+      "id": "stores_wordlist_worddocument"
+    },
+    {
+      "label": "SortByType",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L297",
+      "community": 3,
+      "norm_label": "sortbytype",
+      "id": "stores_wordlist_sortbytype"
+    },
+    {
+      "label": "buildWhere()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L301",
+      "community": 3,
+      "norm_label": "buildwhere()",
+      "id": "stores_wordlist_buildwhere"
+    },
+    {
+      "label": "getSortBy()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L344",
+      "community": 3,
+      "norm_label": "getsortby()",
+      "id": "stores_wordlist_getsortby"
+    },
+    {
+      "label": "initOrama()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L363",
+      "community": 3,
+      "norm_label": "initorama()",
+      "id": "stores_wordlist_initorama"
+    },
+    {
+      "label": "$oramaSearchResults",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L395",
+      "community": 3,
+      "norm_label": "$oramasearchresults",
+      "id": "stores_wordlist_oramasearchresults"
+    },
+    {
+      "label": "$searchResultCount",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L428",
+      "community": 3,
+      "norm_label": "$searchresultcount",
+      "id": "stores_wordlist_searchresultcount"
     },
     {
       "label": "env.d.ts",
@@ -858,7 +1011,7 @@
       "file_type": "code",
       "source_file": "src/plugins/sentryBrowser.ts",
       "source_location": "L1",
-      "community": 43,
+      "community": 14,
       "norm_label": "sentrybrowser.ts",
       "id": "src_plugins_sentrybrowser_ts"
     },
@@ -867,7 +1020,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L1",
-      "community": 7,
+      "community": 24,
       "norm_label": "unsupportedbrowser.ts",
       "id": "src_lib_unsupportedbrowser_ts"
     },
@@ -876,7 +1029,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L9",
-      "community": 7,
+      "community": 24,
       "norm_label": "isbrowsersupported()",
       "id": "lib_unsupportedbrowser_isbrowsersupported"
     },
@@ -885,7 +1038,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L18",
-      "community": 7,
+      "community": 24,
       "norm_label": "checkbrowsersupport()",
       "id": "lib_unsupportedbrowser_checkbrowsersupport"
     },
@@ -895,7 +1048,7 @@
       "source_file": "src/layouts/Layout.astro",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 1,
       "norm_label": "@layouts/layout.astro",
       "id": "src_layouts_layout_astro"
     },
@@ -904,7 +1057,7 @@
       "file_type": "code",
       "source_file": "src/styles/app.scss",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 1,
       "norm_label": "@styles/app.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_app_scss"
     },
@@ -944,7 +1097,7 @@
       "source_file": "src/components/Modal.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 9,
+      "community": 1,
       "norm_label": "modal.vue",
       "id": "src_components_modal_vue"
     },
@@ -954,7 +1107,7 @@
       "source_file": "src/components/ScrollToTop.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 9,
+      "community": 1,
       "norm_label": "scrolltotop.vue",
       "id": "src_components_scrolltotop_vue"
     },
@@ -973,7 +1126,7 @@
       "file_type": "code",
       "source_file": "src/gql/entity-types.ts",
       "source_location": "L1",
-      "community": 33,
+      "community": 8,
       "norm_label": "entity-types.ts",
       "id": "src_gql_entity_types_ts"
     },
@@ -982,7 +1135,7 @@
       "file_type": "code",
       "source_file": "src/gql/entity-types.ts",
       "source_location": "L9",
-      "community": 13,
+      "community": 33,
       "norm_label": "maybe",
       "id": "gql_entity_types_maybe"
     },
@@ -1145,7 +1298,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L86",
-      "community": 33,
+      "community": 8,
       "norm_label": "mediaitemfragment",
       "id": "gql_graphql_mediaitemfragment"
     },
@@ -1154,7 +1307,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L88",
-      "community": 33,
+      "community": 8,
       "norm_label": "wordpropertiesberlinerischaudiofragment",
       "id": "gql_graphql_wordpropertiesberlinerischaudiofragment"
     },
@@ -1163,7 +1316,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L90",
-      "community": 33,
+      "community": 8,
       "norm_label": "wordpropertiesexamplesexampleaudiofragment",
       "id": "gql_graphql_wordpropertiesexamplesexampleaudiofragment"
     },
@@ -1172,7 +1325,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L92",
-      "community": 33,
+      "community": 8,
       "norm_label": "wordpropertiesexamplesfragment",
       "id": "gql_graphql_wordpropertiesexamplesfragment"
     },
@@ -1181,7 +1334,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L94",
-      "community": 33,
+      "community": 8,
       "norm_label": "wordpropertieswikimediafilesfragment",
       "id": "gql_graphql_wordpropertieswikimediafilesfragment"
     },
@@ -1190,7 +1343,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L96",
-      "community": 33,
+      "community": 8,
       "norm_label": "wordpropertiesfragment",
       "id": "gql_graphql_wordpropertiesfragment"
     },
@@ -1199,7 +1352,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L101",
-      "community": 33,
+      "community": 8,
       "norm_label": "berlinerwordfragment",
       "id": "gql_graphql_berlinerwordfragment"
     },
@@ -1271,7 +1424,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L143",
-      "community": 9,
+      "community": 18,
       "norm_label": "getallwordslinksquery",
       "id": "gql_graphql_getallwordslinksquery"
     },
@@ -1442,7 +1595,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort-vorschlagen.astro",
       "source_location": "L1",
-      "community": 9,
+      "community": 1,
       "norm_label": "wort-vorschlagen.astro",
       "id": "src_pages_wort_vorschlagen_astro"
     },
@@ -1451,7 +1604,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort-vorschlagen.astro",
       "source_location": "L6",
-      "community": 9,
+      "community": 1,
       "norm_label": "page",
       "id": "pages_wort_vorschlagen_page"
     },
@@ -1515,7 +1668,7 @@
       "file_type": "code",
       "source_file": "astro:env/client",
       "confidence": "EXTRACTED",
-      "community": 43,
+      "community": 14,
       "norm_label": "astro:env/client",
       "id": "client"
     },
@@ -1524,7 +1677,7 @@
       "file_type": "code",
       "source_file": "src/pages/_app.ts",
       "source_location": "L1",
-      "community": 43,
+      "community": 14,
       "norm_label": "_app.ts",
       "id": "src_pages_app_ts"
     },
@@ -1533,7 +1686,7 @@
       "file_type": "code",
       "source_file": "src/pages/404.astro",
       "source_location": "L1",
-      "community": 9,
+      "community": 1,
       "norm_label": "404.astro",
       "id": "src_pages_404_astro"
     },
@@ -1616,7 +1769,7 @@
       "source_file": "src/components/word-search/WordSearch.astro",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 20,
+      "community": 9,
       "norm_label": "wordsearch.astro",
       "id": "src_components_word_search_wordsearch_astro"
     },
@@ -1673,7 +1826,7 @@
       "file_type": "code",
       "source_file": "src/pages/pwa.astro",
       "source_location": "L1",
-      "community": 9,
+      "community": 12,
       "norm_label": "pwa.astro",
       "id": "src_pages_pwa_astro"
     },
@@ -1682,7 +1835,7 @@
       "file_type": "code",
       "source_file": "src/pages/pwa.astro",
       "source_location": "L5",
-      "community": 9,
+      "community": 12,
       "norm_label": "page",
       "id": "pages_pwa_page"
     },
@@ -1781,7 +1934,7 @@
       "file_type": "code",
       "source_file": "src/styles/plugins/astro-breadcrumbs.scss",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 18,
       "norm_label": "@styles/plugins/astro-breadcrumbs.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_plugins_astro_breadcrumbs_scss"
     },
@@ -1791,7 +1944,7 @@
       "source_file": "src/components/AudioPlayerList.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 13,
+      "community": 33,
       "norm_label": "@components/audioplayerlist.vue",
       "id": "src_components_audioplayerlist_vue"
     },
@@ -1801,7 +1954,7 @@
       "source_file": "src/components/BadgeTag.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 73,
+      "community": 13,
       "norm_label": "badgetag.vue",
       "id": "src_components_badgetag_vue"
     },
@@ -1871,7 +2024,7 @@
       "source_file": "src/components/word/WordExamples.astro",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 13,
+      "community": 33,
       "norm_label": "wordexamples.astro",
       "id": "src_components_word_wordexamples_astro"
     },
@@ -1910,7 +2063,7 @@
       "file_type": "code",
       "source_file": "astro-breadcrumbs",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 18,
       "norm_label": "astro-breadcrumbs",
       "id": "astro_breadcrumbs"
     },
@@ -1919,7 +2072,7 @@
       "file_type": "code",
       "source_file": "hyphenation.de",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 10,
       "norm_label": "hyphenation.de",
       "id": "hyphenation_de"
     },
@@ -1928,7 +2081,7 @@
       "file_type": "code",
       "source_file": "hypher",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 10,
       "norm_label": "hypher",
       "id": "hypher"
     },
@@ -1937,7 +2090,7 @@
       "file_type": "code",
       "source_file": "~icons/lucide/chevron-right",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 18,
       "norm_label": "~icons/lucide/chevron-right",
       "id": "chevron_right"
     },
@@ -1955,7 +2108,7 @@
       "file_type": "code",
       "source_file": "src/gql/entity-types",
       "confidence": "EXTRACTED",
-      "community": 13,
+      "community": 33,
       "norm_label": "@/gql/entity-types",
       "id": "home_felix_workspace_berliner_schnauze_src_gql_entity_types"
     },
@@ -1964,7 +2117,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L1",
-      "community": 9,
+      "community": 18,
       "norm_label": "index.astro",
       "id": "src_pages_wort_index_astro"
     },
@@ -1973,7 +2126,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L34",
-      "community": 9,
+      "community": 18,
       "norm_label": "sortedgroups",
       "id": "wort_index_sortedgroups"
     },
@@ -1982,7 +2135,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L36",
-      "community": 9,
+      "community": 18,
       "norm_label": "content",
       "id": "wort_index_content"
     },
@@ -1991,7 +2144,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L44",
-      "community": 9,
+      "community": 18,
       "norm_label": "schemajson()",
       "id": "wort_index_schemajson"
     },
@@ -2000,7 +2153,7 @@
       "file_type": "code",
       "source_file": "src/styles/objects/_word-index.scss",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 18,
       "norm_label": "@styles/objects/_word-index.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_word_index_scss"
     },
@@ -2009,7 +2162,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_word-group.scss",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 18,
       "norm_label": "@styles/components/_word-group.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_word_group_scss"
     },
@@ -2018,7 +2171,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 18,
       "norm_label": "@/gql/graphql",
       "id": "home_felix_workspace_berliner_schnauze_src_gql_graphql"
     },
@@ -2027,7 +2180,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/meta.json.ts",
       "source_location": "L1",
-      "community": 18,
+      "community": 10,
       "norm_label": "meta.json.ts",
       "id": "src_pages_api_search_meta_json_ts"
     },
@@ -2036,7 +2189,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/meta.json.ts",
       "source_location": "L8",
-      "community": 18,
+      "community": 10,
       "norm_label": "hypher",
       "id": "search_meta_json_hypher"
     },
@@ -2045,7 +2198,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/meta.json.ts",
       "source_location": "L10",
-      "community": 18,
+      "community": 10,
       "norm_label": "get()",
       "id": "search_meta_json_get"
     },
@@ -2054,7 +2207,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L1",
-      "community": 18,
+      "community": 10,
       "norm_label": "index.json.ts",
       "id": "src_pages_api_search_index_json_ts"
     },
@@ -2063,7 +2216,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L12",
-      "community": 18,
+      "community": 10,
       "norm_label": "hypher",
       "id": "search_index_json_hypher"
     },
@@ -2072,7 +2225,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L14",
-      "community": 22,
+      "community": 73,
       "norm_label": "oramasearchindex",
       "id": "search_index_json_oramasearchindex"
     },
@@ -2081,7 +2234,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L16",
-      "community": 18,
+      "community": 10,
       "norm_label": "extractwordtypes()",
       "id": "search_index_json_extractwordtypes"
     },
@@ -2090,7 +2243,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L27",
-      "community": 18,
+      "community": 10,
       "norm_label": "makeoramasearchindex()",
       "id": "search_index_json_makeoramasearchindex"
     },
@@ -2099,7 +2252,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L74",
-      "community": 18,
+      "community": 10,
       "norm_label": "get()",
       "id": "search_index_json_get"
     },
@@ -2135,7 +2288,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/BadgeTag.test.ts",
       "source_location": "L1",
-      "community": 73,
+      "community": 13,
       "norm_label": "badgetag.test.ts",
       "id": "src_tests_unit_components_badgetag_test_ts"
     },
@@ -2144,7 +2297,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/BadgeTag.test.ts",
       "source_location": "L8",
-      "community": 73,
+      "community": 13,
       "norm_label": "wrapper",
       "id": "components_badgetag_test_wrapper"
     },
@@ -2171,7 +2324,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ScrollToTop.test.ts",
       "source_location": "L1",
-      "community": 9,
+      "community": 1,
       "norm_label": "scrolltotop.test.ts",
       "id": "src_tests_unit_components_scrolltotop_test_ts"
     },
@@ -2180,7 +2333,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ScrollToTop.test.ts",
       "source_location": "L29",
-      "community": 9,
+      "community": 1,
       "norm_label": "wrapper",
       "id": "components_scrolltotop_test_wrapper"
     },
@@ -2477,7 +2630,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L1",
-      "community": 17,
+      "community": 56,
       "norm_label": "sortwordsby.test.ts",
       "id": "src_tests_unit_components_filter_sortwordsby_test_ts"
     },
@@ -2486,7 +2639,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L15",
-      "community": 17,
+      "community": 56,
       "norm_label": "mocktogglefn",
       "id": "filter_sortwordsby_test_mocktogglefn"
     },
@@ -2495,7 +2648,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L16",
-      "community": 17,
+      "community": 56,
       "norm_label": "mocksetactiveordercategory",
       "id": "filter_sortwordsby_test_mocksetactiveordercategory"
     },
@@ -2504,7 +2657,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L17",
-      "community": 17,
+      "community": 56,
       "norm_label": "mockwordsearch",
       "id": "filter_sortwordsby_test_mockwordsearch"
     },
@@ -2513,7 +2666,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L35",
-      "community": 17,
+      "community": 56,
       "norm_label": "wrapper",
       "id": "filter_sortwordsby_test_wrapper"
     },
@@ -2522,7 +2675,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L1",
-      "community": 53,
+      "community": 48,
       "norm_label": "sortwordbyselect.test.ts",
       "id": "src_tests_unit_components_filter_sortwordbyselect_test_ts"
     },
@@ -2531,7 +2684,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L12",
-      "community": 53,
+      "community": 48,
       "norm_label": "wrapper",
       "id": "filter_sortwordbyselect_test_wrapper"
     },
@@ -2540,7 +2693,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L18",
-      "community": 53,
+      "community": 48,
       "norm_label": "select",
       "id": "filter_sortwordbyselect_test_select"
     },
@@ -2549,7 +2702,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L1",
-      "community": 56,
+      "community": 9,
       "norm_label": "wordtypefilter.test.ts",
       "id": "src_tests_unit_components_filter_wordtypefilter_test_ts"
     },
@@ -2558,7 +2711,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L10",
-      "community": 56,
+      "community": 9,
       "norm_label": "mockwordsearch",
       "id": "filter_wordtypefilter_test_mockwordsearch"
     },
@@ -2567,7 +2720,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L33",
-      "community": 56,
+      "community": 9,
       "norm_label": "multiselect",
       "id": "filter_wordtypefilter_test_multiselect"
     },
@@ -2576,7 +2729,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L41",
-      "community": 56,
+      "community": 9,
       "norm_label": "attrs",
       "id": "filter_wordtypefilter_test_attrs"
     },
@@ -2657,7 +2810,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotify.test.ts",
       "source_location": "L1",
-      "community": 7,
+      "community": 22,
       "norm_label": "toastnotify.test.ts",
       "id": "src_tests_unit_components_toast_toastnotify_test_ts"
     },
@@ -2666,7 +2819,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L1",
-      "community": 24,
+      "community": 99,
       "norm_label": "getwordtype.test.ts",
       "id": "src_tests_unit_utils_getwordtype_test_ts"
     },
@@ -2675,7 +2828,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L8",
-      "community": 24,
+      "community": 99,
       "norm_label": "doc",
       "id": "utils_getwordtype_test_doc"
     },
@@ -2684,7 +2837,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L9",
-      "community": 24,
+      "community": 99,
       "norm_label": "expectedtags",
       "id": "utils_getwordtype_test_expectedtags"
     },
@@ -2693,7 +2846,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L11",
-      "community": 24,
+      "community": 99,
       "norm_label": "result",
       "id": "utils_getwordtype_test_result"
     },
@@ -2702,7 +2855,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L1",
-      "community": 25,
+      "community": 100,
       "norm_label": "translatenlptags.test.ts",
       "id": "src_tests_unit_utils_translatenlptags_test_ts"
     },
@@ -2711,7 +2864,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L6",
-      "community": 25,
+      "community": 100,
       "norm_label": "englishtags",
       "id": "utils_translatenlptags_test_englishtags"
     },
@@ -2720,7 +2873,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L12",
-      "community": 25,
+      "community": 100,
       "norm_label": "expectedgermantags",
       "id": "utils_translatenlptags_test_expectedgermantags"
     },
@@ -2729,7 +2882,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L24",
-      "community": 25,
+      "community": 100,
       "norm_label": "expectedtags",
       "id": "utils_translatenlptags_test_expectedtags"
     },
@@ -3481,7 +3634,7 @@
       "file_type": "code",
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L1",
-      "community": 10,
+      "community": 9,
       "norm_label": "buttonwithstates.vue",
       "id": "src_components_buttonwithstates_vue"
     },
@@ -3490,7 +3643,7 @@
       "file_type": "code",
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L38",
-      "community": 10,
+      "community": 9,
       "norm_label": "x",
       "id": "components_buttonwithstates_x"
     },
@@ -3499,7 +3652,7 @@
       "file_type": "code",
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L47",
-      "community": 10,
+      "community": 9,
       "norm_label": "computedstate",
       "id": "components_buttonwithstates_computedstate"
     },
@@ -3726,7 +3879,7 @@
       "source_file": "src/components/word-search/WordFilter.vue",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 10,
+      "community": 9,
       "norm_label": "@components/word-search/wordfilter.vue",
       "id": "src_components_word_search_wordfilter_vue"
     },
@@ -3735,7 +3888,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordFilter.vue",
       "source_location": "L109",
-      "community": 10,
+      "community": 9,
       "norm_label": "wordlistfilter",
       "id": "word_search_wordfilter_wordlistfilter"
     },
@@ -3744,7 +3897,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordFilter.vue",
       "source_location": "L110",
-      "community": 10,
+      "community": 9,
       "norm_label": "{ ready, start }",
       "id": "word_search_wordfilter_ready_start"
     },
@@ -3753,7 +3906,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordFilter.vue",
       "source_location": "L112",
-      "community": 10,
+      "community": 9,
       "norm_label": "showwordlistfilterflyout",
       "id": "word_search_wordfilter_showwordlistfilterflyout"
     },
@@ -3817,7 +3970,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_filter-search.scss",
       "confidence": "EXTRACTED",
-      "community": 20,
+      "community": 9,
       "norm_label": "@styles/components/_filter-search.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_filter_search_scss"
     },
@@ -3945,7 +4098,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/WordSwitch.vue",
       "source_location": "L1",
-      "community": 10,
+      "community": 9,
       "norm_label": "wordswitch.vue",
       "id": "src_components_filter_wordswitch_vue"
     },
@@ -3954,7 +4107,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/WordTypeFilter.vue",
       "source_location": "L1",
-      "community": 56,
+      "community": 9,
       "norm_label": "wordtypefilter.vue",
       "id": "src_components_filter_wordtypefilter_vue"
     },
@@ -3963,7 +4116,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/WordRangeSlider.vue",
       "source_location": "L1",
-      "community": 10,
+      "community": 9,
       "norm_label": "wordrangeslider.vue",
       "id": "src_components_filter_wordrangeslider_vue"
     },
@@ -3972,7 +4125,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordsBy.vue",
       "source_location": "L1",
-      "community": 17,
+      "community": 56,
       "norm_label": "sortwordsby.vue",
       "id": "src_components_filter_sortwordsby_vue"
     },
@@ -3981,7 +4134,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordsBy.vue",
       "source_location": "L45",
-      "community": 17,
+      "community": 56,
       "norm_label": "wordsearch",
       "id": "filter_sortwordsby_wordsearch"
     },
@@ -3990,7 +4143,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/BerolinismusToggle.vue",
       "source_location": "L1",
-      "community": 48,
+      "community": 17,
       "norm_label": "berolinismustoggle.vue",
       "id": "src_components_filter_berolinismustoggle_vue"
     },
@@ -3999,7 +4152,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/BerolinismusToggle.vue",
       "source_location": "L18",
-      "community": 48,
+      "community": 17,
       "norm_label": "wordsearch",
       "id": "filter_berolinismustoggle_wordsearch"
     },
@@ -4008,7 +4161,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/AlphabeticalFilterDropdown.vue",
       "source_location": "L1",
-      "community": 48,
+      "community": 17,
       "norm_label": "alphabeticalfilterdropdown.vue",
       "id": "src_components_filter_alphabeticalfilterdropdown_vue"
     },
@@ -4017,7 +4170,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/AlphabeticalFilterDropdown.vue",
       "source_location": "L50",
-      "community": 48,
+      "community": 17,
       "norm_label": "wordsearch",
       "id": "filter_alphabeticalfilterdropdown_wordsearch"
     },
@@ -4026,7 +4179,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/AlphabeticalFilterDropdown.vue",
       "source_location": "L51",
-      "community": 48,
+      "community": 17,
       "norm_label": "hidedropdown",
       "id": "filter_alphabeticalfilterdropdown_hidedropdown"
     },
@@ -4035,7 +4188,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/AlphabeticalFilterDropdown.vue",
       "source_location": "L59",
-      "community": 48,
+      "community": 17,
       "norm_label": "if()",
       "id": "filter_alphabeticalfilterdropdown_if"
     },
@@ -4044,7 +4197,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordBySelect.vue",
       "source_location": "L1",
-      "community": 53,
+      "community": 48,
       "norm_label": "sortwordbyselect.vue",
       "id": "src_components_filter_sortwordbyselect_vue"
     },
@@ -4053,7 +4206,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordBySelect.vue",
       "source_location": "L24",
-      "community": 53,
+      "community": 48,
       "norm_label": "options",
       "id": "filter_sortwordbyselect_options"
     },
@@ -4062,7 +4215,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordBySelect.vue",
       "source_location": "L56",
-      "community": 53,
+      "community": 48,
       "norm_label": "selected",
       "id": "filter_sortwordbyselect_selected"
     },
@@ -4089,7 +4242,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L1",
-      "community": 22,
+      "community": 73,
       "norm_label": "singleword.vue",
       "id": "src_components_word_singleword_vue"
     },
@@ -4098,7 +4251,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L70",
-      "community": 22,
+      "community": 73,
       "norm_label": "iswordoftheday",
       "id": "word_singleword_iswordoftheday"
     },
@@ -4107,7 +4260,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L71",
-      "community": 22,
+      "community": 73,
       "norm_label": "wordoptiondropdown",
       "id": "word_singleword_wordoptiondropdown"
     },
@@ -4116,7 +4269,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L75",
-      "community": 22,
+      "community": 73,
       "norm_label": "highlightmatches()",
       "id": "word_singleword_highlightmatches"
     },
@@ -4143,7 +4296,7 @@
       "file_type": "code",
       "source_file": "virtual:icons/lucide/quote",
       "confidence": "EXTRACTED",
-      "community": 13,
+      "community": 33,
       "norm_label": "virtual:icons/lucide/quote",
       "id": "quote"
     },
@@ -4224,7 +4377,7 @@
       "file_type": "code",
       "source_file": "src/utils/supportedBrowsers.mjs",
       "source_location": "L1",
-      "community": 7,
+      "community": 24,
       "norm_label": "supportedbrowsers.mjs",
       "id": "src_utils_supportedbrowsers_mjs"
     },
@@ -4278,7 +4431,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L28",
-      "community": 18,
+      "community": 10,
       "norm_label": "countletters()",
       "id": "utils_wordhelper_countletters"
     },
@@ -4305,7 +4458,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L54",
-      "community": 18,
+      "community": 10,
       "norm_label": "getwordtype()",
       "id": "utils_wordhelper_getwordtype"
     },
@@ -4314,7 +4467,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L150",
-      "community": 18,
+      "community": 10,
       "norm_label": "translatenlptags()",
       "id": "utils_wordhelper_translatenlptags"
     },
@@ -4521,7 +4674,7 @@
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L14",
-      "community": 34,
+      "community": 24,
       "norm_label": "$showinstallbutton",
       "id": "stores_installapp_showinstallbutton"
     },
@@ -4530,7 +4683,7 @@
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L15",
-      "community": 34,
+      "community": 24,
       "norm_label": "$ispwainstalled",
       "id": "stores_installapp_ispwainstalled"
     },
@@ -4728,7 +4881,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 98,
       "norm_label": "darkmode.ts",
       "id": "src_stores_darkmode_ts"
     },
@@ -4737,7 +4890,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L3",
-      "community": 6,
+      "community": 98,
       "norm_label": "darkmode",
       "id": "stores_darkmode_darkmode"
     },
@@ -4746,7 +4899,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L5",
-      "community": 6,
+      "community": 98,
       "norm_label": "$isdarkmode",
       "id": "stores_darkmode_isdarkmode"
     },
@@ -4755,7 +4908,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L18",
-      "community": 6,
+      "community": 98,
       "norm_label": "setdarkmode()",
       "id": "stores_darkmode_setdarkmode"
     },
@@ -4818,7 +4971,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L1",
-      "community": 7,
+      "community": 22,
       "norm_label": "toastnotify.ts",
       "id": "src_stores_toastnotify_ts"
     },
@@ -4836,7 +4989,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L16",
-      "community": 7,
+      "community": 22,
       "norm_label": "toastpayload",
       "id": "stores_toastnotify_toastpayload"
     },
@@ -4845,7 +4998,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L20",
-      "community": 7,
+      "community": 22,
       "norm_label": "toaststatus",
       "id": "stores_toastnotify_toaststatus"
     },
@@ -4854,7 +5007,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L32",
-      "community": 7,
+      "community": 22,
       "norm_label": "supportspopover()",
       "id": "stores_toastnotify_supportspopover"
     },
@@ -4863,7 +5016,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L43",
-      "community": 7,
+      "community": 22,
       "norm_label": "hidepopover()",
       "id": "stores_toastnotify_hidepopover"
     },
@@ -4872,7 +5025,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L55",
-      "community": 7,
+      "community": 22,
       "norm_label": "createtoast()",
       "id": "stores_toastnotify_createtoast"
     },
@@ -4881,7 +5034,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L67",
-      "community": 7,
+      "community": 24,
       "norm_label": "createtoastnotify()",
       "id": "stores_toastnotify_createtoastnotify"
     },
@@ -4890,7 +5043,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L99",
-      "community": 7,
+      "community": 22,
       "norm_label": "removetoastbyid()",
       "id": "stores_toastnotify_removetoastbyid"
     },
@@ -4989,7 +5142,7 @@
       "file_type": "code",
       "source_file": "src/services/fragments/fragments.ts",
       "source_location": "L1",
-      "community": 28,
+      "community": 53,
       "norm_label": "fragments.ts",
       "id": "src_services_fragments_fragments_ts"
     },
@@ -4998,7 +5151,7 @@
       "file_type": "code",
       "source_file": "src/services/fragments/fragments.ts",
       "source_location": "L3",
-      "community": 28,
+      "community": 53,
       "norm_label": "posttypeseofragment",
       "id": "fragments_fragments_posttypeseofragment"
     },
@@ -5007,7 +5160,7 @@
       "file_type": "code",
       "source_file": "src/services/fragments/fragments.ts",
       "source_location": "L28",
-      "community": 28,
+      "community": 53,
       "norm_label": "mediaitem",
       "id": "fragments_fragments_mediaitem"
     },
@@ -5016,7 +5169,7 @@
       "file_type": "code",
       "source_file": "src/services/fragments/fragments.ts",
       "source_location": "L34",
-      "community": 28,
+      "community": 53,
       "norm_label": "wordpropertiesberlinerischaudio",
       "id": "fragments_fragments_wordpropertiesberlinerischaudio"
     },
@@ -5025,7 +5178,7 @@
       "file_type": "code",
       "source_file": "src/services/fragments/fragments.ts",
       "source_location": "L45",
-      "community": 28,
+      "community": 53,
       "norm_label": "wordpropertiesexamplesexampleaudio",
       "id": "fragments_fragments_wordpropertiesexamplesexampleaudio"
     },
@@ -5034,7 +5187,7 @@
       "file_type": "code",
       "source_file": "src/services/fragments/fragments.ts",
       "source_location": "L56",
-      "community": 28,
+      "community": 53,
       "norm_label": "wordpropertiesexamples",
       "id": "fragments_fragments_wordpropertiesexamples"
     },
@@ -5043,7 +5196,7 @@
       "file_type": "code",
       "source_file": "src/services/fragments/fragments.ts",
       "source_location": "L66",
-      "community": 28,
+      "community": 53,
       "norm_label": "wordpropertieswikimediafiles",
       "id": "fragments_fragments_wordpropertieswikimediafiles"
     },
@@ -5052,7 +5205,7 @@
       "file_type": "code",
       "source_file": "src/services/fragments/fragments.ts",
       "source_location": "L74",
-      "community": 28,
+      "community": 53,
       "norm_label": "wordproperties",
       "id": "fragments_fragments_wordproperties"
     },
@@ -5061,7 +5214,7 @@
       "file_type": "code",
       "source_file": "src/services/fragments/fragments.ts",
       "source_location": "L122",
-      "community": 28,
+      "community": 53,
       "norm_label": "berlinerword",
       "id": "fragments_fragments_berlinerword"
     },
@@ -5097,7 +5250,7 @@
       "file_type": "code",
       "source_file": "src/services/queries/getWords.ts",
       "source_location": "L67",
-      "community": 18,
+      "community": 10,
       "norm_label": "fetchallwords()",
       "id": "queries_getwords_fetchallwords"
     },
@@ -5480,7 +5633,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 48,
+      "community": 17,
       "norm_label": "$wordsearch",
       "id": "stores_index_wordsearch"
     },
@@ -5688,7 +5841,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 9,
+      "community": 1,
       "norm_label": "setcolormode",
       "id": "components_setcolormode_setcolormode"
     },
@@ -5701,7 +5854,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 9,
+      "community": 1,
       "norm_label": "themeinitializationlogic",
       "id": "components_setcolormode_themelogic"
     },
@@ -5753,7 +5906,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 9,
+      "community": 1,
       "norm_label": "basehead",
       "id": "components_basehead_basehead"
     },
@@ -5766,7 +5919,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 9,
+      "community": 1,
       "norm_label": "seoprops",
       "id": "components_basehead_seoprops"
     },
@@ -6715,7 +6868,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 24,
       "norm_label": "registersw() call",
       "id": "services_pwa_registersw"
     },
@@ -8128,365 +8281,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L183",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_buckets_clearall_clearbucket_iscacheavailable_isloading_loadcaches_loaderror_onlinestatus_resync_storagequota_swinfo_totalsizebytes",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L172",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_chevronup",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L173",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_circle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L174",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_circlecheck",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L175",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_circlex",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L176",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_clock",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L211",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_component"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L242",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_confirmclearall"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L259",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_confirmclearbucket"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L198",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_confirmdialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L276",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_formatrelativetime"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L233",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_formaturl"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L194",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_ispwainstalled"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L177",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_loader",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L178",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_refreshcw",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L179",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_rotateccw",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L198",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_storagequotapercent"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L203",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_string"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L227",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_swscripturl",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L220",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_swstatusicon"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L219",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_swstatuslabel"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L226",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_togglebucket"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L180",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_trash2",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": "L181",
-      "weight": 1.0,
-      "source": "src_components_pwacacheoverview_vue",
-      "target": "components_pwacacheoverview_x",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/pwa.astro",
-      "confidence_score": 1.0,
-      "source": "src_pages_pwa_astro",
-      "target": "src_components_pwacacheoverview_vue"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "components_pwacacheoverview_confirmclearall",
-      "target": "components_confirmdialog_confirmdialog"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/PwaCacheOverview.vue",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "components_pwacacheoverview_confirmclearbucket",
-      "target": "components_confirmdialog_confirmdialog"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/word-search/WordSearchList.vue",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_word_search_wordsearchlist_vue",
-      "target": "src_components_wordlist_vue"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L65",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_wordlist_vue",
-      "target": "components_wordlist_activeindex"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L93",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_wordlist_vue",
-      "target": "components_wordlist_focusactive"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L89",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_wordlist_vue",
-      "target": "components_wordlist_gotoword"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L55",
-      "weight": 1.0,
-      "source": "src_components_wordlist_vue",
-      "target": "components_wordlist_mutableoramasearch",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L54",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_wordlist_vue",
-      "target": "components_wordlist_oramasearch"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L68",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_wordlist_vue",
-      "target": "components_wordlist_showactive"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L72",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_wordlist_vue",
-      "target": "components_wordlist_showactivewithtimeout"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WordList.vue",
-      "source_location": "L67",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_wordlist_vue",
-      "target": "components_wordlist_virtualizerref"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "src/composable/useCacheStorage.ts",
       "source_location": "L26",
       "weight": 1.0,
@@ -8612,12 +8406,45 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "composable_usecachestorage_cachebucket"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "composable_usecachestorage_formatbytes"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
       "source_location": "L1",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_tests_unit_composable_usecachestorage_test_ts",
       "target": "composable_usecachestorage_formatbytes"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "composable_usecachestorage_getbucketdisplayname"
     },
     {
       "relation": "imports",
@@ -8660,6 +8487,561 @@
       "confidence_score": 1.0,
       "source": "src_tests_unit_composable_usecachestorage_test_ts",
       "target": "composable_usecachestorage_usecachestorage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L302",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_fetchspy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_makemockcachestorage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L198",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_promise"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L565",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_reloadspy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L588",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_removespy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L410",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_result_unmount"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L589",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_unmount"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_withsetup"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheActions.vue",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheactions_vue",
+      "target": "components_pwacacheactions_rotateccw"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheActions.vue",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheactions_vue",
+      "target": "components_pwacacheactions_trash2"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "components_pwacachebucketlist_chevrondown"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L93",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "components_pwacachebucketlist_formatrelativetime"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L84",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "components_pwacachebucketlist_formaturl"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L82",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "components_pwacachebucketlist_x"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L183",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_buckets_clearall_clearbucket_iscacheavailable_isloading_loadcaches_loaderror_onlinestatus_resync_storagequota_swinfo_totalsizebytes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L174",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_circlecheck"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L175",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_circlex"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L176",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_clock"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L211",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_component"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L242",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_confirmclearall"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L259",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_confirmclearbucket"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L198",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_confirmdialog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L194",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_ispwainstalled"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L177",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_loader"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L198",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_storagequotapercent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L203",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_string"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L227",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_swscripturl"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L220",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_swstatusicon"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": "L219",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheoverview_vue",
+      "target": "components_pwacacheoverview_swstatuslabel"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/pwa.astro",
+      "confidence_score": 1.0,
+      "source": "src_pages_pwa_astro",
+      "target": "src_components_pwacacheoverview_vue"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "components_pwacacheoverview_confirmclearall",
+      "target": "components_confirmdialog_confirmdialog"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "components_pwacacheoverview_confirmclearbucket",
+      "target": "components_confirmdialog_confirmdialog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_accordion_accordion_test_ts",
+      "target": "accordion_accordion_test_components"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L221",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_accordion_accordion_test_ts",
+      "target": "accordion_accordion_test_contentid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L272",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_accordion_accordion_test_ts",
+      "target": "accordion_accordion_test_labelledby"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_accordion_accordion_test_ts",
+      "target": "accordion_accordion_test_mountaccordion"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L160",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_accordion_accordion_test_ts",
+      "target": "accordion_accordion_test_mounttrigger"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L220",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_accordion_accordion_test_ts",
+      "target": "accordion_accordion_test_triggercontrols"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L271",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_accordion_accordion_test_ts",
+      "target": "accordion_accordion_test_triggerid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L288",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_accordion_accordion_test_ts",
+      "target": "accordion_accordion_test_wrapper"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/accordion/Accordion.test.ts",
+      "source_location": "L161",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "accordion_accordion_test_mounttrigger",
+      "target": "accordion_accordion_test_mountaccordion"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/accordion/index.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_accordion_index_ts",
+      "target": "src_components_accordion_accordioncontent_vue"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/accordion/index.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_accordion_index_ts",
+      "target": "src_components_accordion_accordionheader_vue"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/accordion/index.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_accordion_index_ts",
+      "target": "src_components_accordion_accordionitem_vue"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/accordion/index.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_accordion_index_ts",
+      "target": "src_components_accordion_accordiontrigger_vue"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/accordion/index.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_accordion_index_ts",
+      "target": "src_components_accordion_baseaccordion_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/word-search/WordSearchList.vue",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_word_search_wordsearchlist_vue",
+      "target": "src_components_wordlist_vue"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_wordlist_vue",
+      "target": "components_wordlist_activeindex"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L93",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_wordlist_vue",
+      "target": "components_wordlist_focusactive"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L89",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_wordlist_vue",
+      "target": "components_wordlist_gotoword"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L55",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_wordlist_vue",
+      "target": "components_wordlist_mutableoramasearch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L54",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_wordlist_vue",
+      "target": "components_wordlist_oramasearch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_wordlist_vue",
+      "target": "components_wordlist_showactive"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L72",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_wordlist_vue",
+      "target": "components_wordlist_showactivewithtimeout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/WordList.vue",
+      "source_location": "L67",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_wordlist_vue",
+      "target": "components_wordlist_virtualizerref"
     },
     {
       "relation": "re_exports",
@@ -9230,86 +9612,6 @@
       "weight": 1.0,
       "source": "stores_wordlist_searchresultcount",
       "target": "stores_wordlist_oramasearchresults"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L302",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_fetchspy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_makemockcachestorage"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L198",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_promise"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L565",
-      "weight": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_reloadspy",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L588",
-      "weight": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_removespy",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L410",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_result_unmount"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L589",
-      "weight": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_unmount",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_withsetup"
     },
     {
       "relation": "contains",
@@ -18878,5 +19180,5 @@
       "source_file": "src/pages/api/search/index.json.ts"
     }
   ],
-  "built_at_commit": "f20bc973bc00497b1cb3f467d9158a9488df7b1b"
+  "built_at_commit": "ae9782355de11b52c1de2c679f4b9d347b1ddebd"
 }
