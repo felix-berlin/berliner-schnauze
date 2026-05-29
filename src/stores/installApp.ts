@@ -14,13 +14,6 @@ export const $installPrompt = atom<BeforeInstallPromptEvent | null>(null);
 export const $showInstallButton = atom<boolean>(false);
 export const $isPwaInstalled = atom<boolean>(false);
 
-/**
- * Sets the install prompt event.
- *
- * @param   {[type]}  installPrompt
- *
- * @return  {void}
- */
 onMount($installPrompt, () => {
   $isPwaInstalled.set(isPwaInstalled());
 
@@ -28,47 +21,35 @@ onMount($installPrompt, () => {
     trackEvent("App", "Already installed", "PWA");
   }
 
-  window.addEventListener("beforeinstallprompt", (event) => {
+  const handleBeforeInstallPrompt = (event: Event): void => {
     $installPrompt.set(event as BeforeInstallPromptEvent);
     $showInstallButton.set(true);
-  });
+  };
 
-  window.addEventListener("appinstalled", () => {
+  const handleAppInstalled = (): void => {
     trackEvent("App", "Installation completed", "PWA");
-  });
+  };
+
+  window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+  window.addEventListener("appinstalled", handleAppInstalled);
+
+  return () => {
+    window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.removeEventListener("appinstalled", handleAppInstalled);
+  };
 });
 
-/**
- * Checks if the PWA is already installed.
- *
- * @return  {boolean}
- */
-export const isPwaInstalled: () => boolean = (): boolean => {
-  return (
-    window.matchMedia("(display-mode: standalone)").matches ||
-    (window.navigator as Navigator & { standalone?: boolean }).standalone === true
-  );
-};
+export const isPwaInstalled = (): boolean =>
+  window.matchMedia("(display-mode: standalone)").matches ||
+  (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
 
-/**
- * Triggers the PWA install prompt.
- *
- * @return  {Promise<void>}
- */
 export const triggerPwaInstall = async (): Promise<void> => {
   if (!$installPrompt.get()) return;
-
-  await $installPrompt?.get()?.prompt();
+  await $installPrompt.get()?.prompt();
   trackEvent("App", "Clicked On Install Button", "PWA Prompt");
-
   disableInAppInstallPrompt();
 };
 
-/**
- * Disables the PWA install prompt.
- *
- * @return  {void}
- */
 export const disableInAppInstallPrompt = (): void => {
   $installPrompt.set(null);
   $showInstallButton.set(false);
