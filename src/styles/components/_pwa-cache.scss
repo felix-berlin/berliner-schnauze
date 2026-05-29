@@ -197,23 +197,72 @@
     opacity: 0.6;
   }
 
-  &__urls {
+  &__bucket-types {
     display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+  }
+
+  &__type-pill {
+    font-size: 0.7rem;
+    font-family: monospace;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    background-color: color-mix(in srgb, var(--new-blue-200) 40%, transparent);
+    opacity: 0.8;
+  }
+
+  &__url-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  &__url-size {
+    font-size: 0.7rem;
+    opacity: 0.6;
+  }
+
+  &__url-type {
+    font-size: 0.65rem;
+    padding: 0.05rem 0.3rem;
+    border-radius: 2px;
+    background-color: color-mix(in srgb, var(--new-blue-200) 30%, transparent);
+    opacity: 0.8;
+  }
+
+  &__urls {
     margin-top: 0.5rem;
     padding-top: 0.5rem;
     border-top: 1px solid var(--new-blue-200);
-    overflow: hidden;
   }
 
   &__url {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.1rem 0.25rem;
     font-size: 0.75rem;
-    opacity: 0.7;
     font-family: monospace;
+    opacity: 0.7;
+  }
+
+  &__url-path {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    min-width: 0;
+  }
+
+  &__url-age {
+    white-space: nowrap;
+    flex-shrink: 0;
+    opacity: 0.7;
+    font-size: 0.7rem;
   }
 
   &__info-grid {
@@ -293,5 +342,60 @@
     height: 100%;
     background-color: vars.$success;
     transition: width 0.3s ease;
+  }
+}
+
+.c-pwa-type-bar {
+  margin-block-end: 1rem;
+
+  &__track {
+    display: flex;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    gap: 2px;
+    background-color: color-mix(in srgb, var(--new-blue-200) 30%, transparent);
+  }
+
+  &__segment {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    min-width: 2px;
+  }
+
+  &__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-top: 0.5rem;
+  }
+
+  &__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+  }
+
+  &__legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  &__legend-type {
+    font-family: monospace;
+    font-weight: 600;
+  }
+
+  &__legend-size {
+    opacity: 0.6;
+  }
+
+  &__legend-pct {
+    opacity: 0.5;
+    font-size: 0.7rem;
   }
 }

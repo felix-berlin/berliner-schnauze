@@ -1,11 +1,7 @@
 <template>
   <BaseAccordion type="multiple" v-slot="{ toggle }">
     <ul class="c-pwa-cache__list u-list-reset">
-      <li
-        v-for="bucket in buckets"
-        :key="bucket.name"
-        class="c-pwa-cache__bucket"
-      >
+      <li v-for="bucket in buckets" :key="bucket.name" class="c-pwa-cache__bucket">
         <AccordionItem :value="bucket.name" :disabled="bucket.urls.length === 0">
           <div
             class="c-pwa-cache__bucket-header"
@@ -51,12 +47,32 @@
               · alt: {{ formatRelativeTime(bucket.oldestEntry) }}
             </template>
           </div>
+          <div v-if="bucket.typeBreakdown.length > 0" class="c-pwa-cache__bucket-types">
+            <span
+              v-for="td in bucket.typeBreakdown.slice(0, 6)"
+              :key="td.type"
+              class="c-pwa-cache__type-pill"
+            >
+              {{ td.type.toUpperCase() }} {{ td.count }}
+            </span>
+          </div>
           <AccordionContent>
-            <ul class="c-pwa-cache__urls u-list-reset">
-              <li v-for="url in bucket.urls" :key="url" class="c-pwa-cache__url" :title="url">
-                {{ formatUrl(url) }}
-              </li>
-            </ul>
+            <VList
+              :data="bucket.urls"
+              :style="{ height: `min(${bucket.urls.length * 28}px, 50vh)` }"
+              class="c-pwa-cache__urls"
+            >
+              <template #default="{ item }">
+                <div class="c-pwa-cache__url" :title="item.url">
+                  <span class="c-pwa-cache__url-path">{{ formatUrl(item.url) }}</span>
+                  <span class="c-pwa-cache__url-meta">
+                    <span v-if="item.size !== null" class="c-pwa-cache__url-size">{{ formatBytes(item.size) }}</span>
+                    <span v-if="item.contentType" class="c-pwa-cache__url-type">{{ formatContentType(item.contentType) }}</span>
+                    <span v-if="item.date" class="c-pwa-cache__url-age">{{ formatRelativeTime(item.date) }}</span>
+                  </span>
+                </div>
+              </template>
+            </VList>
           </AccordionContent>
         </AccordionItem>
       </li>
@@ -65,9 +81,16 @@
 </template>
 
 <script setup lang="ts">
-import { AccordionContent, AccordionItem, AccordionTrigger, BaseAccordion } from "@components/accordion";
-import { formatBytes, getBucketDisplayName } from "@composables/useCacheStorage";
 import type { CacheBucket } from "@composables/useCacheStorage";
+
+import {
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  BaseAccordion,
+} from "@components/accordion";
+import { formatBytes, getBucketDisplayName } from "@composables/useCacheStorage";
+import { VList } from "virtua/vue";
 import { defineAsyncComponent } from "vue";
 
 defineProps<{
@@ -80,6 +103,26 @@ const emit = defineEmits<{
 
 const ChevronDown = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
 const X = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
+
+const CONTENT_TYPE_LABELS: Record<string, string> = {
+  "application/javascript": "JS",
+  "application/json": "JSON",
+  "font/woff": "WOFF",
+  "font/woff2": "WOFF2",
+  "image/avif": "AVIF",
+  "image/jpeg": "JPG",
+  "image/png": "PNG",
+  "image/svg+xml": "SVG",
+  "image/webp": "WEBP",
+  "text/css": "CSS",
+  "text/html": "HTML",
+  "text/javascript": "JS",
+};
+
+function formatContentType(contentType: string): string {
+  const type = contentType.split(";")[0].trim();
+  return CONTENT_TYPE_LABELS[type] ?? (type.split("/").pop()?.toUpperCase() ?? type);
+}
 
 function formatUrl(url: string): string {
   try {

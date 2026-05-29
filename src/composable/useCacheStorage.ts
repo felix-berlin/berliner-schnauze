@@ -2,12 +2,26 @@ import { useEventListener, useTimeoutFn } from "@vueuse/core";
 import { createToastNotify } from "@stores/index";
 import { computed, onMounted, ref } from "vue";
 
+export interface CacheEntry {
+  contentType: string | null;
+  date: Date | null;
+  size: number | null;
+  url: string;
+}
+
+export interface FileTypeBreakdown {
+  count: number;
+  sizeBytes: number;
+  type: string;
+}
+
 export interface CacheBucket {
-  name: string;
-  totalSizeBytes: number;
   lastModified: Date | null;
+  name: string;
   oldestEntry: Date | null;
-  urls: string[];
+  totalSizeBytes: number;
+  typeBreakdown: FileTypeBreakdown[];
+  urls: CacheEntry[];
 }
 
 export interface StorageQuota {
@@ -40,6 +54,38 @@ export function getBucketDisplayName(name: string): string {
     if (name.startsWith(prefix)) return displayName;
   }
   return name;
+}
+
+const CONTENT_TYPE_TO_EXT: Record<string, string> = {
+  "application/javascript": "js",
+  "application/json": "json",
+  "font/woff": "woff",
+  "font/woff2": "woff2",
+  "image/avif": "avif",
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/svg+xml": "svg",
+  "image/webp": "webp",
+  "text/css": "css",
+  "text/html": "html",
+  "text/javascript": "js",
+};
+
+export function getEntryType(url: string, contentType: string | null): string {
+  if (contentType) {
+    const type = contentType.split(";")[0].trim();
+    if (CONTENT_TYPE_TO_EXT[type]) return CONTENT_TYPE_TO_EXT[type];
+  }
+  try {
+    const pathname = new URL(url).pathname;
+    const lastSegment = pathname.split("/").pop() ?? "";
+    const dotIndex = lastSegment.lastIndexOf(".");
+    if (dotIndex < 1) return "other";
+    const ext = lastSegment.slice(dotIndex + 1).toLowerCase();
+    return ext.length > 0 && ext.length <= 6 ? ext : "other";
+  } catch {
+    return "other";
+  }
 }
 
 export function useCacheStorage() {
@@ -103,34 +149,50 @@ export function useCacheStorage() {
         cacheNames.map(async (name): Promise<CacheBucket> => {
           const cache = await caches.open(name);
           if (!cache)
-            return { lastModified: null, name, oldestEntry: null, totalSizeBytes: 0, urls: [] };
+            return { lastModified: null, name, oldestEntry: null, totalSizeBytes: 0, typeBreakdown: [], urls: [] };
 
           const requests = await cache.keys();
-          const urls = requests.map((req) => req.url);
 
           let totalSizeBytes = 0;
           let lastModified: Date | null = null;
           let oldestEntry: Date | null = null;
 
-          await Promise.all(
-            requests.map(async (request) => {
+          const urls = await Promise.all(
+            requests.map(async (request): Promise<CacheEntry> => {
+              const url = request.url;
               const response = await cache.match(request);
-              if (!response) return;
+              if (!response) return { contentType: null, date: null, size: null, url };
+
+              let size: number | null = null;
               try {
                 const blob = await response.clone().blob();
+                size = blob.size;
                 totalSizeBytes += blob.size;
               } catch {
                 // opaque/CORS response — skip size
               }
+
+              const contentType = response.headers.get("Content-Type");
               const dateHeader = response.headers.get("Date");
-              if (!dateHeader) return;
+              if (!dateHeader) return { contentType, date: null, size, url };
               const date = new Date(dateHeader);
               if (!lastModified || date > lastModified) lastModified = date;
               if (!oldestEntry || date < oldestEntry) oldestEntry = date;
+              return { contentType, date, size, url };
             }),
           );
 
-          return { lastModified, name, oldestEntry, totalSizeBytes, urls };
+          const typeMap = new Map<string, FileTypeBreakdown>();
+          for (const entry of urls) {
+            const type = getEntryType(entry.url, entry.contentType);
+            const existing = typeMap.get(type) ?? { count: 0, sizeBytes: 0, type };
+            existing.count++;
+            existing.sizeBytes += entry.size ?? 0;
+            typeMap.set(type, existing);
+          }
+          const typeBreakdown = [...typeMap.values()].sort((a, b) => b.sizeBytes - a.sizeBytes);
+
+          return { lastModified, name, oldestEntry, totalSizeBytes, typeBreakdown, urls };
         }),
       );
       buckets.value = settled

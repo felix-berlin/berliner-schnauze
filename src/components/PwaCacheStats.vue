@@ -5,6 +5,10 @@
       <span class="c-pwa-cache__stat-label">{{ bucketCount === 1 ? "Cache" : "Caches" }} gecacht</span>
     </div>
     <div class="c-pwa-cache__stat">
+      <span class="c-pwa-cache__stat-value">{{ totalEntryCount }}</span>
+      <span class="c-pwa-cache__stat-label">{{ totalEntryCount === 1 ? "Eintrag" : "Einträge" }} gesamt</span>
+    </div>
+    <div class="c-pwa-cache__stat">
       <span class="c-pwa-cache__stat-value">{{ formatBytes(totalSizeBytes) }}</span>
       <span class="c-pwa-cache__stat-label">gesamt</span>
     </div>
@@ -20,7 +24,8 @@ import { formatBytes, type StorageQuota } from "@composables/useCacheStorage";
 
 defineProps<{
   bucketCount: number;
-  totalSizeBytes: number;
   storageQuota: StorageQuota | null;
+  totalEntryCount: number;
+  totalSizeBytes: number;
 }>();
 </script>
