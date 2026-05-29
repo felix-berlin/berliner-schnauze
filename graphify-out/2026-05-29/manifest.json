@@ -225,8 +225,8 @@
     "semantic_hash": "7bff4858e568d75ff1c946e19e45ed83"
   },
   "/home/felix/workspace/berliner-schnauze/src/tests/unit/composable/useCacheStorage.test.ts": {
-    "mtime": 1780065873.9676626,
-    "ast_hash": "986cea3a9211b47ad68a24d8b7a5a903",
+    "mtime": 1780066402.3915727,
+    "ast_hash": "275e52c7dc8288cc073282cdd896fcf5",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/tests/unit/utils/getWordType.test.ts": {
@@ -625,8 +625,8 @@
     "semantic_hash": "52e6b8b57745c8dab904a0cd2b707536"
   },
   "/home/felix/workspace/berliner-schnauze/src/composable/useCacheStorage.ts": {
-    "mtime": 1780065803.6876705,
-    "ast_hash": "afc0c774dfd9393d5ed9f2a0dfa52513",
+    "mtime": 1780066340.4515727,
+    "ast_hash": "dfab1cb7e30a47718fc818c7014e9dab",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/utils/supportedBrowsers.mjs": {

@@ -1,16 +1,16 @@
 # Graph Report - berliner-schnauze  (2026-05-29)
 
 ## Corpus Check
-- 159 files · ~54,018 words
+- 159 files · ~53,973 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 803 nodes · 1048 edges · 105 communities (64 shown, 41 thin omitted)
+- 805 nodes · 1051 edges · 106 communities (64 shown, 42 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 58 edges (avg confidence: 0.83)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ae978235`
+- Built from commit: `1757e394`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -36,11 +36,11 @@
 - [[_COMMUNITY_GraphQL Mutations & Queries|GraphQL Mutations & Queries]]
 - [[_COMMUNITY_Audio Playback Controls|Audio Playback Controls]]
 - [[_COMMUNITY_Search Modal UI|Search Modal UI]]
-- [[_COMMUNITY_App Shell & Theme|App Shell & Theme]]
+- [[_COMMUNITY_Community 21|Community 21]]
 - [[_COMMUNITY_Word Index Page|Word Index Page]]
-- [[_COMMUNITY_Dark Mode Toggle|Dark Mode Toggle]]
-- [[_COMMUNITY_Image Gallery|Image Gallery]]
-- [[_COMMUNITY_Cookie & PWA Service|Cookie & PWA Service]]
+- [[_COMMUNITY_Community 23|Community 23]]
+- [[_COMMUNITY_Community 24|Community 24]]
+- [[_COMMUNITY_Community 26|Community 26]]
 - [[_COMMUNITY_API Service Layer|API Service Layer]]
 - [[_COMMUNITY_GQL Fragment Definitions|GQL Fragment Definitions]]
 - [[_COMMUNITY_Form & Auth Components|Form & Auth Components]]
@@ -48,7 +48,7 @@
 - [[_COMMUNITY_Virtualized Word List|Virtualized Word List]]
 - [[_COMMUNITY_Toast Notification System|Toast Notification System]]
 - [[_COMMUNITY_Word Examples & Audio|Word Examples & Audio]]
-- [[_COMMUNITY_PWA Install Store|PWA Install Store]]
+- [[_COMMUNITY_Community 34|Community 34]]
 - [[_COMMUNITY_Helper Utility Tests|Helper Utility Tests]]
 - [[_COMMUNITY_Word Utility Tests|Word Utility Tests]]
 - [[_COMMUNITY_Toast Container|Toast Container]]
@@ -87,7 +87,7 @@
 - [[_COMMUNITY_SingleLoader Component|SingleLoader Component]]
 - [[_COMMUNITY_SocialList Component|SocialList Component]]
 - [[_COMMUNITY_TurnStile Component|TurnStile Component]]
-- [[_COMMUNITY_Cache Storage Tests|Cache Storage Tests]]
+- [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Bear Walking Image|Bear Walking Image]]
 - [[_COMMUNITY_Test Setup|Test Setup]]
 - [[_COMMUNITY_ConfettiEffect Props|ConfettiEffect Props]]
@@ -108,6 +108,7 @@
 - [[_COMMUNITY_Community 99|Community 99]]
 - [[_COMMUNITY_Community 100|Community 100]]
 - [[_COMMUNITY_Community 101|Community 101]]
+- [[_COMMUNITY_Community 105|Community 105]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `@/gql/graphql.ts` - 42 edges
@@ -126,12 +127,12 @@
   src/components/SetColorMode.astro → src/stores/wordList.ts
 - `CookieConsent` --semantically_similar_to--> `trackEvent()`  [INFERRED] [semantically similar]
   src/components/CookieConsent.vue → src/utils/analytics.ts
+- `fetchAPI()` --semantically_similar_to--> `getWordOfTheDay()`  [INFERRED] [semantically similar]
+  src/services/fetchApi.ts → src/stores/wordOfTheDay.ts
 - `WordSearchLink` --semantically_similar_to--> `WordOfTheDay`  [INFERRED] [semantically similar]
   src/components/WordSearchLink.vue → src/components/WordOfTheDay.vue
 - `env.d.ts: global ambient types (Turnstile, Window._paq, astro refs)` --semantically_similar_to--> `vendor.d.ts: ambient module declarations (hypher, hyphenation.de, de-compromise)`  [INFERRED] [semantically similar]
   src/env.d.ts → src/types/vendor.d.ts
-- `checkBrowserSupport()` --references--> `vendor.d.ts: ambient module declarations (hypher, hyphenation.de, de-compromise)`  [INFERRED]
-  src/lib/unsupportedBrowser.ts → src/types/vendor.d.ts
 
 ## Hyperedges (group relationships)
 - **All Nanostores stores (persistent + atom + map)** — stores_darkmode_isdarkmode, stores_wordlist_wordsearch, stores_wordoftheday_wordoftheday, stores_toastnotify_toastnotify, stores_installapp_installprompt, stores_modal_isopen, stores_modal_props [EXTRACTED 1.00]
@@ -141,11 +142,11 @@
 - **GQL generated type layer (graphql.ts, gql.ts, fragment-masking.ts, entity-types.ts, index.ts)** — gql_graphql_generatedtypes, gql_gql_graphqlfunction, gql_fragmentmasking_usefragment, gql_entitytypes_berlinerword, gql_index_gqlbarrel [EXTRACTED 1.00]
 - **Search API routes (index + meta) forming the Orama search data pipeline** — pages_api_searchindexroute, pages_api_searchmetaroute, pages_api_ormasearchindex_type [EXTRACTED 0.95]
 
-## Communities (105 total, 41 thin omitted)
+## Communities (106 total, 42 thin omitted)
 
 ### Community 0 - "Orama Search Engine"
-Cohesion: 0.13
-Nodes (14): fetchWikimediaAPI(), result, allWords, currentWord, result, mockWords, result, capitalizeFirstLetter() (+6 more)
+Cohesion: 0.17
+Nodes (9): ConfettiEffect, wrapper, SingleLoader, CountdownLogic, WordOfTheDay, $wordOfTheDay, isWordOfTheDay, wrapper (+1 more)
 
 ### Community 1 - "Site Layout & Footer"
 Cohesion: 0.06
@@ -156,36 +157,36 @@ Cohesion: 0.08
 Nodes (39): $activeFilterCount store atom, Filter flyout panel pattern, Shift+/ keyboard shortcut to open search, open() modal store action, rangeFilterMinMax $wordSearch field, resetAll filter action, $searchResultCount store atom, setActiveOrderCategory action (+31 more)
 
 ### Community 3 - "Word List Filtering"
-Cohesion: 0.08
-Nodes (19): WordSuggestHint, button, $activeFilterCount, CleanBerlinerWord, initOrama(), $oramaSearchResults, RangeFilterMinMax, searchLength (+11 more)
+Cohesion: 0.09
+Nodes (14): WordSuggestHint, $activeFilterCount, CleanBerlinerWord, initOrama(), $oramaSearchResults, RangeFilterMinMax, searchLength, $searchResultCount (+6 more)
 
 ### Community 4 - "Word Display & GQL Types"
 Cohesion: 0.11
 Nodes (26): RandomWordButton, RelatedWords, BerlinerWord, fragment-masking.ts: useFragment / makeFragmentData / isFragmentReady, gql.ts: graphql() typed document map function, graphql.ts: codegen-generated GQL types and fragments, gql/index.ts: barrel re-export of gql.ts, result (+18 more)
 
 ### Community 5 - "Asset & SEO Setup"
-Cohesion: 0.10
-Nodes (19): /fonts/Berlin-Bold.woff2, /fonts/Berlin-Italic.woff2, /fonts/Berlin.woff2, /fonts/BerlinerRegular.woff2, canonicalURL, testObject, testObject, elements (+11 more)
+Cohesion: 0.16
+Nodes (11): /fonts/Berlin-Bold.woff2, /fonts/Berlin-Italic.woff2, /fonts/Berlin.woff2, /fonts/BerlinerRegular.woff2, canonicalURL, @/types/seo, @/utils/helpers, @components/SetColorMode.astro (+3 more)
 
 ### Community 6 - "Modal & PWA Cache"
 Cohesion: 0.11
 Nodes (23): Modal, ModalCloseButton, button, strong, wrapper, stores/index.ts (barrel export), close(), $element (+15 more)
 
 ### Community 7 - "Cache Storage Composable"
-Cohesion: 0.11
-Nodes (15): ChevronDown, X, BUCKET_NAME_MAP, CacheBucket, formatBytes(), getBucketDisplayName(), StorageQuota, SwInfo (+7 more)
+Cohesion: 0.07
+Nodes (26): ChevronDown, X, BUCKET_NAME_MAP, CacheBucket, formatBytes(), getBucketDisplayName(), StorageQuota, SwInfo (+18 more)
 
 ### Community 8 - "GraphQL Type Definitions"
 Cohesion: 0.10
 Nodes (24): BerlinerWordFragment, BerlinerWordFragmentDoc, Exact, GetAllWordsLinksQueryVariables, GetPagesBySlugsQuery, GetPagesBySlugsQueryVariables, MediaItemFragment, MediaItemFragmentDoc (+16 more)
 
 ### Community 9 - "Word of the Day"
-Cohesion: 0.05
-Nodes (26): computedState, X, milliseconds, breakpoints, largerThanSm, preferredMotion, searchLinkIconWrapClass, attrs (+18 more)
+Cohesion: 0.17
+Nodes (9): milliseconds, @assets/images/brown-bear-roar.png, @styles/components/_fact-card.scss, @styles/components/_facts-grid.scss, @styles/objects/_index.scss, content, facts, img (+1 more)
 
 ### Community 10 - "Button States & Sort Controls"
-Cohesion: 0.27
-Nodes (10): fetchAllWords(), extractWordTypes(), GET(), hypher, makeOramaSearchIndex(), GET(), hypher, countLetters() (+2 more)
+Cohesion: 0.07
+Nodes (33): fetchAllWords(), extractWordTypes(), GET(), hypher, makeOramaSearchIndex(), OramaSearchIndex, GET(), hypher (+25 more)
 
 ### Community 11 - "Word Status Components"
 Cohesion: 0.10
@@ -209,12 +210,12 @@ Nodes (17): ConfirmDialog, {
 }, CircleCheck, CircleX, Clock, Component, confirmClearAll(), confirmClearBucket() (+9 more)
 
 ### Community 13 - "Word Detail Page"
-Cohesion: 0.12
-Nodes (12): wrapper, ~icons/lucide/external-link, @styles/components/_single-word.scss, @styles/objects/_word.scss, removeFileExtension(), alternativeWords, galleryWidths, hypher (+4 more)
+Cohesion: 0.14
+Nodes (11): ~icons/lucide/external-link, @styles/components/_single-word.scss, @styles/objects/_word.scss, removeFileExtension(), alternativeWords, galleryWidths, hypher, isNomenPresent (+3 more)
 
 ### Community 14 - "Visual Feedback Components"
-Cohesion: 0.09
-Nodes (17): astro:env/client, ConfettiEffect, wrapper, SingleLoader, CountdownLogic, WordOfTheDay, fetchAPI(), $wordOfTheDay (+9 more)
+Cohesion: 0.20
+Nodes (11): CookieConsent, ImageGallery, ImageGalleryCustomElement, ImageGalleryProps, ScrollToTop, ScrollToTopProps, WordSearchLink, onOfflineReady() (+3 more)
 
 ### Community 15 - "Word Query Layer"
 Cohesion: 0.17
@@ -225,40 +226,36 @@ Cohesion: 0.21
 Nodes (9): debouncedTrackSearch, localSearch, searchInput, searchLength, searchResultCount, trackWordSearchListSearch(), updateSearch, isBrowser() (+1 more)
 
 ### Community 17 - "Search Filter Behaviour"
-Cohesion: 0.29
-Nodes (4): hideDropdown, wordSearch, wordSearch, $wordSearch
-
-### Community 18 - "GraphQL Mutations & Queries"
-Cohesion: 0.18
-Nodes (8): ~icons/lucide/chevron-right, GetAllWordsLinksQuery, @/gql/graphql, @styles/components/_word-group.scss, @styles/objects/_word-index.scss, @styles/plugins/astro-breadcrumbs.scss, content, sortedGroups
+Cohesion: 0.22
+Nodes (6): SearchWords, hideDropdown, wordSearch, wordSearch, wordSearch, $wordSearch
 
 ### Community 19 - "Audio Playback Controls"
 Cohesion: 0.22
 Nodes (7): fillStyle, isPlaying, playAudio(), progress, stopAudio(), wrapper, togglePlayStop()
 
 ### Community 20 - "Search Modal UI"
-Cohesion: 0.18
-Nodes (7): SearchWords, @components/word-search/WordSearchList.vue, $searchResultCount, searchResultCount, activeFilterCount, searchResultCount, WordSuggestHint
+Cohesion: 0.20
+Nodes (6): @components/word-search/WordSearchList.vue, $searchResultCount, searchResultCount, activeFilterCount, searchResultCount, WordSuggestHint
 
-### Community 21 - "App Shell & Theme"
+### Community 21 - "Community 21"
 Cohesion: 0.20
 Nodes (6): @urql/core, Documents, DocumentType, graphql(), SendEmail, GetPagesBySlugs
 
 ### Community 22 - "Word Index Page"
-Cohesion: 0.32
-Nodes (6): createToast(), hidePopover(), removeToastById(), supportsPopover(), ToastPayload, ToastStatus
+Cohesion: 0.18
+Nodes (8): ~icons/lucide/chevron-right, GetAllWordsLinksQuery, @/gql/graphql, @styles/components/_word-group.scss, @styles/objects/_word-index.scss, @styles/plugins/astro-breadcrumbs.scss, content, sortedGroups
 
-### Community 23 - "Dark Mode Toggle"
+### Community 23 - "Community 23"
 Cohesion: 0.20
 Nodes (9): Moon, Sun, button, dom, html, wrapper, toggleMode, @components/ColorModeToggle.vue (+1 more)
 
-### Community 24 - "Image Gallery"
-Cohesion: 0.31
-Nodes (7): useCacheStorage(), checkBrowserSupport(), isBrowserSupported(), registerSW() call, $isPwaInstalled, $showInstallButton, createToastNotify()
-
-### Community 26 - "Cookie & PWA Service"
+### Community 24 - "Community 24"
 Cohesion: 0.20
-Nodes (11): CookieConsent, ImageGallery, ImageGalleryCustomElement, ImageGalleryProps, ScrollToTop, ScrollToTopProps, WordSearchLink, onOfflineReady() (+3 more)
+Nodes (6): breakpoints, largerThanSm, preferredMotion, searchLinkIconWrapClass, @styles/components/_word-search-link.scss, virtual:icons/lucide/mouse-pointer-click
+
+### Community 26 - "Community 26"
+Cohesion: 0.27
+Nodes (6): testObject, testObject, checkObjectValueLength(), checkObjectValues(), formattedDate(), seoData()
 
 ### Community 27 - "API Service Layer"
 Cohesion: 0.25
@@ -288,9 +285,9 @@ Nodes (6): Close, isOpen, isSupported, { isSwiping }, StylePositionType, toastIc
 Cohesion: 0.29
 Nodes (6): Maybe, @/gql/entity-types, virtual:icons/lucide/quote, @components/AudioPlayerList.vue, AudioPlayerList, props
 
-### Community 34 - "PWA Install Store"
-Cohesion: 0.60
-Nodes (4): BeforeInstallPromptEvent, disableInAppInstallPrompt(), $installPrompt, triggerPwaInstall()
+### Community 34 - "Community 34"
+Cohesion: 0.31
+Nodes (6): BeforeInstallPromptEvent, disableInAppInstallPrompt(), $installPrompt, $isPwaInstalled, $showInstallButton, triggerPwaInstall()
 
 ### Community 35 - "Helper Utility Tests"
 Cohesion: 0.29
@@ -321,8 +318,8 @@ Cohesion: 0.40
 Nodes (3): href, words, wrapper
 
 ### Community 43 - "Legal Pages"
-Cohesion: 0.40
-Nodes (3): GetPagesBySlugsDocument, @styles/objects/_legal-pages.scss, client
+Cohesion: 0.17
+Nodes (6): astro:env/client, GetPagesBySlugsDocument, @styles/objects/_legal-pages.scss, client, fetchAPI(), refreshToken()
 
 ### Community 44 - "Toast Popover Concepts"
 Cohesion: 0.40
@@ -337,8 +334,8 @@ Cohesion: 0.20
 Nodes (4): GetImageResult, @utils/analytics, photoswipe/lightbox, photoswipe/style.css
 
 ### Community 48 - "Dark Mode Store"
-Cohesion: 0.29
-Nodes (5): options, selected, select, wrapper, $setSortOrder()
+Cohesion: 0.11
+Nodes (12): computedState, X, options, selected, attrs, mockWordSearch, multiselect, @styles/components/_filter-search.scss (+4 more)
 
 ### Community 49 - "Search Modal State"
 Cohesion: 0.50
@@ -349,44 +346,48 @@ Cohesion: 0.22
 Nodes (8): BerlinerWord, MediaItem, PostTypeSeoFragment, WordProperties, WordPropertiesBerlinerischAudio, WordPropertiesExamples, WordPropertiesExamplesExampleAudio, WordPropertiesWikimediaFiles
 
 ### Community 56 - "Community 56"
-Cohesion: 0.29
-Nodes (5): mockSetActiveOrderCategory, mockToggleFn, mockWordSearch, wrapper, wordSearch
-
-### Community 73 - "Cache Storage Tests"
 Cohesion: 0.40
-Nodes (3): OramaSearchIndex, IsWordOfTheDay, WordOptionDropdown
+Nodes (4): mockSetActiveOrderCategory, mockToggleFn, mockWordSearch, wrapper
+
+### Community 73 - "Community 73"
+Cohesion: 0.25
+Nodes (5): button, setLetterFilter(), setWordTypeFilter(), $toggleBerolinismus(), useViewTransition()
+
+### Community 98 - "Community 98"
+Cohesion: 0.40
+Nodes (5): Example, getWordOfTheDay(), Translation, Word, WordOfTheDay
 
 ### Community 99 - "Community 99"
 Cohesion: 0.50
-Nodes (3): doc, expectedTags, result
+Nodes (3): select, wrapper, $setSortOrder()
 
 ### Community 100 - "Community 100"
 Cohesion: 0.50
-Nodes (3): englishTags, expectedGermanTags, expectedTags
+Nodes (3): elements, result, randomElement()
 
 ## Ambiguous Edges - Review These
 - `$wordSearch` → `ThemeInitializationLogic`  [AMBIGUOUS]
   src/components/SetColorMode.astro · relation: semantically_similar_to
 
 ## Knowledge Gaps
-- **355 isolated node(s):** `StorageQuota`, `SwStatus`, `SwInfo`, `BUCKET_NAME_MAP`, `{ result, unmount }` (+350 more)
+- **355 isolated node(s):** `BeforeInstallPromptEvent`, `StorageQuota`, `SwStatus`, `SwInfo`, `BUCKET_NAME_MAP` (+350 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **41 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **42 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **What is the exact relationship between `$wordSearch` and `ThemeInitializationLogic`?**
   _Edge tagged AMBIGUOUS (relation: semantically_similar_to) - confidence is low._
-- **Why does `@layouts/Layout.astro` connect `Site Layout & Footer` to `Toast Container`, `Asset & SEO Setup`, `Word of the Day`, `Legal Pages`, `PWA Cache Management`, `Word Detail Page`, `GraphQL Mutations & Queries`?**
+- **Why does `@layouts/Layout.astro` connect `Site Layout & Footer` to `Toast Container`, `Asset & SEO Setup`, `Word of the Day`, `Legal Pages`, `PWA Cache Management`, `Word Detail Page`, `Word Index Page`?**
   _High betweenness centrality (0.080) - this node is a cross-community bridge._
-- **Why does `@/gql/graphql.ts` connect `GraphQL Type Definitions` to `GQL Fragment Masking`, `Legal Pages`, `Word Query Layer`, `GraphQL Mutations & Queries`, `App Shell & Theme`, `Form & Auth Components`?**
+- **Why does `@/gql/graphql.ts` connect `GraphQL Type Definitions` to `GQL Fragment Masking`, `Legal Pages`, `Word Query Layer`, `Community 21`, `Word Index Page`, `Form & Auth Components`?**
   _High betweenness centrality (0.071) - this node is a cross-community bridge._
-- **Why does `trackEvent()` connect `Cookie & PWA Service` to `PWA Install Store`, `Word List Filtering`, `Visual Feedback Components`, `Search Input Logic`, `Dark Mode Store`, `Dark Mode Toggle`, `Image Gallery`, `Form & Auth Components`?**
+- **Why does `trackEvent()` connect `Visual Feedback Components` to `Community 34`, `Word List Filtering`, `Community 99`, `Community 98`, `Cache Storage Composable`, `Community 73`, `Search Input Logic`, `Community 23`, `Form & Auth Components`?**
   _High betweenness centrality (0.036) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `trackEvent()` (e.g. with `CookieConsent` and `WordOfTheDay`) actually correct?**
   _`trackEvent()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 3 inferred relationships involving `WordFilter` (e.g. with `SearchModal` and `Filter flyout panel pattern`) actually correct?**
   _`WordFilter` has 3 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `StorageQuota`, `SwStatus`, `SwInfo` to the rest of the system?**
+- **What connects `BeforeInstallPromptEvent`, `StorageQuota`, `SwStatus` to the rest of the system?**
   _355 weakly-connected nodes found - possible documentation gaps or missing edges._

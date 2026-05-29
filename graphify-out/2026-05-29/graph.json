@@ -98,247 +98,409 @@
   },
   "nodes": [
     {
+      "label": "useCacheStorage.ts",
+      "file_type": "code",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L1",
+      "id": "src_composable_usecachestorage_ts",
+      "community": 7,
+      "norm_label": "usecachestorage.ts"
+    },
+    {
+      "label": "CacheBucket",
+      "file_type": "code",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L5",
+      "id": "composable_usecachestorage_cachebucket",
+      "community": 7,
+      "norm_label": "cachebucket"
+    },
+    {
+      "label": "StorageQuota",
+      "file_type": "code",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L13",
+      "id": "composable_usecachestorage_storagequota",
+      "community": 7,
+      "norm_label": "storagequota"
+    },
+    {
+      "label": "SwStatus",
+      "file_type": "code",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L18",
+      "id": "composable_usecachestorage_swstatus",
+      "community": 7,
+      "norm_label": "swstatus"
+    },
+    {
+      "label": "SwInfo",
+      "file_type": "code",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L20",
+      "id": "composable_usecachestorage_swinfo",
+      "community": 7,
+      "norm_label": "swinfo"
+    },
+    {
+      "label": "BUCKET_NAME_MAP",
+      "file_type": "code",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L24",
+      "id": "composable_usecachestorage_bucket_name_map",
+      "community": 7,
+      "norm_label": "bucket_name_map"
+    },
+    {
+      "label": "formatBytes()",
+      "file_type": "code",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L31",
+      "id": "composable_usecachestorage_formatbytes",
+      "community": 7,
+      "norm_label": "formatbytes()"
+    },
+    {
+      "label": "getBucketDisplayName()",
+      "file_type": "code",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L38",
+      "id": "composable_usecachestorage_getbucketdisplayname",
+      "community": 7,
+      "norm_label": "getbucketdisplayname()"
+    },
+    {
+      "label": "useCacheStorage()",
+      "file_type": "code",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L45",
+      "id": "composable_usecachestorage_usecachestorage",
+      "community": 29,
+      "norm_label": "usecachestorage()"
+    },
+    {
+      "label": "useCacheStorage.test.ts",
+      "file_type": "code",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L1",
+      "id": "src_tests_unit_composable_usecachestorage_test_ts",
+      "community": 7,
+      "norm_label": "usecachestorage.test.ts"
+    },
+    {
+      "label": "withSetup()",
+      "file_type": "code",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L9",
+      "id": "composable_usecachestorage_test_withsetup",
+      "community": 7,
+      "norm_label": "withsetup()"
+    },
+    {
+      "label": "makeMockCacheStorage()",
+      "file_type": "code",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L23",
+      "id": "composable_usecachestorage_test_makemockcachestorage",
+      "community": 7,
+      "norm_label": "makemockcachestorage()"
+    },
+    {
+      "label": "{ result, unmount }",
+      "file_type": "code",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L130",
+      "id": "composable_usecachestorage_test_result_unmount",
+      "community": 7,
+      "norm_label": "{ result, unmount }"
+    },
+    {
+      "label": "promise",
+      "file_type": "code",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L200",
+      "id": "composable_usecachestorage_test_promise",
+      "community": 7,
+      "norm_label": "promise"
+    },
+    {
+      "label": "fetchSpy",
+      "file_type": "code",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L304",
+      "id": "composable_usecachestorage_test_fetchspy",
+      "community": 7,
+      "norm_label": "fetchspy"
+    },
+    {
+      "label": "reloadSpy",
+      "file_type": "code",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L551",
+      "id": "composable_usecachestorage_test_reloadspy",
+      "community": 7,
+      "norm_label": "reloadspy"
+    },
+    {
+      "label": "removeSpy",
+      "file_type": "code",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L589",
+      "id": "composable_usecachestorage_test_removespy",
+      "community": 7,
+      "norm_label": "removespy"
+    },
+    {
+      "label": "{ unmount }",
+      "file_type": "code",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L590",
+      "id": "composable_usecachestorage_test_unmount",
+      "community": 7,
+      "norm_label": "{ unmount }"
+    },
+    {
       "label": "PwaCacheActions.vue",
       "file_type": "code",
       "source_file": "src/components/PwaCacheActions.vue",
       "source_location": "L1",
-      "id": "src_components_pwacacheactions_vue",
       "community": 101,
-      "norm_label": "pwacacheactions.vue"
+      "norm_label": "pwacacheactions.vue",
+      "id": "src_components_pwacacheactions_vue"
     },
     {
       "label": "RotateCcw",
       "file_type": "code",
       "source_file": "src/components/PwaCacheActions.vue",
       "source_location": "L32",
-      "id": "components_pwacacheactions_rotateccw",
       "community": 101,
-      "norm_label": "rotateccw"
+      "norm_label": "rotateccw",
+      "id": "components_pwacacheactions_rotateccw"
     },
     {
       "label": "Trash2",
       "file_type": "code",
       "source_file": "src/components/PwaCacheActions.vue",
       "source_location": "L33",
-      "id": "components_pwacacheactions_trash2",
       "community": 101,
-      "norm_label": "trash2"
+      "norm_label": "trash2",
+      "id": "components_pwacacheactions_trash2"
     },
     {
       "label": "PwaCacheBucketList.vue",
       "file_type": "code",
       "source_file": "src/components/PwaCacheBucketList.vue",
       "source_location": "L1",
-      "id": "src_components_pwacachebucketlist_vue",
       "community": 7,
-      "norm_label": "pwacachebucketlist.vue"
+      "norm_label": "pwacachebucketlist.vue",
+      "id": "src_components_pwacachebucketlist_vue"
     },
     {
       "label": "ChevronDown",
       "file_type": "code",
       "source_file": "src/components/PwaCacheBucketList.vue",
       "source_location": "L81",
-      "id": "components_pwacachebucketlist_chevrondown",
       "community": 7,
-      "norm_label": "chevrondown"
+      "norm_label": "chevrondown",
+      "id": "components_pwacachebucketlist_chevrondown"
     },
     {
       "label": "X",
       "file_type": "code",
       "source_file": "src/components/PwaCacheBucketList.vue",
       "source_location": "L82",
-      "id": "components_pwacachebucketlist_x",
       "community": 7,
-      "norm_label": "x"
+      "norm_label": "x",
+      "id": "components_pwacachebucketlist_x"
     },
     {
       "label": "formatUrl()",
       "file_type": "code",
       "source_file": "src/components/PwaCacheBucketList.vue",
       "source_location": "L84",
-      "id": "components_pwacachebucketlist_formaturl",
       "community": 7,
-      "norm_label": "formaturl()"
+      "norm_label": "formaturl()",
+      "id": "components_pwacachebucketlist_formaturl"
     },
     {
       "label": "formatRelativeTime()",
       "file_type": "code",
       "source_file": "src/components/PwaCacheBucketList.vue",
       "source_location": "L93",
-      "id": "components_pwacachebucketlist_formatrelativetime",
       "community": 7,
-      "norm_label": "formatrelativetime()"
+      "norm_label": "formatrelativetime()",
+      "id": "components_pwacachebucketlist_formatrelativetime"
     },
     {
       "label": "PwaCacheHeader.vue",
       "file_type": "code",
       "source_file": "src/components/PwaCacheHeader.vue",
       "source_location": "L1",
-      "id": "src_components_pwacacheheader_vue",
       "community": 102,
-      "norm_label": "pwacacheheader.vue"
+      "norm_label": "pwacacheheader.vue",
+      "id": "src_components_pwacacheheader_vue"
     },
     {
       "label": "PwaCacheInfoGrid.vue",
       "file_type": "code",
       "source_file": "src/components/PwaCacheInfoGrid.vue",
       "source_location": "L1",
-      "id": "src_components_pwacacheinfogrid_vue",
       "community": 103,
-      "norm_label": "pwacacheinfogrid.vue"
+      "norm_label": "pwacacheinfogrid.vue",
+      "id": "src_components_pwacacheinfogrid_vue"
     },
     {
       "label": "PwaCacheOverview.vue",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L1",
-      "id": "src_components_pwacacheoverview_vue",
       "community": 12,
-      "norm_label": "pwacacheoverview.vue"
+      "norm_label": "pwacacheoverview.vue",
+      "id": "src_components_pwacacheoverview_vue"
     },
     {
       "label": "CircleCheck",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L71",
-      "id": "components_pwacacheoverview_circlecheck",
       "community": 12,
-      "norm_label": "circlecheck"
+      "norm_label": "circlecheck",
+      "id": "components_pwacacheoverview_circlecheck"
     },
     {
       "label": "CircleX",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L72",
-      "id": "components_pwacacheoverview_circlex",
       "community": 12,
-      "norm_label": "circlex"
+      "norm_label": "circlex",
+      "id": "components_pwacacheoverview_circlex"
     },
     {
       "label": "Clock",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L73",
-      "id": "components_pwacacheoverview_clock",
       "community": 12,
-      "norm_label": "clock"
+      "norm_label": "clock",
+      "id": "components_pwacacheoverview_clock"
     },
     {
       "label": "Loader",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L74",
-      "id": "components_pwacacheoverview_loader",
       "community": 12,
-      "norm_label": "loader"
+      "norm_label": "loader",
+      "id": "components_pwacacheoverview_loader"
     },
     {
       "label": "{\n  buckets,\n  clearAll,\n  clearBucket,\n  isCacheAvailable,\n  isLoading,\n  loadCaches,\n  loadError,\n  onlineStatus,\n  reSync,\n  storageQuota,\n  swInfo,\n  totalSizeBytes,\n}",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L76",
-      "id": "components_pwacacheoverview_buckets_clearall_clearbucket_iscacheavailable_isloading_loadcaches_loaderror_onlinestatus_resync_storagequota_swinfo_totalsizebytes",
       "community": 12,
-      "norm_label": "{\n  buckets,\n  clearall,\n  clearbucket,\n  iscacheavailable,\n  isloading,\n  loadcaches,\n  loaderror,\n  onlinestatus,\n  resync,\n  storagequota,\n  swinfo,\n  totalsizebytes,\n}"
+      "norm_label": "{\n  buckets,\n  clearall,\n  clearbucket,\n  iscacheavailable,\n  isloading,\n  loadcaches,\n  loaderror,\n  onlinestatus,\n  resync,\n  storagequota,\n  swinfo,\n  totalsizebytes,\n}",
+      "id": "components_pwacacheoverview_buckets_clearall_clearbucket_iscacheavailable_isloading_loadcaches_loaderror_onlinestatus_resync_storagequota_swinfo_totalsizebytes"
     },
     {
       "label": "ConfirmDialog",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L91",
-      "id": "components_pwacacheoverview_confirmdialog",
       "community": 12,
-      "norm_label": "confirmdialog"
+      "norm_label": "confirmdialog",
+      "id": "components_pwacacheoverview_confirmdialog"
     },
     {
       "label": "isPwaInstalled",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L93",
-      "id": "components_pwacacheoverview_ispwainstalled",
       "community": 12,
-      "norm_label": "ispwainstalled"
+      "norm_label": "ispwainstalled",
+      "id": "components_pwacacheoverview_ispwainstalled"
     },
     {
       "label": "storageQuotaPercent",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L95",
-      "id": "components_pwacacheoverview_storagequotapercent",
       "community": 12,
-      "norm_label": "storagequotapercent"
+      "norm_label": "storagequotapercent",
+      "id": "components_pwacacheoverview_storagequotapercent"
     },
     {
       "label": "string",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L100",
-      "id": "components_pwacacheoverview_string",
       "community": 12,
-      "norm_label": "string"
+      "norm_label": "string",
+      "id": "components_pwacacheoverview_string"
     },
     {
       "label": "Component",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L108",
-      "id": "components_pwacacheoverview_component",
       "community": 12,
-      "norm_label": "component"
+      "norm_label": "component",
+      "id": "components_pwacacheoverview_component"
     },
     {
       "label": "swStatusLabel",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L116",
-      "id": "components_pwacacheoverview_swstatuslabel",
       "community": 12,
-      "norm_label": "swstatuslabel"
+      "norm_label": "swstatuslabel",
+      "id": "components_pwacacheoverview_swstatuslabel"
     },
     {
       "label": "swStatusIcon",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L117",
-      "id": "components_pwacacheoverview_swstatusicon",
       "community": 12,
-      "norm_label": "swstatusicon"
+      "norm_label": "swstatusicon",
+      "id": "components_pwacacheoverview_swstatusicon"
     },
     {
       "label": "swScriptURL",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L118",
-      "id": "components_pwacacheoverview_swscripturl",
       "community": 12,
-      "norm_label": "swscripturl"
+      "norm_label": "swscripturl",
+      "id": "components_pwacacheoverview_swscripturl"
     },
     {
       "label": "confirmClearAll()",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L128",
-      "id": "components_pwacacheoverview_confirmclearall",
       "community": 12,
-      "norm_label": "confirmclearall()"
+      "norm_label": "confirmclearall()",
+      "id": "components_pwacacheoverview_confirmclearall"
     },
     {
       "label": "confirmClearBucket()",
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "source_location": "L145",
-      "id": "components_pwacacheoverview_confirmclearbucket",
       "community": 12,
-      "norm_label": "confirmclearbucket()"
+      "norm_label": "confirmclearbucket()",
+      "id": "components_pwacacheoverview_confirmclearbucket"
     },
     {
       "label": "PwaCacheStats.vue",
       "file_type": "code",
       "source_file": "src/components/PwaCacheStats.vue",
       "source_location": "L1",
-      "id": "src_components_pwacachestats_vue",
       "community": 104,
-      "norm_label": "pwacachestats.vue"
+      "norm_label": "pwacachestats.vue",
+      "id": "src_components_pwacachestats_vue"
     },
     {
       "label": "Accordion.test.ts",
@@ -557,87 +719,6 @@
       "id": "components_wordlist_focusactive"
     },
     {
-      "label": "useCacheStorage.ts",
-      "file_type": "code",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L1",
-      "community": 7,
-      "norm_label": "usecachestorage.ts",
-      "id": "src_composable_usecachestorage_ts"
-    },
-    {
-      "label": "CacheBucket",
-      "file_type": "code",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L4",
-      "community": 7,
-      "norm_label": "cachebucket",
-      "id": "composable_usecachestorage_cachebucket"
-    },
-    {
-      "label": "StorageQuota",
-      "file_type": "code",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L12",
-      "community": 7,
-      "norm_label": "storagequota",
-      "id": "composable_usecachestorage_storagequota"
-    },
-    {
-      "label": "SwStatus",
-      "file_type": "code",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L17",
-      "community": 7,
-      "norm_label": "swstatus",
-      "id": "composable_usecachestorage_swstatus"
-    },
-    {
-      "label": "SwInfo",
-      "file_type": "code",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L19",
-      "community": 7,
-      "norm_label": "swinfo",
-      "id": "composable_usecachestorage_swinfo"
-    },
-    {
-      "label": "BUCKET_NAME_MAP",
-      "file_type": "code",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L23",
-      "community": 7,
-      "norm_label": "bucket_name_map",
-      "id": "composable_usecachestorage_bucket_name_map"
-    },
-    {
-      "label": "formatBytes()",
-      "file_type": "code",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L30",
-      "community": 7,
-      "norm_label": "formatbytes()",
-      "id": "composable_usecachestorage_formatbytes"
-    },
-    {
-      "label": "getBucketDisplayName()",
-      "file_type": "code",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L37",
-      "community": 7,
-      "norm_label": "getbucketdisplayname()",
-      "id": "composable_usecachestorage_getbucketdisplayname"
-    },
-    {
-      "label": "useCacheStorage()",
-      "file_type": "code",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L44",
-      "community": 24,
-      "norm_label": "usecachestorage()",
-      "id": "composable_usecachestorage_usecachestorage"
-    },
-    {
       "label": "wordList.ts",
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
@@ -696,7 +777,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L123",
-      "community": 26,
+      "community": 29,
       "norm_label": "resetall()",
       "id": "stores_wordlist_resetall"
     },
@@ -899,87 +980,6 @@
       "id": "stores_wordlist_searchresultcount"
     },
     {
-      "label": "useCacheStorage.test.ts",
-      "file_type": "code",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L1",
-      "community": 7,
-      "norm_label": "usecachestorage.test.ts",
-      "id": "src_tests_unit_composable_usecachestorage_test_ts"
-    },
-    {
-      "label": "withSetup()",
-      "file_type": "code",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L9",
-      "community": 7,
-      "norm_label": "withsetup()",
-      "id": "composable_usecachestorage_test_withsetup"
-    },
-    {
-      "label": "makeMockCacheStorage()",
-      "file_type": "code",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L23",
-      "community": 7,
-      "norm_label": "makemockcachestorage()",
-      "id": "composable_usecachestorage_test_makemockcachestorage"
-    },
-    {
-      "label": "{ result, unmount }",
-      "file_type": "code",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L130",
-      "community": 7,
-      "norm_label": "{ result, unmount }",
-      "id": "composable_usecachestorage_test_result_unmount"
-    },
-    {
-      "label": "promise",
-      "file_type": "code",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L200",
-      "community": 7,
-      "norm_label": "promise",
-      "id": "composable_usecachestorage_test_promise"
-    },
-    {
-      "label": "fetchSpy",
-      "file_type": "code",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L304",
-      "community": 7,
-      "norm_label": "fetchspy",
-      "id": "composable_usecachestorage_test_fetchspy"
-    },
-    {
-      "label": "reloadSpy",
-      "file_type": "code",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L550",
-      "community": 7,
-      "norm_label": "reloadspy",
-      "id": "composable_usecachestorage_test_reloadspy"
-    },
-    {
-      "label": "removeSpy",
-      "file_type": "code",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L588",
-      "community": 7,
-      "norm_label": "removespy",
-      "id": "composable_usecachestorage_test_removespy"
-    },
-    {
-      "label": "{ unmount }",
-      "file_type": "code",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L589",
-      "community": 7,
-      "norm_label": "{ unmount }",
-      "id": "composable_usecachestorage_test_unmount"
-    },
-    {
       "label": "env.d.ts",
       "file_type": "code",
       "source_file": "src/env.d.ts",
@@ -1011,7 +1011,7 @@
       "file_type": "code",
       "source_file": "src/plugins/sentryBrowser.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 6,
       "norm_label": "sentrybrowser.ts",
       "id": "src_plugins_sentrybrowser_ts"
     },
@@ -1020,7 +1020,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L1",
-      "community": 24,
+      "community": 29,
       "norm_label": "unsupportedbrowser.ts",
       "id": "src_lib_unsupportedbrowser_ts"
     },
@@ -1029,7 +1029,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L9",
-      "community": 24,
+      "community": 29,
       "norm_label": "isbrowsersupported()",
       "id": "lib_unsupportedbrowser_isbrowsersupported"
     },
@@ -1038,7 +1038,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L18",
-      "community": 24,
+      "community": 29,
       "norm_label": "checkbrowsersupport()",
       "id": "lib_unsupportedbrowser_checkbrowsersupport"
     },
@@ -1048,7 +1048,7 @@
       "source_file": "src/layouts/Layout.astro",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 1,
+      "community": 9,
       "norm_label": "@layouts/layout.astro",
       "id": "src_layouts_layout_astro"
     },
@@ -1057,7 +1057,7 @@
       "file_type": "code",
       "source_file": "src/styles/app.scss",
       "confidence": "EXTRACTED",
-      "community": 1,
+      "community": 9,
       "norm_label": "@styles/app.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_app_scss"
     },
@@ -1097,7 +1097,7 @@
       "source_file": "src/components/Modal.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 1,
+      "community": 9,
       "norm_label": "modal.vue",
       "id": "src_components_modal_vue"
     },
@@ -1107,7 +1107,7 @@
       "source_file": "src/components/ScrollToTop.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 1,
+      "community": 9,
       "norm_label": "scrolltotop.vue",
       "id": "src_components_scrolltotop_vue"
     },
@@ -1126,7 +1126,7 @@
       "file_type": "code",
       "source_file": "src/gql/entity-types.ts",
       "source_location": "L1",
-      "community": 8,
+      "community": 33,
       "norm_label": "entity-types.ts",
       "id": "src_gql_entity_types_ts"
     },
@@ -1189,7 +1189,7 @@
       "file_type": "code",
       "source_file": "src/gql/gql.ts",
       "source_location": "L1",
-      "community": 21,
+      "community": 43,
       "norm_label": "gql.ts",
       "id": "src_gql_gql_ts"
     },
@@ -1198,7 +1198,7 @@
       "file_type": "code",
       "source_file": "src/gql/gql.ts",
       "source_location": "L16",
-      "community": 21,
+      "community": 43,
       "norm_label": "documents",
       "id": "gql_gql_documents"
     },
@@ -1207,7 +1207,7 @@
       "file_type": "code",
       "source_file": "src/gql/gql.ts",
       "source_location": "L108",
-      "community": 21,
+      "community": 53,
       "norm_label": "graphql()",
       "id": "gql_gql_graphql"
     },
@@ -1216,7 +1216,7 @@
       "file_type": "code",
       "source_file": "src/gql/gql.ts",
       "source_location": "L112",
-      "community": 21,
+      "community": 43,
       "norm_label": "documenttype",
       "id": "gql_gql_documenttype"
     },
@@ -1298,7 +1298,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L86",
-      "community": 8,
+      "community": 33,
       "norm_label": "mediaitemfragment",
       "id": "gql_graphql_mediaitemfragment"
     },
@@ -1307,7 +1307,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L88",
-      "community": 8,
+      "community": 33,
       "norm_label": "wordpropertiesberlinerischaudiofragment",
       "id": "gql_graphql_wordpropertiesberlinerischaudiofragment"
     },
@@ -1316,7 +1316,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L90",
-      "community": 8,
+      "community": 33,
       "norm_label": "wordpropertiesexamplesexampleaudiofragment",
       "id": "gql_graphql_wordpropertiesexamplesexampleaudiofragment"
     },
@@ -1325,7 +1325,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L92",
-      "community": 8,
+      "community": 33,
       "norm_label": "wordpropertiesexamplesfragment",
       "id": "gql_graphql_wordpropertiesexamplesfragment"
     },
@@ -1334,7 +1334,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L94",
-      "community": 8,
+      "community": 33,
       "norm_label": "wordpropertieswikimediafilesfragment",
       "id": "gql_graphql_wordpropertieswikimediafilesfragment"
     },
@@ -1343,7 +1343,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L96",
-      "community": 8,
+      "community": 33,
       "norm_label": "wordpropertiesfragment",
       "id": "gql_graphql_wordpropertiesfragment"
     },
@@ -1352,7 +1352,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L101",
-      "community": 8,
+      "community": 33,
       "norm_label": "berlinerwordfragment",
       "id": "gql_graphql_berlinerwordfragment"
     },
@@ -1424,7 +1424,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L143",
-      "community": 18,
+      "community": 9,
       "norm_label": "getallwordslinksquery",
       "id": "gql_graphql_getallwordslinksquery"
     },
@@ -1541,7 +1541,7 @@
       "file_type": "code",
       "source_file": "src/gql/index.ts",
       "source_location": "L1",
-      "community": 21,
+      "community": 53,
       "norm_label": "index.ts",
       "id": "src_gql_index_ts"
     },
@@ -1595,7 +1595,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort-vorschlagen.astro",
       "source_location": "L1",
-      "community": 1,
+      "community": 9,
       "norm_label": "wort-vorschlagen.astro",
       "id": "src_pages_wort_vorschlagen_astro"
     },
@@ -1604,7 +1604,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort-vorschlagen.astro",
       "source_location": "L6",
-      "community": 1,
+      "community": 9,
       "norm_label": "page",
       "id": "pages_wort_vorschlagen_page"
     },
@@ -1659,7 +1659,7 @@
       "file_type": "code",
       "source_file": "@urql/core",
       "confidence": "EXTRACTED",
-      "community": 21,
+      "community": 43,
       "norm_label": "@urql/core",
       "id": "core"
     },
@@ -1668,7 +1668,7 @@
       "file_type": "code",
       "source_file": "astro:env/client",
       "confidence": "EXTRACTED",
-      "community": 14,
+      "community": 6,
       "norm_label": "astro:env/client",
       "id": "client"
     },
@@ -1677,7 +1677,7 @@
       "file_type": "code",
       "source_file": "src/pages/_app.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 6,
       "norm_label": "_app.ts",
       "id": "src_pages_app_ts"
     },
@@ -1686,7 +1686,7 @@
       "file_type": "code",
       "source_file": "src/pages/404.astro",
       "source_location": "L1",
-      "community": 1,
+      "community": 9,
       "norm_label": "404.astro",
       "id": "src_pages_404_astro"
     },
@@ -1769,7 +1769,7 @@
       "source_file": "src/components/word-search/WordSearch.astro",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 9,
+      "community": 48,
       "norm_label": "wordsearch.astro",
       "id": "src_components_word_search_wordsearch_astro"
     },
@@ -1934,7 +1934,7 @@
       "file_type": "code",
       "source_file": "src/styles/plugins/astro-breadcrumbs.scss",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 9,
       "norm_label": "@styles/plugins/astro-breadcrumbs.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_plugins_astro_breadcrumbs_scss"
     },
@@ -1954,7 +1954,7 @@
       "source_file": "src/components/BadgeTag.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 13,
+      "community": 18,
       "norm_label": "badgetag.vue",
       "id": "src_components_badgetag_vue"
     },
@@ -2004,7 +2004,7 @@
       "source_file": "src/components/word/IsWordOfTheDay.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 14,
+      "community": 4,
       "norm_label": "iswordoftheday.vue",
       "id": "src_components_word_iswordoftheday_vue"
     },
@@ -2044,7 +2044,7 @@
       "source_file": "src/services/api.ts",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 21,
+      "community": 53,
       "norm_label": "api.ts",
       "id": "src_services_api_ts"
     },
@@ -2063,7 +2063,7 @@
       "file_type": "code",
       "source_file": "astro-breadcrumbs",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 9,
       "norm_label": "astro-breadcrumbs",
       "id": "astro_breadcrumbs"
     },
@@ -2090,7 +2090,7 @@
       "file_type": "code",
       "source_file": "~icons/lucide/chevron-right",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 9,
       "norm_label": "~icons/lucide/chevron-right",
       "id": "chevron_right"
     },
@@ -2117,7 +2117,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L1",
-      "community": 18,
+      "community": 9,
       "norm_label": "index.astro",
       "id": "src_pages_wort_index_astro"
     },
@@ -2126,7 +2126,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L34",
-      "community": 18,
+      "community": 9,
       "norm_label": "sortedgroups",
       "id": "wort_index_sortedgroups"
     },
@@ -2135,7 +2135,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L36",
-      "community": 18,
+      "community": 9,
       "norm_label": "content",
       "id": "wort_index_content"
     },
@@ -2144,7 +2144,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L44",
-      "community": 18,
+      "community": 9,
       "norm_label": "schemajson()",
       "id": "wort_index_schemajson"
     },
@@ -2153,7 +2153,7 @@
       "file_type": "code",
       "source_file": "src/styles/objects/_word-index.scss",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 9,
       "norm_label": "@styles/objects/_word-index.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_word_index_scss"
     },
@@ -2162,7 +2162,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_word-group.scss",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 9,
       "norm_label": "@styles/components/_word-group.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_word_group_scss"
     },
@@ -2171,7 +2171,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 9,
       "norm_label": "@/gql/graphql",
       "id": "home_felix_workspace_berliner_schnauze_src_gql_graphql"
     },
@@ -2225,7 +2225,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L14",
-      "community": 73,
+      "community": 10,
       "norm_label": "oramasearchindex",
       "id": "search_index_json_oramasearchindex"
     },
@@ -2279,7 +2279,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/store/wordOfTheDay.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 6,
       "norm_label": "wordoftheday.test.ts",
       "id": "src_tests_unit_store_wordoftheday_test_ts"
     },
@@ -2288,7 +2288,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/BadgeTag.test.ts",
       "source_location": "L1",
-      "community": 13,
+      "community": 18,
       "norm_label": "badgetag.test.ts",
       "id": "src_tests_unit_components_badgetag_test_ts"
     },
@@ -2297,7 +2297,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/BadgeTag.test.ts",
       "source_location": "L8",
-      "community": 13,
+      "community": 18,
       "norm_label": "wrapper",
       "id": "components_badgetag_test_wrapper"
     },
@@ -2306,7 +2306,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/IsWordOfTheDay.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 4,
       "norm_label": "iswordoftheday.test.ts",
       "id": "src_tests_unit_components_iswordoftheday_test_ts"
     },
@@ -2315,7 +2315,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/IsWordOfTheDay.test.ts",
       "source_location": "L12",
-      "community": 14,
+      "community": 4,
       "norm_label": "wrapper",
       "id": "components_iswordoftheday_test_wrapper"
     },
@@ -2324,7 +2324,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ScrollToTop.test.ts",
       "source_location": "L1",
-      "community": 1,
+      "community": 9,
       "norm_label": "scrolltotop.test.ts",
       "id": "src_tests_unit_components_scrolltotop_test_ts"
     },
@@ -2333,7 +2333,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ScrollToTop.test.ts",
       "source_location": "L29",
-      "community": 1,
+      "community": 9,
       "norm_label": "wrapper",
       "id": "components_scrolltotop_test_wrapper"
     },
@@ -2504,7 +2504,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ColorModeToggle.test.ts",
       "source_location": "L1",
-      "community": 23,
+      "community": 29,
       "norm_label": "colormodetoggle.test.ts",
       "id": "src_tests_unit_components_colormodetoggle_test_ts"
     },
@@ -2513,7 +2513,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ColorModeToggle.test.ts",
       "source_location": "L10",
-      "community": 23,
+      "community": 29,
       "norm_label": "dom",
       "id": "components_colormodetoggle_test_dom"
     },
@@ -2522,7 +2522,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ColorModeToggle.test.ts",
       "source_location": "L17",
-      "community": 23,
+      "community": 29,
       "norm_label": "wrapper",
       "id": "components_colormodetoggle_test_wrapper"
     },
@@ -2531,7 +2531,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ColorModeToggle.test.ts",
       "source_location": "L20",
-      "community": 23,
+      "community": 29,
       "norm_label": "button",
       "id": "components_colormodetoggle_test_button"
     },
@@ -2540,7 +2540,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ColorModeToggle.test.ts",
       "source_location": "L21",
-      "community": 23,
+      "community": 29,
       "norm_label": "html",
       "id": "components_colormodetoggle_test_html"
     },
@@ -2702,7 +2702,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L1",
-      "community": 9,
+      "community": 48,
       "norm_label": "wordtypefilter.test.ts",
       "id": "src_tests_unit_components_filter_wordtypefilter_test_ts"
     },
@@ -2711,7 +2711,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L10",
-      "community": 9,
+      "community": 48,
       "norm_label": "mockwordsearch",
       "id": "filter_wordtypefilter_test_mockwordsearch"
     },
@@ -2720,7 +2720,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L33",
-      "community": 9,
+      "community": 48,
       "norm_label": "multiselect",
       "id": "filter_wordtypefilter_test_multiselect"
     },
@@ -2729,7 +2729,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L41",
-      "community": 9,
+      "community": 48,
       "norm_label": "attrs",
       "id": "filter_wordtypefilter_test_attrs"
     },
@@ -2756,7 +2756,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/word/IsWordOfTheDay.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 4,
       "norm_label": "iswordoftheday.test.ts",
       "id": "src_tests_unit_components_word_iswordoftheday_test_ts"
     },
@@ -2765,7 +2765,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/word/IsWordOfTheDay.test.ts",
       "source_location": "L27",
-      "community": 14,
+      "community": 4,
       "norm_label": "wrapper",
       "id": "word_iswordoftheday_test_wrapper"
     },
@@ -2909,7 +2909,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/similarSoundingWords.test.ts",
       "source_location": "L1",
-      "community": 0,
+      "community": 14,
       "norm_label": "similarsoundingwords.test.ts",
       "id": "src_tests_unit_utils_similarsoundingwords_test_ts"
     },
@@ -2918,7 +2918,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/similarSoundingWords.test.ts",
       "source_location": "L10",
-      "community": 0,
+      "community": 14,
       "norm_label": "allwords",
       "id": "utils_similarsoundingwords_test_allwords"
     },
@@ -2927,7 +2927,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/similarSoundingWords.test.ts",
       "source_location": "L15",
-      "community": 0,
+      "community": 14,
       "norm_label": "currentword",
       "id": "utils_similarsoundingwords_test_currentword"
     },
@@ -2936,7 +2936,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/similarSoundingWords.test.ts",
       "source_location": "L17",
-      "community": 0,
+      "community": 14,
       "norm_label": "result",
       "id": "utils_similarsoundingwords_test_result"
     },
@@ -3234,7 +3234,7 @@
       "source_file": "src/components/ColorModeToggle.vue",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 23,
+      "community": 29,
       "norm_label": "@components/colormodetoggle.vue",
       "id": "src_components_colormodetoggle_vue"
     },
@@ -3243,7 +3243,7 @@
       "file_type": "code",
       "source_file": "src/components/ColorModeToggle.vue",
       "source_location": "L32",
-      "community": 23,
+      "community": 29,
       "norm_label": "moon",
       "id": "components_colormodetoggle_moon"
     },
@@ -3252,7 +3252,7 @@
       "file_type": "code",
       "source_file": "src/components/ColorModeToggle.vue",
       "source_location": "L33",
-      "community": 23,
+      "community": 29,
       "norm_label": "sun",
       "id": "components_colormodetoggle_sun"
     },
@@ -3634,7 +3634,7 @@
       "file_type": "code",
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L1",
-      "community": 9,
+      "community": 48,
       "norm_label": "buttonwithstates.vue",
       "id": "src_components_buttonwithstates_vue"
     },
@@ -3643,7 +3643,7 @@
       "file_type": "code",
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L38",
-      "community": 9,
+      "community": 48,
       "norm_label": "x",
       "id": "components_buttonwithstates_x"
     },
@@ -3652,7 +3652,7 @@
       "file_type": "code",
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L47",
-      "community": 9,
+      "community": 48,
       "norm_label": "computedstate",
       "id": "components_buttonwithstates_computedstate"
     },
@@ -3879,7 +3879,7 @@
       "source_file": "src/components/word-search/WordFilter.vue",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 48,
       "norm_label": "@components/word-search/wordfilter.vue",
       "id": "src_components_word_search_wordfilter_vue"
     },
@@ -3888,7 +3888,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordFilter.vue",
       "source_location": "L109",
-      "community": 9,
+      "community": 48,
       "norm_label": "wordlistfilter",
       "id": "word_search_wordfilter_wordlistfilter"
     },
@@ -3897,7 +3897,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordFilter.vue",
       "source_location": "L110",
-      "community": 9,
+      "community": 48,
       "norm_label": "{ ready, start }",
       "id": "word_search_wordfilter_ready_start"
     },
@@ -3906,7 +3906,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordFilter.vue",
       "source_location": "L112",
-      "community": 9,
+      "community": 48,
       "norm_label": "showwordlistfilterflyout",
       "id": "word_search_wordfilter_showwordlistfilterflyout"
     },
@@ -3970,7 +3970,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_filter-search.scss",
       "confidence": "EXTRACTED",
-      "community": 9,
+      "community": 48,
       "norm_label": "@styles/components/_filter-search.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_filter_search_scss"
     },
@@ -4098,7 +4098,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/WordSwitch.vue",
       "source_location": "L1",
-      "community": 9,
+      "community": 48,
       "norm_label": "wordswitch.vue",
       "id": "src_components_filter_wordswitch_vue"
     },
@@ -4107,7 +4107,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/WordTypeFilter.vue",
       "source_location": "L1",
-      "community": 9,
+      "community": 48,
       "norm_label": "wordtypefilter.vue",
       "id": "src_components_filter_wordtypefilter_vue"
     },
@@ -4116,7 +4116,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/WordRangeSlider.vue",
       "source_location": "L1",
-      "community": 9,
+      "community": 48,
       "norm_label": "wordrangeslider.vue",
       "id": "src_components_filter_wordrangeslider_vue"
     },
@@ -4242,7 +4242,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L1",
-      "community": 73,
+      "community": 10,
       "norm_label": "singleword.vue",
       "id": "src_components_word_singleword_vue"
     },
@@ -4251,7 +4251,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L70",
-      "community": 73,
+      "community": 10,
       "norm_label": "iswordoftheday",
       "id": "word_singleword_iswordoftheday"
     },
@@ -4260,7 +4260,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L71",
-      "community": 73,
+      "community": 10,
       "norm_label": "wordoptiondropdown",
       "id": "word_singleword_wordoptiondropdown"
     },
@@ -4269,7 +4269,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L75",
-      "community": 73,
+      "community": 10,
       "norm_label": "highlightmatches()",
       "id": "word_singleword_highlightmatches"
     },
@@ -4278,7 +4278,7 @@
       "file_type": "code",
       "source_file": "src/components/word/IsWordOfTheDay.vue",
       "source_location": "L38",
-      "community": 14,
+      "community": 4,
       "norm_label": "wordoftheday",
       "id": "word_iswordoftheday_wordoftheday"
     },
@@ -4287,7 +4287,7 @@
       "file_type": "code",
       "source_file": "src/components/word/IsWordOfTheDay.vue",
       "source_location": "L40",
-      "community": 14,
+      "community": 4,
       "norm_label": "iswordoftheday",
       "id": "word_iswordoftheday_iswordoftheday"
     },
@@ -4377,7 +4377,7 @@
       "file_type": "code",
       "source_file": "src/utils/supportedBrowsers.mjs",
       "source_location": "L1",
-      "community": 24,
+      "community": 29,
       "norm_label": "supportedbrowsers.mjs",
       "id": "src_utils_supportedbrowsers_mjs"
     },
@@ -4386,7 +4386,7 @@
       "file_type": "code",
       "source_file": "src/utils/analytics.ts",
       "source_location": "L1",
-      "community": 16,
+      "community": 29,
       "norm_label": "analytics.ts",
       "id": "src_utils_analytics_ts"
     },
@@ -4395,7 +4395,7 @@
       "file_type": "code",
       "source_file": "src/utils/analytics.ts",
       "source_location": "L4",
-      "community": 16,
+      "community": 29,
       "norm_label": "isbrowser()",
       "id": "utils_analytics_isbrowser"
     },
@@ -4413,7 +4413,7 @@
       "file_type": "code",
       "source_file": "src/utils/analytics.ts",
       "source_location": "L35",
-      "community": 26,
+      "community": 29,
       "norm_label": "trackevent()",
       "id": "utils_analytics_trackevent"
     },
@@ -4467,7 +4467,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L150",
-      "community": 10,
+      "community": 100,
       "norm_label": "translatenlptags()",
       "id": "utils_wordhelper_translatenlptags"
     },
@@ -4476,7 +4476,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L164",
-      "community": 0,
+      "community": 14,
       "norm_label": "similarsoundingwords()",
       "id": "utils_wordhelper_similarsoundingwords"
     },
@@ -4557,7 +4557,7 @@
       "file_type": "code",
       "source_file": "src/utils/refreshToken.js",
       "source_location": "L1",
-      "community": 14,
+      "community": 6,
       "norm_label": "refreshtoken.js",
       "id": "src_utils_refreshtoken_js"
     },
@@ -4566,7 +4566,7 @@
       "file_type": "code",
       "source_file": "src/utils/refreshToken.js",
       "source_location": "L4",
-      "community": 14,
+      "community": 6,
       "norm_label": "refreshtoken()",
       "id": "utils_refreshtoken_refreshtoken"
     },
@@ -4647,7 +4647,7 @@
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L1",
-      "community": 34,
+      "community": 29,
       "norm_label": "installapp.ts",
       "id": "src_stores_installapp_ts"
     },
@@ -4656,7 +4656,7 @@
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L4",
-      "community": 34,
+      "community": 29,
       "norm_label": "beforeinstallpromptevent",
       "id": "stores_installapp_beforeinstallpromptevent"
     },
@@ -4665,7 +4665,7 @@
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L13",
-      "community": 34,
+      "community": 29,
       "norm_label": "$installprompt",
       "id": "stores_installapp_installprompt"
     },
@@ -4674,7 +4674,7 @@
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L14",
-      "community": 24,
+      "community": 29,
       "norm_label": "$showinstallbutton",
       "id": "stores_installapp_showinstallbutton"
     },
@@ -4683,7 +4683,7 @@
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L15",
-      "community": 24,
+      "community": 29,
       "norm_label": "$ispwainstalled",
       "id": "stores_installapp_ispwainstalled"
     },
@@ -4692,7 +4692,7 @@
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L58",
-      "community": 34,
+      "community": 29,
       "norm_label": "triggerpwainstall()",
       "id": "stores_installapp_triggerpwainstall"
     },
@@ -4701,7 +4701,7 @@
       "file_type": "code",
       "source_file": "src/stores/installApp.ts",
       "source_location": "L72",
-      "community": 34,
+      "community": 29,
       "norm_label": "disableinappinstallprompt()",
       "id": "stores_installapp_disableinappinstallprompt"
     },
@@ -4881,7 +4881,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L1",
-      "community": 98,
+      "community": 37,
       "norm_label": "darkmode.ts",
       "id": "src_stores_darkmode_ts"
     },
@@ -4890,7 +4890,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L3",
-      "community": 98,
+      "community": 37,
       "norm_label": "darkmode",
       "id": "stores_darkmode_darkmode"
     },
@@ -4899,7 +4899,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L5",
-      "community": 98,
+      "community": 37,
       "norm_label": "$isdarkmode",
       "id": "stores_darkmode_isdarkmode"
     },
@@ -4908,7 +4908,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L18",
-      "community": 98,
+      "community": 37,
       "norm_label": "setdarkmode()",
       "id": "stores_darkmode_setdarkmode"
     },
@@ -4917,7 +4917,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 6,
       "norm_label": "wordoftheday.ts",
       "id": "src_stores_wordoftheday_ts"
     },
@@ -4926,7 +4926,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L5",
-      "community": 14,
+      "community": 6,
       "norm_label": "word",
       "id": "stores_wordoftheday_word"
     },
@@ -4935,7 +4935,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L21",
-      "community": 14,
+      "community": 6,
       "norm_label": "example",
       "id": "stores_wordoftheday_example"
     },
@@ -4944,7 +4944,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L26",
-      "community": 14,
+      "community": 6,
       "norm_label": "translation",
       "id": "stores_wordoftheday_translation"
     },
@@ -4953,7 +4953,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L30",
-      "community": 14,
+      "community": 6,
       "norm_label": "wordoftheday",
       "id": "stores_wordoftheday_wordoftheday"
     },
@@ -4962,7 +4962,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L61",
-      "community": 14,
+      "community": 6,
       "norm_label": "getwordoftheday()",
       "id": "stores_wordoftheday_getwordoftheday"
     },
@@ -5034,7 +5034,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L67",
-      "community": 24,
+      "community": 29,
       "norm_label": "createtoastnotify()",
       "id": "stores_toastnotify_createtoastnotify"
     },
@@ -5052,7 +5052,7 @@
       "file_type": "code",
       "source_file": "src/services/fetchApi.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 6,
       "norm_label": "fetchapi.ts",
       "id": "src_services_fetchapi_ts"
     },
@@ -5061,7 +5061,7 @@
       "file_type": "code",
       "source_file": "src/services/fetchApi.ts",
       "source_location": "L3",
-      "community": 14,
+      "community": 6,
       "norm_label": "fetchapi()",
       "id": "services_fetchapi_fetchapi"
     },
@@ -5070,7 +5070,7 @@
       "file_type": "code",
       "source_file": "src/services/pwa.ts",
       "source_location": "L1",
-      "community": 26,
+      "community": 29,
       "norm_label": "pwa.ts",
       "id": "src_services_pwa_ts"
     },
@@ -5079,7 +5079,7 @@
       "file_type": "code",
       "source_file": "src/services/pwa.ts",
       "source_location": "L7",
-      "community": 26,
+      "community": 29,
       "norm_label": "onofflineready()",
       "id": "services_pwa_onofflineready"
     },
@@ -5088,7 +5088,7 @@
       "file_type": "code",
       "source_file": "src/services/pwa.ts",
       "source_location": "L21",
-      "community": 26,
+      "community": 29,
       "norm_label": "onregisteredsw()",
       "id": "services_pwa_onregisteredsw"
     },
@@ -5115,7 +5115,7 @@
       "file_type": "code",
       "source_file": "src/services/mutations/sendMail.ts",
       "source_location": "L1",
-      "community": 21,
+      "community": 53,
       "norm_label": "sendmail.ts",
       "id": "src_services_mutations_sendmail_ts"
     },
@@ -5124,7 +5124,7 @@
       "file_type": "code",
       "source_file": "src/services/mutations/sendMail.ts",
       "source_location": "L5",
-      "community": 21,
+      "community": 53,
       "norm_label": "sendemail",
       "id": "mutations_sendmail_sendemail"
     },
@@ -5133,7 +5133,7 @@
       "file_type": "code",
       "source_file": "src/services/mutations/sendMail.ts",
       "source_location": "L20",
-      "community": 21,
+      "community": 53,
       "norm_label": "sendemailviacontactform7()",
       "id": "mutations_sendmail_sendemailviacontactform7"
     },
@@ -5286,7 +5286,7 @@
       "file_type": "code",
       "source_file": "src/services/queries/getPage.ts",
       "source_location": "L1",
-      "community": 21,
+      "community": 53,
       "norm_label": "getpage.ts",
       "id": "src_services_queries_getpage_ts"
     },
@@ -5295,7 +5295,7 @@
       "file_type": "code",
       "source_file": "src/services/queries/getPage.ts",
       "source_location": "L3",
-      "community": 21,
+      "community": 53,
       "norm_label": "getpagesbyslugs",
       "id": "queries_getpage_getpagesbyslugs"
     },
@@ -5425,7 +5425,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 26,
+      "community": 29,
       "norm_label": "imagegallery",
       "id": "components_imagegallery_imagegallery"
     },
@@ -5490,7 +5490,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 29,
       "norm_label": "togglemode",
       "id": "components_colormodetoggle_togglemode"
     },
@@ -5529,7 +5529,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 26,
+      "community": 29,
       "norm_label": "wordsearchlink",
       "id": "components_wordsearchlink_wordsearchlink"
     },
@@ -5724,7 +5724,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 29,
       "norm_label": "setdarkmode",
       "id": "stores_index_setdarkmode"
     },
@@ -5841,7 +5841,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 9,
       "norm_label": "setcolormode",
       "id": "components_setcolormode_setcolormode"
     },
@@ -5854,7 +5854,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 9,
       "norm_label": "themeinitializationlogic",
       "id": "components_setcolormode_themelogic"
     },
@@ -5906,7 +5906,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 9,
       "norm_label": "basehead",
       "id": "components_basehead_basehead"
     },
@@ -5919,7 +5919,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 9,
       "norm_label": "seoprops",
       "id": "components_basehead_seoprops"
     },
@@ -6010,7 +6010,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 4,
       "norm_label": "wordoftheday",
       "id": "components_wordoftheday_wordoftheday"
     },
@@ -6023,7 +6023,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 4,
       "norm_label": "countdownlogic",
       "id": "components_wordoftheday_countdown"
     },
@@ -6088,7 +6088,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 4,
       "norm_label": "singleloader",
       "id": "components_singleloader_singleloader"
     },
@@ -6101,7 +6101,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 26,
+      "community": 29,
       "norm_label": "scrolltotop",
       "id": "components_scrolltotop_scrolltotop"
     },
@@ -6114,7 +6114,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 26,
+      "community": 29,
       "norm_label": "scrolltotopprops",
       "id": "components_scrolltotop_scrolltotopprops"
     },
@@ -6127,7 +6127,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 26,
+      "community": 29,
       "norm_label": "cookieconsent",
       "id": "components_cookieconsent_cookieconsent"
     },
@@ -6140,7 +6140,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 26,
+      "community": 29,
       "norm_label": "imagegallerycustomelement",
       "id": "components_imagegallery_imagegalleryce"
     },
@@ -6153,7 +6153,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 26,
+      "community": 29,
       "norm_label": "imagegalleryprops",
       "id": "components_imagegallery_imagegalleryprops"
     },
@@ -6166,7 +6166,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 4,
       "norm_label": "$wordoftheday",
       "id": "stores_index_wordoftheday"
     },
@@ -6179,7 +6179,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 4,
       "norm_label": "confettieffect",
       "id": "components_confettieffect_confettieffect"
     },
@@ -6868,7 +6868,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 24,
+      "community": 29,
       "norm_label": "registersw() call",
       "id": "services_pwa_registersw"
     },
@@ -8281,62 +8281,137 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheActions.vue",
-      "source_location": "L32",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L26",
       "weight": 1.0,
-      "source": "src_components_pwacacheactions_vue",
-      "target": "components_pwacacheactions_rotateccw",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "composable_usecachestorage_bucket_name_map"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheActions.vue",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "composable_usecachestorage_cachebucket"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/composable/useCacheStorage.ts",
       "source_location": "L33",
       "weight": 1.0,
-      "source": "src_components_pwacacheactions_vue",
-      "target": "components_pwacacheactions_trash2",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "composable_usecachestorage_formatbytes"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheBucketList.vue",
-      "source_location": "L81",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L40",
       "weight": 1.0,
-      "source": "src_components_pwacachebucketlist_vue",
-      "target": "components_pwacachebucketlist_chevrondown",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "composable_usecachestorage_getbucketdisplayname"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheBucketList.vue",
-      "source_location": "L93",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L13",
       "weight": 1.0,
-      "source": "src_components_pwacachebucketlist_vue",
-      "target": "components_pwacachebucketlist_formatrelativetime",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "composable_usecachestorage_storagequota"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheBucketList.vue",
-      "source_location": "L84",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L20",
       "weight": 1.0,
-      "source": "src_components_pwacachebucketlist_vue",
-      "target": "components_pwacachebucketlist_formaturl",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "composable_usecachestorage_swinfo"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/PwaCacheBucketList.vue",
-      "source_location": "L82",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L18",
       "weight": 1.0,
-      "source": "src_components_pwacachebucketlist_vue",
-      "target": "components_pwacachebucketlist_x",
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "composable_usecachestorage_swstatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L47",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "composable_usecachestorage_usecachestorage"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "core",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "src_stores_index_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "stores_index_createtoastnotify"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_composable_usecachestorage_ts",
+      "target": "stores_toastnotify_createtoastnotify"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "src_composable_usecachestorage_ts"
     },
     {
       "relation": "imports",
@@ -8345,9 +8420,9 @@
       "source_file": "src/components/PwaCacheBucketList.vue",
       "source_location": "L70",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_pwacachebucketlist_vue",
-      "target": "composable_usecachestorage_cachebucket",
-      "confidence_score": 1.0
+      "target": "composable_usecachestorage_cachebucket"
     },
     {
       "relation": "imports",
@@ -8356,9 +8431,20 @@
       "source_file": "src/components/PwaCacheBucketList.vue",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_pwacachebucketlist_vue",
-      "target": "composable_usecachestorage_formatbytes",
-      "confidence_score": 1.0
+      "target": "composable_usecachestorage_formatbytes"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_formatbytes"
     },
     {
       "relation": "imports",
@@ -8367,9 +8453,191 @@
       "source_file": "src/components/PwaCacheBucketList.vue",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_pwacachebucketlist_vue",
-      "target": "composable_usecachestorage_getbucketdisplayname",
-      "confidence_score": 1.0
+      "target": "composable_usecachestorage_getbucketdisplayname"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_getbucketdisplayname"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": null,
+      "weight": 0.7,
+      "source": "composable_usecachestorage_usecachestorage",
+      "target": "stores_installapp_ispwainstalled"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/composable/useCacheStorage.ts",
+      "source_location": "line 204",
+      "weight": 1.0,
+      "source": "composable_usecachestorage_usecachestorage",
+      "target": "stores_toastnotify_createtoastnotify"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_usecachestorage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L302",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_fetchspy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_makemockcachestorage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L198",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_promise"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L565",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_reloadspy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L588",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_removespy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L410",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_result_unmount"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L589",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_unmount"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_composable_usecachestorage_test_ts",
+      "target": "composable_usecachestorage_test_withsetup"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheActions.vue",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheactions_vue",
+      "target": "components_pwacacheactions_rotateccw"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheActions.vue",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacacheactions_vue",
+      "target": "components_pwacacheactions_trash2"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "components_pwacachebucketlist_chevrondown"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L93",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "components_pwacachebucketlist_formatrelativetime"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L84",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "components_pwacachebucketlist_formaturl"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/PwaCacheBucketList.vue",
+      "source_location": "L82",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_pwacachebucketlist_vue",
+      "target": "components_pwacachebucketlist_x"
     },
     {
       "relation": "contains",
@@ -8785,183 +9053,6 @@
       "confidence_score": 1.0,
       "source": "src_components_wordlist_vue",
       "target": "components_wordlist_virtualizerref"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "composable_usecachestorage_bucket_name_map"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "composable_usecachestorage_cachebucket"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "composable_usecachestorage_formatbytes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L40",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "composable_usecachestorage_getbucketdisplayname"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "composable_usecachestorage_storagequota"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "composable_usecachestorage_swinfo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "composable_usecachestorage_swstatus"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L47",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "composable_usecachestorage_usecachestorage"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "src_stores_index_ts"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "stores_index_createtoastnotify"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_composable_usecachestorage_ts",
-      "target": "stores_toastnotify_createtoastnotify"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "src_composable_usecachestorage_ts"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_formatbytes"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_getbucketdisplayname"
-    },
-    {
-      "relation": "shares_data_with",
-      "confidence": "INFERRED",
-      "confidence_score": 0.75,
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": null,
-      "weight": 0.7,
-      "source": "composable_usecachestorage_usecachestorage",
-      "target": "stores_installapp_ispwainstalled"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/composable/useCacheStorage.ts",
-      "source_location": "line 204",
-      "weight": 1.0,
-      "source": "composable_usecachestorage_usecachestorage",
-      "target": "stores_toastnotify_createtoastnotify"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_usecachestorage"
     },
     {
       "relation": "re_exports",
@@ -9532,86 +9623,6 @@
       "weight": 1.0,
       "source": "stores_wordlist_searchresultcount",
       "target": "stores_wordlist_oramasearchresults"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L302",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_fetchspy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_makemockcachestorage"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L198",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_promise"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L565",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_reloadspy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L588",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_removespy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L410",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_result_unmount"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L589",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_unmount"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/composable/useCacheStorage.test.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_composable_usecachestorage_test_ts",
-      "target": "composable_usecachestorage_test_withsetup"
     },
     {
       "relation": "contains",
@@ -19180,5 +19191,5 @@
       "source_file": "src/pages/api/search/index.json.ts"
     }
   ],
-  "built_at_commit": "38642a238ca46433d6660ad43ed7972edae9caee"
+  "built_at_commit": "4bb0968466e7fbe71b26d5ef7dd33412251248b6"
 }
