@@ -6,7 +6,6 @@ import Layout from "@layouts/Layout.astro";
 import { fetchAllWordsLinks } from "@services/api.ts";
 import { routeToWord, seoData } from "@utils/helpers.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
-import ChevronRight from "~icons/lucide/chevron-right";
 
 import type { GetAllWordsLinksQuery } from "@/gql/graphql";
 
@@ -56,7 +55,7 @@ const schemaJson = () =>
     <script set:html={schemaJson()} type="application/ld+json" />
   </Fragment>
   <Breadcrumbs indexText="Start">
-    <ChevronRight height="20" slot="separator" width="20" />
+    <svg slot="separator" viewBox="0 0 24 24" width="20" height="20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18l6-6l-6-6"/></svg>
   </Breadcrumbs>
 
   <h1>Wort-Index</h1>

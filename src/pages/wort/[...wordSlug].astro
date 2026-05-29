@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 // Styles
 import "@styles/objects/_word.scss";
 import "@styles/components/_single-word.scss";
@@ -34,8 +35,6 @@ import {
 import { Breadcrumbs } from "astro-breadcrumbs";
 import german from "hyphenation.de";
 import Hypher from "hypher";
-import ChevronRight from "~icons/lucide/chevron-right";
-import ExternalLink from "~icons/lucide/external-link";
 
 import type { BerlinerWord } from "@/gql/entity-types";
 
@@ -113,7 +112,7 @@ const schemaJson = () =>
     <script set:html={schemaJson()} type="application/ld+json" />
   </Fragment>
   <Breadcrumbs indexText="Start" linkTextFormat="capitalized" truncated={true}>
-    <ChevronRight height="20" slot="separator" width="20" />
+    <svg slot="separator" viewBox="0 0 24 24" width="20" height="20"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18l6-6l-6-6"/></svg>
   </Breadcrumbs>
 
   <IsWordOfTheDay
@@ -356,7 +355,7 @@ const schemaJson = () =>
         >
           Erfahre mehr über dieses Wort
           <span class="c-single-word__learn-more-link-icon">
-            <ExternalLink height="10" width="10" />
+            <svg viewBox="0 0 24 24" width="10" height="10"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 3h6v6m-11 5L21 3M10 21H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h6"/></svg>
           </span>
         </a>
       )

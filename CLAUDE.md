@@ -20,6 +20,13 @@ Rules:
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
 
+## Documentation
+
+Look up EmDash documentation via the `emdash-docs` MCP server when you need to
+verify an API, hook, config option, or pattern. Prefer the docs MCP over
+assumptions from training data -- the docs reflect the current published
+behaviour.
+
 ## Project Overview
 
 Berliner Schnauze is a Berlin dialect translator web app. Data lives in a WordPress GraphQL backend; the frontend is a static Astro site with Vue 3 islands for interactivity. Deployed to Cloudflare Pages.

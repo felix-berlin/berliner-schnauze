@@ -16,7 +16,8 @@
       "@assets/*": ["./src/assets/*"],
       "@styles/*": ["./src/styles/*"],
       "@sass-butler/*": ["./node_modules/@felix_berlin/sass-butler/*"],
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@emdash-cms/types": ["./.emdash/types.ts"]
     },
     "types": [
       "vitest/globals",

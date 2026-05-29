@@ -49,3 +49,7 @@ tests/unit/junit-report.xml
 graphify-out/manifest.json
 graphify-out/cost.json
 graphify-out/cache/
+
+# EmDash
+/data/
+/.emdash/types.ts

@@ -1,11 +1,14 @@
+import node from "@astrojs/node";
 import partytown from "@astrojs/partytown";
+import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import vue from "@astrojs/vue";
+import emdash, { local } from "emdash/astro";
+import { sqlite } from "emdash/db";
 import codecovplugin from "@codecov/astro-plugin";
 import sentry from "@sentry/astro";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
-import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField } from "astro/config";
 import { fileURLToPath } from "node:url";
@@ -18,7 +21,6 @@ const {
   SENTRY_AUTH_TOKEN,
   SENTRY_ORG,
   SENTRY_PROJECT,
-  PWA_DEBUG,
   CODECOV_TOKEN,
   WP_AUTH_REFRESH_TOKEN,
   BUNDLE_ANALYZER_OPEN,
@@ -38,6 +40,8 @@ const sassAliases = {
 
 // https://astro.build/config
 export default defineConfig({
+  output: "server",
+  adapter: node({ mode: "standalone" }),
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   trailingSlash: "never",
   prefetch: true,
@@ -158,12 +162,20 @@ export default defineConfig({
     },
   },
   integrations: [
+    emdash({
+      database: sqlite({ url: "file:./data/emdash.db" }),
+      storage: local({
+        directory: "./data/uploads",
+        baseUrl: "/_emdash/api/media/file",
+      }),
+    }),
     vue({
       appEntrypoint: "/src/pages/_app",
       // devtools: {
       //   launchEditor: "code",
       // },
     }),
+    react(),
     sitemap({
       lastmod: new Date(),
     }),
@@ -193,113 +205,8 @@ export default defineConfig({
     // }),
     // sentry(),
     // spotlightjs(),
-    AstroPWA({
-      $schema: "https://json.schemastore.org/web-manifest-combined.json",
-      mode: import.meta.env.DEV ? "development" : "production",
-      base: "/",
-      scope: "/",
-      includeAssets: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
-      registerType: "autoUpdate",
-      manifest: {
-        name: "Berliner Schnauze",
-        short_name: "BLN Schnauze",
-        description: "Berlinerisch Wörterbuch",
-        theme_color: "#2b333b",
-        background_color: "#a8b2bc",
-        lang: "de",
-        icons: [
-          {
-            src: "favicons/android-chrome-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "favicons/android-chrome-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
-          {
-            src: "favicons/maskable-icon-512x512.png",
-            type: "image/png",
-            sizes: "512x512",
-            purpose: "maskable",
-          },
-        ],
-        screenshots: [
-          {
-            src: "screenshots/berliner-schnauze.wtf_wide.png",
-            sizes: "2880x2288",
-            type: "image/png",
-            form_factor: "wide",
-          },
-          {
-            src: "screenshots/berliner-schnauze.wtf_narrow.png",
-            sizes: "850x1716",
-            type: "image/png",
-            form_factor: "narrow",
-          },
-        ],
-      },
-      workbox: {
-        globDirectory: "dist",
-        // navigateFallback: "/",
-        globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
-        // Increase the file size limit to 15 MB to accommodate large images
-        maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // 15 MB
-        runtimeCaching: [
-          {
-            urlPattern: /.*\/api\/search\/index\.json$/,
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "api-search-index",
-              networkTimeoutSeconds: 10,
-              expiration: {
-                maxEntries: 5,
-                maxAgeSeconds: 10_800, // 3 hours
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-          {
-            urlPattern: /.*\/api\/search\/meta\.json$/,
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "api-search-meta",
-              networkTimeoutSeconds: 10,
-              expiration: {
-                maxEntries: 5,
-                maxAgeSeconds: 10_800, // 3 hours
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-          {
-            urlPattern:
-              /^https:\/\/cms\.berliner-schnauze\.wtf\/wp-json\/berliner-schnauze\/v1\/word-of-the-day$/,
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "api-word-of-the-day",
-              networkTimeoutSeconds: 10,
-              expiration: {
-                maxEntries: 1,
-                maxAgeSeconds: 10_800, // 3 hours
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-        ],
-      },
-      devOptions: {
-        enabled: PWA_DEBUG ?? false,
-        // navigateFallbackAllowlist: [/^\//],
-      },
-    }),
+    // AstroPWA disabled — @vite-pwa/astro@1.2.0 has __filename bug in SSR mode
+    // Re-enable when upstream fix is available
     codecovplugin({
       enableBundleAnalysis: true,
       bundleName: "berliner-schnauze-bundle",
@@ -316,6 +223,7 @@ export default defineConfig({
 
     plugins: [
       Icons({
+        compiler: "vue3",
         iconCustomizer(collection, icon, props) {
           // customize all icons in this collection
           if (collection === "lucide") {
@@ -323,7 +231,7 @@ export default defineConfig({
             props.height = "24";
           }
         },
-      }), // chooses the compiler automatically
+      }),
       sentryVitePlugin({
         authToken: SENTRY_AUTH_TOKEN,
         org: SENTRY_ORG,
@@ -365,6 +273,10 @@ export default defineConfig({
       sourcemap: true, // This is needed for sentryVitePlugin
       target: "esnext",
       cssMinify: "esbuild", // Using esbuild for broader CSS compatibility
+    },
+
+    ssr: {
+      external: ["better-sqlite3"],
     },
   },
 });
