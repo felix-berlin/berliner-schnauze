@@ -1,5 +1,6 @@
+import { useEventListener, useTimeoutFn } from "@vueuse/core";
 import { createToastNotify } from "@stores/index";
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 export interface CacheBucket {
   name: string;
@@ -168,18 +169,13 @@ export function useCacheStorage() {
     onlineStatus.value = "offline";
   };
 
-  let reSyncTimer: ReturnType<typeof setTimeout> | null = null;
+  const { start: scheduleReload } = useTimeoutFn(() => location.reload(), 2100, { immediate: false });
+
+  useEventListener(window, "online", handleOnline);
+  useEventListener(window, "offline", handleOffline);
 
   onMounted(() => {
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
     void verifyConnectivity();
-  });
-
-  onUnmounted(() => {
-    window.removeEventListener("online", handleOnline);
-    window.removeEventListener("offline", handleOffline);
-    if (reSyncTimer !== null) clearTimeout(reSyncTimer);
   });
 
   async function clearBucket(name: string): Promise<void> {
@@ -224,7 +220,7 @@ export function useCacheStorage() {
       status: "info",
       timeout: 2000,
     });
-    reSyncTimer = setTimeout(() => location.reload(), 2100);
+    scheduleReload();
   }
 
   return {

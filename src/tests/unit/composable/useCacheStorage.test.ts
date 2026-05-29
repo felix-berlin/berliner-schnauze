@@ -589,7 +589,7 @@ describe("useCacheStorage — cleanup", () => {
     const removeSpy = vi.spyOn(window, "removeEventListener");
     const { unmount } = withSetup(() => useCacheStorage());
     unmount();
-    expect(removeSpy).toHaveBeenCalledWith("online", expect.any(Function));
-    expect(removeSpy).toHaveBeenCalledWith("offline", expect.any(Function));
+    expect(removeSpy).toHaveBeenCalledWith("online", expect.any(Function), undefined);
+    expect(removeSpy).toHaveBeenCalledWith("offline", expect.any(Function), undefined);
   });
 });
