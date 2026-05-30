@@ -41,11 +41,11 @@ function toggle(): void {
 }
 
 provide<AccordionItemContext>("accordion-item", {
-  value: props.value,
+  contentId,
+  disabled,
   isOpen,
   toggle,
   triggerId,
-  contentId,
-  disabled,
+  value: props.value,
 });
 </script>
