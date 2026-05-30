@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.29.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.2...v3.29.3) (2026-05-30)
+
+
+### Performance Improvements
+
+* manualChunks for stores ([06d4c66](https://github.com/felix-berlin/berliner-schnauze/commit/06d4c6617885838c860805c2c5350baeb26c6625))
+* Race Condition fix ([8cb46b9](https://github.com/felix-berlin/berliner-schnauze/commit/8cb46b9cf0bb8288d0f0d7b13a8e1ad9133333bb))
+* remove barrel imports ([71b0391](https://github.com/felix-berlin/berliner-schnauze/commit/71b039160c111a8e126b93938a1195e81dd4da59))
+
 ## [3.29.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.1...v3.29.2) (2026-05-30)
 
 
