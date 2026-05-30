@@ -1,5 +1,9 @@
 @keyframes shine {
+  from {
+    transform: translateX(-100%);
+  }
+
   to {
-    background-position-x: -200%;
+    transform: translateX(100%);
   }
 }
