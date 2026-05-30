@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { useStore } from "@nanostores/vue";
-import { $isDarkMode } from "@stores/index.ts";
+import { $isDarkMode } from "@stores/darkMode.ts";
 import { onMounted } from "vue";
 
 interface TurnStileProps {

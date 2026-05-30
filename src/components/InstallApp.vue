@@ -24,7 +24,7 @@ import {
   $isPwaInstalled,
   $showInstallButton,
   triggerPwaInstall,
-} from "@stores/index.ts";
+} from "@stores/installApp.ts";
 
 export interface InstallAppProps {
   cssClasses?: Array<string> | object | string;
