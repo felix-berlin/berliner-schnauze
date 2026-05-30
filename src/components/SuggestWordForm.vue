@@ -134,7 +134,7 @@
 
 <script setup lang="ts">
 import TurnStile from "@components/TurnStile.vue";
-import { createToastNotify } from "@stores/index.ts";
+import { createToastNotify } from "@stores/toastNotify.ts";
 import { useMutation } from "@urql/vue";
 import { trackEvent } from "@utils/analytics";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";

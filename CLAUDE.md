@@ -111,7 +111,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 **Modal system**: Open modals via `open()` from `@stores/modal.ts` using `defineAsyncComponent` for dynamic component loading. See `src/components/WordSuggestHint.vue` for reference.
 
-**Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic. Import `createToastNotify` from `@stores/index` (not directly from `@stores/toastNotify`) for toast notifications.
+**Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic. Import `createToastNotify` from `@stores/toastNotify.ts` directly for toast notifications — do NOT import from `@stores/index` as the barrel re-exports `wordList.ts` which has module-level side effects that trigger unnecessary fetches.
 
 **GraphQL**: Import the `graphql` tagged template from `@/gql` for type-safe queries. Generated types live in `src/gql/` (do not edit manually — output of codegen).
 

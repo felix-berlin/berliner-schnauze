@@ -32,9 +32,9 @@
 </template>
 
 <script setup lang="ts">
-import type { ToastNotify } from "@stores/index.ts";
+import type { ToastNotify } from "@stores/toastNotify.ts";
 
-import { removeToastById, supportsPopover } from "@stores/index.ts";
+import { removeToastById, supportsPopover } from "@stores/toastNotify.ts";
 import { useSwipe } from "@vueuse/core";
 import {
   defineAsyncComponent,

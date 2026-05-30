@@ -62,7 +62,7 @@ import type { SwStatus } from "@composables/useCacheStorage";
 import { computed, defineAsyncComponent, onMounted } from "vue";
 import { getBucketDisplayName, useCacheStorage } from "@composables/useCacheStorage";
 import { useStore } from "@nanostores/vue";
-import { $isPwaInstalled } from "@stores/index";
+import { $isPwaInstalled } from "@stores/installApp.ts";
 import { close, open } from "@stores/modal";
 import PwaCacheActions from "@components/PwaCacheActions.vue";
 import PwaCacheBucketList from "@components/PwaCacheBucketList.vue";

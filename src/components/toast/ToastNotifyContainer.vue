@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import ToastNotify from "@components/toast/ToastNotify.vue";
 import { useStore } from "@nanostores/vue";
-import { $toastNotify } from "@stores/index.ts";
+import { $toastNotify } from "@stores/toastNotify.ts";
 
 const toastStore = useStore($toastNotify);
 </script>
