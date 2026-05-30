@@ -391,6 +391,7 @@ async function initOrama(words: OramaSearchIndex[]) {
 }
 
 let searchIndexCachePromise: null | Promise<OramaSearchIndex[]> = null;
+let initOramaPromise: null | Promise<void> = null;
 
 export const $oramaSearchResults = computedAsync([$wordSearch], async (wordSearch) => {
   if (!searchIndexCachePromise) {
@@ -400,9 +401,10 @@ export const $oramaSearchResults = computedAsync([$wordSearch], async (wordSearc
   const oramaSearchIndex = await searchIndexCachePromise;
   const resultLimit = oramaSearchIndex.length;
 
-  if (!db) {
-    await initOrama(oramaSearchIndex);
+  if (!initOramaPromise) {
+    initOramaPromise = initOrama(oramaSearchIndex);
   }
+  await initOramaPromise;
 
   const where = buildWhere(wordSearch);
   const sortBy = getSortBy(wordSearch);
