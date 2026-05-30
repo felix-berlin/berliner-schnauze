@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.29.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.3...v3.29.4) (2026-05-30)
+
+
+### Bug Fixes
+
+* empty word list ([d3de7cd](https://github.com/felix-berlin/berliner-schnauze/commit/d3de7cdbc86fc8b4966ee5344e2bda923df1c5a6))
+
 ## [3.29.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.2...v3.29.3) (2026-05-30)
 
 
