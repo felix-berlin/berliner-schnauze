@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { useVModel } from "@nanostores/vue";
-import { $wordSearch } from "@stores/index.ts";
+import { $wordSearch } from "@stores/wordList.ts";
 import { useId } from "vue";
 
 const { label, switchType } = defineProps<{

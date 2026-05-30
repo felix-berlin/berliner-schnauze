@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { useStore, useVModel } from "@nanostores/vue";
-import { $wordSearch } from "@stores/index.ts";
+import { $wordSearch } from "@stores/wordList.ts";
 import { trackEvent } from "@utils/analytics";
 import Multiselect from "@vueform/multiselect";
 

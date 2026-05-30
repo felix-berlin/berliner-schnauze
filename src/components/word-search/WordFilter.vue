@@ -95,7 +95,7 @@ import WordRangeSlider from "@components/filter/WordRangeSlider.vue";
 import WordSwitch from "@components/filter/WordSwitch.vue";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import { useStore } from "@nanostores/vue";
-import { $showWordListFilterFlyout, $toggleWordListFilterFlyout, resetAll } from "@stores/index.ts";
+import { $showWordListFilterFlyout, $toggleWordListFilterFlyout, resetAll } from "@stores/wordList.ts";
 import { onClickOutside } from "@vueuse/core";
 import { useTimeout } from "@vueuse/core";
 import FilterReset from "virtual:icons/lucide/filter-x";

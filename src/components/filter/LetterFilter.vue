@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { useStore } from "@nanostores/vue";
-import { $wordSearch, setLetterFilter } from "@stores/index.ts";
+import { $wordSearch, setLetterFilter } from "@stores/wordList.ts";
 
 const wordSearchStore = useStore($wordSearch);
 </script>
