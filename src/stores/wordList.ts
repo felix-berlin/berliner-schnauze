@@ -390,15 +390,14 @@ async function initOrama(words: OramaSearchIndex[]) {
   await insertMultiple(db, words);
 }
 
-let searchIndexCache: null | OramaSearchIndex[] = null;
+let searchIndexCachePromise: null | Promise<OramaSearchIndex[]> = null;
 
 export const $oramaSearchResults = computedAsync([$wordSearch], async (wordSearch) => {
-  if (!searchIndexCache) {
-    const response = await fetch("/api/search/index.json");
-    searchIndexCache = (await response.json()) as OramaSearchIndex[];
+  if (!searchIndexCachePromise) {
+    searchIndexCachePromise = fetch("/api/search/index.json").then((r) => r.json() as Promise<OramaSearchIndex[]>);
   }
 
-  const oramaSearchIndex = searchIndexCache;
+  const oramaSearchIndex = await searchIndexCachePromise;
   const resultLimit = oramaSearchIndex.length;
 
   if (!db) {

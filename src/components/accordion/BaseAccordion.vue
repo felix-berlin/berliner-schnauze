@@ -20,7 +20,7 @@ const props = withDefaults(
     defaultValue?: string | number | (string | number)[];
     collapsible?: boolean;
   }>(),
-  { type: "single", collapsible: false },
+  { collapsible: false, type: "single" },
 );
 
 const emit = defineEmits<{
@@ -61,7 +61,7 @@ function toggle(id: string | number): void {
   emit("update:modelValue", next);
 }
 
-provide<AccordionContext>("accordion", { type: props.type, isOpen, toggle });
+provide<AccordionContext>("accordion", { isOpen, toggle, type: props.type });
 </script>
 
 <style lang="scss">

@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import { useStore } from "@nanostores/vue";
-import { $wordSearch, setLetterFilter } from "@stores/index.ts";
+import { $wordSearch, setLetterFilter } from "@stores/wordList.ts";
 import { onSet } from "nanostores";
 import Filter from "virtual:icons/lucide/filter";
 import X from "virtual:icons/lucide/x";

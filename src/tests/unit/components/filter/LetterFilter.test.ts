@@ -1,6 +1,6 @@
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import { useStore } from "@nanostores/vue";
-import { $wordSearch, setLetterFilter } from "@stores/index.ts";
+import { $wordSearch, setLetterFilter } from "@stores/wordList.ts";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { nextTick } from "vue";
@@ -12,7 +12,7 @@ vi.mock("@nanostores/vue", () => ({
   }),
 }));
 
-vi.mock("@stores/index.ts", () => ({
+vi.mock("@stores/wordList.ts", () => ({
   $wordSearch: vi.fn(),
   setLetterFilter: vi.fn(),
 }));

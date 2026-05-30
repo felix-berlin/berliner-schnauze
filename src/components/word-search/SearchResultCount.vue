@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { useStore } from "@nanostores/vue";
-import { $searchResultCount } from "@stores/index";
+import { $searchResultCount } from "@stores/wordList.ts";
 
 const searchResultCount = useStore($searchResultCount);
 </script>

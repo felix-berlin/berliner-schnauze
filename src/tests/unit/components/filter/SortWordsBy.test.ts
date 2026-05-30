@@ -1,5 +1,5 @@
 import SortWordsBy from "@components/filter/SortWordsBy.vue";
-import * as store from "@stores/index.ts";
+import * as store from "@stores/wordList.ts";
 import { mount } from "@vue/test-utils";
 import SortAsc from "virtual:icons/lucide/sort-asc";
 import SortDesc from "virtual:icons/lucide/sort-desc";

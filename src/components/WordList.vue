@@ -30,7 +30,7 @@ import type { ComponentPublicInstance } from "vue";
 
 import SingleWord from "@components/word/SingleWord.vue";
 import { useStore } from "@nanostores/vue";
-import { $oramaSearchResults } from "@stores/index.ts";
+import { $oramaSearchResults } from "@stores/wordList.ts";
 import { routeToWord } from "@utils/helpers.ts";
 import { onKeyStroke } from "@vueuse/core";
 import { VList, WindowVirtualizer } from "virtua/vue";

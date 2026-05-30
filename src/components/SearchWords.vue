@@ -39,7 +39,7 @@ import {
   $searchResultCount,
   $wordSearch,
   searchLength as currentSearchLength,
-} from "@stores/index";
+} from "@stores/wordList.ts";
 import { setMatomoSearch } from "@utils/analytics";
 import { useDebounceFn } from "@vueuse/core";
 import Search from "virtual:icons/lucide/search";

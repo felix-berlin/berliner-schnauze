@@ -365,6 +365,15 @@ export default defineConfig({
       sourcemap: true, // This is needed for sentryVitePlugin
       target: "esnext",
       cssMinify: "esbuild", // Using esbuild for broader CSS compatibility
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            if (id.includes("/stores/wordList") || id.includes("@orama/") || id.includes("@nanostores/async")) {
+              return "wordList";
+            }
+          },
+        },
+      },
     },
   },
 });

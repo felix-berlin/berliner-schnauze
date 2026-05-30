@@ -44,7 +44,7 @@ import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue
 import WordFilter from "@components/word-search/WordFilter.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
 import { useStore } from "@nanostores/vue";
-import { $searchResultCount, $showWordListFilterFlyout } from "@stores/index.ts";
+import { $searchResultCount, $showWordListFilterFlyout } from "@stores/wordList.ts";
 import { defineAsyncComponent } from "vue";
 
 const SearchWords = defineAsyncComponent(() => import("@components/SearchWords.vue"));

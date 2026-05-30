@@ -33,6 +33,7 @@
   "31": "Virtualized Word List",
   "32": "Toast Notification System",
   "33": "Word Examples & Audio",
+  "34": "Community 34",
   "35": "Helper Utility Tests",
   "36": "Word Utility Tests",
   "37": "Toast Container",
@@ -41,8 +42,8 @@
   "40": "Badge & Scroll Components",
   "41": "Bear Mascot Branding",
   "42": "Random Word Tests",
-  "43": "Legal Pages",
-  "44": "Toast Popover Concepts",
+  "43": "Community 43",
+  "44": "Community 44",
   "45": "Device Detection",
   "46": "Audio Player Components",
   "47": "Community 47",
@@ -105,5 +106,10 @@
   "104": "Community 104",
   "105": "Community 105",
   "106": "Community 106",
-  "109": "Community 109"
+  "107": "Community 107",
+  "108": "Community 108",
+  "109": "Community 109",
+  "110": "Community 110",
+  "111": "Community 111",
+  "112": "Community 112"
 }

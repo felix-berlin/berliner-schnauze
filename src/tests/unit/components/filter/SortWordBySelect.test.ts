@@ -1,9 +1,9 @@
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
-import { $setSortOrder } from "@stores/index.ts";
+import { $setSortOrder } from "@stores/wordList.ts";
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-vi.mock("@stores/index.ts", () => ({
+vi.mock("@stores/wordList.ts", () => ({
   $setSortOrder: vi.fn(),
 }));
 

@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { useStore, useVModel } from "@nanostores/vue";
-import { $wordSearch } from "@stores/index.ts";
+import { $wordSearch } from "@stores/wordList.ts";
 import RotateCcwIcon from "virtual:icons/lucide/rotate-ccw";
 import { computed, useId } from "vue";
 
