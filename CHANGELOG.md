@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.29.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.1...v3.29.2) (2026-05-30)
+
+
+### Bug Fixes
+
+* import createToastNotify directly from toastNotify store ([8cec1fd](https://github.com/felix-berlin/berliner-schnauze/commit/8cec1fd9d66e4a7896c00788be69396299d2453d))
+* import stores directly from source modules ([d101309](https://github.com/felix-berlin/berliner-schnauze/commit/d101309c6321bc694b4ddaf46732383c436de2ff))
+
+
+### Performance Improvements
+
+* fix import errors ([8da112c](https://github.com/felix-berlin/berliner-schnauze/commit/8da112ceb1ba85b0fa89a930240965ac509cd751))
+* lazy-load store barrel in devtools setup ([2b62596](https://github.com/felix-berlin/berliner-schnauze/commit/2b625965967b1a575f13b5ae49206551183c91e7))
+* optimize skeleton loader ([de34a63](https://github.com/felix-berlin/berliner-schnauze/commit/de34a63a89ee106d12c6ba00add2c8cc578c0dcf))
+* render system icon per default in color mode ([dc17daa](https://github.com/felix-berlin/berliner-schnauze/commit/dc17daaa5b6e8610ea1b04ff25312e864568a486))
+* some perf improvements ([bbb898a](https://github.com/felix-berlin/berliner-schnauze/commit/bbb898a5ee209320bcd8ad9268b3fb63248bec1f))
+
 ## [3.29.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.0...v3.29.1) (2026-05-29)
 
 
