@@ -74,7 +74,7 @@ For Cloudflare Pages builds, env vars are configured separately in the CF Pages 
 
 - **Astro** handles routing, SSG, and static pages (`src/pages/`)
 - **Vue 3** islands handle all interactive UI (`src/components/*.vue`)
-- **Nanostores** manage client state (`src/stores/`) — all exported from `src/stores/index.ts`
+- **Nanostores** manage client state (`src/stores/`) — import directly from individual store files (e.g. `@stores/darkMode.ts`, `@stores/modal.ts`). Do NOT import from `@stores/index` barrel unless the component specifically needs `wordList.ts` exports — the barrel's `computedAsync` side effect triggers `api/search/index.json` on every chunk that imports it.
 - **urql** handles GraphQL queries/mutations from Vue components
 - **Orama** provides full-text search with German stemming — index built at build time in `src/pages/api/search/index.json.ts`
 - **Composables** in `src/composable/` — Vue composables wrapping browser APIs (Cache Storage, Service Worker)
@@ -108,6 +108,8 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 **Analytics**: Track user interactions with `trackEvent(category, action, label)` from `@utils/analytics`.
 
 **SCSS imports**: Use `@use "@styles/path"` — not `@import`.
+
+**Fonts**: All `@font-face` rules use `font-display: swap` (`src/styles/base/_typo.scss`). Do NOT change to `optional` — on cold cache the 100ms block period makes all text invisible then appear as fallback, causing severe CLS (0.65 observed).
 
 **Modal system**: Open modals via `open()` from `@stores/modal.ts` using `defineAsyncComponent` for dynamic component loading. See `src/components/WordSuggestHint.vue` for reference.
 
