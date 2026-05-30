@@ -1,13 +1,14 @@
 import { persistentAtom } from "@nanostores/persistent";
 
-export type DarkMode = boolean;
+export type DarkMode = boolean | null;
 
-export const $isDarkMode = persistentAtom<DarkMode>("darkMode", false, {
+export const $isDarkMode = persistentAtom<DarkMode>("darkMode", null, {
   decode(value) {
+    if (value == null || value === "null") return null;
     try {
-      return JSON.parse(value);
+      return JSON.parse(value) as boolean;
     } catch {
-      return value;
+      return null;
     }
   },
   encode(value) {
