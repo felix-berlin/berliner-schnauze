@@ -13,28 +13,28 @@
   font-style: normal;
   font-family: Berlin;
   src: url("/fonts/Berlin.woff2") format("woff2");
-  font-display: swap;
+  font-display: optional;
 }
 @font-face {
   font-weight: 400;
   font-style: italic;
   font-family: Berlin;
   src: url("/fonts/Berlin-Italic.woff2") format("woff2");
-  font-display: swap;
+  font-display: optional;
 }
 @font-face {
   font-weight: 700;
   font-style: normal;
   font-family: Berlin;
   src: url("/fonts/Berlin-Bold.woff2") format("woff2");
-  font-display: swap;
+  font-display: optional;
 }
 @font-face {
   font-weight: 900;
   font-style: normal;
   font-family: Berlin;
   src: url("/fonts/BerlinX-Bold.woff2") format("woff2");
-  font-display: swap;
+  font-display: optional;
 }
 
 @for $h from 1 to 6 {
