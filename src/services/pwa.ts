@@ -1,4 +1,4 @@
-import { createToastNotify } from "@stores/index.ts";
+import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
 import { registerSW } from "virtual:pwa-register";
 
