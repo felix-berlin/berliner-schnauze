@@ -102,162 +102,162 @@
       "file_type": "code",
       "source_file": "src/components/BaseHead.astro",
       "source_location": "L1",
+      "id": "src_components_basehead_astro",
       "community": 14,
-      "norm_label": "basehead.astro",
-      "id": "src_components_basehead_astro"
+      "norm_label": "basehead.astro"
     },
     {
       "label": "canonicalURL",
       "file_type": "code",
       "source_file": "src/components/BaseHead.astro",
       "source_location": "L18",
+      "id": "components_basehead_canonicalurl",
       "community": 14,
-      "norm_label": "canonicalurl",
-      "id": "components_basehead_canonicalurl"
+      "norm_label": "canonicalurl"
     },
     {
       "label": "@components/SetColorMode.astro",
       "file_type": "code",
       "source_file": "src/components/SetColorMode.astro",
       "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_components_setcolormode_astro",
       "community": 14,
-      "norm_label": "@components/setcolormode.astro",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_setcolormode_astro"
+      "norm_label": "@components/setcolormode.astro"
     },
     {
       "label": "astro:transitions",
       "file_type": "code",
       "source_file": "astro:transitions",
       "confidence": "EXTRACTED",
+      "id": "astro_transitions",
       "community": 14,
-      "norm_label": "astro:transitions",
-      "id": "astro_transitions"
+      "norm_label": "astro:transitions"
     },
     {
       "label": "virtual:pwa-info",
       "file_type": "code",
       "source_file": "virtual:pwa-info",
       "confidence": "EXTRACTED",
+      "id": "virtual_pwa_info",
       "community": 14,
-      "norm_label": "virtual:pwa-info",
-      "id": "virtual_pwa_info"
+      "norm_label": "virtual:pwa-info"
     },
     {
       "label": "@/utils/helpers",
       "file_type": "code",
       "source_file": "src/utils/helpers",
       "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_utils_helpers",
       "community": 14,
-      "norm_label": "@/utils/helpers",
-      "id": "home_felix_workspace_berliner_schnauze_src_utils_helpers"
+      "norm_label": "@/utils/helpers"
     },
     {
       "label": "@/types/seo",
       "file_type": "code",
       "source_file": "src/types/seo",
       "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_types_seo",
       "community": 14,
-      "norm_label": "@/types/seo",
-      "id": "home_felix_workspace_berliner_schnauze_src_types_seo"
+      "norm_label": "@/types/seo"
     },
     {
       "label": "/fonts/Berlin-Bold.woff2",
       "file_type": "code",
       "source_file": "/fonts/Berlin-Bold.woff2",
       "confidence": "EXTRACTED",
+      "id": "berlin_bold_woff2",
       "community": 14,
-      "norm_label": "/fonts/berlin-bold.woff2",
-      "id": "berlin_bold_woff2"
+      "norm_label": "/fonts/berlin-bold.woff2"
     },
     {
       "label": "/fonts/Berlin-Italic.woff2",
       "file_type": "code",
       "source_file": "/fonts/Berlin-Italic.woff2",
       "confidence": "EXTRACTED",
+      "id": "berlin_italic_woff2",
       "community": 14,
-      "norm_label": "/fonts/berlin-italic.woff2",
-      "id": "berlin_italic_woff2"
+      "norm_label": "/fonts/berlin-italic.woff2"
     },
     {
       "label": "/fonts/BerlinX-Bold.woff2",
       "file_type": "code",
       "source_file": "/fonts/BerlinX-Bold.woff2",
       "confidence": "EXTRACTED",
+      "id": "berlinx_bold_woff2",
       "community": 14,
-      "norm_label": "/fonts/berlinx-bold.woff2",
-      "id": "berlinx_bold_woff2"
+      "norm_label": "/fonts/berlinx-bold.woff2"
     },
     {
       "label": "/fonts/Berlin.woff2",
       "file_type": "code",
       "source_file": "/fonts/Berlin.woff2",
       "confidence": "EXTRACTED",
+      "id": "berlin_woff2",
       "community": 14,
-      "norm_label": "/fonts/berlin.woff2",
-      "id": "berlin_woff2"
+      "norm_label": "/fonts/berlin.woff2"
     },
     {
       "label": "/fonts/BerlinerRegular.woff2",
       "file_type": "code",
       "source_file": "/fonts/BerlinerRegular.woff2",
       "confidence": "EXTRACTED",
+      "id": "berlinerregular_woff2",
       "community": 14,
-      "norm_label": "/fonts/berlinerregular.woff2",
-      "id": "berlinerregular_woff2"
+      "norm_label": "/fonts/berlinerregular.woff2"
     },
     {
       "label": "Modal.vue",
       "file_type": "code",
       "source_file": "src/components/Modal.vue",
       "source_location": "L1",
-      "community": 12,
-      "norm_label": "modal.vue",
-      "id": "src_components_modal_vue"
+      "id": "src_components_modal_vue",
+      "community": 34,
+      "norm_label": "modal.vue"
     },
     {
       "label": "view",
       "file_type": "code",
       "source_file": "src/components/Modal.vue",
       "source_location": "L47",
-      "community": 12,
-      "norm_label": "view",
-      "id": "components_modal_view"
+      "id": "components_modal_view",
+      "community": 34,
+      "norm_label": "view"
     },
     {
       "label": "props",
       "file_type": "code",
       "source_file": "src/components/Modal.vue",
       "source_location": "L48",
-      "community": 12,
-      "norm_label": "props",
-      "id": "components_modal_props"
+      "id": "components_modal_props",
+      "community": 34,
+      "norm_label": "props"
     },
     {
       "label": "viewIsComponent",
       "file_type": "code",
       "source_file": "src/components/Modal.vue",
       "source_location": "L49",
-      "community": 12,
-      "norm_label": "viewiscomponent",
-      "id": "components_modal_viewiscomponent"
+      "id": "components_modal_viewiscomponent",
+      "community": 34,
+      "norm_label": "viewiscomponent"
     },
     {
       "label": "currentModal",
       "file_type": "code",
       "source_file": "src/components/Modal.vue",
       "source_location": "L51",
-      "community": 12,
-      "norm_label": "currentmodal",
-      "id": "components_modal_currentmodal"
+      "id": "components_modal_currentmodal",
+      "community": 34,
+      "norm_label": "currentmodal"
     },
     {
       "label": "hasView",
       "file_type": "code",
       "source_file": "src/components/Modal.vue",
       "source_location": "L53",
-      "community": 12,
-      "norm_label": "hasview",
-      "id": "components_modal_hasview"
+      "id": "components_modal_hasview",
+      "community": 34,
+      "norm_label": "hasview"
     },
     {
       "label": "Footer.astro",
@@ -359,6 +359,15 @@
       "id": "download"
     },
     {
+      "label": "../../package.json",
+      "file_type": "code",
+      "source_file": "package.json",
+      "confidence": "EXTRACTED",
+      "community": 24,
+      "norm_label": "../../package.json",
+      "id": "home_felix_workspace_berliner_schnauze_package_json"
+    },
+    {
       "label": "WordSearchLink.astro",
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.astro",
@@ -454,7 +463,7 @@
       "file_type": "code",
       "source_file": "src/gql/entity-types",
       "confidence": "EXTRACTED",
-      "community": 4,
+      "community": 24,
       "norm_label": "@/gql/entity-types",
       "id": "home_felix_workspace_berliner_schnauze_src_gql_entity_types"
     },
@@ -481,7 +490,7 @@
       "file_type": "code",
       "source_file": "src/pages/[legalPages].astro",
       "source_location": "L1",
-      "community": 18,
+      "community": 22,
       "norm_label": "[legalpages].astro",
       "id": "src_pages_legalpages_astro"
     },
@@ -490,7 +499,7 @@
       "file_type": "code",
       "source_file": "src/pages/[legalPages].astro",
       "source_location": "L13",
-      "community": 18,
+      "community": 22,
       "norm_label": "client",
       "id": "pages_legalpages_client"
     },
@@ -499,7 +508,7 @@
       "file_type": "code",
       "source_file": "src/styles/objects/_legal-pages.scss",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 22,
       "norm_label": "@styles/objects/_legal-pages.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_legal_pages_scss"
     },
@@ -517,7 +526,7 @@
       "file_type": "code",
       "source_file": "src/layouts/Layout.astro",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 22,
       "norm_label": "@layouts/layout.astro",
       "id": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
     },
@@ -535,7 +544,7 @@
       "file_type": "code",
       "source_file": "astro:env/client",
       "confidence": "EXTRACTED",
-      "community": 6,
+      "community": 0,
       "norm_label": "astro:env/client",
       "id": "client"
     },
@@ -544,7 +553,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 22,
       "norm_label": "@/gql/graphql.ts",
       "id": "home_felix_workspace_berliner_schnauze_src_gql_graphql_ts"
     },
@@ -985,7 +994,7 @@
       "file_type": "code",
       "source_file": "src/composable/useCacheStorage.ts",
       "source_location": "L96",
-      "community": 43,
+      "community": 109,
       "norm_label": "usecachestorage()",
       "id": "composable_usecachestorage_usecachestorage"
     },
@@ -1984,7 +1993,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L221",
-      "community": 17,
+      "community": 48,
       "norm_label": "$setsortorder()",
       "id": "stores_wordlist_setsortorder"
     },
@@ -2128,7 +2137,7 @@
       "file_type": "code",
       "source_file": "src/plugins/sentryBrowser.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 0,
       "norm_label": "sentrybrowser.ts",
       "id": "src_plugins_sentrybrowser_ts"
     },
@@ -2165,7 +2174,7 @@
       "source_file": "src/layouts/Layout.astro",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 34,
       "norm_label": "@layouts/layout.astro",
       "id": "src_layouts_layout_astro"
     },
@@ -2174,7 +2183,7 @@
       "file_type": "code",
       "source_file": "src/styles/app.scss",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 34,
       "norm_label": "@styles/app.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_app_scss"
     },
@@ -2184,7 +2193,7 @@
       "source_file": "src/components/ScrollToTop.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 12,
+      "community": 34,
       "norm_label": "scrolltotop.vue",
       "id": "src_components_scrolltotop_vue"
     },
@@ -2203,7 +2212,7 @@
       "file_type": "code",
       "source_file": "src/gql/entity-types.ts",
       "source_location": "L1",
-      "community": 8,
+      "community": 4,
       "norm_label": "entity-types.ts",
       "id": "src_gql_entity_types_ts"
     },
@@ -2375,7 +2384,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L86",
-      "community": 8,
+      "community": 4,
       "norm_label": "mediaitemfragment",
       "id": "gql_graphql_mediaitemfragment"
     },
@@ -2384,7 +2393,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L88",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesberlinerischaudiofragment",
       "id": "gql_graphql_wordpropertiesberlinerischaudiofragment"
     },
@@ -2393,7 +2402,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L90",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesexamplesexampleaudiofragment",
       "id": "gql_graphql_wordpropertiesexamplesexampleaudiofragment"
     },
@@ -2402,7 +2411,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L92",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesexamplesfragment",
       "id": "gql_graphql_wordpropertiesexamplesfragment"
     },
@@ -2411,7 +2420,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L94",
-      "community": 8,
+      "community": 10,
       "norm_label": "wordpropertieswikimediafilesfragment",
       "id": "gql_graphql_wordpropertieswikimediafilesfragment"
     },
@@ -2420,7 +2429,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L96",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesfragment",
       "id": "gql_graphql_wordpropertiesfragment"
     },
@@ -2429,7 +2438,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L101",
-      "community": 8,
+      "community": 10,
       "norm_label": "berlinerwordfragment",
       "id": "gql_graphql_berlinerwordfragment"
     },
@@ -2582,7 +2591,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L153",
-      "community": 0,
+      "community": 29,
       "norm_label": "sendemaildocument",
       "id": "gql_graphql_sendemaildocument"
     },
@@ -2591,7 +2600,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L154",
-      "community": 18,
+      "community": 22,
       "norm_label": "getpagesbyslugsdocument",
       "id": "gql_graphql_getpagesbyslugsdocument"
     },
@@ -2700,7 +2709,7 @@
       "file_type": "code",
       "source_file": "src/pages/_app.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 0,
       "norm_label": "_app.ts",
       "id": "src_pages_app_ts"
     },
@@ -2709,7 +2718,7 @@
       "file_type": "code",
       "source_file": "src/pages/404.astro",
       "source_location": "L1",
-      "community": 12,
+      "community": 34,
       "norm_label": "404.astro",
       "id": "src_pages_404_astro"
     },
@@ -2718,7 +2727,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L1",
-      "community": 14,
+      "community": 18,
       "norm_label": "index.astro",
       "id": "src_pages_index_astro"
     },
@@ -2727,7 +2736,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L13",
-      "community": 14,
+      "community": 18,
       "norm_label": "content",
       "id": "pages_index_content"
     },
@@ -2736,7 +2745,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L24",
-      "community": 14,
+      "community": 18,
       "norm_label": "facts",
       "id": "pages_index_facts"
     },
@@ -2745,7 +2754,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L91",
-      "community": 14,
+      "community": 18,
       "norm_label": "wrapper",
       "id": "pages_index_wrapper"
     },
@@ -2754,7 +2763,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L92",
-      "community": 14,
+      "community": 18,
       "norm_label": "img",
       "id": "pages_index_img"
     },
@@ -2763,7 +2772,7 @@
       "file_type": "code",
       "source_file": "src/styles/objects/_index.scss",
       "confidence": "EXTRACTED",
-      "community": 14,
+      "community": 18,
       "norm_label": "@styles/objects/_index.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss"
     },
@@ -2772,7 +2781,7 @@
       "file_type": "code",
       "source_file": "src/assets/images/brown-bear-roar.png",
       "confidence": "EXTRACTED",
-      "community": 14,
+      "community": 18,
       "norm_label": "@assets/images/brown-bear-roar.png",
       "id": "home_felix_workspace_berliner_schnauze_src_assets_images_brown_bear_roar_png"
     },
@@ -2782,7 +2791,7 @@
       "source_file": "src/components/FactCard.astro",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 14,
+      "community": 18,
       "norm_label": "factcard.astro",
       "id": "src_components_factcard_astro"
     },
@@ -2792,7 +2801,7 @@
       "source_file": "src/components/word-search/WordSearch.astro",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 20,
+      "community": 48,
       "norm_label": "wordsearch.astro",
       "id": "src_components_word_search_wordsearch_astro"
     },
@@ -2802,7 +2811,7 @@
       "source_file": "src/components/WordOfTheDay.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 14,
+      "community": 18,
       "norm_label": "wordoftheday.vue",
       "id": "src_components_wordoftheday_vue"
     },
@@ -2822,7 +2831,7 @@
       "source_file": "src/utils/helpers.ts",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 14,
+      "community": 17,
       "norm_label": "helpers.ts",
       "id": "src_utils_helpers_ts"
     },
@@ -2831,7 +2840,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_facts-grid.scss",
       "confidence": "EXTRACTED",
-      "community": 14,
+      "community": 18,
       "norm_label": "@styles/components/_facts-grid.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss"
     },
@@ -2919,7 +2928,7 @@
       "source_file": "src/components/word/IsWordOfTheDay.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 5,
+      "community": 23,
       "norm_label": "iswordoftheday.vue",
       "id": "src_components_word_iswordoftheday_vue"
     },
@@ -3085,7 +3094,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/store/wordOfTheDay.test.ts",
       "source_location": "L1",
-      "community": 5,
+      "community": 23,
       "norm_label": "wordoftheday.test.ts",
       "id": "src_tests_unit_store_wordoftheday_test_ts"
     },
@@ -3112,7 +3121,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/IsWordOfTheDay.test.ts",
       "source_location": "L1",
-      "community": 5,
+      "community": 23,
       "norm_label": "iswordoftheday.test.ts",
       "id": "src_tests_unit_components_iswordoftheday_test_ts"
     },
@@ -3121,7 +3130,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/IsWordOfTheDay.test.ts",
       "source_location": "L12",
-      "community": 5,
+      "community": 23,
       "norm_label": "wrapper",
       "id": "components_iswordoftheday_test_wrapper"
     },
@@ -3130,7 +3139,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ScrollToTop.test.ts",
       "source_location": "L1",
-      "community": 12,
+      "community": 34,
       "norm_label": "scrolltotop.test.ts",
       "id": "src_tests_unit_components_scrolltotop_test_ts"
     },
@@ -3139,7 +3148,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ScrollToTop.test.ts",
       "source_location": "L29",
-      "community": 12,
+      "community": 34,
       "norm_label": "wrapper",
       "id": "components_scrolltotop_test_wrapper"
     },
@@ -3481,7 +3490,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L1",
-      "community": 17,
+      "community": 48,
       "norm_label": "sortwordbyselect.test.ts",
       "id": "src_tests_unit_components_filter_sortwordbyselect_test_ts"
     },
@@ -3490,7 +3499,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L12",
-      "community": 17,
+      "community": 48,
       "norm_label": "wrapper",
       "id": "filter_sortwordbyselect_test_wrapper"
     },
@@ -3499,7 +3508,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L18",
-      "community": 17,
+      "community": 48,
       "norm_label": "select",
       "id": "filter_sortwordbyselect_test_select"
     },
@@ -3508,7 +3517,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L1",
-      "community": 23,
+      "community": 48,
       "norm_label": "wordtypefilter.test.ts",
       "id": "src_tests_unit_components_filter_wordtypefilter_test_ts"
     },
@@ -3517,7 +3526,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L10",
-      "community": 23,
+      "community": 48,
       "norm_label": "mockwordsearch",
       "id": "filter_wordtypefilter_test_mockwordsearch"
     },
@@ -3526,7 +3535,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L33",
-      "community": 23,
+      "community": 48,
       "norm_label": "multiselect",
       "id": "filter_wordtypefilter_test_multiselect"
     },
@@ -3535,7 +3544,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L41",
-      "community": 23,
+      "community": 48,
       "norm_label": "attrs",
       "id": "filter_wordtypefilter_test_attrs"
     },
@@ -3562,7 +3571,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/word/IsWordOfTheDay.test.ts",
       "source_location": "L1",
-      "community": 5,
+      "community": 23,
       "norm_label": "iswordoftheday.test.ts",
       "id": "src_tests_unit_components_word_iswordoftheday_test_ts"
     },
@@ -3571,7 +3580,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/word/IsWordOfTheDay.test.ts",
       "source_location": "L27",
-      "community": 5,
+      "community": 23,
       "norm_label": "wrapper",
       "id": "word_iswordoftheday_test_wrapper"
     },
@@ -3787,7 +3796,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 17,
       "norm_label": "randomelement.test.ts",
       "id": "src_tests_unit_utils_helper_randomelement_test_ts"
     },
@@ -3796,7 +3805,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 17,
       "norm_label": "elements",
       "id": "helper_randomelement_test_elements"
     },
@@ -3805,7 +3814,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L7",
-      "community": 14,
+      "community": 17,
       "norm_label": "result",
       "id": "helper_randomelement_test_result"
     },
@@ -3823,7 +3832,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValueLength.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 17,
       "norm_label": "checkobjectvaluelength.test.ts",
       "id": "src_tests_unit_utils_helper_checkobjectvaluelength_test_ts"
     },
@@ -3832,7 +3841,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValueLength.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 17,
       "norm_label": "testobject",
       "id": "helper_checkobjectvaluelength_test_testobject"
     },
@@ -3841,7 +3850,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/formattedDate.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 17,
       "norm_label": "formatteddate.test.ts",
       "id": "src_tests_unit_utils_helper_formatteddate_test_ts"
     },
@@ -3868,7 +3877,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValues.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 17,
       "norm_label": "checkobjectvalues.test.ts",
       "id": "src_tests_unit_utils_helper_checkobjectvalues_test_ts"
     },
@@ -3877,7 +3886,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValues.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 17,
       "norm_label": "testobject",
       "id": "helper_checkobjectvalues_test_testobject"
     },
@@ -4257,7 +4266,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_fact-card.scss",
       "confidence": "EXTRACTED",
-      "community": 14,
+      "community": 18,
       "norm_label": "@styles/components/_fact-card.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_fact_card_scss"
     },
@@ -4351,7 +4360,7 @@
       "file_type": "code",
       "source_file": "src/components/WordOfTheDay.vue",
       "source_location": "L90",
-      "community": 14,
+      "community": 18,
       "norm_label": "milliseconds",
       "id": "components_wordoftheday_milliseconds"
     },
@@ -4614,7 +4623,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_filter-search.scss",
       "confidence": "EXTRACTED",
-      "community": 20,
+      "community": 48,
       "norm_label": "@styles/components/_filter-search.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_filter_search_scss"
     },
@@ -4742,7 +4751,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/WordTypeFilter.vue",
       "source_location": "L1",
-      "community": 23,
+      "community": 48,
       "norm_label": "wordtypefilter.vue",
       "id": "src_components_filter_wordtypefilter_vue"
     },
@@ -4832,7 +4841,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordBySelect.vue",
       "source_location": "L1",
-      "community": 17,
+      "community": 48,
       "norm_label": "sortwordbyselect.vue",
       "id": "src_components_filter_sortwordbyselect_vue"
     },
@@ -4841,7 +4850,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordBySelect.vue",
       "source_location": "L24",
-      "community": 17,
+      "community": 48,
       "norm_label": "options",
       "id": "filter_sortwordbyselect_options"
     },
@@ -4850,7 +4859,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordBySelect.vue",
       "source_location": "L56",
-      "community": 17,
+      "community": 48,
       "norm_label": "selected",
       "id": "filter_sortwordbyselect_selected"
     },
@@ -4913,7 +4922,7 @@
       "file_type": "code",
       "source_file": "src/components/word/IsWordOfTheDay.vue",
       "source_location": "L38",
-      "community": 5,
+      "community": 23,
       "norm_label": "wordoftheday",
       "id": "word_iswordoftheday_wordoftheday"
     },
@@ -4922,7 +4931,7 @@
       "file_type": "code",
       "source_file": "src/components/word/IsWordOfTheDay.vue",
       "source_location": "L40",
-      "community": 5,
+      "community": 23,
       "norm_label": "iswordoftheday",
       "id": "word_iswordoftheday_iswordoftheday"
     },
@@ -5192,7 +5201,7 @@
       "file_type": "code",
       "source_file": "src/utils/refreshToken.js",
       "source_location": "L1",
-      "community": 6,
+      "community": 0,
       "norm_label": "refreshtoken.js",
       "id": "src_utils_refreshtoken_js"
     },
@@ -5201,7 +5210,7 @@
       "file_type": "code",
       "source_file": "src/utils/refreshToken.js",
       "source_location": "L4",
-      "community": 6,
+      "community": 0,
       "norm_label": "refreshtoken()",
       "id": "utils_refreshtoken_refreshtoken"
     },
@@ -5219,7 +5228,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L30",
-      "community": 14,
+      "community": 17,
       "norm_label": "randomelement()",
       "id": "utils_helpers_randomelement"
     },
@@ -5228,7 +5237,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L34",
-      "community": 14,
+      "community": 18,
       "norm_label": "seodata()",
       "id": "utils_helpers_seodata"
     },
@@ -5246,7 +5255,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L74",
-      "community": 14,
+      "community": 17,
       "norm_label": "formatteddate()",
       "id": "utils_helpers_formatteddate"
     },
@@ -5255,7 +5264,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L93",
-      "community": 14,
+      "community": 17,
       "norm_label": "checkobjectvalues()",
       "id": "utils_helpers_checkobjectvalues"
     },
@@ -5264,7 +5273,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L104",
-      "community": 14,
+      "community": 17,
       "norm_label": "checkobjectvaluelength()",
       "id": "utils_helpers_checkobjectvaluelength"
     },
@@ -5327,7 +5336,7 @@
       "file_type": "code",
       "source_file": "src/stores/modal.ts",
       "source_location": "L35",
-      "community": 6,
+      "community": 0,
       "norm_label": "$isopen",
       "id": "stores_modal_isopen"
     },
@@ -5453,7 +5462,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 0,
       "norm_label": "darkmode.ts",
       "id": "src_stores_darkmode_ts"
     },
@@ -5462,7 +5471,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L3",
-      "community": 6,
+      "community": 0,
       "norm_label": "darkmode",
       "id": "stores_darkmode_darkmode"
     },
@@ -5471,7 +5480,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L5",
-      "community": 6,
+      "community": 0,
       "norm_label": "$isdarkmode",
       "id": "stores_darkmode_isdarkmode"
     },
@@ -5480,7 +5489,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L18",
-      "community": 6,
+      "community": 0,
       "norm_label": "setdarkmode()",
       "id": "stores_darkmode_setdarkmode"
     },
@@ -5489,7 +5498,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 0,
       "norm_label": "wordoftheday.ts",
       "id": "src_stores_wordoftheday_ts"
     },
@@ -5498,7 +5507,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L5",
-      "community": 6,
+      "community": 0,
       "norm_label": "word",
       "id": "stores_wordoftheday_word"
     },
@@ -5507,7 +5516,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L21",
-      "community": 6,
+      "community": 0,
       "norm_label": "example",
       "id": "stores_wordoftheday_example"
     },
@@ -5516,7 +5525,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L26",
-      "community": 6,
+      "community": 0,
       "norm_label": "translation",
       "id": "stores_wordoftheday_translation"
     },
@@ -5525,7 +5534,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L30",
-      "community": 6,
+      "community": 0,
       "norm_label": "wordoftheday",
       "id": "stores_wordoftheday_wordoftheday"
     },
@@ -5534,7 +5543,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L61",
-      "community": 6,
+      "community": 0,
       "norm_label": "getwordoftheday()",
       "id": "stores_wordoftheday_getwordoftheday"
     },
@@ -5552,7 +5561,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L3",
-      "community": 6,
+      "community": 0,
       "norm_label": "toastnotify",
       "id": "stores_toastnotify_toastnotify"
     },
@@ -5606,7 +5615,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L67",
-      "community": 43,
+      "community": 109,
       "norm_label": "createtoastnotify()",
       "id": "stores_toastnotify_createtoastnotify"
     },
@@ -5624,7 +5633,7 @@
       "file_type": "code",
       "source_file": "src/services/fetchApi.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 0,
       "norm_label": "fetchapi.ts",
       "id": "src_services_fetchapi_ts"
     },
@@ -5633,7 +5642,7 @@
       "file_type": "code",
       "source_file": "src/services/fetchApi.ts",
       "source_location": "L3",
-      "community": 6,
+      "community": 0,
       "norm_label": "fetchapi()",
       "id": "services_fetchapi_fetchapi"
     },
@@ -5919,7 +5928,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 29,
       "norm_label": "suggestwordform",
       "id": "components_suggestwordform_suggestwordform"
     },
@@ -5958,7 +5967,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 29,
       "norm_label": "turnstile",
       "id": "components_turnstile_turnstile"
     },
@@ -5984,7 +5993,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 109,
+      "community": 107,
       "norm_label": "imagegallery",
       "id": "components_imagegallery_imagegallery"
     },
@@ -6036,7 +6045,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 29,
       "norm_label": "colormodetoggle",
       "id": "components_colormodetoggle_colormodetoggle"
     },
@@ -6166,7 +6175,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 29,
       "norm_label": "$isdarkmode",
       "id": "stores_index_isdarkmodestore"
     },
@@ -6257,7 +6266,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 106,
+      "community": 29,
       "norm_label": "createtoastnotify",
       "id": "stores_index_createtoastnotify"
     },
@@ -6348,7 +6357,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 29,
       "norm_label": "alertbanner",
       "id": "components_alertbanner_alertbanner"
     },
@@ -6491,7 +6500,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 29,
       "norm_label": "wordsuggesthint",
       "id": "components_wordsuggesthint_wordsuggesthint"
     },
@@ -6543,7 +6552,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 29,
       "norm_label": "alertbannerprops",
       "id": "components_alertbanner_alertbannerprops"
     },
@@ -6647,7 +6656,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 109,
+      "community": 107,
       "norm_label": "imagegallerycustomelement",
       "id": "components_imagegallery_imagegalleryce"
     },
@@ -6660,7 +6669,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 109,
+      "community": 107,
       "norm_label": "imagegalleryprops",
       "id": "components_imagegallery_imagegalleryprops"
     },
@@ -6673,7 +6682,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 5,
+      "community": 23,
       "norm_label": "$wordoftheday",
       "id": "stores_index_wordoftheday"
     },
@@ -7323,7 +7332,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 0,
       "norm_label": "stores/index.ts (barrel export)",
       "id": "stores_index_barrel"
     },
@@ -7349,7 +7358,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 43,
+      "community": 109,
       "norm_label": "registersw() call",
       "id": "services_pwa_registersw"
     },
@@ -8782,9 +8791,9 @@
       "source_file": "src/components/BaseHead.astro",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_basehead_astro",
-      "target": "berlinx_bold_woff2"
+      "target": "berlinx_bold_woff2",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8933,9 +8942,9 @@
       "source_file": "src/components/Modal.vue",
       "source_location": "L51",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_modal_vue",
-      "target": "components_modal_currentmodal"
+      "target": "components_modal_currentmodal",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8943,9 +8952,9 @@
       "source_file": "src/components/Modal.vue",
       "source_location": "L53",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_modal_vue",
-      "target": "components_modal_hasview"
+      "target": "components_modal_hasview",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8953,9 +8962,9 @@
       "source_file": "src/components/Modal.vue",
       "source_location": "L48",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_modal_vue",
-      "target": "components_modal_props"
+      "target": "components_modal_props",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8963,9 +8972,9 @@
       "source_file": "src/components/Modal.vue",
       "source_location": "L47",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_modal_vue",
-      "target": "components_modal_view"
+      "target": "components_modal_view",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8973,9 +8982,9 @@
       "source_file": "src/components/Modal.vue",
       "source_location": "L49",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_modal_vue",
-      "target": "components_modal_viewiscomponent"
+      "target": "components_modal_viewiscomponent",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9049,6 +9058,17 @@
       "confidence_score": 1.0,
       "source": "src_components_footer_astro",
       "target": "download"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "home_felix_workspace_berliner_schnauze_package_json"
     },
     {
       "relation": "imports_from",
@@ -20027,5 +20047,5 @@
       "source_file": "src/pages/api/search/index.json.ts"
     }
   ],
-  "built_at_commit": "de34a63a89ee106d12c6ba00add2c8cc578c0dcf"
+  "built_at_commit": "bbb898a5ee209320bcd8ad9268b3fb63248bec1f"
 }
