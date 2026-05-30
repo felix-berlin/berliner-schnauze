@@ -38,10 +38,6 @@
     targetDocument.documentElement.style.colorScheme = isDarkMode ? 'dark' : 'light';
 
     upsertThemeColorMeta(targetDocument, isDarkMode);
-
-    if (localStorage.getItem(STORAGE_KEY) === null) {
-      localStorage.setItem(STORAGE_KEY, String(isDarkMode));
-    }
   };
 
   const applyTheme = () => applyThemeToDocument(document);

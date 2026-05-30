@@ -40,9 +40,9 @@ import {
   resetModal,
 } from "@stores/modal.ts";
 import { useMutationObserver } from "@vueuse/core";
-import { computed, onMounted, useTemplateRef } from "vue";
+import { computed, defineAsyncComponent, onMounted, useTemplateRef } from "vue";
 
-import ModalCloseButton from "@/components/ModalCloseButton.vue";
+const ModalCloseButton = defineAsyncComponent(() => import("@/components/ModalCloseButton.vue"));
 
 const view = useStore($view);
 const props = useStore($props);

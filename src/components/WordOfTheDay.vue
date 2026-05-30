@@ -58,7 +58,7 @@ import type { Ref } from "vue";
 import ConfettiEffect from "@components/ConfettiEffect.vue";
 import SingleLoader from "@components/SingleLoader.vue";
 import { useStore } from "@nanostores/vue";
-import { $wordOfTheDay } from "@stores/index.ts";
+import { $wordOfTheDay } from "@stores/wordOfTheDay.ts";
 import { routeToWord } from "@utils/helpers.ts";
 import Crown from "virtual:icons/lucide/crown";
 import { onMounted, ref } from "vue";

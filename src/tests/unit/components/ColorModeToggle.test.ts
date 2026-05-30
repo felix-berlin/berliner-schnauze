@@ -2,21 +2,25 @@
 import ColorModeToggle from "@components/ColorModeToggle.vue";
 import { mount } from "@vue/test-utils";
 import { JSDOM } from "jsdom";
-import { it, expect, describe } from "vitest";
+import { it, expect, describe, beforeEach } from "vitest";
+import { $isDarkMode } from "@stores/index.ts";
 
 describe("ColorModeToggle", async () => {
+  beforeEach(() => {
+    $isDarkMode.set(null);
+  });
+
   it("renders the correct type", async () => {
-    // Create a new JSDOM instance
     const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
 
-    // Set the global window and document objects to the JSDOM window and document objects
     global.window = dom.window;
     global.document = dom.window.document;
 
-    // Mount the component
-    const wrapper = mount(ColorModeToggle);
+    // System preference: light (not dark) → first click sets dark mode
+    global.window.matchMedia = () =>
+      ({ matches: false }) as MediaQueryList;
 
-    // Test that the button toggles the color mode
+    const wrapper = mount(ColorModeToggle);
     const button = wrapper.find("button");
     const html = document.querySelector("html");
 

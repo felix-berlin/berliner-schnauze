@@ -1,4 +1,4 @@
-import { createToastNotify } from "@stores/index.ts";
+import { createToastNotify } from "@stores/toastNotify.ts";
 import supportedBrowsers from "@utils/supportedBrowsers.mjs";
 
 /**

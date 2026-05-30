@@ -57,7 +57,7 @@
 <script setup lang="ts">
 import type { BerlinerWord, WordProperties } from "@/gql/entity-types";
 
-import { createToastNotify } from "@stores/index.ts";
+import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
 import { routeToWord } from "@utils/helpers.ts";
 import { useClipboard, useShare } from "@vueuse/core";

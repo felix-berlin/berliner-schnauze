@@ -1,10 +1,11 @@
+accordion
 achteck
 action
+actions
 active
 alert
 all
 alphabetical
-alphabetically
 alternative
 ambient
 analytics
@@ -25,6 +26,7 @@ available
 back
 badge
 banner
+bar
 barrel
 base
 bear
@@ -39,6 +41,7 @@ body
 bold
 branding
 breadcrumbs
+breakdown
 breakpoints
 brown
 browser
@@ -75,14 +78,17 @@ client
 clock
 close
 codegen
+collections
 color
 colored
+colors
 component
 components
 compromise
 computed
 concept
 confetti
+config
 confirm
 connected
 connection
@@ -93,6 +99,7 @@ contact
 container
 content
 contrast
+controls
 cookie
 core
 count
@@ -105,13 +112,11 @@ custom
 dark
 data
 date
-datenschutz
 day
 debounced
 declarations
 default
 design
-detail
 detect
 detector
 device
@@ -128,7 +133,6 @@ dom
 download
 drawing
 dropdown
-dynamic
 effect
 element
 elements
@@ -137,6 +141,7 @@ emit
 ended
 english
 entity
+entry
 enum
 env
 error
@@ -147,6 +152,7 @@ example
 examples
 expected
 export
+ext
 extension
 external
 extract
@@ -165,6 +171,7 @@ flyout
 focus
 fonts
 footer
+for
 form
 format
 formatted
@@ -184,7 +191,6 @@ graph
 graphql
 grid
 group
-grouped
 groups
 handle
 head
@@ -209,7 +215,6 @@ illustration
 image
 images
 img
-impressum
 incremental
 index
 info
@@ -229,6 +234,8 @@ json
 keyboard
 kiosk
 label
+labelled
+labels
 larger
 layout
 layouts
@@ -241,6 +248,7 @@ lightbox
 link
 links
 list
+live
 load
 loader
 loading
@@ -274,6 +282,7 @@ modified
 module
 moon
 motion
+mount
 mouse
 mouth
 multiselect
@@ -302,6 +311,7 @@ order
 orderby
 ornate
 overview
+package
 page
 pages
 paginated
@@ -309,7 +319,6 @@ panel
 paq
 pattern
 payload
-per
 percent
 photographic
 photoswipe
@@ -348,7 +357,6 @@ register
 registered
 regular
 related
-relative
 reload
 remove
 replay
@@ -369,6 +377,7 @@ script
 scroll
 scss
 search
+segments
 select
 selected
 send
@@ -397,10 +406,10 @@ sorted
 sounding
 spy
 src
-ssg
 start
 state
 states
+stats
 status
 stile
 stop
@@ -429,7 +438,6 @@ text
 than
 the
 theme
-time
 timeout
 tip
 title
@@ -459,6 +467,7 @@ unmount
 unsupported
 update
 url
+urls
 urql
 use
 util

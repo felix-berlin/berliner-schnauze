@@ -10,6 +10,7 @@ export type { Seo, SeoProps, Title };
 
 import BerlinBold from '/fonts/Berlin-Bold.woff2';
 import BerlinItalic from '/fonts/Berlin-Italic.woff2';
+import BerlinXBold from '/fonts/BerlinX-Bold.woff2';
 import Berlin from '/fonts/Berlin.woff2';
 import BerlinerRegular from '/fonts/BerlinerRegular.woff2';
 
@@ -30,7 +31,8 @@ const canonicalURL = removeFileExtension(Astro.url.href);
 <link as='font' crossorigin href={Berlin} rel='preload' type='font/woff2' />
 <link as='font' crossorigin href={BerlinBold} rel='preload' type='font/woff2' />
 <link as='font' crossorigin href={BerlinItalic} rel='preload' type='font/woff2' />
-<link href='//cms.berliner-schnauze.wtf' rel='preconnect' />
+<link as='font' crossorigin href={BerlinXBold} rel='preload' type='font/woff2' />
+<link href='https://cms.berliner-schnauze.wtf' rel='preconnect' crossorigin />
 
 <script src='../plugins/sentryBrowser.ts'></script>
 

@@ -1,5 +1,5 @@
 import { useEventListener, useTimeoutFn } from "@vueuse/core";
-import { createToastNotify } from "@stores/index";
+import { createToastNotify } from "@stores/toastNotify.ts";
 import { computed, onMounted, ref } from "vue";
 
 export interface CacheEntry {

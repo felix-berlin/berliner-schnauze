@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { close } from "@stores/index.ts";
+import { close } from "@stores/modal.ts";
 import X from "virtual:icons/lucide/x";
 import { useSlots } from "vue";
 
