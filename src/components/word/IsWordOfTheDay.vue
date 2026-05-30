@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { useStore } from "@nanostores/vue";
-import { $wordOfTheDay } from "@stores/index.ts";
+import { $wordOfTheDay } from "@stores/wordOfTheDay.ts";
 import Crown from "virtual:icons/lucide/crown";
 import { computed } from "vue";
 

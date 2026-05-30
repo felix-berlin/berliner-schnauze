@@ -38,7 +38,7 @@ const {
       <div id='docStart' style='position: absolute'></div>
       <slot />
     </main>
-    <ScrollToTop client:load />
+    <ScrollToTop client:visible />
     <ToastNotifyContainer client:only='vue' />
     <Modal client:idle />
     <Footer transition:persist />

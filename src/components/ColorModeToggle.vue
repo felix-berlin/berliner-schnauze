@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { useStore } from "@nanostores/vue";
-import { $isDarkMode, setDarkMode } from "@stores/index.ts";
+import { $isDarkMode, setDarkMode } from "@stores/darkMode.ts";
 import { trackEvent } from "@utils/analytics";
 import Moon from "virtual:icons/lucide/moon";
 import Sun from "virtual:icons/lucide/sun";
