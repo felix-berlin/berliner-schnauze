@@ -98,103 +98,122 @@
   },
   "nodes": [
     {
-      "label": "index.astro",
+      "label": "@components/AppSettings.vue",
       "file_type": "code",
-      "source_file": "src/pages/index.astro",
+      "source_file": "src/components/AppSettings.vue",
       "source_location": "L1",
-      "id": "src_pages_index_astro",
-      "community": 17,
-      "norm_label": "index.astro"
+      "confidence": "EXTRACTED",
+      "id": "src_components_appsettings_vue",
+      "community": 85,
+      "norm_label": "@components/appsettings.vue"
     },
     {
-      "label": "content",
+      "label": "BellOffIcon",
       "file_type": "code",
-      "source_file": "src/pages/index.astro",
+      "source_file": "src/components/AppSettings.vue",
+      "source_location": "L11",
+      "id": "components_appsettings_bellofficon",
+      "community": 85,
+      "norm_label": "bellofficon"
+    },
+    {
+      "label": "notificationPermission",
+      "file_type": "code",
+      "source_file": "src/components/AppSettings.vue",
       "source_location": "L13",
-      "id": "pages_index_content",
-      "community": 17,
-      "norm_label": "content"
+      "id": "components_appsettings_notificationpermission",
+      "community": 85,
+      "norm_label": "notificationpermission"
     },
     {
-      "label": "facts",
+      "label": "notificationsSupported",
       "file_type": "code",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L24",
-      "id": "pages_index_facts",
-      "community": 17,
-      "norm_label": "facts"
+      "source_file": "src/components/AppSettings.vue",
+      "source_location": "L14",
+      "id": "components_appsettings_notificationssupported",
+      "community": 85,
+      "norm_label": "notificationssupported"
     },
     {
-      "label": "@styles/objects/_index.scss",
+      "label": "Footer.astro",
       "file_type": "code",
-      "source_file": "src/styles/objects/_index.scss",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L1",
+      "id": "src_components_footer_astro",
+      "community": 24,
+      "norm_label": "footer.astro"
+    },
+    {
+      "label": "socialMenu",
+      "file_type": "code",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L17",
+      "id": "components_footer_socialmenu",
+      "community": 24,
+      "norm_label": "socialmenu"
+    },
+    {
+      "label": "fundingMenu",
+      "file_type": "code",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L32",
+      "id": "components_footer_fundingmenu",
+      "community": 24,
+      "norm_label": "fundingmenu"
+    },
+    {
+      "label": "navMenu1",
+      "file_type": "code",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L47",
+      "id": "components_footer_navmenu1",
+      "community": 24,
+      "norm_label": "navmenu1"
+    },
+    {
+      "label": "navMenu2",
+      "file_type": "code",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L70",
+      "id": "components_footer_navmenu2",
+      "community": 24,
+      "norm_label": "navmenu2"
+    },
+    {
+      "label": "@assets/images/bear-walking.png",
+      "file_type": "code",
+      "source_file": "src/assets/images/bear-walking.png",
       "confidence": "EXTRACTED",
-      "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss",
-      "community": 17,
-      "norm_label": "@styles/objects/_index.scss"
+      "id": "home_felix_workspace_berliner_schnauze_src_assets_images_bear_walking_png",
+      "community": 24,
+      "norm_label": "@assets/images/bear-walking.png"
     },
     {
-      "label": "@assets/images/brown-bear-roar.png",
+      "label": "@components/CarbonBadge.vue",
       "file_type": "code",
-      "source_file": "src/assets/images/brown-bear-roar.png",
+      "source_file": "src/components/CarbonBadge.vue",
       "confidence": "EXTRACTED",
-      "id": "home_felix_workspace_berliner_schnauze_src_assets_images_brown_bear_roar_png",
-      "community": 17,
-      "norm_label": "@assets/images/brown-bear-roar.png"
+      "id": "home_felix_workspace_berliner_schnauze_src_components_carbonbadge_vue",
+      "community": 24,
+      "norm_label": "@components/carbonbadge.vue"
     },
     {
-      "label": "@components/FactCard.astro",
+      "label": "@components/InstallApp.vue",
       "file_type": "code",
-      "source_file": "src/components/FactCard.astro",
+      "source_file": "src/components/InstallApp.vue",
       "confidence": "EXTRACTED",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_factcard_astro",
-      "community": 17,
-      "norm_label": "@components/factcard.astro"
+      "id": "home_felix_workspace_berliner_schnauze_src_components_installapp_vue",
+      "community": 24,
+      "norm_label": "@components/installapp.vue"
     },
     {
-      "label": "@components/word-search/WordSearch.astro",
+      "label": "@components/NavList.vue",
       "file_type": "code",
-      "source_file": "src/components/word-search/WordSearch.astro",
+      "source_file": "src/components/NavList.vue",
       "confidence": "EXTRACTED",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_word_search_wordsearch_astro",
-      "community": 17,
-      "norm_label": "@components/word-search/wordsearch.astro"
-    },
-    {
-      "label": "@components/WordOfTheDay.vue",
-      "file_type": "code",
-      "source_file": "src/components/WordOfTheDay.vue",
-      "confidence": "EXTRACTED",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_wordoftheday_vue",
-      "community": 17,
-      "norm_label": "@components/wordoftheday.vue"
-    },
-    {
-      "label": "@components/WordSearchLink.vue",
-      "file_type": "code",
-      "source_file": "src/components/WordSearchLink.vue",
-      "confidence": "EXTRACTED",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_wordsearchlink_vue",
-      "community": 17,
-      "norm_label": "@components/wordsearchlink.vue"
-    },
-    {
-      "label": "@layouts/Layout.astro",
-      "file_type": "code",
-      "source_file": "src/layouts/Layout.astro",
-      "confidence": "EXTRACTED",
-      "id": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro",
-      "community": 43,
-      "norm_label": "@layouts/layout.astro"
-    },
-    {
-      "label": "@utils/helpers.ts",
-      "file_type": "code",
-      "source_file": "src/utils/helpers.ts",
-      "confidence": "EXTRACTED",
-      "id": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts",
-      "community": 17,
-      "norm_label": "@utils/helpers.ts"
+      "id": "home_felix_workspace_berliner_schnauze_src_components_navlist_vue",
+      "community": 24,
+      "norm_label": "@components/navlist.vue"
     },
     {
       "label": "astro:assets",
@@ -202,17 +221,287 @@
       "source_file": "astro:assets",
       "confidence": "EXTRACTED",
       "id": "astro_assets",
-      "community": 24,
+      "community": 44,
       "norm_label": "astro:assets"
+    },
+    {
+      "label": "virtual:icons/lucide/download",
+      "file_type": "code",
+      "source_file": "virtual:icons/lucide/download",
+      "confidence": "EXTRACTED",
+      "id": "download",
+      "community": 24,
+      "norm_label": "virtual:icons/lucide/download"
+    },
+    {
+      "label": "../../package.json",
+      "file_type": "code",
+      "source_file": "package.json",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_package_json",
+      "community": 24,
+      "norm_label": "../../package.json"
+    },
+    {
+      "label": "MainMenu.vue",
+      "file_type": "code",
+      "source_file": "src/components/header/MainMenu.vue",
+      "source_location": "L1",
+      "id": "src_components_header_mainmenu_vue",
+      "community": 24,
+      "norm_label": "mainmenu.vue"
+    },
+    {
+      "label": "cache.astro",
+      "file_type": "code",
+      "source_file": "src/pages/settings/cache.astro",
+      "source_location": "L1",
+      "id": "src_pages_settings_cache_astro",
+      "community": 85,
+      "norm_label": "cache.astro"
+    },
+    {
+      "label": "page",
+      "file_type": "code",
+      "source_file": "src/pages/settings/cache.astro",
+      "source_location": "L5",
+      "id": "settings_cache_page",
+      "community": 85,
+      "norm_label": "page"
+    },
+    {
+      "label": "@components/PwaCacheOverview.vue",
+      "file_type": "code",
+      "source_file": "src/components/PwaCacheOverview.vue",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_components_pwacacheoverview_vue",
+      "community": 85,
+      "norm_label": "@components/pwacacheoverview.vue"
+    },
+    {
+      "label": "@layouts/Layout.astro",
+      "file_type": "code",
+      "source_file": "src/layouts/Layout.astro",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro",
+      "community": 85,
+      "norm_label": "@layouts/layout.astro"
+    },
+    {
+      "label": "index.astro",
+      "file_type": "code",
+      "source_file": "src/pages/settings/index.astro",
+      "source_location": "L1",
+      "id": "src_pages_settings_index_astro",
+      "community": 85,
+      "norm_label": "index.astro"
+    },
+    {
+      "label": "page",
+      "file_type": "code",
+      "source_file": "src/pages/settings/index.astro",
+      "source_location": "L5",
+      "id": "settings_index_page",
+      "community": 85,
+      "norm_label": "page"
+    },
+    {
+      "label": "pwa.ts",
+      "file_type": "code",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L1",
+      "id": "src_services_pwa_ts",
+      "community": 34,
+      "norm_label": "pwa.ts"
+    },
+    {
+      "label": "onNeedReload()",
+      "file_type": "code",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L7",
+      "id": "services_pwa_onneedreload",
+      "community": 34,
+      "norm_label": "onneedreload()"
+    },
+    {
+      "label": "onOfflineReady()",
+      "file_type": "code",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L29",
+      "id": "services_pwa_onofflineready",
+      "community": 34,
+      "norm_label": "onofflineready()"
+    },
+    {
+      "label": "onRegisteredSW()",
+      "file_type": "code",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L43",
+      "id": "services_pwa_onregisteredsw",
+      "community": 34,
+      "norm_label": "onregisteredsw()"
+    },
+    {
+      "label": "notificationPermission.ts",
+      "file_type": "code",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L1",
+      "id": "src_stores_notificationpermission_ts",
+      "community": 107,
+      "norm_label": "notificationpermission.ts"
+    },
+    {
+      "label": "NotificationPermissionState",
+      "file_type": "code",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L4",
+      "id": "stores_notificationpermission_notificationpermissionstate",
+      "community": 107,
+      "norm_label": "notificationpermissionstate"
+    },
+    {
+      "label": "isNotificationSupported()",
+      "file_type": "code",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L6",
+      "id": "stores_notificationpermission_isnotificationsupported",
+      "community": 107,
+      "norm_label": "isnotificationsupported()"
+    },
+    {
+      "label": "$notificationPermission",
+      "file_type": "code",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L9",
+      "id": "stores_notificationpermission_notificationpermission",
+      "community": 107,
+      "norm_label": "$notificationpermission"
+    },
+    {
+      "label": "requestNotificationPermission()",
+      "file_type": "code",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L13",
+      "id": "stores_notificationpermission_requestnotificationpermission",
+      "community": 107,
+      "norm_label": "requestnotificationpermission()"
+    },
+    {
+      "label": "notificationPermission.test.ts",
+      "file_type": "code",
+      "source_file": "src/tests/unit/store/notificationPermission.test.ts",
+      "source_location": "L1",
+      "id": "src_tests_unit_store_notificationpermission_test_ts",
+      "community": 112,
+      "norm_label": "notificationpermission.test.ts"
+    },
+    {
+      "label": "mockRequestPermission",
+      "file_type": "code",
+      "source_file": "src/tests/unit/store/notificationPermission.test.ts",
+      "source_location": "L3",
+      "id": "store_notificationpermission_test_mockrequestpermission",
+      "community": 112,
+      "norm_label": "mockrequestpermission"
+    },
+    {
+      "label": "index.astro",
+      "file_type": "code",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L1",
+      "community": 17,
+      "norm_label": "index.astro",
+      "id": "src_pages_index_astro"
+    },
+    {
+      "label": "content",
+      "file_type": "code",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L13",
+      "community": 17,
+      "norm_label": "content",
+      "id": "pages_index_content"
+    },
+    {
+      "label": "facts",
+      "file_type": "code",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L24",
+      "community": 17,
+      "norm_label": "facts",
+      "id": "pages_index_facts"
+    },
+    {
+      "label": "@styles/objects/_index.scss",
+      "file_type": "code",
+      "source_file": "src/styles/objects/_index.scss",
+      "confidence": "EXTRACTED",
+      "community": 17,
+      "norm_label": "@styles/objects/_index.scss",
+      "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss"
+    },
+    {
+      "label": "@assets/images/brown-bear-roar.png",
+      "file_type": "code",
+      "source_file": "src/assets/images/brown-bear-roar.png",
+      "confidence": "EXTRACTED",
+      "community": 17,
+      "norm_label": "@assets/images/brown-bear-roar.png",
+      "id": "home_felix_workspace_berliner_schnauze_src_assets_images_brown_bear_roar_png"
+    },
+    {
+      "label": "@components/FactCard.astro",
+      "file_type": "code",
+      "source_file": "src/components/FactCard.astro",
+      "confidence": "EXTRACTED",
+      "community": 17,
+      "norm_label": "@components/factcard.astro",
+      "id": "home_felix_workspace_berliner_schnauze_src_components_factcard_astro"
+    },
+    {
+      "label": "@components/word-search/WordSearch.astro",
+      "file_type": "code",
+      "source_file": "src/components/word-search/WordSearch.astro",
+      "confidence": "EXTRACTED",
+      "community": 17,
+      "norm_label": "@components/word-search/wordsearch.astro",
+      "id": "home_felix_workspace_berliner_schnauze_src_components_word_search_wordsearch_astro"
+    },
+    {
+      "label": "@components/WordOfTheDay.vue",
+      "file_type": "code",
+      "source_file": "src/components/WordOfTheDay.vue",
+      "confidence": "EXTRACTED",
+      "community": 17,
+      "norm_label": "@components/wordoftheday.vue",
+      "id": "home_felix_workspace_berliner_schnauze_src_components_wordoftheday_vue"
+    },
+    {
+      "label": "@components/WordSearchLink.vue",
+      "file_type": "code",
+      "source_file": "src/components/WordSearchLink.vue",
+      "confidence": "EXTRACTED",
+      "community": 17,
+      "norm_label": "@components/wordsearchlink.vue",
+      "id": "home_felix_workspace_berliner_schnauze_src_components_wordsearchlink_vue"
+    },
+    {
+      "label": "@utils/helpers.ts",
+      "file_type": "code",
+      "source_file": "src/utils/helpers.ts",
+      "confidence": "EXTRACTED",
+      "community": 17,
+      "norm_label": "@utils/helpers.ts",
+      "id": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
     },
     {
       "label": "@styles/components/_facts-grid.scss",
       "file_type": "code",
       "source_file": "src/styles/components/_facts-grid.scss",
       "confidence": "EXTRACTED",
-      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss",
       "community": 17,
-      "norm_label": "@styles/components/_facts-grid.scss"
+      "norm_label": "@styles/components/_facts-grid.scss",
+      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss"
     },
     {
       "label": "MainHeader.astro",
@@ -249,15 +538,6 @@
       "community": 24,
       "norm_label": "@components/colormodetoggle.vue",
       "id": "home_felix_workspace_berliner_schnauze_src_components_colormodetoggle_vue"
-    },
-    {
-      "label": "@components/header/MainMenu.vue",
-      "file_type": "code",
-      "source_file": "src/components/header/MainMenu.vue",
-      "confidence": "EXTRACTED",
-      "community": 24,
-      "norm_label": "@components/header/mainmenu.vue",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_header_mainmenu_vue"
     },
     {
       "label": "@components/MainMenuButton.vue",
@@ -372,7 +652,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L157",
-      "community": 3,
+      "community": 109,
       "norm_label": "setletterfilter()",
       "id": "stores_wordlist_setletterfilter"
     },
@@ -390,7 +670,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L174",
-      "community": 3,
+      "community": 22,
       "norm_label": "setwordtypefilter()",
       "id": "stores_wordlist_setwordtypefilter"
     },
@@ -435,7 +715,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L221",
-      "community": 48,
+      "community": 22,
       "norm_label": "$setsortorder()",
       "id": "stores_wordlist_setsortorder"
     },
@@ -453,7 +733,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L236",
-      "community": 3,
+      "community": 22,
       "norm_label": "$toggleberolinismus()",
       "id": "stores_wordlist_toggleberolinismus"
     },
@@ -552,7 +832,7 @@
       "file_type": "code",
       "source_file": "src/pages/_app.ts",
       "source_location": "L1",
-      "community": 29,
+      "community": 31,
       "norm_label": "_app.ts",
       "id": "src_pages_app_ts"
     },
@@ -984,7 +1264,7 @@
       "file_type": "code",
       "source_file": "src/composable/useCacheStorage.ts",
       "source_location": "L96",
-      "community": 34,
+      "community": 7,
       "norm_label": "usecachestorage()",
       "id": "composable_usecachestorage_usecachestorage"
     },
@@ -1160,101 +1440,11 @@
       "id": "components_modal_hasview"
     },
     {
-      "label": "Footer.astro",
-      "file_type": "code",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L1",
-      "community": 24,
-      "norm_label": "footer.astro",
-      "id": "src_components_footer_astro"
-    },
-    {
-      "label": "socialMenu",
-      "file_type": "code",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L17",
-      "community": 24,
-      "norm_label": "socialmenu",
-      "id": "components_footer_socialmenu"
-    },
-    {
-      "label": "fundingMenu",
-      "file_type": "code",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L32",
-      "community": 24,
-      "norm_label": "fundingmenu",
-      "id": "components_footer_fundingmenu"
-    },
-    {
-      "label": "navMenu1",
-      "file_type": "code",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L47",
-      "community": 24,
-      "norm_label": "navmenu1",
-      "id": "components_footer_navmenu1"
-    },
-    {
-      "label": "navMenu2",
-      "file_type": "code",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L70",
-      "community": 24,
-      "norm_label": "navmenu2",
-      "id": "components_footer_navmenu2"
-    },
-    {
-      "label": "@assets/images/bear-walking.png",
-      "file_type": "code",
-      "source_file": "src/assets/images/bear-walking.png",
-      "confidence": "EXTRACTED",
-      "community": 24,
-      "norm_label": "@assets/images/bear-walking.png",
-      "id": "home_felix_workspace_berliner_schnauze_src_assets_images_bear_walking_png"
-    },
-    {
-      "label": "@components/CarbonBadge.vue",
-      "file_type": "code",
-      "source_file": "src/components/CarbonBadge.vue",
-      "confidence": "EXTRACTED",
-      "community": 24,
-      "norm_label": "@components/carbonbadge.vue",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_carbonbadge_vue"
-    },
-    {
-      "label": "@components/InstallApp.vue",
-      "file_type": "code",
-      "source_file": "src/components/InstallApp.vue",
-      "confidence": "EXTRACTED",
-      "community": 24,
-      "norm_label": "@components/installapp.vue",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_installapp_vue"
-    },
-    {
-      "label": "@components/NavList.vue",
-      "file_type": "code",
-      "source_file": "src/components/NavList.vue",
-      "confidence": "EXTRACTED",
-      "community": 24,
-      "norm_label": "@components/navlist.vue",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_navlist_vue"
-    },
-    {
-      "label": "virtual:icons/lucide/download",
-      "file_type": "code",
-      "source_file": "virtual:icons/lucide/download",
-      "confidence": "EXTRACTED",
-      "community": 24,
-      "norm_label": "virtual:icons/lucide/download",
-      "id": "download"
-    },
-    {
       "label": "WordSearchLink.astro",
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.astro",
       "source_location": "L1",
-      "community": 17,
+      "community": 100,
       "norm_label": "wordsearchlink.astro",
       "id": "src_components_wordsearchlink_astro"
     },
@@ -1263,7 +1453,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_word-search-link.scss",
       "confidence": "EXTRACTED",
-      "community": 17,
+      "community": 100,
       "norm_label": "@styles/components/_word-search-link.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_word_search_link_scss"
     },
@@ -1345,7 +1535,7 @@
       "file_type": "code",
       "source_file": "astro",
       "confidence": "EXTRACTED",
-      "community": 18,
+      "community": 43,
       "norm_label": "astro",
       "id": "astro"
     },
@@ -1363,7 +1553,7 @@
       "file_type": "code",
       "source_file": "astro:env/client",
       "confidence": "EXTRACTED",
-      "community": 29,
+      "community": 31,
       "norm_label": "astro:env/client",
       "id": "client"
     },
@@ -2290,7 +2480,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L1",
-      "community": 31,
+      "community": 99,
       "norm_label": "wordlist.vue",
       "id": "src_components_wordlist_vue"
     },
@@ -2299,7 +2489,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L54",
-      "community": 31,
+      "community": 99,
       "norm_label": "oramasearch",
       "id": "components_wordlist_oramasearch"
     },
@@ -2308,7 +2498,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L55",
-      "community": 31,
+      "community": 99,
       "norm_label": "mutableoramasearch",
       "id": "components_wordlist_mutableoramasearch"
     },
@@ -2317,7 +2507,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L65",
-      "community": 31,
+      "community": 99,
       "norm_label": "activeindex",
       "id": "components_wordlist_activeindex"
     },
@@ -2326,7 +2516,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L67",
-      "community": 31,
+      "community": 99,
       "norm_label": "virtualizerref",
       "id": "components_wordlist_virtualizerref"
     },
@@ -2335,7 +2525,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L68",
-      "community": 31,
+      "community": 99,
       "norm_label": "showactive",
       "id": "components_wordlist_showactive"
     },
@@ -2344,7 +2534,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L72",
-      "community": 31,
+      "community": 99,
       "norm_label": "showactivewithtimeout()",
       "id": "components_wordlist_showactivewithtimeout"
     },
@@ -2353,7 +2543,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L89",
-      "community": 31,
+      "community": 99,
       "norm_label": "gotoword()",
       "id": "components_wordlist_gotoword"
     },
@@ -2362,7 +2552,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L93",
-      "community": 31,
+      "community": 99,
       "norm_label": "focusactive()",
       "id": "components_wordlist_focusactive"
     },
@@ -2398,7 +2588,7 @@
       "file_type": "code",
       "source_file": "src/plugins/sentryBrowser.ts",
       "source_location": "L1",
-      "community": 29,
+      "community": 31,
       "norm_label": "sentrybrowser.ts",
       "id": "src_plugins_sentrybrowser_ts"
     },
@@ -2463,7 +2653,7 @@
       "file_type": "code",
       "source_file": "src/gql/entity-types.ts",
       "source_location": "L1",
-      "community": 8,
+      "community": 4,
       "norm_label": "entity-types.ts",
       "id": "src_gql_entity_types_ts"
     },
@@ -2635,7 +2825,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L86",
-      "community": 8,
+      "community": 4,
       "norm_label": "mediaitemfragment",
       "id": "gql_graphql_mediaitemfragment"
     },
@@ -2644,7 +2834,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L88",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesberlinerischaudiofragment",
       "id": "gql_graphql_wordpropertiesberlinerischaudiofragment"
     },
@@ -2653,7 +2843,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L90",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesexamplesexampleaudiofragment",
       "id": "gql_graphql_wordpropertiesexamplesexampleaudiofragment"
     },
@@ -2662,7 +2852,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L92",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesexamplesfragment",
       "id": "gql_graphql_wordpropertiesexamplesfragment"
     },
@@ -2680,7 +2870,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L96",
-      "community": 8,
+      "community": 4,
       "norm_label": "wordpropertiesfragment",
       "id": "gql_graphql_wordpropertiesfragment"
     },
@@ -2689,7 +2879,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L101",
-      "community": 8,
+      "community": 18,
       "norm_label": "berlinerwordfragment",
       "id": "gql_graphql_berlinerwordfragment"
     },
@@ -2990,7 +3180,7 @@
       "source_file": "src/components/WordSearchLink.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 17,
+      "community": 100,
       "norm_label": "wordsearchlink.vue",
       "id": "src_components_wordsearchlink_vue"
     },
@@ -3000,7 +3190,7 @@
       "source_file": "src/utils/helpers.ts",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 14,
+      "community": 20,
       "norm_label": "helpers.ts",
       "id": "src_utils_helpers_ts"
     },
@@ -3048,7 +3238,7 @@
       "source_file": "src/components/ImageGallery.astro",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 24,
+      "community": 44,
       "norm_label": "imagegallery.astro",
       "id": "src_components_imagegallery_astro"
     },
@@ -3703,7 +3893,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
       "source_location": "L1",
-      "community": 3,
+      "community": 109,
       "norm_label": "letterfilter.test.ts",
       "id": "src_tests_unit_components_filter_letterfilter_test_ts"
     },
@@ -3712,7 +3902,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
       "source_location": "L32",
-      "community": 3,
+      "community": 109,
       "norm_label": "button",
       "id": "filter_letterfilter_test_button"
     },
@@ -3937,7 +4127,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 20,
       "norm_label": "randomelement.test.ts",
       "id": "src_tests_unit_utils_helper_randomelement_test_ts"
     },
@@ -3946,7 +4136,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 20,
       "norm_label": "elements",
       "id": "helper_randomelement_test_elements"
     },
@@ -3955,7 +4145,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L7",
-      "community": 14,
+      "community": 20,
       "norm_label": "result",
       "id": "helper_randomelement_test_result"
     },
@@ -3964,7 +4154,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/useViewTransition.test.ts",
       "source_location": "L1",
-      "community": 3,
+      "community": 20,
       "norm_label": "useviewtransition.test.ts",
       "id": "src_tests_unit_utils_helper_useviewtransition_test_ts"
     },
@@ -3973,7 +4163,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValueLength.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 20,
       "norm_label": "checkobjectvaluelength.test.ts",
       "id": "src_tests_unit_utils_helper_checkobjectvaluelength_test_ts"
     },
@@ -3982,7 +4172,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValueLength.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 20,
       "norm_label": "testobject",
       "id": "helper_checkobjectvaluelength_test_testobject"
     },
@@ -3991,7 +4181,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/formattedDate.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 20,
       "norm_label": "formatteddate.test.ts",
       "id": "src_tests_unit_utils_helper_formatteddate_test_ts"
     },
@@ -4000,7 +4190,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 86,
       "norm_label": "routetoword.test.ts",
       "id": "src_tests_unit_utils_helper_routetoword_test_ts"
     },
@@ -4009,7 +4199,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 86,
       "norm_label": "result",
       "id": "helper_routetoword_test_result"
     },
@@ -4018,7 +4208,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValues.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 20,
       "norm_label": "checkobjectvalues.test.ts",
       "id": "src_tests_unit_utils_helper_checkobjectvalues_test_ts"
     },
@@ -4027,7 +4217,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValues.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 20,
       "norm_label": "testobject",
       "id": "helper_checkobjectvalues_test_testobject"
     },
@@ -4181,7 +4371,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L16",
-      "community": 17,
+      "community": 100,
       "norm_label": "searchlinkiconwrapclass",
       "id": "components_wordsearchlink_searchlinkiconwrapclass"
     },
@@ -4190,7 +4380,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L17",
-      "community": 17,
+      "community": 100,
       "norm_label": "preferredmotion",
       "id": "components_wordsearchlink_preferredmotion"
     },
@@ -4199,7 +4389,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L18",
-      "community": 17,
+      "community": 100,
       "norm_label": "breakpoints",
       "id": "components_wordsearchlink_breakpoints"
     },
@@ -4208,7 +4398,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L29",
-      "community": 17,
+      "community": 100,
       "norm_label": "largerthansm",
       "id": "components_wordsearchlink_largerthansm"
     },
@@ -4217,7 +4407,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L31",
-      "community": 17,
+      "community": 100,
       "norm_label": "scrolltowordsearch()",
       "id": "components_wordsearchlink_scrolltowordsearch"
     },
@@ -4226,7 +4416,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L52",
-      "community": 17,
+      "community": 100,
       "norm_label": "showclickeffect()",
       "id": "components_wordsearchlink_showclickeffect"
     },
@@ -4501,7 +4691,7 @@
       "file_type": "code",
       "source_file": "virtual:icons/lucide/mouse-pointer-click",
       "confidence": "EXTRACTED",
-      "community": 17,
+      "community": 100,
       "norm_label": "virtual:icons/lucide/mouse-pointer-click",
       "id": "mouse_pointer_click"
     },
@@ -4519,7 +4709,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L40",
-      "community": 24,
+      "community": 44,
       "norm_label": "getimageresult",
       "id": "components_imagegallery_getimageresult"
     },
@@ -4528,7 +4718,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L117",
-      "community": 24,
+      "community": 44,
       "norm_label": "constructor()",
       "id": "components_imagegallery_constructor"
     },
@@ -4537,7 +4727,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L121",
-      "community": 24,
+      "community": 44,
       "norm_label": "connectedcallback()",
       "id": "components_imagegallery_connectedcallback"
     },
@@ -4546,7 +4736,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L205",
-      "community": 24,
+      "community": 44,
       "norm_label": "disconnectedcallback()",
       "id": "components_imagegallery_disconnectedcallback"
     },
@@ -4555,7 +4745,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L218",
-      "community": 24,
+      "community": 44,
       "norm_label": "createpictureelement()",
       "id": "components_imagegallery_createpictureelement"
     },
@@ -4564,7 +4754,7 @@
       "file_type": "code",
       "source_file": "photoswipe",
       "confidence": "EXTRACTED",
-      "community": 24,
+      "community": 44,
       "norm_label": "photoswipe",
       "id": "photoswipe"
     },
@@ -4573,7 +4763,7 @@
       "file_type": "code",
       "source_file": "photoswipe/style.css",
       "confidence": "EXTRACTED",
-      "community": 24,
+      "community": 44,
       "norm_label": "photoswipe/style.css",
       "id": "style_css"
     },
@@ -4582,7 +4772,7 @@
       "file_type": "code",
       "source_file": "photoswipe/lightbox",
       "confidence": "EXTRACTED",
-      "community": 24,
+      "community": 44,
       "norm_label": "photoswipe/lightbox",
       "id": "lightbox"
     },
@@ -4591,7 +4781,7 @@
       "file_type": "code",
       "source_file": "src/utils/analytics",
       "confidence": "EXTRACTED",
-      "community": 24,
+      "community": 44,
       "norm_label": "@utils/analytics",
       "id": "home_felix_workspace_berliner_schnauze_src_utils_analytics"
     },
@@ -4656,7 +4846,7 @@
       "source_file": "src/components/word-search/WordSearchList.vue",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 20,
+      "community": 99,
       "norm_label": "@components/word-search/wordsearchlist.vue",
       "id": "src_components_word_search_wordsearchlist_vue"
     },
@@ -4665,7 +4855,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordSearchList.vue",
       "source_location": "L40",
-      "community": 20,
+      "community": 99,
       "norm_label": "wordsuggesthint",
       "id": "word_search_wordsearchlist_wordsuggesthint"
     },
@@ -4674,7 +4864,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordSearchList.vue",
       "source_location": "L42",
-      "community": 20,
+      "community": 99,
       "norm_label": "searchresultcount",
       "id": "word_search_wordsearchlist_searchresultcount"
     },
@@ -4683,7 +4873,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/SearchResultCount.vue",
       "source_location": "L1",
-      "community": 20,
+      "community": 99,
       "norm_label": "searchresultcount.vue",
       "id": "src_components_word_search_searchresultcount_vue"
     },
@@ -4692,7 +4882,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/NoSearchResults.vue",
       "source_location": "L1",
-      "community": 20,
+      "community": 99,
       "norm_label": "nosearchresults.vue",
       "id": "src_components_word_search_nosearchresults_vue"
     },
@@ -4701,7 +4891,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/NoSearchResults.vue",
       "source_location": "L13",
-      "community": 20,
+      "community": 99,
       "norm_label": "searchresultcount",
       "id": "word_search_nosearchresults_searchresultcount"
     },
@@ -4719,7 +4909,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/shortcuts/ShortcutNavigating.vue",
       "source_location": "L1",
-      "community": 20,
+      "community": 99,
       "norm_label": "shortcutnavigating.vue",
       "id": "src_components_word_search_shortcuts_shortcutnavigating_vue"
     },
@@ -4728,7 +4918,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/shortcuts/ShortcutSelect.vue",
       "source_location": "L1",
-      "community": 20,
+      "community": 99,
       "norm_label": "shortcutselect.vue",
       "id": "src_components_word_search_shortcuts_shortcutselect_vue"
     },
@@ -4788,16 +4978,6 @@
       "id": "src_components_modals_search_searchmodaltrigger_vue"
     },
     {
-      "label": "@components/header/MainMenu.vue",
-      "file_type": "code",
-      "source_file": "src/components/header/MainMenu.vue",
-      "source_location": "L1",
-      "confidence": "EXTRACTED",
-      "community": 24,
-      "norm_label": "@components/header/mainmenu.vue",
-      "id": "src_components_header_mainmenu_vue"
-    },
-    {
       "label": "MainHeader.vue",
       "file_type": "code",
       "source_file": "src/components/header/MainHeader.vue",
@@ -4811,7 +4991,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/LetterFilter.vue",
       "source_location": "L1",
-      "community": 3,
+      "community": 109,
       "norm_label": "letterfilter.vue",
       "id": "src_components_filter_letterfilter_vue"
     },
@@ -5207,7 +5387,7 @@
       "file_type": "code",
       "source_file": "src/utils/refreshToken.js",
       "source_location": "L1",
-      "community": 29,
+      "community": 31,
       "norm_label": "refreshtoken.js",
       "id": "src_utils_refreshtoken_js"
     },
@@ -5216,7 +5396,7 @@
       "file_type": "code",
       "source_file": "src/utils/refreshToken.js",
       "source_location": "L4",
-      "community": 29,
+      "community": 31,
       "norm_label": "refreshtoken()",
       "id": "utils_refreshtoken_refreshtoken"
     },
@@ -5225,7 +5405,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L12",
-      "community": 14,
+      "community": 86,
       "norm_label": "routetoword()",
       "id": "utils_helpers_routetoword"
     },
@@ -5234,7 +5414,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L30",
-      "community": 14,
+      "community": 20,
       "norm_label": "randomelement()",
       "id": "utils_helpers_randomelement"
     },
@@ -5243,7 +5423,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L34",
-      "community": 14,
+      "community": 20,
       "norm_label": "seodata()",
       "id": "utils_helpers_seodata"
     },
@@ -5252,7 +5432,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L57",
-      "community": 3,
+      "community": 22,
       "norm_label": "useviewtransition()",
       "id": "utils_helpers_useviewtransition"
     },
@@ -5261,7 +5441,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L74",
-      "community": 14,
+      "community": 20,
       "norm_label": "formatteddate()",
       "id": "utils_helpers_formatteddate"
     },
@@ -5270,7 +5450,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L93",
-      "community": 14,
+      "community": 20,
       "norm_label": "checkobjectvalues()",
       "id": "utils_helpers_checkobjectvalues"
     },
@@ -5279,7 +5459,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L104",
-      "community": 14,
+      "community": 20,
       "norm_label": "checkobjectvaluelength()",
       "id": "utils_helpers_checkobjectvaluelength"
     },
@@ -5459,7 +5639,7 @@
       "file_type": "code",
       "source_file": "src/stores/index.ts",
       "source_location": "L1",
-      "community": 99,
+      "community": 29,
       "norm_label": "index.ts",
       "id": "src_stores_index_ts"
     },
@@ -5504,7 +5684,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L1",
-      "community": 29,
+      "community": 31,
       "norm_label": "wordoftheday.ts",
       "id": "src_stores_wordoftheday_ts"
     },
@@ -5513,7 +5693,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L5",
-      "community": 29,
+      "community": 31,
       "norm_label": "word",
       "id": "stores_wordoftheday_word"
     },
@@ -5522,7 +5702,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L21",
-      "community": 29,
+      "community": 31,
       "norm_label": "example",
       "id": "stores_wordoftheday_example"
     },
@@ -5531,7 +5711,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L26",
-      "community": 29,
+      "community": 31,
       "norm_label": "translation",
       "id": "stores_wordoftheday_translation"
     },
@@ -5540,7 +5720,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L30",
-      "community": 29,
+      "community": 31,
       "norm_label": "wordoftheday",
       "id": "stores_wordoftheday_wordoftheday"
     },
@@ -5549,7 +5729,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L61",
-      "community": 29,
+      "community": 31,
       "norm_label": "getwordoftheday()",
       "id": "stores_wordoftheday_getwordoftheday"
     },
@@ -5567,7 +5747,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L3",
-      "community": 37,
+      "community": 9,
       "norm_label": "toastnotify",
       "id": "stores_toastnotify_toastnotify"
     },
@@ -5639,7 +5819,7 @@
       "file_type": "code",
       "source_file": "src/services/fetchApi.ts",
       "source_location": "L1",
-      "community": 29,
+      "community": 31,
       "norm_label": "fetchapi.ts",
       "id": "src_services_fetchapi_ts"
     },
@@ -5648,36 +5828,9 @@
       "file_type": "code",
       "source_file": "src/services/fetchApi.ts",
       "source_location": "L3",
-      "community": 29,
+      "community": 31,
       "norm_label": "fetchapi()",
       "id": "services_fetchapi_fetchapi"
-    },
-    {
-      "label": "pwa.ts",
-      "file_type": "code",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L1",
-      "community": 22,
-      "norm_label": "pwa.ts",
-      "id": "src_services_pwa_ts"
-    },
-    {
-      "label": "onOfflineReady()",
-      "file_type": "code",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L7",
-      "community": 22,
-      "norm_label": "onofflineready()",
-      "id": "services_pwa_onofflineready"
-    },
-    {
-      "label": "onRegisteredSW()",
-      "file_type": "code",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L21",
-      "community": 22,
-      "norm_label": "onregisteredsw()",
-      "id": "services_pwa_onregisteredsw"
     },
     {
       "label": "wikimediaApi.ts",
@@ -5908,7 +6061,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "randomwordbutton",
       "id": "components_randomwordbutton_randomwordbutton"
     },
@@ -5960,7 +6113,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 44,
+      "community": 22,
       "norm_label": "imagegallery",
       "id": "components_imagegallery_imagegallery"
     },
@@ -5973,7 +6126,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 99,
       "norm_label": "searchwords",
       "id": "components_searchwords_searchwords"
     },
@@ -6103,7 +6256,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "relatedwords",
       "id": "components_relatedwords_relatedwords"
     },
@@ -6168,7 +6321,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 99,
       "norm_label": "$searchresultcount",
       "id": "stores_index_searchresultcount"
     },
@@ -6259,7 +6412,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "berlinerword",
       "id": "gql_entitytypes_berlinerword"
     },
@@ -6363,7 +6516,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 111,
       "norm_label": "setcolormode",
       "id": "components_setcolormode_setcolormode"
     },
@@ -6376,7 +6529,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 111,
       "norm_label": "themeinitializationlogic",
       "id": "components_setcolormode_themelogic"
     },
@@ -6623,7 +6776,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 44,
+      "community": 22,
       "norm_label": "imagegallerycustomelement",
       "id": "components_imagegallery_imagegalleryce"
     },
@@ -6636,7 +6789,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 44,
+      "community": 22,
       "norm_label": "imagegalleryprops",
       "id": "components_imagegallery_imagegalleryprops"
     },
@@ -6808,19 +6961,6 @@
       "community": 2,
       "norm_label": "searchmodaltrigger",
       "id": "search_searchmodaltrigger_component"
-    },
-    {
-      "label": "MainMenu",
-      "file_type": "code",
-      "source_file": "src/components/header/MainMenu.vue",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "community": 2,
-      "norm_label": "mainmenu",
-      "id": "header_mainmenu_component"
     },
     {
       "label": "MainHeader (Vue)",
@@ -7226,19 +7366,6 @@
       "id": "services_api_barrel"
     },
     {
-      "label": "registerSW() call",
-      "file_type": "code",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "line 5",
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "community": 34,
-      "norm_label": "registersw() call",
-      "id": "services_pwa_registersw"
-    },
-    {
       "label": "SendEmail (GraphQL mutation)",
       "file_type": "code",
       "source_file": "src/services/mutations/sendMail.ts",
@@ -7429,7 +7556,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 106,
       "norm_label": "api/search/meta.json: search metadata api route",
       "id": "pages_api_searchmetaroute"
     },
@@ -7442,7 +7569,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 106,
       "norm_label": "api/search/index.json: orama search index builder",
       "id": "pages_api_searchindexroute"
     },
@@ -7455,7 +7582,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "fragment-masking.ts: usefragment / makefragmentdata / isfragmentready",
       "id": "gql_fragmentmasking_usefragment"
     },
@@ -7468,7 +7595,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "gql.ts: graphql() typed document map function",
       "id": "gql_gql_graphqlfunction"
     },
@@ -7481,7 +7608,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "graphql.ts: codegen-generated gql types and fragments",
       "id": "gql_graphql_generatedtypes"
     },
@@ -7494,7 +7621,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "gql/index.ts: barrel re-export of gql.ts",
       "id": "gql_index_gqlbarrel"
     },
@@ -7520,7 +7647,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 106,
       "norm_label": "vendor.d.ts: ambient module declarations (hypher, hyphenation.de, de-compromise)",
       "id": "types_vendor_vendordeclarations"
     },
@@ -7559,7 +7686,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 106,
       "norm_label": "sentrybrowser.ts: sentry browser init with tracing + replay",
       "id": "plugins_sentrybrowser_sentryinit"
     },
@@ -7572,7 +7699,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 106,
       "norm_label": "env.d.ts: global ambient types (turnstile, window._paq, astro refs)",
       "id": "src_env_globalambient"
     },
@@ -7585,7 +7712,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 106,
       "norm_label": "oramasearchindex type (returntype of makeoramasearchindex)",
       "id": "pages_api_ormasearchindex_type"
     },
@@ -8541,6 +8668,245 @@
   ],
   "links": [
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AppSettings.vue",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_components_appsettings_vue",
+      "target": "components_appsettings_bellofficon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AppSettings.vue",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_components_appsettings_vue",
+      "target": "components_appsettings_notificationpermission",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AppSettings.vue",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_components_appsettings_vue",
+      "target": "components_appsettings_notificationssupported",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/settings/index.astro",
+      "source": "src_pages_settings_index_astro",
+      "target": "src_components_appsettings_vue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "astro_assets"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "components_footer_fundingmenu"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L47",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "components_footer_navmenu1"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "components_footer_navmenu2"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "components_footer_socialmenu"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "download"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "home_felix_workspace_berliner_schnauze_package_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_assets_images_bear_walking_png"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_carbonbadge_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_installapp_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_navlist_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "src_components_carbonbadge_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "src_components_installapp_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "src_components_navlist_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/layouts/Layout.astro",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_layouts_layout_astro",
+      "target": "src_components_footer_astro"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/components/Footer.astro",
+      "source_location": null,
+      "weight": 0.95,
+      "source": "components_footer_fundingmenu",
+      "target": "components_navlist_navlist"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/header/MainMenu.vue",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "src_components_header_mainmenu_vue",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_installapp_vue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/header/MainMenu.vue",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "src_components_header_mainmenu_vue",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_navlist_vue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ImageGallery.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_imagegallery_astro",
+      "target": "astro_assets"
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -8550,6 +8916,345 @@
       "confidence_score": 1.0,
       "source": "src_pages_index_astro",
       "target": "astro_assets"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/header/MainHeader.astro",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_header_mainheader_astro",
+      "target": "src_components_header_mainmenu_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/header/MainMenu.vue",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "src_components_header_mainmenu_vue",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_mainmenubutton_vue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/header/MainMenu.vue",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_header_mainmenu_vue",
+      "target": "src_components_installapp_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/header/MainMenu.vue",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_header_mainmenu_vue",
+      "target": "src_components_mainmenubutton_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/header/MainMenu.vue",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_header_mainmenu_vue",
+      "target": "src_components_navlist_vue"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/settings/cache.astro",
+      "source": "src_pages_settings_cache_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_pwacacheoverview_vue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/settings/cache.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_pages_settings_cache_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/settings/cache.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_pages_settings_cache_astro",
+      "target": "settings_cache_page",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/[legalPages].astro",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_legalpages_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/settings/index.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_pages_settings_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/wort/index.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_wort_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/wort/[...wordSlug].astro",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_wort_wordslug_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/settings/index.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_pages_settings_index_astro",
+      "target": "settings_index_page",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_services_pwa_ts",
+      "target": "services_pwa_onneedreload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_services_pwa_ts",
+      "target": "services_pwa_onofflineready"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_services_pwa_ts",
+      "target": "services_pwa_onregisteredsw"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_services_pwa_ts",
+      "target": "src_stores_index_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_services_pwa_ts",
+      "target": "src_utils_analytics_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_services_pwa_ts",
+      "target": "stores_index_createtoastnotify"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_services_pwa_ts",
+      "target": "stores_toastnotify_createtoastnotify"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_services_pwa_ts",
+      "target": "utils_analytics_trackevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "services_pwa_onofflineready",
+      "target": "stores_toastnotify_createtoastnotify"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "services_pwa_onofflineready",
+      "target": "utils_analytics_trackevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/pwa.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "services_pwa_onregisteredsw",
+      "target": "utils_analytics_trackevent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_stores_notificationpermission_ts",
+      "target": "stores_notificationpermission_isnotificationsupported",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_stores_notificationpermission_ts",
+      "target": "stores_notificationpermission_notificationpermission",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_stores_notificationpermission_ts",
+      "target": "stores_notificationpermission_notificationpermissionstate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_stores_notificationpermission_ts",
+      "target": "stores_notificationpermission_requestnotificationpermission",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_stores_notificationpermission_ts",
+      "target": "utils_analytics_trackevent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/notificationPermission.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "stores_notificationpermission_requestnotificationpermission",
+      "target": "stores_notificationpermission_isnotificationsupported",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/store/notificationPermission.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_tests_unit_store_notificationpermission_test_ts",
+      "target": "store_notificationpermission_test_mockrequestpermission",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -8611,30 +9316,19 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/pages/index.astro",
-      "source_location": "L8",
+      "source_location": "L11",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss",
-      "confidence_score": 1.0
+      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss"
     },
     {
       "relation": "imports_from",
       "confidence": "EXTRACTED",
       "source_file": "src/pages/index.astro",
+      "confidence_score": 1.0,
       "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss",
-      "confidence_score": 1.0
+      "target": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss"
     },
     {
       "relation": "imports_from",
@@ -8748,39 +9442,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/pages/[legalPages].astro",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_legalpages_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/wort/index.astro",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_wort_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/wort/[...wordSlug].astro",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_wort_wordslug_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/components/BaseHead.astro",
       "source_location": "L4",
       "weight": 1.0,
@@ -8822,28 +9483,6 @@
       "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "astro_assets"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ImageGallery.astro",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_imagegallery_astro",
-      "target": "astro_assets"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/header/MainHeader.astro",
@@ -8863,17 +9502,6 @@
       "confidence_score": 1.0,
       "source": "src_components_header_mainheader_astro",
       "target": "home_felix_workspace_berliner_schnauze_src_components_colormodetoggle_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/header/MainHeader.astro",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_header_mainheader_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_components_header_mainmenu_vue"
     },
     {
       "relation": "imports_from",
@@ -8915,17 +9543,6 @@
       "confidence_score": 1.0,
       "source": "src_components_header_mainheader_astro",
       "target": "src_components_colormodetoggle_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/header/MainHeader.astro",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_header_mainheader_astro",
-      "target": "src_components_header_mainmenu_vue"
     },
     {
       "relation": "imports_from",
@@ -10717,152 +11334,6 @@
       "target": "src_components_modal_vue"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L32",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "components_footer_fundingmenu"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L47",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "components_footer_navmenu1"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L70",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "components_footer_navmenu2"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "components_footer_socialmenu"
-    },
-    {
-      "relation": "imports_from",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "context": "import",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "download"
-    },
-    {
-      "relation": "imports_from",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_assets_images_bear_walking_png"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_components_carbonbadge_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_components_installapp_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_components_navlist_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "src_components_carbonbadge_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "src_components_installapp_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "src_components_navlist_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/layouts/Layout.astro",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_layouts_layout_astro",
-      "target": "src_components_footer_astro"
-    },
-    {
-      "relation": "shares_data_with",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "src/components/Footer.astro",
-      "source_location": null,
-      "weight": 0.95,
-      "source": "components_footer_fundingmenu",
-      "target": "components_navlist_navlist"
-    },
-    {
       "relation": "imports_from",
       "confidence": "EXTRACTED",
       "source_file": "src/components/WordSearchLink.astro",
@@ -12544,16 +13015,6 @@
       "weight": 1.0,
       "source": "stores_installapp_ispwainstalled",
       "target": "stores_installapp_showinstallbutton"
-    },
-    {
-      "relation": "shares_data_with",
-      "confidence": "INFERRED",
-      "confidence_score": 0.75,
-      "source_file": "src/services/pwa.ts",
-      "source_location": null,
-      "weight": 0.7,
-      "source": "services_pwa_registersw",
-      "target": "stores_installapp_ispwainstalled"
     },
     {
       "relation": "calls",
@@ -16179,17 +16640,6 @@
       "target": "components_audioplayer_stopaudio"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/header/MainMenu.vue",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_header_mainmenu_vue",
-      "target": "src_components_installapp_vue"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/InstallApp.vue",
@@ -16265,17 +16715,6 @@
       "target": "stores_index_triggerpwainstall"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/header/MainMenu.vue",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_header_mainmenu_vue",
-      "target": "src_components_navlist_vue"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/ButtonWithStates.vue",
@@ -16305,17 +16744,6 @@
       "confidence_score": 1.0,
       "source": "src_components_word_search_wordfilter_vue",
       "target": "src_components_buttonwithstates_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/header/MainMenu.vue",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_header_mainmenu_vue",
-      "target": "src_components_mainmenubutton_vue"
     },
     {
       "relation": "contains",
@@ -16791,17 +17219,6 @@
       "target": "word_singleword_wordoptiondropdown"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_services_pwa_ts",
-      "target": "src_utils_analytics_ts"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/utils/analytics.ts",
@@ -16911,49 +17328,6 @@
       "source_location": null,
       "weight": 1.0,
       "source": "components_wordsearchlink_wordsearchlink",
-      "target": "utils_analytics_trackevent"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L19",
-      "weight": 1.0,
-      "source": "services_pwa_onofflineready",
-      "target": "utils_analytics_trackevent"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "services_pwa_onregisteredsw",
-      "target": "utils_analytics_trackevent"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/services/pwa.ts",
-      "source_location": "line 19",
-      "weight": 1.0,
-      "source": "services_pwa_registersw",
-      "target": "utils_analytics_trackevent"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_services_pwa_ts",
       "target": "utils_analytics_trackevent"
     },
     {
@@ -17363,17 +17737,6 @@
       "target": "stores_modal_resetmodal"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_services_pwa_ts",
-      "target": "src_stores_index_ts"
-    },
-    {
       "relation": "re_exports",
       "context": "export",
       "confidence": "EXTRACTED",
@@ -17650,38 +18013,6 @@
       "target": "stores_toastnotify_createtoast"
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L12",
-      "weight": 1.0,
-      "source": "services_pwa_onofflineready",
-      "target": "stores_toastnotify_createtoastnotify"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/services/pwa.ts",
-      "source_location": "line 12",
-      "weight": 1.0,
-      "source": "services_pwa_registersw",
-      "target": "stores_toastnotify_createtoastnotify"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_services_pwa_ts",
-      "target": "stores_toastnotify_createtoastnotify"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/fetchApi.ts",
@@ -17690,37 +18021,6 @@
       "confidence_score": 1.0,
       "source": "src_services_fetchapi_ts",
       "target": "services_fetchapi_fetchapi"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_services_pwa_ts",
-      "target": "services_pwa_onofflineready"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_services_pwa_ts",
-      "target": "services_pwa_onregisteredsw"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/services/pwa.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_services_pwa_ts",
-      "target": "stores_index_createtoastnotify"
     },
     {
       "relation": "contains",
@@ -18602,16 +18902,6 @@
       "source_location": null,
       "weight": 1.0,
       "source": "search_searchmodaltrigger_component",
-      "target": "concept_modal_open"
-    },
-    {
-      "relation": "references",
-      "confidence": "INFERRED",
-      "confidence_score": 0.75,
-      "source_file": "src/components/header/MainMenu.vue",
-      "source_location": null,
-      "weight": 0.75,
-      "source": "header_mainmenu_component",
       "target": "concept_modal_open"
     },
     {
@@ -19738,5 +20028,5 @@
       "source_file": "src/pages/api/search/index.json.ts"
     }
   ],
-  "built_at_commit": "08a0214f3e9cf62ab83539949896e823b91bedca"
+  "built_at_commit": "86a57cdc34b56b952dc2c235fb437a7b683db41e"
 }

@@ -8,7 +8,7 @@ registerSW({
     if (typeof Notification !== "undefined" && Notification.permission === "granted") {
       const notification = new Notification("Berliner Schnauze wurde aktualisiert!", {
         body: "Tippe hier, um die neue Version zu laden.",
-        icon: "/icons/icon-192.png",
+        icon: "/favicons/android-chrome-192x192.png",
       });
 
       const doReload = () => {
@@ -21,10 +21,10 @@ registerSW({
       notification.onclick = doReload;
 
       trackEvent("App", "Update notification shown", "PWA");
-    } else {
-      window.location.reload();
-      trackEvent("App", "Silent update applied", "PWA");
+      return;
     }
+    window.location.reload();
+    trackEvent("App", "Silent update applied", "PWA");
   },
   onOfflineReady() {
     if (import.meta.env.DEV) {
