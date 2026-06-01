@@ -5,6 +5,7 @@
 @font-face {
   font-family: Berlin-fallback;
   src: local("ArialMT"), local("Arial"), local("Helvetica Neue"), local("Helvetica");
+  font-display: swap;
   size-adjust: 96%;
   ascent-override: 90.2%;
   descent-override: 24.8%;
@@ -14,6 +15,7 @@
 @font-face {
   font-family: Berliner-fallback;
   src: local("ArialMT"), local("Arial"), local("Helvetica Neue"), local("Helvetica");
+  font-display: swap;
   size-adjust: 98%;
   ascent-override: 80%;
   descent-override: 22.3%;
