@@ -53,6 +53,10 @@ const menuItems: (ItemObject | { component: DefineComponent; props: object })[] 
     link: "/wort",
     title: "Wort Index",
   },
+  {
+    link: "/settings",
+    title: "Einstellungen",
+  },
 ];
 </script>
 

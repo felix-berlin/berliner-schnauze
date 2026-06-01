@@ -1,0 +1,13 @@
+---
+import AppSettings from '@components/AppSettings.vue'
+import Layout from '@layouts/Layout.astro'
+
+const page = {
+  description: 'App-Einstellungen für Berliner Schnauze.',
+  title: 'Einstellungen – Berliner Schnauze',
+}
+---
+
+<Layout content={page}>
+  <AppSettings client:only="vue" />
+</Layout>

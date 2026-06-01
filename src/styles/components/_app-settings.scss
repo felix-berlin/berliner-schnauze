@@ -1,0 +1,21 @@
+.c-app-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__notification-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__denied-hint {
+    font-size: 0.875rem;
+  }
+}
