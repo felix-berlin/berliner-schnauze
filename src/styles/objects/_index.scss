@@ -78,8 +78,8 @@
     opacity: 0;
     transition: opacity 0.3s;
   }
+}
 
-  .o-index__image {
-    opacity: 1;
-  }
+.image-placeholder-wrap.loaded .o-index__image {
+  opacity: 1;
 }

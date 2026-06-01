@@ -1,6 +1,24 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 
+// Fallback font with Berlin body metrics — minimises reflow on font-display:swap
+@font-face {
+  font-family: Berlin-fallback;
+  src: local("ArialMT"), local("Arial"), local("Helvetica Neue"), local("Helvetica");
+  size-adjust: 96%;
+  ascent-override: 90.2%;
+  descent-override: 24.8%;
+  line-gap-override: 0%;
+}
+// Fallback font with Berliner heading metrics — minimises reflow on font-display:swap
+@font-face {
+  font-family: Berliner-fallback;
+  src: local("ArialMT"), local("Arial"), local("Helvetica Neue"), local("Helvetica");
+  size-adjust: 98%;
+  ascent-override: 80%;
+  descent-override: 22.3%;
+  line-gap-override: 0%;
+}
 @font-face {
   font-weight: normal;
   font-style: normal;
