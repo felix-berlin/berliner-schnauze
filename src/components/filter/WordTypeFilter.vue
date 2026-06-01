@@ -10,6 +10,11 @@
       fallback-locale="en"
       class="c-word-type-filter__select"
       placeholder="Worttypen filtern"
+      :aria="{
+        'aria-label': 'Worttypen filtern',
+        'aria-placeholder': undefined,
+        'aria-multiselectable': undefined,
+      }"
       @select="onSelect(value)"
     />
   </nav>

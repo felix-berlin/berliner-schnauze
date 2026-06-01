@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/pages/_app.ts": {
-    "mtime": 1780144888.237363,
-    "ast_hash": "fe1c578642bb25800f7842a52133b8fe",
+    "mtime": 1780339939.146692,
+    "ast_hash": "b4d0ce00da59ddd205dd3bce215c4d76",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/pages/404.astro": {
@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/pages/index.astro": {
-    "mtime": 1779123365.3050487,
-    "ast_hash": "e4c749ce8cb8521e8b298cc3a0e3aa12",
+    "mtime": 1780339889.154707,
+    "ast_hash": "ab67f86136ce92562a8a2afb64fcb3aa",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/pages/pwa.astro": {
@@ -530,8 +530,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/components/ImageGallery.astro": {
-    "mtime": 1780074687.642114,
-    "ast_hash": "5c9c86a688b31a721e3f8ffae3035777",
+    "mtime": 1780337548.6788085,
+    "ast_hash": "d6e6dc74f89cd49ed9777ce544b79df8",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/components/word-search/WordSearchFilterToggle.vue": {
@@ -600,8 +600,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/components/header/MainHeader.astro": {
-    "mtime": 1780087882.2060878,
-    "ast_hash": "f1426364cdf29b1933f41c22f0581821",
+    "mtime": 1780342827.7825768,
+    "ast_hash": "94c574d1694e968ba10b544b6e8c63ad",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/components/accordion/BaseAccordion.vue": {
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/components/filter/WordTypeFilter.vue": {
-    "mtime": 1780144888.0813632,
-    "ast_hash": "41dc23dc88e2c94456f789ccdc589efd",
+    "mtime": 1780341409.5746264,
+    "ast_hash": "4b1fd5f1144b60f5ea9328db5834bd9c",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/components/filter/WordRangeSlider.vue": {
@@ -705,8 +705,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/components/toast/ToastNotify.vue": {
-    "mtime": 1780144888.0813632,
-    "ast_hash": "6a3ea6ed249c017b4f085bf434ec6112",
+    "mtime": 1780340993.8106527,
+    "ast_hash": "8be5a4ee11075ab1b6c12ff02ac9aed2",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/composable/useCacheStorage.ts": {
@@ -715,7 +715,7 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/utils/supportedBrowsers.mjs": {
-    "mtime": 1780141665.6563787,
+    "mtime": 1780342837.6745765,
     "ast_hash": "6d63e71e4f57c3d11078f9b4daa64701",
     "semantic_hash": ""
   },
@@ -745,8 +745,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/stores/wordList.ts": {
-    "mtime": 1780144888.237363,
-    "ast_hash": "a3255962b2cbc47a2e665dc9c3bf98ea",
+    "mtime": 1780146465.941297,
+    "ast_hash": "68561e66b1aa60622f7465778a53ff30",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/stores/installApp.ts": {
