@@ -6,7 +6,7 @@ import MainMenuButton from "@components/MainMenuButton.vue";
 import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue";
 import SunMoonIcon from "virtual:icons/lucide/sun-moon";
 
-const isIndex = Astro.url.pathname === "/";
+const isIndex = Astro.url.pathname === "/" || Astro.url.pathname === "/index";
 ---
 
 <header class="c-header">
