@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.29.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.4...v3.29.5) (2026-06-01)
+
+
+### Bug Fixes
+
+* **a11y:** remove invalid ARIA attrs from multiselect combobox ([e301916](https://github.com/felix-berlin/berliner-schnauze/commit/e301916c65cf2568eb9ead647e67bd48fe139a3c))
+* **header:** correct isIndex detection for trailingSlash:never ([e0ef588](https://github.com/felix-berlin/berliner-schnauze/commit/e0ef588a34198b159fb50bfcb55a1a1613210763))
+* **header:** fix isIndex detection — Astro.url.pathname is /index.html ([dc9637a](https://github.com/felix-berlin/berliner-schnauze/commit/dc9637a0f37bd82151f8f75b07477072ef20fc6d))
+* **perf:** add font-display:swap to fallback [@font-face](https://github.com/font-face) declarations ([be93ade](https://github.com/felix-berlin/berliner-schnauze/commit/be93ade36eab707c30f2db413fe5d42e05825908))
+* **perf:** pre-position toast before showPopover to eliminate CLS ([b7b868c](https://github.com/felix-berlin/berliner-schnauze/commit/b7b868cb87c81dc0fabdb0206272bfd21933389a))
+* **perf:** remove incorrect min-height from WordOfTheDay slot ([c30a5b2](https://github.com/felix-berlin/berliner-schnauze/commit/c30a5b2f1a07aaafc6232e8839d0cc8066a8f2a7))
+* **perf:** remove min-height from image placeholder to fix mobile CLS ([6eebf7a](https://github.com/felix-berlin/berliner-schnauze/commit/6eebf7a90d827d1a930e835c9c875493329f05a9))
+
+
+### Performance Improvements
+
+* fix CLS 0.69 via font metric overrides and island placeholders ([4334f2b](https://github.com/felix-berlin/berliner-schnauze/commit/4334f2b0fd2df3ab14b187019aff9c57ef742d20))
+* remove png und jpeg img gen ([ff8d6a0](https://github.com/felix-berlin/berliner-schnauze/commit/ff8d6a0740939c23c8d43196d73f8f932ca1192f))
+
+
+### Reverts
+
+* remove font metric override [@font-face](https://github.com/font-face) declarations ([aefc65d](https://github.com/felix-berlin/berliner-schnauze/commit/aefc65d493836e1122d21a1a5bb95a10c2757fea))
+* to orig orama cache ([c217eef](https://github.com/felix-berlin/berliner-schnauze/commit/c217eeff099f08781fd386dda608cec053d018b2))
+
 ## [3.29.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.3...v3.29.4) (2026-05-30)
 
 
