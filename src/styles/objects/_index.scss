@@ -67,7 +67,6 @@
 
 .image-placeholder-wrap:not(.loaded) {
   position: relative;
-  min-height: var(--min-height-placeholder, 300px);
 
   @include mx.skeleton-loader;
 
