@@ -154,9 +154,10 @@ onBeforeMount(() => {
 onMounted(async () => {
   if (!isSupported.value) return;
 
-  showToast();
-
   setPosition();
+  stylePosition.top = `${initOffset}px`;
+
+  showToast();
 
   await nextTick();
   setDynamicPosition();
