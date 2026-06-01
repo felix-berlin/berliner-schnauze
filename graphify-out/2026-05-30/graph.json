@@ -98,13 +98,274 @@
   },
   "nodes": [
     {
+      "label": "wordList.ts",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L1",
+      "id": "src_stores_wordlist_ts",
+      "community": 3,
+      "norm_label": "wordlist.ts"
+    },
+    {
+      "label": "CleanBerlinerWord",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L18",
+      "id": "stores_wordlist_cleanberlinerword",
+      "community": 3,
+      "norm_label": "cleanberlinerword"
+    },
+    {
+      "label": "RangeFilterMinMax",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L29",
+      "id": "stores_wordlist_rangefilterminmax",
+      "community": 3,
+      "norm_label": "rangefilterminmax"
+    },
+    {
+      "label": "WordList",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L36",
+      "id": "stores_wordlist_wordlist",
+      "community": 3,
+      "norm_label": "wordlist"
+    },
+    {
+      "label": "$wordSearch",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L59",
+      "id": "stores_wordlist_wordsearch",
+      "community": 3,
+      "norm_label": "$wordsearch"
+    },
+    {
+      "label": "$activeFilterCount",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L94",
+      "id": "stores_wordlist_activefiltercount",
+      "community": 3,
+      "norm_label": "$activefiltercount"
+    },
+    {
+      "label": "resetAll()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L123",
+      "id": "stores_wordlist_resetall",
+      "community": 109,
+      "norm_label": "resetall()"
+    },
+    {
+      "label": "$showWordListFilterFlyout",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L144",
+      "id": "stores_wordlist_showwordlistfilterflyout",
+      "community": 3,
+      "norm_label": "$showwordlistfilterflyout"
+    },
+    {
+      "label": "$toggleWordListFilterFlyout()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L146",
+      "id": "stores_wordlist_togglewordlistfilterflyout",
+      "community": 3,
+      "norm_label": "$togglewordlistfilterflyout()"
+    },
+    {
+      "label": "setLetterFilter()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L157",
+      "id": "stores_wordlist_setletterfilter",
+      "community": 3,
+      "norm_label": "setletterfilter()"
+    },
+    {
+      "label": "toggleInArray()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L163",
+      "id": "stores_wordlist_toggleinarray",
+      "community": 3,
+      "norm_label": "toggleinarray()"
+    },
+    {
+      "label": "setWordTypeFilter()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L174",
+      "id": "stores_wordlist_setwordtypefilter",
+      "community": 3,
+      "norm_label": "setwordtypefilter()"
+    },
+    {
+      "label": "setActiveOrderCategory()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L185",
+      "id": "stores_wordlist_setactiveordercategory",
+      "community": 3,
+      "norm_label": "setactiveordercategory()"
+    },
+    {
+      "label": "$alphabeticalOrderToggle()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L193",
+      "id": "stores_wordlist_alphabeticalordertoggle",
+      "community": 3,
+      "norm_label": "$alphabeticalordertoggle()"
+    },
+    {
+      "label": "$wordListDateOrderToggle()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L205",
+      "id": "stores_wordlist_wordlistdateordertoggle",
+      "community": 3,
+      "norm_label": "$wordlistdateordertoggle()"
+    },
+    {
+      "label": "$wordListModifiedDateOrderToggle()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L214",
+      "id": "stores_wordlist_wordlistmodifieddateordertoggle",
+      "community": 3,
+      "norm_label": "$wordlistmodifieddateordertoggle()"
+    },
+    {
+      "label": "$setSortOrder()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L221",
+      "id": "stores_wordlist_setsortorder",
+      "community": 48,
+      "norm_label": "$setsortorder()"
+    },
+    {
+      "label": "setSearch()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L232",
+      "id": "stores_wordlist_setsearch",
+      "community": 3,
+      "norm_label": "setsearch()"
+    },
+    {
+      "label": "$toggleBerolinismus()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L236",
+      "id": "stores_wordlist_toggleberolinismus",
+      "community": 3,
+      "norm_label": "$toggleberolinismus()"
+    },
+    {
+      "label": "searchLength",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L242",
+      "id": "stores_wordlist_searchlength",
+      "community": 3,
+      "norm_label": "searchlength"
+    },
+    {
+      "label": "getSearchMeta()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L246",
+      "id": "stores_wordlist_getsearchmeta",
+      "community": 3,
+      "norm_label": "getsearchmeta()"
+    },
+    {
+      "label": "wordSchema",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L271",
+      "id": "stores_wordlist_wordschema",
+      "community": 3,
+      "norm_label": "wordschema"
+    },
+    {
+      "label": "WordDocument",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L293",
+      "id": "stores_wordlist_worddocument",
+      "community": 3,
+      "norm_label": "worddocument"
+    },
+    {
+      "label": "SortByType",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L297",
+      "id": "stores_wordlist_sortbytype",
+      "community": 3,
+      "norm_label": "sortbytype"
+    },
+    {
+      "label": "buildWhere()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L301",
+      "id": "stores_wordlist_buildwhere",
+      "community": 3,
+      "norm_label": "buildwhere()"
+    },
+    {
+      "label": "getSortBy()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L344",
+      "id": "stores_wordlist_getsortby",
+      "community": 3,
+      "norm_label": "getsortby()"
+    },
+    {
+      "label": "initOrama()",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L363",
+      "id": "stores_wordlist_initorama",
+      "community": 3,
+      "norm_label": "initorama()"
+    },
+    {
+      "label": "$oramaSearchResults",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L396",
+      "id": "stores_wordlist_oramasearchresults",
+      "community": 3,
+      "norm_label": "$oramasearchresults"
+    },
+    {
+      "label": "$searchResultCount",
+      "file_type": "code",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L429",
+      "id": "stores_wordlist_searchresultcount",
+      "community": 3,
+      "norm_label": "$searchresultcount"
+    },
+    {
       "label": "_app.ts",
       "file_type": "code",
       "source_file": "src/pages/_app.ts",
       "source_location": "L1",
-      "id": "src_pages_app_ts",
-      "community": 34,
-      "norm_label": "_app.ts"
+      "community": 43,
+      "norm_label": "_app.ts",
+      "id": "src_pages_app_ts"
     },
     {
       "label": "PwaCacheOverview.vue",
@@ -390,7 +651,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotifyContainer.vue",
       "source_location": "L1",
-      "community": 26,
+      "community": 23,
       "norm_label": "toastnotifycontainer.vue",
       "id": "src_components_toast_toastnotifycontainer_vue"
     },
@@ -399,7 +660,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotifyContainer.vue",
       "source_location": "L23",
-      "community": 26,
+      "community": 23,
       "norm_label": "toaststore",
       "id": "toast_toastnotifycontainer_toaststore"
     },
@@ -534,7 +795,7 @@
       "file_type": "code",
       "source_file": "src/composable/useCacheStorage.ts",
       "source_location": "L96",
-      "community": 32,
+      "community": 106,
       "norm_label": "usecachestorage()",
       "id": "composable_usecachestorage_usecachestorage"
     },
@@ -543,7 +804,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotify.test.ts",
       "source_location": "L1",
-      "community": 32,
+      "community": 23,
       "norm_label": "toastnotify.test.ts",
       "id": "src_tests_unit_components_toast_toastnotify_test_ts"
     },
@@ -813,7 +1074,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.astro",
       "source_location": "L1",
-      "community": 48,
+      "community": 26,
       "norm_label": "wordsearchlink.astro",
       "id": "src_components_wordsearchlink_astro"
     },
@@ -822,7 +1083,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_word-search-link.scss",
       "confidence": "EXTRACTED",
-      "community": 48,
+      "community": 26,
       "norm_label": "@styles/components/_word-search-link.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_word_search_link_scss"
     },
@@ -931,7 +1192,7 @@
       "file_type": "code",
       "source_file": "src/pages/[legalPages].astro",
       "source_location": "L1",
-      "community": 12,
+      "community": 85,
       "norm_label": "[legalpages].astro",
       "id": "src_pages_legalpages_astro"
     },
@@ -940,7 +1201,7 @@
       "file_type": "code",
       "source_file": "src/pages/[legalPages].astro",
       "source_location": "L13",
-      "community": 12,
+      "community": 85,
       "norm_label": "client",
       "id": "pages_legalpages_client"
     },
@@ -949,7 +1210,7 @@
       "file_type": "code",
       "source_file": "src/styles/objects/_legal-pages.scss",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 85,
       "norm_label": "@styles/objects/_legal-pages.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_legal_pages_scss"
     },
@@ -958,7 +1219,7 @@
       "file_type": "code",
       "source_file": "astro",
       "confidence": "EXTRACTED",
-      "community": 10,
+      "community": 37,
       "norm_label": "astro",
       "id": "astro"
     },
@@ -967,7 +1228,7 @@
       "file_type": "code",
       "source_file": "src/layouts/Layout.astro",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 85,
       "norm_label": "@layouts/layout.astro",
       "id": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
     },
@@ -985,7 +1246,7 @@
       "file_type": "code",
       "source_file": "astro:env/client",
       "confidence": "EXTRACTED",
-      "community": 34,
+      "community": 43,
       "norm_label": "astro:env/client",
       "id": "client"
     },
@@ -994,7 +1255,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 85,
       "norm_label": "@/gql/graphql.ts",
       "id": "home_felix_workspace_berliner_schnauze_src_gql_graphql_ts"
     },
@@ -1057,7 +1318,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/[...wordSlug].astro",
       "source_location": "L92",
-      "community": 14,
+      "community": 13,
       "norm_label": "schemajson()",
       "id": "wort_wordslug_schemajson"
     },
@@ -1093,7 +1354,7 @@
       "file_type": "code",
       "source_file": "src/styles/plugins/astro-breadcrumbs.scss",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 17,
       "norm_label": "@styles/plugins/astro-breadcrumbs.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_plugins_astro_breadcrumbs_scss"
     },
@@ -1165,7 +1426,7 @@
       "file_type": "code",
       "source_file": "src/services/api.ts",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 17,
       "norm_label": "@services/api.ts",
       "id": "home_felix_workspace_berliner_schnauze_src_services_api_ts"
     },
@@ -1192,7 +1453,7 @@
       "file_type": "code",
       "source_file": "astro-breadcrumbs",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 17,
       "norm_label": "astro-breadcrumbs",
       "id": "astro_breadcrumbs"
     },
@@ -1201,7 +1462,7 @@
       "file_type": "code",
       "source_file": "hyphenation.de",
       "confidence": "EXTRACTED",
-      "community": 10,
+      "community": 37,
       "norm_label": "hyphenation.de",
       "id": "hyphenation_de"
     },
@@ -1210,7 +1471,7 @@
       "file_type": "code",
       "source_file": "hypher",
       "confidence": "EXTRACTED",
-      "community": 10,
+      "community": 37,
       "norm_label": "hypher",
       "id": "hypher"
     },
@@ -1219,7 +1480,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L1",
-      "community": 12,
+      "community": 17,
       "norm_label": "index.astro",
       "id": "src_pages_wort_index_astro"
     },
@@ -1228,7 +1489,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L33",
-      "community": 12,
+      "community": 17,
       "norm_label": "sortedgroups",
       "id": "wort_index_sortedgroups"
     },
@@ -1237,7 +1498,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L35",
-      "community": 12,
+      "community": 17,
       "norm_label": "content",
       "id": "wort_index_content"
     },
@@ -1246,7 +1507,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L43",
-      "community": 12,
+      "community": 17,
       "norm_label": "schemajson()",
       "id": "wort_index_schemajson"
     },
@@ -1255,7 +1516,7 @@
       "file_type": "code",
       "source_file": "src/styles/objects/_word-index.scss",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 17,
       "norm_label": "@styles/objects/_word-index.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_word_index_scss"
     },
@@ -1264,7 +1525,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_word-group.scss",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 17,
       "norm_label": "@styles/components/_word-group.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_word_group_scss"
     },
@@ -1273,7 +1534,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 17,
       "norm_label": "@/gql/graphql",
       "id": "home_felix_workspace_berliner_schnauze_src_gql_graphql"
     },
@@ -1921,7 +2182,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L1",
-      "community": 20,
+      "community": 31,
       "norm_label": "wordlist.vue",
       "id": "src_components_wordlist_vue"
     },
@@ -1930,7 +2191,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L54",
-      "community": 20,
+      "community": 31,
       "norm_label": "oramasearch",
       "id": "components_wordlist_oramasearch"
     },
@@ -1939,7 +2200,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L55",
-      "community": 20,
+      "community": 31,
       "norm_label": "mutableoramasearch",
       "id": "components_wordlist_mutableoramasearch"
     },
@@ -1948,7 +2209,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L65",
-      "community": 20,
+      "community": 31,
       "norm_label": "activeindex",
       "id": "components_wordlist_activeindex"
     },
@@ -1957,7 +2218,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L67",
-      "community": 20,
+      "community": 31,
       "norm_label": "virtualizerref",
       "id": "components_wordlist_virtualizerref"
     },
@@ -1966,7 +2227,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L68",
-      "community": 20,
+      "community": 31,
       "norm_label": "showactive",
       "id": "components_wordlist_showactive"
     },
@@ -1975,7 +2236,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L72",
-      "community": 20,
+      "community": 31,
       "norm_label": "showactivewithtimeout()",
       "id": "components_wordlist_showactivewithtimeout"
     },
@@ -1984,7 +2245,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L89",
-      "community": 20,
+      "community": 31,
       "norm_label": "gotoword()",
       "id": "components_wordlist_gotoword"
     },
@@ -1993,270 +2254,9 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L93",
-      "community": 20,
+      "community": 31,
       "norm_label": "focusactive()",
       "id": "components_wordlist_focusactive"
-    },
-    {
-      "label": "wordList.ts",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L1",
-      "community": 3,
-      "norm_label": "wordlist.ts",
-      "id": "src_stores_wordlist_ts"
-    },
-    {
-      "label": "CleanBerlinerWord",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L18",
-      "community": 3,
-      "norm_label": "cleanberlinerword",
-      "id": "stores_wordlist_cleanberlinerword"
-    },
-    {
-      "label": "RangeFilterMinMax",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L29",
-      "community": 3,
-      "norm_label": "rangefilterminmax",
-      "id": "stores_wordlist_rangefilterminmax"
-    },
-    {
-      "label": "WordList",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L36",
-      "community": 3,
-      "norm_label": "wordlist",
-      "id": "stores_wordlist_wordlist"
-    },
-    {
-      "label": "$wordSearch",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L59",
-      "community": 3,
-      "norm_label": "$wordsearch",
-      "id": "stores_wordlist_wordsearch"
-    },
-    {
-      "label": "$activeFilterCount",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L94",
-      "community": 3,
-      "norm_label": "$activefiltercount",
-      "id": "stores_wordlist_activefiltercount"
-    },
-    {
-      "label": "resetAll()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L123",
-      "community": 109,
-      "norm_label": "resetall()",
-      "id": "stores_wordlist_resetall"
-    },
-    {
-      "label": "$showWordListFilterFlyout",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L144",
-      "community": 3,
-      "norm_label": "$showwordlistfilterflyout",
-      "id": "stores_wordlist_showwordlistfilterflyout"
-    },
-    {
-      "label": "$toggleWordListFilterFlyout()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L146",
-      "community": 3,
-      "norm_label": "$togglewordlistfilterflyout()",
-      "id": "stores_wordlist_togglewordlistfilterflyout"
-    },
-    {
-      "label": "setLetterFilter()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L157",
-      "community": 22,
-      "norm_label": "setletterfilter()",
-      "id": "stores_wordlist_setletterfilter"
-    },
-    {
-      "label": "toggleInArray()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L163",
-      "community": 3,
-      "norm_label": "toggleinarray()",
-      "id": "stores_wordlist_toggleinarray"
-    },
-    {
-      "label": "setWordTypeFilter()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L174",
-      "community": 22,
-      "norm_label": "setwordtypefilter()",
-      "id": "stores_wordlist_setwordtypefilter"
-    },
-    {
-      "label": "setActiveOrderCategory()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L185",
-      "community": 3,
-      "norm_label": "setactiveordercategory()",
-      "id": "stores_wordlist_setactiveordercategory"
-    },
-    {
-      "label": "$alphabeticalOrderToggle()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L193",
-      "community": 3,
-      "norm_label": "$alphabeticalordertoggle()",
-      "id": "stores_wordlist_alphabeticalordertoggle"
-    },
-    {
-      "label": "$wordListDateOrderToggle()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L205",
-      "community": 3,
-      "norm_label": "$wordlistdateordertoggle()",
-      "id": "stores_wordlist_wordlistdateordertoggle"
-    },
-    {
-      "label": "$wordListModifiedDateOrderToggle()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L214",
-      "community": 3,
-      "norm_label": "$wordlistmodifieddateordertoggle()",
-      "id": "stores_wordlist_wordlistmodifieddateordertoggle"
-    },
-    {
-      "label": "$setSortOrder()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L221",
-      "community": 17,
-      "norm_label": "$setsortorder()",
-      "id": "stores_wordlist_setsortorder"
-    },
-    {
-      "label": "setSearch()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L232",
-      "community": 3,
-      "norm_label": "setsearch()",
-      "id": "stores_wordlist_setsearch"
-    },
-    {
-      "label": "$toggleBerolinismus()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L236",
-      "community": 22,
-      "norm_label": "$toggleberolinismus()",
-      "id": "stores_wordlist_toggleberolinismus"
-    },
-    {
-      "label": "searchLength",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L242",
-      "community": 3,
-      "norm_label": "searchlength",
-      "id": "stores_wordlist_searchlength"
-    },
-    {
-      "label": "getSearchMeta()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L246",
-      "community": 3,
-      "norm_label": "getsearchmeta()",
-      "id": "stores_wordlist_getsearchmeta"
-    },
-    {
-      "label": "wordSchema",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L271",
-      "community": 3,
-      "norm_label": "wordschema",
-      "id": "stores_wordlist_wordschema"
-    },
-    {
-      "label": "WordDocument",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L293",
-      "community": 3,
-      "norm_label": "worddocument",
-      "id": "stores_wordlist_worddocument"
-    },
-    {
-      "label": "SortByType",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L297",
-      "community": 3,
-      "norm_label": "sortbytype",
-      "id": "stores_wordlist_sortbytype"
-    },
-    {
-      "label": "buildWhere()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L301",
-      "community": 3,
-      "norm_label": "buildwhere()",
-      "id": "stores_wordlist_buildwhere"
-    },
-    {
-      "label": "getSortBy()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L344",
-      "community": 3,
-      "norm_label": "getsortby()",
-      "id": "stores_wordlist_getsortby"
-    },
-    {
-      "label": "initOrama()",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L363",
-      "community": 3,
-      "norm_label": "initorama()",
-      "id": "stores_wordlist_initorama"
-    },
-    {
-      "label": "$oramaSearchResults",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L395",
-      "community": 3,
-      "norm_label": "$oramasearchresults",
-      "id": "stores_wordlist_oramasearchresults"
-    },
-    {
-      "label": "$searchResultCount",
-      "file_type": "code",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L428",
-      "community": 3,
-      "norm_label": "$searchresultcount",
-      "id": "stores_wordlist_searchresultcount"
     },
     {
       "label": "env.d.ts",
@@ -2290,7 +2290,7 @@
       "file_type": "code",
       "source_file": "src/plugins/sentryBrowser.ts",
       "source_location": "L1",
-      "community": 34,
+      "community": 43,
       "norm_label": "sentrybrowser.ts",
       "id": "src_plugins_sentrybrowser_ts"
     },
@@ -2653,7 +2653,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L143",
-      "community": 12,
+      "community": 17,
       "norm_label": "getallwordslinksquery",
       "id": "gql_graphql_getallwordslinksquery"
     },
@@ -2743,7 +2743,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L154",
-      "community": 12,
+      "community": 85,
       "norm_label": "getpagesbyslugsdocument",
       "id": "gql_graphql_getpagesbyslugsdocument"
     },
@@ -2824,7 +2824,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort-vorschlagen.astro",
       "source_location": "L1",
-      "community": 29,
+      "community": 12,
       "norm_label": "wort-vorschlagen.astro",
       "id": "src_pages_wort_vorschlagen_astro"
     },
@@ -2833,7 +2833,7 @@
       "file_type": "code",
       "source_file": "src/pages/wort-vorschlagen.astro",
       "source_location": "L6",
-      "community": 29,
+      "community": 12,
       "norm_label": "page",
       "id": "pages_wort_vorschlagen_page"
     },
@@ -2851,7 +2851,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L1",
-      "community": 48,
+      "community": 22,
       "norm_label": "index.astro",
       "id": "src_pages_index_astro"
     },
@@ -2860,7 +2860,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L13",
-      "community": 48,
+      "community": 22,
       "norm_label": "content",
       "id": "pages_index_content"
     },
@@ -2869,7 +2869,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L24",
-      "community": 48,
+      "community": 22,
       "norm_label": "facts",
       "id": "pages_index_facts"
     },
@@ -2878,7 +2878,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L91",
-      "community": 48,
+      "community": 22,
       "norm_label": "wrapper",
       "id": "pages_index_wrapper"
     },
@@ -2887,7 +2887,7 @@
       "file_type": "code",
       "source_file": "src/pages/index.astro",
       "source_location": "L92",
-      "community": 48,
+      "community": 22,
       "norm_label": "img",
       "id": "pages_index_img"
     },
@@ -2896,7 +2896,7 @@
       "file_type": "code",
       "source_file": "src/styles/objects/_index.scss",
       "confidence": "EXTRACTED",
-      "community": 48,
+      "community": 22,
       "norm_label": "@styles/objects/_index.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss"
     },
@@ -2905,7 +2905,7 @@
       "file_type": "code",
       "source_file": "src/assets/images/brown-bear-roar.png",
       "confidence": "EXTRACTED",
-      "community": 48,
+      "community": 22,
       "norm_label": "@assets/images/brown-bear-roar.png",
       "id": "home_felix_workspace_berliner_schnauze_src_assets_images_brown_bear_roar_png"
     },
@@ -2915,7 +2915,7 @@
       "source_file": "src/components/FactCard.astro",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 48,
+      "community": 22,
       "norm_label": "factcard.astro",
       "id": "src_components_factcard_astro"
     },
@@ -2935,7 +2935,7 @@
       "source_file": "src/components/WordOfTheDay.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 48,
+      "community": 22,
       "norm_label": "wordoftheday.vue",
       "id": "src_components_wordoftheday_vue"
     },
@@ -2945,7 +2945,7 @@
       "source_file": "src/components/WordSearchLink.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 48,
+      "community": 26,
       "norm_label": "wordsearchlink.vue",
       "id": "src_components_wordsearchlink_vue"
     },
@@ -2955,7 +2955,7 @@
       "source_file": "src/utils/helpers.ts",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 14,
+      "community": 10,
       "norm_label": "helpers.ts",
       "id": "src_utils_helpers_ts"
     },
@@ -2964,7 +2964,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_facts-grid.scss",
       "confidence": "EXTRACTED",
-      "community": 48,
+      "community": 22,
       "norm_label": "@styles/components/_facts-grid.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss"
     },
@@ -3072,7 +3072,7 @@
       "source_file": "src/services/api.ts",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 10,
+      "community": 37,
       "norm_label": "api.ts",
       "id": "src_services_api_ts"
     },
@@ -3091,7 +3091,7 @@
       "file_type": "code",
       "source_file": "~icons/lucide/chevron-right",
       "confidence": "EXTRACTED",
-      "community": 12,
+      "community": 17,
       "norm_label": "~icons/lucide/chevron-right",
       "id": "chevron_right"
     },
@@ -3109,7 +3109,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/meta.json.ts",
       "source_location": "L1",
-      "community": 10,
+      "community": 37,
       "norm_label": "meta.json.ts",
       "id": "src_pages_api_search_meta_json_ts"
     },
@@ -3118,7 +3118,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/meta.json.ts",
       "source_location": "L8",
-      "community": 10,
+      "community": 37,
       "norm_label": "hypher",
       "id": "search_meta_json_hypher"
     },
@@ -3127,7 +3127,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/meta.json.ts",
       "source_location": "L10",
-      "community": 10,
+      "community": 37,
       "norm_label": "get()",
       "id": "search_meta_json_get"
     },
@@ -3136,7 +3136,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L1",
-      "community": 10,
+      "community": 37,
       "norm_label": "index.json.ts",
       "id": "src_pages_api_search_index_json_ts"
     },
@@ -3145,7 +3145,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L12",
-      "community": 10,
+      "community": 37,
       "norm_label": "hypher",
       "id": "search_index_json_hypher"
     },
@@ -3154,7 +3154,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L14",
-      "community": 31,
+      "community": 37,
       "norm_label": "oramasearchindex",
       "id": "search_index_json_oramasearchindex"
     },
@@ -3163,7 +3163,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L16",
-      "community": 10,
+      "community": 37,
       "norm_label": "extractwordtypes()",
       "id": "search_index_json_extractwordtypes"
     },
@@ -3172,7 +3172,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L27",
-      "community": 10,
+      "community": 37,
       "norm_label": "makeoramasearchindex()",
       "id": "search_index_json_makeoramasearchindex"
     },
@@ -3181,7 +3181,7 @@
       "file_type": "code",
       "source_file": "src/pages/api/search/index.json.ts",
       "source_location": "L74",
-      "community": 10,
+      "community": 37,
       "norm_label": "get()",
       "id": "search_index_json_get"
     },
@@ -3208,7 +3208,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/store/wordOfTheDay.test.ts",
       "source_location": "L1",
-      "community": 34,
+      "community": 32,
       "norm_label": "wordoftheday.test.ts",
       "id": "src_tests_unit_store_wordoftheday_test_ts"
     },
@@ -3604,7 +3604,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L1",
-      "community": 17,
+      "community": 48,
       "norm_label": "sortwordbyselect.test.ts",
       "id": "src_tests_unit_components_filter_sortwordbyselect_test_ts"
     },
@@ -3613,7 +3613,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L12",
-      "community": 17,
+      "community": 48,
       "norm_label": "wrapper",
       "id": "filter_sortwordbyselect_test_wrapper"
     },
@@ -3622,7 +3622,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L18",
-      "community": 17,
+      "community": 48,
       "norm_label": "select",
       "id": "filter_sortwordbyselect_test_select"
     },
@@ -3667,7 +3667,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
       "source_location": "L1",
-      "community": 22,
+      "community": 3,
       "norm_label": "letterfilter.test.ts",
       "id": "src_tests_unit_components_filter_letterfilter_test_ts"
     },
@@ -3676,7 +3676,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
       "source_location": "L32",
-      "community": 22,
+      "community": 3,
       "norm_label": "button",
       "id": "filter_letterfilter_test_button"
     },
@@ -3703,7 +3703,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotifyContainer.test.ts",
       "source_location": "L1",
-      "community": 26,
+      "community": 23,
       "norm_label": "toastnotifycontainer.test.ts",
       "id": "src_tests_unit_components_toast_toastnotifycontainer_test_ts"
     },
@@ -3712,7 +3712,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotifyContainer.test.ts",
       "source_location": "L9",
-      "community": 26,
+      "community": 23,
       "norm_label": "mocktoasts",
       "id": "toast_toastnotifycontainer_test_mocktoasts"
     },
@@ -3721,7 +3721,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotifyContainer.test.ts",
       "source_location": "L49",
-      "community": 26,
+      "community": 23,
       "norm_label": "wrapper",
       "id": "toast_toastnotifycontainer_test_wrapper"
     },
@@ -3730,7 +3730,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotifyContainer.test.ts",
       "source_location": "L51",
-      "community": 26,
+      "community": 23,
       "norm_label": "toastcomponents",
       "id": "toast_toastnotifycontainer_test_toastcomponents"
     },
@@ -3739,7 +3739,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L1",
-      "community": 85,
+      "community": 37,
       "norm_label": "getwordtype.test.ts",
       "id": "src_tests_unit_utils_getwordtype_test_ts"
     },
@@ -3748,7 +3748,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L8",
-      "community": 85,
+      "community": 37,
       "norm_label": "doc",
       "id": "utils_getwordtype_test_doc"
     },
@@ -3757,7 +3757,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L9",
-      "community": 85,
+      "community": 37,
       "norm_label": "expectedtags",
       "id": "utils_getwordtype_test_expectedtags"
     },
@@ -3766,7 +3766,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/getWordType.test.ts",
       "source_location": "L11",
-      "community": 85,
+      "community": 37,
       "norm_label": "result",
       "id": "utils_getwordtype_test_result"
     },
@@ -3775,7 +3775,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L1",
-      "community": 86,
+      "community": 37,
       "norm_label": "translatenlptags.test.ts",
       "id": "src_tests_unit_utils_translatenlptags_test_ts"
     },
@@ -3784,7 +3784,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L6",
-      "community": 86,
+      "community": 37,
       "norm_label": "englishtags",
       "id": "utils_translatenlptags_test_englishtags"
     },
@@ -3793,7 +3793,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L12",
-      "community": 86,
+      "community": 37,
       "norm_label": "expectedgermantags",
       "id": "utils_translatenlptags_test_expectedgermantags"
     },
@@ -3802,7 +3802,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/translateNlpTags.test.ts",
       "source_location": "L24",
-      "community": 86,
+      "community": 37,
       "norm_label": "expectedtags",
       "id": "utils_translatenlptags_test_expectedtags"
     },
@@ -3901,7 +3901,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 10,
       "norm_label": "randomelement.test.ts",
       "id": "src_tests_unit_utils_helper_randomelement_test_ts"
     },
@@ -3910,7 +3910,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 10,
       "norm_label": "elements",
       "id": "helper_randomelement_test_elements"
     },
@@ -3919,7 +3919,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L7",
-      "community": 14,
+      "community": 10,
       "norm_label": "result",
       "id": "helper_randomelement_test_result"
     },
@@ -3928,7 +3928,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/useViewTransition.test.ts",
       "source_location": "L1",
-      "community": 22,
+      "community": 3,
       "norm_label": "useviewtransition.test.ts",
       "id": "src_tests_unit_utils_helper_useviewtransition_test_ts"
     },
@@ -3937,7 +3937,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValueLength.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 10,
       "norm_label": "checkobjectvaluelength.test.ts",
       "id": "src_tests_unit_utils_helper_checkobjectvaluelength_test_ts"
     },
@@ -3946,7 +3946,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValueLength.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 10,
       "norm_label": "testobject",
       "id": "helper_checkobjectvaluelength_test_testobject"
     },
@@ -3955,7 +3955,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/formattedDate.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 10,
       "norm_label": "formatteddate.test.ts",
       "id": "src_tests_unit_utils_helper_formatteddate_test_ts"
     },
@@ -3964,7 +3964,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 44,
       "norm_label": "routetoword.test.ts",
       "id": "src_tests_unit_utils_helper_routetoword_test_ts"
     },
@@ -3973,7 +3973,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 44,
       "norm_label": "result",
       "id": "helper_routetoword_test_result"
     },
@@ -3982,7 +3982,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValues.test.ts",
       "source_location": "L1",
-      "community": 14,
+      "community": 10,
       "norm_label": "checkobjectvalues.test.ts",
       "id": "src_tests_unit_utils_helper_checkobjectvalues_test_ts"
     },
@@ -3991,7 +3991,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValues.test.ts",
       "source_location": "L6",
-      "community": 14,
+      "community": 10,
       "norm_label": "testobject",
       "id": "helper_checkobjectvalues_test_testobject"
     },
@@ -4145,7 +4145,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L16",
-      "community": 48,
+      "community": 26,
       "norm_label": "searchlinkiconwrapclass",
       "id": "components_wordsearchlink_searchlinkiconwrapclass"
     },
@@ -4154,7 +4154,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L17",
-      "community": 48,
+      "community": 26,
       "norm_label": "preferredmotion",
       "id": "components_wordsearchlink_preferredmotion"
     },
@@ -4163,7 +4163,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L18",
-      "community": 48,
+      "community": 26,
       "norm_label": "breakpoints",
       "id": "components_wordsearchlink_breakpoints"
     },
@@ -4172,7 +4172,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L29",
-      "community": 48,
+      "community": 26,
       "norm_label": "largerthansm",
       "id": "components_wordsearchlink_largerthansm"
     },
@@ -4181,7 +4181,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L31",
-      "community": 48,
+      "community": 26,
       "norm_label": "scrolltowordsearch()",
       "id": "components_wordsearchlink_scrolltowordsearch"
     },
@@ -4190,7 +4190,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L52",
-      "community": 48,
+      "community": 26,
       "norm_label": "showclickeffect()",
       "id": "components_wordsearchlink_showclickeffect"
     },
@@ -4317,7 +4317,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_fact-card.scss",
       "confidence": "EXTRACTED",
-      "community": 48,
+      "community": 22,
       "norm_label": "@styles/components/_fact-card.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_fact_card_scss"
     },
@@ -4411,7 +4411,7 @@
       "file_type": "code",
       "source_file": "src/components/WordOfTheDay.vue",
       "source_location": "L90",
-      "community": 48,
+      "community": 22,
       "norm_label": "milliseconds",
       "id": "components_wordoftheday_milliseconds"
     },
@@ -4465,7 +4465,7 @@
       "file_type": "code",
       "source_file": "virtual:icons/lucide/mouse-pointer-click",
       "confidence": "EXTRACTED",
-      "community": 48,
+      "community": 26,
       "norm_label": "virtual:icons/lucide/mouse-pointer-click",
       "id": "mouse_pointer_click"
     },
@@ -4564,7 +4564,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordSearchFilterToggle.vue",
       "source_location": "L1",
-      "community": 99,
+      "community": 20,
       "norm_label": "wordsearchfiltertoggle.vue",
       "id": "src_components_word_search_wordsearchfiltertoggle_vue"
     },
@@ -4573,7 +4573,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordSearchFilterToggle.vue",
       "source_location": "L23",
-      "community": 99,
+      "community": 20,
       "norm_label": "activefiltercount",
       "id": "word_search_wordsearchfiltertoggle_activefiltercount"
     },
@@ -4784,7 +4784,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/LetterFilter.vue",
       "source_location": "L1",
-      "community": 22,
+      "community": 3,
       "norm_label": "letterfilter.vue",
       "id": "src_components_filter_letterfilter_vue"
     },
@@ -4937,7 +4937,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L1",
-      "community": 31,
+      "community": 37,
       "norm_label": "singleword.vue",
       "id": "src_components_word_singleword_vue"
     },
@@ -4946,7 +4946,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L70",
-      "community": 31,
+      "community": 37,
       "norm_label": "iswordoftheday",
       "id": "word_singleword_iswordoftheday"
     },
@@ -4955,7 +4955,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L71",
-      "community": 31,
+      "community": 37,
       "norm_label": "wordoptiondropdown",
       "id": "word_singleword_wordoptiondropdown"
     },
@@ -4964,7 +4964,7 @@
       "file_type": "code",
       "source_file": "src/components/word/SingleWord.vue",
       "source_location": "L75",
-      "community": 31,
+      "community": 37,
       "norm_label": "highlightmatches()",
       "id": "word_singleword_highlightmatches"
     },
@@ -5054,7 +5054,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L28",
-      "community": 10,
+      "community": 37,
       "norm_label": "countletters()",
       "id": "utils_wordhelper_countletters"
     },
@@ -5081,7 +5081,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L54",
-      "community": 10,
+      "community": 37,
       "norm_label": "getwordtype()",
       "id": "utils_wordhelper_getwordtype"
     },
@@ -5090,7 +5090,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L150",
-      "community": 10,
+      "community": 37,
       "norm_label": "translatenlptags()",
       "id": "utils_wordhelper_translatenlptags"
     },
@@ -5180,7 +5180,7 @@
       "file_type": "code",
       "source_file": "src/utils/refreshToken.js",
       "source_location": "L1",
-      "community": 34,
+      "community": 43,
       "norm_label": "refreshtoken.js",
       "id": "src_utils_refreshtoken_js"
     },
@@ -5189,7 +5189,7 @@
       "file_type": "code",
       "source_file": "src/utils/refreshToken.js",
       "source_location": "L4",
-      "community": 34,
+      "community": 43,
       "norm_label": "refreshtoken()",
       "id": "utils_refreshtoken_refreshtoken"
     },
@@ -5198,7 +5198,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L12",
-      "community": 14,
+      "community": 44,
       "norm_label": "routetoword()",
       "id": "utils_helpers_routetoword"
     },
@@ -5207,7 +5207,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L30",
-      "community": 14,
+      "community": 10,
       "norm_label": "randomelement()",
       "id": "utils_helpers_randomelement"
     },
@@ -5216,7 +5216,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L34",
-      "community": 48,
+      "community": 10,
       "norm_label": "seodata()",
       "id": "utils_helpers_seodata"
     },
@@ -5225,7 +5225,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L57",
-      "community": 22,
+      "community": 3,
       "norm_label": "useviewtransition()",
       "id": "utils_helpers_useviewtransition"
     },
@@ -5234,7 +5234,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L74",
-      "community": 14,
+      "community": 10,
       "norm_label": "formatteddate()",
       "id": "utils_helpers_formatteddate"
     },
@@ -5243,7 +5243,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L93",
-      "community": 14,
+      "community": 10,
       "norm_label": "checkobjectvalues()",
       "id": "utils_helpers_checkobjectvalues"
     },
@@ -5252,7 +5252,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L104",
-      "community": 14,
+      "community": 10,
       "norm_label": "checkobjectvaluelength()",
       "id": "utils_helpers_checkobjectvaluelength"
     },
@@ -5261,7 +5261,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L123",
-      "community": 14,
+      "community": 13,
       "norm_label": "removefileextension()",
       "id": "utils_helpers_removefileextension"
     },
@@ -5315,7 +5315,7 @@
       "file_type": "code",
       "source_file": "src/stores/modal.ts",
       "source_location": "L35",
-      "community": 6,
+      "community": 32,
       "norm_label": "$isopen",
       "id": "stores_modal_isopen"
     },
@@ -5441,7 +5441,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 111,
       "norm_label": "darkmode.ts",
       "id": "src_stores_darkmode_ts"
     },
@@ -5450,7 +5450,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L3",
-      "community": 6,
+      "community": 111,
       "norm_label": "darkmode",
       "id": "stores_darkmode_darkmode"
     },
@@ -5459,7 +5459,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L5",
-      "community": 6,
+      "community": 111,
       "norm_label": "$isdarkmode",
       "id": "stores_darkmode_isdarkmode"
     },
@@ -5468,7 +5468,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L18",
-      "community": 6,
+      "community": 111,
       "norm_label": "setdarkmode()",
       "id": "stores_darkmode_setdarkmode"
     },
@@ -5477,7 +5477,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L1",
-      "community": 34,
+      "community": 32,
       "norm_label": "wordoftheday.ts",
       "id": "src_stores_wordoftheday_ts"
     },
@@ -5486,7 +5486,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L5",
-      "community": 34,
+      "community": 32,
       "norm_label": "word",
       "id": "stores_wordoftheday_word"
     },
@@ -5495,7 +5495,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L21",
-      "community": 34,
+      "community": 32,
       "norm_label": "example",
       "id": "stores_wordoftheday_example"
     },
@@ -5504,7 +5504,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L26",
-      "community": 34,
+      "community": 32,
       "norm_label": "translation",
       "id": "stores_wordoftheday_translation"
     },
@@ -5513,7 +5513,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L30",
-      "community": 34,
+      "community": 32,
       "norm_label": "wordoftheday",
       "id": "stores_wordoftheday_wordoftheday"
     },
@@ -5522,7 +5522,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L61",
-      "community": 34,
+      "community": 32,
       "norm_label": "getwordoftheday()",
       "id": "stores_wordoftheday_getwordoftheday"
     },
@@ -5531,7 +5531,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L1",
-      "community": 32,
+      "community": 23,
       "norm_label": "toastnotify.ts",
       "id": "src_stores_toastnotify_ts"
     },
@@ -5540,7 +5540,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L3",
-      "community": 26,
+      "community": 23,
       "norm_label": "toastnotify",
       "id": "stores_toastnotify_toastnotify"
     },
@@ -5549,7 +5549,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L16",
-      "community": 32,
+      "community": 23,
       "norm_label": "toastpayload",
       "id": "stores_toastnotify_toastpayload"
     },
@@ -5558,7 +5558,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L20",
-      "community": 32,
+      "community": 23,
       "norm_label": "toaststatus",
       "id": "stores_toastnotify_toaststatus"
     },
@@ -5567,7 +5567,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L32",
-      "community": 32,
+      "community": 23,
       "norm_label": "supportspopover()",
       "id": "stores_toastnotify_supportspopover"
     },
@@ -5576,7 +5576,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L43",
-      "community": 32,
+      "community": 23,
       "norm_label": "hidepopover()",
       "id": "stores_toastnotify_hidepopover"
     },
@@ -5585,7 +5585,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L55",
-      "community": 32,
+      "community": 23,
       "norm_label": "createtoast()",
       "id": "stores_toastnotify_createtoast"
     },
@@ -5594,7 +5594,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L67",
-      "community": 32,
+      "community": 106,
       "norm_label": "createtoastnotify()",
       "id": "stores_toastnotify_createtoastnotify"
     },
@@ -5603,7 +5603,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L99",
-      "community": 32,
+      "community": 23,
       "norm_label": "removetoastbyid()",
       "id": "stores_toastnotify_removetoastbyid"
     },
@@ -5612,7 +5612,7 @@
       "file_type": "code",
       "source_file": "src/services/fetchApi.ts",
       "source_location": "L1",
-      "community": 34,
+      "community": 43,
       "norm_label": "fetchapi.ts",
       "id": "src_services_fetchapi_ts"
     },
@@ -5621,7 +5621,7 @@
       "file_type": "code",
       "source_file": "src/services/fetchApi.ts",
       "source_location": "L3",
-      "community": 34,
+      "community": 43,
       "norm_label": "fetchapi()",
       "id": "services_fetchapi_fetchapi"
     },
@@ -5810,7 +5810,7 @@
       "file_type": "code",
       "source_file": "src/services/queries/getWords.ts",
       "source_location": "L67",
-      "community": 10,
+      "community": 37,
       "norm_label": "fetchallwords()",
       "id": "queries_getwords_fetchallwords"
     },
@@ -5881,7 +5881,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 44,
       "norm_label": "randomwordbutton",
       "id": "components_randomwordbutton_randomwordbutton"
     },
@@ -5933,7 +5933,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 109,
+      "community": 112,
       "norm_label": "imagegallery",
       "id": "components_imagegallery_imagegallery"
     },
@@ -5946,7 +5946,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 99,
       "norm_label": "searchwords",
       "id": "components_searchwords_searchwords"
     },
@@ -6076,7 +6076,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 44,
       "norm_label": "relatedwords",
       "id": "components_relatedwords_relatedwords"
     },
@@ -6232,7 +6232,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 44,
       "norm_label": "berlinerword",
       "id": "gql_entitytypes_berlinerword"
     },
@@ -6336,7 +6336,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 22,
+      "community": 3,
       "norm_label": "setcolormode",
       "id": "components_setcolormode_setcolormode"
     },
@@ -6349,7 +6349,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 22,
+      "community": 3,
       "norm_label": "themeinitializationlogic",
       "id": "components_setcolormode_themelogic"
     },
@@ -6596,7 +6596,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 109,
+      "community": 112,
       "norm_label": "imagegallerycustomelement",
       "id": "components_imagegallery_imagegalleryce"
     },
@@ -6609,7 +6609,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 109,
+      "community": 112,
       "norm_label": "imagegalleryprops",
       "id": "components_imagegallery_imagegalleryprops"
     },
@@ -7181,7 +7181,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 32,
       "norm_label": "stores/index.ts (barrel export)",
       "id": "stores_index_barrel"
     },
@@ -7207,7 +7207,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 32,
+      "community": 106,
       "norm_label": "registersw() call",
       "id": "services_pwa_registersw"
     },
@@ -7415,7 +7415,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "api/search/meta.json: search metadata api route",
       "id": "pages_api_searchmetaroute"
     },
@@ -7428,7 +7428,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "api/search/index.json: orama search index builder",
       "id": "pages_api_searchindexroute"
     },
@@ -7441,7 +7441,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 107,
       "norm_label": "fragment-masking.ts: usefragment / makefragmentdata / isfragmentready",
       "id": "gql_fragmentmasking_usefragment"
     },
@@ -7454,7 +7454,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 107,
       "norm_label": "gql.ts: graphql() typed document map function",
       "id": "gql_gql_graphqlfunction"
     },
@@ -7467,7 +7467,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 107,
       "norm_label": "graphql.ts: codegen-generated gql types and fragments",
       "id": "gql_graphql_generatedtypes"
     },
@@ -7480,7 +7480,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 107,
       "norm_label": "gql/index.ts: barrel re-export of gql.ts",
       "id": "gql_index_gqlbarrel"
     },
@@ -7506,7 +7506,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "vendor.d.ts: ambient module declarations (hypher, hyphenation.de, de-compromise)",
       "id": "types_vendor_vendordeclarations"
     },
@@ -7545,7 +7545,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "sentrybrowser.ts: sentry browser init with tracing + replay",
       "id": "plugins_sentrybrowser_sentryinit"
     },
@@ -7558,7 +7558,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "env.d.ts: global ambient types (turnstile, window._paq, astro refs)",
       "id": "src_env_globalambient"
     },
@@ -7571,7 +7571,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 86,
       "norm_label": "oramasearchindex type (returntype of makeoramasearchindex)",
       "id": "pages_api_ormasearchindex_type"
     },
@@ -8526,6 +8526,587 @@
     }
   ],
   "links": [
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/index.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_index_ts",
+      "target": "src_stores_wordlist_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "gql_graphql_berlinerwordfragment"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "search_index_json_oramasearchindex"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "src_gql_entity_types_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "src_pages_api_search_index_json_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "src_utils_analytics_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "src_utils_helpers_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L94",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_activefiltercount"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L193",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_alphabeticalordertoggle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L301",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_buildwhere"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_cleanberlinerword"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L246",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_getsearchmeta"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L344",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_getsortby"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L363",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_initorama"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L395",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_oramasearchresults"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_rangefilterminmax"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L123",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_resetall"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L242",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_searchlength"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L432",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_searchresultcount"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L185",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_setactiveordercategory"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L157",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_setletterfilter"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L232",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_setsearch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L221",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_setsortorder"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L174",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_setwordtypefilter"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L144",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_showwordlistfilterflyout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L297",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_sortbytype"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L236",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_toggleberolinismus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L163",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_toggleinarray"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L146",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_togglewordlistfilterflyout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L293",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_worddocument"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_wordlist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L205",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_wordlistdateordertoggle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L214",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_wordlistmodifieddateordertoggle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L271",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_wordschema"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "stores_wordlist_wordsearch"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "utils_analytics_trackevent"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "utils_helpers_useviewtransition"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "AMBIGUOUS",
+      "confidence_score": 0.2,
+      "source_file": "src/components/SetColorMode.astro",
+      "source_location": null,
+      "weight": 0.2,
+      "source": "components_setcolormode_themelogic",
+      "target": "stores_wordlist_wordsearch"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/WordSuggestHint.vue",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "components_wordsuggesthint_wordsuggesthint",
+      "target": "stores_wordlist_wordsearch"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_filter_letterfilter_test_ts",
+      "target": "stores_wordlist_wordsearch"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/index.ts",
+      "source_location": "line 5",
+      "weight": 1.0,
+      "source": "stores_index_barrel",
+      "target": "stores_wordlist_wordsearch"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "line 94",
+      "weight": 1.0,
+      "source": "stores_wordlist_activefiltercount",
+      "target": "stores_wordlist_wordsearch"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "line 395",
+      "weight": 1.0,
+      "source": "stores_wordlist_oramasearchresults",
+      "target": "stores_wordlist_wordsearch"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "line 141",
+      "weight": 1.0,
+      "source": "stores_wordlist_resetall",
+      "target": "utils_analytics_trackevent"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_filter_letterfilter_test_ts",
+      "target": "stores_wordlist_setletterfilter"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "line 160",
+      "weight": 1.0,
+      "source": "stores_wordlist_setletterfilter",
+      "target": "utils_analytics_trackevent"
+    },
+    {
+      "relation": "references",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "line 158",
+      "weight": 0.9,
+      "source": "utils_helpers_useviewtransition",
+      "target": "stores_wordlist_setletterfilter"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "stores_wordlist_setwordtypefilter",
+      "target": "utils_analytics_trackevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L175",
+      "weight": 1.0,
+      "source": "stores_wordlist_setwordtypefilter",
+      "target": "utils_helpers_useviewtransition"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_tests_unit_components_filter_sortwordbyselect_test_ts",
+      "target": "stores_wordlist_setsortorder"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L229",
+      "weight": 1.0,
+      "source": "stores_wordlist_setsortorder",
+      "target": "utils_analytics_trackevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L239",
+      "weight": 1.0,
+      "source": "stores_wordlist_toggleberolinismus",
+      "target": "utils_analytics_trackevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L237",
+      "weight": 1.0,
+      "source": "stores_wordlist_toggleberolinismus",
+      "target": "utils_helpers_useviewtransition"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "line 408",
+      "weight": 1.0,
+      "source": "stores_wordlist_oramasearchresults",
+      "target": "stores_wordlist_initorama"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "line 432",
+      "weight": 1.0,
+      "source": "stores_wordlist_searchresultcount",
+      "target": "stores_wordlist_oramasearchresults"
+    },
     {
       "relation": "imports_from",
       "context": "import",
@@ -12035,576 +12616,6 @@
       "confidence_score": 1.0,
       "source": "src_components_wordlist_vue",
       "target": "components_wordlist_virtualizerref"
-    },
-    {
-      "relation": "re_exports",
-      "context": "export",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/index.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_index_ts",
-      "target": "src_stores_wordlist_ts"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "gql_graphql_berlinerwordfragment"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "search_index_json_oramasearchindex"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "src_gql_entity_types_ts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "src_pages_api_search_index_json_ts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "src_utils_analytics_ts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "src_utils_helpers_ts"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L94",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_activefiltercount"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L193",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_alphabeticalordertoggle"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L301",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_buildwhere"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_cleanberlinerword"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L246",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_getsearchmeta"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L344",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_getsortby"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L363",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_initorama"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L395",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_oramasearchresults"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_rangefilterminmax"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L123",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_resetall"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L242",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_searchlength"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L432",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_searchresultcount"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L185",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_setactiveordercategory"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L157",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_setletterfilter"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L232",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_setsearch"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L221",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_setsortorder"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L174",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_setwordtypefilter"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L144",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_showwordlistfilterflyout"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L297",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_sortbytype"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L236",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_toggleberolinismus"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L163",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_toggleinarray"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L146",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_togglewordlistfilterflyout"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L293",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_worddocument"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L36",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_wordlist"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L205",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_wordlistdateordertoggle"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L214",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_wordlistmodifieddateordertoggle"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L271",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_wordschema"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L59",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "stores_wordlist_wordsearch"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "utils_analytics_trackevent"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "utils_helpers_useviewtransition"
-    },
-    {
-      "relation": "semantically_similar_to",
-      "confidence": "AMBIGUOUS",
-      "confidence_score": 0.2,
-      "source_file": "src/components/SetColorMode.astro",
-      "source_location": null,
-      "weight": 0.2,
-      "source": "components_setcolormode_themelogic",
-      "target": "stores_wordlist_wordsearch"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/WordSuggestHint.vue",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "components_wordsuggesthint_wordsuggesthint",
-      "target": "stores_wordlist_wordsearch"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_components_filter_letterfilter_test_ts",
-      "target": "stores_wordlist_wordsearch"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/index.ts",
-      "source_location": "line 5",
-      "weight": 1.0,
-      "source": "stores_index_barrel",
-      "target": "stores_wordlist_wordsearch"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "line 94",
-      "weight": 1.0,
-      "source": "stores_wordlist_activefiltercount",
-      "target": "stores_wordlist_wordsearch"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "line 395",
-      "weight": 1.0,
-      "source": "stores_wordlist_oramasearchresults",
-      "target": "stores_wordlist_wordsearch"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "line 141",
-      "weight": 1.0,
-      "source": "stores_wordlist_resetall",
-      "target": "utils_analytics_trackevent"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_components_filter_letterfilter_test_ts",
-      "target": "stores_wordlist_setletterfilter"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "line 160",
-      "weight": 1.0,
-      "source": "stores_wordlist_setletterfilter",
-      "target": "utils_analytics_trackevent"
-    },
-    {
-      "relation": "references",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "line 158",
-      "weight": 0.9,
-      "source": "utils_helpers_useviewtransition",
-      "target": "stores_wordlist_setletterfilter"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L182",
-      "weight": 1.0,
-      "source": "stores_wordlist_setwordtypefilter",
-      "target": "utils_analytics_trackevent"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L175",
-      "weight": 1.0,
-      "source": "stores_wordlist_setwordtypefilter",
-      "target": "utils_helpers_useviewtransition"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_components_filter_sortwordbyselect_test_ts",
-      "target": "stores_wordlist_setsortorder"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L229",
-      "weight": 1.0,
-      "source": "stores_wordlist_setsortorder",
-      "target": "utils_analytics_trackevent"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L239",
-      "weight": 1.0,
-      "source": "stores_wordlist_toggleberolinismus",
-      "target": "utils_analytics_trackevent"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L237",
-      "weight": 1.0,
-      "source": "stores_wordlist_toggleberolinismus",
-      "target": "utils_helpers_useviewtransition"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "line 408",
-      "weight": 1.0,
-      "source": "stores_wordlist_oramasearchresults",
-      "target": "stores_wordlist_initorama"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "line 432",
-      "weight": 1.0,
-      "source": "stores_wordlist_searchresultcount",
-      "target": "stores_wordlist_oramasearchresults"
     },
     {
       "relation": "contains",
@@ -19677,5 +19688,5 @@
       "source_file": "src/pages/api/search/index.json.ts"
     }
   ],
-  "built_at_commit": "2b625965967b1a575f13b5ae49206551183c91e7"
+  "built_at_commit": "d3de7cdbc86fc8b4966ee5344e2bda923df1c5a6"
 }
