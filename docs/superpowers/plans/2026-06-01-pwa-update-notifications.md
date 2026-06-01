@@ -3,18 +3,21 @@
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** When a new PWA version is deployed and the service worker updates:
+
 - If the user has granted notification permission → show native `Notification`, delay the page reload until the user clicks it (60s fallback timeout)
 - If no permission → reload immediately (existing behavior, now explicit)
 
 A new `/settings` page is the entry point for app preferences. The existing `/pwa` cache overview becomes `/settings/cache` (sub-page). Footer link updated accordingly.
 
 **Route structure:**
+
 ```
 /settings          → AppSettings.vue (notification toggle, future settings)
 /settings/cache    → PwaCacheOverview.vue (moved from /pwa)
 ```
 
 **Architecture:**
+
 - `$notificationPermission` atom mirrors `Notification.permission` reactively
 - `requestNotificationPermission()` triggers browser prompt from user gesture
 - `pwa.ts` adds `onNeedReload` to `registerSW` — providing this callback suppresses the default auto-reload, so we must call `window.location.reload()` in all branches
@@ -26,6 +29,7 @@ A new `/settings` page is the entry point for app preferences. The existing `/pw
 **Tech Stack:** Nanostores `atom`, `virtual:pwa-register` (`onNeedReload`), Web Notifications API, Vue 3 Composition API, `useStore` from `@nanostores/vue`, `trackEvent` from `@utils/analytics`.
 
 **Key API facts (verified against installed v1.3.0):**
+
 - `onNeedReload?: () => void` — fires with `autoUpdate` when new SW activates; providing it suppresses the default hard reload → must call `window.location.reload()` manually
 - `onNeedRefresh` — prompt strategy only, **do not use**
 - `Notification.permission` → `"default" | "granted" | "denied"` — browser-persisted, no localStorage needed
@@ -37,18 +41,18 @@ A new `/settings` page is the entry point for app preferences. The existing `/pw
 
 ## File Map
 
-| Action | Path | Responsibility |
-|--------|------|----------------|
-| Create | `src/stores/notificationPermission.ts` | Atom + `requestNotificationPermission()` action |
-| Modify | `src/services/pwa.ts` | Add `onNeedReload` — notify if granted, reload always |
-| Create | `src/components/AppSettings.vue` | Notification toggle UI, `client:only="vue"` |
-| Create | `src/styles/components/_app-settings.scss` | BEM styles for AppSettings |
-| Modify | `src/styles/components/index.scss` | Add `@forward "app-settings"` |
-| **Move** | `src/pages/pwa.astro` → `src/pages/settings/cache.astro` | Cache overview at `/settings/cache` |
-| Create | `src/pages/settings/index.astro` | Main settings page at `/settings` |
-| Modify | `src/components/Footer.astro:57` | Update `/pwa` link → `/settings/cache` |
-| Modify | `src/components/header/MainMenu.vue` | Add `{ link: "/settings", title: "Einstellungen" }` |
-| Create | `src/tests/unit/stores/notificationPermission.test.ts` | Unit tests for store |
+| Action   | Path                                                     | Responsibility                                        |
+| -------- | -------------------------------------------------------- | ----------------------------------------------------- |
+| Create   | `src/stores/notificationPermission.ts`                   | Atom + `requestNotificationPermission()` action       |
+| Modify   | `src/services/pwa.ts`                                    | Add `onNeedReload` — notify if granted, reload always |
+| Create   | `src/components/AppSettings.vue`                         | Notification toggle UI, `client:only="vue"`           |
+| Create   | `src/styles/components/_app-settings.scss`               | BEM styles for AppSettings                            |
+| Modify   | `src/styles/components/index.scss`                       | Add `@forward "app-settings"`                         |
+| **Move** | `src/pages/pwa.astro` → `src/pages/settings/cache.astro` | Cache overview at `/settings/cache`                   |
+| Create   | `src/pages/settings/index.astro`                         | Main settings page at `/settings`                     |
+| Modify   | `src/components/Footer.astro:57`                         | Update `/pwa` link → `/settings/cache`                |
+| Modify   | `src/components/header/MainMenu.vue`                     | Add `{ link: "/settings", title: "Einstellungen" }`   |
+| Create   | `src/tests/unit/stores/notificationPermission.test.ts`   | Unit tests for store                                  |
 
 ---
 
@@ -56,22 +60,24 @@ A new `/settings` page is the entry point for app preferences. The existing `/pw
 
 **Verified allowed APIs:**
 
-| API | Source |
-|-----|--------|
-| `atom<T>(initial)` | `nanostores` |
-| `onMount(atom, () => cleanup)` | `nanostores` |
-| `registerSW({ onNeedReload, onOfflineReady, onRegisteredSW })` | `node_modules/vite-plugin-pwa/types/index.d.ts` |
-| `trackEvent(category, action, label)` | `@utils/analytics` |
-| `useStore($atom)` | `@nanostores/vue` |
-| `Notification.permission`, `.requestPermission()`, `new Notification()`, `.onclick` | Web API |
+| API                                                                                 | Source                                          |
+| ----------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `atom<T>(initial)`                                                                  | `nanostores`                                    |
+| `onMount(atom, () => cleanup)`                                                      | `nanostores`                                    |
+| `registerSW({ onNeedReload, onOfflineReady, onRegisteredSW })`                      | `node_modules/vite-plugin-pwa/types/index.d.ts` |
+| `trackEvent(category, action, label)`                                               | `@utils/analytics`                              |
+| `useStore($atom)`                                                                   | `@nanostores/vue`                               |
+| `Notification.permission`, `.requestPermission()`, `new Notification()`, `.onclick` | Web API                                         |
 
 **Anti-patterns:**
+
 - Do NOT import from `@stores/index` barrel (causes `wordList.ts` computedAsync side effect)
 - Do NOT use `onNeedRefresh` (prompt strategy only)
 - Do NOT call `Notification.requestPermission()` outside user gesture handler
 - Do NOT omit `window.location.reload()` — providing `onNeedReload` suppresses the default reload
 
 **Copy-from references:**
+
 - Atom pattern: `src/stores/installApp.ts:13–40`
 - Astro page structure: `src/pages/pwa.astro:1–13`
 - Vue component setup + useStore: `src/components/PwaCacheOverview.vue`
@@ -84,6 +90,7 @@ A new `/settings` page is the entry point for app preferences. The existing `/pw
 ## Task 1: Notification Permission Store
 
 **Files:**
+
 - Create: `src/stores/notificationPermission.ts`
 - Create: `src/tests/unit/stores/notificationPermission.test.ts`
 
@@ -185,6 +192,7 @@ pnpm vitest run src/tests/unit/stores/notificationPermission.test.ts
 ## Task 2: Update pwa.ts — onNeedReload with deferred reload
 
 **Files:**
+
 - Modify: `src/services/pwa.ts`
 
 - [ ] **Step 1: Add `onNeedReload` to registerSW**
@@ -245,9 +253,11 @@ registerSW({
 ```
 
 **Verification:**
+
 ```bash
 pnpm typechecking
 ```
+
 No new errors — `onNeedReload` is in `RegisterSWOptions`.
 
 ---
@@ -255,6 +265,7 @@ No new errors — `onNeedReload` is in `RegisterSWOptions`.
 ## Task 3: Route restructure — /pwa → /settings/cache
 
 **Files:**
+
 - Move: `src/pages/pwa.astro` → `src/pages/settings/cache.astro`
 - Modify: `src/components/Footer.astro:57`
 
@@ -283,10 +294,13 @@ Then delete `src/pages/pwa.astro`.
 - [ ] **Step 2: Update Footer link**
 
 In `src/components/Footer.astro` at line 57, change:
+
 ```ts
 link: "/pwa",
 ```
+
 to:
+
 ```ts
 link: "/settings/cache",
 ```
@@ -300,6 +314,7 @@ Also update the link label if it reads "PWA" or "Offline-Cache" — check surrou
 ## Task 4: AppSettings Vue Component + SCSS
 
 **Files:**
+
 - Create: `src/components/AppSettings.vue`
 - Create: `src/styles/components/_app-settings.scss`
 - Modify: `src/styles/components/index.scss`
@@ -307,10 +322,12 @@ Also update the link label if it reads "PWA" or "Offline-Cache" — check surrou
 - [ ] **Step 1: Check SCSS variable names**
 
 Before writing SCSS, grep for actual token names:
+
 ```bash
 grep -n "spacing\|font-weight\|font-size\|color-warning\|color-error" \
   src/styles/variables/*.scss | head -30
 ```
+
 Use exact variable names found — do not invent tokens.
 
 - [ ] **Step 2: Create SCSS file**
@@ -345,6 +362,7 @@ Create `src/styles/components/_app-settings.scss` using verified token names. Mi
 - [ ] **Step 3: Register in SCSS index**
 
 In `src/styles/components/index.scss`, add with other `@forward` lines:
+
 ```scss
 @forward "app-settings";
 ```
@@ -354,6 +372,7 @@ In `src/styles/components/index.scss`, add with other `@forward` lines:
 ```bash
 ls node_modules/@iconify-json/lucide/icons/ | grep -E "^bell"
 ```
+
 Use only icon names confirmed to exist (e.g. `bell.svg` → `lucide/bell`).
 
 - [ ] **Step 5: Create AppSettings.vue**
@@ -424,6 +443,7 @@ const notificationsSupported = isNotificationSupported();
 ## Task 5: Settings Index Page
 
 **Files:**
+
 - Create: `src/pages/settings/index.astro`
 
 - [ ] **Step 1: Create page**
@@ -453,6 +473,7 @@ const page = {
 ## Task 6: Navigation Links
 
 **Files:**
+
 - Modify: `src/components/header/MainMenu.vue`
 
 - [ ] **Step 1: Add `/settings` to menuItems**
@@ -468,6 +489,7 @@ const menuItems = [
 ```
 
 Add:
+
 ```ts
 { link: "/settings", title: "Einstellungen" },
 ```
@@ -489,6 +511,7 @@ Add:
 - [ ] Manual: Footer link points to `/settings/cache`
 
 **Anti-pattern verification:**
+
 ```bash
 # No barrel imports
 grep "from \"@stores/index\"" src/components/AppSettings.vue src/stores/notificationPermission.ts
