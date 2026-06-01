@@ -80,7 +80,9 @@ const facts = [
     <!-- <FactCard headline={facts[3].headline} text={facts[3].text} /> -->
     <FactCard headline={facts[4].headline} text={facts[4].text} />
     <FactCard headline={facts[5].headline} text={facts[5].text} />
-    <WordOfTheDay client:visible={{rootMargin: "200px"}} />
+    <WordOfTheDay client:only="vue">
+      <div slot="fallback" class="c-facts-grid__wotd-slot" />
+    </WordOfTheDay>
   </section>
 
   <WordSearch />
