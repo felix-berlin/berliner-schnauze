@@ -1,5 +1,5 @@
 ---
-import type { GetImageResult } from "astro";
+import type { GetImageResult, ImageOutputFormat } from "astro";
 
 import "photoswipe/style.css";
 import { getImage, Picture } from "astro:assets";
@@ -20,7 +20,7 @@ type ImageGalleryProps = {
 };
 
 const {
-  formats = ["avif", "webp", "jpeg"],
+  formats = ["avif", "webp"],
   id = `gallery-${crypto.randomUUID()}`,
   images,
   lightboxSizes,
@@ -66,19 +66,20 @@ const lightboxImageList = await Promise.all(
                 aria-label="Bild in Originalgröße öffnen"
                 class="c-image-gallery__link"
                 data-pswp-avif-srcset={lightboxImageList[index].avif.srcSet.attribute}
-                data-pswp-height={lightboxImageList[index].jpeg.attributes.height}
-                data-pswp-sizes={lightboxImageList[index].jpeg.attributes.sizes}
-                data-pswp-srcset={lightboxImageList[index].jpeg.srcSet.attribute}
+                data-pswp-height={lightboxImageList[index].webp.attributes.height}
+                data-pswp-sizes={lightboxImageList[index].webp.attributes.sizes}
+                data-pswp-srcset={lightboxImageList[index].webp.srcSet.attribute}
                 data-pswp-webp-srcset={lightboxImageList[index].webp.srcSet.attribute}
-                data-pswp-width={lightboxImageList[index].jpeg.attributes.width}
-                href={lightboxImageList[index].jpeg.src}
+                data-pswp-width={lightboxImageList[index].webp.attributes.width}
+                href={lightboxImageList[index].webp.src}
                 rel="noreferrer"
                 target="_blank"
               >
                 <Picture
                   alt={image.altText ?? ''}
                   class="c-image-gallery__image"
-                  formats={formats}
+                  fallbackFormat={"webp" as ImageOutputFormat}
+                  formats={formats as ImageOutputFormat[]}
                   height={image.mediaDetails?.height ?? 0}
                   loading={loading}
                   sizes={`${sizes}, ${image.mediaDetails?.width}px`}
