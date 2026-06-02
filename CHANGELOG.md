@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.30.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.5...v3.30.0) (2026-06-02)
+
+
+### Bug Fixes
+
+* **analytics:** prevent lost and stale Matomo events ([4d3b63d](https://github.com/felix-berlin/berliner-schnauze/commit/4d3b63dd69aef44b64e487cd9a98da86a576cfc1))
+* **darkMode:** restore cc--darkmode class toggling ([8097843](https://github.com/felix-berlin/berliner-schnauze/commit/8097843e5c5feb3844ddb00058d7ccb4df541ae8))
+* double mobile menu trigger ([edbd3ba](https://github.com/felix-berlin/berliner-schnauze/commit/edbd3ba21118bf88a2cbd6ad13a9b81aacc047d1))
+* duplicated import ([02331df](https://github.com/felix-berlin/berliner-schnauze/commit/02331dfffc6c9545865fb158c0305c73ace820f4))
+* icon path ([51899d5](https://github.com/felix-berlin/berliner-schnauze/commit/51899d50ceec4095f7c51907847ca5ee3910b62d))
+* **notifications:** harden permission store and composable ([08f8805](https://github.com/felix-berlin/berliner-schnauze/commit/08f88057f4e9927d549e19b90c398e94213be953))
+* **pushSubscription:** add error handling and concurrent-call guard ([6d12cfa](https://github.com/felix-berlin/berliner-schnauze/commit/6d12cfad3cb312a7ca199fafac6a5410f88554b6))
+* **pwa:** guard Notification constructor, add onRegisterError ([0bb10f7](https://github.com/felix-berlin/berliner-schnauze/commit/0bb10f78c6db887ff20f81e18fdc0be8194f7c35))
+
+
+### Features
+
+* add --> theme, push and install options zu settings page ([9152a44](https://github.com/felix-berlin/berliner-schnauze/commit/9152a443a46834b51554842f31d249a53f4d5bb8))
+* optimize pwa settings design ([e31c138](https://github.com/felix-berlin/berliner-schnauze/commit/e31c138943667b67bf728d07fe11d045ec66e820))
+* **pwa:** add update notifications and app settings page ([86a57cd](https://github.com/felix-berlin/berliner-schnauze/commit/86a57cdc34b56b952dc2c235fb437a7b683db41e))
+* **search:** index compound word suffixes for substring matching ([1fa132f](https://github.com/felix-berlin/berliner-schnauze/commit/1fa132f14174d1b5b21d321e9e17868ef0511299))
+
 ## [3.29.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.4...v3.29.5) (2026-06-01)
 
 
