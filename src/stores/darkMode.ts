@@ -16,6 +16,17 @@ export const $isDarkMode = persistentAtom<DarkMode>("darkMode", null, {
   },
 });
 
-export const setDarkMode = (value: DarkMode) => {
+export const setDarkMode = (value: DarkMode): void => {
   $isDarkMode.set(value);
+
+  if (typeof document === "undefined") return;
+
+  const resolved = value === null
+    ? window.matchMedia("(prefers-color-scheme: dark)").matches
+    : value;
+
+  document.documentElement.classList.toggle("dark", resolved);
+  document.documentElement.style.colorScheme = resolved ? "dark" : "light";
+  document.querySelector("meta[name=theme-color]")
+    ?.setAttribute("content", resolved ? "#2b333b" : "#fad0b0");
 };

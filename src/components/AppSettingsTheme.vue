@@ -50,18 +50,7 @@ const SunMoonIcon = defineAsyncComponent(() => import("virtual:icons/lucide/sun-
 const isDarkMode = useStore($isDarkMode);
 
 function applyDarkMode(value: boolean | null): void {
-  const resolved = value === null
-    ? window.matchMedia("(prefers-color-scheme: dark)").matches
-    : value;
   setDarkMode(value);
-  const htmlClasses = document.querySelector("html")?.classList;
-  if (resolved) {
-    htmlClasses?.add("dark");
-  } else {
-    htmlClasses?.remove("dark");
-  }
-  document.querySelector("meta[name=theme-color]")
-    ?.setAttribute("content", resolved ? "#2b333b" : "#fad0b0");
   trackEvent("Color Mode", value === null ? "System" : value ? "Dark Mode" : "Light Mode", "Settings");
 }
 </script>

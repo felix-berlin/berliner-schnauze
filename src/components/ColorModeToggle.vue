@@ -40,18 +40,12 @@ import SunMoon from "virtual:icons/lucide/sun-moon";
 
 interface ColorModeToggleProps {
   cssClasses?: string | string[];
-  toggleClasses?: string[];
 }
 
-const { cssClasses = "", toggleClasses = ["dark"] } = defineProps<ColorModeToggleProps>();
+const { cssClasses = "" } = defineProps<ColorModeToggleProps>();
 
 const isDarkMode = useStore($isDarkMode);
 
-/**
- * Toggle the color mode.
- *
- * @return  {void}
- */
 const toggleMode = (): void => {
   const newMode =
     isDarkMode.value === null
@@ -59,27 +53,7 @@ const toggleMode = (): void => {
       : !isDarkMode.value;
 
   setDarkMode(newMode);
-  updateThemeColor();
   trackEvent("Color Mode", newMode ? "Dark Mode" : "Light Mode", "Toggle Color Mode");
-
-  const htmlClasses = document.querySelector("html")?.classList;
-
-  if (newMode) {
-    htmlClasses?.add(...toggleClasses);
-  } else {
-    htmlClasses?.remove(...toggleClasses);
-  }
-};
-
-/**
- * Update meta theme color.
- *
- * @return  {void}
- */
-const updateThemeColor = (): void => {
-  const metaThemeColor = document.querySelector("meta[name=theme-color]");
-  const themeColor = isDarkMode.value ? "#2b333b" : "#fad0b0";
-  metaThemeColor?.setAttribute("content", themeColor);
 };
 </script>
 
