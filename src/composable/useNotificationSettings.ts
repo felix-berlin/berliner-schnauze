@@ -12,9 +12,24 @@ import {
   subscribePush,
   unsubscribePush,
 } from "@stores/pushSubscription.ts";
+import type { ComputedRef, Ref } from "vue";
 import { computed, onMounted, ref } from "vue";
+import type { NotificationPermissionState } from "@stores/notificationPermission.ts";
+import type { PushState } from "@stores/pushSubscription.ts";
 
-export function useNotificationSettings() {
+export interface NotificationSettingsComposable {
+  notificationPermission: Readonly<Ref<NotificationPermissionState>>;
+  notificationsSupported: boolean;
+  pushState: Readonly<Ref<PushState>>;
+  pushSupported: boolean;
+  requestNotificationPermission: () => Promise<void>;
+  showPushSection: ComputedRef<boolean>;
+  showRevokeHint: Ref<boolean>;
+  togglePush: () => void;
+  vapidConfigured: boolean;
+}
+
+export function useNotificationSettings(): NotificationSettingsComposable {
   const notificationPermission = useStore($notificationPermission);
   const pushState = useStore($pushState);
 
@@ -28,12 +43,17 @@ export function useNotificationSettings() {
   );
 
   onMounted(() => {
+    // Sync permission atom on mount — fixes SSR hydration where atom initialised as "unsupported"
+    if (isNotificationSupported()) {
+      $notificationPermission.set(Notification.permission);
+    }
     if (pushSupported) void loadPushState();
   });
 
   function togglePush(): void {
-    if (pushState.value === "subscribed") void unsubscribePush();
-    else if (pushState.value === "unsubscribed") void subscribePush();
+    const s = pushState.value;
+    if (s === "subscribed") void unsubscribePush();
+    else if (s === "unsubscribed" || s === "error") void subscribePush();
   }
 
   return {
