@@ -26,6 +26,7 @@ export const setDarkMode = (value: DarkMode): void => {
     : value;
 
   document.documentElement.classList.toggle("dark", resolved);
+  document.documentElement.classList.toggle("cc--darkmode", resolved);
   document.documentElement.style.colorScheme = resolved ? "dark" : "light";
   document.querySelector("meta[name=theme-color]")
     ?.setAttribute("content", resolved ? "#2b333b" : "#fad0b0");
