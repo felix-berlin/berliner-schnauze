@@ -1,9 +1,9 @@
 import AppSettingsNavCard from "@components/AppSettingsNavCard.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
-import { defineComponent } from "vue";
+import { defineComponent, markRaw } from "vue";
 
-const StubIcon = defineComponent({ template: "<span />" });
+const StubIcon = markRaw(defineComponent({ template: "<span />" }));
 
 describe("AppSettingsNavCard.vue", () => {
   const baseProps = {
