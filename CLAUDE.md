@@ -111,6 +111,8 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 **VueUse**: Use `@vueuse/core` wherever it covers a browser API or Vue utility pattern — event listeners, debounce, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, etc. Prefer VueUse over manual implementations. Already used: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`.
 
+**PWA**: Built with `@vite-pwa/astro` + Workbox. Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. On update: shows browser Notification if permission granted, else silently reloads. On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Workbox caches all static assets (JS, CSS, images) up to 15 MB.
+
 **Fonts**: All `@font-face` rules use `font-display: swap` (`src/styles/base/_typo.scss`). Do NOT change to `optional` — on cold cache the 100ms block period makes all text invisible then appear as fallback, causing severe CLS (0.65 observed).
 
 **Modal system**: Open modals via `open()` from `@stores/modal.ts` using `defineAsyncComponent` for dynamic component loading. See `src/components/WordSuggestHint.vue` for reference.
