@@ -55,7 +55,7 @@ pnpm format:check            # Check formatting without writing
 pnpm server:pages            # Serve ./dist with Wrangler Pages
 
 # WordPress auth
-pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (needs .env)
+pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (exception: needs local .env file, not Infisical)
 ```
 
 Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
@@ -101,13 +101,15 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 **Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordList`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS. For async computed stores, use `computedAsync` from `@nanostores/async` (see `$oramaSearchResults` in `src/stores/wordList.ts`). Avoid deprecated `computed() + task()` pattern.
 
-**Vue components**: Use Composition API with `<script setup lang="ts">`. SCSS scoped styles with `<style lang="scss">` and `@use "@styles/..."`.
+**Vue components**: Composition API only — `<script setup lang="ts">`. Block order: `<template>`, `<script>`, `<style>`. CSS classes use BEM with `c-` prefix (e.g. `c-my-component__element`). Styles are NOT scoped — BEMIT class naming provides isolation instead. Use `<style lang="scss">` without `scoped`. Each component owns its SCSS file at `src/styles/components/_name.scss` and loads it via `@use "@styles/components/name"` inside its own `<style>` block — not globally.
 
 **Icons**: Load asynchronously via `defineAsyncComponent(() => import("virtual:icons/lucide/icon-name"))`. All icons from Lucide.
 
 **Analytics**: Track user interactions with `trackEvent(category, action, label)` from `@utils/analytics`.
 
-**SCSS imports**: Use `@use "@styles/path"` — not `@import`.
+**SCSS imports**: Use `@use "@styles/path"` — not `@import`. Global styles (base resets, typography, utilities) belong in `src/styles/app.scss`. Component styles follow the pattern in **Vue components** above.
+
+**VueUse**: Use `@vueuse/core` wherever it covers a browser API or Vue utility pattern — event listeners, debounce, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, etc. Prefer VueUse over manual implementations. Already used: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`.
 
 **Fonts**: All `@font-face` rules use `font-display: swap` (`src/styles/base/_typo.scss`). Do NOT change to `optional` — on cold cache the 100ms block period makes all text invisible then appear as fallback, causing severe CLS (0.65 observed).
 
@@ -119,7 +121,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 ## Environment Variables
 
-Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`. Full list in `.env.example`.
+Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`. Full list in `.env.example`. See [Secrets](#secrets) for how vars are injected.
 
 ## Testing
 

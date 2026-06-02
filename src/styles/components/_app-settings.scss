@@ -1,21 +1,260 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
 .c-app-settings {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.75rem;
 
-  &__section {
+  &__card {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.875rem;
+    padding: 1.25rem 1.5rem;
+
+    .c-button {
+      --padding: 0.375rem 0.75rem;
+
+      align-self: flex-start;
+    }
+
+    border: 1px solid
+      var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
+    background-color: var(--color-card-bg, color-mix(in srgb, var(--orange-100) 35%, white));
+
+    @include butler-mx.dark-mode-class {
+      --color-card-border: color-mix(in srgb, var(--blue) 80%, white);
+      --color-card-bg: color-mix(in srgb, var(--new-blue-400) 70%, transparent);
+    }
   }
 
-  &__notification-row {
+  &__card-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-family: vars.$berliner;
+    font-size: butler-fn.fluid(18, 22, 320, 1260);
+    margin: 0;
   }
 
-  &__denied-hint {
-    font-size: 0.875rem;
+  &__card-title-icon {
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  &__status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding: 0.2rem 0.625rem;
+    border: 1px solid currentColor;
+    width: fit-content;
+
+    &.is-granted {
+      color: vars.$success;
+      background-color: color-mix(in srgb, #{vars.$success} 8%, transparent);
+    }
+
+    &.is-denied {
+      color: vars.$danger;
+      background-color: color-mix(in srgb, #{vars.$danger} 8%, transparent);
+    }
+
+    &.is-default {
+      color: var(--color-body);
+      opacity: 0.55;
+    }
+  }
+
+  &__status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+    flex-shrink: 0;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid
+      var(--color-row-border, color-mix(in srgb, var(--orange-300) 35%, transparent));
+
+    @include butler-mx.dark-mode-class {
+      --color-row-border: color-mix(in srgb, var(--blue) 80%, white);
+    }
+  }
+
+  &__row-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    cursor: pointer;
+  }
+
+  &__hint {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    opacity: 0.7;
+
+    &--error {
+      color: vars.$danger;
+      opacity: 1;
+    }
+  }
+
+  &__revoke-btn {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    color: var(--color-body);
+    opacity: 0.5;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.2s ease;
+
+    @include butler-mx.hover {
+      opacity: 0.85;
+    }
+  }
+
+  &__theme-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid
+      var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
+    overflow: hidden;
+
+    @include butler-mx.dark-mode-class {
+      --color-card-border: color-mix(in srgb, var(--blue) 80%, white);
+    }
+  }
+
+  &__theme-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.25rem;
+    background: none;
+    border: none;
+    border-right: 1px solid
+      var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--color-body);
+    opacity: 0.55;
+    transition:
+      opacity 0.15s ease,
+      background-color 0.15s ease;
+
+    @include butler-mx.dark-mode-class {
+      --color-card-border: color-mix(in srgb, var(--blue) 80%, white);
+    }
+
+    &:last-child {
+      border-right: none;
+    }
+
+    @include butler-mx.hover {
+      opacity: 0.85;
+    }
+
+    &.is-active {
+      opacity: 1;
+      background-color: var(
+        --color-theme-active-bg,
+        color-mix(in srgb, var(--orange-400) 20%, transparent)
+      );
+
+      @include butler-mx.dark-mode-class {
+        --color-theme-active-bg: color-mix(in srgb, var(--blue) 30%, transparent);
+      }
+    }
+  }
+
+  &__nav-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: var(--color-body);
+    border: 1px solid
+      var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
+    background-color: var(--color-card-bg, color-mix(in srgb, var(--orange-100) 35%, white));
+    transition:
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
+
+    @include butler-mx.dark-mode-class {
+      --color-card-border: color-mix(in srgb, var(--blue) 80%, white);
+      --color-card-bg: color-mix(in srgb, var(--new-blue-400) 70%, transparent);
+    }
+    @include butler-mx.hover {
+      border-color: var(--orange-600);
+      box-shadow: 0 0 12px 0 color-mix(in srgb, var(--orange-500) 50%, white);
+
+      @include butler-mx.dark-mode-class {
+        box-shadow: 0 0 12px 0 var(--orange-500);
+      }
+
+      .c-app-settings__nav-card-arrow {
+        transform: translateX(3px);
+      }
+    }
+  }
+
+  &__nav-card--button {
+    width: 100%;
+    margin: 0;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  &__nav-card-content {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  &__nav-card-icon {
+    flex-shrink: 0;
+    opacity: 0.75;
+  }
+
+  &__nav-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  &__nav-card-title {
+    font-family: vars.$berliner;
+    font-size: butler-fn.fluid(16, 18, 320, 1260);
+  }
+
+  &__nav-card-desc {
+    font-size: 0.8125rem;
+    opacity: 0.6;
+  }
+
+  &__nav-card-arrow {
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: transform 0.2s ease;
   }
 }
