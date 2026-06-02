@@ -1,13 +1,20 @@
 ---
-import PwaCacheOverview from '@components/PwaCacheOverview.vue'
-import Layout from '@layouts/Layout.astro'
+import "@styles/plugins/astro-breadcrumbs.scss";
+import PwaCacheOverview from "@components/PwaCacheOverview.vue";
+import Layout from "@layouts/Layout.astro";
+import { Breadcrumbs } from "astro-breadcrumbs";
+import ChevronRight from "~icons/lucide/chevron-right";
 
 const page = {
-  description: 'Verwalte den Offline-Cache der Berliner Schnauze App.',
-  title: 'Offline-Cache – Berliner Schnauze',
-}
+  description: "Verwalte den Offline-Cache der Berliner Schnauze App.",
+  title: "Offline-Cache – Berliner Schnauze",
+};
 ---
 
 <Layout content={page}>
+  <Breadcrumbs indexText="Start">
+    <ChevronRight height="20" slot="separator" width="20" />
+  </Breadcrumbs>
+
   <PwaCacheOverview client:only="vue" />
 </Layout>
