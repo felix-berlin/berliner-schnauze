@@ -24,6 +24,21 @@ function extractWordTypes(wordTags: any): string[] {
   );
 }
 
+function getWordComponents(word: string, minLen = 4): string[] {
+  const parts = word
+    .toLowerCase()
+    .replace(/[^a-zäöüß]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+  const suffixes = new Set<string>();
+  for (const part of parts) {
+    for (let i = 1; i <= part.length - minLen; i++) {
+      suffixes.add(part.slice(i));
+    }
+  }
+  return [...suffixes];
+}
+
 function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, boolean>) {
   const translations = Array.isArray(node.wordProperties?.translations)
     ? node.wordProperties.translations
@@ -68,6 +83,7 @@ function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, b
       translations,
       vowelsCount: vowels,
     },
+    wordComponents: getWordComponents(node.wordProperties?.berlinerisch ?? ""),
   };
 }
 

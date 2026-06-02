@@ -272,6 +272,7 @@ const wordSchema = {
   dateTs: "number",
   modifiedGmt: "string",
   modifiedTs: "number",
+  wordComponents: "string[]",
   wordGroup: "enum",
   wordProperties: {
     audioBerlinerisch: "boolean",
@@ -410,6 +411,7 @@ export const $oramaSearchResults = computedAsync([$wordSearch], async (wordSearc
     boost: {
       "wordProperties.berlinerisch": 2.5,
       "wordProperties.translations": 1,
+      wordComponents: 1.0,
     },
     limit: wordSearch.resultLimit ?? resultLimit ?? 10,
     properties: "*",
