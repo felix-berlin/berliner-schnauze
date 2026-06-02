@@ -16,6 +16,7 @@
         'aria-multiselectable': undefined,
       }"
       @select="onSelect(value)"
+      @deselect="onSelect(value)"
     />
   </nav>
 </template>

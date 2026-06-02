@@ -27,8 +27,8 @@ registerSW({
         console.error("[pwa] Failed to show update notification, falling back to silent reload:", err);
       }
     }
-    window.location.reload();
     trackEvent("App", "Silent update applied", "PWA");
+    window.location.reload();
   },
   onOfflineReady() {
     if (import.meta.env.DEV) {

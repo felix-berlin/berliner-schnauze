@@ -178,8 +178,6 @@ export const setWordTypeFilter = (wordType: string) => {
       toggleInArray($wordSearch.get().activeWordTypeFilter, wordType),
     ),
   );
-
-  trackEvent("WordList", "Filter", `Word Type: ${wordType.split(" ").join(", ")}`);
 };
 
 export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCategory"]) => {
