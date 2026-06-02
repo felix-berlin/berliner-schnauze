@@ -1,0 +1,22 @@
+---
+import "@styles/plugins/astro-breadcrumbs.scss";
+import AppSettings from "@components/AppSettings.vue";
+import Layout from "@layouts/Layout.astro";
+import { Breadcrumbs } from "astro-breadcrumbs";
+import ChevronRight from "~icons/lucide/chevron-right";
+
+const page = {
+  description: "App-Einstellungen für Berliner Schnauze.",
+  title: "Einstellungen – Berliner Schnauze",
+};
+---
+
+<Layout content={page}>
+  <Breadcrumbs indexText="Start">
+    <ChevronRight height="20" slot="separator" width="20" />
+  </Breadcrumbs>
+
+  <h1>Einstellungen</h1>
+
+  <AppSettings client:only="vue" />
+</Layout>

@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { useStore, useVModel } from "@nanostores/vue";
 import {
-  $searchResultCount,
+  $oramaSearchResults,
   $wordSearch,
   searchLength as currentSearchLength,
 } from "@stores/wordList.ts";
@@ -44,7 +44,7 @@ import { setMatomoSearch } from "@utils/analytics";
 import { useDebounceFn } from "@vueuse/core";
 import Search from "virtual:icons/lucide/search";
 import X from "virtual:icons/lucide/x";
-import { onMounted, useTemplateRef } from "vue";
+import { onMounted, ref, useTemplateRef, watch } from "vue";
 
 interface SearchWordsProps {
   autoFocus?: boolean;
@@ -54,13 +54,26 @@ interface SearchWordsProps {
 const { autoFocus = false, buttonPosition = "left" } = defineProps<SearchWordsProps>();
 
 const searchLength = useStore(currentSearchLength);
-const searchResultCount = useStore($searchResultCount);
 const localSearch = useVModel($wordSearch, "search");
 
 const searchInput = useTemplateRef("searchInput");
 
+const oramaResults = useStore($oramaSearchResults);
+const pendingTrackSearch = ref<string | null>(null);
+
+watch(oramaResults, (results) => {
+  if (results.state === "ready" && pendingTrackSearch.value !== null) {
+    setMatomoSearch(pendingTrackSearch.value, "Word Search", results.value?.count ?? 0);
+    pendingTrackSearch.value = null;
+  }
+});
+
 const trackWordSearchListSearch = (search: string) => {
-  setMatomoSearch(search, "Word Search", searchResultCount.value);
+  if (oramaResults.value.state === "ready") {
+    setMatomoSearch(search, "Word Search", oramaResults.value.value?.count ?? 0);
+  } else {
+    pendingTrackSearch.value = search;
+  }
 };
 
 const debouncedTrackSearch = useDebounceFn(trackWordSearchListSearch, 1000, {

@@ -149,6 +149,11 @@ export default defineConfig({
         access: "public",
         default: false,
       }),
+      PUBLIC_VAPID_PUBLIC_KEY: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
     },
   },
   experimental: {

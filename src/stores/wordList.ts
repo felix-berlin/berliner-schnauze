@@ -178,8 +178,6 @@ export const setWordTypeFilter = (wordType: string) => {
       toggleInArray($wordSearch.get().activeWordTypeFilter, wordType),
     ),
   );
-
-  trackEvent("WordList", "Filter", `Word Type: ${wordType.split(" ").join(", ")}`);
 };
 
 export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCategory"]) => {
@@ -274,6 +272,7 @@ const wordSchema = {
   dateTs: "number",
   modifiedGmt: "string",
   modifiedTs: "number",
+  wordComponents: "string[]",
   wordGroup: "enum",
   wordProperties: {
     audioBerlinerisch: "boolean",
@@ -412,6 +411,7 @@ export const $oramaSearchResults = computedAsync([$wordSearch], async (wordSearc
     boost: {
       "wordProperties.berlinerisch": 2.5,
       "wordProperties.translations": 1,
+      wordComponents: 1.0,
     },
     limit: wordSearch.resultLimit ?? resultLimit ?? 10,
     properties: "*",

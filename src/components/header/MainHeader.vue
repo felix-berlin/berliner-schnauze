@@ -10,7 +10,6 @@
 
         <ColorModeToggle
           class="c-menu-nav__item c-menu-nav__item-button u-button-reset"
-          :toggle-classes="['dark', 'cc--darkmode']"
         />
 
         <VMenu

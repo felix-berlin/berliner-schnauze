@@ -75,7 +75,7 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/pages/index.astro": {
-    "mtime": 1780339889.154707,
+    "mtime": 1780345955.5504293,
     "ast_hash": "ab67f86136ce92562a8a2afb64fcb3aa",
     "semantic_hash": ""
   },
@@ -560,7 +560,7 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/components/word-search/WordSearch.astro": {
-    "mtime": 1779123365.3010488,
+    "mtime": 1780345298.922459,
     "ast_hash": "707cbf7022adb06c12b41e624b94b846",
     "semantic_hash": ""
   },
@@ -715,7 +715,7 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/utils/supportedBrowsers.mjs": {
-    "mtime": 1780342837.6745765,
+    "mtime": 1780345840.9064522,
     "ast_hash": "6d63e71e4f57c3d11078f9b4daa64701",
     "semantic_hash": ""
   },

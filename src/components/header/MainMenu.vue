@@ -5,7 +5,7 @@
     strategy="fixed"
     container=".c-menu-nav"
     class="c-menu-nav__item c-menu-more"
-    :triggers="['click', 'hover', 'touch']"
+    :triggers="['click', 'hover']"
   >
     <MainMenuButton />
 
@@ -52,6 +52,10 @@ const menuItems: (ItemObject | { component: DefineComponent; props: object })[] 
   {
     link: "/wort",
     title: "Wort Index",
+  },
+  {
+    link: "/settings",
+    title: "Einstellungen",
   },
 ];
 </script>
