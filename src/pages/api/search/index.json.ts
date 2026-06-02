@@ -24,6 +24,8 @@ function extractWordTypes(wordTags: any): string[] {
   );
 }
 
+// Suffix sub-tokens enable compound word search: "Pinsel" finds "Bierpinsel".
+// Orama does prefix matching natively; this covers the suffix (head-word) side.
 function getWordComponents(word: string, minLen = 4): string[] {
   const parts = word
     .toLowerCase()
