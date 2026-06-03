@@ -2,6 +2,18 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Tool Activation (mandatory at session start)
+
+Pre-load deferred tool schemas before any work — eliminates 2-step friction for the whole session:
+
+```text
+ToolSearch("select:mcp__serena__initial_instructions,mcp__serena__find_symbol,mcp__serena__find_declaration,mcp__serena__find_implementations,mcp__serena__find_referencing_symbols")
+→ call mcp__serena__initial_instructions
+
+ToolSearch("select:mcp__plugin_claude-mem_mcp-search____IMPORTANT,mcp__plugin_claude-mem_mcp-search__search,mcp__plugin_claude-mem_mcp-search__get_observations,mcp__plugin_claude-mem_mcp-search__smart_search,mcp__plugin_claude-mem_mcp-search__observation_search")
+→ call mcp__plugin_claude-mem_mcp-search____IMPORTANT
+```
+
 ## graphify
 
 BEFORE using Grep, Glob, or Read to explore the codebase:
@@ -19,6 +31,20 @@ Rules:
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+## Serena (symbol navigation)
+
+BEFORE using Grep/Glob/Read to find symbol definitions, implementations, or references:
+
+Use `mcp__serena__find_symbol`, `mcp__serena__find_declaration`, or `mcp__serena__find_implementations` — schemas pre-loaded via Tool Activation above.
+
+## Claude-Mem (past session context)
+
+For questions about past sessions, prior decisions, observations, or history:
+
+Use `mcp__plugin_claude-mem_mcp-search__search` or `mcp__plugin_claude-mem_mcp-search__smart_search` — schemas pre-loaded via Tool Activation above.
+
+Workflow: search() → timeline(anchor=ID) → get_observations([IDs]) — never fetch full details without filtering first.
 
 ## Project Overview
 
