@@ -1,0 +1,40 @@
+---
+import WordSimilarSpelling from '@components/word/WordSimilarSpelling.astro';
+import { routeToWord } from '@utils/helpers';
+import { similarSoundingWords } from '@utils/wordHelper';
+import type { BerlinerWord } from '@/gql/entity-types';
+
+interface Props {
+  word: BerlinerWord;
+  allWords: BerlinerWord[];
+}
+
+const { word, allWords } = Astro.props;
+const soundingWords = similarSoundingWords(allWords, word).filter((r) => r.isSimilar);
+---
+
+<section class='c-section-card' id='phonologie'>
+  <div class='c-section-card__header'>
+    <span class='c-section-card__num'>06</span>
+    <h2 class='c-section-card__title'>Phonologie</h2>
+  </div>
+  <div class='c-section-card__body'>
+    {
+      soundingWords.length > 0 && (
+        <>
+          <h3>Ähnlich klingende Wörter</h3>
+          <ul>
+            {soundingWords.map((result) => (
+              <li>
+                <a href={routeToWord(result.word?.slug ?? undefined)}>
+                  {result.word?.wordProperties?.berlinerisch}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )
+    }
+    <WordSimilarSpelling allWords={allWords} currentWord={word} />
+  </div>
+</section>

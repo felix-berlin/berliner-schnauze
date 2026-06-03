@@ -1,0 +1,50 @@
+---
+import type { BerlinerWord } from '@/gql/entity-types';
+
+interface Props {
+  wordProps: BerlinerWord['wordProperties'];
+}
+
+const { wordProps } = Astro.props;
+
+const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
+  return (
+    word?.alternativeWord +
+    (wordProps?.alternativeWords && index !== wordProps?.alternativeWords?.length - 1 ? ', ' : '')
+  );
+});
+---
+
+<section class='c-section-card' id='etymologie'>
+  <div class='c-section-card__header'>
+    <span class='c-section-card__num'>01</span>
+    <h2 class='c-section-card__title'>Etymologie</h2>
+  </div>
+  <div class='c-section-card__body'>
+    {
+      wordProps?.infoText && (
+        <div class='c-section-card__infotext' set:html={wordProps.infoText} />
+      )
+    }
+    {
+      wordProps?.alternativeWords && (
+        <div>
+          <h3>Selbe Bedeutung wie:</h3>
+          <p class='c-single-word__alternative-word'>{alternativeWords}</p>
+        </div>
+      )
+    }
+    {
+      wordProps?.translations && (
+        <div class='c-single-word__translation-wrapper'>
+          <h3 class='c-single-word__sub-headline'>Bedeutung:</h3>
+          <ul class='c-single-word__translation'>
+            {wordProps?.translations?.map((translation) => (
+              <li class='c-single-word__translation-item'>{translation?.translation}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+</section>

@@ -2,44 +2,30 @@
 // Styles
 import '@styles/objects/_word.scss';
 import '@styles/components/_single-word.scss';
-import '@styles/components/_word-sidebar.scss';
-import '@styles/components/_word-hero.scss';
 import '@styles/components/_section-card.scss';
 import '@styles/plugins/astro-breadcrumbs.scss';
 
 // Types
 import type { GetStaticPaths, InferGetStaticParamsType, InferGetStaticPropsType } from 'astro';
 
-import AudioPlayerList from '@components/AudioPlayerList.vue';
-import BadgeTag from '@components/BadgeTag.vue';
 import ImageGallery from '@components/ImageGallery.astro';
 import RandomWordButton from '@components/RandomWordButton.vue';
 import RelatedWords from '@components/RelatedWords.vue';
-import ToolTip from '@components/ToolTip.vue';
-import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
 import WordExamples from '@components/word/WordExamples.astro';
-import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
 import WordAlphabetNav from '@components/word/WordAlphabetNav.astro';
 import WordAnagrams from '@components/word/WordAnagrams.astro';
-import WordCuriosities from '@components/word/WordCuriosities.astro';
-import WordDecomposition from '@components/word/WordDecomposition.astro';
-import WordLetterFrequency from '@components/word/WordLetterFrequency.astro';
-import WordSimilarSpelling from '@components/word/WordSimilarSpelling.astro';
+import WordHero from '@components/word/WordHero.astro';
+import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
+import WordSectionGrammatik from '@components/word/WordSectionGrammatik.astro';
+import WordSectionLinguistik from '@components/word/WordSectionLinguistik.astro';
+import WordSectionOrthographie from '@components/word/WordSectionOrthographie.astro';
+import WordSectionPhonologie from '@components/word/WordSectionPhonologie.astro';
+import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
 import { fetchAllWords } from '@services/api.ts';
 import { formattedDate, removeFileExtension, routeToWord, seoData } from '@utils/helpers.ts';
-import {
-  capitalizeFirstLetter,
-  coloredConsonantsAndVowels,
-  countLetters,
-  findAnagrams,
-  getWordType,
-  similarSoundingWords,
-  translateNlpTags,
-} from '@utils/wordHelper.ts';
+import { findAnagrams, getWordType, translateNlpTags } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
-import german from 'hyphenation.de';
-import Hypher from 'hypher';
 import ChevronRight from '~icons/lucide/chevron-right';
 import ExternalLink from '~icons/lucide/external-link';
 import germanWordsArray from 'all-the-german-words';
@@ -70,13 +56,6 @@ const { allWords, word } = Astro.props;
 
 const wordProps: BerlinerWord['wordProperties'] = word.wordProperties;
 
-const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
-  return (
-    word?.alternativeWord +
-    (wordProps?.alternativeWords && index !== wordProps?.alternativeWords?.length - 1 ? ', ' : '')
-  );
-});
-
 let galleryWidths = [316, 457, 658, 429, 525];
 let gallerySizes =
   '(max-width: 80rem) 525px, (max-width: 64rem) 429px, (max-width: 48rem) 658px, (max-width: 35.49rem) 457px, (max-width: 26.6rem) 316px';
@@ -89,8 +68,6 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
   gallerySizes =
     '(max-width: 70rem) 503px, (max-width: 64rem) 435px, (max-width: 48rem) 307px, (max-width: 35.5rem) 435px, (max-width: 27.2rem) 307px';
 }
-
-const hypher = new Hypher(german);
 
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
 const germanWords = new Set<string>(germanWordsArray as string[]);
@@ -132,137 +109,13 @@ const schemaJson = () =>
   </nav>
 
   <div class='c-word-page'>
-    <aside class='c-word-sidebar'>
-      <div class='c-word-sidebar__word'>
-        <p class='c-word-sidebar__word-title'>{wordProps?.berlinerisch}</p>
-        {wordProps?.article && <p class='c-word-sidebar__word-subtitle'>{wordProps.article}</p>}
-      </div>
-      <nav class='c-word-sidebar__nav' aria-label='Seitennavigation'>
-        <p class='c-word-sidebar__group-label'>Inhalt</p>
-        <a class='c-word-sidebar__link' href='#etymologie'>Bedeutung</a>
-        {
-          wordProps?.examples && (
-            <a class='c-word-sidebar__link' href='#beispiele'>
-              Beispiele
-            </a>
-          )
-        }
-        <div class='c-word-sidebar__divider' role='separator'></div>
-        <p class='c-word-sidebar__group-label'>Sprache</p>
-        <a class='c-word-sidebar__link' href='#orthographie'>Orthographie</a>
-        <a class='c-word-sidebar__link' href='#linguistik'>Linguistik</a>
-        {
-          wordTags.length > 0 && (
-            <a class='c-word-sidebar__link' href='#grammatik'>
-              Grammatik
-            </a>
-          )
-        }
-        <a class='c-word-sidebar__link' href='#phonologie'>Phonologie</a>
-        <div class='c-word-sidebar__divider' role='separator'></div>
-        <p class='c-word-sidebar__group-label'>Entdecken</p>
-        {
-          hasAnagrams && (
-            <a class='c-word-sidebar__link' href='#anagramme'>
-              Anagramme
-            </a>
-          )
-        }
-        <a class='c-word-sidebar__link' href='#navigation'>Nachbarn</a>
-      </nav>
-    </aside>
+    <WordSidebar hasAnagrams={hasAnagrams} wordProps={wordProps} wordTags={wordTags} />
 
     <main class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
-      <div class='c-word-hero'>
-        <div class='c-word-hero__left'>
-          <h1 class='c-word-hero__title'>
-            {wordProps?.berlinerisch}
-            {
-              wordProps?.article && (
-                <span class='c-word-hero__word-article'>, {wordProps.article}</span>
-              )
-            }
-          </h1>
-          <div class='c-word-hero__badges'>
-            {
-              wordProps?.berolinismus && (
-                <ToolTip client:only='vue'>
-                  <BadgeTag> Berolinismus </BadgeTag>
-                  <Fragment slot='content'>
-                    {wordProps?.berlinerisch} gehört zu den Berlinismen.
-                    <>
-                      <br />
-                      <br />
-                    </>
-                    <strong>Berolinismus</strong> sind humorvolle Spitznamen und Eigenheiten, die
-                    bestimmte Orte und Gebäude in Berlin charakterisieren und das lokale Flair der
-                    Stadt prägen.
-                  </Fragment>
-                </ToolTip>
-              )
-            }
-            {wortartLabel && <span class='c-word-hero__wortart-badge'>{wortartLabel}</span>}
-            {
-              word.wordProperties?.berlinerischAudio && (
-                <AudioPlayerList
-                  audio={word.wordProperties?.berlinerischAudio}
-                  client:only='vue'
-                  isType='berlinerisch'
-                />
-              )
-            }
-          </div>
-        </div>
-        <div class='c-word-hero__right'>
-          <IsWordOfTheDay
-            client:only='vue'
-            iconSize={50}
-            tooltipPlacement='top'
-            word={wordProps?.berlinerisch ?? null}
-            wordId={word.berlinerWordId}
-          />
-          <WordOptionDropdown
-            berlinerisch={word.wordProperties?.berlinerisch ?? null}
-            client:only='vue'
-            slug={word.slug}
-          />
-        </div>
-      </div>
+      <WordHero word={word} wordProps={wordProps} wortartLabel={wortartLabel} />
 
       <div class='c-word-main__content'>
-        <section class='c-section-card' id='etymologie'>
-          <div class='c-section-card__header'>
-            <span class='c-section-card__num'>01</span>
-            <h2 class='c-section-card__title'>Etymologie</h2>
-          </div>
-          <div class='c-section-card__body'>
-            {
-              wordProps?.infoText && (
-                <div class='c-section-card__infotext' set:html={wordProps.infoText} />
-              )
-            }
-            {
-              wordProps?.alternativeWords && (
-                <div>
-                  <h3>Selbe Bedeutung wie:</h3>
-                  <p class='c-single-word__alternative-word'>{alternativeWords}</p>
-                </div>
-              )
-            }
-            {
-              wordProps?.translations && (
-                <div class='c-single-word__translation-wrapper'>
-                  <h3 class='c-single-word__sub-headline'>Bedeutung:</h3>
-                  <ul class='c-single-word__translation'>
-                    {wordProps?.translations?.map((translation) => (
-                      <li class='c-single-word__translation-item'>{translation?.translation}</li>
-                    ))}
-                  </ul>
-                </div>
-              )
-            }
-          </div>
-        </section>
+        <WordSectionEtymologie wordProps={wordProps} />
 
         {
           wordProps?.examples && (
@@ -278,133 +131,17 @@ const schemaJson = () =>
           )
         }
 
-        <section class='c-section-card' id='orthographie'>
-          <div class='c-section-card__header'>
-            <span class='c-section-card__num'>03</span>
-            <h2 class='c-section-card__title'>Orthographie</h2>
-          </div>
-          <div class='c-section-card__body'>
-            <div class='c-single-word__syllables'>
-              <h3>Silbentrennung:</h3>
-              <p
-                set:html={hypher
-                  .hyphenate(word.wordProperties?.berlinerisch)
-                  .join(" <span class='is-divider'>|</span> ")}
-              />
-              <h3>Anzahl der Silben:</h3>
-              <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).length}</p>
-            </div>
-            <WordDecomposition
-              allWords={allWords}
-              germanWords={germanWords}
-              word={word.wordProperties?.berlinerisch ?? ''}
-            />
-          </div>
-        </section>
+        <WordSectionOrthographie
+          allWords={allWords}
+          germanWords={germanWords}
+          word={word.wordProperties?.berlinerisch ?? ''}
+        />
 
-        <section class='c-section-card' id='linguistik'>
-          <div class='c-section-card__header'>
-            <span class='c-section-card__num'>04</span>
-            <h2 class='c-section-card__title'>Quantitative Linguistik</h2>
-          </div>
-          <div class='c-section-card__body'>
-            <div class='c-section-card__stat-row'>
-              <div class='c-section-card__stat-box'>
-                <div class='c-section-card__stat-label'>Buchstaben</div>
-                <div class='c-section-card__stat-value'>
-                  {word.wordProperties?.berlinerisch?.length}
-                </div>
-              </div>
-              <div class='c-section-card__stat-box'>
-                <div class='c-section-card__stat-label'>Vokale</div>
-                <div class='c-section-card__stat-value c-section-card__stat-value--vowels'>
-                  {countLetters(word.wordProperties?.berlinerisch ?? '').vowels}
-                </div>
-              </div>
-              <div class='c-section-card__stat-box'>
-                <div class='c-section-card__stat-label'>Konsonanten</div>
-                <div class='c-section-card__stat-value c-section-card__stat-value--consonants'>
-                  {countLetters(word.wordProperties?.berlinerisch ?? '').consonants}
-                </div>
-              </div>
-            </div>
-            <div class='c-single-word__consonants-vowels'>
-              <h3>Konsonanten und Vokale</h3>
-              <p
-                class='c-single-word__consonants-vowels-word'
-                set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch ?? '')}
-              />
-              <div class='c-section-card__cv-legend'>
-                <span
-                  class='c-section-card__cv-legend-item c-section-card__cv-legend-item--consonant'
-                  >Konsonant</span
-                >
-                <span class='c-section-card__cv-legend-item c-section-card__cv-legend-item--vowel'
-                  >Vokal</span
-                >
-              </div>
-            </div>
-            <WordLetterFrequency word={word.wordProperties?.berlinerisch ?? ''} />
-            <WordCuriosities word={word.wordProperties?.berlinerisch ?? ''} />
-          </div>
-        </section>
+        <WordSectionLinguistik word={word.wordProperties?.berlinerisch ?? ''} />
 
-        {
-          wordTags.length > 0 && (
-            <section class='c-section-card' id='grammatik'>
-              <div class='c-section-card__header'>
-                <span class='c-section-card__num'>05</span>
-                <h2 class='c-section-card__title'>Grammatik</h2>
-              </div>
-              <div class='c-section-card__body'>
-                <p class='c-section-card__grammar-label'>Wortart pro Wort (NLP-Analyse)</p>
-                {Object.keys(wordTags[0]).map((key) => {
-                  const isNomenPresent = wordTags[0][key].includes('Nomen');
-                  return (
-                    <div class='c-section-card__grammar-entry'>
-                      <div class='c-section-card__grammar-word'>
-                        {isNomenPresent ? capitalizeFirstLetter(key) : key}
-                      </div>
-                      <div class='c-section-card__grammar-tags'>
-                        {wordTags[0][key].map((tag) => (
-                          <span class='c-section-card__grammar-tag'>{tag}</span>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          )
-        }
+        <WordSectionGrammatik wordTags={wordTags} />
 
-        <section class='c-section-card' id='phonologie'>
-          <div class='c-section-card__header'>
-            <span class='c-section-card__num'>06</span>
-            <h2 class='c-section-card__title'>Phonologie</h2>
-          </div>
-          <div class='c-section-card__body'>
-            {
-              similarSoundingWords(allWords, word).find((w) => w.isSimilar) && (
-                <>
-                  <h3>Ähnlich klingende Wörter</h3>
-                  <ul>
-                    {similarSoundingWords(allWords, word)
-                      .filter((result) => result.isSimilar)
-                      .map((result) => (
-                        <li>
-                          <a href={routeToWord(result.word?.slug ?? undefined)}>
-                            {result.word?.wordProperties?.berlinerisch}
-                          </a>
-                        </li>
-                      ))}
-                  </ul>
-                </>
-              )
-            }
-            <WordSimilarSpelling allWords={allWords} currentWord={word} />
-          </div>
-        </section>
+        <WordSectionPhonologie allWords={allWords} word={word} />
 
         <WordAnagrams allWords={allWords} word={word.wordProperties?.berlinerisch ?? ''} />
 
