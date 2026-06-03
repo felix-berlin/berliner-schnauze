@@ -1,0 +1,33 @@
+---
+import { similarWords } from "@utils/wordHelper";
+import { routeToWord } from "@utils/helpers";
+import type { BerlinerWord } from "@/gql/entity-types";
+
+interface Props {
+  currentWord: BerlinerWord;
+  allWords: BerlinerWord[];
+}
+
+const { currentWord, allWords } = Astro.props;
+const similar = similarWords(allWords, currentWord)
+  .filter((w) => w.isSimilar >= 0.85)
+  .sort((a, b) => b.isSimilar - a.isSimilar)
+  .slice(0, 5);
+---
+
+{
+  similar.length > 0 && (
+    <div>
+      <h3>Ähnlich geschrieben</h3>
+      <ul class="c-single-word__related-words-list">
+        {similar.map(({ word }) => (
+          <li>
+            <a href={routeToWord(word.slug ?? undefined)}>
+              {word.wordProperties?.berlinerisch}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
