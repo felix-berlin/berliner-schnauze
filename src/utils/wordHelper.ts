@@ -230,12 +230,7 @@ export const capitalizeFirstLetter = (word: string) => {
 };
 
 const GERMAN_LETTER_FREQ: Record<string, number> = {
-  e: 17.40, n: 9.78, i: 7.55, s: 7.27, r: 7.00,
-  a: 6.51,  t: 6.15, d: 4.81, h: 4.76, u: 4.35,
-  l: 3.44,  c: 3.06, g: 3.01, m: 2.53, o: 2.51,
-  b: 1.96,  w: 1.89, f: 1.66, k: 1.21, z: 1.13,
-  p: 0.97,  v: 0.67, ü: 0.65, ä: 0.54, ö: 0.30,
-  ß: 0.31,  j: 0.27, y: 0.04, x: 0.03, q: 0.02,
+  a: 6.51, b: 1.96, c: 3.06, d: 4.81, e: 17.40, f: 1.66, g: 3.01, h: 4.76, i: 7.55, j: 0.27, k: 1.21, l: 3.44, m: 2.53, n: 9.78, o: 2.51, p: 0.97, q: 0.02, r: 7.00, s: 7.27, t: 6.15, u: 4.35, v: 0.67, w: 1.89, x: 0.03, y: 0.04, z: 1.13, ß: 0.31, ä: 0.54, ö: 0.30, ü: 0.65,
 };
 
 const frequencyLabel = (pct: number): string => {
@@ -260,9 +255,9 @@ export const letterFrequency = (
     })
     .map((char) => ({
       char,
-      percent: GERMAN_LETTER_FREQ[char]!,
-      label: frequencyLabel(GERMAN_LETTER_FREQ[char]!),
       isVowel: "aeiouäöü".includes(char),
+      label: frequencyLabel(GERMAN_LETTER_FREQ[char]!),
+      percent: GERMAN_LETTER_FREQ[char]!,
     }));
 };
 
@@ -285,13 +280,13 @@ export const wordCuriosities = (
   const isPalindrome = lower === lower.split("").reverse().join("");
   const hasAllVowels = ALL_GERMAN_VOWELS.every((v) => lower.includes(v));
 
-  let longestRun = { length: 0, chars: "" };
+  let longestRun = { chars: "", length: 0 };
   let currentRun = "";
   for (const c of lower) {
     if (isConsonantChar(c)) {
       currentRun += c;
       if (currentRun.length > longestRun.length) {
-        longestRun = { length: currentRun.length, chars: currentRun };
+        longestRun = { chars: currentRun, length: currentRun.length };
       }
     } else {
       currentRun = "";
@@ -299,11 +294,11 @@ export const wordCuriosities = (
   }
 
   return {
-    isPalindrome,
+    endsWithConsonant: isConsonantChar(lower[lower.length - 1] ?? ""),
     hasAllVowels,
+    isPalindrome,
     longestConsonantRun: longestRun,
     startsWithConsonant: isConsonantChar(lower[0] ?? ""),
-    endsWithConsonant: isConsonantChar(lower[lower.length - 1] ?? ""),
   };
 };
 
@@ -335,10 +330,10 @@ export const alphabeticNeighbors = (
       .localeCompare((b.wordProperties?.berlinerisch ?? "").toLowerCase(), "de"),
   );
   const idx = sorted.findIndex((w) => w.id === currentWord.id);
-  if (idx === -1) return { before: [], after: [] };
+  if (idx === -1) return { after: [], before: [] };
   return {
-    before: sorted.slice(Math.max(0, idx - n), idx).reverse(),
     after: sorted.slice(idx + 1, idx + 1 + n),
+    before: sorted.slice(Math.max(0, idx - n), idx).reverse(),
   };
 };
 
