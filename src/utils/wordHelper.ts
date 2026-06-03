@@ -228,3 +228,28 @@ export const createWikimediaFileList = async (wikimediaFiles: WordPropertiesWiki
 export const capitalizeFirstLetter = (word: string) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
+
+export const decomposeCompoundWord = (
+  word: string,
+  germanWords: Set<string>,
+): string[] | null => {
+  const lower = word.toLowerCase();
+  if (lower.length < 5) return null;
+  if (germanWords.has(lower)) return null;
+
+  for (let i = 3; i <= lower.length - 3; i++) {
+    const left = lower.slice(0, i);
+    const right = lower.slice(i);
+
+    if (germanWords.has(left) && germanWords.has(right)) {
+      return [left, right];
+    }
+
+    // Fugen-s: "tageslicht" → "tages" (tag+s) + "licht"
+    if (right.startsWith("s") && right.length >= 3 && germanWords.has(left) && germanWords.has(right.slice(1))) {
+      return [left, right.slice(1)];
+    }
+  }
+
+  return null;
+};
