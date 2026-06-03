@@ -1,0 +1,47 @@
+---
+import { alphabeticNeighbors } from "@utils/wordHelper";
+import { routeToWord } from "@utils/helpers";
+import type { BerlinerWord } from "@/gql/entity-types";
+
+interface Props {
+  currentWord: BerlinerWord;
+  allWords: BerlinerWord[];
+}
+
+const { currentWord, allWords } = Astro.props;
+const { before, after } = alphabeticNeighbors(allWords, currentWord, 3);
+---
+
+<div>
+  <h3>Alphabetische Nachbarn</h3>
+  <div class="c-single-word__alpha-nav">
+    {
+      before.length > 0 && (
+        <div class="c-single-word__alpha-col">
+          <p class="c-single-word__alpha-label">Davor</p>
+          <ul>
+            {before.map((w) => (
+              <li>
+                <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+    {
+      after.length > 0 && (
+        <div class="c-single-word__alpha-col">
+          <p class="c-single-word__alpha-label">Danach</p>
+          <ul>
+            {after.map((w) => (
+              <li>
+                <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+</div>
