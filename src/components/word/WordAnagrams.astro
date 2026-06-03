@@ -1,0 +1,31 @@
+---
+import { findAnagrams } from "@utils/wordHelper";
+import { routeToWord } from "@utils/helpers";
+import type { BerlinerWord } from "@/gql/entity-types";
+
+interface Props {
+  word: string;
+  allWords: BerlinerWord[];
+}
+
+const { word, allWords } = Astro.props;
+const anagrams = findAnagrams(word, allWords);
+---
+
+{
+  anagrams.length > 0 && (
+    <section>
+      <h2>Buchstabenspiele</h2>
+      <div>
+        <h3>Anagramme</h3>
+        <ul class="c-single-word__related-words-list">
+          {anagrams.map((w) => (
+            <li>
+              <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
