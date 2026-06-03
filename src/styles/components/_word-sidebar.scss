@@ -16,12 +16,10 @@
   }
 
   @container word-page (inline-size >= 48rem) {
-    position: sticky;
     top: calc(var(--topbar-height, 52px) + vars.$spacer);
     align-self: start;
     overflow: visible;
     z-index: auto;
-    border-radius: 4px;
   }
   @container word-page (inline-size < 48rem) {
     flex-direction: row;
