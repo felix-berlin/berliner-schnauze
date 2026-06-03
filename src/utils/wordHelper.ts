@@ -272,33 +272,80 @@ export const wordCuriosities = (
 ): {
   isPalindrome: boolean;
   hasAllVowels: boolean;
+  isIsogram: boolean;
+  isAlternating: boolean;
   longestConsonantRun: { length: number; chars: string };
+  longestVowelRun: { length: number; chars: string };
+  doubleLetters: string[];
+  uniqueLetterCount: number;
+  totalLetterCount: number;
+  distinctVowelCount: number;
   startsWithConsonant: boolean;
   endsWithConsonant: boolean;
 } => {
   const lower = word.toLowerCase();
+  const letters = lower.split("").filter((c) => /[a-zäöüß]/i.test(c));
+
   const isPalindrome = lower === lower.split("").reverse().join("");
   const hasAllVowels = ALL_GERMAN_VOWELS.every((v) => lower.includes(v));
 
-  let longestRun = { chars: "", length: 0 };
-  let currentRun = "";
+  const letterFreq = new Map<string, number>();
+  for (const c of letters) {
+    letterFreq.set(c, (letterFreq.get(c) ?? 0) + 1);
+  }
+  const isIsogram = letters.length > 0 && [...letterFreq.values()].every((n) => n === 1);
+
+  let longestConsonantRun = { chars: "", length: 0 };
+  let longestVowelRun = { chars: "", length: 0 };
+  let currentConsonantRun = "";
+  let currentVowelRun = "";
   for (const c of lower) {
     if (isConsonantChar(c)) {
-      currentRun += c;
-      if (currentRun.length > longestRun.length) {
-        longestRun = { chars: currentRun, length: currentRun.length };
+      currentConsonantRun += c;
+      currentVowelRun = "";
+      if (currentConsonantRun.length > longestConsonantRun.length) {
+        longestConsonantRun = { chars: currentConsonantRun, length: currentConsonantRun.length };
+      }
+    } else if (isVowelChar(c)) {
+      currentVowelRun += c;
+      currentConsonantRun = "";
+      if (currentVowelRun.length > longestVowelRun.length) {
+        longestVowelRun = { chars: currentVowelRun, length: currentVowelRun.length };
       }
     } else {
-      currentRun = "";
+      currentConsonantRun = "";
+      currentVowelRun = "";
+    }
+  }
+
+  const doubleLettersSet = new Set<string>();
+  for (let i = 0; i < lower.length - 1; i++) {
+    if (lower[i] === lower[i + 1] && /[a-zäöüß]/i.test(lower[i])) {
+      doubleLettersSet.add(lower[i]);
+    }
+  }
+
+  let isAlternating = letters.length >= 4;
+  for (let i = 0; i < letters.length - 1; i++) {
+    if (isVowelChar(letters[i]) === isVowelChar(letters[i + 1])) {
+      isAlternating = false;
+      break;
     }
   }
 
   return {
+    distinctVowelCount: ALL_GERMAN_VOWELS.filter((v) => lower.includes(v)).length,
+    doubleLetters: [...doubleLettersSet],
     endsWithConsonant: isConsonantChar(lower[lower.length - 1] ?? ""),
     hasAllVowels,
+    isAlternating,
+    isIsogram,
     isPalindrome,
-    longestConsonantRun: longestRun,
+    longestConsonantRun,
+    longestVowelRun,
     startsWithConsonant: isConsonantChar(lower[0] ?? ""),
+    totalLetterCount: letters.length,
+    uniqueLetterCount: letterFreq.size,
   };
 };
 
