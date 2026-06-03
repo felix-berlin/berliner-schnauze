@@ -68,9 +68,9 @@ importers:
       '@vueuse/core':
         specifier: ^14.3.0
         version: 14.3.0(vue@3.5.35(typescript@6.0.3))
-      an-array-of-german-words:
-        specifier: ^1.2.0
-        version: 1.2.0
+      all-the-german-words:
+        specifier: ^1.1.0
+        version: 1.1.0
       astro:
         specifier: ^6.4.2
         version: 6.4.2(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.4)(sass@1.100.0)(terser@5.48.0)(yaml@2.9.0)
@@ -4512,8 +4512,9 @@ packages:
   alien-signals@3.2.1:
     resolution: {integrity: sha512-I8FjmltrfnDFoZedi5CG8DghVYNhzb/Ijluz7tCSJH0xpd0484Kowhbb1XDYOxfJpU1p5wnM2X54dA+IfGyD1g==}
 
-  an-array-of-german-words@1.2.0:
-    resolution: {integrity: sha512-RlQ6XuU0uHOs6o9aum5Wh90q7aKXBWEnyT9BSzhXxJk16kGXe/j4puhgRhM+/0WjKghdpJlFF7CNod7X/Wn1wg==}
+  all-the-german-words@1.1.0:
+    resolution: {integrity: sha512-watOO5w6G1ZYeDhmIzNTtm4Kdw2tQYHKdOhnXvPhCtvKX09QOo3CONUpYlc7NWzlW2YGSBqXRw8GHYchC5eghg==}
+    engines: {node: '>=4'}
     hasBin: true
 
   ansi-escapes@7.3.0:
@@ -13973,7 +13974,7 @@ snapshots:
 
   alien-signals@3.2.1: {}
 
-  an-array-of-german-words@1.2.0: {}
+  all-the-german-words@1.1.0: {}
 
   ansi-escapes@7.3.0:
     dependencies:

@@ -82,7 +82,7 @@
     "@urql/vue": "^2.1.0",
     "@vueform/multiselect": "^2.6.11",
     "@vueuse/core": "^14.3.0",
-    "an-array-of-german-words": "^1.2.0",
+    "all-the-german-words": "^1.1.0",
     "astro": "^6.4.2",
     "astro-breadcrumbs": "^3.4.0",
     "astro-matomo": "^1.10.0",
