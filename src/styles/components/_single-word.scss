@@ -245,19 +245,11 @@
 
     &-fill {
       height: 100%;
-      background: var(--orange-600);
+      background: linear-gradient(90deg, oklch(52% 0.16 var(--bar-hue)), oklch(62% 0.20 var(--bar-hue)));
       border-radius: 4px;
 
       @include butler-mx.dark-mode-class {
-        background: var(--orange-300);
-      }
-
-      &--vowel {
-        background: #435e6b;
-
-        @include butler-mx.dark-mode-class {
-          background: #cfc536;
-        }
+        background: linear-gradient(90deg, oklch(65% 0.18 var(--bar-hue)), oklch(76% 0.22 var(--bar-hue)));
       }
     }
 
@@ -273,9 +265,9 @@
     }
 
     &-source {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       color: color-mix(in srgb, var(--blue) 50%, white);
-      margin-block-start: vars.$spacer * 0.5;
+      margin-block-start: vars.$spacer * 0.75;
       margin-block-end: 0;
 
       @include butler-mx.dark-mode-class {

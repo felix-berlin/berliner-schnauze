@@ -8,6 +8,9 @@ interface Props {
 const { word } = Astro.props;
 const letters = letterFrequency(word);
 const maxPercent = letters.length > 0 ? Math.max(...letters.map((l) => l.percent)) : 1;
+
+// Maps German letter frequency % to a hue: rare (≈0%) → steel-blue (220), common (≈18%) → amber (50)
+const getBarHue = (percent: number) => Math.round(220 - Math.min(percent / 18, 1) * 170);
 ---
 
 {
@@ -22,8 +25,8 @@ const maxPercent = letters.length > 0 ? Math.max(...letters.map((l) => l.percent
             </span>
             <div class="c-single-word__letter-bar-track">
               <div
-                class={`c-single-word__letter-bar-fill${isVowel ? " c-single-word__letter-bar-fill--vowel" : ""}`}
-                style={`width: ${((percent / maxPercent) * 100).toFixed(1)}%`}
+                class="c-single-word__letter-bar-fill"
+                style={`width: ${((percent / maxPercent) * 100).toFixed(1)}%; --bar-hue: ${getBarHue(percent)}`}
               />
             </div>
             <span class="c-single-word__letter-bar-label">
