@@ -229,6 +229,119 @@ export const capitalizeFirstLetter = (word: string) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
+const GERMAN_LETTER_FREQ: Record<string, number> = {
+  e: 17.40, n: 9.78, i: 7.55, s: 7.27, r: 7.00,
+  a: 6.51,  t: 6.15, d: 4.81, h: 4.76, u: 4.35,
+  l: 3.44,  c: 3.06, g: 3.01, m: 2.53, o: 2.51,
+  b: 1.96,  w: 1.89, f: 1.66, k: 1.21, z: 1.13,
+  p: 0.97,  v: 0.67, ü: 0.65, ä: 0.54, ö: 0.30,
+  ß: 0.31,  j: 0.27, y: 0.04, x: 0.03, q: 0.02,
+};
+
+const frequencyLabel = (pct: number): string => {
+  if (pct > 10) return "sehr häufig";
+  if (pct > 5)  return "häufig";
+  if (pct > 2)  return "gelegentlich";
+  if (pct > 1)  return "selten";
+  return "sehr selten";
+};
+
+export const letterFrequency = (
+  word: string,
+): Array<{ char: string; percent: number; label: string; isVowel: boolean }> => {
+  const seen = new Set<string>();
+  return word
+    .toLowerCase()
+    .split("")
+    .filter((c) => {
+      if (seen.has(c) || !(c in GERMAN_LETTER_FREQ)) return false;
+      seen.add(c);
+      return true;
+    })
+    .map((char) => ({
+      char,
+      percent: GERMAN_LETTER_FREQ[char]!,
+      label: frequencyLabel(GERMAN_LETTER_FREQ[char]!),
+      isVowel: "aeiouäöü".includes(char),
+    }));
+};
+
+const VOWELS_SET = new Set(["a", "e", "i", "o", "u", "ä", "ö", "ü"]);
+const ALL_GERMAN_VOWELS = ["a", "e", "i", "o", "u", "ä", "ö", "ü"];
+
+const isVowelChar = (c: string): boolean => VOWELS_SET.has(c);
+const isConsonantChar = (c: string): boolean => /[a-zäöüß]/i.test(c) && !isVowelChar(c);
+
+export const wordCuriosities = (
+  word: string,
+): {
+  isPalindrome: boolean;
+  hasAllVowels: boolean;
+  longestConsonantRun: { length: number; chars: string };
+  startsWithConsonant: boolean;
+  endsWithConsonant: boolean;
+} => {
+  const lower = word.toLowerCase();
+  const isPalindrome = lower === lower.split("").reverse().join("");
+  const hasAllVowels = ALL_GERMAN_VOWELS.every((v) => lower.includes(v));
+
+  let longestRun = { length: 0, chars: "" };
+  let currentRun = "";
+  for (const c of lower) {
+    if (isConsonantChar(c)) {
+      currentRun += c;
+      if (currentRun.length > longestRun.length) {
+        longestRun = { length: currentRun.length, chars: currentRun };
+      }
+    } else {
+      currentRun = "";
+    }
+  }
+
+  return {
+    isPalindrome,
+    hasAllVowels,
+    longestConsonantRun: longestRun,
+    startsWithConsonant: isConsonantChar(lower[0] ?? ""),
+    endsWithConsonant: isConsonantChar(lower[lower.length - 1] ?? ""),
+  };
+};
+
+const sortedChars = (word: string): string =>
+  word.toLowerCase().split("").sort().join("");
+
+export const findAnagrams = (
+  word: string,
+  allWords: BerlinerWord[],
+): BerlinerWord[] => {
+  const target = sortedChars(word);
+  return allWords.filter((w) => {
+    const berlinerisch = w.wordProperties?.berlinerisch ?? "";
+    return (
+      berlinerisch.toLowerCase() !== word.toLowerCase() &&
+      sortedChars(berlinerisch) === target
+    );
+  });
+};
+
+export const alphabeticNeighbors = (
+  allWords: BerlinerWord[],
+  currentWord: BerlinerWord,
+  n: number = 3,
+): { before: BerlinerWord[]; after: BerlinerWord[] } => {
+  const sorted = [...allWords].sort((a, b) =>
+    (a.wordProperties?.berlinerisch ?? "")
+      .toLowerCase()
+      .localeCompare((b.wordProperties?.berlinerisch ?? "").toLowerCase(), "de"),
+  );
+  const idx = sorted.findIndex((w) => w.id === currentWord.id);
+  if (idx === -1) return { before: [], after: [] };
+  return {
+    before: sorted.slice(Math.max(0, idx - n), idx).reverse(),
+    after: sorted.slice(idx + 1, idx + 1 + n),
+  };
+};
+
 export const decomposeCompoundWord = (
   word: string,
   germanWords: Set<string>,
