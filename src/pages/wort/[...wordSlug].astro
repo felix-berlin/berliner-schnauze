@@ -32,6 +32,7 @@ import {
   capitalizeFirstLetter,
   coloredConsonantsAndVowels,
   countLetters,
+  findAnagrams,
   getWordType,
   similarSoundingWords,
   translateNlpTags,
@@ -94,6 +95,7 @@ const hypher = new Hypher(german);
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
 const germanWords = new Set<string>(germanWordsArray as string[]);
 const hasImages = Boolean(wordProps?.images && wordProps.images.nodes.length > 0);
+const hasAnagrams = findAnagrams(word.wordProperties?.berlinerisch ?? '', allWords).length > 0;
 const wortartLabel: string | undefined =
   wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
 
@@ -151,7 +153,9 @@ const schemaJson = () =>
         <a class="c-word-sidebar__link" href="#phonologie">Phonologie</a>
         <div class="c-word-sidebar__divider" role="separator" />
         <p class="c-word-sidebar__group-label">Entdecken</p>
-        <a class="c-word-sidebar__link" href="#anagramme">Anagramme</a>
+        {hasAnagrams && (
+          <a class="c-word-sidebar__link" href="#anagramme">Anagramme</a>
+        )}
         <a class="c-word-sidebar__link" href="#navigation">Nachbarn</a>
       </nav>
     </aside>
