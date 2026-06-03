@@ -8,13 +8,19 @@
 
 **Tech stack:** Astro SSG, SCSS (no `scoped`), BEM with `c-` prefix, pure CSS for sidebar navigation (no Vue required), `position: sticky`.
 
+**CSS philosophy:** Modern CSS exclusively. No `px`-based breakpoints in new SCSS unless unavoidable. Prefer **Container Queries** (`@container`) over Media Queries for all component-level layout switches. Use CSS nesting (`&`), `clamp()`, `color-mix()`, CSS logical properties (`padding-inline`, `margin-block`), and `container-type: inline-size` on layout containers. Media queries are only acceptable for page-level concerns that genuinely depend on the viewport (e.g. the topbar's `position: sticky` offset), and even then only when a container query cannot express the intent.
+
 ---
 
 ## 1. Layout Architecture
 
-### Desktop (≥ `md` breakpoint, ~768px)
+### Container Query setup
 
-The page switches from a single-column flow to a two-column grid:
+`<div class="c-word-page">` gets `container-type: inline-size; container-name: word-page`. All layout switches inside it use `@container word-page (inline-size >= 48rem)` (or similar thresholds) instead of `@media`. The mobile sidebar nav uses `@container word-page (inline-size < 48rem)`.
+
+Similarly, `.c-word-main` gets `container-type: inline-size; container-name: word-main` so the inner gallery split can switch via `@container word-main (inline-size >= 36rem)`.
+
+### Desktop (container ≥ 48rem)
 
 ```
 ┌──────────────────────────────────────────────────┐
@@ -41,9 +47,9 @@ The page switches from a single-column flow to a two-column grid:
 └─────────────┴────────────────────────────────────┘
 ```
 
-Grid: `grid-template-columns: 200px 1fr`, `gap: 2rem`, `align-items: start`.
+Grid: `grid-template-columns: 200px 1fr`, `gap: 2rem`, `align-items: start`. Applied inside `@container word-page (inline-size >= 48rem)`.
 
-### With Images (≥ `md`)
+### With Images (container ≥ 48rem)
 
 When `wordProps.images` exists, the main content area becomes a two-column inner grid:
 
@@ -55,9 +61,9 @@ When `wordProps.images` exists, the main content area becomes a two-column inner
 └─────────┴──────────────────────┴───────────────┘
 ```
 
-Inner grid: `grid-template-columns: 1fr 280px`, gallery column is `position: sticky; top: [topbar height]`.
+Inner grid: `grid-template-columns: 1fr 280px`, switched via `@container word-main (inline-size >= 36rem)`. Gallery column is `position: sticky; top: [topbar height]`.
 
-### Mobile (< `md`)
+### Mobile (container < 48rem)
 
 - Sidebar collapses to a **horizontal scrollable nav bar** pinned below the topbar.
 - Section cards stack full-width.
@@ -99,7 +105,7 @@ Each link: `<a href="#section-id">` — pure anchor navigation, no JS needed.
 
 **Active state:** Left border `3px solid var(--orange-600)` + `background: var(--orange-100)`. Active detection via CSS `scroll-margin-top` on sections + IntersectionObserver in a small inline `<script>` (progressive enhancement, not required for basic nav to work).
 
-**Mobile alternative:** Sidebar becomes `<nav class="c-word-sidebar c-word-sidebar--mobile">` — horizontal flex row, `overflow-x: auto`, pinned below topbar.
+**Mobile alternative:** Via `@container word-page (inline-size < 48rem)`, `.c-word-sidebar` switches to horizontal flex row (`overflow-x: auto`, `-webkit-overflow-scrolling: touch`, `scrollbar-width: none`), pinned below topbar. No JS class toggling — pure CSS container query.
 
 ---
 
@@ -224,19 +230,36 @@ Without images: single-column layout, "Erfahre mehr" link stays at bottom of mai
 
 ---
 
-## 7. Mobile Navigation (< `md`)
+## 7. Mobile Navigation (container < 48rem)
 
 The sidebar becomes a horizontal scrollable nav bar:
 
-```html
-<nav class="c-word-sidebar c-word-sidebar--mobile">
-  <a href="#etymologie">Bedeutung</a>
-  <a href="#beispiele">Beispiele</a>
-  <!-- ... -->
-</nav>
-```
+The sidebar is a single element that adapts via container query — no separate mobile component or BEM modifier needed:
 
-`overflow-x: auto`, `white-space: nowrap`, `-webkit-overflow-scrolling: touch`, `scrollbar-width: none`. Pinned below the topbar with `position: sticky`.
+```scss
+.c-word-sidebar {
+  // desktop: vertical sticky aside (default)
+  display: flex;
+  flex-direction: column;
+
+  @container word-page (inline-size < 48rem) {
+    // mobile: horizontal scroll bar
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    position: sticky;
+    top: var(--topbar-height, 52px);
+    z-index: 10;
+
+    // hide group labels and dividers in mobile row
+    .c-word-sidebar__group-label,
+    .c-word-sidebar__divider { display: none; }
+
+    .c-word-sidebar__word { display: none; }  // word header only on desktop
+  }
+}
+```
 
 Active link: `color: var(--orange-600)`, `border-bottom: 2px solid var(--orange-600)`.
 
@@ -245,18 +268,78 @@ Active link: `color: var(--orange-600)`, `border-bottom: 2px solid var(--orange-
 ## 8. SCSS Architecture
 
 ### New files
-- `src/styles/components/_word-sidebar.scss` — all sidebar styles
-- `src/styles/components/_word-hero.scss` — hero card styles  
+
+- `src/styles/components/_word-sidebar.scss` — sidebar styles
+- `src/styles/components/_word-hero.scss` — hero card styles
 - `src/styles/components/_section-card.scss` — section card frame styles
 
 ### Modified files
-- `src/styles/components/_single-word.scss` — remove grid-template-areas and header/main/footer grid styles that are superseded. Keep: `__word`, `__word-article`, `__translation`, `__examples`, `__example`, `__quote-icon`, `__related-words-list`, `__letter-bar-*`, `__alpha-nav-*`, `__word-parts-*`, `__consonants-vowels`, `__syllables`.
-- `src/pages/wort/[...wordSlug].astro` — restructure template to use new layout and components.
+
+- `src/styles/components/_single-word.scss` — remove superseded grid-template-areas, header/main/footer grid rules. Keep: `__word`, `__word-article`, `__translation`, `__examples`, `__example`, `__quote-icon`, `__related-words-list`, `__letter-bar-*`, `__alpha-nav-*`, `__word-parts-*`, `__consonants-vowels`, `__syllables`.
+- `src/pages/wort/[...wordSlug].astro` — restructure template.
 
 ### New BEM blocks
-- `.c-word-sidebar` / `.c-word-sidebar--mobile`
+
+- `.c-word-sidebar`
 - `.c-word-hero`
 - `.c-section-card`
+- `.c-word-page` (page layout wrapper)
+- `.c-word-main` (main content area, with optional `--with-gallery` variant)
+
+### Modern CSS patterns used throughout
+
+```scss
+// Container query setup — no media queries inside components
+.c-word-page {
+  container-type: inline-size;
+  container-name: word-page;
+}
+
+.c-word-main {
+  container-type: inline-size;
+  container-name: word-main;
+}
+
+// CSS nesting (native, not SCSS-only)
+.c-section-card {
+  border: 1px dashed var(--grey-100);
+
+  & + & {
+    margin-block-start: 0; // gap handled by flex parent
+  }
+
+  &__header {
+    padding-inline: 1.25rem;
+    padding-block: 0.75rem;
+  }
+}
+
+// clamp() for fluid sizing — no breakpoint needed
+.c-word-hero__title {
+  font-size: clamp(2rem, 5cqi, 3.75rem); // cqi = container query inline unit
+}
+
+// color-mix() for tints (already used in codebase, extend pattern)
+.c-section-card__stat-box {
+  background: color-mix(in srgb, var(--orange-600) 10%, white);
+}
+
+// Logical properties throughout
+padding-inline: 1.25rem;   // not padding-left/right
+margin-block: 1rem 0;      // not margin-top/bottom
+border-inline-start: 3px solid var(--orange-300); // not border-left
+```
+
+**Container query breakpoints used:**
+
+| Container    | Threshold      | Effect                             |
+| ------------ | -------------- | ---------------------------------- |
+| `word-page`  | `>= 48rem`     | Two-column sidebar + main layout   |
+| `word-page`  | `< 48rem`      | Horizontal scroll nav              |
+| `word-main`  | `>= 36rem`     | Inner gallery column appears       |
+| `word-hero`  | `>= 32rem`     | Badges wrap to second row          |
+
+No `@include mx.breakpoint()` calls in new SCSS files. Existing files that use `mx.breakpoint()` are untouched.
 
 ---
 
