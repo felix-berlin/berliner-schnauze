@@ -8,7 +8,7 @@
   box-shadow:
     0 0.5px 0.6px rgb(0 0 0 / 8%),
     0 4px 5px rgb(0 0 0 / 16%);
-  scroll-margin-top: calc(var(--topbar-height, 52px) + 1rem);
+  scroll-margin-top: calc(var(--site-header-height, 60px) + var(--topbar-height, 52px) + 1rem);
 
   @include butler-mx.dark-mode-class {
     background: var(--new-blue-400);
@@ -39,7 +39,7 @@
     margin: 0;
 
     @include butler-mx.dark-mode-class {
-      color: var(--orange-300);
+      color: white;
     }
   }
 
@@ -67,7 +67,7 @@
       color: var(--new-blue-400);
 
       @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
+        color: var(--color-body);
       }
     }
   }
@@ -121,7 +121,7 @@
     color: var(--new-blue-400);
 
     @include butler-mx.dark-mode-class {
-      color: var(--orange-300);
+      color: white;
     }
 
     &--vowels {
