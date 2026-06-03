@@ -1,0 +1,40 @@
+---
+import { wordCuriosities } from "@utils/wordHelper";
+
+interface Props {
+  word: string;
+}
+
+const { word } = Astro.props;
+const facts = word.length >= 5 ? wordCuriosities(word) : null;
+---
+
+{
+  facts && (
+    <div>
+      <h3>Wortkuriositäten</h3>
+      <ul>
+        <li>
+          <span class={facts.isPalindrome ? "is-fact-yes" : undefined}>
+            {facts.isPalindrome ? "✓ Palindrom" : "✗ Kein Palindrom"}
+          </span>
+        </li>
+        <li>
+          {facts.hasAllVowels
+            ? "✓ Enthält alle deutschen Vokale"
+            : "✗ Enthält nicht alle deutschen Vokale (a, e, i, o, u, ä, ö, ü)"}
+        </li>
+        {facts.longestConsonantRun.length >= 3 && (
+          <li>
+            ✓ Längste Konsonantenfolge: <strong>{facts.longestConsonantRun.chars}</strong> (
+            {facts.longestConsonantRun.length} Zeichen)
+          </li>
+        )}
+        <li>
+          {facts.startsWithConsonant ? "Beginnt mit Konsonant" : "Beginnt mit Vokal"},{" "}
+          {facts.endsWithConsonant ? "endet mit Konsonant" : "endet mit Vokal"}
+        </li>
+      </ul>
+    </div>
+  )
+}
