@@ -6,7 +6,15 @@
       "Bash(graphify *)",
       "mcp__plugin_claude-mem_mcp-search__search",
       "mcp__plugin_context7_context7__resolve-library-id",
-      "mcp__plugin_context7_context7__query-docs"
+      "mcp__plugin_context7_context7__query-docs",
+      "mcp__plugin_claude-mem_mcp-search__smart_search",
+      "mcp__plugin_claude-mem_mcp-search__get_observations",
+      "mcp__plugin_claude-mem_mcp-search__observation_search",
+      "mcp__serena__find_symbol",
+      "mcp__serena__find_declaration",
+      "mcp__serena__find_implementations",
+      "mcp__serena__find_referencing_symbols",
+      "mcp__serena__get_symbols_overview"
     ]
   },
   "hooks": {
@@ -25,6 +33,20 @@
           {
             "type": "command",
             "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.scss|*.sass) out=$(pnpm exec stylelint \"$file\" --fix 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -20;; esac"
+          },
+          {
+            "type": "command",
+            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.test.*|*.spec.*) out=$(pnpm vitest run \"$file\" 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -40;; esac"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/tool-checklist.sh"
           }
         ]
       }
