@@ -36,7 +36,9 @@
   flex-direction: column;
   gap: vars.$spacer;
 
-  @container word-page (inline-size >= 48rem) {
+  // A container cannot query its own size — media query needed here.
+  // Children still use @container word-page correctly.
+  @media (min-width: 48rem) {
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: 2rem;
