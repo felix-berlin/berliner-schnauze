@@ -1,0 +1,37 @@
+---
+import { letterFrequency } from "@utils/wordHelper";
+
+interface Props {
+  word: string;
+}
+
+const { word } = Astro.props;
+const letters = letterFrequency(word);
+const maxPercent = letters.length > 0 ? Math.max(...letters.map((l) => l.percent)) : 1;
+---
+
+{
+  letters.length > 0 && (
+    <div>
+      <h3>Buchstabenhäufigkeit</h3>
+      <div class="c-single-word__letter-bar">
+        {letters.map(({ char, percent, label, isVowel }) => (
+          <div class="c-single-word__letter-bar-row">
+            <span class={`c-single-word__letter-bar-char ${isVowel ? "is-vowel" : "is-consonant"}`}>
+              {char}
+            </span>
+            <div class="c-single-word__letter-bar-track">
+              <div
+                class={`c-single-word__letter-bar-fill${isVowel ? " c-single-word__letter-bar-fill--vowel" : ""}`}
+                style={`width: ${((percent / maxPercent) * 100).toFixed(1)}%`}
+              />
+            </div>
+            <span class="c-single-word__letter-bar-label">
+              {percent.toFixed(2).replace(".", ",")}% · {label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
