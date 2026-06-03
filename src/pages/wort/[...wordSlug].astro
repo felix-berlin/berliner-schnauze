@@ -17,6 +17,12 @@ import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 // import WordExamples from "@components/word/WordExamples.vue";
 import WordExamples from "@components/word/WordExamples.astro";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
+import WordAlphabetNav from "@components/word/WordAlphabetNav.astro";
+import WordAnagrams from "@components/word/WordAnagrams.astro";
+import WordCuriosities from "@components/word/WordCuriosities.astro";
+import WordDecomposition from "@components/word/WordDecomposition.astro";
+import WordLetterFrequency from "@components/word/WordLetterFrequency.astro";
+import WordSimilarSpelling from "@components/word/WordSimilarSpelling.astro";
 import Layout from "@layouts/Layout.astro";
 // Imports
 import { fetchAllWords } from "@services/api.ts";
@@ -28,7 +34,6 @@ import {
   createWikimediaFileList,
   getWordType,
   similarSoundingWords,
-  similarWords,
   translateNlpTags,
 } from "@utils/wordHelper.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
@@ -36,6 +41,7 @@ import german from "hyphenation.de";
 import Hypher from "hypher";
 import ChevronRight from "~icons/lucide/chevron-right";
 import ExternalLink from "~icons/lucide/external-link";
+import germanWordsArray from "an-array-of-german-words";
 
 import type { BerlinerWord } from "@/gql/entity-types";
 
@@ -89,6 +95,7 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 const hypher = new Hypher(german);
 
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
+const germanWords = new Set<string>(germanWordsArray as string[]);
 
 const schemaJson = () =>
   JSON.stringify({
@@ -221,6 +228,12 @@ const schemaJson = () =>
           <h3>Anzahl der Silben:</h3>
           <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).length}</p>
         </div>
+
+        <WordDecomposition
+          allWords={allWords}
+          germanWords={germanWords}
+          word={word.wordProperties?.berlinerisch ?? ""}
+        />
       </section>
 
       <section>
@@ -249,6 +262,9 @@ const schemaJson = () =>
             <strong>{word.wordProperties?.berlinerisch?.length}</strong> Buchstaben
           </p>
         </div>
+
+        <WordLetterFrequency word={word.wordProperties?.berlinerisch ?? ""} />
+        <WordCuriosities word={word.wordProperties?.berlinerisch ?? ""} />
       </section>
 
       {
@@ -286,12 +302,12 @@ const schemaJson = () =>
         )
       } -->
 
-      {
-        similarSoundingWords(allWords, word).find((word) => word.isSimilar) && (
-          <section>
-            <h2>Phonologie</h2>
-            <h3>Ähnlich klingende Wörter</h3>
-            {similarSoundingWords(allWords, word).some((result) => result.isSimilar) ? (
+      <section>
+        <h2>Phonologie</h2>
+        {
+          similarSoundingWords(allWords, word).find((w) => w.isSimilar) && (
+            <>
+              <h3>Ähnlich klingende Wörter</h3>
               <ul>
                 {similarSoundingWords(allWords, word)
                   .filter((result) => result.isSimilar)
@@ -303,10 +319,11 @@ const schemaJson = () =>
                     </li>
                   ))}
               </ul>
-            ) : null}
-          </section>
-        )
-      }
+            </>
+          )
+        }
+        <WordSimilarSpelling allWords={allWords} currentWord={word} />
+      </section>
 
       {
         wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
@@ -328,6 +345,13 @@ const schemaJson = () =>
           </div>
         )
       }
+
+      <WordAnagrams allWords={allWords} word={word.wordProperties?.berlinerisch ?? ""} />
+
+      <section>
+        <h2>Navigation</h2>
+        <WordAlphabetNav allWords={allWords} currentWord={word} />
+      </section>
     </main>
 
     {
