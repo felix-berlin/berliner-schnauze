@@ -14,7 +14,8 @@
       "mcp__serena__find_declaration",
       "mcp__serena__find_implementations",
       "mcp__serena__find_referencing_symbols",
-      "mcp__serena__get_symbols_overview"
+      "mcp__serena__get_symbols_overview",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__evaluate_script"
     ]
   },
   "hooks": {
