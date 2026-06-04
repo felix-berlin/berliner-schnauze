@@ -6,16 +6,12 @@
 // ── Global token ──────────────────────────────────────────────────────────────
 
 :root {
-  --topbar-height: 52px;
   --site-header-height: 60px;
 }
 
 // ── Page layout containers ────────────────────────────────────────────────────
 
 .c-page-topbar {
-  position: sticky;
-  top: var(--site-header-height, 60px);
-  z-index: 20;
   background: white;
   border-block-end: 1px dashed var(--grey-100);
   box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
@@ -39,7 +35,7 @@
 
   // A container cannot query its own size — media query needed here.
   // Children still use @container word-page correctly.
-  @media (min-width: 48rem) {
+  @media (width > 48rem) {
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: 2rem;
@@ -72,8 +68,13 @@
       gap: vars.$spacer;
       align-items: start;
 
-      .c-word-hero { grid-area: hero; }
-      .c-word-main__content { grid-area: content; }
+      .c-word-hero {
+        grid-area: hero;
+      }
+
+      .c-word-main__content {
+        grid-area: content;
+      }
     }
   }
 }
@@ -245,11 +246,19 @@
 
     &-fill {
       height: 100%;
-      background: linear-gradient(90deg, oklch(52% 0.16 var(--bar-hue)), oklch(62% 0.20 var(--bar-hue)));
+      background: linear-gradient(
+        90deg,
+        oklch(52% 0.16 var(--bar-hue)),
+        oklch(62% 0.2 var(--bar-hue))
+      );
       border-radius: 4px;
 
       @include butler-mx.dark-mode-class {
-        background: linear-gradient(90deg, oklch(65% 0.18 var(--bar-hue)), oklch(76% 0.22 var(--bar-hue)));
+        background: linear-gradient(
+          90deg,
+          oklch(65% 0.18 var(--bar-hue)),
+          oklch(76% 0.22 var(--bar-hue))
+        );
       }
     }
 

@@ -259,19 +259,6 @@ const schemaJson = () =>
     syncHeaderHeight();
     new ResizeObserver(syncHeaderHeight).observe(siteHeader);
   }
-
-  // Sync --topbar-height so sidebar and scroll-margin clear the breadcrumb bar
-  const pageTopbar = document.querySelector<HTMLElement>('.c-page-topbar');
-  if (pageTopbar) {
-    const syncTopbarHeight = () =>
-      document.documentElement.style.setProperty(
-        '--topbar-height',
-        Math.round(pageTopbar.getBoundingClientRect().height) + 'px',
-      );
-    syncTopbarHeight();
-    new ResizeObserver(syncTopbarHeight).observe(pageTopbar);
-  }
-
   const links = document.querySelectorAll<HTMLAnchorElement>('.c-word-sidebar__link');
   const sections = document.querySelectorAll<HTMLElement>('.c-section-card[id]');
 
