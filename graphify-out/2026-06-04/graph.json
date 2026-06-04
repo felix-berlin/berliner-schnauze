@@ -102,27 +102,27 @@
       "file_type": "code",
       "source_file": "src/services/wiktionaryApi.ts",
       "source_location": "L1",
+      "id": "src_services_wiktionaryapi_ts",
       "community": 125,
-      "norm_label": "wiktionaryapi.ts",
-      "id": "src_services_wiktionaryapi_ts"
+      "norm_label": "wiktionaryapi.ts"
     },
     {
       "label": "GENUS_TO_ARTIKEL",
       "file_type": "code",
       "source_file": "src/services/wiktionaryApi.ts",
       "source_location": "L1",
+      "id": "services_wiktionaryapi_genus_to_artikel",
       "community": 125,
-      "norm_label": "genus_to_artikel",
-      "id": "services_wiktionaryapi_genus_to_artikel"
+      "norm_label": "genus_to_artikel"
     },
     {
       "label": "fetchGermanArtikel()",
       "file_type": "code",
       "source_file": "src/services/wiktionaryApi.ts",
       "source_location": "L7",
+      "id": "services_wiktionaryapi_fetchgermanartikel",
       "community": 125,
-      "norm_label": "fetchgermanartikel()",
-      "id": "services_wiktionaryapi_fetchgermanartikel"
+      "norm_label": "fetchgermanartikel()"
     },
     {
       "label": "[...wordSlug].astro",
@@ -188,6 +188,24 @@
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_word_scss"
     },
     {
+      "label": "@styles/components/_single-word.scss",
+      "file_type": "code",
+      "source_file": "src/styles/components/_single-word.scss",
+      "confidence": "EXTRACTED",
+      "community": 13,
+      "norm_label": "@styles/components/_single-word.scss",
+      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_single_word_scss"
+    },
+    {
+      "label": "@styles/components/_section-card.scss",
+      "file_type": "code",
+      "source_file": "src/styles/components/_section-card.scss",
+      "confidence": "EXTRACTED",
+      "community": 13,
+      "norm_label": "@styles/components/_section-card.scss",
+      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_section_card_scss"
+    },
+    {
       "label": "@styles/plugins/astro-breadcrumbs.scss",
       "file_type": "code",
       "source_file": "src/styles/plugins/astro-breadcrumbs.scss",
@@ -201,7 +219,7 @@
       "file_type": "code",
       "source_file": "astro",
       "confidence": "EXTRACTED",
-      "community": 117,
+      "community": 120,
       "norm_label": "astro",
       "id": "astro"
     },
@@ -752,6 +770,15 @@
       "community": 109,
       "norm_label": "wordcuriosities.astro",
       "id": "src_components_word_wordcuriosities_astro"
+    },
+    {
+      "label": "@styles/components/_word-curiosities.scss",
+      "file_type": "code",
+      "source_file": "src/styles/components/_word-curiosities.scss",
+      "confidence": "EXTRACTED",
+      "community": 109,
+      "norm_label": "@styles/components/_word-curiosities.scss",
+      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_word_curiosities_scss"
     },
     {
       "label": "wordCuriosities.test.ts",
@@ -1488,7 +1515,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L157",
-      "community": 118,
+      "community": 3,
       "norm_label": "setletterfilter()",
       "id": "stores_wordlist_setletterfilter"
     },
@@ -1506,7 +1533,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L174",
-      "community": 118,
+      "community": 3,
       "norm_label": "setwordtypefilter()",
       "id": "stores_wordlist_setwordtypefilter"
     },
@@ -1551,7 +1578,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L221",
-      "community": 126,
+      "community": 48,
       "norm_label": "$setsortorder()",
       "id": "stores_wordlist_setsortorder"
     },
@@ -1569,7 +1596,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L236",
-      "community": 118,
+      "community": 3,
       "norm_label": "$toggleberolinismus()",
       "id": "stores_wordlist_toggleberolinismus"
     },
@@ -1668,7 +1695,7 @@
       "file_type": "code",
       "source_file": "src/pages/_app.ts",
       "source_location": "L1",
-      "community": 117,
+      "community": 118,
       "norm_label": "_app.ts",
       "id": "src_pages_app_ts"
     },
@@ -1893,7 +1920,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotify.vue",
       "source_location": "L1",
-      "community": 106,
+      "community": 99,
       "norm_label": "toastnotify.vue",
       "id": "src_components_toast_toastnotify_vue"
     },
@@ -1902,7 +1929,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotify.vue",
       "source_location": "L49",
-      "community": 106,
+      "community": 99,
       "norm_label": "close",
       "id": "toast_toastnotify_close"
     },
@@ -1911,7 +1938,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotify.vue",
       "source_location": "L71",
-      "community": 106,
+      "community": 99,
       "norm_label": "issupported",
       "id": "toast_toastnotify_issupported"
     },
@@ -1920,7 +1947,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotify.vue",
       "source_location": "L72",
-      "community": 106,
+      "community": 99,
       "norm_label": "isopen",
       "id": "toast_toastnotify_isopen"
     },
@@ -1929,7 +1956,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotify.vue",
       "source_location": "L73",
-      "community": 106,
+      "community": 99,
       "norm_label": "{ isswiping }",
       "id": "toast_toastnotify_isswiping"
     },
@@ -1938,7 +1965,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotify.vue",
       "source_location": "L74",
-      "community": 106,
+      "community": 99,
       "norm_label": "stylepositiontype",
       "id": "toast_toastnotify_stylepositiontype"
     },
@@ -1947,7 +1974,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotify.vue",
       "source_location": "L81",
-      "community": 106,
+      "community": 99,
       "norm_label": "toasticonmap",
       "id": "toast_toastnotify_toasticonmap"
     },
@@ -1956,7 +1983,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotifyContainer.vue",
       "source_location": "L1",
-      "community": 106,
+      "community": 111,
       "norm_label": "toastnotifycontainer.vue",
       "id": "src_components_toast_toastnotifycontainer_vue"
     },
@@ -1965,7 +1992,7 @@
       "file_type": "code",
       "source_file": "src/components/toast/ToastNotifyContainer.vue",
       "source_location": "L23",
-      "community": 106,
+      "community": 111,
       "norm_label": "toaststore",
       "id": "toast_toastnotifycontainer_toaststore"
     },
@@ -2317,7 +2344,7 @@
       "file_type": "code",
       "source_file": "src/pages/[legalPages].astro",
       "source_location": "L1",
-      "community": 117,
+      "community": 120,
       "norm_label": "[legalpages].astro",
       "id": "src_pages_legalpages_astro"
     },
@@ -2326,7 +2353,7 @@
       "file_type": "code",
       "source_file": "src/pages/[legalPages].astro",
       "source_location": "L13",
-      "community": 117,
+      "community": 120,
       "norm_label": "client",
       "id": "pages_legalpages_client"
     },
@@ -2335,7 +2362,7 @@
       "file_type": "code",
       "source_file": "src/styles/objects/_legal-pages.scss",
       "confidence": "EXTRACTED",
-      "community": 117,
+      "community": 120,
       "norm_label": "@styles/objects/_legal-pages.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_legal_pages_scss"
     },
@@ -2353,7 +2380,7 @@
       "file_type": "code",
       "source_file": "astro:env/client",
       "confidence": "EXTRACTED",
-      "community": 117,
+      "community": 118,
       "norm_label": "astro:env/client",
       "id": "client"
     },
@@ -2362,7 +2389,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "confidence": "EXTRACTED",
-      "community": 117,
+      "community": 120,
       "norm_label": "@/gql/graphql.ts",
       "id": "home_felix_workspace_berliner_schnauze_src_gql_graphql_ts"
     },
@@ -3082,7 +3109,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L1",
-      "community": 37,
+      "community": 48,
       "norm_label": "wordlist.vue",
       "id": "src_components_wordlist_vue"
     },
@@ -3091,7 +3118,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L54",
-      "community": 37,
+      "community": 48,
       "norm_label": "oramasearch",
       "id": "components_wordlist_oramasearch"
     },
@@ -3100,7 +3127,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L55",
-      "community": 37,
+      "community": 48,
       "norm_label": "mutableoramasearch",
       "id": "components_wordlist_mutableoramasearch"
     },
@@ -3109,7 +3136,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L65",
-      "community": 37,
+      "community": 48,
       "norm_label": "activeindex",
       "id": "components_wordlist_activeindex"
     },
@@ -3118,7 +3145,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L67",
-      "community": 37,
+      "community": 48,
       "norm_label": "virtualizerref",
       "id": "components_wordlist_virtualizerref"
     },
@@ -3127,7 +3154,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L68",
-      "community": 37,
+      "community": 48,
       "norm_label": "showactive",
       "id": "components_wordlist_showactive"
     },
@@ -3136,7 +3163,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L72",
-      "community": 37,
+      "community": 48,
       "norm_label": "showactivewithtimeout()",
       "id": "components_wordlist_showactivewithtimeout"
     },
@@ -3145,7 +3172,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L89",
-      "community": 37,
+      "community": 48,
       "norm_label": "gotoword()",
       "id": "components_wordlist_gotoword"
     },
@@ -3154,7 +3181,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L93",
-      "community": 37,
+      "community": 48,
       "norm_label": "focusactive()",
       "id": "components_wordlist_focusactive"
     },
@@ -3190,7 +3217,7 @@
       "file_type": "code",
       "source_file": "src/plugins/sentryBrowser.ts",
       "source_location": "L1",
-      "community": 117,
+      "community": 118,
       "norm_label": "sentrybrowser.ts",
       "id": "src_plugins_sentrybrowser_ts"
     },
@@ -3199,7 +3226,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L1",
-      "community": 106,
+      "community": 37,
       "norm_label": "unsupportedbrowser.ts",
       "id": "src_lib_unsupportedbrowser_ts"
     },
@@ -3208,7 +3235,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L9",
-      "community": 106,
+      "community": 37,
       "norm_label": "isbrowsersupported()",
       "id": "lib_unsupportedbrowser_isbrowsersupported"
     },
@@ -3217,7 +3244,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L18",
-      "community": 106,
+      "community": 37,
       "norm_label": "checkbrowsersupport()",
       "id": "lib_unsupportedbrowser_checkbrowsersupport"
     },
@@ -3643,7 +3670,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L154",
-      "community": 117,
+      "community": 120,
       "norm_label": "getpagesbyslugsdocument",
       "id": "gql_graphql_getpagesbyslugsdocument"
     },
@@ -3998,7 +4025,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/store/wordOfTheDay.test.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 29,
       "norm_label": "wordoftheday.test.ts",
       "id": "src_tests_unit_store_wordoftheday_test_ts"
     },
@@ -4340,7 +4367,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/ToastNotify.test.ts",
       "source_location": "L1",
-      "community": 106,
+      "community": 99,
       "norm_label": "toastnotify.test.ts",
       "id": "src_tests_unit_components_toastnotify_test_ts"
     },
@@ -4394,7 +4421,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L1",
-      "community": 126,
+      "community": 48,
       "norm_label": "sortwordbyselect.test.ts",
       "id": "src_tests_unit_components_filter_sortwordbyselect_test_ts"
     },
@@ -4403,7 +4430,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L12",
-      "community": 126,
+      "community": 48,
       "norm_label": "wrapper",
       "id": "filter_sortwordbyselect_test_wrapper"
     },
@@ -4412,7 +4439,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L18",
-      "community": 126,
+      "community": 48,
       "norm_label": "select",
       "id": "filter_sortwordbyselect_test_select"
     },
@@ -4421,7 +4448,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L1",
-      "community": 123,
+      "community": 48,
       "norm_label": "wordtypefilter.test.ts",
       "id": "src_tests_unit_components_filter_wordtypefilter_test_ts"
     },
@@ -4430,7 +4457,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L10",
-      "community": 123,
+      "community": 48,
       "norm_label": "mockwordsearch",
       "id": "filter_wordtypefilter_test_mockwordsearch"
     },
@@ -4439,7 +4466,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L33",
-      "community": 123,
+      "community": 48,
       "norm_label": "multiselect",
       "id": "filter_wordtypefilter_test_multiselect"
     },
@@ -4448,7 +4475,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L41",
-      "community": 123,
+      "community": 48,
       "norm_label": "attrs",
       "id": "filter_wordtypefilter_test_attrs"
     },
@@ -4457,7 +4484,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
       "source_location": "L1",
-      "community": 118,
+      "community": 3,
       "norm_label": "letterfilter.test.ts",
       "id": "src_tests_unit_components_filter_letterfilter_test_ts"
     },
@@ -4466,7 +4493,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/LetterFilter.test.ts",
       "source_location": "L32",
-      "community": 118,
+      "community": 3,
       "norm_label": "button",
       "id": "filter_letterfilter_test_button"
     },
@@ -4493,7 +4520,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotifyContainer.test.ts",
       "source_location": "L1",
-      "community": 106,
+      "community": 111,
       "norm_label": "toastnotifycontainer.test.ts",
       "id": "src_tests_unit_components_toast_toastnotifycontainer_test_ts"
     },
@@ -4502,7 +4529,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotifyContainer.test.ts",
       "source_location": "L9",
-      "community": 106,
+      "community": 111,
       "norm_label": "mocktoasts",
       "id": "toast_toastnotifycontainer_test_mocktoasts"
     },
@@ -4511,7 +4538,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotifyContainer.test.ts",
       "source_location": "L49",
-      "community": 106,
+      "community": 111,
       "norm_label": "wrapper",
       "id": "toast_toastnotifycontainer_test_wrapper"
     },
@@ -4520,7 +4547,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/toast/ToastNotifyContainer.test.ts",
       "source_location": "L51",
-      "community": 106,
+      "community": 111,
       "norm_label": "toastcomponents",
       "id": "toast_toastnotifycontainer_test_toastcomponents"
     },
@@ -4691,7 +4718,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L1",
-      "community": 9,
+      "community": 123,
       "norm_label": "randomelement.test.ts",
       "id": "src_tests_unit_utils_helper_randomelement_test_ts"
     },
@@ -4700,7 +4727,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L6",
-      "community": 9,
+      "community": 123,
       "norm_label": "elements",
       "id": "helper_randomelement_test_elements"
     },
@@ -4709,7 +4736,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L7",
-      "community": 9,
+      "community": 123,
       "norm_label": "result",
       "id": "helper_randomelement_test_result"
     },
@@ -4718,7 +4745,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/useViewTransition.test.ts",
       "source_location": "L1",
-      "community": 118,
+      "community": 3,
       "norm_label": "useviewtransition.test.ts",
       "id": "src_tests_unit_utils_helper_useviewtransition_test_ts"
     },
@@ -4754,7 +4781,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L1",
-      "community": 29,
+      "community": 14,
       "norm_label": "routetoword.test.ts",
       "id": "src_tests_unit_utils_helper_routetoword_test_ts"
     },
@@ -4763,7 +4790,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L6",
-      "community": 29,
+      "community": 14,
       "norm_label": "result",
       "id": "helper_routetoword_test_result"
     },
@@ -5273,7 +5300,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordSearchFilterToggle.vue",
       "source_location": "L1",
-      "community": 111,
+      "community": 48,
       "norm_label": "wordsearchfiltertoggle.vue",
       "id": "src_components_word_search_wordsearchfiltertoggle_vue"
     },
@@ -5282,7 +5309,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordSearchFilterToggle.vue",
       "source_location": "L23",
-      "community": 111,
+      "community": 48,
       "norm_label": "activefiltercount",
       "id": "word_search_wordsearchfiltertoggle_activefiltercount"
     },
@@ -5329,7 +5356,7 @@
       "source_file": "src/components/word-search/WordSearchList.vue",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 99,
+      "community": 48,
       "norm_label": "@components/word-search/wordsearchlist.vue",
       "id": "src_components_word_search_wordsearchlist_vue"
     },
@@ -5338,7 +5365,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordSearchList.vue",
       "source_location": "L40",
-      "community": 99,
+      "community": 48,
       "norm_label": "wordsuggesthint",
       "id": "word_search_wordsearchlist_wordsuggesthint"
     },
@@ -5347,7 +5374,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/WordSearchList.vue",
       "source_location": "L42",
-      "community": 99,
+      "community": 48,
       "norm_label": "searchresultcount",
       "id": "word_search_wordsearchlist_searchresultcount"
     },
@@ -5356,7 +5383,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/SearchResultCount.vue",
       "source_location": "L1",
-      "community": 99,
+      "community": 48,
       "norm_label": "searchresultcount.vue",
       "id": "src_components_word_search_searchresultcount_vue"
     },
@@ -5365,7 +5392,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/NoSearchResults.vue",
       "source_location": "L1",
-      "community": 99,
+      "community": 48,
       "norm_label": "nosearchresults.vue",
       "id": "src_components_word_search_nosearchresults_vue"
     },
@@ -5374,7 +5401,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/NoSearchResults.vue",
       "source_location": "L13",
-      "community": 99,
+      "community": 48,
       "norm_label": "searchresultcount",
       "id": "word_search_nosearchresults_searchresultcount"
     },
@@ -5392,7 +5419,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/shortcuts/ShortcutNavigating.vue",
       "source_location": "L1",
-      "community": 99,
+      "community": 48,
       "norm_label": "shortcutnavigating.vue",
       "id": "src_components_word_search_shortcuts_shortcutnavigating_vue"
     },
@@ -5401,7 +5428,7 @@
       "file_type": "code",
       "source_file": "src/components/word-search/shortcuts/ShortcutSelect.vue",
       "source_location": "L1",
-      "community": 99,
+      "community": 48,
       "norm_label": "shortcutselect.vue",
       "id": "src_components_word_search_shortcuts_shortcutselect_vue"
     },
@@ -5474,7 +5501,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/LetterFilter.vue",
       "source_location": "L1",
-      "community": 118,
+      "community": 3,
       "norm_label": "letterfilter.vue",
       "id": "src_components_filter_letterfilter_vue"
     },
@@ -5492,7 +5519,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/WordTypeFilter.vue",
       "source_location": "L1",
-      "community": 123,
+      "community": 48,
       "norm_label": "wordtypefilter.vue",
       "id": "src_components_filter_wordtypefilter_vue"
     },
@@ -5528,7 +5555,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/BerolinismusToggle.vue",
       "source_location": "L1",
-      "community": 111,
+      "community": 20,
       "norm_label": "berolinismustoggle.vue",
       "id": "src_components_filter_berolinismustoggle_vue"
     },
@@ -5537,7 +5564,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/BerolinismusToggle.vue",
       "source_location": "L18",
-      "community": 111,
+      "community": 20,
       "norm_label": "wordsearch",
       "id": "filter_berolinismustoggle_wordsearch"
     },
@@ -5582,7 +5609,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordBySelect.vue",
       "source_location": "L1",
-      "community": 111,
+      "community": 48,
       "norm_label": "sortwordbyselect.vue",
       "id": "src_components_filter_sortwordbyselect_vue"
     },
@@ -5591,7 +5618,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordBySelect.vue",
       "source_location": "L24",
-      "community": 111,
+      "community": 48,
       "norm_label": "options",
       "id": "filter_sortwordbyselect_options"
     },
@@ -5600,7 +5627,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordBySelect.vue",
       "source_location": "L56",
-      "community": 111,
+      "community": 48,
       "norm_label": "selected",
       "id": "filter_sortwordbyselect_selected"
     },
@@ -5690,7 +5717,7 @@
       "file_type": "code",
       "source_file": "src/utils/supportedBrowsers.mjs",
       "source_location": "L1",
-      "community": 106,
+      "community": 37,
       "norm_label": "supportedbrowsers.mjs",
       "id": "src_utils_supportedbrowsers_mjs"
     },
@@ -5780,7 +5807,7 @@
       "file_type": "code",
       "source_file": "src/utils/refreshToken.js",
       "source_location": "L1",
-      "community": 6,
+      "community": 118,
       "norm_label": "refreshtoken.js",
       "id": "src_utils_refreshtoken_js"
     },
@@ -5789,7 +5816,7 @@
       "file_type": "code",
       "source_file": "src/utils/refreshToken.js",
       "source_location": "L4",
-      "community": 6,
+      "community": 118,
       "norm_label": "refreshtoken()",
       "id": "utils_refreshtoken_refreshtoken"
     },
@@ -5798,7 +5825,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L12",
-      "community": 29,
+      "community": 14,
       "norm_label": "routetoword()",
       "id": "utils_helpers_routetoword"
     },
@@ -5807,7 +5834,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L30",
-      "community": 9,
+      "community": 123,
       "norm_label": "randomelement()",
       "id": "utils_helpers_randomelement"
     },
@@ -5816,7 +5843,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L34",
-      "community": 23,
+      "community": 9,
       "norm_label": "seodata()",
       "id": "utils_helpers_seodata"
     },
@@ -5825,7 +5852,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L57",
-      "community": 118,
+      "community": 3,
       "norm_label": "useviewtransition()",
       "id": "utils_helpers_useviewtransition"
     },
@@ -5915,7 +5942,7 @@
       "file_type": "code",
       "source_file": "src/stores/modal.ts",
       "source_location": "L35",
-      "community": 6,
+      "community": 29,
       "norm_label": "$isopen",
       "id": "stores_modal_isopen"
     },
@@ -6032,7 +6059,7 @@
       "file_type": "code",
       "source_file": "src/stores/index.ts",
       "source_location": "L1",
-      "community": 111,
+      "community": 17,
       "norm_label": "index.ts",
       "id": "src_stores_index_ts"
     },
@@ -6041,7 +6068,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 29,
       "norm_label": "darkmode.ts",
       "id": "src_stores_darkmode_ts"
     },
@@ -6050,7 +6077,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L3",
-      "community": 6,
+      "community": 29,
       "norm_label": "darkmode",
       "id": "stores_darkmode_darkmode"
     },
@@ -6059,7 +6086,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L5",
-      "community": 6,
+      "community": 29,
       "norm_label": "$isdarkmode",
       "id": "stores_darkmode_isdarkmode"
     },
@@ -6068,7 +6095,7 @@
       "file_type": "code",
       "source_file": "src/stores/darkMode.ts",
       "source_location": "L18",
-      "community": 6,
+      "community": 29,
       "norm_label": "setdarkmode()",
       "id": "stores_darkmode_setdarkmode"
     },
@@ -6077,7 +6104,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 29,
       "norm_label": "wordoftheday.ts",
       "id": "src_stores_wordoftheday_ts"
     },
@@ -6086,7 +6113,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L5",
-      "community": 6,
+      "community": 29,
       "norm_label": "word",
       "id": "stores_wordoftheday_word"
     },
@@ -6095,7 +6122,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L21",
-      "community": 6,
+      "community": 29,
       "norm_label": "example",
       "id": "stores_wordoftheday_example"
     },
@@ -6104,7 +6131,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L26",
-      "community": 6,
+      "community": 29,
       "norm_label": "translation",
       "id": "stores_wordoftheday_translation"
     },
@@ -6113,7 +6140,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L30",
-      "community": 6,
+      "community": 29,
       "norm_label": "wordoftheday",
       "id": "stores_wordoftheday_wordoftheday"
     },
@@ -6122,7 +6149,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L61",
-      "community": 6,
+      "community": 29,
       "norm_label": "getwordoftheday()",
       "id": "stores_wordoftheday_getwordoftheday"
     },
@@ -6140,7 +6167,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L3",
-      "community": 106,
+      "community": 111,
       "norm_label": "toastnotify",
       "id": "stores_toastnotify_toastnotify"
     },
@@ -6212,7 +6239,7 @@
       "file_type": "code",
       "source_file": "src/services/fetchApi.ts",
       "source_location": "L1",
-      "community": 6,
+      "community": 118,
       "norm_label": "fetchapi.ts",
       "id": "src_services_fetchapi_ts"
     },
@@ -6221,7 +6248,7 @@
       "file_type": "code",
       "source_file": "src/services/fetchApi.ts",
       "source_location": "L3",
-      "community": 6,
+      "community": 118,
       "norm_label": "fetchapi()",
       "id": "services_fetchapi_fetchapi"
     },
@@ -6454,7 +6481,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 14,
       "norm_label": "randomwordbutton",
       "id": "components_randomwordbutton_randomwordbutton"
     },
@@ -6610,7 +6637,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 43,
+      "community": 20,
       "norm_label": "wordsearchlink",
       "id": "components_wordsearchlink_wordsearchlink"
     },
@@ -6649,7 +6676,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 14,
       "norm_label": "relatedwords",
       "id": "components_relatedwords_relatedwords"
     },
@@ -6714,7 +6741,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 99,
+      "community": 20,
       "norm_label": "$searchresultcount",
       "id": "stores_index_searchresultcount"
     },
@@ -6779,7 +6806,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 106,
+      "community": 37,
       "norm_label": "createtoastnotify",
       "id": "stores_index_createtoastnotify"
     },
@@ -6805,7 +6832,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 14,
       "norm_label": "berlinerword",
       "id": "gql_entitytypes_berlinerword"
     },
@@ -6909,7 +6936,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 127,
+      "community": 3,
       "norm_label": "setcolormode",
       "id": "components_setcolormode_setcolormode"
     },
@@ -6922,7 +6949,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 127,
+      "community": 3,
       "norm_label": "themeinitializationlogic",
       "id": "components_setcolormode_themelogic"
     },
@@ -7715,7 +7742,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 29,
       "norm_label": "stores/index.ts (barrel export)",
       "id": "stores_index_barrel"
     },
@@ -7923,7 +7950,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 120,
+      "community": 14,
       "norm_label": "api/search/meta.json: search metadata api route",
       "id": "pages_api_searchmetaroute"
     },
@@ -7936,7 +7963,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 120,
+      "community": 14,
       "norm_label": "api/search/index.json: orama search index builder",
       "id": "pages_api_searchindexroute"
     },
@@ -7949,7 +7976,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 14,
       "norm_label": "fragment-masking.ts: usefragment / makefragmentdata / isfragmentready",
       "id": "gql_fragmentmasking_usefragment"
     },
@@ -7962,7 +7989,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 14,
       "norm_label": "gql.ts: graphql() typed document map function",
       "id": "gql_gql_graphqlfunction"
     },
@@ -7975,7 +8002,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 14,
       "norm_label": "graphql.ts: codegen-generated gql types and fragments",
       "id": "gql_graphql_generatedtypes"
     },
@@ -7988,7 +8015,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 29,
+      "community": 14,
       "norm_label": "gql/index.ts: barrel re-export of gql.ts",
       "id": "gql_index_gqlbarrel"
     },
@@ -8014,7 +8041,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 120,
+      "community": 14,
       "norm_label": "vendor.d.ts: ambient module declarations (hypher, hyphenation.de, de-compromise)",
       "id": "types_vendor_vendordeclarations"
     },
@@ -8053,7 +8080,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 120,
+      "community": 14,
       "norm_label": "sentrybrowser.ts: sentry browser init with tracing + replay",
       "id": "plugins_sentrybrowser_sentryinit"
     },
@@ -8066,7 +8093,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 120,
+      "community": 14,
       "norm_label": "env.d.ts: global ambient types (turnstile, window._paq, astro refs)",
       "id": "src_env_globalambient"
     },
@@ -8079,7 +8106,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 120,
+      "community": 14,
       "norm_label": "oramasearchindex type (returntype of makeoramasearchindex)",
       "id": "pages_api_ormasearchindex_type"
     },
@@ -9027,9 +9054,9 @@
       "source_file": "src/services/wiktionaryApi.ts",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_services_wiktionaryapi_ts",
-      "target": "services_wiktionaryapi_fetchgermanartikel"
+      "target": "services_wiktionaryapi_fetchgermanartikel",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9037,9 +9064,9 @@
       "source_file": "src/services/wiktionaryApi.ts",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_services_wiktionaryapi_ts",
-      "target": "services_wiktionaryapi_genus_to_artikel"
+      "target": "services_wiktionaryapi_genus_to_artikel",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9364,6 +9391,28 @@
       "confidence_score": 1.0,
       "source": "src_pages_wort_wordslug_astro",
       "target": "home_felix_workspace_berliner_schnauze_src_services_api_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/wort/[...wordSlug].astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_wort_wordslug_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_section_card_scss"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/wort/[...wordSlug].astro",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_wort_wordslug_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_single_word_scss"
     },
     {
       "relation": "imports_from",
@@ -10587,6 +10636,17 @@
       "confidence_score": 1.0,
       "source": "src_pages_index_astro",
       "target": "astro_assets"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/word/WordCuriosities.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_word_wordcuriosities_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_word_curiosities_scss"
     },
     {
       "relation": "imports",
@@ -21033,5 +21093,5 @@
       "source_file": "src/pages/api/search/index.json.ts"
     }
   ],
-  "built_at_commit": "e84d248f09cdc387cbad70e370f249d73f65375e"
+  "built_at_commit": "564b6feb82d2d9860621815f6c99203e35458bfa"
 }
