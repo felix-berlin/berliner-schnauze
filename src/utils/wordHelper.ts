@@ -230,14 +230,43 @@ export const capitalizeFirstLetter = (word: string) => {
 };
 
 const GERMAN_LETTER_FREQ: Record<string, number> = {
-  a: 6.51, b: 1.96, c: 3.06, d: 4.81, e: 17.40, f: 1.66, g: 3.01, h: 4.76, i: 7.55, j: 0.27, k: 1.21, l: 3.44, m: 2.53, n: 9.78, o: 2.51, p: 0.97, q: 0.02, r: 7.00, s: 7.27, t: 6.15, u: 4.35, v: 0.67, w: 1.89, x: 0.03, y: 0.04, z: 1.13, ß: 0.31, ä: 0.54, ö: 0.30, ü: 0.65,
+  a: 6.51,
+  b: 1.96,
+  c: 3.06,
+  d: 4.81,
+  e: 17.4,
+  f: 1.66,
+  g: 3.01,
+  h: 4.76,
+  i: 7.55,
+  j: 0.27,
+  k: 1.21,
+  l: 3.44,
+  m: 2.53,
+  n: 9.78,
+  o: 2.51,
+  p: 0.97,
+  q: 0.02,
+  r: 7.0,
+  s: 7.27,
+  t: 6.15,
+  u: 4.35,
+  v: 0.67,
+  w: 1.89,
+  x: 0.03,
+  y: 0.04,
+  z: 1.13,
+  ß: 0.31,
+  ä: 0.54,
+  ö: 0.3,
+  ü: 0.65,
 };
 
 const frequencyLabel = (pct: number): string => {
   if (pct > 10) return "sehr häufig";
-  if (pct > 5)  return "häufig";
-  if (pct > 2)  return "gelegentlich";
-  if (pct > 1)  return "selten";
+  if (pct > 5) return "häufig";
+  if (pct > 2) return "gelegentlich";
+  if (pct > 1) return "selten";
   return "sehr selten";
 };
 
@@ -349,19 +378,14 @@ export const wordCuriosities = (
   };
 };
 
-const sortedChars = (word: string): string =>
-  word.toLowerCase().split("").sort().join("");
+const sortedChars = (word: string): string => word.toLowerCase().split("").sort().join("");
 
-export const findAnagrams = (
-  word: string,
-  allWords: BerlinerWord[],
-): BerlinerWord[] => {
+export const findAnagrams = (word: string, allWords: BerlinerWord[]): BerlinerWord[] => {
   const target = sortedChars(word);
   return allWords.filter((w) => {
     const berlinerisch = w.wordProperties?.berlinerisch ?? "";
     return (
-      berlinerisch.toLowerCase() !== word.toLowerCase() &&
-      sortedChars(berlinerisch) === target
+      berlinerisch.toLowerCase() !== word.toLowerCase() && sortedChars(berlinerisch) === target
     );
   });
 };
@@ -384,12 +408,9 @@ export const alphabeticNeighbors = (
   };
 };
 
-export const decomposeCompoundWord = (
-  word: string,
-  germanWords: Set<string>,
-): string[] | null => {
+export const decomposeCompoundWord = (word: string, germanWords: Set<string>): string[] | null => {
   const lower = word.toLowerCase();
-  if (lower.length < 5) return null;
+  if (lower.length < 5) return null; // Too short to be a compound
   if (germanWords.has(lower)) return null;
 
   for (let i = 3; i <= lower.length - 3; i++) {
@@ -401,7 +422,12 @@ export const decomposeCompoundWord = (
     }
 
     // Fugen-s: "tageslicht" → "tages" (tag+s) + "licht"
-    if (right.startsWith("s") && right.length >= 3 && germanWords.has(left) && germanWords.has(right.slice(1))) {
+    if (
+      right.startsWith("s") &&
+      right.length >= 3 &&
+      germanWords.has(left) &&
+      germanWords.has(right.slice(1))
+    ) {
       return [left, right.slice(1)];
     }
   }
