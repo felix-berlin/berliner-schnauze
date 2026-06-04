@@ -7,10 +7,9 @@ import type { BerlinerWord } from '@/gql/entity-types';
 interface Props {
   word: string;
   allWords: BerlinerWord[];
-  germanWords: Set<string>;
 }
 
-const { word, allWords, germanWords } = Astro.props;
+const { word, allWords } = Astro.props;
 const hypher = new Hypher(german);
 ---
 
@@ -26,6 +25,6 @@ const hypher = new Hypher(german);
       <h3>Anzahl der Silben:</h3>
       <p>{hypher.hyphenate(word).length}</p>
     </div>
-    <WordDecomposition allWords={allWords} germanWords={germanWords} word={word} />
+    <WordDecomposition allWords={allWords} word={word} />
   </div>
 </section>

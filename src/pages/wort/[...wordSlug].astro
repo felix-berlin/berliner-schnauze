@@ -28,7 +28,6 @@ import { findAnagrams, getWordType, translateNlpTags } from '@utils/wordHelper.t
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 import ExternalLink from '~icons/lucide/external-link';
-import germanWordsArray from 'all-the-german-words';
 
 import type { BerlinerWord } from '@/gql/entity-types';
 
@@ -70,7 +69,7 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 }
 
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
-const germanWords = new Set<string>(germanWordsArray as string[]);
+
 const hasImages = Boolean(wordProps?.images && wordProps.images.nodes.length > 0);
 const hasAnagrams = findAnagrams(word.wordProperties?.berlinerisch ?? '', allWords).length > 0;
 const wortartLabel: string | undefined =
@@ -133,7 +132,6 @@ const schemaJson = () =>
 
         <WordSectionOrthographie
           allWords={allWords}
-          germanWords={germanWords}
           word={word.wordProperties?.berlinerisch ?? ''}
         />
 
