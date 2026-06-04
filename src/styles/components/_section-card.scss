@@ -26,7 +26,7 @@
   &__num {
     font-size: 0.65rem;
     font-weight: 700;
-    color: var(--orange-300);
+    color: var(--orange-600);
     letter-spacing: 0.05em;
     flex-shrink: 0;
   }
@@ -108,7 +108,7 @@
     font-size: 0.625rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: color-mix(in srgb, var(--blue) 70%, white);
+    color: color-mix(in srgb, var(--blue) 75%, white);
 
     @include butler-mx.dark-mode-class {
       color: color-mix(in srgb, var(--blue) 30%, white);

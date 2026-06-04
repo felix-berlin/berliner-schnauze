@@ -71,7 +71,7 @@
 
   &__word-subtitle {
     font-size: 0.75rem;
-    color: color-mix(in srgb, var(--blue) 60%, white);
+    color: color-mix(in srgb, var(--blue) 75%, white);
     margin: 0;
     margin-block-start: 0.2rem;
 
@@ -85,7 +85,7 @@
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: color-mix(in srgb, var(--blue) 50%, white);
+    color: color-mix(in srgb, var(--blue) 75%, white);
     padding-inline: vars.$spacer * 0.75;
     margin-block: vars.$spacer * 0.5 0.2rem;
 
