@@ -259,36 +259,4 @@ const schemaJson = () =>
     syncHeaderHeight();
     new ResizeObserver(syncHeaderHeight).observe(siteHeader);
   }
-  const links = document.querySelectorAll<HTMLAnchorElement>('.c-word-sidebar__link');
-  const sections = document.querySelectorAll<HTMLElement>('.c-section-card[id]');
-
-  if (links.length > 0 && sections.length > 0) {
-    const setActive = (id: string) => {
-      links.forEach((l) => l.classList.remove('is-active'));
-      const active = document.querySelector<HTMLAnchorElement>(
-        `.c-word-sidebar__link[href="#${id}"]`,
-      );
-      active?.classList.add('is-active');
-      if (active) {
-        const nav = active.closest<HTMLElement>('.c-word-sidebar');
-        if (nav) {
-          nav.scrollLeft = active.offsetLeft - nav.offsetWidth / 2 + active.offsetWidth / 2;
-        }
-      }
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id);
-            break;
-          }
-        }
-      },
-      { rootMargin: '-10% 0px -80% 0px' },
-    );
-
-    sections.forEach((s) => observer.observe(s));
-  }
 </script>
