@@ -45,8 +45,12 @@ export async function subscribePush(): Promise<void> {
 
   const vapidKey = import.meta.env.PUBLIC_VAPID_PUBLIC_KEY as string | undefined;
   if (!vapidKey) {
-    console.warn("[pushSubscription] No VAPID public key configured (PUBLIC_VAPID_PUBLIC_KEY)");
+    console.error("[pushSubscription] No VAPID public key configured (PUBLIC_VAPID_PUBLIC_KEY)");
     $pushState.set("error");
+    createToastNotify({
+      message: "Push-Benachrichtigungen sind derzeit nicht verfügbar.",
+      status: "error",
+    });
     return;
   }
 
