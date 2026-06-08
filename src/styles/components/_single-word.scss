@@ -84,7 +84,6 @@
   grid-area: gallery;
   position: sticky;
   top: calc(var(--topbar-height, 52px) + vars.$spacer);
-  align-self: start;
 
   &__label {
     font-size: 0.7rem;
