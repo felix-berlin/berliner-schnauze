@@ -2,6 +2,13 @@ import { wordCuriosities } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
 
 describe("wordCuriosities", () => {
+  it("handles empty string without throwing", () => {
+    const result = wordCuriosities("");
+    expect(result.isPalindrome).toBe(true); // "" reversed is still ""
+    expect(result.isIsogram).toBe(false);   // guarded: length > 0 required
+    expect(result.totalLetterCount).toBe(0);
+  });
+
   it("detects a palindrome", () => {
     expect(wordCuriosities("anna").isPalindrome).toBe(true);
   });

@@ -45,4 +45,16 @@ describe("alphabeticNeighbors", () => {
     expect(before).toHaveLength(0);
     expect(after).toHaveLength(0);
   });
+
+  it("sorts umlauts correctly under German locale (ä after a, before b)", () => {
+    const umlautWords = [
+      makeWord("Affe", "1"),
+      makeWord("Äpfel", "2"),
+      makeWord("Birne", "3"),
+    ];
+    const current = umlautWords[1]!; // Äpfel
+    const { before, after } = alphabeticNeighbors(umlautWords, current, 2);
+    expect(before.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Affe"]);
+    expect(after.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Birne"]);
+  });
 });

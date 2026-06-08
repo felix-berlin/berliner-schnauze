@@ -105,6 +105,27 @@ describe("loadPushState", () => {
     expect(createToastNotify).toHaveBeenCalledOnce();
   });
 
+  it("can be retried after an error", async () => {
+    Object.defineProperty(global.navigator, "serviceWorker", {
+      value: { ready: Promise.reject(new Error("SW unavailable")) },
+      writable: true,
+      configurable: true,
+    });
+    const { loadPushState, $pushState } = await import("@stores/pushSubscription.ts");
+    await loadPushState();
+    expect($pushState.get()).toBe("error");
+
+    const sub = makeSub();
+    const reg = makeRegistration(sub);
+    Object.defineProperty(global.navigator, "serviceWorker", {
+      value: { ready: Promise.resolve(reg) },
+      writable: true,
+      configurable: true,
+    });
+    await loadPushState();
+    expect($pushState.get()).toBe("subscribed");
+  });
+
   it("is idempotent — concurrent calls do not double-load", async () => {
     const reg = makeRegistration(null);
     let resolveReady!: (v: unknown) => void;
