@@ -269,6 +269,12 @@ const schemaJson = () =>
         `.c-word-sidebar__link[href="#${id}"]`,
       );
       active?.classList.add('is-active');
+      if (active) {
+        const nav = active.closest<HTMLElement>('.c-word-sidebar');
+        if (nav) {
+          nav.scrollLeft = active.offsetLeft - nav.offsetWidth / 2 + active.offsetWidth / 2;
+        }
+      }
     };
 
     const observer = new IntersectionObserver(

@@ -39,6 +39,7 @@
     .c-word-sidebar__nav {
       flex-direction: row;
       padding-block: 0;
+      min-width: max-content;
     }
   }
 
