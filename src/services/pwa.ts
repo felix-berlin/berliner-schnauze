@@ -28,7 +28,12 @@ registerSW({
       }
     }
     trackEvent("App", "Silent update applied", "PWA");
-    window.location.reload();
+    createToastNotify({
+      message: "Berliner Schnauze wurde aktualisiert und wird neu geladen.",
+      status: "info",
+      timeout: 3_000,
+    });
+    setTimeout(() => window.location.reload(), 3_000);
   },
   onOfflineReady() {
     if (import.meta.env.DEV) {
@@ -46,6 +51,11 @@ registerSW({
   },
   onRegisterError(err) {
     console.error("[pwa] Service Worker registration failed:", err);
+    createToastNotify({
+      message: "Einige App-Funktionen (Offline, Benachrichtigungen) sind nicht verfügbar.",
+      status: "error",
+      timeout: null,
+    });
   },
   onRegisteredSW(swScriptUrl) {
     if (import.meta.env.DEV) {
