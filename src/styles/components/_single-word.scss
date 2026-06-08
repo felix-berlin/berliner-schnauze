@@ -1,5 +1,4 @@
 @use "@styles/variables" as vars;
-@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
@@ -80,6 +79,8 @@
 }
 
 .c-word-gallery-col {
+  container-type: inline-size;
+  container-name: word-gallery-col;
   grid-area: gallery;
   position: sticky;
   top: calc(var(--topbar-height, 52px) + vars.$spacer);
@@ -104,7 +105,7 @@
     display: grid;
     gap: vars.$spacer * 1.5;
 
-    @include mx.breakpoint("xxs") {
+    @container word-gallery-col (inline-size >= 19rem) {
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     }
 
@@ -354,7 +355,7 @@
     fill: var(--grey-200);
     flex: 0 0 auto;
 
-    @include mx.breakpoint("md") {
+    @container word-main (inline-size >= 48rem) {
       --size-quote-icon: 48px;
     }
   }
@@ -365,7 +366,7 @@
     flex-direction: column;
     row-gap: vars.$spacer;
 
-    @include mx.breakpoint("md") {
+    @container word-main (inline-size >= 48rem) {
       --size-font: 1.8rem;
     }
 
@@ -390,7 +391,7 @@
   &__example {
     font-style: italic;
 
-    @include mx.breakpoint("md") {
+    @container word-main (inline-size >= 48rem) {
       --size-font: 2.2rem;
     }
 
@@ -402,12 +403,12 @@
       padding: var(--padding-y) var(--padding-x);
       gap: var(--gap, #{vars.$spacer * 0.5});
 
-      @include mx.breakpoint("sm") {
+      @container word-main (inline-size >= 34rem) {
         --gap: #{vars.$spacer};
         --padding-y: #{vars.$spacer * 1.5};
         --padding-x: 5%;
       }
-      @include mx.breakpoint("md") {
+      @container word-main (inline-size >= 48rem) {
         --padding-y: #{vars.$spacer * 2.5};
         --padding-x: 7%;
       }
@@ -424,7 +425,8 @@
       @include butler-mx.hover {
         --decoration-text: underline dashed;
       }
-      @include mx.breakpoint("xxs") {
+
+      @container word-main (inline-size >= 23rem) {
         --size-font: 1rem;
       }
 
@@ -447,7 +449,7 @@
     border-top: 1px dashed var(--new-blue-200);
     padding-top: vars.$spacer * 1.5;
 
-    @include mx.breakpoint("xs") {
+    @container word-main (inline-size >= 34rem) {
       --spacing: #{vars.$spacer * 2};
       --direction-flex: row;
 
