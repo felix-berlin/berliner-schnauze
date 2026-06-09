@@ -1,5 +1,5 @@
 <template>
-  <nav class="c-nav-list" :class="classesNav">
+  <nav class="c-nav-list" :class="classesNav" :aria-label="ariaLabel">
     <ul class="c-nav-list__list" :class="classesUl">
       <slot name="before" />
       <li
@@ -32,6 +32,7 @@ interface ItemObject {
 }
 
 interface NavListProps {
+  ariaLabel?: string;
   classesLi?: string;
   classesNav?: string;
   classesUl?: string;
@@ -44,7 +45,7 @@ interface NavListProps {
   )[];
 }
 
-const { items } = defineProps<NavListProps>();
+const { items, ariaLabel } = defineProps<NavListProps>();
 
 /**
  * Checks if the item is a Vue component
