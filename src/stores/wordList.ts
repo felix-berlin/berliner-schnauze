@@ -409,9 +409,9 @@ export const $oramaSearchResults = computedAsync([$wordSearch], async (wordSearc
 
   const params: SearchParamsFullText<Orama<typeof wordSchema>> = {
     boost: {
+      wordComponents: 1.0,
       "wordProperties.berlinerisch": 2.5,
       "wordProperties.translations": 1,
-      wordComponents: 1.0,
     },
     limit: wordSearch.resultLimit ?? resultLimit ?? 10,
     properties: "*",
