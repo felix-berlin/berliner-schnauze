@@ -35,3 +35,24 @@ minimumReleaseAgeExclude:
   - vue-tsc@3.3.3
   - '@vue/language-core@3.3.4'
   - vue-tsc@3.3.4
+  - '@cloudflare/workerd-darwin-64@1.20260609.1'
+  - '@cloudflare/workerd-darwin-arm64@1.20260609.1'
+  - '@cloudflare/workerd-linux-64@1.20260609.1'
+  - '@cloudflare/workerd-linux-arm64@1.20260609.1'
+  - '@cloudflare/workerd-windows-64@1.20260609.1'
+  - '@sentry-internal/browser-utils@10.57.0'
+  - '@sentry-internal/feedback@10.57.0'
+  - '@sentry-internal/replay-canvas@10.57.0'
+  - '@sentry-internal/replay@10.57.0'
+  - '@sentry-internal/server-utils@10.57.0'
+  - '@sentry/astro@10.57.0'
+  - '@sentry/browser@10.57.0'
+  - '@sentry/core@10.57.0'
+  - '@sentry/node-core@10.57.0'
+  - '@sentry/node@10.57.0'
+  - '@sentry/opentelemetry@10.57.0'
+  - astro@6.4.5
+  - graphql@16.14.2
+  - miniflare@4.20260609.0
+  - workerd@1.20260609.1
+  - wrangler@4.99.0
