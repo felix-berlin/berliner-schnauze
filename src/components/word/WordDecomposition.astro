@@ -1,5 +1,5 @@
 ---
-import { decomposeCompoundWord } from '@utils/wordHelper';
+import { decomposeCompoundWord, capitalizeFirstLetter } from '@utils/wordHelper';
 import { routeToWord } from '@utils/helpers';
 import type { BerlinerWord } from '@/gql/entity-types';
 import germanWordsArray from 'all-the-german-words';
@@ -30,10 +30,10 @@ const wordMap = new Map(
               {i > 0 && <span class='c-single-word__word-parts-plus'>+</span>}
               {linked ? (
                 <a class='c-single-word__word-part' href={routeToWord(linked.slug ?? undefined)}>
-                  {part}
+                  {capitalizeFirstLetter(part)}
                 </a>
               ) : (
-                <span class='c-single-word__word-part'>{part}</span>
+                <span class='c-single-word__word-part'>{capitalizeFirstLetter(part)}</span>
               )}
             </>
           );

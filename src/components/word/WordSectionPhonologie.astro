@@ -13,10 +13,10 @@ const { word, allWords } = Astro.props;
 const soundingWords = similarSoundingWords(allWords, word).filter((r) => r.isSimilar);
 ---
 
-<section class='c-section-card' id='phonologie'>
+<section class='c-section-card' id='phonologie' aria-labelledby='heading-phonologie'>
   <div class='c-section-card__header'>
     <span class='c-section-card__num'>06</span>
-    <h2 class='c-section-card__title'>Phonologie</h2>
+    <h2 class='c-section-card__title' id='heading-phonologie'>Phonologie</h2>
   </div>
   <div class='c-section-card__body'>
     {

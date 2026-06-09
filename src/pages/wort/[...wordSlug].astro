@@ -101,16 +101,16 @@ const schemaJson = () =>
     <script set:html={schemaJson()} type='application/ld+json' />
   </Fragment>
 
-  <nav class='c-page-topbar'>
+  <nav class='c-page-topbar' aria-label='Brotkrümelpfad'>
     <Breadcrumbs indexText='Start' linkTextFormat='capitalized' truncated={true}>
       <ChevronRight height='20' slot='separator' width='20' />
     </Breadcrumbs>
   </nav>
 
-  <div class='c-word-page'>
+  <article class='c-word-page'>
     <WordSidebar hasAnagrams={hasAnagrams} wordProps={wordProps} wordTags={wordTags} />
 
-    <main class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
+    <div class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
       <WordHero word={word} wordProps={wordProps} wortartLabel={wortartLabel} />
 
       <div class='c-word-main__content'>
@@ -118,10 +118,10 @@ const schemaJson = () =>
 
         {
           wordProps?.examples && (
-            <section class='c-section-card' id='beispiele'>
+            <section class='c-section-card' id='beispiele' aria-labelledby='heading-beispiele'>
               <div class='c-section-card__header'>
                 <span class='c-section-card__num'>02</span>
-                <h2 class='c-section-card__title'>Beispiele</h2>
+                <h2 class='c-section-card__title' id='heading-beispiele'>Beispiele</h2>
               </div>
               <div class='c-section-card__body'>
                 <WordExamples examples={wordProps.examples} rootBemClass='c-single-word' />
@@ -143,10 +143,10 @@ const schemaJson = () =>
 
         <WordAnagrams allWords={allWords} word={word.wordProperties?.berlinerisch ?? ''} />
 
-        <section class='c-section-card' id='navigation'>
+        <section class='c-section-card' id='navigation' aria-labelledby='heading-navigation'>
           <div class='c-section-card__header'>
             <span class='c-section-card__num'>07</span>
-            <h2 class='c-section-card__title'>Alphabetische Nachbarn</h2>
+            <h2 class='c-section-card__title' id='heading-navigation'>Alphabetische Nachbarn</h2>
           </div>
           <div class='c-section-card__body'>
             <WordAlphabetNav allWords={allWords} currentWord={word} />
@@ -155,9 +155,9 @@ const schemaJson = () =>
 
         {
           wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
-            <div class='c-section-card'>
+            <section class='c-section-card' id='verwandte-worte' aria-labelledby='heading-verwandte'>
               <div class='c-section-card__body'>
-                <h3>Verwandte Worte:</h3>
+                <h2 class='c-section-card__title' id='heading-verwandte'>Verwandte Worte</h2>
                 <ul class='c-single-word__related-words-list'>
                   {wordProps.relatedWords.nodes
                     .filter((w) => w?.wordProperties?.berlinerisch !== wordProps?.berlinerisch)
@@ -173,7 +173,7 @@ const schemaJson = () =>
                     ))}
                 </ul>
               </div>
-            </div>
+            </section>
           )
         }
 
@@ -197,7 +197,7 @@ const schemaJson = () =>
 
       {
         hasImages && (
-          <aside class='c-word-gallery-col'>
+          <aside class='c-word-gallery-col' aria-label='Bildergalerie'>
             <p class='c-word-gallery-col__label'>Bilder</p>
             <ImageGallery
               images={wordProps?.images}
@@ -224,18 +224,22 @@ const schemaJson = () =>
           </aside>
         )
       }
-    </main>
-  </div>
+    </div>
+  </article>
 
   <footer class='c-single-word__footer'>
     {
       word?.dateGmt && (
-        <p class='c-single-word__created'>Wort erstellt am: {formattedDate(word.dateGmt)}</p>
+        <p class='c-single-word__created'>
+          Wort erstellt am: <time datetime={word.dateGmt}>{formattedDate(word.dateGmt)}</time>
+        </p>
       )
     }
     {
       word?.modifiedGmt && (
-        <p class='c-single-word__modified'>Bearbeitet am: {formattedDate(word.modifiedGmt)}</p>
+        <p class='c-single-word__modified'>
+          Bearbeitet am: <time datetime={word.modifiedGmt}>{formattedDate(word.modifiedGmt)}</time>
+        </p>
       )
     }
   </footer>

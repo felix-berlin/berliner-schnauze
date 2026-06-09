@@ -12,9 +12,7 @@ const { currentWord, allWords } = Astro.props;
 const { before, after } = alphabeticNeighbors(allWords, currentWord, 3);
 ---
 
-<div>
-  <h3>Alphabetische Nachbarn</h3>
-  <div class="c-single-word__alpha-nav">
+<div class="c-single-word__alpha-nav">
     {
       before.length > 0 && (
         <div class="c-single-word__alpha-col">
@@ -43,5 +41,4 @@ const { before, after } = alphabeticNeighbors(allWords, currentWord, 3);
         </div>
       )
     }
-  </div>
 </div>
