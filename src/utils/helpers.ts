@@ -121,5 +121,5 @@ export const checkObjectValueLength = (obj: Record<string, any>): boolean => {
  * @returns URL without file extension
  */
 export const removeFileExtension = (url: string): string => {
-  return url.replace(/\.(html|htm|php)$/, "");
+  return url.replace(/\.(html|htm|php)$/, "").replace(/\/index$/, "");
 };
