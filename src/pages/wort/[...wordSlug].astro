@@ -101,22 +101,31 @@ const hypher = new Hypher(german);
 
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
 
-const schemaJson = () =>
-  JSON.stringify({
+const schemaJson = () => {
+  const alternateNames = (wordProps?.alternativeWords ?? [])
+    .map((w) => w?.alternativeWord)
+    .filter((n): n is string => Boolean(n));
+
+  return JSON.stringify({
     "@context": "https://schema.org",
     "@type": "DefinedTerm",
-    alternateName: (wordProps?.alternativeWords ?? []).map((w) => w?.alternativeWord).join(", "),
+    ...(alternateNames.length > 0 && { alternateName: alternateNames }),
     description: (wordProps?.translations ?? []).map((t) => t?.translation).join("; "),
     identifier: word.id,
     inDefinedTermSet: {
       "@type": "DefinedTermSet",
+      description: "Wörterbuch für den Berliner Dialekt und Berliner Schnauze",
+      inLanguage: "de-DE",
       name: "Berliner Schnauze Wörterbuch",
       url: `${Astro.url.origin}/wort`,
     },
+    inLanguage: "de-DE",
     name: wordProps?.berlinerisch,
     sameAs: wordProps?.learnMore || undefined,
+    termCode: word.slug || undefined,
     url: removeFileExtension(Astro.url.href),
   });
+};
 ---
 
 <Layout
