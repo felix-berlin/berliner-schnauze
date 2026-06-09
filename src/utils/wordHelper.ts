@@ -205,24 +205,44 @@ export const similarWords = (
     };
   });
 
-  if (needsSimilarity) return similarWords.filter((word) => word.isSimilar >= needsSimilarity);
+  if (needsSimilarity !== undefined) return similarWords.filter((word) => word.isSimilar >= needsSimilarity);
 
   return similarWords;
 };
 
-export const createWikimediaFileList = async (wikimediaFiles: WordPropertiesWikimediaFiles[]) => {
-  if (!wikimediaFiles) return;
+export const createWikimediaFileList = async (
+  wikimediaFiles: WordPropertiesWikimediaFiles[] | null | undefined,
+) => {
+  if (!wikimediaFiles?.length) return [];
 
-  const files = [];
-  for (const file of wikimediaFiles) {
-    const img = await fetchWikimediaAPI(file?.wikimediaFile ?? "");
-    files.push({
-      caption: file?.caption,
-      description: file?.description,
-      image: img,
-    });
+  const results = await Promise.allSettled(
+    wikimediaFiles.map(async (file) => {
+      const img = await fetchWikimediaAPI(file?.wikimediaFile ?? "");
+      return { caption: file?.caption, description: file?.description, image: img };
+    }),
+  );
+
+  const failed = results.filter((r): r is PromiseRejectedResult => r.status === "rejected");
+  if (failed.length > 0) {
+    console.error(
+      "[wordHelper] createWikimediaFileList: failed to fetch",
+      failed.length,
+      "file(s):",
+      failed.map((f) => f.reason),
+    );
   }
-  return files;
+
+  return results
+    .filter(
+      (
+        r,
+      ): r is PromiseFulfilledResult<{
+        caption: string | null | undefined;
+        description: string | null | undefined;
+        image: Awaited<ReturnType<typeof fetchWikimediaAPI>>;
+      }> => r.status === "fulfilled",
+    )
+    .map((r) => r.value);
 };
 
 export const capitalizeFirstLetter = (word: string) => {

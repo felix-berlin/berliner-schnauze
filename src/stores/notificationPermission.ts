@@ -8,7 +8,7 @@ export const isNotificationSupported = (): boolean =>
   typeof window !== "undefined" && Boolean(window.Notification);
 
 export const $notificationPermission = atom<NotificationPermissionState>(
-  isNotificationSupported() ? Notification.permission : "unsupported",
+  isNotificationSupported() ? (window.Notification.permission as NotificationPermission) : "unsupported",
 );
 
 export const requestNotificationPermission = async (): Promise<void> => {

@@ -1,8 +1,8 @@
 export type GermanArtikel = "der" | "die" | "das";
 
 const GENUS_TO_ARTIKEL: Record<"m" | "f" | "n", GermanArtikel> = {
-  m: "der",
   f: "die",
+  m: "der",
   n: "das",
 };
 
@@ -26,9 +26,18 @@ export const fetchGermanArtikel = async (word: string): Promise<GermanArtikel | 
       signal: controller.signal,
     });
 
-    if (!response.ok) return null;
+    if (!response.ok) {
+      console.error("[wiktionaryApi] HTTP error for word:", word, response.status, response.statusText);
+      return null;
+    }
 
-    const data = (await response.json()) as WiktionaryResponse;
+    let data: WiktionaryResponse;
+    try {
+      data = (await response.json()) as WiktionaryResponse;
+    } catch (parseErr) {
+      console.error("[wiktionaryApi] Failed to parse JSON response for word:", word, parseErr);
+      return null;
+    }
     const pages = data?.query?.pages;
     if (!pages) return null;
 
@@ -42,8 +51,12 @@ export const fetchGermanArtikel = async (word: string): Promise<GermanArtikel | 
 
     return genusMatch ? GENUS_TO_ARTIKEL[genusMatch[1] as "m" | "f" | "n"] : null;
   } catch (err) {
-    if (err instanceof Error && err.name !== "AbortError") {
-      console.error("[wiktionaryApi] Failed to fetch German article for word:", word, err);
+    if (err instanceof Error) {
+      if (err.name === "AbortError") {
+        console.warn("[wiktionaryApi] Request timed out (5s) for word:", word);
+      } else {
+        console.error("[wiktionaryApi] Failed to fetch German article for word:", word, err);
+      }
     }
     return null;
   } finally {

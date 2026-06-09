@@ -62,6 +62,10 @@ export async function subscribePush(): Promise<void> {
     } catch (err) {
       console.error("[pushSubscription] Invalid VAPID key format:", err);
       $pushState.set("error");
+      createToastNotify({
+        message: "Push-Benachrichtigungen konnten nicht aktiviert werden. Bitte erneut versuchen.",
+        status: "error",
+      });
       return;
     }
 
