@@ -63,6 +63,17 @@ const { allWords, word } = Astro.props;
 
 const wordProps: BerlinerWord["wordProperties"] = word.wordProperties;
 
+const wordDescription = (() => {
+  const translations = (wordProps?.translations ?? [])
+    .map((t) => t?.translation)
+    .filter(Boolean)
+    .join(", ");
+  if (!translations) return undefined;
+  const berlinerisch = wordProps?.berlinerisch ?? "";
+  const raw = `„${berlinerisch}" ist Berliner Dialekt für ${translations}. Entdecke Berliner Ausdrücke auf Berliner Schnauze.`;
+  return raw.length > 160 ? raw.slice(0, 157) + "…" : raw;
+})();
+
 const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
   return (
     word?.alternativeWord +
@@ -108,7 +119,16 @@ const schemaJson = () =>
   });
 ---
 
-<Layout content={seoData({ seo: word.seo ?? undefined, title: word.title ?? '' })} contentClasses="o-word">
+<Layout
+  content={seoData({
+    seo: {
+      ...(word.seo ?? {}),
+      ...(wordDescription && { opengraphDescription: wordDescription, twitterDescription: wordDescription }),
+    },
+    title: word.title ?? '',
+  })}
+  contentClasses="o-word"
+>
   <Fragment slot="head">
     <script set:html={schemaJson()} type="application/ld+json" />
   </Fragment>
