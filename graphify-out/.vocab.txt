@@ -5,9 +5,12 @@ actions
 active
 alert
 all
+alphabet
+alphabetic
 alphabetical
 alternative
 ambient
+anagrams
 analytics
 and
 api
@@ -15,6 +18,7 @@ app
 architectural
 architecture
 array
+artikel
 asset
 assets
 astro
@@ -66,6 +70,8 @@ cast
 category
 ccw
 century
+char
+chars
 check
 chevron
 circle
@@ -84,6 +90,7 @@ colored
 colors
 component
 components
+compound
 compromise
 computed
 concept
@@ -93,6 +100,7 @@ confirm
 connected
 connection
 consent
+consonant
 consonants
 constructor
 contact
@@ -107,14 +115,16 @@ countdown
 create
 css
 culture
+curiosities
 current
-custom
 dark
 data
 date
 day
 debounced
 declarations
+decompose
+decomposition
 default
 design
 detect
@@ -144,6 +154,7 @@ entry
 enum
 env
 error
+etymologie
 event
 exact
 example
@@ -162,6 +173,7 @@ file
 files
 fill
 filter
+find
 first
 floor
 flyout
@@ -175,15 +187,19 @@ formatted
 found
 fragment
 fragments
+freq
+frequency
 function
 funding
 gallery
 general
 generated
+genus
 german
 get
 global
 gql
+grammatik
 graph
 graphql
 grid
@@ -196,6 +212,7 @@ header
 helper
 helpers
 heraldic
+hero
 hide
 high
 highlight
@@ -203,6 +220,7 @@ hint
 historic
 href
 html
+hue
 hyphenation
 hypher
 icon
@@ -241,6 +259,7 @@ length
 letter
 letters
 lightbox
+linguistik
 link
 links
 list
@@ -289,8 +308,8 @@ nav
 navigate
 navigating
 need
+neighbors
 nlp
-nomen
 not
 notification
 notifications
@@ -309,8 +328,8 @@ orama
 order
 orderby
 ornate
+orthographie
 overview
-package
 page
 pages
 paginated
@@ -320,6 +339,7 @@ pattern
 payload
 percent
 permission
+phonologie
 photographic
 photoswipe
 picture
@@ -334,7 +354,6 @@ popover
 position
 post
 preferred
-present
 prevent
 progress
 promise
@@ -377,6 +396,7 @@ script
 scroll
 scss
 search
+section
 segments
 select
 selected
@@ -392,6 +412,7 @@ shell
 shift
 shortcut
 show
+sidebar
 similar
 single
 size
@@ -404,6 +425,7 @@ social
 sort
 sorted
 sounding
+spelling
 spy
 src
 start
@@ -484,6 +506,7 @@ virtual
 virtualizer
 visual
 vorschlagen
+vowel
 vowels
 vue
 walking
@@ -491,6 +514,7 @@ where
 white
 widths
 wikimedia
+wiktionary
 window
 with
 woff
