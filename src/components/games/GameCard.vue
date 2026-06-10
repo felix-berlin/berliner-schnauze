@@ -1,5 +1,5 @@
 <template>
-  <div class="c-game-card" :style="dragWrapStyle">
+  <div class="c-game-card">
     <div class="c-game-card__hint" aria-hidden="true">
       <span>← NEE</span>
       <span>JA →</span>
@@ -82,27 +82,24 @@ const { isSwiping, distanceX } = usePointerSwipe(cardRef, {
   threshold: 50,
 })
 
-const dragWrapStyle = computed(() => {
-  if (!isSwiping.value) return {}
-  const x = Math.max(-280, Math.min(280, -distanceX.value))
-  return {
-    cursor: 'grabbing',
-    transform: `translateX(${x}px) rotate(${x * 0.04}deg)`,
-    transition: 'none',
-  }
-})
-
 const dragCardStyle = computed(() => {
   if (!isSwiping.value) return {}
   const x = Math.max(-280, Math.min(280, -distanceX.value))
   const progress = Math.min(Math.abs(x) / 80, 1)
-  if (Math.abs(x) < 5) return {}
+  const base = {
+    cursor: 'grabbing',
+    transform: `translateX(${x}px) rotate(${x * 0.04}deg)`,
+    transition: 'none',
+  }
+  if (Math.abs(x) < 5) return base
   return x > 0
     ? {
+        ...base,
         borderColor: `color-mix(in srgb, var(--success) ${Math.round(progress * 80)}%, var(--c-bon-border))`,
         boxShadow: `0 8px 32px rgb(53 166 114 / ${Math.round(progress * 25)}%)`,
       }
     : {
+        ...base,
         borderColor: `color-mix(in srgb, var(--red-500) ${Math.round(progress * 80)}%, var(--c-bon-border))`,
         boxShadow: `0 8px 32px rgb(207 48 24 / ${Math.round(progress * 25)}%)`,
       }
