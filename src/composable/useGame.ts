@@ -61,6 +61,17 @@ export function buildDeck(
   return fisherYates([...shuffledReal, ...shuffledFake])
 }
 
+// Draw n cards from queue without repeating; refills by reshuffling source when empty
+function drawFromQueue(queue: GameCard[], source: GameCard[], n: number): GameCard[] {
+  const result: GameCard[] = []
+  for (let i = 0; i < n; i++) {
+    if (queue.length === 0) queue.push(...fisherYates([...source]))
+    if (queue.length === 0) break
+    result.push(queue.shift()!)
+  }
+  return result
+}
+
 // --- Composable ---
 
 export function useGame() {
@@ -94,10 +105,24 @@ export function useGame() {
 
   let _realWords: GameCard[] = []
   let _fakeWords: FakeWord[] = []
+  // Persistent queues — cycle through all words before repeating
+  let _realQueue: GameCard[] = []
+  let _fakeQueue: GameCard[] = []
 
   function init(realWords: GameCard[], fakeWords: FakeWord[]) {
     _realWords = realWords
     _fakeWords = fakeWords
+    _realQueue = fisherYates([...realWords])
+    _fakeQueue = fisherYates(fakeWords.map((f) => ({ isReal: false as const, word: f.word })))
+  }
+
+  function _makeQueuedDeck(): GameCard[] {
+    const realCount = Math.floor(Math.random() * 6) + 10 // 10..15
+    const fakeCount = 20 - realCount
+    const fakeSource = _fakeWords.map((f) => ({ isReal: false as const, word: f.word }))
+    const real = drawFromQueue(_realQueue, _realWords, realCount)
+    const fake = drawFromQueue(_fakeQueue, fakeSource, fakeCount)
+    return fisherYates([...real, ...fake])
   }
 
   function startGame() {
@@ -105,7 +130,7 @@ export function useGame() {
       bestStreak: 0,
       correctAnswers: 0,
       currentCard: null,
-      deck: buildDeck(_realWords, _fakeWords),
+      deck: _makeQueuedDeck(),
       lastAnswerCorrect: null,
       lastCard: null,
       lives: 3,
@@ -120,8 +145,7 @@ export function useGame() {
 
   function _nextCard() {
     if (state.value.deck.length === 0) {
-      // Endless: reshuffle
-      state.value.deck = buildDeck(_realWords, _fakeWords)
+      state.value.deck = _makeQueuedDeck()
     }
     const [next, ...rest] = state.value.deck
     state.value.deck = rest

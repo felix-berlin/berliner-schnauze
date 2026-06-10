@@ -105,11 +105,9 @@ onMounted(async () => {
     if (!res.ok) throw new Error('Failed to load word index')
     const data = await res.json()
 
-    // Orama serialised index — records nested at data.docs.docs (object keyed by ID)
-    type OramaIndex = { data?: { docs?: { docs?: Record<string, unknown> } } }
-    const records = Object.values(
-      (data as unknown as OramaIndex)?.data?.docs?.docs ?? {},
-    ) as Array<{ wordProperties: { berlinerisch: string; translations: string[] }; slug: string }>
+    // index.json returns a flat array of word objects (not an Orama serialised DB)
+    type SearchRecord = { wordProperties: { berlinerisch: string; translations: string[] }; slug: string }
+    const records = data as SearchRecord[]
 
     const realWords: GameCardData[] = records
       .filter((r) => r?.wordProperties?.berlinerisch)
