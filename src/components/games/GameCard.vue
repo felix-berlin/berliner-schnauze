@@ -1,0 +1,96 @@
+<template>
+  <div class="c-game-card">
+    <div class="c-game-card__hint" aria-hidden="true">
+      <span>← NEE</span>
+      <span>JA →</span>
+    </div>
+
+    <div
+      ref="cardRef"
+      :class="[
+        'c-game-card__card',
+        exitDirection === 'right' && isAnimatingOut && 'c-game-card__card--exit-right',
+        exitDirection === 'left' && isAnimatingOut && 'c-game-card__card--exit-left',
+        isShaking && 'c-game-card__card--shake',
+      ]"
+    >
+      <p class="c-game-card__label">Berlinerisch?</p>
+      <p class="c-game-card__word">{{ word }}</p>
+      <p class="c-game-card__progress">{{ cardNumber }} / 20</p>
+
+      <Transition name="fade-fast">
+        <div v-if="showOverlay" class="c-game-card__overlay">
+          War {{ overlayText }}!
+        </div>
+      </Transition>
+    </div>
+
+    <div class="c-game-card__buttons">
+      <button
+        class="c-game-card__btn c-game-card__btn--no"
+        aria-label="Nee, nicht Berlinerisch"
+        @click="emit('answer', false)"
+      >
+        <XIcon width="20" height="20" aria-hidden="true" />
+        Nee
+      </button>
+      <button
+        class="c-game-card__btn c-game-card__btn--yes"
+        aria-label="Ja, Berlinerisch!"
+        @click="emit('answer', true)"
+      >
+        Ja
+        <CheckIcon width="20" height="20" aria-hidden="true" />
+      </button>
+    </div>
+
+    <p class="c-game-card__keyboard-hint" aria-hidden="true">← Pfeiltasten auch möglich →</p>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, defineAsyncComponent, ref } from 'vue'
+import { onKeyStroke, useSwipe } from '@vueuse/core'
+
+const XIcon = defineAsyncComponent(() => import('virtual:icons/lucide/x'))
+const CheckIcon = defineAsyncComponent(() => import('virtual:icons/lucide/check'))
+
+const props = defineProps<{
+  word: string
+  cardNumber: number
+  isAnimatingOut: boolean
+  exitDirection: 'left' | 'right' | null
+  isShaking: boolean
+  lastAnswerCorrect: boolean | null
+  isReal: boolean | null
+}>()
+
+const emit = defineEmits<{
+  answer: [isReal: boolean]
+}>()
+
+const cardRef = ref<HTMLElement | null>(null)
+
+const showOverlay = computed(() =>
+  props.isShaking && props.lastAnswerCorrect === false && props.isReal !== null,
+)
+
+const overlayText = computed(() =>
+  props.isReal ? 'echtes Berlinerisch' : 'erfunden',
+)
+
+useSwipe(cardRef, {
+  threshold: 50,
+  onSwipeEnd(_, dir) {
+    if (dir === 'right') emit('answer', true)
+    else if (dir === 'left') emit('answer', false)
+  },
+})
+
+onKeyStroke('ArrowRight', () => emit('answer', true))
+onKeyStroke('ArrowLeft', () => emit('answer', false))
+</script>
+
+<style lang="scss">
+@use '@styles/components/berliner-oder-nicht';
+</style>
