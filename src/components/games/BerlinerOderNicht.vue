@@ -106,16 +106,18 @@ onMounted(async () => {
     const data = await res.json()
 
     // Orama serialised index — records nested at data.docs.docs (object keyed by ID)
-    const records: Array<{ wordProperties: { berlinerisch: string; translations: string[] }; slug: string }> =
-      Object.values((data as any)?.data?.docs?.docs ?? {})
+    type OramaIndex = { data?: { docs?: { docs?: Record<string, unknown> } } }
+    const records = Object.values(
+      (data as unknown as OramaIndex)?.data?.docs?.docs ?? {},
+    ) as Array<{ wordProperties: { berlinerisch: string; translations: string[] }; slug: string }>
 
     const realWords: GameCardData[] = records
       .filter((r) => r?.wordProperties?.berlinerisch)
       .map((r) => ({
-        word: r.wordProperties.berlinerisch,
         isReal: true,
         slug: r.slug,
         translation: r.wordProperties.translations?.[0] ?? undefined,
+        word: r.wordProperties.berlinerisch,
       }))
 
     init(realWords, fakeWords)

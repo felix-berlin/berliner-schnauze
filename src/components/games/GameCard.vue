@@ -80,11 +80,11 @@ const overlayText = computed(() =>
 )
 
 useSwipe(cardRef, {
-  threshold: 50,
   onSwipeEnd(_, dir) {
     if (dir === 'right') emit('answer', true)
     else if (dir === 'left') emit('answer', false)
   },
+  threshold: 50,
 })
 
 onKeyStroke('ArrowRight', () => emit('answer', true))

@@ -56,7 +56,7 @@ export function buildDeck(
   const shuffledReal = fisherYates(realWords).slice(0, realCount)
   const shuffledFake = fisherYates(fakes)
     .slice(0, fakeCount)
-    .map((f): GameCard => ({ word: f.word, isReal: false }))
+    .map((f): GameCard => ({ isReal: false, word: f.word }))
 
   return fisherYates([...shuffledReal, ...shuffledFake])
 }
@@ -65,18 +65,18 @@ export function buildDeck(
 
 export function useGame() {
   const state = ref<GameState>({
-    phase: 'idle',
-    lives: 3,
-    score: 0,
-    streak: 0,
     bestStreak: 0,
-    multiplier: 1,
-    totalAnswered: 0,
     correctAnswers: 0,
     currentCard: null,
     deck: [],
     lastAnswerCorrect: null,
     lastCard: null,
+    lives: 3,
+    multiplier: 1,
+    phase: 'idle',
+    score: 0,
+    streak: 0,
+    totalAnswered: 0,
   })
 
   // Exposed reactive slices
@@ -102,18 +102,18 @@ export function useGame() {
 
   function startGame() {
     state.value = {
-      phase: 'playing',
-      lives: 3,
-      score: 0,
-      streak: 0,
       bestStreak: 0,
-      multiplier: 1,
-      totalAnswered: 0,
       correctAnswers: 0,
       currentCard: null,
       deck: buildDeck(_realWords, _fakeWords),
       lastAnswerCorrect: null,
       lastCard: null,
+      lives: 3,
+      multiplier: 1,
+      phase: 'playing',
+      score: 0,
+      streak: 0,
+      totalAnswered: 0,
     }
     _nextCard()
   }

@@ -84,8 +84,8 @@ const { share: _share, isSupported: canShare } = useShare()
 
 function share() {
   _share({
-    title: 'Berliner oder nicht?',
     text: `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
+    title: 'Berliner oder nicht?',
     url: 'https://berliner-schnauze.de/games/berliner-oder-nicht',
   })
 }
