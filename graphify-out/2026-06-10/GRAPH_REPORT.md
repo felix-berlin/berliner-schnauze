@@ -1,7 +1,7 @@
 # Graph Report - berliner-schnauze  (2026-06-10)
 
 ## Corpus Check
-- 213 files · ~69,951 words
+- 213 files · ~69,949 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `38043641`
+- Built from commit: `9faad3d0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -464,7 +464,7 @@ Nodes (3): englishTags, expectedGermanTags, expectedTags
   src/components/SetColorMode.astro · relation: semantically_similar_to
 
 ## Knowledge Gaps
-- **445 isolated node(s):** `showOverlay`, `overlayText`, `savedGame`, `hasSavedGame`, `isShaking` (+440 more)
+- **445 isolated node(s):** `savedGame`, `hasSavedGame`, `isShaking`, `cardNumber`, `cardTransitionName` (+440 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **56 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -481,7 +481,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.051) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `trackEvent()` (e.g. with `CookieConsent` and `WordOfTheDay`) actually correct?**
   _`trackEvent()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `showOverlay`, `overlayText`, `savedGame` to the rest of the system?**
+- **What connects `savedGame`, `hasSavedGame`, `isShaking` to the rest of the system?**
   _445 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Word Filter System` be split into smaller, more focused modules?**
   _Cohesion score 0.08253968253968254 - nodes in this community are weakly interconnected._
