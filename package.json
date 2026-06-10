@@ -83,7 +83,7 @@
     "@vueform/multiselect": "^2.6.11",
     "@vueuse/core": "^14.3.0",
     "all-the-german-words": "^1.1.0",
-    "astro": "^6.4.5",
+    "astro": "^6.4.6",
     "astro-breadcrumbs": "^3.4.0",
     "astro-matomo": "^1.10.0",
     "compromise": "^14.15.1",
@@ -145,8 +145,8 @@
     "postcss-scss": "^4.0.9",
     "rollup-plugin-visualizer": "^7.0.1",
     "sass": "^1.100.00",
-    "semantic-release": "^25.0.3",
-    "sharp": "^0.34.5",
+    "semantic-release": "^25.0.5",
+    "sharp": "^0.35.0",
     "sinon": "^22.0.0",
     "stylelint": "^17.13.0",
     "stylelint-config-recommended-scss": "^17.0.1",
@@ -162,5 +162,5 @@
   "engines": {
     "node": ">=22.12.0"
   },
-  "packageManager": "pnpm@11.5.2"
+  "packageManager": "pnpm@11.5.3"
 }
