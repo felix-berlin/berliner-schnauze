@@ -73,13 +73,23 @@ const overlayText = computed(() =>
   props.isReal ? 'echtes Berlinerisch' : 'erfunden',
 )
 
-usePointerSwipe(cardRef, {
+const { isSwiping, distanceX } = usePointerSwipe(cardRef, {
   disableTextSelect: true,
   onSwipeEnd(_, dir) {
     if (dir === 'right') emit('answer', true)
     else if (dir === 'left') emit('answer', false)
   },
   threshold: 50,
+})
+
+const dragStyle = computed(() => {
+  if (!isSwiping.value) return {}
+  const x = -distanceX.value
+  return {
+    cursor: 'grabbing',
+    transform: `translateX(${x}px) rotate(${x * 0.05}deg)`,
+    transition: 'none',
+  }
 })
 
 onKeyStroke('ArrowRight', () => emit('answer', true))
