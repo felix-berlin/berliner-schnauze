@@ -7,12 +7,7 @@
 
     <div
       ref="cardRef"
-      :class="[
-        'c-game-card__card',
-        exitDirection === 'right' && isAnimatingOut && 'c-game-card__card--exit-right',
-        exitDirection === 'left' && isAnimatingOut && 'c-game-card__card--exit-left',
-        isShaking && 'c-game-card__card--shake',
-      ]"
+      :class="['c-game-card__card', isShaking && 'c-game-card__card--shake']"
     >
       <p class="c-game-card__label">Berlinerisch?</p>
       <p class="c-game-card__word">{{ word }}</p>
@@ -58,8 +53,6 @@ const CheckIcon = defineAsyncComponent(() => import('virtual:icons/lucide/check'
 const props = defineProps<{
   word: string
   cardNumber: number
-  isAnimatingOut: boolean
-  exitDirection: 'left' | 'right' | null
   isShaking: boolean
   lastAnswerCorrect: boolean | null
   isReal: boolean | null

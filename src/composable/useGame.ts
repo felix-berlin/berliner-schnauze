@@ -152,6 +152,10 @@ export function useGame() {
     state.value.currentCard = next ?? null
   }
 
+  function nextCard() {
+    _nextCard()
+  }
+
   function answer(guessedReal: boolean) {
     const card = state.value.currentCard
     if (!card || state.value.phase !== 'playing') return
@@ -177,9 +181,6 @@ export function useGame() {
           timeout: 3000,
         })
       }
-
-      // Advance after short delay (animation plays)
-      setTimeout(() => _nextCard(), 400)
     } else {
       state.value.streak = 0
       state.value.multiplier = 1
@@ -187,9 +188,6 @@ export function useGame() {
 
       if (state.value.lives <= 0) {
         _endGame()
-      } else {
-        // Stay on card for 1200ms (overlay shows correct answer)
-        setTimeout(() => _nextCard(), 1200)
       }
     }
   }
@@ -231,6 +229,7 @@ export function useGame() {
     lastCard,
     lives,
     multiplier,
+    nextCard,
     phase,
     score,
     startGame,

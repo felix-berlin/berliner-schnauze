@@ -30,17 +30,18 @@
         :multiplier="multiplier"
         :is-highscore="score > allTimeHighScore"
       />
-      <GameCard
-        v-if="currentCard"
-        :word="currentCard.word"
-        :card-number="cardNumber"
-        :is-animating-out="isAnimatingOut"
-        :exit-direction="exitDirection"
-        :is-shaking="isShaking"
-        :last-answer-correct="lastAnswerCorrect"
-        :is-real="currentCard.isReal"
-        @answer="onAnswer"
-      />
+      <Transition :name="cardTransitionName" mode="out-in">
+        <GameCard
+          v-if="currentCard"
+          :key="cardNumber"
+          :word="currentCard.word"
+          :card-number="cardNumber"
+          :is-shaking="isShaking"
+          :last-answer-correct="lastAnswerCorrect"
+          :is-real="currentCard.isReal"
+          @answer="onAnswer"
+        />
+      </Transition>
     </template>
 
     <!-- Result -->
@@ -61,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { useStore } from '@nanostores/vue'
 import ConfettiEffect from '@components/ConfettiEffect.vue'
 import { $gameStats } from '@stores/gameStats'
@@ -82,6 +83,7 @@ const {
   lastCard,
   lives,
   multiplier,
+  nextCard,
   phase,
   score,
   startGame: _startGame,
@@ -94,10 +96,15 @@ const allTimeHighScore = computed(() => stats.value.highScore)
 const allTimeBestStreak = computed(() => stats.value.bestStreak)
 
 // Animation state
-const isAnimatingOut = ref(false)
 const exitDirection = ref<'left' | 'right' | null>(null)
 const isShaking = ref(false)
 const cardNumber = ref(1)
+
+const cardTransitionName = computed(() => {
+  if (exitDirection.value === 'right') return 'c-bon-card-right'
+  if (exitDirection.value === 'left') return 'c-bon-card-left'
+  return 'c-bon-card-neutral'
+})
 
 onMounted(async () => {
   try {
@@ -126,7 +133,6 @@ onMounted(async () => {
 
 function startGame() {
   cardNumber.value = 1
-  isAnimatingOut.value = false
   exitDirection.value = null
   isShaking.value = false
   _startGame()
@@ -137,24 +143,24 @@ function onAnswer(guessedReal: boolean) {
   if (!card) return
 
   const correct = card.isReal === guessedReal
+  answer(guessedReal)
+
+  if (phase.value === 'result') return
 
   if (correct) {
     exitDirection.value = guessedReal ? 'right' : 'left'
-    isAnimatingOut.value = true
-    setTimeout(() => {
-      isAnimatingOut.value = false
-      exitDirection.value = null
+    nextTick(() => {
+      nextCard()
       cardNumber.value++
-    }, 350)
+    })
   } else {
     isShaking.value = true
     setTimeout(() => {
       isShaking.value = false
+      nextCard()
       cardNumber.value++
     }, 1200)
   }
-
-  answer(guessedReal)
 }
 </script>
 
