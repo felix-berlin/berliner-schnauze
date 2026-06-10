@@ -24,11 +24,12 @@ export const $savedGame = persistentAtom<SavedGameSnapshot | null>(
   {
     decode(value) {
       try {
-        return JSON.parse(value)
-      } catch {
+        return JSON.parse(value) as SavedGameSnapshot
+      } catch (err) {
+        console.warn('[savedGame] Failed to parse snapshot:', value, err)
         return null
       }
     },
-    encode: (value) => JSON.stringify(value),
+    encode: (value) => (value === null ? undefined : JSON.stringify(value)),
   },
 )
