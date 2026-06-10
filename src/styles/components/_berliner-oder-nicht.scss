@@ -3,14 +3,14 @@
 
 // Page wrapper
 .c-berliner-oder-nicht {
-  --c-bon-surface: #f5f5f5;
-  --c-bon-border: var(--grey-100);
-  --c-bon-text-muted: #888;
+  --c-bon-surface: #fff;
+  --c-bon-border: rgb(0 0 0 / 12%);
+  --c-bon-text-muted: #999;
 
   @include butler-mx.dark-mode-class {
-    --c-bon-surface: #1e1e2e;
-    --c-bon-border: #3a3a5e;
-    --c-bon-text-muted: #555;
+    --c-bon-surface: var(--new-blue-400);
+    --c-bon-border: rgb(255 255 255 / 12%);
+    --c-bon-text-muted: rgb(255 255 255 / 45%);
   }
 
   display: flex;
@@ -89,14 +89,14 @@
 
 // HUD
 .c-game-hud {
-  --c-bon-surface: #f5f5f5;
-  --c-bon-border: var(--grey-100);
-  --c-bon-text-muted: #888;
+  --c-bon-surface: #fff;
+  --c-bon-border: rgb(0 0 0 / 12%);
+  --c-bon-text-muted: #999;
 
   @include butler-mx.dark-mode-class {
-    --c-bon-surface: #1e1e2e;
-    --c-bon-border: #3a3a5e;
-    --c-bon-text-muted: #555;
+    --c-bon-surface: var(--new-blue-400);
+    --c-bon-border: rgb(255 255 255 / 12%);
+    --c-bon-text-muted: rgb(255 255 255 / 45%);
   }
 
   display: flex;
@@ -182,14 +182,14 @@
 
 // Card
 .c-game-card {
-  --c-bon-surface: #f5f5f5;
-  --c-bon-border: var(--grey-100);
-  --c-bon-text-muted: #888;
+  --c-bon-surface: #fff;
+  --c-bon-border: rgb(0 0 0 / 12%);
+  --c-bon-text-muted: #999;
 
   @include butler-mx.dark-mode-class {
-    --c-bon-surface: #1e1e2e;
-    --c-bon-border: #3a3a5e;
-    --c-bon-text-muted: #555;
+    --c-bon-surface: var(--new-blue-400);
+    --c-bon-border: rgb(255 255 255 / 12%);
+    --c-bon-text-muted: rgb(255 255 255 / 45%);
   }
 
   position: relative;
@@ -203,7 +203,7 @@
     margin-bottom: 0.5rem;
     font-size: 0.75rem;
     color: var(--c-bon-text-muted);
-    opacity: 0.5;
+    opacity: 0.65;
   }
 
   &__card {
@@ -390,14 +390,14 @@
 
 // Result
 .c-game-result {
-  --c-bon-surface: #f5f5f5;
-  --c-bon-border: var(--grey-100);
-  --c-bon-text-muted: #888;
+  --c-bon-surface: #fff;
+  --c-bon-border: rgb(0 0 0 / 12%);
+  --c-bon-text-muted: #999;
 
   @include butler-mx.dark-mode-class {
-    --c-bon-surface: #1e1e2e;
-    --c-bon-border: #3a3a5e;
-    --c-bon-text-muted: #555;
+    --c-bon-surface: var(--new-blue-400);
+    --c-bon-border: rgb(255 255 255 / 12%);
+    --c-bon-text-muted: rgb(255 255 255 / 45%);
   }
 
   display: flex;

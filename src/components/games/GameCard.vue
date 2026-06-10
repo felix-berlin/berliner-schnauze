@@ -1,5 +1,5 @@
 <template>
-  <div class="c-game-card">
+  <div class="c-game-card" :style="dragWrapStyle">
     <div class="c-game-card__hint" aria-hidden="true">
       <span>← NEE</span>
       <span>JA →</span>
@@ -8,7 +8,7 @@
     <div
       ref="cardRef"
       :class="['c-game-card__card', isShaking && 'c-game-card__card--shake']"
-      :style="dragStyle"
+      :style="dragCardStyle"
     >
       <p class="c-game-card__label">Berlinerisch?</p>
       <p class="c-game-card__word">{{ word }}</p>
@@ -82,30 +82,30 @@ const { isSwiping, distanceX } = usePointerSwipe(cardRef, {
   threshold: 50,
 })
 
-const dragStyle = computed(() => {
+const dragWrapStyle = computed(() => {
+  if (!isSwiping.value) return {}
+  const x = Math.max(-280, Math.min(280, -distanceX.value))
+  return {
+    cursor: 'grabbing',
+    transform: `translateX(${x}px) rotate(${x * 0.04}deg)`,
+    transition: 'none',
+  }
+})
+
+const dragCardStyle = computed(() => {
   if (!isSwiping.value) return {}
   const x = Math.max(-280, Math.min(280, -distanceX.value))
   const progress = Math.min(Math.abs(x) / 80, 1)
-  const pct = Math.round(progress * 100)
-  const borderColor =
-    x > 4
-      ? `color-mix(in srgb, var(--success) ${pct}%, var(--c-bon-border))`
-      : x < -4
-        ? `color-mix(in srgb, var(--red-500) ${pct}%, var(--c-bon-border))`
-        : undefined
-  const boxShadow =
-    x > 4
-      ? `0 8px 32px rgb(53 166 114 / ${progress * 30}%)`
-      : x < -4
-        ? `0 8px 32px rgb(207 48 24 / ${progress * 30}%)`
-        : undefined
-  return {
-    borderColor,
-    boxShadow,
-    cursor: 'grabbing',
-    transform: `translateX(${x}px) rotate(${x * 0.05}deg)`,
-    transition: 'none',
-  }
+  if (Math.abs(x) < 5) return {}
+  return x > 0
+    ? {
+        borderColor: `color-mix(in srgb, var(--success) ${Math.round(progress * 80)}%, var(--c-bon-border))`,
+        boxShadow: `0 8px 32px rgb(53 166 114 / ${Math.round(progress * 25)}%)`,
+      }
+    : {
+        borderColor: `color-mix(in srgb, var(--red-500) ${Math.round(progress * 80)}%, var(--c-bon-border))`,
+        boxShadow: `0 8px 32px rgb(207 48 24 / ${Math.round(progress * 25)}%)`,
+      }
 })
 
 onKeyStroke('ArrowRight', () => emit('answer', true))
