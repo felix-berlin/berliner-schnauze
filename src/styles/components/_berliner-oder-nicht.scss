@@ -69,6 +69,22 @@
       opacity: 0.88;
     }
   }
+
+  &__resume-btn {
+    padding: 0.875rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    border: 2px solid var(--accent);
+    border-radius: 50px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--accent);
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.88;
+    }
+  }
 }
 
 // HUD

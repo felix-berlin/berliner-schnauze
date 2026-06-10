@@ -16,8 +16,15 @@
           Best Streak
         </div>
       </div>
+      <button
+        v-if="hasSavedGame"
+        class="c-berliner-oder-nicht__resume-btn"
+        @click="resumeGame"
+      >
+        Weiterspielen
+      </button>
       <button class="c-berliner-oder-nicht__start-btn" @click="startGame">
-        Spielen
+        {{ hasSavedGame ? 'Neu starten' : 'Spielen' }}
       </button>
     </div>
 
@@ -66,6 +73,7 @@ import { computed, nextTick, onMounted, ref } from 'vue'
 import { useStore } from '@nanostores/vue'
 import ConfettiEffect from '@components/ConfettiEffect.vue'
 import { $gameStats } from '@stores/gameStats'
+import { $savedGame } from '@stores/savedGame'
 import { fakeWords } from '@/data/fakeWords'
 import { useGame, type GameCard as GameCardData } from '@composables/useGame'
 import GameCard from '@components/games/GameCard.vue'
@@ -85,6 +93,7 @@ const {
   multiplier,
   nextCard,
   phase,
+  resumeGame: _resumeGame,
   score,
   startGame: _startGame,
   streak,
@@ -94,6 +103,9 @@ const {
 const stats = useStore($gameStats)
 const allTimeHighScore = computed(() => stats.value.highScore)
 const allTimeBestStreak = computed(() => stats.value.bestStreak)
+
+const savedGame = useStore($savedGame)
+const hasSavedGame = computed(() => savedGame.value?.phase === 'playing')
 
 // Animation state
 const exitDirection = ref<'left' | 'right' | null>(null)
@@ -136,6 +148,13 @@ function startGame() {
   exitDirection.value = null
   isShaking.value = false
   _startGame()
+}
+
+function resumeGame() {
+  cardNumber.value = 1
+  exitDirection.value = null
+  isShaking.value = false
+  _resumeGame()
 }
 
 function onAnswer(guessedReal: boolean) {
