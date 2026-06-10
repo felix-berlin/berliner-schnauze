@@ -94,6 +94,7 @@
     padding-block-end: 0.5rem;
     border-block-end: 1px dashed var(--orange-200);
     margin-block-end: vars.$spacer * 0.75;
+    margin-block-start: 1.75rem;
 
     @include butler-mx.dark-mode-class {
       color: color-mix(in srgb, var(--blue) 30%, white);
@@ -217,83 +218,109 @@
     }
   }
 
-  &__letter-bar {
+  &__letter-frequency-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: vars.$spacer * 0.5;
+  }
 
-    &-row {
-      display: flex;
-      align-items: center;
-      gap: vars.$spacer * 0.5;
-    }
+  &__letter-frequency-item {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.5;
+  }
 
-    &-char {
-      width: 1.25rem;
-      font-family: monospace;
-      font-weight: bold;
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
+  &__letter-char {
+    width: 1.25rem;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
 
-    &-track {
-      flex: 1;
-      height: 8px;
-      background: rgb(0 0 0 / 20%);
-      border-radius: 4px;
-      overflow: hidden;
-    }
+  &__letter-meter {
+    flex: 1;
+    height: 8px;
+    appearance: none;
+    border: none;
+    background: transparent;
+  }
 
-    &-fill {
-      height: 100%;
+  &__letter-meter::-webkit-meter-bar {
+    background: rgb(0 0 0 / 20%);
+    border-radius: 4px;
+  }
+
+  &__letter-meter::-webkit-meter-optimum-value {
+    border-radius: 4px;
+    background: linear-gradient(
+      90deg,
+      oklch(52% 0.16 var(--meter-hue)),
+      oklch(62% 0.2 var(--meter-hue))
+    );
+  }
+
+  &__letter-meter::-moz-meter-bar {
+    border-radius: 4px;
+    background: linear-gradient(
+      90deg,
+      oklch(52% 0.16 var(--meter-hue)),
+      oklch(62% 0.2 var(--meter-hue))
+    );
+  }
+
+  @include butler-mx.dark-mode-class {
+    &__letter-meter::-webkit-meter-optimum-value {
       background: linear-gradient(
         90deg,
-        oklch(52% 0.16 var(--bar-hue)),
-        oklch(62% 0.2 var(--bar-hue))
+        oklch(65% 0.18 var(--meter-hue)),
+        oklch(76% 0.22 var(--meter-hue))
       );
-      border-radius: 4px;
-
-      @include butler-mx.dark-mode-class {
-        background: linear-gradient(
-          90deg,
-          oklch(65% 0.18 var(--bar-hue)),
-          oklch(76% 0.22 var(--bar-hue))
-        );
-      }
     }
 
-    &-label {
-      font-size: 0.8rem;
-      color: color-mix(in srgb, var(--blue) 70%, white);
-      width: 9rem;
-      flex-shrink: 0;
+    &__letter-meter::-moz-meter-bar {
+      background: linear-gradient(
+        90deg,
+        oklch(65% 0.18 var(--meter-hue)),
+        oklch(76% 0.22 var(--meter-hue))
+      );
+    }
+  }
 
-      @include butler-mx.dark-mode-class {
-        color: color-mix(in srgb, var(--blue) 30%, white);
-      }
+  &__letter-label {
+    font-size: 0.8rem;
+    color: color-mix(in srgb, var(--blue) 70%, white);
+    width: 9rem;
+    flex-shrink: 0;
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
+    }
+  }
+
+  &__letter-bar-source {
+    font-size: 0.65rem;
+    color: color-mix(in srgb, var(--blue) 75%, white);
+    margin-block-start: vars.$spacer * 0.75;
+    margin-block-end: 0;
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
     }
 
-    &-source {
-      font-size: 0.65rem;
-      color: color-mix(in srgb, var(--blue) 75%, white);
-      margin-block-start: vars.$spacer * 0.75;
-      margin-block-end: 0;
+    a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 2px;
 
-      @include butler-mx.dark-mode-class {
-        color: color-mix(in srgb, var(--blue) 30%, white);
-      }
+      &:hover {
+        color: var(--orange-600);
 
-      a {
-        color: inherit;
-        text-decoration: underline;
-        text-underline-offset: 2px;
-
-        &:hover {
-          color: var(--orange-600);
-
-          @include butler-mx.dark-mode-class {
-            color: var(--orange-300);
-          }
+        @include butler-mx.dark-mode-class {
+          color: var(--orange-300);
         }
       }
     }
