@@ -14,8 +14,21 @@ vi.mock('@nanostores/persistent', () => ({
   })),
 }))
 
-import { buildDeck, computeMultiplier } from '@composables/useGame'
+vi.mock('@stores/savedGame', () => ({
+  $savedGame: {
+    get: vi.fn(() => null),
+    set: vi.fn(),
+  },
+}))
+
+vi.mock('@stores/toastNotify', () => ({
+  createToastNotify: vi.fn(),
+}))
+
+import { buildDeck, computeMultiplier, useGame } from '@composables/useGame'
 import type { FakeWord } from '@/data/fakeWords'
+import type { SavedGameSnapshot } from '@stores/savedGame'
+import { $savedGame } from '@stores/savedGame'
 
 const makeRealWords = (n: number) =>
   Array.from({ length: n }, (_, i) => ({
@@ -77,5 +90,99 @@ describe('buildDeck', () => {
     const deck = buildDeck(makeRealWords(50), makeFakeWords(30))
     const words = deck.map((c) => c.word)
     expect(new Set(words).size).toBe(20)
+  })
+})
+
+describe('session persistence', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('resumeGame does nothing before init (no words loaded)', () => {
+    const { resumeGame, phase } = useGame()
+    resumeGame()
+    expect(phase.value).toBe('idle')
+  })
+
+  it('resumeGame does nothing when saved game is null', () => {
+    const { init, resumeGame, phase } = useGame()
+    init(makeRealWords(30), makeFakeWords(20))
+    vi.mocked($savedGame.get).mockReturnValue(null)
+    resumeGame()
+    expect(phase.value).toBe('idle')
+  })
+
+  it('resumeGame restores state from snapshot', () => {
+    const { init, resumeGame, phase, score, lives, streak } = useGame()
+    init(makeRealWords(30), makeFakeWords(20))
+
+    const snapshot: SavedGameSnapshot = {
+      phase: 'playing',
+      lives: 2,
+      score: 50,
+      streak: 3,
+      bestStreak: 5,
+      multiplier: 2,
+      totalAnswered: 8,
+      correctAnswers: 7,
+      currentCard: { word: 'Stulle', isReal: true },
+      deck: [],
+      lastAnswerCorrect: true,
+      lastCard: null,
+      realQueue: [],
+      fakeQueue: [],
+    }
+    vi.mocked($savedGame.get).mockReturnValue(snapshot)
+
+    resumeGame()
+    expect(phase.value).toBe('playing')
+    expect(score.value).toBe(50)
+    expect(lives.value).toBe(2)
+    expect(streak.value).toBe(3)
+  })
+
+  it('startGame clears saved game', () => {
+    const { init, startGame } = useGame()
+    init(makeRealWords(30), makeFakeWords(20))
+    startGame()
+    expect($savedGame.set).toHaveBeenCalledWith(null)
+  })
+
+  it('correct answer saves snapshot to storage', () => {
+    const { init, startGame, answer, currentCard } = useGame()
+    init(makeRealWords(30), makeFakeWords(20))
+    startGame()
+
+    const isReal = currentCard.value!.isReal
+    vi.mocked($savedGame.set).mockClear()
+    answer(isReal)
+
+    expect($savedGame.set).toHaveBeenCalledWith(expect.objectContaining({ phase: 'playing' }))
+  })
+
+  it('wrong answer saves snapshot when lives remain', () => {
+    const { init, startGame, answer, currentCard, lives } = useGame()
+    init(makeRealWords(30), makeFakeWords(20))
+    startGame()
+
+    const isReal = currentCard.value!.isReal
+    vi.mocked($savedGame.set).mockClear()
+    answer(!isReal)
+
+    if (lives.value > 0) {
+      expect($savedGame.set).toHaveBeenCalledWith(expect.objectContaining({ phase: 'playing' }))
+    }
+  })
+
+  it('game over clears saved game', () => {
+    const { init, startGame, answer, currentCard } = useGame()
+    init(makeRealWords(30), makeFakeWords(20))
+    startGame()
+
+    for (let i = 0; i < 3; i++) {
+      answer(!currentCard.value!.isReal)
+    }
+
+    expect($savedGame.set).toHaveBeenLastCalledWith(null)
   })
 })
