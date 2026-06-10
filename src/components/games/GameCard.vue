@@ -8,6 +8,7 @@
     <div
       ref="cardRef"
       :class="['c-game-card__card', isShaking && 'c-game-card__card--shake']"
+      :style="dragStyle"
     >
       <p class="c-game-card__label">Berlinerisch?</p>
       <p class="c-game-card__word">{{ word }}</p>
