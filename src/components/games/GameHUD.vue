@@ -2,7 +2,7 @@
   <div class="c-game-hud">
     <div class="c-game-hud__lives" aria-label="Leben">
       <component
-        :is="i <= lives ? HeartIcon : HeartIcon"
+        :is="HeartIcon"
         v-for="i in MAX_LIVES"
         :key="i"
         :class="['c-game-hud__life-icon', { 'c-game-hud__life-icon--lost': i > lives }]"
