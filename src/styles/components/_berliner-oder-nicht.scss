@@ -251,7 +251,7 @@
     justify-content: center;
     font-size: 1.125rem;
     font-weight: 700;
-    background: rgba(207, 48, 24, 0.88);
+    background: color-mix(in srgb, var(--red-500) 88%, transparent);
     color: #fff;
     pointer-events: none;
   }
