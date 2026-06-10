@@ -84,8 +84,24 @@ const { isSwiping, distanceX } = usePointerSwipe(cardRef, {
 
 const dragStyle = computed(() => {
   if (!isSwiping.value) return {}
-  const x = -distanceX.value
+  const x = Math.max(-280, Math.min(280, -distanceX.value))
+  const progress = Math.min(Math.abs(x) / 80, 1)
+  const pct = Math.round(progress * 100)
+  const borderColor =
+    x > 4
+      ? `color-mix(in srgb, var(--success) ${pct}%, var(--c-bon-border))`
+      : x < -4
+        ? `color-mix(in srgb, var(--red-500) ${pct}%, var(--c-bon-border))`
+        : undefined
+  const boxShadow =
+    x > 4
+      ? `0 8px 32px rgb(53 166 114 / ${progress * 30}%)`
+      : x < -4
+        ? `0 8px 32px rgb(207 48 24 / ${progress * 30}%)`
+        : undefined
   return {
+    borderColor,
+    boxShadow,
     cursor: 'grabbing',
     transform: `translateX(${x}px) rotate(${x * 0.05}deg)`,
     transition: 'none',
