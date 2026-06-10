@@ -211,10 +211,11 @@ export function useGame() {
     state.value.streak = 0;
     state.value.multiplier = 1;
     state.value.lives--;
-    _saveToStorage();
 
     if (state.value.lives <= 0) {
       _endGame();
+    } else {
+      _saveToStorage();
     }
   }
 
@@ -249,9 +250,8 @@ export function useGame() {
     );
   });
 
-  const hasSavedGame = computed(() => $savedGame.get()?.phase === 'playing')
-
   function resumeGame() {
+    if (_realWords.length === 0) return
     const saved = $savedGame.get()
     if (!saved || saved.phase !== 'playing') return
     state.value = {
@@ -277,7 +277,6 @@ export function useGame() {
     bestStreak,
     correctAnswers,
     currentCard,
-    hasSavedGame,
     init,
     isNewHighScore,
     lastAnswerCorrect,
