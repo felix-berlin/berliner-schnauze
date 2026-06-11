@@ -32,14 +32,25 @@ const anchorChain = computed(() => {
   const chain: Record<number, { anchorName: string; anchorSource: string }> = {};
 
   CORNERS.forEach((corner: Corner) => {
-    const group = toastStore.value
-      .filter((t) => (t.position ?? "top-right") === corner)
-      .filter((t) => !t.closing);
+    const all = toastStore.value.filter((t) => (t.position ?? "top-right") === corner);
+    const active = all.filter((t) => !t.closing);
 
-    group.forEach((toast, index) => {
+    // Active toasts form the live stacking chain
+    active.forEach((toast, index) => {
       chain[toast.id!] = {
         anchorName: `--toast-${toast.id}`,
-        anchorSource: index === 0 ? `--toast-corner-${corner}` : `--toast-${group[index - 1].id}`,
+        anchorSource: index === 0 ? `--toast-corner-${corner}` : `--toast-${active[index - 1].id}`,
+      };
+    });
+
+    // Closing toasts keep their anchor-name registered and preserve their own
+    // position-anchor so they stay in place during the exit animation instead of
+    // snapping to top/bottom:auto when removed from the active chain.
+    all.filter((t) => t.closing).forEach((toast) => {
+      const i = all.indexOf(toast);
+      chain[toast.id!] = {
+        anchorName: `--toast-${toast.id}`,
+        anchorSource: i > 0 ? `--toast-${all[i - 1].id}` : `--toast-corner-${corner}`,
       };
     });
   });

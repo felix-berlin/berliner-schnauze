@@ -1,13 +1,13 @@
 import ToastNotify from "@components/toast/ToastNotify.vue";
 import ToastNotifyContainer from "@components/toast/ToastNotifyContainer.vue";
-import { $toastNotify } from "@stores/index.ts";
+import { $toastNotify } from "@stores/toastNotify.ts";
 import { mount } from "@vue/test-utils";
 import { cleanStores, keepMount } from "nanostores";
 import { describe, it, expect, afterEach, beforeAll, beforeEach, vi } from "vitest";
 
 vi.mock("@stores/toastNotify.ts", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@stores/toastNotify.ts")>();
-  return { ...actual, removeToastById: vi.fn() };
+  return { ...actual, markClosing: vi.fn(), removeToast: vi.fn() };
 });
 
 beforeAll(() => {
