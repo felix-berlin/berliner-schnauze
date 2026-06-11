@@ -94,7 +94,7 @@ function share() {
   _share({
     text: `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
     title: 'Berliner oder nicht?',
-    url: `https://berliner-schnauze.de${url}`,
+    url: `${window.location.origin}${url}`,
   }).catch(() => {})
 }
 </script>

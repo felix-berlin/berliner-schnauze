@@ -11,7 +11,10 @@ function toBase64Url(str: string): string {
 }
 
 function fromBase64Url(str: string): string {
-  const padded = str.replace(/-/g, '+').replace(/_/g, '/') + '=='.slice((str.length + 2) % 4 || 4)
+  const padded = str
+    .replace(/-/g, '+')
+    .replace(/_/g, '/')
+    .padEnd(str.length + (4 - (str.length % 4)) % 4, '=')
   return atob(padded)
 }
 
