@@ -71,6 +71,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from 'vue'
+import { useTimeoutFn } from '@vueuse/core'
 import { useStore } from '@nanostores/vue'
 import ConfettiEffect from '@components/ConfettiEffect.vue'
 import { $bonStats } from '@stores/bonStats'
@@ -113,6 +114,12 @@ const hasSavedGame = computed(() => savedBon.value?.phase === 'playing')
 const exitDirection = ref<'left' | 'right' | null>(null)
 const isShaking = ref(false)
 const cardNumber = ref(1)
+
+const { start: startShakeTimer } = useTimeoutFn(() => {
+  isShaking.value = false
+  nextCard()
+  cardNumber.value++
+}, 1200, { immediate: false })
 
 const cardTransitionName = computed(() => {
   if (exitDirection.value === 'right') return 'c-bon-card-right'
@@ -176,11 +183,7 @@ function onAnswer(guessedReal: boolean) {
     })
   } else {
     isShaking.value = true
-    setTimeout(() => {
-      isShaking.value = false
-      nextCard()
-      cardNumber.value++
-    }, 1200)
+    startShakeTimer()
   }
 }
 </script>

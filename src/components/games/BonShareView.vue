@@ -39,16 +39,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed } from 'vue'
+import { useHash } from '@vueuse/core'
 import { decodeShareHash } from '@utils/bonShare'
 import type { BonSharePayload } from '@utils/bonShare'
 
-const payload = ref<BonSharePayload | null>(null)
-
-onMounted(() => {
-  const hash = window.location.hash.slice(1) // strip leading #
-  payload.value = decodeShareHash(hash)
-})
+const hash = useHash()
+const payload = computed<BonSharePayload | null>(() => decodeShareHash(hash.value.slice(1)))
 
 const accuracyPercent = computed(() =>
   payload.value && payload.value.totalAnswered > 0
