@@ -1,17 +1,18 @@
 <template>
+  <div
+    v-for="corner in CORNERS"
+    :key="corner"
+    class="c-toast-corner-anchor"
+    :data-corner="corner"
+    aria-hidden="true"
+  />
+
   <ToastNotify
     v-for="toast in toastStore"
-    :id="toast.id"
     :key="toast.id"
-    :status="toast?.status"
-    :message="toast.message"
-    :show-status-icon="toast?.showStatusIcon"
-    :position="toast?.position"
-    :show-close="toast?.showClose"
-    :close-on-swipe="toast?.closeOnSwipe"
-    :outer-spacing="toast?.outerSpacing"
-    :gap-between="toast?.gapBetween"
-    :init-offset="toast?.initOffset"
+    v-bind="toast"
+    :anchor-name="anchorChain[toast.id!]?.anchorName"
+    :anchor-source="anchorChain[toast.id!]?.anchorSource"
   />
 </template>
 
@@ -19,8 +20,30 @@
 import ToastNotify from "@components/toast/ToastNotify.vue";
 import { useStore } from "@nanostores/vue";
 import { $toastNotify } from "@stores/toastNotify.ts";
+import { computed } from "vue";
 
 const toastStore = useStore($toastNotify);
-</script>
 
-<style lang="scss"></style>
+const CORNERS = ["top-right", "top-left", "bottom-right", "bottom-left"] as const;
+
+type Corner = (typeof CORNERS)[number];
+
+const anchorChain = computed(() => {
+  const chain: Record<number, { anchorName: string; anchorSource: string }> = {};
+
+  CORNERS.forEach((corner: Corner) => {
+    const group = toastStore.value
+      .filter((t) => (t.position ?? "top-right") === corner)
+      .filter((t) => !document.getElementById(`toast-${t.id}`)?.dataset.closing);
+
+    group.forEach((toast, index) => {
+      chain[toast.id!] = {
+        anchorName: `--toast-${toast.id}`,
+        anchorSource: index === 0 ? `--toast-corner-${corner}` : `--toast-${group[index - 1].id}`,
+      };
+    });
+  });
+
+  return chain;
+});
+</script>

@@ -1,12 +1,11 @@
 <template>
   <div
-    v-if="isSupported"
     :id="`toast-${id}`"
     ref="toast"
     popover="manual"
-    class="c-toast-notify is-newest"
+    class="c-toast-notify"
     :class="`c-toast-notify--${status} c-toast-notify--${position}`"
-    :style="stylePosition"
+    :style="{ 'anchor-name': anchorName, 'position-anchor': anchorSource }"
   >
     <Component
       :is="toastIconMap[status]"
@@ -15,12 +14,20 @@
       aria-hidden="true"
     />
 
+    <Pin
+      v-if="timeout === null"
+      class="c-toast-notify__persistent-badge"
+      :width="14"
+      :height="14"
+      aria-label="Permanente Benachrichtigung"
+    />
+
     <div class="c-toast-notify__message">
       {{ message }}
     </div>
 
     <button
-      v-if="showClose"
+      v-if="mustShowClose"
       type="button"
       class="c-toast-notify__close c-button c-button--center-icon"
       aria-label="schließen"
@@ -34,49 +41,30 @@
 <script setup lang="ts">
 import type { ToastNotify } from "@stores/toastNotify.ts";
 
-import { removeToastById, supportsPopover } from "@stores/toastNotify.ts";
+import { removeToastById } from "@stores/toastNotify.ts";
 import { useSwipe } from "@vueuse/core";
-import {
-  defineAsyncComponent,
-  nextTick,
-  onBeforeMount,
-  onMounted,
-  reactive,
-  ref,
-  watch,
-} from "vue";
+import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 
 const Close = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
-
-type Position = "bottom" | "left" | "right" | "top";
-
-type StylePositionType = {
-  [key in Position]?: string;
-};
+const Pin = defineAsyncComponent(() => import("virtual:icons/lucide/pin"));
 
 const {
   closeOnSwipe = true,
-  gapBetween = 10,
-  id = crypto.randomUUID(),
-  initOffset = 100,
+  id,
   message,
-  outerSpacing = "20px",
   position = "top-right",
   showClose = true,
   showStatusIcon = true,
   status = "info",
-} = defineProps<ToastNotify>();
+  timeout,
+  anchorName,
+  anchorSource,
+} = defineProps<ToastNotify & { anchorName?: string; anchorSource?: string }>();
+
+const mustShowClose = computed(() => timeout === null || showClose !== false);
 
 const toast = ref<HTMLElement | null>(null);
-const isSupported = ref(false);
-const isOpen = ref(false);
 const { isSwiping } = useSwipe(toast);
-const stylePosition: StylePositionType = reactive({
-  bottom: "auto",
-  left: "auto",
-  right: "auto",
-  top: "auto",
-});
 
 const toastIconMap = {
   error: defineAsyncComponent(() => import("virtual:icons/lucide/x-circle")),
@@ -85,87 +73,17 @@ const toastIconMap = {
   warning: defineAsyncComponent(() => import("virtual:icons/lucide/alert-circle")),
 };
 
-/**
- * Hides the toast
- *
- * @return  {void}
- */
-const hideToast = async (): Promise<void> => {
-  await nextTick();
-  setDynamicPosition(); // Recalculate the position of the toasts
-
-  removeToastById(id);
+const hideToast = (): void => {
+  removeToastById(id!);
 };
 
-/**
- * Shows the toast
- *
- * @return  {void}
- */
-const showToast = (): void => {
-  isOpen.value = true;
+onMounted(() => {
   toast.value?.showPopover();
-};
-
-/**
- * Gets the props string and converts it to inset styles
- *
- * @return  {void}
- */
-const setPosition = (): void => {
-  const positions = position.split("-");
-
-  positions.forEach((pos) => {
-    stylePosition[pos as keyof StylePositionType] = outerSpacing;
-  });
-};
-
-/**
- * Sets the dynamic position of the toast
- *
- * @return  {void}
- */
-const setDynamicPosition = (): void => {
-  const toasts = document.querySelectorAll(".c-toast-notify");
-  let offset = initOffset; // initial offset
-
-  toasts.forEach((toast) => {
-    const htmlToast = toast as HTMLElement;
-
-    if (!htmlToast || !htmlToast.style) {
-      console.error("Invalid toast element:", htmlToast);
-      return;
-    }
-
-    // Set the top position of the toast
-    htmlToast.style.top = `${offset}px`;
-
-    // Calculate the offset for the next toast
-    const toastHeight = toast.getBoundingClientRect().height;
-
-    offset += toastHeight + gapBetween; // 10 is the margin between toasts
-  });
-};
-
-onBeforeMount(() => {
-  isSupported.value = supportsPopover();
 });
 
-onMounted(async () => {
-  if (!isSupported.value) return;
-
-  setPosition();
-  stylePosition.top = `${initOffset}px`;
-
-  showToast();
-
-  await nextTick();
-  setDynamicPosition();
-});
-
-watch(isSwiping, async () => {
+watch(isSwiping, () => {
   if (isSwiping.value && closeOnSwipe) {
-    await hideToast();
+    hideToast();
   }
 });
 </script>

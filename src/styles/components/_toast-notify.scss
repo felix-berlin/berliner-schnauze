@@ -1,14 +1,74 @@
 @use "@sass-butler/mixins" as butler-mx;
 
+// Corner anchor elements – 0×0 fixed points CSS Anchor Positioning chains from
+.c-toast-corner-anchor {
+  position: fixed;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  visibility: hidden;
+
+  &[data-corner="top-right"] {
+    anchor-name: --toast-corner-top-right;
+    inset-block-start: 20px;
+    inset-inline-end: 20px;
+  }
+
+  &[data-corner="top-left"] {
+    anchor-name: --toast-corner-top-left;
+    inset-block-start: 20px;
+    inset-inline-start: 20px;
+  }
+
+  &[data-corner="bottom-right"] {
+    anchor-name: --toast-corner-bottom-right;
+    // safe-area-inset-bottom for notched devices (iOS home bar, Android nav bar)
+    inset-block-end: max(20px, env(safe-area-inset-bottom, 0px));
+    inset-inline-end: 20px;
+  }
+
+  &[data-corner="bottom-left"] {
+    anchor-name: --toast-corner-bottom-left;
+    inset-block-end: max(20px, env(safe-area-inset-bottom, 0px));
+    inset-inline-start: 20px;
+  }
+}
+
 .c-toast-notify {
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   gap: 1rem;
   color: var(--color);
   background-color: var(--color-background, var(--orange-300));
   border: 1px solid var(--color-border);
   padding: 0.7rem 1.4rem;
   max-width: 88vw;
+
+  // Reset UA popover centering so anchor-based insets take over
+  inset: auto;
+  margin: 0;
+
+  // Position via CSS Anchor Positioning – position-anchor set via inline style
+  &--top-right {
+    top: calc(anchor(bottom) + 10px);
+    right: anchor(right);
+  }
+
+  &--top-left {
+    top: calc(anchor(bottom) + 10px);
+    left: anchor(left);
+  }
+
+  &--bottom-right {
+    bottom: calc(anchor(top) + 10px);
+    right: anchor(right);
+  }
+
+  &--bottom-left {
+    bottom: calc(anchor(top) + 10px);
+    left: anchor(left);
+  }
 
   @include butler-mx.breakpoint("xs") {
     max-width: 400px;
@@ -20,12 +80,13 @@
   }
 
   /**
-   * Important for exit animation
-   * @see: https://developer.chrome.com/blog/entry-exit-animations?hl=de#animating_elements_to_and_from_the_top-layer
+   * Exit state (hidden / closing). Also the @starting-style entry state.
+   * Default: right-anchored toasts slide out to the right.
+   * @see https://developer.chrome.com/blog/entry-exit-animations#animating_elements_to_and_from_the_top-layer
    */
   @include butler-mx.feature("motion") {
     opacity: 0;
-    transform: translateX(150px);
+    transform: translateX(110%);
     transition:
       transform 0.3s,
       opacity 0.3s,
@@ -39,14 +100,39 @@
       transform: translateX(0);
 
       @starting-style {
-        transform: translateX(100%);
         opacity: 0;
+        transform: translateX(110%);
+      }
+    }
+  }
+
+  // Left-anchored: slide in/out from the left instead
+  &--top-left,
+  &--bottom-left {
+    @include butler-mx.feature("motion") {
+      transform: translateX(-110%);
+    }
+
+    &:popover-open {
+      @include butler-mx.feature("motion") {
+        transform: translateX(0);
+
+        @starting-style {
+          opacity: 0;
+          transform: translateX(-110%);
+        }
       }
     }
   }
 
   &__icon {
     flex: 1 0 auto;
+  }
+
+  &__persistent-badge {
+    flex: 0 0 auto;
+    opacity: 0.7;
+    color: currentcolor;
   }
 
   &__close {

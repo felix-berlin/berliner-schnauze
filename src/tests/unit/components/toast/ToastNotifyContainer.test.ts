@@ -3,9 +3,17 @@ import ToastNotifyContainer from "@components/toast/ToastNotifyContainer.vue";
 import { $toastNotify } from "@stores/index.ts";
 import { mount } from "@vue/test-utils";
 import { cleanStores, keepMount } from "nanostores";
-import { describe, it, expect, afterEach, beforeEach } from "vitest";
+import { describe, it, expect, afterEach, beforeAll, beforeEach, vi } from "vitest";
 
-// Mock store data
+vi.mock("@stores/toastNotify.ts", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@stores/toastNotify.ts")>();
+  return { ...actual, removeToastById: vi.fn() };
+});
+
+beforeAll(() => {
+  window.HTMLElement.prototype.showPopover = vi.fn();
+});
+
 const mockToasts = [
   {
     id: 1,
@@ -16,8 +24,8 @@ const mockToasts = [
     showClose: true,
     closeOnSwipe: true,
     outerSpacing: "10px",
-    gapBetween: "5px",
-    initOffset: "20px",
+    gapBetween: 5,
+    initOffset: 20,
   },
   {
     id: 2,
@@ -28,13 +36,12 @@ const mockToasts = [
     showClose: false,
     closeOnSwipe: false,
     outerSpacing: "15px",
-    gapBetween: "10px",
-    initOffset: "25px",
+    gapBetween: 10,
+    initOffset: 25,
   },
 ];
 
 beforeEach(() => {
-  // Populate the store with mock data
   $toastNotify.set(mockToasts);
 });
 
@@ -47,8 +54,8 @@ describe("ToastNotifyContainer.vue", () => {
     keepMount($toastNotify);
 
     const wrapper = mount(ToastNotifyContainer);
-
     const toastComponents = wrapper.findAllComponents(ToastNotify);
+
     expect(toastComponents).toHaveLength(mockToasts.length);
 
     mockToasts.forEach((toast, index) => {
@@ -60,9 +67,20 @@ describe("ToastNotifyContainer.vue", () => {
       expect(toastComponent.props("position")).toBe(toast.position);
       expect(toastComponent.props("showClose")).toBe(toast.showClose);
       expect(toastComponent.props("closeOnSwipe")).toBe(toast.closeOnSwipe);
-      expect(toastComponent.props("outerSpacing")).toBe(toast.outerSpacing);
-      expect(toastComponent.props("gapBetween")).toBe(toast.gapBetween);
-      expect(toastComponent.props("initOffset")).toBe(toast.initOffset);
     });
+  });
+
+  it("computes anchor chain per position group", () => {
+    keepMount($toastNotify);
+    const wrapper = mount(ToastNotifyContainer);
+    const toastComponents = wrapper.findAllComponents(ToastNotify);
+
+    // toast id=1 is first in top-right → anchors to corner
+    expect(toastComponents[0].props("anchorSource")).toBe("--toast-corner-top-right");
+    expect(toastComponents[0].props("anchorName")).toBe("--toast-1");
+
+    // toast id=2 is first in bottom-left → anchors to its own corner
+    expect(toastComponents[1].props("anchorSource")).toBe("--toast-corner-bottom-left");
+    expect(toastComponents[1].props("anchorName")).toBe("--toast-2");
   });
 });
