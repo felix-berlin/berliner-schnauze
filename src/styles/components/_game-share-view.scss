@@ -78,5 +78,10 @@
     &:hover {
       opacity: 0.88;
     }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
   }
 }
