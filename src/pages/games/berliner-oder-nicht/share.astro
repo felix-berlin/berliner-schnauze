@@ -1,0 +1,13 @@
+---
+import GameShareView from '@components/games/GameShareView.vue'
+import Layout from '@layouts/Layout.astro'
+
+const page = {
+  description: 'Sieh dir das Spielergebnis an — Berliner oder nicht? Das Swipe-Game.',
+  title: 'Spielergebnis – Berliner oder nicht? | Berliner Schnauze',
+}
+---
+
+<Layout content={page}>
+  <GameShareView client:only="vue" />
+</Layout>
