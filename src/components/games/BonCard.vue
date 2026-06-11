@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import { computed, defineAsyncComponent, ref } from 'vue'
-import { onKeyStroke, usePointerSwipe } from '@vueuse/core'
+import { onKeyStroke, usePointerSwipe, useVibrate } from '@vueuse/core'
 
 const XIcon = defineAsyncComponent(() => import('virtual:icons/lucide/x'))
 const CheckIcon = defineAsyncComponent(() => import('virtual:icons/lucide/check'))
@@ -73,11 +73,18 @@ const overlayText = computed(() =>
   props.isReal ? 'echtes Berlinerisch' : 'erfunden',
 )
 
+const { vibrate } = useVibrate()
+
 const { isSwiping, distanceX } = usePointerSwipe(cardRef, {
   disableTextSelect: true,
   onSwipeEnd(_, dir) {
-    if (dir === 'right') emit('answer', true)
-    else if (dir === 'left') emit('answer', false)
+    if (dir === 'right') {
+      vibrate([20])
+      emit('answer', true)
+    } else if (dir === 'left') {
+      vibrate([20])
+      emit('answer', false)
+    }
   },
   threshold: 50,
 })
