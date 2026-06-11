@@ -6,7 +6,6 @@
   width: 0;
   height: 0;
   pointer-events: none;
-  visibility: hidden;
 
   &[data-corner="top-right"] {
     anchor-name: --toast-corner-top-right;
@@ -45,9 +44,12 @@
   padding: 0.7rem 1.4rem;
   max-width: 88vw;
 
-  // Reset UA popover centering so anchor-based insets take over
+  // Reset UA popover defaults so anchor-based insets take over
   inset: auto;
   margin: 0;
+  // UA stylesheet sets position-visibility: anchors-visible on [popover] — override
+  // so toasts don't vanish when corner anchors are not "visible" in the scrollport
+  position-visibility: always;
 
   // Position via CSS Anchor Positioning – position-anchor set via inline style
   &--top-right {
@@ -88,8 +90,10 @@
     opacity: 0;
     transform: translateX(110%);
     transition:
-      transform 0.3s,
-      opacity 0.3s,
+      transform 0.3s ease,
+      opacity 0.3s ease,
+      top 0.3s ease,
+      bottom 0.3s ease,
       display 0.3s allow-discrete,
       overlay 0.3s allow-discrete;
   }

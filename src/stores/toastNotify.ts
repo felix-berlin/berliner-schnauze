@@ -36,7 +36,10 @@ export const createToastNotify = (payload: ToastPayload): void => {
   const { timeout } = payload;
   const toast = createToast(payload);
 
-  $toastNotify.set([toast, ...$toastNotify.get()]);
+  // Append (not prepend) — CSS Anchor Positioning requires an anchor to enter the
+  // top layer BEFORE the element that references it. Array order = showPopover() order
+  // = top-layer entry order, so each toast can only anchor to earlier array entries.
+  $toastNotify.set([...$toastNotify.get(), toast]);
 
   if (timeout !== null) {
     setTimeout(
