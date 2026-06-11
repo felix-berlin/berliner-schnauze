@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { decodeShareHash, encodeShareHash } from '@utils/gameShare'
+import { buildShareUrl, decodeShareHash, encodeShareHash } from '@utils/gameShare'
 import type { SharePayload } from '@utils/gameShare'
 
 const payload: SharePayload = {
@@ -44,5 +44,14 @@ describe('decodeShareHash', () => {
 
   it('returns null for base64 that decodes to non-JSON', () => {
     expect(decodeShareHash('uuid.bm90anNvbg==')).toBeNull()
+  })
+})
+
+describe('buildShareUrl', () => {
+  it('returns a path with the correct route and a decodable hash', () => {
+    const url = buildShareUrl(payload)
+    expect(url.startsWith('/games/berliner-oder-nicht/share#')).toBe(true)
+    const hash = url.split('#')[1]
+    expect(decodeShareHash(hash)).toEqual(payload)
   })
 })
