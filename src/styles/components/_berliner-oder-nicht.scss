@@ -112,8 +112,10 @@
   }
 
   &__life-icon {
-    color: var(--red-500);
-    transition: color 0.2s, transform 0.2s;
+    color: var(--orange-500);
+    transition:
+      color 0.2s,
+      transform 0.2s;
 
     &--lost {
       color: var(--c-bon-text-muted);
@@ -207,6 +209,8 @@
   }
 
   &__card {
+    position: relative;
+    overflow: hidden;
     background: var(--c-bon-surface);
     border: 1px solid var(--c-bon-border);
     border-radius: 1rem;
@@ -215,7 +219,10 @@
     box-shadow: 0 8px 32px rgb(0 0 0 / 30%);
     cursor: grab;
     user-select: none;
-    transition: transform 0.25s ease, border-color 0.2s, box-shadow 0.2s;
+    transition:
+      transform 0.25s ease,
+      border-color 0.2s,
+      box-shadow 0.2s;
     will-change: transform;
 
     &--exit-right {
@@ -226,13 +233,13 @@
 
     &--exit-left {
       transform: translateX(-110%) rotate(-12deg);
-      border-color: var(--red-500);
+      border-color: var(--orange-500);
       box-shadow: 0 8px 32px rgb(207 48 24 / 30%);
     }
 
     &--shake {
       animation: c-game-card-shake 0.4s ease;
-      border-color: var(--red-500);
+      border-color: var(--orange-500);
       box-shadow: 0 8px 32px rgb(207 48 24 / 30%);
     }
   }
@@ -265,11 +272,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    background: color-mix(in srgb, var(--red-500) 88%, transparent);
+    background: var(--orange-500);
     color: #fff;
     pointer-events: none;
+    text-shadow: 0 1px 3px rgb(0 0 0 / 30%);
   }
 
   &__buttons {
@@ -297,7 +305,7 @@
     }
 
     &--no {
-      background: var(--red-500);
+      background: var(--orange-500);
       color: #fff;
     }
 
@@ -353,7 +361,9 @@
 // Card Vue transitions
 .c-bon-card-right-leave-active,
 .c-bon-card-left-leave-active {
-  transition: transform 0.35s ease, opacity 0.2s ease 0.15s;
+  transition:
+    transform 0.35s ease,
+    opacity 0.2s ease 0.15s;
 }
 
 .c-bon-card-right-leave-to {
@@ -367,7 +377,9 @@
 }
 
 .c-bon-card-neutral-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .c-bon-card-neutral-leave-to {
@@ -378,7 +390,9 @@
 .c-bon-card-right-enter-active,
 .c-bon-card-left-enter-active,
 .c-bon-card-neutral-enter-active {
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 
 .c-bon-card-right-enter-from,
