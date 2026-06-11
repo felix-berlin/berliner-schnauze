@@ -40,12 +40,15 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useHash } from '@vueuse/core'
+import { useUrlSearchParams } from '@vueuse/core'
 import { decodeShareHash } from '@utils/bonShare'
 import type { BonSharePayload } from '@utils/bonShare'
 
-const hash = useHash()
-const payload = computed<BonSharePayload | null>(() => decodeShareHash(hash.value.slice(1)))
+const params = useUrlSearchParams('history')
+const payload = computed<BonSharePayload | null>(() => {
+  const r = params.r
+  return r ? decodeShareHash(Array.isArray(r) ? r[0] : r) : null
+})
 
 const accuracyPercent = computed(() =>
   payload.value && payload.value.totalAnswered > 0

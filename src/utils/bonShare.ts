@@ -37,5 +37,5 @@ export function decodeShareHash(hash: string): BonSharePayload | null {
 }
 
 export function buildShareUrl(payload: BonSharePayload): string {
-  return `/games/berliner-oder-nicht/share#${encodeShareHash(payload)}`
+  return `/games/berliner-oder-nicht/share?r=${encodeShareHash(payload)}`
 }

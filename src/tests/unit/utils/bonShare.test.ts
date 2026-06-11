@@ -62,10 +62,10 @@ describe('decodeShareHash — edge cases', () => {
 })
 
 describe('buildShareUrl', () => {
-  it('returns a path with the correct route and a decodable hash', () => {
+  it('returns a path with the correct route and a decodable r param', () => {
     const url = buildShareUrl(payload)
-    expect(url.startsWith('/games/berliner-oder-nicht/share#')).toBe(true)
-    const hash = url.split('#')[1]
-    expect(decodeShareHash(hash)).toEqual(payload)
+    expect(url.startsWith('/games/berliner-oder-nicht/share?r=')).toBe(true)
+    const r = new URLSearchParams(url.split('?')[1]).get('r')!
+    expect(decodeShareHash(r)).toEqual(payload)
   })
 })
