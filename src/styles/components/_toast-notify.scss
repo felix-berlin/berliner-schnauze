@@ -51,25 +51,28 @@
   // so toasts don't vanish when corner anchors are not "visible" in the scrollport
   position-visibility: always;
 
-  // Position via CSS Anchor Positioning – position-anchor set via inline style
+  // Position via CSS Anchor Positioning
+  // Vertical (top/bottom): uses position-anchor = prev toast or corner, enabling stacking.
+  // Horizontal (right/left): hardcoded to corner anchor so translateX exit of a prev toast
+  // doesn't drag remaining toasts sideways along the anchor chain.
   &--top-right {
     top: calc(anchor(bottom) + 10px);
-    right: anchor(right);
+    right: anchor(--toast-corner-top-right right);
   }
 
   &--top-left {
     top: calc(anchor(bottom) + 10px);
-    left: anchor(left);
+    left: anchor(--toast-corner-top-left left);
   }
 
   &--bottom-right {
     bottom: calc(anchor(top) + 10px);
-    right: anchor(right);
+    right: anchor(--toast-corner-bottom-right right);
   }
 
   &--bottom-left {
     bottom: calc(anchor(top) + 10px);
-    left: anchor(left);
+    left: anchor(--toast-corner-bottom-left left);
   }
 
   @include butler-mx.breakpoint("xs") {
@@ -89,11 +92,14 @@
   @include butler-mx.feature("motion") {
     opacity: 0;
     transform: translateX(110%);
+    // will-change promotes to compositor layer — transform/opacity transitions stay on GPU.
+    // top/bottom are intentionally NOT transitioned: they use anchor() which triggers
+    // main-thread layout per frame, causing jank at 10+ toasts. The instant restack at
+    // T=250ms (when the exiting toast is 83% gone) is imperceptible in practice.
+    will-change: transform, opacity;
     transition:
       transform 0.3s ease,
       opacity 0.3s ease,
-      top 0.3s ease,
-      bottom 0.3s ease,
       display 0.3s allow-discrete,
       overlay 0.3s allow-discrete;
   }

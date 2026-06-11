@@ -34,7 +34,7 @@ const anchorChain = computed(() => {
   CORNERS.forEach((corner: Corner) => {
     const group = toastStore.value
       .filter((t) => (t.position ?? "top-right") === corner)
-      .filter((t) => !document.getElementById(`toast-${t.id}`)?.dataset.closing);
+      .filter((t) => !t.closing);
 
     group.forEach((toast, index) => {
       chain[toast.id!] = {

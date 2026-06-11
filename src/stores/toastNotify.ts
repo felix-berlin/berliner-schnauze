@@ -2,6 +2,9 @@ import { atom } from "nanostores";
 
 export type ToastNotify = {
   closeOnSwipe?: boolean;
+  // Internal flag — set ~250ms after hidePopover() to remove toast from anchor chain
+  // BEFORE display:none (300ms), avoiding an invalid-anchor → top:auto snap.
+  closing?: boolean;
   gapBetween?: number;
   id?: number;
   initOffset?: number;
@@ -14,17 +17,23 @@ export type ToastNotify = {
   timeout?: null | number; // If null, toast will not be removed automatically
 };
 
-export type ToastPayload = Omit<ToastNotify, "id">;
+export type ToastPayload = Omit<ToastNotify, "id" | "closing">;
 
 export type ToastStatus = "error" | "info" | "success" | "warning";
 
 const removeToastTimeout = 400;
+// Must fire before the 300ms CSS exit transition ends (display:none invalidates anchors).
+const closingMarkDelay = 250;
 const defaultTimeout = 5000;
 
 export const $toastNotify = atom<ToastNotify[]>([]);
 
 const hidePopover = (id: number) => {
   document.getElementById(`toast-${id}`)?.hidePopover();
+};
+
+const markClosing = (id: number) => {
+  $toastNotify.set($toastNotify.get().map((t) => (t.id === id ? { ...t, closing: true } : t)));
 };
 
 const createToast = (payload: ToastPayload): ToastNotify => ({
@@ -42,12 +51,15 @@ export const createToastNotify = (payload: ToastPayload): void => {
   $toastNotify.set([...$toastNotify.get(), toast]);
 
   if (timeout !== null) {
-    setTimeout(
-      () => {
-        hidePopover(toast.id!);
-      },
-      (timeout ?? defaultTimeout) - removeToastTimeout,
-    );
+    const hideAt = (timeout ?? defaultTimeout) - removeToastTimeout;
+
+    setTimeout(() => {
+      hidePopover(toast.id!);
+    }, hideAt);
+
+    setTimeout(() => {
+      markClosing(toast.id!);
+    }, hideAt + closingMarkDelay);
 
     setTimeout(() => {
       $toastNotify.set($toastNotify.get().filter((t) => t.id !== toast.id));
@@ -56,9 +68,11 @@ export const createToastNotify = (payload: ToastPayload): void => {
 };
 
 export const removeToastById = (id: number): void => {
-  const el = document.getElementById(`toast-${id}`);
-  if (el) el.dataset.closing = "true";
-  el?.hidePopover();
+  document.getElementById(`toast-${id}`)?.hidePopover();
+
+  setTimeout(() => {
+    markClosing(id);
+  }, closingMarkDelay);
 
   setTimeout(() => {
     $toastNotify.set($toastNotify.get().filter((t) => t.id !== id));
