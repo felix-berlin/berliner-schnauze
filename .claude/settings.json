@@ -1,24 +1,20 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm view *)",
-      "Bash(pnpm outdated *)",
+      "Bash(npm *)",
+      "Bash(pnpm *)",
+      "Bash(npx *)",
+      "Bash(dlx *)",
       "Bash(graphify *)",
-      "mcp__plugin_claude-mem_mcp-search__search",
-      "mcp__plugin_context7_context7__resolve-library-id",
-      "mcp__plugin_context7_context7__query-docs",
-      "mcp__plugin_claude-mem_mcp-search__smart_search",
-      "mcp__plugin_claude-mem_mcp-search__get_observations",
-      "mcp__plugin_claude-mem_mcp-search__observation_search",
-      "mcp__serena__find_symbol",
-      "mcp__serena__find_declaration",
-      "mcp__serena__find_implementations",
-      "mcp__serena__find_referencing_symbols",
-      "mcp__serena__get_symbols_overview",
-      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__evaluate_script",
-      "mcp__chrome-devtools__take_snapshot",
-      "mcp__plugin_claude-mem_mcp-search__smart_outline",
-      "mcp__plugin_claude-mem_mcp-search__list_corpora"
+      "Bash(vitest *)",
+      "Bash(oxlint *)",
+      "Bash(oxfmt *)",
+      "Bash(stylelint *)",
+      "mcp__plugin_context7_context7__*",
+      "mcp__serena__*",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__*",
+      "mcp__chrome-devtools__*",
+      "mcp__plugin_claude-mem_mcp-search__*"
     ]
   },
   "hooks": {
@@ -28,11 +24,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.ts|*.tsx|*.js|*.mjs|*.cjs|*.vue|*.astro) out=$(pnpm exec oxlint \"$file\" --deny-warnings 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; esac"
+            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.ts|*.tsx|*.js|*.mjs|*.cjs) out=$(pnpm exec oxlint \"$file\" --deny-warnings --fix --fix-suggestions 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; *.vue|*.astro) out=$(pnpm exec oxlint \"$(dirname \"$file\")/\" --deny-warnings --fix --fix-suggestions 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; esac"
           },
           {
             "type": "command",
-            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.ts|*.tsx|*.js|*.mjs|*.cjs|*.vue|*.astro) pnpm exec oxfmt \"$file\" 2>/dev/null;; esac"
+            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.ts|*.tsx|*.js|*.mjs|*.cjs|*.vue) pnpm exec oxfmt \"$file\" 2>/dev/null;; esac"
           },
           {
             "type": "command",

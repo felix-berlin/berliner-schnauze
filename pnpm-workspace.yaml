@@ -2,7 +2,7 @@ overrides:
   "@vitejs/plugin-vue": "^6.0.7"
 
 allowBuilds:
-  '@infisical/cli': true
+  "@infisical/cli": true
   "@parcel/watcher": true
   "@sentry/cli": true
   esbuild: true
@@ -14,75 +14,74 @@ minimumReleaseAgeExclude:
   - wrangler@4.93.1
   - "@iconify-json/lucide@1.2.109"
   - astro@6.3.7
-  - '@infisical/cli@0.43.87'
-  - '@astrojs/internal-helpers@0.10.0'
-  - '@astrojs/markdown-remark@7.2.0'
-  - '@iconify-json/lucide@1.2.110'
-  - '@sentry-internal/browser-utils@10.55.0'
-  - '@sentry-internal/feedback@10.55.0'
-  - '@sentry-internal/replay-canvas@10.55.0'
-  - '@sentry-internal/replay@10.55.0'
-  - '@sentry/astro@10.55.0'
-  - '@sentry/browser@10.55.0'
-  - '@sentry/core@10.55.0'
-  - '@sentry/node-core@10.55.0'
-  - '@sentry/node@10.55.0'
-  - '@sentry/opentelemetry@10.55.0'
+  - "@infisical/cli@0.43.87"
+  - "@astrojs/internal-helpers@0.10.0"
+  - "@astrojs/markdown-remark@7.2.0"
+  - "@iconify-json/lucide@1.2.110"
+  - "@sentry-internal/browser-utils@10.55.0"
+  - "@sentry-internal/feedback@10.55.0"
+  - "@sentry-internal/replay-canvas@10.55.0"
+  - "@sentry-internal/replay@10.55.0"
+  - "@sentry/astro@10.55.0"
+  - "@sentry/browser@10.55.0"
+  - "@sentry/core@10.55.0"
+  - "@sentry/node-core@10.55.0"
+  - "@sentry/node@10.55.0"
+  - "@sentry/opentelemetry@10.55.0"
   - astro@6.4.2
-  - '@iconify-json/lucide@1.2.111'
-  - '@infisical/cli@0.43.89'
-  - '@vue/language-core@3.3.3'
+  - "@iconify-json/lucide@1.2.111"
+  - "@infisical/cli@0.43.89"
+  - "@vue/language-core@3.3.3"
   - vue-tsc@3.3.3
-  - '@vue/language-core@3.3.4'
+  - "@vue/language-core@3.3.4"
   - vue-tsc@3.3.4
-  - '@cloudflare/workerd-darwin-64@1.20260609.1'
-  - '@cloudflare/workerd-darwin-arm64@1.20260609.1'
-  - '@cloudflare/workerd-linux-64@1.20260609.1'
-  - '@cloudflare/workerd-linux-arm64@1.20260609.1'
-  - '@cloudflare/workerd-windows-64@1.20260609.1'
-  - '@sentry-internal/browser-utils@10.57.0'
-  - '@sentry-internal/feedback@10.57.0'
-  - '@sentry-internal/replay-canvas@10.57.0'
-  - '@sentry-internal/replay@10.57.0'
-  - '@sentry-internal/server-utils@10.57.0'
-  - '@sentry/astro@10.57.0'
-  - '@sentry/browser@10.57.0'
-  - '@sentry/core@10.57.0'
-  - '@sentry/node-core@10.57.0'
-  - '@sentry/node@10.57.0'
-  - '@sentry/opentelemetry@10.57.0'
+  - "@cloudflare/workerd-darwin-64@1.20260609.1"
+  - "@cloudflare/workerd-darwin-arm64@1.20260609.1"
+  - "@cloudflare/workerd-linux-64@1.20260609.1"
+  - "@cloudflare/workerd-linux-arm64@1.20260609.1"
+  - "@cloudflare/workerd-windows-64@1.20260609.1"
+  - "@sentry-internal/browser-utils@10.57.0"
+  - "@sentry-internal/feedback@10.57.0"
+  - "@sentry-internal/replay-canvas@10.57.0"
+  - "@sentry-internal/replay@10.57.0"
+  - "@sentry-internal/server-utils@10.57.0"
+  - "@sentry/astro@10.57.0"
+  - "@sentry/browser@10.57.0"
+  - "@sentry/core@10.57.0"
+  - "@sentry/node-core@10.57.0"
+  - "@sentry/node@10.57.0"
+  - "@sentry/opentelemetry@10.57.0"
   - astro@6.4.5
   - graphql@16.14.2
   - miniflare@4.20260609.0
   - workerd@1.20260609.1
   - wrangler@4.99.0
-  - '@img/sharp-darwin-arm64@0.35.0'
-  - '@img/sharp-darwin-x64@0.35.0'
-  - '@img/sharp-freebsd-wasm32@0.35.0'
-  - '@img/sharp-libvips-darwin-arm64@1.3.0'
-  - '@img/sharp-libvips-darwin-x64@1.3.0'
-  - '@img/sharp-libvips-linux-arm64@1.3.0'
-  - '@img/sharp-libvips-linux-arm@1.3.0'
-  - '@img/sharp-libvips-linux-ppc64@1.3.0'
-  - '@img/sharp-libvips-linux-riscv64@1.3.0'
-  - '@img/sharp-libvips-linux-s390x@1.3.0'
-  - '@img/sharp-libvips-linux-x64@1.3.0'
-  - '@img/sharp-libvips-linuxmusl-arm64@1.3.0'
-  - '@img/sharp-libvips-linuxmusl-x64@1.3.0'
-  - '@img/sharp-linux-arm64@0.35.0'
-  - '@img/sharp-linux-arm@0.35.0'
-  - '@img/sharp-linux-ppc64@0.35.0'
-  - '@img/sharp-linux-riscv64@0.35.0'
-  - '@img/sharp-linux-s390x@0.35.0'
-  - '@img/sharp-linux-x64@0.35.0'
-  - '@img/sharp-linuxmusl-arm64@0.35.0'
-  - '@img/sharp-linuxmusl-x64@0.35.0'
-  - '@img/sharp-wasm32@0.35.0'
-  - '@img/sharp-webcontainers-wasm32@0.35.0'
-  - '@img/sharp-win32-arm64@0.35.0'
-  - '@img/sharp-win32-ia32@0.35.0'
-  - '@img/sharp-win32-x64@0.35.0'
-  - astro@6.4.6
+  - "@img/sharp-darwin-arm64@0.35.0"
+  - "@img/sharp-darwin-x64@0.35.0"
+  - "@img/sharp-freebsd-wasm32@0.35.0"
+  - "@img/sharp-libvips-darwin-arm64@1.3.0"
+  - "@img/sharp-libvips-darwin-x64@1.3.0"
+  - "@img/sharp-libvips-linux-arm64@1.3.0"
+  - "@img/sharp-libvips-linux-arm@1.3.0"
+  - "@img/sharp-libvips-linux-ppc64@1.3.0"
+  - "@img/sharp-libvips-linux-riscv64@1.3.0"
+  - "@img/sharp-libvips-linux-s390x@1.3.0"
+  - "@img/sharp-libvips-linux-x64@1.3.0"
+  - "@img/sharp-libvips-linuxmusl-arm64@1.3.0"
+  - "@img/sharp-libvips-linuxmusl-x64@1.3.0"
+  - "@img/sharp-linux-arm64@0.35.0"
+  - "@img/sharp-linux-arm@0.35.0"
+  - "@img/sharp-linux-ppc64@0.35.0"
+  - "@img/sharp-linux-riscv64@0.35.0"
+  - "@img/sharp-linux-s390x@0.35.0"
+  - "@img/sharp-linux-x64@0.35.0"
+  - "@img/sharp-linuxmusl-arm64@0.35.0"
+  - "@img/sharp-linuxmusl-x64@0.35.0"
+  - "@img/sharp-wasm32@0.35.0"
+  - "@img/sharp-webcontainers-wasm32@0.35.0"
+  - "@img/sharp-win32-arm64@0.35.0"
+  - "@img/sharp-win32-ia32@0.35.0"
+  - "@img/sharp-win32-x64@0.35.0"
   - semantic-release@25.0.5
   - semver@7.8.4
   - sharp@0.35.0

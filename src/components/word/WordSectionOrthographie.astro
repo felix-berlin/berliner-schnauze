@@ -1,16 +1,14 @@
 ---
 import WordDecomposition from '@components/word/WordDecomposition.astro';
-import german from 'hyphenation.de';
-import Hypher from 'hypher';
-import type { BerlinerWord } from '@/gql/entity-types';
+import { hypher } from '@utils/hypher';
+import type { WordRef } from '@utils/wordHelper';
 
 interface Props {
   word: string;
-  allWords: BerlinerWord[];
+  allWords: WordRef[];
 }
 
 const { word, allWords } = Astro.props;
-const hypher = new Hypher(german);
 ---
 
 <section class='c-section-card' id='orthographie' aria-labelledby='heading-orthographie'>

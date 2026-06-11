@@ -1,16 +1,14 @@
 ---
-import { decomposeCompoundWord, capitalizeFirstLetter } from '@utils/wordHelper';
+import { decomposeCompoundWord, capitalizeFirstLetter, germanWords } from '@utils/wordHelper';
 import { routeToWord } from '@utils/helpers';
-import type { BerlinerWord } from '@/gql/entity-types';
-import germanWordsArray from 'all-the-german-words';
+import type { WordRef } from '@utils/wordHelper';
 
 interface Props {
   word: string;
-  allWords: BerlinerWord[];
+  allWords: WordRef[];
 }
 
 const { word, allWords } = Astro.props;
-const germanWords = new Set<string>((germanWordsArray as string[]).map((w) => w.toLowerCase()));
 const parts = word.length >= 5 ? decomposeCompoundWord(word, germanWords) : null;
 
 const wordMap = new Map(

@@ -1,0 +1,121 @@
+<template>
+  <div class="c-bon-card">
+    <div class="c-bon-card__hint" aria-hidden="true">
+      <span>← NEE</span>
+      <span>JA →</span>
+    </div>
+
+    <div
+      ref="cardRef"
+      :class="['c-bon-card__card', isShaking && 'c-bon-card__card--shake']"
+      :style="dragCardStyle"
+    >
+      <p class="c-bon-card__label">Berlinerisch?</p>
+      <p class="c-bon-card__word">{{ word }}</p>
+      <p class="c-bon-card__progress">Karte {{ cardNumber }}</p>
+
+      <Transition name="fade-fast">
+        <div v-if="showOverlay" class="c-bon-card__overlay">
+          War {{ overlayText }}!
+        </div>
+      </Transition>
+    </div>
+
+    <div class="c-bon-card__buttons">
+      <button
+        class="c-bon-card__btn c-bon-card__btn--no"
+        aria-label="Nee, nicht Berlinerisch"
+        @click="emit('answer', false)"
+      >
+        <XIcon width="20" height="20" aria-hidden="true" />
+        Nee
+      </button>
+      <button
+        class="c-bon-card__btn c-bon-card__btn--yes"
+        aria-label="Ja, Berlinerisch!"
+        @click="emit('answer', true)"
+      >
+        Ja
+        <CheckIcon width="20" height="20" aria-hidden="true" />
+      </button>
+    </div>
+
+    <p class="c-bon-card__keyboard-hint" aria-hidden="true">← Pfeiltasten auch möglich →</p>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, defineAsyncComponent, ref } from 'vue'
+import { onKeyStroke, usePointerSwipe, useVibrate } from '@vueuse/core'
+
+const XIcon = defineAsyncComponent(() => import('virtual:icons/lucide/x'))
+const CheckIcon = defineAsyncComponent(() => import('virtual:icons/lucide/check'))
+
+const props = defineProps<{
+  word: string
+  cardNumber: number
+  isShaking: boolean
+  lastAnswerCorrect: boolean | null
+  isReal: boolean | null
+}>()
+
+const emit = defineEmits<{
+  answer: [isReal: boolean]
+}>()
+
+const cardRef = ref<HTMLElement | null>(null)
+
+const showOverlay = computed(() =>
+  props.isShaking && props.lastAnswerCorrect === false && props.isReal !== null,
+)
+
+const overlayText = computed(() =>
+  props.isReal ? 'echtes Berlinerisch' : 'erfunden',
+)
+
+const { vibrate } = useVibrate()
+
+const { isSwiping, distanceX } = usePointerSwipe(cardRef, {
+  disableTextSelect: true,
+  onSwipeEnd(_, dir) {
+    if (dir === 'right') {
+      vibrate([20])
+      emit('answer', true)
+    } else if (dir === 'left') {
+      vibrate([20])
+      emit('answer', false)
+    }
+  },
+  threshold: 50,
+})
+
+const dragCardStyle = computed(() => {
+  if (!isSwiping.value) return {}
+  const x = Math.max(-280, Math.min(280, -distanceX.value))
+  const progress = Math.min(Math.abs(x) / 80, 1)
+  const base = {
+    cursor: 'grabbing',
+    transform: `translateX(${x}px) rotate(${x * 0.04}deg)`,
+    transition: 'none',
+  }
+  if (Math.abs(x) < 5) return base
+  return x > 0
+    ? {
+        ...base,
+        borderColor: `color-mix(in srgb, var(--success) ${Math.round(progress * 80)}%, var(--c-bon-border))`,
+        boxShadow: `0 8px 32px rgb(53 166 114 / ${Math.round(progress * 25)}%)`,
+      }
+    : {
+        ...base,
+        borderColor: `color-mix(in srgb, var(--red-500) ${Math.round(progress * 80)}%, var(--c-bon-border))`,
+        boxShadow: `0 8px 32px rgb(207 48 24 / ${Math.round(progress * 25)}%)`,
+      }
+})
+
+onKeyStroke('ArrowRight', () => emit('answer', true))
+onKeyStroke('ArrowLeft', () => emit('answer', false))
+</script>
+
+<style lang="scss">
+@use '@styles/components/berliner-oder-nicht';
+</style>

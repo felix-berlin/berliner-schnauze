@@ -99,7 +99,7 @@ For Cloudflare Pages builds, env vars are configured separately in the CF Pages 
 **Data flow**: WordPress GraphQL API → Astro API routes (static JSON at build time) → Orama in-browser search → Vue components
 
 - **Astro** handles routing, SSG, and static pages (`src/pages/`)
-- **Vue 3** islands handle all interactive UI (`src/components/*.vue`)
+- **Vue 3** islands handle all interactive UI (`src/components/*.vue`) — use **VueUse** (`@vueuse/core`) for browser APIs and Vue utilities before writing custom logic
 - **Nanostores** manage client state (`src/stores/`) — import directly from individual store files (e.g. `@stores/darkMode.ts`, `@stores/modal.ts`). Do NOT import from `@stores/index` barrel unless the component specifically needs `wordList.ts` exports — the barrel's `computedAsync` side effect triggers `api/search/index.json` on every chunk that imports it.
 - **urql** handles GraphQL queries/mutations from Vue components
 - **Orama** provides full-text search with German stemming — index built at build time in `src/pages/api/search/index.json.ts`
@@ -135,7 +135,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 **SCSS imports**: Use `@use "@styles/path"` — not `@import`. Global styles (base resets, typography, utilities) belong in `src/styles/app.scss`. Component styles follow the pattern in **Vue components** above.
 
-**VueUse**: Use `@vueuse/core` wherever it covers a browser API or Vue utility pattern — event listeners, debounce, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, etc. Prefer VueUse over manual implementations. Already used: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`.
+**VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Already in use: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`.
 
 **PWA**: Built with `@vite-pwa/astro` + Workbox. Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. On update: shows browser Notification if permission granted, else silently reloads. On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Workbox caches all static assets (JS, CSS, images) up to 15 MB.
 
@@ -143,7 +143,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 **Modal system**: Open modals via `open()` from `@stores/modal.ts` using `defineAsyncComponent` for dynamic component loading. See `src/components/WordSuggestHint.vue` for reference.
 
-**Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic. Import `createToastNotify` from `@stores/toastNotify.ts` directly for toast notifications — do NOT import from `@stores/index` as the barrel re-exports `wordList.ts` which has module-level side effects that trigger unnecessary fetches.
+**Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic that VueUse does not cover — custom composables are for project-specific logic only; prefer VueUse when it exists. Import `createToastNotify` from `@stores/toastNotify.ts` directly for toast notifications — do NOT import from `@stores/index` as the barrel re-exports `wordList.ts` which has module-level side effects that trigger unnecessary fetches.
 
 **GraphQL**: Import the `graphql` tagged template from `@/gql` for type-safe queries. Generated types live in `src/gql/` (do not edit manually — output of codegen).
 
