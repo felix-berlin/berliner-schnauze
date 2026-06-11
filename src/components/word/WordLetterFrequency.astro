@@ -1,5 +1,5 @@
 ---
-import { letterFrequency } from "@utils/wordHelper";
+import { letterFrequency } from '@utils/wordHelper';
 
 interface Props {
   word: string;
@@ -7,40 +7,50 @@ interface Props {
 
 const { word } = Astro.props;
 const letters = letterFrequency(word);
-const maxPercent = letters.length > 0 ? Math.max(...letters.map((l) => l.percent)) : 1;
+
+const MAX_FREQUENCY = 18;
 
 // Maps German letter frequency % to a hue: rare (≈0%) → steel-blue (220), common (≈18%) → amber (50)
-const getBarHue = (percent: number) => Math.round(220 - Math.min(percent / 18, 1) * 170);
+const getBarHue = (percent: number) => Math.round(220 - Math.min(percent / MAX_FREQUENCY, 1) * 170);
 ---
 
 {
   letters.length > 0 && (
     <div>
       <h3>Buchstabenhäufigkeit</h3>
-      <div class="c-single-word__letter-bar">
+
+      <ul class='c-single-word__letter-frequency-list'>
         {letters.map(({ char, percent, label, isVowel }) => (
-          <div class="c-single-word__letter-bar-row">
-            <span class={`c-single-word__letter-bar-char ${isVowel ? "is-vowel" : "is-consonant"}`}>
+          <li class='c-single-word__letter-frequency-item'>
+            <span class={`c-single-word__letter-char ${isVowel ? 'is-vowel' : 'is-consonant'}`}>
               {char}
             </span>
-            <div class="c-single-word__letter-bar-track">
-              <div
-                class="c-single-word__letter-bar-fill"
-                style={`width: ${((percent / maxPercent) * 100).toFixed(1)}%; --bar-hue: ${getBarHue(percent)}`}
-              />
-            </div>
-            <span class="c-single-word__letter-bar-label">
-              {percent.toFixed(2).replace(".", ",")}% · {label}
+
+            <meter
+              class='c-single-word__letter-meter'
+              min='0'
+              max={MAX_FREQUENCY}
+              value={percent}
+              title={`${char}: ${percent.toFixed(2)}%`}
+              style={`--meter-hue:${getBarHue(percent)}`}
+            >
+              {percent.toFixed(2)}%
+            </meter>
+
+            <span class='c-single-word__letter-label'>
+              {percent.toFixed(2).replace('.', ',')}% · {label}
             </span>
-          </div>
+          </li>
         ))}
-      </div>
-      <p class="c-single-word__letter-bar-source">
-        Der Häufigkeitsvergleich wird auf Grundlage einer Textstichprobe von knapp 180 Milliarden Zeichen aus dem Deutschen Referenzkorpus erstellt.{" "}
+      </ul>
+
+      <p class='c-single-word__letter-bar-source'>
+        Der Häufigkeitsvergleich wird auf Grundlage einer Textstichprobe von knapp 180 Milliarden
+        Zeichen aus dem Deutschen Referenzkorpus erstellt.{' '}
         <a
-          href="https://de.wikipedia.org/wiki/Buchstabenh%C3%A4ufigkeit"
-          target="_blank"
-          rel="noopener noreferrer"
+          href='https://de.wikipedia.org/wiki/Buchstabenh%C3%A4ufigkeit'
+          target='_blank'
+          rel='noopener noreferrer'
         >
           Quelle: Wikipedia
         </a>
