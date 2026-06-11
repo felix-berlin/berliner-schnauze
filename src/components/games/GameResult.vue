@@ -54,6 +54,7 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { useShare } from '@vueuse/core'
 import type { GameCard } from '@composables/useGame'
+import { buildShareUrl } from '@utils/gameShare'
 
 const TrophyIcon = defineAsyncComponent(() => import('virtual:icons/lucide/trophy'))
 const ExternalLinkIcon = defineAsyncComponent(() => import('virtual:icons/lucide/external-link'))
@@ -83,10 +84,17 @@ const accuracyPercent = computed(() =>
 const { share: _share, isSupported: canShare } = useShare()
 
 function share() {
+  const url = buildShareUrl({
+    bestStreak: props.bestStreak,
+    correctAnswers: props.correctAnswers,
+    date: new Date().toISOString(),
+    score: props.score,
+    totalAnswered: props.totalAnswered,
+  })
   _share({
     text: `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
     title: 'Berliner oder nicht?',
-    url: 'https://berliner-schnauze.de/games/berliner-oder-nicht',
+    url: `https://berliner-schnauze.de${url}`,
   })
 }
 </script>
