@@ -12,7 +12,7 @@
     >
       <p class="c-bon-card__label">Berlinerisch?</p>
       <p class="c-bon-card__word">{{ word }}</p>
-      <p class="c-bon-card__progress">{{ cardNumber }} / 20</p>
+      <p class="c-bon-card__progress">Karte {{ cardNumber }}</p>
 
       <Transition name="fade-fast">
         <div v-if="showOverlay" class="c-bon-card__overlay">
