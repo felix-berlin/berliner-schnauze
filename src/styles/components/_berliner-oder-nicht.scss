@@ -88,7 +88,7 @@
 }
 
 // HUD
-.c-game-hud {
+.c-bon-hud {
   --c-bon-surface: #fff;
   --c-bon-border: rgb(0 0 0 / 12%);
   --c-bon-text-muted: #999;
@@ -183,7 +183,7 @@
 }
 
 // Card
-.c-game-card {
+.c-bon-card {
   --c-bon-surface: #fff;
   --c-bon-border: rgb(0 0 0 / 12%);
   --c-bon-text-muted: #999;
@@ -238,7 +238,7 @@
     }
 
     &--shake {
-      animation: c-game-card-shake 0.4s ease;
+      animation: c-bon-card-shake 0.4s ease;
       border-color: var(--orange-500);
       box-shadow: 0 8px 32px rgb(207 48 24 / 30%);
     }
@@ -324,7 +324,7 @@
   }
 }
 
-@keyframes c-game-card-shake {
+@keyframes c-bon-card-shake {
   0%,
   100% {
     transform: translateX(0);
@@ -403,7 +403,7 @@
 }
 
 // Result
-.c-game-result {
+.c-bon-result {
   --c-bon-surface: #fff;
   --c-bon-border: rgb(0 0 0 / 12%);
   --c-bon-text-muted: #999;

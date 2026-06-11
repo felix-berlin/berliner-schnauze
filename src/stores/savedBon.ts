@@ -1,7 +1,7 @@
 import { persistentAtom } from '@nanostores/persistent'
-import type { GameCard } from '@composables/useGame'
+import type { BonCard } from '@composables/useBon'
 
-export interface SavedGameSnapshot {
+export interface SavedBonSnapshot {
   phase: 'playing'
   lives: number
   score: number
@@ -10,23 +10,23 @@ export interface SavedGameSnapshot {
   multiplier: number
   totalAnswered: number
   correctAnswers: number
-  currentCard: GameCard
-  deck: GameCard[]
+  currentCard: BonCard
+  deck: BonCard[]
   lastAnswerCorrect: boolean | null
-  lastCard: GameCard | null
-  realQueue: GameCard[]
-  fakeQueue: GameCard[]
+  lastCard: BonCard | null
+  realQueue: BonCard[]
+  fakeQueue: BonCard[]
 }
 
-export const $savedGame = persistentAtom<SavedGameSnapshot | null>(
-  'gameSession:',
+export const $savedBon = persistentAtom<SavedBonSnapshot | null>(
+  'bonSession:',
   null,
   {
     decode(value) {
       try {
-        return JSON.parse(value) as SavedGameSnapshot
+        return JSON.parse(value) as SavedBonSnapshot
       } catch (err) {
-        console.warn('[savedGame] Failed to parse snapshot:', value, err)
+        console.warn('[savedBon] Failed to parse snapshot:', value, err)
         return null
       }
     },

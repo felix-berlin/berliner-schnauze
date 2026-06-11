@@ -1,19 +1,19 @@
-import { $gameStats } from "@stores/gameStats";
-import { $savedGame } from "@stores/savedGame";
+import { $bonStats } from "@stores/bonStats";
+import { $savedBon } from "@stores/savedBon";
 import { createToastNotify } from "@stores/toastNotify";
 import { trackEvent } from "@utils/analytics";
 import { ref, computed } from "vue";
 
 import type { FakeWord } from "@/data/fakeWords";
 
-export interface GameCard {
+export interface BonCard {
   word: string;
   isReal: boolean;
   slug?: string;
   translation?: string;
 }
 
-interface GameState {
+interface BonState {
   phase: "idle" | "playing" | "result";
   lives: number;
   score: number;
@@ -22,10 +22,10 @@ interface GameState {
   multiplier: number;
   totalAnswered: number;
   correctAnswers: number;
-  currentCard: GameCard | null;
-  deck: GameCard[];
+  currentCard: BonCard | null;
+  deck: BonCard[];
   lastAnswerCorrect: boolean | null;
-  lastCard: GameCard | null;
+  lastCard: BonCard | null;
 }
 
 // --- Pure helpers (exported for testing) ---
@@ -46,7 +46,7 @@ function fisherYates<T>(arr: T[]): T[] {
   return a;
 }
 
-export function buildDeck(realWords: GameCard[], fakes: FakeWord[]): GameCard[] {
+export function buildDeck(realWords: BonCard[], fakes: FakeWord[]): BonCard[] {
   const DECK_SIZE = 20;
   // Variable split: 50–75% real (10–15 cards), rest fake
   const realCount = Math.floor(Math.random() * 6) + 10; // 10..15
@@ -55,14 +55,14 @@ export function buildDeck(realWords: GameCard[], fakes: FakeWord[]): GameCard[] 
   const shuffledReal = fisherYates(realWords).slice(0, realCount);
   const shuffledFake = fisherYates(fakes)
     .slice(0, fakeCount)
-    .map((f): GameCard => ({ isReal: false, word: f.word }));
+    .map((f): BonCard => ({ isReal: false, word: f.word }));
 
   return fisherYates([...shuffledReal, ...shuffledFake]);
 }
 
 // Draw n cards from queue without repeating; refills by reshuffling source when empty
-function drawFromQueue(queue: GameCard[], source: GameCard[], n: number): GameCard[] {
-  const result: GameCard[] = [];
+function drawFromQueue(queue: BonCard[], source: BonCard[], n: number): BonCard[] {
+  const result: BonCard[] = [];
   for (let i = 0; i < n; i++) {
     if (queue.length === 0) queue.push(...fisherYates([...source]));
     if (queue.length === 0) break;
@@ -73,8 +73,8 @@ function drawFromQueue(queue: GameCard[], source: GameCard[], n: number): GameCa
 
 // --- Composable ---
 
-export function useGame() {
-  const state = ref<GameState>({
+export function useBon() {
+  const state = ref<BonState>({
     bestStreak: 0,
     correctAnswers: 0,
     currentCard: null,
@@ -103,13 +103,13 @@ export function useGame() {
   const lastAnswerCorrect = computed(() => state.value.lastAnswerCorrect);
   const lastCard = computed(() => state.value.lastCard);
 
-  let _realWords: GameCard[] = [];
-  let _fakeSource: GameCard[] = [];
+  let _realWords: BonCard[] = [];
+  let _fakeSource: BonCard[] = [];
   // Persistent queues — cycle through all words before repeating
-  let _realQueue: GameCard[] = [];
-  let _fakeQueue: GameCard[] = [];
+  let _realQueue: BonCard[] = [];
+  let _fakeQueue: BonCard[] = [];
 
-  function init(realWords: GameCard[], fakeWords: FakeWord[]) {
+  function init(realWords: BonCard[], fakeWords: FakeWord[]) {
     _realWords = realWords;
     _fakeSource = fakeWords.map((f) => ({ isReal: false as const, word: f.word }));
     _realQueue = fisherYates([...realWords]);
@@ -117,7 +117,7 @@ export function useGame() {
     isReady.value = true
   }
 
-  function _makeQueuedDeck(): GameCard[] {
+  function _makeQueuedDeck(): BonCard[] {
     const realCount = Math.floor(Math.random() * 6) + 10; // 10..15
     const fakeCount = 20 - realCount;
     const real = drawFromQueue(_realQueue, _realWords, realCount);
@@ -162,7 +162,7 @@ export function useGame() {
 
   function _saveToStorage() {
     if (state.value.phase !== 'playing' || !state.value.currentCard) return
-    $savedGame.set({
+    $savedBon.set({
       bestStreak: state.value.bestStreak,
       correctAnswers: state.value.correctAnswers,
       currentCard: state.value.currentCard,
@@ -181,7 +181,7 @@ export function useGame() {
   }
 
   function _clearStorage() {
-    $savedGame.set(null)
+    $savedBon.set(null)
   }
 
   function answer(guessedReal: boolean) {
@@ -226,27 +226,27 @@ export function useGame() {
   function _endGame() {
     _clearStorage();
     state.value.phase = "result";
-    const stats = $gameStats.get();
+    const stats = $bonStats.get();
     const isNewHighScore = state.value.score > stats.highScore;
     const isNewBestStreak = state.value.bestStreak > stats.bestStreak;
 
-    $gameStats.setKey("totalGamesPlayed", stats.totalGamesPlayed + 1);
-    $gameStats.setKey("totalCorrect", stats.totalCorrect + state.value.correctAnswers);
-    $gameStats.setKey("totalAnswered", stats.totalAnswered + state.value.totalAnswered);
+    $bonStats.setKey("totalGamesPlayed", stats.totalGamesPlayed + 1);
+    $bonStats.setKey("totalCorrect", stats.totalCorrect + state.value.correctAnswers);
+    $bonStats.setKey("totalAnswered", stats.totalAnswered + state.value.totalAnswered);
 
     if (isNewHighScore) {
-      $gameStats.setKey("highScore", state.value.score);
+      $bonStats.setKey("highScore", state.value.score);
       trackEvent("game", "new_highscore", "berliner-oder-nicht", state.value.score);
     }
     if (isNewBestStreak) {
-      $gameStats.setKey("bestStreak", state.value.bestStreak);
+      $bonStats.setKey("bestStreak", state.value.bestStreak);
     }
 
     trackEvent("game", "game_over", "berliner-oder-nicht", state.value.score);
   }
 
   const isNewHighScore = computed(() => {
-    const stats = $gameStats.get();
+    const stats = $bonStats.get();
     return (
       state.value.phase === "result" &&
       state.value.score >= stats.highScore &&
@@ -256,7 +256,7 @@ export function useGame() {
 
   function resumeGame() {
     if (_realWords.length === 0) return
-    const saved = $savedGame.get()
+    const saved = $savedBon.get()
     if (!saved || saved.phase !== 'playing') return
     state.value = {
       bestStreak: saved.bestStreak,

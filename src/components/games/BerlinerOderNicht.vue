@@ -31,7 +31,7 @@
 
     <!-- Playing -->
     <template v-if="phase === 'playing'">
-      <GameHUD
+      <BonHUD
         :lives="lives"
         :score="score"
         :streak="streak"
@@ -39,7 +39,7 @@
         :is-highscore="score > allTimeHighScore"
       />
       <Transition :name="cardTransitionName" mode="out-in">
-        <GameCard
+        <BonCard
           v-if="currentCard"
           :key="cardNumber"
           :word="currentCard.word"
@@ -55,7 +55,7 @@
     <!-- Result -->
     <template v-if="phase === 'result'">
       <ConfettiEffect v-if="isNewHighScore" />
-      <GameResult
+      <BonResult
         :score="score"
         :best-streak="bestStreak"
         :total-answered="totalAnswered"
@@ -73,13 +73,13 @@
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useStore } from '@nanostores/vue'
 import ConfettiEffect from '@components/ConfettiEffect.vue'
-import { $gameStats } from '@stores/gameStats'
-import { $savedGame } from '@stores/savedGame'
+import { $bonStats } from '@stores/bonStats'
+import { $savedBon } from '@stores/savedBon'
 import { fakeWords } from '@/data/fakeWords'
-import { useGame, type GameCard as GameCardData } from '@composables/useGame'
-import GameCard from '@components/games/GameCard.vue'
-import GameHUD from '@components/games/GameHUD.vue'
-import GameResult from '@components/games/GameResult.vue'
+import { useBon, type BonCard as BonCardData } from '@composables/useBon'
+import BonCard from '@components/games/BonCard.vue'
+import BonHUD from '@components/games/BonHUD.vue'
+import BonResult from '@components/games/BonResult.vue'
 
 const {
   answer,
@@ -100,14 +100,14 @@ const {
   startGame: _startGame,
   streak,
   totalAnswered,
-} = useGame()
+} = useBon()
 
-const stats = useStore($gameStats)
+const stats = useStore($bonStats)
 const allTimeHighScore = computed(() => stats.value.highScore)
 const allTimeBestStreak = computed(() => stats.value.bestStreak)
 
-const savedGame = useStore($savedGame)
-const hasSavedGame = computed(() => savedGame.value?.phase === 'playing')
+const savedBon = useStore($savedBon)
+const hasSavedGame = computed(() => savedBon.value?.phase === 'playing')
 
 // Animation state
 const exitDirection = ref<'left' | 'right' | null>(null)
@@ -130,7 +130,7 @@ onMounted(async () => {
     type SearchRecord = { wordProperties: { berlinerisch: string; translations: string[] }; slug: string }
     const records = data as SearchRecord[]
 
-    const realWords: GameCardData[] = records
+    const realWords: BonCardData[] = records
       .filter((r) => r?.wordProperties?.berlinerisch)
       .map((r) => ({
         isReal: true,

@@ -46,6 +46,10 @@ const menuItems: (ItemObject | { component: DefineComponent; props: object })[] 
     },
   },
   {
+    link: "/games/berliner-oder-nicht",
+    title: "Spiel - Berliner oder nicht?",
+  },
+  {
     link: "/wort-vorschlagen",
     title: "Wort vorschlagen",
   },
@@ -59,5 +63,3 @@ const menuItems: (ItemObject | { component: DefineComponent; props: object })[] 
   },
 ];
 </script>
-
-<style scoped></style>

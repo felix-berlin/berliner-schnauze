@@ -1,29 +1,29 @@
 <template>
-  <div class="c-game-card">
-    <div class="c-game-card__hint" aria-hidden="true">
+  <div class="c-bon-card">
+    <div class="c-bon-card__hint" aria-hidden="true">
       <span>← NEE</span>
       <span>JA →</span>
     </div>
 
     <div
       ref="cardRef"
-      :class="['c-game-card__card', isShaking && 'c-game-card__card--shake']"
+      :class="['c-bon-card__card', isShaking && 'c-bon-card__card--shake']"
       :style="dragCardStyle"
     >
-      <p class="c-game-card__label">Berlinerisch?</p>
-      <p class="c-game-card__word">{{ word }}</p>
-      <p class="c-game-card__progress">{{ cardNumber }} / 20</p>
+      <p class="c-bon-card__label">Berlinerisch?</p>
+      <p class="c-bon-card__word">{{ word }}</p>
+      <p class="c-bon-card__progress">{{ cardNumber }} / 20</p>
 
       <Transition name="fade-fast">
-        <div v-if="showOverlay" class="c-game-card__overlay">
+        <div v-if="showOverlay" class="c-bon-card__overlay">
           War {{ overlayText }}!
         </div>
       </Transition>
     </div>
 
-    <div class="c-game-card__buttons">
+    <div class="c-bon-card__buttons">
       <button
-        class="c-game-card__btn c-game-card__btn--no"
+        class="c-bon-card__btn c-bon-card__btn--no"
         aria-label="Nee, nicht Berlinerisch"
         @click="emit('answer', false)"
       >
@@ -31,7 +31,7 @@
         Nee
       </button>
       <button
-        class="c-game-card__btn c-game-card__btn--yes"
+        class="c-bon-card__btn c-bon-card__btn--yes"
         aria-label="Ja, Berlinerisch!"
         @click="emit('answer', true)"
       >
@@ -40,7 +40,7 @@
       </button>
     </div>
 
-    <p class="c-game-card__keyboard-hint" aria-hidden="true">← Pfeiltasten auch möglich →</p>
+    <p class="c-bon-card__keyboard-hint" aria-hidden="true">← Pfeiltasten auch möglich →</p>
   </div>
 </template>
 

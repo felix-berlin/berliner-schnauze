@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { buildShareUrl, decodeShareHash, encodeShareHash } from '@utils/gameShare'
-import type { SharePayload } from '@utils/gameShare'
+import { buildShareUrl, decodeShareHash, encodeShareHash } from '@utils/bonShare'
+import type { BonSharePayload } from '@utils/bonShare'
 
-const payload: SharePayload = {
+const payload: BonSharePayload = {
   score: 150,
   bestStreak: 7,
   totalAnswered: 18,

@@ -1,5 +1,5 @@
 ---
-import GameShareView from '@components/games/GameShareView.vue'
+import BonShareView from '@components/games/BonShareView.vue'
 import Layout from '@layouts/Layout.astro'
 
 const page = {
@@ -9,5 +9,5 @@ const page = {
 ---
 
 <Layout content={page}>
-  <GameShareView client:only="vue" />
+  <BonShareView client:only="vue" />
 </Layout>

@@ -1,6 +1,6 @@
 import { persistentMap } from '@nanostores/persistent'
 
-export interface GameStats {
+export interface BonStats {
   highScore: number
   bestStreak: number
   totalGamesPlayed: number
@@ -8,8 +8,8 @@ export interface GameStats {
   totalAnswered: number
 }
 
-export const $gameStats = persistentMap<GameStats>(
-  'gameStats:',
+export const $bonStats = persistentMap<BonStats>(
+  'bonStats:',
   {
     bestStreak: 0,
     highScore: 0,

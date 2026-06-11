@@ -1,32 +1,32 @@
 <template>
-  <div class="c-game-hud">
-    <div class="c-game-hud__lives" aria-label="Leben">
+  <div class="c-bon-hud">
+    <div class="c-bon-hud__lives" aria-label="Leben">
       <component
         :is="HeartIcon"
         v-for="i in MAX_LIVES"
         :key="i"
-        :class="['c-game-hud__life-icon', { 'c-game-hud__life-icon--lost': i > lives }]"
+        :class="['c-bon-hud__life-icon', { 'c-bon-hud__life-icon--lost': i > lives }]"
         :aria-hidden="true"
         width="22"
         height="22"
       />
     </div>
 
-    <div class="c-game-hud__score-wrap">
-      <span :class="['c-game-hud__score', { 'c-game-hud__score--highscore': isHighscore }]">
+    <div class="c-bon-hud__score-wrap">
+      <span :class="['c-bon-hud__score', { 'c-bon-hud__score--highscore': isHighscore }]">
         {{ score }}
       </span>
-      <span class="c-game-hud__score-label">Score</span>
+      <span class="c-bon-hud__score-label">Score</span>
     </div>
 
-    <div class="c-game-hud__streak">
-      <div class="c-game-hud__streak-count">
+    <div class="c-bon-hud__streak">
+      <div class="c-bon-hud__streak-count">
         <FlameIcon width="16" height="16" aria-hidden="true" />
         {{ streak }}
       </div>
-      <div class="c-game-hud__multiplier">
+      <div class="c-bon-hud__multiplier">
         <span
-          :class="['c-game-hud__multiplier-badge', { 'c-game-hud__multiplier-badge--active': multiplier > 1 }]"
+          :class="['c-bon-hud__multiplier-badge', { 'c-bon-hud__multiplier-badge--active': multiplier > 1 }]"
         >{{ multiplier }}×</span>
       </div>
     </div>
