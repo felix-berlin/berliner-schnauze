@@ -24,7 +24,15 @@ import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
 import { fetchAllWords } from '@services/api.ts';
 import { formattedDate, removeFileExtension, routeToWord, seoData } from '@utils/helpers.ts';
-import { findAnagrams, getWordType, translateNlpTags } from '@utils/wordHelper.ts';
+import {
+  alphabeticNeighbors,
+  findAnagrams,
+  getWordType,
+  similarSoundingWords,
+  similarWords,
+  translateNlpTags,
+} from '@utils/wordHelper.ts';
+import type { WordRef } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 import ExternalLink from '~icons/lucide/external-link';
@@ -33,15 +41,32 @@ import type { BerlinerWord } from '@/gql/entity-types';
 
 export const getStaticPaths = (async () => {
   const allWords = await fetchAllWords();
+  const wordRefs: WordRef[] = allWords.map(({ node }) => ({
+    id: node.id,
+    slug: node.slug,
+    wordProperties: { berlinerisch: node.wordProperties?.berlinerisch },
+  }));
 
-  return allWords.map(({ node }) => {
+  return allWords.map(({ node }, i) => {
+    const wordRef = wordRefs[i]!;
+    const berlinerisch = node.wordProperties?.berlinerisch ?? '';
     return {
       params: {
         wordSlug: node.slug ?? undefined,
       },
       props: {
-        allWords: allWords.map((word) => word.node),
+        alphabeticNeighborsResult: alphabeticNeighbors(wordRefs, wordRef),
+        anagramsResult: findAnagrams(berlinerisch, wordRefs),
+        similarSpellingResult: similarWords(wordRefs, wordRef)
+          .filter((w) => w.isSimilar >= 0.85)
+          .sort((a, b) => b.isSimilar - a.isSimilar)
+          .slice(0, 5)
+          .map((w) => w.word),
+        soundingWordsResult: similarSoundingWords(wordRefs, wordRef)
+          .filter((r) => r.isSimilar)
+          .map((r) => r.word),
         word: node,
+        wordRefs,
       },
     };
   });
@@ -51,7 +76,8 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { wordSlug } = Astro.params as Params;
-const { allWords, word } = Astro.props;
+const { word, wordRefs, alphabeticNeighborsResult, anagramsResult, soundingWordsResult, similarSpellingResult } =
+  Astro.props;
 
 const wordProps: BerlinerWord['wordProperties'] = word.wordProperties;
 
@@ -71,7 +97,7 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
 
 const hasImages = Boolean(wordProps?.images && wordProps.images.nodes.length > 0);
-const hasAnagrams = findAnagrams(word.wordProperties?.berlinerisch ?? '', allWords).length > 0;
+const hasAnagrams = anagramsResult.length > 0;
 const wortartLabel: string | undefined =
   wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
 
@@ -131,7 +157,7 @@ const schemaJson = () =>
         }
 
         <WordSectionOrthographie
-          allWords={allWords}
+          allWords={wordRefs}
           word={word.wordProperties?.berlinerisch ?? ''}
         />
 
@@ -139,9 +165,9 @@ const schemaJson = () =>
 
         <WordSectionGrammatik wordTags={wordTags} />
 
-        <WordSectionPhonologie allWords={allWords} word={word} />
+        <WordSectionPhonologie soundingWords={soundingWordsResult} similarSpelling={similarSpellingResult} />
 
-        <WordAnagrams allWords={allWords} word={word.wordProperties?.berlinerisch ?? ''} />
+        <WordAnagrams anagrams={anagramsResult} />
 
         <section class='c-section-card' id='navigation' aria-labelledby='heading-navigation'>
           <div class='c-section-card__header'>
@@ -149,7 +175,7 @@ const schemaJson = () =>
             <h2 class='c-section-card__title' id='heading-navigation'>Alphabetische Nachbarn</h2>
           </div>
           <div class='c-section-card__body'>
-            <WordAlphabetNav allWords={allWords} currentWord={word} />
+            <WordAlphabetNav neighbors={alphabeticNeighborsResult} />
           </div>
         </section>
 
@@ -244,9 +270,9 @@ const schemaJson = () =>
     }
   </footer>
 
-  <RelatedWords words={allWords}>
+  <RelatedWords words={wordRefs}>
     <li>
-      <RandomWordButton class:list='c-related-words__word is-random' words={allWords} />
+      <RandomWordButton class:list='c-related-words__word is-random' words={wordRefs} />
     </li>
   </RelatedWords>
 </Layout>

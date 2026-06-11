@@ -1,16 +1,14 @@
 ---
 import WordSimilarSpelling from '@components/word/WordSimilarSpelling.astro';
 import { routeToWord } from '@utils/helpers';
-import { similarSoundingWords } from '@utils/wordHelper';
-import type { BerlinerWord } from '@/gql/entity-types';
+import type { WordRef } from '@utils/wordHelper';
 
 interface Props {
-  word: BerlinerWord;
-  allWords: BerlinerWord[];
+  soundingWords: WordRef[];
+  similarSpelling: WordRef[];
 }
 
-const { word, allWords } = Astro.props;
-const soundingWords = similarSoundingWords(allWords, word).filter((r) => r.isSimilar);
+const { soundingWords, similarSpelling } = Astro.props;
 ---
 
 <section class='c-section-card' id='phonologie' aria-labelledby='heading-phonologie'>
@@ -24,10 +22,10 @@ const soundingWords = similarSoundingWords(allWords, word).filter((r) => r.isSim
         <>
           <h3>Ähnlich klingende Wörter</h3>
           <ul>
-            {soundingWords.map((result) => (
+            {soundingWords.map((w) => (
               <li>
-                <a href={routeToWord(result.word?.slug ?? undefined)}>
-                  {result.word?.wordProperties?.berlinerisch}
+                <a href={routeToWord(w.slug ?? undefined)}>
+                  {w.wordProperties?.berlinerisch}
                 </a>
               </li>
             ))}
@@ -35,6 +33,6 @@ const soundingWords = similarSoundingWords(allWords, word).filter((r) => r.isSim
         </>
       )
     }
-    <WordSimilarSpelling allWords={allWords} currentWord={word} />
+    <WordSimilarSpelling similar={similarSpelling} />
   </div>
 </section>

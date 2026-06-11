@@ -7,7 +7,7 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
-import { defineConfig, envField } from "astro/config";
+import { defineConfig, envField, svgoOptimizer } from "astro/config";
 import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
@@ -40,7 +40,10 @@ const sassAliases = {
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   trailingSlash: "never",
-  prefetch: true,
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "viewport",
+  },
   build: {
     format: "file",
   },
@@ -157,6 +160,10 @@ export default defineConfig({
     },
   },
   experimental: {
+    rustCompiler: true,
+    clientPrerender: true,
+    chromeDevtoolsWorkspace: true,
+    svgOptimizer: svgoOptimizer(),
     queuedRendering: {
       enabled: true,
       contentCache: true,
@@ -373,7 +380,11 @@ export default defineConfig({
       rollupOptions: {
         output: {
           manualChunks: (id) => {
-            if (id.includes("/stores/wordList") || id.includes("@orama/") || id.includes("@nanostores/async")) {
+            if (
+              id.includes("/stores/wordList") ||
+              id.includes("@orama/") ||
+              id.includes("@nanostores/async")
+            ) {
               return "wordList";
             }
           },

@@ -1,8 +1,21 @@
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
+import germanWordsArray from "all-the-german-words";
 import nlp from "de-compromise";
 import natural from "natural";
 
-import type { BerlinerWord, WordPropertiesWikimediaFiles } from "@/gql/entity-types";
+import type { WordPropertiesWikimediaFiles } from "@/gql/entity-types";
+
+export type WordRef = {
+  id?: string | null;
+  slug?: string | null;
+  wordProperties?: { berlinerisch?: string | null } | null;
+};
+
+export const germanWords = new Set<string>(
+  (germanWordsArray as string[]).map((w) => w.toLowerCase()),
+);
+
+const _soundEx = new natural.SoundEx();
 
 /**
  * Returns the word with vowels and consonants colored.
@@ -161,12 +174,10 @@ export const translateNlpTags = (tags: WordTags[]): WordTags[] => {
   return translatedTags;
 };
 
-export const similarSoundingWords = (allWords: BerlinerWord[], currentWord: BerlinerWord) => {
+export const similarSoundingWords = (allWords: WordRef[], currentWord: WordRef) => {
   if (!currentWord || !allWords) {
     return [];
   }
-
-  const SoundEx = natural.SoundEx;
 
   const allWordsWithoutCurrent = allWords.filter((word) => word.id !== currentWord?.id);
   return allWordsWithoutCurrent.map((word) => {
@@ -175,7 +186,7 @@ export const similarSoundingWords = (allWords: BerlinerWord[], currentWord: Berl
 
     const isSimilar =
       currentBerlinerisch && wordBerlinerisch
-        ? new SoundEx().compare(wordBerlinerisch, currentBerlinerisch)
+        ? _soundEx.compare(wordBerlinerisch, currentBerlinerisch)
         : false;
 
     return {
@@ -186,8 +197,8 @@ export const similarSoundingWords = (allWords: BerlinerWord[], currentWord: Berl
 };
 
 export const similarWords = (
-  allWords: BerlinerWord[],
-  currentWord: BerlinerWord,
+  allWords: WordRef[],
+  currentWord: WordRef,
   needsSimilarity?: number,
 ) => {
   if (!currentWord || !allWords) {
@@ -400,7 +411,7 @@ export const wordCuriosities = (
 
 const sortedChars = (word: string): string => word.toLowerCase().split("").sort().join("");
 
-export const findAnagrams = (word: string, allWords: BerlinerWord[]): BerlinerWord[] => {
+export const findAnagrams = (word: string, allWords: WordRef[]): WordRef[] => {
   const target = sortedChars(word);
   return allWords.filter((w) => {
     const berlinerisch = w.wordProperties?.berlinerisch ?? "";
@@ -411,10 +422,10 @@ export const findAnagrams = (word: string, allWords: BerlinerWord[]): BerlinerWo
 };
 
 export const alphabeticNeighbors = (
-  allWords: BerlinerWord[],
-  currentWord: BerlinerWord,
+  allWords: WordRef[],
+  currentWord: WordRef,
   n: number = 3,
-): { before: BerlinerWord[]; after: BerlinerWord[] } => {
+): { before: WordRef[]; after: WordRef[] } => {
   const sorted = [...allWords].sort((a, b) =>
     (a.wordProperties?.berlinerisch ?? "")
       .toLowerCase()
