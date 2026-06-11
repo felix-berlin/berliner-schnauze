@@ -47,6 +47,20 @@ describe('decodeShareHash', () => {
   })
 })
 
+describe('decodeShareHash — edge cases', () => {
+  it('returns null when hash has no dot', () => {
+    expect(decodeShareHash('nodothere')).toBeNull()
+  })
+
+  it('returns null when b64 part is empty (trailing dot)', () => {
+    expect(decodeShareHash('some-uuid.')).toBeNull()
+  })
+
+  it('returns null for base64 that decodes to non-JSON', () => {
+    expect(decodeShareHash('uuid.bm90anNvbg')).toBeNull()
+  })
+})
+
 describe('buildShareUrl', () => {
   it('returns a path with the correct route and a decodable hash', () => {
     const url = buildShareUrl(payload)
