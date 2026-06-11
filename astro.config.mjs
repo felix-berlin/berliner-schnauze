@@ -255,7 +255,9 @@ export default defineConfig({
       workbox: {
         globDirectory: "dist",
         // navigateFallback: "/",
-        globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
+        globPatterns: import.meta.env.DEV
+          ? []
+          : ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
         // Increase the file size limit to 15 MB to accommodate large images
         maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // 15 MB
         runtimeCaching: [
@@ -327,6 +329,24 @@ export default defineConfig({
     },
 
     plugins: [
+      // In dev mode, the browser fetches sw.js.map and workbox-*.js.map because
+      // vite-pwa generates source maps for the dev service worker. These requests
+      // fall through to Astro's router and match [legalPages].astro → 404 + WARN.
+      // Intercept them here before Astro sees them and return an empty source map.
+      {
+        name: "suppress-sw-sourcemap-404",
+        apply: "serve",
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (!req.url?.match(/\/(sw|workbox-[^/]+)\.js\.map(\?.*)?$/)) {
+              return next();
+            }
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end("{}");
+          });
+        },
+      },
       Icons({
         iconCustomizer(collection, icon, props) {
           // customize all icons in this collection
