@@ -98,184 +98,409 @@
   },
   "nodes": [
     {
+      "label": "BonShareView.vue",
+      "file_type": "code",
+      "source_file": "src/components/games/BonShareView.vue",
+      "source_location": "L1",
+      "id": "src_components_games_bonshareview_vue",
+      "community": 17,
+      "norm_label": "bonshareview.vue"
+    },
+    {
+      "label": "params",
+      "file_type": "code",
+      "source_file": "src/components/games/BonShareView.vue",
+      "source_location": "L47",
+      "id": "games_bonshareview_params",
+      "community": 17,
+      "norm_label": "params"
+    },
+    {
+      "label": "accuracyPercent",
+      "file_type": "code",
+      "source_file": "src/components/games/BonShareView.vue",
+      "source_location": "L53",
+      "id": "games_bonshareview_accuracypercent",
+      "community": 17,
+      "norm_label": "accuracypercent"
+    },
+    {
+      "label": "index.astro",
+      "file_type": "code",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L1",
+      "id": "src_pages_index_astro",
+      "community": 23,
+      "norm_label": "index.astro"
+    },
+    {
+      "label": "content",
+      "file_type": "code",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L13",
+      "id": "pages_index_content",
+      "community": 23,
+      "norm_label": "content"
+    },
+    {
+      "label": "facts",
+      "file_type": "code",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L24",
+      "id": "pages_index_facts",
+      "community": 23,
+      "norm_label": "facts"
+    },
+    {
+      "label": "@styles/objects/_index.scss",
+      "file_type": "code",
+      "source_file": "src/styles/objects/_index.scss",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss",
+      "community": 23,
+      "norm_label": "@styles/objects/_index.scss"
+    },
+    {
+      "label": "@assets/images/brown-bear-roar.png",
+      "file_type": "code",
+      "source_file": "src/assets/images/brown-bear-roar.png",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_assets_images_brown_bear_roar_png",
+      "community": 23,
+      "norm_label": "@assets/images/brown-bear-roar.png"
+    },
+    {
+      "label": "@components/FactCard.astro",
+      "file_type": "code",
+      "source_file": "src/components/FactCard.astro",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_components_factcard_astro",
+      "community": 23,
+      "norm_label": "@components/factcard.astro"
+    },
+    {
+      "label": "@components/word-search/WordSearch.astro",
+      "file_type": "code",
+      "source_file": "src/components/word-search/WordSearch.astro",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_components_word_search_wordsearch_astro",
+      "community": 23,
+      "norm_label": "@components/word-search/wordsearch.astro"
+    },
+    {
+      "label": "@components/WordOfTheDay.vue",
+      "file_type": "code",
+      "source_file": "src/components/WordOfTheDay.vue",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_components_wordoftheday_vue",
+      "community": 23,
+      "norm_label": "@components/wordoftheday.vue"
+    },
+    {
+      "label": "@components/WordSearchLink.vue",
+      "file_type": "code",
+      "source_file": "src/components/WordSearchLink.vue",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_components_wordsearchlink_vue",
+      "community": 23,
+      "norm_label": "@components/wordsearchlink.vue"
+    },
+    {
+      "label": "@layouts/Layout.astro",
+      "file_type": "code",
+      "source_file": "src/layouts/Layout.astro",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro",
+      "community": 129,
+      "norm_label": "@layouts/layout.astro"
+    },
+    {
+      "label": "@utils/helpers.ts",
+      "file_type": "code",
+      "source_file": "src/utils/helpers.ts",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts",
+      "community": 130,
+      "norm_label": "@utils/helpers.ts"
+    },
+    {
+      "label": "astro:assets",
+      "file_type": "code",
+      "source_file": "astro:assets",
+      "confidence": "EXTRACTED",
+      "id": "astro_assets",
+      "community": 9,
+      "norm_label": "astro:assets"
+    },
+    {
+      "label": "@styles/components/_facts-grid.scss",
+      "file_type": "code",
+      "source_file": "src/styles/components/_facts-grid.scss",
+      "confidence": "EXTRACTED",
+      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss",
+      "community": 23,
+      "norm_label": "@styles/components/_facts-grid.scss"
+    },
+    {
+      "label": "bonShare.test.ts",
+      "file_type": "code",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L1",
+      "id": "src_tests_unit_utils_bonshare_test_ts",
+      "community": 17,
+      "norm_label": "bonshare.test.ts"
+    },
+    {
+      "label": "payload",
+      "file_type": "code",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L5",
+      "id": "utils_bonshare_test_payload",
+      "community": 17,
+      "norm_label": "payload"
+    },
+    {
+      "label": "hash",
+      "file_type": "code",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L19",
+      "id": "utils_bonshare_test_hash",
+      "community": 17,
+      "norm_label": "hash"
+    },
+    {
+      "label": "[uuid]",
+      "file_type": "code",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L20",
+      "id": "utils_bonshare_test_uuid",
+      "community": 17,
+      "norm_label": "[uuid]"
+    },
+    {
+      "label": "url",
+      "file_type": "code",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L66",
+      "id": "utils_bonshare_test_url",
+      "community": 17,
+      "norm_label": "url"
+    },
+    {
+      "label": "bonShare.ts",
+      "file_type": "code",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L1",
+      "id": "src_utils_bonshare_ts",
+      "community": 17,
+      "norm_label": "bonshare.ts"
+    },
+    {
+      "label": "BonSharePayload",
+      "file_type": "code",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L1",
+      "id": "utils_bonshare_bonsharepayload",
+      "community": 17,
+      "norm_label": "bonsharepayload"
+    },
+    {
+      "label": "toBase64Url()",
+      "file_type": "code",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L9",
+      "id": "utils_bonshare_tobase64url",
+      "community": 17,
+      "norm_label": "tobase64url()"
+    },
+    {
+      "label": "fromBase64Url()",
+      "file_type": "code",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L13",
+      "id": "utils_bonshare_frombase64url",
+      "community": 17,
+      "norm_label": "frombase64url()"
+    },
+    {
+      "label": "encodeShareHash()",
+      "file_type": "code",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L21",
+      "id": "utils_bonshare_encodesharehash",
+      "community": 17,
+      "norm_label": "encodesharehash()"
+    },
+    {
+      "label": "decodeShareHash()",
+      "file_type": "code",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L27",
+      "id": "utils_bonshare_decodesharehash",
+      "community": 17,
+      "norm_label": "decodesharehash()"
+    },
+    {
+      "label": "buildShareUrl()",
+      "file_type": "code",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L39",
+      "id": "utils_bonshare_buildshareurl",
+      "community": 17,
+      "norm_label": "buildshareurl()"
+    },
+    {
       "label": "BerlinerOderNicht.vue",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L1",
-      "id": "src_components_games_berlinerodernicht_vue",
       "community": 106,
-      "norm_label": "berlinerodernicht.vue"
+      "norm_label": "berlinerodernicht.vue",
+      "id": "src_components_games_berlinerodernicht_vue"
     },
     {
       "label": "savedBon",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L110",
-      "id": "games_berlinerodernicht_savedbon",
       "community": 106,
-      "norm_label": "savedbon"
+      "norm_label": "savedbon",
+      "id": "games_berlinerodernicht_savedbon"
     },
     {
       "label": "hasSavedGame",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L111",
-      "id": "games_berlinerodernicht_hassavedgame",
       "community": 106,
-      "norm_label": "hassavedgame"
+      "norm_label": "hassavedgame",
+      "id": "games_berlinerodernicht_hassavedgame"
     },
     {
       "label": "isShaking",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L115",
-      "id": "games_berlinerodernicht_isshaking",
       "community": 106,
-      "norm_label": "isshaking"
+      "norm_label": "isshaking",
+      "id": "games_berlinerodernicht_isshaking"
     },
     {
       "label": "cardNumber",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L116",
-      "id": "games_berlinerodernicht_cardnumber",
       "community": 106,
-      "norm_label": "cardnumber"
+      "norm_label": "cardnumber",
+      "id": "games_berlinerodernicht_cardnumber"
     },
     {
       "label": "{ vibrate }",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L118",
-      "id": "games_berlinerodernicht_vibrate",
       "community": 106,
-      "norm_label": "{ vibrate }"
+      "norm_label": "{ vibrate }",
+      "id": "games_berlinerodernicht_vibrate"
     },
     {
       "label": "{ start: startShakeTimer }",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L120",
-      "id": "games_berlinerodernicht_start_startshaketimer",
       "community": 106,
-      "norm_label": "{ start: startshaketimer }"
+      "norm_label": "{ start: startshaketimer }",
+      "id": "games_berlinerodernicht_start_startshaketimer"
     },
     {
       "label": "cardTransitionName",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L126",
-      "id": "games_berlinerodernicht_cardtransitionname",
       "community": 106,
-      "norm_label": "cardtransitionname"
+      "norm_label": "cardtransitionname",
+      "id": "games_berlinerodernicht_cardtransitionname"
     },
     {
       "label": "startGame()",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L157",
-      "id": "games_berlinerodernicht_startgame",
       "community": 106,
-      "norm_label": "startgame()"
+      "norm_label": "startgame()",
+      "id": "games_berlinerodernicht_startgame"
     },
     {
       "label": "resumeGame()",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L164",
-      "id": "games_berlinerodernicht_resumegame",
       "community": 106,
-      "norm_label": "resumegame()"
+      "norm_label": "resumegame()",
+      "id": "games_berlinerodernicht_resumegame"
     },
     {
       "label": "onAnswer()",
       "file_type": "code",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L171",
-      "id": "games_berlinerodernicht_onanswer",
       "community": 106,
-      "norm_label": "onanswer()"
+      "norm_label": "onanswer()",
+      "id": "games_berlinerodernicht_onanswer"
     },
     {
       "label": "BonCard.vue",
       "file_type": "code",
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L1",
-      "id": "src_components_games_boncard_vue",
       "community": 24,
-      "norm_label": "boncard.vue"
+      "norm_label": "boncard.vue",
+      "id": "src_components_games_boncard_vue"
     },
     {
       "label": "showOverlay",
       "file_type": "code",
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L68",
-      "id": "games_boncard_showoverlay",
       "community": 24,
-      "norm_label": "showoverlay"
+      "norm_label": "showoverlay",
+      "id": "games_boncard_showoverlay"
     },
     {
       "label": "overlayText",
       "file_type": "code",
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L72",
-      "id": "games_boncard_overlaytext",
       "community": 24,
-      "norm_label": "overlaytext"
+      "norm_label": "overlaytext",
+      "id": "games_boncard_overlaytext"
     },
     {
       "label": "{ vibrate }",
       "file_type": "code",
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L76",
-      "id": "games_boncard_vibrate",
       "community": 24,
-      "norm_label": "{ vibrate }"
+      "norm_label": "{ vibrate }",
+      "id": "games_boncard_vibrate"
     },
     {
       "label": "{ isSwiping, distanceX }",
       "file_type": "code",
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L78",
-      "id": "games_boncard_isswiping_distancex",
       "community": 24,
-      "norm_label": "{ isswiping, distancex }"
+      "norm_label": "{ isswiping, distancex }",
+      "id": "games_boncard_isswiping_distancex"
     },
     {
       "label": "dragCardStyle",
       "file_type": "code",
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L92",
-      "id": "games_boncard_dragcardstyle",
       "community": 24,
-      "norm_label": "dragcardstyle"
-    },
-    {
-      "label": "BonShareView.vue",
-      "file_type": "code",
-      "source_file": "src/components/games/BonShareView.vue",
-      "source_location": "L1",
-      "community": 86,
-      "norm_label": "bonshareview.vue",
-      "id": "src_components_games_bonshareview_vue"
-    },
-    {
-      "label": "hash",
-      "file_type": "code",
-      "source_file": "src/components/games/BonShareView.vue",
-      "source_location": "L47",
-      "community": 86,
-      "norm_label": "hash",
-      "id": "games_bonshareview_hash"
-    },
-    {
-      "label": "accuracyPercent",
-      "file_type": "code",
-      "source_file": "src/components/games/BonShareView.vue",
-      "source_location": "L50",
-      "community": 86,
-      "norm_label": "accuracypercent",
-      "id": "games_bonshareview_accuracypercent"
+      "norm_label": "dragcardstyle",
+      "id": "games_boncard_dragcardstyle"
     },
     {
       "label": "GameResult.vue",
@@ -421,15 +646,6 @@
       "community": 111,
       "norm_label": "page",
       "id": "berliner_oder_nicht_share_page"
-    },
-    {
-      "label": "@layouts/Layout.astro",
-      "file_type": "code",
-      "source_file": "src/layouts/Layout.astro",
-      "confidence": "EXTRACTED",
-      "community": 111,
-      "norm_label": "@layouts/layout.astro",
-      "id": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
     },
     {
       "label": "gameShare.test.ts",
@@ -634,7 +850,7 @@
       "file_type": "code",
       "source_file": "src/pages/games/berliner-oder-nicht.astro",
       "source_location": "L1",
-      "community": 111,
+      "community": 129,
       "norm_label": "berliner-oder-nicht.astro",
       "id": "src_pages_games_berliner_oder_nicht_astro"
     },
@@ -643,7 +859,7 @@
       "file_type": "code",
       "source_file": "src/pages/games/berliner-oder-nicht.astro",
       "source_location": "L5",
-      "community": 111,
+      "community": 129,
       "norm_label": "page",
       "id": "games_berliner_oder_nicht_page"
     },
@@ -742,7 +958,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/wordHelper.test.ts",
       "source_location": "L1",
-      "community": 129,
+      "community": 128,
       "norm_label": "wordhelper.test.ts",
       "id": "src_tests_unit_utils_wordhelper_test_ts"
     },
@@ -751,7 +967,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/wordHelper.test.ts",
       "source_location": "L17",
-      "community": 129,
+      "community": 128,
       "norm_label": "mockfetch",
       "id": "utils_wordhelper_test_mockfetch"
     },
@@ -760,7 +976,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/wordHelper.test.ts",
       "source_location": "L19",
-      "community": 129,
+      "community": 128,
       "norm_label": "makeword()",
       "id": "utils_wordhelper_test_makeword"
     },
@@ -859,7 +1075,7 @@
       "file_type": "code",
       "source_file": "src/stores/notificationPermission.ts",
       "source_location": "L1",
-      "community": 115,
+      "community": 29,
       "norm_label": "notificationpermission.ts",
       "id": "src_stores_notificationpermission_ts"
     },
@@ -868,7 +1084,7 @@
       "file_type": "code",
       "source_file": "src/stores/notificationPermission.ts",
       "source_location": "L5",
-      "community": 115,
+      "community": 29,
       "norm_label": "notificationpermissionstate",
       "id": "stores_notificationpermission_notificationpermissionstate"
     },
@@ -877,7 +1093,7 @@
       "file_type": "code",
       "source_file": "src/stores/notificationPermission.ts",
       "source_location": "L7",
-      "community": 115,
+      "community": 29,
       "norm_label": "isnotificationsupported()",
       "id": "stores_notificationpermission_isnotificationsupported"
     },
@@ -886,7 +1102,7 @@
       "file_type": "code",
       "source_file": "src/stores/notificationPermission.ts",
       "source_location": "L10",
-      "community": 115,
+      "community": 29,
       "norm_label": "$notificationpermission",
       "id": "stores_notificationpermission_notificationpermission"
     },
@@ -895,7 +1111,7 @@
       "file_type": "code",
       "source_file": "src/stores/notificationPermission.ts",
       "source_location": "L14",
-      "community": 115,
+      "community": 29,
       "norm_label": "requestnotificationpermission()",
       "id": "stores_notificationpermission_requestnotificationpermission"
     },
@@ -904,7 +1120,7 @@
       "file_type": "code",
       "source_file": "src/stores/pushSubscription.ts",
       "source_location": "L1",
-      "community": 17,
+      "community": 29,
       "norm_label": "pushsubscription.ts",
       "id": "src_stores_pushsubscription_ts"
     },
@@ -913,7 +1129,7 @@
       "file_type": "code",
       "source_file": "src/stores/pushSubscription.ts",
       "source_location": "L5",
-      "community": 17,
+      "community": 29,
       "norm_label": "pushstate",
       "id": "stores_pushsubscription_pushstate"
     },
@@ -922,7 +1138,7 @@
       "file_type": "code",
       "source_file": "src/stores/pushSubscription.ts",
       "source_location": "L7",
-      "community": 17,
+      "community": 29,
       "norm_label": "ispushsupported()",
       "id": "stores_pushsubscription_ispushsupported"
     },
@@ -931,7 +1147,7 @@
       "file_type": "code",
       "source_file": "src/stores/pushSubscription.ts",
       "source_location": "L12",
-      "community": 17,
+      "community": 29,
       "norm_label": "isvapidconfigured()",
       "id": "stores_pushsubscription_isvapidconfigured"
     },
@@ -940,7 +1156,7 @@
       "file_type": "code",
       "source_file": "src/stores/pushSubscription.ts",
       "source_location": "L16",
-      "community": 17,
+      "community": 29,
       "norm_label": "$pushsubscription",
       "id": "stores_pushsubscription_pushsubscription"
     },
@@ -949,7 +1165,7 @@
       "file_type": "code",
       "source_file": "src/stores/pushSubscription.ts",
       "source_location": "L20",
-      "community": 17,
+      "community": 29,
       "norm_label": "loadpushstate()",
       "id": "stores_pushsubscription_loadpushstate"
     },
@@ -958,7 +1174,7 @@
       "file_type": "code",
       "source_file": "src/stores/pushSubscription.ts",
       "source_location": "L42",
-      "community": 17,
+      "community": 29,
       "norm_label": "subscribepush()",
       "id": "stores_pushsubscription_subscribepush"
     },
@@ -967,7 +1183,7 @@
       "file_type": "code",
       "source_file": "src/stores/pushSubscription.ts",
       "source_location": "L93",
-      "community": 17,
+      "community": 29,
       "norm_label": "unsubscribepush()",
       "id": "stores_pushsubscription_unsubscribepush"
     },
@@ -976,7 +1192,7 @@
       "file_type": "code",
       "source_file": "src/stores/pushSubscription.ts",
       "source_location": "L113",
-      "community": 17,
+      "community": 29,
       "norm_label": "urlbase64touint8array()",
       "id": "stores_pushsubscription_urlbase64touint8array"
     },
@@ -1129,7 +1345,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordList.ts",
       "source_location": "L219",
-      "community": 48,
+      "community": 138,
       "norm_label": "$setsortorder()",
       "id": "stores_wordlist_setsortorder"
     },
@@ -1255,7 +1471,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L14",
-      "community": 18,
+      "community": 133,
       "norm_label": "coloredconsonantsandvowels()",
       "id": "utils_wordhelper_coloredconsonantsandvowels"
     },
@@ -1318,7 +1534,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L188",
-      "community": 18,
+      "community": 133,
       "norm_label": "similarwords()",
       "id": "utils_wordhelper_similarwords"
     },
@@ -1327,7 +1543,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L213",
-      "community": 129,
+      "community": 128,
       "norm_label": "createwikimediafilelist()",
       "id": "utils_wordhelper_createwikimediafilelist"
     },
@@ -1390,7 +1606,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L316",
-      "community": 133,
+      "community": 18,
       "norm_label": "isvowelchar()",
       "id": "utils_wordhelper_isvowelchar"
     },
@@ -1399,7 +1615,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L317",
-      "community": 133,
+      "community": 18,
       "norm_label": "isconsonantchar()",
       "id": "utils_wordhelper_isconsonantchar"
     },
@@ -1408,7 +1624,7 @@
       "file_type": "code",
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L319",
-      "community": 133,
+      "community": 18,
       "norm_label": "wordcuriosities()",
       "id": "utils_wordhelper_wordcuriosities"
     },
@@ -1656,15 +1872,6 @@
       "id": "home_felix_workspace_berliner_schnauze_src_services_api_ts"
     },
     {
-      "label": "@utils/helpers.ts",
-      "file_type": "code",
-      "source_file": "src/utils/helpers.ts",
-      "confidence": "EXTRACTED",
-      "community": 123,
-      "norm_label": "@utils/helpers.ts",
-      "id": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
-    },
-    {
       "label": "astro-breadcrumbs",
       "file_type": "code",
       "source_file": "astro-breadcrumbs",
@@ -1891,7 +2098,7 @@
       "source_file": "src/components/word/WordSectionPhonologie.astro",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 123,
+      "community": 130,
       "norm_label": "@components/word/wordsectionphonologie.astro",
       "id": "src_components_word_wordsectionphonologie_astro"
     },
@@ -1900,7 +2107,7 @@
       "file_type": "code",
       "source_file": "src/components/word/WordSectionPhonologie.astro",
       "source_location": "L13",
-      "community": 123,
+      "community": 130,
       "norm_label": "soundingwords",
       "id": "word_wordsectionphonologie_soundingwords"
     },
@@ -1909,7 +2116,7 @@
       "file_type": "code",
       "source_file": "src/components/word/WordSimilarSpelling.astro",
       "confidence": "EXTRACTED",
-      "community": 123,
+      "community": 130,
       "norm_label": "@components/word/wordsimilarspelling.astro",
       "id": "home_felix_workspace_berliner_schnauze_src_components_word_wordsimilarspelling_astro"
     },
@@ -1918,7 +2125,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers",
       "confidence": "EXTRACTED",
-      "community": 123,
+      "community": 130,
       "norm_label": "@utils/helpers",
       "id": "home_felix_workspace_berliner_schnauze_src_utils_helpers"
     },
@@ -1965,7 +2172,7 @@
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 23,
+      "community": 9,
       "norm_label": "@components/imagegallery.astro",
       "id": "src_components_imagegallery_astro"
     },
@@ -1974,7 +2181,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L118",
-      "community": 23,
+      "community": 9,
       "norm_label": "constructor()",
       "id": "components_imagegallery_constructor"
     },
@@ -1983,7 +2190,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L122",
-      "community": 23,
+      "community": 9,
       "norm_label": "connectedcallback()",
       "id": "components_imagegallery_connectedcallback"
     },
@@ -1992,7 +2199,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L206",
-      "community": 23,
+      "community": 9,
       "norm_label": "disconnectedcallback()",
       "id": "components_imagegallery_disconnectedcallback"
     },
@@ -2001,7 +2208,7 @@
       "file_type": "code",
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L219",
-      "community": 23,
+      "community": 9,
       "norm_label": "createpictureelement()",
       "id": "components_imagegallery_createpictureelement"
     },
@@ -2010,7 +2217,7 @@
       "file_type": "code",
       "source_file": "photoswipe",
       "confidence": "EXTRACTED",
-      "community": 23,
+      "community": 9,
       "norm_label": "photoswipe",
       "id": "photoswipe"
     },
@@ -2019,25 +2226,16 @@
       "file_type": "code",
       "source_file": "photoswipe/style.css",
       "confidence": "EXTRACTED",
-      "community": 23,
+      "community": 9,
       "norm_label": "photoswipe/style.css",
       "id": "style_css"
-    },
-    {
-      "label": "astro:assets",
-      "file_type": "code",
-      "source_file": "astro:assets",
-      "confidence": "EXTRACTED",
-      "community": 23,
-      "norm_label": "astro:assets",
-      "id": "astro_assets"
     },
     {
       "label": "photoswipe/lightbox",
       "file_type": "code",
       "source_file": "photoswipe/lightbox",
       "confidence": "EXTRACTED",
-      "community": 23,
+      "community": 9,
       "norm_label": "photoswipe/lightbox",
       "id": "lightbox"
     },
@@ -2046,7 +2244,7 @@
       "file_type": "code",
       "source_file": "src/utils/analytics",
       "confidence": "EXTRACTED",
-      "community": 23,
+      "community": 9,
       "norm_label": "@utils/analytics",
       "id": "home_felix_workspace_berliner_schnauze_src_utils_analytics"
     },
@@ -2064,7 +2262,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/wordCuriosities.test.ts",
       "source_location": "L1",
-      "community": 133,
+      "community": 18,
       "norm_label": "wordcuriosities.test.ts",
       "id": "src_tests_unit_utils_wordcuriosities_test_ts"
     },
@@ -2074,7 +2272,7 @@
       "source_file": "src/components/AppSettings.vue",
       "source_location": "L1",
       "confidence": "EXTRACTED",
-      "community": 111,
+      "community": 123,
       "norm_label": "@components/appsettings.vue",
       "id": "src_components_appsettings_vue"
     },
@@ -2083,7 +2281,7 @@
       "file_type": "code",
       "source_file": "src/components/AppSettings.vue",
       "source_location": "L11",
-      "community": 111,
+      "community": 123,
       "norm_label": "bellofficon",
       "id": "components_appsettings_bellofficon"
     },
@@ -2092,7 +2290,7 @@
       "file_type": "code",
       "source_file": "src/components/AppSettings.vue",
       "source_location": "L13",
-      "community": 111,
+      "community": 123,
       "norm_label": "notificationpermission",
       "id": "components_appsettings_notificationpermission"
     },
@@ -2101,7 +2299,7 @@
       "file_type": "code",
       "source_file": "src/components/AppSettings.vue",
       "source_location": "L14",
-      "community": 111,
+      "community": 123,
       "norm_label": "notificationssupported",
       "id": "components_appsettings_notificationssupported"
     },
@@ -2209,7 +2407,7 @@
       "file_type": "code",
       "source_file": "src/pages/settings/cache.astro",
       "source_location": "L1",
-      "community": 111,
+      "community": 129,
       "norm_label": "cache.astro",
       "id": "src_pages_settings_cache_astro"
     },
@@ -2218,7 +2416,7 @@
       "file_type": "code",
       "source_file": "src/pages/settings/cache.astro",
       "source_location": "L5",
-      "community": 111,
+      "community": 129,
       "norm_label": "page",
       "id": "settings_cache_page"
     },
@@ -2227,7 +2425,7 @@
       "file_type": "code",
       "source_file": "src/components/PwaCacheOverview.vue",
       "confidence": "EXTRACTED",
-      "community": 111,
+      "community": 129,
       "norm_label": "@components/pwacacheoverview.vue",
       "id": "home_felix_workspace_berliner_schnauze_src_components_pwacacheoverview_vue"
     },
@@ -2236,7 +2434,7 @@
       "file_type": "code",
       "source_file": "src/pages/settings/index.astro",
       "source_location": "L1",
-      "community": 111,
+      "community": 123,
       "norm_label": "index.astro",
       "id": "src_pages_settings_index_astro"
     },
@@ -2245,7 +2443,7 @@
       "file_type": "code",
       "source_file": "src/pages/settings/index.astro",
       "source_location": "L5",
-      "community": 111,
+      "community": 123,
       "norm_label": "page",
       "id": "settings_index_page"
     },
@@ -2302,96 +2500,6 @@
       "community": 112,
       "norm_label": "mockrequestpermission",
       "id": "store_notificationpermission_test_mockrequestpermission"
-    },
-    {
-      "label": "index.astro",
-      "file_type": "code",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L1",
-      "community": 23,
-      "norm_label": "index.astro",
-      "id": "src_pages_index_astro"
-    },
-    {
-      "label": "content",
-      "file_type": "code",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L13",
-      "community": 23,
-      "norm_label": "content",
-      "id": "pages_index_content"
-    },
-    {
-      "label": "facts",
-      "file_type": "code",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L24",
-      "community": 23,
-      "norm_label": "facts",
-      "id": "pages_index_facts"
-    },
-    {
-      "label": "@styles/objects/_index.scss",
-      "file_type": "code",
-      "source_file": "src/styles/objects/_index.scss",
-      "confidence": "EXTRACTED",
-      "community": 23,
-      "norm_label": "@styles/objects/_index.scss",
-      "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss"
-    },
-    {
-      "label": "@assets/images/brown-bear-roar.png",
-      "file_type": "code",
-      "source_file": "src/assets/images/brown-bear-roar.png",
-      "confidence": "EXTRACTED",
-      "community": 23,
-      "norm_label": "@assets/images/brown-bear-roar.png",
-      "id": "home_felix_workspace_berliner_schnauze_src_assets_images_brown_bear_roar_png"
-    },
-    {
-      "label": "@components/FactCard.astro",
-      "file_type": "code",
-      "source_file": "src/components/FactCard.astro",
-      "confidence": "EXTRACTED",
-      "community": 23,
-      "norm_label": "@components/factcard.astro",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_factcard_astro"
-    },
-    {
-      "label": "@components/word-search/WordSearch.astro",
-      "file_type": "code",
-      "source_file": "src/components/word-search/WordSearch.astro",
-      "confidence": "EXTRACTED",
-      "community": 23,
-      "norm_label": "@components/word-search/wordsearch.astro",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_word_search_wordsearch_astro"
-    },
-    {
-      "label": "@components/WordOfTheDay.vue",
-      "file_type": "code",
-      "source_file": "src/components/WordOfTheDay.vue",
-      "confidence": "EXTRACTED",
-      "community": 23,
-      "norm_label": "@components/wordoftheday.vue",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_wordoftheday_vue"
-    },
-    {
-      "label": "@components/WordSearchLink.vue",
-      "file_type": "code",
-      "source_file": "src/components/WordSearchLink.vue",
-      "confidence": "EXTRACTED",
-      "community": 23,
-      "norm_label": "@components/wordsearchlink.vue",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_wordsearchlink_vue"
-    },
-    {
-      "label": "@styles/components/_facts-grid.scss",
-      "file_type": "code",
-      "source_file": "src/styles/components/_facts-grid.scss",
-      "confidence": "EXTRACTED",
-      "community": 23,
-      "norm_label": "@styles/components/_facts-grid.scss",
-      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss"
     },
     {
       "label": "MainHeader.astro",
@@ -3064,7 +3172,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.astro",
       "source_location": "L1",
-      "community": 23,
+      "community": 117,
       "norm_label": "wordsearchlink.astro",
       "id": "src_components_wordsearchlink_astro"
     },
@@ -3073,7 +3181,7 @@
       "file_type": "code",
       "source_file": "src/styles/components/_word-search-link.scss",
       "confidence": "EXTRACTED",
-      "community": 23,
+      "community": 117,
       "norm_label": "@styles/components/_word-search-link.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_word_search_link_scss"
     },
@@ -3110,7 +3218,7 @@
       "file_type": "code",
       "source_file": "src/pages/[legalPages].astro",
       "source_location": "L1",
-      "community": 113,
+      "community": 21,
       "norm_label": "[legalpages].astro",
       "id": "src_pages_legalpages_astro"
     },
@@ -3119,7 +3227,7 @@
       "file_type": "code",
       "source_file": "src/pages/[legalPages].astro",
       "source_location": "L13",
-      "community": 113,
+      "community": 21,
       "norm_label": "client",
       "id": "pages_legalpages_client"
     },
@@ -3128,7 +3236,7 @@
       "file_type": "code",
       "source_file": "src/styles/objects/_legal-pages.scss",
       "confidence": "EXTRACTED",
-      "community": 113,
+      "community": 21,
       "norm_label": "@styles/objects/_legal-pages.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_objects_legal_pages_scss"
     },
@@ -3155,7 +3263,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "confidence": "EXTRACTED",
-      "community": 113,
+      "community": 21,
       "norm_label": "@/gql/graphql.ts",
       "id": "home_felix_workspace_berliner_schnauze_src_gql_graphql_ts"
     },
@@ -3875,7 +3983,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L1",
-      "community": 99,
+      "community": 120,
       "norm_label": "wordlist.vue",
       "id": "src_components_wordlist_vue"
     },
@@ -3884,7 +3992,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L54",
-      "community": 99,
+      "community": 120,
       "norm_label": "oramasearch",
       "id": "components_wordlist_oramasearch"
     },
@@ -3893,7 +4001,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L55",
-      "community": 99,
+      "community": 120,
       "norm_label": "mutableoramasearch",
       "id": "components_wordlist_mutableoramasearch"
     },
@@ -3902,7 +4010,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L65",
-      "community": 99,
+      "community": 120,
       "norm_label": "activeindex",
       "id": "components_wordlist_activeindex"
     },
@@ -3911,7 +4019,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L67",
-      "community": 99,
+      "community": 120,
       "norm_label": "virtualizerref",
       "id": "components_wordlist_virtualizerref"
     },
@@ -3920,7 +4028,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L68",
-      "community": 99,
+      "community": 120,
       "norm_label": "showactive",
       "id": "components_wordlist_showactive"
     },
@@ -3929,7 +4037,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L72",
-      "community": 99,
+      "community": 120,
       "norm_label": "showactivewithtimeout()",
       "id": "components_wordlist_showactivewithtimeout"
     },
@@ -3938,7 +4046,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L89",
-      "community": 99,
+      "community": 120,
       "norm_label": "gotoword()",
       "id": "components_wordlist_gotoword"
     },
@@ -3947,7 +4055,7 @@
       "file_type": "code",
       "source_file": "src/components/WordList.vue",
       "source_location": "L93",
-      "community": 99,
+      "community": 120,
       "norm_label": "focusactive()",
       "id": "components_wordlist_focusactive"
     },
@@ -3992,7 +4100,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L1",
-      "community": 126,
+      "community": 29,
       "norm_label": "unsupportedbrowser.ts",
       "id": "src_lib_unsupportedbrowser_ts"
     },
@@ -4001,7 +4109,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L9",
-      "community": 126,
+      "community": 29,
       "norm_label": "isbrowsersupported()",
       "id": "lib_unsupportedbrowser_isbrowsersupported"
     },
@@ -4010,7 +4118,7 @@
       "file_type": "code",
       "source_file": "src/lib/unsupportedBrowser.ts",
       "source_location": "L18",
-      "community": 126,
+      "community": 29,
       "norm_label": "checkbrowsersupport()",
       "id": "lib_unsupportedbrowser_checkbrowsersupport"
     },
@@ -4129,7 +4237,7 @@
       "file_type": "code",
       "source_file": "src/gql/gql.ts",
       "source_location": "L108",
-      "community": 53,
+      "community": 86,
       "norm_label": "graphql()",
       "id": "gql_gql_graphql"
     },
@@ -4436,7 +4544,7 @@
       "file_type": "code",
       "source_file": "src/gql/graphql.ts",
       "source_location": "L154",
-      "community": 113,
+      "community": 21,
       "norm_label": "getpagesbyslugsdocument",
       "id": "gql_graphql_getpagesbyslugsdocument"
     },
@@ -4463,7 +4571,7 @@
       "file_type": "code",
       "source_file": "src/gql/index.ts",
       "source_location": "L1",
-      "community": 53,
+      "community": 86,
       "norm_label": "index.ts",
       "id": "src_gql_index_ts"
     },
@@ -4575,7 +4683,7 @@
       "source_file": "src/components/WordSearchLink.vue",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 23,
+      "community": 117,
       "norm_label": "wordsearchlink.vue",
       "id": "src_components_wordsearchlink_vue"
     },
@@ -4585,7 +4693,7 @@
       "source_file": "src/utils/helpers.ts",
       "confidence": "EXTRACTED",
       "source_location": "L1",
-      "community": 1,
+      "community": 113,
       "norm_label": "helpers.ts",
       "id": "src_utils_helpers_ts"
     },
@@ -5142,7 +5250,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L1",
-      "community": 20,
+      "community": 122,
       "norm_label": "sortwordsby.test.ts",
       "id": "src_tests_unit_components_filter_sortwordsby_test_ts"
     },
@@ -5151,7 +5259,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L15",
-      "community": 20,
+      "community": 122,
       "norm_label": "mocktogglefn",
       "id": "filter_sortwordsby_test_mocktogglefn"
     },
@@ -5160,7 +5268,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L16",
-      "community": 20,
+      "community": 122,
       "norm_label": "mocksetactiveordercategory",
       "id": "filter_sortwordsby_test_mocksetactiveordercategory"
     },
@@ -5169,7 +5277,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L17",
-      "community": 20,
+      "community": 122,
       "norm_label": "mockwordsearch",
       "id": "filter_sortwordsby_test_mockwordsearch"
     },
@@ -5178,7 +5286,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordsBy.test.ts",
       "source_location": "L35",
-      "community": 20,
+      "community": 122,
       "norm_label": "wrapper",
       "id": "filter_sortwordsby_test_wrapper"
     },
@@ -5187,7 +5295,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L1",
-      "community": 48,
+      "community": 138,
       "norm_label": "sortwordbyselect.test.ts",
       "id": "src_tests_unit_components_filter_sortwordbyselect_test_ts"
     },
@@ -5196,7 +5304,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L12",
-      "community": 48,
+      "community": 138,
       "norm_label": "wrapper",
       "id": "filter_sortwordbyselect_test_wrapper"
     },
@@ -5205,7 +5313,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/SortWordBySelect.test.ts",
       "source_location": "L18",
-      "community": 48,
+      "community": 138,
       "norm_label": "select",
       "id": "filter_sortwordbyselect_test_select"
     },
@@ -5214,7 +5322,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L1",
-      "community": 48,
+      "community": 135,
       "norm_label": "wordtypefilter.test.ts",
       "id": "src_tests_unit_components_filter_wordtypefilter_test_ts"
     },
@@ -5223,7 +5331,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L10",
-      "community": 48,
+      "community": 135,
       "norm_label": "mockwordsearch",
       "id": "filter_wordtypefilter_test_mockwordsearch"
     },
@@ -5232,7 +5340,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L33",
-      "community": 48,
+      "community": 135,
       "norm_label": "multiselect",
       "id": "filter_wordtypefilter_test_multiselect"
     },
@@ -5241,7 +5349,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/components/filter/WordTypeFilter.test.ts",
       "source_location": "L41",
-      "community": 48,
+      "community": 135,
       "norm_label": "attrs",
       "id": "filter_wordtypefilter_test_attrs"
     },
@@ -5448,7 +5556,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/similarWords.test.ts",
       "source_location": "L1",
-      "community": 18,
+      "community": 133,
       "norm_label": "similarwords.test.ts",
       "id": "src_tests_unit_utils_similarwords_test_ts"
     },
@@ -5457,7 +5565,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/similarWords.test.ts",
       "source_location": "L6",
-      "community": 18,
+      "community": 133,
       "norm_label": "mockwords",
       "id": "utils_similarwords_test_mockwords"
     },
@@ -5466,7 +5574,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/similarWords.test.ts",
       "source_location": "L18",
-      "community": 18,
+      "community": 133,
       "norm_label": "result",
       "id": "utils_similarwords_test_result"
     },
@@ -5475,7 +5583,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/coloredConsonantsAndVowels.test.ts",
       "source_location": "L1",
-      "community": 18,
+      "community": 133,
       "norm_label": "coloredconsonantsandvowels.test.ts",
       "id": "src_tests_unit_utils_coloredconsonantsandvowels_test_ts"
     },
@@ -5484,7 +5592,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L1",
-      "community": 1,
+      "community": 113,
       "norm_label": "randomelement.test.ts",
       "id": "src_tests_unit_utils_helper_randomelement_test_ts"
     },
@@ -5493,7 +5601,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L6",
-      "community": 1,
+      "community": 113,
       "norm_label": "elements",
       "id": "helper_randomelement_test_elements"
     },
@@ -5502,7 +5610,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/randomElement.test.ts",
       "source_location": "L7",
-      "community": 1,
+      "community": 113,
       "norm_label": "result",
       "id": "helper_randomelement_test_result"
     },
@@ -5520,7 +5628,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValueLength.test.ts",
       "source_location": "L1",
-      "community": 1,
+      "community": 113,
       "norm_label": "checkobjectvaluelength.test.ts",
       "id": "src_tests_unit_utils_helper_checkobjectvaluelength_test_ts"
     },
@@ -5529,7 +5637,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValueLength.test.ts",
       "source_location": "L6",
-      "community": 1,
+      "community": 113,
       "norm_label": "testobject",
       "id": "helper_checkobjectvaluelength_test_testobject"
     },
@@ -5538,7 +5646,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/formattedDate.test.ts",
       "source_location": "L1",
-      "community": 1,
+      "community": 113,
       "norm_label": "formatteddate.test.ts",
       "id": "src_tests_unit_utils_helper_formatteddate_test_ts"
     },
@@ -5547,7 +5655,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L1",
-      "community": 1,
+      "community": 115,
       "norm_label": "routetoword.test.ts",
       "id": "src_tests_unit_utils_helper_routetoword_test_ts"
     },
@@ -5556,7 +5664,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L6",
-      "community": 1,
+      "community": 115,
       "norm_label": "result",
       "id": "helper_routetoword_test_result"
     },
@@ -5565,7 +5673,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValues.test.ts",
       "source_location": "L1",
-      "community": 1,
+      "community": 113,
       "norm_label": "checkobjectvalues.test.ts",
       "id": "src_tests_unit_utils_helper_checkobjectvalues_test_ts"
     },
@@ -5574,7 +5682,7 @@
       "file_type": "code",
       "source_file": "src/tests/unit/utils/helper/checkObjectValues.test.ts",
       "source_location": "L6",
-      "community": 1,
+      "community": 113,
       "norm_label": "testobject",
       "id": "helper_checkobjectvalues_test_testobject"
     },
@@ -5728,7 +5836,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L16",
-      "community": 23,
+      "community": 117,
       "norm_label": "searchlinkiconwrapclass",
       "id": "components_wordsearchlink_searchlinkiconwrapclass"
     },
@@ -5737,7 +5845,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L17",
-      "community": 23,
+      "community": 117,
       "norm_label": "preferredmotion",
       "id": "components_wordsearchlink_preferredmotion"
     },
@@ -5746,7 +5854,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L18",
-      "community": 23,
+      "community": 117,
       "norm_label": "breakpoints",
       "id": "components_wordsearchlink_breakpoints"
     },
@@ -5755,7 +5863,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L29",
-      "community": 23,
+      "community": 117,
       "norm_label": "largerthansm",
       "id": "components_wordsearchlink_largerthansm"
     },
@@ -5764,7 +5872,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L31",
-      "community": 23,
+      "community": 117,
       "norm_label": "scrolltowordsearch()",
       "id": "components_wordsearchlink_scrolltowordsearch"
     },
@@ -5773,7 +5881,7 @@
       "file_type": "code",
       "source_file": "src/components/WordSearchLink.vue",
       "source_location": "L52",
-      "community": 23,
+      "community": 117,
       "norm_label": "showclickeffect()",
       "id": "components_wordsearchlink_showclickeffect"
     },
@@ -6048,7 +6156,7 @@
       "file_type": "code",
       "source_file": "virtual:icons/lucide/mouse-pointer-click",
       "confidence": "EXTRACTED",
-      "community": 23,
+      "community": 117,
       "norm_label": "virtual:icons/lucide/mouse-pointer-click",
       "id": "mouse_pointer_click"
     },
@@ -6285,7 +6393,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/WordTypeFilter.vue",
       "source_location": "L1",
-      "community": 48,
+      "community": 135,
       "norm_label": "wordtypefilter.vue",
       "id": "src_components_filter_wordtypefilter_vue"
     },
@@ -6303,7 +6411,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordsBy.vue",
       "source_location": "L1",
-      "community": 20,
+      "community": 122,
       "norm_label": "sortwordsby.vue",
       "id": "src_components_filter_sortwordsby_vue"
     },
@@ -6312,7 +6420,7 @@
       "file_type": "code",
       "source_file": "src/components/filter/SortWordsBy.vue",
       "source_location": "L45",
-      "community": 20,
+      "community": 122,
       "norm_label": "wordsearch",
       "id": "filter_sortwordsby_wordsearch"
     },
@@ -6483,7 +6591,7 @@
       "file_type": "code",
       "source_file": "src/utils/supportedBrowsers.mjs",
       "source_location": "L1",
-      "community": 126,
+      "community": 29,
       "norm_label": "supportedbrowsers.mjs",
       "id": "src_utils_supportedbrowsers_mjs"
     },
@@ -6591,7 +6699,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L12",
-      "community": 1,
+      "community": 115,
       "norm_label": "routetoword()",
       "id": "utils_helpers_routetoword"
     },
@@ -6600,7 +6708,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L30",
-      "community": 1,
+      "community": 113,
       "norm_label": "randomelement()",
       "id": "utils_helpers_randomelement"
     },
@@ -6627,7 +6735,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L74",
-      "community": 1,
+      "community": 113,
       "norm_label": "formatteddate()",
       "id": "utils_helpers_formatteddate"
     },
@@ -6636,7 +6744,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L93",
-      "community": 1,
+      "community": 113,
       "norm_label": "checkobjectvalues()",
       "id": "utils_helpers_checkobjectvalues"
     },
@@ -6645,7 +6753,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L104",
-      "community": 1,
+      "community": 113,
       "norm_label": "checkobjectvaluelength()",
       "id": "utils_helpers_checkobjectvaluelength"
     },
@@ -6654,7 +6762,7 @@
       "file_type": "code",
       "source_file": "src/utils/helpers.ts",
       "source_location": "L123",
-      "community": 1,
+      "community": 113,
       "norm_label": "removefileextension()",
       "id": "utils_helpers_removefileextension"
     },
@@ -6825,7 +6933,7 @@
       "file_type": "code",
       "source_file": "src/stores/index.ts",
       "source_location": "L1",
-      "community": 20,
+      "community": 14,
       "norm_label": "index.ts",
       "id": "src_stores_index_ts"
     },
@@ -6834,7 +6942,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L1",
-      "community": 21,
+      "community": 132,
       "norm_label": "wordoftheday.ts",
       "id": "src_stores_wordoftheday_ts"
     },
@@ -6843,7 +6951,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L5",
-      "community": 21,
+      "community": 132,
       "norm_label": "word",
       "id": "stores_wordoftheday_word"
     },
@@ -6852,7 +6960,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L21",
-      "community": 21,
+      "community": 132,
       "norm_label": "example",
       "id": "stores_wordoftheday_example"
     },
@@ -6861,7 +6969,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L26",
-      "community": 21,
+      "community": 132,
       "norm_label": "translation",
       "id": "stores_wordoftheday_translation"
     },
@@ -6870,7 +6978,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L30",
-      "community": 21,
+      "community": 132,
       "norm_label": "wordoftheday",
       "id": "stores_wordoftheday_wordoftheday"
     },
@@ -6879,7 +6987,7 @@
       "file_type": "code",
       "source_file": "src/stores/wordOfTheDay.ts",
       "source_location": "L61",
-      "community": 21,
+      "community": 132,
       "norm_label": "getwordoftheday()",
       "id": "stores_wordoftheday_getwordoftheday"
     },
@@ -6942,7 +7050,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L55",
-      "community": 126,
+      "community": 29,
       "norm_label": "createtoast()",
       "id": "stores_toastnotify_createtoast"
     },
@@ -6951,7 +7059,7 @@
       "file_type": "code",
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L67",
-      "community": 126,
+      "community": 29,
       "norm_label": "createtoastnotify()",
       "id": "stores_toastnotify_createtoastnotify"
     },
@@ -6987,7 +7095,7 @@
       "file_type": "code",
       "source_file": "src/services/wikimediaApi.ts",
       "source_location": "L1",
-      "community": 129,
+      "community": 21,
       "norm_label": "wikimediaapi.ts",
       "id": "src_services_wikimediaapi_ts"
     },
@@ -6996,7 +7104,7 @@
       "file_type": "code",
       "source_file": "src/services/wikimediaApi.ts",
       "source_location": "L3",
-      "community": 129,
+      "community": 128,
       "norm_label": "fetchwikimediaapi()",
       "id": "services_wikimediaapi_fetchwikimediaapi"
     },
@@ -7005,7 +7113,7 @@
       "file_type": "code",
       "source_file": "src/services/mutations/sendMail.ts",
       "source_location": "L1",
-      "community": 53,
+      "community": 86,
       "norm_label": "sendmail.ts",
       "id": "src_services_mutations_sendmail_ts"
     },
@@ -7014,7 +7122,7 @@
       "file_type": "code",
       "source_file": "src/services/mutations/sendMail.ts",
       "source_location": "L5",
-      "community": 53,
+      "community": 86,
       "norm_label": "sendemail",
       "id": "mutations_sendmail_sendemail"
     },
@@ -7023,7 +7131,7 @@
       "file_type": "code",
       "source_file": "src/services/mutations/sendMail.ts",
       "source_location": "L20",
-      "community": 53,
+      "community": 86,
       "norm_label": "sendemailviacontactform7()",
       "id": "mutations_sendmail_sendemailviacontactform7"
     },
@@ -7176,7 +7284,7 @@
       "file_type": "code",
       "source_file": "src/services/queries/getPage.ts",
       "source_location": "L1",
-      "community": 53,
+      "community": 86,
       "norm_label": "getpage.ts",
       "id": "src_services_queries_getpage_ts"
     },
@@ -7185,7 +7293,7 @@
       "file_type": "code",
       "source_file": "src/services/queries/getPage.ts",
       "source_location": "L3",
-      "community": 53,
+      "community": 86,
       "norm_label": "getpagesbyslugs",
       "id": "queries_getpage_getpagesbyslugs"
     },
@@ -7211,7 +7319,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 115,
       "norm_label": "randomwordbutton",
       "id": "components_randomwordbutton_randomwordbutton"
     },
@@ -7406,7 +7514,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 115,
       "norm_label": "relatedwords",
       "id": "components_relatedwords_relatedwords"
     },
@@ -7536,7 +7644,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 126,
+      "community": 29,
       "norm_label": "createtoastnotify",
       "id": "stores_index_createtoastnotify"
     },
@@ -7562,7 +7670,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 115,
       "norm_label": "berlinerword",
       "id": "gql_entitytypes_berlinerword"
     },
@@ -7796,7 +7904,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 136,
       "norm_label": "wordoftheday",
       "id": "components_wordoftheday_wordoftheday"
     },
@@ -7809,7 +7917,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 136,
       "norm_label": "countdownlogic",
       "id": "components_wordoftheday_countdown"
     },
@@ -7874,7 +7982,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 136,
       "norm_label": "singleloader",
       "id": "components_singleloader_singleloader"
     },
@@ -7939,7 +8047,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 136,
       "norm_label": "confettieffect",
       "id": "components_confettieffect_confettieffect"
     },
@@ -8680,7 +8788,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 131,
       "norm_label": "api/search/meta.json: search metadata api route",
       "id": "pages_api_searchmetaroute"
     },
@@ -8693,7 +8801,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 131,
       "norm_label": "api/search/index.json: orama search index builder",
       "id": "pages_api_searchindexroute"
     },
@@ -8706,7 +8814,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 115,
       "norm_label": "fragment-masking.ts: usefragment / makefragmentdata / isfragmentready",
       "id": "gql_fragmentmasking_usefragment"
     },
@@ -8719,7 +8827,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 115,
       "norm_label": "gql.ts: graphql() typed document map function",
       "id": "gql_gql_graphqlfunction"
     },
@@ -8732,7 +8840,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 115,
       "norm_label": "graphql.ts: codegen-generated gql types and fragments",
       "id": "gql_graphql_generatedtypes"
     },
@@ -8745,7 +8853,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 115,
       "norm_label": "gql/index.ts: barrel re-export of gql.ts",
       "id": "gql_index_gqlbarrel"
     },
@@ -8771,7 +8879,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 131,
       "norm_label": "vendor.d.ts: ambient module declarations (hypher, hyphenation.de, de-compromise)",
       "id": "types_vendor_vendordeclarations"
     },
@@ -8810,7 +8918,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 131,
       "norm_label": "sentrybrowser.ts: sentry browser init with tracing + replay",
       "id": "plugins_sentrybrowser_sentryinit"
     },
@@ -8823,7 +8931,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 131,
       "norm_label": "env.d.ts: global ambient types (turnstile, window._paq, astro refs)",
       "id": "src_env_globalambient"
     },
@@ -8836,7 +8944,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 131,
       "norm_label": "oramasearchindex type (returntype of makeoramasearchindex)",
       "id": "pages_api_ormasearchindex_type"
     },
@@ -9779,6 +9887,616 @@
   ],
   "links": [
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/games/BonShareView.vue",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_games_bonshareview_vue",
+      "target": "core"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/games/BonShareView.vue",
+      "source_location": "L50",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_games_bonshareview_vue",
+      "target": "games_bonshareview_accuracypercent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/games/BonShareView.vue",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "src_components_games_bonshareview_vue",
+      "target": "games_bonshareview_params",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/games/BonShareView.vue",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "src_components_games_bonshareview_vue",
+      "target": "src_utils_bonshare_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/games/BonShareView.vue",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "src_components_games_bonshareview_vue",
+      "target": "utils_bonshare_bonsharepayload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/games/BonShareView.vue",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "src_components_games_bonshareview_vue",
+      "target": "utils_bonshare_decodesharehash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "astro_assets"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_assets_images_brown_bear_roar_png"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_factcard_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_word_search_wordsearch_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_wordoftheday_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_components_wordsearchlink_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "pages_index_content"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "pages_index_facts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "src_components_factcard_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "src_components_word_search_wordsearch_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "src_components_wordoftheday_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "src_components_wordsearchlink_vue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "src_utils_helpers_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/index.astro",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_index_astro",
+      "target": "utils_helpers_seodata"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/games/berliner-oder-nicht.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_games_berliner_oder_nicht_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/games/berliner-oder-nicht/share.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_games_berliner_oder_nicht_share_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/[legalPages].astro",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_legalpages_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/settings/cache.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_settings_cache_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/settings/index.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_settings_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/wort/index.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_wort_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/wort/[...wordSlug].astro",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_wort_wordslug_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/BaseHead.astro",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_basehead_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/word/WordSectionPhonologie.astro",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_word_wordsectionphonologie_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/wort/index.astro",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_wort_index_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/wort/[...wordSlug].astro",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_pages_wort_wordslug_astro",
+      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/stores/wordList.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_stores_wordlist_ts",
+      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/Footer.astro",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_footer_astro",
+      "target": "astro_assets"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ImageGallery.astro",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_components_imagegallery_astro",
+      "target": "astro_assets"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_tests_unit_utils_bonshare_test_ts",
+      "target": "src_utils_bonshare_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_tests_unit_utils_bonshare_test_ts",
+      "target": "utils_bonshare_bonsharepayload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_tests_unit_utils_bonshare_test_ts",
+      "target": "utils_bonshare_buildshareurl",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_tests_unit_utils_bonshare_test_ts",
+      "target": "utils_bonshare_decodesharehash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_tests_unit_utils_bonshare_test_ts",
+      "target": "utils_bonshare_encodesharehash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "src_tests_unit_utils_bonshare_test_ts",
+      "target": "utils_bonshare_test_hash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_tests_unit_utils_bonshare_test_ts",
+      "target": "utils_bonshare_test_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "src_tests_unit_utils_bonshare_test_ts",
+      "target": "utils_bonshare_test_url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/utils/bonShare.test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "src_tests_unit_utils_bonshare_test_ts",
+      "target": "utils_bonshare_test_uuid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_utils_bonshare_ts",
+      "target": "utils_bonshare_bonsharepayload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "src_utils_bonshare_ts",
+      "target": "utils_bonshare_buildshareurl",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "src_utils_bonshare_ts",
+      "target": "utils_bonshare_decodesharehash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "src_utils_bonshare_ts",
+      "target": "utils_bonshare_encodesharehash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "src_utils_bonshare_ts",
+      "target": "utils_bonshare_frombase64url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_utils_bonshare_ts",
+      "target": "utils_bonshare_tobase64url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "utils_bonshare_encodesharehash",
+      "target": "utils_bonshare_tobase64url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "utils_bonshare_decodesharehash",
+      "target": "utils_bonshare_frombase64url",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/utils/bonShare.ts",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "utils_bonshare_buildshareurl",
+      "target": "utils_bonshare_encodesharehash",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/games/BerlinerOderNicht.vue",
@@ -9874,9 +10592,9 @@
       "source_file": "src/components/games/BerlinerOderNicht.vue",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_games_berlinerodernicht_vue",
-      "target": "games_berlinerodernicht_vibrate",
-      "confidence_score": 1.0
+      "target": "games_berlinerodernicht_vibrate"
     },
     {
       "relation": "contains",
@@ -9884,9 +10602,9 @@
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_games_boncard_vue",
-      "target": "games_boncard_dragcardstyle",
-      "confidence_score": 1.0
+      "target": "games_boncard_dragcardstyle"
     },
     {
       "relation": "contains",
@@ -9894,9 +10612,9 @@
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L78",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_games_boncard_vue",
-      "target": "games_boncard_isswiping_distancex",
-      "confidence_score": 1.0
+      "target": "games_boncard_isswiping_distancex"
     },
     {
       "relation": "contains",
@@ -9904,9 +10622,9 @@
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_games_boncard_vue",
-      "target": "games_boncard_overlaytext",
-      "confidence_score": 1.0
+      "target": "games_boncard_overlaytext"
     },
     {
       "relation": "contains",
@@ -9914,9 +10632,9 @@
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L68",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_games_boncard_vue",
-      "target": "games_boncard_showoverlay",
-      "confidence_score": 1.0
+      "target": "games_boncard_showoverlay"
     },
     {
       "relation": "contains",
@@ -9924,40 +10642,9 @@
       "source_file": "src/components/games/BonCard.vue",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_components_games_boncard_vue",
-      "target": "games_boncard_vibrate",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/games/BonShareView.vue",
-      "source_location": "L43",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_games_bonshareview_vue",
-      "target": "core"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/games/BonShareView.vue",
-      "source_location": "L50",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_games_bonshareview_vue",
-      "target": "games_bonshareview_accuracypercent"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/games/BonShareView.vue",
-      "source_location": "L47",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_games_bonshareview_vue",
-      "target": "games_bonshareview_hash"
+      "target": "games_boncard_vibrate"
     },
     {
       "relation": "contains",
@@ -10196,94 +10883,6 @@
       "confidence_score": 1.0,
       "source": "src_pages_games_berliner_oder_nicht_share_astro",
       "target": "berliner_oder_nicht_share_page"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/games/berliner-oder-nicht/share.astro",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_games_berliner_oder_nicht_share_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/games/berliner-oder-nicht.astro",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_games_berliner_oder_nicht_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/[legalPages].astro",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_legalpages_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/settings/cache.astro",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_settings_cache_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/settings/index.astro",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_settings_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/wort/index.astro",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_wort_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/wort/[...wordSlug].astro",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_wort_wordslug_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
     },
     {
       "relation": "contains",
@@ -11127,17 +11726,6 @@
       "confidence_score": 1.0,
       "source": "src_stores_wordlist_ts",
       "target": "gql_graphql_berlinerwordfragment"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/wordList.ts",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_stores_wordlist_ts",
-      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
     },
     {
       "relation": "imports",
@@ -12796,17 +13384,6 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/pages/wort/[...wordSlug].astro",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_wort_wordslug_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/wort/[...wordSlug].astro",
       "source_location": "L35",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -13213,50 +13790,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/BaseHead.astro",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_basehead_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/word/WordSectionPhonologie.astro",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_word_wordsectionphonologie_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/wort/index.astro",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_wort_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_utils_helpers_ts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/pages/wort/index.astro",
       "source_location": "L8",
       "weight": 1.0,
@@ -13621,17 +14154,6 @@
       "target": "word_wordletterfrequency_letters"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ImageGallery.astro",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_imagegallery_astro",
-      "target": "astro_assets"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/ImageGallery.astro",
@@ -13716,28 +14238,6 @@
       "confidence_score": 1.0,
       "source": "src_components_imagegallery_astro",
       "target": "style_css"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Footer.astro",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_footer_astro",
-      "target": "astro_assets"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "astro_assets"
     },
     {
       "relation": "contains",
@@ -14155,177 +14655,6 @@
       "confidence_score": 1.0,
       "source": "src_tests_unit_store_notificationpermission_test_ts",
       "target": "store_notificationpermission_test_mockrequestpermission"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_assets_images_brown_bear_roar_png"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_components_factcard_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_components_word_search_wordsearch_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_components_wordoftheday_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_components_wordsearchlink_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_facts_grid_scss"
-    },
-    {
-      "relation": "imports_from",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "home_felix_workspace_berliner_schnauze_src_styles_objects_index_scss"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "pages_index_content"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "pages_index_facts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "src_components_factcard_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "src_components_word_search_wordsearch_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "src_components_wordoftheday_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "src_components_wordsearchlink_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "src_layouts_layout_astro"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "src_utils_helpers_ts"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/index.astro",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_index_astro",
-      "target": "utils_helpers_seodata"
     },
     {
       "relation": "contains",
@@ -22886,5 +23215,5 @@
       "source_file": "src/pages/api/search/index.json.ts"
     }
   ],
-  "built_at_commit": "e4951a36f7f1168a5e8f484f3ddbea6f598406a9"
+  "built_at_commit": "6c056fc4203aee23acbf0d3a95eb2ff332d26a90"
 }

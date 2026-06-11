@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/pages/index.astro": {
-    "mtime": 1780347559.0663695,
-    "ast_hash": "ab67f86136ce92562a8a2afb64fcb3aa",
+    "mtime": 1781213883.469914,
+    "ast_hash": "3e079c8b65abff434f2398b228c62016",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/pages/wort/[...wordSlug].astro": {
@@ -705,7 +705,7 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/utils/supportedBrowsers.mjs": {
-    "mtime": 1781135187.7099068,
+    "mtime": 1781213982.5087554,
     "ast_hash": "cca277da912a6fd5156f67a9d1f21a2e",
     "semantic_hash": ""
   },
@@ -1050,8 +1050,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/tests/unit/utils/bonShare.test.ts": {
-    "mtime": 1781212208.3897214,
-    "ast_hash": "657bf520fc60aaa8a71cb2cbe28ea6d1",
+    "mtime": 1781214511.4326723,
+    "ast_hash": "63504bf68d2f043746cbe438a022a9c0",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/tests/unit/stores/bonPersistence.test.ts": {
@@ -1070,8 +1070,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/components/games/BonShareView.vue": {
-    "mtime": 1781212707.2911088,
-    "ast_hash": "dec921ccfc6be118ba60f1c34418c051",
+    "mtime": 1781214409.7068784,
+    "ast_hash": "43a8172b3d8904a3c5e84eadcebcdb4c",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/components/games/BonResult.vue": {
@@ -1085,8 +1085,8 @@
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/utils/bonShare.ts": {
-    "mtime": 1781212208.3897214,
-    "ast_hash": "bc9ed91696b6ba3509c00a8f7d91ad57",
+    "mtime": 1781214403.6806886,
+    "ast_hash": "ab92901f44da5d41f606cc0fe8ec91e3",
     "semantic_hash": ""
   },
   "/home/felix/workspace/berliner-schnauze/src/stores/bonStats.ts": {
