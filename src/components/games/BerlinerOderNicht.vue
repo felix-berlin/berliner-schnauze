@@ -19,12 +19,13 @@
       <button
         v-if="hasSavedGame"
         class="c-berliner-oder-nicht__resume-btn"
+        :disabled="!isReady"
         @click="resumeGame"
       >
         Weiterspielen
       </button>
-      <button class="c-berliner-oder-nicht__start-btn" @click="startGame">
-        {{ hasSavedGame ? 'Neu starten' : 'Spielen' }}
+      <button class="c-berliner-oder-nicht__start-btn" :disabled="!isReady" @click="startGame">
+        {{ isReady ? (hasSavedGame ? 'Neu starten' : 'Spielen') : 'Laden…' }}
       </button>
     </div>
 
@@ -87,6 +88,7 @@ const {
   currentCard,
   init,
   isNewHighScore,
+  isReady,
   lastAnswerCorrect,
   lastCard,
   lives,

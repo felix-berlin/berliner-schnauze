@@ -186,3 +186,30 @@ describe('session persistence', () => {
     expect($savedGame.set).toHaveBeenLastCalledWith(null)
   })
 })
+
+describe('useGame — isReady guard', () => {
+  it('isReady is false before init', () => {
+    const { isReady } = useGame()
+    expect(isReady.value).toBe(false)
+  })
+
+  it('isReady is true after init', () => {
+    const { init, isReady } = useGame()
+    init(makeRealWords(15), makeFakeWords(20))
+    expect(isReady.value).toBe(true)
+  })
+
+  it('startGame before init leaves phase as idle', () => {
+    const { startGame, phase } = useGame()
+    startGame()
+    expect(phase.value).toBe('idle')
+  })
+
+  it('startGame after init sets currentCard and phase to playing', () => {
+    const { init, startGame, currentCard, phase } = useGame()
+    init(makeRealWords(15), makeFakeWords(20))
+    startGame()
+    expect(phase.value).toBe('playing')
+    expect(currentCard.value).not.toBeNull()
+  })
+})

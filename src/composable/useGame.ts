@@ -88,6 +88,7 @@ export function useGame() {
     streak: 0,
     totalAnswered: 0,
   });
+  const isReady = ref(false)
 
   // Exposed reactive slices
   const phase = computed(() => state.value.phase);
@@ -103,28 +104,31 @@ export function useGame() {
   const lastCard = computed(() => state.value.lastCard);
 
   let _realWords: GameCard[] = [];
-  let _fakeWords: FakeWord[] = [];
+  let _fakeSource: GameCard[] = [];
   // Persistent queues — cycle through all words before repeating
   let _realQueue: GameCard[] = [];
   let _fakeQueue: GameCard[] = [];
 
   function init(realWords: GameCard[], fakeWords: FakeWord[]) {
     _realWords = realWords;
-    _fakeWords = fakeWords;
+    _fakeSource = fakeWords.map((f) => ({ isReal: false as const, word: f.word }));
     _realQueue = fisherYates([...realWords]);
-    _fakeQueue = fisherYates(fakeWords.map((f) => ({ isReal: false as const, word: f.word })));
+    _fakeQueue = fisherYates([..._fakeSource]);
+    isReady.value = true
   }
 
   function _makeQueuedDeck(): GameCard[] {
     const realCount = Math.floor(Math.random() * 6) + 10; // 10..15
     const fakeCount = 20 - realCount;
-    const fakeSource = _fakeWords.map((f) => ({ isReal: false as const, word: f.word }));
     const real = drawFromQueue(_realQueue, _realWords, realCount);
-    const fake = drawFromQueue(_fakeQueue, fakeSource, fakeCount);
+    const fake = drawFromQueue(_fakeQueue, _fakeSource, fakeCount);
     return fisherYates([...real, ...fake]);
   }
 
   function startGame() {
+    if (!isReady.value) return
+    _realQueue = fisherYates([..._realWords]);
+    _fakeQueue = fisherYates([..._fakeSource]);
     _clearStorage();
     state.value = {
       bestStreak: 0,
@@ -279,6 +283,7 @@ export function useGame() {
     currentCard,
     init,
     isNewHighScore,
+    isReady,
     lastAnswerCorrect,
     lastCard,
     lives,
