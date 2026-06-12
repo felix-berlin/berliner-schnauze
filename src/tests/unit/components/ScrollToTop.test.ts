@@ -23,7 +23,21 @@ describe("ScrollToTop.vue", () => {
     });
 
     vi.stubGlobal("IntersectionObserver", intersectionObserverMock);
+
+    // useIntersectionObserver only constructs the observer once its ref targets
+    // resolve to actual elements (queried in onMounted) — provide them in the DOM.
+    document.body.innerHTML = '<div id="docStart"></div><div class="c-footer__ground"></div>';
   });
+
+  // Mount + flush twice: onMounted resolves the target refs, then VueUse's
+  // post-flush watcher constructs the IntersectionObserver.
+  const mountAndGetObserverCallback = async () => {
+    const wrapper = mount(ScrollToTop);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    const callback = intersectionObserverMock.mock.calls[0][0];
+    return { wrapper, callback };
+  };
 
   it("should not show the button initially", () => {
     const wrapper = mount(ScrollToTop);
@@ -31,8 +45,7 @@ describe("ScrollToTop.vue", () => {
   });
 
   it("should show the button when scrolled", async () => {
-    const wrapper = mount(ScrollToTop);
-    const callback = intersectionObserverMock.mock.calls[0][0];
+    const { wrapper, callback } = await mountAndGetObserverCallback();
 
     // Simulate the intersection observer callback
     callback([{ isIntersecting: false }]);
@@ -42,8 +55,7 @@ describe("ScrollToTop.vue", () => {
   });
 
   it("should scroll to top when button is clicked", async () => {
-    const wrapper = mount(ScrollToTop);
-    const callback = intersectionObserverMock.mock.calls[0][0];
+    const { wrapper, callback } = await mountAndGetObserverCallback();
 
     // Simulate the intersection observer callback
     callback([{ isIntersecting: false }]);
