@@ -78,7 +78,7 @@
           :is-shaking="isShaking"
           :last-answer-correct="lastAnswerCorrect"
           :is-real="currentCard.isReal"
-          :is-first-card="cardNumber === 1"
+          :is-first-card="cardNumber === 1 && !stats.hasSeenIntro"
           :disabled="isAnswering"
           @answer="onAnswer"
         />
@@ -270,6 +270,7 @@ function onAnswer(guessedReal: boolean) {
   const card = currentCard.value
   if (!card) return
 
+  if (!stats.value.hasSeenIntro) $bonStats.setKey('hasSeenIntro', true)
   isAnswering.value = true
   const correct = card.isReal === guessedReal
   answer(guessedReal)
