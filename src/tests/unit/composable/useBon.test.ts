@@ -216,23 +216,32 @@ describe('answer — correct path', () => {
     expect(multiplier.value).toBe(5)
   })
 
-  it('triggers toast for correct real card with translation', () => {
-    const { init, startGame, answer, currentCard, nextCard } = useBon()
-    init(makeRealWords(30), makeFakeWords(20))
-    startGame()
-    vi.mocked(createToastNotify).mockClear()
+  it('triggers toast for correct real card with translation', async () => {
+    vi.useFakeTimers()
+    try {
+      const { init, startGame, answer, currentCard, nextCard } = useBon()
+      init(makeRealWords(30), makeFakeWords(20))
+      startGame()
+      vi.mocked(createToastNotify).mockClear()
 
-    // advance to a real card (50-75% of deck is real)
-    let attempts = 0
-    while (!currentCard.value?.isReal && attempts < 20) {
-      nextCard()
-      attempts++
+      // advance to a real card (50-75% of deck is real)
+      let attempts = 0
+      while (!currentCard.value?.isReal && attempts < 20) {
+        nextCard()
+        attempts++
+      }
+      expect(currentCard.value?.isReal).toBe(true)
+      answer(true)
+      // createToastNotify is deferred one rAF to avoid GPU compositor contention
+      // with the card animation on mobile — flush fake timers to trigger it.
+      await vi.runAllTimersAsync()
+      expect(createToastNotify).toHaveBeenCalledWith(
+        expect.objectContaining({ status: 'success' }),
+      )
+    } finally {
+      // finally — a failing assertion must not leak fake timers into other tests
+      vi.useRealTimers()
     }
-    expect(currentCard.value?.isReal).toBe(true)
-    answer(true)
-    expect(createToastNotify).toHaveBeenCalledWith(
-      expect.objectContaining({ status: 'success' }),
-    )
   })
 
   it('does NOT trigger toast for correct fake card', () => {

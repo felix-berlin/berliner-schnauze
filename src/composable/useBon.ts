@@ -203,10 +203,16 @@ export function useBon() {
       state.value.score += 10 * state.value.multiplier;
 
       if (card.isReal && card.translation) {
-        createToastNotify({
-          message: `„${card.word}" = ${card.translation}`,
-          status: "success",
-          timeout: 3000,
+        // Delay one rAF so the card transition has already claimed its GPU
+        // compositor layer. Without this, both the card exit/entry animation and
+        // the toast entry animation start in the same frame, causing a one-frame
+        // flash on mobile (compositor contention).
+        requestAnimationFrame(() => {
+          createToastNotify({
+            message: `„${card.word}" = ${card.translation}`,
+            status: "success",
+            timeout: 3000,
+          });
         });
       }
       _saveToStorage();
