@@ -84,19 +84,18 @@
     --color-border: color-mix(in srgb, var(--blue) 80%, white);
   }
 
+  // Entry slide distance — fixed, not width-relative, so big mobile toasts
+  // don't "shoot" in by covering their own full width in the same duration.
+  --toast-enter-offset: 2.5rem;
+
   /**
-   * Exit state (hidden / closing). Also the @starting-style entry state.
-   * Default: right-anchored toasts slide out to the right.
-   * @see https://developer.chrome.com/blog/entry-exit-animations#animating_elements_to_and_from_the_top-layer
+   * Base (non-open) state: opacity:0 + entry offset transform as defensive fallback.
+   * display/overlay allow-discrete keep the element in the top layer long enough
+   * for the exit sequence (hidePopover is called after the .is-exiting animation).
    */
   @include butler-mx.feature("motion") {
     opacity: 0;
-    transform: translateX(110%);
-    // will-change promotes to compositor layer — transform/opacity transitions stay on GPU.
-    // top/bottom are intentionally NOT transitioned: they use anchor() which triggers
-    // main-thread layout per frame, causing jank at 10+ toasts. The instant restack at
-    // T=250ms (when the exiting toast is 83% gone) is imperceptible in practice.
-    will-change: transform, opacity;
+    transform: translateX(var(--toast-enter-offset));
     transition:
       transform 0.3s ease,
       opacity 0.3s ease,
@@ -104,33 +103,66 @@
       overlay 0.3s allow-discrete;
   }
 
-  &:popover-open {
+  // Open state: fully visible, compositor promoted — will-change applied here
+  // (not in the base state) so it only takes effect after is-entering is removed.
+  // This avoids GPU-layer contention on mobile when concurrent animations
+  // (e.g. BonCard transitions) are running during toast entry.
+  // :not(.is-exiting) is required: without it this rule (0,3,0) would beat
+  // .is-exiting (0,2,0) and hold the toast fully visible during the exit window.
+  &:popover-open:not(.is-entering, .is-exiting) {
     @include butler-mx.feature("motion") {
       opacity: 1;
       transform: translateX(0);
-
-      @starting-style {
-        opacity: 0;
-        transform: translateX(110%);
-      }
+      will-change: transform, opacity;
     }
   }
 
-  // Left-anchored: slide in/out from the left instead
+  /**
+   * ENTRY: .is-entering is present on mount and removed after one
+   * requestAnimationFrame — the browser paints the hidden state once, then the
+   * class removal triggers the CSS transition to the open state cleanly.
+   * This replaces @starting-style, which has a one-frame flash bug with popovers
+   * where the browser briefly renders the :popover-open values (opacity:1) before
+   * @starting-style can override them.
+   * Mutually exclusive with the open-state rule above via its :not(.is-entering).
+   */
+  &:popover-open.is-entering {
+    @include butler-mx.feature("motion") {
+      opacity: 0;
+      transform: translateX(var(--toast-enter-offset));
+    }
+  }
+
+  /**
+   * EXIT: .is-exiting is added BEFORE hidePopover() so the toast stays
+   * :popover-open (and keeps its anchor position) for the full 300ms animation.
+   * hidePopover() is called only when the toast is already invisible — the
+   * anchor restack is instant and imperceptible at that point.
+   * Right-anchored toasts slide out to the right; left-anchored below.
+   */
+  &.is-exiting {
+    @include butler-mx.feature("motion") {
+      opacity: 0;
+      transform: translateX(calc(100% + 1rem));
+    }
+  }
+
+  // Left-anchored: entry from left, exit to left
   &--top-left,
   &--bottom-left {
     @include butler-mx.feature("motion") {
-      transform: translateX(-110%);
+      transform: translateX(calc(-1 * var(--toast-enter-offset)));
     }
 
-    &:popover-open {
+    &:popover-open.is-entering {
       @include butler-mx.feature("motion") {
-        transform: translateX(0);
+        transform: translateX(calc(-1 * var(--toast-enter-offset)));
+      }
+    }
 
-        @starting-style {
-          opacity: 0;
-          transform: translateX(-110%);
-        }
+    &.is-exiting {
+      @include butler-mx.feature("motion") {
+        transform: translateX(calc(-100% - 1rem));
       }
     }
   }

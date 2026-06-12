@@ -2,14 +2,12 @@ import { atom } from "nanostores";
 
 export type ToastNotify = {
   closeOnSwipe?: boolean;
-  // Internal flag — set ~250ms after hidePopover() to remove toast from anchor chain
-  // BEFORE display:none (300ms), avoiding an invalid-anchor → top:auto snap.
+  // Internal flag — set when the exit animation has finished (together with
+  // hidePopover()) so the toast leaves the active anchor chain before
+  // display:none could invalidate it as an anchor (top:auto snap).
   closing?: boolean;
-  gapBetween?: number;
   id?: number;
-  initOffset?: number;
   message: string;
-  outerSpacing?: string;
   position?: "bottom-left" | "bottom-right" | "top-left" | "top-right";
   showClose?: boolean;
   showStatusIcon?: boolean;
@@ -23,11 +21,12 @@ export type ToastStatus = "error" | "info" | "success" | "warning";
 
 export const $toastNotify = atom<ToastNotify[]>([]);
 
+// Monotonic counter — collision-free, unlike Date.now()+random which can clash
+// when several toasts are created in the same millisecond (burst).
+let nextToastId = 0;
+
 export const createToastNotify = (payload: ToastPayload): void => {
-  $toastNotify.set([
-    ...$toastNotify.get(),
-    { id: Date.now() + Math.floor(Math.random() * 1000), ...payload },
-  ]);
+  $toastNotify.set([...$toastNotify.get(), { id: ++nextToastId, ...payload }]);
 };
 
 export const markClosing = (id: number): void => {

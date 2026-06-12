@@ -4,7 +4,7 @@
     ref="toast"
     popover="manual"
     class="c-toast-notify"
-    :class="`c-toast-notify--${status} c-toast-notify--${position}`"
+    :class="[`c-toast-notify--${status}`, `c-toast-notify--${position}`, { 'is-entering': isEntering, 'is-exiting': isExiting }]"
     :style="{ 'anchor-name': anchorName, 'position-anchor': anchorSource }"
   >
     <Component
@@ -66,50 +66,102 @@ const {
   timeout,
   anchorName,
   anchorSource,
-} = defineProps<ToastNotify & { anchorName?: string; anchorSource?: string }>();
+  stackIndex = 0,
+} = defineProps<
+  ToastNotify & { anchorName?: string; anchorSource?: string; stackIndex?: number }
+>();
 
-// Must match CSS: 0.3s exit transition + 0.1s buffer before store removal
+// Duration of the .is-exiting CSS animation — must match transition in SCSS.
+const ANIMATION_DURATION = 300;
+// Buffer after hidePopover() before purging from store (allows display:none to settle).
 const REMOVE_DELAY = 400;
 const DEFAULT_TIMEOUT = 5000;
+
+// Staggered auto-dismiss: when several toasts are created in a burst their timers
+// would otherwise fire in the same frame and all slide out together. Offsetting
+// each toast's auto-hide by its stack position makes a stack leave one after
+// another (oldest first). Capped so deep stacks don't linger too long. Manual
+// close (swipe / click) is never staggered — stays instant.
+const EXIT_STAGGER_STEP = 180;
+const MAX_STAGGER_STEPS = 9;
+const exitStagger = Math.min(stackIndex, MAX_STAGGER_STEPS) * EXIT_STAGGER_STEP;
 
 const mustShowClose = computed(() => timeout === null || showClose !== false);
 
 const toast = ref<HTMLElement | null>(null);
+// isEntering: true on mount so the toast starts hidden (.is-entering class).
+// Removed after a double rAF (see onMounted) — browser paints the hidden state
+// once, then the class removal triggers the CSS entry transition cleanly
+// (no @starting-style flash).
+const isEntering = ref(true);
+const isExiting = ref(false);
 const { isSwiping } = useSwipe(toast);
 
-// Step 2 of dismiss sequence: purge from store after exit animation completes
+// Step 3: purge from store after hidePopover() + display:none settle
 const { start: startRemove, stop: stopRemove } = useTimeoutFn(
   () => removeToast(id!),
   REMOVE_DELAY,
   { immediate: false },
 );
 
-// Auto-dismiss: fires at (timeout - REMOVE_DELAY) so store removal lands at timeout ms
-const autoHideDelay = (timeout ?? DEFAULT_TIMEOUT) - REMOVE_DELAY;
-const { start: startAutoHide, stop: stopAutoHide } = useTimeoutFn(
+// Step 2: called after the .is-exiting animation finishes — toast is already
+// invisible, so markClosing + hidePopover + restack are all imperceptible.
+const { start: startExitComplete, stop: stopExitComplete } = useTimeoutFn(
   () => {
-    toast.value?.hidePopover();
     // markClosing must be synchronous with hidePopover — toasts below this one
-    // update their anchor source immediately, before display:none (T+300ms) could
-    // invalidate this element as an anchor and cause them to snap off-screen.
+    // update their anchor source immediately so they don't snap when the anchor
+    // becomes invalid at display:none time.
     markClosing(id!);
+    toast.value?.hidePopover();
     startRemove();
   },
+  ANIMATION_DURATION,
+  { immediate: false },
+);
+
+// Step 1: begin the visible exit — add class (fires CSS transition), then schedule step 2.
+const startExitAnimation = (): void => {
+  isExiting.value = true;
+  startExitComplete();
+};
+
+// Auto-dismiss: start exit animation early enough that store removal still lands
+// at ~timeout ms. exitStagger cascades bursted toasts one after another.
+// Clamped: a timeout below the exit pipeline (700ms) would yield a negative delay.
+const autoHideDelay = Math.max(
+  0,
+  (timeout ?? DEFAULT_TIMEOUT) - ANIMATION_DURATION - REMOVE_DELAY + exitStagger,
+);
+const { start: startAutoHide, stop: stopAutoHide } = useTimeoutFn(
+  () => startExitAnimation(),
   autoHideDelay,
   { immediate: false },
 );
 
 const triggerHide = (): void => {
   stopAutoHide();
+  stopExitComplete();
   stopRemove();
-  toast.value?.hidePopover();
-  markClosing(id!); // synchronous — same reasoning as above
-  startRemove();
+  startExitAnimation();
 };
 
 onMounted(() => {
   toast.value?.showPopover();
-  if (timeout !== null) startAutoHide();
+  // Two rAFs required. A single rAF fires *before* the browser paints the current
+  // frame, so the "opacity:0 / is-entering" state is never painted and the
+  // transition has no clean starting point — produces a one-frame flash, especially
+  // visible for tall toasts on mobile. The nested rAF guarantees:
+  //   Frame N  : rAF₁ fires → schedules rAF₂; browser paints opacity:0 ✓
+  //   Frame N+1: rAF₂ fires → removes is-entering → transition starts from 0
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      // Guard: component may have unmounted between mount and the second frame —
+      // don't start timers on a disposed scope.
+      if (!toast.value) return;
+      isEntering.value = false;
+      if (timeout !== null) startAutoHide();
+    });
+  });
 });
 
 watch(isSwiping, (swiping) => {

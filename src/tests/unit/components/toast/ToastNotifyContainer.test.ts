@@ -23,9 +23,6 @@ const mockToasts = [
     position: "top-right",
     showClose: true,
     closeOnSwipe: true,
-    outerSpacing: "10px",
-    gapBetween: 5,
-    initOffset: 20,
   },
   {
     id: 2,
@@ -35,9 +32,6 @@ const mockToasts = [
     position: "bottom-left",
     showClose: false,
     closeOnSwipe: false,
-    outerSpacing: "15px",
-    gapBetween: 10,
-    initOffset: 25,
   },
 ];
 
@@ -82,5 +76,41 @@ describe("ToastNotifyContainer.vue", () => {
     // toast id=2 is first in bottom-left → anchors to its own corner
     expect(toastComponents[1].props("anchorSource")).toBe("--toast-corner-bottom-left");
     expect(toastComponents[1].props("anchorName")).toBe("--toast-2");
+  });
+
+  it("assigns stackIndex per corner based on active stack order", () => {
+    $toastNotify.set([
+      { id: 1, message: "first top-right", position: "top-right" },
+      { id: 2, message: "second top-right", position: "top-right" },
+      { id: 3, message: "first bottom-left", position: "bottom-left" },
+    ]);
+    keepMount($toastNotify);
+
+    const wrapper = mount(ToastNotifyContainer);
+    const toastComponents = wrapper.findAllComponents(ToastNotify);
+
+    // Per-corner index: 0 = oldest/closest to corner — drives exit stagger
+    expect(toastComponents[0].props("stackIndex")).toBe(0);
+    expect(toastComponents[1].props("stackIndex")).toBe(1);
+    // Separate corner starts at 0 again
+    expect(toastComponents[2].props("stackIndex")).toBe(0);
+  });
+
+  it("keeps closing toasts in the chain with their original position", () => {
+    $toastNotify.set([
+      { id: 1, message: "closing", position: "top-right", closing: true },
+      { id: 2, message: "active", position: "top-right" },
+    ]);
+    keepMount($toastNotify);
+
+    const wrapper = mount(ToastNotifyContainer);
+    const toastComponents = wrapper.findAllComponents(ToastNotify);
+
+    // Closing toast keeps its own anchor entry (prevents top:auto snap)
+    expect(toastComponents[0].props("anchorName")).toBe("--toast-1");
+    expect(toastComponents[0].props("anchorSource")).toBe("--toast-corner-top-right");
+    // Active toast re-anchors to the corner — it is now first in the live chain
+    expect(toastComponents[1].props("anchorSource")).toBe("--toast-corner-top-right");
+    expect(toastComponents[1].props("stackIndex")).toBe(0);
   });
 });

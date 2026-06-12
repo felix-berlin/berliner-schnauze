@@ -13,6 +13,7 @@
     v-bind="toast"
     :anchor-name="anchorChain[toast.id!]?.anchorName"
     :anchor-source="anchorChain[toast.id!]?.anchorSource"
+    :stack-index="anchorChain[toast.id!]?.stackIndex"
   />
 </template>
 
@@ -29,17 +30,21 @@ const CORNERS = ["top-right", "top-left", "bottom-right", "bottom-left"] as cons
 type Corner = (typeof CORNERS)[number];
 
 const anchorChain = computed(() => {
-  const chain: Record<number, { anchorName: string; anchorSource: string }> = {};
+  const chain: Record<number, { anchorName: string; anchorSource: string; stackIndex: number }> =
+    {};
 
   CORNERS.forEach((corner: Corner) => {
     const all = toastStore.value.filter((t) => (t.position ?? "top-right") === corner);
     const active = all.filter((t) => !t.closing);
 
-    // Active toasts form the live stacking chain
+    // Active toasts form the live stacking chain. stackIndex (0 = closest to the
+    // corner / oldest) drives the staggered auto-dismiss so a burst of toasts
+    // leaves one after another instead of all vanishing in the same frame.
     active.forEach((toast, index) => {
       chain[toast.id!] = {
         anchorName: `--toast-${toast.id}`,
         anchorSource: index === 0 ? `--toast-corner-${corner}` : `--toast-${active[index - 1].id}`,
+        stackIndex: index,
       };
     });
 
@@ -51,6 +56,7 @@ const anchorChain = computed(() => {
       chain[toast.id!] = {
         anchorName: `--toast-${toast.id}`,
         anchorSource: i > 0 ? `--toast-${all[i - 1].id}` : `--toast-corner-${corner}`,
+        stackIndex: i, // moot once closing (auto-hide already fired); kept for type completeness
       };
     });
   });
