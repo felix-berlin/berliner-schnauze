@@ -62,7 +62,7 @@ const canonicalURL = removeFileExtension(Astro.url.href);
 <!-- Open Graph / Facebook -->
 {seo?.opengraphSiteName && <meta content={seo?.opengraphSiteName} property='og:site_name' />}
 {seo?.opengraphType && <meta content={seo?.opengraphType} property='og:type' />}
-{seo?.opengraphUrl && <meta content={seo?.opengraphUrl} property='og:url' />}
+<meta content={canonicalURL} property='og:url' />
 {
   (seo?.opengraphTitle || seo?.title || title) && (
     <meta content={seo?.opengraphTitle || seo?.title || title} property='og:title' />
@@ -85,7 +85,7 @@ const canonicalURL = removeFileExtension(Astro.url.href);
 
 <!-- Twitter -->
 <meta content='summary_large_image' property='twitter:card' />
-{seo?.opengraphUrl && <meta content={seo?.opengraphUrl} property='twitter:url' />}
+<meta content={canonicalURL} property='twitter:url' />
 {
   (seo?.twitterTitle || seo?.title || title) && (
     <meta content={seo?.twitterTitle || seo?.title || title} property='twitter:title' />

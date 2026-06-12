@@ -69,6 +69,7 @@ function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, b
     modifiedGmt: node.modifiedGmt ?? "",
     modifiedTs: node.modifiedGmt ? Date.parse(node.modifiedGmt) : 0,
     slug: node.slug,
+    wordComponents: getWordComponents(node.wordProperties?.berlinerisch ?? ""),
     wordGroup: node.wordGroup ?? "",
     wordProperties: {
       audioBerlinerisch: !!node.wordProperties?.berlinerischAudio,
@@ -85,7 +86,6 @@ function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, b
       translations,
       vowelsCount: vowels,
     },
-    wordComponents: getWordComponents(node.wordProperties?.berlinerisch ?? ""),
   };
 }
 

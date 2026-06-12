@@ -32,6 +32,7 @@ base
 bear
 bed
 before
+bell
 berlin
 berliner
 berlinerisch
@@ -55,7 +56,6 @@ bytes
 cache
 caches
 cafe
-call
 callback
 can
 canonical
@@ -120,7 +120,6 @@ design
 detect
 detector
 device
-devtools
 dialog
 dimensions
 disable
@@ -145,7 +144,6 @@ entry
 enum
 env
 error
-errors
 event
 exact
 example
@@ -165,7 +163,6 @@ files
 fill
 filter
 first
-floating
 floor
 flyout
 focus
@@ -193,6 +190,7 @@ grid
 group
 groups
 handle
+has
 head
 header
 helper
@@ -203,7 +201,6 @@ high
 highlight
 hint
 historic
-homepage
 href
 html
 hyphenation
@@ -214,7 +211,6 @@ identity
 illustration
 image
 images
-img
 incremental
 index
 info
@@ -289,18 +285,21 @@ multiselect
 mutable
 mutation
 name
-native
 nav
 navigate
 navigating
+need
 nlp
 nomen
 not
+notification
+notifications
 notify
 object
 objects
 observer
 octagonal
+off
 offline
 online
 open
@@ -320,6 +319,7 @@ paq
 pattern
 payload
 percent
+permission
 photographic
 photoswipe
 picture
@@ -353,13 +353,13 @@ ref
 refresh
 refs
 regex
-register
 registered
 regular
 related
 reload
 remove
 replay
+request
 reset
 resize
 result
