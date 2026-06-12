@@ -79,6 +79,7 @@
           :last-answer-correct="lastAnswerCorrect"
           :is-real="currentCard.isReal"
           :is-first-card="cardNumber === 1"
+          :disabled="isAnswering"
           @answer="onAnswer"
         />
       </Transition>
@@ -163,6 +164,7 @@ const hasSavedGame = computed(() => savedBon.value?.phase === 'playing')
 // Animation state
 const exitDirection = ref<'left' | 'right' | null>(null)
 const isShaking = ref(false)
+const isAnswering = ref(false)
 const cardNumber = ref(1)
 
 // Component refs for focus management
@@ -208,9 +210,14 @@ const { vibrate } = useVibrate()
 
 const { start: startShakeTimer } = useTimeoutFn(() => {
   isShaking.value = false
+  isAnswering.value = false
   nextCard()
   cardNumber.value++
 }, 1200, { immediate: false })
+
+const { start: startAnswerCooldown } = useTimeoutFn(() => {
+  isAnswering.value = false
+}, 350, { immediate: false })
 
 const cardTransitionName = computed(() => {
   if (exitDirection.value === 'right') return 'c-bon-card-right'
@@ -246,6 +253,7 @@ function startGame() {
   cardNumber.value = 1
   exitDirection.value = null
   isShaking.value = false
+  isAnswering.value = false
   _startGame()
 }
 
@@ -253,13 +261,16 @@ function resumeGame() {
   cardNumber.value = 1
   exitDirection.value = null
   isShaking.value = false
+  isAnswering.value = false
   _resumeGame()
 }
 
 function onAnswer(guessedReal: boolean) {
+  if (isAnswering.value) return
   const card = currentCard.value
   if (!card) return
 
+  isAnswering.value = true
   const correct = card.isReal === guessedReal
   answer(guessedReal)
 
@@ -277,6 +288,7 @@ function onAnswer(guessedReal: boolean) {
   nextTick(() => {
     nextCard()
     cardNumber.value++
+    startAnswerCooldown()
   })
 }
 </script>

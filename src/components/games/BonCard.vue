@@ -44,6 +44,7 @@
         class="c-bon-card__btn c-bon-card__btn--no"
         :aria-label="neeAriaLabel"
         aria-keyshortcuts="ArrowLeft"
+        :disabled="disabled"
         @click="emit('answer', false)"
       >
         <XIcon width="20" height="20" aria-hidden="true" />
@@ -53,6 +54,7 @@
         class="c-bon-card__btn c-bon-card__btn--yes"
         :aria-label="jaAriaLabel"
         aria-keyshortcuts="ArrowRight"
+        :disabled="disabled"
         @click="emit('answer', true)"
       >
         Ja
@@ -81,6 +83,7 @@ const props = defineProps<{
   lastAnswerCorrect: boolean | null
   isReal: boolean | null
   isFirstCard?: boolean
+  disabled?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -120,6 +123,7 @@ const { vibrate } = useVibrate()
 const { isSwiping, distanceX } = usePointerSwipe(cardRef, {
   disableTextSelect: true,
   onSwipeEnd(_, dir) {
+    if (props.disabled) return
     if (dir === 'right') {
       vibrate([20])
       emit('answer', true)
@@ -158,8 +162,8 @@ const dragCardStyle = computed(() => {
       }
 })
 
-onKeyStroke('ArrowRight', () => emit('answer', true))
-onKeyStroke('ArrowLeft', () => emit('answer', false))
+onKeyStroke('ArrowRight', () => { if (!props.disabled) emit('answer', true) })
+onKeyStroke('ArrowLeft', () => { if (!props.disabled) emit('answer', false) })
 </script>
 
 <style lang="scss">
