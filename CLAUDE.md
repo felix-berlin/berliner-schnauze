@@ -61,6 +61,7 @@ pnpm gql:generate:watch      # Run in parallel with dev to regenerate types on s
 pnpm test:unit               # Run full test suite with coverage
 pnpm test:unit:watch         # Watch mode
 pnpm test:unit:ui            # Vitest UI for debugging
+pnpm test:ci                 # CI mode: coverage + JUnit reporter (for pipelines)
 
 # Linting & type checking
 pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS)
@@ -99,7 +100,8 @@ For Cloudflare Pages builds, env vars are configured separately in the CF Pages 
 **Data flow**: WordPress GraphQL API → Astro API routes (static JSON at build time) → Orama in-browser search → Vue components
 
 - **Astro** handles routing, SSG, and static pages (`src/pages/`)
-- **Vue 3** islands handle all interactive UI (`src/components/*.vue`) — use **VueUse** (`@vueuse/core`) for browser APIs and Vue utilities before writing custom logic
+- **Vue 3** islands handle all interactive UI (`src/components/`) — flat files for standalone components, subdirs for feature groups (`games/`, `word/`, `toast/`, `header/`, `accordion/`, `filter/`, `modals/`, `word-search/`). Use **VueUse** (`@vueuse/core`) for browser APIs and Vue utilities before writing custom logic
+- **BON game** (`src/components/games/`) — "Berliner oder Nicht" dialect card game (BerlinerOderNicht.vue, BonCard.vue, BonHUD.vue, BonResult.vue, BonShareView.vue). State in `$bonStats` (persistent high scores/streaks) and `$savedBon` (session resume snapshot). Sharing via URL query params (`src/utils/bonShare.ts`)
 - **Nanostores** manage client state (`src/stores/`) — import directly from individual store files (e.g. `@stores/darkMode.ts`, `@stores/modal.ts`). Do NOT import from `@stores/index` barrel unless the component specifically needs `wordList.ts` exports — the barrel's `computedAsync` side effect triggers `api/search/index.json` on every chunk that imports it.
 - **urql** handles GraphQL queries/mutations from Vue components
 - **Orama** provides full-text search with German stemming — index built at build time in `src/pages/api/search/index.json.ts`
@@ -125,9 +127,21 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 ## Key Conventions
 
-**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordList`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS. For async computed stores, use `computedAsync` from `@nanostores/async` (see `$oramaSearchResults` in `src/stores/wordList.ts`). Avoid deprecated `computed() + task()` pattern.
+**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordList`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS. For async computed stores, use `computedAsync` from `@nanostores/async` (see `$oramaSearchResults` in `src/stores/wordList.ts`). Avoid deprecated `computed() + task()` pattern. Key stores: `darkMode.ts`, `modal.ts`, `wordList.ts`, `toastNotify.ts`, `installApp.ts`, `wordOfTheDay.ts`, `bonStats.ts` (persistent game stats), `savedBon.ts` (session resume snapshot), `notificationPermission.ts`, `pushSubscription.ts`.
 
-**Vue components**: Composition API only — `<script setup lang="ts">`. Block order: `<template>`, `<script>`, `<style>`. CSS classes use BEM with `c-` prefix (e.g. `c-my-component__element`). Styles are NOT scoped — BEMIT class naming provides isolation instead. Use `<style lang="scss">` without `scoped`. Each component owns its SCSS file at `src/styles/components/_name.scss` and loads it via `@use "@styles/components/name"` inside its own `<style>` block — not globally.
+**Vue components**: Composition API only — `<script setup lang="ts">`. Block order: `<template>`, `<script>`, `<style>`. Styles are NOT scoped — BEMIT class naming provides isolation instead. Use `<style lang="scss">` without `scoped`. Each component owns its SCSS file at `src/styles/components/_name.scss` and loads it via `@use "@styles/components/name"` inside its own `<style>` block — not globally.
+
+**CSS / BEMIT naming**: This project uses [BEMIT](https://gist.github.com/stephenway/a6145d9b4430e8c55a77) — BEM enhanced with namespaces:
+
+| Prefix          | Purpose                     | Example                          |
+| --------------- | --------------------------- | -------------------------------- |
+| `.c-`           | Components (reusable UI)    | `.c-word-card__title--active`    |
+| `.o-`           | Objects (structural)        | `.o-grid__item`                  |
+| `.u-`           | Utilities (single-purpose)  | `.u-hidden`                      |
+| `.is-` / `.has-`| State                       | `.is-active`, `.has-dropdown`    |
+| `.js-`          | JS hooks (no styling)       | `.js-scroll-target`              |
+
+Pattern: `.c-block__element--modifier`. Hyphens separate words within each part (`c-my-component`, not `c-myComponent`). Never use plain BEM without a namespace prefix.
 
 **Icons**: Load asynchronously via `defineAsyncComponent(() => import("virtual:icons/lucide/icon-name"))`. All icons from Lucide.
 
@@ -135,7 +149,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 **SCSS imports**: Use `@use "@styles/path"` — not `@import`. Global styles (base resets, typography, utilities) belong in `src/styles/app.scss`. Component styles follow the pattern in **Vue components** above.
 
-**VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Already in use: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`.
+**VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Already in use: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`, `useVibrate`.
 
 **PWA**: Built with `@vite-pwa/astro` + Workbox. Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. On update: shows browser Notification if permission granted, else silently reloads. On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Workbox caches all static assets (JS, CSS, images) up to 15 MB.
 
@@ -156,3 +170,25 @@ Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mj
 - Tests live in `src/tests/unit/` using Vitest + jsdom + Sinon
 - Vue component tests use `@vue/test-utils`
 - Coverage excludes `src/gql/`, `src/types/`, `src/tests/`, `src/plugins/`
+
+## Git Commit Conventions
+
+Format: `<type>(<scope>): <description>` — imperative, lowercase, no trailing period.
+
+| Type       | When to use                                      |
+| ---------- | ------------------------------------------------ |
+| `feat`     | New feature (bumps minor version)                |
+| `fix`      | Bug fix (bumps patch)                            |
+| `refactor` | Code restructure, no behavior change             |
+| `perf`     | Performance-focused refactor                     |
+| `style`    | Formatting only, no logic change                 |
+| `test`     | Adding or correcting tests                       |
+| `docs`     | Documentation only                               |
+| `build`    | Dependencies, tooling, version changes           |
+| `chore`    | Maintenance (initial commits, config, CI tweaks) |
+
+Breaking change: append `!` before colon → `feat(api)!: remove endpoint`. Footer must include `BREAKING CHANGE: <description>`.
+
+Scope is optional but encouraged for this project: `bon`, `pwa`, `search`, `toast`, `word`, `auth`, `ai`.
+
+Reference: [Conventional Commits](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13)
