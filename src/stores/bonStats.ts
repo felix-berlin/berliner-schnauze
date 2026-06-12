@@ -7,12 +7,14 @@ export interface BonStats {
   totalCorrect: number
   totalAnswered: number
   playerName: string
+  hasSeenIntro: boolean
 }
 
 export const $bonStats = persistentMap<BonStats>(
   'bonStats:',
   {
     bestStreak: 0,
+    hasSeenIntro: false,
     highScore: 0,
     playerName: '',
     totalAnswered: 0,
