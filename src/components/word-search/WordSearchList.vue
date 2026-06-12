@@ -44,5 +44,4 @@ const searchResultCount = useStore($searchResultCount);
 
 <style lang="scss">
 @use "@styles/components/shortcut";
-@use "@styles/components/word-search-list";
 </style>
