@@ -45,6 +45,7 @@ tests/unit/junit-report.xml
 
 # AI
 .claude/settings.local.json
+.claude/worktrees/
 .playwright-mcp
 .superpowers
 
