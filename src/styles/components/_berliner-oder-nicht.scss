@@ -475,6 +475,11 @@
     font-size: 0.875rem;
     font-weight: 600;
 
+    svg:first-child {
+      color: oklch(75% 0.17 75deg);
+      flex-shrink: 0;
+    }
+
     &:hover {
       opacity: 0.88;
     }

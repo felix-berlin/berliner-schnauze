@@ -29,7 +29,8 @@
       :href="`/wort/${lastCard.slug}`"
       class="c-bon-result__word-link"
     >
-      <span>💡 „{{ lastCard.word }}" erkunden</span>
+      <LightbulbIcon width="16" height="16" aria-hidden="true" />
+      <span>„{{ lastCard.word }}" erkunden</span>
       <ExternalLinkIcon width="16" height="16" aria-hidden="true" />
     </a>
 
@@ -57,6 +58,7 @@ import type { BonCard } from '@composables/useBon'
 import { buildShareUrl } from '@utils/bonShare'
 
 const TrophyIcon = defineAsyncComponent(() => import('virtual:icons/lucide/trophy'))
+const LightbulbIcon = defineAsyncComponent(() => import('virtual:icons/lucide/lightbulb'))
 const ExternalLinkIcon = defineAsyncComponent(() => import('virtual:icons/lucide/external-link'))
 const Share2Icon = defineAsyncComponent(() => import('virtual:icons/lucide/share-2'))
 const RefreshCwIcon = defineAsyncComponent(() => import('virtual:icons/lucide/refresh-cw'))
