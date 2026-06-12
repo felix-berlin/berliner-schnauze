@@ -23,6 +23,7 @@
     "WorkletGlobalScope": "readonly"
   },
   "ignorePatterns": [
+    "src/components/accordion/index.ts",
     "src/tests",
     "**/coverage/",
     "dist/",

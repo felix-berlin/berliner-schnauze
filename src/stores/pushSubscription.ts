@@ -56,7 +56,7 @@ export async function subscribePush(): Promise<void> {
 
   $pushState.set("loading");
   try {
-    let applicationServerKey: Uint8Array;
+    let applicationServerKey: Uint8Array<ArrayBuffer>;
     try {
       applicationServerKey = urlBase64ToUint8Array(vapidKey);
     } catch (err) {

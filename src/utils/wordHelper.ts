@@ -243,17 +243,7 @@ export const createWikimediaFileList = async (
     );
   }
 
-  return results
-    .filter(
-      (
-        r,
-      ): r is PromiseFulfilledResult<{
-        caption: string | null | undefined;
-        description: string | null | undefined;
-        image: Awaited<ReturnType<typeof fetchWikimediaAPI>>;
-      }> => r.status === "fulfilled",
-    )
-    .map((r) => r.value);
+  return results.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []));
 };
 
 export const capitalizeFirstLetter = (word: string) => {
