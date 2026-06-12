@@ -1,40 +1,40 @@
 <template>
   <div class="c-bon-share-view">
     <template v-if="payload">
-      <p class="c-bon-share-view__title">
+      <h1 class="c-bon-share-view__title">
         {{ payload.playerName ? `${payload.playerName}s Spielergebnis` : 'Spielergebnis' }}
-      </p>
+      </h1>
 
-      <div class="c-bon-share-view__stats">
+      <dl class="c-bon-share-view__stats">
         <div class="c-bon-share-view__stat">
-          <span class="c-bon-share-view__stat-value">{{ payload.score }}</span>
-          <span class="c-bon-share-view__stat-label">Score</span>
+          <dt class="c-bon-share-view__stat-label">Score</dt>
+          <dd class="c-bon-share-view__stat-value">{{ payload.score }}</dd>
         </div>
         <div class="c-bon-share-view__stat">
-          <span class="c-bon-share-view__stat-value">{{ payload.bestStreak }}</span>
-          <span class="c-bon-share-view__stat-label">Best Streak</span>
+          <dt class="c-bon-share-view__stat-label">Best Streak</dt>
+          <dd class="c-bon-share-view__stat-value">{{ payload.bestStreak }}</dd>
         </div>
         <div class="c-bon-share-view__stat">
-          <span class="c-bon-share-view__stat-value">{{ accuracyPercent }}%</span>
-          <span class="c-bon-share-view__stat-label">Genauigkeit</span>
+          <dt class="c-bon-share-view__stat-label">Genauigkeit</dt>
+          <dd class="c-bon-share-view__stat-value">{{ accuracyPercent }}%</dd>
         </div>
         <div class="c-bon-share-view__stat">
-          <span class="c-bon-share-view__stat-value">{{ payload.totalAnswered }}</span>
-          <span class="c-bon-share-view__stat-label">Antworten</span>
+          <dt class="c-bon-share-view__stat-label">Antworten</dt>
+          <dd class="c-bon-share-view__stat-value">{{ payload.totalAnswered }}</dd>
         </div>
-      </div>
+      </dl>
 
       <p class="c-bon-share-view__date">{{ formattedDate }}</p>
 
       <a href="/games/berliner-oder-nicht" class="c-bon-share-view__cta">
-        Selbst spielen →
+        Selbst spielen <span aria-hidden="true">→</span>
       </a>
     </template>
 
     <template v-else>
-      <p class="c-bon-share-view__error">Kein gültiges Ergebnis gefunden.</p>
+      <p class="c-bon-share-view__error" role="alert">Kein gültiges Ergebnis gefunden.</p>
       <a href="/games/berliner-oder-nicht" class="c-bon-share-view__cta">
-        Zum Spiel →
+        Zum Spiel <span aria-hidden="true">→</span>
       </a>
     </template>
   </div>

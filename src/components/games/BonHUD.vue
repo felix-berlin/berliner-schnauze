@@ -1,6 +1,9 @@
 <template>
   <div class="c-bon-hud">
-    <div class="c-bon-hud__lives" aria-label="Leben">
+    <div
+      class="c-bon-hud__lives"
+      :aria-label="`${lives} von ${MAX_LIVES} Leben verbleibend`"
+    >
       <component
         :is="HeartIcon"
         v-for="i in MAX_LIVES"
@@ -13,22 +16,32 @@
     </div>
 
     <div class="c-bon-hud__score-wrap">
-      <span :class="['c-bon-hud__score', { 'c-bon-hud__score--highscore': isHighscore }]">
+      <span :class="['c-bon-hud__score', { 'c-bon-hud__score--highscore': isHighscore }]" aria-hidden="true">
         {{ score }}
       </span>
-      <span class="c-bon-hud__score-label">Score</span>
-      <span v-if="playerName" class="c-bon-hud__player">{{ playerName }}</span>
+      <span v-if="isHighscore" class="u-sr-only">Neuer Highscore: {{ score }}</span>
+      <span v-else class="u-sr-only">Score: {{ score }}</span>
+      <span class="c-bon-hud__score-label" aria-hidden="true">Score</span>
+      <span v-if="playerName" class="c-bon-hud__player" aria-hidden="true">{{ playerName }}</span>
     </div>
 
     <Transition name="c-bon-hud-streak">
-      <div v-if="streak > 0" class="c-bon-hud__streak">
-        <div class="c-bon-hud__streak-count">
+      <div
+        v-if="streak > 0"
+        class="c-bon-hud__streak"
+        :aria-label="`Streak: ${streak}`"
+      >
+        <div class="c-bon-hud__streak-count" aria-hidden="true">
           <FlameIcon width="16" height="16" aria-hidden="true" />
           {{ streak }}
         </div>
         <Transition name="c-bon-hud-streak">
-          <div v-if="multiplier > 1" class="c-bon-hud__multiplier">
-            <span class="c-bon-hud__multiplier-badge c-bon-hud__multiplier-badge--active">
+          <div
+            v-if="multiplier > 1"
+            class="c-bon-hud__multiplier"
+            :aria-label="`${multiplier}× Multiplikator`"
+          >
+            <span class="c-bon-hud__multiplier-badge c-bon-hud__multiplier-badge--active" aria-hidden="true">
               {{ multiplier }}×
             </span>
           </div>

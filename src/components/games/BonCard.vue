@@ -7,6 +7,8 @@
 
     <div
       ref="cardRef"
+      role="group"
+      :aria-labelledby="`bon-word-${cardNumber}`"
       :class="[
         'c-bon-card__card',
         isShaking && 'c-bon-card__card--shake',
@@ -15,11 +17,16 @@
       :style="dragCardStyle"
     >
       <p class="c-bon-card__label">Berlinerisch?</p>
-      <p class="c-bon-card__word">{{ word }}</p>
+      <p :id="`bon-word-${cardNumber}`" class="c-bon-card__word">{{ word }}</p>
       <p class="c-bon-card__progress">Karte {{ cardNumber }}</p>
 
       <Transition name="fade-fast">
-        <div v-if="showOverlay" class="c-bon-card__overlay">
+        <div
+          v-if="showOverlay"
+          class="c-bon-card__overlay"
+          role="alert"
+          aria-atomic="true"
+        >
           War {{ overlayText }}!
         </div>
       </Transition>
@@ -33,8 +40,10 @@
 
     <div class="c-bon-card__buttons">
       <button
+        ref="neeButtonRef"
         class="c-bon-card__btn c-bon-card__btn--no"
-        aria-label="Nee, nicht Berlinerisch"
+        :aria-label="neeAriaLabel"
+        aria-keyshortcuts="ArrowLeft"
         @click="emit('answer', false)"
       >
         <XIcon width="20" height="20" aria-hidden="true" />
@@ -42,7 +51,8 @@
       </button>
       <button
         class="c-bon-card__btn c-bon-card__btn--yes"
-        aria-label="Ja, Berlinerisch!"
+        :aria-label="jaAriaLabel"
+        aria-keyshortcuts="ArrowRight"
         @click="emit('answer', true)"
       >
         Ja
@@ -50,7 +60,9 @@
       </button>
     </div>
 
-    <p class="c-bon-card__keyboard-hint" aria-hidden="true">← Pfeiltasten auch möglich →</p>
+    <p class="c-bon-card__keyboard-hint">
+      <span aria-hidden="true">←</span> Pfeiltasten auch möglich <span aria-hidden="true">→</span>
+    </p>
   </div>
 </template>
 
@@ -76,6 +88,11 @@ const emit = defineEmits<{
 }>()
 
 const cardRef = ref<HTMLElement | null>(null)
+const neeButtonRef = ref<HTMLButtonElement | null>(null)
+
+defineExpose({
+  focus: () => neeButtonRef.value?.focus(),
+})
 
 const showOverlay = computed(() =>
   props.isShaking && props.lastAnswerCorrect === false && props.isReal !== null,
@@ -84,6 +101,9 @@ const showOverlay = computed(() =>
 const overlayText = computed(() =>
   props.isReal ? 'echtes Berlinerisch' : 'erfunden',
 )
+
+const neeAriaLabel = computed(() => `Nee – „${props.word}“ ist nicht Berlinerisch`)
+const jaAriaLabel = computed(() => `Ja – „${props.word}“ ist Berlinerisch`)
 
 const showSwipeHint = ref(props.isFirstCard === true)
 

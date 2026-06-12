@@ -1,5 +1,9 @@
 <template>
   <div class="c-berliner-oder-nicht">
+    <!-- Screen reader live regions -->
+    <div role="status" aria-live="polite" aria-atomic="true" class="u-sr-only">{{ announcement }}</div>
+    <div role="alert" aria-live="assertive" aria-atomic="true" class="u-sr-only">{{ urgentAnnouncement }}</div>
+
     <!-- Idle -->
     <div v-if="phase === 'idle'" class="c-berliner-oder-nicht__idle">
       <h1 class="c-berliner-oder-nicht__idle-title">Berliner<br />oder nicht?</h1>
@@ -9,34 +13,38 @@
       <button
         v-if="playerName && !isEditingName"
         class="c-berliner-oder-nicht__player-badge"
+        :aria-label="`Name bearbeiten: ${playerName}`"
         @click="isEditingName = true"
       >
         <UserIcon width="13" height="13" aria-hidden="true" />
         {{ playerName }}
         <PencilIcon width="11" height="11" aria-hidden="true" />
       </button>
-      <input
-        v-else
-        ref="nameInputRef"
-        v-model="playerName"
-        type="text"
-        placeholder="Dein Name (optional)"
-        class="c-berliner-oder-nicht__name-input"
-        maxlength="32"
-        autocomplete="nickname"
-        @blur="isEditingName = false"
-        @keydown.enter="isEditingName = false"
-      />
-      <div v-if="allTimeHighScore > 0" class="c-berliner-oder-nicht__idle-prev-stats">
+      <template v-else>
+        <label for="bon-player-name" class="u-sr-only">Dein Name (optional)</label>
+        <input
+          id="bon-player-name"
+          ref="nameInputRef"
+          v-model="playerName"
+          type="text"
+          placeholder="Dein Name (optional)"
+          class="c-berliner-oder-nicht__name-input"
+          maxlength="32"
+          autocomplete="nickname"
+          @blur="isEditingName = false"
+          @keydown.enter="isEditingName = false"
+        />
+      </template>
+      <dl v-if="allTimeHighScore > 0" class="c-berliner-oder-nicht__idle-prev-stats">
         <div>
-          <span class="c-berliner-oder-nicht__idle-stat-value">{{ allTimeHighScore }}</span>
-          Highscore
+          <dt>Highscore</dt>
+          <dd class="c-berliner-oder-nicht__idle-stat-value">{{ allTimeHighScore }}</dd>
         </div>
         <div>
-          <span class="c-berliner-oder-nicht__idle-stat-value">{{ allTimeBestStreak }}</span>
-          Best Streak
+          <dt>Best Streak</dt>
+          <dd class="c-berliner-oder-nicht__idle-stat-value">{{ allTimeBestStreak }}</dd>
         </div>
-      </div>
+      </dl>
       <button
         v-if="hasSavedGame"
         class="c-berliner-oder-nicht__resume-btn"
@@ -63,6 +71,7 @@
       <Transition :name="cardTransitionName" mode="out-in">
         <BonCard
           v-if="currentCard"
+          ref="bonCardRef"
           :key="cardNumber"
           :word="currentCard.word"
           :card-number="cardNumber"
@@ -79,6 +88,7 @@
     <template v-if="phase === 'result'">
       <ConfettiEffect v-if="isNewHighScore" />
       <BonResult
+        ref="bonResultRef"
         :score="score"
         :best-streak="bestStreak"
         :total-answered="totalAnswered"
@@ -155,6 +165,45 @@ const exitDirection = ref<'left' | 'right' | null>(null)
 const isShaking = ref(false)
 const cardNumber = ref(1)
 
+// Component refs for focus management
+const bonCardRef = ref<InstanceType<typeof BonCard> | null>(null)
+const bonResultRef = ref<InstanceType<typeof BonResult> | null>(null)
+
+// Screen reader announcements
+const announcement = ref('')
+const urgentAnnouncement = ref('')
+
+watch(score, (newScore) => {
+  if (phase.value !== 'playing') return
+  announcement.value = `Score: ${newScore}`
+})
+
+watch(streak, (newStreak) => {
+  if (phase.value !== 'playing' || newStreak === 0) return
+  announcement.value = multiplier.value > 1
+    ? `Streak: ${newStreak}, ${multiplier.value}× Multiplikator`
+    : `Streak: ${newStreak}`
+})
+
+watch(lives, (newLives, oldLives) => {
+  if (phase.value !== 'playing' || newLives >= oldLives) return
+  urgentAnnouncement.value = `${newLives} von 3 Leben verbleibend`
+})
+
+watch(phase, async (newPhase) => {
+  if (newPhase === 'playing') {
+    announcement.value = 'Spiel gestartet'
+    await nextTick()
+    bonCardRef.value?.focus()
+    return
+  }
+  if (newPhase === 'result') {
+    urgentAnnouncement.value = isNewHighScore.value ? 'Game Over – Neuer Highscore!' : 'Game Over'
+    await nextTick()
+    bonResultRef.value?.focus()
+  }
+})
+
 const { vibrate } = useVibrate()
 
 const { start: startShakeTimer } = useTimeoutFn(() => {
@@ -175,7 +224,6 @@ onMounted(async () => {
     if (!res.ok) throw new Error('Failed to load word index')
     const data = await res.json()
 
-    // index.json returns a flat array of word objects (not an Orama serialised DB)
     type SearchRecord = { wordProperties: { berlinerisch: string; translations: string[] }; slug: string }
     const records = data as SearchRecord[]
 

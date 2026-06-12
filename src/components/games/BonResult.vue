@@ -1,30 +1,30 @@
 <template>
   <div class="c-bon-result">
-    <p class="c-bon-result__title">
+    <h2 ref="titleRef" tabindex="-1" class="c-bon-result__title">
       {{ stats.playerName ? `Game Over, ${stats.playerName}` : 'Game Over' }}
-    </p>
+    </h2>
 
-    <div class="c-bon-result__stats">
+    <dl class="c-bon-result__stats">
       <div class="c-bon-result__stat">
-        <span class="c-bon-result__stat-value">{{ score }}</span>
-        <span class="c-bon-result__stat-label">Score</span>
+        <dt class="c-bon-result__stat-label">Score</dt>
+        <dd class="c-bon-result__stat-value">{{ score }}</dd>
       </div>
       <div class="c-bon-result__stat">
-        <span class="c-bon-result__stat-value">{{ bestStreak }}</span>
-        <span class="c-bon-result__stat-label">Best Streak</span>
+        <dt class="c-bon-result__stat-label">Best Streak</dt>
+        <dd class="c-bon-result__stat-value">{{ bestStreak }}</dd>
       </div>
       <div class="c-bon-result__stat">
-        <span class="c-bon-result__stat-value">{{ accuracyPercent }}%</span>
-        <span class="c-bon-result__stat-label">Genauigkeit</span>
+        <dt class="c-bon-result__stat-label">Genauigkeit</dt>
+        <dd class="c-bon-result__stat-value">{{ accuracyPercent }}%</dd>
       </div>
       <div :class="['c-bon-result__stat', isNewHighScore && 'c-bon-result__stat--highlight']">
-        <span class="c-bon-result__stat-value">
+        <dt class="c-bon-result__stat-label">Highscore</dt>
+        <dd class="c-bon-result__stat-value">
           <TrophyIcon v-if="isNewHighScore" width="18" height="18" aria-hidden="true" />
-          {{ isNewHighScore ? 'Neu!' : allTimeHighScore }}
-        </span>
-        <span class="c-bon-result__stat-label">Highscore</span>
+          {{ isNewHighScore ? 'Neuer Highscore!' : allTimeHighScore }}
+        </dd>
       </div>
-    </div>
+    </dl>
 
     <a
       v-if="lastCard?.isReal && lastCard.slug"
@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import { useShare } from '@vueuse/core'
 import { useStore } from '@nanostores/vue'
 import { $bonStats } from '@stores/bonStats'
@@ -80,6 +80,12 @@ const props = defineProps<{
 const emit = defineEmits<{
   restart: []
 }>()
+
+const titleRef = ref<HTMLHeadingElement | null>(null)
+
+defineExpose({
+  focus: () => titleRef.value?.focus(),
+})
 
 const accuracyPercent = computed(() =>
   props.totalAnswered > 0
