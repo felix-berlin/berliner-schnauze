@@ -7,7 +7,11 @@
 
     <div
       ref="cardRef"
-      :class="['c-bon-card__card', isShaking && 'c-bon-card__card--shake']"
+      :class="[
+        'c-bon-card__card',
+        isShaking && 'c-bon-card__card--shake',
+        showSwipeHint && 'c-bon-card__card--intro',
+      ]"
       :style="dragCardStyle"
     >
       <p class="c-bon-card__label">Berlinerisch?</p>
@@ -17,6 +21,12 @@
       <Transition name="fade-fast">
         <div v-if="showOverlay" class="c-bon-card__overlay">
           War {{ overlayText }}!
+        </div>
+      </Transition>
+
+      <Transition name="fade-fast">
+        <div v-if="showSwipeHint" class="c-bon-card__swipe-hint" aria-hidden="true">
+          <HandIcon class="c-bon-card__swipe-hint-icon" width="32" height="32" />
         </div>
       </Transition>
     </div>
@@ -45,11 +55,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from 'vue'
-import { onKeyStroke, usePointerSwipe, useVibrate } from '@vueuse/core'
+import { computed, defineAsyncComponent, onMounted, ref, watch } from 'vue'
+import { onKeyStroke, usePointerSwipe, useTimeoutFn, useVibrate } from '@vueuse/core'
 
 const XIcon = defineAsyncComponent(() => import('virtual:icons/lucide/x'))
 const CheckIcon = defineAsyncComponent(() => import('virtual:icons/lucide/check'))
+const HandIcon = defineAsyncComponent(() => import('virtual:icons/lucide/hand'))
 
 const props = defineProps<{
   word: string
@@ -57,6 +68,7 @@ const props = defineProps<{
   isShaking: boolean
   lastAnswerCorrect: boolean | null
   isReal: boolean | null
+  isFirstCard?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -73,6 +85,16 @@ const overlayText = computed(() =>
   props.isReal ? 'echtes Berlinerisch' : 'erfunden',
 )
 
+const showSwipeHint = ref(props.isFirstCard === true)
+
+const { start: startHintTimer } = useTimeoutFn(() => {
+  showSwipeHint.value = false
+}, 3000, { immediate: false })
+
+onMounted(() => {
+  if (props.isFirstCard) startHintTimer()
+})
+
 const { vibrate } = useVibrate()
 
 const { isSwiping, distanceX } = usePointerSwipe(cardRef, {
@@ -87,6 +109,10 @@ const { isSwiping, distanceX } = usePointerSwipe(cardRef, {
     }
   },
   threshold: 50,
+})
+
+watch(isSwiping, (val) => {
+  if (val) showSwipeHint.value = false
 })
 
 const dragCardStyle = computed(() => {

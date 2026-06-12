@@ -224,7 +224,11 @@
       transform 0.25s ease,
       border-color 0.2s,
       box-shadow 0.2s;
-    will-change: transform;
+    will-change: translate, rotate, transform;
+
+    &--intro {
+      animation: c-bon-card-intro 2s linear 0.6s both;
+    }
 
     &--exit-right {
       transform: translateX(110%) rotate(12deg);
@@ -264,6 +268,23 @@
     font-size: 0.75rem;
     color: var(--c-bon-text-muted);
     margin-top: 1rem;
+  }
+
+  &__swipe-hint {
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 1.25rem;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  &__swipe-hint-icon {
+    color: var(--c-bon-text-muted);
+    animation: c-bon-swipe-gesture 2s linear 0.6s both;
   }
 
   &__overlay {
@@ -325,6 +346,78 @@
   }
 }
 
+@keyframes c-bon-card-intro {
+  0% {
+    translate: 0;
+    rotate: 0deg;
+    animation-timing-function: ease-in-out;
+  }
+
+  25% {
+    translate: 34px;
+    rotate: 3.5deg;
+    animation-timing-function: ease-in-out;
+  }
+
+  50% {
+    translate: 0;
+    rotate: 0deg;
+    animation-timing-function: ease-in-out;
+  }
+
+  75% {
+    translate: -22px;
+    rotate: -2.5deg;
+    animation-timing-function: ease-in-out;
+  }
+
+  100% {
+    translate: 0;
+    rotate: 0deg;
+  }
+}
+@keyframes c-bon-swipe-gesture {
+  0% {
+    translate: 0;
+    opacity: 0;
+    animation-timing-function: ease-out;
+  }
+
+  8% {
+    translate: 0;
+    opacity: 0.65;
+    animation-timing-function: ease-in-out;
+  }
+
+  33% {
+    translate: 34px;
+    opacity: 0.65;
+    animation-timing-function: ease-in-out;
+  }
+
+  50% {
+    translate: 0;
+    opacity: 0.65;
+    animation-timing-function: ease-in-out;
+  }
+
+  75% {
+    translate: -22px;
+    opacity: 0.65;
+    animation-timing-function: ease-in-out;
+  }
+
+  90% {
+    translate: 0;
+    opacity: 0.65;
+    animation-timing-function: ease-in;
+  }
+
+  100% {
+    translate: 0;
+    opacity: 0;
+  }
+}
 @keyframes c-bon-card-shake {
   0%,
   100% {

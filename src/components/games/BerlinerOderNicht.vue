@@ -47,6 +47,7 @@
           :is-shaking="isShaking"
           :last-answer-correct="lastAnswerCorrect"
           :is-real="currentCard.isReal"
+          :is-first-card="cardNumber === 1"
           @answer="onAnswer"
         />
       </Transition>
