@@ -44,7 +44,7 @@ jobs:
         run: pnpm run test:ci
 
       - name: Codecov
-        uses: codecov/codecov-action@v6.0.1
+        uses: codecov/codecov-action@v6.0.2
         with:
           directory: ./tests/unit/coverage
         env:
