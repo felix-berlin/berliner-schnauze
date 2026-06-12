@@ -43,14 +43,30 @@
     color: var(--new-blue-400);
     margin: 0;
     line-height: 1.1;
-    text-decoration: underline;
-    text-decoration-style: dashed;
-    text-decoration-color: var(--orange-300);
-    text-decoration-thickness: from-font;
-    text-underline-position: from-font;
 
     @include butler-mx.dark-mode-class {
       color: var(--orange-300);
+    }
+
+    dfn {
+      display: inline-block;
+      position: relative;
+      font-style: normal;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        bottom: -0.1em;
+        height: 2px;
+        background: repeating-linear-gradient(
+          to right,
+          var(--orange-300) 0,
+          var(--orange-300) 5px,
+          transparent 5px,
+          transparent 9px
+        );
+      }
     }
   }
 
@@ -58,6 +74,7 @@
     font-weight: 400;
     color: var(--grey-100);
     font-size: clamp(1.2rem, 3cqi, 2.25rem);
+    text-decoration: none;
 
     @include butler-mx.dark-mode-class {
       color: color-mix(in srgb, var(--orange-200) 70%, transparent);
@@ -92,5 +109,14 @@
       color: var(--orange-200);
       border-color: var(--orange-600);
     }
+  }
+
+  // Align the Berolinismus badge to match the wortart badge in this context
+  .c-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
   }
 }

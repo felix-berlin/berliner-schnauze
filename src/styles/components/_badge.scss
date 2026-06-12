@@ -2,11 +2,14 @@
 
 .c-badge {
   background-color: var(--color-background-badge, var(--accent));
+  color: var(--color-badge-text, var(--new-blue-400));
   padding: 0.2em 0.5em;
   border-radius: 0.25em;
   font-size: 0.8rem;
+  font-weight: 600;
 
   @include butler-mx.dark-mode-class {
     --color-background-badge: var(--orange-600);
+    --color-badge-text: var(--orange-100);
   }
 }
