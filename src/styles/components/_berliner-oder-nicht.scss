@@ -90,13 +90,19 @@
     gap: 1.5rem;
     font-size: 0.875rem;
     color: var(--c-bon-text-muted);
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   &__idle-stat-value {
-    display: block;
+    margin: 0;
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-body);
+    order: -1;
   }
 
   &__start-btn {
@@ -613,6 +619,7 @@
   }
 
   &__stat-value {
+    margin: 0;
     font-size: 1.375rem;
     font-weight: 900;
     line-height: 1.2;
