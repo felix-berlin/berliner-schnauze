@@ -122,6 +122,12 @@
     border-inline-start: 3px solid transparent;
     text-decoration: none;
 
+    @include butler-mx.feature("motion") {
+      transition:
+        color 150ms ease,
+        background-color 150ms ease,
+        border-color 150ms ease;
+    }
     @include butler-mx.dark-mode-class {
       color: color-mix(in srgb, var(--orange-100) 80%, transparent);
     }
