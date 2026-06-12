@@ -1,22 +1,24 @@
 import ToastNotify from "@components/toast/ToastNotify.vue";
-import { removeToastById, supportsPopover } from "@stores/toastNotify.ts";
+import { markClosing, removeToast } from "@stores/toastNotify.ts";
 import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeAll, beforeEach } from "vitest";
+import type { VueWrapper } from "@vue/test-utils";
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from "vitest";
 
 vi.mock("@stores/toastNotify.ts", () => ({
-  supportsPopover: vi.fn(() => true),
-  removeToastById: vi.fn(),
+  markClosing: vi.fn(),
+  removeToast: vi.fn(),
 }));
 
-// Mock the showPopover method globally
 beforeAll(() => {
   window.HTMLElement.prototype.showPopover = vi.fn();
+  window.HTMLElement.prototype.hidePopover = vi.fn();
 });
 
 describe("ToastNotify.vue", () => {
-  let wrapper: any;
+  let wrapper: VueWrapper;
 
   beforeEach(() => {
+    vi.useFakeTimers();
     wrapper = mount(ToastNotify, {
       props: {
         message: "Test message",
@@ -24,11 +26,11 @@ describe("ToastNotify.vue", () => {
         status: "info",
       },
     });
+  });
 
-    // Mock the toast.value object with a showPopover method
-    wrapper.vm.toast = {
-      showPopover: vi.fn(),
-    };
+  afterEach(() => {
+    vi.useRealTimers();
+    wrapper.unmount();
   });
 
   it("renders correctly", () => {
@@ -36,16 +38,17 @@ describe("ToastNotify.vue", () => {
     expect(wrapper.find(".c-toast-notify__message").text()).toBe("Test message");
   });
 
-  it("calls showPopover if supported", () => {
-    wrapper.vm.showToast();
-    expect(wrapper.vm.toast.showPopover).toHaveBeenCalled();
+  it("calls showPopover on mount", () => {
+    expect(window.HTMLElement.prototype.showPopover).toHaveBeenCalled();
   });
 
-  it("shows and hides the toast correctly", async () => {
-    await wrapper.vm.$nextTick();
-    expect(wrapper.vm.isOpen).toBe(true);
+  it("calls hidePopover + markClosing immediately, then removeToast after 400ms", async () => {
+    await wrapper.find(".c-toast-notify__close").trigger("click");
 
-    await wrapper.vm.hideToast();
-    expect(removeToastById).toHaveBeenCalledWith(161);
+    expect(window.HTMLElement.prototype.hidePopover).toHaveBeenCalled();
+    expect(markClosing).toHaveBeenCalledWith(161); // synchronous — no timer
+
+    await vi.advanceTimersByTimeAsync(400);
+    expect(removeToast).toHaveBeenCalledWith(161);
   });
 });

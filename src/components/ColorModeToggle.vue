@@ -3,29 +3,13 @@
     type="button"
     class="c-color-mode-toggle c-button c-button--center-icon"
     :class="cssClasses"
+    :aria-label="isDarkMode === null ? 'Auf dunkles Farbschema wechseln' : isDarkMode ? 'Auf helles Farbschema wechseln' : 'Auf dunkles Farbschema wechseln'"
     @click="toggleMode()"
   >
     <Transition name="fade-out-in">
-      <SunMoon
-        v-if="isDarkMode === null"
-        key="system"
-        focusable="false"
-        aria-label="Systemeinstellung (Farbschema)"
-      />
-
-      <Moon
-        v-else-if="isDarkMode"
-        key="dark"
-        focusable="false"
-        aria-label="dunkles Farbschema aktivieren"
-      />
-
-      <Sun
-        v-else
-        key="light"
-        focusable="false"
-        aria-label="helles Farbschema aktivieren"
-      />
+      <SunMoon v-if="isDarkMode === null" key="system" focusable="false" aria-hidden="true" />
+      <Moon v-else-if="isDarkMode" key="dark" focusable="false" aria-hidden="true" />
+      <Sun v-else key="light" focusable="false" aria-hidden="true" />
     </Transition>
   </button>
 </template>

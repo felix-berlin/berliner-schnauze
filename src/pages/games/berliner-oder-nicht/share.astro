@@ -1,0 +1,13 @@
+---
+import BonShareView from '@components/games/BonShareView.vue'
+import Layout from '@layouts/Layout.astro'
+
+const page = {
+  description: 'Sieh dir das Spielergebnis an — Berliner oder nicht? Das Swipe-Game.',
+  title: 'Spielergebnis – Berliner oder nicht? | Berliner Schnauze',
+}
+---
+
+<Layout content={page}>
+  <BonShareView client:only="vue" />
+</Layout>

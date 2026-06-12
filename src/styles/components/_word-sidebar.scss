@@ -1,0 +1,168 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-word-sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px dashed var(--grey-100);
+  border-radius: 4px;
+  overflow: hidden;
+  position: sticky;
+  top: var(--site-header-height, 60px);
+  z-index: 10;
+
+  @include butler-mx.dark-mode-class {
+    background-color: var(--new-blue-400);
+    border-color: color-mix(in srgb, var(--orange-300) 20%, transparent);
+  }
+
+  @container word-page (inline-size >= 48rem) {
+    top: calc(var(--site-header-height, 60px) + vars.$spacer);
+    align-self: start;
+    overflow: visible;
+    z-index: auto;
+  }
+  @container word-page (inline-size < 48rem) {
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    border-radius: 0;
+
+    .c-word-sidebar__word,
+    .c-word-sidebar__group-label,
+    .c-word-sidebar__divider {
+      display: none;
+    }
+
+    .c-word-sidebar__nav {
+      flex-direction: row;
+      padding-block: 0;
+      min-width: max-content;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &__word {
+    padding-inline: vars.$spacer * 0.75;
+    padding-block: vars.$spacer * 0.75;
+    border-block-end: 1px dashed var(--grey-100);
+
+    @include butler-mx.dark-mode-class {
+      border-block-end-color: color-mix(in srgb, var(--orange-300) 30%, transparent);
+    }
+  }
+
+  &__word-title {
+    font-family: vars.$berlin;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--new-blue-400);
+    margin: 0;
+    line-height: 1.1;
+
+    @include butler-mx.dark-mode-class {
+      color: var(--orange-300);
+    }
+  }
+
+  &__word-subtitle {
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--blue) 75%, white);
+    margin: 0;
+    margin-block-start: 0.2rem;
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--orange-200) 70%, transparent);
+    }
+  }
+
+  &__group-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--blue) 75%, white);
+    padding-inline: vars.$spacer * 0.75;
+    margin-block: vars.$spacer * 0.5 0.2rem;
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--orange-200) 60%, transparent);
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    background: var(--grey-100);
+    margin-inline: vars.$spacer * 0.75;
+    margin-block: vars.$spacer * 0.25;
+
+    @include butler-mx.dark-mode-class {
+      background: color-mix(in srgb, var(--orange-300) 20%, transparent);
+    }
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    padding-block: vars.$spacer * 0.5;
+  }
+
+  &__link {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--blue) 80%, white);
+    padding-block: 0.35rem;
+    padding-inline: vars.$spacer * 0.75;
+    border-inline-start: 3px solid transparent;
+    text-decoration: none;
+
+    @include butler-mx.feature("motion") {
+      transition:
+        color 150ms ease,
+        background-color 150ms ease,
+        border-color 150ms ease;
+    }
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--orange-100) 80%, transparent);
+    }
+
+    @container word-page (inline-size < 48rem) {
+      padding-block: 0.75rem;
+      border-inline-start: none;
+      border-block-end: 2px solid transparent;
+      white-space: nowrap;
+    }
+
+    @include butler-mx.hover {
+      color: var(--new-blue-400);
+      background-color: color-mix(in srgb, var(--orange-300) 12%, transparent);
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-200);
+        background-color: color-mix(in srgb, var(--orange-600) 15%, transparent);
+      }
+    }
+
+    &.is-active {
+      color: var(--new-blue-400);
+      background-color: color-mix(in srgb, var(--orange-300) 18%, transparent);
+      border-inline-start-color: var(--orange-600);
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-200);
+        background-color: color-mix(in srgb, var(--orange-600) 20%, transparent);
+      }
+
+      @container word-page (inline-size < 48rem) {
+        border-inline-start-color: transparent;
+        border-block-end-color: var(--orange-600);
+      }
+    }
+  }
+}

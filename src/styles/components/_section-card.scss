@@ -1,0 +1,221 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-section-card {
+  background: white;
+  border: 1px dashed var(--grey-100);
+  border-radius: 4px;
+  box-shadow:
+    0 0.5px 0.6px rgb(0 0 0 / 8%),
+    0 4px 5px rgb(0 0 0 / 16%);
+  scroll-margin-top: calc(var(--site-header-height, 60px) + 1rem);
+
+  @include butler-mx.dark-mode-class {
+    background: var(--new-blue-400);
+  }
+
+  &__header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    padding-inline: 1.25rem;
+    padding-block: 0.75rem;
+    border-block-end: 1px dashed var(--orange-200);
+  }
+
+  &__num {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--orange-600);
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-family: vars.$berlin;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--new-blue-400);
+    margin: 0;
+
+    @include butler-mx.dark-mode-class {
+      color: white;
+    }
+  }
+
+  &__body {
+    padding-inline: 1.25rem;
+    padding-block: 1rem;
+
+    * {
+      overflow-wrap: break-word;
+    }
+
+    :where(p, a, li) {
+      font-size: 1.15rem;
+    }
+
+    :where(li) {
+      line-height: 1.5;
+    }
+
+    h3 {
+      font-family: vars.$berlin;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-block: 1.25em 0.75em;
+      color: var(--new-blue-400);
+
+      @include butler-mx.dark-mode-class {
+        color: var(--color-body);
+      }
+    }
+  }
+
+  &__infotext {
+    border-inline-start: 3px solid var(--orange-300);
+    background: color-mix(in srgb, var(--orange-100) 60%, white);
+    padding: 0.75rem 1rem;
+    margin-block-end: vars.$spacer;
+    border-radius: 0 4px 4px 0;
+
+    @include butler-mx.dark-mode-class {
+      background: color-mix(in srgb, var(--new-blue-400) 80%, black);
+    }
+  }
+
+  &__stat-row {
+    display: flex;
+    gap: vars.$spacer * 0.75;
+    flex-wrap: wrap;
+    margin-block-end: vars.$spacer;
+  }
+
+  &__stat-box {
+    background: color-mix(in srgb, var(--orange-600) 10%, white);
+    border: 1px dashed var(--orange-200);
+    border-radius: 4px;
+    padding: 0.625rem 0.875rem;
+    flex: 1;
+    min-width: 80px;
+
+    @include butler-mx.dark-mode-class {
+      background: color-mix(in srgb, var(--new-blue-400) 80%, black);
+    }
+  }
+
+  &__stat-label {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: color-mix(in srgb, var(--blue) 75%, white);
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
+    }
+  }
+
+  &__stat-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--new-blue-400);
+
+    @include butler-mx.dark-mode-class {
+      color: white;
+    }
+
+    &--vowels {
+      color: #435e6b;
+
+      @include butler-mx.dark-mode-class {
+        color: #cfc536;
+      }
+    }
+
+    &--consonants {
+      color: var(--orange-600);
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-300);
+      }
+    }
+  }
+
+  &__cv-legend {
+    display: flex;
+    gap: vars.$spacer;
+    margin-block-start: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  &__cv-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+
+    &::before {
+      content: "●";
+      font-size: 0.6rem;
+    }
+
+    &--vowel {
+      color: #435e6b;
+
+      @include butler-mx.dark-mode-class {
+        color: #cfc536;
+      }
+    }
+
+    &--consonant {
+      color: var(--orange-600);
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-300);
+      }
+    }
+  }
+
+  &__grammar-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: color-mix(in srgb, var(--blue) 70%, white);
+    margin-block-end: vars.$spacer * 0.75;
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
+    }
+  }
+
+  &__grammar-entry {
+    margin-block-end: 0.875rem;
+  }
+
+  &__grammar-word {
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding-block-end: 0.25rem;
+    border-block-end: 1px dashed var(--orange-200);
+    margin-block-end: 0.5rem;
+  }
+
+  &__grammar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem vars.$spacer * 0.5;
+  }
+
+  &__grammar-tag {
+    background: color-mix(in srgb, var(--orange-100) 80%, white);
+    border: 1px solid var(--orange-200);
+    border-radius: 4px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+
+    @include butler-mx.dark-mode-class {
+      background: color-mix(in srgb, var(--new-blue-400) 70%, black);
+      border-color: var(--orange-600);
+    }
+  }
+}

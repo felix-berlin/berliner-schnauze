@@ -8,10 +8,10 @@
 import { randomElement, routeToWord } from "@utils/helpers.ts";
 import Dices from "virtual:icons/lucide/dices";
 
-import type { BerlinerWord } from "@/gql/entity-types";
+import type { WordRef } from "@utils/wordHelper";
 
 interface RelatedWordsProps {
-  words: BerlinerWord[];
+  words: WordRef[];
 }
 
 const { words } = defineProps<RelatedWordsProps>();

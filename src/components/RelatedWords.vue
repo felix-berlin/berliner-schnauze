@@ -2,7 +2,7 @@
   <section class="c-related-words">
     <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
     <ul class="c-related-words__words u-list-reset">
-      <li v-for="word in xRandomWords(words, numberOfWords)" :key="word.id">
+      <li v-for="word in xRandomWords(words, numberOfWords)" :key="word.id ?? word.slug ?? ''">
         <a
           v-if="word"
           :href="routeToWord(word.slug!)"
@@ -20,24 +20,16 @@
 <script setup lang="ts">
 import { routeToWord } from "@utils/helpers.ts";
 
-import type { BerlinerWord } from "@/gql/entity-types";
+import type { WordRef } from "@utils/wordHelper";
 
 interface RelatedWordsProps {
   numberOfWords?: number;
-  words: BerlinerWord[];
+  words: WordRef[];
 }
 
 const { numberOfWords = 7, words } = defineProps<RelatedWordsProps>();
 
-/**
- * Get x random items from an array
- *
- * @param   {Array}  arr  Array to get random items from
- * @param   {Number}  n    Number of items to get
- *
- * @return  {Array}       Array of random items
- */
-const xRandomWords = (arr: BerlinerWord[], n: number): BerlinerWord[] => {
+const xRandomWords = (arr: WordRef[], n: number): WordRef[] => {
   const result = new Array(n);
   let len = arr.length;
   const taken = new Array(len);

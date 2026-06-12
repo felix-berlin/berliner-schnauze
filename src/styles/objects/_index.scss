@@ -65,20 +65,3 @@
   }
 }
 
-.image-placeholder-wrap:not(.loaded) {
-  position: relative;
-
-  @include mx.skeleton-loader;
-
-  .o-index__image {
-    display: block;
-    width: 100%;
-    height: auto;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-}
-
-.image-placeholder-wrap.loaded .o-index__image {
-  opacity: 1;
-}

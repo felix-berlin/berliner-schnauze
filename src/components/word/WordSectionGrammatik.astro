@@ -1,0 +1,38 @@
+---
+import { capitalizeFirstLetter } from '@utils/wordHelper';
+
+interface Props {
+  wordTags: Record<string, string[]>[];
+}
+
+const { wordTags } = Astro.props;
+---
+
+{
+  wordTags.length > 0 && (
+    <section class='c-section-card' id='grammatik' aria-labelledby='heading-grammatik'>
+      <div class='c-section-card__header'>
+        <span class='c-section-card__num'>05</span>
+        <h2 class='c-section-card__title' id='heading-grammatik'>Grammatik</h2>
+      </div>
+      <div class='c-section-card__body'>
+        <p class='c-section-card__grammar-label'>Wortart pro Wort (NLP-Analyse)</p>
+        {Object.keys(wordTags[0]).map((key) => {
+          const isNomenPresent = wordTags[0][key].includes('Nomen');
+          return (
+            <div class='c-section-card__grammar-entry'>
+              <div class='c-section-card__grammar-word'>
+                {isNomenPresent ? capitalizeFirstLetter(key) : key}
+              </div>
+              <div class='c-section-card__grammar-tags'>
+                {wordTags[0][key].map((tag) => (
+                  <span class='c-section-card__grammar-tag'>{tag}</span>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  )
+}

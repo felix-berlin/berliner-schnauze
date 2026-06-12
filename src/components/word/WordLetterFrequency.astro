@@ -1,0 +1,60 @@
+---
+import { letterFrequency } from '@utils/wordHelper';
+
+interface Props {
+  word: string;
+}
+
+const { word } = Astro.props;
+const letters = letterFrequency(word);
+
+const MAX_FREQUENCY = 18;
+
+// Maps German letter frequency % to a hue: rare (≈0%) → steel-blue (220), common (≈18%) → amber (50)
+const getBarHue = (percent: number) => Math.round(220 - Math.min(percent / MAX_FREQUENCY, 1) * 170);
+---
+
+{
+  letters.length > 0 && (
+    <div>
+      <h3>Buchstabenhäufigkeit</h3>
+
+      <ul class='c-single-word__letter-frequency-list'>
+        {letters.map(({ char, percent, label, isVowel }) => (
+          <li class='c-single-word__letter-frequency-item'>
+            <span class={`c-single-word__letter-char ${isVowel ? 'is-vowel' : 'is-consonant'}`}>
+              {char}
+            </span>
+
+            <meter
+              class='c-single-word__letter-meter'
+              min='0'
+              max={MAX_FREQUENCY}
+              value={percent}
+              title={`${char}: ${percent.toFixed(2)}%`}
+              style={`--meter-hue:${getBarHue(percent)}`}
+            >
+              {percent.toFixed(2)}%
+            </meter>
+
+            <span class='c-single-word__letter-label'>
+              {percent.toFixed(2).replace('.', ',')}% · {label}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <p class='c-single-word__letter-bar-source'>
+        Der Häufigkeitsvergleich wird auf Grundlage einer Textstichprobe von knapp 180 Milliarden
+        Zeichen aus dem Deutschen Referenzkorpus erstellt.{' '}
+        <a
+          href='https://de.wikipedia.org/wiki/Buchstabenh%C3%A4ufigkeit'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          Quelle: Wikipedia
+        </a>
+      </p>
+    </div>
+  )
+}
