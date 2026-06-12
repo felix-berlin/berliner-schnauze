@@ -17,19 +17,24 @@
         {{ score }}
       </span>
       <span class="c-bon-hud__score-label">Score</span>
+      <span v-if="playerName" class="c-bon-hud__player">{{ playerName }}</span>
     </div>
 
-    <div class="c-bon-hud__streak">
-      <div class="c-bon-hud__streak-count">
-        <FlameIcon width="16" height="16" aria-hidden="true" />
-        {{ streak }}
+    <Transition name="c-bon-hud-streak">
+      <div v-if="streak > 0" class="c-bon-hud__streak">
+        <div class="c-bon-hud__streak-count">
+          <FlameIcon width="16" height="16" aria-hidden="true" />
+          {{ streak }}
+        </div>
+        <Transition name="c-bon-hud-streak">
+          <div v-if="multiplier > 1" class="c-bon-hud__multiplier">
+            <span class="c-bon-hud__multiplier-badge c-bon-hud__multiplier-badge--active">
+              {{ multiplier }}×
+            </span>
+          </div>
+        </Transition>
       </div>
-      <div class="c-bon-hud__multiplier">
-        <span
-          :class="['c-bon-hud__multiplier-badge', { 'c-bon-hud__multiplier-badge--active': multiplier > 1 }]"
-        >{{ multiplier }}×</span>
-      </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
@@ -47,6 +52,7 @@ defineProps<{
   streak: number
   multiplier: number
   isHighscore: boolean
+  playerName?: string
 }>()
 </script>
 

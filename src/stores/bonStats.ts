@@ -6,6 +6,7 @@ export interface BonStats {
   totalGamesPlayed: number
   totalCorrect: number
   totalAnswered: number
+  playerName: string
 }
 
 export const $bonStats = persistentMap<BonStats>(
@@ -13,6 +14,7 @@ export const $bonStats = persistentMap<BonStats>(
   {
     bestStreak: 0,
     highScore: 0,
+    playerName: '',
     totalAnswered: 0,
     totalCorrect: 0,
     totalGamesPlayed: 0,

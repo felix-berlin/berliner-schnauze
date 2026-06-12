@@ -6,6 +6,27 @@
       <p class="c-berliner-oder-nicht__idle-description">
         Echtes Berlinerisch oder erfunden? Swipe oder klick — du hast 3 Leben!
       </p>
+      <button
+        v-if="playerName && !isEditingName"
+        class="c-berliner-oder-nicht__player-badge"
+        @click="isEditingName = true"
+      >
+        <UserIcon width="13" height="13" aria-hidden="true" />
+        {{ playerName }}
+        <PencilIcon width="11" height="11" aria-hidden="true" />
+      </button>
+      <input
+        v-else
+        ref="nameInputRef"
+        v-model="playerName"
+        type="text"
+        placeholder="Dein Name (optional)"
+        class="c-berliner-oder-nicht__name-input"
+        maxlength="32"
+        autocomplete="nickname"
+        @blur="isEditingName = false"
+        @keydown.enter="isEditingName = false"
+      />
       <div v-if="allTimeHighScore > 0" class="c-berliner-oder-nicht__idle-prev-stats">
         <div>
           <span class="c-berliner-oder-nicht__idle-stat-value">{{ allTimeHighScore }}</span>
@@ -37,6 +58,7 @@
         :streak="streak"
         :multiplier="multiplier"
         :is-highscore="score > allTimeHighScore"
+        :player-name="stats.playerName || undefined"
       />
       <Transition :name="cardTransitionName" mode="out-in">
         <BonCard
@@ -71,10 +93,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, defineAsyncComponent, nextTick, onMounted, ref, watch } from 'vue'
 import { useTimeoutFn, useVibrate } from '@vueuse/core'
 import { useStore } from '@nanostores/vue'
 import ConfettiEffect from '@components/ConfettiEffect.vue'
+
+const UserIcon = defineAsyncComponent(() => import('virtual:icons/lucide/user'))
+const PencilIcon = defineAsyncComponent(() => import('virtual:icons/lucide/pencil'))
 import { $bonStats } from '@stores/bonStats'
 import { $savedBon } from '@stores/savedBon'
 import { fakeWords } from '@/data/fakeWords'
@@ -107,6 +132,20 @@ const {
 const stats = useStore($bonStats)
 const allTimeHighScore = computed(() => stats.value.highScore)
 const allTimeBestStreak = computed(() => stats.value.bestStreak)
+const playerName = computed({
+  get: () => stats.value.playerName ?? '',
+  set: (val: string) => $bonStats.setKey('playerName', val),
+})
+
+const isEditingName = ref(false)
+const nameInputRef = ref<HTMLInputElement | null>(null)
+
+watch(isEditingName, async (editing) => {
+  if (!editing) return
+  await nextTick()
+  nameInputRef.value?.focus()
+  nameInputRef.value?.select()
+})
 
 const savedBon = useStore($savedBon)
 const hasSavedGame = computed(() => savedBon.value?.phase === 'playing')

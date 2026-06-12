@@ -41,6 +41,50 @@
     font-size: 1rem;
   }
 
+  &__player-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    background: var(--c-bon-surface);
+    border: 1px solid var(--c-bon-border);
+    border-radius: 50px;
+    font-size: 0.9375rem;
+    color: var(--color-body);
+    cursor: pointer;
+    transition: border-color 0.15s;
+
+    &:hover {
+      border-color: var(--accent);
+    }
+
+    svg:last-child {
+      color: var(--c-bon-text-muted);
+    }
+  }
+
+  &__name-input {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.625rem 1.25rem;
+    background: var(--c-bon-surface);
+    border: 1px solid var(--c-bon-border);
+    border-radius: 50px;
+    font-size: 0.9375rem;
+    text-align: center;
+    color: var(--color-body);
+    outline: none;
+    transition: border-color 0.15s;
+
+    &::placeholder {
+      color: var(--c-bon-text-muted);
+    }
+
+    &:focus {
+      border-color: var(--accent);
+    }
+  }
+
   &__idle-prev-stats {
     display: flex;
     gap: 1.5rem;
@@ -100,8 +144,8 @@
     --c-bon-text-muted: rgb(255 255 255 / 45%);
   }
 
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   width: 100%;
   max-width: 420px;
@@ -124,11 +168,13 @@
   }
 
   &__score-wrap {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
   }
 
   &__score {
-    display: block;
     font-size: 1.5rem;
     font-weight: 900;
     line-height: 1;
@@ -145,10 +191,21 @@
     color: var(--c-bon-text-muted);
   }
 
+  &__player {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--color-body);
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   &__streak {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    justify-self: end;
     gap: 0.125rem;
   }
 
@@ -181,6 +238,19 @@
       opacity: 1;
     }
   }
+}
+
+.c-bon-hud-streak-enter-active,
+.c-bon-hud-streak-leave-active {
+  transition:
+    opacity 0.25s ease,
+    scale 0.25s ease;
+}
+
+.c-bon-hud-streak-enter-from,
+.c-bon-hud-streak-leave-to {
+  opacity: 0;
+  scale: 0.75;
 }
 
 // Card

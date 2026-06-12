@@ -1,6 +1,8 @@
 <template>
   <div class="c-bon-result">
-    <p class="c-bon-result__title">Game Over</p>
+    <p class="c-bon-result__title">
+      {{ stats.playerName ? `Game Over, ${stats.playerName}` : 'Game Over' }}
+    </p>
 
     <div class="c-bon-result__stats">
       <div class="c-bon-result__stat">
@@ -54,6 +56,8 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from 'vue'
 import { useShare } from '@vueuse/core'
+import { useStore } from '@nanostores/vue'
+import { $bonStats } from '@stores/bonStats'
 import type { BonCard } from '@composables/useBon'
 import { buildShareUrl } from '@utils/bonShare'
 
@@ -83,18 +87,23 @@ const accuracyPercent = computed(() =>
     : 0,
 )
 
+const stats = useStore($bonStats)
 const { share: _share, isSupported: canShare } = useShare()
 
 function share() {
+  const playerName = stats.value.playerName?.trim() || undefined
   const url = buildShareUrl({
     bestStreak: props.bestStreak,
     correctAnswers: props.correctAnswers,
     date: new Date().toISOString(),
+    playerName,
     score: props.score,
     totalAnswered: props.totalAnswered,
   })
   _share({
-    text: `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
+    text: playerName
+      ? `${playerName} hat ${props.score} Punkte bei „Berliner oder nicht?" 🐻`
+      : `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
     title: 'Berliner oder nicht?',
     url: `${window.location.origin}${url}`,
   }).catch(() => {})

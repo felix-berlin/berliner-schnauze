@@ -1,7 +1,9 @@
 <template>
   <div class="c-bon-share-view">
     <template v-if="payload">
-      <p class="c-bon-share-view__title">Spielergebnis</p>
+      <p class="c-bon-share-view__title">
+        {{ payload.playerName ? `${payload.playerName}s Spielergebnis` : 'Spielergebnis' }}
+      </p>
 
       <div class="c-bon-share-view__stats">
         <div class="c-bon-share-view__stat">

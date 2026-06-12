@@ -4,6 +4,7 @@ export interface BonSharePayload {
   totalAnswered: number
   correctAnswers: number
   date: string
+  playerName?: string
 }
 
 function toBase64Url(str: string): string {
