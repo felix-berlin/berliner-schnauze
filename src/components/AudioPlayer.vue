@@ -19,6 +19,7 @@
 <script setup lang="ts">
 import Pause from "virtual:icons/lucide/pause";
 import Play from "virtual:icons/lucide/play";
+import { useEventListener } from "@vueuse/core";
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 
 import type { MediaItem } from "@/gql/entity-types";
@@ -74,17 +75,15 @@ const togglePlayStop = async () => {
   }
 };
 
-onMounted(() => {
-  audioFile?.addEventListener("ended", handleEnded);
+useEventListener(audioFile, "ended", handleEnded);
 
+onMounted(() => {
   void nextTick(() => {
     audioButton.value?.focus();
   });
 });
 
 onUnmounted(() => {
-  audioFile?.removeEventListener("ended", handleEnded);
-
   if (animationFrameId !== null) {
     cancelAnimationFrame(animationFrameId);
   }
