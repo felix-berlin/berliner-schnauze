@@ -122,7 +122,7 @@ importers:
     devDependencies:
       '@0no-co/graphqlsp':
         specifier: ^1.15.4
-        version: 1.15.4(graphql@16.14.2)(typescript@6.0.3)
+        version: 1.17.1(graphql@16.14.2)(typescript@6.0.3)
       '@astrojs/check':
         specifier: ^0.9.9
         version: 0.9.9(prettier@3.8.3)(typescript@6.0.3)
@@ -299,8 +299,16 @@ packages:
       graphql:
         optional: true
 
-  '@0no-co/graphqlsp@1.15.4':
-    resolution: {integrity: sha512-Nt1DVHcZ08lKRKwhiU0amXH77fSdrO6DzyjLE0DkCxfbM/N1SAs32d76y1xtCzM5H9eT0iDS7SdksgRXWJu05g==}
+  '@0no-co/graphql.web@1.3.1':
+    resolution: {integrity: sha512-QBAMryUITHqs9MC0aMPy/YFxXYzaiOv9Ttqf/Ch+rLqZpMyFxZmJQcqzSRdR/sNsnxrlvii+mRe+BAOAki0+dw==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    peerDependenciesMeta:
+      graphql:
+        optional: true
+
+  '@0no-co/graphqlsp@1.17.1':
+    resolution: {integrity: sha512-grt2Nq6eBkFziaxYWrGcKQjuibTIX8df9kgn7KSKAFnI/mUajPhxBanbnIgQX8m1oEOEFf0OXz4vb2exOKro/A==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
       typescript: ^5.0.0 || ^6.0.0
@@ -1948,11 +1956,11 @@ packages:
   '@floating-ui/utils@0.2.11':
     resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
 
-  '@gql.tada/internal@1.0.9':
-    resolution: {integrity: sha512-Bp8yi+kLrzIJ3l5Dfxhz48H4OCH2LCX+pShaPcJgh+oiBt6clrjUKDYNDD3Z78aDQ3+Tyrxe4dd0MfLgpSLPPg==}
+  '@gql.tada/internal@1.1.0':
+    resolution: {integrity: sha512-ZfSypAi6L0V9BzhTKnSQ+8FL460hArq/puDkotKuaNi8Vvfy7J3tOearfQatyfUrSiZ/oW99rxyjUfUJiHJz8Q==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
-      typescript: ^5.0.0 || ^6.0.0
+      typescript: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
 
   '@graphql-codegen/add@7.0.1':
     resolution: {integrity: sha512-kWw6RMu9ysBw1wcgcgf9mOnswc5M3ekOApDTiaJC/UZNTEYins01srZHYTP7z3P/WlGGC844BRtjwh3U2kNd/A==}
@@ -9773,9 +9781,13 @@ snapshots:
     optionalDependencies:
       graphql: 16.14.2
 
-  '@0no-co/graphqlsp@1.15.4(graphql@16.14.2)(typescript@6.0.3)':
+  '@0no-co/graphql.web@1.3.1(graphql@16.14.2)':
+    optionalDependencies:
+      graphql: 16.14.2
+
+  '@0no-co/graphqlsp@1.17.1(graphql@16.14.2)(typescript@6.0.3)':
     dependencies:
-      '@gql.tada/internal': 1.0.9(graphql@16.14.2)(typescript@6.0.3)
+      '@gql.tada/internal': 1.1.0(graphql@16.14.2)(typescript@6.0.3)
       graphql: 16.14.2
       typescript: 6.0.3
 
@@ -11451,9 +11463,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.11': {}
 
-  '@gql.tada/internal@1.0.9(graphql@16.14.2)(typescript@6.0.3)':
+  '@gql.tada/internal@1.1.0(graphql@16.14.2)(typescript@6.0.3)':
     dependencies:
-      '@0no-co/graphql.web': 1.2.0(graphql@16.14.2)
+      '@0no-co/graphql.web': 1.3.1(graphql@16.14.2)
       graphql: 16.14.2
       typescript: 6.0.3
 
