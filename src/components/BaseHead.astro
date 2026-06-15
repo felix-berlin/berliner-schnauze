@@ -15,7 +15,7 @@ import Berlin from '/fonts/Berlin.woff2';
 import BerlinerRegular from '/fonts/BerlinerRegular.woff2';
 
 const { seo, title } = Astro.props as SeoProps & Title;
-const canonicalURL = seo?.canonical ?? removeFileExtension(Astro.url.href);
+const canonicalURL = seo?.canonical || removeFileExtension(Astro.url.href);
 ---
 
 <!-- Global Metadata -->

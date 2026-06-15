@@ -11,6 +11,15 @@ import { seoData } from "@utils/helpers.ts";
 import { Picture } from "astro:assets";
 import "@styles/components/_facts-grid.scss";
 
+const websiteSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  description: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
+  inLanguage: "de-DE",
+  name: "Berliner Schnauze",
+  url: SITE_URL,
+});
+
 const content = {
   seo: {
     canonical: SITE_URL,
@@ -23,6 +32,7 @@ const content = {
       type: "image/png",
       width: String(BrownBearRoar.width),
     },
+    opengraphType: "website",
   },
   title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",
 };
@@ -56,6 +66,9 @@ const facts = [
 ---
 
 <Layout content={seoData(content)} contentClasses="o-index">
+  <Fragment slot="head">
+    <script set:html={websiteSchema} type="application/ld+json" />
+  </Fragment>
   <header class="o-index__header">
     <h1 class="o-index__headline">
       Na Keule,<br /> keen'n Dunst vom Berlinern?
