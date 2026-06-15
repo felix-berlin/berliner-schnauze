@@ -20,11 +20,32 @@ const websiteSchema = JSON.stringify({
   url: SITE_URL,
 });
 
+const organizationSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Berliner Schnauze",
+  url: SITE_URL,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE_URL}/favicons/favicon.svg`,
+  },
+  sameAs: [
+    "https://mastodon.social/@berliner_schnauze",
+    "https://www.facebook.com/Berliner.Schnauze030",
+    "https://github.com/felix-berlin/berliner-schnauze",
+  ],
+  founder: {
+    "@type": "Person",
+    name: "Felix Scholze",
+    url: "https://webshaped.de/",
+  },
+});
+
 const content = {
   seo: {
     canonical: SITE_URL,
     opengraphDescription:
-      "Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.",
+      "Aktuelles Berlinerisch–Hochdeutsch Wörterbuch. Lerne mehr über die Berliner Mundart, Berlinisch, den Berliner Jargon & Berolinismus.",
     opengraphImage: {
       alt: "Berliner Schnauze – Berlinerisch Wörterbuch",
       height: String(BrownBearRoar.height),
@@ -68,6 +89,7 @@ const facts = [
 <Layout content={seoData(content)} contentClasses="o-index">
   <Fragment slot="head">
     <script set:html={websiteSchema} type="application/ld+json" />
+    <script set:html={organizationSchema} type="application/ld+json" />
   </Fragment>
   <header class="o-index__header">
     <h1 class="o-index__headline">

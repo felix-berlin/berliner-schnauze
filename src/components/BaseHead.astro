@@ -15,7 +15,7 @@ import Berlin from '/fonts/Berlin.woff2';
 import BerlinerRegular from '/fonts/BerlinerRegular.woff2';
 
 const { seo, title } = Astro.props as SeoProps & Title;
-const canonicalURL = seo?.canonical || removeFileExtension(Astro.url.href);
+const canonicalURL = (seo?.canonical || removeFileExtension(Astro.url.href)).replace(/\/$/, '');
 ---
 
 <!-- Global Metadata -->
@@ -115,6 +115,9 @@ const canonicalURL = seo?.canonical || removeFileExtension(Astro.url.href);
     <meta content={seo?.opengraphImage?.sourceUrl} property='twitter:image' />
   )
 }
+
+<!-- Locale -->
+<meta content='de_DE' property='og:locale' />
 
 <!-- Mastodon -->
 <meta content='@berliner_schnauze@mastodon.social' name='fediverse:creator' />
