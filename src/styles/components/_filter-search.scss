@@ -64,12 +64,12 @@
 
     .c-filter-search__sub-label,
     .c-filter-search__section-label {
-      font-size: 1.2rem;
       font-weight: 800;
     }
 
     .c-filter-search__section-label {
       margin-top: 0;
+      font-size: 1.5rem;
     }
 
     .c-filter-search__section-label:not(:first-of-type) {
@@ -78,6 +78,7 @@
 
     .c-filter-search__sub-label {
       margin-top: vars.$spacer * 1.5;
+      font-size: 1.2rem;
     }
   }
 
