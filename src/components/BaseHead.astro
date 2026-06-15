@@ -3,7 +3,7 @@ import SetColorMode from '@components/SetColorMode.astro';
 import { ClientRouter } from 'astro:transitions';
 import { pwaInfo } from 'virtual:pwa-info';
 
-import { removeFileExtension } from '@/utils/helpers';
+import { canonicalUrl } from '@utils/helpers';
 import type { Seo, SeoProps, Title } from '@/types/seo';
 
 export type { Seo, SeoProps, Title };
@@ -15,7 +15,7 @@ import Berlin from '/fonts/Berlin.woff2';
 import BerlinerRegular from '/fonts/BerlinerRegular.woff2';
 
 const { seo, title } = Astro.props as SeoProps & Title;
-const canonicalURL = (seo?.canonical || removeFileExtension(Astro.url.href)).replace(/\/$/, '');
+const canonicalURL = seo?.canonical?.replace(/\/$/, '') ?? canonicalUrl(Astro.url.pathname, Astro.site);
 ---
 
 <!-- Global Metadata -->

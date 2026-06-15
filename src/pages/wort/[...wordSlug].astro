@@ -20,7 +20,7 @@ import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
 import Layout from '@layouts/Layout.astro';
 // Imports
 import { fetchAllWords } from '@services/api.ts';
-import { formattedDate, removeFileExtension, routeToWord, seoData } from '@utils/helpers.ts';
+import { canonicalUrl, formattedDate, routeToWord, seoData } from '@utils/helpers.ts';
 import {
   capitalizeFirstLetter,
   coloredConsonantsAndVowels,
@@ -148,7 +148,7 @@ const schemaJson = () => {
     publisher: {
       '@type': 'Organization',
       name: 'Berliner Schnauze',
-      url: Astro.url.origin,
+      url: canonicalUrl('/', Astro.site),
     },
     ...(firstImage?.sourceUrl && {
       image: {
@@ -166,10 +166,10 @@ const schemaJson = () => {
       description: 'Wörterbuch für den Berliner Dialekt und Berliner Schnauze',
       inLanguage: 'de-DE',
       name: 'Berliner Schnauze Wörterbuch',
-      url: `${Astro.url.origin}/wort`,
+      url: canonicalUrl('/wort', Astro.site),
     },
     inLanguage: 'de-DE',
-    mainEntityOfPage: removeFileExtension(Astro.url.href),
+    mainEntityOfPage: canonicalUrl(Astro.url.pathname, Astro.site),
     name: wordProps?.berlinerisch,
     sameAs: wordProps?.learnMore || undefined,
     ...(firstAudio?.audio?.node?.mediaItemUrl && {
@@ -183,7 +183,7 @@ const schemaJson = () => {
       },
     }),
     termCode: word.slug || undefined,
-    url: removeFileExtension(Astro.url.href),
+    url: canonicalUrl(Astro.url.pathname, Astro.site),
   });
 };
 ---
