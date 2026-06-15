@@ -1,26 +1,26 @@
 ---
 // Styles
-import "@styles/objects/_word.scss";
-import "@styles/components/_single-word.scss";
-import "@styles/plugins/astro-breadcrumbs.scss";
+import '@styles/objects/_word.scss';
+import '@styles/components/_single-word.scss';
+import '@styles/plugins/astro-breadcrumbs.scss';
 
 // Types
-import type { GetStaticPaths, InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
+import type { GetStaticPaths, InferGetStaticParamsType, InferGetStaticPropsType } from 'astro';
 
-import AudioPlayerList from "@components/AudioPlayerList.vue";
-import BadgeTag from "@components/BadgeTag.vue";
-import ImageGallery from "@components/ImageGallery.astro";
-import RandomWordButton from "@components/RandomWordButton.vue";
-import RelatedWords from "@components/RelatedWords.vue";
-import ToolTip from "@components/ToolTip.vue";
-import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
+import AudioPlayerList from '@components/AudioPlayerList.vue';
+import BadgeTag from '@components/BadgeTag.vue';
+import ImageGallery from '@components/ImageGallery.astro';
+import RandomWordButton from '@components/RandomWordButton.vue';
+import RelatedWords from '@components/RelatedWords.vue';
+import ToolTip from '@components/ToolTip.vue';
+import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
 // import WordExamples from "@components/word/WordExamples.vue";
-import WordExamples from "@components/word/WordExamples.astro";
-import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
-import Layout from "@layouts/Layout.astro";
+import WordExamples from '@components/word/WordExamples.astro';
+import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
+import Layout from '@layouts/Layout.astro';
 // Imports
-import { fetchAllWords } from "@services/api.ts";
-import { formattedDate, removeFileExtension, routeToWord, seoData } from "@utils/helpers.ts";
+import { fetchAllWords } from '@services/api.ts';
+import { formattedDate, removeFileExtension, routeToWord, seoData } from '@utils/helpers.ts';
 import {
   capitalizeFirstLetter,
   coloredConsonantsAndVowels,
@@ -30,14 +30,14 @@ import {
   similarSoundingWords,
   similarWords,
   translateNlpTags,
-} from "@utils/wordHelper.ts";
-import { Breadcrumbs } from "astro-breadcrumbs";
-import german from "hyphenation.de";
-import Hypher from "hypher";
-import ChevronRight from "~icons/lucide/chevron-right";
-import ExternalLink from "~icons/lucide/external-link";
+} from '@utils/wordHelper.ts';
+import { Breadcrumbs } from 'astro-breadcrumbs';
+import german from 'hyphenation.de';
+import Hypher from 'hypher';
+import ChevronRight from '~icons/lucide/chevron-right';
+import ExternalLink from '~icons/lucide/external-link';
 
-import type { BerlinerWord } from "@/gql/entity-types";
+import type { BerlinerWord } from '@/gql/entity-types';
 
 export const getStaticPaths = (async () => {
   const allWords = await fetchAllWords();
@@ -61,23 +61,23 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { wordSlug } = Astro.params as Params;
 const { allWords, word } = Astro.props;
 
-const wordProps: BerlinerWord["wordProperties"] = word.wordProperties;
+const wordProps: BerlinerWord['wordProperties'] = word.wordProperties;
 
 const wordDescription = (() => {
   const translations = (wordProps?.translations ?? [])
     .map((t) => t?.translation)
     .filter(Boolean)
-    .join(", ");
+    .join(', ');
   if (!translations) return undefined;
-  const berlinerisch = wordProps?.berlinerisch ?? "";
-  const raw = `„${berlinerisch}" ist Berliner Dialekt für ${translations}. Entdecke Berliner Ausdrücke auf Berliner Schnauze.`;
-  return raw.length > 160 ? raw.slice(0, 157) + "…" : raw;
+  const berlinerisch = wordProps?.berlinerisch ?? '';
+  const raw = `„${berlinerisch}" bedeutet auf Berlinerisch: ${translations}. Entdecke Berliner Ausdrücke auf Berliner Schnauze.`;
+  return raw.length > 160 ? raw.slice(0, 157) + '…' : raw;
 })();
 
 const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
   return (
     word?.alternativeWord +
-    (wordProps?.alternativeWords && index !== wordProps?.alternativeWords?.length - 1 ? ", " : "")
+    (wordProps?.alternativeWords && index !== wordProps?.alternativeWords?.length - 1 ? ', ' : '')
   );
 });
 
@@ -86,15 +86,15 @@ const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
 
 let galleryWidths = [316, 457, 658, 429, 525];
 let gallerySizes =
-  "(max-width: 80rem) 525px, (max-width: 64rem) 429px, (max-width: 48rem) 658px, (max-width: 35.49rem) 457px, (max-width: 26.6rem) 316px";
+  '(max-width: 80rem) 525px, (max-width: 64rem) 429px, (max-width: 48rem) 658px, (max-width: 35.49rem) 457px, (max-width: 26.6rem) 316px';
 const lightboxWidths = [425, 567, 768, 896];
 const lightboxSizes =
-  "(max-width: 26.6rem) 425px, (max-width: 35.49rem) 567px, (max-width: 48rem) 768px, (max-width: 64rem) 896px";
+  '(max-width: 26.6rem) 425px, (max-width: 35.49rem) 567px, (max-width: 48rem) 768px, (max-width: 64rem) 896px';
 
 if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
   galleryWidths = [503, 435, 307];
   gallerySizes =
-    "(max-width: 70rem) 503px, (max-width: 64rem) 435px, (max-width: 48rem) 307px, (max-width: 35.5rem) 435px, (max-width: 27.2rem) 307px";
+    '(max-width: 70rem) 503px, (max-width: 64rem) 435px, (max-width: 48rem) 307px, (max-width: 35.5rem) 435px, (max-width: 27.2rem) 307px';
 }
 
 const hypher = new Hypher(german);
@@ -103,10 +103,22 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch 
 
 const firstImage = wordProps?.images?.nodes?.[0];
 const firstAudio = wordProps?.berlinerischAudio?.[0];
+
+const ogImage = word.seo?.opengraphImage?.sourceUrl
+  ? word.seo.opengraphImage
+  : firstImage?.sourceUrl
+    ? {
+        sourceUrl: firstImage.sourceUrl,
+        alt: firstImage.altText || wordProps?.berlinerisch || '',
+        width: firstImage.mediaDetails?.width,
+        height: firstImage.mediaDetails?.height,
+      }
+    : undefined;
+
 const exampleComments = (wordProps?.examples ?? [])
   .filter((e): e is NonNullable<typeof e> => Boolean(e?.example))
   .map((e) => ({
-    "@type": "Comment",
+    '@type': 'Comment',
     text: e.example as string,
     ...(e.exampleExplanation && { description: e.exampleExplanation }),
   }));
@@ -117,20 +129,30 @@ const schemaJson = () => {
     .filter((n): n is string => Boolean(n));
 
   return JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "DefinedTerm",
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTerm',
     ...(alternateNames.length > 0 && { alternateName: alternateNames }),
     ...(exampleComments.length > 0 && { comment: exampleComments }),
     ...(word.dateGmt && { dateCreated: word.dateGmt }),
     ...(word.modifiedGmt && { dateModified: word.modifiedGmt }),
-    description: wordDescription ?? (wordProps?.translations ?? []).map((t) => t?.translation).filter(Boolean).join("; "),
+    description:
+      wordDescription ??
+      (wordProps?.translations ?? [])
+        .map((t) => t?.translation)
+        .filter(Boolean)
+        .join('; '),
     ...(wordProps?.article && {
       disambiguatingDescription: `Berliner Dialektwort, ${wordProps.article}`,
     }),
     identifier: word.id,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Berliner Schnauze',
+      url: Astro.url.origin,
+    },
     ...(firstImage?.sourceUrl && {
       image: {
-        "@type": "ImageObject",
+        '@type': 'ImageObject',
         contentUrl: firstImage.sourceUrl,
         url: firstImage.sourceUrl,
         ...(firstImage.altText && { name: firstImage.altText }),
@@ -140,23 +162,23 @@ const schemaJson = () => {
       },
     }),
     inDefinedTermSet: {
-      "@type": "DefinedTermSet",
-      description: "Wörterbuch für den Berliner Dialekt und Berliner Schnauze",
-      inLanguage: "de-DE",
-      name: "Berliner Schnauze Wörterbuch",
+      '@type': 'DefinedTermSet',
+      description: 'Wörterbuch für den Berliner Dialekt und Berliner Schnauze',
+      inLanguage: 'de-DE',
+      name: 'Berliner Schnauze Wörterbuch',
       url: `${Astro.url.origin}/wort`,
     },
-    inLanguage: "de-DE",
+    inLanguage: 'de-DE',
     mainEntityOfPage: removeFileExtension(Astro.url.href),
     name: wordProps?.berlinerisch,
     sameAs: wordProps?.learnMore || undefined,
     ...(firstAudio?.audio?.node?.mediaItemUrl && {
       subjectOf: {
-        "@type": "AudioObject",
+        '@type': 'AudioObject',
         contentUrl: firstAudio.audio.node.mediaItemUrl,
         description: `Berliner Aussprache von „${wordProps?.berlinerisch}"`,
-        encodingFormat: "audio/mpeg",
-        inLanguage: "de-DE",
+        encodingFormat: 'audio/mpeg',
+        inLanguage: 'de-DE',
         name: `Aussprache: ${wordProps?.berlinerisch}`,
       },
     }),
@@ -170,34 +192,38 @@ const schemaJson = () => {
   content={seoData({
     seo: {
       ...(word.seo ?? {}),
-      ...(wordDescription && { opengraphDescription: wordDescription, twitterDescription: wordDescription }),
+      ...(wordDescription && {
+        opengraphDescription: wordDescription,
+        twitterDescription: wordDescription,
+      }),
+      ...(ogImage && { opengraphImage: ogImage }),
     },
     title: word.title ?? '',
   })}
-  contentClasses="o-word"
+  contentClasses='o-word'
 >
-  <Fragment slot="head">
-    <script set:html={schemaJson()} type="application/ld+json" />
+  <Fragment slot='head'>
+    <script set:html={schemaJson()} type='application/ld+json' />
   </Fragment>
-  <Breadcrumbs indexText="Start" linkTextFormat="capitalized" truncated={true}>
-    <ChevronRight height="20" slot="separator" width="20" />
+  <Breadcrumbs indexText='Start' linkTextFormat='capitalized' truncated={true}>
+    <ChevronRight height='20' slot='separator' width='20' />
   </Breadcrumbs>
 
   <IsWordOfTheDay
-    client:only="vue"
+    client:only='vue'
     iconSize={50}
-    tooltipPlacement="top"
+    tooltipPlacement='top'
     word={wordProps?.berlinerisch ?? null}
     wordId={word.berlinerWordId}
   />
-  <article class="c-single-word">
-    <header class="c-single-word__header">
-      <h1 class="c-single-word__word">
+  <article class='c-single-word'>
+    <header class='c-single-word__header'>
+      <h1 class='c-single-word__word'>
         {wordProps?.berlinerisch}
 
         {
           wordProps?.article && (
-            <span class="c-single-word__word-article">, {wordProps.article}</span>
+            <span class='c-single-word__word-article'>, {wordProps.article}</span>
           )
         }
       </h1>
@@ -205,17 +231,17 @@ const schemaJson = () => {
         word.wordProperties?.berlinerischAudio && (
           <AudioPlayerList
             audio={word.wordProperties?.berlinerischAudio}
-            client:only="vue"
-            isType="berlinerisch"
+            client:only='vue'
+            isType='berlinerisch'
           />
         )
       }
 
       {
         wordProps?.berolinismus && (
-          <ToolTip client:only="vue">
+          <ToolTip client:only='vue'>
             <BadgeTag> Berolinismus </BadgeTag>
-            <Fragment slot="content">
+            <Fragment slot='content'>
               {word.wordProperties?.berlinerisch} gehört zu den Berlinismen.
               <br />
               <br />
@@ -228,33 +254,33 @@ const schemaJson = () => {
       }
       <WordOptionDropdown
         berlinerisch={word.wordProperties?.berlinerisch ?? null}
-        client:only="vue"
+        client:only='vue'
         slug={word.slug}
       />
     </header>
-    <main class="c-single-word__main">
+    <main class='c-single-word__main'>
       {wordProps?.infoText && <section set:html={wordProps?.infoText} />}
       <section>
         <h2>Etymologie</h2>
 
         {
           wordProps?.alternativeWords && (
-            <div class="c-single-word__alternative-words-wrapper">
+            <div class='c-single-word__alternative-words-wrapper'>
               <h3>Selbe Bedeutung wie:</h3>
-              <p class="c-single-word__alternative-word">{alternativeWords}</p>
+              <p class='c-single-word__alternative-word'>{alternativeWords}</p>
             </div>
           )
         }
 
         {
           wordProps?.translations && (
-            <div class="c-single-word__translation-wrapper">
-              <h3 class="c-single-word__sub-headline">Bedeutung:</h3>
+            <div class='c-single-word__translation-wrapper'>
+              <h3 class='c-single-word__sub-headline'>Bedeutung:</h3>
 
-              <ul class="c-single-word__translation">
+              <ul class='c-single-word__translation'>
                 {wordProps?.translations?.map((translation) => {
                   return (
-                    <li class="c-single-word__translation-item">{translation?.translation}</li>
+                    <li class='c-single-word__translation-item'>{translation?.translation}</li>
                   );
                 })}
               </ul>
@@ -265,9 +291,9 @@ const schemaJson = () => {
 
       {
         wordProps?.examples && (
-          <section class="c-single-word__examples-wrapper">
-            <h2 class="c-single-word__sub-headline">Beispiele:</h2>
-            <WordExamples examples={wordProps.examples} rootBemClass="c-single-word" />
+          <section class='c-single-word__examples-wrapper'>
+            <h2 class='c-single-word__sub-headline'>Beispiele:</h2>
+            <WordExamples examples={wordProps.examples} rootBemClass='c-single-word' />
           </section>
         )
       }
@@ -275,7 +301,7 @@ const schemaJson = () => {
       <section>
         <h2>Orthographie</h2>
 
-        <div class="c-single-word__syllables">
+        <div class='c-single-word__syllables'>
           <h3>Silben und Silbentrennung</h3>
 
           <h3>Silbentrennung:</h3>
@@ -293,19 +319,19 @@ const schemaJson = () => {
       <section>
         <h2>Quantitative Linguistik</h2>
 
-        <div class="c-single-word__consonants-vowels">
+        <div class='c-single-word__consonants-vowels'>
           <h3>Konsonanten und Vokale</h3>
           <p
-            class="c-single-word__consonants-vowels-word"
+            class='c-single-word__consonants-vowels-word'
             set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch ?? '')}
           />
 
           <p>
             enthält {countLetters(word.wordProperties?.berlinerisch ?? '').vowels}
-            <span class="is-vowel">Vokale</span> und {
+            <span class='is-vowel'>Vokale</span> und {
               countLetters(word.wordProperties?.berlinerisch ?? '').consonants
             }
-            <span class="is-consonant">Konsonanten</span>
+            <span class='is-consonant'>Konsonanten</span>
           </p>
         </div>
 
@@ -322,9 +348,9 @@ const schemaJson = () => {
         wordTags.length > 0 && (
           <section>
             <h2>Grammatik</h2>
-            <h3>Wortart {Object.keys(wordTags[0]).length > 1 ? "pro Wort" : ""}</h3>
+            <h3>Wortart {Object.keys(wordTags[0]).length > 1 ? 'pro Wort' : ''}</h3>
             {Object.keys(wordTags[0]).map((key) => {
-              const isNomenPresent = wordTags[0][key].includes("Nomen");
+              const isNomenPresent = wordTags[0][key].includes('Nomen');
               return (
                 <div>
                   <h4>{isNomenPresent ? capitalizeFirstLetter(key) : key}</h4>
@@ -377,15 +403,18 @@ const schemaJson = () => {
 
       {
         wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
-          <div class="c-single-word__related-words-wrapper">
+          <div class='c-single-word__related-words-wrapper'>
             <h3>Verwandte Worte:</h3>
-            <ul class="c-single-word__related-words-list">
+            <ul class='c-single-word__related-words-list'>
               {wordProps.relatedWords.nodes
                 .filter((word) => word?.wordProperties?.berlinerisch !== wordProps?.berlinerisch)
                 .map((word): BerlinerWord[] => {
                   return (
-                    <li class="c-single-word__related-word">
-                      <a class="c-single-word__related-word-link" href={routeToWord(word?.slug ?? undefined)}>
+                    <li class='c-single-word__related-word'>
+                      <a
+                        class='c-single-word__related-word-link'
+                        href={routeToWord(word?.slug ?? undefined)}
+                      >
                         {word?.wordProperties?.berlinerisch}
                       </a>
                     </li>
@@ -399,13 +428,18 @@ const schemaJson = () => {
 
     {
       wordProps?.images && (
-        <section class="c-single-word__gallery-wrap">
+        <section class='c-single-word__gallery-wrap'>
           <h2>Bilder:</h2>
           <ImageGallery
+            fallbackAlt={(() => {
+              const word = wordProps?.berlinerisch ?? '';
+              const translation = wordProps?.translations?.[0]?.translation;
+              return translation ? `${word} – ${translation}` : word;
+            })()}
             images={wordProps?.images}
             lightboxSizes={lightboxSizes}
             lightboxWidths={lightboxWidths}
-            loading="eager"
+            loading='eager'
             sizes={gallerySizes}
             widths={galleryWidths}
           />
@@ -416,28 +450,28 @@ const schemaJson = () => {
     {
       wordProps?.learnMore && (
         <a
-          class="c-single-word__learn-more-link"
+          class='c-single-word__learn-more-link'
           href={wordProps?.learnMore}
-          target="_blank"
-          title="mehr zu diesen Wort auf Wikipedia"
+          target='_blank'
+          title='mehr zu diesen Wort auf Wikipedia'
         >
           Erfahre mehr über dieses Wort
-          <span class="c-single-word__learn-more-link-icon">
-            <ExternalLink height="10" width="10" />
+          <span class='c-single-word__learn-more-link-icon'>
+            <ExternalLink height='10' width='10' />
           </span>
         </a>
       )
     }
 
-    <footer class="c-single-word__footer">
+    <footer class='c-single-word__footer'>
       {
         word?.dateGmt && (
-          <p class="c-single-word__created">Wort erstellt am: {formattedDate(word.dateGmt)}</p>
+          <p class='c-single-word__created'>Wort erstellt am: {formattedDate(word.dateGmt)}</p>
         )
       }
       {
         word?.modifiedGmt && (
-          <p class="c-single-word__modified">Bearbeitet am: {formattedDate(word.modifiedGmt)}</p>
+          <p class='c-single-word__modified'>Bearbeitet am: {formattedDate(word.modifiedGmt)}</p>
         )
       }
     </footer>
@@ -445,7 +479,7 @@ const schemaJson = () => {
 
   <RelatedWords words={allWords}>
     <li>
-      <RandomWordButton class:list="c-related-words__word is-random" words={allWords} />
+      <RandomWordButton class:list='c-related-words__word is-random' words={allWords} />
     </li>
   </RelatedWords>
 </Layout>
