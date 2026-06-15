@@ -6,16 +6,22 @@ import WordSearch from "@components/word-search/WordSearch.astro";
 import WordOfTheDay from "@components/WordOfTheDay.vue";
 import WordSearchLink from "@components/WordSearchLink.vue";
 import Layout from "@layouts/Layout.astro";
+import { SITE_URL } from "astro:env/client";
 import { seoData } from "@utils/helpers.ts";
 import { Picture } from "astro:assets";
 import "@styles/components/_facts-grid.scss";
 
 const content = {
   seo: {
+    canonical: SITE_URL,
     opengraphDescription:
       "Aktuelles Berlinerisch ➡️ Hochdeutsch Wörterbuch. Lerne mehr über: die Berliner Mundart, Berlinisch, den Berliner Jargon, Berlinerisch & Berolinismus.",
     opengraphImage: {
-      sourceUrl: BrownBearRoar.src,
+      alt: "Berliner Schnauze – Berlinerisch Wörterbuch",
+      height: String(BrownBearRoar.height),
+      sourceUrl: new URL(BrownBearRoar.src, SITE_URL).href,
+      type: "image/png",
+      width: String(BrownBearRoar.width),
     },
   },
   title: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch",

@@ -15,7 +15,7 @@ import Berlin from '/fonts/Berlin.woff2';
 import BerlinerRegular from '/fonts/BerlinerRegular.woff2';
 
 const { seo, title } = Astro.props as SeoProps & Title;
-const canonicalURL = removeFileExtension(Astro.url.href);
+const canonicalURL = seo?.canonical ?? removeFileExtension(Astro.url.href);
 ---
 
 <!-- Global Metadata -->
@@ -75,13 +75,24 @@ const canonicalURL = removeFileExtension(Astro.url.href);
 }
 {
   seo?.opengraphImage?.sourceUrl && (
-    <meta content={seo?.opengraphImage?.sourceUrl} property='og:image' />
+    <>
+      <meta content={seo?.opengraphImage?.sourceUrl} property='og:image' />
+      <meta
+        content={seo?.opengraphImage?.alt ?? (seo?.opengraphTitle || seo?.title || title) ?? ''}
+        property='og:image:alt'
+      />
+      {seo?.opengraphImage?.width && (
+        <meta content={seo?.opengraphImage?.width} property='og:image:width' />
+      )}
+      {seo?.opengraphImage?.height && (
+        <meta content={seo?.opengraphImage?.height} property='og:image:height' />
+      )}
+      {seo?.opengraphImage?.type && (
+        <meta content={seo?.opengraphImage?.type} property='og:image:type' />
+      )}
+    </>
   )
 }
-<!-- <meta property="og:image:width" content={""} />
-<meta property="og:image:height" content={""} />
-<meta property="og:image:alt" content={""} />
-<meta property="og:image:type" content={""} /> -->
 
 <!-- Twitter -->
 <meta content='summary_large_image' property='twitter:card' />
