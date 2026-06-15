@@ -9,6 +9,7 @@ import type { WordProperties } from "@/gql/entity-types";
 type ImageNode = NonNullable<NonNullable<WordProperties["images"]>["nodes"]>[number];
 
 type ImageGalleryProps = {
+  fallbackAlt?: string;
   formats?: string[];
   id?: string;
   images: WordProperties["images"];
@@ -20,6 +21,7 @@ type ImageGalleryProps = {
 };
 
 const {
+  fallbackAlt = '',
   formats = ["avif", "webp"],
   id = `gallery-${crypto.randomUUID()}`,
   images,
@@ -76,7 +78,7 @@ const lightboxImageList = await Promise.all(
                 target="_blank"
               >
                 <Picture
-                  alt={image.altText ?? ''}
+                  alt={image.altText || (imageList.length > 1 ? `${fallbackAlt} (Bild ${index + 1})` : fallbackAlt)}
                   class="c-image-gallery__image"
                   fallbackFormat={"webp" as ImageOutputFormat}
                   formats={formats as ImageOutputFormat[]}

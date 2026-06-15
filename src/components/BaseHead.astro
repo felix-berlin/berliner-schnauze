@@ -3,7 +3,7 @@ import SetColorMode from '@components/SetColorMode.astro';
 import { ClientRouter } from 'astro:transitions';
 import { pwaInfo } from 'virtual:pwa-info';
 
-import { removeFileExtension } from '@/utils/helpers';
+import { canonicalUrl } from '@utils/helpers';
 import type { Seo, SeoProps, Title } from '@/types/seo';
 
 export type { Seo, SeoProps, Title };
@@ -15,7 +15,7 @@ import Berlin from '/fonts/Berlin.woff2';
 import BerlinerRegular from '/fonts/BerlinerRegular.woff2';
 
 const { seo, title } = Astro.props as SeoProps & Title;
-const canonicalURL = removeFileExtension(Astro.url.href);
+const canonicalURL = seo?.canonical?.replace(/\/$/, '') ?? canonicalUrl(Astro.url.pathname, Astro.site);
 ---
 
 <!-- Global Metadata -->
@@ -62,7 +62,7 @@ const canonicalURL = removeFileExtension(Astro.url.href);
 <!-- Open Graph / Facebook -->
 {seo?.opengraphSiteName && <meta content={seo?.opengraphSiteName} property='og:site_name' />}
 {seo?.opengraphType && <meta content={seo?.opengraphType} property='og:type' />}
-{seo?.opengraphUrl && <meta content={seo?.opengraphUrl} property='og:url' />}
+<meta content={canonicalURL} property='og:url' />
 {
   (seo?.opengraphTitle || seo?.title || title) && (
     <meta content={seo?.opengraphTitle || seo?.title || title} property='og:title' />
@@ -75,17 +75,28 @@ const canonicalURL = removeFileExtension(Astro.url.href);
 }
 {
   seo?.opengraphImage?.sourceUrl && (
-    <meta content={seo?.opengraphImage?.sourceUrl} property='og:image' />
+    <>
+      <meta content={seo?.opengraphImage?.sourceUrl} property='og:image' />
+      <meta
+        content={seo?.opengraphImage?.alt ?? (seo?.opengraphTitle || seo?.title || title) ?? ''}
+        property='og:image:alt'
+      />
+      {seo?.opengraphImage?.width && (
+        <meta content={seo?.opengraphImage?.width} property='og:image:width' />
+      )}
+      {seo?.opengraphImage?.height && (
+        <meta content={seo?.opengraphImage?.height} property='og:image:height' />
+      )}
+      {seo?.opengraphImage?.type && (
+        <meta content={seo?.opengraphImage?.type} property='og:image:type' />
+      )}
+    </>
   )
 }
-<!-- <meta property="og:image:width" content={""} />
-<meta property="og:image:height" content={""} />
-<meta property="og:image:alt" content={""} />
-<meta property="og:image:type" content={""} /> -->
 
 <!-- Twitter -->
 <meta content='summary_large_image' property='twitter:card' />
-{seo?.opengraphUrl && <meta content={seo?.opengraphUrl} property='twitter:url' />}
+<meta content={canonicalURL} property='twitter:url' />
 {
   (seo?.twitterTitle || seo?.title || title) && (
     <meta content={seo?.twitterTitle || seo?.title || title} property='twitter:title' />
@@ -104,6 +115,9 @@ const canonicalURL = removeFileExtension(Astro.url.href);
     <meta content={seo?.opengraphImage?.sourceUrl} property='twitter:image' />
   )
 }
+
+<!-- Locale -->
+<meta content='de_DE' property='og:locale' />
 
 <!-- Mastodon -->
 <meta content='@berliner_schnauze@mastodon.social' name='fediverse:creator' />

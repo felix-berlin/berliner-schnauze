@@ -55,8 +55,16 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { legalPages } = Astro.params as Params;
 const { page } = Astro.props;
+
+const pageContent = {
+  ...page,
+  seo: {
+    ...(page.seo ?? {}),
+    opengraphType: "website",
+  },
+};
 ---
 
-<Layout content={page}>
+<Layout content={pageContent}>
   <article set:html={page.content} />
 </Layout>
