@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.31.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.30.0...v3.31.0) (2026-06-15)
+
+
+### Bug Fixes
+
+* font sizes für section label and sub label ([a224f85](https://github.com/felix-berlin/berliner-schnauze/commit/a224f85a214ea7da0d89b47d08173bdb36bc3a1c))
+* **seo:** correct canonical and og:url on all pages ([b39992f](https://github.com/felix-berlin/berliner-schnauze/commit/b39992f131d4f03e206954cf1ba1df4053f27540))
+
+
+### Features
+
+* improve json ld schemas ([7fb90d6](https://github.com/felix-berlin/berliner-schnauze/commit/7fb90d6fd2ba4d0ebf68e6131bb2f47d09831203))
+* **seo:** complete og:image metadata and fix homepage canonical ([c00c85f](https://github.com/felix-berlin/berliner-schnauze/commit/c00c85ff45773709b5ca69cb5fc9cea92e5a0d3c))
+* **seo:** enrich DefinedTerm JSON-LD on word pages with all available data ([e35ab26](https://github.com/felix-berlin/berliner-schnauze/commit/e35ab264418e2aad948fb44f6417606235df506e))
+* **seo:** improve DefinedTerm JSON-LD schema on word detail pages ([d1f8b80](https://github.com/felix-berlin/berliner-schnauze/commit/d1f8b80d4a2a81d8756a2e2e7ed40bf71ac62f5d))
+* **seo:** improve homepage meta, schema, and filter a11y ([73b23b7](https://github.com/felix-berlin/berliner-schnauze/commit/73b23b73f958c3a5ccdc0a15b1e2483bd82dc72d))
+* **seo:** improve og:image fallback, alt text generation, and meta description wording ([583ac8f](https://github.com/felix-berlin/berliner-schnauze/commit/583ac8f512fa9bdc8bfce47d80b7163068a509f7))
+* **seo:** individualize meta descriptions on word detail pages ([805ee29](https://github.com/felix-berlin/berliner-schnauze/commit/805ee29f2d302b745647f96233cb255e92f44677))
+
 # [3.30.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.29.5...v3.30.0) (2026-06-02)
 
 
