@@ -23,7 +23,7 @@ import WordSectionPhonologie from '@components/word/WordSectionPhonologie.astro'
 import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
 import { fetchAllWords } from '@services/api.ts';
-import { formattedDate, removeFileExtension, routeToWord, seoData } from '@utils/helpers.ts';
+import { formattedDate, removeFileExtension, routeToWord, seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
   alphabeticNeighbors,
   findAnagrams,
@@ -81,6 +81,27 @@ const { word, wordRefs, alphabeticNeighborsResult, anagramsResult, soundingWords
 
 const wordProps: BerlinerWord['wordProperties'] = word.wordProperties;
 
+const wordDescription = (() => {
+  const translations = (wordProps?.translations ?? [])
+    .map((t) => t?.translation)
+    .filter(Boolean)
+    .join(', ');
+  if (!translations) return undefined;
+  const berlinerisch = wordProps?.berlinerisch ?? '';
+  const raw = `„${berlinerisch}" bedeutet auf Berlinerisch: ${translations}. Entdecke Berliner Ausdrücke auf Berliner Schnauze.`;
+  return raw.length > 160 ? raw.slice(0, 157) + '…' : raw;
+})();
+
+const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
+  return (
+    word?.alternativeWord +
+    (wordProps?.alternativeWords && index !== wordProps?.alternativeWords?.length - 1 ? ', ' : '')
+  );
+});
+
+// const wikimediaFiles = await createWikimediaFileList(wordProps?.wikimediaFiles!);
+// console.log(wikimediaFiles);
+
 let galleryWidths = [316, 457, 658, 429, 525];
 let gallerySizes =
   '(max-width: 80rem) 525px, (max-width: 64rem) 429px, (max-width: 48rem) 658px, (max-width: 35.49rem) 457px, (max-width: 26.6rem) 316px';
@@ -96,31 +117,105 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
 
-const hasImages = Boolean(wordProps?.images && wordProps.images.nodes.length > 0);
-const hasAnagrams = anagramsResult.length > 0;
-const wortartLabel: string | undefined =
-  wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
+const firstImage = wordProps?.images?.nodes?.[0];
+const firstAudio = wordProps?.berlinerischAudio?.[0];
 
-const schemaJson = () =>
-  JSON.stringify({
+const ogImage = word.seo?.opengraphImage?.sourceUrl
+  ? word.seo.opengraphImage
+  : firstImage?.sourceUrl
+    ? {
+        sourceUrl: firstImage.sourceUrl,
+        alt: firstImage.altText || wordProps?.berlinerisch || '',
+        width: firstImage.mediaDetails?.width,
+        height: firstImage.mediaDetails?.height,
+      }
+    : undefined;
+
+const exampleComments = (wordProps?.examples ?? [])
+  .filter((e): e is NonNullable<typeof e> => Boolean(e?.example))
+  .map((e) => ({
+    '@type': 'Comment',
+    text: e.example as string,
+    ...(e.exampleExplanation && { description: e.exampleExplanation }),
+  }));
+
+const schemaJson = () => {
+  const alternateNames = (wordProps?.alternativeWords ?? [])
+    .map((w) => w?.alternativeWord)
+    .filter((n): n is string => Boolean(n));
+
+  return JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'DefinedTerm',
-    alternateName: (wordProps?.alternativeWords ?? []).map((w) => w?.alternativeWord).join(', '),
-    description: (wordProps?.translations ?? []).map((t) => t?.translation).join('; '),
+    ...(alternateNames.length > 0 && { alternateName: alternateNames }),
+    ...(exampleComments.length > 0 && { comment: exampleComments }),
+    ...(word.dateGmt && { dateCreated: word.dateGmt }),
+    ...(word.modifiedGmt && { dateModified: word.modifiedGmt }),
+    description:
+      wordDescription ??
+      (wordProps?.translations ?? [])
+        .map((t) => t?.translation)
+        .filter(Boolean)
+        .join('; '),
+    ...(wordProps?.article && {
+      disambiguatingDescription: `Berliner Dialektwort, ${wordProps.article}`,
+    }),
     identifier: word.id,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Berliner Schnauze',
+      url: canonicalUrl('/', Astro.site),
+    },
+    ...(firstImage?.sourceUrl && {
+      image: {
+        '@type': 'ImageObject',
+        contentUrl: firstImage.sourceUrl,
+        url: firstImage.sourceUrl,
+        ...(firstImage.altText && { name: firstImage.altText }),
+        ...(firstImage.caption && { caption: firstImage.caption }),
+        ...(firstImage.mediaDetails?.width && { width: firstImage.mediaDetails.width }),
+        ...(firstImage.mediaDetails?.height && { height: firstImage.mediaDetails.height }),
+      },
+    }),
     inDefinedTermSet: {
       '@type': 'DefinedTermSet',
+      description: 'Wörterbuch für den Berliner Dialekt und Berliner Schnauze',
+      inLanguage: 'de-DE',
       name: 'Berliner Schnauze Wörterbuch',
-      url: `${Astro.url.origin}/wort`,
+      url: canonicalUrl('/wort', Astro.site),
     },
+    inLanguage: 'de-DE',
+    mainEntityOfPage: canonicalUrl(Astro.url.pathname, Astro.site),
     name: wordProps?.berlinerisch,
     sameAs: wordProps?.learnMore || undefined,
-    url: removeFileExtension(Astro.url.href),
+    ...(firstAudio?.audio?.node?.mediaItemUrl && {
+      subjectOf: {
+        '@type': 'AudioObject',
+        contentUrl: firstAudio.audio.node.mediaItemUrl,
+        description: `Berliner Aussprache von „${wordProps?.berlinerisch}"`,
+        encodingFormat: 'audio/mpeg',
+        inLanguage: 'de-DE',
+        name: `Aussprache: ${wordProps?.berlinerisch}`,
+      },
+    }),
+    termCode: word.slug || undefined,
+    url: canonicalUrl(Astro.url.pathname, Astro.site),
   });
+};
 ---
 
 <Layout
-  content={seoData({ seo: word.seo ?? undefined, title: word.title ?? '' })}
+  content={seoData({
+    seo: {
+      ...(word.seo ?? {}),
+      ...(wordDescription && {
+        opengraphDescription: wordDescription,
+        twitterDescription: wordDescription,
+      }),
+      ...(ogImage && { opengraphImage: ogImage }),
+    },
+    title: word.title ?? '',
+  })}
   contentClasses='o-word'
 >
   <Fragment slot='head'>

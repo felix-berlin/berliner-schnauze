@@ -6,7 +6,11 @@ export interface Seo {
   opengraphAuthor?: string;
   opengraphDescription?: string;
   opengraphImage?: {
+    alt?: string;
+    height?: string;
     sourceUrl: string;
+    type?: string;
+    width?: string;
   };
   opengraphModifiedTime?: string;
   opengraphPublishedTime?: string;

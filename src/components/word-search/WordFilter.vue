@@ -11,16 +11,16 @@
         <X width="18" height="18" />
       </button>
 
-      <h2 id="sort-headline">Sortiere nach:</h2>
+      <p id="sort-headline" class="c-filter-search__section-label">Sortiere nach:</p>
       <SortWordBySelect />
 
-      <h2>Filter nach:</h2>
+      <p class="c-filter-search__section-label">Filter nach:</p>
 
-      <h3>Alphabetisch</h3>
+      <p class="c-filter-search__sub-label">Alphabetisch</p>
       <LetterFilter />
 
-      <div class="c-filter-search__headline-wrap">
-        <h3>Worttyp</h3>
+      <div class="c-filter-search__headline-wrap" role="group" aria-labelledby="filter-worttyp">
+        <p id="filter-worttyp" class="c-filter-search__sub-label">Worttyp</p>
         <BadgeTag> Beta </BadgeTag>
       </div>
 
@@ -31,26 +31,26 @@
 
       <WordTypeFilter />
 
-      <div class="c-filter-search__switch">
-        <h3>Berolinismus</h3>
+      <div class="c-filter-search__switch" role="group" aria-labelledby="filter-berolinismus">
+        <p id="filter-berolinismus" class="c-filter-search__sub-label">Berolinismus</p>
         <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
         <WordSwitch switch-type="berolinismus" label="Berolinismus" />
       </div>
 
-      <div class="c-filter-search__switch">
-        <h3>Beispiel Hörprobe(n)</h3>
+      <div class="c-filter-search__switch" role="group" aria-labelledby="filter-audio-examples">
+        <p id="filter-audio-examples" class="c-filter-search__sub-label">Beispiel Hörprobe(n)</p>
         <i>Zeige Wörter dessen Beispiel(e) Hörprobe(n) haben.</i>
         <WordSwitch switch-type="audioExamples" label="Beispiel Hörprobe(n)" />
       </div>
 
-      <div class="c-filter-search__switch">
-        <h3>Berlinerisch Hörprobe(n)</h3>
+      <div class="c-filter-search__switch" role="group" aria-labelledby="filter-audio-berlinerisch">
+        <p id="filter-audio-berlinerisch" class="c-filter-search__sub-label">Berlinerisch Hörprobe(n)</p>
         <i>Zeige Wörter mit Berlinerisch Hörprobe(n).</i>
         <WordSwitch switch-type="audioBerlinerisch" label="Berlinerisch Hörprobe(n)" />
       </div>
 
-      <div class="c-filter-search__switch">
-        <h3>Mehrere Bedeutungen</h3>
+      <div class="c-filter-search__switch" role="group" aria-labelledby="filter-multiple-meanings">
+        <p id="filter-multiple-meanings" class="c-filter-search__sub-label">Mehrere Bedeutungen</p>
         <i>Zeige Wörter die mehrere Bedeutungen haben.</i>
         <WordSwitch switch-type="multipleMeanings" label="Mehrere Bedeutungen" />
       </div>
