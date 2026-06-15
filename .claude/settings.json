@@ -6,7 +6,9 @@
       "Bash(graphify *)",
       "mcp__plugin_claude-mem_mcp-search__search",
       "mcp__plugin_context7_context7__resolve-library-id",
-      "mcp__plugin_context7_context7__query-docs"
+      "mcp__plugin_context7_context7__query-docs",
+      "Skill(pr-review-toolkit:review-pr)",
+      "Skill(pr-review-toolkit:review-pr:*)"
     ]
   },
   "hooks": {
