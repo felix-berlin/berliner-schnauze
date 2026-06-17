@@ -173,8 +173,8 @@ export default defineConfig({
       lastmod: new Date(),
     }),
     matomo({
-      enabled: import.meta.env.PROD,
-      host: "https://analytics.webshaped.de/",
+      enabled: process.env.ENABLE_ANALYTICS === "true",
+      host: "https://analytics.berliner-schnauze.wtf/",
       siteId: 8,
       debug: import.meta.env.DEV,
       heartBeatTimer: 5,
