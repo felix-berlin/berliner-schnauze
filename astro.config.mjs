@@ -85,6 +85,14 @@ export default defineConfig({
         access: "public",
         default: true,
       }),
+      MATOMO_HOST: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      MATOMO_SITE_ID: envField.number({
+        context: "client",
+        access: "public",
+      }),
       SITE_NAME: envField.string({
         context: "client",
         access: "public",
@@ -174,8 +182,8 @@ export default defineConfig({
     }),
     matomo({
       enabled: process.env.ENABLE_ANALYTICS === "true",
-      host: "https://analytics.berliner-schnauze.wtf/",
-      siteId: 8,
+      host: process.env.MATOMO_HOST,
+      siteId: process.env.MATOMO_SITE_ID,
       debug: import.meta.env.DEV,
       heartBeatTimer: 5,
       disableCookies: true,
@@ -373,7 +381,11 @@ export default defineConfig({
       rollupOptions: {
         output: {
           manualChunks: (id) => {
-            if (id.includes("/stores/wordList") || id.includes("@orama/") || id.includes("@nanostores/async")) {
+            if (
+              id.includes("/stores/wordList") ||
+              id.includes("@orama/") ||
+              id.includes("@nanostores/async")
+            ) {
               return "wordList";
             }
           },
