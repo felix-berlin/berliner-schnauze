@@ -5,29 +5,33 @@ import { registerSW } from "virtual:pwa-register";
 registerSW({
   immediate: true,
   onNeedReload() {
+    if (document.visibilityState === "visible") {
+      createToastNotify({
+        actionLabel: "Jetzt aktualisieren",
+        message: "Eine neue Version ist verfügbar.",
+        onAction: () => {
+          trackEvent("App", "Update accepted by user", "PWA");
+          window.location.reload();
+        },
+        showClose: true,
+        status: "info",
+        timeout: null,
+      });
+      trackEvent("App", "Update toast shown (active tab)", "PWA");
+      return;
+    }
     if (typeof Notification !== "undefined" && Notification.permission === "granted") {
       try {
-        const notification = new Notification("Berliner Schnauze wurde aktualisiert!", {
-          body: "Tippe hier, um die neue Version zu laden.",
+        new Notification("Berliner Schnauze wurde aktualisiert!", {
+          body: "Die neue Version wurde im Hintergrund geladen.",
           icon: "/favicons/android-chrome-192x192.png",
         });
-
-        const doReload = () => {
-          notification.close();
-          clearTimeout(fallbackTimer);
-          window.location.reload();
-        };
-
-        const fallbackTimer = setTimeout(doReload, 60_000);
-        notification.onclick = doReload;
-
-        trackEvent("App", "Update notification shown", "PWA");
-        return;
+        trackEvent("App", "Background update notification shown", "PWA");
       } catch (err) {
-        console.error("[pwa] Failed to show update notification, falling back to silent reload:", err);
+        console.error("[pwa] Failed to show background update notification:", err);
       }
     }
-    trackEvent("App", "Silent update applied", "PWA");
+    trackEvent("App", "Background update applied", "PWA");
     window.location.reload();
   },
   onOfflineReady() {
