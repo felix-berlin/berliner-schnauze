@@ -1,0 +1,84 @@
+.c-toast-container {
+  // UA-Popover-Reset
+  margin: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  overflow: visible;
+  max-width: none;
+  max-height: none;
+
+  // Layout
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: max-content;
+
+  // Bottom: neuester Toast unten (nearest edge) via column-reverse
+  &--bottom-right,
+  &--bottom-left,
+  &--bottom-center {
+    flex-direction: column-reverse;
+  }
+
+  // Corner-Positioning
+  &--top-right     { top: 20px; right: 20px; }
+  &--top-left      { top: 20px; left: 20px; }
+  &--top-center    { top: 20px; left: 50%; translate: -50% 0; }
+  &--bottom-right  { bottom: 20px; right: 20px; }
+  &--bottom-left   { bottom: 20px; left: 20px; }
+  &--bottom-center { bottom: 20px; left: 50%; translate: -50% 0; }
+}
+
+// TransitionGroup-Animations — Leave-active braucht position: absolute
+// damit verbleibende Toasts via FLIP nahtlos nachrücken können
+.c-toast-notify-leave-active {
+  position: absolute;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .c-toast-notify-enter-active,
+  .c-toast-notify-leave-active {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .c-toast-notify-move {
+    transition: transform 0.3s ease;
+  }
+
+  // Richtungs-aware Enter/Leave via Container-Modifier
+  .c-toast-container--top-right,
+  .c-toast-container--bottom-right {
+    .c-toast-notify-enter-from,
+    .c-toast-notify-leave-to {
+      transform: translateX(110%);
+      opacity: 0;
+    }
+  }
+
+  .c-toast-container--top-left,
+  .c-toast-container--bottom-left {
+    .c-toast-notify-enter-from,
+    .c-toast-notify-leave-to {
+      transform: translateX(-110%);
+      opacity: 0;
+    }
+  }
+
+  .c-toast-container--top-center {
+    .c-toast-notify-enter-from,
+    .c-toast-notify-leave-to {
+      transform: translateY(-110%);
+      opacity: 0;
+    }
+  }
+
+  .c-toast-container--bottom-center {
+    .c-toast-notify-enter-from,
+    .c-toast-notify-leave-to {
+      transform: translateY(110%);
+      opacity: 0;
+    }
+  }
+}

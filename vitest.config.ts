@@ -75,6 +75,16 @@ export default getViteConfig(
           access: "public",
           default: 0.1,
         }),
+        MATOMO_HOST: envField.string({
+          context: "client",
+          access: "public",
+          default: "matomo.example.com",
+        }),
+        MATOMO_SITE_ID: envField.number({
+          context: "client",
+          access: "public",
+          default: 1,
+        }),
       },
     },
   },
