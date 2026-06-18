@@ -34,8 +34,8 @@ const createToast = (payload: ToastPayload): ToastNotify => ({
   ...payload,
 });
 
-export const createToastNotify = (payload: ToastPayload): void => {
-  if (!supportsPopover()) return;
+export const createToastNotify = (payload: ToastPayload): boolean => {
+  if (!supportsPopover()) return false;
 
   const pos = payload.position ?? "top-right";
   const current = $toastNotify.get();
@@ -49,6 +49,7 @@ export const createToastNotify = (payload: ToastPayload): void => {
 
   const toast = createToast({ timeout: defaultTimeout, ...payload });
   $toastNotify.set([toast, ...updated]);
+  return true;
 };
 
 export const removeToastById = (id: string): void => {

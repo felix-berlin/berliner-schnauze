@@ -5,7 +5,6 @@
     popover="manual"
     class="c-toast-container"
     :class="`c-toast-container--${position}`"
-    :aria-label="containerLabel"
   >
     <TransitionGroup name="c-toast-notify" @after-leave="onAfterLeave">
       <ToastNotify
@@ -22,22 +21,12 @@ import type { ToastNotify as ToastNotifyType, ToastPosition } from "@stores/toas
 
 import ToastNotify from "@components/toast/ToastNotify.vue";
 import { supportsPopover } from "@stores/toastNotify";
-import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 
 const props = defineProps<{
   position: ToastPosition;
   toasts: ToastNotifyType[];
 }>();
-
-const positionLabels: Record<typeof props.position, string> = {
-  "top-left": "Benachrichtigungen oben links",
-  "top-center": "Benachrichtigungen oben Mitte",
-  "top-right": "Benachrichtigungen oben rechts",
-  "bottom-left": "Benachrichtigungen unten links",
-  "bottom-center": "Benachrichtigungen unten Mitte",
-  "bottom-right": "Benachrichtigungen unten rechts",
-};
-const containerLabel = computed(() => positionLabels[props.position]);
 
 const container = ref<HTMLElement | null>(null);
 const isSupported = ref(false);
@@ -48,9 +37,13 @@ onBeforeMount(() => {
 });
 
 const open = (): void => {
-  if (isOpen.value) return;
-  container.value?.showPopover();
-  isOpen.value = true;
+  if (isOpen.value || !container.value) return;
+  try {
+    container.value.showPopover();
+    isOpen.value = true;
+  } catch (err) {
+    console.error("[ToastPositionGroup] showPopover() failed:", err);
+  }
 };
 
 onMounted(() => {
@@ -63,6 +56,7 @@ onMounted(() => {
 watch(
   () => props.toasts.length,
   (newLen, oldLen) => {
+    if (!isSupported.value) return;
     if (oldLen === 0 && newLen > 0) {
       open();
     }
@@ -70,9 +64,14 @@ watch(
 );
 
 const onAfterLeave = (): void => {
-  if (props.toasts.length === 0) {
-    container.value?.hidePopover();
-    isOpen.value = false;
+  if (props.toasts.length === 0 && isOpen.value) {
+    try {
+      container.value?.hidePopover();
+    } catch (err) {
+      console.error("[ToastPositionGroup] hidePopover() failed:", err);
+    } finally {
+      isOpen.value = false;
+    }
   }
 };
 

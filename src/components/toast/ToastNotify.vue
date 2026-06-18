@@ -64,7 +64,7 @@ const {
   showClose = true,
   showStatusIcon = true,
   status = "info",
-  timeout = 5000,
+  timeout,
 } = defineProps<ToastNotify>();
 
 const toast = ref<HTMLElement | null>(null);
@@ -81,7 +81,10 @@ const toastIconMap = {
 };
 
 const dismiss = (): void => {
-  if (!id) return;
+  if (!id) {
+    console.error("[ToastNotify] dismiss() called on a toast with no id — store invariant violated");
+    return;
+  }
   removeToastById(id);
 };
 
@@ -93,8 +96,10 @@ const { start: startTimeout, stop: stopTimeout } = useTimeoutFn(dismiss, () => r
 });
 
 const pauseTimer = (): void => {
+  if (timerStart === 0) return;
   stopTimeout();
   remaining = Math.max(0, remaining - (Date.now() - timerStart));
+  timerStart = 0;
 };
 
 const resumeTimer = (): void => {

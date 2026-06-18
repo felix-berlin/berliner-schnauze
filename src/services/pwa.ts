@@ -8,20 +8,20 @@ const PWA_UPDATED_KEY = "pwa-just-updated";
 const updatedVersion = sessionStorage.getItem(PWA_UPDATED_KEY);
 if (updatedVersion) {
   sessionStorage.removeItem(PWA_UPDATED_KEY);
-  createToastNotify({
+  const shown = createToastNotify({
     message: `App erfolgreich auf Version ${updatedVersion} aktualisiert.`,
     showClose: true,
     status: "success",
     timeout: null,
   });
-  trackEvent("App", "Update success shown", "PWA");
+  if (shown) trackEvent("App", "Update success shown", "PWA");
 }
 
 registerSW({
   immediate: true,
   onNeedReload() {
     if (document.visibilityState === "visible") {
-      createToastNotify({
+      const shown = createToastNotify({
         actionLabel: "Jetzt aktualisieren",
         message: "Eine neue Version ist verfügbar.",
         onAction: () => {
@@ -33,7 +33,7 @@ registerSW({
         status: "info",
         timeout: null,
       });
-      trackEvent("App", "Update toast shown (active tab)", "PWA");
+      if (shown) trackEvent("App", "Update toast shown (active tab)", "PWA");
       return;
     }
     if (typeof Notification !== "undefined" && Notification.permission === "granted") {
