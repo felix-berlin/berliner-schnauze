@@ -52,4 +52,12 @@
   &__close {
     border: none;
   }
+
+  &__action {
+    flex-shrink: 0;
+    font-size: 0.85em;
+    white-space: nowrap;
+
+    --padding: 0.3rem 0.75rem;
+  }
 }

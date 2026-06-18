@@ -1,11 +1,13 @@
 import { atom } from "nanostores";
 
 export type ToastNotify = {
+  actionLabel?: string;
   closeOnSwipe?: boolean;
   gapBetween?: number;
   id?: number;
   initOffset?: number;
   message: string;
+  onAction?: () => void;
   outerSpacing?: string;
   position?: "bottom-left" | "bottom-right" | "top-left" | "top-right";
   showClose?: boolean;

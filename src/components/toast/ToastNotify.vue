@@ -20,6 +20,15 @@
     </div>
 
     <button
+      v-if="actionLabel"
+      type="button"
+      class="c-toast-notify__action c-button c-button--theme"
+      @click="handleAction()"
+    >
+      {{ actionLabel }}
+    </button>
+
+    <button
       v-if="showClose"
       type="button"
       class="c-toast-notify__close c-button c-button--center-icon"
@@ -55,11 +64,13 @@ type StylePositionType = {
 };
 
 const {
+  actionLabel,
   closeOnSwipe = true,
   gapBetween = 10,
   id = crypto.randomUUID(),
   initOffset = 100,
   message,
+  onAction,
   outerSpacing = "20px",
   position = "top-right",
   showClose = true,
@@ -95,6 +106,11 @@ const hideToast = async (): Promise<void> => {
   setDynamicPosition(); // Recalculate the position of the toasts
 
   removeToastById(id);
+};
+
+const handleAction = async (): Promise<void> => {
+  onAction?.();
+  await hideToast();
 };
 
 /**
