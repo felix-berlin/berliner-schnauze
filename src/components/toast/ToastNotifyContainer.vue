@@ -12,7 +12,7 @@ import type { ToastPosition } from "@stores/toastNotify.ts";
 
 import ToastPositionGroup from "@components/toast/ToastPositionGroup.vue";
 import { useStore } from "@nanostores/vue";
-import { $toastNotify } from "@stores/toastNotify.ts";
+import { $toastNotify } from "@stores/toastNotify";
 
 const toastStore = useStore($toastNotify);
 
@@ -28,5 +28,3 @@ const positions: ToastPosition[] = [
 const toastsByPosition = (pos: ToastPosition) =>
   toastStore.value.filter((t) => (t.position ?? "top-right") === pos);
 </script>
-
-<style lang="scss"></style>
