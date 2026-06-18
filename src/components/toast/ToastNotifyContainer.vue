@@ -1,28 +1,30 @@
 <template>
-  <ToastNotify
-    v-for="toast in toastStore"
-    :id="toast.id"
-    :key="toast.id"
-    :action-label="toast?.actionLabel"
-    :close-on-swipe="toast?.closeOnSwipe"
-    :gap-between="toast?.gapBetween"
-    :init-offset="toast?.initOffset"
-    :message="toast.message"
-    :on-action="toast?.onAction"
-    :outer-spacing="toast?.outerSpacing"
-    :position="toast?.position"
-    :show-close="toast?.showClose"
-    :show-status-icon="toast?.showStatusIcon"
-    :status="toast?.status"
+  <ToastPositionGroup
+    v-for="position in positions"
+    :key="position"
+    :position="position"
+    :toasts="toastsByPosition(position)"
   />
 </template>
 
 <script setup lang="ts">
-import ToastNotify from "@components/toast/ToastNotify.vue";
+import type { ToastPosition } from "@stores/toastNotify.ts";
+
+import ToastPositionGroup from "@components/toast/ToastPositionGroup.vue";
 import { useStore } from "@nanostores/vue";
-import { $toastNotify } from "@stores/toastNotify.ts";
+import { $toastNotify } from "@stores/toastNotify";
 
 const toastStore = useStore($toastNotify);
-</script>
 
-<style lang="scss"></style>
+const positions: ToastPosition[] = [
+  "top-left",
+  "top-center",
+  "top-right",
+  "bottom-left",
+  "bottom-center",
+  "bottom-right",
+];
+
+const toastsByPosition = (pos: ToastPosition) =>
+  toastStore.value.filter((t) => (t.position ?? "top-right") === pos);
+</script>

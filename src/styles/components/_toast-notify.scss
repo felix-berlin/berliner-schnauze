@@ -19,32 +19,6 @@
     --color-border: color-mix(in srgb, var(--blue) 80%, white);
   }
 
-  /**
-   * Important for exit animation
-   * @see: https://developer.chrome.com/blog/entry-exit-animations?hl=de#animating_elements_to_and_from_the_top-layer
-   */
-  @include butler-mx.feature("motion") {
-    opacity: 0;
-    transform: translateX(150px);
-    transition:
-      transform 0.3s,
-      opacity 0.3s,
-      display 0.3s allow-discrete,
-      overlay 0.3s allow-discrete;
-  }
-
-  &:popover-open {
-    @include butler-mx.feature("motion") {
-      opacity: 1;
-      transform: translateX(0);
-
-      @starting-style {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-    }
-  }
-
   &__icon {
     flex: 0 0 auto;
   }

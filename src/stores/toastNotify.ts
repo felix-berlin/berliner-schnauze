@@ -1,111 +1,57 @@
 import { atom } from "nanostores";
 
+export type ToastPosition =
+  | "bottom-center" | "bottom-left" | "bottom-right"
+  | "top-center"    | "top-left"    | "top-right";
+
 export type ToastNotify = {
   actionLabel?: string;
   closeOnSwipe?: boolean;
-  gapBetween?: number;
-  id?: number;
-  initOffset?: number;
+  id?: string;
   message: string;
   onAction?: () => void;
-  outerSpacing?: string;
-  position?: "bottom-left" | "bottom-right" | "top-left" | "top-right";
+  position?: ToastPosition;
   showClose?: boolean;
   showStatusIcon?: boolean;
   status?: ToastStatus;
+  timeout?: null | number;
 };
 
-export type ToastPayload = Omit<ToastNotify, "id"> & {
-  timeout?: null | number; // If null, toast will not be removed automatically
-};
+export type ToastPayload = Omit<ToastNotify, "id">;
 
 export type ToastStatus = "error" | "info" | "success" | "warning";
 
-const removeToastTimeout = 400;
+const MAX_PER_POSITION = 3;
 const defaultTimeout = 5000;
 
 export const $toastNotify = atom<ToastNotify[]>([]);
 
-/**
- * Checks if the browser supports the popover
- *
- * @return  {boolean}
- */
-export const supportsPopover = (): boolean => {
-  return Object.prototype.hasOwnProperty.call(HTMLElement.prototype, "popover");
-};
+export const supportsPopover = (): boolean =>
+  Object.prototype.hasOwnProperty.call(HTMLElement.prototype, "popover");
 
-/**
- * Finds the current toast by id and hides it
- *
- * @param   {ToastPayload[]}  id
- *
- * @return  {void}
- */
-const hidePopover = (id: ToastPayload["timeout"]) => {
-  const toastDom = document.getElementById(`toast-${id}`);
-  toastDom?.hidePopover();
-};
-
-/**
- * Creates a toast object
- *
- * @param   {ToastPayload}  payload
- *
- * @return  {ToastNotify}
- */
 const createToast = (payload: ToastPayload): ToastNotify => ({
-  id: Math.random() * 1000,
+  id: crypto.randomUUID(),
   ...payload,
 });
 
-/**
- * Adds a toast to the toastNotify store
- *
- * @param   {ToastPayload}  payload
- *
- * @return  {void}                      [return description]
- */
-export const createToastNotify = (payload: ToastPayload): void => {
-  if (!supportsPopover()) return;
+export const createToastNotify = (payload: ToastPayload): boolean => {
+  if (!supportsPopover()) return false;
 
-  const { timeout } = payload;
+  const pos = payload.position ?? "top-right";
+  const current = $toastNotify.get();
+  const forPos = current.filter((t) => (t.position ?? "top-right") === pos);
 
-  const toast = createToast(payload);
-
-  $toastNotify.set([toast, ...$toastNotify.get()]);
-
-  if (timeout !== null) {
-    setTimeout(
-      () => {
-        const currentToast = $toastNotify.get().find((t) => t.id === toast.id);
-
-        hidePopover(currentToast?.id);
-      },
-      (timeout ?? defaultTimeout) - removeToastTimeout,
-    );
-
-    setTimeout(() => {
-      $toastNotify.set($toastNotify.get().filter((t) => t.id !== toast.id));
-    }, timeout ?? defaultTimeout);
+  let updated = current;
+  if (forPos.length >= MAX_PER_POSITION) {
+    const oldest = forPos.at(-1)!;
+    updated = current.filter((t) => t.id !== oldest.id);
   }
+
+  const toast = createToast({ timeout: defaultTimeout, ...payload });
+  $toastNotify.set([toast, ...updated]);
+  return true;
 };
 
-/**
- * Removes a toast from the toastNotify store
- *
- * @param   {number}  id
- *
- * @return  {void}
- */
-export const removeToastById = (
-  id: `${string}-${string}-${string}-${string}-${string}` | number,
-): void => {
-  const currentToast = $toastNotify.get().find((t) => t.id === id);
-
-  hidePopover(currentToast?.id);
-
-  setTimeout(() => {
-    $toastNotify.set($toastNotify.get().filter((t) => t.id !== id));
-  }, removeToastTimeout);
+export const removeToastById = (id: string): void => {
+  $toastNotify.set($toastNotify.get().filter((t) => t.id !== id));
 };

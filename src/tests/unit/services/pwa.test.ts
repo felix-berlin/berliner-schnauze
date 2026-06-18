@@ -2,7 +2,7 @@ import { version } from "../../../../package.json";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("virtual:pwa-register", () => ({ registerSW: vi.fn() }));
-vi.mock("@stores/toastNotify", () => ({ createToastNotify: vi.fn() }));
+vi.mock("@stores/toastNotify", () => ({ createToastNotify: vi.fn().mockReturnValue(true) }));
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
 const PWA_UPDATED_KEY = "pwa-just-updated";
