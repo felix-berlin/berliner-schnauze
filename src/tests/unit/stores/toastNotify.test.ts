@@ -50,6 +50,16 @@ describe("createToastNotify", () => {
     expect(forPos.map((t) => t.message)).not.toContain("A");
   });
 
+  it("persists timeout: null on the toast so the component never auto-dismisses", () => {
+    createToastNotify({ message: "Persistent", timeout: null });
+    expect($toastNotify.get()[0].timeout).toBeNull();
+  });
+
+  it("applies a default 5000ms timeout when none is specified", () => {
+    createToastNotify({ message: "Default" });
+    expect($toastNotify.get()[0].timeout).toBe(5000);
+  });
+
   it("does not remove toasts from other positions when one position is full", () => {
     createToastNotify({ message: "A", position: "top-right" });
     createToastNotify({ message: "B", position: "top-right" });
