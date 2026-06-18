@@ -7,6 +7,9 @@
     class="c-toast-notify is-newest"
     :class="`c-toast-notify--${status} c-toast-notify--${position}`"
     :style="stylePosition"
+    :role="ariaRole"
+    :aria-live="ariaLive"
+    aria-atomic="true"
   >
     <Component
       :is="toastIconMap[status]"
@@ -15,18 +18,20 @@
       aria-hidden="true"
     />
 
-    <div class="c-toast-notify__message">
-      {{ message }}
-    </div>
+    <div class="c-toast-notify__body">
+      <div class="c-toast-notify__message">
+        {{ message }}
+      </div>
 
-    <button
-      v-if="actionLabel"
-      type="button"
-      class="c-toast-notify__action c-button c-button--theme"
-      @click="handleAction()"
-    >
-      {{ actionLabel }}
-    </button>
+      <button
+        v-if="actionLabel"
+        type="button"
+        class="c-toast-notify__action c-button"
+        @click="handleAction()"
+      >
+        {{ actionLabel }}
+      </button>
+    </div>
 
     <button
       v-if="showClose"
@@ -43,9 +48,10 @@
 <script setup lang="ts">
 import type { ToastNotify } from "@stores/toastNotify.ts";
 
-import { removeToastById, supportsPopover } from "@stores/toastNotify.ts";
+import { removeToastById, supportsPopover } from "@stores/toastNotify";
 import { useSwipe } from "@vueuse/core";
 import {
+  computed,
   defineAsyncComponent,
   nextTick,
   onBeforeMount,
@@ -88,6 +94,9 @@ const stylePosition: StylePositionType = reactive({
   right: "auto",
   top: "auto",
 });
+
+const ariaRole = computed(() => (status === "error" ? "alert" : "status"));
+const ariaLive = computed(() => (status === "error" ? "assertive" : "polite"));
 
 const toastIconMap = {
   error: defineAsyncComponent(() => import("virtual:icons/lucide/x-circle")),

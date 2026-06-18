@@ -36,8 +36,8 @@
   "scripts": {
     "dev": "infisical run -- astro dev",
     "start": "astro dev",
-    "build": "pnpm run supportedBrowsers && astro build",
-    "build:strict": "astro check && tsc --noEmit && vue-tsc --noEmit && astro build",
+    "build": "pnpm run supportedBrowsers && infisical run -- astro build",
+    "build:strict": "astro check && tsc --noEmit && vue-tsc --noEmit && infisical run -- astro build",
     "preview": "astro preview",
     "astro": "astro",
     "typechecking": "astro check && tsc --noEmit && vue-tsc --noEmit",
@@ -58,7 +58,8 @@
     "browserslist:update": "pnpx update-browserslist-db@latest",
     "predev": "pnpm run gql:generate && pnpm run supportedBrowsers",
     "preinstall": "pnpx only-allow pnpm",
-    "server:pages": "pnpx wrangler pages dev ./dist",
+    "server:preview": "pnpx wrangler pages dev ./dist",
+    "server:build:preview": "pnpm build && pnpm server:preview",
     "supportedBrowsers": "echo \"export default $(browserslist-useragent-regexp --allowHigherVersions);\" > src/utils/supportedBrowsers.mjs",
     "refreshAuthToken": "node --env-file=.env ./src/utils/refreshToken.js"
   },

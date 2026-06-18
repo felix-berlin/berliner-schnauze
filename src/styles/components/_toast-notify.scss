@@ -46,7 +46,14 @@
   }
 
   &__icon {
-    flex: 1 0 auto;
+    flex: 0 0 auto;
+  }
+
+  &__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   &__close {
@@ -54,7 +61,7 @@
   }
 
   &__action {
-    flex-shrink: 0;
+    align-self: flex-start;
     font-size: 0.85em;
     white-space: nowrap;
 
