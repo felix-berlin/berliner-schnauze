@@ -37,6 +37,7 @@
     "dev": "infisical run -- astro dev",
     "start": "astro dev",
     "build": "pnpm run supportedBrowsers && astro build",
+    "build:local": "infisical run -- pnpm run build",
     "build:strict": "astro check && tsc --noEmit && vue-tsc --noEmit && astro build",
     "preview": "astro preview",
     "astro": "astro",
