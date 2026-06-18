@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.32.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.31.0...v3.32.0) (2026-06-18)
+
+
+### Bug Fixes
+
+* **toast:** forward actionLabel and onAction props in ToastNotifyContainer ([7b631d8](https://github.com/felix-berlin/berliner-schnauze/commit/7b631d87b1b3772a3b6e87d322e98c231e68e205))
+
+
+### Features
+
+* **pwa:** implement update behavior based on tab visibility with action button ([83d4da5](https://github.com/felix-berlin/berliner-schnauze/commit/83d4da57c6e79064b5004c8cf9e7b14b50a42f74))
+* **pwa:** show success toast after update with app version ([696cf1a](https://github.com/felix-berlin/berliner-schnauze/commit/696cf1a35150c86366ac3ca305c334e86c39e98e))
+* **pwa:** show update toast on active tab, auto-reload in background ([68b8cff](https://github.com/felix-berlin/berliner-schnauze/commit/68b8cffe1b3987683f24ee8870b3d1b8b4d5081c))
+* **toast:** add optional action button to toast notifications ([115dd4a](https://github.com/felix-berlin/berliner-schnauze/commit/115dd4ad3d734e4d2e41795730979373c391d016))
+* **toast:** layout body wrapper, a11y role/aria-live, fix icon flex ([d807eda](https://github.com/felix-berlin/berliner-schnauze/commit/d807edadacda25ec0ae1ab302c93eade91edd5a8))
+
 # [3.31.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.30.0...v3.31.0) (2026-06-15)
 
 
