@@ -2,6 +2,20 @@ import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
 import { registerSW } from "virtual:pwa-register";
 
+const PWA_UPDATED_KEY = "pwa-just-updated";
+
+const updatedVersion = sessionStorage.getItem(PWA_UPDATED_KEY);
+if (updatedVersion) {
+  sessionStorage.removeItem(PWA_UPDATED_KEY);
+  createToastNotify({
+    message: `App erfolgreich auf Version ${updatedVersion} aktualisiert.`,
+    showClose: true,
+    status: "success",
+    timeout: null,
+  });
+  trackEvent("App", "Update success shown", "PWA");
+}
+
 registerSW({
   immediate: true,
   onNeedReload() {
@@ -10,6 +24,7 @@ registerSW({
         actionLabel: "Jetzt aktualisieren",
         message: "Eine neue Version ist verfügbar.",
         onAction: () => {
+          sessionStorage.setItem(PWA_UPDATED_KEY, __APP_VERSION__);
           trackEvent("App", "Update accepted by user", "PWA");
           window.location.reload();
         },
@@ -31,6 +46,7 @@ registerSW({
         console.error("[pwa] Failed to show background update notification:", err);
       }
     }
+    sessionStorage.setItem(PWA_UPDATED_KEY, __APP_VERSION__);
     trackEvent("App", "Background update applied", "PWA");
     window.location.reload();
   },
