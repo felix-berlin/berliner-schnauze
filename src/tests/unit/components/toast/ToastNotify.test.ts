@@ -1,83 +1,70 @@
 import ToastNotify from "@components/toast/ToastNotify.vue";
-import { removeToastById, supportsPopover } from "@stores/toastNotify.ts";
+import { removeToastById } from "@stores/toastNotify.ts";
 import { mount } from "@vue/test-utils";
-import { describe, it, expect, vi, beforeAll, beforeEach } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@stores/toastNotify.ts", () => ({
-  supportsPopover: vi.fn(() => true),
   removeToastById: vi.fn(),
 }));
+vi.mock("virtual:icons/lucide/x", () => ({ default: { template: "<svg />" } }));
+vi.mock("virtual:icons/lucide/info", () => ({ default: { template: "<svg />" } }));
+vi.mock("virtual:icons/lucide/check-circle-2", () => ({ default: { template: "<svg />" } }));
+vi.mock("virtual:icons/lucide/x-circle", () => ({ default: { template: "<svg />" } }));
+vi.mock("virtual:icons/lucide/alert-circle", () => ({ default: { template: "<svg />" } }));
 
-// Mock the showPopover method globally
-beforeAll(() => {
-  window.HTMLElement.prototype.showPopover = vi.fn();
-});
+afterEach(() => vi.clearAllMocks());
 
 describe("ToastNotify.vue", () => {
-  let wrapper: any;
-
-  beforeEach(() => {
-    wrapper = mount(ToastNotify, {
-      props: {
-        message: "Test message",
-        id: 161,
-        status: "info",
-      },
-    });
-
-    // Mock the toast.value object with a showPopover method
-    wrapper.vm.toast = {
-      showPopover: vi.fn(),
-    };
+  it("renders as a plain div — no popover attribute", () => {
+    const wrapper = mount(ToastNotify, { props: { id: "abc-123", message: "Hi" } });
+    expect(wrapper.find(".c-toast-notify").attributes("popover")).toBeUndefined();
   });
 
-  it("renders correctly", () => {
-    expect(wrapper.exists()).toBe(true);
+  it("displays the message", () => {
+    const wrapper = mount(ToastNotify, { props: { id: "abc-123", message: "Test message" } });
     expect(wrapper.find(".c-toast-notify__message").text()).toBe("Test message");
   });
 
-  it("calls showPopover if supported", () => {
-    wrapper.vm.showToast();
-    expect(wrapper.vm.toast.showPopover).toHaveBeenCalled();
+  it("calls removeToastById with string id when close button clicked", async () => {
+    const wrapper = mount(ToastNotify, {
+      props: { id: "test-uuid-1", message: "Hi", showClose: true },
+    });
+    await wrapper.find(".c-toast-notify__close").trigger("click");
+    expect(removeToastById).toHaveBeenCalledWith("test-uuid-1");
   });
 
-  it("shows and hides the toast correctly", async () => {
-    await wrapper.vm.$nextTick();
-    expect(wrapper.vm.isOpen).toBe(true);
-
-    await wrapper.vm.hideToast();
-    expect(removeToastById).toHaveBeenCalledWith(161);
+  it("calls onAction and removeToastById when action button clicked", async () => {
+    const onAction = vi.fn();
+    const wrapper = mount(ToastNotify, {
+      props: { id: "test-uuid-2", message: "Hi", actionLabel: "Aktualisieren", onAction },
+    });
+    await wrapper.find(".c-toast-notify__action").trigger("click");
+    expect(onAction).toHaveBeenCalledOnce();
+    expect(removeToastById).toHaveBeenCalledWith("test-uuid-2");
   });
 
-  it("does not render action button without actionLabel prop", () => {
+  it("calls removeToastById even when onAction is absent", async () => {
+    const wrapper = mount(ToastNotify, {
+      props: { id: "test-uuid-3", message: "Hi", actionLabel: "Aktualisieren" },
+    });
+    await wrapper.find(".c-toast-notify__action").trigger("click");
+    expect(removeToastById).toHaveBeenCalledWith("test-uuid-3");
+  });
+
+  it("does not render action button without actionLabel", () => {
+    const wrapper = mount(ToastNotify, { props: { id: "abc", message: "Hi" } });
     expect(wrapper.find(".c-toast-notify__action").exists()).toBe(false);
   });
 
-  it("renders action button when actionLabel prop is provided", async () => {
-    const w = mount(ToastNotify, {
-      props: { message: "Test", id: 162, status: "info", actionLabel: "Jetzt aktualisieren" },
-    });
-    expect(w.find(".c-toast-notify__action").exists()).toBe(true);
-    expect(w.find(".c-toast-notify__action").text()).toBe("Jetzt aktualisieren");
+  it("sets role=alert and aria-live=assertive for error status", () => {
+    const wrapper = mount(ToastNotify, { props: { id: "e", message: "Err", status: "error" } });
+    expect(wrapper.find(".c-toast-notify").attributes("role")).toBe("alert");
+    expect(wrapper.find(".c-toast-notify").attributes("aria-live")).toBe("assertive");
   });
 
-  it("calls onAction callback and hides toast when action button is clicked", async () => {
-    const onAction = vi.fn();
-    const w = mount(ToastNotify, {
-      props: { message: "Test", id: 163, status: "info", actionLabel: "Aktualisieren", onAction },
-    });
-    w.vm.toast = { showPopover: vi.fn() };
-    await w.find(".c-toast-notify__action").trigger("click");
-    expect(onAction).toHaveBeenCalledOnce();
-    expect(removeToastById).toHaveBeenCalledWith(163);
-  });
-
-  it("hides toast via action button even when onAction is not provided", async () => {
-    const w = mount(ToastNotify, {
-      props: { message: "Test", id: 164, status: "info", actionLabel: "Aktualisieren" },
-    });
-    w.vm.toast = { showPopover: vi.fn() };
-    await w.find(".c-toast-notify__action").trigger("click");
-    expect(removeToastById).toHaveBeenCalledWith(164);
+  it("sets role=status and aria-live=polite for non-error status", () => {
+    const wrapper = mount(ToastNotify, { props: { id: "s", message: "Ok", status: "success" } });
+    expect(wrapper.find(".c-toast-notify").attributes("role")).toBe("status");
+    expect(wrapper.find(".c-toast-notify").attributes("aria-live")).toBe("polite");
   });
 });
