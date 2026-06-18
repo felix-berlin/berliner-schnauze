@@ -131,3 +131,6 @@ minimumReleaseAgeExclude:
   - miniflare@4.20260611.0
   - sharp@0.35.1
   - wrangler@4.100.0
+  - '@0no-co/graphqlsp@1.17.3'
+  - '@infisical/cli@0.43.96'
+  - astro@6.4.8
