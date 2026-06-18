@@ -38,6 +38,11 @@
   position: absolute;
 }
 
+// Basis-Leave-Zustand: Opacity immer 0 (gilt für alle Motion-Modes)
+.c-toast-notify-leave-to {
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .c-toast-notify-enter-active,
   .c-toast-notify-leave-active {

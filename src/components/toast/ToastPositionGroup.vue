@@ -6,7 +6,7 @@
     class="c-toast-container"
     :class="`c-toast-container--${position}`"
   >
-    <TransitionGroup name="c-toast-notify" @after-leave="onAfterLeave">
+    <TransitionGroup name="c-toast-notify" @before-leave="onBeforeLeave" @after-leave="onAfterLeave">
       <ToastNotify
         v-for="toast in toasts"
         :key="toast.id"
@@ -62,6 +62,15 @@ watch(
     }
   },
 );
+
+const onBeforeLeave = (el: Element): void => {
+  const htmlEl = el as HTMLElement;
+  const { top, left, width } = htmlEl.getBoundingClientRect();
+  const parent = container.value?.getBoundingClientRect() ?? { top: 0, left: 0 };
+  htmlEl.style.top = `${top - parent.top}px`;
+  htmlEl.style.left = `${left - parent.left}px`;
+  htmlEl.style.width = `${width}px`;
+};
 
 const onAfterLeave = (): void => {
   if (props.toasts.length === 0 && isOpen.value) {
