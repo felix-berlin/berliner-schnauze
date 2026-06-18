@@ -76,7 +76,8 @@ const toastIconMap = {
 };
 
 const dismiss = (): void => {
-  removeToastById(id!);
+  if (!id) return;
+  removeToastById(id);
 };
 
 const handleAction = (): void => {

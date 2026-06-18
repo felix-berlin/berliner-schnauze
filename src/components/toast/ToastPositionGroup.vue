@@ -30,15 +30,22 @@ const props = defineProps<{
 
 const container = ref<HTMLElement | null>(null);
 const isSupported = ref(false);
+const isOpen = ref(false);
 
 onBeforeMount(() => {
   isSupported.value = supportsPopover();
 });
 
+const open = (): void => {
+  if (isOpen.value) return;
+  container.value?.showPopover();
+  isOpen.value = true;
+};
+
 onMounted(() => {
   if (!isSupported.value) return;
   if (props.toasts.length > 0) {
-    container.value?.showPopover();
+    open();
   }
 });
 
@@ -46,7 +53,7 @@ watch(
   () => props.toasts.length,
   (newLen, oldLen) => {
     if (oldLen === 0 && newLen > 0) {
-      container.value?.showPopover();
+      open();
     }
   },
 );
@@ -54,6 +61,7 @@ watch(
 const onAfterLeave = (): void => {
   if (props.toasts.length === 0) {
     container.value?.hidePopover();
+    isOpen.value = false;
   }
 };
 

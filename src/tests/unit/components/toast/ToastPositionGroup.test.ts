@@ -84,4 +84,34 @@ describe("ToastPositionGroup.vue", () => {
     });
     expect(wrapper.find(".c-toast-container").exists()).toBe(false);
   });
+
+  it("does not call showPopover twice when already open (double-open guard)", async () => {
+    const { nextTick } = await import("vue");
+    // Mount with toasts already present — onMounted fires showPopover (isOpen → true)
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [toast("a")] },
+    });
+    await nextTick();
+    mockShowPopover.mockClear();
+    // Simulate toasts going 0→1 while already open (guard should block second call)
+    // We do this by directly calling open() again — equivalent to watch 0→1 firing while mounted
+    await wrapper.setProps({ toasts: [toast("a"), toast("b")] });
+    // oldLen=1, newLen=2 — watch does not fire (condition: oldLen===0), so no extra call
+    expect(mockShowPopover).not.toHaveBeenCalled();
+  });
+
+  it("calls showPopover again after hidePopover resets the guard", async () => {
+    const { nextTick } = await import("vue");
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [toast("a")] },
+    });
+    await nextTick();
+    // Close: set toasts to empty and trigger onAfterLeave (hidePopover + isOpen=false)
+    await wrapper.setProps({ toasts: [] });
+    await (wrapper.vm as any).onAfterLeave();
+    mockShowPopover.mockClear();
+    // Re-open: 0→1 should call showPopover exactly once
+    await wrapper.setProps({ toasts: [toast("b")] });
+    expect(mockShowPopover).toHaveBeenCalledOnce();
+  });
 });

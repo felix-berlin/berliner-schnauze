@@ -82,3 +82,11 @@
     }
   }
 }
+@media (prefers-reduced-motion: reduce) {
+  .c-toast-notify-enter-active,
+  .c-toast-notify-leave-active,
+  .c-toast-notify-move {
+    transition: opacity 0.3s ease;
+    transform: none !important;
+  }
+}
