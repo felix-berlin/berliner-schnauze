@@ -3,15 +3,17 @@
     v-for="toast in toastStore"
     :id="toast.id"
     :key="toast.id"
-    :status="toast?.status"
-    :message="toast.message"
-    :show-status-icon="toast?.showStatusIcon"
-    :position="toast?.position"
-    :show-close="toast?.showClose"
+    :action-label="toast?.actionLabel"
     :close-on-swipe="toast?.closeOnSwipe"
-    :outer-spacing="toast?.outerSpacing"
     :gap-between="toast?.gapBetween"
     :init-offset="toast?.initOffset"
+    :message="toast.message"
+    :on-action="toast?.onAction"
+    :outer-spacing="toast?.outerSpacing"
+    :position="toast?.position"
+    :show-close="toast?.showClose"
+    :show-status-icon="toast?.showStatusIcon"
+    :status="toast?.status"
   />
 </template>
 
