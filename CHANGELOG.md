@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.33.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.32.0...v3.33.0) (2026-06-18)
+
+
+### Bug Fixes
+
+* **build:** enhance build scripts — add local build command with infisical ([cbea4cd](https://github.com/felix-berlin/berliner-schnauze/commit/cbea4cd08b88f93ad37928c22c3ff499fc68e272))
+* **build:** remove unnecessary infisical run from build scripts ([7c27eae](https://github.com/felix-berlin/berliner-schnauze/commit/7c27eaefc94371e4467561c0a2fb72c702af75d3))
+* **tests:** refactor icon mocks in ToastNotify tests — use svgStub for consistency ([6272e48](https://github.com/felix-berlin/berliner-schnauze/commit/6272e48e8b7d899038cf9ef4341ed7ae33e9e178))
+* **toast:** address PR review findings — error handling, analytics, timer guards ([e38e784](https://github.com/felix-berlin/berliner-schnauze/commit/e38e7842661793fb8db82d4338ae56ee509282cf))
+* **toast:** correct import path for $toastNotify and remove unused style block ([cc79426](https://github.com/felix-berlin/berliner-schnauze/commit/cc79426a9cfd1f3af02c45563a655b122cf0ded4))
+* **toast:** double-open guard, reduced-motion SCSS, non-null dismiss, swipe test coverage ([992ddf5](https://github.com/felix-berlin/berliner-schnauze/commit/992ddf5873e844e5c5b6350332d9952fa25d85e3))
+* **toast:** fix leave animation — anchor position before absolute, add base opacity ([c4e5394](https://github.com/felix-berlin/berliner-schnauze/commit/c4e5394fd84cbdbb56858d7698c2ebfa69b4b0b0))
+* **toast:** reset UA popover inset to fix position groups landing top-left ([66e28a1](https://github.com/felix-berlin/berliner-schnauze/commit/66e28a15892654a8bfff33a557f2b36f52558136))
+
+
+### Features
+
+* **toast:** add ToastPositionGroup — popover container with FLIP stacking ([3b2c73a](https://github.com/felix-berlin/berliner-schnauze/commit/3b2c73ac7c6a5a86677a0230768fc398721e9a1e))
+* **toast:** extend store — 6 positions, UUID id, MAX_PER_POSITION=3 ([41cafd2](https://github.com/felix-berlin/berliner-schnauze/commit/41cafd20f12d7d08a2bc7df39715b560e03e6b68))
+* **toast:** pause auto-dismiss on hover/focus, resume on leave ([e5934d3](https://github.com/felix-berlin/berliner-schnauze/commit/e5934d3f063353d7bbaa1a799962da817918b76f))
+
 # [3.32.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.31.0...v3.32.0) (2026-06-18)
 
 
