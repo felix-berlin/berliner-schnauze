@@ -13,11 +13,12 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 vi.mock("@stores/toastNotify.ts", () => ({
   removeToastById: vi.fn(),
 }));
-vi.mock("virtual:icons/lucide/x", () => ({ default: { template: "<svg />" } }));
-vi.mock("virtual:icons/lucide/info", () => ({ default: { template: "<svg />" } }));
-vi.mock("virtual:icons/lucide/check-circle-2", () => ({ default: { template: "<svg />" } }));
-vi.mock("virtual:icons/lucide/x-circle", () => ({ default: { template: "<svg />" } }));
-vi.mock("virtual:icons/lucide/alert-circle", () => ({ default: { template: "<svg />" } }));
+const svgStub = { template: "<svg />" };
+vi.mock("virtual:icons/lucide/x", async (importOriginal) => ({ ...(await importOriginal<object>()), default: svgStub }));
+vi.mock("virtual:icons/lucide/info", async (importOriginal) => ({ ...(await importOriginal<object>()), default: svgStub }));
+vi.mock("virtual:icons/lucide/check-circle-2", async (importOriginal) => ({ ...(await importOriginal<object>()), default: svgStub }));
+vi.mock("virtual:icons/lucide/x-circle", async (importOriginal) => ({ ...(await importOriginal<object>()), default: svgStub }));
+vi.mock("virtual:icons/lucide/alert-circle", async (importOriginal) => ({ ...(await importOriginal<object>()), default: svgStub }));
 
 // Track all wrappers so watchers on mockIsSwiping don't leak across tests
 const mountedWrappers: VueWrapper[] = [];
