@@ -1,3 +1,4 @@
+import { version } from "../../../../package.json";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("virtual:pwa-register", () => ({ registerSW: vi.fn() }));
@@ -18,7 +19,7 @@ afterEach(() => {
 
 describe("pwa service — post-update success toast", () => {
   it("shows success toast and tracks event when update flag is set", async () => {
-    sessionStorage.setItem(PWA_UPDATED_KEY, "3.31.0");
+    sessionStorage.setItem(PWA_UPDATED_KEY, version);
 
     await import("@services/pwa");
 
@@ -28,7 +29,7 @@ describe("pwa service — post-update success toast", () => {
     expect(createToastNotify).toHaveBeenCalledOnce();
     expect(createToastNotify).toHaveBeenCalledWith(
       expect.objectContaining({
-        message: "App erfolgreich auf Version 3.31.0 aktualisiert.",
+        message: `App erfolgreich auf Version ${version} aktualisiert.`,
         status: "success",
         timeout: null,
         showClose: true,
@@ -39,7 +40,7 @@ describe("pwa service — post-update success toast", () => {
   });
 
   it("removes the flag from sessionStorage after showing the toast", async () => {
-    sessionStorage.setItem(PWA_UPDATED_KEY, "3.31.0");
+    sessionStorage.setItem(PWA_UPDATED_KEY, version);
 
     await import("@services/pwa");
 

@@ -321,10 +321,6 @@ export default defineConfig({
     (await import("@playform/inline")).default(),
   ],
   vite: {
-    define: {
-      __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
-    },
-
     resolve: {
       alias: {
         "@styles": fileURLToPath(new URL("./src/styles", import.meta.url)),

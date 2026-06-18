@@ -20,7 +20,6 @@ interface TurnstileInstance {
 }
 
 declare global {
-  const __APP_VERSION__: string;
   interface Window {
     _paq: Array<(boolean | null | number | object | string | undefined)[]>;
     onloadTurnstileCallback: (() => void) | undefined;
