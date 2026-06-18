@@ -14,11 +14,10 @@ export type ToastNotify = {
   showClose?: boolean;
   showStatusIcon?: boolean;
   status?: ToastStatus;
-};
-
-export type ToastPayload = Omit<ToastNotify, "id"> & {
   timeout?: null | number;
 };
+
+export type ToastPayload = Omit<ToastNotify, "id">;
 
 export type ToastStatus = "error" | "info" | "success" | "warning";
 
@@ -48,15 +47,8 @@ export const createToastNotify = (payload: ToastPayload): void => {
     updated = current.filter((t) => t.id !== oldest.id);
   }
 
-  const toast = createToast(payload);
+  const toast = createToast({ timeout: defaultTimeout, ...payload });
   $toastNotify.set([toast, ...updated]);
-
-  const { timeout } = payload;
-  if (timeout !== null) {
-    setTimeout(() => {
-      $toastNotify.set($toastNotify.get().filter((t) => t.id !== toast.id));
-    }, timeout ?? defaultTimeout);
-  }
 };
 
 export const removeToastById = (id: string): void => {

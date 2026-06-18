@@ -6,9 +6,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 const mockIsSwiping = ref(false);
 
-vi.mock("@vueuse/core", () => ({
-  useSwipe: vi.fn(() => ({ isSwiping: mockIsSwiping })),
-}));
+vi.mock("@vueuse/core", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@vueuse/core")>();
+  return { ...actual, useSwipe: vi.fn(() => ({ isSwiping: mockIsSwiping })) };
+});
 vi.mock("@stores/toastNotify.ts", () => ({
   removeToastById: vi.fn(),
 }));
@@ -105,5 +106,47 @@ describe("ToastNotify.vue", () => {
     mockIsSwiping.value = true;
     await nextTick();
     expect(removeToastById).not.toHaveBeenCalled();
+  });
+
+  describe("timer pause/resume", () => {
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "Date"] });
+    });
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("auto-dismisses after timeout", async () => {
+      mountToast(ToastNotify, { props: { id: "t1", message: "hi", timeout: 3000 } });
+      vi.advanceTimersByTime(3000);
+      expect(removeToastById).toHaveBeenCalledWith("t1");
+    });
+
+    it("pauses timer on mouseenter, resumes on mouseleave", async () => {
+      const wrapper = mountToast(ToastNotify, { props: { id: "t2", message: "hi", timeout: 3000 } });
+      vi.advanceTimersByTime(1000);
+      await wrapper.find(".c-toast-notify").trigger("mouseenter");
+      vi.advanceTimersByTime(5000); // would have expired — timer paused
+      expect(removeToastById).not.toHaveBeenCalled();
+      await wrapper.find(".c-toast-notify").trigger("mouseleave");
+      vi.advanceTimersByTime(2000); // remaining ~2000ms
+      expect(removeToastById).toHaveBeenCalledWith("t2");
+    });
+
+    it("pauses timer on focusin, resumes on focusout", async () => {
+      const wrapper = mountToast(ToastNotify, { props: { id: "t3", message: "hi", timeout: 2000 } });
+      await wrapper.find(".c-toast-notify").trigger("focusin");
+      vi.advanceTimersByTime(5000);
+      expect(removeToastById).not.toHaveBeenCalled();
+      await wrapper.find(".c-toast-notify").trigger("focusout");
+      vi.advanceTimersByTime(2000);
+      expect(removeToastById).toHaveBeenCalledWith("t3");
+    });
+
+    it("does not auto-dismiss when timeout is null", () => {
+      mountToast(ToastNotify, { props: { id: "t4", message: "hi", timeout: null } });
+      vi.advanceTimersByTime(60000);
+      expect(removeToastById).not.toHaveBeenCalled();
+    });
   });
 });

@@ -7,6 +7,10 @@
     :role="ariaRole"
     :aria-live="ariaLive"
     aria-atomic="true"
+    @mouseenter="pauseTimer"
+    @mouseleave="resumeTimer"
+    @focusin="pauseTimer"
+    @focusout="resumeTimer"
   >
     <Component
       :is="toastIconMap[status]"
@@ -46,8 +50,8 @@
 import type { ToastNotify } from "@stores/toastNotify.ts";
 
 import { removeToastById } from "@stores/toastNotify";
-import { useSwipe } from "@vueuse/core";
-import { computed, defineAsyncComponent, ref, watch } from "vue";
+import { useSwipe, useTimeoutFn } from "@vueuse/core";
+import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 
 const Close = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
 
@@ -60,6 +64,7 @@ const {
   showClose = true,
   showStatusIcon = true,
   status = "info",
+  timeout = 5000,
 } = defineProps<ToastNotify>();
 
 const toast = ref<HTMLElement | null>(null);
@@ -79,6 +84,29 @@ const dismiss = (): void => {
   if (!id) return;
   removeToastById(id);
 };
+
+let remaining = typeof timeout === "number" ? timeout : 5000;
+let timerStart = 0;
+
+const { start: startTimeout, stop: stopTimeout } = useTimeoutFn(dismiss, () => remaining, {
+  immediate: false,
+});
+
+const pauseTimer = (): void => {
+  stopTimeout();
+  remaining = Math.max(0, remaining - (Date.now() - timerStart));
+};
+
+const resumeTimer = (): void => {
+  if (timeout === null || remaining <= 0) return;
+  timerStart = Date.now();
+  startTimeout();
+};
+
+onMounted(() => {
+  if (timeout !== null) resumeTimer();
+});
+
 
 const handleAction = (): void => {
   onAction?.();
