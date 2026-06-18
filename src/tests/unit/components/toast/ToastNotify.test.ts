@@ -48,4 +48,36 @@ describe("ToastNotify.vue", () => {
     await wrapper.vm.hideToast();
     expect(removeToastById).toHaveBeenCalledWith(161);
   });
+
+  it("does not render action button without actionLabel prop", () => {
+    expect(wrapper.find(".c-toast-notify__action").exists()).toBe(false);
+  });
+
+  it("renders action button when actionLabel prop is provided", async () => {
+    const w = mount(ToastNotify, {
+      props: { message: "Test", id: 162, status: "info", actionLabel: "Jetzt aktualisieren" },
+    });
+    expect(w.find(".c-toast-notify__action").exists()).toBe(true);
+    expect(w.find(".c-toast-notify__action").text()).toBe("Jetzt aktualisieren");
+  });
+
+  it("calls onAction callback and hides toast when action button is clicked", async () => {
+    const onAction = vi.fn();
+    const w = mount(ToastNotify, {
+      props: { message: "Test", id: 163, status: "info", actionLabel: "Aktualisieren", onAction },
+    });
+    w.vm.toast = { showPopover: vi.fn() };
+    await w.find(".c-toast-notify__action").trigger("click");
+    expect(onAction).toHaveBeenCalledOnce();
+    expect(removeToastById).toHaveBeenCalledWith(163);
+  });
+
+  it("hides toast via action button even when onAction is not provided", async () => {
+    const w = mount(ToastNotify, {
+      props: { message: "Test", id: 164, status: "info", actionLabel: "Aktualisieren" },
+    });
+    w.vm.toast = { showPopover: vi.fn() };
+    await w.find(".c-toast-notify__action").trigger("click");
+    expect(removeToastById).toHaveBeenCalledWith(164);
+  });
 });
