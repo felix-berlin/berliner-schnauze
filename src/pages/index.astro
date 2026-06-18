@@ -23,22 +23,22 @@ const websiteSchema = JSON.stringify({
 const organizationSchema = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Berliner Schnauze',
-  url: SITE_URL,
-  logo: {
-    '@type': 'ImageObject',
-    url: `${SITE_URL}/favicons/favicon.svg`,
-  },
-  sameAs: [
-    'https://mastodon.social/@berliner_schnauze',
-    'https://www.facebook.com/Berliner.Schnauze030',
-    'https://github.com/felix-berlin/berliner-schnauze',
-  ],
   founder: {
     '@type': 'Person',
     name: 'Felix Scholze',
     url: 'https://webshaped.de/',
   },
+  logo: {
+    '@type': 'ImageObject',
+    url: `${SITE_URL}/favicons/favicon.svg`,
+  },
+  name: 'Berliner Schnauze',
+  sameAs: [
+    'https://mastodon.social/@berliner_schnauze',
+    'https://www.facebook.com/Berliner.Schnauze030',
+    'https://github.com/felix-berlin/berliner-schnauze',
+  ],
+  url: SITE_URL,
 });
 
 const content = {

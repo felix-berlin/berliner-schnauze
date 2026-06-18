@@ -108,10 +108,10 @@ const ogImage = word.seo?.opengraphImage?.sourceUrl
   ? word.seo.opengraphImage
   : firstImage?.sourceUrl
     ? {
-        sourceUrl: firstImage.sourceUrl,
         alt: firstImage.altText || wordProps?.berlinerisch || '',
-        width: firstImage.mediaDetails?.width,
         height: firstImage.mediaDetails?.height,
+        sourceUrl: firstImage.sourceUrl,
+        width: firstImage.mediaDetails?.width,
       }
     : undefined;
 
