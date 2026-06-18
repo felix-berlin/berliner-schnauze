@@ -5,6 +5,7 @@
     popover="manual"
     class="c-toast-container"
     :class="`c-toast-container--${position}`"
+    :aria-label="containerLabel"
   >
     <TransitionGroup name="c-toast-notify" @after-leave="onAfterLeave">
       <ToastNotify
@@ -21,12 +22,22 @@ import type { ToastNotify as ToastNotifyType, ToastPosition } from "@stores/toas
 
 import ToastNotify from "@components/toast/ToastNotify.vue";
 import { supportsPopover } from "@stores/toastNotify";
-import { onBeforeMount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
 
 const props = defineProps<{
   position: ToastPosition;
   toasts: ToastNotifyType[];
 }>();
+
+const positionLabels: Record<typeof props.position, string> = {
+  "top-left": "Benachrichtigungen oben links",
+  "top-center": "Benachrichtigungen oben Mitte",
+  "top-right": "Benachrichtigungen oben rechts",
+  "bottom-left": "Benachrichtigungen unten links",
+  "bottom-center": "Benachrichtigungen unten Mitte",
+  "bottom-right": "Benachrichtigungen unten rechts",
+};
+const containerLabel = computed(() => positionLabels[props.position]);
 
 const container = ref<HTMLElement | null>(null);
 const isSupported = ref(false);
