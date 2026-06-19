@@ -117,6 +117,11 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
 
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
 
+const hasImages = Boolean(wordProps?.images && wordProps.images.nodes.length > 0);
+const hasAnagrams = anagramsResult.length > 0;
+const wortartLabel: string | undefined =
+  wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
+
 const firstImage = wordProps?.images?.nodes?.[0];
 const firstAudio = wordProps?.berlinerischAudio?.[0];
 
