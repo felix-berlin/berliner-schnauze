@@ -21,7 +21,7 @@ import "photoswipe/style.css";
 import { onMounted, onUnmounted, ref } from "vue";
 
 type ImageGalleryProps = {
-  id: string;
+  id?: string;
   images: { image: { preferred: { url: string; width: number; height: number } } }[];
 };
 
