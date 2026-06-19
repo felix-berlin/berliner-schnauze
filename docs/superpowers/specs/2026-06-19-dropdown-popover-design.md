@@ -47,6 +47,7 @@ type PlacementValue =
 type DropdownPopoverProps = {
   placement?: PlacementValue;  // default: "bottom-start"
   offset?: number;             // gap trigger ↔ panel in px, default: 8
+  lazy?: boolean;              // defer slot render until first open, default: true
 };
 ```
 
@@ -104,7 +105,11 @@ close(): void  // programmatically hide the panel
     :style="`position-anchor: --${panelId}; --c-dropdown-offset: ${offset}px`"
     @toggle="onToggle"
   >
-    <slot name="panel" />
+    <!-- Panel div always in DOM (needed for popovertarget ref).
+         Slot content deferred until first open when lazy=true. -->
+    <template v-if="!lazy || hasOpened">
+      <slot name="panel" />
+    </template>
   </div>
 </div>
 ```
@@ -113,14 +118,18 @@ close(): void  // programmatically hide the panel
 
 ```ts
 // inheritAttrs: false — $attrs (e.g. aria-haspopup) land on trigger button, not wrapper div
+const { placement = "bottom-start", offset = 8, lazy = true } = defineProps<DropdownPopoverProps>();
+
 const id = useId();               // Vue 3.5 — SSR-safe unique ID
 const panelId = `dropdown-${id}`;
 
 const panel = ref<HTMLElement | null>(null);
 const isOpen = ref(false);
+const hasOpened = ref(false);    // lazy sentinel — never resets to false
 
 const onToggle = (event: ToggleEvent): void => {
   isOpen.value = event.newState === "open";
+  if (event.newState === "open") hasOpened.value = true;
 };
 
 const close = (): void => {
@@ -135,7 +144,10 @@ defineExpose({ close });
 | State | Type | Source |
 |---|---|---|
 | `isOpen` | `ref<boolean>` | Native `toggle` event on panel |
+| `hasOpened` | `ref<boolean>` | Set `true` on first open — never resets |
 | `panelId` | `string` | `useId()` — stable, SSR-safe |
+
+**Lazy invariant:** `hasOpened` is write-once — it transitions `false → true` on the first `toggle` to `"open"` and never returns to `false`. This means slot content stays mounted across subsequent open/close cycles (no remount cost, no lost scroll state).
 
 ---
 
@@ -284,6 +296,12 @@ applies correct c-dropdown__panel--{placement} class for each placement value
 sets --c-dropdown-offset to offset prop value in panel inline style
 close() calls hidePopover on panel element
 inherited attrs (e.g. aria-haspopup) are applied to trigger button, not wrapper div
+
+// lazy prop
+panel slot is NOT rendered before first open when lazy=true (default)
+panel slot renders after first toggle to newState="open" when lazy=true
+panel slot stays mounted after close (hasOpened remains true, no remount)
+panel slot renders immediately on mount when lazy=false
 ```
 
 ---
