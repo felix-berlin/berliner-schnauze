@@ -28,6 +28,20 @@ beforeAll(() => {
   };
 });
 
+// jsdom does not implement ToggleEvent; provide a minimal polyfill for popover tests
+if (typeof globalThis.ToggleEvent === "undefined") {
+  class ToggleEvent extends Event {
+    newState: string;
+    oldState: string;
+    constructor(type: string, init: { newState?: string; oldState?: string } & EventInit = {}) {
+      super(type, init);
+      this.newState = init.newState ?? "";
+      this.oldState = init.oldState ?? "";
+    }
+  }
+  globalThis.ToggleEvent = ToggleEvent as unknown as typeof globalThis.ToggleEvent;
+}
+
 const ResizeObserverMock = vi.fn(function () {
   return {
     disconnect: vi.fn(),

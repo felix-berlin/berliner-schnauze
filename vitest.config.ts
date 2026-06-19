@@ -1,5 +1,4 @@
 import { getViteConfig, envField } from "astro/config";
-import { mergeConfig } from "vitest/config";
 
 export default getViteConfig(
   {
@@ -26,7 +25,8 @@ export default getViteConfig(
         reportsDirectory: "./tests/unit/coverage",
       },
     },
-  },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any,
   {
     env: {
       schema: {
