@@ -61,5 +61,5 @@ useIntersectionObserver(
 </script>
 
 <style lang="scss">
-@use "@styles/components/scroll-to-top.scss";
+@use "@styles/components/scroll-to-top";
 </style>
