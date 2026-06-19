@@ -61,7 +61,7 @@ importers:
         version: 6.0.2(graphql@16.14.2)
       '@urql/vue':
         specifier: ^2.1.0
-        version: 2.1.0(@urql/core@6.0.2(graphql@16.14.2))(vue@3.5.38(typescript@6.0.3))
+        version: 2.1.1(@urql/core@6.0.2(graphql@16.14.2))(vue@3.5.38(typescript@6.0.3))
       '@vueform/multiselect':
         specifier: ^2.6.11
         version: 2.6.11
@@ -4360,8 +4360,8 @@ packages:
   '@urql/core@6.0.2':
     resolution: {integrity: sha512-9Z4/o97iJujIHKIXcT6jTz147nEb2myZGUKRZ7caHomnKNmm6vd3kpIrkaCuoWJDWrF21eVbNhHWhrBP7gItYw==}
 
-  '@urql/vue@2.1.0':
-    resolution: {integrity: sha512-fRsMOSJze7d9y2NUd31ekZMUWDoc+HYv/jFcO9iPpRFCFlqcuqto5r0v54jDB6C7MEo+xLsqRQGuxe0NM0J8YA==}
+  '@urql/vue@2.1.1':
+    resolution: {integrity: sha512-gmQBQtHO7Rtw1W+CiLb6YcnQEczog3ZxLsFhMvTex1aM1mczT6dDJuiYpJDg2KkuJ8zqXSbMnbwwbm4ukr9vTA==}
     peerDependencies:
       '@urql/core': ^6.0.0
       vue: ^3.2.0
@@ -13820,7 +13820,7 @@ snapshots:
     transitivePeerDependencies:
       - graphql
 
-  '@urql/vue@2.1.0(@urql/core@6.0.2(graphql@16.14.2))(vue@3.5.38(typescript@6.0.3))':
+  '@urql/vue@2.1.1(@urql/core@6.0.2(graphql@16.14.2))(vue@3.5.38(typescript@6.0.3))':
     dependencies:
       '@urql/core': 6.0.2(graphql@16.14.2)
       vue: 3.5.38(typescript@6.0.3)
