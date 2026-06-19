@@ -1,0 +1,77 @@
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-dropdown {
+  display: inline-flex;
+}
+
+.c-dropdown__panel {
+  // UA Popover reset — browsers add margin/border/padding to [popover] elements
+  margin: 0;
+  border: none;
+  padding: 0;
+  background: transparent;
+  overflow: visible;
+  max-width: none;
+  max-height: none;
+  color: inherit;
+
+  // Anchor Positioning — position-anchor is set via inline style (dynamic anchor name per instance)
+  position: fixed;
+  margin-block-start: var(--c-dropdown-offset, 8px);
+  position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+  position-try-order: most-block-size;
+
+  // Placement modifier classes
+  &--bottom-start {
+    position-area: block-end span-inline-end;
+  }
+
+  &--bottom-end {
+    position-area: block-end span-inline-start;
+  }
+
+  &--bottom {
+    position-area: block-end;
+  }
+
+  &--top-start {
+    position-area: block-start span-inline-end;
+  }
+
+  &--top-end {
+    position-area: block-start span-inline-start;
+  }
+
+  &--top {
+    position-area: block-start;
+  }
+
+  // Fallback for browsers without CSS Anchor Positioning (Chrome <125, very rare)
+  @supports not (position-area: block-end) {
+    position: fixed;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    translate: -50% -50%;
+  }
+}
+
+// Fade via @starting-style + allow-discrete (Baseline Newly Available, 2024)
+@include butler-mx.feature("motion") {
+  .c-dropdown__panel {
+    opacity: 1;
+    transition:
+      opacity 0.15s ease,
+      display 0.15s allow-discrete,
+      overlay 0.15s allow-discrete;
+
+    &:not(:popover-open) {
+      opacity: 0;
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+      }
+    }
+  }
+}
