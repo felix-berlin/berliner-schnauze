@@ -68,7 +68,8 @@ pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS)
 pnpm typechecking            # astro check + tsc + vue-tsc  (slow — run targeted, not after every edit)
 
 # Build
-pnpm build                   # Production build (Cloudflare Pages output)
+pnpm build                   # Production build (Cloudflare Pages output) — no infisical, env vars must already be set
+pnpm build:local             # Production build locally — wraps build with infisical to inject env vars
 pnpm build:strict            # Strict build with full type checking
 
 # GraphQL

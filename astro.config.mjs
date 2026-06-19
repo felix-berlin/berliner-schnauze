@@ -88,6 +88,14 @@ export default defineConfig({
         access: "public",
         default: true,
       }),
+      MATOMO_HOST: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      MATOMO_SITE_ID: envField.number({
+        context: "client",
+        access: "public",
+      }),
       SITE_NAME: envField.string({
         context: "client",
         access: "public",
@@ -180,9 +188,9 @@ export default defineConfig({
       lastmod: new Date(),
     }),
     matomo({
-      enabled: import.meta.env.PROD,
-      host: "https://analytics.webshaped.de/",
-      siteId: 8,
+      enabled: process.env.ENABLE_ANALYTICS === "true",
+      host: process.env.MATOMO_HOST,
+      siteId: process.env.MATOMO_SITE_ID,
       debug: import.meta.env.DEV,
       heartBeatTimer: 5,
       disableCookies: true,

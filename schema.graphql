@@ -2759,6 +2759,12 @@ interface Connection {
   pageInfo: PageInfo!
 }
 
+"""The connectors setting type"""
+type ConnectorsSettings {
+  """Der API-Schlüssel für den Konnektor Anthropic."""
+  connectorsAiAnthropicApiKey: String
+}
+
 """contact-form-7/contact-form-selector block"""
 type ContactForm7ContactFormSelectorBlock implements Block {
   attributes: ContactForm7ContactFormSelectorBlockAttributes
@@ -15970,6 +15976,8 @@ type RootQuery implements WithAcfOptionsPageCompanyInformations & WithAcfOptions
     where: RootQueryToCommentConnectionWhereArgs
   ): RootQueryToCommentConnection
   companyInformations: CompanyInformations
+  """Fields of the &#039;ConnectorsSettings&#039; settings group"""
+  connectorsSettings: ConnectorsSettings
   """A node used to manage content"""
   contentNode(
     """
@@ -18645,6 +18653,8 @@ type SendPasswordResetEmailPayload {
 """All of the registered settings"""
 type Settings {
   """Settings of the the string Settings Group"""
+  connectorsSettingsConnectorsAiAnthropicApiKey: String
+  """Settings of the the string Settings Group"""
   discussionSettingsDefaultCommentStatus: String
   """Settings of the the string Settings Group"""
   discussionSettingsDefaultPingStatus: String
@@ -20103,6 +20113,8 @@ input UpdateSettingsInput {
   This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions.
   """
   clientMutationId: String
+  """Der API-Schlüssel für den Konnektor Anthropic."""
+  connectorsSettingsConnectorsAiAnthropicApiKey: String
   """Erlaubt Personen, neue Beiträge zu kommentieren."""
   discussionSettingsDefaultCommentStatus: String
   """
@@ -20155,6 +20167,8 @@ type UpdateSettingsPayload {
   If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
   """
   clientMutationId: String
+  """Update the ConnectorsSettings setting."""
+  connectorsSettings: ConnectorsSettings
   """Update the DiscussionSettings setting."""
   discussionSettings: DiscussionSettings
   """Update the GeneralSettings setting."""

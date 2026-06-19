@@ -17,7 +17,8 @@
       "mcp__plugin_claude-mem_mcp-search__*",
       "Skill(claude-md-management:revise-claude-md:*)",
       "Skill(pr-review-toolkit:review-pr)",
-      "Skill(pr-review-toolkit:review-pr:*)"
+      "Skill(pr-review-toolkit:review-pr:*)",
+      "Bash(npx infisical *)"
     ]
   },
   "hooks": {

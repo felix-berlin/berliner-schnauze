@@ -1,6 +1,6 @@
 {
   "name": "berliner-schnauze",
-  "version": "3.30.0",
+  "version": "3.33.0",
   "homepage": "https://berliner-schnauze.wtf",
   "bugs": {
     "url": "https://github.com/felix-berlin/berliner-schnauze/issues"
@@ -37,6 +37,7 @@
     "dev": "infisical run -- astro dev",
     "start": "astro dev",
     "build": "pnpm run supportedBrowsers && astro build",
+    "build:local": "infisical run -- pnpm run build",
     "build:strict": "astro check && tsc --noEmit && vue-tsc --noEmit && astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -58,7 +59,8 @@
     "browserslist:update": "pnpx update-browserslist-db@latest",
     "predev": "pnpm run gql:generate && pnpm run supportedBrowsers",
     "preinstall": "pnpx only-allow pnpm",
-    "server:pages": "pnpx wrangler pages dev ./dist",
+    "server:preview": "pnpx wrangler pages dev ./dist",
+    "server:build:preview": "pnpm build && pnpm server:preview",
     "supportedBrowsers": "echo \"export default $(browserslist-useragent-regexp --allowHigherVersions);\" > src/utils/supportedBrowsers.mjs",
     "refreshAuthToken": "node --env-file=.env ./src/utils/refreshToken.js"
   },
