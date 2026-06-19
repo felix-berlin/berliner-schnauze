@@ -37,10 +37,6 @@
           {
             "type": "command",
             "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.scss|*.sass) out=$(pnpm exec stylelint \"$file\" --fix 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -20;; esac"
-          },
-          {
-            "type": "command",
-            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.test.*|*.spec.*) out=$(pnpm vitest run \"$file\" 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -40;; esac"
           }
         ]
       }
