@@ -17,8 +17,8 @@
   position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
 
   // Visual style
-  background: var(--color-tooltip-bg, var(--gray-900));
-  color: var(--color-tooltip-text, var(--gray-50));
+  background: var(--color-tooltip-bg, var(--floating-color-background));
+  color: var(--color-tooltip-text, var(--color-body));
   padding: 0.25em 0.6em;
   border-radius: 4px;
   font-size: 0.8125rem;
