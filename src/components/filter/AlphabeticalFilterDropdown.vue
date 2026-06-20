@@ -13,7 +13,7 @@
           type="button"
           class="c-button c-button--center-icon"
         >
-          <span class="c-button--center-icon">
+          <span aria-hidden="true">
             <Filter />
           </span>
           alphabetisch

@@ -23,6 +23,7 @@
       @toggle="onToggle"
       @mouseenter="cancelClose"
       @mouseleave="onMouseLeave"
+      @focusin="cancelClose"
     >
       <span v-if="arrow" class="c-dropdown__arrow" aria-hidden="true" />
       <template v-if="!lazy || hasOpened">
@@ -86,10 +87,10 @@ const triggerProps = computed(() => ({
 }));
 
 const panelStyle = computed(() => ({
-  "position-anchor": `--${panelId}`,
+  "--c-dropdown-arrow-padding": `${arrowPadding}px`,
   "--c-dropdown-offset": `${offset}px`,
   "--c-dropdown-skidding": `${skidding}px`,
-  "--c-dropdown-arrow-padding": `${arrowPadding}px`,
+  "position-anchor": `--${panelId}`,
 }));
 
 const onToggle = (event: ToggleEvent): void => {

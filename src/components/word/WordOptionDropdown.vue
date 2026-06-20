@@ -8,9 +8,9 @@
         v-bind="triggerProps"
         type="button"
         aria-label="Optionen"
-        class="c-button--center-icon"
+        class="c-options-dropdown__options-icon c-button c-button--center-icon"
       >
-        <span aria-hidden="true" class="c-options-dropdown__options-icon c-icon c-icon--lucide-more-vertical" />
+        <span aria-hidden="true" class="c-icon c-icon--lucide-more-vertical" />
       </button>
     </template>
 
