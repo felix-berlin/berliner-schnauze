@@ -34,7 +34,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onUnmounted, ref } from "vue";
+import { useResizeObserver } from "@vueuse/core";
+import { computed, nextTick, ref } from "vue";
 
 export type PlacementValue =
   | "bottom-start"
@@ -103,7 +104,10 @@ const syncArrow = (): void => {
   arrowAbove.value = panelRect.bottom <= triggerRect.top;
 };
 
-let resizeObserver: ResizeObserver | null = null;
+useResizeObserver(
+  [triggerEl, panel, document.documentElement as HTMLElement],
+  () => { if (isOpen.value) syncArrow(); },
+);
 
 const triggerProps = computed(() => ({
   "aria-controls": panelId,
@@ -121,23 +125,11 @@ const panelStyle = computed(() => ({
 const onToggle = (event: ToggleEvent): void => {
   isOpen.value = event.newState === "open";
   if (event.newState === "open") {
-    void nextTick(() => {
-      syncArrow();
-      if (arrow) {
-        resizeObserver = new ResizeObserver(syncArrow);
-        resizeObserver.observe(document.documentElement);
-        if (triggerEl.value) resizeObserver.observe(triggerEl.value);
-        if (panel.value) resizeObserver.observe(panel.value);
-      }
-    });
+    void nextTick(syncArrow);
   } else {
-    resizeObserver?.disconnect();
-    resizeObserver = null;
     arrowX.value = null;
   }
 };
-
-onUnmounted(() => resizeObserver?.disconnect());
 
 // Hover / focus close timer
 let closeTimer: ReturnType<typeof setTimeout> | null = null;
