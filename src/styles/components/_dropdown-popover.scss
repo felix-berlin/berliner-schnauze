@@ -120,9 +120,17 @@
   box-shadow: inherit;
   transform: rotate(45deg);
 
-  // Position arrow at the panel edge facing the trigger
-  .c-dropdown__panel--bottom-start &,
-  .c-dropdown__panel--bottom-end &,
+  // Arrow at top edge — panel is below trigger, arrow aligned toward the anchor
+  .c-dropdown__panel--bottom-start & {
+    top: calc(-1 * var(--arrow-half));
+    left: var(--c-dropdown-arrow-padding, 4px);
+  }
+
+  .c-dropdown__panel--bottom-end & {
+    top: calc(-1 * var(--arrow-half));
+    right: var(--c-dropdown-arrow-padding, 4px);
+  }
+
   .c-dropdown__panel--bottom & {
     top: calc(-1 * var(--arrow-half));
     left: clamp(
@@ -132,8 +140,17 @@
     );
   }
 
-  .c-dropdown__panel--top-start &,
-  .c-dropdown__panel--top-end &,
+  // Arrow at bottom edge — panel is above trigger, arrow aligned toward the anchor
+  .c-dropdown__panel--top-start & {
+    bottom: calc(-1 * var(--arrow-half));
+    left: var(--c-dropdown-arrow-padding, 4px);
+  }
+
+  .c-dropdown__panel--top-end & {
+    bottom: calc(-1 * var(--arrow-half));
+    right: var(--c-dropdown-arrow-padding, 4px);
+  }
+
   .c-dropdown__panel--top & {
     bottom: calc(-1 * var(--arrow-half));
     left: clamp(

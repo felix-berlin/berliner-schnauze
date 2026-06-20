@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useId } from "vue";
+import { computed, ref } from "vue";
 
 export type PlacementValue =
   | "bottom-start"
@@ -66,13 +66,13 @@ const {
   triggers = ["click"],
   panelClass,
   panelTag = "div",
-  arrow = false,
+  arrow = true,
   arrowPadding = 4,
 } = defineProps<DropdownPopoverProps>();
 
 defineOptions({ inheritAttrs: false });
 
-const id = useId();
+const id = crypto.randomUUID();
 const panelId = `dropdown-${id}`;
 
 const triggerEl = ref<HTMLElement | null>(null);

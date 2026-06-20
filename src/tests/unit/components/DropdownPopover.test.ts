@@ -201,8 +201,8 @@ describe("DropdownPopover.vue", () => {
 
   // --- Props: arrow, arrowPadding ---
 
-  it("arrow element is NOT rendered by default", () => {
-    const wrapper = mount(DropdownPopover);
+  it("arrow element is NOT rendered when arrow=false", () => {
+    const wrapper = mount(DropdownPopover, { props: { arrow: false } });
     expect(wrapper.find(".c-dropdown__arrow").exists()).toBe(false);
   });
 
