@@ -26,7 +26,7 @@
       @focusin="cancelClose"
     >
       <span v-if="arrow" class="c-dropdown__arrow" aria-hidden="true" />
-      <template v-if="!lazy || hasOpened">
+      <template v-if="!lazy || isOpen">
         <slot name="panel" />
       </template>
     </component>
@@ -67,7 +67,7 @@ const {
   panelClass,
   panelTag = "div",
   arrow = true,
-  arrowPadding = 4,
+  arrowPadding = 12,
 } = defineProps<DropdownPopoverProps>();
 
 defineOptions({ inheritAttrs: false });
@@ -78,7 +78,6 @@ const panelId = `dropdown-${id}`;
 const triggerEl = ref<HTMLElement | null>(null);
 const panel = ref<HTMLElement | null>(null);
 const isOpen = ref(false);
-const hasOpened = ref(false);
 
 const triggerProps = computed(() => ({
   "aria-controls": panelId,
@@ -95,7 +94,6 @@ const panelStyle = computed(() => ({
 
 const onToggle = (event: ToggleEvent): void => {
   isOpen.value = event.newState === "open";
-  if (event.newState === "open") hasOpened.value = true;
 };
 
 // Hover / focus close timer
