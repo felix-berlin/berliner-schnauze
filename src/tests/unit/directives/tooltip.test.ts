@@ -12,6 +12,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   vi.clearAllMocks();
+  vi.useRealTimers();
   document.querySelectorAll("[popover]").forEach((el) => el.remove());
 });
 
@@ -85,9 +86,12 @@ describe("vTooltip directive", () => {
     expect(mockShowPopover).toHaveBeenCalledOnce();
   });
 
-  it("calls hidePopover on pointerleave", async () => {
+  it("calls hidePopover on pointerleave after delay", async () => {
+    vi.useFakeTimers();
     const wrapper = mountWithDirective("Test");
     await wrapper.find("button").trigger("pointerleave");
+    expect(mockHidePopover).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(200);
     expect(mockHidePopover).toHaveBeenCalledOnce();
   });
 
@@ -97,9 +101,12 @@ describe("vTooltip directive", () => {
     expect(mockShowPopover).toHaveBeenCalledOnce();
   });
 
-  it("calls hidePopover on focusout", async () => {
+  it("calls hidePopover on focusout after delay", async () => {
+    vi.useFakeTimers();
     const wrapper = mountWithDirective("Test");
     await wrapper.find("button").trigger("focusout");
+    expect(mockHidePopover).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(200);
     expect(mockHidePopover).toHaveBeenCalledOnce();
   });
 

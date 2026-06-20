@@ -22,7 +22,11 @@ export type TooltipValue = string | TooltipOptions;
 
 type TooltipState = {
   anchorName: string;
+  hideTimer: ReturnType<typeof setTimeout> | null;
   onHide: () => void;
+  onKeyDown: (e: KeyboardEvent) => void;
+  onPanelPointerEnter: () => void;
+  onPanelPointerLeave: () => void;
   onShow: () => void;
   panel: HTMLDivElement;
   shown: boolean;
@@ -31,6 +35,8 @@ type TooltipState = {
 type TooltipEl = HTMLElement & { _tooltip?: TooltipState };
 
 let _counter = 0;
+
+const HIDE_DELAY = 200;
 
 function normalize(value: TooltipValue): Required<TooltipOptions> {
   const opts = typeof value === "string" ? { content: value } : value;
@@ -59,6 +65,8 @@ function addListeners(el: HTMLElement, state: TooltipState): void {
   el.addEventListener("pointerleave", state.onHide);
   el.addEventListener("focusin", state.onShow);
   el.addEventListener("focusout", state.onHide);
+  state.panel.addEventListener("pointerenter", state.onPanelPointerEnter);
+  state.panel.addEventListener("pointerleave", state.onPanelPointerLeave);
 }
 
 function removeListeners(el: HTMLElement, state: TooltipState): void {
@@ -66,6 +74,9 @@ function removeListeners(el: HTMLElement, state: TooltipState): void {
   el.removeEventListener("pointerleave", state.onHide);
   el.removeEventListener("focusin", state.onShow);
   el.removeEventListener("focusout", state.onHide);
+  state.panel.removeEventListener("pointerenter", state.onPanelPointerEnter);
+  state.panel.removeEventListener("pointerleave", state.onPanelPointerLeave);
+  document.removeEventListener("keydown", state.onKeyDown);
 }
 
 export const vTooltip: Directive<HTMLElement, TooltipValue> = {
@@ -86,13 +97,47 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
 
     const state: TooltipState = {
       anchorName,
+      hideTimer: null,
       onHide() {
         if (state.shown) return;
+        if (state.hideTimer !== null) {
+          clearTimeout(state.hideTimer);
+          state.hideTimer = null;
+        }
+        // Delay lets the pointer move from trigger to panel without dismissing (WCAG 1.4.13)
+        state.hideTimer = setTimeout(() => {
+          panel.hidePopover?.();
+          state.hideTimer = null;
+          document.removeEventListener("keydown", state.onKeyDown);
+        }, HIDE_DELAY);
+      },
+      onKeyDown(e: KeyboardEvent) {
+        if (e.key !== "Escape") return;
+        if (state.hideTimer !== null) {
+          clearTimeout(state.hideTimer);
+          state.hideTimer = null;
+        }
         panel.hidePopover?.();
+        document.removeEventListener("keydown", state.onKeyDown);
+      },
+      onPanelPointerEnter() {
+        // Cancel pending hide when pointer enters the tooltip panel
+        if (state.hideTimer !== null) {
+          clearTimeout(state.hideTimer);
+          state.hideTimer = null;
+        }
+      },
+      onPanelPointerLeave() {
+        state.onHide();
       },
       onShow() {
         if (state.shown) return;
+        if (state.hideTimer !== null) {
+          clearTimeout(state.hideTimer);
+          state.hideTimer = null;
+        }
         panel.showPopover?.();
+        document.addEventListener("keydown", state.onKeyDown);
       },
       panel,
       shown: opts.shown,
@@ -104,6 +149,7 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
     }
     if (opts.shown) {
       panel.showPopover?.();
+      document.addEventListener("keydown", state.onKeyDown);
     }
   },
 
@@ -111,6 +157,9 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
     const state = (el as TooltipEl)._tooltip;
     if (!state) return;
 
+    if (state.hideTimer !== null) {
+      clearTimeout(state.hideTimer);
+    }
     removeListeners(el, state);
     el.style.removeProperty("anchor-name");
     el.removeAttribute("aria-describedby");
@@ -130,6 +179,10 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
     if (newOpts.disabled !== oldOpts.disabled) {
       if (newOpts.disabled) {
         removeListeners(el, state);
+        if (state.hideTimer !== null) {
+          clearTimeout(state.hideTimer);
+          state.hideTimer = null;
+        }
         state.panel.hidePopover?.();
       } else {
         addListeners(el, state);
@@ -140,8 +193,14 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
       state.shown = newOpts.shown;
       if (newOpts.shown) {
         state.panel.showPopover?.();
+        document.addEventListener("keydown", state.onKeyDown);
       } else {
+        if (state.hideTimer !== null) {
+          clearTimeout(state.hideTimer);
+          state.hideTimer = null;
+        }
         state.panel.hidePopover?.();
+        document.removeEventListener("keydown", state.onKeyDown);
       }
     }
   },

@@ -9,7 +9,10 @@ beforeEach(() => {
   HTMLElement.prototype.showPopover = mockShowPopover;
   HTMLElement.prototype.hidePopover = mockHidePopover;
 });
-afterEach(() => vi.clearAllMocks());
+afterEach(() => {
+  vi.clearAllMocks();
+  vi.useRealTimers();
+});
 
 describe("TooltipPopover.vue", () => {
   it("renders default slot content inside .c-tooltip", () => {
@@ -79,15 +82,18 @@ describe("TooltipPopover.vue", () => {
     );
   });
 
-  it("calls showPopover on mouseenter", async () => {
+  it("calls showPopover on pointerenter", async () => {
     const wrapper = mount(TooltipPopover);
-    await wrapper.find(".c-tooltip").trigger("mouseenter");
+    await wrapper.find(".c-tooltip").trigger("pointerenter");
     expect(mockShowPopover).toHaveBeenCalledOnce();
   });
 
-  it("calls hidePopover on mouseleave", async () => {
+  it("calls hidePopover on pointerleave after delay", async () => {
+    vi.useFakeTimers();
     const wrapper = mount(TooltipPopover);
-    await wrapper.find(".c-tooltip").trigger("mouseleave");
+    await wrapper.find(".c-tooltip").trigger("pointerleave");
+    expect(mockHidePopover).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(200);
     expect(mockHidePopover).toHaveBeenCalledOnce();
   });
 
@@ -97,9 +103,12 @@ describe("TooltipPopover.vue", () => {
     expect(mockShowPopover).toHaveBeenCalledOnce();
   });
 
-  it("calls hidePopover on focusout", async () => {
+  it("calls hidePopover on focusout after delay", async () => {
+    vi.useFakeTimers();
     const wrapper = mount(TooltipPopover);
     await wrapper.find(".c-tooltip").trigger("focusout");
+    expect(mockHidePopover).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(200);
     expect(mockHidePopover).toHaveBeenCalledOnce();
   });
 
@@ -109,7 +118,7 @@ describe("TooltipPopover.vue", () => {
     expect(mockShowPopover).toHaveBeenCalledOnce();
   });
 
-  it("hide() calls hidePopover on panel element", () => {
+  it("hide() calls hidePopover on panel element immediately", () => {
     const wrapper = mount(TooltipPopover);
     (wrapper.vm as any).hide();
     expect(mockHidePopover).toHaveBeenCalledOnce();
