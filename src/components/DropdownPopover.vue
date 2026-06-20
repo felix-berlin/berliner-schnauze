@@ -25,7 +25,7 @@
       @mouseleave="onMouseLeave"
       @focusin="cancelClose"
     >
-      <span v-if="arrow" class="c-dropdown__arrow" aria-hidden="true" />
+      <span v-if="arrow && (!lazy || isOpen)" class="c-dropdown__arrow" aria-hidden="true" />
       <template v-if="!lazy || isOpen">
         <slot name="panel" />
       </template>
