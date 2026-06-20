@@ -1,25 +1,86 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-dropdown {
   display: inline-flex;
+
+  &__trigger {
+    display: inline-flex;
+    cursor: pointer;
+    // anchor-name set via inline style (dynamic per instance)
+  }
+
+  // Theme modifier classes
+  &--theme-word-options {
+    .c-dropdown__panel {
+      --padding: #{vars.$spacer * 0.5} #{vars.$spacer * 0.6};
+
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap, #{vars.$spacer * 0.4});
+
+      a,
+      .c-button {
+        --color-border: transparent;
+
+        transition: border 200ms ease-in-out;
+        border-bottom: 1px dashed var(--color-border, transparent);
+
+        @include butler-mx.hover {
+          --color-border: var(--blue);
+
+          box-shadow: none;
+
+          @include butler-mx.dark-mode-class {
+            --color-border: var(--yellow-500);
+          }
+        }
+      }
+    }
+  }
 }
 
 .c-dropdown__panel {
   // UA Popover reset — browsers add margin/border/padding to [popover] elements
   margin: 0;
   border: none;
-  padding: 0;
   background: transparent;
   overflow: visible;
   max-width: none;
   max-height: none;
-  color: inherit;
 
   // Anchor Positioning — position-anchor is set via inline style (dynamic anchor name per instance)
   position: fixed;
   margin-block-start: var(--c-dropdown-offset, 8px);
   position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
   position-try-order: most-block-size;
+
+  --color-background: var(--floating-color-background);
+
+  box-shadow:
+    0 0.5px 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 8%, transparent),
+    0 4px 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent);
+  background-color: var(--color-background);
+  padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
+  color: var(--color, var(--color-body));
+
+  @include butler-mx.dark-mode-class {
+    --color-box-shadow: black;
+  }
+
+  // Skidding — lateral shift; only meaningful with anchor positioning
+  @supports (position-area: block-end) {
+    translate: var(--c-dropdown-skidding, 0) 0;
+  }
+
+  // Fallback for browsers without CSS Anchor Positioning (Chrome <125, very rare)
+  @supports not (position-area: block-end) {
+    position: fixed;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    translate: -50% -50%;
+  }
 
   // Placement modifier classes
   &--bottom-start {
@@ -45,13 +106,41 @@
   &--top {
     position-area: block-start;
   }
+}
 
-  // Fallback for browsers without CSS Anchor Positioning (Chrome <125, very rare)
-  @supports not (position-area: block-end) {
-    position: fixed;
-    inset-block-start: 50%;
-    inset-inline-start: 50%;
-    translate: -50% -50%;
+// Arrow element — rendered when arrow=true prop is set
+.c-dropdown__arrow {
+  --arrow-size: 8px;
+  --arrow-half: calc(var(--arrow-size) / 2);
+
+  position: absolute;
+  width: var(--arrow-size);
+  height: var(--arrow-size);
+  background: var(--color-background);
+  box-shadow: inherit;
+  transform: rotate(45deg);
+
+  // Position arrow at the panel edge facing the trigger
+  .c-dropdown__panel--bottom-start &,
+  .c-dropdown__panel--bottom-end &,
+  .c-dropdown__panel--bottom & {
+    top: calc(-1 * var(--arrow-half));
+    left: clamp(
+      var(--c-dropdown-arrow-padding, 4px),
+      50%,
+      calc(100% - var(--c-dropdown-arrow-padding, 4px) - var(--arrow-size))
+    );
+  }
+
+  .c-dropdown__panel--top-start &,
+  .c-dropdown__panel--top-end &,
+  .c-dropdown__panel--top & {
+    bottom: calc(-1 * var(--arrow-half));
+    left: clamp(
+      var(--c-dropdown-arrow-padding, 4px),
+      50%,
+      calc(100% - var(--c-dropdown-arrow-padding, 4px) - var(--arrow-size))
+    );
   }
 }
 
