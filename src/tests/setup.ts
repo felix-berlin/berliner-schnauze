@@ -5,8 +5,6 @@ import {
   // Components
   Dropdown as VDropdown,
   Menu as VMenu,
-  // Directives
-  VTooltip,
 } from "floating-vue";
 // import { setupServer } from "msw/node";
 // import { graphql, http } from "msw";
@@ -23,7 +21,7 @@ beforeAll(() => {
   };
   config.global.directives = {
     "close-popper": VClosePopper,
-    tooltip: VTooltip,
+    tooltip: { mounted() {}, updated() {}, unmounted() {} },
     // "auto-animate": useAutoAnimate,
   };
 });
