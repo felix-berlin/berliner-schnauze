@@ -1,27 +1,25 @@
 <template>
-  <VMenu
+  <DropdownPopover
     placement="bottom-end"
-    :distance="13"
-    strategy="fixed"
-    container=".c-menu-nav"
+    :offset="13"
     class="c-menu-nav__item c-menu-more"
-    :triggers="['click', 'hover']"
   >
     <MainMenuButton />
 
-    <template #popper>
+    <template #panel>
       <NavList
         :items="menuItems"
         classes-ul="c-menu-more__list u-list-reset"
         classes-li="c-menu-more__item"
       />
     </template>
-  </VMenu>
+  </DropdownPopover>
 </template>
 
 <script setup lang="ts">
 import type { DefineComponent } from "vue";
 
+import DropdownPopover from "@components/DropdownPopover.vue";
 import InstallApp from "@components/InstallApp.vue";
 import MainMenuButton from "@components/MainMenuButton.vue";
 import NavList from "@components/NavList.vue";
@@ -40,7 +38,6 @@ const menuItems: (ItemObject | { component: DefineComponent; props: object })[] 
     component: InstallApp as DefineComponent,
     props: {
       tooltipProps: {
-        container: ".c-menu-nav",
         placement: "left",
       },
     },

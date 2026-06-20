@@ -12,24 +12,16 @@
           class="c-menu-nav__item c-menu-nav__item-button u-button-reset"
         />
 
-        <VMenu
+        <DropdownPopover
           placement="bottom-end"
-          :distance="13"
-          strategy="fixed"
-          container=".c-menu-nav"
+          :offset="13"
           class="c-menu-nav__item c-menu-more"
         >
-          <button
-            type="button"
-            class="c-button c-menu-nav__item-button u-button-reset c-button--center-icon"
-            aria-label="Website Menu Navigation"
-          >
-            <span class="u-icon-wrapper c-button--center-icon">
-              <MenuIcon />
-            </span>
-          </button>
+          <span class="u-icon-wrapper c-button--center-icon" aria-label="Website Menu Navigation">
+            <MenuIcon />
+          </span>
 
-          <template #popper>
+          <template #panel>
             <ul class="c-menu-more__list u-list-reset">
               <!-- <li class="c-menu-more__item">
                 <a :href="routeToWord(randomWord())"> Zufälliges Wort </a>
@@ -47,13 +39,14 @@
               </li>
             </ul>
           </template>
-        </VMenu>
+        </DropdownPopover>
       </div>
     </nav>
   </header>
 </template>
 
 <script setup lang="ts">
+import DropdownPopover from "@components/DropdownPopover.vue";
 import ColorModeToggle from "@components/ColorModeToggle.vue";
 import SearchModal from "@components/modals/search/SearchModal.vue";
 import { randomElement, routeToWord } from "@utils/helpers.ts";

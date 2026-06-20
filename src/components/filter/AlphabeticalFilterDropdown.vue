@@ -1,30 +1,21 @@
 <template>
   <div class="c-filter-dropdown">
-    <VDropdown
+    <DropdownPopover
+      ref="dropdownRef"
       placement="bottom"
-      popper-class="c-filter-dropdown__dropdown"
-      distance="9"
-      container=".c-filter-dropdown"
-      :shown="hideDropdown"
-      :delay="{ show: 0, hide: 0 }"
+      :offset="9"
+      :class="{ 'has-active-filter': wordSearch.activeLetterFilter }"
+      class="c-filter-dropdown__trigger-wrapper"
     >
-      <button
-        type="button"
-        :class="[
-          'c-button c-button--center-icon c-button--filter c-button--dashed-border',
-          { 'has-active-filter': wordSearch.activeLetterFilter },
-        ]"
-      >
-        <span class="c-button--center-icon">
-          <Filter />
-        </span>
-        alphabetisch
-      </button>
+      <span class="c-button--center-icon">
+        <Filter />
+      </span>
+      alphabetisch
 
-      <template #popper>
+      <template #panel>
         <LetterFilter />
       </template>
-    </VDropdown>
+    </DropdownPopover>
 
     <button
       v-if="wordSearch.activeLetterFilter"
@@ -39,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import DropdownPopover from "@components/DropdownPopover.vue";
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import { useStore } from "@nanostores/vue";
 import { $wordSearch, setLetterFilter } from "@stores/wordList.ts";
@@ -48,23 +40,13 @@ import X from "virtual:icons/lucide/x";
 import { ref } from "vue";
 
 const wordSearch = useStore($wordSearch);
-const hideDropdown = ref(false);
+const dropdownRef = ref<InstanceType<typeof DropdownPopover>>();
 
-/**
- * If the active letter filter changes, hide the dropdown
- *
- * @return  {void}
- */
 onSet($wordSearch, ({ newValue }): void => {
   if (wordSearch.value.activeLetterFilter === newValue.activeLetterFilter) {
     return;
   }
-
-  hideDropdown.value = true;
-
-  setTimeout(() => {
-    hideDropdown.value = false;
-  }, 0);
+  dropdownRef.value?.close();
 });
 </script>
 

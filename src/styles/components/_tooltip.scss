@@ -5,7 +5,8 @@
 }
 
 .c-tooltip__panel {
-  // UA Popover reset — browsers add margin/border/padding to [popover] elements
+  // UA Popover reset — browsers add margin/border/overflow/size to [popover] elements
+  // padding/background/color/max-width are reset implicitly by the visual declarations below
   margin: 0;
   border: none;
   overflow: visible;
