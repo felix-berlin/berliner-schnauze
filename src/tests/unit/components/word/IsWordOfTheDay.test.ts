@@ -1,7 +1,7 @@
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import { vTooltip } from "@/directives/tooltip";
 import { useStore } from "@nanostores/vue";
-import { $wordOfTheDay } from "@stores/index.ts";
+import { $wordOfTheDay } from "@stores/wordOfTheDay.ts";
 import { mount } from "@vue/test-utils";
 import Crown from "virtual:icons/lucide/crown";
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
@@ -55,6 +55,7 @@ describe("IsWordOfTheDay.vue", () => {
     expect(wrapper.findComponent(Crown).exists()).toBe(true);
     // vTooltip creates a popover element in document.body
     expect(document.body.querySelector("[popover='manual']")).not.toBeNull();
+    wrapper.unmount();
   });
 
   it("does not render when isWordOfTheDay is false", () => {
