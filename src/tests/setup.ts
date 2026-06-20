@@ -1,28 +1,11 @@
 import { config } from "@vue/test-utils";
-import {
-  Tooltip,
-  VClosePopper,
-  // Components
-  Dropdown as VDropdown,
-  Menu as VMenu,
-} from "floating-vue";
-// import { setupServer } from "msw/node";
-// import { graphql, http } from "msw";
-// import { useAutoAnimate } from "@formkit/auto-animate/vue";
 import { beforeAll, vi } from "vitest";
 
 beforeAll(() => {
   vi.stubEnv("WP_API", "https://cms.berliner-schnauze.wtf/api");
 
-  config.global.components = {
-    Tooltip,
-    VDropdown,
-    VMenu,
-  };
   config.global.directives = {
-    "close-popper": VClosePopper,
     tooltip: { mounted() {}, updated() {}, unmounted() {} },
-    // "auto-animate": useAutoAnimate,
   };
 });
 
