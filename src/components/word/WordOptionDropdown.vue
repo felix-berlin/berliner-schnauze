@@ -7,9 +7,10 @@
       <button
         v-bind="triggerProps"
         type="button"
+        aria-label="Optionen"
         class="c-button--center-icon"
       >
-        <span class="c-options-dropdown__options-icon c-icon c-icon--lucide-more-vertical" />
+        <span aria-hidden="true" class="c-options-dropdown__options-icon c-icon c-icon--lucide-more-vertical" />
       </button>
     </template>
 
