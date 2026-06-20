@@ -59,9 +59,12 @@
 
   --color-background: var(--floating-color-background);
 
-  box-shadow:
-    0 0.5px 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 8%, transparent),
-    0 4px 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent);
+  // filter: drop-shadow casts a unified shadow around the panel + arrow silhouette,
+  // avoiding the double-shadow artefact that box-shadow produces where the arrow
+  // overlaps the panel interior.
+  filter:
+    drop-shadow(0 0.5px 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 8%, transparent))
+    drop-shadow(0 4px 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent));
   background-color: var(--color-background);
   padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
   color: var(--color, var(--color-body));
@@ -118,7 +121,6 @@
   width: var(--arrow-size);
   height: var(--arrow-size);
   background: var(--color-background);
-  box-shadow: inherit;
   transform: rotate(45deg);
 
   // top, left, bottom set via inline style from JS (syncArrow) so the arrow
