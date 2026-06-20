@@ -111,10 +111,13 @@ describe("DropdownPopover.vue", () => {
     expect(panelStyle).toContain(`position-anchor: ${anchorName}`);
   });
 
-  it("close() calls hidePopover on panel element", () => {
-    const wrapper = mount(DropdownPopover);
+  it("close() calls hidePopover and returns focus to trigger", () => {
+    const wrapper = mount(DropdownPopover, { attachTo: document.body });
+    const focusSpy = vi.spyOn(wrapper.find(".c-dropdown__trigger").element, "focus");
     (wrapper.vm as any).close();
     expect(mockHidePopover).toHaveBeenCalledOnce();
+    expect(focusSpy).toHaveBeenCalledOnce();
+    wrapper.unmount();
   });
 
   it("inherited attrs land on trigger button, not wrapper div", () => {

@@ -2,6 +2,7 @@
   <div class="c-dropdown">
     <button
       v-bind="$attrs"
+      ref="trigger"
       type="button"
       class="c-dropdown__trigger"
       :popovertarget="panelId"
@@ -52,6 +53,7 @@ defineOptions({ inheritAttrs: false });
 const id = useId();
 const panelId = `dropdown-${id}`;
 
+const trigger = ref<HTMLButtonElement | null>(null);
 const panel = ref<HTMLElement | null>(null);
 const isOpen = ref(false);
 const hasOpened = ref(false);
@@ -63,6 +65,7 @@ const onToggle = (event: ToggleEvent): void => {
 
 const close = (): void => {
   panel.value?.hidePopover();
+  trigger.value?.focus();
 };
 
 defineExpose({ close });
