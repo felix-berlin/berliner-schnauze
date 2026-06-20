@@ -25,8 +25,8 @@
       @mouseleave="onMouseLeave"
       @focusin="cancelClose"
     >
-      <span v-if="arrow && (!lazy || isOpen)" class="c-dropdown__arrow" :style="arrowDynamicStyle" aria-hidden="true" />
-      <template v-if="!lazy || isOpen">
+      <span v-if="arrow && (!lazy || hasContent)" class="c-dropdown__arrow" :style="arrowDynamicStyle" aria-hidden="true" />
+      <template v-if="!lazy || hasContent">
         <slot name="panel" />
       </template>
     </component>
@@ -57,6 +57,7 @@ export type DropdownPopoverProps = {
   panelTag?: string;
   arrow?: boolean;
   arrowPadding?: number;
+  haspopup?: boolean | "dialog" | "grid" | "listbox" | "menu" | "tree";
 };
 
 const {
@@ -69,6 +70,7 @@ const {
   panelTag = "div",
   arrow = true,
   arrowPadding = 12,
+  haspopup = true,
 } = defineProps<DropdownPopoverProps>();
 
 defineOptions({ inheritAttrs: false });
@@ -79,6 +81,7 @@ const panelId = `dropdown-${id}`;
 const triggerEl = ref<HTMLElement | null>(null);
 const panel = ref<HTMLElement | null>(null);
 const isOpen = ref(false);
+const hasContent = ref(false); // lags isOpen by close-animation duration so lazy content stays during fade-out
 
 const arrowX = ref<number | null>(null);
 const arrowAbove = ref(false);
@@ -112,6 +115,7 @@ useResizeObserver(
 const triggerProps = computed(() => ({
   "aria-controls": panelId,
   "aria-expanded": isOpen.value,
+  "aria-haspopup": haspopup,
   ...(triggers.includes("click") && { popovertarget: panelId }),
 }));
 
@@ -125,10 +129,18 @@ const panelStyle = computed(() => ({
 const onToggle = (event: ToggleEvent): void => {
   isOpen.value = event.newState === "open";
   if (event.newState === "open") {
+    hasContent.value = true;
     void nextTick(syncArrow);
-  } else {
-    arrowX.value = null;
+    return;
   }
+  arrowX.value = null;
+  setTimeout(() => { if (!isOpen.value) hasContent.value = false; }, 150);
+    // Escape leaves focus on <body>; panel content losing focus also qualifies.
+    // Don't steal focus when the user clicked somewhere else (activeElement already moved).
+    if (document.activeElement === document.body || panel.value?.contains(document.activeElement)) {
+      const focusable = triggerEl.value?.querySelector<HTMLElement>(FOCUSABLE);
+      (focusable ?? triggerEl.value)?.focus();
+    }
 };
 
 // Hover / focus close timer

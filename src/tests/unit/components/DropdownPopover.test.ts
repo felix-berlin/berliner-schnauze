@@ -262,13 +262,18 @@ describe("DropdownPopover.vue", () => {
       expect(wrapper.find(".panel-item").exists()).toBe(true);
     });
 
-    it("panel slot is unmounted after close when lazy=true", async () => {
+    it("panel slot is unmounted after close animation when lazy=true", async () => {
+      vi.useFakeTimers();
       const wrapper = mount(DropdownPopover, {
         slots: { panel: '<button class="panel-item">Action</button>' },
       });
       openToggle(wrapper);
       await nextTick();
       closeToggle(wrapper);
+      await nextTick();
+      // content stays during close animation
+      expect(wrapper.find(".panel-item").exists()).toBe(true);
+      vi.runAllTimers();
       await nextTick();
       expect(wrapper.find(".panel-item").exists()).toBe(false);
     });
