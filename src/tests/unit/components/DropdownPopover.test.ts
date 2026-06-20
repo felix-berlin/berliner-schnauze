@@ -206,13 +206,13 @@ describe("DropdownPopover.vue", () => {
     expect(wrapper.find(".c-dropdown__arrow").exists()).toBe(false);
   });
 
-  it("arrow element IS rendered when arrow=true", () => {
-    const wrapper = mount(DropdownPopover, { props: { arrow: true } });
+  it("arrow element IS rendered when arrow=true (lazy=false)", () => {
+    const wrapper = mount(DropdownPopover, { props: { arrow: true, lazy: false } });
     expect(wrapper.find(".c-dropdown__arrow").exists()).toBe(true);
   });
 
   it("arrow element has aria-hidden='true'", () => {
-    const wrapper = mount(DropdownPopover, { props: { arrow: true } });
+    const wrapper = mount(DropdownPopover, { props: { arrow: true, lazy: false } });
     expect(wrapper.find(".c-dropdown__arrow").attributes("aria-hidden")).toBe("true");
   });
 

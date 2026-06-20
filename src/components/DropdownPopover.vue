@@ -25,7 +25,7 @@
       @mouseleave="onMouseLeave"
       @focusin="cancelClose"
     >
-      <span v-if="arrow && (!lazy || isOpen)" class="c-dropdown__arrow" aria-hidden="true" />
+      <span v-if="arrow && (!lazy || isOpen)" class="c-dropdown__arrow" :style="arrowDynamicStyle" aria-hidden="true" />
       <template v-if="!lazy || isOpen">
         <slot name="panel" />
       </template>
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, nextTick, onUnmounted, ref } from "vue";
 
 export type PlacementValue =
   | "bottom-start"
@@ -79,6 +79,32 @@ const triggerEl = ref<HTMLElement | null>(null);
 const panel = ref<HTMLElement | null>(null);
 const isOpen = ref(false);
 
+const arrowX = ref<number | null>(null);
+const arrowAbove = ref(false);
+
+const arrowDynamicStyle = computed((): Record<string, string> => {
+  if (arrowX.value === null) return {};
+  return {
+    bottom: arrowAbove.value ? "calc(-1 * var(--arrow-half))" : "auto",
+    left: `${arrowX.value}px`,
+    top: arrowAbove.value ? "auto" : "calc(-1 * var(--arrow-half))",
+  };
+});
+
+const ARROW_SIZE = 8;
+
+const syncArrow = (): void => {
+  if (!arrow || !panel.value || !triggerEl.value) return;
+  const panelRect = panel.value.getBoundingClientRect();
+  const triggerRect = triggerEl.value.getBoundingClientRect();
+  const triggerCenterX = (triggerRect.left + triggerRect.right) / 2;
+  const rawX = triggerCenterX - panelRect.left - ARROW_SIZE / 2;
+  arrowX.value = Math.max(arrowPadding, Math.min(rawX, panelRect.width - arrowPadding - ARROW_SIZE));
+  arrowAbove.value = panelRect.bottom <= triggerRect.top;
+};
+
+let resizeObserver: ResizeObserver | null = null;
+
 const triggerProps = computed(() => ({
   "aria-controls": panelId,
   "aria-expanded": isOpen.value,
@@ -94,7 +120,24 @@ const panelStyle = computed(() => ({
 
 const onToggle = (event: ToggleEvent): void => {
   isOpen.value = event.newState === "open";
+  if (event.newState === "open") {
+    void nextTick(() => {
+      syncArrow();
+      if (arrow) {
+        resizeObserver = new ResizeObserver(syncArrow);
+        resizeObserver.observe(document.documentElement);
+        if (triggerEl.value) resizeObserver.observe(triggerEl.value);
+        if (panel.value) resizeObserver.observe(panel.value);
+      }
+    });
+  } else {
+    resizeObserver?.disconnect();
+    resizeObserver = null;
+    arrowX.value = null;
+  }
 };
+
+onUnmounted(() => resizeObserver?.disconnect());
 
 // Hover / focus close timer
 let closeTimer: ReturnType<typeof setTimeout> | null = null;

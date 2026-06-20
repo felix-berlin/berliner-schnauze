@@ -121,45 +121,8 @@
   box-shadow: inherit;
   transform: rotate(45deg);
 
-  // Arrow at top edge — panel is below trigger, arrow aligned toward the anchor
-  .c-dropdown__panel--bottom-start & {
-    top: calc(-1 * var(--arrow-half));
-    left: var(--c-dropdown-arrow-padding, 12px);
-  }
-
-  .c-dropdown__panel--bottom-end & {
-    top: calc(-1 * var(--arrow-half));
-    right: var(--c-dropdown-arrow-padding, 12px);
-  }
-
-  .c-dropdown__panel--bottom & {
-    top: calc(-1 * var(--arrow-half));
-    left: clamp(
-      var(--c-dropdown-arrow-padding, 12px),
-      50%,
-      calc(100% - var(--c-dropdown-arrow-padding, 12px) - var(--arrow-size))
-    );
-  }
-
-  // Arrow at bottom edge — panel is above trigger, arrow aligned toward the anchor
-  .c-dropdown__panel--top-start & {
-    bottom: calc(-1 * var(--arrow-half));
-    left: var(--c-dropdown-arrow-padding, 12px);
-  }
-
-  .c-dropdown__panel--top-end & {
-    bottom: calc(-1 * var(--arrow-half));
-    right: var(--c-dropdown-arrow-padding, 12px);
-  }
-
-  .c-dropdown__panel--top & {
-    bottom: calc(-1 * var(--arrow-half));
-    left: clamp(
-      var(--c-dropdown-arrow-padding, 12px),
-      50%,
-      calc(100% - var(--c-dropdown-arrow-padding, 12px) - var(--arrow-size))
-    );
-  }
+  // top, left, bottom set via inline style from JS (syncArrow) so the arrow
+  // tracks the trigger center correctly even after position-try-fallbacks flip
 }
 
 // Fade via @starting-style + allow-discrete (Baseline Newly Available, 2024)
