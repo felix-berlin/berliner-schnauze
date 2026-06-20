@@ -4,7 +4,9 @@
     :offset="13"
     class="c-menu-nav__item c-menu-more"
   >
-    <MainMenuButton />
+    <template #default="{ triggerProps }">
+      <MainMenuButton v-bind="triggerProps" />
+    </template>
 
     <template #panel>
       <NavList

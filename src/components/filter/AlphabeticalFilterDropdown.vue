@@ -7,10 +7,18 @@
       :class="{ 'has-active-filter': wordSearch.activeLetterFilter }"
       class="c-filter-dropdown__trigger-wrapper"
     >
-      <span class="c-button--center-icon">
-        <Filter />
-      </span>
-      alphabetisch
+      <template #default="{ triggerProps }">
+        <button
+          v-bind="triggerProps"
+          type="button"
+          class="c-button c-button--center-icon"
+        >
+          <span class="c-button--center-icon">
+            <Filter />
+          </span>
+          alphabetisch
+        </button>
+      </template>
 
       <template #panel>
         <LetterFilter />
