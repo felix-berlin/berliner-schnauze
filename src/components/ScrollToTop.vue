@@ -5,8 +5,7 @@
       v-tooltip="{
         content: tooltip,
         disabled: (tooltip?.length ? false : true) || hideTooltip,
-        placement: 'auto',
-        distance: 12,
+        offset: 12,
       }"
       type="button"
       class="c-scroll-to-top c-button c-button--center-icon"

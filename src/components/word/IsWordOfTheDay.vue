@@ -3,7 +3,7 @@
     v-if="isWordOfTheDay"
     v-tooltip="{
       content: `${word}, ist das heutige Wort des Tages`,
-      distance: 10,
+      offset: 10,
       placement: tooltipPlacement,
     }"
     class="c-word-of-the-day-crown"

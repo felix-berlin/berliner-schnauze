@@ -4,7 +4,7 @@ import AudioPlayerList from '@components/AudioPlayerList.vue';
 import BadgeTag from '@components/BadgeTag.vue';
 import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
 import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
-import ToolTip from '@components/ToolTip.vue';
+import TooltipPopover from '@components/TooltipPopover.vue';
 import type { BerlinerWord } from '@/gql/entity-types';
 
 interface Props {
@@ -29,9 +29,9 @@ const { word, wordProps, wortartLabel } = Astro.props;
     <div class='c-word-hero__badges'>
       {
         wordProps?.berolinismus && (
-          <ToolTip client:only='vue'>
+          <TooltipPopover client:only='vue'>
             <BadgeTag> Berolinismus </BadgeTag>
-            <Fragment slot='content'>
+            <Fragment slot='tooltip'>
               {wordProps?.berlinerisch} gehört zu den Berlinismen.
               <>
                 <br />
@@ -41,7 +41,7 @@ const { word, wordProps, wortartLabel } = Astro.props;
               bestimmte Orte und Gebäude in Berlin charakterisieren und das lokale Flair der
               Stadt prägen.
             </Fragment>
-          </ToolTip>
+          </TooltipPopover>
         )
       }
       {wortartLabel && <span class='c-word-hero__wortart-badge'>{wortartLabel}</span>}
