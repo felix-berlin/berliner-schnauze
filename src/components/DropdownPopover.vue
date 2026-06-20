@@ -1,36 +1,39 @@
 <template>
-  <div class="c-dropdown">
-    <button
-      v-bind="$attrs"
-      ref="trigger"
-      type="button"
+  <div v-bind="$attrs" class="c-dropdown">
+    <span
+      ref="triggerEl"
       class="c-dropdown__trigger"
-      :popovertarget="panelId"
       :style="`anchor-name: --${panelId}`"
-      :aria-expanded="isOpen"
-      :aria-controls="panelId"
+      @mouseenter="onMouseEnter"
+      @mouseleave="onMouseLeave"
+      @focusin="onFocusIn"
+      @focusout="onFocusOut"
     >
-      <slot />
-    </button>
+      <slot :trigger-props="triggerProps" :is-open="isOpen" :panel-id="panelId" />
+    </span>
 
-    <div
+    <component
+      :is="panelTag"
       ref="panel"
       :id="panelId"
       popover="auto"
       class="c-dropdown__panel"
-      :class="`c-dropdown__panel--${placement}`"
-      :style="`position-anchor: --${panelId}; --c-dropdown-offset: ${offset}px`"
+      :class="[`c-dropdown__panel--${placement}`, panelClass]"
+      :style="panelStyle"
       @toggle="onToggle"
+      @mouseenter="cancelClose"
+      @mouseleave="onMouseLeave"
     >
+      <span v-if="arrow" class="c-dropdown__arrow" aria-hidden="true" />
       <template v-if="!lazy || hasOpened">
         <slot name="panel" />
       </template>
-    </div>
+    </component>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, useId } from "vue";
+import { computed, ref, useId } from "vue";
 
 export type PlacementValue =
   | "bottom-start"
@@ -40,32 +43,105 @@ export type PlacementValue =
   | "top-end"
   | "top";
 
+export type TriggerEvent = "click" | "hover" | "focus";
+
 export type DropdownPopoverProps = {
   lazy?: boolean;
   offset?: number;
   placement?: PlacementValue;
+  skidding?: number;
+  triggers?: TriggerEvent[];
+  panelClass?: string | string[] | Record<string, boolean>;
+  panelTag?: string;
+  arrow?: boolean;
+  arrowPadding?: number;
 };
 
-const { lazy = true, offset = 8, placement = "bottom-start" } = defineProps<DropdownPopoverProps>();
+const {
+  lazy = true,
+  offset = 8,
+  placement = "bottom-start",
+  skidding = 0,
+  triggers = ["click"],
+  panelClass,
+  panelTag = "div",
+  arrow = false,
+  arrowPadding = 4,
+} = defineProps<DropdownPopoverProps>();
 
 defineOptions({ inheritAttrs: false });
 
 const id = useId();
 const panelId = `dropdown-${id}`;
 
-const trigger = ref<HTMLButtonElement | null>(null);
+const triggerEl = ref<HTMLElement | null>(null);
 const panel = ref<HTMLElement | null>(null);
 const isOpen = ref(false);
 const hasOpened = ref(false);
+
+const triggerProps = computed(() => ({
+  "aria-controls": panelId,
+  "aria-expanded": isOpen.value,
+  ...(triggers.includes("click") && { popovertarget: panelId }),
+}));
+
+const panelStyle = computed(() => ({
+  "position-anchor": `--${panelId}`,
+  "--c-dropdown-offset": `${offset}px`,
+  "--c-dropdown-skidding": `${skidding}px`,
+  "--c-dropdown-arrow-padding": `${arrowPadding}px`,
+}));
 
 const onToggle = (event: ToggleEvent): void => {
   isOpen.value = event.newState === "open";
   if (event.newState === "open") hasOpened.value = true;
 };
 
+// Hover / focus close timer
+let closeTimer: ReturnType<typeof setTimeout> | null = null;
+
+const cancelClose = (): void => {
+  if (closeTimer !== null) {
+    clearTimeout(closeTimer);
+    closeTimer = null;
+  }
+};
+
+const scheduleClose = (): void => {
+  closeTimer = setTimeout(() => {
+    panel.value?.hidePopover();
+  }, 100);
+};
+
+const onMouseEnter = (): void => {
+  if (!triggers.includes("hover")) return;
+  cancelClose();
+  panel.value?.showPopover();
+};
+
+const onMouseLeave = (): void => {
+  if (!triggers.includes("hover")) return;
+  scheduleClose();
+};
+
+const onFocusIn = (): void => {
+  if (!triggers.includes("focus")) return;
+  cancelClose();
+  panel.value?.showPopover();
+};
+
+const onFocusOut = (): void => {
+  if (!triggers.includes("focus")) return;
+  scheduleClose();
+};
+
+const FOCUSABLE =
+  'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
 const close = (): void => {
   panel.value?.hidePopover();
-  trigger.value?.focus();
+  const focusable = triggerEl.value?.querySelector<HTMLElement>(FOCUSABLE);
+  (focusable ?? triggerEl.value)?.focus();
 };
 
 defineExpose({ close });
