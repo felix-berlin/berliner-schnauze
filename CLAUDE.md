@@ -107,7 +107,8 @@ For Cloudflare Pages builds, env vars are configured separately in the CF Pages 
 - **urql** handles GraphQL queries/mutations from Vue components
 - **Orama** provides full-text search with German stemming — index built at build time in `src/pages/api/search/index.json.ts`
 - **Composables** in `src/composable/` — Vue composables wrapping browser APIs (Cache Storage, Service Worker)
-- **Global Vue app setup** in `src/pages/_app.ts` — configures urql client, FloatingVue, and Nanostores devtools
+- **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. `<script>` tags in `.astro` files run **only once** on initial load — re-initialize them with `document.addEventListener('astro:page-load', fn)` for subsequent client-side navigations.
+- **Global Vue app setup** in `src/pages/_app.ts` — configures urql client, registers `vTooltip` directive globally, and Nanostores devtools
 
 ## Import Aliases
 
@@ -164,9 +165,19 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 
 **GraphQL**: Import the `graphql` tagged template from `@/gql` for type-safe queries. Generated types live in `src/gql/` (do not edit manually — output of codegen).
 
+**Astro scripts + View Transitions**: `<script>` in `.astro` files compiles to `<script type="module">` and runs only once — never re-runs after client-side navigation. Wrap any DOM-querying logic in `astro:page-load` so it re-runs on every navigation:
+
+```js
+document.addEventListener('astro:page-load', () => {
+  // re-initialize observers, querySelectorAll, etc.
+});
+```
+
+Also guard `ResizeObserver` / `getBoundingClientRect` callbacks against transitional zero-heights: `if (h > 0) { ... }` — View Transition animations can briefly report `height: 0` for persistent elements.
+
 ## Environment Variables
 
-Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`. Full list in `.env.example`. See [Secrets](#secrets) for how vars are injected.
+Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
 
 ## Testing
 
