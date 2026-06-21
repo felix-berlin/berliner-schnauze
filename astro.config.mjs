@@ -2,7 +2,6 @@ import partytown from "@astrojs/partytown";
 import sitemap from "@astrojs/sitemap";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
-import sentry from "@sentry/astro";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
 import AstroPWA from "@vite-pwa/astro";
@@ -124,7 +123,7 @@ export default defineConfig({
         context: "server",
         access: "secret",
       }),
-      SENTRY_DNS: envField.string({
+      SENTRY_DSN: envField.string({
         context: "client",
         access: "public",
         optional: true,
@@ -208,20 +207,12 @@ export default defineConfig({
       viewTransition: {
         contentElement: "main",
       },
-    }), // sentry({
-    //   dsn: import.meta.env.SENTRY_DNS,
-    //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
-    //   sourceMapsUploadOptions: {
-    //     project: import.meta.env.SENTRY_PROJECT,
-    //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
-    //   },
-    // }),
+    }),
     // partytown({
     //   config: {
     //     forward: ["_paq.push"],
     //   },
     // }),
-    // sentry(),
     // spotlightjs(),
     AstroPWA({
       $schema: "https://json.schemastore.org/web-manifest-combined.json",
