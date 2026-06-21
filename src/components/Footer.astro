@@ -4,36 +4,10 @@ import CarbonBadge from '@components/CarbonBadge.vue';
 import InstallApp from '@components/InstallApp.vue';
 import NavList from '@components/NavList.vue';
 import { Picture } from 'astro:assets';
-import { WAKAPI_API_KEY } from 'astro:env/server';
-import { WAKAPI_HOST } from 'astro:env/client';
 import Download from 'virtual:icons/lucide/download';
+import WakapiStats from '@components/WakapiStats.astro';
 
 import { funding, version } from '../../package.json';
-
-let wakapiTime: string | null = null;
-
-if (WAKAPI_API_KEY) {
-  try {
-    const res = await fetch(`${WAKAPI_HOST}/api/summary?interval=any&project=berliner-schnauze`, {
-      headers: {
-        Authorization: `Bearer ${Buffer.from(WAKAPI_API_KEY).toString('base64')}`,
-      },
-    });
-
-    if (res.ok) {
-      const json = await res.json();
-      const raw: number = json.projects?.[0]?.total ?? 0;
-      const totalSeconds = raw > 1e9 ? Math.floor(raw / 1e9) : raw;
-      const hours = Math.floor(totalSeconds / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      if (hours > 0 || minutes > 0) {
-        wakapiTime = `${hours} Std. ${minutes} Min.`;
-      }
-    }
-  } catch {
-    // non-essential — silently skip if unavailable
-  }
-}
 
 // const randomWord = () => {
 //   // TODO: Implement random word
@@ -181,6 +155,6 @@ const navMenu2 = [
     <p>Ein Projekt von: <a href='https://webshaped.de'>Webshaped / Felix Scholze</a></p>
     <CarbonBadge />
     <p>Hergestellt mit🐻-Kräften in Berlin</p>
-    {wakapiTime && <p>⌨️ {wakapiTime} Coding-Zeit</p>}
+    <WakapiStats />
   </div>
 </div>
