@@ -39,7 +39,7 @@
     line-height: 1.5;
   }
 
-  a {
+  a:not(.c-fact-card__link) {
     text-decoration: underline dashed;
   }
 
