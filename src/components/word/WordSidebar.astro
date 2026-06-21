@@ -52,10 +52,12 @@ const { wordProps, wordTags, hasAnagrams } = Astro.props;
 </aside>
 
 <script>
-  const links = document.querySelectorAll<HTMLAnchorElement>('.c-word-sidebar__link');
-  const sections = document.querySelectorAll<HTMLElement>('.c-section-card[id]');
+  function initSidebarNav() {
+    const links = document.querySelectorAll<HTMLAnchorElement>('.c-word-sidebar__link');
+    const sections = document.querySelectorAll<HTMLElement>('.c-section-card[id]');
 
-  if (links.length > 0 && sections.length > 0) {
+    if (links.length === 0 || sections.length === 0) return;
+
     const setActive = (id: string) => {
       links.forEach((l) => l.classList.remove('is-active'));
       const active = document.querySelector<HTMLAnchorElement>(
@@ -84,4 +86,6 @@ const { wordProps, wordTags, hasAnagrams } = Astro.props;
 
     sections.forEach((s) => observer.observe(s));
   }
+
+  document.addEventListener('astro:page-load', initSidebarNav);
 </script>
