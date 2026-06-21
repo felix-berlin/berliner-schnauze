@@ -20,6 +20,7 @@ import WordSectionGrammatik from '@components/word/WordSectionGrammatik.astro';
 import WordSectionLinguistik from '@components/word/WordSectionLinguistik.astro';
 import WordSectionOrthographie from '@components/word/WordSectionOrthographie.astro';
 import WordSectionPhonologie from '@components/word/WordSectionPhonologie.astro';
+import BookRecommendations from '@components/word/BookRecommendations.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
 import { fetchAllWords } from '@services/api.ts';
@@ -319,6 +320,8 @@ const schemaJson = () => {
             </a>
           )
         }
+
+        <BookRecommendations />
       </div>
 
       {
@@ -378,15 +381,27 @@ const schemaJson = () => {
 </Layout>
 
 <script>
-  // Sync --site-header-height so sticky topbar clears the main nav
+  // Sync --site-header-height so sticky topbar clears the main nav.
+  // Guard against height=0 that fires during View Transition animations.
   const siteHeader = document.querySelector<HTMLElement>('.c-header');
   if (siteHeader) {
-    const syncHeaderHeight = () =>
-      document.documentElement.style.setProperty(
-        '--site-header-height',
-        Math.round(siteHeader.getBoundingClientRect().height) + 'px',
-      );
-    syncHeaderHeight();
+    const syncHeaderHeight = () => {
+      const h = Math.round(siteHeader.getBoundingClientRect().height);
+      if (h > 0) {
+        document.documentElement.style.setProperty('--site-header-height', h + 'px');
+      }
+    };
     new ResizeObserver(syncHeaderHeight).observe(siteHeader);
   }
+
+  // Re-sync after every View Transition navigation in case the variable was zeroed out.
+  document.addEventListener('astro:page-load', () => {
+    const header = document.querySelector<HTMLElement>('.c-header');
+    if (header) {
+      const h = Math.round(header.getBoundingClientRect().height);
+      if (h > 0) {
+        document.documentElement.style.setProperty('--site-header-height', h + 'px');
+      }
+    }
+  });
 </script>
