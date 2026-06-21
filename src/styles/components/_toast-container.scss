@@ -72,10 +72,12 @@
   .c-toast-notify-enter-active,
   .c-toast-notify-leave-active {
     transition: transform 0.3s ease, opacity 0.3s ease;
+    will-change: transform, opacity;
   }
 
   .c-toast-notify-move {
     transition: transform 0.3s ease;
+    will-change: transform;
   }
 
   // Richtungs-aware Enter/Leave via Container-Modifier
