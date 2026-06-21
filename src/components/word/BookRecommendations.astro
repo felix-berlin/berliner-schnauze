@@ -1,0 +1,88 @@
+---
+import '@styles/components/_book-recommendations.scss';
+import BookOpen from '~icons/lucide/book-open';
+
+const books = [
+  {
+    badge: 'Wörterbuch',
+    badgeModifier: 'dictionary',
+    description: '~5.000 Stichwörter, Berlinerisch ↔ Hochdeutsch',
+    href: '#',
+    imageAlt: 'Langenscheidt Lilliput Berlinerisch',
+    imageUrl: '',
+    price: 'ab 4,81 €',
+    title: 'Langenscheidt Lilliput Berlinerisch',
+  },
+  {
+    badge: 'Nachschlagewerk',
+    badgeModifier: 'reference',
+    description: 'Mit typischen Berliner Sprüchen & Sprachgeschichte',
+    href: '#',
+    imageAlt: 'Berlinerisch: Watt denn, icke?',
+    imageUrl: '',
+    price: 'ab 8,75 €',
+    title: 'Berlinerisch: Watt denn, icke?',
+  },
+  {
+    badge: 'Geschenk',
+    badgeModifier: 'gift',
+    description: '50 typische Berliner Begriffe als Kartenspiel',
+    href: '#',
+    imageAlt: 'Da kiekste, wa?! Dialekt-Quiz',
+    imageUrl: '',
+    price: 'ab 9,99 €',
+    title: 'Da kiekste, wa?! Dialekt-Quiz',
+  },
+] as const;
+---
+
+<aside class='c-book-recs' aria-label='Buchempfehlungen'>
+  <div class='c-book-recs__header'>
+    <h3 class='c-book-recs__title'>Ooch als Buch zu haben, wa? 🐻</h3>
+    <p class='c-book-recs__subtitle'>Für Berliner & solche, die es werden wollen</p>
+  </div>
+  <ul class='c-book-recs__list' role='list'>
+    {
+      books.map((book) => (
+        <li class='c-book-recs__item'>
+          <a
+            class='c-book-recs__link'
+            href={book.href}
+            rel='noopener noreferrer sponsored'
+            target='_blank'
+          >
+            <div class='c-book-recs__cover' aria-hidden='true'>
+              {book.imageUrl ? (
+                <img
+                  alt={book.imageAlt}
+                  height='66'
+                  loading='lazy'
+                  src={book.imageUrl}
+                  width='48'
+                />
+              ) : (
+                <BookOpen height='22' width='22' />
+              )}
+            </div>
+            <div class='c-book-recs__info'>
+              <p class='c-book-recs__name'>
+                {book.title}
+                <span class={`c-book-recs__badge c-book-recs__badge--${book.badgeModifier}`}>
+                  {book.badge}
+                </span>
+              </p>
+              <p class='c-book-recs__desc'>{book.description}</p>
+            </div>
+            <div class='c-book-recs__price-col'>
+              <span class='c-book-recs__price'>{book.price}</span>
+              <span class='c-book-recs__platform'>Amazon.de</span>
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <p class='c-book-recs__disclaimer'>
+    * Affiliate-Links — Ich kriege eine kleine Provision, für dich bleibt der Preis gleich.
+  </p>
+</aside>
