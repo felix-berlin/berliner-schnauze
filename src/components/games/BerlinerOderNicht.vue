@@ -25,14 +25,14 @@
         <input
           id="bon-player-name"
           ref="nameInputRef"
-          v-model="playerName"
+          v-model="localName"
           type="text"
           placeholder="Dein Name (optional)"
           class="c-berliner-oder-nicht__name-input"
           maxlength="32"
           autocomplete="nickname"
-          @blur="isEditingName = false"
-          @keydown.enter="isEditingName = false"
+          @blur="saveName"
+          @keydown.enter="saveName"
         />
       </template>
       <dl v-if="allTimeHighScore > 0" class="c-berliner-oder-nicht__idle-prev-stats">
@@ -143,16 +143,20 @@ const {
 const stats = useStore($bonStats)
 const allTimeHighScore = computed(() => stats.value.highScore)
 const allTimeBestStreak = computed(() => stats.value.bestStreak)
-const playerName = computed({
-  get: () => stats.value.playerName ?? '',
-  set: (val: string) => $bonStats.setKey('playerName', val),
-})
+const playerName = computed(() => stats.value.playerName ?? '')
+const localName = ref(stats.value.playerName ?? '')
 
 const isEditingName = ref(false)
 const nameInputRef = ref<HTMLInputElement | null>(null)
 
+function saveName() {
+  $bonStats.setKey('playerName', localName.value)
+  isEditingName.value = false
+}
+
 watch(isEditingName, async (editing) => {
   if (!editing) return
+  localName.value = stats.value.playerName ?? ''
   await nextTick()
   nameInputRef.value?.focus()
   nameInputRef.value?.select()
