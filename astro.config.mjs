@@ -75,6 +75,16 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      WAKAPI_HOST: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
+      WAKAPI_API_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       WP_AUTH_REFRESH_TOKEN: envField.string({
         context: "client",
         access: "public",
