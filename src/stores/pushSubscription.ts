@@ -1,5 +1,5 @@
 import { atom } from "nanostores";
-import { createToastNotify } from "@stores/toastNotify.ts";
+import { createToastNotify } from "@stores/toastNotify";
 import { trackEvent } from "@utils/analytics";
 
 export type PushState = "unsupported" | "loading" | "subscribed" | "unsubscribed" | "error";
@@ -52,7 +52,7 @@ export async function subscribePush(): Promise<void> {
 
   $pushState.set("loading");
   try {
-    let applicationServerKey: Uint8Array;
+    let applicationServerKey: Uint8Array<ArrayBuffer>;
     try {
       applicationServerKey = urlBase64ToUint8Array(vapidKey);
     } catch (err) {
