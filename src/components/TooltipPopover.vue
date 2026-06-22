@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="container"
     class="c-tooltip"
     :style="`anchor-name: --${tooltipId}`"
     :aria-describedby="tooltipId"
@@ -21,12 +22,14 @@
       @pointerenter="cancelHide"
       @pointerleave="scheduleHide"
     >
+      <span ref="arrow" class="c-tooltip__arrow" aria-hidden="true" />
       <slot name="tooltip">{{ content }}</slot>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { syncTooltipArrow } from "@/directives/tooltip";
 import { useEventListener } from "@vueuse/core";
 import { ref, useId } from "vue";
 
@@ -51,7 +54,9 @@ const { content, placement = "top", offset = 8 } = defineProps<TooltipPopoverPro
 const id = useId();
 const tooltipId = `tooltip-${id}`;
 
+const container = ref<HTMLElement | null>(null);
 const panel = ref<HTMLElement | null>(null);
+const arrow = ref<HTMLElement | null>(null);
 const isVisible = ref(false);
 
 let hideTimer: ReturnType<typeof setTimeout> | null = null;
@@ -61,12 +66,6 @@ const cancelHide = (): void => {
     clearTimeout(hideTimer);
     hideTimer = null;
   }
-};
-
-const show = (): void => {
-  cancelHide();
-  panel.value?.showPopover();
-  isVisible.value = true;
 };
 
 const hide = (): void => {
@@ -82,6 +81,19 @@ const scheduleHide = (): void => {
   hideTimer = setTimeout(() => {
     hide();
   }, HIDE_DELAY);
+};
+
+const show = (): void => {
+  cancelHide();
+  panel.value?.showPopover();
+  isVisible.value = true;
+  if (container.value && panel.value && arrow.value) {
+    requestAnimationFrame(() => {
+      if (container.value && panel.value && arrow.value) {
+        syncTooltipArrow(container.value, panel.value, arrow.value);
+      }
+    });
+  }
 };
 
 // WCAG 1.4.13: tooltip must be dismissible without moving pointer/focus (Escape key)

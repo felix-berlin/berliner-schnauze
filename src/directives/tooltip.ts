@@ -22,6 +22,7 @@ export type TooltipValue = string | TooltipOptions;
 
 type TooltipState = {
   anchorName: string;
+  arrow: HTMLSpanElement;
   hideTimer: ReturnType<typeof setTimeout> | null;
   onHide: () => void;
   onKeyDown: (e: KeyboardEvent) => void;
@@ -37,6 +38,57 @@ type TooltipEl = HTMLElement & { _tooltip?: TooltipState };
 let _counter = 0;
 
 const HIDE_DELAY = 200;
+
+const ARROW_SIZE = 8;
+const ARROW_HALF = ARROW_SIZE / 2;
+const ARROW_PADDING = 6;
+
+export function syncTooltipArrow(
+  el: HTMLElement,
+  panel: HTMLElement,
+  arrow: HTMLElement,
+): void {
+  const panelRect = panel.getBoundingClientRect();
+  const elRect = el.getBoundingClientRect();
+  const isAbove = panelRect.bottom <= elRect.top;
+  const isBelow = panelRect.top >= elRect.bottom;
+
+  if (isAbove || isBelow) {
+    const elCenterX = (elRect.left + elRect.right) / 2;
+    const rawX = elCenterX - panelRect.left - ARROW_HALF;
+    const x = Math.max(
+      ARROW_PADDING,
+      Math.min(rawX, panelRect.width - ARROW_PADDING - ARROW_SIZE),
+    );
+    arrow.style.left = `${x}px`;
+    arrow.style.right = "";
+    if (isAbove) {
+      arrow.style.top = "";
+      arrow.style.bottom = `${-ARROW_HALF}px`;
+      return;
+    }
+    arrow.style.top = `${-ARROW_HALF}px`;
+    arrow.style.bottom = "";
+    return;
+  }
+
+  const isLeft = panelRect.right <= elRect.left;
+  const elCenterY = (elRect.top + elRect.bottom) / 2;
+  const rawY = elCenterY - panelRect.top - ARROW_HALF;
+  const y = Math.max(
+    ARROW_PADDING,
+    Math.min(rawY, panelRect.height - ARROW_PADDING - ARROW_SIZE),
+  );
+  arrow.style.top = `${y}px`;
+  arrow.style.bottom = "";
+  if (isLeft) {
+    arrow.style.left = "";
+    arrow.style.right = `${-ARROW_HALF}px`;
+    return;
+  }
+  arrow.style.right = "";
+  arrow.style.left = `${-ARROW_HALF}px`;
+}
 
 function normalize(value: TooltipValue): Required<TooltipOptions> {
   const opts = typeof value === "string" ? { content: value } : value;
@@ -54,6 +106,7 @@ function applyPanel(
   anchorName: string,
   opts: Required<TooltipOptions>,
 ): void {
+  // textContent wipes child elements — always re-append arrow after calling this
   panel.textContent = opts.content;
   panel.className = `c-tooltip__panel c-tooltip__panel--${opts.placement}`;
   panel.style.setProperty("position-anchor", anchorName);
@@ -91,12 +144,19 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
     panel.setAttribute("role", "tooltip");
     document.body.appendChild(panel);
 
+    // applyPanel uses textContent which wipes children — set text first, then append arrow
     applyPanel(panel, anchorName, opts);
+    const arrow = document.createElement("span");
+    arrow.className = "c-tooltip__arrow";
+    arrow.setAttribute("aria-hidden", "true");
+    panel.appendChild(arrow);
+
     el.style.setProperty("anchor-name", anchorName);
     el.setAttribute("aria-describedby", id);
 
     const state: TooltipState = {
       anchorName,
+      arrow,
       hideTimer: null,
       onHide() {
         if (state.shown) return;
@@ -137,6 +197,7 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
           state.hideTimer = null;
         }
         panel.showPopover?.();
+        requestAnimationFrame(() => syncTooltipArrow(el, panel, state.arrow));
         document.addEventListener("keydown", state.onKeyDown);
       },
       panel,
@@ -149,6 +210,7 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
     }
     if (opts.shown) {
       panel.showPopover?.();
+      requestAnimationFrame(() => syncTooltipArrow(el, panel, state.arrow));
       document.addEventListener("keydown", state.onKeyDown);
     }
   },
@@ -174,34 +236,36 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
     const newOpts = normalize(binding.value);
     const oldOpts = normalize(binding.oldValue ?? binding.value);
 
+    // applyPanel wipes children — re-append arrow immediately after
     applyPanel(state.panel, state.anchorName, newOpts);
+    state.panel.appendChild(state.arrow);
 
     if (newOpts.disabled !== oldOpts.disabled) {
-      if (newOpts.disabled) {
+      if (!newOpts.disabled) {
+        addListeners(el, state);
+      } else {
         removeListeners(el, state);
         if (state.hideTimer !== null) {
           clearTimeout(state.hideTimer);
           state.hideTimer = null;
         }
         state.panel.hidePopover?.();
-      } else {
-        addListeners(el, state);
       }
     }
 
-    if (newOpts.shown !== oldOpts.shown) {
-      state.shown = newOpts.shown;
-      if (newOpts.shown) {
-        state.panel.showPopover?.();
-        document.addEventListener("keydown", state.onKeyDown);
-      } else {
-        if (state.hideTimer !== null) {
-          clearTimeout(state.hideTimer);
-          state.hideTimer = null;
-        }
-        state.panel.hidePopover?.();
-        document.removeEventListener("keydown", state.onKeyDown);
-      }
+    if (newOpts.shown === oldOpts.shown) return;
+    state.shown = newOpts.shown;
+    if (newOpts.shown) {
+      state.panel.showPopover?.();
+      requestAnimationFrame(() => syncTooltipArrow(el, state.panel, state.arrow));
+      document.addEventListener("keydown", state.onKeyDown);
+      return;
     }
+    if (state.hideTimer !== null) {
+      clearTimeout(state.hideTimer);
+      state.hideTimer = null;
+    }
+    state.panel.hidePopover?.();
+    document.removeEventListener("keydown", state.onKeyDown);
   },
 };
