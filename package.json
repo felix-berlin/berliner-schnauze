@@ -41,7 +41,7 @@
     "build:strict": "astro check && tsc --noEmit && vue-tsc --noEmit && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "typechecking": "astro check && tsc --noEmit && vue-tsc --noEmit",
+    "typechecking": "astro check && vue-tsc --noEmit",
     "lint:js": "pnpm run lint:js:oxlint",
     "lint:js:oxlint": "oxlint src/ --deny-warnings --fix --fix-suggestions",
     "lint:style": "stylelint \"**/*.{scss,sass}\" --ignore-path .gitignore --fix",
