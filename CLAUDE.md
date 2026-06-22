@@ -137,7 +137,7 @@ Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mj
 
 This project uses **pnpm only**. Never use `npm` or `yarn`. The `preinstall` script enforces this via `only-allow pnpm`.
 
-pnpm supply-chain policy: freshly published packages (< 24h) trigger a lockfile age-gate. Fix: `pnpm clean --lockfile && pnpm install` — rebuilds the lockfile from scratch using `minimumReleaseAgeExclude` entries in `pnpm-workspace.yaml`.
+pnpm supply-chain policy: freshly published packages (< 24h) trigger a lockfile age-gate. Fix: `pnpm clean --lockfile && pnpm install` — rebuilds the lockfile from scratch.
 
 ## Astro v7 / Vite 8 Notes
 
