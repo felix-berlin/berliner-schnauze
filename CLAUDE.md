@@ -142,7 +142,7 @@ pnpm supply-chain policy: freshly published packages (< 24h) trigger a lockfile 
 ## Astro v7 / Vite 8 Notes
 
 - `compressHTML: true` is set explicitly — v7 changed default to `'jsx'` which strips spaces between inline elements
-- `build.cssMinify: "esbuild"` kept — LightningCSS (new Vite 8 default) fails on this project's `hsl()` CSS output; esbuild required
+- `build.cssMinify: "esbuild"` kept — LightningCSS 1.32.0 has a deeper tokenizer bug with this project's bundled CSS: fails with `Unexpected token Function("hsl")` and `Unexpected token IDHash(...)` even on plain hex colors. Converting `$danger` from `hsl()` to hex did not help. LightningCSS bug — revisit when upstream fixes it
 - `build.rolldownOptions` replaces deprecated `build.rollupOptions` (Vite 8 moved from Rollup → Rolldown)
 - `Uint8Array<ArrayBuffer>` (not plain `Uint8Array`) required for `PushManager.subscribe()` — TS 6 made `Uint8Array` generic
 - `@vueuse/core` emits `INVALID_ANNOTATION` Rolldown warnings about `#__PURE__` comment positions — upstream issue, build still succeeds, ignore
