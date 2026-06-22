@@ -11,7 +11,7 @@ interface Props {
 const { word, allWords } = Astro.props;
 ---
 
-<section class='c-section-card' id='orthographie' aria-labelledby='heading-orthographie'>
+{word && <section class='c-section-card' id='orthographie' aria-labelledby='heading-orthographie'>
   <div class='c-section-card__header'>
     <span class='c-section-card__num'>03</span>
     <h2 class='c-section-card__title' id='heading-orthographie'>Orthographie</h2>
@@ -25,4 +25,4 @@ const { word, allWords } = Astro.props;
     </dl>
     <WordDecomposition allWords={allWords} word={word} />
   </div>
-</section>
+</section>}

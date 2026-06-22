@@ -6,9 +6,13 @@ interface Props {
   wordProps: BerlinerWord['wordProperties'];
   wordTags: Record<string, string[]>[];
   hasAnagrams: boolean;
+  hasOrthographie: boolean;
+  hasLinguistik: boolean;
+  hasPhonologie: boolean;
+  hasNeighbors: boolean;
 }
 
-const { wordProps, wordTags, hasAnagrams } = Astro.props;
+const { wordProps, wordTags, hasAnagrams, hasOrthographie, hasLinguistik, hasPhonologie, hasNeighbors } = Astro.props;
 ---
 
 <aside class='c-word-sidebar'>
@@ -28,8 +32,8 @@ const { wordProps, wordTags, hasAnagrams } = Astro.props;
     }
     <div class='c-word-sidebar__divider' role='separator'></div>
     <p class='c-word-sidebar__group-label'>Sprache</p>
-    <a class='c-word-sidebar__link' href='#orthographie'>Orthographie</a>
-    <a class='c-word-sidebar__link' href='#linguistik'>Linguistik</a>
+    {hasOrthographie && <a class='c-word-sidebar__link' href='#orthographie'>Orthographie</a>}
+    {hasLinguistik && <a class='c-word-sidebar__link' href='#linguistik'>Linguistik</a>}
     {
       wordTags.length > 0 && (
         <a class='c-word-sidebar__link' href='#grammatik'>
@@ -37,7 +41,7 @@ const { wordProps, wordTags, hasAnagrams } = Astro.props;
         </a>
       )
     }
-    <a class='c-word-sidebar__link' href='#phonologie'>Phonologie</a>
+    {hasPhonologie && <a class='c-word-sidebar__link' href='#phonologie'>Phonologie</a>}
     <div class='c-word-sidebar__divider' role='separator'></div>
     <p class='c-word-sidebar__group-label'>Entdecken</p>
     {
@@ -47,7 +51,7 @@ const { wordProps, wordTags, hasAnagrams } = Astro.props;
         </a>
       )
     }
-    <a class='c-word-sidebar__link' href='#navigation'>Nachbarn</a>
+    {hasNeighbors && <a class='c-word-sidebar__link' href='#navigation'>Nachbarn</a>}
   </nav>
 </aside>
 

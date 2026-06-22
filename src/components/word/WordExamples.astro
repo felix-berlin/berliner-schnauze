@@ -12,7 +12,7 @@ interface WordExamplesProps {
 const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamplesProps;
 ---
 
-<div class={rootBemClass + "__example-wrapper"}>
+{examples.length > 0 && <div class={rootBemClass + "__example-wrapper"}>
   <Quote class={rootBemClass + "__quote-icon"} height={44} stroke-width={0} width={44} />
 
   {
@@ -52,4 +52,4 @@ const { examples = [], rootBemClass = "c-word-list" } = Astro.props as WordExamp
       </ol>
     )
   }
-</div>
+</div>}

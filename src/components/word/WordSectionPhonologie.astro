@@ -9,9 +9,10 @@ interface Props {
 }
 
 const { soundingWords, similarSpelling } = Astro.props;
+const hasContent = soundingWords.length > 0 || similarSpelling.length > 0;
 ---
 
-<section class='c-section-card' id='phonologie' aria-labelledby='heading-phonologie'>
+{hasContent && <section class='c-section-card' id='phonologie' aria-labelledby='heading-phonologie'>
   <div class='c-section-card__header'>
     <span class='c-section-card__num'>06</span>
     <h2 class='c-section-card__title' id='heading-phonologie'>Phonologie</h2>
@@ -35,4 +36,4 @@ const { soundingWords, similarSpelling } = Astro.props;
     }
     <WordSimilarSpelling similar={similarSpelling} />
   </div>
-</section>
+</section>}

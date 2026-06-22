@@ -24,7 +24,7 @@ import BookRecommendations from '@components/word/BookRecommendations.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
 import { fetchAllWords } from '@services/api.ts';
-import { formattedDate, removeFileExtension, routeToWord, seoData, canonicalUrl } from '@utils/helpers.ts';
+import { formattedDate, routeToWord, seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
   alphabeticNeighbors,
   findAnagrams,
@@ -120,6 +120,11 @@ const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch 
 
 const hasImages = Boolean(wordProps?.images && wordProps.images.nodes.length > 0);
 const hasAnagrams = anagramsResult.length > 0;
+const berlinerisch = wordProps?.berlinerisch ?? '';
+const hasOrthographie = berlinerisch.length > 0;
+const hasLinguistik = berlinerisch.length > 0;
+const hasPhonologie = soundingWordsResult.length > 0 || similarSpellingResult.length > 0;
+const hasNeighbors = alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
 const wortartLabel: string | undefined =
   wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
 
@@ -235,7 +240,15 @@ const schemaJson = () => {
   </nav>
 
   <article class='c-word-page'>
-    <WordSidebar hasAnagrams={hasAnagrams} wordProps={wordProps} wordTags={wordTags} />
+    <WordSidebar
+      hasAnagrams={hasAnagrams}
+      hasLinguistik={hasLinguistik}
+      hasNeighbors={hasNeighbors}
+      hasOrthographie={hasOrthographie}
+      hasPhonologie={hasPhonologie}
+      wordProps={wordProps}
+      wordTags={wordTags}
+    />
 
     <div class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
       <WordHero word={word} wordProps={wordProps} wortartLabel={wortartLabel} />
@@ -244,7 +257,7 @@ const schemaJson = () => {
         <WordSectionEtymologie wordProps={wordProps} />
 
         {
-          wordProps?.examples && (
+          wordProps && (wordProps.examples?.length ?? 0) > 0 && (
             <section class='c-section-card' id='beispiele' aria-labelledby='heading-beispiele'>
               <div class='c-section-card__header'>
                 <span class='c-section-card__num'>02</span>
@@ -259,10 +272,10 @@ const schemaJson = () => {
 
         <WordSectionOrthographie
           allWords={wordRefs}
-          word={word.wordProperties?.berlinerisch ?? ''}
+          word={berlinerisch}
         />
 
-        <WordSectionLinguistik word={word.wordProperties?.berlinerisch ?? ''} />
+        <WordSectionLinguistik word={berlinerisch} />
 
         <WordSectionGrammatik wordTags={wordTags} />
 
@@ -270,15 +283,19 @@ const schemaJson = () => {
 
         <WordAnagrams anagrams={anagramsResult} />
 
-        <section class='c-section-card' id='navigation' aria-labelledby='heading-navigation'>
-          <div class='c-section-card__header'>
-            <span class='c-section-card__num'>07</span>
-            <h2 class='c-section-card__title' id='heading-navigation'>Alphabetische Nachbarn</h2>
-          </div>
-          <div class='c-section-card__body'>
-            <WordAlphabetNav neighbors={alphabeticNeighborsResult} />
-          </div>
-        </section>
+        {
+          (alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0) && (
+            <section class='c-section-card' id='navigation' aria-labelledby='heading-navigation'>
+              <div class='c-section-card__header'>
+                <span class='c-section-card__num'>07</span>
+                <h2 class='c-section-card__title' id='heading-navigation'>Alphabetische Nachbarn</h2>
+              </div>
+              <div class='c-section-card__body'>
+                <WordAlphabetNav neighbors={alphabeticNeighborsResult} />
+              </div>
+            </section>
+          )
+        }
 
         {
           wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
