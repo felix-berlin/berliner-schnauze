@@ -1,5 +1,5 @@
 import { atom } from "nanostores";
-import { createToastNotify } from "@stores/toastNotify.ts";
+import { createToastNotify } from "@stores/toastNotify";
 import { trackEvent } from "@utils/analytics";
 
 export type PushState = "unsupported" | "loading" | "subscribed" | "unsubscribed" | "error";

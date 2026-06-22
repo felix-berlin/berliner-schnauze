@@ -19,7 +19,6 @@ const {
   SENTRY_PROJECT,
   PWA_DEBUG,
   CODECOV_TOKEN,
-  WP_AUTH_REFRESH_TOKEN,
   BUNDLE_ANALYZER_OPEN,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
@@ -176,16 +175,7 @@ export default defineConfig({
       }),
     },
   },
-  experimental: {
-    rustCompiler: true,
-    clientPrerender: true,
-    chromeDevtoolsWorkspace: true,
-    svgOptimizer: svgoOptimizer(),
-    queuedRendering: {
-      enabled: true,
-      contentCache: true,
-    },
-  },
+  compressHTML: true,
   integrations: [
     vue({
       appEntrypoint: "/src/pages/_app",
@@ -383,7 +373,6 @@ export default defineConfig({
 
     css: {
       preprocessorMaxWorkers: true,
-      transformer: "postcss",
       preprocessorOptions: {
         scss: {
           importers: [
@@ -405,8 +394,8 @@ export default defineConfig({
     build: {
       sourcemap: true, // This is needed for sentryVitePlugin
       target: "esnext",
-      cssMinify: "esbuild", // Using esbuild for broader CSS compatibility
-      rollupOptions: {
+      cssMinify: "esbuild",
+      rolldownOptions: {
         output: {
           manualChunks: (id) => {
             if (
