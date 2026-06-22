@@ -91,7 +91,3 @@ useEventListener(document, "keydown", (e: KeyboardEvent) => {
 
 defineExpose({ hide, show });
 </script>
-
-<style lang="scss">
-@use "@styles/components/tooltip";
-</style>
