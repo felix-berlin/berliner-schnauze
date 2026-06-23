@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.34.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.33.0...v3.34.0) (2026-06-23)
+
+
+### Bug Fixes
+
+* **docs:** simplify pnpm supply-chain policy instructions and remove outdated minimumReleaseAgeExclude entries ([82095b3](https://github.com/felix-berlin/berliner-schnauze/commit/82095b397aa3c536be35f66d159ee415854ae6b9))
+* **docs:** update Astro v7 / Vite 8 notes for CSS minification issues ([04a7a39](https://github.com/felix-berlin/berliner-schnauze/commit/04a7a39e4bc522046a422135a3305523d3233685))
+* **pnpm:** standardize quotes and ensure minimumReleaseAgeExclude includes Astro packages ([f4477db](https://github.com/felix-berlin/berliner-schnauze/commit/f4477dbe9c3b697d2a4c6e621f08db73938100d9))
+
+
+### Features
+
+* upgrade to Astro v7 ([0923240](https://github.com/felix-berlin/berliner-schnauze/commit/0923240a86a8d5123a17ab2763b868f819a7e024))
+
 # [3.33.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.32.0...v3.33.0) (2026-06-18)
 
 
