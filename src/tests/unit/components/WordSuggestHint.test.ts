@@ -18,13 +18,10 @@ vi.mock("@stores/wordList.ts", async () => {
   };
 });
 
-// Mock the icon component
-vi.mock("virtual:icons/lucide/plus", () => ({
-  default: {
-    name: "Plus",
-    template: '<svg data-testid="plus-icon"></svg>',
-  },
-}));
+vi.mock("virtual:icons/lucide/plus", async (importOriginal) => {
+  const orig = await importOriginal<Record<string, unknown>>();
+  return { ...orig, default: { name: "Plus", template: '<svg data-testid="plus-icon"></svg>' } };
+});
 
 describe("WordSuggestHint.vue", () => {
   beforeEach(() => {

@@ -1,16 +1,16 @@
 import AudioPlayer from "@components/AudioPlayer.vue";
 import { mount } from "@vue/test-utils";
-import Pause from "virtual:icons/lucide/pause";
-import Play from "virtual:icons/lucide/play";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-vi.mock("virtual:icons/lucide/play", () => ({
-  default: { template: "<div>Play Icon</div>" },
-}));
+vi.mock("virtual:icons/lucide/play", async (importOriginal) => {
+  const orig = await importOriginal<Record<string, unknown>>();
+  return { ...orig, default: { template: "<span data-testid='play-icon' />" } };
+});
 
-vi.mock("virtual:icons/lucide/pause", () => ({
-  default: { template: "<div>Pause Icon</div>" },
-}));
+vi.mock("virtual:icons/lucide/pause", async (importOriginal) => {
+  const orig = await importOriginal<Record<string, unknown>>();
+  return { ...orig, default: { template: "<span data-testid='pause-icon' />" } };
+});
 
 describe("AudioPlayer.vue", () => {
   let audioPlayMock: ReturnType<typeof vi.fn>;
@@ -20,7 +20,7 @@ describe("AudioPlayer.vue", () => {
     audioPlayMock = vi.fn();
     audioPauseMock = vi.fn();
 
-    vi.spyOn(window, "Audio").mockImplementation(function (this: any) {
+    vi.spyOn(window, "Audio").mockImplementation(function (this: unknown) {
       return {
         play: audioPlayMock,
         pause: audioPauseMock,
@@ -29,7 +29,7 @@ describe("AudioPlayer.vue", () => {
         currentTime: 0,
         duration: 100,
       };
-    } as any);
+    } as unknown as typeof Audio);
   });
 
   afterEach(() => {
@@ -41,7 +41,7 @@ describe("AudioPlayer.vue", () => {
       props: { audio: "test-audio-url" },
     });
     expect(wrapper.exists()).toBe(true);
-    expect(wrapper.findComponent(Play).exists()).toBe(true);
+    expect(wrapper.find("[data-testid='play-icon']").exists()).toBe(true);
   });
 
   it("plays audio on button click", async () => {
@@ -50,17 +50,17 @@ describe("AudioPlayer.vue", () => {
     });
     await wrapper.find("button").trigger("click");
     expect(audioPlayMock).toHaveBeenCalled();
-    expect(wrapper.findComponent(Pause).exists()).toBe(true);
+    expect(wrapper.find("[data-testid='pause-icon']").exists()).toBe(true);
   });
 
   it("stops audio on button click when playing", async () => {
     const wrapper = mount(AudioPlayer, {
       props: { audio: "test-audio-url" },
     });
-    await wrapper.find("button").trigger("click"); // Play
-    await wrapper.find("button").trigger("click"); // Stop
+    await wrapper.find("button").trigger("click");
+    await wrapper.find("button").trigger("click");
     expect(audioPauseMock).toHaveBeenCalled();
-    expect(wrapper.findComponent(Play).exists()).toBe(true);
+    expect(wrapper.find("[data-testid='play-icon']").exists()).toBe(true);
   });
 
   it("changes aria-label based on playing state", async () => {
@@ -68,7 +68,7 @@ describe("AudioPlayer.vue", () => {
       props: { audio: "test-audio-url" },
     });
     expect(wrapper.find("button").attributes("aria-label")).toBe("Audio abspielen");
-    await wrapper.find("button").trigger("click"); // Play
+    await wrapper.find("button").trigger("click");
     expect(wrapper.find("button").attributes("aria-label")).toBe("Audio stoppen");
   });
 });
