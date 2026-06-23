@@ -1,0 +1,95 @@
+---
+import '@styles/components/_word-sidebar.scss';
+import type { BerlinerWord } from '@/gql/entity-types';
+
+interface Props {
+  wordProps: BerlinerWord['wordProperties'];
+  wordTags: Record<string, string[]>[];
+  hasAnagrams: boolean;
+  hasOrthographie: boolean;
+  hasLinguistik: boolean;
+  hasPhonologie: boolean;
+  hasNeighbors: boolean;
+}
+
+const { wordProps, wordTags, hasAnagrams, hasOrthographie, hasLinguistik, hasPhonologie, hasNeighbors } = Astro.props;
+---
+
+<aside class='c-word-sidebar'>
+  <div class='c-word-sidebar__word'>
+    <p class='c-word-sidebar__word-title'>{wordProps?.berlinerisch}</p>
+    {wordProps?.article && <p class='c-word-sidebar__word-subtitle'>{wordProps.article}</p>}
+  </div>
+  <nav class='c-word-sidebar__nav' aria-label='Seitennavigation'>
+    <p class='c-word-sidebar__group-label'>Inhalt</p>
+    <a class='c-word-sidebar__link' href='#etymologie'>Bedeutung</a>
+    {
+      wordProps?.examples && (
+        <a class='c-word-sidebar__link' href='#beispiele'>
+          Beispiele
+        </a>
+      )
+    }
+    <div class='c-word-sidebar__divider' role='separator'></div>
+    <p class='c-word-sidebar__group-label'>Sprache</p>
+    {hasOrthographie && <a class='c-word-sidebar__link' href='#orthographie'>Orthographie</a>}
+    {hasLinguistik && <a class='c-word-sidebar__link' href='#linguistik'>Linguistik</a>}
+    {
+      wordTags.length > 0 && (
+        <a class='c-word-sidebar__link' href='#grammatik'>
+          Grammatik
+        </a>
+      )
+    }
+    {hasPhonologie && <a class='c-word-sidebar__link' href='#phonologie'>Phonologie</a>}
+    <div class='c-word-sidebar__divider' role='separator'></div>
+    <p class='c-word-sidebar__group-label'>Entdecken</p>
+    {
+      hasAnagrams && (
+        <a class='c-word-sidebar__link' href='#anagramme'>
+          Anagramme
+        </a>
+      )
+    }
+    {hasNeighbors && <a class='c-word-sidebar__link' href='#navigation'>Nachbarn</a>}
+  </nav>
+</aside>
+
+<script>
+  function initSidebarNav() {
+    const links = document.querySelectorAll<HTMLAnchorElement>('.c-word-sidebar__link');
+    const sections = document.querySelectorAll<HTMLElement>('.c-section-card[id]');
+
+    if (links.length === 0 || sections.length === 0) return;
+
+    const setActive = (id: string) => {
+      links.forEach((l) => l.classList.remove('is-active'));
+      const active = document.querySelector<HTMLAnchorElement>(
+        `.c-word-sidebar__link[href="#${id}"]`,
+      );
+      active?.classList.add('is-active');
+      if (active) {
+        const nav = active.closest<HTMLElement>('.c-word-sidebar');
+        if (nav) {
+          nav.scrollLeft = active.offsetLeft - nav.offsetWidth / 2 + active.offsetWidth / 2;
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(entry.target.id);
+            break;
+          }
+        }
+      },
+      { rootMargin: '-10% 0px -80% 0px' },
+    );
+
+    sections.forEach((s) => observer.observe(s));
+  }
+
+  document.addEventListener('astro:page-load', initSidebarNav);
+</script>

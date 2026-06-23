@@ -1,0 +1,41 @@
+---
+import { routeToWord } from "@utils/helpers";
+import type { WordRef } from "@utils/wordHelper";
+
+interface Props {
+  neighbors: { before: WordRef[]; after: WordRef[] };
+}
+
+const { neighbors: { before, after } } = Astro.props;
+---
+
+{(before.length > 0 || after.length > 0) && <div class="c-single-word__alpha-nav">
+    {
+      before.length > 0 && (
+        <div class="c-single-word__alpha-col">
+          <p class="c-single-word__alpha-label">Davor</p>
+          <ul>
+            {before.map((w) => (
+              <li>
+                <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+    {
+      after.length > 0 && (
+        <div class="c-single-word__alpha-col">
+          <p class="c-single-word__alpha-label">Danach</p>
+          <ul>
+            {after.map((w) => (
+              <li>
+                <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+</div>}

@@ -1,0 +1,122 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-word-hero {
+  container-type: inline-size;
+  container-name: word-hero;
+  background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
+  border: 1px dashed var(--grey-100);
+  border-radius: 4px;
+  padding: vars.$spacer * 1.25 vars.$spacer * 1.5;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: vars.$spacer;
+  box-shadow:
+    0 0.5px 0.6px rgb(0 0 0 / 8%),
+    0 4px 5px rgb(0 0 0 / 16%);
+
+  @include butler-mx.dark-mode-class {
+    --color-background: var(--new-blue-400);
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.5;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  &__right {
+    display: flex;
+    align-items: flex-start;
+    gap: vars.$spacer * 0.5;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-family: vars.$berlin;
+    font-size: clamp(2rem, 5cqi, 3.75rem);
+    font-weight: 700;
+    color: var(--new-blue-400);
+    margin: 0;
+    line-height: 1.1;
+
+    @include butler-mx.dark-mode-class {
+      color: var(--orange-300);
+    }
+
+    dfn {
+      display: inline-block;
+      position: relative;
+      font-style: normal;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        bottom: -0.1em;
+        height: 2px;
+        background: repeating-linear-gradient(
+          to right,
+          var(--orange-300) 0,
+          var(--orange-300) 5px,
+          transparent 5px,
+          transparent 9px
+        );
+      }
+    }
+  }
+
+  &__word-article {
+    font-weight: 400;
+    color: var(--grey-100);
+    font-size: clamp(1.2rem, 3cqi, 2.25rem);
+    text-decoration: none;
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--orange-200) 70%, transparent);
+    }
+  }
+
+  &__badges {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+
+    @container word-hero (inline-size >= 32rem) {
+      flex-wrap: nowrap;
+    }
+  }
+
+  &__wortart-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--orange-200) 60%, white);
+    border: 1px solid var(--orange-300);
+    color: var(--new-blue-400);
+
+    @include butler-mx.dark-mode-class {
+      background: color-mix(in srgb, var(--new-blue-400) 80%, black);
+      color: var(--orange-200);
+      border-color: var(--orange-600);
+    }
+  }
+
+  // Align the Berolinismus badge to match the wortart badge in this context
+  .c-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+  }
+}

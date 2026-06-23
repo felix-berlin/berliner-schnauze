@@ -2,20 +2,10 @@ import type { App } from "vue";
 
 import urql, { cacheExchange, fetchExchange } from "@urql/vue";
 import { WP_API } from "astro:env/client";
-import FloatingVue from "floating-vue";
+import { vTooltip } from "@/directives/tooltip";
 
 export default (app: App) => {
-  app.use(FloatingVue, {
-    themes: {
-      ...FloatingVue.options.themes,
-      "word-options": {
-        $extend: "dropdown",
-        autoHide: true,
-        placement: "bottom",
-        triggers: ["click"],
-      },
-    },
-  });
+  app.directive("tooltip", vTooltip);
   app.use(urql, {
     exchanges: [cacheExchange, fetchExchange],
     fetchOptions: {

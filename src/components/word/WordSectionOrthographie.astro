@@ -1,0 +1,28 @@
+---
+import WordDecomposition from '@components/word/WordDecomposition.astro';
+import { hypher } from '@utils/hypher';
+import type { WordRef } from '@utils/wordHelper';
+
+interface Props {
+  word: string;
+  allWords: WordRef[];
+}
+
+const { word, allWords } = Astro.props;
+---
+
+{word && <section class='c-section-card' id='orthographie' aria-labelledby='heading-orthographie'>
+  <div class='c-section-card__header'>
+    <span class='c-section-card__num'>03</span>
+    <h2 class='c-section-card__title' id='heading-orthographie'>Orthographie</h2>
+  </div>
+  <div class='c-section-card__body'>
+    <dl class='c-single-word__syllables'>
+      <dt>Silbentrennung</dt>
+      <dd set:html={hypher.hyphenate(word).join(" <span class='is-divider'>|</span> ")}></dd>
+      <dt>Anzahl der Silben</dt>
+      <dd>{hypher.hyphenate(word).length}</dd>
+    </dl>
+    <WordDecomposition allWords={allWords} word={word} />
+  </div>
+</section>}

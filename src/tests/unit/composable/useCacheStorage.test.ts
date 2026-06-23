@@ -381,12 +381,14 @@ describe("useCacheStorage — onlineStatus", () => {
     unmount();
   });
 
-  it('updates to "offline" on offline event', () => {
+  it('updates to "offline" on offline event', async () => {
     vi.stubGlobal("navigator", { onLine: true, serviceWorker: null });
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true }));
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     const { result, unmount } = withSetup(() => useCacheStorage());
     window.dispatchEvent(new Event("offline"));
+    // useOnline is consumed via watch() — flush the watcher before asserting
+    await nextTick();
     expect(result.onlineStatus.value).toBe("offline");
     unmount();
   });
@@ -660,7 +662,8 @@ describe("useCacheStorage — cleanup", () => {
     const removeSpy = vi.spyOn(window, "removeEventListener");
     const { unmount } = withSetup(() => useCacheStorage());
     unmount();
-    expect(removeSpy).toHaveBeenCalledWith("online", expect.any(Function), undefined);
-    expect(removeSpy).toHaveBeenCalledWith("offline", expect.any(Function), undefined);
+    // VueUse's useOnline registers with an options object (passive) — match any third arg
+    expect(removeSpy).toHaveBeenCalledWith("online", expect.any(Function), expect.anything());
+    expect(removeSpy).toHaveBeenCalledWith("offline", expect.any(Function), expect.anything());
   });
 });

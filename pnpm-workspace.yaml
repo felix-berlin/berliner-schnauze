@@ -10,5 +10,6 @@ allowBuilds:
   workerd: true
 
 minimumReleaseAgeExclude:
-  - astro
-  - "@astrojs/*"
+  - '@astrojs/markdown-satteri@0.3.1'
+  - '@astrojs/vue@7.0.0'
+  - astro@7.0.0

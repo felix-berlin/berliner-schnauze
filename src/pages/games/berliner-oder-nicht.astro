@@ -1,0 +1,13 @@
+---
+import BerlinerOderNicht from '@components/games/BerlinerOderNicht.vue'
+import Layout from '@layouts/Layout.astro'
+
+const page = {
+  description: 'Echtes Berlinerisch oder erfunden? Swipe-Game mit Streak-Multiplikator und Highscore.',
+  title: 'Berliner oder nicht? – Das Swipe-Game | Berliner Schnauze',
+}
+---
+
+<Layout content={page}>
+  <BerlinerOderNicht client:only="vue" />
+</Layout>

@@ -11,7 +11,7 @@
     <div
       v-tooltip="{
         content: 'Klick auf das Wort um mehr zu erfahren!',
-        distance: 10,
+        offset: 10,
         shown: showTooltip,
         placement: 'bottom',
       }"

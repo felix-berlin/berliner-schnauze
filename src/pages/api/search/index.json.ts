@@ -13,7 +13,7 @@ const hypher = new Hypher(german);
 
 export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
 
-function extractWordTypes(wordTags: any): string[] {
+function extractWordTypes(wordTags: unknown): string[] {
   // wordTags can be an array of objects or a single object
   const tagObjs = Array.isArray(wordTags) ? wordTags : [wordTags];
   // Collect all type arrays, flatten, deduplicate

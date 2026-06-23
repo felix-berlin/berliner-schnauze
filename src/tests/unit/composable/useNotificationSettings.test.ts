@@ -139,6 +139,17 @@ describe("togglePush", () => {
     expect(mockUnsubscribePush).not.toHaveBeenCalled();
     unmount();
   });
+
+  it("is a no-op when state is unsupported", async () => {
+    $mockPushState.set("unsupported");
+    const { useNotificationSettings } = await import("@composables/useNotificationSettings.ts");
+    const { result, unmount } = withSetup(() => useNotificationSettings());
+    await nextTick();
+    result.togglePush();
+    expect(mockSubscribePush).not.toHaveBeenCalled();
+    expect(mockUnsubscribePush).not.toHaveBeenCalled();
+    unmount();
+  });
 });
 
 // ---- onMounted ------------------------------------------------------------

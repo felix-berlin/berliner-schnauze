@@ -8,13 +8,21 @@ export const isNotificationSupported = (): boolean =>
   typeof window !== "undefined" && Boolean(window.Notification);
 
 export const $notificationPermission = atom<NotificationPermissionState>(
-  isNotificationSupported() ? Notification.permission : "unsupported",
+  isNotificationSupported() ? (window.Notification.permission as NotificationPermission) : "unsupported",
 );
 
 export const requestNotificationPermission = async (): Promise<void> => {
   if (!isNotificationSupported()) return;
   const current = $notificationPermission.get();
-  if (current === "granted" || current === "denied") return;
+  if (current === "granted") return;
+  if (current === "denied") {
+    createToastNotify({
+      message: "Benachrichtigungen wurden blockiert. Bitte in den Browser-Einstellungen erlauben.",
+      status: "error",
+      timeout: null,
+    });
+    return;
+  }
 
   try {
     const result = await Notification.requestPermission();

@@ -7,7 +7,8 @@ export const $isDarkMode = persistentAtom<DarkMode>("darkMode", null, {
     if (value == null || value === "null") return null;
     try {
       return JSON.parse(value) as boolean;
-    } catch {
+    } catch (err) {
+      console.warn("[darkMode] Failed to parse persisted darkMode value:", value, err);
       return null;
     }
   },

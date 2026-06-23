@@ -5,8 +5,7 @@
       v-tooltip="{
         content: tooltip,
         disabled: (tooltip?.length ? false : true) || hideTooltip,
-        placement: 'auto',
-        distance: 12,
+        offset: 12,
       }"
       type="button"
       class="c-scroll-to-top c-button c-button--center-icon"
@@ -21,7 +20,8 @@
 <script setup lang="ts">
 import { trackEvent } from "@utils/analytics";
 import ChevronUp from "virtual:icons/lucide/chevron-up";
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { useIntersectionObserver } from "@vueuse/core";
+import { onMounted, ref } from "vue";
 
 interface ScrollToTopProps {
   buttonAriaLabel?: string;
@@ -37,41 +37,28 @@ const {
   tooltip = "",
 } = defineProps<ScrollToTopProps>();
 
-const observer = ref<IntersectionObserver | null>(null);
 const isScrolled = ref(false);
-
-const handleIntersect = ([entry]: IntersectionObserverEntry[]) => {
-  isScrolled.value = !entry.isIntersecting;
-};
 
 const scrollToTop = () => {
   window.scrollTo({ behavior: "smooth", top: 0 });
   trackEvent("Scroll to Top", "Clicked", "Scroll to Top Button");
 };
 
+const docStart = ref<HTMLElement | null>(null);
+const footerGround = ref<HTMLElement | null>(null);
+
 onMounted(() => {
-  observer.value = new IntersectionObserver(handleIntersect, {
-    rootMargin: `${showAtPosition}px 0px 0px 0px`,
-  });
-
-  const body = document.querySelector("#docStart");
-
-  const footerElement = document.querySelector(".c-footer__ground");
-
-  if (footerElement) {
-    observer.value.observe(footerElement);
-  }
-
-  if (body) {
-    observer.value.observe(body);
-  }
+  docStart.value = document.querySelector<HTMLElement>("#docStart");
+  footerGround.value = document.querySelector<HTMLElement>(".c-footer__ground");
 });
 
-onBeforeUnmount(() => {
-  observer.value?.disconnect();
-});
+useIntersectionObserver(
+  [docStart, footerGround],
+  ([entry]) => { isScrolled.value = !entry.isIntersecting; },
+  { rootMargin: `${showAtPosition}px 0px 0px 0px` },
+);
 </script>
 
 <style lang="scss">
-@use "@styles/components/scroll-to-top.scss";
+@use "@styles/components/scroll-to-top";
 </style>

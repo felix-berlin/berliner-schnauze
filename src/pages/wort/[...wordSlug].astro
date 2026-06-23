@@ -2,38 +2,39 @@
 // Styles
 import '@styles/objects/_word.scss';
 import '@styles/components/_single-word.scss';
+import '@styles/components/_section-card.scss';
 import '@styles/plugins/astro-breadcrumbs.scss';
 
 // Types
 import type { GetStaticPaths, InferGetStaticParamsType, InferGetStaticPropsType } from 'astro';
 
-import AudioPlayerList from '@components/AudioPlayerList.vue';
-import BadgeTag from '@components/BadgeTag.vue';
 import ImageGallery from '@components/ImageGallery.astro';
 import RandomWordButton from '@components/RandomWordButton.vue';
 import RelatedWords from '@components/RelatedWords.vue';
-import ToolTip from '@components/ToolTip.vue';
-import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
-// import WordExamples from "@components/word/WordExamples.vue";
 import WordExamples from '@components/word/WordExamples.astro';
-import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
+import WordAlphabetNav from '@components/word/WordAlphabetNav.astro';
+import WordAnagrams from '@components/word/WordAnagrams.astro';
+import WordHero from '@components/word/WordHero.astro';
+import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
+import WordSectionGrammatik from '@components/word/WordSectionGrammatik.astro';
+import WordSectionLinguistik from '@components/word/WordSectionLinguistik.astro';
+import WordSectionOrthographie from '@components/word/WordSectionOrthographie.astro';
+import WordSectionPhonologie from '@components/word/WordSectionPhonologie.astro';
+import BookRecommendations from '@components/word/BookRecommendations.astro';
+import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
-// Imports
 import { fetchAllWords } from '@services/api.ts';
-import { canonicalUrl, formattedDate, routeToWord, seoData } from '@utils/helpers.ts';
+import { formattedDate, routeToWord, seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
-  capitalizeFirstLetter,
-  coloredConsonantsAndVowels,
-  countLetters,
-  createWikimediaFileList,
+  alphabeticNeighbors,
+  findAnagrams,
   getWordType,
   similarSoundingWords,
   similarWords,
   translateNlpTags,
 } from '@utils/wordHelper.ts';
+import type { WordRef } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
-import german from 'hyphenation.de';
-import Hypher from 'hypher';
 import ChevronRight from '~icons/lucide/chevron-right';
 import ExternalLink from '~icons/lucide/external-link';
 
@@ -41,15 +42,32 @@ import type { BerlinerWord } from '@/gql/entity-types';
 
 export const getStaticPaths = (async () => {
   const allWords = await fetchAllWords();
+  const wordRefs: WordRef[] = allWords.map(({ node }) => ({
+    id: node.id,
+    slug: node.slug,
+    wordProperties: { berlinerisch: node.wordProperties?.berlinerisch },
+  }));
 
-  return allWords.map(({ node }) => {
+  return allWords.map(({ node }, i) => {
+    const wordRef = wordRefs[i]!;
+    const berlinerisch = node.wordProperties?.berlinerisch ?? '';
     return {
       params: {
         wordSlug: node.slug ?? undefined,
       },
       props: {
-        allWords: allWords.map((word) => word.node),
+        alphabeticNeighborsResult: alphabeticNeighbors(wordRefs, wordRef),
+        anagramsResult: findAnagrams(berlinerisch, wordRefs),
+        similarSpellingResult: similarWords(wordRefs, wordRef)
+          .filter((w) => w.isSimilar >= 0.85)
+          .sort((a, b) => b.isSimilar - a.isSimilar)
+          .slice(0, 5)
+          .map((w) => w.word),
+        soundingWordsResult: similarSoundingWords(wordRefs, wordRef)
+          .filter((r) => r.isSimilar)
+          .map((r) => r.word),
         word: node,
+        wordRefs,
       },
     };
   });
@@ -59,7 +77,8 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { wordSlug } = Astro.params as Params;
-const { allWords, word } = Astro.props;
+const { word, wordRefs, alphabeticNeighborsResult, anagramsResult, soundingWordsResult, similarSpellingResult } =
+  Astro.props;
 
 const wordProps: BerlinerWord['wordProperties'] = word.wordProperties;
 
@@ -97,9 +116,17 @@ if (wordProps?.images && wordProps?.images?.nodes.length > 1) {
     '(max-width: 70rem) 503px, (max-width: 64rem) 435px, (max-width: 48rem) 307px, (max-width: 35.5rem) 435px, (max-width: 27.2rem) 307px';
 }
 
-const hypher = new Hypher(german);
-
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
+
+const hasImages = Boolean(wordProps?.images && wordProps.images.nodes.length > 0);
+const hasAnagrams = anagramsResult.length > 0;
+const berlinerisch = wordProps?.berlinerisch ?? '';
+const hasOrthographie = berlinerisch.length > 0;
+const hasLinguistik = berlinerisch.length > 0;
+const hasPhonologie = soundingWordsResult.length > 0 || similarSpellingResult.length > 0;
+const hasNeighbors = alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
+const wortartLabel: string | undefined =
+  wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
 
 const firstImage = wordProps?.images?.nodes?.[0];
 const firstAudio = wordProps?.berlinerischAudio?.[0];
@@ -205,281 +232,193 @@ const schemaJson = () => {
   <Fragment slot='head'>
     <script set:html={schemaJson()} type='application/ld+json' />
   </Fragment>
-  <Breadcrumbs indexText='Start' linkTextFormat='capitalized' truncated={true}>
-    <ChevronRight height='20' slot='separator' width='20' />
-  </Breadcrumbs>
 
-  <IsWordOfTheDay
-    client:only='vue'
-    iconSize={50}
-    tooltipPlacement='top'
-    word={wordProps?.berlinerisch ?? null}
-    wordId={word.berlinerWordId}
-  />
-  <article class='c-single-word'>
-    <header class='c-single-word__header'>
-      <h1 class='c-single-word__word'>
-        {wordProps?.berlinerisch}
+  <nav class='c-page-topbar' aria-label='Brotkrümelpfad'>
+    <Breadcrumbs indexText='Start' linkTextFormat='capitalized' truncated={true}>
+      <ChevronRight height='20' slot='separator' width='20' />
+    </Breadcrumbs>
+  </nav>
+
+  <article class='c-word-page'>
+    <WordSidebar
+      hasAnagrams={hasAnagrams}
+      hasLinguistik={hasLinguistik}
+      hasNeighbors={hasNeighbors}
+      hasOrthographie={hasOrthographie}
+      hasPhonologie={hasPhonologie}
+      wordProps={wordProps}
+      wordTags={wordTags}
+    />
+
+    <div class:list={['c-word-main', hasImages && 'c-word-main--with-gallery']}>
+      <WordHero word={word} wordProps={wordProps} wortartLabel={wortartLabel} />
+
+      <div class='c-word-main__content'>
+        <WordSectionEtymologie wordProps={wordProps} />
 
         {
-          wordProps?.article && (
-            <span class='c-single-word__word-article'>, {wordProps.article}</span>
+          wordProps && (wordProps.examples?.length ?? 0) > 0 && (
+            <section class='c-section-card' id='beispiele' aria-labelledby='heading-beispiele'>
+              <div class='c-section-card__header'>
+                <span class='c-section-card__num'>02</span>
+                <h2 class='c-section-card__title' id='heading-beispiele'>Beispiele</h2>
+              </div>
+              <div class='c-section-card__body'>
+                <WordExamples examples={wordProps.examples} rootBemClass='c-single-word' />
+              </div>
+            </section>
           )
         }
-      </h1>
-      {
-        word.wordProperties?.berlinerischAudio && (
-          <AudioPlayerList
-            audio={word.wordProperties?.berlinerischAudio}
-            client:only='vue'
-            isType='berlinerisch'
-          />
-        )
-      }
 
-      {
-        wordProps?.berolinismus && (
-          <ToolTip client:only='vue'>
-            <BadgeTag> Berolinismus </BadgeTag>
-            <Fragment slot='content'>
-              {word.wordProperties?.berlinerisch} gehört zu den Berlinismen.
-              <br />
-              <br />
-              <strong>Berolinismus</strong>
-              sind humorvolle Spitznamen und Eigenheiten, die bestimmte Orte und Gebäude in Berlin
-              charakterisieren und das lokale Flair der Stadt prägen.
-            </Fragment>
-          </ToolTip>
-        )
-      }
-      <WordOptionDropdown
-        berlinerisch={word.wordProperties?.berlinerisch ?? null}
-        client:only='vue'
-        slug={word.slug}
-      />
-    </header>
-    <main class='c-single-word__main'>
-      {wordProps?.infoText && <section set:html={wordProps?.infoText} />}
-      <section>
-        <h2>Etymologie</h2>
+        <WordSectionOrthographie
+          allWords={wordRefs}
+          word={berlinerisch}
+        />
+
+        <WordSectionLinguistik word={berlinerisch} />
+
+        <WordSectionGrammatik wordTags={wordTags} />
+
+        <WordSectionPhonologie soundingWords={soundingWordsResult} similarSpelling={similarSpellingResult} />
+
+        <WordAnagrams anagrams={anagramsResult} />
 
         {
-          wordProps?.alternativeWords && (
-            <div class='c-single-word__alternative-words-wrapper'>
-              <h3>Selbe Bedeutung wie:</h3>
-              <p class='c-single-word__alternative-word'>{alternativeWords}</p>
-            </div>
+          (alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0) && (
+            <section class='c-section-card' id='navigation' aria-labelledby='heading-navigation'>
+              <div class='c-section-card__header'>
+                <span class='c-section-card__num'>07</span>
+                <h2 class='c-section-card__title' id='heading-navigation'>Alphabetische Nachbarn</h2>
+              </div>
+              <div class='c-section-card__body'>
+                <WordAlphabetNav neighbors={alphabeticNeighborsResult} />
+              </div>
+            </section>
           )
         }
 
         {
-          wordProps?.translations && (
-            <div class='c-single-word__translation-wrapper'>
-              <h3 class='c-single-word__sub-headline'>Bedeutung:</h3>
-
-              <ul class='c-single-word__translation'>
-                {wordProps?.translations?.map((translation) => {
-                  return (
-                    <li class='c-single-word__translation-item'>{translation?.translation}</li>
-                  );
-                })}
-              </ul>
-            </div>
+          wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
+            <section class='c-section-card' id='verwandte-worte' aria-labelledby='heading-verwandte'>
+              <div class='c-section-card__body'>
+                <h2 class='c-section-card__title' id='heading-verwandte'>Verwandte Worte</h2>
+                <ul class='c-single-word__related-words-list'>
+                  {wordProps.relatedWords.nodes
+                    .filter((w) => w?.wordProperties?.berlinerisch !== wordProps?.berlinerisch)
+                    .map((w): BerlinerWord[] => (
+                      <li class='c-single-word__related-word'>
+                        <a
+                          class='c-single-word__related-word-link'
+                          href={routeToWord(w?.slug ?? undefined)}
+                        >
+                          {w?.wordProperties?.berlinerisch}
+                        </a>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            </section>
           )
         }
-      </section>
+
+        {
+          !hasImages && wordProps?.learnMore && (
+            <a
+              class='c-single-word__learn-more-link'
+              href={wordProps.learnMore}
+              rel='noopener noreferrer'
+              target='_blank'
+              title='mehr zu diesem Wort auf Wikipedia'
+            >
+              Erfahre mehr über dieses Wort
+              <span class='c-single-word__learn-more-link-icon'>
+                <ExternalLink height='10' width='10' />
+              </span>
+            </a>
+          )
+        }
+
+        <BookRecommendations />
+      </div>
 
       {
-        wordProps?.examples && (
-          <section class='c-single-word__examples-wrapper'>
-            <h2 class='c-single-word__sub-headline'>Beispiele:</h2>
-            <WordExamples examples={wordProps.examples} rootBemClass='c-single-word' />
-          </section>
+        hasImages && (
+          <aside class='c-word-gallery-col' aria-label='Bildergalerie'>
+            <p class='c-word-gallery-col__label'>Bilder</p>
+            <ImageGallery
+              images={wordProps?.images}
+              lightboxSizes={lightboxSizes}
+              lightboxWidths={lightboxWidths}
+              priority={true}
+              sizes={gallerySizes}
+              widths={galleryWidths}
+            />
+            {wordProps?.learnMore && (
+              <a
+                class='c-single-word__learn-more-link'
+                href={wordProps.learnMore}
+                rel='noopener noreferrer'
+                target='_blank'
+                title='mehr zu diesem Wort auf Wikipedia'
+              >
+                Erfahre mehr über dieses Wort
+                <span class='c-single-word__learn-more-link-icon'>
+                  <ExternalLink height='10' width='10' />
+                </span>
+              </a>
+            )}
+          </aside>
         )
       }
-
-      <section>
-        <h2>Orthographie</h2>
-
-        <div class='c-single-word__syllables'>
-          <h3>Silben und Silbentrennung</h3>
-
-          <h3>Silbentrennung:</h3>
-          <p
-            set:html={hypher
-              .hyphenate(word.wordProperties?.berlinerisch)
-              .join(" <span class='is-divider'>|</span> ")}
-          />
-
-          <h3>Anzahl der Silben:</h3>
-          <p>{hypher.hyphenate(word.wordProperties?.berlinerisch).length}</p>
-        </div>
-      </section>
-
-      <section>
-        <h2>Quantitative Linguistik</h2>
-
-        <div class='c-single-word__consonants-vowels'>
-          <h3>Konsonanten und Vokale</h3>
-          <p
-            class='c-single-word__consonants-vowels-word'
-            set:html={coloredConsonantsAndVowels(word.wordProperties?.berlinerisch ?? '')}
-          />
-
-          <p>
-            enthält {countLetters(word.wordProperties?.berlinerisch ?? '').vowels}
-            <span class='is-vowel'>Vokale</span> und {
-              countLetters(word.wordProperties?.berlinerisch ?? '').consonants
-            }
-            <span class='is-consonant'>Konsonanten</span>
-          </p>
-        </div>
-
-        <div>
-          <h3>Länge nach Buchstaben</h3>
-          <p>
-            "{word.wordProperties?.berlinerisch}" umfasst
-            <strong>{word.wordProperties?.berlinerisch?.length}</strong> Buchstaben
-          </p>
-        </div>
-      </section>
-
-      {
-        wordTags.length > 0 && (
-          <section>
-            <h2>Grammatik</h2>
-            <h3>Wortart {Object.keys(wordTags[0]).length > 1 ? 'pro Wort' : ''}</h3>
-            {Object.keys(wordTags[0]).map((key) => {
-              const isNomenPresent = wordTags[0][key].includes('Nomen');
-              return (
-                <div>
-                  <h4>{isNomenPresent ? capitalizeFirstLetter(key) : key}</h4>
-                  {wordTags[0][key].length === 1 ? (
-                    <p>{wordTags[0][key][0]}</p>
-                  ) : (
-                    <ul>
-                      {wordTags[0][key].map((tag) => (
-                        <li>{tag}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              );
-            })}
-          </section>
-        )
-      }
-
-      <!-- {
-        word?.berlinerischWordTypes && word?.berlinerischWordTypes.nodes.length > 0 && (
-          <div class="c-single-word__word-type-wrapper">
-            <h2 class="c-single-word__sub-headline">Wortart:</h2>
-            <p class="c-single-word__word-type">{word?.berlinerischWordTypes.nodes[0].name}</p>
-          </div>
-        )
-      } -->
-
-      {
-        similarSoundingWords(allWords, word).find((word) => word.isSimilar) && (
-          <section>
-            <h2>Phonologie</h2>
-            <h3>Ähnlich klingende Wörter</h3>
-            {similarSoundingWords(allWords, word).some((result) => result.isSimilar) ? (
-              <ul>
-                {similarSoundingWords(allWords, word)
-                  .filter((result) => result.isSimilar)
-                  .map((result) => (
-                    <li>
-                      <a href={routeToWord(result.word?.slug ?? undefined)}>
-                        {result.word?.wordProperties?.berlinerisch}
-                      </a>
-                    </li>
-                  ))}
-              </ul>
-            ) : null}
-          </section>
-        )
-      }
-
-      {
-        wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
-          <div class='c-single-word__related-words-wrapper'>
-            <h3>Verwandte Worte:</h3>
-            <ul class='c-single-word__related-words-list'>
-              {wordProps.relatedWords.nodes
-                .filter((word) => word?.wordProperties?.berlinerisch !== wordProps?.berlinerisch)
-                .map((word): BerlinerWord[] => {
-                  return (
-                    <li class='c-single-word__related-word'>
-                      <a
-                        class='c-single-word__related-word-link'
-                        href={routeToWord(word?.slug ?? undefined)}
-                      >
-                        {word?.wordProperties?.berlinerisch}
-                      </a>
-                    </li>
-                  );
-                })}
-            </ul>
-          </div>
-        )
-      }
-    </main>
-
-    {
-      wordProps?.images && (
-        <section class='c-single-word__gallery-wrap'>
-          <h2>Bilder:</h2>
-          <ImageGallery
-            fallbackAlt={(() => {
-              const word = wordProps?.berlinerisch ?? '';
-              const translation = wordProps?.translations?.[0]?.translation;
-              return translation ? `${word} – ${translation}` : word;
-            })()}
-            images={wordProps?.images}
-            lightboxSizes={lightboxSizes}
-            lightboxWidths={lightboxWidths}
-            loading='eager'
-            sizes={gallerySizes}
-            widths={galleryWidths}
-          />
-        </section>
-      )
-    }
-
-    {
-      wordProps?.learnMore && (
-        <a
-          class='c-single-word__learn-more-link'
-          href={wordProps?.learnMore}
-          target='_blank'
-          title='mehr zu diesen Wort auf Wikipedia'
-        >
-          Erfahre mehr über dieses Wort
-          <span class='c-single-word__learn-more-link-icon'>
-            <ExternalLink height='10' width='10' />
-          </span>
-        </a>
-      )
-    }
-
-    <footer class='c-single-word__footer'>
-      {
-        word?.dateGmt && (
-          <p class='c-single-word__created'>Wort erstellt am: {formattedDate(word.dateGmt)}</p>
-        )
-      }
-      {
-        word?.modifiedGmt && (
-          <p class='c-single-word__modified'>Bearbeitet am: {formattedDate(word.modifiedGmt)}</p>
-        )
-      }
-    </footer>
+    </div>
   </article>
 
-  <RelatedWords words={allWords}>
+  <footer class='c-single-word__footer'>
+    {
+      word?.dateGmt && (
+        <p class='c-single-word__created'>
+          Wort erstellt am: <time datetime={word.dateGmt}>{formattedDate(word.dateGmt)}</time>
+        </p>
+      )
+    }
+    {
+      word?.modifiedGmt && (
+        <p class='c-single-word__modified'>
+          Bearbeitet am: <time datetime={word.modifiedGmt}>{formattedDate(word.modifiedGmt)}</time>
+        </p>
+      )
+    }
+  </footer>
+
+  <RelatedWords words={wordRefs}>
     <li>
-      <RandomWordButton class:list='c-related-words__word is-random' words={allWords} />
+      <RandomWordButton class:list='c-related-words__word is-random' words={wordRefs} />
     </li>
   </RelatedWords>
 </Layout>
+
+<script>
+  // Sync --site-header-height so sticky topbar clears the main nav.
+  // Guard against height=0 that fires during View Transition animations.
+  const siteHeader = document.querySelector<HTMLElement>('.c-header');
+  if (siteHeader) {
+    const syncHeaderHeight = () => {
+      const h = Math.round(siteHeader.getBoundingClientRect().height);
+      if (h > 0) {
+        document.documentElement.style.setProperty('--site-header-height', h + 'px');
+      }
+    };
+    new ResizeObserver(syncHeaderHeight).observe(siteHeader);
+  }
+
+  // Re-sync after every View Transition navigation in case the variable was zeroed out.
+  document.addEventListener('astro:page-load', () => {
+    const header = document.querySelector<HTMLElement>('.c-header');
+    if (header) {
+      const h = Math.round(header.getBoundingClientRect().height);
+      if (h > 0) {
+        document.documentElement.style.setProperty('--site-header-height', h + 'px');
+      }
+    }
+  });
+</script>

@@ -1,21 +1,21 @@
 ---
-import type { GetImageResult, ImageOutputFormat } from "astro";
+import type { GetImageResult, ImageOutputFormat } from 'astro';
 
-import "photoswipe/style.css";
-import { getImage, Picture } from "astro:assets";
+import 'photoswipe/style.css';
+import { getImage, Picture } from 'astro:assets';
 
-import type { WordProperties } from "@/gql/entity-types";
+import type { WordProperties } from '@/gql/entity-types';
 
-type ImageNode = NonNullable<NonNullable<WordProperties["images"]>["nodes"]>[number];
+type ImageNode = NonNullable<NonNullable<WordProperties['images']>['nodes']>[number];
 
 type ImageGalleryProps = {
   fallbackAlt?: string;
   formats?: string[];
   id?: string;
-  images: WordProperties["images"];
+  images: WordProperties['images'];
   lightboxSizes?: string;
   lightboxWidths?: number[];
-  loading?: "eager" | "lazy";
+  priority?: boolean;
   sizes: string;
   widths: number[];
 };
@@ -27,7 +27,7 @@ const {
   images,
   lightboxSizes,
   lightboxWidths,
-  loading = "lazy",
+  priority = false,
   sizes,
   widths,
 } = Astro.props as ImageGalleryProps;
@@ -60,13 +60,13 @@ const lightboxImageList = await Promise.all(
 {
   images && images?.nodes && (
     <image-gallery data-formats={formats} data-id={id}>
-      <div class="c-image-gallery" id={id}>
+      <div class='c-image-gallery' id={id}>
         {imageList?.map((image, index) => {
           return (
-            <figure class="c-image-gallery__item">
+            <figure class='c-image-gallery__item'>
               <a
-                aria-label="Bild in Originalgröße öffnen"
-                class="c-image-gallery__link"
+                aria-label='Bild in Originalgröße öffnen'
+                class='c-image-gallery__link'
                 data-pswp-avif-srcset={lightboxImageList[index].avif.srcSet.attribute}
                 data-pswp-height={lightboxImageList[index].webp.attributes.height}
                 data-pswp-sizes={lightboxImageList[index].webp.attributes.sizes}
@@ -74,8 +74,8 @@ const lightboxImageList = await Promise.all(
                 data-pswp-webp-srcset={lightboxImageList[index].webp.srcSet.attribute}
                 data-pswp-width={lightboxImageList[index].webp.attributes.width}
                 href={lightboxImageList[index].webp.src}
-                rel="noreferrer"
-                target="_blank"
+                rel='noreferrer'
+                target='_blank'
               >
                 <Picture
                   alt={image.altText || (imageList.length > 1 ? `${fallbackAlt} (Bild ${index + 1})` : fallbackAlt)}
@@ -83,7 +83,7 @@ const lightboxImageList = await Promise.all(
                   fallbackFormat={"webp" as ImageOutputFormat}
                   formats={formats as ImageOutputFormat[]}
                   height={image.mediaDetails?.height ?? 0}
-                  loading={loading}
+                  priority={priority}
                   sizes={`${sizes}, ${image.mediaDetails?.width}px`}
                   src={image.sourceUrl!}
                   width={image.mediaDetails?.width ?? 0}
@@ -91,9 +91,9 @@ const lightboxImageList = await Promise.all(
                 />
               </a>
               {(image?.caption || image?.description) && (
-                <figcaption class="c-image-gallery__caption">
+                <figcaption class='c-image-gallery__caption'>
                   <p set:html={image.caption} />
-                  <i class="c-image-gallery__description">
+                  <i class='c-image-gallery__description'>
                     <Fragment set:html={image.description} />
                   </i>
                 </figcaption>
@@ -106,9 +106,9 @@ const lightboxImageList = await Promise.all(
   )
 }
 <script>
-  import PhotoSwipeLightbox from "photoswipe/lightbox";
-  import type { Content as PhotoSwipeContent } from "photoswipe/lightbox";
-  import { trackEvent } from "@utils/analytics";
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import type { Content as PhotoSwipeContent } from 'photoswipe/lightbox';
+  import { trackEvent } from '@utils/analytics';
 
   interface Content extends PhotoSwipeContent {
     pictureElement?: HTMLPictureElement;
@@ -124,13 +124,13 @@ const lightboxImageList = await Promise.all(
     connectedCallback() {
       if (!this.lightbox) {
         this.lightbox = new PhotoSwipeLightbox({
-          children: ".c-image-gallery__link",
+          children: '.c-image-gallery__link',
           gallery: `#${this.dataset.id}`,
-          pswpModule: () => import("photoswipe"),
+          pswpModule: () => import('photoswipe'),
         });
 
         // Parse data-pswp attributes
-        this.lightbox.addFilter("itemData", (itemData, index) => {
+        this.lightbox.addFilter('itemData', (itemData, index) => {
           const webpSrcSet = itemData.element?.dataset.pswpWebpSrcset;
           const avifSrcSet = itemData.element?.dataset.pswpAvifSrcset;
           const sizes = itemData.element?.dataset.pswpSizes;
@@ -144,18 +144,18 @@ const lightboxImageList = await Promise.all(
         });
 
         // use <picture> instead of <img>
-        this.lightbox.on("contentLoad", (e) => {
+        this.lightbox.on('contentLoad', (e) => {
           const { content, isLazy } = e;
 
           if (content.data.webpSrcSet || content.data.avifSrcSet) {
             // prevent to stop the default behavior
             e.preventDefault();
 
-            const formats = this.dataset.formats?.split(",") || [];
+            const formats = this.dataset.formats?.split(',') || [];
 
             content.pictureElement = this.createPictureElement(content, formats);
 
-            content.state = "loading";
+            content.state = 'loading';
             if (content.element && content.element instanceof HTMLImageElement) {
               if (content.element?.complete) {
                 content.onLoaded();
@@ -174,7 +174,7 @@ const lightboxImageList = await Promise.all(
 
         // by default PhotoSwipe appends <img>,
         // but we want to append <picture>
-        this.lightbox.on("contentAppend", (e) => {
+        this.lightbox.on('contentAppend', (e) => {
           const { content } = e;
           if (content.pictureElement && !content.pictureElement.parentNode) {
             e.preventDefault();
@@ -185,7 +185,7 @@ const lightboxImageList = await Promise.all(
         // for next/prev navigation with <picture>
         // by default PhotoSwipe removes <img>,
         // but we want to remove <picture>
-        this.lightbox.on("contentRemove", (e) => {
+        this.lightbox.on('contentRemove', (e) => {
           const { content } = e;
           if (content.pictureElement && content.pictureElement.parentNode) {
             e.preventDefault();
@@ -193,12 +193,12 @@ const lightboxImageList = await Promise.all(
           }
         });
 
-        this.lightbox.on("change", () => {
-          trackEvent("Lightbox", "Opened", "Image Gallery");
+        this.lightbox.on('change', () => {
+          trackEvent('Lightbox', 'Opened', 'Image Gallery');
         });
 
-        this.lightbox.on("afterInit", () => {
-          trackEvent("Lightbox", "Slide switched", "Image Gallery");
+        this.lightbox.on('afterInit', () => {
+          trackEvent('Lightbox', 'Slide switched', 'Image Gallery');
         });
       }
 
@@ -219,28 +219,28 @@ const lightboxImageList = await Promise.all(
      * @param formats
      */
     createPictureElement(content: Content, formats: string[]) {
-      content.pictureElement = document.createElement("picture");
+      content.pictureElement = document.createElement('picture');
 
       formats.forEach((format) => {
         if (content.data[`${format}SrcSet`]) {
-          const source = document.createElement("source");
+          const source = document.createElement('source');
           source.srcset = content.data[`${format}SrcSet`];
           source.type = `image/${format}`;
-          source.sizes = content.data.sizes || "";
+          source.sizes = content.data.sizes || '';
           content.pictureElement?.appendChild(source);
         }
       });
 
-      content.element = document.createElement("img");
+      content.element = document.createElement('img');
 
       if (content.element instanceof HTMLImageElement) {
-        content.element.src = content.data.src || "";
-        content.element.srcset = content.data.srcSet || "";
-        content.element.setAttribute("alt", "");
-        content.element.decoding = "async";
-        content.element.loading = "lazy";
-        content.element.sizes = content.data.sizes || "";
-        content.element.className = "pswp__img";
+        content.element.src = content.data.src || '';
+        content.element.srcset = content.data.srcSet || '';
+        content.element.setAttribute('alt', '');
+        content.element.decoding = 'async';
+        content.element.loading = 'lazy';
+        content.element.sizes = content.data.sizes || '';
+        content.element.className = 'pswp__img';
       }
 
       content.pictureElement.appendChild(content.element);
@@ -249,5 +249,5 @@ const lightboxImageList = await Promise.all(
     }
   }
 
-  customElements.define("image-gallery", ImageGallery);
+  customElements.define('image-gallery', ImageGallery);
 </script>

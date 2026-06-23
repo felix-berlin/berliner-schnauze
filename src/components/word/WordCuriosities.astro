@@ -1,0 +1,87 @@
+---
+import { wordCuriosities } from '@utils/wordHelper';
+import '@styles/components/_word-curiosities.scss';
+interface Props {
+  word: string;
+}
+
+const { word } = Astro.props;
+const facts = word.length >= 5 ? wordCuriosities(word) : null;
+---
+
+{
+  facts && (
+    <div class='c-word-curiosities'>
+      <h3 class='c-word-curiosities__heading'>Wortkuriositäten</h3>
+
+      <div class='c-word-curiosities__stats'>
+        <div class='c-word-curiosities__stat'>
+          <span class='c-word-curiosities__stat-value'>{facts.totalLetterCount}</span>
+          <span class='c-word-curiosities__stat-label'>Buchstaben</span>
+        </div>
+        <div class='c-word-curiosities__stat'>
+          <span class='c-word-curiosities__stat-value'>{facts.uniqueLetterCount}</span>
+          <span class='c-word-curiosities__stat-label'>Einzigartig</span>
+        </div>
+        <div class='c-word-curiosities__stat'>
+          <span class='c-word-curiosities__stat-value c-word-curiosities__stat-value--vowels'>
+            {facts.distinctVowelCount}
+          </span>
+          <span class='c-word-curiosities__stat-label'>Vokalarten</span>
+        </div>
+      </div>
+
+      <ul class='c-word-curiosities__list'>
+        <li
+          class:list={[
+            'c-word-curiosities__fact',
+            facts.isPalindrome
+              ? 'c-word-curiosities__fact--positive'
+              : 'c-word-curiosities__fact--negative',
+          ]}
+        >
+          {facts.isPalindrome ? '✓ Palindrom – vorwärts wie rückwärts lesbar' : '✗ Kein Palindrom'}
+        </li>
+
+        {facts.isIsogram && (
+          <li class='c-word-curiosities__fact c-word-curiosities__fact--positive'>
+            ✓ Isogramm – kein Buchstabe wiederholt sich
+          </li>
+        )}
+
+        {facts.isAlternating && (
+          <li class='c-word-curiosities__fact c-word-curiosities__fact--positive'>
+            ✓ Vokal und Konsonant wechseln sich perfekt ab
+          </li>
+        )}
+
+        {facts.hasAllVowels && (
+          <li class='c-word-curiosities__fact c-word-curiosities__fact--positive'>
+            ✓ Enthält alle 8 deutschen Vokale (a, e, i, o, u, ä, ö, ü)
+          </li>
+        )}
+
+        {facts.doubleLetters.length > 0 && (
+          <li class='c-word-curiosities__fact'>
+            Doppelbuchstabe{facts.doubleLetters.length > 1 ? 'n' : ''}:{' '}
+            <strong>{facts.doubleLetters.map((l) => l + l).join(', ')}</strong>
+          </li>
+        )}
+
+        {facts.longestConsonantRun.length >= 3 && (
+          <li class='c-word-curiosities__fact'>
+            Längste Konsonantenfolge: <strong>„{facts.longestConsonantRun.chars}"</strong> (
+            {facts.longestConsonantRun.length} Buchstaben)
+          </li>
+        )}
+
+        {facts.longestVowelRun.length >= 2 && (
+          <li class='c-word-curiosities__fact'>
+            Längste Vokalkette: <strong>„{facts.longestVowelRun.chars}"</strong> (
+            {facts.longestVowelRun.length} Buchstaben)
+          </li>
+        )}
+      </ul>
+    </div>
+  )
+}

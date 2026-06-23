@@ -1,0 +1,67 @@
+---
+import { readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { WAKAPI_API_KEY } from 'astro:env/server';
+import { WAKAPI_HOST } from 'astro:env/client';
+
+interface CachedStats {
+  fetchedAt: number;
+  hours: number;
+  minutes: number;
+}
+
+const CACHE_FILE = join(process.cwd(), '.astro/wakapi-stats.json');
+const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour — stats don't need to be real-time
+
+function readCache(): CachedStats | null {
+  try {
+    const data = JSON.parse(readFileSync(CACHE_FILE, 'utf-8')) as CachedStats;
+    if (Date.now() - data.fetchedAt < CACHE_TTL_MS) return data;
+  } catch {
+    /* file missing or malformed — treat as cache miss */
+  }
+  return null;
+}
+
+function writeCache(stats: CachedStats) {
+  try {
+    writeFileSync(CACHE_FILE, JSON.stringify(stats));
+  } catch {
+    /* non-critical — next request will just fetch again */
+  }
+}
+
+let hours = 0;
+let minutes = 0;
+
+if (WAKAPI_API_KEY) {
+  const cached = readCache();
+
+  if (cached) {
+    hours = cached.hours;
+    minutes = cached.minutes;
+  } else {
+    try {
+      const res = await fetch(`${WAKAPI_HOST}/api/summary?interval=any&project=berliner-schnauze`, {
+        headers: {
+          Authorization: `Bearer ${Buffer.from(WAKAPI_API_KEY).toString('base64')}`,
+        },
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        const project = json.projects?.find((p: { key: string }) => p.key === 'berliner-schnauze');
+        const raw: number = project?.total ?? 0;
+        const totalSeconds = raw > 1e9 ? Math.floor(raw / 1e9) : raw;
+        hours = Math.floor(totalSeconds / 3600);
+        minutes = Math.floor((totalSeconds % 3600) / 60);
+        writeCache({ fetchedAt: Date.now(), hours, minutes });
+      }
+    } catch {
+      console.log('Wakapi stats could not be fetched.');
+    }
+  }
+}
+---
+
+{(hours > 0 || minutes > 0) && <p>{hours}+ Std. Coding-Zeit</p>}

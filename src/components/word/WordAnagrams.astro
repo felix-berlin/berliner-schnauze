@@ -1,0 +1,31 @@
+---
+import { routeToWord } from "@utils/helpers";
+import type { WordRef } from "@utils/wordHelper";
+
+interface Props {
+  anagrams: WordRef[];
+}
+
+const { anagrams } = Astro.props;
+---
+
+{
+  anagrams.length > 0 && (
+    <section class="c-section-card" id="anagramme">
+      <div class="c-section-card__header">
+        <span class="c-section-card__num">—</span>
+        <h2 class="c-section-card__title">Buchstabenspiele</h2>
+      </div>
+      <div class="c-section-card__body">
+        <h3>Anagramme</h3>
+        <ul class="c-single-word__related-words-list">
+          {anagrams.map((w) => (
+            <li>
+              <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

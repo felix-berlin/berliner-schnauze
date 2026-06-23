@@ -1,12 +1,13 @@
 ---
-import BearWalking from "@assets/images/bear-walking.png";
-import CarbonBadge from "@components/CarbonBadge.vue";
-import InstallApp from "@components/InstallApp.vue";
-import NavList from "@components/NavList.vue";
-import { Picture } from "astro:assets";
-import Download from "virtual:icons/lucide/download";
+import BearWalking from '@assets/images/bear-walking.png';
+import CarbonBadge from '@components/CarbonBadge.vue';
+import InstallApp from '@components/InstallApp.vue';
+import NavList from '@components/NavList.vue';
+import { Picture } from 'astro:assets';
+import Download from 'virtual:icons/lucide/download';
+import WakapiStats from '@components/WakapiStats.astro';
 
-import { funding, version } from "../../package.json";
+import { funding, version } from '../../package.json';
 
 // const randomWord = () => {
 //   // TODO: Implement random word
@@ -16,99 +17,100 @@ import { funding, version } from "../../package.json";
 //
 const socialMenu = [
   {
-    link: "https://github.com/felix-berlin/berliner-schnauze",
-    title: "Github",
+    link: 'https://github.com/felix-berlin/berliner-schnauze',
+    title: 'Github',
   },
   {
-    link: "https://mastodon.social/@berliner_schnauze",
-    rel: "me",
-    title: "Mastodon",
+    link: 'https://mastodon.social/@berliner_schnauze',
+    rel: 'me',
+    title: 'Mastodon',
   },
   {
-    link: "https://www.facebook.com/Berliner.Schnauze030",
-    title: "Facebook",
+    link: 'https://www.facebook.com/Berliner.Schnauze030',
+    title: 'Facebook',
   },
 ];
 const fundingMenu = [
   {
-    link: funding.find((f) => f.type === "GitHub Sponsors")?.url ?? '',
-    title: "GitHub Sponsors",
+    link: funding.find((f) => f.type === 'GitHub Sponsors')?.url ?? '',
+    title: 'GitHub Sponsors',
   },
   {
-    link: funding.find((f) => f.type === "Ko-fi")?.url ?? '',
-    title: "Ko-fi",
+    link: funding.find((f) => f.type === 'Ko-fi')?.url ?? '',
+    title: 'Ko-fi',
   },
   {
-    link: funding.find((f) => f.type === "PayPal")?.url ?? '',
-    title: "PayPal",
+    link: funding.find((f) => f.type === 'PayPal')?.url ?? '',
+    title: 'PayPal',
   },
 ];
 
 const navMenu1 = [
   {
-    link: "/wort-vorschlagen",
-    title: "Wort vorschlagen",
+    link: '/wort-vorschlagen',
+    title: 'Wort vorschlagen',
   },
   {
-    link: "/wort",
-    title: "Wort Index",
+    link: '/wort',
+    title: 'Wort Index',
   },
   {
-    link: "/settings/cache",
-    title: "Offline-Cache",
+    link: '/settings/cache',
+    title: 'Offline-Cache',
   },
   {
-    link: "https://github.com/felix-berlin/berliner-schnauze/releases",
-    title: "Changelog",
+    link: 'https://github.com/felix-berlin/berliner-schnauze/releases',
+    title: 'Changelog',
   },
   {
-    link: "https://github.com/felix-berlin/berliner-schnauze/issues/new",
-    title: "tech. Fehler melden",
+    link: 'https://github.com/felix-berlin/berliner-schnauze/issues/new',
+    title: 'tech. Fehler melden',
   },
 ];
 
 const navMenu2 = [
   {
-    link: "/impressum",
-    title: "Impressum",
+    link: '/impressum',
+    title: 'Impressum',
   },
   {
-    link: "/datenschutz",
-    title: "Datenschutz",
+    link: '/datenschutz',
+    title: 'Datenschutz',
   },
 ];
 ---
 
-<footer class="c-footer">
-  <div class="c-footer__farewell u-max-body-width">
-    <div class="c-footer__farewell-image-wrapper">
+<footer class='c-footer'>
+  <div class='c-footer__farewell u-max-body-width'>
+    <div class='c-footer__farewell-image-wrapper'>
       <Picture
-        alt="Ein Bär der durch die Stadt läuft"
-        class="c-footer__farewell-image"
-        formats={["avif", "webp"]}
-        layout="constrained"
+        alt='Ein Bär der durch die Stadt läuft'
+        class='c-footer__farewell-image'
+        formats={['avif', 'webp']}
+        layout='constrained'
         src={BearWalking}
       />
     </div>
-    <p class="c-footer__farewell-text">Knorke ditt du mich hier unten besuchst.</p>
+    <p class='c-footer__farewell-text'>Knorke ditt du mich hier unten besuchst.</p>
   </div>
 
-  <div class="c-footer__ground">
-    <div class="c-footer__wrapper u-max-body-width">
-      <div class="c-footer__ground-app-install">
+  <div class='c-footer__ground'>
+    <div class='c-footer__wrapper u-max-body-width'>
+      <div class='c-footer__ground-app-install'>
         <h2>Installiere die App</h2>
         <p>Mit der Berliner Schnauze App bleibst Du immer informiert, ob online oder offline.</p>
-        <InstallApp client:only="vue" cssClasses={"c-button--center-icon c-button"} showIcon={true}>
+        <InstallApp client:only='vue' cssClasses={'c-button--center-icon c-button'} showIcon={true}>
           <Download height={16} width={16} /> App installieren
-          <p slot="installed">Du nutzt bereits die App.</p>
+          <p slot='installed'>Du nutzt bereits die App.</p>
         </InstallApp>
       </div>
 
       <div>
         <h2>Seiten</h2>
         <NavList
-          classesNav={"c-footer__nav"}
-          classesUl={"c-footer__nav-list u-list-reset"}
+          ariaLabel='Seiten'
+          classesNav={'c-footer__nav'}
+          classesUl={'c-footer__nav-list u-list-reset'}
           items={navMenu1}
         />
       </div>
@@ -116,8 +118,9 @@ const navMenu2 = [
       <div>
         <h2>Projekt unterstützen</h2>
         <NavList
-          classesNav={"c-footer__nav"}
-          classesUl={"c-footer__nav-list u-list-reset"}
+          ariaLabel='Projekt unterstützen'
+          classesNav={'c-footer__nav'}
+          classesUl={'c-footer__nav-list u-list-reset'}
           items={fundingMenu}
         />
       </div>
@@ -125,8 +128,9 @@ const navMenu2 = [
       <div>
         <h2>Social Media</h2>
         <NavList
-          classesNav={"c-footer__nav"}
-          classesUl={"c-footer__nav-list u-list-reset"}
+          ariaLabel='Social Media'
+          classesNav={'c-footer__nav'}
+          classesUl={'c-footer__nav-list u-list-reset'}
           items={socialMenu}
         />
       </div>
@@ -134,21 +138,23 @@ const navMenu2 = [
       <div>
         <h2>Andere</h2>
         <NavList
-          classesNav={"c-footer__nav is-legal"}
-          classesUl={"c-footer__nav-list u-list-reset"}
+          ariaLabel='Andere'
+          classesNav={'c-footer__nav is-legal'}
+          classesUl={'c-footer__nav-list u-list-reset'}
           items={navMenu2}
         />
       </div>
     </div>
   </div>
 </footer>
-<div class="c-footer__end">
-  <div class="c-footer__end-content u-max-body-width">
-    <a href="https://github.com/felix-berlin/berliner-schnauze/releases"
+<div class='c-footer__end'>
+  <div class='c-footer__end-content u-max-body-width'>
+    <a href='https://github.com/felix-berlin/berliner-schnauze/releases'
       >Website Version: {version}</a
     >
-    <p>Ein Projekt von: <a href="https://webshaped.de">Webshaped / Felix Scholze</a></p>
+    <p>Ein Projekt von: <a href='https://webshaped.de'>Webshaped / Felix Scholze</a></p>
     <CarbonBadge />
     <p>Hergestellt mit🐻-Kräften in Berlin</p>
+    <WakapiStats />
   </div>
 </div>

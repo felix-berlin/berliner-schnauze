@@ -1,0 +1,73 @@
+---
+import '@styles/components/_word-hero.scss';
+import AudioPlayerList from '@components/AudioPlayerList.vue';
+import BadgeTag from '@components/BadgeTag.vue';
+import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
+import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
+import TooltipPopover from '@components/TooltipPopover.vue';
+import type { BerlinerWord } from '@/gql/entity-types';
+
+interface Props {
+  word: BerlinerWord;
+  wordProps: BerlinerWord['wordProperties'];
+  wortartLabel: string | undefined;
+}
+
+const { word, wordProps, wortartLabel } = Astro.props;
+---
+
+<header class='c-word-hero'>
+  <div class='c-word-hero__left'>
+    <h1 class='c-word-hero__title'>
+      <dfn>{wordProps?.berlinerisch}</dfn>
+      {
+        wordProps?.article && (
+          <span class='c-word-hero__word-article'>, {wordProps.article}</span>
+        )
+      }
+    </h1>
+    <div class='c-word-hero__badges'>
+      {
+        wordProps?.berolinismus && (
+          <TooltipPopover client:only='vue'>
+            <BadgeTag> Berolinismus </BadgeTag>
+            <Fragment slot='tooltip'>
+              {wordProps?.berlinerisch} gehört zu den Berlinismen.
+              <>
+                <br />
+                <br />
+              </>
+              <strong>Berolinismus</strong> sind humorvolle Spitznamen und Eigenheiten, die
+              bestimmte Orte und Gebäude in Berlin charakterisieren und das lokale Flair der
+              Stadt prägen.
+            </Fragment>
+          </TooltipPopover>
+        )
+      }
+      {wortartLabel && <span class='c-word-hero__wortart-badge'>{wortartLabel}</span>}
+      {
+        word.wordProperties?.berlinerischAudio && (
+          <AudioPlayerList
+            audio={word.wordProperties?.berlinerischAudio}
+            client:only='vue'
+            isType='berlinerisch'
+          />
+        )
+      }
+    </div>
+  </div>
+  <div class='c-word-hero__right'>
+    <IsWordOfTheDay
+      client:only='vue'
+      iconSize={50}
+      tooltipPlacement='top'
+      word={wordProps?.berlinerisch ?? null}
+      wordId={word.berlinerWordId}
+    />
+    <WordOptionDropdown
+      berlinerisch={word.wordProperties?.berlinerisch ?? null}
+      client:only='vue'
+      slug={word.slug}
+    />
+  </div>
+</header>

@@ -1,0 +1,27 @@
+---
+import { routeToWord } from "@utils/helpers";
+import type { WordRef } from "@utils/wordHelper";
+
+interface Props {
+  similar: WordRef[];
+}
+
+const { similar } = Astro.props;
+---
+
+{
+  similar.length > 0 && (
+    <div>
+      <h3>Ähnlich geschrieben</h3>
+      <ul class="c-single-word__related-words-list">
+        {similar.map((w) => (
+          <li>
+            <a href={routeToWord(w.slug ?? undefined)}>
+              {w.wordProperties?.berlinerisch}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}

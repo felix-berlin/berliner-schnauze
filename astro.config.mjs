@@ -2,12 +2,11 @@ import partytown from "@astrojs/partytown";
 import sitemap from "@astrojs/sitemap";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
-import sentry from "@sentry/astro";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
-import { defineConfig, envField } from "astro/config";
+import { defineConfig, envField, svgoOptimizer } from "astro/config";
 import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
@@ -39,7 +38,10 @@ const sassAliases = {
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   trailingSlash: "never",
-  prefetch: true,
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "viewport",
+  },
   build: {
     format: "file",
   },
@@ -67,6 +69,16 @@ export default defineConfig({
         optional: true,
       }),
       WP_AUTH_PASS: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      WAKAPI_HOST: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
+      WAKAPI_API_KEY: envField.string({
         context: "server",
         access: "secret",
         optional: true,
@@ -110,7 +122,7 @@ export default defineConfig({
         context: "server",
         access: "secret",
       }),
-      SENTRY_DNS: envField.string({
+      SENTRY_DSN: envField.string({
         context: "client",
         access: "public",
         optional: true,
@@ -185,20 +197,12 @@ export default defineConfig({
       viewTransition: {
         contentElement: "main",
       },
-    }), // sentry({
-    //   dsn: import.meta.env.SENTRY_DNS,
-    //   tracePropagationTargets: ["https://berliner-schnauze.wtf", /^\/api\//],
-    //   sourceMapsUploadOptions: {
-    //     project: import.meta.env.SENTRY_PROJECT,
-    //     authToken: import.meta.env.SENTRY_AUTH_TOKEN,
-    //   },
-    // }),
+    }),
     // partytown({
     //   config: {
     //     forward: ["_paq.push"],
     //   },
     // }),
-    // sentry(),
     // spotlightjs(),
     AstroPWA({
       $schema: "https://json.schemastore.org/web-manifest-combined.json",
@@ -250,7 +254,9 @@ export default defineConfig({
       workbox: {
         globDirectory: "dist",
         // navigateFallback: "/",
-        globPatterns: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
+        globPatterns: import.meta.env.DEV
+          ? []
+          : ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
         // Increase the file size limit to 15 MB to accommodate large images
         maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // 15 MB
         runtimeCaching: [
@@ -322,6 +328,24 @@ export default defineConfig({
     },
 
     plugins: [
+      // In dev mode, the browser fetches sw.js.map and workbox-*.js.map because
+      // vite-pwa generates source maps for the dev service worker. These requests
+      // fall through to Astro's router and match [legalPages].astro → 404 + WARN.
+      // Intercept them here before Astro sees them and return an empty source map.
+      {
+        name: "suppress-sw-sourcemap-404",
+        apply: "serve",
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (!req.url?.match(/\/(sw|workbox-[^/]+)\.js\.map(\?.*)?$/)) {
+              return next();
+            }
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end("{}");
+          });
+        },
+      },
       Icons({
         iconCustomizer(collection, icon, props) {
           // customize all icons in this collection

@@ -24,12 +24,37 @@
   }
 
   // Corner-Positioning
-  &--top-right     { top: 20px; right: 20px; }
-  &--top-left      { top: 20px; left: 20px; }
-  &--top-center    { top: 20px; left: 50%; translate: -50% 0; }
-  &--bottom-right  { bottom: 20px; right: 20px; }
-  &--bottom-left   { bottom: 20px; left: 20px; }
-  &--bottom-center { bottom: 20px; left: 50%; translate: -50% 0; }
+  &--top-right {
+    top: 20px;
+    right: 20px;
+  }
+
+  &--top-left {
+    top: 20px;
+    left: 20px;
+  }
+
+  &--top-center {
+    top: 20px;
+    left: 50%;
+    translate: -50% 0;
+  }
+
+  &--bottom-right {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  &--bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+
+  &--bottom-center {
+    bottom: 20px;
+    left: 50%;
+    translate: -50% 0;
+  }
 }
 
 // TransitionGroup-Animations — Leave-active braucht position: absolute
@@ -47,10 +72,12 @@
   .c-toast-notify-enter-active,
   .c-toast-notify-leave-active {
     transition: transform 0.3s ease, opacity 0.3s ease;
+    will-change: transform, opacity;
   }
 
   .c-toast-notify-move {
     transition: transform 0.3s ease;
+    will-change: transform;
   }
 
   // Richtungs-aware Enter/Leave via Container-Modifier

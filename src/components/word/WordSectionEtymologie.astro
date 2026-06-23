@@ -1,0 +1,55 @@
+---
+import type { BerlinerWord } from '@/gql/entity-types';
+
+interface Props {
+  wordProps: BerlinerWord['wordProperties'];
+}
+
+const { wordProps } = Astro.props;
+
+const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
+  return (
+    word?.alternativeWord +
+    (wordProps?.alternativeWords && index !== wordProps?.alternativeWords?.length - 1 ? ', ' : '')
+  );
+});
+
+const hasContent =
+  Boolean(wordProps?.infoText) ||
+  (wordProps?.alternativeWords?.length ?? 0) > 0 ||
+  (wordProps?.translations?.length ?? 0) > 0;
+---
+
+{hasContent && <section class='c-section-card' id='etymologie' aria-labelledby='heading-etymologie'>
+  <div class='c-section-card__header'>
+    <span class='c-section-card__num'>01</span>
+    <h2 class='c-section-card__title' id='heading-etymologie'>Etymologie</h2>
+  </div>
+  <div class='c-section-card__body'>
+    {
+      wordProps?.infoText && (
+        <div class='c-section-card__infotext' set:html={wordProps.infoText} />
+      )
+    }
+    {
+      (wordProps?.alternativeWords?.length || wordProps?.translations?.length) && (
+        <dl class='c-single-word__definitions'>
+          {wordProps?.alternativeWords && wordProps.alternativeWords.length > 0 && (
+            <>
+              <dt class='c-single-word__sub-headline'>Selbe Bedeutung wie</dt>
+              <dd class='c-single-word__alternative-word'>{alternativeWords}</dd>
+            </>
+          )}
+          {wordProps?.translations && wordProps.translations.length > 0 && (
+            <>
+              <dt class='c-single-word__sub-headline'>Bedeutung</dt>
+              {wordProps.translations.map((translation) => (
+                <dd class='c-single-word__translation-item'>{translation?.translation}</dd>
+              ))}
+            </>
+          )}
+        </dl>
+      )
+    }
+  </div>
+</section>}

@@ -1,9 +1,10 @@
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
+import { vTooltip } from "@/directives/tooltip";
 import { useStore } from "@nanostores/vue";
-import { $wordOfTheDay } from "@stores/index.ts";
+import { $wordOfTheDay } from "@stores/wordOfTheDay.ts";
 import { mount } from "@vue/test-utils";
 import Crown from "virtual:icons/lucide/crown";
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 
 vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(),
@@ -21,6 +22,15 @@ describe("IsWordOfTheDay.vue", () => {
       },
     };
     (useStore as any).mockReturnValue(mockStore);
+    HTMLElement.prototype.showPopover = vi.fn();
+    HTMLElement.prototype.hidePopover = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    document.querySelectorAll("[popover]").forEach((el) => el.remove());
+    delete (HTMLElement.prototype as any).showPopover;
+    delete (HTMLElement.prototype as any).hidePopover;
   });
 
   it("renders correctly when isWordOfTheDay is true", () => {
@@ -35,12 +45,17 @@ describe("IsWordOfTheDay.vue", () => {
         components: {
           Crown, // Register Crown component globally
         },
+        directives: {
+          tooltip: vTooltip,
+        },
       },
     });
 
     expect(wrapper.find(".c-word-of-the-day-crown").exists()).toBe(true);
     expect(wrapper.findComponent(Crown).exists()).toBe(true);
-    expect(wrapper.find(".c-word-of-the-day-crown").classes("v-popper--has-tooltip")).toBe(true);
+    // vTooltip creates a popover element in document.body
+    expect(document.body.querySelector("[popover='manual']")).not.toBeNull();
+    wrapper.unmount();
   });
 
   it("does not render when isWordOfTheDay is false", () => {
@@ -54,6 +69,7 @@ describe("IsWordOfTheDay.vue", () => {
     });
 
     expect(wrapper.find(".c-word-of-the-day-crown").exists()).toBe(false);
+    wrapper.unmount();
   });
 
   it("renders with correct tooltip content and placement", () => {
@@ -68,11 +84,16 @@ describe("IsWordOfTheDay.vue", () => {
         components: {
           Crown, // Register Crown component globally
         },
+        directives: {
+          tooltip: vTooltip,
+        },
       },
     });
 
-    const tooltip = wrapper.vm.$el.$_popper.options._rawValue;
-    expect(tooltip.content).toContain("TestWord, ist das heutige Wort des Tages");
-    expect(tooltip.placement).toContain("bottom");
+    const tooltip = document.body.querySelector("[popover='manual']");
+    expect(tooltip).not.toBeNull();
+    expect(tooltip?.textContent).toContain("TestWord, ist das heutige Wort des Tages");
+    expect(tooltip?.className).toContain("c-tooltip__panel--bottom");
+    wrapper.unmount();
   });
 });

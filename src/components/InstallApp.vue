@@ -18,6 +18,7 @@
 </template>
 
 <script setup lang="ts">
+import type { TooltipOptions } from "@/directives/tooltip";
 import { useStore } from "@nanostores/vue";
 import {
   $installPrompt,
@@ -32,7 +33,7 @@ export interface InstallAppProps {
   iconSize?: number;
   showIcon?: boolean;
   showText?: boolean;
-  tooltipProps?: object;
+  tooltipProps?: Partial<TooltipOptions>;
 }
 
 const {
