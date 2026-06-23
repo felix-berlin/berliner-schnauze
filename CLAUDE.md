@@ -35,10 +35,11 @@ pnpm gql:generate:watch      # Run in parallel with dev to regenerate types on s
 pnpm test:unit               # Run full test suite with coverage
 pnpm test:unit:watch         # Watch mode
 pnpm test:unit:ui            # Vitest UI for debugging
+pnpm test:ci                 # CI mode: coverage + JUnit reporter
 
 # Linting & type checking
 pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS)
-pnpm typechecking            # astro check + tsc + vue-tsc  (slow — run targeted, not after every edit)
+pnpm typechecking            # astro check + vue-tsc  (slow — run targeted, not after every edit; tsc can't resolve .vue imports)
 
 # Build
 pnpm build                   # Production build (Cloudflare Pages output) — no infisical, env vars must already be set
@@ -53,7 +54,7 @@ pnpm format                  # Format with oxfmt
 pnpm format:check            # Check formatting without writing
 
 # Cloudflare Pages local preview (run after build)
-pnpm server:pages            # Serve ./dist with Wrangler Pages
+pnpm server:preview          # Serve ./dist with Wrangler Pages
 
 # WordPress auth
 pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (exception: needs local .env file, not Infisical)
@@ -74,12 +75,12 @@ For Cloudflare Pages builds, env vars are configured separately in the CF Pages 
 **Data flow**: WordPress GraphQL API → Astro API routes (static JSON at build time) → Orama in-browser search → Vue components
 
 - **Astro** handles routing, SSG, and static pages (`src/pages/`)
-- **Vue 3** islands handle all interactive UI (`src/components/*.vue`)
+- **Vue 3** islands handle all interactive UI (`src/components/`) — flat files for standalone components, subdirs for feature groups (`games/`, `word/`, `toast/`, `header/`, `accordion/`, `filter/`, `modals/`, `word-search/`)
 - **Nanostores** manage client state (`src/stores/`) — import directly from individual store files (e.g. `@stores/darkMode.ts`, `@stores/modal.ts`). Do NOT import from `@stores/index` barrel unless the component specifically needs `wordList.ts` exports — the barrel's `computedAsync` side effect triggers `api/search/index.json` on every chunk that imports it.
 - **urql** handles GraphQL queries/mutations from Vue components
 - **Orama** provides full-text search with German stemming — index built at build time in `src/pages/api/search/index.json.ts`
 - **Composables** in `src/composable/` — Vue composables wrapping browser APIs (Cache Storage, Service Worker)
-- **Global Vue app setup** in `src/pages/_app.ts` — configures urql client, FloatingVue, and Nanostores devtools
+- **Global Vue app setup** in `src/pages/_app.ts` — configures urql client, registers `vTooltip` directive globally (from FloatingVue), and Nanostores devtools
 
 ## Import Aliases
 
@@ -100,7 +101,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 ## Key Conventions
 
-**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordList`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS. For async computed stores, use `computedAsync` from `@nanostores/async` (see `$oramaSearchResults` in `src/stores/wordList.ts`). Avoid deprecated `computed() + task()` pattern.
+**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordList`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS. For async computed stores, use `computedAsync` from `@nanostores/async` (see `$oramaSearchResults` in `src/stores/wordList.ts`). Avoid deprecated `computed() + task()` pattern. Key stores: `darkMode.ts`, `modal.ts`, `wordList.ts`, `toastNotify.ts`, `installApp.ts`, `wordOfTheDay.ts`, `bonStats.ts` (persistent game high scores/streaks), `savedBon.ts` (session resume snapshot), `notificationPermission.ts`, `pushSubscription.ts`.
 
 **Vue components**: Composition API only — `<script setup lang="ts">`. Block order: `<template>`, `<script>`, `<style>`. CSS classes use BEM with `c-` prefix (e.g. `c-my-component__element`). Styles are NOT scoped — BEMIT class naming provides isolation instead. Use `<style lang="scss">` without `scoped`. Each component owns its SCSS file at `src/styles/components/_name.scss` and loads it via `@use "@styles/components/name"` inside its own `<style>` block — not globally.
 
@@ -131,3 +132,45 @@ Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mj
 - Tests live in `src/tests/unit/` using Vitest + jsdom + Sinon
 - Vue component tests use `@vue/test-utils`
 - Coverage excludes `src/gql/`, `src/types/`, `src/tests/`, `src/plugins/`
+
+## Package Manager
+
+This project uses **pnpm only**. Never use `npm` or `yarn`. The `preinstall` script enforces this via `only-allow pnpm`.
+
+pnpm supply-chain policy: freshly published packages (< 24h) trigger a lockfile age-gate. Fix: `pnpm clean --lockfile && pnpm install` — rebuilds the lockfile from scratch.
+
+## Astro v7 / Vite 8 Notes
+
+- `compressHTML: true` is set explicitly — v7 changed default to `'jsx'` which strips spaces between inline elements
+- `build.cssMinify: "esbuild"` kept — LightningCSS 1.32.0 has a deeper tokenizer bug with this project's bundled CSS: fails with `Unexpected token Function("hsl")` and `Unexpected token IDHash(...)` even on plain hex colors. Converting `$danger` from `hsl()` to hex did not help. LightningCSS bug — revisit when upstream fixes it
+- `build.rolldownOptions` replaces deprecated `build.rollupOptions` (Vite 8 moved from Rollup → Rolldown)
+- `Uint8Array<ArrayBuffer>` (not plain `Uint8Array`) required for `PushManager.subscribe()` — TS 6 made `Uint8Array` generic
+- `@vueuse/core` emits `INVALID_ANNOTATION` Rolldown warnings about `#__PURE__` comment positions — upstream issue, build still succeeds, ignore
+
+## AI / Agent Development (Astro v7)
+
+**Background dev server** — agents struggle with long-running processes; use background mode:
+
+```bash
+astro dev --background   # starts server, blocks until ready, then detaches
+astro dev status         # check running instance (URL + PID)
+astro dev logs           # stream logs from background server
+astro dev stop           # idempotent — succeeds even if not running
+```
+
+Astro auto-detects AI agents and enables background mode automatically. A lockfile prevents duplicate instances — starting when already running returns the existing instance. Health endpoint: `/_astro/status`.
+
+**JSON logging** — structured logs for agent parsing or log aggregation:
+
+```bash
+astro dev --json         # enable JSON log output
+```
+
+Or in config:
+
+```js
+import { defineConfig, logHandlers } from "astro/config";
+export default defineConfig({
+  logger: logHandlers.json()   // or logHandlers.compose(logHandlers.console(), logHandlers.json())
+});
+```
