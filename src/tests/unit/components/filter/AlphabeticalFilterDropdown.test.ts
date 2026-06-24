@@ -13,8 +13,10 @@ vi.mock("virtual:icons/lucide/x", async (importOriginal) => {
   return { ...orig, default: { template: "<span data-testid='x-icon' />" } };
 });
 
-const { mockSetLetterFilter } = vi.hoisted(() => ({
+const { mockSetLetterFilter, mockDropdownClose, onSetHolder } = vi.hoisted(() => ({
   mockSetLetterFilter: vi.fn(),
+  mockDropdownClose: vi.fn(),
+  onSetHolder: { callback: null as ((arg: { newValue: unknown }) => void) | null },
 }));
 
 const mockWordSearch = ref({ activeLetterFilter: "", search: "" });
@@ -30,13 +32,21 @@ vi.mock("@nanostores/vue", () => ({
 
 vi.mock("nanostores", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
-  return { ...actual, onSet: vi.fn() };
+  return {
+    ...actual,
+    onSet: vi.fn((_store: unknown, cb: (arg: { newValue: unknown }) => void) => {
+      onSetHolder.callback = cb;
+    }),
+  };
 });
 
 vi.mock("@components/DropdownPopover.vue", () => ({
   default: {
+    name: "DropdownPopover",
     template: `<div class="mock-dropdown" :class="$attrs.class"><slot :triggerProps="{}" /><slot name="panel" /></div>`,
     inheritAttrs: false,
+    expose: ["close"],
+    setup: () => ({ close: mockDropdownClose }),
   },
 }));
 
@@ -47,7 +57,9 @@ vi.mock("@components/filter/LetterFilter.vue", () => ({
 describe("AlphabeticalFilterDropdown.vue", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockDropdownClose.mockClear();
     mockWordSearch.value = { activeLetterFilter: "", search: "" };
+    onSetHolder.callback = null;
   });
 
   it("renders .c-filter-dropdown", () => {
@@ -98,5 +110,19 @@ describe("AlphabeticalFilterDropdown.vue", () => {
     mockWordSearch.value = { activeLetterFilter: "Z", search: "" };
     const wrapper = mount(AlphabeticalFilterDropdown);
     expect(wrapper.find("[data-testid='x-icon']").exists()).toBe(true);
+  });
+
+  it("onSet callback closes dropdown when activeLetterFilter changes", () => {
+    mockWordSearch.value = { activeLetterFilter: "A", search: "" };
+    mount(AlphabeticalFilterDropdown);
+    onSetHolder.callback?.({ newValue: { activeLetterFilter: "B" } });
+    expect(mockDropdownClose).toHaveBeenCalled();
+  });
+
+  it("onSet callback does not close dropdown when activeLetterFilter is unchanged", () => {
+    mockWordSearch.value = { activeLetterFilter: "A", search: "" };
+    mount(AlphabeticalFilterDropdown);
+    onSetHolder.callback?.({ newValue: { activeLetterFilter: "A" } });
+    expect(mockDropdownClose).not.toHaveBeenCalled();
   });
 });

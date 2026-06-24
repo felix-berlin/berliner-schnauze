@@ -1,8 +1,10 @@
 import { mount } from "@vue/test-utils";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { nextTick, ref } from "vue";
 
-import { ref } from "vue";
-
+vi.mock("astro:env/client", () => ({
+  SITE_URL: "https://berliner-schnauze.de",
+}));
 
 vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@vueuse/core")>();
@@ -41,6 +43,10 @@ vi.mock("@components/DropdownPopover.vue", () => ({
 }));
 
 describe("WordOptionDropdown.vue", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("renders the options button", async () => {
     const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
     const wrapper = mount(WordOptionDropdown, {
@@ -98,6 +104,28 @@ describe("WordOptionDropdown.vue", () => {
     expect(shareMock).toHaveBeenCalled();
   });
 
+  it("clicking share button calls createToastNotify with Wort geteilt", async () => {
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Wort teilen']").trigger("click");
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "Wort geteilt" }),
+    );
+  });
+
+  it("clicking share button calls trackEvent", async () => {
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Wort teilen']").trigger("click");
+    const { trackEvent } = await import("@utils/analytics");
+    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith("Word Share", "Word shared", "Word: schnauze");
+  });
+
   it("calls copy when copy word button clicked", async () => {
     const { useClipboard } = await import("@vueuse/core");
     const copyMock = vi.fn().mockResolvedValue(undefined);
@@ -114,5 +142,72 @@ describe("WordOptionDropdown.vue", () => {
     });
     await wrapper.find("[aria-label='Wort kopieren']").trigger("click");
     expect(copyMock).toHaveBeenCalledWith("Schnauze");
+  });
+
+  it("clicking copy word button calls createToastNotify with Wort kopiert", async () => {
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Wort kopieren']").trigger("click");
+    await nextTick();
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "Wort kopiert" }),
+    );
+  });
+
+  it("clicking copy word button calls trackEvent", async () => {
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Wort kopieren']").trigger("click");
+    await nextTick();
+    const { trackEvent } = await import("@utils/analytics");
+    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith("Word Copy", "Word copied", "Word: Schnauze");
+  });
+
+  it("clicking link copy button calls copy with full URL", async () => {
+    const { useClipboard } = await import("@vueuse/core");
+    const copyMock = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(useClipboard).mockReturnValueOnce({
+      copied: ref(false),
+      copy: copyMock,
+      isSupported: ref(true),
+      text: ref(""),
+    });
+
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Link zum Wort kopieren']").trigger("click");
+    await nextTick();
+    expect(copyMock).toHaveBeenCalledWith("https://berliner-schnauze.de/wort/schnauze");
+  });
+
+  it("clicking link copy button calls createToastNotify with Link kopiert", async () => {
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Link zum Wort kopieren']").trigger("click");
+    await nextTick();
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "Link kopiert" }),
+    );
+  });
+
+  it("clicking link copy button calls trackEvent", async () => {
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Link zum Wort kopieren']").trigger("click");
+    await nextTick();
+    const { trackEvent } = await import("@utils/analytics");
+    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith("Word Copy Link", "Word link copied", "Word: schnauze");
   });
 });

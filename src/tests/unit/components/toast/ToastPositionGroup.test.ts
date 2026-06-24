@@ -114,4 +114,46 @@ describe("ToastPositionGroup.vue", () => {
     await wrapper.setProps({ toasts: [toast("b")] });
     expect(mockShowPopover).toHaveBeenCalledOnce();
   });
+
+  it("catches and logs error when showPopover throws", async () => {
+    const { nextTick } = await import("vue");
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mockShowPopover.mockImplementationOnce(() => { throw new Error("popover error"); });
+    mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [toast("a")] },
+    });
+    await nextTick();
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
+
+  it("catches and logs error when hidePopover throws during onAfterLeave", async () => {
+    const { nextTick } = await import("vue");
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mockHidePopover.mockImplementationOnce(() => { throw new Error("popover error"); });
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [toast("a")] },
+    });
+    await nextTick();
+    await wrapper.setProps({ toasts: [] });
+    await (wrapper.vm as any).onAfterLeave();
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
+
+  it("onBeforeLeave sets inline styles on the leaving element", async () => {
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [toast("a")] },
+      attachTo: document.body,
+    });
+    const el = document.createElement("div");
+    vi.spyOn(el, "getBoundingClientRect").mockReturnValue(
+      { top: 100, left: 50, width: 200, bottom: 0, right: 0, height: 0, toJSON: () => ({}) } as DOMRect,
+    );
+    // Access unexposed onBeforeLeave from setup state
+    const setupState = (wrapper.getCurrentComponent() as any).setupState;
+    setupState.onBeforeLeave(el);
+    expect(el.style.width).toBe("200px");
+    wrapper.unmount();
+  });
 });

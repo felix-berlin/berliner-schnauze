@@ -6,6 +6,10 @@ const showFilterRef = ref(false);
 const mockToggle = vi.fn();
 const mockResetAll = vi.fn();
 
+const onClickOutsideHolder = vi.hoisted(() => ({
+  callback: null as (() => void) | null,
+}));
+
 vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(() => showFilterRef),
 }));
@@ -68,7 +72,9 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@vueuse/core")>();
   return {
     ...actual,
-    onClickOutside: vi.fn(),
+    onClickOutside: vi.fn((_el: unknown, cb: () => void) => {
+      onClickOutsideHolder.callback = cb;
+    }),
     useTimeout: vi.fn(() => ({ ready: ref(true), start: vi.fn() })),
   };
 });
@@ -207,6 +213,40 @@ describe("WordFilter.vue", () => {
       props: { closeOnClickOutside: false },
     });
     expect(wrapper.exists()).toBe(true);
+  });
+
+  it("bottom close button calls $toggleWordListFilterFlyout", async () => {
+    showFilterRef.value = true;
+    const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
+    const wrapper = mount(WordFilter);
+    const bottomCloseBtn = wrapper.find("button.is-bottom");
+    expect(bottomCloseBtn.exists()).toBe(true);
+    await bottomCloseBtn.trigger("click");
+    expect(mockToggle).toHaveBeenCalled();
+  });
+
+  it("onClickOutside callback calls toggle when flyout is open and closeOnClickOutside is true", async () => {
+    showFilterRef.value = true;
+    const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
+    mount(WordFilter);
+    onClickOutsideHolder.callback?.();
+    expect(mockToggle).toHaveBeenCalled();
+  });
+
+  it("onClickOutside callback does nothing when flyout is closed", async () => {
+    showFilterRef.value = false;
+    const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
+    mount(WordFilter);
+    onClickOutsideHolder.callback?.();
+    expect(mockToggle).not.toHaveBeenCalled();
+  });
+
+  it("onClickOutside callback does nothing when closeOnClickOutside is false", async () => {
+    showFilterRef.value = true;
+    const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
+    mount(WordFilter, { props: { closeOnClickOutside: false } });
+    onClickOutsideHolder.callback?.();
+    expect(mockToggle).not.toHaveBeenCalled();
   });
 
   it("renders Berolinismus section label", async () => {
