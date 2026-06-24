@@ -108,4 +108,39 @@ describe("installApp store", () => {
       expect($showInstallButton.get()).toBe(false);
     });
   });
+
+  describe("onMount handler", () => {
+    it("calls trackEvent when isPwaInstalled is true on first subscribe", async () => {
+      Object.defineProperty(window, "matchMedia", {
+        value: vi.fn().mockReturnValue({ matches: true }),
+        writable: true,
+        configurable: true,
+      });
+      const { $installPrompt } = await import("@stores/installApp.ts");
+      const { trackEvent } = await import("@utils/analytics");
+      const unsub = $installPrompt.subscribe(() => {});
+      expect(trackEvent).toHaveBeenCalledWith("App", "Already installed", "PWA");
+      unsub();
+    });
+
+    it("sets $installPrompt and $showInstallButton on beforeinstallprompt event", async () => {
+      const { $installPrompt, $showInstallButton } = await import("@stores/installApp.ts");
+      const unsub = $installPrompt.subscribe(() => {});
+      const event = new Event("beforeinstallprompt");
+      window.dispatchEvent(event);
+      expect($installPrompt.get()).toBe(event);
+      expect($showInstallButton.get()).toBe(true);
+      unsub();
+    });
+
+    it("calls trackEvent on appinstalled event", async () => {
+      const { $installPrompt } = await import("@stores/installApp.ts");
+      const { trackEvent } = await import("@utils/analytics");
+      const unsub = $installPrompt.subscribe(() => {});
+      window.dispatchEvent(new Event("appinstalled"));
+      expect(trackEvent).toHaveBeenCalledWith("App", "Installation completed", "PWA");
+      unsub();
+    });
+
+  });
 });
