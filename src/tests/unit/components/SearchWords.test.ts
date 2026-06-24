@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { ref } from "vue";
+import { ref, nextTick } from "vue";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 const searchLengthRef = ref(0);
@@ -33,6 +33,14 @@ vi.mock("@utils/analytics", () => ({
   setMatomoSearch: vi.fn(),
 }));
 
+vi.mock("@vueuse/core", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@vueuse/core")>();
+  return {
+    ...actual,
+    useDebounceFn: vi.fn((fn: (...args: unknown[]) => unknown) => fn),
+  };
+});
+
 vi.mock("virtual:icons/lucide/search", async (importOriginal) => {
   const orig = await importOriginal<Record<string, unknown>>();
   return { ...orig, default: { template: "<span />" } };
@@ -45,9 +53,10 @@ vi.mock("virtual:icons/lucide/x", async (importOriginal) => {
 
 describe("SearchWords.vue", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     searchLengthRef.value = 0;
     localSearchRef.value = "";
-    oramaResultsRef.value = { state: "loading" };
+    oramaResultsRef.value = { state: "loading" } as any;
   });
 
   it("renders the search input", async () => {
@@ -98,5 +107,69 @@ describe("SearchWords.vue", () => {
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords, { props: { buttonPosition: "right" } });
     expect(wrapper.find("button").classes()).toContain("c-word-search__search-button--right");
+  });
+
+  it("clicking button when searchLength > 0 resets localSearch", async () => {
+    searchLengthRef.value = 3;
+    localSearchRef.value = "Kiez";
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords);
+    await wrapper.find("button").trigger("click");
+    expect(localSearchRef.value).toBe("");
+  });
+
+  it("clicking button when searchLength is 0 does not reset search", async () => {
+    searchLengthRef.value = 0;
+    localSearchRef.value = "";
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords);
+    await wrapper.find("button").trigger("click");
+    expect(localSearchRef.value).toBe("");
+  });
+
+  it("input event tracks search immediately when oramaResults is ready", async () => {
+    const { setMatomoSearch } = await import("@utils/analytics");
+    oramaResultsRef.value = { state: "ready", value: { count: 2 } } as any;
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords);
+    // setValue sets the DOM value and triggers v-model + @input
+    await wrapper.find("input").setValue("Schnauze");
+    await nextTick();
+    expect(setMatomoSearch).toHaveBeenCalledWith("Schnauze", "Word Search", 2);
+  });
+
+  it("input event sets pendingTrackSearch when loading, fires setMatomoSearch on ready", async () => {
+    const { setMatomoSearch } = await import("@utils/analytics");
+    oramaResultsRef.value = { state: "loading" } as any;
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords);
+    await wrapper.find("input").setValue("Kiez");
+    await nextTick();
+    expect(setMatomoSearch).not.toHaveBeenCalled();
+    // Transition to ready — watcher fires and flushes pendingTrackSearch
+    oramaResultsRef.value = { state: "ready", value: { count: 1 } } as any;
+    await nextTick();
+    expect(setMatomoSearch).toHaveBeenCalledWith("Kiez", "Word Search", 1);
+    wrapper.unmount();
+  });
+
+  it("autoFocus prop focuses the search input on mount", async () => {
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords, {
+      props: { autoFocus: true },
+      attachTo: document.body,
+    });
+    await nextTick();
+    expect(document.activeElement).toBe(wrapper.find("input").element);
+    wrapper.unmount();
+  });
+
+  it("focusSearchInput exposed method focuses the input", async () => {
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords, { attachTo: document.body });
+    (wrapper.vm as { focusSearchInput: () => void }).focusSearchInput();
+    await nextTick();
+    expect(document.activeElement).toBe(wrapper.find("input").element);
+    wrapper.unmount();
   });
 });
