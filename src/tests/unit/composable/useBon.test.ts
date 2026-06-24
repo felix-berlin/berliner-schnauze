@@ -602,4 +602,14 @@ describe('session persistence', () => {
     for (let i = 0; i < 3; i++) answer(!currentCard.value!.isReal)
     expect($savedBon.set).toHaveBeenLastCalledWith(null)
   })
+
+  it('lastAnswerCorrect and lastCard reflect the most recent answer', () => {
+    const { init, startGame, answer, currentCard, lastAnswerCorrect, lastCard } = useBon()
+    init(makeRealWords(30), makeFakeWords(20))
+    startGame()
+    const card = currentCard.value!
+    answer(card.isReal)
+    expect(lastAnswerCorrect.value).toBe(true)
+    expect(lastCard.value).toBe(card)
+  })
 })

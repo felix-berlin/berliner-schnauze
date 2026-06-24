@@ -192,4 +192,44 @@ describe("PwaCacheOverview.vue", () => {
     const wrapper = mount(PwaCacheOverview);
     expect(wrapper.exists()).toBe(true);
   });
+
+  it("confirmClearAll cancel callback calls close()", async () => {
+    const { open, close } = await import("@stores/modal");
+    const wrapper = mount(PwaCacheOverview);
+    await wrapper.findComponent({ name: "PwaCacheActions" }).vm.$emit("clear-all");
+    const callArg = vi.mocked(open).mock.calls[0][0] as { view?: { events?: { cancel?: () => void; confirm?: () => void } } };
+    callArg.view?.events?.cancel?.();
+    expect(close).toHaveBeenCalled();
+  });
+
+  it("confirmClearAll confirm callback calls close() and clearAll()", async () => {
+    const { open, close } = await import("@stores/modal");
+    const wrapper = mount(PwaCacheOverview);
+    await wrapper.findComponent({ name: "PwaCacheActions" }).vm.$emit("clear-all");
+    const callArg = vi.mocked(open).mock.calls[0][0] as { view?: { events?: { cancel?: () => void; confirm?: () => void } } };
+    callArg.view?.events?.confirm?.();
+    expect(close).toHaveBeenCalled();
+    expect(mockClearAll).toHaveBeenCalled();
+  });
+
+  it("confirmClearBucket cancel callback calls close()", async () => {
+    const { open, close } = await import("@stores/modal");
+    mockBuckets.value = [{ name: "cache-v1", urls: [] }];
+    const wrapper = mount(PwaCacheOverview);
+    await wrapper.findComponent({ name: "PwaCacheBucketList" }).vm.$emit("clear-bucket", "cache-v1");
+    const callArg = vi.mocked(open).mock.calls[0][0] as { view?: { events?: { cancel?: () => void; confirm?: () => void } } };
+    callArg.view?.events?.cancel?.();
+    expect(close).toHaveBeenCalled();
+  });
+
+  it("confirmClearBucket confirm callback calls close() and clearBucket()", async () => {
+    const { open, close } = await import("@stores/modal");
+    mockBuckets.value = [{ name: "cache-v1", urls: [] }];
+    const wrapper = mount(PwaCacheOverview);
+    await wrapper.findComponent({ name: "PwaCacheBucketList" }).vm.$emit("clear-bucket", "cache-v1");
+    const callArg = vi.mocked(open).mock.calls[0][0] as { view?: { events?: { cancel?: () => void; confirm?: () => void } } };
+    callArg.view?.events?.confirm?.();
+    expect(close).toHaveBeenCalled();
+    expect(mockClearBucket).toHaveBeenCalledWith("cache-v1");
+  });
 });
