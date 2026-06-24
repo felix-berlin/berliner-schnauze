@@ -223,6 +223,25 @@ describe("useCacheStorage — loadCaches", () => {
     unmount();
   });
 
+  it("three entries covers both dateRange update branches (lines 196-197)", async () => {
+    vi.stubGlobal(
+      "caches",
+      makeMockCacheStorage({
+        "api-search-index": [
+          { url: "https://example.com/a", size: 100, dateStr: "Thu, 01 Jan 2026 08:00:00 GMT" },
+          { url: "https://example.com/b", size: 100, dateStr: "Thu, 01 Jan 2026 12:00:00 GMT" },
+          { url: "https://example.com/c", size: 100, dateStr: "Thu, 01 Jan 2026 06:00:00 GMT" },
+        ],
+      }),
+    );
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const bucket = result.buckets.value.find((b) => b.name === "api-search-index")!;
+    expect(bucket.dateRange?.lastModified.toISOString()).toBe("2026-01-01T12:00:00.000Z");
+    expect(bucket.dateRange?.oldestEntry.toISOString()).toBe("2026-01-01T06:00:00.000Z");
+    unmount();
+  });
+
   it("computes correct totalSizeBytes across all buckets", async () => {
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -344,6 +363,13 @@ describe("useCacheStorage — clearAll", () => {
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.clearAll();
     expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2);
+    unmount();
+  });
+
+  it("clearAll returns early when caches is undefined (covers line 266)", async () => {
+    vi.unstubAllGlobals();
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await expect(result.clearAll()).resolves.toBeUndefined();
     unmount();
   });
 });

@@ -612,4 +612,23 @@ describe('session persistence', () => {
     expect(lastAnswerCorrect.value).toBe(true)
     expect(lastCard.value).toBe(card)
   })
+
+  it('drawFromQueue breaks when source is empty (covers line 68) and currentCard is null when deck is empty (covers line 156)', () => {
+    const { init, startGame, currentCard } = useBon()
+    // Both sources empty: drawFromQueue([],[],n) → queue stays empty → break
+    // deck ends up [] → _nextCard sets currentCard = undefined ?? null = null
+    init([], [])
+    startGame()
+    expect(currentCard.value).toBeNull()
+  })
+
+  it('_saveToStorage early-return branch: phase not playing after game over', () => {
+    const { init, startGame, answer, currentCard } = useBon()
+    init(makeRealWords(30), makeFakeWords(20))
+    startGame()
+    // Lose all lives → phase becomes result, _saveToStorage not called with set
+    for (let i = 0; i < 3; i++) answer(!currentCard.value!.isReal)
+    // After game over, $savedBon.set(null) is called, not _saveToStorage
+    expect(vi.mocked($savedBon.set)).toHaveBeenLastCalledWith(null)
+  })
 })
