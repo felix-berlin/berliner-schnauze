@@ -2,14 +2,17 @@ import BerlinerOderNicht from "@components/games/BerlinerOderNicht.vue";
 import { useStore } from "@nanostores/vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { ref } from "vue";
+import { ref, nextTick } from "vue";
 
-const { mockInit, mockStartGame, mockResumeGame, mockAnswer, mockNextCard } = vi.hoisted(() => ({
+const { mockInit, mockStartGame, mockResumeGame, mockAnswer, mockNextCard, mockStartShake, mockStartCooldown, mockVibrate } = vi.hoisted(() => ({
   mockInit: vi.fn(),
   mockStartGame: vi.fn(),
   mockResumeGame: vi.fn(),
   mockAnswer: vi.fn(),
   mockNextCard: vi.fn(),
+  mockStartShake: vi.fn(),
+  mockStartCooldown: vi.fn(),
+  mockVibrate: vi.fn(),
 }));
 
 const mockPhase = ref("idle");
@@ -66,6 +69,7 @@ vi.mock("@components/ConfettiEffect.vue", () => ({
 
 vi.mock("@components/games/BonCard.vue", () => ({
   default: {
+    name: "BonCard",
     props: ["word", "cardNumber", "isShaking", "lastAnswerCorrect", "isReal", "isFirstCard", "disabled"],
     template: "<div class='mock-bon-card'>{{ word }}</div>",
     emits: ["answer"],
@@ -83,6 +87,7 @@ vi.mock("@components/games/BonHUD.vue", () => ({
 
 vi.mock("@components/games/BonResult.vue", () => ({
   default: {
+    name: "BonResult",
     props: ["score", "bestStreak", "totalAnswered", "correctAnswers", "isNewHighScore", "allTimeHighScore", "lastCard"],
     template: "<div class='mock-bon-result' />",
     emits: ["restart"],
@@ -95,8 +100,10 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
   return {
     ...actual,
-    useVibrate: vi.fn(() => ({ vibrate: vi.fn() })),
-    useTimeoutFn: vi.fn(() => ({ start: vi.fn() })),
+    useVibrate: vi.fn(() => ({ vibrate: mockVibrate })),
+    useTimeoutFn: vi.fn((_, delay?: number) =>
+      delay === 350 ? { start: mockStartCooldown } : { start: mockStartShake },
+    ),
   };
 });
 
@@ -123,6 +130,11 @@ describe("BerlinerOderNicht.vue", () => {
     mockInit.mockClear();
     mockStartGame.mockClear();
     mockResumeGame.mockClear();
+    mockAnswer.mockClear();
+    mockNextCard.mockClear();
+    mockStartShake.mockClear();
+    mockStartCooldown.mockClear();
+    mockVibrate.mockClear();
 
     global.fetch = vi.fn(() =>
       Promise.resolve({ ok: true, json: () => Promise.resolve([]) }),
@@ -269,5 +281,182 @@ describe("BerlinerOderNicht.vue", () => {
     mount(BerlinerOderNicht);
     await vi.runAllTimersAsync();
     expect(mockInit).toHaveBeenCalled();
+  });
+
+  it("logs error when fetch fails on mount", async () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    global.fetch = vi.fn(() => Promise.resolve({ ok: false })) as unknown as typeof fetch;
+    mount(BerlinerOderNicht);
+    await vi.runAllTimersAsync();
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
+
+  it("score watcher updates announcement in playing phase", async () => {
+    mockPhase.value = "playing";
+    const wrapper = mount(BerlinerOderNicht);
+    mockScore.value = 10;
+    await nextTick();
+    expect(wrapper.find("[role='status']").text()).toBe("Score: 10");
+  });
+
+  it("score watcher does not update announcement when not playing", async () => {
+    const wrapper = mount(BerlinerOderNicht);
+    mockScore.value = 10;
+    await nextTick();
+    expect(wrapper.find("[role='status']").text()).toBe("");
+  });
+
+  it("streak watcher updates announcement with multiplier > 1", async () => {
+    mockPhase.value = "playing";
+    mockMultiplier.value = 2;
+    const wrapper = mount(BerlinerOderNicht);
+    mockStreak.value = 3;
+    await nextTick();
+    expect(wrapper.find("[role='status']").text()).toContain("2×");
+  });
+
+  it("streak watcher updates announcement without multiplier when multiplier is 1", async () => {
+    mockPhase.value = "playing";
+    mockMultiplier.value = 1;
+    const wrapper = mount(BerlinerOderNicht);
+    mockStreak.value = 3;
+    await nextTick();
+    expect(wrapper.find("[role='status']").text()).toBe("Streak: 3");
+  });
+
+  it("streak watcher does nothing when streak is 0", async () => {
+    mockPhase.value = "playing";
+    const wrapper = mount(BerlinerOderNicht);
+    const before = wrapper.find("[role='status']").text();
+    mockStreak.value = 0;
+    await nextTick();
+    expect(wrapper.find("[role='status']").text()).toBe(before);
+  });
+
+  it("lives watcher sets urgentAnnouncement when lives decrease in playing phase", async () => {
+    mockPhase.value = "playing";
+    const wrapper = mount(BerlinerOderNicht);
+    mockLives.value = 2;
+    await nextTick();
+    expect(wrapper.find("[role='alert']").text()).toContain("2 von 3 Leben");
+  });
+
+  it("lives watcher does nothing when lives increase", async () => {
+    mockPhase.value = "playing";
+    mockLives.value = 2;
+    const wrapper = mount(BerlinerOderNicht);
+    mockLives.value = 3;
+    await nextTick();
+    expect(wrapper.find("[role='alert']").text()).toBe("");
+  });
+
+  it("phase watcher announces game started when phase becomes playing", async () => {
+    const wrapper = mount(BerlinerOderNicht);
+    mockPhase.value = "playing";
+    await nextTick();
+    expect(wrapper.find("[role='status']").text()).toContain("Spiel gestartet");
+  });
+
+  it("phase watcher announces game over when phase becomes result", async () => {
+    mockPhase.value = "playing";
+    const wrapper = mount(BerlinerOderNicht);
+    mockPhase.value = "result";
+    await nextTick();
+    expect(wrapper.find("[role='alert']").text()).toContain("Game Over");
+  });
+
+  it("phase watcher announces new highscore when isNewHighScore", async () => {
+    mockPhase.value = "playing";
+    mockIsNewHighScore.value = true;
+    const wrapper = mount(BerlinerOderNicht);
+    mockPhase.value = "result";
+    await nextTick();
+    expect(wrapper.find("[role='alert']").text()).toContain("Neuer Highscore");
+  });
+
+  it("onAnswer correct guess calls answer and nextCard", async () => {
+    mockPhase.value = "playing";
+    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    setupMocks({ hasSeenIntro: true });
+    const wrapper = mount(BerlinerOderNicht);
+    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
+    await nextTick();
+    expect(mockAnswer).toHaveBeenCalledWith(true);
+    expect(mockNextCard).toHaveBeenCalled();
+    expect(mockVibrate).toHaveBeenCalledWith([50]);
+  });
+
+  it("onAnswer incorrect guess shakes card and starts shake timer", async () => {
+    mockPhase.value = "playing";
+    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    setupMocks({ hasSeenIntro: true });
+    const wrapper = mount(BerlinerOderNicht);
+    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", false);
+    await nextTick();
+    expect(mockAnswer).toHaveBeenCalledWith(false);
+    expect(mockVibrate).toHaveBeenCalledWith([80, 60, 80]);
+    expect(mockStartShake).toHaveBeenCalled();
+    expect(wrapper.findComponent({ name: "BonCard" }).props("isShaking")).toBe(true);
+  });
+
+  it("onAnswer does nothing when isAnswering is true", async () => {
+    mockPhase.value = "playing";
+    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    setupMocks({ hasSeenIntro: true });
+    const wrapper = mount(BerlinerOderNicht);
+    const bonCard = wrapper.findComponent({ name: "BonCard" });
+    await bonCard.vm.$emit("answer", true); // sets isAnswering = true
+    const callsBefore = mockAnswer.mock.calls.length;
+    await bonCard.vm.$emit("answer", false); // early return — isAnswering is still true
+    expect(mockAnswer.mock.calls.length).toBe(callsBefore);
+  });
+
+  it("onAnswer returns early when phase becomes result after answer()", async () => {
+    mockPhase.value = "playing";
+    mockCurrentCard.value = { word: "Kiez", isReal: false };
+    setupMocks({ hasSeenIntro: true });
+    // Make answer() transition to result phase
+    mockAnswer.mockImplementation(() => { mockPhase.value = "result"; });
+    const wrapper = mount(BerlinerOderNicht);
+    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", false);
+    await nextTick();
+    expect(mockNextCard).not.toHaveBeenCalled();
+    mockAnswer.mockReset();
+  });
+
+  it("onAnswer sets hasSeenIntro when not yet seen", async () => {
+    const { $bonStats } = await import("@stores/bonStats");
+    mockPhase.value = "playing";
+    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    setupMocks({ hasSeenIntro: false }); // not seen
+    const wrapper = mount(BerlinerOderNicht);
+    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
+    expect($bonStats.setKey).toHaveBeenCalledWith("hasSeenIntro", true);
+  });
+
+  it("clicking player badge enables name editing", async () => {
+    setupMocks({ playerName: "Felix" });
+    const wrapper = mount(BerlinerOderNicht);
+    await wrapper.find(".c-berliner-oder-nicht__player-badge").trigger("click");
+    await nextTick();
+    expect(wrapper.find("#bon-player-name").exists()).toBe(true);
+  });
+
+  it("saveName saves localName to store on input blur", async () => {
+    const { $bonStats } = await import("@stores/bonStats");
+    const wrapper = mount(BerlinerOderNicht, { attachTo: document.body });
+    const input = wrapper.find("#bon-player-name");
+    await input.setValue("Luise");
+    await input.trigger("blur");
+    expect($bonStats.setKey).toHaveBeenCalledWith("playerName", "Luise");
+    wrapper.unmount();
+  });
+
+  it("BonResult restart event calls startGame", async () => {
+    mockPhase.value = "result";
+    const wrapper = mount(BerlinerOderNicht);
+    await wrapper.findComponent({ name: "BonResult" }).vm.$emit("restart");
+    expect(mockStartGame).toHaveBeenCalled();
   });
 });
