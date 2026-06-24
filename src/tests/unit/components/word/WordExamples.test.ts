@@ -1,5 +1,5 @@
 import WordExamples from "@components/word/WordExamples.vue";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("virtual:icons/lucide/quote", async (importOriginal) => {
@@ -8,7 +8,8 @@ vi.mock("virtual:icons/lucide/quote", async (importOriginal) => {
 });
 
 vi.mock("@components/AudioPlayerList.vue", () => ({
-  default: { template: "<div class='mock-audio-player' />" },
+  __esModule: true,
+  default: { name: "AudioPlayerList", template: "<div class='mock-audio-player'></div>" },
 }));
 
 describe("WordExamples.vue", () => {
@@ -125,5 +126,28 @@ describe("WordExamples.vue", () => {
       },
     });
     expect(wrapper.find(".mock-quote-icon").exists()).toBe(true);
+  });
+
+  it("renders AudioPlayerList when single example has exampleAudio", async () => {
+    const wrapper = mount(WordExamples, {
+      props: {
+        examples: [{ example: "Test.", exampleExplanation: null, exampleAudio: [{ url: "audio.mp3", label: "" }] as any }],
+      },
+    });
+    await flushPromises();
+    expect(wrapper.find(".mock-audio-player").exists()).toBe(true);
+  });
+
+  it("renders AudioPlayerList in list items when exampleAudio is present", async () => {
+    const wrapper = mount(WordExamples, {
+      props: {
+        examples: [
+          { example: "Erster.", exampleExplanation: null, exampleAudio: [{ url: "a.mp3", label: "" }] as any },
+          { example: "Zweiter.", exampleExplanation: null, exampleAudio: null },
+        ],
+      },
+    });
+    await flushPromises();
+    expect(wrapper.find(".mock-audio-player").exists()).toBe(true);
   });
 });

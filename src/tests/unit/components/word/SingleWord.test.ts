@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@utils/helpers.ts", () => ({
@@ -10,6 +10,14 @@ vi.mock("virtual:icons/lucide/book-open", async (importOriginal) => {
   const orig = await importOriginal<Record<string, unknown>>();
   return { ...orig, default: { template: "<span />" } };
 });
+
+vi.mock("@components/word/WordOptionDropdown.vue", () => ({
+  __esModule: true,
+  default: {
+    name: "WordOptionDropdown",
+    template: '<div class="mock-word-option-dropdown"><slot name="after" /></div>',
+  },
+}));
 
 const source = {
   berlinerWordId: "42",
@@ -141,5 +149,26 @@ describe("SingleWord.vue", () => {
     const link = wrapper.find(".c-word-list__berlinerisch a");
     expect(link.html()).toContain('<mark class="is-highlight">Sch</mark>');
     expect(link.html()).toContain('<mark class="is-highlight">ze</mark>');
+  });
+
+  it("renders WordOptionDropdown when showDropdown is true", async () => {
+    const SingleWord = (await import("@components/word/SingleWord.vue")).default;
+    const wrapper = mount(SingleWord, {
+      props: { source, positions: undefined, showDropdown: true },
+    });
+    await flushPromises();
+    expect(wrapper.find(".mock-word-option-dropdown").exists()).toBe(true);
+  });
+
+  it("renders 'Mehr erfahren' link inside dropdown #after slot when showDropdown is true", async () => {
+    const SingleWord = (await import("@components/word/SingleWord.vue")).default;
+    const wrapper = mount(SingleWord, {
+      props: { source, positions: undefined, showDropdown: true },
+    });
+    await flushPromises();
+    const link = wrapper.find(".c-options-dropdown__copy-button");
+    expect(link.exists()).toBe(true);
+    expect(link.attributes("href")).toBe("/wort/schnauze");
+    expect(link.text()).toContain("Mehr erfahren");
   });
 });
