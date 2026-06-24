@@ -84,6 +84,16 @@ describe("BonShareView.vue", () => {
     expect(wrapper.find(".c-bon-share-view__date").text()).toBeTruthy();
   });
 
+  it("formattedDate returns empty string when date is missing (covers line 62 early return)", async () => {
+    const { useUrlSearchParams } = await import("@vueuse/core");
+    const { decodeShareHash } = await import("@utils/bonShare");
+    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<typeof useUrlSearchParams>);
+    vi.mocked(decodeShareHash).mockReturnValueOnce({ ...samplePayload, date: undefined as unknown as string });
+
+    const wrapper = mount(BonShareView);
+    expect(wrapper.find(".c-bon-share-view__date").text()).toBe("");
+  });
+
   it("handles array r param by taking first value", async () => {
     const { useUrlSearchParams } = await import("@vueuse/core");
     vi.mocked(useUrlSearchParams).mockReturnValue({ r: ["valid", "other"] } as unknown as ReturnType<typeof useUrlSearchParams>);

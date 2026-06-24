@@ -286,6 +286,11 @@ describe("AccordionContent", () => {
     expect(labelledBy).toBeTruthy();
   });
 
+  it("isOpen defaults to false when no open prop and no AccordionItem context (covers ?? false branch)", () => {
+    const wrapper = mount(AccordionContent);
+    expect(wrapper.find(".c-accordion__body").classes()).not.toContain("is-open");
+  });
+
   it("standalone :open=true adds is-open class", () => {
     const wrapper = mount(AccordionContent, { props: { open: true } });
     expect(wrapper.find(".c-accordion__body").classes()).toContain("is-open");

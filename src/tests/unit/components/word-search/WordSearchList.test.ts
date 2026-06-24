@@ -99,6 +99,13 @@ describe("WordSearchList.vue", () => {
     expect(wrapper.exists()).toBe(true);
   });
 
+  it("hides WordSuggestHint when searchResultCount > 0 (covers v-if false branch)", async () => {
+    searchCountRef.value = 5;
+    const WordSearchList = (await import("@components/word-search/WordSearchList.vue")).default;
+    const wrapper = mount(WordSearchList, { props: { cssClass: "" } });
+    expect(wrapper.find(".c-word-search-list").exists()).toBe(true);
+  });
+
   it("applies empty cssClass without adding extra classes", async () => {
     const WordSearchList = (await import("@components/word-search/WordSearchList.vue")).default;
     const wrapper = mount(WordSearchList, {

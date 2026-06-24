@@ -134,6 +134,30 @@ describe("SingleWord.vue", () => {
     expect(link.html()).toContain("Schnauze");
   });
 
+  it("uses empty string fallback when berlinerisch is undefined (covers ?? '' branch)", async () => {
+    const SingleWord = (await import("@components/word/SingleWord.vue")).default;
+    const sourceNoBerlinerisch = {
+      ...source,
+      wordProperties: { berlinerisch: undefined as unknown as string },
+    };
+    const wrapper = mount(SingleWord, {
+      props: { source: sourceNoBerlinerisch, positions: undefined, showDropdown: false },
+    });
+    const link = wrapper.find(".c-word-list__berlinerisch a");
+    expect(link.html()).not.toContain("<mark");
+  });
+
+  it("returns plain text when matchesObj is empty (covers allMatches.length === 0 branch)", async () => {
+    const SingleWord = (await import("@components/word/SingleWord.vue")).default;
+    const positions = { "wordProperties.berlinerisch": {} };
+    const wrapper = mount(SingleWord, {
+      props: { source, positions, showDropdown: false },
+    });
+    const link = wrapper.find(".c-word-list__berlinerisch a");
+    expect(link.html()).not.toContain("<mark");
+    expect(link.html()).toContain("Schnauze");
+  });
+
   it("renders multiple non-overlapping highlights correctly", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     // "Schnauze": highlight "Sch" (0,3) and "ze" (6,2)
