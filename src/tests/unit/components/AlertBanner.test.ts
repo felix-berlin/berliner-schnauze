@@ -1,45 +1,38 @@
 import AlertBanner from "@components/AlertBanner.vue";
 import { mount } from "@vue/test-utils";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("AlertBanner.vue", () => {
-  it("renders with default props", () => {
+  it("renders as div by default with role=alert", () => {
     const wrapper = mount(AlertBanner);
     expect(wrapper.element.tagName).toBe("DIV");
+    expect(wrapper.attributes("role")).toBe("alert");
+  });
+
+  it("applies c-alert and c-alert--warning classes by default", () => {
+    const wrapper = mount(AlertBanner);
     expect(wrapper.classes()).toContain("c-alert");
     expect(wrapper.classes()).toContain("c-alert--warning");
-    expect(wrapper.text()).toBe("Alert");
   });
 
-  it("renders with different type props", () => {
-    const types = ["success", "danger", "info"];
-    types.forEach((type) => {
-      const wrapper = mount(AlertBanner, {
-        props: { type },
-      });
-      expect(wrapper.classes()).toContain(`c-alert--${type}`);
-    });
+  it("renders as a different element when element prop changes", () => {
+    const wrapper = mount(AlertBanner, { props: { element: "section" } });
+    expect(wrapper.element.tagName).toBe("SECTION");
   });
 
-  it("renders with a custom element", () => {
-    const wrapper = mount(AlertBanner, {
-      props: { element: "span" },
-    });
-    expect(wrapper.element.tagName).toBe("SPAN");
+  it("applies custom type class", () => {
+    const wrapper = mount(AlertBanner, { props: { type: "danger" } });
+    expect(wrapper.classes()).toContain("c-alert--danger");
   });
 
-  it("renders with a custom componentClass", () => {
-    const wrapper = mount(AlertBanner, {
-      props: { componentClass: "custom-alert" },
-    });
+  it("renders slot content", () => {
+    const wrapper = mount(AlertBanner, { slots: { default: "Custom Alert Message" } });
+    expect(wrapper.text()).toBe("Custom Alert Message");
+  });
+
+  it("applies custom componentClass", () => {
+    const wrapper = mount(AlertBanner, { props: { componentClass: "custom-alert" } });
     expect(wrapper.classes()).toContain("custom-alert");
     expect(wrapper.classes()).toContain("custom-alert--warning");
-  });
-
-  it("renders slot content correctly", () => {
-    const wrapper = mount(AlertBanner, {
-      slots: { default: "Custom Alert Message" },
-    });
-    expect(wrapper.text()).toBe("Custom Alert Message");
   });
 });

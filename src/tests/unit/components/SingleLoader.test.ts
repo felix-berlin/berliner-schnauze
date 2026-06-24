@@ -1,16 +1,15 @@
 import SingleLoader from "@components/SingleLoader.vue";
 import { mount } from "@vue/test-utils";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 describe("SingleLoader.vue", () => {
-  it("renders correctly", () => {
+  it("renders .c-single-loader container", () => {
     const wrapper = mount(SingleLoader);
-    expect(wrapper.exists()).toBe(true);
+    expect(wrapper.find(".c-single-loader").exists()).toBe(true);
   });
 
-  it("contains the loader element", () => {
+  it("contains .c-single-loader__loader child", () => {
     const wrapper = mount(SingleLoader);
-    const loader = wrapper.find(".c-single-loader__loader");
-    expect(loader.exists()).toBe(true);
+    expect(wrapper.find(".c-single-loader__loader").exists()).toBe(true);
   });
 });
