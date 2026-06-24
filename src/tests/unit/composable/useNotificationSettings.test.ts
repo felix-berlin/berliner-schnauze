@@ -183,4 +183,17 @@ describe("onMounted", () => {
     expect($notificationPermission.get()).toBe("granted");
     unmount();
   });
+
+  it("does not sync permission when Notification is unavailable (covers line 47 false branch)", async () => {
+    vi.stubGlobal("Notification", undefined);
+    const { $notificationPermission } = await import("@stores/notificationPermission.ts");
+    const setSpy = vi.spyOn($notificationPermission, "set");
+    const { useNotificationSettings } = await import("@composables/useNotificationSettings.ts");
+    const { unmount } = withSetup(() => useNotificationSettings());
+    await nextTick();
+    expect(setSpy).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+    setSpy.mockRestore();
+    unmount();
+  });
 });
