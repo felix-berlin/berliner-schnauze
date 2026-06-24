@@ -149,12 +149,19 @@ describe("similarWords", () => {
     expect(withZero).toHaveLength(withUndefined.length);
   });
 
-  it("handles words with null berlinerisch (covers ?? '' branch)", () => {
+  it("handles words with null berlinerisch (covers word.?.berlinerisch ?? '' branch)", () => {
     const current = makeWord("1", "Bier");
     const nullWord = { id: "2", wordProperties: { berlinerisch: null } } as unknown as BerlinerWord;
     const noPropsWord = { id: "3" } as unknown as BerlinerWord;
     const results = similarWords([current, nullWord, noPropsWord], current);
     expect(results).toHaveLength(2);
+  });
+
+  it("handles currentWord with no wordProperties (covers currentWord.?.berlinerisch ?? '' branch)", () => {
+    const current = { id: "1" } as unknown as BerlinerWord;
+    const other = makeWord("2", "Bier");
+    const results = similarWords([current, other], current);
+    expect(results).toHaveLength(1);
   });
 });
 
