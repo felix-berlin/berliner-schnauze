@@ -259,6 +259,29 @@ describe("vTooltip directive", () => {
     vi.advanceTimersByTime(300);
     expect(mockHidePopover).toHaveBeenCalledOnce();
   });
+
+  it("onHide clears existing timer when called again while timer is pending (covers lines 163-165)", async () => {
+    vi.useFakeTimers();
+    const wrapper = mountWithDirective("Test");
+    await wrapper.find("button").trigger("pointerleave"); // first: sets hideTimer
+    await wrapper.find("button").trigger("pointerleave"); // second: hideTimer !== null → clears, resets
+    vi.advanceTimersByTime(300);
+    expect(mockHidePopover).toHaveBeenCalledOnce(); // only one hide despite two pointerleave calls
+  });
+
+  it("update: shown true→false with pending timer clears timer (covers lines 264-266)", async () => {
+    vi.useFakeTimers();
+    const wrapper = mountWithDirective("Test");
+    await wrapper.find("button").trigger("pointerleave"); // sets hideTimer
+    // shown changes from undefined to true: showPopover called, timer still pending
+    await wrapper.setProps({ val: { content: "Test", shown: true } });
+    expect(mockShowPopover).toHaveBeenCalledOnce();
+    // shown changes from true to false with hideTimer pending: hits lines 264-266
+    await wrapper.setProps({ val: { content: "Test", shown: false } });
+    expect(mockHidePopover).toHaveBeenCalledOnce();
+    vi.advanceTimersByTime(300);
+    expect(mockHidePopover).toHaveBeenCalledOnce(); // timer was cleared, not double-fired
+  });
 });
 
 function makeEl(rect: Partial<DOMRect>): HTMLElement {

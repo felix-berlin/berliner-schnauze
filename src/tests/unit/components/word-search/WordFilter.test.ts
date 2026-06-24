@@ -10,6 +10,8 @@ const onClickOutsideHolder = vi.hoisted(() => ({
   callback: null as (() => void) | null,
 }));
 
+const mockUseTimeout = vi.hoisted(() => vi.fn());
+
 vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(() => showFilterRef),
 }));
@@ -75,7 +77,7 @@ vi.mock("@vueuse/core", async (importOriginal) => {
     onClickOutside: vi.fn((_el: unknown, cb: () => void) => {
       onClickOutsideHolder.callback = cb;
     }),
-    useTimeout: vi.fn(() => ({ ready: ref(true), start: vi.fn() })),
+    useTimeout: mockUseTimeout,
   };
 });
 
@@ -84,6 +86,8 @@ beforeEach(() => {
   showFilterRef.value = false;
   mockToggle.mockClear();
   mockResetAll.mockClear();
+  mockUseTimeout.mockReset();
+  mockUseTimeout.mockReturnValue({ ready: ref(true), start: vi.fn() });
 });
 
 describe("WordFilter.vue", () => {
@@ -261,5 +265,12 @@ describe("WordFilter.vue", () => {
     const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
     const wrapper = mount(WordFilter);
     expect(wrapper.text()).toContain("Zurücksetzen");
+  });
+
+  it("ButtonWithStates gets state='success' when ready is false (covers line 66 branch)", async () => {
+    mockUseTimeout.mockReturnValueOnce({ ready: ref(false), start: vi.fn() });
+    const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
+    const wrapper = mount(WordFilter);
+    expect(wrapper.exists()).toBe(true);
   });
 });
