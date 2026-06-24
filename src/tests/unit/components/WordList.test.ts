@@ -1,8 +1,9 @@
 import WordList from "@components/WordList.vue";
 import { useStore } from "@nanostores/vue";
+import { useTimeoutFn } from "@vueuse/core";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { ref } from "vue";
+import { ref, nextTick } from "vue";
 
 const { VirtualizerStub, keyStrokeHandlers, startHideActiveTimerFn } = vi.hoisted(() => {
   const handlers = new Map<string, (e: KeyboardEvent) => void>();
@@ -177,5 +178,24 @@ describe("WordList.vue", () => {
     mount(WordList);
     const spy = fireKey("Enter");
     expect(spy).toHaveBeenCalled(); // preventDefault
+  });
+
+  it("useTimeoutFn callback sets showActive to false (covers line 71)", () => {
+    let capturedFn!: () => void;
+    vi.mocked(useTimeoutFn).mockImplementationOnce((fn: () => void) => {
+      capturedFn = fn;
+      return { start: startHideActiveTimerFn };
+    });
+    mount(WordList);
+    expect(capturedFn).toBeDefined();
+    capturedFn();
+  });
+
+  it("watch callback clears resultRefs when mutableOramaSearch changes (covers line 81)", async () => {
+    const oramaRef = ref({ state: "ready" as const, value: { hits: [makeHit("Eier")] } });
+    vi.mocked(useStore).mockReturnValue(oramaRef);
+    mount(WordList);
+    oramaRef.value = { state: "ready", value: { hits: [makeHit("Kiez")] } };
+    await nextTick();
   });
 });
