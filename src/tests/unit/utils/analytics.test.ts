@@ -68,4 +68,15 @@ describe("trackEvent", () => {
     trackEvent("Game", "score", "BON", 0);
     expect(window._paq?.[0]).toEqual(["trackEvent", "Game", "score", "BON", 0]);
   });
+
+  it("returns early without pushing when window is undefined (covers line 42 !isBrowser branch)", async () => {
+    const { trackEvent } = await import("@utils/analytics");
+    vi.stubGlobal("window", undefined);
+    try {
+      trackEvent("UI", "click", "button");
+    } finally {
+      vi.unstubAllGlobals();
+    }
+    expect((window as Window & { _paq?: unknown })._paq).toBeUndefined();
+  });
 });

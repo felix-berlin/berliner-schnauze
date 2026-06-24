@@ -168,6 +168,28 @@ describe("ToastPositionGroup.vue", () => {
     consoleSpy.mockRestore();
   });
 
+  it("open() returns early when already open (covers line 40 isOpen.value branch)", async () => {
+    const { nextTick } = await import("vue");
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [toast("a")] },
+    });
+    await nextTick(); // onMounted fires open() → isOpen becomes true
+    mockShowPopover.mockClear();
+    // Call open() again directly — should hit isOpen.value === true early return
+    (wrapper.getCurrentComponent() as any).setupState.open();
+    expect(mockShowPopover).not.toHaveBeenCalled();
+  });
+
+  it("open() returns early when container ref is null (covers line 40 !container.value branch)", () => {
+    vi.mocked(supportsPopover).mockReturnValueOnce(false); // v-if=false → no div → container stays null
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [] },
+    });
+    // Call open() directly — isOpen=false but container=null → early return
+    (wrapper.getCurrentComponent() as any).setupState.open();
+    expect(mockShowPopover).not.toHaveBeenCalled();
+  });
+
   it("onBeforeLeave sets inline styles on the leaving element", async () => {
     const wrapper = mount(ToastPositionGroup, {
       props: { position: "top-right", toasts: [toast("a")] },

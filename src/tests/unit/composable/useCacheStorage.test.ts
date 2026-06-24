@@ -685,6 +685,55 @@ describe("useCacheStorage — swInfo", () => {
     expect(result.swInfo.value).toMatchObject({ status: "active", scriptURL: "" });
     unmount();
   });
+
+  it("uses '' fallback when reg.scope is null (covers line 140 ?? '' branch)", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: {
+        getRegistration: vi.fn().mockResolvedValue({
+          active: { scriptURL: "https://example.com/sw.js" },
+          waiting: null,
+          installing: null,
+          scope: null,
+        }),
+      },
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.swInfo.value).toMatchObject({ scope: "", scriptURL: "https://example.com/sw.js" });
+    unmount();
+  });
+
+  it("skips storageQuota when estimate returns non-numeric values (covers line 112 false branch)", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: "unknown", quota: "unknown" }) },
+      serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.storageQuota.value).toBeNull();
+    unmount();
+  });
+
+  it("silently ignores NotAllowedError from storage.estimate (covers line 116 false branch)", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    const domEx = new DOMException("Permission denied", "NotAllowedError");
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockRejectedValue(domEx) },
+      serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(warnSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
+    unmount();
+  });
 });
 
 describe("useCacheStorage — loadCaches error handling", () => {

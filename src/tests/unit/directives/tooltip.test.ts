@@ -299,6 +299,27 @@ describe("vTooltip directive", () => {
       ),
     ).not.toThrow();
   });
+
+  it("normalize uses '' for content when value object has no content (covers line 96 ?? '' branch)", () => {
+    mountWithDirective({ disabled: true } as any);
+    const panel = document.body.querySelector("[popover]") as HTMLElement;
+    expect(panel.textContent).toBe("");
+  });
+
+  it("panel pointerenter is safe when no hide timer is pending (covers line 185 null branch)", async () => {
+    mountWithDirective("Test");
+    const panel = document.body.querySelector("[popover]") as HTMLElement;
+    // Dispatch pointerenter on the panel without any prior pointerleave (hideTimer is null)
+    panel.dispatchEvent(new Event("pointerenter"));
+    expect(mockHidePopover).not.toHaveBeenCalled();
+  });
+
+  it("updated uses binding.value as fallback when oldValue is undefined (covers line 237 ?? binding.value)", () => {
+    const wrapper = mountWithDirective("Initial");
+    const btn = wrapper.find("button").element;
+    vTooltip.updated!(btn, { value: "Updated", oldValue: undefined } as any, null as any, null as any);
+    expect(document.body.querySelector("[popover]")?.textContent).toBe("Updated");
+  });
 });
 
 function makeEl(rect: Partial<DOMRect>): HTMLElement {
