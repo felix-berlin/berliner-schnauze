@@ -22,7 +22,7 @@ const indexResponse = [
     modifiedGmt: "2024-01-02T00:00:00",
     modifiedTs: 1704153600,
     slug: "schnauze",
-    wordComponents: ["schnauze"],
+    wordComponents: ["schnauze", "berlin"],
     wordGroup: "S",
     wordProperties: {
       audioBerlinerisch: false,
@@ -35,6 +35,30 @@ const indexResponse = [
       similarSoundingWords: false,
       syllablesCount: 2,
       translations: ["Mund"],
+      vowelsCount: 3,
+    },
+  },
+  {
+    berlinerischWordTypes: ["Verb"],
+    dateGmt: "2023-01-01T00:00:00",
+    dateTs: 1672531200,
+    id: "2",
+    modifiedGmt: "2024-06-01T00:00:00",
+    modifiedTs: 1717200000,
+    slug: "kieken",
+    wordComponents: ["kieken", "berlin"],
+    wordGroup: "K",
+    wordProperties: {
+      audioBerlinerisch: false,
+      audioExamples: false,
+      berlinerisch: "Kieken",
+      berolinismus: false,
+      characterLength: 6,
+      consonantsCount: 3,
+      multipleMeanings: false,
+      similarSoundingWords: false,
+      syllablesCount: 2,
+      translations: ["schauen", "Mund"],
       vowelsCount: 3,
     },
   },
@@ -53,6 +77,19 @@ vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 vi.mock("@utils/helpers.ts", () => ({
   useViewTransition: vi.fn((fn: () => void) => fn()),
 }));
+
+// The highlight plugin's async afterInsert causes insertMultiple to use the sync path
+// without awaiting individual insert() Promises, leaving the Radix index empty.
+// Replace with sync stubs so the index is fully populated before search runs.
+vi.mock("@orama/plugin-match-highlight", async () => {
+  const { search } = await import("@orama/orama");
+  return {
+    afterInsert: vi.fn(), // sync no-op keeps insertMultiple on the sync path with proper Promises
+    searchWithHighlight: vi.fn((db: unknown, params: unknown) =>
+      (search as (db: unknown, params: unknown) => unknown)(db, params),
+    ),
+  };
+});
 
 // ─── setup ────────────────────────────────────────────────────────────────────
 
@@ -435,52 +472,79 @@ describe("buildWhere — filter options", () => {
 });
 
 describe("getSortBy — sort orders", () => {
-  it("date order (ASC) produces ready state", async () => {
+  // Both test documents share "Mund" in translations; searching for it ensures 2+ hits
+  // so Orama actually invokes the custom comparator function (lines 350, 355).
+
+  it("date order (ASC) puts older dateTs first", async () => {
     const { $wordSearch, $oramaSearchResults } = await import("@stores/wordList.ts");
     $wordSearch.setKey("activeOrderCategory", "date");
     $wordSearch.setKey("dateOrder", "ASC");
+    $wordSearch.setKey("search", "berlin");
+    let hits: typeof $oramaSearchResults.get.prototype[] = [];
     await vi.waitFor(
       () => {
-        expect($oramaSearchResults.get().state).toBe("ready");
+        const r = $oramaSearchResults.get();
+        expect(r.state).toBe("ready");
+        hits = r.value?.hits ?? [];
+        expect(hits.length).toBeGreaterThanOrEqual(2);
       },
       { timeout: 5000 },
     );
+    expect(hits[0].document.dateTs).toBeLessThanOrEqual(hits[1].document.dateTs);
   });
 
-  it("date order (DESC) produces ready state", async () => {
+  it("date order (DESC) puts newer dateTs first", async () => {
     const { $wordSearch, $oramaSearchResults } = await import("@stores/wordList.ts");
     $wordSearch.setKey("activeOrderCategory", "date");
     $wordSearch.setKey("dateOrder", "DESC");
+    $wordSearch.setKey("search", "berlin");
+    let hits: typeof $oramaSearchResults.get.prototype[] = [];
     await vi.waitFor(
       () => {
-        expect($oramaSearchResults.get().state).toBe("ready");
+        const r = $oramaSearchResults.get();
+        expect(r.state).toBe("ready");
+        hits = r.value?.hits ?? [];
+        expect(hits.length).toBeGreaterThanOrEqual(2);
       },
       { timeout: 5000 },
     );
+    expect(hits[0].document.dateTs).toBeGreaterThanOrEqual(hits[1].document.dateTs);
   });
 
-  it("modifiedDate order (ASC) produces ready state", async () => {
+  it("modifiedDate order (ASC) puts older modifiedTs first", async () => {
     const { $wordSearch, $oramaSearchResults } = await import("@stores/wordList.ts");
     $wordSearch.setKey("activeOrderCategory", "modifiedDate");
     $wordSearch.setKey("modifiedDateOrder", "ASC");
+    $wordSearch.setKey("search", "berlin");
+    let hits: typeof $oramaSearchResults.get.prototype[] = [];
     await vi.waitFor(
       () => {
-        expect($oramaSearchResults.get().state).toBe("ready");
+        const r = $oramaSearchResults.get();
+        expect(r.state).toBe("ready");
+        hits = r.value?.hits ?? [];
+        expect(hits.length).toBeGreaterThanOrEqual(2);
       },
       { timeout: 5000 },
     );
+    expect(hits[0].document.modifiedTs).toBeLessThanOrEqual(hits[1].document.modifiedTs);
   });
 
-  it("modifiedDate order (DESC) produces ready state", async () => {
+  it("modifiedDate order (DESC) puts newer modifiedTs first", async () => {
     const { $wordSearch, $oramaSearchResults } = await import("@stores/wordList.ts");
     $wordSearch.setKey("activeOrderCategory", "modifiedDate");
     $wordSearch.setKey("modifiedDateOrder", "DESC");
+    $wordSearch.setKey("search", "berlin");
+    let hits: typeof $oramaSearchResults.get.prototype[] = [];
     await vi.waitFor(
       () => {
-        expect($oramaSearchResults.get().state).toBe("ready");
+        const r = $oramaSearchResults.get();
+        expect(r.state).toBe("ready");
+        hits = r.value?.hits ?? [];
+        expect(hits.length).toBeGreaterThanOrEqual(2);
       },
       { timeout: 5000 },
     );
+    expect(hits[0].document.modifiedTs).toBeGreaterThanOrEqual(hits[1].document.modifiedTs);
   });
 });
 

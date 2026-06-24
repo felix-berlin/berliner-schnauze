@@ -2,8 +2,10 @@ import { formatBytes, getBucketDisplayName, getEntryType } from "@composables/us
 import { useCacheStorage } from "@composables/useCacheStorage";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createApp, nextTick } from "vue";
+import { createToastNotify } from "@stores/toastNotify.ts";
 
 vi.mock("@stores/index", () => ({ createToastNotify: vi.fn() }));
+vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
 
 // Helper: mounts a composable inside a Vue app (needed for onMounted/onUnmounted)
 function withSetup<T>(composable: () => T): { result: T; unmount: () => void } {
@@ -665,5 +667,75 @@ describe("useCacheStorage — cleanup", () => {
     // VueUse's useOnline registers with an options object (passive) — match any third arg
     expect(removeSpy).toHaveBeenCalledWith("online", expect.any(Function), expect.anything());
     expect(removeSpy).toHaveBeenCalledWith("offline", expect.any(Function), expect.anything());
+  });
+});
+
+describe("useCacheStorage — clearBucket error toast", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("shows error toast when caches.delete() throws in clearBucket", async () => {
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockResolvedValue([]),
+      open: vi.fn().mockResolvedValue(null),
+      delete: vi.fn().mockRejectedValue(new DOMException("SecurityError")),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearBucket("api-search-index");
+    expect(createToastNotify).toHaveBeenCalledWith(
+      expect.objectContaining({ message: expect.stringContaining("Suchindex"), status: "error" }),
+    );
+    unmount();
+  });
+});
+
+describe("useCacheStorage — clearAll error toasts", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("shows toast with failCount when some deletes are rejected in clearAll", async () => {
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockResolvedValue(["bucket-a", "bucket-b"]),
+      open: vi.fn().mockResolvedValue(null),
+      delete: vi.fn()
+        .mockResolvedValueOnce(true)
+        .mockRejectedValueOnce(new Error("permission denied")),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearAll();
+    expect(createToastNotify).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "1 Cache(s) konnten nicht geleert werden.",
+        status: "error",
+      }),
+    );
+    unmount();
+  });
+
+  it("shows generic error toast when caches.keys() throws in clearAll", async () => {
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockRejectedValue(new Error("Security error")),
+      open: vi.fn().mockResolvedValue(null),
+      delete: vi.fn(),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearAll();
+    expect(createToastNotify).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Caches konnten nicht geleert werden.",
+        status: "error",
+      }),
+    );
+    unmount();
   });
 });
