@@ -50,4 +50,13 @@ describe("AudioPlayerList.vue", () => {
     });
     expect(wrapper.findAll(".c-audio-list__item")).toHaveLength(0);
   });
+
+  it("passes null to AudioPlayer when mediaItemUrl is null (covers line 12 ?? null branch)", async () => {
+    const AudioPlayerList = (await import("@components/AudioPlayerList.vue")).default;
+    const audioWithNullUrl = [{ gender: "male" as const, audio: { node: { mediaItemUrl: null } } }];
+    const wrapper = mount(AudioPlayerList, {
+      props: { audio: audioWithNullUrl, isType: "berlinerisch" },
+    });
+    expect(wrapper.find(".c-audio-list__item").exists()).toBe(true);
+  });
 });

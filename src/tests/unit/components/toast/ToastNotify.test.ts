@@ -84,6 +84,17 @@ describe("ToastNotify.vue", () => {
     expect(wrapper.find(".c-toast-notify").attributes("aria-live")).toBe("polite");
   });
 
+  it("dismiss() logs error and returns early when id is empty (covers lines 84-86)", async () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const wrapper = mountToast(ToastNotify, {
+      props: { id: "" as unknown as string, message: "Hi", showClose: true },
+    });
+    await wrapper.find(".c-toast-notify__close").trigger("click");
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("no id"));
+    expect(removeToastById).not.toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
+
   it("swipe-to-dismiss calls removeToastById when isSwiping becomes true", async () => {
     const { nextTick } = await import("vue");
     mountToast(ToastNotify, {

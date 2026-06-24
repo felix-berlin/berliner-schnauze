@@ -305,6 +305,99 @@ describe("useCacheStorage — loadCaches", () => {
   });
 });
 
+describe("useCacheStorage — cache entry edge cases", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  const stubCachesWith = (cacheData: {
+    keys: ReturnType<typeof vi.fn>;
+    match: ReturnType<typeof vi.fn>;
+  }) => {
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockResolvedValue(["test-cache"]),
+      open: vi.fn().mockResolvedValue({ ...cacheData, delete: vi.fn().mockResolvedValue(true) }),
+      delete: vi.fn(),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+    });
+  };
+
+  it("returns null fields when cache.match returns null (covers line 168 !response branch)", async () => {
+    stubCachesWith({
+      keys: vi.fn().mockResolvedValue([new Request("https://example.com/file.js")]),
+      match: vi.fn().mockResolvedValue(null),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const bucket = result.buckets.value.find((b) => b.name === "test-cache")!;
+    expect(bucket.urls[0]).toMatchObject({ contentType: null, date: null, size: null });
+    unmount();
+  });
+
+  it("logs warning when blob() throws non-TypeError (covers lines 175-176 warn branch)", async () => {
+    const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const mockResponse = {
+      clone: vi.fn().mockReturnValue({
+        blob: vi.fn().mockRejectedValue(new Error("network error")),
+      }),
+      headers: { get: vi.fn().mockReturnValue(null) },
+    };
+    stubCachesWith({
+      keys: vi.fn().mockResolvedValue([new Request("https://example.com/file.js")]),
+      match: vi.fn().mockResolvedValue(mockResponse),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining("Unexpected blob()"),
+      expect.anything(),
+      expect.anything(),
+    );
+    consoleSpy.mockRestore();
+    unmount();
+  });
+
+  it("silently ignores TypeError from blob() (covers line 175 false branch)", async () => {
+    const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const mockResponse = {
+      clone: vi.fn().mockReturnValue({
+        blob: vi.fn().mockRejectedValue(new TypeError("aborted")),
+      }),
+      headers: { get: vi.fn().mockReturnValue(null) },
+    };
+    stubCachesWith({
+      keys: vi.fn().mockResolvedValue([new Request("https://example.com/file.js")]),
+      match: vi.fn().mockResolvedValue(mockResponse),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(consoleSpy).not.toHaveBeenCalled();
+    consoleSpy.mockRestore();
+    unmount();
+  });
+
+  it("returns null date for invalid Date header (covers line 184 isNaN branch)", async () => {
+    stubCachesWith({
+      keys: vi.fn().mockResolvedValue([new Request("https://example.com/file.js")]),
+      match: vi.fn().mockResolvedValue(
+        new Response(new Uint8Array(100), { headers: { Date: "not-a-valid-date" } }),
+      ),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const bucket = result.buckets.value.find((b) => b.name === "test-cache")!;
+    expect(bucket.urls[0].date).toBeNull();
+    unmount();
+  });
+});
+
 describe("useCacheStorage — clearBucket", () => {
   let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>;
 
@@ -570,6 +663,26 @@ describe("useCacheStorage — swInfo", () => {
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
     expect(result.swInfo.value?.status).toBe("not-registered");
+    unmount();
+  });
+
+  it("uses '' fallback for scriptURL when worker.scriptURL is null (covers line 141 ?? '' branch)", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: {
+        getRegistration: vi.fn().mockResolvedValue({
+          active: { scriptURL: null },
+          waiting: null,
+          installing: null,
+          scope: "https://example.com/",
+        }),
+      },
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.swInfo.value).toMatchObject({ status: "active", scriptURL: "" });
     unmount();
   });
 });

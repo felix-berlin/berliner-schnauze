@@ -35,6 +35,21 @@ vi.mock("@components/word-search/WordSearchFilterToggle.vue", () => ({
   default: { template: "<div class='mock-filter-toggle' />" },
 }));
 
+vi.mock("@components/WordList.vue", () => {
+  const mod: Record<string | symbol, unknown> = {
+    default: { template: "<div class='mock-word-list' />" },
+  };
+  // vue-test-utils accesses Vue internal flags (__isTeleport, __isKeepAlive, name…) on the raw
+  // module proxy when an async component resolves. Use a permissive Proxy so those accesses
+  // return undefined/false instead of causing Vitest's strict proxy to throw.
+  return new Proxy(mod, {
+    has: () => true,
+    get(target, key) {
+      return key in target ? target[key] : undefined;
+    },
+  });
+});
+
 vi.mock("@components/ModalCloseButton.vue", () => ({
   default: { template: "<button class='mock-modal-close'><slot name='suffix' /></button>" },
 }));
@@ -50,6 +65,8 @@ vi.mock("@components/word-search/shortcuts/ShortcutNavigating.vue", () => ({
 vi.mock("@components/word-search/shortcuts/ShortcutSelect.vue", () => ({
   default: { template: "<span class='mock-shortcut-select' />" },
 }));
+
+
 
 describe("SearchModal.vue", () => {
   beforeEach(() => {
@@ -119,5 +136,13 @@ describe("SearchModal.vue", () => {
     const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
     const wrapper = mount(SearchModal);
     expect(wrapper.find(".mock-no-search-results").exists()).toBe(true);
+  });
+
+  it("renders WordList when searchResultCount > 0 (covers line 17 v-if true branch)", async () => {
+    showFlyoutRef.value = false;
+    searchCountRef.value = 3;
+    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
+    const wrapper = mount(SearchModal);
+    expect(wrapper.find("[role='search']").exists()).toBe(true);
   });
 });

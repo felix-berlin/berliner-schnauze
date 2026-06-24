@@ -210,4 +210,71 @@ describe("WordOptionDropdown.vue", () => {
     const { trackEvent } = await import("@utils/analytics");
     expect(vi.mocked(trackEvent)).toHaveBeenCalledWith("Word Copy Link", "Word link copied", "Word: schnauze");
   });
+
+  it("hides clipboard buttons when clipboard is not supported (covers lines 33-37, 45-49 false branch)", async () => {
+    const { useClipboard } = await import("@vueuse/core");
+    vi.mocked(useClipboard).mockReturnValueOnce({
+      copied: ref(false),
+      copy: vi.fn().mockResolvedValue(undefined),
+      isSupported: ref(false),
+      text: ref(""),
+    });
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    expect(wrapper.find("[aria-label='Link zum Wort kopieren']").exists()).toBe(false);
+    expect(wrapper.find("[aria-label='Wort kopieren']").exists()).toBe(false);
+  });
+
+  it("shareWord uses '' fallback when slug is null (covers line 25 ?? '' branch)", async () => {
+    const { useShare } = await import("@vueuse/core");
+    const shareMock = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(useShare).mockReturnValueOnce({
+      isSupported: { value: true } as ReturnType<typeof useShare>["isSupported"],
+      share: shareMock,
+    });
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: null as unknown as string },
+    });
+    await wrapper.find("[aria-label='Wort teilen']").trigger("click");
+    expect(shareMock).toHaveBeenCalledWith(expect.objectContaining({ url: "/wort/" }));
+  });
+
+  it("copyWordPageUrlToClipboard uses '' fallback when slug is null (covers line 37 ?? '' branch)", async () => {
+    const { useClipboard } = await import("@vueuse/core");
+    const copyMock = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(useClipboard).mockReturnValueOnce({
+      copied: ref(false),
+      copy: copyMock,
+      isSupported: ref(true),
+      text: ref(""),
+    });
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: null as unknown as string },
+    });
+    await wrapper.find("[aria-label='Link zum Wort kopieren']").trigger("click");
+    await nextTick();
+    expect(copyMock).toHaveBeenCalledWith(expect.stringContaining("/wort/"));
+  });
+
+  it("copyNameToClipboard uses '' fallback when berlinerisch is null (covers line 49 ?? '' branch)", async () => {
+    const { useClipboard } = await import("@vueuse/core");
+    const copyMock = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(useClipboard).mockReturnValueOnce({
+      copied: ref(false),
+      copy: copyMock,
+      isSupported: ref(true),
+      text: ref(""),
+    });
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: null as unknown as string, slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Wort kopieren']").trigger("click");
+    await nextTick();
+    expect(copyMock).toHaveBeenCalledWith("");
+  });
 });

@@ -282,6 +282,23 @@ describe("vTooltip directive", () => {
     vi.advanceTimersByTime(300);
     expect(mockHidePopover).toHaveBeenCalledOnce(); // timer was cleared, not double-fired
   });
+
+  it("unmounted is safe when _tooltip is absent (covers line 220 !state early return)", () => {
+    const el = document.createElement("button");
+    expect(() => vTooltip.unmounted!(el, null as any, null as any, null as any)).not.toThrow();
+  });
+
+  it("updated is safe when _tooltip is absent (covers lines 234-237 !state early return)", () => {
+    const el = document.createElement("button");
+    expect(() =>
+      vTooltip.updated!(
+        el,
+        { value: "test", oldValue: undefined } as any,
+        null as any,
+        null as any,
+      ),
+    ).not.toThrow();
+  });
 });
 
 function makeEl(rect: Partial<DOMRect>): HTMLElement {

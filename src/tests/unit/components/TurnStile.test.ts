@@ -93,4 +93,15 @@ describe("TurnStile.vue — renderTurnstile callback (covers lines 49-50, 67)", 
     expect(wrapper.emitted("fail")).toBeTruthy();
     expect(wrapper.emitted("expire")).toBeTruthy();
   });
+
+  it("passes theme='dark' when isDarkMode store is true (covers line 54 dark branch)", async () => {
+    const { $isDarkMode } = await import("@stores/darkMode.ts");
+    $isDarkMode.set(true);
+    const mockRender = vi.fn();
+    (window as any).turnstile = { render: mockRender };
+    mount(TurnStile, { props: { siteKey: "k" } });
+    (window as any).onloadTurnstileCallback();
+    expect(mockRender.mock.calls[0][1]).toMatchObject({ theme: "dark" });
+    $isDarkMode.set(false);
+  });
 });
