@@ -112,6 +112,36 @@ describe("wordList store", () => {
       $wordSearch.setKey("consonantsCount", 3);
       expect($activeFilterCount.get()).toBe(2);
     });
+
+    it("counts audioExamples as 1 when true", async () => {
+      const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("audioExamples", true);
+      expect($activeFilterCount.get()).toBe(1);
+    });
+
+    it("counts multipleMeanings as 1 when true", async () => {
+      const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("multipleMeanings", true);
+      expect($activeFilterCount.get()).toBe(1);
+    });
+
+    it("counts similarSoundingWords as 1 when true", async () => {
+      const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("similarSoundingWords", true);
+      expect($activeFilterCount.get()).toBe(1);
+    });
+
+    it("counts vowelsCount when set", async () => {
+      const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("vowelsCount", 2);
+      expect($activeFilterCount.get()).toBe(1);
+    });
+
+    it("counts syllablesCount when set", async () => {
+      const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("syllablesCount", 3);
+      expect($activeFilterCount.get()).toBe(1);
+    });
   });
 
   describe("resetAll", () => {
@@ -338,6 +368,26 @@ describe("wordList store", () => {
       const { $wordSearch, searchLength } = await import("@stores/wordList.ts");
       $wordSearch.setKey("search", "Berlin");
       expect(searchLength.get()).toBe(6);
+    });
+  });
+
+  describe("$searchResultCount", () => {
+    it("returns 0 when oramaSearchResults state is not ready", async () => {
+      const { $oramaSearchResults, $searchResultCount } = await import("@stores/wordList.ts");
+      ($oramaSearchResults as any).set({ state: "loading" });
+      expect($searchResultCount.get()).toBe(0);
+    });
+
+    it("returns count when state is ready", async () => {
+      const { $oramaSearchResults, $searchResultCount } = await import("@stores/wordList.ts");
+      ($oramaSearchResults as any).set({ state: "ready", value: { count: 42 } });
+      expect($searchResultCount.get()).toBe(42);
+    });
+
+    it("returns 0 when state is ready but value has no count", async () => {
+      const { $oramaSearchResults, $searchResultCount } = await import("@stores/wordList.ts");
+      ($oramaSearchResults as any).set({ state: "ready", value: null });
+      expect($searchResultCount.get()).toBe(0);
     });
   });
 });
