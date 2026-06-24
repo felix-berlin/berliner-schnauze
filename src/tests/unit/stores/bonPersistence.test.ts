@@ -1,5 +1,5 @@
 /**
- * Tests for bonStats and savedBon persistence callbacks (encode/decode).
+ * Tests for bonStats, savedBon, and wordSearch persistence callbacks (encode/decode).
  * These run WITHOUT mocking @nanostores/persistent so the actual module code executes.
  */
 import { describe, expect, it, beforeEach, vi } from 'vitest'
@@ -52,6 +52,16 @@ describe('bonStats — persistence callbacks', () => {
     expect(stats.totalGamesPlayed).toBe(0)
     expect(stats.totalCorrect).toBe(0)
     expect(stats.totalAnswered).toBe(0)
+  })
+})
+
+describe('wordSearch — persistence decode catch branch', () => {
+  it('decode returns raw value when localStorage contains non-JSON (covers line 87)', async () => {
+    vi.resetModules()
+    localStorage.clear()
+    localStorage.setItem('wordSearch:search', 'not-json-value')
+    const { $wordSearch } = await import('@stores/wordList')
+    expect(() => $wordSearch.get()).not.toThrow()
   })
 })
 
