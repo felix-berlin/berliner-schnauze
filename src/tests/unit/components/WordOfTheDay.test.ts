@@ -141,4 +141,23 @@ describe("WordOfTheDay.vue", () => {
     const wrapper = mountComponent();
     expect(wrapper.find(".c-word-of-the-day__content").exists()).toBe(true);
   });
+
+  it("updates countdown display after first tick", async () => {
+    const wrapper = mountComponent();
+    // The countdown is initialized with "00" values; after 1 second it runs resetAtMidnight / convertMsToTime
+    vi.advanceTimersByTime(1000);
+    await wrapper.vm.$nextTick();
+    // Countdown spans should still be present — values are derived from real time
+    expect(wrapper.findAll(".c-word-of-the-day__update span")).toHaveLength(3);
+  });
+
+  it("countdown spans render two-digit strings", async () => {
+    const wrapper = mountComponent();
+    vi.advanceTimersByTime(1000);
+    await wrapper.vm.$nextTick();
+    const spans = wrapper.findAll(".c-word-of-the-day__update span");
+    spans.forEach((span) => {
+      expect(span.text()).toMatch(/^\d{2}$/);
+    });
+  });
 });

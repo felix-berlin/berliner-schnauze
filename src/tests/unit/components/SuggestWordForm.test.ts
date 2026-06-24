@@ -1,4 +1,5 @@
 import SuggestWordForm from "@components/SuggestWordForm.vue";
+import TurnStile from "@components/TurnStile.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
@@ -30,6 +31,7 @@ vi.mock("@utils/analytics", () => ({
 
 vi.mock("@components/TurnStile.vue", () => ({
   default: {
+    name: "TurnStile",
     template: "<div class='mock-turnstile' />",
     emits: ["verify"],
   },
@@ -128,5 +130,37 @@ describe("SuggestWordForm.vue", () => {
     expect(wrapper.find("#userEmail").exists()).toBe(true);
     const label = wrapper.find("label[for='userEmail']");
     expect(label.text()).toContain("optional");
+  });
+
+  it("calls executeMutation when form is valid and verified", async () => {
+    const { useMutation } = await import("@urql/vue");
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    // Simulate TurnStile verification
+    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.find("form").trigger("submit");
+    await Promise.resolve();
+    expect(vi.mocked(useMutation).mock.results[0].value.executeMutation).toHaveBeenCalled();
+  });
+
+  it("shows eMail has-error when invalid email is provided", async () => {
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.find<HTMLInputElement>("#userEmail").setValue("not-an-email");
+    await wrapper.find("form").trigger("submit");
+    const field = wrapper.find("#userEmail").element.closest(".c-form__item");
+    expect(field?.classList.contains("has-error")).toBe(true);
+  });
+
+  it("does not show eMail has-error when valid email is provided", async () => {
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.find<HTMLInputElement>("#userEmail").setValue("test@example.com");
+    await wrapper.find("form").trigger("submit");
+    const field = wrapper.find("#userEmail").element.closest(".c-form__item");
+    expect(field?.classList.contains("has-error")).toBe(false);
   });
 });
