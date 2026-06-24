@@ -116,6 +116,12 @@ describe("AccordionHeader", () => {
 });
 
 describe("AccordionItem", () => {
+  it("throws when mounted outside BaseAccordion (covers line 31 throw branch)", () => {
+    expect(() => mount(AccordionItem, { props: { value: "x" } })).toThrow(
+      "AccordionItem must be inside BaseAccordion",
+    );
+  });
+
   it("renders .c-accordion__item", () => {
     const wrapper = mountAccordion(`
       <BaseAccordion><AccordionItem value="x" /></BaseAccordion>
@@ -157,6 +163,12 @@ describe("AccordionItem", () => {
 });
 
 describe("AccordionTrigger", () => {
+  it("throws when mounted outside AccordionItem (covers line 30 throw branch)", () => {
+    expect(() => mount(AccordionTrigger)).toThrow(
+      "AccordionTrigger must be inside AccordionItem",
+    );
+  });
+
   function mountTrigger(open = false) {
     return mountAccordion(`
       <BaseAccordion type="single" :default-value="'item'" v-if="${open}">
