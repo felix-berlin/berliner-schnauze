@@ -1,6 +1,7 @@
 import AudioPlayer from "@components/AudioPlayer.vue";
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { nextTick } from "vue";
 
 vi.mock("virtual:icons/lucide/play", async (importOriginal) => {
   const orig = await importOriginal<Record<string, unknown>>();
@@ -70,5 +71,38 @@ describe("AudioPlayer.vue", () => {
     expect(wrapper.find("button").attributes("aria-label")).toBe("Audio abspielen");
     await wrapper.find("button").trigger("click");
     expect(wrapper.find("button").attributes("aria-label")).toBe("Audio stoppen");
+  });
+
+  it("handleEnded resets isPlaying and progress when audio ends (covers lines 40-41)", async () => {
+    let capturedEndedHandler: (() => void) | null = null;
+    vi.spyOn(window, "Audio").mockImplementationOnce(function (this: unknown) {
+      return {
+        play: vi.fn().mockResolvedValue(undefined),
+        pause: vi.fn(),
+        addEventListener: vi.fn((event: string, handler: () => void) => {
+          if (event === "ended") capturedEndedHandler = handler;
+        }),
+        removeEventListener: vi.fn(),
+        currentTime: 50,
+        duration: 100,
+      };
+    } as unknown as typeof Audio);
+
+    const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
+    await wrapper.find("button").trigger("click");
+    expect(wrapper.find("[data-testid='pause-icon']").exists()).toBe(true);
+    capturedEndedHandler!();
+    await nextTick();
+    expect(wrapper.find("[data-testid='play-icon']").exists()).toBe(true);
+    wrapper.unmount();
+  });
+
+  it("onUnmounted cancels animation frame when playing (covers lines 87-88)", async () => {
+    const cancelRafSpy = vi.spyOn(window, "cancelAnimationFrame");
+    const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
+    await wrapper.find("button").trigger("click");
+    wrapper.unmount();
+    expect(cancelRafSpy).toHaveBeenCalled();
+    cancelRafSpy.mockRestore();
   });
 });

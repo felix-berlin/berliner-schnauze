@@ -66,4 +66,11 @@ describe("RelatedWords.vue", () => {
     const wrapper = mount(RelatedWords, { props: { words } });
     expect(wrapper.find("h2").text()).toBe("Bock mehr Wörter kennen zu lernen?");
   });
+
+  it("throws RangeError when numberOfWords exceeds available words (covers line 37)", () => {
+    const tooFew = [makeWord("a", "A"), makeWord("b", "B")];
+    expect(() =>
+      mount(RelatedWords, { props: { words: tooFew, numberOfWords: 5 } }),
+    ).toThrow(RangeError);
+  });
 });

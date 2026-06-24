@@ -198,4 +198,12 @@ describe("resetModal", () => {
     resetModal();
     expect(document.body.classList.contains("u-disable-scroll")).toBe(false);
   });
+
+  it("does not call preventScroll when disableScroll is false (covers line 90 false branch)", async () => {
+    const { resetModal, $props } = await import("@stores/modal.ts");
+    $props.setKey("disableScroll", false);
+    document.body.classList.add("u-disable-scroll");
+    resetModal();
+    expect(document.body.classList.contains("u-disable-scroll")).toBe(true);
+  });
 });
