@@ -87,6 +87,24 @@ describe("BaseAccordion", () => {
     expect(wrapper.find("[data-test='state']").text()).toBe("true");
   });
 
+  it("watcher ignores modelValue change to undefined, preserving open state (covers line 42 false branch)", async () => {
+    const wrapper = mount({
+      components,
+      data() {
+        return { modelVal: "a" as string | undefined };
+      },
+      template: `
+        <BaseAccordion type="single" :model-value="modelVal" v-slot="{ isOpen }">
+          <span data-test="state">{{ isOpen('a') }}</span>
+        </BaseAccordion>
+      `,
+    });
+    expect(wrapper.find("[data-test='state']").text()).toBe("true");
+    await wrapper.setData({ modelVal: undefined });
+    // watcher fires with undefined → guard is false → openIds unchanged → still open
+    expect(wrapper.find("[data-test='state']").text()).toBe("true");
+  });
+
   it("defaultValue sets initial open state", () => {
     const wrapper = mountAccordion(`
       <BaseAccordion type="single" default-value="a" v-slot="{ isOpen }">

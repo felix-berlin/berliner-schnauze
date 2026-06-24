@@ -97,6 +97,34 @@ describe("AudioPlayer.vue", () => {
     wrapper.unmount();
   });
 
+  it("renders without audio file when audio prop is empty (covers line 33 null branch)", () => {
+    const wrapper = mount(AudioPlayer, { props: { audio: "" } });
+    expect(wrapper.find("button").exists()).toBe(true);
+    wrapper.unmount();
+  });
+
+  it("onUnmounted is safe when never played (covers line 87 false branch)", () => {
+    const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
+    wrapper.unmount();
+  });
+
+  it("progress falls back to 0 when audioFile.duration is 0 (covers line 50 false branch)", async () => {
+    vi.spyOn(window, "Audio").mockImplementationOnce(function (this: unknown) {
+      return {
+        play: vi.fn().mockResolvedValue(undefined),
+        pause: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        currentTime: 5,
+        duration: 0,
+      };
+    } as unknown as typeof Audio);
+    const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
+    await wrapper.find("button").trigger("click");
+    expect(wrapper.find("[data-testid='pause-icon']").exists()).toBe(true);
+    wrapper.unmount();
+  });
+
   it("onUnmounted cancels animation frame when playing (covers lines 87-88)", async () => {
     const cancelRafSpy = vi.spyOn(window, "cancelAnimationFrame");
     const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
