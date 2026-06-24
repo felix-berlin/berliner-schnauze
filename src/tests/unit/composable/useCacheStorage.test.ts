@@ -739,3 +739,71 @@ describe("useCacheStorage — clearAll error toasts", () => {
     unmount();
   });
 });
+
+describe("useCacheStorage — blob() non-TypeError error branch", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("logs console.warn when blob() throws a non-TypeError", async () => {
+    const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const nonTypeError = new Error("quota exceeded");
+    const mockResponse = {
+      clone: () => ({ blob: () => Promise.reject(nonTypeError) }),
+      headers: { get: (key: string) => (key === "Content-Type" ? "application/json" : null) },
+    };
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockResolvedValue(["test-bucket"]),
+      open: vi.fn().mockResolvedValue({
+        keys: vi.fn().mockResolvedValue([new Request("https://example.com/data.json")]),
+        match: vi.fn().mockResolvedValue(mockResponse),
+        delete: vi.fn(),
+      }),
+      delete: vi.fn(),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "[useCacheStorage] Unexpected blob() error for",
+      "https://example.com/data.json",
+      nonTypeError,
+    );
+    unmount();
+  });
+});
+
+describe("useCacheStorage — rejected bucket in Promise.allSettled", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("logs console.error when a bucket load rejects inside allSettled", async () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const loadError = new Error("Permission denied");
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockResolvedValue(["good-bucket", "bad-bucket"]),
+      open: vi.fn().mockImplementation((name: string) => {
+        if (name === "bad-bucket") return Promise.reject(loadError);
+        return Promise.resolve({
+          keys: vi.fn().mockResolvedValue([]),
+          match: vi.fn(),
+          delete: vi.fn(),
+        });
+      }),
+      delete: vi.fn(),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "[useCacheStorage] Failed to load cache bucket:",
+      loadError,
+    );
+    unmount();
+  });
+});
