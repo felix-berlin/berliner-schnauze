@@ -100,4 +100,17 @@ describe("fetchGermanArtikel", () => {
     expect(await fetchGermanArtikel("Hund")).toBeNull();
     expect(consoleSpy).toHaveBeenCalledOnce();
   });
+
+  it("returns null when revision has no '*' content (covers ?? '' fallback)", async () => {
+    const body = { query: { pages: { "12345": { revisions: [{}] } } } };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(makeResponse(true, body)));
+    const { fetchGermanArtikel } = await import("@services/wiktionaryApi.ts");
+    expect(await fetchGermanArtikel("Test")).toBeNull();
+  });
+
+  it("returns null silently when a non-Error value is thrown", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue("string error"));
+    const { fetchGermanArtikel } = await import("@services/wiktionaryApi.ts");
+    expect(await fetchGermanArtikel("Hund")).toBeNull();
+  });
 });

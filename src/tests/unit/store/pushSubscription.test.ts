@@ -201,6 +201,16 @@ describe("subscribePush", () => {
     expect(createToastNotify).toHaveBeenCalledOnce();
   });
 
+  it("sets error + shows toast when VAPID key format is malformed", async () => {
+    vi.stubEnv("PUBLIC_VAPID_PUBLIC_KEY", "!!!invalid!!!");
+    const { subscribePush, $pushState } = await import("@stores/pushSubscription.ts");
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    $pushState.set("unsubscribed");
+    await subscribePush();
+    expect($pushState.get()).toBe("error");
+    expect(createToastNotify).toHaveBeenCalledOnce();
+  });
+
   it("shows permission-denied toast on NotAllowedError", async () => {
     const denied = Object.assign(new DOMException("User denied", "NotAllowedError"));
     const reg = { pushManager: { getSubscription: vi.fn(), subscribe: vi.fn().mockRejectedValue(denied) } };

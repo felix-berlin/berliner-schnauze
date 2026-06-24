@@ -248,6 +248,17 @@ describe("vTooltip directive", () => {
     await wrapper.find("button").trigger("pointerenter");
     expect(mockShowPopover).toHaveBeenCalledOnce();
   });
+
+  it("updated: disabling while hideTimer is pending clears timer and hides once", async () => {
+    vi.useFakeTimers();
+    const wrapper = mountWithDirective({ content: "Test", disabled: false });
+    await wrapper.find("button").trigger("pointerleave");
+    expect(mockHidePopover).not.toHaveBeenCalled();
+    await wrapper.setProps({ val: { content: "Test", disabled: true } });
+    expect(mockHidePopover).toHaveBeenCalledOnce();
+    vi.advanceTimersByTime(300);
+    expect(mockHidePopover).toHaveBeenCalledOnce();
+  });
 });
 
 function makeEl(rect: Partial<DOMRect>): HTMLElement {
