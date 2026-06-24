@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 import BonResult from "@components/games/BonResult.vue";
+import { useShare } from "@vueuse/core";
 
 
 const statsRef = ref({ playerName: "" });
@@ -128,5 +129,42 @@ describe("BonResult.vue", () => {
   it("exposes focus method", () => {
     const wrapper = mount(BonResult, { props: defaultProps });
     expect(typeof (wrapper.vm as { focus?: () => void }).focus).toBe("function");
+  });
+
+  it("calling focus() calls focus on the h2 element (covers line 87)", () => {
+    const wrapper = mount(BonResult, { props: defaultProps });
+    const h2 = wrapper.find("h2").element;
+    const focusSpy = vi.spyOn(h2, "focus");
+    (wrapper.vm as any).focus();
+    expect(focusSpy).toHaveBeenCalledOnce();
+  });
+
+  it("shows share button when useShare is supported (covers lines 100-109)", async () => {
+    const mockShareFn = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(useShare).mockReturnValueOnce({
+      isSupported: ref(true),
+      share: mockShareFn,
+    } as any);
+    statsRef.value = { playerName: "" };
+    const wrapper = mount(BonResult, { props: defaultProps });
+    expect(wrapper.find(".c-bon-result__share-btn").exists()).toBe(true);
+    await wrapper.find(".c-bon-result__share-btn").trigger("click");
+    expect(mockShareFn).toHaveBeenCalledOnce();
+    const callArg = mockShareFn.mock.calls[0][0];
+    expect(callArg.text).toMatch(/Ich hab/);
+  });
+
+  it("share() uses playerName in text when set (covers playerName branch in share)", async () => {
+    const mockShareFn = vi.fn().mockResolvedValue(undefined);
+    vi.mocked(useShare).mockReturnValueOnce({
+      isSupported: ref(true),
+      share: mockShareFn,
+    } as any);
+    statsRef.value = { playerName: "Felix" };
+    const wrapper = mount(BonResult, { props: defaultProps });
+    await wrapper.find(".c-bon-result__share-btn").trigger("click");
+    const callArg = mockShareFn.mock.calls[0][0];
+    expect(callArg.text).toMatch(/Felix/);
+    statsRef.value = { playerName: "" };
   });
 });
