@@ -16,6 +16,14 @@ describe("createToastNotify", () => {
   });
   afterEach(() => {
     vi.restoreAllMocks();
+    delete (HTMLElement.prototype as { popover?: unknown }).popover;
+  });
+
+  it("returns false and does not add toast when popover API is unavailable", () => {
+    delete (HTMLElement.prototype as { popover?: unknown }).popover;
+    const result = createToastNotify({ message: "test" });
+    expect(result).toBe(false);
+    expect($toastNotify.get()).toHaveLength(0);
   });
 
   it("assigns a UUID string id", () => {
