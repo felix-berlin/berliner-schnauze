@@ -4,6 +4,23 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { ref } from "vue";
 
+const { mockWhenever, mockOnEventFired } = vi.hoisted(() => {
+  let capturedWheneverCb: (() => void) | null = null;
+  let capturedOnEventFired: ((e: KeyboardEvent) => void) | null = null;
+  return {
+    mockWhenever: {
+      fn: vi.fn((_: unknown, cb: () => void) => { capturedWheneverCb = cb; }),
+      call: () => capturedWheneverCb?.(),
+    },
+    mockOnEventFired: {
+      fn: vi.fn((opts: { onEventFired: (e: KeyboardEvent) => void }) => {
+        capturedOnEventFired = opts.onEventFired;
+      }),
+      fire: (e: KeyboardEvent) => capturedOnEventFired?.(e),
+    },
+  };
+});
+
 vi.mock("virtual:icons/lucide/search", async (importOriginal) => {
   const orig = await importOriginal<Record<string, unknown>>();
   return { ...orig, default: { template: "<span data-testid='search-icon' />" } };
@@ -21,8 +38,11 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
   return {
     ...actual,
-    useMagicKeys: vi.fn(() => ({ "Shift+/": ref(false) })),
-    whenever: vi.fn(),
+    useMagicKeys: vi.fn((opts?: { onEventFired?: (e: KeyboardEvent) => void; passive?: boolean }) => {
+      if (opts?.onEventFired) mockOnEventFired.fn(opts as { onEventFired: (e: KeyboardEvent) => void });
+      return { "Shift+/": ref(false) };
+    }),
+    whenever: mockWhenever.fn,
   };
 });
 
@@ -86,5 +106,38 @@ describe("SearchModalTrigger.vue", () => {
     expect(btn.classes()).toContain("c-searchbar");
     expect(btn.classes()).toContain("c-button");
     expect(btn.classes()).toContain("c-button--outline");
+  });
+
+  it("keyboard shortcut calls open() via whenever callback", () => {
+    mount(SearchModalTrigger);
+    mockWhenever.call();
+    expect(modalStore.open).toHaveBeenCalledTimes(1);
+  });
+
+  it("keyboard shortcut calls trackEvent", async () => {
+    const { trackEvent } = await import("@utils/analytics");
+    mount(SearchModalTrigger);
+    mockWhenever.call();
+    expect(trackEvent).toHaveBeenCalledWith(
+      "Search",
+      "Open Search Modal via Keyboard",
+      "Search Modal Opened via Keyboard",
+    );
+  });
+
+  it("onEventFired calls preventDefault for Shift+/ keydown", () => {
+    mount(SearchModalTrigger);
+    const event = new KeyboardEvent("keydown", { shiftKey: true, key: "/" });
+    const preventDefaultSpy = vi.spyOn(event, "preventDefault");
+    mockOnEventFired.fire(event);
+    expect(preventDefaultSpy).toHaveBeenCalled();
+  });
+
+  it("onEventFired does not call preventDefault for other keys", () => {
+    mount(SearchModalTrigger);
+    const event = new KeyboardEvent("keydown", { key: "a" });
+    const preventDefaultSpy = vi.spyOn(event, "preventDefault");
+    mockOnEventFired.fire(event);
+    expect(preventDefaultSpy).not.toHaveBeenCalled();
   });
 });

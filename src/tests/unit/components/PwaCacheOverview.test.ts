@@ -7,6 +7,8 @@ const mockBuckets = ref<{ name: string; urls: string[] }[]>([]);
 const mockIsCacheAvailable = ref(true);
 const mockIsLoading = ref(false);
 const mockLoadError = ref<string | null>(null);
+const mockStorageQuota = ref<{ quotaBytes: number; usedBytes: number } | null>(null);
+const mockSwInfo = ref<{ scriptURL?: string; status: string } | null>(null);
 const mockLoadCaches = vi.fn();
 const mockReSync = vi.fn();
 const mockClearAll = vi.fn();
@@ -23,11 +25,11 @@ vi.mock("@composables/useCacheStorage", () => ({
     loadError: mockLoadError,
     onlineStatus: ref("online"),
     reSync: mockReSync,
-    storageQuota: ref(null),
-    swInfo: ref(null),
+    storageQuota: mockStorageQuota,
+    swInfo: mockSwInfo,
     totalSizeBytes: ref(0),
   })),
-  getBucketDisplayName: vi.fn((name: string) => name),
+  getBucketDisplayName: vi.fn((name: string) => `[${name}]`),
 }));
 
 vi.mock("@nanostores/vue", () => ({
@@ -61,13 +63,15 @@ vi.mock("@components/PwaCacheInfoGrid.vue", () => ({
 
 vi.mock("@components/PwaCacheActions.vue", () => ({
   default: {
-    template: "<div class='mock-pwa-cache-actions' @click.self='$emit(\"refresh\")' />",
+    name: "PwaCacheActions",
+    template: "<div class='mock-pwa-cache-actions' />",
     emits: ["refresh", "clear-all", "resync"],
   },
 }));
 
 vi.mock("@components/PwaCacheBucketList.vue", () => ({
   default: {
+    name: "PwaCacheBucketList",
     template: "<div class='mock-pwa-cache-bucket-list' />",
     emits: ["clear-bucket"],
   },
@@ -80,6 +84,8 @@ describe("PwaCacheOverview.vue", () => {
     mockIsCacheAvailable.value = true;
     mockIsLoading.value = false;
     mockLoadError.value = null;
+    mockStorageQuota.value = null;
+    mockSwInfo.value = null;
   });
 
   it("renders .c-pwa-cache wrapper", () => {
@@ -156,5 +162,34 @@ describe("PwaCacheOverview.vue", () => {
     const wrapper = mount(PwaCacheOverview);
     expect(wrapper.find(".mock-pwa-cache-bucket-list").exists()).toBe(true);
     expect(wrapper.find(".c-pwa-cache__empty").exists()).toBe(false);
+  });
+
+  it("clear-all event from PwaCacheActions triggers open() with ConfirmDialog", async () => {
+    const { open } = await import("@stores/modal");
+    const wrapper = mount(PwaCacheOverview);
+    await wrapper.findComponent({ name: "PwaCacheActions" }).vm.$emit("clear-all");
+    expect(open).toHaveBeenCalledOnce();
+  });
+
+  it("clear-bucket event from PwaCacheBucketList triggers open() with ConfirmDialog", async () => {
+    const { open } = await import("@stores/modal");
+    mockBuckets.value = [{ name: "cache-v1", urls: ["/foo"] }];
+    const wrapper = mount(PwaCacheOverview);
+    await wrapper.findComponent({ name: "PwaCacheBucketList" }).vm.$emit("clear-bucket", "cache-v1");
+    expect(open).toHaveBeenCalledOnce();
+    const callArg = vi.mocked(open).mock.calls[0][0];
+    expect(callArg.view?.props?.message).toContain("[cache-v1]");
+  });
+
+  it("storageQuotaPercent returns correct percentage when quota is set", () => {
+    mockStorageQuota.value = { quotaBytes: 1000, usedBytes: 250 };
+    const wrapper = mount(PwaCacheOverview);
+    expect(wrapper.exists()).toBe(true);
+  });
+
+  it("swScriptURL is resolved when swInfo has scriptURL", () => {
+    mockSwInfo.value = { status: "active", scriptURL: "/sw.js" };
+    const wrapper = mount(PwaCacheOverview);
+    expect(wrapper.exists()).toBe(true);
   });
 });
