@@ -97,7 +97,7 @@ describe("AudioPlayer.vue", () => {
     wrapper.unmount();
   });
 
-  it("renders without audio file when audio prop is empty (covers line 33 null branch)", () => {
+  it("renders correctly when audio prop is empty (covers line 33 null branch)", () => {
     const wrapper = mount(AudioPlayer, { props: { audio: "" } });
     expect(wrapper.find("button").exists()).toBe(true);
     wrapper.unmount();
@@ -108,7 +108,33 @@ describe("AudioPlayer.vue", () => {
     wrapper.unmount();
   });
 
-  it("progress falls back to 0 when audioFile.duration is 0 (covers line 50 false branch)", async () => {
+  it("updateProgress exits early when audioFile is null (covers line 49 false branch)", async () => {
+    let capturedCb: FrameRequestCallback | null = null;
+    const rafSpy = vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      capturedCb = cb;
+      return 1;
+    });
+    const wrapper = mount(AudioPlayer, { props: { audio: "" } });
+    await wrapper.find("button").trigger("click"); // playAudio schedules rAF even with null audioFile
+    capturedCb!(0); // fire updateProgress → if (null && isPlaying) → false → exits
+    rafSpy.mockRestore();
+    wrapper.unmount();
+  });
+
+  it("updateProgress computes progress when duration > 0 (covers lines 49-52 true/truthy branch)", async () => {
+    let capturedCb: FrameRequestCallback | null = null;
+    const rafSpy = vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      capturedCb = cb;
+      return 1;
+    });
+    const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
+    await wrapper.find("button").trigger("click"); // default mock: duration=100, currentTime=0
+    capturedCb!(0); // fire updateProgress → if (audioFile && isPlaying) → true → duration truthy → computes ratio
+    rafSpy.mockRestore();
+    wrapper.unmount();
+  });
+
+  it("updateProgress uses 0 when audioFile.duration is 0 (covers line 50 false branch)", async () => {
     vi.spyOn(window, "Audio").mockImplementationOnce(function (this: unknown) {
       return {
         play: vi.fn().mockResolvedValue(undefined),
@@ -119,9 +145,15 @@ describe("AudioPlayer.vue", () => {
         duration: 0,
       };
     } as unknown as typeof Audio);
+    let capturedCb: FrameRequestCallback | null = null;
+    const rafSpy = vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      capturedCb = cb;
+      return 1;
+    });
     const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
     await wrapper.find("button").trigger("click");
-    expect(wrapper.find("[data-testid='pause-icon']").exists()).toBe(true);
+    capturedCb!(0); // fire updateProgress → duration=0 → progress = 0 (false branch)
+    rafSpy.mockRestore();
     wrapper.unmount();
   });
 

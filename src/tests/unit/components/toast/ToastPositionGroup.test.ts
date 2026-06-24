@@ -127,6 +127,33 @@ describe("ToastPositionGroup.vue", () => {
     consoleSpy.mockRestore();
   });
 
+  it("watcher skips open() when isSupported is false (covers line 59 early return)", async () => {
+    vi.mocked(supportsPopover).mockReturnValueOnce(false);
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [] },
+    });
+    await wrapper.setProps({ toasts: [toast("a")] });
+    expect(mockShowPopover).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
+
+  it("onBeforeLeave uses {left:0,top:0} fallback when container is null (covers line 69 ?? fallback)", () => {
+    vi.mocked(supportsPopover).mockReturnValueOnce(false);
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [] },
+    });
+    const el = document.createElement("div");
+    vi.spyOn(el, "getBoundingClientRect").mockReturnValue(
+      { top: 100, left: 50, width: 200, bottom: 0, right: 0, height: 0, toJSON: () => ({}) } as DOMRect,
+    );
+    const setupState = (wrapper.getCurrentComponent() as any).setupState;
+    setupState.onBeforeLeave(el);
+    // container is null → fallback {left:0, top:0} → top=100-0=100, left=50-0=50
+    expect(el.style.top).toBe("100px");
+    expect(el.style.left).toBe("50px");
+    wrapper.unmount();
+  });
+
   it("catches and logs error when hidePopover throws during onAfterLeave", async () => {
     const { nextTick } = await import("vue");
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});

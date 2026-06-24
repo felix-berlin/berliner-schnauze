@@ -153,6 +153,18 @@ describe("SearchWords.vue", () => {
     wrapper.unmount();
   });
 
+  it("watcher is a no-op when state is ready but pendingTrackSearch is null (covers line 65 false branch)", async () => {
+    const { setMatomoSearch } = await import("@utils/analytics");
+    oramaResultsRef.value = { state: "loading" } as any;
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords);
+    // Transition directly to ready without any pending search → watcher fires, if-body skipped
+    oramaResultsRef.value = { state: "ready", value: { count: 0 } } as any;
+    await nextTick();
+    expect(setMatomoSearch).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
+
   it("autoFocus prop focuses the search input on mount", async () => {
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords, {
