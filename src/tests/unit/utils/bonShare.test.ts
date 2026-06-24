@@ -69,3 +69,41 @@ describe('buildShareUrl', () => {
     expect(decodeShareHash(r)).toEqual(payload)
   })
 })
+
+describe('decodeShareHash — invalid payload validation', () => {
+  function encodeRaw(value: unknown): string {
+    const b64 = btoa(JSON.stringify(value)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+    return `uuid.${b64}`
+  }
+
+  it('returns null when decoded JSON is null (covers isValidPayload null check)', () => {
+    expect(decodeShareHash(encodeRaw(null))).toBeNull()
+  })
+
+  it('returns null when decoded JSON is a primitive (non-object)', () => {
+    expect(decodeShareHash(encodeRaw(42))).toBeNull()
+  })
+
+  it('returns null when score is negative (covers isFiniteNonNegative false branch)', () => {
+    expect(decodeShareHash(encodeRaw({ ...payload, score: -1 }))).toBeNull()
+  })
+
+  it('returns null when score is not a number', () => {
+    expect(decodeShareHash(encodeRaw({ ...payload, score: 'not-a-number' }))).toBeNull()
+  })
+
+  it('returns null when date is missing', () => {
+    const { date: _d, ...noDate } = payload
+    expect(decodeShareHash(encodeRaw(noDate))).toBeNull()
+  })
+
+  it('returns null when playerName is a non-string value', () => {
+    expect(decodeShareHash(encodeRaw({ ...payload, playerName: 123 }))).toBeNull()
+  })
+
+  it('accepts valid payload with optional playerName as string', () => {
+    expect(decodeShareHash(encodeRaw({ ...payload, playerName: 'Alice' }))).toMatchObject({
+      playerName: 'Alice',
+    })
+  })
+})

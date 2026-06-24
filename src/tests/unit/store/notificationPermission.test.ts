@@ -93,4 +93,12 @@ describe("notificationPermission store", () => {
     expect(isNotificationSupported()).toBe(false);
     vi.unstubAllGlobals();
   });
+
+  it("requestNotificationPermission returns early when not supported", async () => {
+    vi.stubGlobal("Notification", undefined);
+    const { requestNotificationPermission } = await import("@stores/notificationPermission.ts");
+    await requestNotificationPermission();
+    expect(mockRequestPermission).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+  });
 });

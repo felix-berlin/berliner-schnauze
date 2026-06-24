@@ -131,6 +131,16 @@ describe("open", () => {
     open({});
     expect($onCloseCallback.get()).toBeNull();
   });
+
+  it("calls el.showModal() on the registered dialog element after nextTick", async () => {
+    const { open, $element } = await import("@stores/modal.ts");
+    const fakeDialog = { showModal: vi.fn() } as unknown as HTMLDialogElement;
+    $element.set(fakeDialog);
+    open({});
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(fakeDialog.showModal).toHaveBeenCalledOnce();
+  });
 });
 
 // ─── close ────────────────────────────────────────────────────────────────────

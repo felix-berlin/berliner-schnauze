@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  capitalizeFirstLetter,
   coloredConsonantsAndVowels,
   countLetters,
   createWikimediaFileList,
@@ -227,5 +228,23 @@ describe("createWikimediaFileList", () => {
       expect.any(Array),
     );
     consoleSpy.mockRestore();
+  });
+});
+
+describe("capitalizeFirstLetter", () => {
+  it("capitalizes the first letter of a lowercase word", () => {
+    expect(capitalizeFirstLetter("berliner")).toBe("Berliner");
+  });
+
+  it("leaves already-capitalized words unchanged", () => {
+    expect(capitalizeFirstLetter("Schnauze")).toBe("Schnauze");
+  });
+
+  it("handles single character", () => {
+    expect(capitalizeFirstLetter("a")).toBe("A");
+  });
+
+  it("handles empty string", () => {
+    expect(capitalizeFirstLetter("")).toBe("");
   });
 });

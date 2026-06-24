@@ -85,4 +85,13 @@ describe("darkMode store", () => {
     setDarkMode(null);
     expect($isDarkMode.get()).toBeNull();
   });
+
+  it("returns early without touching document when document is undefined", async () => {
+    const { setDarkMode } = await import("@stores/darkMode.ts");
+    const origDocument = global.document;
+    // @ts-expect-error intentionally removing document
+    delete global.document;
+    expect(() => setDarkMode(true)).not.toThrow();
+    global.document = origDocument;
+  });
 });
