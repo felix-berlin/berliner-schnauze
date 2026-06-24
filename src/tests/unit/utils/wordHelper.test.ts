@@ -148,6 +148,14 @@ describe("similarWords", () => {
     const withUndefined = similarWords([current, other], current, undefined);
     expect(withZero).toHaveLength(withUndefined.length);
   });
+
+  it("handles words with null berlinerisch (covers ?? '' branch)", () => {
+    const current = makeWord("1", "Bier");
+    const nullWord = { id: "2", wordProperties: { berlinerisch: null } } as unknown as BerlinerWord;
+    const noPropsWord = { id: "3" } as unknown as BerlinerWord;
+    const results = similarWords([current, nullWord, noPropsWord], current);
+    expect(results).toHaveLength(2);
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -230,6 +238,15 @@ describe("createWikimediaFileList", () => {
       expect.any(Array),
     );
     consoleSpy.mockRestore();
+  });
+
+  it("calls fetchWikimediaAPI with empty string when wikimediaFile is null (covers ?? '' branch)", async () => {
+    mockFetch.mockResolvedValue({ thumbnail: { url: "http://example.com/img.jpg" } });
+    const result = await createWikimediaFileList([
+      { wikimediaFile: null, caption: "cap", description: "desc" } as never,
+    ]);
+    expect(mockFetch).toHaveBeenCalledWith("");
+    expect(result).toHaveLength(1);
   });
 });
 
