@@ -122,6 +122,14 @@ describe("BonCard.vue", () => {
     expect(typeof (wrapper.vm as { focus?: () => void }).focus).toBe("function");
   });
 
+  it("focus() calls focus on neeButtonRef when button is mounted (covers line 97 ?. non-null branch)", () => {
+    const wrapper = mount(BonCard, { props: defaultProps, attachTo: document.body });
+    const focusSpy = vi.spyOn(wrapper.find(".c-bon-card__btn--no").element, "focus");
+    (wrapper.vm as { focus: () => void }).focus();
+    expect(focusSpy).toHaveBeenCalledOnce();
+    wrapper.unmount();
+  });
+
   it("shows swipe hint on first card", async () => {
     const wrapper = mount(BonCard, { props: { ...defaultProps, isFirstCard: true } });
     await wrapper.vm.$nextTick();

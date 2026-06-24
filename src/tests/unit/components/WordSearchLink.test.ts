@@ -137,4 +137,16 @@ describe("WordSearchLink.vue", () => {
     await nextTick();
     expect(wrapper.find(".c-word-search-link__icon-wrap").classes()).not.toContain("u-ripple");
   });
+
+  it("logs error when search bar not found after all retries (covers line 44)", async () => {
+    vi.useFakeTimers();
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const wrapper = mount(WordSearchLink);
+    await wrapper.find("button").trigger("click");
+    // 5 retries × 100ms each = 500ms total; advance past all of them
+    vi.advanceTimersByTime(600);
+    expect(consoleSpy).toHaveBeenCalledWith("Search bar element not found after multiple attempts.");
+    consoleSpy.mockRestore();
+    vi.useRealTimers();
+  });
 });

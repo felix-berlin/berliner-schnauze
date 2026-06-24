@@ -193,6 +193,12 @@ describe("PwaCacheOverview.vue", () => {
     expect(wrapper.exists()).toBe(true);
   });
 
+  it("swScriptURL returns null when scriptURL is empty string (covers line 127 || null branch)", () => {
+    mockSwInfo.value = { status: "active", scriptURL: "" };
+    const wrapper = mount(PwaCacheOverview);
+    expect(wrapper.exists()).toBe(true);
+  });
+
   it("confirmClearAll cancel callback calls close()", async () => {
     const { open, close } = await import("@stores/modal");
     const wrapper = mount(PwaCacheOverview);

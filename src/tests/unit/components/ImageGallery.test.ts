@@ -82,4 +82,22 @@ describe("ImageGallery.vue", () => {
     wrapper.unmount();
     expect(instance.destroy).toHaveBeenCalled();
   });
+
+  it("pswpModule factory resolves to photoswipe when called (covers line 37 arrow fn body)", async () => {
+    let capturedPswpModule: (() => Promise<unknown>) | undefined;
+    const { default: PhotoSwipeLightbox } = await import("photoswipe/lightbox");
+    vi.mocked(PhotoSwipeLightbox).mockImplementationOnce(function (
+      this: Record<string, unknown>,
+      opts: { pswpModule?: () => Promise<unknown> },
+    ) {
+      capturedPswpModule = opts.pswpModule;
+      this.init = mockInit;
+      this.destroy = mockDestroy;
+    });
+    const { default: ImageGallery } = await import("@components/ImageGallery.vue");
+    mount(ImageGallery, { props: { images: sampleImages } });
+    expect(typeof capturedPswpModule).toBe("function");
+    const result = await capturedPswpModule!();
+    expect(result).toBeDefined();
+  });
 });

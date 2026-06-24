@@ -156,4 +156,30 @@ describe("PwaCacheBucketList", () => {
     await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     expect(wrapper.find(".c-pwa-cache__url-type").text()).toBe("X-CUSTOM");
   });
+
+  it("renders type breakdown pills when typeBreakdown has items (covers line 51 v-if true branch)", () => {
+    const bucket: CacheBucket = {
+      dateRange: null,
+      name: "api-search-index",
+      totalSizeBytes: 0,
+      typeBreakdown: [{ type: "js", count: 12, sizeBytes: 5000 }],
+      urls: [],
+    };
+    const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
+    expect(wrapper.find(".c-pwa-cache__bucket-types").exists()).toBe(true);
+    expect(wrapper.find(".c-pwa-cache__type-pill").text()).toContain("JS 12");
+  });
+
+  it("formatUrl falls back to raw url when URL() parsing throws (covers line 118 catch branch)", async () => {
+    const bucket: CacheBucket = {
+      dateRange: null,
+      name: "api-search-index",
+      totalSizeBytes: 0,
+      typeBreakdown: [],
+      urls: [{ contentType: null, date: null, size: null, url: "/relative-path-no-origin" }],
+    };
+    const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
+    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
+    expect(wrapper.find(".c-pwa-cache__url-path").text()).toContain("/relative-path-no-origin");
+  });
 });

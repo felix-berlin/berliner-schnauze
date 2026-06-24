@@ -105,5 +105,25 @@ describe("wordOfTheDay store", () => {
       expect(mockFetch).toHaveBeenCalled();
       unsub();
     });
+
+    it("outer catch in onMount logs error when getWordOfTheDay rejects (covers line 117)", async () => {
+      // Make fetch reject so getWordOfTheDay's internal .catch() runs
+      mockFetch.mockRejectedValueOnce(new Error("network"));
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
+      // Make first setKey call throw so that getWordOfTheDay's internal .catch() handler itself
+      // throws, which propagates as a rejection from getWordOfTheDay() and triggers line 117
+      vi.spyOn($wordOfTheDay, "setKey").mockImplementationOnce(() => {
+        throw new Error("setKey blown");
+      });
+      const unsub = $wordOfTheDay.subscribe(() => {});
+      await new Promise<void>((r) => setTimeout(r, 100));
+      expect(consoleSpy).toHaveBeenCalledWith(
+        "Failed to fetch Word of the Day: ",
+        expect.any(Error),
+      );
+      unsub();
+      consoleSpy.mockRestore();
+    });
   });
 });

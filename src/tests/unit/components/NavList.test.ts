@@ -95,4 +95,28 @@ describe("NavList.vue", () => {
     const wrapper = mount(NavList, { props: { items: itemsWithRel } });
     expect(wrapper.find("a").attributes("rel")).toBe("noopener");
   });
+
+  it("isVueComponent returns true for object with render property (covers line 58)", () => {
+    const wrapper = mount(NavList, { props: { items: linkItems } });
+    const { isVueComponent } = (wrapper.getCurrentComponent() as any).setupState;
+    expect(isVueComponent({ render: () => {} })).toBe(true);
+  });
+
+  it("isVueComponent returns true for object with setup property", () => {
+    const wrapper = mount(NavList, { props: { items: linkItems } });
+    const { isVueComponent } = (wrapper.getCurrentComponent() as any).setupState;
+    expect(isVueComponent({ setup: () => ({}) })).toBe(true);
+  });
+
+  it("isVueComponent returns true for object with components property", () => {
+    const wrapper = mount(NavList, { props: { items: linkItems } });
+    const { isVueComponent } = (wrapper.getCurrentComponent() as any).setupState;
+    expect(isVueComponent({ components: {} })).toBe(true);
+  });
+
+  it("isVueComponent returns false for plain link object", () => {
+    const wrapper = mount(NavList, { props: { items: linkItems } });
+    const { isVueComponent } = (wrapper.getCurrentComponent() as any).setupState;
+    expect(isVueComponent({ link: "/about", title: "About" })).toBe(false);
+  });
 });

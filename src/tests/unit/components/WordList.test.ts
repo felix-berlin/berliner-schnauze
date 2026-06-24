@@ -198,4 +198,21 @@ describe("WordList.vue", () => {
     oramaRef.value = { state: "ready", value: { hits: [makeHit("Kiez")] } };
     await nextTick();
   });
+
+  it("el.focus() is called inside focusActive nextTick when ref exists (covers line 104)", async () => {
+    vi.mocked(useStore).mockReturnValue(
+      ref({ state: "ready", value: { hits: [makeHit("Kiez")] } }),
+    );
+    const wrapper = mount(WordList, { attachTo: document.body });
+    const setupState = (wrapper.getCurrentComponent() as any).setupState;
+    // Use setResultRef to populate resultRefs (it checks instanceof HTMLElement before pushing)
+    const el = document.createElement("li");
+    const focusSpy = vi.spyOn(el, "focus");
+    setupState.setResultRef(el);
+    // ArrowDown: activeIndex stays 0 (1 item: (0+1)%1=0), calls focusActive → nextTick → el.focus()
+    fireKey("ArrowDown");
+    await nextTick();
+    expect(focusSpy).toHaveBeenCalledOnce();
+    wrapper.unmount();
+  });
 });
