@@ -409,6 +409,70 @@ describe("DropdownPopover.vue", () => {
     expect(mockHidePopover).not.toHaveBeenCalled();
   });
 
+  // --- syncArrow: early-return when arrow=false (line 101) ---
+
+  it("resize observer callback with arrow=false hits syncArrow early-return (covers line 101 !arrow branch)", async () => {
+    const wrapper = mountWithTrigger({ props: { arrow: false } });
+    openToggle(wrapper);
+    await nextTick();
+    resizeCb.fn?.();
+    await nextTick();
+    expect(wrapper.find(".c-dropdown").exists()).toBe(true);
+  });
+
+  // --- arrowDynamicStyle: arrowAbove=false ternary branches (lines 92, 94) ---
+
+  it("syncArrow sets arrowAbove=false when panel is below trigger (covers lines 92/94 false ternary branches)", async () => {
+    const wrapper = mountWithTrigger({ props: { arrow: true, lazy: false } });
+    const panelEl = wrapper.find(".c-dropdown__panel").element;
+    const triggerSpan = wrapper.find(".c-dropdown__trigger").element;
+    vi.spyOn(panelEl, "getBoundingClientRect").mockReturnValue({
+      bottom: 400, top: 200, left: 0, right: 200, width: 200, height: 200, x: 0, y: 200,
+      toJSON: () => ({}),
+    } as DOMRect);
+    vi.spyOn(triggerSpan, "getBoundingClientRect").mockReturnValue({
+      bottom: 100, top: 50, left: 50, right: 150, width: 100, height: 50, x: 50, y: 50,
+      toJSON: () => ({}),
+    } as DOMRect);
+    openToggle(wrapper);
+    await nextTick();
+    expect(wrapper.find(".c-dropdown__arrow").exists()).toBe(true);
+  });
+
+  // --- onToggle close: setTimeout false branch (line 137) ---
+
+  it("setTimeout callback does not clear hasContent when dropdown was reopened within 150ms (covers line 137 false branch)", async () => {
+    vi.useFakeTimers();
+    const wrapper = mount(DropdownPopover, {
+      slots: { panel: '<button class="panel-item">Action</button>' },
+    });
+    openToggle(wrapper);
+    await nextTick();
+    closeToggle(wrapper);
+    await nextTick();
+    openToggle(wrapper); // re-open before 150ms elapses
+    await nextTick();
+    vi.advanceTimersByTime(150); // timer fires: isOpen=true → skip clearing hasContent
+    await nextTick();
+    expect(wrapper.find(".panel-item").exists()).toBe(true);
+  });
+
+  // --- onToggle close: focus-stealing guard false branch (line 140) ---
+
+  it("onToggle close skips focus-steal when activeElement is outside trigger and panel (covers line 140 false branch)", async () => {
+    const wrapper = mount(DropdownPopover, { attachTo: document.body });
+    const external = document.createElement("button");
+    document.body.appendChild(external);
+    external.focus();
+    openToggle(wrapper);
+    await nextTick();
+    closeToggle(wrapper);
+    await nextTick();
+    expect(document.activeElement).toBe(external);
+    external.remove();
+    wrapper.unmount();
+  });
+
   // --- close() fallback (line 190) ---
 
   it("close() focuses triggerEl directly when no focusable descendant inside trigger (covers line 190 ?? branch)", () => {

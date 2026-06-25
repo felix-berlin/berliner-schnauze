@@ -36,6 +36,13 @@ describe("TurnStile.vue", () => {
 
     window.turnstile = null;
   });
+
+  it("creates script tag when window.turnstile is exactly null (covers || left-side true short-circuit branch)", () => {
+    (window as any).turnstile = null;
+    const scriptsBefore = document.getElementsByTagName("script").length;
+    mount(TurnStile, { props: { siteKey: "k" } });
+    expect(document.getElementsByTagName("script").length).toBeGreaterThan(scriptsBefore);
+  });
 });
 
 describe("TurnStile.vue — renderTurnstile callback (covers lines 49-50, 67)", () => {

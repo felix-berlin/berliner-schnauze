@@ -520,6 +520,24 @@ describe("BerlinerOderNicht.vue", () => {
     expect(mockAnswer).toHaveBeenCalled();
   });
 
+  it("playerName computed uses empty string fallback when playerName is null (covers lines 146-147 ?? right branch)", () => {
+    setupMocks({ playerName: null as unknown as string });
+    const wrapper = mount(BerlinerOderNicht);
+    // playerName ?? '' → '' (falsy) → badge hidden, input shown
+    expect(wrapper.find("#bon-player-name").exists()).toBe(true);
+  });
+
+  it("isEditingName watcher returns early when editing becomes false (covers line 158 true branch)", async () => {
+    setupMocks({ playerName: "Felix" });
+    const wrapper = mount(BerlinerOderNicht, { attachTo: document.body });
+    await wrapper.find(".c-berliner-oder-nicht__player-badge").trigger("click");
+    await nextTick(); // watcher fires with editing=true
+    await wrapper.find("#bon-player-name").trigger("blur"); // saveName → isEditingName=false
+    await nextTick(); // watcher fires with editing=false → early return
+    expect(wrapper.find(".c-berliner-oder-nicht__player-badge").exists()).toBe(true);
+    wrapper.unmount();
+  });
+
   it("onAnswer returns early when currentCard is null (covers line 275 true branch)", () => {
     mockPhase.value = "playing";
     mockCurrentCard.value = { word: "Kiez", isReal: true };

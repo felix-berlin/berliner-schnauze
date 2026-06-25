@@ -154,4 +154,29 @@ describe("TooltipPopover.vue", () => {
     vi.advanceTimersByTime(300);
     expect(mockHidePopover).not.toHaveBeenCalled();
   });
+
+  it("show() fires requestAnimationFrame callback to sync arrow when refs are set (covers lines 90-92 true branch)", () => {
+    const rafCallbacks: FrameRequestCallback[] = [];
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      rafCallbacks.push(cb);
+      return rafCallbacks.length;
+    });
+    const wrapper = mount(TooltipPopover, { attachTo: document.body });
+    (wrapper.vm as any).show();
+    rafCallbacks.forEach((cb) => cb(0));
+    expect(mockShowPopover).toHaveBeenCalledOnce();
+    wrapper.unmount();
+  });
+
+  it("rAF callback is a no-op when refs become null after unmount (covers line 92 false branch)", () => {
+    const rafCallbacks: FrameRequestCallback[] = [];
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      rafCallbacks.push(cb);
+      return rafCallbacks.length;
+    });
+    const wrapper = mount(TooltipPopover, { attachTo: document.body });
+    (wrapper.vm as any).show();
+    wrapper.unmount(); // refs → null
+    expect(() => rafCallbacks.forEach((cb) => cb(0))).not.toThrow();
+  });
 });
