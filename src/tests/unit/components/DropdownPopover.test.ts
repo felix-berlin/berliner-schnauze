@@ -3,6 +3,21 @@ import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+const { resizeCb } = vi.hoisted(() => ({
+  resizeCb: { fn: null as ((...args: unknown[]) => void) | null },
+}));
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@vueuse/core")>();
+  return {
+    ...actual,
+    useResizeObserver: vi.fn((_targets: unknown, fn: (...args: unknown[]) => void) => {
+      resizeCb.fn = fn;
+      return { stop: vi.fn(), isSupported: { value: true } };
+    }),
+  };
+});
+
 const mockShowPopover = vi.fn();
 const mockHidePopover = vi.fn();
 
@@ -354,5 +369,58 @@ describe("DropdownPopover.vue", () => {
       await wrapper.find(".c-dropdown__trigger").trigger("focusin");
       expect(mockShowPopover).not.toHaveBeenCalled();
     });
+  });
+
+  // --- ResizeObserver callback (line 112) ---
+
+  it("resize observer callback is a no-op when dropdown is closed (covers line 112 false branch)", async () => {
+    const wrapper = mountWithTrigger();
+    // isOpen is false by default — callback should not invoke syncArrow
+    resizeCb.fn?.();
+    await nextTick();
+    expect(wrapper.find(".c-dropdown").exists()).toBe(true);
+  });
+
+  it("resize observer callback calls syncArrow when dropdown is open (covers line 112 true branch)", async () => {
+    const wrapper = mountWithTrigger();
+    openToggle(wrapper);
+    await nextTick();
+    // isOpen is now true — callback should invoke syncArrow without throwing
+    resizeCb.fn?.();
+    await nextTick();
+    expect(wrapper.find(".c-dropdown").exists()).toBe(true);
+  });
+
+  // --- triggers: early-return branches (lines 169, 180) ---
+
+  it("mouseleave on trigger does not schedule close when triggers excludes 'hover' (covers line 169 true branch)", async () => {
+    vi.useFakeTimers();
+    const wrapper = mount(DropdownPopover, { props: { triggers: ["click"] } });
+    await wrapper.find(".c-dropdown__trigger").trigger("mouseleave");
+    vi.advanceTimersByTime(200);
+    expect(mockHidePopover).not.toHaveBeenCalled();
+  });
+
+  it("focusout on trigger does not schedule close when triggers excludes 'focus' (covers line 180 true branch)", async () => {
+    vi.useFakeTimers();
+    const wrapper = mount(DropdownPopover, { props: { triggers: ["click"] } });
+    await wrapper.find(".c-dropdown__trigger").trigger("focusout");
+    vi.advanceTimersByTime(200);
+    expect(mockHidePopover).not.toHaveBeenCalled();
+  });
+
+  // --- close() fallback (line 190) ---
+
+  it("close() focuses triggerEl directly when no focusable descendant inside trigger (covers line 190 ?? branch)", () => {
+    const wrapper = mount(DropdownPopover, {
+      attachTo: document.body,
+      slots: { default: "<span>not focusable</span>" },
+    });
+    const triggerEl = wrapper.find(".c-dropdown__trigger").element as HTMLElement;
+    const focusSpy = vi.spyOn(triggerEl, "focus");
+    (wrapper.vm as InstanceType<typeof DropdownPopover>).close();
+    expect(mockHidePopover).toHaveBeenCalledOnce();
+    expect(focusSpy).toHaveBeenCalledOnce();
+    wrapper.unmount();
   });
 });

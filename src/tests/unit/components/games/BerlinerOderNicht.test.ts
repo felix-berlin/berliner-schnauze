@@ -459,4 +459,106 @@ describe("BerlinerOderNicht.vue", () => {
     await wrapper.findComponent({ name: "BonResult" }).vm.$emit("restart");
     expect(mockStartGame).toHaveBeenCalled();
   });
+
+  it("shake timer callback resets shaking state and calls nextCard (covers lines 216-219)", async () => {
+    const { useTimeoutFn } = await import("@vueuse/core");
+    let capturedShakeFn: (() => void) | null = null;
+    vi.mocked(useTimeoutFn)
+      .mockImplementationOnce((fn: (...args: unknown[]) => unknown) => {
+        capturedShakeFn = fn as () => void;
+        return { start: mockStartShake } as ReturnType<typeof useTimeoutFn>;
+      })
+      .mockImplementationOnce(() => ({ start: mockStartCooldown }) as ReturnType<typeof useTimeoutFn>);
+
+    mockPhase.value = "playing";
+    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    setupMocks({ hasSeenIntro: true });
+    const wrapper = mount(BerlinerOderNicht);
+
+    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", false);
+    await nextTick();
+    expect(wrapper.findComponent({ name: "BonCard" }).props("isShaking")).toBe(true);
+    expect(capturedShakeFn).not.toBeNull();
+
+    capturedShakeFn!();
+    await nextTick();
+    expect(wrapper.findComponent({ name: "BonCard" }).props("isShaking")).toBe(false);
+    expect(mockNextCard).toHaveBeenCalled();
+  });
+
+  it("cooldown timer callback resets isAnswering (covers line 223)", async () => {
+    const { useTimeoutFn } = await import("@vueuse/core");
+    let capturedCooldownFn: (() => void) | null = null;
+    vi.mocked(useTimeoutFn)
+      .mockImplementationOnce(() => ({ start: mockStartShake }) as ReturnType<typeof useTimeoutFn>)
+      .mockImplementationOnce((fn: (...args: unknown[]) => unknown) => {
+        capturedCooldownFn = fn as () => void;
+        return { start: mockStartCooldown } as ReturnType<typeof useTimeoutFn>;
+      });
+
+    mockPhase.value = "playing";
+    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    setupMocks({ hasSeenIntro: true });
+    const wrapper = mount(BerlinerOderNicht);
+
+    // Correct answer → startAnswerCooldown() is called inside a nextTick
+    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
+    await nextTick();
+    expect(capturedCooldownFn).not.toBeNull();
+
+    // isAnswering is still true → second answer is blocked
+    mockAnswer.mockClear();
+    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
+    expect(mockAnswer).not.toHaveBeenCalled();
+
+    // Fire the cooldown → isAnswering = false
+    capturedCooldownFn!();
+    await nextTick();
+
+    // Now a new answer goes through
+    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
+    expect(mockAnswer).toHaveBeenCalled();
+  });
+
+  it("onAnswer returns early when currentCard is null (covers line 275 true branch)", () => {
+    mockPhase.value = "playing";
+    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    setupMocks({ hasSeenIntro: true });
+    const wrapper = mount(BerlinerOderNicht);
+    const bonCard = wrapper.findComponent({ name: "BonCard" });
+    // Synchronously null the card — BonCard still in DOM until nextTick
+    mockCurrentCard.value = null;
+    // Emit without await — onAnswer reads currentCard.value===null → early return
+    bonCard.vm.$emit("answer", true);
+    expect(mockAnswer).not.toHaveBeenCalled();
+  });
+
+  it("onAnswer correct guess on fake word sets exitDirection=left (covers lines 228/292)", async () => {
+    mockPhase.value = "playing";
+    mockCurrentCard.value = { word: "Quatsch", isReal: false };
+    setupMocks({ hasSeenIntro: true });
+    const wrapper = mount(BerlinerOderNicht);
+    // guessedReal=false, card.isReal=false → correct=true → exitDirection='left'
+    await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", false);
+    await nextTick();
+    expect(mockVibrate).toHaveBeenCalledWith([50]);
+    expect(mockNextCard).toHaveBeenCalled();
+  });
+
+  it("onMounted maps word with empty translations to translation=undefined (covers line 246 ?? branch)", async () => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve([
+            { wordProperties: { berlinerisch: "Schnauze", translations: [] }, slug: "schnauze" },
+          ]),
+      }),
+    ) as unknown as typeof fetch;
+    mount(BerlinerOderNicht);
+    await vi.runAllTimersAsync();
+    expect(mockInit).toHaveBeenCalled();
+    const [realWords] = mockInit.mock.calls[mockInit.mock.calls.length - 1] as [{ translation: unknown }[], unknown];
+    expect(realWords[0].translation).toBeUndefined();
+  });
 });

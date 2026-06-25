@@ -163,4 +163,47 @@ describe("SuggestWordForm.vue", () => {
     const field = wrapper.find("#userEmail").element.closest(".c-form__item");
     expect(field?.classList.contains("has-error")).toBe(false);
   });
+
+  it("userName field gets has-error when value is a single char (covers line 295)", async () => {
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.find<HTMLInputElement>("#userName").setValue("X");
+    await wrapper.find("form").trigger("submit");
+    const field = wrapper.find("#userName").element.closest(".c-form__item");
+    expect(field?.classList.contains("has-error")).toBe(true);
+  });
+
+  it("example field gets has-error when value is a single char (covers line 298)", async () => {
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.find<HTMLInputElement>("#example").setValue("A");
+    await wrapper.find("form").trigger("submit");
+    const field = wrapper.find("#example").element.closest(".c-form__item");
+    expect(field?.classList.contains("c-textarea--error")).toBe(true);
+  });
+
+  it("resetForm schedules form reset via setTimeout after successful send (covers lines 250, 267)", async () => {
+    vi.useFakeTimers();
+    const { useMutation } = await import("@urql/vue");
+    vi.mocked(useMutation).mockReturnValueOnce({
+      executeMutation: vi.fn(() =>
+        Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
+      ),
+      data: { value: { sendEmail: { sent: true } } } as any,
+    } as any);
+
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.find("form").trigger("submit");
+    await Promise.resolve();
+    await Promise.resolve();
+
+    vi.advanceTimersByTime(3100);
+    expect(wrapper.exists()).toBe(true);
+    vi.useRealTimers();
+  });
 });

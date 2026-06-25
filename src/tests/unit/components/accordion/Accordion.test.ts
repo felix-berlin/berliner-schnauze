@@ -383,4 +383,16 @@ describe("AccordionContent", () => {
     expect(wrapper.find(".c-accordion__item").classes()).toContain("is-open");
     expect(wrapper.find(".c-accordion__body").exists()).toBe(true);
   });
+
+  it("isOpen computed returns false when inside a closed AccordionItem (covers line 26 itemCtx exists + isOpen false)", () => {
+    const wrapper = mountAccordion(`
+      <BaseAccordion type="single">
+        <AccordionItem value="x">
+          <AccordionContent>Body</AccordionContent>
+        </AccordionItem>
+      </BaseAccordion>
+    `);
+    expect(wrapper.find(".c-accordion__item").classes()).not.toContain("is-open");
+    expect(wrapper.find(".c-accordion__body").exists()).toBe(true);
+  });
 });
