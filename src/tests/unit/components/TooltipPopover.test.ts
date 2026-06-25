@@ -123,4 +123,35 @@ describe("TooltipPopover.vue", () => {
     (wrapper.vm as any).hide();
     expect(mockHidePopover).toHaveBeenCalledOnce();
   });
+
+  it("Escape key hides tooltip when visible (covers line 101 true branch)", () => {
+    const wrapper = mount(TooltipPopover);
+    (wrapper.vm as any).show();
+    mockHidePopover.mockClear();
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    expect(mockHidePopover).toHaveBeenCalled();
+  });
+
+  it("Escape key does nothing when tooltip is not visible (covers line 101 && false branch)", () => {
+    mount(TooltipPopover);
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    expect(mockHidePopover).not.toHaveBeenCalled();
+  });
+
+  it("non-Escape keydown does not hide tooltip (covers line 101 key !== Escape branch)", () => {
+    const wrapper = mount(TooltipPopover);
+    (wrapper.vm as any).show();
+    mockHidePopover.mockClear();
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Tab" }));
+    expect(mockHidePopover).not.toHaveBeenCalled();
+  });
+
+  it("moving pointer to panel cancels scheduled hide (covers cancelHide true branch)", async () => {
+    vi.useFakeTimers();
+    const wrapper = mount(TooltipPopover);
+    await wrapper.find(".c-tooltip").trigger("pointerleave");
+    await wrapper.find(".c-tooltip__panel").trigger("pointerenter");
+    vi.advanceTimersByTime(300);
+    expect(mockHidePopover).not.toHaveBeenCalled();
+  });
 });

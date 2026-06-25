@@ -75,6 +75,26 @@ describe("WordRangeSlider.vue", () => {
     expect(rangeRef.value).toBeUndefined();
   });
 
+  it("triggering input on range element updates rangeValue (covers v-model handler at line 8)", async () => {
+    const { useVModel } = await import("@nanostores/vue");
+    const rangeRef = ref<number | undefined>(undefined);
+    vi.mocked(useVModel).mockReturnValueOnce(rangeRef as ReturnType<typeof useVModel>);
+    const WordRangeSlider = (await import("@components/filter/WordRangeSlider.vue")).default;
+    const wrapper = mount(WordRangeSlider, { props: { label: "Zeichen", rangeType: "characterCount" } });
+    await wrapper.find("input[type='range']").setValue("5");
+    expect(rangeRef.value).toBeDefined();
+  });
+
+  it("triggering input on number element updates rangeValue (covers v-model handler at line 19)", async () => {
+    const { useVModel } = await import("@nanostores/vue");
+    const rangeRef = ref<number | undefined>(undefined);
+    vi.mocked(useVModel).mockReturnValueOnce(rangeRef as ReturnType<typeof useVModel>);
+    const WordRangeSlider = (await import("@components/filter/WordRangeSlider.vue")).default;
+    const wrapper = mount(WordRangeSlider, { props: { label: "Silben", rangeType: "syllablesCount" } });
+    await wrapper.find("input[type='number']").setValue("3");
+    expect(rangeRef.value).toBeDefined();
+  });
+
   it("getMinMax falls back to {max:0,min:0} when rangeFilterMinMax is null (covers ?? branch)", async () => {
     const { useStore } = await import("@nanostores/vue");
     vi.mocked(useStore).mockReturnValueOnce({ value: { rangeFilterMinMax: null } } as any);

@@ -113,6 +113,36 @@ describe("BaseAccordion", () => {
     `);
     expect(wrapper.find("[data-test='state']").text()).toBe("true");
   });
+
+  it("defaultValue as array opens multiple items (covers line 34 Array.isArray true branch)", () => {
+    const wrapper = mountAccordion(`
+      <BaseAccordion type="multiple" :default-value="['a', 'b']" v-slot="{ isOpen }">
+        <span data-test="state-a">{{ isOpen('a') }}</span>
+        <span data-test="state-b">{{ isOpen('b') }}</span>
+      </BaseAccordion>
+    `);
+    expect(wrapper.find("[data-test='state-a']").text()).toBe("true");
+    expect(wrapper.find("[data-test='state-b']").text()).toBe("true");
+  });
+
+  it("watcher updates openIds when modelValue changes to a non-undefined value (covers line 42 true branch)", async () => {
+    const wrapper = mount({
+      components,
+      data() {
+        return { modelVal: "a" as string | undefined };
+      },
+      template: `
+        <BaseAccordion type="single" :model-value="modelVal" v-slot="{ isOpen }">
+          <span data-test="state-a">{{ isOpen('a') }}</span>
+          <span data-test="state-b">{{ isOpen('b') }}</span>
+        </BaseAccordion>
+      `,
+    });
+    expect(wrapper.find("[data-test='state-a']").text()).toBe("true");
+    await wrapper.setData({ modelVal: "b" });
+    expect(wrapper.find("[data-test='state-a']").text()).toBe("false");
+    expect(wrapper.find("[data-test='state-b']").text()).toBe("true");
+  });
 });
 
 describe("AccordionHeader", () => {
@@ -176,6 +206,18 @@ describe("AccordionItem", () => {
       </BaseAccordion>
     `);
     await wrapper.find(".c-accordion__trigger").trigger("click");
+    expect(wrapper.find(".c-accordion__item").classes()).not.toContain("is-open");
+  });
+
+  it("toggle() called directly on disabled AccordionItem is a no-op (covers line 40 false branch)", async () => {
+    const wrapper = mountAccordion(`
+      <BaseAccordion type="single" collapsible>
+        <AccordionItem value="x" disabled />
+      </BaseAccordion>
+    `);
+    const itemWrapper = wrapper.findComponent(AccordionItem);
+    const { toggle } = (itemWrapper.getCurrentComponent() as any).setupState;
+    toggle();
     expect(wrapper.find(".c-accordion__item").classes()).not.toContain("is-open");
   });
 });
@@ -328,5 +370,17 @@ describe("AccordionContent", () => {
       </BaseAccordion>
     `);
     expect(wrapper.find(".c-accordion__content").text()).toBe("Slot text");
+  });
+
+  it("isOpen is true when inside an open AccordionItem (covers itemCtx?.isOpen.value true branch)", () => {
+    const wrapper = mountAccordion(`
+      <BaseAccordion type="single" default-value="x">
+        <AccordionItem value="x">
+          <AccordionContent>Body</AccordionContent>
+        </AccordionItem>
+      </BaseAccordion>
+    `);
+    expect(wrapper.find(".c-accordion__item").classes()).toContain("is-open");
+    expect(wrapper.find(".c-accordion__body").exists()).toBe(true);
   });
 });

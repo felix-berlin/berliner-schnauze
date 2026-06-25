@@ -46,10 +46,12 @@ describe("WordSearchLink.vue", () => {
   });
 
   it("calls trackEvent on click", async () => {
+    vi.useFakeTimers();
     const { trackEvent } = await import("@utils/analytics");
     const wrapper = mount(WordSearchLink);
     await wrapper.find("button").trigger("click");
     expect(trackEvent).toHaveBeenCalledWith("Search", "Click Search Link", "Search Link Clicked");
+    vi.useRealTimers();
   });
 
   it("scrolls to search input when element is found", async () => {

@@ -54,4 +54,10 @@ describe("LetterFilter.vue", () => {
     await allButton.trigger("click");
     expect(setLetterFilter).toHaveBeenCalledWith("");
   });
+
+  it("clicking a letter button calls setLetterFilter with that letter (covers line 27)", async () => {
+    const letterButtons = wrapper.findAll(".c-letter-filter__button:not(.is-all)");
+    await letterButtons[0].trigger("click");
+    expect(setLetterFilter).toHaveBeenCalledWith("a");
+  });
 });

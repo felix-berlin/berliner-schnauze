@@ -15,8 +15,13 @@ vi.mock("@utils/helpers.ts", () => ({
   useViewTransition: vi.fn((fn: () => void) => fn()),
 }));
 
+const { capturedCbRef } = vi.hoisted(() => ({
+  capturedCbRef: { fn: undefined as ((...args: unknown[]) => Promise<unknown>) | undefined },
+}));
+
 vi.mock("@nanostores/async", () => ({
-  computedAsync: vi.fn(() => {
+  computedAsync: vi.fn((stores: unknown, callback: (...args: unknown[]) => Promise<unknown>) => {
+    capturedCbRef.fn = callback;
     const { atom } = require("nanostores");
     return atom(null);
   }),
@@ -388,6 +393,44 @@ describe("wordList store", () => {
       const { $oramaSearchResults, $searchResultCount } = await import("@stores/wordList.ts");
       ($oramaSearchResults as any).set({ state: "ready", value: null });
       expect($searchResultCount.get()).toBe(0);
+    });
+  });
+
+  describe("$oramaSearchResults computedAsync callback", () => {
+    it("returns null when db is falsy after initOrama (covers line 433 false branch and line 424 ?? 10)", async () => {
+      // Import triggers computedAsync mock which captures the callback
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      expect(capturedCbRef.fn).toBeDefined();
+      // fetch mock returns a non-array object → resultLimit = undefined → limit falls through to ?? 10
+      // create mock returns undefined → db stays falsy → returns null (line 433 false branch)
+      const result = await capturedCbRef.fn!($wordSearch.get());
+      expect(result).toBeNull();
+    });
+
+    it("calls searchWithHighlight when db is truthy (covers line 433 true branch)", async () => {
+      const { create } = await import("@orama/orama");
+      const { searchWithHighlight } = await import("@orama/plugin-match-highlight");
+      vi.mocked(create).mockResolvedValueOnce({ _orama: true } as unknown as never);
+      vi.mocked(searchWithHighlight).mockResolvedValueOnce({ hits: [], count: 0, elapsed: { raw: 0, formatted: "0" } } as unknown as never);
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      expect(capturedCbRef.fn).toBeDefined();
+      const result = await capturedCbRef.fn!($wordSearch.get());
+      expect(searchWithHighlight).toHaveBeenCalled();
+      expect(result).toBeDefined();
+    });
+
+    it("catches fetch errors and returns null (covers line 434-436 catch branch)", async () => {
+      globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false, status: 500 })) as unknown as typeof fetch;
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      const result = await capturedCbRef.fn!($wordSearch.get());
+      expect(result).toBeNull();
+      expect(consoleSpy).toHaveBeenCalledWith("[wordList] Search failed:", expect.any(Error));
+      consoleSpy.mockRestore();
+      // restore fetch mock
+      globalThis.fetch = vi.fn(() =>
+        Promise.resolve({ ok: true, json: () => Promise.resolve({ availableWordGroups: [], wordTypes: [], rangeFilterMinMax: {} }) }),
+      ) as unknown as typeof fetch;
     });
   });
 });

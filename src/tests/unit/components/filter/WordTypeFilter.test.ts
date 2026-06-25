@@ -93,4 +93,11 @@ describe("WordTypeFilter.vue", () => {
     await multiselect.vm.$emit("deselect");
     expect(trackEvent).toHaveBeenCalledWith("WordList", "Filter", expect.stringContaining("Word Type:"));
   });
+
+  it("v-model update from Multiselect updates value ref (covers line 4 v-model handler)", async () => {
+    const wrapper = mount(WordTypeFilter);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+    await multiselect.vm.$emit("update:modelValue", ["Substantiv"]);
+    expect(mockActiveWordTypeFilter.value).toEqual(["Substantiv"]);
+  });
 });

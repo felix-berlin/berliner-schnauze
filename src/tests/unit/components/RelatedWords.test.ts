@@ -73,4 +73,24 @@ describe("RelatedWords.vue", () => {
       mount(RelatedWords, { props: { words: tooFew, numberOfWords: 5 } }),
     ).toThrow(RangeError);
   });
+
+  it("uses slug as key when id is undefined (covers line 5 ?? word.slug branch)", () => {
+    const wordsWithoutId = [
+      { slug: "allet", wordProperties: { berlinerisch: "Allet" } },
+      { slug: "kiez", wordProperties: { berlinerisch: "Kiez" } },
+      { slug: "schnauze", wordProperties: { berlinerisch: "Schnauze" } },
+    ] as ReturnType<typeof makeWord>[];
+    const wrapper = mount(RelatedWords, { props: { words: wordsWithoutId, numberOfWords: 3 } });
+    expect(wrapper.findAll("li")).toHaveLength(3);
+  });
+
+  it("falls back to empty string key when both id and slug are undefined (covers line 5 ?? '' branch)", () => {
+    const wordsWithoutIdOrSlug = [
+      { wordProperties: { berlinerisch: "Allet" } },
+      { wordProperties: { berlinerisch: "Kiez" } },
+      { wordProperties: { berlinerisch: "Schnauze" } },
+    ] as unknown as ReturnType<typeof makeWord>[];
+    const wrapper = mount(RelatedWords, { props: { words: wordsWithoutIdOrSlug, numberOfWords: 3 } });
+    expect(wrapper.findAll("li")).toHaveLength(3);
+  });
 });

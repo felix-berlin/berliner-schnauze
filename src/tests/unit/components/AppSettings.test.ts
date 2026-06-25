@@ -30,8 +30,14 @@ vi.mock("@components/AppSettingsNavCard.vue", () => {
   };
   return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
 });
-vi.mock("virtual:icons/lucide/download", () => ({ default: { template: "<svg />" } }));
-vi.mock("virtual:icons/lucide/hard-drive", () => ({ default: { template: "<svg />" } }));
+vi.mock("virtual:icons/lucide/download", () => {
+  const mod: Record<string | symbol, unknown> = { default: { template: "<svg />" } };
+  return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
+});
+vi.mock("virtual:icons/lucide/hard-drive", () => {
+  const mod: Record<string | symbol, unknown> = { default: { template: "<svg />" } };
+  return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
+});
 
 // Nav card stub defined outside vi.mock — no hoisting issue here
 const NavCardStub = defineComponent({
@@ -100,6 +106,13 @@ describe("AppSettings.vue", () => {
 
   it("resolves defineAsyncComponent factories without stubs (covers lines 30, 33, 36)", async () => {
     // No stubs — Vue calls the factory functions in defineAsyncComponent to load the modules
+    const wrapper = mount(AppSettings);
+    await flushPromises();
+    expect(wrapper.find(".c-app-settings").exists()).toBe(true);
+  });
+
+  it("resolves DownloadIcon factory when showInstallButton is true (covers line 39)", async () => {
+    $showInstallButton.set(true);
     const wrapper = mount(AppSettings);
     await flushPromises();
     expect(wrapper.find(".c-app-settings").exists()).toBe(true);

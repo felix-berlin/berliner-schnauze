@@ -26,6 +26,14 @@ describe("WordSwitch.vue", () => {
     expect(wrapper.find("label").text()).toBe("Audio Berlinerisch");
   });
 
+  it("toggling checkbox executes v-model handler (covers line 5)", async () => {
+    const WordSwitch = (await import("@components/filter/WordSwitch.vue")).default;
+    const wrapper = mount(WordSwitch, { props: { label: "Test", switchType: "berolinismus" } });
+    const input = wrapper.find("input[type='checkbox']");
+    await input.setValue(true);
+    expect((input.element as HTMLInputElement).checked).toBe(true);
+  });
+
   it("input id matches label for attribute", async () => {
     const WordSwitch = (await import("@components/filter/WordSwitch.vue")).default;
     const wrapper = mount(WordSwitch, {

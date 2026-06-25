@@ -155,6 +155,18 @@ describe("AppSettingsNotifications.vue", () => {
     expect(wrapper.text()).toContain("Benachrichtigungen deaktivieren");
   });
 
+  it("clicking revoke button toggles showRevokeHint (covers line 64)", async () => {
+    mockedUseNotificationSettings.mockReturnValue(
+      makeState({ notificationPermission: ref("granted") }) as ReturnType<typeof useNotificationSettings>,
+    );
+    const wrapper = mount(AppSettingsNotifications);
+    const revokeBtn = wrapper.find(".c-app-settings__revoke-btn");
+    expect(revokeBtn.exists()).toBe(true);
+    await revokeBtn.trigger("click");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.text()).toContain("Schloss-Symbol");
+  });
+
   it("shows revoke hint text when showRevokeHint is true", async () => {
     const revokeRef = ref(true);
     mockedUseNotificationSettings.mockReturnValue(

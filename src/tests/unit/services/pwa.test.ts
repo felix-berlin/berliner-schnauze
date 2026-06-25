@@ -15,6 +15,7 @@ beforeEach(() => {
 
 afterEach(() => {
   sessionStorage.clear();
+  vi.unstubAllEnvs();
 });
 
 describe("pwa service — post-update success toast", () => {
@@ -237,6 +238,14 @@ describe("pwa service — onOfflineReady", () => {
     onOfflineReady();
     expect(consoleSpy).toHaveBeenCalledWith("PWA application ready to work offline");
   });
+
+  it("does not log in non-DEV mode (covers line 55 false branch)", async () => {
+    vi.stubEnv("DEV", false as unknown as string);
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const { onOfflineReady } = await getRegisterSWCallbacks();
+    onOfflineReady();
+    expect(consoleSpy).not.toHaveBeenCalledWith("PWA application ready to work offline");
+  });
 });
 
 // ── onRegisterError ───────────────────────────────────────────────────────────
@@ -270,6 +279,14 @@ describe("pwa service — onRegisteredSW", () => {
     onRegisteredSW("/sw.js");
 
     expect(trackEvent).toHaveBeenCalledWith("App", "Service Worker registered", "PWA");
+  });
+
+  it("does not log in non-DEV mode (covers line 77 false branch)", async () => {
+    vi.stubEnv("DEV", false as unknown as string);
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const { onRegisteredSW } = await getRegisterSWCallbacks();
+    onRegisteredSW("/sw.js");
+    expect(consoleSpy).not.toHaveBeenCalledWith("SW registered: ", "/sw.js");
   });
 
   it("logs to console in DEV mode", async () => {

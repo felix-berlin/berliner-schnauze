@@ -206,4 +206,19 @@ describe("resetModal", () => {
     resetModal();
     expect(document.body.classList.contains("u-disable-scroll")).toBe(true);
   });
+
+  it("skips setTimeout when window is undefined (covers line 94 false branch)", async () => {
+    const { resetModal, $view, $viewIsComponent } = await import("@stores/modal.ts");
+    $view.set({ props: { foo: "bar" } });
+    $viewIsComponent.set(true);
+    vi.stubGlobal("window", undefined);
+    try {
+      resetModal();
+      vi.advanceTimersByTime(600);
+      // Store was NOT reset because the setTimeout branch was skipped
+      expect($view.get().props).toEqual({ foo: "bar" });
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
 });

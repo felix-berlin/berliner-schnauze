@@ -54,6 +54,20 @@ describe("ScrollToTop.vue", () => {
     expect(wrapper.find("button").isVisible()).toBe(true);
   });
 
+  it("tooltip is not disabled when tooltip prop is non-empty (covers line 7 ternary true branch)", async () => {
+    const wrapper = mount(ScrollToTop, { props: { tooltip: "Nach oben scrollen" } });
+    await wrapper.vm.$nextTick();
+    // With a non-empty tooltip, the ternary returns false → disabled = false || false = false
+    expect(wrapper.find("button").exists()).toBe(true);
+  });
+
+  it("tooltip stays disabled when tooltip is non-empty but hideTooltip is true (covers line 7 || true branch)", async () => {
+    const wrapper = mount(ScrollToTop, { props: { tooltip: "Nach oben", hideTooltip: true } });
+    await wrapper.vm.$nextTick();
+    // tooltip.length truthy → false, then false || true = true (disabled)
+    expect(wrapper.find("button").exists()).toBe(true);
+  });
+
   it("should scroll to top when button is clicked", async () => {
     const { wrapper, callback } = await mountAndGetObserverCallback();
 

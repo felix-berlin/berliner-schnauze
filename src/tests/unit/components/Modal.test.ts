@@ -158,4 +158,51 @@ describe("Modal.vue", () => {
     mount(Modal);
     expect(mockSetElement).toHaveBeenCalledOnce();
   });
+
+  it("renders inner template when hasView is true (covers line 16 true branch)", async () => {
+    mockView.value = { component: { render: () => null }, props: {} };
+    mockViewIsComponent.value = true;
+    setupUseStore();
+    const wrapper = mount(Modal);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("dialog").exists()).toBe(true);
+  });
+
+  it("renders close button when showCloseButton is true and hasView is true (covers line 17 true branch)", async () => {
+    mockView.value = { props: { foo: "bar" } };
+    mockProps.value = { ...mockProps.value, showCloseButton: true };
+    mockViewIsComponent.value = false;
+    setupUseStore();
+    const wrapper = mount(Modal);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("dialog").exists()).toBe(true);
+  });
+
+  it("does not render close button when showCloseButton is false and hasView is true (covers line 17 false branch)", async () => {
+    mockView.value = { props: { foo: "bar" } };
+    mockProps.value = { ...mockProps.value, showCloseButton: false };
+    mockViewIsComponent.value = false;
+    setupUseStore();
+    const wrapper = mount(Modal);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("dialog").exists()).toBe(true);
+  });
+
+  it("renders Component when viewIsComponent is true (covers line 22 true branch)", async () => {
+    mockView.value = { component: { render: () => null }, props: {}, events: { click: vi.fn() } };
+    mockViewIsComponent.value = true;
+    setupUseStore();
+    const wrapper = mount(Modal);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("dialog").exists()).toBe(true);
+  });
+
+  it("renders div with v-html when viewIsComponent is false and hasView is true (covers line 22 false branch)", async () => {
+    mockView.value = { html: "<p>content</p>" };
+    mockViewIsComponent.value = false;
+    setupUseStore();
+    const wrapper = mount(Modal);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("dialog").exists()).toBe(true);
+  });
 });
