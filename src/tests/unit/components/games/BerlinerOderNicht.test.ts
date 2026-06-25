@@ -538,6 +538,22 @@ describe("BerlinerOderNicht.vue", () => {
     wrapper.unmount();
   });
 
+  it("isEditingName watcher ?? right branch when playerName is null before watcher fires (covers line 159)", async () => {
+    const statsRef = ref({ ...defaultStats, playerName: "Felix" });
+    vi.mocked(useStore).mockReset();
+    vi.mocked(useStore)
+      .mockReturnValueOnce(statsRef)
+      .mockReturnValueOnce(ref(null));
+    const wrapper = mount(BerlinerOderNicht, { attachTo: document.body });
+    // Synchronously click — schedules watcher but does not flush it yet
+    wrapper.find(".c-berliner-oder-nicht__player-badge").element.click();
+    // Null out playerName before the watcher fires
+    statsRef.value = { ...defaultStats, playerName: null as unknown as string };
+    // Flush: watcher fires with editing=true, reads stats.value.playerName (null) → null ?? '' → right branch
+    await nextTick();
+    wrapper.unmount();
+  });
+
   it("onAnswer returns early when currentCard is null (covers line 275 true branch)", () => {
     mockPhase.value = "playing";
     mockCurrentCard.value = { word: "Kiez", isReal: true };

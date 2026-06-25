@@ -96,4 +96,11 @@ describe("PwaCacheInfoGrid", () => {
     expect(subText).toContain("…");
     expect(subText.length).toBeLessThan(65);
   });
+
+  it("returns short pathname as-is for valid URL (covers line 54 false branch)", () => {
+    const wrapper = mount(PwaCacheInfoGrid, {
+      props: { ...defaultProps, swScriptURL: "https://example.com/sw.js" },
+    });
+    expect(wrapper.find(".c-pwa-cache__info-sub").text()).toBe("/sw.js");
+  });
 });

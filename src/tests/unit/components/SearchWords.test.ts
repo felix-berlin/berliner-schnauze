@@ -197,6 +197,33 @@ describe("SearchWords.vue", () => {
     wrapper.unmount();
   });
 
+  it("watcher covers results.value?.count null branch when value is null (covers line 66)", async () => {
+    const { setMatomoSearch } = await import("@utils/analytics");
+    oramaResultsRef.value = { state: "loading" } as any;
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords);
+    await wrapper.find("input").setValue("Kiez");
+    await nextTick();
+    expect(setMatomoSearch).not.toHaveBeenCalled();
+    // Transition to ready with null value → results.value?.count = undefined ?? 0 = 0
+    oramaResultsRef.value = { state: "ready", value: null } as any;
+    await nextTick();
+    expect(setMatomoSearch).toHaveBeenCalledWith("Kiez", "Word Search", 0);
+    wrapper.unmount();
+  });
+
+  it("trackWordSearchListSearch covers value?.count null branch when typing while ready and value is null (covers line 73)", async () => {
+    const { setMatomoSearch } = await import("@utils/analytics");
+    oramaResultsRef.value = { state: "ready", value: null } as any;
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords);
+    await wrapper.find("input").setValue("Kiez");
+    await nextTick();
+    // oramaResults.value.value?.count = null?.count = undefined ?? 0 = 0
+    expect(setMatomoSearch).toHaveBeenCalledWith("Kiez", "Word Search", 0);
+    wrapper.unmount();
+  });
+
   it("focusSearchInput is a no-op when searchInput ref is null after unmount (covers line 109 false branch)", async () => {
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords, { attachTo: document.body });

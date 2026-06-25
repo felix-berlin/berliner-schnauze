@@ -1,6 +1,6 @@
 import SuggestWordForm from "@components/SuggestWordForm.vue";
 import TurnStile from "@components/TurnStile.vue";
-import { mount } from "@vue/test-utils";
+import { mount, flushPromises } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 
@@ -36,6 +36,7 @@ vi.mock("@components/TurnStile.vue", () => ({
     emits: ["verify"],
   },
 }));
+
 
 describe("SuggestWordForm.vue", () => {
   beforeEach(() => {
@@ -182,6 +183,74 @@ describe("SuggestWordForm.vue", () => {
     await wrapper.find("form").trigger("submit");
     const field = wrapper.find("#example").element.closest(".c-form__item");
     expect(field?.classList.contains("c-textarea--error")).toBe(true);
+  });
+
+  it("shows 'Wort wird gesendet' while mutation is pending (covers line 127 v-else branch)", async () => {
+    const { useMutation } = await import("@urql/vue");
+    vi.mocked(useMutation).mockReturnValueOnce({
+      executeMutation: vi.fn(() => new Promise(() => {})),
+      data: { value: null },
+    } as any);
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.find("form").trigger("submit");
+    expect(wrapper.find("button[type='submit']").text()).toContain("Wort wird gesendet");
+  });
+
+  it("shows error toast when sent=false (covers line 231)", async () => {
+    const { useMutation } = await import("@urql/vue");
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    vi.mocked(useMutation).mockReturnValueOnce({
+      executeMutation: vi.fn(() =>
+        Promise.resolve({ data: { sendEmail: { sent: false } }, error: null }),
+      ),
+      data: { value: null },
+    } as any);
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.find("form").trigger("submit");
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "error" }),
+    );
+  });
+
+  it("AlertBanner slot renders formErrors.example text when example is too short (covers line 75)", async () => {
+    const wrapper = mount(SuggestWordForm, {
+      global: { stubs: { AlertBanner: { template: "<div><slot /></div>" } } },
+    });
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.find<HTMLTextAreaElement>("#example").setValue("A");
+    await wrapper.find("form").trigger("submit");
+    expect(wrapper.text()).toContain("Mehr is dir nicht eingefallen?");
+  });
+
+  it("AlertBanner slot renders formErrors.name text when userName is too short (covers line 97)", async () => {
+    const wrapper = mount(SuggestWordForm, {
+      global: { stubs: { AlertBanner: { template: "<div><slot /></div>" } } },
+    });
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.find<HTMLInputElement>("#userName").setValue("X");
+    await wrapper.find("form").trigger("submit");
+    expect(wrapper.text()).toContain("Du hast nen sehr kleinen Namen");
+  });
+
+  it("AlertBanner slot renders formErrors.eMail text when email is invalid (covers line 118)", async () => {
+    const wrapper = mount(SuggestWordForm, {
+      global: { stubs: { AlertBanner: { template: "<div><slot /></div>" } } },
+    });
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.find<HTMLInputElement>("#userEmail").setValue("not-an-email");
+    await wrapper.find("form").trigger("submit");
+    expect(wrapper.text()).toContain("Irgendwas läuft hier nicht");
   });
 
   it("resetForm schedules form reset via setTimeout after successful send (covers lines 250, 267)", async () => {
