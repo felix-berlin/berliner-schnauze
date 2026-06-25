@@ -234,4 +234,19 @@ describe("BonCard.vue", () => {
     mockSwipeState.keyHandlers.get("ArrowLeft")?.();
     expect(wrapper.emitted("answer")).toBeUndefined();
   });
+
+  it("useTimeoutFn callback sets showSwipeHint to false (covers line 114)", async () => {
+    const vueuse = await import("@vueuse/core");
+    let capturedTimerCallback: (() => void) | null = null;
+    vi.mocked(vueuse.useTimeoutFn).mockImplementationOnce((fn: (...args: unknown[]) => unknown) => {
+      capturedTimerCallback = fn as () => void;
+      return { start: mockSwipeState.startHintTimer } as ReturnType<typeof vueuse.useTimeoutFn>;
+    });
+    const wrapper = mount(BonCard, { props: { ...defaultProps, isFirstCard: true } });
+    expect(capturedTimerCallback).not.toBeNull();
+    expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(true);
+    capturedTimerCallback!();
+    await nextTick();
+    expect(wrapper.find(".c-bon-card__swipe-hint").exists()).toBe(false);
+  });
 });

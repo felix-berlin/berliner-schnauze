@@ -199,6 +199,14 @@ describe("WordList.vue", () => {
     await nextTick();
   });
 
+  it("returns empty array when hits is undefined (covers line 57 ?? [] branch)", () => {
+    vi.mocked(useStore).mockReturnValue(
+      ref({ state: "ready" as const, value: { hits: undefined } }),
+    );
+    const wrapper = mount(WordList);
+    expect(wrapper.findAll(".mock-single-word")).toHaveLength(0);
+  });
+
   it("el.focus() is called inside focusActive nextTick when ref exists (covers line 104)", async () => {
     vi.mocked(useStore).mockReturnValue(
       ref({ state: "ready", value: { hits: [makeHit("Kiez")] } }),

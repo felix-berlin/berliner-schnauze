@@ -165,4 +165,14 @@ describe("AudioPlayer.vue", () => {
     expect(cancelRafSpy).toHaveBeenCalled();
     cancelRafSpy.mockRestore();
   });
+
+  it("stopAudio skips cancelAnimationFrame when animationFrameId is null (covers line 64 false branch)", async () => {
+    vi.spyOn(window, "requestAnimationFrame").mockReturnValue(null as unknown as number);
+    const cancelRafSpy = vi.spyOn(window, "cancelAnimationFrame");
+    const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
+    await wrapper.find("button").trigger("click"); // play → animationFrameId = null (mock returns null)
+    await wrapper.find("button").trigger("click"); // stop → if (null !== null) = false → no cancelAnimationFrame
+    expect(cancelRafSpy).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
 });

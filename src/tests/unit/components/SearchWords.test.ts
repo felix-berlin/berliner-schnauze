@@ -184,4 +184,24 @@ describe("SearchWords.vue", () => {
     expect(document.activeElement).toBe(wrapper.find("input").element);
     wrapper.unmount();
   });
+
+  it("watcher short-circuits when state transitions to non-ready (covers line 65 && left false branch)", async () => {
+    const { setMatomoSearch } = await import("@utils/analytics");
+    oramaResultsRef.value = { state: "ready", value: { count: 0 } } as any;
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords);
+    vi.clearAllMocks();
+    oramaResultsRef.value = { state: "loading" } as any;
+    await nextTick();
+    expect(setMatomoSearch).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
+
+  it("focusSearchInput is a no-op when searchInput ref is null after unmount (covers line 109 false branch)", async () => {
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords, { attachTo: document.body });
+    const vm = wrapper.vm as { focusSearchInput: () => void };
+    wrapper.unmount();
+    expect(() => vm.focusSearchInput()).not.toThrow();
+  });
 });
