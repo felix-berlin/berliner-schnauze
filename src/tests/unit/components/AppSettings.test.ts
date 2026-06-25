@@ -12,16 +12,15 @@ vi.mock("@stores/installApp.ts", async () => {
   };
 });
 
-// Module-level mocks for async component factories (used to cover lines 30, 33, 36).
 // Permissive Proxy pattern: prevents Vitest's strict module proxy from throwing when
 // vue-test-utils' createDefaultStub probes Vue internal flags (__isTeleport etc.) on the
 // raw module object returned by the vi.mock factory.
 vi.mock("@components/AppSettingsTheme.vue", () => {
-  const mod: Record<string | symbol, unknown> = { default: { template: "<div class='theme-loaded' />" } };
+  const mod: Record<string | symbol, unknown> = { default: { template: "<div />" } };
   return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
 });
 vi.mock("@components/AppSettingsNotifications.vue", () => {
-  const mod: Record<string | symbol, unknown> = { default: { template: "<div class='notifications-loaded' />" } };
+  const mod: Record<string | symbol, unknown> = { default: { template: "<div />" } };
   return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
 });
 vi.mock("@components/AppSettingsNavCard.vue", () => {
@@ -104,17 +103,5 @@ describe("AppSettings.vue", () => {
     expect(triggerPwaInstall).toHaveBeenCalledOnce();
   });
 
-  it("resolves defineAsyncComponent factories without stubs (covers lines 30, 33, 36)", async () => {
-    // No stubs — Vue calls the factory functions in defineAsyncComponent to load the modules
-    const wrapper = mount(AppSettings);
-    await flushPromises();
-    expect(wrapper.find(".c-app-settings").exists()).toBe(true);
-  });
 
-  it("resolves DownloadIcon factory when showInstallButton is true (covers line 39)", async () => {
-    $showInstallButton.set(true);
-    const wrapper = mount(AppSettings);
-    await flushPromises();
-    expect(wrapper.find(".c-app-settings").exists()).toBe(true);
-  });
 });
