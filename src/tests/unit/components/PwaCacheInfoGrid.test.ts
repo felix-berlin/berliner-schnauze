@@ -1,6 +1,7 @@
 import PwaCacheInfoGrid from "@components/PwaCacheInfoGrid.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
+import { markRaw } from "vue";
 
 const defaultProps = {
   swInfo: { status: "active" as const, scriptURL: "/sw.js", scope: "/" },
@@ -80,7 +81,7 @@ describe("PwaCacheInfoGrid", () => {
   });
 
   it("renders swStatusIcon component when provided (covers line 6 v-if true branch)", () => {
-    const IconStub = { template: "<svg data-testid='icon' />" };
+    const IconStub = markRaw({ template: "<svg data-testid='icon' />" });
     const wrapper = mount(PwaCacheInfoGrid, {
       props: { ...defaultProps, swStatusIcon: IconStub as any },
     });
