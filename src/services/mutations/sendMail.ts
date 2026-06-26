@@ -34,7 +34,6 @@ export const sendEmailViaContactForm7 = async (
     },
   })
     .then((response) => response.json())
-    .then((data) => console.log(data))
     .catch((error) => console.error("Error:", error));
 
   await fetch(`${WP_REST_API}/contact-form-7/v1/contact-forms/${SUGGEST_WORD_FORM_ID}/feedback`, {
@@ -45,7 +44,6 @@ export const sendEmailViaContactForm7 = async (
     method: "POST",
   }).then((response) => {
     if (!response.ok) {
-      console.log("response: ", response, response.json());
       return Promise.reject(new Error("Send E-Mail failed", { cause: response.status }));
     }
     return response.json();

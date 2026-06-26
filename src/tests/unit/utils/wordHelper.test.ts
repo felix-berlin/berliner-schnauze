@@ -1,8 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  alphabeticNeighbors,
+  capitalizeFirstLetter,
   coloredConsonantsAndVowels,
   countLetters,
   createWikimediaFileList,
+  findAnagrams,
   similarSoundingWords,
   similarWords,
   translateNlpTags,
@@ -145,6 +148,21 @@ describe("similarWords", () => {
     const withUndefined = similarWords([current, other], current, undefined);
     expect(withZero).toHaveLength(withUndefined.length);
   });
+
+  it("handles words with null berlinerisch (covers word.?.berlinerisch ?? '' branch)", () => {
+    const current = makeWord("1", "Bier");
+    const nullWord = { id: "2", wordProperties: { berlinerisch: null } } as unknown as BerlinerWord;
+    const noPropsWord = { id: "3" } as unknown as BerlinerWord;
+    const results = similarWords([current, nullWord, noPropsWord], current);
+    expect(results).toHaveLength(2);
+  });
+
+  it("handles currentWord with no wordProperties (covers currentWord.?.berlinerisch ?? '' branch)", () => {
+    const current = { id: "1" } as unknown as BerlinerWord;
+    const other = makeWord("2", "Bier");
+    const results = similarWords([current, other], current);
+    expect(results).toHaveLength(1);
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -227,5 +245,121 @@ describe("createWikimediaFileList", () => {
       expect.any(Array),
     );
     consoleSpy.mockRestore();
+  });
+
+  it("calls fetchWikimediaAPI with empty string when wikimediaFile is null (covers ?? '' branch)", async () => {
+    mockFetch.mockResolvedValue({ thumbnail: { url: "http://example.com/img.jpg" } });
+    const result = await createWikimediaFileList([
+      { wikimediaFile: null, caption: "cap", description: "desc" } as never,
+    ]);
+    expect(mockFetch).toHaveBeenCalledWith("");
+    expect(result).toHaveLength(1);
+  });
+});
+
+describe("capitalizeFirstLetter", () => {
+  it("capitalizes the first letter of a lowercase word", () => {
+    expect(capitalizeFirstLetter("berliner")).toBe("Berliner");
+  });
+
+  it("leaves already-capitalized words unchanged", () => {
+    expect(capitalizeFirstLetter("Schnauze")).toBe("Schnauze");
+  });
+
+  it("handles single character", () => {
+    expect(capitalizeFirstLetter("a")).toBe("A");
+  });
+
+  it("handles empty string", () => {
+    expect(capitalizeFirstLetter("")).toBe("");
+  });
+});
+
+// ---------------------------------------------------------------------------
+
+describe("findAnagrams", () => {
+  function makeRef(id: string, berlinerisch: string | null | undefined) {
+    return { id, wordProperties: berlinerisch !== undefined ? { berlinerisch } : undefined };
+  }
+
+  it("returns words whose letters match the target", () => {
+    const words = [makeRef("1", "arte"), makeRef("2", "rate"), makeRef("3", "nope")];
+    const result = findAnagrams("tare", words);
+    expect(result.map((w) => w.id)).toEqual(["1", "2"]);
+  });
+
+  it("excludes the word itself (case-insensitive)", () => {
+    const words = [makeRef("1", "Tare"), makeRef("2", "rate")];
+    const result = findAnagrams("tare", words);
+    expect(result.map((w) => w.id)).toEqual(["2"]);
+  });
+
+  it("returns empty array when no anagrams exist", () => {
+    const words = [makeRef("1", "hello"), makeRef("2", "world")];
+    expect(findAnagrams("xyz", words)).toEqual([]);
+  });
+
+  it("handles word with null berlinerisch (falls back to empty string)", () => {
+    const words = [makeRef("1", null), makeRef("2", "abc")];
+    const result = findAnagrams("abc", words);
+    expect(result.map((w) => w.id)).toEqual([]);
+  });
+
+  it("handles word with undefined wordProperties (falls back to empty string)", () => {
+    const words = [makeRef("1", undefined), makeRef("2", "test")];
+    const result = findAnagrams("sett", words);
+    expect(result.map((w) => w.id)).toEqual(["2"]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+
+describe("alphabeticNeighbors", () => {
+  function makeRef(id: string, berlinerisch: string | null | undefined) {
+    return { id, wordProperties: berlinerisch !== undefined ? { berlinerisch } : undefined };
+  }
+
+  const words = [
+    makeRef("1", "Apfel"),
+    makeRef("2", "Birne"),
+    makeRef("3", "Daten"),
+    makeRef("4", "Eier"),
+    makeRef("5", "Feige"),
+  ];
+
+  it("returns correct before and after neighbors", () => {
+    const result = alphabeticNeighbors(words, makeRef("3", "Daten"), 2);
+    expect(result.before.map((w) => w.id)).toEqual(["2", "1"]);
+    expect(result.after.map((w) => w.id)).toEqual(["4", "5"]);
+  });
+
+  it("returns empty arrays when currentWord id is not in allWords", () => {
+    const result = alphabeticNeighbors(words, makeRef("99", "Nope"), 2);
+    expect(result).toEqual({ before: [], after: [] });
+  });
+
+  it("limits neighbors to n", () => {
+    const result = alphabeticNeighbors(words, makeRef("3", "Daten"), 1);
+    expect(result.before).toHaveLength(1);
+    expect(result.after).toHaveLength(1);
+  });
+
+  it("handles word at start — no before neighbors", () => {
+    const result = alphabeticNeighbors(words, makeRef("1", "Apfel"), 3);
+    expect(result.before).toEqual([]);
+    expect(result.after.map((w) => w.id)).toEqual(["2", "3", "4"]);
+  });
+
+  it("handles word at end — no after neighbors", () => {
+    const result = alphabeticNeighbors(words, makeRef("5", "Feige"), 3);
+    expect(result.after).toEqual([]);
+    expect(result.before.map((w) => w.id)).toEqual(["4", "3", "2"]);
+  });
+
+  it("sorts words with null berlinerisch as empty string (branch coverage)", () => {
+    const mixed = [makeRef("a", null), makeRef("b", "Zoo"), makeRef("c", undefined)];
+    const result = alphabeticNeighbors(mixed, makeRef("b", "Zoo"), 3);
+    expect(result.before).toHaveLength(2);
+    expect(result.after).toEqual([]);
   });
 });

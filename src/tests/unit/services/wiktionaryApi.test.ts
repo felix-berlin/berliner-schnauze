@@ -100,4 +100,41 @@ describe("fetchGermanArtikel", () => {
     expect(await fetchGermanArtikel("Hund")).toBeNull();
     expect(consoleSpy).toHaveBeenCalledOnce();
   });
+
+  it("returns null when revision has no '*' content (covers ?? '' fallback)", async () => {
+    const body = { query: { pages: { "12345": { revisions: [{}] } } } };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(makeResponse(true, body)));
+    const { fetchGermanArtikel } = await import("@services/wiktionaryApi.ts");
+    expect(await fetchGermanArtikel("Test")).toBeNull();
+  });
+
+  it("returns null silently when a non-Error value is thrown", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue("string error"));
+    const { fetchGermanArtikel } = await import("@services/wiktionaryApi.ts");
+    expect(await fetchGermanArtikel("Hund")).toBeNull();
+  });
+
+  it("fires abort callback after 5 s timeout (covers setTimeout arrow fn)", async () => {
+    vi.useFakeTimers();
+    const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    let rejectFetch!: (err: unknown) => void;
+    const pending = new Promise<never>((_, reject) => { rejectFetch = reject; });
+    vi.stubGlobal("fetch", vi.fn().mockReturnValue(pending));
+
+    const { fetchGermanArtikel } = await import("@services/wiktionaryApi.ts");
+    const promise = fetchGermanArtikel("TestWord");
+
+    vi.advanceTimersByTime(5001);
+    rejectFetch(Object.assign(new Error("aborted"), { name: "AbortError" }));
+
+    const result = await promise;
+    expect(result).toBeNull();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "[wiktionaryApi] Request timed out (5s) for word:",
+      "TestWord",
+    );
+
+    vi.useRealTimers();
+  });
 });

@@ -131,6 +131,16 @@ describe("open", () => {
     open({});
     expect($onCloseCallback.get()).toBeNull();
   });
+
+  it("calls el.showModal() on the registered dialog element after nextTick", async () => {
+    const { open, $element } = await import("@stores/modal.ts");
+    const fakeDialog = { showModal: vi.fn() } as unknown as HTMLDialogElement;
+    $element.set(fakeDialog);
+    open({});
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(fakeDialog.showModal).toHaveBeenCalledOnce();
+  });
 });
 
 // ─── close ────────────────────────────────────────────────────────────────────
@@ -187,5 +197,28 @@ describe("resetModal", () => {
     $props.setKey("disableScroll", true);
     resetModal();
     expect(document.body.classList.contains("u-disable-scroll")).toBe(false);
+  });
+
+  it("does not call preventScroll when disableScroll is false (covers line 90 false branch)", async () => {
+    const { resetModal, $props } = await import("@stores/modal.ts");
+    $props.setKey("disableScroll", false);
+    document.body.classList.add("u-disable-scroll");
+    resetModal();
+    expect(document.body.classList.contains("u-disable-scroll")).toBe(true);
+  });
+
+  it("skips setTimeout when window is undefined (covers line 94 false branch)", async () => {
+    const { resetModal, $view, $viewIsComponent } = await import("@stores/modal.ts");
+    $view.set({ props: { foo: "bar" } });
+    $viewIsComponent.set(true);
+    vi.stubGlobal("window", undefined);
+    try {
+      resetModal();
+      vi.advanceTimersByTime(600);
+      // Store was NOT reset because the setTimeout branch was skipped
+      expect($view.get().props).toEqual({ foo: "bar" });
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });

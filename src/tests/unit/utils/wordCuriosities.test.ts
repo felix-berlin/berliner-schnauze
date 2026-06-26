@@ -120,4 +120,19 @@ describe("wordCuriosities", () => {
       expect(wordCuriosities("Bierpinsel").distinctVowelCount).toBe(2);
     });
   });
+
+  describe("non-letter characters reset consonant/vowel runs", () => {
+    it("resets runs when a digit appears between consonants", () => {
+      // "str1str": "str" (run 3), then '1' resets, then "str" again (run 3)
+      // longest consonant run should still be 3 (not 6 as it would be without reset)
+      const result = wordCuriosities("str1str");
+      expect(result.longestConsonantRun.length).toBe(3);
+    });
+
+    it("resets runs when a hyphen interrupts a vowel sequence", () => {
+      // "aaa-eee": longest vowel run = 3 (reset by hyphen), not 6
+      const result = wordCuriosities("aaa-eee");
+      expect(result.longestVowelRun.length).toBe(3);
+    });
+  });
 });

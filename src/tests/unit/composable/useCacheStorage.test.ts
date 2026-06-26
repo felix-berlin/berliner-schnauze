@@ -2,8 +2,10 @@ import { formatBytes, getBucketDisplayName, getEntryType } from "@composables/us
 import { useCacheStorage } from "@composables/useCacheStorage";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createApp, nextTick } from "vue";
+import { createToastNotify } from "@stores/toastNotify.ts";
 
 vi.mock("@stores/index", () => ({ createToastNotify: vi.fn() }));
+vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
 
 // Helper: mounts a composable inside a Vue app (needed for onMounted/onUnmounted)
 function withSetup<T>(composable: () => T): { result: T; unmount: () => void } {
@@ -221,6 +223,25 @@ describe("useCacheStorage — loadCaches", () => {
     unmount();
   });
 
+  it("three entries covers both dateRange update branches (lines 196-197)", async () => {
+    vi.stubGlobal(
+      "caches",
+      makeMockCacheStorage({
+        "api-search-index": [
+          { url: "https://example.com/a", size: 100, dateStr: "Thu, 01 Jan 2026 08:00:00 GMT" },
+          { url: "https://example.com/b", size: 100, dateStr: "Thu, 01 Jan 2026 12:00:00 GMT" },
+          { url: "https://example.com/c", size: 100, dateStr: "Thu, 01 Jan 2026 06:00:00 GMT" },
+        ],
+      }),
+    );
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const bucket = result.buckets.value.find((b) => b.name === "api-search-index")!;
+    expect(bucket.dateRange?.lastModified.toISOString()).toBe("2026-01-01T12:00:00.000Z");
+    expect(bucket.dateRange?.oldestEntry.toISOString()).toBe("2026-01-01T06:00:00.000Z");
+    unmount();
+  });
+
   it("computes correct totalSizeBytes across all buckets", async () => {
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -284,6 +305,99 @@ describe("useCacheStorage — loadCaches", () => {
   });
 });
 
+describe("useCacheStorage — cache entry edge cases", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  const stubCachesWith = (cacheData: {
+    keys: ReturnType<typeof vi.fn>;
+    match: ReturnType<typeof vi.fn>;
+  }) => {
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockResolvedValue(["test-cache"]),
+      open: vi.fn().mockResolvedValue({ ...cacheData, delete: vi.fn().mockResolvedValue(true) }),
+      delete: vi.fn(),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+    });
+  };
+
+  it("returns null fields when cache.match returns null (covers line 168 !response branch)", async () => {
+    stubCachesWith({
+      keys: vi.fn().mockResolvedValue([new Request("https://example.com/file.js")]),
+      match: vi.fn().mockResolvedValue(null),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const bucket = result.buckets.value.find((b) => b.name === "test-cache")!;
+    expect(bucket.urls[0]).toMatchObject({ contentType: null, date: null, size: null });
+    unmount();
+  });
+
+  it("logs warning when blob() throws non-TypeError (covers lines 175-176 warn branch)", async () => {
+    const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const mockResponse = {
+      clone: vi.fn().mockReturnValue({
+        blob: vi.fn().mockRejectedValue(new Error("network error")),
+      }),
+      headers: { get: vi.fn().mockReturnValue(null) },
+    };
+    stubCachesWith({
+      keys: vi.fn().mockResolvedValue([new Request("https://example.com/file.js")]),
+      match: vi.fn().mockResolvedValue(mockResponse),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining("Unexpected blob()"),
+      expect.anything(),
+      expect.anything(),
+    );
+    consoleSpy.mockRestore();
+    unmount();
+  });
+
+  it("silently ignores TypeError from blob() (covers line 175 false branch)", async () => {
+    const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const mockResponse = {
+      clone: vi.fn().mockReturnValue({
+        blob: vi.fn().mockRejectedValue(new TypeError("aborted")),
+      }),
+      headers: { get: vi.fn().mockReturnValue(null) },
+    };
+    stubCachesWith({
+      keys: vi.fn().mockResolvedValue([new Request("https://example.com/file.js")]),
+      match: vi.fn().mockResolvedValue(mockResponse),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(consoleSpy).not.toHaveBeenCalled();
+    consoleSpy.mockRestore();
+    unmount();
+  });
+
+  it("returns null date for invalid Date header (covers line 184 isNaN branch)", async () => {
+    stubCachesWith({
+      keys: vi.fn().mockResolvedValue([new Request("https://example.com/file.js")]),
+      match: vi.fn().mockResolvedValue(
+        new Response(new Uint8Array(100), { headers: { Date: "not-a-valid-date" } }),
+      ),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    const bucket = result.buckets.value.find((b) => b.name === "test-cache")!;
+    expect(bucket.urls[0].date).toBeNull();
+    unmount();
+  });
+});
+
 describe("useCacheStorage — clearBucket", () => {
   let mockCacheStorage: ReturnType<typeof makeMockCacheStorage>;
 
@@ -342,6 +456,13 @@ describe("useCacheStorage — clearAll", () => {
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.clearAll();
     expect(mockCacheStorage.keys).toHaveBeenCalledTimes(2);
+    unmount();
+  });
+
+  it("clearAll returns early when caches is undefined (covers line 266)", async () => {
+    vi.unstubAllGlobals();
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await expect(result.clearAll()).resolves.toBeUndefined();
     unmount();
   });
 });
@@ -544,6 +665,75 @@ describe("useCacheStorage — swInfo", () => {
     expect(result.swInfo.value?.status).toBe("not-registered");
     unmount();
   });
+
+  it("uses '' fallback for scriptURL when worker.scriptURL is null (covers line 141 ?? '' branch)", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: {
+        getRegistration: vi.fn().mockResolvedValue({
+          active: { scriptURL: null },
+          waiting: null,
+          installing: null,
+          scope: "https://example.com/",
+        }),
+      },
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.swInfo.value).toMatchObject({ status: "active", scriptURL: "" });
+    unmount();
+  });
+
+  it("uses '' fallback when reg.scope is null (covers line 140 ?? '' branch)", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      serviceWorker: {
+        getRegistration: vi.fn().mockResolvedValue({
+          active: { scriptURL: "https://example.com/sw.js" },
+          waiting: null,
+          installing: null,
+          scope: null,
+        }),
+      },
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.swInfo.value).toMatchObject({ scope: "", scriptURL: "https://example.com/sw.js" });
+    unmount();
+  });
+
+  it("skips storageQuota when estimate returns non-numeric values (covers line 112 false branch)", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockResolvedValue({ usage: "unknown", quota: "unknown" }) },
+      serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(result.storageQuota.value).toBeNull();
+    unmount();
+  });
+
+  it("silently ignores NotAllowedError from storage.estimate (covers line 116 false branch)", async () => {
+    vi.stubGlobal("caches", makeMockCacheStorage({}));
+    const domEx = new DOMException("Permission denied", "NotAllowedError");
+    vi.stubGlobal("navigator", {
+      onLine: true,
+      storage: { estimate: vi.fn().mockRejectedValue(domEx) },
+      serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(warnSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
+    unmount();
+  });
 });
 
 describe("useCacheStorage — loadCaches error handling", () => {
@@ -665,5 +855,143 @@ describe("useCacheStorage — cleanup", () => {
     // VueUse's useOnline registers with an options object (passive) — match any third arg
     expect(removeSpy).toHaveBeenCalledWith("online", expect.any(Function), expect.anything());
     expect(removeSpy).toHaveBeenCalledWith("offline", expect.any(Function), expect.anything());
+  });
+});
+
+describe("useCacheStorage — clearBucket error toast", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("shows error toast when caches.delete() throws in clearBucket", async () => {
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockResolvedValue([]),
+      open: vi.fn().mockResolvedValue(null),
+      delete: vi.fn().mockRejectedValue(new DOMException("SecurityError")),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearBucket("api-search-index");
+    expect(createToastNotify).toHaveBeenCalledWith(
+      expect.objectContaining({ message: expect.stringContaining("Suchindex"), status: "error" }),
+    );
+    unmount();
+  });
+});
+
+describe("useCacheStorage — clearAll error toasts", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("shows toast with failCount when some deletes are rejected in clearAll", async () => {
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockResolvedValue(["bucket-a", "bucket-b"]),
+      open: vi.fn().mockResolvedValue(null),
+      delete: vi.fn()
+        .mockResolvedValueOnce(true)
+        .mockRejectedValueOnce(new Error("permission denied")),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearAll();
+    expect(createToastNotify).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "1 Cache(s) konnten nicht geleert werden.",
+        status: "error",
+      }),
+    );
+    unmount();
+  });
+
+  it("shows generic error toast when caches.keys() throws in clearAll", async () => {
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockRejectedValue(new Error("Security error")),
+      open: vi.fn().mockResolvedValue(null),
+      delete: vi.fn(),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearAll();
+    expect(createToastNotify).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Caches konnten nicht geleert werden.",
+        status: "error",
+      }),
+    );
+    unmount();
+  });
+});
+
+describe("useCacheStorage — blob() non-TypeError error branch", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("logs console.warn when blob() throws a non-TypeError", async () => {
+    const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const nonTypeError = new Error("quota exceeded");
+    const mockResponse = {
+      clone: () => ({ blob: () => Promise.reject(nonTypeError) }),
+      headers: { get: (key: string) => (key === "Content-Type" ? "application/json" : null) },
+    };
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockResolvedValue(["test-bucket"]),
+      open: vi.fn().mockResolvedValue({
+        keys: vi.fn().mockResolvedValue([new Request("https://example.com/data.json")]),
+        match: vi.fn().mockResolvedValue(mockResponse),
+        delete: vi.fn(),
+      }),
+      delete: vi.fn(),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "[useCacheStorage] Unexpected blob() error for",
+      "https://example.com/data.json",
+      nonTypeError,
+    );
+    unmount();
+  });
+});
+
+describe("useCacheStorage — rejected bucket in Promise.allSettled", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("logs console.error when a bucket load rejects inside allSettled", async () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const loadError = new Error("Permission denied");
+    vi.stubGlobal("caches", {
+      keys: vi.fn().mockResolvedValue(["good-bucket", "bad-bucket"]),
+      open: vi.fn().mockImplementation((name: string) => {
+        if (name === "bad-bucket") return Promise.reject(loadError);
+        return Promise.resolve({
+          keys: vi.fn().mockResolvedValue([]),
+          match: vi.fn(),
+          delete: vi.fn(),
+        });
+      }),
+      delete: vi.fn(),
+      has: vi.fn(),
+      match: vi.fn(),
+    });
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.loadCaches();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "[useCacheStorage] Failed to load cache bucket:",
+      loadError,
+    );
+    unmount();
   });
 });

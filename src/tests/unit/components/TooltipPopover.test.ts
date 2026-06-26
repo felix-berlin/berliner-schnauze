@@ -123,4 +123,77 @@ describe("TooltipPopover.vue", () => {
     (wrapper.vm as any).hide();
     expect(mockHidePopover).toHaveBeenCalledOnce();
   });
+
+  it("Escape key hides tooltip when visible (covers line 101 true branch)", () => {
+    const wrapper = mount(TooltipPopover);
+    (wrapper.vm as any).show();
+    mockHidePopover.mockClear();
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    expect(mockHidePopover).toHaveBeenCalled();
+  });
+
+  it("Escape key does nothing when tooltip is not visible (covers line 101 && false branch)", () => {
+    mount(TooltipPopover);
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    expect(mockHidePopover).not.toHaveBeenCalled();
+  });
+
+  it("non-Escape keydown does not hide tooltip (covers line 101 key !== Escape branch)", () => {
+    const wrapper = mount(TooltipPopover);
+    (wrapper.vm as any).show();
+    mockHidePopover.mockClear();
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Tab" }));
+    expect(mockHidePopover).not.toHaveBeenCalled();
+  });
+
+  it("moving pointer to panel cancels scheduled hide (covers cancelHide true branch)", async () => {
+    vi.useFakeTimers();
+    const wrapper = mount(TooltipPopover);
+    await wrapper.find(".c-tooltip").trigger("pointerleave");
+    await wrapper.find(".c-tooltip__panel").trigger("pointerenter");
+    vi.advanceTimersByTime(300);
+    expect(mockHidePopover).not.toHaveBeenCalled();
+  });
+
+  it("show() fires requestAnimationFrame callback to sync arrow when refs are set (covers lines 90-92 true branch)", () => {
+    const rafCallbacks: FrameRequestCallback[] = [];
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      rafCallbacks.push(cb);
+      return rafCallbacks.length;
+    });
+    const wrapper = mount(TooltipPopover, { attachTo: document.body });
+    (wrapper.vm as any).show();
+    rafCallbacks.forEach((cb) => cb(0));
+    expect(mockShowPopover).toHaveBeenCalledOnce();
+    wrapper.unmount();
+  });
+
+  it("rAF callback is a no-op when refs become null after unmount (covers line 92 false branch)", () => {
+    const rafCallbacks: FrameRequestCallback[] = [];
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      rafCallbacks.push(cb);
+      return rafCallbacks.length;
+    });
+    const wrapper = mount(TooltipPopover, { attachTo: document.body });
+    (wrapper.vm as any).show();
+    wrapper.unmount(); // refs → null
+    expect(() => rafCallbacks.forEach((cb) => cb(0))).not.toThrow();
+  });
+
+  it("show() does not call requestAnimationFrame when refs are null (covers line 90 false branch)", () => {
+    // After unmount, Vue sets all template refs to null — show() is still
+    // callable via the closure captured by defineExpose and must not throw.
+    const rafCallbacks: FrameRequestCallback[] = [];
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      rafCallbacks.push(cb);
+      return rafCallbacks.length;
+    });
+    const wrapper = mount(TooltipPopover, { attachTo: document.body });
+    const exposedShow = (wrapper.vm as any).show as () => void;
+    wrapper.unmount(); // template refs become null
+    const countBefore = rafCallbacks.length;
+    expect(() => exposedShow()).not.toThrow();
+    // requestAnimationFrame must NOT have been scheduled (refs are null → if is false)
+    expect(rafCallbacks.length).toBe(countBefore);
+  });
 });

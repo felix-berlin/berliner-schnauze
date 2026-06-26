@@ -1,46 +1,103 @@
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
-import { shallowMount, type VueWrapper } from "@vue/test-utils";
-import { describe, it, expect, vi } from "vitest";
+import { mount } from "@vue/test-utils";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { ref } from "vue";
 
-// Mock analytics
 vi.mock("@utils/analytics", () => ({
   trackEvent: vi.fn(),
 }));
 
-const mockWordSearch = {
+const mockActiveWordTypeFilter = ref<string[]>([]);
+const mockWordSearch = ref({
   wordTypes: ["Substantiv", "Verb", "Adjektiv"],
-  activeWordTypeFilter: ["Substantiv"],
-};
+  activeWordTypeFilter: mockActiveWordTypeFilter.value,
+});
+
+vi.mock("@stores/wordList.ts", () => ({
+  $wordSearch: {},
+  $oramaSearchResults: {},
+  setLetterFilter: vi.fn(),
+}));
 
 vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(() => mockWordSearch),
-  useVModel: vi.fn(() => ({ value: mockWordSearch.activeWordTypeFilter })),
+  useVModel: vi.fn(() => mockActiveWordTypeFilter),
 }));
 
-vi.mock("@stores/index.ts", () => ({
-  $wordSearch: {
-    get: vi.fn(() => mockWordSearch),
+vi.mock("@vueform/multiselect", () => ({
+  default: {
+    name: "Multiselect",
+    props: ["modelValue", "mode", "closeOnSelect", "hideSelected", "options", "locale",
+            "fallbackLocale", "placeholder", "aria"],
+    template: "<div class='mock-multiselect'><slot /></div>",
+    emits: ["select", "deselect", "update:modelValue"],
   },
 }));
 
 describe("WordTypeFilter.vue", () => {
-  let wrapper: VueWrapper;
-
-  it("renders the WordTypeFilter component with Multiselect", () => {
-    wrapper = shallowMount(WordTypeFilter);
-
-    expect(wrapper.find(".c-word-type-filter").exists()).toBe(true);
-    const multiselect = wrapper.findComponent({ name: "Multiselect" });
-    expect(multiselect.exists()).toBe(true);
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockActiveWordTypeFilter.value = [];
+    mockWordSearch.value = {
+      wordTypes: ["Substantiv", "Verb", "Adjektiv"],
+      activeWordTypeFilter: [],
+    };
   });
 
-  it("passes correct props to Multiselect", () => {
-    wrapper = shallowMount(WordTypeFilter);
-    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+  it("renders the .c-word-type-filter nav", () => {
+    const wrapper = mount(WordTypeFilter);
+    expect(wrapper.find(".c-word-type-filter").exists()).toBe(true);
+  });
 
-    const attrs = multiselect.attributes();
-    expect(attrs.mode).toBe("multiple");
-    expect(attrs.locale).toBe("de");
-    expect(attrs.placeholder).toBe("Worttypen filtern");
+  it("renders the Multiselect component", () => {
+    const wrapper = mount(WordTypeFilter);
+    expect(wrapper.findComponent({ name: "Multiselect" }).exists()).toBe(true);
+  });
+
+  it("passes mode='multiple' to Multiselect", () => {
+    const wrapper = mount(WordTypeFilter);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+    expect(multiselect.props("mode")).toBe("multiple");
+  });
+
+  it("passes placeholder 'Worttypen filtern' to Multiselect", () => {
+    const wrapper = mount(WordTypeFilter);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+    expect(multiselect.props("placeholder")).toBe("Worttypen filtern");
+  });
+
+  it("passes locale='de' to Multiselect", () => {
+    const wrapper = mount(WordTypeFilter);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+    expect(multiselect.props("locale")).toBe("de");
+  });
+
+  it("passes wordTypes from store as options", () => {
+    const wrapper = mount(WordTypeFilter);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+    expect(multiselect.props("options")).toEqual(["Substantiv", "Verb", "Adjektiv"]);
+  });
+
+  it("calls trackEvent on select with selected values", async () => {
+    const { trackEvent } = await import("@utils/analytics");
+    const wrapper = mount(WordTypeFilter);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+    await multiselect.vm.$emit("select");
+    expect(trackEvent).toHaveBeenCalledWith("WordList", "Filter", expect.stringContaining("Word Type:"));
+  });
+
+  it("calls trackEvent on deselect with remaining values", async () => {
+    const { trackEvent } = await import("@utils/analytics");
+    const wrapper = mount(WordTypeFilter);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+    await multiselect.vm.$emit("deselect");
+    expect(trackEvent).toHaveBeenCalledWith("WordList", "Filter", expect.stringContaining("Word Type:"));
+  });
+
+  it("v-model update from Multiselect updates value ref (covers line 4 v-model handler)", async () => {
+    const wrapper = mount(WordTypeFilter);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+    await multiselect.vm.$emit("update:modelValue", ["Substantiv"]);
+    expect(mockActiveWordTypeFilter.value).toEqual(["Substantiv"]);
   });
 });

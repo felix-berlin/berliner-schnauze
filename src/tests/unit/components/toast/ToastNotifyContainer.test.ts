@@ -56,4 +56,13 @@ describe("ToastNotifyContainer.vue", () => {
     expect(bottomLeft!.props("toasts")).toHaveLength(1);
     expect(topLeft!.props("toasts")).toHaveLength(0);
   });
+
+  it("routes toast with no position to top-right via ?? fallback", async () => {
+    $toastNotify.set([{ id: "x", message: "X" }]);
+    const wrapper = mount(ToastNotifyContainer);
+    await import("vue").then((v) => v.nextTick());
+    const groups = wrapper.findAllComponents(ToastPositionGroup);
+    const topRight = groups.find((g) => g.props("position") === "top-right");
+    expect(topRight!.props("toasts")).toHaveLength(1);
+  });
 });
