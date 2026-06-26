@@ -1,6 +1,7 @@
 /** Creates a Vue component stub safe for use with vi.mock() — wraps in Proxy to satisfy Vitest's strict module access */
 export function createComponentStub(template = "<div><slot /></div>") {
   const mod: Record<string | symbol, unknown> = {
+    [Symbol.toStringTag]: "Module",
     default: { template },
   };
   return new Proxy(mod, {

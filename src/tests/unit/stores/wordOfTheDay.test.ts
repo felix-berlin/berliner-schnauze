@@ -47,6 +47,7 @@ describe("wordOfTheDay store", () => {
 
     it("sets error=true and loading=false on non-ok response", async () => {
       mockFetch.mockResolvedValueOnce({ ok: false, status: 500 });
+      vi.spyOn(console, "error").mockImplementation(() => {});
       const { $wordOfTheDay, getWordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       await getWordOfTheDay();
       expect($wordOfTheDay.get().error).toBe(true);

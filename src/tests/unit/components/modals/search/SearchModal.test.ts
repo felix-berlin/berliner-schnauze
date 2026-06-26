@@ -37,6 +37,7 @@ vi.mock("@components/word-search/WordSearchFilterToggle.vue", () => ({
 
 vi.mock("@components/WordList.vue", () => {
   const mod: Record<string | symbol, unknown> = {
+    [Symbol.toStringTag]: "Module",
     default: { template: "<div class='mock-word-list' />" },
   };
   // vue-test-utils accesses Vue internal flags (__isTeleport, __isKeepAlive, name…) on the raw
