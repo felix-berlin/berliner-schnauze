@@ -181,9 +181,22 @@ Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mj
 
 ## Testing
 
-- Tests live in `src/tests/unit/` using Vitest + jsdom + Sinon
-- Vue component tests use `@vue/test-utils`
+- Tests live in `src/tests/unit/` using Vitest + jsdom + `@vue/test-utils`
 - Coverage excludes `src/gql/`, `src/types/`, `src/tests/`, `src/plugins/`
+
+**Shared helpers** (`src/tests/unit/helpers/`):
+
+- `createAstroRender(Component)` — creates an `AstroContainer` once and returns a reusable `render(props)` fn. Always call in `beforeAll` with a **30 s timeout** (`AstroContainer.create()` costs ~10-15 s). Exception: tests that call `vi.resetModules()` per-test must create the container per-test.
+- `createStoreMockImpl(storeMap)` — builds a `useStore` mock impl that returns the right `ref` per store
+- `createComponentStub(template?)` — Proxy-safe module mock for `vi.mock()` factories; includes `[Symbol.toStringTag]: 'Module'` so Vue's `defineAsyncComponent` correctly extracts `.default` (omitting it causes "Component is missing template or render function" warn)
+- `createSlotStub(name, template?)` — lightweight stub for `config.global.stubs`
+
+**Testing gotchas:**
+
+- **Icons**: `virtual:icons/*` are auto-stubbed by the Vitest plugin in `vitest.config.ts` — they render as `<span data-testid="icon-lucide-<name>" />`. No per-file `vi.mock` needed.
+- **`markRaw()`**: Wrap any component object stored in `ref()` or passed as a reactive prop. Without it Vue makes it a Proxy and warns about missing template/render function.
+- **`config.global.stubs`**: Preferred way to stub `defineAsyncComponent` components in `mount()` — avoids `vi.mock` hoisting issues.
+- **Proxy `vi.mock` factories**: Must include `[Symbol.toStringTag]: 'Module'` in the target object; use `createComponentStub` from helpers instead of rolling your own.
 
 ## Git Commit Conventions
 
