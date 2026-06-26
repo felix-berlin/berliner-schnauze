@@ -12,6 +12,6 @@ describe("CarbonBadge.vue", () => {
     );
 
     // Check if the default text is rendered correctly
-    expect(wrapper.find("span").text()).toBe("umweltschonend");
+    expect(wrapper.find("a").text()).toContain("umweltschonend");
   });
 });

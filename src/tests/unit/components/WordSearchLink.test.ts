@@ -19,11 +19,6 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   };
 });
 
-vi.mock("virtual:icons/lucide/mouse-pointer-click", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span />" } };
-});
-
 describe("WordSearchLink.vue", () => {
   beforeEach(() => {
     vi.clearAllMocks();

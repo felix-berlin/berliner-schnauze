@@ -27,11 +27,6 @@ vi.mock("@utils/helpers.ts", () => ({
   routeToWord: vi.fn((slug: string) => `/wort/${slug}`),
 }));
 
-vi.mock("virtual:icons/lucide/menu", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span class=\"mock-menu-icon\" />" } };
-});
-
 beforeEach(() => {
   vi.resetModules();
 });
@@ -90,7 +85,7 @@ describe("MainHeader.vue", () => {
   it("renders menu icon inside navigation button area", async () => {
     const MainHeader = (await import("@components/header/MainHeader.vue")).default;
     const wrapper = mount(MainHeader);
-    expect(wrapper.find(".mock-menu-icon").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-menu']").exists()).toBe(true);
   });
 
   it("renders menu items in the dropdown panel", async () => {

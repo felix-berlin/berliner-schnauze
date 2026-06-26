@@ -1,7 +1,45 @@
 import { getViteConfig, envField } from "astro/config";
+import type { Plugin } from "vite";
+
+const ICON_STUB_PREFIX = "/__vitest_icon_stub__/";
+
+function iconStubPlugin(): Plugin {
+  return {
+    name: "vitest-icon-stub",
+    enforce: "pre",
+    resolveId(id) {
+      if (id.startsWith(ICON_STUB_PREFIX)) {
+        return id;
+      }
+    },
+    load(id) {
+      if (id.startsWith(ICON_STUB_PREFIX)) {
+        const name = id.slice(ICON_STUB_PREFIX.length).replace(/\//g, "-");
+        return `export default { template: '<span data-testid="icon-${name}" />' };`;
+      }
+    },
+  };
+}
+
+// Aliases run before any plugin resolveId hooks (including unplugin-icons),
+// so this redirect always wins. The stub plugin then handles the prefixed ID.
+const iconAlias = [
+  {
+    find: /^virtual:icons\/(.*)/,
+    replacement: `${ICON_STUB_PREFIX}$1`,
+  },
+  {
+    find: /^~icons\/(.*)/,
+    replacement: `${ICON_STUB_PREFIX}$1`,
+  },
+];
 
 export default getViteConfig(
   {
+    plugins: [iconStubPlugin()],
+    resolve: {
+      alias: iconAlias,
+    },
     test: {
       include: ["src/tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
       globals: true,

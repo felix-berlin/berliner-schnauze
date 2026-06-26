@@ -3,16 +3,6 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { ref } from "vue";
 
-vi.mock("virtual:icons/lucide/filter", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span data-testid='filter-icon' />" } };
-});
-
-vi.mock("virtual:icons/lucide/x", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span data-testid='x-icon' />" } };
-});
-
 const { mockSetLetterFilter, mockDropdownClose, onSetHolder } = vi.hoisted(() => ({
   mockSetLetterFilter: vi.fn(),
   mockDropdownClose: vi.fn(),
@@ -103,13 +93,13 @@ describe("AlphabeticalFilterDropdown.vue", () => {
 
   it("renders filter icon", () => {
     const wrapper = mount(AlphabeticalFilterDropdown);
-    expect(wrapper.find("[data-testid='filter-icon']").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-filter']").exists()).toBe(true);
   });
 
   it("shows x-icon in active filter button", () => {
     mockWordSearch.value = { activeLetterFilter: "Z", search: "" };
     const wrapper = mount(AlphabeticalFilterDropdown);
-    expect(wrapper.find("[data-testid='x-icon']").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-x']").exists()).toBe(true);
   });
 
   it("onSet callback closes dropdown when activeLetterFilter changes", () => {

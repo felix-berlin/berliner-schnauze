@@ -6,9 +6,6 @@ import { describe, expect, it, vi } from "vitest";
 // Stub SCSS imports — not resolvable in node environment
 vi.mock("@styles/components/_word-hero.scss", () => ({}));
 
-// Stub virtual icon — not a real module in node
-vi.mock("virtual:icons/lucide/sun-moon", () => ({ default: {} }));
-
 const makeWordProps = (overrides: Record<string, unknown> = {}) => ({
   berlinerisch: "Schnauze",
   article: "die",

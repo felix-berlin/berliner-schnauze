@@ -10,11 +10,6 @@ vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(() => searchResultCountRef),
 }));
 
-vi.mock("virtual:icons/lucide/search-x", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span />" } };
-});
-
 describe("NoSearchResults.vue", () => {
   it("shows .c-word-search-list__no-result when count is 0", async () => {
     searchResultCountRef.value = 0;

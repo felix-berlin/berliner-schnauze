@@ -18,11 +18,6 @@ vi.mock("@stores/wordList.ts", async () => {
   };
 });
 
-vi.mock("virtual:icons/lucide/plus", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { name: "Plus", template: '<svg data-testid="plus-icon"></svg>' } };
-});
-
 describe("WordSuggestHint.vue", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -56,7 +51,7 @@ describe("WordSuggestHint.vue", () => {
     it("should render the Plus icon", () => {
       const wrapper = mount(WordSuggestHint);
 
-      expect(wrapper.find('[data-testid="plus-icon"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="icon-lucide-plus"]').exists()).toBe(true);
     });
 
     it("should have correct CSS classes", () => {

@@ -2,6 +2,7 @@ import InstallApp from "@components/InstallApp.vue";
 import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
+import { createStoreMockImpl } from "../helpers/stores";
 
 let installPromptRef = ref<unknown>(null);
 let showInstallButtonRef = ref(false);
@@ -30,12 +31,13 @@ describe("InstallApp.vue", () => {
     showInstallButtonRef.value = false;
     isPwaInstalledRef.value = false;
 
-    mockedUseStore.mockImplementation((store: unknown) => {
-      if (store === "installPrompt") return installPromptRef;
-      if (store === "showInstallButton") return showInstallButtonRef;
-      if (store === "isPwaInstalled") return isPwaInstalledRef;
-      return ref(null);
-    });
+    mockedUseStore.mockImplementation(
+      createStoreMockImpl([
+        ["installPrompt", installPromptRef],
+        ["showInstallButton", showInstallButtonRef],
+        ["isPwaInstalled", isPwaInstalledRef],
+      ]),
+    );
   });
 
   it("button is hidden when hideIfInstalled=true and isPwaInstalled=true", () => {

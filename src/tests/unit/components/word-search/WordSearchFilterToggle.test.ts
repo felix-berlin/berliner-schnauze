@@ -14,11 +14,6 @@ vi.mock("@stores/wordList.ts", () => ({
   $toggleWordListFilterFlyout: mockToggle,
 }));
 
-vi.mock("virtual:icons/lucide/filter", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span />" } };
-});
-
 describe("WordSearchFilterToggle.vue", () => {
   beforeEach(() => {
     activeFilterCountRef.value = 0;

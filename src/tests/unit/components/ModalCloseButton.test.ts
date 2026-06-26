@@ -3,11 +3,6 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@stores/modal.ts", () => ({ close: vi.fn() }));
 
-vi.mock("virtual:icons/lucide/x", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span />" } };
-});
-
 import { close } from "@stores/modal.ts";
 const mockedClose = vi.mocked(close);
 

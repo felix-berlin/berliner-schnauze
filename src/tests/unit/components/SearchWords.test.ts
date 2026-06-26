@@ -41,16 +41,6 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   };
 });
 
-vi.mock("virtual:icons/lucide/search", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span />" } };
-});
-
-vi.mock("virtual:icons/lucide/x", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span />" } };
-});
-
 describe("SearchWords.vue", () => {
   beforeEach(() => {
     vi.clearAllMocks();

@@ -1,6 +1,6 @@
 // @vitest-environment node
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeAll } from "vitest";
+import { createAstroRender } from "../../helpers";
 
 vi.mock("@styles/components/_word-sidebar.scss", () => ({}));
 
@@ -22,11 +22,12 @@ const defaultProps = {
 };
 
 describe("WordSidebar.astro", () => {
-  async function render(props: Record<string, unknown>) {
+  let render: (props: Record<string, unknown>) => Promise<string>;
+
+  beforeAll(async () => {
     const { default: WordSidebar } = await import("@components/word/WordSidebar.astro");
-    const container = await AstroContainer.create();
-    return container.renderToString(WordSidebar, { props });
-  }
+    render = await createAstroRender(WordSidebar);
+  }, 30_000);
 
   it("renders the aside with c-word-sidebar class", async () => {
     const result = await render(defaultProps);

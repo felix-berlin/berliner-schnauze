@@ -29,15 +29,6 @@ vi.mock("@components/AppSettingsNavCard.vue", () => {
   };
   return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
 });
-vi.mock("virtual:icons/lucide/download", () => {
-  const mod: Record<string | symbol, unknown> = { default: { template: "<svg />" } };
-  return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
-});
-vi.mock("virtual:icons/lucide/hard-drive", () => {
-  const mod: Record<string | symbol, unknown> = { default: { template: "<svg />" } };
-  return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
-});
-
 // Nav card stub defined outside vi.mock — no hoisting issue here
 const NavCardStub = defineComponent({
   props: ["icon", "title", "description", "href", "tag"],

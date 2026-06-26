@@ -2,11 +2,6 @@ import WordExamples from "@components/word/WordExamples.vue";
 import { flushPromises, mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("virtual:icons/lucide/quote", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span class='mock-quote-icon' />" } };
-});
-
 vi.mock("@components/AudioPlayerList.vue", () => ({
   __esModule: true,
   default: { name: "AudioPlayerList", template: "<div class='mock-audio-player'></div>" },
@@ -125,7 +120,7 @@ describe("WordExamples.vue", () => {
         examples: [{ example: "Test.", exampleExplanation: null, exampleAudio: null }],
       },
     });
-    expect(wrapper.find(".mock-quote-icon").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-quote']").exists()).toBe(true);
   });
 
   it("renders AudioPlayerList when single example has exampleAudio", async () => {

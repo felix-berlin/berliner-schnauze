@@ -60,16 +60,6 @@ vi.mock("@components/filter/WordTypeFilter.vue", () => ({
   default: { template: "<div class=\"mock-word-type-filter\" />" },
 }));
 
-vi.mock("virtual:icons/lucide/filter-x", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span class=\"mock-filter-reset-icon\" />" } };
-});
-
-vi.mock("virtual:icons/lucide/x", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span class=\"mock-x-icon\" />" } };
-});
-
 vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@vueuse/core")>();
   return {

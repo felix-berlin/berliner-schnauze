@@ -1,20 +1,14 @@
 // @vitest-environment node
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, it, beforeAll } from "vitest";
+import { createAstroRender } from "../../helpers";
 
 describe("WordLetterFrequency.astro", () => {
-  let container: InstanceType<typeof AstroContainer>;
-  let WordLetterFrequency: any;
+  let render: (props: Record<string, unknown>) => Promise<string>;
 
   beforeAll(async () => {
-    container = await AstroContainer.create();
-    const mod = await import("@components/word/WordLetterFrequency.astro");
-    WordLetterFrequency = mod.default;
+    const { default: WordLetterFrequency } = await import("@components/word/WordLetterFrequency.astro");
+    render = await createAstroRender(WordLetterFrequency);
   }, 30_000);
-
-  async function render(props: Record<string, unknown>) {
-    return container.renderToString(WordLetterFrequency, { props });
-  }
 
   it("renders the frequency list for a word with letters", async () => {
     const result = await render({ word: "Schnauze" });

@@ -16,11 +16,6 @@ vi.mock("@stores/wordList.ts", () => ({
   setLetterFilter: vi.fn(),
 }));
 
-vi.mock("virtual:icons/lucide/paw-print", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span />" } };
-});
-
 describe("BerolinismusToggle.vue", () => {
   beforeEach(() => {
     vi.resetModules();

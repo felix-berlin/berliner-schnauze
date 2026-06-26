@@ -1,20 +1,14 @@
 // @vitest-environment node
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, it, beforeAll } from "vitest";
+import { createAstroRender } from "../../helpers";
 
 describe("WordSectionGrammatik.astro", () => {
-  let container: InstanceType<typeof AstroContainer>;
-  let WordSectionGrammatik: any;
+  let render: (props: Record<string, unknown>) => Promise<string>;
 
   beforeAll(async () => {
-    container = await AstroContainer.create();
-    const mod = await import("@components/word/WordSectionGrammatik.astro");
-    WordSectionGrammatik = mod.default;
+    const { default: WordSectionGrammatik } = await import("@components/word/WordSectionGrammatik.astro");
+    render = await createAstroRender(WordSectionGrammatik);
   }, 30_000);
-
-  async function render(props: Record<string, unknown>) {
-    return container.renderToString(WordSectionGrammatik, { props });
-  }
 
   it("renders nothing when wordTags is empty", async () => {
     const result = await render({ wordTags: [] });

@@ -45,12 +45,6 @@ vi.mock("@stores/modal", () => ({
   close: vi.fn(),
 }));
 
-vi.mock("virtual:icons/lucide/circle", () => ({ default: { template: "<span />" } }));
-vi.mock("virtual:icons/lucide/circle-check", () => ({ default: { template: "<span />" } }));
-vi.mock("virtual:icons/lucide/circle-x", () => ({ default: { template: "<span />" } }));
-vi.mock("virtual:icons/lucide/clock", () => ({ default: { template: "<span />" } }));
-vi.mock("virtual:icons/lucide/loader", () => ({ default: { template: "<span />" } }));
-
 vi.mock("@components/PwaCacheHeader.vue", () => ({
   default: { template: "<div class='mock-pwa-cache-header' />" },
 }));

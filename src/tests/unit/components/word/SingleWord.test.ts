@@ -6,11 +6,6 @@ vi.mock("@utils/helpers.ts", () => ({
   randomElement: vi.fn(),
 }));
 
-vi.mock("virtual:icons/lucide/book-open", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span />" } };
-});
-
 vi.mock("@components/word/WordOptionDropdown.vue", () => ({
   __esModule: true,
   default: {

@@ -21,11 +21,6 @@ const { mockWhenever, mockOnEventFired } = vi.hoisted(() => {
   };
 });
 
-vi.mock("virtual:icons/lucide/search", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span data-testid='search-icon' />" } };
-});
-
 vi.mock("@stores/modal.ts", () => ({
   open: vi.fn(),
 }));
@@ -102,7 +97,7 @@ describe("SearchModalTrigger.vue", () => {
 
   it("renders search icon", () => {
     const wrapper = mount(SearchModalTrigger);
-    expect(wrapper.find("[data-testid='search-icon']").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-search']").exists()).toBe(true);
   });
 
   it("has correct CSS classes on button", () => {

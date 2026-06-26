@@ -1,6 +1,6 @@
 // @vitest-environment node
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeAll } from "vitest";
+import { createAstroRender } from "../../helpers";
 
 vi.mock("@utils/helpers", () => ({
   routeToWord: vi.fn((slug?: string) => (slug ? `/wort/${slug}` : "/wort/")),
@@ -12,13 +12,12 @@ const makeWordRef = (slug: string, berlinerisch: string) => ({
 });
 
 describe("WordAlphabetNav.astro", () => {
-  async function render(props: Record<string, unknown>) {
-    const { default: WordAlphabetNav } = await import(
-      "@components/word/WordAlphabetNav.astro"
-    );
-    const container = await AstroContainer.create();
-    return container.renderToString(WordAlphabetNav, { props });
-  }
+  let render: (props: Record<string, unknown>) => Promise<string>;
+
+  beforeAll(async () => {
+    const { default: WordAlphabetNav } = await import("@components/word/WordAlphabetNav.astro");
+    render = await createAstroRender(WordAlphabetNav);
+  }, 30_000);
 
   it("renders nothing when both before and after are empty", async () => {
     const result = await render({ neighbors: { before: [], after: [] } });

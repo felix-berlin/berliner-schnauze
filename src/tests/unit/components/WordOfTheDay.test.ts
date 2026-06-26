@@ -3,11 +3,6 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { ref } from "vue";
 
-vi.mock("virtual:icons/lucide/crown", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span data-testid='crown-icon' />" } };
-});
-
 const mockWordOfTheDay = ref<{
   loading: boolean;
   error: boolean;
@@ -68,7 +63,7 @@ describe("WordOfTheDay.vue", () => {
 
   it("renders the crown icon", () => {
     const wrapper = mountComponent();
-    expect(wrapper.find("[data-testid='crown-icon']").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-crown']").exists()).toBe(true);
   });
 
   it("shows 'Wort des Tages' headline", () => {

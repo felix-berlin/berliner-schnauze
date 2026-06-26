@@ -3,16 +3,6 @@ import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { nextTick } from "vue";
 
-vi.mock("virtual:icons/lucide/play", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span data-testid='play-icon' />" } };
-});
-
-vi.mock("virtual:icons/lucide/pause", async (importOriginal) => {
-  const orig = await importOriginal<Record<string, unknown>>();
-  return { ...orig, default: { template: "<span data-testid='pause-icon' />" } };
-});
-
 describe("AudioPlayer.vue", () => {
   let audioPlayMock: ReturnType<typeof vi.fn>;
   let audioPauseMock: ReturnType<typeof vi.fn>;
@@ -42,7 +32,7 @@ describe("AudioPlayer.vue", () => {
       props: { audio: "test-audio-url" },
     });
     expect(wrapper.exists()).toBe(true);
-    expect(wrapper.find("[data-testid='play-icon']").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-play']").exists()).toBe(true);
   });
 
   it("plays audio on button click", async () => {
@@ -51,7 +41,7 @@ describe("AudioPlayer.vue", () => {
     });
     await wrapper.find("button").trigger("click");
     expect(audioPlayMock).toHaveBeenCalled();
-    expect(wrapper.find("[data-testid='pause-icon']").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-pause']").exists()).toBe(true);
   });
 
   it("stops audio on button click when playing", async () => {
@@ -61,7 +51,7 @@ describe("AudioPlayer.vue", () => {
     await wrapper.find("button").trigger("click");
     await wrapper.find("button").trigger("click");
     expect(audioPauseMock).toHaveBeenCalled();
-    expect(wrapper.find("[data-testid='play-icon']").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-play']").exists()).toBe(true);
   });
 
   it("changes aria-label based on playing state", async () => {
@@ -90,10 +80,10 @@ describe("AudioPlayer.vue", () => {
 
     const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
     await wrapper.find("button").trigger("click");
-    expect(wrapper.find("[data-testid='pause-icon']").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-pause']").exists()).toBe(true);
     capturedEndedHandler!();
     await nextTick();
-    expect(wrapper.find("[data-testid='play-icon']").exists()).toBe(true);
+    expect(wrapper.find("[data-testid='icon-lucide-play']").exists()).toBe(true);
     wrapper.unmount();
   });
 

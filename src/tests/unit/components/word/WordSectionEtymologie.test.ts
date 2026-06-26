@@ -1,6 +1,6 @@
 // @vitest-environment node
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, beforeAll } from "vitest";
+import { createAstroRender } from "../../helpers";
 
 const makeWordProps = (overrides: Record<string, unknown> = {}) => ({
   berlinerisch: "Schnauze",
@@ -11,13 +11,14 @@ const makeWordProps = (overrides: Record<string, unknown> = {}) => ({
 });
 
 describe("WordSectionEtymologie.astro", () => {
-  async function render(props: Record<string, unknown>) {
+  let render: (props: Record<string, unknown>) => Promise<string>;
+
+  beforeAll(async () => {
     const { default: WordSectionEtymologie } = await import(
       "@components/word/WordSectionEtymologie.astro"
     );
-    const container = await AstroContainer.create();
-    return container.renderToString(WordSectionEtymologie, { props });
-  }
+    render = await createAstroRender(WordSectionEtymologie);
+  }, 30_000);
 
   it("renders nothing when no content is present", async () => {
     const result = await render({ wordProps: makeWordProps() });

@@ -1,22 +1,16 @@
 // @vitest-environment node
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, it, vi, beforeAll } from "vitest";
+import { createAstroRender } from "../../helpers";
 
 vi.mock("@styles/components/_word-curiosities.scss", () => ({}));
 
 describe("WordCuriosities.astro", () => {
-  let container: InstanceType<typeof AstroContainer>;
-  let WordCuriosities: any;
+  let render: (props: Record<string, unknown>) => Promise<string>;
 
   beforeAll(async () => {
-    container = await AstroContainer.create();
-    const mod = await import("@components/word/WordCuriosities.astro");
-    WordCuriosities = mod.default;
+    const { default: WordCuriosities } = await import("@components/word/WordCuriosities.astro");
+    render = await createAstroRender(WordCuriosities);
   }, 30_000);
-
-  async function render(props: Record<string, unknown>) {
-    return container.renderToString(WordCuriosities, { props });
-  }
 
   it("renders nothing for a word shorter than 5 characters", async () => {
     const result = await render({ word: "Ick" });
