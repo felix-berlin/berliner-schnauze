@@ -37,6 +37,17 @@ vi.mock("@components/TurnStile.vue", () => ({
   },
 }));
 
+vi.mock("@components/AlertBanner.vue", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@components/AlertBanner.vue")>();
+  return {
+    ...actual,
+    default: {
+      name: "AlertBanner",
+      template: "<div class='mock-alert-banner'><slot /></div>",
+    },
+  };
+});
+
 
 describe("SuggestWordForm.vue", () => {
   beforeEach(() => {

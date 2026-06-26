@@ -19,6 +19,7 @@ export default getViteConfig(
           "src/env.d.ts",
           "src/pages/_app.ts",
           "src/plugins/**",
+          "src/lib/**",
           "src/utils/supportedBrowsers.mjs",
           "codegen.ts",
         ],
