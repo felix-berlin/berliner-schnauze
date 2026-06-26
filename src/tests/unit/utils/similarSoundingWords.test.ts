@@ -1,6 +1,5 @@
 import { similarSoundingWords } from "@utils/wordHelper";
 import * as natural from "natural";
-import sinon from "sinon";
 import { describe, it, expect } from "vitest";
 
 const SoundEx = natural.SoundEx;
