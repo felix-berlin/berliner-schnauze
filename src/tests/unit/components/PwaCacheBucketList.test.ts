@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("virtua/vue", () => ({
   VList: {
-    props: ["data"],
+    props: ["data", "style", "class"],
     setup(props: { data: unknown[] }, { slots }: { slots: any }) {
       return () => props.data.map((item: unknown, index: number) => slots.default?.({ item, index }));
     },
