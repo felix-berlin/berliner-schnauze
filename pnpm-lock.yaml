@@ -37,7 +37,7 @@ importers:
         version: 1.3.4(nanostores@1.3.0)
       '@nanostores/vue':
         specifier: ^1.1.0
-        version: 1.1.0(@nanostores/logger@1.1.0(nanostores@1.3.0))(@vue/devtools-api@8.1.3)(nanostores@1.3.0)(vue@3.5.38(typescript@6.0.3))
+        version: 1.1.0(@nanostores/logger@1.1.0(nanostores@1.3.0))(@vue/devtools-api@8.1.4)(nanostores@1.3.0)(vue@3.5.38(typescript@6.0.3))
       '@orama/orama':
         specifier: ^3.1.18
         version: 3.1.18
@@ -197,7 +197,7 @@ importers:
         version: 3.5.38
       '@vue/devtools-api':
         specifier: ^8.1.2
-        version: 8.1.3
+        version: 8.1.4
       '@vue/test-utils':
         specifier: ^2.4.10
         version: 2.4.11(@vue/compiler-dom@3.5.38)(@vue/server-renderer@3.5.38(vue@3.5.38(typescript@6.0.3)))(vue@3.5.38(typescript@6.0.3))
@@ -4216,19 +4216,22 @@ packages:
   '@vue/compiler-ssr@3.5.38':
     resolution: {integrity: sha512-7s+W5Gc42FGxZMcuwl8H5B29T8BJPMdBT7KHFE+BbAuZ/iTEdTtv7z2XiMjiaUUw4w3ZcCEdHs36RuYJ2VA7bA==}
 
-  '@vue/devtools-api@8.1.3':
-    resolution: {integrity: sha512-73NMCvxXh8Hyozc/jiwqTFWVcCMyi11U1zmrq4DoukQJnuo8JHt6FsNu4HdeUDa8SpIp5vb7Q22GWgIq0efsXg==}
+  '@vue/devtools-api@8.1.4':
+    resolution: {integrity: sha512-zphdXRe0VxWfUWH2KLcNV4xWUMxjxASyxCjFS/wRHVYfJCMBulq1ce3RHGkYRxghoVBqwCzOw1TWIIfvIWCY1w==}
 
   '@vue/devtools-core@8.1.3':
     resolution: {integrity: sha512-xezkv5/CPH/o5C8PE2Len9MnTJMsctYYQbKbbUiNOJpKd+fRHj27nKDb/sbtYI8NSQduegeQhCJGKRgAiOV6Uw==}
     peerDependencies:
       vue: ^3.0.0
 
-  '@vue/devtools-kit@8.1.3':
-    resolution: {integrity: sha512-cRn7GXiCQkMYU2Z3h3pM4YO/ndbx9FY1yLDAqIqPLcmIq4H6zAOJHein6tvZU3AfPwgrodqLiPBEF+YQaS8AxA==}
+  '@vue/devtools-kit@8.1.4':
+    resolution: {integrity: sha512-+GLBwY63hZ46sqTlgXgvd8IcZTpWe0PZzbJgs63ii/8uTYVwg1q9bdIR9xx8ReKcrdWS01RGCbC971jYPvjRCA==}
 
   '@vue/devtools-shared@8.1.3':
     resolution: {integrity: sha512-CM3uIPL+v+lrJUk33+pxspYo0MhuMWlCvf7zC9fybifvCPyM2jUbYRPwoYEJgYbwRqPikm5HozbUhp60MF2QuA==}
+
+  '@vue/devtools-shared@8.1.4':
+    resolution: {integrity: sha512-Earc/zrg0w0Md4KdrvgRR1vC5F17Zn+VzqTNI7PXYXz0fPJDVWENe7fv6NHi6Ja9Sq6Ce6SYUdc2FlXU0OMkjQ==}
 
   '@vue/language-core@3.3.5':
     resolution: {integrity: sha512-UkKu5nhX89fg4VhlG/FOeI10G3cj/7radKT/cy9BT4Q9qJmJlSTAc/dP63Xqs29aypN4f39xUV6PsLNk/dcD6g==}
@@ -11901,13 +11904,13 @@ snapshots:
     dependencies:
       nanostores: 1.3.0
 
-  '@nanostores/vue@1.1.0(@nanostores/logger@1.1.0(nanostores@1.3.0))(@vue/devtools-api@8.1.3)(nanostores@1.3.0)(vue@3.5.38(typescript@6.0.3))':
+  '@nanostores/vue@1.1.0(@nanostores/logger@1.1.0(nanostores@1.3.0))(@vue/devtools-api@8.1.4)(nanostores@1.3.0)(vue@3.5.38(typescript@6.0.3))':
     dependencies:
       nanostores: 1.3.0
       vue: 3.5.38(typescript@6.0.3)
     optionalDependencies:
       '@nanostores/logger': 1.1.0(nanostores@1.3.0)
-      '@vue/devtools-api': 8.1.3
+      '@vue/devtools-api': 8.1.4
 
   '@napi-rs/wasm-runtime@1.1.5(@emnapi/core@1.10.0)(@emnapi/runtime@1.11.1)':
     dependencies:
@@ -13693,24 +13696,26 @@ snapshots:
       '@vue/compiler-dom': 3.5.38
       '@vue/shared': 3.5.38
 
-  '@vue/devtools-api@8.1.3':
+  '@vue/devtools-api@8.1.4':
     dependencies:
-      '@vue/devtools-kit': 8.1.3
+      '@vue/devtools-kit': 8.1.4
 
   '@vue/devtools-core@8.1.3(vue@3.5.38(typescript@6.0.3))':
     dependencies:
-      '@vue/devtools-kit': 8.1.3
+      '@vue/devtools-kit': 8.1.4
       '@vue/devtools-shared': 8.1.3
       vue: 3.5.38(typescript@6.0.3)
 
-  '@vue/devtools-kit@8.1.3':
+  '@vue/devtools-kit@8.1.4':
     dependencies:
-      '@vue/devtools-shared': 8.1.3
+      '@vue/devtools-shared': 8.1.4
       birpc: 2.9.0
       hookable: 5.5.3
       perfect-debounce: 2.1.0
 
   '@vue/devtools-shared@8.1.3': {}
+
+  '@vue/devtools-shared@8.1.4': {}
 
   '@vue/language-core@3.3.5':
     dependencies:
@@ -19014,7 +19019,7 @@ snapshots:
   vite-plugin-vue-devtools@8.1.3(vite@8.0.16(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))(vue@3.5.38(typescript@6.0.3)):
     dependencies:
       '@vue/devtools-core': 8.1.3(vue@3.5.38(typescript@6.0.3))
-      '@vue/devtools-kit': 8.1.3
+      '@vue/devtools-kit': 8.1.4
       '@vue/devtools-shared': 8.1.3
       sirv: 3.0.2
       vite: 8.0.16(@types/node@25.9.4)(esbuild@0.28.1)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
