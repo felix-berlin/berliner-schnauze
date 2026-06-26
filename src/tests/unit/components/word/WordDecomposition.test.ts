@@ -1,17 +1,22 @@
 // @vitest-environment node
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeAll } from "vitest";
 
 vi.mock("@utils/helpers", () => ({
   routeToWord: vi.fn((slug?: string) => (slug ? `/wort/${slug}` : "/wort/")),
 }));
 
 describe("WordDecomposition.astro", () => {
+  let container: InstanceType<typeof AstroContainer>;
+  let WordDecomposition: any;
+
+  beforeAll(async () => {
+    container = await AstroContainer.create();
+    const mod = await import("@components/word/WordDecomposition.astro");
+    WordDecomposition = mod.default;
+  }, 30_000);
+
   async function render(props: Record<string, unknown>) {
-    const { default: WordDecomposition } = await import(
-      "@components/word/WordDecomposition.astro"
-    );
-    const container = await AstroContainer.create();
     return container.renderToString(WordDecomposition, { props });
   }
 

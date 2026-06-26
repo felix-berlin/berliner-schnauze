@@ -1,15 +1,20 @@
 // @vitest-environment node
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeAll } from "vitest";
 
 vi.mock("@styles/components/_word-curiosities.scss", () => ({}));
 
 describe("WordSectionLinguistik.astro", () => {
+  let container: InstanceType<typeof AstroContainer>;
+  let WordSectionLinguistik: any;
+
+  beforeAll(async () => {
+    container = await AstroContainer.create();
+    const mod = await import("@components/word/WordSectionLinguistik.astro");
+    WordSectionLinguistik = mod.default;
+  }, 30_000);
+
   async function render(props: Record<string, unknown>) {
-    const { default: WordSectionLinguistik } = await import(
-      "@components/word/WordSectionLinguistik.astro"
-    );
-    const container = await AstroContainer.create();
     return container.renderToString(WordSectionLinguistik, { props });
   }
 
