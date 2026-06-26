@@ -277,4 +277,25 @@ describe("WordOptionDropdown.vue", () => {
     await nextTick();
     expect(copyMock).toHaveBeenCalledWith("");
   });
+
+  it("share rejection is caught silently by .catch handler (covers line 98 catch lambda)", async () => {
+    const { useShare } = await import("@vueuse/core");
+    const shareMock = vi.fn().mockRejectedValue(new DOMException("AbortError", "AbortError"));
+    vi.mocked(useShare).mockReturnValueOnce({
+      isSupported: { value: true } as ReturnType<typeof useShare>["isSupported"],
+      share: shareMock,
+    });
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    // Click share — share() rejects; the .catch((err) => err) must not throw
+    await wrapper.find("[aria-label='Wort teilen']").trigger("click");
+    await nextTick();
+    // If the catch handler works, no unhandled rejection occurs and the toast still fires
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
+      expect.objectContaining({ message: "Wort geteilt" }),
+    );
+  });
 });

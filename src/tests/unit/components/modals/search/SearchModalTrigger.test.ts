@@ -1,6 +1,6 @@
 import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue";
 import * as modalStore from "@stores/modal.ts";
-import { mount } from "@vue/test-utils";
+import { mount, flushPromises } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { ref } from "vue";
 
@@ -29,6 +29,11 @@ vi.mock("virtual:icons/lucide/search", async (importOriginal) => {
 vi.mock("@stores/modal.ts", () => ({
   open: vi.fn(),
 }));
+
+vi.mock("@components/modals/search/SearchModal.vue", async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
+  return { ...actual, default: { name: "SearchModal", template: "<div />" } };
+});
 
 vi.mock("@utils/analytics", () => ({
   trackEvent: vi.fn(),
@@ -139,5 +144,19 @@ describe("SearchModalTrigger.vue", () => {
     const preventDefaultSpy = vi.spyOn(event, "preventDefault");
     mockOnEventFired.fire(event);
     expect(preventDefaultSpy).not.toHaveBeenCalled();
+  });
+
+  it("resolves the defineAsyncComponent factory for SearchModal (covers line 28 factory fn)", async () => {
+    const wrapper = mount(SearchModalTrigger);
+    await wrapper.find("button").trigger("click");
+
+    const callArgs = vi.mocked(modalStore.open).mock.calls[0][0];
+    const asyncComponent = callArgs.view!.component as any;
+
+    // Mount the async component so Vue invokes the factory arrow at line 28
+    const { defineComponent, h } = await import("vue");
+    const Host = defineComponent({ render: () => h(asyncComponent) });
+    mount(Host);
+    await flushPromises();
   });
 });

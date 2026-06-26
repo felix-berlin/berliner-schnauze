@@ -103,5 +103,4 @@ describe("AppSettings.vue", () => {
     expect(triggerPwaInstall).toHaveBeenCalledOnce();
   });
 
-
 });

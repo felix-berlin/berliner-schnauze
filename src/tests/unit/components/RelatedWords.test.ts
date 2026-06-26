@@ -93,4 +93,10 @@ describe("RelatedWords.vue", () => {
     const wrapper = mount(RelatedWords, { props: { words: wordsWithoutIdOrSlug, numberOfWords: 3 } });
     expect(wrapper.findAll("li")).toHaveLength(3);
   });
+
+  // v-if="word" on line 7: the false branch is structurally unreachable through the
+  // public API — xRandomWords always returns real array elements (objects), which are
+  // truthy, and the :key binding on <li> would crash on a null/undefined entry before
+  // v-if could evaluate.  Coverage of this branch requires a source-level fix (guard the
+  // :key expression too) or a compiler-internal hook; no test can reach it cleanly.
 });

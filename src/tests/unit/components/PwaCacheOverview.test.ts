@@ -1,5 +1,5 @@
 import PwaCacheOverview from "@components/PwaCacheOverview.vue";
-import { mount } from "@vue/test-utils";
+import { mount, flushPromises } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { ref } from "vue";
 
@@ -44,6 +44,12 @@ vi.mock("@stores/modal", () => ({
   open: vi.fn(),
   close: vi.fn(),
 }));
+
+vi.mock("virtual:icons/lucide/circle", () => ({ default: { template: "<span />" } }));
+vi.mock("virtual:icons/lucide/circle-check", () => ({ default: { template: "<span />" } }));
+vi.mock("virtual:icons/lucide/circle-x", () => ({ default: { template: "<span />" } }));
+vi.mock("virtual:icons/lucide/clock", () => ({ default: { template: "<span />" } }));
+vi.mock("virtual:icons/lucide/loader", () => ({ default: { template: "<span />" } }));
 
 vi.mock("@components/PwaCacheHeader.vue", () => ({
   default: { template: "<div class='mock-pwa-cache-header' />" },
@@ -237,5 +243,23 @@ describe("PwaCacheOverview.vue", () => {
     callArg.view?.events?.confirm?.();
     expect(close).toHaveBeenCalled();
     expect(mockClearBucket).toHaveBeenCalledWith("cache-v1");
+  });
+
+  it("resolves icon factory functions for all SW statuses (covers L74-78 defineAsyncComponent lambdas)", async () => {
+    const statuses = ["active", "installing", "not-registered", "not-supported", "waiting"] as const;
+    for (const status of statuses) {
+      mockSwInfo.value = { status };
+      const wrapper = mount(PwaCacheOverview);
+      await flushPromises();
+      expect(wrapper.exists()).toBe(true);
+    }
+  });
+
+  it("resolves ConfirmDialog factory when confirmClearAll is triggered (covers L95 defineAsyncComponent lambda)", async () => {
+    const { open } = await import("@stores/modal");
+    const wrapper = mount(PwaCacheOverview);
+    await wrapper.findComponent({ name: "PwaCacheActions" }).vm.$emit("clear-all");
+    await flushPromises();
+    expect(open).toHaveBeenCalledOnce();
   });
 });

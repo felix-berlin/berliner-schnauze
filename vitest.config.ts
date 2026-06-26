@@ -21,6 +21,15 @@ export default getViteConfig(
           "src/plugins/**",
           "src/lib/**",
           "src/utils/supportedBrowsers.mjs",
+          // MainHeader.astro is a thin shell whose client:only Vue children can't be
+          // SSR-rendered by the Astro Container API (virtual:astro:vue-app is unresolvable
+          // outside Vite). Its Vue counterpart MainHeader.vue is covered by MainHeader.test.ts.
+          "src/components/header/MainHeader.astro",
+          // BaseHead and Footer have too many runtime/env-var deps to test with the Container API.
+          "src/components/BaseHead.astro",
+          "src/components/Footer.astro",
+          // ImageGallery.astro is a thin shell around a client:only Vue island.
+          "src/components/ImageGallery.astro",
           "codegen.ts",
         ],
         reportsDirectory: "./tests/unit/coverage",

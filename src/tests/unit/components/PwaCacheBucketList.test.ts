@@ -239,6 +239,19 @@ describe("PwaCacheBucketList", () => {
     expect(wrapper.find(".c-pwa-cache__bucket-meta").text()).toContain("Min.");
   });
 
+  it("clicking AccordionTrigger button does not propagate to header (covers L21 @click.stop handler)", async () => {
+    const buckets = [makeBucket("api-search-index", ["https://a.com/path"])];
+    const wrapper = mount(PwaCacheBucketList, { props: { buckets } });
+    // The accordion trigger button carries the @click.stop compiled handler — trigger it directly
+    const trigger = wrapper.find(".c-accordion__trigger");
+    expect(trigger.exists()).toBe(true);
+    await trigger.trigger("click");
+    // After clicking the trigger (which has @click.stop), the accordion item should now be open
+    // because AccordionTrigger's own click handler toggles it — the stop modifier just prevents
+    // the event from reaching the parent header div's handler a second time
+    expect(wrapper.find(".c-accordion__item").classes()).toContain("is-open");
+  });
+
   it("formatRelativeTime returns 'vor X Std.' for date 5 hours ago (covers line 129)", () => {
     const bucket: CacheBucket = {
       dateRange: { lastModified: new Date(Date.now() - 5 * 3_600_000), oldestEntry: new Date(Date.now() - 5 * 3_600_000) },

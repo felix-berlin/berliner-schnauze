@@ -179,4 +179,21 @@ describe("TooltipPopover.vue", () => {
     wrapper.unmount(); // refs → null
     expect(() => rafCallbacks.forEach((cb) => cb(0))).not.toThrow();
   });
+
+  it("show() does not call requestAnimationFrame when refs are null (covers line 90 false branch)", () => {
+    // After unmount, Vue sets all template refs to null — show() is still
+    // callable via the closure captured by defineExpose and must not throw.
+    const rafCallbacks: FrameRequestCallback[] = [];
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+      rafCallbacks.push(cb);
+      return rafCallbacks.length;
+    });
+    const wrapper = mount(TooltipPopover, { attachTo: document.body });
+    const exposedShow = (wrapper.vm as any).show as () => void;
+    wrapper.unmount(); // template refs become null
+    const countBefore = rafCallbacks.length;
+    expect(() => exposedShow()).not.toThrow();
+    // requestAnimationFrame must NOT have been scheduled (refs are null → if is false)
+    expect(rafCallbacks.length).toBe(countBefore);
+  });
 });

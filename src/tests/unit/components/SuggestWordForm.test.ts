@@ -1,7 +1,7 @@
 import SuggestWordForm from "@components/SuggestWordForm.vue";
 import TurnStile from "@components/TurnStile.vue";
-import { mount, flushPromises } from "@vue/test-utils";
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { mount, flushPromises, config } from "@vue/test-utils";
+import { describe, expect, it, vi, beforeEach, beforeAll, afterAll } from "vitest";
 
 
 vi.mock("astro:env/client", () => ({
@@ -37,16 +37,17 @@ vi.mock("@components/TurnStile.vue", () => ({
   },
 }));
 
-vi.mock("@components/AlertBanner.vue", () => ({
-  __isTeleport: false,
-  default: {
-    name: "AlertBanner",
-    template: "<div class='mock-alert-banner'><slot /></div>",
-  },
-}));
-
+const AlertBannerStub = { name: "AlertBanner", template: "<div class='mock-alert-banner'><slot /></div>" };
 
 describe("SuggestWordForm.vue", () => {
+  beforeAll(() => {
+    config.global.stubs.AlertBanner = AlertBannerStub;
+  });
+
+  afterAll(() => {
+    delete config.global.stubs.AlertBanner;
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -283,4 +284,5 @@ describe("SuggestWordForm.vue", () => {
     expect(wrapper.exists()).toBe(true);
     vi.useRealTimers();
   });
+
 });

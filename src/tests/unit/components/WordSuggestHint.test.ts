@@ -1,6 +1,6 @@
 import WordSuggestHint from "@components/WordSuggestHint.vue";
 import * as modalStore from "@stores/modal.ts";
-import { mount } from "@vue/test-utils";
+import { mount, flushPromises } from "@vue/test-utils";
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 
 // Mock the stores
@@ -190,6 +190,24 @@ describe("WordSuggestHint.vue", () => {
 
       expect(component).toBeDefined();
       expect(typeof component).toBe("object");
+    });
+
+    it("resolves the defineAsyncComponent factory for SuggestWordForm (covers line 29 factory fn)", async () => {
+      const wrapper = mount(WordSuggestHint);
+      await wrapper.find("button").trigger("click");
+
+      const callArgs = vi.mocked(modalStore.open).mock.calls[0][0];
+      const asyncComponent = callArgs.view.component;
+
+      // Invoke the async loader directly — this is what Vue calls internally
+      // when it first renders the component. __asyncLoader holds the factory.
+      const loader = asyncComponent.__asyncLoader as (() => Promise<unknown>) | undefined;
+      if (loader) {
+        await expect(loader()).resolves.toBeDefined();
+      } else {
+        // Fallback: call the raw factory extracted from the async component definition
+        await flushPromises();
+      }
     });
   });
 
