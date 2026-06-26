@@ -72,6 +72,7 @@ describe("notificationPermission store", () => {
   });
 
   it("shows toast and does not update atom when requestPermission throws", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
     mockRequestPermission.mockRejectedValue(new TypeError("Not allowed"));
     const { requestNotificationPermission, $notificationPermission } = await import(
       "@stores/notificationPermission.ts"

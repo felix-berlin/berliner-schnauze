@@ -1,7 +1,7 @@
 import NavList from "@components/NavList.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
-import { defineComponent } from "vue";
+import { defineComponent, markRaw } from "vue";
 
 describe("NavList.vue", () => {
   const linkItems = [
@@ -69,18 +69,18 @@ describe("NavList.vue", () => {
   });
 
   it("renders component items via <component :is>", () => {
-    const TestComponent = defineComponent({
+    const TestComponent = markRaw(defineComponent({
       template: '<span class="test-component">Test</span>',
-    });
+    }));
     const componentItems = [{ component: TestComponent, props: {} }];
     const wrapper = mount(NavList, { props: { items: componentItems } });
     expect(wrapper.find(".test-component").exists()).toBe(true);
   });
 
   it("renders mixed link and component items", () => {
-    const TestComponent = defineComponent({
+    const TestComponent = markRaw(defineComponent({
       template: '<span class="comp-item">Comp</span>',
-    });
+    }));
     const mixedItems = [
       { link: "/home", title: "Home" },
       { component: TestComponent, props: {} },

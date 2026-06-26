@@ -2,7 +2,7 @@ import Modal from "@components/Modal.vue";
 import { useStore } from "@nanostores/vue";
 import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ref } from "vue";
+import { markRaw, ref } from "vue";
 
 const {
   mockResetModal,
@@ -160,7 +160,7 @@ describe("Modal.vue", () => {
   });
 
   it("renders inner template when hasView is true (covers line 16 true branch)", async () => {
-    mockView.value = { component: { render: () => null }, props: {} };
+    mockView.value = { component: markRaw({ render: () => null }), props: {} };
     mockViewIsComponent.value = true;
     setupUseStore();
     const wrapper = mount(Modal);
@@ -189,7 +189,7 @@ describe("Modal.vue", () => {
   });
 
   it("renders Component when viewIsComponent is true (covers line 22 true branch)", async () => {
-    mockView.value = { component: { render: () => null }, props: {}, events: { click: vi.fn() } };
+    mockView.value = { component: markRaw({ render: () => null }), props: {}, events: { click: vi.fn() } };
     mockViewIsComponent.value = true;
     setupUseStore();
     const wrapper = mount(Modal);
