@@ -24,7 +24,7 @@
   &__left {
     display: flex;
     flex-direction: column;
-    gap: vars.$spacer * 0.5;
+    gap: vars.$spacer;
     flex: 1;
     min-width: 200px;
   }
@@ -54,7 +54,7 @@
       font-style: normal;
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         inset-inline: 0;
         bottom: -0.1em;
