@@ -34,7 +34,7 @@
 
   // A container cannot query its own size — media query needed here.
   // Children still use @container word-page correctly.
-  @media (width > 48rem) {
+  @media (width > butler-fn.px-to-rem(807)) {
     display: grid;
     grid-template-columns: 200px 1fr;
     gap: 2rem;
