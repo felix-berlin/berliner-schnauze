@@ -73,11 +73,11 @@ describe("WordSectionEtymologie.astro", () => {
     expect(result).toContain("Maul");
   });
 
-  it("renders the section number 01", async () => {
+  it("renders the section number element", async () => {
     const result = await render({
       wordProps: makeWordProps({ infoText: "Test" }),
     });
-    expect(result).toContain("01");
+    expect(result).toContain("c-section-card__num");
   });
 
   it("renders aria-labelledby heading-etymologie", async () => {

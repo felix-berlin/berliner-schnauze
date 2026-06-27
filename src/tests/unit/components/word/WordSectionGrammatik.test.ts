@@ -55,11 +55,11 @@ describe("WordSectionGrammatik.astro", () => {
     expect(result).toContain("NLP-Analyse");
   });
 
-  it("renders the section number 05", async () => {
+  it("renders the section number element", async () => {
     const result = await render({
       wordTags: [{ Schnauze: ["Nomen"] }],
     });
-    expect(result).toContain("05");
+    expect(result).toContain("c-section-card__num");
   });
 
   it("renders aria-labelledby heading-grammatik", async () => {

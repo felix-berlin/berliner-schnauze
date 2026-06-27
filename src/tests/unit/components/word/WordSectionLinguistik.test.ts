@@ -63,9 +63,9 @@ describe("WordSectionLinguistik.astro", () => {
     expect(result).toContain("Wortkuriositäten");
   });
 
-  it("renders the section number 04", async () => {
+  it("renders the section number element", async () => {
     const result = await render({ word: "Schnauze" });
-    expect(result).toContain("04");
+    expect(result).toContain("c-section-card__num");
   });
 
   it("renders aria-labelledby heading-linguistik", async () => {

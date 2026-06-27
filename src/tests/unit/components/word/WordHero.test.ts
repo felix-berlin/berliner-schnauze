@@ -1,9 +1,7 @@
 // @vitest-environment node
-import { experimental_AstroContainer as AstroContainer } from "astro/container";
-import { getContainerRenderer } from "@astrojs/vue/container-renderer";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeAll } from "vitest";
+import { createAstroRender } from "../../helpers";
 
-// Stub SCSS imports — not resolvable in node environment
 vi.mock("@styles/components/_word-hero.scss", () => ({}));
 
 const makeWordProps = (overrides: Record<string, unknown> = {}) => ({
@@ -21,13 +19,12 @@ const makeWord = (wordProps = makeWordProps()) => ({
 });
 
 describe("WordHero.astro", () => {
-  async function render(props: Record<string, unknown>) {
+  let render: (props: Record<string, unknown>) => Promise<string>;
+
+  beforeAll(async () => {
     const { default: WordHero } = await import("@components/word/WordHero.astro");
-    const container = await AstroContainer.create({
-      renderers: [getContainerRenderer()],
-    });
-    return container.renderToString(WordHero, { props });
-  }
+    render = await createAstroRender(WordHero);
+  }, 30_000);
 
   it("renders .c-word-hero header element", async () => {
     const wordProps = makeWordProps();

@@ -36,9 +36,9 @@ describe("WordSectionOrthographie.astro", () => {
     expect(result).toContain("Anzahl der Silben");
   });
 
-  it("renders the section number 03", async () => {
+  it("renders the section number element", async () => {
     const result = await render({ word: "Schnauze", allWords: [] });
-    expect(result).toContain("03");
+    expect(result).toContain("c-section-card__num");
   });
 
   it("renders aria-labelledby heading-orthographie", async () => {
