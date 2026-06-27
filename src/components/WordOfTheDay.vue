@@ -1,6 +1,11 @@
 <template>
   <div
+    ref="root"
     class="c-word-of-the-day c-confetti"
+    data-track-content
+    data-content-name="Word of the Day"
+    :data-content-piece="currentWord?.word?.berlinerisch ?? ''"
+    :data-content-target="routeToWord(currentWord?.word?.post_name)"
     role="link"
     tabindex="0"
     @mouseover="toggleCelebration(true)"
@@ -57,11 +62,15 @@ import type { Ref } from "vue";
 
 import ConfettiEffect from "@components/ConfettiEffect.vue";
 import SingleLoader from "@components/SingleLoader.vue";
+import { useContentTracking } from "@composables/useContentTracking";
 import { useStore } from "@nanostores/vue";
 import { $wordOfTheDay } from "@stores/wordOfTheDay.ts";
 import { routeToWord } from "@utils/helpers.ts";
 import Crown from "virtual:icons/lucide/crown";
 import { onMounted, ref } from "vue";
+
+const root = ref<HTMLElement | null>(null);
+useContentTracking(root);
 
 const currentWord = useStore($wordOfTheDay);
 const celebrate = ref(false);

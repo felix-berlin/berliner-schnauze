@@ -50,3 +50,15 @@ export const trackEvent = (
 
   _paq.push(["trackEvent", ...eventData]);
 };
+
+/**
+ * Track content impressions within a DOM node (for dynamically mounted Vue islands).
+ * Call in onMounted() after adding data-track-content attributes to the element.
+ *
+ * @see https://developer.matomo.org/guides/content-tracking
+ */
+export const trackContentImpressionsWithinNode = (el: Element): void => {
+  if (!isBrowser()) return;
+  const _paq = (window._paq = window._paq || []);
+  _paq.push(["trackContentImpressionsWithinNode", el]);
+};

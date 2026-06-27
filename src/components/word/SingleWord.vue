@@ -8,6 +8,7 @@
     :class="{ 'has-translation': source.wordProperties?.translations }"
     data-track-content
     data-content-name="word"
+    :data-content-target="routeToWord(source.slug!)"
   >
     <dl class="c-word-list__header">
       <dt

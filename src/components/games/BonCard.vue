@@ -1,5 +1,12 @@
 <template>
-  <div class="c-bon-card">
+  <div
+    ref="root"
+    class="c-bon-card"
+    data-track-content
+    data-content-name="Bon Card"
+    :data-content-piece="word"
+    data-content-target="#"
+  >
     <div class="c-bon-card__hint" aria-hidden="true">
       <span>← NEE</span>
       <span>JA →</span>
@@ -71,6 +78,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, onMounted, ref, watch } from 'vue'
 import { onKeyStroke, usePointerSwipe, useTimeoutFn, useVibrate } from '@vueuse/core'
+import { useContentTracking } from '@composables/useContentTracking'
 
 const XIcon = defineAsyncComponent(() => import('virtual:icons/lucide/x'))
 const CheckIcon = defineAsyncComponent(() => import('virtual:icons/lucide/check'))
@@ -90,8 +98,11 @@ const emit = defineEmits<{
   answer: [isReal: boolean]
 }>()
 
+const root = ref<HTMLElement | null>(null)
 const cardRef = ref<HTMLElement | null>(null)
 const neeButtonRef = ref<HTMLButtonElement | null>(null)
+
+useContentTracking(root)
 
 defineExpose({
   focus: () => neeButtonRef.value?.focus(),

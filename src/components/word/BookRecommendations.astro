@@ -50,6 +50,10 @@ const books = [
             href={book.href}
             rel='noopener noreferrer sponsored'
             target='_blank'
+            data-track-content
+            data-content-name="Book Recommendation"
+            data-content-piece={book.title}
+            data-content-target={book.href}
           >
             <div class='c-book-recs__cover' aria-hidden='true'>
               {book.imageUrl ? (

@@ -390,7 +390,7 @@ const schemaJson = () => {
     }
   </footer>
 
-  <RelatedWords words={wordRefs}>
+  <RelatedWords words={wordRefs} currentWord={wordProps?.berlinerisch ?? ''}>
     <li>
       <RandomWordButton class:list='c-related-words__word is-random' words={wordRefs} />
     </li>

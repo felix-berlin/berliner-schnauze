@@ -1,5 +1,12 @@
 <template>
-  <section class="c-related-words">
+  <section
+    ref="root"
+    class="c-related-words"
+    data-track-content
+    data-content-name="Related Words"
+    :data-content-piece="currentWord"
+    data-content-target="#"
+  >
     <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
     <ul class="c-related-words__words u-list-reset">
       <li v-for="word in xRandomWords(words, numberOfWords)" :key="word.id ?? word.slug ?? ''">
@@ -18,16 +25,22 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { routeToWord } from "@utils/helpers.ts";
+import { useContentTracking } from "@composables/useContentTracking";
 
 import type { WordRef } from "@utils/wordHelper";
 
 interface RelatedWordsProps {
   numberOfWords?: number;
   words: WordRef[];
+  currentWord?: string;
 }
 
-const { numberOfWords = 7, words } = defineProps<RelatedWordsProps>();
+const { numberOfWords = 7, words, currentWord = "" } = defineProps<RelatedWordsProps>();
+
+const root = ref<HTMLElement | null>(null);
+useContentTracking(root);
 
 const xRandomWords = (arr: WordRef[], n: number): WordRef[] => {
   const result = new Array(n);
