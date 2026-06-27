@@ -1,0 +1,27 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-single-word {
+  &__alpha-nav {
+    display: flex;
+    gap: vars.$spacer * 2;
+    flex-wrap: wrap;
+  }
+
+  &__alpha-col {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  &__alpha-label {
+    font-size: 0.8rem;
+    color: color-mix(in srgb, var(--blue) 70%, white);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: vars.$spacer * 0.5;
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
+    }
+  }
+}

@@ -1,5 +1,12 @@
 <template>
-  <div class="c-word-suggest-hint">
+  <div
+    ref="root"
+    class="c-word-suggest-hint"
+    data-track-content
+    data-content-name="Word Suggest CTA"
+    data-content-piece="Wort vorschlagen"
+    data-content-target="#"
+  >
     <strong class="c-word-suggest-hint__text"
       >Dieses Wort ist anscheinend noch nicht Teil des Wörterbuchs.<br />
       Möchtest du es hinzufügen?</strong
@@ -15,11 +22,15 @@
 </template>
 
 <script setup lang="ts">
+import { useContentTracking } from "@composables/useContentTracking";
 import { useStore } from "@nanostores/vue";
 import { open } from "@stores/modal.ts";
 import { $wordSearch } from "@stores/wordList.ts";
 import Plus from "virtual:icons/lucide/plus";
-import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref } from "vue";
+
+const root = ref<HTMLElement | null>(null);
+useContentTracking(root);
 
 const wordSearch = useStore($wordSearch);
 

@@ -72,6 +72,7 @@ describe("notificationPermission store", () => {
   });
 
   it("shows toast and does not update atom when requestPermission throws", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
     mockRequestPermission.mockRejectedValue(new TypeError("Not allowed"));
     const { requestNotificationPermission, $notificationPermission } = await import(
       "@stores/notificationPermission.ts"
@@ -91,6 +92,14 @@ describe("notificationPermission store", () => {
     vi.stubGlobal("Notification", undefined);
     const { isNotificationSupported } = await import("@stores/notificationPermission.ts");
     expect(isNotificationSupported()).toBe(false);
+    vi.unstubAllGlobals();
+  });
+
+  it("requestNotificationPermission returns early when not supported", async () => {
+    vi.stubGlobal("Notification", undefined);
+    const { requestNotificationPermission } = await import("@stores/notificationPermission.ts");
+    await requestNotificationPermission();
+    expect(mockRequestPermission).not.toHaveBeenCalled();
     vi.unstubAllGlobals();
   });
 });

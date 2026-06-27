@@ -63,6 +63,7 @@ export const getWordOfTheDay = async (): Promise<void> => {
     .then((res) => {
       if (!res.ok) {
         $wordOfTheDay.setKey("error", true);
+        $wordOfTheDay.setKey("loading", false);
 
         throw new Error("Failed to fetch Word of the Day");
       }
@@ -73,18 +74,45 @@ export const getWordOfTheDay = async (): Promise<void> => {
       return res.json();
     })
     .then((data) => {
+      $wordOfTheDay.setKey("error", false);
       $wordOfTheDay.setKey("word", data);
       $wordOfTheDay.setKey("loading", false);
     })
     .catch((err) => {
       $wordOfTheDay.setKey("error", true);
+      $wordOfTheDay.setKey("loading", false);
 
       console.error("Failed to fetch Word of the Day: ", err);
     });
 };
 
+const isCachedToday = (timestamp: number): boolean => {
+  const cached = new Date(timestamp);
+  const now = new Date();
+  return (
+    cached.getFullYear() === now.getFullYear() &&
+    cached.getMonth() === now.getMonth() &&
+    cached.getDate() === now.getDate()
+  );
+};
+
+const getPersistedTimestamp = (): number => {
+  // nanostores onMount callbacks run in reverse registration order (reduceRight),
+  // so persistentMap's restore() hasn't populated the store yet when our callback runs.
+  // Read directly from localStorage using the persistentMap key format.
+  try {
+    const raw = localStorage.getItem("wordOfTheDay:timestamp");
+    return raw ? (JSON.parse(raw) as number) : 0;
+  } catch {
+    return 0;
+  }
+};
+
 onMount($wordOfTheDay, () => {
   void task(async () => {
+    const timestamp = getPersistedTimestamp();
+    if (timestamp && isCachedToday(timestamp)) return;
+
     await getWordOfTheDay().catch((err) => {
       console.error("Failed to fetch Word of the Day: ", err);
     });

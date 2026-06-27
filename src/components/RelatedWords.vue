@@ -1,8 +1,15 @@
 <template>
-  <section class="c-related-words">
+  <section
+    ref="root"
+    class="c-related-words"
+    data-track-content
+    data-content-name="Related Words"
+    :data-content-piece="currentWord"
+    data-content-target="#"
+  >
     <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
     <ul class="c-related-words__words u-list-reset">
-      <li v-for="word in xRandomWords(words, numberOfWords)" :key="word.id">
+      <li v-for="word in xRandomWords(words, numberOfWords)" :key="word.id ?? word.slug ?? ''">
         <a
           v-if="word"
           :href="routeToWord(word.slug!)"
@@ -18,26 +25,24 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { routeToWord } from "@utils/helpers.ts";
+import { useContentTracking } from "@composables/useContentTracking";
 
-import type { BerlinerWord } from "@/gql/entity-types";
+import type { WordRef } from "@utils/wordHelper";
 
 interface RelatedWordsProps {
   numberOfWords?: number;
-  words: BerlinerWord[];
+  words: WordRef[];
+  currentWord?: string;
 }
 
-const { numberOfWords = 7, words } = defineProps<RelatedWordsProps>();
+const { numberOfWords = 7, words, currentWord = "" } = defineProps<RelatedWordsProps>();
 
-/**
- * Get x random items from an array
- *
- * @param   {Array}  arr  Array to get random items from
- * @param   {Number}  n    Number of items to get
- *
- * @return  {Array}       Array of random items
- */
-const xRandomWords = (arr: BerlinerWord[], n: number): BerlinerWord[] => {
+const root = ref<HTMLElement | null>(null);
+useContentTracking(root);
+
+const xRandomWords = (arr: WordRef[], n: number): WordRef[] => {
   const result = new Array(n);
   let len = arr.length;
   const taken = new Array(len);

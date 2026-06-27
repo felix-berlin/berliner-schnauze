@@ -68,4 +68,16 @@ describe("PwaCacheStats", () => {
     expect(wrapper.text()).not.toContain("belegt");
     expect(wrapper.findAll(".c-pwa-cache__stat")).toHaveLength(3);
   });
+
+  it("quotaPercent returns 0 when quotaBytes is 0 (covers line 62 quotaBytes===0 branch)", () => {
+    const wrapper = mount(PwaCacheStats, {
+      props: {
+        bucketCount: 1,
+        storageQuota: { quotaBytes: 0, usedBytes: 0 },
+        totalEntryCount: 0,
+        totalSizeBytes: 0,
+      },
+    });
+    expect(wrapper.find(".c-pwa-cache__stat--quota .c-pwa-cache__stat-value").text()).toBe("0%");
+  });
 });

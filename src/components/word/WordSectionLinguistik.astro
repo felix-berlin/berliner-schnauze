@@ -1,0 +1,55 @@
+---
+import '@styles/components/_section-card.scss';
+import '@styles/components/_word-section-linguistik.scss';
+import WordCuriosities from '@components/word/WordCuriosities.astro';
+import WordLetterFrequency from '@components/word/WordLetterFrequency.astro';
+import { coloredConsonantsAndVowels, countLetters } from '@utils/wordHelper';
+
+interface Props {
+  word: string;
+}
+
+const { word } = Astro.props;
+const letterCount = countLetters(word);
+---
+
+{word && <section class='c-section-card' id='linguistik' aria-labelledby='heading-linguistik'>
+  <div class='c-section-card__header'>
+    <span class='c-section-card__num'></span>
+    <h2 class='c-section-card__title' id='heading-linguistik'>Quantitative Linguistik</h2>
+  </div>
+  <div class='c-section-card__body'>
+    <div class='c-section-card__stat-row'>
+      <div class='c-section-card__stat-box'>
+        <div class='c-section-card__stat-label'>Buchstaben</div>
+        <div class='c-section-card__stat-value'>{word.length}</div>
+      </div>
+      <div class='c-section-card__stat-box'>
+        <div class='c-section-card__stat-label'>Vokale</div>
+        <div class='c-section-card__stat-value c-section-card__stat-value--vowels'>
+          {letterCount.vowels}
+        </div>
+      </div>
+      <div class='c-section-card__stat-box'>
+        <div class='c-section-card__stat-label'>Konsonanten</div>
+        <div class='c-section-card__stat-value c-section-card__stat-value--consonants'>
+          {letterCount.consonants}
+        </div>
+      </div>
+    </div>
+    <div class='c-single-word__consonants-vowels'>
+      <h3>Konsonanten und Vokale</h3>
+      <p class='c-single-word__consonants-vowels-word' set:html={coloredConsonantsAndVowels(word)} />
+      <div class='c-section-card__cv-legend'>
+        <span class='c-section-card__cv-legend-item c-section-card__cv-legend-item--consonant'
+          >Konsonant</span
+        >
+        <span class='c-section-card__cv-legend-item c-section-card__cv-legend-item--vowel'
+          >Vokal</span
+        >
+      </div>
+    </div>
+    <WordLetterFrequency word={word} />
+    <WordCuriosities word={word} />
+  </div>
+</section>}

@@ -1,0 +1,41 @@
+---
+import '@styles/components/_section-card.scss';
+import '@styles/components/_word-related-words.scss';
+import { routeToWord } from "@utils/helpers";
+import type { WordRef } from "@utils/wordHelper";
+
+interface Props {
+  anagrams: WordRef[];
+}
+
+const { anagrams } = Astro.props;
+---
+
+{
+  anagrams.length > 0 && (
+    <section
+      class="c-section-card c-section-card--unnumbered"
+      id="anagramme"
+      aria-labelledby="heading-anagramme"
+      data-track-content
+      data-content-name="Word Anagrams"
+      data-content-piece={anagrams[0]?.wordProperties?.berlinerisch ?? ''}
+      data-content-target="#"
+    >
+      <div class="c-section-card__header">
+        <span class="c-section-card__num"></span>
+        <h2 class="c-section-card__title" id="heading-anagramme">Buchstabenspiele</h2>
+      </div>
+      <div class="c-section-card__body">
+        <h3>Anagramme</h3>
+        <ul class="c-single-word__related-words-list">
+          {anagrams.map((w) => (
+            <li>
+              <a class="c-single-word__related-word-link" href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

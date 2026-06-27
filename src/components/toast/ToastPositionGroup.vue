@@ -66,7 +66,7 @@ watch(
 const onBeforeLeave = (el: Element): void => {
   const htmlEl = el as HTMLElement;
   const { top, left, width } = htmlEl.getBoundingClientRect();
-  const parent = container.value?.getBoundingClientRect() ?? { top: 0, left: 0 };
+  const parent = container.value?.getBoundingClientRect() ?? { left: 0, top: 0 };
   htmlEl.style.top = `${top - parent.top}px`;
   htmlEl.style.left = `${left - parent.left}px`;
   htmlEl.style.width = `${width}px`;

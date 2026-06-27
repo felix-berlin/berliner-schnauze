@@ -1,0 +1,24 @@
+---
+import '@styles/components/_section-card.scss';
+import WordAlphabetNav from '@components/word/WordAlphabetNav.astro';
+import type { WordRef } from '@utils/wordHelper';
+
+interface Props {
+  neighbors: { before: WordRef[]; after: WordRef[] };
+}
+
+const { neighbors } = Astro.props;
+const hasContent = neighbors.before.length > 0 || neighbors.after.length > 0;
+---
+
+{hasContent && (
+  <section class='c-section-card' id='navigation' aria-labelledby='heading-navigation'>
+    <div class='c-section-card__header'>
+      <span class='c-section-card__num'></span>
+      <h2 class='c-section-card__title' id='heading-navigation'>Alphabetische Nachbarn</h2>
+    </div>
+    <div class='c-section-card__body'>
+      <WordAlphabetNav neighbors={neighbors} />
+    </div>
+  </section>
+)}

@@ -1,0 +1,102 @@
+import RelatedWords from "@components/RelatedWords.vue";
+import { mount } from "@vue/test-utils";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("@utils/helpers.ts", () => ({
+  routeToWord: vi.fn((slug: string) => `/wort/${slug}`),
+}));
+
+const makeWord = (slug: string, berlinerisch: string) => ({
+  id: slug,
+  slug,
+  wordProperties: { berlinerisch },
+});
+
+describe("RelatedWords.vue", () => {
+  const words = [
+    makeWord("allet", "Allet"),
+    makeWord("kiez", "Kiez"),
+    makeWord("schnauze", "Schnauze"),
+    makeWord("berliner", "Berliner"),
+    makeWord("molle", "Molle"),
+    makeWord("icke", "Icke"),
+    makeWord("jut", "Jut"),
+    makeWord("nüscht", "Nüscht"),
+  ];
+
+  it("renders the correct number of words (default 7)", () => {
+    const wrapper = mount(RelatedWords, { props: { words } });
+    expect(wrapper.findAll("li")).toHaveLength(7);
+  });
+
+  it("renders the specified numberOfWords", () => {
+    const wrapper = mount(RelatedWords, { props: { words, numberOfWords: 3 } });
+    expect(wrapper.findAll("li")).toHaveLength(3);
+  });
+
+  it("renders links with correct href from routeToWord", () => {
+    const wrapper = mount(RelatedWords, { props: { words, numberOfWords: 1 } });
+    const link = wrapper.find("a");
+    expect(link.attributes("href")).toMatch(/^\/wort\//);
+  });
+
+  it("shows the berlinerisch text in each link", () => {
+    const simpleWords = [
+      makeWord("allet", "Allet"),
+      makeWord("kiez", "Kiez"),
+      makeWord("schnauze", "Schnauze"),
+    ];
+    const wrapper = mount(RelatedWords, { props: { words: simpleWords, numberOfWords: 3 } });
+    const linkTexts = wrapper.findAll("a").map((a) => a.text());
+    expect(linkTexts.some((t) => ["Allet", "Kiez", "Schnauze"].includes(t))).toBe(true);
+  });
+
+  it("links have title attribute with berlinerisch text", () => {
+    const wrapper = mount(RelatedWords, { props: { words, numberOfWords: 1 } });
+    const link = wrapper.find("a");
+    expect(link.attributes("title")).toMatch(/Erfahre mehr über/);
+  });
+
+  it("renders the section with correct class", () => {
+    const wrapper = mount(RelatedWords, { props: { words } });
+    expect(wrapper.find(".c-related-words").exists()).toBe(true);
+  });
+
+  it("renders headline text", () => {
+    const wrapper = mount(RelatedWords, { props: { words } });
+    expect(wrapper.find("h2").text()).toBe("Bock mehr Wörter kennen zu lernen?");
+  });
+
+  it("throws RangeError when numberOfWords exceeds available words (covers line 37)", () => {
+    const tooFew = [makeWord("a", "A"), makeWord("b", "B")];
+    expect(() =>
+      mount(RelatedWords, { props: { words: tooFew, numberOfWords: 5 } }),
+    ).toThrow(RangeError);
+  });
+
+  it("uses slug as key when id is undefined (covers line 5 ?? word.slug branch)", () => {
+    const wordsWithoutId = [
+      { slug: "allet", wordProperties: { berlinerisch: "Allet" } },
+      { slug: "kiez", wordProperties: { berlinerisch: "Kiez" } },
+      { slug: "schnauze", wordProperties: { berlinerisch: "Schnauze" } },
+    ] as ReturnType<typeof makeWord>[];
+    const wrapper = mount(RelatedWords, { props: { words: wordsWithoutId, numberOfWords: 3 } });
+    expect(wrapper.findAll("li")).toHaveLength(3);
+  });
+
+  it("falls back to empty string key when both id and slug are undefined (covers line 5 ?? '' branch)", () => {
+    const wordsWithoutIdOrSlug = [
+      { wordProperties: { berlinerisch: "Allet" } },
+      { wordProperties: { berlinerisch: "Kiez" } },
+      { wordProperties: { berlinerisch: "Schnauze" } },
+    ] as unknown as ReturnType<typeof makeWord>[];
+    const wrapper = mount(RelatedWords, { props: { words: wordsWithoutIdOrSlug, numberOfWords: 3 } });
+    expect(wrapper.findAll("li")).toHaveLength(3);
+  });
+
+  // v-if="word" on line 7: the false branch is structurally unreachable through the
+  // public API — xRandomWords always returns real array elements (objects), which are
+  // truthy, and the :key binding on <li> would crash on a null/undefined entry before
+  // v-if could evaluate.  Coverage of this branch requires a source-level fix (guard the
+  // :key expression too) or a compiler-internal hook; no test can reach it cleanly.
+});

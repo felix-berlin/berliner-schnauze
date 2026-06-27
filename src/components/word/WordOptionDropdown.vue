@@ -1,16 +1,20 @@
 <template>
-  <VDropdown placement="bottom-end" class="c-options-dropdown" distance="9" theme="word-options">
-    <button
-      type="button"
-      class="c-options-dropdown__options c-button c-button--center-icon"
-      aria-label="Website Menu Navigation"
-    >
-      <span
-        class="c-options-dropdown__options-icon c-button--center-icon c-icon c-icon--lucide-more-vertical"
-      />
-    </button>
+  <DropdownPopover
+    placement="bottom-end"
+    class="c-options-dropdown c-dropdown--theme-word-options"
+  >
+    <template #default="{ triggerProps }">
+      <button
+        v-bind="triggerProps"
+        type="button"
+        aria-label="Optionen"
+        class="c-options-dropdown__options-icon c-button c-button--center-icon"
+      >
+        <span aria-hidden="true" class="c-icon c-icon--lucide-more-vertical" />
+      </button>
+    </template>
 
-    <template #popper>
+    <template #panel>
       <slot name="before" />
 
       <button
@@ -51,7 +55,7 @@
 
       <slot name="after" />
     </template>
-  </VDropdown>
+  </DropdownPopover>
 </template>
 
 <script setup lang="ts">
@@ -65,6 +69,7 @@ import { SITE_URL } from "astro:env/client";
 import Copy from "virtual:icons/lucide/copy";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
+import DropdownPopover from "@components/DropdownPopover.vue";
 
 interface WordProps {
   berlinerisch: WordProperties["berlinerisch"];

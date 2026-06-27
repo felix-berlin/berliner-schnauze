@@ -1,6 +1,6 @@
-import type { Seo } from "@/types/seo";
-
 import { SITE_NAME, SITE_URL } from "astro:env/client";
+
+import type { Seo } from "@/types/seo";
 
 /**
  * Returns the route to a word
@@ -11,7 +11,7 @@ import { SITE_NAME, SITE_URL } from "astro:env/client";
  */
 export const routeToWord = (word: string | undefined): string => {
   if (typeof word !== "string") {
-    console.error("routeToWord: word is not a string");
+    console.error(`routeToWord: "${word}" is not a string`);
 
     return "/wort";
   }
@@ -116,4 +116,4 @@ export const checkObjectValueLength = (obj: Record<string, any>): boolean => {
 };
 
 export const canonicalUrl = (pathname: string, site: URL | undefined): string =>
-  new URL(pathname, site).toString().replace(/\/$/, '');
+  new URL(pathname, site).toString().replace(/\/$/, "");

@@ -1,12 +1,21 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm view *)",
-      "Bash(pnpm outdated *)",
+      "Bash(npm *)",
+      "Bash(pnpm *)",
+      "Bash(npx *)",
+      "Bash(dlx *)",
       "Bash(graphify *)",
-      "mcp__plugin_claude-mem_mcp-search__search",
-      "mcp__plugin_context7_context7__resolve-library-id",
-      "mcp__plugin_context7_context7__query-docs",
+      "Bash(vitest *)",
+      "Bash(oxlint *)",
+      "Bash(oxfmt *)",
+      "Bash(stylelint *)",
+      "mcp__plugin_context7_context7__*",
+      "mcp__serena__*",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__*",
+      "mcp__chrome-devtools__*",
+      "mcp__plugin_claude-mem_mcp-search__*",
+      "Skill(claude-md-management:revise-claude-md:*)",
       "Skill(pr-review-toolkit:review-pr)",
       "Skill(pr-review-toolkit:review-pr:*)",
       "Bash(npx infisical *)"
@@ -19,11 +28,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.ts|*.tsx|*.js|*.mjs|*.cjs|*.vue|*.astro) out=$(pnpm exec oxlint \"$file\" --deny-warnings 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; esac"
+            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.ts|*.tsx|*.js|*.mjs|*.cjs) out=$(pnpm exec oxlint \"$file\" --deny-warnings --fix --fix-suggestions 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; *.vue|*.astro) out=$(pnpm exec oxlint \"$(dirname \"$file\")/\" --deny-warnings --fix --fix-suggestions 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; esac"
           },
           {
             "type": "command",
-            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.ts|*.tsx|*.js|*.mjs|*.cjs|*.vue|*.astro) pnpm exec oxfmt \"$file\" 2>/dev/null;; esac"
+            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.ts|*.tsx|*.js|*.mjs|*.cjs|*.vue) pnpm exec oxfmt \"$file\" 2>/dev/null;; esac"
           },
           {
             "type": "command",
@@ -47,7 +56,16 @@
         "hooks": [
           {
             "type": "command",
-            "command": "CMD=$(python3 -c \"import json,sys; d=json.load(sys.stdin); print(d.get('tool_input',d).get('command',''))\" 2>/dev/null || true); case \"$CMD\" in *grep*|*rg\\ *|*ripgrep*|*find\\ *|*fd\\ *|*ack\\ *|*ag\\ *)   [ -f graphify-out/graph.json ] &&   echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"graphify: knowledge graph at graphify-out/. For focused questions, run `graphify query \\\"<question>\\\"` (scoped subgraph, usually much smaller than GRAPH_REPORT.md) instead of grepping raw files. Read GRAPH_REPORT.md only for broad architecture context.\"}}'   || true ;; esac"
+            "command": "CMD=$(python3 -c \"import json,sys; d=json.load(sys.stdin); print(d.get('tool_input',d).get('command',''))\" 2>/dev/null || true); case \"$CMD\" in *grep*|*rg\\ *|*ripgrep*|*find\\ *|*fd\\ *|*ack\\ *|*ag\\ *)   [ -f graphify-out/graph.json ] &&   echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"MANDATORY: graphify-out/graph.json exists. You MUST run `graphify query \\\"<question>\\\"` before grepping raw files. Only grep after graphify has oriented you, or to modify/debug specific lines.\"}}'   || true ;; esac"
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "HIT=$(python3 -c \"import json,sys;d=json.load(sys.stdin);t=d.get('tool_input',d);s=(str(t.get('file_path') or '')+' '+str(t.get('pattern') or '')+' '+str(t.get('path') or '')).lower().replace(chr(92),'/');exts=('.py','.js','.ts','.tsx','.jsx','.go','.rs','.java','.rb','.c','.h','.cpp','.hpp','.cc','.cs','.kt','.swift','.php','.scala','.lua','.sh','.md','.rst','.txt','.mdx');sys.stdout.write('1' if 'graphify-out/' not in s and any(e in s for e in exts) else '')\" 2>/dev/null || true); if [ \"$HIT\" = 1 ] && [ -f graphify-out/graph.json ]; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"additionalContext\":\"MANDATORY: graphify-out/graph.json exists. You MUST run graphify before reading source files. Use: `graphify query \\\"<question>\\\"` (scoped subgraph), `graphify explain \\\"<concept>\\\"`, or `graphify path \\\"<A>\\\" \\\"<B>\\\"`. Only read raw files after graphify has oriented you, or to modify/debug specific lines. This rule applies to subagents too \u2014 include it in every subagent prompt involving code exploration.\"}}'; fi || true"
           }
         ]
       }

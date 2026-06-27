@@ -1,0 +1,43 @@
+---
+import '@styles/components/_word-decomposition.scss';
+import { decomposeCompoundWord, capitalizeFirstLetter, germanWords } from '@utils/wordHelper';
+import { routeToWord } from '@utils/helpers';
+import type { WordRef } from '@utils/wordHelper';
+
+interface Props {
+  word: string;
+  allWords: WordRef[];
+}
+
+const { word, allWords } = Astro.props;
+const parts = word.length >= 5 ? decomposeCompoundWord(word, germanWords) : null;
+
+const wordMap = new Map(
+  allWords.map((w) => [w.wordProperties?.berlinerisch?.toLowerCase() ?? '', w]),
+);
+---
+
+{
+  parts && parts.length >= 2 && (
+    <div>
+      <h3>Wortzerlegung</h3>
+      <div class='c-single-word__word-parts'>
+        {parts.map((part, i) => {
+          const linked = wordMap.get(part);
+          return (
+            <>
+              {i > 0 && <span class='c-single-word__word-parts-plus'>+</span>}
+              {linked ? (
+                <a class='c-single-word__word-part' href={routeToWord(linked.slug ?? undefined)}>
+                  {capitalizeFirstLetter(part)}
+                </a>
+              ) : (
+                <span class='c-single-word__word-part'>{capitalizeFirstLetter(part)}</span>
+              )}
+            </>
+          );
+        })}
+      </div>
+    </div>
+  )
+}

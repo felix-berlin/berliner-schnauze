@@ -1,0 +1,71 @@
+@use "@styles/variables" as vars;
+
+.c-single-word {
+  --size-quote-icon: 32px;
+
+  &__quote-icon {
+    width: var(--size-quote-icon);
+    height: var(--size-quote-icon);
+    fill: var(--grey-200);
+    flex: 0 0 auto;
+
+    @container word-main (inline-size >= 48rem) {
+      --size-quote-icon: 48px;
+    }
+  }
+
+  &__examples {
+    padding-left: vars.$spacer;
+    display: flex;
+    flex-direction: column;
+    row-gap: vars.$spacer;
+
+    @container word-main (inline-size >= 48rem) {
+      --size-font: 1.8rem;
+    }
+
+    &-item {
+      font-style: italic;
+    }
+  }
+
+  &__examples,
+  &__example {
+    font-size: var(--size-font, 1.7rem);
+    flex-basis: 100%;
+    margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
+    overflow-wrap: break-word;
+
+    &-explanation {
+      font-size: 1rem;
+      margin-top: vars.$spacer * 0.5;
+    }
+  }
+
+  &__example {
+    font-style: italic;
+
+    @container word-main (inline-size >= 48rem) {
+      --size-font: 2.2rem;
+    }
+
+    &-wrapper {
+      --padding-y: #{vars.$spacer};
+      --padding-x: 0;
+
+      display: flex;
+      padding: var(--padding-y) var(--padding-x);
+      gap: var(--gap, #{vars.$spacer * 0.5});
+
+      @container word-main (inline-size >= 34rem) {
+        --gap: #{vars.$spacer};
+        --padding-y: #{vars.$spacer * 1.5};
+        --padding-x: 5%;
+      }
+      @container word-main (inline-size >= 48rem) {
+        --padding-y: #{vars.$spacer * 2.5};
+        --padding-x: 7%;
+      }
+    }
+  }
+}

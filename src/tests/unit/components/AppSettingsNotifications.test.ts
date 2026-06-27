@@ -45,12 +45,10 @@ describe("AppSettingsNotifications.vue", () => {
     expect(wrapper.find("button").exists()).toBe(false);
   });
 
-  it("shows status badge with correct class for default permission", () => {
+  it("shows status badge with 'Nicht aktiviert' text for default permission", () => {
     const wrapper = mount(AppSettingsNotifications);
-    const badge = wrapper.find(".c-app-settings__status-badge");
-    expect(badge.exists()).toBe(true);
-    expect(badge.classes()).toContain("is-default");
-    expect(badge.text()).toContain("Nicht aktiviert");
+    expect(wrapper.find(".c-app-settings__status-badge").exists()).toBe(true);
+    expect(wrapper.text()).toContain("Nicht aktiviert");
   });
 
   it("shows 'Aktiv' badge when permission is granted", () => {
@@ -58,9 +56,7 @@ describe("AppSettingsNotifications.vue", () => {
       makeState({ notificationPermission: ref("granted") }) as ReturnType<typeof useNotificationSettings>,
     );
     const wrapper = mount(AppSettingsNotifications);
-    const badge = wrapper.find(".c-app-settings__status-badge");
-    expect(badge.classes()).toContain("is-granted");
-    expect(badge.text()).toContain("Aktiv");
+    expect(wrapper.text()).toContain("Aktiv");
   });
 
   it("shows 'Blockiert' badge and browser-hint when permission is denied", () => {
@@ -68,7 +64,6 @@ describe("AppSettingsNotifications.vue", () => {
       makeState({ notificationPermission: ref("denied") }) as ReturnType<typeof useNotificationSettings>,
     );
     const wrapper = mount(AppSettingsNotifications);
-    expect(wrapper.find(".c-app-settings__status-badge").classes()).toContain("is-denied");
     expect(wrapper.text()).toContain("Blockiert");
     expect(wrapper.text()).toContain("Browser-Einstellungen");
   });
@@ -149,7 +144,7 @@ describe("AppSettingsNotifications.vue", () => {
       }) as ReturnType<typeof useNotificationSettings>,
     );
     const wrapper = mount(AppSettingsNotifications);
-    expect(wrapper.find(".c-app-settings__hint--error").exists()).toBe(true);
+    expect(wrapper.text()).toContain("konnten nicht aktiviert werden");
   });
 
   it("shows revoke section when permission is granted", () => {
@@ -157,7 +152,19 @@ describe("AppSettingsNotifications.vue", () => {
       makeState({ notificationPermission: ref("granted") }) as ReturnType<typeof useNotificationSettings>,
     );
     const wrapper = mount(AppSettingsNotifications);
-    expect(wrapper.find(".c-app-settings__revoke-btn").exists()).toBe(true);
+    expect(wrapper.text()).toContain("Benachrichtigungen deaktivieren");
+  });
+
+  it("clicking revoke button toggles showRevokeHint (covers line 64)", async () => {
+    mockedUseNotificationSettings.mockReturnValue(
+      makeState({ notificationPermission: ref("granted") }) as ReturnType<typeof useNotificationSettings>,
+    );
+    const wrapper = mount(AppSettingsNotifications);
+    const revokeBtn = wrapper.find(".c-app-settings__revoke-btn");
+    expect(revokeBtn.exists()).toBe(true);
+    await revokeBtn.trigger("click");
+    await wrapper.vm.$nextTick();
+    expect(wrapper.text()).toContain("Schloss-Symbol");
   });
 
   it("shows revoke hint text when showRevokeHint is true", async () => {

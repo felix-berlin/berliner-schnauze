@@ -1,6 +1,6 @@
-import { useEventListener, useTimeoutFn } from "@vueuse/core";
+import { useOnline, useTimeoutFn } from "@vueuse/core";
 import { createToastNotify } from "@stores/toastNotify.ts";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 export interface CacheEntry {
   contentType: string | null;
@@ -229,40 +229,24 @@ export function useCacheStorage() {
     }
   }
 
-  const onlineStatus = ref<"online" | "offline">("online");
+  const isOnline = useOnline();
+  const onlineStatus = ref<"online" | "offline">(isOnline.value ? "online" : "offline");
 
-  async function verifyConnectivity(): Promise<void> {
-    if (!navigator.onLine) {
+  watch(isOnline, async (online) => {
+    if (!online) {
       onlineStatus.value = "offline";
       return;
     }
+    // HEAD bypasses Workbox precache (GET-only); /ping is a static file so SW never caches it
     try {
-      // HEAD bypasses Workbox precache (GET-only); /ping is a static file so SW never caches it
-      await fetch("/ping", {
-        method: "HEAD",
-        signal: AbortSignal.timeout(3000),
-      });
+      await fetch("/ping", { method: "HEAD", signal: AbortSignal.timeout(3000) });
       onlineStatus.value = "online";
     } catch {
       onlineStatus.value = "offline";
     }
-  }
-
-  const handleOnline = () => {
-    void verifyConnectivity();
-  };
-  const handleOffline = () => {
-    onlineStatus.value = "offline";
-  };
+  }, { immediate: true });
 
   const { start: scheduleReload } = useTimeoutFn(() => location.reload(), 2100, { immediate: false });
-
-  useEventListener(window, "online", handleOnline);
-  useEventListener(window, "offline", handleOffline);
-
-  onMounted(() => {
-    void verifyConnectivity();
-  });
 
   async function clearBucket(name: string): Promise<void> {
     if (typeof caches === "undefined" || !caches) return;

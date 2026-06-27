@@ -1,0 +1,114 @@
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-tooltip {
+  display: inline-flex;
+}
+
+.c-tooltip__panel {
+  --c-tooltip-bg: var(--color-tooltip-bg, var(--floating-color-background));
+
+  // UA Popover reset — browsers add margin/border/overflow/size to [popover] elements
+  margin: 0;
+  border: none;
+  overflow: visible;
+  max-height: none;
+
+  // Anchor Positioning — position-anchor set via inline style (dynamic per instance)
+  position: fixed;
+  position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+
+  // Visual style
+  // filter: drop-shadow unifies panel + arrow into one shadow silhouette,
+  // avoiding the double-shadow artifact where the arrow overlaps the panel edge.
+  background: var(--c-tooltip-bg);
+  color: var(--color-tooltip-text, var(--color-body));
+  padding: 0.25em 0.6em;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  max-width: 20rem;
+  filter: drop-shadow(0 2px 6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 20%, transparent));
+
+  @include butler-mx.dark-mode-class {
+    --color-box-shadow: black;
+  }
+
+  // Placement modifiers — offset margin direction matches placement direction
+  &--top {
+    position-area: block-start;
+    margin-block-end: var(--c-tooltip-offset, 8px);
+  }
+
+  &--top-start {
+    position-area: block-start span-inline-end;
+    margin-block-end: var(--c-tooltip-offset, 8px);
+  }
+
+  &--top-end {
+    position-area: block-start span-inline-start;
+    margin-block-end: var(--c-tooltip-offset, 8px);
+  }
+
+  &--bottom {
+    position-area: block-end;
+    margin-block-start: var(--c-tooltip-offset, 8px);
+  }
+
+  &--bottom-start {
+    position-area: block-end span-inline-end;
+    margin-block-start: var(--c-tooltip-offset, 8px);
+  }
+
+  &--bottom-end {
+    position-area: block-end span-inline-start;
+    margin-block-start: var(--c-tooltip-offset, 8px);
+  }
+
+  &--left {
+    position-area: inline-start;
+    margin-inline-end: var(--c-tooltip-offset, 8px);
+  }
+
+  &--right {
+    position-area: inline-end;
+    margin-inline-start: var(--c-tooltip-offset, 8px);
+  }
+
+  // Fallback for browsers without CSS Anchor Positioning
+  @supports not (position-area: block-end) {
+    position: fixed;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    translate: -50% -50%;
+  }
+}
+
+// Arrow element — rotated square that creates a directional pointer toward the trigger
+.c-tooltip__arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--c-tooltip-bg);
+  transform: rotate(45deg);
+  // top, left, right, bottom set via JS (syncArrow) to track trigger center
+}
+
+// Fade via @starting-style + allow-discrete
+@include butler-mx.feature("motion") {
+  .c-tooltip__panel {
+    opacity: 1;
+    transition:
+      opacity 0.1s ease,
+      display 0.1s allow-discrete,
+      overlay 0.1s allow-discrete;
+
+    &:not(:popover-open) {
+      opacity: 0;
+    }
+
+    @starting-style {
+      &:popover-open {
+        opacity: 0;
+      }
+    }
+  }
+}

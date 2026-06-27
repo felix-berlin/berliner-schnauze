@@ -1,0 +1,77 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+@use "@sass-butler/functions" as butler-fn;
+
+// ── Global token ──────────────────────────────────────────────────────────────
+
+:root {
+  --site-header-height: 60px;
+}
+
+// ── Page layout containers ────────────────────────────────────────────────────
+
+.c-page-topbar {
+  background: white;
+  border-block-end: 1px dashed var(--grey-100);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+  padding-inline: vars.$spacer * 1.5;
+  padding-block: vars.$spacer * 0.75;
+
+  @include butler-mx.dark-mode-class {
+    background: var(--new-blue-400);
+    border-block-end-color: color-mix(in srgb, var(--orange-300) 30%, transparent);
+  }
+}
+
+.c-word-page {
+  container-type: inline-size;
+  container-name: word-page;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacer;
+
+  // A container cannot query its own size — media query needed here.
+  // Children still use @container word-page correctly.
+  @media (width > butler-fn.px-to-rem(807)) {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+}
+
+.c-word-main {
+  container-type: inline-size;
+  container-name: word-main;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacer;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer;
+  }
+
+  // Gallery layout uses word-page container (self-query of word-main is not possible).
+  // 60rem = ~200px sidebar + 2rem gap + 1fr content + 280px gallery column.
+  &--with-gallery {
+    @container word-page (inline-size >= 60rem) {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      grid-template-areas:
+        "hero hero"
+        "content gallery";
+      gap: vars.$spacer;
+      align-items: start;
+
+      .c-word-hero {
+        grid-area: hero;
+      }
+
+      .c-word-main__content {
+        grid-area: content;
+      }
+    }
+  }
+}

@@ -1,0 +1,107 @@
+---
+import type { AffiliateBook, AffiliateDisclaimer } from '@services/queries/getAffiliate';
+
+import { Picture } from 'astro:assets';
+import '@styles/components/_book-recommendations.scss';
+import BookOpen from '~icons/lucide/book-open';
+
+interface Props {
+  books: AffiliateBook[];
+  disclaimers: AffiliateDisclaimer[];
+}
+
+const { books, disclaimers } = Astro.props;
+
+function getPlatformLabel(href: string | null): string {
+  if (!href) return '';
+  if (/amazon\.|amzn\.to/i.test(href)) return 'Amazon.de';
+  try {
+    return new URL(href).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
+function isAmazonLink(href: string | null): boolean {
+  return /amazon\.|amzn\.to/i.test(href ?? '');
+}
+---
+
+<aside class='c-book-recs' aria-label='Buchempfehlungen'>
+  <div class='c-book-recs__header'>
+    <h3 class='c-book-recs__title'>Ooch als Buch zu haben, wa?</h3>
+    <p class='c-book-recs__subtitle'>Für Berliner & solche, die es werden wollen</p>
+  </div>
+  <ul class='c-book-recs__list' role='list'>
+    {
+      books.map((book) => (
+        <li class='c-book-recs__item'>
+          <a
+            class='c-book-recs__link'
+            href={book.href ?? undefined}
+            rel='noopener noreferrer sponsored'
+            target='_blank'
+            data-track-content
+            data-content-name='Book Recommendation'
+            data-content-piece={book.title}
+            data-content-target={book.href}
+          >
+            <div class='c-book-recs__cover' aria-hidden='true'>
+              {book.imageUrl ? (
+                <Picture
+                  alt={book.imageAlt ?? book.title}
+                  densities={[1, 2]}
+                  formats={['avif', 'webp']}
+                  height={66}
+                  loading='lazy'
+                  src={book.imageUrl}
+                  width={48}
+                />
+              ) : (
+                <BookOpen height='22' width='22' />
+              )}
+            </div>
+            <div class='c-book-recs__info'>
+              <p class='c-book-recs__name'>
+                {book.title}
+                <span class={`c-book-recs__badge c-book-recs__badge--${book.badgeModifier}`}>
+                  {book.badge}
+                </span>
+              </p>
+              <p class='c-book-recs__desc'>{book.description}</p>
+            </div>
+            <div class='c-book-recs__price-col'>
+              <span class='c-book-recs__platform'>{getPlatformLabel(book.href)}</span>
+              {isAmazonLink(book.href) && (
+                <span class='c-book-recs__paid-label'>(bezahlter Link)</span>
+              )}
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <p class='c-book-recs__disclaimer'>
+    {disclaimers
+      .filter((d) => {
+        const plat = d.plattform?.toLowerCase() ?? '';
+        if (plat.includes('amazon') && books.some((b) => isAmazonLink(b.href))) return true;
+        return books.some((b) => getPlatformLabel(b.href).toLowerCase() === plat);
+      })
+      .map((d) => d.text)
+      .join(' ')
+    }{' '}Ich erhalte eine kleine Provision — für dich bleibt der Preis gleich.
+  </p>
+</aside>
+
+<script>
+  import { trackEvent } from '@utils/analytics';
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLAnchorElement>('.c-book-recs__link').forEach((link) => {
+      link.addEventListener('click', () => {
+        trackEvent('Affiliate', 'Book clicked', link.dataset.contentPiece ?? '');
+      });
+    });
+  });
+</script>

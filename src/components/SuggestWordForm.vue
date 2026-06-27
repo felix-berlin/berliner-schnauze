@@ -1,5 +1,14 @@
 <template>
-  <form class="c-suggest-word-form c-form" novalidate="true" @submit.prevent="checkForm">
+  <form
+    ref="root"
+    class="c-suggest-word-form c-form"
+    novalidate="true"
+    data-track-content
+    data-content-name="Word Suggest Form"
+    data-content-piece="Wort einreichen"
+    data-content-target="/wort-vorschlagen"
+    @submit.prevent="checkForm"
+  >
     <div class="c-form__group">
       <div
         class="c-form__item is-vertical"
@@ -121,7 +130,7 @@
       </div>
     </div>
 
-    <button class="c-button c-suggest-word-form__button" type="submit">
+    <button class="c-button c-suggest-word-form__button" type="submit" data-content-ignoreinteraction>
       <Transition name="fade" mode="out-in">
         <span v-if="!isSending">Wort einreichen</span>
         <span v-else>Wort wird gesendet</span>
@@ -134,6 +143,7 @@
 
 <script setup lang="ts">
 import TurnStile from "@components/TurnStile.vue";
+import { useContentTracking } from "@composables/useContentTracking";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { useMutation } from "@urql/vue";
 import { trackEvent } from "@utils/analytics";
@@ -143,6 +153,9 @@ import { defineAsyncComponent, reactive, ref } from "vue";
 import { SendEmailDocument } from "@/gql/graphql.ts";
 
 const AlertBanner = defineAsyncComponent(() => import("@components/AlertBanner.vue"));
+
+const root = ref<HTMLFormElement | null>(null);
+useContentTracking(root);
 
 const props = defineProps<{
   berlinerWord?: string;

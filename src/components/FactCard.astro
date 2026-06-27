@@ -9,7 +9,13 @@ type FactCardProps = {
 const { headline, text } = Astro.props as FactCardProps;
 ---
 
-<div class="c-fact-card">
+<div
+  class="c-fact-card"
+  data-track-content
+  data-content-name="Fact Card"
+  data-content-piece={headline}
+  data-content-target="#"
+>
   <h3 class="c-fact-card__headline" set:html={headline} />
   <p class="c-fact-card__text" set:html={text} />
 </div>

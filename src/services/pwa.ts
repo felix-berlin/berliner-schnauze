@@ -67,6 +67,11 @@ registerSW({
   },
   onRegisterError(err) {
     console.error("[pwa] Service Worker registration failed:", err);
+    createToastNotify({
+      message: "Einige App-Funktionen (Offline, Benachrichtigungen) sind nicht verfügbar.",
+      status: "error",
+      timeout: null,
+    });
   },
   onRegisteredSW(swScriptUrl) {
     if (import.meta.env.DEV) {

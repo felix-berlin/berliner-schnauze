@@ -1,0 +1,30 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-single-word {
+  &__footer {
+    display: flex;
+    flex-direction: var(--direction-flex, column);
+    gap: var(--spacing, #{vars.$spacer * 0.5});
+    border-top: 1px dashed var(--new-blue-200);
+    padding-top: vars.$spacer * 1.5;
+
+    @container word-main (inline-size >= 34rem) {
+      --spacing: #{vars.$spacer * 2};
+      --direction-flex: row;
+
+      justify-content: flex-end;
+    }
+  }
+
+  &__created,
+  &__modified {
+    margin: 0;
+    font-size: 0.8rem;
+    color: color-mix(in srgb, var(--blue) 70%, white);
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
+    }
+  }
+}

@@ -1,0 +1,25 @@
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-single-word {
+  &__consonants-vowels {
+    &-word {
+      letter-spacing: 3px;
+    }
+
+    .is-consonant {
+      color: var(--orange-600);
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-300);
+      }
+    }
+
+    .is-vowel {
+      color: #435e6b;
+
+      @include butler-mx.dark-mode-class {
+        color: #cfc536;
+      }
+    }
+  }
+}

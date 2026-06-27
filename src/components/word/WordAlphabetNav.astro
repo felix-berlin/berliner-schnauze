@@ -1,0 +1,52 @@
+---
+import '@styles/components/_word-alphabet-nav.scss';
+import { routeToWord } from "@utils/helpers";
+import type { WordRef } from "@utils/wordHelper";
+
+interface Props {
+  neighbors: { before: WordRef[]; after: WordRef[] };
+}
+
+const { neighbors: { before, after } } = Astro.props;
+
+const validBefore = before.filter(w => w.slug && w.wordProperties?.berlinerisch);
+const validAfter = after.filter(w => w.slug && w.wordProperties?.berlinerisch);
+---
+
+{(validBefore.length > 0 || validAfter.length > 0) && <nav
+  class="c-single-word__alpha-nav"
+  aria-label="Alphabetische Nachbarn"
+  data-track-content
+  data-content-name="Alphabet Navigation"
+  data-content-piece={`${validBefore[0]?.wordProperties?.berlinerisch ?? ''} → ${validAfter[0]?.wordProperties?.berlinerisch ?? ''}`}
+  data-content-target={validAfter[0] ? routeToWord(validAfter[0].slug ?? undefined) : validBefore[0] ? routeToWord(validBefore[0].slug ?? undefined) : '#'}
+>
+    {
+      validBefore.length > 0 && (
+        <div class="c-single-word__alpha-col">
+          <p class="c-single-word__alpha-label">Davor</p>
+          <ul>
+            {validBefore.map((w) => (
+              <li>
+                <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+    {
+      validAfter.length > 0 && (
+        <div class="c-single-word__alpha-col">
+          <p class="c-single-word__alpha-label">Danach</p>
+          <ul>
+            {validAfter.map((w) => (
+              <li>
+                <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+</nav>}

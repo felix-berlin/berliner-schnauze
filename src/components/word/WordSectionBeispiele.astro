@@ -1,0 +1,24 @@
+---
+import '@styles/components/_section-card.scss';
+import '@styles/components/_word-section-beispiele.scss';
+import WordExamples from '@components/word/WordExamples.astro';
+import type { Maybe, WordPropertiesExamples } from '@/gql/entity-types';
+
+interface Props {
+  examples?: Maybe<WordPropertiesExamples>[] | null;
+}
+
+const { examples } = Astro.props;
+---
+
+{(examples?.length ?? 0) > 0 && (
+  <section class='c-section-card' id='beispiele' aria-labelledby='heading-beispiele'>
+    <div class='c-section-card__header'>
+      <span class='c-section-card__num'></span>
+      <h2 class='c-section-card__title' id='heading-beispiele'>Beispiele</h2>
+    </div>
+    <div class='c-section-card__body'>
+      <WordExamples examples={examples} rootBemClass='c-single-word' />
+    </div>
+  </section>
+)}

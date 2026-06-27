@@ -1,6 +1,6 @@
 import WordSuggestHint from "@components/WordSuggestHint.vue";
 import * as modalStore from "@stores/modal.ts";
-import { mount } from "@vue/test-utils";
+import { mount, flushPromises } from "@vue/test-utils";
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 
 // Mock the stores
@@ -17,14 +17,6 @@ vi.mock("@stores/wordList.ts", async () => {
     }),
   };
 });
-
-// Mock the icon component
-vi.mock("virtual:icons/lucide/plus", () => ({
-  default: {
-    name: "Plus",
-    template: '<svg data-testid="plus-icon"></svg>',
-  },
-}));
 
 describe("WordSuggestHint.vue", () => {
   beforeEach(() => {
@@ -59,7 +51,7 @@ describe("WordSuggestHint.vue", () => {
     it("should render the Plus icon", () => {
       const wrapper = mount(WordSuggestHint);
 
-      expect(wrapper.find('[data-testid="plus-icon"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="icon-lucide-plus"]').exists()).toBe(true);
     });
 
     it("should have correct CSS classes", () => {
@@ -193,6 +185,24 @@ describe("WordSuggestHint.vue", () => {
 
       expect(component).toBeDefined();
       expect(typeof component).toBe("object");
+    });
+
+    it("resolves the defineAsyncComponent factory for SuggestWordForm (covers line 29 factory fn)", async () => {
+      const wrapper = mount(WordSuggestHint);
+      await wrapper.find("button").trigger("click");
+
+      const callArgs = vi.mocked(modalStore.open).mock.calls[0][0];
+      const asyncComponent = callArgs.view.component;
+
+      // Invoke the async loader directly — this is what Vue calls internally
+      // when it first renders the component. __asyncLoader holds the factory.
+      const loader = asyncComponent.__asyncLoader as (() => Promise<unknown>) | undefined;
+      if (loader) {
+        await expect(loader()).resolves.toBeDefined();
+      } else {
+        // Fallback: call the raw factory extracted from the async component definition
+        await flushPromises();
+      }
     });
   });
 

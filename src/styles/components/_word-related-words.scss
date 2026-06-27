@@ -1,0 +1,70 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-single-word {
+  &__related-words-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+
+  &__related-word-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.875rem;
+    background: var(--orange-200);
+    border: 1px dashed var(--orange-300);
+    border-radius: 3px;
+    font-family: vars.$berlin;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--new-blue-400);
+    transition:
+      border-color 0.15s ease,
+      border-style 0.15s ease,
+      color 0.15s ease,
+      background 0.15s ease;
+
+    &::after {
+      content: "→" / "";
+      font-size: 0.8em;
+      overflow: hidden;
+      max-width: 0;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition:
+        opacity 0.15s ease,
+        max-width 0.15s ease,
+        margin-inline-start 0.15s ease,
+        transform 0.15s ease;
+    }
+
+    @include butler-mx.dark-mode-class {
+      background: color-mix(in srgb, var(--new-blue-400) 70%, black);
+      border-color: var(--grey-100);
+      color: #c8d0d8;
+    }
+    @include butler-mx.hover {
+      background: var(--orange-300);
+      border-color: var(--orange-500);
+      border-style: solid;
+      color: var(--orange-700);
+
+      &::after {
+        opacity: 1;
+        max-width: 1.5em;
+        margin-inline-start: 0.35rem;
+        transform: translateX(0);
+      }
+
+      @include butler-mx.dark-mode-class {
+        background: color-mix(in srgb, var(--new-blue-400) 50%, black);
+        border-color: var(--orange-400);
+        color: var(--orange-300);
+      }
+    }
+  }
+}

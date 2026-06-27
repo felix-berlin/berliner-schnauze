@@ -33,8 +33,10 @@ type AcfCodeHighlightingBlockAttributes {
   className: String
   data: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   mode: String
   name: String
+  style: BlockAttributesObject
 }
 
 """
@@ -116,8 +118,10 @@ type AcfGithubRawDataBlockAttributes {
   className: String
   data: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   mode: String
   name: String
+  style: BlockAttributesObject
 }
 
 """ACF Link field"""
@@ -178,6 +182,168 @@ interface AcfOptionsPage implements Node {
   menuTitle: String
   pageTitle: String
   parentId: String
+}
+
+type Affliate implements AcfOptionsPage & Node & WithAcfAffliateLinksFields {
+  """Fields of the AffliateLinksFields ACF Field Group"""
+  affliateLinksFields: AffliateLinksFields
+  """The globally unique ID for the object"""
+  id: ID!
+  menuTitle: String
+  pageTitle: String
+  parentId: String
+}
+
+"""
+The &quot;AffliateLinksFields&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
+"""
+type AffliateLinksFields implements AcfFieldGroup & AcfFieldGroupFields & AffliateLinksFields_Fields {
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;AffliateLinksFields&quot; Field Group
+  """
+  books: [AffliateLinksFieldsBooks]
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;AffliateLinksFields&quot; Field Group
+  """
+  disclaimers: [AffliateLinksFieldsDisclaimers]
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+}
+
+"""
+The &quot;AffliateLinksFieldsBooks&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
+"""
+type AffliateLinksFieldsBooks implements AcfFieldGroup & AcfFieldGroupFields & AffliateLinksFieldsBooks_Fields {
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  badge: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  badgeModifier: String
+  """
+  Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  description: String
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  href: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  imageAlt: String
+  """
+  Für Amazon Bildgrößen:
+  
+  _SL75_ = 75px (längste Seite)
+  _SL160_ = 160px
+  _SL200_ = 200px
+  _SL500_ = 500px
+  _SX300_ = 300px (Breite)
+  _SY_300 = 300px (Höhe)
+  kein Suffix = Original
+  """
+  imageUrl: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  title: String
+}
+
+"""
+Interface representing fields of the ACF &quot;AffliateLinksFieldsBooks&quot; Field Group
+"""
+interface AffliateLinksFieldsBooks_Fields implements AcfFieldGroup & AcfFieldGroupFields {
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  badge: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  badgeModifier: String
+  """
+  Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  description: String
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  href: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  imageAlt: String
+  """
+  Für Amazon Bildgrößen:
+  
+  _SL75_ = 75px (längste Seite)
+  _SL160_ = 160px
+  _SL200_ = 200px
+  _SL500_ = 500px
+  _SX300_ = 300px (Breite)
+  _SY_300 = 300px (Höhe)
+  kein Suffix = Original
+  """
+  imageUrl: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsBooks&quot; Field Group
+  """
+  title: String
+}
+
+"""
+The &quot;AffliateLinksFieldsDisclaimers&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
+"""
+type AffliateLinksFieldsDisclaimers implements AcfFieldGroup & AcfFieldGroupFields & AffliateLinksFieldsDisclaimers_Fields {
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsDisclaimers&quot; Field Group
+  """
+  plattform: String
+  """
+  Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsDisclaimers&quot; Field Group
+  """
+  text: String
+}
+
+"""
+Interface representing fields of the ACF &quot;AffliateLinksFieldsDisclaimers&quot; Field Group
+"""
+interface AffliateLinksFieldsDisclaimers_Fields implements AcfFieldGroup & AcfFieldGroupFields {
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsDisclaimers&quot; Field Group
+  """
+  plattform: String
+  """
+  Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;AffliateLinksFieldsDisclaimers&quot; Field Group
+  """
+  text: String
+}
+
+"""
+Interface representing fields of the ACF &quot;AffliateLinksFields&quot; Field Group
+"""
+interface AffliateLinksFields_Fields implements AcfFieldGroup & AcfFieldGroupFields {
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;AffliateLinksFields&quot; Field Group
+  """
+  books: [AffliateLinksFieldsBooks]
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;AffliateLinksFields&quot; Field Group
+  """
+  disclaimers: [AffliateLinksFieldsDisclaimers]
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
 }
 
 """
@@ -2765,42 +2931,6 @@ type ConnectorsSettings {
   connectorsAiAnthropicApiKey: String
 }
 
-"""contact-form-7/contact-form-selector block"""
-type ContactForm7ContactFormSelectorBlock implements Block {
-  attributes: ContactForm7ContactFormSelectorBlockAttributes
-  """Block attributes, JSON encoded"""
-  attributesJSON: String
-  """Server side rendered content."""
-  dynamicContent: String
-  """Gutenberg blocks"""
-  innerBlocks: [Block!]
-  """Is block rendered server side."""
-  isDynamic: Boolean!
-  """Name of the block."""
-  name: String!
-  order: Int!
-  """Original HTML content."""
-  originalContent: String
-  """Parent post."""
-  parentNode: Node!
-  """Parent post id."""
-  parentNodeDatabaseId: Int!
-  """Original HTML content with inner blocks."""
-  saveContent: String
-}
-
-type ContactForm7ContactFormSelectorBlockAttributes {
-  className: String
-  hash: String
-  htmlClass: String
-  htmlId: String
-  htmlName: String
-  htmlTitle: String
-  id: Int
-  lock: BlockAttributesObject
-  title: String
-}
-
 """
 Base interface for content objects like posts, pages, and media items. Provides common fields available across these content types.
 """
@@ -3403,6 +3533,210 @@ enum ContentTypesOfTagEnum {
   POST
 }
 
+"""core/accordion block"""
+type CoreAccordionBlock implements Block {
+  attributes: CoreAccordionBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreAccordionBlockAttributes {
+  align: String
+  anchor: String
+  ariaLabel: String
+  autoclose: Boolean!
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  headingLevel: Float!
+  iconPosition: String!
+  layout: BlockAttributesObject
+  levelOptions: BlockAttributesArray
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  showIcon: Boolean!
+  style: BlockAttributesObject
+  textColor: String
+}
+
+"""core/accordion-heading block"""
+type CoreAccordionHeadingBlock implements Block {
+  attributes: CoreAccordionHeadingBlockAttributesUnion
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreAccordionHeadingBlockAttributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  iconPosition: String!
+  level: Float
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  openByDefault: Boolean!
+  showIcon: Boolean!
+  style: BlockAttributesObject
+  textColor: String
+}
+
+union CoreAccordionHeadingBlockAttributesUnion = CoreAccordionHeadingBlockAttributes | CoreAccordionHeadingBlockDeprecatedV1Attributes | CoreAccordionHeadingBlockDeprecatedV2Attributes
+
+type CoreAccordionHeadingBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  iconPosition: String!
+  level: Float
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  openByDefault: Boolean!
+  showIcon: Boolean!
+  style: BlockAttributesObject
+  textColor: String
+}
+
+type CoreAccordionHeadingBlockDeprecatedV2Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  iconPosition: String!
+  level: Float
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  openByDefault: Boolean!
+  showIcon: Boolean!
+  style: BlockAttributesObject
+  textColor: String
+}
+
+"""core/accordion-item block"""
+type CoreAccordionItemBlock implements Block {
+  attributes: CoreAccordionItemBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreAccordionItemBlockAttributes {
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  layout: BlockAttributesObject
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  openByDefault: Boolean!
+  style: BlockAttributesObject
+  textColor: String
+}
+
+"""core/accordion-panel block"""
+type CoreAccordionPanelBlock implements Block {
+  attributes: CoreAccordionPanelBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreAccordionPanelBlockAttributes {
+  allowedBlocks: BlockAttributesArray
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  layout: BlockAttributesObject
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
 """core/archives block"""
 type CoreArchivesBlock implements Block {
   attributes: CoreArchivesBlockAttributes
@@ -3429,14 +3763,20 @@ type CoreArchivesBlock implements Block {
 
 type CoreArchivesBlockAttributes {
   align: String
+  anchor: String
+  backgroundColor: String
+  borderColor: String
   className: String
   displayAsDropdown: Boolean!
   fontFamily: String
   fontSize: String
+  gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   showLabel: Boolean!
   showPostCounts: Boolean!
   style: BlockAttributesObject
+  textColor: String
   type: String!
 }
 
@@ -3468,11 +3808,12 @@ type CoreAudioBlockAttributes {
   align: String
   anchor: String
   autoplay: Boolean
-  caption: String
+  blob: String
   className: String
   id: Float
   lock: BlockAttributesObject
   loop: Boolean
+  metadata: BlockAttributesObject
   preload: String
   src: String
   style: BlockAttributesObject
@@ -3484,11 +3825,12 @@ type CoreAudioBlockDeprecatedV1Attributes {
   align: String
   anchor: String
   autoplay: Boolean
-  caption: String
+  blob: String
   className: String
   id: Float
   lock: BlockAttributesObject
   loop: Boolean
+  metadata: BlockAttributesObject
   preload: String
   src: String
   style: BlockAttributesObject
@@ -3520,11 +3862,13 @@ type CoreAvatarBlock implements Block {
 
 type CoreAvatarBlockAttributes {
   align: String
+  anchor: String
   borderColor: String
   className: String
   isLink: Boolean!
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   size: Float!
   style: BlockAttributesObject
   userId: Float
@@ -3532,7 +3876,7 @@ type CoreAvatarBlockAttributes {
 
 """core/block block"""
 type CoreBlock implements Block {
-  attributes: CoreBlockAttributes
+  attributes: CoreBlockAttributesUnion
   """Block attributes, JSON encoded"""
   attributesJSON: String
   """Server side rendered content."""
@@ -3556,8 +3900,70 @@ type CoreBlock implements Block {
 }
 
 type CoreBlockAttributes {
+  content: BlockAttributesObject!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   ref: Float
+}
+
+union CoreBlockAttributesUnion = CoreBlockAttributes | CoreBlockDeprecatedV1Attributes | CoreBlockDeprecatedV2Attributes
+
+type CoreBlockDeprecatedV1Attributes {
+  content: BlockAttributesObject!
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  ref: Float
+}
+
+type CoreBlockDeprecatedV2Attributes {
+  content: BlockAttributesObject!
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  ref: Float
+}
+
+"""core/breadcrumbs block"""
+type CoreBreadcrumbsBlock implements Block {
+  attributes: CoreBreadcrumbsBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreBreadcrumbsBlockAttributes {
+  align: String
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  prefersTaxonomy: Boolean!
+  separator: String!
+  showCurrentItem: Boolean!
+  showHomeItem: Boolean!
+  showOnHomePage: Boolean!
+  style: BlockAttributesObject
+  textColor: String
 }
 
 """core/button block"""
@@ -3594,12 +4000,11 @@ type CoreButtonBlockAttributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3607,7 +4012,7 @@ type CoreButtonBlockAttributes {
   width: Float
 }
 
-union CoreButtonBlockAttributesUnion = CoreButtonBlockAttributes | CoreButtonBlockDeprecatedV1Attributes | CoreButtonBlockDeprecatedV2Attributes | CoreButtonBlockDeprecatedV3Attributes | CoreButtonBlockDeprecatedV4Attributes | CoreButtonBlockDeprecatedV5Attributes | CoreButtonBlockDeprecatedV6Attributes | CoreButtonBlockDeprecatedV7Attributes | CoreButtonBlockDeprecatedV8Attributes | CoreButtonBlockDeprecatedV9Attributes | CoreButtonBlockDeprecatedV10Attributes | CoreButtonBlockDeprecatedV11Attributes
+union CoreButtonBlockAttributesUnion = CoreButtonBlockAttributes | CoreButtonBlockDeprecatedV1Attributes | CoreButtonBlockDeprecatedV2Attributes | CoreButtonBlockDeprecatedV3Attributes | CoreButtonBlockDeprecatedV4Attributes | CoreButtonBlockDeprecatedV5Attributes | CoreButtonBlockDeprecatedV6Attributes | CoreButtonBlockDeprecatedV7Attributes | CoreButtonBlockDeprecatedV8Attributes | CoreButtonBlockDeprecatedV9Attributes | CoreButtonBlockDeprecatedV10Attributes | CoreButtonBlockDeprecatedV11Attributes | CoreButtonBlockDeprecatedV12Attributes | CoreButtonBlockDeprecatedV13Attributes
 
 type CoreButtonBlockDeprecatedV1Attributes {
   anchor: String
@@ -3619,12 +4024,11 @@ type CoreButtonBlockDeprecatedV1Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3642,12 +4046,11 @@ type CoreButtonBlockDeprecatedV2Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3665,12 +4068,11 @@ type CoreButtonBlockDeprecatedV3Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3688,12 +4090,11 @@ type CoreButtonBlockDeprecatedV4Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3711,12 +4112,11 @@ type CoreButtonBlockDeprecatedV5Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3734,12 +4134,11 @@ type CoreButtonBlockDeprecatedV6Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3757,12 +4156,11 @@ type CoreButtonBlockDeprecatedV7Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3780,12 +4178,11 @@ type CoreButtonBlockDeprecatedV8Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3803,12 +4200,11 @@ type CoreButtonBlockDeprecatedV9Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3826,12 +4222,11 @@ type CoreButtonBlockDeprecatedV10Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
   textColor: String
   title: String
   type: String!
@@ -3849,12 +4244,55 @@ type CoreButtonBlockDeprecatedV11Attributes {
   gradient: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   rel: String
   style: BlockAttributesObject
   tagName: String!
-  text: String
-  textAlign: String
+  textColor: String
+  title: String
+  type: String!
+  url: String
+  width: Float
+}
+
+type CoreButtonBlockDeprecatedV12Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  linkTarget: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  placeholder: String
+  rel: String
+  style: BlockAttributesObject
+  tagName: String!
+  textColor: String
+  title: String
+  type: String!
+  url: String
+  width: Float
+}
+
+type CoreButtonBlockDeprecatedV13Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  linkTarget: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  placeholder: String
+  rel: String
+  style: BlockAttributesObject
+  tagName: String!
   textColor: String
   title: String
   type: String!
@@ -3889,12 +4327,17 @@ type CoreButtonsBlock implements Block {
 type CoreButtonsBlockAttributes {
   align: String
   anchor: String
+  backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
+  gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
+  textColor: String
 }
 
 union CoreButtonsBlockAttributesUnion = CoreButtonsBlockAttributes | CoreButtonsBlockDeprecatedV1Attributes | CoreButtonsBlockDeprecatedV2Attributes
@@ -3902,23 +4345,33 @@ union CoreButtonsBlockAttributesUnion = CoreButtonsBlockAttributes | CoreButtons
 type CoreButtonsBlockDeprecatedV1Attributes {
   align: String
   anchor: String
+  backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
+  gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
+  textColor: String
 }
 
 type CoreButtonsBlockDeprecatedV2Attributes {
   align: String
   anchor: String
+  backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
+  gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
+  textColor: String
 }
 
 """core/calendar block"""
@@ -3947,11 +4400,13 @@ type CoreCalendarBlock implements Block {
 
 type CoreCalendarBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
   fontSize: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   month: Int
   style: BlockAttributesObject
   textColor: String
@@ -3984,16 +4439,25 @@ type CoreCategoriesBlock implements Block {
 
 type CoreCategoriesBlockAttributes {
   align: String
+  anchor: String
+  backgroundColor: String
+  borderColor: String
   className: String
   displayAsDropdown: Boolean!
   fontFamily: String
   fontSize: String
+  gradient: String
+  label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   showEmpty: Boolean!
   showHierarchy: Boolean!
+  showLabel: Boolean!
   showOnlyTopLevel: Boolean!
   showPostCounts: Boolean!
   style: BlockAttributesObject
+  taxonomy: String!
+  textColor: String
 }
 
 """core/code block"""
@@ -4026,11 +4490,11 @@ type CoreCodeBlockAttributes {
   backgroundColor: String
   borderColor: String
   className: String
-  content: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -4070,6 +4534,7 @@ type CoreColumnBlockAttributes {
   gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
   verticalAlignment: String
@@ -4089,6 +4554,7 @@ type CoreColumnBlockDeprecatedV1Attributes {
   gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
   verticalAlignment: String
@@ -4131,6 +4597,7 @@ type CoreColumnsBlockAttributes {
   isStackedOnMobile: Boolean!
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
   verticalAlignment: String
@@ -4150,6 +4617,7 @@ type CoreColumnsBlockDeprecatedV1Attributes {
   isStackedOnMobile: Boolean!
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
   verticalAlignment: String
@@ -4167,6 +4635,7 @@ type CoreColumnsBlockDeprecatedV2Attributes {
   isStackedOnMobile: Boolean!
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
   verticalAlignment: String
@@ -4184,6 +4653,7 @@ type CoreColumnsBlockDeprecatedV3Attributes {
   isStackedOnMobile: Boolean!
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
   verticalAlignment: String
@@ -4214,7 +4684,9 @@ type CoreCommentAuthorNameBlock implements Block {
 }
 
 type CoreCommentAuthorNameBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
@@ -4222,15 +4694,17 @@ type CoreCommentAuthorNameBlockAttributes {
   isLink: Boolean!
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
   textColor: String
 }
 
-union CoreCommentAuthorNameBlockAttributesUnion = CoreCommentAuthorNameBlockAttributes | CoreCommentAuthorNameBlockDeprecatedV1Attributes
+union CoreCommentAuthorNameBlockAttributesUnion = CoreCommentAuthorNameBlockAttributes | CoreCommentAuthorNameBlockDeprecatedV1Attributes | CoreCommentAuthorNameBlockDeprecatedV2Attributes
 
 type CoreCommentAuthorNameBlockDeprecatedV1Attributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
@@ -4238,14 +4712,30 @@ type CoreCommentAuthorNameBlockDeprecatedV1Attributes {
   isLink: Boolean!
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
+  textColor: String
+}
+
+type CoreCommentAuthorNameBlockDeprecatedV2Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  isLink: Boolean!
+  linkTarget: String!
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   textColor: String
 }
 
 """core/comment-content block"""
 type CoreCommentContentBlock implements Block {
-  attributes: CoreCommentContentBlockAttributes
+  attributes: CoreCommentContentBlockAttributesUnion
   """Block attributes, JSON encoded"""
   attributesJSON: String
   """Server side rendered content."""
@@ -4268,14 +4758,32 @@ type CoreCommentContentBlock implements Block {
 }
 
 type CoreCommentContentBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
+  textColor: String
+}
+
+union CoreCommentContentBlockAttributesUnion = CoreCommentContentBlockAttributes | CoreCommentContentBlockDeprecatedV1Attributes
+
+type CoreCommentContentBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   textColor: String
 }
 
@@ -4304,7 +4812,9 @@ type CoreCommentDateBlock implements Block {
 }
 
 type CoreCommentDateBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
@@ -4312,6 +4822,7 @@ type CoreCommentDateBlockAttributes {
   gradient: String
   isLink: Boolean!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -4319,7 +4830,9 @@ type CoreCommentDateBlockAttributes {
 union CoreCommentDateBlockAttributesUnion = CoreCommentDateBlockAttributes | CoreCommentDateBlockDeprecatedV1Attributes
 
 type CoreCommentDateBlockDeprecatedV1Attributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
@@ -4327,13 +4840,14 @@ type CoreCommentDateBlockDeprecatedV1Attributes {
   gradient: String
   isLink: Boolean!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
 
 """core/comment-edit-link block"""
 type CoreCommentEditLinkBlock implements Block {
-  attributes: CoreCommentEditLinkBlockAttributes
+  attributes: CoreCommentEditLinkBlockAttributesUnion
   """Block attributes, JSON encoded"""
   attributesJSON: String
   """Server side rendered content."""
@@ -4356,21 +4870,40 @@ type CoreCommentEditLinkBlock implements Block {
 }
 
 type CoreCommentEditLinkBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
+  textColor: String
+}
+
+union CoreCommentEditLinkBlockAttributesUnion = CoreCommentEditLinkBlockAttributes | CoreCommentEditLinkBlockDeprecatedV1Attributes
+
+type CoreCommentEditLinkBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  linkTarget: String!
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   textColor: String
 }
 
 """core/comment-reply-link block"""
 type CoreCommentReplyLinkBlock implements Block {
-  attributes: CoreCommentReplyLinkBlockAttributes
+  attributes: CoreCommentReplyLinkBlockAttributesUnion
   """Block attributes, JSON encoded"""
   attributesJSON: String
   """Server side rendered content."""
@@ -4393,14 +4926,32 @@ type CoreCommentReplyLinkBlock implements Block {
 }
 
 type CoreCommentReplyLinkBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
+  textColor: String
+}
+
+union CoreCommentReplyLinkBlockAttributesUnion = CoreCommentReplyLinkBlockAttributes | CoreCommentReplyLinkBlockDeprecatedV1Attributes
+
+type CoreCommentReplyLinkBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   textColor: String
 }
 
@@ -4430,10 +4981,13 @@ type CoreCommentTemplateBlock implements Block {
 
 type CoreCommentTemplateBlockAttributes {
   align: String
+  anchor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
 }
 
@@ -4463,13 +5017,16 @@ type CoreCommentsBlock implements Block {
 
 type CoreCommentsBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   legacy: Boolean!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -4479,13 +5036,16 @@ union CoreCommentsBlockAttributesUnion = CoreCommentsBlockAttributes | CoreComme
 
 type CoreCommentsBlockDeprecatedV1Attributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   legacy: Boolean!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -4517,6 +5077,7 @@ type CoreCommentsPaginationBlock implements Block {
 
 type CoreCommentsPaginationBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
@@ -4524,6 +5085,7 @@ type CoreCommentsPaginationBlockAttributes {
   gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   paginationArrow: String!
   style: BlockAttributesObject
   textColor: String
@@ -4554,6 +5116,7 @@ type CoreCommentsPaginationNextBlock implements Block {
 }
 
 type CoreCommentsPaginationNextBlockAttributes {
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
@@ -4561,6 +5124,7 @@ type CoreCommentsPaginationNextBlockAttributes {
   gradient: String
   label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -4590,12 +5154,14 @@ type CoreCommentsPaginationNumbersBlock implements Block {
 }
 
 type CoreCommentsPaginationNumbersBlockAttributes {
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -4625,6 +5191,7 @@ type CoreCommentsPaginationPreviousBlock implements Block {
 }
 
 type CoreCommentsPaginationPreviousBlockAttributes {
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
@@ -4632,6 +5199,7 @@ type CoreCommentsPaginationPreviousBlockAttributes {
   gradient: String
   label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -4662,6 +5230,7 @@ type CoreCommentsTitleBlock implements Block {
 
 type CoreCommentsTitleBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
   borderColor: String
   className: String
@@ -4669,18 +5238,20 @@ type CoreCommentsTitleBlockAttributes {
   fontSize: String
   gradient: String
   level: Float!
+  levelOptions: BlockAttributesArray
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   showCommentsCount: Boolean!
   showPostTitle: Boolean!
   style: BlockAttributesObject
-  textAlign: String
   textColor: String
 }
 
-union CoreCommentsTitleBlockAttributesUnion = CoreCommentsTitleBlockAttributes | CoreCommentsTitleBlockDeprecatedV1Attributes
+union CoreCommentsTitleBlockAttributesUnion = CoreCommentsTitleBlockAttributes | CoreCommentsTitleBlockDeprecatedV1Attributes | CoreCommentsTitleBlockDeprecatedV2Attributes
 
 type CoreCommentsTitleBlockDeprecatedV1Attributes {
   align: String
+  anchor: String
   backgroundColor: String
   borderColor: String
   className: String
@@ -4688,11 +5259,31 @@ type CoreCommentsTitleBlockDeprecatedV1Attributes {
   fontSize: String
   gradient: String
   level: Float!
+  levelOptions: BlockAttributesArray
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   showCommentsCount: Boolean!
   showPostTitle: Boolean!
   style: BlockAttributesObject
-  textAlign: String
+  textColor: String
+}
+
+type CoreCommentsTitleBlockDeprecatedV2Attributes {
+  align: String
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  level: Float!
+  levelOptions: BlockAttributesArray
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  showCommentsCount: Boolean!
+  showPostTitle: Boolean!
+  style: BlockAttributesObject
   textColor: String
 }
 
@@ -4741,11 +5332,15 @@ type CoreCoverBlockAttributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -4753,7 +5348,7 @@ type CoreCoverBlockAttributes {
   useFeaturedImage: Boolean!
 }
 
-union CoreCoverBlockAttributesUnion = CoreCoverBlockAttributes | CoreCoverBlockDeprecatedV1Attributes | CoreCoverBlockDeprecatedV2Attributes | CoreCoverBlockDeprecatedV3Attributes | CoreCoverBlockDeprecatedV4Attributes | CoreCoverBlockDeprecatedV5Attributes | CoreCoverBlockDeprecatedV6Attributes | CoreCoverBlockDeprecatedV7Attributes | CoreCoverBlockDeprecatedV8Attributes | CoreCoverBlockDeprecatedV9Attributes | CoreCoverBlockDeprecatedV10Attributes | CoreCoverBlockDeprecatedV11Attributes
+union CoreCoverBlockAttributesUnion = CoreCoverBlockAttributes | CoreCoverBlockDeprecatedV1Attributes | CoreCoverBlockDeprecatedV2Attributes | CoreCoverBlockDeprecatedV3Attributes | CoreCoverBlockDeprecatedV4Attributes | CoreCoverBlockDeprecatedV5Attributes | CoreCoverBlockDeprecatedV6Attributes | CoreCoverBlockDeprecatedV7Attributes | CoreCoverBlockDeprecatedV8Attributes | CoreCoverBlockDeprecatedV9Attributes | CoreCoverBlockDeprecatedV10Attributes | CoreCoverBlockDeprecatedV11Attributes | CoreCoverBlockDeprecatedV12Attributes | CoreCoverBlockDeprecatedV13Attributes | CoreCoverBlockDeprecatedV14Attributes
 
 type CoreCoverBlockDeprecatedV1Attributes {
   align: String
@@ -4776,11 +5371,15 @@ type CoreCoverBlockDeprecatedV1Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -4809,11 +5408,15 @@ type CoreCoverBlockDeprecatedV2Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -4842,11 +5445,15 @@ type CoreCoverBlockDeprecatedV3Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -4875,11 +5482,15 @@ type CoreCoverBlockDeprecatedV4Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -4908,11 +5519,15 @@ type CoreCoverBlockDeprecatedV5Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -4941,11 +5556,15 @@ type CoreCoverBlockDeprecatedV6Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -4974,11 +5593,15 @@ type CoreCoverBlockDeprecatedV7Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -5007,11 +5630,15 @@ type CoreCoverBlockDeprecatedV8Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -5040,11 +5667,15 @@ type CoreCoverBlockDeprecatedV9Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -5073,11 +5704,15 @@ type CoreCoverBlockDeprecatedV10Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -5106,11 +5741,126 @@ type CoreCoverBlockDeprecatedV11Attributes {
   id: Float
   isDark: Boolean!
   isRepeated: Boolean!
+  isUserOverlayColor: Boolean
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minHeight: Float
   minHeightUnit: String
   overlayColor: String
+  poster: String
+  sizeSlug: String
+  style: BlockAttributesObject
+  tagName: String!
+  textColor: String
+  url: String
+  useFeaturedImage: Boolean!
+}
+
+type CoreCoverBlockDeprecatedV12Attributes {
+  align: String
+  allowedBlocks: BlockAttributesArray
+  alt: String!
+  anchor: String
+  backgroundColor: String
+  backgroundType: String!
+  borderColor: String
+  className: String
+  contentPosition: String
+  customGradient: String
+  customOverlayColor: String
+  dimRatio: Float!
+  focalPoint: BlockAttributesObject
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  hasParallax: Boolean!
+  id: Float
+  isDark: Boolean!
+  isRepeated: Boolean!
+  isUserOverlayColor: Boolean
+  layout: BlockAttributesObject
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  minHeight: Float
+  minHeightUnit: String
+  overlayColor: String
+  poster: String
+  sizeSlug: String
+  style: BlockAttributesObject
+  tagName: String!
+  textColor: String
+  url: String
+  useFeaturedImage: Boolean!
+}
+
+type CoreCoverBlockDeprecatedV13Attributes {
+  align: String
+  allowedBlocks: BlockAttributesArray
+  alt: String!
+  anchor: String
+  backgroundColor: String
+  backgroundType: String!
+  borderColor: String
+  className: String
+  contentPosition: String
+  customGradient: String
+  customOverlayColor: String
+  dimRatio: Float!
+  focalPoint: BlockAttributesObject
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  hasParallax: Boolean!
+  id: Float
+  isDark: Boolean!
+  isRepeated: Boolean!
+  isUserOverlayColor: Boolean
+  layout: BlockAttributesObject
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  minHeight: Float
+  minHeightUnit: String
+  overlayColor: String
+  poster: String
+  sizeSlug: String
+  style: BlockAttributesObject
+  tagName: String!
+  textColor: String
+  url: String
+  useFeaturedImage: Boolean!
+}
+
+type CoreCoverBlockDeprecatedV14Attributes {
+  align: String
+  allowedBlocks: BlockAttributesArray
+  alt: String!
+  anchor: String
+  backgroundColor: String
+  backgroundType: String!
+  borderColor: String
+  className: String
+  contentPosition: String
+  customGradient: String
+  customOverlayColor: String
+  dimRatio: Float!
+  focalPoint: BlockAttributesObject
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  hasParallax: Boolean!
+  id: Float
+  isDark: Boolean!
+  isRepeated: Boolean!
+  isUserOverlayColor: Boolean
+  layout: BlockAttributesObject
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  minHeight: Float
+  minHeightUnit: String
+  overlayColor: String
+  poster: String
+  sizeSlug: String
   style: BlockAttributesObject
   tagName: String!
   textColor: String
@@ -5144,6 +5894,8 @@ type CoreDetailsBlock implements Block {
 
 type CoreDetailsBlockAttributes {
   align: String
+  allowedBlocks: BlockAttributesArray
+  anchor: String
   backgroundColor: String
   borderColor: String
   className: String
@@ -5152,9 +5904,11 @@ type CoreDetailsBlockAttributes {
   gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  name: String
+  placeholder: String
   showContent: Boolean!
   style: BlockAttributesObject
-  summary: String
   textColor: String
 }
 
@@ -5185,9 +5939,10 @@ type CoreEmbedBlock implements Block {
 type CoreEmbedBlockAttributes {
   align: String
   allowResponsive: Boolean!
-  caption: String
+  anchor: String
   className: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   previewable: Boolean!
   providerNameSlug: String
   responsive: Boolean!
@@ -5201,9 +5956,10 @@ union CoreEmbedBlockAttributesUnion = CoreEmbedBlockAttributes | CoreEmbedBlockD
 type CoreEmbedBlockDeprecatedV1Attributes {
   align: String
   allowResponsive: Boolean!
-  caption: String
+  anchor: String
   className: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   previewable: Boolean!
   providerNameSlug: String
   responsive: Boolean!
@@ -5215,9 +5971,10 @@ type CoreEmbedBlockDeprecatedV1Attributes {
 type CoreEmbedBlockDeprecatedV2Attributes {
   align: String
   allowResponsive: Boolean!
-  caption: String
+  anchor: String
   className: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   previewable: Boolean!
   providerNameSlug: String
   responsive: Boolean!
@@ -5254,15 +6011,16 @@ type CoreFileBlockAttributes {
   align: String
   anchor: String
   backgroundColor: String
+  blob: String
+  borderColor: String
   className: String
   displayPreview: Boolean
-  downloadButtonText: String
   fileId: String
-  fileName: String
   gradient: String
   href: String
   id: Float
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   previewHeight: Float!
   showDownloadButton: Boolean!
   style: BlockAttributesObject
@@ -5277,15 +6035,16 @@ type CoreFileBlockDeprecatedV1Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  blob: String
+  borderColor: String
   className: String
   displayPreview: Boolean
-  downloadButtonText: String
   fileId: String
-  fileName: String
   gradient: String
   href: String
   id: Float
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   previewHeight: Float!
   showDownloadButton: Boolean!
   style: BlockAttributesObject
@@ -5298,15 +6057,16 @@ type CoreFileBlockDeprecatedV2Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  blob: String
+  borderColor: String
   className: String
   displayPreview: Boolean
-  downloadButtonText: String
   fileId: String
-  fileName: String
   gradient: String
   href: String
   id: Float
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   previewHeight: Float!
   showDownloadButton: Boolean!
   style: BlockAttributesObject
@@ -5319,15 +6079,16 @@ type CoreFileBlockDeprecatedV3Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  blob: String
+  borderColor: String
   className: String
   displayPreview: Boolean
-  downloadButtonText: String
   fileId: String
-  fileName: String
   gradient: String
   href: String
   id: Float
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   previewHeight: Float!
   showDownloadButton: Boolean!
   style: BlockAttributesObject
@@ -5361,12 +6122,14 @@ type CoreFootnotesBlock implements Block {
 }
 
 type CoreFootnotesBlockAttributes {
+  anchor: String
   backgroundColor: String
   borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -5398,6 +6161,7 @@ type CoreFreeformBlock implements Block {
 type CoreFreeformBlockAttributes {
   content: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
 }
 
 """core/gallery block"""
@@ -5428,8 +6192,9 @@ type CoreGalleryBlockAttributes {
   align: String
   allowResize: Boolean!
   anchor: String
+  aspectRatio: String!
   backgroundColor: String
-  caption: String
+  borderColor: String
   className: String
   columns: Float
   fixedHeight: Boolean!
@@ -5441,6 +6206,9 @@ type CoreGalleryBlockAttributes {
   linkTarget: String
   linkTo: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  navigationButtonType: String!
+  randomOrder: Boolean!
   shortCodeTransforms: [BlockAttributesObject]!
   sizeSlug: String!
   style: BlockAttributesObject
@@ -5449,7 +6217,6 @@ type CoreGalleryBlockAttributes {
 
 type CoreGalleryBlockAttributesImages {
   alt: String!
-  caption: String
   fullUrl: String
   id: String
   link: String
@@ -5462,8 +6229,9 @@ type CoreGalleryBlockDeprecatedV1Attributes {
   align: String
   allowResize: Boolean!
   anchor: String
+  aspectRatio: String!
   backgroundColor: String
-  caption: String
+  borderColor: String
   className: String
   columns: Float
   fixedHeight: Boolean!
@@ -5475,6 +6243,9 @@ type CoreGalleryBlockDeprecatedV1Attributes {
   linkTarget: String
   linkTo: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  navigationButtonType: String!
+  randomOrder: Boolean!
   shortCodeTransforms: [BlockAttributesObject]!
   sizeSlug: String!
   style: BlockAttributesObject
@@ -5483,7 +6254,6 @@ type CoreGalleryBlockDeprecatedV1Attributes {
 
 type CoreGalleryBlockDeprecatedV1AttributesImages {
   alt: String!
-  caption: String
   fullUrl: String
   id: String
   link: String
@@ -5494,8 +6264,9 @@ type CoreGalleryBlockDeprecatedV2Attributes {
   align: String
   allowResize: Boolean!
   anchor: String
+  aspectRatio: String!
   backgroundColor: String
-  caption: String
+  borderColor: String
   className: String
   columns: Float
   fixedHeight: Boolean!
@@ -5507,6 +6278,9 @@ type CoreGalleryBlockDeprecatedV2Attributes {
   linkTarget: String
   linkTo: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  navigationButtonType: String!
+  randomOrder: Boolean!
   shortCodeTransforms: [BlockAttributesObject]!
   sizeSlug: String!
   style: BlockAttributesObject
@@ -5515,7 +6289,6 @@ type CoreGalleryBlockDeprecatedV2Attributes {
 
 type CoreGalleryBlockDeprecatedV2AttributesImages {
   alt: String!
-  caption: String
   fullUrl: String
   id: String
   link: String
@@ -5526,8 +6299,9 @@ type CoreGalleryBlockDeprecatedV3Attributes {
   align: String
   allowResize: Boolean!
   anchor: String
+  aspectRatio: String!
   backgroundColor: String
-  caption: String
+  borderColor: String
   className: String
   columns: Float
   fixedHeight: Boolean!
@@ -5539,6 +6313,9 @@ type CoreGalleryBlockDeprecatedV3Attributes {
   linkTarget: String
   linkTo: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  navigationButtonType: String!
+  randomOrder: Boolean!
   shortCodeTransforms: [BlockAttributesObject]!
   sizeSlug: String!
   style: BlockAttributesObject
@@ -5547,7 +6324,6 @@ type CoreGalleryBlockDeprecatedV3Attributes {
 
 type CoreGalleryBlockDeprecatedV3AttributesImages {
   alt: String!
-  caption: String
   fullUrl: String
   id: String
   link: String
@@ -5558,8 +6334,9 @@ type CoreGalleryBlockDeprecatedV4Attributes {
   align: String
   allowResize: Boolean!
   anchor: String
+  aspectRatio: String!
   backgroundColor: String
-  caption: String
+  borderColor: String
   className: String
   columns: Float
   fixedHeight: Boolean!
@@ -5571,6 +6348,9 @@ type CoreGalleryBlockDeprecatedV4Attributes {
   linkTarget: String
   linkTo: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  navigationButtonType: String!
+  randomOrder: Boolean!
   shortCodeTransforms: [BlockAttributesObject]!
   sizeSlug: String!
   style: BlockAttributesObject
@@ -5579,7 +6359,6 @@ type CoreGalleryBlockDeprecatedV4Attributes {
 
 type CoreGalleryBlockDeprecatedV4AttributesImages {
   alt: String!
-  caption: String
   fullUrl: String
   id: String
   link: String
@@ -5590,8 +6369,9 @@ type CoreGalleryBlockDeprecatedV5Attributes {
   align: String
   allowResize: Boolean!
   anchor: String
+  aspectRatio: String!
   backgroundColor: String
-  caption: String
+  borderColor: String
   className: String
   columns: Float
   fixedHeight: Boolean!
@@ -5603,6 +6383,9 @@ type CoreGalleryBlockDeprecatedV5Attributes {
   linkTarget: String
   linkTo: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  navigationButtonType: String!
+  randomOrder: Boolean!
   shortCodeTransforms: [BlockAttributesObject]!
   sizeSlug: String!
   style: BlockAttributesObject
@@ -5611,7 +6394,6 @@ type CoreGalleryBlockDeprecatedV5Attributes {
 
 type CoreGalleryBlockDeprecatedV5AttributesImages {
   alt: String!
-  caption: String
   fullUrl: String
   id: String
   link: String
@@ -5622,8 +6404,9 @@ type CoreGalleryBlockDeprecatedV6Attributes {
   align: String
   allowResize: Boolean!
   anchor: String
+  aspectRatio: String!
   backgroundColor: String
-  caption: String
+  borderColor: String
   className: String
   columns: Float
   fixedHeight: Boolean!
@@ -5635,6 +6418,9 @@ type CoreGalleryBlockDeprecatedV6Attributes {
   linkTarget: String
   linkTo: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  navigationButtonType: String!
+  randomOrder: Boolean!
   shortCodeTransforms: [BlockAttributesObject]!
   sizeSlug: String!
   style: BlockAttributesObject
@@ -5643,7 +6429,6 @@ type CoreGalleryBlockDeprecatedV6Attributes {
 
 type CoreGalleryBlockDeprecatedV6AttributesImages {
   alt: String!
-  caption: String
   fullUrl: String
   id: String
   link: String
@@ -5654,8 +6439,9 @@ type CoreGalleryBlockDeprecatedV7Attributes {
   align: String
   allowResize: Boolean!
   anchor: String
+  aspectRatio: String!
   backgroundColor: String
-  caption: String
+  borderColor: String
   className: String
   columns: Float
   fixedHeight: Boolean!
@@ -5667,6 +6453,9 @@ type CoreGalleryBlockDeprecatedV7Attributes {
   linkTarget: String
   linkTo: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  navigationButtonType: String!
+  randomOrder: Boolean!
   shortCodeTransforms: [BlockAttributesObject]!
   sizeSlug: String!
   style: BlockAttributesObject
@@ -5675,7 +6464,6 @@ type CoreGalleryBlockDeprecatedV7Attributes {
 
 type CoreGalleryBlockDeprecatedV7AttributesImages {
   alt: String!
-  caption: String
   fullUrl: String
   id: String
   link: String
@@ -5856,35 +6644,39 @@ type CoreHeadingBlockAttributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   level: Float!
+  levelOptions: BlockAttributesArray
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
-  textAlign: String
   textColor: String
 }
 
-union CoreHeadingBlockAttributesUnion = CoreHeadingBlockAttributes | CoreHeadingBlockDeprecatedV1Attributes | CoreHeadingBlockDeprecatedV2Attributes | CoreHeadingBlockDeprecatedV3Attributes | CoreHeadingBlockDeprecatedV4Attributes | CoreHeadingBlockDeprecatedV5Attributes
+union CoreHeadingBlockAttributesUnion = CoreHeadingBlockAttributes | CoreHeadingBlockDeprecatedV1Attributes | CoreHeadingBlockDeprecatedV2Attributes | CoreHeadingBlockDeprecatedV3Attributes | CoreHeadingBlockDeprecatedV4Attributes | CoreHeadingBlockDeprecatedV5Attributes | CoreHeadingBlockDeprecatedV6Attributes
 
 type CoreHeadingBlockDeprecatedV1Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   level: Float!
+  levelOptions: BlockAttributesArray
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
-  textAlign: String
   textColor: String
 }
 
@@ -5892,16 +6684,18 @@ type CoreHeadingBlockDeprecatedV2Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   level: Float!
+  levelOptions: BlockAttributesArray
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
-  textAlign: String
   textColor: String
 }
 
@@ -5909,16 +6703,18 @@ type CoreHeadingBlockDeprecatedV3Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   level: Float!
+  levelOptions: BlockAttributesArray
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
-  textAlign: String
   textColor: String
 }
 
@@ -5926,16 +6722,18 @@ type CoreHeadingBlockDeprecatedV4Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   level: Float!
+  levelOptions: BlockAttributesArray
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
-  textAlign: String
   textColor: String
 }
 
@@ -5943,16 +6741,37 @@ type CoreHeadingBlockDeprecatedV5Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   level: Float!
+  levelOptions: BlockAttributesArray
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
-  textAlign: String
+  textColor: String
+}
+
+type CoreHeadingBlockDeprecatedV6Attributes {
+  align: String
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fitText: Boolean
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  level: Float!
+  levelOptions: BlockAttributesArray
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  placeholder: String
+  style: BlockAttributesObject
   textColor: String
 }
 
@@ -5981,11 +6800,13 @@ type CoreHomeLinkBlock implements Block {
 }
 
 type CoreHomeLinkBlockAttributes {
+  anchor: String
   className: String
   fontFamily: String
   fontSize: String
   label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
 }
 
@@ -6016,6 +6837,45 @@ type CoreHtmlBlock implements Block {
 type CoreHtmlBlockAttributes {
   content: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+}
+
+"""core/icon block"""
+type CoreIconBlock implements Block {
+  attributes: CoreIconBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreIconBlockAttributes {
+  align: String
+  anchor: String
+  ariaLabel: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  icon: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
 }
 
 """core/image block"""
@@ -6049,9 +6909,10 @@ type CoreImageBlockAttributes {
   alt: String!
   anchor: String
   aspectRatio: String
+  blob: String
   borderColor: String
-  caption: String
   className: String
+  focalPoint: BlockAttributesObject
   height: String
   href: String
   id: Float
@@ -6060,6 +6921,7 @@ type CoreImageBlockAttributes {
   linkDestination: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String
   scale: String
   sizeSlug: String
@@ -6076,9 +6938,10 @@ type CoreImageBlockDeprecatedV1Attributes {
   alt: String!
   anchor: String
   aspectRatio: String
+  blob: String
   borderColor: String
-  caption: String
   className: String
+  focalPoint: BlockAttributesObject
   height: String
   href: String
   id: Float
@@ -6087,6 +6950,7 @@ type CoreImageBlockDeprecatedV1Attributes {
   linkDestination: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String
   scale: String
   sizeSlug: String
@@ -6101,9 +6965,10 @@ type CoreImageBlockDeprecatedV2Attributes {
   alt: String!
   anchor: String
   aspectRatio: String
+  blob: String
   borderColor: String
-  caption: String
   className: String
+  focalPoint: BlockAttributesObject
   height: String
   href: String
   id: Float
@@ -6112,6 +6977,7 @@ type CoreImageBlockDeprecatedV2Attributes {
   linkDestination: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String
   scale: String
   sizeSlug: String
@@ -6126,9 +6992,10 @@ type CoreImageBlockDeprecatedV3Attributes {
   alt: String!
   anchor: String
   aspectRatio: String
+  blob: String
   borderColor: String
-  caption: String
   className: String
+  focalPoint: BlockAttributesObject
   height: String
   href: String
   id: Float
@@ -6137,6 +7004,7 @@ type CoreImageBlockDeprecatedV3Attributes {
   linkDestination: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String
   scale: String
   sizeSlug: String
@@ -6151,9 +7019,10 @@ type CoreImageBlockDeprecatedV4Attributes {
   alt: String!
   anchor: String
   aspectRatio: String
+  blob: String
   borderColor: String
-  caption: String
   className: String
+  focalPoint: BlockAttributesObject
   height: String
   href: String
   id: Float
@@ -6162,6 +7031,7 @@ type CoreImageBlockDeprecatedV4Attributes {
   linkDestination: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String
   scale: String
   sizeSlug: String
@@ -6176,9 +7046,10 @@ type CoreImageBlockDeprecatedV5Attributes {
   alt: String!
   anchor: String
   aspectRatio: String
+  blob: String
   borderColor: String
-  caption: String
   className: String
+  focalPoint: BlockAttributesObject
   height: String
   href: String
   id: Float
@@ -6187,6 +7058,7 @@ type CoreImageBlockDeprecatedV5Attributes {
   linkDestination: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String
   scale: String
   sizeSlug: String
@@ -6201,9 +7073,10 @@ type CoreImageBlockDeprecatedV6Attributes {
   alt: String!
   anchor: String
   aspectRatio: String
+  blob: String
   borderColor: String
-  caption: String
   className: String
+  focalPoint: BlockAttributesObject
   height: String
   href: String
   id: Float
@@ -6212,6 +7085,7 @@ type CoreImageBlockDeprecatedV6Attributes {
   linkDestination: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String
   scale: String
   sizeSlug: String
@@ -6226,9 +7100,10 @@ type CoreImageBlockDeprecatedV7Attributes {
   alt: String!
   anchor: String
   aspectRatio: String
+  blob: String
   borderColor: String
-  caption: String
   className: String
+  focalPoint: BlockAttributesObject
   height: String
   href: String
   id: Float
@@ -6237,6 +7112,7 @@ type CoreImageBlockDeprecatedV7Attributes {
   linkDestination: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String
   scale: String
   sizeSlug: String
@@ -6251,9 +7127,10 @@ type CoreImageBlockDeprecatedV8Attributes {
   alt: String!
   anchor: String
   aspectRatio: String
+  blob: String
   borderColor: String
-  caption: String
   className: String
+  focalPoint: BlockAttributesObject
   height: String
   href: String
   id: Float
@@ -6262,6 +7139,7 @@ type CoreImageBlockDeprecatedV8Attributes {
   linkDestination: String
   linkTarget: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String
   scale: String
   sizeSlug: String
@@ -6283,7 +7161,7 @@ type CoreImageBlockToMediaItemConnectionEdge implements Edge & MediaItemConnecti
 
 """core/latest-comments block"""
 type CoreLatestCommentsBlock implements Block {
-  attributes: CoreLatestCommentsBlockAttributes
+  attributes: CoreLatestCommentsBlockAttributesUnion
   """Block attributes, JSON encoded"""
   attributesJSON: String
   """Server side rendered content."""
@@ -6307,15 +7185,40 @@ type CoreLatestCommentsBlock implements Block {
 
 type CoreLatestCommentsBlockAttributes {
   align: String
+  anchor: String
+  backgroundColor: String
   className: String
   commentsToShow: Float!
   displayAvatar: Boolean!
+  displayContent: String!
   displayDate: Boolean!
-  displayExcerpt: Boolean!
   fontFamily: String
   fontSize: String
+  gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
+  textColor: String
+}
+
+union CoreLatestCommentsBlockAttributesUnion = CoreLatestCommentsBlockAttributes | CoreLatestCommentsBlockDeprecatedV1Attributes
+
+type CoreLatestCommentsBlockDeprecatedV1Attributes {
+  align: String
+  anchor: String
+  backgroundColor: String
+  className: String
+  commentsToShow: Float!
+  displayAvatar: Boolean!
+  displayContent: String!
+  displayDate: Boolean!
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
 }
 
 """core/latest-posts block"""
@@ -6345,7 +7248,9 @@ type CoreLatestPostsBlock implements Block {
 type CoreLatestPostsBlockAttributes {
   addLinkToFeaturedImage: Boolean!
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   categories: [BlockAttributesObject]
   className: String
   columns: Float!
@@ -6363,6 +7268,7 @@ type CoreLatestPostsBlockAttributes {
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   order: String!
   orderBy: String!
   postLayout: String!
@@ -6377,7 +7283,9 @@ union CoreLatestPostsBlockAttributesUnion = CoreLatestPostsBlockAttributes | Cor
 type CoreLatestPostsBlockDeprecatedV1Attributes {
   addLinkToFeaturedImage: Boolean!
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   categories: [BlockAttributesObject]
   className: String
   columns: Float!
@@ -6395,6 +7303,7 @@ type CoreLatestPostsBlockDeprecatedV1Attributes {
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   order: String!
   orderBy: String!
   postLayout: String!
@@ -6434,6 +7343,8 @@ type CoreLegacyWidgetBlockAttributes {
   idBase: String
   instance: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
 }
 
 """core/list block"""
@@ -6463,11 +7374,13 @@ type CoreListBlock implements Block {
 type CoreListBlockAttributes {
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   ordered: Boolean!
   placeholder: String
   reversed: Boolean
@@ -6478,16 +7391,18 @@ type CoreListBlockAttributes {
   values: String!
 }
 
-union CoreListBlockAttributesUnion = CoreListBlockAttributes | CoreListBlockDeprecatedV1Attributes | CoreListBlockDeprecatedV2Attributes | CoreListBlockDeprecatedV3Attributes
+union CoreListBlockAttributesUnion = CoreListBlockAttributes | CoreListBlockDeprecatedV1Attributes | CoreListBlockDeprecatedV2Attributes | CoreListBlockDeprecatedV3Attributes | CoreListBlockDeprecatedV4Attributes
 
 type CoreListBlockDeprecatedV1Attributes {
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   ordered: Boolean!
   placeholder: String
   reversed: Boolean
@@ -6501,11 +7416,13 @@ type CoreListBlockDeprecatedV1Attributes {
 type CoreListBlockDeprecatedV2Attributes {
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   ordered: Boolean!
   placeholder: String
   reversed: Boolean
@@ -6519,11 +7436,33 @@ type CoreListBlockDeprecatedV2Attributes {
 type CoreListBlockDeprecatedV3Attributes {
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  ordered: Boolean!
+  placeholder: String
+  reversed: Boolean
+  start: Float
+  style: BlockAttributesObject
+  textColor: String
+  type: String
+  values: String!
+}
+
+type CoreListBlockDeprecatedV4Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   ordered: Boolean!
   placeholder: String
   reversed: Boolean
@@ -6559,13 +7498,18 @@ type CoreListItemBlock implements Block {
 }
 
 type CoreListItemBlockAttributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
   fontFamily: String
   fontSize: String
+  gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
+  textColor: String
 }
 
 """core/loginout block"""
@@ -6593,13 +7537,75 @@ type CoreLoginoutBlock implements Block {
 }
 
 type CoreLoginoutBlockAttributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
   className: String
   displayLoginAsForm: Boolean!
   fontFamily: String
   fontSize: String
+  gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   redirectToCurrent: Boolean!
   style: BlockAttributesObject
+  textColor: String
+}
+
+"""core/math block"""
+type CoreMathBlock implements Block {
+  attributes: CoreMathBlockAttributesUnion
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreMathBlockAttributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontSize: String
+  gradient: String
+  latex: String
+  lock: BlockAttributesObject
+  mathML: String
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
+union CoreMathBlockAttributesUnion = CoreMathBlockAttributes | CoreMathBlockDeprecatedV1Attributes
+
+type CoreMathBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontSize: String
+  gradient: String
+  latex: String
+  lock: BlockAttributesObject
+  mathML: String
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
 }
 
 """core/media-text block"""
@@ -6631,6 +7637,7 @@ type CoreMediaTextBlockAttributes {
   allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   focalPoint: BlockAttributesObject
   fontFamily: String
@@ -6651,19 +7658,22 @@ type CoreMediaTextBlockAttributes {
   mediaType: String
   mediaUrl: String
   mediaWidth: Float!
+  metadata: BlockAttributesObject
   rel: String
   style: BlockAttributesObject
   textColor: String
+  useFeaturedImage: Boolean!
   verticalAlignment: String
 }
 
-union CoreMediaTextBlockAttributesUnion = CoreMediaTextBlockAttributes | CoreMediaTextBlockDeprecatedV1Attributes | CoreMediaTextBlockDeprecatedV2Attributes | CoreMediaTextBlockDeprecatedV3Attributes | CoreMediaTextBlockDeprecatedV4Attributes | CoreMediaTextBlockDeprecatedV5Attributes | CoreMediaTextBlockDeprecatedV6Attributes
+union CoreMediaTextBlockAttributesUnion = CoreMediaTextBlockAttributes | CoreMediaTextBlockDeprecatedV1Attributes | CoreMediaTextBlockDeprecatedV2Attributes | CoreMediaTextBlockDeprecatedV3Attributes | CoreMediaTextBlockDeprecatedV4Attributes | CoreMediaTextBlockDeprecatedV5Attributes | CoreMediaTextBlockDeprecatedV6Attributes | CoreMediaTextBlockDeprecatedV7Attributes
 
 type CoreMediaTextBlockDeprecatedV1Attributes {
   align: String!
   allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   focalPoint: BlockAttributesObject
   fontFamily: String
@@ -6684,9 +7694,11 @@ type CoreMediaTextBlockDeprecatedV1Attributes {
   mediaType: String
   mediaUrl: String
   mediaWidth: Float!
+  metadata: BlockAttributesObject
   rel: String
   style: BlockAttributesObject
   textColor: String
+  useFeaturedImage: Boolean!
   verticalAlignment: String
 }
 
@@ -6695,6 +7707,7 @@ type CoreMediaTextBlockDeprecatedV2Attributes {
   allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   focalPoint: BlockAttributesObject
   fontFamily: String
@@ -6715,9 +7728,11 @@ type CoreMediaTextBlockDeprecatedV2Attributes {
   mediaType: String
   mediaUrl: String
   mediaWidth: Float!
+  metadata: BlockAttributesObject
   rel: String
   style: BlockAttributesObject
   textColor: String
+  useFeaturedImage: Boolean!
   verticalAlignment: String
 }
 
@@ -6726,6 +7741,7 @@ type CoreMediaTextBlockDeprecatedV3Attributes {
   allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   focalPoint: BlockAttributesObject
   fontFamily: String
@@ -6746,9 +7762,11 @@ type CoreMediaTextBlockDeprecatedV3Attributes {
   mediaType: String
   mediaUrl: String
   mediaWidth: Float!
+  metadata: BlockAttributesObject
   rel: String
   style: BlockAttributesObject
   textColor: String
+  useFeaturedImage: Boolean!
   verticalAlignment: String
 }
 
@@ -6757,6 +7775,7 @@ type CoreMediaTextBlockDeprecatedV4Attributes {
   allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   focalPoint: BlockAttributesObject
   fontFamily: String
@@ -6777,9 +7796,11 @@ type CoreMediaTextBlockDeprecatedV4Attributes {
   mediaType: String
   mediaUrl: String
   mediaWidth: Float!
+  metadata: BlockAttributesObject
   rel: String
   style: BlockAttributesObject
   textColor: String
+  useFeaturedImage: Boolean!
   verticalAlignment: String
 }
 
@@ -6788,6 +7809,7 @@ type CoreMediaTextBlockDeprecatedV5Attributes {
   allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   focalPoint: BlockAttributesObject
   fontFamily: String
@@ -6808,9 +7830,11 @@ type CoreMediaTextBlockDeprecatedV5Attributes {
   mediaType: String
   mediaUrl: String
   mediaWidth: Float!
+  metadata: BlockAttributesObject
   rel: String
   style: BlockAttributesObject
   textColor: String
+  useFeaturedImage: Boolean!
   verticalAlignment: String
 }
 
@@ -6819,6 +7843,7 @@ type CoreMediaTextBlockDeprecatedV6Attributes {
   allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   focalPoint: BlockAttributesObject
   fontFamily: String
@@ -6839,9 +7864,45 @@ type CoreMediaTextBlockDeprecatedV6Attributes {
   mediaType: String
   mediaUrl: String
   mediaWidth: Float!
+  metadata: BlockAttributesObject
   rel: String
   style: BlockAttributesObject
   textColor: String
+  useFeaturedImage: Boolean!
+  verticalAlignment: String
+}
+
+type CoreMediaTextBlockDeprecatedV7Attributes {
+  align: String!
+  allowedBlocks: BlockAttributesArray
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  focalPoint: BlockAttributesObject
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  href: String
+  imageFill: Boolean
+  isStackedOnMobile: Boolean!
+  linkClass: String
+  linkDestination: String
+  linkTarget: String
+  lock: BlockAttributesObject
+  mediaAlt: String!
+  mediaId: Float
+  mediaLink: String
+  mediaPosition: String!
+  mediaSizeSlug: String
+  mediaType: String
+  mediaUrl: String
+  mediaWidth: Float!
+  metadata: BlockAttributesObject
+  rel: String
+  style: BlockAttributesObject
+  textColor: String
+  useFeaturedImage: Boolean!
   verticalAlignment: String
 }
 
@@ -6871,6 +7932,7 @@ type CoreMissingBlock implements Block {
 
 type CoreMissingBlockAttributes {
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   originalContent: String
   originalName: String
   originalUndelimitedContent: String
@@ -6901,8 +7963,9 @@ type CoreMoreBlock implements Block {
 }
 
 type CoreMoreBlockAttributes {
-  customText: String
+  customText: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   noTeaser: Boolean!
 }
 
@@ -6932,6 +7995,7 @@ type CoreNavigationBlock implements Block {
 
 type CoreNavigationBlockAttributes {
   align: String
+  anchor: String
   ariaLabel: String
   backgroundColor: String
   className: String
@@ -6946,7 +8010,8 @@ type CoreNavigationBlockAttributes {
   layout: BlockAttributesObject
   lock: BlockAttributesObject
   maxNestingLevel: Float!
-  openSubmenusOnClick: Boolean!
+  metadata: BlockAttributesObject
+  overlay: String
   overlayBackgroundColor: String
   overlayMenu: String!
   overlayTextColor: String
@@ -6955,14 +8020,16 @@ type CoreNavigationBlockAttributes {
   rgbTextColor: String
   showSubmenuIcon: Boolean!
   style: BlockAttributesObject
+  submenuVisibility: String!
   textColor: String
   unstableLocation: String
 }
 
-union CoreNavigationBlockAttributesUnion = CoreNavigationBlockAttributes | CoreNavigationBlockDeprecatedV1Attributes | CoreNavigationBlockDeprecatedV2Attributes | CoreNavigationBlockDeprecatedV3Attributes | CoreNavigationBlockDeprecatedV4Attributes | CoreNavigationBlockDeprecatedV5Attributes | CoreNavigationBlockDeprecatedV6Attributes
+union CoreNavigationBlockAttributesUnion = CoreNavigationBlockAttributes | CoreNavigationBlockDeprecatedV1Attributes | CoreNavigationBlockDeprecatedV2Attributes | CoreNavigationBlockDeprecatedV3Attributes | CoreNavigationBlockDeprecatedV4Attributes | CoreNavigationBlockDeprecatedV5Attributes | CoreNavigationBlockDeprecatedV6Attributes | CoreNavigationBlockDeprecatedV7Attributes
 
 type CoreNavigationBlockDeprecatedV1Attributes {
   align: String
+  anchor: String
   ariaLabel: String
   backgroundColor: String
   className: String
@@ -6977,7 +8044,8 @@ type CoreNavigationBlockDeprecatedV1Attributes {
   layout: BlockAttributesObject
   lock: BlockAttributesObject
   maxNestingLevel: Float!
-  openSubmenusOnClick: Boolean!
+  metadata: BlockAttributesObject
+  overlay: String
   overlayBackgroundColor: String
   overlayMenu: String!
   overlayTextColor: String
@@ -6986,12 +8054,14 @@ type CoreNavigationBlockDeprecatedV1Attributes {
   rgbTextColor: String
   showSubmenuIcon: Boolean!
   style: BlockAttributesObject
+  submenuVisibility: String!
   textColor: String
   unstableLocation: String
 }
 
 type CoreNavigationBlockDeprecatedV2Attributes {
   align: String
+  anchor: String
   ariaLabel: String
   backgroundColor: String
   className: String
@@ -7006,7 +8076,8 @@ type CoreNavigationBlockDeprecatedV2Attributes {
   layout: BlockAttributesObject
   lock: BlockAttributesObject
   maxNestingLevel: Float!
-  openSubmenusOnClick: Boolean!
+  metadata: BlockAttributesObject
+  overlay: String
   overlayBackgroundColor: String
   overlayMenu: String!
   overlayTextColor: String
@@ -7015,12 +8086,14 @@ type CoreNavigationBlockDeprecatedV2Attributes {
   rgbTextColor: String
   showSubmenuIcon: Boolean!
   style: BlockAttributesObject
+  submenuVisibility: String!
   textColor: String
   unstableLocation: String
 }
 
 type CoreNavigationBlockDeprecatedV3Attributes {
   align: String
+  anchor: String
   ariaLabel: String
   backgroundColor: String
   className: String
@@ -7035,7 +8108,8 @@ type CoreNavigationBlockDeprecatedV3Attributes {
   layout: BlockAttributesObject
   lock: BlockAttributesObject
   maxNestingLevel: Float!
-  openSubmenusOnClick: Boolean!
+  metadata: BlockAttributesObject
+  overlay: String
   overlayBackgroundColor: String
   overlayMenu: String!
   overlayTextColor: String
@@ -7044,12 +8118,14 @@ type CoreNavigationBlockDeprecatedV3Attributes {
   rgbTextColor: String
   showSubmenuIcon: Boolean!
   style: BlockAttributesObject
+  submenuVisibility: String!
   textColor: String
   unstableLocation: String
 }
 
 type CoreNavigationBlockDeprecatedV4Attributes {
   align: String
+  anchor: String
   ariaLabel: String
   backgroundColor: String
   className: String
@@ -7064,7 +8140,8 @@ type CoreNavigationBlockDeprecatedV4Attributes {
   layout: BlockAttributesObject
   lock: BlockAttributesObject
   maxNestingLevel: Float!
-  openSubmenusOnClick: Boolean!
+  metadata: BlockAttributesObject
+  overlay: String
   overlayBackgroundColor: String
   overlayMenu: String!
   overlayTextColor: String
@@ -7073,12 +8150,14 @@ type CoreNavigationBlockDeprecatedV4Attributes {
   rgbTextColor: String
   showSubmenuIcon: Boolean!
   style: BlockAttributesObject
+  submenuVisibility: String!
   textColor: String
   unstableLocation: String
 }
 
 type CoreNavigationBlockDeprecatedV5Attributes {
   align: String
+  anchor: String
   ariaLabel: String
   backgroundColor: String
   className: String
@@ -7093,7 +8172,8 @@ type CoreNavigationBlockDeprecatedV5Attributes {
   layout: BlockAttributesObject
   lock: BlockAttributesObject
   maxNestingLevel: Float!
-  openSubmenusOnClick: Boolean!
+  metadata: BlockAttributesObject
+  overlay: String
   overlayBackgroundColor: String
   overlayMenu: String!
   overlayTextColor: String
@@ -7102,12 +8182,14 @@ type CoreNavigationBlockDeprecatedV5Attributes {
   rgbTextColor: String
   showSubmenuIcon: Boolean!
   style: BlockAttributesObject
+  submenuVisibility: String!
   textColor: String
   unstableLocation: String
 }
 
 type CoreNavigationBlockDeprecatedV6Attributes {
   align: String
+  anchor: String
   ariaLabel: String
   backgroundColor: String
   className: String
@@ -7122,7 +8204,8 @@ type CoreNavigationBlockDeprecatedV6Attributes {
   layout: BlockAttributesObject
   lock: BlockAttributesObject
   maxNestingLevel: Float!
-  openSubmenusOnClick: Boolean!
+  metadata: BlockAttributesObject
+  overlay: String
   overlayBackgroundColor: String
   overlayMenu: String!
   overlayTextColor: String
@@ -7131,6 +8214,39 @@ type CoreNavigationBlockDeprecatedV6Attributes {
   rgbTextColor: String
   showSubmenuIcon: Boolean!
   style: BlockAttributesObject
+  submenuVisibility: String!
+  textColor: String
+  unstableLocation: String
+}
+
+type CoreNavigationBlockDeprecatedV7Attributes {
+  align: String
+  anchor: String
+  ariaLabel: String
+  backgroundColor: String
+  className: String
+  customBackgroundColor: String
+  customOverlayBackgroundColor: String
+  customOverlayTextColor: String
+  customTextColor: String
+  fontFamily: String
+  fontSize: String
+  hasIcon: Boolean!
+  icon: String!
+  layout: BlockAttributesObject
+  lock: BlockAttributesObject
+  maxNestingLevel: Float!
+  metadata: BlockAttributesObject
+  overlay: String
+  overlayBackgroundColor: String
+  overlayMenu: String!
+  overlayTextColor: String
+  ref: Float
+  rgbBackgroundColor: String
+  rgbTextColor: String
+  showSubmenuIcon: Boolean!
+  style: BlockAttributesObject
+  submenuVisibility: String!
   textColor: String
   unstableLocation: String
 }
@@ -7160,6 +8276,7 @@ type CoreNavigationLinkBlock implements Block {
 }
 
 type CoreNavigationLinkBlockAttributes {
+  anchor: String
   className: String
   description: String
   fontFamily: String
@@ -7169,6 +8286,7 @@ type CoreNavigationLinkBlockAttributes {
   kind: String
   label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   opensInNewTab: Boolean!
   rel: String
   style: BlockAttributesObject
@@ -7180,6 +8298,7 @@ type CoreNavigationLinkBlockAttributes {
 union CoreNavigationLinkBlockAttributesUnion = CoreNavigationLinkBlockAttributes | CoreNavigationLinkBlockDeprecatedV1Attributes
 
 type CoreNavigationLinkBlockDeprecatedV1Attributes {
+  anchor: String
   className: String
   description: String
   fontFamily: String
@@ -7189,12 +8308,50 @@ type CoreNavigationLinkBlockDeprecatedV1Attributes {
   kind: String
   label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   opensInNewTab: Boolean!
   rel: String
   style: BlockAttributesObject
   title: String
   type: String
   url: String
+}
+
+"""core/navigation-overlay-close block"""
+type CoreNavigationOverlayCloseBlock implements Block {
+  attributes: CoreNavigationOverlayCloseBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreNavigationOverlayCloseBlockAttributes {
+  backgroundColor: String
+  className: String
+  displayMode: String!
+  fontFamily: String
+  fontSize: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  text: String
+  textColor: String
 }
 
 """core/navigation-submenu block"""
@@ -7222,15 +8379,20 @@ type CoreNavigationSubmenuBlock implements Block {
 }
 
 type CoreNavigationSubmenuBlockAttributes {
+  anchor: String
   className: String
   description: String
+  fontFamily: String
+  fontSize: String
   id: Float
   isTopLevelItem: Boolean
   kind: String
   label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   opensInNewTab: Boolean!
   rel: String
+  style: BlockAttributesObject
   title: String
   type: String
   url: String
@@ -7262,6 +8424,7 @@ type CoreNextpageBlock implements Block {
 
 type CoreNextpageBlockAttributes {
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
 }
 
 """core/page-list block"""
@@ -7289,13 +8452,19 @@ type CorePageListBlock implements Block {
 }
 
 type CorePageListBlockAttributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
+  gradient: String
   isNested: Boolean!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   parentPageID: Int!
   style: BlockAttributesObject
+  textColor: String
 }
 
 """core/page-list-item block"""
@@ -7323,12 +8492,15 @@ type CorePageListItemBlock implements Block {
 }
 
 type CorePageListItemBlockAttributes {
+  anchor: String
   className: String
   hasChildren: Boolean
   id: Float
   label: String
   link: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   title: String
 }
 
@@ -7360,33 +8532,37 @@ type CoreParagraphBlockAttributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
   direction: String
   dropCap: Boolean!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
   textColor: String
 }
 
-union CoreParagraphBlockAttributesUnion = CoreParagraphBlockAttributes | CoreParagraphBlockDeprecatedV1Attributes | CoreParagraphBlockDeprecatedV2Attributes | CoreParagraphBlockDeprecatedV3Attributes | CoreParagraphBlockDeprecatedV4Attributes | CoreParagraphBlockDeprecatedV5Attributes | CoreParagraphBlockDeprecatedV6Attributes
+union CoreParagraphBlockAttributesUnion = CoreParagraphBlockAttributes | CoreParagraphBlockDeprecatedV1Attributes | CoreParagraphBlockDeprecatedV2Attributes | CoreParagraphBlockDeprecatedV3Attributes | CoreParagraphBlockDeprecatedV4Attributes | CoreParagraphBlockDeprecatedV5Attributes | CoreParagraphBlockDeprecatedV6Attributes | CoreParagraphBlockDeprecatedV7Attributes
 
 type CoreParagraphBlockDeprecatedV1Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
   direction: String
   dropCap: Boolean!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
   textColor: String
@@ -7396,14 +8572,16 @@ type CoreParagraphBlockDeprecatedV2Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
   direction: String
   dropCap: Boolean!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
   textColor: String
@@ -7413,14 +8591,16 @@ type CoreParagraphBlockDeprecatedV3Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
   direction: String
   dropCap: Boolean!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
   textColor: String
@@ -7430,14 +8610,16 @@ type CoreParagraphBlockDeprecatedV4Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
   direction: String
   dropCap: Boolean!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
   textColor: String
@@ -7447,14 +8629,16 @@ type CoreParagraphBlockDeprecatedV5Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
   direction: String
   dropCap: Boolean!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
   textColor: String
@@ -7464,14 +8648,35 @@ type CoreParagraphBlockDeprecatedV6Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
   direction: String
   dropCap: Boolean!
+  fitText: Boolean
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  placeholder: String
+  style: BlockAttributesObject
+  textColor: String
+}
+
+type CoreParagraphBlockDeprecatedV7Attributes {
+  align: String
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  direction: String
+  dropCap: Boolean!
+  fitText: Boolean
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String
   style: BlockAttributesObject
   textColor: String
@@ -7504,12 +8709,14 @@ type CorePatternBlock implements Block {
 type CorePatternBlockAttributes {
   className: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   slug: String
+  style: BlockAttributesObject
 }
 
 """core/post-author-biography block"""
 type CorePostAuthorBiographyBlock implements Block {
-  attributes: CorePostAuthorBiographyBlockAttributes
+  attributes: CorePostAuthorBiographyBlockAttributesUnion
   """Block attributes, JSON encoded"""
   attributesJSON: String
   """Server side rendered content."""
@@ -7532,14 +8739,32 @@ type CorePostAuthorBiographyBlock implements Block {
 }
 
 type CorePostAuthorBiographyBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
+  textColor: String
+}
+
+union CorePostAuthorBiographyBlockAttributesUnion = CorePostAuthorBiographyBlockAttributes | CorePostAuthorBiographyBlockDeprecatedV1Attributes
+
+type CorePostAuthorBiographyBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   textColor: String
 }
 
@@ -7568,8 +8793,10 @@ type CorePostAuthorBlock implements Block {
 }
 
 type CorePostAuthorBlockAttributes {
+  anchor: String
   avatarSize: Float!
   backgroundColor: String
+  borderColor: String
   byline: String
   className: String
   fontFamily: String
@@ -7578,6 +8805,7 @@ type CorePostAuthorBlockAttributes {
   isLink: Boolean!
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   showAvatar: Boolean!
   showBio: Boolean
   style: BlockAttributesObject
@@ -7587,7 +8815,7 @@ type CorePostAuthorBlockAttributes {
 
 """core/post-author-name block"""
 type CorePostAuthorNameBlock implements Block {
-  attributes: CorePostAuthorNameBlockAttributes
+  attributes: CorePostAuthorNameBlockAttributesUnion
   """Block attributes, JSON encoded"""
   attributesJSON: String
   """Server side rendered content."""
@@ -7610,7 +8838,9 @@ type CorePostAuthorNameBlock implements Block {
 }
 
 type CorePostAuthorNameBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
@@ -7618,14 +8848,86 @@ type CorePostAuthorNameBlockAttributes {
   isLink: Boolean!
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
+  textColor: String
+}
+
+union CorePostAuthorNameBlockAttributesUnion = CorePostAuthorNameBlockAttributes | CorePostAuthorNameBlockDeprecatedV1Attributes
+
+type CorePostAuthorNameBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  isLink: Boolean!
+  linkTarget: String!
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
+"""core/post-comments-count block"""
+type CorePostCommentsCountBlock implements Block {
+  attributes: CorePostCommentsCountBlockAttributesUnion
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CorePostCommentsCountBlockAttributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
+union CorePostCommentsCountBlockAttributesUnion = CorePostCommentsCountBlockAttributes | CorePostCommentsCountBlockDeprecatedV1Attributes
+
+type CorePostCommentsCountBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   textColor: String
 }
 
 """core/post-comments-form block"""
 type CorePostCommentsFormBlock implements Block {
-  attributes: CorePostCommentsFormBlockAttributes
+  attributes: CorePostCommentsFormBlockAttributesUnion
   """Block attributes, JSON encoded"""
   attributesJSON: String
   """Server side rendered content."""
@@ -7648,13 +8950,82 @@ type CorePostCommentsFormBlock implements Block {
 }
 
 type CorePostCommentsFormBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
+  textColor: String
+}
+
+union CorePostCommentsFormBlockAttributesUnion = CorePostCommentsFormBlockAttributes | CorePostCommentsFormBlockDeprecatedV1Attributes
+
+type CorePostCommentsFormBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
+"""core/post-comments-link block"""
+type CorePostCommentsLinkBlock implements Block {
+  attributes: CorePostCommentsLinkBlockAttributesUnion
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CorePostCommentsLinkBlockAttributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
+union CorePostCommentsLinkBlockAttributesUnion = CorePostCommentsLinkBlockAttributes | CorePostCommentsLinkBlockDeprecatedV1Attributes
+
+type CorePostCommentsLinkBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   textColor: String
 }
 
@@ -7684,14 +9055,18 @@ type CorePostContentBlock implements Block {
 
 type CorePostContentBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
+  tagName: String!
   textColor: String
 }
 
@@ -7720,32 +9095,74 @@ type CorePostDateBlock implements Block {
 }
 
 type CorePostDateBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  displayType: String!
+  datetime: String
   fontFamily: String
   fontSize: String
   format: String
   gradient: String
   isLink: Boolean!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
 }
 
-union CorePostDateBlockAttributesUnion = CorePostDateBlockAttributes | CorePostDateBlockDeprecatedV1Attributes
+union CorePostDateBlockAttributesUnion = CorePostDateBlockAttributes | CorePostDateBlockDeprecatedV1Attributes | CorePostDateBlockDeprecatedV2Attributes | CorePostDateBlockDeprecatedV3Attributes
 
 type CorePostDateBlockDeprecatedV1Attributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  displayType: String!
+  datetime: String
   fontFamily: String
   fontSize: String
   format: String
   gradient: String
   isLink: Boolean!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textAlign: String
+  textColor: String
+}
+
+type CorePostDateBlockDeprecatedV2Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  datetime: String
+  fontFamily: String
+  fontSize: String
+  format: String
+  gradient: String
+  isLink: Boolean!
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textAlign: String
+  textColor: String
+}
+
+type CorePostDateBlockDeprecatedV3Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  datetime: String
+  fontFamily: String
+  fontSize: String
+  format: String
+  gradient: String
+  isLink: Boolean!
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
@@ -7776,13 +9193,16 @@ type CorePostExcerptBlock implements Block {
 }
 
 type CorePostExcerptBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   excerptLength: Float!
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   moreText: String
   showMoreOnNewLine: Boolean!
   style: BlockAttributesObject
@@ -7816,6 +9236,7 @@ type CorePostFeaturedImageBlock implements Block {
 
 type CorePostFeaturedImageBlockAttributes {
   align: String
+  anchor: String
   aspectRatio: String
   borderColor: String
   className: String
@@ -7827,11 +9248,13 @@ type CorePostFeaturedImageBlockAttributes {
   isLink: Boolean!
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   overlayColor: String
   rel: String!
   scale: String!
   sizeSlug: String
   style: BlockAttributesObject
+  useFirstImageFromPost: Boolean!
   width: String
 }
 
@@ -7860,6 +9283,7 @@ type CorePostNavigationLinkBlock implements Block {
 }
 
 type CorePostNavigationLinkBlockAttributes {
+  anchor: String
   arrow: String!
   backgroundColor: String
   className: String
@@ -7868,8 +9292,10 @@ type CorePostNavigationLinkBlockAttributes {
   label: String
   linkLabel: Boolean!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   showTitle: Boolean!
   style: BlockAttributesObject
+  taxonomy: String!
   textAlign: String
   textColor: String
   type: String!
@@ -7901,20 +9327,23 @@ type CorePostTemplateBlock implements Block {
 
 type CorePostTemplateBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
 
 """core/post-terms block"""
 type CorePostTermsBlock implements Block {
-  attributes: CorePostTermsBlockAttributes
+  attributes: CorePostTermsBlockAttributesUnion
   """Block attributes, JSON encoded"""
   attributesJSON: String
   """Server side rendered content."""
@@ -7937,18 +9366,100 @@ type CorePostTermsBlock implements Block {
 }
 
 type CorePostTermsBlockAttributes {
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   prefix: String!
   separator: String!
   style: BlockAttributesObject
   suffix: String!
   term: String
-  textAlign: String
+  textColor: String
+}
+
+union CorePostTermsBlockAttributesUnion = CorePostTermsBlockAttributes | CorePostTermsBlockDeprecatedV1Attributes
+
+type CorePostTermsBlockDeprecatedV1Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  prefix: String!
+  separator: String!
+  style: BlockAttributesObject
+  suffix: String!
+  term: String
+  textColor: String
+}
+
+"""core/post-time-to-read block"""
+type CorePostTimeToReadBlock implements Block {
+  attributes: CorePostTimeToReadBlockAttributesUnion
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CorePostTimeToReadBlockAttributes {
+  anchor: String
+  averageReadingSpeed: Float!
+  backgroundColor: String
+  borderColor: String
+  className: String
+  displayAsRange: Boolean!
+  displayMode: String!
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
+union CorePostTimeToReadBlockAttributesUnion = CorePostTimeToReadBlockAttributes | CorePostTimeToReadBlockDeprecatedV1Attributes
+
+type CorePostTimeToReadBlockDeprecatedV1Attributes {
+  anchor: String
+  averageReadingSpeed: Float!
+  backgroundColor: String
+  borderColor: String
+  className: String
+  displayAsRange: Boolean!
+  displayMode: String!
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   textColor: String
 }
 
@@ -7978,15 +9489,19 @@ type CorePostTitleBlock implements Block {
 
 type CorePostTitleBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   isLink: Boolean!
   level: Float!
+  levelOptions: BlockAttributesArray
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String!
   style: BlockAttributesObject
   textAlign: String
@@ -7997,15 +9512,19 @@ union CorePostTitleBlockAttributesUnion = CorePostTitleBlockAttributes | CorePos
 
 type CorePostTitleBlockDeprecatedV1Attributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   isLink: Boolean!
   level: Float!
+  levelOptions: BlockAttributesArray
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String!
   style: BlockAttributesObject
   textAlign: String
@@ -8039,12 +9558,13 @@ type CorePreformattedBlock implements Block {
 type CorePreformattedBlockAttributes {
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
-  content: String!
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -8078,16 +9598,15 @@ type CorePullquoteBlockAttributes {
   anchor: String
   backgroundColor: String
   borderColor: String
-  citation: String!
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
-  value: String
 }
 
 union CorePullquoteBlockAttributesUnion = CorePullquoteBlockAttributes | CorePullquoteBlockDeprecatedV1Attributes | CorePullquoteBlockDeprecatedV2Attributes | CorePullquoteBlockDeprecatedV3Attributes | CorePullquoteBlockDeprecatedV4Attributes | CorePullquoteBlockDeprecatedV5Attributes | CorePullquoteBlockDeprecatedV6Attributes
@@ -8097,16 +9616,15 @@ type CorePullquoteBlockDeprecatedV1Attributes {
   anchor: String
   backgroundColor: String
   borderColor: String
-  citation: String!
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
-  value: String
 }
 
 type CorePullquoteBlockDeprecatedV2Attributes {
@@ -8114,16 +9632,15 @@ type CorePullquoteBlockDeprecatedV2Attributes {
   anchor: String
   backgroundColor: String
   borderColor: String
-  citation: String!
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
-  value: String
 }
 
 type CorePullquoteBlockDeprecatedV3Attributes {
@@ -8131,16 +9648,15 @@ type CorePullquoteBlockDeprecatedV3Attributes {
   anchor: String
   backgroundColor: String
   borderColor: String
-  citation: String!
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
-  value: String
 }
 
 type CorePullquoteBlockDeprecatedV4Attributes {
@@ -8148,16 +9664,15 @@ type CorePullquoteBlockDeprecatedV4Attributes {
   anchor: String
   backgroundColor: String
   borderColor: String
-  citation: String!
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
-  value: String
 }
 
 type CorePullquoteBlockDeprecatedV5Attributes {
@@ -8165,16 +9680,15 @@ type CorePullquoteBlockDeprecatedV5Attributes {
   anchor: String
   backgroundColor: String
   borderColor: String
-  citation: String!
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
-  value: String
 }
 
 type CorePullquoteBlockDeprecatedV6Attributes {
@@ -8182,16 +9696,15 @@ type CorePullquoteBlockDeprecatedV6Attributes {
   anchor: String
   backgroundColor: String
   borderColor: String
-  citation: String!
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
-  value: String
 }
 
 """core/query block"""
@@ -8220,75 +9733,108 @@ type CoreQueryBlock implements Block {
 
 type CoreQueryBlockAttributes {
   align: String
+  anchor: String
   className: String
   enhancedPagination: Boolean!
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   namespace: String
   query: BlockAttributesObject!
   queryId: Float
+  style: BlockAttributesObject
   tagName: String!
 }
 
-union CoreQueryBlockAttributesUnion = CoreQueryBlockAttributes | CoreQueryBlockDeprecatedV1Attributes | CoreQueryBlockDeprecatedV2Attributes | CoreQueryBlockDeprecatedV3Attributes | CoreQueryBlockDeprecatedV4Attributes | CoreQueryBlockDeprecatedV5Attributes
+union CoreQueryBlockAttributesUnion = CoreQueryBlockAttributes | CoreQueryBlockDeprecatedV1Attributes | CoreQueryBlockDeprecatedV2Attributes | CoreQueryBlockDeprecatedV3Attributes | CoreQueryBlockDeprecatedV4Attributes | CoreQueryBlockDeprecatedV5Attributes | CoreQueryBlockDeprecatedV6Attributes
 
 type CoreQueryBlockDeprecatedV1Attributes {
   align: String
+  anchor: String
   className: String
   enhancedPagination: Boolean!
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   namespace: String
   query: BlockAttributesObject!
   queryId: Float
+  style: BlockAttributesObject
   tagName: String!
 }
 
 type CoreQueryBlockDeprecatedV2Attributes {
   align: String
+  anchor: String
   className: String
   enhancedPagination: Boolean!
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   namespace: String
   query: BlockAttributesObject!
   queryId: Float
+  style: BlockAttributesObject
   tagName: String!
 }
 
 type CoreQueryBlockDeprecatedV3Attributes {
   align: String
+  anchor: String
   className: String
   enhancedPagination: Boolean!
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   namespace: String
   query: BlockAttributesObject!
   queryId: Float
+  style: BlockAttributesObject
   tagName: String!
 }
 
 type CoreQueryBlockDeprecatedV4Attributes {
   align: String
+  anchor: String
   className: String
   enhancedPagination: Boolean!
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   namespace: String
   query: BlockAttributesObject!
   queryId: Float
+  style: BlockAttributesObject
   tagName: String!
 }
 
 type CoreQueryBlockDeprecatedV5Attributes {
   align: String
+  anchor: String
   className: String
   enhancedPagination: Boolean!
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   namespace: String
   query: BlockAttributesObject!
   queryId: Float
+  style: BlockAttributesObject
+  tagName: String!
+}
+
+type CoreQueryBlockDeprecatedV6Attributes {
+  align: String
+  anchor: String
+  className: String
+  enhancedPagination: Boolean!
+  layout: BlockAttributesObject
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  namespace: String
+  query: BlockAttributesObject!
+  queryId: Float
+  style: BlockAttributesObject
   tagName: String!
 }
 
@@ -8318,12 +9864,14 @@ type CoreQueryNoResultsBlock implements Block {
 
 type CoreQueryNoResultsBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -8354,6 +9902,7 @@ type CoreQueryPaginationBlock implements Block {
 
 type CoreQueryPaginationBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
@@ -8361,6 +9910,7 @@ type CoreQueryPaginationBlockAttributes {
   gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   paginationArrow: String!
   showLabel: Boolean!
   style: BlockAttributesObject
@@ -8371,6 +9921,7 @@ union CoreQueryPaginationBlockAttributesUnion = CoreQueryPaginationBlockAttribut
 
 type CoreQueryPaginationBlockDeprecatedV1Attributes {
   align: String
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
@@ -8378,6 +9929,7 @@ type CoreQueryPaginationBlockDeprecatedV1Attributes {
   gradient: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   paginationArrow: String!
   showLabel: Boolean!
   style: BlockAttributesObject
@@ -8409,6 +9961,7 @@ type CoreQueryPaginationNextBlock implements Block {
 }
 
 type CoreQueryPaginationNextBlockAttributes {
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
@@ -8416,6 +9969,7 @@ type CoreQueryPaginationNextBlockAttributes {
   gradient: String
   label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -8445,12 +9999,14 @@ type CoreQueryPaginationNumbersBlock implements Block {
 }
 
 type CoreQueryPaginationNumbersBlockAttributes {
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   midSize: Float!
   style: BlockAttributesObject
   textColor: String
@@ -8481,6 +10037,7 @@ type CoreQueryPaginationPreviousBlock implements Block {
 }
 
 type CoreQueryPaginationPreviousBlockAttributes {
+  anchor: String
   backgroundColor: String
   className: String
   fontFamily: String
@@ -8488,6 +10045,7 @@ type CoreQueryPaginationPreviousBlockAttributes {
   gradient: String
   label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -8518,13 +10076,17 @@ type CoreQueryTitleBlock implements Block {
 
 type CoreQueryTitleBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   level: Float!
+  levelOptions: BlockAttributesArray
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   showPrefix: Boolean!
   showSearchTerm: Boolean!
   style: BlockAttributesObject
@@ -8537,19 +10099,63 @@ union CoreQueryTitleBlockAttributesUnion = CoreQueryTitleBlockAttributes | CoreQ
 
 type CoreQueryTitleBlockDeprecatedV1Attributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   level: Float!
+  levelOptions: BlockAttributesArray
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   showPrefix: Boolean!
   showSearchTerm: Boolean!
   style: BlockAttributesObject
   textAlign: String
   textColor: String
   type: String
+}
+
+"""core/query-total block"""
+type CoreQueryTotalBlock implements Block {
+  attributes: CoreQueryTotalBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreQueryTotalBlockAttributes {
+  align: String
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  displayType: String!
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
 }
 
 """core/quote block"""
@@ -8578,77 +10184,116 @@ type CoreQuoteBlock implements Block {
 
 type CoreQuoteBlockAttributes {
   align: String
+  allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
-  citation: String!
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
+  layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
+  textAlign: String
   textColor: String
   value: String!
 }
 
-union CoreQuoteBlockAttributesUnion = CoreQuoteBlockAttributes | CoreQuoteBlockDeprecatedV1Attributes | CoreQuoteBlockDeprecatedV2Attributes | CoreQuoteBlockDeprecatedV3Attributes | CoreQuoteBlockDeprecatedV4Attributes
+union CoreQuoteBlockAttributesUnion = CoreQuoteBlockAttributes | CoreQuoteBlockDeprecatedV1Attributes | CoreQuoteBlockDeprecatedV2Attributes | CoreQuoteBlockDeprecatedV3Attributes | CoreQuoteBlockDeprecatedV4Attributes | CoreQuoteBlockDeprecatedV5Attributes
 
 type CoreQuoteBlockDeprecatedV1Attributes {
   align: String
+  allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
-  citation: String!
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
+  layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
+  textAlign: String
   textColor: String
   value: String!
 }
 
 type CoreQuoteBlockDeprecatedV2Attributes {
   align: String
+  allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
-  citation: String!
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
+  layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
+  textAlign: String
   textColor: String
   value: String!
 }
 
 type CoreQuoteBlockDeprecatedV3Attributes {
   align: String
+  allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
-  citation: String!
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
+  layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
+  textAlign: String
   textColor: String
   value: String!
 }
 
 type CoreQuoteBlockDeprecatedV4Attributes {
   align: String
+  allowedBlocks: BlockAttributesArray
   anchor: String
   backgroundColor: String
-  citation: String!
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
+  layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
+  textAlign: String
+  textColor: String
+  value: String!
+}
+
+type CoreQuoteBlockDeprecatedV5Attributes {
+  align: String
+  allowedBlocks: BlockAttributesArray
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  layout: BlockAttributesObject
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textAlign: String
   textColor: String
   value: String!
 }
@@ -8678,6 +10323,7 @@ type CoreReadMoreBlock implements Block {
 }
 
 type CoreReadMoreBlockAttributes {
+  anchor: String
   backgroundColor: String
   borderColor: String
   className: String
@@ -8687,6 +10333,7 @@ type CoreReadMoreBlockAttributes {
   gradient: String
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -8717,7 +10364,10 @@ type CoreRssBlock implements Block {
 
 type CoreRssBlockAttributes {
   align: String
+  anchor: String
+  backgroundColor: String
   blockLayout: String!
+  borderColor: String
   className: String
   columns: Float!
   displayAuthor: Boolean!
@@ -8725,8 +10375,14 @@ type CoreRssBlockAttributes {
   displayExcerpt: Boolean!
   excerptLength: Float!
   feedURL: String!
+  gradient: String
   itemsToShow: Float!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  openInNewTab: Boolean!
+  rel: String
+  style: BlockAttributesObject
+  textColor: String
 }
 
 """core/search block"""
@@ -8755,9 +10411,9 @@ type CoreSearchBlock implements Block {
 
 type CoreSearchBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
   borderColor: String
-  buttonBehavior: String!
   buttonPosition: String!
   buttonText: String
   buttonUseIcon: Boolean!
@@ -8768,6 +10424,7 @@ type CoreSearchBlockAttributes {
   isSearchFieldHidden: Boolean!
   label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   placeholder: String!
   query: BlockAttributesObject!
   showLabel: Boolean!
@@ -8808,8 +10465,10 @@ type CoreSeparatorBlockAttributes {
   className: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   opacity: String!
   style: BlockAttributesObject
+  tagName: String!
   textColor: String
 }
 
@@ -8822,8 +10481,10 @@ type CoreSeparatorBlockDeprecatedV1Attributes {
   className: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   opacity: String!
   style: BlockAttributesObject
+  tagName: String!
   textColor: String
 }
 
@@ -8853,6 +10514,7 @@ type CoreShortcodeBlock implements Block {
 
 type CoreShortcodeBlockAttributes {
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   text: String
 }
 
@@ -8882,10 +10544,12 @@ type CoreSiteLogoBlock implements Block {
 
 type CoreSiteLogoBlockAttributes {
   align: String
+  anchor: String
   className: String
   isLink: Boolean!
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   shouldSyncIcon: Boolean
   style: BlockAttributesObject
   width: Float
@@ -8917,12 +10581,17 @@ type CoreSiteTaglineBlock implements Block {
 
 type CoreSiteTaglineBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
+  level: Float!
+  levelOptions: BlockAttributesArray!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
@@ -8932,12 +10601,17 @@ union CoreSiteTaglineBlockAttributesUnion = CoreSiteTaglineBlockAttributes | Cor
 
 type CoreSiteTaglineBlockDeprecatedV1Attributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
+  level: Float!
+  levelOptions: BlockAttributesArray!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
@@ -8969,15 +10643,19 @@ type CoreSiteTitleBlock implements Block {
 
 type CoreSiteTitleBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   isLink: Boolean!
   level: Float!
+  levelOptions: BlockAttributesArray!
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
@@ -8987,15 +10665,19 @@ union CoreSiteTitleBlockAttributesUnion = CoreSiteTitleBlockAttributes | CoreSit
 
 type CoreSiteTitleBlockDeprecatedV1Attributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   gradient: String
   isLink: Boolean!
   level: Float!
+  levelOptions: BlockAttributesArray!
   linkTarget: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
@@ -9026,11 +10708,14 @@ type CoreSocialLinkBlock implements Block {
 }
 
 type CoreSocialLinkBlockAttributes {
+  anchor: String
   className: String
   label: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   rel: String
   service: String
+  style: BlockAttributesObject
   url: String
 }
 
@@ -9062,6 +10747,7 @@ type CoreSocialLinksBlockAttributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   customIconBackgroundColor: String
   customIconColor: String
@@ -9072,6 +10758,7 @@ type CoreSocialLinksBlockAttributes {
   iconColorValue: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   openInNewTab: Boolean!
   showLabels: Boolean!
   size: String
@@ -9085,6 +10772,7 @@ type CoreSocialLinksBlockDeprecatedV1Attributes {
   align: String
   anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   customIconBackgroundColor: String
   customIconColor: String
@@ -9095,6 +10783,7 @@ type CoreSocialLinksBlockDeprecatedV1Attributes {
   iconColorValue: String
   layout: BlockAttributesObject
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   openInNewTab: Boolean!
   showLabels: Boolean!
   size: String
@@ -9131,6 +10820,7 @@ type CoreSpacerBlockAttributes {
   className: String
   height: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   width: String
 }
@@ -9142,6 +10832,7 @@ type CoreSpacerBlockDeprecatedV1Attributes {
   className: String
   height: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   width: String
 }
@@ -9176,7 +10867,6 @@ type CoreTableBlockAttributes {
   backgroundColor: String
   body: [CoreTableBlockAttributesBody]!
   borderColor: String
-  caption: String!
   className: String
   fontFamily: String
   fontSize: String
@@ -9185,6 +10875,7 @@ type CoreTableBlockAttributes {
   hasFixedLayout: Boolean!
   head: [CoreTableBlockAttributesHead]!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -9196,7 +10887,6 @@ type CoreTableBlockAttributesBody {
 type CoreTableBlockAttributesBodyCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
@@ -9209,7 +10899,6 @@ type CoreTableBlockAttributesFoot {
 type CoreTableBlockAttributesFootCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
@@ -9222,13 +10911,12 @@ type CoreTableBlockAttributesHead {
 type CoreTableBlockAttributesHeadCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
 }
 
-union CoreTableBlockAttributesUnion = CoreTableBlockAttributes | CoreTableBlockDeprecatedV1Attributes | CoreTableBlockDeprecatedV2Attributes | CoreTableBlockDeprecatedV3Attributes
+union CoreTableBlockAttributesUnion = CoreTableBlockAttributes | CoreTableBlockDeprecatedV1Attributes | CoreTableBlockDeprecatedV2Attributes | CoreTableBlockDeprecatedV3Attributes | CoreTableBlockDeprecatedV4Attributes
 
 type CoreTableBlockDeprecatedV1Attributes {
   align: String
@@ -9236,7 +10924,6 @@ type CoreTableBlockDeprecatedV1Attributes {
   backgroundColor: String
   body: [CoreTableBlockDeprecatedV1AttributesBody]!
   borderColor: String
-  caption: String!
   className: String
   fontFamily: String
   fontSize: String
@@ -9245,6 +10932,7 @@ type CoreTableBlockDeprecatedV1Attributes {
   hasFixedLayout: Boolean!
   head: [CoreTableBlockDeprecatedV1AttributesHead]!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -9256,7 +10944,6 @@ type CoreTableBlockDeprecatedV1AttributesBody {
 type CoreTableBlockDeprecatedV1AttributesBodyCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
@@ -9269,7 +10956,6 @@ type CoreTableBlockDeprecatedV1AttributesFoot {
 type CoreTableBlockDeprecatedV1AttributesFootCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
@@ -9282,7 +10968,6 @@ type CoreTableBlockDeprecatedV1AttributesHead {
 type CoreTableBlockDeprecatedV1AttributesHeadCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
@@ -9294,7 +10979,6 @@ type CoreTableBlockDeprecatedV2Attributes {
   backgroundColor: String
   body: [CoreTableBlockDeprecatedV2AttributesBody]!
   borderColor: String
-  caption: String!
   className: String
   fontFamily: String
   fontSize: String
@@ -9303,6 +10987,7 @@ type CoreTableBlockDeprecatedV2Attributes {
   hasFixedLayout: Boolean!
   head: [CoreTableBlockDeprecatedV2AttributesHead]!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -9314,7 +10999,6 @@ type CoreTableBlockDeprecatedV2AttributesBody {
 type CoreTableBlockDeprecatedV2AttributesBodyCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
@@ -9327,7 +11011,6 @@ type CoreTableBlockDeprecatedV2AttributesFoot {
 type CoreTableBlockDeprecatedV2AttributesFootCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
@@ -9340,7 +11023,6 @@ type CoreTableBlockDeprecatedV2AttributesHead {
 type CoreTableBlockDeprecatedV2AttributesHeadCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
@@ -9352,7 +11034,6 @@ type CoreTableBlockDeprecatedV3Attributes {
   backgroundColor: String
   body: [CoreTableBlockDeprecatedV3AttributesBody]!
   borderColor: String
-  caption: String!
   className: String
   fontFamily: String
   fontSize: String
@@ -9361,6 +11042,7 @@ type CoreTableBlockDeprecatedV3Attributes {
   hasFixedLayout: Boolean!
   head: [CoreTableBlockDeprecatedV3AttributesHead]!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textColor: String
 }
@@ -9372,7 +11054,6 @@ type CoreTableBlockDeprecatedV3AttributesBody {
 type CoreTableBlockDeprecatedV3AttributesBodyCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
@@ -9385,7 +11066,6 @@ type CoreTableBlockDeprecatedV3AttributesFoot {
 type CoreTableBlockDeprecatedV3AttributesFootCells {
   align: String
   colspan: String
-  content: String
   rowspan: String
   scope: String
   tag: String!
@@ -9398,7 +11078,61 @@ type CoreTableBlockDeprecatedV3AttributesHead {
 type CoreTableBlockDeprecatedV3AttributesHeadCells {
   align: String
   colspan: String
-  content: String
+  rowspan: String
+  scope: String
+  tag: String!
+}
+
+type CoreTableBlockDeprecatedV4Attributes {
+  align: String
+  anchor: String
+  backgroundColor: String
+  body: [CoreTableBlockDeprecatedV4AttributesBody]!
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  foot: [CoreTableBlockDeprecatedV4AttributesFoot]!
+  gradient: String
+  hasFixedLayout: Boolean!
+  head: [CoreTableBlockDeprecatedV4AttributesHead]!
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
+type CoreTableBlockDeprecatedV4AttributesBody {
+  cells: [CoreTableBlockDeprecatedV4AttributesBodyCells]!
+}
+
+type CoreTableBlockDeprecatedV4AttributesBodyCells {
+  align: String
+  colspan: String
+  rowspan: String
+  scope: String
+  tag: String!
+}
+
+type CoreTableBlockDeprecatedV4AttributesFoot {
+  cells: [CoreTableBlockDeprecatedV4AttributesFootCells]!
+}
+
+type CoreTableBlockDeprecatedV4AttributesFootCells {
+  align: String
+  colspan: String
+  rowspan: String
+  scope: String
+  tag: String!
+}
+
+type CoreTableBlockDeprecatedV4AttributesHead {
+  cells: [CoreTableBlockDeprecatedV4AttributesHeadCells]!
+}
+
+type CoreTableBlockDeprecatedV4AttributesHeadCells {
+  align: String
+  colspan: String
   rowspan: String
   scope: String
   tag: String!
@@ -9430,10 +11164,13 @@ type CoreTagCloudBlock implements Block {
 
 type CoreTagCloudBlockAttributes {
   align: String
+  anchor: String
+  borderColor: String
   className: String
   fontFamily: String
   largestFontSize: String!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   numberOfTags: Float!
   showTagCounts: Boolean!
   smallestFontSize: String!
@@ -9470,14 +11207,55 @@ type CoreTemplatePartBlockAttributes {
   area: String
   className: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   slug: String
+  style: BlockAttributesObject
   tagName: String
   theme: String
 }
 
+"""core/term-count block"""
+type CoreTermCountBlock implements Block {
+  attributes: CoreTermCountBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreTermCountBlockAttributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  bracketType: String!
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
 """core/term-description block"""
 type CoreTermDescriptionBlock implements Block {
-  attributes: CoreTermDescriptionBlockAttributes
+  attributes: CoreTermDescriptionBlockAttributesUnion
   """Block attributes, JSON encoded"""
   attributesJSON: String
   """Server side rendered content."""
@@ -9501,14 +11279,151 @@ type CoreTermDescriptionBlock implements Block {
 
 type CoreTermDescriptionBlockAttributes {
   align: String
+  anchor: String
   backgroundColor: String
+  borderColor: String
   className: String
   fontFamily: String
   fontSize: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
+union CoreTermDescriptionBlockAttributesUnion = CoreTermDescriptionBlockAttributes | CoreTermDescriptionBlockDeprecatedV1Attributes
+
+type CoreTermDescriptionBlockDeprecatedV1Attributes {
+  align: String
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
+"""core/term-name block"""
+type CoreTermNameBlock implements Block {
+  attributes: CoreTermNameBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreTermNameBlockAttributes {
+  align: String
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  isLink: Boolean!
+  level: Float!
+  levelOptions: BlockAttributesArray
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   textAlign: String
   textColor: String
+}
+
+"""core/term-template block"""
+type CoreTermTemplateBlock implements Block {
+  attributes: CoreTermTemplateBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreTermTemplateBlockAttributes {
+  align: String
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  layout: BlockAttributesObject
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  textColor: String
+}
+
+"""core/terms-query block"""
+type CoreTermsQueryBlock implements Block {
+  attributes: CoreTermsQueryBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type CoreTermsQueryBlockAttributes {
+  align: String
+  anchor: String
+  className: String
+  layout: BlockAttributesObject
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  tagName: String!
+  termQuery: BlockAttributesObject!
 }
 
 """core/text-columns block"""
@@ -9540,6 +11455,8 @@ type CoreTextColumnsBlockAttributes {
   columns: Float!
   content: [CoreTextColumnsBlockAttributesContent]!
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   width: String
 }
 
@@ -9576,30 +11493,28 @@ type CoreVerseBlockAttributes {
   backgroundColor: String
   borderColor: String
   className: String
-  content: String!
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
   textColor: String
 }
 
-union CoreVerseBlockAttributesUnion = CoreVerseBlockAttributes | CoreVerseBlockDeprecatedV1Attributes | CoreVerseBlockDeprecatedV2Attributes
+union CoreVerseBlockAttributesUnion = CoreVerseBlockAttributes | CoreVerseBlockDeprecatedV1Attributes | CoreVerseBlockDeprecatedV2Attributes | CoreVerseBlockDeprecatedV3Attributes
 
 type CoreVerseBlockDeprecatedV1Attributes {
   anchor: String
   backgroundColor: String
   borderColor: String
   className: String
-  content: String!
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
   textColor: String
 }
 
@@ -9608,13 +11523,26 @@ type CoreVerseBlockDeprecatedV2Attributes {
   backgroundColor: String
   borderColor: String
   className: String
-  content: String!
   fontFamily: String
   fontSize: String
   gradient: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
-  textAlign: String
+  textColor: String
+}
+
+type CoreVerseBlockDeprecatedV3Attributes {
+  anchor: String
+  backgroundColor: String
+  borderColor: String
+  className: String
+  fontFamily: String
+  fontSize: String
+  gradient: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   textColor: String
 }
 
@@ -9646,12 +11574,13 @@ type CoreVideoBlockAttributes {
   align: String
   anchor: String
   autoplay: Boolean
-  caption: String
+  blob: String
   className: String
   controls: Boolean!
   id: Float
   lock: BlockAttributesObject
   loop: Boolean
+  metadata: BlockAttributesObject
   muted: Boolean
   playsInline: Boolean
   poster: String
@@ -9667,12 +11596,13 @@ type CoreVideoBlockDeprecatedV1Attributes {
   align: String
   anchor: String
   autoplay: Boolean
-  caption: String
+  blob: String
   className: String
   controls: Boolean!
   id: Float
   lock: BlockAttributesObject
   loop: Boolean
+  metadata: BlockAttributesObject
   muted: Boolean
   playsInline: Boolean
   poster: String
@@ -9709,6 +11639,8 @@ type CoreWidgetGroupBlock implements Block {
 type CoreWidgetGroupBlockAttributes {
   className: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   title: String
 }
 
@@ -9717,6 +11649,8 @@ union CoreWidgetGroupBlockAttributesUnion = CoreWidgetGroupBlockAttributes | Cor
 type CoreWidgetGroupBlockDeprecatedV1Attributes {
   className: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
   title: String
 }
 
@@ -10222,8 +12156,14 @@ interface DatabaseIdentifier {
 input DateInput {
   """Day of the month (from 1 to 31)"""
   day: Int
+  """Hour of the day (from 0 to 23)"""
+  hour: Int
+  """Minute of the hour (from 0 to 59)"""
+  minute: Int
   """Month number (from 1 to 12)"""
   month: Int
+  """Second of the minute (from 0 to 59)"""
+  second: Int
   """4 digit year (e.g. 2017)"""
   year: Int
 }
@@ -15801,7 +17741,8 @@ type RootMutation {
 }
 
 """The root entry point into the Graph"""
-type RootQuery implements WithAcfOptionsPageCompanyInformations & WithAcfOptionsPageThemeGeneralSettings {
+type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompanyInformations & WithAcfOptionsPageThemeGeneralSettings {
+  affliate: Affliate
   """Entry point to get all settings for the site"""
   allSettings: Settings
   """An object of the berlinerWord Type. Berlinerische Wörter"""
@@ -18556,6 +20497,7 @@ type SafeSvgSvgIconBlockAttributes {
   imageSizes: BlockAttributesObject
   imageWidth: Float
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   style: BlockAttributesObject
   svgURL: String!
   textColor: String
@@ -21436,11 +23378,24 @@ interface WPPageInfo implements PageInfo {
 }
 
 """
+Provides access to fields of the &quot;AffliateLinksFields&quot; ACF Field Group via the &quot;affliateLinksFields&quot; field
+"""
+interface WithAcfAffliateLinksFields {
+  """Fields of the AffliateLinksFields ACF Field Group"""
+  affliateLinksFields: AffliateLinksFields
+}
+
+"""
 Provides access to fields of the &quot;GithubRawData&quot; ACF Field Group via the &quot;githubRawData&quot; field
 """
 interface WithAcfGithubRawData {
   """Fields of the GithubRawData ACF Field Group"""
   githubRawData: GithubRawData
+}
+
+"""Access point for the &quot;Affliate&quot; ACF Options Page"""
+interface WithAcfOptionsPageAffliate {
+  affliate: Affliate
 }
 
 """Access point for the &quot;CompanyInformations&quot; ACF Options Page"""
@@ -21871,16 +23826,29 @@ type YoastFaqBlockAttributes {
   additionalListCssClasses: String
   className: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   questions: BlockAttributesArray
+  style: BlockAttributesObject
 }
 
-union YoastFaqBlockAttributesUnion = YoastFaqBlockAttributes | YoastFaqBlockDeprecatedV1Attributes
+union YoastFaqBlockAttributesUnion = YoastFaqBlockAttributes | YoastFaqBlockDeprecatedV1Attributes | YoastFaqBlockDeprecatedV2Attributes
 
 type YoastFaqBlockDeprecatedV1Attributes {
   additionalListCssClasses: String
   className: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   questions: BlockAttributesArray
+  style: BlockAttributesObject
+}
+
+type YoastFaqBlockDeprecatedV2Attributes {
+  additionalListCssClasses: String
+  className: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  questions: BlockAttributesArray
+  style: BlockAttributesObject
 }
 
 """yoast/how-to-block block"""
@@ -21918,12 +23886,14 @@ type YoastHowToBlockAttributes {
   hours: String
   jsonDescription: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minutes: String
   steps: BlockAttributesArray
+  style: BlockAttributesObject
   unorderedList: Boolean
 }
 
-union YoastHowToBlockAttributesUnion = YoastHowToBlockAttributes | YoastHowToBlockDeprecatedV1Attributes | YoastHowToBlockDeprecatedV2Attributes
+union YoastHowToBlockAttributesUnion = YoastHowToBlockAttributes | YoastHowToBlockDeprecatedV1Attributes | YoastHowToBlockDeprecatedV2Attributes | YoastHowToBlockDeprecatedV3Attributes
 
 type YoastHowToBlockDeprecatedV1Attributes {
   additionalListCssClasses: String
@@ -21936,8 +23906,10 @@ type YoastHowToBlockDeprecatedV1Attributes {
   hours: String
   jsonDescription: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minutes: String
   steps: BlockAttributesArray
+  style: BlockAttributesObject
   unorderedList: Boolean
 }
 
@@ -21952,8 +23924,28 @@ type YoastHowToBlockDeprecatedV2Attributes {
   hours: String
   jsonDescription: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
   minutes: String
   steps: BlockAttributesArray
+  style: BlockAttributesObject
+  unorderedList: Boolean
+}
+
+type YoastHowToBlockDeprecatedV3Attributes {
+  additionalListCssClasses: String
+  className: String
+  days: String
+  defaultDurationText: String
+  description: String
+  durationText: String
+  hasDuration: Boolean
+  hours: String
+  jsonDescription: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  minutes: String
+  steps: BlockAttributesArray
+  style: BlockAttributesObject
   unorderedList: Boolean
 }
 
@@ -21984,4 +23976,39 @@ type YoastSeoBreadcrumbsBlock implements Block {
 type YoastSeoBreadcrumbsBlockAttributes {
   className: String
   lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+}
+
+"""yoast-seo/content-suggestion block"""
+type YoastSeoContentSuggestionBlock implements Block {
+  attributes: YoastSeoContentSuggestionBlockAttributes
+  """Block attributes, JSON encoded"""
+  attributesJSON: String
+  """Server side rendered content."""
+  dynamicContent: String
+  """Gutenberg blocks"""
+  innerBlocks: [Block!]
+  """Is block rendered server side."""
+  isDynamic: Boolean!
+  """Name of the block."""
+  name: String!
+  order: Int!
+  """Original HTML content."""
+  originalContent: String
+  """Parent post."""
+  parentNode: Node!
+  """Parent post id."""
+  parentNodeDatabaseId: Int!
+  """Original HTML content with inner blocks."""
+  saveContent: String
+}
+
+type YoastSeoContentSuggestionBlockAttributes {
+  className: String
+  lock: BlockAttributesObject
+  metadata: BlockAttributesObject
+  style: BlockAttributesObject
+  suggestions: [String]!
+  title: String!
 }

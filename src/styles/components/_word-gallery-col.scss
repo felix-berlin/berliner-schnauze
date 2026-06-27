@@ -1,0 +1,59 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-word-gallery-col {
+  container-type: inline-size;
+  container-name: word-gallery-col;
+  grid-area: gallery;
+  position: sticky;
+  top: calc(var(--topbar-height, 52px) + vars.$spacer);
+
+  &__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: color-mix(in srgb, var(--blue) 70%, white);
+    padding-block-end: 0.5rem;
+    border-block-end: 1px dashed var(--orange-200);
+    margin-block-end: vars.$spacer * 0.75;
+    margin-block-start: 1.75rem;
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
+    }
+  }
+
+  .c-image-gallery {
+    display: grid;
+    gap: vars.$spacer * 1.5;
+
+    @container word-gallery-col (inline-size >= 19rem) {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .c-image-gallery__item {
+      margin: 0;
+      padding: var(--spacing-inner, 10px);
+      background: #fff;
+      width: fit-content;
+      box-shadow: 0 3px 3px
+        color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent);
+      height: fit-content;
+
+      @include butler-mx.dark-mode-class {
+        --color-border: var(--new-blue-200);
+      }
+    }
+
+    .c-image-gallery__link {
+      cursor: zoom-in;
+    }
+
+    .c-image-gallery__caption {
+      color: var(--blue-400);
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
+  }
+}

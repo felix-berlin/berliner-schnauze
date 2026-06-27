@@ -114,4 +114,95 @@ describe("ToastPositionGroup.vue", () => {
     await wrapper.setProps({ toasts: [toast("b")] });
     expect(mockShowPopover).toHaveBeenCalledOnce();
   });
+
+  it("catches and logs error when showPopover throws", async () => {
+    const { nextTick } = await import("vue");
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mockShowPopover.mockImplementationOnce(() => { throw new Error("popover error"); });
+    mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [toast("a")] },
+    });
+    await nextTick();
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
+
+  it("watcher skips open() when isSupported is false (covers line 59 early return)", async () => {
+    vi.mocked(supportsPopover).mockReturnValueOnce(false);
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [] },
+    });
+    await wrapper.setProps({ toasts: [toast("a")] });
+    expect(mockShowPopover).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
+
+  it("onBeforeLeave uses {left:0,top:0} fallback when container is null (covers line 69 ?? fallback)", () => {
+    vi.mocked(supportsPopover).mockReturnValueOnce(false);
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [] },
+    });
+    const el = document.createElement("div");
+    vi.spyOn(el, "getBoundingClientRect").mockReturnValue(
+      { top: 100, left: 50, width: 200, bottom: 0, right: 0, height: 0, toJSON: () => ({}) } as DOMRect,
+    );
+    const setupState = (wrapper.getCurrentComponent() as any).setupState;
+    setupState.onBeforeLeave(el);
+    // container is null → fallback {left:0, top:0} → top=100-0=100, left=50-0=50
+    expect(el.style.top).toBe("100px");
+    expect(el.style.left).toBe("50px");
+    wrapper.unmount();
+  });
+
+  it("catches and logs error when hidePopover throws during onAfterLeave", async () => {
+    const { nextTick } = await import("vue");
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    mockHidePopover.mockImplementationOnce(() => { throw new Error("popover error"); });
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [toast("a")] },
+    });
+    await nextTick();
+    await wrapper.setProps({ toasts: [] });
+    await (wrapper.vm as any).onAfterLeave();
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
+
+  it("open() returns early when already open (covers line 40 isOpen.value branch)", async () => {
+    const { nextTick } = await import("vue");
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [toast("a")] },
+    });
+    await nextTick(); // onMounted fires open() → isOpen becomes true
+    mockShowPopover.mockClear();
+    // Call open() again directly — should hit isOpen.value === true early return
+    (wrapper.getCurrentComponent() as any).setupState.open();
+    expect(mockShowPopover).not.toHaveBeenCalled();
+  });
+
+  it("open() returns early when container ref is null (covers line 40 !container.value branch)", () => {
+    vi.mocked(supportsPopover).mockReturnValueOnce(false); // v-if=false → no div → container stays null
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [] },
+    });
+    // Call open() directly — isOpen=false but container=null → early return
+    (wrapper.getCurrentComponent() as any).setupState.open();
+    expect(mockShowPopover).not.toHaveBeenCalled();
+  });
+
+  it("onBeforeLeave sets inline styles on the leaving element", async () => {
+    const wrapper = mount(ToastPositionGroup, {
+      props: { position: "top-right", toasts: [toast("a")] },
+      attachTo: document.body,
+    });
+    const el = document.createElement("div");
+    vi.spyOn(el, "getBoundingClientRect").mockReturnValue(
+      { top: 100, left: 50, width: 200, bottom: 0, right: 0, height: 0, toJSON: () => ({}) } as DOMRect,
+    );
+    // Access unexposed onBeforeLeave from setup state
+    const setupState = (wrapper.getCurrentComponent() as any).setupState;
+    setupState.onBeforeLeave(el);
+    expect(el.style.width).toBe("200px");
+    wrapper.unmount();
+  });
 });

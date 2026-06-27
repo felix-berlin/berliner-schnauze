@@ -32,7 +32,7 @@ import SingleWord from "@components/word/SingleWord.vue";
 import { useStore } from "@nanostores/vue";
 import { $oramaSearchResults } from "@stores/wordList.ts";
 import { routeToWord } from "@utils/helpers.ts";
-import { onKeyStroke } from "@vueuse/core";
+import { onKeyStroke, useTimeoutFn } from "@vueuse/core";
 import { VList, WindowVirtualizer } from "virtua/vue";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
@@ -66,15 +66,15 @@ const activeIndex = ref(0);
 const resultRefs = ref<HTMLElement[]>([]);
 const virtualizerRef = useTemplateRef("virtualizer");
 const showActive = ref(false);
-let hideActiveTimeout: null | ReturnType<typeof setTimeout> = null;
 const ACTIVE_TIMEOUT = 3500; // ms
+
+const { start: startHideActiveTimer } = useTimeoutFn(() => {
+  showActive.value = false;
+}, ACTIVE_TIMEOUT, { immediate: false });
 
 const showActiveWithTimeout = () => {
   showActive.value = true;
-  if (hideActiveTimeout) clearTimeout(hideActiveTimeout);
-  hideActiveTimeout = setTimeout(() => {
-    showActive.value = false;
-  }, ACTIVE_TIMEOUT);
+  startHideActiveTimer();
 };
 
 // Clear refs when result data changes, not on every render side effect.

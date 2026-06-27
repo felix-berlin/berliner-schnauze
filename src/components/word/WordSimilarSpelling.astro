@@ -1,0 +1,33 @@
+---
+import '@styles/components/_word-related-words.scss';
+import { routeToWord } from "@utils/helpers";
+import type { WordRef } from "@utils/wordHelper";
+
+interface Props {
+  similar: WordRef[];
+}
+
+const { similar } = Astro.props;
+---
+
+{
+  similar.length > 0 && (
+    <div
+      data-track-content
+      data-content-name="Similar Spelling"
+      data-content-piece={similar[0]?.wordProperties?.berlinerisch ?? ''}
+      data-content-target="#"
+    >
+      <h3>Ähnlich geschrieben</h3>
+      <ul class="c-single-word__related-words-list">
+        {similar.map((w) => (
+          <li>
+            <a class="c-single-word__related-word-link" href={routeToWord(w.slug ?? undefined)}>
+              {w.wordProperties?.berlinerisch}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}

@@ -1,30 +1,43 @@
 <template>
-  <VMenu
-    placement="bottom-end"
-    :distance="13"
-    strategy="fixed"
-    container=".c-menu-nav"
-    class="c-menu-nav__item c-menu-more"
-    :triggers="['click', 'hover']"
+  <div
+    ref="root"
+    data-track-content
+    data-content-name="Main Menu"
+    data-content-piece="Navigation"
+    data-content-target="#"
   >
-    <MainMenuButton />
+    <DropdownPopover
+      placement="bottom-end"
+      :offset="13"
+      class="c-menu-nav__item c-menu-more c-dropdown--theme-dropdown"
+    >
+      <template #default="{ triggerProps }">
+        <MainMenuButton v-bind="triggerProps" />
+      </template>
 
-    <template #popper>
-      <NavList
-        :items="menuItems"
-        classes-ul="c-menu-more__list u-list-reset"
-        classes-li="c-menu-more__item"
-      />
-    </template>
-  </VMenu>
+      <template #panel>
+        <NavList
+          :items="menuItems"
+          classes-ul="c-menu-more__list u-list-reset"
+          classes-li="c-menu-more__item"
+        />
+      </template>
+    </DropdownPopover>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { DefineComponent } from "vue";
 
+import DropdownPopover from "@components/DropdownPopover.vue";
 import InstallApp from "@components/InstallApp.vue";
 import MainMenuButton from "@components/MainMenuButton.vue";
 import NavList from "@components/NavList.vue";
+import { useContentTracking } from "@composables/useContentTracking";
+import { ref } from "vue";
+
+const root = ref<HTMLElement | null>(null);
+useContentTracking(root);
 
 // const randomWord = () => {
 //   // TODO: Implement random word
@@ -40,10 +53,13 @@ const menuItems: (ItemObject | { component: DefineComponent; props: object })[] 
     component: InstallApp as DefineComponent,
     props: {
       tooltipProps: {
-        container: ".c-menu-nav",
         placement: "left",
       },
     },
+  },
+  {
+    link: "/games/berliner-oder-nicht",
+    title: "Spiel - Berliner oder nicht?",
   },
   {
     link: "/wort-vorschlagen",
@@ -59,5 +75,3 @@ const menuItems: (ItemObject | { component: DefineComponent; props: object })[] 
   },
 ];
 </script>
-
-<style scoped></style>

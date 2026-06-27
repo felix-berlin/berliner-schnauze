@@ -2,6 +2,4 @@
 @use "utilities";
 @use "layouts";
 @use "components";
-
-// Plugins
-@use "plugins/floating-vue";
+@use "components/tooltip";

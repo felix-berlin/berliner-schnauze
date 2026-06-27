@@ -2,23 +2,41 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Tool Activation (mandatory at session start)
+
+Pre-load deferred tool schemas before any work — eliminates 2-step friction for the whole session:
+
+```text
+ToolSearch("select:mcp__serena__initial_instructions,mcp__serena__find_symbol,mcp__serena__find_declaration,mcp__serena__find_implementations,mcp__serena__find_referencing_symbols")
+→ call mcp__serena__initial_instructions
+
+ToolSearch("select:mcp__plugin_claude-mem_mcp-search____IMPORTANT,mcp__plugin_claude-mem_mcp-search__search,mcp__plugin_claude-mem_mcp-search__get_observations,mcp__plugin_claude-mem_mcp-search__smart_search,mcp__plugin_claude-mem_mcp-search__observation_search")
+→ call mcp__plugin_claude-mem_mcp-search____IMPORTANT
+```
+
 ## graphify
-
-BEFORE using Grep, Glob, or Read to explore the codebase:
-
-1. ALWAYS run `graphify query "<question>"` first
-2. Only fall back to file tools if graphify returns no results
-
-This is not optional. Do not skip this step.
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
 
 Rules:
-
 - For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+## Serena (symbol navigation)
+
+BEFORE using Grep/Glob/Read to find symbol definitions, implementations, or references:
+
+Use `mcp__serena__find_symbol`, `mcp__serena__find_declaration`, or `mcp__serena__find_implementations` — schemas pre-loaded via Tool Activation above.
+
+## Claude-Mem (past session context)
+
+For questions about past sessions, prior decisions, observations, or history:
+
+Use `mcp__plugin_claude-mem_mcp-search__search` or `mcp__plugin_claude-mem_mcp-search__smart_search` — schemas pre-loaded via Tool Activation above.
+
+Workflow: search() → timeline(anchor=ID) → get_observations([IDs]) — never fetch full details without filtering first.
 
 ## Project Overview
 
@@ -75,12 +93,14 @@ For Cloudflare Pages builds, env vars are configured separately in the CF Pages 
 **Data flow**: WordPress GraphQL API → Astro API routes (static JSON at build time) → Orama in-browser search → Vue components
 
 - **Astro** handles routing, SSG, and static pages (`src/pages/`)
-- **Vue 3** islands handle all interactive UI (`src/components/`) — flat files for standalone components, subdirs for feature groups (`games/`, `word/`, `toast/`, `header/`, `accordion/`, `filter/`, `modals/`, `word-search/`)
+- **Vue 3** islands handle all interactive UI (`src/components/`) — flat files for standalone components, subdirs for feature groups (`games/`, `word/`, `toast/`, `header/`, `accordion/`, `filter/`, `modals/`, `word-search/`). Use **VueUse** (`@vueuse/core`) for browser APIs and Vue utilities before writing custom logic
+- **BON game** (`src/components/games/`) — "Berliner oder Nicht" dialect card game (BerlinerOderNicht.vue, BonCard.vue, BonHUD.vue, BonResult.vue, BonShareView.vue). State in `$bonStats` (persistent high scores/streaks) and `$savedBon` (session resume snapshot). Sharing via URL query params (`src/utils/bonShare.ts`)
 - **Nanostores** manage client state (`src/stores/`) — import directly from individual store files (e.g. `@stores/darkMode.ts`, `@stores/modal.ts`). Do NOT import from `@stores/index` barrel unless the component specifically needs `wordList.ts` exports — the barrel's `computedAsync` side effect triggers `api/search/index.json` on every chunk that imports it.
 - **urql** handles GraphQL queries/mutations from Vue components
 - **Orama** provides full-text search with German stemming — index built at build time in `src/pages/api/search/index.json.ts`
 - **Composables** in `src/composable/` — Vue composables wrapping browser APIs (Cache Storage, Service Worker)
-- **Global Vue app setup** in `src/pages/_app.ts` — configures urql client, registers `vTooltip` directive globally (from FloatingVue), and Nanostores devtools
+- **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. `<script>` tags in `.astro` files run **only once** on initial load — re-initialize them with `document.addEventListener('astro:page-load', fn)` for subsequent client-side navigations.
+- **Global Vue app setup** in `src/pages/_app.ts` — configures urql client, registers `vTooltip` directive globally, and Nanostores devtools
 
 ## Import Aliases
 
@@ -101,9 +121,23 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 ## Key Conventions
 
-**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordList`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS. For async computed stores, use `computedAsync` from `@nanostores/async` (see `$oramaSearchResults` in `src/stores/wordList.ts`). Avoid deprecated `computed() + task()` pattern. Key stores: `darkMode.ts`, `modal.ts`, `wordList.ts`, `toastNotify.ts`, `installApp.ts`, `wordOfTheDay.ts`, `bonStats.ts` (persistent game high scores/streaks), `savedBon.ts` (session resume snapshot), `notificationPermission.ts`, `pushSubscription.ts`.
+**Nanostores**: All store exports use `$` prefix (`$isDarkMode`, `$wordList`). Use `useStore()` from `@nanostores/vue` in Vue components; use `.get()/.set()` for direct access in Astro/TS. For async computed stores, use `computedAsync` from `@nanostores/async` (see `$oramaSearchResults` in `src/stores/wordList.ts`). Avoid deprecated `computed() + task()` pattern. Key stores: `darkMode.ts`, `modal.ts`, `wordList.ts`, `toastNotify.ts`, `installApp.ts`, `wordOfTheDay.ts`, `bonStats.ts` (persistent game stats), `savedBon.ts` (session resume snapshot), `notificationPermission.ts`, `pushSubscription.ts`.
 
-**Vue components**: Composition API only — `<script setup lang="ts">`. Block order: `<template>`, `<script>`, `<style>`. CSS classes use BEM with `c-` prefix (e.g. `c-my-component__element`). Styles are NOT scoped — BEMIT class naming provides isolation instead. Use `<style lang="scss">` without `scoped`. Each component owns its SCSS file at `src/styles/components/_name.scss` and loads it via `@use "@styles/components/name"` inside its own `<style>` block — not globally.
+**Vue components**: Composition API only — `<script setup lang="ts">`. Block order: `<template>`, `<script>`, `<style>`. Styles are NOT scoped — BEMIT class naming provides isolation instead. Use `<style lang="scss">` without `scoped`. Each component owns its SCSS file at `src/styles/components/_name.scss` and loads it via `@use "@styles/components/name"` inside its own `<style>` block — not globally.
+
+**CSS / BEMIT naming**: This project uses [BEMIT](https://gist.github.com/stephenway/a6145d9b4430e8c55a77) — BEM enhanced with namespaces:
+
+| Prefix          | Purpose                     | Example                          |
+| --------------- | --------------------------- | -------------------------------- |
+| `.c-`           | Components (reusable UI)    | `.c-word-card__title--active`    |
+| `.o-`           | Objects (structural)        | `.o-grid__item`                  |
+| `.u-`           | Utilities (single-purpose)  | `.u-hidden`                      |
+| `.is-` / `.has-`| State                       | `.is-active`, `.has-dropdown`    |
+| `.js-`          | JS hooks (no styling)       | `.js-scroll-target`              |
+
+Pattern: `.c-block__element--modifier`. Hyphens separate words within each part (`c-my-component`, not `c-myComponent`). Never use plain BEM without a namespace prefix.
+
+**JS & CSS feature targeting**: Always use native JS and CSS features that are [Baseline Widely Available or Newly Available](https://web.dev/baseline). No polyfills for Baseline features.
 
 **Icons**: Load asynchronously via `defineAsyncComponent(() => import("virtual:icons/lucide/icon-name"))`. All icons from Lucide.
 
@@ -111,7 +145,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 **SCSS imports**: Use `@use "@styles/path"` — not `@import`. Global styles (base resets, typography, utilities) belong in `src/styles/app.scss`. Component styles follow the pattern in **Vue components** above.
 
-**VueUse**: Use `@vueuse/core` wherever it covers a browser API or Vue utility pattern — event listeners, debounce, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, etc. Prefer VueUse over manual implementations. Already used: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`.
+**VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Already in use: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`, `useVibrate`.
 
 **PWA**: Built with `@vite-pwa/astro` + Workbox. Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. On update: shows browser Notification if permission granted, else silently reloads. On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Workbox caches all static assets (JS, CSS, images) up to 15 MB.
 
@@ -119,19 +153,64 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 **Modal system**: Open modals via `open()` from `@stores/modal.ts` using `defineAsyncComponent` for dynamic component loading. See `src/components/WordSuggestHint.vue` for reference.
 
-**Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic. Import `createToastNotify` from `@stores/toastNotify.ts` directly for toast notifications — do NOT import from `@stores/index` as the barrel re-exports `wordList.ts` which has module-level side effects that trigger unnecessary fetches.
+**Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic that VueUse does not cover — custom composables are for project-specific logic only; prefer VueUse when it exists. Import `createToastNotify` from `@stores/toastNotify.ts` directly for toast notifications — do NOT import from `@stores/index` as the barrel re-exports `wordList.ts` which has module-level side effects that trigger unnecessary fetches.
 
 **GraphQL**: Import the `graphql` tagged template from `@/gql` for type-safe queries. Generated types live in `src/gql/` (do not edit manually — output of codegen).
 
+**Astro scripts + View Transitions**: `<script>` in `.astro` files compiles to `<script type="module">` and runs only once — never re-runs after client-side navigation. Wrap any DOM-querying logic in `astro:page-load` so it re-runs on every navigation:
+
+```js
+document.addEventListener('astro:page-load', () => {
+  // re-initialize observers, querySelectorAll, etc.
+});
+```
+
+Also guard `ResizeObserver` / `getBoundingClientRect` callbacks against transitional zero-heights: `if (h > 0) { ... }` — View Transition animations can briefly report `height: 0` for persistent elements.
+
 ## Environment Variables
 
-Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`. Full list in `.env.example`. See [Secrets](#secrets) for how vars are injected.
+Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
 
 ## Testing
 
-- Tests live in `src/tests/unit/` using Vitest + jsdom + Sinon
-- Vue component tests use `@vue/test-utils`
+- Tests live in `src/tests/unit/` using Vitest + jsdom + `@vue/test-utils`
 - Coverage excludes `src/gql/`, `src/types/`, `src/tests/`, `src/plugins/`
+
+**Shared helpers** (`src/tests/unit/helpers/`):
+
+- `createAstroRender(Component)` — creates an `AstroContainer` once and returns a reusable `render(props)` fn. Always call in `beforeAll` with a **30 s timeout** (`AstroContainer.create()` costs ~10-15 s). Exception: tests that call `vi.resetModules()` per-test must create the container per-test.
+- `createStoreMockImpl(storeMap)` — builds a `useStore` mock impl that returns the right `ref` per store
+- `createComponentStub(template?)` — Proxy-safe module mock for `vi.mock()` factories; includes `[Symbol.toStringTag]: 'Module'` so Vue's `defineAsyncComponent` correctly extracts `.default` (omitting it causes "Component is missing template or render function" warn)
+- `createSlotStub(name, template?)` — lightweight stub for `config.global.stubs`
+
+**Testing gotchas:**
+
+- **Icons**: `virtual:icons/*` are auto-stubbed by the Vitest plugin in `vitest.config.ts` — they render as `<span data-testid="icon-lucide-<name>" />`. No per-file `vi.mock` needed.
+- **`markRaw()`**: Wrap any component object stored in `ref()` or passed as a reactive prop. Without it Vue makes it a Proxy and warns about missing template/render function.
+- **`config.global.stubs`**: Preferred way to stub `defineAsyncComponent` components in `mount()` — avoids `vi.mock` hoisting issues.
+- **Proxy `vi.mock` factories**: Must include `[Symbol.toStringTag]: 'Module'` in the target object; use `createComponentStub` from helpers instead of rolling your own.
+
+## Git Commit Conventions
+
+Format: `<type>(<scope>): <description>` — imperative, lowercase, no trailing period.
+
+| Type       | When to use                                      |
+| ---------- | ------------------------------------------------ |
+| `feat`     | New feature (bumps minor version)                |
+| `fix`      | Bug fix (bumps patch)                            |
+| `refactor` | Code restructure, no behavior change             |
+| `perf`     | Performance-focused refactor                     |
+| `style`    | Formatting only, no logic change                 |
+| `test`     | Adding or correcting tests                       |
+| `docs`     | Documentation only                               |
+| `build`    | Dependencies, tooling, version changes           |
+| `chore`    | Maintenance (initial commits, config, CI tweaks) |
+
+Breaking change: append `!` before colon → `feat(api)!: remove endpoint`. Footer must include `BREAKING CHANGE: <description>`.
+
+Scope is optional but encouraged for this project: `bon`, `pwa`, `search`, `toast`, `word`, `auth`, `ai`.
+
+Reference: [Conventional Commits](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13)
 
 ## Package Manager
 
