@@ -11,27 +11,29 @@
   >
     <slot :tooltip-id="tooltipId" />
 
-    <div
-      :id="tooltipId"
-      ref="panel"
-      popover="manual"
-      role="tooltip"
-      class="c-tooltip__panel"
-      :class="`c-tooltip__panel--${placement}`"
-      :style="`position-anchor: --${tooltipId}; --c-tooltip-offset: ${offset}px`"
-      @pointerenter="cancelHide"
-      @pointerleave="scheduleHide"
-    >
-      <span ref="arrow" class="c-tooltip__arrow" aria-hidden="true" />
-      <slot name="tooltip">{{ content }}</slot>
-    </div>
+    <Teleport to="body">
+      <div
+        :id="tooltipId"
+        ref="panel"
+        popover="manual"
+        role="tooltip"
+        class="c-tooltip__panel"
+        :class="`c-tooltip__panel--${placement}`"
+        :style="`position-anchor: --${tooltipId}; --c-tooltip-offset: ${offset}px`"
+        @pointerenter="cancelHide"
+        @pointerleave="scheduleHide"
+      >
+        <span ref="arrow" class="c-tooltip__arrow" aria-hidden="true" />
+        <slot name="tooltip">{{ content }}</slot>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
 import { syncTooltipArrow } from "@/directives/tooltip";
 import { useEventListener } from "@vueuse/core";
-import { ref, useId } from "vue";
+import { ref } from "vue";
 
 export type TooltipPlacement =
   | "top"
@@ -51,8 +53,8 @@ export type TooltipPopoverProps = {
 
 const { content, placement = "top", offset = 8 } = defineProps<TooltipPopoverProps>();
 
-const id = useId();
-const tooltipId = `tooltip-${id}`;
+// crypto.randomUUID() is safe here: component is client:only, no SSR hydration needed
+const tooltipId = `tooltip-${crypto.randomUUID().slice(0, 8)}`;
 
 const container = ref<HTMLElement | null>(null);
 const panel = ref<HTMLElement | null>(null);
