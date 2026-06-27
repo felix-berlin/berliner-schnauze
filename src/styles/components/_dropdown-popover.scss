@@ -10,35 +10,6 @@
     cursor: pointer;
     // anchor-name set via inline style (dynamic per instance)
   }
-
-  // Theme modifier classes
-  &--theme-word-options {
-    .c-dropdown__panel {
-      --padding: #{vars.$spacer * 0.5} #{vars.$spacer * 0.6};
-
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap, #{vars.$spacer * 0.4});
-
-      a,
-      .c-button {
-        --color-border: transparent;
-
-        transition: border 200ms ease-in-out;
-        border-bottom: 1px dashed var(--color-border, transparent);
-
-        @include butler-mx.hover {
-          --color-border: var(--blue);
-
-          box-shadow: none;
-
-          @include butler-mx.dark-mode-class {
-            --color-border: var(--yellow-500);
-          }
-        }
-      }
-    }
-  }
 }
 
 .c-dropdown__panel {
@@ -54,7 +25,10 @@
   // Anchor Positioning — position-anchor is set via inline style (dynamic anchor name per instance)
   position: fixed;
   margin-block-start: var(--c-dropdown-offset, 8px);
-  position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+  position-try-fallbacks:
+    flip-inline,
+    flip-block,
+    flip-block flip-inline;
   position-try-order: most-block-size;
 
   --color-background: var(--floating-color-background);
@@ -62,9 +36,12 @@
   // filter: drop-shadow casts a unified shadow around the panel + arrow silhouette,
   // avoiding the double-shadow artefact that box-shadow produces where the arrow
   // overlaps the panel interior.
-  filter:
-    drop-shadow(0 0.5px 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 8%, transparent))
-    drop-shadow(0 4px 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent));
+  filter: drop-shadow(
+      0 0.5px 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 8%, transparent)
+    )
+    drop-shadow(
+      0 4px 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent)
+    );
   background-color: var(--color-background);
   padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
   color: var(--color, var(--color-body));

@@ -6,23 +6,23 @@
     data-content-piece="Navigation"
     data-content-target="#"
   >
-  <DropdownPopover
-    placement="bottom-end"
-    :offset="13"
-    class="c-menu-nav__item c-menu-more"
-  >
-    <template #default="{ triggerProps }">
-      <MainMenuButton v-bind="triggerProps" />
-    </template>
+    <DropdownPopover
+      placement="bottom-end"
+      :offset="13"
+      class="c-menu-nav__item c-menu-more c-dropdown--theme-dropdown"
+    >
+      <template #default="{ triggerProps }">
+        <MainMenuButton v-bind="triggerProps" />
+      </template>
 
-    <template #panel>
-      <NavList
-        :items="menuItems"
-        classes-ul="c-menu-more__list u-list-reset"
-        classes-li="c-menu-more__item"
-      />
-    </template>
-  </DropdownPopover>
+      <template #panel>
+        <NavList
+          :items="menuItems"
+          classes-ul="c-menu-more__list u-list-reset"
+          classes-li="c-menu-more__item"
+        />
+      </template>
+    </DropdownPopover>
   </div>
 </template>
 

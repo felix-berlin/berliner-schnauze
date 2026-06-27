@@ -25,7 +25,12 @@
       @mouseleave="onMouseLeave"
       @focusin="cancelClose"
     >
-      <span v-if="arrow && (!lazy || hasContent)" class="c-dropdown__arrow" :style="arrowDynamicStyle" aria-hidden="true" />
+      <span
+        v-if="arrow && (!lazy || hasContent)"
+        class="c-dropdown__arrow"
+        :style="arrowDynamicStyle"
+        aria-hidden="true"
+      />
       <template v-if="!lazy || hasContent">
         <slot name="panel" />
       </template>
@@ -103,14 +108,16 @@ const syncArrow = (): void => {
   const triggerRect = triggerEl.value.getBoundingClientRect();
   const triggerCenterX = (triggerRect.left + triggerRect.right) / 2;
   const rawX = triggerCenterX - panelRect.left - ARROW_SIZE / 2;
-  arrowX.value = Math.max(arrowPadding, Math.min(rawX, panelRect.width - arrowPadding - ARROW_SIZE));
+  arrowX.value = Math.max(
+    arrowPadding,
+    Math.min(rawX, panelRect.width - arrowPadding - ARROW_SIZE),
+  );
   arrowAbove.value = panelRect.bottom <= triggerRect.top;
 };
 
-useResizeObserver(
-  [triggerEl, panel, document.documentElement as HTMLElement],
-  () => { if (isOpen.value) syncArrow(); },
-);
+useResizeObserver([triggerEl, panel, document.documentElement as HTMLElement], () => {
+  if (isOpen.value) syncArrow();
+});
 
 const triggerProps = computed(() => ({
   "aria-controls": panelId,
@@ -134,13 +141,15 @@ const onToggle = (event: ToggleEvent): void => {
     return;
   }
   arrowX.value = null;
-  setTimeout(() => { if (!isOpen.value) hasContent.value = false; }, 150);
-    // Escape leaves focus on <body>; panel content losing focus also qualifies.
-    // Don't steal focus when the user clicked somewhere else (activeElement already moved).
-    if (document.activeElement === document.body || panel.value?.contains(document.activeElement)) {
-      const focusable = triggerEl.value?.querySelector<HTMLElement>(FOCUSABLE);
-      (focusable ?? triggerEl.value)?.focus();
-    }
+  setTimeout(() => {
+    if (!isOpen.value) hasContent.value = false;
+  }, 150);
+  // Escape leaves focus on <body>; panel content losing focus also qualifies.
+  // Don't steal focus when the user clicked somewhere else (activeElement already moved).
+  if (document.activeElement === document.body || panel.value?.contains(document.activeElement)) {
+    const focusable = triggerEl.value?.querySelector<HTMLElement>(FOCUSABLE);
+    (focusable ?? triggerEl.value)?.focus();
+  }
 };
 
 // Hover / focus close timer
@@ -195,4 +204,5 @@ defineExpose({ close });
 
 <style lang="scss">
 @use "@styles/components/dropdown-popover";
+@use "@styles/components/dropdown-popover-themes";
 </style>

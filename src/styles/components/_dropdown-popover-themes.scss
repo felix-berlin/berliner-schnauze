@@ -1,0 +1,41 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-dropdown {
+  // Theme modifier classes
+  &--theme-dropdown,
+  &--theme-word-options {
+    .c-dropdown__panel {
+      --padding: #{vars.$spacer * 0.5} #{vars.$spacer * 0.6};
+
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap, #{vars.$spacer * 0.4});
+
+      a,
+      .c-button {
+        --color-border: transparent;
+
+        transition: border 200ms ease-in-out;
+        border-bottom: 1px dashed var(--color-border, transparent);
+
+        @include butler-mx.hover {
+          --color-border: var(--blue);
+
+          box-shadow: none;
+
+          @include butler-mx.dark-mode-class {
+            --color-border: var(--yellow-500);
+          }
+        }
+      }
+    }
+  }
+
+  &--theme-dropdown {
+    .c-dropdown__panel {
+      --padding: #{vars.$spacer vars.$spacer * 1.5};
+    }
+  }
+}
