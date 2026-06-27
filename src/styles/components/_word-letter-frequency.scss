@@ -86,7 +86,7 @@
   }
 
   &__letter-bar-source {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     color: color-mix(in srgb, var(--blue) 75%, white);
     margin-block-start: vars.$spacer * 0.75;
     margin-block-end: 0;
@@ -97,6 +97,7 @@
 
     a {
       color: inherit;
+      font-size: inherit;
       text-decoration: underline;
       text-underline-offset: 2px;
 

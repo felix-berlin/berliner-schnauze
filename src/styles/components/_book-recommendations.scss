@@ -177,7 +177,7 @@
     color: var(--grey-100);
 
     @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, white 40%, transparent);
+      color: color-mix(in srgb, white 55%, transparent);
     }
   }
 
@@ -188,7 +188,7 @@
     margin-block-start: 0.1rem;
 
     @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, white 30%, transparent);
+      color: color-mix(in srgb, white 45%, transparent);
     }
   }
 
@@ -200,7 +200,7 @@
     margin: 0;
 
     @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, white 35%, transparent);
+      color: color-mix(in srgb, white 45%, transparent);
     }
   }
 }
