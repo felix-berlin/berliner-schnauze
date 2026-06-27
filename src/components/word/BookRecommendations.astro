@@ -1,39 +1,30 @@
 ---
+import type { AffiliateBook, AffiliateDisclaimer } from '@services/queries/getAffiliate';
+
+import { Picture } from 'astro:assets';
 import '@styles/components/_book-recommendations.scss';
 import BookOpen from '~icons/lucide/book-open';
 
-const books = [
-  {
-    badge: 'Wörterbuch',
-    badgeModifier: 'dictionary',
-    description: '~5.000 Stichwörter, Berlinerisch ↔ Hochdeutsch',
-    href: '#',
-    imageAlt: 'Langenscheidt Lilliput Berlinerisch',
-    imageUrl: '',
-    price: 'ab 4,81 €',
-    title: 'Langenscheidt Lilliput Berlinerisch',
-  },
-  {
-    badge: 'Nachschlagewerk',
-    badgeModifier: 'reference',
-    description: 'Mit typischen Berliner Sprüchen & Sprachgeschichte',
-    href: '#',
-    imageAlt: 'Berlinerisch: Watt denn, icke?',
-    imageUrl: '',
-    price: 'ab 8,75 €',
-    title: 'Berlinerisch: Watt denn, icke?',
-  },
-  {
-    badge: 'Geschenk',
-    badgeModifier: 'gift',
-    description: '50 typische Berliner Begriffe als Kartenspiel',
-    href: '#',
-    imageAlt: 'Da kiekste, wa?! Dialekt-Quiz',
-    imageUrl: '',
-    price: 'ab 9,99 €',
-    title: 'Da kiekste, wa?! Dialekt-Quiz',
-  },
-] as const;
+interface Props {
+  books: AffiliateBook[];
+  disclaimers: AffiliateDisclaimer[];
+}
+
+const { books, disclaimers } = Astro.props;
+
+function getPlatformLabel(href: string | null): string {
+  if (!href) return '';
+  if (/amazon\.|amzn\.to/i.test(href)) return 'Amazon.de';
+  try {
+    return new URL(href).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
+function isAmazonLink(href: string | null): boolean {
+  return /amazon\.|amzn\.to/i.test(href ?? '');
+}
 ---
 
 <aside class='c-book-recs' aria-label='Buchempfehlungen'>
@@ -47,22 +38,24 @@ const books = [
         <li class='c-book-recs__item'>
           <a
             class='c-book-recs__link'
-            href={book.href}
+            href={book.href ?? undefined}
             rel='noopener noreferrer sponsored'
             target='_blank'
             data-track-content
-            data-content-name="Book Recommendation"
+            data-content-name='Book Recommendation'
             data-content-piece={book.title}
             data-content-target={book.href}
           >
             <div class='c-book-recs__cover' aria-hidden='true'>
               {book.imageUrl ? (
-                <img
-                  alt={book.imageAlt}
-                  height='66'
+                <Picture
+                  alt={book.imageAlt ?? book.title}
+                  densities={[1, 2]}
+                  formats={['avif', 'webp']}
+                  height={66}
                   loading='lazy'
                   src={book.imageUrl}
-                  width='48'
+                  width={48}
                 />
               ) : (
                 <BookOpen height='22' width='22' />
@@ -78,8 +71,10 @@ const books = [
               <p class='c-book-recs__desc'>{book.description}</p>
             </div>
             <div class='c-book-recs__price-col'>
-              <span class='c-book-recs__price'>{book.price}</span>
-              <span class='c-book-recs__platform'>Amazon.de</span>
+              <span class='c-book-recs__platform'>{getPlatformLabel(book.href)}</span>
+              {isAmazonLink(book.href) && (
+                <span class='c-book-recs__paid-label'>(bezahlter Link)</span>
+              )}
             </div>
           </a>
         </li>
@@ -87,6 +82,14 @@ const books = [
     }
   </ul>
   <p class='c-book-recs__disclaimer'>
-    * Affiliate-Links — Ich kriege eine kleine Provision, für dich bleibt der Preis gleich.
+    {disclaimers
+      .filter((d) => {
+        const plat = d.plattform?.toLowerCase() ?? '';
+        if (plat.includes('amazon') && books.some((b) => isAmazonLink(b.href))) return true;
+        return books.some((b) => getPlatformLabel(b.href).toLowerCase() === plat);
+      })
+      .map((d) => d.text)
+      .join(' ')
+    }{' '}Ich erhalte eine kleine Provision — für dich bleibt der Preis gleich.
   </p>
 </aside>

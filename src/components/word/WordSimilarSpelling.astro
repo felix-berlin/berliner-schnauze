@@ -22,7 +22,7 @@ const { similar } = Astro.props;
       <ul class="c-single-word__related-words-list">
         {similar.map((w) => (
           <li>
-            <a href={routeToWord(w.slug ?? undefined)}>
+            <a class="c-single-word__related-word-link" href={routeToWord(w.slug ?? undefined)}>
               {w.wordProperties?.berlinerisch}
             </a>
           </li>

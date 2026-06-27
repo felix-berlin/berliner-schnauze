@@ -181,6 +181,17 @@
     }
   }
 
+  &__paid-label {
+    display: block;
+    font-size: 0.575rem;
+    color: var(--grey-100);
+    margin-block-start: 0.1rem;
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, white 30%, transparent);
+    }
+  }
+
   &__disclaimer {
     padding: 0.5rem 1.25rem;
     font-size: 0.625rem;

@@ -46,7 +46,7 @@ export default defineConfig({
     format: "file",
   },
   image: {
-    domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf"],
+    domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf", "m.media-amazon.com"],
     breakpoints: [
       180, 320, 480, 640, 750, 828, 960, 1080, 1280, 1668, 1920, 2048, 2560, 3200, 3840, 4480, 5120,
       6016,

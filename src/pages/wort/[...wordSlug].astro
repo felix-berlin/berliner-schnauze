@@ -25,7 +25,7 @@ import WordSectionVerwandteWorte from '@components/word/WordSectionVerwandteWort
 import BookRecommendations from '@components/word/BookRecommendations.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
-import { fetchAllWords } from '@services/api.ts';
+import { fetchAffiliateData, fetchAllWords } from '@services/api.ts';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
   alphabeticNeighbors,
@@ -120,6 +120,7 @@ const hasLinguistik = berlinerisch.length > 0;
 const hasPhonologie = soundingWordsResult.length > 0 || similarSpellingResult.length > 0;
 const hasNeighbors = alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
 const hasRelatedWords = (wordProps?.relatedWords?.nodes?.length ?? 0) > 0;
+const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetchAffiliateData();
 const wortartLabel: string | undefined =
   wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
 
@@ -273,7 +274,7 @@ const schemaJson = () => {
 
         {!hasImages && wordProps?.learnMore && <WordLearnMore learnMore={wordProps.learnMore} />}
 
-        <BookRecommendations />
+        <BookRecommendations books={affiliateBooks} disclaimers={affiliateDisclaimers} />
       </div>
 
       {hasImages && (
