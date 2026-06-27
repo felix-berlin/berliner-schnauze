@@ -2,18 +2,6 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-word-curiosities {
-  &__heading {
-    font-family: vars.$berlin;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-block: 1.25em 0.75em;
-    color: var(--new-blue-400);
-
-    @include butler-mx.dark-mode-class {
-      color: var(--color-body);
-    }
-  }
-
   &__list {
     list-style: none;
     padding: 0;

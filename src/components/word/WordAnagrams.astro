@@ -14,6 +14,7 @@ const { anagrams } = Astro.props;
     <section
       class="c-section-card c-section-card--unnumbered"
       id="anagramme"
+      aria-labelledby="heading-anagramme"
       data-track-content
       data-content-name="Word Anagrams"
       data-content-piece={anagrams[0]?.wordProperties?.berlinerisch ?? ''}
@@ -21,7 +22,7 @@ const { anagrams } = Astro.props;
     >
       <div class="c-section-card__header">
         <span class="c-section-card__num"></span>
-        <h2 class="c-section-card__title">Buchstabenspiele</h2>
+        <h2 class="c-section-card__title" id="heading-anagramme">Buchstabenspiele</h2>
       </div>
       <div class="c-section-card__body">
         <h3>Anagramme</h3>

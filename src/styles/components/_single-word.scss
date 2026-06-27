@@ -142,36 +142,6 @@
     overflow-wrap: break-word;
   }
 
-  h2 {
-    margin: var(--spacing-outer, 0 0 vars.$spacer * 0.25 0);
-    font-size: 2rem;
-  }
-
-  h3 {
-    font-size: 1.5rem;
-  }
-
-  h4 {
-    font-size: 1.25rem;
-  }
-
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: vars.$berlin;
-    font-weight: 700;
-    margin-block: 1.5em 1em;
-  }
-
-  :where(p, a, li) {
-    font-size: 1.15rem;
-  }
-
-  :where(li) {
-    line-height: 1.5;
-  }
-
   &__syllables {
     display: grid;
     grid-template-columns: max-content 1fr;
@@ -250,7 +220,7 @@
       align-items: baseline;
 
       &::before {
-        content: counter(meaning) '.';
+        content: counter(meaning) ".";
         color: var(--orange-500, #c0612a);
         font-size: 0.7em;
         font-weight: 700;
@@ -441,7 +411,7 @@
   }
 
   &__word-part {
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: bold;
     padding: 3px 12px;
     border: 1px solid var(--grey-100);
