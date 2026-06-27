@@ -1,4 +1,6 @@
 ---
+import '@styles/components/_section-card.scss';
+import '@styles/components/_word-related-words.scss';
 import { routeToWord } from "@utils/helpers";
 import type { WordRef } from "@utils/wordHelper";
 
@@ -29,7 +31,7 @@ const { anagrams } = Astro.props;
         <ul class="c-single-word__related-words-list">
           {anagrams.map((w) => (
             <li>
-              <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+              <a class="c-single-word__related-word-link" href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
             </li>
           ))}
         </ul>
