@@ -270,7 +270,7 @@ const schemaJson = () => {
 
         <WordSectionNachbarn neighbors={alphabeticNeighborsResult} />
 
-        <WordSectionVerwandteWorte relatedWords={wordProps?.relatedWords} currentWord={berlinerisch} />
+        <WordSectionVerwandteWorte relatedWords={wordProps?.relatedWords ?? null} currentWord={berlinerisch} />
 
         {!hasImages && wordProps?.learnMore && <WordLearnMore learnMore={wordProps.learnMore} />}
 

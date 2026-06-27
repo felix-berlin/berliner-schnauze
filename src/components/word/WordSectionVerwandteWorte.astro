@@ -5,7 +5,7 @@ import { routeToWord } from '@utils/helpers';
 import type { BerlinerWord } from '@/gql/entity-types';
 
 interface Props {
-  relatedWords: BerlinerWord['wordProperties']['relatedWords'];
+  relatedWords: NonNullable<BerlinerWord['wordProperties']>['relatedWords'];
   currentWord: string;
 }
 
