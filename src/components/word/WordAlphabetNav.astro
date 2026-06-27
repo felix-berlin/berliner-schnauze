@@ -9,7 +9,13 @@ interface Props {
 const { neighbors: { before, after } } = Astro.props;
 ---
 
-{(before.length > 0 || after.length > 0) && <div class="c-single-word__alpha-nav">
+{(before.length > 0 || after.length > 0) && <div
+  class="c-single-word__alpha-nav"
+  data-track-content
+  data-content-name="Alphabet Navigation"
+  data-content-piece={`${before[0]?.wordProperties?.berlinerisch ?? ''} → ${after[0]?.wordProperties?.berlinerisch ?? ''}`}
+  data-content-target={after[0] ? routeToWord(after[0].slug ?? undefined) : before[0] ? routeToWord(before[0].slug ?? undefined) : '#'}
+>
     {
       before.length > 0 && (
         <div class="c-single-word__alpha-col">

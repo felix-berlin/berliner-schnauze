@@ -5,7 +5,7 @@
     data-track-content
     data-content-name="Bon Card"
     :data-content-piece="word"
-    data-content-target="#"
+    data-content-target="javascript:answer"
   >
     <div class="c-bon-card__hint" aria-hidden="true">
       <span>← NEE</span>

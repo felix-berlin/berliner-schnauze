@@ -11,7 +11,14 @@ const { anagrams } = Astro.props;
 
 {
   anagrams.length > 0 && (
-    <section class="c-section-card c-section-card--unnumbered" id="anagramme">
+    <section
+      class="c-section-card c-section-card--unnumbered"
+      id="anagramme"
+      data-track-content
+      data-content-name="Word Anagrams"
+      data-content-piece={anagrams[0]?.wordProperties?.berlinerisch ?? ''}
+      data-content-target="#"
+    >
       <div class="c-section-card__header">
         <span class="c-section-card__num"></span>
         <h2 class="c-section-card__title">Buchstabenspiele</h2>

@@ -1,4 +1,11 @@
 <template>
+  <div
+    ref="root"
+    data-track-content
+    data-content-name="Main Menu"
+    data-content-piece="Navigation"
+    data-content-target="#"
+  >
   <DropdownPopover
     placement="bottom-end"
     :offset="13"
@@ -16,6 +23,7 @@
       />
     </template>
   </DropdownPopover>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -25,6 +33,11 @@ import DropdownPopover from "@components/DropdownPopover.vue";
 import InstallApp from "@components/InstallApp.vue";
 import MainMenuButton from "@components/MainMenuButton.vue";
 import NavList from "@components/NavList.vue";
+import { useContentTracking } from "@composables/useContentTracking";
+import { ref } from "vue";
+
+const root = ref<HTMLElement | null>(null);
+useContentTracking(root);
 
 // const randomWord = () => {
 //   // TODO: Implement random word

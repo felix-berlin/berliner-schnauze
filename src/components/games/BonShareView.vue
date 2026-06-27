@@ -1,5 +1,12 @@
 <template>
-  <div class="c-bon-share-view">
+  <div
+    ref="root"
+    class="c-bon-share-view"
+    data-track-content
+    data-content-name="BON Share Result"
+    :data-content-piece="contentPiece"
+    data-content-target="/games/berliner-oder-nicht"
+  >
     <template v-if="payload">
       <h1 class="c-bon-share-view__title">
         {{ payload.playerName ? `${payload.playerName}s Spielergebnis` : 'Spielergebnis' }}
@@ -41,10 +48,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useUrlSearchParams } from '@vueuse/core'
 import { decodeShareHash } from '@utils/bonShare'
 import type { BonSharePayload } from '@utils/bonShare'
+import { useContentTracking } from '@composables/useContentTracking'
+
+const root = ref<HTMLElement | null>(null)
+useContentTracking(root)
 
 const params = useUrlSearchParams('history')
 const payload = computed<BonSharePayload | null>(() => {
@@ -64,6 +75,12 @@ const formattedDate = computed(() => {
     new Date(payload.value.date),
   )
 })
+
+const contentPiece = computed(() =>
+  payload.value
+    ? `Score ${payload.value.score}${payload.value.playerName ? ` – ${payload.value.playerName}` : ''}`
+    : 'Spielergebnis',
+)
 </script>
 
 <style lang="scss">

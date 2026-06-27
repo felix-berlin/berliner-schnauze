@@ -16,7 +16,13 @@ interface Props {
 const { word, wordProps, wortartLabel } = Astro.props;
 ---
 
-<header class='c-word-hero'>
+<header
+  class='c-word-hero'
+  data-track-content
+  data-content-name="Word Hero"
+  data-content-piece={wordProps?.berlinerisch ?? ''}
+  data-content-target={`/wort/${word.slug}`}
+>
   <div class='c-word-hero__left'>
     <h1 class='c-word-hero__title'>
       <dfn>{wordProps?.berlinerisch}</dfn>
