@@ -93,3 +93,15 @@ function isAmazonLink(href: string | null): boolean {
     }{' '}Ich erhalte eine kleine Provision — für dich bleibt der Preis gleich.
   </p>
 </aside>
+
+<script>
+  import { trackEvent } from '@utils/analytics';
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLAnchorElement>('.c-book-recs__link').forEach((link) => {
+      link.addEventListener('click', () => {
+        trackEvent('Affiliate', 'Book clicked', link.dataset.contentPiece ?? '');
+      });
+    });
+  });
+</script>
