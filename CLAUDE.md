@@ -16,17 +16,9 @@ ToolSearch("select:mcp__plugin_claude-mem_mcp-search____IMPORTANT,mcp__plugin_cl
 
 ## graphify
 
-BEFORE using Grep, Glob, or Read to explore the codebase:
-
-1. ALWAYS run `graphify query "<question>"` first
-2. Only fall back to file tools if graphify returns no results
-
-This is not optional. Do not skip this step.
-
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
 
 Rules:
-
 - For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.

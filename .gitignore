@@ -48,6 +48,7 @@ tests/unit/junit-report.xml
 .claude/worktrees/
 .playwright-mcp
 .superpowers
+.scratch
 
 # Graphify
 graphify-out/manifest.json
