@@ -19,151 +19,150 @@ interface Props {
   word: string;
 }
 
+type FactIcon = typeof Check;
+
+type FactEntry = {
+  icon: FactIcon;
+  variant?: 'positive' | 'negative' | 'neutral';
+  prefix?: string;
+  text?: string;
+  tooltip?: {
+    term: string;
+    htmlContent: string;
+  };
+};
+
 const { word } = Astro.props;
 const facts = word.length >= 5 ? wordCuriosities(word) : null;
 const syllableCount = word.length >= 5 ? hypher.hyphenate(word).length : null;
+
+const factEntries: FactEntry[] = facts ? [
+  facts.isPalindrome
+    ? {
+        icon: Check,
+        text: ' – vorwärts wie rückwärts lesbar',
+        tooltip: {
+          htmlContent:
+            'Ein Wort, das vorwärts wie rückwärts gleich gelesen wird.<br />Beispiel: <strong>Ehe</strong>, <strong>Legel</strong>',
+          term: 'Palindrom',
+        },
+        variant: 'positive' as const,
+      }
+    : {
+        icon: X,
+        prefix: 'Kein ',
+        tooltip: {
+          htmlContent:
+            'Ein Palindrom ist ein Wort, das vorwärts wie rückwärts gleich gelesen wird.<br />Beispiel: <strong>Ehe</strong>, <strong>Legel</strong>',
+          term: 'Palindrom',
+        },
+        variant: 'negative' as const,
+      },
+
+  facts.isIsogram && {
+    icon: Fingerprint,
+    text: ' – kein Buchstabe wiederholt sich',
+    tooltip: {
+      htmlContent: 'Jeder Buchstabe kommt genau einmal vor – kein Buchstabe wiederholt sich.',
+      term: 'Isogramm',
+    },
+    variant: 'positive' as const,
+  },
+
+  facts.isAlternating && {
+    icon: Shuffle,
+    tooltip: {
+      htmlContent: 'Vokal und Konsonant wechseln sich an jeder Position perfekt ab.',
+      term: 'Vokal-Konsonant-Wechsel',
+    },
+    variant: 'positive' as const,
+  },
+
+  facts.hasAllVowels && {
+    icon: Star,
+    text: 'Enthält alle 8 deutschen Vokale (a, e, i, o, u, ä, ö, ü)',
+    variant: 'positive' as const,
+  },
+
+  facts.hasUmlaut && {
+    icon: BadgeCheck,
+    text: 'Enthält Umlaut (ä, ö oder ü)',
+    variant: 'positive' as const,
+  },
+
+  facts.doubleLetters.length > 0 && {
+    icon: Copy,
+    text: `Doppelbuchstabe${facts.doubleLetters.length > 1 ? 'n' : ''}: ${facts.doubleLetters.map((l) => l + l).join(', ')}`,
+  },
+
+  facts.longestConsonantRun.length >= 3 && {
+    icon: AlignJustify,
+    text: `Längste Konsonantenfolge: „${facts.longestConsonantRun.chars}" (${facts.longestConsonantRun.length} Buchstaben)`,
+  },
+
+  facts.longestVowelRun.length >= 2 && {
+    icon: Mic,
+    text: `Längste Vokalkette: „${facts.longestVowelRun.chars}" (${facts.longestVowelRun.length} Buchstaben)`,
+  },
+
+  {
+    icon: ArrowRight,
+    text: `Beginnt mit ${facts.startsWithConsonant ? 'Konsonant' : 'Vokal'}`,
+    variant: 'neutral' as const,
+  },
+
+  {
+    icon: ArrowLeft,
+    text: `Endet mit ${facts.endsWithConsonant ? 'Konsonant' : 'Vokal'}`,
+    variant: 'neutral' as const,
+  },
+].filter(Boolean) as FactEntry[] : [];
 ---
 
 {
   facts && (
     <div class='c-word-curiosities'>
-      <h3 class='c-word-curiosities__heading'>Wortkuriositäten</h3>
+      <h3 id='word-curiosities-heading' class='c-word-curiosities__heading'>Wortkuriositäten</h3>
 
-      <div class='c-word-curiosities__stats'>
-        <div class='c-word-curiosities__stat'>
-          <span class='c-word-curiosities__stat-value'>{facts.uniqueLetterCount}</span>
-          <span class='c-word-curiosities__stat-label'>Unikate</span>
+      <dl class='c-section-card__stat-row'>
+        <div class='c-section-card__stat-box'>
+          <dt class='c-section-card__stat-label'>Unikate</dt>
+          <dd class='c-section-card__stat-value'>{facts.uniqueLetterCount}</dd>
         </div>
-        <div class='c-word-curiosities__stat'>
-          <span class='c-word-curiosities__stat-value c-word-curiosities__stat-value--vowels'>
+        <div class='c-section-card__stat-box'>
+          <dt class='c-section-card__stat-label'>Vokalarten</dt>
+          <dd class='c-section-card__stat-value c-section-card__stat-value--vowels'>
             {facts.distinctVowelCount}
-          </span>
-          <span class='c-word-curiosities__stat-label'>Vokalarten</span>
+          </dd>
         </div>
-        <div class='c-word-curiosities__stat'>
-          <span class='c-word-curiosities__stat-value'>{syllableCount}</span>
-          <span class='c-word-curiosities__stat-label'>Silben</span>
+        <div class='c-section-card__stat-box'>
+          <dt class='c-section-card__stat-label'>Silben</dt>
+          <dd class='c-section-card__stat-value'>{syllableCount}</dd>
         </div>
-      </div>
+      </dl>
 
-      <ul class='c-word-curiosities__list'>
-        {facts.isPalindrome ? (
-          <li class='c-word-curiosities__fact c-word-curiosities__fact--positive'>
+      <ul class='c-word-curiosities__list' role='list' aria-labelledby='word-curiosities-heading'>
+        {factEntries.map((fact) => {
+          const Icon = fact.icon;
+          return (
+          <li class:list={[
+            'c-word-curiosities__fact',
+            fact.variant && `c-word-curiosities__fact--${fact.variant}`,
+          ]}>
             <span class='c-word-curiosities__fact-icon'>
-              <Check width='14' height='14' aria-hidden='true' />
+              <Icon width='14' height='14' aria-hidden='true' />
             </span>
-            <TooltipPopover client:only='vue'>
-              <span class='c-word-curiosities__term'>Palindrom</span>
-              <Fragment slot='tooltip'>
-                Ein Wort, das vorwärts wie rückwärts gleich gelesen wird.
-                <br />Beispiel: <strong>Ehe</strong>, <strong>Legel</strong>
-              </Fragment>
-            </TooltipPopover>
-            {' – vorwärts wie rückwärts lesbar'}
+            {fact.prefix}
+            {fact.tooltip && (
+              <TooltipPopover client:only='vue'>
+                <span class='c-word-curiosities__term'>{fact.tooltip.term}</span>
+                <Fragment slot='tooltip' set:html={fact.tooltip.htmlContent} />
+              </TooltipPopover>
+            )}
+            {fact.text}
           </li>
-        ) : (
-          <li class='c-word-curiosities__fact c-word-curiosities__fact--negative'>
-            <span class='c-word-curiosities__fact-icon'>
-              <X width='14' height='14' aria-hidden='true' />
-            </span>
-            {'Kein '}
-            <TooltipPopover client:only='vue'>
-              <span class='c-word-curiosities__term'>Palindrom</span>
-              <Fragment slot='tooltip'>
-                Ein Palindrom ist ein Wort, das vorwärts wie rückwärts gleich gelesen wird.
-                <br />Beispiel: <strong>Ehe</strong>, <strong>Legel</strong>
-              </Fragment>
-            </TooltipPopover>
-          </li>
-        )}
-
-        {facts.isIsogram && (
-          <li class='c-word-curiosities__fact c-word-curiosities__fact--positive'>
-            <span class='c-word-curiosities__fact-icon'>
-              <Fingerprint width='14' height='14' aria-hidden='true' />
-            </span>
-            <TooltipPopover client:only='vue'>
-              <span class='c-word-curiosities__term'>Isogramm</span>
-              <Fragment slot='tooltip'>
-                Jeder Buchstabe kommt genau einmal vor – kein Buchstabe wiederholt sich.
-              </Fragment>
-            </TooltipPopover>
-            {' – kein Buchstabe wiederholt sich'}
-          </li>
-        )}
-
-        {facts.isAlternating && (
-          <li class='c-word-curiosities__fact c-word-curiosities__fact--positive'>
-            <span class='c-word-curiosities__fact-icon'>
-              <Shuffle width='14' height='14' aria-hidden='true' />
-            </span>
-            <TooltipPopover client:only='vue'>
-              <span class='c-word-curiosities__term'>Vokal-Konsonant-Wechsel</span>
-              <Fragment slot='tooltip'>
-                Vokal und Konsonant wechseln sich an jeder Position perfekt ab.
-              </Fragment>
-            </TooltipPopover>
-          </li>
-        )}
-
-        {facts.hasAllVowels && (
-          <li class='c-word-curiosities__fact c-word-curiosities__fact--positive'>
-            <span class='c-word-curiosities__fact-icon'>
-              <Star width='14' height='14' aria-hidden='true' />
-            </span>
-            {'Enthält alle 8 deutschen Vokale (a, e, i, o, u, ä, ö, ü)'}
-          </li>
-        )}
-
-        {facts.hasUmlaut && (
-          <li class='c-word-curiosities__fact c-word-curiosities__fact--positive'>
-            <span class='c-word-curiosities__fact-icon'>
-              <BadgeCheck width='14' height='14' aria-hidden='true' />
-            </span>
-            {'Enthält Umlaut (ä, ö oder ü)'}
-          </li>
-        )}
-
-        {facts.doubleLetters.length > 0 && (
-          <li class='c-word-curiosities__fact'>
-            <span class='c-word-curiosities__fact-icon'>
-              <Copy width='14' height='14' aria-hidden='true' />
-            </span>
-            {`Doppelbuchstabe${facts.doubleLetters.length > 1 ? 'n' : ''}: ${facts.doubleLetters.map((l) => l + l).join(', ')}`}
-          </li>
-        )}
-
-        {facts.longestConsonantRun.length >= 3 && (
-          <li class='c-word-curiosities__fact'>
-            <span class='c-word-curiosities__fact-icon'>
-              <AlignJustify width='14' height='14' aria-hidden='true' />
-            </span>
-            {`Längste Konsonantenfolge: „${facts.longestConsonantRun.chars}" (${facts.longestConsonantRun.length} Buchstaben)`}
-          </li>
-        )}
-
-        {facts.longestVowelRun.length >= 2 && (
-          <li class='c-word-curiosities__fact'>
-            <span class='c-word-curiosities__fact-icon'>
-              <Mic width='14' height='14' aria-hidden='true' />
-            </span>
-            {`Längste Vokalkette: „${facts.longestVowelRun.chars}" (${facts.longestVowelRun.length} Buchstaben)`}
-          </li>
-        )}
-
-        <li class='c-word-curiosities__fact c-word-curiosities__fact--neutral'>
-          <span class='c-word-curiosities__fact-icon'>
-            <ArrowRight width='14' height='14' aria-hidden='true' />
-          </span>
-          {`Beginnt mit ${facts.startsWithConsonant ? 'Konsonant' : 'Vokal'}`}
-        </li>
-
-        <li class='c-word-curiosities__fact c-word-curiosities__fact--neutral'>
-          <span class='c-word-curiosities__fact-icon'>
-            <ArrowLeft width='14' height='14' aria-hidden='true' />
-          </span>
-          {`Endet mit ${facts.endsWithConsonant ? 'Konsonant' : 'Vokal'}`}
-        </li>
+          );
+        })}
       </ul>
     </div>
   )
