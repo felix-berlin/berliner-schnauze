@@ -71,9 +71,13 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 0.4rem;
+
+    @media (width >= 36rem) {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   &__fact {
@@ -91,5 +95,30 @@
         color: color-mix(in srgb, var(--blue) 30%, white);
       }
     }
+
+    &--neutral {
+      color: color-mix(in srgb, var(--blue) 75%, white);
+
+      @include butler-mx.dark-mode-class {
+        color: color-mix(in srgb, var(--blue) 30%, white);
+      }
+    }
+  }
+
+  &__fact-icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    margin-inline-end: 0.35rem;
+  }
+
+  &__term {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 2px;
+    cursor: help;
   }
 }

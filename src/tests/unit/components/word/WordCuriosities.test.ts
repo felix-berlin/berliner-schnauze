@@ -26,9 +26,9 @@ describe("WordCuriosities.astro", () => {
 
   it("renders letter count stats", async () => {
     const result = await render({ word: "Schnauze" });
-    expect(result).toContain("Buchstaben");
-    expect(result).toContain("Einzigartig");
+    expect(result).toContain("Unikate");
     expect(result).toContain("Vokalarten");
+    expect(result).not.toContain("Einzigartig");
   });
 
   it("renders the stat values", async () => {

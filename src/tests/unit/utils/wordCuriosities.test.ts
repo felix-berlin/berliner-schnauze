@@ -135,4 +135,17 @@ describe("wordCuriosities", () => {
       expect(result.longestVowelRun.length).toBe(3);
     });
   });
+
+  describe("hasUmlaut", () => {
+    it("wordCuriosities returns hasUmlaut=true for words with umlauts", () => {
+      expect(wordCuriosities("Nüsse").hasUmlaut).toBe(true);
+      expect(wordCuriosities("Käse").hasUmlaut).toBe(true);
+      expect(wordCuriosities("Ölfass").hasUmlaut).toBe(true);
+    });
+
+    it("wordCuriosities returns hasUmlaut=false for words without umlauts", () => {
+      expect(wordCuriosities("Hallo").hasUmlaut).toBe(false);
+      expect(wordCuriosities("Berlin").hasUmlaut).toBe(false);
+    });
+  });
 });

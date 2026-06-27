@@ -322,6 +322,7 @@ export const wordCuriosities = (
 ): {
   isPalindrome: boolean;
   hasAllVowels: boolean;
+  hasUmlaut: boolean;
   isIsogram: boolean;
   isAlternating: boolean;
   longestConsonantRun: { length: number; chars: string };
@@ -338,6 +339,9 @@ export const wordCuriosities = (
 
   const isPalindrome = lower === lower.split("").reverse().join("");
   const hasAllVowels = ALL_GERMAN_VOWELS.every((v) => lower.includes(v));
+
+  const UMLAUTS = new Set(['ä', 'ö', 'ü', 'Ä', 'Ö', 'Ü']);
+  const hasUmlaut = [...word].some(c => UMLAUTS.has(c));
 
   const letterFreq = new Map<string, number>();
   for (const c of letters) {
@@ -388,6 +392,7 @@ export const wordCuriosities = (
     doubleLetters: [...doubleLettersSet],
     endsWithConsonant: isConsonantChar(lower[lower.length - 1] ?? ""),
     hasAllVowels,
+    hasUmlaut,
     isAlternating,
     isIsogram,
     isPalindrome,
