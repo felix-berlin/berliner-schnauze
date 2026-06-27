@@ -1,6 +1,10 @@
 @use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 
+.c-word-main__content {
+  counter-reset: section-num;
+}
+
 .c-section-card {
   background: white;
   border: 1px dashed var(--grey-100);
@@ -9,9 +13,18 @@
     0 0.5px 0.6px rgb(0 0 0 / 8%),
     0 4px 5px rgb(0 0 0 / 16%);
   scroll-margin-top: calc(var(--site-header-height, 60px) + 1rem);
+  counter-increment: section-num;
 
   @include butler-mx.dark-mode-class {
     background: var(--new-blue-400);
+  }
+
+  &--unnumbered {
+    counter-increment: none;
+
+    .c-section-card__num::before {
+      content: '—';
+    }
   }
 
   &__header {
@@ -29,6 +42,10 @@
     color: var(--orange-600);
     letter-spacing: 0.05em;
     flex-shrink: 0;
+
+    &::before {
+      content: counter(section-num, decimal-leading-zero);
+    }
   }
 
   &__title {
