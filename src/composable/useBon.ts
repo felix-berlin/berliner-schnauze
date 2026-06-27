@@ -145,6 +145,7 @@ export function useBon() {
       totalAnswered: 0,
     };
     _nextCard();
+    trackEvent("Game", "Game Started", "berliner-oder-nicht");
   }
 
   function _nextCard() {
@@ -242,13 +243,14 @@ export function useBon() {
 
     if (isNewHighScore) {
       $bonStats.setKey("highScore", state.value.score);
-      trackEvent("game", "new_highscore", "berliner-oder-nicht", state.value.score);
+      trackEvent("Game", "New Highscore", "berliner-oder-nicht", state.value.score);
     }
     if (isNewBestStreak) {
       $bonStats.setKey("bestStreak", state.value.bestStreak);
+      trackEvent("Game", "New Best Streak", "berliner-oder-nicht", state.value.bestStreak);
     }
 
-    trackEvent("game", "game_over", "berliner-oder-nicht", state.value.score);
+    trackEvent("Game", "Game Over", "berliner-oder-nicht", state.value.score);
   }
 
   const isNewHighScore = computed(() => {
@@ -280,6 +282,7 @@ export function useBon() {
     }
     _realQueue = [...saved.realQueue]
     _fakeQueue = [...saved.fakeQueue]
+    trackEvent("Game", "Game Resumed", "berliner-oder-nicht");
   }
 
   return {

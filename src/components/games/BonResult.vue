@@ -30,6 +30,7 @@
       v-if="lastCard?.isReal && lastCard.slug"
       :href="`/wort/${lastCard.slug}`"
       class="c-bon-result__word-link"
+      @click="trackWordExplored"
     >
       <LightbulbIcon width="16" height="16" aria-hidden="true" />
       <span>„{{ lastCard.word }}" erkunden</span>
@@ -60,6 +61,7 @@ import { useStore } from '@nanostores/vue'
 import { $bonStats } from '@stores/bonStats'
 import type { BonCard } from '@composables/useBon'
 import { buildShareUrl } from '@utils/bonShare'
+import { trackEvent } from '@utils/analytics'
 
 const TrophyIcon = defineAsyncComponent(() => import('virtual:icons/lucide/trophy'))
 const LightbulbIcon = defineAsyncComponent(() => import('virtual:icons/lucide/lightbulb'))
@@ -96,7 +98,12 @@ const accuracyPercent = computed(() =>
 const stats = useStore($bonStats)
 const { share: _share, isSupported: canShare } = useShare()
 
+function trackWordExplored() {
+  trackEvent("Game", "Word Explored", "berliner-oder-nicht")
+}
+
 function share() {
+  trackEvent("Game", "Result Shared", "berliner-oder-nicht")
   const playerName = stats.value.playerName?.trim() || undefined
   const url = buildShareUrl({
     bestStreak: props.bestStreak,

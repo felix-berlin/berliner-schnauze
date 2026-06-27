@@ -393,17 +393,66 @@ describe('_endGame', () => {
 
   it('fires game_over analytics event', () => {
     playUntilGameOver()
-    expect(trackEvent).toHaveBeenCalledWith('game', 'game_over', 'berliner-oder-nicht', expect.any(Number))
+    expect(trackEvent).toHaveBeenCalledWith('Game', 'Game Over', 'berliner-oder-nicht', expect.any(Number))
   })
 
   it('fires new_highscore analytics event when score beats stored 0', () => {
     playUntilGameOver(1)
-    expect(trackEvent).toHaveBeenCalledWith('game', 'new_highscore', 'berliner-oder-nicht', expect.any(Number))
+    expect(trackEvent).toHaveBeenCalledWith('Game', 'New Highscore', 'berliner-oder-nicht', expect.any(Number))
   })
 
   it('does NOT fire new_highscore event when score is 0', () => {
     playUntilGameOver(0)
-    expect(trackEvent).not.toHaveBeenCalledWith('game', 'new_highscore', expect.anything(), expect.anything())
+    expect(trackEvent).not.toHaveBeenCalledWith('Game', 'New Highscore', expect.anything(), expect.anything())
+  })
+
+  it('fires new_best_streak analytics event when best streak is beaten', () => {
+    playUntilGameOver(1) // 1 correct → bestStreak becomes 1 > stored 0
+    expect(trackEvent).toHaveBeenCalledWith('Game', 'New Best Streak', 'berliner-oder-nicht', expect.any(Number))
+  })
+
+  it('does NOT fire new_best_streak event when streak is 0', () => {
+    playUntilGameOver(0) // no correct answers → bestStreak stays 0
+    expect(trackEvent).not.toHaveBeenCalledWith('Game', 'New Best Streak', expect.anything(), expect.anything())
+  })
+})
+
+// ─── analytics — startGame / resumeGame ──────────────────────────────────────
+
+describe('analytics — startGame / resumeGame', () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it('tracks Game Started on startGame', () => {
+    const { init, startGame } = useBon()
+    init(makeRealWords(15), makeFakeWords(20))
+    startGame()
+    expect(trackEvent).toHaveBeenCalledWith('Game', 'Game Started', 'berliner-oder-nicht')
+  })
+
+  it('tracks Game Resumed on resumeGame', () => {
+    const { init, resumeGame } = useBon()
+    init(makeRealWords(30), makeFakeWords(20))
+
+    const snapshot: SavedBonSnapshot = {
+      phase: 'playing',
+      lives: 2,
+      score: 50,
+      streak: 3,
+      bestStreak: 5,
+      multiplier: 2,
+      totalAnswered: 8,
+      correctAnswers: 7,
+      currentCard: { word: 'Stulle', isReal: true },
+      deck: [],
+      lastAnswerCorrect: true,
+      lastCard: null,
+      realQueue: [],
+      fakeQueue: [],
+    }
+    vi.mocked($savedBon.get).mockReturnValue(snapshot)
+
+    resumeGame()
+    expect(trackEvent).toHaveBeenCalledWith('Game', 'Game Resumed', 'berliner-oder-nicht')
   })
 })
 
