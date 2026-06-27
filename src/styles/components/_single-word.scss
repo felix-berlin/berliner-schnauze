@@ -235,6 +235,37 @@
     font-size: 1rem;
   }
 
+  &__translation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: meaning;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+
+    li {
+      counter-increment: meaning;
+      display: grid;
+      grid-template-columns: 1.4em 1fr;
+      gap: 0.3em;
+      align-items: baseline;
+
+      &::before {
+        content: counter(meaning) '.';
+        color: var(--orange-500, #c0612a);
+        font-size: 0.7em;
+        font-weight: 700;
+        padding-block-start: 0.15em;
+        line-height: 1;
+
+        @include butler-mx.dark-mode-class {
+          color: var(--orange-300);
+        }
+      }
+    }
+  }
+
   &__word-type-wrapper {
     display: flex;
     align-items: center;

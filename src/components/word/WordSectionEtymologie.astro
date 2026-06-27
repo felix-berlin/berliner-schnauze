@@ -42,10 +42,18 @@ const hasContent =
           )}
           {wordProps?.translations && wordProps.translations.length > 0 && (
             <>
-              <dt class='c-single-word__sub-headline'>Bedeutung</dt>
-              {wordProps.translations.map((translation) => (
-                <dd class='c-single-word__translation-item'>{translation?.translation}</dd>
-              ))}
+              <dt class='c-single-word__sub-headline'>{wordProps.translations.length === 1 ? 'Bedeutung' : 'Bedeutungen'}</dt>
+              {wordProps.translations.length === 1 ? (
+                <dd class='c-single-word__translation-item'>{wordProps.translations[0]?.translation}</dd>
+              ) : (
+                <dd class='c-single-word__translation-item'>
+                  <ol class='c-single-word__translation-list'>
+                    {wordProps.translations.map((translation) => (
+                      <li>{translation?.translation}</li>
+                    ))}
+                  </ol>
+                </dd>
+              )}
             </>
           )}
         </dl>
