@@ -1,0 +1,23 @@
+---
+import { formattedDate } from '@utils/helpers';
+
+interface Props {
+  dateGmt?: string | null;
+  modifiedGmt?: string | null;
+}
+
+const { dateGmt, modifiedGmt } = Astro.props;
+---
+
+<footer class='c-single-word__footer'>
+  {dateGmt && (
+    <p class='c-single-word__created'>
+      Wort erstellt am: <time datetime={dateGmt}>{formattedDate(dateGmt)}</time>
+    </p>
+  )}
+  {modifiedGmt && (
+    <p class='c-single-word__modified'>
+      Bearbeitet am: <time datetime={modifiedGmt}>{formattedDate(modifiedGmt)}</time>
+    </p>
+  )}
+</footer>

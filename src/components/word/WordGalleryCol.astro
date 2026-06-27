@@ -1,0 +1,29 @@
+---
+import ImageGallery from '@components/ImageGallery.astro';
+import WordLearnMore from '@components/word/WordLearnMore.astro';
+import type { WordProperties } from '@/gql/entity-types';
+
+interface Props {
+  images: WordProperties['images'];
+  learnMore?: string | null;
+  lightboxSizes?: string;
+  lightboxWidths?: number[];
+  sizes: string;
+  widths: number[];
+}
+
+const { images, learnMore, lightboxSizes, lightboxWidths, sizes, widths } = Astro.props;
+---
+
+<aside class='c-word-gallery-col' aria-label='Bildergalerie'>
+  <p class='c-word-gallery-col__label'>Bilder</p>
+  <ImageGallery
+    images={images}
+    lightboxSizes={lightboxSizes}
+    lightboxWidths={lightboxWidths}
+    priority={true}
+    sizes={sizes}
+    widths={widths}
+  />
+  {learnMore && <WordLearnMore learnMore={learnMore} />}
+</aside>

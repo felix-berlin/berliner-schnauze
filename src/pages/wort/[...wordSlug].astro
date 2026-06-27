@@ -8,23 +8,26 @@ import '@styles/plugins/astro-breadcrumbs.scss';
 // Types
 import type { GetStaticPaths, InferGetStaticParamsType, InferGetStaticPropsType } from 'astro';
 
-import ImageGallery from '@components/ImageGallery.astro';
 import RandomWordButton from '@components/RandomWordButton.vue';
 import RelatedWords from '@components/RelatedWords.vue';
-import WordExamples from '@components/word/WordExamples.astro';
-import WordAlphabetNav from '@components/word/WordAlphabetNav.astro';
 import WordAnagrams from '@components/word/WordAnagrams.astro';
+import WordGalleryCol from '@components/word/WordGalleryCol.astro';
 import WordHero from '@components/word/WordHero.astro';
+import WordLearnMore from '@components/word/WordLearnMore.astro';
+import WordPageFooter from '@components/word/WordPageFooter.astro';
+import WordSectionBeispiele from '@components/word/WordSectionBeispiele.astro';
 import WordSectionEtymologie from '@components/word/WordSectionEtymologie.astro';
 import WordSectionGrammatik from '@components/word/WordSectionGrammatik.astro';
 import WordSectionLinguistik from '@components/word/WordSectionLinguistik.astro';
+import WordSectionNachbarn from '@components/word/WordSectionNachbarn.astro';
 import WordSectionOrthographie from '@components/word/WordSectionOrthographie.astro';
 import WordSectionPhonologie from '@components/word/WordSectionPhonologie.astro';
+import WordSectionVerwandteWorte from '@components/word/WordSectionVerwandteWorte.astro';
 import BookRecommendations from '@components/word/BookRecommendations.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
 import { fetchAllWords } from '@services/api.ts';
-import { formattedDate, routeToWord, seoData, canonicalUrl } from '@utils/helpers.ts';
+import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
   alphabeticNeighbors,
   findAnagrams,
@@ -36,7 +39,6 @@ import {
 import type { WordRef } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
-import ExternalLink from '~icons/lucide/external-link';
 
 import type { BerlinerWord } from '@/gql/entity-types';
 
@@ -258,19 +260,7 @@ const schemaJson = () => {
       <div class='c-word-main__content'>
         <WordSectionEtymologie wordProps={wordProps} />
 
-        {
-          wordProps && (wordProps.examples?.length ?? 0) > 0 && (
-            <section class='c-section-card' id='beispiele' aria-labelledby='heading-beispiele'>
-              <div class='c-section-card__header'>
-                <span class='c-section-card__num'></span>
-                <h2 class='c-section-card__title' id='heading-beispiele'>Beispiele</h2>
-              </div>
-              <div class='c-section-card__body'>
-                <WordExamples examples={wordProps.examples} rootBemClass='c-single-word' />
-              </div>
-            </section>
-          )
-        }
+        <WordSectionBeispiele examples={wordProps?.examples} />
 
         <WordSectionOrthographie
           allWords={wordRefs}
@@ -285,115 +275,29 @@ const schemaJson = () => {
 
         <WordAnagrams anagrams={anagramsResult} />
 
-        {
-          (alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0) && (
-            <section class='c-section-card' id='navigation' aria-labelledby='heading-navigation'>
-              <div class='c-section-card__header'>
-                <span class='c-section-card__num'></span>
-                <h2 class='c-section-card__title' id='heading-navigation'>Alphabetische Nachbarn</h2>
-              </div>
-              <div class='c-section-card__body'>
-                <WordAlphabetNav neighbors={alphabeticNeighborsResult} />
-              </div>
-            </section>
-          )
-        }
+        <WordSectionNachbarn neighbors={alphabeticNeighborsResult} />
 
-        {
-          wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
-            <section class='c-section-card' id='verwandte-worte' aria-labelledby='heading-verwandte'>
-              <div class='c-section-card__header'>
-                <span class='c-section-card__num'></span>
-                <h2 class='c-section-card__title' id='heading-verwandte'>Verwandte Worte</h2>
-              </div>
-              <div class='c-section-card__body'>
-                <ul class='c-single-word__related-words-list'>
-                  {wordProps.relatedWords.nodes
-                    .filter((w) => w?.wordProperties?.berlinerisch !== wordProps?.berlinerisch)
-                    .map((w): BerlinerWord[] => (
-                      <li class='c-single-word__related-word'>
-                        <a
-                          class='c-single-word__related-word-link'
-                          href={routeToWord(w?.slug ?? undefined)}
-                        >
-                          {w?.wordProperties?.berlinerisch}
-                        </a>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            </section>
-          )
-        }
+        <WordSectionVerwandteWorte relatedWords={wordProps?.relatedWords} currentWord={berlinerisch} />
 
-        {
-          !hasImages && wordProps?.learnMore && (
-            <a
-              class='c-single-word__learn-more-link'
-              href={wordProps.learnMore}
-              rel='noopener noreferrer'
-              target='_blank'
-              title='mehr zu diesem Wort auf Wikipedia'
-            >
-              Erfahre mehr über dieses Wort
-              <span class='c-single-word__learn-more-link-icon'>
-                <ExternalLink height='10' width='10' />
-              </span>
-            </a>
-          )
-        }
+        {!hasImages && wordProps?.learnMore && <WordLearnMore learnMore={wordProps.learnMore} />}
 
         <BookRecommendations />
       </div>
 
-      {
-        hasImages && (
-          <aside class='c-word-gallery-col' aria-label='Bildergalerie'>
-            <p class='c-word-gallery-col__label'>Bilder</p>
-            <ImageGallery
-              images={wordProps?.images}
-              lightboxSizes={lightboxSizes}
-              lightboxWidths={lightboxWidths}
-              priority={true}
-              sizes={gallerySizes}
-              widths={galleryWidths}
-            />
-            {wordProps?.learnMore && (
-              <a
-                class='c-single-word__learn-more-link'
-                href={wordProps.learnMore}
-                rel='noopener noreferrer'
-                target='_blank'
-                title='mehr zu diesem Wort auf Wikipedia'
-              >
-                Erfahre mehr über dieses Wort
-                <span class='c-single-word__learn-more-link-icon'>
-                  <ExternalLink height='10' width='10' />
-                </span>
-              </a>
-            )}
-          </aside>
-        )
-      }
+      {hasImages && (
+        <WordGalleryCol
+          images={wordProps?.images}
+          learnMore={wordProps?.learnMore}
+          lightboxSizes={lightboxSizes}
+          lightboxWidths={lightboxWidths}
+          sizes={gallerySizes}
+          widths={galleryWidths}
+        />
+      )}
     </div>
   </article>
 
-  <footer class='c-single-word__footer'>
-    {
-      word?.dateGmt && (
-        <p class='c-single-word__created'>
-          Wort erstellt am: <time datetime={word.dateGmt}>{formattedDate(word.dateGmt)}</time>
-        </p>
-      )
-    }
-    {
-      word?.modifiedGmt && (
-        <p class='c-single-word__modified'>
-          Bearbeitet am: <time datetime={word.modifiedGmt}>{formattedDate(word.modifiedGmt)}</time>
-        </p>
-      )
-    }
-  </footer>
+  <WordPageFooter dateGmt={word.dateGmt} modifiedGmt={word.modifiedGmt} />
 
   <RelatedWords words={wordRefs} currentWord={wordProps?.berlinerisch ?? ''}>
     <li>

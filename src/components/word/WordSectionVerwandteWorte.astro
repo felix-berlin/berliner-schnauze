@@ -1,0 +1,34 @@
+---
+import { routeToWord } from '@utils/helpers';
+import type { BerlinerWord } from '@/gql/entity-types';
+
+interface Props {
+  relatedWords: BerlinerWord['wordProperties']['relatedWords'];
+  currentWord: string;
+}
+
+const { relatedWords, currentWord } = Astro.props;
+const filteredWords = (relatedWords?.nodes ?? []).filter(
+  (w) => w?.wordProperties?.berlinerisch !== currentWord
+);
+---
+
+{filteredWords.length > 0 && (
+  <section class='c-section-card' id='verwandte-worte' aria-labelledby='heading-verwandte'>
+    <div class='c-section-card__header'>
+      <span class='c-section-card__num'></span>
+      <h2 class='c-section-card__title' id='heading-verwandte'>Verwandte Worte</h2>
+    </div>
+    <div class='c-section-card__body'>
+      <ul class='c-single-word__related-words-list'>
+        {filteredWords.map((w) => (
+          <li class='c-single-word__related-word'>
+            <a class='c-single-word__related-word-link' href={routeToWord(w?.slug ?? undefined)}>
+              {w?.wordProperties?.berlinerisch}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

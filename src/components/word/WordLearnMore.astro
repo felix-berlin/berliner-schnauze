@@ -1,0 +1,22 @@
+---
+import ExternalLink from '~icons/lucide/external-link';
+
+interface Props {
+  learnMore: string;
+}
+
+const { learnMore } = Astro.props;
+---
+
+<a
+  class='c-single-word__learn-more-link'
+  href={learnMore}
+  rel='noopener noreferrer'
+  target='_blank'
+  title='mehr zu diesem Wort auf Wikipedia'
+>
+  Erfahre mehr über dieses Wort
+  <span class='c-single-word__learn-more-link-icon'>
+    <ExternalLink height='10' width='10' />
+  </span>
+</a>
