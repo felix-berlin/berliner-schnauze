@@ -96,4 +96,37 @@ describe("IsWordOfTheDay.vue", () => {
     expect(tooltip?.className).toContain("c-tooltip__panel--bottom");
     wrapper.unmount();
   });
+
+  it("renders badge variant with crown icon and text when isWordOfTheDay is true", () => {
+    const wrapper = mount(IsWordOfTheDay, {
+      props: {
+        wordId: 1,
+        word: "TestWord",
+        variant: "badge",
+      },
+      global: {
+        components: { Crown },
+      },
+    });
+
+    const badge = wrapper.find(".c-word-hero__wotd-badge");
+    expect(badge.exists()).toBe(true);
+    expect(badge.text()).toContain("Wort des Tages");
+    expect(wrapper.findComponent(Crown).exists()).toBe(true);
+    expect(wrapper.find(".c-word-of-the-day-crown").exists()).toBe(false);
+    wrapper.unmount();
+  });
+
+  it("does not render badge variant when isWordOfTheDay is false", () => {
+    const wrapper = mount(IsWordOfTheDay, {
+      props: {
+        wordId: 2,
+        word: "TestWord",
+        variant: "badge",
+      },
+    });
+
+    expect(wrapper.find(".c-word-hero__wotd-badge").exists()).toBe(false);
+    wrapper.unmount();
+  });
 });

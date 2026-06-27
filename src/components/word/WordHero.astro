@@ -45,6 +45,12 @@ const { word, wordProps, wortartLabel } = Astro.props;
         )
       }
       {wortartLabel && <span class='c-word-hero__wortart-badge'>{wortartLabel}</span>}
+      <IsWordOfTheDay
+        client:only='vue'
+        variant='badge'
+        word={wordProps?.berlinerisch ?? null}
+        wordId={word.berlinerWordId}
+      />
       {
         word.wordProperties?.berlinerischAudio && (
           <AudioPlayerList
@@ -57,13 +63,6 @@ const { word, wordProps, wortartLabel } = Astro.props;
     </div>
   </div>
   <div class='c-word-hero__right'>
-    <IsWordOfTheDay
-      client:only='vue'
-      iconSize={50}
-      tooltipPlacement='top'
-      word={wordProps?.berlinerisch ?? null}
-      wordId={word.berlinerWordId}
-    />
     <WordOptionDropdown
       berlinerisch={word.wordProperties?.berlinerisch ?? null}
       client:only='vue'
