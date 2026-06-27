@@ -10,9 +10,10 @@ interface Props {
   hasLinguistik: boolean;
   hasPhonologie: boolean;
   hasNeighbors: boolean;
+  hasRelatedWords: boolean;
 }
 
-const { wordProps, wordTags, hasAnagrams, hasOrthographie, hasLinguistik, hasPhonologie, hasNeighbors } = Astro.props;
+const { wordProps, wordTags, hasAnagrams, hasOrthographie, hasLinguistik, hasPhonologie, hasNeighbors, hasRelatedWords } = Astro.props;
 ---
 
 <aside class='c-word-sidebar'>
@@ -52,6 +53,7 @@ const { wordProps, wordTags, hasAnagrams, hasOrthographie, hasLinguistik, hasPho
       )
     }
     {hasNeighbors && <a class='c-word-sidebar__link' href='#navigation'>Nachbarn</a>}
+    {hasRelatedWords && <a class='c-word-sidebar__link' href='#verwandte-worte'>Verwandte Worte</a>}
   </nav>
 </aside>
 

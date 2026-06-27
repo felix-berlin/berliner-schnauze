@@ -19,6 +19,7 @@ const defaultProps = {
   hasLinguistik: false,
   hasPhonologie: false,
   hasNeighbors: false,
+  hasRelatedWords: false,
 };
 
 describe("WordSidebar.astro", () => {
@@ -127,6 +128,17 @@ describe("WordSidebar.astro", () => {
     const result = await render({ ...defaultProps, hasNeighbors: true });
     expect(result).toContain("Nachbarn");
     expect(result).toContain('href="#navigation"');
+  });
+
+  it("renders Verwandte Worte link when hasRelatedWords is true", async () => {
+    const result = await render({ ...defaultProps, hasRelatedWords: true });
+    expect(result).toContain("Verwandte Worte");
+    expect(result).toContain('href="#verwandte-worte"');
+  });
+
+  it("does not render Verwandte Worte link when hasRelatedWords is false", async () => {
+    const result = await render(defaultProps);
+    expect(result).not.toContain('href="#verwandte-worte"');
   });
 
   it("renders the nav with aria-label Seitennavigation", async () => {

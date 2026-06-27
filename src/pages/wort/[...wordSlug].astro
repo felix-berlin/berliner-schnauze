@@ -125,6 +125,7 @@ const hasOrthographie = berlinerisch.length > 0;
 const hasLinguistik = berlinerisch.length > 0;
 const hasPhonologie = soundingWordsResult.length > 0 || similarSpellingResult.length > 0;
 const hasNeighbors = alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
+const hasRelatedWords = (wordProps?.relatedWords?.nodes?.length ?? 0) > 0;
 const wortartLabel: string | undefined =
   wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
 
@@ -246,6 +247,7 @@ const schemaJson = () => {
       hasNeighbors={hasNeighbors}
       hasOrthographie={hasOrthographie}
       hasPhonologie={hasPhonologie}
+      hasRelatedWords={hasRelatedWords}
       wordProps={wordProps}
       wordTags={wordTags}
     />
@@ -300,8 +302,11 @@ const schemaJson = () => {
         {
           wordProps?.relatedWords?.nodes && wordProps?.relatedWords?.nodes.length > 0 && (
             <section class='c-section-card' id='verwandte-worte' aria-labelledby='heading-verwandte'>
-              <div class='c-section-card__body'>
+              <div class='c-section-card__header'>
+                <span class='c-section-card__num'></span>
                 <h2 class='c-section-card__title' id='heading-verwandte'>Verwandte Worte</h2>
+              </div>
+              <div class='c-section-card__body'>
                 <ul class='c-single-word__related-words-list'>
                   {wordProps.relatedWords.nodes
                     .filter((w) => w?.wordProperties?.berlinerisch !== wordProps?.berlinerisch)
