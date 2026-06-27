@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.35.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.35.0...v3.35.1) (2026-06-27)
+
+
+### Performance Improvements
+
+* change default prefetch strategy to hover in astro.config.mjs ([5521f78](https://github.com/felix-berlin/berliner-schnauze/commit/5521f788869fbe598a4a82ee3de545736615e266))
+
 # [3.35.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.34.0...v3.35.0) (2026-06-27)
 
 
