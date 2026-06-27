@@ -14,59 +14,6 @@
     }
   }
 
-  &__stats {
-    display: flex;
-    gap: vars.$spacer * 0.75;
-    flex-wrap: wrap;
-    margin-block-end: vars.$spacer;
-  }
-
-  &__stat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    background: color-mix(in srgb, var(--orange-600) 10%, white);
-    border: 1px dashed var(--orange-200);
-    border-radius: 4px;
-    padding: 0.5rem 0.75rem;
-    flex: 1;
-    min-width: 70px;
-
-    @include butler-mx.dark-mode-class {
-      background: color-mix(in srgb, var(--new-blue-400) 80%, black);
-    }
-  }
-
-  &__stat-value {
-    font-size: 1.5rem;
-    font-weight: 800;
-    line-height: 1;
-    color: var(--new-blue-400);
-
-    @include butler-mx.dark-mode-class {
-      color: white;
-    }
-
-    &--vowels {
-      color: #435e6b;
-
-      @include butler-mx.dark-mode-class {
-        color: #cfc536;
-      }
-    }
-  }
-
-  &__stat-label {
-    font-size: 0.6rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: color-mix(in srgb, var(--blue) 75%, white);
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--blue) 30%, white);
-    }
-  }
-
   &__list {
     list-style: none;
     padding: 0;
@@ -120,5 +67,11 @@
     text-decoration-style: dotted;
     text-underline-offset: 2px;
     cursor: help;
+  }
+
+  .c-section-card__stat-box {
+    dd {
+      margin-inline-start: 0;
+    }
   }
 }
