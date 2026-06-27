@@ -40,7 +40,7 @@ export default defineConfig({
   trailingSlash: "never",
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: "viewport",
+    defaultStrategy: "hover",
   },
   build: {
     format: "file",
