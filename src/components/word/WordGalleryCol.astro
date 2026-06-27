@@ -4,7 +4,7 @@ import WordLearnMore from '@components/word/WordLearnMore.astro';
 import type { WordProperties } from '@/gql/entity-types';
 
 interface Props {
-  images: WordProperties['images'];
+  images?: WordProperties['images'];
   learnMore?: string | null;
   lightboxSizes?: string;
   lightboxWidths?: number[];
@@ -12,7 +12,7 @@ interface Props {
   widths: number[];
 }
 
-const { images, learnMore, lightboxSizes, lightboxWidths, sizes, widths } = Astro.props;
+const { images = null, learnMore, lightboxSizes, lightboxWidths, sizes, widths } = Astro.props;
 ---
 
 <aside class='c-word-gallery-col' aria-label='Bildergalerie'>
