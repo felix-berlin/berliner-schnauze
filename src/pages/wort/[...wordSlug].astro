@@ -307,27 +307,19 @@ const schemaJson = () => {
 </Layout>
 
 <script>
-  // Sync --site-header-height so sticky topbar clears the main nav.
-  // Guard against height=0 that fires during View Transition animations.
+  function syncHeaderHeight() {
+    const header = document.querySelector<HTMLElement>('.c-header');
+    if (!header) return;
+    const h = Math.round(header.getBoundingClientRect().height);
+    if (h > 0) {
+      document.documentElement.style.setProperty('--site-header-height', h + 'px');
+    }
+  }
+
   const siteHeader = document.querySelector<HTMLElement>('.c-header');
   if (siteHeader) {
-    const syncHeaderHeight = () => {
-      const h = Math.round(siteHeader.getBoundingClientRect().height);
-      if (h > 0) {
-        document.documentElement.style.setProperty('--site-header-height', h + 'px');
-      }
-    };
     new ResizeObserver(syncHeaderHeight).observe(siteHeader);
   }
 
-  // Re-sync after every View Transition navigation in case the variable was zeroed out.
-  document.addEventListener('astro:page-load', () => {
-    const header = document.querySelector<HTMLElement>('.c-header');
-    if (header) {
-      const h = Math.round(header.getBoundingClientRect().height);
-      if (h > 0) {
-        document.documentElement.style.setProperty('--site-header-height', h + 'px');
-      }
-    }
-  });
+  document.addEventListener('astro:page-load', syncHeaderHeight);
 </script>
