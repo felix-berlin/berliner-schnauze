@@ -23,7 +23,7 @@
     counter-increment: none;
 
     .c-section-card__num::before {
-      content: '—';
+      content: "—";
     }
   }
 
@@ -118,6 +118,7 @@
 
     @include butler-mx.dark-mode-class {
       background: color-mix(in srgb, var(--new-blue-400) 80%, black);
+      border-color: var(--grey-100);
     }
   }
 
