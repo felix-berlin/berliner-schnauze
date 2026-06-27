@@ -95,13 +95,6 @@ const wordDescription = (() => {
   return raw.length > 160 ? raw.slice(0, 157) + '…' : raw;
 })();
 
-const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
-  return (
-    word?.alternativeWord +
-    (wordProps?.alternativeWords && index !== wordProps?.alternativeWords?.length - 1 ? ', ' : '')
-  );
-});
-
 // const wikimediaFiles = await createWikimediaFileList(wordProps?.wikimediaFiles!);
 // console.log(wikimediaFiles);
 
