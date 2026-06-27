@@ -16,8 +16,6 @@
   box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
   padding-inline: vars.$spacer * 1.5;
   padding-block: vars.$spacer * 0.75;
-  display: flex;
-  align-items: center;
 
   @include butler-mx.dark-mode-class {
     background: var(--new-blue-400);
