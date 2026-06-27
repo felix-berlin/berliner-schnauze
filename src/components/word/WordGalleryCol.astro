@@ -7,13 +7,23 @@ import type { WordProperties } from '@/gql/entity-types';
 interface Props {
   images?: WordProperties['images'];
   learnMore?: string | null;
-  lightboxSizes?: string;
-  lightboxWidths?: number[];
-  sizes: string;
-  widths: number[];
 }
 
-const { images = null, learnMore, lightboxSizes, lightboxWidths, sizes, widths } = Astro.props;
+const { images = null, learnMore } = Astro.props;
+
+// sizes/widths: max-width conditions ordered smallest breakpoint first (first match wins).
+// Gallery col is 280px fixed at desktop (word-page container >= 60rem ≈ 1010px viewport).
+// Below that threshold the gallery fills the content column width.
+// Multi-image: 2-col internal grid active when gallery col >= 19rem (304px), i.e. below ~63rem viewport.
+// Each image in 2-col ≈ (col - gap) / 2 - item-padding. Desktop: 280px col → single col → 260px.
+const isMultiImage = (images?.nodes?.length ?? 0) > 1;
+const widths = isMultiImage ? [200, 307, 435] : [316, 457, 658, 316];
+const sizes = isMultiImage
+  ? '(max-width: 35.5rem) 200px, (max-width: 48rem) 307px, (max-width: 63rem) 435px, 307px'
+  : '(max-width: 26.6rem) 316px, (max-width: 35.49rem) 457px, (max-width: 48rem) 658px, 316px';
+const lightboxWidths = [425, 567, 768, 896];
+const lightboxSizes =
+  '(max-width: 26.6rem) 425px, (max-width: 35.49rem) 567px, (max-width: 48rem) 768px, (max-width: 64rem) 896px';
 ---
 
 <aside class='c-word-gallery-col' aria-label='Bildergalerie'>
