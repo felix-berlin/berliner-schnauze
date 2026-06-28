@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.35.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.35.1...v3.35.2) (2026-06-28)
+
+
+### Bug Fixes
+
+* **routing:** filter words without slug in getStaticPaths ([ae88f9e](https://github.com/felix-berlin/berliner-schnauze/commit/ae88f9ecc86d326f1ef8c13fad44da27d9473d11))
+* **routing:** log word id and name when slug is missing ([a525cbb](https://github.com/felix-berlin/berliner-schnauze/commit/a525cbbc0386bea75e46a0a69a81da31168e5066))
+* **word:** exclude slug-less words from wordRefs to prevent null routing errors ([e01d017](https://github.com/felix-berlin/berliner-schnauze/commit/e01d017ede931c8d29ef5201cc4bbaa0f1ec8cb3))
+
+
+### Performance Improvements
+
+* change font-display to fallback for Berliner and Berlin fonts ([fa6131b](https://github.com/felix-berlin/berliner-schnauze/commit/fa6131b3b841d4e14800cdd0f86b7e0d9e9b6461))
+* **cls:** add min-height to fact cards to prevent font-swap layout collapse ([922e31d](https://github.com/felix-berlin/berliner-schnauze/commit/922e31dfab6f41560b6bae2b5bb95a413a376520))
+* **cls:** inline critical min-height for fact cards in page head ([c5b3c64](https://github.com/felix-berlin/berliner-schnauze/commit/c5b3c64e755c6a3ca1cfc8dda89e8088807a8e10))
+* **cls:** use is:inline to prevent Astro from bundling critical min-height style ([1e1ab55](https://github.com/felix-berlin/berliner-schnauze/commit/1e1ab557897c71918d49987023f8a6d20d5fa058))
+* comment out replay integration in Sentry initialization for future SSR support ([6b265ea](https://github.com/felix-berlin/berliner-schnauze/commit/6b265ead023c56dd71faa388bd290ccf3e0a2a9f))
+* integrate custom fonts and optimize font loading in the configuration ([e81c6ff](https://github.com/felix-berlin/berliner-schnauze/commit/e81c6ffe6fc29c92b35e5b41c802722b6fdf4bac))
+* isolate Sentry SDK into a separate JS chunk ([cbc2864](https://github.com/felix-berlin/berliner-schnauze/commit/cbc2864e2524601c7c24403629ba6211b5d20c7c))
+* remove unused preconnect to cms.berliner-schnauze.wtf ([9d14043](https://github.com/felix-berlin/berliner-schnauze/commit/9d1404372da129287c93b5ed26a0a5711652ea5f))
+* reserve min-height for WordOfTheDay fallback slot to prevent grid reflow CLS ([10c4276](https://github.com/felix-berlin/berliner-schnauze/commit/10c42761b7ac5afa0f2bbf8151e4147ce44c88b6))
+
+
+### Reverts
+
+* **cls:** remove min-height fact-card attempts ([e28a3ab](https://github.com/felix-berlin/berliner-schnauze/commit/e28a3ab07f190ae45790da8b12279c0b34491270))
+
 ## [3.35.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.35.0...v3.35.1) (2026-06-27)
 
 
