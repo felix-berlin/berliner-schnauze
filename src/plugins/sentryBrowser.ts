@@ -8,7 +8,8 @@ Sentry.init({
 
   environment: SENTRY_ENVIRONMENT,
 
-  integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
+  // Enable Tracing integration when moving to ssr, replay not realy needed for now
+  // integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
   release: version,
 
   replaysOnErrorSampleRate: 1.0,

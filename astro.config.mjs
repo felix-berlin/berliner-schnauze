@@ -6,7 +6,7 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import spotlightjs from "@spotlightjs/astro";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
-import { defineConfig, envField, svgoOptimizer } from "astro/config";
+import { defineConfig, envField, fontProviders, svgoOptimizer } from "astro/config";
 import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
@@ -38,6 +38,55 @@ const sassAliases = {
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   trailingSlash: "never",
+  fonts: [
+    {
+      provider: fontProviders.local(),
+      name: "Berliner",
+      cssVariable: "--font-berliner",
+      fallbacks: ["Georgia", "serif"],
+      display: "fallback",
+      options: {
+        variants: [
+          {
+            weight: "normal",
+            style: "normal",
+            src: ["./src/assets/fonts/BerlinerRegular.woff2"],
+          },
+        ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
+      name: "Berlin",
+      cssVariable: "--font-berlin",
+      fallbacks: ["Arial", "sans-serif"],
+      display: "fallback",
+      options: {
+        variants: [
+          {
+            weight: 400,
+            style: "normal",
+            src: ["./src/assets/fonts/Berlin.woff2"],
+          },
+          {
+            weight: 400,
+            style: "italic",
+            src: ["./src/assets/fonts/Berlin-Italic.woff2"],
+          },
+          {
+            weight: 700,
+            style: "normal",
+            src: ["./src/assets/fonts/Berlin-Bold.woff2"],
+          },
+          {
+            weight: 900,
+            style: "normal",
+            src: ["./src/assets/fonts/BerlinX-Bold.woff2"],
+          },
+        ],
+      },
+    },
+  ],
   prefetch: {
     prefetchAll: true,
     defaultStrategy: "hover",
@@ -401,6 +450,9 @@ export default defineConfig({
               id.includes("@nanostores/async")
             ) {
               return "wordList";
+            }
+            if (id.includes("@sentry/") || id.includes("/plugins/sentryBrowser")) {
+              return "sentry";
             }
           },
         },

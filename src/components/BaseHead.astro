@@ -1,5 +1,6 @@
 ---
 import SetColorMode from '@components/SetColorMode.astro';
+import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import { pwaInfo } from 'virtual:pwa-info';
 
@@ -7,12 +8,6 @@ import { canonicalUrl } from '@utils/helpers';
 import type { Seo, SeoProps, Title } from '@/types/seo';
 
 export type { Seo, SeoProps, Title };
-
-import BerlinBold from '/fonts/Berlin-Bold.woff2';
-import BerlinItalic from '/fonts/Berlin-Italic.woff2';
-import BerlinXBold from '/fonts/BerlinX-Bold.woff2';
-import Berlin from '/fonts/Berlin.woff2';
-import BerlinerRegular from '/fonts/BerlinerRegular.woff2';
 
 const { seo, title } = Astro.props as SeoProps & Title;
 const canonicalURL = seo?.canonical?.replace(/\/$/, '') ?? canonicalUrl(Astro.url.pathname, Astro.site);
@@ -27,12 +22,8 @@ const canonicalURL = seo?.canonical?.replace(/\/$/, '') ?? canonicalUrl(Astro.ur
   {seo?.title || title}
 </title>
 
-<link as='font' crossorigin href={BerlinerRegular} rel='preload' type='font/woff2' />
-<link as='font' crossorigin href={Berlin} rel='preload' type='font/woff2' />
-<link as='font' crossorigin href={BerlinBold} rel='preload' type='font/woff2' />
-<link as='font' crossorigin href={BerlinItalic} rel='preload' type='font/woff2' />
-<link as='font' crossorigin href={BerlinXBold} rel='preload' type='font/woff2' />
-<link href='https://cms.berliner-schnauze.wtf' rel='preconnect' crossorigin />
+<Font cssVariable="--font-berliner" preload />
+<Font cssVariable="--font-berlin" preload />
 
 <script src='../plugins/sentryBrowser.ts'></script>
 
