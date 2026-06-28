@@ -73,5 +73,9 @@ const menuItems: (ItemObject | { component: DefineComponent; props: object })[] 
     link: "/settings",
     title: "Einstellungen",
   },
+  {
+    link: "/changelog",
+    title: "Was ist neu?",
+  },
 ];
 </script>

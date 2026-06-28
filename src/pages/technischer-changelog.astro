@@ -1,0 +1,20 @@
+---
+import Layout from '@layouts/Layout.astro';
+import type { Seo } from '@/types/seo';
+import { Content } from '../../CHANGELOG.md';
+
+const seo: Seo = {
+  opengraphDescription: 'Vollständiger technischer Changelog mit allen Commits und Versionen.',
+  opengraphTitle: 'Technischer Changelog — Berliner Schnauze',
+};
+---
+
+<Layout content={{ title: 'Technischer Changelog', seo }}>
+  <article class='o-container c-technical-changelog'>
+    <Content />
+  </article>
+</Layout>
+
+<style lang='scss'>
+  @use '@styles/pages/technical-changelog';
+</style>

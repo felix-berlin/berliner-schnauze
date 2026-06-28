@@ -1,0 +1,40 @@
+@use "@styles/variables" as vars;
+
+.c-technical-changelog {
+  padding-block: vars.$spacer * 3;
+
+  h1,
+  h2,
+  h3 {
+    margin-block-start: vars.$spacer * 2;
+    margin-block-end: vars.$spacer * 0.5;
+  }
+
+  h1:first-child {
+    margin-block-start: 0;
+  }
+
+  p {
+    margin-block-end: vars.$spacer * 0.5;
+  }
+
+  ul {
+    padding-inline-start: vars.$spacer * 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.25;
+    margin-block-end: vars.$spacer * 0.5;
+  }
+
+  a {
+    word-break: break-all;
+  }
+
+  code {
+    font-family: monospace;
+    font-size: 0.875em;
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+    padding-inline: 0.25em;
+    border-radius: 2px;
+  }
+}

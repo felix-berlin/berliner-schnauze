@@ -1,0 +1,46 @@
+---
+import Layout from '@layouts/Layout.astro';
+import type { Seo } from '@/types/seo';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const changelogs = await getCollection('changelogs');
+  return changelogs.map((entry) => ({
+    params: { version: entry.data.version },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, description, releaseDate } = entry.data;
+
+const seo: Seo = {
+  opengraphDescription: description,
+  opengraphTitle: title,
+};
+---
+
+<Layout content={{ title, seo }}>
+  <article class='o-container c-user-changelog'>
+    <header class='c-user-changelog__header'>
+      <h1 class='c-user-changelog__title'>{title}</h1>
+      <time class='c-user-changelog__date' datetime={releaseDate}>
+        Veröffentlicht am {
+          new Date(releaseDate).toLocaleDateString('de-DE', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })
+        }
+      </time>
+    </header>
+    <div class='c-user-changelog__content'>
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<style lang='scss'>
+  @use '@styles/pages/changelog-detail';
+</style>
