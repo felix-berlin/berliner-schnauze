@@ -451,6 +451,9 @@ export default defineConfig({
             ) {
               return "wordList";
             }
+            if (id.includes("@sentry/") || id.includes("/plugins/sentryBrowser")) {
+              return "sentry";
+            }
           },
         },
       },
