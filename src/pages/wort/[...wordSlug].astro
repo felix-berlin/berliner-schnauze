@@ -50,7 +50,10 @@ export const getStaticPaths = (async () => {
   }));
 
   return allWords.flatMap(({ node }, i) => {
-    if (!node.slug) return [];
+    if (!node.slug) {
+      console.warn(`[wort/[...wordSlug]] Word without slug skipped — id: ${node.id}, berlinerisch: "${node.wordProperties?.berlinerisch ?? '(unknown)'}"`);
+      return [];
+    }
     const wordRef = wordRefs[i]!;
     const berlinerisch = node.wordProperties?.berlinerisch ?? '';
     return [{
