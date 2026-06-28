@@ -49,12 +49,13 @@ export const getStaticPaths = (async () => {
     wordProperties: { berlinerisch: node.wordProperties?.berlinerisch },
   }));
 
-  return allWords.map(({ node }, i) => {
+  return allWords.flatMap(({ node }, i) => {
+    if (!node.slug) return [];
     const wordRef = wordRefs[i]!;
     const berlinerisch = node.wordProperties?.berlinerisch ?? '';
-    return {
+    return [{
       params: {
-        wordSlug: node.slug ?? undefined,
+        wordSlug: node.slug,
       },
       props: {
         alphabeticNeighborsResult: alphabeticNeighbors(wordRefs, wordRef),
@@ -70,7 +71,7 @@ export const getStaticPaths = (async () => {
         word: node,
         wordRefs,
       },
-    };
+    }];
   });
 }) satisfies GetStaticPaths;
 
