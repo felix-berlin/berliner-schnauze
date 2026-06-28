@@ -1,0 +1,11 @@
+# Content-hashed assets — safe to cache forever (URL changes on every build)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Build-time generated search indexes — cache for 1 day
+# Cloudflare Pages purges all caches on every deploy
+/api/search/index.json
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+
+/api/search/meta.json
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
