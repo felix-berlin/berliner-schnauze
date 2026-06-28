@@ -91,8 +91,6 @@ const facts = [
   <Fragment slot='head'>
     <script set:html={websiteSchema} type='application/ld+json' />
     <script set:html={organizationSchema} type='application/ld+json' />
-    {/* Reserve fact-card height before external CSS loads — prevents CLS from font+CSS arriving simultaneously */}
-    <style is:inline>.c-fact-card{min-height:160px}</style>
   </Fragment>
   <header class='o-index__header'>
     <h1 class='o-index__headline'>

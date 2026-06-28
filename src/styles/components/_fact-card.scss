@@ -7,7 +7,6 @@
   padding-block: 1rem;
   padding-inline: 1.5rem;
   border: 1px solid var(--new-blue-200);
-  min-height: 160px;
 
   @include butler-mx.dark-mode-class {
     --color-background: rgb(0 0 0 / 10%);
