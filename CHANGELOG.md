@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.35.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.35.2...v3.35.3) (2026-06-28)
+
+
+### Performance Improvements
+
+* **cls:** inline critical fact-card CSS via beasties:include comment ([b7a2293](https://github.com/felix-berlin/berliner-schnauze/commit/b7a2293f7e4b88b098af0bdcb512fd0339cdea84))
+
 ## [3.35.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.35.1...v3.35.2) (2026-06-28)
 
 
