@@ -123,6 +123,11 @@ export default getViteConfig(
           access: "public",
           default: 0.1,
         }),
+        SENTRY_AUTH_TOKEN: envField.string({
+          context: "server",
+          access: "secret",
+          default: "not-a-real-token",
+        }),
         MATOMO_HOST: envField.string({
           context: "client",
           access: "public",
