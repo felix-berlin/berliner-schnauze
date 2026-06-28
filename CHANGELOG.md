@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.36.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.35.3...v3.36.0) (2026-06-28)
+
+
+### Features
+
+* **changelog:** implement user and technical changelogs with new pages and styles ([44b6430](https://github.com/felix-berlin/berliner-schnauze/commit/44b64309ccb8182e2588addbf160876a8fe64395))
+* **tests:** add unit tests for changelog and technical changelog pages ([e8da053](https://github.com/felix-berlin/berliner-schnauze/commit/e8da053484f3dcb20f3208d058d47c6828c0f2a1))
+
 ## [3.35.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.35.2...v3.35.3) (2026-06-28)
 
 
