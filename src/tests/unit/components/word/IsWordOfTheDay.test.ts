@@ -33,7 +33,7 @@ describe("IsWordOfTheDay.vue", () => {
     delete (HTMLElement.prototype as any).hidePopover;
   });
 
-  it("renders correctly when isWordOfTheDay is true", () => {
+  it("renders correctly when isWordOfTheDay is true", async () => {
     const wrapper = mount(IsWordOfTheDay, {
       props: {
         wordId: 1,
@@ -53,7 +53,8 @@ describe("IsWordOfTheDay.vue", () => {
 
     expect(wrapper.find(".c-word-of-the-day-crown").exists()).toBe(true);
     expect(wrapper.findComponent(Crown).exists()).toBe(true);
-    // vTooltip creates a popover element in document.body
+    // vTooltip lazily adds the panel to body on first show
+    await wrapper.find("[aria-describedby]").trigger("pointerenter");
     expect(document.body.querySelector("[popover='manual']")).not.toBeNull();
     wrapper.unmount();
   });
@@ -72,7 +73,7 @@ describe("IsWordOfTheDay.vue", () => {
     wrapper.unmount();
   });
 
-  it("renders with correct tooltip content and placement", () => {
+  it("renders with correct tooltip content and placement", async () => {
     const wrapper = mount(IsWordOfTheDay, {
       props: {
         wordId: 1,
@@ -90,6 +91,7 @@ describe("IsWordOfTheDay.vue", () => {
       },
     });
 
+    await wrapper.find("[aria-describedby]").trigger("pointerenter");
     const tooltip = document.body.querySelector("[popover='manual']");
     expect(tooltip).not.toBeNull();
     expect(tooltip?.textContent).toContain("TestWord, ist das heutige Wort des Tages");

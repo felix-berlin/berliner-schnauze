@@ -80,8 +80,7 @@ const {
 
 defineOptions({ inheritAttrs: false });
 
-const id = crypto.randomUUID();
-const panelId = `dropdown-${id}`;
+const panelId = `dropdown-${crypto.randomUUID()}`;
 
 const triggerEl = ref<HTMLElement | null>(null);
 const panel = ref<HTMLElement | null>(null);

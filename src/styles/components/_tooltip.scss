@@ -92,6 +92,12 @@
   // top, left, right, bottom set via JS (syncArrow) to track trigger center
 }
 
+// Closed panel must never intercept clicks — during overlay allow-discrete exit transition
+// the panel stays in the top layer for the full animation duration.
+.c-tooltip__panel:not(:popover-open) {
+  pointer-events: none;
+}
+
 // Fade via @starting-style + allow-discrete
 @include butler-mx.feature("motion") {
   .c-tooltip__panel {

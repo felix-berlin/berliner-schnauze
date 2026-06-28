@@ -29,25 +29,40 @@ const mountWithDirective = (value: TooltipValue) => {
   return wrapper;
 };
 
+// Access the panel element directly from directive state (useful before first show).
+const getStatePanel = (wrapper: VueWrapper) =>
+  (wrapper.find("button").element as any)._tooltip?.panel as HTMLElement | undefined;
+
+// Trigger show and return the panel now in document.body.
+const showAndGetPanel = async (wrapper: VueWrapper) => {
+  await wrapper.find("button").trigger("pointerenter");
+  return document.body.querySelector("[popover]") as HTMLElement;
+};
+
 describe("vTooltip directive", () => {
-  it("creates a [popover='manual'] element in document.body on mount", () => {
-    mountWithDirective("Test tooltip");
+  it("creates a [popover='manual'] element in document.body on show", async () => {
+    const wrapper = mountWithDirective("Test tooltip");
+    expect(document.body.querySelector("[popover='manual']")).toBeNull();
+    await showAndGetPanel(wrapper);
     expect(document.body.querySelector("[popover='manual']")).not.toBeNull();
   });
 
-  it("panel has role='tooltip'", () => {
-    mountWithDirective("Test");
-    expect(document.body.querySelector("[popover]")?.getAttribute("role")).toBe("tooltip");
+  it("panel has role='tooltip'", async () => {
+    const wrapper = mountWithDirective("Test");
+    const panel = await showAndGetPanel(wrapper);
+    expect(panel.getAttribute("role")).toBe("tooltip");
   });
 
-  it("sets panel textContent from string value", () => {
-    mountWithDirective("Hello Tooltip");
-    expect(document.body.querySelector("[popover]")?.textContent).toBe("Hello Tooltip");
+  it("sets panel textContent from string value", async () => {
+    const wrapper = mountWithDirective("Hello Tooltip");
+    const panel = await showAndGetPanel(wrapper);
+    expect(panel.textContent).toBe("Hello Tooltip");
   });
 
-  it("sets panel textContent from content option", () => {
-    mountWithDirective({ content: "Option text" });
-    expect(document.body.querySelector("[popover]")?.textContent).toBe("Option text");
+  it("sets panel textContent from content option", async () => {
+    const wrapper = mountWithDirective({ content: "Option text" });
+    const panel = await showAndGetPanel(wrapper);
+    expect(panel.textContent).toBe("Option text");
   });
 
   it("sets anchor-name on host element", () => {
@@ -56,34 +71,34 @@ describe("vTooltip directive", () => {
     expect(anchorName).toMatch(/^--tooltip-/);
   });
 
-  it("sets position-anchor on panel matching host anchor-name", () => {
+  it("sets position-anchor on panel matching host anchor-name", async () => {
     const wrapper = mountWithDirective("Test");
     const anchorName = wrapper.find("button").element.style.getPropertyValue("anchor-name");
-    const panel = document.body.querySelector("[popover]") as HTMLElement;
+    const panel = await showAndGetPanel(wrapper);
     expect(panel.style.getPropertyValue("position-anchor")).toBe(anchorName);
   });
 
-  it("sets aria-describedby on host matching panel id", () => {
+  it("sets aria-describedby on host matching panel id", async () => {
     const wrapper = mountWithDirective("Test");
-    const panel = document.body.querySelector("[popover]") as HTMLElement;
+    const panel = await showAndGetPanel(wrapper);
     expect(wrapper.find("button").attributes("aria-describedby")).toBe(panel.id);
   });
 
-  it("applies default placement class 'top'", () => {
-    mountWithDirective("Test");
-    expect(document.body.querySelector("[popover]")?.className).toContain("c-tooltip__panel--top");
+  it("applies default placement class 'top'", async () => {
+    const wrapper = mountWithDirective("Test");
+    const panel = await showAndGetPanel(wrapper);
+    expect(panel.className).toContain("c-tooltip__panel--top");
   });
 
-  it("applies specified placement class", () => {
-    mountWithDirective({ content: "Test", placement: "bottom" });
-    expect(document.body.querySelector("[popover]")?.className).toContain(
-      "c-tooltip__panel--bottom",
-    );
+  it("applies specified placement class", async () => {
+    const wrapper = mountWithDirective({ content: "Test", placement: "bottom" });
+    const panel = await showAndGetPanel(wrapper);
+    expect(panel.className).toContain("c-tooltip__panel--bottom");
   });
 
-  it("sets --c-tooltip-offset from offset option", () => {
-    mountWithDirective({ content: "Test", offset: 16 });
-    const panel = document.body.querySelector("[popover]") as HTMLElement;
+  it("sets --c-tooltip-offset from offset option", async () => {
+    const wrapper = mountWithDirective({ content: "Test", offset: 16 });
+    const panel = await showAndGetPanel(wrapper);
     expect(panel.style.getPropertyValue("--c-tooltip-offset")).toBe("16px");
   });
 
@@ -148,8 +163,9 @@ describe("vTooltip directive", () => {
     expect(mockShowPopover).not.toHaveBeenCalled();
   });
 
-  it("removes panel from document.body on unmount", () => {
+  it("removes panel from document.body on unmount", async () => {
     const wrapper = mountWithDirective("Test");
+    await showAndGetPanel(wrapper);
     expect(document.body.querySelector("[popover]")).not.toBeNull();
     wrapper.unmount();
     expect(document.body.querySelector("[popover]")).toBeNull();
@@ -197,6 +213,7 @@ describe("vTooltip directive", () => {
   it("panel pointerenter cancels pending hide timer", async () => {
     vi.useFakeTimers();
     const wrapper = mountWithDirective("Test");
+    await wrapper.find("button").trigger("pointerenter"); // adds panel to body
     const panel = document.body.querySelector("[popover]") as HTMLElement;
     await wrapper.find("button").trigger("pointerleave");
     panel.dispatchEvent(new Event("pointerenter"));
@@ -206,7 +223,8 @@ describe("vTooltip directive", () => {
 
   it("panel pointerleave triggers hide after delay", async () => {
     vi.useFakeTimers();
-    mountWithDirective("Test");
+    const wrapper = mountWithDirective("Test");
+    await wrapper.find("button").trigger("pointerenter"); // adds panel to body
     const panel = document.body.querySelector("[popover]") as HTMLElement;
     panel.dispatchEvent(new Event("pointerleave"));
     expect(mockHidePopover).not.toHaveBeenCalled();
@@ -301,13 +319,16 @@ describe("vTooltip directive", () => {
   });
 
   it("normalize uses '' for content when value object has no content (covers line 96 ?? '' branch)", () => {
-    mountWithDirective({ disabled: true } as any);
-    const panel = document.body.querySelector("[popover]") as HTMLElement;
-    expect(panel.textContent).toBe("");
+    const wrapper = mountWithDirective({ disabled: true } as any);
+    // Panel is never shown when disabled — access directly via directive state
+    const panel = getStatePanel(wrapper);
+    expect(panel?.textContent).toBe("");
   });
 
   it("panel pointerenter is safe when no hide timer is pending (covers line 185 null branch)", async () => {
-    mountWithDirective("Test");
+    const wrapper = mountWithDirective("Test");
+    await wrapper.find("button").trigger("pointerenter"); // adds panel to body
+    mockShowPopover.mockClear();
     const panel = document.body.querySelector("[popover]") as HTMLElement;
     // Dispatch pointerenter on the panel without any prior pointerleave (hideTimer is null)
     panel.dispatchEvent(new Event("pointerenter"));
@@ -318,7 +339,9 @@ describe("vTooltip directive", () => {
     const wrapper = mountWithDirective("Initial");
     const btn = wrapper.find("button").element;
     vTooltip.updated!(btn, { value: "Updated", oldValue: undefined } as any, null as any, null as any);
-    expect(document.body.querySelector("[popover]")?.textContent).toBe("Updated");
+    // Panel may not be in body yet — access via directive state
+    const panel = getStatePanel(wrapper);
+    expect(panel?.textContent).toBe("Updated");
   });
 });
 

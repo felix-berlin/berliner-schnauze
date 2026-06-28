@@ -11,29 +11,28 @@
   >
     <slot :tooltip-id="tooltipId" />
 
-    <Teleport to="body">
-      <div
-        :id="tooltipId"
-        ref="panel"
-        popover="manual"
-        role="tooltip"
-        class="c-tooltip__panel"
-        :class="`c-tooltip__panel--${placement}`"
-        :style="`position-anchor: --${tooltipId}; --c-tooltip-offset: ${offset}px`"
-        @pointerenter="cancelHide"
-        @pointerleave="scheduleHide"
-      >
-        <span ref="arrow" class="c-tooltip__arrow" aria-hidden="true" />
-        <slot name="tooltip">{{ content }}</slot>
-      </div>
-    </Teleport>
+    <div
+      v-if="isRendered"
+      :id="tooltipId"
+      ref="panel"
+      popover="manual"
+      role="tooltip"
+      class="c-tooltip__panel"
+      :class="`c-tooltip__panel--${placement}`"
+      :style="`position-anchor: --${tooltipId}; --c-tooltip-offset: ${offset}px`"
+      @pointerenter="cancelHide"
+      @pointerleave="scheduleHide"
+    >
+      <span ref="arrow" class="c-tooltip__arrow" aria-hidden="true" />
+      <slot name="tooltip">{{ content }}</slot>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { syncTooltipArrow } from "@/directives/tooltip";
 import { useEventListener } from "@vueuse/core";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 
 export type TooltipPlacement =
   | "top"
@@ -60,8 +59,13 @@ const container = ref<HTMLElement | null>(null);
 const panel = ref<HTMLElement | null>(null);
 const arrow = ref<HTMLElement | null>(null);
 const isVisible = ref(false);
+const isRendered = ref(false);
 
 let hideTimer: ReturnType<typeof setTimeout> | null = null;
+let domRemovalTimer: ReturnType<typeof setTimeout> | null = null;
+
+// Matches the CSS exit transition duration in _tooltip.scss
+const EXIT_ANIMATION_MS = 100;
 
 const cancelHide = (): void => {
   if (hideTimer !== null) {
@@ -70,23 +74,39 @@ const cancelHide = (): void => {
   }
 };
 
+const cancelDomRemoval = (): void => {
+  if (domRemovalTimer !== null) {
+    clearTimeout(domRemovalTimer);
+    domRemovalTimer = null;
+  }
+};
+
 const hide = (): void => {
   cancelHide();
   panel.value?.hidePopover();
   isVisible.value = false;
+  // Keep panel in DOM until the overlay allow-discrete exit animation completes,
+  // then remove it so it doesn't persist as dead DOM between interactions.
+  domRemovalTimer = setTimeout(() => {
+    isRendered.value = false;
+    domRemovalTimer = null;
+  }, EXIT_ANIMATION_MS);
 };
 
 // Delay lets the pointer move from trigger to tooltip panel without dismissing (WCAG 1.4.13)
 const HIDE_DELAY = 200;
 
 const scheduleHide = (): void => {
-  hideTimer = setTimeout(() => {
-    hide();
-  }, HIDE_DELAY);
+  hideTimer = setTimeout(hide, HIDE_DELAY);
 };
 
-const show = (): void => {
+const show = async (): Promise<void> => {
   cancelHide();
+  cancelDomRemoval();
+  if (!isRendered.value) {
+    isRendered.value = true;
+    await nextTick();
+  }
   panel.value?.showPopover();
   isVisible.value = true;
   if (container.value && panel.value && arrow.value) {

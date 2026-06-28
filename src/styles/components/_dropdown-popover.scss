@@ -104,6 +104,12 @@
   // tracks the trigger center correctly even after position-try-fallbacks flip
 }
 
+// Closed panel must never intercept clicks — especially during the overlay allow-discrete
+// exit transition where the panel stays in the top layer for the duration of the animation.
+.c-dropdown__panel:not(:popover-open) {
+  pointer-events: none;
+}
+
 // Fade via @starting-style + allow-discrete (Baseline Newly Available, 2024)
 @include butler-mx.feature("motion") {
   .c-dropdown__panel {
