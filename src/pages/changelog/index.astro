@@ -1,0 +1,46 @@
+---
+import Layout from '@layouts/Layout.astro';
+import type { Seo } from '@/types/seo';
+import { getCollection } from 'astro:content';
+
+const changelogs = await getCollection('changelogs');
+const sorted = changelogs.sort((a, b) =>
+  b.data.version.localeCompare(a.data.version, undefined, { numeric: true }),
+);
+
+const seo: Seo = {
+  opengraphDescription: 'Alle Neuigkeiten und Verbesserungen der Berliner Schnauze App.',
+  opengraphTitle: 'Was ist neu? — Berliner Schnauze',
+};
+---
+
+<Layout content={{ title: 'Was ist neu?', seo }}>
+  <section class='o-container c-changelog-overview'>
+    <h1 class='c-changelog-overview__title'>Was ist neu?</h1>
+    <ul class='c-changelog-overview__list'>
+      {
+        sorted.map((entry) => (
+          <li class='c-changelog-overview__item'>
+            <a class='c-changelog-overview__link' href={`/changelog/${entry.data.version}`}>
+              {entry.data.title}
+            </a>
+            <time class='c-changelog-overview__date' datetime={entry.data.releaseDate}>
+              {new Date(entry.data.releaseDate).toLocaleDateString('de-DE', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+            </time>
+            {entry.data.description && (
+              <p class='c-changelog-overview__description'>{entry.data.description}</p>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Layout>
+
+<style lang='scss'>
+  @use '@styles/pages/changelog-overview';
+</style>
