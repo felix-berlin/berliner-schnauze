@@ -44,6 +44,7 @@ export default defineConfig({
       name: "Berliner",
       cssVariable: "--font-berliner",
       fallbacks: ["Georgia", "serif"],
+      display: "fallback",
       options: {
         variants: [
           {
@@ -59,6 +60,7 @@ export default defineConfig({
       name: "Berlin",
       cssVariable: "--font-berlin",
       fallbacks: ["Arial", "sans-serif"],
+      display: "fallback",
       options: {
         variants: [
           {
