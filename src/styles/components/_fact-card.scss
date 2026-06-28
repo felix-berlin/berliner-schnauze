@@ -2,11 +2,13 @@
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
+/* beasties:include */
 .c-fact-card {
   background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 20%, transparent));
   padding-block: 1rem;
   padding-inline: 1.5rem;
   border: 1px solid var(--new-blue-200);
+  min-height: 160px;
 
   @include butler-mx.dark-mode-class {
     --color-background: rgb(0 0 0 / 10%);
