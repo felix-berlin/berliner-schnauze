@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.37.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.36.0...v3.37.0) (2026-06-28)
+
+
+### Features
+
+* **tooltip:** enhance tooltip and dropdown popovers with lazy rendering and improved event handling ([e7e37ed](https://github.com/felix-berlin/berliner-schnauze/commit/e7e37eddbbbe21a6f68e46151a4686db987c5c92))
+
 # [3.36.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.35.3...v3.36.0) (2026-06-28)
 
 
