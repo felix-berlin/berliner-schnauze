@@ -43,18 +43,21 @@ import type { BerlinerWord } from '@/gql/entity-types';
 
 export const getStaticPaths = (async () => {
   const allWords = await fetchAllWords();
-  const wordRefs: WordRef[] = allWords.map(({ node }) => ({
-    id: node.id,
-    slug: node.slug,
-    wordProperties: { berlinerisch: node.wordProperties?.berlinerisch },
-  }));
+  const wordRefs: WordRef[] = allWords
+    .filter(({ node }) => !!node.slug)
+    .map(({ node }) => ({
+      id: node.id,
+      slug: node.slug,
+      wordProperties: { berlinerisch: node.wordProperties?.berlinerisch },
+    }));
+  const wordRefById = new Map(wordRefs.map((ref) => [ref.id, ref]));
 
-  return allWords.flatMap(({ node }, i) => {
+  return allWords.flatMap(({ node }) => {
     if (!node.slug) {
       console.warn(`[wort/[...wordSlug]] Word without slug skipped — id: ${node.id}, berlinerisch: "${node.wordProperties?.berlinerisch ?? '(unknown)'}"`);
       return [];
     }
-    const wordRef = wordRefs[i]!;
+    const wordRef = wordRefById.get(node.id)!;
     const berlinerisch = node.wordProperties?.berlinerisch ?? '';
     return [{
       params: {
