@@ -15,7 +15,7 @@ export default (app: App) => {
     },
     url: WP_API,
   });
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV === "development") {
     void Promise.all([
       import("@nanostores/vue/devtools"),
       import("../stores/index"),
