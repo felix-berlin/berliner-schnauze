@@ -45,7 +45,7 @@ async function fetchWordModifiedDates(apiUrl) {
     if (!bw) break;
     for (const { node } of bw.edges) {
       if (node.slug && node.modifiedGmt) {
-        map.set(node.slug, new Date(node.modifiedGmt + "Z"));
+        map.set(node.slug, new Date(node.modifiedGmt + "Z").toISOString());
       }
     }
     cursor = bw.pageInfo.hasNextPage ? bw.pageInfo.endCursor : null;
@@ -269,12 +269,13 @@ export default defineConfig({
       // },
     }),
     sitemap({
+      filter: (page) => !page.includes("/settings"),
       serialize: async (item) => {
         const match = item.url.match(/\/wort\/([^/?#]+)/);
         if (match) {
           const dates = await getWordDates();
-          const lastmod = dates.get(match[1]);
-          if (lastmod) return { ...item, lastmod };
+          const date = dates.get(match[1]);
+          if (date) return { ...item, lastmod: date };
         }
         return item;
       },
