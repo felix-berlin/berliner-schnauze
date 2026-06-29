@@ -296,6 +296,8 @@ const wordSchema = {
 type WordDocument = TypedDocument<Orama<typeof wordSchema>>;
 
 let db: null | Orama<typeof wordSchema> = null;
+let dbInitializing = false;
+const dbInitWaiters: Array<() => void> = [];
 
 type SortByType =
   | ((a: [number, number, WordDocument], b: [number, number, WordDocument]) => number)
@@ -364,7 +366,14 @@ function getSortBy(wordSearch: WordList): SortByType {
 }
 
 async function initOrama(words: OramaSearchIndex[]) {
-  db = create({
+  if (dbInitializing) {
+    await new Promise<void>((r) => dbInitWaiters.push(r));
+    return;
+  }
+
+  dbInitializing = true;
+
+  const localDb = create({
     components: {
       tokenizer: {
         language,
@@ -390,7 +399,12 @@ async function initOrama(words: OramaSearchIndex[]) {
     schema: wordSchema,
   });
 
-  await insertMultiple(db, words);
+  await insertMultiple(localDb, words);
+
+  db = localDb;
+  dbInitializing = false;
+  for (const r of dbInitWaiters) r();
+  dbInitWaiters.length = 0;
 }
 
 let searchIndexCache: null | OramaSearchIndex[] = null;
@@ -409,6 +423,8 @@ export const $oramaSearchResults = computedAsync([$wordSearch], async (wordSearc
     const resultLimit = oramaSearchIndex.length;
 
     if (!db) {
+      // Defer until after first paint so the LCP element can render first
+      await new Promise<void>((r) => requestAnimationFrame(() => setTimeout(r, 0)));
       await initOrama(oramaSearchIndex);
     }
 
