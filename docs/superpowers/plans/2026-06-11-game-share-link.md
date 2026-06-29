@@ -12,21 +12,23 @@
 
 ## File Map
 
-| Action | Path | Responsibility |
-|--------|------|----------------|
-| Create | `src/utils/gameShare.ts` | encode/decode share payload; generate share URL |
-| Create | `src/pages/games/berliner-oder-nicht/share.astro` | Astro wrapper for the share display page |
-| Create | `src/components/games/GameShareView.vue` | Vue component that decodes hash and shows results |
-| Modify | `src/components/games/GameResult.vue` | replace hardcoded URL in `useShare` with generated share URL |
+| Action | Path                                              | Responsibility                                               |
+| ------ | ------------------------------------------------- | ------------------------------------------------------------ |
+| Create | `src/utils/gameShare.ts`                          | encode/decode share payload; generate share URL              |
+| Create | `src/pages/games/berliner-oder-nicht/share.astro` | Astro wrapper for the share display page                     |
+| Create | `src/components/games/GameShareView.vue`          | Vue component that decodes hash and shows results            |
+| Modify | `src/components/games/GameResult.vue`             | replace hardcoded URL in `useShare` with generated share URL |
 
 ---
 
 ### Task 1: URL encode/decode utility
 
 **Files:**
+
 - Create: `src/utils/gameShare.ts`
 
 **Payload shape:**
+
 ```ts
 export interface SharePayload {
   score: number
@@ -38,6 +40,7 @@ export interface SharePayload {
 ```
 
 **Encoding strategy:** `<uuid>.<base64url(JSON)>`
+
 - UUID prefix makes URL unguessable even with known score
 - base64url avoids `+/=` which break URL fragments without encoding
 
@@ -101,6 +104,7 @@ describe('decodeShareHash', () => {
 ```bash
 pnpm vitest run src/tests/unit/utils/gameShare.test.ts
 ```
+
 Expected: `Cannot find module '@utils/gameShare'`
 
 - [ ] **Step 3: Implement `src/utils/gameShare.ts`**
@@ -151,6 +155,7 @@ export function buildShareUrl(payload: SharePayload): string {
 ```bash
 pnpm vitest run src/tests/unit/utils/gameShare.test.ts
 ```
+
 Expected: all 7 tests pass
 
 - [ ] **Step 5: Commit**
@@ -165,6 +170,7 @@ git commit -m "feat(game): add share URL encode/decode utility"
 ### Task 2: Share page — Astro wrapper + Vue decode component
 
 **Files:**
+
 - Create: `src/pages/games/berliner-oder-nicht/share.astro`
 - Create: `src/components/games/GameShareView.vue`
 
@@ -376,9 +382,10 @@ git commit -m "feat(game): add share results page /games/berliner-oder-nicht/sha
 ### Task 3: Wire share URL into GameResult.vue
 
 **Files:**
+
 - Modify: `src/components/games/GameResult.vue`
 
-Currently `share()` sends `url: 'https://berliner-schnauze.de/games/berliner-oder-nicht'` — replace with the generated share URL. Add `date` (today's ISO string) to the payload.
+Currently `share()` sends `url: 'https://berliner-schnauze.wtf/games/berliner-oder-nicht'` — replace with the generated share URL. Add `date` (today's ISO string) to the payload.
 
 GameResult already receives all needed props: `score`, `bestStreak`, `totalAnswered`, `correctAnswers`.
 
@@ -404,7 +411,7 @@ function share() {
   _share({
     text: `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
     title: 'Berliner oder nicht?',
-    url: `https://berliner-schnauze.de${url}`,
+    url: `https://berliner-schnauze.wtf${url}`,
   })
 }
 ```

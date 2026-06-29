@@ -12,18 +12,18 @@
 
 ## File Map
 
-| File | Action | Purpose |
-|------|--------|---------|
-| `src/data/fakeWords.ts` | Create | Static dataset of invented + hochdeutsch impostor words |
-| `src/stores/gameStats.ts` | Create | `persistentMap` for cross-session highscore/stats |
-| `src/composable/useGame.ts` | Create | All game logic: deck, scoring, lives, state machine |
-| `src/styles/components/_berliner-oder-nicht.scss` | Create | BEM styles for all game components |
-| `src/components/games/GameHUD.vue` | Create | Lives (hearts), score, streak+multiplier display |
-| `src/components/games/GameCard.vue` | Create | Swipeable word card with animations |
-| `src/components/games/GameResult.vue` | Create | End screen: stats, share, link to word, restart |
-| `src/components/games/BerlinerOderNicht.vue` | Create | Root island: fetches words, wires composable, phase switching |
-| `src/pages/games/berliner-oder-nicht.astro` | Create | Route at `/games/berliner-oder-nicht` |
-| `src/tests/unit/composable/useGame.test.ts` | Create | Unit tests for game logic |
+| File                                              | Action | Purpose                                                       |
+| ------------------------------------------------- | ------ | ------------------------------------------------------------- |
+| `src/data/fakeWords.ts`                           | Create | Static dataset of invented + hochdeutsch impostor words       |
+| `src/stores/gameStats.ts`                         | Create | `persistentMap` for cross-session highscore/stats             |
+| `src/composable/useGame.ts`                       | Create | All game logic: deck, scoring, lives, state machine           |
+| `src/styles/components/_berliner-oder-nicht.scss` | Create | BEM styles for all game components                            |
+| `src/components/games/GameHUD.vue`                | Create | Lives (hearts), score, streak+multiplier display              |
+| `src/components/games/GameCard.vue`               | Create | Swipeable word card with animations                           |
+| `src/components/games/GameResult.vue`             | Create | End screen: stats, share, link to word, restart               |
+| `src/components/games/BerlinerOderNicht.vue`      | Create | Root island: fetches words, wires composable, phase switching |
+| `src/pages/games/berliner-oder-nicht.astro`       | Create | Route at `/games/berliner-oder-nicht`                         |
+| `src/tests/unit/composable/useGame.test.ts`       | Create | Unit tests for game logic                                     |
 
 ---
 
@@ -1234,7 +1234,7 @@ function share() {
   _share({
     title: 'Berliner oder nicht?',
     text: `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
-    url: 'https://berliner-schnauze.de/games/berliner-oder-nicht',
+    url: 'https://berliner-schnauze.wtf/games/berliner-oder-nicht',
   })
 }
 </script>
