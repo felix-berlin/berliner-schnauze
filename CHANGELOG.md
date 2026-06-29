@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.38.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.37.0...v3.38.0) (2026-06-29)
+
+
+### Bug Fixes
+
+* **app:** update environment check to enable devtools only in development mode ([6249838](https://github.com/felix-berlin/berliner-schnauze/commit/6249838f44e4d3805849c5eca393e6ceb0d40bdd))
+* **seo:** update canonical URL handling and improve Open Graph image settings ([4666f4f](https://github.com/felix-berlin/berliner-schnauze/commit/4666f4fa9d3b2ee4377ce5ff22f28ced2d299cbb))
+* **seo:** update share URLs to use the new domain and improve formatting in documentation ([5dc9a54](https://github.com/felix-berlin/berliner-schnauze/commit/5dc9a5453b654878acf62153359677460e093e1c))
+
+
+### Features
+
+* **seo:** enhance SEO metadata handling and add Open Graph image generation ([225a622](https://github.com/felix-berlin/berliner-schnauze/commit/225a622dcb50ab6ea3a9b2cb1c82834f987903da))
+
 # [3.37.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.36.0...v3.37.0) (2026-06-28)
 
 
