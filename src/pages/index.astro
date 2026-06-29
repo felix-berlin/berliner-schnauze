@@ -19,11 +19,20 @@ const websiteSchema = JSON.stringify({
   inLanguage: 'de-DE',
   name: 'Berliner Schnauze',
   url: SITE_URL,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${SITE_URL}/wort?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
 });
 
 const organizationSchema = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': `${SITE_URL}/#organization`,
   founder: {
     '@type': 'Person',
     name: 'Felix Scholze',

@@ -41,12 +41,16 @@ const content = {
   title: "Berlinerisch Wort-Index - Berlinerisch zu Hochdeutsch",
 };
 
+const totalWordCount = Object.values(groupedWords).reduce((sum, words) => sum + words.length, 0);
+
 const schemaJson = () =>
   JSON.stringify({
     "@context": "https://schema.org",
     "@type": "DefinedTermSet",
+    "@id": `${canonicalUrl('/wort', Astro.site)}#termset`,
     description: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch.",
     name: "Berliner Schnauze Wörterbuch",
+    numberOfItems: totalWordCount,
     url: canonicalUrl('/wort', Astro.site),
   });
 ---

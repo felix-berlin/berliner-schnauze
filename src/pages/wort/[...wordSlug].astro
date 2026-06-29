@@ -169,10 +169,10 @@ const schemaJson = () => {
       disambiguatingDescription: `Berliner Dialektwort, ${wordProps.article}`,
     }),
     identifier: word.id,
-    publisher: {
-      '@type': 'Organization',
-      name: 'Berliner Schnauze',
-      url: canonicalUrl('/', Astro.site),
+    publisher: { '@id': `${Astro.site}#organization` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.c-word-hero__description', '.c-word-examples'],
     },
     ...(firstImage?.sourceUrl && {
       image: {
@@ -187,6 +187,7 @@ const schemaJson = () => {
     }),
     inDefinedTermSet: {
       '@type': 'DefinedTermSet',
+      '@id': `${canonicalUrl('/wort', Astro.site)}#termset`,
       description: 'Wörterbuch für den Berliner Dialekt und Berliner Schnauze',
       inLanguage: 'de-DE',
       name: 'Berliner Schnauze Wörterbuch',
