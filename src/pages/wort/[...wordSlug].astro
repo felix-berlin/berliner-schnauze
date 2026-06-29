@@ -97,9 +97,13 @@ const wordDescription = (() => {
     .join(', ');
   if (!translations) return undefined;
   const berlinerisch = wordProps?.berlinerisch ?? '';
-  const raw = `„${berlinerisch}" bedeutet auf Berlinerisch: ${translations}. Entdecke Berliner Ausdrücke auf Berliner Schnauze.`;
+  const raw = `${berlinerisch} heißt auf Berlinerisch: ${translations}. Mit Etymologie, Aussprache und Beispielsätzen.`;
   return raw.length > 160 ? raw.slice(0, 157) + '…' : raw;
 })();
+
+const wordPageTitle = wordProps?.berlinerisch
+  ? `${wordProps.berlinerisch} auf Berlinerisch — Bedeutung, Beispiel & Herkunft | Berliner Schnauze`
+  : (word.title ?? '');
 
 // const wikimediaFiles = await createWikimediaFileList(wordProps?.wikimediaFiles!);
 // console.log(wikimediaFiles);
@@ -217,6 +221,7 @@ const schemaJson = () => {
   content={seoData({
     seo: {
       ...(word.seo ?? {}),
+      title: wordPageTitle,
       ...(wordDescription && {
         opengraphDescription: wordDescription,
         twitterDescription: wordDescription,
