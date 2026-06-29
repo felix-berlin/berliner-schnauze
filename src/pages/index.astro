@@ -18,21 +18,21 @@ const websiteSchema = JSON.stringify({
   description: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch',
   inLanguage: 'de-DE',
   name: 'Berliner Schnauze',
-  url: SITE_URL,
   potentialAction: {
     '@type': 'SearchAction',
+    'query-input': 'required name=search_term_string',
     target: {
       '@type': 'EntryPoint',
       urlTemplate: `${SITE_URL}/wort?q={search_term_string}`,
     },
-    'query-input': 'required name=search_term_string',
   },
+  url: SITE_URL,
 });
 
 const organizationSchema = JSON.stringify({
   '@context': 'https://schema.org',
-  '@type': 'Organization',
   '@id': `${SITE_URL}/#organization`,
+  '@type': 'Organization',
   founder: {
     '@type': 'Person',
     name: 'Felix Scholze',

@@ -137,10 +137,10 @@ const ogImage = word.seo?.opengraphImage?.sourceUrl
         width: firstImage.mediaDetails?.width,
       }
     : {
-        sourceUrl: generatedOgImageUrl,
         alt: wordProps?.berlinerisch ?? '',
-        width: '1200',
         height: '630',
+        sourceUrl: generatedOgImageUrl,
+        width: '1200',
       };
 
 const exampleComments = (wordProps?.examples ?? [])
@@ -190,8 +190,8 @@ const schemaJson = () => {
       },
     }),
     inDefinedTermSet: {
-      '@type': 'DefinedTermSet',
       '@id': `${canonicalUrl('/wort', Astro.site)}#termset`,
+      '@type': 'DefinedTermSet',
       description: 'Wörterbuch für den Berliner Dialekt und Berliner Schnauze',
       inLanguage: 'de-DE',
       name: 'Berliner Schnauze Wörterbuch',
