@@ -18,7 +18,12 @@ async function fetchAll(apiUrl: string): Promise<Map<string, string>> {
       body: JSON.stringify({ query: QUERY, variables: { after: cursor } }),
     });
     const { data } = (await res.json()) as {
-      data?: { berlinerWords?: { edges: { node: { slug: string; modifiedGmt: string } }[]; pageInfo: { endCursor: string; hasNextPage: boolean } } };
+      data?: {
+        berlinerWords?: {
+          edges: { node: { slug: string; modifiedGmt: string } }[];
+          pageInfo: { endCursor: string; hasNextPage: boolean };
+        };
+      };
     };
     const bw = data?.berlinerWords;
     if (!bw) break;
@@ -36,7 +41,8 @@ async function fetchAll(apiUrl: string): Promise<Map<string, string>> {
 
 let _cache: Promise<Map<string, string>> | null = null;
 
-/** Returns slug → ISO lastmod date for all published words. Cached per build process. */
+/** Returns slug → ISO lastmod date for all published words. Cached per build process.
+ *  Uses process.env.WP_API directly — safe to import from astro.config.mjs. */
 export const getWordDates = (): Promise<Map<string, string>> => {
   const apiUrl = process.env.WP_API;
   if (!apiUrl) return Promise.resolve(new Map());

@@ -12,7 +12,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
-import { getWordDates } from "./src/utils/sitemapDates.ts";
+import { getWordDates } from "./src/services/queries/getSitemapWordDates.ts";
 
 const {
   SENTRY_AUTH_TOKEN,
