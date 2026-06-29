@@ -229,9 +229,7 @@ export default defineConfig({
       //   launchEditor: "code",
       // },
     }),
-    sitemap({
-      lastmod: new Date(),
-    }),
+    sitemap(),
     matomo({
       enabled: process.env.ENABLE_ANALYTICS === "true",
       host: process.env.MATOMO_HOST,
