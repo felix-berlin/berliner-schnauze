@@ -19,8 +19,6 @@ const pages = Object.fromEntries(
 );
 
 export const { getStaticPaths, GET } = await OGImageRoute({
-  param: "wordSlug",
-  pages,
   getImageOptions(_slug, page) {
     return {
       title: page.berlinerisch,
@@ -31,23 +29,23 @@ export const { getStaticPaths, GET } = await OGImageRoute({
       ],
       border: {
         color: [207, 87, 54],
-        width: 16,
         side: "inline-start",
+        width: 16,
       },
       padding: 72,
       font: {
-        title: {
-          color: [207, 87, 54],
-          size: 88,
-          weight: "Bold",
-          families: ["Berlin"],
-          lineHeight: 1.1,
-        },
         description: {
           color: [250, 208, 176],
-          size: 42,
           families: ["Berlin"],
           lineHeight: 1.3,
+          size: 42,
+        },
+        title: {
+          color: [207, 87, 54],
+          families: ["Berlin"],
+          lineHeight: 1.1,
+          size: 88,
+          weight: "Bold",
         },
       },
       fonts: ["./src/assets/fonts/Berlin-Bold.woff2"],
@@ -58,4 +56,6 @@ export const { getStaticPaths, GET } = await OGImageRoute({
       // },
     };
   },
+  pages,
+  param: "wordSlug",
 });
