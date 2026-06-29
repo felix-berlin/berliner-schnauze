@@ -1,12 +1,15 @@
 ---
-import BerlinerOderNicht from '@components/games/BerlinerOderNicht.vue'
-import Layout from '@layouts/Layout.astro'
-import { SITE_URL } from 'astro:env/client'
+import BerlinerOderNicht from '@components/games/BerlinerOderNicht.vue';
+import Layout from '@layouts/Layout.astro';
+import { SITE_URL } from 'astro:env/client';
 
 const page = {
-  opengraphDescription: 'Swipe-Game für echte Berliner: Erkenne, ob Wörter zum Berliner Dialekt gehören oder nicht. Kostenlos, ohne Anmeldung — als App installierbar.',
+  seo: {
+    opengraphDescription:
+      'Swipe-Game für echte Berliner: Erkenne, ob Wörter zum Berliner Dialekt gehören oder nicht. Kostenlos, ohne Anmeldung — als App installierbar.',
+  },
   title: 'Berliner oder Nicht? — Erkenne den echten Berliner Dialekt | Berliner Schnauze',
-}
+};
 
 const gameSchema = JSON.stringify({
   '@context': 'https://schema.org',
@@ -18,16 +21,15 @@ const gameSchema = JSON.stringify({
   operatingSystem: 'Web',
   publisher: { '@id': `${SITE_URL}/#organization` },
   url: `${SITE_URL}/games/berliner-oder-nicht`,
-})
+});
 ---
 
 <Layout content={page}>
   <Fragment slot='head'>
-    <meta content={page.opengraphDescription} name='description' />
     <script set:html={gameSchema} type='application/ld+json' />
   </Fragment>
 
   <h1 class='u-sr-only'>Berliner oder Nicht? — Erkenne den echten Berliner Dialekt</h1>
 
-  <BerlinerOderNicht client:only="vue" />
+  <BerlinerOderNicht client:only='vue' />
 </Layout>
