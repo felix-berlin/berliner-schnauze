@@ -1,13 +1,33 @@
 ---
 import BerlinerOderNicht from '@components/games/BerlinerOderNicht.vue'
 import Layout from '@layouts/Layout.astro'
+import { SITE_URL } from 'astro:env/client'
 
 const page = {
-  description: 'Echtes Berlinerisch oder erfunden? Swipe-Game mit Streak-Multiplikator und Highscore.',
-  title: 'Berliner oder nicht? – Das Swipe-Game | Berliner Schnauze',
+  opengraphDescription: 'Swipe-Game für echte Berliner: Erkenne, ob Wörter zum Berliner Dialekt gehören oder nicht. Kostenlos, ohne Anmeldung — als App installierbar.',
+  title: 'Berliner oder Nicht? — Erkenne den echten Berliner Dialekt | Berliner Schnauze',
 }
+
+const gameSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'VideoGame',
+  name: 'Berliner oder Nicht?',
+  description: 'Swipe-Game: Erkenne echte Berliner Dialektwörter.',
+  genre: 'Sprachquiz',
+  operatingSystem: 'Web',
+  applicationCategory: 'Game',
+  publisher: { '@id': `${SITE_URL}/#organization` },
+  url: `${SITE_URL}/games/berliner-oder-nicht`,
+})
 ---
 
 <Layout content={page}>
+  <Fragment slot='head'>
+    <meta content={page.opengraphDescription} name='description' />
+    <script set:html={gameSchema} type='application/ld+json' />
+  </Fragment>
+
+  <h1 class='u-sr-only'>Berliner oder Nicht? — Erkenne den echten Berliner Dialekt</h1>
+
   <BerlinerOderNicht client:only="vue" />
 </Layout>
