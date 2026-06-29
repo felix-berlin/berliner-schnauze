@@ -10,7 +10,9 @@ import type { Seo, SeoProps, Title } from '@/types/seo';
 export type { Seo, SeoProps, Title };
 
 const { seo, title } = Astro.props as SeoProps & Title;
-const canonicalURL = seo?.canonical?.replace(/\/$/, '') ?? canonicalUrl(Astro.url.pathname, Astro.site);
+const canonicalURL = seo?.canonical?.trim()
+  ? seo.canonical.replace(/\/$/, '')
+  : canonicalUrl(Astro.url.pathname, Astro.site);
 ---
 
 <!-- Global Metadata -->
@@ -86,29 +88,33 @@ const canonicalURL = seo?.canonical?.replace(/\/$/, '') ?? canonicalUrl(Astro.ur
 }
 
 <!-- Twitter -->
-<meta content='summary_large_image' property='twitter:card' />
-<meta content={canonicalURL} property='twitter:url' />
+<meta content='summary_large_image' name='twitter:card' />
+<meta content={canonicalURL} name='twitter:url' />
 {
   (seo?.twitterTitle || seo?.title || title) && (
-    <meta content={seo?.twitterTitle || seo?.title || title} property='twitter:title' />
+    <meta content={seo?.twitterTitle || seo?.title || title} name='twitter:title' />
   )
 }
 {
   (seo?.twitterDescription || seo?.opengraphDescription) && (
     <meta
       content={seo?.twitterDescription || seo?.opengraphDescription}
-      property='twitter:description'
+      name='twitter:description'
     />
   )
 }
 {
   seo?.opengraphImage?.sourceUrl && (
-    <meta content={seo?.opengraphImage?.sourceUrl} property='twitter:image' />
+    <meta content={seo?.opengraphImage?.sourceUrl} name='twitter:image' />
   )
 }
 
 <!-- Locale -->
 <meta content='de_DE' property='og:locale' />
+
+<!-- Article times -->
+{seo?.opengraphPublishedTime && <meta property='article:published_time' content={seo.opengraphPublishedTime} />}
+{seo?.opengraphModifiedTime && <meta property='article:modified_time' content={seo.opengraphModifiedTime} />}
 
 <!-- Mastodon -->
 <meta content='@berliner_schnauze@mastodon.social' name='fediverse:creator' />
