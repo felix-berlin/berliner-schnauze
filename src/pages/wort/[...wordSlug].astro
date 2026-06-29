@@ -104,7 +104,6 @@ const wordDescription = (() => {
 // const wikimediaFiles = await createWikimediaFileList(wordProps?.wikimediaFiles!);
 // console.log(wikimediaFiles);
 
-
 const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
 
 const hasImages = Boolean(wordProps?.images && wordProps.images.nodes.length > 0);
@@ -122,6 +121,8 @@ const wortartLabel: string | undefined =
 const firstImage = wordProps?.images?.nodes?.[0];
 const firstAudio = wordProps?.berlinerischAudio?.[0];
 
+const generatedOgImageUrl = new URL(`/og/${wordSlug}.png`, Astro.site).toString();
+
 const ogImage = word.seo?.opengraphImage?.sourceUrl
   ? word.seo.opengraphImage
   : firstImage?.sourceUrl
@@ -131,7 +132,12 @@ const ogImage = word.seo?.opengraphImage?.sourceUrl
         sourceUrl: firstImage.sourceUrl,
         width: firstImage.mediaDetails?.width,
       }
-    : undefined;
+    : {
+        sourceUrl: generatedOgImageUrl,
+        alt: wordProps?.berlinerisch ?? '',
+        width: '1200',
+        height: '630',
+      };
 
 const exampleComments = (wordProps?.examples ?? [])
   .filter((e): e is NonNullable<typeof e> => Boolean(e?.example))
@@ -215,6 +221,10 @@ const schemaJson = () => {
         twitterDescription: wordDescription,
       }),
       ...(ogImage && { opengraphImage: ogImage }),
+      ...(!word.seo?.opengraphPublishedTime &&
+        word.dateGmt && { opengraphPublishedTime: word.dateGmt }),
+      ...(!word.seo?.opengraphModifiedTime &&
+        word.modifiedGmt && { opengraphModifiedTime: word.modifiedGmt }),
     },
     title: word.title ?? '',
   })}

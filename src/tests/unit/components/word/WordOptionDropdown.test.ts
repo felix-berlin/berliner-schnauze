@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick, ref } from "vue";
 
 vi.mock("astro:env/client", () => ({
-  SITE_URL: "https://berliner-schnauze.de",
+  SITE_URL: "https://berliner-schnauze.wtf",
 }));
 
 vi.mock("@vueuse/core", async (importOriginal) => {
@@ -123,7 +123,11 @@ describe("WordOptionDropdown.vue", () => {
     });
     await wrapper.find("[aria-label='Wort teilen']").trigger("click");
     const { trackEvent } = await import("@utils/analytics");
-    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith("Word Share", "Word shared", "Word: schnauze");
+    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith(
+      "Word Share",
+      "Word shared",
+      "Word: schnauze",
+    );
   });
 
   it("calls copy when copy word button clicked", async () => {
@@ -165,7 +169,11 @@ describe("WordOptionDropdown.vue", () => {
     await wrapper.find("[aria-label='Wort kopieren']").trigger("click");
     await nextTick();
     const { trackEvent } = await import("@utils/analytics");
-    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith("Word Copy", "Word copied", "Word: Schnauze");
+    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith(
+      "Word Copy",
+      "Word copied",
+      "Word: Schnauze",
+    );
   });
 
   it("clicking link copy button calls copy with full URL", async () => {
@@ -184,7 +192,7 @@ describe("WordOptionDropdown.vue", () => {
     });
     await wrapper.find("[aria-label='Link zum Wort kopieren']").trigger("click");
     await nextTick();
-    expect(copyMock).toHaveBeenCalledWith("https://berliner-schnauze.de/wort/schnauze");
+    expect(copyMock).toHaveBeenCalledWith("https://berliner-schnauze.wtf/wort/schnauze");
   });
 
   it("clicking link copy button calls createToastNotify with Link kopiert", async () => {
@@ -208,7 +216,11 @@ describe("WordOptionDropdown.vue", () => {
     await wrapper.find("[aria-label='Link zum Wort kopieren']").trigger("click");
     await nextTick();
     const { trackEvent } = await import("@utils/analytics");
-    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith("Word Copy Link", "Word link copied", "Word: schnauze");
+    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith(
+      "Word Copy Link",
+      "Word link copied",
+      "Word: schnauze",
+    );
   });
 
   it("hides clipboard buttons when clipboard is not supported (covers lines 33-37, 45-49 false branch)", async () => {

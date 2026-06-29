@@ -4,7 +4,7 @@ import "@styles/components/_word-group.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 import Layout from "@layouts/Layout.astro";
 import { fetchAllWordsLinks } from "@services/api.ts";
-import { routeToWord, seoData } from "@utils/helpers.ts";
+import { routeToWord, seoData, canonicalUrl } from "@utils/helpers.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import ChevronRight from "~icons/lucide/chevron-right";
 
@@ -47,7 +47,7 @@ const schemaJson = () =>
     "@type": "DefinedTermSet",
     description: "Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch.",
     name: "Berliner Schnauze Wörterbuch",
-    url: "https://berliner-schnauze.de/wort",
+    url: canonicalUrl('/wort', Astro.site),
   });
 ---
 

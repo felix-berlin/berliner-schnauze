@@ -116,4 +116,4 @@ export const checkObjectValueLength = (obj: Record<string, any>): boolean => {
 };
 
 export const canonicalUrl = (pathname: string, site: URL | undefined): string =>
-  new URL(pathname, site).toString().replace(/\/$/, "");
+  new URL(pathname.replace(/\.html$/, ""), site).toString().replace(/\/$/, "");
