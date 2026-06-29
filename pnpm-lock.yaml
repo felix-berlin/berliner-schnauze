@@ -123,6 +123,9 @@ importers:
       workbox-window:
         specifier: ^7.4.1
         version: 7.4.1
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
     devDependencies:
       '@0no-co/graphqlsp':
         specifier: ^1.17.3
