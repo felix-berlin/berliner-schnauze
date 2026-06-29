@@ -12,6 +12,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
+import { getWordDates } from "./src/utils/sitemapDates.ts";
 
 const {
   SENTRY_AUTH_TOKEN,
@@ -21,45 +22,6 @@ const {
   CODECOV_TOKEN,
   BUNDLE_ANALYZER_OPEN,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
-
-/** Fetches slug → modifiedGmt for all published words (paginated). */
-async function fetchWordModifiedDates(apiUrl) {
-  const map = new Map();
-  let cursor = null;
-  do {
-    const res = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: `query($after: String) {
-          berlinerWords(first: 100, after: $after, where: { stati: PUBLISH }) {
-            edges { node { slug modifiedGmt } }
-            pageInfo { endCursor hasNextPage }
-          }
-        }`,
-        variables: { after: cursor },
-      }),
-    });
-    const { data } = await res.json();
-    const bw = data?.berlinerWords;
-    if (!bw) break;
-    for (const { node } of bw.edges) {
-      if (node.slug && node.modifiedGmt) {
-        map.set(node.slug, new Date(node.modifiedGmt + "Z").toISOString());
-      }
-    }
-    cursor = bw.pageInfo.hasNextPage ? bw.pageInfo.endCursor : null;
-  } while (cursor);
-  return map;
-}
-
-let _wordDatesPromise = null;
-const getWordDates = () => {
-  const apiUrl = process.env.WP_API;
-  if (!apiUrl) return Promise.resolve(new Map());
-  _wordDatesPromise ??= fetchWordModifiedDates(apiUrl);
-  return _wordDatesPromise;
-};
 
 const visualizerPlugin = visualizer({
   open: BUNDLE_ANALYZER_OPEN === "true",
