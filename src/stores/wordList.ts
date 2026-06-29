@@ -49,7 +49,6 @@ export type WordList = {
   multipleMeanings?: boolean;
   rangeFilterMinMax?: RangeFilterMinMax;
   resultLimit?: number;
-  search: string;
   similarSoundingWords?: boolean;
   syllablesCount?: number;
   vowelsCount?: number;
@@ -73,7 +72,6 @@ export const $wordSearch = persistentMap<WordList>(
     modifiedDateOrder: "ASC",
     multipleMeanings: false,
     resultLimit: undefined,
-    search: "",
     similarSoundingWords: false,
     syllablesCount: undefined,
     vowelsCount: undefined,
@@ -90,6 +88,8 @@ export const $wordSearch = persistentMap<WordList>(
     encode: (value) => JSON.stringify(value),
   },
 );
+
+export const $searchQuery = atom<string>("");
 
 export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
   // List all filter keys that should count as "active" if truthy
@@ -133,7 +133,7 @@ export const resetAll = () => {
   $wordSearch.setKey("dateOrder", "ASC");
   $wordSearch.setKey("modifiedDateOrder", "ASC");
   $wordSearch.setKey("multipleMeanings", false);
-  $wordSearch.setKey("search", "");
+  $searchQuery.set("");
   $wordSearch.setKey("similarSoundingWords", false);
   $wordSearch.setKey("syllablesCount", undefined);
   $wordSearch.setKey("vowelsCount", undefined);
@@ -228,7 +228,7 @@ export const $setSortOrder = (
 };
 
 export const setSearch = (search: string) => {
-  $wordSearch.setKey("search", search);
+  $searchQuery.set(search);
 };
 
 export const $toggleBerolinismus = () => {
@@ -237,9 +237,7 @@ export const $toggleBerolinismus = () => {
   trackEvent("WordList", "Filter", `Berolinismus: ${$wordSearch.get().berolinismus}`);
 };
 
-export const searchLength = computed($wordSearch, (wordSearch) => {
-  return wordSearch?.search ? wordSearch.search.length : 0;
-});
+export const searchLength = computed($searchQuery, (q) => q.length);
 
 const getSearchMeta = async () => {
   const response = await fetch("/api/search/meta.json");
@@ -393,49 +391,52 @@ async function initOrama(words: OramaSearchIndex[]) {
   await insertMultiple(db, words);
 }
 
-let searchIndexCache: null | OramaSearchIndex[] = null;
+let searchIndexCache: OramaSearchIndex[] | null = null;
 
-export const $oramaSearchResults = computedAsync([$wordSearch], async (wordSearch) => {
-  try {
-    if (!searchIndexCache) {
-      const response = await fetch("/api/search/index.json");
-      if (!response.ok) {
-        throw new Error(`[wordList] search index fetch failed: ${response.status}`);
+export const $oramaSearchResults = computedAsync(
+  [$wordSearch, $searchQuery],
+  async (wordSearch, searchQuery) => {
+    try {
+      if (!searchIndexCache) {
+        const response = await fetch("/api/search/index.json");
+        if (!response.ok) {
+          throw new Error(`[wordList] search index fetch failed: ${response.status}`);
+        }
+        searchIndexCache = (await response.json()) as OramaSearchIndex[];
       }
-      searchIndexCache = (await response.json()) as OramaSearchIndex[];
+
+      const oramaSearchIndex = searchIndexCache;
+      const resultLimit = oramaSearchIndex.length;
+
+      if (!db) {
+        await initOrama(oramaSearchIndex);
+      }
+
+      const where = buildWhere(wordSearch);
+      const sortBy = getSortBy(wordSearch);
+
+      const params: SearchParamsFullText<Orama<typeof wordSchema>> = {
+        boost: {
+          wordComponents: 1.0,
+          "wordProperties.berlinerisch": 2.5,
+          "wordProperties.translations": 1,
+        },
+        limit: wordSearch.resultLimit ?? resultLimit ?? 10,
+        properties: "*",
+        sortBy,
+        term: searchQuery,
+        threshold: 0.5,
+        tolerance: 1,
+        ...(Object.keys(where).length > 0 ? { where } : {}),
+      };
+
+      return db ? await searchWithHighlight(db, params) : null;
+    } catch (err) {
+      console.error("[wordList] Search failed:", err);
+      return null;
     }
-
-    const oramaSearchIndex = searchIndexCache;
-    const resultLimit = oramaSearchIndex.length;
-
-    if (!db) {
-      await initOrama(oramaSearchIndex);
-    }
-
-    const where = buildWhere(wordSearch);
-    const sortBy = getSortBy(wordSearch);
-
-    const params: SearchParamsFullText<Orama<typeof wordSchema>> = {
-      boost: {
-        wordComponents: 1.0,
-        "wordProperties.berlinerisch": 2.5,
-        "wordProperties.translations": 1,
-      },
-      limit: wordSearch.resultLimit ?? resultLimit ?? 10,
-      properties: "*",
-      sortBy,
-      term: wordSearch.search,
-      threshold: 0.5,
-      tolerance: 1,
-      ...(Object.keys(where).length > 0 ? { where } : {}),
-    };
-
-    return db ? await searchWithHighlight(db, params) : null;
-  } catch (err) {
-    console.error("[wordList] Search failed:", err);
-    return null;
-  }
-});
+  },
+);
 
 export const $searchResultCount = computed($oramaSearchResults, (oramaSearchResults) => {
   if (oramaSearchResults.state !== "ready") return 0;
