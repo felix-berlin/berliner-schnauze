@@ -1,6 +1,5 @@
-import { OGImageRoute } from 'astro-og-canvas';
-
-import { fetchAllWords } from '@services/api.ts';
+import { fetchAllWords } from "@services/api.ts";
+import { OGImageRoute } from "astro-og-canvas";
 
 const allWords = await fetchAllWords();
 
@@ -14,38 +13,49 @@ const pages = Object.fromEntries(
         translation: (node.wordProperties?.translations ?? [])
           .map((t) => t?.translation)
           .filter(Boolean)
-          .join(', '),
+          .join(", "),
       },
     ]),
 );
 
 export const { getStaticPaths, GET } = await OGImageRoute({
-  param: 'wordSlug',
+  param: "wordSlug",
   pages,
   getImageOptions(_slug, page) {
     return {
       title: page.berlinerisch,
       description: page.translation || undefined,
-      bgGradient: [[48, 57, 86]],
+      bgGradient: [
+        [43, 51, 59],
+        [30, 37, 43],
+      ],
       border: {
-        color: [250, 208, 176],
-        width: 20,
-        side: 'inline-start',
+        color: [207, 87, 54],
+        width: 16,
+        side: "inline-start",
       },
+      padding: 72,
       font: {
         title: {
-          color: [255, 255, 255],
-          size: 72,
-          weight: 'Bold',
-          families: ['Berlin'],
+          color: [207, 87, 54],
+          size: 88,
+          weight: "Bold",
+          families: ["Berlin"],
+          lineHeight: 1.1,
         },
         description: {
           color: [250, 208, 176],
-          size: 40,
-          families: ['Berlin'],
+          size: 42,
+          families: ["Berlin"],
+          lineHeight: 1.3,
         },
       },
-      fonts: ['./src/assets/fonts/Berlin-Bold.woff2'],
+      fonts: ["./src/assets/fonts/Berlin-Bold.woff2"],
+      // TODO: add logo with transparent background
+      // logo: {
+      //   path: './public/favicons/android-chrome-192x192.png',
+      //   size: [72, 72],
+      // },
     };
   },
 });
