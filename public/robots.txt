@@ -35,4 +35,30 @@ Disallow: /
 User-agent: ClaudeBot
 Disallow: /
 
+# Anthropic web crawler (separate from ClaudeBot)
+User-agent: anthropic-ai
+Disallow: /
+
+# Apple Intelligence training
+User-agent: Applebot-Extended
+Disallow: /
+
+# ByteDance / TikTok
+User-agent: Bytespider
+Disallow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Disallow: /
+User-agent: Meta-ExternalFetcher
+Disallow: /
+
+# Allen Institute for AI
+User-agent: AI2Bot
+Disallow: /
+
+# Amazon
+User-agent: Amazonbot
+Disallow: /
+
 Sitemap: https://berliner-schnauze.wtf/sitemap-index.xml
