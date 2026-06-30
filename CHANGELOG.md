@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.39.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.0...v3.39.1) (2026-06-30)
+
+
+### Bug Fixes
+
+* update content structure and licensing information in llms.txt ([4d12401](https://github.com/felix-berlin/berliner-schnauze/commit/4d124019523558155a9288754c0fb0bc97d251b4))
+
 # [3.39.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.38.0...v3.39.0) (2026-06-30)
 
 
