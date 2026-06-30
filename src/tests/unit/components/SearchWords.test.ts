@@ -2,31 +2,37 @@ import { mount } from "@vue/test-utils";
 import { ref, nextTick } from "vue";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
+vi.mock("@composables/useSearchQuerySync", () => ({
+  useSearchQuerySync: vi.fn(),
+}));
+
 const searchLengthRef = ref(0);
 const oramaResultsRef = ref({ state: "loading" });
 const localSearchRef = ref("");
 
-vi.mock("@nanostores/vue", () => ({
-  useStore: vi.fn((store) => {
-    if (store === mockStores.$wordSearch || store === mockStores.currentSearchLength) {
-      return searchLengthRef;
-    }
-    return oramaResultsRef;
-  }),
-  useVModel: vi.fn(() => localSearchRef),
-}));
-
 const mockStores = {
-  $wordSearch: {},
+  $searchQuery: {
+    set: vi.fn((v: string) => {
+      localSearchRef.value = v;
+    }),
+    get: vi.fn(() => localSearchRef.value),
+  },
   $oramaSearchResults: {},
-  currentSearchLength: {},
   searchLength: {},
 };
 
+vi.mock("@nanostores/vue", () => ({
+  useStore: vi.fn((store) => {
+    if (store === mockStores.searchLength) return searchLengthRef;
+    if (store === mockStores.$searchQuery) return localSearchRef;
+    return oramaResultsRef;
+  }),
+}));
+
 vi.mock("@stores/wordList.ts", () => ({
-  $wordSearch: mockStores.$wordSearch,
+  $searchQuery: mockStores.$searchQuery,
   $oramaSearchResults: mockStores.$oramaSearchResults,
-  searchLength: mockStores.currentSearchLength,
+  searchLength: mockStores.searchLength,
 }));
 
 vi.mock("@utils/analytics", () => ({
