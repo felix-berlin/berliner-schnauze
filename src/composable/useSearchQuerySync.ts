@@ -2,13 +2,26 @@ import { $searchQuery } from "@stores/wordList.ts";
 import { useDebounceFn } from "@vueuse/core";
 import { onBeforeUnmount } from "vue";
 
+// Propagate active search through every Astro View Transition.
+// Module-level: persists for the full SPA session once SearchWords is first loaded.
+// astro:before-preparation fires before the new page is fetched — mutating event.to
+// ensures ?q= is carried to the new URL so syncFromUrl() restores the atom on remount.
+if (typeof document !== "undefined") {
+  document.addEventListener("astro:before-preparation", (event: Event) => {
+    const q = $searchQuery.get();
+    const e = event as Event & { to: URL };
+    if (q) {
+      e.to.searchParams.set("q", q);
+    } else {
+      e.to.searchParams.delete("q");
+    }
+  });
+}
+
 export function useSearchQuerySync(): void {
-  // Only set atom when ?q= is explicitly in the URL — never clear on pages without it.
-  // SearchWords unmounts on View Transition navigation (no transition:persist), so this
-  // runs again on remount; clearing would wipe the active search on every page change.
   const syncFromUrl = () => {
-    const q = new URLSearchParams(location.search).get("q");
-    if (q !== null) $searchQuery.set(q);
+    const q = new URLSearchParams(location.search).get("q") ?? "";
+    $searchQuery.set(q);
   };
 
   document.addEventListener("astro:page-load", syncFromUrl);

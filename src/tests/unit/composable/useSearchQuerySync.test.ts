@@ -20,6 +20,14 @@ function mountComposable(locationSearch: string) {
   );
 }
 
+function fireBeforePreparation(destinationHref: string): URL {
+  const destination = new URL(destinationHref);
+  const event = new Event("astro:before-preparation");
+  Object.assign(event, { to: destination });
+  document.dispatchEvent(event);
+  return destination;
+}
+
 describe("useSearchQuerySync", () => {
   beforeEach(() => {
     $searchQuery.set("");
@@ -37,10 +45,10 @@ describe("useSearchQuerySync", () => {
     expect($searchQuery.get()).toBe("bier");
   });
 
-  it("does not clear $searchQuery when mounted on a URL without ?q=", () => {
+  it("sets $searchQuery to empty string when no ?q= in URL", () => {
     $searchQuery.set("oldvalue");
     mountComposable("");
-    expect($searchQuery.get()).toBe("oldvalue");
+    expect($searchQuery.get()).toBe("");
   });
 
   it("re-reads ?q= when astro:page-load fires", async () => {
@@ -75,21 +83,6 @@ describe("useSearchQuerySync", () => {
     );
   });
 
-  it("preserves $searchQuery when navigating to a URL without ?q=", async () => {
-    mountComposable("?q=bier");
-    expect($searchQuery.get()).toBe("bier");
-
-    Object.defineProperty(window, "location", {
-      value: { search: "", href: "http://localhost/wort/berliner" },
-      writable: true,
-      configurable: true,
-    });
-    document.dispatchEvent(new Event("astro:page-load"));
-    await nextTick();
-
-    expect($searchQuery.get()).toBe("bier");
-  });
-
   it("removes ?q= from URL when $searchQuery is cleared", async () => {
     mountComposable("?q=bier");
     $searchQuery.set("");
@@ -98,5 +91,25 @@ describe("useSearchQuerySync", () => {
 
     const calledUrl = vi.mocked(history.replaceState).mock.calls.at(-1)?.[2] as string;
     expect(calledUrl).not.toContain("q=");
+  });
+
+  describe("astro:before-preparation — navigation propagation", () => {
+    it("appends ?q= to destination URL when search is active", () => {
+      $searchQuery.set("bier");
+      const dest = fireBeforePreparation("http://localhost/wort/berliner");
+      expect(dest.searchParams.get("q")).toBe("bier");
+    });
+
+    it("removes ?q= from destination URL when search is empty", () => {
+      $searchQuery.set("");
+      const dest = fireBeforePreparation("http://localhost/wort/berliner?q=stale");
+      expect(dest.searchParams.get("q")).toBeNull();
+    });
+
+    it("updates ?q= in destination when search value differs", () => {
+      $searchQuery.set("kiez");
+      const dest = fireBeforePreparation("http://localhost/?q=old");
+      expect(dest.searchParams.get("q")).toBe("kiez");
+    });
   });
 });
