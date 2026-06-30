@@ -34,17 +34,18 @@
 </template>
 
 <script setup lang="ts">
-import { useStore, useVModel } from "@nanostores/vue";
+import { useStore } from "@nanostores/vue";
 import {
   $oramaSearchResults,
-  $wordSearch,
+  $searchQuery,
   searchLength as currentSearchLength,
 } from "@stores/wordList.ts";
+import { useSearchQuerySync } from "@composables/useSearchQuerySync";
 import { setMatomoSearch } from "@utils/analytics";
 import { useDebounceFn } from "@vueuse/core";
 import Search from "virtual:icons/lucide/search";
 import X from "virtual:icons/lucide/x";
-import { onMounted, ref, useTemplateRef, watch } from "vue";
+import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
 
 interface SearchWordsProps {
   autoFocus?: boolean;
@@ -53,8 +54,14 @@ interface SearchWordsProps {
 
 const { autoFocus = false, buttonPosition = "left" } = defineProps<SearchWordsProps>();
 
+useSearchQuerySync();
+
 const searchLength = useStore(currentSearchLength);
-const localSearch = useVModel($wordSearch, "search");
+const _searchQuery = useStore($searchQuery);
+const localSearch = computed({
+  get: () => _searchQuery.value,
+  set: (v: string) => $searchQuery.set(v),
+});
 
 const searchInput = useTemplateRef("searchInput");
 
@@ -80,29 +87,16 @@ const debouncedTrackSearch = useDebounceFn(trackWordSearchListSearch, 1000, {
   maxWait: 5000,
 });
 
-/**
- * Emits the search value to the parent component
- */
 const updateSearch = async (): Promise<void> => {
   await debouncedTrackSearch(localSearch.value);
 };
 
-/**
- * Handles the button actions
- *
- * @return  {void}
- */
 const buttonActions = (): void => {
   if (searchLength.value > 0) resetSearch();
 };
 
-/**
- * Resets the search value
- *
- * @return  {void}
- */
 const resetSearch = (): void => {
-  localSearch.value = "";
+  $searchQuery.set("");
 };
 
 const focusSearchInput = () => {
@@ -112,9 +106,7 @@ const focusSearchInput = () => {
 };
 
 onMounted(() => {
-  if (autoFocus) {
-    focusSearchInput();
-  }
+  if (autoFocus) focusSearchInput();
 });
 
 defineExpose({

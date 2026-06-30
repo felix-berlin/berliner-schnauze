@@ -9,9 +9,15 @@ Disallow: /
 User-agent: GPTBot
 Disallow: /
 
-# Not for training, only for user requests
+# Real-time search (not training) — allow for ChatGPT Search answers
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: ChatGPT-User
-Disallow: /
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
 
 # Marker for disabling Bard and Vertex AI
 User-agent: Google-Extended
@@ -23,6 +29,36 @@ Disallow: /
 
 # Multi-purpose, commercial uses; including LLMs
 User-agent: Omgilibot
+Disallow: /
+
+# Training opt-out
+User-agent: ClaudeBot
+Disallow: /
+
+# Anthropic web crawler (separate from ClaudeBot)
+User-agent: anthropic-ai
+Disallow: /
+
+# Apple Intelligence training
+User-agent: Applebot-Extended
+Disallow: /
+
+# ByteDance / TikTok
+User-agent: Bytespider
+Disallow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Disallow: /
+User-agent: Meta-ExternalFetcher
+Disallow: /
+
+# Allen Institute for AI
+User-agent: AI2Bot
+Disallow: /
+
+# Amazon
+User-agent: Amazonbot
 Disallow: /
 
 Sitemap: https://berliner-schnauze.wtf/sitemap-index.xml

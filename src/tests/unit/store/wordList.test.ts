@@ -158,17 +158,17 @@ describe("$activeFilterCount", () => {
 
 describe("resetAll", () => {
   it("resets all filters to defaults and tracks event", async () => {
-    const { resetAll, $wordSearch } = await import("@stores/wordList.ts");
+    const { resetAll, $wordSearch, $searchQuery } = await import("@stores/wordList.ts");
     const { trackEvent } = await import("@utils/analytics");
     $wordSearch.setKey("activeLetterFilter", "B");
     $wordSearch.setKey("berolinismus", true);
-    $wordSearch.setKey("search", "test");
+    $searchQuery.set("test");
     $wordSearch.setKey("activeOrderCategory", "date");
     resetAll();
     const ws = $wordSearch.get();
     expect(ws.activeLetterFilter).toBe("");
     expect(ws.berolinismus).toBe(false);
-    expect(ws.search).toBe("");
+    expect($searchQuery.get()).toBe("");
     expect(ws.activeOrderCategory).toBe("alphabetical");
     expect(trackEvent).toHaveBeenCalledWith("WordList", "Reset", "All filters reset");
   });
@@ -310,9 +310,9 @@ describe("$setSortOrder", () => {
 
 describe("setSearch", () => {
   it("updates the search string", async () => {
-    const { setSearch, $wordSearch } = await import("@stores/wordList.ts");
+    const { setSearch, $searchQuery } = await import("@stores/wordList.ts");
     setSearch("Schnauze");
-    expect($wordSearch.get().search).toBe("Schnauze");
+    expect($searchQuery.get()).toBe("Schnauze");
   });
 });
 
@@ -344,8 +344,8 @@ describe("searchLength", () => {
   });
 
   it("returns length of current search string", async () => {
-    const { searchLength, $wordSearch } = await import("@stores/wordList.ts");
-    $wordSearch.setKey("search", "Hund");
+    const { searchLength, $searchQuery } = await import("@stores/wordList.ts");
+    $searchQuery.set("Hund");
     expect(searchLength.get()).toBe(4);
   });
 });

@@ -60,14 +60,14 @@ describe("wordList store", () => {
 
   describe("$wordSearch default state", () => {
     it("has correct default values", async () => {
-      const { $wordSearch } = await import("@stores/wordList.ts");
+      const { $wordSearch, $searchQuery } = await import("@stores/wordList.ts");
       const state = $wordSearch.get();
       expect(state.activeLetterFilter).toBe("");
       expect(state.activeOrderCategory).toBe("alphabetical");
       expect(state.activeWordTypeFilter).toEqual([]);
       expect(state.alphabeticalOrder).toBe("ASC");
       expect(state.berolinismus).toBe(false);
-      expect(state.search).toBe("");
+      expect($searchQuery.get()).toBe("");
       expect(state.dateOrder).toBe("ASC");
       expect(state.modifiedDateOrder).toBe("ASC");
     });
@@ -151,10 +151,10 @@ describe("wordList store", () => {
 
   describe("resetAll", () => {
     it("resets all filters to defaults", async () => {
-      const { $wordSearch, resetAll } = await import("@stores/wordList.ts");
+      const { $wordSearch, $searchQuery, resetAll } = await import("@stores/wordList.ts");
       $wordSearch.setKey("activeLetterFilter", "Z");
       $wordSearch.setKey("berolinismus", true);
-      $wordSearch.setKey("search", "test");
+      $searchQuery.set("test");
       $wordSearch.setKey("activeWordTypeFilter", ["Verb"]);
 
       resetAll();
@@ -162,7 +162,7 @@ describe("wordList store", () => {
       const state = $wordSearch.get();
       expect(state.activeLetterFilter).toBe("");
       expect(state.berolinismus).toBe(false);
-      expect(state.search).toBe("");
+      expect($searchQuery.get()).toBe("");
       expect(state.activeWordTypeFilter).toEqual([]);
       expect(state.alphabeticalOrder).toBe("ASC");
       expect(state.dateOrder).toBe("ASC");
@@ -321,16 +321,16 @@ describe("wordList store", () => {
 
   describe("setSearch", () => {
     it("sets the search string", async () => {
-      const { $wordSearch, setSearch } = await import("@stores/wordList.ts");
+      const { $searchQuery, setSearch } = await import("@stores/wordList.ts");
       setSearch("Berliner");
-      expect($wordSearch.get().search).toBe("Berliner");
+      expect($searchQuery.get()).toBe("Berliner");
     });
 
     it("can be set to empty string", async () => {
-      const { $wordSearch, setSearch } = await import("@stores/wordList.ts");
+      const { $searchQuery, setSearch } = await import("@stores/wordList.ts");
       setSearch("foo");
       setSearch("");
-      expect($wordSearch.get().search).toBe("");
+      expect($searchQuery.get()).toBe("");
     });
   });
 
@@ -364,14 +364,14 @@ describe("wordList store", () => {
 
   describe("searchLength", () => {
     it("returns 0 when search is empty", async () => {
-      const { $wordSearch, searchLength } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("search", "");
+      const { $searchQuery, searchLength } = await import("@stores/wordList.ts");
+      $searchQuery.set("");
       expect(searchLength.get()).toBe(0);
     });
 
     it("returns the length of the search string", async () => {
-      const { $wordSearch, searchLength } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("search", "Berlin");
+      const { $searchQuery, searchLength } = await import("@stores/wordList.ts");
+      $searchQuery.set("Berlin");
       expect(searchLength.get()).toBe(6);
     });
   });

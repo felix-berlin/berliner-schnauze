@@ -18,11 +18,20 @@ const websiteSchema = JSON.stringify({
   description: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch',
   inLanguage: 'de-DE',
   name: 'Berliner Schnauze',
+  potentialAction: {
+    '@type': 'SearchAction',
+    'query-input': 'required name=search_term_string',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${SITE_URL}/wort?q={search_term_string}`,
+    },
+  },
   url: SITE_URL,
 });
 
 const organizationSchema = JSON.stringify({
   '@context': 'https://schema.org',
+  '@id': `${SITE_URL}/#organization`,
   '@type': 'Organization',
   founder: {
     '@type': 'Person',
@@ -104,6 +113,7 @@ const facts = [
         formats={['avif', 'webp']}
         layout='constrained'
         priority={true}
+        sizes="(min-width: 900px) 900px, (min-width: 768px) 50vw, (min-width: 568px) 85vw, 64vw"
         src={BrownBearRoar}
       />
     </div>

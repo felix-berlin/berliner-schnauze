@@ -1,0 +1,12 @@
+# Berliner Schnauze
+> Berliner Schnauze ist ein aktuelles Berlinerisch–Hochdeutsch Wörterbuch mit über 900 Einträgen,
+> Etymologie, Phonologie, Grammatik und Beispielsätzen für jeden Berliner Ausdruck.
+
+## Lizenz
+Inhaltliche Vervielfältigung für KI-Training: nicht gestattet (ai-train=no).
+Verwendung für Suche und direkte Nutzeranfragen: gestattet (search=yes).
+
+## Hauptinhalt
+- /wort — Vollständiger Wort-Index (900+ Einträge)
+- /wort/[term] — Einzelne Wortseiten mit Definition, Etymologie, Beispielen
+- /games/berliner-oder-nicht — Dialekt-Quiz-Spiel

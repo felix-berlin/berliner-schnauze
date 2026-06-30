@@ -97,9 +97,13 @@ const wordDescription = (() => {
     .join(', ');
   if (!translations) return undefined;
   const berlinerisch = wordProps?.berlinerisch ?? '';
-  const raw = `„${berlinerisch}" bedeutet auf Berlinerisch: ${translations}. Entdecke Berliner Ausdrücke auf Berliner Schnauze.`;
+  const raw = `${berlinerisch} heißt auf Berlinerisch: ${translations}. Mit Etymologie, Aussprache und Beispielsätzen.`;
   return raw.length > 160 ? raw.slice(0, 157) + '…' : raw;
 })();
+
+const wordPageTitle = wordProps?.berlinerisch
+  ? `${wordProps.berlinerisch} auf Berlinerisch — Bedeutung, Beispiel & Herkunft | Berliner Schnauze`
+  : (word.title ?? '');
 
 // const wikimediaFiles = await createWikimediaFileList(wordProps?.wikimediaFiles!);
 // console.log(wikimediaFiles);
@@ -133,10 +137,10 @@ const ogImage = word.seo?.opengraphImage?.sourceUrl
         width: firstImage.mediaDetails?.width,
       }
     : {
-        sourceUrl: generatedOgImageUrl,
         alt: wordProps?.berlinerisch ?? '',
-        width: '1200',
         height: '630',
+        sourceUrl: generatedOgImageUrl,
+        width: '1200',
       };
 
 const exampleComments = (wordProps?.examples ?? [])
@@ -169,10 +173,10 @@ const schemaJson = () => {
       disambiguatingDescription: `Berliner Dialektwort, ${wordProps.article}`,
     }),
     identifier: word.id,
-    publisher: {
-      '@type': 'Organization',
-      name: 'Berliner Schnauze',
-      url: canonicalUrl('/', Astro.site),
+    publisher: { '@id': `${Astro.site}#organization` },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.c-word-hero__description', '.c-word-examples'],
     },
     ...(firstImage?.sourceUrl && {
       image: {
@@ -186,6 +190,7 @@ const schemaJson = () => {
       },
     }),
     inDefinedTermSet: {
+      '@id': `${canonicalUrl('/wort', Astro.site)}#termset`,
       '@type': 'DefinedTermSet',
       description: 'Wörterbuch für den Berliner Dialekt und Berliner Schnauze',
       inLanguage: 'de-DE',
@@ -216,6 +221,7 @@ const schemaJson = () => {
   content={seoData({
     seo: {
       ...(word.seo ?? {}),
+      title: wordPageTitle,
       ...(wordDescription && {
         opengraphDescription: wordDescription,
         twitterDescription: wordDescription,

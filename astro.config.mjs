@@ -12,6 +12,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
+import { getWordDates } from "./src/services/queries/getSitemapWordDates.ts";
 
 const {
   SENTRY_AUTH_TOKEN,
@@ -230,7 +231,18 @@ export default defineConfig({
       // },
     }),
     sitemap({
-      lastmod: new Date(),
+      filter: (page) =>
+        !page.includes("/settings") &&
+        !page.endsWith("/games/berliner-oder-nicht/share"),
+      serialize: async (item) => {
+        const match = item.url.match(/\/wort\/([^/?#]+)/);
+        if (match) {
+          const dates = await getWordDates();
+          const date = dates.get(match[1]);
+          if (date) return { ...item, lastmod: date };
+        }
+        return item;
+      },
     }),
     matomo({
       enabled: process.env.ENABLE_ANALYTICS === "true",
