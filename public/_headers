@@ -1,5 +1,4 @@
 /*
-  Cache-Control: no-cache
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
@@ -7,6 +6,3 @@
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://*.berliner-schnauze.wtf https://*.cloudflareinsights.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.berliner-schnauze.wtf https://*.sentry.io https://sentry.io https://cloudflareinsights.com https://*.cloudflareinsights.com; font-src 'self'; frame-src https://challenges.cloudflare.com; frame-ancestors 'none'
   Content-Signal: search=yes, ai-train=no
   TDM-Reservation: 1
-
-/_astro/*
-  Cache-Control: public, max-age=31536000, immutable
