@@ -37,10 +37,10 @@ describe("useSearchQuerySync", () => {
     expect($searchQuery.get()).toBe("bier");
   });
 
-  it("sets $searchQuery to empty string when no ?q= in URL", () => {
+  it("does not clear $searchQuery when mounted on a URL without ?q=", () => {
     $searchQuery.set("oldvalue");
     mountComposable("");
-    expect($searchQuery.get()).toBe("");
+    expect($searchQuery.get()).toBe("oldvalue");
   });
 
   it("re-reads ?q= when astro:page-load fires", async () => {
