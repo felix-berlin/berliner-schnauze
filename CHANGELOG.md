@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.39.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.2...v3.39.3) (2026-06-30)
+
+
+### Bug Fixes
+
+* **csp:** allow Cloudflare Turnstile script and frame origins ([978a524](https://github.com/felix-berlin/berliner-schnauze/commit/978a524a6f732dfefe3a854be6a0f524c0556c19))
+
 ## [3.39.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.1...v3.39.2) (2026-06-30)
 
 
