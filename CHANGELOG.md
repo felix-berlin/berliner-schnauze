@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.39.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.3...v3.39.4) (2026-06-30)
+
+
+### Performance Improvements
+
+* **pwa:** exclude OG images and screenshots from precache ([4cb34c0](https://github.com/felix-berlin/berliner-schnauze/commit/4cb34c056928bedd17c4ef6a6a3873d69574f752))
+
 ## [3.39.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.2...v3.39.3) (2026-06-30)
 
 
