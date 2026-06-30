@@ -231,7 +231,9 @@ export default defineConfig({
       // },
     }),
     sitemap({
-      filter: (page) => !page.includes("/settings"),
+      filter: (page) =>
+        !page.includes("/settings") &&
+        !page.endsWith("/games/berliner-oder-nicht/share"),
       serialize: async (item) => {
         const match = item.url.match(/\/wort\/([^/?#]+)/);
         if (match) {
