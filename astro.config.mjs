@@ -315,8 +315,13 @@ export default defineConfig({
         globPatterns: import.meta.env.DEV
           ? []
           : ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
-        // Increase the file size limit to 15 MB to accommodate large images
-        maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // 15 MB
+        globIgnores: [
+          // OG images are fetched by social crawlers only, never by users
+          "og/**",
+          // Screenshots are only used in the PWA install manifest, not at runtime
+          "screenshots/**",
+        ],
+        maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2 MB (Workbox default)
         runtimeCaching: [
           {
             urlPattern: /.*\/api\/search\/index\.json$/,
