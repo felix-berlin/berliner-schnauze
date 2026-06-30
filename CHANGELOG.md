@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.39.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.4...v3.39.5) (2026-06-30)
+
+
+### Bug Fixes
+
+* **cache:** remove all Cache-Control headers, let Cloudflare Pages decide ([fff5cfb](https://github.com/felix-berlin/berliner-schnauze/commit/fff5cfbe80d35f742c8daa60f059b90f5a23c931))
+
 ## [3.39.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.3...v3.39.4) (2026-06-30)
 
 
