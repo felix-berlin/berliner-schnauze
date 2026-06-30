@@ -1,8 +1,8 @@
+import { useSearchQuerySync } from "@composables/useSearchQuerySync";
+import { $searchQuery } from "@stores/wordList.ts";
 import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { defineComponent, nextTick } from "vue";
-import { $searchQuery } from "@stores/wordList.ts";
-import { useSearchQuerySync } from "@composables/useSearchQuerySync";
 
 function mountComposable(locationSearch: string) {
   Object.defineProperty(window, "location", {
@@ -73,6 +73,21 @@ describe("useSearchQuerySync", () => {
       "",
       expect.stringContaining("q=schnauze"),
     );
+  });
+
+  it("preserves $searchQuery when navigating to a URL without ?q=", async () => {
+    mountComposable("?q=bier");
+    expect($searchQuery.get()).toBe("bier");
+
+    Object.defineProperty(window, "location", {
+      value: { search: "", href: "http://localhost/wort/berliner" },
+      writable: true,
+      configurable: true,
+    });
+    document.dispatchEvent(new Event("astro:page-load"));
+    await nextTick();
+
+    expect($searchQuery.get()).toBe("bier");
   });
 
   it("removes ?q= from URL when $searchQuery is cleared", async () => {
