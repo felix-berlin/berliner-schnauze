@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.39.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.1...v3.39.2) (2026-06-30)
+
+
+### Bug Fixes
+
+* **cache:** replace stale-while-revalidate with no-cache on HTML routes ([be53568](https://github.com/felix-berlin/berliner-schnauze/commit/be535685b9c73ecea7f831b7438572055cdf2c40))
+
 ## [3.39.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.0...v3.39.1) (2026-06-30)
 
 
