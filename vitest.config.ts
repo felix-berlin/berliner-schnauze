@@ -68,6 +68,8 @@ export default getViteConfig(
           "src/components/Footer.astro",
           // ImageGallery.astro is a thin shell around a client:only Vue island.
           "src/components/ImageGallery.astro",
+          // berliner-oder-nicht.astro is a thin shell around a client:only Vue island with astro:env deps.
+          "src/pages/games/berliner-oder-nicht.astro",
           "codegen.ts",
         ],
         reportsDirectory: "./tests/unit/coverage",

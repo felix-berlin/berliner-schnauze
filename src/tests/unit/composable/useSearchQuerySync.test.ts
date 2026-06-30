@@ -112,4 +112,11 @@ describe("useSearchQuerySync", () => {
       expect(dest.searchParams.get("q")).toBe("kiez");
     });
   });
+
+  it("removes astro:page-load listener and unsubscribes on unmount", () => {
+    const removeListenerSpy = vi.spyOn(document, "removeEventListener");
+    const wrapper = mountComposable("");
+    wrapper.unmount();
+    expect(removeListenerSpy).toHaveBeenCalledWith("astro:page-load", expect.any(Function));
+  });
 });
