@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.39.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.38.0...v3.39.0) (2026-06-30)
+
+
+### Bug Fixes
+
+* **dependencies:** add zod to dependencies and update pnpm-lock.yaml ([46869c0](https://github.com/felix-berlin/berliner-schnauze/commit/46869c05552b2f3bc3c18500acaaa4ed86b1ec14))
+* **search:** never clear \$searchQuery when URL has no ?q= ([af733cd](https://github.com/felix-berlin/berliner-schnauze/commit/af733cd84b35c1eacd96ac22cde7b7034186d900))
+* **search:** preserve search when navigating to pages without ?q= ([47764bd](https://github.com/felix-berlin/berliner-schnauze/commit/47764bd5d105bf809053b91802150c0537081640))
+* **search:** update URL handling for active search during navigation ([2971ec7](https://github.com/felix-berlin/berliner-schnauze/commit/2971ec732328099939839c2919fe62eed7eaf8c9))
+* **security:** update Content-Security-Policy for improved resource handling ([110186e](https://github.com/felix-berlin/berliner-schnauze/commit/110186e4284f8535e4b84271291860b0fef5f9eb))
+* **seo:** add WP API origin to CSP connect-src ([984705f](https://github.com/felix-berlin/berliner-schnauze/commit/984705ffe4b5fffd8e59ac7dc587baaac5a0b8c2))
+* **seo:** correct sitemap lastmod type and restore settings filter ([6a72a3a](https://github.com/felix-berlin/berliner-schnauze/commit/6a72a3a1827e9046144e83f6f93c34f9bde4fabd))
+* **seo:** remove inaccurate global sitemap lastmod ([12dc0dc](https://github.com/felix-berlin/berliner-schnauze/commit/12dc0dcb7bab440485907fccf9c226e6c1912744))
+* **seo:** reorder parameters in OGImageRoute for clarity ([b85f2e6](https://github.com/felix-berlin/berliner-schnauze/commit/b85f2e670d7b4959e9f7255c9abf65dbb1c20876))
+* **seo:** restructure SEO properties for clarity and consistency ([4e6ada9](https://github.com/felix-berlin/berliner-schnauze/commit/4e6ada985ba0171a121a2d3fda96ce1f6f1e5d01))
+* **seo:** update robots.txt and BaseHead.astro for AI training opt-out ([4a9c124](https://github.com/felix-berlin/berliner-schnauze/commit/4a9c12436206668a667e349521e76c347bd2864d))
+* **sitemap:** exclude specific share page from sitemap generation ([6cb6099](https://github.com/felix-berlin/berliner-schnauze/commit/6cb609913fa8ac108d037b1d93e9b28b8d26fcba))
+
+
+### Features
+
+* **search:** add useSearchQuerySync composable for URL ↔ \$searchQuery sync ([60c2921](https://github.com/felix-berlin/berliner-schnauze/commit/60c2921c74051999d5d3129b7d53f6c8db7a1fc7))
+* **search:** wire SearchWords.vue to \$searchQuery via useSearchQuerySync ([f132701](https://github.com/felix-berlin/berliner-schnauze/commit/f132701196f1cca9519c334f25209fe2120fd5bd))
+* **seo:** add /public/llms.txt for AI search discoverability ([f5f150b](https://github.com/felix-berlin/berliner-schnauze/commit/f5f150ba6b128cf41efbf201191248b1cdbe7c34))
+* **seo:** add Cloudflare Pages _headers for security and caching ([ee1c7b2](https://github.com/felix-berlin/berliner-schnauze/commit/ee1c7b26fcfb1f13e6fac6fe06ab62a77d4b8945))
+* **seo:** add per-URL sitemap lastmod from WordPress modifiedGmt ([ca0aa18](https://github.com/felix-berlin/berliner-schnauze/commit/ca0aa18ec63a59d489d1f47c7a0dfbc54eb501eb))
+* **seo:** allow AI search bots in robots.txt ([f738429](https://github.com/felix-berlin/berliner-schnauze/commit/f73842951f4921bf929ff0461c1d610b9575425d))
+* **seo:** enhance JSON-LD schema across site ([efe0ce9](https://github.com/felix-berlin/berliner-schnauze/commit/efe0ce91a246d5657caabe89a5507ccad1879a67)), closes [#organization](https://github.com/felix-berlin/berliner-schnauze/issues/organization) [wort#termset](https://github.com/wort/issues/termset) [wort#termset](https://github.com/wort/issues/termset)
+* **seo:** fix games page — add H1, meta description, VideoGame schema ([1fb29e2](https://github.com/felix-berlin/berliner-schnauze/commit/1fb29e24431895769a73d38926c28fd024fbe166))
+* **seo:** improve word page title and meta description templates ([d2e4364](https://github.com/felix-berlin/berliner-schnauze/commit/d2e43647ab46669f12d01de7dc424f85251e6bce))
+
+
+### Performance Improvements
+
+* **images:** add accurate sizes attributes to hero and footer images ([0ddb754](https://github.com/felix-berlin/berliner-schnauze/commit/0ddb754fe6799f8614a023b82cff5aac5bb617dd))
+
 # [3.38.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.37.0...v3.38.0) (2026-06-29)
 
 
