@@ -47,11 +47,27 @@ const seoProps = seoData({
     canonical: thema.seo?.canonical ?? canonicalUrl(`/themen/${thema.slug}/`, Astro.site),
     opengraphDescription:
       thema.seo?.opengraphDescription ?? thema.seo?.metaDesc ?? thema.description ?? '',
+    ...(thema.seo?.opengraphImage?.sourceUrl && {
+      opengraphImage: { sourceUrl: thema.seo.opengraphImage.sourceUrl },
+    }),
     opengraphType: 'website',
     title: thema.seo?.title ?? thema.name ?? '',
   },
   title: thema.name ?? '',
 });
+
+const itemListJson = () =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: words.map(({ node }, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: canonicalUrl(routeToWord(node.slug ?? undefined), Astro.site),
+    })),
+    name: thema.name ?? '',
+    numberOfItems: words.length,
+  });
 ---
 
 <Layout content={seoProps} contentClasses='o-thema'>
@@ -65,6 +81,7 @@ const seoProps = seoData({
     <p class='c-thema-header__count'>{words.length} Wörter</p>
   </header>
 
+  <h2 class='c-thema-word-list__heading'>{words.length} Wörter zu diesem Thema</h2>
   <ul class='c-thema-word-list'>
     {
       words.map(({ node }) => (
@@ -76,4 +93,6 @@ const seoProps = seoData({
       ))
     }
   </ul>
+
+  <script set:html={itemListJson()} type='application/ld+json' />
 </Layout>
