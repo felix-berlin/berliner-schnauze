@@ -57,5 +57,4 @@ export const { getStaticPaths, GET } = await OGImageRoute({
     };
   },
   pages,
-  param: "wordSlug",
 });
