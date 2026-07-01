@@ -4,7 +4,19 @@
   padding-block: vars.$spacer * 3;
 
   &__title {
+    margin-block-end: vars.$spacer * 0.5;
+  }
+
+  &__intro {
+    max-width: 60ch;
     margin-block-end: vars.$spacer * 1.5;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  &__heading {
+    margin: 0 0 vars.$spacer;
+    font-size: 1.25rem;
   }
 
   &__list {
