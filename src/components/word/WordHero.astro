@@ -1,10 +1,12 @@
 ---
 import '@styles/components/_word-hero.scss';
+import '@styles/components/_word-themen.scss';
 import AudioPlayerList from '@components/AudioPlayerList.vue';
 import BadgeTag from '@components/BadgeTag.vue';
 import IsWordOfTheDay from '@components/word/IsWordOfTheDay.vue';
 import WordOptionDropdown from '@components/word/WordOptionDropdown.vue';
 import TooltipPopover from '@components/TooltipPopover.vue';
+import Tag from '~icons/lucide/tag';
 import type { BerlinerWord } from '@/gql/entity-types';
 
 interface Props {
@@ -14,6 +16,7 @@ interface Props {
 }
 
 const { word, wordProps, wortartLabel } = Astro.props;
+const themen = word.berlinerischThemen?.nodes ?? [];
 ---
 
 <header
@@ -63,10 +66,11 @@ const { word, wordProps, wortartLabel } = Astro.props;
       }
     </div>
     {
-      word.berlinerischThemen?.nodes?.length > 0 && (
+      themen.length > 0 && (
         <div class='c-word-themen'>
-          {word.berlinerischThemen.nodes.map((thema) => (
+          {themen.map((thema) => (
             <a href={`/themen/${thema.slug}`} class='c-word-themen__badge'>
+              <Tag height='12' width='12' />
               {thema.name}
             </a>
           ))}
