@@ -1,0 +1,51 @@
+@use "@styles/variables" as vars;
+
+.c-themen-overview {
+  padding-block: vars.$spacer * 3;
+
+  &__title {
+    margin-block-end: vars.$spacer * 0.5;
+  }
+
+  &__intro {
+    max-width: 60ch;
+    margin-block-end: vars.$spacer * 1.5;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  &__heading {
+    margin: 0 0 vars.$spacer;
+    font-size: 1.25rem;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: vars.$spacer;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.25;
+  }
+
+  &__link {
+    font-weight: 600;
+    font-size: 1.125rem;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__count {
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+}

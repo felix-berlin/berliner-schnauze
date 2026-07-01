@@ -1,0 +1,46 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Deliberately NOT matching the wortart/wotd/berolinismus badge family above:
+// those are quiet outlined facts about the word (sharp 4px corners, pale fill).
+// Themen are links to other pages, so they get a solid filled pill instead —
+// same palette, different shape and weight, so the two rows read as two
+// distinct kinds of thing rather than one undifferentiated badge soup.
+.c-word-themen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: vars.$spacer * 0.5;
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    white-space: nowrap;
+    background: var(--orange-600);
+    color: var(--orange-100);
+
+    svg {
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+
+    @include butler-mx.dark-mode-class {
+      background: var(--orange-500);
+      color: var(--new-blue-600);
+    }
+    @include butler-mx.hover {
+      background: var(--orange-700);
+      text-decoration: underline;
+
+      @include butler-mx.dark-mode-class {
+        background: var(--orange-400);
+      }
+    }
+  }
+}

@@ -418,6 +418,25 @@ type BerlinerWord implements ContentNode & DatabaseIdentifier & HierarchicalCont
   """The id field matches the WP_Post-&gt;ID field."""
   berlinerWordId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
   """
+  Connection between the BerlinerWord type and the berlinerischThema type
+  """
+  berlinerischThemen(
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+    """Arguments for filtering the connection"""
+    where: BerlinerWordToBerlinerischThemaConnectionWhereArgs
+  ): BerlinerWordToBerlinerischThemaConnection
+  """
   Connection between the BerlinerWord type and the berlinerischWordType type
   """
   berlinerischWordTypes(
@@ -595,6 +614,38 @@ type BerlinerWord implements ContentNode & DatabaseIdentifier & HierarchicalCont
   wordProperties: WordProperties
 }
 
+"""Set relationships between the berlinerWord to berlinerischThemen"""
+input BerlinerWordBerlinerischThemenInput {
+  """
+  If true, this will append the berlinerischThema to existing related berlinerischThemen. If false, this will replace existing relationships. Default true.
+  """
+  append: Boolean
+  """The input list of items to set."""
+  nodes: [BerlinerWordBerlinerischThemenNodeInput]
+}
+
+"""
+List of berlinerischThemen to connect the berlinerWord to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists.
+"""
+input BerlinerWordBerlinerischThemenNodeInput {
+  """
+  The description of the berlinerischThema. This field is used to set a description of the berlinerischThema if a new one is created during the mutation.
+  """
+  description: String
+  """
+  The ID of the berlinerischThema. If present, this will be used to connect to the berlinerWord. If no existing berlinerischThema exists with this ID, no connection will be made.
+  """
+  id: ID
+  """
+  The name of the berlinerischThema. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field.
+  """
+  name: String
+  """
+  The slug of the berlinerischThema. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation.
+  """
+  slug: String
+}
+
 """Set relationships between the berlinerWord to berlinerischWordTypes"""
 input BerlinerWordBerlinerischWordTypesInput {
   """
@@ -680,6 +731,113 @@ enum BerlinerWordIdType {
   ID
   """Identify a resource by the URI."""
   URI
+}
+
+"""
+Connection between the BerlinerWord type and the berlinerischThema type
+"""
+type BerlinerWordToBerlinerischThemaConnection implements BerlinerischThemaConnection & Connection {
+  """Edges for the BerlinerWordToBerlinerischThemaConnection connection"""
+  edges: [BerlinerWordToBerlinerischThemaConnectionEdge!]!
+  """The nodes of the connection, without the edges"""
+  nodes: [BerlinerischThema!]!
+  """Information about pagination in a connection."""
+  pageInfo: BerlinerWordToBerlinerischThemaConnectionPageInfo!
+}
+
+"""An edge in a connection"""
+type BerlinerWordToBerlinerischThemaConnectionEdge implements BerlinerischThemaConnectionEdge & Edge {
+  """A cursor for use in pagination"""
+  cursor: String
+  """The Yoast SEO Primary berlinerisch_word_themen"""
+  isPrimary: Boolean
+  """The item at the end of the edge"""
+  node: BerlinerischThema!
+}
+
+"""
+Pagination metadata specific to &quot;BerlinerWordToBerlinerischThemaConnection&quot; collections. Provides cursors and flags for navigating through sets of BerlinerWordToBerlinerischThemaConnection Nodes.
+"""
+type BerlinerWordToBerlinerischThemaConnectionPageInfo implements BerlinerischThemaConnectionPageInfo & PageInfo & WPPageInfo {
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+  """Raw schema for page"""
+  seo: SEOPostTypePageInfo
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+  total: Int
+}
+
+"""
+Arguments for filtering the BerlinerWordToBerlinerischThemaConnection connection
+"""
+input BerlinerWordToBerlinerischThemaConnectionWhereArgs {
+  """
+  Unique cache key to be produced when this query is stored in an object cache. Default is 'core'.
+  """
+  cacheDomain: String
+  """
+  Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0.
+  """
+  childOf: Int
+  """
+  True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false.
+  """
+  childless: Boolean
+  """
+  Retrieve terms where the description is LIKE the input value. Default empty.
+  """
+  descriptionLike: String
+  """
+  Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array.
+  """
+  exclude: [ID]
+  """
+  Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array.
+  """
+  excludeTree: [ID]
+  """
+  Whether to hide terms not assigned to any posts. Accepts true or false. Default false
+  """
+  hideEmpty: Boolean
+  """
+  Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true.
+  """
+  hierarchical: Boolean
+  """Array of term ids to include. Default empty array."""
+  include: [ID]
+  """Array of names to return term(s) for. Default empty."""
+  name: [String]
+  """Retrieve terms where the name is LIKE the input value. Default empty."""
+  nameLike: String
+  """
+  Array of object IDs. Results will be limited to terms associated with these objects.
+  """
+  objectIds: [ID]
+  """Direction the connection should be ordered in"""
+  order: OrderEnum
+  """Field(s) to order terms by. Defaults to 'name'."""
+  orderby: TermObjectsConnectionOrderbyEnum
+  """
+  Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false.
+  """
+  padCounts: Boolean
+  """Parent term ID to retrieve direct-child terms of. Default empty."""
+  parent: Int
+  """
+  Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty.
+  """
+  search: String
+  """Array of slugs to return term(s) for. Default empty."""
+  slug: [String]
+  """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomyId: [ID]
+  """Whether to prime meta caches for matched terms. Default true."""
+  updateTermMetaCache: Boolean
 }
 
 """
@@ -902,6 +1060,347 @@ input BerlinerWordToTermNodeConnectionWhereArgs {
   termTaxonomyId: [ID]
   """Whether to prime meta caches for matched terms. Default true."""
   updateTermMetaCache: Boolean
+}
+
+"""The berlinerischThema type"""
+type BerlinerischThema implements DatabaseIdentifier & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable {
+  """
+  Connection between the BerlinerischThema type and the berlinerWord type
+  """
+  berlinerWords(
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+    """Arguments for filtering the connection"""
+    where: BerlinerischThemaToBerlinerWordConnectionWhereArgs
+  ): BerlinerischThemaToBerlinerWordConnection
+  """The id field matches the WP_Post-&gt;ID field."""
+  berlinerischThemaId: Int @deprecated(reason: "Deprecated in favor of databaseId")
+  """Connection between the BerlinerischThema type and the ContentNode type"""
+  contentNodes(
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+    """Arguments for filtering the connection"""
+    where: BerlinerischThemaToContentNodeConnectionWhereArgs
+  ): BerlinerischThemaToContentNodeConnection
+  """The number of objects connected to the object"""
+  count: Int
+  """The unique identifier stored in the database"""
+  databaseId: Int!
+  """The description of the object"""
+  description: String
+  """Connection between the TermNode type and the EnqueuedScript type"""
+  enqueuedScripts(
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+  ): TermNodeToEnqueuedScriptConnection
+  """Connection between the TermNode type and the EnqueuedStylesheet type"""
+  enqueuedStylesheets(
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+  ): TermNodeToEnqueuedStylesheetConnection
+  """The globally unique ID for the object"""
+  id: ID!
+  """Whether the node is a Comment"""
+  isComment: Boolean!
+  """Whether the node is a Content Node"""
+  isContentNode: Boolean!
+  """Whether the node represents the front page."""
+  isFrontPage: Boolean!
+  """Whether  the node represents the blog page."""
+  isPostsPage: Boolean!
+  """Whether the object is restricted from the current viewer"""
+  isRestricted: Boolean
+  """Whether the node is a Term"""
+  isTermNode: Boolean!
+  """The link to the term"""
+  link: String
+  """The human friendly name of the object."""
+  name: String
+  """The Yoast SEO data of the Themen taxonomy."""
+  seo: TaxonomySEO
+  """An alphanumeric identifier for the object unique to its type."""
+  slug: String
+  """Connection between the BerlinerischThema type and the Taxonomy type"""
+  taxonomy: BerlinerischThemaToTaxonomyConnectionEdge
+  """The name of the taxonomy that the object is associated with"""
+  taxonomyName: String
+  """The ID of the term group that this term object belongs to"""
+  termGroupId: Int
+  """The taxonomy ID that the object is associated with"""
+  termTaxonomyId: Int
+  """The unique resource identifier path"""
+  uri: String
+}
+
+"""
+A paginated collection of berlinerischThema Nodes, Supports cursor-based pagination and filtering to efficiently retrieve sets of berlinerischThema Nodes
+"""
+interface BerlinerischThemaConnection implements Connection {
+  """
+  A list of edges (relational context) between RootQuery and connected berlinerischThema Nodes
+  """
+  edges: [BerlinerischThemaConnectionEdge!]!
+  """A list of connected berlinerischThema Nodes"""
+  nodes: [BerlinerischThema!]!
+  """Information about pagination in a connection."""
+  pageInfo: BerlinerischThemaConnectionPageInfo!
+}
+
+"""
+Represents a connection to a berlinerischThema. Contains both the berlinerischThema Node and metadata about the relationship.
+"""
+interface BerlinerischThemaConnectionEdge implements Edge {
+  """
+  Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+  """
+  cursor: String
+  """The connected berlinerischThema Node"""
+  node: BerlinerischThema!
+}
+
+"""
+Pagination metadata specific to &quot;BerlinerischThemaConnectionEdge&quot; collections. Provides cursors and flags for navigating through sets of &quot;BerlinerischThemaConnectionEdge&quot; Nodes.
+"""
+interface BerlinerischThemaConnectionPageInfo implements PageInfo & WPPageInfo {
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+  """Raw schema for page"""
+  seo: SEOPostTypePageInfo
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+  total: Int
+}
+
+"""
+Identifier types for retrieving a specific BerlinerischThema. Determines which unique property (global ID, database ID, slug, etc.) is used to locate the BerlinerischThema.
+"""
+enum BerlinerischThemaIdType {
+  """The Database ID for the node"""
+  DATABASE_ID
+  """The hashed Global ID"""
+  ID
+  """The name of the node"""
+  NAME
+  """Url friendly name of the node"""
+  SLUG
+  """The URI for the node"""
+  URI
+}
+
+"""
+Connection between the BerlinerischThema type and the berlinerWord type
+"""
+type BerlinerischThemaToBerlinerWordConnection implements BerlinerWordConnection & Connection {
+  """Edges for the BerlinerischThemaToBerlinerWordConnection connection"""
+  edges: [BerlinerischThemaToBerlinerWordConnectionEdge!]!
+  """The nodes of the connection, without the edges"""
+  nodes: [BerlinerWord!]!
+  """Information about pagination in a connection."""
+  pageInfo: BerlinerischThemaToBerlinerWordConnectionPageInfo!
+}
+
+"""An edge in a connection"""
+type BerlinerischThemaToBerlinerWordConnectionEdge implements BerlinerWordConnectionEdge & Edge {
+  """A cursor for use in pagination"""
+  cursor: String
+  """The item at the end of the edge"""
+  node: BerlinerWord!
+}
+
+"""
+Pagination metadata specific to &quot;BerlinerischThemaToBerlinerWordConnection&quot; collections. Provides cursors and flags for navigating through sets of BerlinerischThemaToBerlinerWordConnection Nodes.
+"""
+type BerlinerischThemaToBerlinerWordConnectionPageInfo implements BerlinerWordConnectionPageInfo & PageInfo & WPPageInfo {
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+  """Raw schema for page"""
+  seo: SEOPostTypePageInfo
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+  total: Int
+}
+
+"""
+Arguments for filtering the BerlinerischThemaToBerlinerWordConnection connection
+"""
+input BerlinerischThemaToBerlinerWordConnectionWhereArgs {
+  """Filter the connection based on dates"""
+  dateQuery: DateQueryInput
+  """
+  True for objects with passwords; False for objects without passwords; null for all objects with or without passwords
+  """
+  hasPassword: Boolean
+  """Specific database ID of the object"""
+  id: Int
+  """Array of IDs for the objects to retrieve"""
+  in: [ID]
+  """Get objects with a specific mimeType property"""
+  mimeType: MimeTypeEnum
+  """Slug / post_name of the object"""
+  name: String
+  """Specify objects to retrieve. Use slugs"""
+  nameIn: [String]
+  """
+  Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored
+  """
+  notIn: [ID]
+  """What parameter to use to order the objects by."""
+  orderby: [PostObjectsConnectionOrderbyInput]
+  """Use ID to return only children. Use 0 to return only top-level items"""
+  parent: ID
+  """Specify objects whose parent is in an array"""
+  parentIn: [ID]
+  """Specify posts whose parent is not in an array"""
+  parentNotIn: [ID]
+  """Show posts with a specific password."""
+  password: String
+  """Show Posts based on a keyword search"""
+  search: String
+  """Retrieve posts where post status is in an array."""
+  stati: [PostStatusEnum]
+  """Show posts with a specific status."""
+  status: PostStatusEnum
+  """Title of the object"""
+  title: String
+}
+
+"""Connection between the BerlinerischThema type and the ContentNode type"""
+type BerlinerischThemaToContentNodeConnection implements Connection & ContentNodeConnection {
+  """Edges for the BerlinerischThemaToContentNodeConnection connection"""
+  edges: [BerlinerischThemaToContentNodeConnectionEdge!]!
+  """The nodes of the connection, without the edges"""
+  nodes: [ContentNode!]!
+  """Information about pagination in a connection."""
+  pageInfo: BerlinerischThemaToContentNodeConnectionPageInfo!
+}
+
+"""An edge in a connection"""
+type BerlinerischThemaToContentNodeConnectionEdge implements ContentNodeConnectionEdge & Edge {
+  """A cursor for use in pagination"""
+  cursor: String
+  """The item at the end of the edge"""
+  node: ContentNode!
+}
+
+"""
+Pagination metadata specific to &quot;BerlinerischThemaToContentNodeConnection&quot; collections. Provides cursors and flags for navigating through sets of BerlinerischThemaToContentNodeConnection Nodes.
+"""
+type BerlinerischThemaToContentNodeConnectionPageInfo implements ContentNodeConnectionPageInfo & PageInfo & WPPageInfo {
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+  """Raw schema for page"""
+  seo: SEOPostTypePageInfo
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+  total: Int
+}
+
+"""
+Arguments for filtering the BerlinerischThemaToContentNodeConnection connection
+"""
+input BerlinerischThemaToContentNodeConnectionWhereArgs {
+  """The Types of content to filter"""
+  contentTypes: [ContentTypesOfBerlinerischThemaEnum]
+  """Filter the connection based on dates"""
+  dateQuery: DateQueryInput
+  """
+  True for objects with passwords; False for objects without passwords; null for all objects with or without passwords
+  """
+  hasPassword: Boolean
+  """Specific database ID of the object"""
+  id: Int
+  """Array of IDs for the objects to retrieve"""
+  in: [ID]
+  """Get objects with a specific mimeType property"""
+  mimeType: MimeTypeEnum
+  """Slug / post_name of the object"""
+  name: String
+  """Specify objects to retrieve. Use slugs"""
+  nameIn: [String]
+  """
+  Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored
+  """
+  notIn: [ID]
+  """What parameter to use to order the objects by."""
+  orderby: [PostObjectsConnectionOrderbyInput]
+  """Use ID to return only children. Use 0 to return only top-level items"""
+  parent: ID
+  """Specify objects whose parent is in an array"""
+  parentIn: [ID]
+  """Specify posts whose parent is not in an array"""
+  parentNotIn: [ID]
+  """Show posts with a specific password."""
+  password: String
+  """Show Posts based on a keyword search"""
+  search: String
+  """Retrieve posts where post status is in an array."""
+  stati: [PostStatusEnum]
+  """Show posts with a specific status."""
+  status: PostStatusEnum
+  """Title of the object"""
+  title: String
+}
+
+"""Connection between the BerlinerischThema type and the Taxonomy type"""
+type BerlinerischThemaToTaxonomyConnectionEdge implements Edge & OneToOneConnection & TaxonomyConnectionEdge {
+  """
+  Opaque reference to the nodes position in the connection. Value can be used with pagination args.
+  """
+  cursor: String
+  """The node of the connection, without the edges"""
+  node: Taxonomy!
 }
 
 """The berlinerischWordType type"""
@@ -2905,12 +3404,103 @@ enum CommentsConnectionOrderbyEnum {
   USER_ID
 }
 
-type CompanyInformations implements AcfOptionsPage & Node {
+type CompanyInformations implements AcfOptionsPage & Node & WithAcfCompanyInformations {
+  """Fields of the CompanyInformations ACF Field Group"""
+  companyInformations: CompanyInformations
   """The globally unique ID for the object"""
   id: ID!
   menuTitle: String
   pageTitle: String
   parentId: String
+}
+
+"""
+The &quot;CompanyInformationsSocialMedia&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
+"""
+type CompanyInformationsSocialMedia implements AcfFieldGroup & AcfFieldGroupFields & CompanyInformationsSocialMedia_Fields {
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;CompanyInformationsSocialMedia&quot; Field Group
+  """
+  networkname: [String]
+  """
+  Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;CompanyInformationsSocialMedia&quot; Field Group
+  """
+  networkprofile: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformationsSocialMedia&quot; Field Group
+  """
+  rel: String
+}
+
+"""
+Interface representing fields of the ACF &quot;CompanyInformationsSocialMedia&quot; Field Group
+"""
+interface CompanyInformationsSocialMedia_Fields implements AcfFieldGroup & AcfFieldGroupFields {
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;CompanyInformationsSocialMedia&quot; Field Group
+  """
+  networkname: [String]
+  """
+  Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;CompanyInformationsSocialMedia&quot; Field Group
+  """
+  networkprofile: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformationsSocialMedia&quot; Field Group
+  """
+  rel: String
+}
+
+"""
+Interface representing fields of the ACF &quot;CompanyInformations&quot; Field Group
+"""
+interface CompanyInformations_Fields implements AcfFieldGroup & AcfFieldGroupFields {
+  """
+  Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  address: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  companyName: String
+  """
+  Field of the &quot;email&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  email: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  fax: String
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Bitte geben Sie hier die Seite mit dem Impressum an.
+  Die Datenschutzerklärung definieren Sie über Einstellungen &gt; Privatsphäre.
+  """
+  imprint: AcfLink
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  legalForm: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  location: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  phone: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  proprietor: String
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  socialMedia: [CompanyInformationsSocialMedia]
 }
 
 """
@@ -3507,6 +4097,12 @@ type ContentTypeToTaxonomyConnectionPageInfo implements PageInfo & TaxonomyConne
   """When paginating backwards, the cursor to continue."""
   startCursor: String
   total: Int
+}
+
+"""Allowed Content Types of the BerlinerischThema taxonomy."""
+enum ContentTypesOfBerlinerischThemaEnum {
+  """The Type of Content object"""
+  BERLINERISCH
 }
 
 """Allowed Content Types of the BerlinerischWordType taxonomy."""
@@ -11656,6 +12252,8 @@ type CoreWidgetGroupBlockDeprecatedV1Attributes {
 
 """Input for the createBerlinerWord mutation."""
 input CreateBerlinerWordInput {
+  """Set connections between the berlinerWord and berlinerischThemen"""
+  berlinerischThemen: BerlinerWordBerlinerischThemenInput
   """Set connections between the berlinerWord and berlinerischWordTypes"""
   berlinerischWordTypes: BerlinerWordBerlinerischWordTypesInput
   """
@@ -11686,6 +12284,34 @@ input CreateBerlinerWordInput {
 type CreateBerlinerWordPayload {
   """The Post object mutation type."""
   berlinerWord: BerlinerWord
+  """
+  If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+  """
+  clientMutationId: String
+}
+
+"""Input for the createBerlinerischThema mutation."""
+input CreateBerlinerischThemaInput {
+  """The slug that the berlinerisch_word_themen will be an alias of"""
+  aliasOf: String
+  """
+  This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+  """
+  clientMutationId: String
+  """The description of the berlinerisch_word_themen object"""
+  description: String
+  """The name of the berlinerisch_word_themen object to mutate"""
+  name: String!
+  """
+  If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name.
+  """
+  slug: String
+}
+
+"""The payload for the createBerlinerischThema mutation."""
+type CreateBerlinerischThemaPayload {
+  """The created berlinerisch_word_themen"""
+  berlinerischThema: BerlinerischThema
   """
   If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
   """
@@ -12224,6 +12850,28 @@ input DeleteBerlinerWordInput {
 type DeleteBerlinerWordPayload {
   """The object before it was deleted"""
   berlinerWord: BerlinerWord
+  """
+  If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+  """
+  clientMutationId: String
+  """The ID of the deleted object"""
+  deletedId: ID
+}
+
+"""Input for the deleteBerlinerischThema mutation."""
+input DeleteBerlinerischThemaInput {
+  """
+  This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+  """
+  clientMutationId: String
+  """The ID of the berlinerischThema to delete"""
+  id: ID!
+}
+
+"""The payload for the deleteBerlinerischThema mutation."""
+type DeleteBerlinerischThemaPayload {
+  """The deleted term object"""
+  berlinerischThema: BerlinerischThema
   """
   If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
   """
@@ -13999,7 +14647,7 @@ enum MenuItemNodeIdTypeEnum {
 }
 
 """Deprecated in favor of MenuItemLinkable Interface"""
-union MenuItemObjectUnion = BerlinerWord | BerlinerischWordType | Category | Page | Post | Tag
+union MenuItemObjectUnion = BerlinerWord | BerlinerischThema | BerlinerischWordType | Category | Page | Post | Tag
 
 """Connection between the MenuItem type and the Menu type"""
 type MenuItemToMenuConnectionEdge implements Edge & MenuConnectionEdge & OneToOneConnection {
@@ -14540,136 +15188,6 @@ interface OneToOneConnection implements Edge {
   cursor: String
   """The connected node"""
   node: Node!
-}
-
-"""
-The &quot;OptionsCompanyInformations&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
-"""
-type OptionsCompanyInformations implements AcfFieldGroup & AcfFieldGroupFields & OptionsCompanyInformations_Fields {
-  """
-  Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  address: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  companyName: String
-  """
-  Field of the &quot;email&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  email: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  fax: String
-  """The name of the field group"""
-  fieldGroupName: String @deprecated(reason: "Use __typename instead")
-  """
-  Bitte geben Sie hier die Seite mit dem Impressum an.
-  Die Datenschutzerklärung definieren Sie über Einstellungen &gt; Privatsphäre.
-  """
-  imprint: AcfLink
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  legalForm: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  location: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  phone: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  proprietor: String
-  """
-  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  socialMedia: [OptionsCompanyInformationsSocialMedia]
-}
-
-"""
-The &quot;OptionsCompanyInformationsSocialMedia&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
-"""
-type OptionsCompanyInformationsSocialMedia implements AcfFieldGroup & AcfFieldGroupFields & OptionsCompanyInformationsSocialMedia_Fields {
-  """The name of the field group"""
-  fieldGroupName: String @deprecated(reason: "Use __typename instead")
-  """
-  Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformationsSocialMedia&quot; Field Group
-  """
-  networkname: [String]
-  """
-  Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformationsSocialMedia&quot; Field Group
-  """
-  networkprofile: String
-}
-
-"""
-Interface representing fields of the ACF &quot;OptionsCompanyInformationsSocialMedia&quot; Field Group
-"""
-interface OptionsCompanyInformationsSocialMedia_Fields implements AcfFieldGroup & AcfFieldGroupFields {
-  """The name of the field group"""
-  fieldGroupName: String @deprecated(reason: "Use __typename instead")
-  """
-  Field of the &quot;select&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformationsSocialMedia&quot; Field Group
-  """
-  networkname: [String]
-  """
-  Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformationsSocialMedia&quot; Field Group
-  """
-  networkprofile: String
-}
-
-"""
-Interface representing fields of the ACF &quot;OptionsCompanyInformations&quot; Field Group
-"""
-interface OptionsCompanyInformations_Fields implements AcfFieldGroup & AcfFieldGroupFields {
-  """
-  Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  address: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  companyName: String
-  """
-  Field of the &quot;email&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  email: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  fax: String
-  """The name of the field group"""
-  fieldGroupName: String @deprecated(reason: "Use __typename instead")
-  """
-  Bitte geben Sie hier die Seite mit dem Impressum an.
-  Die Datenschutzerklärung definieren Sie über Einstellungen &gt; Privatsphäre.
-  """
-  imprint: AcfLink
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  legalForm: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  location: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  phone: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  proprietor: String
-  """
-  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;OptionsCompanyInformations&quot; Field Group
-  """
-  socialMedia: [OptionsCompanyInformationsSocialMedia]
 }
 
 """
@@ -17518,6 +18036,11 @@ type RootMutation {
     """Input for the createBerlinerWord mutation"""
     input: CreateBerlinerWordInput!
   ): CreateBerlinerWordPayload
+  """The createBerlinerischThema mutation"""
+  createBerlinerischThema(
+    """Input for the createBerlinerischThema mutation"""
+    input: CreateBerlinerischThemaInput!
+  ): CreateBerlinerischThemaPayload
   """The createBerlinerischWordType mutation"""
   createBerlinerischWordType(
     """Input for the createBerlinerischWordType mutation"""
@@ -17578,6 +18101,11 @@ type RootMutation {
     """Input for the deleteBerlinerWord mutation"""
     input: DeleteBerlinerWordInput!
   ): DeleteBerlinerWordPayload
+  """The deleteBerlinerischThema mutation"""
+  deleteBerlinerischThema(
+    """Input for the deleteBerlinerischThema mutation"""
+    input: DeleteBerlinerischThemaInput!
+  ): DeleteBerlinerischThemaPayload
   """The deleteBerlinerischWordType mutation"""
   deleteBerlinerischWordType(
     """Input for the deleteBerlinerischWordType mutation"""
@@ -17678,6 +18206,11 @@ type RootMutation {
     """Input for the updateBerlinerWord mutation"""
     input: UpdateBerlinerWordInput!
   ): UpdateBerlinerWordPayload
+  """The updateBerlinerischThema mutation"""
+  updateBerlinerischThema(
+    """Input for the updateBerlinerischThema mutation"""
+    input: UpdateBerlinerischThemaInput!
+  ): UpdateBerlinerischThemaPayload
   """The updateBerlinerischWordType mutation"""
   updateBerlinerischWordType(
     """Input for the updateBerlinerischWordType mutation"""
@@ -17782,6 +18315,30 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
     """Arguments for filtering the connection"""
     where: RootQueryToBerlinerWordConnectionWhereArgs
   ): RootQueryToBerlinerWordConnection
+  """A 0bject"""
+  berlinerischThema(
+    """The globally unique identifier of the object."""
+    id: ID!
+    """Type of unique identifier to fetch by. Default is Global ID"""
+    idType: BerlinerischThemaIdType
+  ): BerlinerischThema
+  """Connection between the RootQuery type and the berlinerischThema type"""
+  berlinerischThemen(
+    """
+    Cursor used along with the "first" argument to reference where in the dataset to get data
+    """
+    after: String
+    """
+    Cursor used along with the "last" argument to reference where in the dataset to get data
+    """
+    before: String
+    """The number of items to return after the referenced "after" cursor"""
+    first: Int
+    """The number of items to return before the referenced "before" cursor"""
+    last: Int
+    """Arguments for filtering the connection"""
+    where: RootQueryToBerlinerischThemaConnectionWhereArgs
+  ): RootQueryToBerlinerischThemaConnection
   """A 0bject"""
   berlinerischWordType(
     """The globally unique identifier of the object."""
@@ -18524,6 +19081,109 @@ input RootQueryToBerlinerWordConnectionWhereArgs {
   status: PostStatusEnum
   """Title of the object"""
   title: String
+}
+
+"""Connection between the RootQuery type and the berlinerischThema type"""
+type RootQueryToBerlinerischThemaConnection implements BerlinerischThemaConnection & Connection {
+  """Edges for the RootQueryToBerlinerischThemaConnection connection"""
+  edges: [RootQueryToBerlinerischThemaConnectionEdge!]!
+  """The nodes of the connection, without the edges"""
+  nodes: [BerlinerischThema!]!
+  """Information about pagination in a connection."""
+  pageInfo: RootQueryToBerlinerischThemaConnectionPageInfo!
+}
+
+"""An edge in a connection"""
+type RootQueryToBerlinerischThemaConnectionEdge implements BerlinerischThemaConnectionEdge & Edge {
+  """A cursor for use in pagination"""
+  cursor: String
+  """The item at the end of the edge"""
+  node: BerlinerischThema!
+}
+
+"""
+Pagination metadata specific to &quot;RootQueryToBerlinerischThemaConnection&quot; collections. Provides cursors and flags for navigating through sets of RootQueryToBerlinerischThemaConnection Nodes.
+"""
+type RootQueryToBerlinerischThemaConnectionPageInfo implements BerlinerischThemaConnectionPageInfo & PageInfo & WPPageInfo {
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+  """Raw schema for page"""
+  seo: SEOPostTypePageInfo
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+  total: Int
+}
+
+"""
+Arguments for filtering the RootQueryToBerlinerischThemaConnection connection
+"""
+input RootQueryToBerlinerischThemaConnectionWhereArgs {
+  """
+  Unique cache key to be produced when this query is stored in an object cache. Default is 'core'.
+  """
+  cacheDomain: String
+  """
+  Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0.
+  """
+  childOf: Int
+  """
+  True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false.
+  """
+  childless: Boolean
+  """
+  Retrieve terms where the description is LIKE the input value. Default empty.
+  """
+  descriptionLike: String
+  """
+  Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array.
+  """
+  exclude: [ID]
+  """
+  Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array.
+  """
+  excludeTree: [ID]
+  """
+  Whether to hide terms not assigned to any posts. Accepts true or false. Default false
+  """
+  hideEmpty: Boolean
+  """
+  Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true.
+  """
+  hierarchical: Boolean
+  """Array of term ids to include. Default empty array."""
+  include: [ID]
+  """Array of names to return term(s) for. Default empty."""
+  name: [String]
+  """Retrieve terms where the name is LIKE the input value. Default empty."""
+  nameLike: String
+  """
+  Array of object IDs. Results will be limited to terms associated with these objects.
+  """
+  objectIds: [ID]
+  """Direction the connection should be ordered in"""
+  order: OrderEnum
+  """Field(s) to order terms by. Defaults to 'name'."""
+  orderby: TermObjectsConnectionOrderbyEnum
+  """
+  Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false.
+  """
+  padCounts: Boolean
+  """Parent term ID to retrieve direct-child terms of. Default empty."""
+  parent: Int
+  """
+  Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty.
+  """
+  search: String
+  """Array of slugs to return term(s) for. Default empty."""
+  slug: [String]
+  """Array of term taxonomy IDs, to match when querying terms."""
+  termTaxonomyId: [ID]
+  """Whether to prime meta caches for matched terms. Default true."""
+  updateTermMetaCache: Boolean
 }
 
 """
@@ -21170,6 +21830,8 @@ interface TaxonomyConnectionPageInfo implements PageInfo & WPPageInfo {
 Available classification systems for organizing content. Identifies the different taxonomy types that can be used for content categorization.
 """
 enum TaxonomyEnum {
+  """Taxonomy enum berlinerisch_word_themen"""
+  BERLINERISCHTHEMA
   """Taxonomy enum berlinerisch_word_type"""
   BERLINERISCHWORDTYPE
   """Taxonomy enum category"""
@@ -21623,6 +22285,8 @@ interface UniformResourceIdentifiable implements Node {
 
 """Input for the updateBerlinerWord mutation."""
 input UpdateBerlinerWordInput {
+  """Set connections between the berlinerWord and berlinerischThemen"""
+  berlinerischThemen: BerlinerWordBerlinerischThemenInput
   """Set connections between the berlinerWord and berlinerischWordTypes"""
   berlinerischWordTypes: BerlinerWordBerlinerischWordTypesInput
   """
@@ -21657,6 +22321,36 @@ input UpdateBerlinerWordInput {
 type UpdateBerlinerWordPayload {
   """The Post object mutation type."""
   berlinerWord: BerlinerWord
+  """
+  If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+  """
+  clientMutationId: String
+}
+
+"""Input for the updateBerlinerischThema mutation."""
+input UpdateBerlinerischThemaInput {
+  """The slug that the berlinerisch_word_themen will be an alias of"""
+  aliasOf: String
+  """
+  This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions.
+  """
+  clientMutationId: String
+  """The description of the berlinerisch_word_themen object"""
+  description: String
+  """The ID of the berlinerischThema object to update"""
+  id: ID!
+  """The name of the berlinerisch_word_themen object to mutate"""
+  name: String
+  """
+  If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name.
+  """
+  slug: String
+}
+
+"""The payload for the updateBerlinerischThema mutation."""
+type UpdateBerlinerischThemaPayload {
+  """The created berlinerisch_word_themen"""
+  berlinerischThema: BerlinerischThema
   """
   If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
   """
@@ -23383,6 +24077,14 @@ Provides access to fields of the &quot;AffliateLinksFields&quot; ACF Field Group
 interface WithAcfAffliateLinksFields {
   """Fields of the AffliateLinksFields ACF Field Group"""
   affliateLinksFields: AffliateLinksFields
+}
+
+"""
+Provides access to fields of the &quot;CompanyInformations&quot; ACF Field Group via the &quot;companyInformations&quot; field
+"""
+interface WithAcfCompanyInformations {
+  """Fields of the CompanyInformations ACF Field Group"""
+  companyInformations: CompanyInformations
 }
 
 """

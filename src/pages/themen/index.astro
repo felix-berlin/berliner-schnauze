@@ -1,0 +1,84 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { fetchAllThemen } from '@services/api.ts';
+import { canonicalUrl, seoData } from '@utils/helpers.ts';
+import { Breadcrumbs } from 'astro-breadcrumbs';
+import ChevronRight from '~icons/lucide/chevron-right';
+import BrownBearRoar from '@assets/images/brown-bear-roar.png';
+import { SITE_URL } from 'astro:env/client';
+import { getImage } from 'astro:assets';
+
+import '@styles/plugins/astro-breadcrumbs.scss';
+import '@styles/components/_themen-overview.scss';
+
+const allThemen = await fetchAllThemen();
+const sortedThemen = [...allThemen].sort((a, b) =>
+  (a.name ?? '').localeCompare(b.name ?? '', 'de'),
+);
+
+const ogImage = await getImage({ format: 'png', src: BrownBearRoar });
+
+const content = {
+  seo: {
+    canonical: canonicalUrl('/themen', Astro.site),
+    opengraphDescription:
+      'Von Alltag und Beziehungen bis Schimpfwörter und Stadtleben – alle Berliner Dialektwörter der Berliner Schnauze sortiert nach 12 Themen zum Entdecken.',
+    opengraphImage: {
+      alt: 'Berliner Schnauze – Themen & Kategorien',
+      height: ogImage.attributes.height,
+      sourceUrl: new URL(ogImage.src, SITE_URL).href,
+      type: 'image/png',
+      width: ogImage.attributes.width,
+    },
+    opengraphType: 'website',
+  },
+  title: 'Themen & Kategorien – Berlinerisch nach Thema entdecken',
+};
+
+const itemListJson = () =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: sortedThemen.map((thema, index) => ({
+      '@type': 'ListItem',
+      name: thema.name ?? '',
+      position: index + 1,
+      url: canonicalUrl(`/themen/${thema.slug}`, Astro.site),
+    })),
+    name: 'Themen',
+    numberOfItems: sortedThemen.length,
+  });
+---
+
+<Layout content={seoData(content)}>
+  <section class='o-container c-themen-overview'>
+    <Breadcrumbs indexText='Start' linkTextFormat='capitalized'>
+      <ChevronRight height='20' slot='separator' width='20' />
+    </Breadcrumbs>
+
+    <h1 class='c-themen-overview__title'>Themen &amp; Kategorien</h1>
+    <p class='c-themen-overview__intro'>
+      Von Alltag und Beziehungen bis Schimpfwörter und Stadtleben – hier findste alle Berliner
+      Dialektwörter sortiert nach Thema. Wähl ne Kategorie und tauch tief in die Berliner Schnauze
+      ein.
+    </p>
+
+    <h2 class='c-themen-overview__heading'>{sortedThemen.length} Themen entdecken</h2>
+    <ul class='c-themen-overview__list'>
+      {
+        sortedThemen.map((thema) => (
+          <li class='c-themen-overview__item'>
+            <a class='c-themen-overview__link' href={`/themen/${thema.slug}`}>
+              {thema.name}
+            </a>
+            {typeof thema.count === 'number' && (
+              <span class='c-themen-overview__count'>{thema.count} Wörter</span>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <script set:html={itemListJson()} type='application/ld+json' />
+</Layout>

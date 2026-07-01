@@ -61,6 +61,10 @@ function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, b
   const wordTags = translateNlpTags(getWordType(berlinerisch));
   const wordTypes = extractWordTypes(wordTags);
 
+  // berlinerischThemen is added to the GQL fragment but not yet in generated types (pending codegen after WP taxonomy setup)
+  const themen = ((node as Record<string, unknown>).berlinerischThemen as { nodes: Array<{ slug: string | null }> } | null | undefined)
+    ?.nodes.map((n) => n.slug).filter((s): s is string => typeof s === "string") ?? [];
+
   return {
     berlinerWordId: node.berlinerWordId,
     berlinerischWordTypes: wordTypes,
@@ -69,6 +73,7 @@ function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, b
     modifiedGmt: node.modifiedGmt ?? "",
     modifiedTs: node.modifiedGmt ? Date.parse(node.modifiedGmt) : 0,
     slug: node.slug,
+    themen,
     wordComponents: getWordComponents(node.wordProperties?.berlinerisch ?? ""),
     wordGroup: node.wordGroup ?? "",
     wordProperties: {

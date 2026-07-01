@@ -14,7 +14,7 @@ minimumReleaseAgeExclude:
   - "@felix_berlin/*"
   - astro-breadcrumbs
   - "@astrojs/markdown-satteri@0.3.1"
-  - "@astrojs/vue@7.0.0"
+  - '@astrojs/vue@7.0.0 || 7.0.1'
   - astro@7.0.0 || 7.0.3
   - "@sentry/browser-utils@10.62.0"
   - "@sentry/browser@10.62.0"
