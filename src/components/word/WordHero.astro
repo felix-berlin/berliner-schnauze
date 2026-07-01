@@ -19,7 +19,7 @@ const { word, wordProps, wortartLabel } = Astro.props;
 <header
   class='c-word-hero'
   data-track-content
-  data-content-name="Word Hero"
+  data-content-name='Word Hero'
   data-content-piece={wordProps?.berlinerisch ?? ''}
   data-content-target={`/wort/${word.slug}`}
 >
@@ -62,6 +62,17 @@ const { word, wordProps, wortartLabel } = Astro.props;
         )
       }
     </div>
+    {
+      word.berlinerischThemen?.nodes?.length > 0 && (
+        <div class='c-word-themen'>
+          {word.berlinerischThemen.nodes.map((thema) => (
+            <a href={`/themen/${thema.slug}`} class='c-word-themen__badge'>
+              {thema.name}
+            </a>
+          ))}
+        </div>
+      )
+    }
   </div>
   <div class='c-word-hero__right'>
     <WordOptionDropdown

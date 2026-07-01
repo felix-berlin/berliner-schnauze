@@ -1,0 +1,68 @@
+---
+// Styles
+import '@styles/objects/_word.scss';
+import '@styles/components/_word-page-layout.scss';
+import '@styles/plugins/astro-breadcrumbs.scss';
+
+// Types
+import type { GetStaticPaths, InferGetStaticParamsType, InferGetStaticPropsType } from 'astro';
+
+import Layout from '@layouts/Layout.astro';
+import { fetchAffiliateData, fetchAllWords, fetchAllThemen } from '@services/api.ts';
+import { seoData, canonicalUrl } from '@utils/helpers.ts';
+
+export const getStaticPaths = (async () => {
+  const [allThemen, allWords] = await Promise.all([fetchAllThemen(), fetchAllWords()]);
+
+  // Wort-zu-Thema-Mapping aus bereits gefetchten Wörtern
+  const wordsByThema = new Map<string, typeof allWords>();
+  for (const { node } of allWords) {
+    for (const thema of node.berlinerischThemen?.nodes ?? []) {
+      if (!thema.slug) continue;
+      if (!wordsByThema.has(thema.slug)) wordsByThema.set(thema.slug, []);
+      wordsByThema.get(thema.slug)!.push({ node });
+    }
+  }
+
+  return allThemen.map((thema) => ({
+    params: { themaSlug: thema.slug },
+    props: {
+      thema,
+      words: wordsByThema.get(thema.slug ?? '') ?? [],
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { themaSlug } = Astro.params as Params;
+const { thema, words } = Astro.props;
+console.log(words[0].node.wordProperties.berlinerisch);
+
+const seoProps = seoData({
+  seo: {
+    title: thema.seo?.title ?? thema.name ?? '',
+    opengraphDescription:
+      thema.seo?.opengraphDescription ?? thema.seo?.metaDesc ?? thema.description ?? '',
+    canonical: thema.seo?.canonical,
+    opengraphType: 'website',
+  },
+  title: thema.name ?? '',
+});
+---
+
+<Layout content={seoProps} contentClasses='o-thema'>
+  <h1>{thema.name}</h1>
+  <p>{thema.description}</p>
+
+  <ul class='o-thema__words'>
+    {
+      words.map(({ node }) => (
+        <li>
+          <a href={`/wort/${node.slug}`}>{node.wordProperties.berlinerisch}</a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
