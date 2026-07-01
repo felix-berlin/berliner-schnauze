@@ -13,9 +13,9 @@ async function fetchAll(apiUrl: string): Promise<Map<string, string>> {
 
   do {
     const res = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query: QUERY, variables: { after: cursor } }),
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
     });
     const { data } = (await res.json()) as {
       data?: {
