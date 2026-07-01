@@ -1,0 +1,40 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { fetchAllThemen } from '@services/api.ts';
+import { seoData } from '@utils/helpers.ts';
+
+import '@styles/components/_themen-overview.scss';
+
+const allThemen = await fetchAllThemen();
+const sortedThemen = [...allThemen].sort((a, b) =>
+  (a.name ?? '').localeCompare(b.name ?? '', 'de'),
+);
+
+const content = {
+  seo: {
+    opengraphDescription:
+      'Alle Themen und Kategorien der Berliner Schnauze im Überblick — von Alltag bis Schimpfwörter.',
+  },
+  title: 'Themen',
+};
+---
+
+<Layout content={seoData(content)}>
+  <section class='o-container c-themen-overview'>
+    <h1 class='c-themen-overview__title'>Themen</h1>
+    <ul class='c-themen-overview__list'>
+      {
+        sortedThemen.map((thema) => (
+          <li class='c-themen-overview__item'>
+            <a class='c-themen-overview__link' href={`/themen/${thema.slug}`}>
+              {thema.name}
+            </a>
+            {typeof thema.count === 'number' && (
+              <span class='c-themen-overview__count'>{thema.count} Wörter</span>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Layout>

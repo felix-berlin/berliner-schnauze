@@ -2,12 +2,16 @@ import { cacheExchange, Client, fetchExchange } from "@urql/core";
 import { WP_API } from "astro:env/client";
 
 import { graphql } from "@/gql";
+import type { GetAllBerlinerischThemenQuery } from "@/gql/graphql";
 
-import { TaxonomySeoFragment } from "@services/fragments/fragments";
+
+type ThemaNodes = NonNullable<
+  GetAllBerlinerischThemenQuery["berlinerischThemen"]
+>["nodes"];
 
 const client = new Client({
-  url: WP_API,
   exchanges: [cacheExchange, fetchExchange],
+  url: WP_API,
 });
 
 export const GetAllBerlinerischThemen = graphql(`
@@ -26,7 +30,7 @@ export const GetAllBerlinerischThemen = graphql(`
   }
 `);
 
-let _themenCache: ReturnType<typeof fetchAllThemen> | null = null;
+let _themenCache: Promise<ThemaNodes> | null = null;
 
 export const fetchAllThemen = async () => {
   _themenCache ??= client
