@@ -9,7 +9,7 @@
       locale="de"
       fallback-locale="en"
       :multiple-label="multipleLabel"
-      class="c-word-type-filter__select"
+      class="c-custom-multiselect"
       placeholder="Worttypen filtern"
       :aria="{
         'aria-label': 'Worttypen filtern',
@@ -38,7 +38,3 @@ const onSelect = (value: string[]) => {
   trackEvent("WordList", "Filter", `Word Type: ${value.join(", ")}`);
 };
 </script>
-
-<style lang="scss">
-@use "@styles/components/word-type-filter";
-</style>

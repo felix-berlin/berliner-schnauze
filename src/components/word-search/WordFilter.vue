@@ -133,4 +133,5 @@ onClickOutside(wordListFilter, () => {
 <style lang="scss">
 @use "@styles/components/switch";
 @use "@vueform/multiselect/themes/default.css";
+@use "@styles/components/custom-multiselect";
 </style>

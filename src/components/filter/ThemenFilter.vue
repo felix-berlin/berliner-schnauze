@@ -7,7 +7,7 @@
       :hide-selected="false"
       :options="themenOptions"
       :multiple-label="multipleLabel"
-      class="c-themen-filter__select"
+      class="c-custom-multiselect"
       placeholder="Themen filtern"
       :aria="{
         'aria-label': 'Themen filtern',
@@ -41,7 +41,3 @@ const onSelect = (value: string[]) => {
   trackEvent("WordList", "Filter", `Themen: ${value.join(", ")}`);
 };
 </script>
-
-<style lang="scss">
-@use "@styles/components/themen-filter";
-</style>
