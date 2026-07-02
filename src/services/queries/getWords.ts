@@ -1,6 +1,4 @@
-import { cacheExchange, Client, fetchExchange } from "@urql/core";
-import { SHOW_TEST_DATA, WP_API, WP_REST_API } from "astro:env/client";
-import { WP_AUTH_PASS, WP_AUTH_USER } from "astro:env/server";
+import { SHOW_TEST_DATA } from "astro:env/client";
 
 import type {
   GetAllWordsQuery,
@@ -12,46 +10,7 @@ import type {
 
 import { graphql } from "@/gql";
 import { GetAllWordsDocument, GetAllWordsLinksDocument } from "@/gql/graphql.ts";
-
-let _devAuthToken: string | null = null;
-let _devAuthTokenPromise: Promise<string | null> | null = null;
-
-const fetchDevAuthToken = (): Promise<string | null> => {
-  if (!WP_AUTH_USER || !WP_AUTH_PASS) {
-    console.warn("SHOW_TEST_DATA is true but WP_AUTH_USER/WP_AUTH_PASS are not set — drafts won't be fetched.");
-    return Promise.resolve(null);
-  }
-  _devAuthTokenPromise ??= fetch(`${WP_REST_API}/jwt-auth/v1/token`, {
-    body: JSON.stringify({ password: WP_AUTH_PASS, username: WP_AUTH_USER }),
-    headers: { "Content-Type": "application/json" },
-    method: "POST",
-  })
-    .then(async (res) => {
-      if (!res.ok) {
-        console.warn("Failed to get dev auth token:", res.status);
-        return null;
-      }
-      const { token } = (await res.json()) as { token: string };
-      _devAuthToken = token;
-      return token;
-    })
-    .catch((e) => {
-      console.warn("Failed to get dev auth token:", e);
-      return null;
-    });
-  return _devAuthTokenPromise;
-};
-
-const client = new Client({
-  exchanges: [cacheExchange, fetchExchange],
-  fetchOptions: () => ({
-    headers: {
-      "Content-Type": "application/json",
-      ...(_devAuthToken ? { Authorization: `Bearer ${_devAuthToken}` } : {}),
-    },
-  }),
-  url: WP_API,
-});
+import { wpGraphqlClient } from "@services/wpGraphqlClient";
 
 const fetchPaginatedWords = async (
   queryDocument: typeof GetAllWordsDocument | typeof GetAllWordsLinksDocument,
@@ -73,7 +32,7 @@ const fetchPaginatedWords = async (
       order: orderByType,
       stati,
     };
-    const response = await client.query(queryDocument, variables).toPromise();
+    const response = await wpGraphqlClient.query(queryDocument, variables).toPromise();
 
     if (response.error) {
       console.error("Error fetching words:", response.error);
@@ -104,7 +63,6 @@ export const fetchAllWords = async (
   orderByType: OrderEnum = "ASC",
   stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
 ): Promise<WordEdges> => {
-  if (SHOW_TEST_DATA) await fetchDevAuthToken();
   _allWordsCache ??= fetchPaginatedWords(GetAllWordsDocument, orderByField, orderByType, stati);
   return _allWordsCache;
 };
@@ -114,7 +72,6 @@ export const fetchAllWordsLinks = async (
   orderByType: OrderEnum = "ASC",
   stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
 ): Promise<WordEdges> => {
-  if (SHOW_TEST_DATA) await fetchDevAuthToken();
   _allWordsLinksCache ??= fetchPaginatedWords(GetAllWordsLinksDocument, orderByField, orderByType, stati);
   return _allWordsLinksCache;
 };

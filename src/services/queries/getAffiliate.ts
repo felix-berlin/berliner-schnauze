@@ -1,16 +1,8 @@
-import { cacheExchange, Client, fetchExchange } from "@urql/core";
-import { WP_API } from "astro:env/client";
-
 import type { AffiliateQuery } from "@/gql/graphql.ts";
 
 import { graphql } from "@/gql";
 import { AffiliateDocument } from "@/gql/graphql.ts";
-
-const client = new Client({
-  exchanges: [cacheExchange, fetchExchange],
-  fetchOptions: { headers: { "Content-Type": "application/json" } },
-  url: WP_API,
-});
+import { wpGraphqlClient } from "@services/wpGraphqlClient";
 
 type AffliateLinksFields = NonNullable<
   NonNullable<AffiliateQuery["affliate"]>["affliateLinksFields"]
@@ -25,7 +17,7 @@ export interface AffiliateData {
 }
 
 export const fetchAffiliateData = async (): Promise<AffiliateData> => {
-  const response = await client.query(AffiliateDocument, {}).toPromise();
+  const response = await wpGraphqlClient.query(AffiliateDocument, {}).toPromise();
 
   if (response.error) {
     console.error("Error fetching affiliate data:", response.error);

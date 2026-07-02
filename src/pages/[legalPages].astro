@@ -3,23 +3,12 @@ import "@styles/objects/_legal-pages.scss";
 import type { GetStaticPaths, InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
 
 import Layout from "@layouts/Layout.astro";
-import { cacheExchange, Client, fetchExchange } from "@urql/core";
-import { WP_API } from "astro:env/client";
 
 import { GetPagesBySlugsDocument } from "@/gql/graphql.ts";
+import { wpGraphqlClient } from "@services/wpGraphqlClient";
 
 export const getStaticPaths = (async () => {
-  const client = new Client({
-    exchanges: [cacheExchange, fetchExchange],
-    fetchOptions: {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-    url: WP_API,
-  });
-
-  const pagesResponse = await client
+  const pagesResponse = await wpGraphqlClient
     .query(GetPagesBySlugsDocument, {
       slugs: ["datenschutz", "impressum"],
     })

@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("astro:env/client", () => ({ WP_API: "http://test.local/graphql" }));
+vi.mock("astro:env/server", () => ({ WP_AUTH_PASS: "test", WP_AUTH_USER: "test" }));
 
 const toPromiseMock = vi.fn();
 const queryMock = vi.fn(() => ({ toPromise: toPromiseMock }));

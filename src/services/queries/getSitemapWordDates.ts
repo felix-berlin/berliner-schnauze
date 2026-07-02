@@ -11,10 +11,16 @@ async function fetchAll(apiUrl: string): Promise<Map<string, string>> {
   const map = new Map<string, string>();
   let cursor: string | null = null;
 
+  const { WP_AUTH_PASS, WP_AUTH_USER } = process.env;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (WP_AUTH_USER && WP_AUTH_PASS) {
+    headers.Authorization = `Basic ${Buffer.from(`${WP_AUTH_USER}:${WP_AUTH_PASS}`).toString("base64")}`;
+  }
+
   do {
     const res = await fetch(apiUrl, {
       body: JSON.stringify({ query: QUERY, variables: { after: cursor } }),
-      headers: { "Content-Type": "application/json" },
+      headers,
       method: "POST",
     });
     const { data } = (await res.json()) as {
