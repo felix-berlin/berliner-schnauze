@@ -5,9 +5,11 @@
  */
 
 export interface WpConfig {
-  baseUrl: string;
-  auth: string;
+  readonly baseUrl: string;
+  readonly auth: string;
 }
+
+const TIMEOUT_MS = 15_000;
 
 export function getWpConfig(): WpConfig {
   const baseUrl = process.env["WP_REST_API"];
@@ -39,10 +41,13 @@ export async function wpFetch<T>(
       Authorization: `Basic ${auth}`,
       ...(options.headers as Record<string, string>),
     },
+    signal: AbortSignal.timeout(TIMEOUT_MS),
   });
 
   if (!response.ok) {
-    const body = await response.text().catch(() => "(no body)");
+    const body = await response
+      .text()
+      .catch((e: unknown) => `(failed to read body: ${e instanceof Error ? e.message : String(e)})`);
     throw new Error(`WP REST ${options.method ?? "GET"} ${url} → ${response.status}: ${body}`);
   }
 

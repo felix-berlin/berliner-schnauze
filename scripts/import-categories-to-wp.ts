@@ -20,6 +20,7 @@ import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { wpFetch, delay, getWpConfig, type WpConfig } from "./lib/wp-rest.ts";
+import { CATEGORY_LABELS, type WordCategory } from "./lib/word-category.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -39,31 +40,10 @@ const TAXONOMY_REST_BASE = "berlinerisch-themen";
 
 const RATE_MS = 150;
 
-// ── Category labels (for creating terms) ──────────────────────────────────
-const CATEGORY_LABELS: Record<string, string> = {
-  "essen-trinken": "Essen & Trinken",
-  "alkohol-kneipe": "Alkohol & Kneipe",
-  "schimpfwoerter-beleidigungen": "Schimpfwörter & Beleidigungen",
-  "charakter-eigenschaften": "Charakter & Eigenschaften",
-  "gefuehle-emotionen": "Gefühle & Emotionen",
-  "koerper": "Körper",
-  "geld": "Geld",
-  "orte-spitzname": "Berliner Orte & Spitznamen",
-  "stadtleben": "Berliner Stadtleben",
-  "beziehungen-soziales": "Beziehungen & Soziales",
-  "alltag-wohnen": "Alltag & Wohnen",
-  "unterhaltung-freizeit": "Unterhaltung & Freizeit",
-};
+// Sentinel term ID used only in --dry-run to represent "would be created" without a real WP ID
+const DRY_RUN_TERM_ID = -1;
 
 // ── Types ──────────────────────────────────────────────────────────────────
-interface WordCategory {
-  berlinerWordId: number;
-  slug: string;
-  berlinerisch: string;
-  translations: string[];
-  themen: string[];
-}
-
 interface WpTerm {
   id: number;
   slug: string;
@@ -93,7 +73,7 @@ async function getOrCreateTerm(slug: string, config: WpConfig): Promise<WpTerm> 
   console.log(`  Creating term: "${slug}" → "${name}"`);
 
   if (DRY_RUN) {
-    return { id: -1, slug, name };
+    return { id: DRY_RUN_TERM_ID, slug, name };
   }
 
   const created = await wpFetch<WpTerm>(
@@ -195,6 +175,12 @@ async function main(): Promise<void> {
   const postSlugMap = await fetchAllPostSlugs(config);
   console.log(`Found ${postSlugMap.size} published posts`);
 
+  if (postSlugMap.size === 0) {
+    throw new Error(
+      `No WP posts found via POST_TYPE_REST_BASE="${POST_TYPE_REST_BASE}" — check the REST base name against your WP install (curl -s "\${WP_REST_API}/wp/v2/" | grep -i berliner).`,
+    );
+  }
+
   // Step 4: Assign terms
   console.log(`\n--- Step 3: Assigning terms to ${words.length} posts ---`);
   let success = 0;
@@ -204,7 +190,7 @@ async function main(): Promise<void> {
   for (const word of words) {
     const termIds = word.themen
       .map((s) => termIdMap.get(s))
-      .filter((id): id is number => typeof id === "number" && id !== -1);
+      .filter((id): id is number => typeof id === "number" && id !== DRY_RUN_TERM_ID);
 
     if (termIds.length === 0) {
       console.warn(`  SKIP ${word.slug}: no valid term IDs (themen=${word.themen.join(",")})`);
@@ -236,7 +222,7 @@ async function main(): Promise<void> {
   if (skipped > 0) console.log(`⚠ Skipped:  ${skipped}`);
   if (errors > 0) console.log(`✗ Errors:   ${errors}`);
 
-  if (errors > 0) process.exit(1);
+  if (errors > 0 || (words.length > 0 && skipped === words.length)) process.exit(1);
 }
 
 main().catch((err) => {
