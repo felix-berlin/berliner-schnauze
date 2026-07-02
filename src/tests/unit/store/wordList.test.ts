@@ -10,6 +10,10 @@ const metaResponse = {
     syllablesCount: { min: 1, max: 5 },
     vowelsCount: { min: 0, max: 8 },
   },
+  themen: [
+    { name: "Essen & Trinken", slug: "essen-trinken" },
+    { name: "Alkohol & Kneipe", slug: "alkohol-kneipe" },
+  ],
   wordTypes: ["Nomen", "Verb"],
 };
 
@@ -22,6 +26,7 @@ const indexResponse = [
     modifiedGmt: "2024-01-02T00:00:00",
     modifiedTs: 1704153600,
     slug: "schnauze",
+    themen: ["essen-trinken"],
     wordComponents: ["schnauze", "berlin"],
     wordGroup: "S",
     wordProperties: {
@@ -46,6 +51,7 @@ const indexResponse = [
     modifiedGmt: "2024-06-01T00:00:00",
     modifiedTs: 1717200000,
     slug: "kieken",
+    themen: ["alkohol-kneipe"],
     wordComponents: ["kieken", "berlin"],
     wordGroup: "K",
     wordProperties: {
@@ -137,6 +143,12 @@ describe("$activeFilterCount", () => {
     expect($activeFilterCount.get()).toBe(1);
   });
 
+  it("increments for non-empty activeThemenFilter", async () => {
+    const { $activeFilterCount, $wordSearch } = await import("@stores/wordList.ts");
+    $wordSearch.setKey("activeThemenFilter", ["essen-trinken"]);
+    expect($activeFilterCount.get()).toBe(1);
+  });
+
   it("increments for each true boolean flag", async () => {
     const { $activeFilterCount, $wordSearch } = await import("@stores/wordList.ts");
     $wordSearch.setKey("berolinismus", true);
@@ -164,12 +176,14 @@ describe("resetAll", () => {
     $wordSearch.setKey("berolinismus", true);
     $searchQuery.set("test");
     $wordSearch.setKey("activeOrderCategory", "date");
+    $wordSearch.setKey("activeThemenFilter", ["essen-trinken"]);
     resetAll();
     const ws = $wordSearch.get();
     expect(ws.activeLetterFilter).toBe("");
     expect(ws.berolinismus).toBe(false);
     expect($searchQuery.get()).toBe("");
     expect(ws.activeOrderCategory).toBe("alphabetical");
+    expect(ws.activeThemenFilter).toEqual([]);
     expect(trackEvent).toHaveBeenCalledWith("WordList", "Reset", "All filters reset");
   });
 });
@@ -227,6 +241,24 @@ describe("setWordTypeFilter", () => {
     setWordTypeFilter("Nomen");
     expect($wordSearch.get().activeWordTypeFilter).not.toContain("Nomen");
     expect($wordSearch.get().activeWordTypeFilter).toContain("Verb");
+  });
+});
+
+// ─── setThemenFilter ──────────────────────────────────────────────────────────
+
+describe("setThemenFilter", () => {
+  it("adds a thema when not present", async () => {
+    const { setThemenFilter, $wordSearch } = await import("@stores/wordList.ts");
+    setThemenFilter("essen-trinken");
+    expect($wordSearch.get().activeThemenFilter).toContain("essen-trinken");
+  });
+
+  it("removes a thema when already present (toggleInArray)", async () => {
+    const { setThemenFilter, $wordSearch } = await import("@stores/wordList.ts");
+    $wordSearch.setKey("activeThemenFilter", ["essen-trinken", "alkohol-kneipe"]);
+    setThemenFilter("essen-trinken");
+    expect($wordSearch.get().activeThemenFilter).not.toContain("essen-trinken");
+    expect($wordSearch.get().activeThemenFilter).toContain("alkohol-kneipe");
   });
 });
 
@@ -360,6 +392,7 @@ describe("onMount — getSearchMeta", () => {
       expect($wordSearch.get().letterGroups).toEqual(["B", "S"]);
     });
     expect($wordSearch.get().wordTypes).toEqual(["Nomen", "Verb"]);
+    expect($wordSearch.get().themen).toEqual(metaResponse.themen);
     expect($wordSearch.get().rangeFilterMinMax).toEqual(metaResponse.rangeFilterMinMax);
     unsub();
   });
@@ -462,12 +495,42 @@ describe("buildWhere — filter options", () => {
     $wordSearch.setKey("syllablesCount", 1);
     $wordSearch.setKey("activeLetterFilter", "S");
     $wordSearch.setKey("activeWordTypeFilter", ["Nomen"]);
+    $wordSearch.setKey("activeThemenFilter", ["essen-trinken"]);
     await vi.waitFor(
       () => {
         expect($oramaSearchResults.get().state).toBe("ready");
       },
       { timeout: 5000 },
     );
+  });
+});
+
+describe("buildWhere — themen filter", () => {
+  it("filters results to only documents matching activeThemenFilter via where.themen", async () => {
+    const { $wordSearch, $oramaSearchResults } = await import("@stores/wordList.ts");
+    $wordSearch.setKey("activeThemenFilter", ["essen-trinken"]);
+    await vi.waitFor(
+      () => {
+        expect($oramaSearchResults.get().state).toBe("ready");
+      },
+      { timeout: 5000 },
+    );
+    const hits = $oramaSearchResults.get().value?.hits ?? [];
+    expect(hits.length).toBe(1);
+    expect(hits[0].document.wordProperties.berlinerisch).toBe("Schnauze");
+  });
+
+  it("returns no results when activeThemenFilter matches no document", async () => {
+    const { $wordSearch, $oramaSearchResults } = await import("@stores/wordList.ts");
+    $wordSearch.setKey("activeThemenFilter", ["nicht-existent"]);
+    await vi.waitFor(
+      () => {
+        expect($oramaSearchResults.get().state).toBe("ready");
+      },
+      { timeout: 5000 },
+    );
+    const hits = $oramaSearchResults.get().value?.hits ?? [];
+    expect(hits.length).toBe(0);
   });
 });
 
