@@ -1,4 +1,4 @@
 export * from "@services/queries/getAffiliate";
 export * from "@services/queries/getPage";
 export * from "@services/queries/getWords";
-export * from "./queries/getThemen";
+export * from "@services/queries/getThemen";
