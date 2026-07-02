@@ -36,6 +36,7 @@ export type RangeFilterMinMax = {
 export type WordList = {
   activeLetterFilter: string;
   activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
+  activeThemenFilter: string[];
   activeWordTypeFilter: string[];
   alphabeticalOrder: "ASC" | "DESC";
   audioBerlinerisch: boolean;
@@ -51,6 +52,7 @@ export type WordList = {
   resultLimit?: number;
   similarSoundingWords?: boolean;
   syllablesCount?: number;
+  themen: { name: string; slug: string }[];
   vowelsCount?: number;
   wordTypes: string[];
 };
@@ -60,6 +62,7 @@ export const $wordSearch = persistentMap<WordList>(
   {
     activeLetterFilter: "",
     activeOrderCategory: "alphabetical",
+    activeThemenFilter: [],
     activeWordTypeFilter: [],
     alphabeticalOrder: "ASC",
     audioBerlinerisch: false,
@@ -74,6 +77,7 @@ export const $wordSearch = persistentMap<WordList>(
     resultLimit: undefined,
     similarSoundingWords: false,
     syllablesCount: undefined,
+    themen: [],
     vowelsCount: undefined,
     wordTypes: [],
   },
@@ -111,6 +115,7 @@ export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
 
   if (wordSearch.activeLetterFilter !== "") count++;
   if (wordSearch.activeWordTypeFilter?.length) count++;
+  if (wordSearch.activeThemenFilter?.length) count++;
 
   count += booleanKeys.filter((key) => !!wordSearch[key]).length;
   count += numberKeys.filter(
@@ -123,6 +128,7 @@ export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
 export const resetAll = () => {
   $wordSearch.setKey("activeLetterFilter", "");
   $wordSearch.setKey("activeOrderCategory", "alphabetical");
+  $wordSearch.setKey("activeThemenFilter", []);
   $wordSearch.setKey("activeWordTypeFilter", []);
   $wordSearch.setKey("alphabeticalOrder", "ASC");
   $wordSearch.setKey("audioBerlinerisch", false);
@@ -176,6 +182,15 @@ export const setWordTypeFilter = (wordType: string) => {
     $wordSearch.setKey(
       "activeWordTypeFilter",
       toggleInArray($wordSearch.get().activeWordTypeFilter, wordType),
+    ),
+  );
+};
+
+export const setThemenFilter = (themaSlug: string) => {
+  useViewTransition(() =>
+    $wordSearch.setKey(
+      "activeThemenFilter",
+      toggleInArray($wordSearch.get().activeThemenFilter, themaSlug),
     ),
   );
 };
@@ -247,6 +262,7 @@ const getSearchMeta = async () => {
   return (await response.json()) as {
     availableWordGroups: string[];
     rangeFilterMinMax: RangeFilterMinMax;
+    themen: { name: string; slug: string }[];
     wordTypes: string[];
   };
 };
@@ -257,6 +273,7 @@ onMount($wordSearch, () => {
       const meta = await getSearchMeta();
       $wordSearch.setKey("letterGroups", meta.availableWordGroups);
       $wordSearch.setKey("wordTypes", meta.wordTypes);
+      $wordSearch.setKey("themen", meta.themen);
       $wordSearch.setKey("rangeFilterMinMax", meta.rangeFilterMinMax);
     } catch (err) {
       console.error("[wordList] Failed to load search meta:", err);
@@ -274,6 +291,7 @@ const wordSchema = {
   dateTs: "number",
   modifiedGmt: "string",
   modifiedTs: "number",
+  themen: "enum[]",
   wordComponents: "string[]",
   wordGroup: "enum",
   wordProperties: {
@@ -339,6 +357,14 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
       containsAny: wordSearch.activeWordTypeFilter,
     };
   }
+  if (
+    Array.isArray(wordSearch.activeThemenFilter) &&
+    wordSearch.activeThemenFilter.length > 0
+  ) {
+    where.themen = {
+      containsAny: wordSearch.activeThemenFilter,
+    };
+  }
   return where;
 }
 
@@ -375,6 +401,7 @@ async function initOrama(words: OramaSearchIndex[]) {
           "dateGmt",
           "wordProperties.berolinismus",
           "berlinerischWordTypes",
+          "themen",
         ],
         stemming: true,
       },
