@@ -31,6 +31,17 @@
 
       <WordTypeFilter />
 
+      <div class="c-filter-search__headline-wrap" role="group" aria-labelledby="filter-themen">
+        <p id="filter-themen" class="c-filter-search__sub-label">Themen</p>
+      </div>
+
+      <i>
+        Filtere nach thematischen Kategorien wie Essen &amp; Trinken, Alkohol &amp; Kneipe
+        oder Schimpfwörter.
+      </i>
+
+      <ThemenFilter />
+
       <div class="c-filter-search__switch" role="group" aria-labelledby="filter-berolinismus">
         <p id="filter-berolinismus" class="c-filter-search__sub-label">Berolinismus</p>
         <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
@@ -91,6 +102,7 @@ import BadgeTag from "@components/BadgeTag.vue";
 import ButtonWithStates from "@components/ButtonWithStates.vue";
 import LetterFilter from "@components/filter/LetterFilter.vue";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
+import ThemenFilter from "@components/filter/ThemenFilter.vue";
 import WordRangeSlider from "@components/filter/WordRangeSlider.vue";
 import WordSwitch from "@components/filter/WordSwitch.vue";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
@@ -120,4 +132,5 @@ onClickOutside(wordListFilter, () => {
 
 <style lang="scss">
 @use "@styles/components/switch";
+@use "@vueform/multiselect/themes/default.css";
 </style>

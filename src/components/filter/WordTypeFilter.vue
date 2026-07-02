@@ -41,5 +41,4 @@ const onSelect = (value: string[]) => {
 
 <style lang="scss">
 @use "@styles/components/word-type-filter";
-@use "@vueform/multiselect/themes/default.css";
 </style>
