@@ -24209,6 +24209,10 @@ type WordProperties implements AcfFieldGroup & AcfFieldGroupFields & WordPropert
   """
   Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
   """
+  sources: [WordPropertiesSources]
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
+  """
   translations: [WordPropertiesTranslations]
   """
   Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
@@ -24342,6 +24346,32 @@ interface WordPropertiesExamples_Fields implements AcfFieldGroup & AcfFieldGroup
   exampleExplanation: String
   """The name of the field group"""
   fieldGroupName: String @deprecated(reason: "Use __typename instead")
+}
+
+"""
+The &quot;WordPropertiesSources&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
+"""
+type WordPropertiesSources implements AcfFieldGroup & AcfFieldGroupFields & WordPropertiesSources_Fields {
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  For more control, you may specify both a value and label like this:
+  red : Red
+  """
+  quelle: [String]
+}
+
+"""
+Interface representing fields of the ACF &quot;WordPropertiesSources&quot; Field Group
+"""
+interface WordPropertiesSources_Fields implements AcfFieldGroup & AcfFieldGroupFields {
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  For more control, you may specify both a value and label like this:
+  red : Red
+  """
+  quelle: [String]
 }
 
 """
@@ -24480,6 +24510,10 @@ interface WordProperties_Fields implements AcfFieldGroup & AcfFieldGroupFields {
     """The number of items to return before the referenced "before" cursor"""
     last: Int
   ): AcfContentNodeConnection
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
+  """
+  sources: [WordPropertiesSources]
   """
   Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
   """
