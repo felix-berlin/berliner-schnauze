@@ -39,6 +39,10 @@ export const fetchAllThemen = async () => {
     .then((result) => {
       if (result.error) throw result.error;
       return result.data?.berlinerischThemen?.nodes ?? [];
+    })
+    .catch((err: unknown) => {
+      _themenCache = null;
+      throw err;
     });
   return _themenCache;
 };
