@@ -60,6 +60,10 @@ vi.mock("@components/filter/WordTypeFilter.vue", () => ({
   default: { template: "<div class=\"mock-word-type-filter\" />" },
 }));
 
+vi.mock("@components/filter/ThemenFilter.vue", () => ({
+  default: { template: "<div class=\"mock-themen-filter\" />" },
+}));
+
 vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@vueuse/core")>();
   return {
@@ -161,6 +165,13 @@ describe("WordFilter.vue", () => {
     const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
     const wrapper = mount(WordFilter);
     expect(wrapper.find(".mock-word-type-filter").exists()).toBe(true);
+  });
+
+  it("renders ThemenFilter component", async () => {
+    showFilterRef.value = true;
+    const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
+    const wrapper = mount(WordFilter);
+    expect(wrapper.find(".mock-themen-filter").exists()).toBe(true);
   });
 
   it("renders multiple WordSwitch components", async () => {

@@ -1,0 +1,98 @@
+---
+// Styles
+import '@styles/plugins/astro-breadcrumbs.scss';
+import '@styles/components/_thema-detail.scss';
+
+// Types
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+
+import Layout from '@layouts/Layout.astro';
+import { fetchAllThemen, fetchAllWords } from '@services/api.ts';
+import { canonicalUrl, routeToWord, seoData } from '@utils/helpers.ts';
+import { Breadcrumbs } from 'astro-breadcrumbs';
+import ChevronRight from '~icons/lucide/chevron-right';
+
+export const getStaticPaths = (async () => {
+  const [allThemen, allWords] = await Promise.all([fetchAllThemen(), fetchAllWords()]);
+
+  // Wort-zu-Thema-Mapping aus bereits gefetchten Wörtern
+  type WordNode = (typeof allWords)[number]['node'];
+  const wordsByThema = new Map<string, { node: WordNode }[]>();
+  for (const { node } of allWords) {
+    for (const thema of node.berlinerischThemen?.nodes ?? []) {
+      if (!thema.slug) continue;
+      if (!wordsByThema.has(thema.slug)) wordsByThema.set(thema.slug, []);
+      wordsByThema.get(thema.slug)!.push({ node });
+    }
+  }
+
+  return allThemen.flatMap((thema) => {
+    if (!thema.slug) return [];
+    return [{
+      params: { themaSlug: thema.slug },
+      props: {
+        thema,
+        words: wordsByThema.get(thema.slug) ?? [],
+      },
+    }];
+  });
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { thema, words } = Astro.props as Props;
+
+const seoProps = seoData({
+  seo: {
+    canonical: thema.seo?.canonical ?? canonicalUrl(`/themen/${thema.slug}/`, Astro.site),
+    opengraphDescription:
+      thema.seo?.opengraphDescription ?? thema.seo?.metaDesc ?? thema.description ?? '',
+    ...(thema.seo?.opengraphImage?.sourceUrl && {
+      opengraphImage: { sourceUrl: thema.seo.opengraphImage.sourceUrl },
+    }),
+    opengraphType: 'website',
+    title: thema.seo?.title ?? thema.name ?? '',
+  },
+  title: thema.name ?? '',
+});
+
+const itemListJson = () =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: words.map(({ node }, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: canonicalUrl(routeToWord(node.slug ?? undefined), Astro.site),
+    })),
+    name: thema.name ?? '',
+    numberOfItems: words.length,
+  });
+---
+
+<Layout content={seoProps} contentClasses='o-thema'>
+  <Breadcrumbs indexText='Start' linkTextFormat='capitalized'>
+    <ChevronRight height='20' slot='separator' width='20' />
+  </Breadcrumbs>
+
+  <header class='c-thema-header'>
+    <h1 class='c-thema-header__title'>{thema.name}</h1>
+    {thema.description && <div class='c-thema-header__description' set:html={thema.description} />}
+    <p class='c-thema-header__count'>{words.length} Wörter</p>
+  </header>
+
+  <h2 class='c-thema-word-list__heading'>{words.length} Wörter zu diesem Thema</h2>
+  <ul class='c-thema-word-list'>
+    {
+      words.map(({ node }) => (
+        <li class='c-thema-word-list__item'>
+          <a class='c-thema-word-list__link' href={routeToWord(node.slug ?? undefined)}>
+            {node.wordProperties?.berlinerisch}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <script set:html={itemListJson()} type='application/ld+json' />
+</Layout>

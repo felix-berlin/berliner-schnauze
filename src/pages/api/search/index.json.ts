@@ -41,7 +41,7 @@ function getWordComponents(word: string, minLen = 4): string[] {
   return [...suffixes];
 }
 
-function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, boolean>) {
+export function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, boolean>) {
   const translations = Array.isArray(node.wordProperties?.translations)
     ? node.wordProperties.translations
         .map((t) => t?.translation)
@@ -61,6 +61,10 @@ function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, b
   const wordTags = translateNlpTags(getWordType(berlinerisch));
   const wordTypes = extractWordTypes(wordTags);
 
+  const themen = (node.berlinerischThemen?.nodes ?? [])
+    .map((n) => n.slug)
+    .filter((s): s is string => typeof s === "string");
+
   return {
     berlinerWordId: node.berlinerWordId,
     berlinerischWordTypes: wordTypes,
@@ -69,6 +73,7 @@ function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, b
     modifiedGmt: node.modifiedGmt ?? "",
     modifiedTs: node.modifiedGmt ? Date.parse(node.modifiedGmt) : 0,
     slug: node.slug,
+    themen,
     wordComponents: getWordComponents(node.wordProperties?.berlinerisch ?? ""),
     wordGroup: node.wordGroup ?? "",
     wordProperties: {

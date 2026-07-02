@@ -65,6 +65,7 @@ describe("wordList store", () => {
       expect(state.activeLetterFilter).toBe("");
       expect(state.activeOrderCategory).toBe("alphabetical");
       expect(state.activeWordTypeFilter).toEqual([]);
+      expect(state.activeThemenFilter).toEqual([]);
       expect(state.alphabeticalOrder).toBe("ASC");
       expect(state.berolinismus).toBe(false);
       expect($searchQuery.get()).toBe("");
@@ -88,6 +89,12 @@ describe("wordList store", () => {
     it("counts non-empty activeWordTypeFilter as 1", async () => {
       const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
       $wordSearch.setKey("activeWordTypeFilter", ["Substantiv"]);
+      expect($activeFilterCount.get()).toBe(1);
+    });
+
+    it("counts non-empty activeThemenFilter as 1", async () => {
+      const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("activeThemenFilter", ["essen-trinken"]);
       expect($activeFilterCount.get()).toBe(1);
     });
 
@@ -156,6 +163,7 @@ describe("wordList store", () => {
       $wordSearch.setKey("berolinismus", true);
       $searchQuery.set("test");
       $wordSearch.setKey("activeWordTypeFilter", ["Verb"]);
+      $wordSearch.setKey("activeThemenFilter", ["essen-trinken"]);
 
       resetAll();
 
@@ -164,6 +172,7 @@ describe("wordList store", () => {
       expect(state.berolinismus).toBe(false);
       expect($searchQuery.get()).toBe("");
       expect(state.activeWordTypeFilter).toEqual([]);
+      expect(state.activeThemenFilter).toEqual([]);
       expect(state.alphabeticalOrder).toBe("ASC");
       expect(state.dateOrder).toBe("ASC");
     });
@@ -238,6 +247,29 @@ describe("wordList store", () => {
       $wordSearch.setKey("activeWordTypeFilter", ["Verb", "Substantiv"]);
       setWordTypeFilter("Verb");
       expect($wordSearch.get().activeWordTypeFilter).toEqual(["Substantiv"]);
+    });
+  });
+
+  describe("setThemenFilter", () => {
+    it("adds a thema when not present", async () => {
+      const { $wordSearch, setThemenFilter } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("activeThemenFilter", []);
+      setThemenFilter("essen-trinken");
+      expect($wordSearch.get().activeThemenFilter).toContain("essen-trinken");
+    });
+
+    it("removes a thema when already present", async () => {
+      const { $wordSearch, setThemenFilter } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("activeThemenFilter", ["essen-trinken"]);
+      setThemenFilter("essen-trinken");
+      expect($wordSearch.get().activeThemenFilter).not.toContain("essen-trinken");
+    });
+
+    it("keeps other themen when toggling one", async () => {
+      const { $wordSearch, setThemenFilter } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("activeThemenFilter", ["essen-trinken", "alkohol-kneipe"]);
+      setThemenFilter("essen-trinken");
+      expect($wordSearch.get().activeThemenFilter).toEqual(["alkohol-kneipe"]);
     });
   });
 

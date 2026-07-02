@@ -1,5 +1,24 @@
 import { graphql } from "@/gql";
 
+export const TaxonomySeoFragment = graphql(`
+  fragment TaxonomySeoFragment on TaxonomySEO {
+    title
+    metaDesc
+    canonical
+    opengraphDescription
+    opengraphTitle
+    opengraphType
+    opengraphUrl
+    opengraphImage {
+      sourceUrl
+    }
+    twitterDescription
+    twitterTitle
+    metaRobotsNofollow
+    metaRobotsNoindex
+  }
+`);
+
 export const PostTypeSeoFragment = graphql(`
   fragment PostTypeSeoFragment on PostTypeSEO {
     title
@@ -134,6 +153,12 @@ export const BerlinerWord = graphql(`
     berlinerischWordTypes {
       nodes {
         name
+      }
+    }
+    berlinerischThemen {
+      nodes {
+        name
+        slug
       }
     }
     seo {

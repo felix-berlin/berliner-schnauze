@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-import { fetchAllWords } from "@services/api.ts";
+import { fetchAllThemen, fetchAllWords } from "@services/api.ts";
 import { countLetters, getWordType, translateNlpTags } from "@utils/wordHelper.ts";
 import german from "hyphenation.de";
 import Hypher from "hypher";
@@ -9,6 +9,12 @@ const hypher = new Hypher(german);
 
 export const GET: APIRoute = async () => {
   const allWords = await fetchAllWords();
+  const allThemen = await fetchAllThemen();
+
+  const themen = allThemen
+    .filter((t): t is typeof t & { name: string; slug: string } => !!t.slug && !!t.name)
+    .map((t) => ({ name: t.name, slug: t.slug }))
+    .sort((a, b) => a.name.localeCompare(b.name, "de"));
 
   const availableWordGroups = Array.from(
     new Set(allWords.map(({ node }) => node.wordGroup?.toUpperCase())),
@@ -79,6 +85,7 @@ export const GET: APIRoute = async () => {
   const meta = {
     availableWordGroups,
     rangeFilterMinMax: minMax,
+    themen,
     wordTypes,
   };
 
