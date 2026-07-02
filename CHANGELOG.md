@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.40.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.5...v3.40.0) (2026-07-02)
+
+
+### Bug Fixes
+
+* **scripts:** harden WP category import, dedupe WordCategory type ([d80bf51](https://github.com/felix-berlin/berliner-schnauze/commit/d80bf51a4b216ad703b55d75e6813bd20667dbaf))
+* **search:** drop unnecessary type cast for berlinerischThemen ([09bb31d](https://github.com/felix-berlin/berliner-schnauze/commit/09bb31d262d21252005c2b317b24d55e56962fa1))
+* **services:** use [@services](https://github.com/services) alias for getThemen export ([a574ecb](https://github.com/felix-berlin/berliner-schnauze/commit/a574ecb36f10a312e1988f2862e4d2f864ad90b4))
+* **themen:** evict cache on GraphQL error in fetchAllThemen ([50c8fdc](https://github.com/felix-berlin/berliner-schnauze/commit/50c8fdcde7391234c5520e7ab01947e3e4f3461e))
+* update dependency version constraints in pnpm-workspace.yaml and clean up unused parameter in OG image route ([44bdb55](https://github.com/felix-berlin/berliner-schnauze/commit/44bdb5589d78266a84d4005db0b0f0da942b6904))
+* **word:** authenticate build-time WPGraphQL requests via Basic Auth ([0df14d1](https://github.com/felix-berlin/berliner-schnauze/commit/0df14d1be00224920c5c1cc2e9c7b9487a4e4402))
+* **word:** show German text for multiselect selection count ([3f813c6](https://github.com/felix-berlin/berliner-schnauze/commit/3f813c6e88a86426d54ff89068dcdbcd08eb7e17))
+
+
+### Features
+
+* add Themen support and related API enhancements ([0ae0c15](https://github.com/felix-berlin/berliner-schnauze/commit/0ae0c155a71c2a397a98247cd232e8ffa2ebc138))
+* **thema:** enhance SEO and add structured data for thema pages ([8adcd71](https://github.com/felix-berlin/berliner-schnauze/commit/8adcd71e6195fdb1e36cfea3c48f37f1690bd6c8))
+* **themen:** add category taxonomy pages for berlinerischThemen ([a3c4a9a](https://github.com/felix-berlin/berliner-schnauze/commit/a3c4a9acf3a62dbcd0fc10840361e6b2df61ef5d))
+* **themen:** enhance themen overview with SEO improvements and structured data ([f6084ac](https://github.com/felix-berlin/berliner-schnauze/commit/f6084acf55331b38181a2653b702d7c8efbe7b00))
+* **word:** add ThemenFilter multiselect component ([f89f15f](https://github.com/felix-berlin/berliner-schnauze/commit/f89f15f3bd4437cee9ad1b972c7c2274ec129b39))
+* **word:** add WordPropertiesSources field group to schema ([5b31945](https://github.com/felix-berlin/berliner-schnauze/commit/5b3194527dbba9f0f79f8d2342b2a88d828c76f2))
+* **word:** show topic badges on word hero ([57c3630](https://github.com/felix-berlin/berliner-schnauze/commit/57c363097ec3efbf2102c539759fe15a8f9279a3))
+* **word:** wire themen into search meta, store, and Orama filter ([80601de](https://github.com/felix-berlin/berliner-schnauze/commit/80601de58596b8a843c28049d538dbd233ee981b))
+* **word:** wire ThemenFilter into the filter flyout ([fe6d087](https://github.com/felix-berlin/berliner-schnauze/commit/fe6d0871e335cbf2c02b76bf607ed81927d5f744))
+
 ## [3.39.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.4...v3.39.5) (2026-06-30)
 
 
