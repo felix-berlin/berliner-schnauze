@@ -8,6 +8,7 @@
       :options="wordSearch.wordTypes"
       locale="de"
       fallback-locale="en"
+      :multiple-label="multipleLabel"
       class="c-word-type-filter__select"
       placeholder="Worttypen filtern"
       :aria="{
@@ -29,6 +30,9 @@ import Multiselect from "@vueform/multiselect";
 
 const wordSearch = useStore($wordSearch);
 const value = useVModel($wordSearch, "activeWordTypeFilter");
+
+const multipleLabel = (selected: string[]) =>
+  selected.length === 1 ? "1 Option ausgewählt" : `${selected.length} Optionen ausgewählt`;
 
 const onSelect = (value: string[]) => {
   trackEvent("WordList", "Filter", `Word Type: ${value.join(", ")}`);

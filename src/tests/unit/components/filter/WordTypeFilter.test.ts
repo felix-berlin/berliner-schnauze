@@ -28,7 +28,7 @@ vi.mock("@vueform/multiselect", () => ({
   default: {
     name: "Multiselect",
     props: ["modelValue", "mode", "closeOnSelect", "hideSelected", "options", "locale",
-            "fallbackLocale", "placeholder", "aria"],
+            "fallbackLocale", "multipleLabel", "placeholder", "aria"],
     template: "<div class='mock-multiselect'><slot /></div>",
     emits: ["select", "deselect", "update:modelValue"],
   },
@@ -99,5 +99,13 @@ describe("WordTypeFilter.vue", () => {
     const multiselect = wrapper.findComponent({ name: "Multiselect" });
     await multiselect.vm.$emit("update:modelValue", ["Substantiv"]);
     expect(mockActiveWordTypeFilter.value).toEqual(["Substantiv"]);
+  });
+
+  it("passes a multipleLabel function that returns German text", () => {
+    const wrapper = mount(WordTypeFilter);
+    const multiselect = wrapper.findComponent({ name: "Multiselect" });
+    const multipleLabel = multiselect.props("multipleLabel") as (selected: string[]) => string;
+    expect(multipleLabel(["Substantiv"])).toBe("1 Option ausgewählt");
+    expect(multipleLabel(["Substantiv", "Verb"])).toBe("2 Optionen ausgewählt");
   });
 });
