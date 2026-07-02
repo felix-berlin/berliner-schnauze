@@ -3,6 +3,9 @@ dist/
 dev-dist/
 .astro
 
+# one-off migration script output (see scripts/*.ts)
+/data/
+
 # test output
 coverage
 /tests/unit/coverage
