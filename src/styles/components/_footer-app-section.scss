@@ -1,0 +1,14 @@
+@use "@styles/variables" as vars;
+
+.c-footer-app-section {
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__settings-link {
+    gap: vars.$spacer * 0.25;
+    text-decoration: none;
+  }
+}
