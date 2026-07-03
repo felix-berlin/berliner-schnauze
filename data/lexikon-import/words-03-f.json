@@ -267,6 +267,7 @@
   },
   {
     "word": "Fetzen",
+    "allowDuplicate": true,
     "article": "der",
     "translations": ["Stück"],
     "examples": [{ "example": "Dir hau ick in Fetzen!" }],

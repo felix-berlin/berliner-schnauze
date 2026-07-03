@@ -93,6 +93,12 @@ export interface LexikonEntry {
   infoText?: string;
   /** berlinerisch-themen term slugs */
   themen: string[];
+  /**
+   * Set when the entry intentionally collides case-insensitively with another
+   * word (e.g. verb "fetzen" vs noun "Fetzen") — disables the case-insensitive
+   * duplicate guard; the exact-title guard still applies.
+   */
+  allowDuplicate?: boolean;
 }
 
 interface WpTerm {
@@ -166,16 +172,26 @@ async function getOrCreateTerm(slug: string, config: WpConfig): Promise<WpTerm> 
   return created;
 }
 
-// ── Fetch existing post slugs (all statuses we can see) ───────────────────
-async function fetchExistingSlugs(config: WpConfig): Promise<Set<string>> {
-  const slugs = new Set<string>();
+// ── Fetch existing post titles (all statuses we can see) ──────────────────
+function decodeEntities(s: string): string {
+  return s
+    .replace(/&#(\d+);/g, (_, n: string) => String.fromCodePoint(Number(n)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, n: string) => String.fromCodePoint(parseInt(n, 16)))
+    .replaceAll("&amp;", "&")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">");
+}
+
+async function fetchExistingTitles(config: WpConfig): Promise<Set<string>> {
+  const titles = new Set<string>();
   for (const status of ["publish", "draft", "pending", "future", "private"]) {
     let page = 1;
     while (true) {
       let posts: WpPost[];
       try {
         posts = await wpFetch<WpPost[]>(
-          `/${POST_TYPE_REST_BASE}?per_page=100&page=${page}&_fields=id,slug&status=${status}`,
+          `/${POST_TYPE_REST_BASE}?per_page=100&page=${page}&_fields=id,title&status=${status}`,
           {},
           config,
         );
@@ -185,15 +201,17 @@ async function fetchExistingSlugs(config: WpConfig): Promise<Set<string>> {
         break;
       }
       if (posts.length === 0) break;
-      for (const post of posts) slugs.add(post.slug);
-      process.stdout.write(`\rFetched ${slugs.size} existing slugs (${status}, page ${page})...`);
+      for (const post of posts) {
+        if (post.title?.rendered) titles.add(decodeEntities(post.title.rendered).trim());
+      }
+      process.stdout.write(`\rFetched ${titles.size} existing titles (${status}, page ${page})...`);
       if (posts.length < 100) break;
       page++;
       await delay(RATE_MS);
     }
   }
   process.stdout.write("\n");
-  return slugs;
+  return titles;
 }
 
 // ── Build POST body ────────────────────────────────────────────────────────
@@ -237,14 +255,18 @@ async function main(): Promise<void> {
   console.log(`Total: ${entries.length} entries`);
 
   // Validate before touching WP
-  const seen = new Set<string>();
+  const seenExact = new Set<string>();
+  const seenLower = new Set<string>();
   const problems: string[] = [];
   for (const e of entries) {
     if (!e.word?.trim()) problems.push(`Entry without word: ${JSON.stringify(e)}`);
     if (!e.translations?.length) problems.push(`"${e.word}": no translations`);
-    const slug = slugify(e.word);
-    if (seen.has(slug)) problems.push(`Duplicate slug in data: "${e.word}" (${slug})`);
-    seen.add(slug);
+    if (seenExact.has(e.word)) problems.push(`Duplicate word in data: "${e.word}"`);
+    if (seenLower.has(e.word.toLowerCase()) && !e.allowDuplicate) {
+      problems.push(`Case-insensitive duplicate: "${e.word}" (set allowDuplicate if intended)`);
+    }
+    seenExact.add(e.word);
+    seenLower.add(e.word.toLowerCase());
     for (const t of e.themen ?? []) {
       if (!VALID_THEMEN.has(t)) problems.push(`"${e.word}": unknown thema "${t}"`);
     }
@@ -272,9 +294,10 @@ async function main(): Promise<void> {
     termIdMap.set(slug, term.id);
   }
 
-  console.log("\n--- Step 2: Fetching existing post slugs ---");
-  const existingSlugs = await fetchExistingSlugs(config);
-  console.log(`Found ${existingSlugs.size} existing posts`);
+  console.log("\n--- Step 2: Fetching existing post titles ---");
+  const existingTitles = await fetchExistingTitles(config);
+  const existingLower = new Set([...existingTitles].map((t) => t.toLowerCase()));
+  console.log(`Found ${existingTitles.size} existing posts`);
 
   console.log(`\n--- Step 3: Creating posts ---`);
   let created = 0;
@@ -285,9 +308,13 @@ async function main(): Promise<void> {
   for (const entry of entries) {
     if (created >= LIMIT) break;
 
-    const slug = slugify(entry.word);
-    if (existingSlugs.has(slug)) {
-      console.log(`  SKIP (exists): ${entry.word} (${slug})`);
+    if (existingTitles.has(entry.word)) {
+      console.log(`  SKIP (exists): ${entry.word}`);
+      skipped++;
+      continue;
+    }
+    if (existingLower.has(entry.word.toLowerCase()) && !entry.allowDuplicate) {
+      console.log(`  SKIP (case-variant exists): ${entry.word}`);
       skipped++;
       continue;
     }
@@ -321,7 +348,8 @@ async function main(): Promise<void> {
       }
 
       console.log(`  ✓ ${entry.word} (id=${post.id}, ${body.status as string})`);
-      existingSlugs.add(slug);
+      existingTitles.add(entry.word);
+      existingLower.add(entry.word.toLowerCase());
       created++;
       await delay(RATE_MS);
     } catch (err) {
