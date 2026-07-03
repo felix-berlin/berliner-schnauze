@@ -4,7 +4,8 @@ dev-dist/
 .astro
 
 # one-off migration script output (see scripts/*.ts)
-/data/
+/data/*
+!/data/lexikon-import/
 
 # test output
 coverage
