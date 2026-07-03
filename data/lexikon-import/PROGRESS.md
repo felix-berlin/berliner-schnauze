@@ -8,7 +8,10 @@ Quelldatei: `berlinisch_lexikon.md` (5418 Zeilen, Upload), Start nach Eintrag
 | 994–1163 (D) | ✅ kuratiert | words-01-d.json |
 | 1164–1305 (E) | ✅ kuratiert | words-02-e.json |
 | 1309–1588 (F) | ✅ kuratiert | words-03-f.json |
-| 1591–5418 (G–Z) | ⏳ offen | — |
+| 1591–1860 (G) | ✅ kuratiert | words-04-g.json |
+| 1862–2107 (H) | ✅ kuratiert | words-05-h.json |
+| 2109–2179 (I–J) | ✅ kuratiert | words-06-i-j.json |
+| 2180–5418 (K–Z) | ⏳ offen | — |
 
 Hinweis: Die PDF→Markdown-Konvertierung hat die zwei Spalten des Originals
 teils verschachtelt — Einträge können mitten im Satz abbrechen und viele

@@ -1,0 +1,722 @@
+[
+  {
+    "word": "Haar",
+    "article": "das",
+    "translations": ["Haar (in der Wendung über Glatzen)"],
+    "examples": [
+      { "example": "Dem wächst de Kniescheibe durch de Haare.", "explanation": "Er bekommt eine Glatze." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "haben, sich",
+    "translations": ["sich zieren", "sich aufregen"],
+    "examples": [
+      { "example": "Nu ham Se sich doch nich so!", "explanation": "Regen Sie sich doch nicht so auf, seien Sie nicht beleidigt." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Hackding",
+    "article": "das",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Hacke",
+    "article": "die",
+    "translations": ["Ferse", "Kopf"],
+    "examples": [
+      { "example": "Der looft sich de Hacken ab.", "explanation": "Er ist vergeblich unterwegs." },
+      { "example": "Der hat ’n Ding anna Hacke.", "explanation": "Er hat ’n Ding am Kopp." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "hacken",
+    "translations": ["ankleben", "festsitzen"],
+    "themen": []
+  },
+  {
+    "word": "Hackenporsche",
+    "article": "der",
+    "translations": ["kleiner Einkaufswagen", "Rentnerkarren"],
+    "themen": ["stadtleben", "alltag-wohnen"]
+  },
+  {
+    "word": "Hackepeter",
+    "article": "der",
+    "translations": ["gehacktes Schweinefleisch mit Pfeffer und Zwiebeln"],
+    "examples": [
+      { "example": "Aus dir mack ick Hackepeter!", "explanation": "Drohung." }
+    ],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Hadscheeh",
+    "translations": ["Abschiedsgruß"],
+    "infoText": "Verschmelzung aus Hatschi und Adieu bzw. Atschö.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Häkelhaken",
+    "translations": ["dünne Beine"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "halb und halb",
+    "translations": ["mittelmäßig (als Antwort auf »Wie geht’s?«)"],
+    "examples": [
+      { "example": "Wie jeht’s? — Halb und halb.", "explanation": "Anspielung auf einen ebenso bezeichneten Schnaps der Firma Mampe." },
+      { "example": "Wie war jestern dit Spiel? — Nüscht Halbet und nüscht Janzet.", "explanation": "Nicht so gut." }
+    ],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Halber",
+    "article": "der",
+    "translations": ["Glas Bier (0,4 l)"],
+    "examples": [{ "example": "’nen Halben, bitte!" }],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "halblang",
+    "translations": ["nicht übertreiben (in der Wendung »mach mal halblang«)"],
+    "examples": [
+      { "example": "Mach mal halblang!", "explanation": "Übertreib nicht so." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "hallweje",
+    "translations": ["immer langsam", "nicht übertreiben"],
+    "infoText": "Wie halblang.",
+    "themen": []
+  },
+  {
+    "word": "Halbstadt",
+    "article": "die",
+    "translations": ["West-Berlin"],
+    "infoText": "Frühere Bezeichnung.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Hallelujah-Staude",
+    "article": "die",
+    "translations": ["Weihnachtsbaum"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Halsweite",
+    "article": "die",
+    "translations": ["passende Größe (nur verneint)"],
+    "examples": [
+      { "example": "Dit is nich meine Halsweite.", "explanation": "Das ist eine Nummer zu groß für mich." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "heiße Schrippe",
+    "article": "die",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "heiter",
+    "translations": ["interessant, amüsant (ironisch)"],
+    "examples": [
+      { "example": "Dit kann ja noch heiter werden!", "explanation": "Ironisch: das kann ja noch interessant werden." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "helle",
+    "translations": ["klug"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "kleines Helles",
+    "article": "das",
+    "translations": ["kleines helles Bier"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "hellicht",
+    "translations": ["hell"],
+    "themen": []
+  },
+  {
+    "word": "Helmut",
+    "article": "der",
+    "translations": ["Polizist"],
+    "infoText": "Abgeleitet von Helmhut, der Pickelhaube aus der Kaiserzeit. Von 1918 bis Anfang der 50er Jahre nur noch Tschako.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Henkel",
+    "article": "der",
+    "translations": ["Verstand (in der Redensart)"],
+    "examples": [
+      { "example": "Du hast wohl nich mehr alle Henkel anner Kanne!", "explanation": "Du spinnst wohl, du hast sie wohl nicht mehr alle." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Heringsbändiger",
+    "article": "der",
+    "translations": ["Verkäufer im Tante-Emma-Laden"],
+    "infoText": "Im 19. Jahrhundert für einen Diener im Kolonialwarenladen, heute abwertend.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Herreninfektionsgeschäft",
+    "article": "das",
+    "translations": ["Bordell"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Heuboden",
+    "article": "der",
+    "translations": ["Galerie im Sportpalast"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Heulboje",
+    "article": "die",
+    "translations": ["Sänger"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Heule",
+    "article": "die",
+    "translations": ["Radio"],
+    "themen": ["alltag-wohnen", "unterhaltung-freizeit"]
+  },
+  {
+    "word": "Heuler",
+    "article": "der",
+    "translations": ["abfällige Bemerkung (in der Wendung »der letzte Heuler«)"],
+    "examples": [
+      { "example": "Dit is der letzte Heuler.", "explanation": "Abfällige Bemerkung über eine Sache oder Person." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Heulsuse",
+    "article": "die",
+    "translations": ["plärrendes Kind", "ständig jammernder Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen", "gefuehle-emotionen"]
+  },
+  {
+    "word": "hier",
+    "translations": ["gescheit (in der Redensart)"],
+    "examples": [
+      { "example": "Du bist wohl nich von hier?", "explanation": "Du bist wohl nicht gescheit?" }
+    ],
+    "themen": []
+  },
+  {
+    "word": "hille hille",
+    "translations": ["schnell"],
+    "infoText": "Ostberlinisch.",
+    "themen": []
+  },
+  {
+    "word": "Hambutten",
+    "translations": ["Hagebutten"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Hämeken",
+    "article": "das",
+    "translations": ["kleiner, unauffälliger Mann"],
+    "infoText": "Von mittelhochdeutsch ham = Haut, Hülle, Kleid und dem niederdeutschen Diminutiv -ken.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Hammelbeene",
+    "translations": ["Beine"],
+    "examples": [
+      { "example": "Dir werd’ ick de Hammelbeene langzieh’n.", "explanation": "Drohung. Mit Bezug auf die Kastration des Schafbocks, bei der man dem Tier die Beine langzieht." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Hamster melken",
+    "translations": ["Toilette aufsuchen"],
+    "examples": [
+      { "example": "Ick gloob meen Hamster bohnert.", "explanation": "Ausruf des Erstaunens." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Hanake",
+    "article": "der",
+    "translations": ["Schimpfwort"],
+    "infoText": "Wie Kanake. Die Hanaken sind eine tschechische Ethnie in Mähren.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "handlich",
+    "translations": ["sehr groß"],
+    "themen": []
+  },
+  {
+    "word": "Handschuhe",
+    "translations": ["Gleichgültigkeit (in der Redensart)"],
+    "examples": [
+      { "example": "Das ist meinem Vater ganz recht, warum kooft er mir keene Handschuhe.", "explanation": "Nach Trachsel (1873) eine aus einer Gerichtsverhandlung ins Volk übergegangene Redensart, mit der der Berliner seine Gleichgültigkeit über einen Vorwurf ausdrückt." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Handtuch",
+    "article": "das",
+    "translations": ["langes, schmales Zimmer", "schlanker Mensch"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Hängebauchschwein",
+    "article": "das",
+    "translations": ["dicker Mensch"],
+    "examples": [{ "example": "Der sieht aus wie’n Hängebauchschwein." }],
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  },
+  {
+    "word": "Hängsel",
+    "article": "das",
+    "translations": ["Schlaufe am Rock"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Hanne",
+    "article": "der",
+    "translations": ["Schwächling", "schwächlicher Charakter"],
+    "alternativeWords": ["Hannefatzke", "Hannepampe", "Hannepiepe"],
+    "infoText": "Die Zusammensetzungen werden auch in der Bedeutung von ›Kaspar‹ gebraucht.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "happenpappen",
+    "translations": ["essen"],
+    "infoText": "Als Substantiv: Speise, Bissen. Von mittelhochdeutsch peppe = Speise und niederdeutsch happen = schnappen, verschlingen.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "happig",
+    "translations": ["viel", "stark", "überzogen"],
+    "examples": [{ "example": "Die Preise sind janz schön happig!" }],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Harke",
+    "article": "die",
+    "translations": ["Nachdruck (in der Drohung)"],
+    "examples": [
+      { "example": "Dir werd’ ick zeigen, wat ’ne Harke ist.", "explanation": "Drohung." }
+    ],
+    "infoText": "Geht wohl nicht auf die Liebe der Berliner zu ihren Kleingärten zurück, sondern auf die strafende germanische Göttin Harke oder auf die Drohung, dem Opponenten das Gesicht mit dem »Rechenzinken«, der Hand, zu zerkratzen.",
+    "themen": []
+  },
+  {
+    "word": "hartleibig",
+    "translations": ["hartherzig"],
+    "infoText": "Beim Geizigen ist nicht nur das Herz, sondern auch der Stuhl verhärtet.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Hasenbrot",
+    "article": "das",
+    "translations": ["nicht gegessenes, wieder mit nach Hause gebrachtes Brot"],
+    "infoText": "Geht entweder auf den in Norddeutschland verbreiteten Glauben zurück, dass der Hase Brot bringt, oder darauf, dass nicht mehr frisches Brot als Kaninchenfutter verwendet wird.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Häseken",
+    "article": "das",
+    "translations": ["Kosename für kleine Mädchen oder eine Freundin"],
+    "alternativeWords": ["Haaseken"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Hasenjacht",
+    "article": "die",
+    "translations": ["große Eile (in der Redensart)"],
+    "examples": [
+      { "example": "Dit is ja schneller als uff de Hasenjacht!", "explanation": "Das geht äußerst schnell." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Haue",
+    "article": "die",
+    "translations": ["Prügel", "Schläge"],
+    "themen": []
+  },
+  {
+    "word": "Hauer",
+    "article": "der",
+    "translations": ["großer Zahn"],
+    "infoText": "Eigentlich die großen Eckzähne des Ebers.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Hausbiene",
+    "article": "die",
+    "translations": ["Wanze"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Hausfrauenblick",
+    "article": "der",
+    "translations": ["schielender Blick"],
+    "examples": [
+      { "example": "Der schielt links nach de Wäsche und rechts nach de Klammern.", "explanation": "Beschreibung des Hausfrauenblicks." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Hausknochen",
+    "article": "der",
+    "translations": ["Hausschlüssel"],
+    "alternativeWords": ["Hausknüppel"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "heben, einen",
+    "translations": ["einen trinken"],
+    "examples": [{ "example": "Komm, wir jeh’n een’ heben!" }],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Hecht",
+    "article": "der",
+    "translations": ["dichter Tabaksqualm im Zimmer"],
+    "infoText": "Substantiviert von niederdeutsch hecht = dicht.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Hechtsuppe",
+    "article": "die",
+    "translations": ["starker Durchzug (in der Redensart)"],
+    "examples": [
+      { "example": "Dit zieht wie Hechtsuppe.", "explanation": "Es zieht sehr stark. Anspielung darauf, dass eine Fischsuppe lange ziehen muss." }
+    ],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Heckmeck",
+    "article": "der",
+    "translations": ["Durcheinander", "Unsinn"],
+    "examples": [{ "example": "Mach nich so’n Heckmeck!" }],
+    "infoText": "Vielleicht beeinflusst von meck, dem Laut der Ziege (vgl. meckern); mittelniederdeutsch hak unde mak.",
+    "themen": []
+  },
+  {
+    "word": "heftig",
+    "translations": ["unverschämt", "überteuert"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Heiden-",
+    "translations": ["Verstärkung (Heidengeld, Heidenlärm)"],
+    "infoText": "Heidengeld = viel Geld, Heidenlärm = riesiger Lärm.",
+    "themen": []
+  },
+  {
+    "word": "heideritzken",
+    "translations": ["schnell"],
+    "themen": []
+  },
+  {
+    "word": "heidi",
+    "translations": ["ab ins Bett (in der Wendung »ab heidi«)"],
+    "examples": [
+      { "example": "Ab heidi!", "explanation": "Jetzt schnell ins Bett — mit Betonung auf der zweiten Silbe." }
+    ],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "heien",
+    "translations": ["das Heu wenden, einsammeln"],
+    "infoText": "Im 19. Jahrhundert als Charlottenburger Dialekt vermerkt.",
+    "themen": []
+  },
+  {
+    "word": "heiern",
+    "translations": ["schlafen", "schlagen"],
+    "themen": []
+  },
+  {
+    "word": "Heini",
+    "article": "der",
+    "translations": ["verächtliche Bezeichnung für unbeliebte Personen"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Himmelszicke",
+    "article": "die",
+    "translations": ["Schimpfwort für eine Frau"],
+    "alternativeWords": ["Himmelsziege"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "hin",
+    "translations": ["gestorben", "kaputt", "begeistert (»hin und weg«)"],
+    "examples": [
+      { "example": "Der is hin!", "explanation": "Er ist gestorben bzw. verfällt körperlich oder geistig." },
+      { "example": "Weg is weg und hin is hin.", "explanation": "Kommentar zu einer Einsicht in die Notwendigkeit." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "hinhunzen",
+    "translations": ["verschleißen", "kaputt machen"],
+    "alternativeWords": ["verhunzen"],
+    "themen": []
+  },
+  {
+    "word": "hindämeln",
+    "translations": ["schlendern"],
+    "themen": []
+  },
+  {
+    "word": "hinschlagen",
+    "translations": ["Ausdruck des Erstaunens (in der Redensart)"],
+    "examples": [
+      { "example": "Da schlag eena lang hin! ...und steh’ kurz wieder uff.", "explanation": "Ausdruck des Erstaunens." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Hinterhofpflanze",
+    "article": "die",
+    "translations": ["Person aus dem Milieu"],
+    "infoText": "Bezeichnet eine Person »aus’m Milljöh«.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Hirni",
+    "article": "der",
+    "translations": ["Idiot"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Hirnschale",
+    "article": "die",
+    "translations": ["Kopf"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Hohler Zahn",
+    "article": "der",
+    "translations": ["Turmruine der Kaiser-Wilhelm-Gedächtniskirche"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "hohnecken",
+    "translations": ["verhöhnen"],
+    "infoText": "Im Berliner Vertragsbuch von 1542 in der Beilegung eines Beleidigungsprozesses belegt.",
+    "themen": []
+  },
+  {
+    "word": "hohnepiepeln",
+    "translations": ["verulken", "verhöhnen"],
+    "alternativeWords": ["verhohnepiepeln"],
+    "themen": []
+  },
+  {
+    "word": "hojappen",
+    "translations": ["gähnen"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Holzbock",
+    "article": "der",
+    "translations": ["Förster"],
+    "themen": []
+  },
+  {
+    "word": "holzen, sich",
+    "translations": ["sich schlagen", "unfair Fußball spielen"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Hopfenkaltschale",
+    "article": "die",
+    "translations": ["Bier"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Hoppelpoppel",
+    "article": "das",
+    "translations": ["Bauernfrühstück", "wüstes Durcheinander", "Rollmops"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "hops gehen",
+    "translations": ["sterben", "bankrott gehen", "auffliegen"],
+    "examples": [{ "example": "Der is hops jejangen." }],
+    "infoText": "Von hopsen = hüpfen.",
+    "themen": []
+  },
+  {
+    "word": "Hopskäse",
+    "article": "der",
+    "translations": ["Person mit unstetem Lebenswandel", "kleiner Junge"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Horchlappen",
+    "translations": ["Ohren"],
+    "alternativeWords": ["Horchlöffel"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Horchophon",
+    "article": "das",
+    "translations": ["Telefon"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Horn",
+    "article": "das",
+    "translations": ["Aufspielen (in der Wendung »ins Horn stoßen«)"],
+    "examples": [
+      { "example": "Der stößt ins Horn.", "explanation": "Er spielt sich auf — nicht zu verwechseln mit dem Hornochsen (dummer Mensch)." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Hörnerbrause",
+    "article": "die",
+    "translations": ["Bockbier"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Hoscher",
+    "article": "der",
+    "translations": ["etwas Großes"],
+    "examples": [
+      { "example": "Is dit’n Hoscher!", "explanation": "Bewundernd, z.B. zu einem rasanten Sportwagen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Hosenmatz",
+    "article": "der",
+    "translations": ["kleines Kind"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Hotte",
+    "article": "das",
+    "translations": ["Kosewort für ein Haustier", "Berliner Form des Namens Horst"],
+    "alternativeWords": ["Hottehü-Pferd"],
+    "infoText": "Hottehüh mit Bäckerzusatz = Bulette.",
+    "themen": []
+  },
+  {
+    "word": "hotten",
+    "translations": ["tanzen"],
+    "infoText": "Jugendsprachlich, von englisch hot = heiß.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "hübsch",
+    "translations": ["sehr", "recht"],
+    "examples": [{ "example": "Kinder, bleibt ma hübsch artig." }],
+    "themen": []
+  },
+  {
+    "word": "Hucke",
+    "article": "die",
+    "translations": ["Tragekorb für den Rücken"],
+    "examples": [
+      { "example": "Jemandem die Hucke vollhauen.", "explanation": "Ihn prügeln." }
+    ],
+    "infoText": "Auf dem Bau zum Transportieren von Mauersteinen.",
+    "themen": []
+  },
+  {
+    "word": "Huddern",
+    "translations": ["Hände"],
+    "examples": [{ "example": "Wat hast du ’n wieder mang de Huddern jehabt." }],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Hufnagel",
+    "article": "der",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Hullerdibuller",
+    "translations": ["Holterdipolter"],
+    "themen": []
+  },
+  {
+    "word": "Humpen",
+    "article": "der",
+    "translations": ["Bierkrug"],
+    "infoText": "Zuerst omd., dann wohl durch die Studentensprache verbreitet; niederdeutsch Hump(e) = Teil, Stück, Ecke.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Hund",
+    "article": "der",
+    "translations": ["Hund (in zahlreichen Redewendungen)"],
+    "examples": [
+      { "example": "Stadtbekannt wie ’n bunter Hund." },
+      { "example": "Der kommt bald uff’n Hund.", "explanation": "Er kommt herunter." },
+      { "example": "Der is vor de Hunde jejangen.", "explanation": "Er ist völlig verkommen." }
+    ],
+    "infoText": "Der Hundepuffer ist die Bulette.",
+    "themen": []
+  },
+  {
+    "word": "Hungerharke",
+    "article": "die",
+    "translations": ["Luftbrückendenkmal in Berlin-Tempelhof"],
+    "alternativeWords": ["Hungerkralle"],
+    "infoText": "Die Form erinnert an eine verkehrt in den Boden gesteckte Harke.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Hunni",
+    "article": "der",
+    "translations": ["Hundertmarkschein"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Husche",
+    "article": "die",
+    "translations": ["heftiger, aber kurzer Platzregen"],
+    "infoText": "Abgeleitet von der lautmalenden Interjektion husch.",
+    "themen": []
+  },
+  {
+    "word": "husten",
+    "translations": ["verweigern (in der Wendung »wat husten«)"],
+    "examples": [
+      { "example": "Ick werd’ da wat husten!", "explanation": "Ich denke gar nicht daran." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Hutsche",
+    "article": "die",
+    "translations": ["kleine Fußbank"],
+    "alternativeWords": ["Rutsche"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Hutschnur",
+    "article": "die",
+    "translations": ["Grenze des Erträglichen (in der Wendung)"],
+    "examples": [
+      { "example": "Dit jeht ma über de Hutschnur.", "explanation": "Das geht zu weit, jetzt reicht es." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  }
+]

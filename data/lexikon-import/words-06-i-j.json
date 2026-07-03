@@ -1,0 +1,192 @@
+[
+  {
+    "word": "ick",
+    "translations": ["ich"],
+    "examples": [
+      {
+        "example": "Ick sitze da und esse Klopps. / Uff eenmal kloppt’s. / Ick jeh zur Tür und denk: Nanu? / Erst war se uff, jetz isse zu! / Ick jehe raus und kieke - / Und wer steht draußen? Icke!",
+        "explanation": "Das bekannte »Icke-Gedicht«."
+      }
+    ],
+    "infoText": "Niederdeutsches Relikt, deshalb ick gesprochen.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Idi",
+    "article": "der",
+    "translations": ["Idiot"],
+    "infoText": "Abkürzung von Idiot.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "IHB",
+    "translations": ["Ingenieur Hochbau (spöttisch: »Idioten helfen bauen«)"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Ille",
+    "article": "die",
+    "translations": ["Stock", "Knüppel"],
+    "examples": [
+      { "example": "Deine Keule hat meine Brieze mit de Ille vor de Omme jeknökt.", "explanation": "Dein Bruder hat meiner Schwester mit dem Stock an den Kopf geschlagen (vgl. Brieze, Keule, Omme)." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "illuminiert",
+    "translations": ["betrunken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "immer",
+    "translations": ["nachdrückliche Feststellung (in der Wendung)"],
+    "examples": [{ "example": "Dit war’t schon immer!" }],
+    "themen": []
+  },
+  {
+    "word": "in",
+    "translations": ["gehaltvoll (»es in sich haben«)", "en vogue (»in sein«)"],
+    "examples": [
+      { "example": "Dit hat’s in sich.", "explanation": "Das ist schwierig, das ist gehaltvoll." },
+      { "example": "Dit is in.", "explanation": "Das ist en vogue." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Infamia",
+    "article": "die",
+    "translations": ["schlechte Zigarre"],
+    "themen": []
+  },
+  {
+    "word": "Innung",
+    "article": "die",
+    "translations": ["Gruppe", "Familie"],
+    "examples": [
+      { "example": "Du blamierst de janze Innung.", "explanation": "Die ganze Gruppe, Familie o.ä." }
+    ],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Institut für Knastologie",
+    "article": "das",
+    "translations": ["Moabiter Kriminalgericht"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "intus",
+    "translations": ["zu sich genommen", "getrunken"],
+    "examples": [{ "example": "Ick hab schon sechs Pilli intus." }],
+    "infoText": "Von lateinisch intus = innen.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Ische",
+    "article": "die",
+    "translations": ["Frau", "Freundin", "Geliebte", "Partnerin"],
+    "infoText": "Von jiddisch ischa = Frau, mit langem i gesprochen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "is nich",
+    "translations": ["kommt nicht in Frage (Form der Abweisung)"],
+    "examples": [{ "example": "Mich über’n Leisten is nich." }],
+    "themen": []
+  },
+  {
+    "word": "Istanbul-Express",
+    "article": "der",
+    "translations": ["U-Bahnlinie von Spandau zum Schlesischen Tor"],
+    "alternativeWords": ["Orient-Express"],
+    "infoText": "Abschätzig, da in Kreuzberg ein Großteil der türkischen Bevölkerung wohnt.",
+    "themen": ["orte-spitzname", "stadtleben"]
+  },
+  {
+    "word": "itzen",
+    "translations": ["stehlen"],
+    "themen": []
+  },
+  {
+    "word": "jachtern",
+    "translations": ["wild spielen", "sich abhetzen"],
+    "infoText": "Abgeleitet von jagen.",
+    "themen": []
+  },
+  {
+    "word": "jagen",
+    "translations": ["nicht mögen (in der Wendung)"],
+    "examples": [
+      { "example": "Damit könn’ se ma jagen!", "explanation": "Das mag ich nicht." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Jammerholz",
+    "article": "das",
+    "translations": ["Klavier"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Jammerlappen",
+    "article": "der",
+    "translations": ["wehleidiger Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "jampeln",
+    "translations": ["sich unruhig verhalten", "herumzappeln"],
+    "examples": [
+      { "example": "Die Kinder jampeln herum.", "explanation": "Kinder, die nicht still sitzen können." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "japsen",
+    "translations": ["nach Luft schnappen"],
+    "infoText": "Von jappen = mühsam atmen, den Mund aufsperren.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Jardingarten",
+    "article": "der",
+    "translations": ["Garten"],
+    "infoText": "Gesprochen »Jardinjarten«, von französisch jardin = Garten.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "jiepern",
+    "translations": ["gierig sein nach etwas"],
+    "examples": [{ "example": "Ick hab ’nen Jieper uff ’ne Weiße!" }],
+    "infoText": "Abgeleitet von der niederdeutschen Form ›giepe(r)n‹ bzw. hochdeutsch ›gaffen‹, also mit offenem Mund nach etwas blicken.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Jokus",
+    "article": "der",
+    "translations": ["Jux", "Scherz", "Spaß"],
+    "infoText": "Lateinisch iocus = Scherz.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Juchtel-Fuchtel",
+    "translations": ["tanzen gehen", "einkaufen, schlendern gehen"],
+    "examples": [{ "example": "Auf die Juchtel-Fuchtel jeh’n." }],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Jum",
+    "article": "der",
+    "translations": ["Rausch (in der Wendung »im Jum sein«)"],
+    "examples": [
+      { "example": "Der is im Jum.", "explanation": "Er ist angetrunken, betrunken." }
+    ],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "j.w.d.",
+    "translations": ["janz weit draußen"],
+    "infoText": "Wer »j.w.d.« wohnt, der wohnt am Rande der Außenbezirke.",
+    "themen": ["stadtleben", "orte-spitzname"]
+  }
+]
