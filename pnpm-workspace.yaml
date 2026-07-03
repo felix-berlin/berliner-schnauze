@@ -1,6 +1,6 @@
 overrides:
   "@vitejs/plugin-vue": "^6.0.7"
-  js-yaml: "4.2.0"
+  js-yaml: "4.3.0"
 
 allowBuilds:
   "@infisical/cli": true
