@@ -29,3 +29,6 @@
 | 3569 | Pforzmolle | Variante → als alternativeWords bei „Forzmolle" nachgetragen |
 | 3570 | Pfote | mit „Pote" zusammengeführt |
 | 3733 | Quetschkommode | Variante → als alternativeWords bei „Knautschkommode" erfasst |
+| 3918 | rumflippen | Variante → als alternativeWords bei „flippen" erfasst |
+| 3930 | rumkrebsen | Variante → als alternativeWords bei „krebsen" erfasst |
+| 3936 | Rutsche | Variante → als alternativeWords bei „Hutsche" erfasst |

@@ -1,0 +1,540 @@
+[
+  {
+    "word": "Rabatz",
+    "article": "der",
+    "translations": ["Krach", "Unruhe"],
+    "infoText": "Als Verb rabatzen = herumtoben, Unruhe stiften. Vielleicht von polnisch rąbać = hauen.",
+    "themen": []
+  },
+  {
+    "word": "Rabauke",
+    "article": "der",
+    "translations": ["frecher Junge"],
+    "infoText": "Entlehnt aus niederländisch rabauw = Schurke, Strolch, mit der niederdeutschen Endung -ken.",
+    "themen": ["schimpfwoerter-beleidigungen", "beziehungen-soziales"]
+  },
+  {
+    "word": "Rabenaas",
+    "article": "das",
+    "translations": ["Schimpfwort"],
+    "infoText": "Steigerung zu Aas, das dem Raben als Futter dient. Schimpfwort seit dem 17. Jahrhundert.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Rachenputzer",
+    "article": "der",
+    "translations": ["scharfes Getränk"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Racker",
+    "article": "der",
+    "translations": ["Schelm", "Kind, das gern Schabernack treibt"],
+    "infoText": "Gehört zu mittelniederdeutsch racken = den Unflat zusammenfegen. Bereits im Mittelniederdeutschen als Schimpfwort, in der 2. Hälfte des 18. Jahrhunderts abgeschwächt auf Kinder angewandt.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Rad",
+    "article": "das",
+    "translations": ["Verrücktheit (in der Wendung »ein Rad abhaben«)"],
+    "examples": [
+      { "example": "Der hat’n Rad ab.", "explanation": "Der spinnt." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Radau",
+    "article": "der",
+    "translations": ["Lärm"],
+    "themen": []
+  },
+  {
+    "word": "Radaubruder",
+    "article": "der",
+    "translations": ["Streit suchende Person"],
+    "alternativeWords": ["Radautüte"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "raffitückisch",
+    "translations": ["besonders raffiniert"],
+    "infoText": "Verschmelzung aus ›raffiniert‹ und ›(heim)tückisch‹.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Raffke",
+    "article": "der",
+    "translations": ["Neureicher"],
+    "alternativeWords": ["Raffzahn"],
+    "infoText": "Jemand, der in kurzer Zeit viel Geld zusammengerafft hat. In Berlin um 1920 gebildete Bezeichnung, die auf mittelhochdeutsch raffen = eilig an sich reißen zurückgeht.",
+    "themen": ["geld", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "rahmig",
+    "translations": ["betrunken"],
+    "infoText": "Man denke an »aus dem Rahmen fallen«.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Rahmkater",
+    "article": "der",
+    "translations": ["schmutzige Person"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Ralle",
+    "article": "die",
+    "translations": ["Bruder", "Schwester"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "rammdösig",
+    "translations": ["benommen", "dösig"],
+    "infoText": "Wie dösig mit der Verstärkung ramm, eigentlich »Widder«. Vielleicht mit Bezug auf die Vorstellung, dass Schafe lange reglos dastehen und »vor sich hindösen«.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Rammröhre",
+    "article": "die",
+    "translations": ["Zylinderhut"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "ramponieren",
+    "translations": ["beschädigen"],
+    "themen": []
+  },
+  {
+    "word": "Rand",
+    "article": "der",
+    "translations": ["Mund (in der Wendung »halt den Rand«)"],
+    "examples": [
+      { "example": "Halt den Rand!", "explanation": "Halt den Mund!" }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Randalle",
+    "article": "die",
+    "translations": ["Lärm"],
+    "examples": [
+      { "example": "Randale machen.", "explanation": "Jugendsprachlich: Zoff anfangen." }
+    ],
+    "infoText": "Studentensprachlich zusammengezogen aus Rand = lärmender Spaß und Skandal.",
+    "themen": []
+  },
+  {
+    "word": "Range",
+    "article": "die",
+    "translations": ["ungebändigtes, freches, unerzogenes Kind"],
+    "infoText": "Im Frühneuhochdeutschen bezeichnete Range eine Sau, ein Mutterschwein. Seit Ende des 15. Jahrhunderts Schimpfwort, später abgeschwächt.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "rangehen",
+    "translations": ["sich trauen", "sich stürmisch nähern"],
+    "examples": [
+      { "example": "Da jeh ick nich ran!", "explanation": "Da traue ich mich nicht ran." },
+      { "example": "Der jeht janz schön ran.", "explanation": "Er nähert sich stürmisch einer Frau." }
+    ],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "ranklotzen",
+    "translations": ["intensiv arbeiten", "forsch rangehen"],
+    "themen": []
+  },
+  {
+    "word": "rantzen",
+    "translations": ["schnell und wild tanzen"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Rasselbande",
+    "article": "die",
+    "translations": ["Kinder"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Ratten",
+    "translations": ["brutale Schlägertrupps unter den BFC-Anhängern"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Rauchschwalbe",
+    "article": "die",
+    "translations": ["schmutzige Person"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "ratzekahl",
+    "translations": ["restlos", "vollständig"],
+    "examples": [
+      { "example": "Andere Leute flanieren hin und her, des Morgens sind se konservativ, des Mittags sind se liberal und des Abends sind se ratzekahl!", "explanation": "David Kalisch in der Berliner Posse »Einhunderttausend Taler« (1849)." }
+    ],
+    "infoText": "Entweder von französisch radical oder von »kahl wie ne geborene Ratte«. Etwas »ratzekahl aufessen« = wie von Ratten mit Stumpf und Stiel auffressen.",
+    "themen": []
+  },
+  {
+    "word": "Raupen",
+    "translations": ["sonderbare Einfälle (in der Wendung »Raupen im Kopp«)"],
+    "examples": [
+      { "example": "Der hat Raupen im Kopp.", "explanation": "Er hat sonderbare Einfälle." }
+    ],
+    "infoText": "Aus der Studentensprache des 18. Jahrhunderts.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Raupensammlung",
+    "article": "die",
+    "translations": ["Sammlung (scherzhaft)"],
+    "examples": [{ "example": "Die Briefmarke fehlt ma noch in meiner Raupensammlung." }],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "rausmachen, sich",
+    "translations": ["größer, schöner, stattlicher werden"],
+    "examples": [{ "example": "Der Kleene hat sich janz schön rausjemacht." }],
+    "themen": []
+  },
+  {
+    "word": "rausreißen",
+    "translations": ["helfen, nützen (nur verneint)"],
+    "examples": [
+      { "example": "Dit reiß mich ooch nich mehr raus.", "explanation": "Das hilft, nützt mir auch nichts mehr." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Reff",
+    "article": "das",
+    "translations": ["altes Weib (»’n ollet Reff«)"],
+    "infoText": "Fußt auf niederdeutsch rif = Kadaver.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Regenschirm",
+    "article": "der",
+    "translations": ["äußerst gespannt (in der Redensart)"],
+    "examples": [
+      { "example": "Ick bin jespannt wie’n Rejenschirm." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Register",
+    "article": "das",
+    "translations": ["nicht mehr jung (in der Redensart)"],
+    "examples": [
+      { "example": "Sie sind ja ooch schon ’n ollet Rejister." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Reibach",
+    "article": "der",
+    "translations": ["Gewinn"],
+    "infoText": "Von jiddisch rewach = Zins.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "rin",
+    "translations": ["herein", "hinein"],
+    "examples": [{ "example": "Immer rin in’t Vergnügen." }],
+    "infoText": "Berlinische Aussprache von ›rein‹.",
+    "themen": []
+  },
+  {
+    "word": "reinbuttern",
+    "translations": ["Geld hineinstecken"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "reinknien",
+    "translations": ["sich in eine Sache vertiefen"],
+    "themen": []
+  },
+  {
+    "word": "reinriechen",
+    "translations": ["sich oberflächlich bzw. nur kurz informieren"],
+    "themen": []
+  },
+  {
+    "word": "reinschliddern",
+    "translations": ["in eine Sache hereinfallen"],
+    "infoText": "Fußt auf niederdeutsch schliddern = auf Schnee und Eis dahinrutschen.",
+    "themen": []
+  },
+  {
+    "word": "reinschmoken",
+    "translations": ["jemandem eine Ohrfeige verpassen"],
+    "themen": []
+  },
+  {
+    "word": "reinwürgen",
+    "translations": ["einen Verweis erteilen"],
+    "examples": [
+      { "example": "Wenn de so weitermachst, kriste eene rinjewürgt.", "explanation": "Dann erhältst du einen Verweis, einen Tadel." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Reitstall",
+    "article": "der",
+    "translations": ["sehr großes Zimmer"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "remmeln",
+    "translations": ["einrammen", "rammeln"],
+    "infoText": "Im 19. Jahrhundert allgemein für einrammen, heute mit deutlicher Anspielung auf den Geschlechtsakt.",
+    "themen": []
+  },
+  {
+    "word": "Remmidemmi",
+    "article": "das",
+    "translations": ["lautes Vergnügen", "Krach", "Durcheinander"],
+    "examples": [{ "example": "Mach nicht so’n Remmidemmi!" }],
+    "infoText": "Fußt wahrscheinlich auf der schallnachahmenden Bezeichnung ›Rammerdammer‹ für den Steinmetz.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "rendlich",
+    "translations": ["reinlich"],
+    "themen": []
+  },
+  {
+    "word": "Renne",
+    "article": "die",
+    "translations": ["Rinnstein", "Dachrinne"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Rennsemmeln",
+    "translations": ["Hausschuhe"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Rentnerkarren",
+    "article": "der",
+    "translations": ["Einkaufswagen (fahrbares Gestell mit Tasche)"],
+    "alternativeWords": ["Rentnerporsche", "AOK-Chopper"],
+    "themen": ["stadtleben", "alltag-wohnen"]
+  },
+  {
+    "word": "Resedatopf",
+    "article": "der",
+    "translations": ["Zylinderhut"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Retourkutsche",
+    "article": "die",
+    "translations": ["schlagfertige Erwiderung eines Vorwurfs"],
+    "examples": [{ "example": "Dit war ’ne Retourkutsche." }],
+    "infoText": "Leitet sich ab von der für die Hin- und Rückfahrt benutzten Kutsche.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "riechen",
+    "translations": ["merken (»den Braten riechen«)", "leiden können (verneint)"],
+    "examples": [
+      { "example": "Den kann ick nich riechen.", "explanation": "Den kann ich nicht leiden." },
+      { "example": "Riech ma an meine Knospe!", "explanation": "Drohung, bei der die Faust unter die Nase gehalten wird." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Riecher",
+    "article": "der",
+    "translations": ["Gespür"],
+    "examples": [
+      { "example": "Der hat den richt’jen Riecher jehabt.", "explanation": "Er hatte das richtige Gefühl für eine günstige Gelegenheit." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Riechkolben",
+    "article": "der",
+    "translations": ["große Nase"],
+    "alternativeWords": ["Riechzinken"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Riegelotto",
+    "article": "der",
+    "translations": ["Rigoletto"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Rieke",
+    "article": "die",
+    "translations": ["Freundin", "Kosename für Friederike und Ulrike"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Ringelpietz mit Anfassen",
+    "article": "der",
+    "translations": ["Tanzvergnügen"],
+    "infoText": "Aus ringeln und slawisch -pie(t)z = singen.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "riskieren",
+    "translations": ["trinken (19. Jh.)", "frech sein (»’ne Lippe riskieren«)"],
+    "themen": []
+  },
+  {
+    "word": "rocken",
+    "translations": ["tanzen"],
+    "infoText": "Jugendsprachlich, von englisch Rock’n’Roll.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Rockerwiege",
+    "article": "die",
+    "translations": ["Motorrad"],
+    "themen": []
+  },
+  {
+    "word": "Rohr",
+    "article": "das",
+    "translations": ["Flasche"],
+    "examples": [
+      { "example": "Mit vollem Rohr.", "explanation": "Etwas mit aller Kraft tun." }
+    ],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Röhre",
+    "article": "die",
+    "translations": ["Wärmstelle im Kachelofen", "Fernseher"],
+    "examples": [
+      { "example": "Die hat einen Braten inna Röhre.", "explanation": "Sie bekommt ein Kind." }
+    ],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Rohrspatz",
+    "article": "der",
+    "translations": ["Schimpfender (in der Redensart)"],
+    "examples": [{ "example": "Er schimpft wie’n Rohrspatz." }],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Rolle",
+    "article": "die",
+    "translations": ["Mangel (in Redewendungen)"],
+    "examples": [
+      { "example": "Jemanden durch de Rolle dreh’n.", "explanation": "In die Mangel nehmen." },
+      { "example": "Von der Rolle sein.", "explanation": "Fertig, kaputt sein." },
+      { "example": "Jemanden auf die Rolle schieben.", "explanation": "Ihn verulken, zum Narren halten." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "rote Socke",
+    "article": "die",
+    "translations": ["Funktionär (DDR, spöttisch)"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Rotunde",
+    "article": "die",
+    "translations": ["Bedürfnisanstalt"],
+    "alternativeWords": ["Café Karo"],
+    "infoText": "Wegen der Form auch Café Karo genannt.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Rotz",
+    "article": "der",
+    "translations": ["Nasenschleim (produktiv in Schimpfwörtern)"],
+    "infoText": "Von althochdeutsch (h)roz = Nasenschleim. Rotzgöre = freches Kind, Rotzbremse = Schnurrbart, Rotzhobel = Mundharmonika, Rotzkocher = Pfeife, Rotzneese = triefende Nase bzw. Kind mit Schnoddernase. Wer sich rotzig verhält, ist frech.",
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  },
+  {
+    "word": "rubbeln",
+    "translations": ["stark reiben"],
+    "infoText": "Von niederdeutsch Rubbel = Waschbrett.",
+    "themen": []
+  },
+  {
+    "word": "Rübe",
+    "article": "die",
+    "translations": ["Nase", "Kopf", "Bruder"],
+    "infoText": "Eine rote Rübe meint nicht nur eine rote Nase, sondern auch eine rote Socke (Funktionär).",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Rülps",
+    "article": "der",
+    "translations": ["König beim Kartenspiel"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "rujenieren",
+    "translations": ["ruinieren"],
+    "themen": []
+  },
+  {
+    "word": "rumboddern",
+    "translations": ["in aufgeweichtem Boden gehen"],
+    "infoText": "Siehe botten.",
+    "themen": []
+  },
+  {
+    "word": "rumfuchteln",
+    "translations": ["mit einem Stock herumschwingen"],
+    "themen": []
+  },
+  {
+    "word": "rumfuhrwerken",
+    "translations": ["hineinfummeln", "stören"],
+    "examples": [{ "example": "Mußte ma da immer rumfuhrwerken!" }],
+    "themen": []
+  },
+  {
+    "word": "rumfummeln",
+    "translations": ["herumfingern"],
+    "themen": []
+  },
+  {
+    "word": "rumhacken",
+    "translations": ["fortwährend tadeln (»auf jemandem rumhacken«)"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "rumhampeln",
+    "translations": ["sich ungebärdig bewegen", "tanzen"],
+    "infoText": "Beeinflusst von Hampelmann.",
+    "themen": []
+  },
+  {
+    "word": "rumschweigen",
+    "translations": ["herumsprechen (scherzhaft)"],
+    "examples": [{ "example": "Dit hat sich schon rumjeschwiegen." }],
+    "themen": []
+  },
+  {
+    "word": "Rummel",
+    "article": "der",
+    "translations": ["Festlichkeit (spöttisch)", "Jahrmarkt"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Runzelzulage",
+    "article": "die",
+    "translations": ["Gehaltserhöhung der Beamten"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "ruppig",
+    "translations": ["barsch", "schroff"],
+    "themen": ["charakter-eigenschaften"]
+  }
+]
