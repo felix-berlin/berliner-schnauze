@@ -1,0 +1,151 @@
+[
+  {
+    "word": "q.m.w.",
+    "translations": ["quatsch ma weiter"],
+    "infoText": "Aufforderung weiterzureden, insbesondere dann, wenn man auf die Rede keinen Wert legt.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "quabbelig",
+    "translations": ["schwabbelig"],
+    "infoText": "Niederdeutsch.",
+    "themen": []
+  },
+  {
+    "word": "quackeln",
+    "translations": ["tratschen", "schwatzen"],
+    "infoText": "Verkleinerungsform von ›quaken‹, siehe auch quatschen.",
+    "themen": []
+  },
+  {
+    "word": "Quadder",
+    "article": "der",
+    "translations": ["Unsinn", "leeres Geschwätz"],
+    "infoText": "Als Verb: schwatzen. Nebenform zu quackeln.",
+    "themen": []
+  },
+  {
+    "word": "quade",
+    "translations": ["klein"],
+    "infoText": "Von niederdeutsch quade = jüngstes Kind in der Familie.",
+    "themen": []
+  },
+  {
+    "word": "Quadratarsch",
+    "article": "der",
+    "translations": ["ungeschickter Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Quadratlatschen",
+    "translations": ["große, ungeschlachte Füße"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Quadratschnauze",
+    "article": "die",
+    "translations": ["Person mit großer Klappe"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "quängeln",
+    "translations": ["nörgeln"],
+    "infoText": "Ein Nörgler ist ein Quengelkopp.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Quake",
+    "article": "die",
+    "translations": ["Kind"],
+    "alternativeWords": ["Quak"],
+    "infoText": "Abgeleitet von quaken, quackeln = schwätzen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Qualmtüte",
+    "article": "die",
+    "translations": ["starker Raucher", "Schwätzer"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Quanten",
+    "translations": ["Füße", "Schuhe"],
+    "infoText": "Hängt vermutlich zusammen mit Quantum, von lateinisch quantus = groß.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Quarre",
+    "article": "die",
+    "translations": ["Kind"],
+    "infoText": "Substantivierung von quarren.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "quarren",
+    "translations": ["schreien (von Kindern)"],
+    "infoText": "Von mittelniederdeutsch quarren = grollende, brummende Töne ausstoßen, zunächst für die Lautäußerungen des Frosches belegt.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "quasseln",
+    "translations": ["ununterbrochen reden"],
+    "infoText": "Von niederdeutsch quasseln, dwasseln = plappern, schwatzen. Wer am Telefon quasselt, hängt an der Quasselstrippe oder ist eine selbige.",
+    "themen": []
+  },
+  {
+    "word": "quatschen",
+    "translations": ["Unsinn reden", "viel, ununterbrochen reden"],
+    "examples": [
+      { "example": "Dit is ja Quatsch mit Soße.", "explanation": "Völliger Blödsinn." }
+    ],
+    "infoText": "Von niederdeutsch quat = böse, schlimm; im 16. Jahrhundert wurden die Niederdeutsch-Sprechenden als »Quatländer« bezeichnet. Ein Quatschkopf ist ein Mensch, der ungereimtes Zeug spricht.",
+    "themen": []
+  },
+  {
+    "word": "quatschnaß",
+    "translations": ["völlig durchnässt"],
+    "themen": []
+  },
+  {
+    "word": "Quengelfritze",
+    "article": "der",
+    "translations": ["nörgelndes Kind"],
+    "alternativeWords": ["Quengelkopp"],
+    "infoText": "Von umgangssprachlich quengeln = weinerlich Missbehagen äußern.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Quese",
+    "article": "die",
+    "translations": ["Blase unter der Haut"],
+    "infoText": "Von niederdeutsch quessen = quetschen. Quesenkopp wie Quatschkopf.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Quetsche",
+    "article": "die",
+    "translations": ["kleiner Laden", "Kofferradio"],
+    "infoText": "Vgl. englisch squeeze-box.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "quimen",
+    "translations": ["kränkeln"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Quirl",
+    "article": "der",
+    "translations": ["quirliger, energiegeladener Mensch"],
+    "examples": [
+      { "example": "Nimm den Quirl aus’m Mund!", "explanation": "Sprich nicht so geschwollen, so pathetisch." }
+    ],
+    "infoText": "Im 19. Jahrhundert für einen kleinen Menschen, der sich beim Gehen hin und her bewegt.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "qurksen",
+    "translations": ["ein gluckerndes Geräusch von sich geben"],
+    "themen": []
+  }
+]

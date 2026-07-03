@@ -23,3 +23,9 @@
 | 3150 | Nonneferzchen | Variante → als alternativeWords bei „Nunneferzchen" erfasst |
 | 3204/3227/3228 | öberste, ooch, Ooge | reine Aussprachehinweise |
 | 3236 | Orient-Expreß | Variante → als alternativeWords bei „Istanbul-Express" erfasst |
+| 3306 | Pinsel | Variante → als alternativeWords bei „Pinkel" erfasst |
+| 3397 | Plastikschüssel | Variante → als alternativeWords bei „Plastepanzer" erfasst |
+| 3423 | plümerant | Variante von „blümerant" (vor „Dampf", bereits importiert) |
+| 3569 | Pforzmolle | Variante → als alternativeWords bei „Forzmolle" nachgetragen |
+| 3570 | Pfote | mit „Pote" zusammengeführt |
+| 3733 | Quetschkommode | Variante → als alternativeWords bei „Knautschkommode" erfasst |

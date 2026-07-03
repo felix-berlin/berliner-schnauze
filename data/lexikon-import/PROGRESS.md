@@ -15,7 +15,9 @@ Quelldatei: `berlinisch_lexikon.md` (5418 Zeilen, Upload), Start nach Eintrag
 | 2688–2814 (L) | ✅ kuratiert | words-09-l.json |
 | 2816–3084 (M) | ✅ kuratiert | words-10-m.json |
 | 3086–3249 (N–O) | ✅ kuratiert | words-11-n-o.json |
-| 3251–5418 (P–Z) | ⏳ offen | — |
+| 3251–3679 (P) | ✅ kuratiert | words-12-p1.json, words-13-p2.json |
+| 3682–3741 (Q) | ✅ kuratiert | words-14-q.json |
+| 3743–5418 (R–Z) | ⏳ offen | — |
 
 Hinweis: Die PDF→Markdown-Konvertierung hat die zwei Spalten des Originals
 teils verschachtelt — Einträge können mitten im Satz abbrechen und viele
