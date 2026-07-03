@@ -1,0 +1,814 @@
+[
+  {
+    "word": "fackeln",
+    "translations": ["zögern"],
+    "examples": [{ "example": "Fackeln Se nich so lange." }],
+    "themen": []
+  },
+  {
+    "word": "Fahrrad",
+    "article": "das",
+    "translations": ["Brille"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Fahrschein verlangen",
+    "translations": ["die Rechnung verlangen"],
+    "examples": [
+      { "example": "Noch jemand ohne Fahrschein?", "explanation": "Im Sinne von »Noch einen Wunsch?« — aus dem Straßenbahnerjargon übernommen." }
+    ],
+    "themen": ["alkohol-kneipe", "stadtleben"]
+  },
+  {
+    "word": "Fall",
+    "article": "der",
+    "translations": ["Geschmack (in der Wendung »nich mein Fall«)"],
+    "examples": [
+      { "example": "Dit is nich mein Fall.", "explanation": "Das passt mir nicht, missfällt mir." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Falle",
+    "article": "die",
+    "translations": ["Bett"],
+    "examples": [{ "example": "Ab in die Falle!" }],
+    "infoText": "Vermutlich verkürzt aus Wanzenfalle.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Familienknicker",
+    "article": "der",
+    "translations": ["großer Regenschirm"],
+    "infoText": "Spöttische Bezeichnung.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "falsch",
+    "translations": ["böse", "wütend auf"],
+    "examples": [
+      { "example": "Uff den Kerl bin ick falsch!" },
+      { "example": "Ein falscher Fuffziger.", "explanation": "Eine hinterlistige Person." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Fangeisen",
+    "article": "das",
+    "translations": ["Ehering"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Faßbrause",
+    "article": "die",
+    "translations": ["Apfelbrause vom Fass"],
+    "infoText": "Nur in Berlin erhältlich und äußerst köstlich und erfrischend.",
+    "themen": ["essen-trinken", "stadtleben"]
+  },
+  {
+    "word": "Fantaska aus der Bodenluke",
+    "article": "die",
+    "translations": ["Frau"],
+    "infoText": "Scherzhafte Bezeichnung für eine Frau.",
+    "themen": []
+  },
+  {
+    "word": "Fatzen",
+    "article": "der",
+    "translations": ["Stück Frühstücksbrot"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Fatzke",
+    "article": "der",
+    "translations": ["eitler, aufgeblasener Mensch"],
+    "examples": [{ "example": "Sie oller Fatzke!" }],
+    "alternativeWords": ["Appelfatzke", "Hannefatzke"],
+    "infoText": "Wahrscheinlich nicht abgeleitet von frühneuhochdeutsch fatzen = spotten, sondern vom Vokativ des polnischen Vornamens Wacek (zu tschechisch Václav).",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "faul",
+    "translations": ["schlecht", "unzuverlässig"],
+    "examples": [{ "example": "Mach bloß keene faulen Witze!" }],
+    "themen": []
+  },
+  {
+    "word": "Faulfieber",
+    "article": "das",
+    "translations": ["Trägheit"],
+    "infoText": "Ursprünglich umgangssprachlich die geheuchelte Krankheit fauler Schüler und Arbeitsscheuer.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Faust",
+    "article": "die",
+    "translations": ["unpassend (in der Wendung »wie die Faust uff’s Ooge«)"],
+    "examples": [
+      { "example": "Dit paßt wie die Faust uff’s Ooge.", "explanation": "Das passt überhaupt nicht zusammen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "faustdick",
+    "translations": ["mit allen Wassern gewaschen (in der Wendung)"],
+    "examples": [
+      { "example": "Der hat es faustdick hinter den Ohren.", "explanation": "Er ist mit allen Wassern gewaschen." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Faxen",
+    "translations": ["Gesten und Gebärden, um Lachen zu erregen", "dumme Späße"],
+    "examples": [
+      { "example": "Jetz hab ick aber die Faxen dicke!", "explanation": "Jetzt habe ich genug davon." }
+    ],
+    "infoText": "Entweder entstanden aus mundartlich fickfacken = hin- und herlaufen oder fatzen = spotten.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Federball",
+    "article": "der",
+    "translations": ["Bett (in der Wendung »uff’n Federball jehn«)"],
+    "examples": [
+      { "example": "Uff’n Federball jeh’n.", "explanation": "Zu Bett gehen." }
+    ],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Feez",
+    "article": "der",
+    "translations": ["Vergnügen", "Spaß", "Unsinn"],
+    "examples": [{ "example": "Mach doch nich so ’nen Feez." }],
+    "infoText": "Von französisch fête = Fest, Feier.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "fegen",
+    "translations": ["schnell laufen"],
+    "examples": [
+      { "example": "Da kommt er anjefecht." },
+      { "example": "Ein irrer Fejer.", "explanation": "Ein Feger ist eine außerordentlich gut aussehende Frau." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Feierabend",
+    "article": "der",
+    "translations": ["Schluss (in der Wendung »Nu is Feierabend«)"],
+    "examples": [
+      { "example": "Nu is Feierabend!", "explanation": "Jetzt reicht es." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "feierlich",
+    "translations": ["wohl (nur verneint: »nich feierlich«)"],
+    "examples": [
+      { "example": "Mir is heut ja nich feierlich zumute.", "explanation": "Ich fühle mich in dieser Situation nicht wohl." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "feiger Hund",
+    "article": "der",
+    "translations": ["Schwächling"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "feixen",
+    "translations": ["dumm, verstohlen oder albern lachen"],
+    "infoText": "Norddeutsch Feix = Dümmling.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Fell",
+    "article": "das",
+    "translations": ["Haut"],
+    "examples": [
+      { "example": "Dem zieh’ ick dit Fell über die Ohren.", "explanation": "Drohung." },
+      { "example": "Der hat’n dicket Fell.", "explanation": "Er ist unempfindlich, daher belastbar." }
+    ],
+    "infoText": "Aus dem Jargon der Abdecker des 17. Jahrhunderts.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Ferkeltaxe",
+    "article": "die",
+    "translations": ["Schienenbus mit Gangschaltung"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "fertig",
+    "translations": ["imstande", "müde", "erledigt"],
+    "examples": [
+      { "example": "Dit kriegt der fertig!", "explanation": "Das ist er imstande zu tun." },
+      { "example": "Ick bin fix und fertig.", "explanation": "Ich bin völlig erschöpft." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "feste",
+    "translations": ["kräftig", "ordentlich"],
+    "examples": [
+      { "example": "Immer feste druff!" },
+      { "example": "Immer feste auf die Weste!", "explanation": "Von Berliner Soldaten im Kampf gegen Napoleon (1813)." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Festessen",
+    "article": "das",
+    "translations": ["Vergnügen (ironisch)"],
+    "examples": [{ "example": "Es war mir ein Festessen." }],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Fete",
+    "article": "die",
+    "translations": ["Fest", "Party"],
+    "infoText": "Jugendsprachlich, von französisch fête = Fest, Feier. Davon auch ›feten‹ für ›tanzen‹.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Fett",
+    "article": "das",
+    "translations": ["Strafe, Denkzettel (in der Wendung »sein Fett wegbekommen«)"],
+    "examples": [
+      { "example": "Der hat sein Fett weg bekommen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Fettlebe",
+    "article": "die",
+    "translations": ["gutes Leben"],
+    "examples": [
+      { "example": "Heut machen wa eenen uff Fettlebe.", "explanation": "Heute lassen wir es uns gut ergehen." }
+    ],
+    "themen": ["essen-trinken", "unterhaltung-freizeit"]
+  },
+  {
+    "word": "Fettsack",
+    "article": "der",
+    "translations": ["extrem dicker Mensch"],
+    "infoText": "Schimpfwort.",
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  },
+  {
+    "word": "fetzen",
+    "translations": ["stark sein", "reinhauen"],
+    "examples": [
+      { "example": "Dit fetzt!", "explanation": "Jugendsprachlich: das haut rein, das ist stark." }
+    ],
+    "infoText": "Von französisch fête. Im 19. Jahrhundert bereits als alltagssprachlich verzeichnet. Davon abgeleitet: fetzig.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Fetzen",
+    "article": "der",
+    "translations": ["Stück"],
+    "examples": [{ "example": "Dir hau ick in Fetzen!" }],
+    "infoText": "Von spätmittelhochdeutsch vetze = Lumpen, abgerissenes Kleidungsstück.",
+    "themen": []
+  },
+  {
+    "word": "Feuermelder",
+    "article": "der",
+    "translations": ["rote Nase"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "ff.",
+    "translations": ["sehr gut", "ausgezeichnet"],
+    "examples": [
+      { "example": "Berlinisch kann ick aus’m ff." }
+    ],
+    "infoText": "Auch Abkürzung von »Feinstes vom Feinen«. Früher im Lebensmittelhandel üblich, z.B. »ff. Speiseöl«.",
+    "themen": []
+  },
+  {
+    "word": "fiepen",
+    "translations": ["winseln", "leise pfeifen"],
+    "themen": []
+  },
+  {
+    "word": "fies",
+    "translations": ["ekelhaft", "widerlich", "abstoßend"],
+    "infoText": "Von mittelniederdeutsch vis. Ein Fiesling ist ein Mensch mit miesem Charakter.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Fiesbiedelhoppsack",
+    "article": "der",
+    "translations": ["Peitsche"],
+    "themen": []
+  },
+  {
+    "word": "Fiesematenten",
+    "translations": ["unnötige Umstände", "Streiche", "Schikanen"],
+    "examples": [{ "example": "Mach bloß keene Fiesematenten." }],
+    "themen": []
+  },
+  {
+    "word": "fiestlau",
+    "translations": ["lauwarm"],
+    "infoText": "Wie umgangssprachlich pupwarm. Basiert auf norddeutsch Fiest = leise entweichender Darmwind.",
+    "themen": []
+  },
+  {
+    "word": "Figur",
+    "article": "die",
+    "translations": ["Person", "Type"],
+    "examples": [{ "example": "Kiek da mal die Fijuren an, wie die ausseh’n!" }],
+    "themen": []
+  },
+  {
+    "word": "Filzlatschenkino",
+    "article": "das",
+    "translations": ["Fernseher"],
+    "themen": ["alltag-wohnen", "unterhaltung-freizeit"]
+  },
+  {
+    "word": "Fimmel",
+    "article": "der",
+    "translations": ["Spleen", "Größenwahn"],
+    "examples": [
+      { "example": "Der hat doch ’n Fimmel!", "explanation": "Der leidet an Größenwahn, der spinnt." }
+    ],
+    "infoText": "Wahrscheinlich abgeleitet von fummeln, fimmeln = suchend herumtasten.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "fingern",
+    "translations": ["erreichen", "hinbekommen"],
+    "examples": [
+      { "example": "Wir wer’n dit Ding schon fingern.", "explanation": "Wir werden die Sache schon schaukeln." },
+      { "example": "Finger da nich mit deine unejalen Hände rum.", "explanation": "Lass die Finger weg!" }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Finkennapp",
+    "article": "der",
+    "translations": ["kleines Gefäß", "kleines Glas", "kleine Tasse"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "fipsig",
+    "translations": ["klein und niedlich"],
+    "infoText": "Norddeutsch.",
+    "themen": []
+  },
+  {
+    "word": "Firlefanz",
+    "article": "der",
+    "translations": ["etwas Überflüssiges", "Unfug", "Blödsinn"],
+    "examples": [{ "example": "Wat is’n dit für ’n Firlefanz?" }],
+    "infoText": "Aus mittelhochdeutsch firlifanz = eine Art Tanz.",
+    "themen": []
+  },
+  {
+    "word": "Fischköppe",
+    "translations": ["Bewohner der norddeutschen Küstengegenden", "Mecklenburger"],
+    "infoText": "Westberlinisch spöttisch für die Bewohner der norddeutschen Küstengegenden, ostberlinisch für die Mecklenburger.",
+    "themen": ["schimpfwoerter-beleidigungen", "orte-spitzname"]
+  },
+  {
+    "word": "fistern",
+    "translations": ["hinauswerfen"],
+    "examples": [
+      { "example": "Ick werd dir jleich rausfistern.", "explanation": "Mach, dass du wegkommst. Bei Trachsel 1873 belegt." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "flach",
+    "translations": ["ausfallend (in der Wendung »flach fallen«)"],
+    "examples": [
+      { "example": "Mittachessen fällt heut flach.", "explanation": "Das Mittagessen fällt heute aus." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Flachmann",
+    "article": "der",
+    "translations": ["kleine Taschenflasche mit Alkohol"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Flamme",
+    "article": "die",
+    "translations": ["Freundin", "Streichholz"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Flappe",
+    "article": "die",
+    "translations": ["mürrisch verzogener Mund"],
+    "examples": [{ "example": "Zieh doch nich so’ne Flappe." }],
+    "infoText": "Im Niederdeutschen Flabbe = herunterhängende Unterlippe. Vgl. englisch to flap = lose herunterhängen.",
+    "themen": ["koerper", "gefuehle-emotionen"]
+  },
+  {
+    "word": "Flaps",
+    "article": "der",
+    "translations": ["unreifer Mensch", "leichter Schlag"],
+    "infoText": "Im 19. Jahrhundert für Zylinderhut, heute für einen Menschen, ›der den Ernst des Lebens noch nicht begriffen hat‹. Einen »Flaps kriegen« = einen leichten Schlag erhalten.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Flattermann",
+    "article": "der",
+    "translations": ["Brathähnchen", "Angst (in der Wendung »einen Flattermann kriegen«)"],
+    "examples": [
+      { "example": "Einen Flattermann kriejen.", "explanation": "Angst bekommen. Abwandlung von »einen Flattermann haben« = Händezittern haben." }
+    ],
+    "themen": ["essen-trinken", "gefuehle-emotionen"]
+  },
+  {
+    "word": "Flax",
+    "article": "der",
+    "translations": ["Spaß", "Unsinn"],
+    "examples": [
+      { "example": "Du bist wohl ooch her, wo der Flax blüht?", "explanation": "Du bist wohl auch ein spaßiger Mensch?" }
+    ],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Fleck",
+    "article": "der",
+    "translations": ["Ziererei (in der Redensart)"],
+    "examples": [
+      { "example": "Machen Se sich mal nich ’n Fleck uff’t Hemde.", "explanation": "Haben/zieren Sie sich nicht so." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Fleckfieber",
+    "article": "das",
+    "translations": ["lästige Person"],
+    "infoText": "Für Personen, die einem lästig werden, weil sie einen nicht in Ruhe lassen. Insbesondere für Kinder, die einem immer wieder die Ruhe stehlen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Fleischbeschauung",
+    "article": "die",
+    "translations": ["FKK-Strand-Besuch"],
+    "examples": [
+      { "example": "FKK-Strand-Besucher jeh’n zur Fleischbeschauung." }
+    ],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Flez",
+    "article": "der",
+    "translations": ["Flegel"],
+    "infoText": "Auch als Verb: Wer sich irgendwo hinfle(t)zt, der lümmelt sich hin, breitet sich aus.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Fliege",
+    "article": "die",
+    "translations": ["Flucht (in der Wendung »’ne Flieje machen«)"],
+    "examples": [
+      { "example": "’ne Flieje machen.", "explanation": "Flüchten." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "fliegen",
+    "translations": ["eilen"],
+    "examples": [{ "example": "Ick flieje ja schon!" }],
+    "themen": []
+  },
+  {
+    "word": "fliegende Untertasse",
+    "article": "die",
+    "translations": ["Nonne"],
+    "themen": []
+  },
+  {
+    "word": "flippen",
+    "translations": ["ausgelassen tanzen", "ausgelassen sein"],
+    "alternativeWords": ["rumflippen"],
+    "infoText": "Jugendsprachlich, von englisch to flip = schnipsen, schnellen.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Flitz haben",
+    "translations": ["verrückt sein"],
+    "infoText": "Von mittelniederdeutsch flitse = Pfeil.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Flitzpiepe",
+    "article": "die",
+    "translations": ["nicht ernstzunehmender Mensch", "Penis"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "flötengehen",
+    "translations": ["verlorengehen"],
+    "examples": [
+      { "example": "Jestern war ick uff ’ner Fete, da is ma dit Portemonnaie flöten jejangen." }
+    ],
+    "infoText": "Wahrscheinlich von mittelniederdeutsch vlöten = fließen, schwimmen, treiben.",
+    "themen": []
+  },
+  {
+    "word": "Flötentöne",
+    "translations": ["Anstand, Benehmen (in der Drohung)"],
+    "examples": [
+      { "example": "Dir werd’ ick die Flötentöne beibringen!", "explanation": "Drohung." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Flocke",
+    "article": "die",
+    "translations": ["Verschwinden (in der Wendung »’ne Flocke machen«)"],
+    "examples": [
+      { "example": "’ne Flocke machen.", "explanation": "Verschwinden. Fußt auf dem Bild einer im Schnee verschwindenden Schneeflocke." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Flohkiste",
+    "article": "die",
+    "translations": ["Bett"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Flohleiter",
+    "article": "die",
+    "translations": ["Laufmasche"],
+    "themen": ["alltag-wohnen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Flosse",
+    "article": "die",
+    "translations": ["Hand"],
+    "examples": [
+      { "example": "Wenn man ›juten Tach‹ sacht, denn jibt man die Flosse." }
+    ],
+    "infoText": "Übertragen von den Fischflossen.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Flunder",
+    "article": "die",
+    "translations": ["flachbrüstige Frau (in der Wendung »platt wie ’ne Flunder«)", "platt sein vor Staunen"],
+    "examples": [
+      { "example": "Bei mir Flunder.", "explanation": "Ich bin platt vor Staunen." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Flunken",
+    "translations": ["Hände"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Flunsch",
+    "article": "der",
+    "translations": ["vorgeschobene Unterlippe (als Zeichen von Unzufriedenheit)"],
+    "examples": [
+      { "example": "Weeß ooch nich, warum die immer so’n Flunsch zieht." }
+    ],
+    "themen": ["koerper", "gefuehle-emotionen"]
+  },
+  {
+    "word": "flüstern",
+    "translations": ["sagen (euphemistisch in Drohungen)"],
+    "examples": [
+      { "example": "Dit eene kann ick dir flüstern...", "explanation": "Drohung." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Flüstertüte",
+    "article": "die",
+    "translations": ["Megaphon"],
+    "themen": []
+  },
+  {
+    "word": "flutschen",
+    "translations": ["rasch von der Hand gehen", "entwischen"],
+    "infoText": "Bei Trachsel 1873 unter fluschen als pommerscher Dialekt vermerkt. Von mittelniederdeutsch flutschen = sich hastig bewegen.",
+    "themen": []
+  },
+  {
+    "word": "for naß",
+    "translations": ["umsonst", "gratis"],
+    "infoText": "Bildung zu rotwelsch naß = ohne Geld und englisch for nothing. Siehe auch Nassauer.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "forsch",
+    "translations": ["dynamisch", "stark", "draufgängerisch"],
+    "infoText": "Von mittelniederdeutsch forse = Kraft.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "forschieren",
+    "translations": ["zwingen"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich, von forsch.",
+    "themen": []
+  },
+  {
+    "word": "Forzmolle",
+    "article": "die",
+    "translations": ["Bett"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Fratze",
+    "article": "die",
+    "translations": ["Gesicht"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "frech",
+    "translations": ["frech", "frei"],
+    "examples": [
+      { "example": "Frech wie Oskar." },
+      { "example": "Ick bin so frech!", "explanation": "Anstelle von »Ich bin so frei!«." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Freimaurerzigarre",
+    "article": "die",
+    "translations": ["Zigarre"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": []
+  },
+  {
+    "word": "Fressalien",
+    "translations": ["Essen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Fresse",
+    "article": "die",
+    "translations": ["Mund"],
+    "examples": [
+      { "example": "Halt die Fresse!" },
+      { "example": "Meine Fresse!", "explanation": "Ausruf maßlosen Erstaunens." },
+      { "example": "’ne Fresse ziehen.", "explanation": "Schmollen." }
+    ],
+    "infoText": "Insbesondere in Drohungen gebraucht.",
+    "themen": ["koerper", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Fressen",
+    "article": "das",
+    "translations": ["gelegene Sache (in der Wendung »jefundenet Fressen«)"],
+    "examples": [
+      { "example": "Dit is ’n jefundenet Fressen für mich.", "explanation": "Das kommt mir gerade recht." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Fress-Ex",
+    "article": "der",
+    "translations": ["Exquisitladen (DDR)"],
+    "infoText": "Ostberlinisch für die Exquisitläden, in denen ein reichhaltiges Warenangebot zur Verfügung stand, das allerdings nur gegen extrem hohe Preise vom DDR-Bürger genutzt werden konnte.",
+    "themen": ["essen-trinken", "stadtleben"]
+  },
+  {
+    "word": "Friedhofsgemüse",
+    "article": "das",
+    "translations": ["welke Blumen", "alte Menschen (jugendsprachlich)"],
+    "infoText": "1. ironisch für welke Blumen, 2. für eine Gruppe von Menschen, deren Schicksal unausweichlich erscheint, 3. jugendsprachlich für alte Menschen.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Friedrich Wilhelm",
+    "article": "der",
+    "translations": ["Unterschrift"],
+    "examples": [
+      { "example": "Da muß ick noch meinen Friedrich Wilhelm runtersetzen." }
+    ],
+    "infoText": "Beruht auf den in Preußen häufig vorkommenden Königsnamen.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Fritze",
+    "article": "der",
+    "translations": ["Händler", "Verkäufer", "Handwerker (in Zusammensetzungen)"],
+    "examples": [
+      { "example": "Hallo Fritze!" }
+    ],
+    "infoText": "Produktives Element in zahlreichen Zusammensetzungen: Zijarrenfritze ist der Verkäufer im Tabakladen, ebenso Jemüsefritze, Eierfritze etc. Fritz war ein beliebter Vorname im 19. Jahrhundert und wird in Berlin in der Ausrufeform mit einem -e versehen.",
+    "themen": ["stadtleben", "beziehungen-soziales"]
+  },
+  {
+    "word": "Frontlader",
+    "article": "der",
+    "translations": ["Gabelstapler"],
+    "themen": []
+  },
+  {
+    "word": "Früchtchen",
+    "article": "das",
+    "translations": ["freches Kind", "krimineller Erwachsener"],
+    "themen": ["beziehungen-soziales", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "fuchswild",
+    "translations": ["sehr wütend"],
+    "infoText": "Gegenteil von lammfromm, Vorform von fuchsteufelswild.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "fuhrwerken",
+    "translations": ["sich einmischen", "hantieren"],
+    "examples": [
+      { "example": "Fuhrwerk ma da nich dazwischen." }
+    ],
+    "infoText": "Bei Glaßbrenner im Sinne von hantieren belegt.",
+    "themen": []
+  },
+  {
+    "word": "funken",
+    "translations": ["sich finden (»es hat gefunkt«)", "Androhung von Schlägen"],
+    "examples": [
+      { "example": "Jetz’ funkt’s aber!", "explanation": "Androhung von Schlägen." }
+    ],
+    "infoText": "Wenn es zwischen zweien »jefunkt hat«, dann haben sie sich gefunden.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Furzkruke",
+    "article": "die",
+    "translations": ["schwache, nicht ernst gemeinte Beleidigung"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Fußbodendompteuse",
+    "article": "die",
+    "translations": ["Raumpflegerin"],
+    "examples": [
+      { "example": "Uff Fußbodenmaniküre jehen.", "explanation": "Sauber machen gehen." }
+    ],
+    "alternativeWords": ["Fußbodenmasseuse", "Fußbodenkosmetikerin"],
+    "infoText": "Spöttisch für Raumpflegerin.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Fusseln",
+    "translations": ["Geld", "erfolglos reden (in der Wendung »sich das Maul fusselig reden«)"],
+    "examples": [
+      { "example": "Sich das Maul fusselig reden.", "explanation": "Ohne Erfolg auf jemanden einreden." }
+    ],
+    "infoText": "Im 19. Jahrhundert für Geld.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Fußlappen mit Flöhe",
+    "translations": ["unschmackhaftes Essen"],
+    "infoText": "Fußt auf umgangssprachlich ›Fußlappen‹ für ein Essen mit großen Kohlstücken.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "futsch",
+    "translations": ["verloren", "kaputt"],
+    "examples": [{ "example": "Dit Jeld is futsch." }],
+    "alternativeWords": ["futschikato"],
+    "infoText": "Wahrscheinlich lautnachahmende Bildung, vgl. futschen = schlüpfen, vorbeihuschen.",
+    "themen": []
+  },
+  {
+    "word": "Futschen",
+    "translations": ["Hausschuhe"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Futterage",
+    "article": "die",
+    "translations": ["Esswaren"],
+    "infoText": "Vermutlich fußend auf französisch fourrage.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Futterluke",
+    "article": "die",
+    "translations": ["Mund"],
+    "infoText": "Abgeleitet von der Öffnung, durch die Futter gereicht wird.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "fuzelig",
+    "translations": ["betrunken"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "fuzzelig",
+    "translations": ["äußerst klein"],
+    "themen": []
+  }
+]

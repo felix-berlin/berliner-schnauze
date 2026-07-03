@@ -1,0 +1,400 @@
+[
+  {
+    "word": "Eau de Mief",
+    "article": "das",
+    "translations": ["Parfum"],
+    "themen": []
+  },
+  {
+    "word": "Ecke",
+    "article": "die",
+    "translations": ["unbestimmte Entfernungsangabe"],
+    "examples": [
+      { "example": "Von hier bis zum Koofmann is ’ne janz schöne Ecke.", "explanation": "Es ist ein ganz schönes Stück Weg." }
+    ],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Eckensteher",
+    "article": "der",
+    "translations": ["Dienstmann"],
+    "infoText": "Früher für Dienstmann, auch »Nante« genannt — nach der Titelfigur einer 1832 uraufgeführten Posse.",
+    "themen": ["stadtleben", "orte-spitzname"]
+  },
+  {
+    "word": "Ede",
+    "article": "der",
+    "translations": ["Kumpel", "Bruder", "leicht krimineller Typ"],
+    "infoText": "Abkürzung von Eduard.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Eecks",
+    "translations": ["Ausruf des Abscheus"],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Ehestandslokomotive",
+    "article": "die",
+    "translations": ["Kinderwagen"],
+    "themen": ["beziehungen-soziales", "alltag-wohnen"]
+  },
+  {
+    "word": "Ehrensäbel",
+    "article": "der",
+    "translations": ["Ehrensache"],
+    "themen": []
+  },
+  {
+    "word": "ehrlich",
+    "translations": ["wirklich", "ungelogen"],
+    "examples": [{ "example": "Ick hab ehrlich wat zu tun." }],
+    "themen": []
+  },
+  {
+    "word": "ehrpusselig",
+    "translations": ["betont ehrbar", "sittsam"],
+    "infoText": "Norddeutsch, spöttische Bezeichnung für ehrbares, sittsames, lobenswertes Verhalten. Ironisierung von ehrpusslig = sittsam, prüde, abgeleitet von pusseln = eine Arbeit geduldig verrichten.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Ei",
+    "article": "das",
+    "translations": ["Hoden (Plural)", "Geld (Plural)"],
+    "examples": [
+      { "example": "Der sieht aus wie aus’m Ei jepellt.", "explanation": "Besonders schick, elegant." },
+      { "example": "Dir polier ick gleich de Eier!", "explanation": "Ernstzunehmende Androhung von Gewalt." },
+      { "example": "Ick hab nur noch zwanzich Eier.", "explanation": "Eier hier in der Bedeutung von Geld/Mark." }
+    ],
+    "infoText": "Eine Eierkiste ist ein Auto, ein Eierkopp ein kantiger Kopf oder jemand, der schwer von Begriff ist. Eierpampe ist mit Wasser vermischter Sand beim Kinderspiel.",
+    "themen": ["koerper", "geld"]
+  },
+  {
+    "word": "Eisenbahn",
+    "article": "die",
+    "translations": ["höchste Zeit (in der Wendung »höchste Eisenbahn«)"],
+    "examples": [
+      { "example": "Et is höchste Eisenbahn.", "explanation": "Es ist höchste Zeit. Nach Glaßbrenner (1847)." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Eisente",
+    "article": "die",
+    "translations": ["prüde Frau"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Ekel",
+    "article": "das",
+    "translations": ["widerwärtiger Mensch"],
+    "infoText": "Von ostfälisch ekelen = verdrießen. Noch verstärkend: Ekelpaket. Man denke an den leicht berlinernden Alfred Tetzlaff aus der Fernsehserie »Ein Herz und eine Seele«.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Elbkähne",
+    "translations": ["große Schuhe"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Ella",
+    "article": "die",
+    "translations": ["Braut", "Freundin", "Schwester"],
+    "alternativeWords": ["Elle"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Elsterauge",
+    "article": "das",
+    "translations": ["Hühnerauge"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Eltern",
+    "translations": ["hervorragend (in der Wendung »nich von schlechten Eltern«)"],
+    "examples": [
+      { "example": "Dit is nich von schlechten Eltern.", "explanation": "Es ist hervorragend, besonders gut." },
+      { "example": "Eltern mit Pillenknick.", "explanation": "Kinderlose Eltern." }
+    ],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Em",
+    "article": "die",
+    "translations": ["Mark (Währung)"],
+    "infoText": "Im Plural auch Emmchen.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Embüdel",
+    "article": "der",
+    "translations": ["Freund"],
+    "alternativeWords": ["Embiedel"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Emmer",
+    "article": "der",
+    "translations": ["Eimer"],
+    "infoText": "Bei Glaßbrenner belegt.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Emton",
+    "article": "der",
+    "translations": ["liebevoll-kritische Anrede"],
+    "examples": [
+      { "example": "Paß mal uff, mein Emton!", "explanation": "Anrede für Personen, die man kritisieren will, aber gern hat und nicht verletzen will." }
+    ],
+    "infoText": "In der Regel mit dem Possessivpronomen »mein« verbunden.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Ende",
+    "translations": ["Ausdruck des Erstaunens (in der Redensart)"],
+    "examples": [
+      { "example": "Da is ja dit Ende von weg!", "explanation": "Redensart als Ausdruck des Erstaunens." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "ent oder weder",
+    "translations": ["entweder – oder"],
+    "alternativeWords": ["Ente oder Trente"],
+    "themen": []
+  },
+  {
+    "word": "entfernt",
+    "translations": ["nur von weitem gut aussehend"],
+    "examples": [
+      { "example": "Dit macht sich von weiten sehr entfernt.", "explanation": "Von weitem betrachtet sieht das sehr gut aus (aber eben nicht von nah)." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "entrenanu",
+    "translations": ["unter uns"],
+    "infoText": "Von französisch entre nous = unter uns.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "entschuldigen",
+    "translations": ["sich entschuldigen (ironisch)"],
+    "examples": [
+      { "example": "Können Se nich uffpassen? — Entschuld’jen Se, daß ick jebor’n bin.", "explanation": "Ironische Entschuldigung, erstmalig 1845 in Berlin belegt." }
+    ],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "eildieweil",
+    "translations": ["weil"],
+    "infoText": "Oft mit Hauptsatzstellung im Nebensatz. Wahrscheinlich entstanden aus »alldieweil« und »Eile mit Weile«.",
+    "themen": []
+  },
+  {
+    "word": "Einbildung",
+    "article": "die",
+    "translations": ["Einbildung"],
+    "examples": [
+      { "example": "Einbildung is ooch ’ne Bildung.", "explanation": "Spöttische Redensart über eingebildete Menschen." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "eine drauf machen",
+    "translations": ["tanzen", "feiern"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "einfuchsen",
+    "translations": ["sich gründlich einarbeiten"],
+    "examples": [
+      { "example": "Der is daruff besonders jut einjefuchst.", "explanation": "Er kann die Sache besonders gut." }
+    ],
+    "infoText": "Aus der Studentensprache des 19. Jahrhunderts.",
+    "themen": []
+  },
+  {
+    "word": "Eingemachtes",
+    "article": "das",
+    "translations": ["Reserven (in der Wendung »an’s Eingemachte gehen«)"],
+    "examples": [
+      { "example": "An’s Einjemachte jehen.", "explanation": "An die Reserven gehen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "eingespundert",
+    "translations": ["eingesperrt"],
+    "infoText": "Fußt wahrscheinlich auf mittelniederdeutsch Spinde = Schrank, Vorratsbehälter.",
+    "themen": []
+  },
+  {
+    "word": "einhandeln",
+    "translations": ["etwas Unangenehmes bekommen"],
+    "examples": [{ "example": "Du handelst dir gleich ’ne Ohrfeige ein!" }],
+    "themen": []
+  },
+  {
+    "word": "einkacheln",
+    "translations": ["viel oder hastig essen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Einkriegezeck",
+    "article": "das",
+    "translations": ["Fangspiel"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "einleiern",
+    "translations": ["etwas vorbereiten", "einfädeln"],
+    "examples": [{ "example": "Dit hat der mir einjeleiert." }],
+    "themen": []
+  },
+  {
+    "word": "Einnehme",
+    "article": "die",
+    "translations": ["Kellnerin", "Kassiererin"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "einnehmen",
+    "translations": ["gern viel Geld einnehmen"],
+    "examples": [
+      { "example": "Er hat ’n einnehmendet Wesen.", "explanation": "Ironisch: Er nimmt gern viel Geld ein, jemand »vom Stabe Nimm«." }
+    ],
+    "themen": ["geld", "charakter-eigenschaften"]
+  },
+  {
+    "word": "einpfeifen",
+    "translations": ["essen", "trinken"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "einpummeln, sich",
+    "translations": ["sich warm anziehen", "sich stark einhüllen"],
+    "alternativeWords": ["anpummeln, sich"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "einrühren",
+    "translations": ["etwas anrichten", "einbrocken"],
+    "examples": [{ "example": "Da haste mir wat einjerührt!" }],
+    "themen": []
+  },
+  {
+    "word": "einstippen",
+    "translations": ["eintauchen (Brot in Milch, Schrippe in Kaffee)"],
+    "infoText": "Von mittelniederdeutsch stippen = eintauchen.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Eisbein",
+    "article": "das",
+    "translations": ["Eisbein (Berliner Nationalgericht)", "kalte Füße"],
+    "examples": [
+      { "example": "Dem knick ick die Eisbeene!", "explanation": "Drohung — hier in der Bedeutung »kalte Füße«." }
+    ],
+    "infoText": "Eisbein mit Erbspüree ist das Berliner Nationalgericht, in Bayern »Haxen« genannt. Eisbein mit Lenkstange = Rollmops.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Erbbegräbnis",
+    "article": "das",
+    "translations": ["mehrfach bankrottgegangenes Geschäft oder Restaurant"],
+    "themen": ["stadtleben", "geld"]
+  },
+  {
+    "word": "Erholungsheim",
+    "article": "das",
+    "translations": ["Gefängnis"],
+    "examples": [
+      { "example": "Erholungsheim - will jemand aussteigen?", "explanation": "Früherer Ausruf der Schaffner am Gefängnis Tegel." }
+    ],
+    "themen": ["orte-spitzname", "stadtleben"]
+  },
+  {
+    "word": "Ersatzspiel",
+    "article": "das",
+    "translations": ["Hasardspiel"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "erschossen sein",
+    "translations": ["erschöpft sein"],
+    "examples": [{ "example": "Ick fühl ma heute wie erschossen." }],
+    "themen": ["koerper", "gefuehle-emotionen"]
+  },
+  {
+    "word": "erstensmal",
+    "translations": ["zum ersten (beim Aufzählen von Gründen)"],
+    "infoText": "Beim Anführen von Gründen: erstensmal, zweetensmal usw.",
+    "themen": []
+  },
+  {
+    "word": "erzählen",
+    "translations": ["beauftragen", "einreden", "weismachen"],
+    "examples": [
+      { "example": "Mir könn’ Se nüscht erzähl’n!", "explanation": "Mir können Sie nichts weismachen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Eskimoflip",
+    "article": "der",
+    "translations": ["Wasser"],
+    "infoText": "Fußt auf umgangssprachlich Eskimo = hochprozentiges alkoholisches Getränk.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Essig",
+    "article": "der",
+    "translations": ["vorbei", "aus (in der Wendung »damit is Essig«)"],
+    "examples": [
+      { "example": "Damit is Essig!", "explanation": "Damit ist es vorbei, mit dieser Hoffnung ist es aus." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "etepetete",
+    "translations": ["pedantisch genau", "zimperlich"],
+    "infoText": "Fußt wahrscheinlich nicht auf französisch être peut-être ›im Zweifel sein‹, sondern auf niederdeutsch öt(e), entrundet ete, ›geziert, zärtlich, überfein‹, das ironisierend verdoppelt wurde.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Eternitplätzchen",
+    "article": "das",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Eule",
+    "article": "die",
+    "translations": ["hässliche Frau", "Bruder", "Kopf"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Eumel",
+    "article": "der",
+    "translations": ["Kopf", "Dummkopf"],
+    "examples": [{ "example": "Du alter Eumel, du!" }],
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  },
+  {
+    "word": "Extramuros",
+    "article": "die",
+    "translations": ["Zigarre"],
+    "infoText": "Im 19. Jahrhundert für Zigarre. Von lateinisch extra muros = außerhalb der Zimmerwände.",
+    "themen": []
+  },
+  {
+    "word": "Extrawurst",
+    "article": "die",
+    "translations": ["etwas Besonderes", "Sonderbehandlung"],
+    "examples": [
+      { "example": "Ick hab keene Lust, dir ’ne Extrawurscht zu braten." }
+    ],
+    "themen": ["essen-trinken", "charakter-eigenschaften"]
+  }
+]

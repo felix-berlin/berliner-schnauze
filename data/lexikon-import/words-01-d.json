@@ -1,0 +1,464 @@
+[
+  {
+    "word": "Dampfschornstein",
+    "article": "der",
+    "translations": ["Zylinderhut"],
+    "infoText": "Im 19. Jahrhundert gebräuchliche Bezeichnung für den Zylinderhut.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "dancen",
+    "translations": ["tanzen"],
+    "infoText": "Heute jugendsprachlicher Anglizismus, aber bereits im 19. Jahrhundert belegt und über die niederdeutsche Aussprache des anlautenden ›t‹ zu erklären.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "danke",
+    "translations": ["gut", "ganz gut"],
+    "examples": [{ "example": "Und sonst jeht’s danke?", "explanation": "Und sonst geht es gut?" }],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "davor",
+    "translations": ["dafür"],
+    "themen": []
+  },
+  {
+    "word": "d.b.d.d.h.k.P.",
+    "translations": ["Doof bleibt doof, da helfen keene Pillen"],
+    "infoText": "Beliebte Berliner Abkürzung für den Spruch »Doof bleibt doof, da helfen keene Pillen.«",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Deckel",
+    "article": "der",
+    "translations": ["Hut"],
+    "examples": [{ "example": "Krist gleich een’s uff’n Deckel.", "explanation": "Androhung von Schlägen" }],
+    "infoText": "Im 19. Jahrhundert für Zylinderhut, heute allgemein für Hut.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Deez",
+    "article": "der",
+    "translations": ["Kopf"],
+    "examples": [
+      { "example": "Dir hau ick een’s uff’n Deez, daß de aus de Rippen kiekst wie’n Affe durch’t Jitter.", "explanation": "Drohung" }
+    ],
+    "infoText": "Von französisch tête = Kopf. Taucht häufig in Form einer Drohung auf.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Deibel",
+    "article": "der",
+    "translations": ["Teufel"],
+    "examples": [
+      { "example": "Den Deibel nochmal!" },
+      { "example": "Da kommste in Deibels Küche.", "explanation": "Da gerätst du in Schwierigkeiten." }
+    ],
+    "infoText": "Niederdeutsche Form von Teufel, in vielen Redewendungen gebräuchlich.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Demse",
+    "article": "die",
+    "translations": ["stickige, drückende Luft"],
+    "infoText": "Aus dem Obersächsischen, nach 1945 nach Berlin gelangt.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Denkste",
+    "translations": ["da hast du falsch gedacht"],
+    "examples": [
+      { "example": "Dit is ’n typischer Fall von Denkste.", "explanation": "Ein typischer Fall dafür, dass sich jemand geirrt hat." }
+    ],
+    "infoText": "Zurückweisende Antwort, Verschleifung von »Denkst du!«.",
+    "themen": []
+  },
+  {
+    "word": "Denkmurmel",
+    "article": "die",
+    "translations": ["Kopf"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Destille",
+    "article": "die",
+    "translations": ["Kneipe"],
+    "examples": [
+      { "example": "Ejal, wo der Berliner mit eenem Oooge hinkiekt - mit’s andre kiekta inne Destille.", "explanation": "Geflügeltes Wort aus der Zeit, als Zille sein Stammlokal »Zur quietschvergnügten Drehorgel« besuchte." }
+    ],
+    "infoText": "Früher für Kneipe, abgeleitet von der Destillationsanstalt.",
+    "themen": ["alkohol-kneipe", "stadtleben"]
+  },
+  {
+    "word": "dicht",
+    "translations": ["knapp daneben"],
+    "examples": [
+      { "example": "Dicht daneben is ooch vorbei.", "explanation": "Spöttischer Kommentar zu einer nicht gelungenen Handlung." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "dicke haben",
+    "translations": ["etwas satt haben", "einer Sache überdrüssig sein"],
+    "examples": [{ "example": "Dit hab ick jetz endgültig dicke!" }],
+    "alternativeWords": ["dick haben"],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Dickus",
+    "article": "der",
+    "translations": ["dicker Junge"],
+    "infoText": "Spöttische Anrede für einen dicken Schüler.",
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  },
+  {
+    "word": "Dickkopp",
+    "article": "der",
+    "translations": ["Dickkopf", "starrköpfiger Mensch"],
+    "infoText": "Mensch, der mit dem Kopf durch die Wand will, der starrköpfig ist und nicht von seinem Willen abweicht.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Dienstbolzen",
+    "article": "der",
+    "translations": ["Dienstmädchen", "Dienstbote"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Diensteid",
+    "article": "der",
+    "translations": ["Schnaps (in der Wendung »Eenen uff’n Diensteid nehmen«)"],
+    "examples": [{ "example": "Eenen uff’n Diensteid nehmen.", "explanation": "Einen Schnaps trinken." }],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Dienstpote",
+    "article": "der",
+    "translations": ["Dienstbote"],
+    "infoText": "Wortspiel, das sich vermutlich aus »Dienstpfote« mit niederdeutsch gesprochenem ›p‹ ableitet.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "dieselig",
+    "translations": ["schwindelig"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "direkt",
+    "translations": ["geradezu", "wirklich"],
+    "examples": [{ "example": "Dit is direkt schade." }],
+    "themen": []
+  },
+  {
+    "word": "direktemang",
+    "translations": ["geradezu", "wirklich"],
+    "alternativeWords": ["direktmang"],
+    "themen": []
+  },
+  {
+    "word": "Direx",
+    "article": "der",
+    "translations": ["Direktor"],
+    "infoText": "Schülersprachlich für Direktor.",
+    "themen": []
+  },
+  {
+    "word": "Dividendenjauche",
+    "article": "die",
+    "translations": ["helles Bier"],
+    "infoText": "Um im Jahre 1870 an der Börse Gewinne zu machen, erhöhte man die Dividende, was zu einem sogenannten Aktienbier führte, einem Bier minderer Qualität.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Drehhahnbräu",
+    "article": "das",
+    "translations": ["Glas Leitungswasser"],
+    "infoText": "Ironisch für ein Glas Leitungswasser bei Tisch.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "drehen",
+    "translations": ["hinkriegen", "eine Sache schon machen"],
+    "examples": [{ "example": "Dit wer’n wa schon drehen." }],
+    "themen": []
+  },
+  {
+    "word": "dreidoppelt",
+    "translations": ["dreifach"],
+    "themen": []
+  },
+  {
+    "word": "Dreikäsehoch",
+    "article": "der",
+    "translations": ["kleiner Junge"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "dreist",
+    "translations": ["wirklich", "frech", "zuversichtlich", "unverschämt"],
+    "examples": [
+      { "example": "Laß den man dreist kommen.", "explanation": "Lass ihn mal ruhig kommen." },
+      { "example": "Dit is ja wirklich dreist von dem.", "explanation": "Unverschämt." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Dremmel",
+    "article": "der",
+    "translations": ["Furcht", "Drang (auf die Toilette)"],
+    "examples": [
+      { "example": "Der hat ’n Dremmel.", "explanation": "Er muss dringend aufs Klo." }
+    ],
+    "infoText": "Abgeleitet von dremmeln = drängen.",
+    "themen": ["gefuehle-emotionen", "koerper"]
+  },
+  {
+    "word": "Dresche",
+    "article": "die",
+    "translations": ["Prügel", "Schläge"],
+    "infoText": "Substantivierung von Getreide dreschen.",
+    "themen": []
+  },
+  {
+    "word": "drippeln",
+    "translations": ["tröpfeln", "leicht regnen"],
+    "infoText": "Wenn es aus dem Wasserhahn tropft, heißt es drippen.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "dröhnen",
+    "translations": ["jemandem ein paar knallen"],
+    "themen": []
+  },
+  {
+    "word": "Dröhnung haben",
+    "translations": ["betrunken sein"],
+    "infoText": "Von umgangssprachlich dröhnen = sich betrinken, im Rausch sein.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "drömmeln gehen",
+    "translations": ["zur Toilette gehen"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "drucksen",
+    "translations": ["mühsam herausbringen"],
+    "infoText": "Intensivbildung zu drucken = drücken. Auch herumdrucksen = nicht die Wahrheit sagen wollen.",
+    "themen": []
+  },
+  {
+    "word": "Drückeberger",
+    "article": "der",
+    "translations": ["jemand, der die Arbeit scheut"],
+    "infoText": "Im 19. Jahrhundert für jemanden, der sich verkriecht.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "drum rumkommen",
+    "translations": ["davonkommen"],
+    "examples": [{ "example": "Da sind wa ja nochmal drum rumjekomm’." }],
+    "themen": []
+  },
+  {
+    "word": "druselig",
+    "translations": ["schläfrig", "müde"],
+    "infoText": "Norddeutsch. Als Verb drusseln oder auch eindrusseln, gesprochen mit stimmhaftem s.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Düsenklipper",
+    "article": "der",
+    "translations": ["Flugzeug"],
+    "themen": []
+  },
+  {
+    "word": "dufte",
+    "translations": ["großartig", "prima"],
+    "infoText": "Von jiddisch toffte. Wird heute gebraucht für die früheren Bezeichnungen knorke und schnafte.",
+    "themen": []
+  },
+  {
+    "word": "duhn",
+    "translations": ["betrunken", "völlig geschafft"],
+    "infoText": "Niederdeutschen Ursprungs, eigentlich »aufgeschwollen«, zu dehnen und dunsen.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "dulli dulli",
+    "translations": ["besonders gut"],
+    "themen": []
+  },
+  {
+    "word": "dumm",
+    "translations": ["dumm", "unangenehm"],
+    "examples": [
+      { "example": "Sie sind ja nich so dumm wie Se ausseh’n." },
+      { "example": "Dumm jebor’n und nüscht dazujelernt." },
+      { "example": "Dit is dumm.", "explanation": "Die Sache ist unangenehm." }
+    ],
+    "infoText": "Von mittelniederdeutsch dum = unerfahren, einfältig. Wird in zahlreichen Wendungen gebraucht, oft weniger böse gemeint als es scheint.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Dummerjahn",
+    "article": "der",
+    "translations": ["Dummkopf"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Dummsdorf",
+    "translations": ["Ort, aus dem die Dummen kommen (nur in der Redensart)"],
+    "examples": [
+      { "example": "Wir sind hier ooch nich aus Dummsdorf.", "explanation": "Wir sind nicht dumm. Bereits bei Glaßbrenner belegte Sentenz." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "dunnemals",
+    "translations": ["damals"],
+    "examples": [{ "example": "Von anno dunnemals." }],
+    "infoText": "Von niederdeutsch dunn = damals.",
+    "themen": []
+  },
+  {
+    "word": "Dunnerwettsteen",
+    "translations": ["Ausruf des Erstaunens"],
+    "infoText": "Bei Glaßbrenner als Ausruf des Erstaunens, wie Donnerlittchen.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "dünne machen, sich",
+    "translations": ["sich verkrümeln", "sich zurückziehen"],
+    "themen": []
+  },
+  {
+    "word": "Dunst",
+    "article": "der",
+    "translations": ["Ahnung (nur verneint)"],
+    "examples": [
+      { "example": "Du hast ja keenen Dunst!", "explanation": "Du hast ja davon keine Ahnung." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Dunstkiepe",
+    "article": "die",
+    "translations": ["Herrenhut mit hohem Boden"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "durchplumpsen",
+    "translations": ["durchfallen (bei einer Prüfung)"],
+    "themen": []
+  },
+  {
+    "word": "Docht",
+    "article": "der",
+    "translations": ["Nerven (in der Wendung »auf den Docht gehen«)"],
+    "examples": [
+      { "example": "Der jeht mir uff’n Docht.", "explanation": "Der geht mir auf die Nerven." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Dohle",
+    "article": "die",
+    "translations": ["Hut"],
+    "infoText": "Früher Zylinderhut, heute allgemein für Hut.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "doktern",
+    "translations": ["sich mit etwas intensiv beschäftigen"],
+    "examples": [
+      { "example": "Der muß immer wat herumdoktern.", "explanation": "Der hat immer etwas zu tun — mit leicht negativem Beigeschmack." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Dollar",
+    "article": "der",
+    "translations": ["Geld (in der Wendung »einen harten Dollar schütten«)"],
+    "examples": [
+      { "example": "Einen harten Dollar schütten.", "explanation": "Bezahlen." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Dollarbrägen",
+    "article": "der",
+    "translations": ["Draufgänger"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Donnerlittchen",
+    "translations": ["Ausruf des Erstaunens"],
+    "alternativeWords": ["Donnerlitken"],
+    "infoText": "Die Endung -littchen ist eine Variante zu Lüchtig = Blitz.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "doof",
+    "translations": ["dumm"],
+    "infoText": "Von niederdeutsch taub. Seit Anfang des 20. Jahrhunderts von Berlin aus im deutschen Sprachraum verbreitet. Es existieren zahlreiche Komposita, in der Regel Schimpfworte: Doofkopp, doowe Nuß, doowe Sau, Dowie, Doowietz.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "durchwachsen",
+    "translations": ["mittelmäßig"],
+    "examples": [
+      { "example": "Na, wie jeht’s denn heut? — Na, so durchwachsen.", "explanation": "Dialog zwischen Krankenschwester und Patient." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "durchwutschen",
+    "translations": ["entwischen"],
+    "infoText": "Von umgangssprachlich durchwitschen.",
+    "themen": []
+  },
+  {
+    "word": "durschten",
+    "translations": ["durstig sein"],
+    "examples": [{ "example": "Mir durschtet.", "explanation": "Ich bin durstig." }],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Dusel",
+    "article": "der",
+    "translations": ["Glück"],
+    "examples": [{ "example": "Mensch, da haste aber ’n Dusel jehabt." }],
+    "infoText": "Weiterentwicklung von niederdeutsch Dusel = Schlaf, Halbschlaf.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "dusemang",
+    "translations": ["sacht", "behutsam", "leise"],
+    "infoText": "Von französisch doucement. Gesprochen mit stimmhaftem ›s‹ und dem typisch berlinischen Nasal.",
+    "themen": []
+  },
+  {
+    "word": "Dussel",
+    "article": "der",
+    "translations": ["dummer Mensch", "Dummkopf"],
+    "infoText": "Norddeutsch. Adjektiv: dusselig.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "duster",
+    "translations": ["dunkel", "finster"],
+    "infoText": "Trachsel schreibt 1873 über den »dusteren Keller«, eine bekannte Kneipe am Fuße des Kreuzbergs: »In den Kunsthandlungen sah man ein ganz schwarzes längliches Viereck mit der Inschrift: ›Berlin bei Nacht, vom dusteren Keller aus gesehen‹.«",
+    "themen": []
+  },
+  {
+    "word": "Dutt",
+    "article": "der",
+    "translations": ["Haarknoten", "Kopf"],
+    "examples": [{ "example": "Haut ihm eens uff’n Dutt!" }],
+    "infoText": "Niederdeutsch. Haarknoten der Frauen, wird allgemein auch für Kopf gebraucht.",
+    "themen": ["koerper"]
+  }
+]
