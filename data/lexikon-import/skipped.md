@@ -15,3 +15,11 @@
 | 2062 | Hausknüppel | Variante → als alternativeWords bei „Hausknochen" erfasst |
 | 2367 | Knust | Variante → als alternativeWords bei „Kanten" erfasst |
 | 2612 | Krümelkacker | Variante → als alternativeWords bei „Korinthenkacker" erfasst |
+| 2692 | Laban | Variante → als alternativeWords bei „Laatsch" erfasst |
+| 2818 | M. / Emm / Emmchen | bereits als „Em" (words-02-e.json) erfasst |
+| 2916 | maschucke | Variante → als alternativeWords bei „meschugge" erfasst |
+| 3024 | mehrére | reiner Aussprachehinweis („mehrere") |
+| 3102 | Nachtschattengewächs | Variante → als alternativeWords bei „Nachteule" erfasst |
+| 3150 | Nonneferzchen | Variante → als alternativeWords bei „Nunneferzchen" erfasst |
+| 3204/3227/3228 | öberste, ooch, Ooge | reine Aussprachehinweise |
+| 3236 | Orient-Expreß | Variante → als alternativeWords bei „Istanbul-Express" erfasst |

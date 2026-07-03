@@ -1,0 +1,652 @@
+[
+  {
+    "word": "Macher",
+    "article": "der",
+    "translations": ["Leiter"],
+    "examples": [{ "example": "Kollege Meier ist der Macher von’t Janze." }],
+    "themen": []
+  },
+  {
+    "word": "Macke",
+    "article": "die",
+    "translations": ["Verrücktheit", "Beschädigung"],
+    "examples": [
+      { "example": "Der hat ’ne Macke.", "explanation": "Er hat nicht alle Tassen im Schrank, einen leichten Dachschaden." },
+      { "example": "Da is ’ne Macke dran.", "explanation": "Die Sache ist beschädigt." }
+    ],
+    "infoText": "Von jiddisch makko = Schlag, Stoß.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Macker",
+    "article": "der",
+    "translations": ["Freund", "irrer Typ"],
+    "infoText": "Jugendsprachlich. Vielleicht von niederländisch makker = Genosse, Kamerad.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Madenkiste",
+    "article": "die",
+    "translations": ["Sarg"],
+    "themen": []
+  },
+  {
+    "word": "madig machen",
+    "translations": ["jemanden schlechtmachen"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Mafiatorte",
+    "article": "die",
+    "translations": ["Pizza"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Maikäfer",
+    "article": "der",
+    "translations": ["Garde-Füsilierregiment (Kaiserzeit)"],
+    "infoText": "Das Regiment kam alljährlich in der ›Maikäferzeit‹ zu den Paraden nach Berlin.",
+    "themen": ["orte-spitzname", "stadtleben"]
+  },
+  {
+    "word": "Makulatur reden",
+    "translations": ["Klartext reden"],
+    "themen": []
+  },
+  {
+    "word": "malle",
+    "translations": ["dumm"],
+    "infoText": "Aus dem Niederländischen im 14. Jahrhundert entlehnt.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "mampfen",
+    "translations": ["essen", "schwatzen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Männe",
+    "article": "der",
+    "translations": ["Ehegatte"],
+    "infoText": "Abkürzung von Hermann, verallgemeinernd für Ehegatte.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Männeken",
+    "article": "das",
+    "translations": ["kleiner, schwächlicher Mann"],
+    "infoText": "Leitet sich nicht von französisch ›mannequin‹ ab, sondern ist eine Zusammensetzung von ›Mann‹ und dem niederdeutschen Diminutivsuffix ›-ken‹, also »Männchen«.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "mang",
+    "translations": ["dazwischen", "zwischen", "darunter"],
+    "examples": [
+      { "example": "Mang uns mang is eener mang, der nich mang uns mang jehört.", "explanation": "Kritik an Personen, die aus einem bestimmten Bereich ausgegrenzt werden sollen." }
+    ],
+    "infoText": "Von niederdeutsch mank.",
+    "themen": []
+  },
+  {
+    "word": "manoli",
+    "translations": ["verdreht", "verrückt"],
+    "infoText": "Geht zurück auf die Lichtreklame der Zigarettenfirma Manoli Ende des 19. Jahrhunderts, in der sich in einem Lichtkreis eine schwarze Kugel ständig drehte — der Effekt ›machte die Leute verrückt‹. Wer völlig verrückt ist, ist manoli linksherum.",
+    "themen": ["charakter-eigenschaften", "stadtleben"]
+  },
+  {
+    "word": "mantschen",
+    "translations": ["mischen", "mit den Händen durchwühlen"],
+    "examples": [
+      { "example": "Mensch, mansch nich so in deinem Essen rum, sondern iß lieber." }
+    ],
+    "alternativeWords": ["manschen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Manschetten haben",
+    "translations": ["Furcht, Angst haben"],
+    "infoText": "Mit Bezug auf Manschetten = Handschellen, eigentlich die Handüberschläge am Hemdsärmel.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Marie",
+    "article": "die",
+    "translations": ["Geld"],
+    "examples": [
+      { "example": "Die Marie springen lassen.", "explanation": "Bezahlen, spendieren." }
+    ],
+    "infoText": "Geht zurück auf den Maria-Theresien-Taler.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Mark",
+    "article": "die",
+    "translations": ["Mark (in Redewendungen)"],
+    "examples": [
+      { "example": "Dit jeht ma durch Mark und Pfenn’je.", "explanation": "Durch Mark und Bein." },
+      { "example": "Ick hab keene müde Mark mehr.", "explanation": "Ich bin pleite." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "markieren",
+    "translations": ["vortäuschen"],
+    "examples": [
+      { "example": "Der markiert ’nen Dusslijen.", "explanation": "Er stellt sich dumm." }
+    ],
+    "infoText": "Von französisch marquer.",
+    "themen": []
+  },
+  {
+    "word": "Marks",
+    "article": "das",
+    "translations": ["Knochenmark"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Masse",
+    "article": "die",
+    "translations": ["Menge"],
+    "examples": [{ "example": "Dit is ’ne janze Masse Bier." }],
+    "themen": []
+  },
+  {
+    "word": "Massel",
+    "article": "der",
+    "translations": ["Glück"],
+    "examples": [{ "example": "Da haste aber wirklich Massel jehabt!" }],
+    "infoText": "Von hebräisch masel = Schicksal, Glücksstern.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Matratze",
+    "article": "die",
+    "translations": ["Schlaf (in der Wendung »an der Matratze horchen«)"],
+    "examples": [
+      { "example": "Anne Matratze horchen.", "explanation": "Schlafen." }
+    ],
+    "infoText": "Ein Matratzenhorcher ist ein Langschläfer, Matratzenkino bezeichnet den Fernseher.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Matsch",
+    "article": "der",
+    "translations": ["Schmutz", "Schneematsch"],
+    "examples": [
+      { "example": "Der hat Matsch am Paddel.", "explanation": "Er hat ’n Ding am Kopp." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Matte",
+    "article": "die",
+    "translations": ["lange Haare bei Männern", "Teppich"],
+    "examples": [
+      { "example": "Um 5 Uhr steh ick uff der Matte!", "explanation": "»Auf der Matte stehen« = da sein. Vielleicht von der Matte des Boxrings." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Matz",
+    "article": "der",
+    "translations": ["unbedeutender Mensch", "kleines Kind"],
+    "infoText": "Kurzform von Matthias, im 19. Jahrhundert für untauglicher Mensch. Eine Matzbleke ist ein Trottel.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "mau",
+    "translations": ["unwohl", "schwach", "wenig"],
+    "examples": [{ "example": "Dit war ja ’n bißchen mau, dein Referat." }],
+    "themen": []
+  },
+  {
+    "word": "Mauke",
+    "article": "die",
+    "translations": ["Fuß", "übelriechende Füße", "große Schuhe", "Ball mit wenig Luft"],
+    "infoText": "Slawischen Ursprungs. Nach dem Fußballspiel hat man dicke Mauken.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "mauscheln",
+    "translations": ["heimlich betrügen"],
+    "infoText": "Rotwelsch.",
+    "themen": []
+  },
+  {
+    "word": "Mäuse",
+    "translations": ["Geld"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Mäusebraten",
+    "article": "der",
+    "translations": ["Kartoffeln mit Speck"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Mäuse melken",
+    "translations": ["verzweifeln (in der Redensart)"],
+    "examples": [
+      { "example": "Dit is ja zum Mäusemelken.", "explanation": "Zum Verzweifeln." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "mausetot",
+    "translations": ["völlig tot"],
+    "infoText": "Leitet sich nicht aus dem Französischen ab, sondern aus niederdeutsch mu(r)sdod.",
+    "themen": []
+  },
+  {
+    "word": "mausig",
+    "translations": ["wichtigtuerisch (in der Wendung »sich mausig machen«)"],
+    "examples": [
+      { "example": "Der macht sich mausig.", "explanation": "Er tut sich wichtig." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "meckern",
+    "translations": ["nörgeln"],
+    "infoText": "Ein Nörgelfritze ist ein Meckerkopp, eine Nörgeltante eine Meckerziege. Iterativ zu schallnachahmendem meckern = wie eine Ziege schreien.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Meile",
+    "article": "die",
+    "translations": ["Verdacht (in der Redensart)"],
+    "examples": [
+      { "example": "Dit riecht man zehn Meilen jejen ’n Wind.", "explanation": "Da stimmt etwas nicht." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Meiran",
+    "article": "der",
+    "translations": ["Majoran"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Meise haben",
+    "translations": ["verrückt sein", "einen Vogel haben"],
+    "examples": [{ "example": "Der hat ’ne volle Meise." }],
+    "infoText": "Umgangssprachlich von Berlin ausgegangen.",
+    "themen": []
+  },
+  {
+    "word": "melanklöterich",
+    "translations": ["wehmütig"],
+    "infoText": "Zusammengesetzt aus melancholisch und norddeutsch klöterig = schlecht, schwächlich, mit Bezug auf französisch mélancolique.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "melden",
+    "translations": ["zu sagen haben (nur verneint)"],
+    "examples": [
+      { "example": "Meier hat zuhause nüscht zu melden.", "explanation": "Nichts zu sagen." }
+    ],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Memme",
+    "article": "die",
+    "translations": ["Feigling"],
+    "infoText": "Von mittelhochdeutsch memme, mamme = Mutterbrust.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Menkenke",
+    "translations": ["Geschrei", "Umstände", "Blödsinn"],
+    "alternativeWords": ["Menkenken"],
+    "infoText": "Lautspielerische Substantivierung von ›mengen‹.",
+    "themen": []
+  },
+  {
+    "word": "Merkwürden",
+    "translations": ["Hochwürden (ironisch)"],
+    "examples": [{ "example": "Na, Euer Merkwürden, wie jeht’s?" }],
+    "themen": []
+  },
+  {
+    "word": "Merkwürdiges Viertel",
+    "article": "das",
+    "translations": ["Märkisches Viertel"],
+    "infoText": "Neubaukomplex im Norden Berlins.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "meschugge",
+    "translations": ["verrückt", "irre"],
+    "examples": [{ "example": "Dein Jequatsche macht ma janz meschugge." }],
+    "alternativeWords": ["maschucke"],
+    "infoText": "Von jiddisch meschuggo.",
+    "themen": []
+  },
+  {
+    "word": "Meter",
+    "article": "der",
+    "translations": ["Mark (Geld)"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Meucheleisen",
+    "article": "das",
+    "translations": ["Dolch"],
+    "themen": []
+  },
+  {
+    "word": "mickrig",
+    "translations": ["klein und schwächlich", "kränkelnd"],
+    "infoText": "Von germanisch muk = weich, gedrückt. In einem Gedicht von Bornemann (1816): »De Fru was klein und mückerig...«",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Mief",
+    "article": "der",
+    "translations": ["schlechte Luft"],
+    "infoText": "Ein Miefquirl ist ein Ventilator oder eine einen üblen Geruch verbreitende Person.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Mieke",
+    "article": "die",
+    "translations": ["Schwester"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "mies",
+    "translations": ["schlecht", "übel", "widerlich"],
+    "infoText": "Von jiddisch mis(er) = widerlich. Ein Miesepeter ist ein ewig nörgelnder Mensch, ein Miesmacher ein Schwarzseher.",
+    "themen": []
+  },
+  {
+    "word": "Milchreisbubi",
+    "article": "der",
+    "translations": ["kindlich aussehender Mann"],
+    "themen": ["koerper", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Minna",
+    "article": "die",
+    "translations": ["Freundin, Frau", "Geschirrspülmaschine"],
+    "examples": [
+      { "example": "Jemanden zur Minna machen.", "explanation": "Ihn beschimpfen, fertig machen." },
+      { "example": "Ach du dicke Minna!", "explanation": "Ausruf der Verwunderung." }
+    ],
+    "infoText": "Die Grüne Minna bezeichnet einen Polizeiwagen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Mirabellenetui",
+    "article": "das",
+    "translations": ["Büstenhalter"],
+    "themen": ["koerper", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Mischpoke",
+    "article": "die",
+    "translations": ["Verwandtschaft", "Anhang"],
+    "examples": [{ "example": "Jestern war schon wieder die janze Mischpoke da." }],
+    "infoText": "Von jiddisch mischpocho = Stamm, Sippe, Familie. Mit leicht negativer Konnotation.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Mist",
+    "article": "der",
+    "translations": ["Mist (produktiv in Schimpfwörtern)"],
+    "infoText": "Eine Mistbiene ist ein Schimpfwort auf eine Frau, ein Mistkäfer auf einen Mann, Mistbolzen auf beiderlei Geschlecht. Eine Mistgondel bezeichnet einen Kinderwagen, eine Misttöle einen Hund. All diese Schimpfwörter »sind uff’n Mist der Berliner jewachsen«.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Miß Tiefjekühlt",
+    "translations": ["Schönheitskönigin (ironischer Ehrentitel)"],
+    "alternativeWords": ["Miß Wackelarsch"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "mitkriegen",
+    "translations": ["verstehen"],
+    "themen": []
+  },
+  {
+    "word": "mittenmang",
+    "translations": ["dazwischen", "drinnen", "mittendrin"],
+    "infoText": "Siehe mang.",
+    "themen": []
+  },
+  {
+    "word": "Mitternachtsvase",
+    "article": "die",
+    "translations": ["Nachttopf"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Mittlerer Koofmich",
+    "article": "der",
+    "translations": ["Normalbürger"],
+    "infoText": "Siehe auch Koofmich.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "mohndoof",
+    "translations": ["besonders doof"],
+    "infoText": "Geht darauf zurück, dass im früheren Pommern und Ostpreußen Kleinkindern zur Beruhigung in Leinen eingewickelter Mohn gegeben wurde — und Mohn macht bekanntlich ›doof‹.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Molle",
+    "article": "die",
+    "translations": ["Glas Bier"],
+    "infoText": "Von niederdeutsch Mulde, Backtrog. Ein Mollenfriedhof ist ein dicker Bauch, eine Mollekühle eine kühle Molle. Eine Molle mit Kompott ist ein Glas Bier und ein Kurzer.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Molleken-Doof",
+    "article": "der",
+    "translations": ["dümmliches Kind"],
+    "infoText": "Aus mollig, -ken und doof.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "mollig",
+    "translations": ["warm", "bequem"],
+    "themen": []
+  },
+  {
+    "word": "gehackter Molly",
+    "article": "der",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "molum",
+    "translations": ["betrunken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Monte Klamotte",
+    "article": "der",
+    "translations": ["Insulaner (Trümmerberg in Berlin-Schöneberg)"],
+    "alternativeWords": ["Mont Klamott"],
+    "infoText": "Spitzname für den aus Steintrümmern aufgeschütteten ›Insulaner‹, auch allgemein für eine städtische Müllkippe.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Moos",
+    "article": "das",
+    "translations": ["Geld"],
+    "infoText": "Jiddisch.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Mopp",
+    "article": "der",
+    "translations": ["Perücke", "lange Haartracht"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Moppel",
+    "article": "der",
+    "translations": ["Rollmops", "kleiner Hund"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Moppelkotze",
+    "article": "die",
+    "translations": ["Italienischer Salat"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Mopse",
+    "translations": ["Geld"],
+    "infoText": "Im 19. Jahrhundert. Als Verb mopsen = stehlen.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Motte",
+    "article": "die",
+    "translations": ["schlagfertiges Mädchen (»kesse Motte«)", "langes Schlafen (»bis in die Motten«)"],
+    "examples": [
+      { "example": "’ne kesse Motte.", "explanation": "Ein schlagfertiger Teenie." },
+      { "example": "Der pennt bis in die Motten.", "explanation": "Er schläft ziemlich lange." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Mottenfiffi",
+    "article": "der",
+    "translations": ["Perücke"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Mottenpost",
+    "article": "die",
+    "translations": ["Berliner Morgenpost"],
+    "themen": ["orte-spitzname", "stadtleben"]
+  },
+  {
+    "word": "Mücke",
+    "article": "die",
+    "translations": ["Flucht (»’ne Mücke machen«)", "Geld (»Mücken«)"],
+    "examples": [
+      { "example": "’ne Mücke machen.", "explanation": "Weglaufen." },
+      { "example": "Mücken locker machen.", "explanation": "Bezahlen." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Muckefuck",
+    "article": "der",
+    "translations": ["Ersatzkaffee", "dünner Kaffee"],
+    "infoText": "Angeblich von den Hugenotten kreiert: Als Friedrich II. den Kaffeezoll drastisch erhöhte, verliehen die französischen Gärtner dem verdünnten Kaffee mit gerösteten Zichorienwurzeln eine tiefschwarze Farbe (frz. mocca faux = falscher Mokka). Tatsächlich eine Zusammensetzung aus Mucken = brauner Holzmulm und fuck = faul.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Muckepicke",
+    "article": "die",
+    "translations": ["Motorrad"],
+    "infoText": "Wie Nuckelpinne.",
+    "themen": []
+  },
+  {
+    "word": "mucksen",
+    "translations": ["mucken", "halblaut murmeln"],
+    "examples": [
+      { "example": "Mucks da nich’!", "explanation": "Sei ruhig." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "mudicke",
+    "translations": ["angefault"],
+    "infoText": "Von niederdeutsch muddig = faulig riechend.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Müllkutenindianer",
+    "article": "der",
+    "translations": ["Angestellter bei der Müllabfuhr"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Mürbchen",
+    "article": "das",
+    "translations": ["besonders zarter Fleischspieß"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Muffensausen",
+    "article": "das",
+    "translations": ["Angst"],
+    "examples": [{ "example": "Der hat Muffensausen." }],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "muffig",
+    "translations": ["mürrisch", "maulfaul"],
+    "alternativeWords": ["mufflig"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "mulmig",
+    "translations": ["unbehaglich", "bedenklich"],
+    "infoText": "Abgeleitet von Mulm = morsches, faulendes Holz.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Mumm",
+    "article": "der",
+    "translations": ["Mut"],
+    "infoText": "Vielleicht von lateinisch animum (Geist, Seele) verkürzt oder rotwelsch Mumm = geistiges, körperliches Vermögen.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Mumpitz",
+    "article": "der",
+    "translations": ["Unsinn"],
+    "infoText": "Von Mumme = Maske und Butze = Vogelscheuche, Schreckgestalt.",
+    "themen": []
+  },
+  {
+    "word": "murklig",
+    "translations": ["unansehnlich", "klein"],
+    "infoText": "Murke = Krume.",
+    "themen": []
+  },
+  {
+    "word": "Murks",
+    "article": "der",
+    "translations": ["schlechte Arbeit"],
+    "examples": [{ "example": "Der hat wieder Murks verzappt." }],
+    "infoText": "Als Verb im 19. Jahrhundert für ›in Unordnung bringen‹, heute abmurksen für ›töten‹.",
+    "themen": []
+  },
+  {
+    "word": "Murmeln",
+    "translations": ["Geld"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Musspritze",
+    "article": "die",
+    "translations": ["Regenschirm"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Mustopp",
+    "article": "der",
+    "translations": ["Marmeladentopf", "Begriffsstutzigkeit (»aus’m Mustopp kommen«)"],
+    "examples": [
+      { "example": "Du kommst wohl aus’m Mustopp.", "explanation": "Du begreifst etwas reichlich spät." }
+    ],
+    "infoText": "1872 als Schülerjargon vermerkt für einen Schüler, der eine gedankenlose Antwort gibt.",
+    "themen": []
+  },
+  {
+    "word": "mutterseelenallein",
+    "translations": ["völlig allein"],
+    "infoText": "Vielleicht von französisch moi tout seul = ich ganz allein oder zusammengesetzt aus Mutterseele und mutterallein.",
+    "themen": ["gefuehle-emotionen"]
+  }
+]
