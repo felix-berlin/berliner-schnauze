@@ -1,0 +1,1257 @@
+[
+  {
+    "word": "schnabbelieren",
+    "translations": ["mit Behagen speisen", "schnabulieren"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "schnabbern",
+    "translations": ["viel sprechen"],
+    "infoText": "Wie quasseln. So auch Schnabberliese.",
+    "themen": []
+  },
+  {
+    "word": "Schnabus",
+    "article": "der",
+    "translations": ["Schnaps"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "schnafte",
+    "translations": ["ausgezeichnet", "sehr gut"],
+    "themen": []
+  },
+  {
+    "word": "Schnalle",
+    "article": "die",
+    "translations": ["Bruder", "Freundin", "Kumpel"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "schnallen",
+    "translations": ["verstehen"],
+    "examples": [{ "example": "Inner Schule hab ick heut wieder ja nischt jeschnallt." }],
+    "themen": []
+  },
+  {
+    "word": "Schnäpperken",
+    "article": "das",
+    "translations": ["Glas Schnaps"],
+    "infoText": "Von schnäppern = ein Glas Schnaps trinken, substantiviert durch die niederdeutsche Endung -ken.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Schnapsdrossel",
+    "article": "die",
+    "translations": ["Trunkenbold"],
+    "infoText": "Dem Namen der Wacholderdrossel nachgeahmt.",
+    "themen": ["alkohol-kneipe", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "schnarzig",
+    "translations": ["besonders gut"],
+    "themen": []
+  },
+  {
+    "word": "schnasseln",
+    "translations": ["trinken"],
+    "infoText": "Von jiddisch schasjenen.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Schnauze",
+    "article": "die",
+    "translations": ["Mund (Schimpfwort)"],
+    "examples": [
+      { "example": "Ick polier’ dir gleich de Schnauze!" }
+    ],
+    "infoText": "Eine frisierte Schnauze bezeichnet eine gewollt vornehme Sprechweise.",
+    "themen": ["koerper", "schimpfwoerter-beleidigungen", "stadtleben"]
+  },
+  {
+    "word": "Schnauzenschaber",
+    "article": "der",
+    "translations": ["Herrenfriseur"],
+    "alternativeWords": ["Schnauzenschinder"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Schneemann",
+    "article": "der",
+    "translations": ["Verkehrspolizist"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "schneen",
+    "translations": ["schneien"],
+    "themen": []
+  },
+  {
+    "word": "Schneiderkarpfen",
+    "article": "der",
+    "translations": ["Hering (ironisch)"],
+    "infoText": "Was dem Reichen der Karpfen, ist dem armen Schneider der Hering.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schnelle",
+    "article": "die",
+    "translations": ["schnell (in der Wendung »uff de Schnelle«)"],
+    "themen": []
+  },
+  {
+    "word": "Schneppe",
+    "article": "die",
+    "translations": ["Schnepfe", "Prostituierte"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "schnieke",
+    "translations": ["fein", "elegant", "schmuck", "schneidig"],
+    "infoText": "Von niederdeutsch snigger, snicker = munter, hübsch, zierlich. Überhaupt Ausdruck des Wohlgefallens.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Schniepel",
+    "article": "der",
+    "translations": ["Frack", "Penis eines kleinen Jungen"],
+    "infoText": "Von niederdeutsch sniepeln = abschneiden. Frack insbesondere im 19. Jahrhundert.",
+    "themen": ["koerper", "charakter-eigenschaften"]
+  },
+  {
+    "word": "schnippern",
+    "translations": ["mit der Schere schneiden", "schnippeln"],
+    "themen": []
+  },
+  {
+    "word": "Schnittloch",
+    "article": "der",
+    "translations": ["Schnittlauch"],
+    "infoText": "Siehe auch Knobloch.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "schnobbern",
+    "translations": ["schlummern"],
+    "themen": []
+  },
+  {
+    "word": "schnoddrig",
+    "translations": ["frech", "vorlaut"],
+    "infoText": "Von niederdeutsch snodder = Nasenschleim. Bezeichnet jemanden, der noch so jung ist, dass ihm der Nasenschleim aus der Nase läuft, und dem es noch gar nicht zukommt, mitzureden.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Schnodderschnauze",
+    "article": "die",
+    "translations": ["vorlautes Mundwerk"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "schnorren",
+    "translations": ["betteln", "auf geschickte Art etwas abstauben"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Schnösel",
+    "article": "der",
+    "translations": ["sich vornehm gebender Mann", "vorlauter Junge"],
+    "infoText": "Abgeleitet von Schnodder, siehe schnoddrig.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "schnuddelig",
+    "translations": ["nett", "liebenswert"],
+    "alternativeWords": ["schnulle"],
+    "infoText": "Gehört zu Schnute und ist parallel zu schnoddrig.",
+    "themen": []
+  },
+  {
+    "word": "schnuppe",
+    "translations": ["gleichgültig", "egal", "einerlei"],
+    "examples": [{ "example": "Dit is’ ma schnuppe!" }],
+    "infoText": "Von Berlin aus in der 2. Hälfte des 19. Jahrhunderts verbreitet.",
+    "themen": []
+  },
+  {
+    "word": "schnurz",
+    "translations": ["gleichgültig", "egal"],
+    "examples": [
+      { "example": "Dit is ma schnurz und piepe.", "explanation": "Das ist völlig gleichgültig." }
+    ],
+    "infoText": "Abgeleitet von norddeutsch Snart, Snurt = Furz.",
+    "themen": []
+  },
+  {
+    "word": "Schnute",
+    "article": "die",
+    "translations": ["Mund"],
+    "examples": [
+      { "example": "’ne Schnute ziehen.", "explanation": "Schmollen." }
+    ],
+    "infoText": "Niederdeutsche Entsprechung zu hochdeutsch ›Schnauze‹.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "schocken",
+    "translations": ["bezahlen"],
+    "infoText": "Von jiddisch schuck = Mark, Geldstück.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "schoflig",
+    "translations": ["gemein"],
+    "infoText": "Von jiddisch schophol = niedrig, schlecht.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Scholli",
+    "article": "der",
+    "translations": ["Drohung (in der Wendung »mein lieber Scholli«)"],
+    "examples": [
+      { "example": "Mein lieber Scholli!", "explanation": "Drohung, insbesondere von Eltern gegenüber ihren Kindern." }
+    ],
+    "infoText": "Vielleicht von französisch joli = niedlich.",
+    "themen": []
+  },
+  {
+    "word": "Schorftörtchen",
+    "article": "das",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schornsteinfegerhelm",
+    "article": "der",
+    "translations": ["Zylinderhut"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Schote",
+    "article": "die",
+    "translations": ["Ohrfeige", "nicht ganz korrekte Situation"],
+    "examples": [
+      { "example": "’ne Schote abzieh’n.", "explanation": "Etwas tun, was nicht ganz korrekt ist." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Schotterlotte",
+    "article": "die",
+    "translations": ["betuchte Freundin"],
+    "infoText": "Fußt auf umgangssprachlich Schotter = Geld, analog zu Kies.",
+    "themen": ["geld", "beziehungen-soziales"]
+  },
+  {
+    "word": "schräg",
+    "translations": ["schief (in der Wendung »schräg ankieken«)"],
+    "examples": [
+      { "example": "Der kiekt ma schräg an.", "explanation": "Er guckt mich schief an." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Schreckschraube",
+    "article": "die",
+    "translations": ["meckernde Frau", "alte Jungfer"],
+    "examples": [{ "example": "’ne olle Schreckschraube." }],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schreibebrief",
+    "article": "der",
+    "translations": ["offizieller Brief"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Schreiberholz",
+    "article": "das",
+    "translations": ["Bleistift"],
+    "themen": []
+  },
+  {
+    "word": "Schreifritz",
+    "article": "der",
+    "translations": ["Freischütz"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Schrippe",
+    "article": "die",
+    "translations": ["Brötchen (Berliner Spezialität)"],
+    "infoText": "Eine verzauberte oder gebratene Schrippe bezeichnet die Bulette, ebenso Schrippe im eigenen Saft; »’ne olle Schrippe« bezieht sich mitunter auf eine Frau. Vgl. frühneuhochdeutsch ›schripfen‹.",
+    "themen": ["essen-trinken", "stadtleben"]
+  },
+  {
+    "word": "Schrippenarchitekt",
+    "article": "der",
+    "translations": ["Bäcker"],
+    "themen": ["stadtleben", "essen-trinken"]
+  },
+  {
+    "word": "Schrippenpuffer",
+    "article": "der",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schrulle",
+    "article": "die",
+    "translations": ["alte Frau"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "schrumplig",
+    "translations": ["runzlig"],
+    "infoText": "Von schrumpeln, niederdeutsche und mitteldeutsche Variante zu schrumpfen.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "schubbern",
+    "translations": ["reiben, scheuern", "tanzen", "arbeiten"],
+    "infoText": "Von schubben, niederdeutsche und mitteldeutsche Variante zu hochdeutsch ›schieben‹.",
+    "themen": []
+  },
+  {
+    "word": "Schubjack",
+    "article": "der",
+    "translations": ["Geizhals"],
+    "infoText": "Vgl. niederländisch schobbejak; aus niederdeutsch schobben = kratzen und der verkürzten Nebenform Jack aus Jacob.",
+    "themen": ["geld", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "schuchteln",
+    "translations": ["tanzen", "einen Einkaufsbummel machen"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Schudder",
+    "article": "der",
+    "translations": ["Schauder"],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Schüttelroste",
+    "translations": ["Tanzfläche (in der Wendung)"],
+    "examples": [
+      { "example": "Uff de Schüttelroste gehen.", "explanation": "Tanzen gehen." }
+    ],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Schuhsohlen putzen",
+    "translations": ["tanzen gehen"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Schumm",
+    "article": "der",
+    "translations": ["Rausch"],
+    "infoText": "Von jiddisch schemen = Fett. Der Anfangslaut wird wie französisch ›j‹ in jardin gesprochen; daher auch die Aussprache Jum.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Schuß",
+    "article": "der",
+    "translations": ["Misserfolg (»Schuß in die Hose«)", "Verrücktheit (»’nen Schuß weghaben«)"],
+    "examples": [
+      { "example": "Dit war’n Schuß in die Hose.", "explanation": "Das war nicht gelungen." },
+      { "example": "Der hat ’nen Schuß weg.", "explanation": "Er ist nicht ganz richtig im Kopf." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "schusselig",
+    "translations": ["fahrig"],
+    "infoText": "Obersächsisch.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Schusterjunge",
+    "article": "der",
+    "translations": ["Roggenmehlbrötchen"],
+    "examples": [
+      { "example": "Es regnet Schusterjungen.", "explanation": "Es regnet sehr stark." }
+    ],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schusterpunsch",
+    "article": "der",
+    "translations": ["normaler Kaffee"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "schwach",
+    "translations": ["ohne Geld (in der Wendung »schwach auf der Brust«)"],
+    "examples": [
+      { "example": "Du bist wohl momentan schwach uff de Brust.", "explanation": "Du hast wohl kein Geld mehr." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Schwadilje",
+    "article": "die",
+    "translations": ["alte Jungfer"],
+    "infoText": "Früher gebräuchlich.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schwangere Auster",
+    "article": "die",
+    "translations": ["Berliner Kongresshalle"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "schwarz",
+    "translations": ["lange (in der Wendung »warten, bis de schwarz wirst«)"],
+    "examples": [
+      { "example": "Da kannste warten, bis de schwarz wirst." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Schwefel",
+    "article": "der",
+    "translations": ["Streichholz"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Schwein",
+    "article": "das",
+    "translations": ["Schimpfwort"],
+    "examples": [
+      { "example": "Ick gloob mein Schwein feift!", "explanation": "Ich glaube, ich spinne. (Ausruf des Erstaunens)" }
+    ],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schweinebacke",
+    "article": "die",
+    "translations": ["Schimpfwort für eine Person"],
+    "alternativeWords": ["Schweinepriester"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schweinezucht",
+    "article": "die",
+    "translations": ["große Unordnung"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Schwelle",
+    "article": "die",
+    "translations": ["Schwester"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Schwenzelpfennige",
+    "translations": ["heimlich gespartes Wirtschaftsgeld"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "schwer schief geladen",
+    "translations": ["stark betrunken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Schwiegerpaul",
+    "article": "der",
+    "translations": ["Schwiegervater"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "schwiemlig",
+    "translations": ["schwindlig"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "schwiemeln",
+    "translations": ["ein liederliches Leben führen"],
+    "infoText": "Von niederdeutsch swimen = schweben.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "schwierige Geburt",
+    "article": "die",
+    "translations": ["nicht einfach zu bewerkstelligende Sache"],
+    "examples": [{ "example": "Dit war ’ne schwierige Geburt." }],
+    "themen": []
+  },
+  {
+    "word": "Schwindeljule",
+    "article": "die",
+    "translations": ["kleines Mädchen"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Schwindelpost",
+    "article": "die",
+    "translations": ["unwahre Extrablätter (1870)"],
+    "infoText": "So bezeichnete man im Jahre 1870 die zahlreichen Extrablätter, die den Verlauf des Krieges nicht gerade wahrheitsgemäß berichteten.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "schwoofen",
+    "translations": ["tanzen"],
+    "examples": [
+      { "example": "Uff’n Schwoof gehen.", "explanation": "Tanzen gehen; im 19. Jahrhundert: auf einen öffentlichen Ball gehen." }
+    ],
+    "infoText": "Von obersächsisch Schwof = Dorftanz, was an mittelhochdeutsch sweif = schwingende Bewegung anknüpft.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Schwuchtel",
+    "article": "die",
+    "translations": ["feminin wirkender Homosexueller (abwertend)"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "schwuchteln gehen",
+    "translations": ["tanzen gehen"],
+    "infoText": "Zu mundartlich schwuchten = schwanken, schaukeln.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Schwulitäten",
+    "translations": ["Schwierigkeiten"],
+    "examples": [
+      { "example": "In Schwulitäten geraten.", "explanation": "In Schwierigkeiten kommen." }
+    ],
+    "infoText": "Fußt auf niederdeutsch swul = drückend, ängstlich, beklommen.",
+    "themen": []
+  },
+  {
+    "word": "Schwupper",
+    "article": "der",
+    "translations": ["Fehler", "Versehen"],
+    "infoText": "Von umgangssprachlich Schwupp = kleine herausschwappende Menge.",
+    "themen": []
+  },
+  {
+    "word": "Sechser",
+    "article": "der",
+    "translations": ["5-Pfennig-Stück"],
+    "infoText": "Leitet sich ab von einer Münze, die früher sechs Pfennige wert war.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "SED",
+    "translations": ["Selten etwas dran (spöttische Auflösung)"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Seechbomme",
+    "article": "die",
+    "translations": ["Nachttopf"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Seelenziepen",
+    "article": "das",
+    "translations": ["Liebeskummer"],
+    "infoText": "Siehe ziepen.",
+    "themen": ["gefuehle-emotionen", "beziehungen-soziales"]
+  },
+  {
+    "word": "Seifensieder",
+    "article": "der",
+    "translations": ["Licht, Erkenntnis (in der Redensart)"],
+    "examples": [
+      { "example": "Mir jeht’n Seifensieder uff.", "explanation": "Mir geht ein Licht auf. Seifensieder = Kerze." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Selbstgestrickter",
+    "article": "der",
+    "translations": ["langhaariger Hund"],
+    "themen": []
+  },
+  {
+    "word": "selbstgewachsen",
+    "translations": ["von guter Qualität (scherzhaft)"],
+    "examples": [
+      { "example": "Die Blume is selbstjewachsen.", "explanation": "Hebt die Qualität hervor." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "selten",
+    "translations": ["ungewöhnlich"],
+    "themen": []
+  },
+  {
+    "word": "Semmeltörtchen",
+    "article": "das",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Senfschnuller",
+    "article": "der",
+    "translations": ["Bockwurst"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Senge",
+    "article": "die",
+    "translations": ["Schläge", "Tracht Prügel"],
+    "themen": []
+  },
+  {
+    "word": "Senkel",
+    "article": "der",
+    "translations": ["Schnürsenkel"],
+    "examples": [
+      { "example": "Der hat nich alle uff’n Senkel.", "explanation": "Er ist verrückt." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Senkelhalter",
+    "translations": ["Schuhe"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "senkrecht",
+    "translations": ["aufrecht"],
+    "themen": []
+  },
+  {
+    "word": "Sesselpuper",
+    "article": "der",
+    "translations": ["Beamter"],
+    "themen": ["schimpfwoerter-beleidigungen", "stadtleben"]
+  },
+  {
+    "word": "setzen",
+    "translations": ["Prügel geben (in der Wendung »es setzt gleich«)"],
+    "examples": [
+      { "example": "Es setzt gleich Keile!", "explanation": "Es gibt gleich Prügel." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Siebenklepper",
+    "article": "der",
+    "translations": ["Kind"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "siebenköpfige Raupe",
+    "article": "die",
+    "translations": ["starker Esser (in der Redensart)"],
+    "examples": [
+      { "example": "Der ißt wie eine siebenköpfige Raupe.", "explanation": "Er isst viel." }
+    ],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Sieke",
+    "article": "die",
+    "translations": ["Musik"],
+    "infoText": "Abkürzung aus dem Liedvers »In Rixdorf is Musike…«",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "simelieren",
+    "translations": ["nachsinnen"],
+    "themen": []
+  },
+  {
+    "word": "Singepedemie",
+    "article": "die",
+    "translations": ["Singakademie"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "sittlich",
+    "translations": ["nützlich (nur verneint)"],
+    "examples": [
+      { "example": "Dit hat keenen sittlichen Wert.", "explanation": "Das nützt nichts." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Sitzkissen",
+    "article": "das",
+    "translations": ["türkisches Fladenbrot"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Sitzung haben",
+    "translations": ["zur Toilette gehen"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Snob",
+    "article": "der",
+    "translations": ["feiner Herr"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Socken",
+    "translations": ["Überraschung, Eile (in Redewendungen)"],
+    "examples": [
+      { "example": "Ick bin janz vonne Socken.", "explanation": "Ich bin überrascht." },
+      { "example": "Der rennt, daß de Socken qualm’n." },
+      { "example": "Du mieser Eimer Socken!", "explanation": "Beleidigung." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Soff",
+    "article": "der",
+    "translations": ["Getränk", "Gesöff"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Sohle",
+    "article": "die",
+    "translations": ["Tanz (in der Wendung »’ne kesse Sohle drehen«)"],
+    "examples": [
+      { "example": "’ne Sohle uff’t Parkett lejen.", "explanation": "Tanzen." }
+    ],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Sohlen",
+    "translations": ["Schuhe"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Sohnemann",
+    "article": "der",
+    "translations": ["Sohn (freundliche Anrede)"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Soße",
+    "article": "die",
+    "translations": ["dasselbe (in der Wendung »alles eine Soße«)"],
+    "examples": [
+      { "example": "Is allet eene Soße.", "explanation": "Es ist alles dasselbe." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "spachteln",
+    "translations": ["viel und mit Genuss essen"],
+    "alternativeWords": ["einspachteln"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "spack",
+    "translations": ["schmal", "elend", "dünn"],
+    "infoText": "Niederdeutsch = ausgedörrt, ausgetrocknet.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Spaghettis",
+    "translations": ["Italiener", "Haare"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Span",
+    "article": "der",
+    "translations": ["Theater, Ziererei (in der Wendung »keene Späne machen«)"],
+    "examples": [
+      { "example": "Mach ma keene Späne!", "explanation": "Mach kein Theater, zier dich nicht so." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Spekuliereisen",
+    "article": "das",
+    "translations": ["Brille"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Sperenzken",
+    "translations": ["zögernde Einwände", "Umstände"],
+    "infoText": "Von lateinisch sperantia = Hoffnung und niederdeutsch -ken, in Analogie zu umgangssprachlich Sperenzchen.",
+    "themen": []
+  },
+  {
+    "word": "Spickaal",
+    "article": "der",
+    "translations": ["geräucherter Aal"],
+    "examples": [
+      { "example": "Nu sagen se bloß noch Spickaal, dann hau ick Ihnen eene runter.", "explanation": "Antwort auf eine Aufzählung leckerer Speisen, mit denen einem der Mund wässrig gemacht wird." }
+    ],
+    "infoText": "Albert Hopf gibt dem Helden in seinem Stück »Spickaal als Beherrscher der Mosquito-Küste« (1846) denselben Namen. Niederdeutsch Spikkaal = geräucherter Aal.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "spillerig",
+    "translations": ["dürr", "dünn", "hoch aufgeschossen"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "spinös",
+    "translations": ["schwierig", "spitzzüngig"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Spinne mit Ei",
+    "article": "die",
+    "translations": ["Spinat mit Ei"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "spitz",
+    "translations": ["krank", "geil"],
+    "themen": []
+  },
+  {
+    "word": "Spohn",
+    "article": "der",
+    "translations": ["Span"],
+    "themen": []
+  },
+  {
+    "word": "Spree-Athen",
+    "article": "das",
+    "translations": ["Berlin (Beiname)"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Spreewasser",
+    "article": "das",
+    "translations": ["Berliner Herkunft (in der Redensart)"],
+    "examples": [
+      { "example": "Der is mit Spreewasser jetauft.", "explanation": "Er ist ein »echter« Berliner." }
+    ],
+    "themen": ["stadtleben", "orte-spitzname"]
+  },
+  {
+    "word": "springen lassen",
+    "translations": ["spendieren"],
+    "examples": [
+      { "example": "Läßte wat springen?", "explanation": "Spendierst du was?" }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Spritschleuder",
+    "article": "die",
+    "translations": ["US-Auto"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Spucke",
+    "article": "die",
+    "translations": ["Sprachlosigkeit (in der Wendung)"],
+    "examples": [
+      { "example": "Da bleibt mir die Spucke weg.", "explanation": "Ich bin sprachlos." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Spuk",
+    "article": "der",
+    "translations": ["unangenehme Sache"],
+    "examples": [{ "example": "Endlich is der janze Spuk vorbei." }],
+    "themen": []
+  },
+  {
+    "word": "spulerig",
+    "translations": ["dünn", "mager"],
+    "infoText": "Von rotwelsch spulen = essen.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Sputnick",
+    "article": "der",
+    "translations": ["Vorortzug auf dem Berliner Außenring", "neuer Erdenbürger"],
+    "examples": [
+      { "example": "’ne Molle und een Sputnick.", "explanation": "Ein Bier und ein Schnaps." }
+    ],
+    "infoText": "Ostberlinisch.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Stampe",
+    "article": "die",
+    "translations": ["Kneipe"],
+    "infoText": "Von französisch estaminet.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Stamper",
+    "translations": ["Beine"],
+    "infoText": "Fußt auf stampfen.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Stänkerfritze",
+    "article": "der",
+    "translations": ["zänkischer Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "statiös",
+    "translations": ["stattlich"],
+    "themen": []
+  },
+  {
+    "word": "steckerig",
+    "translations": ["holzig"],
+    "infoText": "Fußt auf mittelhochdeutsch stecke = Pfahl. Als Verb steckern = herumstochern.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Steckerling",
+    "article": "der",
+    "translations": ["Stichling"],
+    "themen": []
+  },
+  {
+    "word": "steif",
+    "translations": ["unnachgiebig (in der Drohung)"],
+    "examples": [
+      { "example": "Den laß ick am steifen Arm verhungern.", "explanation": "Der soll sich vorsehen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "steiler Zahn",
+    "article": "der",
+    "translations": ["hübsches Mädchen"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Steintal",
+    "article": "das",
+    "translations": ["Marzahn"],
+    "infoText": "Ostberlinisch für das Neubaugebiet Marzahn.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Stellage",
+    "article": "die",
+    "translations": ["Gestell"],
+    "themen": []
+  },
+  {
+    "word": "Stelzen",
+    "translations": ["Beine"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Stemmzeug",
+    "article": "das",
+    "translations": ["Messer und Gabel"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Steppke",
+    "article": "der",
+    "translations": ["kesser, kleiner Junge"],
+    "infoText": "Fußt entweder auf der niederdeutschen Verkleinerungsbildung zu Stopfen = Korken oder auf der niederdeutschen Form zu Stiftchen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "stibitzen",
+    "translations": ["stehlen"],
+    "infoText": "Vielleicht Einfluss von niederdeutsch stippen = sich eine Sache aneignen und mundartlich st(r)iezen = stehlen.",
+    "themen": []
+  },
+  {
+    "word": "Stiebel",
+    "article": "der",
+    "translations": ["Stiefel"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "stiek",
+    "translations": ["langsam"],
+    "themen": []
+  },
+  {
+    "word": "stieke",
+    "translations": ["ruhig", "still"],
+    "themen": []
+  },
+  {
+    "word": "Stiesel",
+    "article": "der",
+    "translations": ["unhöflicher Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "stiller Portier",
+    "article": "der",
+    "translations": ["Tafel im Hausflur mit den Namen der Mieter"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Stimmungsgemüse",
+    "article": "das",
+    "translations": ["Blumen"],
+    "themen": []
+  },
+  {
+    "word": "Stinkadores",
+    "translations": ["schlechte, stinkende Zigarre"],
+    "themen": []
+  },
+  {
+    "word": "Stinkstiebel",
+    "article": "der",
+    "translations": ["Schimpfwort auf eine Person"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Stippi",
+    "article": "der",
+    "translations": ["kleiner Junge"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Stoffel",
+    "article": "der",
+    "translations": ["schweigsamer, nicht kommunikativer Mensch"],
+    "infoText": "Früher für einen groben, derben, beschränkten Menschen.",
+    "themen": ["charakter-eigenschaften", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Stoppelhopser",
+    "article": "der",
+    "translations": ["Infanterie-Soldat"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": []
+  },
+  {
+    "word": "Storch",
+    "article": "der",
+    "translations": ["Verwunderung (in der Redensart)"],
+    "examples": [
+      { "example": "Na, nu brat mir eener ’n Storch.", "explanation": "Ausdruck der Verwunderung." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Stoß",
+    "article": "der",
+    "translations": ["Erfolg (bei Frauen)"],
+    "examples": [
+      { "example": "Der hat’n Stoß jehabt bei de Weiber.", "explanation": "Er hat Erfolg gehabt — mit deutlicher sexueller Anspielung." }
+    ],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "stoßen",
+    "translations": ["verprügeln (in der Wendung »aus’m Anzug stoßen«)"],
+    "themen": []
+  },
+  {
+    "word": "stramm",
+    "translations": ["straff", "fest", "gehaltvoll"],
+    "examples": [
+      { "example": "Der is stramm inner Weste.", "explanation": "Er ist beleibt." },
+      { "example": "Der jeht stramm uff de Achtzig zu.", "explanation": "Er steht kurz vor dem 80. Lebensjahr." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Stremel",
+    "article": "der",
+    "translations": ["Gewohnheit"],
+    "examples": [{ "example": "Er jeht immer nach seinem alten Stremel." }],
+    "infoText": "Nach Stremel = kleines Wegstück, von niederdeutsch Striemen = Streifen.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "stremplich",
+    "translations": ["nicht in Ordnung"],
+    "themen": []
+  },
+  {
+    "word": "Stretsch",
+    "article": "der",
+    "translations": ["Stress"],
+    "themen": []
+  },
+  {
+    "word": "Strich",
+    "article": "der",
+    "translations": ["Wut (»auf dem Strich haben«)", "Prostitution (»auf den Strich gehen«)"],
+    "examples": [
+      { "example": "Den hab ick uff’n Strich.", "explanation": "Auf den habe ich eine Wut." },
+      { "example": "Den hab ick nach Strich und Faden verbleut!" }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Strick",
+    "article": "der",
+    "translations": ["übermütiges, ungezogenes Kind"],
+    "infoText": "Verkürzung aus Galgenstrick.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "striezen",
+    "translations": ["stehlen"],
+    "alternativeWords": ["stritzen"],
+    "themen": []
+  },
+  {
+    "word": "Strippe",
+    "article": "die",
+    "translations": ["Bindfaden", "Telefon"],
+    "infoText": "Im 19. Jahrhundert für den Kümmelbranntwein zum Bier. Von mittelniederdeutsch strippe = Riemen, Schlaufe.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Strippenzieher",
+    "article": "der",
+    "translations": ["Elektriker"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Stroh",
+    "article": "das",
+    "translations": ["Vergessenes, Dummheit (in Redewendungen)"],
+    "examples": [
+      { "example": "Da kommt Stroh druff.", "explanation": "Das ist schon längst vergessen." },
+      { "example": "Der hat Stroh im Kopp.", "explanation": "Er ist dumm." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Strolch",
+    "article": "der",
+    "translations": ["kleiner Gauner", "kleines Kind"],
+    "infoText": "Vielleicht von alemannisch strollen = ziellos umherstreifen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Strumpf",
+    "article": "der",
+    "translations": ["gute Geschichte (in der Wendung)"],
+    "examples": [
+      { "example": "Machen se mal ’nen netten Strumpf draus.", "explanation": "Machen Sie eine gute Geschichte daraus." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Strunze",
+    "article": "die",
+    "translations": ["Frau (abwertend)"],
+    "infoText": "Von ›stronzen‹, dem Intensivum zu ›strotzen‹.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "stuckern",
+    "translations": ["holpern (beim Fahren)"],
+    "infoText": "Holpernde, polternde Bewegung z.B. über Kopfsteinpflaster.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "stuken",
+    "translations": ["stoßen", "stauchen", "verhauen"],
+    "infoText": "Niederdeutsch. Auch jemanden ein- oder runterstuken = ins Wasser stoßen, untertauchen.",
+    "themen": []
+  },
+  {
+    "word": "Stubenpisser",
+    "article": "der",
+    "translations": ["Beamter"],
+    "themen": ["schimpfwoerter-beleidigungen", "stadtleben"]
+  },
+  {
+    "word": "Stulle",
+    "article": "die",
+    "translations": ["Schnitte Brot"],
+    "infoText": "Ursprünglich ein kleiner Brotlaib. Eine Klappstulle bezeichnet zwei aufeinandergelegte Stullen. Die erste Berliner Laubenkolonie bekam den Namen Trockene Stulle. Fußt auf niederländisch stul = Brocken, Stück.",
+    "themen": ["essen-trinken", "stadtleben"]
+  },
+  {
+    "word": "Stumpen",
+    "article": "der",
+    "translations": ["unteres Reststück (insbesondere einer Zigarre)"],
+    "infoText": "Niederdeutsche Form für Stumpf.",
+    "themen": []
+  },
+  {
+    "word": "Stumpfbock",
+    "article": "der",
+    "translations": ["langweiliger Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "stundenlang",
+    "translations": ["unentwegt", "ohne Unterbrechung"],
+    "examples": [{ "example": "Dem könnt’ ick stundenlang inne Fresse hau’n." }],
+    "themen": []
+  },
+  {
+    "word": "Stunk",
+    "article": "der",
+    "translations": ["Zank", "Ärger"],
+    "examples": [
+      { "example": "Dit jibt Stunk.", "explanation": "Das gibt Ärger." }
+    ],
+    "infoText": "Nebenform zu Stank, vgl. stänkern.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Sturmsäcke",
+    "translations": ["Windbeutel"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Stuß",
+    "article": "der",
+    "translations": ["Unsinn", "blödsinniges Zeug"],
+    "infoText": "Von jiddisch schtus = Narrheit, Torheit.",
+    "themen": []
+  },
+  {
+    "word": "Suffkopp",
+    "article": "der",
+    "translations": ["Säufer", "Trunkenbold"],
+    "themen": ["alkohol-kneipe", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "sülzen",
+    "translations": ["nörgeln", "maulen", "jemandem in den Ohren liegen"],
+    "infoText": "Eine Sülzneese ist ein Nörgler.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Sums",
+    "article": "der",
+    "translations": ["viel Aufhebens"],
+    "examples": [{ "example": "Mach bloß nich so’n Summs dadraus!" }],
+    "infoText": "Von ›sumsen‹, Intensivum zu summen.",
+    "themen": []
+  },
+  {
+    "word": "Superhammer",
+    "article": "der",
+    "translations": ["Knüller"],
+    "themen": []
+  },
+  {
+    "word": "Suppenschüsseln",
+    "translations": ["dicke Brillengläser"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Suppenschmiede",
+    "article": "die",
+    "translations": ["Kantine"],
+    "themen": ["essen-trinken", "stadtleben"]
+  },
+  {
+    "word": "susig",
+    "translations": ["dumm"],
+    "infoText": "Heute meistens transusig.",
+    "themen": []
+  }
+]

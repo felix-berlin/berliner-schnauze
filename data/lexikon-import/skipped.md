@@ -32,3 +32,20 @@
 | 3918 | rumflippen | Variante → als alternativeWords bei „flippen" erfasst |
 | 3930 | rumkrebsen | Variante → als alternativeWords bei „krebsen" erfasst |
 | 3936 | Rutsche | Variante → als alternativeWords bei „Hutsche" erfasst |
+| 3948 | Sachsengesocks | bereits im infoText von „Gesockse" erfasst |
+| 4012 | Sankristei | reiner Aussprachehinweis (Sakristei) |
+| 4180 | Schißlaweng | Variante von „Cislaweng" (vor „Dampf", bereits importiert) |
+| 4190 | schlagen | Redensart bereits bei „hinschlagen" erfasst |
+| 4302 | Schlunze | Variante → als alternativeWords bei „Schlumpe" erfasst |
+| 4440 | schnulle | Variante → als alternativeWords bei „schnuddelig" erfasst |
+| 4650 | Trittewar | Variante → als alternativeWords bei „Tretewar" erfasst |
+| 4745 | verfitzen | Variante → als alternativeWords bei „verheddern" erfasst |
+| 4752 | vermickert | Kreuzverweis auf „mickrig" |
+| 4788 | verhohnepiepeln | doppelt in Quelle; einmal erfasst |
+| 4842 | vorbinden | Variante → als alternativeWords bei „vorknöpfen" erfasst |
+| 4900 | widder | reiner Aussprachehinweis (wieder) |
+| 5034 | Zimtzicke | Variante → als alternativeWords bei „Zicke" erfasst |
+| 5025 | Zigarrenfritze | reiner Kreuzverweis auf Ø Fritze |
+| 5059 | zerteppern | Variante → als alternativeWords bei „töppern" erfasst |
+| 5088–5239 | Literaturverzeichnis | Metatext |
+| 5241–5412 | Zusammenfassungsliste | Duplikate der Haupteinträge; nur 7 neue Wörter übernommen |

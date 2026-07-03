@@ -1,0 +1,358 @@
+[
+  {
+    "word": "wa",
+    "translations": ["nicht wahr"],
+    "infoText": "Hat eine ähnliche Funktion wie in anderen Dialekten ›ne‹ oder ›gel‹ und im Amerikanischen ›okay‹.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "wabbelig",
+    "translations": ["flau", "wackelig", "quabbelig"],
+    "themen": []
+  },
+  {
+    "word": "WC",
+    "translations": ["Centrum-Warenhäuser (ironische Abkürzung)"],
+    "examples": [
+      { "example": "Det is ’ne Wolke - Kaufhof, vorher Zentrum." }
+    ],
+    "infoText": "Ostberlinisch.",
+    "themen": ["orte-spitzname", "stadtleben"]
+  },
+  {
+    "word": "Wackelpeter",
+    "article": "der",
+    "translations": ["Götterspeise"],
+    "infoText": "Umgangssprachlich Wackelpudding.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Wade",
+    "article": "die",
+    "translations": ["Wade (in Redewendungen)"],
+    "examples": [
+      { "example": "Der bescheißt sich die Waden.", "explanation": "Er ist übereifrig." },
+      { "example": "Ick krieg den Dot in beede Waden.", "explanation": "Ich lach mich tot." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "wahr",
+    "translations": ["lange her (in der Redensart)"],
+    "examples": [
+      { "example": "Dit is beinah schon nich mehr wahr.", "explanation": "Das ist schon lange her." },
+      { "example": "Dit is nich der wahre Jakob.", "explanation": "Das ist einem nicht ganz angenehm." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "wälzen",
+    "translations": ["kaputtlachen (in der Wendung »zum Wälzen«)"],
+    "examples": [
+      { "example": "Dit is ja zum Wälzen.", "explanation": "Zum Kaputtlachen." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Walzer",
+    "article": "der",
+    "translations": ["Bedeutung (nur verneint)"],
+    "examples": [
+      { "example": "Dit spielt doch keen Walzer!", "explanation": "Das spielt doch keine Rolle." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Wampe",
+    "article": "die",
+    "translations": ["Bauch"],
+    "examples": [
+      { "example": "Sich die Wampe vollschlagen.", "explanation": "Sich vollessen." }
+    ],
+    "themen": ["koerper", "essen-trinken"]
+  },
+  {
+    "word": "Wamse",
+    "article": "die",
+    "translations": ["Schläge"],
+    "infoText": "Man denke an den Wams, der ausgeklopft wird, um den Staub zu entfernen.",
+    "themen": []
+  },
+  {
+    "word": "Wanderbulette",
+    "article": "die",
+    "translations": ["Frikadelle im Brötchen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Wanstrammeln",
+    "article": "das",
+    "translations": ["Bauchschmerzen"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Waschfrau",
+    "article": "die",
+    "translations": ["Abfuhr (in der Redensart)"],
+    "examples": [
+      { "example": "Grüßen Se Ihre Waschfrau.", "explanation": "Gehen Sie Ihrer Wege." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Waschlappen",
+    "article": "der",
+    "translations": ["Schwächling", "Feigling"],
+    "infoText": "Ein Dienstmädchen wurde im 19. Jahrhundert als Waschlappen-Adjutant bezeichnet.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Wasser in die Ecke stellen",
+    "translations": ["pinkeln gehen"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Wasserpollake",
+    "article": "der",
+    "translations": ["Pole (ursprünglich Schlesier)"],
+    "infoText": "Historischer Beleg — die Bezeichnung ist diskriminierend und heute nicht mehr verwendbar.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "wegschmeißen",
+    "translations": ["ausgeben"],
+    "examples": [
+      { "example": "Dafür hab ick zwanzig Märker wegjeschmiss’n." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "wegschmelzen",
+    "translations": ["abhauen, weglaufen", "vor Rührung zerfließen"],
+    "themen": []
+  },
+  {
+    "word": "Weiber schaukeln",
+    "translations": ["tanzen"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "weimern",
+    "translations": ["klagen", "jammern"],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Weiße",
+    "article": "die",
+    "translations": ["Berliner Weißbier"],
+    "infoText": "Helles, obergäriges Bier. Mit einem ›Schuß‹ Himbeer- oder Waldmeistersirup versüßt als Weiße mit Schuß bekannt.",
+    "themen": ["alkohol-kneipe", "stadtleben"]
+  },
+  {
+    "word": "Weißkäse",
+    "article": "der",
+    "translations": ["Quark"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Weltgeschichte",
+    "article": "die",
+    "translations": ["Empörung (in der Redensart)"],
+    "examples": [
+      { "example": "Da hört sich doch die Weltjeschichte uff.", "explanation": "Da hört sich doch alles auf — Ausdruck der Empörung." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "wenn schon, denn schon",
+    "translations": ["dann aber richtig"],
+    "examples": [
+      { "example": "Machste dit heute noch fertig? — Na, wenn schon, denn schon!" }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Wettkampf zwischen Bäcker und Schlächter",
+    "article": "der",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Wichs",
+    "article": "der",
+    "translations": ["übertrieben festliche, elegante Kleidung"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Wichse",
+    "article": "die",
+    "translations": ["Schläge", "Prügel"],
+    "infoText": "Auch verwichsen.",
+    "themen": []
+  },
+  {
+    "word": "Wichser",
+    "article": "der",
+    "translations": ["Angeber"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Wichsgriffel",
+    "translations": ["Hände", "Finger"],
+    "infoText": "Die ›Griffel‹ zum ›Wichsen‹, zum Auf-Hochglanz-Bringen, aber auch mit Anspielung aufs Onanieren.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Wickel",
+    "article": "der",
+    "translations": ["Kragen (in der Wendung »beim Wickel nehmen«)"],
+    "examples": [
+      { "example": "Jemanden bei’m Wickel nehmen.", "explanation": "Ihn sich vorknöpfen. Wickel meint die im Nacken zusammengezogenen Haare." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "wie",
+    "translations": ["als", "sowie", "sobald"],
+    "examples": [{ "example": "Meene Keule is jünger wie icke." }],
+    "themen": []
+  },
+  {
+    "word": "wie noch nie",
+    "translations": ["sehr"],
+    "examples": [{ "example": "Da hab ick jelacht, wie noch nie." }],
+    "themen": []
+  },
+  {
+    "word": "Wiese mähen",
+    "translations": ["Haare schneiden"],
+    "examples": [
+      { "example": "Dann ist die Wiese grün!", "explanation": "Dann ist meine Geduld am Ende. Abgeleitet von der Spielansage Pik — die Farbe ist im deutschen Kartenspiel grün." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Willem",
+    "article": "der",
+    "translations": ["Wilhelm"],
+    "examples": [
+      { "example": "Der macht ’nen dicken Willem.", "explanation": "Er gibt an." }
+    ],
+    "infoText": "Ein falscher Willem ist ein falsches Haarteil.",
+    "themen": []
+  },
+  {
+    "word": "Wirsing",
+    "article": "der",
+    "translations": ["Kopf"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Wirtschaft",
+    "article": "die",
+    "translations": ["Haushalt", "Aufregung, Unordnung"],
+    "examples": [{ "example": "Mach doch hier nich so’ne Wirtschaft." }],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Wodka",
+    "article": "der",
+    "translations": ["Wodka (im Ostberliner Spruch)"],
+    "examples": [
+      { "example": "Wodka schmeckt ooch ohne Zähne.", "explanation": "Ostberliner Spruch." }
+    ],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Wolke",
+    "article": "die",
+    "translations": ["großartige Sache"],
+    "examples": [
+      { "example": "Dit is ne Wolke.", "explanation": "Das ist eine Wucht." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Wonneproppen",
+    "article": "der",
+    "translations": ["strahlendes Baby", "mollige Blondine"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Wonneschaukel",
+    "article": "die",
+    "translations": ["Hochzeitskutsche"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Wrasen",
+    "article": "der",
+    "translations": ["Wasserdampf"],
+    "infoText": "Niederdeutsches Wort, das seit dem 18. Jahrhundert von Berlin aus in die Literatursprache eingedrungen ist.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Wucht",
+    "article": "die",
+    "translations": ["Tracht Prügel", "großartige Sache (anerkennend)"],
+    "examples": [
+      { "example": "Dit is ’ne Wucht.", "explanation": "Ausdruck der Anerkennung, des Lobes." }
+    ],
+    "infoText": "Von obersächsisch Wucht = Gewicht, Schwere.",
+    "themen": []
+  },
+  {
+    "word": "Wuchtbrumme",
+    "article": "die",
+    "translations": ["duftes Mädchen"],
+    "infoText": "›’ne dufte Biene‹.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Wundertüte",
+    "article": "die",
+    "translations": ["Knallkopf, der für Überraschungen sorgt"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Wuppdich",
+    "article": "der",
+    "translations": ["Schwung"],
+    "alternativeWords": ["Wuppdi"],
+    "infoText": "Ausruf zum Ausdruck einer schnellen und plötzlichen Bewegung.",
+    "themen": []
+  },
+  {
+    "word": "Wuppdizität",
+    "article": "die",
+    "translations": ["Geschwindigkeit"],
+    "infoText": "Um 1860 in Berlin entstanden.",
+    "themen": []
+  },
+  {
+    "word": "wurachen",
+    "translations": ["mit lauten Geräuschen herumarbeiten"],
+    "themen": []
+  },
+  {
+    "word": "Würger",
+    "article": "der",
+    "translations": ["Krawatte"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Wurst",
+    "article": "die",
+    "translations": ["Essen (in der Wendung »’ne Wurst fassen«)"],
+    "examples": [
+      { "example": "’ne Wurst fassen.", "explanation": "Essen." }
+    ],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "wuschig",
+    "translations": ["ungekämmt", "zerstreut, unkonzentriert"],
+    "infoText": "Von wuscheln = zersausen, zerknüllen.",
+    "themen": ["koerper"]
+  }
+]

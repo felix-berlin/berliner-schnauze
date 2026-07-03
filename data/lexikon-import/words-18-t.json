@@ -1,0 +1,483 @@
+[
+  {
+    "word": "Tablettschluse",
+    "article": "die",
+    "translations": ["Serviererin"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Tacheles",
+    "translations": ["Tatsachen"],
+    "examples": [
+      { "example": "Tacheles reden.", "explanation": "Zur Sache kommen." }
+    ],
+    "infoText": "Von jiddisch tachlis = Endzweck.",
+    "themen": []
+  },
+  {
+    "word": "Tachtel",
+    "article": "die",
+    "translations": ["Ohrfeige"],
+    "examples": [
+      { "example": "Jemandem eine tachteln.", "explanation": "Eine runterhauen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Tallpatsch",
+    "article": "der",
+    "translations": ["Tollpatsch"],
+    "infoText": "Von ungarisch talpas = breitfüßig. Auch als Verb talpatschen = ungeschickt handeln.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "talpschen",
+    "translations": ["ungeschickt mit den Händen fassen"],
+    "alternativeWords": ["talpchen", "antalpchen"],
+    "themen": []
+  },
+  {
+    "word": "Tankstelle",
+    "article": "die",
+    "translations": ["Kneipe"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Tante",
+    "article": "die",
+    "translations": ["Freundin", "Dame beim Kartenspiel", "Pfandhaus"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Tante-Emma-Laden",
+    "article": "der",
+    "translations": ["kleines Einzelhandelsgeschäft"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "tapern",
+    "translations": ["ungeschickt handeln"],
+    "infoText": "Nebenform zu talpen = schwer auftreten, und tappen.",
+    "themen": []
+  },
+  {
+    "word": "Tapetenflunder",
+    "article": "die",
+    "translations": ["Wanze"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "tapsen",
+    "translations": ["tappen"],
+    "infoText": "Tapsig = ungeschickt.",
+    "themen": []
+  },
+  {
+    "word": "Tatzen",
+    "translations": ["Hände"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "teckelig",
+    "translations": ["krummbeinig"],
+    "infoText": "Als Verb: mit den Fußspitzen einwärts gehen.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Teigaffe",
+    "article": "der",
+    "translations": ["Bäcker (herabsetzend)"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "teilachen",
+    "translations": ["ausreißen", "flüchten"],
+    "infoText": "Jiddisch.",
+    "themen": []
+  },
+  {
+    "word": "Telespargel",
+    "article": "der",
+    "translations": ["Fernsehturm in Berlin-Mitte"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Teller bunte Knete",
+    "article": "der",
+    "translations": ["Pizza"],
+    "infoText": "Verweist offensichtlich auch auf die gleichnamige Rockgruppe.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Tellermine",
+    "article": "die",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Tepper",
+    "article": "der",
+    "translations": ["ungeschickter Mensch"],
+    "examples": [
+      { "example": "Geschirr zerteppern.", "explanation": "In Scherben schmeißen." }
+    ],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Teppich",
+    "article": "der",
+    "translations": ["Ruhe (in der Wendung »auf dem Teppich bleiben«)"],
+    "examples": [
+      { "example": "Bleib’n Se uff’n Teppich.", "explanation": "Regen Sie sich nicht so auf, bleiben Sie ruhig." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Terke",
+    "article": "der",
+    "translations": ["Türke"],
+    "examples": [
+      { "example": "Hat keener kleenen Terken nich gesehen?", "explanation": "Scherzhafte Äußerung, 1872 verzeichnet." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Tick",
+    "article": "der",
+    "translations": ["Verrücktheit"],
+    "examples": [
+      { "example": "Der tickt nich sauber.", "explanation": "Er spinnt." },
+      { "example": "Der hat ’nen Tick unter’m Pony." }
+    ],
+    "infoText": "Von französisch tic = fehlerhafte Angewohnheit von Pferden.",
+    "themen": []
+  },
+  {
+    "word": "tigern",
+    "translations": ["sich (zu Fuß) beeilen"],
+    "examples": [{ "example": "Ick muß schnell nach Hause tigern." }],
+    "themen": []
+  },
+  {
+    "word": "Tingeltangel",
+    "article": "das",
+    "translations": ["musikalische Darbietung in Vergnügungsstätten"],
+    "infoText": "Kennzeichnung der musikalischen Darbietungen von Vergnügungsstätten Anfang der 1870er Jahre. Vgl. schallnachahmend ›ting tang‹ für den Beckenschlag.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Tintenpropfen",
+    "article": "der",
+    "translations": ["Zylinderhut"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Tintenpisser",
+    "article": "der",
+    "translations": ["Schreiberling"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Tippelschickse",
+    "article": "die",
+    "translations": ["Strichmädchen"],
+    "infoText": "Siehe auch Schickse.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Tippelchen",
+    "article": "das",
+    "translations": ["ganz kleiner Fleck"],
+    "infoText": "Tüpfelchen.",
+    "themen": []
+  },
+  {
+    "word": "Titkendreher",
+    "article": "der",
+    "translations": ["Tütendreher", "Ladendiener"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": []
+  },
+  {
+    "word": "Todesknolle",
+    "article": "die",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Töle",
+    "article": "die",
+    "translations": ["kläffender Hund"],
+    "infoText": "Niederdeutsch.",
+    "themen": []
+  },
+  {
+    "word": "toll",
+    "translations": ["wunderbar", "prima"],
+    "themen": []
+  },
+  {
+    "word": "Tomaten",
+    "translations": ["schlechtes Sehen (in der Redensart)"],
+    "examples": [
+      { "example": "Du hast wohl Tomaten uff’n Oogen!", "explanation": "Du kannst wohl nicht richtig gucken." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Ton",
+    "article": "der",
+    "translations": ["Worte (in der Redensart)"],
+    "examples": [
+      { "example": "Haste Töne?", "explanation": "Hast du Worte?" }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "töppern",
+    "translations": ["Geschirr zerbrechen"],
+    "alternativeWords": ["zertöppern", "zerteppern"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Tort",
+    "article": "der",
+    "translations": ["Kränkung (in der Wendung »einen Tort antun«)"],
+    "infoText": "Von französisch tort = Unrecht.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Torte",
+    "article": "die",
+    "translations": ["Freundin", "Frau", "Partnerin"],
+    "infoText": "Jugendsprachlich.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "totschick",
+    "translations": ["besonders schick"],
+    "infoText": "Von französisch tout chic.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Tour",
+    "article": "die",
+    "translations": ["Masche", "Art"],
+    "examples": [
+      { "example": "Aber nich uff die Tour.", "explanation": "Nicht auf die Art und Weise." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Trabbi",
+    "article": "der",
+    "translations": ["Trabant (Auto)"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Traberpastete",
+    "article": "die",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Trampelloge",
+    "article": "die",
+    "translations": ["billigster Platz im Theater"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "trampsen",
+    "translations": ["trampeln"],
+    "themen": []
+  },
+  {
+    "word": "Tran",
+    "article": "der",
+    "translations": ["Rausch (in der Wendung »im Tran sein«)"],
+    "infoText": "Wer »im Tran ist«, ist betrunken — deshalb aber nicht unbedingt transusig (langweilig und behäbig). Eine schlecht brennende Lampe ist eine Tranfunzel.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Tränentier",
+    "article": "das",
+    "translations": ["Trottel"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Traute",
+    "article": "die",
+    "translations": ["Mut"],
+    "infoText": "Substantiv zu ›sich trauen‹.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Trecker",
+    "article": "der",
+    "translations": ["Erstaunen (in der Redensart)"],
+    "examples": [
+      { "example": "Ick gloob mein Trecker humpelt!", "explanation": "Ich glaube, ich spinne." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Treppe",
+    "article": "die",
+    "translations": ["neuer Haarschnitt (in der spöttischen Frage)"],
+    "examples": [
+      { "example": "Biste die Treppe runterjefall’n?", "explanation": "Hast du dir die Haare schneiden lassen?" }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Tretbretter",
+    "translations": ["Schuhe"],
+    "alternativeWords": ["Treter"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Tretewar",
+    "article": "das",
+    "translations": ["Bürgersteig", "Trottoir"],
+    "alternativeWords": ["Trittewar"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Tretmine",
+    "article": "die",
+    "translations": ["Hundekot auf dem Bürgersteig", "Bulette"],
+    "examples": [
+      { "example": "Achtung, Tretmine!", "explanation": "Pass auf, da liegt Hundekot." }
+    ],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Triene",
+    "article": "die",
+    "translations": ["einfältiges Mädchen"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Triesel",
+    "article": "der",
+    "translations": ["Kreisel"],
+    "infoText": "Wem »trieselig wird«, dem wird schwindelig oder er ist betrunken.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "tritzen",
+    "translations": ["quälen", "peinigen (insbesondere bei Prüfungen)"],
+    "infoText": "Gehört zu norddeutsch Tritze = Rolle, Winde.",
+    "themen": []
+  },
+  {
+    "word": "Trittchen",
+    "translations": ["Schuhe"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "trommeln",
+    "translations": ["angeben"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Trulla",
+    "article": "die",
+    "translations": ["Freundin", "Frau", "Mädchen"],
+    "infoText": "Von trollen = sich schwerfällig bewegen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Tschako",
+    "article": "der",
+    "translations": ["Polizeihelm", "Polizist"],
+    "infoText": "Ursprünglich ironische Bezeichnung für den Polizeihelm, was auf die Kopfbedeckung der preußischen Husaren ab 1804 zurückgeht.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Tube",
+    "article": "die",
+    "translations": ["Gaspedal (in der Wendung »auf die Tube drücken«)"],
+    "examples": [
+      { "example": "Uff de Tube drücken.", "explanation": "Schnell fahren, aber auch mehr machen, als nötig ist." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Tucke",
+    "article": "die",
+    "translations": ["Frau (abfällig)"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "tuckeln",
+    "translations": ["langsam fahren"],
+    "examples": [{ "example": "Kiek mal, da kommt Kutte anjetuckelt!" }],
+    "infoText": "Lautnachahmend für das Motorengeräusch.",
+    "themen": []
+  },
+  {
+    "word": "tücksch",
+    "translations": ["trotzig", "zornig"],
+    "infoText": "Von tückisch.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Tülle",
+    "article": "die",
+    "translations": ["Frau (abfällig)"],
+    "infoText": "Eigentlich Ausguss der Kanne.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Türkenkoffer",
+    "article": "der",
+    "translations": ["Plastiktüte"],
+    "infoText": "Historischer Beleg — die Bezeichnung ist diskriminierend und heute nicht mehr verwendbar.",
+    "themen": []
+  },
+  {
+    "word": "Tussi",
+    "article": "die",
+    "translations": ["Frau", "Freundin"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Tüte",
+    "article": "die",
+    "translations": ["Person (leicht negativ)", "Ablehnung (»kommt nich inne Tüte«)"],
+    "examples": [
+      { "example": "Kommt nich inne Tüte!", "explanation": "Kommt nicht in Frage." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "tuten",
+    "translations": ["trinken", "blasen"],
+    "examples": [
+      { "example": "Der hat ja von Tuten und Blasen keene Ahnung." }
+    ],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Tütenschlund",
+    "article": "der",
+    "translations": ["Mund"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Tutrian",
+    "article": "der",
+    "translations": ["Trompeter", "Angeber"],
+    "themen": []
+  },
+  {
+    "word": "tutschen",
+    "translations": ["trinken"],
+    "infoText": "Vielleicht von »an der Tutte saugen«, parallel zu lutschen und niederdeutsch tuschen = saugen.",
+    "themen": ["alkohol-kneipe"]
+  }
+]
