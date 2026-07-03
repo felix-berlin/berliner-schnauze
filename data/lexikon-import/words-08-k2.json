@@ -1,0 +1,714 @@
+[
+  {
+    "word": "Knaatsch",
+    "article": "der",
+    "translations": ["Ärger"],
+    "infoText": "Vielleicht von niederdeutsch Gnatz = übelgelaunter Mensch.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Knackarsch",
+    "article": "der",
+    "translations": ["erotisierende Hinteransicht einer Person"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "oller Knacker",
+    "article": "der",
+    "translations": ["alter Mann"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Knall",
+    "article": "der",
+    "translations": ["Verrücktheit (in der Wendung »einen Knall haben«)"],
+    "examples": [
+      { "example": "Du hast wohl ’n Knall?", "explanation": "Du bist wohl verrückt." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "knallig",
+    "translations": ["stark auffallend (von Farben)"],
+    "examples": [{ "example": "Knallige Farben." }],
+    "themen": []
+  },
+  {
+    "word": "Knallkopp",
+    "article": "der",
+    "translations": ["Dummkopf"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Knallschote",
+    "article": "die",
+    "translations": ["Ohrfeige"],
+    "themen": []
+  },
+  {
+    "word": "Knalltüte",
+    "article": "die",
+    "translations": ["Blödmann", "Spinner"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "knapp",
+    "translations": ["nicht zu wenig (verneint)", "eng anliegend"],
+    "examples": [
+      { "example": "Jib ma mal ’n Stück Fleisch, aber nich zu knapp.", "explanation": "Nicht zu wenig, sprich: besonders viel." },
+      { "example": "Die Hose is zu knapp." }
+    ],
+    "infoText": "Von mittelniederdeutsch knap(pe) = eng, rar, spärlich.",
+    "themen": []
+  },
+  {
+    "word": "knapsen",
+    "translations": ["sparen"],
+    "infoText": "Verwandt mit knappen = sich einschränken.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Knarre",
+    "article": "die",
+    "translations": ["Revolver", "Gewehr"],
+    "themen": []
+  },
+  {
+    "word": "Knast",
+    "article": "der",
+    "translations": ["Gefängnis", "Hunger (»Knast haben«)"],
+    "infoText": "Von jiddisch knas = Geldstrafe. Ein Insasse heißt Knasti oder Knastbruder, auch Knacki.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Knautschke",
+    "translations": ["früherer Name eines Nilpferds im Berliner Zoo"],
+    "infoText": "Von knautschen = zusammendrücken, knittern.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Knautschkommode",
+    "article": "die",
+    "translations": ["Ziehharmonika"],
+    "alternativeWords": ["Quetschkommode"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Kneipe",
+    "article": "die",
+    "translations": ["typische Berliner Gastwirtschaft", "Trinklokal"],
+    "infoText": "Der Besitzer wird Kneipier genannt.",
+    "themen": ["alkohol-kneipe", "stadtleben"]
+  },
+  {
+    "word": "kneisten",
+    "translations": ["blinzeln"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Knete",
+    "article": "die",
+    "translations": ["Geld"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Knief",
+    "article": "das",
+    "translations": ["Taschenmesser"],
+    "infoText": "Von französisch canif.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Knies",
+    "article": "der",
+    "translations": ["Streit"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Knilch",
+    "article": "der",
+    "translations": ["unsympathischer Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Knobländer",
+    "translations": ["Knoblauchwürste", "Hände"],
+    "examples": [{ "example": "Jeh mit deine Knobländer da weg!" }],
+    "infoText": "Abgeleitet von Knobel = (Finger-)Knöchel, im Plural auch »Faust«.",
+    "themen": ["koerper", "essen-trinken"]
+  },
+  {
+    "word": "Knobloch",
+    "article": "der",
+    "translations": ["Knoblauch"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Knochenkalle",
+    "article": "der",
+    "translations": ["dünner Mensch", "Skelett"],
+    "themen": ["koerper", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Knochenmühle",
+    "article": "die",
+    "translations": ["schwere, anstrengende Arbeit", "Arbeitsstätte"],
+    "themen": []
+  },
+  {
+    "word": "knochentrocken",
+    "translations": ["äußerst trocken"],
+    "themen": []
+  },
+  {
+    "word": "knödeln",
+    "translations": ["Fußball spielen"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "knöken",
+    "translations": ["schlagen", "koten"],
+    "infoText": "Von niederdeutsch Knöken = Knochen.",
+    "themen": []
+  },
+  {
+    "word": "Knolle",
+    "article": "die",
+    "translations": ["Nase"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Knopp",
+    "article": "der",
+    "translations": ["Mensch (meist negativ)"],
+    "examples": [
+      { "example": "’n oller Knopp.", "explanation": "Ein unfreundlicher alter Mann. Ein »kleiner Knopp« ist hingegen ein kleiner, niedlicher Junge." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "knorke",
+    "translations": ["prima", "dufte", "großartig"],
+    "examples": [{ "example": "Knorke ist dreimal so dufte wie schnafte." }],
+    "infoText": "Vielleicht entstanden als Reimwort zu Lorke, aus knorrig = kraftvoll mit der niederdeutschen Verkleinerungssilbe -ke, oder aus der Posse »Die Familie Knorke« des Varietékomikers Rudolf Melzer.",
+    "themen": []
+  },
+  {
+    "word": "Knösel",
+    "article": "der",
+    "translations": ["Tabakspfeife"],
+    "themen": []
+  },
+  {
+    "word": "Knubben",
+    "article": "der",
+    "translations": ["Astknoten"],
+    "alternativeWords": ["Knubbel"],
+    "infoText": "Niederdeutsch. Knubbelig ist knotig, knollig.",
+    "themen": []
+  },
+  {
+    "word": "Knuddel",
+    "article": "der",
+    "translations": ["Knäuel"],
+    "themen": []
+  },
+  {
+    "word": "knülle",
+    "translations": ["völlig betrunken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Knülsch",
+    "article": "der",
+    "translations": ["Kerl"],
+    "infoText": "Vielleicht aus rotwelsch knollig = bäuerisch, grob.",
+    "themen": []
+  },
+  {
+    "word": "Knüppel",
+    "article": "der",
+    "translations": ["schmales Weißbrötchen"],
+    "infoText": "Im Gegensatz zur Schrippe mit Milch anstatt Wasser zubereitet.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "knüppeldicke voll",
+    "translations": ["stockbetrunken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "knüppern",
+    "translations": ["knoten", "binden"],
+    "themen": []
+  },
+  {
+    "word": "koddern",
+    "translations": ["rummanschen"],
+    "examples": [{ "example": "Kodder da nich mit dein unejalen Finger drin rum!" }],
+    "infoText": "Von mittelniederdeutsch Kod(d)er = Schleim, Rotz.",
+    "themen": []
+  },
+  {
+    "word": "Kodderschnauze",
+    "article": "die",
+    "translations": ["freches Mundwerk"],
+    "infoText": "Negative Bezeichnung für die berühmt-berüchtigte »Berliner Schnauze«.",
+    "themen": ["charakter-eigenschaften", "stadtleben"]
+  },
+  {
+    "word": "Koffer",
+    "article": "der",
+    "translations": ["Anlass zur Rückkehr nach Berlin (in der Wendung)"],
+    "examples": [
+      { "example": "Einen Koffer in Berlin haben.", "explanation": "Geht zurück auf den Schlager »Ich hab noch einen Koffer in Berlin«." }
+    ],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Kofferheule",
+    "article": "die",
+    "translations": ["Radio", "Kofferradio"],
+    "themen": ["alltag-wohnen", "unterhaltung-freizeit"]
+  },
+  {
+    "word": "Kohlblätter",
+    "translations": ["Ohren"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Kohl",
+    "article": "der",
+    "translations": ["Stuß", "Blödsinn"],
+    "examples": [
+      { "example": "Dit macht den Kohl ooch nich fett.", "explanation": "Das macht auch nichts weiter aus." },
+      { "example": "Red doch nich so’n Kohl." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Kohldampf schieben",
+    "translations": ["Hunger haben"],
+    "infoText": "Rotwelsch Koller sowie Dampf meint »Hunger«.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Kohle",
+    "article": "die",
+    "translations": ["Geld"],
+    "examples": [
+      { "example": "Die Kohlen locker machen.", "explanation": "Bezahlen." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Kohlenkarte",
+    "article": "die",
+    "translations": ["Gehaltsabrechnung"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "kokeln",
+    "translations": ["mit Feuer spielen"],
+    "infoText": "Norddeutsch und obersächsisch.",
+    "themen": []
+  },
+  {
+    "word": "Koks",
+    "article": "der",
+    "translations": ["Geld", "Kokain", "Unsinn"],
+    "examples": [
+      { "example": "Red’ bloß keen’ Koks!", "explanation": "Rede bloß keinen Unsinn." }
+    ],
+    "infoText": "Abgeleitet von Koks = steifer Herrenhut, was auf William Coke zurückgeht, der den Hut populär machte. Siehe auch Graf Koks von der Gasanstalt.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Kölner Kotze",
+    "article": "die",
+    "translations": ["Italienischer Salat"],
+    "alternativeWords": ["Mobbelkotze"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Kommfranzundjeh",
+    "article": "der",
+    "translations": ["Conférencier", "Ansager"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Kommunistenschaukel",
+    "article": "die",
+    "translations": ["Wagen der tschechischen Marke »Tatra«"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Kompott",
+    "article": "das",
+    "translations": ["noch zu Erledigendes (in der Wendung)"],
+    "examples": [
+      { "example": "Dit hängt als Kompott hinten noch mit dranne.", "explanation": "Das muss noch erledigt werden." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Kompottschalen",
+    "translations": ["extrem dicke Brillengläser"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Konfusionsrat",
+    "article": "der",
+    "translations": ["konfuser Mensch"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Koofmich",
+    "article": "der",
+    "translations": ["Kaufmann", "Materialist"],
+    "infoText": "Mensch mit konsumistisch-hedonistischer Lebenseinstellung. Entweder aus berlinisch koofen und Michel (in Anlehnung an den »Deutschen Michel«) oder aus »Kauf (Koof) mich!«.",
+    "themen": ["geld", "stadtleben"]
+  },
+  {
+    "word": "Kopf",
+    "article": "der",
+    "translations": ["Kopf (in zahlreichen Redewendungen)"],
+    "examples": [
+      { "example": "Der is nich uff’n Kopp jefall’n.", "explanation": "Er ist pfiffig." },
+      { "example": "Wat man nich im Koppe hat, muß man inne Beene ham." }
+    ],
+    "infoText": "Der Kopf spielt in zahlreichen Schimpfwörtern eine Rolle: Knallkopp, Döskopp, Doofkopp, Scheißkopp.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Kopfschuster",
+    "article": "der",
+    "translations": ["Hutmacher"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": []
+  },
+  {
+    "word": "Korinthenkacker",
+    "article": "der",
+    "translations": ["überkorrekter Mensch"],
+    "alternativeWords": ["Krümelkacker"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "koscher",
+    "translations": ["rein", "einwandfrei"],
+    "examples": [{ "example": "Ick weeß nich, aber der Typ kommt ma nich janz koscher vor." }],
+    "infoText": "Von jiddisch koscher = rein.",
+    "themen": []
+  },
+  {
+    "word": "Kosthappen",
+    "article": "der",
+    "translations": ["Kostprobe von Nahrungsmitteln"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Köter",
+    "article": "der",
+    "translations": ["Hund (abfällig)"],
+    "infoText": "Niederdeutsch.",
+    "themen": []
+  },
+  {
+    "word": "kotzen",
+    "translations": ["sich erbrechen"],
+    "examples": [
+      { "example": "Man kann nicht soviel fressen, wie man kotzen möchte.", "explanation": "Max Liebermann über die Nazi-Zeit." }
+    ],
+    "infoText": "Bereits Mitte des 18. Jahrhunderts als »verächtliches Pöbelwort« charakterisiert. Ein Kotzbalken ist eine schlechte Zigarre, ein Kotzbrocken oder Kotzproppen ein widerlicher Mensch.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Krabbe",
+    "article": "die",
+    "translations": ["kleines, niedliches Kind bzw. Mädchen"],
+    "infoText": "Von mittelniederdeutsch krabbe = krabbelndes Tier.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Kränke",
+    "article": "die",
+    "translations": ["Krankheit"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Kragenweite",
+    "article": "die",
+    "translations": ["passende Größe (nur verneint)"],
+    "examples": [
+      { "example": "Dit is nich meine Kragenweite.", "explanation": "Die Sache ist eine Nummer zu groß für mich; ist mir nicht angenehm." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Krakel",
+    "article": "der",
+    "translations": ["Streit", "Lärm"],
+    "infoText": "Auch krakehlen, Krakehler. Entweder von französisch querelle = Streit oder von mittelniederdeutsch krackel(e).",
+    "themen": []
+  },
+  {
+    "word": "Krakelpfoten",
+    "translations": ["unsaubere Schrift"],
+    "infoText": "Mittelniederdeutsch kraken, Kroken = falten.",
+    "themen": []
+  },
+  {
+    "word": "kramig",
+    "translations": ["unordentlich"],
+    "infoText": "Von Kram = Krempel, wertloses Zeug.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Kramme",
+    "article": "die",
+    "translations": ["Krampe", "U-förmig gebogener Metallhaken"],
+    "infoText": "Auch Papierhaken, wenn Schüler mit einem »Schießgummi« Krammen schießen.",
+    "themen": []
+  },
+  {
+    "word": "Kranz",
+    "article": "der",
+    "translations": ["Kranz (in der derben Redensart)"],
+    "examples": [
+      { "example": "Koof dir’n Kranz und wart’ uff’n Friedhof, bis de begraben wirst." }
+    ],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Krauter",
+    "article": "der",
+    "translations": ["Sonderling (»oller Krauter«)", "Besitzer einer Werkstatt oder eines Ladens"],
+    "themen": ["charakter-eigenschaften", "stadtleben"]
+  },
+  {
+    "word": "krebsen",
+    "translations": ["nicht richtig vorankommen", "trödeln"],
+    "alternativeWords": ["rumkrebsen"],
+    "themen": []
+  },
+  {
+    "word": "krepeln",
+    "translations": ["dahinvegetieren"],
+    "infoText": "Bei Trachsel (1873) fortkrepeln in der Bedeutung von ›kümmerlich fortleben‹.",
+    "themen": []
+  },
+  {
+    "word": "Krepierseite",
+    "article": "die",
+    "translations": ["Sterbelager (in der Wendung)"],
+    "examples": [
+      { "example": "Der liegt uff de Krepierseite.", "explanation": "Er hat nicht mehr lange zu leben." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "kreuzfidel",
+    "translations": ["munter", "heiter", "sehr froh"],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "kribbelig",
+    "translations": ["reizbar", "nervös", "unruhig"],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Kriere",
+    "article": "die",
+    "translations": ["Kälte"],
+    "infoText": "Jiddisch.",
+    "themen": []
+  },
+  {
+    "word": "krimitiv",
+    "translations": ["kriminell und primitiv"],
+    "infoText": "Verschmelzung aus kriminell und primitiv.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Krips",
+    "article": "der",
+    "translations": ["Kehlkopf"],
+    "infoText": "Abgeleitet von Grips = Kerngehäuse, siehe auch Griepsch.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "krisselig",
+    "translations": ["mit leicht gekräuselter Oberfläche"],
+    "themen": []
+  },
+  {
+    "word": "Kronsohn",
+    "article": "der",
+    "translations": ["Sohn"],
+    "infoText": "Hebt die enge Beziehung zwischen Vater und Sohn hervor.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Kroppzeug",
+    "article": "das",
+    "translations": ["Gesindel", "kleine Kinder"],
+    "infoText": "Von mittelniederdeutsch kropp = Kleinvieh.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Kröte",
+    "article": "die",
+    "translations": ["Schimpfwort oder Kosewort für ein Kind", "Geld (Plural)"],
+    "infoText": "Adjektivisch im Sinne von kratzbürstig, gereizt.",
+    "themen": ["geld", "beziehungen-soziales"]
+  },
+  {
+    "word": "Krücke",
+    "article": "die",
+    "translations": ["unsympathischer Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "kruke machen",
+    "translations": ["schlapp machen"],
+    "infoText": "Eine Kruke ist eine seltsame Person, ein Sonderling.",
+    "themen": []
+  },
+  {
+    "word": "Kts",
+    "translations": ["Kaffeesahne"],
+    "infoText": "Ostberlinisch, abgekürzt aus Kuhtittensaft.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "kübeln",
+    "translations": ["trinken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Kuddelmuddel",
+    "article": "der",
+    "translations": ["Durcheinander", "Wirrwarr"],
+    "infoText": "Aus niederdeutsch koddeln = flüchtig waschen und modder = Schmutz. Um die Mitte des 19. Jahrhunderts von Berlin aus verbreitet.",
+    "themen": []
+  },
+  {
+    "word": "kümmeln",
+    "translations": ["einen Schnaps (Kümmelkorn) trinken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Kümmel hauen",
+    "translations": ["Faustschlag auf einen Muskel geben"],
+    "themen": []
+  },
+  {
+    "word": "Kümmeltürke",
+    "article": "der",
+    "translations": ["Schimpfwort", "Gemüsehändler"],
+    "infoText": "Eigentlich ein altes Studentenwort aus der Zeit des Corpsgeistes: »Er sauft wie’n Kümmeltürke«. Heute ein diskriminierendes Schimpfwort.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Kuhfuß",
+    "article": "der",
+    "translations": ["Gewehr"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": []
+  },
+  {
+    "word": "Kujon",
+    "article": "der",
+    "translations": ["Schurke", "Schuft"],
+    "infoText": "Von französisch couillon.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "kujonieren",
+    "translations": ["jemanden ärgern, quälen, schikanieren"],
+    "themen": []
+  },
+  {
+    "word": "Kule",
+    "article": "die",
+    "translations": ["Vertiefung im Boden (z.B. Sandkule)", "Brot"],
+    "infoText": "Norddeutsch, von mittelniederdeutsch kule = runder, verdickter Gegenstand.",
+    "themen": []
+  },
+  {
+    "word": "Kulleraugen",
+    "translations": ["große, runde Augen"],
+    "examples": [
+      { "example": "Mach doch nich solche Kulleroogen.", "explanation": "Schau mich nicht so erwartungsvoll an." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Kulör",
+    "article": "die",
+    "translations": ["Farbe", "Sorte Mensch (übertragen)"],
+    "examples": [
+      { "example": "Die Kulör kenn ick.", "explanation": "Die Personen kenne ich, die taugen allesamt nichts." }
+    ],
+    "infoText": "Von französisch couleur.",
+    "themen": []
+  },
+  {
+    "word": "Kulturpickel",
+    "article": "der",
+    "translations": ["Kongresshalle in Berlin-Ost"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "fauler Kunde",
+    "article": "der",
+    "translations": ["zahlungsunfähiger Mensch", "zweifelhafte Person"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Kunkel fassen",
+    "translations": ["Ausflüchte suchen, um die Wahrheit zu verheimlichen"],
+    "infoText": "Kunkeln bzw. umgangssprachlich kungeln, wie mauscheln.",
+    "themen": []
+  },
+  {
+    "word": "künstlich",
+    "translations": ["grundlos (in der Wendung »sich künstlich aufregen«)"],
+    "examples": [
+      { "example": "Nu reg’ da nich künstlich auf.", "explanation": "Reg dich nicht grundlos auf." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Kürbis",
+    "article": "der",
+    "translations": ["Kopf"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "kuschki machen",
+    "translations": ["nachsitzen"],
+    "themen": []
+  },
+  {
+    "word": "Kute",
+    "article": "die",
+    "translations": ["Grube"],
+    "themen": []
+  },
+  {
+    "word": "Kutte",
+    "article": "die",
+    "translations": ["Jacke", "Kurzform für Kurt"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "KWV",
+    "translations": ["Kommunale Wohnungsverwaltung (spöttisch: »Kaputt-wüst-verrottet«)"],
+    "infoText": "Jugendsprachlich, ostberlinisch.",
+    "themen": ["stadtleben"]
+  }
+]

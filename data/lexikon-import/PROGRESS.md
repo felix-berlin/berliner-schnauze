@@ -11,7 +11,8 @@ Quelldatei: `berlinisch_lexikon.md` (5418 Zeilen, Upload), Start nach Eintrag
 | 1591–1860 (G) | ✅ kuratiert | words-04-g.json |
 | 1862–2107 (H) | ✅ kuratiert | words-05-h.json |
 | 2109–2179 (I–J) | ✅ kuratiert | words-06-i-j.json |
-| 2180–5418 (K–Z) | ⏳ offen | — |
+| 2180–2686 (K) | ✅ kuratiert | words-07-k1.json, words-08-k2.json |
+| 2688–5418 (L–Z) | ⏳ offen | — |
 
 Hinweis: Die PDF→Markdown-Konvertierung hat die zwei Spalten des Originals
 teils verschachtelt — Einträge können mitten im Satz abbrechen und viele

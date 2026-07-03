@@ -13,3 +13,5 @@
 | 1897–1899 | heißen | nur ironischer Ausspruch zur Berliner Aussprache, kein Dialektwort |
 | 1915 | Heringsfritze | reiner Kreuzverweis auf Ø Fritze |
 | 2062 | Hausknüppel | Variante → als alternativeWords bei „Hausknochen" erfasst |
+| 2367 | Knust | Variante → als alternativeWords bei „Kanten" erfasst |
+| 2612 | Krümelkacker | Variante → als alternativeWords bei „Korinthenkacker" erfasst |
