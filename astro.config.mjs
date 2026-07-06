@@ -325,10 +325,9 @@ export default defineConfig({
         runtimeCaching: [
           {
             urlPattern: /.*\/api\/search\/index\.json$/,
-            handler: "NetworkFirst",
+            handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-index",
-              networkTimeoutSeconds: 10,
               expiration: {
                 maxEntries: 5,
                 maxAgeSeconds: 10_800, // 3 hours
@@ -340,10 +339,9 @@ export default defineConfig({
           },
           {
             urlPattern: /.*\/api\/search\/meta\.json$/,
-            handler: "NetworkFirst",
+            handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-meta",
-              networkTimeoutSeconds: 10,
               expiration: {
                 maxEntries: 5,
                 maxAgeSeconds: 10_800, // 3 hours

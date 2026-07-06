@@ -4,6 +4,13 @@ import WordFilter from "@components/word-search/WordFilter.vue";
 import WordSearchList from "@components/word-search/WordSearchList.vue";
 ---
 
+{/* Warm up the search index before the Vue island hydrates and fires its
+    first computation. crossorigin="anonymous" is required for reuse: fetch()
+    defaults to mode "cors" + credentials "same-origin" (even same-origin),
+    and only crossorigin="anonymous" produces that same key — omitting the
+    attribute would create a no-cors/include preload that never matches. */}
+<link rel="preload" href="/api/search/index.json" as="fetch" crossorigin="anonymous" />
+
 <section class="c-filter-search" id="wordListing">
   <WordFilter client:only="vue" />
 

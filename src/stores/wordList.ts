@@ -418,27 +418,40 @@ async function initOrama(words: OramaSearchIndex[]) {
   await insertMultiple(db, words);
 }
 
-let searchIndexCache: OramaSearchIndex[] | null = null;
+let initPromise: null | Promise<OramaSearchIndex[]> = null;
+
+/**
+ * Single-flight guard: fetch the search index and build the Orama DB exactly
+ * once, even when several computations start before the first one settles
+ * (rapid typing on a cold cache would otherwise double-fetch and
+ * double-insert documents). Kept lazy — nothing runs until the first search.
+ * On failure the memoized promise is cleared so the next computation retries.
+ */
+function ensureSearchReady(): Promise<OramaSearchIndex[]> {
+  initPromise ??= (async () => {
+    const response = await fetch("/api/search/index.json");
+    if (!response.ok) {
+      throw new Error(`[wordList] search index fetch failed: ${response.status}`);
+    }
+    const searchIndex = (await response.json()) as OramaSearchIndex[];
+    await initOrama(searchIndex);
+    return searchIndex;
+  })().catch((err) => {
+    initPromise = null; // allow retry after failure
+    throw err;
+  });
+  return initPromise;
+}
 
 export const $oramaSearchResults = computedAsync(
   [$wordSearch, $searchQuery],
   async (wordSearch, searchQuery) => {
+    // Fetch/init failures propagate on purpose: computedAsync then reports
+    // state "failed" and the error UI can prompt a reload.
+    const oramaSearchIndex = await ensureSearchReady();
+    const resultLimit = oramaSearchIndex.length;
+
     try {
-      if (!searchIndexCache) {
-        const response = await fetch("/api/search/index.json");
-        if (!response.ok) {
-          throw new Error(`[wordList] search index fetch failed: ${response.status}`);
-        }
-        searchIndexCache = (await response.json()) as OramaSearchIndex[];
-      }
-
-      const oramaSearchIndex = searchIndexCache;
-      const resultLimit = oramaSearchIndex.length;
-
-      if (!db) {
-        await initOrama(oramaSearchIndex);
-      }
-
       const where = buildWhere(wordSearch);
       const sortBy = getSortBy(wordSearch);
 
