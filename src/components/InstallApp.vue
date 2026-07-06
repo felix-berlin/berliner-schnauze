@@ -1,33 +1,28 @@
 <template>
-  <div
+  <button
     ref="root"
+    v-show="hideIfInstalled && !isPwaInstalled"
+    v-tooltip="{
+      content:
+        'Entschuldige die App kann leider nicht installiert werden. Dein Browser unterstützt die Installation nicht.',
+      disabled: showButton,
+      placement: 'top',
+      ...tooltipProps,
+    }"
+    class="c-install-button c-button"
+    :disabled="!showButton"
     data-track-content
     data-content-name="PWA Install Prompt"
     data-content-piece="App installieren"
     data-content-target="#install"
+    data-content-ignoreinteraction
+    @click="triggerPwaInstall()"
   >
-    <button
-      v-show="hideIfInstalled && !isPwaInstalled"
-      v-tooltip="{
-        content: 'Entschuldige die App kann leider nicht installiert werden.',
-        disabled: showButton,
-        placement: 'top',
-        ...tooltipProps,
-      }"
-      class="c-install-button"
-      :class="cssClasses"
-      :disabled="!showButton"
-      data-content-ignoreinteraction
-      @click="triggerPwaInstall()"
-    >
-      <slot v-if="showText"> App installieren </slot>
-    </button>
-    <slot v-if="isPwaInstalled" name="installed" />
-  </div>
+    <slot v-if="showText"> App installieren </slot>
+  </button>
 </template>
 
 <script setup lang="ts">
-import type { TooltipOptions } from "@/directives/tooltip";
 import { useContentTracking } from "@composables/useContentTracking";
 import { useStore } from "@nanostores/vue";
 import {
@@ -38,8 +33,9 @@ import {
 } from "@stores/installApp.ts";
 import { ref } from "vue";
 
+import type { TooltipOptions } from "@/directives/tooltip";
+
 export interface InstallAppProps {
-  cssClasses?: Array<string> | object | string;
   hideIfInstalled?: boolean;
   iconSize?: number;
   showIcon?: boolean;
@@ -47,12 +43,7 @@ export interface InstallAppProps {
   tooltipProps?: Partial<TooltipOptions>;
 }
 
-const {
-  cssClasses = "c-button",
-  hideIfInstalled = true,
-  showText = true,
-  tooltipProps,
-} = defineProps<InstallAppProps>();
+const { hideIfInstalled = true, showText = true, tooltipProps } = defineProps<InstallAppProps>();
 
 const root = ref<HTMLElement | null>(null);
 useContentTracking(root);

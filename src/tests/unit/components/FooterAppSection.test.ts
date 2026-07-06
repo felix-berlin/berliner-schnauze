@@ -53,6 +53,7 @@ describe("FooterAppSection.vue", () => {
       const settingsLink = wrapper.find("a[href='/settings']");
       expect(settingsLink.exists()).toBe(true);
       expect(settingsLink.attributes("aria-label")).toBe("Einstellungen");
+      expect(settingsLink.classes()).toContain("c-footer-app-section__settings-link--icon-only");
       expect(settingsLink.text()).toBe("");
     });
   });

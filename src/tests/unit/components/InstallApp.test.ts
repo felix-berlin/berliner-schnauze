@@ -77,20 +77,9 @@ describe("InstallApp.vue", () => {
     expect(wrapper.html()).not.toContain("Install Now");
   });
 
-  it("shows installed slot when isPwaInstalled=true", () => {
-    isPwaInstalledRef.value = true;
-    const wrapper = mount(InstallApp, {
-      slots: { installed: "<div class='installed-msg'>Already installed!</div>" },
-    });
-    expect(wrapper.find(".installed-msg").exists()).toBe(true);
-  });
-
-  it("does not show installed slot when isPwaInstalled=false", () => {
-    isPwaInstalledRef.value = false;
-    const wrapper = mount(InstallApp, {
-      slots: { installed: "<div class='installed-msg'>Already installed!</div>" },
-    });
-    expect(wrapper.find(".installed-msg").exists()).toBe(false);
+  it("root element is the button itself", () => {
+    const wrapper = mount(InstallApp, {});
+    expect(wrapper.element.tagName).toBe("BUTTON");
   });
 
   it("button is disabled when showButton is false", () => {

@@ -7,8 +7,15 @@
     gap: vars.$spacer * 0.5;
   }
 
-  &__settings-link {
-    gap: vars.$spacer * 0.25;
+  &__settings-link,
+  .c-install-button {
+    --padding: 0.5rem 1rem;
+
+    gap: vars.$spacer * 0.5;
     text-decoration: none;
+
+    &--icon-only {
+      --padding: 0.5rem;
+    }
   }
 }
