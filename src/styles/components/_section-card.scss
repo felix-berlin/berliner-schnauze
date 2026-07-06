@@ -93,8 +93,11 @@
     border-inline-start: 3px solid var(--orange-300);
     background: color-mix(in srgb, var(--orange-100) 60%, white);
     padding: 0.75rem 1rem;
-    margin-block-end: vars.$spacer;
     border-radius: 0 4px 4px 0;
+
+    &:not(:first-child) {
+      margin-block-start: vars.$spacer;
+    }
 
     @include butler-mx.dark-mode-class {
       background: color-mix(in srgb, var(--new-blue-400) 80%, black);

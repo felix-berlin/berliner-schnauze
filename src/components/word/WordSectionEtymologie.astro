@@ -16,10 +16,21 @@ const alternativeWords = wordProps?.alternativeWords?.map((word, index) => {
   );
 });
 
+// ACF checkbox choices may carry a link as "Label : https://…" — split only
+// on the spaced colon so titles like "Berlinisch: Lexikon" stay intact.
+const sources = (wordProps?.sources ?? [])
+  .flatMap((row) => row?.quelle ?? [])
+  .filter((s): s is string => Boolean(s))
+  .map((raw) => {
+    const [label, url] = raw.split(' : ');
+    return url?.startsWith('http') ? { label: label ?? raw, url } : { label: raw, url: null };
+  });
+
 const hasContent =
   Boolean(wordProps?.infoText) ||
   (wordProps?.alternativeWords?.length ?? 0) > 0 ||
-  (wordProps?.translations?.length ?? 0) > 0;
+  (wordProps?.translations?.length ?? 0) > 0 ||
+  sources.length > 0;
 ---
 
 {hasContent && <section class='c-section-card' id='etymologie' aria-labelledby='heading-etymologie'>
@@ -29,19 +40,8 @@ const hasContent =
   </div>
   <div class='c-section-card__body'>
     {
-      wordProps?.infoText && (
-        <div class='c-section-card__infotext' set:html={wordProps.infoText} />
-      )
-    }
-    {
       (wordProps?.alternativeWords?.length || wordProps?.translations?.length) && (
         <dl class='c-single-word__definitions'>
-          {wordProps?.alternativeWords && wordProps.alternativeWords.length > 0 && (
-            <>
-              <dt class='c-single-word__sub-headline'>Selbe Bedeutung wie</dt>
-              <dd class='c-single-word__alternative-word'>{alternativeWords}</dd>
-            </>
-          )}
           {wordProps?.translations && wordProps.translations.length > 0 && (
             <>
               <dt class='c-single-word__sub-headline'>{wordProps.translations.length === 1 ? 'Bedeutung' : 'Bedeutungen'}</dt>
@@ -58,8 +58,39 @@ const hasContent =
               )}
             </>
           )}
+          {wordProps?.alternativeWords && wordProps.alternativeWords.length > 0 && (
+            <>
+              <dt class='c-single-word__sub-headline'>Selbe Bedeutung wie</dt>
+              <dd class='c-single-word__alternative-word'>{alternativeWords}</dd>
+            </>
+          )}
         </dl>
       )
     }
+    {
+      wordProps?.infoText && (
+        <div class='c-section-card__infotext' set:html={wordProps.infoText} />
+      )
+    }
   </div>
+  {
+    sources.length > 0 && (
+      <footer class='c-word-sources'>
+        <span class='c-word-sources__label'>{sources.length === 1 ? 'Quelle' : 'Quellen'}</span>
+        <ul class='c-word-sources__list'>
+          {sources.map((source) => (
+            <li class='c-word-sources__item'>
+              {source.url ? (
+                <a class='c-word-sources__link' href={source.url} rel='noopener'>
+                  {source.label}
+                </a>
+              ) : (
+                source.label
+              )}
+            </li>
+          ))}
+        </ul>
+      </footer>
+    )
+  }
 </section>}

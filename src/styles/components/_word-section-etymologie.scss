@@ -25,10 +25,16 @@
     }
   }
 
-  &__alternative-word,
-  &__translation-item {
+  &__alternative-word {
     margin: 0;
     font-size: 1rem;
+  }
+
+  // The definition is the payoff of a dictionary entry — give it headroom.
+  &__translation-item {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.45;
   }
 
   &__translation-list {
@@ -66,5 +72,62 @@
     display: flex;
     flex-direction: column;
     row-gap: vars.$spacer * 1;
+  }
+}
+
+// Provenance line at the card's foot — the citation register of a lexicon
+// entry, quiet by design.
+.c-word-sources {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.375rem vars.$spacer * 0.75;
+  padding-inline: 1.25rem;
+  padding-block: 0.625rem;
+  border-block-start: 1px dashed var(--orange-200);
+
+  &__label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: color-mix(in srgb, var(--blue) 70%, white);
+    white-space: nowrap;
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
+    }
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem vars.$spacer;
+  }
+
+  &__item {
+    font-size: 0.8rem;
+    color: color-mix(in srgb, var(--new-blue-400) 75%, white);
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, white 70%, var(--new-blue-400));
+    }
+  }
+
+  &__link {
+    color: inherit;
+    text-decoration: underline dotted;
+    text-underline-offset: 0.2em;
+
+    &:hover {
+      color: var(--orange-500);
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-300);
+      }
+    }
   }
 }
