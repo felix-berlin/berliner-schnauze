@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-06T00:00:00Z",
+  "title": "Design System: Berliner Schnauze",
+  "extensions": {
+    "colorMeta": {
+      "currywurst-400": { "role": "primary", "displayName": "Currywurst Orange (light)", "canonical": "#e28964" },
+      "currywurst-500": { "role": "primary", "displayName": "Currywurst Orange (core)", "canonical": "#cf5736", "tonalRamp": ["#fcead7", "#fad0b0", "#f0ac85", "#e28964", "#cf5736", "#b23b27", "#95231b", "#781111", "#630a11"] },
+      "berlin-red-500": { "role": "secondary", "displayName": "Berlin Red", "canonical": "#cf3018" },
+      "berlin-red-berlin-500": { "role": "secondary", "displayName": "Berlin Red (brand mark)", "canonical": "#f2391d" },
+      "ink-base": { "role": "neutral", "displayName": "Ink Base", "canonical": "#2b333b" },
+      "grey-100": { "role": "neutral", "displayName": "Grey (border/secondary text)", "canonical": "#4e545a" },
+      "grey-200": { "role": "neutral", "displayName": "Grey (deep)", "canonical": "#373c40" },
+      "white-100": { "role": "neutral", "displayName": "Paper White", "canonical": "#f9f9f9" },
+      "cream-500": { "role": "neutral", "displayName": "Cream (dark-mode body text)", "canonical": "#e3e3d2" },
+      "gold-500": { "role": "tertiary", "displayName": "Gold (rare highlight)", "canonical": "#e1b125" },
+      "danger": { "role": "alert", "displayName": "Danger", "canonical": "hsl(8deg 89% 53%)" },
+      "success": { "role": "alert", "displayName": "Success", "canonical": "#35a672" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Berliner Display", "purpose": "All headings (h1-h6), headword titles. Normal weight only." },
+      "body": { "displayName": "Berlin Body", "purpose": "Paragraph/list copy, buttons. 1px letter-spacing is deliberate." },
+      "label": { "displayName": "Berlin Label", "purpose": "Badges, stat labels, grammar tags. Uppercase, dense, functional." }
+    },
+    "shadows": [
+      { "name": "paper-lift", "value": "0 0.5px 0.6px rgb(0 0 0 / 8%), 0 4px 5px rgb(0 0 0 / 16%)", "purpose": "The system's only shadow, applied uniformly to every raised surface (section-cards, word-hero)." }
+    ],
+    "motion": [
+      { "name": "button-transition", "value": "all 0.3s ease-in-out", "purpose": "Default button state transition (background, border, color)." }
+    ],
+    "breakpoints": [
+      { "name": "xxs", "value": "375px" },
+      { "name": "xs", "value": "568px" },
+      { "name": "sm", "value": "768px" },
+      { "name": "md", "value": "1024px" },
+      { "name": "lg", "value": "1260px" },
+      { "name": "xlg", "value": "1440px" },
+      { "name": "fhd", "value": "1920px" },
+      { "name": "uhd", "value": "2560px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "Standard action button: flat, square corners, dashed hover border.",
+      "html": "<button class=\"ds-btn\">Suchen</button>",
+      "css": ".ds-btn { cursor: pointer; padding: 0.25rem; background-color: #fcead7; border: 1px solid #b23b27; color: #2b333b; font-family: 'Berlin', sans-serif; letter-spacing: 1px; transition: all 0.3s ease-in-out; } .ds-btn:hover, .ds-btn:focus-visible { border-style: dashed; box-shadow: 0 0 12px 0 color-mix(in srgb, #cf5736 60%, white); }"
+    },
+    {
+      "name": "Themed Button",
+      "kind": "button",
+      "refersTo": "button-theme",
+      "description": "Declarative primary-action button on ink-base fill.",
+      "html": "<button class=\"ds-btn-theme\">Wort vorschlagen</button>",
+      "css": ".ds-btn-theme { cursor: pointer; padding: 0.25rem; background-color: #2b333b; border: 1px solid #b23b27; color: #f9f9f9; font-family: 'Berliner', serif; transition: all 0.3s ease-in-out; } .ds-btn-theme:hover, .ds-btn-theme:focus-visible { border-style: dashed; box-shadow: 0 0 12px 0 color-mix(in srgb, #cf5736 60%, white); }"
+    },
+    {
+      "name": "Section Card",
+      "kind": "card",
+      "refersTo": "section-card",
+      "description": "Numbered content card with dashed dividers and Paper Lift shadow.",
+      "html": "<article class=\"ds-card\"><header class=\"ds-card__header\"><span class=\"ds-card__num\">01</span><h3 class=\"ds-card__title\">Etymologie</h3></header><div class=\"ds-card__body\"><p>Herkunft und Bedeutung des Begriffs.</p></div></article>",
+      "css": ".ds-card { background: #ffffff; border: 1px dashed #4e545a; border-radius: 4px 4px 0 0; box-shadow: 0 0.5px 0.6px rgb(0 0 0 / 8%), 0 4px 5px rgb(0 0 0 / 16%); } .ds-card__header { display: flex; align-items: baseline; gap: 0.625rem; padding: 0.75rem 1.25rem; border-bottom: 1px dashed #fad0b0; } .ds-card__num { font-size: 0.65rem; font-weight: 700; color: #cf5736; letter-spacing: 0.05em; } .ds-card__title { font-family: 'Berlin', sans-serif; font-size: 1.25rem; font-weight: 700; color: #2b333b; margin: 0; } .ds-card__body { padding: 1rem 1.25rem; }"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Uppercase metadata chip (word-of-day, word type, grammar tag).",
+      "html": "<span class=\"ds-badge\">Substantiv</span>",
+      "css": ".ds-badge { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.25rem 0.6rem; border-radius: 4px; background: color-mix(in srgb, #fad0b0 60%, white); border: 1px solid #f0ac85; color: #2b333b; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Postcard Rule",
+    "overview": "Every raised surface in this system carries the same texture: a dashed hand-stamped line. It shows up as the underline beneath a headword, the divider between a section-card's header and body, the hover border on a button, the underline on an inline link. That one repeated stroke is doing the work most design systems spend a whole 'personality' section trying to fake — it reads as annotated, postcard-stamped, a little scrappy. Cheeky (schnodderig) and warm (heimatlich) at once, the way the Berlin dialect itself is blunt but affectionate. The palette sits a dark navy-ink base (#2b333b) against a Currywurst-orange family that carries almost every accent, badge, border, and stat highlight, with Berlin Red reserved as the rarer, more declarative color. This is a product register: the job is fast lookup, so decoration never gets between a search and its answer.",
+    "keyCharacteristics": [
+      "Dashed-line texture as the one recurring signature (borders, underlines, dividers)",
+      "Currywurst orange dominant; Berlin Red rare and declarative",
+      "Dark navy-ink (#2b333b) carries text and dark-mode surfaces, never a bright accent",
+      "Flat, square-cornered buttons (0 radius); soft 4px radius everywhere else",
+      "One consistent Paper Lift shadow for every raised card/hero, no ad hoc shadows"
+    ],
+    "rules": [
+      { "name": "The Ink Stays Structural Rule", "body": "The navy-ink base (#2b333b) is text and dark-mode surface only. If it starts appearing as a button fill or badge background in light mode, re-route to orange or red.", "section": "colors" },
+      { "name": "The One Red Rule", "body": "Berlin Red is the brand's own color, not a general accent. It shows up rarely so that when it appears, it still reads as THE color.", "section": "colors" },
+      { "name": "The Handwritten Headline Rule", "body": "Headings are always Berliner; body is always Berlin. The two fonts never trade places.", "section": "typography" },
+      { "name": "The One Shadow Rule", "body": "A new 'raised' component uses Paper Lift exactly as specified, not a lighter or heavier variant.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use the dashed-line texture (borders, underlines, dividers) as the system's one recurring signature.",
+      "Do keep Currywurst Orange as the dominant accent family; reserve Berlin Red for rare, declarative brand moments only.",
+      "Do apply Paper Lift as the only shadow for raised surfaces.",
+      "Do set headings in Berliner and body copy in Berlin, with the 1px body letter-spacing intact.",
+      "Do keep functional metadata uppercase and small, never a decorative section eyebrow.",
+      "Do hold WCAG AA contrast (>=4.5:1 body text) even where the palette leans warm/orange on cream."
+    ],
+    "donts": [
+      "Don't flatten the Schnauze voice into generic SaaS/dictionary-app neutrality.",
+      "Don't add new colored border-left/border-inline-start accent stripes beyond the one named exception (infotext citation callout).",
+      "Don't use the ink-base navy (#2b333b) as a bright UI accent.",
+      "Don't invent a new shadow value for a raised component — reuse Paper Lift exactly.",
+      "Don't round button corners — flat/square is the button shape.",
+      "Don't swap Berliner and Berlin between roles."
+    ]
+  }
+}
