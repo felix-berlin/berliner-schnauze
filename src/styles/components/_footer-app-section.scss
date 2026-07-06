@@ -13,9 +13,9 @@
 
     gap: vars.$spacer * 0.5;
     text-decoration: none;
+  }
 
-    &--icon-only {
-      --padding: 0.5rem;
-    }
+  &__settings-link--icon-only {
+    --padding: 0.5rem;
   }
 }

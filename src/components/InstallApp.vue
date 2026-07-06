@@ -37,8 +37,6 @@ import type { TooltipOptions } from "@/directives/tooltip";
 
 export interface InstallAppProps {
   hideIfInstalled?: boolean;
-  iconSize?: number;
-  showIcon?: boolean;
   showText?: boolean;
   tooltipProps?: Partial<TooltipOptions>;
 }

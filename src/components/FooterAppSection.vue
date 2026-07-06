@@ -17,7 +17,7 @@
       <h2>Installiere die App</h2>
       <p>Mit der Berliner Schnauze App bleibst Du immer informiert, ob online oder offline.</p>
       <div class="c-footer-app-section__actions">
-        <InstallApp class="c-button--center-icon" :show-icon="true">
+        <InstallApp class="c-button--center-icon">
           <DownloadIcon height="16" width="16" />
           App installieren
         </InstallApp>
