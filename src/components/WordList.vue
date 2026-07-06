@@ -1,6 +1,13 @@
 <template>
+  <WordListSkeleton v-if="searchState === 'loading'" :item-size="itemSize" />
+
+  <div v-else-if="searchState === 'failed'" class="c-word-search-list__no-result" role="alert">
+    <p>Da klemmt wat. Lad de Seite neu.</p>
+  </div>
+
   <component
     :is="virtualizerComponent"
+    v-else
     ref="virtualizer"
     v-slot="{ item, index }"
     v-bind="!useWindowVirtualizer ? { style: { width: '100%', height: '100%' } } : {}"
@@ -28,13 +35,15 @@
 <script setup lang="ts">
 import type { ComponentPublicInstance } from "vue";
 
+import WordListSkeleton from "@components/word-search/WordListSkeleton.vue";
 import SingleWord from "@components/word/SingleWord.vue";
 import { useStore } from "@nanostores/vue";
-import { $oramaSearchResults } from "@stores/wordList.ts";
+import { $oramaSearchResults, $searchState } from "@stores/wordList.ts";
 import { routeToWord } from "@utils/helpers.ts";
 import { onKeyStroke, useTimeoutFn } from "@vueuse/core";
 import { VList, WindowVirtualizer } from "virtua/vue";
 import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
+
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
 const {
@@ -52,9 +61,12 @@ const {
 const virtualizerComponent = useWindowVirtualizer ? WindowVirtualizer : VList;
 
 const oramaSearch = useStore($oramaSearchResults);
+const searchState = useStore($searchState);
 const mutableOramaSearch = computed(
   () =>
-    (oramaSearch.value?.state === "ready" ? (oramaSearch.value.value?.hits ?? []) : []) as unknown as {
+    (oramaSearch.value?.state === "ready"
+      ? (oramaSearch.value.value?.hits ?? [])
+      : []) as unknown as {
       document: OramaSearchIndex;
       id: string;
       positions: Record<string, Record<string, { length: number; start: number }[]>>;
@@ -68,9 +80,13 @@ const virtualizerRef = useTemplateRef("virtualizer");
 const showActive = ref(false);
 const ACTIVE_TIMEOUT = 3500; // ms
 
-const { start: startHideActiveTimer } = useTimeoutFn(() => {
-  showActive.value = false;
-}, ACTIVE_TIMEOUT, { immediate: false });
+const { start: startHideActiveTimer } = useTimeoutFn(
+  () => {
+    showActive.value = false;
+  },
+  ACTIVE_TIMEOUT,
+  { immediate: false },
+);
 
 const showActiveWithTimeout = () => {
   showActive.value = true;
