@@ -54,6 +54,13 @@ tests/unit/junit-report.xml
 .superpowers
 .scratch
 
+# Impeccable design skill (local harness config/cache, not project source)
+.impeccable/
+.agents/skills/impeccable/
+.claude/skills/impeccable/
+.github/skills/impeccable/
+.codex/skills/impeccable/
+
 # Graphify
 graphify-out/manifest.json
 graphify-out/cost.json
