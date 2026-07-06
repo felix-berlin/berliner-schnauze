@@ -15,16 +15,16 @@
  *   - berlinerisch_word_themen taxonomy registered (rest_base: berlinerisch-themen)
  *
  * Usage:
- *   infisical run -- pnpm tsx scripts/import-words-to-wp.ts --dry-run     # preview
- *   infisical run -- pnpm tsx scripts/import-words-to-wp.ts               # import as drafts
- *   infisical run -- pnpm tsx scripts/import-words-to-wp.ts --publish     # import published
- *   infisical run -- pnpm tsx scripts/import-words-to-wp.ts --limit 5     # first 5 only
- *   infisical run -- pnpm tsx scripts/import-words-to-wp.ts --word Deez   # single word
+ *   infisical run -- pnpm dlx tsx scripts/import-words-to-wp.ts --dry-run     # preview
+ *   infisical run -- pnpm dlx tsx scripts/import-words-to-wp.ts               # import as drafts
+ *   infisical run -- pnpm dlx tsx scripts/import-words-to-wp.ts --publish     # import published
+ *   infisical run -- pnpm dlx tsx scripts/import-words-to-wp.ts --limit 5     # first 5 only
+ *   infisical run -- pnpm dlx tsx scripts/import-words-to-wp.ts --word Deez   # single word
  *
  * Requires env vars: WP_REST_API, WP_AUTH_USER, WP_AUTH_PASS
  */
 
-import { readFileSync, readdirSync } from "fs";
+import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { wpFetch, delay, getWpConfig, type WpConfig } from "./lib/wp-rest.ts";
@@ -65,13 +65,13 @@ const ACF = {
   alternativeWord: "alternative_word",
   infoText: "info_text",
   sources: "sources",
-  quelle: "quelle",
+  source: "source",
 } as const;
 
-// Value for the sources > quelle checkbox on every imported word.
-// Must match a configured choice of the ACF checkbox field — adjust if the
-// choice value differs in WP (e.g. a URL or a different label).
-const SOURCE_QUELLE = "Peter Schlobinski – Berlinisch Lexikon (SDLS/Spreeradio 1995)";
+// Value for the sources > source checkbox on every imported word.
+// Verified against the live ACF checkbox choice (post "dampf") — note the
+// U+2019 apostrophe and en dash; the value must match byte-for-byte.
+const SOURCE_QUELLE = "SDLS/Schlobi’s Linguistic Corner – Berlinisch: Lexikon";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 export interface LexikonExample {
@@ -233,7 +233,7 @@ function buildPostBody(entry: LexikonEntry, termIds: number[]): Record<string, u
     }));
   }
   if (entry.infoText) acf[ACF.infoText] = entry.infoText;
-  acf[ACF.sources] = [{ [ACF.quelle]: [SOURCE_QUELLE] }];
+  acf[ACF.sources] = [{ [ACF.source]: [SOURCE_QUELLE] }];
 
   return {
     title: entry.word,
@@ -304,17 +304,22 @@ async function main(): Promise<void> {
   let skipped = 0;
   let errors = 0;
   let acfWarned = false;
+  // Skipped entries incl. their full lexikon data, persisted for a later
+  // pass that checks whether the existing WP posts can be enriched.
+  const skippedEntries: Array<LexikonEntry & { skipReason: string }> = [];
 
   for (const entry of entries) {
     if (created >= LIMIT) break;
 
     if (existingTitles.has(entry.word)) {
       console.log(`  SKIP (exists): ${entry.word}`);
+      skippedEntries.push({ ...entry, skipReason: "exists" });
       skipped++;
       continue;
     }
     if (existingLower.has(entry.word.toLowerCase()) && !entry.allowDuplicate) {
       console.log(`  SKIP (case-variant exists): ${entry.word}`);
+      skippedEntries.push({ ...entry, skipReason: "case-variant-exists" });
       skipped++;
       continue;
     }
@@ -365,6 +370,11 @@ async function main(): Promise<void> {
   console.log(`\n${"─".repeat(50)}`);
   console.log(`✓ Created: ${created}${DRY_RUN ? " (dry run)" : ""}`);
   console.log(`→ Skipped (already exist): ${skipped}`);
+  if (skippedEntries.length > 0) {
+    const skipFile = join(DATA_DIR, "skipped-words.json");
+    writeFileSync(skipFile, JSON.stringify(skippedEntries, null, 2) + "\n");
+    console.log(`→ Skipped entries written to ${skipFile}`);
+  }
   if (errors > 0) {
     console.log(`✗ Errors: ${errors}`);
     process.exit(1);
