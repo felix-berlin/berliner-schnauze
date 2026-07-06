@@ -5,6 +5,7 @@ import { WAKAPI_API_KEY } from 'astro:env/server';
 import { WAKAPI_HOST } from 'astro:env/client';
 
 interface CachedStats {
+  failed?: boolean;
   fetchedAt: number;
   hours: number;
   minutes: number;
@@ -12,11 +13,16 @@ interface CachedStats {
 
 const CACHE_FILE = join(process.cwd(), '.astro/wakapi-stats.json');
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour — stats don't need to be real-time
+// Failures are cached too: without this, every prerendered page (the footer is
+// on all of them) retries the fetch and stalls the whole build when Wakapi is down.
+const FAILURE_TTL_MS = 5 * 60 * 1000;
+const FETCH_TIMEOUT_MS = 5000;
 
 function readCache(): CachedStats | null {
   try {
     const data = JSON.parse(readFileSync(CACHE_FILE, 'utf-8')) as CachedStats;
-    if (Date.now() - data.fetchedAt < CACHE_TTL_MS) return data;
+    const ttl = data.failed ? FAILURE_TTL_MS : CACHE_TTL_MS;
+    if (Date.now() - data.fetchedAt < ttl) return data;
   } catch {
     /* file missing or malformed — treat as cache miss */
   }
@@ -46,6 +52,7 @@ if (WAKAPI_API_KEY) {
         headers: {
           Authorization: `Bearer ${Buffer.from(WAKAPI_API_KEY).toString('base64')}`,
         },
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       });
 
       if (res.ok) {
@@ -56,8 +63,12 @@ if (WAKAPI_API_KEY) {
         hours = Math.floor(totalSeconds / 3600);
         minutes = Math.floor((totalSeconds % 3600) / 60);
         writeCache({ fetchedAt: Date.now(), hours, minutes });
+      } else {
+        writeCache({ failed: true, fetchedAt: Date.now(), hours: 0, minutes: 0 });
+        console.log(`Wakapi stats request failed with status ${res.status}.`);
       }
     } catch {
+      writeCache({ failed: true, fetchedAt: Date.now(), hours: 0, minutes: 0 });
       console.log('Wakapi stats could not be fetched.');
     }
   }
