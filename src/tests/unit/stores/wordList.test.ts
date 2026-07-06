@@ -471,14 +471,38 @@ describe("wordList store", () => {
       expect(result).toBeDefined();
     });
 
-    it("catches fetch errors and returns null (covers line 434-436 catch branch)", async () => {
-      globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false, status: 500 })) as unknown as typeof fetch;
-      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    it("fetches the search index only once for concurrent computations (single-flight)", async () => {
+      const fetchSpy = vi.fn(() =>
+        Promise.resolve({ ok: true, json: () => Promise.resolve([]) }),
+      );
+      globalThis.fetch = fetchSpy as unknown as typeof fetch;
       const { $wordSearch } = await import("@stores/wordList.ts");
+      await Promise.all([
+        capturedCbRef.fn!($wordSearch.get()),
+        capturedCbRef.fn!($wordSearch.get()),
+      ]);
+      const indexCalls = fetchSpy.mock.calls.filter(
+        ([url]) => url === "/api/search/index.json",
+      );
+      expect(indexCalls).toHaveLength(1);
+    });
+
+    it("throws on fetch failure so computedAsync reports state failed, then retries", async () => {
+      globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false, status: 500 })) as unknown as typeof fetch;
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      await expect(capturedCbRef.fn!($wordSearch.get())).rejects.toThrow(
+        "[wordList] search index fetch failed: 500",
+      );
+
+      // Failure clears the memoized init promise → the next computation retries.
+      const retryFetch = vi.fn(() =>
+        Promise.resolve({ ok: true, json: () => Promise.resolve([]) }),
+      );
+      globalThis.fetch = retryFetch as unknown as typeof fetch;
       const result = await capturedCbRef.fn!($wordSearch.get());
-      expect(result).toBeNull();
-      expect(consoleSpy).toHaveBeenCalledWith("[wordList] Search failed:", expect.any(Error));
-      consoleSpy.mockRestore();
+      expect(retryFetch).toHaveBeenCalledWith("/api/search/index.json");
+      expect(result).toBeNull(); // create mock returns undefined → db falsy → null
+
       // restore fetch mock
       globalThis.fetch = vi.fn(() =>
         Promise.resolve({ ok: true, json: () => Promise.resolve({ availableWordGroups: [], wordTypes: [], rangeFilterMinMax: {} }) }),
