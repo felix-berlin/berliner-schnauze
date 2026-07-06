@@ -428,6 +428,26 @@ describe("wordList store", () => {
     });
   });
 
+  describe("$searchState", () => {
+    it("returns loading while oramaSearchResults is loading", async () => {
+      const { $oramaSearchResults, $searchState } = await import("@stores/wordList.ts");
+      ($oramaSearchResults as any).set({ state: "loading" });
+      expect($searchState.get()).toBe("loading");
+    });
+
+    it("returns ready when oramaSearchResults is ready", async () => {
+      const { $oramaSearchResults, $searchState } = await import("@stores/wordList.ts");
+      ($oramaSearchResults as any).set({ state: "ready", value: { count: 1 } });
+      expect($searchState.get()).toBe("ready");
+    });
+
+    it("returns failed when oramaSearchResults failed", async () => {
+      const { $oramaSearchResults, $searchState } = await import("@stores/wordList.ts");
+      ($oramaSearchResults as any).set({ state: "failed", error: new Error("boom") });
+      expect($searchState.get()).toBe("failed");
+    });
+  });
+
   describe("$oramaSearchResults computedAsync callback", () => {
     it("returns null when db is falsy after initOrama (covers line 433 false branch and line 424 ?? 10)", async () => {
       // Import triggers computedAsync mock which captures the callback

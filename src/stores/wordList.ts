@@ -469,3 +469,8 @@ export const $searchResultCount = computed($oramaSearchResults, (oramaSearchResu
   if (oramaSearchResults.state !== "ready") return 0;
   return oramaSearchResults.value?.count ?? 0;
 });
+
+export const $searchState = computed(
+  $oramaSearchResults,
+  (oramaSearchResults) => oramaSearchResults.state, // 'loading' | 'ready' | 'failed'
+);
