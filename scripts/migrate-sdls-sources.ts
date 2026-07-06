@@ -55,6 +55,7 @@ interface WpPost {
   slug: string;
   status: string;
   acf?: {
+    berlinerisch?: string;
     info_text?: string;
     sources?: SourcesRow[] | null;
   };
@@ -64,7 +65,7 @@ async function fetchAllPosts(config: WpConfig): Promise<WpPost[]> {
   const posts: WpPost[] = [];
   for (let page = 1; ; page++) {
     const batch = await wpFetch<WpPost[]>(
-      `/${POST_TYPE_REST_BASE}?per_page=${PER_PAGE}&page=${page}&status=publish,draft&_fields=id,slug,status,acf.info_text,acf.sources`,
+      `/${POST_TYPE_REST_BASE}?per_page=${PER_PAGE}&page=${page}&status=publish,draft&_fields=id,slug,status,acf.berlinerisch,acf.info_text,acf.sources`,
       {},
       config,
     );
@@ -127,7 +128,11 @@ async function main(): Promise<void> {
         `/${POST_TYPE_REST_BASE}/${post.id}?_fields=id,acf.info_text,acf.sources`,
         {
           method: "POST",
-          body: JSON.stringify({ acf: { info_text: newInfoText, sources } }),
+          // ACF REST validation requires the mandatory `berlinerisch` field
+          // in every acf update payload — send it back unchanged.
+          body: JSON.stringify({
+            acf: { berlinerisch: post.acf?.berlinerisch, info_text: newInfoText, sources },
+          }),
         },
         config,
       );
