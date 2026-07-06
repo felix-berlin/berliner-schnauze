@@ -416,6 +416,21 @@ async function initOrama(words: OramaSearchIndex[]) {
   });
 
   await insertMultiple(db, words);
+
+  // insertMultiple picks its synchronous path because Orama's asyncNeeded
+  // check ignores the plugin-level afterInsert hook, so the async
+  // match-highlight hook is fired without being awaited: the positions
+  // store fills in AFTER insertMultiple resolves. Searching before it is
+  // complete returns 0 hits (or throws inside searchWithHighlight), which
+  // showed up as a "ready + Keen Treffer" flash on cold start. Drain the
+  // hook queue before declaring the DB ready; the deadline only guards
+  // against a hypothetical stuck hook.
+  const positionCount = () =>
+    Object.keys((db?.data as { positions?: Record<string, unknown> })?.positions ?? {}).length;
+  const deadline = Date.now() + 10_000;
+  while (positionCount() < words.length && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
 }
 
 let initPromise: null | Promise<OramaSearchIndex[]> = null;
