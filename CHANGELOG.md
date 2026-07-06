@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.41.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.40.0...v3.41.0) (2026-07-06)
+
+
+### Bug Fixes
+
+* **pwa:** remove dead InstallApp props and fix icon-only selector leak ([cf36248](https://github.com/felix-berlin/berliner-schnauze/commit/cf36248891399c1d250697550031298612ad3b95))
+* update pnpm workspace configuration ([f3ce30b](https://github.com/felix-berlin/berliner-schnauze/commit/f3ce30b3ec5fe771f9be714460ed74ed80361b74))
+
+
+### Features
+
+* **pwa:** add settings access to footer app install section ([6360338](https://github.com/felix-berlin/berliner-schnauze/commit/6360338e5b86ccde79a7d55b32808388582e3fe9))
+
 # [3.40.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.39.5...v3.40.0) (2026-07-02)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "berliner-schnauze",
-  "version": "3.40.0",
+  "version": "3.41.0",
   "homepage": "https://berliner-schnauze.wtf",
   "bugs": {
     "url": "https://github.com/felix-berlin/berliner-schnauze/issues"
@@ -84,9 +84,9 @@
     "@vueform/multiselect": "^2.6.11",
     "@vueuse/core": "^14.3.0",
     "all-the-german-words": "^1.1.0",
-    "astro": "^7.0.3",
+    "astro": "^7.0.6",
     "astro-breadcrumbs": "^3.4.1",
-    "astro-matomo": "^1.10.0",
+    "astro-matomo": "^1.12.0",
     "astro-og-canvas": "^0.13.0",
     "canvaskit-wasm": "^0.41.1",
     "compromise": "^14.15.1",
@@ -164,5 +164,5 @@
   "engines": {
     "node": ">=22.12.0"
   },
-  "packageManager": "pnpm@11.9.0"
+  "packageManager": "pnpm@11.10.0"
 }

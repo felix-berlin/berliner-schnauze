@@ -1,10 +1,9 @@
 ---
 import BearWalking from '@assets/images/bear-walking.png';
 import CarbonBadge from '@components/CarbonBadge.vue';
-import InstallApp from '@components/InstallApp.vue';
+import FooterAppSection from '@components/FooterAppSection.vue';
 import NavList from '@components/NavList.vue';
 import { Picture } from 'astro:assets';
-import Download from 'virtual:icons/lucide/download';
 import WakapiStats from '@components/WakapiStats.astro';
 
 import { funding, version } from '../../package.json';
@@ -102,12 +101,7 @@ const navMenu2 = [
   <div class='c-footer__ground'>
     <div class='c-footer__wrapper u-max-body-width'>
       <div class='c-footer__ground-app-install'>
-        <h2>Installiere die App</h2>
-        <p>Mit der Berliner Schnauze App bleibst Du immer informiert, ob online oder offline.</p>
-        <InstallApp client:only='vue' cssClasses={'c-button--center-icon c-button'} showIcon={true}>
-          <Download height={16} width={16} /> App installieren
-          <p slot='installed'>Du nutzt bereits die App.</p>
-        </InstallApp>
+        <FooterAppSection client:only='vue' />
       </div>
 
       <div>
