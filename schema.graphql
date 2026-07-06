@@ -14797,6 +14797,8 @@ Media file type classification based on MIME standards. Used to identify and fil
 enum MimeTypeEnum {
   """application/java mime type."""
   APPLICATION_JAVA
+  """application/javascript mime type."""
+  APPLICATION_JAVASCRIPT
   """application/msword mime type."""
   APPLICATION_MSWORD
   """application/octet-stream mime type."""
@@ -14959,6 +14961,8 @@ enum MimeTypeEnum {
   TEXT_CSS
   """text/csv mime type."""
   TEXT_CSV
+  """text/html mime type."""
+  TEXT_HTML
   """text/plain mime type."""
   TEXT_PLAIN
   """text/richtext mime type."""
