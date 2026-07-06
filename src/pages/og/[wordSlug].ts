@@ -21,8 +21,6 @@ const pages = Object.fromEntries(
 export const { getStaticPaths, GET } = await OGImageRoute({
   getImageOptions(_slug, page) {
     return {
-      title: page.berlinerisch,
-      description: page.translation || undefined,
       bgGradient: [
         [43, 51, 59],
         [30, 37, 43],
@@ -32,7 +30,7 @@ export const { getStaticPaths, GET } = await OGImageRoute({
         side: "inline-start",
         width: 16,
       },
-      padding: 72,
+      description: page.translation || undefined,
       font: {
         description: {
           color: [250, 208, 176],
@@ -54,6 +52,8 @@ export const { getStaticPaths, GET } = await OGImageRoute({
       //   path: './public/favicons/android-chrome-192x192.png',
       //   size: [72, 72],
       // },
+      padding: 72,
+      title: page.berlinerisch,
     };
   },
   pages,
