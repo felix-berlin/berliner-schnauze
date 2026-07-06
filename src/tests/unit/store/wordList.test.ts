@@ -444,24 +444,20 @@ describe("$oramaSearchResults", () => {
     );
   });
 
-  it("handles search index fetch failure gracefully", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  it("reports failed state when search index fetch fails", async () => {
+    // Fetch/init errors propagate on purpose: computedAsync reports "failed"
+    // so the error UI can prompt a reload.
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
     const { $oramaSearchResults } = await import("@stores/wordList.ts");
     await vi.waitFor(
       () => {
-        const result = $oramaSearchResults.get();
-        expect(result.state).toBe("ready");
-        expect(result.value).toBeNull();
+        expect($oramaSearchResults.get().state).toBe("failed");
       },
       { timeout: 5000 },
     );
-    expect(consoleSpy).toHaveBeenCalledWith("[wordList] Search failed:", expect.any(Error));
-    consoleSpy.mockRestore();
   });
 
-  it("handles non-ok search index response gracefully", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  it("reports failed state on non-ok search index response", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({ ok: false, status: 503, json: vi.fn() }),
@@ -469,13 +465,10 @@ describe("$oramaSearchResults", () => {
     const { $oramaSearchResults } = await import("@stores/wordList.ts");
     await vi.waitFor(
       () => {
-        const result = $oramaSearchResults.get();
-        expect(result.state).toBe("ready");
-        expect(result.value).toBeNull();
+        expect($oramaSearchResults.get().state).toBe("failed");
       },
       { timeout: 5000 },
     );
-    consoleSpy.mockRestore();
   });
 });
 
