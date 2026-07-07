@@ -84,19 +84,6 @@ vi.mock("@utils/helpers.ts", () => ({
   useViewTransition: vi.fn((fn: () => void) => fn()),
 }));
 
-// The highlight plugin's async afterInsert causes insertMultiple to use the sync path
-// without awaiting individual insert() Promises, leaving the Radix index empty.
-// Replace with sync stubs so the index is fully populated before search runs.
-vi.mock("@orama/plugin-match-highlight", async () => {
-  const { search } = await import("@orama/orama");
-  return {
-    afterInsert: vi.fn(), // sync no-op keeps insertMultiple on the sync path with proper Promises
-    searchWithHighlight: vi.fn((db: unknown, params: unknown) =>
-      (search as (db: unknown, params: unknown) => unknown)(db, params),
-    ),
-  };
-});
-
 // ─── setup ────────────────────────────────────────────────────────────────────
 
 function makeFetch(overrides: Record<string, unknown> = {}) {

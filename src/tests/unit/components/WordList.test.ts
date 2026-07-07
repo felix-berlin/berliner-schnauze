@@ -1,6 +1,6 @@
 import WordList from "@components/WordList.vue";
 import { useStore } from "@nanostores/vue";
-import { $oramaSearchResults, $searchState } from "@stores/wordList.ts";
+import { $oramaSearchResults, $searchQuery, $searchState } from "@stores/wordList.ts";
 import { mount } from "@vue/test-utils";
 import { useTimeoutFn } from "@vueuse/core";
 import { describe, expect, it, vi, beforeEach } from "vitest";
@@ -30,7 +30,7 @@ vi.mock("virtua/vue", () => ({
 
 vi.mock("@components/word/SingleWord.vue", () => ({
   default: {
-    props: ["source", "index", "positions", "showDropdown"],
+    props: ["source", "index", "highlightTerm", "showDropdown"],
     template:
       "<li class='mock-single-word' tabindex='0'>{{ source?.wordProperties?.berlinerisch }}</li>",
   },
@@ -38,6 +38,7 @@ vi.mock("@components/word/SingleWord.vue", () => ({
 
 vi.mock("@stores/wordList.ts", () => ({
   $oramaSearchResults: {},
+  $searchQuery: {},
   $searchState: {},
 }));
 
@@ -74,6 +75,7 @@ const mockStores = (
   vi.mocked(useStore).mockImplementation(
     createStoreMockImpl([
       [$oramaSearchResults, oramaRef],
+      [$searchQuery, ref("")],
       [$searchState, ref(stateValue)],
     ]) as unknown as typeof useStore,
   );
@@ -82,7 +84,6 @@ const mockStores = (
 const makeHit = (berlinerisch: string, slug = berlinerisch.toLowerCase()) => ({
   id: slug,
   score: 1,
-  positions: {},
   document: { id: slug, slug, wordProperties: { berlinerisch, translations: ["test"] } },
 });
 

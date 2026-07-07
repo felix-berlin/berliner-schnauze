@@ -23,7 +23,7 @@
       :key="index"
       :index="index"
       :source="item.document"
-      :positions="item.positions"
+      :highlight-term="searchQuery"
       :style="{ 'margin-bottom': singleWordGap }"
       :class="{ 'is-active': showActive && index === activeIndex }"
       tabindex="0"
@@ -38,7 +38,7 @@ import type { ComponentPublicInstance } from "vue";
 import WordListSkeleton from "@components/word-search/WordListSkeleton.vue";
 import SingleWord from "@components/word/SingleWord.vue";
 import { useStore } from "@nanostores/vue";
-import { $oramaSearchResults, $searchState } from "@stores/wordList.ts";
+import { $oramaSearchResults, $searchQuery, $searchState } from "@stores/wordList.ts";
 import { routeToWord } from "@utils/helpers.ts";
 import { onKeyStroke, useTimeoutFn } from "@vueuse/core";
 import { VList, WindowVirtualizer } from "virtua/vue";
@@ -61,6 +61,7 @@ const {
 const virtualizerComponent = useWindowVirtualizer ? WindowVirtualizer : VList;
 
 const oramaSearch = useStore($oramaSearchResults);
+const searchQuery = useStore($searchQuery);
 const searchState = useStore($searchState);
 const mutableOramaSearch = computed(
   () =>
@@ -69,7 +70,6 @@ const mutableOramaSearch = computed(
       : []) as unknown as {
       document: OramaSearchIndex;
       id: string;
-      positions: Record<string, Record<string, { length: number; start: number }[]>>;
       score: number;
     }[],
 );

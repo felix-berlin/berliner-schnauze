@@ -1,14 +1,13 @@
 /**
  * Regression test for the cold-start "ready + 0 results" flash.
  *
- * @orama/plugin-match-highlight registers an async afterInsert hook, but
- * Orama's insertMultiple picks its synchronous path (its asyncNeeded check
- * ignores plugin-level afterInsert), so the hook runs fire-and-forget and
- * the positions store fills in AFTER insertMultiple resolves. Searching in
- * that window returns 0 hits. initOrama must therefore drain the hook queue
- * before the store reports its first "ready" state.
+ * Historically @orama/plugin-match-highlight's fire-and-forget afterInsert
+ * hook let the store report "ready" before the index was searchable. The
+ * plugin is gone (highlighting now happens at render time via
+ * @orama/highlight), but this guard stays: the first "ready" state after a
+ * cold start must never carry 0 hits.
  *
- * Uses the real Orama stack on purpose — mocking it would hide the race.
+ * Uses the real Orama stack on purpose — mocking it would hide any race.
  */
 import { describe, expect, it, vi } from "vitest";
 

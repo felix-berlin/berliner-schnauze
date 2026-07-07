@@ -32,7 +32,7 @@ describe("SingleWord.vue", () => {
   it("renders article with id word-{berlinerWordId}", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
-      props: { source, positions: undefined, showDropdown: false },
+      props: { source, showDropdown: false },
     });
     expect(wrapper.find("article#word-42").exists()).toBe(true);
   });
@@ -40,7 +40,7 @@ describe("SingleWord.vue", () => {
   it("sets data-group attribute from wordGroup", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
-      props: { source, positions: undefined, showDropdown: false },
+      props: { source, showDropdown: false },
     });
     expect(wrapper.find("article").attributes("data-group")).toBe("noun");
   });
@@ -48,7 +48,7 @@ describe("SingleWord.vue", () => {
   it("renders .c-word-list__berlinerisch element", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
-      props: { source, positions: undefined, showDropdown: false },
+      props: { source, showDropdown: false },
     });
     expect(wrapper.find(".c-word-list__berlinerisch").exists()).toBe(true);
   });
@@ -56,7 +56,7 @@ describe("SingleWord.vue", () => {
   it("link inside .c-word-list__berlinerisch points to routeToWord(slug)", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
-      props: { source, positions: undefined, showDropdown: false },
+      props: { source, showDropdown: false },
     });
     const link = wrapper.find(".c-word-list__berlinerisch a");
     expect(link.exists()).toBe(true);
@@ -66,7 +66,7 @@ describe("SingleWord.vue", () => {
   it("renders translations in .c-word-list__translation", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
-      props: { source, positions: undefined, showDropdown: false },
+      props: { source, showDropdown: false },
     });
     const translation = wrapper.find(".c-word-list__translation");
     expect(translation.exists()).toBe(true);
@@ -77,7 +77,7 @@ describe("SingleWord.vue", () => {
   it("has has-translation class when translations exist", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
-      props: { source, positions: undefined, showDropdown: false },
+      props: { source, showDropdown: false },
     });
     expect(wrapper.find("article").classes()).toContain("has-translation");
   });
@@ -89,7 +89,7 @@ describe("SingleWord.vue", () => {
       wordProperties: { berlinerisch: "Schnauze" },
     };
     const wrapper = mount(SingleWord, {
-      props: { source: sourceNoTranslation, positions: undefined, showDropdown: false },
+      props: { source: sourceNoTranslation, showDropdown: false },
     });
     expect(wrapper.find("article").classes()).not.toContain("has-translation");
   });
@@ -97,32 +97,26 @@ describe("SingleWord.vue", () => {
   it("renders berlinerisch text in the link", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
-      props: { source, positions: undefined, showDropdown: false },
+      props: { source, showDropdown: false },
     });
     const link = wrapper.find(".c-word-list__berlinerisch a");
     expect(link.html()).toContain("Schnauze");
   });
 
-  it("wraps matched text in <mark class=\"is-highlight\"> when positions provided", async () => {
+  it("wraps matched text in <mark class=\"is-highlight\"> when highlightTerm matches", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
-    // positions for 'wordProperties.berlinerisch': match "Schna" (start=0, length=5)
-    const positions = {
-      "wordProperties.berlinerisch": {
-        someKey: [{ start: 0, length: 5 }],
-      },
-    };
     const wrapper = mount(SingleWord, {
-      props: { source, positions, showDropdown: false },
+      props: { highlightTerm: "Schna", source, showDropdown: false },
     });
     const link = wrapper.find(".c-word-list__berlinerisch a");
     expect(link.html()).toContain('<mark class="is-highlight">Schna</mark>');
     expect(link.html()).toContain("uze");
   });
 
-  it("renders plain text when no positions provided", async () => {
+  it("renders plain text when no highlightTerm provided", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
-      props: { source, positions: undefined, showDropdown: false },
+      props: { source, showDropdown: false },
     });
     const link = wrapper.find(".c-word-list__berlinerisch a");
     expect(link.html()).not.toContain("<mark");
@@ -136,44 +130,45 @@ describe("SingleWord.vue", () => {
       wordProperties: { berlinerisch: undefined as unknown as string },
     };
     const wrapper = mount(SingleWord, {
-      props: { source: sourceNoBerlinerisch, positions: undefined, showDropdown: false },
+      props: { source: sourceNoBerlinerisch, showDropdown: false },
     });
     const link = wrapper.find(".c-word-list__berlinerisch a");
     expect(link.html()).not.toContain("<mark");
   });
 
-  it("returns plain text when matchesObj is empty (covers allMatches.length === 0 branch)", async () => {
+  it("returns plain text when highlightTerm is whitespace only", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
-    const positions = { "wordProperties.berlinerisch": {} };
     const wrapper = mount(SingleWord, {
-      props: { source, positions, showDropdown: false },
+      props: { highlightTerm: "   ", source, showDropdown: false },
     });
     const link = wrapper.find(".c-word-list__berlinerisch a");
     expect(link.html()).not.toContain("<mark");
     expect(link.html()).toContain("Schnauze");
   });
 
-  it("renders multiple non-overlapping highlights correctly", async () => {
+  it("returns plain text when highlightTerm does not match", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
-    // "Schnauze": highlight "Sch" (0,3) and "ze" (6,2)
-    const positions = {
-      "wordProperties.berlinerisch": {
-        match1: [{ start: 0, length: 3 }],
-        match2: [{ start: 6, length: 2 }],
-      },
-    };
     const wrapper = mount(SingleWord, {
-      props: { source, positions, showDropdown: false },
+      props: { highlightTerm: "xyz", source, showDropdown: false },
     });
     const link = wrapper.find(".c-word-list__berlinerisch a");
-    expect(link.html()).toContain('<mark class="is-highlight">Sch</mark>');
-    expect(link.html()).toContain('<mark class="is-highlight">ze</mark>');
+    expect(link.html()).not.toContain("<mark");
+    expect(link.html()).toContain("Schnauze");
+  });
+
+  it("highlights case-insensitively", async () => {
+    const SingleWord = (await import("@components/word/SingleWord.vue")).default;
+    const wrapper = mount(SingleWord, {
+      props: { highlightTerm: "schna", source, showDropdown: false },
+    });
+    const link = wrapper.find(".c-word-list__berlinerisch a");
+    expect(link.html()).toContain('<mark class="is-highlight">Schna</mark>');
   });
 
   it("renders WordOptionDropdown when showDropdown is true", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
-      props: { source, positions: undefined, showDropdown: true },
+      props: { source, showDropdown: true },
     });
     await flushPromises();
     expect(wrapper.find(".mock-word-option-dropdown").exists()).toBe(true);
@@ -182,7 +177,7 @@ describe("SingleWord.vue", () => {
   it("renders 'Mehr erfahren' link inside dropdown #after slot when showDropdown is true", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
-      props: { source, positions: undefined, showDropdown: true },
+      props: { source, showDropdown: true },
     });
     await flushPromises();
     const link = wrapper.find(".c-options-dropdown__copy-button");

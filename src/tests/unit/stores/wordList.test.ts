@@ -30,11 +30,7 @@ vi.mock("@nanostores/async", () => ({
 vi.mock("@orama/orama", () => ({
   create: vi.fn(),
   insertMultiple: vi.fn(),
-}));
-
-vi.mock("@orama/plugin-match-highlight", () => ({
-  afterInsert: vi.fn(),
-  searchWithHighlight: vi.fn(),
+  search: vi.fn(),
 }));
 
 vi.mock("@orama/stemmers/german", () => ({
@@ -459,15 +455,14 @@ describe("wordList store", () => {
       expect(result).toBeNull();
     });
 
-    it("calls searchWithHighlight when db is truthy (covers line 433 true branch)", async () => {
-      const { create } = await import("@orama/orama");
-      const { searchWithHighlight } = await import("@orama/plugin-match-highlight");
+    it("calls search when db is truthy (covers line 433 true branch)", async () => {
+      const { create, search } = await import("@orama/orama");
       vi.mocked(create).mockResolvedValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(searchWithHighlight).mockResolvedValueOnce({ hits: [], count: 0, elapsed: { raw: 0, formatted: "0" } } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({ hits: [], count: 0, elapsed: { raw: 0, formatted: "0" } } as unknown as never);
       const { $wordSearch } = await import("@stores/wordList.ts");
       expect(capturedCbRef.fn).toBeDefined();
       const result = await capturedCbRef.fn!($wordSearch.get());
-      expect(searchWithHighlight).toHaveBeenCalled();
+      expect(search).toHaveBeenCalled();
       expect(result).toBeDefined();
     });
 

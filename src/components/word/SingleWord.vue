@@ -22,12 +22,7 @@
         />
         <a
           :href="routeToWord(source.slug!)"
-          v-html="
-            highlightMatches(
-              source.wordProperties?.berlinerisch ?? '',
-              positions?.['wordProperties.berlinerisch'],
-            )
-          "
+          v-html="highlightMatches(source.wordProperties?.berlinerisch ?? '', highlightTerm)"
         />
       </dt>
 
@@ -53,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { Highlight } from "@orama/highlight";
 import { routeToWord } from "@utils/helpers.ts";
 import BookOpen from "virtual:icons/lucide/book-open";
 
@@ -61,36 +57,18 @@ import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 
 type WordProps = {
+  highlightTerm?: string;
   index?: number;
-  positions: Record<string, Record<string, { length: number; start: number }[]>> | undefined;
   showDropdown?: boolean;
   source: OramaSearchIndex;
 };
 
-const { index, positions, showDropdown = true, source } = defineProps<WordProps>();
+const { highlightTerm, index, showDropdown = true, source } = defineProps<WordProps>();
 
-const highlightMatches = (
-  text: string,
-  matchesObj?: Record<string, { length: number; start: number }[]>,
-): string => {
-  if (!matchesObj || typeof matchesObj !== "object") return text;
+const highlighter = new Highlight({ CSSClass: "is-highlight", HTMLTag: "mark" });
 
-  // Flatten all match arrays from the object
-  const allMatches = Object.values(matchesObj).flat().filter(Boolean);
-
-  if (!Array.isArray(allMatches) || allMatches.length === 0) return text;
-
-  // Sort matches by start index
-  const sorted = [...allMatches].sort((a, b) => a.start - b.start);
-
-  let result = "";
-  let lastIndex = 0;
-  for (const match of sorted) {
-    result += text.slice(lastIndex, match.start);
-    result += `<mark class="is-highlight">${text.slice(match.start, match.start + match.length)}</mark>`;
-    lastIndex = match.start + match.length;
-  }
-  result += text.slice(lastIndex);
-  return result;
+const highlightMatches = (text: string, term?: string): string => {
+  if (!term?.trim()) return text;
+  return highlighter.highlight(text, term).HTML;
 };
 </script>
