@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.42.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.41.0...v3.42.0) (2026-07-07)
+
+
+### Bug Fixes
+
+* **build:** time-box Wakapi stats fetch and cache failures ([94005f1](https://github.com/felix-berlin/berliner-schnauze/commit/94005f1498f883d775aab2f01031afe9ae84193b))
+* **search:** gate no-results and result count on search readiness ([ed47774](https://github.com/felix-berlin/berliner-schnauze/commit/ed4777443a42a4f9232c046cda1e52d804b2992f))
+* **search:** wait for match-highlight positions before first search ([d4bac64](https://github.com/felix-berlin/berliner-schnauze/commit/d4bac64fa13c12a9154b7d595c5b52b304086683))
+* **word:** title-based dedupe for word import, allow case-variant pairs ([5fd36f0](https://github.com/felix-berlin/berliner-schnauze/commit/5fd36f0474df5d085600877e29a0ecde5c1bb69f))
+
+
+### Features
+
+* add berlinerisch field to ACF updates in SDLS migration script ([e763078](https://github.com/felix-berlin/berliner-schnauze/commit/e763078438d87fd10270c4f1b4b1863087f9dbd2))
+* add heuristic categorization script for uncategorized lexikon entries ([2c384f9](https://github.com/felix-berlin/berliner-schnauze/commit/2c384f90674c52cc6f3dd4b25247f9958bf68f50))
+* **search:** implement stale-while-revalidate caching strategy for search API ([a4960fa](https://github.com/felix-berlin/berliner-schnauze/commit/a4960fa9e5327f2aef610242829ae6b4f480408c))
+* **search:** migrate highlighting to @orama/highlight ([9c9ade7](https://github.com/felix-berlin/berliner-schnauze/commit/9c9ade76e734ca5ff9f14b2137052b325946e633))
+* **search:** show skeleton rows while search index loads ([9490878](https://github.com/felix-berlin/berliner-schnauze/commit/9490878ab6a0c930fdd65c8310c9e578e5a3dcb0))
+* update import script and add migration for SDLS sources ([8b0b443](https://github.com/felix-berlin/berliner-schnauze/commit/8b0b443923fbbb47f029251feab17c7f56cddd53))
+* **word:** add lexikon word import script and data format ([cae9eaf](https://github.com/felix-berlin/berliner-schnauze/commit/cae9eaf81a9931f3178a1a0c8c045d8b352a68dc))
+* **word:** curate lexikon entries D-F for WP import ([9ef0fd8](https://github.com/felix-berlin/berliner-schnauze/commit/9ef0fd8ea83e10e6f6a7d97533fc668797b70c8f))
+* **word:** curate lexikon entries G-J for WP import ([cb18b2b](https://github.com/felix-berlin/berliner-schnauze/commit/cb18b2b3c06f1e78e21571e2d2af8ba2433aca50))
+* **word:** curate lexikon entries K for WP import ([72d063f](https://github.com/felix-berlin/berliner-schnauze/commit/72d063fbc4df3453c8cb41883bbf3150ccda4fad))
+* **word:** curate lexikon entries L-O for WP import ([2d94a29](https://github.com/felix-berlin/berliner-schnauze/commit/2d94a29b5a6941f6cfbfc30c0bb36cdc5c0248cd))
+* **word:** curate lexikon entries P-Q for WP import ([e986061](https://github.com/felix-berlin/berliner-schnauze/commit/e986061a8365ccc2ec5517f145e503df4bad7195))
+* **word:** curate lexikon entries R for WP import ([a01bab7](https://github.com/felix-berlin/berliner-schnauze/commit/a01bab724e9643064217ed837382c5b18b01448e))
+* **word:** curate lexikon entries S-Z, complete import dataset ([159ae49](https://github.com/felix-berlin/berliner-schnauze/commit/159ae49fee37fe01e51134357aea00ec07a46521))
+* **word:** show sources in etymology section ([8717167](https://github.com/felix-berlin/berliner-schnauze/commit/87171672530f94729fbb9c927fec4e76df6663e1))
+
 # [3.41.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.40.0...v3.41.0) (2026-07-06)
 
 
