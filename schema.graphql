@@ -3430,12 +3430,12 @@ type CompanyInformations implements AcfFieldGroup & AcfFieldGroupFields & Compan
   Field of the &quot;email&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
   """
   email: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
-  """
-  fax: String
   """The name of the field group"""
   fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  funding: [CompanyInformationsFunding]
   """
   Bitte geben Sie hier die Seite mit dem Impressum an.
   Die Datenschutzerklärung definieren Sie über Einstellungen &gt; Privatsphäre.
@@ -3461,6 +3461,46 @@ type CompanyInformations implements AcfFieldGroup & AcfFieldGroupFields & Compan
   Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
   """
   socialMedia: [CompanyInformationsSocialMedia]
+}
+
+"""
+The &quot;CompanyInformationsFunding&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
+"""
+type CompanyInformationsFunding implements AcfFieldGroup & AcfFieldGroupFields & CompanyInformationsFunding_Fields {
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  adresse: String
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  link: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  name: String
+}
+
+"""
+Interface representing fields of the ACF &quot;CompanyInformationsFunding&quot; Field Group
+"""
+interface CompanyInformationsFunding_Fields implements AcfFieldGroup & AcfFieldGroupFields {
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  adresse: String
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  link: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  name: String
 }
 
 """
@@ -3519,12 +3559,12 @@ interface CompanyInformations_Fields implements AcfFieldGroup & AcfFieldGroupFie
   Field of the &quot;email&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
   """
   email: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
-  """
-  fax: String
   """The name of the field group"""
   fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  funding: [CompanyInformationsFunding]
   """
   Bitte geben Sie hier die Seite mit dem Impressum an.
   Die Datenschutzerklärung definieren Sie über Einstellungen &gt; Privatsphäre.
