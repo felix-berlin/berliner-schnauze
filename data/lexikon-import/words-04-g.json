@@ -1,0 +1,664 @@
+[
+  {
+    "word": "GabiKo",
+    "article": "der",
+    "translations": ["ganz billiger Korn"],
+    "infoText": "Ostberlinische Abkürzung.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Galan",
+    "article": "der",
+    "translations": ["jemand, der vornehm tut", "Freund einer Frau"],
+    "examples": [{ "example": "Dein Galan hat wieder anjeruf’n." }],
+    "infoText": "Von spanisch galán = Liebhaber, Verehrer.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Gang",
+    "article": "der",
+    "translations": ["Funktion (in der Wendung »im Gange sein«)"],
+    "examples": [
+      { "example": "Warum is dit wieder nich im Jange?", "explanation": "Warum funktioniert es nicht?" }
+    ],
+    "themen": []
+  },
+  {
+    "word": "janüscht",
+    "translations": ["gar nichts"],
+    "examples": [
+      { "example": "Ick sach janüscht.", "explanation": "Ich habe keine Meinung, ich übernehme keine Verantwortung." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Gardinenstange",
+    "article": "die",
+    "translations": ["flachbrüstige Frau"],
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  },
+  {
+    "word": "Gärtnerwurst",
+    "article": "die",
+    "translations": ["grüne Gurke"],
+    "infoText": "Die im Garten des Kleingärtners wächst.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "gebacken",
+    "translations": ["beschaffen", "gebaut"],
+    "examples": [{ "example": "So wie wir jebacken sind." }],
+    "themen": []
+  },
+  {
+    "word": "geblaßmeiert",
+    "translations": ["angeschmiert"],
+    "themen": []
+  },
+  {
+    "word": "gebont",
+    "translations": ["abgemacht", "wird erledigt"],
+    "examples": [{ "example": "Dit is jebont!" }],
+    "infoText": "Hergenommen vom Kassenbon.",
+    "themen": []
+  },
+  {
+    "word": "Geborene",
+    "article": "die",
+    "translations": ["Adlige"],
+    "examples": [{ "example": "’ne Jeborene von und zu." }],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Gebratene Schrippe",
+    "article": "die",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "gebumfiedelt",
+    "translations": ["geschmeichelt"],
+    "examples": [
+      { "example": "Der fühlt sich jebumfiedelt.", "explanation": "Er kommt sich geschmeichelt vor." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Gedächtniswärmer",
+    "article": "der",
+    "translations": ["Baskenmütze"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Gedrängte Wochenübersicht",
+    "article": "die",
+    "translations": ["Bulette", "Frikadelle"],
+    "infoText": "Scherzhaft, weil — so die Annahme — Reste von Mittagsgerichten einer Woche verarbeitet werden.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "gefällig",
+    "translations": ["drohend bevorstehend"],
+    "examples": [
+      { "example": "Da is wat jefällig!", "explanation": "Da passiert gleich etwas (Drohung)." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "geforben",
+    "translations": ["gefärbt"],
+    "themen": []
+  },
+  {
+    "word": "gefressen",
+    "translations": ["nicht ausstehen können (in der Wendung »jemanden gefressen haben«)"],
+    "examples": [
+      { "example": "Den hab ick jefressen!", "explanation": "Diese Person kann ich nicht ausstehen." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Gegend",
+    "article": "die",
+    "translations": ["unwirtlicher Ort", "Landschaft außerhalb Berlins"],
+    "examples": [
+      { "example": "Weit und breit nüscht wie Jejend!", "explanation": "Nur Landschaft. Die Redensart geht auf Glaßbrenner zurück." }
+    ],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Gegenteil",
+    "article": "das",
+    "translations": ["Verneinung mit ironischem Unterton"],
+    "examples": [
+      { "example": "Haste Hunger? — Janz im Jejenteil." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "gehörig",
+    "translations": ["stark", "sehr"],
+    "examples": [{ "example": "Dit war ’ne janz jehör’je Portion Eisbeen." }],
+    "themen": []
+  },
+  {
+    "word": "Geist",
+    "article": "der",
+    "translations": ["Nerven (in der Wendung »auf den Geist gehen«)"],
+    "examples": [
+      { "example": "Du jehst ma uff’n Jeist!", "explanation": "Du gehst mir auf die Nerven." }
+    ],
+    "infoText": "Ein geistiger Kleingärtner oder Kleinrentner ist geistig obdachlos, also schlicht ein Dummkopf.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Geizhammel",
+    "article": "der",
+    "translations": ["geiziger Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen", "geld"]
+  },
+  {
+    "word": "Gelaber",
+    "article": "das",
+    "translations": ["Geschwätz"],
+    "themen": []
+  },
+  {
+    "word": "gelacht",
+    "translations": ["lachhaft"],
+    "examples": [{ "example": "Wär ja jelacht, wenn wa dit nich schaffen würden." }],
+    "themen": []
+  },
+  {
+    "word": "gelackmeiert",
+    "translations": ["angeschmiert"],
+    "infoText": "Wenn jemand den Kürzeren zieht, ist er der Jelackmeierte. Aus lackieren im Sinne von »hereinlegen, betrügen« und meiern = foppen, täuschen.",
+    "themen": []
+  },
+  {
+    "word": "geladen",
+    "translations": ["stark betrunken", "aggressiv, wütend"],
+    "examples": [
+      { "example": "Der hat schwer jeladen heut.", "explanation": "Er hat viel Alkohol getrunken." },
+      { "example": "Warum bist ’n so jeladen?", "explanation": "So aggressiv, wütend?" }
+    ],
+    "themen": ["alkohol-kneipe", "gefuehle-emotionen"]
+  },
+  {
+    "word": "gelernt",
+    "translations": ["perfekt beherrscht"],
+    "examples": [
+      { "example": "Jelernt is jelernt.", "explanation": "Man beherrscht eine Sache perfekt." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "gelitten",
+    "translations": ["geläutet"],
+    "themen": []
+  },
+  {
+    "word": "gelungen",
+    "translations": ["originell", "merkwürdig"],
+    "themen": []
+  },
+  {
+    "word": "gemacht",
+    "translations": ["wird erledigt"],
+    "examples": [{ "example": "Is jemacht!" }],
+    "themen": []
+  },
+  {
+    "word": "gemischt",
+    "translations": ["ordinär", "anstößig"],
+    "themen": []
+  },
+  {
+    "word": "junges Gemüse",
+    "article": "das",
+    "translations": ["Kinder", "junge Leute"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Gemüseathlet",
+    "article": "der",
+    "translations": ["krasser Egoist"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Gemüte führen, sich",
+    "translations": ["etwas trinken"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Gemütsathlet",
+    "article": "der",
+    "translations": ["herzloser Mensch"],
+    "examples": [
+      { "example": "Der hat ’n Jemüt wie’n Schaukelpferd." }
+    ],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "genau",
+    "translations": ["Genaues (in der Wendung)"],
+    "examples": [
+      { "example": "Nüscht Jenauet is nich raus.", "explanation": "Etwas Genaues weiß man nicht." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "genehmigen, sich einen",
+    "translations": ["einen trinken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "genormt latschen",
+    "translations": ["tanzen"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "genügen",
+    "translations": ["abschließender Kommentar (in der Wendung)"],
+    "examples": [
+      { "example": "›Dit jenücht‹, sagt der Staatsanwalt.", "explanation": "Abschließende Kommentierung einer Handlung. Übernommen aus einer Gerichtsszene von Albert Hopf (1845)." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "gerammelt",
+    "translations": ["sehr", "äußerst"],
+    "examples": [{ "example": "Die Küche war jerammelt voll." }],
+    "themen": []
+  },
+  {
+    "word": "gerieben",
+    "translations": ["schlau", "hinterlistig"],
+    "examples": [{ "example": "Dit is ’n janz jerieb’nes Bürschchen." }],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "geringst",
+    "translations": ["nicht im Geringsten (doppelt verneint)"],
+    "examples": [{ "example": "Im jeringsten janich." }],
+    "themen": []
+  },
+  {
+    "word": "gerissen",
+    "translations": ["schlau"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "geritzt",
+    "translations": ["erledigt", "in Ordnung"],
+    "examples": [{ "example": "Is jeritzt!" }],
+    "themen": []
+  },
+  {
+    "word": "Gesabber",
+    "article": "das",
+    "translations": ["Geschwätz"],
+    "examples": [{ "example": "Hör doch mal uff mit dem Jesabber." }],
+    "infoText": "Von »Sabber« = Speichel, niederdeutsch sabbeln.",
+    "themen": []
+  },
+  {
+    "word": "gescheit",
+    "translations": ["ordentlich", "brauchbar"],
+    "examples": [
+      { "example": "Jib ma mal jescheite Karten!", "explanation": "Beim Skat." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "geschenkt",
+    "translations": ["auf keinen Fall (verstärkte Ablehnung)"],
+    "examples": [
+      { "example": "Dit nehm ick nich jeschenkt!", "explanation": "Das nehme ich nicht — Verstärkung der Negation." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Geschichte",
+    "article": "die",
+    "translations": ["Umstände", "etwas Kompliziertes"],
+    "examples": [
+      { "example": "Wat hast’n? — So’ne Blinddarmjeschichte." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Geschmadder",
+    "article": "das",
+    "translations": ["unsaubere Schrift", "Geschmiere"],
+    "themen": []
+  },
+  {
+    "word": "geschmiert",
+    "translations": ["hervorragend laufend"],
+    "examples": [
+      { "example": "Dit jeht ja wie jeschmiert.", "explanation": "Das läuft wie ein gut geschmiertes Wagenrad." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "geschnitten",
+    "translations": ["verkalkuliert (in der Wendung »sich geschnitten haben«)"],
+    "examples": [{ "example": "Da haste dich aber jeschnitten." }],
+    "themen": []
+  },
+  {
+    "word": "geschwollen",
+    "translations": ["mit Pathos redend", "gekünstelt fein sprechend"],
+    "examples": [{ "example": "Der redet jeschwollen daher." }],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Geseier",
+    "article": "das",
+    "translations": ["Klagen", "weinerliches Herumreden"],
+    "infoText": "Von jiddisch gesera = Bestimmung, Verordnung.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Gesichte",
+    "article": "das",
+    "translations": ["mürrische Miene"],
+    "examples": [
+      { "example": "Mach nicht so’n Jesichte.", "explanation": "Schau nicht so mürrisch oder traurig drein." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Gesichtserker",
+    "article": "der",
+    "translations": ["Nase"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Gesockse",
+    "article": "das",
+    "translations": ["abwertend für Gruppen von Menschen", "Schimpfwort für Sachsen"],
+    "infoText": "Nach 1945 Schimpfwort für die Sachsen (auch Sachsengesocks). Früher für arme Leute, die keine Socken und kein Schuhwerk besaßen.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Gestell",
+    "article": "das",
+    "translations": ["hagerer Mensch"],
+    "examples": [{ "example": "Mensch, ist dit’n Jestell!" }],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "gestohlen",
+    "translations": ["egal (in der Wendung »gestohlen bleiben können«)"],
+    "examples": [
+      { "example": "Der kann ma jestohl’n bleiben.", "explanation": "Der kann bleiben, wo der Pfeffer wächst." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "gesund",
+    "translations": ["schlau", "praktisch"],
+    "themen": []
+  },
+  {
+    "word": "gesundstoßen, sich",
+    "translations": ["Wohlstand erlangen", "Profite machen"],
+    "infoText": "Aufgekommen im 19. Jahrhundert im Zusammenhang mit Aktienschiebereien.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "glotzen",
+    "translations": ["große Augen machen", "starren"],
+    "infoText": "Aus dem Mittelhochdeutschen für schimmern, glänzen. Bereits bevor es die Glotze (= Fernseher) gab, sind die Wörter Glotzpaule und Glotzooge belegt.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Glubsche",
+    "article": "die",
+    "translations": ["Brille"],
+    "infoText": "Niederdeutsch. Im 19. Jahrhundert ist glubschen für mürrisch, von unten aufwärts blicken belegt. Wer immer »gleich so glubsch ist«, der ist beleidigt.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "gnatschig",
+    "translations": ["mürrisch"],
+    "infoText": "Wahrscheinlich von umgangssprachlich gnatzen = mürrisch sein. Siehe auch gnietschig.",
+    "themen": ["gefuehle-emotionen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Gnatschke",
+    "article": "der",
+    "translations": ["Italienischer Salat"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "gnatzen",
+    "translations": ["weinen", "wimmern", "verstimmt sein"],
+    "infoText": "Ein Gnatzkopp ist ein mürrischer Mensch.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "gnedderig",
+    "translations": ["verdrießlich"],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "gnietschig",
+    "translations": ["geizig", "mürrisch"],
+    "infoText": "Im 19. Jahrhundert geizig, heute für mürrisch, meist in der Form gnatschig. Eine Gnietsche ist eine übellaunige Person, ebenso Gnietschkatze oder Gnietschpeter.",
+    "themen": ["charakter-eigenschaften", "geld"]
+  },
+  {
+    "word": "gnurpsen",
+    "translations": ["ein knarrendes Geräusch von sich geben"],
+    "themen": []
+  },
+  {
+    "word": "Gold-Else",
+    "article": "die",
+    "translations": ["Figur auf der Siegessäule"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Gondel",
+    "article": "die",
+    "translations": ["Kopf"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Göre",
+    "article": "die",
+    "translations": ["Mädchen", "freche, unerzogene Kinder (Plural)"],
+    "infoText": "Im Niederdeutschen seit dem 17. Jahrhundert auf Menschen bezogen nachweisbar. Vielleicht von mittelhochdeutsch gorec = gering, armselig.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Gott",
+    "article": "der",
+    "translations": ["Gott (in zahlreichen Redewendungen)"],
+    "examples": [
+      { "example": "Jehnse mit Jott, aber jehnse!" },
+      { "example": "Sie sind wohl janz von Jott verlassen!", "explanation": "Sie sind nicht recht bei Trost!" },
+      { "example": "Dit reene Wort Jottes.", "explanation": "Ein guter Schnaps." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "gottsjämmerlich",
+    "translations": ["sehr schlecht"],
+    "examples": [{ "example": "Mir is jottsjämmerlich zumute." }],
+    "infoText": "Lautvariation zu kotzjämmerlich.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "gottvoll",
+    "translations": ["reizend"],
+    "examples": [{ "example": "Dit is ja ’ne jottvolle Story." }],
+    "alternativeWords": ["göttlich"],
+    "themen": []
+  },
+  {
+    "word": "Graf Koks",
+    "article": "der",
+    "translations": ["feiner Pinkel", "eingebildeter Mensch"],
+    "alternativeWords": ["Graf Koks von der Gasanstalt", "Graf Rotz von der Popelsburg", "Graf Kacke"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Granatenbutze",
+    "article": "die",
+    "translations": ["Frau"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "grapschen",
+    "translations": ["greifen"],
+    "infoText": "Vielleicht von polnisch grabić = raffen, rauben.",
+    "themen": []
+  },
+  {
+    "word": "Graul",
+    "article": "der",
+    "translations": ["Grauen"],
+    "examples": [{ "example": "Ick krieg schon ’nen Graul, wenn ick dit nur sehe." }],
+    "infoText": "Sich graulen bedeutet sich fürchten, Angst haben.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Grieben",
+    "translations": ["Fettrückstände", "Herpes-Ausschlag am Mund"],
+    "infoText": "Nicht nur die gebräunten Fettrückstände beim Auslassen von Schmalz, sondern auch ein Ausschlag am Mund, der angeblich durch zu fettes Essen hervorgerufen wird. Von mittelhochdeutsch griebe = ausgelassener Fettwürfel.",
+    "themen": ["essen-trinken", "koerper"]
+  },
+  {
+    "word": "Griepsch",
+    "article": "der",
+    "translations": ["Kerngehäuse des Apfels"],
+    "alternativeWords": ["Appelgriepsch"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Griffel",
+    "translations": ["Finger"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Grips",
+    "article": "der",
+    "translations": ["Verstand"],
+    "infoText": "Norddeutsch. Von der Iterativform ›gripsen‹ für grippen = an sich raffen.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "grölen",
+    "translations": ["schreien", "laut herumsingen"],
+    "infoText": "Von mittelniederdeutsch gralen = lärmen. In einer Beschreibung Berlins von 1792 heißt es, dass bei Hochzeiten die Kurrende »während dem Essen erscheint und einige bekannte Kirchengesänge hergrölet«.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Groschen",
+    "article": "der",
+    "translations": ["Zehnpfennigstück"],
+    "infoText": "Von mittelhochdeutsch grosse = Dickpfennig, lateinisch grossus = dick.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Großer Gelber",
+    "article": "der",
+    "translations": ["Doppeldeckerbus"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Großkotz",
+    "article": "der",
+    "translations": ["Prahler", "überheblicher Mensch"],
+    "examples": [{ "example": "So’n großkotz’jer Typ!" }],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Großmutter",
+    "article": "die",
+    "translations": ["Unglaube (in der Redensart)"],
+    "examples": [
+      { "example": "Dit kannste deine Großmutter erzähl’n, aber nich mir.", "explanation": "Das glaube ich nicht." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Großschnauze",
+    "article": "die",
+    "translations": ["Prahler"],
+    "infoText": "Jemand, der die Schnauze weit aufreißt.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Grüneberger",
+    "article": "der",
+    "translations": ["saurer Wein"],
+    "infoText": "Ursprünglich der Wein aus Grünberg.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Grüne Minna",
+    "article": "die",
+    "translations": ["Polizeiwagen"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Grütze",
+    "article": "die",
+    "translations": ["Verstand"],
+    "examples": [{ "example": "Der hat Grütze im Kopp!" }],
+    "infoText": "Von frühneuhochdeutsch Kritz.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Gulli",
+    "article": "der",
+    "translations": ["Gulasch"],
+    "alternativeWords": ["Gullpopo"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Gully",
+    "article": "der",
+    "translations": ["Kanalisationsdeckel", "Abwasserschacht", "Abfluss"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Gummi",
+    "article": "der",
+    "translations": ["Taxi"],
+    "examples": [{ "example": "Nehm’ wa uns ’n Gummi?" }],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Gummiadler",
+    "article": "der",
+    "translations": ["Broiler", "Brathähnchen"],
+    "infoText": "Ostberlinisch für Broiler, die Bezeichnung für Brathähnchen im DDR-Wortschatz. Bereits studentensprachlich in den 50er Jahren belegt.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Gummifinger",
+    "article": "der",
+    "translations": ["Bratwurst mit Kunstdarm"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Gummihacken",
+    "article": "der",
+    "translations": ["Bulette", "Frikadelle"],
+    "alternativeWords": ["Gummimuffe", "Gummipuck"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Gummipuppe",
+    "article": "die",
+    "translations": ["dickliches Mädchen"],
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  }
+]

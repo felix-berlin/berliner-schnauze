@@ -1,0 +1,74 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-word-list-skeleton {
+  margin: 0;
+  padding: 0;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    box-sizing: border-box;
+    height: var(--word-list-skeleton-row-size, 110px);
+    margin-bottom: vars.$spacer;
+    padding: vars.$spacer * 0.5 vars.$spacer;
+    background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
+    border: 1px dashed var(--color-border, var(--orange-200));
+
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--new-blue-400);
+      --color-border: var(--new-blue-200);
+      --color-skeleton-bone: var(--new-blue-200);
+    }
+  }
+
+  &__lines {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: vars.$spacer * 0.5;
+    min-width: 0;
+  }
+
+  &__bar {
+    height: 0.75rem;
+    border-radius: 4px;
+    background-color: var(--color-skeleton-bone, var(--orange-200));
+
+    &--word {
+      width: min(40%, 220px);
+    }
+
+    &--translation {
+      width: min(65%, 340px);
+      opacity: 0.6;
+    }
+  }
+
+  &__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    background-color: var(--color-skeleton-bone, var(--orange-200));
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .c-word-list-skeleton__row {
+    animation: word-list-skeleton-pulse 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes word-list-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}

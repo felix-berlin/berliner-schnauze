@@ -1,0 +1,369 @@
+[
+  {
+    "word": "zabberich",
+    "translations": ["eifrig", "ärgerlich"],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "zach",
+    "translations": ["zaghaft"],
+    "infoText": "Norddeutsch/sächsisch, Nebenform zu zag = verzagt, verschüchtert.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Zack",
+    "translations": ["Aufmerksamkeit (in der Wendung »auf Zack sein«)"],
+    "examples": [
+      { "example": "Der is uff Zack.", "explanation": "Er ist auf dem Kiewief, passt auf." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Zacken",
+    "article": "der",
+    "translations": ["Stück Brot", "Rausch (»’nen Zacken in der Krone haben«)"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Zadder",
+    "article": "der",
+    "translations": ["Bindegewebe im Fleisch"],
+    "infoText": "Zähes, mit Sehnen durchsetztes Fleisch ist zaddrig.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Zahn",
+    "article": "der",
+    "translations": ["Freundin", "Fernsehturm in Berlin-Mitte"],
+    "examples": [
+      { "example": "Den Zahn laß da mal zieh’n.", "explanation": "Dezenter Hinweis, dass sich derjenige nichts einbilden soll." }
+    ],
+    "infoText": "Siehe auch steiler Zahn = hübsches Mädchen.",
+    "themen": ["beziehungen-soziales", "orte-spitzname"]
+  },
+  {
+    "word": "Zahnklempner",
+    "article": "der",
+    "translations": ["Zahnarzt"],
+    "themen": ["koerper", "stadtleben"]
+  },
+  {
+    "word": "Zahnreißer",
+    "article": "der",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Zankdeibel",
+    "article": "der",
+    "translations": ["zänkischer Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Zanktippe",
+    "article": "die",
+    "translations": ["zänkische Frau"],
+    "infoText": "Lautmalerisch für Xanthippe, die zänkische Gattin des Sokrates.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "zappenduster",
+    "translations": ["sehr dunkel", "aus, zu Ende"],
+    "themen": []
+  },
+  {
+    "word": "Zaster",
+    "article": "der",
+    "translations": ["Geld"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Zauber",
+    "article": "der",
+    "translations": ["Schwindel", "Aufführung"],
+    "examples": [
+      { "example": "Wat soll’n der Zauber?", "explanation": "Kritisch über eine Tätigkeit." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Zeck spielen",
+    "translations": ["Fangen spielen"],
+    "infoText": "Von mittelhochdeutsch Zecke = zwickendes Insekt. Greifen, Haschen, Kriegen spielen, wobei der Fänger dem Gejagten einen leichten Schlag geben muss.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Zehlendorfdollar",
+    "article": "der",
+    "translations": ["Fünfmarkschein"],
+    "infoText": "Mit Anspielung auf die in Berlin-Zehlendorf stationierten US-Soldaten.",
+    "themen": ["geld", "orte-spitzname"]
+  },
+  {
+    "word": "Zergerei",
+    "article": "die",
+    "translations": ["fortwährende Neckerei"],
+    "alternativeWords": ["Zergelei"],
+    "infoText": "Von niederdeutsch tergen = reizen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "zerknautschen",
+    "translations": ["zerknittern"],
+    "themen": []
+  },
+  {
+    "word": "zerknirpseln",
+    "translations": ["zerstückeln", "fertigmachen"],
+    "examples": [{ "example": "Dir könnt’ ick zerknirpseln." }],
+    "themen": []
+  },
+  {
+    "word": "zerpliesert",
+    "translations": ["zersaust"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Zerquetschte",
+    "translations": ["ein paar Pfennige (in der Wendung)"],
+    "examples": [
+      { "example": "Zwanzig Mark und ’n paar Zerquetschte." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Zibbe",
+    "article": "die",
+    "translations": ["Frau (abfällig)"],
+    "infoText": "Eigentlich Ziege.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Zicke",
+    "article": "die",
+    "translations": ["dürre, störrische Frau", "Dummheiten (Plural)"],
+    "examples": [
+      { "example": "Mach doch keene Zicken.", "explanation": "Stell dich nicht so an, mach keine Dummheiten." }
+    ],
+    "alternativeWords": ["Zimtzicke"],
+    "infoText": "Berlinische und obersächsische Variante zu Ziege.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Ziehe",
+    "article": "die",
+    "translations": ["Pflege", "Erziehung"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "ziepen",
+    "translations": ["an den Haaren zupfen"],
+    "infoText": "Norddeutsch und ostdeutsch, gehört zu ›zupfen‹.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Zierlappe",
+    "article": "der",
+    "translations": ["affektierte Person"],
+    "alternativeWords": ["Zieraffe"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Zierpuppe",
+    "article": "die",
+    "translations": ["Frau als Schaustück"],
+    "infoText": "Bezeichnung für eine Frau, die dem Mann als Schaustück dient.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Zille",
+    "article": "die",
+    "translations": ["Spreekahn"],
+    "examples": [
+      { "example": "Lieber von Zille gemalt, als vom Sozialismus gezeichnet.", "explanation": "Ostberliner Spruch." }
+    ],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Zimmerberolina",
+    "article": "die",
+    "translations": ["pompöse Frau"],
+    "infoText": "Nach der Figur der Berolina vom Alexanderplatz.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Zimt",
+    "article": "der",
+    "translations": ["Theater, Umstände"],
+    "examples": [
+      { "example": "Mach doch keen’ Zimt.", "explanation": "Mach kein Theater." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Zimmerlinde",
+    "article": "die",
+    "translations": ["Kollegin"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Zimtdriese",
+    "article": "die",
+    "translations": ["sich geziert verhaltende Person"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Zinnober",
+    "article": "der",
+    "translations": ["Kram"],
+    "examples": [{ "example": "Wohin mit dem Zinnober?" }],
+    "themen": []
+  },
+  {
+    "word": "Zippe",
+    "article": "die",
+    "translations": ["Zigarette"],
+    "infoText": "Wahrscheinlich von ›Zippel‹, der niederdeutschen Form zu ›Zipfel‹.",
+    "themen": []
+  },
+  {
+    "word": "Zippelwilli",
+    "article": "der",
+    "translations": ["Fleischer"],
+    "infoText": "Bezieht sich auf die Wurstenden, die früher mitverkauft wurden.",
+    "themen": ["stadtleben", "essen-trinken"]
+  },
+  {
+    "word": "Zitterjule",
+    "article": "die",
+    "translations": ["Beifahrerin auf dem Motorrad"],
+    "themen": []
+  },
+  {
+    "word": "Zitronenneger",
+    "article": "der",
+    "translations": ["Person asiatischer Herkunft"],
+    "infoText": "Historischer Beleg aus dem Lexikon — die Bezeichnung ist rassistisch und heute nicht mehr verwendbar.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Zosse",
+    "article": "die",
+    "translations": ["altes Pferd", "alte Frau (übertragen)"],
+    "infoText": "Geht zurück auf jiddisch sus = Pferd.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Zottel",
+    "article": "die",
+    "translations": ["Frau (verächtlich)", "Haare (Plural)"],
+    "examples": [{ "example": "Laß da mal de Zotteln schneiden." }],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "zu",
+    "translations": ["los", "vorwärts"],
+    "examples": [{ "example": "Na, denn man zu." }],
+    "themen": []
+  },
+  {
+    "word": "Zuchthauspastete",
+    "article": "die",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "zuckeln",
+    "translations": ["langsam fahren, gehen"],
+    "examples": [{ "example": "Im Zuckeltrab fahren." }],
+    "infoText": "Nebenform von ›zockeln‹, das auf ›ziehen‹ beruht.",
+    "themen": []
+  },
+  {
+    "word": "Zuckersand",
+    "article": "der",
+    "translations": ["feiner Sand"],
+    "themen": []
+  },
+  {
+    "word": "Zumpel",
+    "article": "der",
+    "translations": ["Lappen", "Haare (Plural)"],
+    "infoText": "Beruht auf Lumpen. Siehe auch Zotteln.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Zündelmänner",
+    "translations": ["Feuerwehrmänner"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Zünder",
+    "article": "der",
+    "translations": ["Nase"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Zurückzieher",
+    "article": "der",
+    "translations": ["Rückzieher"],
+    "examples": [
+      { "example": "’n Zurückzieher machen.", "explanation": "Etwas zurücknehmen, sich vor etwas drücken." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "zusammentrommeln",
+    "translations": ["einschrumpfen"],
+    "themen": []
+  },
+  {
+    "word": "zweidoppelt",
+    "translations": ["doppelt", "zweifach gelegt"],
+    "themen": []
+  },
+  {
+    "word": "Zwingtöppen",
+    "translations": ["Schuhe"],
+    "infoText": "Aus Zwinge = Zange und (Fußball-)Töppen.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "zwitschern",
+    "translations": ["trinken"],
+    "examples": [
+      { "example": "Een’ zwitschern jeh’n.", "explanation": "Einen Schnaps trinken gehen." }
+    ],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Droschkenkutscher",
+    "article": "der",
+    "translations": ["Bier mit Korn"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Kopp",
+    "article": "der",
+    "translations": ["Kopf"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Lanke",
+    "article": "die",
+    "translations": ["Gewässerbezeichnung"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Luch",
+    "article": "das",
+    "translations": ["Landschaftsbezeichnung (sumpfige Niederung)"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Plötze",
+    "article": "die",
+    "translations": ["Weißfisch"],
+    "themen": ["essen-trinken"]
+  }
+]

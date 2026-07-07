@@ -38,10 +38,10 @@ importers:
       '@nanostores/vue':
         specifier: ^1.1.0
         version: 1.1.0(@nanostores/logger@1.1.0(nanostores@1.4.0))(@vue/devtools-api@8.1.5)(nanostores@1.4.0)(vue@3.5.39(typescript@6.0.3))
+      '@orama/highlight':
+        specifier: ^0.1.9
+        version: 0.1.9
       '@orama/orama':
-        specifier: ^3.1.18
-        version: 3.1.18
-      '@orama/plugin-match-highlight':
         specifier: ^3.1.18
         version: 3.1.18
       '@orama/stemmers':
@@ -2996,12 +2996,12 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
 
+  '@orama/highlight@0.1.9':
+    resolution: {integrity: sha512-eH4uZMea4R9x9vBFJyS/87oR4Y8oIKxF7e1SItJ9DhPlexZWMVZRlFYvHS1BM/563/dU240ct4ZaGHoYKiCkyQ==}
+
   '@orama/orama@3.1.18':
     resolution: {integrity: sha512-a61ljmRVVyG5MC/698C8/FfFDw5a8LOIvyOLW5fztgUXqUpc1jOfQzOitSCbge657OgXXThmY3Tk8fpiDb4UcA==}
     engines: {node: '>= 20.0.0'}
-
-  '@orama/plugin-match-highlight@3.1.18':
-    resolution: {integrity: sha512-oqdzOkt1wTgLnpAFxSqxHuttaQiXnDNs5BE6ozpUzYn+pmWwZIvji/NVVtOoXdUSBJbopBKU2pptibmRNJ0gyw==}
 
   '@orama/stemmers@3.1.18':
     resolution: {integrity: sha512-xXs5fpiUvBs4jJZtnayJmUSomdxxiwwwvTbAzPHSyI6geLM7bxXHgpVlYz4JeMBycHX8bHF7j9m7F35BxhuZ8g==}
@@ -12297,11 +12297,9 @@ snapshots:
       '@opentelemetry/api': 1.9.1
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.1)
 
-  '@orama/orama@3.1.18': {}
+  '@orama/highlight@0.1.9': {}
 
-  '@orama/plugin-match-highlight@3.1.18':
-    dependencies:
-      '@orama/orama': 3.1.18
+  '@orama/orama@3.1.18': {}
 
   '@orama/stemmers@3.1.18': {}
 

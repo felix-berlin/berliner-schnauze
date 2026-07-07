@@ -30,11 +30,7 @@ vi.mock("@nanostores/async", () => ({
 vi.mock("@orama/orama", () => ({
   create: vi.fn(),
   insertMultiple: vi.fn(),
-}));
-
-vi.mock("@orama/plugin-match-highlight", () => ({
-  afterInsert: vi.fn(),
-  searchWithHighlight: vi.fn(),
+  search: vi.fn(),
 }));
 
 vi.mock("@orama/stemmers/german", () => ({
@@ -428,6 +424,26 @@ describe("wordList store", () => {
     });
   });
 
+  describe("$searchState", () => {
+    it("returns loading while oramaSearchResults is loading", async () => {
+      const { $oramaSearchResults, $searchState } = await import("@stores/wordList.ts");
+      ($oramaSearchResults as any).set({ state: "loading" });
+      expect($searchState.get()).toBe("loading");
+    });
+
+    it("returns ready when oramaSearchResults is ready", async () => {
+      const { $oramaSearchResults, $searchState } = await import("@stores/wordList.ts");
+      ($oramaSearchResults as any).set({ state: "ready", value: { count: 1 } });
+      expect($searchState.get()).toBe("ready");
+    });
+
+    it("returns failed when oramaSearchResults failed", async () => {
+      const { $oramaSearchResults, $searchState } = await import("@stores/wordList.ts");
+      ($oramaSearchResults as any).set({ state: "failed", error: new Error("boom") });
+      expect($searchState.get()).toBe("failed");
+    });
+  });
+
   describe("$oramaSearchResults computedAsync callback", () => {
     it("returns null when db is falsy after initOrama (covers line 433 false branch and line 424 ?? 10)", async () => {
       // Import triggers computedAsync mock which captures the callback
@@ -439,26 +455,49 @@ describe("wordList store", () => {
       expect(result).toBeNull();
     });
 
-    it("calls searchWithHighlight when db is truthy (covers line 433 true branch)", async () => {
-      const { create } = await import("@orama/orama");
-      const { searchWithHighlight } = await import("@orama/plugin-match-highlight");
+    it("calls search when db is truthy (covers line 433 true branch)", async () => {
+      const { create, search } = await import("@orama/orama");
       vi.mocked(create).mockResolvedValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(searchWithHighlight).mockResolvedValueOnce({ hits: [], count: 0, elapsed: { raw: 0, formatted: "0" } } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({ hits: [], count: 0, elapsed: { raw: 0, formatted: "0" } } as unknown as never);
       const { $wordSearch } = await import("@stores/wordList.ts");
       expect(capturedCbRef.fn).toBeDefined();
       const result = await capturedCbRef.fn!($wordSearch.get());
-      expect(searchWithHighlight).toHaveBeenCalled();
+      expect(search).toHaveBeenCalled();
       expect(result).toBeDefined();
     });
 
-    it("catches fetch errors and returns null (covers line 434-436 catch branch)", async () => {
-      globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false, status: 500 })) as unknown as typeof fetch;
-      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    it("fetches the search index only once for concurrent computations (single-flight)", async () => {
+      const fetchSpy = vi.fn(() =>
+        Promise.resolve({ ok: true, json: () => Promise.resolve([]) }),
+      );
+      globalThis.fetch = fetchSpy as unknown as typeof fetch;
       const { $wordSearch } = await import("@stores/wordList.ts");
+      await Promise.all([
+        capturedCbRef.fn!($wordSearch.get()),
+        capturedCbRef.fn!($wordSearch.get()),
+      ]);
+      const indexCalls = fetchSpy.mock.calls.filter(
+        ([url]) => url === "/api/search/index.json",
+      );
+      expect(indexCalls).toHaveLength(1);
+    });
+
+    it("throws on fetch failure so computedAsync reports state failed, then retries", async () => {
+      globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false, status: 500 })) as unknown as typeof fetch;
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      await expect(capturedCbRef.fn!($wordSearch.get())).rejects.toThrow(
+        "[wordList] search index fetch failed: 500",
+      );
+
+      // Failure clears the memoized init promise → the next computation retries.
+      const retryFetch = vi.fn(() =>
+        Promise.resolve({ ok: true, json: () => Promise.resolve([]) }),
+      );
+      globalThis.fetch = retryFetch as unknown as typeof fetch;
       const result = await capturedCbRef.fn!($wordSearch.get());
-      expect(result).toBeNull();
-      expect(consoleSpy).toHaveBeenCalledWith("[wordList] Search failed:", expect.any(Error));
-      consoleSpy.mockRestore();
+      expect(retryFetch).toHaveBeenCalledWith("/api/search/index.json");
+      expect(result).toBeNull(); // create mock returns undefined → db falsy → null
+
       // restore fetch mock
       globalThis.fetch = vi.fn(() =>
         Promise.resolve({ ok: true, json: () => Promise.resolve({ availableWordGroups: [], wordTypes: [], rangeFilterMinMax: {} }) }),

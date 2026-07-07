@@ -1,0 +1,482 @@
+[
+  {
+    "word": "L2",
+    "translations": ["lange Leitung"],
+    "infoText": "So auch L5: lausig lange leicht lädierte Leitung.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Labbe",
+    "article": "die",
+    "translations": ["eitler Nichtskönner", "Lippe, Mund"],
+    "infoText": "Von niederdeutsch lappen = schlaff herunterhängen.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "labberig",
+    "translations": ["unangenehm weichlich (von Speisen)"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "labern",
+    "translations": ["dummes Zeug reden", "schwätzen"],
+    "infoText": "Fußt auf Labbe.",
+    "themen": []
+  },
+  {
+    "word": "Labommel",
+    "article": "der",
+    "translations": ["durchtriebener Kerl"],
+    "infoText": "Schimpfwort.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Lackaffe",
+    "article": "der",
+    "translations": ["eitler Fratz"],
+    "infoText": "Basiert auf lackierter (= geschniegelter, eingebildeter) Affe. Wie Fatzke.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "lackieren",
+    "translations": ["betrügen"],
+    "themen": []
+  },
+  {
+    "word": "Ladenschwengel",
+    "article": "der",
+    "translations": ["Kaufmannsgehilfe (abwertend)"],
+    "themen": ["stadtleben", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Lakenball",
+    "article": "der",
+    "translations": ["Bett (in der Wendung »zum Lakenball gehen«)"],
+    "examples": [
+      { "example": "Zum Lakenball jeh’n.", "explanation": "Ins Bett gehen." }
+    ],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Lamäng",
+    "article": "die",
+    "translations": ["Handgelenk (in der Wendung »aus der Lamäng«)"],
+    "examples": [
+      { "example": "Aus der Lamäng heraus.", "explanation": "Etwas routiniert, sicher und ohne langes Nachdenken tun." },
+      { "example": "Dit kommt nich inne Lamäng.", "explanation": "Das kommt nicht in Frage." }
+    ],
+    "infoText": "Von französisch la main = die Hand.",
+    "themen": []
+  },
+  {
+    "word": "Lamberkeng",
+    "article": "der",
+    "translations": ["Fensterquerbehang"],
+    "examples": [
+      { "example": "’ne Stulle mit Lamberkengs.", "explanation": "Eine Brotschnitte, deren Belag an den Rändern ›überhängt‹." }
+    ],
+    "alternativeWords": ["Lamberkäng"],
+    "infoText": "Von französisch lambrequin.",
+    "themen": ["alltag-wohnen", "essen-trinken"]
+  },
+  {
+    "word": "Lampe",
+    "article": "die",
+    "translations": ["Kehle (in der Wendung »einen auf die Lampe gießen«)"],
+    "examples": [
+      { "example": "Einen auf die Lampe gießen.", "explanation": "Trinken, sich betrinken." }
+    ],
+    "infoText": "Vermutlich von umgangssprachlich »Öl auf die Lampe gießen« = trinken.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Landei",
+    "article": "das",
+    "translations": ["Mädchen vom Lande"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Landpomeranze",
+    "article": "die",
+    "translations": ["Mädchen vom Lande"],
+    "infoText": "Pomeranze = Bitterorange. Wie Landei.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "längelang",
+    "translations": ["der Länge nach"],
+    "themen": []
+  },
+  {
+    "word": "langen",
+    "translations": ["reichen, ausreichen", "hauen"],
+    "examples": [
+      { "example": "Jetz langt’s ma aber!" },
+      { "example": "Wenn de nich still bist, dann lang’ ick dir eene." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "langstielig",
+    "translations": ["langweilig"],
+    "themen": []
+  },
+  {
+    "word": "Lästerschwein",
+    "article": "das",
+    "translations": ["Schwesterlein (ironisch)"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Laternenpfahl",
+    "article": "der",
+    "translations": ["überdeutlicher Hinweis (in der Wendung)"],
+    "examples": [
+      { "example": "Ein Wink mit’n Laternenpfahl.", "explanation": "Ein überaus deutlicher Wink." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Latichte",
+    "article": "die",
+    "translations": ["Laterne", "Licht", "Blickfeld"],
+    "examples": [
+      { "example": "Woll’n se ma nich aus de Latichte jeh’n!", "explanation": "Aus dem Licht, aus dem Blickfeld gehen." }
+    ],
+    "infoText": "Verschmelzung aus Laterne und Licht.",
+    "themen": []
+  },
+  {
+    "word": "Laatsch",
+    "article": "der",
+    "translations": ["langer, hagerer Mensch", "Hausschuhe (Plural)"],
+    "alternativeWords": ["Latsch", "Lulatsch", "Laban"],
+    "infoText": "Verallgemeinernd ›Mensch ohne Haltung‹. Latschen = schlurfen, nachlässig gehen.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Langer Lulatsch",
+    "article": "der",
+    "translations": ["Berliner Funkturm"],
+    "infoText": "Spitzname des Berliner Funkturms.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Latz",
+    "article": "der",
+    "translations": ["Brust (in der Wendung »eene vor’n Latz kriegen«)"],
+    "examples": [
+      { "example": "Eene vor’n Latz kriegen.", "explanation": "Eine geschlagen bekommen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Laube",
+    "article": "die",
+    "translations": ["Fertigstellung (in der Wendung »fertig is de Laube«)"],
+    "examples": [
+      { "example": "Fertig is de Laube.", "explanation": "Erleichterter Kommentar nach rasch erledigter Arbeit." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Laubfrösche",
+    "translations": ["grün Uniformierte (z.B. Zöllner)"],
+    "infoText": "So nannte man in Berlin vor 1848 die Gendarmen, welche grüne Uniformen trugen.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Laubenpieper",
+    "article": "der",
+    "translations": ["Kleingärtner"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "lauern",
+    "translations": ["warten"],
+    "themen": []
+  },
+  {
+    "word": "Laune",
+    "article": "die",
+    "translations": ["Spaß (in der Wendung »Laune machen«)"],
+    "examples": [
+      { "example": "Dit macht Laune.", "explanation": "Das macht Spaß." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Laus",
+    "article": "die",
+    "translations": ["Unannehmlichkeit (in der Redensart)"],
+    "examples": [
+      { "example": "Ick will ma nich ’ne Laus in’ Pelz setzen.", "explanation": "Ich will mir nichts Unangenehmes aufladen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Lauselümmel",
+    "article": "der",
+    "translations": ["Lausebengel"],
+    "themen": ["schimpfwoerter-beleidigungen", "beziehungen-soziales"]
+  },
+  {
+    "word": "Lauseharke",
+    "article": "die",
+    "translations": ["Kamm"],
+    "themen": ["koerper", "alltag-wohnen"]
+  },
+  {
+    "word": "Lausekröten",
+    "translations": ["wenig Geld"],
+    "examples": [
+      { "example": "Die paar Lausekröten!", "explanation": "Das bisschen Geld." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Lausenest",
+    "article": "das",
+    "translations": ["Dorf", "Kleinstadt"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Leberwurst",
+    "article": "die",
+    "translations": ["Beleidigtsein (in der Redensart)"],
+    "examples": [
+      { "example": "Der is beleidigt wie ’ne jekränkte Leberwurscht." }
+    ],
+    "themen": ["gefuehle-emotionen", "essen-trinken"]
+  },
+  {
+    "word": "Leib",
+    "article": "der",
+    "translations": ["Ruhe (in der Wendung »vom Leibe gehen«)"],
+    "examples": [
+      { "example": "Jeh mir vom Leibe!", "explanation": "Lass mich in Ruhe." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Leichenstrümpfe",
+    "translations": ["Würste"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Leichenwagen",
+    "article": "der",
+    "translations": ["Leichenwagen (in der Drohung)"],
+    "examples": [
+      { "example": "Bestell dir schon immer mal ’n Leichenwagen.", "explanation": "Drohung." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Leierkasten",
+    "article": "der",
+    "translations": ["Drehorgel"],
+    "infoText": "Eine Leierkastendecke bezeichnet einen Mantel.",
+    "themen": ["stadtleben", "unterhaltung-freizeit"]
+  },
+  {
+    "word": "Leisetreter",
+    "translations": ["Hausschuhe"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Leitungsheimer",
+    "article": "der",
+    "translations": ["Glas Leitungswasser"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "leppern, sich",
+    "translations": ["sich ansammeln"],
+    "examples": [
+      { "example": "Da leppert sich wat zusammen.", "explanation": "Da kommt etwas zusammen, z.B. an Geld." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "lernen",
+    "translations": ["lehren"],
+    "infoText": "Anstelle von lehren gebraucht.",
+    "themen": []
+  },
+  {
+    "word": "letztens",
+    "translations": ["neulich"],
+    "themen": []
+  },
+  {
+    "word": "Leukoplastbomber",
+    "article": "der",
+    "translations": ["Kleinwagen"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Levkoi",
+    "article": "der",
+    "translations": ["Lakai"],
+    "infoText": "Im 19. Jahrhundert. Wortspiel zu Levkoje (griechisch leukoion = Weißveilchen).",
+    "themen": []
+  },
+  {
+    "word": "Lichter",
+    "translations": ["Kerzen"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Lichterne",
+    "article": "die",
+    "translations": ["Laterne"],
+    "themen": []
+  },
+  {
+    "word": "lila",
+    "translations": ["mittelmäßig (als Antwort auf »Wie geht’s?«)"],
+    "examples": [
+      { "example": "Wie jehts denn so? — So lila.", "explanation": "Lautspiel zu ›so lala‹, mit Bezug auf »lila bis blaßblau« bzw. »lila durchwachsen«." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Lippe",
+    "article": "die",
+    "translations": ["freches Mundwerk (in der Wendung »’ne Lippe riskieren«)"],
+    "examples": [
+      { "example": "’ne Lippe riskieren.", "explanation": "Vorlaut, frech sein." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Lippenkitzler",
+    "article": "der",
+    "translations": ["Bart"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Lippentriller pfeifen",
+    "translations": ["trinken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "blonde Lissy",
+    "article": "die",
+    "translations": ["Klobürste"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Loden",
+    "translations": ["ungepflegte Locken, Haare"],
+    "infoText": "Mittelhochdeutsch Lode = grober Wollstoff.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Löffel",
+    "translations": ["Ohren"],
+    "infoText": "Siehe auch Horchlöffel.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "löhnen",
+    "translations": ["bezahlen"],
+    "alternativeWords": ["ablöhnen"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Lorke",
+    "article": "die",
+    "translations": ["dünner Kaffee", "schlechtes Getränk"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "loseisen",
+    "translations": ["freimachen", "befreien"],
+    "themen": []
+  },
+  {
+    "word": "losschießen",
+    "translations": ["zu sprechen anfangen"],
+    "examples": [
+      { "example": "Schießen Se endlich los!", "explanation": "Sprechen Sie endlich." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "löten",
+    "translations": ["machen (nur verneint)"],
+    "examples": [
+      { "example": "Da jibt’s nischt zu löten (am Holzeimer).", "explanation": "Da ist nichts zu machen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Lowise",
+    "article": "die",
+    "translations": ["Luise"],
+    "themen": []
+  },
+  {
+    "word": "Luder",
+    "article": "das",
+    "translations": ["Schimpfwort", "Aas"],
+    "examples": [{ "example": "Du jemeinet Luder, du!" }],
+    "infoText": "Von mittelhochdeutsch luoder = Lockspeise, Schlemmerei, Gespött.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Lümmel",
+    "article": "der",
+    "translations": ["frecher Bengel", "Penis"],
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  },
+  {
+    "word": "Lümmeltüte",
+    "article": "die",
+    "translations": ["Präservativ"],
+    "themen": []
+  },
+  {
+    "word": "lumpen",
+    "translations": ["geizen (nur verneint: »sich nicht lumpen lassen«)"],
+    "examples": [
+      { "example": "Der läßt sich nich lumpen.", "explanation": "Er ist nicht geizig, sondern spendabel." },
+      { "example": "Die paar lumpjen Fennje.", "explanation": "Das wenige Geld." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Lungentorpedo",
+    "article": "der",
+    "translations": ["Zigarre", "starke Zigarette"],
+    "themen": []
+  },
+  {
+    "word": "Lunte",
+    "article": "die",
+    "translations": ["Verdacht (»Lunte riechen«)", "Spaß (»Lunte machen«)"],
+    "examples": [
+      { "example": "Der riecht Lunte.", "explanation": "Er schöpft Verdacht." },
+      { "example": "Dit macht Lunte!", "explanation": "Das macht Spaß." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Lusche",
+    "article": "die",
+    "translations": ["unfähiger Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Lüttiti",
+    "article": "der",
+    "translations": ["kleiner Stich, Verrücktheit"],
+    "examples": [
+      { "example": "Der hat ’nen kleinen Lüttiti.", "explanation": "Er hat einen kleinen Stich, er spinnt." }
+    ],
+    "infoText": "Mit Hauptakzent auf der ersten Silbe.",
+    "themen": []
+  }
+]

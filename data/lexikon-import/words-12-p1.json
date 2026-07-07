@@ -1,0 +1,428 @@
+[
+  {
+    "word": "Pachulke",
+    "article": "der",
+    "translations": ["grober, ungeschlachter Mensch"],
+    "infoText": "Von polnisch pacholek. Im Mittelalter wurden im polnischen Raum die von der Stadt bezahlten Söldner ›pacholkowie‹ genannt, später verächtliche Bezeichnung für die in Lehndiensten stehenden Bauern.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Pack",
+    "article": "das",
+    "translations": ["Gesindel", "verachtete Gruppe von Menschen"],
+    "infoText": "Von mittelniederdeutsch pak = Pack, Bündel, Gepäck.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Package",
+    "article": "die",
+    "translations": ["Gesindel"],
+    "infoText": "Von französisch bagage = Gepäck. Siehe auch Pack.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Padde",
+    "article": "die",
+    "translations": ["Person, die sich im Wasser tummelt (insbesondere Kind)"],
+    "infoText": "Im 19. Jahrhundert für Frosch. Im 12. Jahrhundert aus dem Niederländischen übernommen.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Paddenpuper",
+    "article": "der",
+    "translations": ["Ausflugsdampfer"],
+    "infoText": "Basiert auf niederdeutsch padden = treten, schreiten (davon ›paddeln‹) und umgangssprachlich ›pupen‹.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Pallazzo Prozzo",
+    "article": "der",
+    "translations": ["Palast der Republik"],
+    "alternativeWords": ["Ballast der Republik"],
+    "infoText": "Ostberlinisch, spöttisch.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Palme",
+    "article": "die",
+    "translations": ["Erregung (in der Wendung »auf der Palme sein«)"],
+    "examples": [
+      { "example": "Der is ja mächtig uff de Palme.", "explanation": "Sehr aufgeregt." },
+      { "example": "Der bringt mich uff de Palme.", "explanation": "Der macht mich verrückt." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Pamel",
+    "article": "das",
+    "translations": ["Brot"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Pampe",
+    "article": "die",
+    "translations": ["weiche, breiartige Masse", "schlechtes Essen"],
+    "infoText": "Von niederdeutsch Pamp = Brei, Modder. Im 19. Jahrhundert für schlechtes Essen.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "pampig",
+    "translations": ["frech, anmaßend", "breiig, weich"],
+    "infoText": "Abgeleitet von Pampe.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Pamputschen",
+    "translations": ["Schuhe"],
+    "infoText": "Abgeleitet von umgangssprachlich Babuschen = Hausschuhe, was auf französisch babouche = türkischer Schuh fußt, was wiederum auf türkisch ›pabutschi‹ zurückgeht.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Panne",
+    "article": "die",
+    "translations": ["Verrücktheit (in der Wendung »’ne Panne haben«)"],
+    "examples": [
+      { "example": "Der hat vielleicht ’ne Panne.", "explanation": "Der ist nicht ganz richtig im Kopf." }
+    ],
+    "infoText": "Von französisch panne = Funktionsstörung bei Maschinen.",
+    "themen": []
+  },
+  {
+    "word": "Panoramablick",
+    "article": "der",
+    "translations": ["Schielen"],
+    "examples": [
+      { "example": "Der hat ’n Panoramablick.", "explanation": "Er schielt." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Pantinen",
+    "translations": ["Holzschuhe (in der Redensart)"],
+    "examples": [
+      { "example": "Kipp nich aus de Pantinen, wenn de die Nachricht hörst.", "explanation": "Brich nicht zusammen, fall nicht um." }
+    ],
+    "infoText": "Niederdeutsch Pantine = Holzschuh, Pantoffel. Pantinenkintopp bezeichnet das Filzlatschenkino (den Fernseher).",
+    "themen": []
+  },
+  {
+    "word": "Panzerplatte",
+    "article": "die",
+    "translations": ["Bulette", "Frikadelle"],
+    "infoText": "Fußt auf umgangssprachlich Panzerplatte = Scheibe Hartwurst.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Pappchinese",
+    "article": "der",
+    "translations": ["alberner Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Pappdiskus",
+    "article": "der",
+    "translations": ["Pizza"],
+    "infoText": "Bestandteile wie Pappe und Form eines Diskus.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Pappe",
+    "article": "die",
+    "translations": ["Führerschein", "Trabant"],
+    "examples": [
+      { "example": "Dit is nich von Pappe.", "explanation": "Das ist nicht schlecht." }
+    ],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Pappenstiel",
+    "article": "der",
+    "translations": ["Geringfügigkeit (nur verneint)"],
+    "examples": [
+      { "example": "Dit is keen Pappenstiel.", "explanation": "Das ist nicht wenig, nicht gering zu veranschlagen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "par Order di Mufti",
+    "translations": ["auf höheren Befehl"],
+    "themen": []
+  },
+  {
+    "word": "Parteitagssprudel",
+    "article": "der",
+    "translations": ["Springbrunnen auf dem Straußberger Platz"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "partu",
+    "translations": ["durchaus", "unbedingt"],
+    "examples": [{ "example": "Sie will partu nich mitjeh’n." }],
+    "infoText": "Von französisch partout.",
+    "themen": []
+  },
+  {
+    "word": "passen",
+    "translations": ["gefallen"],
+    "examples": [{ "example": "Dit paßt ma jar nich, daß de noch nich jefrühstückt hast." }],
+    "themen": []
+  },
+  {
+    "word": "patent",
+    "translations": ["begabt", "geschickt", "in Ordnung"],
+    "examples": [{ "example": "Is ’n janz patenter Kerl." }],
+    "infoText": "Ein Patentekel ist das Gegenteil, ein Patentfatzke ein eingebildeter Mensch.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Patsche",
+    "article": "die",
+    "translations": ["Straßenschmutz", "Hände (Plural)", "Klemme (»in der Patsche sitzen«)"],
+    "examples": [
+      { "example": "In der Patsche sitzen.", "explanation": "Keinen Ausweg finden, in der Bredullje sein." }
+    ],
+    "infoText": "Abgeleitet von der lautmalenden Interjektion ›patsch‹.",
+    "themen": []
+  },
+  {
+    "word": "Patz-Eule",
+    "article": "die",
+    "translations": ["jemand, der etwas verpatzt hat"],
+    "infoText": "Schimpfwort.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "patzig",
+    "translations": ["frech", "unhöflich", "vorlaut"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Pauke",
+    "article": "die",
+    "translations": ["Schule", "Bauch"],
+    "examples": [
+      { "example": "Der haut ordentlich een’ uff de Pauke.", "explanation": "Er macht einen drauf und ist im Geldausgeben freizügig." },
+      { "example": "Der is mit der Pauke jepiekt.", "explanation": "Er ist nicht recht bei Verstand." }
+    ],
+    "infoText": "Ein Pauker oder Arschpauker ist ein Lehrer.",
+    "themen": []
+  },
+  {
+    "word": "Pechhengst",
+    "article": "der",
+    "translations": ["Schuster"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": []
+  },
+  {
+    "word": "pechös",
+    "translations": ["misslich", "unglücklich"],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Pedalenstiege",
+    "article": "die",
+    "translations": ["Fahrrad"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Pede",
+    "article": "die",
+    "translations": ["Quecke", "Unkraut", "Haare"],
+    "infoText": "Niederländischer Herkunft.",
+    "themen": []
+  },
+  {
+    "word": "Pelle",
+    "article": "die",
+    "translations": ["Haut"],
+    "examples": [
+      { "example": "Jeh ma bloß vonne Pelle.", "explanation": "Lass mich in Ruhe." },
+      { "example": "Der sitzt ma uff der Pelle!", "explanation": "Der lässt mich nicht in Ruhe." }
+    ],
+    "infoText": "Von lateinisch pella, niederländisch pel. Berliner Spezialität: Pellkartoffeln mit Leinöl. Verbreitung des Substantivs durch niederländische Siedler in der Mark.",
+    "themen": ["koerper", "essen-trinken"]
+  },
+  {
+    "word": "pellen",
+    "translations": ["jemandem eine Ohrfeige verpassen"],
+    "themen": []
+  },
+  {
+    "word": "Penne",
+    "article": "die",
+    "translations": ["Schule", "Bett", "liederliche Frau"],
+    "infoText": "Von lateinisch penna = Schreibfeder.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Penunse",
+    "article": "die",
+    "translations": ["Geld"],
+    "infoText": "Polnisch (pieniądze = Geld).",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Persilschein haben",
+    "translations": ["alles machen dürfen"],
+    "infoText": "Früher in Anwendung auf Personen, die nach 1945 entnazifiziert, also reingewaschen waren (Persil = Waschmittelmarke).",
+    "themen": []
+  },
+  {
+    "word": "per Tallje gehen",
+    "translations": ["ohne Mantel gehen"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "pesen",
+    "translations": ["schnell laufen", "rennen"],
+    "alternativeWords": ["peesen"],
+    "infoText": "Von lateinisch pes = Fuß.",
+    "themen": []
+  },
+  {
+    "word": "Peter Lehmann",
+    "article": "der",
+    "translations": ["Petroleum"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "pettern",
+    "translations": ["herumstochern"],
+    "themen": []
+  },
+  {
+    "word": "petzen",
+    "translations": ["anschwärzen"],
+    "infoText": "Von rotwelsch petzen = bei der Polizei anschwärzen. Seit Ende des 18. Jahrhunderts studentensprachlich belegt. Siehe auch anpetzen.",
+    "themen": []
+  },
+  {
+    "word": "Pfanne",
+    "article": "die",
+    "translations": ["Niederlage (in der Wendung »in die Pfanne hauen«)"],
+    "examples": [
+      { "example": "Jemanden in de Pfanne hau’n.", "explanation": "Ihn körperlich oder in einem Wortgefecht niedermachen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Pfannkuchen",
+    "article": "der",
+    "translations": ["Berliner (Gebäck)"],
+    "examples": [
+      { "example": "Pfannkuchen mit Beene.", "explanation": "Ein kleiner, dicker Mensch." }
+    ],
+    "infoText": "Gebäck, das außerhalb Berlins als »Berliner« bekannt ist.",
+    "themen": ["essen-trinken", "stadtleben"]
+  },
+  {
+    "word": "pfeffern",
+    "translations": ["werfen", "schlagen"],
+    "examples": [
+      { "example": "Ich pfeffer dir gleich ’n paar!", "explanation": "Ich hau’ dir gleich ein paar runter." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Pfefferzimmer",
+    "article": "das",
+    "translations": ["Abstellraum"],
+    "infoText": "Raum, in den man alles »reinpfeffert«.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Pfeife",
+    "article": "die",
+    "translations": ["Idiot"],
+    "examples": [
+      { "example": "Dem is de Pfeife ausjejang’n.", "explanation": "Er hat kein Geld oder keine Kraft mehr." }
+    ],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "pfeifen",
+    "translations": ["trinken"],
+    "examples": [{ "example": "Jeh’n wa noch een pfeifen?" }],
+    "infoText": "Abgeleitet von der soldatischen Sitte, die Flüssigkeitsmenge in einer Feldflasche durch Hineinblasen zu prüfen.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Pfeifenheini",
+    "article": "der",
+    "translations": ["Schimpfwort für eine körperlich unterlegene Person"],
+    "alternativeWords": ["Pfeifenkopp"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Pferd",
+    "article": "das",
+    "translations": ["Pferd (in Redensarten)"],
+    "examples": [
+      { "example": "Ick gloob, mich tritt ’n Ferd!", "explanation": "Ausruf des Erstaunens, der Verwunderung." },
+      { "example": "Der Apfel fällt nicht weit vom Pferd.", "explanation": "Scherzhafte Verdrehung von »vom Stamm«." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Pferdekur",
+    "article": "die",
+    "translations": ["Rosskur"],
+    "infoText": "Kur à la Dr. Eisenbart.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Pfiff",
+    "article": "der",
+    "translations": ["Kunstgriff"],
+    "themen": []
+  },
+  {
+    "word": "Pfingstochse",
+    "article": "der",
+    "translations": ["dummer Mensch", "überladen geschmückter Geck"],
+    "infoText": "Nach Trachsel (1873) ein »überreich mit Schmucksachen beladener Geck«.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Berliner Pflanze",
+    "article": "die",
+    "translations": ["echtes Berliner Kind"],
+    "examples": [
+      {
+        "example": "Denkste denn, denkste denn, Du Berliner Pflanze, Denkste denn, ick liebe dir, Nur weil ick mit dir tanze?",
+        "explanation": "Gesungen mit der Melodie des ›Petersburger Marsches‹."
+      }
+    ],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Pflasterstein",
+    "article": "der",
+    "translations": ["harter Pfefferkuchen"],
+    "infoText": "Übertragbar auf alle zu hart gewordenen Gegenstände.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Pflaume",
+    "article": "die",
+    "translations": ["Versager", "Nichtskönner", "Fußball"],
+    "examples": [
+      { "example": "Spielste mit Fußball? — Aber nich mit der Flaume, die de da inner Hand hast." }
+    ],
+    "alternativeWords": ["Pflaumenaugust", "Pflaumenede"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Pfund",
+    "article": "das",
+    "translations": ["Zwanzig Mark", "Verstärkung (Pfundskerl, Pfundssache)"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "pfuschen",
+    "translations": ["schludrig arbeiten", "schwarzarbeiten"],
+    "themen": []
+  }
+]

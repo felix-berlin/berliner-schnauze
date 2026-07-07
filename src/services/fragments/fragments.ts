@@ -123,6 +123,9 @@ export const WordProperties = graphql(`
       ...WordPropertiesWikimediaFiles
     }
     infoText
+    sources {
+      quelle
+    }
     images {
       nodes {
         sourceUrl

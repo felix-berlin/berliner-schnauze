@@ -1,0 +1,863 @@
+[
+  {
+    "word": "picheln",
+    "translations": ["stark trinken"],
+    "infoText": "Niederdeutsch/obersächsisch. Ursprünglich nach Pegeln (Eichzeichen) trinken, vgl. niederdeutsch ›enen goden Pegel supen‹.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Piefke",
+    "article": "der",
+    "translations": ["kleiner Junge"],
+    "infoText": "Nach dem preußischen Musikmeister Piefke, der 1864 den Düppeler Sturmmarsch komponierte. Einfluss von norddeutsch Piefke = Pfeifchen ist nicht auszuschließen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Pieke",
+    "article": "die",
+    "translations": ["Anfang (in der Wendung »von der Pieke auf«)"],
+    "examples": [
+      { "example": "Von der Pieke auf lernen.", "explanation": "Von Anfang an und gründlich. (Picke = Spitzhacke)" }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Piejatz",
+    "article": "der",
+    "translations": ["Zigarre"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": []
+  },
+  {
+    "word": "piekfein",
+    "translations": ["sehr fein", "auserlesen"],
+    "infoText": "Leitet sich nicht aus dem Jiddischen ab, sondern von der niederdeutschen Bezeichnung ›puk, pük‹, ursprünglich für eine feine niederländische Tuchsorte.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Piep",
+    "article": "der",
+    "translations": ["Ton (»nich mehr Piep sagen können«)", "Vogel (»’n Piep haben«)"],
+    "examples": [
+      { "example": "Er kann nich mehr Piep sagen.", "explanation": "Keinen Ton mehr herausbringen." },
+      { "example": "Der hat’n Piep.", "explanation": "Der hat einen Vogel, der spinnt." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "piepe",
+    "translations": ["egal"],
+    "examples": [
+      { "example": "Dit is ma piepe.", "explanation": "Das ist mir völlig egal." }
+    ],
+    "infoText": "Niederdeutsch Piepe, ursprünglich Halm- oder Weidenpfeife.",
+    "themen": []
+  },
+  {
+    "word": "piepegal",
+    "translations": ["völlig gleichgültig"],
+    "infoText": "Zusammensetzung aus piepe und egal.",
+    "themen": []
+  },
+  {
+    "word": "Piepel",
+    "article": "der",
+    "translations": ["kleiner Junge", "Penis"],
+    "examples": [{ "example": "Kinderschokolade biegt den Piepel gerade." }],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Piepen",
+    "translations": ["Geld"],
+    "examples": [{ "example": "Viel Arbeet und wenig Piepen." }],
+    "infoText": "Verkürzt aus Piepmatz.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Piepmatz",
+    "article": "der",
+    "translations": ["Vogel"],
+    "examples": [
+      { "example": "Der hat ’nen Piepmatz.", "explanation": "Er ist verrückt." }
+    ],
+    "infoText": "Eigentlich der Adler auf der Münze.",
+    "themen": []
+  },
+  {
+    "word": "Pieps",
+    "article": "der",
+    "translations": ["ganz wenig"],
+    "themen": []
+  },
+  {
+    "word": "piesacken",
+    "translations": ["quälen", "peinigen", "ärgern"],
+    "infoText": "Von niederdeutsch pisakken = schlagen, quälen, abgeleitet von Pessek = Ochsenziemer.",
+    "themen": []
+  },
+  {
+    "word": "Piesepampel",
+    "article": "der",
+    "translations": ["charakterschwacher, ungeschickter Mensch"],
+    "infoText": "Vielleicht aus bammeln = schlaff herabhängen und Piesel = Penis, in Analogie zu Schlappschwanz.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "pietschen",
+    "translations": ["trinken"],
+    "infoText": "Von polnisch pić oder tschechisch pití.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Pilli",
+    "article": "das",
+    "translations": ["Glas Pils"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Pimpelfritze",
+    "article": "der",
+    "translations": ["jemand, der schnell friert"],
+    "alternativeWords": ["Pimpelliese", "Pimpellotte"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "pimpeln",
+    "translations": ["frieren", "empfindlich sein"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Pimperlinge",
+    "translations": ["kleine Geldstücke", "Geld"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "pimpern",
+    "translations": ["Petting ausüben"],
+    "infoText": "Von niederdeutsch pümpeln = stoßen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "wandelnder Pinguin",
+    "article": "der",
+    "translations": ["Nonne"],
+    "themen": []
+  },
+  {
+    "word": "Pinke",
+    "article": "die",
+    "translations": ["Geld"],
+    "alternativeWords": ["Pinkepinke"],
+    "infoText": "Gleichbedeutend mit Penunse, mit Bezug auf jiddisch pinka = Geldbüchse, wahrscheinlich aus polnisch pieniądze = Geld hervorgegangen.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Pinkel",
+    "article": "der",
+    "translations": ["eleganter und arroganter Mann (»feiner Pinkel«)"],
+    "alternativeWords": ["Pinsel"],
+    "themen": ["charakter-eigenschaften", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "pinkeln",
+    "translations": ["urinieren"],
+    "infoText": "Vgl. niederdeutsch Pink = Penis, eigentlich kleiner Finger.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Pinne",
+    "article": "die",
+    "translations": ["kleiner Nagel, Stift", "Lüge"],
+    "examples": [
+      { "example": "Pinn uns nich wat vor.", "explanation": "Lüg uns nicht an." }
+    ],
+    "infoText": "Graf Pinne ist ein Sinnbild für den Schlemmer.",
+    "themen": []
+  },
+  {
+    "word": "Pinscher",
+    "article": "der",
+    "translations": ["beschimpfende Anrede"],
+    "examples": [{ "example": "Sie Pinscher!" }],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Pinsel-Heinrich",
+    "article": "der",
+    "translations": ["Heinrich Zille"],
+    "infoText": "Spitzname für Heinrich Zille (1858–1929), durch dessen kritisch-satirische Bilder das »Milljöh« zeichnerisch und fotografisch dargestellt wurde.",
+    "themen": ["orte-spitzname", "stadtleben"]
+  },
+  {
+    "word": "Pinselschwinger",
+    "article": "der",
+    "translations": ["Maler"],
+    "themen": []
+  },
+  {
+    "word": "Pinte",
+    "article": "die",
+    "translations": ["Kneipe"],
+    "infoText": "Von lateinisch pincta = Gemaltes, wohl das gemalte Eichzeichen. Ursprünglich Flüssigkeitsmaß, später Wirtshauszeichen.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Pionöse",
+    "article": "die",
+    "translations": ["Pionierleiterin (DDR, spöttisch)"],
+    "infoText": "Ostberlinisch, aus ›Pionierin‹ und ›Baletteuse‹.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Pippifax",
+    "article": "der",
+    "translations": ["Quatsch", "kleiner Junge"],
+    "examples": [{ "example": "Is doch allet Pippifax." }],
+    "themen": []
+  },
+  {
+    "word": "pirseln",
+    "translations": ["urinieren", "eine Tätigkeit langsam (tröpfelnd) tun"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Pißkiste",
+    "article": "die",
+    "translations": ["Kinderwagen"],
+    "themen": []
+  },
+  {
+    "word": "Pißnelke",
+    "article": "die",
+    "translations": ["Schimpfwort"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Pißtopf",
+    "article": "der",
+    "translations": ["Nachttopf"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Pladautz",
+    "translations": ["Geräusch eines fallenden Gegenstands"],
+    "examples": [{ "example": "Pladautz, da flog er hin." }],
+    "infoText": "Lautmalerisch, bereits im 19. Jahrhundert vermerkt.",
+    "themen": []
+  },
+  {
+    "word": "pladdern",
+    "translations": ["stark regnen"],
+    "infoText": "Von niederdeutsch pladdern, pleddern = plätschern, in Strömen regnen.",
+    "themen": []
+  },
+  {
+    "word": "Plansch",
+    "article": "der",
+    "translations": ["Regen", "Nässe"],
+    "themen": []
+  },
+  {
+    "word": "plärren",
+    "translations": ["weinen", "schreien"],
+    "infoText": "Von französisch pleurer, niederdeutsch blarren. Eine Plärrliese ist ein weinendes Kind.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Plastenerz",
+    "article": "der",
+    "translations": ["Regenmantel"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Plastepanzer",
+    "article": "der",
+    "translations": ["Trabant"],
+    "alternativeWords": ["Plastikschüssel", "Asphaltblase"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Platschpampe",
+    "article": "die",
+    "translations": ["Schneematsch"],
+    "infoText": "Aus lautmalend platsch und Pampe.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "platt",
+    "translations": ["verblüfft"],
+    "examples": [{ "example": "Da biste platt, wa?" }],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Platze",
+    "article": "die",
+    "translations": ["großer Ärger (in der Wendung »sich die Platze ärgern«)"],
+    "examples": [
+      { "example": "Da kann man sich ja die Platze ärgern!", "explanation": "Sich ärgern, bis man platzt." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Plautze",
+    "article": "die",
+    "translations": ["Bauch"],
+    "examples": [
+      { "example": "Sich die Plauze vollhau’n.", "explanation": "Viel essen." }
+    ],
+    "infoText": "Von sorbisch pluca = Lunge.",
+    "themen": ["koerper", "essen-trinken"]
+  },
+  {
+    "word": "Pleite",
+    "article": "die",
+    "translations": ["Bankrott"],
+    "infoText": "Von jiddisch plejte = Flucht, Rettung.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Plempe",
+    "article": "die",
+    "translations": ["dünne Suppe", "Revolver", "Polizei"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "plemplem",
+    "translations": ["verrückt", "irre"],
+    "themen": []
+  },
+  {
+    "word": "Plörre",
+    "article": "die",
+    "translations": ["dünner Kaffee", "gehaltlose Flüssigkeit"],
+    "alternativeWords": ["Plerre"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Pli",
+    "article": "der",
+    "translations": ["Gewandtheit", "Mutterwitz"],
+    "infoText": "Französisch, eigentlich Falte. Vgl. prendre un pli = eine Gewohnheit annehmen.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "plieren",
+    "translations": ["schielen"],
+    "infoText": "Norddeutsch. Plieroogen.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "plinsen",
+    "translations": ["weinen"],
+    "infoText": "Früher blinzeln.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "plötrich",
+    "translations": ["kümmerlich", "schäbig"],
+    "infoText": "Von französisch pleutre = Lump.",
+    "themen": []
+  },
+  {
+    "word": "Plumpe",
+    "article": "die",
+    "translations": ["Gesundbrunnen (Stadtteil)", "Schwengelbrunnen"],
+    "infoText": "Früher für Straßen-/Schwengelbrunnen; bezeichnet den Stadtteil Gesundbrunnen im Bezirk Wedding.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "plundrig",
+    "translations": ["schäbig"],
+    "themen": []
+  },
+  {
+    "word": "uff’n Plutz",
+    "translations": ["plötzlich", "unerwartet"],
+    "themen": []
+  },
+  {
+    "word": "Pocke",
+    "article": "die",
+    "translations": ["Fußball"],
+    "infoText": "Niederdeutsch Blatter, Pustel.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Pöker",
+    "article": "der",
+    "translations": ["Gesäß"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Pojatz",
+    "article": "der",
+    "translations": ["Faxenmacher"],
+    "infoText": "Man denke an Bajazzo.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Polenshop",
+    "article": "der",
+    "translations": ["ehemaliges Warenhaus Centrum am Alexanderplatz"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Polente",
+    "article": "die",
+    "translations": ["Polizei"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Polier",
+    "article": "der",
+    "translations": ["Sprecher", "Maurerpolier"],
+    "infoText": "Von französisch parler = sprechen.",
+    "themen": []
+  },
+  {
+    "word": "Politunten-Express",
+    "article": "der",
+    "translations": ["Polizeiwagen mit Politessen"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "polken",
+    "translations": ["Verwickeltes mit den Fingern hervorholen"],
+    "themen": []
+  },
+  {
+    "word": "Polterkopp",
+    "article": "der",
+    "translations": ["gereizter, lauter Mensch"],
+    "themen": ["charakter-eigenschaften", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Polyp",
+    "article": "der",
+    "translations": ["Polizist"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "pomadig",
+    "translations": ["langsam"],
+    "alternativeWords": ["pomade"],
+    "infoText": "Von polnisch pomału = langsam.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Pomadenhengst",
+    "article": "der",
+    "translations": ["Stutzer", "eitler Mann"],
+    "infoText": "Im 19. Jahrhundert für Stutzer, heute wie umgangssprachlich Pomadenbengel.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Pomperbüdel",
+    "article": "der",
+    "translations": ["Stoffhandtasche"],
+    "infoText": "Anlehnung an Pompadour; formähnlich mit der beutelförmigen Damenhandtasche.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Pomuchelskopp",
+    "article": "der",
+    "translations": ["Dickkopf"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Popelfahne",
+    "article": "die",
+    "translations": ["Taschentuch"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Popeline",
+    "article": "die",
+    "translations": ["kleines Mädchen, das in der Nase bohrt"],
+    "infoText": "Von französisch popeline = festes Gewand aus Garnen; nicht französisch ausgesprochen.",
+    "themen": []
+  },
+  {
+    "word": "poplig",
+    "translations": ["armselig", "sehr klein"],
+    "examples": [{ "example": "Wat is’n dit für’n poplijet Auto?" }],
+    "themen": []
+  },
+  {
+    "word": "Popo",
+    "article": "die",
+    "translations": ["Politische Polizei"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Portierzwiebel",
+    "article": "die",
+    "translations": ["kleiner Haarknoten"],
+    "infoText": "Wie er früher von Portierfrauen getragen wurde.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Portjeesche",
+    "article": "die",
+    "translations": ["Hauswartsfrau"],
+    "themen": ["alltag-wohnen", "stadtleben"]
+  },
+  {
+    "word": "Portjuchhe",
+    "article": "das",
+    "translations": ["Portemonnaie"],
+    "infoText": "Aus französisch ›portemonnaie‹ und umgangssprachlich ›juchhe‹.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Porzellanpuppe",
+    "article": "die",
+    "translations": ["junges, hübsches Mädchen"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Posen",
+    "translations": ["Federn", "Bett (»inne Posen gehen«)"],
+    "examples": [
+      { "example": "Inne Posen jeh’n.", "explanation": "Ins Bett gehen." }
+    ],
+    "infoText": "Von Pose = Federkiel, Schreibfeder, Bettfeder.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Posemuckel",
+    "article": "das",
+    "translations": ["abgelegenes Dorf oder Kleinstadt", "kleines Kind"],
+    "infoText": "Geht zurück auf den Namen eines kleinen Dorfes im Kreis Bomst (Posen) Ende des 19. Jahrhunderts.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Pote",
+    "article": "die",
+    "translations": ["Pfote", "Hand", "Fuß"],
+    "alternativeWords": ["Pfote"],
+    "infoText": "Niederdeutsch.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Potsdamer",
+    "article": "der",
+    "translations": ["beschränkter Mensch"],
+    "infoText": "Nach Trachsel (1873).",
+    "themen": ["schimpfwoerter-beleidigungen", "orte-spitzname"]
+  },
+  {
+    "word": "Potsdorf",
+    "translations": ["Potsdam"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "pover",
+    "translations": ["arm"],
+    "infoText": "Gesprochen mit einem w, von französisch pauvre.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Prä",
+    "article": "das",
+    "translations": ["Vorrecht"],
+    "themen": []
+  },
+  {
+    "word": "Prachtschinken",
+    "article": "der",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Pranken",
+    "translations": ["große Hände"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "prahtschen",
+    "translations": ["prahlerisch auftreten"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "präpeln",
+    "translations": ["essen"],
+    "examples": [
+      { "example": "Vor sich hinpräpeln.", "explanation": "Etwas vor sich hintun." }
+    ],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Präsentierteller",
+    "article": "der",
+    "translations": ["exponierte Stelle (in der Wendung)"],
+    "examples": [
+      { "example": "Ick sitz hier wie uff’m Präsentierteller.", "explanation": "Allen Blicken preisgegeben." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "preschen",
+    "translations": ["rennen", "eilen"],
+    "infoText": "Entstanden aus pirschen = jagen.",
+    "themen": []
+  },
+  {
+    "word": "Presley-Verschnitt",
+    "article": "der",
+    "translations": ["Möchtegern-Elvis"],
+    "infoText": "Jugendsprachlich.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Prenzelberg",
+    "article": "der",
+    "translations": ["Prenzlauer Berg"],
+    "infoText": "Ostberlinisch für den Bezirk Prenzlauer Berg.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "priemen",
+    "translations": ["langsam arbeiten"],
+    "infoText": "Von niederdeutsch Priem = Pfriem, Ahle.",
+    "themen": []
+  },
+  {
+    "word": "Primeltopp",
+    "article": "der",
+    "translations": ["einfältiger Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Pröppke",
+    "translations": ["behaglich (in der Wendung »wie Pröppke dasitzen«)"],
+    "examples": [
+      { "example": "Der sitzt da wie Pröppke.", "explanation": "Er sitzt behaglich." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Proletarier-Eisbein",
+    "article": "das",
+    "translations": ["Rollmops"],
+    "infoText": "Siehe auch Eisbein.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Proletenbagger",
+    "article": "der",
+    "translations": ["Paternosteraufzug"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Proli",
+    "article": "der",
+    "translations": ["Prolet", "Durchschnittsbürger (abfällig)"],
+    "infoText": "Jugendsprachlich.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Propeller",
+    "article": "der",
+    "translations": ["Kragenfliege", "Ohren"],
+    "themen": ["koerper", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Proppen",
+    "article": "der",
+    "translations": ["Pfropfen", "Verlegenheit (»uff’n Proppen sitzen«)"],
+    "themen": []
+  },
+  {
+    "word": "Prothese",
+    "article": "die",
+    "translations": ["Gebiss (in der Redensart)"],
+    "examples": [
+      { "example": "Du brauchst ja nich deine Prothese zu fletschen!", "explanation": "Du brauchst nicht zu lachen." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Protz",
+    "article": "der",
+    "translations": ["Angeber"],
+    "infoText": "Übertragung von Protu, Brotz = Kröte; sich aufblasen wie ein Frosch. In Zusammensetzungen wie Muskelprotz oder Geldprotz.",
+    "themen": ["charakter-eigenschaften", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Protzkeule",
+    "article": "die",
+    "translations": ["Fernsehturm in Berlin-Mitte"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Publikus",
+    "article": "der",
+    "translations": ["Publikum"],
+    "infoText": "Maskuline Form von lateinisch publicum; Plural: Publikümer.",
+    "themen": []
+  },
+  {
+    "word": "Puckel",
+    "article": "der",
+    "translations": ["Buckel", "Rücken"],
+    "examples": [
+      { "example": "Sie könn’ ma ’n Puckel runterrutschen." },
+      { "example": "Lieber ’n Bauch vom Saufen als ’n Puckel vom Arbeeten." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "puckeln, sich",
+    "translations": ["etwas Schweres tragen", "sich abmühen"],
+    "themen": []
+  },
+  {
+    "word": "puckern",
+    "translations": ["rhythmisch klopfen"],
+    "examples": [
+      { "example": "Et puckert und muckert.", "explanation": "Etwas macht sich in regelmäßigen Abständen bemerkbar, z.B. Kopfschmerzen." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "puffern",
+    "translations": ["tanzen"],
+    "examples": [{ "example": "Wir jeh’n heut puffern." }],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "pulen",
+    "translations": ["herumfingern"],
+    "themen": []
+  },
+  {
+    "word": "Pulle",
+    "article": "die",
+    "translations": ["Flasche"],
+    "examples": [
+      { "example": "’ne Pulle eindreh’n.", "explanation": "Eine Flasche Schnaps trinken." }
+    ],
+    "infoText": "Von lateinisch ampulla.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "pullern",
+    "translations": ["urinieren", "stark regnen"],
+    "alternativeWords": ["pullo pullo machen"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Pupe",
+    "article": "die",
+    "translations": ["Parkwächter (früher)", "Homosexueller", "abgestandenes Bier"],
+    "themen": []
+  },
+  {
+    "word": "pupen",
+    "translations": ["prahlen"],
+    "examples": [
+      { "example": "Der pupt aus der Schnauze.", "explanation": "Er stößt auf." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "puplau",
+    "translations": ["lauwarm"],
+    "themen": []
+  },
+  {
+    "word": "Puppenlappen",
+    "translations": ["Stofflappen und Flicken zum Spielen"],
+    "examples": [
+      { "example": "Dir hau ick zu Puppenlappen!", "explanation": "Jemanden schlagen, dass seine Kleidung in Fetzen hängt." },
+      { "example": "Der friert zu Puppenlappen.", "explanation": "Er zittert vor Kälte." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Puschel",
+    "article": "der",
+    "translations": ["fixe Idee", "merkwürdige Angewohnheit"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Puseratze",
+    "article": "die",
+    "translations": ["Geld"],
+    "examples": [
+      { "example": "Ick hab keene Puseratze mehr.", "explanation": "Von etwas nichts mehr haben." }
+    ],
+    "infoText": "Mit Bezug auf Ratz = Siebenschläfer oder französisch raté = das Versagen.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Pussel",
+    "article": "das",
+    "translations": ["nettes Mädchen", "kleines Wesen"],
+    "infoText": "Vielleicht von pussen = küssen oder Puß = Katze.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Pusselfritze",
+    "article": "der",
+    "translations": ["jemand, der sich mit Kleinigkeiten abgibt"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "pusseln",
+    "translations": ["sich mit Kleinigkeiten beschäftigen"],
+    "infoText": "Niederdeutsche und ostdeutsche Nebenform von ›bosseln‹.",
+    "themen": []
+  },
+  {
+    "word": "Pusteblume",
+    "article": "die",
+    "translations": ["Dolde des Löwenzahns"],
+    "themen": []
+  },
+  {
+    "word": "Pustekuchen",
+    "translations": ["denkste", "starke Verneinung"],
+    "infoText": "Ausdruck der Ablehnung.",
+    "themen": []
+  },
+  {
+    "word": "Pusterohr",
+    "article": "das",
+    "translations": ["Blasrohr"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Putelje",
+    "article": "die",
+    "translations": ["Flasche"],
+    "infoText": "Von französisch bouteille.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Putenjunker",
+    "article": "der",
+    "translations": ["junger adliger Offizier vom Lande"],
+    "infoText": "Im 19. Jahrhundert; einer, der noch wenig Stadtschliff besaß.",
+    "themen": []
+  },
+  {
+    "word": "Putenrennen",
+    "article": "das",
+    "translations": ["Damenwahl beim Tanz", "Frauentagsfeier (ostberlinisch)"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Puttputt",
+    "article": "das",
+    "translations": ["Geld"],
+    "infoText": "Leitet sich ab von der Fingerbewegung beim Locken der ›Putthühner‹, die der Fingerbewegung beim Geldzählen gleicht.",
+    "themen": ["geld"]
+  }
+]

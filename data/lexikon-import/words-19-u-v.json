@@ -1,0 +1,596 @@
+[
+  {
+    "word": "U-Bahn-Wurst",
+    "article": "die",
+    "translations": ["Fleischwurst"],
+    "infoText": "»Mal hell, mal dunkel.«",
+    "themen": ["essen-trinken", "stadtleben"]
+  },
+  {
+    "word": "übelnehmsch",
+    "translations": ["empfindlich"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "überlegen",
+    "translations": ["ein Kind übers Knie legen und verhauen"],
+    "themen": []
+  },
+  {
+    "word": "Übergewicht",
+    "article": "das",
+    "translations": ["Gleichgewicht (scherzhaft verdreht)"],
+    "themen": []
+  },
+  {
+    "word": "überziehen",
+    "translations": ["eine Ohrfeige geben"],
+    "examples": [{ "example": "Dir zieh ick een’s über." }],
+    "themen": []
+  },
+  {
+    "word": "übers Ohr hauen",
+    "translations": ["betrügen"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Ulster-Knöppe",
+    "translations": ["Buletten", "Frikadellen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "umbringen, sich",
+    "translations": ["ungeheuer viel für jemanden tun"],
+    "examples": [
+      { "example": "Der bringt sich reineweg um." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "umgekehrt",
+    "translations": ["andersherum (in der Redensart)"],
+    "examples": [{ "example": "Umjekehrt wird’n Schuh draus." }],
+    "themen": []
+  },
+  {
+    "word": "umknixen",
+    "translations": ["mit dem Fuß umknicken"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "umpusten",
+    "translations": ["krank aussehend (in der Wendung »wie zum Umpusten«)"],
+    "examples": [
+      { "example": "Der sieht aus wie zum Umpusten.", "explanation": "Er sieht krank aus." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "unegal",
+    "translations": ["ungeschickt"],
+    "examples": [
+      { "example": "Laß bloß deine unejalen Finger davon." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "ungelogen",
+    "translations": ["ganz bestimmt"],
+    "themen": []
+  },
+  {
+    "word": "ungeschickt",
+    "translations": ["ungeschickt (in der Redensart)"],
+    "examples": [{ "example": "Unjeschickt läßt grüßen." }],
+    "themen": []
+  },
+  {
+    "word": "olle Unke",
+    "article": "die",
+    "translations": ["Schwarzseher"],
+    "infoText": "Nach dem von den Brüdern Grimm aufgezeichneten Märchen von der Unke.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Untermieter",
+    "article": "der",
+    "translations": ["Floh"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Unterseeboot",
+    "article": "das",
+    "translations": ["Bückling"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "unverschämt",
+    "translations": ["heftig", "maßlos", "dreist"],
+    "themen": []
+  },
+  {
+    "word": "üppig",
+    "translations": ["übermütig"],
+    "themen": []
+  },
+  {
+    "word": "urst",
+    "translations": ["dufte", "großartig"],
+    "infoText": "Ostberlinisch und jugendsprachlich, gleichbedeutend mit ›urisch‹ (umgangssprachlich urig). Vermutlich die verkürzte Form des Superlativs ›urigst‹.",
+    "themen": []
+  },
+  {
+    "word": "urig",
+    "translations": ["dufte", "großartig"],
+    "themen": []
+  },
+  {
+    "word": "Vampirkiller",
+    "article": "der",
+    "translations": ["Knoblauch"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Vatermörder",
+    "article": "der",
+    "translations": ["spitz hochstehender Hemdkragen"],
+    "infoText": "Früher gebräuchlich.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Venus von Kilo",
+    "article": "die",
+    "translations": ["dicke Frau"],
+    "infoText": "Wortspiel mit der Venus von Milo.",
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  },
+  {
+    "word": "veraasen",
+    "translations": ["vergeuden"],
+    "themen": []
+  },
+  {
+    "word": "verargen",
+    "translations": ["verdenken", "übel nehmen"],
+    "themen": []
+  },
+  {
+    "word": "verballern",
+    "translations": ["verhauen"],
+    "themen": []
+  },
+  {
+    "word": "verbimsen",
+    "translations": ["verhauen"],
+    "themen": []
+  },
+  {
+    "word": "verboten",
+    "translations": ["unmöglich (vom Aussehen)"],
+    "examples": [{ "example": "Dit sieht ja verboten aus." }],
+    "infoText": "Vgl. englisch it looks forbidding.",
+    "themen": []
+  },
+  {
+    "word": "verbraten",
+    "translations": ["verschwenden"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "verbrochen",
+    "translations": ["angestellt"],
+    "examples": [{ "example": "Wat haste nu wieder verbrochen?" }],
+    "themen": []
+  },
+  {
+    "word": "verbumfiedeln",
+    "translations": ["verschwenden"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "verbummeln",
+    "translations": ["die Zeit in Müßiggang zubringen"],
+    "themen": []
+  },
+  {
+    "word": "verbuttern",
+    "translations": ["vergeuden"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "verdampfen",
+    "translations": ["flüchten", "weglaufen"],
+    "themen": []
+  },
+  {
+    "word": "verdreht",
+    "translations": ["verrückt", "originell"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "verduften",
+    "translations": ["verschwinden"],
+    "alternativeWords": ["verdünnisieren"],
+    "themen": []
+  },
+  {
+    "word": "verekeln",
+    "translations": ["widerwärtig machen"],
+    "themen": []
+  },
+  {
+    "word": "verfatzen",
+    "translations": ["abhauen", "weglaufen"],
+    "infoText": "Von ›Fatz‹, Nebenform zu ›Furz‹.",
+    "themen": []
+  },
+  {
+    "word": "verfügen, sich",
+    "translations": ["sich entfernen"],
+    "themen": []
+  },
+  {
+    "word": "verhackstücken",
+    "translations": ["verprügeln"],
+    "themen": []
+  },
+  {
+    "word": "verheddern",
+    "translations": ["in Unordnung geraten"],
+    "examples": [{ "example": "Die janze Wolle hat sich verheddert." }],
+    "alternativeWords": ["verfitzen"],
+    "themen": []
+  },
+  {
+    "word": "verheiraten, sich",
+    "translations": ["lange wegbleiben (scherzhaft)"],
+    "examples": [
+      { "example": "Du hast da wohl verheiratet.", "explanation": "Wenn man lange auf jemanden warten muss." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "verhohnepiepeln",
+    "translations": ["verhöhnen", "verspotten"],
+    "themen": []
+  },
+  {
+    "word": "verkieken, sich",
+    "translations": ["sich verlieben"],
+    "infoText": "Siehe auch kieken.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "verklatschen",
+    "translations": ["verleumden"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "verklickern",
+    "translations": ["jemandem etwas beibringen, erklären"],
+    "infoText": "Nebenform zu ›verkleckern‹.",
+    "themen": []
+  },
+  {
+    "word": "verklieren",
+    "translations": ["durch Schmieren verderben"],
+    "themen": []
+  },
+  {
+    "word": "verkloppen",
+    "translations": ["verhauen", "verkaufen"],
+    "themen": []
+  },
+  {
+    "word": "verknautschen",
+    "translations": ["verknüllen"],
+    "themen": []
+  },
+  {
+    "word": "verknusematuckeln",
+    "translations": ["ein Mädchen vernaschen"],
+    "infoText": "Aus verkosematuckeln und verknusen.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "verknusen",
+    "translations": ["vertragen", "mögen (meist verneint)"],
+    "infoText": "Niederdeutsch, eigentlich zermalmen, kauen, verdauen.",
+    "themen": []
+  },
+  {
+    "word": "verkoddert",
+    "translations": ["schmutzig", "abgetragen"],
+    "themen": []
+  },
+  {
+    "word": "verkohlen",
+    "translations": ["verspotten", "an der Nase herumführen"],
+    "themen": []
+  },
+  {
+    "word": "verkorkst",
+    "translations": ["schiefgelaufen", "verdorben"],
+    "examples": [{ "example": "Die janze Sache is verkorkst." }],
+    "themen": []
+  },
+  {
+    "word": "verkosematuckeln",
+    "translations": ["liebkosen"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "verkringeln",
+    "translations": ["flüchten", "abhauen"],
+    "themen": []
+  },
+  {
+    "word": "verkrümeln, sich",
+    "translations": ["sich davonmachen", "sich verstecken"],
+    "themen": []
+  },
+  {
+    "word": "verkrunkeln",
+    "translations": ["zerknittern"],
+    "themen": []
+  },
+  {
+    "word": "verkudelt",
+    "translations": ["zerzaust"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "verleppern",
+    "translations": ["Geld in kleinen Beträgen vergeuden"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "verludern",
+    "translations": ["verschlampen", "sein Äußeres vernachlässigen"],
+    "alternativeWords": ["verloddern"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "vermasseln",
+    "translations": ["zunichtemachen"],
+    "examples": [
+      { "example": "Einem die Tour vermasseln.", "explanation": "Einen Plan, ein Geschäft zunichtemachen." }
+    ],
+    "infoText": "Von jiddisch masol = Glück, Glücksstern.",
+    "themen": []
+  },
+  {
+    "word": "vermißquiemt",
+    "translations": ["kränklich", "heruntergekommen"],
+    "infoText": "Von französisch mesquin = armselig.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "vermugeln",
+    "translations": ["vertuschen"],
+    "themen": []
+  },
+  {
+    "word": "verpecken",
+    "translations": ["schlagen", "durchhauen"],
+    "infoText": "Von Pecke = Stock, Gerte.",
+    "themen": []
+  },
+  {
+    "word": "verpimpeln",
+    "translations": ["verzärteln"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "verplätten",
+    "translations": ["durchprügeln"],
+    "themen": []
+  },
+  {
+    "word": "verplempern",
+    "translations": ["sinnlos ausgeben", "vergeuden"],
+    "examples": [
+      { "example": "Mit dit Bezahlen verplempert man dit meiste Jeld.", "explanation": "Berliner Kneipen-Spruch." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "verposamentieren",
+    "translations": ["Geld durchbringen"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "verpusten, sich",
+    "translations": ["Luft schöpfen"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "verquast",
+    "translations": ["verwickelt", "zerfahren"],
+    "examples": [{ "example": "’ne verquaste Jeschichte." }],
+    "infoText": "Von niederdeutsch dwas = töricht bzw. quasen = dumm schwätzen.",
+    "themen": []
+  },
+  {
+    "word": "verquer",
+    "translations": ["ungelegen"],
+    "themen": []
+  },
+  {
+    "word": "verratzt sein",
+    "translations": ["verloren sein"],
+    "examples": [{ "example": "Ick bin verratzt und verloren!" }],
+    "themen": []
+  },
+  {
+    "word": "verrungenieren",
+    "translations": ["ruinieren"],
+    "alternativeWords": ["verrujenieren"],
+    "themen": []
+  },
+  {
+    "word": "verscherbeln",
+    "translations": ["verkaufen", "zu Geld machen"],
+    "infoText": "Im Sinne von etwas zu »Scherben«, zu Kleingeld machen.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "verschimpfieren",
+    "translations": ["verunstalten"],
+    "themen": []
+  },
+  {
+    "word": "Verschiß",
+    "article": "der",
+    "translations": ["Ungnade (in der Wendung »in Verschiß geraten«)"],
+    "themen": []
+  },
+  {
+    "word": "verschludern",
+    "translations": ["verschleudern"],
+    "themen": []
+  },
+  {
+    "word": "verschmaddern",
+    "translations": ["verschmieren"],
+    "infoText": "Von niederdeutsch ›schmaddern‹, Nebenform zu ›schmieren‹ und ›schmuddeln‹.",
+    "themen": []
+  },
+  {
+    "word": "verschmeißen",
+    "translations": ["verlegen"],
+    "themen": []
+  },
+  {
+    "word": "verschrecken",
+    "translations": ["erschrecken"],
+    "themen": []
+  },
+  {
+    "word": "verschütt gehen",
+    "translations": ["verschwinden", "verloren gehen"],
+    "infoText": "Basiert auf niederdeutsch schütten = einsperren.",
+    "themen": []
+  },
+  {
+    "word": "versieben",
+    "translations": ["verpatzen", "durch Ungeschicklichkeit verderben"],
+    "themen": []
+  },
+  {
+    "word": "versohlen",
+    "translations": ["durchprügeln"],
+    "themen": []
+  },
+  {
+    "word": "versuchsweise geboren",
+    "translations": ["ein Versuch (in der Redensart)"],
+    "examples": [
+      { "example": "Dit is versuchsweise geboren.", "explanation": "Das ist ein Versuch." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "vertobaken",
+    "translations": ["verhauen"],
+    "themen": []
+  },
+  {
+    "word": "verwichsen",
+    "translations": ["verprügeln"],
+    "themen": []
+  },
+  {
+    "word": "verzauberte Schrippe",
+    "article": "die",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "verzischen",
+    "translations": ["weglaufen", "ein Bier schnell trinken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Vettel",
+    "article": "die",
+    "translations": ["alte Frau", "Puffmutter"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "viel zu ville",
+    "translations": ["zu viel", "mehr als ausreichend"],
+    "themen": []
+  },
+  {
+    "word": "Violine",
+    "article": "die",
+    "translations": ["Bedeutung (nur verneint)"],
+    "examples": [
+      { "example": "Dit spielt keene Violine!", "explanation": "Das ist völlig egal, spielt keine Rolle." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "vierdoppelt",
+    "translations": ["vierfach"],
+    "themen": []
+  },
+  {
+    "word": "Vogelagathe",
+    "article": "die",
+    "translations": ["Frau"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Vollkornschnitzel",
+    "article": "das",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "von wegen",
+    "translations": ["auf keinen Fall (starke Verneinung)"],
+    "examples": [
+      { "example": "Haste jestern wat jetrunken? — Von wejen!" }
+    ],
+    "themen": []
+  },
+  {
+    "word": "voricht",
+    "translations": ["vorig"],
+    "examples": [{ "example": "Vorchte Woche, vorchtet Jahr." }],
+    "themen": []
+  },
+  {
+    "word": "vorknöpfen",
+    "translations": ["zur Rechenschaft ziehen"],
+    "examples": [
+      { "example": "Den knöpp ick ma vor.", "explanation": "Den nehme ich mir vor, dem lese ich die Leviten." }
+    ],
+    "alternativeWords": ["vorbinden, sich jemanden"],
+    "themen": []
+  },
+  {
+    "word": "vorn",
+    "translations": ["vorn (in der selbstbewussten Redensart)"],
+    "examples": [
+      { "example": "Wo wir sind, ist vorn; wenn wir hinten sind, ist hinten vorn." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "vorneweg",
+    "translations": ["voraus"],
+    "themen": []
+  },
+  {
+    "word": "Vorrede",
+    "article": "die",
+    "translations": ["Umschweife"],
+    "examples": [
+      { "example": "Halt da nicht lange mit de Vorrede uff.", "explanation": "Komm zur Sache." }
+    ],
+    "themen": []
+  }
+]

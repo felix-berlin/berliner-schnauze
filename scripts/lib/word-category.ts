@@ -24,6 +24,9 @@ export const CATEGORIES = [
   { label: "Beziehungen & Soziales", slug: "beziehungen-soziales" },
   { label: "Alltag & Wohnen", slug: "alltag-wohnen" },
   { label: "Unterhaltung & Freizeit", slug: "unterhaltung-freizeit" },
+  { label: "Redewendungen & Sprüche", slug: "redewendungen-sprueche" },
+  { label: "Spott & Ironie", slug: "spott-ironie" },
+  { label: "Machen & Tun", slug: "machen-tun" },
 ] as const;
 
 export const CATEGORY_LABELS: Record<string, string> = Object.fromEntries(

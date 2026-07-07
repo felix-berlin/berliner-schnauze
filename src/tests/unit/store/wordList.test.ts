@@ -84,19 +84,6 @@ vi.mock("@utils/helpers.ts", () => ({
   useViewTransition: vi.fn((fn: () => void) => fn()),
 }));
 
-// The highlight plugin's async afterInsert causes insertMultiple to use the sync path
-// without awaiting individual insert() Promises, leaving the Radix index empty.
-// Replace with sync stubs so the index is fully populated before search runs.
-vi.mock("@orama/plugin-match-highlight", async () => {
-  const { search } = await import("@orama/orama");
-  return {
-    afterInsert: vi.fn(), // sync no-op keeps insertMultiple on the sync path with proper Promises
-    searchWithHighlight: vi.fn((db: unknown, params: unknown) =>
-      (search as (db: unknown, params: unknown) => unknown)(db, params),
-    ),
-  };
-});
-
 // ─── setup ────────────────────────────────────────────────────────────────────
 
 function makeFetch(overrides: Record<string, unknown> = {}) {
@@ -444,24 +431,20 @@ describe("$oramaSearchResults", () => {
     );
   });
 
-  it("handles search index fetch failure gracefully", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  it("reports failed state when search index fetch fails", async () => {
+    // Fetch/init errors propagate on purpose: computedAsync reports "failed"
+    // so the error UI can prompt a reload.
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
     const { $oramaSearchResults } = await import("@stores/wordList.ts");
     await vi.waitFor(
       () => {
-        const result = $oramaSearchResults.get();
-        expect(result.state).toBe("ready");
-        expect(result.value).toBeNull();
+        expect($oramaSearchResults.get().state).toBe("failed");
       },
       { timeout: 5000 },
     );
-    expect(consoleSpy).toHaveBeenCalledWith("[wordList] Search failed:", expect.any(Error));
-    consoleSpy.mockRestore();
   });
 
-  it("handles non-ok search index response gracefully", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  it("reports failed state on non-ok search index response", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({ ok: false, status: 503, json: vi.fn() }),
@@ -469,13 +452,10 @@ describe("$oramaSearchResults", () => {
     const { $oramaSearchResults } = await import("@stores/wordList.ts");
     await vi.waitFor(
       () => {
-        const result = $oramaSearchResults.get();
-        expect(result.state).toBe("ready");
-        expect(result.value).toBeNull();
+        expect($oramaSearchResults.get().state).toBe("failed");
       },
       { timeout: 5000 },
     );
-    consoleSpy.mockRestore();
   });
 });
 

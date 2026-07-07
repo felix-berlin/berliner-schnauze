@@ -1,0 +1,733 @@
+[
+  {
+    "word": "Sabberliese",
+    "article": "die",
+    "translations": ["tratschende Frau", "unsauberes Kind"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "sabbern",
+    "translations": ["dummes Zeug reden"],
+    "alternativeWords": ["sabbeln"],
+    "infoText": "Iterativbildung zu mittelniederdeutsch sabben = geifern, speicheln.",
+    "themen": []
+  },
+  {
+    "word": "Sabbermaul",
+    "article": "das",
+    "translations": ["Quatschkopf"],
+    "alternativeWords": ["Sabberfritze"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "sachte",
+    "translations": ["behutsam", "ruhig"],
+    "examples": [{ "example": "Immer sachte mit die jungen Pferde." }],
+    "alternativeWords": ["sachteken"],
+    "themen": []
+  },
+  {
+    "word": "Sack",
+    "article": "der",
+    "translations": ["Schimpfwort"],
+    "examples": [{ "example": "Du oller Sack!" }],
+    "infoText": "In zahlreichen Wendungen: Sacksülze, Sackgesichte, Saftsack usw.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Säcke",
+    "translations": ["offene Tür (in der ironischen Frage)"],
+    "examples": [
+      { "example": "Sach mal, haste Säcke vor de Türe?", "explanation": "Ironische Frage an jemanden, der eine Tür offen lässt." }
+    ],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "saftig",
+    "translations": ["derb", "hoch (von Preisen)"],
+    "examples": [
+      { "example": "’n saft’jer Preis.", "explanation": "Ein hoher Preis." }
+    ],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Saftladen",
+    "article": "der",
+    "translations": ["miese Kneipe", "schlecht geführter Laden"],
+    "infoText": "Ursprünglich für eine Apotheke wegen des Verkaufs von Kräutersäften.",
+    "themen": ["alkohol-kneipe", "stadtleben"]
+  },
+  {
+    "word": "Salat",
+    "article": "der",
+    "translations": ["Bescherung (in der Redensart)"],
+    "examples": [
+      { "example": "Da ham wa den Salat!", "explanation": "Da haben wir die Bescherung." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Salzkuchen",
+    "article": "der",
+    "translations": ["Brötchen aus Roggen- und Weizenmehl"],
+    "alternativeWords": ["Salzketer"],
+    "infoText": "»-keter« ist die entrundete Form von »Köter«, Hund. Siehe auch Schusterjunge.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Salzhase",
+    "article": "der",
+    "translations": ["eingesalzener Hering"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Sammelsurium",
+    "article": "das",
+    "translations": ["Durcheinander", "Mischmasch"],
+    "infoText": "In Anlehnung an niederdeutsch ›Sammelsur‹, ein aus Speiseresten bestehendes, säuerlich schmeckendes Gericht. Scherzhafte Bildung aus der Studentensprache des 17. Jahrhunderts.",
+    "themen": []
+  },
+  {
+    "word": "Sardellen",
+    "translations": ["Haare"],
+    "infoText": "Ursprünglich für spärliche Haarsträhnen.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Sargnagel",
+    "article": "der",
+    "translations": ["Zigarette"],
+    "infoText": "Vgl. englisch coffin-nail.",
+    "themen": []
+  },
+  {
+    "word": "Satansbraten",
+    "article": "der",
+    "translations": ["Bulette", "frecher Junge", "Hallodri"],
+    "themen": ["essen-trinken", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Sau",
+    "article": "die",
+    "translations": ["Schimpfwort"],
+    "examples": [
+      { "example": "Der rennt wie ’ne jesengte Sau.", "explanation": "Er ist in höchster Eile." },
+      { "example": "Jemanden zur Sau machen.", "explanation": "Ihn in Grund und Boden stampfen." }
+    ],
+    "infoText": "In Zusammensetzungen: Saukerl, Sauladen, Saubande, olle Sau. »Unter aller Sau« = unter aller Kritik.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "sauer",
+    "translations": ["böse", "wütend"],
+    "examples": [
+      { "example": "Uff den bin ick janz schön sauer." },
+      { "example": "Dit kannste dir sauer kochen.", "explanation": "Das kannst du für dich behalten." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Sauerkohlstampfer",
+    "translations": ["dicke, plumpe Beine"],
+    "alternativeWords": ["Sauerkohlstampen"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Saunickel",
+    "article": "der",
+    "translations": ["schmutziger Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Saures",
+    "translations": ["Prügel (in der Aufmunterung »Jib ihm Saures!«)"],
+    "examples": [{ "example": "Jib ihm Saures!" }],
+    "themen": []
+  },
+  {
+    "word": "Sause",
+    "article": "die",
+    "translations": ["Zechtour"],
+    "examples": [
+      { "example": "’ne Sause machen.", "explanation": "Zechen, einen trinken gehen." }
+    ],
+    "themen": ["alkohol-kneipe", "unterhaltung-freizeit"]
+  },
+  {
+    "word": "Schacht",
+    "article": "der",
+    "translations": ["Keile", "Prügel"],
+    "infoText": "Norddeutsch.",
+    "themen": []
+  },
+  {
+    "word": "Schachtel",
+    "article": "die",
+    "translations": ["alte und/oder hässliche Frau (»olle Schachtel«)"],
+    "infoText": "Wohl nach frühneuhochdeutsch schattel = weibliche Scham.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schafsscheiße mit Speckkrabben",
+    "translations": ["unschmackhaftes Essen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schale",
+    "article": "die",
+    "translations": ["feine Kleidung (in der Wendung »sich in Schale schmeißen«)"],
+    "examples": [
+      { "example": "Der hat sich in Schale jeschmiss’n.", "explanation": "Er hat sich feingemacht, schick angezogen." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "schalen gehen",
+    "translations": ["Mülltonnen nach verwertbaren Abfällen durchsehen"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Schallee",
+    "article": "das",
+    "translations": ["Gelee"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schamsel",
+    "article": "das",
+    "translations": ["liederlich aussehendes Frauenzimmer"],
+    "infoText": "Von französisch mamselle.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schamster",
+    "article": "der",
+    "translations": ["Freund einer Frau"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Schandschnauze",
+    "article": "die",
+    "translations": ["freches Mundwerk"],
+    "themen": ["charakter-eigenschaften", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schandtat",
+    "article": "die",
+    "translations": ["Unternehmung (in der Wendung »zu allen Schandtaten bereit«)"],
+    "examples": [
+      { "example": "Der is zu allen Schandtaten bereit.", "explanation": "Er macht gern alles mit." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "schappern",
+    "translations": ["tanzen"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Schappipuffer",
+    "article": "der",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "scharf",
+    "translations": ["gierig (in der Wendung »scharf auf etwas sein«)"],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "scharmieren",
+    "translations": ["liebkosen"],
+    "infoText": "Von französisch charmer.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "scharwenzeln",
+    "translations": ["schmeicheln"],
+    "infoText": "Vom tschechischen Hasardkartenspiel Straschak eingedrungen; Wenzel = Bube.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "schauderös",
+    "translations": ["schauerlich"],
+    "themen": []
+  },
+  {
+    "word": "schauern",
+    "translations": ["scheuern"],
+    "themen": []
+  },
+  {
+    "word": "schaukeln",
+    "translations": ["hinbekommen (in der Wendung »das Kind schon schaukeln«)"],
+    "examples": [
+      { "example": "Wir werd’n dit Kind schon schaukeln.", "explanation": "Wir werden die Sache schon machen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Schaukelpferd",
+    "article": "das",
+    "translations": ["Gutmütigkeit (in der Redensart)"],
+    "examples": [
+      { "example": "Der hat ’n Jemüt wie’n Schaukelpferd.", "explanation": "Er ist gutmütig." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Schaute",
+    "article": "der",
+    "translations": ["charakterloser Mensch"],
+    "infoText": "Von jiddisch schoteh = Narr. Im 19. Jahrhundert eine Vogelscheuche, ein hässlicher Mensch.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "scheckig",
+    "translations": ["krumm (in der Wendung »sich scheckig lachen«)"],
+    "examples": [
+      { "example": "Der lacht sich scheckig.", "explanation": "Er lacht sich krumm." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Scheese",
+    "article": "die",
+    "translations": ["schlechtes Auto", "Kinderwagen"],
+    "infoText": "Von französisch chaise (port-chaise = Sänfte). Schesen = schnell laufen, jagen, vielleicht von englisch to chase.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Scheibenkleister",
+    "article": "der",
+    "translations": ["Scheiße (Umschreibung)"],
+    "examples": [
+      { "example": "So’n Scheibenkleister!", "explanation": "Ausruf der Verärgerung." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Scheich Ahmed",
+    "article": "der",
+    "translations": ["reicher Mann"],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Schein",
+    "article": "der",
+    "translations": ["100-Mark-Schein"],
+    "infoText": "Ein halber Schein ist ein 50-Mark-Schein.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Scheiß",
+    "article": "der",
+    "translations": ["Mist", "Unsinn"],
+    "examples": [{ "example": "So’n Scheiß!" }],
+    "infoText": "Entstanden aus hochdeutsch Femininum »die Scheiße« und der niederdeutschen maskulinen Form »der Schiet«. Produktiv in Zusammensetzungen: Scheißangst, Scheißtyp usw.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Scheiße mit Reis",
+    "translations": ["unschmackhaftes Essen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Scheißständer",
+    "translations": ["Beine"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "scherbeln",
+    "translations": ["tanzen (veraltet)"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "scheuern",
+    "translations": ["tanzen, feiern", "ohrfeigen"],
+    "examples": [{ "example": "Ick scheuer dir gleich ’n paar!" }],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Scheuerratte",
+    "article": "die",
+    "translations": ["Mädchen, das ständig tanzen geht"],
+    "infoText": "Eine ›Tanzmaus‹.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Scheunendrescher",
+    "article": "der",
+    "translations": ["starker Esser (in der Redensart)"],
+    "examples": [
+      { "example": "Der ißt wie’n Scheunendrescher.", "explanation": "Er isst viel." }
+    ],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "schick",
+    "translations": ["sehr gut"],
+    "infoText": "Wie dufte.",
+    "themen": []
+  },
+  {
+    "word": "schicker",
+    "translations": ["betrunken"],
+    "infoText": "Jiddisch.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Schickse",
+    "article": "die",
+    "translations": ["junge Frau (verächtlich)"],
+    "infoText": "Von jiddisch schekez; ursprünglich bezogen auf christliche Frauen, die mit einem jüdischen Mann befreundet waren.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "schieben",
+    "translations": ["gehen", "machen"],
+    "examples": [
+      { "example": "Schieb ab!", "explanation": "Hau ab." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Schieleisen",
+    "article": "das",
+    "translations": ["Brille"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "schiel",
+    "translations": ["schielend"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Schiepchen",
+    "article": "das",
+    "translations": ["Freund"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Schiepel",
+    "article": "der",
+    "translations": ["alter Hut"],
+    "infoText": "Im 19. Jahrhundert gebräuchlich.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "schikanös",
+    "translations": ["schikanierend"],
+    "themen": []
+  },
+  {
+    "word": "Schillebold",
+    "article": "der",
+    "translations": ["Libelle"],
+    "themen": []
+  },
+  {
+    "word": "Schimpfe",
+    "article": "die",
+    "translations": ["Schelte"],
+    "examples": [{ "example": "Mutter, jibt’s Schimpfe, wenn ick zu spät komme?" }],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Schimmer",
+    "article": "der",
+    "translations": ["Ahnung"],
+    "examples": [{ "example": "Der hat ja keen’ Schimmer!" }],
+    "themen": []
+  },
+  {
+    "word": "Schippe",
+    "article": "die",
+    "translations": ["Schaufel"],
+    "examples": [
+      { "example": "Jemanden uff de Schippe nehm’n.", "explanation": "Ihn veralbern." },
+      { "example": "’ne Schippe ziehen.", "explanation": "Den Mund verziehen als Ausdruck des Gekränktseins." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "schiskojenno",
+    "translations": ["gleichgültig", "egal"],
+    "infoText": "Polnisch (wszystko jedno).",
+    "themen": []
+  },
+  {
+    "word": "Schlaaks",
+    "article": "der",
+    "translations": ["hochgeschossener, meist ungeschickter Mensch"],
+    "infoText": "Von niederdeutsch slak = nachlässig, träge.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Schlabbertutti",
+    "article": "der",
+    "translations": ["süße, weichliche Speise"],
+    "alternativeWords": ["Schlabbertutsch"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schlaffi",
+    "article": "der",
+    "translations": ["schlapper Typ"],
+    "infoText": "Jugendsprachlich.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schlafittchen",
+    "article": "das",
+    "translations": ["Kragen (in der Wendung »beim Schlafittchen kriegen«)"],
+    "examples": [
+      { "example": "Jemanden bei’t Schlafittchen kriejen.", "explanation": "Ihn am Rockkragen festhalten, meist um ihm die Leviten zu lesen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Schlamassel",
+    "article": "der",
+    "translations": ["verfahrene, schwierige Situation"],
+    "examples": [{ "example": "Da ham wa wieder den Schlamassel!" }],
+    "infoText": "Von jiddisch masol = Glück. Wie Bredullje.",
+    "themen": []
+  },
+  {
+    "word": "Schlammschieter",
+    "article": "der",
+    "translations": ["Schimpfwort auf eine Person"],
+    "alternativeWords": ["Schlammscheißer"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schlampampe",
+    "article": "die",
+    "translations": ["unordentliche, nachlässige Frau", "Unordentlichkeit"],
+    "infoText": "Von mittelniederdeutsch slampampen.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schlangenfraß",
+    "article": "der",
+    "translations": ["schlechtes Essen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schlapper",
+    "translations": ["Hausschuhe"],
+    "examples": [{ "example": "Jib ma mal de Schlapper rüber." }],
+    "infoText": "Norddeutsch ›Schlappen‹, von niederdeutsch slappen = hängen lassen.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Schlappschwanz",
+    "article": "der",
+    "translations": ["Schwächling"],
+    "infoText": "Abgeleitet von »schlaffer Schwanz«, nicht erigierter Penis.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schlauch",
+    "article": "der",
+    "translations": ["Erschöpfung, Pleite (in der Wendung »auf dem Schlauch stehen«)"],
+    "examples": [
+      { "example": "Der steht auf dem Schlauch.", "explanation": "Er ist völlig erschöpft oder pleite." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "schleierhaft",
+    "translations": ["rätselhaft"],
+    "themen": []
+  },
+  {
+    "word": "Schleimscheißer",
+    "article": "der",
+    "translations": ["Kriecher", "Schmeichler"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Schlenki",
+    "article": "der",
+    "translations": ["Gelenkbus"],
+    "infoText": "Ostberlinisch für den Bus der Öffentlichen Verkehrsbetriebe, der aus zwei durch ein Gelenk verbundenen Wagen besteht.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Schlesinger",
+    "article": "der",
+    "translations": ["Schlesier"],
+    "themen": []
+  },
+  {
+    "word": "Schlidderbahn",
+    "article": "die",
+    "translations": ["Rodelbahn"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "schliepig",
+    "translations": ["wässrig (in Bezug auf Kartoffeln)"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schlimme Oogenwurst",
+    "article": "die",
+    "translations": ["Fleischwurst"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schlitten",
+    "article": "der",
+    "translations": ["Motorrad", "großes Auto"],
+    "examples": [
+      { "example": "Mit dem wer’ ick Schlitten fahr’n!", "explanation": "Drohung." }
+    ],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Schlodderpamps",
+    "article": "der",
+    "translations": ["weiche Masse"],
+    "infoText": "Aus niederdeutsch sluddern = schlottern und Pamps = Brei. Siehe auch Pampe.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schlorndorf",
+    "translations": ["Berlin-Charlottenburg"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Schlorren",
+    "translations": ["Hausschuhe"],
+    "infoText": "Norddeutsch, ostpreußisch.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Schlössertöle",
+    "article": "die",
+    "translations": ["Schlosshund (in der Redensart)"],
+    "examples": [
+      { "example": "Er heult wie ’ne Schlössertöle.", "explanation": "Wie ein Schlosshund, also ununterbrochen und heftig." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Schluckspecht",
+    "article": "der",
+    "translations": ["jemand, der viel trinkt bzw. viel trinken kann"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Schlummerorgel",
+    "article": "die",
+    "translations": ["Radio"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Schlummerkopp",
+    "article": "der",
+    "translations": ["Mensch ohne Energie"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Schlummerrolle",
+    "article": "die",
+    "translations": ["Geliebte", "Freundin"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Schlumpe",
+    "article": "die",
+    "translations": ["Schlampe"],
+    "alternativeWords": ["Schlunze"],
+    "infoText": "Norddeutsch, von schlumpen = schlaff herabhängen.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schlung",
+    "article": "der",
+    "translations": ["Schlund"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Schmalzamor",
+    "article": "der",
+    "translations": ["verliebter dicker Mann"],
+    "themen": ["beziehungen-soziales", "schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Schmalzlerche",
+    "article": "die",
+    "translations": ["Pfannkuchen (Berliner)"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Schmalzstulle",
+    "article": "die",
+    "translations": ["Geld (in der Wendung)"],
+    "examples": [
+      { "example": "Immer rüber mit de Schmalzstullen.", "explanation": "Immer her mit dem Geld." }
+    ],
+    "infoText": "Ein Schmalzstullentheater ist ein billiges Boulevardtheater.",
+    "themen": ["geld", "essen-trinken"]
+  },
+  {
+    "word": "Schmatzipuffer",
+    "article": "der",
+    "translations": ["Liebling"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "schmeißen",
+    "translations": ["werfen, geben", "starten, anzünden"],
+    "examples": [
+      { "example": "Schmeiß ma mal de Kassette rüber." },
+      { "example": "Schmeiß mal den Ofen/Wagen an." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "schmettern",
+    "translations": ["trinken"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Schmierage",
+    "article": "die",
+    "translations": ["Geschmiere"],
+    "themen": []
+  },
+  {
+    "word": "Schmook",
+    "article": "der",
+    "translations": ["verbotene Übersetzung (Schule)"],
+    "infoText": "Im 19. Jahrhundert. Vgl. englisch ›smoke‹ und ›smog‹.",
+    "themen": []
+  },
+  {
+    "word": "Schmu",
+    "article": "der",
+    "translations": ["Betrug (in der Wendung »Schmu machen«)"],
+    "infoText": "Rotwelsch schmuh = Profit, Gewinn.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "schmuddelig",
+    "translations": ["schmutzig"],
+    "infoText": "Von niederdeutsch smuddelig.",
+    "themen": []
+  },
+  {
+    "word": "schmulen",
+    "translations": ["verstohlen blicken", "in der Schule abgucken"],
+    "themen": []
+  },
+  {
+    "word": "schmurgeln",
+    "translations": ["brutzeln", "braten"],
+    "themen": ["essen-trinken"]
+  }
+]

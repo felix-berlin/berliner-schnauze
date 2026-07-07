@@ -1,0 +1,791 @@
+[
+  {
+    "word": "Kabache",
+    "article": "die",
+    "translations": ["niedriges, primitives Haus", "zweifelhafte Kneipe"],
+    "infoText": "Anfangs obersächsisch und norddeutsch, aufgekommen im 19. Jahrhundert.",
+    "themen": ["alltag-wohnen", "alkohol-kneipe"]
+  },
+  {
+    "word": "kabbeln, sich",
+    "translations": ["zanken", "streiten"],
+    "infoText": "Niederdeutsch. Als Substantiv: Kabbelei.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Kabolzschießen",
+    "translations": ["einen Purzelbaum schlagen"],
+    "infoText": "Man denke an einen Kobold. Von daher auch umgangssprachlich Kabolzwasser für einen Schnaps, der einen umzuwerfen droht.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Kabrusche",
+    "article": "die",
+    "translations": ["Geschäft (in der Wendung »Kabrusche machen«)"],
+    "infoText": "Von jiddisch chawrusso = Gesellschaft, Genossenschaft.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Kabuffe",
+    "article": "die",
+    "translations": ["Verschlag", "kleine Kammer"],
+    "alternativeWords": ["Kabuffken"],
+    "infoText": "Von mittelniederdeutsch Kabuse.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Kackständer",
+    "translations": ["Beine"],
+    "alternativeWords": ["Kackstelzen"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Kaderwelsch",
+    "article": "das",
+    "translations": ["unverständlicher Funktionärsjargon"],
+    "infoText": "Ostberlinisch, aus Kauderwelsch und Kader.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Kaff",
+    "article": "das",
+    "translations": ["Kleinstadt", "Dorf"],
+    "infoText": "Im Prinzip jede Stadt in Deutschland außer Berlin.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "kalter Kaffee",
+    "article": "der",
+    "translations": ["alte Neuigkeit"],
+    "examples": [
+      { "example": "Dit is doch allet kalter Kaffee.", "explanation": "Reaktion auf eine ›Neuigkeit‹, die bereits bekannt ist." },
+      { "example": "Dit jeht dir ’n kalten Kaffee an!", "explanation": "Das geht dich gar nichts an!" }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Kaffer",
+    "article": "der",
+    "translations": ["ungebildeter Mensch", "einfältiger Tölpel", "Provinzler"],
+    "infoText": "Von jiddisch kapher = Bauer.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "kahle Atter",
+    "article": "die",
+    "translations": ["Glatze"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "kajolen",
+    "translations": ["jagen", "eilen", "mal hier, mal da sein"],
+    "themen": []
+  },
+  {
+    "word": "Kalabreser",
+    "article": "der",
+    "translations": ["Hut"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Kaleika",
+    "translations": ["Spaß", "Unsinn", "Aufhebens", "Umstände"],
+    "infoText": "Von polnisch kolejka = Reihenfolge. Erstmals 1845 in Brandenburg bezeugt.",
+    "themen": []
+  },
+  {
+    "word": "Kalitte",
+    "article": "die",
+    "translations": ["Kohlweißling"],
+    "infoText": "Aus Kolwite.",
+    "themen": []
+  },
+  {
+    "word": "Kalkmütze",
+    "article": "die",
+    "translations": ["Verkehrspolizist"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Kalle",
+    "article": "die",
+    "translations": ["Braut", "Bruder"],
+    "infoText": "Von jiddisch kallah = Braut.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Kalüppe",
+    "article": "die",
+    "translations": ["Bruchbude"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Kamelogramm",
+    "article": "das",
+    "translations": ["Schimpfwort (»du altes Kamel«)"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Kameruner",
+    "article": "der",
+    "translations": ["Schmalzgebäck in Form einer Acht"],
+    "infoText": "Vergleichbar dem Pfannkuchen.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Kampfbrötchen",
+    "article": "das",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Kamurke",
+    "article": "die",
+    "translations": ["kleine, elende Stube"],
+    "infoText": "Von slawisch komorka.",
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Kanake",
+    "article": "der",
+    "translations": ["Schimpfwort"],
+    "infoText": "Sehr frühzeitig im Berliner Wortschatz, gebraucht wie Hanake; heute allgemein abfällige, diskriminierende Bezeichnung.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "kandideln",
+    "translations": ["lustig (Adjektiv)", "sich betrinken (»sich eenen ankandideln«)"],
+    "infoText": "Wer »überkandidelt« ist, spinnt ein bisschen, handelt übertrieben.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Kanone",
+    "article": "die",
+    "translations": ["unter aller Kritik (in der Wendung »unter aller Kanone«)"],
+    "examples": [
+      { "example": "Dit Stück is unter aller Kanone.", "explanation": "Unter aller Kritik. Von lateinisch sub omni canone — »Kanon« als Bewertungsmaßstab." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Kanonenstöpsel",
+    "article": "der",
+    "translations": ["dicke Person"],
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  },
+  {
+    "word": "Kante",
+    "article": "die",
+    "translations": ["Busen", "Erspartes (in der Wendung »auf die hohe Kante legen«)"],
+    "examples": [
+      { "example": "Hat die ’ne Kante!", "explanation": "Hat die einen Busen!" },
+      { "example": "Jeld uff de hohe Kante legen.", "explanation": "Sparen." }
+    ],
+    "themen": ["geld", "koerper"]
+  },
+  {
+    "word": "Kanten",
+    "article": "der",
+    "translations": ["Ende des Brotlaibs"],
+    "alternativeWords": ["Knust"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Kanthaken",
+    "article": "der",
+    "translations": ["Schlafittchen (in der Wendung »am Kanthaken nehmen«)"],
+    "examples": [
+      { "example": "Jemanden am Kanthaken nehm’n.", "explanation": "Ihn am Schlafittchen nehmen." }
+    ],
+    "infoText": "Vermutlich abgeleitet von Kammhaken, dem Kamm des Hahns.",
+    "themen": []
+  },
+  {
+    "word": "Kanzelstürmer",
+    "article": "der",
+    "translations": ["Pfarrer"],
+    "themen": []
+  },
+  {
+    "word": "kapee",
+    "translations": ["Begriff (in der Wendung »schwer von kapee«)"],
+    "examples": [
+      { "example": "Der is schwer von kapee.", "explanation": "Er ist schwer von Begriff (zu kapieren)." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Kappes",
+    "article": "der",
+    "translations": ["Blödsinn", "Unfug"],
+    "examples": [{ "example": "Dit is ja alles Kappes." }],
+    "infoText": "Von französisch cabus = Kohlkopf.",
+    "themen": []
+  },
+  {
+    "word": "kapores",
+    "translations": ["entzwei", "ruiniert"],
+    "infoText": "Von jiddisch Sühneopfer: Am Vorabend des Versöhnungstages wurden Hühner als Sühneopfer »kapora« geschlagen.",
+    "themen": []
+  },
+  {
+    "word": "kariert quatschen",
+    "translations": ["Unfug daherreden", "dumm rumquasseln"],
+    "themen": []
+  },
+  {
+    "word": "Karnalje",
+    "article": "die",
+    "translations": ["Schurke", "Schlingel"],
+    "infoText": "Von französisch canaille. Auch Karnaljenvogel anstelle von Kanarienvogel.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Karnickel",
+    "article": "das",
+    "translations": ["der Schuldige", "Sündenbock"],
+    "infoText": "Eine Karnickelneese bezeichnet eine von der Norm abweichende Nase.",
+    "themen": []
+  },
+  {
+    "word": "Karo einfach",
+    "article": "das",
+    "translations": ["trockenes Brot", "einfaches Essen"],
+    "infoText": "Vermutlich abgeleitet von Karo-Kaffee.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Karotte",
+    "article": "die",
+    "translations": ["junger, unerfahrener Mensch"],
+    "examples": [{ "example": "’ne jungsche Karotte." }],
+    "themen": []
+  },
+  {
+    "word": "Kartoffel",
+    "article": "die",
+    "translations": ["Taschenuhr", "Hin und Her (in der Redensart)"],
+    "examples": [
+      { "example": "Rin inne Kartoffeln, raus aus de Kartoffeln.", "explanation": "Etwas tun und wieder rückgängig machen, etwas Überflüssiges tun." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Kartoffelsaft",
+    "article": "der",
+    "translations": ["Wodka"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Kaschemme",
+    "article": "die",
+    "translations": ["Kneipe"],
+    "infoText": "Von rotwelsch Katschemme, das von slawischen Formen hergeleitet ist, vgl. sorbisch korcma, polnisch karczma.",
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Kaschube",
+    "article": "der",
+    "translations": ["bäurischer Mensch"],
+    "infoText": "Abgeleitet von den Kassuben im ehemaligen Pommern und Westpreußen.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Käseblatt",
+    "article": "das",
+    "translations": ["Zeitung"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Käsekopp",
+    "article": "der",
+    "translations": ["Dummkopf"],
+    "infoText": "Seit dem späten 19. Jahrhundert von Berlin ausgegangen.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Käsemauken",
+    "translations": ["Schweißfüße", "Beine"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Kasperlesekt",
+    "article": "der",
+    "translations": ["Selters"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Kastrolle",
+    "article": "die",
+    "translations": ["Kasserolle"],
+    "themen": ["alltag-wohnen", "essen-trinken"]
+  },
+  {
+    "word": "Katzenkopp",
+    "article": "der",
+    "translations": ["kurzer, leichter Schlag auf den Hinterkopf"],
+    "themen": []
+  },
+  {
+    "word": "heilige Kaufe",
+    "article": "die",
+    "translations": ["Weihnachtseinkäufe"],
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Keife",
+    "article": "die",
+    "translations": ["Frau (abschätzig)"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Keile",
+    "article": "die",
+    "translations": ["Schläge", "Prügel", "Hiebe"],
+    "infoText": "Eine Keilerei ist eine Prügelei.",
+    "themen": []
+  },
+  {
+    "word": "Keks",
+    "article": "der",
+    "translations": ["Kopf"],
+    "examples": [
+      { "example": "Du jehst ma uff’n Keks.", "explanation": "Du gehst mir auf die Nerven, auf den Geist." }
+    ],
+    "infoText": "Vielleicht mit Bezug auf jiddisch gag = Dach.",
+    "themen": ["koerper", "gefuehle-emotionen"]
+  },
+  {
+    "word": "kellnerieren",
+    "translations": ["kellnern", "bedienen"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "keß",
+    "translations": ["keck", "mutig"],
+    "examples": [{ "example": "’ne kesse Jöhre." }],
+    "infoText": "Von jiddisch chochom = Kluger, Weiser.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Keule",
+    "article": "die",
+    "translations": ["Bruder", "Kumpel"],
+    "infoText": "Verkürzt aus Briezkeule (siehe Brieze).",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "keulen",
+    "translations": ["schnell laufen"],
+    "themen": []
+  },
+  {
+    "word": "Keulen schwingen",
+    "translations": ["tanzen gehen", "sich beeilen"],
+    "examples": [
+      { "example": "Schwing mal deine Keulen!", "explanation": "Beeil dich! Keule = Bein." }
+    ],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "kiebig",
+    "translations": ["frech", "zänkisch"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "kieken",
+    "translations": ["gucken"],
+    "infoText": "Wer kiekdoof ist, der ist kurzsichtig.",
+    "themen": []
+  },
+  {
+    "word": "Kieker",
+    "article": "der",
+    "translations": ["Beobachtung (in der Wendung »auf dem Kieker haben«)"],
+    "examples": [
+      { "example": "Jemanden uff’n Kieker ham.", "explanation": "Ihn beobachten, um ihn einer Sache zu überführen." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Kien",
+    "article": "der",
+    "translations": ["Hut, Aufmerksamkeit (in der Wendung »auf dem Kien sein«)"],
+    "examples": [
+      { "example": "Uff’n Kien sein.", "explanation": "Helle sein, vorsichtig sein, auf der Hut sein." }
+    ],
+    "infoText": "Geht entweder auf französisch ›quine‹ (unverhoffter Vorteil), englisch ›keen‹ (scharf) oder jiddisch kiwen (aufmerksam) zurück. Aufgekommen zur Zeit der französischen Besetzung (1806–08).",
+    "themen": []
+  },
+  {
+    "word": "Kienappel",
+    "article": "der",
+    "translations": ["Kiefernzapfen"],
+    "themen": []
+  },
+  {
+    "word": "Kies",
+    "article": "der",
+    "translations": ["Geld"],
+    "examples": [
+      { "example": "Der pupt in den Kies.", "explanation": "Er geht leer aus." }
+    ],
+    "infoText": "Geht zurück auf jiddisch kis = (Geld-)Beutel oder rotwelsch Kies, Kiesel = Stein (vgl. rotwelsch Steiner = Münzgeld).",
+    "themen": ["geld"]
+  },
+  {
+    "word": "kiesetig",
+    "translations": ["mäklig", "wählerisch"],
+    "infoText": "Von althochdeutsch kiosan = kiesen, prüfen, wählen.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Kievief",
+    "translations": ["Aufmerksamkeit (in der Wendung »auf dem Kievief sein«)"],
+    "examples": [
+      { "example": "Uff’m Kievief sein.", "explanation": "Aufpassen." }
+    ],
+    "alternativeWords": ["Kiewief"],
+    "infoText": "Von französisch Qui vive?, früher Ausruf der Wache.",
+    "themen": []
+  },
+  {
+    "word": "Kiez",
+    "article": "der",
+    "translations": ["typisches Berliner Viertel mit »Miljöh«"],
+    "alternativeWords": ["Kietz"],
+    "infoText": "Bereits 1249 als Siedlungsname bezeugt. Ursprünglich ärmliche Fischersiedlung, später Ortsteil und Stadtteil.",
+    "themen": ["stadtleben", "orte-spitzname"]
+  },
+  {
+    "word": "Kinderschaukel",
+    "article": "die",
+    "translations": ["Kinderwagen", "Motorrad mit Beiwagen"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Kindersärge",
+    "translations": ["übergroße Schuhe"],
+    "infoText": "Vermutlich bei Berliner Soldaten 1813/14 entstanden.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Kinkerlitzken",
+    "translations": ["wertlose Kleinigkeiten", "Umstände"],
+    "examples": [
+      { "example": "Mach keene Kinkerlitzken.", "explanation": "Komm zur Sache." }
+    ],
+    "infoText": "Von französisch quincaillerie (Kurzwaren) oder aus Kanker (Spinne) und Litze (Faden), also Wertloses wie ein Spinnengewebe. Die Endsilbe -ken ist das niederdeutsche Diminutiv -chen; so hört man auch Kinkerlitzchen.",
+    "themen": []
+  },
+  {
+    "word": "Kintopp",
+    "article": "der",
+    "translations": ["Kino"],
+    "infoText": "1906 aufgekommen mit Bezug auf das Kinematographietheater am Kottbusser Damm, dessen Besitzer Topp hieß.",
+    "themen": ["unterhaltung-freizeit", "stadtleben"]
+  },
+  {
+    "word": "Kippe",
+    "article": "die",
+    "translations": ["Zigarettenstummel", "Zweifelhaftes (»auf der Kippe stehen«)"],
+    "infoText": "Von mittelniederdeutsch Kippe = Spitze, Kante.",
+    "themen": []
+  },
+  {
+    "word": "Kirchenmaus",
+    "article": "die",
+    "translations": ["Pfarrer"],
+    "infoText": "Von daher auch »arm sein wie ’ne Kirchenmaus«.",
+    "themen": []
+  },
+  {
+    "word": "Kirste",
+    "article": "die",
+    "translations": ["Brotkruste"],
+    "infoText": "Meistens mit gerundetem i gesprochen: Kürste.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Kiste",
+    "article": "die",
+    "translations": ["Fernseher", "Auto", "Sarg", "Sache (»’ne faule Kiste«)"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Klabafti",
+    "article": "der",
+    "translations": ["Schnaps"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Kladderadatsch",
+    "article": "der",
+    "translations": ["Krach von etwas Zerbrechendem", "Zusammenbruch"],
+    "infoText": "Lautmalerisch, erweitert aus klatsch und kladatsch. ›Kladderadatsch‹ war auch der Titel des bekanntesten deutschen Satireblattes (erstmals 7. Mai 1848).",
+    "themen": []
+  },
+  {
+    "word": "Kladerage",
+    "article": "die",
+    "translations": ["Kleidung"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Klaferze",
+    "article": "der",
+    "translations": ["Homosexueller"],
+    "themen": []
+  },
+  {
+    "word": "Klafte",
+    "article": "die",
+    "translations": ["nörgelnde Frau"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "klaften gehen",
+    "translations": ["einkaufen gehen", "tratschen"],
+    "infoText": "Von mittelhochdeutsch Klaft = Geschwätz.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Klamauk",
+    "article": "der",
+    "translations": ["Krach", "ausgelassenes Vergnügen", "plumper Spaß"],
+    "infoText": "Ein Film mit billigen Witzen ist ein Klamaukfilm. Wahrscheinlich lautnachahmenden Ursprungs.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "klamm",
+    "translations": ["vor Kälte unbeweglich", "schlecht bei Kasse"],
+    "infoText": "Von mittelniederdeutsch klam = eng, vor Kälte erstarrt. »Klamm sein« = schlecht bei Kasse sein, weil die Bewegung des Geldzählens nicht mehr gemacht werden kann.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Klammerbeutel",
+    "article": "der",
+    "translations": ["Verrücktheit (in der Redensart)"],
+    "examples": [
+      { "example": "Dir ham se wohl mit’m Klammerbeutel jepudert.", "explanation": "Du spinnst wohl." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Klammerbraut",
+    "article": "die",
+    "translations": ["Beifahrerin auf dem Motorrad"],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Klamotten",
+    "translations": ["heruntergekommene Kleidungsstücke", "wertloses Kramzeug"],
+    "infoText": "Entstammt dem Berliner Gaunerjargon um 1900, die Herkunft ist unklar.",
+    "themen": ["charakter-eigenschaften", "alltag-wohnen"]
+  },
+  {
+    "word": "Klamottenkiste",
+    "article": "die",
+    "translations": ["Kino"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Klappe",
+    "article": "die",
+    "translations": ["Mund", "Bett"],
+    "infoText": "Von niederdeutsch klappen = schallen, klatschen.",
+    "themen": ["koerper", "alltag-wohnen"]
+  },
+  {
+    "word": "Klapperkasten",
+    "article": "der",
+    "translations": ["Klavier", "klappriges Auto"],
+    "themen": []
+  },
+  {
+    "word": "Klappmatismus",
+    "article": "der",
+    "translations": ["Mechanismus"],
+    "alternativeWords": ["Klapparatismus"],
+    "themen": []
+  },
+  {
+    "word": "Klappstulle",
+    "article": "die",
+    "translations": ["Doppelschnitte Brot"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Klapsmühle",
+    "article": "die",
+    "translations": ["Nervenheilanstalt"],
+    "infoText": "Wie z.B. Bonnies Ranch (Karl-Bonhoeffer-Anstalten), Berlins größte Nervenheilanstalt.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "klasse",
+    "translations": ["toll", "besonders gut"],
+    "themen": []
+  },
+  {
+    "word": "Klatschjule",
+    "article": "die",
+    "translations": ["tratschende Frau"],
+    "alternativeWords": ["Klatschmaul", "Klatschrieke"],
+    "infoText": "Von klatschen = schwatzen, über Abwesende reden.",
+    "themen": ["schimpfwoerter-beleidigungen", "beziehungen-soziales"]
+  },
+  {
+    "word": "Klaue",
+    "article": "die",
+    "translations": ["schlechte Handschrift"],
+    "infoText": "Mit Bezug auf Klaue = Hand und klauen = abschreiben.",
+    "themen": []
+  },
+  {
+    "word": "kleben",
+    "translations": ["eine runterhauen (in der Wendung »eine kleben«)"],
+    "examples": [
+      { "example": "Dir kleb ick eene.", "explanation": "Drohung." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Kleedage",
+    "article": "die",
+    "translations": ["Kleidung", "Garderobe"],
+    "infoText": "Im 19. Jahrhundert für vornehme Bekleidung.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Klemme",
+    "article": "die",
+    "translations": ["Verlegenheit"],
+    "examples": [{ "example": "Ick sitz janz schön inne Klemme." }],
+    "themen": []
+  },
+  {
+    "word": "klieren",
+    "translations": ["unsauber schreiben"],
+    "themen": []
+  },
+  {
+    "word": "Klietsch",
+    "article": "der",
+    "translations": ["nicht richtig aufgegangener Kuchen"],
+    "alternativeWords": ["Klietschkuchen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Klimperkasten",
+    "article": "der",
+    "translations": ["Klavier"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Klinkerschrippe",
+    "article": "die",
+    "translations": ["Schrippe", "Brötchen"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Klippschule",
+    "article": "die",
+    "translations": ["Schule mit geringen Anforderungen"],
+    "infoText": "Im 19. Jahrhundert für Privatschule.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "Klitsche",
+    "article": "die",
+    "translations": ["kleines Häuschen, Geschäft oder Büro"],
+    "infoText": "Vielleicht aus polnisch kleć = Lehmhaus.",
+    "themen": ["alltag-wohnen", "stadtleben"]
+  },
+  {
+    "word": "Kloppe",
+    "article": "die",
+    "translations": ["Schläge"],
+    "infoText": "Von mittelniederdeutsch kloppen = klopfen, in erster Linie auf Kinder bezogen. Berühmt die Hyperkorrektur von Leuten, die ihr Berlinisch zu meiden suchen: »Ich versteh das jar nich, warum die Kinder sich immer klopfen müssen.«",
+    "themen": []
+  },
+  {
+    "word": "Klops mit Beene",
+    "article": "der",
+    "translations": ["dicklicher Junge"],
+    "infoText": "Klops = Kloß aus Hackfleisch.",
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"]
+  },
+  {
+    "word": "Klopsbrummer",
+    "article": "der",
+    "translations": ["Bulette", "Frikadelle"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Kloßbrühe",
+    "article": "die",
+    "translations": ["völlig verständlich (in der Redensart)"],
+    "examples": [
+      { "example": "Dit is klar wie Kloßbrühe.", "explanation": "Völlig verständlich." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Kloßkopp",
+    "article": "der",
+    "translations": ["Schwachkopf"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Klöten",
+    "translations": ["Hoden"],
+    "infoText": "Von niederdeutsch Kloot = Kloß, Kugel, Ball.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Klötenkorn",
+    "article": "der",
+    "translations": ["Eierlikör"],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "klotzig",
+    "translations": ["plump", "sehr, äußerst (adverbial)"],
+    "examples": [{ "example": "Dit is klotzig teuer." }],
+    "themen": []
+  },
+  {
+    "word": "Kluft",
+    "article": "die",
+    "translations": ["Kleidung"],
+    "infoText": "Von jiddisch keliphas = Schale, über die Gaunersprache ›klaffot‹. Wer ›sich in Schale geworfen‹ hat, ist »fein« angezogen.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Klump",
+    "article": "der",
+    "translations": ["Klotz"],
+    "infoText": "Norddeutsch.",
+    "themen": []
+  },
+  {
+    "word": "Klumpatsch",
+    "article": "der",
+    "translations": ["Quatsch", "unnötiger Aufwand"],
+    "infoText": "Aus Klump und patschen = laut zusammenfallen.",
+    "themen": []
+  },
+  {
+    "word": "Klunker",
+    "translations": ["Schmuck (abschätzig)"],
+    "infoText": "Von mittelhochdeutsch glunkern = baumeln, schlenkern. Von daher auch klunkerig = unordentlich, zerlumpt.",
+    "themen": ["charakter-eigenschaften", "geld"]
+  },
+  {
+    "word": "Klunte",
+    "article": "die",
+    "translations": ["Mädchen", "Kleidung (Plural)"],
+    "themen": []
+  }
+]

@@ -1,0 +1,476 @@
+[
+  {
+    "word": "Nabelficker",
+    "article": "der",
+    "translations": ["mit sich selbst beschäftigter Typ", "Narziss"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "nachgeschmissen",
+    "translations": ["sehr billig"],
+    "examples": [{ "example": "Beim Schlußverkoof kriste de Klamotten nachjeschmiss’n." }],
+    "themen": ["geld"]
+  },
+  {
+    "word": "Nachtdroschke",
+    "article": "die",
+    "translations": ["Leichenwagen"],
+    "themen": []
+  },
+  {
+    "word": "Nachteule",
+    "article": "die",
+    "translations": ["Person, die die Nacht zum Tage macht"],
+    "alternativeWords": ["Nachtschattengewächs"],
+    "infoText": "Im 19. Jahrhundert für eine alte, hässliche Frau.",
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Nachtigall",
+    "article": "die",
+    "translations": ["Vorahnung (in der Redensart)"],
+    "examples": [
+      { "example": "Nachtijall, ick hör da trapsen!", "explanation": "Ich merke etwas, es ist etwas im Gange. Abwandlung von »Nachtigall, ich hör dich singen« aus »Des Knaben Wunderhorn«." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Nachtmütze",
+    "article": "die",
+    "translations": ["verschlafener Mensch"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "nachtschlafend",
+    "translations": ["zu nachtschlafender Zeit"],
+    "themen": []
+  },
+  {
+    "word": "Nachttopf",
+    "article": "der",
+    "translations": ["Hut", "Mütze"],
+    "infoText": "Wahrscheinlich abgeleitet von der soldatischen Bedeutung »Stahlhelm«.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Nachwuchs",
+    "article": "der",
+    "translations": ["Kind"],
+    "examples": [{ "example": "Dit is mein Nachwuchs." }],
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "nachzotteln",
+    "translations": ["langsam nachfolgen"],
+    "themen": []
+  },
+  {
+    "word": "Nakedei",
+    "article": "der",
+    "translations": ["nackte Person, insbesondere Kind"],
+    "infoText": "Von gotisch naqadei = Nacktheit. Nackedonien ist Mazedonien nachgebildet und meint einen Nacktbadestrand.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Nagel",
+    "article": "der",
+    "translations": ["Rausch (in der Wendung »einen Nagel drin haben«)"],
+    "examples": [
+      { "example": "Mann, hat der ’n Nagel drin!", "explanation": "Ist der betrunken." }
+    ],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "Nahkampfdiele",
+    "article": "die",
+    "translations": ["Lokal", "Bar", "Tanzfläche"],
+    "themen": ["alkohol-kneipe", "unterhaltung-freizeit"]
+  },
+  {
+    "word": "Nappkuchen",
+    "article": "der",
+    "translations": ["Trottel"],
+    "alternativeWords": ["Nappsülze"],
+    "infoText": "Jemand, der aus dem Mustopp kommt.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Neese",
+    "article": "die",
+    "translations": ["Nase"],
+    "examples": [
+      { "example": "Ham Se schon de Neese pleng?", "explanation": "Haben Sie schon die Nase voll (frz. plein = voll)?" },
+      { "example": "Denn muß ick Ihnen noch paar Wörter unter die Neese reiben." }
+    ],
+    "infoText": "Berlinische Aussprache von Nase. Ein Nasenfahrrad ist eine Brille, ein Nasenkneifer oder Nasenquetscher hingegen ein Sarg — letzterer kam kurz nach 1750 in Preußen auf als niedriger »Sarg der Armendirektion« mit flachem Deckel.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Nasenwärmer",
+    "article": "der",
+    "translations": ["Schnauzbart", "Halbschleier bis zur Oberlippe"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Nassauer",
+    "article": "der",
+    "translations": ["jemand, der andere für sich bezahlen lässt"],
+    "infoText": "Im 19. Jahrhundert für einen Geizkragen. Bildung zu rotwelsch naß = ohne Geld sowie in Anlehnung an den Orts- und Landesnamen Nassau. Als Verb: nassauern.",
+    "themen": ["geld", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Natter",
+    "article": "die",
+    "translations": ["äußerst empfindliche Person (in der Wendung)"],
+    "examples": [
+      { "example": "Die reagiert wie ’ne Natter.", "explanation": "Sie ist äußerst empfindlich." }
+    ],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Nebbochant",
+    "article": "der",
+    "translations": ["Nichtskönner"],
+    "infoText": "Jiddisch. Gebildet von umgangssprachlich ›nebbich‹, einem Ausdruck geringschätziger Ablehnung.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Negerpimmel",
+    "article": "der",
+    "translations": ["Blutwurst"],
+    "infoText": "Historischer Beleg aus dem Lexikon — die Bezeichnung ist rassistisch und heute nicht mehr verwendbar.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Negerschweiß",
+    "article": "der",
+    "translations": ["Cola-Getränk", "Kaffee ohne Milch"],
+    "infoText": "Historischer Beleg aus dem Lexikon — die Bezeichnung ist rassistisch und heute nicht mehr verwendbar.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "neppen",
+    "translations": ["zu hohe Preise nehmen"],
+    "infoText": "Vielleicht von rotwelsch neppen = betrügen.",
+    "themen": ["geld"]
+  },
+  {
+    "word": "Neu-Deli",
+    "article": "das",
+    "translations": ["Delikatladen (DDR)"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["essen-trinken", "stadtleben"]
+  },
+  {
+    "word": "nichtsdestotrotz",
+    "translations": ["nichtsdestoweniger"],
+    "themen": []
+  },
+  {
+    "word": "nicht ohne",
+    "translations": ["sehr gut", "beachtlich"],
+    "examples": [
+      { "example": "Dit Essen war nich ohne." },
+      { "example": "Der is nich ohne.", "explanation": "Vor dem muss man sich in Acht nehmen, der hat Ahnung." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "nie",
+    "translations": ["sehr gut (in der Wendung »wie nie«)"],
+    "examples": [
+      { "example": "Dit flutscht wie nie.", "explanation": "Das klappt sehr gut." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Niedertreter",
+    "translations": ["Hausschuhe"],
+    "themen": ["alltag-wohnen"]
+  },
+  {
+    "word": "Nieselpriem",
+    "article": "der",
+    "translations": ["langweiliger Mensch"],
+    "infoText": "Aus nieseln = leicht regnen und P(f)riem = Schusterahle.",
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "nüscht",
+    "translations": ["nichts"],
+    "examples": [
+      { "example": "Nüscht Jenauet is nich raus.", "explanation": "Etwas Genaues weiß man nicht." }
+    ],
+    "alternativeWords": ["nischt"],
+    "themen": []
+  },
+  {
+    "word": "Nixer",
+    "article": "der",
+    "translations": ["Versager"],
+    "infoText": "Berlinische Variante zu umgangssprachlich ›Nichtser‹.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "nöhlen",
+    "translations": ["zögern", "nörgeln, vor sich hinschmollen"],
+    "infoText": "Niederdeutsch. Ein Nöhlepeter oder eine Nöhlsuse ist ein Nörgler bzw. eine Nörglerin.",
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Nörgelfritze",
+    "article": "der",
+    "translations": ["Nörgler"],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
+  },
+  {
+    "word": "Nolle",
+    "article": "der",
+    "translations": ["Nollendorfplatz in Berlin-Schöneberg"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Noten",
+    "translations": ["Schläge"],
+    "examples": [{ "example": "Keile nach Noten." }],
+    "themen": []
+  },
+  {
+    "word": "Nuckelken",
+    "article": "das",
+    "translations": ["Lockruf für Kaninchen"],
+    "themen": []
+  },
+  {
+    "word": "Nuckelpinne",
+    "article": "die",
+    "translations": ["langsames Auto (herablassend)"],
+    "infoText": "Aus nuckeln = langsam sein und Pinne = Hebelarm am Steuerruder.",
+    "themen": ["stadtleben"]
+  },
+  {
+    "word": "nuddeln",
+    "translations": ["ungleichmäßige Drehbewegung ausführen", "mühsame Kleinarbeit verrichten"],
+    "infoText": "Ursprünglich am Leierkasten drehen.",
+    "themen": []
+  },
+  {
+    "word": "Null uff’s Ferd",
+    "translations": ["Nullouvert (beim Skatspiel)"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Nulpe",
+    "article": "die",
+    "translations": ["willensschwacher Mensch", "Schwächling", "Dummkopf"],
+    "infoText": "Vielleicht von Null = unbedeutender Mensch.",
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Nummer",
+    "article": "die",
+    "translations": ["auffälliger Typ"],
+    "examples": [
+      { "example": "Dit is ’ne Nummer.", "explanation": "Das ist ein Typ!" }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Nunneferzchen",
+    "article": "das",
+    "translations": ["Kameruner (Schmalzgebäck)"],
+    "alternativeWords": ["Nonneferzchen"],
+    "infoText": "Nonnenpförzchen.",
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Nusche",
+    "article": "die",
+    "translations": ["Nase", "Mund"],
+    "examples": [{ "example": "Krist glei’ eens inne Nusche!" }],
+    "infoText": "Nebenform zu umgangssprachlich ›Nuschel, Nischel‹.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Nuttenbrosche",
+    "article": "die",
+    "translations": ["Brunnen auf dem Alexanderplatz"],
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "nuttig",
+    "translations": ["unbedeutend", "schlecht"],
+    "themen": []
+  },
+  {
+    "word": "obenuff",
+    "translations": ["vergnügt (in der Wendung »obenuff sein«)"],
+    "examples": [
+      { "example": "Der is heut obenuff.", "explanation": "Er ist vergnügt." }
+    ],
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Ober",
+    "article": "der",
+    "translations": ["Oberkellner", "Regierender Bürgermeister von Berlin"],
+    "infoText": "Ironisch: Herr Oberkörper.",
+    "themen": ["alkohol-kneipe", "stadtleben"]
+  },
+  {
+    "word": "oberfaul",
+    "translations": ["bedenklich (»an der Sache ist was oberfaul«)"],
+    "examples": [
+      { "example": "An der Sache is wat oberfaul.", "explanation": "Die Sache hat einen Haken." }
+    ],
+    "infoText": "Vielleicht von niederdeutsch aewerful = mehr als faul.",
+    "themen": []
+  },
+  {
+    "word": "Obermimer",
+    "article": "der",
+    "translations": ["Vorsteher oder Leiter einer Gruppe (geringschätzig)"],
+    "examples": [{ "example": "Der Obermima von’t Janze." }],
+    "alternativeWords": ["Obermotz"],
+    "themen": []
+  },
+  {
+    "word": "Oberschweineöde",
+    "translations": ["Oberschöneweide"],
+    "infoText": "Ostberlinisch.",
+    "themen": ["orte-spitzname"]
+  },
+  {
+    "word": "Oberstübchen",
+    "article": "das",
+    "translations": ["Kopf"],
+    "examples": [
+      { "example": "Der tickt nich richtig im Oberstübchen.", "explanation": "Der spinnt." }
+    ],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Ochsenpantoffel",
+    "article": "der",
+    "translations": ["Schimpfwort für eine Person"],
+    "themen": ["schimpfwoerter-beleidigungen"]
+  },
+  {
+    "word": "Oderkähne",
+    "translations": ["zu große Schuhe"],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "öfter",
+    "translations": ["öfter (spöttische Frage bei Missgeschick)"],
+    "examples": [
+      { "example": "Machen Se dit öfter?", "explanation": "Spöttische Frage, wenn jemandem ein Missgeschick passiert." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "Ölgötze",
+    "article": "der",
+    "translations": ["schweigsamer, langweilender Mensch"],
+    "examples": [{ "example": "Der sitzt da wie’n Öljötze." }],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Ölkopp",
+    "article": "der",
+    "translations": ["Kater", "Betrunkener"],
+    "examples": [
+      { "example": "Der hat ’nen Ölkopp.", "explanation": "Er hat einen Kater, ist betrunken." }
+    ],
+    "themen": ["alkohol-kneipe"]
+  },
+  {
+    "word": "oll",
+    "translations": ["alt"],
+    "infoText": "Niederdeutsch. In vielen Verbindungen als Beschimpfung: oller Knopp, oller Zausel, oller Kerl, oller Bock.",
+    "themen": []
+  },
+  {
+    "word": "Olle",
+    "article": "die",
+    "translations": ["Ehegattin", "Alte(r)"],
+    "examples": [
+      { "example": "Meine Olle!" }
+    ],
+    "infoText": "Liebevoll in der Wendung »mein(e) Olleken«.",
+    "themen": ["beziehungen-soziales"]
+  },
+  {
+    "word": "Omme",
+    "article": "die",
+    "translations": ["Kopf", "Fußball"],
+    "themen": ["koerper"]
+  },
+  {
+    "word": "Onkel",
+    "article": "der",
+    "translations": ["großer Zeh"],
+    "infoText": "Wer »onkelt«, verdreht beim Gehen den Fuß. Von französisch ›gros ongle‹ = großer Zeh. Seit 1870 in Berlin belegt.",
+    "themen": ["koerper"]
+  },
+  {
+    "word": "gelber Onkel",
+    "article": "der",
+    "translations": ["Rohrstock"],
+    "themen": []
+  },
+  {
+    "word": "Onkel Pelle",
+    "article": "der",
+    "translations": ["clowneske Figur bei Kinderfesten"],
+    "themen": ["unterhaltung-freizeit"]
+  },
+  {
+    "word": "Opodéldok",
+    "translations": ["Ausruf des Erstaunens"],
+    "infoText": "Abgeleitet von dem gleichnamigen Hausmittel zur Behandlung rheumatischer Beschwerden.",
+    "themen": ["gefuehle-emotionen"]
+  },
+  {
+    "word": "Oper",
+    "article": "die",
+    "translations": ["dummes Gerede (in der Wendung »Opern quatschen«)"],
+    "examples": [
+      { "example": "Quatsch bloß keene Opern.", "explanation": "Quatsch nicht dusselig, bleib sachlich." }
+    ],
+    "themen": []
+  },
+  {
+    "word": "organisieren",
+    "translations": ["stehlen", "etwas besorgen"],
+    "themen": []
+  },
+  {
+    "word": "Orje",
+    "article": "der",
+    "translations": ["Georg"],
+    "themen": []
+  },
+  {
+    "word": "Oskar",
+    "translations": ["äußerst frech (in der Wendung »frech wie Oskar«)"],
+    "examples": [{ "example": "Frech wie Oskar." }],
+    "themen": ["charakter-eigenschaften"]
+  },
+  {
+    "word": "Ostseeforelle",
+    "article": "die",
+    "translations": ["Salzhering"],
+    "themen": ["essen-trinken"]
+  },
+  {
+    "word": "Otto",
+    "article": "der",
+    "translations": ["beliebiger Gegenstand, große Sache"],
+    "examples": [
+      { "example": "Dit is’n Otto!", "explanation": "Erstaunter Ausruf, z.B. über einen besonders großen Gänsebraten." }
+    ],
+    "infoText": "Entstand vielleicht mit Bezug auf den Jockei Otto Schmidt, volkstümlicher Liebling auf der Rennbahn Hoppegarten, der von Hans Albers mit »Otto, Otto« angespornt worden sein soll.",
+    "themen": []
+  }
+]
