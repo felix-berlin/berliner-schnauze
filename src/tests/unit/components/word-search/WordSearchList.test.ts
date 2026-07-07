@@ -1,48 +1,56 @@
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 const searchCountRef = ref(0);
-
-vi.mock("@nanostores/vue", () => ({
-  useStore: vi.fn(() => searchCountRef),
-}));
+const searchStateRef = ref<"loading" | "ready" | "failed">("ready");
 
 vi.mock("@stores/wordList.ts", () => ({
-  $searchResultCount: {},
+  $searchResultCount: "searchResultCount",
+  $searchState: "searchState",
+}));
+
+vi.mock("@nanostores/vue", () => ({
+  useStore: vi.fn((store: unknown) => (store === "searchState" ? searchStateRef : searchCountRef)),
 }));
 
 vi.mock("@components/SearchWords.vue", () => ({
-  default: { template: "<div class=\"mock-search-words\" />" },
+  default: { template: '<div class="mock-search-words" />' },
 }));
 
 vi.mock("@components/word-search/NoSearchResults.vue", () => ({
-  default: { template: "<div class=\"mock-no-search-results\" />" },
+  default: { template: '<div class="mock-no-search-results" />' },
 }));
 
 vi.mock("@components/word-search/SearchResultCount.vue", () => ({
-  default: { template: "<div class=\"mock-search-result-count\" />" },
+  default: { template: '<div class="mock-search-result-count" />' },
 }));
 
 vi.mock("@components/word-search/shortcuts/ShortcutNavigating.vue", () => ({
-  default: { template: "<div class=\"mock-shortcut-navigating\" />" },
+  default: { template: '<div class="mock-shortcut-navigating" />' },
 }));
 
 vi.mock("@components/word-search/shortcuts/ShortcutSelect.vue", () => ({
-  default: { template: "<div class=\"mock-shortcut-select\" />" },
+  default: { template: '<div class="mock-shortcut-select" />' },
 }));
 
 vi.mock("@components/word-search/WordSearchFilterToggle.vue", () => ({
-  default: { template: "<div class=\"mock-filter-toggle\" />" },
+  default: { template: '<div class="mock-filter-toggle" />' },
 }));
 
 vi.mock("@components/WordList.vue", () => ({
-  default: { template: "<div class=\"mock-word-list\" />" },
+  default: { template: '<div class="mock-word-list" />' },
 }));
+
+vi.mock("@components/WordSuggestHint.vue", async () => {
+  const { createComponentStub } = await import("../../helpers/stubs");
+  return createComponentStub('<div class="mock-word-suggest-hint" />');
+});
 
 beforeEach(() => {
   vi.resetModules();
   searchCountRef.value = 0;
+  searchStateRef.value = "ready";
 });
 
 describe("WordSearchList.vue", () => {
@@ -89,21 +97,28 @@ describe("WordSearchList.vue", () => {
     expect(wrapper.find(".mock-word-list").exists()).toBe(true);
   });
 
-  it("renders without errors when count is 0 (WordSuggestHint conditionally rendered)", async () => {
-    searchCountRef.value = 0;
+  it("shows WordSuggestHint when search is ready and count is 0", async () => {
     const WordSearchList = (await import("@components/word-search/WordSearchList.vue")).default;
-    const wrapper = mount(WordSearchList, {
-      props: { cssClass: "" },
-    });
-    // The component should mount without throwing
-    expect(wrapper.exists()).toBe(true);
+    const wrapper = mount(WordSearchList, { props: { cssClass: "" } });
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    expect(wrapper.find(".mock-word-suggest-hint").exists()).toBe(true);
   });
 
-  it("hides WordSuggestHint when searchResultCount > 0 (covers v-if false branch)", async () => {
+  it("hides WordSuggestHint while search index is loading even with count 0", async () => {
+    searchStateRef.value = "loading";
+    const WordSearchList = (await import("@components/word-search/WordSearchList.vue")).default;
+    const wrapper = mount(WordSearchList, { props: { cssClass: "" } });
+    await flushPromises();
+    expect(wrapper.find(".mock-word-suggest-hint").exists()).toBe(false);
+  });
+
+  it("hides WordSuggestHint when searchResultCount > 0", async () => {
     searchCountRef.value = 5;
     const WordSearchList = (await import("@components/word-search/WordSearchList.vue")).default;
     const wrapper = mount(WordSearchList, { props: { cssClass: "" } });
-    expect(wrapper.find(".c-word-search-list").exists()).toBe(true);
+    await flushPromises();
+    expect(wrapper.find(".mock-word-suggest-hint").exists()).toBe(false);
   });
 
   it("applies empty cssClass without adding extra classes", async () => {

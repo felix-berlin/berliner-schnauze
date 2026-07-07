@@ -1,5 +1,8 @@
 <template>
-  <div v-if="searchResultCount === 0" class="c-word-search-list__no-result">
+  <div
+    v-if="searchState === 'ready' && searchResultCount === 0"
+    class="c-word-search-list__no-result"
+  >
     <SearchXIcon width="50" height="50" />
     <p>Da biste anjemeiat. Keen Treffer.</p>
   </div>
@@ -7,10 +10,11 @@
 
 <script setup lang="ts">
 import { useStore } from "@nanostores/vue";
-import { $searchResultCount } from "@stores/wordList.ts";
+import { $searchResultCount, $searchState } from "@stores/wordList.ts";
 import SearchXIcon from "virtual:icons/lucide/search-x";
 
 const searchResultCount = useStore($searchResultCount);
+const searchState = useStore($searchState);
 </script>
 
 <style scoped></style>

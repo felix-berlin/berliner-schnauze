@@ -25,21 +25,21 @@
 import { useContentTracking } from "@composables/useContentTracking";
 import { useStore } from "@nanostores/vue";
 import { open } from "@stores/modal.ts";
-import { $wordSearch } from "@stores/wordList.ts";
+import { $searchQuery } from "@stores/wordList.ts";
 import Plus from "virtual:icons/lucide/plus";
 import { defineAsyncComponent, ref } from "vue";
 
 const root = ref<HTMLElement | null>(null);
 useContentTracking(root);
 
-const wordSearch = useStore($wordSearch);
+const searchQuery = useStore($searchQuery);
 
 const openWordSuggestionModal = () => {
   open({
     view: {
       component: defineAsyncComponent(() => import("@components/SuggestWordForm.vue")),
       props: {
-        berlinerWord: wordSearch.value.search || undefined,
+        berlinerWord: searchQuery.value || undefined,
       },
     },
   });

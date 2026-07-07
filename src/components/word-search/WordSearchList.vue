@@ -13,7 +13,7 @@
 
     <NoSearchResults />
 
-    <WordSuggestHint v-if="searchResultCount === 0" />
+    <WordSuggestHint v-if="searchState === 'ready' && searchResultCount === 0" />
   </div>
 
   <WordList class="c-word-list--large" :use-window-virtualizer="false" :item-size="60" />
@@ -28,7 +28,7 @@ import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
 import WordList from "@components/WordList.vue";
 import { useStore } from "@nanostores/vue";
-import { $searchResultCount } from "@stores/wordList.ts";
+import { $searchResultCount, $searchState } from "@stores/wordList.ts";
 import { defineAsyncComponent } from "vue";
 
 type WordSearchListProps = {
@@ -40,6 +40,7 @@ const props = defineProps<WordSearchListProps>();
 const WordSuggestHint = defineAsyncComponent(() => import("@components/WordSuggestHint.vue"));
 
 const searchResultCount = useStore($searchResultCount);
+const searchState = useStore($searchState);
 </script>
 
 <style lang="scss">
