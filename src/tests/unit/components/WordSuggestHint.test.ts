@@ -9,12 +9,9 @@ vi.mock("@stores/modal.ts", () => ({
 }));
 
 vi.mock("@stores/wordList.ts", async () => {
-  const { map } = await import("nanostores");
+  const { atom } = await import("nanostores");
   return {
-    $wordSearch: map({
-      search: "",
-      filters: {},
-    }),
+    $searchQuery: atom(""),
   };
 });
 
@@ -87,8 +84,8 @@ describe("WordSuggestHint.vue", () => {
     });
 
     it("should pass undefined berlinerWord when search is empty", async () => {
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      $wordSearch.set({ search: "", filters: {} });
+      const { $searchQuery } = await import("@stores/wordList.ts");
+      $searchQuery.set("");
 
       const wrapper = mount(WordSuggestHint);
       const button = wrapper.find(".c-word-suggest-hint__button");
@@ -103,8 +100,8 @@ describe("WordSuggestHint.vue", () => {
     });
 
     it("should pass search term as berlinerWord when search is not empty", async () => {
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      $wordSearch.set({ search: "Kiez", filters: {} });
+      const { $searchQuery } = await import("@stores/wordList.ts");
+      $searchQuery.set("Kiez");
 
       const wrapper = mount(WordSuggestHint);
       const button = wrapper.find(".c-word-suggest-hint__button");
@@ -132,8 +129,8 @@ describe("WordSuggestHint.vue", () => {
 
   describe("Store Integration", () => {
     it("should reactively update modal props when search changes", async () => {
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      $wordSearch.set({ search: "", filters: {} });
+      const { $searchQuery } = await import("@stores/wordList.ts");
+      $searchQuery.set("");
 
       const wrapper = mount(WordSuggestHint);
 
@@ -142,7 +139,7 @@ describe("WordSuggestHint.vue", () => {
       expect(vi.mocked(modalStore.open).mock.calls[0][0].view.props.berlinerWord).toBeUndefined();
 
       // Update search
-      $wordSearch.set({ search: "Schnauze", filters: {} });
+      $searchQuery.set("Schnauze");
       await wrapper.vm.$nextTick();
 
       // Second click with search term
@@ -151,8 +148,8 @@ describe("WordSuggestHint.vue", () => {
     });
 
     it("should handle special characters in search term", async () => {
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      $wordSearch.set({ search: "Jöö!", filters: {} });
+      const { $searchQuery } = await import("@stores/wordList.ts");
+      $searchQuery.set("Jöö!");
 
       const wrapper = mount(WordSuggestHint);
       await wrapper.find("button").trigger("click");
@@ -163,8 +160,8 @@ describe("WordSuggestHint.vue", () => {
     });
 
     it("should trim whitespace from search term", async () => {
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      $wordSearch.set({ search: "  Kiez  ", filters: {} });
+      const { $searchQuery } = await import("@stores/wordList.ts");
+      $searchQuery.set("  Kiez  ");
 
       const wrapper = mount(WordSuggestHint);
       await wrapper.find("button").trigger("click");
@@ -225,21 +222,9 @@ describe("WordSuggestHint.vue", () => {
   });
 
   describe("Edge Cases", () => {
-    it("should handle null search value gracefully", async () => {
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      $wordSearch.set({ search: null as any, filters: {} });
-
-      const wrapper = mount(WordSuggestHint);
-      await wrapper.find("button").trigger("click");
-
-      const callArgs = vi.mocked(modalStore.open).mock.calls[0][0];
-
-      expect(callArgs.view.props.berlinerWord).toBeUndefined();
-    });
-
     it("should handle empty string search correctly", async () => {
-      const { $wordSearch } = await import("@stores/wordList.ts");
-      $wordSearch.set({ search: "", filters: {} });
+      const { $searchQuery } = await import("@stores/wordList.ts");
+      $searchQuery.set("");
 
       const wrapper = mount(WordSuggestHint);
       await wrapper.find("button").trigger("click");
