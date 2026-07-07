@@ -1,0 +1,24 @@
+@use "@styles/variables" as vars;
+
+.c-donation-page {
+  display: grid;
+  gap: vars.$spacer * 1.5;
+
+  &__intro {
+    max-width: 65ch;
+  }
+
+  &__platform-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.75;
+    margin-block-start: vars.$spacer;
+  }
+
+  &__platform-link {
+    display: inline-block;
+    padding: vars.$spacer * 0.5 vars.$spacer;
+    font-weight: 700;
+    text-decoration: none;
+  }
+}
