@@ -404,6 +404,7 @@
   "402": "Community 402",
   "403": "Community 403",
   "404": "Community 404",
+  "405": "NavList.vue",
   "406": "Community 406",
   "407": "Community 407",
   "408": "Community 408",
@@ -474,6 +475,7 @@
   "473": "Community 473",
   "474": "Community 474",
   "475": "Community 475",
+  "476": "ButtonWithStates.vue",
   "477": "Community 477",
   "478": "Community 478",
   "479": "Community 479",
@@ -529,6 +531,7 @@
   "529": "Community 529",
   "530": "Community 530",
   "531": "Community 531",
+  "532": "WordList.test.ts",
   "533": "Community 533",
   "534": "Community 534",
   "535": "Community 535",
@@ -832,5 +835,8 @@
   "833": "Community 833",
   "834": "Community 834",
   "835": "Community 835",
+  "836": "findAnagrams.test.ts",
+  "837": "getWordOfTheDay",
+  "838": "sentryBrowser.ts",
   "839": "Community 839"
 }

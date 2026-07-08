@@ -700,7 +700,7 @@
     "semantic_hash": ""
   },
   "src/utils/supportedBrowsers.mjs": {
-    "mtime": 1783499180.8262265,
+    "mtime": 1783545692.3621643,
     "ast_hash": "bc1a0ef36cebf05cba9484b4b2cc88b5",
     "semantic_hash": ""
   },
@@ -807,11 +807,6 @@
   "src/assets/images/bear-walking.png": {
     "mtime": 1779123365.2970488,
     "ast_hash": "66d4a5ba63ff2c8033830eb70d393258",
-    "semantic_hash": ""
-  },
-  "src/assets/images/800px-Berlin_Cafe_Achteck_BusB.jpg": {
-    "mtime": 1779123365.2970488,
-    "ast_hash": "45c9aaf091d6ba1a0986f3262b6bfea6",
     "semantic_hash": ""
   },
   "src/assets/images/brown-bear-roar.png": {
@@ -1762,6 +1757,21 @@
   "src/tests/unit/services/getCompanyFunding.test.ts": {
     "mtime": 1783498850.5518618,
     "ast_hash": "69ccdc13523645f53984efcb0fee51af",
+    "semantic_hash": ""
+  },
+  "src/assets/images/logo/berliner-schnauze-logo.jpg": {
+    "mtime": 1783514249.3074813,
+    "ast_hash": "8443f1cc7044bdb4001538cafba94475",
+    "semantic_hash": ""
+  },
+  "src/assets/images/logo/berliner-schnauze-logo.png": {
+    "mtime": 1783514311.0772464,
+    "ast_hash": "223d1cd094e1d21bfe4b208b418b152f",
+    "semantic_hash": ""
+  },
+  "src/assets/images/logo/berliner-schnauze-logo.svg": {
+    "mtime": 1783513836.5801554,
+    "ast_hash": "a41a50fe97d64872a7775bcac85586c2",
     "semantic_hash": ""
   }
 }
