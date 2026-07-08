@@ -78,5 +78,16 @@
       "type": "http",
       "url": "https://mcp.docs.astro.build/mcp"
     }
+  },
+  "extraKnownMarketplaces": {
+    "humanizer": {
+      "source": {
+        "source": "github",
+        "repo": "blader/humanizer"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "humanizer@humanizer": true
   }
 }
