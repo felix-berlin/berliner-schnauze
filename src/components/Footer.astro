@@ -6,9 +6,10 @@ import NavList from '@components/NavList.vue';
 import { Picture } from 'astro:assets';
 import WakapiStats from '@components/WakapiStats.astro';
 import { fetchSocialMenu } from '@services/queries/getCompanySocialMedia';
+import { fetchFundingData } from '@services/queries/getCompanyFunding';
 import { fetchMenu } from '@services/queries/getMenu';
 
-import { funding, version } from '../../package.json';
+import { version } from '../../package.json';
 
 // const randomWord = () => {
 //   // TODO: Implement random word
@@ -17,19 +18,10 @@ import { funding, version } from '../../package.json';
 //
 //
 const socialMenu = await fetchSocialMenu();
+const { platforms } = await fetchFundingData();
 const fundingMenu = [
-  {
-    link: funding.find((f) => f.type === 'GitHub Sponsors')?.url ?? '',
-    title: 'GitHub Sponsors',
-  },
-  {
-    link: funding.find((f) => f.type === 'Ko-fi')?.url ?? '',
-    title: 'Ko-fi',
-  },
-  {
-    link: funding.find((f) => f.type === 'PayPal')?.url ?? '',
-    title: 'PayPal',
-  },
+  ...platforms.map((platform) => ({ link: platform.link, title: platform.name })),
+  { link: '/spenden', title: 'Alle Spendenwege' },
 ];
 
 const navMenu1 = await fetchMenu('Footer Nav 1');
@@ -72,7 +64,7 @@ const navMenu2 = await fetchMenu('Footer Nav 2');
         data-track-content
         data-content-name='Footer Funding CTA'
         data-content-piece='Projekt unterstützen'
-        data-content-target={fundingMenu[0].link}
+        data-content-target={fundingMenu[0]?.link ?? '/spenden'}
       >
         <h2>Projekt unterstützen</h2>
         <NavList
