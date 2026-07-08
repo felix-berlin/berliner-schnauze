@@ -1,16 +1,16 @@
 # Graph Report - berliner-schnauze  (2026-07-08)
 
 ## Corpus Check
-- 350 files · ~137,557 words
+- 348 files · ~136,547 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2134 nodes · 2248 edges · 840 communities (185 shown, 655 thin omitted)
+- 2126 nodes · 2241 edges · 834 communities (179 shown, 655 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 14 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cff9edbb`
+- Built from commit: `fd4bb810`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -751,12 +751,6 @@
 - [[_COMMUNITY_Community 831|Community 831]]
 - [[_COMMUNITY_Community 832|Community 832]]
 - [[_COMMUNITY_Community 833|Community 833]]
-- [[_COMMUNITY_Community 834|Community 834]]
-- [[_COMMUNITY_Community 835|Community 835]]
-- [[_COMMUNITY_Community 836|Community 836]]
-- [[_COMMUNITY_Community 837|Community 837]]
-- [[_COMMUNITY_Community 838|Community 838]]
-- [[_COMMUNITY_Community 839|Community 839]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `@/gql/graphql` - 64 edges
@@ -773,14 +767,14 @@
 ## Surprising Connections (you probably didn't know these)
 - `RelatedWordsProps` --references--> `WordRef`  [EXTRACTED]
   src/components/RelatedWords.vue → src/utils/wordHelper.ts
-- `scrollToTop()` --calls--> `trackEvent()`  [EXTRACTED]
-  src/components/ScrollToTop.vue → src/utils/analytics.ts
 - `goToWord()` --calls--> `routeToWord()`  [EXTRACTED]
   src/components/WordList.vue → src/utils/helpers.ts
 - `scrollToWordSearch()` --calls--> `trackEvent()`  [EXTRACTED]
   src/components/WordSearchLink.vue → src/utils/analytics.ts
 - `onSelect()` --calls--> `trackEvent()`  [EXTRACTED]
   src/components/filter/ThemenFilter.vue → src/utils/analytics.ts
+- `onSelect()` --calls--> `trackEvent()`  [EXTRACTED]
+  src/components/filter/WordTypeFilter.vue → src/utils/analytics.ts
 
 ## Import Cycles
 - None detected.
@@ -793,19 +787,29 @@
 - **GQL generated type layer (graphql.ts, gql.ts, fragment-masking.ts, entity-types.ts, index.ts)** — src_gql_graphql_generatedtypes, src_gql_gql_graphqlfunction, gql_fragmentmasking_usefragment, gql_entitytypes_berlinerword, src_gql_index_gqlbarrel [EXTRACTED 1.00]
 - **Search API routes (index + meta) forming the Orama search data pipeline** — pages_api_searchindexroute, pages_api_searchmetaroute, pages_api_ormasearchindex_type [EXTRACTED 0.95]
 
-## Communities (840 total, 655 thin omitted)
+## Communities (834 total, 655 thin omitted)
 
 ### Community 1 - "Site Layout & Footer"
-Cohesion: 0.17
-Nodes (9): @styles/app.scss, @styles/components/_thema-detail.scss, @styles/components/_word-group.scss, @styles/objects/_word-index.scss, @styles/plugins/astro-breadcrumbs.scss, GetAllWordsLinksQuery, @layouts/Layout.astro, page (+1 more)
+Cohesion: 0.13
+Nodes (14): @assets/images/brown-bear-roar.png, @styles/app.scss, @styles/components/_thema-detail.scss, @styles/components/_themen-overview.scss, @styles/components/_word-group.scss, @styles/objects/_word-index.scss, @styles/plugins/astro-breadcrumbs.scss, GetAllWordsLinksQuery (+6 more)
 
 ### Community 3 - "Word List Filtering"
 Cohesion: 0.10
 Nodes (10): wordSearch, CleanBerlinerWord, RangeFilterMinMax, setThemenFilter(), setWordTypeFilter(), SortByType, $toggleBerolinismus(), WordDocument (+2 more)
 
 ### Community 4 - "Word Display & GQL Types"
-Cohesion: 0.16
-Nodes (10): { audio }, audioButton, AudioPlayerListProps, fillStyle, isPlaying, playAudio(), progress, stopAudio() (+2 more)
+Cohesion: 0.10
+Nodes (17): virtual:icons/lucide/alert-circle, virtual:icons/lucide/check-circle-2, virtual:icons/lucide/info, {
+  actionLabel,
+  closeOnSwipe = true,
+  id,
+  message,
+  onAction,
+  showClose = true,
+  showStatusIcon = true,
+  status = "info",
+  timeout,
+}, ariaLive, ariaRole, Close, dismiss() (+9 more)
 
 ### Community 6 - "Modal & PWA Cache"
 Cohesion: 0.06
@@ -813,15 +817,11 @@ Nodes (39): @components/Modal.vue, currentModal, hasView, ModalCloseButton, prop
 
 ### Community 7 - "Cache Storage Composable"
 Cohesion: 0.19
-Nodes (10): confirmClearBucket(), BUCKET_NAME_MAP, CacheEntry, FileExtType, FileTypeBreakdown, formatBytes(), getBucketDisplayName(), getEntryType() (+2 more)
+Nodes (9): confirmClearBucket(), BUCKET_NAME_MAP, CacheEntry, FileExtType, FileTypeBreakdown, getBucketDisplayName(), getEntryType(), SwStatus (+1 more)
 
 ### Community 8 - "GraphQL Type Definitions"
 Cohesion: 0.07
 Nodes (28): @/gql/graphql, AffiliateQueryVariables, BerlinerWordFragmentDoc, CompanyFundingQuery, CompanyFundingQueryVariables, CompanySocialMediaQuery, CompanySocialMediaQueryVariables, Exact (+20 more)
-
-### Community 9 - "Word of the Day"
-Cohesion: 0.15
-Nodes (5): astro:env/client, astro:env/server, CACHE_FILE, gameSchema, page
 
 ### Community 10 - "Community 10"
 Cohesion: 0.13
@@ -849,20 +849,20 @@ Nodes (21): virtual:icons/lucide/circle, virtual:icons/lucide/circle-check, virt
 }, Circle (+13 more)
 
 ### Community 13 - "Word Detail Page"
-Cohesion: 0.11
-Nodes (18): @styles/components/_word-gallery-col.scss, @styles/components/_word-learn-more.scss, @styles/components/_word-page-layout.scss, @styles/components/_word-section-etymologie.scss, @styles/objects/_word.scss, @components/word/WordGalleryCol.astro, lightboxWidths, @components/word/WordLearnMore.astro (+10 more)
+Cohesion: 0.12
+Nodes (16): @styles/components/_word-gallery-col.scss, @styles/components/_word-learn-more.scss, @styles/components/_word-page-layout.scss, @styles/components/_word-section-etymologie.scss, @styles/objects/_word.scss, @components/word/WordGalleryCol.astro, lightboxWidths, @components/word/WordLearnMore.astro (+8 more)
 
 ### Community 16 - "Search Input Logic"
-Cohesion: 0.15
-Nodes (14): @components/SearchWords.vue, { autoFocus = false, buttonPosition = "left" }, buttonActions(), debouncedTrackSearch, localSearch, oramaResults, pendingTrackSearch, resetSearch() (+6 more)
+Cohesion: 0.14
+Nodes (16): @components/SearchWords.vue, { autoFocus = false, buttonPosition = "left" }, buttonActions(), debouncedTrackSearch, localSearch, oramaResults, pendingTrackSearch, resetSearch() (+8 more)
 
 ### Community 17 - "Search Filter Behaviour"
 Cohesion: 0.14
 Nodes (17): @components/games/BonShareView.vue, accuracyPercent, contentPiece, formattedDate, params, payload, root, page (+9 more)
 
 ### Community 18 - "GraphQL Mutations & Queries"
-Cohesion: 0.12
-Nodes (16): dict, ALL_GERMAN_VOWELS, decomposeCompoundWord(), findAnagrams(), GERMAN_LETTER_FREQ, germanWords, isConsonantChar(), isVowelChar() (+8 more)
+Cohesion: 0.10
+Nodes (18): @components/word/WordSectionGrammatik.astro, dict, ALL_GERMAN_VOWELS, capitalizeFirstLetter(), decomposeCompoundWord(), findAnagrams(), GERMAN_LETTER_FREQ, germanWords (+10 more)
 
 ### Community 19 - "Audio Playback Controls"
 Cohesion: 0.20
@@ -876,22 +876,22 @@ Nodes (14): @assets/images/bear-walking.png, @components/CarbonBadge.vue, GreenH
 }, @components/Footer.astro, fundingMenu, CompanySocialMediaDocument, MenuByNameDocument (+6 more)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.15
+Cohesion: 0.16
 Nodes (11): @components/word/IsWordOfTheDay.vue, {
   iconSize = 24,
   tooltipPlacement = "right",
   variant = "icon",
   word,
   wordId,
-}, isWordOfTheDay, IsWordOfTheDayProps, wordOfTheDay, WordPropertiesFragment, Example, getWordOfTheDay() (+3 more)
+}, isWordOfTheDay, IsWordOfTheDayProps, wordOfTheDay, WordProps, WordPropertiesFragment, Example (+3 more)
 
 ### Community 24 - "Community 24"
 Cohesion: 0.20
 Nodes (7): @styles/components/_word-letter-frequency.scss, @styles/components/_word-section-linguistik.scss, @components/word/WordLetterFrequency.astro, letters, @components/word/WordSectionLinguistik.astro, coloredConsonantsAndVowels(), letterFrequency()
 
 ### Community 26 - "Community 26"
-Cohesion: 0.06
-Nodes (24): @components/TooltipPopover.vue, arrow, cancelDomRemoval(), cancelHide(), container, { content, placement = "top", offset = 8 }, hide(), isRendered (+16 more)
+Cohesion: 0.12
+Nodes (8): TooltipEl, TooltipPlacement, TooltipState, TooltipValue, vTooltip, mockHidePopover, mockShowPopover, mountedWrappers
 
 ### Community 28 - "GQL Fragment Definitions"
 Cohesion: 0.08
@@ -914,42 +914,41 @@ Cohesion: 0.08
 Nodes (3): defaultProps, createAstroRender(), { mockEntry }
 
 ### Community 37 - "Toast Container"
-Cohesion: 0.06
-Nodes (33): virtual:icons/lucide/alert-circle, virtual:icons/lucide/check-circle-2, virtual:icons/lucide/info, {
-  actionLabel,
-  closeOnSwipe = true,
-  id,
-  message,
-  onAction,
-  showClose = true,
-  showStatusIcon = true,
-  status = "info",
-  timeout,
-}, ariaLive, ariaRole, Close, dismiss() (+25 more)
+Cohesion: 0.12
+Nodes (15): @components/toast/ToastNotifyContainer.vue, positions, toastStore, container, isOpen, isSupported, props, removeToastById() (+7 more)
+
+### Community 38 - "GQL Fragment Masking"
+Cohesion: 0.29
+Nodes (3): @/gql/graphql, FragmentType, Incremental
 
 ### Community 40 - "Badge & Scroll Components"
-Cohesion: 0.20
-Nodes (6): photoswipe/lightbox, @components/ImageGallery.astro, { id = crypto.randomUUID(), images }, ImageGalleryProps, lightbox, photoswipe/style.css
+Cohesion: 0.17
+Nodes (14): @components/TooltipPopover.vue, arrow, cancelDomRemoval(), cancelHide(), container, { content, placement = "top", offset = 8 }, hide(), isRendered (+6 more)
 
 ### Community 41 - "Bear Mascot Branding"
 Cohesion: 0.60
 Nodes (5): brown-bear-roar.png (image asset), Berliner Bär (Berlin heraldic bear), App branding mascot / visual identity, Schnauze (snout/mouth/attitude concept), High-contrast black-and-white photographic illustration
 
 ### Community 43 - "Community 43"
-Cohesion: 0.29
-Nodes (12): share(), sendMail(), copyNameToClipboard(), copyWordPageUrlToClipboard(), shareWord(), onNeedReload(), onOfflineReady(), onRegisteredSW() (+4 more)
+Cohesion: 0.12
+Nodes (25): share(), @components/ScrollToTop.vue, {
+  buttonAriaLabel = "nach oben scrollen",
+  hideTooltip = false,
+  showAtPosition = 500,
+  tooltip = "",
+}, docStart, footerGround, isScrolled, scrollToTop(), ScrollToTopProps (+17 more)
 
 ### Community 44 - "Community 44"
 Cohesion: 0.13
 Nodes (11): ../../CHANGELOG.md, @components/BaseHead.astro, changelogs, collections, Seo, sorted, Seo, Seo (+3 more)
 
 ### Community 46 - "Audio Player Components"
-Cohesion: 0.21
-Nodes (16): @styles/components/_word-section-beispiele.scss, virtual:icons/lucide/quote, @components/AudioPlayerList.vue, { audio, isType }, AudioPlayerListProps, @components/word/WordExamples.astro, AudioPlayerList, props (+8 more)
+Cohesion: 0.05
+Nodes (39): @styles/components/_word-hero.scss, @styles/components/_word-section-beispiele.scss, @styles/components/_word-sidebar.scss, @styles/components/_word-themen.scss, photoswipe/lightbox, virtual:icons/lucide/quote, { audio }, audioButton (+31 more)
 
 ### Community 47 - "Community 47"
-Cohesion: 0.18
-Nodes (6): @components/word/WordSectionGrammatik.astro, fetchWikimediaAPI(), mockFetch, alphabeticNeighbors(), capitalizeFirstLetter(), createWikimediaFileList()
+Cohesion: 0.22
+Nodes (4): fetchWikimediaAPI(), mockFetch, alphabeticNeighbors(), createWikimediaFileList()
 
 ### Community 50 - "AlertBanner Tests"
 Cohesion: 0.17
@@ -957,23 +956,23 @@ Nodes (12): GetAllWordsDocument, GetAllWordsLinksDocument, GetAllWordsQuery, Get
 
 ### Community 53 - "Community 53"
 Cohesion: 0.12
-Nodes (14): Documents, DocumentType, graphql(), BerlinerWord, MediaItem, PostTypeSeoFragment, TaxonomySeoFragment, WordProperties (+6 more)
+Nodes (13): Documents, DocumentType, graphql(), BerlinerWord, MediaItem, PostTypeSeoFragment, TaxonomySeoFragment, WordProperties (+5 more)
 
 ### Community 54 - "Modal Close Button"
-Cohesion: 0.13
-Nodes (14): virtual:icons/lucide/lightbulb, accuracyPercent, emit, ExternalLinkIcon, LightbulbIcon, props, RefreshCwIcon, Share2Icon (+6 more)
+Cohesion: 0.12
+Nodes (15): virtual:icons/lucide/lightbulb, virtual:icons/lucide/share-2, accuracyPercent, emit, ExternalLinkIcon, LightbulbIcon, props, RefreshCwIcon (+7 more)
 
 ### Community 59 - "TurnStile Tests"
-Cohesion: 0.33
-Nodes (3): ../../package.json, getRegisterSWCallbacks(), mockReload
+Cohesion: 0.17
+Nodes (6): astro:env/client, ../../package.json, gameSchema, page, getRegisterSWCallbacks(), mockReload
 
 ### Community 62 - "Button State Types"
-Cohesion: 0.14
-Nodes (13): @styles/components/_filter-search.scss, ButtonState, Check, computedState, { defaultIconSize = 18, state = "normal" }, X, @components/word-search/WordFilter.vue, { closeOnClickOutside = true } (+5 more)
+Cohesion: 0.15
+Nodes (12): @styles/components/_filter-search.scss, id, { label, switchType }, typeOfSwitch, @components/word-search/WordFilter.vue, { closeOnClickOutside = true }, { ready, start }, showWordListFilterFlyout (+4 more)
 
 ### Community 65 - "ConfettiEffect Component"
-Cohesion: 0.50
-Nodes (3): defaultProps, statsRef, @urql/core
+Cohesion: 0.22
+Nodes (5): $oramaSearchResults, defaultProps, statsRef, { VirtualizerStub, keyStrokeHandlers, startHideActiveTimerFn }, @urql/core
 
 ### Community 66 - "DropdownPopover Component"
 Cohesion: 0.08
@@ -991,32 +990,32 @@ Nodes (22): arrowAbove, arrowDynamicStyle, arrowX, cancelClose(), DropdownPopove
 } (+14 more)
 
 ### Community 70 - "SingleLoader Component"
-Cohesion: 0.29
-Nodes (5): COLORS, props, Segment, segments, CacheBucket
+Cohesion: 0.25
+Nodes (6): COLORS, props, Segment, segments, CacheBucket, formatBytes()
 
 ### Community 71 - "SocialList Component"
 Cohesion: 0.40
 Nodes (3): list, { listItemModifier, listLinkModifier, listModifier, modifier }, SocialListProps
 
 ### Community 72 - "TurnStile Component"
-Cohesion: 0.20
-Nodes (6): virtual:icons/lucide/share-2, { berlinerisch, slug }, { copied, copy, isSupported: clipBoardIsSupported, text }, { isSupported: shareIsSupported, share }, WordProps, BerlinerWordFragment
+Cohesion: 0.50
+Nodes (3): mockedUseStore, searchResultCountRef, searchStateRef
 
 ### Community 76 - "Vendor Type Declarations"
-Cohesion: 0.16
-Nodes (20): @styles/components/_section-card.scss, @styles/components/_word-alphabet-nav.scss, @styles/components/_word-decomposition.scss, @styles/components/_word-related-words.scss, @styles/components/_word-section-orthographie.scss, @components/RandomWordButton.vue, RelatedWordsProps, root (+12 more)
+Cohesion: 0.14
+Nodes (21): @styles/components/_section-card.scss, @styles/components/_word-alphabet-nav.scss, @styles/components/_word-decomposition.scss, @styles/components/_word-related-words.scss, @styles/components/_word-section-orthographie.scss, @components/RandomWordButton.vue, RelatedWordsProps, root (+13 more)
 
 ### Community 77 - "ImageGallery Vue"
-Cohesion: 0.20
-Nodes (9): @styles/components/_button.scss, @styles/components/_donation-page.scss, CompanyFundingDocument, CompanyFunding, fetchFundingData(), FundingData, FundingPlatform, FundingWallet (+1 more)
+Cohesion: 0.22
+Nodes (8): @styles/components/_button.scss, @styles/components/_donation-page.scss, CompanyFundingDocument, CompanyFunding, fetchFundingData(), FundingData, FundingPlatform, FundingWallet
 
 ### Community 79 - "DropdownPopover Vue"
 Cohesion: 0.29
 Nodes (4): @components/RelatedWords.vue, { numberOfWords = 7, words, currentWord = "" }, RelatedWordsProps, root
 
 ### Community 80 - "CookieConsent Vue"
-Cohesion: 0.12
-Nodes (15): ~icons/lucide/book-open, @assets/images/brown-bear-roar.png, @styles/components/_book-recommendations.scss, @styles/components/_fact-card.scss, @styles/components/_facts-grid.scss, @styles/components/_themen-overview.scss, @styles/objects/_index.scss, @components/FactCard.astro (+7 more)
+Cohesion: 0.14
+Nodes (12): ~icons/lucide/book-open, @styles/components/_book-recommendations.scss, @styles/components/_fact-card.scss, @styles/components/_facts-grid.scss, @styles/objects/_index.scss, @components/FactCard.astro, @components/GameCtaCard.astro, @components/word/BookRecommendations.astro (+4 more)
 
 ### Community 81 - "ShortcutClose Vue"
 Cohesion: 0.24
@@ -1027,12 +1026,12 @@ Cohesion: 0.17
 Nodes (10): defaultStats, mockCurrentCard, { mockInit, mockStartGame, mockResumeGame, mockAnswer, mockNextCard, mockStartShake, mockStartCooldown, mockVibrate }, mockIsNewHighScore, mockIsReady, mockLives, mockMultiplier, mockPhase (+2 more)
 
 ### Community 83 - "ConfettiEffect Props"
-Cohesion: 0.17
-Nodes (10): virtual:icons/lucide/database, virtual:icons/lucide/files, virtual:icons/lucide/hard-drive, virtual:icons/lucide/layers, DatabaseIcon, FilesIcon, HardDriveIcon, LayersIcon (+2 more)
+Cohesion: 0.18
+Nodes (9): virtual:icons/lucide/database, virtual:icons/lucide/files, virtual:icons/lucide/layers, DatabaseIcon, FilesIcon, HardDriveIcon, LayersIcon, props (+1 more)
 
 ### Community 85 - "Community 85"
 Cohesion: 0.05
-Nodes (34): @styles/components/_menu-nav.scss, virtual:icons/lucide/monitor, virtual:icons/lucide/moon, applyDarkMode(), isDarkMode, MonitorIcon, MoonIcon, SunIcon (+26 more)
+Nodes (35): @styles/components/_menu-nav.scss, virtual:icons/lucide/monitor, virtual:icons/lucide/moon, applyDarkMode(), isDarkMode, MonitorIcon, MoonIcon, SunIcon (+27 more)
 
 ### Community 87 - "TurnStile Props"
 Cohesion: 0.18
@@ -1051,16 +1050,16 @@ Cohesion: 0.22
 Nodes (6): onSelect(), themenOptions, value, wordSearch, mockActiveThemenFilter, mockWordSearch
 
 ### Community 99 - "Community 99"
-Cohesion: 0.12
-Nodes (17): @components/modals/search/SearchModal.vue, searchResultCount, SearchWords, showWordListFilterFlyout, WordList, searchResultCount, searchState, searchResultCount (+9 more)
+Cohesion: 0.13
+Nodes (16): @components/modals/search/SearchModal.vue, searchResultCount, SearchWords, showWordListFilterFlyout, WordList, searchResultCount, searchState, searchResultCount (+8 more)
 
 ### Community 101 - "Community 101"
 Cohesion: 0.22
 Nodes (7): virtual:icons/lucide/refresh-cw, virtual:icons/lucide/rotate-ccw, emit, RefreshCw, RotateCcw, Trash2, virtual:icons/lucide/trash-2
 
 ### Community 102 - "Community 102"
-Cohesion: 0.15
-Nodes (8): AffiliateDocument, AffiliateQuery, pages, Affiliate, AffiliateBook, AffiliateData, AffiliateDisclaimer, AffliateLinksFields
+Cohesion: 0.22
+Nodes (7): AffiliateDocument, AffiliateQuery, Affiliate, AffiliateBook, AffiliateData, AffiliateDisclaimer, AffliateLinksFields
 
 ### Community 104 - "Community 104"
 Cohesion: 0.29
@@ -1094,21 +1093,21 @@ Cohesion: 0.29
 Nodes (5): mockIsPushSupported, mockLoadPushState, $mockPushState, mockSubscribePush, mockUnsubscribePush
 
 ### Community 109 - "Community 109"
-Cohesion: 0.12
-Nodes (13): { itemSize = 110 }, @components/WordList.vue, activeIndex, goToWord(), {
+Cohesion: 0.09
+Nodes (17): { itemSize = 110 }, highlighter, { highlightTerm, index, showDropdown = true, source }, WordProps, @components/WordList.vue, activeIndex, goToWord(), {
   itemSize = 110,
   showDropdown = true,
   singleWordGap = "1.75rem",
   useWindowVirtualizer = true,
-}, mutableOramaSearch, oramaSearch, resultRefs (+5 more)
+} (+9 more)
 
 ### Community 111 - "Community 111"
 Cohesion: 0.25
 Nodes (7): @components/DonationWallets.vue, CheckIcon, { copied, copy, isSupported: clipBoardIsSupported }, copiedAddress, copyAddress(), CopyIcon, { wallets }
 
 ### Community 116 - "Community 116"
-Cohesion: 0.08
-Nodes (30): virtual:icons/lucide/download, virtual:icons/lucide/settings, @components/AppSettings.vue, AppSettingsNavCard, AppSettingsNotifications, AppSettingsTheme, DownloadIcon, HardDriveIcon (+22 more)
+Cohesion: 0.07
+Nodes (31): virtual:icons/lucide/download, virtual:icons/lucide/hard-drive, virtual:icons/lucide/settings, @components/AppSettings.vue, AppSettingsNavCard, AppSettingsNotifications, AppSettingsTheme, DownloadIcon (+23 more)
 
 ### Community 117 - "Community 117"
 Cohesion: 0.33
@@ -1119,12 +1118,12 @@ Cohesion: 0.40
 Nodes (4): localSearchRef, mockStores, oramaResultsRef, searchLengthRef
 
 ### Community 119 - "Community 119"
-Cohesion: 0.21
-Nodes (12): extractWordTypes(), GET(), getWordComponents(), hypher, makeOramaSearchIndex(), GET(), hypher, fetchAllThemen() (+4 more)
+Cohesion: 0.16
+Nodes (13): BerlinerWordFragment, extractWordTypes(), GET(), getWordComponents(), hypher, makeOramaSearchIndex(), GET(), hypher (+5 more)
 
 ### Community 120 - "Community 120"
-Cohesion: 0.15
-Nodes (11): $oramaSearchResults, mockedUseStore, searchResultCountRef, searchStateRef, mockedUseStore, searchResultCountRef, searchStateRef, mockStores() (+3 more)
+Cohesion: 0.16
+Nodes (11): installPromptRef, isPwaInstalledRef, mockedTriggerPwaInstall, mockedUseStore, showInstallButtonRef, mockedUseStore, searchResultCountRef, searchStateRef (+3 more)
 
 ### Community 125 - "Community 125"
 Cohesion: 0.33
@@ -1148,8 +1147,8 @@ Nodes (8): virtual:icons/lucide/bell, virtual:icons/lucide/bell-ring, BellIcon, 
 }, mockedUseNotificationSettings, mockRequestNotificationPermission, mockTogglePush
 
 ### Community 130 - "Community 130"
-Cohesion: 0.15
-Nodes (11): ~icons/lucide/align-justify, ~icons/lucide/arrow-left, ~icons/lucide/arrow-right, ~icons/lucide/badge-check, ~icons/lucide/fingerprint, @styles/components/_word-curiosities.scss, ~icons/lucide/mic, ~icons/lucide/shuffle (+3 more)
+Cohesion: 0.20
+Nodes (10): ~icons/lucide/align-justify, ~icons/lucide/arrow-left, ~icons/lucide/arrow-right, ~icons/lucide/badge-check, ~icons/lucide/fingerprint, @styles/components/_word-curiosities.scss, ~icons/lucide/mic, ~icons/lucide/shuffle (+2 more)
 
 ### Community 132 - "Community 132"
 Cohesion: 0.12
@@ -1172,13 +1171,8 @@ Nodes (5): @components/AlertBanner.vue, AlertBannerProps, {
 }, root, useContentTracking()
 
 ### Community 195 - "Community 195"
-Cohesion: 0.25
-Nodes (7): @components/ScrollToTop.vue, {
-  buttonAriaLabel = "nach oben scrollen",
-  hideTooltip = false,
-  showAtPosition = 500,
-  tooltip = "",
-}, docStart, footerGround, isScrolled, scrollToTop(), ScrollToTopProps
+Cohesion: 0.33
+Nodes (5): ButtonState, Check, computedState, { defaultIconSize = 18, state = "normal" }, X
 
 ### Community 196 - "Community 196"
 Cohesion: 0.40
@@ -1196,14 +1190,6 @@ Nodes (3): isPwaInstalledRef, mockedTrackEvent, mockedUseStore
 Cohesion: 0.53
 Nodes (3): useSearchQuerySync(), $searchQuery, mountComposable()
 
-### Community 231 - "Community 231"
-Cohesion: 0.33
-Nodes (5): @styles/components/_word-hero.scss, @styles/components/_word-themen.scss, @components/BadgeTag.vue, @components/word/WordHero.astro, ~icons/lucide/tag
-
-### Community 275 - "Community 275"
-Cohesion: 0.33
-Nodes (4): highlighter, { highlightTerm, index, showDropdown = true, source }, WordProps, OramaSearchIndex
-
 ### Community 438 - "Community 438"
 Cohesion: 0.25
 Nodes (6): getMinMax, hasRangeSet, id, { label, rangeType }, rangeValue, wordSearch
@@ -1212,28 +1198,12 @@ Nodes (6): getMinMax, hasRangeSet, id, { label, rangeType }, rangeValue, wordSea
 Cohesion: 0.50
 Nodes (3): activeFilterCount, $activeFilterCount, $toggleWordListFilterFlyout()
 
-### Community 834 - "Community 834"
-Cohesion: 0.33
-Nodes (5): installPromptRef, isPwaInstalledRef, mockedTriggerPwaInstall, mockedUseStore, showInstallButtonRef
-
-### Community 835 - "Community 835"
-Cohesion: 0.33
-Nodes (4): EVM_CHAINS, fundingFixture, queryMock, toPromiseMock
-
-### Community 836 - "Community 836"
-Cohesion: 0.60
-Nodes (4): trackWordSearchListSearch(), isBrowser(), setMatomoSearch(), trackContentImpressionsWithinNode()
-
-### Community 837 - "Community 837"
-Cohesion: 0.50
-Nodes (3): id, { label, switchType }, typeOfSwitch
-
 ## Knowledge Gaps
-- **1226 isolated node(s):** `AlertBannerProps`, `{
+- **1221 isolated node(s):** `AlertBannerProps`, `{
   componentClass = "c-alert",
   element = "div",
   type = "warning",
-}`, `root`, `AppSettingsTheme`, `AppSettingsNotifications` (+1221 more)
+}`, `root`, `AppSettingsTheme`, `AppSettingsNotifications` (+1216 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **655 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1241,20 +1211,20 @@ Nodes (3): id, { label, switchType }, typeOfSwitch
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `@components/PwaCacheOverview.vue` connect `PWA Cache Management` to `Community 224`, `Site Layout & Footer`, `Community 101`, `Modal & PWA Cache`, `Community 198`, `Cache Storage Composable`, `SingleLoader Component`, `ConfettiEffect Props`, `Community 116`, `TurnStile Props`, `NavigateBack Component`?**
-  _High betweenness centrality (0.047) - this node is a cross-community bridge._
-- **Why does `@components/games/BerlinerOderNicht.vue` connect `Community 106` to `ConfettiEffect Component`, `Community 104`, `Word of the Day`, `MainHeader Vue`, `Audio Playback Controls`, `Community 405`, `Modal Close Button`, `Community 126`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
-- **Why does `trackEvent()` connect `Community 43` to `Word List Filtering`, `Modal & PWA Cache`, `Community 136`, `Community 10`, `Word Status Components`, `Audio Playback Controls`, `Community 29`, `Modal Close Button`, `Button State Types`, `Community 195`, `Community 196`, `Community 836`, `Community 199`, `TurnStile Component`, `Community 85`, `SendMail CF7 Service`, `Community 96`, `Community 111`, `Community 116`?**
-  _High betweenness centrality (0.033) - this node is a cross-community bridge._
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Why does `@components/games/BerlinerOderNicht.vue` connect `Community 106` to `ConfettiEffect Component`, `Community 104`, `MainHeader Vue`, `Audio Playback Controls`, `Community 405`, `Modal Close Button`, `TurnStile Tests`, `Community 126`?**
+  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+- **Why does `trackEvent()` connect `Community 43` to `Community 96`, `Word List Filtering`, `Community 196`, `Modal & PWA Cache`, `Community 199`, `Community 136`, `Community 10`, `Word Status Components`, `Community 111`, `Audio Playback Controls`, `Community 116`, `Community 85`, `Modal Close Button`, `Button State Types`, `Community 29`, `SendMail CF7 Service`?**
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
 - **What connects `AlertBannerProps`, `{
   componentClass = "c-alert",
   element = "div",
   type = "warning",
 }`, `root` to the rest of the system?**
-  _1226 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1221 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Site Layout & Footer` be split into smaller, more focused modules?**
+  _Cohesion score 0.12681159420289856 - nodes in this community are weakly interconnected._
 - **Should `Word List Filtering` be split into smaller, more focused modules?**
   _Cohesion score 0.10276679841897234 - nodes in this community are weakly interconnected._
-- **Should `Modal & PWA Cache` be split into smaller, more focused modules?**
-  _Cohesion score 0.06028368794326241 - nodes in this community are weakly interconnected._
-- **Should `GraphQL Type Definitions` be split into smaller, more focused modules?**
-  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._
+- **Should `Word Display & GQL Types` be split into smaller, more focused modules?**
+  _Cohesion score 0.09523809523809523 - nodes in this community are weakly interconnected._
