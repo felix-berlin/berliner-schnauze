@@ -53,6 +53,28 @@
         <span class="c-options-dropdown__copy-text">Wort kopieren</span>
       </button>
 
+      <button
+        aria-label="Fehler melden"
+        type="button"
+        class="c-options-dropdown__copy-button c-button"
+        @click="openFeedbackModal('error')"
+      >
+        <Flag width="18" height="18" class="c-options-dropdown__icon-button" />
+
+        <span class="c-options-dropdown__copy-text">Fehler melden</span>
+      </button>
+
+      <button
+        aria-label="Inhalt vorschlagen"
+        type="button"
+        class="c-options-dropdown__copy-button c-button"
+        @click="openFeedbackModal('content')"
+      >
+        <Lightbulb width="18" height="18" class="c-options-dropdown__icon-button" />
+
+        <span class="c-options-dropdown__copy-text">Inhalt vorschlagen</span>
+      </button>
+
       <slot name="after" />
     </template>
   </DropdownPopover>
@@ -61,14 +83,18 @@
 <script setup lang="ts">
 import type { BerlinerWord, WordProperties } from "@/gql/entity-types";
 
+import { open } from "@stores/modal.ts";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
 import { routeToWord } from "@utils/helpers.ts";
 import { useClipboard, useShare } from "@vueuse/core";
 import { SITE_URL } from "astro:env/client";
 import Copy from "virtual:icons/lucide/copy";
+import Flag from "virtual:icons/lucide/flag";
+import Lightbulb from "virtual:icons/lucide/lightbulb";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
+import { defineAsyncComponent } from "vue";
 import DropdownPopover from "@components/DropdownPopover.vue";
 
 interface WordProps {
@@ -130,6 +156,26 @@ const copyNameToClipboard = async (name: string): Promise<void> => {
   createToastNotify({ message: "Wort kopiert", status: "success" });
 
   trackEvent("Word Copy", "Word copied", `Word: ${name}`);
+};
+
+/**
+ * Opens the word feedback modal, preselecting error report or content suggestion
+ *
+ * @param   {"content" | "error"}  type
+ *
+ * @return  {void}
+ */
+const openFeedbackModal = (type: "content" | "error"): void => {
+  open({
+    view: {
+      component: defineAsyncComponent(() => import("@components/word/WordFeedbackForm.vue")),
+      props: {
+        berlinerWord: berlinerisch ?? undefined,
+        slug: slug ?? undefined,
+        type,
+      },
+    },
+  });
 };
 </script>
 

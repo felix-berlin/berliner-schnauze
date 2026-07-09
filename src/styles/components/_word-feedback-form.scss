@@ -1,0 +1,45 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-word-feedback-form {
+  &__word-context {
+    margin-bottom: vars.$spacer * 1.5;
+    color: color-mix(in srgb, var(--blue) 70%, white);
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--blue) 30%, white);
+    }
+  }
+
+  &__type-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 1.5;
+  }
+
+  &__type-option {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.5;
+    font-weight: 400;
+    cursor: pointer;
+
+    input[type="radio"] {
+      accent-color: var(--accent);
+    }
+  }
+
+  &__button {
+    --padding: #{vars.$spacer * 0.75} #{vars.$spacer * 1.2};
+
+    font-size: 1.7rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .c-turnstile {
+    margin-top: vars.$spacer * 2.5;
+  }
+}
