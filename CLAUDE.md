@@ -88,6 +88,19 @@ Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical l
 
 For Cloudflare Pages builds, env vars are configured separately in the CF Pages dashboard.
 
+## WordPress MCP Access
+
+Claude has direct MCP access to the WordPress backend via the `berlinerSchnauze` server (configured in `.mcp.json`, credentials in `~/.claude/settings.json` — see `.env.example` for the template, never commit real credentials).
+
+Available abilities:
+- `berliner-schnauze/get-posts` — published/draft blog posts (title, URL, date, excerpt). `post_status` param defaults to `publish`; pass `draft` for drafts.
+- `berliner-schnauze/create-post` — creates a draft post
+- `berliner-schnauze/get-words` — Berlinerisch glossary entries (custom post type)
+- `yoast-seo/get-seo-scores` / `yoast-seo/get-readability-scores` — SEO/readability for recently changed posts
+- `backwpup/list-jobs`, `run-job`, `cancel-job`, `get-backup-history`, `get-backup-logs` — BackWPup backup management. Call `list-jobs` + `get-backup-history` before any risky action (plugin/theme/core updates) to offer a backup first.
+
+Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adapter-get-ability-info`.
+
 ## Architecture
 
 **Data flow**: WordPress GraphQL API → Astro API routes (static JSON at build time) → Orama in-browser search → Vue components
