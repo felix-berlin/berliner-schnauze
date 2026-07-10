@@ -765,8 +765,8 @@
     "semantic_hash": ""
   },
   "src/services/fetchApi.ts": {
-    "mtime": 1783676105.5581594,
-    "ast_hash": "2d46d4d04980647839e321fb2f6cfc2e",
+    "mtime": 1779123365.3050487,
+    "ast_hash": "9c62b5b65cd51673342b7ba211c3ea78",
     "semantic_hash": ""
   },
   "src/services/api.ts": {
@@ -785,8 +785,8 @@
     "semantic_hash": ""
   },
   "src/services/mutations/sendMail.ts": {
-    "mtime": 1783676094.950827,
-    "ast_hash": "21b5024119554a961fac4e5d7a825f54",
+    "mtime": 1782602712.4583483,
+    "ast_hash": "766eebd508314ece8528d42bfbd9d06f",
     "semantic_hash": ""
   },
   "src/services/fragments/fragments.ts": {
@@ -1620,8 +1620,8 @@
     "semantic_hash": ""
   },
   "src/tests/unit/services/fetchApi.test.ts": {
-    "mtime": 1783676279.4794044,
-    "ast_hash": "0337b1b75c4daa96c1d8c3a8a38712e7",
+    "mtime": 1782602712.4795692,
+    "ast_hash": "dc3679a2a525e18d5ce795b6a6a0deea",
     "semantic_hash": ""
   },
   "src/tests/unit/services/getSitemapWordDates.test.ts": {
@@ -1640,8 +1640,8 @@
     "semantic_hash": ""
   },
   "src/tests/unit/services/sendMail.test.ts": {
-    "mtime": 1783676161.756231,
-    "ast_hash": "0e2aa3ca120108dfcf406a4314fc7e10",
+    "mtime": 1782602712.4800527,
+    "ast_hash": "c6bd3da1433ae901f79058880dd00c11",
     "semantic_hash": ""
   },
   "src/tests/unit/services/wikimediaApi.test.ts": {
