@@ -1,4 +1,5 @@
-import { SUGGEST_WORD_FORM_ID, WP_AUTH_REFRESH_TOKEN, WP_REST_API } from "astro:env/client";
+import { SUGGEST_WORD_FORM_ID, WP_REST_API } from "astro:env/client";
+import { WP_AUTH_REFRESH_TOKEN } from "astro:env/server";
 
 import { graphql } from "@/gql";
 
