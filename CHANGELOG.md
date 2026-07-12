@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.42.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.42.0...v3.42.1) (2026-07-12)
+
+
+### Bug Fixes
+
+* include Firefox ESR in supported browser detection ([b635b3a](https://github.com/felix-berlin/berliner-schnauze/commit/b635b3acbc887589c1de92560e635b689a5a721c))
+
 # [3.42.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.41.0...v3.42.0) (2026-07-07)
 
 
