@@ -47,11 +47,17 @@
 </template>
 
 <script setup lang="ts">
-import type { ToastNotify } from "@stores/toastNotify.ts";
-
 import { removeToastById } from "@stores/toastNotify";
 import { useSwipe, useTimeoutFn } from "@vueuse/core";
 import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
+
+// Relative import (not the usual `@stores/*` alias) is required here: under
+// TypeScript 7, @vue/compiler-sfc's cross-file type resolution for
+// `defineProps<T>()` falls back to `ts.findConfigFile`/tsconfig path-alias
+// resolution for non-relative specifiers, and that classic API no longer
+// exists in TS7. Relative specifiers skip that path entirely. Revert once
+// @vue/compiler-sfc supports TS7's native compiler.
+import type { ToastNotify } from "../../stores/toastNotify.ts";
 
 const Close = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
 
@@ -82,7 +88,9 @@ const toastIconMap = {
 
 const dismiss = (): void => {
   if (!id) {
-    console.error("[ToastNotify] dismiss() called on a toast with no id — store invariant violated");
+    console.error(
+      "[ToastNotify] dismiss() called on a toast with no id — store invariant violated",
+    );
     return;
   }
   removeToastById(id);
@@ -111,7 +119,6 @@ const resumeTimer = (): void => {
 onMounted(() => {
   if (timeout !== null) resumeTimer();
 });
-
 
 const handleAction = (): void => {
   onAction?.();

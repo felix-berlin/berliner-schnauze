@@ -1,5 +1,10 @@
 overrides:
   "@vitejs/plugin-vue": "^6.0.7"
+  # @astrojs/language-server 2.16.11 is the latest published version but still
+  # crashes under TypeScript 7 (see `pnpm typechecking:vue-astro` / CLAUDE.md's
+  # "TypeScript 7" section) — kept here so a fixed release gets picked up
+  # automatically on `pnpm install`.
+  "@astrojs/language-server": "^2.16.11"
 
 allowBuilds:
   "@infisical/cli": true

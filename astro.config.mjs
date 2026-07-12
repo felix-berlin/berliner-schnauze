@@ -7,11 +7,13 @@ import spotlightjs from "@spotlightjs/astro";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders, svgoOptimizer } from "astro/config";
+import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
+
 import { getWordDates } from "./src/services/queries/getSitemapWordDates.ts";
 
 const {
@@ -229,11 +231,29 @@ export default defineConfig({
       // devtools: {
       //   launchEditor: "code",
       // },
+      // TypeScript 7 dropped `ts.sys` from its default export. @vue/compiler-sfc
+      // falls back to `ts.sys` for filesystem access when resolving
+      // `defineProps<ImportedType>()`/`defineEmits<ImportedType>()` cross-file type
+      // references, so without an explicit `fs` here that resolution throws
+      // "No fs option provided to `compileScript` in non-Node environment."
+      // Remove this once @vue/compiler-sfc stops depending on `ts.sys`.
+      script: {
+        fs: {
+          fileExists: existsSync,
+          readFile: (file) => {
+            try {
+              return readFileSync(file, "utf-8");
+            } catch {
+              return undefined;
+            }
+          },
+          realpath: realpathSync,
+        },
+      },
     }),
     sitemap({
       filter: (page) =>
-        !page.includes("/settings") &&
-        !page.endsWith("/games/berliner-oder-nicht/share"),
+        !page.includes("/settings") && !page.endsWith("/games/berliner-oder-nicht/share"),
       serialize: async (item) => {
         const match = item.url.match(/\/wort\/([^/?#]+)/);
         if (match) {

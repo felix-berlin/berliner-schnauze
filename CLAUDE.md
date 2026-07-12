@@ -19,6 +19,7 @@ ToolSearch("select:mcp__plugin_claude-mem_mcp-search____IMPORTANT,mcp__plugin_cl
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
 
 Rules:
+
 - For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
@@ -57,7 +58,8 @@ pnpm test:ci                 # CI mode: coverage + JUnit reporter
 
 # Linting & type checking
 pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS)
-pnpm typechecking            # astro check + vue-tsc  (slow — run targeted, not after every edit; tsc can't resolve .vue imports)
+pnpm typechecking            # tsc --noEmit only (see TypeScript 7 note below — vue-tsc/astro check are currently broken)
+pnpm typechecking:vue-astro  # astro check + vue-tsc — currently crashes under TypeScript 7, kept for when upstream fixes land
 
 # Build
 pnpm build                   # Production build (Cloudflare Pages output) — no infisical, env vars must already be set
@@ -127,13 +129,13 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 **CSS / BEMIT naming**: This project uses [BEMIT](https://gist.github.com/stephenway/a6145d9b4430e8c55a77) — BEM enhanced with namespaces:
 
-| Prefix          | Purpose                     | Example                          |
-| --------------- | --------------------------- | -------------------------------- |
-| `.c-`           | Components (reusable UI)    | `.c-word-card__title--active`    |
-| `.o-`           | Objects (structural)        | `.o-grid__item`                  |
-| `.u-`           | Utilities (single-purpose)  | `.u-hidden`                      |
-| `.is-` / `.has-`| State                       | `.is-active`, `.has-dropdown`    |
-| `.js-`          | JS hooks (no styling)       | `.js-scroll-target`              |
+| Prefix           | Purpose                    | Example                       |
+| ---------------- | -------------------------- | ----------------------------- |
+| `.c-`            | Components (reusable UI)   | `.c-word-card__title--active` |
+| `.o-`            | Objects (structural)       | `.o-grid__item`               |
+| `.u-`            | Utilities (single-purpose) | `.u-hidden`                   |
+| `.is-` / `.has-` | State                      | `.is-active`, `.has-dropdown` |
+| `.js-`           | JS hooks (no styling)      | `.js-scroll-target`           |
 
 Pattern: `.c-block__element--modifier`. Hyphens separate words within each part (`c-my-component`, not `c-myComponent`). Never use plain BEM without a namespace prefix.
 
@@ -160,7 +162,7 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 **Astro scripts + View Transitions**: `<script>` in `.astro` files compiles to `<script type="module">` and runs only once — never re-runs after client-side navigation. Wrap any DOM-querying logic in `astro:page-load` so it re-runs on every navigation:
 
 ```js
-document.addEventListener('astro:page-load', () => {
+document.addEventListener("astro:page-load", () => {
   // re-initialize observers, querySelectorAll, etc.
 });
 ```
@@ -226,6 +228,16 @@ pnpm supply-chain policy: freshly published packages (< 24h) trigger a lockfile 
 - `Uint8Array<ArrayBuffer>` (not plain `Uint8Array`) required for `PushManager.subscribe()` — TS 6 made `Uint8Array` generic
 - `@vueuse/core` emits `INVALID_ANNOTATION` Rolldown warnings about `#__PURE__` comment positions — upstream issue, build still succeeds, ignore
 
+## TypeScript 7
+
+`typescript` is on `^7.0.2`. TS7's published package is the native/Go compiler — its default export is just `{version, versionMajorMinor}`; the classic `Program`/`LanguageService` API (`ts.sys`, `ts.findConfigFile`, `typescript/lib/tsc`, etc.) is gone entirely, not just moved.
+
+- `tsc --noEmit` still works fine (it shells out to the native binary) and is what `pnpm typechecking` / `build:strict` run now.
+- `vue-tsc` (latest 3.3.7) and `@astrojs/check` → `@astrojs/language-server` (latest 2.16.11) both build a classic `ts.LanguageService` and hard-crash under TS7 (`ERR_PACKAGE_PATH_NOT_EXPORTED` on `typescript/lib/tsc`, and `ts.sys` being `undefined`, respectively). Neither has shipped a TS7-native release.
+- `typescript` is a **peerDependency** of both tools, so there's no way to pin them to TS6 independently via pnpm overrides while the rest of the project uses TS7 — peer deps are a shared singleton, overrides only redirect real dependency edges (verified: `vue-tsc>typescript` / `@astrojs/check>typescript` overrides are silently no-ops in the lockfile).
+- Interim state: `.vue`/`.astro` type-checking is unavailable. Run `pnpm typechecking:vue-astro` occasionally to check if an upstream release fixed it — once it stops crashing, fold it back into `typechecking`/`build:strict` and remove this note.
+- `@astrojs/language-server` is pinned via `pnpm-workspace.yaml` overrides so a fixed release gets picked up automatically on `pnpm install`.
+
 ## AI / Agent Development (Astro v7)
 
 **Background dev server** — agents struggle with long-running processes; use background mode:
@@ -250,7 +262,7 @@ Or in config:
 ```js
 import { defineConfig, logHandlers } from "astro/config";
 export default defineConfig({
-  logger: logHandlers.json()   // or logHandlers.compose(logHandlers.console(), logHandlers.json())
+  logger: logHandlers.json(), // or logHandlers.compose(logHandlers.console(), logHandlers.json())
 });
 ```
 
