@@ -21,8 +21,7 @@ export const fetchFundingData = async (): Promise<FundingData> => {
   const response = await wpGraphqlClient.query(CompanyFundingDocument, {}).toPromise();
 
   if (response.error) {
-    console.error("Error fetching funding data:", response.error);
-    return { platforms: [], wallets: [] };
+    throw new Error("Fetching company funding data failed", { cause: response.error });
   }
 
   const entries = response.data?.company?.companyInformations?.funding ?? [];

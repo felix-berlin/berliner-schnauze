@@ -124,15 +124,11 @@ describe("fetchFundingData", () => {
     expect(await fetchFundingData()).toEqual({ platforms: [], wallets: [] });
   });
 
-  it("returns empty arrays and logs on GraphQL error", async () => {
-    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  it("throws on GraphQL error instead of silently returning empty data", async () => {
     const gqlError = new Error("GraphQL boom");
     toPromiseMock.mockResolvedValue({ data: undefined, error: gqlError });
     const { fetchFundingData } = await import("@services/queries/getCompanyFunding");
 
-    const result = await fetchFundingData();
-
-    expect(result).toEqual({ platforms: [], wallets: [] });
-    expect(consoleErrorSpy).toHaveBeenCalledWith("Error fetching funding data:", gqlError);
+    await expect(fetchFundingData()).rejects.toThrow("Fetching company funding data failed");
   });
 });

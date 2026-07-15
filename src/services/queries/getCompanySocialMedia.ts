@@ -12,8 +12,7 @@ export const fetchSocialMenu = async (): Promise<SocialMenuItem[]> => {
   const response = await wpGraphqlClient.query(CompanySocialMediaDocument, {}).toPromise();
 
   if (response.error) {
-    console.error("Error fetching social media links:", response.error);
-    return [];
+    throw new Error("Fetching company social media links failed", { cause: response.error });
   }
 
   const entries = response.data?.company?.companyInformations?.socialMedia ?? [];

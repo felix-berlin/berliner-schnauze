@@ -15,8 +15,7 @@ export const fetchMenu = async (name: string): Promise<MenuItem[]> => {
   const response = await wpGraphqlClient.query(MenuByNameDocument, { name }).toPromise();
 
   if (response.error) {
-    console.error(`Error fetching menu "${name}":`, response.error);
-    return [];
+    throw new Error(`Fetching menu "${name}" failed`, { cause: response.error });
   }
 
   const nodes = response.data?.menu?.menuItems?.nodes ?? [];
