@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.43.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.42.1...v3.43.0) (2026-07-15)
+
+
+### Bug Fixes
+
+* **footer:** clarify donation link label wording ([34ea949](https://github.com/felix-berlin/berliner-schnauze/commit/34ea949949ad18634cb9eb74a905a3f6bf3ecb46))
+* **footer:** fail build on WP fetch errors instead of silently swallowing them ([6a8ed29](https://github.com/felix-berlin/berliner-schnauze/commit/6a8ed29cafe64c06fb99ca1a2098946d67978fcb))
+* update environment variable imports for server context ([1aea679](https://github.com/felix-berlin/berliner-schnauze/commit/1aea679b68e5c199d3039a7e6463be061ad7f907))
+
+
+### Features
+
+* Add Berliner Schnauze logo in JPG, PNG, and SVG formats ([713e564](https://github.com/felix-berlin/berliner-schnauze/commit/713e5647cfdb82059e99bb4cea26f486919d0cfc))
+* **donation:** add hero eyebrow, reassurance chips, and icon platform cards ([276a802](https://github.com/felix-berlin/berliner-schnauze/commit/276a80205646fda70552d4ee281ed8d88ea56972))
+* **donation:** fetch funding data from WordPress with wallet grouping ([f84cdf8](https://github.com/felix-berlin/berliner-schnauze/commit/f84cdf827c8bf63898f094ec29b6f51275af6740))
+* **donation:** implement DonationWallets component for displaying funding wallets ([6973ecd](https://github.com/felix-berlin/berliner-schnauze/commit/6973ecd11c089221864fcf51a9f6c498cadd308f))
+* **donation:** improve crypto wallet copy UX and responsive addresses ([1565f93](https://github.com/felix-berlin/berliner-schnauze/commit/1565f932af9d97d42323626ed3d5fea16cb684fe))
+* **footer:** fetch social links and nav menus from WordPress ([a327911](https://github.com/felix-berlin/berliner-schnauze/commit/a327911201baa93e35b91da4f93365d419015b6c))
+* **footer:** source funding menu from CMS and link donation page ([50a68dd](https://github.com/felix-berlin/berliner-schnauze/commit/50a68dd15b43a5c93d92b2bc5598cde0d20993be))
+* **seo:** add SEO audit implementation plan and initial fixes ([5b5c4f8](https://github.com/felix-berlin/berliner-schnauze/commit/5b5c4f803efbfef93df1c78b25a4a5f73a057910))
+
 ## [3.42.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.42.0...v3.42.1) (2026-07-12)
 
 
