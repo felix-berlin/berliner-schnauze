@@ -17,10 +17,6 @@ export const GetAllPosts = graphql(`
           node {
             sourceUrl
             altText
-            mediaDetails {
-              height
-              width
-            }
           }
         }
         blocks {

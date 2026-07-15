@@ -1,5 +1,11 @@
 @use "@styles/variables" as vars;
 
+.o-magazin-article {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacer * 1.5;
+}
+
 .c-magazin-article {
   &__header {
     padding-block: vars.$spacer * 2 vars.$spacer;
