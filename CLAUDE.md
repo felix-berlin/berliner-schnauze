@@ -88,6 +88,19 @@ Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical l
 
 For Cloudflare Pages builds, env vars are configured separately in the CF Pages dashboard.
 
+## WordPress MCP Access
+
+Claude has direct MCP access to the WordPress backend via the `berlinerSchnauze` server (configured in `.mcp.json`, credentials in `~/.claude/settings.json` — see `.env.example` for the template, never commit real credentials).
+
+Available abilities:
+- `berliner-schnauze/get-posts` — published/draft blog posts (title, URL, date, excerpt). `post_status` param defaults to `publish`; pass `draft` for drafts.
+- `berliner-schnauze/create-post` — creates a draft post
+- `berliner-schnauze/get-words` — Berlinerisch glossary entries (custom post type)
+- `yoast-seo/get-seo-scores` / `yoast-seo/get-readability-scores` — SEO/readability for recently changed posts
+- `backwpup/list-jobs`, `run-job`, `cancel-job`, `get-backup-history`, `get-backup-logs` — BackWPup backup management. Call `list-jobs` + `get-backup-history` before any risky action (plugin/theme/core updates) to offer a backup first.
+
+Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adapter-get-ability-info`.
+
 ## Architecture
 
 **Data flow**: WordPress GraphQL API → Astro API routes (static JSON at build time) → Orama in-browser search → Vue components
@@ -144,6 +157,8 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 **Analytics**: Track user interactions with `trackEvent(category, action, label)` from `@utils/analytics`.
 
 **SCSS imports**: Use `@use "@styles/path"` — not `@import`. Global styles (base resets, typography, utilities) belong in `src/styles/app.scss`. Component styles follow the pattern in **Vue components** above.
+
+**Breakpoints & container queries**: Never write raw `@media (width >= vars.$sm)` queries. Fixed viewport breakpoints always go through the sass-butler mixin: `@use "@styles/mixins" as mx;` then `@include mx.breakpoint("sm") { ... }` (direction defaults to `min`; pass `"max"` for a max-width query). The breakpoint map lives in `src/styles/variables/_layout.scss`. Wherever the responsive behavior is really about a component's own available space rather than the viewport, prefer a **container query** instead: `container-type: inline-size; container-name: x;` on the ancestor, then `@container x (inline-size >= Yrem) { ... }` on the descendant — see `src/styles/components/_word-page-layout.scss` and `_word-gallery-col.scss` for the established pattern.
 
 **VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Already in use: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`, `useVibrate`.
 

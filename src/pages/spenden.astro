@@ -1,0 +1,127 @@
+---
+import '@styles/components/_button.scss';
+import '@styles/components/_donation-page.scss';
+import '@styles/components/_section-card.scss';
+import CoffeeIcon from '~icons/lucide/coffee';
+import CreditCardIcon from '~icons/lucide/credit-card';
+import CrownIcon from '~icons/lucide/crown';
+import DonationWallets from '@components/DonationWallets.vue';
+import HeartIcon from '~icons/lucide/heart';
+import Layout from '@layouts/Layout.astro';
+import CheckIcon from '~icons/lucide/check';
+import { fetchFundingData } from '@services/queries/getCompanyFunding';
+
+const { platforms, wallets } = await fetchFundingData();
+
+const reassuranceChips = ['Keene Werbung', 'Keene Tracker', 'Open Source'];
+
+type PlatformIcon = typeof HeartIcon;
+
+const defaultPlatformMeta: { icon: PlatformIcon; primary?: boolean; subtitle: string } = {
+  icon: HeartIcon,
+  subtitle: '',
+};
+
+const platformMeta: Record<string, { icon: PlatformIcon; primary?: boolean; subtitle: string }> =
+  {
+    'Buy me a coffee': { icon: CoffeeIcon, subtitle: 'Kleene Aufmerksamkeit' },
+    'GitHub Sponsors': { icon: HeartIcon, primary: true, subtitle: 'Einmalig oder monatlich' },
+    'Ko-fi': { icon: CoffeeIcon, subtitle: 'Kaffee spendieren' },
+    PayPal: { icon: CreditCardIcon, subtitle: 'Schnell und direkt' },
+  };
+
+const page = {
+  seo: {
+    opengraphDescription:
+      "Berliner Schnauze is' kostenlos und werbefrei. Wenn de dit Projekt unterstützen willst: Hier findste alle Spenden-Möglichkeiten — von PayPal bis Krypto.",
+  },
+  title: 'Spenden - Berliner Schnauze',
+};
+---
+
+<Layout content={page}>
+  <div class='c-donation-page'>
+    <p class='c-donation-page__eyebrow'>
+      <CrownIcon width='18' height='18' aria-hidden='true' />
+      Projekt unterstützen
+    </p>
+
+    <h1>Haste mal nen Euro?</h1>
+
+    <p class='c-donation-page__intro'>
+      Berliner Schnauze is' komplett kostenlos — keene Werbung, keen Schnickschnack, keene
+      versteckten Kosten. Wat trotzdem anfällt: Hosting, Domain und ne janze Menge Zeit. Wenn de
+      Bock hast, dit Projekt zu unterstützen, findste hier alle Wege. Allet freiwillig, versteht
+      sich.
+    </p>
+
+    <ul class='c-donation-page__reassurance u-list-reset'>
+      {
+        reassuranceChips.map((label) => (
+          <li class='c-donation-page__reassurance-chip'>
+            <CheckIcon width='14' height='14' aria-hidden='true' />
+            {label}
+          </li>
+        ))
+      }
+    </ul>
+
+    <section
+      class='c-section-card c-donation-page__section'
+      aria-labelledby='heading-plattformen'
+    >
+      <div class='c-section-card__header'>
+        <span class='c-section-card__num'></span>
+        <h2 class='c-section-card__title' id='heading-plattformen'>Plattformen</h2>
+      </div>
+      <div class='c-section-card__body'>
+        <p>Der klassische Weg — einmalig oder regelmäßig, janz wie de willst.</p>
+        <ul class='c-donation-page__platform-list u-list-reset'>
+          {
+            platforms.map((platform) => {
+              const meta = platformMeta[platform.name] ?? defaultPlatformMeta;
+              const Icon = meta.icon;
+
+              return (
+                <li
+                  class:list={[
+                    'c-donation-page__platform-item',
+                    { 'c-donation-page__platform-item--primary': meta.primary },
+                  ]}
+                >
+                  <a
+                    class='c-button c-donation-page__platform-link'
+                    href={platform.link}
+                    rel='noopener'
+                    target='_blank'
+                  >
+                    <span class='c-donation-page__platform-icon'>
+                      <Icon width='20' height='20' aria-hidden='true' />
+                    </span>
+                    <span class='c-donation-page__platform-text'>
+                      <span class='c-donation-page__platform-name'>{platform.name}</span>
+                      {meta.subtitle && (
+                        <span class='c-donation-page__platform-subtitle'>{meta.subtitle}</span>
+                      )}
+                    </span>
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class='c-section-card c-donation-page__section' aria-labelledby='heading-krypto'>
+      <div class='c-section-card__header'>
+        <span class='c-section-card__num'></span>
+        <h2 class='c-section-card__title' id='heading-krypto'>Krypto</h2>
+      </div>
+      <div class='c-section-card__body'>
+        <p>Für die Krypto-Freunde: Adresse kopieren, Coins rüberschicken, fertich.</p>
+        <DonationWallets client:visible wallets={wallets} />
+      </div>
+    </section>
+  </div>
+</Layout>

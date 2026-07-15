@@ -5,8 +5,11 @@ import FooterAppSection from '@components/FooterAppSection.vue';
 import NavList from '@components/NavList.vue';
 import { Picture } from 'astro:assets';
 import WakapiStats from '@components/WakapiStats.astro';
+import { fetchSocialMenu } from '@services/queries/getCompanySocialMedia';
+import { fetchFundingData } from '@services/queries/getCompanyFunding';
+import { fetchMenu } from '@services/queries/getMenu';
 
-import { funding, version } from '../../package.json';
+import { version } from '../../package.json';
 
 // const randomWord = () => {
 //   // TODO: Implement random word
@@ -14,73 +17,16 @@ import { funding, version } from '../../package.json';
 // };
 //
 //
-const socialMenu = [
-  {
-    link: 'https://github.com/felix-berlin/berliner-schnauze',
-    title: 'Github',
-  },
-  {
-    link: 'https://mastodon.social/@berliner_schnauze',
-    rel: 'me',
-    title: 'Mastodon',
-  },
-  {
-    link: 'https://www.facebook.com/Berliner.Schnauze030',
-    title: 'Facebook',
-  },
-];
+const socialMenu = await fetchSocialMenu();
+const { platforms } = await fetchFundingData();
 const fundingMenu = [
-  {
-    link: funding.find((f) => f.type === 'GitHub Sponsors')?.url ?? '',
-    title: 'GitHub Sponsors',
-  },
-  {
-    link: funding.find((f) => f.type === 'Ko-fi')?.url ?? '',
-    title: 'Ko-fi',
-  },
-  {
-    link: funding.find((f) => f.type === 'PayPal')?.url ?? '',
-    title: 'PayPal',
-  },
+  ...platforms.map((platform) => ({ link: platform.link, title: platform.name })),
+  { link: '/spenden', title: 'Alle Spenden-Möglichkeiten' },
 ];
 
-const navMenu1 = [
-  {
-    link: '/wort-vorschlagen',
-    title: 'Wort vorschlagen',
-  },
-  {
-    link: '/wort',
-    title: 'Wort Index',
-  },
-  {
-    link: '/settings/cache',
-    title: 'Offline-Cache',
-  },
-  {
-    link: '/changelog',
-    title: 'Was ist neu?',
-  },
-  {
-    link: '/technischer-changelog',
-    title: 'tech. Changelog',
-  },
-  {
-    link: 'https://github.com/felix-berlin/berliner-schnauze/issues/new',
-    title: 'tech. Fehler melden',
-  },
-];
+const navMenu1 = await fetchMenu('Footer Nav 1');
 
-const navMenu2 = [
-  {
-    link: '/impressum',
-    title: 'Impressum',
-  },
-  {
-    link: '/datenschutz',
-    title: 'Datenschutz',
-  },
-];
+const navMenu2 = await fetchMenu('Footer Nav 2');
 ---
 
 <footer class='c-footer'>
@@ -118,7 +64,7 @@ const navMenu2 = [
         data-track-content
         data-content-name='Footer Funding CTA'
         data-content-piece='Projekt unterstützen'
-        data-content-target={fundingMenu[0].link}
+        data-content-target={fundingMenu[0]?.link ?? '/spenden'}
       >
         <h2>Projekt unterstützen</h2>
         <NavList

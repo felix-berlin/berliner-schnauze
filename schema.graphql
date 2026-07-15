@@ -3404,7 +3404,7 @@ enum CommentsConnectionOrderbyEnum {
   USER_ID
 }
 
-type CompanyInformations implements AcfOptionsPage & Node & WithAcfCompanyInformations {
+type Company implements AcfOptionsPage & Node & WithAcfCompanyInformations {
   """Fields of the CompanyInformations ACF Field Group"""
   companyInformations: CompanyInformations
   """The globally unique ID for the object"""
@@ -3412,6 +3412,95 @@ type CompanyInformations implements AcfOptionsPage & Node & WithAcfCompanyInform
   menuTitle: String
   pageTitle: String
   parentId: String
+}
+
+"""
+The &quot;CompanyInformations&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
+"""
+type CompanyInformations implements AcfFieldGroup & AcfFieldGroupFields & CompanyInformations_Fields {
+  """
+  Field of the &quot;textarea&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  address: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  companyName: String
+  """
+  Field of the &quot;email&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  email: String
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  funding: [CompanyInformationsFunding]
+  """
+  Bitte geben Sie hier die Seite mit dem Impressum an.
+  Die Datenschutzerklärung definieren Sie über Einstellungen &gt; Privatsphäre.
+  """
+  imprint: AcfLink
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  legalForm: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  location: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  phone: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  proprietor: String
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  socialMedia: [CompanyInformationsSocialMedia]
+}
+
+"""
+The &quot;CompanyInformationsFunding&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
+"""
+type CompanyInformationsFunding implements AcfFieldGroup & AcfFieldGroupFields & CompanyInformationsFunding_Fields {
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  adresse: String
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  link: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  name: String
+}
+
+"""
+Interface representing fields of the ACF &quot;CompanyInformationsFunding&quot; Field Group
+"""
+interface CompanyInformationsFunding_Fields implements AcfFieldGroup & AcfFieldGroupFields {
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  adresse: String
+  """The name of the field group"""
+  fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  link: String
+  """
+  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformationsFunding&quot; Field Group
+  """
+  name: String
 }
 
 """
@@ -3470,12 +3559,12 @@ interface CompanyInformations_Fields implements AcfFieldGroup & AcfFieldGroupFie
   Field of the &quot;email&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
   """
   email: String
-  """
-  Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
-  """
-  fax: String
   """The name of the field group"""
   fieldGroupName: String @deprecated(reason: "Use __typename instead")
+  """
+  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;CompanyInformations&quot; Field Group
+  """
+  funding: [CompanyInformationsFunding]
   """
   Bitte geben Sie hier die Seite mit dem Impressum an.
   Die Datenschutzerklärung definieren Sie über Einstellungen &gt; Privatsphäre.
@@ -3513,12 +3602,6 @@ interface Connection {
   nodes: [Node!]!
   """Information about pagination in a connection."""
   pageInfo: PageInfo!
-}
-
-"""The connectors setting type"""
-type ConnectorsSettings {
-  """Der API-Schlüssel für den Konnektor Anthropic."""
-  connectorsAiAnthropicApiKey: String
 }
 
 """
@@ -8981,6 +9064,7 @@ type CoreNavigationSubmenuBlockAttributes {
   fontFamily: String
   fontSize: String
   id: Float
+  isParentSubmenu: Boolean!
   isTopLevelItem: Boolean
   kind: String
   label: String
@@ -9055,7 +9139,6 @@ type CorePageListBlockAttributes {
   fontFamily: String
   fontSize: String
   gradient: String
-  isNested: Boolean!
   lock: BlockAttributesObject
   metadata: BlockAttributesObject
   parentPageID: Int!
@@ -18278,7 +18361,7 @@ type RootMutation {
 }
 
 """The root entry point into the Graph"""
-type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompanyInformations & WithAcfOptionsPageThemeGeneralSettings {
+type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany {
   affliate: Affliate
   """Entry point to get all settings for the site"""
   allSettings: Settings
@@ -18477,9 +18560,7 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
     """Arguments for filtering the connection"""
     where: RootQueryToCommentConnectionWhereArgs
   ): RootQueryToCommentConnection
-  companyInformations: CompanyInformations
-  """Fields of the &#039;ConnectorsSettings&#039; settings group"""
-  connectorsSettings: ConnectorsSettings
+  company: Company
   """A node used to manage content"""
   contentNode(
     """
@@ -18940,7 +19021,6 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
     """The globally unique identifier of the theme."""
     id: ID!
   ): Theme
-  themeGeneralSettings: ThemeGeneralSettings
   """Connection between the RootQuery type and the Theme type"""
   themes(
     """
@@ -21259,8 +21339,6 @@ type SendPasswordResetEmailPayload {
 """All of the registered settings"""
 type Settings {
   """Settings of the the string Settings Group"""
-  connectorsSettingsConnectorsAiAnthropicApiKey: String
-  """Settings of the the string Settings Group"""
   discussionSettingsDefaultCommentStatus: String
   """Settings of the the string Settings Group"""
   discussionSettingsDefaultPingStatus: String
@@ -22259,14 +22337,6 @@ interface ThemeConnectionPageInfo implements PageInfo & WPPageInfo {
   total: Int
 }
 
-type ThemeGeneralSettings implements AcfOptionsPage & Node {
-  """The globally unique ID for the object"""
-  id: ID!
-  menuTitle: String
-  pageTitle: String
-  parentId: String
-}
-
 """
 An interface for content that can be accessed via a unique URI/URL path. Implemented by content types that have their own permalinks.
 """
@@ -22753,8 +22823,6 @@ input UpdateSettingsInput {
   This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions.
   """
   clientMutationId: String
-  """Der API-Schlüssel für den Konnektor Anthropic."""
-  connectorsSettingsConnectorsAiAnthropicApiKey: String
   """Erlaubt Personen, neue Beiträge zu kommentieren."""
   discussionSettingsDefaultCommentStatus: String
   """
@@ -22807,8 +22875,6 @@ type UpdateSettingsPayload {
   If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions.
   """
   clientMutationId: String
-  """Update the ConnectorsSettings setting."""
-  connectorsSettings: ConnectorsSettings
   """Update the DiscussionSettings setting."""
   discussionSettings: DiscussionSettings
   """Update the GeneralSettings setting."""
@@ -24104,14 +24170,9 @@ interface WithAcfOptionsPageAffliate {
   affliate: Affliate
 }
 
-"""Access point for the &quot;CompanyInformations&quot; ACF Options Page"""
-interface WithAcfOptionsPageCompanyInformations {
-  companyInformations: CompanyInformations
-}
-
-"""Access point for the &quot;ThemeGeneralSettings&quot; ACF Options Page"""
-interface WithAcfOptionsPageThemeGeneralSettings {
-  themeGeneralSettings: ThemeGeneralSettings
+"""Access point for the &quot;Company&quot; ACF Options Page"""
+interface WithAcfOptionsPageCompany {
+  company: Company
 }
 
 """
@@ -24142,9 +24203,7 @@ type WordOfTheDayPayload {
 The &quot;WordProperties&quot; Field Group. Added to the Schema by &quot;WPGraphQL for ACF&quot;.
 """
 type WordProperties implements AcfFieldGroup & AcfFieldGroupFields & WordProperties_Fields {
-  """
-  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
-  """
+  """Alternative Worte für das Haupt-Berlinerische Wort."""
   alternativeWords: [WordPropertiesAlternativeWords]
   """
   Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
@@ -24193,9 +24252,7 @@ type WordProperties implements AcfFieldGroup & AcfFieldGroupFields & WordPropert
   Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
   """
   learnMore: String
-  """
-  Field of the &quot;relationship&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
-  """
+  """Deprecated! Ähnliche Worte werden in Astro programatisch gefunden."""
   relatedWords(
     """
     Cursor used along with the "first" argument to reference where in the dataset to get data
@@ -24446,9 +24503,7 @@ interface WordPropertiesWikimediaFiles_Fields implements AcfFieldGroup & AcfFiel
 Interface representing fields of the ACF &quot;WordProperties&quot; Field Group
 """
 interface WordProperties_Fields implements AcfFieldGroup & AcfFieldGroupFields {
-  """
-  Field of the &quot;repeater&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
-  """
+  """Alternative Worte für das Haupt-Berlinerische Wort."""
   alternativeWords: [WordPropertiesAlternativeWords]
   """
   Field of the &quot;text&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
@@ -24497,9 +24552,7 @@ interface WordProperties_Fields implements AcfFieldGroup & AcfFieldGroupFields {
   Field of the &quot;url&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
   """
   learnMore: String
-  """
-  Field of the &quot;relationship&quot; Field Type added to the schema as part of the &quot;WordProperties&quot; Field Group
-  """
+  """Deprecated! Ähnliche Worte werden in Astro programatisch gefunden."""
   relatedWords(
     """
     Cursor used along with the "first" argument to reference where in the dataset to get data

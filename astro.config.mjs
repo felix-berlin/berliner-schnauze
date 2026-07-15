@@ -131,8 +131,8 @@ export default defineConfig({
         optional: true,
       }),
       WP_AUTH_REFRESH_TOKEN: envField.string({
-        context: "client",
-        access: "public",
+        context: "server",
+        access: "secret",
       }),
       SUGGEST_WORD_FORM_ID: envField.string({
         context: "client",

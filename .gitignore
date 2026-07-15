@@ -62,6 +62,5 @@ tests/unit/junit-report.xml
 .codex/skills/impeccable/
 
 # Graphify
-graphify-out/manifest.json
 graphify-out/cost.json
 graphify-out/cache/
