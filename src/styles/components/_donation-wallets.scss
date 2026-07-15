@@ -12,6 +12,8 @@
     background: color-mix(in srgb, var(--orange-600) 10%, white);
     border: 1px dashed var(--orange-200);
     border-radius: 4px;
+    container-type: inline-size;
+    container-name: donation-wallet-card;
 
     @include butler-mx.dark-mode-class {
       background: color-mix(in srgb, var(--new-blue-400) 80%, black);
@@ -51,10 +53,38 @@
   }
 
   &__address {
+    display: inline-block;
     min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
     font-family: ui-monospace, "SF Mono", "Cascadia Mono", monospace;
     font-size: 0.9rem;
     letter-spacing: 0;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    @container donation-wallet-card (inline-size >= 28rem) {
+      overflow: visible;
+      white-space: normal;
+      text-overflow: clip;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  &__card .c-button.c-donation-wallets__copy-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4375rem;
+    padding: 0.4375rem 0.8125rem;
+    margin-inline-start: auto;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+
+    &.is-copied {
+      --color-background: var(--success);
+      --color-border: var(--success);
+      --color: white;
+    }
   }
 }

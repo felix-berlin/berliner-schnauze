@@ -62,13 +62,12 @@ describe("DonationWallets.vue", () => {
     expect(cards[2]?.findAll(".c-donation-wallets__badge")).toHaveLength(1);
   });
 
-  it("displays a middle-truncated address but keeps the full address in the title", async () => {
+  it("displays the full address, visually clipped via CSS on narrow viewports", async () => {
     const DonationWallets = (await import("@components/DonationWallets.vue")).default;
     const wrapper = mount(DonationWallets, { props: { wallets: walletsFixture } });
 
     const address = wrapper.find(".c-donation-wallets__address");
-    expect(address.text()).toBe("0x4A21…1eeE");
-    expect(address.text()).not.toContain(EVM_ADDRESS);
+    expect(address.text()).toBe(EVM_ADDRESS);
     expect(address.attributes("title")).toBe(EVM_ADDRESS);
   });
 

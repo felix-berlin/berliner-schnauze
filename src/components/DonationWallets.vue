@@ -8,24 +8,26 @@
       </ul>
 
       <div class="c-donation-wallets__address-row">
-        <code class="c-donation-wallets__address" :title="wallet.address">
-          {{ truncateAddress(wallet.address) }}
-        </code>
+        <code class="c-donation-wallets__address" :title="wallet.address">{{
+          wallet.address
+        }}</code>
 
         <button
           v-if="clipBoardIsSupported"
           type="button"
-          class="c-button c-button--center-icon c-donation-wallets__copy-button"
+          class="c-button c-donation-wallets__copy-button"
+          :class="{ 'is-copied': copied && copiedAddress === wallet.address }"
           :aria-label="`Adresse für ${wallet.chains.join(', ')} kopieren`"
           @click="copyAddress(wallet)"
         >
           <CheckIcon
             v-if="copied && copiedAddress === wallet.address"
-            width="18"
-            height="18"
+            width="16"
+            height="16"
             aria-hidden="true"
           />
-          <CopyIcon v-else width="18" height="18" aria-hidden="true" />
+          <CopyIcon v-else width="16" height="16" aria-hidden="true" />
+          {{ copied && copiedAddress === wallet.address ? "Kopiert!" : "Kopieren" }}
         </button>
       </div>
     </li>
@@ -47,16 +49,6 @@ const { wallets } = defineProps<{ wallets: FundingWallet[] }>();
 
 const { copied, copy, isSupported: clipBoardIsSupported } = useClipboard();
 const copiedAddress = ref("");
-
-/**
- * Middle-ellipsis truncation for wallet addresses (display only)
- *
- * @param   {string}  address
- *
- * @return  {string}
- */
-const truncateAddress = (address: string): string =>
-  address.length <= 13 ? address : `${address.slice(0, 6)}…${address.slice(-4)}`;
 
 /**
  * Copy the full wallet address to the clipboard
