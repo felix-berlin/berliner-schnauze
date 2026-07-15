@@ -1720,8 +1720,8 @@
     "semantic_hash": ""
   },
   "src/services/queries/getCompanySocialMedia.ts": {
-    "mtime": 1784105447.340127,
-    "ast_hash": "89c9c3124f08f01b9de43a62869f52c8",
+    "mtime": 1784112500.8181903,
+    "ast_hash": "3bebe8764be3f2839a9e9ca5f72d5a04",
     "semantic_hash": ""
   },
   "src/tests/unit/stores/wordListOramaInit.test.ts": {
@@ -1730,8 +1730,8 @@
     "semantic_hash": ""
   },
   "src/services/queries/getMenu.ts": {
-    "mtime": 1784105447.3402977,
-    "ast_hash": "5b8285c1690a2ef4e156f95e592f28e6",
+    "mtime": 1784112500.8183126,
+    "ast_hash": "bab70cb474dd8b6b19f3d2e4d179bba2",
     "semantic_hash": ""
   },
   "src/components/DonationWallets.vue": {
@@ -1745,8 +1745,8 @@
     "semantic_hash": ""
   },
   "src/services/queries/getCompanyFunding.ts": {
-    "mtime": 1784105447.3391876,
-    "ast_hash": "df58eb3281f63f8e7f8fe9bdaea3570f",
+    "mtime": 1784112500.8181903,
+    "ast_hash": "6fdbb3f6150f2caddf547dd38c312734",
     "semantic_hash": ""
   },
   "src/tests/unit/components/DonationWallets.test.ts": {
@@ -1755,8 +1755,8 @@
     "semantic_hash": ""
   },
   "src/tests/unit/services/getCompanyFunding.test.ts": {
-    "mtime": 1784105447.3414948,
-    "ast_hash": "69ccdc13523645f53984efcb0fee51af",
+    "mtime": 1784112500.818391,
+    "ast_hash": "6f66196e3747d25c70167bf0523d4dad",
     "semantic_hash": ""
   },
   "src/assets/images/logo/berliner-schnauze-logo.jpg": {
@@ -1772,6 +1772,16 @@
   "src/assets/images/logo/berliner-schnauze-logo.svg": {
     "mtime": 1784105447.3373766,
     "ast_hash": "a41a50fe97d64872a7775bcac85586c2",
+    "semantic_hash": ""
+  },
+  "src/tests/unit/services/getCompanySocialMedia.test.ts": {
+    "mtime": 1784112341.6362703,
+    "ast_hash": "72d33f1acb40eda246e974c6decd5d0f",
+    "semantic_hash": ""
+  },
+  "src/tests/unit/services/getMenu.test.ts": {
+    "mtime": 1784112356.0528288,
+    "ast_hash": "3f2dae1506542657090904e9c08f522b",
     "semantic_hash": ""
   }
 }

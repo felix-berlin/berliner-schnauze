@@ -4,14 +4,124 @@
   "graph": {},
   "nodes": [
     {
+      "label": "DonationWallets.vue",
+      "file_type": "code",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_donationwallets",
+      "community": 59,
+      "norm_label": "donationwallets.vue"
+    },
+    {
+      "label": "CopyIcon",
+      "file_type": "code",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "src_components_donationwallets_copyicon",
+      "community": 59,
+      "norm_label": "copyicon"
+    },
+    {
+      "label": "CheckIcon",
+      "file_type": "code",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "src_components_donationwallets_checkicon",
+      "community": 59,
+      "norm_label": "checkicon"
+    },
+    {
+      "label": "{ wallets }",
+      "file_type": "code",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "src_components_donationwallets_wallets",
+      "community": 59,
+      "norm_label": "{ wallets }"
+    },
+    {
+      "label": "{ copied, copy, isSupported: clipBoardIsSupported }",
+      "file_type": "code",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "src_components_donationwallets_copied_copy_issupported_clipboardissupported",
+      "community": 59,
+      "norm_label": "{ copied, copy, issupported: clipboardissupported }"
+    },
+    {
+      "label": "copiedAddress",
+      "file_type": "code",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "src_components_donationwallets_copiedaddress",
+      "community": 59,
+      "norm_label": "copiedaddress"
+    },
+    {
+      "label": "copyAddress()",
+      "file_type": "code",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "src_components_donationwallets_copyaddress",
+      "community": 59,
+      "norm_label": "copyaddress()"
+    },
+    {
+      "label": "virtual:icons/lucide/copy",
+      "file_type": "code",
+      "source_file": "virtual:icons/lucide/copy",
+      "confidence": "EXTRACTED",
+      "_origin": "ast",
+      "id": "copy",
+      "community": 59,
+      "norm_label": "virtual:icons/lucide/copy"
+    },
+    {
+      "label": "virtual:icons/lucide/check",
+      "file_type": "code",
+      "source_file": "virtual:icons/lucide/check",
+      "confidence": "EXTRACTED",
+      "_origin": "ast",
+      "id": "check",
+      "community": 59,
+      "norm_label": "virtual:icons/lucide/check"
+    },
+    {
+      "label": "DonationWallets.test.ts",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/DonationWallets.test.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_tests_unit_components_donationwallets_test",
+      "community": 59,
+      "norm_label": "donationwallets.test.ts"
+    },
+    {
+      "label": "walletsFixture",
+      "file_type": "code",
+      "source_file": "src/tests/unit/components/DonationWallets.test.ts",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "src_tests_unit_components_donationwallets_test_walletsfixture",
+      "community": 59,
+      "norm_label": "walletsfixture"
+    },
+    {
       "label": "spenden.astro",
       "file_type": "code",
       "source_file": "src/pages/spenden.astro",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "src_pages_spenden",
       "community": 59,
-      "norm_label": "spenden.astro"
+      "norm_label": "spenden.astro",
+      "id": "src_pages_spenden"
     },
     {
       "label": "@styles/components/_button.scss",
@@ -19,9 +129,9 @@
       "source_file": "src/styles/components/_button.scss",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_button_scss",
       "community": 59,
-      "norm_label": "@styles/components/_button.scss"
+      "norm_label": "@styles/components/_button.scss",
+      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_button_scss"
     },
     {
       "label": "@styles/components/_donation-page.scss",
@@ -29,9 +139,9 @@
       "source_file": "src/styles/components/_donation-page.scss",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_donation_page_scss",
       "community": 59,
-      "norm_label": "@styles/components/_donation-page.scss"
+      "norm_label": "@styles/components/_donation-page.scss",
+      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_donation_page_scss"
     },
     {
       "label": "@styles/components/_section-card.scss",
@@ -39,9 +149,9 @@
       "source_file": "src/styles/components/_section-card.scss",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_section_card_scss",
       "community": 76,
-      "norm_label": "@styles/components/_section-card.scss"
+      "norm_label": "@styles/components/_section-card.scss",
+      "id": "home_felix_workspace_berliner_schnauze_src_styles_components_section_card_scss"
     },
     {
       "label": "~icons/lucide/coffee",
@@ -49,9 +159,9 @@
       "source_file": "~icons/lucide/coffee",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "id": "coffee",
       "community": 59,
-      "norm_label": "~icons/lucide/coffee"
+      "norm_label": "~icons/lucide/coffee",
+      "id": "coffee"
     },
     {
       "label": "~icons/lucide/credit-card",
@@ -59,9 +169,9 @@
       "source_file": "~icons/lucide/credit-card",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "id": "credit_card",
       "community": 59,
-      "norm_label": "~icons/lucide/credit-card"
+      "norm_label": "~icons/lucide/credit-card",
+      "id": "credit_card"
     },
     {
       "label": "~icons/lucide/crown",
@@ -69,19 +179,9 @@
       "source_file": "~icons/lucide/crown",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "id": "crown",
       "community": 59,
-      "norm_label": "~icons/lucide/crown"
-    },
-    {
-      "label": "@components/DonationWallets.vue",
-      "file_type": "code",
-      "source_file": "src/components/DonationWallets.vue",
-      "confidence": "EXTRACTED",
-      "_origin": "ast",
-      "id": "home_felix_workspace_berliner_schnauze_src_components_donationwallets_vue",
-      "community": 59,
-      "norm_label": "@components/donationwallets.vue"
+      "norm_label": "~icons/lucide/crown",
+      "id": "crown"
     },
     {
       "label": "~icons/lucide/heart",
@@ -89,9 +189,9 @@
       "source_file": "~icons/lucide/heart",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "id": "heart",
       "community": 59,
-      "norm_label": "~icons/lucide/heart"
+      "norm_label": "~icons/lucide/heart",
+      "id": "heart"
     },
     {
       "label": "@layouts/Layout.astro",
@@ -99,19 +199,9 @@
       "source_file": "src/layouts/Layout.astro",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "id": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro",
       "community": 59,
-      "norm_label": "@layouts/layout.astro"
-    },
-    {
-      "label": "~icons/lucide/check",
-      "file_type": "code",
-      "source_file": "~icons/lucide/check",
-      "confidence": "EXTRACTED",
-      "_origin": "ast",
-      "id": "check",
-      "community": 59,
-      "norm_label": "~icons/lucide/check"
+      "norm_label": "@layouts/layout.astro",
+      "id": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
     },
     {
       "label": "@services/queries/getCompanyFunding",
@@ -119,9 +209,9 @@
       "source_file": "src/services/queries/getCompanyFunding.ts",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "id": "home_felix_workspace_berliner_schnauze_src_services_queries_getcompanyfunding_ts",
       "community": 59,
-      "norm_label": "@services/queries/getcompanyfunding"
+      "norm_label": "@services/queries/getcompanyfunding",
+      "id": "home_felix_workspace_berliner_schnauze_src_services_queries_getcompanyfunding_ts"
     },
     {
       "label": "Footer.astro",
@@ -129,7 +219,7 @@
       "source_file": "src/components/Footer.astro",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 59,
+      "community": 50,
       "norm_label": "footer.astro",
       "id": "src_components_footer"
     },
@@ -139,7 +229,7 @@
       "source_file": "src/components/Footer.astro",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 59,
+      "community": 50,
       "norm_label": "fundingmenu",
       "id": "src_components_footer_fundingmenu"
     },
@@ -149,7 +239,7 @@
       "source_file": "src/assets/images/bear-walking.png",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 59,
+      "community": 50,
       "norm_label": "@assets/images/bear-walking.png",
       "id": "home_felix_workspace_berliner_schnauze_src_assets_images_bear_walking_png"
     },
@@ -159,7 +249,7 @@
       "source_file": "src/components/CarbonBadge.vue",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 59,
+      "community": 50,
       "norm_label": "@components/carbonbadge.vue",
       "id": "home_felix_workspace_berliner_schnauze_src_components_carbonbadge_vue"
     },
@@ -169,7 +259,7 @@
       "source_file": "src/components/FooterAppSection.vue",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 59,
+      "community": 50,
       "norm_label": "@components/footerappsection.vue",
       "id": "home_felix_workspace_berliner_schnauze_src_components_footerappsection_vue"
     },
@@ -179,7 +269,7 @@
       "source_file": "src/components/NavList.vue",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 59,
+      "community": 50,
       "norm_label": "@components/navlist.vue",
       "id": "home_felix_workspace_berliner_schnauze_src_components_navlist_vue"
     },
@@ -189,7 +279,7 @@
       "source_file": "astro:assets",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 80,
+      "community": 50,
       "norm_label": "astro:assets",
       "id": "astro_assets"
     },
@@ -199,7 +289,7 @@
       "source_file": "src/components/WakapiStats.astro",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 59,
+      "community": 50,
       "norm_label": "@components/wakapistats.astro",
       "id": "home_felix_workspace_berliner_schnauze_src_components_wakapistats_astro"
     },
@@ -209,7 +299,7 @@
       "source_file": "src/services/queries/getCompanySocialMedia.ts",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 59,
+      "community": 50,
       "norm_label": "@services/queries/getcompanysocialmedia",
       "id": "home_felix_workspace_berliner_schnauze_src_services_queries_getcompanysocialmedia_ts"
     },
@@ -219,7 +309,7 @@
       "source_file": "src/services/queries/getMenu.ts",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 59,
+      "community": 50,
       "norm_label": "@services/queries/getmenu",
       "id": "home_felix_workspace_berliner_schnauze_src_services_queries_getmenu_ts"
     },
@@ -574,7 +664,7 @@
       "source_file": "virtual:icons/lucide/sun-moon",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 85,
+      "community": 24,
       "norm_label": "virtual:icons/lucide/sun-moon",
       "id": "sun_moon"
     },
@@ -584,7 +674,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "audioplayer.vue",
       "id": "src_components_audioplayer"
     },
@@ -594,7 +684,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "audioplayerlistprops",
       "id": "src_components_audioplayer_audioplayerlistprops"
     },
@@ -604,7 +694,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "{ audio }",
       "id": "src_components_audioplayer_audio"
     },
@@ -614,7 +704,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "isplaying",
       "id": "src_components_audioplayer_isplaying"
     },
@@ -624,7 +714,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "audiobutton",
       "id": "src_components_audioplayer_audiobutton"
     },
@@ -634,7 +724,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "progress",
       "id": "src_components_audioplayer_progress"
     },
@@ -644,7 +734,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "handleended()",
       "id": "src_components_audioplayer_handleended"
     },
@@ -654,7 +744,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "fillstyle",
       "id": "src_components_audioplayer_fillstyle"
     },
@@ -664,7 +754,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "updateprogress()",
       "id": "src_components_audioplayer_updateprogress"
     },
@@ -674,7 +764,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "playaudio()",
       "id": "src_components_audioplayer_playaudio"
     },
@@ -684,7 +774,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "stopaudio()",
       "id": "src_components_audioplayer_stopaudio"
     },
@@ -694,7 +784,7 @@
       "source_file": "src/components/AudioPlayer.vue",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "toggleplaystop()",
       "id": "src_components_audioplayer_toggleplaystop"
     },
@@ -810,7 +900,7 @@
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 207,
+      "community": 62,
       "norm_label": "buttonwithstates.vue",
       "id": "src_components_buttonwithstates"
     },
@@ -820,7 +910,7 @@
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 207,
+      "community": 62,
       "norm_label": "check",
       "id": "src_components_buttonwithstates_check"
     },
@@ -830,7 +920,7 @@
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 207,
+      "community": 62,
       "norm_label": "x",
       "id": "src_components_buttonwithstates_x"
     },
@@ -840,7 +930,7 @@
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 207,
+      "community": 62,
       "norm_label": "buttonstate",
       "id": "src_components_buttonwithstates_buttonstate"
     },
@@ -850,7 +940,7 @@
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 207,
+      "community": 62,
       "norm_label": "{ defaulticonsize = 18, state = \"normal\" }",
       "id": "src_components_buttonwithstates_defaulticonsize_18_state_normal"
     },
@@ -860,7 +950,7 @@
       "source_file": "src/components/ButtonWithStates.vue",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 207,
+      "community": 62,
       "norm_label": "computedstate",
       "id": "src_components_buttonwithstates_computedstate"
     },
@@ -1026,87 +1116,6 @@
       "community": 228,
       "norm_label": "cookieconsent.vue",
       "id": "src_components_cookieconsent"
-    },
-    {
-      "label": "@components/DonationWallets.vue",
-      "file_type": "code",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L1",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "community": 79,
-      "norm_label": "@components/donationwallets.vue",
-      "id": "src_components_donationwallets"
-    },
-    {
-      "label": "CopyIcon",
-      "file_type": "code",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L43",
-      "_origin": "ast",
-      "community": 79,
-      "norm_label": "copyicon",
-      "id": "src_components_donationwallets_copyicon"
-    },
-    {
-      "label": "CheckIcon",
-      "file_type": "code",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L44",
-      "_origin": "ast",
-      "community": 79,
-      "norm_label": "checkicon",
-      "id": "src_components_donationwallets_checkicon"
-    },
-    {
-      "label": "{ wallets }",
-      "file_type": "code",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L46",
-      "_origin": "ast",
-      "community": 79,
-      "norm_label": "{ wallets }",
-      "id": "src_components_donationwallets_wallets"
-    },
-    {
-      "label": "{ copied, copy, isSupported: clipBoardIsSupported }",
-      "file_type": "code",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L48",
-      "_origin": "ast",
-      "community": 79,
-      "norm_label": "{ copied, copy, issupported: clipboardissupported }",
-      "id": "src_components_donationwallets_copied_copy_issupported_clipboardissupported"
-    },
-    {
-      "label": "copiedAddress",
-      "file_type": "code",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L49",
-      "_origin": "ast",
-      "community": 79,
-      "norm_label": "copiedaddress",
-      "id": "src_components_donationwallets_copiedaddress"
-    },
-    {
-      "label": "truncateAddress()",
-      "file_type": "code",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L58",
-      "_origin": "ast",
-      "community": 79,
-      "norm_label": "truncateaddress()",
-      "id": "src_components_donationwallets_truncateaddress"
-    },
-    {
-      "label": "copyAddress()",
-      "file_type": "code",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L68",
-      "_origin": "ast",
-      "community": 79,
-      "norm_label": "copyaddress()",
-      "id": "src_components_donationwallets_copyaddress"
     },
     {
       "label": "virtual:icons/lucide/copy",
@@ -1387,7 +1396,7 @@
       "confidence": "EXTRACTED",
       "_origin": "ast",
       "source_location": "L1",
-      "community": 121,
+      "community": 24,
       "norm_label": "navlist.vue",
       "id": "src_components_navlist"
     },
@@ -1431,7 +1440,7 @@
       "confidence": "EXTRACTED",
       "_origin": "ast",
       "source_location": "L1",
-      "community": 21,
+      "community": 47,
       "norm_label": "getmenu.ts",
       "id": "src_services_queries_getmenu"
     },
@@ -1493,7 +1502,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "confidence": "EXTRACTED",
-      "community": 10,
+      "community": 72,
       "norm_label": "@components/imagegallery.astro",
       "id": "src_components_imagegallery_astro_src_components_imagegallery"
     },
@@ -1503,7 +1512,7 @@
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L120",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "constructor()",
       "id": "src_components_imagegallery_constructor"
     },
@@ -1513,7 +1522,7 @@
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L124",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "connectedcallback()",
       "id": "src_components_imagegallery_connectedcallback"
     },
@@ -1523,7 +1532,7 @@
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L208",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "disconnectedcallback()",
       "id": "src_components_imagegallery_disconnectedcallback"
     },
@@ -1533,7 +1542,7 @@
       "source_file": "src/components/ImageGallery.astro",
       "source_location": "L221",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "createpictureelement()",
       "id": "src_components_imagegallery_createpictureelement"
     },
@@ -1543,7 +1552,7 @@
       "source_file": "photoswipe",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "photoswipe",
       "id": "photoswipe"
     },
@@ -1563,7 +1572,7 @@
       "source_file": "photoswipe/style.css",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "photoswipe/style.css",
       "id": "style_css"
     },
@@ -1584,7 +1593,7 @@
       "source_file": "photoswipe/lightbox",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "photoswipe/lightbox",
       "id": "lightbox"
     },
@@ -1595,7 +1604,7 @@
       "confidence": "EXTRACTED",
       "_origin": "ast",
       "source_location": "L1",
-      "community": 366,
+      "community": 94,
       "norm_label": "analytics.ts",
       "id": "src_utils_analytics"
     },
@@ -1605,7 +1614,7 @@
       "source_file": "src/components/ImageGallery.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "imagegallery.vue",
       "id": "src_components_imagegallery_vue_src_components_imagegallery"
     },
@@ -1615,7 +1624,7 @@
       "source_file": "src/components/ImageGallery.vue",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "imagegalleryprops",
       "id": "src_components_imagegallery_imagegalleryprops"
     },
@@ -1625,7 +1634,7 @@
       "source_file": "src/components/ImageGallery.vue",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "{ id = crypto.randomuuid(), images }",
       "id": "src_components_imagegallery_id_crypto_randomuuid_images"
     },
@@ -1635,7 +1644,7 @@
       "source_file": "src/components/ImageGallery.vue",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 10,
+      "community": 72,
       "norm_label": "lightbox",
       "id": "src_components_imagegallery_lightbox"
     },
@@ -1706,7 +1715,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "confidence": "EXTRACTED",
-      "community": 85,
+      "community": 24,
       "norm_label": "@components/mainmenubutton.vue",
       "id": "src_components_mainmenubutton"
     },
@@ -1818,7 +1827,7 @@
       "source_file": "src/components/NavList.vue",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 121,
+      "community": 24,
       "norm_label": "itemobject",
       "id": "src_components_navlist_itemobject"
     },
@@ -1828,7 +1837,7 @@
       "source_file": "src/components/NavList.vue",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 121,
+      "community": 24,
       "norm_label": "navlistprops",
       "id": "src_components_navlist_navlistprops"
     },
@@ -1838,7 +1847,7 @@
       "source_file": "src/components/NavList.vue",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 121,
+      "community": 24,
       "norm_label": "{ items, arialabel }",
       "id": "src_components_navlist_items_arialabel"
     },
@@ -1848,7 +1857,7 @@
       "source_file": "src/components/NavList.vue",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 121,
+      "community": 24,
       "norm_label": "isvuecomponent()",
       "id": "src_components_navlist_isvuecomponent"
     },
@@ -1858,7 +1867,7 @@
       "source_file": "src/components/NavList.vue",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 121,
+      "community": 24,
       "norm_label": "isexternallink()",
       "id": "src_components_navlist_isexternallink"
     },
@@ -2511,7 +2520,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "confidence": "EXTRACTED",
-      "community": 50,
+      "community": 366,
       "norm_label": "@components/relatedwords.vue",
       "id": "src_components_relatedwords"
     },
@@ -2521,7 +2530,7 @@
       "source_file": "src/components/RelatedWords.vue",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 50,
+      "community": 76,
       "norm_label": "relatedwordsprops",
       "id": "src_components_relatedwords_relatedwordsprops"
     },
@@ -2531,7 +2540,7 @@
       "source_file": "src/components/RelatedWords.vue",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 50,
+      "community": 366,
       "norm_label": "{ numberofwords = 7, words, currentword = \"\" }",
       "id": "src_components_relatedwords_numberofwords_7_words_currentword"
     },
@@ -2541,7 +2550,7 @@
       "source_file": "src/components/RelatedWords.vue",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 50,
+      "community": 366,
       "norm_label": "root",
       "id": "src_components_relatedwords_root"
     },
@@ -2551,7 +2560,7 @@
       "source_file": "src/components/RelatedWords.vue",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 50,
+      "community": 366,
       "norm_label": "xrandomwords()",
       "id": "src_components_relatedwords_xrandomwords"
     },
@@ -2924,7 +2933,7 @@
       "source_file": "src/components/SuggestWordForm.vue",
       "source_location": "L208",
       "_origin": "ast",
-      "community": 4,
+      "community": 43,
       "norm_label": "sendmail()",
       "id": "src_components_suggestwordform_sendmail"
     },
@@ -3115,7 +3124,7 @@
       "source_file": "src/components/TurnStile.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "turnstile.vue",
       "id": "src_components_turnstile"
     },
@@ -3125,7 +3134,7 @@
       "source_file": "src/components/TurnStile.vue",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "turnstileprops",
       "id": "src_components_turnstile_turnstileprops"
     },
@@ -3135,7 +3144,7 @@
       "source_file": "src/components/TurnStile.vue",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "{ sitekey, wrapperid = \"turnstilewrapper\" }",
       "id": "src_components_turnstile_sitekey_wrapperid_turnstilewrapper"
     },
@@ -3145,7 +3154,7 @@
       "source_file": "src/components/TurnStile.vue",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "isdarkmode",
       "id": "src_components_turnstile_isdarkmode"
     },
@@ -3155,7 +3164,7 @@
       "source_file": "src/components/TurnStile.vue",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "emit",
       "id": "src_components_turnstile_emit"
     },
@@ -3165,7 +3174,7 @@
       "source_file": "src/components/TurnStile.vue",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "createturnstilescripttag()",
       "id": "src_components_turnstile_createturnstilescripttag"
     },
@@ -3175,7 +3184,7 @@
       "source_file": "src/components/TurnStile.vue",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "renderturnstile()",
       "id": "src_components_turnstile_renderturnstile"
     },
@@ -3185,7 +3194,7 @@
       "source_file": "src/components/TurnStile.vue",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "checkverification()",
       "id": "src_components_turnstile_checkverification"
     },
@@ -3396,7 +3405,7 @@
       "source_file": "src/components/WordList.vue",
       "source_location": "L105",
       "_origin": "ast",
-      "community": 76,
+      "community": 109,
       "norm_label": "gotoword()",
       "id": "src_components_wordlist_gotoword"
     },
@@ -5000,7 +5009,7 @@
       "source_file": "src/components/games/BonResult.vue",
       "source_location": "L105",
       "_origin": "ast",
-      "community": 76,
+      "community": 43,
       "norm_label": "share()",
       "id": "src_components_games_bonresult_share"
     },
@@ -5122,7 +5131,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "confidence": "EXTRACTED",
-      "community": 85,
+      "community": 24,
       "norm_label": "@components/header/mainheader.astro",
       "id": "src_components_header_mainheader_astro_src_components_header_mainheader"
     },
@@ -5132,7 +5141,7 @@
       "source_file": "src/components/header/MainHeader.astro",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 85,
+      "community": 24,
       "norm_label": "isindex",
       "id": "src_components_header_mainheader_isindex"
     },
@@ -5142,7 +5151,7 @@
       "source_file": "src/styles/components/_menu-nav.scss",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 85,
+      "community": 24,
       "norm_label": "@styles/components/_menu-nav.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_menu_nav_scss"
     },
@@ -5153,7 +5162,7 @@
       "confidence": "EXTRACTED",
       "_origin": "ast",
       "source_location": "L1",
-      "community": 85,
+      "community": 24,
       "norm_label": "mainmenu.vue",
       "id": "src_components_header_mainmenu"
     },
@@ -5164,7 +5173,7 @@
       "confidence": "EXTRACTED",
       "_origin": "ast",
       "source_location": "L1",
-      "community": 293,
+      "community": 6,
       "norm_label": "searchmodaltrigger.vue",
       "id": "src_components_modals_search_searchmodaltrigger"
     },
@@ -5204,7 +5213,7 @@
       "source_file": "src/components/header/MainMenu.vue",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 85,
+      "community": 24,
       "norm_label": "root",
       "id": "src_components_header_mainmenu_root"
     },
@@ -5214,7 +5223,7 @@
       "source_file": "src/components/header/MainMenu.vue",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 85,
+      "community": 24,
       "norm_label": "itemobject",
       "id": "src_components_header_mainmenu_itemobject"
     },
@@ -5224,7 +5233,7 @@
       "source_file": "src/components/header/MainMenu.vue",
       "source_location": "L51",
       "_origin": "ast",
-      "community": 85,
+      "community": 24,
       "norm_label": "menuitems",
       "id": "src_components_header_mainmenu_menuitems"
     },
@@ -5285,7 +5294,7 @@
       "source_file": "src/components/modals/search/SearchModalTrigger.vue",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 293,
+      "community": 6,
       "norm_label": "opensearchmodal()",
       "id": "src_components_modals_search_searchmodaltrigger_opensearchmodal"
     },
@@ -5295,7 +5304,7 @@
       "source_file": "src/components/modals/search/SearchModalTrigger.vue",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 293,
+      "community": 6,
       "norm_label": "opensearchviakeyboard()",
       "id": "src_components_modals_search_searchmodaltrigger_opensearchviakeyboard"
     },
@@ -5305,7 +5314,7 @@
       "source_file": "src/components/modals/search/SearchModalTrigger.vue",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 293,
+      "community": 6,
       "norm_label": "keys",
       "id": "src_components_modals_search_searchmodaltrigger_keys"
     },
@@ -5870,7 +5879,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "confidence": "EXTRACTED",
-      "community": 80,
+      "community": 50,
       "norm_label": "@components/word/bookrecommendations.astro",
       "id": "src_components_word_bookrecommendations"
     },
@@ -5891,7 +5900,7 @@
       "source_file": "src/styles/components/_book-recommendations.scss",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 80,
+      "community": 50,
       "norm_label": "@styles/components/_book-recommendations.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_book_recommendations_scss"
     },
@@ -5901,7 +5910,7 @@
       "source_file": "~icons/lucide/book-open",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 80,
+      "community": 50,
       "norm_label": "~icons/lucide/book-open",
       "id": "book_open"
     },
@@ -6504,7 +6513,7 @@
       "source_file": "src/components/word/WordOptionDropdown.vue",
       "source_location": "L91",
       "_origin": "ast",
-      "community": 76,
+      "community": 43,
       "norm_label": "shareword()",
       "id": "src_components_word_wordoptiondropdown_shareword"
     },
@@ -6577,7 +6586,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "confidence": "EXTRACTED",
-      "community": 13,
+      "community": 76,
       "norm_label": "@components/word/wordsectionetymologie.astro",
       "id": "src_components_word_wordsectionetymologie"
     },
@@ -6587,7 +6596,7 @@
       "source_file": "src/components/word/WordSectionEtymologie.astro",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 13,
+      "community": 76,
       "norm_label": "alternativewords",
       "id": "src_components_word_wordsectionetymologie_alternativewords"
     },
@@ -6597,7 +6606,7 @@
       "source_file": "src/components/word/WordSectionEtymologie.astro",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 13,
+      "community": 76,
       "norm_label": "sources",
       "id": "src_components_word_wordsectionetymologie_sources"
     },
@@ -6607,7 +6616,7 @@
       "source_file": "src/styles/components/_word-section-etymologie.scss",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 13,
+      "community": 76,
       "norm_label": "@styles/components/_word-section-etymologie.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_word_section_etymologie_scss"
     },
@@ -6715,7 +6724,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "confidence": "EXTRACTED",
-      "community": 10,
+      "community": 13,
       "norm_label": "@components/word/wordsidebar.astro",
       "id": "src_components_word_wordsidebar"
     },
@@ -6725,7 +6734,7 @@
       "source_file": "src/styles/components/_word-sidebar.scss",
       "confidence": "EXTRACTED",
       "_origin": "ast",
-      "community": 10,
+      "community": 13,
       "norm_label": "@styles/components/_word-sidebar.scss",
       "id": "home_felix_workspace_berliner_schnauze_src_styles_components_word_sidebar_scss"
     },
@@ -7005,7 +7014,7 @@
       "source_file": "src/composable/useSearchQuerySync.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 476,
+      "community": 16,
       "norm_label": "usesearchquerysync.ts",
       "id": "src_composable_usesearchquerysync"
     },
@@ -7015,7 +7024,7 @@
       "source_file": "src/composable/useSearchQuerySync.ts",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 476,
+      "community": 16,
       "norm_label": "usesearchquerysync()",
       "id": "src_composable_usesearchquerysync_usesearchquerysync"
     },
@@ -7466,7 +7475,7 @@
       "source_file": "src/gql/graphql.ts",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "mediaitemfragment",
       "id": "src_gql_graphql_mediaitemfragment"
     },
@@ -7506,7 +7515,7 @@
       "source_file": "src/gql/graphql.ts",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 18,
+      "community": 10,
       "norm_label": "wordpropertieswikimediafilesfragment",
       "id": "src_gql_graphql_wordpropertieswikimediafilesfragment"
     },
@@ -7526,7 +7535,7 @@
       "source_file": "src/gql/graphql.ts",
       "source_location": "L103",
       "_origin": "ast",
-      "community": 745,
+      "community": 119,
       "norm_label": "berlinerwordfragment",
       "id": "src_gql_graphql_berlinerwordfragment"
     },
@@ -7666,7 +7675,7 @@
       "source_file": "src/gql/graphql.ts",
       "source_location": "L147",
       "_origin": "ast",
-      "community": 47,
+      "community": 21,
       "norm_label": "getallberlinerischthemenquery",
       "id": "src_gql_graphql_getallberlinerischthemenquery"
     },
@@ -7846,7 +7855,7 @@
       "source_file": "src/gql/graphql.ts",
       "source_location": "L187",
       "_origin": "ast",
-      "community": 21,
+      "community": 47,
       "norm_label": "menubynamedocument",
       "id": "src_gql_graphql_menubynamedocument"
     },
@@ -8579,7 +8588,7 @@
       "source_file": "src/pages/wort/[...wordSlug].astro",
       "source_location": "L154",
       "_origin": "ast",
-      "community": 13,
+      "community": 1,
       "norm_label": "schemajson()",
       "id": "src_pages_wort_wordslug_schemajson"
     },
@@ -8999,7 +9008,7 @@
       "source_file": "src/services/queries/getMenu.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 21,
+      "community": 47,
       "norm_label": "menuitem",
       "id": "src_services_queries_getmenu_menuitem"
     },
@@ -9009,7 +9018,7 @@
       "source_file": "src/services/queries/getMenu.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 21,
+      "community": 47,
       "norm_label": "fetchmenu()",
       "id": "src_services_queries_getmenu_fetchmenu"
     },
@@ -9019,7 +9028,7 @@
       "source_file": "src/services/queries/getMenu.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 21,
+      "community": 47,
       "norm_label": "menubyname",
       "id": "src_services_queries_getmenu_menubyname"
     },
@@ -9079,7 +9088,7 @@
       "source_file": "src/services/queries/getThemen.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 47,
+      "community": 21,
       "norm_label": "getthemen.ts",
       "id": "src_services_queries_getthemen"
     },
@@ -9089,7 +9098,7 @@
       "source_file": "src/services/queries/getThemen.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 47,
+      "community": 21,
       "norm_label": "themanodes",
       "id": "src_services_queries_getthemen_themanodes"
     },
@@ -9099,7 +9108,7 @@
       "source_file": "src/services/queries/getThemen.ts",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 47,
+      "community": 21,
       "norm_label": "getallberlinerischthemen",
       "id": "src_services_queries_getthemen_getallberlinerischthemen"
     },
@@ -9189,7 +9198,7 @@
       "source_file": "src/services/wikimediaApi.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "wikimediaapi.ts",
       "id": "src_services_wikimediaapi"
     },
@@ -9199,7 +9208,7 @@
       "source_file": "src/services/wikimediaApi.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "fetchwikimediaapi()",
       "id": "src_services_wikimediaapi_fetchwikimediaapi"
     },
@@ -9339,7 +9348,7 @@
       "source_file": "src/stores/index.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 132,
+      "community": 24,
       "norm_label": "index.ts",
       "id": "src_stores_index"
     },
@@ -9839,7 +9848,7 @@
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 43,
+      "community": 37,
       "norm_label": "createtoast()",
       "id": "src_stores_toastnotify_createtoast"
     },
@@ -9859,7 +9868,7 @@
       "source_file": "src/stores/toastNotify.ts",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 37,
+      "community": 46,
       "norm_label": "removetoastbyid()",
       "id": "src_stores_toastnotify_removetoastbyid"
     },
@@ -9919,7 +9928,7 @@
       "source_file": "src/stores/wordList.ts",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 476,
+      "community": 16,
       "norm_label": "$searchquery",
       "id": "src_stores_wordlist_searchquery"
     },
@@ -10479,7 +10488,7 @@
       "source_file": "src/tests/unit/components/AudioPlayer.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 10,
+      "community": 40,
       "norm_label": "audioplayer.test.ts",
       "id": "src_tests_unit_components_audioplayer_test"
     },
@@ -10584,26 +10593,6 @@
       "id": "src_tests_unit_components_cookieconsent_test_runmock_showpreferencesmock"
     },
     {
-      "label": "DonationWallets.test.ts",
-      "file_type": "code",
-      "source_file": "src/tests/unit/components/DonationWallets.test.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 77,
-      "norm_label": "donationwallets.test.ts",
-      "id": "src_tests_unit_components_donationwallets_test"
-    },
-    {
-      "label": "walletsFixture",
-      "file_type": "code",
-      "source_file": "src/tests/unit/components/DonationWallets.test.ts",
-      "source_location": "L32",
-      "_origin": "ast",
-      "community": 77,
-      "norm_label": "walletsfixture",
-      "id": "src_tests_unit_components_donationwallets_test_walletsfixture"
-    },
-    {
       "label": "DropdownPopover.test.ts",
       "file_type": "code",
       "source_file": "src/tests/unit/components/DropdownPopover.test.ts",
@@ -10689,7 +10678,7 @@
       "source_file": "src/tests/unit/components/FooterAppSection.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 120,
+      "community": 79,
       "norm_label": "footerappsection.test.ts",
       "id": "src_tests_unit_components_footerappsection_test"
     },
@@ -10699,7 +10688,7 @@
       "source_file": "src/tests/unit/components/FooterAppSection.test.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 120,
+      "community": 79,
       "norm_label": "ispwainstalledref",
       "id": "src_tests_unit_components_footerappsection_test_ispwainstalledref"
     },
@@ -10709,7 +10698,7 @@
       "source_file": "src/tests/unit/components/FooterAppSection.test.ts",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 120,
+      "community": 79,
       "norm_label": "mockedusestore",
       "id": "src_tests_unit_components_footerappsection_test_mockedusestore"
     },
@@ -10719,7 +10708,7 @@
       "source_file": "src/tests/unit/components/FooterAppSection.test.ts",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 120,
+      "community": 79,
       "norm_label": "mockedtrackevent",
       "id": "src_tests_unit_components_footerappsection_test_mockedtrackevent"
     },
@@ -10729,7 +10718,7 @@
       "source_file": "src/tests/unit/components/FooterAppSection.test.ts",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 120,
+      "community": 79,
       "norm_label": "mountsection()",
       "id": "src_tests_unit_components_footerappsection_test_mountsection"
     },
@@ -10939,7 +10928,7 @@
       "source_file": "src/tests/unit/components/NavList.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 24,
       "norm_label": "navlist.test.ts",
       "id": "src_tests_unit_components_navlist_test"
     },
@@ -11189,7 +11178,7 @@
       "source_file": "src/tests/unit/components/RelatedWords.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 50,
+      "community": 366,
       "norm_label": "relatedwords.test.ts",
       "id": "src_tests_unit_components_relatedwords_test"
     },
@@ -11199,7 +11188,7 @@
       "source_file": "src/tests/unit/components/RelatedWords.test.ts",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 50,
+      "community": 366,
       "norm_label": "makeword()",
       "id": "src_tests_unit_components_relatedwords_test_makeword"
     },
@@ -11299,7 +11288,7 @@
       "source_file": "src/tests/unit/components/SuggestWordForm.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "suggestwordform.test.ts",
       "id": "src_tests_unit_components_suggestwordform_test"
     },
@@ -11309,7 +11298,7 @@
       "source_file": "src/tests/unit/components/SuggestWordForm.test.ts",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "alertbannerstub",
       "id": "src_tests_unit_components_suggestwordform_test_alertbannerstub"
     },
@@ -11379,7 +11368,7 @@
       "source_file": "src/tests/unit/components/TurnStile.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 40,
+      "community": 24,
       "norm_label": "turnstile.test.ts",
       "id": "src_tests_unit_components_turnstile_test"
     },
@@ -11919,7 +11908,7 @@
       "source_file": "src/tests/unit/components/games/BonCard.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 126,
+      "community": 121,
       "norm_label": "boncard.test.ts",
       "id": "src_tests_unit_components_games_boncard_test"
     },
@@ -11929,7 +11918,7 @@
       "source_file": "src/tests/unit/components/games/BonCard.test.ts",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 126,
+      "community": 121,
       "norm_label": "mockswipestate",
       "id": "src_tests_unit_components_games_boncard_test_mockswipestate"
     },
@@ -11939,7 +11928,7 @@
       "source_file": "src/tests/unit/components/games/BonCard.test.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 126,
+      "community": 121,
       "norm_label": "defaultprops",
       "id": "src_tests_unit_components_games_boncard_test_defaultprops"
     },
@@ -12079,7 +12068,7 @@
       "source_file": "src/tests/unit/components/modals/search/SearchModalTrigger.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 293,
+      "community": 6,
       "norm_label": "searchmodaltrigger.test.ts",
       "id": "src_tests_unit_components_modals_search_searchmodaltrigger_test"
     },
@@ -12089,7 +12078,7 @@
       "source_file": "src/tests/unit/components/modals/search/SearchModalTrigger.test.ts",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 293,
+      "community": 6,
       "norm_label": "{ mockwhenever, mockoneventfired }",
       "id": "src_tests_unit_components_modals_search_searchmodaltrigger_test_mockwhenever_mockoneventfired"
     },
@@ -12099,7 +12088,7 @@
       "source_file": "src/tests/unit/components/toast/ToastNotify.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 499,
+      "community": 46,
       "norm_label": "toastnotify.test.ts",
       "id": "src_tests_unit_components_toast_toastnotify_test"
     },
@@ -12109,7 +12098,7 @@
       "source_file": "src/tests/unit/components/toast/ToastNotify.test.ts",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 499,
+      "community": 46,
       "norm_label": "mockisswiping",
       "id": "src_tests_unit_components_toast_toastnotify_test_mockisswiping"
     },
@@ -12119,7 +12108,7 @@
       "source_file": "src/tests/unit/components/toast/ToastNotify.test.ts",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 499,
+      "community": 46,
       "norm_label": "svgstub",
       "id": "src_tests_unit_components_toast_toastnotify_test_svgstub"
     },
@@ -12129,7 +12118,7 @@
       "source_file": "src/tests/unit/components/toast/ToastNotify.test.ts",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 499,
+      "community": 46,
       "norm_label": "mountedwrappers",
       "id": "src_tests_unit_components_toast_toastnotify_test_mountedwrappers"
     },
@@ -12139,7 +12128,7 @@
       "source_file": "src/tests/unit/components/toast/ToastNotify.test.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 499,
+      "community": 46,
       "norm_label": "mounttoast()",
       "id": "src_tests_unit_components_toast_toastnotify_test_mounttoast"
     },
@@ -12199,7 +12188,7 @@
       "source_file": "src/tests/unit/components/word-search/NoSearchResults.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 120,
+      "community": 85,
       "norm_label": "nosearchresults.test.ts",
       "id": "src_tests_unit_components_word_search_nosearchresults_test"
     },
@@ -12209,7 +12198,7 @@
       "source_file": "src/tests/unit/components/word-search/NoSearchResults.test.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 120,
+      "community": 85,
       "norm_label": "searchresultcountref",
       "id": "src_tests_unit_components_word_search_nosearchresults_test_searchresultcountref"
     },
@@ -12219,7 +12208,7 @@
       "source_file": "src/tests/unit/components/word-search/NoSearchResults.test.ts",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 120,
+      "community": 85,
       "norm_label": "searchstateref",
       "id": "src_tests_unit_components_word_search_nosearchresults_test_searchstateref"
     },
@@ -12229,7 +12218,7 @@
       "source_file": "src/tests/unit/components/word-search/NoSearchResults.test.ts",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 120,
+      "community": 85,
       "norm_label": "mockedusestore",
       "id": "src_tests_unit_components_word_search_nosearchresults_test_mockedusestore"
     },
@@ -12839,7 +12828,7 @@
       "source_file": "src/tests/unit/composable/useSearchQuerySync.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 476,
+      "community": 16,
       "norm_label": "usesearchquerysync.test.ts",
       "id": "src_tests_unit_composable_usesearchquerysync_test"
     },
@@ -12849,7 +12838,7 @@
       "source_file": "src/tests/unit/composable/useSearchQuerySync.test.ts",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 476,
+      "community": 16,
       "norm_label": "mountcomposable()",
       "id": "src_tests_unit_composable_usesearchquerysync_test_mountcomposable"
     },
@@ -12859,7 +12848,7 @@
       "source_file": "src/tests/unit/composable/useSearchQuerySync.test.ts",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 476,
+      "community": 16,
       "norm_label": "firebeforepreparation()",
       "id": "src_tests_unit_composable_usesearchquerysync_test_firebeforepreparation"
     },
@@ -13059,7 +13048,7 @@
       "source_file": "src/tests/unit/pages/api/search/index.json.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 745,
+      "community": 119,
       "norm_label": "index.json.test.ts",
       "id": "src_tests_unit_pages_api_search_index_json_test"
     },
@@ -13069,7 +13058,7 @@
       "source_file": "src/tests/unit/pages/api/search/index.json.test.ts",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 745,
+      "community": 119,
       "norm_label": "makeword()",
       "id": "src_tests_unit_pages_api_search_index_json_test_makeword"
     },
@@ -13609,7 +13598,7 @@
       "source_file": "src/tests/unit/utils/alphabeticNeighbors.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 745,
+      "community": 18,
       "norm_label": "alphabeticneighbors.test.ts",
       "id": "src_tests_unit_utils_alphabeticneighbors_test"
     },
@@ -13619,7 +13608,7 @@
       "source_file": "src/tests/unit/utils/alphabeticNeighbors.test.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 745,
+      "community": 18,
       "norm_label": "makeword()",
       "id": "src_tests_unit_utils_alphabeticneighbors_test_makeword"
     },
@@ -13739,7 +13728,7 @@
       "source_file": "src/tests/unit/utils/findAnagrams.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 745,
+      "community": 18,
       "norm_label": "findanagrams.test.ts",
       "id": "src_tests_unit_utils_findanagrams_test"
     },
@@ -13749,7 +13738,7 @@
       "source_file": "src/tests/unit/utils/findAnagrams.test.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 745,
+      "community": 18,
       "norm_label": "makeword()",
       "id": "src_tests_unit_utils_findanagrams_test_makeword"
     },
@@ -13769,7 +13758,7 @@
       "source_file": "src/tests/unit/utils/helper/canonicalUrl.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 13,
+      "community": 1,
       "norm_label": "canonicalurl.test.ts",
       "id": "src_tests_unit_utils_helper_canonicalurl_test"
     },
@@ -13819,7 +13808,7 @@
       "source_file": "src/tests/unit/utils/helper/routeToWord.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 76,
+      "community": 35,
       "norm_label": "routetoword.test.ts",
       "id": "src_tests_unit_utils_helper_routetoword_test"
     },
@@ -13829,7 +13818,7 @@
       "source_file": "src/tests/unit/utils/helper/seoData.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 1,
+      "community": 35,
       "norm_label": "seodata.test.ts",
       "id": "src_tests_unit_utils_helper_seodata_test"
     },
@@ -13839,7 +13828,7 @@
       "source_file": "src/tests/unit/utils/helper/useViewTransition.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 35,
+      "community": 3,
       "norm_label": "useviewtransition.test.ts",
       "id": "src_tests_unit_utils_helper_useviewtransition_test"
     },
@@ -13869,7 +13858,7 @@
       "source_file": "src/tests/unit/utils/similarSoundingWords.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "similarsoundingwords.test.ts",
       "id": "src_tests_unit_utils_similarsoundingwords_test"
     },
@@ -13879,7 +13868,7 @@
       "source_file": "src/tests/unit/utils/similarWords.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "similarwords.test.ts",
       "id": "src_tests_unit_utils_similarwords_test"
     },
@@ -13909,7 +13898,7 @@
       "source_file": "src/tests/unit/utils/wordHelper.test.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "wordhelper.test.ts",
       "id": "src_tests_unit_utils_wordhelper_test"
     },
@@ -13919,7 +13908,7 @@
       "source_file": "src/tests/unit/utils/wordHelper.test.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "mockfetch",
       "id": "src_tests_unit_utils_wordhelper_test_mockfetch"
     },
@@ -13929,7 +13918,7 @@
       "source_file": "src/tests/unit/utils/wordHelper.test.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "makeword()",
       "id": "src_tests_unit_utils_wordhelper_test_makeword"
     },
@@ -13939,7 +13928,7 @@
       "source_file": "src/tests/unit/utils/wordHelper.test.ts",
       "source_location": "L281",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "makeref()",
       "id": "src_tests_unit_utils_wordhelper_test_makeref"
     },
@@ -14019,7 +14008,7 @@
       "source_file": "src/utils/analytics.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 366,
+      "community": 94,
       "norm_label": "isbrowser()",
       "id": "src_utils_analytics_isbrowser"
     },
@@ -14029,7 +14018,7 @@
       "source_file": "src/utils/analytics.ts",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 16,
+      "community": 94,
       "norm_label": "setmatomosearch()",
       "id": "src_utils_analytics_setmatomosearch"
     },
@@ -14049,7 +14038,7 @@
       "source_file": "src/utils/analytics.ts",
       "source_location": "L60",
       "_origin": "ast",
-      "community": 366,
+      "community": 94,
       "norm_label": "trackcontentimpressionswithinnode()",
       "id": "src_utils_analytics_trackcontentimpressionswithinnode"
     },
@@ -14189,7 +14178,7 @@
       "source_file": "src/utils/helpers.ts",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 76,
+      "community": 43,
       "norm_label": "routetoword()",
       "id": "src_utils_helpers_routetoword"
     },
@@ -14209,7 +14198,7 @@
       "source_file": "src/utils/helpers.ts",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 1,
+      "community": 35,
       "norm_label": "seodata()",
       "id": "src_utils_helpers_seodata"
     },
@@ -14259,7 +14248,7 @@
       "source_file": "src/utils/helpers.ts",
       "source_location": "L118",
       "_origin": "ast",
-      "community": 13,
+      "community": 1,
       "norm_label": "canonicalurl()",
       "id": "src_utils_helpers_canonicalurl"
     },
@@ -14399,7 +14388,7 @@
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L177",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "similarsoundingwords()",
       "id": "src_utils_wordhelper_similarsoundingwords"
     },
@@ -14409,7 +14398,7 @@
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L199",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "similarwords()",
       "id": "src_utils_wordhelper_similarwords"
     },
@@ -14419,7 +14408,7 @@
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L224",
       "_origin": "ast",
-      "community": 72,
+      "community": 18,
       "norm_label": "createwikimediafilelist()",
       "id": "src_utils_wordhelper_createwikimediafilelist"
     },
@@ -14519,7 +14508,7 @@
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L407",
       "_origin": "ast",
-      "community": 745,
+      "community": 18,
       "norm_label": "sortedchars()",
       "id": "src_utils_wordhelper_sortedchars"
     },
@@ -14529,7 +14518,7 @@
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L409",
       "_origin": "ast",
-      "community": 745,
+      "community": 18,
       "norm_label": "findanagrams()",
       "id": "src_utils_wordhelper_findanagrams"
     },
@@ -14539,7 +14528,7 @@
       "source_file": "src/utils/wordHelper.ts",
       "source_location": "L419",
       "_origin": "ast",
-      "community": 745,
+      "community": 18,
       "norm_label": "alphabeticneighbors()",
       "id": "src_utils_wordhelper_alphabeticneighbors"
     },
@@ -21330,55 +21319,152 @@
   ],
   "links": [
     {
-      "relation": "imports_from",
+      "relation": "dynamic_import",
       "confidence": "EXTRACTED",
-      "source_file": "src/pages/spenden.astro",
-      "source": "src_pages_spenden",
+      "source_file": "src/components/DonationWallets.vue",
+      "source": "src_components_donationwallets",
       "target": "check",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
+      "relation": "dynamic_import",
       "confidence": "EXTRACTED",
-      "source_file": "src/pages/spenden.astro",
-      "source": "src_pages_spenden",
-      "target": "coffee",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/spenden.astro",
-      "source": "src_pages_spenden",
-      "target": "credit_card",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/spenden.astro",
-      "source": "src_pages_spenden",
-      "target": "crown",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/spenden.astro",
-      "source": "src_pages_spenden",
-      "target": "heart",
+      "source_file": "src/components/DonationWallets.vue",
+      "source": "src_components_donationwallets",
+      "target": "copy",
       "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/pages/spenden.astro",
-      "source_location": "L8",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L38",
       "weight": 1.0,
-      "source": "src_pages_spenden",
-      "target": "home_felix_workspace_berliner_schnauze_src_components_donationwallets_vue",
+      "source": "src_components_donationwallets",
+      "target": "home_felix_workspace_berliner_schnauze_src_services_queries_getcompanyfunding_ts",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "src_components_donationwallets",
+      "target": "src_components_donationwallets_checkicon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "src_components_donationwallets",
+      "target": "src_components_donationwallets_copied_copy_issupported_clipboardissupported",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "src_components_donationwallets",
+      "target": "src_components_donationwallets_copiedaddress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "src_components_donationwallets",
+      "target": "src_components_donationwallets_copyaddress",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "src_components_donationwallets",
+      "target": "src_components_donationwallets_copyicon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/DonationWallets.vue",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "src_components_donationwallets",
+      "target": "src_components_donationwallets_wallets",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/spenden.astro",
+      "confidence_score": 1.0,
+      "source": "src_pages_spenden",
+      "target": "check"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/DonationWallets.test.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_tests_unit_components_donationwallets_test",
+      "target": "home_felix_workspace_berliner_schnauze_src_services_queries_getcompanyfunding_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/tests/unit/components/DonationWallets.test.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "src_tests_unit_components_donationwallets_test",
+      "target": "src_tests_unit_components_donationwallets_test_walletsfixture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/spenden.astro",
+      "confidence_score": 1.0,
+      "source": "src_pages_spenden",
+      "target": "coffee"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/spenden.astro",
+      "confidence_score": 1.0,
+      "source": "src_pages_spenden",
+      "target": "credit_card"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/spenden.astro",
+      "confidence_score": 1.0,
+      "source": "src_pages_spenden",
+      "target": "crown"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "source_file": "src/pages/spenden.astro",
+      "confidence_score": 1.0,
+      "source": "src_pages_spenden",
+      "target": "heart"
     },
     {
       "relation": "imports_from",
@@ -21387,9 +21473,9 @@
       "source_file": "src/pages/spenden.astro",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pages_spenden",
-      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro",
-      "confidence_score": 1.0
+      "target": "home_felix_workspace_berliner_schnauze_src_layouts_layout_astro"
     },
     {
       "relation": "imports_from",
@@ -21398,17 +21484,17 @@
       "source_file": "src/pages/spenden.astro",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pages_spenden",
-      "target": "home_felix_workspace_berliner_schnauze_src_services_queries_getcompanyfunding_ts",
-      "confidence_score": 1.0
+      "target": "home_felix_workspace_berliner_schnauze_src_services_queries_getcompanyfunding_ts"
     },
     {
       "relation": "imports_from",
       "confidence": "EXTRACTED",
       "source_file": "src/pages/spenden.astro",
+      "confidence_score": 1.0,
       "source": "src_pages_spenden",
-      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_button_scss",
-      "confidence_score": 1.0
+      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_button_scss"
     },
     {
       "relation": "imports_from",
@@ -21417,9 +21503,9 @@
       "source_file": "src/pages/spenden.astro",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pages_spenden",
-      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_donation_page_scss",
-      "confidence_score": 1.0
+      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_donation_page_scss"
     },
     {
       "relation": "imports_from",
@@ -21428,9 +21514,9 @@
       "source_file": "src/pages/spenden.astro",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_pages_spenden",
-      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_section_card_scss",
-      "confidence_score": 1.0
+      "target": "home_felix_workspace_berliner_schnauze_src_styles_components_section_card_scss"
     },
     {
       "relation": "imports_from",
@@ -23429,164 +23515,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L44",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_components_donationwallets_checkicon"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L48",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_components_donationwallets_copied_copy_issupported_clipboardissupported"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L49",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_components_donationwallets_copiedaddress"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L68",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_components_donationwallets_copyaddress"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L43",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_components_donationwallets_copyicon"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L58",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_components_donationwallets_truncateaddress"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L46",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_components_donationwallets_wallets"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L36",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_services_queries_getcompanyfunding"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L36",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_services_queries_getcompanyfunding_fundingwallet"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L38",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_stores_toastnotify"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L38",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_stores_toastnotify_createtoastnotify"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L39",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_utils_analytics"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L39",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets",
-      "target": "src_utils_analytics_trackevent"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L72",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets_copyaddress",
-      "target": "src_stores_toastnotify_createtoastnotify"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/DonationWallets.vue",
-      "source_location": "L74",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_components_donationwallets_copyaddress",
-      "target": "src_utils_analytics_trackevent"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "src/components/DropdownPopover.vue",
       "source_location": "L91",
       "weight": 1.0,
@@ -24383,17 +24311,6 @@
       "confidence_score": 1.0,
       "source": "src_services_queries_getcompanyfunding",
       "target": "src_services_wpgraphqlclient_wpgraphqlclient"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/components/DonationWallets.test.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_components_donationwallets_test",
-      "target": "src_services_queries_getcompanyfunding"
     },
     {
       "relation": "imports",
@@ -38556,17 +38473,6 @@
       "target": "src_utils_analytics_trackevent"
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/components/DonationWallets.test.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_components_donationwallets_test",
-      "target": "src_services_queries_getcompanyfunding_fundingwallet"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/services/queries/getPage.ts",
@@ -40906,16 +40812,6 @@
       "confidence_score": 1.0,
       "source": "src_tests_unit_components_cookieconsent_test",
       "target": "src_tests_unit_components_cookieconsent_test_runmock_showpreferencesmock"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/tests/unit/components/DonationWallets.test.ts",
-      "source_location": "L32",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_tests_unit_components_donationwallets_test",
-      "target": "src_tests_unit_components_donationwallets_test_walletsfixture"
     },
     {
       "relation": "contains",
@@ -44383,5 +44279,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "276a80205646fda70552d4ee281ed8d88ea56972"
+  "built_at_commit": "1565f932af9d97d42323626ed3d5fea16cb684fe"
 }
