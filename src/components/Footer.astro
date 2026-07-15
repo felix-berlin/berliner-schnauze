@@ -21,7 +21,7 @@ const socialMenu = await fetchSocialMenu();
 const { platforms } = await fetchFundingData();
 const fundingMenu = [
   ...platforms.map((platform) => ({ link: platform.link, title: platform.name })),
-  { link: '/spenden', title: 'Alle Spendenwege' },
+  { link: '/spenden', title: 'Alle Spenden-Möglichkeiten' },
 ];
 
 const navMenu1 = await fetchMenu('Footer Nav 1');
