@@ -30,13 +30,13 @@
     "semantic_hash": ""
   },
   "src/gql/gql.ts": {
-    "mtime": 1784138210.5282044,
-    "ast_hash": "c5c4873853abb18c5e981c902629cec3",
+    "mtime": 1784144057.360904,
+    "ast_hash": "17cdb5f33cdaa41a4581bb3b4190f785",
     "semantic_hash": ""
   },
   "src/gql/graphql.ts": {
-    "mtime": 1784138210.528575,
-    "ast_hash": "538fa026a323ef4149bf765dcf892d11",
+    "mtime": 1784144057.36698,
+    "ast_hash": "b6eae7a1d5063823f56571439639a771",
     "semantic_hash": ""
   },
   "src/gql/index.ts": {
@@ -1790,8 +1790,8 @@
     "semantic_hash": ""
   },
   "src/services/queries/getPosts.ts": {
-    "mtime": 1784138210.5334413,
-    "ast_hash": "e685331643f80910f6b46250003715fd",
+    "mtime": 1784144036.5169063,
+    "ast_hash": "108245aaf12dcd6a919ecbd3f7701fc3",
     "semantic_hash": ""
   },
   "src/tests/unit/services/getPosts.test.ts": {
@@ -1820,8 +1820,8 @@
     "semantic_hash": ""
   },
   "src/pages/magazin/index.astro": {
-    "mtime": 1784138965.189569,
-    "ast_hash": "43ea24ba1593a74df853dda07c8f94a3",
+    "mtime": 1784144033.8387191,
+    "ast_hash": "f876a4cdc5d32ecaf7bc6609632a5e25",
     "semantic_hash": ""
   },
   "src/pages/magazin/[postSlug].astro": {
