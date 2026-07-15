@@ -1,0 +1,57 @@
+@use "@styles/variables" as vars;
+
+.c-magazin-article {
+  &__header {
+    padding-block: vars.$spacer * 2 vars.$spacer;
+  }
+
+  &__title {
+    margin-block-end: vars.$spacer * 0.25;
+  }
+
+  &__date {
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+
+  &__body {
+    max-width: 70ch;
+
+    :is(h2, h3, h4) {
+      margin-block: vars.$spacer * 1.5 vars.$spacer * 0.5;
+    }
+
+    p {
+      line-height: 1.7;
+      margin-block-end: vars.$spacer;
+    }
+
+    hr {
+      border: none;
+      border-block-start: 1px dashed var(--grey-100);
+      margin-block: vars.$spacer * 2;
+    }
+
+    ul,
+    ol {
+      margin-block-end: vars.$spacer;
+      padding-inline-start: vars.$spacer;
+    }
+  }
+
+  &__quote {
+    margin: vars.$spacer * 1.5 0;
+    padding: vars.$spacer;
+    border: 1px dashed var(--orange-200);
+    font-style: italic;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__image {
+    margin-block: vars.$spacer;
+    border-radius: 4px;
+  }
+}

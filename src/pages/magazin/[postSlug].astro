@@ -1,0 +1,82 @@
+---
+import '@styles/plugins/astro-breadcrumbs.scss';
+import '@styles/components/_magazin-article.scss';
+
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+
+import Layout from '@layouts/Layout.astro';
+import ArticleBlocks from '@components/magazin/ArticleBlocks.astro';
+import { fetchAllPosts } from '@services/api.ts';
+import { canonicalUrl, seoData } from '@utils/helpers.ts';
+import { Breadcrumbs } from 'astro-breadcrumbs';
+import ChevronRight from '~icons/lucide/chevron-right';
+import { Picture } from 'astro:assets';
+
+export const getStaticPaths = (async () => {
+  const allPosts = await fetchAllPosts();
+
+  return allPosts.flatMap((post) => {
+    if (!post.slug) return [];
+    return [{
+      params: { postSlug: post.slug },
+      props: { post },
+    }];
+  });
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { post } = Astro.props as Props;
+
+const seoProps = seoData({
+  seo: {
+    canonical: post.seo?.canonical ?? canonicalUrl(`/magazin/${post.slug}/`, Astro.site),
+    opengraphDescription: post.seo?.opengraphDescription ?? post.seo?.metaDesc ?? '',
+    ...(post.seo?.opengraphImage?.sourceUrl && {
+      opengraphImage: { sourceUrl: post.seo.opengraphImage.sourceUrl },
+    }),
+    opengraphType: 'article',
+    title: post.seo?.title ?? post.title ?? '',
+  },
+  title: post.title ?? '',
+});
+
+const articleJson = () =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    datePublished: post.date ?? undefined,
+    headline: post.title ?? '',
+    url: canonicalUrl(`/magazin/${post.slug}`, Astro.site),
+  });
+---
+
+<Layout content={seoProps} contentClasses='o-magazin-article'>
+  <Breadcrumbs indexText='Start' linkTextFormat='capitalized'>
+    <ChevronRight height='20' slot='separator' width='20' />
+  </Breadcrumbs>
+
+  <header class='c-magazin-article__header'>
+    <h1 class='c-magazin-article__title'>{post.title}</h1>
+    {post.date && (
+      <time class='c-magazin-article__date' datetime={post.date}>
+        {new Date(post.date).toLocaleDateString('de-DE')}
+      </time>
+    )}
+    {post.featuredImage?.node?.sourceUrl && (
+      <Picture
+        alt={post.featuredImage.node.altText ?? ''}
+        class='c-magazin-article__image'
+        formats={['avif', 'webp']}
+        height={420}
+        loading='eager'
+        src={post.featuredImage.node.sourceUrl}
+        width={800}
+      />
+    )}
+  </header>
+
+  <ArticleBlocks blocks={post.blocks ?? []} />
+
+  <script set:html={articleJson()} type='application/ld+json' />
+</Layout>
