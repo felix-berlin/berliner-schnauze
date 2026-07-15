@@ -10,12 +10,12 @@ interface ImageBlockAttributes {
 
 interface Props {
   block: {
-    attributes?: ImageBlockAttributes | null;
+    attributes?: unknown;
   };
 }
 
 const { block } = Astro.props as Props;
-const attrs = block.attributes;
+const attrs = block.attributes as ImageBlockAttributes | null | undefined;
 ---
 
 {attrs?.url && (

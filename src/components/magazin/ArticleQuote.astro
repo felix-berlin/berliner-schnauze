@@ -5,12 +5,12 @@ interface QuoteBlockAttributes {
 
 interface Props {
   block: {
-    attributes?: QuoteBlockAttributes | null;
+    attributes?: unknown;
   };
 }
 
 const { block } = Astro.props as Props;
-const value = block.attributes?.value ?? '';
+const value = (block.attributes as QuoteBlockAttributes | null | undefined)?.value ?? '';
 ---
 
 <blockquote class='c-magazin-article__quote' set:html={value} />
