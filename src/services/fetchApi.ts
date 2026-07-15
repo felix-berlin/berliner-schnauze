@@ -1,4 +1,5 @@
-import { WP_API, WP_AUTH_REFRESH_TOKEN } from "astro:env/client";
+import { WP_API } from "astro:env/client";
+import { WP_AUTH_REFRESH_TOKEN } from "astro:env/server";
 
 export const fetchAPI = async (query: string, { variables } = { variables: {} }) => {
   const headers = {
