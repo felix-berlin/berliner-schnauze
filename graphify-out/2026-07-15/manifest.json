@@ -30,13 +30,13 @@
     "semantic_hash": ""
   },
   "src/gql/gql.ts": {
-    "mtime": 1784113302.0317802,
-    "ast_hash": "0f0f08f3d65c018db2909aa213fb2031",
+    "mtime": 1784138210.5282044,
+    "ast_hash": "c5c4873853abb18c5e981c902629cec3",
     "semantic_hash": ""
   },
   "src/gql/graphql.ts": {
-    "mtime": 1784113302.0319207,
-    "ast_hash": "35b68bd7e164c1109b205f8f6735d7ac",
+    "mtime": 1784138210.528575,
+    "ast_hash": "538fa026a323ef4149bf765dcf892d11",
     "semantic_hash": ""
   },
   "src/gql/index.ts": {
@@ -770,8 +770,8 @@
     "semantic_hash": ""
   },
   "src/services/api.ts": {
-    "mtime": 1783446230.841886,
-    "ast_hash": "9f309f6ee1b60550916221e20b5df7cb",
+    "mtime": 1784138210.5286944,
+    "ast_hash": "b91c5139d071ee68071642e8a15d9fe8",
     "semantic_hash": ""
   },
   "src/services/pwa.ts": {
@@ -1782,6 +1782,46 @@
   "src/tests/unit/services/getMenu.test.ts": {
     "mtime": 1784113302.032388,
     "ast_hash": "3f2dae1506542657090904e9c08f522b",
+    "semantic_hash": ""
+  },
+  "src/services/fragments/blockFragments.ts": {
+    "mtime": 1784138210.533345,
+    "ast_hash": "c655a7594a868e03e2ea543c8e7cef24",
+    "semantic_hash": ""
+  },
+  "src/services/queries/getPosts.ts": {
+    "mtime": 1784138210.5334413,
+    "ast_hash": "e685331643f80910f6b46250003715fd",
+    "semantic_hash": ""
+  },
+  "src/tests/unit/services/getPosts.test.ts": {
+    "mtime": 1784138210.5334413,
+    "ast_hash": "8d1e2ab6aa1c8f541207f80738e8cf09",
+    "semantic_hash": ""
+  },
+  "src/components/magazin/ArticleBlocks.astro": {
+    "mtime": 1784138669.5658727,
+    "ast_hash": "75cdaebd660d647378ed7b25a25be654",
+    "semantic_hash": ""
+  },
+  "src/components/magazin/ArticleImage.astro": {
+    "mtime": 1784139142.4594407,
+    "ast_hash": "a42154290f49a8f006e75dd8ba84d5fb",
+    "semantic_hash": ""
+  },
+  "src/components/magazin/ArticleQuote.astro": {
+    "mtime": 1784139147.9295483,
+    "ast_hash": "81bfc57f72924f7a5f3fb97f87f3f44b",
+    "semantic_hash": ""
+  },
+  "src/tests/unit/components/magazin/ArticleBlocks.test.ts": {
+    "mtime": 1784138648.3382545,
+    "ast_hash": "cba54ba575971fdc035a88a7ba806300",
+    "semantic_hash": ""
+  },
+  "src/pages/magazin/index.astro": {
+    "mtime": 1784138965.189569,
+    "ast_hash": "43ea24ba1593a74df853dda07c8f94a3",
     "semantic_hash": ""
   }
 }

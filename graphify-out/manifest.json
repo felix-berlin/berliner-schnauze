@@ -1798,5 +1798,35 @@
     "mtime": 1784138210.5334413,
     "ast_hash": "8d1e2ab6aa1c8f541207f80738e8cf09",
     "semantic_hash": ""
+  },
+  "src/components/magazin/ArticleBlocks.astro": {
+    "mtime": 1784138669.5658727,
+    "ast_hash": "75cdaebd660d647378ed7b25a25be654",
+    "semantic_hash": ""
+  },
+  "src/components/magazin/ArticleImage.astro": {
+    "mtime": 1784139142.4594407,
+    "ast_hash": "a42154290f49a8f006e75dd8ba84d5fb",
+    "semantic_hash": ""
+  },
+  "src/components/magazin/ArticleQuote.astro": {
+    "mtime": 1784139147.9295483,
+    "ast_hash": "81bfc57f72924f7a5f3fb97f87f3f44b",
+    "semantic_hash": ""
+  },
+  "src/tests/unit/components/magazin/ArticleBlocks.test.ts": {
+    "mtime": 1784138648.3382545,
+    "ast_hash": "cba54ba575971fdc035a88a7ba806300",
+    "semantic_hash": ""
+  },
+  "src/pages/magazin/index.astro": {
+    "mtime": 1784138965.189569,
+    "ast_hash": "43ea24ba1593a74df853dda07c8f94a3",
+    "semantic_hash": ""
+  },
+  "src/pages/magazin/[postSlug].astro": {
+    "mtime": 1784143142.0013602,
+    "ast_hash": "018f4ed0b87ce06839c6c9a64673ddd7",
+    "semantic_hash": ""
   }
 }
