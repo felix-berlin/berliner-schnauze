@@ -6,8 +6,10 @@ import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
 
 import Layout from '@layouts/Layout.astro';
 import ArticleBlocks from '@components/magazin/ArticleBlocks.astro';
+import ArticleShare from '@components/magazin/ArticleShare.vue';
 import { fetchAllPosts } from '@services/api.ts';
-import { canonicalUrl, seoData } from '@utils/helpers.ts';
+import { canonicalUrl, formattedDate, seoData } from '@utils/helpers.ts';
+import { processArticleBlocks } from '@utils/article.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 import { Picture } from 'astro:assets';
@@ -15,18 +17,28 @@ import { Picture } from 'astro:assets';
 export const getStaticPaths = (async () => {
   const allPosts = await fetchAllPosts();
 
+  const byDateDesc = [...allPosts].sort(
+    (a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime(),
+  );
+
   return allPosts.flatMap((post) => {
     if (!post.slug) return [];
+
+    const related = byDateDesc.filter((p) => p.slug && p.slug !== post.slug).slice(0, 3);
+
     return [{
       params: { postSlug: post.slug },
-      props: { post },
+      props: { post, related },
     }];
   });
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { post } = Astro.props as Props;
+const { post, related } = Astro.props as Props;
+
+const { blocks, toc } = processArticleBlocks(post.blocks ?? []);
+const readingMinutes = post.seo?.readingTime ? Math.max(1, Math.round(post.seo.readingTime)) : null;
 
 const seoProps = seoData({
   seo: {
@@ -58,15 +70,20 @@ const articleJson = () =>
 
   <header class='c-magazin-article__header'>
     <h1 class='c-magazin-article__title'>{post.title}</h1>
-    {post.date && (
-      <time class='c-magazin-article__date' datetime={post.date}>
-        {new Date(post.date).toLocaleDateString('de-DE')}
-      </time>
-    )}
+    <div class='c-magazin-article__meta'>
+      {post.date && (
+        <time class='c-magazin-article__date' datetime={post.date}>
+          {formattedDate(post.date)}
+        </time>
+      )}
+      {readingMinutes && (
+        <span class='c-magazin-article__reading-time'>{readingMinutes} Min Lesezeit</span>
+      )}
+    </div>
     {post.featuredImage?.node?.sourceUrl && (
       <Picture
         alt={post.featuredImage.node.altText ?? ''}
-        class='c-magazin-article__image'
+        class='c-magazin-article__image c-magazin-article__image--featured'
         formats={['avif', 'webp']}
         height={420}
         loading='eager'
@@ -76,7 +93,100 @@ const articleJson = () =>
     )}
   </header>
 
-  <ArticleBlocks blocks={post.blocks ?? []} />
+  <div class='c-magazin-article__layout'>
+    {toc.length >= 3 && (
+      <aside class='c-magazin-article__toc js-toc' aria-label='Inhalt'>
+        <p class='c-magazin-article__toc-title'>Inhalt</p>
+        <nav>
+          <ol class='c-magazin-article__toc-list'>
+            {toc.map((entry) => (
+              <li>
+                <a class='c-magazin-article__toc-link' data-toc={entry.id} href={`#${entry.id}`}>
+                  {entry.text}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </aside>
+    )}
+
+    <div class='c-magazin-article__main'>
+      <ArticleBlocks blocks={blocks} />
+    </div>
+  </div>
+
+  <footer class='c-magazin-article__footer'>
+    <div class='c-magazin-article__footer-actions'>
+      <a class='c-button c-button--back' href='/magazin'>
+        <span aria-hidden='true'>←</span> Zurück zum Magazin
+      </a>
+      <ArticleShare client:visible title={post.title ?? ''} url={`/magazin/${post.slug}`} />
+    </div>
+
+    {related.length > 0 && (
+      <section class='c-magazin-article__related'>
+        <h2 class='c-magazin-article__related-title'>Noch nich' genug?</h2>
+        <ul class='c-magazin-article__related-list'>
+          {related.map((item) => (
+            <li class='c-magazin-article__related-item'>
+              <a class='c-magazin-article__related-link' href={`/magazin/${item.slug}`}>
+                <span class='c-magazin-article__related-headline'>{item.title}</span>
+                {item.date && (
+                  <time class='c-magazin-article__related-date' datetime={item.date}>
+                    {formattedDate(item.date)}
+                  </time>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </footer>
 
   <script set:html={articleJson()} type='application/ld+json' />
 </Layout>
+
+<script>
+  // Table-of-contents scroll-spy: highlight the section currently in view.
+  // Progressive enhancement — the jump links work without this.
+  const initTocSpy = () => {
+    const toc = document.querySelector<HTMLElement>('.js-toc');
+    if (!toc) return;
+
+    const links = new Map<string, HTMLAnchorElement>();
+    toc.querySelectorAll<HTMLAnchorElement>('[data-toc]').forEach((link) => {
+      const id = link.dataset.toc;
+      if (id) links.set(id, link);
+    });
+
+    const headings = [...links.keys()]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (!headings.length) return;
+
+    let current: HTMLAnchorElement | null = null;
+    const setCurrent = (id: string) => {
+      const next = links.get(id) ?? null;
+      if (next === current) return;
+      current?.classList.remove('is-current');
+      next?.classList.add('is-current');
+      current = next;
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]?.target.id) setCurrent(visible[0].target.id);
+      },
+      { rootMargin: '-20% 0px -70% 0px' },
+    );
+
+    headings.forEach((h) => observer.observe(h));
+  };
+
+  document.addEventListener('astro:page-load', initTocSpy);
+</script>
