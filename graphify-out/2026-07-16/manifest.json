@@ -700,8 +700,8 @@
     "semantic_hash": ""
   },
   "src/utils/supportedBrowsers.mjs": {
-    "mtime": 1784110216.1256735,
-    "ast_hash": "bc1a0ef36cebf05cba9484b4b2cc88b5",
+    "mtime": 1784213396.171805,
+    "ast_hash": "025088ce659ff627d12d2526d0b139a1",
     "semantic_hash": ""
   },
   "src/utils/analytics.ts": {
@@ -1825,8 +1825,23 @@
     "semantic_hash": ""
   },
   "src/pages/magazin/[postSlug].astro": {
-    "mtime": 1784143142.0013602,
-    "ast_hash": "018f4ed0b87ce06839c6c9a64673ddd7",
+    "mtime": 1784214321.274695,
+    "ast_hash": "2a387c01641fee154108ac1b04410f07",
+    "semantic_hash": ""
+  },
+  "src/components/magazin/ArticleShare.vue": {
+    "mtime": 1784214284.3559847,
+    "ast_hash": "222ea6ef45c7168258de430636cd2940",
+    "semantic_hash": ""
+  },
+  "src/tests/unit/utils/article.test.ts": {
+    "mtime": 1784214262.8879585,
+    "ast_hash": "c28b8504655d64a817392aaeac7dde86",
+    "semantic_hash": ""
+  },
+  "src/utils/article.ts": {
+    "mtime": 1784214225.77556,
+    "ast_hash": "0c8a568d0e16c984a9901a81684bb16e",
     "semantic_hash": ""
   }
 }
