@@ -68,6 +68,34 @@ describe("processArticleBlocks", () => {
     expect(blocks[0].saveContent).toContain(`id="${toc[0].id}"`);
   });
 
+  it("reuses an existing heading id for the TOC without rewriting the markup", () => {
+    const { blocks, toc } = processArticleBlocks([
+      block(1, '<h2 id="custom-anchor">Bereits gesetzt</h2>'),
+    ]);
+    expect(toc).toEqual([{ id: "custom-anchor", text: "Bereits gesetzt" }]);
+    expect(blocks[0].saveContent).toBe('<h2 id="custom-anchor">Bereits gesetzt</h2>');
+  });
+
+  it("keeps a pre-identified Quellen heading out of the TOC", () => {
+    const { toc } = processArticleBlocks([block(1, '<h2 id="q">Quellen</h2>')]);
+    expect(toc).toHaveLength(0);
+  });
+
+  it("falls back to a generic slug when a heading has no slug-able text", () => {
+    const { blocks, toc } = processArticleBlocks([block(1, "<h2>—</h2>")]);
+    expect(toc[0].id).toBe("abschnitt");
+    expect(blocks[0].saveContent).toContain('id="abschnitt"');
+  });
+
+  it("returns blocks with empty or missing saveContent untouched", () => {
+    const empty = { name: "core/paragraph", order: 1, saveContent: "" };
+    const nil = { name: "core/paragraph", order: 2, saveContent: null };
+    const { blocks, toc } = processArticleBlocks([empty, nil]);
+    expect(blocks[0]).toBe(empty);
+    expect(blocks[1]).toBe(nil);
+    expect(toc).toHaveLength(0);
+  });
+
   it("leaves image and quote blocks untouched", () => {
     const original = "<h2>ignored</h2>";
     const { blocks, toc } = processArticleBlocks([block(1, original, "core/image")]);
