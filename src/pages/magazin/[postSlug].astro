@@ -118,7 +118,7 @@ const articleJson = () =>
 
   <footer class='c-magazin-article__footer'>
     <div class='c-magazin-article__footer-actions'>
-      <a class='c-button c-button--back' href='/magazin'>
+      <a class='c-button' href='/magazin'>
         <span aria-hidden='true'>←</span> Zurück zum Magazin
       </a>
       <ArticleShare client:visible title={post.title ?? ''} url={`/magazin/${post.slug}`} />

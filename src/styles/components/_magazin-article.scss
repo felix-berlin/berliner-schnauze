@@ -80,19 +80,16 @@ $toc-width: 16rem;
     }
   }
 
+  // Compact index card below `lg`; a sticky margin sidebar from `lg` up.
   &__toc {
-    max-width: $reading-width;
-    width: 100%;
+    width: fit-content;
+    max-width: 100%;
     margin-inline: auto;
-    margin-block-end: vars.$spacer;
-    padding: vars.$spacer;
+    margin-block-end: vars.$spacer * 1.5;
+    padding: vars.$spacer * 0.75 vars.$spacer;
     border: 1px dashed var(--grey-100);
     border-radius: 4px;
-    background: color-mix(in srgb, var(--orange-100) 45%, white);
 
-    @include butler-mx.dark-mode-class {
-      background: color-mix(in srgb, var(--new-blue-400) 80%, black);
-    }
     @include mx.breakpoint("lg") {
       grid-column: 1;
       justify-self: end;
@@ -103,7 +100,6 @@ $toc-width: 16rem;
       top: var(--anchor-offset);
       max-height: calc(100dvh - var(--anchor-offset) - 1rem);
       overflow-y: auto;
-      background: transparent;
       border: none;
       border-inline-end: 1px dashed var(--grey-100);
       border-radius: 0;
@@ -113,6 +109,8 @@ $toc-width: 16rem;
 
   &__toc-title {
     margin: 0 0 vars.$spacer * 0.5;
+    padding-block-end: vars.$spacer * 0.4;
+    border-block-end: 1px dashed var(--orange-200);
     font-family: vars.$berlin;
     font-size: 0.7rem;
     font-weight: 700;
@@ -129,11 +127,8 @@ $toc-width: 16rem;
     margin: 0;
     padding: 0;
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: vars.$spacer * 0.25;
     font-size: 0.8rem;
-    line-height: 1.35;
+    line-height: 1.3;
   }
 
   &__toc-link {
@@ -350,12 +345,15 @@ $toc-width: 16rem;
     align-items: center;
     justify-content: space-between;
     gap: vars.$spacer;
-  }
 
-  &__share {
-    --padding: #{vars.$spacer * 0.4 vars.$spacer * 0.75};
+    // Both actions (back link + share) read as the same button.
+    .c-button {
+      --padding: #{vars.$spacer * 0.5 vars.$spacer * 0.85};
 
-    gap: vars.$spacer * 0.4;
+      display: inline-flex;
+      align-items: center;
+      gap: vars.$spacer * 0.4;
+    }
   }
 
   &__related-title {
