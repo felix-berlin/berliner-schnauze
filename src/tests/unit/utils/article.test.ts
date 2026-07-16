@@ -59,6 +59,15 @@ describe("processArticleBlocks", () => {
     expect(sources).not.toContain('href="#fnref-2"');
   });
 
+  it("never carries angle brackets from crafted heading markup into TOC/slug", () => {
+    const { blocks, toc } = processArticleBlocks([
+      block(1, "<h2>Hallo <scr<script>ipt>alert(1)</script></h2>"),
+    ]);
+    expect(toc[0].text).not.toMatch(/[<>]/);
+    expect(toc[0].id).toMatch(/^[a-z0-9-]+$/);
+    expect(blocks[0].saveContent).toContain(`id="${toc[0].id}"`);
+  });
+
   it("leaves image and quote blocks untouched", () => {
     const original = "<h2>ignored</h2>";
     const { blocks, toc } = processArticleBlocks([block(1, original, "core/image")]);
