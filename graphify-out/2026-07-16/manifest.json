@@ -1825,8 +1825,8 @@
     "semantic_hash": ""
   },
   "src/pages/magazin/[postSlug].astro": {
-    "mtime": 1784214321.274695,
-    "ast_hash": "2a387c01641fee154108ac1b04410f07",
+    "mtime": 1784215355.133221,
+    "ast_hash": "3f206269abd328393b51f9a93469cce7",
     "semantic_hash": ""
   },
   "src/components/magazin/ArticleShare.vue": {
@@ -1835,13 +1835,13 @@
     "semantic_hash": ""
   },
   "src/tests/unit/utils/article.test.ts": {
-    "mtime": 1784214262.8879585,
-    "ast_hash": "c28b8504655d64a817392aaeac7dde86",
+    "mtime": 1784216386.180279,
+    "ast_hash": "714fd2f74f5eeec6ca8c8dac1ea37ef3",
     "semantic_hash": ""
   },
   "src/utils/article.ts": {
-    "mtime": 1784214225.77556,
-    "ast_hash": "0c8a568d0e16c984a9901a81684bb16e",
+    "mtime": 1784216376.9256732,
+    "ast_hash": "b469af4fc39e0139cde48ee9b6c04433",
     "semantic_hash": ""
   }
 }
