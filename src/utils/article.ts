@@ -15,15 +15,19 @@ export interface ProcessedArticle {
   toc: TocEntry[];
 }
 
-// Reduce heading markup to plain text for TOC labels + slugs. The trailing
-// `[<>]` strip guarantees no residual angle brackets survive crafted/nested
-// input, so the result can never carry an HTML element (CodeQL js/incomplete-
-// multi-character-sanitization).
-const stripTags = (html: string): string =>
-  html
-    .replace(/<[^>]*>/g, "")
-    .replace(/[<>]/g, "")
-    .trim();
+// Reduce heading markup to plain text for TOC labels + slugs. The strip is
+// applied in a fixpoint loop so nested/crafted tags can't reconstruct after a
+// single pass, then any residual angle bracket is removed — the result can
+// never carry an HTML element (CodeQL js/incomplete-multi-character-sanitization).
+const stripTags = (html: string): string => {
+  let text = html;
+  let previous: string;
+  do {
+    previous = text;
+    text = text.replace(/<[^>]*>/g, "");
+  } while (text !== previous);
+  return text.replace(/[<>]/g, "").trim();
+};
 
 /**
  * Build-time slug for heading anchors. German-aware (umlauts → ae/oe/ue, ß → ss)
