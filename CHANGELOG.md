@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.43.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.43.0...v3.43.1) (2026-07-19)
+
+
+### Bug Fixes
+
+* **word:** remove unwanted space before article comma in word hero title ([528d3ca](https://github.com/felix-berlin/berliner-schnauze/commit/528d3cad496761a5776510c150618702491f5a76))
+
 # [3.43.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.42.1...v3.43.0) (2026-07-15)
 
 
