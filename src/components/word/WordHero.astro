@@ -28,8 +28,9 @@ const themen = word.berlinerischThemen?.nodes ?? [];
 >
   <div class='c-word-hero__left'>
     <h1 class='c-word-hero__title'>
-      <dfn>{wordProps?.berlinerisch}</dfn>
-      {wordProps?.article && <span class='c-word-hero__word-article'>, {wordProps.article}</span>}
+      <dfn>{wordProps?.berlinerisch}</dfn>{wordProps?.article && (
+        <span class='c-word-hero__word-article'>, {wordProps.article}</span>
+      )}
     </h1>
     <div class='c-word-hero__badges'>
       {
