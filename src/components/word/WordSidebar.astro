@@ -58,39 +58,19 @@ const { wordProps, wordTags, hasAnagrams, hasOrthographie, hasLinguistik, hasPho
 </aside>
 
 <script>
+  import { initScrollSpy } from '@utils/scrollSpy';
+
   function initSidebarNav() {
-    const links = document.querySelectorAll<HTMLAnchorElement>('.c-word-sidebar__link');
-    const sections = document.querySelectorAll<HTMLElement>('.c-section-card[id]');
-
-    if (links.length === 0 || sections.length === 0) return;
-
-    const setActive = (id: string) => {
-      links.forEach((l) => l.classList.remove('is-active'));
-      const active = document.querySelector<HTMLAnchorElement>(
-        `.c-word-sidebar__link[href="#${id}"]`,
-      );
-      active?.classList.add('is-active');
-      if (active) {
-        const nav = active.closest<HTMLElement>('.c-word-sidebar');
-        if (nav) {
-          nav.scrollLeft = active.offsetLeft - nav.offsetWidth / 2 + active.offsetWidth / 2;
-        }
-      }
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id);
-            break;
-          }
-        }
+    initScrollSpy({
+      activeClass: 'is-active',
+      getSectionId: (link) => link.getAttribute('href')?.slice(1),
+      linkSelector: '.c-word-sidebar__link',
+      navSelector: '.c-word-sidebar',
+      onActivate: (link, nav) => {
+        nav.scrollLeft = link.offsetLeft - nav.offsetWidth / 2 + link.offsetWidth / 2;
       },
-      { rootMargin: '-10% 0px -80% 0px' },
-    );
-
-    sections.forEach((s) => observer.observe(s));
+      rootMargin: '-10% 0px -80% 0px',
+    });
   }
 
   document.addEventListener('astro:page-load', initSidebarNav);
