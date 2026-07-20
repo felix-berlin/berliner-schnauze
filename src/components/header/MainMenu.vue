@@ -17,9 +17,9 @@
 
       <template #panel>
         <NavList
-          :items="menuItems"
+          :items="items"
           classes-ul="c-menu-more__list u-list-reset"
-          classes-li="c-menu-more__item"
+          :classes-li="itemClasses"
         />
       </template>
     </DropdownPopover>
@@ -27,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+import type { MenuItem } from "@services/queries/getMenu";
 import type { DefineComponent } from "vue";
 
 import DropdownPopover from "@components/DropdownPopover.vue";
@@ -34,48 +35,32 @@ import InstallApp from "@components/InstallApp.vue";
 import MainMenuButton from "@components/MainMenuButton.vue";
 import NavList from "@components/NavList.vue";
 import { useContentTracking } from "@composables/useContentTracking";
-import { ref } from "vue";
+import { computed, ref } from "vue";
+
+interface MainMenuProps {
+  menuItems?: MenuItem[];
+}
+
+const { menuItems = [] } = defineProps<MainMenuProps>();
 
 const root = ref<HTMLElement | null>(null);
 useContentTracking(root);
 
-// const randomWord = () => {
-//   // TODO: Implement random word
-//   // return randomElement(berlinerWords).post_name;
-// };
-interface ItemObject {
-  link: string;
-  title: string;
-}
-
-const menuItems: (ItemObject | { component: DefineComponent; props: object })[] = [
-  {
-    component: InstallApp as DefineComponent,
-    props: {
-      tooltipProps: {
-        placement: "left",
-      },
+// The install prompt is a fixed, non-CMS entry; everything after it comes
+// from the WordPress "Main Menu" location (see @services/queries/getMenu).
+const installAppItem = {
+  component: InstallApp as DefineComponent,
+  props: {
+    tooltipProps: {
+      placement: "left",
     },
   },
-  {
-    link: "/games/berliner-oder-nicht",
-    title: "Spiel - Berliner oder nicht?",
-  },
-  {
-    link: "/wort-vorschlagen",
-    title: "Wort vorschlagen",
-  },
-  {
-    link: "/wort",
-    title: "Wort Index",
-  },
-  {
-    link: "/settings",
-    title: "Einstellungen",
-  },
-  {
-    link: "/changelog",
-    title: "Was ist neu?",
-  },
-];
+};
+
+const items = computed(() => [installAppItem, ...menuItems]);
+
+// Dashed divider between the fixed install item and the CMS-driven links —
+// only when there's something to separate it from.
+const itemClasses = (_item: unknown, index: number): string =>
+  index === 1 ? "c-menu-more__item is-split" : "c-menu-more__item";
 </script>

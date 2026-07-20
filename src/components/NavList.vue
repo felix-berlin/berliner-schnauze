@@ -6,7 +6,7 @@
         v-for="(item, index) in items"
         :key="index"
         class="c-nav-list__list-item"
-        :class="classesLi"
+        :class="typeof classesLi === 'function' ? classesLi(item, index) : classesLi"
       >
         <a
           v-if="'link' in item"
@@ -31,18 +31,14 @@ interface ItemObject {
   rel?: string;
 }
 
+type NavListItem = ItemObject | { component: DefineComponent; props: object };
+
 interface NavListProps {
   ariaLabel?: string;
-  classesLi?: string;
+  classesLi?: string | ((item: NavListItem, index: number) => string);
   classesNav?: string;
   classesUl?: string;
-  items: (
-    | ItemObject
-    | {
-        component: DefineComponent;
-        props: object;
-      }
-  )[];
+  items: NavListItem[];
 }
 
 const { items, ariaLabel } = defineProps<NavListProps>();
