@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.44.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.43.1...v3.44.0) (2026-07-20)
+
+
+### Bug Fixes
+
+* **blog:** rewrite CMS-absolute internal links to relative paths ([edd7568](https://github.com/felix-berlin/berliner-schnauze/commit/edd7568056d65c1dfbbf5a3500464b298c2b02a9))
+* **gitattributes:** specify merge strategy for graph.json in knowledge-graph artifacts ([8dc0c81](https://github.com/felix-berlin/berliner-schnauze/commit/8dc0c811b01acbb180e5ae2ba4f1a1aecdd61a4c))
+* **gql:** bypass schema validation for codegen ([b89504f](https://github.com/felix-berlin/berliner-schnauze/commit/b89504fdc3fa53acba0e1c6b6bb789e267037743))
+* **magazin:** cast block attributes internally in image/quote components ([1c66e48](https://github.com/felix-berlin/berliner-schnauze/commit/1c66e483a592408815d95abe833b98651c17fbfd))
+* **magazin:** complete tag stripping in stripTags (CodeQL) ([d93a9c7](https://github.com/felix-berlin/berliner-schnauze/commit/d93a9c7fc5b99525b613bdbcc1a614a5d3c09522))
+* **magazin:** polish TOC card and footer buttons ([1f55f8a](https://github.com/felix-berlin/berliner-schnauze/commit/1f55f8a076aa2859c18e3b6a56ccec587b7fc356))
+* **magazin:** resolve final-review findings (nested <p>, dead CSS hook, unused query field) ([4270456](https://github.com/felix-berlin/berliner-schnauze/commit/42704569457a56943ba150d4607662cea77a2da3))
+* **magazin:** strip tags in a fixpoint loop (CodeQL) ([6a885df](https://github.com/felix-berlin/berliner-schnauze/commit/6a885df47d93fd9af67f63de1376a29bb26ad4b5))
+
+
+### Features
+
+* **blog:** add Amazon affiliate disclosure and per-link labels ([e670723](https://github.com/felix-berlin/berliner-schnauze/commit/e670723c7f04dd3896d61f7bbae737c95e435342))
+* **magazin:** add block-by-block article renderer with saveContent fallback ([775c1f9](https://github.com/felix-berlin/berliner-schnauze/commit/775c1f9e125daa232d924b7de8ebd3a39ee20a85))
+* **magazin:** add GetAllPosts query with cached fetchAllPosts() ([c9bdc98](https://github.com/felix-berlin/berliner-schnauze/commit/c9bdc980280aa9bd2a53e0f7260927a08a10c645))
+* **magazin:** add magazine article detail page ([f1374a7](https://github.com/felix-berlin/berliner-schnauze/commit/f1374a7d8ae792982f72e27e301802670cf785a1))
+* **magazin:** add magazine listing page ([c980c53](https://github.com/felix-berlin/berliner-schnauze/commit/c980c5308d80e838217aecc17f758624392c5a38))
+* **magazin:** editorial reading experience for article detail page ([77de72d](https://github.com/felix-berlin/berliner-schnauze/commit/77de72d3f44934ef73e937e066d3af027889ce2d))
+* **nav:** drive main menu from CMS "Main Menu" location ([fecffa3](https://github.com/felix-berlin/berliner-schnauze/commit/fecffa33fdc7db222c81d5ae91156189b7dc2125))
+* **utils:** add shared scroll-spy helper for TOC-style nav ([4941e04](https://github.com/felix-berlin/berliner-schnauze/commit/4941e049d336197a5a83f42c4c33cbcee6baf416))
+
 ## [3.43.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.43.0...v3.43.1) (2026-07-19)
 
 
