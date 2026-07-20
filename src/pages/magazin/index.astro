@@ -1,0 +1,87 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { fetchAllPosts } from '@services/api.ts';
+import { canonicalUrl, seoData } from '@utils/helpers.ts';
+import { Breadcrumbs } from 'astro-breadcrumbs';
+import ChevronRight from '~icons/lucide/chevron-right';
+import { Picture } from 'astro:assets';
+
+import '@styles/plugins/astro-breadcrumbs.scss';
+import '@styles/components/_magazin-overview.scss';
+
+const allPosts = await fetchAllPosts();
+const sortedPosts = [...allPosts].sort(
+  (a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime(),
+);
+
+const content = {
+  seo: {
+    canonical: canonicalUrl('/magazin', Astro.site),
+    opengraphDescription:
+      'Geschichte, Herkunft und Kuriositäten der Berliner Schnauze – Wissensartikel rund um den Berliner Dialekt.',
+    opengraphType: 'website',
+  },
+  title: 'Magazin – Wissen rund um die Berliner Schnauze',
+};
+
+const itemListJson = () =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: sortedPosts.map((post, index) => ({
+      '@type': 'ListItem',
+      name: post.title ?? '',
+      position: index + 1,
+      url: canonicalUrl(`/magazin/${post.slug}`, Astro.site),
+    })),
+    name: 'Magazin',
+    numberOfItems: sortedPosts.length,
+  });
+---
+
+<Layout content={seoData(content)}>
+  <section class='o-container c-magazin-overview'>
+    <Breadcrumbs indexText='Start' linkTextFormat='capitalized'>
+      <ChevronRight height='20' slot='separator' width='20' />
+    </Breadcrumbs>
+
+    <h1 class='c-magazin-overview__title'>Magazin</h1>
+    <p class='c-magazin-overview__intro'>
+      Geschichte, Herkunft und Kuriositäten der Berliner Schnauze – von Redewendungen bis
+      Berolinismen.
+    </p>
+
+    <ul class='c-magazin-overview__list'>
+      {
+        sortedPosts.map((post) => (
+          <li class='c-magazin-overview__item'>
+            {post.featuredImage?.node?.sourceUrl && (
+              <Picture
+                alt={post.featuredImage.node.altText ?? ''}
+                class='c-magazin-overview__image'
+                formats={['avif', 'webp']}
+                height={200}
+                loading='lazy'
+                src={post.featuredImage.node.sourceUrl}
+                width={320}
+              />
+            )}
+            <a class='c-magazin-overview__link' href={`/magazin/${post.slug}`}>
+              {post.title}
+            </a>
+            {post.date && (
+              <time class='c-magazin-overview__date' datetime={post.date}>
+                {new Date(post.date).toLocaleDateString('de-DE')}
+              </time>
+            )}
+            {post.excerpt && (
+              <div class='c-magazin-overview__excerpt' set:html={post.excerpt} />
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <script is:inline set:html={itemListJson()} type='application/ld+json' />
+</Layout>

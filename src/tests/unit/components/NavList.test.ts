@@ -114,6 +114,18 @@ describe("NavList.vue", () => {
     expect(isVueComponent({ components: {} })).toBe(true);
   });
 
+  it("supports classesLi as a per-item function", () => {
+    const wrapper = mount(NavList, {
+      props: {
+        items: linkItems,
+        classesLi: (_item: unknown, index: number) => (index === 1 ? "is-split" : "plain"),
+      },
+    });
+    const items = wrapper.findAll("li");
+    expect(items[0].classes()).toContain("plain");
+    expect(items[1].classes()).toContain("is-split");
+  });
+
   it("isVueComponent returns false for plain link object", () => {
     const wrapper = mount(NavList, { props: { items: linkItems } });
     const { isVueComponent } = (wrapper.getCurrentComponent() as any).setupState;

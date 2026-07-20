@@ -2,3 +2,4 @@
 
 # Generated knowledge-graph artifacts: hide from GitHub language stats and diffs
 graphify-out/** linguist-generated=true
+graphify-out/graph.json merge=graphify

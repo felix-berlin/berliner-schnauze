@@ -1,0 +1,171 @@
+---
+import '@styles/plugins/astro-breadcrumbs.scss';
+import '@styles/components/_magazin-article.scss';
+
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+
+import Layout from '@layouts/Layout.astro';
+import ArticleBlocks from '@components/magazin/ArticleBlocks.astro';
+import ArticleShare from '@components/magazin/ArticleShare.vue';
+import { fetchAllPosts } from '@services/api.ts';
+import { canonicalUrl, formattedDate, seoData } from '@utils/helpers.ts';
+import { processArticleBlocks } from '@utils/article.ts';
+import { Breadcrumbs } from 'astro-breadcrumbs';
+import ChevronRight from '~icons/lucide/chevron-right';
+import { Picture } from 'astro:assets';
+
+export const getStaticPaths = (async () => {
+  const allPosts = await fetchAllPosts();
+
+  const byDateDesc = [...allPosts].sort(
+    (a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime(),
+  );
+
+  return allPosts.flatMap((post) => {
+    if (!post.slug) return [];
+
+    const related = byDateDesc.filter((p) => p.slug && p.slug !== post.slug).slice(0, 3);
+
+    return [{
+      params: { postSlug: post.slug },
+      props: { post, related },
+    }];
+  });
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { post, related } = Astro.props as Props;
+
+const { blocks, toc, hasAffiliateLinks } = processArticleBlocks(post.blocks ?? []);
+const readingMinutes = post.seo?.readingTime ? Math.max(1, Math.round(post.seo.readingTime)) : null;
+
+const seoProps = seoData({
+  seo: {
+    canonical: post.seo?.canonical ?? canonicalUrl(`/magazin/${post.slug}/`, Astro.site),
+    opengraphDescription: post.seo?.opengraphDescription ?? post.seo?.metaDesc ?? '',
+    ...(post.seo?.opengraphImage?.sourceUrl && {
+      opengraphImage: { sourceUrl: post.seo.opengraphImage.sourceUrl },
+    }),
+    opengraphType: 'article',
+    title: post.seo?.title ?? post.title ?? '',
+  },
+  title: post.title ?? '',
+});
+
+const articleJson = () =>
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    datePublished: post.date ?? undefined,
+    headline: post.title ?? '',
+    url: canonicalUrl(`/magazin/${post.slug}`, Astro.site),
+  });
+---
+
+<Layout content={seoProps} contentClasses='o-magazin-article'>
+  <Breadcrumbs indexText='Start' linkTextFormat='capitalized'>
+    <ChevronRight height='20' slot='separator' width='20' />
+  </Breadcrumbs>
+
+  <header class='c-magazin-article__header'>
+    <h1 class='c-magazin-article__title'>{post.title}</h1>
+    <div class='c-magazin-article__meta'>
+      {post.date && (
+        <time class='c-magazin-article__date' datetime={post.date}>
+          {formattedDate(post.date)}
+        </time>
+      )}
+      {readingMinutes && (
+        <span class='c-magazin-article__reading-time'>{readingMinutes} Min Lesezeit</span>
+      )}
+    </div>
+    {hasAffiliateLinks && (
+      <p class='c-magazin-article__affiliate-disclosure'>
+        Als Amazon-Partner verdiene ich an qualifizierten Verkäufen. Ich erhalte eine kleine
+        Provision — für dich bleibt der Preis gleich.
+      </p>
+    )}
+    {post.featuredImage?.node?.sourceUrl && (
+      <Picture
+        alt={post.featuredImage.node.altText ?? ''}
+        class='c-magazin-article__image c-magazin-article__image--featured'
+        formats={['avif', 'webp']}
+        height={420}
+        loading='eager'
+        src={post.featuredImage.node.sourceUrl}
+        width={800}
+      />
+    )}
+  </header>
+
+  <div class='c-magazin-article__layout'>
+    {toc.length >= 3 && (
+      <aside class='c-magazin-article__toc js-toc' aria-label='Inhalt'>
+        <p class='c-magazin-article__toc-title'>Inhalt</p>
+        <nav>
+          <ol class='c-magazin-article__toc-list'>
+            {toc.map((entry) => (
+              <li>
+                <a class='c-magazin-article__toc-link' data-toc={entry.id} href={`#${entry.id}`}>
+                  {entry.text}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </aside>
+    )}
+
+    <div class='c-magazin-article__main'>
+      <ArticleBlocks blocks={blocks} />
+    </div>
+  </div>
+
+  <footer class='c-magazin-article__footer'>
+    <div class='c-magazin-article__footer-actions'>
+      <a class='c-button' href='/magazin'>
+        <span aria-hidden='true'>←</span> Zurück zum Magazin
+      </a>
+      <ArticleShare client:visible title={post.title ?? ''} url={`/magazin/${post.slug}`} />
+    </div>
+
+    {related.length > 0 && (
+      <section class='c-magazin-article__related'>
+        <h2 class='c-magazin-article__related-title'>Noch nich' genug?</h2>
+        <ul class='c-magazin-article__related-list'>
+          {related.map((item) => (
+            <li class='c-magazin-article__related-item'>
+              <a class='c-magazin-article__related-link' href={`/magazin/${item.slug}`}>
+                <span class='c-magazin-article__related-headline'>{item.title}</span>
+                {item.date && (
+                  <time class='c-magazin-article__related-date' datetime={item.date}>
+                    {formattedDate(item.date)}
+                  </time>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </footer>
+
+  <script set:html={articleJson()} type='application/ld+json' />
+</Layout>
+
+<script>
+  import { initScrollSpy } from '@utils/scrollSpy';
+
+  // Progressive enhancement — the jump links work without this.
+  const initTocSpy = () => {
+    initScrollSpy({
+      activeClass: 'is-current',
+      getSectionId: (link) => link.dataset.toc,
+      linkSelector: '[data-toc]',
+      navSelector: '.js-toc',
+    });
+  };
+
+  document.addEventListener('astro:page-load', initTocSpy);
+</script>

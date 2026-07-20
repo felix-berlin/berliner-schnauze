@@ -1,0 +1,16 @@
+---
+interface QuoteBlockAttributes {
+  value?: string | null;
+}
+
+interface Props {
+  block: {
+    attributes?: unknown;
+  };
+}
+
+const { block } = Astro.props as Props;
+const value = (block.attributes as QuoteBlockAttributes | null | undefined)?.value ?? '';
+---
+
+<blockquote class='c-magazin-article__quote' set:html={value} />

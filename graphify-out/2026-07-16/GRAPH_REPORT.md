@@ -1,7 +1,7 @@
 # Graph Report - berliner-schnauze  (2026-07-16)
 
 ## Corpus Check
-- 364 files · ~153,236 words
+- 364 files · ~153,205 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6a885df4`
+- Built from commit: `d93a9c7f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

@@ -1,0 +1,26 @@
+---
+import ArticleImage from './ArticleImage.astro';
+import ArticleQuote from './ArticleQuote.astro';
+
+interface ArticleBlock {
+  name: string;
+  order: number;
+  saveContent?: string | null;
+  attributes?: unknown;
+}
+
+interface Props {
+  blocks: ArticleBlock[];
+}
+
+const { blocks } = Astro.props as Props;
+const sorted = [...blocks].sort((a, b) => a.order - b.order);
+---
+
+<div class='c-magazin-article__body'>
+  {sorted.map((block) => {
+    if (block.name === 'core/image') return <ArticleImage block={block} />;
+    if (block.name === 'core/quote') return <ArticleQuote block={block} />;
+    return <Fragment set:html={block.saveContent ?? ''} />;
+  })}
+</div>

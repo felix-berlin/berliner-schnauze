@@ -35,6 +35,7 @@ const config: CodegenConfig = {
         headers: {
           Authorization: `Basic ${Buffer.from(`${WP_AUTH_USER}:${WP_AUTH_PASS}`).toString("base64")}`,
         },
+        assumeValid: true,
       },
     },
   ],

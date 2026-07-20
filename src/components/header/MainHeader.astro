@@ -5,8 +5,10 @@ import MainMenu from "@components/header/MainMenu.vue";
 import MainMenuButton from "@components/MainMenuButton.vue";
 import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue";
 import SunMoonIcon from "virtual:icons/lucide/sun-moon";
+import { fetchMenu } from "@services/queries/getMenu";
 
 const isIndex = /^\/(index(\.html)?)?$/.test(Astro.url.pathname);
+const mainMenuItems = await fetchMenu("Main Menu");
 ---
 
 <header class="c-header">
@@ -29,7 +31,7 @@ const isIndex = /^\/(index(\.html)?)?$/.test(Astro.url.pathname);
         </button>
       </ColorModeToggle>
 
-      <MainMenu client:only="vue">
+      <MainMenu client:only="vue" menuItems={mainMenuItems}>
         <MainMenuButton slot="fallback" />
       </MainMenu>
     </nav>

@@ -19,7 +19,11 @@ vi.mock("@components/NavList.vue", () => ({
   default: {
     name: "NavList",
     props: ["items", "classesUl", "classesLi"],
-    template: "<ul><li v-for=\"item in items\" :key=\"item.link || item.component\">{{ item.title }}</li></ul>",
+    template:
+      "<ul><li v-for=\"(item, index) in items\" :key=\"index\" " +
+      ":class=\"typeof classesLi === 'function' ? classesLi(item, index) : classesLi\">" +
+      "<component v-if=\"item.component\" :is=\"item.component\" v-bind=\"item.props\" />" +
+      "<template v-else>{{ item.title }}</template></li></ul>",
   },
 }));
 
@@ -37,14 +41,42 @@ describe("MainMenu.vue", () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it("passes menuItems with expected nav links to NavList", async () => {
+  it("renders the CMS-provided menuItems alongside the fixed install item", async () => {
     const MainMenu = (await import("@components/header/MainMenu.vue")).default;
-    const wrapper = mount(MainMenu);
+    const wrapper = mount(MainMenu, {
+      props: {
+        menuItems: [
+          { link: "/magazin", title: "Magazin" },
+          { link: "/wort", title: "Wort Index" },
+        ],
+      },
+    });
     const text = wrapper.text();
-    expect(text).toContain("Spiel - Berliner oder nicht?");
-    expect(text).toContain("Wort vorschlagen");
+    expect(text).toContain("Magazin");
     expect(text).toContain("Wort Index");
-    expect(text).toContain("Einstellungen");
+    expect(wrapper.find(".install-app").exists()).toBe(true);
+  });
+
+  it("puts the install item first regardless of CMS item order", async () => {
+    const MainMenu = (await import("@components/header/MainMenu.vue")).default;
+    const wrapper = mount(MainMenu, {
+      props: { menuItems: [{ link: "/magazin", title: "Magazin" }] },
+    });
+    const items = wrapper.findAll("li");
+    expect(items[0].find(".install-app").exists()).toBe(true);
+    expect(items[1].text()).toBe("Magazin");
+  });
+
+  it("adds a dashed divider before the first CMS item, none when the CMS menu is empty", async () => {
+    const MainMenu = (await import("@components/header/MainMenu.vue")).default;
+
+    const withItems = mount(MainMenu, {
+      props: { menuItems: [{ link: "/magazin", title: "Magazin" }] },
+    });
+    expect(withItems.findAll("li")[1].classes()).toContain("is-split");
+
+    const empty = mount(MainMenu, { props: { menuItems: [] } });
+    expect(empty.findAll("li")).toHaveLength(1);
   });
 
   it("uses DropdownPopover as root wrapper", async () => {
