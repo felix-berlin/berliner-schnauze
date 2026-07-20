@@ -155,43 +155,16 @@ const articleJson = () =>
 </Layout>
 
 <script>
-  // Table-of-contents scroll-spy: highlight the section currently in view.
+  import { initScrollSpy } from '@utils/scrollSpy';
+
   // Progressive enhancement — the jump links work without this.
   const initTocSpy = () => {
-    const toc = document.querySelector<HTMLElement>('.js-toc');
-    if (!toc) return;
-
-    const links = new Map<string, HTMLAnchorElement>();
-    toc.querySelectorAll<HTMLAnchorElement>('[data-toc]').forEach((link) => {
-      const id = link.dataset.toc;
-      if (id) links.set(id, link);
+    initScrollSpy({
+      activeClass: 'is-current',
+      getSectionId: (link) => link.dataset.toc,
+      linkSelector: '[data-toc]',
+      navSelector: '.js-toc',
     });
-
-    const headings = [...links.keys()]
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (!headings.length) return;
-
-    let current: HTMLAnchorElement | null = null;
-    const setCurrent = (id: string) => {
-      const next = links.get(id) ?? null;
-      if (next === current) return;
-      current?.classList.remove('is-current');
-      next?.classList.add('is-current');
-      current = next;
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]?.target.id) setCurrent(visible[0].target.id);
-      },
-      { rootMargin: '-20% 0px -70% 0px' },
-    );
-
-    headings.forEach((h) => observer.observe(h));
   };
 
   document.addEventListener('astro:page-load', initTocSpy);
