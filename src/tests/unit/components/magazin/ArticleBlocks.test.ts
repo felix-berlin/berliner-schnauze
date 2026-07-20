@@ -57,4 +57,39 @@ describe("ArticleBlocks.astro", () => {
     });
     expect(result).not.toContain("c-magazin-article__image");
   });
+
+  it("renders a Picture for a core/image block with a url and explicit dimensions", async () => {
+    const result = await render({
+      blocks: [
+        {
+          name: "core/image",
+          order: 0,
+          saveContent: "",
+          attributes: {
+            url: "https://cms.berliner-schnauze.wtf/wp-content/uploads/baer.jpg",
+            width: "600",
+            height: "300",
+            alt: "Ein Berliner Bär",
+          },
+        },
+      ],
+    });
+    expect(result).toContain("c-magazin-article__image");
+    expect(result).toContain("Ein Berliner Bär");
+  });
+
+  it("falls back to default dimensions and empty alt when a core/image block omits them", async () => {
+    const result = await render({
+      blocks: [
+        {
+          name: "core/image",
+          order: 0,
+          saveContent: "",
+          attributes: { url: "https://cms.berliner-schnauze.wtf/wp-content/uploads/baer.jpg" },
+        },
+      ],
+    });
+    expect(result).toContain("c-magazin-article__image");
+    expect(result).not.toMatch(/alt="[^"]+"/);
+  });
 });
