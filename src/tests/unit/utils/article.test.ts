@@ -1,5 +1,8 @@
+import { WP_API } from "astro:env/client";
 import { processArticleBlocks, slugify } from "@utils/article";
 import { describe, expect, it } from "vitest";
+
+const wpOrigin = new URL(WP_API).origin;
 
 const block = (order: number, saveContent: string, name = "core/paragraph") => ({
   name,
@@ -85,6 +88,19 @@ describe("processArticleBlocks", () => {
     const { blocks, toc } = processArticleBlocks([block(1, "<h2>—</h2>")]);
     expect(toc[0].id).toBe("abschnitt");
     expect(blocks[0].saveContent).toContain('id="abschnitt"');
+  });
+
+  it("rewrites CMS-absolute internal links to relative paths", () => {
+    const { blocks } = processArticleBlocks([
+      block(1, `<p>Siehe <a href="${wpOrigin}/wort/bulette/">Bulette</a>.</p>`),
+    ]);
+    expect(blocks[0].saveContent).toContain('href="/wort/bulette/"');
+  });
+
+  it("leaves external links untouched", () => {
+    const original = '<p><a href="https://example.com/foo">Extern</a></p>';
+    const { blocks } = processArticleBlocks([block(1, original)]);
+    expect(blocks[0].saveContent).toBe(original);
   });
 
   it("returns blocks with empty or missing saveContent untouched", () => {

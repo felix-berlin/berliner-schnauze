@@ -1,3 +1,5 @@
+import { WP_API } from "astro:env/client";
+
 export interface TocEntry {
   id: string;
   text: string;
@@ -20,6 +22,13 @@ export interface ProcessedArticle {
 // editor marks a link as sponsored/affiliate — network-agnostic, survives
 // link format changes, and matches Google's own rel=sponsored guidance.
 const SPONSORED_LINK_PATTERN = /\brel="[^"]*\bsponsored\b[^"]*"/i;
+
+// WP's internal link inserter always writes hrefs absolute against the CMS's own
+// siteurl (cms.berliner-schnauze.wtf) — there's no WP-side fix without breaking
+// wp-admin/assets. Stripping that origin turns them into root-relative links that
+// resolve against whatever domain actually serves the page (dev or prod).
+const wpOrigin = new URL(WP_API).origin;
+const rewriteWpLinks = (html: string): string => html.replaceAll(`href="${wpOrigin}`, 'href="');
 
 // Reduce heading markup to plain text for TOC labels + slugs. The strip is
 // applied in a fixpoint loop so nested/crafted tags can't reconstruct after a
@@ -84,6 +93,9 @@ export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle =
     if (!source) return block;
 
     let html = source;
+
+    // 0. Internal links: rewrite CMS-absolute hrefs to relative paths.
+    html = rewriteWpLinks(html);
 
     // 1. Headings: ensure an id and collect the TOC (skip the Quellen appendix).
     html = html.replace(/<h2\b([^>]*)>([\s\S]*?)<\/h2>/gi, (match, attrs: string, inner: string) => {
