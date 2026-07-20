@@ -37,7 +37,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { post, related } = Astro.props as Props;
 
-const { blocks, toc } = processArticleBlocks(post.blocks ?? []);
+const { blocks, toc, hasAffiliateLinks } = processArticleBlocks(post.blocks ?? []);
 const readingMinutes = post.seo?.readingTime ? Math.max(1, Math.round(post.seo.readingTime)) : null;
 
 const seoProps = seoData({
@@ -80,6 +80,12 @@ const articleJson = () =>
         <span class='c-magazin-article__reading-time'>{readingMinutes} Min Lesezeit</span>
       )}
     </div>
+    {hasAffiliateLinks && (
+      <p class='c-magazin-article__affiliate-disclosure'>
+        Als Amazon-Partner verdiene ich an qualifizierten Verkäufen. Ich erhalte eine kleine
+        Provision — für dich bleibt der Preis gleich.
+      </p>
+    )}
     {post.featuredImage?.node?.sourceUrl && (
       <Picture
         alt={post.featuredImage.node.altText ?? ''}

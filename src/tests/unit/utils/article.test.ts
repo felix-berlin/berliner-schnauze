@@ -102,4 +102,78 @@ describe("processArticleBlocks", () => {
     expect(blocks[0].saveContent).toBe(original);
     expect(toc).toHaveLength(0);
   });
+
+  describe("hasAffiliateLinks", () => {
+    it("detects a link marked rel=sponsored", () => {
+      const { hasAffiliateLinks } = processArticleBlocks([
+        block(1, '<p>Kauf <a href="https://www.amazon.de/dp/B01N5IB20Q" rel="sponsored">hier</a>.</p>'),
+      ]);
+      expect(hasAffiliateLinks).toBe(true);
+    });
+
+    it("detects rel=sponsored combined with other rel values", () => {
+      const { hasAffiliateLinks } = processArticleBlocks([
+        block(1, '<p><a href="https://amzn.to/3xyz123" rel="noopener sponsored nofollow">Angebot</a></p>'),
+      ]);
+      expect(hasAffiliateLinks).toBe(true);
+    });
+
+    it("ignores a link without rel=sponsored, even to amazon.de", () => {
+      const { hasAffiliateLinks } = processArticleBlocks([
+        block(1, '<p><a href="https://www.amazon.de/dp/B01N5IB20Q">hier</a></p>'),
+      ]);
+      expect(hasAffiliateLinks).toBe(false);
+    });
+
+    it("is false when no link is present", () => {
+      const { hasAffiliateLinks } = processArticleBlocks([
+        block(1, "<p>Ganz normaler Text ohne Links.</p>"),
+      ]);
+      expect(hasAffiliateLinks).toBe(false);
+    });
+
+    it("checks image and quote blocks too, not just processed ones", () => {
+      const { hasAffiliateLinks } = processArticleBlocks([
+        block(1, '<a href="https://amzn.to/3xyz123" rel="sponsored">Bild</a>', "core/image"),
+      ]);
+      expect(hasAffiliateLinks).toBe(true);
+    });
+  });
+
+  describe("sponsored link labeling", () => {
+    it("appends a visible Anzeige tag right after a rel=sponsored link", () => {
+      const { blocks } = processArticleBlocks([
+        block(1, '<p><a href="https://amzn.to/3xyz123" rel="sponsored">Angebot</a> lohnt sich.</p>'),
+      ]);
+      expect(blocks[0].saveContent).toBe(
+        '<p><a href="https://amzn.to/3xyz123" rel="sponsored">Angebot</a>' +
+          '<span class="c-magazin-article__sponsored-tag">Anzeige</span> lohnt sich.</p>',
+      );
+    });
+
+    it("labels every sponsored link when there are several", () => {
+      const { blocks } = processArticleBlocks([
+        block(
+          1,
+          '<p><a href="https://amzn.to/1" rel="sponsored">Eins</a> und ' +
+            '<a href="https://amzn.to/2" rel="sponsored">Zwei</a></p>',
+        ),
+      ]);
+      const html = blocks[0].saveContent ?? "";
+      expect(html.match(/c-magazin-article__sponsored-tag/g)).toHaveLength(2);
+    });
+
+    it("does not label a link without rel=sponsored", () => {
+      const { blocks } = processArticleBlocks([
+        block(1, '<p><a href="https://www.amazon.de/dp/B01N5IB20Q">hier</a></p>'),
+      ]);
+      expect(blocks[0].saveContent).not.toContain("sponsored-tag");
+    });
+
+    it("skips image and quote blocks, matching their existing exemption", () => {
+      const original = '<a href="https://amzn.to/3xyz123" rel="sponsored">Bild</a>';
+      const { blocks } = processArticleBlocks([block(1, original, "core/image")]);
+      expect(blocks[0].saveContent).toBe(original);
+    });
+  });
 });

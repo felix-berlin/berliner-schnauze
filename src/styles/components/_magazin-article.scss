@@ -59,6 +59,20 @@ $toc-width: 16rem;
     }
   }
 
+  &__affiliate-disclosure {
+    margin-block: vars.$spacer * 0.75 0;
+    padding: vars.$spacer * 0.6 vars.$spacer * 0.85;
+    border: 1px dashed var(--grey-100);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--grey-100);
+
+    @include butler-mx.dark-mode-class {
+      color: color-mix(in srgb, var(--color-body) 65%, transparent);
+    }
+  }
+
   // ------------------------------------------------------- Layout + TOC
   &__layout {
     @include mx.breakpoint("lg") {
@@ -240,6 +254,32 @@ $toc-width: 16rem;
 
       @include butler-mx.dark-mode-class {
         color: var(--orange-300);
+      }
+    }
+
+    // Sponsored-link label — sits right after the link, not just the
+    // article-level notice, per-link legal disclosure. Dashed outline, not a
+    // filled badge: this fires on every sponsored link, so it stays quiet
+    // rather than competing with the orange accent used for real emphasis.
+    .c-magazin-article__sponsored-tag {
+      display: inline-block;
+      margin-inline-start: 0.35em;
+      padding: 0.05em 0.4em;
+      border: 1px dashed var(--grey-100);
+      border-radius: 4px;
+      font-family: vars.$berlin;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--grey-100);
+      vertical-align: middle;
+      white-space: nowrap;
+
+      @include butler-mx.dark-mode-class {
+        color: color-mix(in srgb, var(--color-body) 65%, transparent);
+        border-color: color-mix(in srgb, var(--color-body) 35%, transparent);
       }
     }
 

@@ -13,7 +13,13 @@ export interface ArticleBlock {
 export interface ProcessedArticle {
   blocks: ArticleBlock[];
   toc: TocEntry[];
+  hasAffiliateLinks: boolean;
 }
+
+// Gutenberg's link UI writes rel="sponsored" (or "… sponsored …") when an
+// editor marks a link as sponsored/affiliate — network-agnostic, survives
+// link format changes, and matches Google's own rel=sponsored guidance.
+const SPONSORED_LINK_PATTERN = /\brel="[^"]*\bsponsored\b[^"]*"/i;
 
 // Reduce heading markup to plain text for TOC labels + slugs. The strip is
 // applied in a fixpoint loop so nested/crafted tags can't reconstruct after a
@@ -60,6 +66,9 @@ export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle =
   const toc: TocEntry[] = [];
   const slugCounts = new Map<string, number>();
   const seenRefs = new Set<string>();
+  const hasAffiliateLinks = sorted.some(
+    (block) => block.saveContent && SPONSORED_LINK_PATTERN.test(block.saveContent),
+  );
 
   const uniqueSlug = (base: string): string => {
     const key = base || "abschnitt";
@@ -105,8 +114,14 @@ export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle =
       return `<li id="quelle-${num}">${inner} <a class="c-magazin-article__backref" href="#fnref-${num}" aria-label="Zurück zur Textstelle">↩</a></li>`;
     });
 
+    // 4. Sponsored links: visibly label each one, not just the article-level notice.
+    html = html.replace(
+      /<a\b[^>]*\brel="[^"]*\bsponsored\b[^"]*"[^>]*>[\s\S]*?<\/a>/gi,
+      (match) => `${match}<span class="c-magazin-article__sponsored-tag">Anzeige</span>`,
+    );
+
     return { ...block, saveContent: html };
   });
 
-  return { blocks: outBlocks, toc };
+  return { blocks: outBlocks, hasAffiliateLinks, toc };
 };
