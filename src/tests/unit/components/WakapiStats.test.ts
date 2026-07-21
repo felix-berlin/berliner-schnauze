@@ -31,7 +31,7 @@ describe("WakapiStats.astro", () => {
     global.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        projects: [{ key: "berliner-schnauze", total: 7200 }],
+        data: { total_seconds: 7200 },
       }),
     } as unknown as Response);
 
@@ -42,10 +42,10 @@ describe("WakapiStats.astro", () => {
     expect(result).toContain("Std. Coding-Zeit");
   });
 
-  it("renders nothing when fetch returns no matching project", async () => {
+  it("renders nothing when total_seconds is zero", async () => {
     global.fetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ projects: [] }),
+      json: async () => ({ data: { total_seconds: 0 } }),
     } as unknown as Response);
 
     const { default: WakapiStats } = await import("@components/WakapiStats.astro");
@@ -88,20 +88,5 @@ describe("WakapiStats.astro", () => {
     expect(result).toContain("10+");
     expect(result).toContain("Std. Coding-Zeit");
     expect(global.fetch).not.toHaveBeenCalled();
-  });
-
-  it("handles nanosecond-scale total by converting to seconds", async () => {
-    global.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        projects: [{ key: "berliner-schnauze", total: 3600 * 1e9 }],
-      }),
-    } as unknown as Response);
-
-    const { default: WakapiStats } = await import("@components/WakapiStats.astro");
-    const container = await AstroContainer.create();
-    const result = await container.renderToString(WakapiStats, {});
-    expect(result).toContain("1+");
-    expect(result).toContain("Std. Coding-Zeit");
   });
 });
