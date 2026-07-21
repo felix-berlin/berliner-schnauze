@@ -60,7 +60,3 @@ tests/unit/junit-report.xml
 .claude/skills/impeccable/
 .github/skills/impeccable/
 .codex/skills/impeccable/
-
-# Graphify
-graphify-out/cost.json
-graphify-out/cache/
