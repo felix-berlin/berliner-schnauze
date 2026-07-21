@@ -48,18 +48,22 @@ if (WAKAPI_API_KEY) {
     minutes = cached.minutes;
   } else {
     try {
-      const res = await fetch(`${WAKAPI_HOST}/api/summary?interval=any&project=berliner-schnauze`, {
-        headers: {
-          Authorization: `Bearer ${Buffer.from(WAKAPI_API_KEY).toString('base64')}`,
+      // Use the cached WakaTime-compat all-time endpoint. /api/summary?interval=any
+      // is not a valid interval and triggers an unbounded aggregation that never
+      // completes within FETCH_TIMEOUT_MS; this endpoint is precomputed (~500ms).
+      const res = await fetch(
+        `${WAKAPI_HOST}/api/compat/wakatime/v1/users/current/all_time_since_today?project=berliner-schnauze`,
+        {
+          headers: {
+            Authorization: `Bearer ${Buffer.from(WAKAPI_API_KEY).toString('base64')}`,
+          },
+          signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
         },
-        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-      });
+      );
 
       if (res.ok) {
         const json = await res.json();
-        const project = json.projects?.find((p: { key: string }) => p.key === 'berliner-schnauze');
-        const raw: number = project?.total ?? 0;
-        const totalSeconds = raw > 1e9 ? Math.floor(raw / 1e9) : raw;
+        const totalSeconds: number = json.data?.total_seconds ?? 0;
         hours = Math.floor(totalSeconds / 3600);
         minutes = Math.floor((totalSeconds % 3600) / 60);
         writeCache({ fetchedAt: Date.now(), hours, minutes });
