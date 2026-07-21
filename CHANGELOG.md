@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.44.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.44.0...v3.44.1) (2026-07-21)
+
+
+### Bug Fixes
+
+* switch Wakapi to cached all-time endpoint to stop stats timeout ([a220974](https://github.com/felix-berlin/berliner-schnauze/commit/a22097434d292005fa8898cdb2ebe92180420028))
+
 # [3.44.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.43.1...v3.44.0) (2026-07-20)
 
 
