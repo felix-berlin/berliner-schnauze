@@ -29,5 +29,15 @@ minimumReleaseAgeExclude:
   - autoprefixer@10.5.3
   - compromise@14.16.0
   - de-compromise@0.1.0
-  - miniflare@4.20260710.0
-  - wrangler@4.111.0
+  - miniflare@4.20260710.0 || 4.20260721.0
+  - wrangler@4.111.0 || 4.113.0
+  - '@cloudflare/workerd-darwin-64@1.20260721.1'
+  - '@cloudflare/workerd-darwin-arm64@1.20260721.1'
+  - '@cloudflare/workerd-linux-64@1.20260721.1'
+  - '@cloudflare/workerd-linux-arm64@1.20260721.1'
+  - '@cloudflare/workerd-windows-64@1.20260721.1'
+  - '@infisical/cli@0.43.111'
+  - '@semantic-release/changelog@7.0.0'
+  - '@semantic-release/git@11.0.0'
+  - nanostores@1.4.1
+  - workerd@1.20260721.1
