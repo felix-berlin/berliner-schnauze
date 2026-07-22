@@ -1,13 +1,26 @@
-const QUERY = `
+/** Sitemap route filter: drop settings pages and the BON share route,
+ *  keep everything else (words, magazine, themen, static pages). */
+export const sitemapFilter = (page: string): boolean =>
+  !page.includes("/settings") &&
+  !page.endsWith("/games/berliner-oder-nicht/share");
+
+type DateNode = { slug: string; modifiedGmt: string };
+
+const buildQuery = (root: string, where: string): string => `
   query($after: String) {
-    berlinerWords(first: 100, after: $after, where: { stati: PUBLISH }) {
+    ${root}(first: 100, after: $after, where: { ${where} }) {
       edges { node { slug modifiedGmt } }
       pageInfo { endCursor hasNextPage }
     }
   }
 `;
 
-async function fetchAll(apiUrl: string): Promise<Map<string, string>> {
+/** Paginates a WPGraphQL connection, returning slug → ISO lastmod. */
+async function fetchDates(
+  apiUrl: string,
+  query: string,
+  root: string,
+): Promise<Map<string, string>> {
   const map = new Map<string, string>();
   let cursor: string | null = null;
 
@@ -19,39 +32,52 @@ async function fetchAll(apiUrl: string): Promise<Map<string, string>> {
 
   do {
     const res = await fetch(apiUrl, {
-      body: JSON.stringify({ query: QUERY, variables: { after: cursor } }),
+      body: JSON.stringify({ query, variables: { after: cursor } }),
       headers,
       method: "POST",
     });
     const { data } = (await res.json()) as {
-      data?: {
-        berlinerWords?: {
-          edges: { node: { slug: string; modifiedGmt: string } }[];
+      data?: Record<
+        string,
+        {
+          edges: { node: DateNode }[];
           pageInfo: { endCursor: string; hasNextPage: boolean };
-        };
-      };
+        }
+      >;
     };
-    const bw = data?.berlinerWords;
-    if (!bw) break;
+    const conn = data?.[root];
+    if (!conn) break;
 
-    for (const { node } of bw.edges) {
+    for (const { node } of conn.edges) {
       if (node.slug && node.modifiedGmt) {
         map.set(node.slug, new Date(node.modifiedGmt + "Z").toISOString());
       }
     }
-    cursor = bw.pageInfo.hasNextPage ? bw.pageInfo.endCursor : null;
+    cursor = conn.pageInfo.hasNextPage ? conn.pageInfo.endCursor : null;
   } while (cursor);
 
   return map;
 }
 
-let _cache: Promise<Map<string, string>> | null = null;
+const WORD_QUERY = buildQuery("berlinerWords", "stati: PUBLISH");
+const POST_QUERY = buildQuery("posts", "status: PUBLISH");
 
-/** Returns slug → ISO lastmod date for all published words. Cached per build process.
+let _wordCache: Promise<Map<string, string>> | null = null;
+let _postCache: Promise<Map<string, string>> | null = null;
+
+/** Returns slug → ISO lastmod for all published words. Cached per build process.
  *  Uses process.env.WP_API directly — safe to import from astro.config.mjs. */
 export const getWordDates = (): Promise<Map<string, string>> => {
   const apiUrl = process.env.WP_API;
   if (!apiUrl) return Promise.resolve(new Map());
-  _cache ??= fetchAll(apiUrl);
-  return _cache;
+  _wordCache ??= fetchDates(apiUrl, WORD_QUERY, "berlinerWords");
+  return _wordCache;
+};
+
+/** Returns slug → ISO lastmod for all published magazine posts. Cached per build. */
+export const getPostDates = (): Promise<Map<string, string>> => {
+  const apiUrl = process.env.WP_API;
+  if (!apiUrl) return Promise.resolve(new Map());
+  _postCache ??= fetchDates(apiUrl, POST_QUERY, "posts");
+  return _postCache;
 };
