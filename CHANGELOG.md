@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.45.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.44.1...v3.45.0) (2026-07-22)
+
+
+### Features
+
+* **seo:** add lastmod to magazine articles in sitemap ([ad955cf](https://github.com/felix-berlin/berliner-schnauze/commit/ad955cfa851fb57f90bdba63fb543afd9e575a71))
+
 ## [3.44.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.44.0...v3.44.1) (2026-07-21)
 
 
