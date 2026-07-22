@@ -1,0 +1,32 @@
+schema: spec-driven
+
+context: |
+  Domain: Berliner Schnauze — a Berlin-dialect translator / glossary web app.
+  Content (glossary words, blog posts) lives in a WordPress GraphQL backend and is
+  pulled into the frontend as static JSON at build time.
+
+  Architecture: static Astro site (SSG, src/pages/) with Vue 3 islands for all
+  interactivity (src/components/). Client state in Nanostores ($-prefixed exports,
+  src/stores/). Full-text search via Orama with German stemming, index built at
+  build time. urql for GraphQL from Vue. Deployed to Cloudflare Pages. PWA via
+  @vite-pwa/astro + Workbox.
+
+  Notable capabilities: BON game ("Berliner oder Nicht", src/components/games/),
+  word detail pages, Orama word search, PWA/offline + cache overview, toast system,
+  modal system, blog/magazine. Historical per-feature plans live (frozen) in
+  docs/superpowers/plans/ — use them as source when writing a capability's
+  current-state spec, but do NOT add new plans there; all new planning is OpenSpec.
+
+  Conventions: TypeScript path aliases only (@components, @stores, @utils, …), never
+  relative paths. BEMIT CSS naming (.c-/.o-/.u-/.is-/.js- prefixes). SCSS via @use,
+  component styles co-located and loaded per-component. Prefer VueUse before hand-
+  rolling browser-API wrappers. Target only Baseline (widely/newly available) JS/CSS
+  features — no polyfills. Icons from Lucide, loaded async. pnpm only.
+
+rules:
+  tasks:
+    - Reference exact file paths and use TS path aliases, not relative paths
+    - "Verification tasks use project scripts: pnpm test:unit, pnpm lint, pnpm typechecking"
+  proposal:
+    - "State a Non-goals section to keep scope tight (project favors the smallest change that works)"
+    - Note the affected capability(ies) so the matching current-state spec can be created or updated
