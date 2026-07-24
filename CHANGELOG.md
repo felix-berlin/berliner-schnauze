@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.46.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.45.0...v3.46.0) (2026-07-24)
+
+
+### Bug Fixes
+
+* dropdown hydration bug ([329d2b6](https://github.com/felix-berlin/berliner-schnauze/commit/329d2b660839cca98756ad08083d5f8709c19e4b))
+* history fallback (test) ([06347f5](https://github.com/felix-berlin/berliner-schnauze/commit/06347f5a4e7292beafe71cc57c2bfdbd373f7688))
+* remove headers cf settings (for now --> testing) ([5836c97](https://github.com/felix-berlin/berliner-schnauze/commit/5836c974f4c185d77eea783758cf0d6f2bed3798))
+
+
+### Features
+
+* **bon:** reveal word meaning on wrong answers, add idiom hint ([194a1f1](https://github.com/felix-berlin/berliner-schnauze/commit/194a1f1021527c0d9188c8f4e3894694eaa47c23))
+* hide search shortcuts on touch ([abeeb73](https://github.com/felix-berlin/berliner-schnauze/commit/abeeb7376d7d64f887a86eea4f15c3081fe1ec96))
+
 # [3.45.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.44.1...v3.45.0) (2026-07-22)
 
 
