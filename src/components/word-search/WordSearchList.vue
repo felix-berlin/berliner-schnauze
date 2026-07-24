@@ -6,7 +6,7 @@
 
     <SearchResultCount />
 
-    <div class="c-filter-search__shortcuts">
+    <div v-if="hasKeyboard" class="c-filter-search__shortcuts">
       <ShortcutSelect />
       <ShortcutNavigating />
     </div>
@@ -29,6 +29,7 @@ import WordSearchFilterToggle from "@components/word-search/WordSearchFilterTogg
 import WordList from "@components/WordList.vue";
 import { useStore } from "@nanostores/vue";
 import { $searchResultCount, $searchState } from "@stores/wordList.ts";
+import { useMediaQuery } from "@vueuse/core";
 import { defineAsyncComponent } from "vue";
 
 type WordSearchListProps = {
@@ -41,6 +42,11 @@ const WordSuggestHint = defineAsyncComponent(() => import("@components/WordSugge
 
 const searchResultCount = useStore($searchResultCount);
 const searchState = useStore($searchState);
+
+// Coarse pointer (touch) implies no keyboard is the primary input; the shortcut
+// hints below are meaningless without one. Reactive so a paired Bluetooth keyboard
+// can still bring the hints back mid-session.
+const hasKeyboard = useMediaQuery("(pointer: fine)");
 </script>
 
 <style lang="scss">

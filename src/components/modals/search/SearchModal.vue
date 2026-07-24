@@ -25,9 +25,11 @@
   </div>
 
   <footer v-if="!showWordListFilterFlyout">
-    <ShortcutSelect />
-    <ShortcutNavigating />
-    <ShortcutClose />
+    <template v-if="hasKeyboard">
+      <ShortcutSelect />
+      <ShortcutNavigating />
+      <ShortcutClose />
+    </template>
     <ModalCloseButton>
       <template #suffix>schließen</template>
     </ModalCloseButton>
@@ -45,6 +47,7 @@ import WordFilter from "@components/word-search/WordFilter.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
 import { useStore } from "@nanostores/vue";
 import { $searchResultCount, $showWordListFilterFlyout } from "@stores/wordList.ts";
+import { useMediaQuery } from "@vueuse/core";
 import { defineAsyncComponent } from "vue";
 
 const SearchWords = defineAsyncComponent(() => import("@components/SearchWords.vue"));
@@ -52,6 +55,11 @@ const WordList = defineAsyncComponent(() => import("@components/WordList.vue"));
 
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
 const searchResultCount = useStore($searchResultCount);
+
+// Coarse pointer (touch) implies no keyboard is the primary input; the shortcut
+// hints below are meaningless without one. Reactive so a paired Bluetooth keyboard
+// can still bring the hints back mid-session.
+const hasKeyboard = useMediaQuery("(pointer: fine)");
 </script>
 
 <style lang="scss">
