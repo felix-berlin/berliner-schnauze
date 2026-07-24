@@ -2,6 +2,7 @@
   <div class="c-filter-dropdown">
     <DropdownPopover
       ref="dropdownRef"
+      name="alphabetical-filter"
       placement="bottom"
       :offset="9"
       :class="{ 'has-active-filter': wordSearch.activeLetterFilter }"

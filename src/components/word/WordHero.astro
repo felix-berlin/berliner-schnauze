@@ -82,7 +82,7 @@ const themen = word.berlinerischThemen?.nodes ?? [];
   <div class='c-word-hero__right'>
     <WordOptionDropdown
       berlinerisch={word.wordProperties?.berlinerisch ?? null}
-      client:only='vue'
+      client:load
       slug={word.slug}
     />
   </div>

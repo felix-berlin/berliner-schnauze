@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { useResizeObserver } from "@vueuse/core";
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 
 export type PlacementValue =
   | "bottom-start"
@@ -53,6 +53,11 @@ export type PlacementValue =
 export type TriggerEvent = "click" | "hover" | "focus";
 
 export type DropdownPopoverProps = {
+  /** Unique identifier for this instance, e.g. "main-menu" or `word-options-${slug}`.
+   * Must be unique across every DropdownPopover rendered on a page — each Astro
+   * island mounts its own Vue app, so a generated id (e.g. useId()) is NOT
+   * guaranteed unique across islands, only within one. */
+  name: string;
   lazy?: boolean;
   offset?: number;
   placement?: PlacementValue;
@@ -66,6 +71,7 @@ export type DropdownPopoverProps = {
 };
 
 const {
+  name,
   lazy = true,
   offset = 8,
   placement = "bottom-start",
@@ -80,7 +86,7 @@ const {
 
 defineOptions({ inheritAttrs: false });
 
-const panelId = `dropdown-${crypto.randomUUID()}`;
+const panelId = `dropdown-${name}`;
 
 const triggerEl = ref<HTMLElement | null>(null);
 const panel = ref<HTMLElement | null>(null);
@@ -114,8 +120,11 @@ const syncArrow = (): void => {
   arrowAbove.value = panelRect.bottom <= triggerRect.top;
 };
 
-useResizeObserver([triggerEl, panel, document.documentElement as HTMLElement], () => {
-  if (isOpen.value) syncArrow();
+// document access must wait for onMounted — this runs during SSR under client:load
+onMounted(() => {
+  useResizeObserver([triggerEl, panel, document.documentElement as HTMLElement], () => {
+    if (isOpen.value) syncArrow();
+  });
 });
 
 const triggerProps = computed(() => ({
