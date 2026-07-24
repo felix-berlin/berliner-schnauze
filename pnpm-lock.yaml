@@ -155,7 +155,7 @@ importers:
         version: 6.1.1(graphql-sock@1.0.1(graphql@17.0.2))(graphql@17.0.2)
       '@infisical/cli':
         specifier: ^0.43.111
-        version: 0.43.111
+        version: 0.43.113
       '@nanostores/logger':
         specifier: ^1.1.0
         version: 1.1.0(nanostores@1.4.1)
@@ -2440,8 +2440,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@infisical/cli@0.43.111':
-    resolution: {integrity: sha512-ROIeeOLQtN8ECn6HEnQbQ3doo4BcUMxIgAArSXeW+dfH/hAXX/sCLyUPpVWOXR45KadV9sDDhEvo350xc+GhrQ==}
+  '@infisical/cli@0.43.113':
+    resolution: {integrity: sha512-+TyqomnoibYn6nWtTrGhyypZyB6fk480LooSn8H+KAxEpmqKbCehb8ZpIFeOo6UYjGuyS3OFfzJUq15zagWNqg==}
     hasBin: true
 
   '@inquirer/ansi@2.0.7':
@@ -8219,8 +8219,8 @@ packages:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
 
-  tar@7.5.16:
-    resolution: {integrity: sha512-56adEpPMouktRlBLXiaYFFzZ/3+JXa8P9n7WbR+ibIjtviN55mEaOkiysCnPnWm+7kkui1Dn8J9l+g6zV8731w==}
+  tar@7.5.21:
+    resolution: {integrity: sha512-XdhtCvlMywwxpCW8YEq3lOXBJpUPTR2OHHcwLPO3HwsJqOHa2Ok/oJ7ruGzp+JrKoRPVCzJwAdEjqLW/vNRPHA==}
     engines: {node: '>=18'}
 
   temp-dir@2.0.0:
@@ -11572,9 +11572,9 @@ snapshots:
   '@img/sharp-win32-x64@0.35.3':
     optional: true
 
-  '@infisical/cli@0.43.111':
+  '@infisical/cli@0.43.113':
     dependencies:
-      tar: 7.5.16
+      tar: 7.5.21
       yauzl: 3.4.0
 
   '@inquirer/ansi@2.0.7': {}
@@ -17854,7 +17854,7 @@ snapshots:
 
   tagged-tag@1.0.0: {}
 
-  tar@7.5.16:
+  tar@7.5.21:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
