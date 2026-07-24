@@ -4,6 +4,15 @@ import { ref } from "vue";
 
 const showFlyoutRef = ref(false);
 const searchCountRef = ref(0);
+const hasKeyboardRef = ref(true);
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@vueuse/core")>();
+  return {
+    ...actual,
+    useMediaQuery: vi.fn(() => hasKeyboardRef),
+  };
+});
 
 let useStoreCallCount = 0;
 vi.mock("@nanostores/vue", () => ({
@@ -75,6 +84,7 @@ describe("SearchModal.vue", () => {
     useStoreCallCount = 0;
     showFlyoutRef.value = false;
     searchCountRef.value = 0;
+    hasKeyboardRef.value = true;
   });
 
   it("renders role='search' container", async () => {
@@ -123,6 +133,25 @@ describe("SearchModal.vue", () => {
     const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
     const wrapper = mount(SearchModal);
     expect(wrapper.find("footer").exists()).toBe(false);
+  });
+
+  it("hides shortcut hints but keeps the close button when no keyboard signal is present", async () => {
+    hasKeyboardRef.value = false;
+    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
+    const wrapper = mount(SearchModal);
+    expect(wrapper.find(".mock-shortcut-close").exists()).toBe(false);
+    expect(wrapper.find(".mock-shortcut-navigating").exists()).toBe(false);
+    expect(wrapper.find(".mock-shortcut-select").exists()).toBe(false);
+    expect(wrapper.find(".mock-modal-close").exists()).toBe(true);
+  });
+
+  it("shows shortcut hints when a keyboard signal is present", async () => {
+    hasKeyboardRef.value = true;
+    const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
+    const wrapper = mount(SearchModal);
+    expect(wrapper.find(".mock-shortcut-close").exists()).toBe(true);
+    expect(wrapper.find(".mock-shortcut-navigating").exists()).toBe(true);
+    expect(wrapper.find(".mock-shortcut-select").exists()).toBe(true);
   });
 
   it("renders SearchResultCount when flyout is not visible", async () => {

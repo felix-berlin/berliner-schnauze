@@ -44,3 +44,11 @@ const {
     <Footer transition:persist />
   </body>
 </html>
+
+<script>
+  import { initHistoryNavigationFallback } from '@utils/historyNavigationFallback';
+
+  // Intentionally NOT wrapped in astro:page-load: the popstate listener must
+  // attach exactly once per tab session, not re-attach on every transition.
+  initHistoryNavigationFallback();
+</script>

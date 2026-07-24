@@ -4,6 +4,15 @@ import { ref } from "vue";
 
 const searchCountRef = ref(0);
 const searchStateRef = ref<"loading" | "ready" | "failed">("ready");
+const hasKeyboardRef = ref(true);
+
+vi.mock("@vueuse/core", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@vueuse/core")>();
+  return {
+    ...actual,
+    useMediaQuery: vi.fn(() => hasKeyboardRef),
+  };
+});
 
 vi.mock("@stores/wordList.ts", () => ({
   $searchResultCount: "searchResultCount",
@@ -51,6 +60,7 @@ beforeEach(() => {
   vi.resetModules();
   searchCountRef.value = 0;
   searchStateRef.value = "ready";
+  hasKeyboardRef.value = true;
 });
 
 describe("WordSearchList.vue", () => {
@@ -87,6 +97,22 @@ describe("WordSearchList.vue", () => {
     expect(wrapper.find(".mock-no-search-results").exists()).toBe(true);
     expect(wrapper.find(".mock-search-result-count").exists()).toBe(true);
     expect(wrapper.find(".mock-filter-toggle").exists()).toBe(true);
+  });
+
+  it("shows shortcut hints when a keyboard signal is present", async () => {
+    hasKeyboardRef.value = true;
+    const WordSearchList = (await import("@components/word-search/WordSearchList.vue")).default;
+    const wrapper = mount(WordSearchList, { props: { cssClass: "" } });
+    expect(wrapper.find(".mock-shortcut-select").exists()).toBe(true);
+    expect(wrapper.find(".mock-shortcut-navigating").exists()).toBe(true);
+  });
+
+  it("hides shortcut hints when no keyboard signal is present", async () => {
+    hasKeyboardRef.value = false;
+    const WordSearchList = (await import("@components/word-search/WordSearchList.vue")).default;
+    const wrapper = mount(WordSearchList, { props: { cssClass: "" } });
+    expect(wrapper.find(".mock-shortcut-select").exists()).toBe(false);
+    expect(wrapper.find(".mock-shortcut-navigating").exists()).toBe(false);
   });
 
   it("renders WordList outside the search div", async () => {

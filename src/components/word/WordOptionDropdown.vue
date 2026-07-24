@@ -1,5 +1,6 @@
 <template>
   <DropdownPopover
+    :name="`word-options-${slug ?? ''}`"
     placement="bottom-end"
     class="c-options-dropdown c-dropdown--theme-word-options"
   >

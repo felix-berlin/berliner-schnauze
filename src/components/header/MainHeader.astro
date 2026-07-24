@@ -2,7 +2,6 @@
 import "@styles/components/_menu-nav.scss";
 import ColorModeToggle from "@components/ColorModeToggle.vue";
 import MainMenu from "@components/header/MainMenu.vue";
-import MainMenuButton from "@components/MainMenuButton.vue";
 import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue";
 import SunMoonIcon from "virtual:icons/lucide/sun-moon";
 import { fetchMenu } from "@services/queries/getMenu";
@@ -31,9 +30,7 @@ const mainMenuItems = await fetchMenu("Main Menu");
         </button>
       </ColorModeToggle>
 
-      <MainMenu client:only="vue" menuItems={mainMenuItems}>
-        <MainMenuButton slot="fallback" />
-      </MainMenu>
+      <MainMenu client:load menuItems={mainMenuItems} />
     </nav>
   </div>
 </header>

@@ -34,7 +34,10 @@
           role="alert"
           aria-atomic="true"
         >
-          War {{ overlayText }}!
+          <span class="c-bon-card__overlay-verdict">War {{ overlayText }}!</span>
+          <span v-if="revealMeaning" class="c-bon-card__overlay-meaning">
+            „{{ word }}“ = {{ revealMeaning }}
+          </span>
         </div>
       </Transition>
 
@@ -90,6 +93,7 @@ const props = defineProps<{
   isShaking: boolean
   lastAnswerCorrect: boolean | null
   isReal: boolean | null
+  translation?: string | null
   isFirstCard?: boolean
   disabled?: boolean
 }>()
@@ -114,6 +118,11 @@ const showOverlay = computed(() =>
 
 const overlayText = computed(() =>
   props.isReal ? 'echtes Berlinerisch' : 'erfunden',
+)
+
+// Only real words carry a meaning; fakes never do.
+const revealMeaning = computed(() =>
+  props.isReal && props.translation ? props.translation : null,
 )
 
 const neeAriaLabel = computed(() => `Nee – „${props.word}“ ist nicht Berlinerisch`)
