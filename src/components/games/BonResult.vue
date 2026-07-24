@@ -26,6 +26,10 @@
       </div>
     </dl>
 
+    <p v-if="lastCard?.isReal && lastCard.translation" class="c-bon-result__word-meaning">
+      „{{ lastCard.word }}“ = {{ lastCard.translation }}
+    </p>
+
     <a
       v-if="lastCard?.isReal && lastCard.slug"
       :href="`/wort/${lastCard.slug}`"

@@ -107,6 +107,39 @@ describe("BonCard.vue", () => {
     expect(wrapper.find(".c-bon-card__overlay").text()).toContain("erfunden");
   });
 
+  it("wrong answer on a real word with a translation reveals the meaning", () => {
+    const wrapper = mount(BonCard, {
+      props: {
+        ...defaultProps,
+        word: "Aas",
+        isShaking: true,
+        lastAnswerCorrect: false,
+        isReal: true,
+        translation: "fauler Mensch",
+      },
+    });
+    const meaning = wrapper.find(".c-bon-card__overlay-meaning");
+    expect(meaning.exists()).toBe(true);
+    expect(meaning.text()).toContain("Aas");
+    expect(meaning.text()).toContain("fauler Mensch");
+  });
+
+  it("wrong answer on a real word without a translation shows the verdict but no meaning", () => {
+    const wrapper = mount(BonCard, {
+      props: { ...defaultProps, isShaking: true, lastAnswerCorrect: false, isReal: true, translation: null },
+    });
+    expect(wrapper.find(".c-bon-card__overlay").text()).toContain("echtes Berlinerisch");
+    expect(wrapper.find(".c-bon-card__overlay-meaning").exists()).toBe(false);
+  });
+
+  it("wrong answer on a fake word never shows a meaning", () => {
+    const wrapper = mount(BonCard, {
+      props: { ...defaultProps, isShaking: true, lastAnswerCorrect: false, isReal: false, translation: "irrelevant" },
+    });
+    expect(wrapper.find(".c-bon-card__overlay").text()).toContain("erfunden");
+    expect(wrapper.find(".c-bon-card__overlay-meaning").exists()).toBe(false);
+  });
+
   it("nee button has correct aria-label", () => {
     const wrapper = mount(BonCard, { props: { ...defaultProps, word: "Kiez" } });
     expect(wrapper.find(".c-bon-card__btn--no").attributes("aria-label")).toContain("Kiez");
