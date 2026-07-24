@@ -23,10 +23,17 @@ context: |
   rolling browser-API wrappers. Target only Baseline (widely/newly available) JS/CSS
   features — no polyfills. Icons from Lucide, loaded async. pnpm only.
 
+  Code-exploration tooling: codebase-memory-mcp (search_graph/trace_path/get_architecture/
+  query_graph) is the primary tool for structural code search (indexed once via
+  index_repository); claude-mem (mem-search/timeline) surfaces past decisions and session
+  history; serena handles symbol-level lookups and edits. Native grep/Read are the last
+  resort, not the default.
+
 rules:
   tasks:
     - Reference exact file paths and use TS path aliases, not relative paths
     - "Verification tasks use project scripts: pnpm test:unit, pnpm lint, pnpm typechecking"
+    - "Discovery/exploration tasks (finding usages, tracing call chains, mapping architecture) should specify codebase-memory-mcp or claude-mem as the tool to use, not raw grep"
   proposal:
     - "State a Non-goals section to keep scope tight (project favors the smallest change that works)"
     - Note the affected capability(ies) so the matching current-state spec can be created or updated
