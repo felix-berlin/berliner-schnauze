@@ -58,8 +58,8 @@ pnpm test:ci                 # CI mode: coverage + JUnit reporter
 
 # Linting & type checking
 pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS)
-pnpm typechecking            # tsc --noEmit only (see TypeScript 7 note below — vue-tsc/astro check are currently broken)
-pnpm typechecking:vue-astro  # astro check + vue-tsc — currently crashes under TypeScript 7, kept for when upstream fixes land
+pnpm typechecking            # tsc --noEmit + vue-tsc (via scripts/vue-tsc.mjs — see TypeScript 7 note below)
+pnpm typechecking:astro      # astro check — currently fails fast under TypeScript 7, kept for when upstream ships support
 
 # Build
 pnpm build                   # Production build (Cloudflare Pages output) — no infisical, env vars must already be set
@@ -230,13 +230,11 @@ pnpm supply-chain policy: freshly published packages (< 24h) trigger a lockfile 
 
 ## TypeScript 7
 
-`typescript` is on `^7.0.2`. TS7's published package is the native/Go compiler — its default export is just `{version, versionMajorMinor}`; the classic `Program`/`LanguageService` API (`ts.sys`, `ts.findConfigFile`, `typescript/lib/tsc`, etc.) is gone entirely, not just moved.
+`typescript` is on `^7.0.2`. TS7's published package is the native/Go compiler — its default export is just `{version, versionMajorMinor}`; the classic `Program`/`LanguageService` API (`ts.sys`, `ts.findConfigFile`, `typescript/lib/tsc`, etc.) is gone entirely, not just moved. `@vue/compiler-sfc` also falls back to `ts.sys` when resolving `defineProps<T>()`/`defineEmits<T>()` cross-file type references — fixed via the `script.fs` option passed to the `vue()` integration in `astro.config.mjs`.
 
-- `tsc --noEmit` still works fine (it shells out to the native binary) and is what `pnpm typechecking` / `build:strict` run now.
-- `vue-tsc` (latest 3.3.7) and `@astrojs/check` → `@astrojs/language-server` (latest 2.16.11) both build a classic `ts.LanguageService` and hard-crash under TS7 (`ERR_PACKAGE_PATH_NOT_EXPORTED` on `typescript/lib/tsc`, and `ts.sys` being `undefined`, respectively). Neither has shipped a TS7-native release.
-- `typescript` is a **peerDependency** of both tools, so there's no way to pin them to TS6 independently via pnpm overrides while the rest of the project uses TS7 — peer deps are a shared singleton, overrides only redirect real dependency edges (verified: `vue-tsc>typescript` / `@astrojs/check>typescript` overrides are silently no-ops in the lockfile).
-- Interim state: `.vue`/`.astro` type-checking is unavailable. Run `pnpm typechecking:vue-astro` occasionally to check if an upstream release fixed it — once it stops crashing, fold it back into `typechecking`/`build:strict` and remove this note.
-- `@astrojs/language-server` is pinned via `pnpm-workspace.yaml` overrides so a fixed release gets picked up automatically on `pnpm install`.
+- `tsc --noEmit` works fine (shells out to the native binary) — runs as part of `pnpm typechecking` / `build:strict`.
+- **vue-tsc works** as of `vue-tsc@3.3.8` (released after the TS7 bump above landed — see https://github.com/vuejs/language-tools/releases/tag/v3.3.8), via `@typescript/typescript6`, Microsoft's classic-API compat shim (full old TS6 compiler, published under a different package name specifically so it doesn't collide with the real `typescript` singleton). vue-tsc's CLI still defaults to `require.resolve('typescript/lib/tsc')` though, which crashes immediately since that's real TS7 — and `typescript` is a **peerDependency** of vue-tsc (a shared singleton), so pnpm `overrides`/`packageExtensions` can't swap it out per-consumer (verified: both are silently no-ops for peer edges when the name collides with an existing peer declaration). Worked around with `scripts/vue-tsc.mjs`, which calls vue-tsc's exported `run()` directly with an explicit path to `@typescript/typescript6` (a plain devDependency, no singleton conflict since it's a distinct package name). `pnpm typechecking` / `build:strict` use this wrapper instead of the `vue-tsc` bin directly.
+- **`astro check` (→ `@astrojs/language-server`) still does not work.** As of `2.16.12` it fails fast with a clear message instead of crashing (`"TypeScript's native compiler (7.0 and later) does not ship this [programmatic] API yet"`, tracked at https://github.com/withastro/roadmap/discussions/1321), but there's no `@typescript/typescript6`-style workaround shipped yet. Kept as `pnpm typechecking:astro` (not part of `typechecking`/`build:strict`) — fold back in once upstream adds support. `@astrojs/language-server` is pinned via `pnpm-workspace.yaml` overrides so a fixed release gets picked up automatically on `pnpm install`.
 
 ## AI / Agent Development (Astro v7)
 
