@@ -1,9 +1,14 @@
+import * as modalStore from "@stores/modal.ts";
 import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { nextTick, ref } from "vue";
 
 vi.mock("astro:env/client", () => ({
   SITE_URL: "https://berliner-schnauze.wtf",
+}));
+
+vi.mock("@stores/modal.ts", () => ({
+  open: vi.fn(),
 }));
 
 vi.mock("@vueuse/core", async (importOriginal) => {
@@ -309,5 +314,61 @@ describe("WordOptionDropdown.vue", () => {
     expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
       expect.objectContaining({ message: "Wort geteilt" }),
     );
+  });
+
+  it("renders the 'Fehler melden' and 'Inhalt vorschlagen' buttons", async () => {
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    expect(wrapper.find("[aria-label='Fehler melden']").exists()).toBe(true);
+    expect(wrapper.find("[aria-label='Inhalt vorschlagen']").exists()).toBe(true);
+  });
+
+  it("clicking 'Fehler melden' opens the modal with type 'error'", async () => {
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Fehler melden']").trigger("click");
+
+    expect(modalStore.open).toHaveBeenCalledTimes(1);
+    const callArgs = vi.mocked(modalStore.open).mock.calls[0][0];
+    expect(callArgs.view?.props).toEqual({
+      berlinerWord: "Schnauze",
+      slug: "schnauze",
+      type: "error",
+    });
+  });
+
+  it("clicking 'Inhalt vorschlagen' opens the modal with type 'content'", async () => {
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: "Schnauze", slug: "schnauze" },
+    });
+    await wrapper.find("[aria-label='Inhalt vorschlagen']").trigger("click");
+
+    expect(modalStore.open).toHaveBeenCalledTimes(1);
+    const callArgs = vi.mocked(modalStore.open).mock.calls[0][0];
+    expect(callArgs.view?.props).toEqual({
+      berlinerWord: "Schnauze",
+      slug: "schnauze",
+      type: "content",
+    });
+  });
+
+  it("passes undefined for berlinerWord/slug when props are null", async () => {
+    const WordOptionDropdown = (await import("@components/word/WordOptionDropdown.vue")).default;
+    const wrapper = mount(WordOptionDropdown, {
+      props: { berlinerisch: null as unknown as string, slug: null as unknown as string },
+    });
+    await wrapper.find("[aria-label='Fehler melden']").trigger("click");
+
+    const callArgs = vi.mocked(modalStore.open).mock.calls[0][0];
+    expect(callArgs.view?.props).toEqual({
+      berlinerWord: undefined,
+      slug: undefined,
+      type: "error",
+    });
   });
 });
