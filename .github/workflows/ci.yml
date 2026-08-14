@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+# Repo default is write; this job only reads code, so scope it down.
+permissions:
+  contents: read
+
 jobs:
   lint-and-typecheck:
     runs-on: ubuntu-latest
