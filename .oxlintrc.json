@@ -25,6 +25,7 @@
   "ignorePatterns": [
     "src/components/accordion/index.ts",
     "src/tests",
+    "src/gql/",
     "**/coverage/",
     "dist/",
     "**/dev-dist/",
