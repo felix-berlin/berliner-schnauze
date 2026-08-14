@@ -61,7 +61,7 @@ jobs:
           -o playwright-report.tar.gz.gpg playwright-report.tar.gz
         rm playwright-report.tar.gz
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
