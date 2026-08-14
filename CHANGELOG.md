@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.47.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.46.0...v3.47.0) (2026-08-14)
+
+
+### Bug Fixes
+
+* **build:** generate supportedBrowsers.mjs via Node instead of shell echo ([305b78c](https://github.com/felix-berlin/berliner-schnauze/commit/305b78cb7ef9291f4ca328369b79d7fbbec05aca))
+* **ci:** encrypt Playwright HTML report before artifact upload ([a9b99ee](https://github.com/felix-berlin/berliner-schnauze/commit/a9b99ee20456fcab9c6ced8bf1368c599cdc1de9))
+* **ci:** generate Astro types before lint/typecheck ([ade6d06](https://github.com/felix-berlin/berliner-schnauze/commit/ade6d06aa4a62a49b794da1dc16b2498b5dc7d97))
+* **e2e:** generate supportedBrowsers.mjs before dev server, disable devToolbar in CI ([bb8a893](https://github.com/felix-berlin/berliner-schnauze/commit/bb8a893a8c32a24ad60cc414d33fef8ed11476a6))
+* **lint:** exclude generated src/gql/ from oxlint ([846bbea](https://github.com/felix-berlin/berliner-schnauze/commit/846bbea5c6d7fd69c36162a4bd93a16442a32b9e))
+* **types:** exclude coverage/dev-dist artifacts from type checking ([14da976](https://github.com/felix-berlin/berliner-schnauze/commit/14da9762ad904ed6646e4664a20f64fa2b254f96))
+* **types:** resolve remaining vue-tsc/astro check errors ([dfdb00b](https://github.com/felix-berlin/berliner-schnauze/commit/dfdb00be24b8b24a6d98e4b14fa302865e38c483))
+
+
+### Features
+
+* **build:** upgrade to Astro 7.2, enable session:false and incrementalBuild ([744dea0](https://github.com/felix-berlin/berliner-schnauze/commit/744dea0919662310a08475b71f747e633981dc1c))
+
 # [3.46.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.45.0...v3.46.0) (2026-07-24)
 
 
