@@ -29,6 +29,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # oxlint runs type-aware and vue-tsc/astro check need Astro's generated
+      # types (astro:env/*, content collections) and the supportedBrowsers.mjs
+      # stub the app imports — neither needs real secrets, just the schema.
+      - name: Generate Astro types
+        run: |
+          pnpm run supportedBrowsers
+          pnpm exec astro sync
+
       - name: Lint
         run: pnpm run lint
 
