@@ -61,7 +61,7 @@
     "preinstall": "pnpx only-allow pnpm",
     "server:preview": "pnpx wrangler pages dev ./dist",
     "server:build:preview": "pnpm build && pnpm server:preview",
-    "supportedBrowsers": "echo \"export default $(browserslist-useragent-regexp --allowHigherVersions);\" > src/utils/supportedBrowsers.mjs",
+    "supportedBrowsers": "node scripts/generate-supported-browsers.mjs",
     "refreshAuthToken": "node --env-file=.env ./src/utils/refreshToken.js"
   },
   "dependencies": {
