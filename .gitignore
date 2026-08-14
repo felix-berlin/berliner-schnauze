@@ -60,3 +60,7 @@ tests/unit/junit-report.xml
 .claude/skills/impeccable/
 .github/skills/impeccable/
 .codex/skills/impeccable/
+
+# Playwright
+/blob-report/
+/playwright/.auth/
