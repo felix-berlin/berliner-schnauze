@@ -44,9 +44,26 @@ jobs:
     - name: Run Playwright tests
       run: pnpm exec playwright test
 
+    # Traces/screenshots/console logs can contain secrets — this repo is public,
+    # so GitHub Actions artifacts are downloadable by anyone. Encrypt before
+    # upload per https://playwright.dev/docs/ci-intro#properly-handling-secrets.
+    # Decrypt locally with:
+    #   gpg --decrypt --batch --passphrase "$PLAYWRIGHT_REPORT_PASSPHRASE" \
+    #     playwright-report.tar.gz.gpg | tar xz
+    - name: Encrypt HTML report
+      if: ${{ !cancelled() }}
+      env:
+        PLAYWRIGHT_REPORT_PASSPHRASE: ${{ secrets.PLAYWRIGHT_REPORT_PASSPHRASE }}
+      run: |
+        tar czf playwright-report.tar.gz playwright-report/
+        gpg --batch --yes --symmetric --cipher-algo AES256 \
+          --passphrase "$PLAYWRIGHT_REPORT_PASSPHRASE" \
+          -o playwright-report.tar.gz.gpg playwright-report.tar.gz
+        rm playwright-report.tar.gz
+
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
-        path: playwright-report/
+        path: playwright-report.tar.gz.gpg
         retention-days: 14
