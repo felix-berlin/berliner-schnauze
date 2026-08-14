@@ -42,6 +42,10 @@ const sassAliases = {
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   trailingSlash: "never",
+  // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
+  devToolbar: {
+    enabled: !process.env.CI,
+  },
   fonts: [
     {
       provider: fontProviders.local(),

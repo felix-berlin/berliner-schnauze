@@ -80,7 +80,10 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'pnpm exec astro dev',
+    // `astro dev` alone breaks on a fresh checkout: src/utils/supportedBrowsers.mjs
+    // is a gitignored generated stub normally created by the `predev` hook, which
+    // only fires for `pnpm run dev` — not when this command spawns `astro dev` directly.
+    command: 'pnpm run supportedBrowsers && pnpm exec astro dev',
     url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
