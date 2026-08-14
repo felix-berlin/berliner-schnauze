@@ -1,7 +1,16 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "node_modules", "src/tests/**/*.spec.ts", "src/tests/**/*.test.ts", "vitest.config.ts"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "dev-dist",
+    "coverage",
+    "**/coverage/**",
+    "src/tests/**/*.spec.ts",
+    "src/tests/**/*.test.ts",
+    "vitest.config.ts"
+  ],
   "compilerOptions": {
     "jsx": "preserve",
     "paths": {
