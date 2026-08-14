@@ -28,6 +28,8 @@
     ],
     // https://bobbyhadz.com/blog/typescript-module-can-only-be-default-imported-esmoduleinterop
     "esModuleInterop": true,
+    // de-compromise ships broken .d.ts files; don't fail typechecking on third-party declarations
+    "skipLibCheck": true,
     "plugins": [
       {
         "name": "@0no-co/graphqlsp",

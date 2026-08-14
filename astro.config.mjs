@@ -3,7 +3,6 @@ import sitemap from "@astrojs/sitemap";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import spotlightjs from "@spotlightjs/astro";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders, svgoOptimizer } from "astro/config";

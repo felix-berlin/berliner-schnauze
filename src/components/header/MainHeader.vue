@@ -13,6 +13,7 @@
         />
 
         <DropdownPopover
+          name="main-menu"
           placement="bottom-end"
           :offset="13"
           class="c-menu-nav__item c-menu-more"

@@ -8,6 +8,15 @@ const { WP_API, WP_AUTH_USER, WP_AUTH_PASS } = loadEnv(
   "",
 );
 
+const schema: Record<string, { assumeValid: boolean; headers: Record<string, string> }> = {
+  [WP_API]: {
+    headers: {
+      Authorization: `Basic ${Buffer.from(`${WP_AUTH_USER}:${WP_AUTH_PASS}`).toString("base64")}`,
+    },
+    assumeValid: true,
+  },
+};
+
 const config: CodegenConfig = {
   documents: ["src/**/*.{graphql,js,ts,jsx,tsx,vue}", "!src/gql/**/*"],
   generates: {
@@ -29,16 +38,7 @@ const config: CodegenConfig = {
     },
   },
   ignoreNoDocuments: true, // for better experience with the watcher
-  schema: [
-    {
-      [WP_API]: {
-        headers: {
-          Authorization: `Basic ${Buffer.from(`${WP_AUTH_USER}:${WP_AUTH_PASS}`).toString("base64")}`,
-        },
-        assumeValid: true,
-      },
-    },
-  ],
+  schema: [schema],
 };
 
 export default config;

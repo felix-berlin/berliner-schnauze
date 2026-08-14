@@ -1282,6 +1282,10 @@ input BerlinerischThemaToBerlinerWordConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -1308,6 +1312,8 @@ input BerlinerischThemaToBerlinerWordConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -1363,6 +1369,10 @@ input BerlinerischThemaToContentNodeConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -1389,6 +1399,8 @@ input BerlinerischThemaToContentNodeConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -1708,6 +1720,10 @@ input BerlinerischWordTypeToBerlinerWordConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -1734,6 +1750,8 @@ input BerlinerischWordTypeToBerlinerWordConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -1898,6 +1916,10 @@ input BerlinerischWordTypeToContentNodeConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -1924,6 +1946,8 @@ input BerlinerischWordTypeToContentNodeConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -2050,6 +2074,10 @@ input BlockEditorContentNodeConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -2076,6 +2104,8 @@ input BlockEditorContentNodeConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -2309,9 +2339,9 @@ type BlockEditorPreviewToBlockEditorPreviewConnection implements BlockEditorPrev
 """An edge in a connection"""
 type BlockEditorPreviewToBlockEditorPreviewConnectionEdge implements BlockEditorPreviewConnectionEdge & Edge {
   """A cursor for use in pagination"""
-  cursor: String @deprecated(reason: "This content type is not hierarchical and typically will not have ancestors")
+  cursor: String
   """The item at the end of the edge"""
-  node: BlockEditorPreview! @deprecated(reason: "This content type is not hierarchical and typically will not have ancestors")
+  node: BlockEditorPreview!
 }
 
 """
@@ -2340,7 +2370,7 @@ type BlockEditorPreviewToParentConnectionEdge implements BlockEditorPreviewConne
   """
   cursor: String
   """The node of the connection, without the edges"""
-  node: BlockEditorPreview! @deprecated(reason: "This content type is not hierarchical and typically will not have a parent")
+  node: BlockEditorPreview!
 }
 
 """
@@ -2352,7 +2382,7 @@ type BlockEditorPreviewToPreviewConnectionEdge implements BlockEditorPreviewConn
   """
   cursor: String
   """The node of the connection, without the edges"""
-  node: BlockEditorPreview! @deprecated(reason: "The &quot;BlockEditorPreview&quot; Type is not publicly queryable and does not support previews. This field will be removed in the future.")
+  node: BlockEditorPreview!
 }
 
 """
@@ -2749,6 +2779,10 @@ input CategoryToContentNodeConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -2775,6 +2809,8 @@ input CategoryToContentNodeConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -2860,6 +2896,10 @@ input CategoryToPostConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -2898,6 +2938,8 @@ input CategoryToPostConnectionWhereArgs {
   tagSlugAnd: [String]
   """Array of tag slugs, used to include objects in ANY specified tags"""
   tagSlugIn: [String]
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -3875,6 +3917,14 @@ interface ContentTemplate {
   templateName: String
 }
 
+"""
+The templates that can be assigned to content. Used to filter a connection by the template its content uses.
+"""
+enum ContentTemplateEnum {
+  """The default template, applied when no specific template is assigned."""
+  DEFAULT_TEMPLATE
+}
+
 """An Post Type object"""
 type ContentType implements Node & UniformResourceIdentifiable {
   """Whether this content type should can be exported."""
@@ -4117,6 +4167,10 @@ input ContentTypeToContentNodeConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -4143,6 +4197,8 @@ input ContentTypeToContentNodeConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -13240,13 +13296,15 @@ type DeleteUserPayload {
 }
 
 """The discussion setting type"""
-type DiscussionSettings {
+type DiscussionSettings implements Node {
   """Erlaubt Personen, neue Beiträge zu kommentieren."""
   defaultCommentStatus: String
   """
   Link-Benachrichtigungen von anderen Blogs (Pingbacks und Trackbacks) zu neuen Beiträgen erlauben.
   """
   defaultPingStatus: String
+  """The globally unique identifier of the settings group."""
+  id: ID!
 }
 
 """
@@ -13456,7 +13514,7 @@ interface EnqueuedStylesheetConnectionPageInfo implements PageInfo & WPPageInfo 
 }
 
 """The general setting type"""
-type GeneralSettings {
+type GeneralSettings implements Node {
   """Ein Datumsformat für alle datumsbasierten Zeichenfolgen."""
   dateFormat: String
   """Website-Untertitel."""
@@ -13465,6 +13523,12 @@ type GeneralSettings {
   Diese Adresse wird für administrative Zwecke verwendet, wie Benachrichtigungen über neue Benutzer.
   """
   email: String
+  """
+  The address at which visitors reach the site&#039;s front end. Can differ from the `url` field when the front end and the content management backend are served from different addresses, such as on headless or decoupled installs.
+  """
+  homeUrl: String
+  """The globally unique identifier of the settings group."""
+  id: ID!
   """WordPress-Ländercode."""
   language: String
   """
@@ -13735,6 +13799,10 @@ input HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -13761,6 +13829,8 @@ input HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -13820,6 +13890,10 @@ input HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -13846,6 +13920,8 @@ input HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -15778,6 +15854,10 @@ input PageToRevisionConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -15804,8 +15884,22 @@ input PageToRevisionConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
+}
+
+"""The permalink setting type"""
+type PermalinkSettings implements Node {
+  """The prefix used in the URLs of category archive pages."""
+  categoryBase: String
+  """The globally unique identifier of the settings group."""
+  id: ID!
+  """The structure used to build the URLs for content on the site."""
+  structure: String
+  """The prefix used in the URLs of tag archive pages."""
+  tagBase: String
 }
 
 """An plugin object"""
@@ -16482,6 +16576,10 @@ input PostFormatToContentNodeConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -16508,6 +16606,8 @@ input PostFormatToContentNodeConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -16583,6 +16683,10 @@ input PostFormatToPostConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -16621,6 +16725,8 @@ input PostFormatToPostConnectionWhereArgs {
   tagSlugAnd: [String]
   """Array of tag slugs, used to include objects in ANY specified tags"""
   tagSlugIn: [String]
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -17026,7 +17132,7 @@ type PostToParentConnectionEdge implements Edge & OneToOneConnection & PostConne
   """
   cursor: String
   """The node of the connection, without the edges"""
-  node: Post! @deprecated(reason: "This content type is not hierarchical and typically will not have a parent")
+  node: Post!
 }
 
 """Connection between the post type and the post type"""
@@ -17042,9 +17148,9 @@ type PostToPostConnection implements Connection & PostConnection {
 """An edge in a connection"""
 type PostToPostConnectionEdge implements Edge & PostConnectionEdge {
   """A cursor for use in pagination"""
-  cursor: String @deprecated(reason: "This content type is not hierarchical and typically will not have ancestors")
+  cursor: String
   """The item at the end of the edge"""
-  node: Post! @deprecated(reason: "This content type is not hierarchical and typically will not have ancestors")
+  node: Post!
 }
 
 """
@@ -17248,6 +17354,10 @@ input PostToRevisionConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -17286,6 +17396,8 @@ input PostToRevisionConnectionWhereArgs {
   tagSlugAnd: [String]
   """Array of tag slugs, used to include objects in ANY specified tags"""
   tagSlugIn: [String]
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -17591,7 +17703,9 @@ interface Previewable {
 }
 
 """The reading setting type"""
-type ReadingSettings {
+type ReadingSettings implements Node {
+  """The globally unique identifier of the settings group."""
+  id: ID!
   """
   Die ID der Seite, auf der die neuesten Beiträge angezeigt werden sollen
   """
@@ -17989,7 +18103,7 @@ type ReusableBlockToParentConnectionEdge implements Edge & OneToOneConnection & 
   """
   cursor: String
   """The node of the connection, without the edges"""
-  node: ReusableBlock! @deprecated(reason: "This content type is not hierarchical and typically will not have a parent")
+  node: ReusableBlock!
 }
 
 """Connection between the ReusableBlock type and the ReusableBlock type"""
@@ -17999,7 +18113,7 @@ type ReusableBlockToPreviewConnectionEdge implements Edge & OneToOneConnection &
   """
   cursor: String
   """The node of the connection, without the edges"""
-  node: ReusableBlock! @deprecated(reason: "The &quot;ReusableBlock&quot; Type is not publicly queryable and does not support previews. This field will be removed in the future.")
+  node: ReusableBlock!
 }
 
 """Connection between the ReusableBlock type and the ReusableBlock type"""
@@ -18015,9 +18129,9 @@ type ReusableBlockToReusableBlockConnection implements Connection & ReusableBloc
 """An edge in a connection"""
 type ReusableBlockToReusableBlockConnectionEdge implements Edge & ReusableBlockConnectionEdge {
   """A cursor for use in pagination"""
-  cursor: String @deprecated(reason: "This content type is not hierarchical and typically will not have ancestors")
+  cursor: String
   """The item at the end of the edge"""
-  node: ReusableBlock! @deprecated(reason: "This content type is not hierarchical and typically will not have ancestors")
+  node: ReusableBlock!
 }
 
 """
@@ -18086,6 +18200,10 @@ input ReusableBlockToRevisionConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -18112,6 +18230,8 @@ input ReusableBlockToRevisionConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -18763,6 +18883,8 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
     """Arguments for filtering the connection"""
     where: RootQueryToPageConnectionWhereArgs
   ): RootQueryToPageConnection
+  """Fields of the &#039;PermalinkSettings&#039; settings group"""
+  permalinkSettings: PermalinkSettings
   """A WordPress plugin"""
   plugin(
     """The globally unique identifier of the plugin."""
@@ -19137,6 +19259,10 @@ input RootQueryToBerlinerWordConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -19163,6 +19289,8 @@ input RootQueryToBerlinerWordConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -19436,6 +19564,10 @@ input RootQueryToBlockEditorPreviewConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -19464,6 +19596,8 @@ input RootQueryToBlockEditorPreviewConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -19725,6 +19859,10 @@ input RootQueryToContentNodeConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -19751,6 +19889,8 @@ input RootQueryToContentNodeConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -19919,6 +20059,10 @@ input RootQueryToMediaItemConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -19945,6 +20089,8 @@ input RootQueryToMediaItemConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -20100,6 +20246,10 @@ input RootQueryToPageConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -20126,6 +20276,8 @@ input RootQueryToPageConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -20246,6 +20398,10 @@ input RootQueryToPostConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -20284,6 +20440,8 @@ input RootQueryToPostConnectionWhereArgs {
   tagSlugAnd: [String]
   """Array of tag slugs, used to include objects in ANY specified tags"""
   tagSlugIn: [String]
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -20438,6 +20596,10 @@ input RootQueryToReusableBlockConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -20464,6 +20626,8 @@ input RootQueryToReusableBlockConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -20517,6 +20681,10 @@ input RootQueryToRevisionsConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -20543,6 +20711,8 @@ input RootQueryToRevisionsConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -21338,41 +21508,49 @@ type SendPasswordResetEmailPayload {
 
 """All of the registered settings"""
 type Settings {
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   discussionSettingsDefaultCommentStatus: String
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   discussionSettingsDefaultPingStatus: String
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   generalSettingsDateFormat: String
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   generalSettingsDescription: String
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   generalSettingsEmail: String
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
+  generalSettingsHomeUrl: String
+  """Settings of the string Settings Group"""
   generalSettingsLanguage: String
-  """Settings of the the integer Settings Group"""
+  """Settings of the integer Settings Group"""
   generalSettingsStartOfWeek: Int
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   generalSettingsTimeFormat: String
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   generalSettingsTimezone: String
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   generalSettingsTitle: String
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   generalSettingsUrl: String
-  """Settings of the the integer Settings Group"""
+  """Settings of the string Settings Group"""
+  permalinkSettingsCategoryBase: String
+  """Settings of the string Settings Group"""
+  permalinkSettingsStructure: String
+  """Settings of the string Settings Group"""
+  permalinkSettingsTagBase: String
+  """Settings of the integer Settings Group"""
   readingSettingsPageForPosts: Int
-  """Settings of the the integer Settings Group"""
+  """Settings of the integer Settings Group"""
   readingSettingsPageOnFront: Int
-  """Settings of the the integer Settings Group"""
+  """Settings of the integer Settings Group"""
   readingSettingsPostsPerPage: Int
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   readingSettingsShowOnFront: String
-  """Settings of the the integer Settings Group"""
+  """Settings of the integer Settings Group"""
   writingSettingsDefaultCategory: Int
-  """Settings of the the string Settings Group"""
+  """Settings of the string Settings Group"""
   writingSettingsDefaultPostFormat: String
-  """Settings of the the boolean Settings Group"""
+  """Settings of the boolean Settings Group"""
   writingSettingsUseSmilies: Boolean
 }
 
@@ -21626,6 +21804,10 @@ input TagToContentNodeConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -21652,6 +21834,8 @@ input TagToContentNodeConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -21727,6 +21911,10 @@ input TagToPostConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -21765,6 +21953,8 @@ input TagToPostConnectionWhereArgs {
   tagSlugAnd: [String]
   """Array of tag slugs, used to include objects in ANY specified tags"""
   tagSlugIn: [String]
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -22847,8 +23037,6 @@ input UpdateSettingsInput {
   generalSettingsTimezone: String
   """Website-Titel."""
   generalSettingsTitle: String
-  """Website-URL."""
-  generalSettingsUrl: String
   """
   Die ID der Seite, auf der die neuesten Beiträge angezeigt werden sollen
   """
@@ -22879,6 +23067,8 @@ type UpdateSettingsPayload {
   discussionSettings: DiscussionSettings
   """Update the GeneralSettings setting."""
   generalSettings: GeneralSettings
+  """Update the PermalinkSettings setting."""
+  permalinkSettings: PermalinkSettings
   """Update the ReadingSettings setting."""
   readingSettings: ReadingSettings
   """Update the WritingSettings setting."""
@@ -23385,9 +23575,9 @@ interface UserRoleConnectionPageInfo implements PageInfo & WPPageInfo {
 Permission levels for user accounts. Defines the standard access levels that control what actions users can perform within the system.
 """
 enum UserRoleEnum {
-  """User role with specific capabilities"""
+  """Full system access with ability to manage all aspects of the site."""
   ADMINISTRATOR
-  """User role with specific capabilities"""
+  """Can publish and manage their own content."""
   AUTHOR
   """User role with specific capabilities"""
   BACKWPUP_ADMIN
@@ -23395,15 +23585,15 @@ enum UserRoleEnum {
   BACKWPUP_AUFTRAGSHELFER
   """User role with specific capabilities"""
   BACKWPUP_AUFTRAGSPR__FUNG
-  """User role with specific capabilities"""
+  """Can write and manage their own content but cannot publish."""
   CONTRIBUTOR
-  """User role with specific capabilities"""
+  """Content management access without administrative capabilities."""
   EDITOR
   """User role with specific capabilities"""
   SEO_EDITOR
   """User role with specific capabilities"""
   SEO_MANAGER
-  """User role with specific capabilities"""
+  """Can only manage their profile and read content."""
   SUBSCRIBER
 }
 
@@ -23468,6 +23658,10 @@ input UserToBlockEditorPreviewConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -23494,6 +23688,8 @@ input UserToBlockEditorPreviewConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -23732,6 +23928,10 @@ input UserToMediaItemConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -23758,6 +23958,8 @@ input UserToMediaItemConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -23821,6 +24023,10 @@ input UserToPageConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -23847,6 +24053,8 @@ input UserToPageConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -23922,6 +24130,10 @@ input UserToPostConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -23960,6 +24172,8 @@ input UserToPostConnectionWhereArgs {
   tagSlugAnd: [String]
   """Array of tag slugs, used to include objects in ANY specified tags"""
   tagSlugIn: [String]
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -24013,6 +24227,10 @@ input UserToRevisionsConnectionWhereArgs {
   id: Int
   """Array of IDs for the objects to retrieve"""
   in: [ID]
+  """
+  True to limit the results to sticky posts; false to exclude sticky posts. Note: this filters the result set, it does not float sticky posts to the top of the results.
+  """
+  isSticky: Boolean
   """Get objects with a specific mimeType property"""
   mimeType: MimeTypeEnum
   """Slug / post_name of the object"""
@@ -24039,6 +24257,8 @@ input UserToRevisionsConnectionWhereArgs {
   stati: [PostStatusEnum]
   """Show posts with a specific status."""
   status: PostStatusEnum
+  """Filter the connection to content assigned a specific template."""
+  template: ContentTemplateEnum
   """Title of the object"""
   title: String
 }
@@ -24582,11 +24802,13 @@ interface WordProperties_Fields implements AcfFieldGroup & AcfFieldGroupFields {
 }
 
 """The writing setting type"""
-type WritingSettings {
+type WritingSettings implements Node {
   """Standard-Beitragskategorie."""
   defaultCategory: Int
   """Standard-Beitragsformat."""
   defaultPostFormat: String
+  """The globally unique identifier of the settings group."""
+  id: ID!
   """Emoticons wie :-) und :-P als Grafiken anzeigen."""
   useSmilies: Boolean
 }
