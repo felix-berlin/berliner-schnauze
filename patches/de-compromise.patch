@@ -1,0 +1,20 @@
+diff --git a/types/view/de.ts b/types/view/de.ts
+index db9746cb3fc95167289e720d46a7d9788b566401..0a036beae10177dab20d9695c24a34a975a47dee 100644
+--- a/types/view/de.ts
++++ b/types/view/de.ts
+@@ -1,3 +1,4 @@
++// @ts-nocheck — see one.ts for why
+ import View from './one'
+ 
+ 
+diff --git a/types/view/one.ts b/types/view/one.ts
+index 7b4d88f21f134b6b739cbb8ad0a2d95778093e09..dd9c312ffb68dceef74ff80a1c7eb348b975359c 100644
+--- a/types/view/one.ts
++++ b/types/view/one.ts
+@@ -1,3 +1,6 @@
++// @ts-nocheck — upstream ships this as un-compiled source under "types"; it fails
++// strict compiler options (verbatimModuleSyntax, strictPropertyInitialization)
++// that aren't relevant since this file is never executed, only type-checked.
+ import { Document, Pointer, Groups, JsonProps, outMethods, matchOptions, Term, Net } from '../misc'
+ 
+ class View {
