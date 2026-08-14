@@ -29,7 +29,7 @@ const {
   type = "warning",
 } = defineProps<AlertBannerProps>();
 
-const root = ref<Element | null>(null);
+const root = ref<HTMLElement | SVGElement | null>(null);
 useContentTracking(root);
 </script>
 

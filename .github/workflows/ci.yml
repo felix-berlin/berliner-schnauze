@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Repo default is write; this job only reads code, so scope it down.
+permissions:
+  contents: read
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm 🛠️
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v7
+        with:
+          node-version: "lts/*"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # oxlint runs type-aware and vue-tsc/astro check need Astro's generated
+      # types (astro:env/*, content collections) and the supportedBrowsers.mjs
+      # stub the app imports — neither needs real secrets, just the schema.
+      - name: Generate Astro types
+        run: |
+          pnpm run supportedBrowsers
+          pnpm exec astro sync
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Type check
+        run: pnpm run typechecking

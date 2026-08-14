@@ -3,7 +3,6 @@ import sitemap from "@astrojs/sitemap";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import spotlightjs from "@spotlightjs/astro";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders, svgoOptimizer } from "astro/config";
@@ -43,6 +42,13 @@ const sassAliases = {
 export default defineConfig({
   site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
   trailingSlash: "never",
+  // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
+  devToolbar: {
+    enabled: !process.env.CI,
+  },
+  // No Astro.session usage anywhere in the codebase — opt out to tree-shake
+  // the session runtime out of the Cloudflare Pages build.
+  session: false,
   fonts: [
     {
       provider: fontProviders.local(),
@@ -480,5 +486,11 @@ export default defineConfig({
         },
       },
     },
+  },
+  experimental: {
+    // ~2500+ /wort/ pages plus themen/magazin/changelog/og are rebuilt from
+    // WordPress data every build; incrementalBuild skips regenerating a page
+    // when its module graph and cacheKey are unchanged since the last build.
+    incrementalBuild: true,
   },
 });

@@ -8,6 +8,10 @@
         "WP_API_USERNAME": "${WP_MCP_USERNAME}",
         "WP_API_PASSWORD": "${WP_MCP_PASSWORD}"
       }
+    },
+    "playwright-test": {
+      "command": "npx",
+      "args": ["playwright", "run-test-mcp-server"]
     }
   }
 }

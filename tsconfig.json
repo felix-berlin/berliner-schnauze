@@ -1,7 +1,16 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "node_modules", "src/tests/**/*.spec.ts", "src/tests/**/*.test.ts", "vitest.config.ts"],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "dev-dist",
+    "coverage",
+    "**/coverage/**",
+    "src/tests/**/*.spec.ts",
+    "src/tests/**/*.test.ts",
+    "vitest.config.ts"
+  ],
   "compilerOptions": {
     "jsx": "preserve",
     "paths": {
@@ -28,6 +37,8 @@
     ],
     // https://bobbyhadz.com/blog/typescript-module-can-only-be-default-imported-esmoduleinterop
     "esModuleInterop": true,
+    // de-compromise ships broken .d.ts files; don't fail typechecking on third-party declarations
+    "skipLibCheck": true,
     "plugins": [
       {
         "name": "@0no-co/graphqlsp",
