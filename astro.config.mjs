@@ -46,6 +46,9 @@ export default defineConfig({
   devToolbar: {
     enabled: !process.env.CI,
   },
+  // No Astro.session usage anywhere in the codebase — opt out to tree-shake
+  // the session runtime out of the Cloudflare Pages build.
+  session: false,
   fonts: [
     {
       provider: fontProviders.local(),
@@ -483,5 +486,11 @@ export default defineConfig({
         },
       },
     },
+  },
+  experimental: {
+    // ~2500+ /wort/ pages plus themen/magazin/changelog/og are rebuilt from
+    // WordPress data every build; incrementalBuild skips regenerating a page
+    // when its module graph and cacheKey are unchanged since the last build.
+    incrementalBuild: true,
   },
 });
