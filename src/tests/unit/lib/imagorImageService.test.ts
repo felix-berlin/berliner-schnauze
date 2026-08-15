@@ -8,6 +8,18 @@ vi.mock("@utils/imagor", () => ({
   signImagorPath: signImagorPathMock,
 }));
 
+const sharpParseURLMock = vi.fn();
+const sharpTransformMock = vi.fn();
+const sharpGetURLMock = vi.fn(() => "/local-image-url");
+
+vi.mock("astro/assets/services/sharp", () => ({
+  default: {
+    parseURL: sharpParseURLMock,
+    transform: sharpTransformMock,
+    getURL: sharpGetURLMock,
+  },
+}));
+
 const { default: imagorImageService } = await import("@lib/imagorImageService");
 
 describe("imagorImageService.getURL", () => {
@@ -47,13 +59,13 @@ describe("imagorImageService.getURL", () => {
     ).toThrow(/width and height/);
   });
 
-  it("throws for non-string (ESM-imported) src", () => {
-    expect(() =>
-      imagorImageService.getURL(
-        { src: { src: "/local.png" } as never, width: 400, height: 200 },
-        {} as never,
-      ),
-    ).toThrow(/remote/);
+  it("delegates non-string (ESM-imported) src to Sharp service", () => {
+    const localSrc = { src: "/local.png" } as never;
+    const imageConfig = {} as never;
+    const url = imagorImageService.getURL({ src: localSrc, width: 100, height: 100 }, imageConfig);
+
+    expect(sharpGetURLMock).toHaveBeenCalledWith({ src: localSrc, width: 100, height: 100 }, imageConfig);
+    expect(url).toBe("/local-image-url");
   });
 });
 
@@ -64,5 +76,10 @@ describe("imagorImageService transform-shape hooks", () => {
     expect(imagorImageService.validateOptions).toBe(baseService.validateOptions);
     expect(imagorImageService.getSrcSet).toBe(baseService.getSrcSet);
     expect(imagorImageService.getHTMLAttributes).toBe(baseService.getHTMLAttributes);
+  });
+
+  it("delegates parseURL and transform to Sharp service", () => {
+    expect(imagorImageService.parseURL).toBe(sharpParseURLMock);
+    expect(imagorImageService.transform).toBe(sharpTransformMock);
   });
 });

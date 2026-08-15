@@ -1,14 +1,17 @@
+import sharpService from "astro/assets/services/sharp";
 import { baseService } from "astro/assets";
-import type { ExternalImageService, ImageTransform } from "astro";
+import type { ImageTransform, LocalImageService } from "astro";
 import { buildImagorPath, signImagorPath } from "@utils/imagor";
 
-const imagorImageService: ExternalImageService = {
+const imagorImageService: LocalImageService = {
   validateOptions: baseService.validateOptions,
   getSrcSet: baseService.getSrcSet,
   getHTMLAttributes: baseService.getHTMLAttributes,
-  getURL(options: ImageTransform) {
+  parseURL: sharpService.parseURL,
+  transform: sharpService.transform,
+  getURL(options: ImageTransform, imageConfig) {
     if (typeof options.src !== "string") {
-      throw new Error("imagorImageService only supports remote (string) image sources.");
+      return sharpService.getURL(options, imageConfig);
     }
     if (!options.width || !options.height) {
       throw new Error(`imagorImageService requires both width and height, got src=${options.src}`);
