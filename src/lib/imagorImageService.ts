@@ -6,7 +6,7 @@ import { baseService } from "astro/assets";
 type UnresolvedSrcSetValue = {
   transform: ImageTransform;
   descriptor?: string;
-  attributes?: Record<string, any>;
+  attributes?: Record<string, unknown>;
 };
 
 type ImagorImageTransform = ImageTransform & {
