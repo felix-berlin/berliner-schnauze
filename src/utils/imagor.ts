@@ -4,7 +4,6 @@ import { createHmac } from "node:crypto";
 const SIGNER_TRUNCATE = 40;
 
 type ImagorMode = "fit-in" | "full-fit-in" | "adaptive-fit-in" | "unsafe" | "stretch" | "trim";
-type ImagorAlign = "left" | "center" | "right" | "top" | "middle" | "bottom";
 
 type ImagorPadding = {
   left?: number;
