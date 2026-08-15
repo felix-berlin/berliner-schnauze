@@ -413,6 +413,7 @@ export default defineConfig({
         // navigateFallbackAllowlist: [/^\//],
       },
     }),
+    // TODO: deactivate codecovplugin for local development builds, because it slows down the build and is not needed for local testing
     codecovplugin({
       enableBundleAnalysis: true,
       bundleName: "berliner-schnauze-bundle",
