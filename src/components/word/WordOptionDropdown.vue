@@ -60,8 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BerlinerWord, WordProperties } from "@/gql/entity-types";
-
+import DropdownPopover from "@components/DropdownPopover.vue";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
 import { routeToWord } from "@utils/helpers.ts";
@@ -70,7 +69,8 @@ import { SITE_URL } from "astro:env/client";
 import Copy from "virtual:icons/lucide/copy";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
-import DropdownPopover from "@components/DropdownPopover.vue";
+
+import type { BerlinerWord, WordProperties } from "@/gql/entity-types";
 
 interface WordProps {
   berlinerisch: WordProperties["berlinerisch"];

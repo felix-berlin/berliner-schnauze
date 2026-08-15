@@ -7,8 +7,9 @@ vi.mock("astro:env/client", () => ({
 }));
 vi.mock("astro:env/server", () => ({ WP_AUTH_PASS: "test", WP_AUTH_USER: "test" }));
 
-import { makeOramaSearchIndex } from "@/pages/api/search/index.json.ts";
 import type { BerlinerWord } from "@/gql/entity-types";
+
+import { makeOramaSearchIndex } from "@/pages/api/search/index.json.ts";
 
 function makeWord(overrides: Partial<BerlinerWord> = {}): BerlinerWord {
   return {

@@ -7,10 +7,10 @@
 
 Change `onNeedReload` in `src/services/pwa.ts` so update behavior depends on whether the user is actively looking at the tab:
 
-| Tab state | Behavior |
-|---|---|
+| Tab state                       | Behavior                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------ |
 | `visibilityState === "visible"` | Show toast with "Jetzt aktualisieren" action button — **no auto-reload** |
-| `visibilityState === "hidden"` | Show native notification + **auto-reload immediately** |
+| `visibilityState === "hidden"`  | Show native notification + **auto-reload immediately**                   |
 
 ---
 
@@ -18,15 +18,16 @@ Change `onNeedReload` in `src/services/pwa.ts` so update behavior depends on whe
 
 ### Files to touch
 
-| File | Change |
-|---|---|
-| `src/stores/toastNotify.ts` | Add `actionLabel?: string` + `onAction?: () => void` to `ToastNotify` type |
-| `src/components/toast/ToastNotify.vue` | Render action button; call `onAction()` + `hideToast()` on click |
-| `src/styles/components/_toast-notify.scss` | Style `.c-toast-notify__action` |
-| `src/services/pwa.ts` | Branch `onNeedReload` on `document.visibilityState` |
-| `src/tests/unit/components/toast/ToastNotify.test.ts` | Tests for action button |
+| File                                                  | Change                                                                     |
+| ----------------------------------------------------- | -------------------------------------------------------------------------- |
+| `src/stores/toastNotify.ts`                           | Add `actionLabel?: string` + `onAction?: () => void` to `ToastNotify` type |
+| `src/components/toast/ToastNotify.vue`                | Render action button; call `onAction()` + `hideToast()` on click           |
+| `src/styles/components/_toast-notify.scss`            | Style `.c-toast-notify__action`                                            |
+| `src/services/pwa.ts`                                 | Branch `onNeedReload` on `document.visibilityState`                        |
+| `src/tests/unit/components/toast/ToastNotify.test.ts` | Tests for action button                                                    |
 
 ### Key constraints confirmed
+
 - `ToastNotify` type has **no** `actionLabel`/`onAction` today — must be added
 - `document.visibilityState` is **not used anywhere** — new feature
 - `trackEvent(category, action, label)` — 3 string params
@@ -43,8 +44,8 @@ Add two optional fields to the `ToastNotify` type (lines 3–14):
 
 ```ts
 export type ToastNotify = {
-  actionLabel?: string;       // <-- add
-  onAction?: () => void;      // <-- add
+  actionLabel?: string; // <-- add
+  onAction?: () => void; // <-- add
   closeOnSwipe?: boolean;
   // ... rest unchanged
 };
@@ -89,6 +90,7 @@ Add action button in template, after `.c-toast-notify__message` div, before the 
 Add `.c-toast-notify__action` styles. Reference existing button utilities (`c-button--small`) and ensure the button sits inline with the message. Minimal additions — rely on `c-button` base classes as much as possible.
 
 ### Verification
+
 - `pnpm lint` → 0 errors
 - `pnpm typechecking` → 0 new TS errors
 - `pnpm test:unit` → existing toast tests still pass
@@ -135,6 +137,7 @@ onNeedReload() {
 ```
 
 **What changed vs. current code:**
+
 - Old `fallbackTimer` + `notification.onclick` reload loop → removed (background = always auto-reload)
 - Toast `timeout: null` → update prompt stays until user acts
 - 2 old `trackEvent` calls → replaced by 4 granular ones:
@@ -144,6 +147,7 @@ onNeedReload() {
   - `"Background update applied"` — auto-reload triggered in background
 
 ### Verification
+
 - `pnpm lint` → 0 errors
 - `pnpm typechecking` → 0 new TS errors
 
@@ -161,6 +165,7 @@ In `src/tests/unit/components/toast/ToastNotify.test.ts`, add:
 Mock `removeToastById` (already mocked in other toast tests — follow the same pattern).
 
 ### Verification
+
 - `pnpm test:unit` → all tests pass including new ones
 
 ---

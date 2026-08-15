@@ -15,7 +15,10 @@
     "word": "Fahrschein verlangen",
     "translations": ["die Rechnung verlangen"],
     "examples": [
-      { "example": "Noch jemand ohne Fahrschein?", "explanation": "Im Sinne von »Noch einen Wunsch?« — aus dem Straßenbahnerjargon übernommen." }
+      {
+        "example": "Noch jemand ohne Fahrschein?",
+        "explanation": "Im Sinne von »Noch einen Wunsch?« — aus dem Straßenbahnerjargon übernommen."
+      }
     ],
     "themen": ["alkohol-kneipe", "stadtleben"]
   },
@@ -105,7 +108,10 @@
     "article": "die",
     "translations": ["unpassend (in der Wendung »wie die Faust uff’s Ooge«)"],
     "examples": [
-      { "example": "Dit paßt wie die Faust uff’s Ooge.", "explanation": "Das passt überhaupt nicht zusammen." }
+      {
+        "example": "Dit paßt wie die Faust uff’s Ooge.",
+        "explanation": "Das passt überhaupt nicht zusammen."
+      }
     ],
     "themen": []
   },
@@ -113,7 +119,10 @@
     "word": "faustdick",
     "translations": ["mit allen Wassern gewaschen (in der Wendung)"],
     "examples": [
-      { "example": "Der hat es faustdick hinter den Ohren.", "explanation": "Er ist mit allen Wassern gewaschen." }
+      {
+        "example": "Der hat es faustdick hinter den Ohren.",
+        "explanation": "Er ist mit allen Wassern gewaschen."
+      }
     ],
     "themen": ["charakter-eigenschaften"]
   },
@@ -121,7 +130,10 @@
     "word": "Faxen",
     "translations": ["Gesten und Gebärden, um Lachen zu erregen", "dumme Späße"],
     "examples": [
-      { "example": "Jetz hab ick aber die Faxen dicke!", "explanation": "Jetzt habe ich genug davon." }
+      {
+        "example": "Jetz hab ick aber die Faxen dicke!",
+        "explanation": "Jetzt habe ich genug davon."
+      }
     ],
     "infoText": "Entweder entstanden aus mundartlich fickfacken = hin- und herlaufen oder fatzen = spotten.",
     "themen": ["unterhaltung-freizeit"]
@@ -130,9 +142,7 @@
     "word": "Federball",
     "article": "der",
     "translations": ["Bett (in der Wendung »uff’n Federball jehn«)"],
-    "examples": [
-      { "example": "Uff’n Federball jeh’n.", "explanation": "Zu Bett gehen." }
-    ],
+    "examples": [{ "example": "Uff’n Federball jeh’n.", "explanation": "Zu Bett gehen." }],
     "themen": ["alltag-wohnen"]
   },
   {
@@ -148,7 +158,10 @@
     "translations": ["schnell laufen"],
     "examples": [
       { "example": "Da kommt er anjefecht." },
-      { "example": "Ein irrer Fejer.", "explanation": "Ein Feger ist eine außerordentlich gut aussehende Frau." }
+      {
+        "example": "Ein irrer Fejer.",
+        "explanation": "Ein Feger ist eine außerordentlich gut aussehende Frau."
+      }
     ],
     "themen": []
   },
@@ -156,16 +169,17 @@
     "word": "Feierabend",
     "article": "der",
     "translations": ["Schluss (in der Wendung »Nu is Feierabend«)"],
-    "examples": [
-      { "example": "Nu is Feierabend!", "explanation": "Jetzt reicht es." }
-    ],
+    "examples": [{ "example": "Nu is Feierabend!", "explanation": "Jetzt reicht es." }],
     "themen": []
   },
   {
     "word": "feierlich",
     "translations": ["wohl (nur verneint: »nich feierlich«)"],
     "examples": [
-      { "example": "Mir is heut ja nich feierlich zumute.", "explanation": "Ich fühle mich in dieser Situation nicht wohl." }
+      {
+        "example": "Mir is heut ja nich feierlich zumute.",
+        "explanation": "Ich fühle mich in dieser Situation nicht wohl."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
@@ -187,7 +201,10 @@
     "translations": ["Haut"],
     "examples": [
       { "example": "Dem zieh’ ick dit Fell über die Ohren.", "explanation": "Drohung." },
-      { "example": "Der hat’n dicket Fell.", "explanation": "Er ist unempfindlich, daher belastbar." }
+      {
+        "example": "Der hat’n dicket Fell.",
+        "explanation": "Er ist unempfindlich, daher belastbar."
+      }
     ],
     "infoText": "Aus dem Jargon der Abdecker des 17. Jahrhunderts.",
     "themen": ["koerper"]
@@ -213,7 +230,10 @@
     "translations": ["kräftig", "ordentlich"],
     "examples": [
       { "example": "Immer feste druff!" },
-      { "example": "Immer feste auf die Weste!", "explanation": "Von Berliner Soldaten im Kampf gegen Napoleon (1813)." }
+      {
+        "example": "Immer feste auf die Weste!",
+        "explanation": "Von Berliner Soldaten im Kampf gegen Napoleon (1813)."
+      }
     ],
     "themen": []
   },
@@ -235,9 +255,7 @@
     "word": "Fett",
     "article": "das",
     "translations": ["Strafe, Denkzettel (in der Wendung »sein Fett wegbekommen«)"],
-    "examples": [
-      { "example": "Der hat sein Fett weg bekommen." }
-    ],
+    "examples": [{ "example": "Der hat sein Fett weg bekommen." }],
     "themen": []
   },
   {
@@ -245,7 +263,10 @@
     "article": "die",
     "translations": ["gutes Leben"],
     "examples": [
-      { "example": "Heut machen wa eenen uff Fettlebe.", "explanation": "Heute lassen wir es uns gut ergehen." }
+      {
+        "example": "Heut machen wa eenen uff Fettlebe.",
+        "explanation": "Heute lassen wir es uns gut ergehen."
+      }
     ],
     "themen": ["essen-trinken", "unterhaltung-freizeit"]
   },
@@ -283,9 +304,7 @@
   {
     "word": "ff.",
     "translations": ["sehr gut", "ausgezeichnet"],
-    "examples": [
-      { "example": "Berlinisch kann ick aus’m ff." }
-    ],
+    "examples": [{ "example": "Berlinisch kann ick aus’m ff." }],
     "infoText": "Auch Abkürzung von »Feinstes vom Feinen«. Früher im Lebensmittelhandel üblich, z.B. »ff. Speiseöl«.",
     "themen": []
   },
@@ -336,7 +355,10 @@
     "article": "der",
     "translations": ["Spleen", "Größenwahn"],
     "examples": [
-      { "example": "Der hat doch ’n Fimmel!", "explanation": "Der leidet an Größenwahn, der spinnt." }
+      {
+        "example": "Der hat doch ’n Fimmel!",
+        "explanation": "Der leidet an Größenwahn, der spinnt."
+      }
     ],
     "infoText": "Wahrscheinlich abgeleitet von fummeln, fimmeln = suchend herumtasten.",
     "themen": ["charakter-eigenschaften"]
@@ -345,8 +367,14 @@
     "word": "fingern",
     "translations": ["erreichen", "hinbekommen"],
     "examples": [
-      { "example": "Wir wer’n dit Ding schon fingern.", "explanation": "Wir werden die Sache schon schaukeln." },
-      { "example": "Finger da nich mit deine unejalen Hände rum.", "explanation": "Lass die Finger weg!" }
+      {
+        "example": "Wir wer’n dit Ding schon fingern.",
+        "explanation": "Wir werden die Sache schon schaukeln."
+      },
+      {
+        "example": "Finger da nich mit deine unejalen Hände rum.",
+        "explanation": "Lass die Finger weg!"
+      }
     ],
     "themen": []
   },
@@ -380,7 +408,10 @@
     "word": "fistern",
     "translations": ["hinauswerfen"],
     "examples": [
-      { "example": "Ick werd dir jleich rausfistern.", "explanation": "Mach, dass du wegkommst. Bei Trachsel 1873 belegt." }
+      {
+        "example": "Ick werd dir jleich rausfistern.",
+        "explanation": "Mach, dass du wegkommst. Bei Trachsel 1873 belegt."
+      }
     ],
     "themen": []
   },
@@ -388,7 +419,10 @@
     "word": "flach",
     "translations": ["ausfallend (in der Wendung »flach fallen«)"],
     "examples": [
-      { "example": "Mittachessen fällt heut flach.", "explanation": "Das Mittagessen fällt heute aus." }
+      {
+        "example": "Mittachessen fällt heut flach.",
+        "explanation": "Das Mittagessen fällt heute aus."
+      }
     ],
     "themen": []
   },
@@ -424,7 +458,10 @@
     "article": "der",
     "translations": ["Brathähnchen", "Angst (in der Wendung »einen Flattermann kriegen«)"],
     "examples": [
-      { "example": "Einen Flattermann kriejen.", "explanation": "Angst bekommen. Abwandlung von »einen Flattermann haben« = Händezittern haben." }
+      {
+        "example": "Einen Flattermann kriejen.",
+        "explanation": "Angst bekommen. Abwandlung von »einen Flattermann haben« = Händezittern haben."
+      }
     ],
     "themen": ["essen-trinken", "gefuehle-emotionen"]
   },
@@ -433,7 +470,10 @@
     "article": "der",
     "translations": ["Spaß", "Unsinn"],
     "examples": [
-      { "example": "Du bist wohl ooch her, wo der Flax blüht?", "explanation": "Du bist wohl auch ein spaßiger Mensch?" }
+      {
+        "example": "Du bist wohl ooch her, wo der Flax blüht?",
+        "explanation": "Du bist wohl auch ein spaßiger Mensch?"
+      }
     ],
     "themen": ["unterhaltung-freizeit"]
   },
@@ -442,7 +482,10 @@
     "article": "der",
     "translations": ["Ziererei (in der Redensart)"],
     "examples": [
-      { "example": "Machen Se sich mal nich ’n Fleck uff’t Hemde.", "explanation": "Haben/zieren Sie sich nicht so." }
+      {
+        "example": "Machen Se sich mal nich ’n Fleck uff’t Hemde.",
+        "explanation": "Haben/zieren Sie sich nicht so."
+      }
     ],
     "themen": []
   },
@@ -457,9 +500,7 @@
     "word": "Fleischbeschauung",
     "article": "die",
     "translations": ["FKK-Strand-Besuch"],
-    "examples": [
-      { "example": "FKK-Strand-Besucher jeh’n zur Fleischbeschauung." }
-    ],
+    "examples": [{ "example": "FKK-Strand-Besucher jeh’n zur Fleischbeschauung." }],
     "themen": ["unterhaltung-freizeit"]
   },
   {
@@ -473,9 +514,7 @@
     "word": "Fliege",
     "article": "die",
     "translations": ["Flucht (in der Wendung »’ne Flieje machen«)"],
-    "examples": [
-      { "example": "’ne Flieje machen.", "explanation": "Flüchten." }
-    ],
+    "examples": [{ "example": "’ne Flieje machen.", "explanation": "Flüchten." }],
     "themen": []
   },
   {
@@ -531,7 +570,10 @@
     "article": "die",
     "translations": ["Verschwinden (in der Wendung »’ne Flocke machen«)"],
     "examples": [
-      { "example": "’ne Flocke machen.", "explanation": "Verschwinden. Fußt auf dem Bild einer im Schnee verschwindenden Schneeflocke." }
+      {
+        "example": "’ne Flocke machen.",
+        "explanation": "Verschwinden. Fußt auf dem Bild einer im Schnee verschwindenden Schneeflocke."
+      }
     ],
     "themen": []
   },
@@ -551,19 +593,18 @@
     "word": "Flosse",
     "article": "die",
     "translations": ["Hand"],
-    "examples": [
-      { "example": "Wenn man ›juten Tach‹ sacht, denn jibt man die Flosse." }
-    ],
+    "examples": [{ "example": "Wenn man ›juten Tach‹ sacht, denn jibt man die Flosse." }],
     "infoText": "Übertragen von den Fischflossen.",
     "themen": ["koerper"]
   },
   {
     "word": "Flunder",
     "article": "die",
-    "translations": ["flachbrüstige Frau (in der Wendung »platt wie ’ne Flunder«)", "platt sein vor Staunen"],
-    "examples": [
-      { "example": "Bei mir Flunder.", "explanation": "Ich bin platt vor Staunen." }
+    "translations": [
+      "flachbrüstige Frau (in der Wendung »platt wie ’ne Flunder«)",
+      "platt sein vor Staunen"
     ],
+    "examples": [{ "example": "Bei mir Flunder.", "explanation": "Ich bin platt vor Staunen." }],
     "themen": ["koerper"]
   },
   {
@@ -575,17 +616,13 @@
     "word": "Flunsch",
     "article": "der",
     "translations": ["vorgeschobene Unterlippe (als Zeichen von Unzufriedenheit)"],
-    "examples": [
-      { "example": "Weeß ooch nich, warum die immer so’n Flunsch zieht." }
-    ],
+    "examples": [{ "example": "Weeß ooch nich, warum die immer so’n Flunsch zieht." }],
     "themen": ["koerper", "gefuehle-emotionen"]
   },
   {
     "word": "flüstern",
     "translations": ["sagen (euphemistisch in Drohungen)"],
-    "examples": [
-      { "example": "Dit eene kann ick dir flüstern...", "explanation": "Drohung." }
-    ],
+    "examples": [{ "example": "Dit eene kann ick dir flüstern...", "explanation": "Drohung." }],
     "themen": []
   },
   {
@@ -669,7 +706,10 @@
     "article": "das",
     "translations": ["gelegene Sache (in der Wendung »jefundenet Fressen«)"],
     "examples": [
-      { "example": "Dit is ’n jefundenet Fressen für mich.", "explanation": "Das kommt mir gerade recht." }
+      {
+        "example": "Dit is ’n jefundenet Fressen für mich.",
+        "explanation": "Das kommt mir gerade recht."
+      }
     ],
     "themen": []
   },
@@ -691,9 +731,7 @@
     "word": "Friedrich Wilhelm",
     "article": "der",
     "translations": ["Unterschrift"],
-    "examples": [
-      { "example": "Da muß ick noch meinen Friedrich Wilhelm runtersetzen." }
-    ],
+    "examples": [{ "example": "Da muß ick noch meinen Friedrich Wilhelm runtersetzen." }],
     "infoText": "Beruht auf den in Preußen häufig vorkommenden Königsnamen.",
     "themen": ["alltag-wohnen"]
   },
@@ -701,9 +739,7 @@
     "word": "Fritze",
     "article": "der",
     "translations": ["Händler", "Verkäufer", "Handwerker (in Zusammensetzungen)"],
-    "examples": [
-      { "example": "Hallo Fritze!" }
-    ],
+    "examples": [{ "example": "Hallo Fritze!" }],
     "infoText": "Produktives Element in zahlreichen Zusammensetzungen: Zijarrenfritze ist der Verkäufer im Tabakladen, ebenso Jemüsefritze, Eierfritze etc. Fritz war ein beliebter Vorname im 19. Jahrhundert und wird in Berlin in der Ausrufeform mit einem -e versehen.",
     "themen": ["stadtleben", "beziehungen-soziales"]
   },
@@ -728,18 +764,14 @@
   {
     "word": "fuhrwerken",
     "translations": ["sich einmischen", "hantieren"],
-    "examples": [
-      { "example": "Fuhrwerk ma da nich dazwischen." }
-    ],
+    "examples": [{ "example": "Fuhrwerk ma da nich dazwischen." }],
     "infoText": "Bei Glaßbrenner im Sinne von hantieren belegt.",
     "themen": []
   },
   {
     "word": "funken",
     "translations": ["sich finden (»es hat gefunkt«)", "Androhung von Schlägen"],
-    "examples": [
-      { "example": "Jetz’ funkt’s aber!", "explanation": "Androhung von Schlägen." }
-    ],
+    "examples": [{ "example": "Jetz’ funkt’s aber!", "explanation": "Androhung von Schlägen." }],
     "infoText": "Wenn es zwischen zweien »jefunkt hat«, dann haben sie sich gefunden.",
     "themen": ["beziehungen-soziales"]
   },
@@ -764,7 +796,10 @@
     "word": "Fusseln",
     "translations": ["Geld", "erfolglos reden (in der Wendung »sich das Maul fusselig reden«)"],
     "examples": [
-      { "example": "Sich das Maul fusselig reden.", "explanation": "Ohne Erfolg auf jemanden einreden." }
+      {
+        "example": "Sich das Maul fusselig reden.",
+        "explanation": "Ohne Erfolg auf jemanden einreden."
+      }
     ],
     "infoText": "Im 19. Jahrhundert für Geld.",
     "themen": ["geld"]

@@ -15,6 +15,7 @@
 import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+
 import type { LexikonEntry } from "./import-words-to-wp.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

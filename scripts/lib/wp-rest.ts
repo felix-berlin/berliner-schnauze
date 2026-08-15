@@ -47,7 +47,9 @@ export async function wpFetch<T>(
   if (!response.ok) {
     const body = await response
       .text()
-      .catch((e: unknown) => `(failed to read body: ${e instanceof Error ? e.message : String(e)})`);
+      .catch(
+        (e: unknown) => `(failed to read body: ${e instanceof Error ? e.message : String(e)})`,
+      );
     throw new Error(`WP REST ${options.method ?? "GET"} ${url} → ${response.status}: ${body}`);
   }
 

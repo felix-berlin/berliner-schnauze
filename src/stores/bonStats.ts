@@ -1,22 +1,22 @@
-import { persistentMap } from '@nanostores/persistent'
+import { persistentMap } from "@nanostores/persistent";
 
 export interface BonStats {
-  highScore: number
-  bestStreak: number
-  totalGamesPlayed: number
-  totalCorrect: number
-  totalAnswered: number
-  playerName: string
-  hasSeenIntro: boolean
+  highScore: number;
+  bestStreak: number;
+  totalGamesPlayed: number;
+  totalCorrect: number;
+  totalAnswered: number;
+  playerName: string;
+  hasSeenIntro: boolean;
 }
 
 export const $bonStats = persistentMap<BonStats>(
-  'bonStats:',
+  "bonStats:",
   {
     bestStreak: 0,
     hasSeenIntro: false,
     highScore: 0,
-    playerName: '',
+    playerName: "",
     totalAnswered: 0,
     totalCorrect: 0,
     totalGamesPlayed: 0,
@@ -24,11 +24,11 @@ export const $bonStats = persistentMap<BonStats>(
   {
     decode(value) {
       try {
-        return JSON.parse(value)
+        return JSON.parse(value);
       } catch {
-        return value
+        return value;
       }
     },
     encode: (value) => JSON.stringify(value),
   },
-)
+);

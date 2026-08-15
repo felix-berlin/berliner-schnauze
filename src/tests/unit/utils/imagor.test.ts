@@ -27,7 +27,9 @@ describe("buildImagorPath", () => {
       height: 50,
     });
 
-    expect(path).toBe("fit-in/100x50/filters:format(webp):quality(80)/https%3A%2F%2Fupload.wikimedia.org%2Fx.jpg");
+    expect(path).toBe(
+      "fit-in/100x50/filters:format(webp):quality(80)/https%3A%2F%2Fupload.wikimedia.org%2Fx.jpg",
+    );
   });
 });
 

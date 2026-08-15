@@ -12,29 +12,30 @@
 
 ## File Map
 
-| Action | Path | Purpose |
-|--------|------|---------|
-| Install | — | `an-array-of-german-words` npm package |
-| Modify | `src/utils/wordHelper.ts` | 6 new utility functions |
-| Create | `src/tests/unit/utils/decomposeCompoundWord.test.ts` | Tests |
-| Create | `src/tests/unit/utils/letterFrequency.test.ts` | Tests |
-| Create | `src/tests/unit/utils/wordCuriosities.test.ts` | Tests |
-| Create | `src/tests/unit/utils/findAnagrams.test.ts` | Tests |
-| Create | `src/tests/unit/utils/alphabeticNeighbors.test.ts` | Tests |
-| Modify | `src/styles/components/_single-word.scss` | Letter bar styles |
-| Create | `src/components/word/WordLetterFrequency.astro` | Bar chart component |
-| Create | `src/components/word/WordCuriosities.astro` | Fun facts component |
-| Create | `src/components/word/WordDecomposition.astro` | Compound decomposition |
-| Create | `src/components/word/WordSimilarSpelling.astro` | Jaro-Winkler similar words |
-| Create | `src/components/word/WordAnagrams.astro` | Anagram finder |
-| Create | `src/components/word/WordAlphabetNav.astro` | Alphabetical navigation |
-| Modify | `src/pages/wort/[...wordSlug].astro` | Wire all components into page |
+| Action  | Path                                                 | Purpose                                |
+| ------- | ---------------------------------------------------- | -------------------------------------- |
+| Install | —                                                    | `an-array-of-german-words` npm package |
+| Modify  | `src/utils/wordHelper.ts`                            | 6 new utility functions                |
+| Create  | `src/tests/unit/utils/decomposeCompoundWord.test.ts` | Tests                                  |
+| Create  | `src/tests/unit/utils/letterFrequency.test.ts`       | Tests                                  |
+| Create  | `src/tests/unit/utils/wordCuriosities.test.ts`       | Tests                                  |
+| Create  | `src/tests/unit/utils/findAnagrams.test.ts`          | Tests                                  |
+| Create  | `src/tests/unit/utils/alphabeticNeighbors.test.ts`   | Tests                                  |
+| Modify  | `src/styles/components/_single-word.scss`            | Letter bar styles                      |
+| Create  | `src/components/word/WordLetterFrequency.astro`      | Bar chart component                    |
+| Create  | `src/components/word/WordCuriosities.astro`          | Fun facts component                    |
+| Create  | `src/components/word/WordDecomposition.astro`        | Compound decomposition                 |
+| Create  | `src/components/word/WordSimilarSpelling.astro`      | Jaro-Winkler similar words             |
+| Create  | `src/components/word/WordAnagrams.astro`             | Anagram finder                         |
+| Create  | `src/components/word/WordAlphabetNav.astro`          | Alphabetical navigation                |
+| Modify  | `src/pages/wort/[...wordSlug].astro`                 | Wire all components into page          |
 
 ---
 
 ## Task 1: Install German Wordlist Package
 
 **Files:**
+
 - Modify: `package.json` (via pnpm)
 
 - [ ] **Step 1: Install the package**
@@ -63,6 +64,7 @@ git commit -m "chore: add an-array-of-german-words for compound word decompositi
 ## Task 2: `decomposeCompoundWord` Utility
 
 **Files:**
+
 - Modify: `src/utils/wordHelper.ts`
 - Create: `src/tests/unit/utils/decomposeCompoundWord.test.ts`
 
@@ -118,10 +120,7 @@ Expected: FAIL — `decomposeCompoundWord is not a function`
 Add to `src/utils/wordHelper.ts`:
 
 ```typescript
-export const decomposeCompoundWord = (
-  word: string,
-  germanWords: Set<string>,
-): string[] | null => {
+export const decomposeCompoundWord = (word: string, germanWords: Set<string>): string[] | null => {
   const lower = word.toLowerCase();
   if (lower.length < 5) return null;
   if (germanWords.has(lower)) return null;
@@ -164,6 +163,7 @@ git commit -m "feat(wordHelper): add decomposeCompoundWord utility"
 ## Task 3: `letterFrequency` Utility
 
 **Files:**
+
 - Modify: `src/utils/wordHelper.ts`
 - Create: `src/tests/unit/utils/letterFrequency.test.ts`
 
@@ -226,19 +226,43 @@ Add to `src/utils/wordHelper.ts`:
 
 ```typescript
 const GERMAN_LETTER_FREQ: Record<string, number> = {
-  e: 17.40, n: 9.78, i: 7.55, s: 7.27, r: 7.00,
-  a: 6.51,  t: 6.15, d: 4.81, h: 4.76, u: 4.35,
-  l: 3.44,  c: 3.06, g: 3.01, m: 2.53, o: 2.51,
-  b: 1.96,  w: 1.89, f: 1.66, k: 1.21, z: 1.13,
-  p: 0.97,  v: 0.67, ü: 0.65, ä: 0.54, ö: 0.30,
-  ß: 0.31,  j: 0.27, y: 0.04, x: 0.03, q: 0.02,
+  e: 17.4,
+  n: 9.78,
+  i: 7.55,
+  s: 7.27,
+  r: 7.0,
+  a: 6.51,
+  t: 6.15,
+  d: 4.81,
+  h: 4.76,
+  u: 4.35,
+  l: 3.44,
+  c: 3.06,
+  g: 3.01,
+  m: 2.53,
+  o: 2.51,
+  b: 1.96,
+  w: 1.89,
+  f: 1.66,
+  k: 1.21,
+  z: 1.13,
+  p: 0.97,
+  v: 0.67,
+  ü: 0.65,
+  ä: 0.54,
+  ö: 0.3,
+  ß: 0.31,
+  j: 0.27,
+  y: 0.04,
+  x: 0.03,
+  q: 0.02,
 };
 
 const frequencyLabel = (pct: number): string => {
   if (pct > 10) return "sehr häufig";
-  if (pct > 5)  return "häufig";
-  if (pct > 2)  return "gelegentlich";
-  if (pct > 1)  return "selten";
+  if (pct > 5) return "häufig";
+  if (pct > 2) return "gelegentlich";
+  if (pct > 1) return "selten";
   return "sehr selten";
 };
 
@@ -283,6 +307,7 @@ git commit -m "feat(wordHelper): add letterFrequency utility"
 ## Task 4: `wordCuriosities` Utility
 
 **Files:**
+
 - Modify: `src/utils/wordHelper.ts`
 - Create: `src/tests/unit/utils/wordCuriosities.test.ts`
 
@@ -321,14 +346,14 @@ describe("wordCuriosities", () => {
 
   it("detects start/end consonant correctly", () => {
     const result = wordCuriosities("Bierpinsel");
-    expect(result.startsWithConsonant).toBe(true);  // B
-    expect(result.endsWithConsonant).toBe(true);    // l
+    expect(result.startsWithConsonant).toBe(true); // B
+    expect(result.endsWithConsonant).toBe(true); // l
   });
 
   it("detects start/end vowel correctly", () => {
     const result = wordCuriosities("aasen");
     expect(result.startsWithConsonant).toBe(false); // a
-    expect(result.endsWithConsonant).toBe(false);   // n — wait, n is consonant
+    expect(result.endsWithConsonant).toBe(false); // n — wait, n is consonant
   });
 });
 ```
@@ -350,8 +375,7 @@ const VOWELS_SET = new Set(["a", "e", "i", "o", "u", "ä", "ö", "ü"]);
 const ALL_GERMAN_VOWELS = ["a", "e", "i", "o", "u", "ä", "ö", "ü"];
 
 const isVowelChar = (c: string): boolean => VOWELS_SET.has(c);
-const isConsonantChar = (c: string): boolean =>
-  /[a-zäöüß]/i.test(c) && !isVowelChar(c);
+const isConsonantChar = (c: string): boolean => /[a-zäöüß]/i.test(c) && !isVowelChar(c);
 
 export const wordCuriosities = (
   word: string,
@@ -398,7 +422,7 @@ The last test case in step 1 is wrong — "n" is a consonant. Fix:
 it("detects start/end vowel correctly", () => {
   const result = wordCuriosities("aasen");
   expect(result.startsWithConsonant).toBe(false); // a = vowel
-  expect(result.endsWithConsonant).toBe(true);    // n = consonant
+  expect(result.endsWithConsonant).toBe(true); // n = consonant
 });
 ```
 
@@ -424,6 +448,7 @@ git commit -m "feat(wordHelper): add wordCuriosities utility"
 ## Task 5: `findAnagrams` Utility
 
 **Files:**
+
 - Modify: `src/utils/wordHelper.ts`
 - Create: `src/tests/unit/utils/findAnagrams.test.ts`
 
@@ -484,19 +509,14 @@ Expected: FAIL
 Add to `src/utils/wordHelper.ts`:
 
 ```typescript
-const sortedChars = (word: string): string =>
-  word.toLowerCase().split("").sort().join("");
+const sortedChars = (word: string): string => word.toLowerCase().split("").sort().join("");
 
-export const findAnagrams = (
-  word: string,
-  allWords: BerlinerWord[],
-): BerlinerWord[] => {
+export const findAnagrams = (word: string, allWords: BerlinerWord[]): BerlinerWord[] => {
   const target = sortedChars(word);
   return allWords.filter((w) => {
     const berlinerisch = w.wordProperties?.berlinerisch ?? "";
     return (
-      berlinerisch.toLowerCase() !== word.toLowerCase() &&
-      sortedChars(berlinerisch) === target
+      berlinerisch.toLowerCase() !== word.toLowerCase() && sortedChars(berlinerisch) === target
     );
   });
 };
@@ -522,6 +542,7 @@ git commit -m "feat(wordHelper): add findAnagrams utility"
 ## Task 6: `alphabeticNeighbors` Utility
 
 **Files:**
+
 - Modify: `src/utils/wordHelper.ts`
 - Create: `src/tests/unit/utils/alphabeticNeighbors.test.ts`
 
@@ -561,21 +582,13 @@ describe("alphabeticNeighbors", () => {
     const current = allWords[0]!; // Anton
     const { before, after } = alphabeticNeighbors(allWords, current, 3);
     expect(before).toHaveLength(0);
-    expect(after.map((w) => w.wordProperties?.berlinerisch)).toEqual([
-      "Berta",
-      "Caesar",
-      "Dora",
-    ]);
+    expect(after.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Berta", "Caesar", "Dora"]);
   });
 
   it("returns fewer results at the end of the list", () => {
     const current = allWords[4]!; // Emil
     const { before, after } = alphabeticNeighbors(allWords, current, 3);
-    expect(before.map((w) => w.wordProperties?.berlinerisch)).toEqual([
-      "Dora",
-      "Caesar",
-      "Berta",
-    ]);
+    expect(before.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Dora", "Caesar", "Berta"]);
     expect(after).toHaveLength(0);
   });
 
@@ -650,6 +663,7 @@ git commit -m "feat(wordHelper): add alphabeticNeighbors utility"
 ## Task 7: SCSS — Letter Bar Styles
 
 **Files:**
+
 - Modify: `src/styles/components/_single-word.scss`
 
 - [ ] **Step 1: Add letter bar styles**
@@ -771,6 +785,7 @@ git commit -m "feat(styles): add letter-bar, alpha-nav, word-parts styles to sin
 ## Task 8: `WordLetterFrequency.astro` Component
 
 **Files:**
+
 - Create: `src/components/word/WordLetterFrequency.astro`
 
 - [ ] **Step 1: Create the component**
@@ -831,6 +846,7 @@ git commit -m "feat(component): add WordLetterFrequency Astro component"
 ## Task 9: `WordCuriosities.astro` Component
 
 **Files:**
+
 - Create: `src/components/word/WordCuriosities.astro`
 
 - [ ] **Step 1: Create the component**
@@ -899,6 +915,7 @@ git commit -m "feat(component): add WordCuriosities Astro component"
 ## Task 10: `WordDecomposition.astro` Component
 
 **Files:**
+
 - Create: `src/components/word/WordDecomposition.astro`
 
 - [ ] **Step 1: Create the component**
@@ -968,6 +985,7 @@ git commit -m "feat(component): add WordDecomposition Astro component"
 ## Task 11: `WordSimilarSpelling.astro` Component
 
 **Files:**
+
 - Create: `src/components/word/WordSimilarSpelling.astro`
 
 The `similarWords()` function in `wordHelper.ts` already returns `{ isSimilar: number; word: BerlinerWord }[]` — just filter and slice in the component.
@@ -1028,6 +1046,7 @@ git commit -m "feat(component): add WordSimilarSpelling Astro component"
 ## Task 12: `WordAnagrams.astro` Component
 
 **Files:**
+
 - Create: `src/components/word/WordAnagrams.astro`
 
 - [ ] **Step 1: Create the component**
@@ -1082,6 +1101,7 @@ git commit -m "feat(component): add WordAnagrams Astro component"
 ## Task 13: `WordAlphabetNav.astro` Component
 
 **Files:**
+
 - Create: `src/components/word/WordAlphabetNav.astro`
 
 - [ ] **Step 1: Create the component**
@@ -1158,6 +1178,7 @@ git commit -m "feat(component): add WordAlphabetNav Astro component"
 ## Task 14: Integration in Page Template
 
 **Files:**
+
 - Modify: `src/pages/wort/[...wordSlug].astro`
 
 - [ ] **Step 1: Add imports**
@@ -1280,6 +1301,7 @@ git commit -m "feat(page): integrate new word detail section components"
 ## Self-Review
 
 **Spec coverage:**
+
 - ✅ `WordDecomposition` — Task 2 (utility) + Task 10 (component) + Task 14 step 3
 - ✅ `WordLetterFrequency` — Task 3 (utility) + Task 8 (component) + Task 14 step 4
 - ✅ `WordCuriosities` — Task 4 (utility) + Task 9 (component) + Task 14 step 4

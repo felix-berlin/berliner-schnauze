@@ -85,9 +85,14 @@ describe("TooltipPopover.vue", () => {
 
   it("applies correct placement modifier class for each value", async () => {
     const placements = [
-      "top", "top-start", "top-end",
-      "bottom", "bottom-start", "bottom-end",
-      "left", "right",
+      "top",
+      "top-start",
+      "top-end",
+      "bottom",
+      "bottom-start",
+      "bottom-end",
+      "left",
+      "right",
     ] as const;
     for (const placement of placements) {
       // Mount + show + unmount each iteration to avoid stale panels in body

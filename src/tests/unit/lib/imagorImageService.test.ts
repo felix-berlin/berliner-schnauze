@@ -1,7 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
-const buildImagorPathMock = vi.fn(() => "fit-in/400x200/filters:format(webp):quality(80)/encoded-url");
-const signImagorPathMock = vi.fn((path: string) => `https://assets.kasimir.dev/signed-hash/${path}`);
+const buildImagorPathMock = vi.fn(
+  () => "fit-in/400x200/filters:format(webp):quality(80)/encoded-url",
+);
+const signImagorPathMock = vi.fn(
+  (path: string) => `https://assets.kasimir.dev/signed-hash/${path}`,
+);
 
 vi.mock("@utils/imagor", () => ({
   buildImagorPath: buildImagorPathMock,
@@ -29,7 +33,9 @@ describe("imagorImageService.getURL", () => {
       format: "webp",
       quality: 80,
     });
-    expect(signImagorPathMock).toHaveBeenCalledWith("fit-in/400x200/filters:format(webp):quality(80)/encoded-url");
+    expect(signImagorPathMock).toHaveBeenCalledWith(
+      "fit-in/400x200/filters:format(webp):quality(80)/encoded-url",
+    );
     expect(url).toBe(
       "https://assets.kasimir.dev/signed-hash/fit-in/400x200/filters:format(webp):quality(80)/encoded-url",
     );
@@ -37,13 +43,19 @@ describe("imagorImageService.getURL", () => {
 
   it("throws when width is missing", () => {
     expect(() =>
-      imagorImageService.getURL({ src: "https://cms.berliner-schnauze.wtf/foo.png", height: 200 }, {} as never),
+      imagorImageService.getURL(
+        { src: "https://cms.berliner-schnauze.wtf/foo.png", height: 200 },
+        {} as never,
+      ),
     ).toThrow(/width and height/);
   });
 
   it("throws when height is missing", () => {
     expect(() =>
-      imagorImageService.getURL({ src: "https://cms.berliner-schnauze.wtf/foo.png", width: 400 }, {} as never),
+      imagorImageService.getURL(
+        { src: "https://cms.berliner-schnauze.wtf/foo.png", width: 400 },
+        {} as never,
+      ),
     ).toThrow(/width and height/);
   });
 

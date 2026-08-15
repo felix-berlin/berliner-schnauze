@@ -30,9 +30,10 @@
 </template>
 
 <script setup lang="ts">
-import { syncTooltipArrow } from "@/directives/tooltip";
 import { useEventListener } from "@vueuse/core";
 import { nextTick, ref } from "vue";
+
+import { syncTooltipArrow } from "@/directives/tooltip";
 
 export type TooltipPlacement =
   | "top"

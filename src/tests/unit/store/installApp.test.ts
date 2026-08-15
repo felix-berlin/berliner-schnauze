@@ -51,9 +51,8 @@ describe("isPwaInstalled", () => {
 
 describe("disableInAppInstallPrompt", () => {
   it("sets $installPrompt to null and $showInstallButton to false", async () => {
-    const { disableInAppInstallPrompt, $installPrompt, $showInstallButton } = await import(
-      "@stores/installApp.ts"
-    );
+    const { disableInAppInstallPrompt, $installPrompt, $showInstallButton } =
+      await import("@stores/installApp.ts");
     $showInstallButton.set(true);
     disableInAppInstallPrompt();
     expect($installPrompt.get()).toBeNull();
@@ -69,7 +68,10 @@ describe("onMount cleanup", () => {
     const unsub = $installPrompt.subscribe(() => {});
     unsub();
     vi.advanceTimersByTime(1001);
-    expect(removeEventListenerSpy).toHaveBeenCalledWith("beforeinstallprompt", expect.any(Function));
+    expect(removeEventListenerSpy).toHaveBeenCalledWith(
+      "beforeinstallprompt",
+      expect.any(Function),
+    );
     expect(removeEventListenerSpy).toHaveBeenCalledWith("appinstalled", expect.any(Function));
     vi.useRealTimers();
   });

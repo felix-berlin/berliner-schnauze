@@ -76,6 +76,7 @@ Inner grid: `grid-template-columns: 1fr 280px`, switched via `@container word-ma
 **Element:** `<nav class="c-page-topbar">` — sticky, `z-index` above content.
 
 **Contents:**
+
 - Left: `<Breadcrumbs>` (existing component, unchanged)
 - Right: nothing (topbar stays lean)
 
@@ -88,18 +89,20 @@ Inner grid: `grid-template-columns: 1fr 280px`, switched via `@container word-ma
 **Element:** `<aside class="c-word-sidebar">` — `position: sticky; top: [topbar height + spacer]`.
 
 ### Word Header Block (`.c-word-sidebar__word`)
+
 - Background: `var(--new-blue-400)` (dark blue, existing dark-mode color — used here as accent in light mode too)
 - Word title in Berlin font, `color: var(--orange-300)`
 - Article/type subtitle in muted color
 
 ### Navigation (`.c-word-sidebar__nav`)
+
 Links grouped into three sections with uppercase micro-labels:
 
-| Group label | Links |
-|---|---|
-| **Inhalt** | Bedeutung, Beispiele |
-| **Sprache** | Orthographie, Quantit. Linguistik, Grammatik, Phonologie |
-| **Entdecken** | Anagramme, Alphabetische Nachbarn |
+| Group label   | Links                                                    |
+| ------------- | -------------------------------------------------------- |
+| **Inhalt**    | Bedeutung, Beispiele                                     |
+| **Sprache**   | Orthographie, Quantit. Linguistik, Grammatik, Phonologie |
+| **Entdecken** | Anagramme, Alphabetische Nachbarn                        |
 
 Each link: `<a href="#section-id">` — pure anchor navigation, no JS needed.
 
@@ -114,6 +117,7 @@ Each link: `<a href="#section-id">` — pure anchor navigation, no JS needed.
 Replaces the current `<header class="c-single-word__header">`.
 
 **Layout:** Flexbox row, space-between.
+
 - Left: H1 word title + badges row
 - Right: action buttons
 
@@ -122,6 +126,7 @@ Replaces the current `<header class="c-single-word__header">`.
 **Article suffix** (`, der`): smaller, lighter weight, `color: var(--grey-100)`.
 
 **Badges row** (`.c-word-hero__badges`): flex, gap, below title.
+
 - `<BadgeTag>` for Berolinismus (existing component, unchanged)
 - Wortart badge (Substantiv / Verb / etc.) — new plain badge
 - Audio player slot (existing `<AudioPlayerList>` component, unchanged)
@@ -162,16 +167,16 @@ Each content section becomes a `.c-section-card`:
 
 ### Section order and IDs
 
-| # | ID | Section | Components |
-|---|---|---|---|
-| 01 | `#etymologie` | Etymologie | InfoText block + Bedeutung list + Alternative Wörter |
-| 02 | `#beispiele` | Beispiele | `<WordExamples>` (conditional) |
-| 03 | `#orthographie` | Orthographie | Silbentrennung + `<WordDecomposition>` |
-| 04 | `#linguistik` | Quantitative Linguistik | Stat boxes + Vokal/Konsonant display + Letter bars + `<WordLetterFrequency>` + `<WordCuriosities>` |
-| 05 | `#grammatik` | Grammatik | NLP word-type tags (conditional) |
-| 06 | `#phonologie` | Phonologie | Similar-sounding + `<WordSimilarSpelling>` |
-| — | `#anagramme` | (Buchstabenspiele) | `<WordAnagrams>` — section-card only if anagrams exist |
-| 07 | `#navigation` | Alphabetische Nachbarn | `<WordAlphabetNav>` |
+| #   | ID              | Section                 | Components                                                                                         |
+| --- | --------------- | ----------------------- | -------------------------------------------------------------------------------------------------- |
+| 01  | `#etymologie`   | Etymologie              | InfoText block + Bedeutung list + Alternative Wörter                                               |
+| 02  | `#beispiele`    | Beispiele               | `<WordExamples>` (conditional)                                                                     |
+| 03  | `#orthographie` | Orthographie            | Silbentrennung + `<WordDecomposition>`                                                             |
+| 04  | `#linguistik`   | Quantitative Linguistik | Stat boxes + Vokal/Konsonant display + Letter bars + `<WordLetterFrequency>` + `<WordCuriosities>` |
+| 05  | `#grammatik`    | Grammatik               | NLP word-type tags (conditional)                                                                   |
+| 06  | `#phonologie`   | Phonologie              | Similar-sounding + `<WordSimilarSpelling>`                                                         |
+| —   | `#anagramme`    | (Buchstabenspiele)      | `<WordAnagrams>` — section-card only if anagrams exist                                             |
+| 07  | `#navigation`   | Alphabetische Nachbarn  | `<WordAlphabetNav>`                                                                                |
 
 Beispiele and Grammatik are conditional (only rendered if data exists). Both still get section-card wrapping when they do appear.
 
@@ -191,6 +196,7 @@ Beispiele and Grammatik are conditional (only rendered if data exists). Both sti
 ### 6.2 Quantitative Linguistik (`#linguistik`)
 
 Three stat boxes in a flex row:
+
 - **Buchstaben** (total count)
 - **Vokale** count — value colored `var(--vowel-color)` (#435e6b)
 - **Konsonanten** count — value colored `var(--orange-600)`
@@ -254,9 +260,13 @@ The sidebar is a single element that adapts via container query — no separate 
 
     // hide group labels and dividers in mobile row
     .c-word-sidebar__group-label,
-    .c-word-sidebar__divider { display: none; }
+    .c-word-sidebar__divider {
+      display: none;
+    }
 
-    .c-word-sidebar__word { display: none; }  // word header only on desktop
+    .c-word-sidebar__word {
+      display: none;
+    } // word header only on desktop
   }
 }
 ```
@@ -325,19 +335,19 @@ Active link: `color: var(--orange-600)`, `border-bottom: 2px solid var(--orange-
 }
 
 // Logical properties throughout
-padding-inline: 1.25rem;   // not padding-left/right
-margin-block: 1rem 0;      // not margin-top/bottom
+padding-inline: 1.25rem; // not padding-left/right
+margin-block: 1rem 0; // not margin-top/bottom
 border-inline-start: 3px solid var(--orange-300); // not border-left
 ```
 
 **Container query breakpoints used:**
 
-| Container    | Threshold      | Effect                             |
-| ------------ | -------------- | ---------------------------------- |
-| `word-page`  | `>= 48rem`     | Two-column sidebar + main layout   |
-| `word-page`  | `< 48rem`      | Horizontal scroll nav              |
-| `word-main`  | `>= 36rem`     | Inner gallery column appears       |
-| `word-hero`  | `>= 32rem`     | Badges wrap to second row          |
+| Container   | Threshold  | Effect                           |
+| ----------- | ---------- | -------------------------------- |
+| `word-page` | `>= 48rem` | Two-column sidebar + main layout |
+| `word-page` | `< 48rem`  | Horizontal scroll nav            |
+| `word-main` | `>= 36rem` | Inner gallery column appears     |
+| `word-hero` | `>= 32rem` | Badges wrap to second row        |
 
 No `@include mx.breakpoint()` calls in new SCSS files. Existing files that use `mx.breakpoint()` are untouched.
 
@@ -393,6 +403,7 @@ No `@include mx.breakpoint()` calls in new SCSS files. Existing files that use `
 ## 10. Dark Mode
 
 All new components use existing dark-mode patterns via `@include butler-mx.dark-mode-class`:
+
 - `.c-word-sidebar`: `background: var(--new-blue-400)`, sidebar word block gets darker shade
 - `.c-section-card`: `background: var(--new-blue-400)` (matches existing `--color-background` dark value)
 - `.c-word-hero`: same as existing `.c-single-word` dark mode (`--color-background: var(--new-blue-400)`)

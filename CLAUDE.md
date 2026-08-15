@@ -83,6 +83,7 @@ For Cloudflare Pages builds, env vars are configured separately in the CF Pages 
 Claude has direct MCP access to the WordPress backend via the `berlinerSchnauze` server (configured in `.mcp.json`, credentials in `~/.claude/settings.json` — see `.env.example` for the template, never commit real credentials).
 
 Available abilities:
+
 - `berliner-schnauze/get-posts` — published/draft blog posts (title, URL, date, excerpt). `post_status` param defaults to `publish`; pass `draft` for drafts.
 - `berliner-schnauze/create-post` — creates a draft post
 - `berliner-schnauze/get-words` — Berlinerisch glossary entries (custom post type)
@@ -130,13 +131,13 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 **CSS / BEMIT naming**: This project uses [BEMIT](https://gist.github.com/stephenway/a6145d9b4430e8c55a77) — BEM enhanced with namespaces:
 
-| Prefix          | Purpose                     | Example                          |
-| --------------- | --------------------------- | -------------------------------- |
-| `.c-`           | Components (reusable UI)    | `.c-word-card__title--active`    |
-| `.o-`           | Objects (structural)        | `.o-grid__item`                  |
-| `.u-`           | Utilities (single-purpose)  | `.u-hidden`                      |
-| `.is-` / `.has-`| State                       | `.is-active`, `.has-dropdown`    |
-| `.js-`          | JS hooks (no styling)       | `.js-scroll-target`              |
+| Prefix           | Purpose                    | Example                       |
+| ---------------- | -------------------------- | ----------------------------- |
+| `.c-`            | Components (reusable UI)   | `.c-word-card__title--active` |
+| `.o-`            | Objects (structural)       | `.o-grid__item`               |
+| `.u-`            | Utilities (single-purpose) | `.u-hidden`                   |
+| `.is-` / `.has-` | State                      | `.is-active`, `.has-dropdown` |
+| `.js-`           | JS hooks (no styling)      | `.js-scroll-target`           |
 
 Pattern: `.c-block__element--modifier`. Hyphens separate words within each part (`c-my-component`, not `c-myComponent`). Never use plain BEM without a namespace prefix.
 
@@ -165,7 +166,7 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 **Astro scripts + View Transitions**: `<script>` in `.astro` files compiles to `<script type="module">` and runs only once — never re-runs after client-side navigation. Wrap any DOM-querying logic in `astro:page-load` so it re-runs on every navigation:
 
 ```js
-document.addEventListener('astro:page-load', () => {
+document.addEventListener("astro:page-load", () => {
   // re-initialize observers, querySelectorAll, etc.
 });
 ```
@@ -255,7 +256,7 @@ Or in config:
 ```js
 import { defineConfig, logHandlers } from "astro/config";
 export default defineConfig({
-  logger: logHandlers.json()   // or logHandlers.compose(logHandlers.console(), logHandlers.json())
+  logger: logHandlers.json(), // or logHandlers.compose(logHandlers.console(), logHandlers.json())
 });
 ```
 

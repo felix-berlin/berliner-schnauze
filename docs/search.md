@@ -6,11 +6,11 @@
 
 ## Indexed fields
 
-| Field | Boost | Notes |
-|---|---|---|
-| `wordProperties.berlinerisch` | 2.5 | Primary dialect word |
-| `wordProperties.translations` | 1.0 | Standard German translations |
-| `wordComponents` | 1.0 | Compound word suffix tokens (see below) |
+| Field                         | Boost | Notes                                   |
+| ----------------------------- | ----- | --------------------------------------- |
+| `wordProperties.berlinerisch` | 2.5   | Primary dialect word                    |
+| `wordProperties.translations` | 1.0   | Standard German translations            |
+| `wordComponents`              | 1.0   | Compound word suffix tokens (see below) |
 
 ## Compound word search
 

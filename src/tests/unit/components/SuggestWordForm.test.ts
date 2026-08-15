@@ -3,7 +3,6 @@ import TurnStile from "@components/TurnStile.vue";
 import { mount, flushPromises, config } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, beforeAll, afterAll } from "vitest";
 
-
 vi.mock("astro:env/client", () => ({
   TURNSTILE_SITE_KEY: "test-site-key",
 }));
@@ -37,7 +36,10 @@ vi.mock("@components/TurnStile.vue", () => ({
   },
 }));
 
-const AlertBannerStub = { name: "AlertBanner", template: "<div class='mock-alert-banner'><slot /></div>" };
+const AlertBannerStub = {
+  name: "AlertBanner",
+  template: "<div class='mock-alert-banner'><slot /></div>",
+};
 
 describe("SuggestWordForm.vue", () => {
   beforeAll(() => {
@@ -284,5 +286,4 @@ describe("SuggestWordForm.vue", () => {
     expect(wrapper.exists()).toBe(true);
     vi.useRealTimers();
   });
-
 });

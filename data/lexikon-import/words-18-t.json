@@ -8,9 +8,7 @@
   {
     "word": "Tacheles",
     "translations": ["Tatsachen"],
-    "examples": [
-      { "example": "Tacheles reden.", "explanation": "Zur Sache kommen." }
-    ],
+    "examples": [{ "example": "Tacheles reden.", "explanation": "Zur Sache kommen." }],
     "infoText": "Von jiddisch tachlis = Endzweck.",
     "themen": []
   },
@@ -18,9 +16,7 @@
     "word": "Tachtel",
     "article": "die",
     "translations": ["Ohrfeige"],
-    "examples": [
-      { "example": "Jemandem eine tachteln.", "explanation": "Eine runterhauen." }
-    ],
+    "examples": [{ "example": "Jemandem eine tachteln.", "explanation": "Eine runterhauen." }],
     "themen": []
   },
   {
@@ -119,9 +115,7 @@
     "word": "Tepper",
     "article": "der",
     "translations": ["ungeschickter Mensch"],
-    "examples": [
-      { "example": "Geschirr zerteppern.", "explanation": "In Scherben schmeißen." }
-    ],
+    "examples": [{ "example": "Geschirr zerteppern.", "explanation": "In Scherben schmeißen." }],
     "themen": ["schimpfwoerter-beleidigungen"]
   },
   {
@@ -129,7 +123,10 @@
     "article": "der",
     "translations": ["Ruhe (in der Wendung »auf dem Teppich bleiben«)"],
     "examples": [
-      { "example": "Bleib’n Se uff’n Teppich.", "explanation": "Regen Sie sich nicht so auf, bleiben Sie ruhig." }
+      {
+        "example": "Bleib’n Se uff’n Teppich.",
+        "explanation": "Regen Sie sich nicht so auf, bleiben Sie ruhig."
+      }
     ],
     "themen": []
   },
@@ -138,7 +135,10 @@
     "article": "der",
     "translations": ["Türke"],
     "examples": [
-      { "example": "Hat keener kleenen Terken nich gesehen?", "explanation": "Scherzhafte Äußerung, 1872 verzeichnet." }
+      {
+        "example": "Hat keener kleenen Terken nich gesehen?",
+        "explanation": "Scherzhafte Äußerung, 1872 verzeichnet."
+      }
     ],
     "themen": []
   },
@@ -222,7 +222,10 @@
     "word": "Tomaten",
     "translations": ["schlechtes Sehen (in der Redensart)"],
     "examples": [
-      { "example": "Du hast wohl Tomaten uff’n Oogen!", "explanation": "Du kannst wohl nicht richtig gucken." }
+      {
+        "example": "Du hast wohl Tomaten uff’n Oogen!",
+        "explanation": "Du kannst wohl nicht richtig gucken."
+      }
     ],
     "themen": ["koerper"]
   },
@@ -230,9 +233,7 @@
     "word": "Ton",
     "article": "der",
     "translations": ["Worte (in der Redensart)"],
-    "examples": [
-      { "example": "Haste Töne?", "explanation": "Hast du Worte?" }
-    ],
+    "examples": [{ "example": "Haste Töne?", "explanation": "Hast du Worte?" }],
     "themen": ["gefuehle-emotionen"]
   },
   {
@@ -328,7 +329,10 @@
     "article": "die",
     "translations": ["neuer Haarschnitt (in der spöttischen Frage)"],
     "examples": [
-      { "example": "Biste die Treppe runterjefall’n?", "explanation": "Hast du dir die Haare schneiden lassen?" }
+      {
+        "example": "Biste die Treppe runterjefall’n?",
+        "explanation": "Hast du dir die Haare schneiden lassen?"
+      }
     ],
     "themen": ["koerper"]
   },
@@ -402,7 +406,10 @@
     "article": "die",
     "translations": ["Gaspedal (in der Wendung »auf die Tube drücken«)"],
     "examples": [
-      { "example": "Uff de Tube drücken.", "explanation": "Schnell fahren, aber auch mehr machen, als nötig ist." }
+      {
+        "example": "Uff de Tube drücken.",
+        "explanation": "Schnell fahren, aber auch mehr machen, als nötig ist."
+      }
     ],
     "themen": []
   },
@@ -449,17 +456,13 @@
     "word": "Tüte",
     "article": "die",
     "translations": ["Person (leicht negativ)", "Ablehnung (»kommt nich inne Tüte«)"],
-    "examples": [
-      { "example": "Kommt nich inne Tüte!", "explanation": "Kommt nicht in Frage." }
-    ],
+    "examples": [{ "example": "Kommt nich inne Tüte!", "explanation": "Kommt nicht in Frage." }],
     "themen": []
   },
   {
     "word": "tuten",
     "translations": ["trinken", "blasen"],
-    "examples": [
-      { "example": "Der hat ja von Tuten und Blasen keene Ahnung." }
-    ],
+    "examples": [{ "example": "Der hat ja von Tuten und Blasen keene Ahnung." }],
     "themen": ["alkohol-kneipe"]
   },
   {

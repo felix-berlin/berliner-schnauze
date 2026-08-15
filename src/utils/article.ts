@@ -98,20 +98,23 @@ export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle =
     html = rewriteWpLinks(html);
 
     // 1. Headings: ensure an id and collect the TOC (skip the Quellen appendix).
-    html = html.replace(/<h2\b([^>]*)>([\s\S]*?)<\/h2>/gi, (match, attrs: string, inner: string) => {
-      const text = stripTags(inner);
-      const isQuellen = text.toLowerCase() === "quellen";
-      const existingId = attrs.match(/\bid="([^"]+)"/)?.[1];
+    html = html.replace(
+      /<h2\b([^>]*)>([\s\S]*?)<\/h2>/gi,
+      (match, attrs: string, inner: string) => {
+        const text = stripTags(inner);
+        const isQuellen = text.toLowerCase() === "quellen";
+        const existingId = attrs.match(/\bid="([^"]+)"/)?.[1];
 
-      if (existingId) {
-        if (!isQuellen) toc.push({ id: existingId, text });
-        return match;
-      }
+        if (existingId) {
+          if (!isQuellen) toc.push({ id: existingId, text });
+          return match;
+        }
 
-      const id = uniqueSlug(slugify(text));
-      if (!isQuellen) toc.push({ id, text });
-      return `<h2${attrs} id="${id}">${inner}</h2>`;
-    });
+        const id = uniqueSlug(slugify(text));
+        if (!isQuellen) toc.push({ id, text });
+        return `<h2${attrs} id="${id}">${inner}</h2>`;
+      },
+    );
 
     // 2. Footnote references: first mention of each source becomes a return target.
     html = html.replace(/<a\s+href="#quelle-(\d+)"/gi, (match, num: string) => {
@@ -121,10 +124,13 @@ export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle =
     });
 
     // 3. Quellen entries: add a back-link to the citing reference (only if cited).
-    html = html.replace(/<li\s+id="quelle-(\d+)">([\s\S]*?)<\/li>/gi, (match, num: string, inner: string) => {
-      if (!seenRefs.has(num)) return match;
-      return `<li id="quelle-${num}">${inner} <a class="c-magazin-article__backref" href="#fnref-${num}" aria-label="Zurück zur Textstelle">↩</a></li>`;
-    });
+    html = html.replace(
+      /<li\s+id="quelle-(\d+)">([\s\S]*?)<\/li>/gi,
+      (match, num: string, inner: string) => {
+        if (!seenRefs.has(num)) return match;
+        return `<li id="quelle-${num}">${inner} <a class="c-magazin-article__backref" href="#fnref-${num}" aria-label="Zurück zur Textstelle">↩</a></li>`;
+      },
+    );
 
     // 4. Sponsored links: visibly label each one, not just the article-level notice.
     html = html.replace(

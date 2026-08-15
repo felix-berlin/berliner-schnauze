@@ -353,10 +353,7 @@ function buildWhere(wordSearch: WordList): Record<string, unknown> {
       containsAny: wordSearch.activeWordTypeFilter,
     };
   }
-  if (
-    Array.isArray(wordSearch.activeThemenFilter) &&
-    wordSearch.activeThemenFilter.length > 0
-  ) {
+  if (Array.isArray(wordSearch.activeThemenFilter) && wordSearch.activeThemenFilter.length > 0) {
     where.themen = {
       containsAny: wordSearch.activeThemenFilter,
     };
@@ -454,7 +451,11 @@ export const $oramaSearchResults = computedAsync(
         limit: wordSearch.resultLimit ?? resultLimit ?? 10,
         // Only the user-facing text fields — "*" would also run full-text
         // matching over dateGmt/modifiedGmt ISO strings.
-        properties: ["wordComponents", "wordProperties.berlinerisch", "wordProperties.translations"],
+        properties: [
+          "wordComponents",
+          "wordProperties.berlinerisch",
+          "wordProperties.translations",
+        ],
         sortBy,
         term: searchQuery,
         threshold: 0.5,

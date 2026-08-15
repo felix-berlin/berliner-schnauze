@@ -190,18 +190,16 @@ describe("wordList store", () => {
 
   describe("$toggleWordListFilterFlyout", () => {
     it("toggles from false to true", async () => {
-      const { $showWordListFilterFlyout, $toggleWordListFilterFlyout } = await import(
-        "@stores/wordList.ts"
-      );
+      const { $showWordListFilterFlyout, $toggleWordListFilterFlyout } =
+        await import("@stores/wordList.ts");
       $showWordListFilterFlyout.set(false);
       $toggleWordListFilterFlyout();
       expect($showWordListFilterFlyout.get()).toBe(true);
     });
 
     it("toggles from true to false", async () => {
-      const { $showWordListFilterFlyout, $toggleWordListFilterFlyout } = await import(
-        "@stores/wordList.ts"
-      );
+      const { $showWordListFilterFlyout, $toggleWordListFilterFlyout } =
+        await import("@stores/wordList.ts");
       $showWordListFilterFlyout.set(true);
       $toggleWordListFilterFlyout();
       expect($showWordListFilterFlyout.get()).toBe(false);
@@ -458,7 +456,11 @@ describe("wordList store", () => {
     it("calls search when db is truthy (covers line 433 true branch)", async () => {
       const { create, search } = await import("@orama/orama");
       vi.mocked(create).mockResolvedValueOnce({ _orama: true } as unknown as never);
-      vi.mocked(search).mockResolvedValueOnce({ hits: [], count: 0, elapsed: { raw: 0, formatted: "0" } } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({
+        hits: [],
+        count: 0,
+        elapsed: { raw: 0, formatted: "0" },
+      } as unknown as never);
       const { $wordSearch } = await import("@stores/wordList.ts");
       expect(capturedCbRef.fn).toBeDefined();
       const result = await capturedCbRef.fn!($wordSearch.get());
@@ -467,23 +469,21 @@ describe("wordList store", () => {
     });
 
     it("fetches the search index only once for concurrent computations (single-flight)", async () => {
-      const fetchSpy = vi.fn(() =>
-        Promise.resolve({ ok: true, json: () => Promise.resolve([]) }),
-      );
+      const fetchSpy = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve([]) }));
       globalThis.fetch = fetchSpy as unknown as typeof fetch;
       const { $wordSearch } = await import("@stores/wordList.ts");
       await Promise.all([
         capturedCbRef.fn!($wordSearch.get()),
         capturedCbRef.fn!($wordSearch.get()),
       ]);
-      const indexCalls = fetchSpy.mock.calls.filter(
-        ([url]) => url === "/api/search/index.json",
-      );
+      const indexCalls = fetchSpy.mock.calls.filter(([url]) => url === "/api/search/index.json");
       expect(indexCalls).toHaveLength(1);
     });
 
     it("throws on fetch failure so computedAsync reports state failed, then retries", async () => {
-      globalThis.fetch = vi.fn(() => Promise.resolve({ ok: false, status: 500 })) as unknown as typeof fetch;
+      globalThis.fetch = vi.fn(() =>
+        Promise.resolve({ ok: false, status: 500 }),
+      ) as unknown as typeof fetch;
       const { $wordSearch } = await import("@stores/wordList.ts");
       await expect(capturedCbRef.fn!($wordSearch.get())).rejects.toThrow(
         "[wordList] search index fetch failed: 500",
@@ -500,7 +500,11 @@ describe("wordList store", () => {
 
       // restore fetch mock
       globalThis.fetch = vi.fn(() =>
-        Promise.resolve({ ok: true, json: () => Promise.resolve({ availableWordGroups: [], wordTypes: [], rangeFilterMinMax: {} }) }),
+        Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({ availableWordGroups: [], wordTypes: [], rangeFilterMinMax: {} }),
+        }),
       ) as unknown as typeof fetch;
     });
   });

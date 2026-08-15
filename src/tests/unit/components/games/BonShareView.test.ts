@@ -1,7 +1,8 @@
+import type { BonSharePayload } from "@utils/bonShare";
+
+import BonShareView from "@components/games/BonShareView.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import BonShareView from "@components/games/BonShareView.vue";
-import type { BonSharePayload } from "@utils/bonShare";
 
 const samplePayload: BonSharePayload = {
   score: 120,
@@ -36,7 +37,9 @@ describe("BonShareView.vue", () => {
 
   it("shows player result when valid hash is present", async () => {
     const { useUrlSearchParams } = await import("@vueuse/core");
-    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<typeof useUrlSearchParams>);
+    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<
+      typeof useUrlSearchParams
+    >);
 
     const wrapper = mount(BonShareView);
     expect(wrapper.find(".c-bon-share-view__stats").exists()).toBe(true);
@@ -47,7 +50,9 @@ describe("BonShareView.vue", () => {
   it("shows Spielergebnis title without player name when playerName missing", async () => {
     const { useUrlSearchParams } = await import("@vueuse/core");
     const { decodeShareHash } = await import("@utils/bonShare");
-    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<typeof useUrlSearchParams>);
+    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<
+      typeof useUrlSearchParams
+    >);
     vi.mocked(decodeShareHash).mockReturnValueOnce({ ...samplePayload, playerName: undefined });
 
     const wrapper = mount(BonShareView);
@@ -56,7 +61,9 @@ describe("BonShareView.vue", () => {
 
   it("computes accuracy percent correctly", async () => {
     const { useUrlSearchParams } = await import("@vueuse/core");
-    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<typeof useUrlSearchParams>);
+    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<
+      typeof useUrlSearchParams
+    >);
 
     const wrapper = mount(BonShareView);
     expect(wrapper.text()).toContain("80%");
@@ -65,7 +72,9 @@ describe("BonShareView.vue", () => {
   it("shows zero accuracy when totalAnswered is 0", async () => {
     const { useUrlSearchParams } = await import("@vueuse/core");
     const { decodeShareHash } = await import("@utils/bonShare");
-    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<typeof useUrlSearchParams>);
+    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<
+      typeof useUrlSearchParams
+    >);
     vi.mocked(decodeShareHash).mockReturnValueOnce({
       ...samplePayload,
       totalAnswered: 0,
@@ -78,7 +87,9 @@ describe("BonShareView.vue", () => {
 
   it("renders formatted date", async () => {
     const { useUrlSearchParams } = await import("@vueuse/core");
-    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<typeof useUrlSearchParams>);
+    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<
+      typeof useUrlSearchParams
+    >);
 
     const wrapper = mount(BonShareView);
     expect(wrapper.find(".c-bon-share-view__date").text()).toBeTruthy();
@@ -87,8 +98,13 @@ describe("BonShareView.vue", () => {
   it("formattedDate returns empty string when date is missing (covers line 62 early return)", async () => {
     const { useUrlSearchParams } = await import("@vueuse/core");
     const { decodeShareHash } = await import("@utils/bonShare");
-    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<typeof useUrlSearchParams>);
-    vi.mocked(decodeShareHash).mockReturnValueOnce({ ...samplePayload, date: undefined as unknown as string });
+    vi.mocked(useUrlSearchParams).mockReturnValue({ r: "valid" } as ReturnType<
+      typeof useUrlSearchParams
+    >);
+    vi.mocked(decodeShareHash).mockReturnValueOnce({
+      ...samplePayload,
+      date: undefined as unknown as string,
+    });
 
     const wrapper = mount(BonShareView);
     expect(wrapper.find(".c-bon-share-view__date").text()).toBe("");
@@ -96,7 +112,9 @@ describe("BonShareView.vue", () => {
 
   it("handles array r param by taking first value", async () => {
     const { useUrlSearchParams } = await import("@vueuse/core");
-    vi.mocked(useUrlSearchParams).mockReturnValue({ r: ["valid", "other"] } as unknown as ReturnType<typeof useUrlSearchParams>);
+    vi.mocked(useUrlSearchParams).mockReturnValue({
+      r: ["valid", "other"],
+    } as unknown as ReturnType<typeof useUrlSearchParams>);
 
     const wrapper = mount(BonShareView);
     expect(wrapper.find(".c-bon-share-view__stats").exists()).toBe(true);

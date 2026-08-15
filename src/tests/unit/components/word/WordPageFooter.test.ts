@@ -1,14 +1,13 @@
 // @vitest-environment node
 import { describe, expect, it, beforeAll } from "vitest";
+
 import { createAstroRender } from "../../helpers";
 
 describe("WordPageFooter.astro", () => {
   let render: (props: Record<string, unknown>) => Promise<string>;
 
   beforeAll(async () => {
-    const { default: WordPageFooter } = await import(
-      "@components/word/WordPageFooter.astro"
-    );
+    const { default: WordPageFooter } = await import("@components/word/WordPageFooter.astro");
     render = await createAstroRender(WordPageFooter);
   }, 30_000);
 

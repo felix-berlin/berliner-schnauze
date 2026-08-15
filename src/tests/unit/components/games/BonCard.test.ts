@@ -126,7 +126,13 @@ describe("BonCard.vue", () => {
 
   it("wrong answer on a real word without a translation shows the verdict but no meaning", () => {
     const wrapper = mount(BonCard, {
-      props: { ...defaultProps, isShaking: true, lastAnswerCorrect: false, isReal: true, translation: null },
+      props: {
+        ...defaultProps,
+        isShaking: true,
+        lastAnswerCorrect: false,
+        isReal: true,
+        translation: null,
+      },
     });
     expect(wrapper.find(".c-bon-card__overlay").text()).toContain("echtes Berlinerisch");
     expect(wrapper.find(".c-bon-card__overlay-meaning").exists()).toBe(false);
@@ -134,7 +140,13 @@ describe("BonCard.vue", () => {
 
   it("wrong answer on a fake word never shows a meaning", () => {
     const wrapper = mount(BonCard, {
-      props: { ...defaultProps, isShaking: true, lastAnswerCorrect: false, isReal: false, translation: "irrelevant" },
+      props: {
+        ...defaultProps,
+        isShaking: true,
+        lastAnswerCorrect: false,
+        isReal: false,
+        translation: "irrelevant",
+      },
     });
     expect(wrapper.find(".c-bon-card__overlay").text()).toContain("erfunden");
     expect(wrapper.find(".c-bon-card__overlay-meaning").exists()).toBe(false);

@@ -5,7 +5,10 @@ vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
 const mockRequestPermission = vi.fn();
 Object.defineProperty(global, "Notification", {
-  value: { permission: "default" as NotificationPermission, requestPermission: mockRequestPermission },
+  value: {
+    permission: "default" as NotificationPermission,
+    requestPermission: mockRequestPermission,
+  },
   writable: true,
   configurable: true,
 });
@@ -24,9 +27,8 @@ describe("notificationPermission store", () => {
 
   it("requestNotificationPermission calls browser API and updates atom", async () => {
     mockRequestPermission.mockResolvedValue("granted");
-    const { requestNotificationPermission, $notificationPermission } = await import(
-      "@stores/notificationPermission.ts"
-    );
+    const { requestNotificationPermission, $notificationPermission } =
+      await import("@stores/notificationPermission.ts");
     await requestNotificationPermission();
     expect(mockRequestPermission).toHaveBeenCalledOnce();
     expect($notificationPermission.get()).toBe("granted");
@@ -50,9 +52,8 @@ describe("notificationPermission store", () => {
 
   it("handles denied permission", async () => {
     mockRequestPermission.mockResolvedValue("denied");
-    const { requestNotificationPermission, $notificationPermission } = await import(
-      "@stores/notificationPermission.ts"
-    );
+    const { requestNotificationPermission, $notificationPermission } =
+      await import("@stores/notificationPermission.ts");
     await requestNotificationPermission();
     expect($notificationPermission.get()).toBe("denied");
   });
@@ -74,9 +75,8 @@ describe("notificationPermission store", () => {
   it("shows toast and does not update atom when requestPermission throws", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     mockRequestPermission.mockRejectedValue(new TypeError("Not allowed"));
-    const { requestNotificationPermission, $notificationPermission } = await import(
-      "@stores/notificationPermission.ts"
-    );
+    const { requestNotificationPermission, $notificationPermission } =
+      await import("@stores/notificationPermission.ts");
     const { createToastNotify } = await import("@stores/toastNotify.ts");
     await requestNotificationPermission();
     expect(createToastNotify).toHaveBeenCalledOnce();

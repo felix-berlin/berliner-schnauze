@@ -6,33 +6,33 @@
 
 ## Scope & Entscheidungen
 
-| Frage | Entscheidung | Begründung |
-|---|---|---|
-| Neue oder bestehende Taxonomie? | **Neue**: `berlinerischThemen` | `berlinerischWordTypes` = Grammatik-Typen; nicht vermischen |
-| Wo registrieren? | WP PHP-Plugin / functions.php | Taxonomie muss serverseitig registriert sein bevor REST-API-Terme angelegt werden |
-| Kategorisierungs-Tool | Claude API (claude-sonnet-4-6), Batch-Mode | ~919 Wörter; Batches à 50 für Token-Effizienz |
-| Zwischenspeicher | `data/word-categories.json` im Repo | Manuell korrigierbar vor WP-Import; Wiederholbarkeit |
-| WP-Import-Methode | WP REST API (Basic Auth) | Einfacher als WPGraphQL-Mutations für Bulk-Termine; Auth-Credentials bereits als Env-Vars vorhanden |
-| Kategorien-Anzahl | ~15–20 Themen-Kategorien | Breit genug für Navigation, eng genug für Sinn |
+| Frage                           | Entscheidung                               | Begründung                                                                                          |
+| ------------------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| Neue oder bestehende Taxonomie? | **Neue**: `berlinerischThemen`             | `berlinerischWordTypes` = Grammatik-Typen; nicht vermischen                                         |
+| Wo registrieren?                | WP PHP-Plugin / functions.php              | Taxonomie muss serverseitig registriert sein bevor REST-API-Terme angelegt werden                   |
+| Kategorisierungs-Tool           | Claude API (claude-sonnet-4-6), Batch-Mode | ~919 Wörter; Batches à 50 für Token-Effizienz                                                       |
+| Zwischenspeicher                | `data/word-categories.json` im Repo        | Manuell korrigierbar vor WP-Import; Wiederholbarkeit                                                |
+| WP-Import-Methode               | WP REST API (Basic Auth)                   | Einfacher als WPGraphQL-Mutations für Bulk-Termine; Auth-Credentials bereits als Env-Vars vorhanden |
+| Kategorien-Anzahl               | ~15–20 Themen-Kategorien                   | Breit genug für Navigation, eng genug für Sinn                                                      |
 
 ---
 
 ## Themen-Kategorien (finale Struktur)
 
-| Slug | Label (DE) | Notiz |
-|---|---|---|
-| `essen-trinken` | Essen & Trinken | Kern-Cluster, stark befüllt |
-| `alkohol-kneipe` | Alkohol & Kneipe | Eigener Cluster — Molle, Destille, Kaschemme, blau sein; starke Berlin-Identität |
-| `schimpfwoerter-beleidigungen` | Schimpfwörter & Beleidigungen | Kern-Cluster, stark befüllt |
-| `charakter-eigenschaften` | Charakter & Eigenschaften | Absorbs: Kleidung & Aussehen |
-| `gefuehle-emotionen` | Gefühle & Emotionen | Nur befüllen wenn ≥ 10 Wörter vorhanden |
-| `koerper` | Körper | Ohne Gesundheit — kaum Berliner Dialektwörter für Gesundheitsthemen |
-| `geld` | Geld | Ohne Arbeit — Penunse/Kröten/blechen als eigener Cluster |
-| `orte-spitzname` | Berliner Orte & Spitznamen | Eigener Cluster — stärkster Unique Content |
-| `stadtleben` | Berliner Stadtleben | Kiez, Späti, JWD, etc. |
-| `beziehungen-soziales` | Beziehungen & Soziales | Absorbs: Kinder & Familie |
-| `alltag-wohnen` | Alltag & Wohnen | Nur befüllen wenn ≥ 10 Wörter vorhanden |
-| `unterhaltung-freizeit` | Unterhaltung & Freizeit | Bleibt |
+| Slug                           | Label (DE)                    | Notiz                                                                            |
+| ------------------------------ | ----------------------------- | -------------------------------------------------------------------------------- |
+| `essen-trinken`                | Essen & Trinken               | Kern-Cluster, stark befüllt                                                      |
+| `alkohol-kneipe`               | Alkohol & Kneipe              | Eigener Cluster — Molle, Destille, Kaschemme, blau sein; starke Berlin-Identität |
+| `schimpfwoerter-beleidigungen` | Schimpfwörter & Beleidigungen | Kern-Cluster, stark befüllt                                                      |
+| `charakter-eigenschaften`      | Charakter & Eigenschaften     | Absorbs: Kleidung & Aussehen                                                     |
+| `gefuehle-emotionen`           | Gefühle & Emotionen           | Nur befüllen wenn ≥ 10 Wörter vorhanden                                          |
+| `koerper`                      | Körper                        | Ohne Gesundheit — kaum Berliner Dialektwörter für Gesundheitsthemen              |
+| `geld`                         | Geld                          | Ohne Arbeit — Penunse/Kröten/blechen als eigener Cluster                         |
+| `orte-spitzname`               | Berliner Orte & Spitznamen    | Eigener Cluster — stärkster Unique Content                                       |
+| `stadtleben`                   | Berliner Stadtleben           | Kiez, Späti, JWD, etc.                                                           |
+| `beziehungen-soziales`         | Beziehungen & Soziales        | Absorbs: Kinder & Familie                                                        |
+| `alltag-wohnen`                | Alltag & Wohnen               | Nur befüllen wenn ≥ 10 Wörter vorhanden                                          |
+| `unterhaltung-freizeit`        | Unterhaltung & Freizeit       | Bleibt                                                                           |
 
 **Gestrichen**: `bewegung-fortbewegung` (kein Search Intent), `natur-wetter` (zu dünn), `sonstiges` (nie verwenden — verwässert Taxonomie)
 
@@ -88,6 +88,7 @@ Wichtig: `show_in_graphql: true` — macht Taxonomie in WPGraphQL und Astro-Code
 **0b. REST-Endpunkte verifizieren**
 
 Nach Registrierung prüfen:
+
 ```bash
 # Taxonomie-Endpunkt erreichbar?
 curl -u "$WP_AUTH_USER:$WP_AUTH_PASS" "$WP_REST_API/berliner-word-themen"
@@ -109,6 +110,7 @@ curl -u "$WP_AUTH_USER:$WP_AUTH_PASS" "$WP_REST_API/berliner-word/1"
 **1a. Fetch-Script schreiben** (`scripts/categorize-words.ts`)
 
 Script-Struktur:
+
 ```typescript
 // 1. WP GraphQL → fetchAllWords() (bereits vorhanden in src/services/queries/getWords.ts)
 // 2. Extrahiere pro Wort: berlinerWordId, slug, berlinerisch, translations[], examples[]
@@ -120,11 +122,13 @@ Script-Struktur:
 Wiederholbar: Bereits kategorisierte IDs überspringen (merge-Logik).
 
 **Wichtige Imports**:
+
 - `fetchAllWords` aus `src/services/queries/getWords.ts` (wiederverwendbar — kein neues GQL nötig)
 - `@anthropic-ai/sdk` für Claude API (ggf. installieren: `pnpm add -D @anthropic-ai/sdk`)
 - Env-Vars: `WP_API` (GraphQL endpoint) + Infisical für Auth
 
 **Claude-Prompt-Struktur** (pro Batch):
+
 ```
 Du bist ein Experte für Berliner Dialekt. Kategorisiere die folgenden Berliner Mundart-Wörter
 in eine oder mehrere der folgenden Themen-Kategorien. Gib für jedes Wort seine ID und die
@@ -142,6 +146,7 @@ Antworte NUR mit validem JSON: [{ "id": "...", "themen": ["slug1", "slug2"] }]
 **Batches**: 50 Wörter pro Request → ~19 API-Calls für ~919 Wörter
 
 **Output-Format** (`data/word-categories.json`):
+
 ```json
 [
   {
@@ -155,6 +160,7 @@ Antworte NUR mit validem JSON: [{ "id": "...", "themen": ["slug1", "slug2"] }]
 ```
 
 **Verification**:
+
 - JSON valide und vollständig (alle ~919 Wörter vorhanden)
 - Jeder Eintrag hat mindestens 1 Thema
 - Kein Thema außerhalb der erlaubten Slugs
@@ -183,15 +189,18 @@ Antworte NUR mit validem JSON: [{ "id": "...", "themen": ["slug1", "slug2"] }]
 
 **Auth**: HTTP Basic Auth via `Authorization: Basic base64(user:pass)` — Credentials aus Env-Vars.
 
-**Rate-Limiting**: 
+**Rate-Limiting**:
+
 - 1 Request pro 100ms (kein WP-Rate-Limit aber höflich bleiben)
 - Bei 429/503: Exponential Backoff
 
-**Idempotenz**: 
+**Idempotenz**:
+
 - Existierende Terms per Slug prüfen (GET vor POST)
 - `--dry-run` Flag für Vorschau ohne Änderungen
 
 **CLI-Optionen**:
+
 ```bash
 pnpm tsx scripts/import-categories-to-wp.ts             # Vollimport
 pnpm tsx scripts/import-categories-to-wp.ts --dry-run   # Vorschau
@@ -199,6 +208,7 @@ pnpm tsx scripts/import-categories-to-wp.ts --slug wat  # Einzelner Post
 ```
 
 **Verification**:
+
 - WP Admin → Themen-Taxonomie zeigt alle ~15–20 Terms
 - Stichproben: 5 zufällige Posts im WP Admin haben korrekte Themen gesetzt
 - `curl "$WP_REST_API/berliner-word-themen"` → listet alle Terms
@@ -216,6 +226,7 @@ Dieser Phase ist **optional** und **unabhängig** von Phase 1+2. Erst angehen we
 **3a. GQL-Fragment erweitern**
 
 In `src/services/fragments/fragments.ts` → `BerlinerWord`-Fragment:
+
 ```graphql
 berlinerischThemen {
   nodes {
@@ -234,6 +245,7 @@ pnpm gql:generate
 **3c. Search-Index erweitern**
 
 In `src/pages/api/search/index.json.ts` → `makeOramaSearchIndex()`:
+
 ```typescript
 themen: node.berlinerischThemen?.nodes.map(n => n.slug) ?? [],
 ```
@@ -246,12 +258,12 @@ Verification: `pnpm build:local` erfolgreich; `data/api/search/index.json` enth�
 
 ## Dateien die neu entstehen
 
-| Datei | Zweck |
-|---|---|
-| `scripts/categorize-words.ts` | LLM-Kategorisierungs-Script |
-| `scripts/import-categories-to-wp.ts` | WP REST API Import-Script |
-| `data/word-categories.json` | Zwischenspeicher (commit ins Repo) |
-| `scripts/lib/wp-rest.ts` | Shared WP REST Auth-Helper |
+| Datei                                | Zweck                              |
+| ------------------------------------ | ---------------------------------- |
+| `scripts/categorize-words.ts`        | LLM-Kategorisierungs-Script        |
+| `scripts/import-categories-to-wp.ts` | WP REST API Import-Script          |
+| `data/word-categories.json`          | Zwischenspeicher (commit ins Repo) |
+| `scripts/lib/wp-rest.ts`             | Shared WP REST Auth-Helper         |
 
 ---
 
@@ -270,9 +282,9 @@ Phase 3:  (optional) GQL-Fragment + Codegen + Search-Index
 
 ## Bekannte Risiken
 
-| Risiko | Mitigation |
-|---|---|
-| Claude klassifiziert falsch | JSON-Zwischenspeicher → manuelle Korrektur vor Import |
-| WP REST Auth schlägt fehl | Application Password in WP generieren (WP 5.6+) statt User-Pass |
-| berliner-word Post-Type nicht in REST | `show_in_rest: true` beim CPT prüfen |
-| Taxonomie fehlt in WPGraphQL | WPGraphQL-Plugin-Setting: "Show in GraphQL" aktivieren |
+| Risiko                                | Mitigation                                                      |
+| ------------------------------------- | --------------------------------------------------------------- |
+| Claude klassifiziert falsch           | JSON-Zwischenspeicher → manuelle Korrektur vor Import           |
+| WP REST Auth schlägt fehl             | Application Password in WP generieren (WP 5.6+) statt User-Pass |
+| berliner-word Post-Type nicht in REST | `show_in_rest: true` beim CPT prüfen                            |
+| Taxonomie fehlt in WPGraphQL          | WPGraphQL-Plugin-Setting: "Show in GraphQL" aktivieren          |

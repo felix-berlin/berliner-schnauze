@@ -19,8 +19,9 @@
 import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import { wpFetch, delay, getWpConfig, type WpConfig } from "./lib/wp-rest.ts";
+
 import { CATEGORY_LABELS, type WordCategory } from "./lib/word-category.ts";
+import { wpFetch, delay, getWpConfig, type WpConfig } from "./lib/wp-rest.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -139,7 +140,9 @@ async function assignTermsToPost(
 
 // ── Main ───────────────────────────────────────────────────────────────────
 async function main(): Promise<void> {
-  console.log(`Mode: ${DRY_RUN ? "DRY RUN" : "LIVE"}${SLUG_FILTER ? ` | slug="${SLUG_FILTER}"` : ""}`);
+  console.log(
+    `Mode: ${DRY_RUN ? "DRY RUN" : "LIVE"}${SLUG_FILTER ? ` | slug="${SLUG_FILTER}"` : ""}`,
+  );
 
   const dataPath = join(__dirname, "../data/word-categories.json");
   let words: WordCategory[] = JSON.parse(readFileSync(dataPath, "utf-8"));

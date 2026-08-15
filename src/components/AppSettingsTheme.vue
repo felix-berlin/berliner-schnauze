@@ -51,6 +51,10 @@ const isDarkMode = useStore($isDarkMode);
 
 function applyDarkMode(value: boolean | null): void {
   setDarkMode(value);
-  trackEvent("Color Mode", value === null ? "System" : value ? "Dark Mode" : "Light Mode", "Settings");
+  trackEvent(
+    "Color Mode",
+    value === null ? "System" : value ? "Dark Mode" : "Light Mode",
+    "Settings",
+  );
 }
 </script>

@@ -9,11 +9,7 @@
       class="c-filter-dropdown__trigger-wrapper"
     >
       <template #default="{ triggerProps }">
-        <button
-          v-bind="triggerProps"
-          type="button"
-          class="c-button c-button--center-icon"
-        >
+        <button v-bind="triggerProps" type="button" class="c-button c-button--center-icon">
           <span aria-hidden="true">
             <Filter />
           </span>

@@ -1,5 +1,6 @@
 import { alphabeticNeighbors } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
+
 import type { BerlinerWord } from "@/gql/entity-types";
 
 const makeWord = (berlinerisch: string, id: string): BerlinerWord =>
@@ -47,11 +48,7 @@ describe("alphabeticNeighbors", () => {
   });
 
   it("sorts umlauts correctly under German locale (ä after a, before b)", () => {
-    const umlautWords = [
-      makeWord("Affe", "1"),
-      makeWord("Äpfel", "2"),
-      makeWord("Birne", "3"),
-    ];
+    const umlautWords = [makeWord("Affe", "1"), makeWord("Äpfel", "2"), makeWord("Birne", "3")];
     const current = umlautWords[1]!; // Äpfel
     const { before, after } = alphabeticNeighbors(umlautWords, current, 2);
     expect(before.map((w) => w.wordProperties?.berlinerisch)).toEqual(["Affe"]);

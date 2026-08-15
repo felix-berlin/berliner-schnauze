@@ -48,13 +48,13 @@
 </template>
 
 <script setup lang="ts">
+import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
+import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 import { Highlight } from "@orama/highlight";
 import { routeToWord } from "@utils/helpers.ts";
 import BookOpen from "virtual:icons/lucide/book-open";
 
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
-import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
-import WordOptionDropdown from "@components/word/WordOptionDropdown.vue";
 
 type WordProps = {
   highlightTerm?: string;

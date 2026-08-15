@@ -30,7 +30,16 @@ vi.mock("@nanostores/vue", () => ({
 vi.mock("@vueform/multiselect", () => ({
   default: {
     name: "Multiselect",
-    props: ["modelValue", "mode", "closeOnSelect", "hideSelected", "options", "multipleLabel", "placeholder", "aria"],
+    props: [
+      "modelValue",
+      "mode",
+      "closeOnSelect",
+      "hideSelected",
+      "options",
+      "multipleLabel",
+      "placeholder",
+      "aria",
+    ],
     template: "<div class='mock-multiselect'><slot /></div>",
     emits: ["select", "deselect", "update:modelValue"],
   },
@@ -85,7 +94,11 @@ describe("ThemenFilter.vue", () => {
     const wrapper = mount(ThemenFilter);
     const multiselect = wrapper.findComponent({ name: "Multiselect" });
     await multiselect.vm.$emit("select");
-    expect(trackEvent).toHaveBeenCalledWith("WordList", "Filter", expect.stringContaining("Themen:"));
+    expect(trackEvent).toHaveBeenCalledWith(
+      "WordList",
+      "Filter",
+      expect.stringContaining("Themen:"),
+    );
   });
 
   it("calls trackEvent on deselect with remaining values", async () => {
@@ -93,7 +106,11 @@ describe("ThemenFilter.vue", () => {
     const wrapper = mount(ThemenFilter);
     const multiselect = wrapper.findComponent({ name: "Multiselect" });
     await multiselect.vm.$emit("deselect");
-    expect(trackEvent).toHaveBeenCalledWith("WordList", "Filter", expect.stringContaining("Themen:"));
+    expect(trackEvent).toHaveBeenCalledWith(
+      "WordList",
+      "Filter",
+      expect.stringContaining("Themen:"),
+    );
   });
 
   it("v-model update from Multiselect updates value ref", async () => {

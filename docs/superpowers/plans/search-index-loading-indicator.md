@@ -20,14 +20,14 @@ Each phase is self-contained and executable in a fresh context. Execute phases i
 
 ### Allowed APIs (verified, with sources)
 
-| API | Source | Notes |
-| --- | --- | --- |
+| API                                                                 | Source                                          | Notes                                                                                                                                                         |
+| ------------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AsyncComputedStore` states: `'loading'` \| `'ready'` \| `'failed'` | `node_modules/@nanostores/async/index.d.ts:4-6` | **Exactly these three.** There is NO `'error'`, `'idle'` or `'pending'` state. `failed` carries `{ error, changing }`, `ready` carries `{ value, changing }`. |
-| `useStore()` from `@nanostores/vue` | already used in `WordList.vue:54` | Returns ref of the full state object — `oramaSearch.value.state` is reactive. |
-| `computed()` from `nanostores` | already used in `wordList.ts:98` | For derived `$searchState` store. |
-| Lucide icons | CLAUDE.md convention | `defineAsyncComponent(() => import("virtual:icons/lucide/loader-circle"))`. In tests auto-stubbed as `<span data-testid="icon-lucide-loader-circle" />`. |
-| `usePreferredReducedMotion` from `@vueuse/core` | already in use per CLAUDE.md | Prefer CSS `@media (prefers-reduced-motion: reduce)` for pure-CSS animation, no JS needed. |
-| Workbox `runtimeCaching` handlers | `astro.config.mjs:325-355` | index.json + meta.json currently `NetworkFirst`, `networkTimeoutSeconds: 10`, 3 h expiration. `StaleWhileRevalidate` is a valid Workbox handler string. |
+| `useStore()` from `@nanostores/vue`                                 | already used in `WordList.vue:54`               | Returns ref of the full state object — `oramaSearch.value.state` is reactive.                                                                                 |
+| `computed()` from `nanostores`                                      | already used in `wordList.ts:98`                | For derived `$searchState` store.                                                                                                                             |
+| Lucide icons                                                        | CLAUDE.md convention                            | `defineAsyncComponent(() => import("virtual:icons/lucide/loader-circle"))`. In tests auto-stubbed as `<span data-testid="icon-lucide-loader-circle" />`.      |
+| `usePreferredReducedMotion` from `@vueuse/core`                     | already in use per CLAUDE.md                    | Prefer CSS `@media (prefers-reduced-motion: reduce)` for pure-CSS animation, no JS needed.                                                                    |
+| Workbox `runtimeCaching` handlers                                   | `astro.config.mjs:325-355`                      | index.json + meta.json currently `NetworkFirst`, `networkTimeoutSeconds: 10`, 3 h expiration. `StaleWhileRevalidate` is a valid Workbox handler string.       |
 
 ### Existing patterns to copy
 
@@ -108,7 +108,9 @@ Independent items, each small; implement in this order:
    ```ts
    let initPromise: Promise<void> | null = null;
    function ensureSearchReady(): Promise<void> {
-     initPromise ??= (async () => { /* fetch index.json + initOrama */ })();
+     initPromise ??= (async () => {
+       /* fetch index.json + initOrama */
+     })();
      return initPromise;
    }
    ```

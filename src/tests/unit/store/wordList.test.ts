@@ -184,17 +184,15 @@ describe("$showWordListFilterFlyout / $toggleWordListFilterFlyout", () => {
   });
 
   it("toggles false → true", async () => {
-    const { $showWordListFilterFlyout, $toggleWordListFilterFlyout } = await import(
-      "@stores/wordList.ts"
-    );
+    const { $showWordListFilterFlyout, $toggleWordListFilterFlyout } =
+      await import("@stores/wordList.ts");
     $toggleWordListFilterFlyout();
     expect($showWordListFilterFlyout.get()).toBe(true);
   });
 
   it("toggles true → false", async () => {
-    const { $showWordListFilterFlyout, $toggleWordListFilterFlyout } = await import(
-      "@stores/wordList.ts"
-    );
+    const { $showWordListFilterFlyout, $toggleWordListFilterFlyout } =
+      await import("@stores/wordList.ts");
     $showWordListFilterFlyout.set(true);
     $toggleWordListFilterFlyout();
     expect($showWordListFilterFlyout.get()).toBe(false);
@@ -401,10 +399,7 @@ describe("onMount — getSearchMeta", () => {
 
   it("logs error when meta response is not ok", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({ ok: false, status: 500, json: vi.fn() }),
-    );
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 500, json: vi.fn() }));
     const { $wordSearch } = await import("@stores/wordList.ts");
     const unsub = $wordSearch.subscribe(() => {});
     await vi.waitFor(() => {
@@ -445,10 +440,7 @@ describe("$oramaSearchResults", () => {
   });
 
   it("reports failed state on non-ok search index response", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({ ok: false, status: 503, json: vi.fn() }),
-    );
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 503, json: vi.fn() }));
     const { $oramaSearchResults } = await import("@stores/wordList.ts");
     await vi.waitFor(
       () => {
@@ -523,7 +515,7 @@ describe("getSortBy — sort orders", () => {
     $wordSearch.setKey("activeOrderCategory", "date");
     $wordSearch.setKey("dateOrder", "ASC");
     $wordSearch.setKey("search", "berlin");
-    let hits: typeof $oramaSearchResults.get.prototype[] = [];
+    let hits: (typeof $oramaSearchResults.get.prototype)[] = [];
     await vi.waitFor(
       () => {
         const r = $oramaSearchResults.get();
@@ -541,7 +533,7 @@ describe("getSortBy — sort orders", () => {
     $wordSearch.setKey("activeOrderCategory", "date");
     $wordSearch.setKey("dateOrder", "DESC");
     $wordSearch.setKey("search", "berlin");
-    let hits: typeof $oramaSearchResults.get.prototype[] = [];
+    let hits: (typeof $oramaSearchResults.get.prototype)[] = [];
     await vi.waitFor(
       () => {
         const r = $oramaSearchResults.get();
@@ -559,7 +551,7 @@ describe("getSortBy — sort orders", () => {
     $wordSearch.setKey("activeOrderCategory", "modifiedDate");
     $wordSearch.setKey("modifiedDateOrder", "ASC");
     $wordSearch.setKey("search", "berlin");
-    let hits: typeof $oramaSearchResults.get.prototype[] = [];
+    let hits: (typeof $oramaSearchResults.get.prototype)[] = [];
     await vi.waitFor(
       () => {
         const r = $oramaSearchResults.get();
@@ -577,7 +569,7 @@ describe("getSortBy — sort orders", () => {
     $wordSearch.setKey("activeOrderCategory", "modifiedDate");
     $wordSearch.setKey("modifiedDateOrder", "DESC");
     $wordSearch.setKey("search", "berlin");
-    let hits: typeof $oramaSearchResults.get.prototype[] = [];
+    let hits: (typeof $oramaSearchResults.get.prototype)[] = [];
     await vi.waitFor(
       () => {
         const r = $oramaSearchResults.get();

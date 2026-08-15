@@ -8,9 +8,7 @@
       <div class="c-menu-nav__main-elements">
         <SearchModal class="c-menu-nav__item" />
 
-        <ColorModeToggle
-          class="c-menu-nav__item c-menu-nav__item-button u-button-reset"
-        />
+        <ColorModeToggle class="c-menu-nav__item c-menu-nav__item-button u-button-reset" />
 
         <DropdownPopover
           name="main-menu"
@@ -47,8 +45,8 @@
 </template>
 
 <script setup lang="ts">
-import DropdownPopover from "@components/DropdownPopover.vue";
 import ColorModeToggle from "@components/ColorModeToggle.vue";
+import DropdownPopover from "@components/DropdownPopover.vue";
 import SearchModal from "@components/modals/search/SearchModal.vue";
 import { randomElement, routeToWord } from "@utils/helpers.ts";
 import MenuIcon from "virtual:icons/lucide/menu";

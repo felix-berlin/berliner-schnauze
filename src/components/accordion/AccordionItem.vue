@@ -1,17 +1,14 @@
 <template>
-  <div
-    class="c-accordion__item"
-    :class="{ 'is-open': isOpen, 'is-disabled': disabled }"
-  >
+  <div class="c-accordion__item" :class="{ 'is-open': isOpen, 'is-disabled': disabled }">
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, inject, provide, useId } from "vue";
+import type { AccordionContext } from "@components/accordion/BaseAccordion.vue";
 import type { ComputedRef } from "vue";
 
-import type { AccordionContext } from "@components/accordion/BaseAccordion.vue";
+import { computed, inject, provide, useId } from "vue";
 
 export interface AccordionItemContext {
   value: string | number;

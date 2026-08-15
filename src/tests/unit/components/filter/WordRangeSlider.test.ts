@@ -2,7 +2,6 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { ref } from "vue";
 
-
 vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(() => ({
     value: {
@@ -80,7 +79,9 @@ describe("WordRangeSlider.vue", () => {
     const rangeRef = ref<number | undefined>(undefined);
     vi.mocked(useVModel).mockReturnValueOnce(rangeRef as ReturnType<typeof useVModel>);
     const WordRangeSlider = (await import("@components/filter/WordRangeSlider.vue")).default;
-    const wrapper = mount(WordRangeSlider, { props: { label: "Zeichen", rangeType: "characterCount" } });
+    const wrapper = mount(WordRangeSlider, {
+      props: { label: "Zeichen", rangeType: "characterCount" },
+    });
     await wrapper.find("input[type='range']").setValue("5");
     expect(rangeRef.value).toBeDefined();
   });
@@ -90,7 +91,9 @@ describe("WordRangeSlider.vue", () => {
     const rangeRef = ref<number | undefined>(undefined);
     vi.mocked(useVModel).mockReturnValueOnce(rangeRef as ReturnType<typeof useVModel>);
     const WordRangeSlider = (await import("@components/filter/WordRangeSlider.vue")).default;
-    const wrapper = mount(WordRangeSlider, { props: { label: "Silben", rangeType: "syllablesCount" } });
+    const wrapper = mount(WordRangeSlider, {
+      props: { label: "Silben", rangeType: "syllablesCount" },
+    });
     await wrapper.find("input[type='number']").setValue("3");
     expect(rangeRef.value).toBeDefined();
   });

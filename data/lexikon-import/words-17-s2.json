@@ -62,9 +62,7 @@
     "word": "Schnauze",
     "article": "die",
     "translations": ["Mund (Schimpfwort)"],
-    "examples": [
-      { "example": "Ick polier’ dir gleich de Schnauze!" }
-    ],
+    "examples": [{ "example": "Ick polier’ dir gleich de Schnauze!" }],
     "infoText": "Eine frisierte Schnauze bezeichnet eine gewollt vornehme Sprechweise.",
     "themen": ["koerper", "schimpfwoerter-beleidigungen", "stadtleben"]
   },
@@ -186,9 +184,7 @@
     "word": "Schnute",
     "article": "die",
     "translations": ["Mund"],
-    "examples": [
-      { "example": "’ne Schnute ziehen.", "explanation": "Schmollen." }
-    ],
+    "examples": [{ "example": "’ne Schnute ziehen.", "explanation": "Schmollen." }],
     "infoText": "Niederdeutsche Entsprechung zu hochdeutsch ›Schnauze‹.",
     "themen": ["koerper"]
   },
@@ -209,7 +205,10 @@
     "article": "der",
     "translations": ["Drohung (in der Wendung »mein lieber Scholli«)"],
     "examples": [
-      { "example": "Mein lieber Scholli!", "explanation": "Drohung, insbesondere von Eltern gegenüber ihren Kindern." }
+      {
+        "example": "Mein lieber Scholli!",
+        "explanation": "Drohung, insbesondere von Eltern gegenüber ihren Kindern."
+      }
     ],
     "infoText": "Vielleicht von französisch joli = niedlich.",
     "themen": []
@@ -334,9 +333,7 @@
   {
     "word": "Schüttelroste",
     "translations": ["Tanzfläche (in der Wendung)"],
-    "examples": [
-      { "example": "Uff de Schüttelroste gehen.", "explanation": "Tanzen gehen." }
-    ],
+    "examples": [{ "example": "Uff de Schüttelroste gehen.", "explanation": "Tanzen gehen." }],
     "themen": ["unterhaltung-freizeit"]
   },
   {
@@ -386,7 +383,10 @@
     "word": "schwach",
     "translations": ["ohne Geld (in der Wendung »schwach auf der Brust«)"],
     "examples": [
-      { "example": "Du bist wohl momentan schwach uff de Brust.", "explanation": "Du hast wohl kein Geld mehr." }
+      {
+        "example": "Du bist wohl momentan schwach uff de Brust.",
+        "explanation": "Du hast wohl kein Geld mehr."
+      }
     ],
     "themen": ["geld"]
   },
@@ -406,9 +406,7 @@
   {
     "word": "schwarz",
     "translations": ["lange (in der Wendung »warten, bis de schwarz wirst«)"],
-    "examples": [
-      { "example": "Da kannste warten, bis de schwarz wirst." }
-    ],
+    "examples": [{ "example": "Da kannste warten, bis de schwarz wirst." }],
     "themen": []
   },
   {
@@ -422,7 +420,10 @@
     "article": "das",
     "translations": ["Schimpfwort"],
     "examples": [
-      { "example": "Ick gloob mein Schwein feift!", "explanation": "Ich glaube, ich spinne. (Ausruf des Erstaunens)" }
+      {
+        "example": "Ick gloob mein Schwein feift!",
+        "explanation": "Ich glaube, ich spinne. (Ausruf des Erstaunens)"
+      }
     ],
     "themen": ["schimpfwoerter-beleidigungen"]
   },
@@ -496,7 +497,10 @@
     "word": "schwoofen",
     "translations": ["tanzen"],
     "examples": [
-      { "example": "Uff’n Schwoof gehen.", "explanation": "Tanzen gehen; im 19. Jahrhundert: auf einen öffentlichen Ball gehen." }
+      {
+        "example": "Uff’n Schwoof gehen.",
+        "explanation": "Tanzen gehen; im 19. Jahrhundert: auf einen öffentlichen Ball gehen."
+      }
     ],
     "infoText": "Von obersächsisch Schwof = Dorftanz, was an mittelhochdeutsch sweif = schwingende Bewegung anknüpft.",
     "themen": ["unterhaltung-freizeit"]
@@ -560,7 +564,10 @@
     "article": "der",
     "translations": ["Licht, Erkenntnis (in der Redensart)"],
     "examples": [
-      { "example": "Mir jeht’n Seifensieder uff.", "explanation": "Mir geht ein Licht auf. Seifensieder = Kerze." }
+      {
+        "example": "Mir jeht’n Seifensieder uff.",
+        "explanation": "Mir geht ein Licht auf. Seifensieder = Kerze."
+      }
     ],
     "themen": []
   },
@@ -629,9 +636,7 @@
   {
     "word": "setzen",
     "translations": ["Prügel geben (in der Wendung »es setzt gleich«)"],
-    "examples": [
-      { "example": "Es setzt gleich Keile!", "explanation": "Es gibt gleich Prügel." }
-    ],
+    "examples": [{ "example": "Es setzt gleich Keile!", "explanation": "Es gibt gleich Prügel." }],
     "themen": []
   },
   {
@@ -712,9 +717,7 @@
     "word": "Sohle",
     "article": "die",
     "translations": ["Tanz (in der Wendung »’ne kesse Sohle drehen«)"],
-    "examples": [
-      { "example": "’ne Sohle uff’t Parkett lejen.", "explanation": "Tanzen." }
-    ],
+    "examples": [{ "example": "’ne Sohle uff’t Parkett lejen.", "explanation": "Tanzen." }],
     "themen": ["unterhaltung-freizeit"]
   },
   {
@@ -732,9 +735,7 @@
     "word": "Soße",
     "article": "die",
     "translations": ["dasselbe (in der Wendung »alles eine Soße«)"],
-    "examples": [
-      { "example": "Is allet eene Soße.", "explanation": "Es ist alles dasselbe." }
-    ],
+    "examples": [{ "example": "Is allet eene Soße.", "explanation": "Es ist alles dasselbe." }],
     "themen": []
   },
   {
@@ -780,7 +781,10 @@
     "article": "der",
     "translations": ["geräucherter Aal"],
     "examples": [
-      { "example": "Nu sagen se bloß noch Spickaal, dann hau ick Ihnen eene runter.", "explanation": "Antwort auf eine Aufzählung leckerer Speisen, mit denen einem der Mund wässrig gemacht wird." }
+      {
+        "example": "Nu sagen se bloß noch Spickaal, dann hau ick Ihnen eene runter.",
+        "explanation": "Antwort auf eine Aufzählung leckerer Speisen, mit denen einem der Mund wässrig gemacht wird."
+      }
     ],
     "infoText": "Albert Hopf gibt dem Helden in seinem Stück »Spickaal als Beherrscher der Mosquito-Küste« (1846) denselben Namen. Niederdeutsch Spikkaal = geräucherter Aal.",
     "themen": ["essen-trinken"]
@@ -823,16 +827,17 @@
     "article": "das",
     "translations": ["Berliner Herkunft (in der Redensart)"],
     "examples": [
-      { "example": "Der is mit Spreewasser jetauft.", "explanation": "Er ist ein »echter« Berliner." }
+      {
+        "example": "Der is mit Spreewasser jetauft.",
+        "explanation": "Er ist ein »echter« Berliner."
+      }
     ],
     "themen": ["stadtleben", "orte-spitzname"]
   },
   {
     "word": "springen lassen",
     "translations": ["spendieren"],
-    "examples": [
-      { "example": "Läßte wat springen?", "explanation": "Spendierst du was?" }
-    ],
+    "examples": [{ "example": "Läßte wat springen?", "explanation": "Spendierst du was?" }],
     "themen": ["geld"]
   },
   {
@@ -913,7 +918,10 @@
     "word": "steif",
     "translations": ["unnachgiebig (in der Drohung)"],
     "examples": [
-      { "example": "Den laß ick am steifen Arm verhungern.", "explanation": "Der soll sich vorsehen." }
+      {
+        "example": "Den laß ick am steifen Arm verhungern.",
+        "explanation": "Der soll sich vorsehen."
+      }
     ],
     "themen": []
   },
@@ -1039,7 +1047,10 @@
     "article": "der",
     "translations": ["Erfolg (bei Frauen)"],
     "examples": [
-      { "example": "Der hat’n Stoß jehabt bei de Weiber.", "explanation": "Er hat Erfolg gehabt — mit deutlicher sexueller Anspielung." }
+      {
+        "example": "Der hat’n Stoß jehabt bei de Weiber.",
+        "explanation": "Er hat Erfolg gehabt — mit deutlicher sexueller Anspielung."
+      }
     ],
     "themen": ["beziehungen-soziales"]
   },
@@ -1053,7 +1064,10 @@
     "translations": ["straff", "fest", "gehaltvoll"],
     "examples": [
       { "example": "Der is stramm inner Weste.", "explanation": "Er ist beleibt." },
-      { "example": "Der jeht stramm uff de Achtzig zu.", "explanation": "Er steht kurz vor dem 80. Lebensjahr." }
+      {
+        "example": "Der jeht stramm uff de Achtzig zu.",
+        "explanation": "Er steht kurz vor dem 80. Lebensjahr."
+      }
     ],
     "themen": []
   },
@@ -1134,7 +1148,10 @@
     "article": "der",
     "translations": ["gute Geschichte (in der Wendung)"],
     "examples": [
-      { "example": "Machen se mal ’nen netten Strumpf draus.", "explanation": "Machen Sie eine gute Geschichte daraus." }
+      {
+        "example": "Machen se mal ’nen netten Strumpf draus.",
+        "explanation": "Machen Sie eine gute Geschichte daraus."
+      }
     ],
     "themen": []
   },
@@ -1193,9 +1210,7 @@
     "word": "Stunk",
     "article": "der",
     "translations": ["Zank", "Ärger"],
-    "examples": [
-      { "example": "Dit jibt Stunk.", "explanation": "Das gibt Ärger." }
-    ],
+    "examples": [{ "example": "Dit jibt Stunk.", "explanation": "Das gibt Ärger." }],
     "infoText": "Nebenform zu Stank, vgl. stänkern.",
     "themen": ["beziehungen-soziales"]
   },

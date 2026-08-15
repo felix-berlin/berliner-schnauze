@@ -1,3 +1,7 @@
+import type { NotificationPermissionState } from "@stores/notificationPermission.ts";
+import type { PushState } from "@stores/pushSubscription.ts";
+import type { ComputedRef, Ref } from "vue";
+
 import { useStore } from "@nanostores/vue";
 import {
   $notificationPermission,
@@ -12,10 +16,7 @@ import {
   subscribePush,
   unsubscribePush,
 } from "@stores/pushSubscription.ts";
-import type { ComputedRef, Ref } from "vue";
 import { computed, onMounted, ref } from "vue";
-import type { NotificationPermissionState } from "@stores/notificationPermission.ts";
-import type { PushState } from "@stores/pushSubscription.ts";
 
 export interface NotificationSettingsComposable {
   notificationPermission: Readonly<Ref<NotificationPermissionState>>;

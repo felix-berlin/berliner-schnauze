@@ -58,7 +58,7 @@ configuration (`IMAGOR_SIGNER_TYPE=sha256`, `IMAGOR_SIGNER_TRUNCATE=40`):
    format natively (no manual `+`/`/` → `-`/`_` replacement or padding
    stripping needed).
 4. Truncate the encoded digest to the first 40 characters (truncation
-   happens *after* encoding, per the docs).
+   happens _after_ encoding, per the docs).
 5. Assemble the final URL: `{IMAGOR_HOST}/{truncatedHash}/{path}`.
 
 `IMAGOR_SIGNER_TYPE`/`IMAGOR_SIGNER_TRUNCATE` are fixed properties of the
@@ -87,11 +87,11 @@ browser only ever sees fully-signed URLs.
 
 ## Files
 
-| File | Change |
-|---|---|
-| `astro.config.mjs` | Add `IMAGOR_HOST`/`IMAGOR_SECRET` to `env.schema`. Point `image.service.entrypoint` at the new custom service. Add a `runtimeCaching` entry for `assets.kasimir.dev` (see below). `image.domains` unchanged. |
-| `src/utils/imagor.ts` (new) | `signImagorPath(path: string): string` — HMAC-SHA256 signing per the algorithm above, using `astro:env/server` for `IMAGOR_HOST`/`IMAGOR_SECRET`. |
-| `src/lib/imagorImageService.ts` (new) | Implements Astro's `ImageService` interface: `validateOptions`, `getURL`, `getSrcSet` (builds one Imagor URL per width/format/density combination requested by the calling `Picture`/`getImage` call), `getHTMLAttributes`. Builds the Imagor filter path (`fit-in/{w}x{h}/filters:format(...):quality(80)/...`) and delegates signing to `src/utils/imagor.ts`. |
+| File                                        | Change                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `astro.config.mjs`                          | Add `IMAGOR_HOST`/`IMAGOR_SECRET` to `env.schema`. Point `image.service.entrypoint` at the new custom service. Add a `runtimeCaching` entry for `assets.kasimir.dev` (see below). `image.domains` unchanged.                                                                                                                                                                                                                                                                  |
+| `src/utils/imagor.ts` (new)                 | `signImagorPath(path: string): string` — HMAC-SHA256 signing per the algorithm above, using `astro:env/server` for `IMAGOR_HOST`/`IMAGOR_SECRET`.                                                                                                                                                                                                                                                                                                                             |
+| `src/lib/imagorImageService.ts` (new)       | Implements Astro's `ImageService` interface: `validateOptions`, `getURL`, `getSrcSet` (builds one Imagor URL per width/format/density combination requested by the calling `Picture`/`getImage` call), `getHTMLAttributes`. Builds the Imagor filter path (`fit-in/{w}x{h}/filters:format(...):quality(80)/...`) and delegates signing to `src/utils/imagor.ts`.                                                                                                              |
 | `src/tests/unit/utils/imagor.test.ts` (new) | Byte-exact self-check against a known test vector from Imagor's own test suite (`cshum/imagor/imagorpath/params_test.go`, "non url image with hash and custom signer" case): secret `"1234"`, path `meta/10x11:12x13/fit-in/-300x-200/5x6/left/top/smart/filters:some_filter()/img`, expected hash `XBCO7esuLsNQuSF2v9ie36pESRGx2rzLjhUxXWnV`. This verifies the implementation matches Imagor's reference algorithm exactly, not just structurally (correct length/charset). |
 
 No changes needed to `ImageGallery.astro`, `ArticleImage.astro`,
@@ -110,7 +110,7 @@ the PWA's offline mode, matching current offline behavior for other content.
 
 ## Out of Scope
 
-- No fallback/retry logic for Imagor being down at *request* time (runtime,
+- No fallback/retry logic for Imagor being down at _request_ time (runtime,
   not build time) — not requested, and the existing `image.domains`
   allowlist plus signing already constrain what's servable; treating Imagor
   outages as a monitoring/ops concern rather than app-level fallback code.

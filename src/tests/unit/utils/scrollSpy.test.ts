@@ -9,7 +9,12 @@ describe("initScrollSpy", () => {
     observeMock = vi.fn();
     intersectionObserverMock = vi.fn(function (this: { callback: unknown }, callback: unknown) {
       this.callback = callback;
-      return { observe: observeMock, disconnect: vi.fn(), unobserve: vi.fn(), takeRecords: vi.fn() };
+      return {
+        observe: observeMock,
+        disconnect: vi.fn(),
+        unobserve: vi.fn(),
+        takeRecords: vi.fn(),
+      };
     });
     vi.stubGlobal("IntersectionObserver", intersectionObserverMock);
     document.body.innerHTML = "";

@@ -1,5 +1,6 @@
-import PwaCacheBucketList from "@components/PwaCacheBucketList.vue";
 import type { CacheBucket } from "@composables/useCacheStorage";
+
+import PwaCacheBucketList from "@components/PwaCacheBucketList.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 
@@ -7,14 +8,18 @@ vi.mock("virtua/vue", () => ({
   VList: {
     props: ["data", "style", "class"],
     setup(props: { data: unknown[] }, { slots }: { slots: any }) {
-      return () => props.data.map((item: unknown, index: number) => slots.default?.({ item, index }));
+      return () =>
+        props.data.map((item: unknown, index: number) => slots.default?.({ item, index }));
     },
   },
 }));
 
 function makeBucket(name: string, urls: string[] = [], sizeBytes = 1024): CacheBucket {
   return {
-    dateRange: { lastModified: new Date("2026-01-15T12:00:00Z"), oldestEntry: new Date("2026-01-01T12:00:00Z") },
+    dateRange: {
+      lastModified: new Date("2026-01-15T12:00:00Z"),
+      oldestEntry: new Date("2026-01-01T12:00:00Z"),
+    },
     name,
     totalSizeBytes: sizeBytes,
     typeBreakdown: [],
@@ -87,11 +92,21 @@ describe("PwaCacheBucketList", () => {
 
   it("shows age for entry with date", async () => {
     const bucket: CacheBucket = {
-      dateRange: { lastModified: new Date("2026-01-15T12:00:00Z"), oldestEntry: new Date("2026-01-01T12:00:00Z") },
+      dateRange: {
+        lastModified: new Date("2026-01-15T12:00:00Z"),
+        oldestEntry: new Date("2026-01-01T12:00:00Z"),
+      },
       name: "api-search-index",
       totalSizeBytes: 1024,
       typeBreakdown: [],
-      urls: [{ contentType: null, date: new Date("2026-01-15T12:00:00Z"), size: null, url: "https://a.com/x" }],
+      urls: [
+        {
+          contentType: null,
+          date: new Date("2026-01-15T12:00:00Z"),
+          size: null,
+          url: "https://a.com/x",
+        },
+      ],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
     await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
@@ -150,7 +165,9 @@ describe("PwaCacheBucketList", () => {
       name: "api-search-index",
       totalSizeBytes: 0,
       typeBreakdown: [],
-      urls: [{ contentType: "application/x-custom", date: null, size: null, url: "https://a.com/x" }],
+      urls: [
+        { contentType: "application/x-custom", date: null, size: null, url: "https://a.com/x" },
+      ],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
     await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
@@ -217,7 +234,10 @@ describe("PwaCacheBucketList", () => {
 
   it("formatRelativeTime returns 'gerade eben' for date less than 1 minute ago (covers line 127)", () => {
     const bucket: CacheBucket = {
-      dateRange: { lastModified: new Date(Date.now() - 10_000), oldestEntry: new Date(Date.now() - 10_000) },
+      dateRange: {
+        lastModified: new Date(Date.now() - 10_000),
+        oldestEntry: new Date(Date.now() - 10_000),
+      },
       name: "api-search-index",
       totalSizeBytes: 0,
       typeBreakdown: [],
@@ -229,7 +249,10 @@ describe("PwaCacheBucketList", () => {
 
   it("formatRelativeTime returns 'vor X Min.' for date 30 minutes ago (covers line 128)", () => {
     const bucket: CacheBucket = {
-      dateRange: { lastModified: new Date(Date.now() - 30 * 60_000), oldestEntry: new Date(Date.now() - 30 * 60_000) },
+      dateRange: {
+        lastModified: new Date(Date.now() - 30 * 60_000),
+        oldestEntry: new Date(Date.now() - 30 * 60_000),
+      },
       name: "api-search-index",
       totalSizeBytes: 0,
       typeBreakdown: [],
@@ -254,7 +277,10 @@ describe("PwaCacheBucketList", () => {
 
   it("formatRelativeTime returns 'vor X Std.' for date 5 hours ago (covers line 129)", () => {
     const bucket: CacheBucket = {
-      dateRange: { lastModified: new Date(Date.now() - 5 * 3_600_000), oldestEntry: new Date(Date.now() - 5 * 3_600_000) },
+      dateRange: {
+        lastModified: new Date(Date.now() - 5 * 3_600_000),
+        oldestEntry: new Date(Date.now() - 5 * 3_600_000),
+      },
       name: "api-search-index",
       totalSizeBytes: 0,
       typeBreakdown: [],

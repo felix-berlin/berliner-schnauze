@@ -1,6 +1,6 @@
-import { atom } from "nanostores";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
+import { atom } from "nanostores";
 
 export type NotificationPermissionState = NotificationPermission | "unsupported";
 
@@ -8,7 +8,9 @@ export const isNotificationSupported = (): boolean =>
   typeof window !== "undefined" && Boolean(window.Notification);
 
 export const $notificationPermission = atom<NotificationPermissionState>(
-  isNotificationSupported() ? (window.Notification.permission as NotificationPermission) : "unsupported",
+  isNotificationSupported()
+    ? (window.Notification.permission as NotificationPermission)
+    : "unsupported",
 );
 
 export const requestNotificationPermission = async (): Promise<void> => {

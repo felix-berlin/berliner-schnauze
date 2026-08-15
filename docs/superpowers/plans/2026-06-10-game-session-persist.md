@@ -34,6 +34,7 @@
 ## Task 1: `src/stores/savedGame.ts` — new file
 
 **Files:**
+
 - Create: `src/stores/savedGame.ts`
 
 Define the snapshot type and persistentAtom.
@@ -41,40 +42,36 @@ Define the snapshot type and persistentAtom.
 - [ ] **Step 1: Write the file**
 
 ```typescript
-import { persistentAtom } from '@nanostores/persistent'
-import type { GameCard } from '@composables/useGame'
+import { persistentAtom } from "@nanostores/persistent";
+import type { GameCard } from "@composables/useGame";
 
 export interface SavedGameSnapshot {
-  phase: 'playing'
-  lives: number
-  score: number
-  streak: number
-  bestStreak: number
-  multiplier: number
-  totalAnswered: number
-  correctAnswers: number
-  currentCard: GameCard
-  deck: GameCard[]
-  lastAnswerCorrect: boolean | null
-  lastCard: GameCard | null
-  realQueue: GameCard[]
-  fakeQueue: GameCard[]
+  phase: "playing";
+  lives: number;
+  score: number;
+  streak: number;
+  bestStreak: number;
+  multiplier: number;
+  totalAnswered: number;
+  correctAnswers: number;
+  currentCard: GameCard;
+  deck: GameCard[];
+  lastAnswerCorrect: boolean | null;
+  lastCard: GameCard | null;
+  realQueue: GameCard[];
+  fakeQueue: GameCard[];
 }
 
-export const $savedGame = persistentAtom<SavedGameSnapshot | null>(
-  'gameSession:',
-  null,
-  {
-    decode(value) {
-      try {
-        return JSON.parse(value)
-      } catch {
-        return null
-      }
-    },
-    encode: (value) => JSON.stringify(value),
+export const $savedGame = persistentAtom<SavedGameSnapshot | null>("gameSession:", null, {
+  decode(value) {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return null;
+    }
   },
-)
+  encode: (value) => JSON.stringify(value),
+});
 ```
 
 - [ ] **Step 2: Verify file exists and compiles**
@@ -87,6 +84,7 @@ Expected: no output (clean)
 ## Task 2: Extend `src/composable/useGame.ts`
 
 **Files:**
+
 - Modify: `src/composable/useGame.ts`
 
 Add `_saveToStorage()`, `_clearStorage()`, `hasSavedGame` computed, and `resumeGame()`. Wire `_saveToStorage()` into `answer()` and `_clearStorage()` into `startGame()` + `_endGame()`.
@@ -96,16 +94,16 @@ Add `_saveToStorage()`, `_clearStorage()`, `hasSavedGame` computed, and `resumeG
 After existing imports (line 5), add:
 
 ```typescript
-import { $savedGame } from '@stores/savedGame'
+import { $savedGame } from "@stores/savedGame";
 ```
 
 - [ ] **Step 2: Add private save/clear helpers inside `useGame()`, after the `_nextCard` function**
 
 ```typescript
 function _saveToStorage() {
-  if (state.value.phase !== 'playing' || !state.value.currentCard) return
+  if (state.value.phase !== "playing" || !state.value.currentCard) return;
   $savedGame.set({
-    phase: 'playing',
+    phase: "playing",
     lives: state.value.lives,
     score: state.value.score,
     streak: state.value.streak,
@@ -119,11 +117,11 @@ function _saveToStorage() {
     lastCard: state.value.lastCard,
     realQueue: [..._realQueue],
     fakeQueue: [..._fakeQueue],
-  })
+  });
 }
 
 function _clearStorage() {
-  $savedGame.set(null)
+  $savedGame.set(null);
 }
 ```
 
@@ -133,39 +131,39 @@ The `answer()` function after edit:
 
 ```typescript
 function answer(guessedReal: boolean) {
-  const card = state.value.currentCard
-  if (!card || state.value.phase !== 'playing') return
+  const card = state.value.currentCard;
+  if (!card || state.value.phase !== "playing") return;
 
-  const correct = card.isReal === guessedReal
-  state.value.lastCard = card
-  state.value.lastAnswerCorrect = correct
-  state.value.totalAnswered++
+  const correct = card.isReal === guessedReal;
+  state.value.lastCard = card;
+  state.value.lastAnswerCorrect = correct;
+  state.value.totalAnswered++;
 
   if (correct) {
-    state.value.correctAnswers++
-    state.value.streak++
-    state.value.multiplier = computeMultiplier(state.value.streak)
+    state.value.correctAnswers++;
+    state.value.streak++;
+    state.value.multiplier = computeMultiplier(state.value.streak);
     if (state.value.streak > state.value.bestStreak) {
-      state.value.bestStreak = state.value.streak
+      state.value.bestStreak = state.value.streak;
     }
-    state.value.score += 10 * state.value.multiplier
+    state.value.score += 10 * state.value.multiplier;
 
     if (card.isReal && card.translation) {
       createToastNotify({
         message: `„${card.word}" = ${card.translation}`,
-        status: 'success',
+        status: "success",
         timeout: 3000,
-      })
+      });
     }
-    _saveToStorage()
+    _saveToStorage();
   } else {
-    state.value.streak = 0
-    state.value.multiplier = 1
-    state.value.lives--
-    _saveToStorage()
+    state.value.streak = 0;
+    state.value.multiplier = 1;
+    state.value.lives--;
+    _saveToStorage();
 
     if (state.value.lives <= 0) {
-      _endGame()
+      _endGame();
     }
   }
 }
@@ -176,22 +174,24 @@ Note: `_saveToStorage()` in else branch runs before `_endGame()`. `_endGame()` w
 - [ ] **Step 4: Call `_clearStorage()` at start of `startGame()` and at start of `_endGame()`**
 
 `startGame()` after edit (first line added):
+
 ```typescript
 function startGame() {
-  _clearStorage()
+  _clearStorage();
   state.value = {
     bestStreak: 0,
     // ... rest unchanged
-  }
-  _nextCard()
+  };
+  _nextCard();
 }
 ```
 
 `_endGame()` after edit (first line added):
+
 ```typescript
 function _endGame() {
-  _clearStorage()
-  state.value.phase = 'result'
+  _clearStorage();
+  state.value.phase = "result";
   // ... rest unchanged
 }
 ```
@@ -201,13 +201,13 @@ function _endGame() {
 After `isNewHighScore` computed (line ~212):
 
 ```typescript
-const hasSavedGame = computed(() => $savedGame.get()?.phase === 'playing')
+const hasSavedGame = computed(() => $savedGame.get()?.phase === "playing");
 
 function resumeGame() {
-  const saved = $savedGame.get()
-  if (!saved || saved.phase !== 'playing') return
+  const saved = $savedGame.get();
+  if (!saved || saved.phase !== "playing") return;
   state.value = {
-    phase: 'playing',
+    phase: "playing",
     lives: saved.lives,
     score: saved.score,
     streak: saved.streak,
@@ -219,19 +219,20 @@ function resumeGame() {
     deck: saved.deck,
     lastAnswerCorrect: saved.lastAnswerCorrect,
     lastCard: saved.lastCard,
-  }
-  _realQueue = [...saved.realQueue]
-  _fakeQueue = [...saved.fakeQueue]
+  };
+  _realQueue = [...saved.realQueue];
+  _fakeQueue = [...saved.fakeQueue];
 }
 ```
 
 Return object additions:
+
 ```typescript
 return {
   // ... existing keys ...
   hasSavedGame,
   resumeGame,
-}
+};
 ```
 
 - [ ] **Step 6: Run lint on the file**
@@ -251,6 +252,7 @@ git commit -m "feat(game): persist session to localStorage with save/restore/res
 ## Task 3: Update `src/components/games/BerlinerOderNicht.vue`
 
 **Files:**
+
 - Modify: `src/components/games/BerlinerOderNicht.vue`
 
 Add `hasSavedGame` and `resumeGame` to destructure. Add "Weiterspielen" button to idle screen. Wire `resumeGame()` wrapper in component.
@@ -263,7 +265,7 @@ const {
   bestStreak,
   correctAnswers,
   currentCard,
-  hasSavedGame,       // ADD
+  hasSavedGame, // ADD
   init,
   isNewHighScore,
   lastAnswerCorrect,
@@ -272,12 +274,12 @@ const {
   multiplier,
   nextCard,
   phase,
-  resumeGame: _resumeGame,  // ADD (aliased to avoid collision)
+  resumeGame: _resumeGame, // ADD (aliased to avoid collision)
   score,
   startGame: _startGame,
   streak,
   totalAnswered,
-} = useGame()
+} = useGame();
 ```
 
 - [ ] **Step 2: Add `resumeGame()` wrapper function in script**
@@ -286,10 +288,10 @@ After `startGame()`:
 
 ```typescript
 function resumeGame() {
-  cardNumber.value = 1
-  exitDirection.value = null
-  isShaking.value = false
-  _resumeGame()
+  cardNumber.value = 1;
+  exitDirection.value = null;
+  isShaking.value = false;
+  _resumeGame();
 }
 ```
 
@@ -298,11 +300,7 @@ function resumeGame() {
 In the `c-berliner-oder-nicht__idle` div, after the stats block and before the start button:
 
 ```html
-<button
-  v-if="hasSavedGame"
-  class="c-berliner-oder-nicht__resume-btn"
-  @click="resumeGame"
->
+<button v-if="hasSavedGame" class="c-berliner-oder-nicht__resume-btn" @click="resumeGame">
   Weiterspielen
 </button>
 ```
@@ -354,6 +352,7 @@ git commit -m "feat(game): show Weiterspielen button in idle screen when saved s
 ## Task 4: Tests
 
 **Files:**
+
 - Modify: `src/tests/unit/composable/useGame.test.ts`
 
 - [ ] **Step 1: Add mock for `$savedGame` at top of test file alongside the existing `$gameStats` mock**
@@ -361,29 +360,29 @@ git commit -m "feat(game): show Weiterspielen button in idle screen when saved s
 Check the existing mock pattern in the test file (look for `vi.mock('@stores/gameStats')`), then add:
 
 ```typescript
-vi.mock('@stores/savedGame', () => ({
+vi.mock("@stores/savedGame", () => ({
   $savedGame: {
     get: vi.fn(() => null),
     set: vi.fn(),
   },
-}))
+}));
 ```
 
 - [ ] **Step 2: Add test cases**
 
 ```typescript
-describe('session persistence', () => {
-  it('hasSavedGame is false when $savedGame is null', () => {
-    const { hasSavedGame } = useGame()
-    expect(hasSavedGame.value).toBe(false)
-  })
+describe("session persistence", () => {
+  it("hasSavedGame is false when $savedGame is null", () => {
+    const { hasSavedGame } = useGame();
+    expect(hasSavedGame.value).toBe(false);
+  });
 
-  it('resumeGame does nothing when no saved game', () => {
-    const { resumeGame, phase } = useGame()
-    resumeGame()
-    expect(phase.value).toBe('idle')
-  })
-})
+  it("resumeGame does nothing when no saved game", () => {
+    const { resumeGame, phase } = useGame();
+    resumeGame();
+    expect(phase.value).toBe("idle");
+  });
+});
 ```
 
 - [ ] **Step 3: Run tests**

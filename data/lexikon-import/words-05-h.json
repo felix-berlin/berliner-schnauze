@@ -4,7 +4,10 @@
     "article": "das",
     "translations": ["Haar (in der Wendung über Glatzen)"],
     "examples": [
-      { "example": "Dem wächst de Kniescheibe durch de Haare.", "explanation": "Er bekommt eine Glatze." }
+      {
+        "example": "Dem wächst de Kniescheibe durch de Haare.",
+        "explanation": "Er bekommt eine Glatze."
+      }
     ],
     "themen": ["koerper"]
   },
@@ -12,7 +15,10 @@
     "word": "haben, sich",
     "translations": ["sich zieren", "sich aufregen"],
     "examples": [
-      { "example": "Nu ham Se sich doch nich so!", "explanation": "Regen Sie sich doch nicht so auf, seien Sie nicht beleidigt." }
+      {
+        "example": "Nu ham Se sich doch nich so!",
+        "explanation": "Regen Sie sich doch nicht so auf, seien Sie nicht beleidigt."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
@@ -47,9 +53,7 @@
     "word": "Hackepeter",
     "article": "der",
     "translations": ["gehacktes Schweinefleisch mit Pfeffer und Zwiebeln"],
-    "examples": [
-      { "example": "Aus dir mack ick Hackepeter!", "explanation": "Drohung." }
-    ],
+    "examples": [{ "example": "Aus dir mack ick Hackepeter!", "explanation": "Drohung." }],
     "themen": ["essen-trinken"]
   },
   {
@@ -67,8 +71,14 @@
     "word": "halb und halb",
     "translations": ["mittelmäßig (als Antwort auf »Wie geht’s?«)"],
     "examples": [
-      { "example": "Wie jeht’s? — Halb und halb.", "explanation": "Anspielung auf einen ebenso bezeichneten Schnaps der Firma Mampe." },
-      { "example": "Wie war jestern dit Spiel? — Nüscht Halbet und nüscht Janzet.", "explanation": "Nicht so gut." }
+      {
+        "example": "Wie jeht’s? — Halb und halb.",
+        "explanation": "Anspielung auf einen ebenso bezeichneten Schnaps der Firma Mampe."
+      },
+      {
+        "example": "Wie war jestern dit Spiel? — Nüscht Halbet und nüscht Janzet.",
+        "explanation": "Nicht so gut."
+      }
     ],
     "themen": ["alkohol-kneipe"]
   },
@@ -82,9 +92,7 @@
   {
     "word": "halblang",
     "translations": ["nicht übertreiben (in der Wendung »mach mal halblang«)"],
-    "examples": [
-      { "example": "Mach mal halblang!", "explanation": "Übertreib nicht so." }
-    ],
+    "examples": [{ "example": "Mach mal halblang!", "explanation": "Übertreib nicht so." }],
     "themen": []
   },
   {
@@ -111,7 +119,10 @@
     "article": "die",
     "translations": ["passende Größe (nur verneint)"],
     "examples": [
-      { "example": "Dit is nich meine Halsweite.", "explanation": "Das ist eine Nummer zu groß für mich." }
+      {
+        "example": "Dit is nich meine Halsweite.",
+        "explanation": "Das ist eine Nummer zu groß für mich."
+      }
     ],
     "themen": []
   },
@@ -125,7 +136,10 @@
     "word": "heiter",
     "translations": ["interessant, amüsant (ironisch)"],
     "examples": [
-      { "example": "Dit kann ja noch heiter werden!", "explanation": "Ironisch: das kann ja noch interessant werden." }
+      {
+        "example": "Dit kann ja noch heiter werden!",
+        "explanation": "Ironisch: das kann ja noch interessant werden."
+      }
     ],
     "themen": []
   },
@@ -157,7 +171,10 @@
     "article": "der",
     "translations": ["Verstand (in der Redensart)"],
     "examples": [
-      { "example": "Du hast wohl nich mehr alle Henkel anner Kanne!", "explanation": "Du spinnst wohl, du hast sie wohl nicht mehr alle." }
+      {
+        "example": "Du hast wohl nich mehr alle Henkel anner Kanne!",
+        "explanation": "Du spinnst wohl, du hast sie wohl nicht mehr alle."
+      }
     ],
     "themen": []
   },
@@ -197,7 +214,10 @@
     "article": "der",
     "translations": ["abfällige Bemerkung (in der Wendung »der letzte Heuler«)"],
     "examples": [
-      { "example": "Dit is der letzte Heuler.", "explanation": "Abfällige Bemerkung über eine Sache oder Person." }
+      {
+        "example": "Dit is der letzte Heuler.",
+        "explanation": "Abfällige Bemerkung über eine Sache oder Person."
+      }
     ],
     "themen": []
   },
@@ -237,7 +257,10 @@
     "word": "Hammelbeene",
     "translations": ["Beine"],
     "examples": [
-      { "example": "Dir werd’ ick de Hammelbeene langzieh’n.", "explanation": "Drohung. Mit Bezug auf die Kastration des Schafbocks, bei der man dem Tier die Beine langzieht." }
+      {
+        "example": "Dir werd’ ick de Hammelbeene langzieh’n.",
+        "explanation": "Drohung. Mit Bezug auf die Kastration des Schafbocks, bei der man dem Tier die Beine langzieht."
+      }
     ],
     "themen": ["koerper"]
   },
@@ -265,7 +288,10 @@
     "word": "Handschuhe",
     "translations": ["Gleichgültigkeit (in der Redensart)"],
     "examples": [
-      { "example": "Das ist meinem Vater ganz recht, warum kooft er mir keene Handschuhe.", "explanation": "Nach Trachsel (1873) eine aus einer Gerichtsverhandlung ins Volk übergegangene Redensart, mit der der Berliner seine Gleichgültigkeit über einen Vorwurf ausdrückt." }
+      {
+        "example": "Das ist meinem Vater ganz recht, warum kooft er mir keene Handschuhe.",
+        "explanation": "Nach Trachsel (1873) eine aus einer Gerichtsverhandlung ins Volk übergegangene Redensart, mit der der Berliner seine Gleichgültigkeit über einen Vorwurf ausdrückt."
+      }
     ],
     "themen": []
   },
@@ -343,7 +369,10 @@
     "article": "die",
     "translations": ["große Eile (in der Redensart)"],
     "examples": [
-      { "example": "Dit is ja schneller als uff de Hasenjacht!", "explanation": "Das geht äußerst schnell." }
+      {
+        "example": "Dit is ja schneller als uff de Hasenjacht!",
+        "explanation": "Das geht äußerst schnell."
+      }
     ],
     "themen": []
   },
@@ -371,7 +400,10 @@
     "article": "der",
     "translations": ["schielender Blick"],
     "examples": [
-      { "example": "Der schielt links nach de Wäsche und rechts nach de Klammern.", "explanation": "Beschreibung des Hausfrauenblicks." }
+      {
+        "example": "Der schielt links nach de Wäsche und rechts nach de Klammern.",
+        "explanation": "Beschreibung des Hausfrauenblicks."
+      }
     ],
     "themen": ["koerper"]
   },
@@ -400,7 +432,10 @@
     "article": "die",
     "translations": ["starker Durchzug (in der Redensart)"],
     "examples": [
-      { "example": "Dit zieht wie Hechtsuppe.", "explanation": "Es zieht sehr stark. Anspielung darauf, dass eine Fischsuppe lange ziehen muss." }
+      {
+        "example": "Dit zieht wie Hechtsuppe.",
+        "explanation": "Es zieht sehr stark. Anspielung darauf, dass eine Fischsuppe lange ziehen muss."
+      }
     ],
     "themen": ["alltag-wohnen"]
   },
@@ -432,7 +467,10 @@
     "word": "heidi",
     "translations": ["ab ins Bett (in der Wendung »ab heidi«)"],
     "examples": [
-      { "example": "Ab heidi!", "explanation": "Jetzt schnell ins Bett — mit Betonung auf der zweiten Silbe." }
+      {
+        "example": "Ab heidi!",
+        "explanation": "Jetzt schnell ins Bett — mit Betonung auf der zweiten Silbe."
+      }
     ],
     "themen": ["alltag-wohnen"]
   },
@@ -464,8 +502,14 @@
     "word": "hin",
     "translations": ["gestorben", "kaputt", "begeistert (»hin und weg«)"],
     "examples": [
-      { "example": "Der is hin!", "explanation": "Er ist gestorben bzw. verfällt körperlich oder geistig." },
-      { "example": "Weg is weg und hin is hin.", "explanation": "Kommentar zu einer Einsicht in die Notwendigkeit." }
+      {
+        "example": "Der is hin!",
+        "explanation": "Er ist gestorben bzw. verfällt körperlich oder geistig."
+      },
+      {
+        "example": "Weg is weg und hin is hin.",
+        "explanation": "Kommentar zu einer Einsicht in die Notwendigkeit."
+      }
     ],
     "themen": []
   },
@@ -484,7 +528,10 @@
     "word": "hinschlagen",
     "translations": ["Ausdruck des Erstaunens (in der Redensart)"],
     "examples": [
-      { "example": "Da schlag eena lang hin! ...und steh’ kurz wieder uff.", "explanation": "Ausdruck des Erstaunens." }
+      {
+        "example": "Da schlag eena lang hin! ...und steh’ kurz wieder uff.",
+        "explanation": "Ausdruck des Erstaunens."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
@@ -583,7 +630,10 @@
     "article": "das",
     "translations": ["Aufspielen (in der Wendung »ins Horn stoßen«)"],
     "examples": [
-      { "example": "Der stößt ins Horn.", "explanation": "Er spielt sich auf — nicht zu verwechseln mit dem Hornochsen (dummer Mensch)." }
+      {
+        "example": "Der stößt ins Horn.",
+        "explanation": "Er spielt sich auf — nicht zu verwechseln mit dem Hornochsen (dummer Mensch)."
+      }
     ],
     "themen": ["charakter-eigenschaften"]
   },
@@ -598,7 +648,10 @@
     "article": "der",
     "translations": ["etwas Großes"],
     "examples": [
-      { "example": "Is dit’n Hoscher!", "explanation": "Bewundernd, z.B. zu einem rasanten Sportwagen." }
+      {
+        "example": "Is dit’n Hoscher!",
+        "explanation": "Bewundernd, z.B. zu einem rasanten Sportwagen."
+      }
     ],
     "themen": []
   },
@@ -632,9 +685,7 @@
     "word": "Hucke",
     "article": "die",
     "translations": ["Tragekorb für den Rücken"],
-    "examples": [
-      { "example": "Jemandem die Hucke vollhauen.", "explanation": "Ihn prügeln." }
-    ],
+    "examples": [{ "example": "Jemandem die Hucke vollhauen.", "explanation": "Ihn prügeln." }],
     "infoText": "Auf dem Bau zum Transportieren von Mauersteinen.",
     "themen": []
   },
@@ -715,7 +766,10 @@
     "article": "die",
     "translations": ["Grenze des Erträglichen (in der Wendung)"],
     "examples": [
-      { "example": "Dit jeht ma über de Hutschnur.", "explanation": "Das geht zu weit, jetzt reicht es." }
+      {
+        "example": "Dit jeht ma über de Hutschnur.",
+        "explanation": "Das geht zu weit, jetzt reicht es."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   }

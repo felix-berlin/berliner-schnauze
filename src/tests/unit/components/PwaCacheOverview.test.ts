@@ -175,7 +175,9 @@ describe("PwaCacheOverview.vue", () => {
     const { open } = await import("@stores/modal");
     mockBuckets.value = [{ name: "cache-v1", urls: ["/foo"] }];
     const wrapper = mount(PwaCacheOverview);
-    await wrapper.findComponent({ name: "PwaCacheBucketList" }).vm.$emit("clear-bucket", "cache-v1");
+    await wrapper
+      .findComponent({ name: "PwaCacheBucketList" })
+      .vm.$emit("clear-bucket", "cache-v1");
     expect(open).toHaveBeenCalledOnce();
     const callArg = vi.mocked(open).mock.calls[0][0];
     expect(callArg.view?.props?.message).toContain("[cache-v1]");
@@ -203,7 +205,9 @@ describe("PwaCacheOverview.vue", () => {
     const { open, close } = await import("@stores/modal");
     const wrapper = mount(PwaCacheOverview);
     await wrapper.findComponent({ name: "PwaCacheActions" }).vm.$emit("clear-all");
-    const callArg = vi.mocked(open).mock.calls[0][0] as { view?: { events?: { cancel?: () => void; confirm?: () => void } } };
+    const callArg = vi.mocked(open).mock.calls[0][0] as {
+      view?: { events?: { cancel?: () => void; confirm?: () => void } };
+    };
     callArg.view?.events?.cancel?.();
     expect(close).toHaveBeenCalled();
   });
@@ -212,7 +216,9 @@ describe("PwaCacheOverview.vue", () => {
     const { open, close } = await import("@stores/modal");
     const wrapper = mount(PwaCacheOverview);
     await wrapper.findComponent({ name: "PwaCacheActions" }).vm.$emit("clear-all");
-    const callArg = vi.mocked(open).mock.calls[0][0] as { view?: { events?: { cancel?: () => void; confirm?: () => void } } };
+    const callArg = vi.mocked(open).mock.calls[0][0] as {
+      view?: { events?: { cancel?: () => void; confirm?: () => void } };
+    };
     callArg.view?.events?.confirm?.();
     expect(close).toHaveBeenCalled();
     expect(mockClearAll).toHaveBeenCalled();
@@ -222,8 +228,12 @@ describe("PwaCacheOverview.vue", () => {
     const { open, close } = await import("@stores/modal");
     mockBuckets.value = [{ name: "cache-v1", urls: [] }];
     const wrapper = mount(PwaCacheOverview);
-    await wrapper.findComponent({ name: "PwaCacheBucketList" }).vm.$emit("clear-bucket", "cache-v1");
-    const callArg = vi.mocked(open).mock.calls[0][0] as { view?: { events?: { cancel?: () => void; confirm?: () => void } } };
+    await wrapper
+      .findComponent({ name: "PwaCacheBucketList" })
+      .vm.$emit("clear-bucket", "cache-v1");
+    const callArg = vi.mocked(open).mock.calls[0][0] as {
+      view?: { events?: { cancel?: () => void; confirm?: () => void } };
+    };
     callArg.view?.events?.cancel?.();
     expect(close).toHaveBeenCalled();
   });
@@ -232,15 +242,25 @@ describe("PwaCacheOverview.vue", () => {
     const { open, close } = await import("@stores/modal");
     mockBuckets.value = [{ name: "cache-v1", urls: [] }];
     const wrapper = mount(PwaCacheOverview);
-    await wrapper.findComponent({ name: "PwaCacheBucketList" }).vm.$emit("clear-bucket", "cache-v1");
-    const callArg = vi.mocked(open).mock.calls[0][0] as { view?: { events?: { cancel?: () => void; confirm?: () => void } } };
+    await wrapper
+      .findComponent({ name: "PwaCacheBucketList" })
+      .vm.$emit("clear-bucket", "cache-v1");
+    const callArg = vi.mocked(open).mock.calls[0][0] as {
+      view?: { events?: { cancel?: () => void; confirm?: () => void } };
+    };
     callArg.view?.events?.confirm?.();
     expect(close).toHaveBeenCalled();
     expect(mockClearBucket).toHaveBeenCalledWith("cache-v1");
   });
 
   it("resolves icon factory functions for all SW statuses (covers L74-78 defineAsyncComponent lambdas)", async () => {
-    const statuses = ["active", "installing", "not-registered", "not-supported", "waiting"] as const;
+    const statuses = [
+      "active",
+      "installing",
+      "not-registered",
+      "not-supported",
+      "waiting",
+    ] as const;
     for (const status of statuses) {
       mockSwInfo.value = { status };
       const wrapper = mount(PwaCacheOverview);

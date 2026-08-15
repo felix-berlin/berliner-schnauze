@@ -17,13 +17,13 @@ Zwei neue Seitenbereiche erstellen:
 
 ### Erlaubte APIs
 
-| API | Quelle | Verwendung |
-|-----|--------|------------|
-| `Layout.astro` | `src/layouts/Layout.astro:12–19` | Einziges Layout, Props: `{ bodyClasses?, content: { title, seo? }, contentClasses? }` |
-| `Astro.glob()` | Astro built-in | Alle `.md`-Dateien aus `docs/user-changelog/` laden |
-| Markdown-Import | Astro built-in | `import { Content } from '../../CHANGELOG.md'` — gibt `Content`-Komponente |
-| `SeoProps` | `@/types/seo` | Optional in `content.seo` für Meta-Tags |
-| `getStaticPaths()` | Astro built-in | Statische Routen für `[version].astro` generieren |
+| API                | Quelle                           | Verwendung                                                                            |
+| ------------------ | -------------------------------- | ------------------------------------------------------------------------------------- |
+| `Layout.astro`     | `src/layouts/Layout.astro:12–19` | Einziges Layout, Props: `{ bodyClasses?, content: { title, seo? }, contentClasses? }` |
+| `Astro.glob()`     | Astro built-in                   | Alle `.md`-Dateien aus `docs/user-changelog/` laden                                   |
+| Markdown-Import    | Astro built-in                   | `import { Content } from '../../CHANGELOG.md'` — gibt `Content`-Komponente            |
+| `SeoProps`         | `@/types/seo`                    | Optional in `content.seo` für Meta-Tags                                               |
+| `getStaticPaths()` | Astro built-in                   | Statische Routen für `[version].astro` generieren                                     |
 
 ### Antipatterns
 
@@ -262,43 +262,63 @@ ls dist/technischer-changelog/index.html   # muss nach Build existieren
 Drei neue SCSS-Dateien anlegen (Minimal-Skeleton, dann nach Bedarf ausbauen):
 
 **`src/styles/pages/_changelog-overview.scss`**
+
 ```scss
 .c-changelog-overview {
-  &__title { }
+  &__title {
+  }
   &__list {
     list-style: none;
     padding: 0;
   }
-  &__item { }
-  &__link { }
-  &__date { }
-  &__description { }
+  &__item {
+  }
+  &__link {
+  }
+  &__date {
+  }
+  &__description {
+  }
 }
 ```
 
 **`src/styles/pages/_changelog-detail.scss`**
+
 ```scss
 .c-user-changelog {
-  &__header { }
-  &__title { }
-  &__date { }
+  &__header {
+  }
+  &__title {
+  }
+  &__date {
+  }
   &__content {
     // Prose-Styling für Markdown-Output
-    h2 { }
-    p { }
-    ul { }
+    h2 {
+    }
+    p {
+    }
+    ul {
+    }
   }
 }
 ```
 
 **`src/styles/pages/_technical-changelog.scss`**
+
 ```scss
 .c-technical-changelog {
   // Prose-Styling für CHANGELOG.md Markdown-Output
-  h1, h2, h3 { }
-  a { }
-  ul { }
-  code { }
+  h1,
+  h2,
+  h3 {
+  }
+  a {
+  }
+  ul {
+  }
+  code {
+  }
 }
 ```
 
@@ -342,12 +362,12 @@ pnpm lint           # keine neuen Fehler
 
 ## Dateiübersicht
 
-| Aktion | Datei |
-|--------|-------|
+| Aktion | Datei                                                     |
+| ------ | --------------------------------------------------------- |
 | Ändern | `docs/user-changelog/v3.35.0.md` — Frontmatter hinzufügen |
-| Neu | `src/pages/changelog/index.astro` |
-| Neu | `src/pages/changelog/[version].astro` |
-| Neu | `src/pages/technischer-changelog.astro` |
-| Neu | `src/styles/pages/_changelog-overview.scss` |
-| Neu | `src/styles/pages/_changelog-detail.scss` |
-| Neu | `src/styles/pages/_technical-changelog.scss` |
+| Neu    | `src/pages/changelog/index.astro`                         |
+| Neu    | `src/pages/changelog/[version].astro`                     |
+| Neu    | `src/pages/technischer-changelog.astro`                   |
+| Neu    | `src/styles/pages/_changelog-overview.scss`               |
+| Neu    | `src/styles/pages/_changelog-detail.scss`                 |
+| Neu    | `src/styles/pages/_technical-changelog.scss`              |

@@ -1,7 +1,6 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 
-
 describe("MainMenuButton.vue", () => {
   it("renders a button with correct aria-label", async () => {
     const MainMenuButton = (await import("@components/MainMenuButton.vue")).default;

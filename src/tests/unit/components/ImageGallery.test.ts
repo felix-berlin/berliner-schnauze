@@ -112,7 +112,8 @@ describe("ImageGallery.vue", () => {
     // Simpler: mount with errorHandler to absorb the onMounted throw, then unmount.
     const caughtErrors: unknown[] = [];
     // eslint-disable-next-line prefer-arrow-callback
-    vi.mocked(PhotoSwipeLightbox).mockImplementationOnce(function () { // oxlint-disable-line prefer-arrow-functions
+    vi.mocked(PhotoSwipeLightbox).mockImplementationOnce(function () {
+      // oxlint-disable-line prefer-arrow-functions
       throw new Error("lightbox init failed");
     } as unknown as typeof PhotoSwipeLightbox);
 

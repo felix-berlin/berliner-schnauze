@@ -1,5 +1,5 @@
-import { afterEach, describe, expect, it } from "vitest";
 import { DeviceDetector } from "@utils/device";
+import { afterEach, describe, expect, it } from "vitest";
 
 const originalUA = navigator.userAgent;
 
@@ -56,9 +56,7 @@ describe("DeviceDetector – mobile", () => {
   });
 
   it("detects IEMobile (Windows Phone) as mobile (not tablet)", () => {
-    setUA(
-      "Mozilla/5.0 (compatible; MSIE 10.0; Windows Phone 8.0; Trident/6.0; IEMobile/10.0)",
-    );
+    setUA("Mozilla/5.0 (compatible; MSIE 10.0; Windows Phone 8.0; Trident/6.0; IEMobile/10.0)");
     const d = new DeviceDetector();
     expect(d.getDevice()).toEqual({ isDesktop: false, isMobile: true, isTablet: false });
   });

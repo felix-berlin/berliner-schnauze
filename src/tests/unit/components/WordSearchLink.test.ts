@@ -14,8 +14,18 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@vueuse/core")>();
   return {
     ...actual,
-    useBreakpoints: vi.fn(() => ({ greater: vi.fn(() => ({ get value() { return mockState.breakpointGreater; } })) })),
-    usePreferredReducedMotion: vi.fn(() => ({ get value() { return mockState.preferredMotion; } })),
+    useBreakpoints: vi.fn(() => ({
+      greater: vi.fn(() => ({
+        get value() {
+          return mockState.breakpointGreater;
+        },
+      })),
+    })),
+    usePreferredReducedMotion: vi.fn(() => ({
+      get value() {
+        return mockState.preferredMotion;
+      },
+    })),
   };
 });
 
@@ -142,7 +152,9 @@ describe("WordSearchLink.vue", () => {
     await wrapper.find("button").trigger("click");
     // 5 retries × 100ms each = 500ms total; advance past all of them
     vi.advanceTimersByTime(600);
-    expect(consoleSpy).toHaveBeenCalledWith("Search bar element not found after multiple attempts.");
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "Search bar element not found after multiple attempts.",
+    );
     consoleSpy.mockRestore();
     vi.useRealTimers();
   });

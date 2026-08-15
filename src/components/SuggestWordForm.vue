@@ -130,7 +130,11 @@
       </div>
     </div>
 
-    <button class="c-button c-suggest-word-form__button" type="submit" data-content-ignoreinteraction>
+    <button
+      class="c-button c-suggest-word-form__button"
+      type="submit"
+      data-content-ignoreinteraction
+    >
       <Transition name="fade" mode="out-in">
         <span v-if="!isSending">Wort einreichen</span>
         <span v-else>Wort wird gesendet</span>

@@ -34,13 +34,13 @@
 </template>
 
 <script setup lang="ts">
+import { useSearchQuerySync } from "@composables/useSearchQuerySync";
 import { useStore } from "@nanostores/vue";
 import {
   $oramaSearchResults,
   $searchQuery,
   searchLength as currentSearchLength,
 } from "@stores/wordList.ts";
-import { useSearchQuerySync } from "@composables/useSearchQuerySync";
 import { setMatomoSearch } from "@utils/analytics";
 import { useDebounceFn } from "@vueuse/core";
 import Search from "virtual:icons/lucide/search";

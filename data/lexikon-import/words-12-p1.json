@@ -82,7 +82,10 @@
     "article": "die",
     "translations": ["Verrücktheit (in der Wendung »’ne Panne haben«)"],
     "examples": [
-      { "example": "Der hat vielleicht ’ne Panne.", "explanation": "Der ist nicht ganz richtig im Kopf." }
+      {
+        "example": "Der hat vielleicht ’ne Panne.",
+        "explanation": "Der ist nicht ganz richtig im Kopf."
+      }
     ],
     "infoText": "Von französisch panne = Funktionsstörung bei Maschinen.",
     "themen": []
@@ -91,16 +94,17 @@
     "word": "Panoramablick",
     "article": "der",
     "translations": ["Schielen"],
-    "examples": [
-      { "example": "Der hat ’n Panoramablick.", "explanation": "Er schielt." }
-    ],
+    "examples": [{ "example": "Der hat ’n Panoramablick.", "explanation": "Er schielt." }],
     "themen": ["koerper"]
   },
   {
     "word": "Pantinen",
     "translations": ["Holzschuhe (in der Redensart)"],
     "examples": [
-      { "example": "Kipp nich aus de Pantinen, wenn de die Nachricht hörst.", "explanation": "Brich nicht zusammen, fall nicht um." }
+      {
+        "example": "Kipp nich aus de Pantinen, wenn de die Nachricht hörst.",
+        "explanation": "Brich nicht zusammen, fall nicht um."
+      }
     ],
     "infoText": "Niederdeutsch Pantine = Holzschuh, Pantoffel. Pantinenkintopp bezeichnet das Filzlatschenkino (den Fernseher).",
     "themen": []
@@ -129,9 +133,7 @@
     "word": "Pappe",
     "article": "die",
     "translations": ["Führerschein", "Trabant"],
-    "examples": [
-      { "example": "Dit is nich von Pappe.", "explanation": "Das ist nicht schlecht." }
-    ],
+    "examples": [{ "example": "Dit is nich von Pappe.", "explanation": "Das ist nicht schlecht." }],
     "themen": ["stadtleben"]
   },
   {
@@ -139,7 +141,10 @@
     "article": "der",
     "translations": ["Geringfügigkeit (nur verneint)"],
     "examples": [
-      { "example": "Dit is keen Pappenstiel.", "explanation": "Das ist nicht wenig, nicht gering zu veranschlagen." }
+      {
+        "example": "Dit is keen Pappenstiel.",
+        "explanation": "Das ist nicht wenig, nicht gering zu veranschlagen."
+      }
     ],
     "themen": []
   },
@@ -180,7 +185,10 @@
     "article": "die",
     "translations": ["Straßenschmutz", "Hände (Plural)", "Klemme (»in der Patsche sitzen«)"],
     "examples": [
-      { "example": "In der Patsche sitzen.", "explanation": "Keinen Ausweg finden, in der Bredullje sein." }
+      {
+        "example": "In der Patsche sitzen.",
+        "explanation": "Keinen Ausweg finden, in der Bredullje sein."
+      }
     ],
     "infoText": "Abgeleitet von der lautmalenden Interjektion ›patsch‹.",
     "themen": []
@@ -202,8 +210,14 @@
     "article": "die",
     "translations": ["Schule", "Bauch"],
     "examples": [
-      { "example": "Der haut ordentlich een’ uff de Pauke.", "explanation": "Er macht einen drauf und ist im Geldausgeben freizügig." },
-      { "example": "Der is mit der Pauke jepiekt.", "explanation": "Er ist nicht recht bei Verstand." }
+      {
+        "example": "Der haut ordentlich een’ uff de Pauke.",
+        "explanation": "Er macht einen drauf und ist im Geldausgeben freizügig."
+      },
+      {
+        "example": "Der is mit der Pauke jepiekt.",
+        "explanation": "Er ist nicht recht bei Verstand."
+      }
     ],
     "infoText": "Ein Pauker oder Arschpauker ist ein Lehrer.",
     "themen": []
@@ -303,7 +317,10 @@
     "article": "die",
     "translations": ["Niederlage (in der Wendung »in die Pfanne hauen«)"],
     "examples": [
-      { "example": "Jemanden in de Pfanne hau’n.", "explanation": "Ihn körperlich oder in einem Wortgefecht niedermachen." }
+      {
+        "example": "Jemanden in de Pfanne hau’n.",
+        "explanation": "Ihn körperlich oder in einem Wortgefecht niedermachen."
+      }
     ],
     "themen": []
   },
@@ -321,7 +338,10 @@
     "word": "pfeffern",
     "translations": ["werfen", "schlagen"],
     "examples": [
-      { "example": "Ich pfeffer dir gleich ’n paar!", "explanation": "Ich hau’ dir gleich ein paar runter." }
+      {
+        "example": "Ich pfeffer dir gleich ’n paar!",
+        "explanation": "Ich hau’ dir gleich ein paar runter."
+      }
     ],
     "themen": []
   },
@@ -337,7 +357,10 @@
     "article": "die",
     "translations": ["Idiot"],
     "examples": [
-      { "example": "Dem is de Pfeife ausjejang’n.", "explanation": "Er hat kein Geld oder keine Kraft mehr." }
+      {
+        "example": "Dem is de Pfeife ausjejang’n.",
+        "explanation": "Er hat kein Geld oder keine Kraft mehr."
+      }
     ],
     "themen": ["schimpfwoerter-beleidigungen"]
   },
@@ -360,8 +383,14 @@
     "article": "das",
     "translations": ["Pferd (in Redensarten)"],
     "examples": [
-      { "example": "Ick gloob, mich tritt ’n Ferd!", "explanation": "Ausruf des Erstaunens, der Verwunderung." },
-      { "example": "Der Apfel fällt nicht weit vom Pferd.", "explanation": "Scherzhafte Verdrehung von »vom Stamm«." }
+      {
+        "example": "Ick gloob, mich tritt ’n Ferd!",
+        "explanation": "Ausruf des Erstaunens, der Verwunderung."
+      },
+      {
+        "example": "Der Apfel fällt nicht weit vom Pferd.",
+        "explanation": "Scherzhafte Verdrehung von »vom Stamm«."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },

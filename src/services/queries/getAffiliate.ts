@@ -1,15 +1,18 @@
+import { wpGraphqlClient } from "@services/wpGraphqlClient";
+
 import type { AffiliateQuery } from "@/gql/graphql.ts";
 
 import { graphql } from "@/gql";
 import { AffiliateDocument } from "@/gql/graphql.ts";
-import { wpGraphqlClient } from "@services/wpGraphqlClient";
 
 type AffliateLinksFields = NonNullable<
   NonNullable<AffiliateQuery["affliate"]>["affliateLinksFields"]
 >;
 
 export type AffiliateBook = NonNullable<NonNullable<AffliateLinksFields["books"]>[number]>;
-export type AffiliateDisclaimer = NonNullable<NonNullable<AffliateLinksFields["disclaimers"]>[number]>;
+export type AffiliateDisclaimer = NonNullable<
+  NonNullable<AffliateLinksFields["disclaimers"]>[number]
+>;
 
 export interface AffiliateData {
   books: AffiliateBook[];
@@ -26,7 +29,9 @@ export const fetchAffiliateData = async (): Promise<AffiliateData> => {
 
   const fields = response.data?.affliate?.affliateLinksFields;
   const books = (fields?.books ?? []).filter((b): b is AffiliateBook => b !== null);
-  const disclaimers = (fields?.disclaimers ?? []).filter((d): d is AffiliateDisclaimer => d !== null);
+  const disclaimers = (fields?.disclaimers ?? []).filter(
+    (d): d is AffiliateDisclaimer => d !== null,
+  );
 
   return { books, disclaimers };
 };

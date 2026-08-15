@@ -118,7 +118,9 @@ describe("ToastPositionGroup.vue", () => {
   it("catches and logs error when showPopover throws", async () => {
     const { nextTick } = await import("vue");
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    mockShowPopover.mockImplementationOnce(() => { throw new Error("popover error"); });
+    mockShowPopover.mockImplementationOnce(() => {
+      throw new Error("popover error");
+    });
     mount(ToastPositionGroup, {
       props: { position: "top-right", toasts: [toast("a")] },
     });
@@ -143,9 +145,15 @@ describe("ToastPositionGroup.vue", () => {
       props: { position: "top-right", toasts: [] },
     });
     const el = document.createElement("div");
-    vi.spyOn(el, "getBoundingClientRect").mockReturnValue(
-      { top: 100, left: 50, width: 200, bottom: 0, right: 0, height: 0, toJSON: () => ({}) } as DOMRect,
-    );
+    vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
+      top: 100,
+      left: 50,
+      width: 200,
+      bottom: 0,
+      right: 0,
+      height: 0,
+      toJSON: () => ({}),
+    } as DOMRect);
     const setupState = (wrapper.getCurrentComponent() as any).setupState;
     setupState.onBeforeLeave(el);
     // container is null → fallback {left:0, top:0} → top=100-0=100, left=50-0=50
@@ -157,7 +165,9 @@ describe("ToastPositionGroup.vue", () => {
   it("catches and logs error when hidePopover throws during onAfterLeave", async () => {
     const { nextTick } = await import("vue");
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    mockHidePopover.mockImplementationOnce(() => { throw new Error("popover error"); });
+    mockHidePopover.mockImplementationOnce(() => {
+      throw new Error("popover error");
+    });
     const wrapper = mount(ToastPositionGroup, {
       props: { position: "top-right", toasts: [toast("a")] },
     });
@@ -196,9 +206,15 @@ describe("ToastPositionGroup.vue", () => {
       attachTo: document.body,
     });
     const el = document.createElement("div");
-    vi.spyOn(el, "getBoundingClientRect").mockReturnValue(
-      { top: 100, left: 50, width: 200, bottom: 0, right: 0, height: 0, toJSON: () => ({}) } as DOMRect,
-    );
+    vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
+      top: 100,
+      left: 50,
+      width: 200,
+      bottom: 0,
+      right: 0,
+      height: 0,
+      toJSON: () => ({}),
+    } as DOMRect);
     // Access unexposed onBeforeLeave from setup state
     const setupState = (wrapper.getCurrentComponent() as any).setupState;
     setupState.onBeforeLeave(el);

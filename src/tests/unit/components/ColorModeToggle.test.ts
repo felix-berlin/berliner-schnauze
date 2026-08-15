@@ -1,9 +1,9 @@
 // @ts-ignore: Unresolved import
 import ColorModeToggle from "@components/ColorModeToggle.vue";
+import { $isDarkMode } from "@stores/index.ts";
 import { mount } from "@vue/test-utils";
 import { JSDOM } from "jsdom";
 import { it, expect, describe, beforeEach } from "vitest";
-import { $isDarkMode } from "@stores/index.ts";
 
 describe("ColorModeToggle", async () => {
   beforeEach(() => {
@@ -17,8 +17,7 @@ describe("ColorModeToggle", async () => {
     global.document = dom.window.document;
 
     // System preference: light (not dark) → first click sets dark mode
-    global.window.matchMedia = () =>
-      ({ matches: false }) as MediaQueryList;
+    global.window.matchMedia = () => ({ matches: false }) as MediaQueryList;
 
     const wrapper = mount(ColorModeToggle);
     const button = wrapper.find("button");

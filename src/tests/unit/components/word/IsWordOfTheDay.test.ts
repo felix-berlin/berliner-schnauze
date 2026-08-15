@@ -1,10 +1,11 @@
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
-import { vTooltip } from "@/directives/tooltip";
 import { useStore } from "@nanostores/vue";
 import { $wordOfTheDay } from "@stores/wordOfTheDay.ts";
 import { mount } from "@vue/test-utils";
 import Crown from "virtual:icons/lucide/crown";
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
+
+import { vTooltip } from "@/directives/tooltip";
 
 vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(),

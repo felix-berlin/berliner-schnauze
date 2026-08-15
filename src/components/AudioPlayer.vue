@@ -17,9 +17,9 @@
 </template>
 
 <script setup lang="ts">
+import { useEventListener } from "@vueuse/core";
 import Pause from "virtual:icons/lucide/pause";
 import Play from "virtual:icons/lucide/play";
-import { useEventListener } from "@vueuse/core";
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 
 import type { MediaItem } from "@/gql/entity-types";

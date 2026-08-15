@@ -15,7 +15,13 @@ Reusable accordion component system. Compound component pattern with WAI-ARIA co
 Import from barrel:
 
 ```ts
-import { BaseAccordion, AccordionItem, AccordionHeader, AccordionTrigger, AccordionContent } from "@components/accordion";
+import {
+  BaseAccordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionTrigger,
+  AccordionContent,
+} from "@components/accordion";
 ```
 
 ## Usage Patterns
@@ -88,11 +94,7 @@ For custom header content (extra buttons, metadata) — use `BaseAccordion` `v-s
 ```html
 <BaseAccordion type="multiple" v-slot="{ isOpen, toggle }">
   <ul>
-    <li
-      v-for="item in items"
-      :key="item.id"
-      :class="{ 'is-open': isOpen(item.id) }"
-    >
+    <li v-for="item in items" :key="item.id" :class="{ 'is-open': isOpen(item.id) }">
       <div class="my-header" @click="toggle(item.id)">
         <span>{{ item.title }}</span>
         <span>{{ item.meta }}</span>
@@ -105,9 +107,7 @@ For custom header content (extra buttons, metadata) — use `BaseAccordion` `v-s
           <ChevronDown />
         </button>
       </div>
-      <AccordionContent :open="isOpen(item.id)">
-        {{ item.content }}
-      </AccordionContent>
+      <AccordionContent :open="isOpen(item.id)"> {{ item.content }} </AccordionContent>
     </li>
   </ul>
 </BaseAccordion>

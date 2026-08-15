@@ -27,8 +27,9 @@
 import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import { wpFetch, delay, getWpConfig, type WpConfig } from "./lib/wp-rest.ts";
+
 import { CATEGORY_LABELS, CATEGORIES } from "./lib/word-category.ts";
+import { wpFetch, delay, getWpConfig, type WpConfig } from "./lib/wp-rest.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, "../data/lexikon-import");

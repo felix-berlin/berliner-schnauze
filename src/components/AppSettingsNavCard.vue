@@ -20,9 +20,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, type Component } from "vue";
 
-const ChevronRightIcon = defineAsyncComponent(
-  () => import("virtual:icons/lucide/chevron-right"),
-);
+const ChevronRightIcon = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-right"));
 
 const props = withDefaults(
   defineProps<{

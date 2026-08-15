@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it, vi, beforeAll } from "vitest";
+
 import { createAstroRender } from "../../helpers";
 
 vi.mock("@utils/helpers", () => ({
@@ -10,7 +11,8 @@ describe("WordSectionOrthographie.astro", () => {
   let render: (props: Record<string, unknown>) => Promise<string>;
 
   beforeAll(async () => {
-    const { default: WordSectionOrthographie } = await import("@components/word/WordSectionOrthographie.astro");
+    const { default: WordSectionOrthographie } =
+      await import("@components/word/WordSectionOrthographie.astro");
     render = await createAstroRender(WordSectionOrthographie);
   }, 30_000);
 

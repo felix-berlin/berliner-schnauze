@@ -128,6 +128,7 @@ export function useSearchQuerySync() {
 ```
 
 **Behaviour on navigation:**
+
 - `astro:page-load` fires → `syncFromUrl` runs → `$searchQuery` set to `?q=` value (or `""` if absent)
 - User types → `$searchQuery` updates → URL updated via `replaceState` (300ms debounce)
 - User shares URL → recipient opens page → `syncFromUrl` reads `?q=` → search pre-filled
@@ -160,12 +161,12 @@ Re-export `$searchQuery` alongside existing exports if other components import f
 
 ## Affected Files
 
-| File | Change |
-|---|---|
-| `src/stores/wordList.ts` | Remove `search` from `$wordSearch`, add `$searchQuery atom`, update `$oramaSearchResults`, `searchLength`, `setSearch`, `resetAll` |
-| `src/composable/useSearchQuerySync.ts` | New file |
-| `src/components/SearchWords.vue` | Use composable, bind to `$searchQuery`, remove manual URL logic |
-| `src/stores/index.ts` | Re-export `$searchQuery` if needed |
+| File                                   | Change                                                                                                                             |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `src/stores/wordList.ts`               | Remove `search` from `$wordSearch`, add `$searchQuery atom`, update `$oramaSearchResults`, `searchLength`, `setSearch`, `resetAll` |
+| `src/composable/useSearchQuerySync.ts` | New file                                                                                                                           |
+| `src/components/SearchWords.vue`       | Use composable, bind to `$searchQuery`, remove manual URL logic                                                                    |
+| `src/stores/index.ts`                  | Re-export `$searchQuery` if needed                                                                                                 |
 
 ## Testing
 

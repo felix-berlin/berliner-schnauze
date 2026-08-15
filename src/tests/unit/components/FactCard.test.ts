@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it, beforeAll } from "vitest";
+
 import { createAstroRender } from "../helpers";
 
 describe("FactCard.astro", () => {

@@ -15,7 +15,10 @@
 
   // Anchor Positioning — position-anchor set via inline style (dynamic per instance)
   position: fixed;
-  position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+  position-try-fallbacks:
+    flip-block,
+    flip-inline,
+    flip-block flip-inline;
 
   // Visual style
   // filter: drop-shadow unifies panel + arrow into one shadow silhouette,
@@ -26,7 +29,9 @@
   border-radius: 4px;
   font-size: 0.8125rem;
   max-width: 20rem;
-  filter: drop-shadow(0 2px 6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 20%, transparent));
+  filter: drop-shadow(
+    0 2px 6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 20%, transparent)
+  );
 
   @include butler-mx.dark-mode-class {
     --color-box-shadow: black;

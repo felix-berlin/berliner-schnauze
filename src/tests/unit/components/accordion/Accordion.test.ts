@@ -6,7 +6,13 @@ import BaseAccordion from "@components/accordion/BaseAccordion.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 
-const components = { AccordionContent, AccordionHeader, AccordionItem, AccordionTrigger, BaseAccordion };
+const components = {
+  AccordionContent,
+  AccordionHeader,
+  AccordionItem,
+  AccordionTrigger,
+  BaseAccordion,
+};
 
 function mountAccordion(template: string) {
   return mount({ template, components });
@@ -224,9 +230,7 @@ describe("AccordionItem", () => {
 
 describe("AccordionTrigger", () => {
   it("throws when mounted outside AccordionItem (covers line 30 throw branch)", () => {
-    expect(() => mount(AccordionTrigger)).toThrow(
-      "AccordionTrigger must be inside AccordionItem",
-    );
+    expect(() => mount(AccordionTrigger)).toThrow("AccordionTrigger must be inside AccordionItem");
   });
 
   function mountTrigger(open = false) {

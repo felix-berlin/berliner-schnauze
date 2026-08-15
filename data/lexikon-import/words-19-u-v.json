@@ -41,9 +41,7 @@
   {
     "word": "umbringen, sich",
     "translations": ["ungeheuer viel für jemanden tun"],
-    "examples": [
-      { "example": "Der bringt sich reineweg um." }
-    ],
+    "examples": [{ "example": "Der bringt sich reineweg um." }],
     "themen": []
   },
   {
@@ -68,9 +66,7 @@
   {
     "word": "unegal",
     "translations": ["ungeschickt"],
-    "examples": [
-      { "example": "Laß bloß deine unejalen Finger davon." }
-    ],
+    "examples": [{ "example": "Laß bloß deine unejalen Finger davon." }],
     "themen": []
   },
   {
@@ -245,7 +241,10 @@
     "word": "verheiraten, sich",
     "translations": ["lange wegbleiben (scherzhaft)"],
     "examples": [
-      { "example": "Du hast da wohl verheiratet.", "explanation": "Wenn man lange auf jemanden warten muss." }
+      {
+        "example": "Du hast da wohl verheiratet.",
+        "explanation": "Wenn man lange auf jemanden warten muss."
+      }
     ],
     "themen": []
   },
@@ -354,7 +353,10 @@
     "word": "vermasseln",
     "translations": ["zunichtemachen"],
     "examples": [
-      { "example": "Einem die Tour vermasseln.", "explanation": "Einen Plan, ein Geschäft zunichtemachen." }
+      {
+        "example": "Einem die Tour vermasseln.",
+        "explanation": "Einen Plan, ein Geschäft zunichtemachen."
+      }
     ],
     "infoText": "Von jiddisch masol = Glück, Glücksstern.",
     "themen": []
@@ -390,7 +392,10 @@
     "word": "verplempern",
     "translations": ["sinnlos ausgeben", "vergeuden"],
     "examples": [
-      { "example": "Mit dit Bezahlen verplempert man dit meiste Jeld.", "explanation": "Berliner Kneipen-Spruch." }
+      {
+        "example": "Mit dit Bezahlen verplempert man dit meiste Jeld.",
+        "explanation": "Berliner Kneipen-Spruch."
+      }
     ],
     "themen": ["geld"]
   },
@@ -527,7 +532,10 @@
     "article": "die",
     "translations": ["Bedeutung (nur verneint)"],
     "examples": [
-      { "example": "Dit spielt keene Violine!", "explanation": "Das ist völlig egal, spielt keine Rolle." }
+      {
+        "example": "Dit spielt keene Violine!",
+        "explanation": "Das ist völlig egal, spielt keine Rolle."
+      }
     ],
     "themen": []
   },
@@ -551,9 +559,7 @@
   {
     "word": "von wegen",
     "translations": ["auf keinen Fall (starke Verneinung)"],
-    "examples": [
-      { "example": "Haste jestern wat jetrunken? — Von wejen!" }
-    ],
+    "examples": [{ "example": "Haste jestern wat jetrunken? — Von wejen!" }],
     "themen": []
   },
   {
@@ -566,7 +572,10 @@
     "word": "vorknöpfen",
     "translations": ["zur Rechenschaft ziehen"],
     "examples": [
-      { "example": "Den knöpp ick ma vor.", "explanation": "Den nehme ich mir vor, dem lese ich die Leviten." }
+      {
+        "example": "Den knöpp ick ma vor.",
+        "explanation": "Den nehme ich mir vor, dem lese ich die Leviten."
+      }
     ],
     "alternativeWords": ["vorbinden, sich jemanden"],
     "themen": []
@@ -574,9 +583,7 @@
   {
     "word": "vorn",
     "translations": ["vorn (in der selbstbewussten Redensart)"],
-    "examples": [
-      { "example": "Wo wir sind, ist vorn; wenn wir hinten sind, ist hinten vorn." }
-    ],
+    "examples": [{ "example": "Wo wir sind, ist vorn; wenn wir hinten sind, ist hinten vorn." }],
     "themen": ["charakter-eigenschaften"]
   },
   {

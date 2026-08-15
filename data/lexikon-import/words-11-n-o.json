@@ -30,7 +30,10 @@
     "article": "die",
     "translations": ["Vorahnung (in der Redensart)"],
     "examples": [
-      { "example": "Nachtijall, ick hör da trapsen!", "explanation": "Ich merke etwas, es ist etwas im Gange. Abwandlung von »Nachtigall, ich hör dich singen« aus »Des Knaben Wunderhorn«." }
+      {
+        "example": "Nachtijall, ick hör da trapsen!",
+        "explanation": "Ich merke etwas, es ist etwas im Gange. Abwandlung von »Nachtigall, ich hör dich singen« aus »Des Knaben Wunderhorn«."
+      }
     ],
     "themen": []
   },
@@ -99,7 +102,10 @@
     "article": "die",
     "translations": ["Nase"],
     "examples": [
-      { "example": "Ham Se schon de Neese pleng?", "explanation": "Haben Sie schon die Nase voll (frz. plein = voll)?" },
+      {
+        "example": "Ham Se schon de Neese pleng?",
+        "explanation": "Haben Sie schon die Nase voll (frz. plein = voll)?"
+      },
       { "example": "Denn muß ick Ihnen noch paar Wörter unter die Neese reiben." }
     ],
     "infoText": "Berlinische Aussprache von Nase. Ein Nasenfahrrad ist eine Brille, ein Nasenkneifer oder Nasenquetscher hingegen ein Sarg — letzterer kam kurz nach 1750 in Preußen auf als niedriger »Sarg der Armendirektion« mit flachem Deckel.",
@@ -171,16 +177,17 @@
     "translations": ["sehr gut", "beachtlich"],
     "examples": [
       { "example": "Dit Essen war nich ohne." },
-      { "example": "Der is nich ohne.", "explanation": "Vor dem muss man sich in Acht nehmen, der hat Ahnung." }
+      {
+        "example": "Der is nich ohne.",
+        "explanation": "Vor dem muss man sich in Acht nehmen, der hat Ahnung."
+      }
     ],
     "themen": []
   },
   {
     "word": "nie",
     "translations": ["sehr gut (in der Wendung »wie nie«)"],
-    "examples": [
-      { "example": "Dit flutscht wie nie.", "explanation": "Das klappt sehr gut." }
-    ],
+    "examples": [{ "example": "Dit flutscht wie nie.", "explanation": "Das klappt sehr gut." }],
     "themen": []
   },
   {
@@ -270,9 +277,7 @@
     "word": "Nummer",
     "article": "die",
     "translations": ["auffälliger Typ"],
-    "examples": [
-      { "example": "Dit is ’ne Nummer.", "explanation": "Das ist ein Typ!" }
-    ],
+    "examples": [{ "example": "Dit is ’ne Nummer.", "explanation": "Das ist ein Typ!" }],
     "themen": []
   },
   {
@@ -305,9 +310,7 @@
   {
     "word": "obenuff",
     "translations": ["vergnügt (in der Wendung »obenuff sein«)"],
-    "examples": [
-      { "example": "Der is heut obenuff.", "explanation": "Er ist vergnügt." }
-    ],
+    "examples": [{ "example": "Der is heut obenuff.", "explanation": "Er ist vergnügt." }],
     "themen": ["gefuehle-emotionen"]
   },
   {
@@ -364,7 +367,10 @@
     "word": "öfter",
     "translations": ["öfter (spöttische Frage bei Missgeschick)"],
     "examples": [
-      { "example": "Machen Se dit öfter?", "explanation": "Spöttische Frage, wenn jemandem ein Missgeschick passiert." }
+      {
+        "example": "Machen Se dit öfter?",
+        "explanation": "Spöttische Frage, wenn jemandem ein Missgeschick passiert."
+      }
     ],
     "themen": []
   },
@@ -394,9 +400,7 @@
     "word": "Olle",
     "article": "die",
     "translations": ["Ehegattin", "Alte(r)"],
-    "examples": [
-      { "example": "Meine Olle!" }
-    ],
+    "examples": [{ "example": "Meine Olle!" }],
     "infoText": "Liebevoll in der Wendung »mein(e) Olleken«.",
     "themen": ["beziehungen-soziales"]
   },
@@ -436,7 +440,10 @@
     "article": "die",
     "translations": ["dummes Gerede (in der Wendung »Opern quatschen«)"],
     "examples": [
-      { "example": "Quatsch bloß keene Opern.", "explanation": "Quatsch nicht dusselig, bleib sachlich." }
+      {
+        "example": "Quatsch bloß keene Opern.",
+        "explanation": "Quatsch nicht dusselig, bleib sachlich."
+      }
     ],
     "themen": []
   },
@@ -468,7 +475,10 @@
     "article": "der",
     "translations": ["beliebiger Gegenstand, große Sache"],
     "examples": [
-      { "example": "Dit is’n Otto!", "explanation": "Erstaunter Ausruf, z.B. über einen besonders großen Gänsebraten." }
+      {
+        "example": "Dit is’n Otto!",
+        "explanation": "Erstaunter Ausruf, z.B. über einen besonders großen Gänsebraten."
+      }
     ],
     "infoText": "Entstand vielleicht mit Bezug auf den Jockei Otto Schmidt, volkstümlicher Liebling auf der Rennbahn Hoppegarten, der von Hans Albers mit »Otto, Otto« angespornt worden sein soll.",
     "themen": []

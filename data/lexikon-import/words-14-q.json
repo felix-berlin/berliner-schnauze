@@ -95,9 +95,7 @@
   {
     "word": "quatschen",
     "translations": ["Unsinn reden", "viel, ununterbrochen reden"],
-    "examples": [
-      { "example": "Dit is ja Quatsch mit Soße.", "explanation": "Völliger Blödsinn." }
-    ],
+    "examples": [{ "example": "Dit is ja Quatsch mit Soße.", "explanation": "Völliger Blödsinn." }],
     "infoText": "Von niederdeutsch quat = böse, schlimm; im 16. Jahrhundert wurden die Niederdeutsch-Sprechenden als »Quatländer« bezeichnet. Ein Quatschkopf ist ein Mensch, der ungereimtes Zeug spricht.",
     "themen": []
   },
@@ -138,7 +136,10 @@
     "article": "der",
     "translations": ["quirliger, energiegeladener Mensch"],
     "examples": [
-      { "example": "Nimm den Quirl aus’m Mund!", "explanation": "Sprich nicht so geschwollen, so pathetisch." }
+      {
+        "example": "Nimm den Quirl aus’m Mund!",
+        "explanation": "Sprich nicht so geschwollen, so pathetisch."
+      }
     ],
     "infoText": "Im 19. Jahrhundert für einen kleinen Menschen, der sich beim Gehen hin und her bewegt.",
     "themen": ["charakter-eigenschaften"]

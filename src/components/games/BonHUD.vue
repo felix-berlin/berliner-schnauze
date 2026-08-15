@@ -1,9 +1,6 @@
 <template>
   <div class="c-bon-hud">
-    <div
-      class="c-bon-hud__lives"
-      :aria-label="`${lives} von ${MAX_LIVES} Leben verbleibend`"
-    >
+    <div class="c-bon-hud__lives" :aria-label="`${lives} von ${MAX_LIVES} Leben verbleibend`">
       <component
         :is="HeartIcon"
         v-for="i in MAX_LIVES"
@@ -16,7 +13,10 @@
     </div>
 
     <div class="c-bon-hud__score-wrap">
-      <span :class="['c-bon-hud__score', { 'c-bon-hud__score--highscore': isHighscore }]" aria-hidden="true">
+      <span
+        :class="['c-bon-hud__score', { 'c-bon-hud__score--highscore': isHighscore }]"
+        aria-hidden="true"
+      >
         {{ score }}
       </span>
       <span v-if="isHighscore" class="u-sr-only">Neuer Highscore: {{ score }}</span>
@@ -26,11 +26,7 @@
     </div>
 
     <Transition name="c-bon-hud-streak">
-      <div
-        v-if="streak > 0"
-        class="c-bon-hud__streak"
-        :aria-label="`Streak: ${streak}`"
-      >
+      <div v-if="streak > 0" class="c-bon-hud__streak" :aria-label="`Streak: ${streak}`">
         <div class="c-bon-hud__streak-count" aria-hidden="true">
           <FlameIcon width="16" height="16" aria-hidden="true" />
           {{ streak }}
@@ -41,7 +37,10 @@
             class="c-bon-hud__multiplier"
             :aria-label="`${multiplier}× Multiplikator`"
           >
-            <span class="c-bon-hud__multiplier-badge c-bon-hud__multiplier-badge--active" aria-hidden="true">
+            <span
+              class="c-bon-hud__multiplier-badge c-bon-hud__multiplier-badge--active"
+              aria-hidden="true"
+            >
               {{ multiplier }}×
             </span>
           </div>
@@ -52,23 +51,23 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from "vue";
 
-const HeartIcon = defineAsyncComponent(() => import('virtual:icons/lucide/heart'))
-const FlameIcon = defineAsyncComponent(() => import('virtual:icons/lucide/flame'))
+const HeartIcon = defineAsyncComponent(() => import("virtual:icons/lucide/heart"));
+const FlameIcon = defineAsyncComponent(() => import("virtual:icons/lucide/flame"));
 
-const MAX_LIVES = 3
+const MAX_LIVES = 3;
 
 defineProps<{
-  lives: number
-  score: number
-  streak: number
-  multiplier: number
-  isHighscore: boolean
-  playerName?: string
-}>()
+  lives: number;
+  score: number;
+  streak: number;
+  multiplier: number;
+  isHighscore: boolean;
+  playerName?: string;
+}>();
 </script>
 
 <style lang="scss">
-@use '@styles/components/berliner-oder-nicht';
+@use "@styles/components/berliner-oder-nicht";
 </style>

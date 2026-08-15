@@ -1,5 +1,6 @@
-import PwaCacheTypeBar from "@components/PwaCacheTypeBar.vue";
 import type { CacheBucket } from "@composables/useCacheStorage";
+
+import PwaCacheTypeBar from "@components/PwaCacheTypeBar.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 
@@ -55,9 +56,11 @@ describe("PwaCacheTypeBar", () => {
   });
 
   it("groups types beyond MAX into sonstige", () => {
-    const types = ["js", "css", "avif", "webp", "woff2", "html", "json", "png"].map(
-      (type, i) => ({ count: 1, sizeBytes: 100 - i * 10, type }),
-    );
+    const types = ["js", "css", "avif", "webp", "woff2", "html", "json", "png"].map((type, i) => ({
+      count: 1,
+      sizeBytes: 100 - i * 10,
+      type,
+    }));
     const bucket = makeBucket(types);
     const wrapper = mount(PwaCacheTypeBar, { props: { buckets: [bucket] } });
     const labels = wrapper.findAll(".c-pwa-type-bar__legend-type").map((el) => el.text());
@@ -66,9 +69,11 @@ describe("PwaCacheTypeBar", () => {
   });
 
   it("does not add sonstige when types equal MAX_TYPES exactly", () => {
-    const types = ["js", "css", "avif", "webp", "woff2", "html", "json"].map(
-      (type, i) => ({ count: 1, sizeBytes: 100 - i, type }),
-    );
+    const types = ["js", "css", "avif", "webp", "woff2", "html", "json"].map((type, i) => ({
+      count: 1,
+      sizeBytes: 100 - i,
+      type,
+    }));
     const wrapper = mount(PwaCacheTypeBar, { props: { buckets: [makeBucket(types)] } });
     const labels = wrapper.findAll(".c-pwa-type-bar__legend-type").map((el) => el.text());
     expect(labels).not.toContain("SONSTIGE");

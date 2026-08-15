@@ -40,9 +40,11 @@ describe("getWordDates", () => {
     process.env.WP_API = "http://test.local/graphql";
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
-        makePage([{ slug: "aalen", modifiedGmt: "2025-04-09T12:00:00" }], false, ""),
-      ),
+      vi
+        .fn()
+        .mockResolvedValue(
+          makePage([{ slug: "aalen", modifiedGmt: "2025-04-09T12:00:00" }], false, ""),
+        ),
     );
     const { getWordDates } = await import("@services/queries/getSitemapWordDates");
     const result = await getWordDates();
@@ -68,10 +70,13 @@ describe("getWordDates", () => {
 
   it("breaks early when berlinerWords missing from response", async () => {
     process.env.WP_API = "http://test.local/graphql";
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockResolvedValue({ data: {} }),
-    }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({ data: {} }),
+      }),
+    );
     const { getWordDates } = await import("@services/queries/getSitemapWordDates");
     expect((await getWordDates()).size).toBe(0);
   });
@@ -124,14 +129,16 @@ describe("getPostDates", () => {
     process.env.WP_API = "http://test.local/graphql";
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
-        makePage(
-          [{ slug: "berlinerische-woerter-herkunft", modifiedGmt: "2026-07-20T14:06:35" }],
-          false,
-          "",
-          "posts",
+      vi
+        .fn()
+        .mockResolvedValue(
+          makePage(
+            [{ slug: "berlinerische-woerter-herkunft", modifiedGmt: "2026-07-20T14:06:35" }],
+            false,
+            "",
+            "posts",
+          ),
         ),
-      ),
     );
     const { getPostDates } = await import("@services/queries/getSitemapWordDates");
     const result = await getPostDates();
@@ -184,7 +191,9 @@ describe("getPostDates", () => {
     process.env.WP_API = "http://test.local/graphql";
     const fetchMock = vi
       .fn()
-      .mockResolvedValue(makePage([{ slug: "post-a", modifiedGmt: "2026-01-01T00:00:00" }], false, "", "posts"));
+      .mockResolvedValue(
+        makePage([{ slug: "post-a", modifiedGmt: "2026-01-01T00:00:00" }], false, "", "posts"),
+      );
     vi.stubGlobal("fetch", fetchMock);
     const { getPostDates } = await import("@services/queries/getSitemapWordDates");
     await getPostDates();
@@ -205,8 +214,8 @@ describe("sitemapFilter", () => {
     const { sitemapFilter } = await import("@services/queries/getSitemapWordDates");
     expect(sitemapFilter("https://berliner-schnauze.wtf/settings")).toBe(false);
     expect(sitemapFilter("https://berliner-schnauze.wtf/settings/cache")).toBe(false);
-    expect(
-      sitemapFilter("https://berliner-schnauze.wtf/games/berliner-oder-nicht/share"),
-    ).toBe(false);
+    expect(sitemapFilter("https://berliner-schnauze.wtf/games/berliner-oder-nicht/share")).toBe(
+      false,
+    );
   });
 });

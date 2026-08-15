@@ -1,9 +1,8 @@
+import BonResult from "@components/games/BonResult.vue";
 import { mount } from "@vue/test-utils";
+import { useShare } from "@vueuse/core";
 import { describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
-import BonResult from "@components/games/BonResult.vue";
-import { useShare } from "@vueuse/core";
-
 
 const statsRef = ref({ playerName: "" });
 

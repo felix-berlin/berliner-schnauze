@@ -11,7 +11,10 @@
     "article": "die",
     "translations": ["Verrücktheit", "Beschädigung"],
     "examples": [
-      { "example": "Der hat ’ne Macke.", "explanation": "Er hat nicht alle Tassen im Schrank, einen leichten Dachschaden." },
+      {
+        "example": "Der hat ’ne Macke.",
+        "explanation": "Er hat nicht alle Tassen im Schrank, einen leichten Dachschaden."
+      },
       { "example": "Da is ’ne Macke dran.", "explanation": "Die Sache ist beschädigt." }
     ],
     "infoText": "Von jiddisch makko = Schlag, Stoß.",
@@ -82,7 +85,10 @@
     "word": "mang",
     "translations": ["dazwischen", "zwischen", "darunter"],
     "examples": [
-      { "example": "Mang uns mang is eener mang, der nich mang uns mang jehört.", "explanation": "Kritik an Personen, die aus einem bestimmten Bereich ausgegrenzt werden sollen." }
+      {
+        "example": "Mang uns mang is eener mang, der nich mang uns mang jehört.",
+        "explanation": "Kritik an Personen, die aus einem bestimmten Bereich ausgegrenzt werden sollen."
+      }
     ],
     "infoText": "Von niederdeutsch mank.",
     "themen": []
@@ -96,9 +102,7 @@
   {
     "word": "mantschen",
     "translations": ["mischen", "mit den Händen durchwühlen"],
-    "examples": [
-      { "example": "Mensch, mansch nich so in deinem Essen rum, sondern iß lieber." }
-    ],
+    "examples": [{ "example": "Mensch, mansch nich so in deinem Essen rum, sondern iß lieber." }],
     "alternativeWords": ["manschen"],
     "themen": ["essen-trinken"]
   },
@@ -162,9 +166,7 @@
     "word": "Matratze",
     "article": "die",
     "translations": ["Schlaf (in der Wendung »an der Matratze horchen«)"],
-    "examples": [
-      { "example": "Anne Matratze horchen.", "explanation": "Schlafen." }
-    ],
+    "examples": [{ "example": "Anne Matratze horchen.", "explanation": "Schlafen." }],
     "infoText": "Ein Matratzenhorcher ist ein Langschläfer, Matratzenkino bezeichnet den Fernseher.",
     "themen": ["alltag-wohnen"]
   },
@@ -182,7 +184,10 @@
     "article": "die",
     "translations": ["lange Haare bei Männern", "Teppich"],
     "examples": [
-      { "example": "Um 5 Uhr steh ick uff der Matte!", "explanation": "»Auf der Matte stehen« = da sein. Vielleicht von der Matte des Boxrings." }
+      {
+        "example": "Um 5 Uhr steh ick uff der Matte!",
+        "explanation": "»Auf der Matte stehen« = da sein. Vielleicht von der Matte des Boxrings."
+      }
     ],
     "themen": ["koerper"]
   },
@@ -226,9 +231,7 @@
   {
     "word": "Mäuse melken",
     "translations": ["verzweifeln (in der Redensart)"],
-    "examples": [
-      { "example": "Dit is ja zum Mäusemelken.", "explanation": "Zum Verzweifeln." }
-    ],
+    "examples": [{ "example": "Dit is ja zum Mäusemelken.", "explanation": "Zum Verzweifeln." }],
     "themen": ["gefuehle-emotionen"]
   },
   {
@@ -240,9 +243,7 @@
   {
     "word": "mausig",
     "translations": ["wichtigtuerisch (in der Wendung »sich mausig machen«)"],
-    "examples": [
-      { "example": "Der macht sich mausig.", "explanation": "Er tut sich wichtig." }
-    ],
+    "examples": [{ "example": "Der macht sich mausig.", "explanation": "Er tut sich wichtig." }],
     "themen": ["charakter-eigenschaften"]
   },
   {
@@ -256,7 +257,10 @@
     "article": "die",
     "translations": ["Verdacht (in der Redensart)"],
     "examples": [
-      { "example": "Dit riecht man zehn Meilen jejen ’n Wind.", "explanation": "Da stimmt etwas nicht." }
+      {
+        "example": "Dit riecht man zehn Meilen jejen ’n Wind.",
+        "explanation": "Da stimmt etwas nicht."
+      }
     ],
     "themen": []
   },
@@ -505,7 +509,10 @@
   {
     "word": "Motte",
     "article": "die",
-    "translations": ["schlagfertiges Mädchen (»kesse Motte«)", "langes Schlafen (»bis in die Motten«)"],
+    "translations": [
+      "schlagfertiges Mädchen (»kesse Motte«)",
+      "langes Schlafen (»bis in die Motten«)"
+    ],
     "examples": [
       { "example": "’ne kesse Motte.", "explanation": "Ein schlagfertiger Teenie." },
       { "example": "Der pennt bis in die Motten.", "explanation": "Er schläft ziemlich lange." }
@@ -551,9 +558,7 @@
   {
     "word": "mucksen",
     "translations": ["mucken", "halblaut murmeln"],
-    "examples": [
-      { "example": "Mucks da nich’!", "explanation": "Sei ruhig." }
-    ],
+    "examples": [{ "example": "Mucks da nich’!", "explanation": "Sei ruhig." }],
     "themen": []
   },
   {
@@ -638,7 +643,10 @@
     "article": "der",
     "translations": ["Marmeladentopf", "Begriffsstutzigkeit (»aus’m Mustopp kommen«)"],
     "examples": [
-      { "example": "Du kommst wohl aus’m Mustopp.", "explanation": "Du begreifst etwas reichlich spät." }
+      {
+        "example": "Du kommst wohl aus’m Mustopp.",
+        "explanation": "Du begreifst etwas reichlich spät."
+      }
     ],
     "infoText": "1872 als Schülerjargon vermerkt für einen Schüler, der eine gedankenlose Antwort gibt.",
     "themen": []

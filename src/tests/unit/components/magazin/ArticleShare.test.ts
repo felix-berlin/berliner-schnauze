@@ -102,7 +102,11 @@ describe("ArticleShare.vue", () => {
     const wrapper = mount(ArticleShare, { props });
     await wrapper.find(".c-magazin-article__share").trigger("click");
     const { trackEvent } = await import("@utils/analytics");
-    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith("Magazin Share", "Article shared", props.title);
+    expect(vi.mocked(trackEvent)).toHaveBeenCalledWith(
+      "Magazin Share",
+      "Article shared",
+      props.title,
+    );
   });
 
   it("swallows a share rejection without throwing", async () => {

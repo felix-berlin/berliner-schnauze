@@ -103,7 +103,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockRequestPermission = vi.fn();
 Object.defineProperty(global, "Notification", {
-  value: { permission: "default" as NotificationPermission, requestPermission: mockRequestPermission },
+  value: {
+    permission: "default" as NotificationPermission,
+    requestPermission: mockRequestPermission,
+  },
   writable: true,
 });
 
@@ -121,9 +124,8 @@ describe("notificationPermission store", () => {
 
   it("requestNotificationPermission calls browser API and updates atom", async () => {
     mockRequestPermission.mockResolvedValue("granted");
-    const { requestNotificationPermission, $notificationPermission } = await import(
-      "@stores/notificationPermission.ts"
-    );
+    const { requestNotificationPermission, $notificationPermission } =
+      await import("@stores/notificationPermission.ts");
     await requestNotificationPermission();
     expect(mockRequestPermission).toHaveBeenCalledOnce();
     expect($notificationPermission.get()).toBe("granted");
@@ -131,9 +133,8 @@ describe("notificationPermission store", () => {
 
   it("handles denied permission", async () => {
     mockRequestPermission.mockResolvedValue("denied");
-    const { requestNotificationPermission, $notificationPermission } = await import(
-      "@stores/notificationPermission.ts"
-    );
+    const { requestNotificationPermission, $notificationPermission } =
+      await import("@stores/notificationPermission.ts");
     await requestNotificationPermission();
     expect($notificationPermission.get()).toBe("denied");
   });
@@ -401,9 +402,7 @@ const notificationsSupported = isNotificationSupported();
     <section class="c-app-settings__section">
       <h2>Benachrichtigungen</h2>
 
-      <p v-if="!notificationsSupported">
-        Dein Browser unterstützt keine Benachrichtigungen.
-      </p>
+      <p v-if="!notificationsSupported">Dein Browser unterstützt keine Benachrichtigungen.</p>
 
       <template v-else>
         <div class="c-app-settings__notification-row">

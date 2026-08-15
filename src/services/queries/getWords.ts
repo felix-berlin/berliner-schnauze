@@ -1,3 +1,4 @@
+import { wpGraphqlClient } from "@services/wpGraphqlClient";
 import { SHOW_TEST_DATA } from "astro:env/client";
 
 import type {
@@ -10,7 +11,6 @@ import type {
 
 import { graphql } from "@/gql";
 import { GetAllWordsDocument, GetAllWordsLinksDocument } from "@/gql/graphql.ts";
-import { wpGraphqlClient } from "@services/wpGraphqlClient";
 
 const fetchPaginatedWords = async (
   queryDocument: typeof GetAllWordsDocument | typeof GetAllWordsLinksDocument,
@@ -72,7 +72,12 @@ export const fetchAllWordsLinks = async (
   orderByType: OrderEnum = "ASC",
   stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
 ): Promise<WordEdges> => {
-  _allWordsLinksCache ??= fetchPaginatedWords(GetAllWordsLinksDocument, orderByField, orderByType, stati);
+  _allWordsLinksCache ??= fetchPaginatedWords(
+    GetAllWordsLinksDocument,
+    orderByField,
+    orderByType,
+    stati,
+  );
   return _allWordsLinksCache;
 };
 

@@ -2,9 +2,7 @@
   {
     "word": "Deckel",
     "article": "der",
-    "translations": [
-      "Hut"
-    ],
+    "translations": ["Hut"],
     "examples": [
       {
         "example": "Krist gleich een’s uff’n Deckel.",
@@ -12,17 +10,13 @@
       }
     ],
     "infoText": "Im 19. Jahrhundert für Zylinderhut, heute allgemein für Hut.",
-    "themen": [
-      "charakter-eigenschaften"
-    ],
+    "themen": ["charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Deez",
     "article": "der",
-    "translations": [
-      "Kopf"
-    ],
+    "translations": ["Kopf"],
     "examples": [
       {
         "example": "Dir hau ick een’s uff’n Deez, daß de aus de Rippen kiekst wie’n Affe durch’t Jitter.",
@@ -30,29 +24,21 @@
       }
     ],
     "infoText": "Von französisch tête = Kopf. Taucht häufig in Form einer Drohung auf.",
-    "themen": [
-      "koerper"
-    ],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Demse",
     "article": "die",
-    "translations": [
-      "stickige, drückende Luft"
-    ],
+    "translations": ["stickige, drückende Luft"],
     "infoText": "Aus dem Obersächsischen, nach 1945 nach Berlin gelangt.",
-    "themen": [
-      "alltag-wohnen"
-    ],
+    "themen": ["alltag-wohnen"],
     "skipReason": "exists"
   },
   {
     "word": "Destille",
     "article": "die",
-    "translations": [
-      "Kneipe"
-    ],
+    "translations": ["Kneipe"],
     "examples": [
       {
         "example": "Ejal, wo der Berliner mit eenem Oooge hinkiekt - mit’s andre kiekta inne Destille.",
@@ -60,18 +46,12 @@
       }
     ],
     "infoText": "Früher für Kneipe, abgeleitet von der Destillationsanstalt.",
-    "themen": [
-      "alkohol-kneipe",
-      "stadtleben"
-    ],
+    "themen": ["alkohol-kneipe", "stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "dufte",
-    "translations": [
-      "großartig",
-      "prima"
-    ],
+    "translations": ["großartig", "prima"],
     "infoText": "Von jiddisch toffte. Wird heute gebraucht für die früheren Bezeichnungen knorke und schnafte.",
     "themen": [],
     "skipReason": "exists"
@@ -79,9 +59,7 @@
   {
     "word": "Dunst",
     "article": "der",
-    "translations": [
-      "Ahnung (nur verneint)"
-    ],
+    "translations": ["Ahnung (nur verneint)"],
     "examples": [
       {
         "example": "Du hast ja keenen Dunst!",
@@ -93,99 +71,67 @@
   },
   {
     "word": "etepetete",
-    "translations": [
-      "pedantisch genau",
-      "zimperlich"
-    ],
+    "translations": ["pedantisch genau", "zimperlich"],
     "infoText": "Fußt wahrscheinlich nicht auf französisch être peut-être ›im Zweifel sein‹, sondern auf niederdeutsch öt(e), entrundet ete, ›geziert, zärtlich, überfein‹, das ironisierend verdoppelt wurde.",
-    "themen": [
-      "charakter-eigenschaften"
-    ],
+    "themen": ["charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Extrawurst",
     "article": "die",
-    "translations": [
-      "etwas Besonderes",
-      "Sonderbehandlung"
-    ],
+    "translations": ["etwas Besonderes", "Sonderbehandlung"],
     "examples": [
       {
         "example": "Ick hab keene Lust, dir ’ne Extrawurscht zu braten."
       }
     ],
-    "themen": [
-      "essen-trinken",
-      "charakter-eigenschaften"
-    ],
+    "themen": ["essen-trinken", "charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Falle",
     "article": "die",
-    "translations": [
-      "Bett"
-    ],
+    "translations": ["Bett"],
     "examples": [
       {
         "example": "Ab in die Falle!"
       }
     ],
     "infoText": "Vermutlich verkürzt aus Wanzenfalle.",
-    "themen": [
-      "alltag-wohnen"
-    ],
+    "themen": ["alltag-wohnen"],
     "skipReason": "exists"
   },
   {
     "word": "Fatzke",
     "article": "der",
-    "translations": [
-      "eitler, aufgeblasener Mensch"
-    ],
+    "translations": ["eitler, aufgeblasener Mensch"],
     "examples": [
       {
         "example": "Sie oller Fatzke!"
       }
     ],
-    "alternativeWords": [
-      "Appelfatzke",
-      "Hannefatzke"
-    ],
+    "alternativeWords": ["Appelfatzke", "Hannefatzke"],
     "infoText": "Wahrscheinlich nicht abgeleitet von frühneuhochdeutsch fatzen = spotten, sondern vom Vokativ des polnischen Vornamens Wacek (zu tschechisch Václav).",
-    "themen": [
-      "schimpfwoerter-beleidigungen",
-      "charakter-eigenschaften"
-    ],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Feez",
     "article": "der",
-    "translations": [
-      "Vergnügen",
-      "Spaß",
-      "Unsinn"
-    ],
+    "translations": ["Vergnügen", "Spaß", "Unsinn"],
     "examples": [
       {
         "example": "Mach doch nich so ’nen Feez."
       }
     ],
     "infoText": "Von französisch fête = Fest, Feier.",
-    "themen": [
-      "unterhaltung-freizeit"
-    ],
+    "themen": ["unterhaltung-freizeit"],
     "skipReason": "exists"
   },
   {
     "word": "Fimmel",
     "article": "der",
-    "translations": [
-      "Spleen",
-      "Größenwahn"
-    ],
+    "translations": ["Spleen", "Größenwahn"],
     "examples": [
       {
         "example": "Der hat doch ’n Fimmel!",
@@ -193,59 +139,39 @@
       }
     ],
     "infoText": "Wahrscheinlich abgeleitet von fummeln, fimmeln = suchend herumtasten.",
-    "themen": [
-      "charakter-eigenschaften"
-    ],
+    "themen": ["charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Fischköppe",
-    "translations": [
-      "Bewohner der norddeutschen Küstengegenden",
-      "Mecklenburger"
-    ],
+    "translations": ["Bewohner der norddeutschen Küstengegenden", "Mecklenburger"],
     "infoText": "Westberlinisch spöttisch für die Bewohner der norddeutschen Küstengegenden, ostberlinisch für die Mecklenburger.",
-    "themen": [
-      "schimpfwoerter-beleidigungen",
-      "orte-spitzname"
-    ],
+    "themen": ["schimpfwoerter-beleidigungen", "orte-spitzname"],
     "skipReason": "exists"
   },
   {
     "word": "Flitzpiepe",
     "article": "die",
-    "translations": [
-      "nicht ernstzunehmender Mensch",
-      "Penis"
-    ],
-    "themen": [
-      "schimpfwoerter-beleidigungen"
-    ],
+    "translations": ["nicht ernstzunehmender Mensch", "Penis"],
+    "themen": ["schimpfwoerter-beleidigungen"],
     "skipReason": "exists"
   },
   {
     "word": "Flosse",
     "article": "die",
-    "translations": [
-      "Hand"
-    ],
+    "translations": ["Hand"],
     "examples": [
       {
         "example": "Wenn man ›juten Tach‹ sacht, denn jibt man die Flosse."
       }
     ],
     "infoText": "Übertragen von den Fischflossen.",
-    "themen": [
-      "koerper"
-    ],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "flutschen",
-    "translations": [
-      "rasch von der Hand gehen",
-      "entwischen"
-    ],
+    "translations": ["rasch von der Hand gehen", "entwischen"],
     "infoText": "Bei Trachsel 1873 unter fluschen als pommerscher Dialekt vermerkt. Von mittelniederdeutsch flutschen = sich hastig bewegen.",
     "themen": [],
     "skipReason": "exists"
@@ -253,30 +179,20 @@
   {
     "word": "Fratze",
     "article": "die",
-    "translations": [
-      "Gesicht"
-    ],
-    "themen": [
-      "koerper"
-    ],
+    "translations": ["Gesicht"],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Fressalien",
-    "translations": [
-      "Essen"
-    ],
-    "themen": [
-      "essen-trinken"
-    ],
+    "translations": ["Essen"],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "Fresse",
     "article": "die",
-    "translations": [
-      "Mund"
-    ],
+    "translations": ["Mund"],
     "examples": [
       {
         "example": "Halt die Fresse!"
@@ -291,46 +207,31 @@
       }
     ],
     "infoText": "Insbesondere in Drohungen gebraucht.",
-    "themen": [
-      "koerper",
-      "schimpfwoerter-beleidigungen"
-    ],
+    "themen": ["koerper", "schimpfwoerter-beleidigungen"],
     "skipReason": "exists"
   },
   {
     "word": "Fritze",
     "article": "der",
-    "translations": [
-      "Händler",
-      "Verkäufer",
-      "Handwerker (in Zusammensetzungen)"
-    ],
+    "translations": ["Händler", "Verkäufer", "Handwerker (in Zusammensetzungen)"],
     "examples": [
       {
         "example": "Hallo Fritze!"
       }
     ],
     "infoText": "Produktives Element in zahlreichen Zusammensetzungen: Zijarrenfritze ist der Verkäufer im Tabakladen, ebenso Jemüsefritze, Eierfritze etc. Fritz war ein beliebter Vorname im 19. Jahrhundert und wird in Berlin in der Ausrufeform mit einem -e versehen.",
-    "themen": [
-      "stadtleben",
-      "beziehungen-soziales"
-    ],
+    "themen": ["stadtleben", "beziehungen-soziales"],
     "skipReason": "exists"
   },
   {
     "word": "futsch",
-    "translations": [
-      "verloren",
-      "kaputt"
-    ],
+    "translations": ["verloren", "kaputt"],
     "examples": [
       {
         "example": "Dit Jeld is futsch."
       }
     ],
-    "alternativeWords": [
-      "futschikato"
-    ],
+    "alternativeWords": ["futschikato"],
     "infoText": "Wahrscheinlich lautnachahmende Bildung, vgl. futschen = schlüpfen, vorbeihuschen.",
     "themen": [],
     "skipReason": "exists"
@@ -338,68 +239,46 @@
   {
     "word": "Groschen",
     "article": "der",
-    "translations": [
-      "Zehnpfennigstück"
-    ],
+    "translations": ["Zehnpfennigstück"],
     "infoText": "Von mittelhochdeutsch grosse = Dickpfennig, lateinisch grossus = dick.",
-    "themen": [
-      "geld"
-    ],
+    "themen": ["geld"],
     "skipReason": "exists"
   },
   {
     "word": "Großkotz",
     "article": "der",
-    "translations": [
-      "Prahler",
-      "überheblicher Mensch"
-    ],
+    "translations": ["Prahler", "überheblicher Mensch"],
     "examples": [
       {
         "example": "So’n großkotz’jer Typ!"
       }
     ],
-    "themen": [
-      "schimpfwoerter-beleidigungen",
-      "charakter-eigenschaften"
-    ],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Hackenporsche",
     "article": "der",
-    "translations": [
-      "kleiner Einkaufswagen",
-      "Rentnerkarren"
-    ],
-    "themen": [
-      "stadtleben",
-      "alltag-wohnen"
-    ],
+    "translations": ["kleiner Einkaufswagen", "Rentnerkarren"],
+    "themen": ["stadtleben", "alltag-wohnen"],
     "skipReason": "exists"
   },
   {
     "word": "Hackepeter",
     "article": "der",
-    "translations": [
-      "gehacktes Schweinefleisch mit Pfeffer und Zwiebeln"
-    ],
+    "translations": ["gehacktes Schweinefleisch mit Pfeffer und Zwiebeln"],
     "examples": [
       {
         "example": "Aus dir mack ick Hackepeter!",
         "explanation": "Drohung."
       }
     ],
-    "themen": [
-      "essen-trinken"
-    ],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "halblang",
-    "translations": [
-      "nicht übertreiben (in der Wendung »mach mal halblang«)"
-    ],
+    "translations": ["nicht übertreiben (in der Wendung »mach mal halblang«)"],
     "examples": [
       {
         "example": "Mach mal halblang!",
@@ -411,20 +290,14 @@
   },
   {
     "word": "helle",
-    "translations": [
-      "klug"
-    ],
-    "themen": [
-      "charakter-eigenschaften"
-    ],
+    "translations": ["klug"],
+    "themen": ["charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Harke",
     "article": "die",
-    "translations": [
-      "Nachdruck (in der Drohung)"
-    ],
+    "translations": ["Nachdruck (in der Drohung)"],
     "examples": [
       {
         "example": "Dir werd’ ick zeigen, wat ’ne Harke ist.",
@@ -438,10 +311,7 @@
   {
     "word": "Heckmeck",
     "article": "der",
-    "translations": [
-      "Durcheinander",
-      "Unsinn"
-    ],
+    "translations": ["Durcheinander", "Unsinn"],
     "examples": [
       {
         "example": "Mach nich so’n Heckmeck!"
@@ -454,42 +324,28 @@
   {
     "word": "Hirni",
     "article": "der",
-    "translations": [
-      "Idiot"
-    ],
-    "themen": [
-      "schimpfwoerter-beleidigungen"
-    ],
+    "translations": ["Idiot"],
+    "themen": ["schimpfwoerter-beleidigungen"],
     "skipReason": "exists"
   },
   {
     "word": "Hohler Zahn",
     "article": "der",
-    "translations": [
-      "Turmruine der Kaiser-Wilhelm-Gedächtniskirche"
-    ],
-    "themen": [
-      "orte-spitzname"
-    ],
+    "translations": ["Turmruine der Kaiser-Wilhelm-Gedächtniskirche"],
+    "themen": ["orte-spitzname"],
     "skipReason": "case-variant-exists"
   },
   {
     "word": "Hosenmatz",
     "article": "der",
-    "translations": [
-      "kleines Kind"
-    ],
-    "themen": [
-      "beziehungen-soziales"
-    ],
+    "translations": ["kleines Kind"],
+    "themen": ["beziehungen-soziales"],
     "skipReason": "exists"
   },
   {
     "word": "Hucke",
     "article": "die",
-    "translations": [
-      "Tragekorb für den Rücken"
-    ],
+    "translations": ["Tragekorb für den Rücken"],
     "examples": [
       {
         "example": "Jemandem die Hucke vollhauen.",
@@ -503,21 +359,15 @@
   {
     "word": "Humpen",
     "article": "der",
-    "translations": [
-      "Bierkrug"
-    ],
+    "translations": ["Bierkrug"],
     "infoText": "Zuerst omd., dann wohl durch die Studentensprache verbreitet; niederdeutsch Hump(e) = Teil, Stück, Ecke.",
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "Hund",
     "article": "der",
-    "translations": [
-      "Hund (in zahlreichen Redewendungen)"
-    ],
+    "translations": ["Hund (in zahlreichen Redewendungen)"],
     "examples": [
       {
         "example": "Stadtbekannt wie ’n bunter Hund."
@@ -538,18 +388,14 @@
   {
     "word": "Husche",
     "article": "die",
-    "translations": [
-      "heftiger, aber kurzer Platzregen"
-    ],
+    "translations": ["heftiger, aber kurzer Platzregen"],
     "infoText": "Abgeleitet von der lautmalenden Interjektion husch.",
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "husten",
-    "translations": [
-      "verweigern (in der Wendung »wat husten«)"
-    ],
+    "translations": ["verweigern (in der Wendung »wat husten«)"],
     "examples": [
       {
         "example": "Ick werd’ da wat husten!",
@@ -561,89 +407,58 @@
   },
   {
     "word": "intus",
-    "translations": [
-      "zu sich genommen",
-      "getrunken"
-    ],
+    "translations": ["zu sich genommen", "getrunken"],
     "examples": [
       {
         "example": "Ick hab schon sechs Pilli intus."
       }
     ],
     "infoText": "Von lateinisch intus = innen.",
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "Ische",
     "article": "die",
-    "translations": [
-      "Frau",
-      "Freundin",
-      "Geliebte",
-      "Partnerin"
-    ],
+    "translations": ["Frau", "Freundin", "Geliebte", "Partnerin"],
     "infoText": "Von jiddisch ischa = Frau, mit langem i gesprochen.",
-    "themen": [
-      "beziehungen-soziales"
-    ],
+    "themen": ["beziehungen-soziales"],
     "skipReason": "exists"
   },
   {
     "word": "japsen",
-    "translations": [
-      "nach Luft schnappen"
-    ],
+    "translations": ["nach Luft schnappen"],
     "infoText": "Von jappen = mühsam atmen, den Mund aufsperren.",
-    "themen": [
-      "koerper"
-    ],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Kaff",
     "article": "das",
-    "translations": [
-      "Kleinstadt",
-      "Dorf"
-    ],
+    "translations": ["Kleinstadt", "Dorf"],
     "infoText": "Im Prinzip jede Stadt in Deutschland außer Berlin.",
-    "themen": [
-      "stadtleben"
-    ],
+    "themen": ["stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Kaschemme",
     "article": "die",
-    "translations": [
-      "Kneipe"
-    ],
+    "translations": ["Kneipe"],
     "infoText": "Von rotwelsch Katschemme, das von slawischen Formen hergeleitet ist, vgl. sorbisch korcma, polnisch karczma.",
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "Käseblatt",
     "article": "das",
-    "translations": [
-      "Zeitung"
-    ],
-    "themen": [
-      "alltag-wohnen"
-    ],
+    "translations": ["Zeitung"],
+    "themen": ["alltag-wohnen"],
     "skipReason": "exists"
   },
   {
     "word": "Keks",
     "article": "der",
-    "translations": [
-      "Kopf"
-    ],
+    "translations": ["Kopf"],
     "examples": [
       {
         "example": "Du jehst ma uff’n Keks.",
@@ -651,69 +466,45 @@
       }
     ],
     "infoText": "Vielleicht mit Bezug auf jiddisch gag = Dach.",
-    "themen": [
-      "koerper",
-      "gefuehle-emotionen"
-    ],
+    "themen": ["koerper", "gefuehle-emotionen"],
     "skipReason": "exists"
   },
   {
     "word": "Keule",
     "article": "die",
-    "translations": [
-      "Bruder",
-      "Kumpel"
-    ],
+    "translations": ["Bruder", "Kumpel"],
     "infoText": "Verkürzt aus Briezkeule (siehe Brieze).",
-    "themen": [
-      "beziehungen-soziales"
-    ],
+    "themen": ["beziehungen-soziales"],
     "skipReason": "exists"
   },
   {
     "word": "Kienappel",
     "article": "der",
-    "translations": [
-      "Kiefernzapfen"
-    ],
+    "translations": ["Kiefernzapfen"],
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "Kiez",
     "article": "der",
-    "translations": [
-      "typisches Berliner Viertel mit »Miljöh«"
-    ],
-    "alternativeWords": [
-      "Kietz"
-    ],
+    "translations": ["typisches Berliner Viertel mit »Miljöh«"],
+    "alternativeWords": ["Kietz"],
     "infoText": "Bereits 1249 als Siedlungsname bezeugt. Ursprünglich ärmliche Fischersiedlung, später Ortsteil und Stadtteil.",
-    "themen": [
-      "stadtleben",
-      "orte-spitzname"
-    ],
+    "themen": ["stadtleben", "orte-spitzname"],
     "skipReason": "exists"
   },
   {
     "word": "Kintopp",
     "article": "der",
-    "translations": [
-      "Kino"
-    ],
+    "translations": ["Kino"],
     "infoText": "1906 aufgekommen mit Bezug auf das Kinematographietheater am Kottbusser Damm, dessen Besitzer Topp hieß.",
-    "themen": [
-      "unterhaltung-freizeit",
-      "stadtleben"
-    ],
+    "themen": ["unterhaltung-freizeit", "stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Klaue",
     "article": "die",
-    "translations": [
-      "schlechte Handschrift"
-    ],
+    "translations": ["schlechte Handschrift"],
     "infoText": "Mit Bezug auf Klaue = Hand und klauen = abschreiben.",
     "themen": [],
     "skipReason": "exists"
@@ -721,22 +512,15 @@
   {
     "word": "Klitsche",
     "article": "die",
-    "translations": [
-      "kleines Häuschen, Geschäft oder Büro"
-    ],
+    "translations": ["kleines Häuschen, Geschäft oder Büro"],
     "infoText": "Vielleicht aus polnisch kleć = Lehmhaus.",
-    "themen": [
-      "alltag-wohnen",
-      "stadtleben"
-    ],
+    "themen": ["alltag-wohnen", "stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Knopp",
     "article": "der",
-    "translations": [
-      "Mensch (meist negativ)"
-    ],
+    "translations": ["Mensch (meist negativ)"],
     "examples": [
       {
         "example": "’n oller Knopp.",
@@ -748,11 +532,7 @@
   },
   {
     "word": "knorke",
-    "translations": [
-      "prima",
-      "dufte",
-      "großartig"
-    ],
+    "translations": ["prima", "dufte", "großartig"],
     "examples": [
       {
         "example": "Knorke ist dreimal so dufte wie schnafte."
@@ -765,34 +545,23 @@
   {
     "word": "Knüppel",
     "article": "der",
-    "translations": [
-      "schmales Weißbrötchen"
-    ],
+    "translations": ["schmales Weißbrötchen"],
     "infoText": "Im Gegensatz zur Schrippe mit Milch anstatt Wasser zubereitet.",
-    "themen": [
-      "essen-trinken"
-    ],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "Kodderschnauze",
     "article": "die",
-    "translations": [
-      "freches Mundwerk"
-    ],
+    "translations": ["freches Mundwerk"],
     "infoText": "Negative Bezeichnung für die berühmt-berüchtigte »Berliner Schnauze«.",
-    "themen": [
-      "charakter-eigenschaften",
-      "stadtleben"
-    ],
+    "themen": ["charakter-eigenschaften", "stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Kompott",
     "article": "das",
-    "translations": [
-      "noch zu Erledigendes (in der Wendung)"
-    ],
+    "translations": ["noch zu Erledigendes (in der Wendung)"],
     "examples": [
       {
         "example": "Dit hängt als Kompott hinten noch mit dranne.",
@@ -804,10 +573,7 @@
   },
   {
     "word": "koscher",
-    "translations": [
-      "rein",
-      "einwandfrei"
-    ],
+    "translations": ["rein", "einwandfrei"],
     "examples": [
       {
         "example": "Ick weeß nich, aber der Typ kommt ma nich janz koscher vor."
@@ -820,116 +586,77 @@
   {
     "word": "Kute",
     "article": "die",
-    "translations": [
-      "Grube"
-    ],
+    "translations": ["Grube"],
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "labberig",
-    "translations": [
-      "unangenehm weichlich (von Speisen)"
-    ],
-    "themen": [
-      "essen-trinken"
-    ],
+    "translations": ["unangenehm weichlich (von Speisen)"],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "Lackaffe",
     "article": "der",
-    "translations": [
-      "eitler Fratz"
-    ],
+    "translations": ["eitler Fratz"],
     "infoText": "Basiert auf lackierter (= geschniegelter, eingebildeter) Affe. Wie Fatzke.",
-    "themen": [
-      "schimpfwoerter-beleidigungen",
-      "charakter-eigenschaften"
-    ],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Langer Lulatsch",
     "article": "der",
-    "translations": [
-      "Berliner Funkturm"
-    ],
+    "translations": ["Berliner Funkturm"],
     "infoText": "Spitzname des Berliner Funkturms.",
-    "themen": [
-      "orte-spitzname"
-    ],
+    "themen": ["orte-spitzname"],
     "skipReason": "exists"
   },
   {
     "word": "Laubenpieper",
     "article": "der",
-    "translations": [
-      "Kleingärtner"
-    ],
-    "themen": [
-      "stadtleben"
-    ],
+    "translations": ["Kleingärtner"],
+    "themen": ["stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Leierkasten",
     "article": "der",
-    "translations": [
-      "Drehorgel"
-    ],
+    "translations": ["Drehorgel"],
     "infoText": "Eine Leierkastendecke bezeichnet einen Mantel.",
-    "themen": [
-      "stadtleben",
-      "unterhaltung-freizeit"
-    ],
+    "themen": ["stadtleben", "unterhaltung-freizeit"],
     "skipReason": "exists"
   },
   {
     "word": "Lippe",
     "article": "die",
-    "translations": [
-      "freches Mundwerk (in der Wendung »’ne Lippe riskieren«)"
-    ],
+    "translations": ["freches Mundwerk (in der Wendung »’ne Lippe riskieren«)"],
     "examples": [
       {
         "example": "’ne Lippe riskieren.",
         "explanation": "Vorlaut, frech sein."
       }
     ],
-    "themen": [
-      "charakter-eigenschaften"
-    ],
+    "themen": ["charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Loden",
-    "translations": [
-      "ungepflegte Locken, Haare"
-    ],
+    "translations": ["ungepflegte Locken, Haare"],
     "infoText": "Mittelhochdeutsch Lode = grober Wollstoff.",
-    "themen": [
-      "koerper"
-    ],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Lorke",
     "article": "die",
-    "translations": [
-      "dünner Kaffee",
-      "schlechtes Getränk"
-    ],
-    "themen": [
-      "essen-trinken"
-    ],
+    "translations": ["dünner Kaffee", "schlechtes Getränk"],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "löten",
-    "translations": [
-      "machen (nur verneint)"
-    ],
+    "translations": ["machen (nur verneint)"],
     "examples": [
       {
         "example": "Da jibt’s nischt zu löten (am Holzeimer).",
@@ -942,10 +669,7 @@
   {
     "word": "Lunte",
     "article": "die",
-    "translations": [
-      "Verdacht (»Lunte riechen«)",
-      "Spaß (»Lunte machen«)"
-    ],
+    "translations": ["Verdacht (»Lunte riechen«)", "Spaß (»Lunte machen«)"],
     "examples": [
       {
         "example": "Der riecht Lunte.",
@@ -962,9 +686,7 @@
   {
     "word": "Macher",
     "article": "der",
-    "translations": [
-      "Leiter"
-    ],
+    "translations": ["Leiter"],
     "examples": [
       {
         "example": "Kollege Meier ist der Macher von’t Janze."
@@ -975,63 +697,41 @@
   },
   {
     "word": "Makulatur reden",
-    "translations": [
-      "Klartext reden"
-    ],
+    "translations": ["Klartext reden"],
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "mampfen",
-    "translations": [
-      "essen",
-      "schwatzen"
-    ],
-    "themen": [
-      "essen-trinken"
-    ],
+    "translations": ["essen", "schwatzen"],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "Männeken",
     "article": "das",
-    "translations": [
-      "kleiner, schwächlicher Mann"
-    ],
+    "translations": ["kleiner, schwächlicher Mann"],
     "infoText": "Leitet sich nicht von französisch ›mannequin‹ ab, sondern ist eine Zusammensetzung von ›Mann‹ und dem niederdeutschen Diminutivsuffix ›-ken‹, also »Männchen«.",
-    "themen": [
-      "koerper"
-    ],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Menkenke",
-    "translations": [
-      "Geschrei",
-      "Umstände",
-      "Blödsinn"
-    ],
-    "alternativeWords": [
-      "Menkenken"
-    ],
+    "translations": ["Geschrei", "Umstände", "Blödsinn"],
+    "alternativeWords": ["Menkenken"],
     "infoText": "Lautspielerische Substantivierung von ›mengen‹.",
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "meschugge",
-    "translations": [
-      "verrückt",
-      "irre"
-    ],
+    "translations": ["verrückt", "irre"],
     "examples": [
       {
         "example": "Dein Jequatsche macht ma janz meschugge."
       }
     ],
-    "alternativeWords": [
-      "maschucke"
-    ],
+    "alternativeWords": ["maschucke"],
     "infoText": "Von jiddisch meschuggo.",
     "themen": [],
     "skipReason": "exists"
@@ -1039,75 +739,51 @@
   {
     "word": "Mief",
     "article": "der",
-    "translations": [
-      "schlechte Luft"
-    ],
+    "translations": ["schlechte Luft"],
     "infoText": "Ein Miefquirl ist ein Ventilator oder eine einen üblen Geruch verbreitende Person.",
-    "themen": [
-      "alltag-wohnen"
-    ],
+    "themen": ["alltag-wohnen"],
     "skipReason": "exists"
   },
   {
     "word": "Mischpoke",
     "article": "die",
-    "translations": [
-      "Verwandtschaft",
-      "Anhang"
-    ],
+    "translations": ["Verwandtschaft", "Anhang"],
     "examples": [
       {
         "example": "Jestern war schon wieder die janze Mischpoke da."
       }
     ],
     "infoText": "Von jiddisch mischpocho = Stamm, Sippe, Familie. Mit leicht negativer Konnotation.",
-    "themen": [
-      "beziehungen-soziales"
-    ],
+    "themen": ["beziehungen-soziales"],
     "skipReason": "exists"
   },
   {
     "word": "Molle",
     "article": "die",
-    "translations": [
-      "Glas Bier"
-    ],
+    "translations": ["Glas Bier"],
     "infoText": "Von niederdeutsch Mulde, Backtrog. Ein Mollenfriedhof ist ein dicker Bauch, eine Mollekühle eine kühle Molle. Eine Molle mit Kompott ist ein Glas Bier und ein Kurzer.",
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "Moppelkotze",
     "article": "die",
-    "translations": [
-      "Italienischer Salat"
-    ],
-    "themen": [
-      "essen-trinken"
-    ],
+    "translations": ["Italienischer Salat"],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "Muckefuck",
     "article": "der",
-    "translations": [
-      "Ersatzkaffee",
-      "dünner Kaffee"
-    ],
+    "translations": ["Ersatzkaffee", "dünner Kaffee"],
     "infoText": "Angeblich von den Hugenotten kreiert: Als Friedrich II. den Kaffeezoll drastisch erhöhte, verliehen die französischen Gärtner dem verdünnten Kaffee mit gerösteten Zichorienwurzeln eine tiefschwarze Farbe (frz. mocca faux = falscher Mokka). Tatsächlich eine Zusammensetzung aus Mucken = brauner Holzmulm und fuck = faul.",
-    "themen": [
-      "essen-trinken"
-    ],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "Mumpitz",
     "article": "der",
-    "translations": [
-      "Unsinn"
-    ],
+    "translations": ["Unsinn"],
     "infoText": "Von Mumme = Maske und Butze = Vogelscheuche, Schreckgestalt.",
     "themen": [],
     "skipReason": "exists"
@@ -1115,10 +791,7 @@
   {
     "word": "Mustopp",
     "article": "der",
-    "translations": [
-      "Marmeladentopf",
-      "Begriffsstutzigkeit (»aus’m Mustopp kommen«)"
-    ],
+    "translations": ["Marmeladentopf", "Begriffsstutzigkeit (»aus’m Mustopp kommen«)"],
     "examples": [
       {
         "example": "Du kommst wohl aus’m Mustopp.",
@@ -1132,21 +805,15 @@
   {
     "word": "Nakedei",
     "article": "der",
-    "translations": [
-      "nackte Person, insbesondere Kind"
-    ],
+    "translations": ["nackte Person, insbesondere Kind"],
     "infoText": "Von gotisch naqadei = Nacktheit. Nackedonien ist Mazedonien nachgebildet und meint einen Nacktbadestrand.",
-    "themen": [
-      "koerper"
-    ],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Neese",
     "article": "die",
-    "translations": [
-      "Nase"
-    ],
+    "translations": ["Nase"],
     "examples": [
       {
         "example": "Ham Se schon de Neese pleng?",
@@ -1157,70 +824,49 @@
       }
     ],
     "infoText": "Berlinische Aussprache von Nase. Ein Nasenfahrrad ist eine Brille, ein Nasenkneifer oder Nasenquetscher hingegen ein Sarg — letzterer kam kurz nach 1750 in Preußen auf als niedriger »Sarg der Armendirektion« mit flachem Deckel.",
-    "themen": [
-      "koerper"
-    ],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Nieselpriem",
     "article": "der",
-    "translations": [
-      "langweiliger Mensch"
-    ],
+    "translations": ["langweiliger Mensch"],
     "infoText": "Aus nieseln = leicht regnen und P(f)riem = Schusterahle.",
-    "themen": [
-      "schimpfwoerter-beleidigungen",
-      "charakter-eigenschaften"
-    ],
+    "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "nüscht",
-    "translations": [
-      "nichts"
-    ],
+    "translations": ["nichts"],
     "examples": [
       {
         "example": "Nüscht Jenauet is nich raus.",
         "explanation": "Etwas Genaues weiß man nicht."
       }
     ],
-    "alternativeWords": [
-      "nischt"
-    ],
+    "alternativeWords": ["nischt"],
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "Nuckelpinne",
     "article": "die",
-    "translations": [
-      "langsames Auto (herablassend)"
-    ],
+    "translations": ["langsames Auto (herablassend)"],
     "infoText": "Aus nuckeln = langsam sein und Pinne = Hebelarm am Steuerruder.",
-    "themen": [
-      "stadtleben"
-    ],
+    "themen": ["stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Nuttenbrosche",
     "article": "die",
-    "translations": [
-      "Brunnen auf dem Alexanderplatz"
-    ],
-    "themen": [
-      "orte-spitzname"
-    ],
+    "translations": ["Brunnen auf dem Alexanderplatz"],
+    "themen": ["orte-spitzname"],
     "skipReason": "exists"
   },
   {
     "word": "Palme",
     "article": "die",
-    "translations": [
-      "Erregung (in der Wendung »auf der Palme sein«)"
-    ],
+    "translations": ["Erregung (in der Wendung »auf der Palme sein«)"],
     "examples": [
       {
         "example": "Der is ja mächtig uff de Palme.",
@@ -1231,48 +877,34 @@
         "explanation": "Der macht mich verrückt."
       }
     ],
-    "themen": [
-      "gefuehle-emotionen"
-    ],
+    "themen": ["gefuehle-emotionen"],
     "skipReason": "exists"
   },
   {
     "word": "Pampe",
     "article": "die",
-    "translations": [
-      "weiche, breiartige Masse",
-      "schlechtes Essen"
-    ],
+    "translations": ["weiche, breiartige Masse", "schlechtes Essen"],
     "infoText": "Von niederdeutsch Pamp = Brei, Modder. Im 19. Jahrhundert für schlechtes Essen.",
-    "themen": [
-      "essen-trinken"
-    ],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "Pappe",
     "article": "die",
-    "translations": [
-      "Führerschein",
-      "Trabant"
-    ],
+    "translations": ["Führerschein", "Trabant"],
     "examples": [
       {
         "example": "Dit is nich von Pappe.",
         "explanation": "Das ist nicht schlecht."
       }
     ],
-    "themen": [
-      "stadtleben"
-    ],
+    "themen": ["stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Pelle",
     "article": "die",
-    "translations": [
-      "Haut"
-    ],
+    "translations": ["Haut"],
     "examples": [
       {
         "example": "Jeh ma bloß vonne Pelle.",
@@ -1284,30 +916,21 @@
       }
     ],
     "infoText": "Von lateinisch pella, niederländisch pel. Berliner Spezialität: Pellkartoffeln mit Leinöl. Verbreitung des Substantivs durch niederländische Siedler in der Mark.",
-    "themen": [
-      "koerper",
-      "essen-trinken"
-    ],
+    "themen": ["koerper", "essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "Penunse",
     "article": "die",
-    "translations": [
-      "Geld"
-    ],
+    "translations": ["Geld"],
     "infoText": "Polnisch (pieniądze = Geld).",
-    "themen": [
-      "geld"
-    ],
+    "themen": ["geld"],
     "skipReason": "exists"
   },
   {
     "word": "Pfannkuchen",
     "article": "der",
-    "translations": [
-      "Berliner (Gebäck)"
-    ],
+    "translations": ["Berliner (Gebäck)"],
     "examples": [
       {
         "example": "Pfannkuchen mit Beene.",
@@ -1315,69 +938,46 @@
       }
     ],
     "infoText": "Gebäck, das außerhalb Berlins als »Berliner« bekannt ist.",
-    "themen": [
-      "essen-trinken",
-      "stadtleben"
-    ],
+    "themen": ["essen-trinken", "stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "picheln",
-    "translations": [
-      "stark trinken"
-    ],
+    "translations": ["stark trinken"],
     "infoText": "Niederdeutsch/obersächsisch. Ursprünglich nach Pegeln (Eichzeichen) trinken, vgl. niederdeutsch ›enen goden Pegel supen‹.",
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "piekfein",
-    "translations": [
-      "sehr fein",
-      "auserlesen"
-    ],
+    "translations": ["sehr fein", "auserlesen"],
     "infoText": "Leitet sich nicht aus dem Jiddischen ab, sondern von der niederdeutschen Bezeichnung ›puk, pük‹, ursprünglich für eine feine niederländische Tuchsorte.",
-    "themen": [
-      "charakter-eigenschaften"
-    ],
+    "themen": ["charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Piepel",
     "article": "der",
-    "translations": [
-      "kleiner Junge",
-      "Penis"
-    ],
+    "translations": ["kleiner Junge", "Penis"],
     "examples": [
       {
         "example": "Kinderschokolade biegt den Piepel gerade."
       }
     ],
-    "themen": [
-      "koerper"
-    ],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Pinte",
     "article": "die",
-    "translations": [
-      "Kneipe"
-    ],
+    "translations": ["Kneipe"],
     "infoText": "Von lateinisch pincta = Gemaltes, wohl das gemalte Eichzeichen. Ursprünglich Flüssigkeitsmaß, später Wirtshauszeichen.",
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "pladdern",
-    "translations": [
-      "stark regnen"
-    ],
+    "translations": ["stark regnen"],
     "infoText": "Von niederdeutsch pladdern, pleddern = plätschern, in Strömen regnen.",
     "themen": [],
     "skipReason": "exists"
@@ -1385,33 +985,22 @@
   {
     "word": "Plumpe",
     "article": "die",
-    "translations": [
-      "Gesundbrunnen (Stadtteil)",
-      "Schwengelbrunnen"
-    ],
+    "translations": ["Gesundbrunnen (Stadtteil)", "Schwengelbrunnen"],
     "infoText": "Früher für Straßen-/Schwengelbrunnen; bezeichnet den Stadtteil Gesundbrunnen im Bezirk Wedding.",
-    "themen": [
-      "orte-spitzname"
-    ],
+    "themen": ["orte-spitzname"],
     "skipReason": "exists"
   },
   {
     "word": "Popelfahne",
     "article": "die",
-    "translations": [
-      "Taschentuch"
-    ],
-    "themen": [
-      "alltag-wohnen"
-    ],
+    "translations": ["Taschentuch"],
+    "themen": ["alltag-wohnen"],
     "skipReason": "exists"
   },
   {
     "word": "Pulle",
     "article": "die",
-    "translations": [
-      "Flasche"
-    ],
+    "translations": ["Flasche"],
     "examples": [
       {
         "example": "’ne Pulle eindreh’n.",
@@ -1419,60 +1008,39 @@
       }
     ],
     "infoText": "Von lateinisch ampulla.",
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "Quadratlatschen",
-    "translations": [
-      "große, ungeschlachte Füße"
-    ],
-    "themen": [
-      "koerper"
-    ],
+    "translations": ["große, ungeschlachte Füße"],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Qualmtüte",
     "article": "die",
-    "translations": [
-      "starker Raucher",
-      "Schwätzer"
-    ],
-    "themen": [
-      "schimpfwoerter-beleidigungen"
-    ],
+    "translations": ["starker Raucher", "Schwätzer"],
+    "themen": ["schimpfwoerter-beleidigungen"],
     "skipReason": "exists"
   },
   {
     "word": "Quanten",
-    "translations": [
-      "Füße",
-      "Schuhe"
-    ],
+    "translations": ["Füße", "Schuhe"],
     "infoText": "Hängt vermutlich zusammen mit Quantum, von lateinisch quantus = groß.",
-    "themen": [
-      "koerper"
-    ],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "quasseln",
-    "translations": [
-      "ununterbrochen reden"
-    ],
+    "translations": ["ununterbrochen reden"],
     "infoText": "Von niederdeutsch quasseln, dwasseln = plappern, schwatzen. Wer am Telefon quasselt, hängt an der Quasselstrippe oder ist eine selbige.",
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "quatschen",
-    "translations": [
-      "Unsinn reden",
-      "viel, ununterbrochen reden"
-    ],
+    "translations": ["Unsinn reden", "viel, ununterbrochen reden"],
     "examples": [
       {
         "example": "Dit is ja Quatsch mit Soße.",
@@ -1486,10 +1054,7 @@
   {
     "word": "Rabatz",
     "article": "der",
-    "translations": [
-      "Krach",
-      "Unruhe"
-    ],
+    "translations": ["Krach", "Unruhe"],
     "infoText": "Als Verb rabatzen = herumtoben, Unruhe stiften. Vielleicht von polnisch rąbać = hauen.",
     "themen": [],
     "skipReason": "exists"
@@ -1497,44 +1062,28 @@
   {
     "word": "Rachenputzer",
     "article": "der",
-    "translations": [
-      "scharfes Getränk"
-    ],
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "translations": ["scharfes Getränk"],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "Raffke",
     "article": "der",
-    "translations": [
-      "Neureicher"
-    ],
-    "alternativeWords": [
-      "Raffzahn"
-    ],
+    "translations": ["Neureicher"],
+    "alternativeWords": ["Raffzahn"],
     "infoText": "Jemand, der in kurzer Zeit viel Geld zusammengerafft hat. In Berlin um 1920 gebildete Bezeichnung, die auf mittelhochdeutsch raffen = eilig an sich reißen zurückgeht.",
-    "themen": [
-      "geld",
-      "schimpfwoerter-beleidigungen"
-    ],
+    "themen": ["geld", "schimpfwoerter-beleidigungen"],
     "skipReason": "exists"
   },
   {
     "word": "ramponieren",
-    "translations": [
-      "beschädigen"
-    ],
+    "translations": ["beschädigen"],
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "rin",
-    "translations": [
-      "herein",
-      "hinein"
-    ],
+    "translations": ["herein", "hinein"],
     "examples": [
       {
         "example": "Immer rin in’t Vergnügen."
@@ -1547,56 +1096,40 @@
   {
     "word": "Reitstall",
     "article": "der",
-    "translations": [
-      "sehr großes Zimmer"
-    ],
-    "themen": [
-      "alltag-wohnen"
-    ],
+    "translations": ["sehr großes Zimmer"],
+    "themen": ["alltag-wohnen"],
     "skipReason": "exists"
   },
   {
     "word": "Remmidemmi",
     "article": "das",
-    "translations": [
-      "lautes Vergnügen",
-      "Krach",
-      "Durcheinander"
-    ],
+    "translations": ["lautes Vergnügen", "Krach", "Durcheinander"],
     "examples": [
       {
         "example": "Mach nicht so’n Remmidemmi!"
       }
     ],
     "infoText": "Fußt wahrscheinlich auf der schallnachahmenden Bezeichnung ›Rammerdammer‹ für den Steinmetz.",
-    "themen": [
-      "unterhaltung-freizeit"
-    ],
+    "themen": ["unterhaltung-freizeit"],
     "skipReason": "exists"
   },
   {
     "word": "Retourkutsche",
     "article": "die",
-    "translations": [
-      "schlagfertige Erwiderung eines Vorwurfs"
-    ],
+    "translations": ["schlagfertige Erwiderung eines Vorwurfs"],
     "examples": [
       {
         "example": "Dit war ’ne Retourkutsche."
       }
     ],
     "infoText": "Leitet sich ab von der für die Hin- und Rückfahrt benutzten Kutsche.",
-    "themen": [
-      "beziehungen-soziales"
-    ],
+    "themen": ["beziehungen-soziales"],
     "skipReason": "exists"
   },
   {
     "word": "Riecher",
     "article": "der",
-    "translations": [
-      "Gespür"
-    ],
+    "translations": ["Gespür"],
     "examples": [
       {
         "example": "Der hat den richt’jen Riecher jehabt.",
@@ -1609,93 +1142,63 @@
   {
     "word": "Ringelpietz mit Anfassen",
     "article": "der",
-    "translations": [
-      "Tanzvergnügen"
-    ],
+    "translations": ["Tanzvergnügen"],
     "infoText": "Aus ringeln und slawisch -pie(t)z = singen.",
-    "themen": [
-      "unterhaltung-freizeit"
-    ],
+    "themen": ["unterhaltung-freizeit"],
     "skipReason": "exists"
   },
   {
     "word": "Rotz",
     "article": "der",
-    "translations": [
-      "Nasenschleim (produktiv in Schimpfwörtern)"
-    ],
+    "translations": ["Nasenschleim (produktiv in Schimpfwörtern)"],
     "infoText": "Von althochdeutsch (h)roz = Nasenschleim. Rotzgöre = freches Kind, Rotzbremse = Schnurrbart, Rotzhobel = Mundharmonika, Rotzkocher = Pfeife, Rotzneese = triefende Nase bzw. Kind mit Schnoddernase. Wer sich rotzig verhält, ist frech.",
-    "themen": [
-      "schimpfwoerter-beleidigungen",
-      "koerper"
-    ],
+    "themen": ["schimpfwoerter-beleidigungen", "koerper"],
     "skipReason": "exists"
   },
   {
     "word": "saftig",
-    "translations": [
-      "derb",
-      "hoch (von Preisen)"
-    ],
+    "translations": ["derb", "hoch (von Preisen)"],
     "examples": [
       {
         "example": "’n saft’jer Preis.",
         "explanation": "Ein hoher Preis."
       }
     ],
-    "themen": [
-      "geld"
-    ],
+    "themen": ["geld"],
     "skipReason": "exists"
   },
   {
     "word": "Saftladen",
     "article": "der",
-    "translations": [
-      "miese Kneipe",
-      "schlecht geführter Laden"
-    ],
+    "translations": ["miese Kneipe", "schlecht geführter Laden"],
     "infoText": "Ursprünglich für eine Apotheke wegen des Verkaufs von Kräutersäften.",
-    "themen": [
-      "alkohol-kneipe",
-      "stadtleben"
-    ],
+    "themen": ["alkohol-kneipe", "stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Schale",
     "article": "die",
-    "translations": [
-      "feine Kleidung (in der Wendung »sich in Schale schmeißen«)"
-    ],
+    "translations": ["feine Kleidung (in der Wendung »sich in Schale schmeißen«)"],
     "examples": [
       {
         "example": "Der hat sich in Schale jeschmiss’n.",
         "explanation": "Er hat sich feingemacht, schick angezogen."
       }
     ],
-    "themen": [
-      "charakter-eigenschaften"
-    ],
+    "themen": ["charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Schieleisen",
     "article": "das",
-    "translations": [
-      "Brille"
-    ],
-    "themen": [
-      "koerper"
-    ],
+    "translations": ["Brille"],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Schlamassel",
     "article": "der",
-    "translations": [
-      "verfahrene, schwierige Situation"
-    ],
+    "translations": ["verfahrene, schwierige Situation"],
     "examples": [
       {
         "example": "Da ham wa wieder den Schlamassel!"
@@ -1708,96 +1211,61 @@
   {
     "word": "Schlangenfraß",
     "article": "der",
-    "translations": [
-      "schlechtes Essen"
-    ],
-    "themen": [
-      "essen-trinken"
-    ],
+    "translations": ["schlechtes Essen"],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "schmulen",
-    "translations": [
-      "verstohlen blicken",
-      "in der Schule abgucken"
-    ],
+    "translations": ["verstohlen blicken", "in der Schule abgucken"],
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "Schnäpperken",
     "article": "das",
-    "translations": [
-      "Glas Schnaps"
-    ],
+    "translations": ["Glas Schnaps"],
     "infoText": "Von schnäppern = ein Glas Schnaps trinken, substantiviert durch die niederdeutsche Endung -ken.",
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "Schnauze",
     "article": "die",
-    "translations": [
-      "Mund (Schimpfwort)"
-    ],
+    "translations": ["Mund (Schimpfwort)"],
     "examples": [
       {
         "example": "Ick polier’ dir gleich de Schnauze!"
       }
     ],
     "infoText": "Eine frisierte Schnauze bezeichnet eine gewollt vornehme Sprechweise.",
-    "themen": [
-      "koerper",
-      "schimpfwoerter-beleidigungen",
-      "stadtleben"
-    ],
+    "themen": ["koerper", "schimpfwoerter-beleidigungen", "stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Schnelle",
     "article": "die",
-    "translations": [
-      "schnell (in der Wendung »uff de Schnelle«)"
-    ],
+    "translations": ["schnell (in der Wendung »uff de Schnelle«)"],
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "schnieke",
-    "translations": [
-      "fein",
-      "elegant",
-      "schmuck",
-      "schneidig"
-    ],
+    "translations": ["fein", "elegant", "schmuck", "schneidig"],
     "infoText": "Von niederdeutsch snigger, snicker = munter, hübsch, zierlich. Überhaupt Ausdruck des Wohlgefallens.",
-    "themen": [
-      "charakter-eigenschaften"
-    ],
+    "themen": ["charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "schnoddrig",
-    "translations": [
-      "frech",
-      "vorlaut"
-    ],
+    "translations": ["frech", "vorlaut"],
     "infoText": "Von niederdeutsch snodder = Nasenschleim. Bezeichnet jemanden, der noch so jung ist, dass ihm der Nasenschleim aus der Nase läuft, und dem es noch gar nicht zukommt, mitzureden.",
-    "themen": [
-      "charakter-eigenschaften"
-    ],
+    "themen": ["charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "schnuppe",
-    "translations": [
-      "gleichgültig",
-      "egal",
-      "einerlei"
-    ],
+    "translations": ["gleichgültig", "egal", "einerlei"],
     "examples": [
       {
         "example": "Dit is’ ma schnuppe!"
@@ -1809,10 +1277,7 @@
   },
   {
     "word": "schnurz",
-    "translations": [
-      "gleichgültig",
-      "egal"
-    ],
+    "translations": ["gleichgültig", "egal"],
     "examples": [
       {
         "example": "Dit is ma schnurz und piepe.",
@@ -1826,148 +1291,94 @@
   {
     "word": "Schrippe",
     "article": "die",
-    "translations": [
-      "Brötchen (Berliner Spezialität)"
-    ],
+    "translations": ["Brötchen (Berliner Spezialität)"],
     "infoText": "Eine verzauberte oder gebratene Schrippe bezeichnet die Bulette, ebenso Schrippe im eigenen Saft; »’ne olle Schrippe« bezieht sich mitunter auf eine Frau. Vgl. frühneuhochdeutsch ›schripfen‹.",
-    "themen": [
-      "essen-trinken",
-      "stadtleben"
-    ],
+    "themen": ["essen-trinken", "stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Schusterjunge",
     "article": "der",
-    "translations": [
-      "Roggenmehlbrötchen"
-    ],
+    "translations": ["Roggenmehlbrötchen"],
     "examples": [
       {
         "example": "Es regnet Schusterjungen.",
         "explanation": "Es regnet sehr stark."
       }
     ],
-    "themen": [
-      "essen-trinken"
-    ],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "Schwelle",
     "article": "die",
-    "translations": [
-      "Schwester"
-    ],
-    "themen": [
-      "beziehungen-soziales"
-    ],
+    "translations": ["Schwester"],
+    "themen": ["beziehungen-soziales"],
     "skipReason": "exists"
   },
   {
     "word": "Sechser",
     "article": "der",
-    "translations": [
-      "5-Pfennig-Stück"
-    ],
+    "translations": ["5-Pfennig-Stück"],
     "infoText": "Leitet sich ab von einer Münze, die früher sechs Pfennige wert war.",
-    "themen": [
-      "geld"
-    ],
+    "themen": ["geld"],
     "skipReason": "exists"
   },
   {
     "word": "spachteln",
-    "translations": [
-      "viel und mit Genuss essen"
-    ],
-    "alternativeWords": [
-      "einspachteln"
-    ],
-    "themen": [
-      "essen-trinken"
-    ],
+    "translations": ["viel und mit Genuss essen"],
+    "alternativeWords": ["einspachteln"],
+    "themen": ["essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "spack",
-    "translations": [
-      "schmal",
-      "elend",
-      "dünn"
-    ],
+    "translations": ["schmal", "elend", "dünn"],
     "infoText": "Niederdeutsch = ausgedörrt, ausgetrocknet.",
-    "themen": [
-      "koerper"
-    ],
+    "themen": ["koerper"],
     "skipReason": "exists"
   },
   {
     "word": "Stampe",
     "article": "die",
-    "translations": [
-      "Kneipe"
-    ],
+    "translations": ["Kneipe"],
     "infoText": "Von französisch estaminet.",
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "Stippi",
     "article": "der",
-    "translations": [
-      "kleiner Junge"
-    ],
-    "themen": [
-      "beziehungen-soziales"
-    ],
+    "translations": ["kleiner Junge"],
+    "themen": ["beziehungen-soziales"],
     "skipReason": "exists"
   },
   {
     "word": "Stulle",
     "article": "die",
-    "translations": [
-      "Schnitte Brot"
-    ],
+    "translations": ["Schnitte Brot"],
     "infoText": "Ursprünglich ein kleiner Brotlaib. Eine Klappstulle bezeichnet zwei aufeinandergelegte Stullen. Die erste Berliner Laubenkolonie bekam den Namen Trockene Stulle. Fußt auf niederländisch stul = Brocken, Stück.",
-    "themen": [
-      "essen-trinken",
-      "stadtleben"
-    ],
+    "themen": ["essen-trinken", "stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "sülzen",
-    "translations": [
-      "nörgeln",
-      "maulen",
-      "jemandem in den Ohren liegen"
-    ],
+    "translations": ["nörgeln", "maulen", "jemandem in den Ohren liegen"],
     "infoText": "Eine Sülzneese ist ein Nörgler.",
-    "themen": [
-      "charakter-eigenschaften"
-    ],
+    "themen": ["charakter-eigenschaften"],
     "skipReason": "exists"
   },
   {
     "word": "Tankstelle",
     "article": "die",
-    "translations": [
-      "Kneipe"
-    ],
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "translations": ["Kneipe"],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "Töle",
     "article": "die",
-    "translations": [
-      "kläffender Hund"
-    ],
+    "translations": ["kläffender Hund"],
     "infoText": "Niederdeutsch.",
     "themen": [],
     "skipReason": "exists"
@@ -1975,26 +1386,19 @@
   {
     "word": "Tretmine",
     "article": "die",
-    "translations": [
-      "Hundekot auf dem Bürgersteig",
-      "Bulette"
-    ],
+    "translations": ["Hundekot auf dem Bürgersteig", "Bulette"],
     "examples": [
       {
         "example": "Achtung, Tretmine!",
         "explanation": "Pass auf, da liegt Hundekot."
       }
     ],
-    "themen": [
-      "stadtleben"
-    ],
+    "themen": ["stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "tuckeln",
-    "translations": [
-      "langsam fahren"
-    ],
+    "translations": ["langsam fahren"],
     "examples": [
       {
         "example": "Kiek mal, da kommt Kutte anjetuckelt!"
@@ -2006,129 +1410,87 @@
   },
   {
     "word": "verbimsen",
-    "translations": [
-      "verhauen"
-    ],
+    "translations": ["verhauen"],
     "themen": [],
     "skipReason": "exists"
   },
   {
     "word": "wa",
-    "translations": [
-      "nicht wahr"
-    ],
+    "translations": ["nicht wahr"],
     "infoText": "Hat eine ähnliche Funktion wie in anderen Dialekten ›ne‹ oder ›gel‹ und im Amerikanischen ›okay‹.",
-    "themen": [
-      "stadtleben"
-    ],
+    "themen": ["stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Wampe",
     "article": "die",
-    "translations": [
-      "Bauch"
-    ],
+    "translations": ["Bauch"],
     "examples": [
       {
         "example": "Sich die Wampe vollschlagen.",
         "explanation": "Sich vollessen."
       }
     ],
-    "themen": [
-      "koerper",
-      "essen-trinken"
-    ],
+    "themen": ["koerper", "essen-trinken"],
     "skipReason": "exists"
   },
   {
     "word": "Wonneproppen",
     "article": "der",
-    "translations": [
-      "strahlendes Baby",
-      "mollige Blondine"
-    ],
-    "themen": [
-      "beziehungen-soziales"
-    ],
+    "translations": ["strahlendes Baby", "mollige Blondine"],
+    "themen": ["beziehungen-soziales"],
     "skipReason": "exists"
   },
   {
     "word": "Zacken",
     "article": "der",
-    "translations": [
-      "Stück Brot",
-      "Rausch (»’nen Zacken in der Krone haben«)"
-    ],
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "translations": ["Stück Brot", "Rausch (»’nen Zacken in der Krone haben«)"],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   },
   {
     "word": "Zahnklempner",
     "article": "der",
-    "translations": [
-      "Zahnarzt"
-    ],
-    "themen": [
-      "koerper",
-      "stadtleben"
-    ],
+    "translations": ["Zahnarzt"],
+    "themen": ["koerper", "stadtleben"],
     "skipReason": "exists"
   },
   {
     "word": "Zaster",
     "article": "der",
-    "translations": [
-      "Geld"
-    ],
-    "themen": [
-      "geld"
-    ],
+    "translations": ["Geld"],
+    "themen": ["geld"],
     "skipReason": "exists"
   },
   {
     "word": "Zerquetschte",
-    "translations": [
-      "ein paar Pfennige (in der Wendung)"
-    ],
+    "translations": ["ein paar Pfennige (in der Wendung)"],
     "examples": [
       {
         "example": "Zwanzig Mark und ’n paar Zerquetschte."
       }
     ],
-    "themen": [
-      "geld"
-    ],
+    "themen": ["geld"],
     "skipReason": "exists"
   },
   {
     "word": "Zibbe",
     "article": "die",
-    "translations": [
-      "Frau (abfällig)"
-    ],
+    "translations": ["Frau (abfällig)"],
     "infoText": "Eigentlich Ziege.",
-    "themen": [
-      "schimpfwoerter-beleidigungen"
-    ],
+    "themen": ["schimpfwoerter-beleidigungen"],
     "skipReason": "exists"
   },
   {
     "word": "zwitschern",
-    "translations": [
-      "trinken"
-    ],
+    "translations": ["trinken"],
     "examples": [
       {
         "example": "Een’ zwitschern jeh’n.",
         "explanation": "Einen Schnaps trinken gehen."
       }
     ],
-    "themen": [
-      "alkohol-kneipe"
-    ],
+    "themen": ["alkohol-kneipe"],
     "skipReason": "exists"
   }
 ]

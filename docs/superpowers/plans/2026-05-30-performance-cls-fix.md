@@ -10,12 +10,12 @@
 
 Performance trace (2026-05-30) revealed:
 
-| Metric | Value | Threshold |
-|---|---|---|
-| CLS (field p75) | 0.20 | >0.25 = Bad |
-| CLS (Lighthouse mobile) | 0.33 | >0.25 = Bad |
-| Max critical path latency | 500ms | — |
-| LCP (field p75) | 1,119ms | ≤2,500ms = Good |
+| Metric                    | Value   | Threshold       |
+| ------------------------- | ------- | --------------- |
+| CLS (field p75)           | 0.20    | >0.25 = Bad     |
+| CLS (Lighthouse mobile)   | 0.33    | >0.25 = Bad     |
+| Max critical path latency | 500ms   | —               |
+| LCP (field p75)           | 1,119ms | ≤2,500ms = Good |
 
 Three root causes identified:
 
@@ -55,6 +55,7 @@ File: `src/components/BaseHead.astro` — after existing font preloads (line 32)
 ```
 
 Verify existing preloads follow same pattern at lines 29–32:
+
 ```astro
 <link rel="preload" href="/fonts/BerlinerRegular.woff2" as="font" type="font/woff2" crossorigin />
 ```
@@ -66,6 +67,7 @@ Verify existing preloads follow same pattern at lines 29–32:
 `font-display: block` = invisible text (FOIT) → no CLS but bad UX.
 
 In `src/styles/base/_typo.scss`:
+
 - **Berlin 400 regular + italic** (body text, lines 11–24): change to `font-display: optional`
 - **BerlinerRegular** (display/heading font, line 4–10): keep `swap` or change to `optional` — test visually
 - **Berlin 700 Bold + BerlinX 900** (headings, lines 25–38): change to `optional`
@@ -73,6 +75,7 @@ In `src/styles/base/_typo.scss`:
 > **Note:** `optional` means if the font misses the 100ms window on first load, the fallback is used for that page view. On repeat visits the font is cached and loads instantly. This is the recommended CLS fix for web fonts.
 
 **Verification:**
+
 - Run `pnpm build && pnpm server:pages`, open in Chrome DevTools → Performance tab → confirm no layout shifts during font load
 - Check that font still renders (not invisible) on first load in incognito
 
@@ -97,9 +100,10 @@ Wrap `<ColorModeToggle client:only="vue" />` in a container with fixed dimension
 ```
 
 Or add the class to the parent element that already wraps it and add CSS:
+
 ```scss
 .color-mode-toggle-slot {
-  width: 40px;   // match actual button dimensions
+  width: 40px; // match actual button dimensions
   height: 40px;
   flex-shrink: 0;
 }
@@ -116,6 +120,7 @@ Check `src/components/header/MainHeader.astro` for the parent element wrapping `
 `src/components/SetColorMode.astro` (current branch, modified) injects a blocking inline script that sets `data-theme` on `<html>` before paint. Confirm it's included in `BaseHead.astro` or before any layout-affecting components. This prevents color-mode-driven repaints.
 
 **Verification:**
+
 - Chrome DevTools → Performance → record reload → check "Layout Shift" events in timeline
 - Confirm header height stays constant from initial paint through hydration
 - Field CLS target: ≤0.10
@@ -131,19 +136,22 @@ Check `src/components/header/MainHeader.astro` for the parent element wrapping `
 File: `src/components/Modal.vue` — line 45.
 
 **Before:**
+
 ```js
-import ModalCloseButton from "@/components/ModalCloseButton.vue"
+import ModalCloseButton from "@/components/ModalCloseButton.vue";
 ```
 
 **After:**
+
 ```js
-import { defineAsyncComponent } from "vue"
-const ModalCloseButton = defineAsyncComponent(() => import("@/components/ModalCloseButton.vue"))
+import { defineAsyncComponent } from "vue";
+const ModalCloseButton = defineAsyncComponent(() => import("@/components/ModalCloseButton.vue"));
 ```
 
 `ModalCloseButton` is only used inside the modal overlay — it never renders until the modal opens. Async import is safe here and breaks the static chain so Rollup/Vite splits it into a separate chunk that loads on demand.
 
 **Verification:**
+
 - `pnpm build` — confirm `ModalCloseButton` is no longer listed as a static dependency of `Modal` chunk in the Rollup output
 - Open page, open browser Network tab, verify `ModalCloseButton.*.js` does NOT load on page load (only loads when modal first opens)
 - Open a modal → confirm ModalCloseButton renders correctly
@@ -160,20 +168,24 @@ const ModalCloseButton = defineAsyncComponent(() => import("@/components/ModalCl
 File: `src/components/BaseHead.astro` — line 33.
 
 **Before:**
+
 ```html
-<link href='//cms.berliner-schnauze.wtf' rel='preconnect' />
+<link href="//cms.berliner-schnauze.wtf" rel="preconnect" />
 ```
 
 **After:**
+
 ```html
-<link href='https://cms.berliner-schnauze.wtf' rel='preconnect' crossorigin />
+<link href="https://cms.berliner-schnauze.wtf" rel="preconnect" crossorigin />
 ```
 
 For the duplicate `Link:` response header from the CMS server — this comes from WordPress, not from this repo. Options:
+
 - If the CMS is self-managed: remove the `Link: preconnect` header from the WordPress server config / plugin
 - If not accessible: acceptable to leave (browser deduplicates same-origin preconnects)
 
 **Verification:**
+
 - Chrome DevTools → Network tab → filter "Initiator: preconnect" → confirm only one connection to `cms.berliner-schnauze.wtf`
 - `pnpm build && pnpm server:pages` → view source → confirm `href='https://...'` and `crossorigin` present
 
@@ -198,12 +210,14 @@ pnpm server:pages
 ```
 
 Then in Chrome DevTools / Chrome DevTools MCP:
+
 1. Performance trace on `https://berliner-schnauze.wtf/` (after deploying) — confirm CLS < 0.10
 2. Lighthouse mobile audit — confirm score maintained (Accessibility/SEO/BP 100)
 3. Network tab — confirm `ModalCloseButton.*.js` absent on initial load
 4. Network tab — single preconnect to `cms.berliner-schnauze.wtf`
 
 **Acceptance criteria:**
+
 - [ ] Field CLS ≤ 0.10 (may take days to show in CrUX — lab CLS should be 0.00 on mobile Lighthouse)
 - [ ] Lighthouse mobile CLS score ≥ 0.9 (currently 0.35)
 - [ ] `ModalCloseButton.js` not in initial page load waterfall

@@ -27,7 +27,12 @@ export const fetchGermanArtikel = async (word: string): Promise<GermanArtikel | 
     });
 
     if (!response.ok) {
-      console.error("[wiktionaryApi] HTTP error for word:", word, response.status, response.statusText);
+      console.error(
+        "[wiktionaryApi] HTTP error for word:",
+        word,
+        response.status,
+        response.statusText,
+      );
       return null;
     }
 

@@ -1,6 +1,7 @@
+import { wpGraphqlClient } from "@services/wpGraphqlClient";
+
 import { graphql } from "@/gql";
 import { CompanyFundingDocument } from "@/gql/graphql.ts";
-import { wpGraphqlClient } from "@services/wpGraphqlClient";
 
 export interface FundingPlatform {
   link: string;

@@ -1,7 +1,9 @@
-import { syncTooltipArrow, vTooltip } from "@/directives/tooltip";
-import type { TooltipValue } from "@/directives/tooltip";
 import { mount, type VueWrapper } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import type { TooltipValue } from "@/directives/tooltip";
+
+import { syncTooltipArrow, vTooltip } from "@/directives/tooltip";
 
 const mockShowPopover = vi.fn();
 const mockHidePopover = vi.fn();
@@ -13,7 +15,11 @@ beforeEach(() => {
   HTMLElement.prototype.hidePopover = mockHidePopover;
 });
 afterEach(() => {
-  mountedWrappers.forEach((w) => { try { w.unmount(); } catch {} });
+  mountedWrappers.forEach((w) => {
+    try {
+      w.unmount();
+    } catch {}
+  });
   mountedWrappers.length = 0;
   vi.clearAllMocks();
   vi.useRealTimers();
@@ -338,7 +344,12 @@ describe("vTooltip directive", () => {
   it("updated uses binding.value as fallback when oldValue is undefined (covers line 237 ?? binding.value)", () => {
     const wrapper = mountWithDirective("Initial");
     const btn = wrapper.find("button").element;
-    vTooltip.updated!(btn, { value: "Updated", oldValue: undefined } as any, null as any, null as any);
+    vTooltip.updated!(
+      btn,
+      { value: "Updated", oldValue: undefined } as any,
+      null as any,
+      null as any,
+    );
     // Panel may not be in body yet — access via directive state
     const panel = getStatePanel(wrapper);
     expect(panel?.textContent).toBe("Updated");
@@ -348,7 +359,14 @@ describe("vTooltip directive", () => {
 function makeEl(rect: Partial<DOMRect>): HTMLElement {
   const el = document.createElement("div");
   vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
-    top: 0, left: 0, bottom: 0, right: 0, width: 0, height: 0, x: 0, y: 0,
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
     toJSON: () => ({}),
     ...rect,
   } as DOMRect);

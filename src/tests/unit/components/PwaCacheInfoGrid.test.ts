@@ -52,7 +52,11 @@ describe("PwaCacheInfoGrid", () => {
 
   it("shows quota progressbar when storageQuota provided", () => {
     const wrapper = mount(PwaCacheInfoGrid, {
-      props: { ...defaultProps, storageQuota: { usedBytes: 500, quotaBytes: 1000 }, storageQuotaPercent: 50 },
+      props: {
+        ...defaultProps,
+        storageQuota: { usedBytes: 500, quotaBytes: 1000 },
+        storageQuotaPercent: 50,
+      },
     });
     const bar = wrapper.find("[role='progressbar']");
     expect(bar.exists()).toBe(true);

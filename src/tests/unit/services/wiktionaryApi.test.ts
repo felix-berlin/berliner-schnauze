@@ -8,7 +8,9 @@ function makeResponse(ok: boolean, body: unknown): Response {
 }
 
 function makeWiktionaryBody(genus: string | null): unknown {
-  const content = genus ? `{{Deutsch Substantiv Übersicht\n|Genus=${genus}\n}}` : "{{Deutsch Verb}}";
+  const content = genus
+    ? `{{Deutsch Substantiv Übersicht\n|Genus=${genus}\n}}`
+    : "{{Deutsch Verb}}";
   return {
     query: {
       pages: {
@@ -92,10 +94,13 @@ describe("fetchGermanArtikel", () => {
 
   it("returns null on JSON parse failure", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockRejectedValue(new SyntaxError("Unexpected token")),
-    }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockRejectedValue(new SyntaxError("Unexpected token")),
+      }),
+    );
     const { fetchGermanArtikel } = await import("@services/wiktionaryApi.ts");
     expect(await fetchGermanArtikel("Hund")).toBeNull();
     expect(consoleSpy).toHaveBeenCalledOnce();
@@ -119,7 +124,9 @@ describe("fetchGermanArtikel", () => {
     const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
     let rejectFetch!: (err: unknown) => void;
-    const pending = new Promise<never>((_, reject) => { rejectFetch = reject; });
+    const pending = new Promise<never>((_, reject) => {
+      rejectFetch = reject;
+    });
     vi.stubGlobal("fetch", vi.fn().mockReturnValue(pending));
 
     const { fetchGermanArtikel } = await import("@services/wiktionaryApi.ts");

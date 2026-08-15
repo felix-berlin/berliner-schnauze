@@ -66,9 +66,15 @@
                 <div class="c-pwa-cache__url" :title="item.url">
                   <span class="c-pwa-cache__url-path">{{ formatUrl(item.url) }}</span>
                   <span class="c-pwa-cache__url-meta">
-                    <span v-if="item.size !== null" class="c-pwa-cache__url-size">{{ formatBytes(item.size) }}</span>
-                    <span v-if="item.contentType" class="c-pwa-cache__url-type">{{ formatContentType(item.contentType) }}</span>
-                    <span v-if="item.date" class="c-pwa-cache__url-age">{{ formatRelativeTime(item.date) }}</span>
+                    <span v-if="item.size !== null" class="c-pwa-cache__url-size">{{
+                      formatBytes(item.size)
+                    }}</span>
+                    <span v-if="item.contentType" class="c-pwa-cache__url-type">{{
+                      formatContentType(item.contentType)
+                    }}</span>
+                    <span v-if="item.date" class="c-pwa-cache__url-age">{{
+                      formatRelativeTime(item.date)
+                    }}</span>
                   </span>
                 </div>
               </template>
@@ -89,7 +95,11 @@ import {
   AccordionTrigger,
   BaseAccordion,
 } from "@components/accordion";
-import { CONTENT_TYPE_TO_EXT, formatBytes, getBucketDisplayName } from "@composables/useCacheStorage";
+import {
+  CONTENT_TYPE_TO_EXT,
+  formatBytes,
+  getBucketDisplayName,
+} from "@composables/useCacheStorage";
 import { VList } from "virtua/vue";
 import { defineAsyncComponent } from "vue";
 

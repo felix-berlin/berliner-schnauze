@@ -21,24 +21,26 @@
 
 ## File Map
 
-| File | Action | Responsibility |
-|---|---|---|
-| `src/stores/wordList.ts` | Modify | Remove `search` from `WordList` type + `$wordSearch`; add `$searchQuery` atom; update `$oramaSearchResults`, `searchLength`, `setSearch`, `resetAll` |
-| `src/composable/useSearchQuerySync.ts` | Create | URL ↔ `$searchQuery` bidirectional sync with Astro page-load support |
-| `src/components/SearchWords.vue` | Modify | Remove manual URL logic; use composable + writable computed ref over `$searchQuery` |
-| `src/tests/unit/stores/wordList.test.ts` | Modify | Update `search`-related assertions to use `$searchQuery` |
-| `src/tests/unit/composable/useSearchQuerySync.test.ts` | Create | Full composable unit tests |
-| `src/tests/unit/components/SearchWords.test.ts` | Modify | Replace `useVModel` mock with `$searchQuery` mock |
+| File                                                   | Action | Responsibility                                                                                                                                       |
+| ------------------------------------------------------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/stores/wordList.ts`                               | Modify | Remove `search` from `WordList` type + `$wordSearch`; add `$searchQuery` atom; update `$oramaSearchResults`, `searchLength`, `setSearch`, `resetAll` |
+| `src/composable/useSearchQuerySync.ts`                 | Create | URL ↔ `$searchQuery` bidirectional sync with Astro page-load support                                                                                 |
+| `src/components/SearchWords.vue`                       | Modify | Remove manual URL logic; use composable + writable computed ref over `$searchQuery`                                                                  |
+| `src/tests/unit/stores/wordList.test.ts`               | Modify | Update `search`-related assertions to use `$searchQuery`                                                                                             |
+| `src/tests/unit/composable/useSearchQuerySync.test.ts` | Create | Full composable unit tests                                                                                                                           |
+| `src/tests/unit/components/SearchWords.test.ts`        | Modify | Replace `useVModel` mock with `$searchQuery` mock                                                                                                    |
 
 ---
 
 ### Task 1: Refactor `wordList.ts` — extract `search` into `$searchQuery` atom
 
 **Files:**
+
 - Modify: `src/stores/wordList.ts`
 - Modify: `src/tests/unit/stores/wordList.test.ts`
 
 **Interfaces:**
+
 - Produces: `export const $searchQuery: WritableAtom<string>` — import path: `@stores/wordList.ts`
 - Produces: `export type WordList` — no longer has a `search` field
 - Produces: `searchLength` — now `computed($searchQuery, (q) => q.length)`; same import path, same usage
@@ -283,10 +285,12 @@ git commit -m "refactor(search): extract search term from \$wordSearch into \$se
 ### Task 2: Create `useSearchQuerySync` composable
 
 **Files:**
+
 - Create: `src/composable/useSearchQuerySync.ts`
 - Create: `src/tests/unit/composable/useSearchQuerySync.test.ts`
 
 **Interfaces:**
+
 - Consumes: `$searchQuery: WritableAtom<string>` from `@stores/wordList.ts` (Task 1)
 - Produces: `export function useSearchQuerySync(): void` — call once in a component `setup()`. On call: reads `?q=` from URL and syncs `$searchQuery`; registers `astro:page-load` listener to re-sync on every Astro navigation; watches `$searchQuery` to write `?q=` back to URL via debounced `history.replaceState`.
 
@@ -447,16 +451,19 @@ git commit -m "feat(search): add useSearchQuerySync composable for URL ↔ \$sea
 ### Task 3: Update `SearchWords.vue` — use `$searchQuery` and `useSearchQuerySync`
 
 **Files:**
+
 - Modify: `src/components/SearchWords.vue`
 - Modify: `src/tests/unit/components/SearchWords.test.ts`
 
 **Interfaces:**
+
 - Consumes: `$searchQuery: WritableAtom<string>` from `@stores/wordList.ts` (Task 1)
 - Consumes: `useSearchQuerySync(): void` from `@composables/useSearchQuerySync` (Task 2)
 
 - [ ] **Step 1: Update `SearchWords.test.ts` mock setup**
 
 In `src/tests/unit/components/SearchWords.test.ts`, replace the current mock block at the top of the file. The key changes:
+
 - Add `vi.mock("@composables/useSearchQuerySync")` to stub the composable (no-op in tests)
 - Remove `useVModel` from the `@nanostores/vue` mock
 - Add `$searchQuery` to the stores mock with a `.set` spy that updates `localSearchRef`
@@ -640,12 +647,14 @@ git commit -m "feat(search): wire SearchWords.vue to \$searchQuery via useSearch
 ## Self-Review
 
 **Spec coverage:**
+
 - `?q=` works on every page → `astro:page-load` re-reads URL on every Astro navigation ✓
 - Sharing `/?q=bier` pre-fills search → `syncFromUrl()` runs during composable setup ✓
 - No stale localStorage search → `search` removed from `persistentMap` ✓
 - Filter preferences stay in localStorage → `$wordSearch` unchanged except `search` removal ✓
 
 **Type consistency:**
+
 - `$searchQuery` exported in Task 1, consumed identically in Tasks 2 and 3 ✓
 - `useSearchQuerySync()` exported in Task 2, consumed identically in Task 3 ✓
 - `searchLength` updated to `computed($searchQuery, (q) => q.length)` in Task 1; Task 3 imports it as `searchLength as currentSearchLength` — same pattern as before ✓

@@ -9,6 +9,7 @@
 ### Worttyp-Filter — vollständiger Ist-Zustand
 
 **UI-Komponente**: `src/components/filter/WordTypeFilter.vue`
+
 ```vue
 <template>
   <nav class="c-word-type-filter">
@@ -22,7 +23,11 @@
       fallback-locale="en"
       class="c-word-type-filter__select"
       placeholder="Worttypen filtern"
-      :aria="{ 'aria-label': 'Worttypen filtern', 'aria-placeholder': undefined, 'aria-multiselectable': undefined }"
+      :aria="{
+        'aria-label': 'Worttypen filtern',
+        'aria-placeholder': undefined,
+        'aria-multiselectable': undefined,
+      }"
       @select="onSelect(value)"
       @deselect="onSelect(value)"
     />
@@ -52,16 +57,21 @@ const onSelect = (value: string[]) => {
 **Multiselect-Lib**: `@vueform/multiselect@2.6.11` (`node_modules/@vueform/multiselect`). `locale`/`fallback-locale` Props existieren, aber diese Version bündelt **keine** Locale-Dateien (`find node_modules/@vueform/multiselect -iname "*locale*"` → leer). Die Props sind aktuell wirkungslos.
 
 **Wichtiger Fund — Grund für den Screenshot-Bug**: In `node_modules/@vueform/multiselect/dist/multiselect.mjs:475-479`:
+
 ```js
 const multipleLabelText = computed(() => {
   return multipleLabel.value !== undefined
     ? multipleLabel.value(iv.value, $this)
-    : (iv.value && iv.value.length > 1 ? `${iv.value.length} options selected` : `1 option selected`)
+    : iv.value && iv.value.length > 1
+      ? `${iv.value.length} options selected`
+      : `1 option selected`;
 });
 ```
+
 `"3 options selected"` ist der **hardcodierte englische Default-Text**, gerendert wenn kein `multipleLabel`-Prop übergeben wird. Fix: `multipleLabel`-Funktion als Prop übergeben, die deutschen Text zurückgibt. `locale`/`fallback-locale` bleiben harmlos (keine Wirkung, kein Löschen nötig — aber optional entfernbar da tot).
 
 **Store**: `src/stores/wordList.ts`
+
 - `WordList`-Type: `activeWordTypeFilter: string[]` (Zeile 39), `wordTypes: string[]` (Zeile 55)
 - Default in `$wordSearch` (persistentMap): `activeWordTypeFilter: []` (63), `wordTypes: []` (78)
 - `$activeFilterCount` computed zählt `activeWordTypeFilter?.length` (113)
@@ -70,7 +80,10 @@ const multipleLabelText = computed(() => {
 - Orama-Schema `wordSchema` (271-292): `berlinerischWordTypes: "enum[]"` — **`themen` Feld fehlt hier komplett**, obwohl `src/pages/api/search/index.json.ts` bereits ein `themen: string[]` Feld pro Wort liefert (aus PR #1658)
 - `buildWhere()` (302-343): Für Worttyp bei Zeile 334-341:
   ```ts
-  if (Array.isArray(wordSearch.activeWordTypeFilter) && wordSearch.activeWordTypeFilter.length > 0) {
+  if (
+    Array.isArray(wordSearch.activeWordTypeFilter) &&
+    wordSearch.activeWordTypeFilter.length > 0
+  ) {
     where.berlinerischWordTypes = { containsAny: wordSearch.activeWordTypeFilter };
   }
   ```
@@ -78,12 +91,14 @@ const multipleLabelText = computed(() => {
 **Meta-Endpoint**: `src/pages/api/search/meta.json.ts` liefert aktuell `{ availableWordGroups, rangeFilterMinMax, wordTypes }`. `themen` fehlt. Quelle für Themen-Optionen sollte **`fetchAllThemen()`** aus `@services/api.ts` sein (liefert bereits `{ name, slug, description, count, seo }[]`, sauberer als die NLP-Tag-Herleitung bei `wordTypes`) — **nicht** aus den Wörtern selbst ableiten.
 
 **Entschieden (User, 2026-07-02)**:
+
 - Kein Beta-Badge für Themen-Filter
 - Gleiches Farbschema (Orange/Blue) wie Worttyp-Filter übernehmen
 - Hilfetext-Vorschlag aus Phase 4 passt so
 - `@use "@vueform/multiselect/themes/default.css";` wird aktuell in `WordTypeFilter.vue` importiert (Zeile 40) — würde bei `ThemenFilter.vue` doppelt importiert. Fix: CSS-Import **einmalig in der übergeordneten Komponente** `WordFilter.vue` platzieren, aus `WordTypeFilter.vue` entfernen, in `ThemenFilter.vue` gar nicht erst hinzufügen. Siehe Phase 1 (Anpassung `WordTypeFilter.vue`) und Phase 4 (Import in `WordFilter.vue`).
 
 **Parent-Komponente**: `src/components/word-search/WordFilter.vue` — Filter-Flyout, komponiert alle Filter linear:
+
 ```vue
 <div class="c-filter-search__headline-wrap" role="group" aria-labelledby="filter-worttyp">
   <p id="filter-worttyp" class="c-filter-search__sub-label">Worttyp</p>
@@ -95,6 +110,7 @@ const multipleLabelText = computed(() => {
 </i>
 <WordTypeFilter />
 ```
+
 Analog wird ein `<ThemenFilter />`-Block eingefügt, direkt nach dem Worttyp-Block. **Kein** `Beta`-Badge nötig für Themen (neu, aber nicht experimentell wie Worttyp — Entscheidung: siehe Phase 2, ggf. mit User klären ob Beta-Badge gewünscht).
 
 **SCSS**: `src/styles/components/_word-type-filter.scss` — nutzt `@vueform/multiselect`-CSS-Custom-Properties (`--ms-*`) für Theming, `butler-mx.dark-mode-class` Mixin für Dark Mode. Analog: `_themen-filter.scss` mit identischem Pattern (eigene BEMIT-Klasse `.c-themen-filter`).
@@ -118,29 +134,32 @@ Analog wird ein `<ThemenFilter />`-Block eingefügt, direkt nach dem Worttyp-Blo
 In `WordTypeFilter.vue` einen `multipleLabel`-Prop-Handler ergänzen, der den `@vueform/multiselect`-Default `"X options selected"` durch deutschen Text ersetzt. Gleiches Pattern wird in Phase 2 für den neuen `ThemenFilter.vue` mitgegeben (nicht separat duplizieren — als kleine shared Helper-Funktion, z. B. in `@utils/helpers.ts` oder direkt lokal in beiden Komponenten dieselbe Zeile).
 
 **Multiselect-API-Referenz** (aus `node_modules/@vueform/multiselect/dist/multiselect.mjs:475-479`):
+
 ```js
 const multipleLabelText = computed(() => {
   return multipleLabel.value !== undefined
     ? multipleLabel.value(iv.value, $this)
-    : (iv.value && iv.value.length > 1 ? `${iv.value.length} options selected` : `1 option selected`)
+    : iv.value && iv.value.length > 1
+      ? `${iv.value.length} options selected`
+      : `1 option selected`;
 });
 ```
+
 `multipleLabel` ist eine Funktion `(selectedValues, multiselectInstance) => string`. Sie MUSS als Prop übergeben werden, um den Default zu überschreiben.
 
 ### Umsetzung (Copy-Pattern)
 
 In `WordTypeFilter.vue` (und später `ThemenFilter.vue`) im `<script setup>`:
+
 ```ts
 const multipleLabel = (selected: string[]) =>
   selected.length === 1 ? "1 Option ausgewählt" : `${selected.length} Optionen ausgewählt`;
 ```
+
 Im Template:
+
 ```vue
-<Multiselect
-  ...
-  :multiple-label="multipleLabel"
-  ...
-/>
+<Multiselect ... :multiple-label="multipleLabel" ... />
 ```
 
 **Zusätzlich in dieser Phase (User-Entscheidung)**: `@use "@vueform/multiselect/themes/default.css";` aus `WordTypeFilter.vue`s `<style>`-Block (aktuell Zeile 40) entfernen. Der Import wandert in Phase 4 in die übergeordnete Komponente `WordFilter.vue`, damit er nur einmal global geladen wird (sonst doppelter Import sobald `ThemenFilter.vue` dazukommt). `WordTypeFilter.vue`s `<style>`-Block behält nur `@use "@styles/components/word-type-filter";`.
@@ -162,6 +181,7 @@ Im Template:
 **2a. `src/pages/api/search/meta.json.ts` erweitern**
 
 Themen-Liste aus `fetchAllThemen()` beziehen (nicht aus Wörtern ableiten — die Quelle ist bereits sauber strukturiert):
+
 ```ts
 import { fetchAllThemen } from "@services/api.ts";
 // ...
@@ -171,7 +191,9 @@ const themen = allThemen
   .map((t) => ({ name: t.name, slug: t.slug }))
   .sort((a, b) => a.name.localeCompare(b.name, "de"));
 ```
+
 `meta`-Objekt um `themen` ergänzen:
+
 ```ts
 const meta = {
   availableWordGroups,
@@ -305,6 +327,7 @@ In `src/components/word-search/WordFilter.vue` nach dem bestehenden Worttyp-Bloc
 ```
 
 Import ergänzen im `<script setup>`:
+
 ```ts
 import ThemenFilter from "@components/filter/ThemenFilter.vue";
 ```
@@ -312,10 +335,12 @@ import ThemenFilter from "@components/filter/ThemenFilter.vue";
 **Entschieden**: Kein Beta-Badge für den Themen-Block (im Gegensatz zu Worttyp).
 
 **CSS-Import verschieben (User-Entscheidung, siehe Phase 1 + 3)**: Der `<style>`-Block von `WordFilter.vue` (aktuell nur `@use "@styles/components/switch";`, Zeile 122-123) bekommt zusätzlich den Multiselect-Theme-Import, der bisher in `WordTypeFilter.vue` lag:
+
 ```scss
 @use "@styles/components/switch";
 @use "@vueform/multiselect/themes/default.css";
 ```
+
 Damit wird das CSS genau einmal geladen, unabhängig davon wie viele Multiselect-Filter (`WordTypeFilter`, `ThemenFilter`) `WordFilter.vue` komponiert.
 
 ### Verification
@@ -331,6 +356,7 @@ Damit wird das CSS genau einmal geladen, unabhängig davon wie viele Multiselect
 ### Was umsetzen
 
 Neue Datei `src/tests/unit/components/filter/ThemenFilter.test.ts`, 1:1 Kopie-Pattern von `WordTypeFilter.test.ts`, aber:
+
 - `mockWordSearch` mit `themen: [{ name: "Essen & Trinken", slug: "essen-trinken" }, ...]` statt `wordTypes: [...]`
 - `useVModel` mockt `activeThemenFilter` statt `activeWordTypeFilter`
 - Options-Assertion prüft `[{ value: "essen-trinken", label: "Essen & Trinken" }, ...]`

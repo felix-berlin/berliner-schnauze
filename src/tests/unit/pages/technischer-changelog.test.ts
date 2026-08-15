@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it, beforeAll, vi } from "vitest";
+
 import { createAstroRender } from "../helpers";
 
 vi.mock("@layouts/Layout.astro", async () => {

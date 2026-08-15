@@ -21,22 +21,24 @@
 
 ## File Map
 
-| File | Action | Responsibility |
-|---|---|---|
-| `src/components/DropdownPopover.vue` | Replace entirely | Template, script, `@use` for SCSS |
-| `src/styles/components/_dropdown-popover.scss` | Create | UA reset, anchor positioning, placement modifiers, fade animation |
-| `src/tests/unit/components/DropdownPopover.test.ts` | Create | All component tests |
+| File                                                | Action           | Responsibility                                                    |
+| --------------------------------------------------- | ---------------- | ----------------------------------------------------------------- |
+| `src/components/DropdownPopover.vue`                | Replace entirely | Template, script, `@use` for SCSS                                 |
+| `src/styles/components/_dropdown-popover.scss`      | Create           | UA reset, anchor positioning, placement modifiers, fade animation |
+| `src/tests/unit/components/DropdownPopover.test.ts` | Create           | All component tests                                               |
 
 ---
 
 ### Task 1: Tests + SCSS + Component — Full TDD Cycle
 
 **Files:**
+
 - Create: `src/tests/unit/components/DropdownPopover.test.ts`
 - Create: `src/styles/components/_dropdown-popover.scss`
 - Modify: `src/components/DropdownPopover.vue` (full replacement)
 
 **Interfaces:**
+
 - Produces:
   - `export type PlacementValue = "bottom-start" | "bottom-end" | "bottom" | "top-start" | "top-end" | "top"`
   - `export type DropdownPopoverProps = { placement?: PlacementValue; offset?: number; lazy?: boolean }`
@@ -128,8 +130,12 @@ describe("DropdownPopover.vue", () => {
 
   it("applies correct CSS class for each placement value", () => {
     const placements = [
-      "bottom-start", "bottom-end", "bottom",
-      "top-start", "top-end", "top",
+      "bottom-start",
+      "bottom-end",
+      "bottom",
+      "top-start",
+      "top-end",
+      "top",
     ] as const;
     for (const placement of placements) {
       const wrapper = mount(DropdownPopover, { props: { placement } });
@@ -247,16 +253,31 @@ Create `src/styles/components/_dropdown-popover.scss`:
   // Anchor Positioning — position-anchor is set via inline style (dynamic anchor name per instance)
   position: fixed;
   margin-block-start: var(--c-dropdown-offset, 8px);
-  position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+  position-try-fallbacks:
+    flip-inline,
+    flip-block,
+    flip-block flip-inline;
   position-try-order: most-block-size;
 
   // Placement modifier classes
-  &--bottom-start { position-area: block-end span-inline-end; }
-  &--bottom-end   { position-area: block-end span-inline-start; }
-  &--bottom       { position-area: block-end; }
-  &--top-start    { position-area: block-start span-inline-end; }
-  &--top-end      { position-area: block-start span-inline-start; }
-  &--top          { position-area: block-start; }
+  &--bottom-start {
+    position-area: block-end span-inline-end;
+  }
+  &--bottom-end {
+    position-area: block-end span-inline-start;
+  }
+  &--bottom {
+    position-area: block-end;
+  }
+  &--top-start {
+    position-area: block-start span-inline-end;
+  }
+  &--top-end {
+    position-area: block-start span-inline-start;
+  }
+  &--top {
+    position-area: block-start;
+  }
 
   // Fallback for browsers without CSS Anchor Positioning (Chrome <125, very rare)
   @supports not (position-area: block-end) {
@@ -328,12 +349,7 @@ Replace all content of `src/components/DropdownPopover.vue`:
 import { ref, useId } from "vue";
 
 export type PlacementValue =
-  | "bottom-start"
-  | "bottom-end"
-  | "bottom"
-  | "top-start"
-  | "top-end"
-  | "top";
+  "bottom-start" | "bottom-end" | "bottom" | "top-start" | "top-end" | "top";
 
 export type DropdownPopoverProps = {
   lazy?: boolean;

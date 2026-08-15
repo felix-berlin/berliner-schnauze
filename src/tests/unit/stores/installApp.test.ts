@@ -58,13 +58,16 @@ describe("installApp store", () => {
   describe("disableInAppInstallPrompt", () => {
     it("sets $installPrompt to null", async () => {
       const { $installPrompt, disableInAppInstallPrompt } = await import("@stores/installApp.ts");
-      $installPrompt.set({ prompt: vi.fn() } as unknown as Parameters<typeof $installPrompt.set>[0]);
+      $installPrompt.set({ prompt: vi.fn() } as unknown as Parameters<
+        typeof $installPrompt.set
+      >[0]);
       disableInAppInstallPrompt();
       expect($installPrompt.get()).toBeNull();
     });
 
     it("sets $showInstallButton to false", async () => {
-      const { $showInstallButton, disableInAppInstallPrompt } = await import("@stores/installApp.ts");
+      const { $showInstallButton, disableInAppInstallPrompt } =
+        await import("@stores/installApp.ts");
       $showInstallButton.set(true);
       disableInAppInstallPrompt();
       expect($showInstallButton.get()).toBe(false);
@@ -81,9 +84,12 @@ describe("installApp store", () => {
     });
 
     it("calls prompt() when $installPrompt is set", async () => {
-      const { $installPrompt, $showInstallButton, triggerPwaInstall } = await import("@stores/installApp.ts");
+      const { $installPrompt, $showInstallButton, triggerPwaInstall } =
+        await import("@stores/installApp.ts");
       const promptMock = vi.fn().mockResolvedValue(undefined);
-      $installPrompt.set({ prompt: promptMock } as unknown as Parameters<typeof $installPrompt.set>[0]);
+      $installPrompt.set({ prompt: promptMock } as unknown as Parameters<
+        typeof $installPrompt.set
+      >[0]);
       $showInstallButton.set(true);
       await triggerPwaInstall();
       expect(promptMock).toHaveBeenCalledOnce();
@@ -93,15 +99,20 @@ describe("installApp store", () => {
       const { $installPrompt, triggerPwaInstall } = await import("@stores/installApp.ts");
       const { trackEvent } = await import("@utils/analytics");
       const promptMock = vi.fn().mockResolvedValue(undefined);
-      $installPrompt.set({ prompt: promptMock } as unknown as Parameters<typeof $installPrompt.set>[0]);
+      $installPrompt.set({ prompt: promptMock } as unknown as Parameters<
+        typeof $installPrompt.set
+      >[0]);
       await triggerPwaInstall();
       expect(trackEvent).toHaveBeenCalledWith("App", "Clicked On Install Button", "PWA Prompt");
     });
 
     it("disables the prompt after calling it", async () => {
-      const { $installPrompt, $showInstallButton, triggerPwaInstall } = await import("@stores/installApp.ts");
+      const { $installPrompt, $showInstallButton, triggerPwaInstall } =
+        await import("@stores/installApp.ts");
       const promptMock = vi.fn().mockResolvedValue(undefined);
-      $installPrompt.set({ prompt: promptMock } as unknown as Parameters<typeof $installPrompt.set>[0]);
+      $installPrompt.set({ prompt: promptMock } as unknown as Parameters<
+        typeof $installPrompt.set
+      >[0]);
       $showInstallButton.set(true);
       await triggerPwaInstall();
       expect($installPrompt.get()).toBeNull();
@@ -141,6 +152,5 @@ describe("installApp store", () => {
       expect(trackEvent).toHaveBeenCalledWith("App", "Installation completed", "PWA");
       unsub();
     });
-
   });
 });

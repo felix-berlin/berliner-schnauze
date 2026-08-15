@@ -58,8 +58,14 @@
     "article": "der",
     "translations": ["alte Neuigkeit"],
     "examples": [
-      { "example": "Dit is doch allet kalter Kaffee.", "explanation": "Reaktion auf eine ›Neuigkeit‹, die bereits bekannt ist." },
-      { "example": "Dit jeht dir ’n kalten Kaffee an!", "explanation": "Das geht dich gar nichts an!" }
+      {
+        "example": "Dit is doch allet kalter Kaffee.",
+        "explanation": "Reaktion auf eine ›Neuigkeit‹, die bereits bekannt ist."
+      },
+      {
+        "example": "Dit jeht dir ’n kalten Kaffee an!",
+        "explanation": "Das geht dich gar nichts an!"
+      }
     ],
     "themen": []
   },
@@ -163,7 +169,10 @@
     "article": "die",
     "translations": ["unter aller Kritik (in der Wendung »unter aller Kanone«)"],
     "examples": [
-      { "example": "Dit Stück is unter aller Kanone.", "explanation": "Unter aller Kritik. Von lateinisch sub omni canone — »Kanon« als Bewertungsmaßstab." }
+      {
+        "example": "Dit Stück is unter aller Kanone.",
+        "explanation": "Unter aller Kritik. Von lateinisch sub omni canone — »Kanon« als Bewertungsmaßstab."
+      }
     ],
     "themen": []
   },
@@ -210,7 +219,10 @@
     "word": "kapee",
     "translations": ["Begriff (in der Wendung »schwer von kapee«)"],
     "examples": [
-      { "example": "Der is schwer von kapee.", "explanation": "Er ist schwer von Begriff (zu kapieren)." }
+      {
+        "example": "Der is schwer von kapee.",
+        "explanation": "Er ist schwer von Begriff (zu kapieren)."
+      }
     ],
     "themen": ["charakter-eigenschaften"]
   },
@@ -266,7 +278,10 @@
     "article": "die",
     "translations": ["Taschenuhr", "Hin und Her (in der Redensart)"],
     "examples": [
-      { "example": "Rin inne Kartoffeln, raus aus de Kartoffeln.", "explanation": "Etwas tun und wieder rückgängig machen, etwas Überflüssiges tun." }
+      {
+        "example": "Rin inne Kartoffeln, raus aus de Kartoffeln.",
+        "explanation": "Etwas tun und wieder rückgängig machen, etwas Überflüssiges tun."
+      }
     ],
     "themen": []
   },
@@ -350,7 +365,10 @@
     "article": "der",
     "translations": ["Kopf"],
     "examples": [
-      { "example": "Du jehst ma uff’n Keks.", "explanation": "Du gehst mir auf die Nerven, auf den Geist." }
+      {
+        "example": "Du jehst ma uff’n Keks.",
+        "explanation": "Du gehst mir auf die Nerven, auf den Geist."
+      }
     ],
     "infoText": "Vielleicht mit Bezug auf jiddisch gag = Dach.",
     "themen": ["koerper", "gefuehle-emotionen"]
@@ -403,7 +421,10 @@
     "article": "der",
     "translations": ["Beobachtung (in der Wendung »auf dem Kieker haben«)"],
     "examples": [
-      { "example": "Jemanden uff’n Kieker ham.", "explanation": "Ihn beobachten, um ihn einer Sache zu überführen." }
+      {
+        "example": "Jemanden uff’n Kieker ham.",
+        "explanation": "Ihn beobachten, um ihn einer Sache zu überführen."
+      }
     ],
     "themen": []
   },
@@ -412,7 +433,10 @@
     "article": "der",
     "translations": ["Hut, Aufmerksamkeit (in der Wendung »auf dem Kien sein«)"],
     "examples": [
-      { "example": "Uff’n Kien sein.", "explanation": "Helle sein, vorsichtig sein, auf der Hut sein." }
+      {
+        "example": "Uff’n Kien sein.",
+        "explanation": "Helle sein, vorsichtig sein, auf der Hut sein."
+      }
     ],
     "infoText": "Geht entweder auf französisch ›quine‹ (unverhoffter Vorteil), englisch ›keen‹ (scharf) oder jiddisch kiwen (aufmerksam) zurück. Aufgekommen zur Zeit der französischen Besetzung (1806–08).",
     "themen": []
@@ -427,9 +451,7 @@
     "word": "Kies",
     "article": "der",
     "translations": ["Geld"],
-    "examples": [
-      { "example": "Der pupt in den Kies.", "explanation": "Er geht leer aus." }
-    ],
+    "examples": [{ "example": "Der pupt in den Kies.", "explanation": "Er geht leer aus." }],
     "infoText": "Geht zurück auf jiddisch kis = (Geld-)Beutel oder rotwelsch Kies, Kiesel = Stein (vgl. rotwelsch Steiner = Münzgeld).",
     "themen": ["geld"]
   },
@@ -442,9 +464,7 @@
   {
     "word": "Kievief",
     "translations": ["Aufmerksamkeit (in der Wendung »auf dem Kievief sein«)"],
-    "examples": [
-      { "example": "Uff’m Kievief sein.", "explanation": "Aufpassen." }
-    ],
+    "examples": [{ "example": "Uff’m Kievief sein.", "explanation": "Aufpassen." }],
     "alternativeWords": ["Kiewief"],
     "infoText": "Von französisch Qui vive?, früher Ausruf der Wache.",
     "themen": []
@@ -472,9 +492,7 @@
   {
     "word": "Kinkerlitzken",
     "translations": ["wertlose Kleinigkeiten", "Umstände"],
-    "examples": [
-      { "example": "Mach keene Kinkerlitzken.", "explanation": "Komm zur Sache." }
-    ],
+    "examples": [{ "example": "Mach keene Kinkerlitzken.", "explanation": "Komm zur Sache." }],
     "infoText": "Von französisch quincaillerie (Kurzwaren) oder aus Kanker (Spinne) und Litze (Faden), also Wertloses wie ein Spinnengewebe. Die Endsilbe -ken ist das niederdeutsche Diminutiv -chen; so hört man auch Kinkerlitzchen.",
     "themen": []
   },
@@ -567,7 +585,10 @@
     "article": "der",
     "translations": ["Verrücktheit (in der Redensart)"],
     "examples": [
-      { "example": "Dir ham se wohl mit’m Klammerbeutel jepudert.", "explanation": "Du spinnst wohl." }
+      {
+        "example": "Dir ham se wohl mit’m Klammerbeutel jepudert.",
+        "explanation": "Du spinnst wohl."
+      }
     ],
     "themen": []
   },
@@ -645,9 +666,7 @@
   {
     "word": "kleben",
     "translations": ["eine runterhauen (in der Wendung »eine kleben«)"],
-    "examples": [
-      { "example": "Dir kleb ick eene.", "explanation": "Drohung." }
-    ],
+    "examples": [{ "example": "Dir kleb ick eene.", "explanation": "Drohung." }],
     "themen": []
   },
   {

@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it, vi, beforeAll } from "vitest";
+
 import { createAstroRender } from "../../helpers";
 
 vi.mock("@styles/components/_word-hero.scss", () => ({}));

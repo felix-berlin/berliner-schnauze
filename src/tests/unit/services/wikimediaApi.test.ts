@@ -35,7 +35,10 @@ afterEach(() => {
 
 describe("fetchWikimediaAPI", () => {
   it("returns parsed JSON for a valid file", async () => {
-    const mockData = { title: "File:Berlin.jpg", preferred: { url: "https://example.com/berlin.jpg" } };
+    const mockData = {
+      title: "File:Berlin.jpg",
+      preferred: { url: "https://example.com/berlin.jpg" },
+    };
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(makeResponse(true, mockData)));
     const { fetchWikimediaAPI } = await import("@services/wikimediaApi.ts");
     expect(await fetchWikimediaAPI("File:Berlin.jpg")).toEqual(mockData);
@@ -43,10 +46,13 @@ describe("fetchWikimediaAPI", () => {
 
   it("logs and swallows errors on a non-ok response", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
-      ok: false,
-      text: vi.fn().mockResolvedValue("Not Found"),
-    }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        text: vi.fn().mockResolvedValue("Not Found"),
+      }),
+    );
     const { fetchWikimediaAPI } = await import("@services/wikimediaApi.ts");
     expect(await fetchWikimediaAPI("File:NotFound.jpg")).toBeUndefined();
     expect(consoleSpy).toHaveBeenCalledOnce();

@@ -1,7 +1,8 @@
-import { version } from "../../package.json";
 import { createToastNotify } from "@stores/toastNotify";
 import { trackEvent } from "@utils/analytics";
 import { registerSW } from "virtual:pwa-register";
+
+import { version } from "../../package.json";
 
 const PWA_UPDATED_KEY = "pwa-just-updated";
 

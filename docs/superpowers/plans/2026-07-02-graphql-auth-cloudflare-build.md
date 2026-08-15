@@ -9,14 +9,14 @@
 
 Five separate, duplicated `urql` `Client` instances hit `WP_API`, **none of them send any auth header** today:
 
-| File | Client | Used for |
-| --- | --- | --- |
-| `src/services/queries/getWords.ts:45-54` | own `Client` | word list (build-time, SSG) |
-| `src/pages/[legalPages].astro:12` | own `Client` | legal pages (build-time, SSG) |
-| `src/services/queries/getThemen.ts:12` | own `Client` | topic taxonomy (build-time, SSG) |
-| `src/services/queries/getAffiliate.ts:9` | own `Client` | affiliate data (build-time, SSG) |
-| `src/services/queries/getSitemapWordDates.ts` | raw fetch to `WP_API` | sitemap lastmod (build-time, SSG) |
-| `src/pages/_app.ts:9-17` | global Vue urql plugin | **runtime, in the visitor's browser** |
+| File                                          | Client                 | Used for                              |
+| --------------------------------------------- | ---------------------- | ------------------------------------- |
+| `src/services/queries/getWords.ts:45-54`      | own `Client`           | word list (build-time, SSG)           |
+| `src/pages/[legalPages].astro:12`             | own `Client`           | legal pages (build-time, SSG)         |
+| `src/services/queries/getThemen.ts:12`        | own `Client`           | topic taxonomy (build-time, SSG)      |
+| `src/services/queries/getAffiliate.ts:9`      | own `Client`           | affiliate data (build-time, SSG)      |
+| `src/services/queries/getSitemapWordDates.ts` | raw fetch to `WP_API`  | sitemap lastmod (build-time, SSG)     |
+| `src/pages/_app.ts:9-17`                      | global Vue urql plugin | **runtime, in the visitor's browser** |
 
 `getWords.ts:16-43` already contains a **dev-only** JWT fetch (`fetchDevAuthToken`) that:
 
@@ -29,7 +29,7 @@ This proves the **"JWT Authentication for WP-API"** plugin's token is already ac
 There is also a **separate, static-token path**, unrelated to the above:
 
 - `WP_AUTH_REFRESH_TOKEN` — `context: "client", access: "public"` in `astro.config.mjs:133-136`. **This means it is already inlined into the public browser bundle today** — a pre-existing exposure, independent of the current breakage.
-- `src/utils/refreshToken.js` — a manual script (`pnpm refreshAuthToken`) that logs in via `WP_AUTH_USER`/`WP_AUTH_PASS` against the same `/jwt-auth/v1/token` REST endpoint and **rewrites `.env`** with a fresh token. The script itself prints: *"Make sure to add this token to the server environment as well!"* — i.e. it must be manually copied into the Cloudflare Pages dashboard. This is the brittle manual step that most likely caused the current breakage (token expired, dashboard not updated).
+- `src/utils/refreshToken.js` — a manual script (`pnpm refreshAuthToken`) that logs in via `WP_AUTH_USER`/`WP_AUTH_PASS` against the same `/jwt-auth/v1/token` REST endpoint and **rewrites `.env`** with a fresh token. The script itself prints: _"Make sure to add this token to the server environment as well!"_ — i.e. it must be manually copied into the Cloudflare Pages dashboard. This is the brittle manual step that most likely caused the current breakage (token expired, dashboard not updated).
 - `codegen.ts:6-33` also uses `WP_AUTH_REFRESH_TOKEN` to authenticate schema introspection for `pnpm gql:generate`. This only runs locally (via `infisical run --`), never during the Cloudflare build (`pnpm build` = `astro build`, no codegen step — confirmed in `package.json:39`). Lower priority, but will break the same way for local dev.
 - `src/services/fetchApi.ts` and `src/services/mutations/sendMail.ts` also send `Authorization: Bearer ${WP_AUTH_REFRESH_TOKEN}`, but **neither is called from any live code path** — `fetchApi.ts` has no importers, and `sendMail.ts`'s `sendEmailViaContactForm7()` is only referenced from its own dead test file (`src/tests/unit/services/sendMail.test.ts`). Confirmed via repo-wide grep. Both are dead code — candidates for deletion in a follow-up cleanup, out of scope for this plan.
 
@@ -44,7 +44,7 @@ There is also a **separate, static-token path**, unrelated to the above:
 - **HTTP Basic Auth** via `WP-API/Basic-Auth` plugin — not needed, Application Passwords supersede this and don't require a separate plugin.
 - Cookie/nonce auth is browser-session-based and not applicable to a build process or a stateless public form.
 
-Anti-patterns to avoid: do not invent a `refreshJwtAuthToken` GraphQL mutation (that belongs to the *other* plugin, not the one in use); do not assume Application Passwords need any plugin — they are WP core since 5.6.
+Anti-patterns to avoid: do not invent a `refreshJwtAuthToken` GraphQL mutation (that belongs to the _other_ plugin, not the one in use); do not assume Application Passwords need any plugin — they are WP core since 5.6.
 
 ---
 
@@ -124,7 +124,7 @@ add_filter( 'graphql_request_data', function ( $request_data ) {
 ### Phase 3 verification checklist
 
 - Submit the suggest-a-word form against the real (or staging) WP instance with **no** `Authorization` header sent (confirm via browser devtools network tab) and confirm the mutation still succeeds end-to-end — check the resulting WP entry/email, not just that the HTTP request returns 200.
-- Confirm every *other* query/mutation still requires auth (i.e. the exception is scoped to `SendEmail` only, not a schema-wide bypass) — try an anonymous `berlinerWords` query and confirm it still 401s/errors.
+- Confirm every _other_ query/mutation still requires auth (i.e. the exception is scoped to `SendEmail` only, not a schema-wide bypass) — try an anonymous `berlinerWords` query and confirm it still 401s/errors.
 - Confirm Turnstile still gates submission (test with an invalid/missing Turnstile token, expect rejection) — this is the only anti-abuse layer left on this mutation, so it must still work.
 
 ### Phase 3 anti-pattern guards

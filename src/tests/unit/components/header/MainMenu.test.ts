@@ -4,14 +4,14 @@ import { describe, expect, it, vi } from "vitest";
 vi.mock("@components/DropdownPopover.vue", () => ({
   default: {
     name: "DropdownPopover",
-    template: "<div class=\"c-menu-more\"><slot /><slot name=\"panel\" /></div>",
+    template: '<div class="c-menu-more"><slot /><slot name="panel" /></div>',
   },
 }));
 
 vi.mock("@components/MainMenuButton.vue", () => ({
   default: {
     name: "MainMenuButton",
-    template: "<button type=\"button\">Menu</button>",
+    template: '<button type="button">Menu</button>',
   },
 }));
 
@@ -20,9 +20,9 @@ vi.mock("@components/NavList.vue", () => ({
     name: "NavList",
     props: ["items", "classesUl", "classesLi"],
     template:
-      "<ul><li v-for=\"(item, index) in items\" :key=\"index\" " +
+      '<ul><li v-for="(item, index) in items" :key="index" ' +
       ":class=\"typeof classesLi === 'function' ? classesLi(item, index) : classesLi\">" +
-      "<component v-if=\"item.component\" :is=\"item.component\" v-bind=\"item.props\" />" +
+      '<component v-if="item.component" :is="item.component" v-bind="item.props" />' +
       "<template v-else>{{ item.title }}</template></li></ul>",
   },
 }));
@@ -30,7 +30,7 @@ vi.mock("@components/NavList.vue", () => ({
 vi.mock("@components/InstallApp.vue", () => ({
   default: {
     name: "InstallApp",
-    template: "<div class=\"install-app\" />",
+    template: '<div class="install-app" />',
   },
 }));
 

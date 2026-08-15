@@ -13,9 +13,7 @@
   {
     "word": "WC",
     "translations": ["Centrum-Warenhäuser (ironische Abkürzung)"],
-    "examples": [
-      { "example": "Det is ’ne Wolke - Kaufhof, vorher Zentrum." }
-    ],
+    "examples": [{ "example": "Det is ’ne Wolke - Kaufhof, vorher Zentrum." }],
     "infoText": "Ostberlinisch.",
     "themen": ["orte-spitzname", "stadtleben"]
   },
@@ -40,17 +38,21 @@
     "word": "wahr",
     "translations": ["lange her (in der Redensart)"],
     "examples": [
-      { "example": "Dit is beinah schon nich mehr wahr.", "explanation": "Das ist schon lange her." },
-      { "example": "Dit is nich der wahre Jakob.", "explanation": "Das ist einem nicht ganz angenehm." }
+      {
+        "example": "Dit is beinah schon nich mehr wahr.",
+        "explanation": "Das ist schon lange her."
+      },
+      {
+        "example": "Dit is nich der wahre Jakob.",
+        "explanation": "Das ist einem nicht ganz angenehm."
+      }
     ],
     "themen": []
   },
   {
     "word": "wälzen",
     "translations": ["kaputtlachen (in der Wendung »zum Wälzen«)"],
-    "examples": [
-      { "example": "Dit is ja zum Wälzen.", "explanation": "Zum Kaputtlachen." }
-    ],
+    "examples": [{ "example": "Dit is ja zum Wälzen.", "explanation": "Zum Kaputtlachen." }],
     "themen": ["gefuehle-emotionen"]
   },
   {
@@ -66,9 +68,7 @@
     "word": "Wampe",
     "article": "die",
     "translations": ["Bauch"],
-    "examples": [
-      { "example": "Sich die Wampe vollschlagen.", "explanation": "Sich vollessen." }
-    ],
+    "examples": [{ "example": "Sich die Wampe vollschlagen.", "explanation": "Sich vollessen." }],
     "themen": ["koerper", "essen-trinken"]
   },
   {
@@ -121,9 +121,7 @@
   {
     "word": "wegschmeißen",
     "translations": ["ausgeben"],
-    "examples": [
-      { "example": "Dafür hab ick zwanzig Märker wegjeschmiss’n." }
-    ],
+    "examples": [{ "example": "Dafür hab ick zwanzig Märker wegjeschmiss’n." }],
     "themen": ["geld"]
   },
   {
@@ -159,16 +157,17 @@
     "article": "die",
     "translations": ["Empörung (in der Redensart)"],
     "examples": [
-      { "example": "Da hört sich doch die Weltjeschichte uff.", "explanation": "Da hört sich doch alles auf — Ausdruck der Empörung." }
+      {
+        "example": "Da hört sich doch die Weltjeschichte uff.",
+        "explanation": "Da hört sich doch alles auf — Ausdruck der Empörung."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
   {
     "word": "wenn schon, denn schon",
     "translations": ["dann aber richtig"],
-    "examples": [
-      { "example": "Machste dit heute noch fertig? — Na, wenn schon, denn schon!" }
-    ],
+    "examples": [{ "example": "Machste dit heute noch fertig? — Na, wenn schon, denn schon!" }],
     "themen": []
   },
   {
@@ -207,7 +206,10 @@
     "article": "der",
     "translations": ["Kragen (in der Wendung »beim Wickel nehmen«)"],
     "examples": [
-      { "example": "Jemanden bei’m Wickel nehmen.", "explanation": "Ihn sich vorknöpfen. Wickel meint die im Nacken zusammengezogenen Haare." }
+      {
+        "example": "Jemanden bei’m Wickel nehmen.",
+        "explanation": "Ihn sich vorknöpfen. Wickel meint die im Nacken zusammengezogenen Haare."
+      }
     ],
     "themen": []
   },
@@ -227,7 +229,10 @@
     "word": "Wiese mähen",
     "translations": ["Haare schneiden"],
     "examples": [
-      { "example": "Dann ist die Wiese grün!", "explanation": "Dann ist meine Geduld am Ende. Abgeleitet von der Spielansage Pik — die Farbe ist im deutschen Kartenspiel grün." }
+      {
+        "example": "Dann ist die Wiese grün!",
+        "explanation": "Dann ist meine Geduld am Ende. Abgeleitet von der Spielansage Pik — die Farbe ist im deutschen Kartenspiel grün."
+      }
     ],
     "themen": ["koerper"]
   },
@@ -235,9 +240,7 @@
     "word": "Willem",
     "article": "der",
     "translations": ["Wilhelm"],
-    "examples": [
-      { "example": "Der macht ’nen dicken Willem.", "explanation": "Er gibt an." }
-    ],
+    "examples": [{ "example": "Der macht ’nen dicken Willem.", "explanation": "Er gibt an." }],
     "infoText": "Ein falscher Willem ist ein falsches Haarteil.",
     "themen": []
   },
@@ -267,9 +270,7 @@
     "word": "Wolke",
     "article": "die",
     "translations": ["großartige Sache"],
-    "examples": [
-      { "example": "Dit is ne Wolke.", "explanation": "Das ist eine Wucht." }
-    ],
+    "examples": [{ "example": "Dit is ne Wolke.", "explanation": "Das ist eine Wucht." }],
     "themen": []
   },
   {
@@ -344,9 +345,7 @@
     "word": "Wurst",
     "article": "die",
     "translations": ["Essen (in der Wendung »’ne Wurst fassen«)"],
-    "examples": [
-      { "example": "’ne Wurst fassen.", "explanation": "Essen." }
-    ],
+    "examples": [{ "example": "’ne Wurst fassen.", "explanation": "Essen." }],
     "themen": ["essen-trinken"]
   },
   {

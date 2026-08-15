@@ -1,7 +1,7 @@
 import DropdownPopover from "@components/DropdownPopover.vue";
 import { mount } from "@vue/test-utils";
-import { h, nextTick } from "vue";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { h, nextTick } from "vue";
 
 const { resizeCb } = vi.hoisted(() => ({
   resizeCb: { fn: null as ((...args: unknown[]) => void) | null },
@@ -172,8 +172,12 @@ describe("DropdownPopover.vue", () => {
 
   it("applies correct CSS class for each placement value", () => {
     const placements = [
-      "bottom-start", "bottom-end", "bottom",
-      "top-start", "top-end", "top",
+      "bottom-start",
+      "bottom-end",
+      "bottom",
+      "top-start",
+      "top-end",
+      "top",
     ] as const;
     for (const placement of placements) {
       const wrapper = mount(DropdownPopover, { props: { placement } });
@@ -427,11 +431,25 @@ describe("DropdownPopover.vue", () => {
     const panelEl = wrapper.find(".c-dropdown__panel").element;
     const triggerSpan = wrapper.find(".c-dropdown__trigger").element;
     vi.spyOn(panelEl, "getBoundingClientRect").mockReturnValue({
-      bottom: 400, top: 200, left: 0, right: 200, width: 200, height: 200, x: 0, y: 200,
+      bottom: 400,
+      top: 200,
+      left: 0,
+      right: 200,
+      width: 200,
+      height: 200,
+      x: 0,
+      y: 200,
       toJSON: () => ({}),
     } as DOMRect);
     vi.spyOn(triggerSpan, "getBoundingClientRect").mockReturnValue({
-      bottom: 100, top: 50, left: 50, right: 150, width: 100, height: 50, x: 50, y: 50,
+      bottom: 100,
+      top: 50,
+      left: 50,
+      right: 150,
+      width: 100,
+      height: 50,
+      x: 50,
+      y: 50,
       toJSON: () => ({}),
     } as DOMRect);
     openToggle(wrapper);

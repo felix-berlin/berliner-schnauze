@@ -1,6 +1,7 @@
+import { wpGraphqlClient } from "@services/wpGraphqlClient";
+
 import { graphql } from "@/gql";
 import { CompanySocialMediaDocument } from "@/gql/graphql.ts";
-import { wpGraphqlClient } from "@services/wpGraphqlClient";
 
 export interface SocialMenuItem {
   link: string;

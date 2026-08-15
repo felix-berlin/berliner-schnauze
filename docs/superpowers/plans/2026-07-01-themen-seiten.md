@@ -6,13 +6,13 @@
 
 ## Architektur-Entscheidungen
 
-| Frage | Entscheidung | Begründung |
-|---|---|---|
-| Wort-zu-Thema-Mapping | `fetchAllWords()` + gruppieren | Bereits in `BerlinerWord`-Fragment, kein extra GQL |
-| Thema-Metadaten (description, SEO) | Neues Root-Query `berlinerischThemen` | `description` + `seo` nur über Root-Term-Query verfügbar |
-| SEO-Typ für Taxonomy Terms | Neues Fragment `TaxonomySeoFragment on TaxonomySEO` | Taxonomy terms verwenden `TaxonomySEO`, nicht `PostTypeSEO` |
-| Route | `/themen/[themaSlug].astro` | Spiegelt WP `rewrite slug: 'themen'` wider |
-| Wort-Seite Kategorie-Anzeige | `word.berlinerischThemen.nodes` direkt nutzen | Bereits im Fragment gefetcht — kein extra GQL |
+| Frage                              | Entscheidung                                        | Begründung                                                  |
+| ---------------------------------- | --------------------------------------------------- | ----------------------------------------------------------- |
+| Wort-zu-Thema-Mapping              | `fetchAllWords()` + gruppieren                      | Bereits in `BerlinerWord`-Fragment, kein extra GQL          |
+| Thema-Metadaten (description, SEO) | Neues Root-Query `berlinerischThemen`               | `description` + `seo` nur über Root-Term-Query verfügbar    |
+| SEO-Typ für Taxonomy Terms         | Neues Fragment `TaxonomySeoFragment on TaxonomySEO` | Taxonomy terms verwenden `TaxonomySEO`, nicht `PostTypeSEO` |
+| Route                              | `/themen/[themaSlug].astro`                         | Spiegelt WP `rewrite slug: 'themen'` wider                  |
+| Wort-Seite Kategorie-Anzeige       | `word.berlinerischThemen.nodes` direkt nutzen       | Bereits im Fragment gefetcht — kein extra GQL               |
 
 ---
 
@@ -141,6 +141,7 @@ pnpm gql:generate
 ```
 
 **Verification**:
+
 - `grep -n "GetAllBerlinerischThemen\|TaxonomySeoFragment" src/gql/graphql.ts` → beide vorhanden
 - `grep -n "berlinerischThemen" src/gql/graphql.ts` → Fragment-Typ mit `description` und `seo`
 - Kein TypeScript-Fehler: `pnpm exec vue-tsc --noEmit 2>&1 | grep getThemen`
@@ -156,12 +157,10 @@ pnpm gql:generate
 Pattern: Copy von `src/pages/wort/index.astro` für Grundstruktur, `src/pages/wort/[...wordSlug].astro` für `getStaticPaths`.
 
 **`getStaticPaths`**:
+
 ```typescript
 export const getStaticPaths = async () => {
-  const [allThemen, allWords] = await Promise.all([
-    fetchAllThemen(),
-    fetchAllWords(),
-  ]);
+  const [allThemen, allWords] = await Promise.all([fetchAllThemen(), fetchAllWords()]);
 
   // Wort-zu-Thema-Mapping aus bereits gefetchten Wörtern
   const wordsByThema = new Map<string, typeof allWords>();
@@ -184,16 +183,19 @@ export const getStaticPaths = async () => {
 ```
 
 **Props**:
+
 ```typescript
 const { thema, words } = Astro.props;
 ```
 
 **SEO** (mapping von TaxonomySEO → SeoProps):
+
 ```typescript
 const seoProps = seoData({
   seo: {
     title: thema.seo?.title ?? thema.name ?? "",
-    opengraphDescription: thema.seo?.opengraphDescription ?? thema.seo?.metaDesc ?? thema.description ?? "",
+    opengraphDescription:
+      thema.seo?.opengraphDescription ?? thema.seo?.metaDesc ?? thema.description ?? "",
     canonical: thema.seo?.canonical,
     opengraphType: "website",
   },
@@ -204,6 +206,7 @@ const seoProps = seoData({
 `seoData()` importieren aus: `src/utils/helpers.ts` (gleiche Datei wie auf der Wort-Seite).
 
 **Template**:
+
 - `<Layout content={seoProps} contentClasses="o-thema">`
 - `<h1>` mit Thema-Name
 - Beschreibungstext: `thema.description` (HTML aus WP, mit `set:html`)
@@ -215,6 +218,7 @@ const seoProps = seoData({
 Übersicht aller 12 Kategorien mit Link-Liste. Pattern: `src/pages/changelog/index.astro`.
 
 **Verification**:
+
 - `pnpm build:local` erfolgreich
 - `dist/themen/unterhaltung-freizeit/index.html` vorhanden
 - Alle 12 Thema-Seiten generiert: `ls dist/themen/`
@@ -276,6 +280,7 @@ SCSS in `src/styles/components/_word-themen.scss` (neues File), laden via `@use 
 **Anti-Pattern**: KEIN `scoped` auf `<style>` — BEMIT-Namenskonvention, kein Scoping.
 
 **Verification**:
+
 - `pnpm build:local` ohne Fehler
 - Im HTML von `/wort/aalen/`: Link zu `/themen/unterhaltung-freizeit` vorhanden
 - `grep -r "c-word-themen" dist/wort/aalen/` → Badge-HTML im Output
@@ -289,6 +294,7 @@ SCSS in `src/styles/components/_word-themen.scss` (neues File), laden via `@use 
 Die Sitemap wird in `astro.config.mjs` konfiguriert (Astro Sitemap-Integration). Themen-Seiten werden automatisch aufgenommen da sie statisch generiert werden — **keine Änderung nötig** wenn Astro Sitemap `@astrojs/sitemap` mit `customPages` oder Auto-Discovery konfiguriert ist.
 
 Prüfen nach Build:
+
 ```bash
 grep "themen" dist/sitemap*.xml
 ```
@@ -299,21 +305,21 @@ Falls nicht automatisch: `customPages` in `astro.config.mjs` erweitern.
 
 ## Neue Dateien
 
-| Datei | Zweck |
-|---|---|
-| `src/services/queries/getThemen.ts` | `fetchAllThemen()` + GQL-Query |
-| `src/pages/themen/[themaSlug].astro` | Dynamische Kategorie-Seiten |
-| `src/pages/themen/index.astro` | Übersicht aller Kategorien |
-| `src/styles/components/_word-themen.scss` | Badge-Styling |
+| Datei                                     | Zweck                          |
+| ----------------------------------------- | ------------------------------ |
+| `src/services/queries/getThemen.ts`       | `fetchAllThemen()` + GQL-Query |
+| `src/pages/themen/[themaSlug].astro`      | Dynamische Kategorie-Seiten    |
+| `src/pages/themen/index.astro`            | Übersicht aller Kategorien     |
+| `src/styles/components/_word-themen.scss` | Badge-Styling                  |
 
 ## Geänderte Dateien
 
-| Datei | Änderung |
-|---|---|
-| `src/services/fragments/fragments.ts` | `TaxonomySeoFragment` hinzufügen |
-| `src/services/api.ts` | `fetchAllThemen` re-exportieren |
-| `src/pages/wort/[...wordSlug].astro` | Themen-Badges einblenden |
-| `src/pages/api/search/index.json.ts` | `as Record<string, unknown>` Cast entfernen (nach Codegen) |
+| Datei                                 | Änderung                                                   |
+| ------------------------------------- | ---------------------------------------------------------- |
+| `src/services/fragments/fragments.ts` | `TaxonomySeoFragment` hinzufügen                           |
+| `src/services/api.ts`                 | `fetchAllThemen` re-exportieren                            |
+| `src/pages/wort/[...wordSlug].astro`  | Themen-Badges einblenden                                   |
+| `src/pages/api/search/index.json.ts`  | `as Record<string, unknown>` Cast entfernen (nach Codegen) |
 
 ---
 
@@ -329,9 +335,9 @@ Phase 4: Sitemap prüfen → pnpm build:local
 
 ## Bekannte Risiken
 
-| Risiko | Mitigation |
-|---|---|
-| `TaxonomySEO` nicht im Schema (Yoast nicht für Taxonomie aktiviert) | Phase 0b verifizieren; Fallback: `seo`-Feld weglassen, `description` direkt nutzen |
-| `berlinerischThemen` Root-Query nicht registriert | WPGraphQL Plugin-Version ≥ 1.x prüfen; `show_in_graphql: true` in Taxonomie-Registration (bereits gesetzt) |
-| Fehlende `description` auf Themen | WP Admin → Berliner Schnauze → Themen → Beschreibung eintragen |
-| Codegen-Fehler durch TaxonomySEO-Felder | Felder einzeln testen; ggf. auf `title metaDesc` reduzieren |
+| Risiko                                                              | Mitigation                                                                                                 |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `TaxonomySEO` nicht im Schema (Yoast nicht für Taxonomie aktiviert) | Phase 0b verifizieren; Fallback: `seo`-Feld weglassen, `description` direkt nutzen                         |
+| `berlinerischThemen` Root-Query nicht registriert                   | WPGraphQL Plugin-Version ≥ 1.x prüfen; `show_in_graphql: true` in Taxonomie-Registration (bereits gesetzt) |
+| Fehlende `description` auf Themen                                   | WP Admin → Berliner Schnauze → Themen → Beschreibung eintragen                                             |
+| Codegen-Fehler durch TaxonomySEO-Felder                             | Felder einzeln testen; ggf. auf `title metaDesc` reduzieren                                                |

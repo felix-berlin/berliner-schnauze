@@ -37,9 +37,7 @@
     "word": "Rad",
     "article": "das",
     "translations": ["Verrücktheit (in der Wendung »ein Rad abhaben«)"],
-    "examples": [
-      { "example": "Der hat’n Rad ab.", "explanation": "Der spinnt." }
-    ],
+    "examples": [{ "example": "Der hat’n Rad ab.", "explanation": "Der spinnt." }],
     "themen": []
   },
   {
@@ -109,9 +107,7 @@
     "word": "Rand",
     "article": "der",
     "translations": ["Mund (in der Wendung »halt den Rand«)"],
-    "examples": [
-      { "example": "Halt den Rand!", "explanation": "Halt den Mund!" }
-    ],
+    "examples": [{ "example": "Halt den Rand!", "explanation": "Halt den Mund!" }],
     "themen": []
   },
   {
@@ -136,7 +132,10 @@
     "translations": ["sich trauen", "sich stürmisch nähern"],
     "examples": [
       { "example": "Da jeh ick nich ran!", "explanation": "Da traue ich mich nicht ran." },
-      { "example": "Der jeht janz schön ran.", "explanation": "Er nähert sich stürmisch einer Frau." }
+      {
+        "example": "Der jeht janz schön ran.",
+        "explanation": "Er nähert sich stürmisch einer Frau."
+      }
     ],
     "themen": ["beziehungen-soziales"]
   },
@@ -172,7 +171,10 @@
     "word": "ratzekahl",
     "translations": ["restlos", "vollständig"],
     "examples": [
-      { "example": "Andere Leute flanieren hin und her, des Morgens sind se konservativ, des Mittags sind se liberal und des Abends sind se ratzekahl!", "explanation": "David Kalisch in der Berliner Posse »Einhunderttausend Taler« (1849)." }
+      {
+        "example": "Andere Leute flanieren hin und her, des Morgens sind se konservativ, des Mittags sind se liberal und des Abends sind se ratzekahl!",
+        "explanation": "David Kalisch in der Berliner Posse »Einhunderttausend Taler« (1849)."
+      }
     ],
     "infoText": "Entweder von französisch radical oder von »kahl wie ne geborene Ratte«. Etwas »ratzekahl aufessen« = wie von Ratten mit Stumpf und Stiel auffressen.",
     "themen": []
@@ -203,7 +205,10 @@
     "word": "rausreißen",
     "translations": ["helfen, nützen (nur verneint)"],
     "examples": [
-      { "example": "Dit reiß mich ooch nich mehr raus.", "explanation": "Das hilft, nützt mir auch nichts mehr." }
+      {
+        "example": "Dit reiß mich ooch nich mehr raus.",
+        "explanation": "Das hilft, nützt mir auch nichts mehr."
+      }
     ],
     "themen": []
   },
@@ -218,18 +223,14 @@
     "word": "Regenschirm",
     "article": "der",
     "translations": ["äußerst gespannt (in der Redensart)"],
-    "examples": [
-      { "example": "Ick bin jespannt wie’n Rejenschirm." }
-    ],
+    "examples": [{ "example": "Ick bin jespannt wie’n Rejenschirm." }],
     "themen": ["gefuehle-emotionen"]
   },
   {
     "word": "Register",
     "article": "das",
     "translations": ["nicht mehr jung (in der Redensart)"],
-    "examples": [
-      { "example": "Sie sind ja ooch schon ’n ollet Rejister." }
-    ],
+    "examples": [{ "example": "Sie sind ja ooch schon ’n ollet Rejister." }],
     "themen": []
   },
   {
@@ -276,7 +277,10 @@
     "word": "reinwürgen",
     "translations": ["einen Verweis erteilen"],
     "examples": [
-      { "example": "Wenn de so weitermachst, kriste eene rinjewürgt.", "explanation": "Dann erhältst du einen Verweis, einen Tadel." }
+      {
+        "example": "Wenn de so weitermachst, kriste eene rinjewürgt.",
+        "explanation": "Dann erhältst du einen Verweis, einen Tadel."
+      }
     ],
     "themen": []
   },
@@ -343,7 +347,10 @@
     "translations": ["merken (»den Braten riechen«)", "leiden können (verneint)"],
     "examples": [
       { "example": "Den kann ick nich riechen.", "explanation": "Den kann ich nicht leiden." },
-      { "example": "Riech ma an meine Knospe!", "explanation": "Drohung, bei der die Faust unter die Nase gehalten wird." }
+      {
+        "example": "Riech ma an meine Knospe!",
+        "explanation": "Drohung, bei der die Faust unter die Nase gehalten wird."
+      }
     ],
     "themen": []
   },
@@ -352,7 +359,10 @@
     "article": "der",
     "translations": ["Gespür"],
     "examples": [
-      { "example": "Der hat den richt’jen Riecher jehabt.", "explanation": "Er hatte das richtige Gefühl für eine günstige Gelegenheit." }
+      {
+        "example": "Der hat den richt’jen Riecher jehabt.",
+        "explanation": "Er hatte das richtige Gefühl für eine günstige Gelegenheit."
+      }
     ],
     "themen": []
   },
@@ -403,9 +413,7 @@
     "word": "Rohr",
     "article": "das",
     "translations": ["Flasche"],
-    "examples": [
-      { "example": "Mit vollem Rohr.", "explanation": "Etwas mit aller Kraft tun." }
-    ],
+    "examples": [{ "example": "Mit vollem Rohr.", "explanation": "Etwas mit aller Kraft tun." }],
     "themen": ["alkohol-kneipe"]
   },
   {
@@ -431,7 +439,10 @@
     "examples": [
       { "example": "Jemanden durch de Rolle dreh’n.", "explanation": "In die Mangel nehmen." },
       { "example": "Von der Rolle sein.", "explanation": "Fertig, kaputt sein." },
-      { "example": "Jemanden auf die Rolle schieben.", "explanation": "Ihn verulken, zum Narren halten." }
+      {
+        "example": "Jemanden auf die Rolle schieben.",
+        "explanation": "Ihn verulken, zum Narren halten."
+      }
     ],
     "themen": []
   },

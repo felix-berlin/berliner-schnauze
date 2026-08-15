@@ -69,9 +69,9 @@ describe("RelatedWords.vue", () => {
 
   it("throws RangeError when numberOfWords exceeds available words (covers line 37)", () => {
     const tooFew = [makeWord("a", "A"), makeWord("b", "B")];
-    expect(() =>
-      mount(RelatedWords, { props: { words: tooFew, numberOfWords: 5 } }),
-    ).toThrow(RangeError);
+    expect(() => mount(RelatedWords, { props: { words: tooFew, numberOfWords: 5 } })).toThrow(
+      RangeError,
+    );
   });
 
   it("uses slug as key when id is undefined (covers line 5 ?? word.slug branch)", () => {
@@ -90,7 +90,9 @@ describe("RelatedWords.vue", () => {
       { wordProperties: { berlinerisch: "Kiez" } },
       { wordProperties: { berlinerisch: "Schnauze" } },
     ] as unknown as ReturnType<typeof makeWord>[];
-    const wrapper = mount(RelatedWords, { props: { words: wordsWithoutIdOrSlug, numberOfWords: 3 } });
+    const wrapper = mount(RelatedWords, {
+      props: { words: wordsWithoutIdOrSlug, numberOfWords: 3 },
+    });
     expect(wrapper.findAll("li")).toHaveLength(3);
   });
 

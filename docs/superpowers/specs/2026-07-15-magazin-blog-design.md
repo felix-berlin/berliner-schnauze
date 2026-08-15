@@ -154,19 +154,19 @@ const sorted = [...blocks].sort((a, b) => a.order - b.order);
 
 ## Affected Files
 
-| File | Change |
-|---|---|
-| `src/services/fragments/blockFragments.ts` | Neu — `CoreImageBlockFields`, `CoreQuoteBlockFields` |
-| `src/services/queries/getPosts.ts` | Neu — `GetAllPosts` Query, `fetchAllPosts()` (cached, throws) |
-| `src/services/api.ts` | Re-export `fetchAllPosts` |
-| `src/pages/magazin/index.astro` | Neu — Listing |
-| `src/pages/magazin/[postSlug].astro` | Neu — Detail, `getStaticPaths` |
-| `src/components/magazin/ArticleBlocks.astro` | Neu — Block-Dispatcher mit Fallback |
-| `src/components/magazin/ArticleImage.astro` | Neu — `core/image` → optimiertes Bild |
-| `src/components/magazin/ArticleQuote.astro` | Neu — `core/quote` → Postcard-Zitat |
-| `src/styles/components/_magazin-overview.scss` | Neu |
-| `src/styles/components/_magazin-article.scss` | Neu |
-| Codegen (`pnpm gql:generate`) | Regeneriert `src/gql/graphql.ts` mit `Post`/`Block`-Typen |
+| File                                           | Change                                                        |
+| ---------------------------------------------- | ------------------------------------------------------------- |
+| `src/services/fragments/blockFragments.ts`     | Neu — `CoreImageBlockFields`, `CoreQuoteBlockFields`          |
+| `src/services/queries/getPosts.ts`             | Neu — `GetAllPosts` Query, `fetchAllPosts()` (cached, throws) |
+| `src/services/api.ts`                          | Re-export `fetchAllPosts`                                     |
+| `src/pages/magazin/index.astro`                | Neu — Listing                                                 |
+| `src/pages/magazin/[postSlug].astro`           | Neu — Detail, `getStaticPaths`                                |
+| `src/components/magazin/ArticleBlocks.astro`   | Neu — Block-Dispatcher mit Fallback                           |
+| `src/components/magazin/ArticleImage.astro`    | Neu — `core/image` → optimiertes Bild                         |
+| `src/components/magazin/ArticleQuote.astro`    | Neu — `core/quote` → Postcard-Zitat                           |
+| `src/styles/components/_magazin-overview.scss` | Neu                                                           |
+| `src/styles/components/_magazin-article.scss`  | Neu                                                           |
+| Codegen (`pnpm gql:generate`)                  | Regeneriert `src/gql/graphql.ts` mit `Post`/`Block`-Typen     |
 
 ## Testing
 

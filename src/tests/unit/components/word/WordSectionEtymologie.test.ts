@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it, beforeAll } from "vitest";
+
 import { createAstroRender } from "../../helpers";
 
 const makeWordProps = (overrides: Record<string, unknown> = {}) => ({
@@ -14,9 +15,8 @@ describe("WordSectionEtymologie.astro", () => {
   let render: (props: Record<string, unknown>) => Promise<string>;
 
   beforeAll(async () => {
-    const { default: WordSectionEtymologie } = await import(
-      "@components/word/WordSectionEtymologie.astro"
-    );
+    const { default: WordSectionEtymologie } =
+      await import("@components/word/WordSectionEtymologie.astro");
     render = await createAstroRender(WordSectionEtymologie);
   }, 30_000);
 

@@ -23,13 +23,13 @@
 
 ### Key Findings
 
-| Pattern | File count | Pain |
-|---|---|---|
-| Icon mocks (`virtual:icons/lucide/*`) | ~20 files | 3–4 inconsistent styles, 1–5 `vi.mock()` blocks per file |
-| Store mocks with `useStore` wiring | 29 files | 15+ line boilerplate per file |
-| AstroContainer setup in `beforeAll` | ~10 files | 7-line block duplicated verbatim |
-| SCSS module mocks | 4 files | trivial `vi.mock("...", () => ({}))` |
-| No shared helpers file | — | every file reimplements patterns |
+| Pattern                               | File count | Pain                                                     |
+| ------------------------------------- | ---------- | -------------------------------------------------------- |
+| Icon mocks (`virtual:icons/lucide/*`) | ~20 files  | 3–4 inconsistent styles, 1–5 `vi.mock()` blocks per file |
+| Store mocks with `useStore` wiring    | 29 files   | 15+ line boilerplate per file                            |
+| AstroContainer setup in `beforeAll`   | ~10 files  | 7-line block duplicated verbatim                         |
+| SCSS module mocks                     | 4 files    | trivial `vi.mock("...", () => ({}))`                     |
+| No shared helpers file                | —          | every file reimplements patterns                         |
 
 ### Allowed APIs (verified from existing test files)
 
@@ -48,8 +48,8 @@
 
 ### Files to change
 
-| File | Action |
-|---|---|
+| File               | Action                            |
+| ------------------ | --------------------------------- |
 | `vitest.config.ts` | Add `plugins: [iconStubPlugin()]` |
 
 ### Implementation
@@ -95,6 +95,7 @@ grep -rl 'virtual:icons/lucide' src/tests/unit/
 ```
 
 Remove every block matching:
+
 ```typescript
 vi.mock("virtual:icons/lucide/...", ...);
 ```
@@ -109,6 +110,7 @@ The plugin handles all of them automatically.
 - [ ] Run `pnpm test:unit` again — verify no regressions
 
 **Anti-patterns:**
+
 - Do NOT add the plugin to `astro.config.mjs` (production build)
 - Do NOT use `vi.mock` with a glob/regex — Vitest doesn't support wildcards
 
@@ -123,6 +125,7 @@ The plugin handles all of them automatically.
 Replaces the 7-line `beforeAll` boilerplate in every Astro component test.
 
 **Before (current pattern in WordSectionLinguistik.test.ts):**
+
 ```typescript
 let container: InstanceType<typeof AstroContainer>;
 let WordSectionLinguistik: any;
@@ -139,25 +142,30 @@ async function render(props: Record<string, unknown>) {
 ```
 
 **After (with helper):**
+
 ```typescript
 import { createAstroRender } from "../helpers/astro";
 
 let render: (props: Record<string, unknown>) => Promise<string>;
 
 beforeAll(async () => {
-  const { default: WordSectionLinguistik } = await import("@components/word/WordSectionLinguistik.astro");
+  const { default: WordSectionLinguistik } =
+    await import("@components/word/WordSectionLinguistik.astro");
   render = await createAstroRender(WordSectionLinguistik);
 }, 30_000);
 ```
 
 **Helper implementation (`src/tests/unit/helpers/astro.ts`):**
+
 ```typescript
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 
 export async function createAstroRender(component: unknown) {
   const container = await AstroContainer.create();
   return (props: Record<string, unknown>) =>
-    container.renderToString(component as Parameters<typeof container.renderToString>[0], { props });
+    container.renderToString(component as Parameters<typeof container.renderToString>[0], {
+      props,
+    });
 }
 ```
 
@@ -166,6 +174,7 @@ export async function createAstroRender(component: unknown) {
 Reduces the verbose `useStore.mockImplementation` pattern in 29 files.
 
 **Before (current pattern in InstallApp.test.ts):**
+
 ```typescript
 beforeEach(() => {
   mockedUseStore.mockImplementation((store: unknown) => {
@@ -178,6 +187,7 @@ beforeEach(() => {
 ```
 
 **After:**
+
 ```typescript
 import { createStoreMockImpl } from "../helpers/stores";
 
@@ -187,12 +197,13 @@ beforeEach(() => {
       [installAppStore.$installPrompt, installPromptRef],
       [installAppStore.$showInstallButton, showInstallButtonRef],
       [installAppStore.$isPwaInstalled, isPwaInstalledRef],
-    ])
+    ]),
   );
 });
 ```
 
 **Helper implementation (`src/tests/unit/helpers/stores.ts`):**
+
 ```typescript
 import { ref, type Ref } from "vue";
 
@@ -220,7 +231,9 @@ export function createComponentStub(template = "<div><slot /></div>") {
   };
   return new Proxy(mod, {
     has: () => true,
-    get(t, k) { return k in t ? t[k] : undefined; },
+    get(t, k) {
+      return k in t ? t[k] : undefined;
+    },
   });
 }
 
@@ -269,6 +282,7 @@ src/tests/unit/components/word/WordAnagrams.test.ts
 ```
 
 **For each file:**
+
 1. Add import: `import { createAstroRender } from "../helpers/astro";` (adjust relative path)
 2. Remove `let container: InstanceType<typeof AstroContainer>;` and component variable
 3. Change `let render` type to `(props: Record<string, unknown>) => Promise<string>`
@@ -289,11 +303,13 @@ grep -rl 'mockImplementation.*store' src/tests/unit/
 ```
 
 Priority targets based on audit:
+
 - `src/tests/unit/components/InstallApp.test.ts`
 - `src/tests/unit/components/WordOfTheDay.test.ts`
 - Any file with 3+ `if (store === ...)` branches in `mockImplementation`
 
 **For each file:**
+
 1. Add: `import { createStoreMockImpl } from "../helpers/stores";`
 2. Replace the `mockImplementation((store) => { if ... if ... return ref(null) })` block with `createStoreMockImpl([...])`
 
@@ -306,6 +322,7 @@ Priority targets based on audit:
 ## Phase 5: Standardize `vi.mock` Component Stubs (Optional Polish)
 
 Files using inconsistent `vi.mock` for component stubs (e.g. `AppSettings.test.ts`):
+
 - Replace ad-hoc Proxy objects with `createComponentStub()` from `helpers/stubs.ts`
 - Replace `beforeAll(() => { config.global.stubs.X = ... })` with `createSlotStub()` where applicable
 
@@ -333,11 +350,11 @@ This phase is optional — only worth doing if test count for these files is low
 
 ## Anti-Pattern Guards
 
-| Anti-pattern | Why it breaks |
-|---|---|
-| Calling helper inside `vi.mock()` factory | `vi.mock` is hoisted — imports aren't available at hoist time |
-| Adding icon stub plugin to `astro.config.mjs` | Breaks production icon loading |
-| Using `vi.doMock()` for icons | Not hoisted — race conditions between import and mock |
-| Removing `beforeAll` timeout (30_000) | AstroContainer.create() can take >5s on first call |
-| Using `vi.mock` with regex/glob | Vitest doesn't support wildcard module matching |
+| Anti-pattern                                      | Why it breaks                                                     |
+| ------------------------------------------------- | ----------------------------------------------------------------- |
+| Calling helper inside `vi.mock()` factory         | `vi.mock` is hoisted — imports aren't available at hoist time     |
+| Adding icon stub plugin to `astro.config.mjs`     | Breaks production icon loading                                    |
+| Using `vi.doMock()` for icons                     | Not hoisted — race conditions between import and mock             |
+| Removing `beforeAll` timeout (30_000)             | AstroContainer.create() can take >5s on first call                |
+| Using `vi.mock` with regex/glob                   | Vitest doesn't support wildcard module matching                   |
 | Calling `delete config.global.stubs.X` at runtime | Triggers Vitest Proxy `__isKeepAlive` errors in subsequent mounts |
