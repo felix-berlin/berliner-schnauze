@@ -2,14 +2,22 @@
 > Berliner Schnauze ist ein aktuelles Berlinerisch–Hochdeutsch Wörterbuch mit über 900 Einträgen,
 > Etymologie, Phonologie, Grammatik und Beispielsätzen für jeden Berliner Ausdruck.
 
-Die Inhalte dürfen für Suche und direkte Nutzeranfragen verwendet werden (search=yes). Eine Vervielfältigung für KI-Training ist nicht gestattet (ai-train=no).
+Die Inhalte dürfen für Suche und direkte Nutzeranfragen verwendet werden (search=yes). Eine Vervielfältigung für KI-Training ist nicht gestattet (ai-train=no) — siehe /robots.txt für die verbindliche Bot-Konfiguration je Crawler.
 
-## Hauptinhalt
-- [Startseite](https://berliner-schnauze.wtf): Übersicht und Wort des Tages
+Einzelne Wortseiten folgen dem Muster `https://berliner-schnauze.wtf/wort/{begriff}`; die vollständige, aktuelle URL-Liste steht in der [Sitemap](https://berliner-schnauze.wtf/sitemap-index.xml).
+
+## Wörterbuch
 - [Wort-Index](https://berliner-schnauze.wtf/wort): Vollständiger Wort-Index (900+ Einträge)
-- [Einzelne Wortseiten](https://berliner-schnauze.wtf/wort/[term]): Definition, Etymologie, Phonologie, Grammatik und Beispielsätze
+- [Wort des Tages](https://berliner-schnauze.wtf): Startseite mit täglich wechselndem Begriff
+- [Themen](https://berliner-schnauze.wtf/themen): Wörter gruppiert nach thematischen Kategorien
+
+## Magazin
+- [Magazin](https://berliner-schnauze.wtf/magazin): Artikel rund um Berliner Dialekt, Kultur und Sprache
+
+## Spiele
 - [Berliner oder Nicht](https://berliner-schnauze.wtf/games/berliner-oder-nicht): Dialekt-Quiz-Spiel
 
 ## Optional
+- [Changelog](https://berliner-schnauze.wtf/changelog): Nutzerorientierte Versionshistorie der App
 - [Impressum](https://berliner-schnauze.wtf/impressum): Rechtliche Angaben
 - [Datenschutz](https://berliner-schnauze.wtf/datenschutz): Datenschutzerklärung
