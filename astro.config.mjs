@@ -413,12 +413,16 @@ export default defineConfig({
         // navigateFallbackAllowlist: [/^\//],
       },
     }),
-    // TODO: deactivate codecovplugin for local development builds, because it slows down the build and is not needed for local testing
-    codecovplugin({
-      enableBundleAnalysis: true,
-      bundleName: "berliner-schnauze-bundle",
-      uploadToken: CODECOV_TOKEN,
-    }),
+    // Skipped for local dev builds: slows down the build and isn't needed outside CI.
+    ...(import.meta.env.DEV
+      ? []
+      : [
+          codecovplugin({
+            enableBundleAnalysis: true,
+            bundleName: "berliner-schnauze-bundle",
+            uploadToken: CODECOV_TOKEN,
+          }),
+        ]),
     (await import("@playform/inline")).default(),
   ],
   vite: {
