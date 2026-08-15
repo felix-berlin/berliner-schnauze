@@ -17663,18 +17663,27 @@ type PostTypeLabelDetails {
 }
 
 type PostTypeSEO {
+  analysis: SEOAnalysis
+  breadcrumbTitle: String
   breadcrumbs: [SEOPostTypeBreadcrumbs]
   canonical: String
   cornerstone: Boolean
   focuskw: String
   fullHead: String
+  head: SEOHead
+  language: String
   metaDesc: String
   metaKeywords: String
   metaRobotsNofollow: String
   metaRobotsNoindex: String
+  objectLastModified: String
+  objectPublishedAt: String
   opengraphAuthor: String
   opengraphDescription: String
+  opengraphEnabled: Boolean
+  opengraphFbAppId: String
   opengraphImage: MediaItem
+  opengraphLocale: String
   opengraphModifiedTime: String
   opengraphPublishedTime: String
   opengraphPublisher: String
@@ -17683,10 +17692,17 @@ type PostTypeSEO {
   opengraphType: String
   opengraphUrl: String
   readingTime: Float
+  region: String
+  relNext: String
+  relPrev: String
+  robots: SEORobots
   schema: SEOPostTypeSchema
   title: String
+  twitterCardType: String
+  twitterCreator: String
   twitterDescription: String
   twitterImage: MediaItem
+  twitterSite: String
   twitterTitle: String
 }
 
@@ -21115,6 +21131,28 @@ type RootQueryToUserRoleConnectionPageInfo implements PageInfo & UserRoleConnect
   total: Int
 }
 
+"""The Yoast SEO advanced site configuration"""
+type SEOAdvanced {
+  contentAnalysisActive: Boolean
+  environmentType: String
+  hasMultipleAuthors: Boolean
+  inclusiveLanguageAnalysisActive: Boolean
+  indexNowEnabled: Boolean
+  indexNowKey: String
+  keywordAnalysisActive: Boolean
+  siteType: String
+  xmlSitemapEnabled: Boolean
+}
+
+"""The Yoast SEO analysis scores and link counts"""
+type SEOAnalysis {
+  inclusiveLanguageScore: Int
+  incomingLinkCount: Int
+  keywordScore: Int
+  linkCount: Int
+  readabilityScore: Int
+}
+
 """The Yoast SEO breadcrumb config"""
 type SEOBreadcrumbs {
   archivePrefix: String
@@ -21136,6 +21174,7 @@ enum SEOCardType {
 
 """The Yoast SEO site level configuration data"""
 type SEOConfig {
+  advanced: SEOAdvanced
   breadcrumbs: SEOBreadcrumbs
   contentTypes: SEOContentTypes
   meta: SEOGlobalMeta
@@ -21143,12 +21182,14 @@ type SEOConfig {
   redirects: [SEORedirect]
   schema: SEOSchema
   social: SEOSocial
+  taxonomyArchives: SEOTaxonomyTypes
   webmaster: SEOWebmaster
 }
 
 """The Yoast SEO search appearance content types fields"""
 type SEOContentType {
   archive: SEOContentTypeArchive
+  articleType: String
   metaDesc: String
   metaRobotsNoindex: Boolean
   schema: SEOPageInfoSchema
@@ -21162,11 +21203,13 @@ type SEOContentTypeArchive {
   breadcrumbTitle: String
   fullHead: String
   hasArchive: Boolean
+  head: SEOHead
   metaDesc: String
   metaRobotsFollow: String
   metaRobotsIndex: String
   metaRobotsNofollow: Boolean
   metaRobotsNoindex: Boolean
+  social: SEOSocialArchive
   title: String
 }
 
@@ -21187,6 +21230,7 @@ type SEOGlobalMeta {
   date: SEOGlobalMetaDate
   homepage: SEOGlobalMetaHome
   notFound: SEOGlobalMeta404
+  search: SEOGlobalMetaSearch
 }
 
 """The Yoast SEO meta 404 data"""
@@ -21198,6 +21242,9 @@ type SEOGlobalMeta404 {
 """The Yoast SEO Author data"""
 type SEOGlobalMetaAuthor {
   description: String
+  noindex: Boolean
+  noindexNoPosts: Boolean
+  social: SEOSocialArchive
   title: String
 }
 
@@ -21209,6 +21256,8 @@ type SEOGlobalMetaConfig {
 """The Yoast SEO Date data"""
 type SEOGlobalMetaDate {
   description: String
+  noindex: Boolean
+  social: SEOSocialArchive
   title: String
 }
 
@@ -21218,9 +21267,21 @@ type SEOGlobalMetaHome {
   title: String
 }
 
+"""The Yoast SEO search results data"""
+type SEOGlobalMetaSearch {
+  title: String
+}
+
+"""The Yoast SEO head output as structured HTML and JSON"""
+type SEOHead {
+  html: String
+  json: String
+}
+
 """The Open Graph data"""
 type SEOOpenGraph {
   defaultImage: MediaItem
+  enabled: Boolean
   frontPage: SEOOpenGraphFrontPage
 }
 
@@ -21261,6 +21322,15 @@ type SEORedirect {
   type: Int
 }
 
+"""The Yoast SEO robots directives"""
+type SEORobots {
+  noarchive: Boolean
+  nofollow: String
+  noimageindex: Boolean
+  noindex: String
+  nosnippet: Boolean
+}
+
 """The Yoast SEO schema data"""
 type SEOSchema {
   companyLogo: MediaItem
@@ -21281,12 +21351,20 @@ type SEOSocial {
   facebook: SEOSocialFacebook
   instagram: SEOSocialInstagram
   linkedIn: SEOSocialLinkedIn
+  mastodon: SEOSocialMastodon
   mySpace: SEOSocialMySpace
   otherSocials: [String]
   pinterest: SEOSocialPinterest
   twitter: SEOSocialTwitter
   wikipedia: SEOSocialWikipedia
   youTube: SEOSocialYoutube
+}
+
+"""The Yoast SEO Premium social settings for an archive"""
+type SEOSocialArchive {
+  description: String
+  image: MediaItem
+  title: String
 }
 
 type SEOSocialFacebook {
@@ -21302,6 +21380,10 @@ type SEOSocialLinkedIn {
   url: String
 }
 
+type SEOSocialMastodon {
+  url: String
+}
+
 type SEOSocialMySpace {
   url: String
 }
@@ -21313,6 +21395,7 @@ type SEOSocialPinterest {
 
 type SEOSocialTwitter {
   cardType: SEOCardType
+  enabled: Boolean
   username: String
 }
 
@@ -21329,23 +21412,55 @@ type SEOTaxonomySchema {
   raw: String
 }
 
+"""The Yoast SEO search appearance Taxonomy types fields"""
+type SEOTaxonomyType {
+  archive: SEOTaxonomyTypeArchive
+}
+
+"""The Yoast SEO search appearance Taxonomy types fields"""
+type SEOTaxonomyTypeArchive {
+  metaDesc: String
+  metaRobotsNoindex: Boolean
+  social: SEOSocialArchive
+  title: String
+}
+
+"""The Yoast SEO archive configuration data for taxonomies"""
+type SEOTaxonomyTypes {
+  berlinerischThema: SEOTaxonomyType
+  berlinerischWordType: SEOTaxonomyType
+  category: SEOTaxonomyType
+  postFormat: SEOTaxonomyType
+  tag: SEOTaxonomyType
+}
+
 type SEOUser {
+  analysis: SEOAnalysis
   breadcrumbTitle: String
   canonical: String
   fullHead: String
+  head: SEOHead
   language: String
   metaDesc: String
   metaRobotsNofollow: String
   metaRobotsNoindex: String
   opengraphDescription: String
+  opengraphEnabled: Boolean
+  opengraphFbAppId: String
   opengraphImage: MediaItem
+  opengraphLocale: String
   opengraphTitle: String
   region: String
+  relNext: String
+  relPrev: String
+  robots: SEORobots
   schema: SEOUserSchema
   social: SEOUserSocial
   title: String
+  twitterCreator: String
   twitterDescription: String
   twitterImage: MediaItem
+  twitterSite: String
   twitterTitle: String
 }
 
@@ -21360,6 +21475,7 @@ type SEOUserSocial {
   facebook: String
   instagram: String
   linkedIn: String
+  mastodon: String
   mySpace: String
   pinterest: String
   soundCloud: String
@@ -22125,18 +22241,27 @@ enum TaxonomyIdTypeEnum {
 }
 
 type TaxonomySEO {
+  analysis: SEOAnalysis
+  breadcrumbTitle: String
   breadcrumbs: [SEOPostTypeBreadcrumbs]
   canonical: String
   cornerstone: Boolean
   focuskw: String
   fullHead: String
+  head: SEOHead
+  language: String
   metaDesc: String
   metaKeywords: String
   metaRobotsNofollow: String
   metaRobotsNoindex: String
+  objectLastModified: String
+  objectPublishedAt: String
   opengraphAuthor: String
   opengraphDescription: String
+  opengraphEnabled: Boolean
+  opengraphFbAppId: String
   opengraphImage: MediaItem
+  opengraphLocale: String
   opengraphModifiedTime: String
   opengraphPublishedTime: String
   opengraphPublisher: String
@@ -22144,10 +22269,17 @@ type TaxonomySEO {
   opengraphTitle: String
   opengraphType: String
   opengraphUrl: String
+  region: String
+  relNext: String
+  relPrev: String
+  robots: SEORobots
   schema: SEOTaxonomySchema
   title: String
+  twitterCardType: String
+  twitterCreator: String
   twitterDescription: String
   twitterImage: MediaItem
+  twitterSite: String
   twitterTitle: String
 }
 
