@@ -1,17 +1,16 @@
-import sharpService from "astro/assets/services/sharp";
 import { baseService } from "astro/assets";
-import type { ImageTransform, LocalImageService } from "astro";
+import type { ExternalImageService, ImageTransform } from "astro";
 import { buildImagorPath, signImagorPath } from "@utils/imagor";
 
-const imagorImageService: LocalImageService = {
+const imagorImageService: ExternalImageService = {
   validateOptions: baseService.validateOptions,
   getSrcSet: baseService.getSrcSet,
   getHTMLAttributes: baseService.getHTMLAttributes,
-  parseURL: sharpService.parseURL,
-  transform: sharpService.transform,
-  getURL(options: ImageTransform, imageConfig) {
+  getURL(options: ImageTransform) {
     if (typeof options.src !== "string") {
-      return sharpService.getURL(options, imageConfig);
+      // Local (ESM-imported) images are served at their original, Vite-processed
+      // asset URL — Imagor only transforms remote CMS/Wikimedia/Amazon images.
+      return options.src.src;
     }
     if (!options.width || !options.height) {
       throw new Error(`imagorImageService requires both width and height, got src=${options.src}`);
