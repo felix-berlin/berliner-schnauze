@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.48.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.47.0...v3.48.0) (2026-08-15)
+
+
+### Bug Fixes
+
+* **config:** add TODO to deactivate codecovplugin for local development builds ([2159572](https://github.com/felix-berlin/berliner-schnauze/commit/21595728c613c10dcab81fc1faffa239ef4280cf))
+* **config:** skip codecovplugin for local dev builds ([a69c67b](https://github.com/felix-berlin/berliner-schnauze/commit/a69c67b74cf1ed2dd4974857d5bed0c799232c19))
+* **config:** tighten workbox runtime-caching rules ([c52cfeb](https://github.com/felix-berlin/berliner-schnauze/commit/c52cfeb90f8fb929b495948ef18542a9fde1fb4b))
+* **dependencies:** remove sharp dependency from package.json and pnpm-lock.yaml ([0b74073](https://github.com/felix-berlin/berliner-schnauze/commit/0b74073997ae667870d87a1716a881f77b11cd4a))
+* **images:** honor responsive widths and drop broken unsafe imagor mode ([ce7f63d](https://github.com/felix-berlin/berliner-schnauze/commit/ce7f63d966cba997e4ca6172ac2275d201224b72))
+* **images:** remove unused image assets from the project ([8a87e83](https://github.com/felix-berlin/berliner-schnauze/commit/8a87e836158f03a1b8b62755260c4ff221d89d00))
+* **images:** remove unused ImagorAlign type definition ([aa7d63a](https://github.com/felix-berlin/berliner-schnauze/commit/aa7d63af02bdd8808d31198e5aa8fea120dd694b))
+* **images:** route local ESM image sources through Astro's Sharp service ([6612fbb](https://github.com/felix-berlin/berliner-schnauze/commit/6612fbba3da41078212cb54d532c266ed8d847ee))
+* **images:** route local ESM image sources through their original asset URL ([274e471](https://github.com/felix-berlin/berliner-schnauze/commit/274e47187c86749a28d96471131bef8f33ebc084))
+* **images:** specify dimensions for Open Graph image ([12c22fa](https://github.com/felix-berlin/berliner-schnauze/commit/12c22fae5d221d8b25eeff0ec925c99680c3e077))
+* **images:** update attributes type in UnresolvedSrcSetValue to use unknown ([d68659f](https://github.com/felix-berlin/berliner-schnauze/commit/d68659fa2c8494a5d6ca87b31043dbd3c4f80c9a))
+* **images:** update image sources to use external URLs and adjust attributes ([a4446e9](https://github.com/felix-berlin/berliner-schnauze/commit/a4446e9a23f4668d276a85b81c24e38ff98a3c7c))
+* **images:** update Open Graph image source to use a direct URL ([702033a](https://github.com/felix-berlin/berliner-schnauze/commit/702033abe7637ec00540a1d7dab49f35efd058e1))
+
+
+### Features
+
+* **images:** add custom Astro image service backed by Imagor ([90facb2](https://github.com/felix-berlin/berliner-schnauze/commit/90facb227f13387818184391e476042afa012620))
+* **images:** add fallback format for images and enhance Imagor image processing capabilities ([a859823](https://github.com/felix-berlin/berliner-schnauze/commit/a859823a2dc18f35dd23776ebdc86e881712419b))
+* **images:** add Imagor HMAC-SHA256 URL signing utility ([ba1e078](https://github.com/felix-berlin/berliner-schnauze/commit/ba1e078464554618c2eb2437991aecf26935d4c9))
+* **images:** wire Imagor service into Astro image pipeline and PWA cache ([fcbfebc](https://github.com/felix-berlin/berliner-schnauze/commit/fcbfebcc163cefb774186d0c6bdd310eb247f3d5))
+* **pwa:** add cache cleanup, navigate fallback, and manifest polish ([c66ca70](https://github.com/felix-berlin/berliner-schnauze/commit/c66ca7096dbc862cf81c6626dbf418606adbe720))
+* **pwa:** add icons for app shortcuts in site configuration ([cdf6563](https://github.com/felix-berlin/berliner-schnauze/commit/cdf6563b6a79817f7b5e240afe99a4c3f9c3ee23))
+* **seo:** enhance SEO types with additional fields and configurations ([c078102](https://github.com/felix-berlin/berliner-schnauze/commit/c0781025b5fe02cd5c619226c3b118669fcce0be))
+
+
+### Performance Improvements
+
+* **images:** preconnect to the Imagor host ([965b817](https://github.com/felix-berlin/berliner-schnauze/commit/965b817f3c3281255cad5a785bf7be0664ae8268))
+
 # [3.47.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.46.0...v3.47.0) (2026-08-14)
 
 
