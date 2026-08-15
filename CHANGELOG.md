@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.48.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.48.1...v3.48.2) (2026-08-15)
+
+
+### Bug Fixes
+
+* **docs:** correct entry count in llms.txt from 900 to 2400 ([df062b2](https://github.com/felix-berlin/berliner-schnauze/commit/df062b2d5d4561b5f20658610a4087f3e4fa2271))
+
 ## [3.48.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.48.0...v3.48.1) (2026-08-15)
 
 
