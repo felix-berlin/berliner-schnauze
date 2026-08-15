@@ -9,7 +9,7 @@
   >
     <template v-if="payload">
       <h1 class="c-bon-share-view__title">
-        {{ payload.playerName ? `${payload.playerName}s Spielergebnis` : 'Spielergebnis' }}
+        {{ payload.playerName ? `${payload.playerName}s Spielergebnis` : "Spielergebnis" }}
       </h1>
 
       <dl class="c-bon-share-view__stats">
@@ -48,41 +48,42 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useUrlSearchParams } from '@vueuse/core'
-import { decodeShareHash } from '@utils/bonShare'
-import type { BonSharePayload } from '@utils/bonShare'
-import { useContentTracking } from '@composables/useContentTracking'
+import type { BonSharePayload } from "@utils/bonShare";
 
-const root = ref<HTMLElement | null>(null)
-useContentTracking(root)
+import { useContentTracking } from "@composables/useContentTracking";
+import { decodeShareHash } from "@utils/bonShare";
+import { useUrlSearchParams } from "@vueuse/core";
+import { computed, ref } from "vue";
 
-const params = useUrlSearchParams('history')
+const root = ref<HTMLElement | null>(null);
+useContentTracking(root);
+
+const params = useUrlSearchParams("history");
 const payload = computed<BonSharePayload | null>(() => {
-  const r = params.r
-  return r ? decodeShareHash(Array.isArray(r) ? r[0] : r) : null
-})
+  const r = params.r;
+  return r ? decodeShareHash(Array.isArray(r) ? r[0] : r) : null;
+});
 
 const accuracyPercent = computed(() =>
   payload.value && payload.value.totalAnswered > 0
     ? Math.round((payload.value.correctAnswers / payload.value.totalAnswered) * 100)
     : 0,
-)
+);
 
 const formattedDate = computed(() => {
-  if (!payload.value?.date) return ''
-  return new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' }).format(
+  if (!payload.value?.date) return "";
+  return new Intl.DateTimeFormat("de-DE", { dateStyle: "long" }).format(
     new Date(payload.value.date),
-  )
-})
+  );
+});
 
 const contentPiece = computed(() =>
   payload.value
-    ? `Score ${payload.value.score}${payload.value.playerName ? ` – ${payload.value.playerName}` : ''}`
-    : 'Spielergebnis',
-)
+    ? `Score ${payload.value.score}${payload.value.playerName ? ` – ${payload.value.playerName}` : ""}`
+    : "Spielergebnis",
+);
 </script>
 
 <style lang="scss">
-@use '@styles/components/bon-share-view';
+@use "@styles/components/bon-share-view";
 </style>

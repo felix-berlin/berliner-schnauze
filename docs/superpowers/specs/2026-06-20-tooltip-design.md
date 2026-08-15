@@ -12,6 +12,7 @@ Replace FloatingVue's `v-tooltip` directive and `VTooltip` component with a nati
 ## Scope
 
 **In scope:**
+
 - New directive `src/directives/tooltip.ts`
 - New component `src/components/TooltipPopover.vue`
 - New SCSS `src/styles/components/_tooltip.scss`
@@ -22,6 +23,7 @@ Replace FloatingVue's `v-tooltip` directive and `VTooltip` component with a nati
 - Delete `src/components/ToolTip.vue`
 
 **Out of scope:**
+
 - Touch/mobile long-press to show tooltip
 - Tooltip arrow/caret (decorative pointer)
 - Singleton tooltip pattern (one tooltip shared across all directive instances)
@@ -30,14 +32,14 @@ Replace FloatingVue's `v-tooltip` directive and `VTooltip` component with a nati
 
 ## Decisions
 
-| Decision | Choice | Rationale |
-|---|---|---|
-| Popover type | `popover="manual"` | Hover/focus controlled via JS; no auto-dismiss interference with dropdowns |
-| API style | Clean break | 5 usage sites are easy to migrate; allows idiomatic API |
-| `distance` rename | → `offset` | Consistent with DropdownPopover |
-| `placement: "auto"` | Removed | `position-try-fallbacks` handles fallback automatically |
-| Directive/Component relationship | Independent | No shared runtime; directive = DOM manipulation, component = Vue template |
-| `aria-describedby` on component | Wrapper div | Slot traversal to find inner element is out of scope |
+| Decision                         | Choice             | Rationale                                                                  |
+| -------------------------------- | ------------------ | -------------------------------------------------------------------------- |
+| Popover type                     | `popover="manual"` | Hover/focus controlled via JS; no auto-dismiss interference with dropdowns |
+| API style                        | Clean break        | 5 usage sites are easy to migrate; allows idiomatic API                    |
+| `distance` rename                | → `offset`         | Consistent with DropdownPopover                                            |
+| `placement: "auto"`              | Removed            | `position-try-fallbacks` handles fallback automatically                    |
+| Directive/Component relationship | Independent        | No shared runtime; directive = DOM manipulation, component = Vue template  |
+| `aria-describedby` on component  | Wrapper div        | Slot traversal to find inner element is out of scope                       |
 
 ---
 
@@ -63,16 +65,14 @@ src/tests/unit/components/TooltipPopover.test.ts
 
 ```typescript
 export type TooltipPlacement =
-  | "top" | "top-start" | "top-end"
-  | "bottom" | "bottom-start" | "bottom-end"
-  | "left" | "right";
+  "top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "right";
 
 export type TooltipOptions = {
   content: string;
   placement?: TooltipPlacement; // default: "top"
-  offset?: number;              // default: 8
-  disabled?: boolean;           // default: false
-  shown?: boolean;              // default: false
+  offset?: number; // default: 8
+  disabled?: boolean; // default: false
+  shown?: boolean; // default: false
 };
 
 export type TooltipValue = string | TooltipOptions;
@@ -81,19 +81,18 @@ export type TooltipValue = string | TooltipOptions;
 ### Usage
 
 ```html
-v-tooltip="'Einfacher Tooltip-Text'"
-v-tooltip="{ content: 'Text', placement: 'bottom', offset: 12 }"
-v-tooltip="{ content: 'Text', disabled: !hasContent }"
-v-tooltip="{ content: 'Text', shown: isVisible }"
+v-tooltip="'Einfacher Tooltip-Text'" v-tooltip="{ content: 'Text', placement: 'bottom', offset: 12
+}" v-tooltip="{ content: 'Text', disabled: !hasContent }" v-tooltip="{ content: 'Text', shown:
+isVisible }"
 ```
 
 ### Lifecycle
 
-| Hook | Action |
-|------|--------|
-| `mounted` | Create `<div popover="manual" role="tooltip" id="tooltip-<id}">` in `document.body`; set `anchor-name: --tooltip-<id>` + `aria-describedby="tooltip-<id>"` on host; add `pointerenter`, `pointerleave`, `focusin`, `focusout` listeners |
-| `updated` | Sync content, placement, offset; if `disabled` changes: add/remove listeners; if `shown` changes: call `showPopover()` / `hidePopover()`. `shown: true` is a hard override — hover events are ignored while it is set; `shown: false` is the default (hover still works normally) |
-| `unmounted` | Remove panel from DOM; remove all event listeners; clean up inline styles |
+| Hook        | Action                                                                                                                                                                                                                                                                            |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mounted`   | Create `<div popover="manual" role="tooltip" id="tooltip-<id}">` in `document.body`; set `anchor-name: --tooltip-<id>` + `aria-describedby="tooltip-<id>"` on host; add `pointerenter`, `pointerleave`, `focusin`, `focusout` listeners                                           |
+| `updated`   | Sync content, placement, offset; if `disabled` changes: add/remove listeners; if `shown` changes: call `showPopover()` / `hidePopover()`. `shown: true` is a hard override — hover events are ignored while it is set; `shown: false` is the default (hover still works normally) |
+| `unmounted` | Remove panel from DOM; remove all event listeners; clean up inline styles                                                                                                                                                                                                         |
 
 ### Registration
 
@@ -111,17 +110,17 @@ app.directive("tooltip", vTooltip);
 
 ```typescript
 export type TooltipPopoverProps = {
-  content?: string;              // Text shorthand; slot overrides
-  placement?: TooltipPlacement;  // default: "top"
-  offset?: number;               // default: 8
+  content?: string; // Text shorthand; slot overrides
+  placement?: TooltipPlacement; // default: "top"
+  offset?: number; // default: 8
 };
 ```
 
 ### Slots
 
-| Slot | Purpose |
-|------|---------|
-| `default` | Trigger content (the element being described) |
+| Slot       | Purpose                                         |
+| ---------- | ----------------------------------------------- |
+| `default`  | Trigger content (the element being described)   |
 | `#tooltip` | Rich tooltip content — overrides `content` prop |
 
 ### Expose
@@ -176,9 +175,7 @@ tooltipRef.value?.show();
 <!-- Rich content via slot -->
 <TooltipPopover placement="bottom">
   <span>Wort des Tages</span>
-  <template #tooltip>
-    <strong>Klick</strong> für mehr Infos
-  </template>
+  <template #tooltip> <strong>Klick</strong> für mehr Infos </template>
 </TooltipPopover>
 
 <!-- Programmatisch (WordOfTheDay pattern) -->
@@ -212,7 +209,10 @@ tooltipRef.value?.show();
 
   // Anchor Positioning
   position: fixed;
-  position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+  position-try-fallbacks:
+    flip-block,
+    flip-inline,
+    flip-block flip-inline;
 
   // Tooltip visual style
   background: var(--color-tooltip-bg, var(--gray-900));
@@ -224,14 +224,38 @@ tooltipRef.value?.show();
 
   // Placement modifiers — each sets position-area + its own offset margin direction
   // (offset must be direction-aware; a global margin-block-start only works for bottom placement)
-  &--top         { position-area: block-start; margin-block-end: var(--c-tooltip-offset, 8px); }
-  &--top-start   { position-area: block-start span-inline-end; margin-block-end: var(--c-tooltip-offset, 8px); }
-  &--top-end     { position-area: block-start span-inline-start; margin-block-end: var(--c-tooltip-offset, 8px); }
-  &--bottom      { position-area: block-end; margin-block-start: var(--c-tooltip-offset, 8px); }
-  &--bottom-start { position-area: block-end span-inline-end; margin-block-start: var(--c-tooltip-offset, 8px); }
-  &--bottom-end  { position-area: block-end span-inline-start; margin-block-start: var(--c-tooltip-offset, 8px); }
-  &--left        { position-area: inline-start; margin-inline-end: var(--c-tooltip-offset, 8px); }
-  &--right       { position-area: inline-end; margin-inline-start: var(--c-tooltip-offset, 8px); }
+  &--top {
+    position-area: block-start;
+    margin-block-end: var(--c-tooltip-offset, 8px);
+  }
+  &--top-start {
+    position-area: block-start span-inline-end;
+    margin-block-end: var(--c-tooltip-offset, 8px);
+  }
+  &--top-end {
+    position-area: block-start span-inline-start;
+    margin-block-end: var(--c-tooltip-offset, 8px);
+  }
+  &--bottom {
+    position-area: block-end;
+    margin-block-start: var(--c-tooltip-offset, 8px);
+  }
+  &--bottom-start {
+    position-area: block-end span-inline-end;
+    margin-block-start: var(--c-tooltip-offset, 8px);
+  }
+  &--bottom-end {
+    position-area: block-end span-inline-start;
+    margin-block-start: var(--c-tooltip-offset, 8px);
+  }
+  &--left {
+    position-area: inline-start;
+    margin-inline-end: var(--c-tooltip-offset, 8px);
+  }
+  &--right {
+    position-area: inline-end;
+    margin-inline-start: var(--c-tooltip-offset, 8px);
+  }
 
   // Fallback: browsers without CSS Anchor Positioning
   @supports not (position-area: block-end) {
@@ -268,16 +292,16 @@ tooltipRef.value?.show();
 
 ## Placement → position-area mapping
 
-| `placement` | `position-area` |
-|-------------|----------------|
-| `top` | `block-start` |
-| `top-start` | `block-start span-inline-end` |
-| `top-end` | `block-start span-inline-start` |
-| `bottom` | `block-end` |
-| `bottom-start` | `block-end span-inline-end` |
-| `bottom-end` | `block-end span-inline-start` |
-| `left` | `inline-start` |
-| `right` | `inline-end` |
+| `placement`    | `position-area`                 |
+| -------------- | ------------------------------- |
+| `top`          | `block-start`                   |
+| `top-start`    | `block-start span-inline-end`   |
+| `top-end`      | `block-start span-inline-start` |
+| `bottom`       | `block-end`                     |
+| `bottom-start` | `block-end span-inline-end`     |
+| `bottom-end`   | `block-end span-inline-start`   |
+| `left`         | `inline-start`                  |
+| `right`        | `inline-end`                    |
 
 ---
 
@@ -285,28 +309,28 @@ tooltipRef.value?.show();
 
 ### `v-tooltip` usage sites
 
-| File | Change |
-|------|--------|
-| `InstallApp.vue` | `distance` → `offset` |
-| `WordOfTheDay.vue` | Remove `shown` + `distance`; use `ref` + `tooltipRef.value?.show()` |
-| `ScrollToTop.vue` | `distance` → `offset`; remove `placement: "auto"` |
-| `IsWordOfTheDay.vue` | `distance` → `offset` |
-| `AudioPlayerList.vue` | No change needed (already string value) |
+| File                  | Change                                                              |
+| --------------------- | ------------------------------------------------------------------- |
+| `InstallApp.vue`      | `distance` → `offset`                                               |
+| `WordOfTheDay.vue`    | Remove `shown` + `distance`; use `ref` + `tooltipRef.value?.show()` |
+| `ScrollToTop.vue`     | `distance` → `offset`; remove `placement: "auto"`                   |
+| `IsWordOfTheDay.vue`  | `distance` → `offset`                                               |
+| `AudioPlayerList.vue` | No change needed (already string value)                             |
 
 ### Component migration
 
-| File | Change |
-|------|--------|
-| `src/components/ToolTip.vue` | Delete |
+| File                                 | Change                                                                            |
+| ------------------------------------ | --------------------------------------------------------------------------------- |
+| `src/components/ToolTip.vue`         | Delete                                                                            |
 | `src/components/word/WordHero.astro` | Import `TooltipPopover`; `<ToolTip>` → `<TooltipPopover>`; `#popper` → `#tooltip` |
 
 ### FloatingVue removal
 
-| File | Change |
-|------|--------|
-| `src/pages/_app.ts` | Remove `FloatingVue` import + `app.use(FloatingVue, ...)`; add `vTooltip` directive registration |
+| File                 | Change                                                                                                    |
+| -------------------- | --------------------------------------------------------------------------------------------------------- |
+| `src/pages/_app.ts`  | Remove `FloatingVue` import + `app.use(FloatingVue, ...)`; add `vTooltip` directive registration          |
 | `src/tests/setup.ts` | Remove all `floating-vue` imports and directive/component registrations; add new `tooltip` directive mock |
-| `package.json` | Remove `floating-vue` dependency |
+| `package.json`       | Remove `floating-vue` dependency                                                                          |
 
 ---
 

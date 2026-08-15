@@ -9,6 +9,7 @@
 ## Astro Docs Findings (from MCP)
 
 **`<Picture>` — `formats` prop** ([ref](https://docs.astro.build/en/reference/modules/astro-assets/#picture-)):
+
 - `formats: ImageOutputFormat[]` — array of `<source>` elements to generate, IN ORDER
 - `fallbackFormat: ImageOutputFormat` — format for the `<img>` fallback tag
   - **Default: `.png` for static images, `.jpg` if source is JPG, `.gif` for animated, `.svg` for SVG**
@@ -22,12 +23,12 @@
 
 ## Current State Analysis
 
-| File | Source | formats | `<img>` fallback | Problem |
-|------|--------|---------|-----------------|---------|
-| `src/components/Footer.astro:89` | `bear-walking.png` | `["avif", "webp"]` | auto → `.png` ✓ | **None — already correct** |
-| `src/pages/index.astro:63` | `brown-bear-roar.png` | `["avif", "webp"]` | auto → `.png` ✓ | **None — already correct** |
-| `src/components/ImageGallery.astro:23` | Remote CMS (mixed) | default `["avif", "webp", "jpeg"]` | auto (JPEG/PNG from source) | **Problem: `getImage({ format: "jpeg" })` called for PNG sources → generates JPEG file (loses alpha channel)** |
-| `src/components/ImageGallery.astro:68-74` | — | hardcoded `.jpeg` key | — | **Problem: lightbox data attrs fail semantically for PNG sources** |
+| File                                      | Source                | formats                            | `<img>` fallback            | Problem                                                                                                        |
+| ----------------------------------------- | --------------------- | ---------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `src/components/Footer.astro:89`          | `bear-walking.png`    | `["avif", "webp"]`                 | auto → `.png` ✓             | **None — already correct**                                                                                     |
+| `src/pages/index.astro:63`                | `brown-bear-roar.png` | `["avif", "webp"]`                 | auto → `.png` ✓             | **None — already correct**                                                                                     |
+| `src/components/ImageGallery.astro:23`    | Remote CMS (mixed)    | default `["avif", "webp", "jpeg"]` | auto (JPEG/PNG from source) | **Problem: `getImage({ format: "jpeg" })` called for PNG sources → generates JPEG file (loses alpha channel)** |
+| `src/components/ImageGallery.astro:68-74` | —                     | hardcoded `.jpeg` key              | —                           | **Problem: lightbox data attrs fail semantically for PNG sources**                                             |
 
 **Footer.astro and index.astro require no changes.** Astro already handles fallback correctly.
 
@@ -44,7 +45,7 @@ Additionally, the data attributes (lines 68-74) are hardcoded to `.jpeg` key —
 ### Fix
 
 1. Change default `formats` to `["avif", "webp"]` — no JPEG in `<source>` elements
-2. Add `getFallbackFormat(url)` per image — `"jpeg"` for non-PNG, `"png"` for PNG sources  
+2. Add `getFallbackFormat(url)` per image — `"jpeg"` for non-PNG, `"png"` for PNG sources
 3. In `getImage()` loop: generate `formats` (avif + webp) + the detected fallback format
 4. In data attributes: replace hardcoded `.jpeg` with dynamic `fallbackFormat` per image
 5. In `<Picture>`: use `formats` prop as-is (now `["avif", "webp"]`); optionally set explicit `fallbackFormat` for remote images
@@ -58,10 +59,13 @@ Additionally, the data attributes (lines 68-74) are hardcoded to `.jpeg` key —
 ### Task 1a — Change default `formats` prop
 
 **Line 23** — change:
+
 ```typescript
 formats = ["avif", "webp", "jpeg"],
 ```
+
 to:
+
 ```typescript
 formats = ["avif", "webp"],
 ```

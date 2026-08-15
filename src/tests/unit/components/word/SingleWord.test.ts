@@ -103,7 +103,7 @@ describe("SingleWord.vue", () => {
     expect(link.html()).toContain("Schnauze");
   });
 
-  it("wraps matched text in <mark class=\"is-highlight\"> when highlightTerm matches", async () => {
+  it('wraps matched text in <mark class="is-highlight"> when highlightTerm matches', async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
       props: { highlightTerm: "Schna", source, showDropdown: false },

@@ -1,5 +1,5 @@
-import { useOnline, useTimeoutFn } from "@vueuse/core";
 import { createToastNotify } from "@stores/toastNotify.ts";
+import { useOnline, useTimeoutFn } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 
 export interface CacheEntry {
@@ -10,8 +10,18 @@ export interface CacheEntry {
 }
 
 export type FileExtType =
-  | "avif" | "css" | "html" | "jpg" | "js" | "json"
-  | "other" | "png" | "svg" | "woff" | "woff2" | "webp"
+  | "avif"
+  | "css"
+  | "html"
+  | "jpg"
+  | "js"
+  | "json"
+  | "other"
+  | "png"
+  | "svg"
+  | "woff"
+  | "woff2"
+  | "webp"
   | (string & {});
 
 export interface FileTypeBreakdown {
@@ -216,7 +226,9 @@ export function useCacheStorage() {
       );
       const rejected = settled.filter((r): r is PromiseRejectedResult => r.status === "rejected");
       if (rejected.length > 0) {
-        rejected.forEach((r) => console.error("[useCacheStorage] Failed to load cache bucket:", r.reason));
+        rejected.forEach((r) =>
+          console.error("[useCacheStorage] Failed to load cache bucket:", r.reason),
+        );
       }
       buckets.value = settled
         .filter((r): r is PromiseFulfilledResult<CacheBucket> => r.status === "fulfilled")
@@ -232,21 +244,27 @@ export function useCacheStorage() {
   const isOnline = useOnline();
   const onlineStatus = ref<"online" | "offline">(isOnline.value ? "online" : "offline");
 
-  watch(isOnline, async (online) => {
-    if (!online) {
-      onlineStatus.value = "offline";
-      return;
-    }
-    // HEAD bypasses Workbox precache (GET-only); /ping is a static file so SW never caches it
-    try {
-      await fetch("/ping", { method: "HEAD", signal: AbortSignal.timeout(3000) });
-      onlineStatus.value = "online";
-    } catch {
-      onlineStatus.value = "offline";
-    }
-  }, { immediate: true });
+  watch(
+    isOnline,
+    async (online) => {
+      if (!online) {
+        onlineStatus.value = "offline";
+        return;
+      }
+      // HEAD bypasses Workbox precache (GET-only); /ping is a static file so SW never caches it
+      try {
+        await fetch("/ping", { method: "HEAD", signal: AbortSignal.timeout(3000) });
+        onlineStatus.value = "online";
+      } catch {
+        onlineStatus.value = "offline";
+      }
+    },
+    { immediate: true },
+  );
 
-  const { start: scheduleReload } = useTimeoutFn(() => location.reload(), 2100, { immediate: false });
+  const { start: scheduleReload } = useTimeoutFn(() => location.reload(), 2100, {
+    immediate: false,
+  });
 
   async function clearBucket(name: string): Promise<void> {
     if (typeof caches === "undefined" || !caches) return;

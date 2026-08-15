@@ -1,5 +1,5 @@
-import { WP_API } from "astro:env/client";
 import { processArticleBlocks, slugify } from "@utils/article";
+import { WP_API } from "astro:env/client";
 import { describe, expect, it } from "vitest";
 
 const wpOrigin = new URL(WP_API).origin;
@@ -35,10 +35,7 @@ describe("processArticleBlocks", () => {
   });
 
   it("de-duplicates repeated heading slugs", () => {
-    const { toc } = processArticleBlocks([
-      block(1, "<h2>Fazit</h2>"),
-      block(2, "<h2>Fazit</h2>"),
-    ]);
+    const { toc } = processArticleBlocks([block(1, "<h2>Fazit</h2>"), block(2, "<h2>Fazit</h2>")]);
     expect(toc.map((t) => t.id)).toEqual(["fazit", "fazit-2"]);
   });
 
@@ -122,14 +119,20 @@ describe("processArticleBlocks", () => {
   describe("hasAffiliateLinks", () => {
     it("detects a link marked rel=sponsored", () => {
       const { hasAffiliateLinks } = processArticleBlocks([
-        block(1, '<p>Kauf <a href="https://www.amazon.de/dp/B01N5IB20Q" rel="sponsored">hier</a>.</p>'),
+        block(
+          1,
+          '<p>Kauf <a href="https://www.amazon.de/dp/B01N5IB20Q" rel="sponsored">hier</a>.</p>',
+        ),
       ]);
       expect(hasAffiliateLinks).toBe(true);
     });
 
     it("detects rel=sponsored combined with other rel values", () => {
       const { hasAffiliateLinks } = processArticleBlocks([
-        block(1, '<p><a href="https://amzn.to/3xyz123" rel="noopener sponsored nofollow">Angebot</a></p>'),
+        block(
+          1,
+          '<p><a href="https://amzn.to/3xyz123" rel="noopener sponsored nofollow">Angebot</a></p>',
+        ),
       ]);
       expect(hasAffiliateLinks).toBe(true);
     });
@@ -159,7 +162,10 @@ describe("processArticleBlocks", () => {
   describe("sponsored link labeling", () => {
     it("appends a visible Anzeige tag right after a rel=sponsored link", () => {
       const { blocks } = processArticleBlocks([
-        block(1, '<p><a href="https://amzn.to/3xyz123" rel="sponsored">Angebot</a> lohnt sich.</p>'),
+        block(
+          1,
+          '<p><a href="https://amzn.to/3xyz123" rel="sponsored">Angebot</a> lohnt sich.</p>',
+        ),
       ]);
       expect(blocks[0].saveContent).toBe(
         '<p><a href="https://amzn.to/3xyz123" rel="sponsored">Angebot</a>' +

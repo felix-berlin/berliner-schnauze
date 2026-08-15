@@ -52,9 +52,7 @@
     "word": "Lakenball",
     "article": "der",
     "translations": ["Bett (in der Wendung »zum Lakenball gehen«)"],
-    "examples": [
-      { "example": "Zum Lakenball jeh’n.", "explanation": "Ins Bett gehen." }
-    ],
+    "examples": [{ "example": "Zum Lakenball jeh’n.", "explanation": "Ins Bett gehen." }],
     "themen": ["alltag-wohnen"]
   },
   {
@@ -62,7 +60,10 @@
     "article": "die",
     "translations": ["Handgelenk (in der Wendung »aus der Lamäng«)"],
     "examples": [
-      { "example": "Aus der Lamäng heraus.", "explanation": "Etwas routiniert, sicher und ohne langes Nachdenken tun." },
+      {
+        "example": "Aus der Lamäng heraus.",
+        "explanation": "Etwas routiniert, sicher und ohne langes Nachdenken tun."
+      },
       { "example": "Dit kommt nich inne Lamäng.", "explanation": "Das kommt nicht in Frage." }
     ],
     "infoText": "Von französisch la main = die Hand.",
@@ -73,7 +74,10 @@
     "article": "der",
     "translations": ["Fensterquerbehang"],
     "examples": [
-      { "example": "’ne Stulle mit Lamberkengs.", "explanation": "Eine Brotschnitte, deren Belag an den Rändern ›überhängt‹." }
+      {
+        "example": "’ne Stulle mit Lamberkengs.",
+        "explanation": "Eine Brotschnitte, deren Belag an den Rändern ›überhängt‹."
+      }
     ],
     "alternativeWords": ["Lamberkäng"],
     "infoText": "Von französisch lambrequin.",
@@ -141,7 +145,10 @@
     "article": "die",
     "translations": ["Laterne", "Licht", "Blickfeld"],
     "examples": [
-      { "example": "Woll’n se ma nich aus de Latichte jeh’n!", "explanation": "Aus dem Licht, aus dem Blickfeld gehen." }
+      {
+        "example": "Woll’n se ma nich aus de Latichte jeh’n!",
+        "explanation": "Aus dem Licht, aus dem Blickfeld gehen."
+      }
     ],
     "infoText": "Verschmelzung aus Laterne und Licht.",
     "themen": []
@@ -175,7 +182,10 @@
     "article": "die",
     "translations": ["Fertigstellung (in der Wendung »fertig is de Laube«)"],
     "examples": [
-      { "example": "Fertig is de Laube.", "explanation": "Erleichterter Kommentar nach rasch erledigter Arbeit." }
+      {
+        "example": "Fertig is de Laube.",
+        "explanation": "Erleichterter Kommentar nach rasch erledigter Arbeit."
+      }
     ],
     "themen": []
   },
@@ -200,9 +210,7 @@
     "word": "Laune",
     "article": "die",
     "translations": ["Spaß (in der Wendung »Laune machen«)"],
-    "examples": [
-      { "example": "Dit macht Laune.", "explanation": "Das macht Spaß." }
-    ],
+    "examples": [{ "example": "Dit macht Laune.", "explanation": "Das macht Spaß." }],
     "themen": ["gefuehle-emotionen"]
   },
   {
@@ -210,7 +218,10 @@
     "article": "die",
     "translations": ["Unannehmlichkeit (in der Redensart)"],
     "examples": [
-      { "example": "Ick will ma nich ’ne Laus in’ Pelz setzen.", "explanation": "Ich will mir nichts Unangenehmes aufladen." }
+      {
+        "example": "Ick will ma nich ’ne Laus in’ Pelz setzen.",
+        "explanation": "Ich will mir nichts Unangenehmes aufladen."
+      }
     ],
     "themen": []
   },
@@ -229,9 +240,7 @@
   {
     "word": "Lausekröten",
     "translations": ["wenig Geld"],
-    "examples": [
-      { "example": "Die paar Lausekröten!", "explanation": "Das bisschen Geld." }
-    ],
+    "examples": [{ "example": "Die paar Lausekröten!", "explanation": "Das bisschen Geld." }],
     "themen": ["geld"]
   },
   {
@@ -244,18 +253,14 @@
     "word": "Leberwurst",
     "article": "die",
     "translations": ["Beleidigtsein (in der Redensart)"],
-    "examples": [
-      { "example": "Der is beleidigt wie ’ne jekränkte Leberwurscht." }
-    ],
+    "examples": [{ "example": "Der is beleidigt wie ’ne jekränkte Leberwurscht." }],
     "themen": ["gefuehle-emotionen", "essen-trinken"]
   },
   {
     "word": "Leib",
     "article": "der",
     "translations": ["Ruhe (in der Wendung »vom Leibe gehen«)"],
-    "examples": [
-      { "example": "Jeh mir vom Leibe!", "explanation": "Lass mich in Ruhe." }
-    ],
+    "examples": [{ "example": "Jeh mir vom Leibe!", "explanation": "Lass mich in Ruhe." }],
     "themen": []
   },
   {
@@ -294,7 +299,10 @@
     "word": "leppern, sich",
     "translations": ["sich ansammeln"],
     "examples": [
-      { "example": "Da leppert sich wat zusammen.", "explanation": "Da kommt etwas zusammen, z.B. an Geld." }
+      {
+        "example": "Da leppert sich wat zusammen.",
+        "explanation": "Da kommt etwas zusammen, z.B. an Geld."
+      }
     ],
     "themen": ["geld"]
   },
@@ -337,7 +345,10 @@
     "word": "lila",
     "translations": ["mittelmäßig (als Antwort auf »Wie geht’s?«)"],
     "examples": [
-      { "example": "Wie jehts denn so? — So lila.", "explanation": "Lautspiel zu ›so lala‹, mit Bezug auf »lila bis blaßblau« bzw. »lila durchwachsen«." }
+      {
+        "example": "Wie jehts denn so? — So lila.",
+        "explanation": "Lautspiel zu ›so lala‹, mit Bezug auf »lila bis blaßblau« bzw. »lila durchwachsen«."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
@@ -345,9 +356,7 @@
     "word": "Lippe",
     "article": "die",
     "translations": ["freches Mundwerk (in der Wendung »’ne Lippe riskieren«)"],
-    "examples": [
-      { "example": "’ne Lippe riskieren.", "explanation": "Vorlaut, frech sein." }
-    ],
+    "examples": [{ "example": "’ne Lippe riskieren.", "explanation": "Vorlaut, frech sein." }],
     "themen": ["charakter-eigenschaften"]
   },
   {
@@ -399,16 +408,17 @@
   {
     "word": "losschießen",
     "translations": ["zu sprechen anfangen"],
-    "examples": [
-      { "example": "Schießen Se endlich los!", "explanation": "Sprechen Sie endlich." }
-    ],
+    "examples": [{ "example": "Schießen Se endlich los!", "explanation": "Sprechen Sie endlich." }],
     "themen": []
   },
   {
     "word": "löten",
     "translations": ["machen (nur verneint)"],
     "examples": [
-      { "example": "Da jibt’s nischt zu löten (am Holzeimer).", "explanation": "Da ist nichts zu machen." }
+      {
+        "example": "Da jibt’s nischt zu löten (am Holzeimer).",
+        "explanation": "Da ist nichts zu machen."
+      }
     ],
     "themen": []
   },
@@ -442,7 +452,10 @@
     "word": "lumpen",
     "translations": ["geizen (nur verneint: »sich nicht lumpen lassen«)"],
     "examples": [
-      { "example": "Der läßt sich nich lumpen.", "explanation": "Er ist nicht geizig, sondern spendabel." },
+      {
+        "example": "Der läßt sich nich lumpen.",
+        "explanation": "Er ist nicht geizig, sondern spendabel."
+      },
       { "example": "Die paar lumpjen Fennje.", "explanation": "Das wenige Geld." }
     ],
     "themen": ["geld"]
@@ -474,7 +487,10 @@
     "article": "der",
     "translations": ["kleiner Stich, Verrücktheit"],
     "examples": [
-      { "example": "Der hat ’nen kleinen Lüttiti.", "explanation": "Er hat einen kleinen Stich, er spinnt." }
+      {
+        "example": "Der hat ’nen kleinen Lüttiti.",
+        "explanation": "Er hat einen kleinen Stich, er spinnt."
+      }
     ],
     "infoText": "Mit Hauptakzent auf der ersten Silbe.",
     "themen": []

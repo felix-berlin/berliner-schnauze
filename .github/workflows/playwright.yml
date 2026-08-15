@@ -1,9 +1,9 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 permissions:
   id-token: write
@@ -14,56 +14,56 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout ✅
-      uses: actions/checkout@v7
+      - name: Checkout ✅
+        uses: actions/checkout@v7
 
-    - name: Fetch secrets from Infisical 🔐
-      uses: Infisical/secrets-action@v1.0.16
-      with:
-        method: "oidc"
-        identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
-        project-slug: "berliner-schnauze"
-        env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
-        domain: "https://infisical.kasimir.dev"
+      - name: Fetch secrets from Infisical 🔐
+        uses: Infisical/secrets-action@v1.0.16
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+          domain: "https://infisical.kasimir.dev"
 
-    - name: Setup pnpm 🛠️
-      uses: pnpm/action-setup@v6
+      - name: Setup pnpm 🛠️
+        uses: pnpm/action-setup@v6
 
-    - name: Setup Node.js 🔧
-      uses: actions/setup-node@v7
-      with:
-        node-version: lts/*
-        cache: pnpm
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: pnpm
 
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: Install Playwright Browsers
-      run: pnpm exec playwright install --with-deps
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
 
-    - name: Run Playwright tests
-      run: pnpm exec playwright test
+      - name: Run Playwright tests
+        run: pnpm exec playwright test
 
-    # Traces/screenshots/console logs can contain secrets — this repo is public,
-    # so GitHub Actions artifacts are downloadable by anyone. Encrypt before
-    # upload per https://playwright.dev/docs/ci-intro#properly-handling-secrets.
-    # Decrypt locally with:
-    #   gpg --decrypt --batch --passphrase "$PLAYWRIGHT_REPORT_PASSPHRASE" \
-    #     playwright-report.tar.gz.gpg | tar xz
-    - name: Encrypt HTML report
-      if: ${{ !cancelled() }}
-      env:
-        PLAYWRIGHT_REPORT_PASSPHRASE: ${{ secrets.PLAYWRIGHT_REPORT_PASSPHRASE }}
-      run: |
-        tar czf playwright-report.tar.gz playwright-report/
-        gpg --batch --yes --symmetric --cipher-algo AES256 \
-          --passphrase "$PLAYWRIGHT_REPORT_PASSPHRASE" \
-          -o playwright-report.tar.gz.gpg playwright-report.tar.gz
-        rm playwright-report.tar.gz
+      # Traces/screenshots/console logs can contain secrets — this repo is public,
+      # so GitHub Actions artifacts are downloadable by anyone. Encrypt before
+      # upload per https://playwright.dev/docs/ci-intro#properly-handling-secrets.
+      # Decrypt locally with:
+      #   gpg --decrypt --batch --passphrase "$PLAYWRIGHT_REPORT_PASSPHRASE" \
+      #     playwright-report.tar.gz.gpg | tar xz
+      - name: Encrypt HTML report
+        if: ${{ !cancelled() }}
+        env:
+          PLAYWRIGHT_REPORT_PASSPHRASE: ${{ secrets.PLAYWRIGHT_REPORT_PASSPHRASE }}
+        run: |
+          tar czf playwright-report.tar.gz playwright-report/
+          gpg --batch --yes --symmetric --cipher-algo AES256 \
+            --passphrase "$PLAYWRIGHT_REPORT_PASSPHRASE" \
+            -o playwright-report.tar.gz.gpg playwright-report.tar.gz
+          rm playwright-report.tar.gz
 
-    - uses: actions/upload-artifact@v7
-      if: ${{ !cancelled() }}
-      with:
-        name: playwright-report
-        path: playwright-report.tar.gz.gpg
-        retention-days: 14
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report.tar.gz.gpg
+          retention-days: 14

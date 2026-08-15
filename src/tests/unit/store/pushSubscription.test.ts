@@ -37,7 +37,11 @@ beforeEach(() => {
   });
 
   // provide window.PushManager so isPushSupported() returns true
-  Object.defineProperty(global.window, "PushManager", { value: {}, writable: true, configurable: true });
+  Object.defineProperty(global.window, "PushManager", {
+    value: {},
+    writable: true,
+    configurable: true,
+  });
 });
 
 afterEach(() => {
@@ -50,7 +54,8 @@ describe("urlBase64ToUint8Array", () => {
   it("decodes a valid URL-safe base64 VAPID key", async () => {
     const { urlBase64ToUint8Array } = await import("@stores/pushSubscription.ts");
     // known VAPID public key (88 chars URL-safe base64)
-    const key = "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U";
+    const key =
+      "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U";
     const result = urlBase64ToUint8Array(key);
     expect(result).toBeInstanceOf(Uint8Array);
     expect(result.length).toBe(65);
@@ -73,7 +78,8 @@ describe("loadPushState", () => {
       writable: true,
       configurable: true,
     });
-    const { loadPushState, $pushState, $pushSubscription } = await import("@stores/pushSubscription.ts");
+    const { loadPushState, $pushState, $pushSubscription } =
+      await import("@stores/pushSubscription.ts");
     await loadPushState();
     expect($pushState.get()).toBe("subscribed");
     expect($pushSubscription.get()).toBe(sub);
@@ -86,7 +92,8 @@ describe("loadPushState", () => {
       writable: true,
       configurable: true,
     });
-    const { loadPushState, $pushState, $pushSubscription } = await import("@stores/pushSubscription.ts");
+    const { loadPushState, $pushState, $pushSubscription } =
+      await import("@stores/pushSubscription.ts");
     await loadPushState();
     expect($pushState.get()).toBe("unsubscribed");
     expect($pushSubscription.get()).toBeNull();
@@ -129,7 +136,9 @@ describe("loadPushState", () => {
   it("is idempotent — concurrent calls do not double-load", async () => {
     const reg = makeRegistration(null);
     let resolveReady!: (v: unknown) => void;
-    const readyPromise = new Promise((r) => { resolveReady = r; });
+    const readyPromise = new Promise((r) => {
+      resolveReady = r;
+    });
     Object.defineProperty(global.navigator, "serviceWorker", {
       value: { ready: readyPromise },
       writable: true,
@@ -154,7 +163,10 @@ describe("subscribePush", () => {
       writable: true,
       configurable: true,
     });
-    vi.stubEnv("PUBLIC_VAPID_PUBLIC_KEY", "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U");
+    vi.stubEnv(
+      "PUBLIC_VAPID_PUBLIC_KEY",
+      "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U",
+    );
     const { subscribePush, $pushState } = await import("@stores/pushSubscription.ts");
     $pushState.set("subscribed");
     await subscribePush();
@@ -171,14 +183,20 @@ describe("subscribePush", () => {
 
   it("subscribes and sets subscribed on success", async () => {
     const sub = makeSub();
-    const reg = { pushManager: { getSubscription: vi.fn(), subscribe: vi.fn().mockResolvedValue(sub) } };
+    const reg = {
+      pushManager: { getSubscription: vi.fn(), subscribe: vi.fn().mockResolvedValue(sub) },
+    };
     Object.defineProperty(global.navigator, "serviceWorker", {
       value: { ready: Promise.resolve(reg) },
       writable: true,
       configurable: true,
     });
-    vi.stubEnv("PUBLIC_VAPID_PUBLIC_KEY", "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U");
-    const { subscribePush, $pushState, $pushSubscription } = await import("@stores/pushSubscription.ts");
+    vi.stubEnv(
+      "PUBLIC_VAPID_PUBLIC_KEY",
+      "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U",
+    );
+    const { subscribePush, $pushState, $pushSubscription } =
+      await import("@stores/pushSubscription.ts");
     $pushState.set("unsubscribed");
     await subscribePush();
     expect($pushState.get()).toBe("subscribed");
@@ -186,13 +204,21 @@ describe("subscribePush", () => {
   });
 
   it("sets error + shows toast on subscribe failure", async () => {
-    const reg = { pushManager: { getSubscription: vi.fn(), subscribe: vi.fn().mockRejectedValue(new Error("fail")) } };
+    const reg = {
+      pushManager: {
+        getSubscription: vi.fn(),
+        subscribe: vi.fn().mockRejectedValue(new Error("fail")),
+      },
+    };
     Object.defineProperty(global.navigator, "serviceWorker", {
       value: { ready: Promise.resolve(reg) },
       writable: true,
       configurable: true,
     });
-    vi.stubEnv("PUBLIC_VAPID_PUBLIC_KEY", "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U");
+    vi.stubEnv(
+      "PUBLIC_VAPID_PUBLIC_KEY",
+      "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U",
+    );
     const { subscribePush, $pushState } = await import("@stores/pushSubscription.ts");
     const { createToastNotify } = await import("@stores/toastNotify.ts");
     $pushState.set("unsubscribed");
@@ -213,13 +239,18 @@ describe("subscribePush", () => {
 
   it("shows permission-denied toast on NotAllowedError", async () => {
     const denied = Object.assign(new DOMException("User denied", "NotAllowedError"));
-    const reg = { pushManager: { getSubscription: vi.fn(), subscribe: vi.fn().mockRejectedValue(denied) } };
+    const reg = {
+      pushManager: { getSubscription: vi.fn(), subscribe: vi.fn().mockRejectedValue(denied) },
+    };
     Object.defineProperty(global.navigator, "serviceWorker", {
       value: { ready: Promise.resolve(reg) },
       writable: true,
       configurable: true,
     });
-    vi.stubEnv("PUBLIC_VAPID_PUBLIC_KEY", "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U");
+    vi.stubEnv(
+      "PUBLIC_VAPID_PUBLIC_KEY",
+      "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U",
+    );
     const { subscribePush, $pushState } = await import("@stores/pushSubscription.ts");
     const { createToastNotify } = await import("@stores/toastNotify.ts");
     $pushState.set("unsubscribed");
@@ -235,7 +266,8 @@ describe("subscribePush", () => {
 describe("unsubscribePush", () => {
   it("unsubscribes, clears subscription, sets unsubscribed", async () => {
     const sub = makeSub();
-    const { unsubscribePush, $pushState, $pushSubscription } = await import("@stores/pushSubscription.ts");
+    const { unsubscribePush, $pushState, $pushSubscription } =
+      await import("@stores/pushSubscription.ts");
     $pushSubscription.set(sub);
     $pushState.set("subscribed");
     await unsubscribePush();
@@ -245,7 +277,8 @@ describe("unsubscribePush", () => {
   });
 
   it("is a no-op when subscription is null", async () => {
-    const { unsubscribePush, $pushState, $pushSubscription } = await import("@stores/pushSubscription.ts");
+    const { unsubscribePush, $pushState, $pushSubscription } =
+      await import("@stores/pushSubscription.ts");
     $pushSubscription.set(null);
     $pushState.set("unsubscribed");
     await unsubscribePush();
@@ -255,7 +288,8 @@ describe("unsubscribePush", () => {
   it("sets error + shows toast when unsubscribe() rejects", async () => {
     const sub = makeSub();
     (sub.unsubscribe as ReturnType<typeof vi.fn>).mockRejectedValue(new Error("network error"));
-    const { unsubscribePush, $pushState, $pushSubscription } = await import("@stores/pushSubscription.ts");
+    const { unsubscribePush, $pushState, $pushSubscription } =
+      await import("@stores/pushSubscription.ts");
     const { createToastNotify } = await import("@stores/toastNotify.ts");
     $pushSubscription.set(sub);
     $pushState.set("subscribed");
@@ -266,7 +300,8 @@ describe("unsubscribePush", () => {
 
   it("does nothing when state is loading", async () => {
     const sub = makeSub();
-    const { unsubscribePush, $pushState, $pushSubscription } = await import("@stores/pushSubscription.ts");
+    const { unsubscribePush, $pushState, $pushSubscription } =
+      await import("@stores/pushSubscription.ts");
     $pushSubscription.set(sub);
     $pushState.set("loading");
     await unsubscribePush();

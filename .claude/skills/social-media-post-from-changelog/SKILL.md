@@ -9,9 +9,9 @@ description: Use when converting a berliner-schnauze user changelog into social 
 
 Beim Aufruf `args` übergeben, zwei Modi:
 
-| Arg | Modus |
-|---|---|
-| `brand` | Berliner Schnauze Kanäle. Die App spricht zu ihren Nutzern |
+| Arg        | Modus                                                            |
+| ---------- | ---------------------------------------------------------------- |
+| `brand`    | Berliner Schnauze Kanäle. Die App spricht zu ihren Nutzern       |
 | `personal` | Felix' persönliche Profile. Entwickler spricht zur Dev-Community |
 
 Kein Arg angegeben? Nachfragen.
@@ -25,19 +25,19 @@ Version aus dem Dateinamen oder Kontext entnehmen. Sollen mehrere Versionen zusa
 
 ## Die Stimme ist der ganze Job
 
-Ein Post ohne Stimme fällt im Feed durch, egal wie sauber er ist. Der Humanizer-Pass ganz unten macht einen Post nicht *schlecht*, aber *gut* macht ihn erst die Haltung. Deshalb steht die Stimme hier oben und zuerst, und nicht die Liste der Verbote. Zieh dir vor dem Schreiben den passenden Modus rein und schreib aus der Haltung heraus, nicht aus der Vermeidung.
+Ein Post ohne Stimme fällt im Feed durch, egal wie sauber er ist. Der Humanizer-Pass ganz unten macht einen Post nicht _schlecht_, aber _gut_ macht ihn erst die Haltung. Deshalb steht die Stimme hier oben und zuerst, und nicht die Liste der Verbote. Zieh dir vor dem Schreiben den passenden Modus rein und schreib aus der Haltung heraus, nicht aus der Vermeidung.
 
 ### Modus `brand`: die App redet, und zwar berlinerisch
 
-Die App ist keine neutrale Wörterbuch-Firma, sie *ist* die Berliner Schnauze. Trocken, direkt, ein bisschen ruppig, aber warm. Sie prahlt nicht, sie stellt hin: "Is jetzt da. Kannste haben." Understatement schlägt Hype. Ein neues Feature wird nicht "gefeiert", es wird über'n Tresen geschoben wie 'ne Currywurst.
+Die App ist keine neutrale Wörterbuch-Firma, sie _ist_ die Berliner Schnauze. Trocken, direkt, ein bisschen ruppig, aber warm. Sie prahlt nicht, sie stellt hin: "Is jetzt da. Kannste haben." Understatement schlägt Hype. Ein neues Feature wird nicht "gefeiert", es wird über'n Tresen geschoben wie 'ne Currywurst.
 
 So klingt das:
 
-- **Dialekt als Würze, nicht als Kostüm.** Ein paar Marker streuen (nu, ooch, dit, wa, kieken, ick, nüscht, jibt, bloß), nicht jedes Wort verballhornen. Muss lesbar bleiben, auch für Zujezogene. Faustregel: ein, zwei Marker pro Satz reichen, der Rest ist normales Deutsch mit berlinerischem *Rhythmus* (kurz, blunt, understated).
+- **Dialekt als Würze, nicht als Kostüm.** Ein paar Marker streuen (nu, ooch, dit, wa, kieken, ick, nüscht, jibt, bloß), nicht jedes Wort verballhornen. Muss lesbar bleiben, auch für Zujezogene. Faustregel: ein, zwei Marker pro Satz reichen, der Rest ist normales Deutsch mit berlinerischem _Rhythmus_ (kurz, blunt, understated).
 - **Kurze, blunt Sätze.** "Nu kannste ooch lesen." statt "Wir freuen uns, einen neuen Lesebereich vorzustellen."
 - **Trockener Schluss statt Werbe-Aufruf.** "Kiek rin: [link]" statt "Jetzt entdecken!".
 - **Warm, nicht anbiedernd.** Die App mag ihre Leute, muss aber nich drum betteln.
-- **Kein "wir"/"uns"/"unser".** Hinter dem Projekt steht *eine* Person, kein Team, kein Verlag. Also nix vortäuschen: Die App redet in der Ich-Form ("ick", "ick trag's bloß zusammen") oder spricht dich direkt mit "du" an ("nu kannste") oder bleibt unpersönlich ("dit Magazin is da"). "Bei uns" wirkt harmlos, impliziert aber 'ne Redaktion, gibt's nicht.
+- **Kein "wir"/"uns"/"unser".** Hinter dem Projekt steht _eine_ Person, kein Team, kein Verlag. Also nix vortäuschen: Die App redet in der Ich-Form ("ick", "ick trag's bloß zusammen") oder spricht dich direkt mit "du" an ("nu kannste") oder bleibt unpersönlich ("dit Magazin is da"). "Bei uns" wirkt harmlos, impliziert aber 'ne Redaktion, gibt's nicht.
 - **Vertrauen bleibt echt.** Bei Herkunft, Quellen, Zahlen sachlich bleiben. Die Schnauze ist frech, aber sie lügt nicht und labert nix schön.
 
 **So nicht** (sauber, aber austauschbar, kein Mensch hört da die Schnauze):
@@ -81,15 +81,15 @@ So klingt das:
 
 Nach Format gruppiert, ein Format pro Gruppe:
 
-| Gruppe | Plattformen | Limit |
-|---|---|---|
-| **Microblogging** | Twitter/X, Bluesky, Mastodon | 280 / 300 / 500 Zeichen |
-| **Visual & Long-form** | Instagram, Facebook | Unbegrenzt, visuell-first |
-| **Professional** | LinkedIn | Unbegrenzt, professionell |
+| Gruppe                 | Plattformen                  | Limit                     |
+| ---------------------- | ---------------------------- | ------------------------- |
+| **Microblogging**      | Twitter/X, Bluesky, Mastodon | 280 / 300 / 500 Zeichen   |
+| **Visual & Long-form** | Instagram, Facebook          | Unbegrenzt, visuell-first |
+| **Professional**       | LinkedIn                     | Unbegrenzt, professionell |
 
 Mastodon hat mit 500 Zeichen etwas mehr Luft, da darf optional ein Satz mehr rein. Sonst identisch innerhalb der Gruppe.
 
-Die Blöcke unten sind *Gerüste*, keine Vorlagen zum Ausfüllen im Formular-Stil. Schreib den Post in der Stimme von oben und häng die Struktur locker dran. Wenn ein Gerüst und die Stimme sich beißen, gewinnt die Stimme.
+Die Blöcke unten sind _Gerüste_, keine Vorlagen zum Ausfüllen im Formular-Stil. Schreib den Post in der Stimme von oben und häng die Struktur locker dran. Wenn ein Gerüst und die Stimme sich beißen, gewinnt die Stimme.
 
 ---
 
@@ -164,12 +164,12 @@ Für personal/dev-Content selten sinnvoll. Nur auf Nachfrage.
 
 ## Mapping: Changelog-Section → Post-Fokus
 
-| Changelog-Section | brand | personal |
-|---|---|---|
-| Neues Feature | Was kann der Nutzer jetzt tun? | Was war technisch interessant? |
-| Redesign | Wie fühlt sich die App jetzt an? | Was hab ich neu gebaut und warum? |
-| Bugfixes | "Läuft jetzt runder" | "Hat mich länger genervt als gedacht" |
-| Hintergrund / Tech | Weglassen oder sehr kurz | Kurz erwähnen wenn relevant |
+| Changelog-Section  | brand                            | personal                              |
+| ------------------ | -------------------------------- | ------------------------------------- |
+| Neues Feature      | Was kann der Nutzer jetzt tun?   | Was war technisch interessant?        |
+| Redesign           | Wie fühlt sich die App jetzt an? | Was hab ich neu gebaut und warum?     |
+| Bugfixes           | "Läuft jetzt runder"             | "Hat mich länger genervt als gedacht" |
+| Hintergrund / Tech | Weglassen oder sehr kurz         | Kurz erwähnen wenn relevant           |
 
 ---
 

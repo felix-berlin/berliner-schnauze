@@ -23,45 +23,46 @@ vi.mock("@stores/wordList.ts", () => ({
 }));
 
 vi.mock("@components/BadgeTag.vue", () => ({
-  default: { template: "<span class=\"mock-badge-tag\"><slot /></span>" },
+  default: { template: '<span class="mock-badge-tag"><slot /></span>' },
 }));
 
 vi.mock("@components/ButtonWithStates.vue", () => ({
   default: {
     props: ["state", "type"],
-    template: "<button class=\"mock-button-with-states\" :type=\"type\" @click=\"$emit('click')\"><slot /></button>",
+    template:
+      '<button class="mock-button-with-states" :type="type" @click="$emit(\'click\')"><slot /></button>',
     emits: ["click"],
   },
 }));
 
 vi.mock("@components/filter/LetterFilter.vue", () => ({
-  default: { template: "<div class=\"mock-letter-filter\" />" },
+  default: { template: '<div class="mock-letter-filter" />' },
 }));
 
 vi.mock("@components/filter/SortWordBySelect.vue", () => ({
-  default: { template: "<div class=\"mock-sort-word-by-select\" />" },
+  default: { template: '<div class="mock-sort-word-by-select" />' },
 }));
 
 vi.mock("@components/filter/WordRangeSlider.vue", () => ({
   default: {
     props: ["rangeType", "label"],
-    template: "<div class=\"mock-word-range-slider\" />",
+    template: '<div class="mock-word-range-slider" />',
   },
 }));
 
 vi.mock("@components/filter/WordSwitch.vue", () => ({
   default: {
     props: ["switchType", "label"],
-    template: "<div class=\"mock-word-switch\" />",
+    template: '<div class="mock-word-switch" />',
   },
 }));
 
 vi.mock("@components/filter/WordTypeFilter.vue", () => ({
-  default: { template: "<div class=\"mock-word-type-filter\" />" },
+  default: { template: '<div class="mock-word-type-filter" />' },
 }));
 
 vi.mock("@components/filter/ThemenFilter.vue", () => ({
-  default: { template: "<div class=\"mock-themen-filter\" />" },
+  default: { template: '<div class="mock-themen-filter" />' },
 }));
 
 vi.mock("@vueuse/core", async (importOriginal) => {

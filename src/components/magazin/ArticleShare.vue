@@ -14,9 +14,9 @@ import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
 import { useClipboard, useShare } from "@vueuse/core";
 import { SITE_URL } from "astro:env/client";
-import { computed } from "vue";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
+import { computed } from "vue";
 
 const { title, url } = defineProps<{ title: string; url: string }>();
 

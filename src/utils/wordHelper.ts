@@ -216,7 +216,8 @@ export const similarWords = (
     };
   });
 
-  if (needsSimilarity !== undefined) return similarWords.filter((word) => word.isSimilar >= needsSimilarity);
+  if (needsSimilarity !== undefined)
+    return similarWords.filter((word) => word.isSimilar >= needsSimilarity);
 
   return similarWords;
 };
@@ -340,8 +341,8 @@ export const wordCuriosities = (
   const isPalindrome = lower === lower.split("").reverse().join("");
   const hasAllVowels = ALL_GERMAN_VOWELS.every((v) => lower.includes(v));
 
-  const UMLAUTS = new Set(['ä', 'ö', 'ü', 'Ä', 'Ö', 'Ü']);
-  const hasUmlaut = [...word].some(c => UMLAUTS.has(c));
+  const UMLAUTS = new Set(["ä", "ö", "ü", "Ä", "Ö", "Ü"]);
+  const hasUmlaut = [...word].some((c) => UMLAUTS.has(c));
 
   const letterFreq = new Map<string, number>();
   for (const c of letters) {

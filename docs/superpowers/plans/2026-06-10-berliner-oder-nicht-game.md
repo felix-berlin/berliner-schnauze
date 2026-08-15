@@ -30,100 +30,101 @@
 ## Task 1: Fake Words Dataset
 
 **Files:**
+
 - Create: `src/data/fakeWords.ts`
 
 - [ ] **Step 1: Create the file**
 
 ```typescript
 export interface FakeWord {
-  word: string
-  category: 'invented' | 'hochdeutsch'
+  word: string;
+  category: "invented" | "hochdeutsch";
 }
 
 export const fakeWords: FakeWord[] = [
   // Erfunden — klingen plausibel berlinerisch
-  { word: 'Schnörrke', category: 'invented' },
-  { word: 'Wabbatz', category: 'invented' },
-  { word: 'Pröllke', category: 'invented' },
-  { word: 'Knüffke', category: 'invented' },
-  { word: 'Döllmer', category: 'invented' },
-  { word: 'Zabbel', category: 'invented' },
-  { word: 'Wubbke', category: 'invented' },
-  { word: 'Plörrn', category: 'invented' },
-  { word: 'Schnüffel', category: 'invented' },
-  { word: 'Tröddelke', category: 'invented' },
-  { word: 'Knorze', category: 'invented' },
-  { word: 'Quabbel', category: 'invented' },
-  { word: 'Schnackel', category: 'invented' },
-  { word: 'Döbbel', category: 'invented' },
-  { word: 'Worrke', category: 'invented' },
-  { word: 'Plubbatz', category: 'invented' },
-  { word: 'Zöbbel', category: 'invented' },
-  { word: 'Knüpps', category: 'invented' },
-  { word: 'Schnubber', category: 'invented' },
-  { word: 'Trabbel', category: 'invented' },
-  { word: 'Dörrke', category: 'invented' },
-  { word: 'Wabbel', category: 'invented' },
-  { word: 'Pluddel', category: 'invented' },
-  { word: 'Schnorkel', category: 'invented' },
-  { word: 'Knuffel', category: 'invented' },
-  { word: 'Zöppke', category: 'invented' },
-  { word: 'Dörratz', category: 'invented' },
-  { word: 'Wubbelke', category: 'invented' },
-  { word: 'Pröppel', category: 'invented' },
-  { word: 'Schnabbel', category: 'invented' },
-  { word: 'Knübbel', category: 'invented' },
-  { word: 'Zubbelke', category: 'invented' },
-  { word: 'Trödds', category: 'invented' },
-  { word: 'Wuppke', category: 'invented' },
-  { word: 'Schnüllke', category: 'invented' },
-  { word: 'Plörre', category: 'invented' },
-  { word: 'Döbbatz', category: 'invented' },
-  { word: 'Knurzel', category: 'invented' },
-  { word: 'Zuppke', category: 'invented' },
-  { word: 'Wabbern', category: 'invented' },
-  { word: 'Schnörkel', category: 'invented' },
-  { word: 'Pröbbel', category: 'invented' },
-  { word: 'Knubbatz', category: 'invented' },
-  { word: 'Döbbelke', category: 'invented' },
-  { word: 'Zörrn', category: 'invented' },
-  { word: 'Wupperling', category: 'invented' },
-  { word: 'Schnobbelke', category: 'invented' },
-  { word: 'Trabbatz', category: 'invented' },
-  { word: 'Knüppatz', category: 'invented' },
-  { word: 'Plubbke', category: 'invented' },
+  { word: "Schnörrke", category: "invented" },
+  { word: "Wabbatz", category: "invented" },
+  { word: "Pröllke", category: "invented" },
+  { word: "Knüffke", category: "invented" },
+  { word: "Döllmer", category: "invented" },
+  { word: "Zabbel", category: "invented" },
+  { word: "Wubbke", category: "invented" },
+  { word: "Plörrn", category: "invented" },
+  { word: "Schnüffel", category: "invented" },
+  { word: "Tröddelke", category: "invented" },
+  { word: "Knorze", category: "invented" },
+  { word: "Quabbel", category: "invented" },
+  { word: "Schnackel", category: "invented" },
+  { word: "Döbbel", category: "invented" },
+  { word: "Worrke", category: "invented" },
+  { word: "Plubbatz", category: "invented" },
+  { word: "Zöbbel", category: "invented" },
+  { word: "Knüpps", category: "invented" },
+  { word: "Schnubber", category: "invented" },
+  { word: "Trabbel", category: "invented" },
+  { word: "Dörrke", category: "invented" },
+  { word: "Wabbel", category: "invented" },
+  { word: "Pluddel", category: "invented" },
+  { word: "Schnorkel", category: "invented" },
+  { word: "Knuffel", category: "invented" },
+  { word: "Zöppke", category: "invented" },
+  { word: "Dörratz", category: "invented" },
+  { word: "Wubbelke", category: "invented" },
+  { word: "Pröppel", category: "invented" },
+  { word: "Schnabbel", category: "invented" },
+  { word: "Knübbel", category: "invented" },
+  { word: "Zubbelke", category: "invented" },
+  { word: "Trödds", category: "invented" },
+  { word: "Wuppke", category: "invented" },
+  { word: "Schnüllke", category: "invented" },
+  { word: "Plörre", category: "invented" },
+  { word: "Döbbatz", category: "invented" },
+  { word: "Knurzel", category: "invented" },
+  { word: "Zuppke", category: "invented" },
+  { word: "Wabbern", category: "invented" },
+  { word: "Schnörkel", category: "invented" },
+  { word: "Pröbbel", category: "invented" },
+  { word: "Knubbatz", category: "invented" },
+  { word: "Döbbelke", category: "invented" },
+  { word: "Zörrn", category: "invented" },
+  { word: "Wupperling", category: "invented" },
+  { word: "Schnobbelke", category: "invented" },
+  { word: "Trabbatz", category: "invented" },
+  { word: "Knüppatz", category: "invented" },
+  { word: "Plubbke", category: "invented" },
   // Hochdeutsch — echte Wörter, aber nicht berlinerisch
-  { word: 'Fernseher', category: 'hochdeutsch' },
-  { word: 'Bürgersteig', category: 'hochdeutsch' },
-  { word: 'Schmetterling', category: 'hochdeutsch' },
-  { word: 'Krankenhaus', category: 'hochdeutsch' },
-  { word: 'Handtuch', category: 'hochdeutsch' },
-  { word: 'Blumenkohl', category: 'hochdeutsch' },
-  { word: 'Streichholz', category: 'hochdeutsch' },
-  { word: 'Taschenlampe', category: 'hochdeutsch' },
-  { word: 'Würfelzucker', category: 'hochdeutsch' },
-  { word: 'Pflasterstein', category: 'hochdeutsch' },
-  { word: 'Schornsteinfeger', category: 'hochdeutsch' },
-  { word: 'Gurke', category: 'hochdeutsch' },
-  { word: 'Fußgänger', category: 'hochdeutsch' },
-  { word: 'Briefkasten', category: 'hochdeutsch' },
-  { word: 'Hausschlüssel', category: 'hochdeutsch' },
-  { word: 'Fahrradkette', category: 'hochdeutsch' },
-  { word: 'Kühlschrank', category: 'hochdeutsch' },
-  { word: 'Waschbecken', category: 'hochdeutsch' },
-  { word: 'Gardine', category: 'hochdeutsch' },
-  { word: 'Türklinke', category: 'hochdeutsch' },
-  { word: 'Kerze', category: 'hochdeutsch' },
-  { word: 'Wäscheklammer', category: 'hochdeutsch' },
-  { word: 'Kopfkissen', category: 'hochdeutsch' },
-  { word: 'Regenschirm', category: 'hochdeutsch' },
-  { word: 'Zimmerpflanze', category: 'hochdeutsch' },
-  { word: 'Vorhang', category: 'hochdeutsch' },
-  { word: 'Treppengeländer', category: 'hochdeutsch' },
-  { word: 'Lichtschalter', category: 'hochdeutsch' },
-  { word: 'Fensterscheibe', category: 'hochdeutsch' },
-  { word: 'Schreibtisch', category: 'hochdeutsch' },
-]
+  { word: "Fernseher", category: "hochdeutsch" },
+  { word: "Bürgersteig", category: "hochdeutsch" },
+  { word: "Schmetterling", category: "hochdeutsch" },
+  { word: "Krankenhaus", category: "hochdeutsch" },
+  { word: "Handtuch", category: "hochdeutsch" },
+  { word: "Blumenkohl", category: "hochdeutsch" },
+  { word: "Streichholz", category: "hochdeutsch" },
+  { word: "Taschenlampe", category: "hochdeutsch" },
+  { word: "Würfelzucker", category: "hochdeutsch" },
+  { word: "Pflasterstein", category: "hochdeutsch" },
+  { word: "Schornsteinfeger", category: "hochdeutsch" },
+  { word: "Gurke", category: "hochdeutsch" },
+  { word: "Fußgänger", category: "hochdeutsch" },
+  { word: "Briefkasten", category: "hochdeutsch" },
+  { word: "Hausschlüssel", category: "hochdeutsch" },
+  { word: "Fahrradkette", category: "hochdeutsch" },
+  { word: "Kühlschrank", category: "hochdeutsch" },
+  { word: "Waschbecken", category: "hochdeutsch" },
+  { word: "Gardine", category: "hochdeutsch" },
+  { word: "Türklinke", category: "hochdeutsch" },
+  { word: "Kerze", category: "hochdeutsch" },
+  { word: "Wäscheklammer", category: "hochdeutsch" },
+  { word: "Kopfkissen", category: "hochdeutsch" },
+  { word: "Regenschirm", category: "hochdeutsch" },
+  { word: "Zimmerpflanze", category: "hochdeutsch" },
+  { word: "Vorhang", category: "hochdeutsch" },
+  { word: "Treppengeländer", category: "hochdeutsch" },
+  { word: "Lichtschalter", category: "hochdeutsch" },
+  { word: "Fensterscheibe", category: "hochdeutsch" },
+  { word: "Schreibtisch", category: "hochdeutsch" },
+];
 ```
 
 - [ ] **Step 2: Commit**
@@ -138,23 +139,24 @@ git commit -m "feat(game): add fake words dataset for Berliner oder nicht game"
 ## Task 2: Game Stats Store
 
 **Files:**
+
 - Create: `src/stores/gameStats.ts`
 
 - [ ] **Step 1: Create the store**
 
 ```typescript
-import { persistentMap } from '@nanostores/persistent'
+import { persistentMap } from "@nanostores/persistent";
 
 export interface GameStats {
-  highScore: number
-  bestStreak: number
-  totalGamesPlayed: number
-  totalCorrect: number
-  totalAnswered: number
+  highScore: number;
+  bestStreak: number;
+  totalGamesPlayed: number;
+  totalCorrect: number;
+  totalAnswered: number;
 }
 
 export const $gameStats = persistentMap<GameStats>(
-  'gameStats:',
+  "gameStats:",
   {
     highScore: 0,
     bestStreak: 0,
@@ -165,14 +167,14 @@ export const $gameStats = persistentMap<GameStats>(
   {
     decode(value) {
       try {
-        return JSON.parse(value)
+        return JSON.parse(value);
       } catch {
-        return value
+        return value;
       }
     },
     encode: (value) => JSON.stringify(value),
   },
-)
+);
 ```
 
 - [ ] **Step 2: Commit**
@@ -187,6 +189,7 @@ git commit -m "feat(game): add persistent game stats store"
 ## Task 3: useGame Composable + Tests (TDD)
 
 **Files:**
+
 - Create: `src/composable/useGame.ts`
 - Create: `src/tests/unit/composable/useGame.test.ts`
 
@@ -197,10 +200,10 @@ The composable exports pure helper functions (`buildDeck`, `computeMultiplier`) 
 Create `src/tests/unit/composable/useGame.test.ts`:
 
 ```typescript
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock persistentMap so tests don't need localStorage
-vi.mock('@nanostores/persistent', () => ({
+vi.mock("@nanostores/persistent", () => ({
   persistentMap: vi.fn(() => ({
     get: vi.fn(() => ({
       highScore: 0,
@@ -211,10 +214,10 @@ vi.mock('@nanostores/persistent', () => ({
     })),
     setKey: vi.fn(),
   })),
-}))
+}));
 
-import { buildDeck, computeMultiplier } from '@composables/useGame'
-import type { FakeWord } from '@/data/fakeWords'
+import { buildDeck, computeMultiplier } from "@composables/useGame";
+import type { FakeWord } from "@/data/fakeWords";
 
 const makeRealWords = (n: number) =>
   Array.from({ length: n }, (_, i) => ({
@@ -222,62 +225,62 @@ const makeRealWords = (n: number) =>
     isReal: true as const,
     slug: `wort-${i}`,
     translation: `Translation ${i}`,
-  }))
+  }));
 
 const makeFakeWords = (n: number): FakeWord[] =>
   Array.from({ length: n }, (_, i) => ({
     word: `Fake${i}`,
-    category: 'invented' as const,
-  }))
+    category: "invented" as const,
+  }));
 
-describe('computeMultiplier', () => {
-  it('returns 1 for streak 0', () => expect(computeMultiplier(0)).toBe(1))
-  it('returns 1 for streak 2', () => expect(computeMultiplier(2)).toBe(1))
-  it('returns 2 for streak 3', () => expect(computeMultiplier(3)).toBe(2))
-  it('returns 2 for streak 5', () => expect(computeMultiplier(5)).toBe(2))
-  it('returns 3 for streak 6', () => expect(computeMultiplier(6)).toBe(3))
-  it('returns 3 for streak 9', () => expect(computeMultiplier(9)).toBe(3))
-  it('returns 5 for streak 10', () => expect(computeMultiplier(10)).toBe(5))
-  it('returns 5 for streak 20', () => expect(computeMultiplier(20)).toBe(5))
-})
+describe("computeMultiplier", () => {
+  it("returns 1 for streak 0", () => expect(computeMultiplier(0)).toBe(1));
+  it("returns 1 for streak 2", () => expect(computeMultiplier(2)).toBe(1));
+  it("returns 2 for streak 3", () => expect(computeMultiplier(3)).toBe(2));
+  it("returns 2 for streak 5", () => expect(computeMultiplier(5)).toBe(2));
+  it("returns 3 for streak 6", () => expect(computeMultiplier(6)).toBe(3));
+  it("returns 3 for streak 9", () => expect(computeMultiplier(9)).toBe(3));
+  it("returns 5 for streak 10", () => expect(computeMultiplier(10)).toBe(5));
+  it("returns 5 for streak 20", () => expect(computeMultiplier(20)).toBe(5));
+});
 
-describe('buildDeck', () => {
-  it('always returns exactly 20 cards', () => {
-    const deck = buildDeck(makeRealWords(50), makeFakeWords(30))
-    expect(deck).toHaveLength(20)
-  })
+describe("buildDeck", () => {
+  it("always returns exactly 20 cards", () => {
+    const deck = buildDeck(makeRealWords(50), makeFakeWords(30));
+    expect(deck).toHaveLength(20);
+  });
 
-  it('real card count is between 10 and 15 (50–75%)', () => {
+  it("real card count is between 10 and 15 (50–75%)", () => {
     // Run 20 times — variable split should stay within bounds every time
     for (let i = 0; i < 20; i++) {
-      const deck = buildDeck(makeRealWords(50), makeFakeWords(30))
-      const realCount = deck.filter((c) => c.isReal).length
-      expect(realCount).toBeGreaterThanOrEqual(10)
-      expect(realCount).toBeLessThanOrEqual(15)
+      const deck = buildDeck(makeRealWords(50), makeFakeWords(30));
+      const realCount = deck.filter((c) => c.isReal).length;
+      expect(realCount).toBeGreaterThanOrEqual(10);
+      expect(realCount).toBeLessThanOrEqual(15);
     }
-  })
+  });
 
-  it('fake cards have isReal = false', () => {
-    const deck = buildDeck(makeRealWords(50), makeFakeWords(30))
-    const fakeCards = deck.filter((c) => !c.isReal)
-    fakeCards.forEach((c) => expect(c.isReal).toBe(false))
-  })
+  it("fake cards have isReal = false", () => {
+    const deck = buildDeck(makeRealWords(50), makeFakeWords(30));
+    const fakeCards = deck.filter((c) => !c.isReal);
+    fakeCards.forEach((c) => expect(c.isReal).toBe(false));
+  });
 
-  it('real cards carry slug and word', () => {
-    const deck = buildDeck(makeRealWords(50), makeFakeWords(30))
-    const realCards = deck.filter((c) => c.isReal)
+  it("real cards carry slug and word", () => {
+    const deck = buildDeck(makeRealWords(50), makeFakeWords(30));
+    const realCards = deck.filter((c) => c.isReal);
     realCards.forEach((c) => {
-      expect(c.slug).toBeDefined()
-      expect(c.word).toBeTruthy()
-    })
-  })
+      expect(c.slug).toBeDefined();
+      expect(c.word).toBeTruthy();
+    });
+  });
 
-  it('no duplicate words within one deck', () => {
-    const deck = buildDeck(makeRealWords(50), makeFakeWords(30))
-    const words = deck.map((c) => c.word)
-    expect(new Set(words).size).toBe(20)
-  })
-})
+  it("no duplicate words within one deck", () => {
+    const deck = buildDeck(makeRealWords(50), makeFakeWords(30));
+    const words = deck.map((c) => c.word);
+    expect(new Set(words).size).toBe(20);
+  });
+});
 ```
 
 - [ ] **Step 2: Run tests — expect FAIL (buildDeck and computeMultiplier not yet exported)**
@@ -291,74 +294,71 @@ Expected: `Error: Failed to resolve import "@composables/useGame"`
 - [ ] **Step 3: Create `src/composable/useGame.ts`**
 
 ```typescript
-import { ref, computed } from 'vue'
-import { $gameStats } from '@stores/gameStats'
-import { createToastNotify } from '@stores/toastNotify'
-import { trackEvent } from '@utils/analytics'
-import type { FakeWord } from '@/data/fakeWords'
+import { ref, computed } from "vue";
+import { $gameStats } from "@stores/gameStats";
+import { createToastNotify } from "@stores/toastNotify";
+import { trackEvent } from "@utils/analytics";
+import type { FakeWord } from "@/data/fakeWords";
 
 export interface GameCard {
-  word: string
-  isReal: boolean
-  slug?: string
-  translation?: string
+  word: string;
+  isReal: boolean;
+  slug?: string;
+  translation?: string;
 }
 
 interface GameState {
-  phase: 'idle' | 'playing' | 'result'
-  lives: number
-  score: number
-  streak: number
-  bestStreak: number
-  multiplier: number
-  totalAnswered: number
-  correctAnswers: number
-  currentCard: GameCard | null
-  deck: GameCard[]
-  lastAnswerCorrect: boolean | null
-  lastCard: GameCard | null
+  phase: "idle" | "playing" | "result";
+  lives: number;
+  score: number;
+  streak: number;
+  bestStreak: number;
+  multiplier: number;
+  totalAnswered: number;
+  correctAnswers: number;
+  currentCard: GameCard | null;
+  deck: GameCard[];
+  lastAnswerCorrect: boolean | null;
+  lastCard: GameCard | null;
 }
 
 // --- Pure helpers (exported for testing) ---
 
 export function computeMultiplier(streak: number): number {
-  if (streak >= 10) return 5
-  if (streak >= 6) return 3
-  if (streak >= 3) return 2
-  return 1
+  if (streak >= 10) return 5;
+  if (streak >= 6) return 3;
+  if (streak >= 3) return 2;
+  return 1;
 }
 
 function fisherYates<T>(arr: T[]): T[] {
-  const a = [...arr]
+  const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[a[i], a[j]] = [a[j], a[i]]
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
-  return a
+  return a;
 }
 
-export function buildDeck(
-  realWords: GameCard[],
-  fakes: FakeWord[],
-): GameCard[] {
-  const DECK_SIZE = 20
+export function buildDeck(realWords: GameCard[], fakes: FakeWord[]): GameCard[] {
+  const DECK_SIZE = 20;
   // Variable split: 50–75% real (10–15 cards), rest fake
-  const realCount = Math.floor(Math.random() * 6) + 10 // 10..15
-  const fakeCount = DECK_SIZE - realCount
+  const realCount = Math.floor(Math.random() * 6) + 10; // 10..15
+  const fakeCount = DECK_SIZE - realCount;
 
-  const shuffledReal = fisherYates(realWords).slice(0, realCount)
+  const shuffledReal = fisherYates(realWords).slice(0, realCount);
   const shuffledFake = fisherYates(fakes)
     .slice(0, fakeCount)
-    .map((f): GameCard => ({ word: f.word, isReal: false }))
+    .map((f): GameCard => ({ word: f.word, isReal: false }));
 
-  return fisherYates([...shuffledReal, ...shuffledFake])
+  return fisherYates([...shuffledReal, ...shuffledFake]);
 }
 
 // --- Composable ---
 
 export function useGame() {
   const state = ref<GameState>({
-    phase: 'idle',
+    phase: "idle",
     lives: 3,
     score: 0,
     streak: 0,
@@ -370,32 +370,32 @@ export function useGame() {
     deck: [],
     lastAnswerCorrect: null,
     lastCard: null,
-  })
+  });
 
   // Exposed reactive slices
-  const phase = computed(() => state.value.phase)
-  const lives = computed(() => state.value.lives)
-  const score = computed(() => state.value.score)
-  const streak = computed(() => state.value.streak)
-  const bestStreak = computed(() => state.value.bestStreak)
-  const multiplier = computed(() => state.value.multiplier)
-  const totalAnswered = computed(() => state.value.totalAnswered)
-  const correctAnswers = computed(() => state.value.correctAnswers)
-  const currentCard = computed(() => state.value.currentCard)
-  const lastAnswerCorrect = computed(() => state.value.lastAnswerCorrect)
-  const lastCard = computed(() => state.value.lastCard)
+  const phase = computed(() => state.value.phase);
+  const lives = computed(() => state.value.lives);
+  const score = computed(() => state.value.score);
+  const streak = computed(() => state.value.streak);
+  const bestStreak = computed(() => state.value.bestStreak);
+  const multiplier = computed(() => state.value.multiplier);
+  const totalAnswered = computed(() => state.value.totalAnswered);
+  const correctAnswers = computed(() => state.value.correctAnswers);
+  const currentCard = computed(() => state.value.currentCard);
+  const lastAnswerCorrect = computed(() => state.value.lastAnswerCorrect);
+  const lastCard = computed(() => state.value.lastCard);
 
-  let _realWords: GameCard[] = []
-  let _fakeWords: FakeWord[] = []
+  let _realWords: GameCard[] = [];
+  let _fakeWords: FakeWord[] = [];
 
   function init(realWords: GameCard[], fakeWords: FakeWord[]) {
-    _realWords = realWords
-    _fakeWords = fakeWords
+    _realWords = realWords;
+    _fakeWords = fakeWords;
   }
 
   function startGame() {
     state.value = {
-      phase: 'playing',
+      phase: "playing",
       lives: 3,
       score: 0,
       streak: 0,
@@ -407,87 +407,91 @@ export function useGame() {
       deck: buildDeck(_realWords, _fakeWords),
       lastAnswerCorrect: null,
       lastCard: null,
-    }
-    _nextCard()
+    };
+    _nextCard();
   }
 
   function _nextCard() {
     if (state.value.deck.length === 0) {
       // Endless: reshuffle
-      state.value.deck = buildDeck(_realWords, _fakeWords)
+      state.value.deck = buildDeck(_realWords, _fakeWords);
     }
-    const [next, ...rest] = state.value.deck
-    state.value.deck = rest
-    state.value.currentCard = next ?? null
+    const [next, ...rest] = state.value.deck;
+    state.value.deck = rest;
+    state.value.currentCard = next ?? null;
   }
 
   function answer(guessedReal: boolean) {
-    const card = state.value.currentCard
-    if (!card || state.value.phase !== 'playing') return
+    const card = state.value.currentCard;
+    if (!card || state.value.phase !== "playing") return;
 
-    const correct = card.isReal === guessedReal
-    state.value.lastCard = card
-    state.value.lastAnswerCorrect = correct
-    state.value.totalAnswered++
+    const correct = card.isReal === guessedReal;
+    state.value.lastCard = card;
+    state.value.lastAnswerCorrect = correct;
+    state.value.totalAnswered++;
 
     if (correct) {
-      state.value.correctAnswers++
-      state.value.streak++
-      state.value.multiplier = computeMultiplier(state.value.streak)
+      state.value.correctAnswers++;
+      state.value.streak++;
+      state.value.multiplier = computeMultiplier(state.value.streak);
       if (state.value.streak > state.value.bestStreak) {
-        state.value.bestStreak = state.value.streak
+        state.value.bestStreak = state.value.streak;
       }
-      state.value.score += 10 * state.value.multiplier
+      state.value.score += 10 * state.value.multiplier;
 
       if (card.isReal && card.translation) {
         createToastNotify({
           message: `„${card.word}" = ${card.translation}`,
-          status: 'success',
+          status: "success",
           timeout: 3000,
-        })
+        });
       }
 
       // Advance after short delay (animation plays)
-      setTimeout(() => _nextCard(), 400)
+      setTimeout(() => _nextCard(), 400);
     } else {
-      state.value.streak = 0
-      state.value.multiplier = 1
-      state.value.lives--
+      state.value.streak = 0;
+      state.value.multiplier = 1;
+      state.value.lives--;
 
       if (state.value.lives <= 0) {
-        _endGame()
+        _endGame();
       } else {
         // Stay on card for 1200ms (overlay shows correct answer)
-        setTimeout(() => _nextCard(), 1200)
+        setTimeout(() => _nextCard(), 1200);
       }
     }
   }
 
   function _endGame() {
-    state.value.phase = 'result'
-    const stats = $gameStats.get()
-    const isNewHighScore = state.value.score > stats.highScore
-    const isNewBestStreak = state.value.bestStreak > stats.bestStreak
+    state.value.phase = "result";
+    const stats = $gameStats.get();
+    const isNewHighScore = state.value.score > stats.highScore;
+    const isNewBestStreak = state.value.bestStreak > stats.bestStreak;
 
-    $gameStats.setKey('totalGamesPlayed', stats.totalGamesPlayed + 1)
-    $gameStats.setKey('totalCorrect', stats.totalCorrect + state.value.correctAnswers)
-    $gameStats.setKey('totalAnswered', stats.totalAnswered + state.value.totalAnswered)
+    $gameStats.setKey("totalGamesPlayed", stats.totalGamesPlayed + 1);
+    $gameStats.setKey("totalCorrect", stats.totalCorrect + state.value.correctAnswers);
+    $gameStats.setKey("totalAnswered", stats.totalAnswered + state.value.totalAnswered);
 
     if (isNewHighScore) {
-      $gameStats.setKey('highScore', state.value.score)
-      trackEvent('game', 'new_highscore', 'berliner-oder-nicht', state.value.score)
+      $gameStats.setKey("highScore", state.value.score);
+      trackEvent("game", "new_highscore", "berliner-oder-nicht", state.value.score);
     }
     if (isNewBestStreak) {
-      $gameStats.setKey('bestStreak', state.value.bestStreak)
+      $gameStats.setKey("bestStreak", state.value.bestStreak);
     }
 
-    trackEvent('game', 'game_over', 'berliner-oder-nicht', state.value.score)
+    trackEvent("game", "game_over", "berliner-oder-nicht", state.value.score);
   }
 
   const isNewHighScore = computed(() => {
-    const stats = $gameStats.get()
-    return state.value.phase === 'result' && state.value.score >= stats.highScore && state.value.score > 0
-  })
+    const stats = $gameStats.get();
+    return (
+      state.value.phase === "result" &&
+      state.value.score >= stats.highScore &&
+      state.value.score > 0
+    );
+  });
 
   return {
     answer,
@@ -505,7 +509,7 @@ export function useGame() {
     startGame,
     streak,
     totalAnswered,
-  }
+  };
 }
 ```
 
@@ -529,6 +533,7 @@ git commit -m "feat(game): add useGame composable with deck building and scoring
 ## Task 4: SCSS
 
 **Files:**
+
 - Create: `src/styles/components/_berliner-oder-nicht.scss`
 
 - [ ] **Step 1: Create the stylesheet**
@@ -619,7 +624,9 @@ git commit -m "feat(game): add useGame composable with deck building and scoring
 
   &__life-icon {
     color: var(--color-error, #e74c3c);
-    transition: color 0.2s, transform 0.2s;
+    transition:
+      color 0.2s,
+      transform 0.2s;
 
     &--lost {
       color: var(--color-text-muted, #555);
@@ -714,7 +721,10 @@ git commit -m "feat(game): add useGame composable with deck building and scoring
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     cursor: grab;
     user-select: none;
-    transition: transform 0.25s ease, border-color 0.2s, box-shadow 0.2s;
+    transition:
+      transform 0.25s ease,
+      border-color 0.2s,
+      box-shadow 0.2s;
     will-change: transform;
 
     &--exit-right {
@@ -816,11 +826,22 @@ git commit -m "feat(game): add useGame composable with deck building and scoring
 }
 
 @keyframes c-game-card-shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-8px) rotate(-1deg); }
-  40% { transform: translateX(8px) rotate(1deg); }
-  60% { transform: translateX(-6px) rotate(-0.5deg); }
-  80% { transform: translateX(6px) rotate(0.5deg); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-8px) rotate(-1deg);
+  }
+  40% {
+    transform: translateX(8px) rotate(1deg);
+  }
+  60% {
+    transform: translateX(-6px) rotate(-0.5deg);
+  }
+  80% {
+    transform: translateX(6px) rotate(0.5deg);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -914,7 +935,9 @@ git commit -m "feat(game): add useGame composable with deck building and scoring
     cursor: pointer;
     transition: opacity 0.15s;
 
-    &:hover { opacity: 0.75; }
+    &:hover {
+      opacity: 0.75;
+    }
   }
 
   &__restart-btn {
@@ -933,7 +956,9 @@ git commit -m "feat(game): add useGame composable with deck building and scoring
     cursor: pointer;
     transition: opacity 0.15s;
 
-    &:hover { opacity: 0.88; }
+    &:hover {
+      opacity: 0.88;
+    }
   }
 }
 ```
@@ -950,6 +975,7 @@ git commit -m "feat(game): add SCSS for Berliner oder nicht game components"
 ## Task 5: GameHUD Component
 
 **Files:**
+
 - Create: `src/components/games/GameHUD.vue`
 
 - [ ] **Step 1: Create the component**
@@ -983,32 +1009,36 @@ git commit -m "feat(game): add SCSS for Berliner oder nicht game components"
       </div>
       <div class="c-game-hud__multiplier">
         <span
-          :class="['c-game-hud__multiplier-badge', { 'c-game-hud__multiplier-badge--active': multiplier > 1 }]"
-        >{{ multiplier }}×</span>
+          :class="[
+            'c-game-hud__multiplier-badge',
+            { 'c-game-hud__multiplier-badge--active': multiplier > 1 },
+          ]"
+          >{{ multiplier }}×</span
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from "vue";
 
-const HeartIcon = defineAsyncComponent(() => import('virtual:icons/lucide/heart'))
-const FlameIcon = defineAsyncComponent(() => import('virtual:icons/lucide/flame'))
+const HeartIcon = defineAsyncComponent(() => import("virtual:icons/lucide/heart"));
+const FlameIcon = defineAsyncComponent(() => import("virtual:icons/lucide/flame"));
 
-const MAX_LIVES = 3
+const MAX_LIVES = 3;
 
 defineProps<{
-  lives: number
-  score: number
-  streak: number
-  multiplier: number
-  isHighscore: boolean
-}>()
+  lives: number;
+  score: number;
+  streak: number;
+  multiplier: number;
+  isHighscore: boolean;
+}>();
 </script>
 
 <style lang="scss">
-@use '@styles/components/berliner-oder-nicht';
+@use "@styles/components/berliner-oder-nicht";
 </style>
 ```
 
@@ -1024,6 +1054,7 @@ git commit -m "feat(game): add GameHUD component with lives, score, streak displ
 ## Task 6: GameCard Component
 
 **Files:**
+
 - Create: `src/components/games/GameCard.vue`
 
 The card handles swipe detection via `useSwipe` and keyboard via `onKeyStroke`, then emits `answer` events upward. Animation state (exit direction, shake) is driven by props from the parent.
@@ -1052,9 +1083,7 @@ The card handles swipe detection via `useSwipe` and keyboard via `onKeyStroke`, 
       <p class="c-game-card__progress">{{ cardNumber }} / 20</p>
 
       <Transition name="fade-fast">
-        <div v-if="showOverlay" class="c-game-card__overlay">
-          War {{ overlayText }}!
-        </div>
+        <div v-if="showOverlay" class="c-game-card__overlay">War {{ overlayText }}!</div>
       </Transition>
     </div>
 
@@ -1082,50 +1111,48 @@ The card handles swipe detection via `useSwipe` and keyboard via `onKeyStroke`, 
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from 'vue'
-import { onKeyStroke, useSwipe } from '@vueuse/core'
+import { computed, defineAsyncComponent, ref } from "vue";
+import { onKeyStroke, useSwipe } from "@vueuse/core";
 
-const XIcon = defineAsyncComponent(() => import('virtual:icons/lucide/x'))
-const CheckIcon = defineAsyncComponent(() => import('virtual:icons/lucide/check'))
+const XIcon = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
+const CheckIcon = defineAsyncComponent(() => import("virtual:icons/lucide/check"));
 
 const props = defineProps<{
-  word: string
-  cardNumber: number
-  isAnimatingOut: boolean
-  exitDirection: 'left' | 'right' | null
-  isShaking: boolean
-  lastAnswerCorrect: boolean | null
-  isReal: boolean | null // revealed after wrong answer for overlay
-}>()
+  word: string;
+  cardNumber: number;
+  isAnimatingOut: boolean;
+  exitDirection: "left" | "right" | null;
+  isShaking: boolean;
+  lastAnswerCorrect: boolean | null;
+  isReal: boolean | null; // revealed after wrong answer for overlay
+}>();
 
 const emit = defineEmits<{
-  answer: [isReal: boolean]
-}>()
+  answer: [isReal: boolean];
+}>();
 
-const cardRef = ref<HTMLElement | null>(null)
+const cardRef = ref<HTMLElement | null>(null);
 
-const showOverlay = computed(() =>
-  props.isShaking && props.lastAnswerCorrect === false && props.isReal !== null,
-)
+const showOverlay = computed(
+  () => props.isShaking && props.lastAnswerCorrect === false && props.isReal !== null,
+);
 
-const overlayText = computed(() =>
-  props.isReal ? 'echtes Berlinerisch' : 'erfunden',
-)
+const overlayText = computed(() => (props.isReal ? "echtes Berlinerisch" : "erfunden"));
 
 const { direction } = useSwipe(cardRef, {
   threshold: 50,
   onSwipeEnd(_, dir) {
-    if (dir === 'right') emit('answer', true)
-    else if (dir === 'left') emit('answer', false)
+    if (dir === "right") emit("answer", true);
+    else if (dir === "left") emit("answer", false);
   },
-})
+});
 
-onKeyStroke('ArrowRight', () => emit('answer', true))
-onKeyStroke('ArrowLeft', () => emit('answer', false))
+onKeyStroke("ArrowRight", () => emit("answer", true));
+onKeyStroke("ArrowLeft", () => emit("answer", false));
 </script>
 
 <style lang="scss">
-@use '@styles/components/berliner-oder-nicht';
+@use "@styles/components/berliner-oder-nicht";
 </style>
 ```
 
@@ -1141,6 +1168,7 @@ git commit -m "feat(game): add GameCard component with swipe, keyboard, and anim
 ## Task 7: GameResult Component
 
 **Files:**
+
 - Create: `src/components/games/GameResult.vue`
 
 - [ ] **Step 1: Create the component**
@@ -1166,7 +1194,7 @@ git commit -m "feat(game): add GameCard component with swipe, keyboard, and anim
       <div :class="['c-game-result__stat', isNewHighScore && 'c-game-result__stat--highlight']">
         <span class="c-game-result__stat-value">
           <TrophyIcon v-if="isNewHighScore" width="18" height="18" aria-hidden="true" />
-          {{ isNewHighScore ? 'Neu!' : allTimeHighScore }}
+          {{ isNewHighScore ? "Neu!" : allTimeHighScore }}
         </span>
         <span class="c-game-result__stat-label">Highscore</span>
       </div>
@@ -1182,11 +1210,7 @@ git commit -m "feat(game): add GameCard component with swipe, keyboard, and anim
     </a>
 
     <div class="c-game-result__actions">
-      <button
-        v-if="canShare"
-        class="c-game-result__share-btn"
-        @click="share"
-      >
+      <button v-if="canShare" class="c-game-result__share-btn" @click="share">
         <Share2Icon width="18" height="18" aria-hidden="true" />
         Teilen
       </button>
@@ -1199,48 +1223,46 @@ git commit -m "feat(game): add GameCard component with swipe, keyboard, and anim
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from 'vue'
-import { useShare } from '@vueuse/core'
-import type { GameCard } from '@composables/useGame'
+import { computed, defineAsyncComponent } from "vue";
+import { useShare } from "@vueuse/core";
+import type { GameCard } from "@composables/useGame";
 
-const TrophyIcon = defineAsyncComponent(() => import('virtual:icons/lucide/trophy'))
-const ExternalLinkIcon = defineAsyncComponent(() => import('virtual:icons/lucide/external-link'))
-const Share2Icon = defineAsyncComponent(() => import('virtual:icons/lucide/share-2'))
-const RefreshCwIcon = defineAsyncComponent(() => import('virtual:icons/lucide/refresh-cw'))
+const TrophyIcon = defineAsyncComponent(() => import("virtual:icons/lucide/trophy"));
+const ExternalLinkIcon = defineAsyncComponent(() => import("virtual:icons/lucide/external-link"));
+const Share2Icon = defineAsyncComponent(() => import("virtual:icons/lucide/share-2"));
+const RefreshCwIcon = defineAsyncComponent(() => import("virtual:icons/lucide/refresh-cw"));
 
 const props = defineProps<{
-  score: number
-  bestStreak: number
-  totalAnswered: number
-  correctAnswers: number
-  isNewHighScore: boolean
-  allTimeHighScore: number
-  lastCard: GameCard | null
-}>()
+  score: number;
+  bestStreak: number;
+  totalAnswered: number;
+  correctAnswers: number;
+  isNewHighScore: boolean;
+  allTimeHighScore: number;
+  lastCard: GameCard | null;
+}>();
 
 const emit = defineEmits<{
-  restart: []
-}>()
+  restart: [];
+}>();
 
 const accuracyPercent = computed(() =>
-  props.totalAnswered > 0
-    ? Math.round((props.correctAnswers / props.totalAnswered) * 100)
-    : 0,
-)
+  props.totalAnswered > 0 ? Math.round((props.correctAnswers / props.totalAnswered) * 100) : 0,
+);
 
-const { share: _share, isSupported: canShare } = useShare()
+const { share: _share, isSupported: canShare } = useShare();
 
 function share() {
   _share({
-    title: 'Berliner oder nicht?',
+    title: "Berliner oder nicht?",
     text: `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
-    url: 'https://berliner-schnauze.wtf/games/berliner-oder-nicht',
-  })
+    url: "https://berliner-schnauze.wtf/games/berliner-oder-nicht",
+  });
 }
 </script>
 
 <style lang="scss">
-@use '@styles/components/berliner-oder-nicht';
+@use "@styles/components/berliner-oder-nicht";
 </style>
 ```
 
@@ -1256,6 +1278,7 @@ git commit -m "feat(game): add GameResult component with stats, share, and word 
 ## Task 8: BerlinerOderNicht Root Component
 
 **Files:**
+
 - Create: `src/components/games/BerlinerOderNicht.vue`
 
 This component fetches `/api/search/index.json`, maps words to `GameCard[]`, initialises `useGame`, and orchestrates phase transitions. It also triggers `ConfettiEffect` on new high score.
@@ -1281,9 +1304,7 @@ This component fetches `/api/search/index.json`, maps words to `GameCard[]`, ini
           Best Streak
         </div>
       </div>
-      <button class="c-berliner-oder-nicht__start-btn" @click="startGame">
-        Spielen
-      </button>
+      <button class="c-berliner-oder-nicht__start-btn" @click="startGame">Spielen</button>
     </div>
 
     <!-- Playing -->
@@ -1326,15 +1347,15 @@ This component fetches `/api/search/index.json`, maps words to `GameCard[]`, ini
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { useStore } from '@nanostores/vue'
-import ConfettiEffect from '@components/ConfettiEffect.vue'
-import { $gameStats } from '@stores/gameStats'
-import { fakeWords } from '@/data/fakeWords'
-import { useGame, type GameCard as GameCardData } from '@composables/useGame'
-import GameCard from '@components/games/GameCard.vue'
-import GameHUD from '@components/games/GameHUD.vue'
-import GameResult from '@components/games/GameResult.vue'
+import { computed, onMounted, ref } from "vue";
+import { useStore } from "@nanostores/vue";
+import ConfettiEffect from "@components/ConfettiEffect.vue";
+import { $gameStats } from "@stores/gameStats";
+import { fakeWords } from "@/data/fakeWords";
+import { useGame, type GameCard as GameCardData } from "@composables/useGame";
+import GameCard from "@components/games/GameCard.vue";
+import GameHUD from "@components/games/GameHUD.vue";
+import GameResult from "@components/games/GameResult.vue";
 
 const {
   answer,
@@ -1352,28 +1373,30 @@ const {
   startGame: _startGame,
   streak,
   totalAnswered,
-} = useGame()
+} = useGame();
 
-const stats = useStore($gameStats)
-const allTimeHighScore = computed(() => stats.value.highScore)
-const allTimeBestStreak = computed(() => stats.value.bestStreak)
+const stats = useStore($gameStats);
+const allTimeHighScore = computed(() => stats.value.highScore);
+const allTimeBestStreak = computed(() => stats.value.bestStreak);
 
 // Animation state
-const isAnimatingOut = ref(false)
-const exitDirection = ref<'left' | 'right' | null>(null)
-const isShaking = ref(false)
-const cardNumber = ref(1)
+const isAnimatingOut = ref(false);
+const exitDirection = ref<"left" | "right" | null>(null);
+const isShaking = ref(false);
+const cardNumber = ref(1);
 
 onMounted(async () => {
   try {
-    const res = await fetch('/api/search/index.json')
-    if (!res.ok) throw new Error('Failed to load word index')
-    const data = await res.json()
+    const res = await fetch("/api/search/index.json");
+    if (!res.ok) throw new Error("Failed to load word index");
+    const data = await res.json();
 
     // data is an Orama serialised index — the actual records are nested
     // Extract word objects from the Orama index structure
-    const records: Array<{ wordProperties: { berlinerisch: string; translations: string[] }; slug: string }> =
-      Object.values((data as any)?.data?.docs?.docs ?? {})
+    const records: Array<{
+      wordProperties: { berlinerisch: string; translations: string[] };
+      slug: string;
+    }> = Object.values((data as any)?.data?.docs?.docs ?? {});
 
     const realWords: GameCard[] = records
       .filter((r) => r?.wordProperties?.berlinerisch)
@@ -1382,51 +1405,51 @@ onMounted(async () => {
         isReal: true,
         slug: r.slug,
         translation: r.wordProperties.translations?.[0] ?? undefined,
-      }))
+      }));
 
-    init(realWords, fakeWords)
+    init(realWords, fakeWords);
   } catch (err) {
-    console.error('[BerlinerOderNicht] Failed to load words:', err)
+    console.error("[BerlinerOderNicht] Failed to load words:", err);
   }
-})
+});
 
 function startGame() {
-  cardNumber.value = 1
-  isAnimatingOut.value = false
-  exitDirection.value = null
-  isShaking.value = false
-  _startGame()
+  cardNumber.value = 1;
+  isAnimatingOut.value = false;
+  exitDirection.value = null;
+  isShaking.value = false;
+  _startGame();
 }
 
 function onAnswer(guessedReal: boolean) {
   // Check correct before calling answer() to animate accordingly
-  const card = currentCard.value
-  if (!card) return
+  const card = currentCard.value;
+  if (!card) return;
 
-  const correct = card.isReal === guessedReal
+  const correct = card.isReal === guessedReal;
 
   if (correct) {
-    exitDirection.value = guessedReal ? 'right' : 'left'
-    isAnimatingOut.value = true
+    exitDirection.value = guessedReal ? "right" : "left";
+    isAnimatingOut.value = true;
     setTimeout(() => {
-      isAnimatingOut.value = false
-      exitDirection.value = null
-      cardNumber.value++
-    }, 350)
+      isAnimatingOut.value = false;
+      exitDirection.value = null;
+      cardNumber.value++;
+    }, 350);
   } else {
-    isShaking.value = true
+    isShaking.value = true;
     setTimeout(() => {
-      isShaking.value = false
-      cardNumber.value++
-    }, 1200)
+      isShaking.value = false;
+      cardNumber.value++;
+    }, 1200);
   }
 
-  answer(guessedReal)
+  answer(guessedReal);
 }
 </script>
 
 <style lang="scss">
-@use '@styles/components/berliner-oder-nicht';
+@use "@styles/components/berliner-oder-nicht";
 </style>
 ```
 
@@ -1442,6 +1465,7 @@ git commit -m "feat(game): add BerlinerOderNicht root component with phase switc
 ## Task 9: Astro Page
 
 **Files:**
+
 - Create: `src/pages/games/berliner-oder-nicht.astro`
 
 - [ ] **Step 1: Create the page**
@@ -1498,6 +1522,7 @@ pnpm dev
 Navigate to `http://localhost:4321/games/berliner-oder-nicht`.
 
 Verify:
+
 - Idle screen shows title + "Spielen" button
 - Clicking "Spielen" starts the game, cards appear
 - Correct answer: card animates out, score increases

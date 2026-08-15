@@ -15,11 +15,11 @@ Performance traces on `perf-img-and-others.berliner-schnauze.pages.dev` (2026-06
 
 Root causes identified in this session:
 
-| # | Cause | Evidence | CLS Impact |
-|---|-------|----------|------------|
-| 1 | Font swap — Berlin font family, `font-display: swap`, no metric overrides | Shift at 60–90ms post-TTFB → matches font download timing. 5 fonts preloaded but still swap when they arrive | **Primary** ~0.69 |
-| 2 | `WordOfTheDay client:only="vue"` — no SSR shell | `client:only` = zero HTML until Vue hydrates. Grid item appears after JS runs, shifts content below | **Secondary** (unmeasured) |
-| 3 | Image placeholder CSS bug | Duplicate `.o-index__image` in `:not(.loaded)` block — `opacity:0` then `opacity:1` override. Skeleton plays but image is already visible | No CLS, but broken UX |
+| #   | Cause                                                                     | Evidence                                                                                                                                  | CLS Impact                 |
+| --- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| 1   | Font swap — Berlin font family, `font-display: swap`, no metric overrides | Shift at 60–90ms post-TTFB → matches font download timing. 5 fonts preloaded but still swap when they arrive                              | **Primary** ~0.69          |
+| 2   | `WordOfTheDay client:only="vue"` — no SSR shell                           | `client:only` = zero HTML until Vue hydrates. Grid item appears after JS runs, shifts content below                                       | **Secondary** (unmeasured) |
+| 3   | Image placeholder CSS bug                                                 | Duplicate `.o-index__image` in `:not(.loaded)` block — `opacity:0` then `opacity:1` override. Skeleton plays but image is already visible | No CLS, but broken UX      |
 
 **Why CLS from fonts?** `font-display: swap` renders fallback font immediately, then swaps the web font when loaded. If the web font has different metrics (cap height, x-height, line spacing) than the fallback, text reflows → layout shift. Fix: add CSS font metric overrides to the `@font-face` `src` fallback so the fallback font dimensions match the web font.
 
@@ -29,14 +29,15 @@ Root causes identified in this session:
 
 Sources already confirmed in this session:
 
-| File | Relevant lines |
-|------|---------------|
-| `src/styles/base/_typo.scss` | Lines 4–38: all 5 `@font-face` with `font-display: swap` |
-| `src/pages/index.astro` | Line 83: `<WordOfTheDay client:only="vue" />` |
-| `src/styles/objects/_index.scss` | Lines 68–85: `.image-placeholder-wrap` CSS with bug |
-| `src/components/WordOfTheDay.vue` | Client-only component, renders crown + word card |
+| File                              | Relevant lines                                           |
+| --------------------------------- | -------------------------------------------------------- |
+| `src/styles/base/_typo.scss`      | Lines 4–38: all 5 `@font-face` with `font-display: swap` |
+| `src/pages/index.astro`           | Line 83: `<WordOfTheDay client:only="vue" />`            |
+| `src/styles/objects/_index.scss`  | Lines 68–85: `.image-placeholder-wrap` CSS with bug      |
+| `src/components/WordOfTheDay.vue` | Client-only component, renders crown + word card         |
 
 Font stack confirmed (via browser eval):
+
 - `Berliner` 400 normal → `BerlinerRegular.woff2` (headings: h1–h5)
 - `Berlin` 400 normal → `Berlin.woff2` (body text)
 - `Berlin` 400 italic → `Berlin-Italic.woff2`
@@ -101,11 +102,13 @@ line-gap-override = sTypoLineGap / unitsPerEm × 100%
 ```
 
 Or use the Chrome DevTools font override panel:
+
 1. DevTools → Rendering tab → "Local fonts" → enable
-2. Open `chrome://settings/fonts`  
+2. Open `chrome://settings/fonts`
 3. Use [Malte Ubl's size-adjust calculator](https://seek-oss.github.io/capsize/) or the [web font override generator](https://www.industrialempathy.com/perfect-sse/)
 
 **Verification:**
+
 - Note down override values for Berlin and BerlinerRegular before proceeding to Phase 2
 - Target: fallback font renders at identical dimensions to web font
 
@@ -125,13 +128,13 @@ Pattern (adjust values from Phase 1 measurements):
 // Patched fallback for Berlin 400 — metrics matched to Berlin.woff2
 @font-face {
   font-family: "Berlin-fallback";
-  src: local("Arial");           // or local("system-ui"), whatever the stack uses
+  src: local("Arial"); // or local("system-ui"), whatever the stack uses
   font-weight: 400;
   font-style: normal;
-  size-adjust: 97%;              // measured value from Phase 1
-  ascent-override: 90%;          // measured value
-  descent-override: 22%;         // measured value
-  line-gap-override: 0%;         // measured value
+  size-adjust: 97%; // measured value from Phase 1
+  ascent-override: 90%; // measured value
+  descent-override: 22%; // measured value
+  line-gap-override: 0%; // measured value
 }
 
 // Web font (existing, unchanged)
@@ -148,10 +151,14 @@ Then update the `font-family` stack wherever `Berlin` is used to include `Berlin
 
 ```scss
 // Before:
-body { font-family: vars.$berlin, sans-serif; }
+body {
+  font-family: vars.$berlin, sans-serif;
+}
 
 // After:
-body { font-family: vars.$berlin, Berlin-fallback, sans-serif; }
+body {
+  font-family: vars.$berlin, Berlin-fallback, sans-serif;
+}
 ```
 
 Repeat for `Berliner` (headings) → `Berliner-fallback`.
@@ -159,6 +166,7 @@ Repeat for `Berliner` (headings) → `Berliner-fallback`.
 ### 2b — Verify no reflow in DevTools
 
 Run performance trace (Chrome DevTools MCP `performance_start_trace`) on local `pnpm server:pages`. Check:
+
 - CLS insight shows 0 or near-0 for layout shift cluster that was at 60–90ms post-TTFB
 - Font still renders correctly visually
 
@@ -176,8 +184,9 @@ Run performance trace (Chrome DevTools MCP `performance_start_trace`) on local `
 Open staging URL in browser DevTools → inspect the rendered `WordOfTheDay` card:
 
 ```js
-document.querySelector('astro-island[component-url*="WordOfTheDay"]')
-  .children[0].getBoundingClientRect()
+document
+  .querySelector('astro-island[component-url*="WordOfTheDay"]')
+  .children[0].getBoundingClientRect();
 // Note: height, width
 ```
 
@@ -223,6 +232,7 @@ Performance trace → CLSCulprits insight → confirm no shift attributable to W
 File: `src/styles/objects/_index.scss`, lines 68–85.
 
 **Current (broken):**
+
 ```scss
 .image-placeholder-wrap:not(.loaded) {
   position: relative;
@@ -233,12 +243,13 @@ File: `src/styles/objects/_index.scss`, lines 68–85.
     display: block;
     width: 100%;
     height: auto;
-    opacity: 0;          // ← hidden while loading
+    opacity: 0; // ← hidden while loading
     transition: opacity 0.3s;
   }
 
-  .o-index__image {      // ← DUPLICATE: overrides opacity to 1!
-    opacity: 1;          // ← image always visible, skeleton pointless
+  .o-index__image {
+    // ← DUPLICATE: overrides opacity to 1!
+    opacity: 1; // ← image always visible, skeleton pointless
   }
 }
 ```
@@ -246,6 +257,7 @@ File: `src/styles/objects/_index.scss`, lines 68–85.
 The second `.o-index__image` rule overrides the first. Image is always `opacity: 1` regardless of loaded state. Skeleton loader plays but image is visible behind it.
 
 **Fix (remove duplicate rule):**
+
 ```scss
 .image-placeholder-wrap:not(.loaded) {
   position: relative;
@@ -287,6 +299,7 @@ Then performance trace (Chrome DevTools MCP):
 4. Visual check: WordOfTheDay skeleton / reserved space holds layout before hydration
 
 **Acceptance criteria:**
+
 - [ ] Lab CLS ≤ 0.10 (performance trace, unthrottled)
 - [ ] Lighthouse mobile CLS score ≥ 0.9
 - [ ] Berlin font renders correctly on first load (not permanent fallback)
@@ -300,6 +313,7 @@ Then performance trace (Chrome DevTools MCP):
 ## Relation to Existing Plan
 
 `2026-05-30-performance-cls-fix.md` covered:
+
 - Phase 1a (BerlinX-Bold preload) → **already done** (5 fonts preloaded confirmed in browser)
 - Phase 1b (font-display: optional) → **blocked** by CLAUDE.md (causes CLS 0.65)
 - Phase 2 (ColorModeToggle + MainMenu placeholders) → still valid, not covered here

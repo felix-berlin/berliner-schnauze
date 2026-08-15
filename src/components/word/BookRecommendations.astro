@@ -51,6 +51,7 @@ function isAmazonLink(href: string | null): boolean {
                 <Picture
                   alt={book.imageAlt ?? book.title}
                   densities={[1, 2]}
+                  fallbackFormat='webp'
                   formats={['avif', 'webp']}
                   height={66}
                   loading='lazy'
@@ -82,14 +83,15 @@ function isAmazonLink(href: string | null): boolean {
     }
   </ul>
   <p class='c-book-recs__disclaimer'>
-    {disclaimers
-      .filter((d) => {
-        const plat = d.plattform?.toLowerCase() ?? '';
-        if (plat.includes('amazon') && books.some((b) => isAmazonLink(b.href))) return true;
-        return books.some((b) => getPlatformLabel(b.href).toLowerCase() === plat);
-      })
-      .map((d) => d.text)
-      .join(' ')
+    {
+      disclaimers
+        .filter((d) => {
+          const plat = d.plattform?.toLowerCase() ?? '';
+          if (plat.includes('amazon') && books.some((b) => isAmazonLink(b.href))) return true;
+          return books.some((b) => getPlatformLabel(b.href).toLowerCase() === plat);
+        })
+        .map((d) => d.text)
+        .join(' ')
     }{' '}Ich erhalte eine kleine Provision — für dich bleibt der Preis gleich.
   </p>
 </aside>

@@ -33,7 +33,9 @@
     "word": "Deckel",
     "article": "der",
     "translations": ["Hut"],
-    "examples": [{ "example": "Krist gleich een’s uff’n Deckel.", "explanation": "Androhung von Schlägen" }],
+    "examples": [
+      { "example": "Krist gleich een’s uff’n Deckel.", "explanation": "Androhung von Schlägen" }
+    ],
     "infoText": "Im 19. Jahrhundert für Zylinderhut, heute allgemein für Hut.",
     "themen": ["charakter-eigenschaften"]
   },
@@ -42,7 +44,10 @@
     "article": "der",
     "translations": ["Kopf"],
     "examples": [
-      { "example": "Dir hau ick een’s uff’n Deez, daß de aus de Rippen kiekst wie’n Affe durch’t Jitter.", "explanation": "Drohung" }
+      {
+        "example": "Dir hau ick een’s uff’n Deez, daß de aus de Rippen kiekst wie’n Affe durch’t Jitter.",
+        "explanation": "Drohung"
+      }
     ],
     "infoText": "Von französisch tête = Kopf. Taucht häufig in Form einer Drohung auf.",
     "themen": ["koerper"]
@@ -53,7 +58,10 @@
     "translations": ["Teufel"],
     "examples": [
       { "example": "Den Deibel nochmal!" },
-      { "example": "Da kommste in Deibels Küche.", "explanation": "Da gerätst du in Schwierigkeiten." }
+      {
+        "example": "Da kommste in Deibels Küche.",
+        "explanation": "Da gerätst du in Schwierigkeiten."
+      }
     ],
     "infoText": "Niederdeutsche Form von Teufel, in vielen Redewendungen gebräuchlich.",
     "themen": ["gefuehle-emotionen"]
@@ -69,7 +77,10 @@
     "word": "Denkste",
     "translations": ["da hast du falsch gedacht"],
     "examples": [
-      { "example": "Dit is ’n typischer Fall von Denkste.", "explanation": "Ein typischer Fall dafür, dass sich jemand geirrt hat." }
+      {
+        "example": "Dit is ’n typischer Fall von Denkste.",
+        "explanation": "Ein typischer Fall dafür, dass sich jemand geirrt hat."
+      }
     ],
     "infoText": "Zurückweisende Antwort, Verschleifung von »Denkst du!«.",
     "themen": []
@@ -85,7 +96,10 @@
     "article": "die",
     "translations": ["Kneipe"],
     "examples": [
-      { "example": "Ejal, wo der Berliner mit eenem Oooge hinkiekt - mit’s andre kiekta inne Destille.", "explanation": "Geflügeltes Wort aus der Zeit, als Zille sein Stammlokal »Zur quietschvergnügten Drehorgel« besuchte." }
+      {
+        "example": "Ejal, wo der Berliner mit eenem Oooge hinkiekt - mit’s andre kiekta inne Destille.",
+        "explanation": "Geflügeltes Wort aus der Zeit, als Zille sein Stammlokal »Zur quietschvergnügten Drehorgel« besuchte."
+      }
     ],
     "infoText": "Früher für Kneipe, abgeleitet von der Destillationsanstalt.",
     "themen": ["alkohol-kneipe", "stadtleben"]
@@ -94,7 +108,10 @@
     "word": "dicht",
     "translations": ["knapp daneben"],
     "examples": [
-      { "example": "Dicht daneben is ooch vorbei.", "explanation": "Spöttischer Kommentar zu einer nicht gelungenen Handlung." }
+      {
+        "example": "Dicht daneben is ooch vorbei.",
+        "explanation": "Spöttischer Kommentar zu einer nicht gelungenen Handlung."
+      }
     ],
     "themen": []
   },
@@ -129,7 +146,9 @@
     "word": "Diensteid",
     "article": "der",
     "translations": ["Schnaps (in der Wendung »Eenen uff’n Diensteid nehmen«)"],
-    "examples": [{ "example": "Eenen uff’n Diensteid nehmen.", "explanation": "Einen Schnaps trinken." }],
+    "examples": [
+      { "example": "Eenen uff’n Diensteid nehmen.", "explanation": "Einen Schnaps trinken." }
+    ],
     "themen": ["alkohol-kneipe"]
   },
   {
@@ -207,9 +226,7 @@
     "word": "Dremmel",
     "article": "der",
     "translations": ["Furcht", "Drang (auf die Toilette)"],
-    "examples": [
-      { "example": "Der hat ’n Dremmel.", "explanation": "Er muss dringend aufs Klo." }
-    ],
+    "examples": [{ "example": "Der hat ’n Dremmel.", "explanation": "Er muss dringend aufs Klo." }],
     "infoText": "Abgeleitet von dremmeln = drängen.",
     "themen": ["gefuehle-emotionen", "koerper"]
   },
@@ -311,7 +328,10 @@
     "word": "Dummsdorf",
     "translations": ["Ort, aus dem die Dummen kommen (nur in der Redensart)"],
     "examples": [
-      { "example": "Wir sind hier ooch nich aus Dummsdorf.", "explanation": "Wir sind nicht dumm. Bereits bei Glaßbrenner belegte Sentenz." }
+      {
+        "example": "Wir sind hier ooch nich aus Dummsdorf.",
+        "explanation": "Wir sind nicht dumm. Bereits bei Glaßbrenner belegte Sentenz."
+      }
     ],
     "themen": ["charakter-eigenschaften"]
   },
@@ -374,7 +394,10 @@
     "word": "doktern",
     "translations": ["sich mit etwas intensiv beschäftigen"],
     "examples": [
-      { "example": "Der muß immer wat herumdoktern.", "explanation": "Der hat immer etwas zu tun — mit leicht negativem Beigeschmack." }
+      {
+        "example": "Der muß immer wat herumdoktern.",
+        "explanation": "Der hat immer etwas zu tun — mit leicht negativem Beigeschmack."
+      }
     ],
     "themen": []
   },
@@ -382,9 +405,7 @@
     "word": "Dollar",
     "article": "der",
     "translations": ["Geld (in der Wendung »einen harten Dollar schütten«)"],
-    "examples": [
-      { "example": "Einen harten Dollar schütten.", "explanation": "Bezahlen." }
-    ],
+    "examples": [{ "example": "Einen harten Dollar schütten.", "explanation": "Bezahlen." }],
     "themen": ["geld"]
   },
   {
@@ -410,7 +431,10 @@
     "word": "durchwachsen",
     "translations": ["mittelmäßig"],
     "examples": [
-      { "example": "Na, wie jeht’s denn heut? — Na, so durchwachsen.", "explanation": "Dialog zwischen Krankenschwester und Patient." }
+      {
+        "example": "Na, wie jeht’s denn heut? — Na, so durchwachsen.",
+        "explanation": "Dialog zwischen Krankenschwester und Patient."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },

@@ -29,7 +29,10 @@
     "article": "die",
     "translations": ["Stock", "Knüppel"],
     "examples": [
-      { "example": "Deine Keule hat meine Brieze mit de Ille vor de Omme jeknökt.", "explanation": "Dein Bruder hat meiner Schwester mit dem Stock an den Kopf geschlagen (vgl. Brieze, Keule, Omme)." }
+      {
+        "example": "Deine Keule hat meine Brieze mit de Ille vor de Omme jeknökt.",
+        "explanation": "Dein Bruder hat meiner Schwester mit dem Stock an den Kopf geschlagen (vgl. Brieze, Keule, Omme)."
+      }
     ],
     "themen": []
   },
@@ -64,7 +67,10 @@
     "article": "die",
     "translations": ["Gruppe", "Familie"],
     "examples": [
-      { "example": "Du blamierst de janze Innung.", "explanation": "Die ganze Gruppe, Familie o.ä." }
+      {
+        "example": "Du blamierst de janze Innung.",
+        "explanation": "Die ganze Gruppe, Familie o.ä."
+      }
     ],
     "themen": ["beziehungen-soziales"]
   },
@@ -116,9 +122,7 @@
   {
     "word": "jagen",
     "translations": ["nicht mögen (in der Wendung)"],
-    "examples": [
-      { "example": "Damit könn’ se ma jagen!", "explanation": "Das mag ich nicht." }
-    ],
+    "examples": [{ "example": "Damit könn’ se ma jagen!", "explanation": "Das mag ich nicht." }],
     "themen": []
   },
   {
@@ -137,7 +141,10 @@
     "word": "jampeln",
     "translations": ["sich unruhig verhalten", "herumzappeln"],
     "examples": [
-      { "example": "Die Kinder jampeln herum.", "explanation": "Kinder, die nicht still sitzen können." }
+      {
+        "example": "Die Kinder jampeln herum.",
+        "explanation": "Kinder, die nicht still sitzen können."
+      }
     ],
     "themen": []
   },
@@ -178,9 +185,7 @@
     "word": "Jum",
     "article": "der",
     "translations": ["Rausch (in der Wendung »im Jum sein«)"],
-    "examples": [
-      { "example": "Der is im Jum.", "explanation": "Er ist angetrunken, betrunken." }
-    ],
+    "examples": [{ "example": "Der is im Jum.", "explanation": "Er ist angetrunken, betrunken." }],
     "themen": ["alkohol-kneipe"]
   },
   {

@@ -1,9 +1,8 @@
+import BonResult from "@components/games/BonResult.vue";
 import { mount } from "@vue/test-utils";
+import { useShare } from "@vueuse/core";
 import { describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
-import BonResult from "@components/games/BonResult.vue";
-import { useShare } from "@vueuse/core";
-
 
 const statsRef = ref({ playerName: "" });
 
@@ -113,6 +112,28 @@ describe("BonResult.vue", () => {
       },
     });
     expect(wrapper.find(".c-bon-result__word-link").exists()).toBe(false);
+  });
+
+  it("shows word meaning when lastCard is real and has a translation", () => {
+    const wrapper = mount(BonResult, {
+      props: {
+        ...defaultProps,
+        lastCard: { word: "Schnauze", isReal: true, slug: "schnauze", translation: "Mund" },
+      },
+    });
+    const meaning = wrapper.find(".c-bon-result__word-meaning");
+    expect(meaning.exists()).toBe(true);
+    expect(meaning.text()).toBe("„Schnauze“ = Mund");
+  });
+
+  it("does not show word meaning when lastCard has no translation", () => {
+    const wrapper = mount(BonResult, {
+      props: {
+        ...defaultProps,
+        lastCard: { word: "Schnauze", isReal: true, slug: "schnauze" },
+      },
+    });
+    expect(wrapper.find(".c-bon-result__word-meaning").exists()).toBe(false);
   });
 
   it("emits restart when restart button clicked", async () => {

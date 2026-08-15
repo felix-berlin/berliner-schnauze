@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
+import type { WordRef } from "@utils/wordHelper";
+
 import { useContentTracking } from "@composables/useContentTracking";
 import { randomElement, routeToWord } from "@utils/helpers.ts";
 import Dices from "virtual:icons/lucide/dices";
 import { ref } from "vue";
-
-import type { WordRef } from "@utils/wordHelper";
 
 interface RelatedWordsProps {
   words: WordRef[];

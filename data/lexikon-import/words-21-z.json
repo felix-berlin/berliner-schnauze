@@ -36,7 +36,10 @@
     "article": "der",
     "translations": ["Freundin", "Fernsehturm in Berlin-Mitte"],
     "examples": [
-      { "example": "Den Zahn laß da mal zieh’n.", "explanation": "Dezenter Hinweis, dass sich derjenige nichts einbilden soll." }
+      {
+        "example": "Den Zahn laß da mal zieh’n.",
+        "explanation": "Dezenter Hinweis, dass sich derjenige nichts einbilden soll."
+      }
     ],
     "infoText": "Siehe auch steiler Zahn = hübsches Mädchen.",
     "themen": ["beziehungen-soziales", "orte-spitzname"]
@@ -126,9 +129,7 @@
   {
     "word": "Zerquetschte",
     "translations": ["ein paar Pfennige (in der Wendung)"],
-    "examples": [
-      { "example": "Zwanzig Mark und ’n paar Zerquetschte." }
-    ],
+    "examples": [{ "example": "Zwanzig Mark und ’n paar Zerquetschte." }],
     "themen": ["geld"]
   },
   {
@@ -143,7 +144,10 @@
     "article": "die",
     "translations": ["dürre, störrische Frau", "Dummheiten (Plural)"],
     "examples": [
-      { "example": "Mach doch keene Zicken.", "explanation": "Stell dich nicht so an, mach keine Dummheiten." }
+      {
+        "example": "Mach doch keene Zicken.",
+        "explanation": "Stell dich nicht so an, mach keine Dummheiten."
+      }
     ],
     "alternativeWords": ["Zimtzicke"],
     "infoText": "Berlinische und obersächsische Variante zu Ziege.",
@@ -180,7 +184,10 @@
     "article": "die",
     "translations": ["Spreekahn"],
     "examples": [
-      { "example": "Lieber von Zille gemalt, als vom Sozialismus gezeichnet.", "explanation": "Ostberliner Spruch." }
+      {
+        "example": "Lieber von Zille gemalt, als vom Sozialismus gezeichnet.",
+        "explanation": "Ostberliner Spruch."
+      }
     ],
     "themen": ["stadtleben"]
   },
@@ -195,9 +202,7 @@
     "word": "Zimt",
     "article": "der",
     "translations": ["Theater, Umstände"],
-    "examples": [
-      { "example": "Mach doch keen’ Zimt.", "explanation": "Mach kein Theater." }
-    ],
+    "examples": [{ "example": "Mach doch keen’ Zimt.", "explanation": "Mach kein Theater." }],
     "themen": []
   },
   {
@@ -308,7 +313,10 @@
     "article": "der",
     "translations": ["Rückzieher"],
     "examples": [
-      { "example": "’n Zurückzieher machen.", "explanation": "Etwas zurücknehmen, sich vor etwas drücken." }
+      {
+        "example": "’n Zurückzieher machen.",
+        "explanation": "Etwas zurücknehmen, sich vor etwas drücken."
+      }
     ],
     "themen": []
   },

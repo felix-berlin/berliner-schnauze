@@ -10,10 +10,7 @@
     </p>
 
     <template v-else>
-      <div
-        class="c-app-settings__status-badge"
-        :class="`is-${notificationPermission}`"
-      >
+      <div class="c-app-settings__status-badge" :class="`is-${notificationPermission}`">
         <span class="c-app-settings__status-dot" />
         <span v-if="notificationPermission === 'granted'">Aktiv</span>
         <span v-else-if="notificationPermission === 'denied'">Blockiert</span>
@@ -52,7 +49,10 @@
         <p v-if="!vapidConfigured" class="c-app-settings__hint">
           Push-Benachrichtigungen sind noch nicht konfiguriert.
         </p>
-        <p v-else-if="pushState === 'error'" class="c-app-settings__hint c-app-settings__hint--error">
+        <p
+          v-else-if="pushState === 'error'"
+          class="c-app-settings__hint c-app-settings__hint--error"
+        >
           Push-Benachrichtigungen konnten nicht aktiviert werden.
         </p>
       </template>
@@ -66,8 +66,8 @@
           Benachrichtigungen deaktivieren
         </button>
         <p v-if="showRevokeHint" class="c-app-settings__hint">
-          Browser-Berechtigungen können nur direkt im Browser widerrufen werden.
-          Klicke auf das Schloss-Symbol in der Adressleiste und deaktiviere „Benachrichtigungen".
+          Browser-Berechtigungen können nur direkt im Browser widerrufen werden. Klicke auf das
+          Schloss-Symbol in der Adressleiste und deaktiviere „Benachrichtigungen".
         </p>
       </template>
     </template>

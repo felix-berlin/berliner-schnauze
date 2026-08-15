@@ -151,7 +151,10 @@ $toc-width: 16rem;
     color: var(--color-body);
     text-decoration: none;
     border-inline-start: 2px solid transparent;
-    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background 0.15s ease;
 
     @include butler-mx.hover {
       color: var(--orange-600);
@@ -418,7 +421,9 @@ $toc-width: 16rem;
     border-radius: 4px;
     text-decoration: none;
     color: var(--color-body);
-    transition: border-color 0.15s ease, background 0.15s ease;
+    transition:
+      border-color 0.15s ease,
+      background 0.15s ease;
 
     @include butler-mx.hover {
       border-style: dashed;

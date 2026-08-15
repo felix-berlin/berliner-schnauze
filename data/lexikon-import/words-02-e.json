@@ -10,7 +10,10 @@
     "article": "die",
     "translations": ["unbestimmte Entfernungsangabe"],
     "examples": [
-      { "example": "Von hier bis zum Koofmann is ’ne janz schöne Ecke.", "explanation": "Es ist ein ganz schönes Stück Weg." }
+      {
+        "example": "Von hier bis zum Koofmann is ’ne janz schöne Ecke.",
+        "explanation": "Es ist ein ganz schönes Stück Weg."
+      }
     ],
     "themen": ["stadtleben"]
   },
@@ -62,9 +65,18 @@
     "article": "das",
     "translations": ["Hoden (Plural)", "Geld (Plural)"],
     "examples": [
-      { "example": "Der sieht aus wie aus’m Ei jepellt.", "explanation": "Besonders schick, elegant." },
-      { "example": "Dir polier ick gleich de Eier!", "explanation": "Ernstzunehmende Androhung von Gewalt." },
-      { "example": "Ick hab nur noch zwanzich Eier.", "explanation": "Eier hier in der Bedeutung von Geld/Mark." }
+      {
+        "example": "Der sieht aus wie aus’m Ei jepellt.",
+        "explanation": "Besonders schick, elegant."
+      },
+      {
+        "example": "Dir polier ick gleich de Eier!",
+        "explanation": "Ernstzunehmende Androhung von Gewalt."
+      },
+      {
+        "example": "Ick hab nur noch zwanzich Eier.",
+        "explanation": "Eier hier in der Bedeutung von Geld/Mark."
+      }
     ],
     "infoText": "Eine Eierkiste ist ein Auto, ein Eierkopp ein kantiger Kopf oder jemand, der schwer von Begriff ist. Eierpampe ist mit Wasser vermischter Sand beim Kinderspiel.",
     "themen": ["koerper", "geld"]
@@ -74,7 +86,10 @@
     "article": "die",
     "translations": ["höchste Zeit (in der Wendung »höchste Eisenbahn«)"],
     "examples": [
-      { "example": "Et is höchste Eisenbahn.", "explanation": "Es ist höchste Zeit. Nach Glaßbrenner (1847)." }
+      {
+        "example": "Et is höchste Eisenbahn.",
+        "explanation": "Es ist höchste Zeit. Nach Glaßbrenner (1847)."
+      }
     ],
     "themen": []
   },
@@ -113,7 +128,10 @@
     "word": "Eltern",
     "translations": ["hervorragend (in der Wendung »nich von schlechten Eltern«)"],
     "examples": [
-      { "example": "Dit is nich von schlechten Eltern.", "explanation": "Es ist hervorragend, besonders gut." },
+      {
+        "example": "Dit is nich von schlechten Eltern.",
+        "explanation": "Es ist hervorragend, besonders gut."
+      },
       { "example": "Eltern mit Pillenknick.", "explanation": "Kinderlose Eltern." }
     ],
     "themen": ["beziehungen-soziales"]
@@ -144,7 +162,10 @@
     "article": "der",
     "translations": ["liebevoll-kritische Anrede"],
     "examples": [
-      { "example": "Paß mal uff, mein Emton!", "explanation": "Anrede für Personen, die man kritisieren will, aber gern hat und nicht verletzen will." }
+      {
+        "example": "Paß mal uff, mein Emton!",
+        "explanation": "Anrede für Personen, die man kritisieren will, aber gern hat und nicht verletzen will."
+      }
     ],
     "infoText": "In der Regel mit dem Possessivpronomen »mein« verbunden.",
     "themen": ["beziehungen-soziales"]
@@ -153,7 +174,10 @@
     "word": "Ende",
     "translations": ["Ausdruck des Erstaunens (in der Redensart)"],
     "examples": [
-      { "example": "Da is ja dit Ende von weg!", "explanation": "Redensart als Ausdruck des Erstaunens." }
+      {
+        "example": "Da is ja dit Ende von weg!",
+        "explanation": "Redensart als Ausdruck des Erstaunens."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
@@ -167,7 +191,10 @@
     "word": "entfernt",
     "translations": ["nur von weitem gut aussehend"],
     "examples": [
-      { "example": "Dit macht sich von weiten sehr entfernt.", "explanation": "Von weitem betrachtet sieht das sehr gut aus (aber eben nicht von nah)." }
+      {
+        "example": "Dit macht sich von weiten sehr entfernt.",
+        "explanation": "Von weitem betrachtet sieht das sehr gut aus (aber eben nicht von nah)."
+      }
     ],
     "themen": []
   },
@@ -181,7 +208,10 @@
     "word": "entschuldigen",
     "translations": ["sich entschuldigen (ironisch)"],
     "examples": [
-      { "example": "Können Se nich uffpassen? — Entschuld’jen Se, daß ick jebor’n bin.", "explanation": "Ironische Entschuldigung, erstmalig 1845 in Berlin belegt." }
+      {
+        "example": "Können Se nich uffpassen? — Entschuld’jen Se, daß ick jebor’n bin.",
+        "explanation": "Ironische Entschuldigung, erstmalig 1845 in Berlin belegt."
+      }
     ],
     "themen": ["beziehungen-soziales"]
   },
@@ -196,7 +226,10 @@
     "article": "die",
     "translations": ["Einbildung"],
     "examples": [
-      { "example": "Einbildung is ooch ’ne Bildung.", "explanation": "Spöttische Redensart über eingebildete Menschen." }
+      {
+        "example": "Einbildung is ooch ’ne Bildung.",
+        "explanation": "Spöttische Redensart über eingebildete Menschen."
+      }
     ],
     "themen": ["charakter-eigenschaften"]
   },
@@ -209,7 +242,10 @@
     "word": "einfuchsen",
     "translations": ["sich gründlich einarbeiten"],
     "examples": [
-      { "example": "Der is daruff besonders jut einjefuchst.", "explanation": "Er kann die Sache besonders gut." }
+      {
+        "example": "Der is daruff besonders jut einjefuchst.",
+        "explanation": "Er kann die Sache besonders gut."
+      }
     ],
     "infoText": "Aus der Studentensprache des 19. Jahrhunderts.",
     "themen": []
@@ -218,9 +254,7 @@
     "word": "Eingemachtes",
     "article": "das",
     "translations": ["Reserven (in der Wendung »an’s Eingemachte gehen«)"],
-    "examples": [
-      { "example": "An’s Einjemachte jehen.", "explanation": "An die Reserven gehen." }
-    ],
+    "examples": [{ "example": "An’s Einjemachte jehen.", "explanation": "An die Reserven gehen." }],
     "themen": []
   },
   {
@@ -262,7 +296,10 @@
     "word": "einnehmen",
     "translations": ["gern viel Geld einnehmen"],
     "examples": [
-      { "example": "Er hat ’n einnehmendet Wesen.", "explanation": "Ironisch: Er nimmt gern viel Geld ein, jemand »vom Stabe Nimm«." }
+      {
+        "example": "Er hat ’n einnehmendet Wesen.",
+        "explanation": "Ironisch: Er nimmt gern viel Geld ein, jemand »vom Stabe Nimm«."
+      }
     ],
     "themen": ["geld", "charakter-eigenschaften"]
   },
@@ -294,7 +331,10 @@
     "article": "das",
     "translations": ["Eisbein (Berliner Nationalgericht)", "kalte Füße"],
     "examples": [
-      { "example": "Dem knick ick die Eisbeene!", "explanation": "Drohung — hier in der Bedeutung »kalte Füße«." }
+      {
+        "example": "Dem knick ick die Eisbeene!",
+        "explanation": "Drohung — hier in der Bedeutung »kalte Füße«."
+      }
     ],
     "infoText": "Eisbein mit Erbspüree ist das Berliner Nationalgericht, in Bayern »Haxen« genannt. Eisbein mit Lenkstange = Rollmops.",
     "themen": ["essen-trinken"]
@@ -310,7 +350,10 @@
     "article": "das",
     "translations": ["Gefängnis"],
     "examples": [
-      { "example": "Erholungsheim - will jemand aussteigen?", "explanation": "Früherer Ausruf der Schaffner am Gefängnis Tegel." }
+      {
+        "example": "Erholungsheim - will jemand aussteigen?",
+        "explanation": "Früherer Ausruf der Schaffner am Gefängnis Tegel."
+      }
     ],
     "themen": ["orte-spitzname", "stadtleben"]
   },
@@ -336,7 +379,10 @@
     "word": "erzählen",
     "translations": ["beauftragen", "einreden", "weismachen"],
     "examples": [
-      { "example": "Mir könn’ Se nüscht erzähl’n!", "explanation": "Mir können Sie nichts weismachen." }
+      {
+        "example": "Mir könn’ Se nüscht erzähl’n!",
+        "explanation": "Mir können Sie nichts weismachen."
+      }
     ],
     "themen": []
   },
@@ -352,7 +398,10 @@
     "article": "der",
     "translations": ["vorbei", "aus (in der Wendung »damit is Essig«)"],
     "examples": [
-      { "example": "Damit is Essig!", "explanation": "Damit ist es vorbei, mit dieser Hoffnung ist es aus." }
+      {
+        "example": "Damit is Essig!",
+        "explanation": "Damit ist es vorbei, mit dieser Hoffnung ist es aus."
+      }
     ],
     "themen": []
   },
@@ -392,9 +441,7 @@
     "word": "Extrawurst",
     "article": "die",
     "translations": ["etwas Besonderes", "Sonderbehandlung"],
-    "examples": [
-      { "example": "Ick hab keene Lust, dir ’ne Extrawurscht zu braten." }
-    ],
+    "examples": [{ "example": "Ick hab keene Lust, dir ’ne Extrawurscht zu braten." }],
     "themen": ["essen-trinken", "charakter-eigenschaften"]
   }
 ]

@@ -36,8 +36,8 @@
       </div>
 
       <i>
-        Filtere nach thematischen Kategorien wie Essen &amp; Trinken, Alkohol &amp; Kneipe
-        oder Schimpfwörter.
+        Filtere nach thematischen Kategorien wie Essen &amp; Trinken, Alkohol &amp; Kneipe oder
+        Schimpfwörter.
       </i>
 
       <ThemenFilter />
@@ -55,7 +55,9 @@
       </div>
 
       <div class="c-filter-search__switch" role="group" aria-labelledby="filter-audio-berlinerisch">
-        <p id="filter-audio-berlinerisch" class="c-filter-search__sub-label">Berlinerisch Hörprobe(n)</p>
+        <p id="filter-audio-berlinerisch" class="c-filter-search__sub-label">
+          Berlinerisch Hörprobe(n)
+        </p>
         <i>Zeige Wörter mit Berlinerisch Hörprobe(n).</i>
         <WordSwitch switch-type="audioBerlinerisch" label="Berlinerisch Hörprobe(n)" />
       </div>
@@ -107,7 +109,11 @@ import WordRangeSlider from "@components/filter/WordRangeSlider.vue";
 import WordSwitch from "@components/filter/WordSwitch.vue";
 import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import { useStore } from "@nanostores/vue";
-import { $showWordListFilterFlyout, $toggleWordListFilterFlyout, resetAll } from "@stores/wordList.ts";
+import {
+  $showWordListFilterFlyout,
+  $toggleWordListFilterFlyout,
+  resetAll,
+} from "@stores/wordList.ts";
 import { onClickOutside } from "@vueuse/core";
 import { useTimeout } from "@vueuse/core";
 import FilterReset from "virtual:icons/lucide/filter-x";

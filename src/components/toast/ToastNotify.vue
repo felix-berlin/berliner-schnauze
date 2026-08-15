@@ -82,7 +82,9 @@ const toastIconMap = {
 
 const dismiss = (): void => {
   if (!id) {
-    console.error("[ToastNotify] dismiss() called on a toast with no id — store invariant violated");
+    console.error(
+      "[ToastNotify] dismiss() called on a toast with no id — store invariant violated",
+    );
     return;
   }
   removeToastById(id);
@@ -111,7 +113,6 @@ const resumeTimer = (): void => {
 onMounted(() => {
   if (timeout !== null) resumeTimer();
 });
-
 
 const handleAction = (): void => {
   onAction?.();

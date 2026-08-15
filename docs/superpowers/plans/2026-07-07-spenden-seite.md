@@ -40,21 +40,21 @@ Antwort: **15 Einträge, zwei Sorten** (diskriminiert dadurch, welches Feld gese
 
 ### Vorhandene Patterns (Datei:Zeile — kopieren, nicht neu erfinden)
 
-| Was | Quelle |
-|---|---|
-| Service-Query-Pattern (fetch + map + error→`[]`) | `src/services/queries/getCompanySocialMedia.ts` (Commit `a3279112`, gleiche Session) |
-| Query mit Variable | `src/services/queries/getMenu.ts` |
-| urql-Client (Build-Time, Basic Auth) | `src/services/wpGraphqlClient.ts` |
-| Statische Seite mit Layout | `src/pages/wort-vorschlagen.astro` (Frontmatter: `const page = { title }`, `<Layout content={page}>`) |
-| Layout-Props | `src/layouts/Layout.astro:12-19` — `content: { seo?: SeoProps; title: string }` |
-| SEO-Props-Shape | `src/components/BaseHead.astro` (`SeoProps`-Export) |
-| Copy-to-Clipboard | `src/components/word/WordOptionDropdown.vue` — nutzt VueUse `useClipboard` |
-| Toast nach Copy | `createToastNotify` aus `@stores/toastNotify.ts` (direkt importieren, NICHT `@stores/index`) |
-| Analytics | `trackEvent(category, action, label)` aus `@utils/analytics` |
-| Icons | `defineAsyncComponent(() => import("virtual:icons/lucide/<name>"))` |
-| Footer-Funding aktuell | `src/components/Footer.astro` — `fundingMenu` aus `package.json` `funding`-Feld |
-| Service-Test-Pattern | `src/tests/unit/services/fetchApi.test.ts` |
-| Astro-Render-Testhelper | `src/tests/unit/helpers/` — `createAstroRender()` in `beforeAll` mit **30 s Timeout** |
+| Was                                              | Quelle                                                                                                |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| Service-Query-Pattern (fetch + map + error→`[]`) | `src/services/queries/getCompanySocialMedia.ts` (Commit `a3279112`, gleiche Session)                  |
+| Query mit Variable                               | `src/services/queries/getMenu.ts`                                                                     |
+| urql-Client (Build-Time, Basic Auth)             | `src/services/wpGraphqlClient.ts`                                                                     |
+| Statische Seite mit Layout                       | `src/pages/wort-vorschlagen.astro` (Frontmatter: `const page = { title }`, `<Layout content={page}>`) |
+| Layout-Props                                     | `src/layouts/Layout.astro:12-19` — `content: { seo?: SeoProps; title: string }`                       |
+| SEO-Props-Shape                                  | `src/components/BaseHead.astro` (`SeoProps`-Export)                                                   |
+| Copy-to-Clipboard                                | `src/components/word/WordOptionDropdown.vue` — nutzt VueUse `useClipboard`                            |
+| Toast nach Copy                                  | `createToastNotify` aus `@stores/toastNotify.ts` (direkt importieren, NICHT `@stores/index`)          |
+| Analytics                                        | `trackEvent(category, action, label)` aus `@utils/analytics`                                          |
+| Icons                                            | `defineAsyncComponent(() => import("virtual:icons/lucide/<name>"))`                                   |
+| Footer-Funding aktuell                           | `src/components/Footer.astro` — `fundingMenu` aus `package.json` `funding`-Feld                       |
+| Service-Test-Pattern                             | `src/tests/unit/services/fetchApi.test.ts`                                                            |
+| Astro-Render-Testhelper                          | `src/tests/unit/helpers/` — `createAstroRender()` in `beforeAll` mit **30 s Timeout**                 |
 
 ### Design-Vorgaben (aus `DESIGN.md` — vor UI-Arbeit erneut lesen)
 
@@ -117,9 +117,18 @@ Antwort: **15 Einträge, zwei Sorten** (diskriminiert dadurch, welches Feld gese
 2. Typen + Mapping exportieren:
 
    ```ts
-   export interface FundingPlatform { link: string; name: string }
-   export interface FundingWallet { address: string; chains: string[] }
-   export interface FundingData { platforms: FundingPlatform[]; wallets: FundingWallet[] }
+   export interface FundingPlatform {
+     link: string;
+     name: string;
+   }
+   export interface FundingWallet {
+     address: string;
+     chains: string[];
+   }
+   export interface FundingData {
+     platforms: FundingPlatform[];
+     wallets: FundingWallet[];
+   }
    ```
 
    - `platforms`: Einträge mit `link !== null`
@@ -129,9 +138,10 @@ Antwort: **15 Einträge, zwei Sorten** (diskriminiert dadurch, welches Feld gese
 3. `pnpm gql:generate` ausführen (braucht Infisical-Login) → `CompanyFundingDocument` entsteht in `src/gql/graphql.ts`.
 
 **Verifikation:**
+
 - [ ] Serena-Diagnostics auf der neuen Datei: leer
 - [ ] Live-Test (Muster aus dieser Session):
-  `npx infisical run -- node -e "<fetch gegen WP_API mit query CompanyFunding>"` → 15 Einträge
+      `npx infisical run -- node -e "<fetch gegen WP_API mit query CompanyFunding>"` → 15 Einträge
 - [ ] `grep -n "CompanyFundingDocument" src/gql/graphql.ts` → Treffer
 
 **Anti-Pattern-Guards:** keine zusätzlichen Query-Felder erfinden; kein eigener urql-Client — `wpGraphqlClient` importieren.
@@ -165,6 +175,7 @@ Antwort: **15 Einträge, zwei Sorten** (diskriminiert dadurch, welches Feld gese
 **Dokumentation-Referenzen:** `DESIGN.md` §5 (Components), `wort-vorschlagen.astro`, `WordOptionDropdown.vue`, `NavList.vue:28-32` (Item-Shape).
 
 **Verifikation:**
+
 - [ ] `astro dev --background` → `/spenden` rendert: 4 Plattform-Buttons, 4 Wallet-Karten (1× EVM mit 8 Badges, Bitcoin, Solana, Tron)
 - [ ] Copy-Button kopiert korrekte volle Adresse (nicht die gekürzte Anzeige!) + Toast erscheint
 - [ ] Footer zeigt CMS-Plattformen + „Alle Spendenwege"
@@ -189,6 +200,7 @@ Antwort: **15 Einträge, zwei Sorten** (diskriminiert dadurch, welches Feld gese
 3. Optional: `spenden.astro`-Rendertest via `createAstroRender` (30 s Timeout in `beforeAll`) — nur wenn Service dafür mockbar; sonst weglassen (Seite ist dünn, Logik steckt in Service + Island).
 
 **Verifikation:**
+
 - [ ] `pnpm vitest run src/tests/unit/services/getCompanyFunding.test.ts` grün
 - [ ] `pnpm vitest run src/tests/unit/components/DonationWallets.test.ts` grün
 

@@ -1,16 +1,13 @@
-import { atom } from "nanostores";
 import { createToastNotify } from "@stores/toastNotify";
 import { trackEvent } from "@utils/analytics";
+import { atom } from "nanostores";
 
 export type PushState = "unsupported" | "loading" | "subscribed" | "unsubscribed" | "error";
 
 export const isPushSupported = (): boolean =>
-  typeof window !== "undefined" &&
-  "PushManager" in window &&
-  "serviceWorker" in navigator;
+  typeof window !== "undefined" && "PushManager" in window && "serviceWorker" in navigator;
 
-export const isVapidConfigured = (): boolean =>
-  Boolean(import.meta.env.PUBLIC_VAPID_PUBLIC_KEY);
+export const isVapidConfigured = (): boolean => Boolean(import.meta.env.PUBLIC_VAPID_PUBLIC_KEY);
 
 export const $pushState = atom<PushState>(isPushSupported() ? "loading" : "unsupported");
 export const $pushSubscription = atom<PushSubscription | null>(null);

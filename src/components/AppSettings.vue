@@ -26,15 +26,11 @@ import { useStore } from "@nanostores/vue";
 import { $showInstallButton, triggerPwaInstall } from "@stores/installApp.ts";
 import { defineAsyncComponent } from "vue";
 
-const AppSettingsTheme = defineAsyncComponent(
-  () => import("@components/AppSettingsTheme.vue"),
-);
+const AppSettingsTheme = defineAsyncComponent(() => import("@components/AppSettingsTheme.vue"));
 const AppSettingsNotifications = defineAsyncComponent(
   () => import("@components/AppSettingsNotifications.vue"),
 );
-const AppSettingsNavCard = defineAsyncComponent(
-  () => import("@components/AppSettingsNavCard.vue"),
-);
+const AppSettingsNavCard = defineAsyncComponent(() => import("@components/AppSettingsNavCard.vue"));
 
 const DownloadIcon = defineAsyncComponent(() => import("virtual:icons/lucide/download"));
 const HardDriveIcon = defineAsyncComponent(() => import("virtual:icons/lucide/hard-drive"));

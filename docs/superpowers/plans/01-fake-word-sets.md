@@ -24,7 +24,7 @@ Only `fakeWords.ts` changes.
 ## Target sizes
 
 | Category      | Current | Target   |
-|---------------|---------|----------|
+| ------------- | ------- | -------- |
 | `invented`    | 50      | ~500     |
 | `hochdeutsch` | 30      | ~300     |
 | **Total**     | **80**  | **~800** |
@@ -74,16 +74,16 @@ The file stays a plain array export — no helper functions, no pools:
 
 ```ts
 export interface FakeWord {
-  word: string
-  category: 'invented' | 'hochdeutsch'
+  word: string;
+  category: "invented" | "hochdeutsch";
 }
 
 export const fakeWords: FakeWord[] = [
   // ~500 invented entries
-  { category: 'invented', word: '...' },
+  { category: "invented", word: "..." },
   // ~300 hochdeutsch entries
-  { category: 'hochdeutsch', word: '...' },
-]
+  { category: "hochdeutsch", word: "..." },
+];
 ```
 
 **Verification after Phase 1**:

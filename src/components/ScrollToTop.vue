@@ -19,8 +19,8 @@
 
 <script setup lang="ts">
 import { trackEvent } from "@utils/analytics";
-import ChevronUp from "virtual:icons/lucide/chevron-up";
 import { useIntersectionObserver } from "@vueuse/core";
+import ChevronUp from "virtual:icons/lucide/chevron-up";
 import { onMounted, ref } from "vue";
 
 interface ScrollToTopProps {
@@ -54,7 +54,9 @@ onMounted(() => {
 
 useIntersectionObserver(
   [docStart, footerGround],
-  ([entry]) => { isScrolled.value = !entry.isIntersecting; },
+  ([entry]) => {
+    isScrolled.value = !entry.isIntersecting;
+  },
   { rootMargin: `${showAtPosition}px 0px 0px 0px` },
 );
 </script>

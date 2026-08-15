@@ -121,7 +121,7 @@ ls_additional_workspace_folders: []
 #     - "./subproject1"
 #     - "./subproject2"
 ls_workspace_folders:
-- .
+  - .
 
 # optional shell command to run before the language backend (LSP or JetBrains) is initialised.
 # the command runs in the project root directory and is only executed if the project is trusted
@@ -171,7 +171,7 @@ activation_command_timeout: 180.0
 # The first language server is the default language and the respective language server will be used as a fallback.
 # Note that when using the JetBrains backend, language servers are not used and this list is correspondingly ignored.
 language_servers:
-- vue
-- scss
-- typescript_vts
-- json
+  - vue
+  - scss
+  - typescript_vts
+  - json

@@ -4,8 +4,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const enablePopoverSupport = () => {
   Object.defineProperty(HTMLElement.prototype, "popover", {
     configurable: true,
-    get() { return this.getAttribute("popover"); },
-    set(v) { this.setAttribute("popover", v); },
+    get() {
+      return this.getAttribute("popover");
+    },
+    set(v) {
+      this.setAttribute("popover", v);
+    },
   });
 };
 

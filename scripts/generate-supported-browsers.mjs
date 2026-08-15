@@ -1,5 +1,5 @@
-import { writeFileSync } from "node:fs";
 import { getUserAgentRegex } from "browserslist-useragent-regexp";
+import { writeFileSync } from "node:fs";
 
 const regexp = getUserAgentRegex({ allowHigherVersions: true });
 

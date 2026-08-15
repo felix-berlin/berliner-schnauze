@@ -6,12 +6,12 @@
     class="c-toast-container"
     :class="`c-toast-container--${position}`"
   >
-    <TransitionGroup name="c-toast-notify" @before-leave="onBeforeLeave" @after-leave="onAfterLeave">
-      <ToastNotify
-        v-for="toast in toasts"
-        :key="toast.id"
-        v-bind="toast"
-      />
+    <TransitionGroup
+      name="c-toast-notify"
+      @before-leave="onBeforeLeave"
+      @after-leave="onAfterLeave"
+    >
+      <ToastNotify v-for="toast in toasts" :key="toast.id" v-bind="toast" />
     </TransitionGroup>
   </div>
 </template>

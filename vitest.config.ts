@@ -1,5 +1,6 @@
-import { getViteConfig, envField } from "astro/config";
 import type { Plugin } from "vite";
+
+import { getViteConfig, envField } from "astro/config";
 
 const ICON_STUB_PREFIX = "/__vitest_icon_stub__/";
 
@@ -80,7 +81,7 @@ export default getViteConfig(
         reportsDirectory: "./tests/unit/coverage",
       },
     },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any,
   {
     env: {
@@ -134,6 +135,16 @@ export default getViteConfig(
           context: "server",
           access: "secret",
           default: "not-a-real-token",
+        }),
+        IMAGOR_HOST: envField.string({
+          context: "server",
+          access: "public",
+          default: "https://assets.example.com",
+        }),
+        IMAGOR_SECRET: envField.string({
+          context: "server",
+          access: "secret",
+          default: "not-a-real-secret",
         }),
         MATOMO_HOST: envField.string({
           context: "client",

@@ -88,7 +88,7 @@ export function useBon() {
     streak: 0,
     totalAnswered: 0,
   });
-  const isReady = ref(false)
+  const isReady = ref(false);
 
   // Exposed reactive slices
   const phase = computed(() => state.value.phase);
@@ -114,7 +114,7 @@ export function useBon() {
     _fakeSource = fakeWords.map((f) => ({ isReal: false as const, word: f.word }));
     _realQueue = fisherYates([...realWords]);
     _fakeQueue = fisherYates([..._fakeSource]);
-    isReady.value = true
+    isReady.value = true;
   }
 
   function _makeQueuedDeck(): BonCard[] {
@@ -126,7 +126,7 @@ export function useBon() {
   }
 
   function startGame() {
-    if (!isReady.value) return
+    if (!isReady.value) return;
     _realQueue = fisherYates([..._realWords]);
     _fakeQueue = fisherYates([..._fakeSource]);
     _clearStorage();
@@ -162,7 +162,7 @@ export function useBon() {
   }
 
   function _saveToStorage() {
-    if (state.value.phase !== 'playing' || !state.value.currentCard) return
+    if (state.value.phase !== "playing" || !state.value.currentCard) return;
     $savedBon.set({
       bestStreak: state.value.bestStreak,
       correctAnswers: state.value.correctAnswers,
@@ -173,16 +173,16 @@ export function useBon() {
       lastCard: state.value.lastCard,
       lives: state.value.lives,
       multiplier: state.value.multiplier,
-      phase: 'playing',
+      phase: "playing",
       realQueue: [..._realQueue],
       score: state.value.score,
       streak: state.value.streak,
       totalAnswered: state.value.totalAnswered,
-    })
+    });
   }
 
   function _clearStorage() {
-    $savedBon.set(null)
+    $savedBon.set(null);
   }
 
   function answer(guessedReal: boolean) {
@@ -263,9 +263,9 @@ export function useBon() {
   });
 
   function resumeGame() {
-    if (_realWords.length === 0) return
-    const saved = $savedBon.get()
-    if (!saved || saved.phase !== 'playing') return
+    if (_realWords.length === 0) return;
+    const saved = $savedBon.get();
+    if (!saved || saved.phase !== "playing") return;
     state.value = {
       bestStreak: saved.bestStreak,
       correctAnswers: saved.correctAnswers,
@@ -275,13 +275,13 @@ export function useBon() {
       lastCard: saved.lastCard,
       lives: saved.lives,
       multiplier: saved.multiplier,
-      phase: 'playing',
+      phase: "playing",
       score: saved.score,
       streak: saved.streak,
       totalAnswered: saved.totalAnswered,
-    }
-    _realQueue = [...saved.realQueue]
-    _fakeQueue = [...saved.fakeQueue]
+    };
+    _realQueue = [...saved.realQueue];
+    _fakeQueue = [...saved.fakeQueue];
     trackEvent("Game", "Game Resumed", "berliner-oder-nicht");
   }
 

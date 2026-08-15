@@ -1,5 +1,6 @@
-import { atom } from "nanostores";
 import type { PushState } from "@stores/pushSubscription.ts";
+
+import { atom } from "nanostores";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createApp, nextTick } from "vue";
 

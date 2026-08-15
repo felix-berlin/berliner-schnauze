@@ -1,7 +1,16 @@
 import { decomposeCompoundWord } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
 
-const dict = new Set(["bier", "pinsel", "hoden", "kobold", "schnauze", "berlin", "arbeit", "platz"]);
+const dict = new Set([
+  "bier",
+  "pinsel",
+  "hoden",
+  "kobold",
+  "schnauze",
+  "berlin",
+  "arbeit",
+  "platz",
+]);
 
 describe("decomposeCompoundWord", () => {
   it("splits a compound word at the correct boundary", () => {

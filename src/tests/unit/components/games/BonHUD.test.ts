@@ -1,7 +1,6 @@
+import BonHUD from "@components/games/BonHUD.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
-import BonHUD from "@components/games/BonHUD.vue";
-
 
 const defaultProps = {
   lives: 3,

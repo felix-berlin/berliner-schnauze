@@ -1,8 +1,12 @@
 import { atom } from "nanostores";
 
 export type ToastPosition =
-  | "bottom-center" | "bottom-left" | "bottom-right"
-  | "top-center"    | "top-left"    | "top-right";
+  | "bottom-center"
+  | "bottom-left"
+  | "bottom-right"
+  | "top-center"
+  | "top-left"
+  | "top-right";
 
 export type ToastNotify = {
   actionLabel?: string;

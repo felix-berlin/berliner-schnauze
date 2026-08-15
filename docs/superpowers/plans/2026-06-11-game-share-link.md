@@ -31,11 +31,11 @@
 
 ```ts
 export interface SharePayload {
-  score: number
-  bestStreak: number
-  totalAnswered: number
-  correctAnswers: number
-  date: string // ISO 8601
+  score: number;
+  bestStreak: number;
+  totalAnswered: number;
+  correctAnswers: number;
+  date: string; // ISO 8601
 }
 ```
 
@@ -49,54 +49,52 @@ export interface SharePayload {
 Create `src/tests/unit/utils/gameShare.test.ts`:
 
 ```ts
-import { describe, expect, it } from 'vitest'
-import { decodeShareHash, encodeShareHash } from '@utils/gameShare'
-import type { SharePayload } from '@utils/gameShare'
+import { describe, expect, it } from "vitest";
+import { decodeShareHash, encodeShareHash } from "@utils/gameShare";
+import type { SharePayload } from "@utils/gameShare";
 
 const payload: SharePayload = {
   score: 150,
   bestStreak: 7,
   totalAnswered: 18,
   correctAnswers: 14,
-  date: '2026-06-11T00:00:00.000Z',
-}
+  date: "2026-06-11T00:00:00.000Z",
+};
 
-describe('encodeShareHash', () => {
-  it('returns a non-empty string', () => {
-    expect(encodeShareHash(payload)).toBeTruthy()
-  })
+describe("encodeShareHash", () => {
+  it("returns a non-empty string", () => {
+    expect(encodeShareHash(payload)).toBeTruthy();
+  });
 
-  it('contains a UUID prefix (8-4-4-4-12 hex)', () => {
-    const hash = encodeShareHash(payload)
-    const [uuid] = hash.split('.')
-    expect(uuid).toMatch(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
-    )
-  })
+  it("contains a UUID prefix (8-4-4-4-12 hex)", () => {
+    const hash = encodeShareHash(payload);
+    const [uuid] = hash.split(".");
+    expect(uuid).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
+  });
 
-  it('two calls produce different UUIDs', () => {
-    expect(encodeShareHash(payload)).not.toBe(encodeShareHash(payload))
-  })
-})
+  it("two calls produce different UUIDs", () => {
+    expect(encodeShareHash(payload)).not.toBe(encodeShareHash(payload));
+  });
+});
 
-describe('decodeShareHash', () => {
-  it('round-trips payload', () => {
-    const hash = encodeShareHash(payload)
-    expect(decodeShareHash(hash)).toEqual(payload)
-  })
+describe("decodeShareHash", () => {
+  it("round-trips payload", () => {
+    const hash = encodeShareHash(payload);
+    expect(decodeShareHash(hash)).toEqual(payload);
+  });
 
-  it('returns null for empty string', () => {
-    expect(decodeShareHash('')).toBeNull()
-  })
+  it("returns null for empty string", () => {
+    expect(decodeShareHash("")).toBeNull();
+  });
 
-  it('returns null for garbage input', () => {
-    expect(decodeShareHash('notvalid')).toBeNull()
-  })
+  it("returns null for garbage input", () => {
+    expect(decodeShareHash("notvalid")).toBeNull();
+  });
 
-  it('returns null for base64 that decodes to non-JSON', () => {
-    expect(decodeShareHash('uuid.bm90anNvbg==')).toBeNull()
-  })
-})
+  it("returns null for base64 that decodes to non-JSON", () => {
+    expect(decodeShareHash("uuid.bm90anNvbg==")).toBeNull();
+  });
+});
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
@@ -111,42 +109,42 @@ Expected: `Cannot find module '@utils/gameShare'`
 
 ```ts
 export interface SharePayload {
-  score: number
-  bestStreak: number
-  totalAnswered: number
-  correctAnswers: number
-  date: string
+  score: number;
+  bestStreak: number;
+  totalAnswered: number;
+  correctAnswers: number;
+  date: string;
 }
 
 function toBase64Url(str: string): string {
-  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
 function fromBase64Url(str: string): string {
-  const padded = str.replace(/-/g, '+').replace(/_/g, '/') + '=='.slice((str.length + 2) % 4 || 4)
-  return atob(padded)
+  const padded = str.replace(/-/g, "+").replace(/_/g, "/") + "==".slice((str.length + 2) % 4 || 4);
+  return atob(padded);
 }
 
 export function encodeShareHash(payload: SharePayload): string {
-  const uuid = crypto.randomUUID()
-  const b64 = toBase64Url(JSON.stringify(payload))
-  return `${uuid}.${b64}`
+  const uuid = crypto.randomUUID();
+  const b64 = toBase64Url(JSON.stringify(payload));
+  return `${uuid}.${b64}`;
 }
 
 export function decodeShareHash(hash: string): SharePayload | null {
-  const dotIndex = hash.indexOf('.')
-  if (dotIndex === -1) return null
-  const b64 = hash.slice(dotIndex + 1)
-  if (!b64) return null
+  const dotIndex = hash.indexOf(".");
+  if (dotIndex === -1) return null;
+  const b64 = hash.slice(dotIndex + 1);
+  if (!b64) return null;
   try {
-    return JSON.parse(fromBase64Url(b64)) as SharePayload
+    return JSON.parse(fromBase64Url(b64)) as SharePayload;
   } catch {
-    return null
+    return null;
   }
 }
 
 export function buildShareUrl(payload: SharePayload): string {
-  return `/games/berliner-oder-nicht/share#${encodeShareHash(payload)}`
+  return `/games/berliner-oder-nicht/share#${encodeShareHash(payload)}`;
 }
 ```
 
@@ -228,48 +226,44 @@ Use the exact same `---` import block pattern (same layout, same title conventio
 
       <p class="c-game-share-view__date">{{ formattedDate }}</p>
 
-      <a href="/games/berliner-oder-nicht" class="c-game-share-view__cta">
-        Selbst spielen →
-      </a>
+      <a href="/games/berliner-oder-nicht" class="c-game-share-view__cta"> Selbst spielen → </a>
     </template>
 
     <template v-else>
       <p class="c-game-share-view__error">Kein gültiges Ergebnis gefunden.</p>
-      <a href="/games/berliner-oder-nicht" class="c-game-share-view__cta">
-        Zum Spiel →
-      </a>
+      <a href="/games/berliner-oder-nicht" class="c-game-share-view__cta"> Zum Spiel → </a>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { decodeShareHash } from '@utils/gameShare'
-import type { SharePayload } from '@utils/gameShare'
+import { computed, onMounted, ref } from "vue";
+import { decodeShareHash } from "@utils/gameShare";
+import type { SharePayload } from "@utils/gameShare";
 
-const payload = ref<SharePayload | null>(null)
+const payload = ref<SharePayload | null>(null);
 
 onMounted(() => {
-  const hash = window.location.hash.slice(1) // strip leading #
-  payload.value = decodeShareHash(hash)
-})
+  const hash = window.location.hash.slice(1); // strip leading #
+  payload.value = decodeShareHash(hash);
+});
 
 const accuracyPercent = computed(() =>
   payload.value && payload.value.totalAnswered > 0
     ? Math.round((payload.value.correctAnswers / payload.value.totalAnswered) * 100)
     : 0,
-)
+);
 
 const formattedDate = computed(() => {
-  if (!payload.value?.date) return ''
-  return new Intl.DateTimeFormat('de-DE', { dateStyle: 'long' }).format(
+  if (!payload.value?.date) return "";
+  return new Intl.DateTimeFormat("de-DE", { dateStyle: "long" }).format(
     new Date(payload.value.date),
-  )
-})
+  );
+});
 </script>
 
 <style lang="scss">
-@use '@styles/components/game-share-view';
+@use "@styles/components/game-share-view";
 </style>
 ```
 
@@ -394,7 +388,7 @@ GameResult already receives all needed props: `score`, `bestStreak`, `totalAnswe
 In `<script setup>`, import `buildShareUrl` and update `share()`:
 
 ```ts
-import { buildShareUrl } from '@utils/gameShare'
+import { buildShareUrl } from "@utils/gameShare";
 ```
 
 Replace the `share()` function body:
@@ -407,12 +401,12 @@ function share() {
     totalAnswered: props.totalAnswered,
     correctAnswers: props.correctAnswers,
     date: new Date().toISOString(),
-  })
+  });
   _share({
     text: `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
-    title: 'Berliner oder nicht?',
+    title: "Berliner oder nicht?",
     url: `https://berliner-schnauze.wtf${url}`,
-  })
+  });
 }
 ```
 
@@ -459,10 +453,16 @@ To test the URL directly without share sheet: open DevTools console, run:
 
 ```js
 // copy from GameResult.vue logic
-import('/src/utils/gameShare.ts').then(m => {
-  const url = m.buildShareUrl({ score: 120, bestStreak: 5, totalAnswered: 14, correctAnswers: 11, date: new Date().toISOString() })
-  console.log(url)
-})
+import("/src/utils/gameShare.ts").then((m) => {
+  const url = m.buildShareUrl({
+    score: 120,
+    bestStreak: 5,
+    totalAnswered: 14,
+    correctAnswers: 11,
+    date: new Date().toISOString(),
+  });
+  console.log(url);
+});
 ```
 
 Or: manually build a test URL by running `buildShareUrl` in the Vitest REPL.

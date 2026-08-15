@@ -11,6 +11,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
+
 import {
   getPostDates,
   getWordDates,
@@ -24,7 +25,10 @@ const {
   PWA_DEBUG,
   CODECOV_TOKEN,
   BUNDLE_ANALYZER_OPEN,
+  IMAGOR_HOST,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+
+const SITE_ORIGIN = import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf";
 
 const visualizerPlugin = visualizer({
   open: BUNDLE_ANALYZER_OPEN === "true",
@@ -40,7 +44,7 @@ const sassAliases = {
 
 // https://astro.build/config
 export default defineConfig({
-  site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
+  site: SITE_ORIGIN,
   trailingSlash: "never",
   // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
   devToolbar: {
@@ -109,6 +113,9 @@ export default defineConfig({
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf", "m.media-amazon.com"],
     breakpoints: [180, 320, 480, 640, 750, 828, 960, 1080, 1280, 1668, 1920, 2048, 2560],
     responsiveStyles: true,
+    service: {
+      entrypoint: "./src/lib/imagorImageService.ts",
+    },
   },
   env: {
     schema: {
@@ -139,6 +146,14 @@ export default defineConfig({
         context: "server",
         access: "secret",
         optional: true,
+      }),
+      IMAGOR_HOST: envField.string({
+        context: "server",
+        access: "public",
+      }),
+      IMAGOR_SECRET: envField.string({
+        context: "server",
+        access: "secret",
       }),
       WP_AUTH_REFRESH_TOKEN: envField.string({
         context: "server",
@@ -283,12 +298,36 @@ export default defineConfig({
       includeAssets: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
       registerType: "autoUpdate",
       manifest: {
+        id: "/",
         name: "Berliner Schnauze",
         short_name: "BLN Schnauze",
         description: "Berlinerisch Wörterbuch",
         theme_color: "#2b333b",
         background_color: "#a8b2bc",
         lang: "de",
+        launch_handler: {
+          client_mode: "navigate-existing",
+        },
+        shortcuts: [
+          {
+            name: "Wort suchen",
+            short_name: "Suchen",
+            url: "/",
+            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
+          },
+          {
+            name: "Berliner oder Nicht spielen",
+            short_name: "Spielen",
+            url: "/games/berliner-oder-nicht",
+            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
+          },
+          {
+            name: "Wort vorschlagen",
+            short_name: "Vorschlagen",
+            url: "/wort-vorschlagen",
+            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
+          },
+        ],
         icons: [
           {
             src: "favicons/android-chrome-192x192.png",
@@ -324,7 +363,11 @@ export default defineConfig({
       },
       workbox: {
         globDirectory: "dist",
-        // navigateFallback: "/",
+        cleanupOutdatedCaches: true,
+        // Falls back to the (precached) homepage for any navigation that misses
+        // both precache and network — e.g. a word page added after the last SW
+        // update, while offline — instead of the browser's generic offline page.
+        navigateFallback: "/",
         globPatterns: import.meta.env.DEV
           ? []
           : ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
@@ -337,12 +380,12 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2 MB (Workbox default)
         runtimeCaching: [
           {
-            urlPattern: /.*\/api\/search\/index\.json$/,
+            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/index\\.json$`),
             handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-index",
               expiration: {
-                maxEntries: 5,
+                maxEntries: 1,
                 maxAgeSeconds: 10_800, // 3 hours
               },
               cacheableResponse: {
@@ -351,12 +394,12 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /.*\/api\/search\/meta\.json$/,
+            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/meta\\.json$`),
             handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-meta",
               expiration: {
-                maxEntries: 5,
+                maxEntries: 1,
                 maxAgeSeconds: 10_800, // 3 hours
               },
               cacheableResponse: {
@@ -380,6 +423,23 @@ export default defineConfig({
               },
             },
           },
+          {
+            urlPattern: new RegExp(`^${IMAGOR_HOST}/.*`),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "imagor-images",
+              expiration: {
+                // Responsive `widths` variants (multiple breakpoints x formats per
+                // image) multiply the URL count per <Picture> well beyond the old
+                // density-only srcset, so this needs more headroom than before.
+                maxEntries: 500,
+                maxAgeSeconds: 2_592_000, // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
         ],
       },
       devOptions: {
@@ -387,11 +447,16 @@ export default defineConfig({
         // navigateFallbackAllowlist: [/^\//],
       },
     }),
-    codecovplugin({
-      enableBundleAnalysis: true,
-      bundleName: "berliner-schnauze-bundle",
-      uploadToken: CODECOV_TOKEN,
-    }),
+    // Skipped for local dev builds: slows down the build and isn't needed outside CI.
+    ...(import.meta.env.DEV
+      ? []
+      : [
+          codecovplugin({
+            enableBundleAnalysis: true,
+            bundleName: "berliner-schnauze-bundle",
+            uploadToken: CODECOV_TOKEN,
+          }),
+        ]),
     (await import("@playform/inline")).default(),
   ],
   vite: {

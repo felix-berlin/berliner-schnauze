@@ -9,7 +9,10 @@
       class="c-audio-list__item"
     >
       <span class="c-audio-list__gender">{{ item?.gender === "female" ? "♀" : "♂" }}</span>
-      <AudioPlayer :audio="item?.audio?.node.mediaItemUrl ?? null" class="c-audio-list__audio-player" />
+      <AudioPlayer
+        :audio="item?.audio?.node.mediaItemUrl ?? null"
+        class="c-audio-list__audio-player"
+      />
     </div>
   </div>
 </template>

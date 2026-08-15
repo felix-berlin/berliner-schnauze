@@ -1,4 +1,3 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   alphabeticNeighbors,
   capitalizeFirstLetter,
@@ -10,6 +9,8 @@ import {
   similarWords,
   translateNlpTags,
 } from "@utils/wordHelper";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import type { BerlinerWord } from "@/gql/entity-types";
 
 vi.mock("@services/wikimediaApi.ts", () => ({

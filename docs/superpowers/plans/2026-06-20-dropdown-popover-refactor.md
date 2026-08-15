@@ -22,28 +22,31 @@
 
 ## File Map
 
-| File | Action | What changes |
-|---|---|---|
-| `src/tests/unit/components/DropdownPopover.test.ts` | Rewrite | Reflect new slot API; add trigger/arrow/panel tests |
-| `src/components/DropdownPopover.vue` | Refactor | Remove internal button; add trigger span, new props, scoped slot |
-| `src/styles/components/_dropdown-popover.scss` | Modify | Trigger span styles, `--c-dropdown-skidding`, arrow element |
-| `src/components/word/WordOptionDropdown.vue` | Modify | Adopt scoped slot API |
-| `src/components/filter/AlphabeticalFilterDropdown.vue` | Modify | Adopt scoped slot API |
-| `src/components/header/MainMenu.vue` | Modify | Adopt scoped slot API |
+| File                                                   | Action   | What changes                                                     |
+| ------------------------------------------------------ | -------- | ---------------------------------------------------------------- |
+| `src/tests/unit/components/DropdownPopover.test.ts`    | Rewrite  | Reflect new slot API; add trigger/arrow/panel tests              |
+| `src/components/DropdownPopover.vue`                   | Refactor | Remove internal button; add trigger span, new props, scoped slot |
+| `src/styles/components/_dropdown-popover.scss`         | Modify   | Trigger span styles, `--c-dropdown-skidding`, arrow element      |
+| `src/components/word/WordOptionDropdown.vue`           | Modify   | Adopt scoped slot API                                            |
+| `src/components/filter/AlphabeticalFilterDropdown.vue` | Modify   | Adopt scoped slot API                                            |
+| `src/components/header/MainMenu.vue`                   | Modify   | Adopt scoped slot API                                            |
 
 ---
 
 ## Task 1: Rewrite tests for the new API
 
 **Files:**
+
 - Rewrite: `src/tests/unit/components/DropdownPopover.test.ts`
 
 **Interfaces:**
+
 - Consumes: existing `DropdownPopover` component (tests will FAIL until Task 2 is done — that is expected)
 - Produces: complete test suite covering old and new behaviour
 
 **Context for the agent:**  
 The existing test file (`src/tests/unit/components/DropdownPopover.test.ts`) was written for the OLD API where the component itself rendered a `<button class="c-dropdown__trigger">`. The new API:
+
 - Replaces the internal `<button>` with a `<span class="c-dropdown__trigger">` wrapper
 - Default slot is now **scoped** — it exposes `{ triggerProps, isOpen, panelId }`
 - `$attrs` now bind to the outer `.c-dropdown` div, NOT the trigger span
@@ -215,8 +218,12 @@ describe("DropdownPopover.vue", () => {
 
   it("applies correct CSS class for each placement value", () => {
     const placements = [
-      "bottom-start", "bottom-end", "bottom",
-      "top-start", "top-end", "top",
+      "bottom-start",
+      "bottom-end",
+      "bottom",
+      "top-start",
+      "top-end",
+      "top",
     ] as const;
     for (const placement of placements) {
       const wrapper = mount(DropdownPopover, { props: { placement } });
@@ -431,9 +438,11 @@ git commit -m "test(dropdown): rewrite DropdownPopover tests for new scoped slot
 ## Task 2: Refactor DropdownPopover.vue
 
 **Files:**
+
 - Modify: `src/components/DropdownPopover.vue`
 
 **Interfaces:**
+
 - Consumes: `useId()` from Vue, `ref`, `computed` from Vue
 - Produces:
   - `close(): void` — exposed, hides panel and focuses first focusable child in trigger span
@@ -442,6 +451,7 @@ git commit -m "test(dropdown): rewrite DropdownPopover tests for new scoped slot
 
 **Context for the agent:**  
 The current `src/components/DropdownPopover.vue` renders an internal `<button class="c-dropdown__trigger">` with `$attrs`, `popovertarget`, and `anchor-name`. Replace it with a `<span class="c-dropdown__trigger">` that:
+
 - Holds the `anchor-name` inline style
 - Fires `mouseenter`/`mouseleave`/`focusin`/`focusout` event handlers (only effective when the relevant trigger type is in `triggers`)
 - Wraps the default scoped slot (which exposes `triggerProps`, `isOpen`, `panelId`)
@@ -451,8 +461,10 @@ The current `src/components/DropdownPopover.vue` renders an internal `<button cl
 The hover/focus close uses a 100ms debounced timer (`closeTimer`). `cancelClose` is also called on panel `mouseenter`/`focusin` to prevent premature close when the pointer moves from trigger into the panel.
 
 `close()` uses a querySelector to focus the first focusable child rather than the span itself (which is not naturally focusable):
+
 ```ts
-const FOCUSABLE = 'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+const FOCUSABLE =
+  'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 ```
 
 - [ ] **Step 1: Replace DropdownPopover.vue with the refactored implementation**
@@ -496,12 +508,7 @@ const FOCUSABLE = 'button:not([disabled]),[href],input:not([disabled]),select:no
 import { computed, ref, useId } from "vue";
 
 export type PlacementValue =
-  | "bottom-start"
-  | "bottom-end"
-  | "bottom"
-  | "top-start"
-  | "top-end"
-  | "top";
+  "bottom-start" | "bottom-end" | "bottom" | "top-start" | "top-end" | "top";
 
 export type TriggerEvent = "click" | "hover" | "focus";
 
@@ -640,9 +647,11 @@ git commit -m "refactor(dropdown): remove internal trigger button, expose scoped
 ## Task 3: Update SCSS
 
 **Files:**
+
 - Modify: `src/styles/components/_dropdown-popover.scss`
 
 **Interfaces:**
+
 - Consumes: CSS custom properties `--c-dropdown-skidding`, `--c-dropdown-arrow-padding` set by the component's `panelStyle`
 - Produces: visual arrow element, skidding applied, trigger span styled
 
@@ -651,7 +660,7 @@ The `.c-dropdown__trigger` is now a `<span>` (not a button). It needs `display: 
 
 The `@use` imports at the top of the file are: `@use "@styles/variables" as vars` and `@use "@styles/mixins" as mx` and `@use "@sass-butler/mixins" as butler-mx`.
 
-- [ ] **Step 1: Update _dropdown-popover.scss**
+- [ ] **Step 1: Update \_dropdown-popover.scss**
 
 Replace the entire file content with:
 
@@ -711,7 +720,10 @@ Replace the entire file content with:
   // Anchor Positioning — position-anchor is set via inline style (dynamic anchor name per instance)
   position: fixed;
   margin-block-start: var(--c-dropdown-offset, 8px);
-  position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+  position-try-fallbacks:
+    flip-inline,
+    flip-block,
+    flip-block flip-inline;
   position-try-order: most-block-size;
 
   --color-background: var(--floating-color-background);
@@ -852,11 +864,13 @@ git commit -m "style(dropdown): update trigger span styles, add skidding and arr
 ## Task 4: Migrate usage sites to the new API
 
 **Files:**
+
 - Modify: `src/components/word/WordOptionDropdown.vue`
 - Modify: `src/components/filter/AlphabeticalFilterDropdown.vue`
 - Modify: `src/components/header/MainMenu.vue`
 
 **Interfaces:**
+
 - Consumes: `DropdownPopover` with scoped default slot exposing `{ triggerProps, isOpen, panelId }`
 - Produces: all 3 consumers updated, test suite green
 
@@ -872,33 +886,30 @@ After migrating, run the full test suite. There are no dedicated tests for these
 The current default slot is a `<span>` acting as button label. Wrap it in an explicit `<button>`.
 
 Change the `<DropdownPopover ...>` section from:
+
 ```html
 <DropdownPopover placement="bottom-end" class="c-options-dropdown c-dropdown--theme-word-options">
+  <span
+    class="c-options-dropdown__options-icon c-button--center-icon c-icon c-icon--lucide-more-vertical" />
 
-    <span
-      class="c-options-dropdown__options-icon c-button--center-icon c-icon c-icon--lucide-more-vertical"
-    />
-
-
-  <template #panel>
+  <template #panel></template
+></DropdownPopover>
 ```
 
 To:
+
 ```html
 <DropdownPopover
   placement="bottom-end"
   class="c-options-dropdown c-dropdown--theme-word-options"
   v-slot="{ triggerProps }"
 >
-  <button
-    v-bind="triggerProps"
-    type="button"
-    class="c-button--center-icon"
-  >
+  <button v-bind="triggerProps" type="button" class="c-button--center-icon">
     <span class="c-options-dropdown__options-icon c-icon c-icon--lucide-more-vertical" />
   </button>
 
-  <template #panel>
+  <template #panel></template
+></DropdownPopover>
 ```
 
 - [ ] **Step 2: Update AlphabeticalFilterDropdown.vue**
@@ -906,6 +917,7 @@ To:
 The current default slot has `<span>` + text. The `dropdownRef.value?.close()` usage in the script stays — `close()` is still exposed.
 
 Change the `<DropdownPopover ...>` section from:
+
 ```html
 <DropdownPopover
   ref="dropdownRef"
@@ -919,10 +931,12 @@ Change the `<DropdownPopover ...>` section from:
   </span>
   alphabetisch
 
-  <template #panel>
+  <template #panel></template
+></DropdownPopover>
 ```
 
 To:
+
 ```html
 <DropdownPopover
   ref="dropdownRef"
@@ -932,18 +946,15 @@ To:
   class="c-filter-dropdown__trigger-wrapper"
   v-slot="{ triggerProps }"
 >
-  <button
-    v-bind="triggerProps"
-    type="button"
-    class="c-button c-button--center-icon"
-  >
+  <button v-bind="triggerProps" type="button" class="c-button c-button--center-icon">
     <span class="c-button--center-icon">
       <Filter />
     </span>
     alphabetisch
   </button>
 
-  <template #panel>
+  <template #panel></template
+></DropdownPopover>
 ```
 
 - [ ] **Step 3: Update MainMenu.vue**
@@ -951,16 +962,15 @@ To:
 `<MainMenuButton />` is the trigger — its root is a `<button>`, `inheritAttrs: true`, so `v-bind="triggerProps"` flows through automatically.
 
 Change:
+
 ```html
-<DropdownPopover
-  placement="bottom-end"
-  :offset="13"
-  class="c-menu-nav__item c-menu-more"
->
-  <MainMenuButton />
+<DropdownPopover placement="bottom-end" :offset="13" class="c-menu-nav__item c-menu-more">
+  <MainMenuButton
+/></DropdownPopover>
 ```
 
 To:
+
 ```html
 <DropdownPopover
   placement="bottom-end"
@@ -968,7 +978,8 @@ To:
   class="c-menu-nav__item c-menu-more"
   v-slot="{ triggerProps }"
 >
-  <MainMenuButton v-bind="triggerProps" />
+  <MainMenuButton v-bind="triggerProps"
+/></DropdownPopover>
 ```
 
 - [ ] **Step 4: Run full test suite**

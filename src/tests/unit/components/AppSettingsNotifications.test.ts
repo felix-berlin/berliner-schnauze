@@ -33,7 +33,9 @@ const mockedUseNotificationSettings = vi.mocked(useNotificationSettings);
 describe("AppSettingsNotifications.vue", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockedUseNotificationSettings.mockReturnValue(makeState() as ReturnType<typeof useNotificationSettings>);
+    mockedUseNotificationSettings.mockReturnValue(
+      makeState() as ReturnType<typeof useNotificationSettings>,
+    );
   });
 
   it("shows unsupported hint when notificationsSupported is false", () => {
@@ -53,7 +55,9 @@ describe("AppSettingsNotifications.vue", () => {
 
   it("shows 'Aktiv' badge when permission is granted", () => {
     mockedUseNotificationSettings.mockReturnValue(
-      makeState({ notificationPermission: ref("granted") }) as ReturnType<typeof useNotificationSettings>,
+      makeState({ notificationPermission: ref("granted") }) as ReturnType<
+        typeof useNotificationSettings
+      >,
     );
     const wrapper = mount(AppSettingsNotifications);
     expect(wrapper.text()).toContain("Aktiv");
@@ -61,7 +65,9 @@ describe("AppSettingsNotifications.vue", () => {
 
   it("shows 'Blockiert' badge and browser-hint when permission is denied", () => {
     mockedUseNotificationSettings.mockReturnValue(
-      makeState({ notificationPermission: ref("denied") }) as ReturnType<typeof useNotificationSettings>,
+      makeState({ notificationPermission: ref("denied") }) as ReturnType<
+        typeof useNotificationSettings
+      >,
     );
     const wrapper = mount(AppSettingsNotifications);
     expect(wrapper.text()).toContain("Blockiert");
@@ -81,7 +87,9 @@ describe("AppSettingsNotifications.vue", () => {
 
   it("does not show activate button when permission is granted", () => {
     mockedUseNotificationSettings.mockReturnValue(
-      makeState({ notificationPermission: ref("granted") }) as ReturnType<typeof useNotificationSettings>,
+      makeState({ notificationPermission: ref("granted") }) as ReturnType<
+        typeof useNotificationSettings
+      >,
     );
     const wrapper = mount(AppSettingsNotifications);
     const buttons = wrapper.findAll("button");
@@ -149,7 +157,9 @@ describe("AppSettingsNotifications.vue", () => {
 
   it("shows revoke section when permission is granted", () => {
     mockedUseNotificationSettings.mockReturnValue(
-      makeState({ notificationPermission: ref("granted") }) as ReturnType<typeof useNotificationSettings>,
+      makeState({ notificationPermission: ref("granted") }) as ReturnType<
+        typeof useNotificationSettings
+      >,
     );
     const wrapper = mount(AppSettingsNotifications);
     expect(wrapper.text()).toContain("Benachrichtigungen deaktivieren");
@@ -157,7 +167,9 @@ describe("AppSettingsNotifications.vue", () => {
 
   it("clicking revoke button toggles showRevokeHint (covers line 64)", async () => {
     mockedUseNotificationSettings.mockReturnValue(
-      makeState({ notificationPermission: ref("granted") }) as ReturnType<typeof useNotificationSettings>,
+      makeState({ notificationPermission: ref("granted") }) as ReturnType<
+        typeof useNotificationSettings
+      >,
     );
     const wrapper = mount(AppSettingsNotifications);
     const revokeBtn = wrapper.find(".c-app-settings__revoke-btn");

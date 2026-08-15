@@ -13,15 +13,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from "vue";
-
 import type { AccordionItemContext } from "@components/accordion/AccordionItem.vue";
+
+import { computed, inject } from "vue";
 
 const props = defineProps<{
   open?: boolean;
 }>();
 
-const itemCtx = inject<AccordionItemContext>("accordion-item", null as unknown as AccordionItemContext);
+const itemCtx = inject<AccordionItemContext>(
+  "accordion-item",
+  null as unknown as AccordionItemContext,
+);
 
 const isOpen = computed(() => props.open ?? itemCtx?.isOpen.value ?? false);
 </script>

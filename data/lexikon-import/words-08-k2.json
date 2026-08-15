@@ -22,9 +22,7 @@
     "word": "Knall",
     "article": "der",
     "translations": ["Verrücktheit (in der Wendung »einen Knall haben«)"],
-    "examples": [
-      { "example": "Du hast wohl ’n Knall?", "explanation": "Du bist wohl verrückt." }
-    ],
+    "examples": [{ "example": "Du hast wohl ’n Knall?", "explanation": "Du bist wohl verrückt." }],
     "themen": []
   },
   {
@@ -55,7 +53,10 @@
     "word": "knapp",
     "translations": ["nicht zu wenig (verneint)", "eng anliegend"],
     "examples": [
-      { "example": "Jib ma mal ’n Stück Fleisch, aber nich zu knapp.", "explanation": "Nicht zu wenig, sprich: besonders viel." },
+      {
+        "example": "Jib ma mal ’n Stück Fleisch, aber nich zu knapp.",
+        "explanation": "Nicht zu wenig, sprich: besonders viel."
+      },
       { "example": "Die Hose is zu knapp." }
     ],
     "infoText": "Von mittelniederdeutsch knap(pe) = eng, rar, spärlich.",
@@ -182,7 +183,10 @@
     "article": "der",
     "translations": ["Mensch (meist negativ)"],
     "examples": [
-      { "example": "’n oller Knopp.", "explanation": "Ein unfreundlicher alter Mann. Ein »kleiner Knopp« ist hingegen ein kleiner, niedlicher Junge." }
+      {
+        "example": "’n oller Knopp.",
+        "explanation": "Ein unfreundlicher alter Mann. Ein »kleiner Knopp« ist hingegen ein kleiner, niedlicher Junge."
+      }
     ],
     "themen": []
   },
@@ -261,7 +265,10 @@
     "article": "der",
     "translations": ["Anlass zur Rückkehr nach Berlin (in der Wendung)"],
     "examples": [
-      { "example": "Einen Koffer in Berlin haben.", "explanation": "Geht zurück auf den Schlager »Ich hab noch einen Koffer in Berlin«." }
+      {
+        "example": "Einen Koffer in Berlin haben.",
+        "explanation": "Geht zurück auf den Schlager »Ich hab noch einen Koffer in Berlin«."
+      }
     ],
     "themen": ["stadtleben"]
   },
@@ -281,7 +288,10 @@
     "article": "der",
     "translations": ["Stuß", "Blödsinn"],
     "examples": [
-      { "example": "Dit macht den Kohl ooch nich fett.", "explanation": "Das macht auch nichts weiter aus." },
+      {
+        "example": "Dit macht den Kohl ooch nich fett.",
+        "explanation": "Das macht auch nichts weiter aus."
+      },
       { "example": "Red doch nich so’n Kohl." }
     ],
     "themen": []
@@ -296,9 +306,7 @@
     "word": "Kohle",
     "article": "die",
     "translations": ["Geld"],
-    "examples": [
-      { "example": "Die Kohlen locker machen.", "explanation": "Bezahlen." }
-    ],
+    "examples": [{ "example": "Die Kohlen locker machen.", "explanation": "Bezahlen." }],
     "themen": ["geld"]
   },
   {
@@ -317,9 +325,7 @@
     "word": "Koks",
     "article": "der",
     "translations": ["Geld", "Kokain", "Unsinn"],
-    "examples": [
-      { "example": "Red’ bloß keen’ Koks!", "explanation": "Rede bloß keinen Unsinn." }
-    ],
+    "examples": [{ "example": "Red’ bloß keen’ Koks!", "explanation": "Rede bloß keinen Unsinn." }],
     "infoText": "Abgeleitet von Koks = steifer Herrenhut, was auf William Coke zurückgeht, der den Hut populär machte. Siehe auch Graf Koks von der Gasanstalt.",
     "themen": ["geld"]
   },
@@ -348,7 +354,10 @@
     "article": "das",
     "translations": ["noch zu Erledigendes (in der Wendung)"],
     "examples": [
-      { "example": "Dit hängt als Kompott hinten noch mit dranne.", "explanation": "Das muss noch erledigt werden." }
+      {
+        "example": "Dit hängt als Kompott hinten noch mit dranne.",
+        "explanation": "Das muss noch erledigt werden."
+      }
     ],
     "themen": []
   },
@@ -419,7 +428,10 @@
     "word": "kotzen",
     "translations": ["sich erbrechen"],
     "examples": [
-      { "example": "Man kann nicht soviel fressen, wie man kotzen möchte.", "explanation": "Max Liebermann über die Nazi-Zeit." }
+      {
+        "example": "Man kann nicht soviel fressen, wie man kotzen möchte.",
+        "explanation": "Max Liebermann über die Nazi-Zeit."
+      }
     ],
     "infoText": "Bereits Mitte des 18. Jahrhunderts als »verächtliches Pöbelwort« charakterisiert. Ein Kotzbalken ist eine schlechte Zigarre, ein Kotzbrocken oder Kotzproppen ein widerlicher Mensch.",
     "themen": ["koerper"]
@@ -442,7 +454,10 @@
     "article": "die",
     "translations": ["passende Größe (nur verneint)"],
     "examples": [
-      { "example": "Dit is nich meine Kragenweite.", "explanation": "Die Sache ist eine Nummer zu groß für mich; ist mir nicht angenehm." }
+      {
+        "example": "Dit is nich meine Kragenweite.",
+        "explanation": "Die Sache ist eine Nummer zu groß für mich; ist mir nicht angenehm."
+      }
     ],
     "themen": []
   },
@@ -504,7 +519,10 @@
     "article": "die",
     "translations": ["Sterbelager (in der Wendung)"],
     "examples": [
-      { "example": "Der liegt uff de Krepierseite.", "explanation": "Er hat nicht mehr lange zu leben." }
+      {
+        "example": "Der liegt uff de Krepierseite.",
+        "explanation": "Er hat nicht mehr lange zu leben."
+      }
     ],
     "themen": []
   },
@@ -641,7 +659,10 @@
     "word": "Kulleraugen",
     "translations": ["große, runde Augen"],
     "examples": [
-      { "example": "Mach doch nich solche Kulleroogen.", "explanation": "Schau mich nicht so erwartungsvoll an." }
+      {
+        "example": "Mach doch nich solche Kulleroogen.",
+        "explanation": "Schau mich nicht so erwartungsvoll an."
+      }
     ],
     "themen": ["koerper"]
   },
@@ -650,7 +671,10 @@
     "article": "die",
     "translations": ["Farbe", "Sorte Mensch (übertragen)"],
     "examples": [
-      { "example": "Die Kulör kenn ick.", "explanation": "Die Personen kenne ich, die taugen allesamt nichts." }
+      {
+        "example": "Die Kulör kenn ick.",
+        "explanation": "Die Personen kenne ich, die taugen allesamt nichts."
+      }
     ],
     "infoText": "Von französisch couleur.",
     "themen": []

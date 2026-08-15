@@ -52,6 +52,7 @@
 ```
 
 Key structural decisions:
+
 - `anchor-name` lives on `.c-dropdown__trigger` (tighter to the actual trigger element, better panel positioning).
 - `$attrs` (including `class`) bind to the outer `.c-dropdown` wrapper — `inheritAttrs: false` stays.
 - The outer wrapper no longer carries the anchor; `.c-dropdown__trigger` span does.
@@ -60,11 +61,11 @@ Key structural decisions:
 
 The `triggers` prop accepts an array of `'click' | 'hover' | 'focus'`. Each trigger type wires a different mechanism:
 
-| Trigger | Mechanism | Where |
-|---|---|---|
-| `'click'` (default) | Native `popovertarget` attribute in `triggerProps` | User's button inside default slot |
-| `'hover'` | `mouseenter` / `mouseleave` listeners → `showPopover()` / `hidePopover()` | `.c-dropdown__trigger` span |
-| `'focus'` | `focusin` / `focusout` listeners → `showPopover()` / `hidePopover()` | `.c-dropdown__trigger` span |
+| Trigger             | Mechanism                                                                 | Where                             |
+| ------------------- | ------------------------------------------------------------------------- | --------------------------------- |
+| `'click'` (default) | Native `popovertarget` attribute in `triggerProps`                        | User's button inside default slot |
+| `'hover'`           | `mouseenter` / `mouseleave` listeners → `showPopover()` / `hidePopover()` | `.c-dropdown__trigger` span       |
+| `'focus'`           | `focusin` / `focusout` listeners → `showPopover()` / `hidePopover()`      | `.c-dropdown__trigger` span       |
 
 `popovertarget` is only included in `triggerProps` when `'click'` is in `triggers` — using the native browser toggle avoids the double-fire that occurs when click delegation fights `popover="auto"` light-dismiss (which fires on `pointerdown`).
 
@@ -90,10 +91,10 @@ Default slot exposes:
 
 ```ts
 const panelStyle = computed(() => ({
-  'position-anchor': `--${panelId}`,
-  '--c-dropdown-offset':        `${offset}px`,
-  '--c-dropdown-skidding':      `${skidding}px`,
-  '--c-dropdown-arrow-padding': `${arrowPadding}px`,
+  "position-anchor": `--${panelId}`,
+  "--c-dropdown-offset": `${offset}px`,
+  "--c-dropdown-skidding": `${skidding}px`,
+  "--c-dropdown-arrow-padding": `${arrowPadding}px`,
 }));
 ```
 
@@ -102,26 +103,24 @@ const panelStyle = computed(() => ({
 ## Props
 
 ```ts
-type TriggerEvent = 'click' | 'hover' | 'focus';
-type PlacementValue =
-  | 'bottom-start' | 'bottom-end' | 'bottom'
-  | 'top-start'    | 'top-end'    | 'top';
+type TriggerEvent = "click" | "hover" | "focus";
+type PlacementValue = "bottom-start" | "bottom-end" | "bottom" | "top-start" | "top-end" | "top";
 
 type DropdownPopoverProps = {
   // Behavior
-  lazy?:      boolean;         // default: true — defer panel slot render until first open
-  placement?: PlacementValue;  // default: 'bottom-start'
-  offset?:    number;          // px — perpendicular distance trigger→panel, default: 8
-  skidding?:  number;          // px — lateral shift along placement axis, default: 0 (positive = inline-end / right, negative = inline-start / left)
-  triggers?:  TriggerEvent[];  // default: ['click']
+  lazy?: boolean; // default: true — defer panel slot render until first open
+  placement?: PlacementValue; // default: 'bottom-start'
+  offset?: number; // px — perpendicular distance trigger→panel, default: 8
+  skidding?: number; // px — lateral shift along placement axis, default: 0 (positive = inline-end / right, negative = inline-start / left)
+  triggers?: TriggerEvent[]; // default: ['click']
 
   // Panel
   panelClass?: string | string[] | Record<string, boolean>;
-  panelTag?:   string;         // HTML tag for the panel element, default: 'div'
+  panelTag?: string; // HTML tag for the panel element, default: 'div'
 
   // Arrow
-  arrow?:        boolean;  // show arrow pointing to trigger, default: false
-  arrowPadding?: number;   // px — min distance from arrow to panel corners, default: 4
+  arrow?: boolean; // show arrow pointing to trigger, default: false
+  arrowPadding?: number; // px — min distance from arrow to panel corners, default: 4
 };
 ```
 
@@ -174,9 +173,7 @@ type DropdownPopoverProps = {
   class="c-nav__item"
   v-slot="{ triggerProps, isOpen }"
 >
-  <button v-bind="triggerProps" type="button" :class="{ 'is-active': isOpen }">
-    Nav
-  </button>
+  <button v-bind="triggerProps" type="button" :class="{ 'is-active': isOpen }">Nav</button>
   <template #panel>…</template>
 </DropdownPopover>
 ```
@@ -216,7 +213,7 @@ type DropdownPopoverProps = {
   height: var(--arrow-size);
   background: var(--color-background);
   transform: rotate(45deg);
-  box-shadow: inherit;   // picks up panel shadow for seamless look
+  box-shadow: inherit; // picks up panel shadow for seamless look
 
   // Position at the panel edge facing the trigger, per placement group:
 }
@@ -270,11 +267,11 @@ type DropdownPopoverProps = {
 
 ## Migration at usage sites
 
-| File | Required change |
-|---|---|
-| `WordOptionDropdown.vue` | Add `v-slot="{ triggerProps }"`, wrap `<span>` in `<button v-bind="triggerProps" type="button">` |
+| File                             | Required change                                                                                                            |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `WordOptionDropdown.vue`         | Add `v-slot="{ triggerProps }"`, wrap `<span>` in `<button v-bind="triggerProps" type="button">`                           |
 | `AlphabeticalFilterDropdown.vue` | Add `v-slot="{ triggerProps }"`, wrap `<span>Filter</span> alphabetisch` in `<button v-bind="triggerProps" type="button">` |
-| `MainMenu.vue` | Add `v-slot="{ triggerProps }"`, pass `v-bind="triggerProps"` to `<MainMenuButton>` (must accept attrs) |
+| `MainMenu.vue`                   | Add `v-slot="{ triggerProps }"`, pass `v-bind="triggerProps"` to `<MainMenuButton>` (must accept attrs)                    |
 
 ---
 

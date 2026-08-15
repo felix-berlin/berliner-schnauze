@@ -79,7 +79,12 @@ $lighten-percent: 5;
 /// Generate shades for light mode
 @for $i from 1 through $num-shades {
   $shade: color.adjust(#2b333b, $lightness: calc((1% * ($i * $lighten-percent))));
-  $blues-tints: map.merge($blues-tints, ("blue-tints-" + $i * 100: $shade));
+  $blues-tints: map.merge(
+    $blues-tints,
+    (
+      "blue-tints-" + $i * 100: $shade,
+    )
+  );
 }
 $test-tint: (
   "blue-tints-100": #36404a,
@@ -104,7 +109,12 @@ $darken-percent: 4;
 /// Generate shades for light mode
 @for $i from 1 through $num-shades {
   $shade: color.adjust(#2b333b, $lightness: calc(-1% * ($darken-percent * $i)));
-  $blues-shades: map.merge($blues-shades, ("blue-tints-" + $i * 100: $shade));
+  $blues-shades: map.merge(
+    $blues-shades,
+    (
+      "blue-tints-" + $i * 100: $shade,
+    )
+  );
 }
 $e: (
   "blue-tints-100": #22292f,

@@ -19,7 +19,10 @@
     "article": "der",
     "translations": ["Funktion (in der Wendung »im Gange sein«)"],
     "examples": [
-      { "example": "Warum is dit wieder nich im Jange?", "explanation": "Warum funktioniert es nicht?" }
+      {
+        "example": "Warum is dit wieder nich im Jange?",
+        "explanation": "Warum funktioniert es nicht?"
+      }
     ],
     "themen": []
   },
@@ -27,7 +30,10 @@
     "word": "janüscht",
     "translations": ["gar nichts"],
     "examples": [
-      { "example": "Ick sach janüscht.", "explanation": "Ich habe keine Meinung, ich übernehme keine Verantwortung." }
+      {
+        "example": "Ick sach janüscht.",
+        "explanation": "Ich habe keine Meinung, ich übernehme keine Verantwortung."
+      }
     ],
     "themen": []
   },
@@ -79,7 +85,10 @@
     "word": "gebumfiedelt",
     "translations": ["geschmeichelt"],
     "examples": [
-      { "example": "Der fühlt sich jebumfiedelt.", "explanation": "Er kommt sich geschmeichelt vor." }
+      {
+        "example": "Der fühlt sich jebumfiedelt.",
+        "explanation": "Er kommt sich geschmeichelt vor."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
@@ -113,7 +122,10 @@
     "word": "gefressen",
     "translations": ["nicht ausstehen können (in der Wendung »jemanden gefressen haben«)"],
     "examples": [
-      { "example": "Den hab ick jefressen!", "explanation": "Diese Person kann ich nicht ausstehen." }
+      {
+        "example": "Den hab ick jefressen!",
+        "explanation": "Diese Person kann ich nicht ausstehen."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
@@ -122,7 +134,10 @@
     "article": "die",
     "translations": ["unwirtlicher Ort", "Landschaft außerhalb Berlins"],
     "examples": [
-      { "example": "Weit und breit nüscht wie Jejend!", "explanation": "Nur Landschaft. Die Redensart geht auf Glaßbrenner zurück." }
+      {
+        "example": "Weit und breit nüscht wie Jejend!",
+        "explanation": "Nur Landschaft. Die Redensart geht auf Glaßbrenner zurück."
+      }
     ],
     "themen": ["stadtleben"]
   },
@@ -130,9 +145,7 @@
     "word": "Gegenteil",
     "article": "das",
     "translations": ["Verneinung mit ironischem Unterton"],
-    "examples": [
-      { "example": "Haste Hunger? — Janz im Jejenteil." }
-    ],
+    "examples": [{ "example": "Haste Hunger? — Janz im Jejenteil." }],
     "themen": []
   },
   {
@@ -179,7 +192,10 @@
     "word": "geladen",
     "translations": ["stark betrunken", "aggressiv, wütend"],
     "examples": [
-      { "example": "Der hat schwer jeladen heut.", "explanation": "Er hat viel Alkohol getrunken." },
+      {
+        "example": "Der hat schwer jeladen heut.",
+        "explanation": "Er hat viel Alkohol getrunken."
+      },
       { "example": "Warum bist ’n so jeladen?", "explanation": "So aggressiv, wütend?" }
     ],
     "themen": ["alkohol-kneipe", "gefuehle-emotionen"]
@@ -234,9 +250,7 @@
     "word": "Gemütsathlet",
     "article": "der",
     "translations": ["herzloser Mensch"],
-    "examples": [
-      { "example": "Der hat ’n Jemüt wie’n Schaukelpferd." }
-    ],
+    "examples": [{ "example": "Der hat ’n Jemüt wie’n Schaukelpferd." }],
     "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
   },
   {
@@ -261,7 +275,10 @@
     "word": "genügen",
     "translations": ["abschließender Kommentar (in der Wendung)"],
     "examples": [
-      { "example": "›Dit jenücht‹, sagt der Staatsanwalt.", "explanation": "Abschließende Kommentierung einer Handlung. Übernommen aus einer Gerichtsszene von Albert Hopf (1845)." }
+      {
+        "example": "›Dit jenücht‹, sagt der Staatsanwalt.",
+        "explanation": "Abschließende Kommentierung einer Handlung. Übernommen aus einer Gerichtsszene von Albert Hopf (1845)."
+      }
     ],
     "themen": []
   },
@@ -305,16 +322,17 @@
   {
     "word": "gescheit",
     "translations": ["ordentlich", "brauchbar"],
-    "examples": [
-      { "example": "Jib ma mal jescheite Karten!", "explanation": "Beim Skat." }
-    ],
+    "examples": [{ "example": "Jib ma mal jescheite Karten!", "explanation": "Beim Skat." }],
     "themen": []
   },
   {
     "word": "geschenkt",
     "translations": ["auf keinen Fall (verstärkte Ablehnung)"],
     "examples": [
-      { "example": "Dit nehm ick nich jeschenkt!", "explanation": "Das nehme ich nicht — Verstärkung der Negation." }
+      {
+        "example": "Dit nehm ick nich jeschenkt!",
+        "explanation": "Das nehme ich nicht — Verstärkung der Negation."
+      }
     ],
     "themen": []
   },
@@ -322,9 +340,7 @@
     "word": "Geschichte",
     "article": "die",
     "translations": ["Umstände", "etwas Kompliziertes"],
-    "examples": [
-      { "example": "Wat hast’n? — So’ne Blinddarmjeschichte." }
-    ],
+    "examples": [{ "example": "Wat hast’n? — So’ne Blinddarmjeschichte." }],
     "themen": []
   },
   {
@@ -337,7 +353,10 @@
     "word": "geschmiert",
     "translations": ["hervorragend laufend"],
     "examples": [
-      { "example": "Dit jeht ja wie jeschmiert.", "explanation": "Das läuft wie ein gut geschmiertes Wagenrad." }
+      {
+        "example": "Dit jeht ja wie jeschmiert.",
+        "explanation": "Das läuft wie ein gut geschmiertes Wagenrad."
+      }
     ],
     "themen": []
   },
@@ -365,7 +384,10 @@
     "article": "das",
     "translations": ["mürrische Miene"],
     "examples": [
-      { "example": "Mach nicht so’n Jesichte.", "explanation": "Schau nicht so mürrisch oder traurig drein." }
+      {
+        "example": "Mach nicht so’n Jesichte.",
+        "explanation": "Schau nicht so mürrisch oder traurig drein."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
@@ -393,7 +415,10 @@
     "word": "gestohlen",
     "translations": ["egal (in der Wendung »gestohlen bleiben können«)"],
     "examples": [
-      { "example": "Der kann ma jestohl’n bleiben.", "explanation": "Der kann bleiben, wo der Pfeffer wächst." }
+      {
+        "example": "Der kann ma jestohl’n bleiben.",
+        "explanation": "Der kann bleiben, wo der Pfeffer wächst."
+      }
     ],
     "themen": []
   },
@@ -480,7 +505,10 @@
     "translations": ["Gott (in zahlreichen Redewendungen)"],
     "examples": [
       { "example": "Jehnse mit Jott, aber jehnse!" },
-      { "example": "Sie sind wohl janz von Jott verlassen!", "explanation": "Sie sind nicht recht bei Trost!" },
+      {
+        "example": "Sie sind wohl janz von Jott verlassen!",
+        "explanation": "Sie sind nicht recht bei Trost!"
+      },
       { "example": "Dit reene Wort Jottes.", "explanation": "Ein guter Schnaps." }
     ],
     "themen": ["gefuehle-emotionen"]
@@ -503,7 +531,11 @@
     "word": "Graf Koks",
     "article": "der",
     "translations": ["feiner Pinkel", "eingebildeter Mensch"],
-    "alternativeWords": ["Graf Koks von der Gasanstalt", "Graf Rotz von der Popelsburg", "Graf Kacke"],
+    "alternativeWords": [
+      "Graf Koks von der Gasanstalt",
+      "Graf Rotz von der Popelsburg",
+      "Graf Kacke"
+    ],
     "themen": ["schimpfwoerter-beleidigungen", "charakter-eigenschaften"]
   },
   {
@@ -582,7 +614,10 @@
     "article": "die",
     "translations": ["Unglaube (in der Redensart)"],
     "examples": [
-      { "example": "Dit kannste deine Großmutter erzähl’n, aber nich mir.", "explanation": "Das glaube ich nicht." }
+      {
+        "example": "Dit kannste deine Großmutter erzähl’n, aber nich mir.",
+        "explanation": "Das glaube ich nicht."
+      }
     ],
     "themen": []
   },

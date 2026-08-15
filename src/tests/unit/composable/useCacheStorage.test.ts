@@ -1,8 +1,8 @@
 import { formatBytes, getBucketDisplayName, getEntryType } from "@composables/useCacheStorage";
 import { useCacheStorage } from "@composables/useCacheStorage";
+import { createToastNotify } from "@stores/toastNotify.ts";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createApp, nextTick } from "vue";
-import { createToastNotify } from "@stores/toastNotify.ts";
 
 vi.mock("@stores/index", () => ({ createToastNotify: vi.fn() }));
 vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
@@ -23,7 +23,10 @@ function withSetup<T>(composable: () => T): { result: T; unmount: () => void } {
 
 // Helper: builds a mock CacheStorage
 function makeMockCacheStorage(
-  data: Record<string, Array<{ url: string; dateStr?: string; size?: number; contentType?: string }>>,
+  data: Record<
+    string,
+    Array<{ url: string; dateStr?: string; size?: number; contentType?: string }>
+  >,
 ) {
   const cacheInstances = Object.fromEntries(
     Object.entries(data).map(([name, entries]) => {
@@ -386,9 +389,11 @@ describe("useCacheStorage — cache entry edge cases", () => {
   it("returns null date for invalid Date header (covers line 184 isNaN branch)", async () => {
     stubCachesWith({
       keys: vi.fn().mockResolvedValue([new Request("https://example.com/file.js")]),
-      match: vi.fn().mockResolvedValue(
-        new Response(new Uint8Array(100), { headers: { Date: "not-a-valid-date" } }),
-      ),
+      match: vi
+        .fn()
+        .mockResolvedValue(
+          new Response(new Uint8Array(100), { headers: { Date: "not-a-valid-date" } }),
+        ),
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -629,7 +634,10 @@ describe("useCacheStorage — swInfo", () => {
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
-    expect(result.swInfo.value).toMatchObject({ status: "waiting", scriptURL: "https://example.com/sw.js" });
+    expect(result.swInfo.value).toMatchObject({
+      status: "waiting",
+      scriptURL: "https://example.com/sw.js",
+    });
     unmount();
   });
 
@@ -702,7 +710,10 @@ describe("useCacheStorage — swInfo", () => {
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
-    expect(result.swInfo.value).toMatchObject({ scope: "", scriptURL: "https://example.com/sw.js" });
+    expect(result.swInfo.value).toMatchObject({
+      scope: "",
+      scriptURL: "https://example.com/sw.js",
+    });
     unmount();
   });
 
@@ -891,7 +902,8 @@ describe("useCacheStorage — clearAll error toasts", () => {
     vi.stubGlobal("caches", {
       keys: vi.fn().mockResolvedValue(["bucket-a", "bucket-b"]),
       open: vi.fn().mockResolvedValue(null),
-      delete: vi.fn()
+      delete: vi
+        .fn()
         .mockResolvedValueOnce(true)
         .mockRejectedValueOnce(new Error("permission denied")),
       has: vi.fn(),

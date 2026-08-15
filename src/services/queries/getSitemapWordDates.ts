@@ -1,8 +1,7 @@
 /** Sitemap route filter: drop settings pages and the BON share route,
  *  keep everything else (words, magazine, themen, static pages). */
 export const sitemapFilter = (page: string): boolean =>
-  !page.includes("/settings") &&
-  !page.endsWith("/games/berliner-oder-nicht/share");
+  !page.includes("/settings") && !page.endsWith("/games/berliner-oder-nicht/share");
 
 type DateNode = { slug: string; modifiedGmt: string };
 

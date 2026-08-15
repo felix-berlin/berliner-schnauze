@@ -8,15 +8,15 @@
 
 ## Realdata-Analyse (aus dist/ + API, 916 Wörter)
 
-| Befund | Wert | Impact |
-|--------|------|--------|
-| `alternateName: ""` (Bug — leerer String statt weglassen) | **883/916** | Kritisch |
-| `alternateName: "string"` (Bug — String statt Array) | **33/916** | Kritisch |
-| `alternateName` korrekt als Array | **0/916** | — |
-| Wörter mit leerem `description` | **25/916** | Hoch |
-| Wörter mit Audio | **1/916** (allet-in-butta) | Niedrig |
-| Wörter mit Bildergalerie | **0/916** | Niedrig (future-proof) |
-| Wörter mit Übersetzungen | **892/916** | — |
+| Befund                                                    | Wert                       | Impact                 |
+| --------------------------------------------------------- | -------------------------- | ---------------------- |
+| `alternateName: ""` (Bug — leerer String statt weglassen) | **883/916**                | Kritisch               |
+| `alternateName: "string"` (Bug — String statt Array)      | **33/916**                 | Kritisch               |
+| `alternateName` korrekt als Array                         | **0/916**                  | —                      |
+| Wörter mit leerem `description`                           | **25/916**                 | Hoch                   |
+| Wörter mit Audio                                          | **1/916** (allet-in-butta) | Niedrig                |
+| Wörter mit Bildergalerie                                  | **0/916**                  | Niedrig (future-proof) |
+| Wörter mit Übersetzungen                                  | **892/916**                | —                      |
 
 > **Hinweis:** Der `dist/`-Output wurde aus einer älteren Codebasis gebaut. Der aktuelle `schemaJson()` in `[...wordSlug].astro` ist bereits besser (korrektes Array-Handling), braucht aber einen Rebuild.
 
@@ -26,16 +26,17 @@
 
 ### Quellen
 
-| Quelle | Befund |
-|--------|--------|
-| `src/gql/graphql.ts:96–101` | `WordPropertiesFragment` — vollständige Typdefinition |
-| `src/gql/graphql.ts:101` | `BerlinerWordFragment` — `dateGmt`, `modifiedGmt`, `wordGroup`, SEO-Fragment |
-| `src/pages/wort/[...wordSlug].astro:104–128` | Aktuelle `schemaJson()`-Funktion |
-| schema.org / Context7 | `AudioObject.contentUrl`, `AudioObject.encodingFormat`, `ImageObject.url/width/height/caption` |
+| Quelle                                       | Befund                                                                                         |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `src/gql/graphql.ts:96–101`                  | `WordPropertiesFragment` — vollständige Typdefinition                                          |
+| `src/gql/graphql.ts:101`                     | `BerlinerWordFragment` — `dateGmt`, `modifiedGmt`, `wordGroup`, SEO-Fragment                   |
+| `src/pages/wort/[...wordSlug].astro:104–128` | Aktuelle `schemaJson()`-Funktion                                                               |
+| schema.org / Context7                        | `AudioObject.contentUrl`, `AudioObject.encodingFormat`, `ImageObject.url/width/height/caption` |
 
 ### Erlaubte schema.org-Properties (verifiziert)
 
 **`DefinedTerm`** (erbt von `Thing`):
+
 - `name`, `description`, `url`, `identifier`, `sameAs`, `alternateName` ✓ (bereits genutzt)
 - `inDefinedTermSet`, `termCode`, `inLanguage` ✓ (bereits genutzt)
 - `dateCreated`, `dateModified` — via `Thing`-Erbschaft
@@ -44,33 +45,36 @@
 - `subjectOf` — für verknüpfte Inhalte
 
 **`ImageObject`** (für `image`-Property):
+
 - `url` / `contentUrl` — Bild-URL
 - `width`, `height` — Pixelmaße
 - `caption`, `description`, `name`
 - `encodingFormat` — z. B. `"image/jpeg"`
 
 **`AudioObject`** (für Audio-Aussprache):
-- `contentUrl` — MP3-URL *(verifiziert: schema.org AudioObject Beispiel)*
-- `encodingFormat` — `"audio/mpeg"` *(verifiziert)*
+
+- `contentUrl` — MP3-URL _(verifiziert: schema.org AudioObject Beispiel)_
+- `encodingFormat` — `"audio/mpeg"` _(verifiziert)_
 - `name` — z. B. `"Aussprache: Kodderschnauze"`
 - `description`, `inLanguage`
 
 **Anti-Patterns:**
+
 - `DefinedTerm` hat kein eigenes `audio`-Property — Audio über `subjectOf` oder direkt als `associatedMedia` einbinden
 - `alternateName` als Array korrekt ✓ (kein String)
 - `identifier` = interne WP-ID, nicht die öffentliche URL → korrekter als `@id` oder beides
 
 ### Aktuell ungenutzte verfügbare Daten
 
-| Feld | Quelle | schema.org-Ziel |
-|------|--------|-----------------|
-| `word.dateGmt` | BerlinerWord | `dateCreated` |
-| `word.modifiedGmt` | BerlinerWord | `dateModified` |
-| `wordProps.images.nodes[0]` | WordProperties | `image` → `ImageObject` |
-| `wordProps.berlinerischAudio[0]` | WordProperties | `subjectOf` → `AudioObject` |
-| `wordProps.article` | WordProperties | `disambiguatingDescription` |
-| `wordProps.examples[]` | WordProperties | `comment` → `Comment[]` |
-| `wordDescription` (berechnet) | Zeile 66–75 | `description` (statt raw join) |
+| Feld                             | Quelle         | schema.org-Ziel                |
+| -------------------------------- | -------------- | ------------------------------ |
+| `word.dateGmt`                   | BerlinerWord   | `dateCreated`                  |
+| `word.modifiedGmt`               | BerlinerWord   | `dateModified`                 |
+| `wordProps.images.nodes[0]`      | WordProperties | `image` → `ImageObject`        |
+| `wordProps.berlinerischAudio[0]` | WordProperties | `subjectOf` → `AudioObject`    |
+| `wordProps.article`              | WordProperties | `disambiguatingDescription`    |
+| `wordProps.examples[]`           | WordProperties | `comment` → `Comment[]`        |
+| `wordDescription` (berechnet)    | Zeile 66–75    | `description` (statt raw join) |
 
 ---
 
@@ -136,6 +140,7 @@ pnpm build && grep -A 30 'application/ld+json' dist/wort/kodderschnauze.html
 Wenn `wordProps.images?.nodes?.length > 0` → erstes Bild als `ImageObject` einbinden.
 
 Verfügbare Felder aus GraphQL:
+
 - `images.nodes[0].sourceUrl` → `contentUrl` + `url`
 - `images.nodes[0].altText` → `name` (Fallback: Wortname)
 - `images.nodes[0].caption` → `caption`
@@ -181,6 +186,7 @@ grep -A 10 '"ImageObject"' dist/wort/[slug-mit-bild].html
 Wenn `wordProps.berlinerischAudio?.length > 0` → Audio als `AudioObject` unter `subjectOf`.
 
 Verfügbare Felder:
+
 - `berlinerischAudio[0].audio.node.mediaItemUrl` → `contentUrl` (MP3-URL)
 - `berlinerischAudio[0].gender` → für `name`-Konstruktion
 
@@ -279,6 +285,7 @@ pnpm test:unit
 ```
 
 **Externe Validierung:**
+
 - https://validator.schema.org/ — JSON-LD auf Fehler prüfen
 - https://search.google.com/test/rich-results — Rich Results Vorschau
 

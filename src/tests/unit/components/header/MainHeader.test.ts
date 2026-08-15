@@ -4,21 +4,21 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("@components/DropdownPopover.vue", () => ({
   default: {
     name: "DropdownPopover",
-    template: "<div class=\"c-dropdown-popover\"><slot /><slot name=\"panel\" /></div>",
+    template: '<div class="c-dropdown-popover"><slot /><slot name="panel" /></div>',
   },
 }));
 
 vi.mock("@components/ColorModeToggle.vue", () => ({
   default: {
     name: "ColorModeToggle",
-    template: "<button class=\"mock-color-mode-toggle\" />",
+    template: '<button class="mock-color-mode-toggle" />',
   },
 }));
 
 vi.mock("@components/modals/search/SearchModal.vue", () => ({
   default: {
     name: "SearchModal",
-    template: "<div class=\"mock-search-modal\" />",
+    template: '<div class="mock-search-modal" />',
   },
 }));
 

@@ -9,7 +9,9 @@ const { mockWhenever, mockOnEventFired } = vi.hoisted(() => {
   let capturedOnEventFired: ((e: KeyboardEvent) => void) | null = null;
   return {
     mockWhenever: {
-      fn: vi.fn((_: unknown, cb: () => void) => { capturedWheneverCb = cb; }),
+      fn: vi.fn((_: unknown, cb: () => void) => {
+        capturedWheneverCb = cb;
+      }),
       call: () => capturedWheneverCb?.(),
     },
     mockOnEventFired: {
@@ -38,10 +40,13 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
   return {
     ...actual,
-    useMagicKeys: vi.fn((opts?: { onEventFired?: (e: KeyboardEvent) => void; passive?: boolean }) => {
-      if (opts?.onEventFired) mockOnEventFired.fn(opts as { onEventFired: (e: KeyboardEvent) => void });
-      return { "Shift+/": ref(false) };
-    }),
+    useMagicKeys: vi.fn(
+      (opts?: { onEventFired?: (e: KeyboardEvent) => void; passive?: boolean }) => {
+        if (opts?.onEventFired)
+          mockOnEventFired.fn(opts as { onEventFired: (e: KeyboardEvent) => void });
+        return { "Shift+/": ref(false) };
+      },
+    ),
     whenever: mockWhenever.fn,
   };
 });

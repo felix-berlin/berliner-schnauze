@@ -25,12 +25,14 @@
 ### Task 1: Post query + data fetching
 
 **Files:**
+
 - Create: `src/services/fragments/blockFragments.ts`
 - Create: `src/services/queries/getPosts.ts`
 - Modify: `src/services/api.ts`
 - Test: `src/tests/unit/services/getPosts.test.ts`
 
 **Interfaces:**
+
 - Produces: `fetchAllPosts(): Promise<PostNodes>` — cached promise, throws on GraphQL error, evicts cache on failure so the next call retries (same contract as `fetchAllThemen()` in `getThemen.ts`)
 - Produces: `GetAllPosts` — the `graphql()`-tagged query document (unused directly outside this file, but exported the same way `GetAllBerlinerischThemen` is)
 - Produces (type, available after codegen in Step 6): `PostNodes = NonNullable<GetAllPostsQuery["posts"]>["nodes"]`
@@ -251,12 +253,14 @@ git commit -m "feat(magazin): add GetAllPosts query with cached fetchAllPosts()"
 ### Task 2: Block renderer components
 
 **Files:**
+
 - Create: `src/components/magazin/ArticleImage.astro`
 - Create: `src/components/magazin/ArticleQuote.astro`
 - Create: `src/components/magazin/ArticleBlocks.astro`
 - Test: `src/tests/unit/components/magazin/ArticleBlocks.test.ts`
 
 **Interfaces:**
+
 - Consumes: nothing from Task 1 directly (block shape is described with a local minimal interface, not the generated union type, to keep this component decoupled from the exact GraphQL union shape)
 - Produces: `ArticleBlocks` (default export, `.astro`) — `Props: { blocks: ArticleBlock[] }` where `ArticleBlock = { name: string; order: number; saveContent?: string | null; attributes?: unknown }`. Task 4 renders `<ArticleBlocks blocks={post.blocks} />`.
 
@@ -446,10 +450,12 @@ git commit -m "feat(magazin): add block-by-block article renderer with saveConte
 ### Task 3: Magazin listing page
 
 **Files:**
+
 - Create: `src/pages/magazin/index.astro`
 - Create: `src/styles/components/_magazin-overview.scss`
 
 **Interfaces:**
+
 - Consumes: `fetchAllPosts()` from Task 1 (`@services/api`)
 
 No dedicated test file — thin routing/listing page, consistent with `themen/index.astro` (no test either). Verified in Task 5's manual check.
@@ -630,10 +636,12 @@ git commit -m "feat(magazin): add magazine listing page"
 ### Task 4: Magazin detail page
 
 **Files:**
+
 - Create: `src/pages/magazin/[postSlug].astro`
 - Create: `src/styles/components/_magazin-article.scss`
 
 **Interfaces:**
+
 - Consumes: `fetchAllPosts()` from Task 1, `ArticleBlocks` from Task 2
 
 - [ ] **Step 1: Create the stylesheet**
@@ -819,6 +827,7 @@ Open `http://localhost:4321/magazin/` — confirm the published post appears as 
 - [ ] **Step 3: Check the detail page**
 
 Click through to `/magazin/<slug>/`. Confirm:
+
 - Headings, paragraphs, and lists render correctly
 - Any image blocks render as optimized `<picture>` elements (check DevTools Network tab for `.avif`/`.webp` requests)
 - Any quote blocks render inside the dashed-border `c-magazin-article__quote` box

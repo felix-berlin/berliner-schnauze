@@ -4,12 +4,7 @@ import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { markRaw, ref } from "vue";
 
-const {
-  mockResetModal,
-  mockSetElement,
-  mockPreventScroll,
-  mockSetIsOpen,
-} = vi.hoisted(() => ({
+const { mockResetModal, mockSetElement, mockPreventScroll, mockSetIsOpen } = vi.hoisted(() => ({
   mockResetModal: vi.fn(),
   mockSetElement: vi.fn(),
   mockPreventScroll: vi.fn(),
@@ -54,11 +49,7 @@ const mockProps = ref({
 });
 const mockViewIsComponent = ref(false);
 
-function setupUseStore(
-  view = mockView,
-  props = mockProps,
-  viewIsComponent = mockViewIsComponent,
-) {
+function setupUseStore(view = mockView, props = mockProps, viewIsComponent = mockViewIsComponent) {
   vi.mocked(useStore).mockReset();
   vi.mocked(useStore)
     .mockReturnValueOnce(view)
@@ -189,7 +180,11 @@ describe("Modal.vue", () => {
   });
 
   it("renders Component when viewIsComponent is true (covers line 22 true branch)", async () => {
-    mockView.value = { component: markRaw({ render: () => null }), props: {}, events: { click: vi.fn() } };
+    mockView.value = {
+      component: markRaw({ render: () => null }),
+      props: {},
+      events: { click: vi.fn() },
+    };
     mockViewIsComponent.value = true;
     setupUseStore();
     const wrapper = mount(Modal);

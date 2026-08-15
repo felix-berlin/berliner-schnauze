@@ -46,30 +46,26 @@
         <p>Noch nichts gecacht.</p>
       </div>
 
-      <PwaCacheBucketList
-        v-else
-        :buckets="buckets"
-        @clear-bucket="confirmClearBucket"
-      />
+      <PwaCacheBucketList v-else :buckets="buckets" @clear-bucket="confirmClearBucket" />
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Component } from "vue";
 import type { SwStatus } from "@composables/useCacheStorage";
+import type { Component } from "vue";
 
-import { computed, defineAsyncComponent, onMounted } from "vue";
-import { getBucketDisplayName, useCacheStorage } from "@composables/useCacheStorage";
-import { useStore } from "@nanostores/vue";
-import { $isPwaInstalled } from "@stores/installApp.ts";
-import { close, open } from "@stores/modal";
 import PwaCacheActions from "@components/PwaCacheActions.vue";
 import PwaCacheBucketList from "@components/PwaCacheBucketList.vue";
 import PwaCacheHeader from "@components/PwaCacheHeader.vue";
 import PwaCacheInfoGrid from "@components/PwaCacheInfoGrid.vue";
 import PwaCacheStats from "@components/PwaCacheStats.vue";
 import PwaCacheTypeBar from "@components/PwaCacheTypeBar.vue";
+import { getBucketDisplayName, useCacheStorage } from "@composables/useCacheStorage";
+import { useStore } from "@nanostores/vue";
+import { $isPwaInstalled } from "@stores/installApp.ts";
+import { close, open } from "@stores/modal";
+import { computed, defineAsyncComponent, onMounted } from "vue";
 
 const Circle = defineAsyncComponent(() => import("virtual:icons/lucide/circle"));
 const CircleCheck = defineAsyncComponent(() => import("virtual:icons/lucide/circle-check"));

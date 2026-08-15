@@ -28,12 +28,7 @@
       <p class="c-bon-card__progress">Karte {{ cardNumber }}</p>
 
       <Transition name="fade-fast">
-        <div
-          v-if="showOverlay"
-          class="c-bon-card__overlay"
-          role="alert"
-          aria-atomic="true"
-        >
+        <div v-if="showOverlay" class="c-bon-card__overlay" role="alert" aria-atomic="true">
           <span class="c-bon-card__overlay-verdict">War {{ overlayText }}!</span>
           <span v-if="revealMeaning" class="c-bon-card__overlay-meaning">
             „{{ word }}“ = {{ revealMeaning }}
@@ -79,96 +74,98 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onMounted, ref, watch } from 'vue'
-import { onKeyStroke, usePointerSwipe, useTimeoutFn, useVibrate } from '@vueuse/core'
-import { useContentTracking } from '@composables/useContentTracking'
+import { useContentTracking } from "@composables/useContentTracking";
+import { onKeyStroke, usePointerSwipe, useTimeoutFn, useVibrate } from "@vueuse/core";
+import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 
-const XIcon = defineAsyncComponent(() => import('virtual:icons/lucide/x'))
-const CheckIcon = defineAsyncComponent(() => import('virtual:icons/lucide/check'))
-const HandIcon = defineAsyncComponent(() => import('virtual:icons/lucide/hand'))
+const XIcon = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
+const CheckIcon = defineAsyncComponent(() => import("virtual:icons/lucide/check"));
+const HandIcon = defineAsyncComponent(() => import("virtual:icons/lucide/hand"));
 
 const props = defineProps<{
-  word: string
-  cardNumber: number
-  isShaking: boolean
-  lastAnswerCorrect: boolean | null
-  isReal: boolean | null
-  translation?: string | null
-  isFirstCard?: boolean
-  disabled?: boolean
-}>()
+  word: string;
+  cardNumber: number;
+  isShaking: boolean;
+  lastAnswerCorrect: boolean | null;
+  isReal: boolean | null;
+  translation?: string | null;
+  isFirstCard?: boolean;
+  disabled?: boolean;
+}>();
 
 const emit = defineEmits<{
-  answer: [isReal: boolean]
-}>()
+  answer: [isReal: boolean];
+}>();
 
-const root = ref<HTMLElement | null>(null)
-const cardRef = ref<HTMLElement | null>(null)
-const neeButtonRef = ref<HTMLButtonElement | null>(null)
+const root = ref<HTMLElement | null>(null);
+const cardRef = ref<HTMLElement | null>(null);
+const neeButtonRef = ref<HTMLButtonElement | null>(null);
 
-useContentTracking(root)
+useContentTracking(root);
 
 defineExpose({
   focus: () => neeButtonRef.value?.focus(),
-})
+});
 
-const showOverlay = computed(() =>
-  props.isShaking && props.lastAnswerCorrect === false && props.isReal !== null,
-)
+const showOverlay = computed(
+  () => props.isShaking && props.lastAnswerCorrect === false && props.isReal !== null,
+);
 
-const overlayText = computed(() =>
-  props.isReal ? 'echtes Berlinerisch' : 'erfunden',
-)
+const overlayText = computed(() => (props.isReal ? "echtes Berlinerisch" : "erfunden"));
 
 // Only real words carry a meaning; fakes never do.
 const revealMeaning = computed(() =>
   props.isReal && props.translation ? props.translation : null,
-)
+);
 
-const neeAriaLabel = computed(() => `Nee – „${props.word}“ ist nicht Berlinerisch`)
-const jaAriaLabel = computed(() => `Ja – „${props.word}“ ist Berlinerisch`)
+const neeAriaLabel = computed(() => `Nee – „${props.word}“ ist nicht Berlinerisch`);
+const jaAriaLabel = computed(() => `Ja – „${props.word}“ ist Berlinerisch`);
 
-const showSwipeHint = ref(props.isFirstCard === true)
+const showSwipeHint = ref(props.isFirstCard === true);
 
-const { start: startHintTimer } = useTimeoutFn(() => {
-  showSwipeHint.value = false
-}, 3000, { immediate: false })
+const { start: startHintTimer } = useTimeoutFn(
+  () => {
+    showSwipeHint.value = false;
+  },
+  3000,
+  { immediate: false },
+);
 
 onMounted(() => {
-  if (props.isFirstCard) startHintTimer()
-})
+  if (props.isFirstCard) startHintTimer();
+});
 
-const { vibrate } = useVibrate()
+const { vibrate } = useVibrate();
 
 const { isSwiping, distanceX } = usePointerSwipe(cardRef, {
   disableTextSelect: true,
   onSwipeEnd(_, dir) {
-    if (props.disabled) return
-    if (dir === 'right') {
-      vibrate([20])
-      emit('answer', true)
-    } else if (dir === 'left') {
-      vibrate([20])
-      emit('answer', false)
+    if (props.disabled) return;
+    if (dir === "right") {
+      vibrate([20]);
+      emit("answer", true);
+    } else if (dir === "left") {
+      vibrate([20]);
+      emit("answer", false);
     }
   },
   threshold: 50,
-})
+});
 
 watch(isSwiping, (val) => {
-  if (val) showSwipeHint.value = false
-})
+  if (val) showSwipeHint.value = false;
+});
 
 const dragCardStyle = computed(() => {
-  if (!isSwiping.value) return {}
-  const x = Math.max(-280, Math.min(280, -distanceX.value))
-  const progress = Math.min(Math.abs(x) / 80, 1)
+  if (!isSwiping.value) return {};
+  const x = Math.max(-280, Math.min(280, -distanceX.value));
+  const progress = Math.min(Math.abs(x) / 80, 1);
   const base = {
-    cursor: 'grabbing',
+    cursor: "grabbing",
     transform: `translateX(${x}px) rotate(${x * 0.04}deg)`,
-    transition: 'none',
-  }
-  if (Math.abs(x) < 5) return base
+    transition: "none",
+  };
+  if (Math.abs(x) < 5) return base;
   return x > 0
     ? {
         ...base,
@@ -179,13 +176,17 @@ const dragCardStyle = computed(() => {
         ...base,
         borderColor: `color-mix(in srgb, var(--red-500) ${Math.round(progress * 80)}%, var(--c-bon-border))`,
         boxShadow: `0 8px 32px rgb(207 48 24 / ${Math.round(progress * 25)}%)`,
-      }
-})
+      };
+});
 
-onKeyStroke('ArrowRight', () => { if (!props.disabled) emit('answer', true) })
-onKeyStroke('ArrowLeft', () => { if (!props.disabled) emit('answer', false) })
+onKeyStroke("ArrowRight", () => {
+  if (!props.disabled) emit("answer", true);
+});
+onKeyStroke("ArrowLeft", () => {
+  if (!props.disabled) emit("answer", false);
+});
 </script>
 
 <style lang="scss">
-@use '@styles/components/berliner-oder-nicht';
+@use "@styles/components/berliner-oder-nicht";
 </style>

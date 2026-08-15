@@ -28,10 +28,13 @@ describe("fetchAPI", () => {
 
   it("logs and swallows errors on a non-ok response", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
-      ok: false,
-      text: vi.fn().mockResolvedValue("Internal Server Error"),
-    }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        text: vi.fn().mockResolvedValue("Internal Server Error"),
+      }),
+    );
     const { fetchAPI } = await import("@services/fetchApi.ts");
     expect(await fetchAPI("{ words { id } }")).toBeUndefined();
     expect(consoleSpy).toHaveBeenCalledOnce();

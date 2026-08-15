@@ -12,20 +12,21 @@
 
 ## File Structure
 
-| Action | File |
-|---|---|
+| Action | File                                       |
+| ------ | ------------------------------------------ |
 | Create | `src/styles/components/_word-sidebar.scss` |
-| Create | `src/styles/components/_word-hero.scss` |
+| Create | `src/styles/components/_word-hero.scss`    |
 | Create | `src/styles/components/_section-card.scss` |
-| Modify | `src/styles/components/_single-word.scss` |
-| Modify | `src/components/word/WordAnagrams.astro` |
-| Modify | `src/pages/wort/[...wordSlug].astro` |
+| Modify | `src/styles/components/_single-word.scss`  |
+| Modify | `src/components/word/WordAnagrams.astro`   |
+| Modify | `src/pages/wort/[...wordSlug].astro`       |
 
 ---
 
 ## Task 1: Create `_word-sidebar.scss`
 
 **Files:**
+
 - Create: `src/styles/components/_word-sidebar.scss`
 
 The sidebar is a **single element** that switches between vertical (desktop) and horizontal scroll nav (mobile) via `@container word-page`. `.c-word-page` is the container (established in Task 4). `position: sticky` works in both modes: mobile sticks at `top: var(--topbar-height)` as a horizontal bar; desktop sticks in its grid column. Active link class `.is-active` is toggled by IntersectionObserver added in Task 6.
@@ -185,6 +186,7 @@ git commit -m "feat(styles): add word sidebar component styles"
 ## Task 2: Create `_word-hero.scss`
 
 **Files:**
+
 - Create: `src/styles/components/_word-hero.scss`
 
 Replaces `<header class="c-single-word__header">`. Uses `clamp()` with `cqi` units (container query inline) for fluid title sizing. The `word-hero` container enables badge-wrap threshold at `32rem`.
@@ -313,6 +315,7 @@ git commit -m "feat(styles): add word hero card component styles"
 ## Task 3: Create `_section-card.scss`
 
 **Files:**
+
 - Create: `src/styles/components/_section-card.scss`
 
 Each content section becomes a `.c-section-card`. `scroll-margin-top` clears the sticky topbar on anchor navigation. Includes subclasses for the infotext block, stat boxes (Linguistik), CV legend, and grammar tags.
@@ -565,9 +568,11 @@ git commit -m "feat(styles): add section card component styles"
 ## Task 4: Rewrite `_single-word.scss`
 
 **Files:**
+
 - Modify: `src/styles/components/_single-word.scss`
 
 **What changes:**
+
 - **Add** at top: `--topbar-height: 52px` on `:root`, plus `.c-page-topbar`, `.c-word-page`, `.c-word-main`, `.c-word-gallery-col` layout rules
 - **Remove** from `.c-single-word` root: `display: grid`, `gap`, `grid-template-areas`, `grid-template-columns`, `background-color`, `border`, `box-shadow`, `padding`
 - **Remove**: `.c-single-word:has(.c-single-word__gallery-wrap)` block
@@ -657,8 +662,12 @@ Write `src/styles/components/_single-word.scss`:
       gap: vars.$spacer;
       align-items: start;
 
-      .c-word-hero { grid-area: hero; }
-      .c-word-main__content { grid-area: content; }
+      .c-word-hero {
+        grid-area: hero;
+      }
+      .c-word-main__content {
+        grid-area: content;
+      }
     }
   }
 }
@@ -1046,6 +1055,7 @@ git commit -m "refactor(styles): restructure single-word scss — add layout con
 ## Task 5: Update `WordAnagrams.astro` to use section-card BEM
 
 **Files:**
+
 - Modify: `src/components/word/WordAnagrams.astro`
 
 The anagrams section must use `.c-section-card` classes when anagrams exist. `id="anagramme"` enables sidebar anchor navigation. The section number is `—` (non-sequential, only appears conditionally).
@@ -1111,9 +1121,11 @@ git commit -m "feat(WordAnagrams): use section-card BEM for redesigned layout"
 ## Task 6: Restructure `[...wordSlug].astro`
 
 **Files:**
+
 - Modify: `src/pages/wort/[...wordSlug].astro`
 
 **Key changes:**
+
 1. Import three new SCSS files after `_single-word.scss`
 2. Remove `createWikimediaFileList` import (unused)
 3. Add `hasImages` and `wortartLabel` computed variables
@@ -1131,16 +1143,16 @@ git commit -m "feat(WordAnagrams): use section-card BEM for redesigned layout"
 
 **Section IDs and numbers:**
 
-| # | ID | When |
-|---|---|---|
-| 01 | `#etymologie` | always |
-| 02 | `#beispiele` | `wordProps.examples` |
-| 03 | `#orthographie` | always |
-| 04 | `#linguistik` | always |
-| 05 | `#grammatik` | `wordTags.length > 0` |
-| 06 | `#phonologie` | always |
-| — | `#anagramme` | rendered by `<WordAnagrams>` |
-| 07 | `#navigation` | always |
+| #   | ID              | When                         |
+| --- | --------------- | ---------------------------- |
+| 01  | `#etymologie`   | always                       |
+| 02  | `#beispiele`    | `wordProps.examples`         |
+| 03  | `#orthographie` | always                       |
+| 04  | `#linguistik`   | always                       |
+| 05  | `#grammatik`    | `wordTags.length > 0`        |
+| 06  | `#phonologie`   | always                       |
+| —   | `#anagramme`    | rendered by `<WordAnagrams>` |
+| 07  | `#navigation`   | always                       |
 
 - [ ] **Step 1: Overwrite the Astro page**
 
@@ -1672,23 +1684,23 @@ git commit -m "feat(word-page): redesign single word page — sidebar nav, secti
 
 ## Spec Coverage
 
-| Spec section | Implemented in | ✓ |
-|---|---|---|
-| §1 Container query setup | Task 4 `.c-word-page`, `.c-word-main` | ✅ |
-| §1 Desktop 2-col grid `>= 48rem` | Task 4 | ✅ |
-| §1 Gallery inner grid `>= 60rem` | Task 4 `.c-word-main--with-gallery` | ✅ |
-| §1 Mobile horizontal scroll nav | Task 1 `@container word-page < 48rem` | ✅ |
-| §2 Topbar (breadcrumbs, sticky) | Task 4 `.c-page-topbar` + Task 6 | ✅ |
-| §3 Sidebar with word block + nav groups | Task 1 + Task 6 | ✅ |
-| §3 Active link (IntersectionObserver) | Task 6 inline script | ✅ |
-| §4 Word Hero card | Task 2 + Task 6 | ✅ |
-| §4 Wortart badge | Task 6 `wortartLabel` + `__wortart-badge` | ✅ |
-| §5 Section cards with `__num` + `__title` | Task 3 + Task 6 | ✅ |
-| §6.1 Etymologie infotext block | Task 3 `__infotext` + Task 6 | ✅ |
-| §6.2 Linguistik stat boxes + CV legend | Task 3 + Task 6 | ✅ |
-| §6.3 Grammatik NLP tag chips | Task 3 `__grammar-*` + Task 6 | ✅ |
-| §6.4 Gallery column (conditional) | Task 4 + Task 6 | ✅ |
-| §7 Mobile sidebar CSS-only switch | Task 1 | ✅ |
-| §8 New SCSS files + modified file | Tasks 1–4 | ✅ |
-| §10 Dark mode on all new components | Tasks 1–4 (`butler-mx.dark-mode-class`) | ✅ |
-| §11 Existing components untouched | No changes to word sub-components | ✅ |
+| Spec section                              | Implemented in                            | ✓   |
+| ----------------------------------------- | ----------------------------------------- | --- |
+| §1 Container query setup                  | Task 4 `.c-word-page`, `.c-word-main`     | ✅  |
+| §1 Desktop 2-col grid `>= 48rem`          | Task 4                                    | ✅  |
+| §1 Gallery inner grid `>= 60rem`          | Task 4 `.c-word-main--with-gallery`       | ✅  |
+| §1 Mobile horizontal scroll nav           | Task 1 `@container word-page < 48rem`     | ✅  |
+| §2 Topbar (breadcrumbs, sticky)           | Task 4 `.c-page-topbar` + Task 6          | ✅  |
+| §3 Sidebar with word block + nav groups   | Task 1 + Task 6                           | ✅  |
+| §3 Active link (IntersectionObserver)     | Task 6 inline script                      | ✅  |
+| §4 Word Hero card                         | Task 2 + Task 6                           | ✅  |
+| §4 Wortart badge                          | Task 6 `wortartLabel` + `__wortart-badge` | ✅  |
+| §5 Section cards with `__num` + `__title` | Task 3 + Task 6                           | ✅  |
+| §6.1 Etymologie infotext block            | Task 3 `__infotext` + Task 6              | ✅  |
+| §6.2 Linguistik stat boxes + CV legend    | Task 3 + Task 6                           | ✅  |
+| §6.3 Grammatik NLP tag chips              | Task 3 `__grammar-*` + Task 6             | ✅  |
+| §6.4 Gallery column (conditional)         | Task 4 + Task 6                           | ✅  |
+| §7 Mobile sidebar CSS-only switch         | Task 1                                    | ✅  |
+| §8 New SCSS files + modified file         | Tasks 1–4                                 | ✅  |
+| §10 Dark mode on all new components       | Tasks 1–4 (`butler-mx.dark-mode-class`)   | ✅  |
+| §11 Existing components untouched         | No changes to word sub-components         | ✅  |

@@ -1,8 +1,4 @@
-import {
-  useTestStorageEngine,
-  setTestStorageKey,
-  cleanTestStorage,
-} from "@nanostores/persistent";
+import { useTestStorageEngine, setTestStorageKey, cleanTestStorage } from "@nanostores/persistent";
 import { describe, expect, it, beforeAll, afterEach, vi } from "vitest";
 
 describe("darkMode store — persistence decode/encode", () => {

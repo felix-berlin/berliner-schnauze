@@ -72,11 +72,7 @@ Destructure `isReady` from `useGame()`. Disable "Spielen" and "Weiterspielen" bu
 is initializing.
 
 ```html
-<button
-  class="c-berliner-oder-nicht__start-btn"
-  :disabled="!isReady"
-  @click="startGame"
->
+<button class="c-berliner-oder-nicht__start-btn" :disabled="!isReady" @click="startGame">
   {{ isReady ? (hasSavedGame ? 'Neu starten' : 'Spielen') : 'Laden…' }}
 </button>
 ```
@@ -89,7 +85,7 @@ Add early-return guard in `startGame()` as a safety net (belt-and-suspenders):
 
 ```ts
 function startGame() {
-  if (!isReady.value) return
+  if (!isReady.value) return;
   // ... rest unchanged
 }
 ```
@@ -112,17 +108,17 @@ This ensures every new game starts from the full pool in a new random order.
 
 ```ts
 function startGame() {
-  if (!isReady.value) return
+  if (!isReady.value) return;
   // Fresh shuffle for each new game
-  _realQueue = fisherYates([..._realWords])
-  _fakeQueue = fisherYates(_fakeWords.map((f) => ({ isReal: false as const, word: f.word })))
-  _clearStorage()
+  _realQueue = fisherYates([..._realWords]);
+  _fakeQueue = fisherYates(_fakeWords.map((f) => ({ isReal: false as const, word: f.word })));
+  _clearStorage();
   state.value = {
     // ... unchanged
     deck: _makeQueuedDeck(),
     // ...
-  }
-  _nextCard()
+  };
+  _nextCard();
 }
 ```
 
@@ -132,29 +128,30 @@ function startGame() {
 Pre-compute it once in `init()` and store as module-level `_fakeSource: GameCard[]`.
 
 ```ts
-let _fakeSource: GameCard[] = []
+let _fakeSource: GameCard[] = [];
 
 function init(realWords: GameCard[], fakeWords: FakeWord[]) {
-  _realWords = realWords
-  _fakeWords = fakeWords
-  _fakeSource = fakeWords.map((f) => ({ isReal: false as const, word: f.word }))
-  _realQueue = fisherYates([...realWords])
-  _fakeQueue = fisherYates([..._fakeSource])
-  isReady.value = true
+  _realWords = realWords;
+  _fakeWords = fakeWords;
+  _fakeSource = fakeWords.map((f) => ({ isReal: false as const, word: f.word }));
+  _realQueue = fisherYates([...realWords]);
+  _fakeQueue = fisherYates([..._fakeSource]);
+  isReady.value = true;
 }
 
 function _makeQueuedDeck(): GameCard[] {
-  const realCount = Math.floor(Math.random() * 6) + 10
-  const fakeCount = 20 - realCount
-  const real = drawFromQueue(_realQueue, _realWords, realCount)
-  const fake = drawFromQueue(_fakeQueue, _fakeSource, fakeCount)
-  return fisherYates([...real, ...fake])
+  const realCount = Math.floor(Math.random() * 6) + 10;
+  const fakeCount = 20 - realCount;
+  const real = drawFromQueue(_realQueue, _realWords, realCount);
+  const fake = drawFromQueue(_fakeQueue, _fakeSource, fakeCount);
+  return fisherYates([...real, ...fake]);
 }
 ```
 
 Also update `startGame()` to use `_fakeSource`:
+
 ```ts
-_fakeQueue = fisherYates([..._fakeSource])
+_fakeQueue = fisherYates([..._fakeSource]);
 ```
 
 **Verification after Phase 2**:

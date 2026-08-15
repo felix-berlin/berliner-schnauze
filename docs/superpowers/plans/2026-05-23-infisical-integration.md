@@ -27,17 +27,18 @@ Before running any task, verify in the Infisical dashboard:
 
 ## Files
 
-| Action | File | Change |
-|--------|------|--------|
-| Create | `.infisical.json` | Workspace + env mapping |
-| Modify | `package.json` | `infisical run --` on `dev`, `gql:generate`, `gql:generate:watch` |
-| Modify | `.github/workflows/release.yml` | OIDC permission + Infisical secrets step + dynamic Sentry env |
+| Action | File                            | Change                                                            |
+| ------ | ------------------------------- | ----------------------------------------------------------------- |
+| Create | `.infisical.json`               | Workspace + env mapping                                           |
+| Modify | `package.json`                  | `infisical run --` on `dev`, `gql:generate`, `gql:generate:watch` |
+| Modify | `.github/workflows/release.yml` | OIDC permission + Infisical secrets step + dynamic Sentry env     |
 
 ---
 
 ## Task 1: Create `.infisical.json`
 
 **Files:**
+
 - Create: `.infisical.json`
 
 - [ ] **Step 1: Create the config file**
@@ -76,9 +77,11 @@ git commit -m "build(infisical): add workspace config with branch-to-env mapping
 ## Task 2: Wrap local dev scripts in `package.json`
 
 **Files:**
+
 - Modify: `package.json`
 
 **Why these three scripts only:**
+
 - `dev` — astro dev server needs all env vars at startup
 - `gql:generate` — codegen.ts uses `loadEnv` to fetch `WP_API` + `WP_AUTH_REFRESH_TOKEN` for schema fetch
 - `gql:generate:watch` — same as above, runs continuously in parallel with dev
@@ -96,6 +99,7 @@ In `package.json`, change:
 ```
 
 The surrounding scripts for reference (do not change these):
+
 ```json
 "predev": "pnpm run gql:generate && pnpm run supportedBrowsers",
 "build": "pnpm run supportedBrowsers && astro build",
@@ -131,9 +135,11 @@ git commit -m "build(infisical): inject secrets via infisical run for dev and co
 ## Task 3: Update `release.yml` — OIDC + Infisical secrets
 
 **Files:**
+
 - Modify: `.github/workflows/release.yml`
 
 **What changes:**
+
 1. Add `id-token: write` permission (required for GitHub OIDC)
 2. Add Infisical secrets fetch step before the Sentry release step
 3. Make Sentry `environment` dynamic (production for `main`, staging for `beta`)
@@ -157,7 +163,7 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-      id-token: write  # required for GitHub OIDC with Infisical
+      id-token: write # required for GitHub OIDC with Infisical
 
     steps:
       - name: Checkout ✅
@@ -252,8 +258,9 @@ In `CLAUDE.md`, update the development commands section:
 
 ```markdown
 # Development
-pnpm dev                     # Start dev server (requires infisical login; auto-runs codegen + supportedBrowsers via predev)
-pnpm gql:generate:watch      # Run in parallel with dev to regenerate types on schema changes (requires infisical login)
+
+pnpm dev # Start dev server (requires infisical login; auto-runs codegen + supportedBrowsers via predev)
+pnpm gql:generate:watch # Run in parallel with dev to regenerate types on schema changes (requires infisical login)
 ```
 
 Add a note after the commands block:

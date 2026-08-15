@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { canonicalUrl } from "@utils/helpers";
+import { describe, expect, it } from "vitest";
 
 describe("canonicalUrl", () => {
   const site = new URL("https://berliner-schnauze.wtf");

@@ -14,12 +14,12 @@ Technische Commit-Listen aus CHANGELOG.md oder GitHub-PRs in verständliche, nut
 
 Der Skill nimmt ein optionales Argument, das den Modus bestimmt:
 
-| Argument | Verhalten |
-|---|---|
-| *(leer)* oder `latest` | Changelog für die neueste Version in CHANGELOG.md schreiben |
-| `x.y.z` (z. B. `3.41.0`) | Changelog für genau diese Version schreiben |
-| `aufholen` | Alle fehlenden Changelogs nachziehen (siehe unten) |
-| `update` | Bestehende Changelog-Dateien ans aktuelle Schema anpassen (siehe unten) |
+| Argument                 | Verhalten                                                               |
+| ------------------------ | ----------------------------------------------------------------------- |
+| _(leer)_ oder `latest`   | Changelog für die neueste Version in CHANGELOG.md schreiben             |
+| `x.y.z` (z. B. `3.41.0`) | Changelog für genau diese Version schreiben                             |
+| `aufholen`               | Alle fehlenden Changelogs nachziehen (siehe unten)                      |
+| `update`                 | Bestehende Changelog-Dateien ans aktuelle Schema anpassen (siehe unten) |
 
 ### Modus `aufholen`
 
@@ -49,14 +49,14 @@ Für den Fall, dass sich das Schema geändert hat (Frontmatter-Felder, Titel-Reg
 
 Technische Scopes auf nutzersichtbare Themen abbilden:
 
-| Technische Scopes | Nutzerfreundliche Gruppe |
-|---|---|
-| `game`, `bon` | Spiel-Bereich (z. B. "Berliner oder Nicht") |
-| `word-page`, `word-*`, `component` | Wort-Detailseite |
-| `toast` | Hinweis-Meldungen |
-| `pwa`, `sw` | App-Verhalten / Updates |
-| `a11y`, `seo`, `styles`, `build` | "Verbesserungen im Hintergrund" |
-| `dropdown`, `tooltip` | Bedienelemente |
+| Technische Scopes                  | Nutzerfreundliche Gruppe                    |
+| ---------------------------------- | ------------------------------------------- |
+| `game`, `bon`                      | Spiel-Bereich (z. B. "Berliner oder Nicht") |
+| `word-page`, `word-*`, `component` | Wort-Detailseite                            |
+| `toast`                            | Hinweis-Meldungen                           |
+| `pwa`, `sw`                        | App-Verhalten / Updates                     |
+| `a11y`, `seo`, `styles`, `build`   | "Verbesserungen im Hintergrund"             |
+| `dropdown`, `tooltip`              | Bedienelemente                              |
 
 Commits ohne sichtbare Nutzerwirkung (`test`, `ci`, `docs`, `fix: formatting`) **weglassen**.
 
@@ -86,6 +86,7 @@ description: "[1 Satz Zusammenfassung — erscheint auf der Übersichtsseite /ch
 ---
 
 ## [Hauptthema 2]
+
 ...
 
 ---
@@ -97,11 +98,11 @@ description: "[1 Satz Zusammenfassung — erscheint auf der Übersichtsseite /ch
 
 **Frontmatter-Felder:**
 
-| Feld | Inhalt |
-|---|---|
-| `version` | Versionsnummer als String, z. B. `"3.35.0"` (kein `v`-Prefix) |
-| `releaseDate` | ISO-Datum, z. B. `"2026-06-27"` |
-| `title` | Individueller Aufhänger pro Release — siehe **Titel** unten |
+| Feld          | Inhalt                                                                           |
+| ------------- | -------------------------------------------------------------------------------- |
+| `version`     | Versionsnummer als String, z. B. `"3.35.0"` (kein `v`-Prefix)                    |
+| `releaseDate` | ISO-Datum, z. B. `"2026-06-27"`                                                  |
+| `title`       | Individueller Aufhänger pro Release — siehe **Titel** unten                      |
 | `description` | 1 kurzer Satz für die Übersichtsseite — keine technischen Details, Nutzersprache |
 
 ## Titel

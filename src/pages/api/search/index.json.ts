@@ -19,7 +19,11 @@ function extractWordTypes(wordTags: unknown): string[] {
   // Collect all type arrays, flatten, deduplicate
   return Array.from(
     new Set(
-      tagObjs.flatMap((obj) => (obj && typeof obj === "object" ? (Object.values(obj as Record<string, string[]>).flat() as string[]) : [])),
+      tagObjs.flatMap((obj) =>
+        obj && typeof obj === "object"
+          ? (Object.values(obj as Record<string, string[]>).flat() as string[])
+          : [],
+      ),
     ),
   );
 }

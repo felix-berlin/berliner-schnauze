@@ -199,9 +199,7 @@ import Component from "@components/Component.vue";
 describe("Component", () => {
   it("should render correctly", () => {
     const wrapper = mount(Component, {
-      props: {
-        /* ... */
-      },
+      props: {/* ... */},
     });
     expect(wrapper.text()).toContain("expected text");
   });

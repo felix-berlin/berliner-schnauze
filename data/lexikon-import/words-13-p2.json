@@ -17,7 +17,10 @@
     "article": "die",
     "translations": ["Anfang (in der Wendung »von der Pieke auf«)"],
     "examples": [
-      { "example": "Von der Pieke auf lernen.", "explanation": "Von Anfang an und gründlich. (Picke = Spitzhacke)" }
+      {
+        "example": "Von der Pieke auf lernen.",
+        "explanation": "Von Anfang an und gründlich. (Picke = Spitzhacke)"
+      }
     ],
     "themen": []
   },
@@ -39,7 +42,10 @@
     "article": "der",
     "translations": ["Ton (»nich mehr Piep sagen können«)", "Vogel (»’n Piep haben«)"],
     "examples": [
-      { "example": "Er kann nich mehr Piep sagen.", "explanation": "Keinen Ton mehr herausbringen." },
+      {
+        "example": "Er kann nich mehr Piep sagen.",
+        "explanation": "Keinen Ton mehr herausbringen."
+      },
       { "example": "Der hat’n Piep.", "explanation": "Der hat einen Vogel, der spinnt." }
     ],
     "themen": []
@@ -47,9 +53,7 @@
   {
     "word": "piepe",
     "translations": ["egal"],
-    "examples": [
-      { "example": "Dit is ma piepe.", "explanation": "Das ist mir völlig egal." }
-    ],
+    "examples": [{ "example": "Dit is ma piepe.", "explanation": "Das ist mir völlig egal." }],
     "infoText": "Niederdeutsch Piepe, ursprünglich Halm- oder Weidenpfeife.",
     "themen": []
   },
@@ -77,9 +81,7 @@
     "word": "Piepmatz",
     "article": "der",
     "translations": ["Vogel"],
-    "examples": [
-      { "example": "Der hat ’nen Piepmatz.", "explanation": "Er ist verrückt." }
-    ],
+    "examples": [{ "example": "Der hat ’nen Piepmatz.", "explanation": "Er ist verrückt." }],
     "infoText": "Eigentlich der Adler auf der Münze.",
     "themen": []
   },
@@ -168,9 +170,7 @@
     "word": "Pinne",
     "article": "die",
     "translations": ["kleiner Nagel, Stift", "Lüge"],
-    "examples": [
-      { "example": "Pinn uns nich wat vor.", "explanation": "Lüg uns nicht an." }
-    ],
+    "examples": [{ "example": "Pinn uns nich wat vor.", "explanation": "Lüg uns nicht an." }],
     "infoText": "Graf Pinne ist ein Sinnbild für den Schlemmer.",
     "themen": []
   },
@@ -296,7 +296,10 @@
     "article": "die",
     "translations": ["großer Ärger (in der Wendung »sich die Platze ärgern«)"],
     "examples": [
-      { "example": "Da kann man sich ja die Platze ärgern!", "explanation": "Sich ärgern, bis man platzt." }
+      {
+        "example": "Da kann man sich ja die Platze ärgern!",
+        "explanation": "Sich ärgern, bis man platzt."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
@@ -304,9 +307,7 @@
     "word": "Plautze",
     "article": "die",
     "translations": ["Bauch"],
-    "examples": [
-      { "example": "Sich die Plauze vollhau’n.", "explanation": "Viel essen." }
-    ],
+    "examples": [{ "example": "Sich die Plauze vollhau’n.", "explanation": "Viel essen." }],
     "infoText": "Von sorbisch pluca = Lunge.",
     "themen": ["koerper", "essen-trinken"]
   },
@@ -522,9 +523,7 @@
   {
     "word": "Posen",
     "translations": ["Federn", "Bett (»inne Posen gehen«)"],
-    "examples": [
-      { "example": "Inne Posen jeh’n.", "explanation": "Ins Bett gehen." }
-    ],
+    "examples": [{ "example": "Inne Posen jeh’n.", "explanation": "Ins Bett gehen." }],
     "infoText": "Von Pose = Federkiel, Schreibfeder, Bettfeder.",
     "themen": ["alltag-wohnen"]
   },
@@ -586,9 +585,7 @@
   {
     "word": "präpeln",
     "translations": ["essen"],
-    "examples": [
-      { "example": "Vor sich hinpräpeln.", "explanation": "Etwas vor sich hintun." }
-    ],
+    "examples": [{ "example": "Vor sich hinpräpeln.", "explanation": "Etwas vor sich hintun." }],
     "themen": ["essen-trinken"]
   },
   {
@@ -596,7 +593,10 @@
     "article": "der",
     "translations": ["exponierte Stelle (in der Wendung)"],
     "examples": [
-      { "example": "Ick sitz hier wie uff’m Präsentierteller.", "explanation": "Allen Blicken preisgegeben." }
+      {
+        "example": "Ick sitz hier wie uff’m Präsentierteller.",
+        "explanation": "Allen Blicken preisgegeben."
+      }
     ],
     "themen": []
   },
@@ -635,9 +635,7 @@
   {
     "word": "Pröppke",
     "translations": ["behaglich (in der Wendung »wie Pröppke dasitzen«)"],
-    "examples": [
-      { "example": "Der sitzt da wie Pröppke.", "explanation": "Er sitzt behaglich." }
-    ],
+    "examples": [{ "example": "Der sitzt da wie Pröppke.", "explanation": "Er sitzt behaglich." }],
     "themen": []
   },
   {
@@ -677,7 +675,10 @@
     "article": "die",
     "translations": ["Gebiss (in der Redensart)"],
     "examples": [
-      { "example": "Du brauchst ja nich deine Prothese zu fletschen!", "explanation": "Du brauchst nicht zu lachen." }
+      {
+        "example": "Du brauchst ja nich deine Prothese zu fletschen!",
+        "explanation": "Du brauchst nicht zu lachen."
+      }
     ],
     "themen": ["koerper"]
   },
@@ -721,7 +722,10 @@
     "word": "puckern",
     "translations": ["rhythmisch klopfen"],
     "examples": [
-      { "example": "Et puckert und muckert.", "explanation": "Etwas macht sich in regelmäßigen Abständen bemerkbar, z.B. Kopfschmerzen." }
+      {
+        "example": "Et puckert und muckert.",
+        "explanation": "Etwas macht sich in regelmäßigen Abständen bemerkbar, z.B. Kopfschmerzen."
+      }
     ],
     "themen": ["koerper"]
   },
@@ -761,9 +765,7 @@
   {
     "word": "pupen",
     "translations": ["prahlen"],
-    "examples": [
-      { "example": "Der pupt aus der Schnauze.", "explanation": "Er stößt auf." }
-    ],
+    "examples": [{ "example": "Der pupt aus der Schnauze.", "explanation": "Er stößt auf." }],
     "themen": []
   },
   {
@@ -775,7 +777,10 @@
     "word": "Puppenlappen",
     "translations": ["Stofflappen und Flicken zum Spielen"],
     "examples": [
-      { "example": "Dir hau ick zu Puppenlappen!", "explanation": "Jemanden schlagen, dass seine Kleidung in Fetzen hängt." },
+      {
+        "example": "Dir hau ick zu Puppenlappen!",
+        "explanation": "Jemanden schlagen, dass seine Kleidung in Fetzen hängt."
+      },
       { "example": "Der friert zu Puppenlappen.", "explanation": "Er zittert vor Kälte." }
     ],
     "themen": []

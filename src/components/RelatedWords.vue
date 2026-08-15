@@ -25,11 +25,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { routeToWord } from "@utils/helpers.ts";
-import { useContentTracking } from "@composables/useContentTracking";
-
 import type { WordRef } from "@utils/wordHelper";
+
+import { useContentTracking } from "@composables/useContentTracking";
+import { routeToWord } from "@utils/helpers.ts";
+import { ref } from "vue";
 
 interface RelatedWordsProps {
   numberOfWords?: number;

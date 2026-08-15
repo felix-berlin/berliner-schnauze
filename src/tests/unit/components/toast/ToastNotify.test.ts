@@ -1,8 +1,8 @@
 import ToastNotify from "@components/toast/ToastNotify.vue";
 import { removeToastById } from "@stores/toastNotify.ts";
 import { mount, type VueWrapper } from "@vue/test-utils";
-import { ref } from "vue";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { ref } from "vue";
 
 const mockIsSwiping = ref(false);
 
@@ -73,13 +73,17 @@ describe("ToastNotify.vue", () => {
   });
 
   it("sets role=alert and aria-live=assertive for error status", () => {
-    const wrapper = mountToast(ToastNotify, { props: { id: "e", message: "Err", status: "error" } });
+    const wrapper = mountToast(ToastNotify, {
+      props: { id: "e", message: "Err", status: "error" },
+    });
     expect(wrapper.find(".c-toast-notify").attributes("role")).toBe("alert");
     expect(wrapper.find(".c-toast-notify").attributes("aria-live")).toBe("assertive");
   });
 
   it("sets role=status and aria-live=polite for non-error status", () => {
-    const wrapper = mountToast(ToastNotify, { props: { id: "s", message: "Ok", status: "success" } });
+    const wrapper = mountToast(ToastNotify, {
+      props: { id: "s", message: "Ok", status: "success" },
+    });
     expect(wrapper.find(".c-toast-notify").attributes("role")).toBe("status");
     expect(wrapper.find(".c-toast-notify").attributes("aria-live")).toBe("polite");
   });
@@ -130,7 +134,9 @@ describe("ToastNotify.vue", () => {
     });
 
     it("pauses timer on mouseenter, resumes on mouseleave", async () => {
-      const wrapper = mountToast(ToastNotify, { props: { id: "t2", message: "hi", timeout: 3000 } });
+      const wrapper = mountToast(ToastNotify, {
+        props: { id: "t2", message: "hi", timeout: 3000 },
+      });
       vi.advanceTimersByTime(1000);
       await wrapper.find(".c-toast-notify").trigger("mouseenter");
       vi.advanceTimersByTime(5000); // would have expired — timer paused
@@ -141,7 +147,9 @@ describe("ToastNotify.vue", () => {
     });
 
     it("pauses timer on focusin, resumes on focusout", async () => {
-      const wrapper = mountToast(ToastNotify, { props: { id: "t3", message: "hi", timeout: 2000 } });
+      const wrapper = mountToast(ToastNotify, {
+        props: { id: "t3", message: "hi", timeout: 2000 },
+      });
       await wrapper.find(".c-toast-notify").trigger("focusin");
       vi.advanceTimersByTime(5000);
       expect(removeToastById).not.toHaveBeenCalled();
@@ -157,7 +165,9 @@ describe("ToastNotify.vue", () => {
     });
 
     it("resumeTimer returns early when remaining is exhausted to 0 (covers line 106 remaining<=0 branch)", async () => {
-      const wrapper = mountToast(ToastNotify, { props: { id: "t5", message: "hi", timeout: 1000 } });
+      const wrapper = mountToast(ToastNotify, {
+        props: { id: "t5", message: "hi", timeout: 1000 },
+      });
       // Advance full timeout — timer fires and calls dismiss once; timerStart still holds start value
       vi.advanceTimersByTime(1000);
       // mouseenter → pauseTimer: remaining = max(0, 1000 - elapsed=1000) = 0, timerStart reset to 0
@@ -172,7 +182,9 @@ describe("ToastNotify.vue", () => {
 
   it("renders warning status icon component when status is warning (covers line 80 factory branch)", async () => {
     const { flushPromises } = await import("@vue/test-utils");
-    mountToast(ToastNotify, { props: { id: "warn-1", message: "Warning!", status: "warning", showStatusIcon: true } });
+    mountToast(ToastNotify, {
+      props: { id: "warn-1", message: "Warning!", status: "warning", showStatusIcon: true },
+    });
     await flushPromises();
     // The warning defineAsyncComponent factory is invoked on render — coverage is the goal
     expect(true).toBe(true);

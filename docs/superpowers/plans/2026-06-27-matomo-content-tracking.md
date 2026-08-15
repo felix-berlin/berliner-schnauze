@@ -5,6 +5,7 @@
 **Vorbedingung erfüllt**: BON Event Tracking (Game Started/Over/Resumed/Highscore/Streak/Share/WordExplored) wurde bereits implementiert — commit `bb0c07f4` auf `feature/more-word-details`.
 
 **Ausgangslage**:
+
 - `astro-matomo` Integration aktiv mit `viewTransition.contentElement: "main"` — re-scannt Inhalte bei Astro-Navigationen
 - `SingleWord.vue` hat rudimentäres Content Tracking (fehlt `data-content-target`)
 - Alle anderen Komponenten: kein Content Tracking
@@ -35,19 +36,19 @@
   data-content-name="Eindeutiger Name"
   data-content-piece="Spezifisches Inhaltselement"
   data-content-target="/ziel-url"
->
+></div>
 ```
 
 ```ts
 // Für dynamisch gemountete Vue-Islands (nach onMounted)
-_paq.push(['trackContentImpressionsWithinNode', domElement])
+_paq.push(["trackContentImpressionsWithinNode", domElement]);
 
 // Vollständig manuell (wenn kein DOM-Zugriff)
-_paq.push(['trackContentImpression', name, piece, target])
-_paq.push(['trackContentInteraction', 'click', name, piece, target])
+_paq.push(["trackContentImpression", name, piece, target]);
+_paq.push(["trackContentInteraction", "click", name, piece, target]);
 
 // Debug
-_paq.push(['logAllContentBlocksOnPage'])
+_paq.push(["logAllContentBlocksOnPage"]);
 ```
 
 **Wie `astro-matomo` Content Tracking handhabt** (Quelle: [matomo.ts](https://github.com/felix-berlin/astro-matomo/blob/main/packages/astro-matomo/src/matomo.ts)):
@@ -80,10 +81,11 @@ Wichtige Konsequenzen:
 ### Tasks
 
 1. **`analytics.ts`**: `trackContentImpressionsWithinNode(el: Element): void` ergänzen
+
    ```ts
    export function trackContentImpressionsWithinNode(el: Element): void {
-     if (!isBrowser()) return
-     window._paq.push(['trackContentImpressionsWithinNode', el])
+     if (!isBrowser()) return;
+     window._paq.push(["trackContentImpressionsWithinNode", el]);
    }
    ```
 
@@ -92,23 +94,24 @@ Wichtige Konsequenzen:
    Impression erst beim Eintreten in den Viewport feuern — nicht bei `onMounted`. Viele Kandidaten (RelatedWords, WordAnagrams, WordAlphabetNav, BonCard, Footer) liegen unterhalb des Folds. Ein `onMounted`-Aufruf würde Impressionen für Inhalte zählen, die der User nie gesehen hat.
 
    ```ts
-   import { useIntersectionObserver } from '@vueuse/core'
-   import type { Ref } from 'vue'
-   import { trackContentImpressionsWithinNode } from '@utils/analytics'
+   import { useIntersectionObserver } from "@vueuse/core";
+   import type { Ref } from "vue";
+   import { trackContentImpressionsWithinNode } from "@utils/analytics";
 
    export function useContentTracking(el: Ref<Element | null>) {
      const { stop } = useIntersectionObserver(el, ([entry]) => {
        if (entry.isIntersecting && el.value) {
-         trackContentImpressionsWithinNode(el.value)
-         stop() // Impression nur einmal zählen
+         trackContentImpressionsWithinNode(el.value);
+         stop(); // Impression nur einmal zählen
        }
-     })
+     });
    }
    ```
 
    `useIntersectionObserver` ist bereits in `@vueuse/core` vorhanden (im Projekt verfügbar, kein neues Package nötig).
 
 ### Verifikation
+
 ```bash
 grep -n "trackContentImpressionsWithinNode" src/utils/analytics.ts
 grep -n "useContentTracking" src/composable/useContentTracking.ts
@@ -128,18 +131,14 @@ pnpm typechecking
 Im `<article>`-Root (aktuell Zeile 2–11): `data-content-target` mit der Word-URL binden.
 
 ```html
-<article
-  data-track-content
-  data-content-name="word"
-  :data-content-target="wordUrl"
-  ...
->
+<article data-track-content data-content-name="word" :data-content-target="wordUrl" ...></article>
 ```
 
 - `wordUrl` = relativer Pfad zum Wort (z.B. `/wort/kiez`) — aus `source.slug` oder äquivalentem Prop ableiten
 - `data-content-piece` bleibt: `:data-content-piece="source.wordProperties?.berlinerisch"`
 
 ### Verifikation
+
 ```bash
 grep -n "data-content-target" src/components/word/SingleWord.vue
 # Muss eine Bindung zeigen, nicht leer
@@ -162,7 +161,7 @@ Für `.astro`-Dateien reichen HTML-Attribute — kein JS-Aufruf nötig, da `astr
   data-content-name="Game CTA"
   data-content-piece="Berliner oder Nicht spielen"
   data-content-target="/berliner-oder-nicht"
->
+></div>
 ```
 
 ### 3b: FactCard.astro
@@ -188,9 +187,9 @@ Für `.astro`-Dateien reichen HTML-Attribute — kein JS-Aufruf nötig, da `astr
 <a
   data-track-content
   data-content-name="Book Recommendation"
-  data-content-piece={book.title}
-  data-content-target={book.href}
->
+  data-content-piece="{book.title}"
+  data-content-target="{book.href}"
+></a>
 ```
 
 ### 3d: WordAlphabetNav.astro
@@ -222,9 +221,9 @@ Sektion "Buchstabenspiele" mit Anagramm-Links. Misst, ob User verwandte Wörter 
 <section
   data-track-content
   data-content-name="Word Anagrams"
-  data-content-piece={wordName}
+  data-content-piece="{wordName}"
   data-content-target="#"
->
+></section>
 ```
 
 **Anti-Pattern**: `data-content-target` nicht leer lassen — `"#"` als Fallback setzen, da Interaktionen auf Kinder-Links trotzdem getrackt werden.
@@ -240,9 +239,9 @@ Sektion "Ähnlich geschrieben" mit Links zu ähnlich geschriebenen Wörtern.
 <section
   data-track-content
   data-content-name="Similar Spelling"
-  data-content-piece={wordName}
+  data-content-piece="{wordName}"
   data-content-target="#"
->
+></section>
 ```
 
 ### 3g: WordHero.astro
@@ -275,13 +274,14 @@ Nur den Funding/App-Install-Bereich im Footer tracken, nicht den gesamten Footer
   data-track-content
   data-content-name="Footer Funding CTA"
   data-content-piece="Projekt unterstützen"
-  data-content-target={fundingUrl}
->
+  data-content-target="{fundingUrl}"
+></div>
 ```
 
 Erst Datei lesen um den genauen Container für Funding-Links zu identifizieren.
 
 ### Verifikation Phase 3
+
 ```bash
 grep -rn "data-track-content" src/components/**/*.astro src/pages/**/*.astro
 # Muss GameCtaCard, FactCard, BookRecommendations zeigen
@@ -309,11 +309,11 @@ Vue-Islands werden **nach** dem initialen Matomo-Scan gemountet → `useContentT
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useContentTracking } from '@composables/useContentTracking'
+import { ref } from "vue";
+import { useContentTracking } from "@composables/useContentTracking";
 
-const root = ref<HTMLElement | null>(null)
-useContentTracking(root)
+const root = ref<HTMLElement | null>(null);
+useContentTracking(root);
 </script>
 ```
 
@@ -370,18 +370,16 @@ Pattern: Wie `AlertBanner.vue` in Phase 4b — Composable-Pattern + `data-conten
   >
     <!-- ... -->
     <!-- Submit-Button: ignoreinteraction, da trackEvent bereits feuert -->
-    <button type="submit" data-content-ignoreinteraction>
-      Wort einreichen
-    </button>
+    <button type="submit" data-content-ignoreinteraction>Wort einreichen</button>
   </form>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useContentTracking } from '@composables/useContentTracking'
+import { ref } from "vue";
+import { useContentTracking } from "@composables/useContentTracking";
 
-const root = ref<HTMLFormElement | null>(null)
-useContentTracking(root)
+const root = ref<HTMLFormElement | null>(null);
+useContentTracking(root);
 </script>
 ```
 
@@ -405,11 +403,11 @@ Einfacher Discovery-CTA. Impression = Button wurde gesehen, Interaction = Klick.
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useContentTracking } from '@composables/useContentTracking'
+import { ref } from "vue";
+import { useContentTracking } from "@composables/useContentTracking";
 
-const root = ref<HTMLAnchorElement | null>(null)
-useContentTracking(root)
+const root = ref<HTMLAnchorElement | null>(null);
+useContentTracking(root);
 </script>
 ```
 
@@ -429,12 +427,14 @@ Das Dropdown-Menü mit Game-Link, Wort-Vorschlag, Word-Index und Settings. Conte
     data-content-name="Main Menu"
     data-content-piece="Navigation"
     data-content-target="#"
-  >
+  ></div>
+</template>
 ```
 
 **Hinweis**: `data-content-target="#"` da das Menü mehrere Ziel-Links hat. Matomo trackt den tatsächlich geklickten `href`-Link als Interaction-Target automatisch.
 
 ### Verifikation Phase 4
+
 ```bash
 grep -rn "useContentTracking" src/components/
 # Muss WordOfTheDay, AlertBanner, InstallApp, WordSuggestHint zeigen
@@ -468,23 +468,24 @@ Dieses Vue-Island wird via `client:only="vue"` auf `/games/berliner-oder-nicht/s
     data-content-name="BON Share Result"
     :data-content-piece="contentPiece"
     data-content-target="/games/berliner-oder-nicht"
-  >
+  ></div>
+</template>
 ```
 
 In `<script setup>`:
 
 ```ts
-import { ref, computed } from 'vue'
-import { useContentTracking } from '@composables/useContentTracking'
+import { ref, computed } from "vue";
+import { useContentTracking } from "@composables/useContentTracking";
 
-const root = ref<HTMLElement | null>(null)
-useContentTracking(root)
+const root = ref<HTMLElement | null>(null);
+useContentTracking(root);
 
 const contentPiece = computed(() =>
   payload.value
-    ? `Score ${payload.value.score}${payload.value.playerName ? ` – ${payload.value.playerName}` : ''}`
-    : 'Spielergebnis'
-)
+    ? `Score ${payload.value.score}${payload.value.playerName ? ` – ${payload.value.playerName}` : ""}`
+    : "Spielergebnis",
+);
 ```
 
 **Messwert**: Impression = jemand sieht ein geteiltes Ergebnis; Interaction = Klick auf „Selbst spielen" → zeigt Share-Funnel-Conversion.
@@ -502,6 +503,7 @@ const contentPiece = computed(() =>
 - `data-content-ignoreinteraction` NICHT setzen — Klick-Interaktionen sollen erfasst werden
 
 ### Verifikation Phase 5
+
 ```bash
 grep -rn "data-track-content" src/components/word/ src/components/games/
 pnpm test:unit
@@ -515,7 +517,7 @@ pnpm test:unit
 
 ```js
 // In Browser-Konsole auf der laufenden App
-_paq.push(['logAllContentBlocksOnPage'])
+_paq.push(["logAllContentBlocksOnPage"]);
 // Muss alle implementierten Blöcke listen
 ```
 
@@ -585,17 +587,17 @@ pnpm typechecking
 
 Diese wurden geprüft und explizit NICHT in den Plan aufgenommen:
 
-| Komponente | Grund |
-| ---------- | ----- |
-| `ImageGallery.astro` | Hat bereits `trackEvent('Lightbox', …)` — Content Tracking redundant |
-| `SearchModalTrigger.vue` | Hat bereits `trackEvent('Search', …)` — redundant |
-| `WordOptionDropdown.vue` | Hat 3× `trackEvent` — Content Tracking würde Konflikte erzeugen |
-| `SocialList.vue` | Externe Klicks via Referral-Analytics besser messbar |
-| `AudioPlayerList.vue` | Audio-Plays sind kein Link-CTA, kein sinnvoller `data-content-target` |
-| `CookieConsent.vue` | Einzelner Button, Event Tracking ausreichend |
+| Komponente                                   | Grund                                                                       |
+| -------------------------------------------- | --------------------------------------------------------------------------- |
+| `ImageGallery.astro`                         | Hat bereits `trackEvent('Lightbox', …)` — Content Tracking redundant        |
+| `SearchModalTrigger.vue`                     | Hat bereits `trackEvent('Search', …)` — redundant                           |
+| `WordOptionDropdown.vue`                     | Hat 3× `trackEvent` — Content Tracking würde Konflikte erzeugen             |
+| `SocialList.vue`                             | Externe Klicks via Referral-Analytics besser messbar                        |
+| `AudioPlayerList.vue`                        | Audio-Plays sind kein Link-CTA, kein sinnvoller `data-content-target`       |
+| `CookieConsent.vue`                          | Einzelner Button, Event Tracking ausreichend                                |
 | `AppSettings.vue` / `AppSettingsNavCard.vue` | Settings-Seiten haben anderes User-Intent, Conversion-Funnel nicht relevant |
-| `AppSettingsNotifications.vue` | Notification-Permission hat eigenes `trackEvent` in Store |
-| `PwaCacheOverview.vue` | Technische UI, kein Content-Discovery-Funnel |
-| `MainHeader.vue` | Zu breit; Kinder-Komponenten (Menu, Search) tracken gezielter |
-| `ColorModeToggle.vue` | Settings-Toggle, kein Content-CTA |
-| `ScrollToTop.vue` | Utility, kein Content |
+| `AppSettingsNotifications.vue`               | Notification-Permission hat eigenes `trackEvent` in Store                   |
+| `PwaCacheOverview.vue`                       | Technische UI, kein Content-Discovery-Funnel                                |
+| `MainHeader.vue`                             | Zu breit; Kinder-Komponenten (Menu, Search) tracken gezielter               |
+| `ColorModeToggle.vue`                        | Settings-Toggle, kein Content-CTA                                           |
+| `ScrollToTop.vue`                            | Utility, kein Content                                                       |

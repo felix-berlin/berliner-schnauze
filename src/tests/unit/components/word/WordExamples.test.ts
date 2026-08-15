@@ -22,7 +22,9 @@ describe("WordExamples.vue", () => {
   it("renders wrapper when a single example is provided", () => {
     const wrapper = mount(WordExamples, {
       props: {
-        examples: [{ example: "Det is keen Zufall.", exampleExplanation: null, exampleAudio: null }],
+        examples: [
+          { example: "Det is keen Zufall.", exampleExplanation: null, exampleAudio: null },
+        ],
       },
     });
     expect(wrapper.find(".c-word-list__example-wrapper").exists()).toBe(true);
@@ -31,7 +33,9 @@ describe("WordExamples.vue", () => {
   it("renders single example text", () => {
     const wrapper = mount(WordExamples, {
       props: {
-        examples: [{ example: "Ick bin een Berliner.", exampleExplanation: null, exampleAudio: null }],
+        examples: [
+          { example: "Ick bin een Berliner.", exampleExplanation: null, exampleAudio: null },
+        ],
       },
     });
     expect(wrapper.find(".c-word-list__example").text()).toBe("Ick bin een Berliner.");
@@ -57,7 +61,9 @@ describe("WordExamples.vue", () => {
   it("does not render explanation element when exampleExplanation is absent", () => {
     const wrapper = mount(WordExamples, {
       props: {
-        examples: [{ example: "Ick bin een Berliner.", exampleExplanation: null, exampleAudio: null }],
+        examples: [
+          { example: "Ick bin een Berliner.", exampleExplanation: null, exampleAudio: null },
+        ],
       },
     });
     expect(wrapper.find(".c-word-list__example-explanation").exists()).toBe(false);
@@ -126,7 +132,13 @@ describe("WordExamples.vue", () => {
   it("renders AudioPlayerList when single example has exampleAudio", async () => {
     const wrapper = mount(WordExamples, {
       props: {
-        examples: [{ example: "Test.", exampleExplanation: null, exampleAudio: [{ url: "audio.mp3", label: "" }] as any }],
+        examples: [
+          {
+            example: "Test.",
+            exampleExplanation: null,
+            exampleAudio: [{ url: "audio.mp3", label: "" }] as any,
+          },
+        ],
       },
     });
     await flushPromises();
@@ -137,7 +149,11 @@ describe("WordExamples.vue", () => {
     const wrapper = mount(WordExamples, {
       props: {
         examples: [
-          { example: "Erster.", exampleExplanation: null, exampleAudio: [{ url: "a.mp3", label: "" }] as any },
+          {
+            example: "Erster.",
+            exampleExplanation: null,
+            exampleAudio: [{ url: "a.mp3", label: "" }] as any,
+          },
           { example: "Zweiter.", exampleExplanation: null, exampleAudio: null },
         ],
       },

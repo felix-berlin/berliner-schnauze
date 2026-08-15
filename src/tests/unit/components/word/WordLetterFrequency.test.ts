@@ -1,12 +1,14 @@
 // @vitest-environment node
 import { describe, expect, it, beforeAll } from "vitest";
+
 import { createAstroRender } from "../../helpers";
 
 describe("WordLetterFrequency.astro", () => {
   let render: (props: Record<string, unknown>) => Promise<string>;
 
   beforeAll(async () => {
-    const { default: WordLetterFrequency } = await import("@components/word/WordLetterFrequency.astro");
+    const { default: WordLetterFrequency } =
+      await import("@components/word/WordLetterFrequency.astro");
     render = await createAstroRender(WordLetterFrequency);
   }, 30_000);
 

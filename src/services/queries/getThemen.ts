@@ -1,10 +1,10 @@
-import { graphql } from "@/gql";
-import type { GetAllBerlinerischThemenQuery } from "@/gql/graphql";
 import { wpGraphqlClient } from "@services/wpGraphqlClient";
 
-type ThemaNodes = NonNullable<
-  GetAllBerlinerischThemenQuery["berlinerischThemen"]
->["nodes"];
+import type { GetAllBerlinerischThemenQuery } from "@/gql/graphql";
+
+import { graphql } from "@/gql";
+
+type ThemaNodes = NonNullable<GetAllBerlinerischThemenQuery["berlinerischThemen"]>["nodes"];
 
 export const GetAllBerlinerischThemen = graphql(`
   query GetAllBerlinerischThemen {

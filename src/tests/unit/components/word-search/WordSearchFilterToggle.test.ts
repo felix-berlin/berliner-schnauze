@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
-import { ref } from "vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ref } from "vue";
 
 const activeFilterCountRef = ref(0);
 const mockToggle = vi.fn();

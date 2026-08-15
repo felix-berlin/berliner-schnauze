@@ -1,7 +1,7 @@
 <template>
   <div class="c-bon-result">
     <h2 ref="titleRef" tabindex="-1" class="c-bon-result__title">
-      {{ stats.playerName ? `Game Over, ${stats.playerName}` : 'Game Over' }}
+      {{ stats.playerName ? `Game Over, ${stats.playerName}` : "Game Over" }}
     </h2>
 
     <dl class="c-bon-result__stats">
@@ -21,7 +21,7 @@
         <dt class="c-bon-result__stat-label">Highscore</dt>
         <dd class="c-bon-result__stat-value">
           <TrophyIcon v-if="isNewHighScore" width="18" height="18" aria-hidden="true" />
-          {{ isNewHighScore ? 'Neuer Highscore!' : allTimeHighScore }}
+          {{ isNewHighScore ? "Neuer Highscore!" : allTimeHighScore }}
         </dd>
       </div>
     </dl>
@@ -42,11 +42,7 @@
     </a>
 
     <div class="c-bon-result__actions">
-      <button
-        v-if="canShare"
-        class="c-bon-result__share-btn"
-        @click="share"
-      >
+      <button v-if="canShare" class="c-bon-result__share-btn" @click="share">
         <Share2Icon width="18" height="18" aria-hidden="true" />
         Teilen
       </button>
@@ -59,56 +55,55 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from 'vue'
-import { useShare } from '@vueuse/core'
-import { useStore } from '@nanostores/vue'
-import { $bonStats } from '@stores/bonStats'
-import type { BonCard } from '@composables/useBon'
-import { buildShareUrl } from '@utils/bonShare'
-import { trackEvent } from '@utils/analytics'
+import type { BonCard } from "@composables/useBon";
 
-const TrophyIcon = defineAsyncComponent(() => import('virtual:icons/lucide/trophy'))
-const LightbulbIcon = defineAsyncComponent(() => import('virtual:icons/lucide/lightbulb'))
-const ExternalLinkIcon = defineAsyncComponent(() => import('virtual:icons/lucide/external-link'))
-const Share2Icon = defineAsyncComponent(() => import('virtual:icons/lucide/share-2'))
-const RefreshCwIcon = defineAsyncComponent(() => import('virtual:icons/lucide/refresh-cw'))
+import { useStore } from "@nanostores/vue";
+import { $bonStats } from "@stores/bonStats";
+import { trackEvent } from "@utils/analytics";
+import { buildShareUrl } from "@utils/bonShare";
+import { useShare } from "@vueuse/core";
+import { computed, defineAsyncComponent, ref } from "vue";
+
+const TrophyIcon = defineAsyncComponent(() => import("virtual:icons/lucide/trophy"));
+const LightbulbIcon = defineAsyncComponent(() => import("virtual:icons/lucide/lightbulb"));
+const ExternalLinkIcon = defineAsyncComponent(() => import("virtual:icons/lucide/external-link"));
+const Share2Icon = defineAsyncComponent(() => import("virtual:icons/lucide/share-2"));
+const RefreshCwIcon = defineAsyncComponent(() => import("virtual:icons/lucide/refresh-cw"));
 
 const props = defineProps<{
-  score: number
-  bestStreak: number
-  totalAnswered: number
-  correctAnswers: number
-  isNewHighScore: boolean
-  allTimeHighScore: number
-  lastCard: BonCard | null
-}>()
+  score: number;
+  bestStreak: number;
+  totalAnswered: number;
+  correctAnswers: number;
+  isNewHighScore: boolean;
+  allTimeHighScore: number;
+  lastCard: BonCard | null;
+}>();
 
 const emit = defineEmits<{
-  restart: []
-}>()
+  restart: [];
+}>();
 
-const titleRef = ref<HTMLHeadingElement | null>(null)
+const titleRef = ref<HTMLHeadingElement | null>(null);
 
 defineExpose({
   focus: () => titleRef.value?.focus(),
-})
+});
 
 const accuracyPercent = computed(() =>
-  props.totalAnswered > 0
-    ? Math.round((props.correctAnswers / props.totalAnswered) * 100)
-    : 0,
-)
+  props.totalAnswered > 0 ? Math.round((props.correctAnswers / props.totalAnswered) * 100) : 0,
+);
 
-const stats = useStore($bonStats)
-const { share: _share, isSupported: canShare } = useShare()
+const stats = useStore($bonStats);
+const { share: _share, isSupported: canShare } = useShare();
 
 function trackWordExplored() {
-  trackEvent("Game", "Word Explored", "berliner-oder-nicht")
+  trackEvent("Game", "Word Explored", "berliner-oder-nicht");
 }
 
 function share() {
-  trackEvent("Game", "Result Shared", "berliner-oder-nicht")
-  const playerName = stats.value.playerName?.trim() || undefined
+  trackEvent("Game", "Result Shared", "berliner-oder-nicht");
+  const playerName = stats.value.playerName?.trim() || undefined;
   const url = buildShareUrl({
     bestStreak: props.bestStreak,
     correctAnswers: props.correctAnswers,
@@ -116,17 +111,17 @@ function share() {
     playerName,
     score: props.score,
     totalAnswered: props.totalAnswered,
-  })
+  });
   _share({
     text: playerName
       ? `${playerName} hat ${props.score} Punkte bei „Berliner oder nicht?" 🐻`
       : `Ich hab ${props.score} Punkte bei „Berliner oder nicht?" 🐻`,
-    title: 'Berliner oder nicht?',
+    title: "Berliner oder nicht?",
     url: `${window.location.origin}${url}`,
-  }).catch(() => {})
+  }).catch(() => {});
 }
 </script>
 
 <style lang="scss">
-@use '@styles/components/berliner-oder-nicht';
+@use "@styles/components/berliner-oder-nicht";
 </style>

@@ -38,16 +38,17 @@
     "word": "Säcke",
     "translations": ["offene Tür (in der ironischen Frage)"],
     "examples": [
-      { "example": "Sach mal, haste Säcke vor de Türe?", "explanation": "Ironische Frage an jemanden, der eine Tür offen lässt." }
+      {
+        "example": "Sach mal, haste Säcke vor de Türe?",
+        "explanation": "Ironische Frage an jemanden, der eine Tür offen lässt."
+      }
     ],
     "themen": ["alltag-wohnen"]
   },
   {
     "word": "saftig",
     "translations": ["derb", "hoch (von Preisen)"],
-    "examples": [
-      { "example": "’n saft’jer Preis.", "explanation": "Ein hoher Preis." }
-    ],
+    "examples": [{ "example": "’n saft’jer Preis.", "explanation": "Ein hoher Preis." }],
     "themen": ["geld"]
   },
   {
@@ -122,7 +123,10 @@
     "translations": ["böse", "wütend"],
     "examples": [
       { "example": "Uff den bin ick janz schön sauer." },
-      { "example": "Dit kannste dir sauer kochen.", "explanation": "Das kannst du für dich behalten." }
+      {
+        "example": "Dit kannste dir sauer kochen.",
+        "explanation": "Das kannst du für dich behalten."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },
@@ -148,9 +152,7 @@
     "word": "Sause",
     "article": "die",
     "translations": ["Zechtour"],
-    "examples": [
-      { "example": "’ne Sause machen.", "explanation": "Zechen, einen trinken gehen." }
-    ],
+    "examples": [{ "example": "’ne Sause machen.", "explanation": "Zechen, einen trinken gehen." }],
     "themen": ["alkohol-kneipe", "unterhaltung-freizeit"]
   },
   {
@@ -177,7 +179,10 @@
     "article": "die",
     "translations": ["feine Kleidung (in der Wendung »sich in Schale schmeißen«)"],
     "examples": [
-      { "example": "Der hat sich in Schale jeschmiss’n.", "explanation": "Er hat sich feingemacht, schick angezogen." }
+      {
+        "example": "Der hat sich in Schale jeschmiss’n.",
+        "explanation": "Er hat sich feingemacht, schick angezogen."
+      }
     ],
     "themen": ["charakter-eigenschaften"]
   },
@@ -216,7 +221,10 @@
     "article": "die",
     "translations": ["Unternehmung (in der Wendung »zu allen Schandtaten bereit«)"],
     "examples": [
-      { "example": "Der is zu allen Schandtaten bereit.", "explanation": "Er macht gern alles mit." }
+      {
+        "example": "Der is zu allen Schandtaten bereit.",
+        "explanation": "Er macht gern alles mit."
+      }
     ],
     "themen": []
   },
@@ -262,7 +270,10 @@
     "word": "schaukeln",
     "translations": ["hinbekommen (in der Wendung »das Kind schon schaukeln«)"],
     "examples": [
-      { "example": "Wir werd’n dit Kind schon schaukeln.", "explanation": "Wir werden die Sache schon machen." }
+      {
+        "example": "Wir werd’n dit Kind schon schaukeln.",
+        "explanation": "Wir werden die Sache schon machen."
+      }
     ],
     "themen": []
   },
@@ -285,9 +296,7 @@
   {
     "word": "scheckig",
     "translations": ["krumm (in der Wendung »sich scheckig lachen«)"],
-    "examples": [
-      { "example": "Der lacht sich scheckig.", "explanation": "Er lacht sich krumm." }
-    ],
+    "examples": [{ "example": "Der lacht sich scheckig.", "explanation": "Er lacht sich krumm." }],
     "themen": ["gefuehle-emotionen"]
   },
   {
@@ -301,9 +310,7 @@
     "word": "Scheibenkleister",
     "article": "der",
     "translations": ["Scheiße (Umschreibung)"],
-    "examples": [
-      { "example": "So’n Scheibenkleister!", "explanation": "Ausruf der Verärgerung." }
-    ],
+    "examples": [{ "example": "So’n Scheibenkleister!", "explanation": "Ausruf der Verärgerung." }],
     "themen": ["gefuehle-emotionen"]
   },
   {
@@ -359,9 +366,7 @@
     "word": "Scheunendrescher",
     "article": "der",
     "translations": ["starker Esser (in der Redensart)"],
-    "examples": [
-      { "example": "Der ißt wie’n Scheunendrescher.", "explanation": "Er isst viel." }
-    ],
+    "examples": [{ "example": "Der ißt wie’n Scheunendrescher.", "explanation": "Er isst viel." }],
     "themen": ["essen-trinken"]
   },
   {
@@ -386,9 +391,7 @@
   {
     "word": "schieben",
     "translations": ["gehen", "machen"],
-    "examples": [
-      { "example": "Schieb ab!", "explanation": "Hau ab." }
-    ],
+    "examples": [{ "example": "Schieb ab!", "explanation": "Hau ab." }],
     "themen": []
   },
   {
@@ -446,7 +449,10 @@
     "translations": ["Schaufel"],
     "examples": [
       { "example": "Jemanden uff de Schippe nehm’n.", "explanation": "Ihn veralbern." },
-      { "example": "’ne Schippe ziehen.", "explanation": "Den Mund verziehen als Ausdruck des Gekränktseins." }
+      {
+        "example": "’ne Schippe ziehen.",
+        "explanation": "Den Mund verziehen als Ausdruck des Gekränktseins."
+      }
     ],
     "themen": []
   },
@@ -482,7 +488,10 @@
     "article": "das",
     "translations": ["Kragen (in der Wendung »beim Schlafittchen kriegen«)"],
     "examples": [
-      { "example": "Jemanden bei’t Schlafittchen kriejen.", "explanation": "Ihn am Rockkragen festhalten, meist um ihm die Leviten zu lesen." }
+      {
+        "example": "Jemanden bei’t Schlafittchen kriejen.",
+        "explanation": "Ihn am Rockkragen festhalten, meist um ihm die Leviten zu lesen."
+      }
     ],
     "themen": []
   },
@@ -533,7 +542,10 @@
     "article": "der",
     "translations": ["Erschöpfung, Pleite (in der Wendung »auf dem Schlauch stehen«)"],
     "examples": [
-      { "example": "Der steht auf dem Schlauch.", "explanation": "Er ist völlig erschöpft oder pleite." }
+      {
+        "example": "Der steht auf dem Schlauch.",
+        "explanation": "Er ist völlig erschöpft oder pleite."
+      }
     ],
     "themen": []
   },
@@ -582,9 +594,7 @@
     "word": "Schlitten",
     "article": "der",
     "translations": ["Motorrad", "großes Auto"],
-    "examples": [
-      { "example": "Mit dem wer’ ick Schlitten fahr’n!", "explanation": "Drohung." }
-    ],
+    "examples": [{ "example": "Mit dem wer’ ick Schlitten fahr’n!", "explanation": "Drohung." }],
     "themen": ["stadtleben"]
   },
   {
@@ -610,7 +620,10 @@
     "article": "die",
     "translations": ["Schlosshund (in der Redensart)"],
     "examples": [
-      { "example": "Er heult wie ’ne Schlössertöle.", "explanation": "Wie ein Schlosshund, also ununterbrochen und heftig." }
+      {
+        "example": "Er heult wie ’ne Schlössertöle.",
+        "explanation": "Wie ein Schlosshund, also ununterbrochen und heftig."
+      }
     ],
     "themen": ["gefuehle-emotionen"]
   },

@@ -1,5 +1,5 @@
-import { defineConfig, devices } from '@playwright/test';
-import { isAgent } from 'std-env';
+import { defineConfig, devices } from "@playwright/test";
+import { isAgent } from "std-env";
 
 /**
  * Read environment variables from file.
@@ -13,7 +13,7 @@ import { isAgent } from 'std-env';
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests/e2e',
+  testDir: "./tests/e2e",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -27,44 +27,41 @@ export default defineConfig({
    * terminal output, AI agents (detected via std-env, same signal Vitest 4.1+
    * uses for its "agent" reporter) get the minimal 'dot' reporter instead of
    * the verbose per-test 'list' output, to save tokens. */
-  reporter: [
-    ['html', { open: 'never' }],
-    [isAgent && !process.env.CI ? 'dot' : 'list'],
-  ],
+  reporter: [["html", { open: "never" }], [isAgent && !process.env.CI ? "dot" : "list"]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: 'http://localhost:4321',
+    baseURL: "http://localhost:4321",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: "on-first-retry",
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
     },
 
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
     },
 
     /* Test against mobile viewports. */
     {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
+      name: "Mobile Chrome",
+      use: { ...devices["Pixel 5"] },
     },
     {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
+      name: "Mobile Safari",
+      use: { ...devices["iPhone 12"] },
     },
 
     /* Test against branded browsers. */
@@ -83,8 +80,8 @@ export default defineConfig({
     // `astro dev` alone breaks on a fresh checkout: src/utils/supportedBrowsers.mjs
     // is a gitignored generated stub normally created by the `predev` hook, which
     // only fires for `pnpm run dev` — not when this command spawns `astro dev` directly.
-    command: 'pnpm run supportedBrowsers && pnpm exec astro dev',
-    url: 'http://localhost:4321',
+    command: "pnpm run supportedBrowsers && pnpm exec astro dev",
+    url: "http://localhost:4321",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

@@ -4,7 +4,16 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { ref, nextTick } from "vue";
 
-const { mockInit, mockStartGame, mockResumeGame, mockAnswer, mockNextCard, mockStartShake, mockStartCooldown, mockVibrate } = vi.hoisted(() => ({
+const {
+  mockInit,
+  mockStartGame,
+  mockResumeGame,
+  mockAnswer,
+  mockNextCard,
+  mockStartShake,
+  mockStartCooldown,
+  mockVibrate,
+} = vi.hoisted(() => ({
   mockInit: vi.fn(),
   mockStartGame: vi.fn(),
   mockResumeGame: vi.fn(),
@@ -70,7 +79,15 @@ vi.mock("@components/ConfettiEffect.vue", () => ({
 vi.mock("@components/games/BonCard.vue", () => ({
   default: {
     name: "BonCard",
-    props: ["word", "cardNumber", "isShaking", "lastAnswerCorrect", "isReal", "isFirstCard", "disabled"],
+    props: [
+      "word",
+      "cardNumber",
+      "isShaking",
+      "lastAnswerCorrect",
+      "isReal",
+      "isFirstCard",
+      "disabled",
+    ],
     template: "<div class='mock-bon-card'>{{ word }}</div>",
     emits: ["answer"],
     expose: ["focus"],
@@ -88,7 +105,15 @@ vi.mock("@components/games/BonHUD.vue", () => ({
 vi.mock("@components/games/BonResult.vue", () => ({
   default: {
     name: "BonResult",
-    props: ["score", "bestStreak", "totalAnswered", "correctAnswers", "isNewHighScore", "allTimeHighScore", "lastCard"],
+    props: [
+      "score",
+      "bestStreak",
+      "totalAnswered",
+      "correctAnswers",
+      "isNewHighScore",
+      "allTimeHighScore",
+      "lastCard",
+    ],
     template: "<div class='mock-bon-result' />",
     emits: ["restart"],
     expose: ["focus"],
@@ -274,7 +299,10 @@ describe("BerlinerOderNicht.vue", () => {
         ok: true,
         json: () =>
           Promise.resolve([
-            { wordProperties: { berlinerisch: "Kiez", translations: ["Neighborhood"] }, slug: "kiez" },
+            {
+              wordProperties: { berlinerisch: "Kiez", translations: ["Neighborhood"] },
+              slug: "kiez",
+            },
           ]),
       }),
     ) as unknown as typeof fetch;
@@ -417,7 +445,9 @@ describe("BerlinerOderNicht.vue", () => {
     mockCurrentCard.value = { word: "Kiez", isReal: false };
     setupMocks({ hasSeenIntro: true });
     // Make answer() transition to result phase
-    mockAnswer.mockImplementation(() => { mockPhase.value = "result"; });
+    mockAnswer.mockImplementation(() => {
+      mockPhase.value = "result";
+    });
     const wrapper = mount(BerlinerOderNicht);
     await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", false);
     await nextTick();
@@ -468,7 +498,9 @@ describe("BerlinerOderNicht.vue", () => {
         capturedShakeFn = fn as () => void;
         return { start: mockStartShake } as ReturnType<typeof useTimeoutFn>;
       })
-      .mockImplementationOnce(() => ({ start: mockStartCooldown }) as ReturnType<typeof useTimeoutFn>);
+      .mockImplementationOnce(
+        () => ({ start: mockStartCooldown }) as ReturnType<typeof useTimeoutFn>,
+      );
 
     mockPhase.value = "playing";
     mockCurrentCard.value = { word: "Kiez", isReal: true };
@@ -541,9 +573,7 @@ describe("BerlinerOderNicht.vue", () => {
   it("isEditingName watcher ?? right branch when playerName is null before watcher fires (covers line 159)", async () => {
     const statsRef = ref({ ...defaultStats, playerName: "Felix" });
     vi.mocked(useStore).mockReset();
-    vi.mocked(useStore)
-      .mockReturnValueOnce(statsRef)
-      .mockReturnValueOnce(ref(null));
+    vi.mocked(useStore).mockReturnValueOnce(statsRef).mockReturnValueOnce(ref(null));
     const wrapper = mount(BerlinerOderNicht, { attachTo: document.body });
     // Synchronously click — schedules watcher but does not flush it yet
     wrapper.find(".c-berliner-oder-nicht__player-badge").element.click();
@@ -592,7 +622,10 @@ describe("BerlinerOderNicht.vue", () => {
     mount(BerlinerOderNicht);
     await vi.runAllTimersAsync();
     expect(mockInit).toHaveBeenCalled();
-    const [realWords] = mockInit.mock.calls[mockInit.mock.calls.length - 1] as [{ translation: unknown }[], unknown];
+    const [realWords] = mockInit.mock.calls[mockInit.mock.calls.length - 1] as [
+      { translation: unknown }[],
+      unknown,
+    ];
     expect(realWords[0].translation).toBeUndefined();
   });
 });

@@ -103,7 +103,9 @@ async function main(): Promise<void> {
 
     if (newInfoText.includes("SDLS")) {
       // Marker present outside the expected "Quelle: …" line — needs a human.
-      console.log(`  ⚠ SKIP ${post.slug} (#${post.id}): unexpected info_text format, review manually`);
+      console.log(
+        `  ⚠ SKIP ${post.slug} (#${post.id}): unexpected info_text format, review manually`,
+      );
       skipped++;
       continue;
     }
@@ -139,7 +141,9 @@ async function main(): Promise<void> {
 
       const savedInfo = result.acf?.info_text ?? "";
       if (savedInfo.includes("SDLS") || !hasSourceValue(result.acf?.sources)) {
-        console.log(`  ✗ VERIFY FAILED ${post.slug}: response not as expected, check post manually`);
+        console.log(
+          `  ✗ VERIFY FAILED ${post.slug}: response not as expected, check post manually`,
+        );
         failed++;
       } else {
         updated++;

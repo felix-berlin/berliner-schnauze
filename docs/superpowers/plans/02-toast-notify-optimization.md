@@ -4,27 +4,27 @@
 
 **CSS Anchor Positioning — Baseline 2026 (Verified)**
 
-| Browser | Since | Notes |
-| --- | --- | --- |
-| Chrome/Edge | 125 (May 2024) | Full support |
-| Firefox | 147 | Enabled by default |
-| Safari | 26 (iOS 26 / macOS Tahoe) | Full support |
+| Browser     | Since                     | Notes              |
+| ----------- | ------------------------- | ------------------ |
+| Chrome/Edge | 125 (May 2024)            | Full support       |
+| Firefox     | 147                       | Enabled by default |
+| Safari      | 26 (iOS 26 / macOS Tahoe) | Full support       |
 
 Global coverage ≈ 76% (Jun 2026). Polyfill: `@oddbird/css-anchor-positioning` for older versions. **Use CSS Anchor Positioning — it is Baseline 2026.**
 
 **Verified API surface (MDN, W3C spec):**
 
-| Property / Function | Syntax | Notes |
-| --- | --- | --- |
-| `anchor-name` | `anchor-name: --my-anchor` | `<dashed-ident>`, sets element as anchor |
-| `position-anchor` | `position-anchor: --my-anchor` | Default anchor for positioned element |
-| `anchor()` | `top: anchor(bottom)` / `anchor(--name side, fallback)` | Inset value relative to anchor edge |
-| `anchor-size()` | `width: anchor-size(width)` | Dimension relative to anchor |
-| `position-area` | `position-area: top right` | 9-cell grid shorthand, alternative to `anchor()` |
-| `anchor-scope` | `anchor-scope: all` | Scopes names inside subtree (for repeated components) |
-| `@position-try` | `@position-try --name { ... }` | Named fallback position block |
-| `position-try-fallbacks` | `position-try-fallbacks: --name, flip-block` | Ordered fallback list |
-| `position-visibility` | `position-visibility: anchors-valid` | Auto-hide if anchor invalid |
+| Property / Function      | Syntax                                                  | Notes                                                 |
+| ------------------------ | ------------------------------------------------------- | ----------------------------------------------------- |
+| `anchor-name`            | `anchor-name: --my-anchor`                              | `<dashed-ident>`, sets element as anchor              |
+| `position-anchor`        | `position-anchor: --my-anchor`                          | Default anchor for positioned element                 |
+| `anchor()`               | `top: anchor(bottom)` / `anchor(--name side, fallback)` | Inset value relative to anchor edge                   |
+| `anchor-size()`          | `width: anchor-size(width)`                             | Dimension relative to anchor                          |
+| `position-area`          | `position-area: top right`                              | 9-cell grid shorthand, alternative to `anchor()`      |
+| `anchor-scope`           | `anchor-scope: all`                                     | Scopes names inside subtree (for repeated components) |
+| `@position-try`          | `@position-try --name { ... }`                          | Named fallback position block                         |
+| `position-try-fallbacks` | `position-try-fallbacks: --name, flip-block`            | Ordered fallback list                                 |
+| `position-visibility`    | `position-visibility: anchors-valid`                    | Auto-hide if anchor invalid                           |
 
 **Anti-patterns (MUST avoid):**
 
@@ -35,13 +35,13 @@ Global coverage ≈ 76% (Jun 2026). Polyfill: `@oddbird/css-anchor-positioning` 
 
 **Popover API — verified facts:**
 
-| API | Signature | Notes |
-|-----|-----------|-------|
-| `popover="manual"` | HTML attr | Multiple simultaneous popovers — correct for toasts |
-| `showPopover()` | `el.showPopover()` | Adds to top layer |
-| `hidePopover()` | `el.hidePopover()` | Removes from top layer |
-| `beforetoggle` | `ToggleEvent { oldState, newState }` | Cancelable on show only |
-| `toggle` | same shape, fires after | Not cancelable |
+| API                | Signature                            | Notes                                               |
+| ------------------ | ------------------------------------ | --------------------------------------------------- |
+| `popover="manual"` | HTML attr                            | Multiple simultaneous popovers — correct for toasts |
+| `showPopover()`    | `el.showPopover()`                   | Adds to top layer                                   |
+| `hidePopover()`    | `el.hidePopover()`                   | Removes from top layer                              |
+| `beforetoggle`     | `ToggleEvent { oldState, newState }` | Cancelable on show only                             |
+| `toggle`           | same shape, fires after              | Not cancelable                                      |
 
 **Allowed transition pattern (MDN):**
 
@@ -81,12 +81,7 @@ Render 4 invisible fixed divs — one per corner. These are the anchor roots for
 
 ```html
 <!-- One per corner, rendered in ToastNotifyContainer -->
-<div
-  v-for="corner in CORNERS"
-  :key="corner"
-  class="c-toast-corner-anchor"
-  :data-corner="corner"
-/>
+<div v-for="corner in CORNERS" :key="corner" class="c-toast-corner-anchor" :data-corner="corner" />
 ```
 
 ```scss
@@ -97,10 +92,26 @@ Render 4 invisible fixed divs — one per corner. These are the anchor roots for
   height: 0;
   pointer-events: none;
 
-  &[data-corner="top-right"]    { top: 20px;                                       right: 20px; anchor-name: --toast-corner-top-right; }
-  &[data-corner="top-left"]     { top: 20px;                                       left: 20px;  anchor-name: --toast-corner-top-left; }
-  &[data-corner="bottom-right"] { bottom: max(20px, env(safe-area-inset-bottom, 0px)); right: 20px; anchor-name: --toast-corner-bottom-right; }
-  &[data-corner="bottom-left"]  { bottom: max(20px, env(safe-area-inset-bottom, 0px)); left: 20px;  anchor-name: --toast-corner-bottom-left; }
+  &[data-corner="top-right"] {
+    top: 20px;
+    right: 20px;
+    anchor-name: --toast-corner-top-right;
+  }
+  &[data-corner="top-left"] {
+    top: 20px;
+    left: 20px;
+    anchor-name: --toast-corner-top-left;
+  }
+  &[data-corner="bottom-right"] {
+    bottom: max(20px, env(safe-area-inset-bottom, 0px));
+    right: 20px;
+    anchor-name: --toast-corner-bottom-right;
+  }
+  &[data-corner="bottom-left"] {
+    bottom: max(20px, env(safe-area-inset-bottom, 0px));
+    left: 20px;
+    anchor-name: --toast-corner-bottom-left;
+  }
 }
 ```
 
@@ -116,14 +127,11 @@ const anchorChain = computed(() => {
   const chain: Record<number, { anchorName: string; anchorSource: string }> = {};
 
   CORNERS.forEach((corner: Corner) => {
-    const group = toastStore.value.filter(
-      (t) => (t.position ?? "top-right") === corner
-    );
+    const group = toastStore.value.filter((t) => (t.position ?? "top-right") === corner);
     group.forEach((toast, index) => {
       chain[toast.id!] = {
         anchorName: `--toast-${toast.id}`,
-        anchorSource:
-          index === 0 ? `--toast-corner-${corner}` : `--toast-${group[index - 1].id}`,
+        anchorSource: index === 0 ? `--toast-corner-${corner}` : `--toast-${group[index - 1].id}`,
       };
     });
   });
@@ -146,12 +154,7 @@ const anchorStyle = computed(() => ({
 ```
 
 ```html
-<div
-  :id="`toast-${id}`"
-  popover="manual"
-  :class="[...]"
-  :style="anchorStyle"
->
+<div :id="`toast-${id}`" popover="manual" :class="[...]" :style="anchorStyle"></div>
 ```
 
 **Remove** `setPosition()`, `setDynamicPosition()`, `stylePosition` reactive object, and `initOffset` prop — CSS anchors handle all positioning.
@@ -250,7 +253,11 @@ Persistent toasts need a clear visual distinction — users must understand they
 
 ```html
 <!-- Add to template when timeout === null -->
-<span v-if="timeout === null" class="c-toast-notify__persistent-badge" aria-label="Permanent notification">
+<span
+  v-if="timeout === null"
+  class="c-toast-notify__persistent-badge"
+  aria-label="Permanent notification"
+>
   <!-- lucide: pin icon -->
 </span>
 ```
@@ -402,6 +409,7 @@ grep -n "z-index" src/styles/components/_toast-notify.scss
 ```
 
 **Verification checklist:**
+
 - [ ] `pnpm test:unit` passes (all existing tests green)
 - [ ] `pnpm lint` passes
 - [ ] `pnpm typechecking` — no new errors
@@ -417,21 +425,21 @@ pnpm test:unit
 
 **Manual test matrix:**
 
-| Scenario | Expected |
-|----------|----------|
-| Single toast `top-right` | Appears anchored to top-right corner, slides in from right |
-| Single toast `bottom-left` | Appears anchored to bottom-left corner, slides in from left |
-| 3 toasts `top-right` | Stack downward with gap via anchor chain |
-| 3 toasts `bottom-right` | Stack upward via anchor chain |
-| Remove middle toast | Next toast re-anchors to predecessor automatically, no JS restack |
-| Auto-timeout toast | Slides out correct direction, anchor chain updates |
-| Swipe-to-dismiss | Toast removed, chain updates |
-| Persistent toast (`timeout: null`) | Stays until close button clicked; pin badge visible; close button always rendered |
-| Persistent toast + `showClose: false` | Close button still renders (override) |
-| Mixed corners simultaneously | No cross-corner interference |
-| Mobile 360px | No horizontal overflow |
-| iOS safe area | Bottom corner anchors respect home bar (`env(safe-area-inset-bottom)`) |
-| Reduced motion | No translate animation; opacity fade only |
+| Scenario                              | Expected                                                                          |
+| ------------------------------------- | --------------------------------------------------------------------------------- |
+| Single toast `top-right`              | Appears anchored to top-right corner, slides in from right                        |
+| Single toast `bottom-left`            | Appears anchored to bottom-left corner, slides in from left                       |
+| 3 toasts `top-right`                  | Stack downward with gap via anchor chain                                          |
+| 3 toasts `bottom-right`               | Stack upward via anchor chain                                                     |
+| Remove middle toast                   | Next toast re-anchors to predecessor automatically, no JS restack                 |
+| Auto-timeout toast                    | Slides out correct direction, anchor chain updates                                |
+| Swipe-to-dismiss                      | Toast removed, chain updates                                                      |
+| Persistent toast (`timeout: null`)    | Stays until close button clicked; pin badge visible; close button always rendered |
+| Persistent toast + `showClose: false` | Close button still renders (override)                                             |
+| Mixed corners simultaneously          | No cross-corner interference                                                      |
+| Mobile 360px                          | No horizontal overflow                                                            |
+| iOS safe area                         | Bottom corner anchors respect home bar (`env(safe-area-inset-bottom)`)            |
+| Reduced motion                        | No translate animation; opacity fade only                                         |
 
 **Anti-pattern audit (grep — should find no results):**
 

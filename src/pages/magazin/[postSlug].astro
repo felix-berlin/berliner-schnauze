@@ -26,10 +26,12 @@ export const getStaticPaths = (async () => {
 
     const related = byDateDesc.filter((p) => p.slug && p.slug !== post.slug).slice(0, 3);
 
-    return [{
-      params: { postSlug: post.slug },
-      props: { post, related },
-    }];
+    return [
+      {
+        params: { postSlug: post.slug },
+        props: { post, related },
+      },
+    ];
   });
 }) satisfies GetStaticPaths;
 
@@ -71,51 +73,62 @@ const articleJson = () =>
   <header class='c-magazin-article__header'>
     <h1 class='c-magazin-article__title'>{post.title}</h1>
     <div class='c-magazin-article__meta'>
-      {post.date && (
-        <time class='c-magazin-article__date' datetime={post.date}>
-          {formattedDate(post.date)}
-        </time>
-      )}
-      {readingMinutes && (
-        <span class='c-magazin-article__reading-time'>{readingMinutes} Min Lesezeit</span>
-      )}
+      {
+        post.date && (
+          <time class='c-magazin-article__date' datetime={post.date}>
+            {formattedDate(post.date)}
+          </time>
+        )
+      }
+      {
+        readingMinutes && (
+          <span class='c-magazin-article__reading-time'>{readingMinutes} Min Lesezeit</span>
+        )
+      }
     </div>
-    {hasAffiliateLinks && (
-      <p class='c-magazin-article__affiliate-disclosure'>
-        Als Amazon-Partner verdiene ich an qualifizierten Verkäufen. Ich erhalte eine kleine
-        Provision — für dich bleibt der Preis gleich.
-      </p>
-    )}
-    {post.featuredImage?.node?.sourceUrl && (
-      <Picture
-        alt={post.featuredImage.node.altText ?? ''}
-        class='c-magazin-article__image c-magazin-article__image--featured'
-        formats={['avif', 'webp']}
-        height={420}
-        loading='eager'
-        src={post.featuredImage.node.sourceUrl}
-        width={800}
-      />
-    )}
+    {
+      hasAffiliateLinks && (
+        <p class='c-magazin-article__affiliate-disclosure'>
+          Als Amazon-Partner verdiene ich an qualifizierten Verkäufen. Ich erhalte eine kleine
+          Provision — für dich bleibt der Preis gleich.
+        </p>
+      )
+    }
+    {
+      post.featuredImage?.node?.sourceUrl && (
+        <Picture
+          alt={post.featuredImage.node.altText ?? ''}
+          class='c-magazin-article__image c-magazin-article__image--featured'
+          fallbackFormat='webp'
+          formats={['avif', 'webp']}
+          height={420}
+          loading='eager'
+          src={post.featuredImage.node.sourceUrl}
+          width={800}
+        />
+      )
+    }
   </header>
 
   <div class='c-magazin-article__layout'>
-    {toc.length >= 3 && (
-      <aside class='c-magazin-article__toc js-toc' aria-label='Inhalt'>
-        <p class='c-magazin-article__toc-title'>Inhalt</p>
-        <nav>
-          <ol class='c-magazin-article__toc-list'>
-            {toc.map((entry) => (
-              <li>
-                <a class='c-magazin-article__toc-link' data-toc={entry.id} href={`#${entry.id}`}>
-                  {entry.text}
-                </a>
-              </li>
-            ))}
-          </ol>
-        </nav>
-      </aside>
-    )}
+    {
+      toc.length >= 3 && (
+        <aside class='c-magazin-article__toc js-toc' aria-label='Inhalt'>
+          <p class='c-magazin-article__toc-title'>Inhalt</p>
+          <nav>
+            <ol class='c-magazin-article__toc-list'>
+              {toc.map((entry) => (
+                <li>
+                  <a class='c-magazin-article__toc-link' data-toc={entry.id} href={`#${entry.id}`}>
+                    {entry.text}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </aside>
+      )
+    }
 
     <div class='c-magazin-article__main'>
       <ArticleBlocks blocks={blocks} />
@@ -130,25 +143,27 @@ const articleJson = () =>
       <ArticleShare client:visible title={post.title ?? ''} url={`/magazin/${post.slug}`} />
     </div>
 
-    {related.length > 0 && (
-      <section class='c-magazin-article__related'>
-        <h2 class='c-magazin-article__related-title'>Noch nich' genug?</h2>
-        <ul class='c-magazin-article__related-list'>
-          {related.map((item) => (
-            <li class='c-magazin-article__related-item'>
-              <a class='c-magazin-article__related-link' href={`/magazin/${item.slug}`}>
-                <span class='c-magazin-article__related-headline'>{item.title}</span>
-                {item.date && (
-                  <time class='c-magazin-article__related-date' datetime={item.date}>
-                    {formattedDate(item.date)}
-                  </time>
-                )}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
+    {
+      related.length > 0 && (
+        <section class='c-magazin-article__related'>
+          <h2 class='c-magazin-article__related-title'>Noch nich' genug?</h2>
+          <ul class='c-magazin-article__related-list'>
+            {related.map((item) => (
+              <li class='c-magazin-article__related-item'>
+                <a class='c-magazin-article__related-link' href={`/magazin/${item.slug}`}>
+                  <span class='c-magazin-article__related-headline'>{item.title}</span>
+                  {item.date && (
+                    <time class='c-magazin-article__related-date' datetime={item.date}>
+                      {formattedDate(item.date)}
+                    </time>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
   </footer>
 
   <script set:html={articleJson()} type='application/ld+json' />

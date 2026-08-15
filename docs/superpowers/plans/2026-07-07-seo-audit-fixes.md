@@ -11,28 +11,29 @@ Jede Phase ist eigenständig in frischem Kontext ausführbar. Reihenfolge: 1→8
 
 **Erlaubte APIs / verifizierte Fakten (aus Code-Recon 2026-07-07):**
 
-| Thema | Fakt | Quelle |
-|---|---|---|
-| Critical CSS | `@playform/inline` v0.1.4 (wrappt beasties), letzter Eintrag im `integrations`-Array, **ohne Optionen** aufgerufen | `astro.config.mjs`, `package.json:119` |
-| Sitemap | `@astrojs/sitemap` mit `serialize`-Funktion, setzt `lastmod` bereits für `/wort/<slug>` via `getWordDates()` | `astro.config.mjs` (sitemap-Block), `src/services/queries/getSitemapWordDates.ts` |
-| Headers | `public/_headers` existiert (8 Zeilen: Security-Header + Content-Signal). **Keine** Cache-Control-Regeln im Repo | `public/_headers` |
-| Suchindex | `src/pages/api/search/index.json.ts:126` — `new Response(JSON.stringify(...))` **ohne Header**. URL hardcoded in `src/stores/wordList.ts:422`, `src/components/games/BerlinerOderNicht.vue:234`, `src/components/word-search/WordSearch.astro:12` + SW-Regex in `astro.config.mjs` | Recon |
-| llms.txt | Statische Datei `public/llms.txt` (handgeschrieben, 16 Zeilen). Kein Route-Code | `public/llms.txt` |
-| Wortart/NLP | Im Repo berechnet: `getWordType()` (`src/utils/wordHelper.ts:67`, compromise/nlp) + `translateNlpTags()` (`:163`). WP liefert kuratierte Typen `berlinerischWordTypes.nodes.name` — ungenutzt, auskommentiert in `src/pages/api/search/index.json.ts:51-52` | Recon |
-| Meta-Description | `src/pages/wort/[...wordSlug].astro:93-102`, hardcodierter Suffix „Mit Etymologie, Aussprache und Beispielsätzen." | Recon |
-| Examples-Feld | `wordProps.examples` (`WordPropertiesExamples`: `example`, `exampleExplanation`, `exampleAudio`); Conditional-Pattern existiert: `src/components/word/WordSectionBeispiele.astro:14` | `src/services/fragments/fragments.ts:75-83` |
-| Audio-Feld | `wordProperties.berlinerischAudio` existiert im Fragment | `fragments.ts:93-142` |
-| H1-Bug | `src/components/word/WordHero.astro:30-33` — Whitespace zwischen `</dfn>` und `<span>, {article}</span>` erzeugt „Tankstelle , die" | Recon |
-| JSON-LD Wortseite | `schemaJson()` in `src/pages/wort/[...wordSlug].astro:154-217`: DefinedTerm (161), Comment via `exampleComments` (146-152, angehängt 163), speakable (177-180), DefinedTermSet (192-199) | Recon |
-| JSON-LD Homepage | `websiteSchema` (index.astro:15-30), `organizationSchema` (32-52), Logo = SVG (41-44). PNG existiert: `/favicons/apple-touch-icon-180x180.png` | Recon |
-| Kontrast | `GameCtaCard.astro:16` → `.c-fact-card__link`, Style `src/styles/components/_fact-card.scss:45-61`, `background: var(--orange-500)` (#cf5736, Zeile 51). `--orange-600` = #b23b27 existiert (`src/styles/variables/_colors.scss:37`) | Recon |
-| CLS-Selektoren | `.o-index__image`: `src/styles/objects/_index.scss:41-49` (+ wrap 24-39); `.c-word-search-link`: `src/styles/components/_word-search-link.scss:4-36`. Markup: `index.astro:109-112`, `WordSearchLink.vue:2` | Recon |
-| Homepage-Islands | `WordSearchLink client:load` (index.astro:122); `WordFilter client:only="vue"` + `WordSearchList client:only="vue"` (`src/components/word-search/WordSearch.astro:15,17`); `WordOfTheDay client:only='vue'` mit leerem fallback-Slot (index.astro:136-138) | Recon |
-| Statische Seiten | WP-Seiten via `src/pages/[legalPages].astro` (Slugs Zeile 13); kein Standalone-Content-Page-Beispiel außer 404 | Recon |
-| Wort-Liste statisch | `/wort`-Index rendert alle 946 Links serverseitig via `fetchAllWordsLinks()` (`src/pages/wort/index.astro:16`) | Recon |
-| Tests | Vorlagen: `WordSectionGrammatik.test.ts` (Astro-Komponente rendern), `version.test.ts` (getStaticPaths aufrufen), `getSitemapWordDates.test.ts`. **Kein** Test für JSON-LD/Meta-Tags/sitemap-serialize — net-new | `src/tests/unit/` |
+| Thema               | Fakt                                                                                                                                                                                                                                                                               | Quelle                                                                            |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Critical CSS        | `@playform/inline` v0.1.4 (wrappt beasties), letzter Eintrag im `integrations`-Array, **ohne Optionen** aufgerufen                                                                                                                                                                 | `astro.config.mjs`, `package.json:119`                                            |
+| Sitemap             | `@astrojs/sitemap` mit `serialize`-Funktion, setzt `lastmod` bereits für `/wort/<slug>` via `getWordDates()`                                                                                                                                                                       | `astro.config.mjs` (sitemap-Block), `src/services/queries/getSitemapWordDates.ts` |
+| Headers             | `public/_headers` existiert (8 Zeilen: Security-Header + Content-Signal). **Keine** Cache-Control-Regeln im Repo                                                                                                                                                                   | `public/_headers`                                                                 |
+| Suchindex           | `src/pages/api/search/index.json.ts:126` — `new Response(JSON.stringify(...))` **ohne Header**. URL hardcoded in `src/stores/wordList.ts:422`, `src/components/games/BerlinerOderNicht.vue:234`, `src/components/word-search/WordSearch.astro:12` + SW-Regex in `astro.config.mjs` | Recon                                                                             |
+| llms.txt            | Statische Datei `public/llms.txt` (handgeschrieben, 16 Zeilen). Kein Route-Code                                                                                                                                                                                                    | `public/llms.txt`                                                                 |
+| Wortart/NLP         | Im Repo berechnet: `getWordType()` (`src/utils/wordHelper.ts:67`, compromise/nlp) + `translateNlpTags()` (`:163`). WP liefert kuratierte Typen `berlinerischWordTypes.nodes.name` — ungenutzt, auskommentiert in `src/pages/api/search/index.json.ts:51-52`                        | Recon                                                                             |
+| Meta-Description    | `src/pages/wort/[...wordSlug].astro:93-102`, hardcodierter Suffix „Mit Etymologie, Aussprache und Beispielsätzen."                                                                                                                                                                 | Recon                                                                             |
+| Examples-Feld       | `wordProps.examples` (`WordPropertiesExamples`: `example`, `exampleExplanation`, `exampleAudio`); Conditional-Pattern existiert: `src/components/word/WordSectionBeispiele.astro:14`                                                                                               | `src/services/fragments/fragments.ts:75-83`                                       |
+| Audio-Feld          | `wordProperties.berlinerischAudio` existiert im Fragment                                                                                                                                                                                                                           | `fragments.ts:93-142`                                                             |
+| H1-Bug              | `src/components/word/WordHero.astro:30-33` — Whitespace zwischen `</dfn>` und `<span>, {article}</span>` erzeugt „Tankstelle , die"                                                                                                                                                | Recon                                                                             |
+| JSON-LD Wortseite   | `schemaJson()` in `src/pages/wort/[...wordSlug].astro:154-217`: DefinedTerm (161), Comment via `exampleComments` (146-152, angehängt 163), speakable (177-180), DefinedTermSet (192-199)                                                                                           | Recon                                                                             |
+| JSON-LD Homepage    | `websiteSchema` (index.astro:15-30), `organizationSchema` (32-52), Logo = SVG (41-44). PNG existiert: `/favicons/apple-touch-icon-180x180.png`                                                                                                                                     | Recon                                                                             |
+| Kontrast            | `GameCtaCard.astro:16` → `.c-fact-card__link`, Style `src/styles/components/_fact-card.scss:45-61`, `background: var(--orange-500)` (#cf5736, Zeile 51). `--orange-600` = #b23b27 existiert (`src/styles/variables/_colors.scss:37`)                                               | Recon                                                                             |
+| CLS-Selektoren      | `.o-index__image`: `src/styles/objects/_index.scss:41-49` (+ wrap 24-39); `.c-word-search-link`: `src/styles/components/_word-search-link.scss:4-36`. Markup: `index.astro:109-112`, `WordSearchLink.vue:2`                                                                        | Recon                                                                             |
+| Homepage-Islands    | `WordSearchLink client:load` (index.astro:122); `WordFilter client:only="vue"` + `WordSearchList client:only="vue"` (`src/components/word-search/WordSearch.astro:15,17`); `WordOfTheDay client:only='vue'` mit leerem fallback-Slot (index.astro:136-138)                         | Recon                                                                             |
+| Statische Seiten    | WP-Seiten via `src/pages/[legalPages].astro` (Slugs Zeile 13); kein Standalone-Content-Page-Beispiel außer 404                                                                                                                                                                     | Recon                                                                             |
+| Wort-Liste statisch | `/wort`-Index rendert alle 946 Links serverseitig via `fetchAllWordsLinks()` (`src/pages/wort/index.astro:16`)                                                                                                                                                                     | Recon                                                                             |
+| Tests               | Vorlagen: `WordSectionGrammatik.test.ts` (Astro-Komponente rendern), `version.test.ts` (getStaticPaths aufrufen), `getSitemapWordDates.test.ts`. **Kein** Test für JSON-LD/Meta-Tags/sitemap-serialize — net-new                                                                   | `src/tests/unit/`                                                                 |
 
 **Anti-Patterns (verifiziert NICHT vorhanden — nicht erfinden):**
+
 - Kein `beasties`/`critters` direkt in config — Optionen müssten an `@playform/inline` `.default({...})` gehen (API vorher in node_modules/Docs prüfen!)
 - Kein `src/pages/llms.txt.ts` — llms.txt ist statisch
 - Sitemap: KEIN `changefreq`/`priority` hinzufügen (Google ignoriert beides; Audit bestätigt korrekt weggelassen)
@@ -43,16 +44,20 @@ Jede Phase ist eigenständig in frischem Kontext ausführbar. Reihenfolge: 1→8
 ## Phase 1: Template-Quickfixes (4 unabhängige Mini-Tasks, je 1 Commit)
 
 ### 1a. H1-Leerzeichen-Bug
+
 - `src/components/word/WordHero.astro:30-33`: Whitespace zwischen `</dfn>` und `<span …>, {article}</span>` eliminieren — Elemente auf eine Zeile ziehen oder `{...}`-Expression-Join nutzen. Ziel-Rendering: `Tankstelle, die`.
 - **Verify:** `pnpm vitest run src/tests/unit/components/word/WordHero.test.ts` + neue Assertion: gerendertes HTML matcht `/<\/dfn><span/` bzw. Text enthält kein `" ,"`.
 
 ### 1b. Kontrast-Fix Game-CTA
+
 - `src/styles/components/_fact-card.scss:51`: `var(--orange-500)` → `var(--orange-600)`. Hover (Zeile 59) eine Stufe dunkler oder Unterstreichung.
 - #b23b27 vs. Weiß ≈ 5:1 → AA-konform. KEINEN neuen Farbwert erfinden — Token existiert.
 - **Verify:** visuell (`pnpm dev`), danach Lighthouse-A11y-Check auf Homepage (Ziel: color-contrast-Audit besteht).
 
 ### 1c. JSON-LD-Fixes Wortseite + Homepage
+
 Referenz mit fertigen Snippets: `berliner-schnauze.wtf-audit/findings/schema.md`.
+
 - `src/pages/wort/[...wordSlug].astro`, `schemaJson()` (154-217):
   1. `speakable` (177-180) vom DefinedTerm auf einen neuen `WebPage`-Node verschieben (`@graph` oder separates Objekt; `@id` = Seiten-URL).
   2. `comment` (163) → `workExample` umbenennen (Comment-Nodes können bleiben, Property-Name ist das Domain-Problem).
@@ -60,6 +65,7 @@ Referenz mit fertigen Snippets: `berliner-schnauze.wtf-audit/findings/schema.md`
 - **Verify:** `pnpm build:local`, dann JSON-LD aus dist extrahieren (`grep -o 'application/ld+json.*' dist/wort/aasen/index.html`) und mit https://validator.schema.org gegenprüfen. Neuer Unit-Test: `schemaJson`-Output parsen, assert `speakable` NICHT auf DefinedTerm, `workExample` statt `comment`.
 
 ### 1d. Konditionale Meta-Description
+
 - `src/pages/wort/[...wordSlug].astro:93-102`: Suffix dynamisch bauen:
   - Basis: `${berlinerisch} heißt auf Berlinerisch: ${translations}.`
   - `Mit Etymologie` immer (Sektion existiert immer? prüfen — sonst ebenfalls konditional)
@@ -73,7 +79,9 @@ Referenz mit fertigen Snippets: `berliner-schnauze.wtf-audit/findings/schema.md`
 ## Phase 2: Caching + Sitemap-lastmod
 
 ### 2a. Cache-Header (`public/_headers`)
+
 Cloudflare-Pages-Headers-Syntax (Doku: developers.cloudflare.com/pages/configuration/headers/). An bestehende Datei anhängen:
+
 ```
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
@@ -84,10 +92,12 @@ Cloudflare-Pages-Headers-Syntax (Doku: developers.cloudflare.com/pages/configura
 /api/search/meta.json
   Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 ```
+
 - Content-Hashing der Suchindex-URL bewusst NICHT machen (3 Code-Literale + SW-Regex, hoher Aufwand — Audit-Empfehlung war „oder SWR", wir nehmen SWR). SW-seitig cached Workbox bereits StaleWhileRevalidate 3h — HTTP-Header decken Erstbesuch/No-SW ab.
 - **Verify:** nach Deploy `curl -sI https://berliner-schnauze.wtf/_astro/<asset> | grep -i cache-control` → `immutable`; gleiches für `/api/search/index.json` → `stale-while-revalidate`.
 
 ### 2b. Sitemap-lastmod für Themen + statische Seiten
+
 - `astro.config.mjs`, bestehende `serialize`-Funktion erweitern (Pattern KOPIEREN, nicht umbauen):
   1. `/themen/<slug>`: lastmod = max(`modifiedGmt`) aller Wörter des Themas. Neue Query-Funktion analog `getSitemapWordDates.ts` (Cache-Pattern Zeilen 48-57 kopieren) — Wörter mit `berlinerischThemen`-Zuordnung sind via `fetchAllWords()`-Daten verfügbar; alternativ leichte GraphQL-Query `slug + modifiedGmt + berlinerischThemen`.
   2. Statische Seiten (Homepage, /wort, /impressum, …): lastmod = Build-Zeitpunkt ist FALSCH (täglich neue lastmod ohne Inhaltsänderung = Vertrauensverlust bei Google). Stattdessen: nur Themen-Seiten fixen, statische Seiten ohne lastmod lassen (Audit-Priorität war „Themen zuerst, Rest Low").
@@ -101,8 +111,10 @@ Cloudflare-Pages-Headers-Syntax (Doku: developers.cloudflare.com/pages/configura
 **Befund:** Inline-Critical-CSS (`@playform/inline`, ohne Optionen) enthält Sizing für `.o-index__image` und `.c-word-search-link` nicht → volles Stylesheet bei ~600ms verschiebt Layout (Bild 372×214→238×137, Button 39→66px). Nur Erstbesuch (SW-Cache macht Folgebesuche sauber). `font-display` NICHT anfassen (dokumentierter Trade-off, Anteil nur 0,03).
 
 **Umsetzung (deterministisch, nicht beasties-Tuning):**
+
 1. Layout-kritische Dimensionen der beiden Elemente in ein kleines `<style is:global>` direkt in `src/pages/index.astro` (Head) legen ODER als Inline-Styles auf die Elemente (`index.astro:109-112` Bild-Wrap, `WordSearchLink.vue:2`/`WordSearchLink.astro:6` Button). Benötigt: finale Breite/Höhe bzw. `aspect-ratio` + `max-width` fürs Bild, `min-height`/Padding für den Button — Werte aus `src/styles/objects/_index.scss:24-49` und `src/styles/components/_word-search-link.scss:4-36` ableiten (die `fluid()`-Berechnung ggf. als statisches `clamp()` duplizieren, mit Kommentar auf die SCSS-Quelle).
 2. Alternative zuerst prüfen (15 min timebox): `@playform/inline`-Optionen in `node_modules/@playform/inline/Target/Interface/` — falls beasties-`allowRules`/`additionalStylesheets`-äquivalent existiert, ist Config-Weg sauberer. Nichts erfinden: nur dokumentierte Optionen verwenden.
+
 - **Verify:** Repro-Skript aus Audit: Chrome DevTools MCP, frischer isolierter Context (kein SW), mobile Viewport 412×915@2.625, Fast 4G, 4× CPU, `PerformanceObserver({type:'layout-shift',buffered:true})` → Gesamt-CLS < 0,1. Genaue Methode: `berliner-schnauze.wtf-audit/findings/visual.md`. Gegen Preview-Build (`pnpm build:local && pnpm server:preview`) testen.
 
 ---
@@ -135,6 +147,7 @@ Cloudflare-Pages-Headers-Syntax (Doku: developers.cloudflare.com/pages/configura
 **Befund (SXO-Critical):** `WordFilter`/`WordSearchList` sind `client:only="vue"` (`WordSearch.astro:15,17`) → serverseitig leere Divs. `WordOfTheDay client:only` mit leerem Fallback-Slot (`index.astro:136-138`).
 
 **Umsetzung (Fallback-Content, KEINE Hydration-Umstellung):**
+
 - `client:only` NICHT auf `client:load` umstellen — Komponenten hängen an Browser-APIs/Stores (Barrel-Side-Effects, `computedAsync`); SSR-Umbau wäre riskant. Stattdessen Astro-natives Muster: statisches Server-HTML im gleichen `<section>`, das beim Mount ausgeblendet wird.
 - In `src/components/word-search/WordSearch.astro`:
   1. Statische Liste server-rendern — Pattern von `src/pages/wort/index.astro:16` KOPIEREN (`fetchAllWordsLinks()`): z. B. alphabetische Linkliste (alle 946 Links sind auf /wort schon precedent — hier reicht ggf. gekürzte Liste + prominenter Link „Alle Wörter → /wort").
@@ -149,6 +162,7 @@ Cloudflare-Pages-Headers-Syntax (Doku: developers.cloudflare.com/pages/configura
 ## Phase 7: Neue Seiten — `/ueber` + „Was bedeutet Berliner Schnauze?"
 
 **Inhalt kommt von Felix (Redaktion). Code scaffolds nur.** Zwei Varianten (Entscheidung Felix):
+
 - **(a) WordPress-Seiten** (wie Impressum): Slug in `src/pages/[legalPages].astro:13` ergänzen (`"ueber"`, `"berliner-schnauze"` o. ä.) — Voraussetzung: Seiten in WP angelegt. Route-Umbenennung erwägen (Datei heißt `[legalPages]` — semantisch dann falsch, ggf. `[wpPages].astro`).
 - **(b) Standalone-Astro-Seiten**: `src/pages/ueber.astro` mit `Layout` + `seoData()` (`src/utils/helpers.ts:34-46`) — Pattern von `index.astro`-Head übernehmen. Kein Precedent für hardcodierte Content-Seite — bei (b) neuen Precedent sauber setzen.
 - Brand-Phrase-Seite zusätzlich: interner Link von Homepage (z. B. FactCard) + `Organization`-Schema `sameAs`/`about`-Verknüpfung; `speakable`+`WebPage`-Schema wie in Phase 1c-Muster.

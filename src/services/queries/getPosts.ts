@@ -1,6 +1,8 @@
-import { graphql } from "@/gql";
-import type { GetAllPostsQuery } from "@/gql/graphql";
 import { wpGraphqlClient } from "@services/wpGraphqlClient";
+
+import type { GetAllPostsQuery } from "@/gql/graphql";
+
+import { graphql } from "@/gql";
 
 export type PostNodes = NonNullable<GetAllPostsQuery["posts"]>["nodes"];
 

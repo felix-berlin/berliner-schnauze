@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
-import { ref, nextTick } from "vue";
 import { describe, expect, it, vi, beforeEach } from "vitest";
+import { ref, nextTick } from "vue";
 
 vi.mock("@composables/useSearchQuerySync", () => ({
   useSearchQuerySync: vi.fn(),

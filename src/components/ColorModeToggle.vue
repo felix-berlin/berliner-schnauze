@@ -3,7 +3,13 @@
     type="button"
     class="c-color-mode-toggle c-button c-button--center-icon"
     :class="cssClasses"
-    :aria-label="isDarkMode === null ? 'Auf dunkles Farbschema wechseln' : isDarkMode ? 'Auf helles Farbschema wechseln' : 'Auf dunkles Farbschema wechseln'"
+    :aria-label="
+      isDarkMode === null
+        ? 'Auf dunkles Farbschema wechseln'
+        : isDarkMode
+          ? 'Auf helles Farbschema wechseln'
+          : 'Auf dunkles Farbschema wechseln'
+    "
     @click="toggleMode()"
   >
     <Transition name="fade-out-in">

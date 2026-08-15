@@ -40,7 +40,9 @@ describe("LetterFilter.vue", () => {
   });
 
   it("renders one button per letter in letterGroups", () => {
-    const letterButtons = wrapper.findAll(".c-letter-filter__list-item .c-letter-filter__button:not(.is-all)");
+    const letterButtons = wrapper.findAll(
+      ".c-letter-filter__list-item .c-letter-filter__button:not(.is-all)",
+    );
     expect(letterButtons).toHaveLength(3);
   });
 

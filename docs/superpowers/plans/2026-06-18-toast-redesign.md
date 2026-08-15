@@ -21,28 +21,30 @@
 
 ## File Map
 
-| Datei | Aktion | Verantwortung |
-|---|---|---|
-| `src/stores/toastNotify.ts` | Modify | `ToastPosition` +2 Werte; `id: string` (UUID); `MAX_PER_POSITION=3`; `removeToastById` vereinfacht |
-| `src/components/toast/ToastPositionGroup.vue` | **Create** | `popover="manual"` Container; `showPopover`/`hidePopover` Lifecycle; `<TransitionGroup>` |
-| `src/components/toast/ToastNotify.vue` | Modify | Entfernt: `popover`, Inline-Styles, `initOffset`, `outerSpacing`, `gapBetween`, `setDynamicPosition`, `isOpen` |
-| `src/components/toast/ToastNotifyContainer.vue` | Modify | Rendert 6 fixe `ToastPositionGroup`; kein `v-for` über flachen Store mehr |
-| `src/styles/components/_toast-container.scss` | **Create** | UA-Reset, Corner-Positioning, TransitionGroup-Klassen |
-| `src/styles/components/_toast-notify.scss` | Modify | Entfernt: `popover`-Animations-Block (`overlay allow-discrete`, `@starting-style`, `translateX`) |
-| `src/tests/unit/stores/toastNotify.test.ts` | **Create** | UUID-id, MAX\_PER\_POSITION, neue Positionen, `removeToastById` |
-| `src/tests/unit/components/toast/ToastPositionGroup.test.ts` | **Create** | `showPopover`/`hidePopover` Lifecycle, `@after-leave` Guard |
-| `src/tests/unit/components/toast/ToastNotify.test.ts` | Modify | Vollständig ersetzen: kein Popover, kein `isOpen`, kein `showToast`; `id` ist string |
-| `src/tests/unit/components/toast/ToastNotifyContainer.test.ts` | Modify | Vollständig ersetzen: 6 `ToastPositionGroup` statt flache `ToastNotify`-Liste |
+| Datei                                                          | Aktion     | Verantwortung                                                                                                  |
+| -------------------------------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------- |
+| `src/stores/toastNotify.ts`                                    | Modify     | `ToastPosition` +2 Werte; `id: string` (UUID); `MAX_PER_POSITION=3`; `removeToastById` vereinfacht             |
+| `src/components/toast/ToastPositionGroup.vue`                  | **Create** | `popover="manual"` Container; `showPopover`/`hidePopover` Lifecycle; `<TransitionGroup>`                       |
+| `src/components/toast/ToastNotify.vue`                         | Modify     | Entfernt: `popover`, Inline-Styles, `initOffset`, `outerSpacing`, `gapBetween`, `setDynamicPosition`, `isOpen` |
+| `src/components/toast/ToastNotifyContainer.vue`                | Modify     | Rendert 6 fixe `ToastPositionGroup`; kein `v-for` über flachen Store mehr                                      |
+| `src/styles/components/_toast-container.scss`                  | **Create** | UA-Reset, Corner-Positioning, TransitionGroup-Klassen                                                          |
+| `src/styles/components/_toast-notify.scss`                     | Modify     | Entfernt: `popover`-Animations-Block (`overlay allow-discrete`, `@starting-style`, `translateX`)               |
+| `src/tests/unit/stores/toastNotify.test.ts`                    | **Create** | UUID-id, MAX\_PER\_POSITION, neue Positionen, `removeToastById`                                                |
+| `src/tests/unit/components/toast/ToastPositionGroup.test.ts`   | **Create** | `showPopover`/`hidePopover` Lifecycle, `@after-leave` Guard                                                    |
+| `src/tests/unit/components/toast/ToastNotify.test.ts`          | Modify     | Vollständig ersetzen: kein Popover, kein `isOpen`, kein `showToast`; `id` ist string                           |
+| `src/tests/unit/components/toast/ToastNotifyContainer.test.ts` | Modify     | Vollständig ersetzen: 6 `ToastPositionGroup` statt flache `ToastNotify`-Liste                                  |
 
 ---
 
 ### Task 1: Store — UUID-id, 6 Positionen, MAX_PER_POSITION=3
 
 **Files:**
+
 - Modify: `src/stores/toastNotify.ts`
 - Create: `src/tests/unit/stores/toastNotify.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `ToastPosition = "bottom-center" | "bottom-left" | "bottom-right" | "top-center" | "top-left" | "top-right"`
   - `ToastNotify.id: string`
@@ -59,8 +61,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const enablePopoverSupport = () => {
   Object.defineProperty(HTMLElement.prototype, "popover", {
     configurable: true,
-    get() { return this.getAttribute("popover"); },
-    set(v) { this.setAttribute("popover", v); },
+    get() {
+      return this.getAttribute("popover");
+    },
+    set(v) {
+      this.setAttribute("popover", v);
+    },
   });
 };
 
@@ -146,8 +152,7 @@ Erwartet: FAIL — `top-center`/`bottom-center` nicht im Typ, `id` ist number, M
 import { atom } from "nanostores";
 
 export type ToastPosition =
-  | "bottom-center" | "bottom-left" | "bottom-right"
-  | "top-center"    | "top-left"    | "top-right";
+  "bottom-center" | "bottom-left" | "bottom-right" | "top-center" | "top-left" | "top-right";
 
 export type ToastNotify = {
   actionLabel?: string;
@@ -233,11 +238,13 @@ git commit -m "feat(toast): extend store — 6 positions, UUID id, MAX_PER_POSIT
 ### Task 2: Simplify `ToastNotify.vue` — Remove Positioning Logic
 
 **Files:**
+
 - Modify: `src/components/toast/ToastNotify.vue`
 - Modify: `src/styles/components/_toast-notify.scss`
 - Modify: `src/tests/unit/components/toast/ToastNotify.test.ts`
 
 **Interfaces:**
+
 - Consumes: `ToastNotify` type (Task 1) — `id: string`, keine `initOffset`/`outerSpacing`/`gapBetween`-Props
 - Produces: `<div class="c-toast-notify">` ohne `popover`-Attribut; ruft `removeToastById(id!)` on dismiss; Swipe-to-dismiss bleibt
 
@@ -506,11 +513,13 @@ git commit -m "refactor(toast): simplify ToastNotify — remove popover and posi
 ### Task 3: Neue `ToastPositionGroup.vue` + `_toast-container.scss`
 
 **Files:**
+
 - Create: `src/components/toast/ToastPositionGroup.vue`
 - Create: `src/styles/components/_toast-container.scss`
 - Create: `src/tests/unit/components/toast/ToastPositionGroup.test.ts`
 
 **Interfaces:**
+
 - Consumes: `ToastPosition`, `ToastNotify` (Task 1); `<ToastNotify>` (Task 2); `supportsPopover` aus Store
 - Produces: `<ToastPositionGroup position="top-right" :toasts="[...]" />` — `popover="manual"` Container mit positionierten Flex-Toasts; `defineExpose({ onAfterLeave })` für Testbarkeit
 
@@ -628,11 +637,7 @@ Erwartet: FAIL — Datei existiert nicht.
     :class="`c-toast-container--${position}`"
   >
     <TransitionGroup name="c-toast-notify" @after-leave="onAfterLeave">
-      <ToastNotify
-        v-for="toast in toasts"
-        :key="toast.id"
-        v-bind="toast"
-      />
+      <ToastNotify v-for="toast in toasts" :key="toast.id" v-bind="toast" />
     </TransitionGroup>
   </div>
 </template>
@@ -717,12 +722,32 @@ defineExpose({ onAfterLeave });
   }
 
   // Corner-Positioning
-  &--top-right     { top: 20px; right: 20px; }
-  &--top-left      { top: 20px; left: 20px; }
-  &--top-center    { top: 20px; left: 50%; translate: -50% 0; }
-  &--bottom-right  { bottom: 20px; right: 20px; }
-  &--bottom-left   { bottom: 20px; left: 20px; }
-  &--bottom-center { bottom: 20px; left: 50%; translate: -50% 0; }
+  &--top-right {
+    top: 20px;
+    right: 20px;
+  }
+  &--top-left {
+    top: 20px;
+    left: 20px;
+  }
+  &--top-center {
+    top: 20px;
+    left: 50%;
+    translate: -50% 0;
+  }
+  &--bottom-right {
+    bottom: 20px;
+    right: 20px;
+  }
+  &--bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+  &--bottom-center {
+    bottom: 20px;
+    left: 50%;
+    translate: -50% 0;
+  }
 }
 
 // TransitionGroup-Animations — Leave-active braucht position: absolute
@@ -734,7 +759,9 @@ defineExpose({ onAfterLeave });
 @include butler-mx.feature("motion") {
   .c-toast-notify-enter-active,
   .c-toast-notify-leave-active {
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
   }
 
   .c-toast-notify-move {
@@ -804,10 +831,12 @@ git commit -m "feat(toast): add ToastPositionGroup — popover container with Tr
 ### Task 4: Refactor `ToastNotifyContainer.vue` + Update Container-Test
 
 **Files:**
+
 - Modify: `src/components/toast/ToastNotifyContainer.vue`
 - Modify: `src/tests/unit/components/toast/ToastNotifyContainer.test.ts`
 
 **Interfaces:**
+
 - Consumes: `$toastNotify` Store (Task 1); `<ToastPositionGroup>` (Task 3)
 - Produces: Rendert immer 6 `ToastPositionGroup`-Instanzen; jede erhält den gefilterten Store-Slice für ihre Position
 
@@ -844,9 +873,7 @@ describe("ToastNotifyContainer.vue", () => {
 
   it("renders one group per position including all 6 positions", () => {
     const wrapper = mount(ToastNotifyContainer);
-    const positions = wrapper
-      .findAllComponents(ToastPositionGroup)
-      .map((c) => c.props("position"));
+    const positions = wrapper.findAllComponents(ToastPositionGroup).map((c) => c.props("position"));
     expect(positions).toContain("top-left");
     expect(positions).toContain("top-center");
     expect(positions).toContain("top-right");
@@ -948,9 +975,9 @@ pnpm lint
 
 ```js
 // In der Browser-Konsole:
-window.__createToast?.({ message: "Top right ✓", position: "top-right", status: "success" })
-window.__createToast?.({ message: "Bottom left ✓", position: "bottom-left", status: "info" })
-window.__createToast?.({ message: "Top center ✓", position: "top-center", status: "warning" })
+window.__createToast?.({ message: "Top right ✓", position: "top-right", status: "success" });
+window.__createToast?.({ message: "Bottom left ✓", position: "bottom-left", status: "info" });
+window.__createToast?.({ message: "Top center ✓", position: "top-center", status: "warning" });
 ```
 
 Prüfen: Toast slides in aus der richtigen Richtung; FLIP beim Schließen eines mittleren Toasts; max. 3 pro Position.

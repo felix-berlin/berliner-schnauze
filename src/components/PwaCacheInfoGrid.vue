@@ -35,8 +35,8 @@
 </template>
 
 <script setup lang="ts">
-import { type Component } from "vue";
 import { type StorageQuota, type SwInfo } from "@composables/useCacheStorage";
+import { type Component } from "vue";
 
 defineProps<{
   swInfo: SwInfo | null;

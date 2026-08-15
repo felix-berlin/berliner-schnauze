@@ -76,8 +76,6 @@ vi.mock("@components/word-search/shortcuts/ShortcutSelect.vue", () => ({
   default: { template: "<span class='mock-shortcut-select' />" },
 }));
 
-
-
 describe("SearchModal.vue", () => {
   beforeEach(() => {
     vi.resetModules();

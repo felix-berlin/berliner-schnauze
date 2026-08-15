@@ -17,17 +17,36 @@ vi.mock("@stores/installApp.ts", async () => {
 // raw module object returned by the vi.mock factory.
 vi.mock("@components/AppSettingsTheme.vue", () => {
   const mod: Record<string | symbol, unknown> = { default: { template: "<div />" } };
-  return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
+  return new Proxy(mod, {
+    has: () => true,
+    get(t, k) {
+      return k in t ? t[k] : undefined;
+    },
+  });
 });
 vi.mock("@components/AppSettingsNotifications.vue", () => {
   const mod: Record<string | symbol, unknown> = { default: { template: "<div />" } };
-  return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
+  return new Proxy(mod, {
+    has: () => true,
+    get(t, k) {
+      return k in t ? t[k] : undefined;
+    },
+  });
 });
 vi.mock("@components/AppSettingsNavCard.vue", () => {
   const mod: Record<string | symbol, unknown> = {
-    default: { props: ["icon", "title", "description", "href", "tag"], emits: ["click"], template: "<a data-testid='nav-card-loaded' />" },
+    default: {
+      props: ["icon", "title", "description", "href", "tag"],
+      emits: ["click"],
+      template: "<a data-testid='nav-card-loaded' />",
+    },
   };
-  return new Proxy(mod, { has: () => true, get(t, k) { return k in t ? t[k] : undefined; } });
+  return new Proxy(mod, {
+    has: () => true,
+    get(t, k) {
+      return k in t ? t[k] : undefined;
+    },
+  });
 });
 // Nav card stub defined outside vi.mock — no hoisting issue here
 const NavCardStub = defineComponent({
@@ -93,5 +112,4 @@ describe("AppSettings.vue", () => {
     await installCard!.trigger("click");
     expect(triggerPwaInstall).toHaveBeenCalledOnce();
   });
-
 });

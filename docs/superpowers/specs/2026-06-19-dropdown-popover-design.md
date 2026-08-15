@@ -12,11 +12,13 @@ Replace the existing stub `DropdownPopover.vue` with a production-ready, generic
 ## Scope
 
 **In scope:**
+
 - Full replacement of `src/components/DropdownPopover.vue`
 - New SCSS file `src/styles/components/_dropdown-popover.scss`
 - New test file `src/tests/unit/components/DropdownPopover.test.ts`
 
 **Out of scope:**
+
 - Migrating `WordOptionDropdown.vue` from FloatingVue to this component (separate task)
 - Keyboard arrow-key navigation within the panel (consumer responsibility)
 - `role="menu"` scaffolding (consumer responsibility)
@@ -25,13 +27,13 @@ Replace the existing stub `DropdownPopover.vue` with a production-ready, generic
 
 ## Decisions
 
-| Decision | Choice | Rationale |
-|---|---|---|
-| Content model | Arbitrary slot | Maximum flexibility; ARIA semantics owned by consumer |
-| Placement API | `placement` prop → CSS class | BEM modifier keeps positioning in CSS, not JS |
-| Fallbacks | `flip-inline, flip-block, flip-block flip-inline` | Covers all 4 quadrants without manual `@position-try` rules |
-| Browser support | Baseline Newly Available (no polyfill) | Project already targets Popover API with same baseline |
-| Trigger | Internal `<button>` with default slot | Covers all current use cases; attrs inherited via `inheritAttrs: false` |
+| Decision        | Choice                                            | Rationale                                                               |
+| --------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
+| Content model   | Arbitrary slot                                    | Maximum flexibility; ARIA semantics owned by consumer                   |
+| Placement API   | `placement` prop → CSS class                      | BEM modifier keeps positioning in CSS, not JS                           |
+| Fallbacks       | `flip-inline, flip-block, flip-block flip-inline` | Covers all 4 quadrants without manual `@position-try` rules             |
+| Browser support | Baseline Newly Available (no polyfill)            | Project already targets Popover API with same baseline                  |
+| Trigger         | Internal `<button>` with default slot             | Covers all current use cases; attrs inherited via `inheritAttrs: false` |
 
 ---
 
@@ -40,23 +42,21 @@ Replace the existing stub `DropdownPopover.vue` with a production-ready, generic
 ### Props
 
 ```ts
-type PlacementValue =
-  | "bottom-start" | "bottom-end" | "bottom"
-  | "top-start"    | "top-end"    | "top";
+type PlacementValue = "bottom-start" | "bottom-end" | "bottom" | "top-start" | "top-end" | "top";
 
 type DropdownPopoverProps = {
-  placement?: PlacementValue;  // default: "bottom-start"
-  offset?: number;             // gap trigger ↔ panel in px, default: 8
-  lazy?: boolean;              // defer slot render until first open, default: true
+  placement?: PlacementValue; // default: "bottom-start"
+  offset?: number; // gap trigger ↔ panel in px, default: 8
+  lazy?: boolean; // defer slot render until first open, default: true
 };
 ```
 
 ### Slots
 
-| Slot | Purpose |
-|---|---|
-| `default` | Trigger button content (icon, label) |
-| `panel` | Panel content — arbitrary, consumer owns ARIA |
+| Slot      | Purpose                                       |
+| --------- | --------------------------------------------- |
+| `default` | Trigger button content (icon, label)          |
+| `panel`   | Panel content — arbitrary, consumer owns ARIA |
 
 ### Exposes
 
@@ -120,12 +120,12 @@ close(): void  // programmatically hide the panel
 // inheritAttrs: false — $attrs (e.g. aria-haspopup) land on trigger button, not wrapper div
 const { placement = "bottom-start", offset = 8, lazy = true } = defineProps<DropdownPopoverProps>();
 
-const id = useId();               // Vue 3.5 — SSR-safe unique ID
+const id = useId(); // Vue 3.5 — SSR-safe unique ID
 const panelId = `dropdown-${id}`;
 
 const panel = ref<HTMLElement | null>(null);
 const isOpen = ref(false);
-const hasOpened = ref(false);    // lazy sentinel — never resets to false
+const hasOpened = ref(false); // lazy sentinel — never resets to false
 
 const onToggle = (event: ToggleEvent): void => {
   isOpen.value = event.newState === "open";
@@ -141,11 +141,11 @@ defineExpose({ close });
 
 ### State
 
-| State | Type | Source |
-|---|---|---|
-| `isOpen` | `ref<boolean>` | Native `toggle` event on panel |
+| State       | Type           | Source                                  |
+| ----------- | -------------- | --------------------------------------- |
+| `isOpen`    | `ref<boolean>` | Native `toggle` event on panel          |
 | `hasOpened` | `ref<boolean>` | Set `true` on first open — never resets |
-| `panelId` | `string` | `useId()` — stable, SSR-safe |
+| `panelId`   | `string`       | `useId()` — stable, SSR-safe            |
 
 **Lazy invariant:** `hasOpened` is write-once — it transitions `false → true` on the first `toggle` to `"open"` and never returns to `false`. This means slot content stays mounted across subsequent open/close cycles (no remount cost, no lost scroll state).
 
@@ -155,23 +155,27 @@ defineExpose({ close });
 
 ### `placement` → `position-area`
 
-| Prop value | `position-area` | Description |
-|---|---|---|
-| `bottom-start` | `block-end span-inline-end` | below, left-aligned |
-| `bottom-end` | `block-end span-inline-start` | below, right-aligned |
-| `bottom` | `block-end` | below, centered |
-| `top-start` | `block-start span-inline-end` | above, left-aligned |
-| `top-end` | `block-start span-inline-start` | above, right-aligned |
-| `top` | `block-start` | above, centered |
+| Prop value     | `position-area`                 | Description          |
+| -------------- | ------------------------------- | -------------------- |
+| `bottom-start` | `block-end span-inline-end`     | below, left-aligned  |
+| `bottom-end`   | `block-end span-inline-start`   | below, right-aligned |
+| `bottom`       | `block-end`                     | below, centered      |
+| `top-start`    | `block-start span-inline-end`   | above, left-aligned  |
+| `top-end`      | `block-start span-inline-start` | above, right-aligned |
+| `top`          | `block-start`                   | above, centered      |
 
 ### Fallback strategy
 
 ```css
-position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+position-try-fallbacks:
+  flip-inline,
+  flip-block,
+  flip-block flip-inline;
 position-try-order: most-block-size;
 ```
 
 For primary `bottom-start`, the browser automatically tries in order:
+
 1. `bottom-start` (primary)
 2. `bottom-end` (flip-inline)
 3. `top-start` (flip-block)
@@ -199,22 +203,42 @@ margin-block-start: var(--c-dropdown-offset, 8px);
 
 .c-dropdown__panel {
   // UA Popover reset
-  margin: 0; border: none; padding: 0;
-  background: transparent; overflow: visible; max-width: none; max-height: none;
+  margin: 0;
+  border: none;
+  padding: 0;
+  background: transparent;
+  overflow: visible;
+  max-width: none;
+  max-height: none;
 
   // Anchor Positioning
   position: fixed;
   margin-block-start: var(--c-dropdown-offset, 8px);
-  position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+  position-try-fallbacks:
+    flip-inline,
+    flip-block,
+    flip-block flip-inline;
   position-try-order: most-block-size;
 
   // Placements
-  &--bottom-start { position-area: block-end span-inline-end; }
-  &--bottom-end   { position-area: block-end span-inline-start; }
-  &--bottom       { position-area: block-end; }
-  &--top-start    { position-area: block-start span-inline-end; }
-  &--top-end      { position-area: block-start span-inline-start; }
-  &--top          { position-area: block-start; }
+  &--bottom-start {
+    position-area: block-end span-inline-end;
+  }
+  &--bottom-end {
+    position-area: block-end span-inline-start;
+  }
+  &--bottom {
+    position-area: block-end;
+  }
+  &--top-start {
+    position-area: block-start span-inline-end;
+  }
+  &--top-end {
+    position-area: block-start span-inline-start;
+  }
+  &--top {
+    position-area: block-start;
+  }
 
   // Non-supporting browsers (Chrome < 125 — very rare)
   @supports not (position-area: block-end) {
@@ -233,10 +257,14 @@ margin-block-start: var(--c-dropdown-offset, 8px);
       display 0.15s allow-discrete,
       overlay 0.15s allow-discrete;
 
-    &:not(:popover-open) { opacity: 0; }
+    &:not(:popover-open) {
+      opacity: 0;
+    }
 
     @starting-style {
-      &:popover-open { opacity: 0; }
+      &:popover-open {
+        opacity: 0;
+      }
     }
   }
 }
@@ -248,11 +276,11 @@ margin-block-start: var(--c-dropdown-offset, 8px);
 
 ### What the component provides
 
-| Attribute | Element | Value |
-|---|---|---|
+| Attribute       | Element            | Value                         |
+| --------------- | ------------------ | ----------------------------- |
 | `aria-expanded` | Trigger `<button>` | reactive `"true"` / `"false"` |
-| `aria-controls` | Trigger `<button>` | `{panelId}` |
-| `id` | Panel `<div>` | `{panelId}` |
+| `aria-controls` | Trigger `<button>` | `{panelId}`                   |
+| `id`            | Panel `<div>`      | `{panelId}`                   |
 
 ### What `popover="auto"` provides for free
 
@@ -273,6 +301,7 @@ margin-block-start: var(--c-dropdown-offset, 8px);
 **File:** `src/tests/unit/components/DropdownPopover.test.ts`
 
 **Mock setup:**
+
 ```ts
 beforeEach(() => {
   HTMLElement.prototype.showPopover = vi.fn();
@@ -308,11 +337,11 @@ panel slot renders immediately on mount when lazy=false
 
 ## Browser Support
 
-| Browser | Min version | Notes |
-|---|---|---|
-| Chrome | 125 | CSS Anchor Positioning GA |
-| Firefox | 131 | CSS Anchor Positioning GA |
-| Safari | 18.2 | CSS Anchor Positioning GA |
+| Browser | Min version | Notes                     |
+| ------- | ----------- | ------------------------- |
+| Chrome  | 125         | CSS Anchor Positioning GA |
+| Firefox | 131         | CSS Anchor Positioning GA |
+| Safari  | 18.2        | CSS Anchor Positioning GA |
 
 Baseline Newly Available (September 2024). Aligns with existing Popover API usage in the project.
 

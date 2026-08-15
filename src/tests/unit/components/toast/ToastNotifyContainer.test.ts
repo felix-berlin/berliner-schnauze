@@ -27,9 +27,7 @@ describe("ToastNotifyContainer.vue", () => {
 
   it("renders one group per position including all 6 positions", () => {
     const wrapper = mount(ToastNotifyContainer);
-    const positions = wrapper
-      .findAllComponents(ToastPositionGroup)
-      .map((c) => c.props("position"));
+    const positions = wrapper.findAllComponents(ToastPositionGroup).map((c) => c.props("position"));
     expect(positions).toContain("top-left");
     expect(positions).toContain("top-center");
     expect(positions).toContain("top-right");

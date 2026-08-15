@@ -1,5 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it, beforeAll } from "vitest";
+
 import { createAstroRender } from "../../helpers";
 
 const makeRelatedWords = (words: { berlinerisch: string; slug: string }[] = []) => ({
@@ -13,9 +14,8 @@ describe("WordSectionVerwandteWorte.astro", () => {
   let render: (props: Record<string, unknown>) => Promise<string>;
 
   beforeAll(async () => {
-    const { default: WordSectionVerwandteWorte } = await import(
-      "@components/word/WordSectionVerwandteWorte.astro"
-    );
+    const { default: WordSectionVerwandteWorte } =
+      await import("@components/word/WordSectionVerwandteWorte.astro");
     render = await createAstroRender(WordSectionVerwandteWorte);
   }, 30_000);
 

@@ -1,5 +1,6 @@
-import { version } from "../../../../package.json";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { version } from "../../../../package.json";
 
 vi.mock("virtual:pwa-register", () => ({ registerSW: vi.fn() }));
 vi.mock("@stores/toastNotify", () => ({ createToastNotify: vi.fn().mockReturnValue(true) }));
@@ -122,7 +123,8 @@ describe("pwa service — onNeedReload", () => {
     const { trackEvent } = await import("@utils/analytics");
 
     onNeedReload();
-    const onAction = (createToastNotify as ReturnType<typeof vi.fn>).mock.calls[0][0].onAction as () => void;
+    const onAction = (createToastNotify as ReturnType<typeof vi.fn>).mock.calls[0][0]
+      .onAction as () => void;
     onAction();
 
     expect(sessionStorage.getItem(PWA_UPDATED_KEY)).toBe(version);
@@ -149,11 +151,13 @@ describe("pwa service — onNeedReload", () => {
     Object.defineProperty(window, "Notification", {
       configurable: true,
       value: class MockNotification {
-        constructor(public title: string, public options: NotificationOptions) {}
+        constructor(
+          public title: string,
+          public options: NotificationOptions,
+        ) {}
         static permission = "granted";
       },
     });
-    
 
     const { onNeedReload } = await getRegisterSWCallbacks();
     const { trackEvent } = await import("@utils/analytics");
@@ -181,7 +185,6 @@ describe("pwa service — onNeedReload", () => {
       },
     });
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    
 
     const { onNeedReload } = await getRegisterSWCallbacks();
     onNeedReload();
@@ -199,9 +202,10 @@ describe("pwa service — onNeedReload", () => {
     });
     Object.defineProperty(window, "Notification", {
       configurable: true,
-      value: class { static permission = "denied"; },
+      value: class {
+        static permission = "denied";
+      },
     });
-    
 
     const { onNeedReload } = await getRegisterSWCallbacks();
     const { trackEvent } = await import("@utils/analytics");

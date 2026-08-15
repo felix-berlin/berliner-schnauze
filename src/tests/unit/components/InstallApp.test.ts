@@ -2,6 +2,7 @@ import InstallApp from "@components/InstallApp.vue";
 import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
+
 import { createStoreMockImpl } from "../helpers/stores";
 
 let installPromptRef = ref<unknown>(null);
@@ -19,8 +20,8 @@ vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(),
 }));
 
-import * as installAppStore from "@stores/installApp.ts";
 import { useStore } from "@nanostores/vue";
+import * as installAppStore from "@stores/installApp.ts";
 const mockedUseStore = vi.mocked(useStore);
 const mockedTriggerPwaInstall = vi.mocked(installAppStore.triggerPwaInstall);
 

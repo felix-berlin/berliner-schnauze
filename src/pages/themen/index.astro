@@ -4,7 +4,6 @@ import { fetchAllThemen } from '@services/api.ts';
 import { canonicalUrl, seoData } from '@utils/helpers.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
-import BrownBearRoar from '@assets/images/brown-bear-roar.png';
 import { SITE_URL } from 'astro:env/client';
 import { getImage } from 'astro:assets';
 
@@ -16,7 +15,12 @@ const sortedThemen = [...allThemen].sort((a, b) =>
   (a.name ?? '').localeCompare(b.name ?? '', 'de'),
 );
 
-const ogImage = await getImage({ format: 'png', src: BrownBearRoar });
+const ogImage = await getImage({
+  format: 'png',
+  height: 517,
+  src: 'https://cms.berliner-schnauze.wtf/wp-content/uploads/brown-bear-roar.png',
+  width: 900,
+});
 
 const content = {
   seo: {

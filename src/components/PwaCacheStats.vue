@@ -36,15 +36,16 @@
         <span class="c-pwa-cache__stat-quota-fill" :style="{ width: `${quotaPercent}%` }" />
       </span>
       <span class="c-pwa-cache__stat-quota-detail">
-        {{ formatBytes(storageQuota.usedBytes) }} von {{ formatBytes(storageQuota.quotaBytes) }} belegt
+        {{ formatBytes(storageQuota.usedBytes) }} von
+        {{ formatBytes(storageQuota.quotaBytes) }} belegt
       </span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent } from "vue";
 import { formatBytes, type StorageQuota } from "@composables/useCacheStorage";
+import { computed, defineAsyncComponent } from "vue";
 
 const DatabaseIcon = defineAsyncComponent(() => import("virtual:icons/lucide/database"));
 const FilesIcon = defineAsyncComponent(() => import("virtual:icons/lucide/files"));

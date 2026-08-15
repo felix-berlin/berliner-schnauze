@@ -68,9 +68,7 @@ const segments = computed((): Segment[] => {
   const rest = sorted.slice(MAX_TYPES);
 
   const entries: [string, number][] =
-    rest.length > 0
-      ? [...top, ["sonstige", rest.reduce((sum, [, s]) => sum + s, 0)]]
-      : top;
+    rest.length > 0 ? [...top, ["sonstige", rest.reduce((sum, [, s]) => sum + s, 0)]] : top;
 
   const segs = entries
     .map(([type, sizeBytes], i) => ({
