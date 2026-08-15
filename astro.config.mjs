@@ -313,16 +313,19 @@ export default defineConfig({
             name: "Wort suchen",
             short_name: "Suchen",
             url: "/",
+            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
           },
           {
             name: "Berliner oder Nicht spielen",
             short_name: "Spielen",
             url: "/games/berliner-oder-nicht",
+            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
           },
           {
             name: "Wort vorschlagen",
             short_name: "Vorschlagen",
             url: "/wort-vorschlagen",
+            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
           },
         ],
         icons: [
