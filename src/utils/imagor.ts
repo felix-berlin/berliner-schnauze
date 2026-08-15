@@ -3,7 +3,7 @@ import { createHmac } from "node:crypto";
 
 const SIGNER_TRUNCATE = 40;
 
-type ImagorMode = "fit-in" | "full-fit-in" | "adaptive-fit-in" | "unsafe" | "stretch" | "trim";
+type ImagorMode = "fit-in" | "full-fit-in" | "adaptive-fit-in" | "stretch" | "trim";
 
 type ImagorPadding = {
   left?: number;
@@ -62,14 +62,13 @@ export function buildImagorPath(
   const targetQuality = quality ?? 80;
   const filterSuffix = filters.length > 0 ? `:${filters.join(":")}` : "";
 
-  const modePrefix = mode === "unsafe" ? "unsafe" : mode;
   const alignmentPrefix = align
     ? `/${align.horizontal ?? "center"}/${align.vertical ?? "middle"}`
     : "";
   const paddingPrefix = normalizePadding(padding) ? `/${normalizePadding(padding)}` : "";
   const smartPrefix = smart ? "/smart" : "";
 
-  return `${modePrefix}/${width}x${height}${paddingPrefix}${alignmentPrefix}${smartPrefix}/filters:format(${targetFormat}):quality(${targetQuality})${filterSuffix}/${encodeURIComponent(upstreamUrl)}`;
+  return `${mode}/${width}x${height}${paddingPrefix}${alignmentPrefix}${smartPrefix}/filters:format(${targetFormat}):quality(${targetQuality})${filterSuffix}/${encodeURIComponent(upstreamUrl)}`;
 }
 
 export function signImagorPath(path: string): string {

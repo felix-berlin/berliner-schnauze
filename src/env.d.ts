@@ -29,7 +29,7 @@ declare global {
     type ImagorProcessingFilter =
       // Quality & Format
       | `quality(${number})`
-      | `format(jpeg | png | gif | webp | avif | jxl | tiff | jp2)`
+      | `format(${"jpeg" | "png" | "gif" | "webp" | "avif" | "jxl" | "tiff" | "jp2"})`
       | `lossless()`
       | `max_bytes(${number})`
       // Color & Light
@@ -78,13 +78,7 @@ declare global {
       // Custom string for unsupported filters
       | string;
 
-    type ImagorEndpointMode =
-      | "fit-in"
-      | "full-fit-in"
-      | "adaptive-fit-in"
-      | "stretch"
-      | "trim"
-      | "unsafe";
+    type ImagorEndpointMode = "fit-in" | "full-fit-in" | "adaptive-fit-in" | "stretch" | "trim";
 
     type ImagorHorizontalAlign = "left" | "center" | "right";
     type ImagorVerticalAlign = "top" | "middle" | "bottom";

@@ -45,29 +45,40 @@ const imagorImageService: ExternalImageService = {
 
     const targetFormats =
       options.formats && options.formats.length > 0 ? options.formats : [options.format ?? "webp"];
-    const densities = options.densities && options.densities.length > 0 ? options.densities : [1];
     // Use the last format in the list as the fallback (e.g., webp for ["avif", "webp"])
     const fallbackFormat = targetFormats[targetFormats.length - 1];
+    const baseWidth = options.width ?? 1;
+    const baseHeight = options.height ?? 1;
+    const aspectRatio = baseWidth / baseHeight;
 
-    return densities.flatMap((density) => {
-      const numericDensity = Number(density);
+    // `widths` (from Astro's `layout`/responsive-image breakpoints) and `densities`
+    // are mutually exclusive on ImageTransform — mirror astro's own baseService here.
+    const sizes =
+      options.widths && options.widths.length > 0
+        ? options.widths.map((width) => ({
+            descriptor: `${width}w`,
+            height: Math.max(1, Math.round(width / aspectRatio)),
+            width,
+          }))
+        : (options.densities && options.densities.length > 0 ? options.densities : [1]).map((density) => {
+            const numericDensity = Number(density);
+            return {
+              descriptor: `${numericDensity}x`,
+              height: Math.max(1, Math.round(baseHeight * numericDensity)),
+              width: Math.max(1, Math.round(baseWidth * numericDensity)),
+            };
+          });
 
-      return targetFormats
+    return sizes.flatMap(({ descriptor, height, width }) =>
+      targetFormats
         .map((format) => {
-          const width = Math.max(1, Math.round((options.width ?? 1) * numericDensity));
-          const height = Math.max(1, Math.round((options.height ?? 1) * numericDensity));
-
-          // Skip the fallback format at 1x (that goes in the <img> tag via getURL)
-          if (
-            format === fallbackFormat &&
-            width === (options.width ?? 1) &&
-            height === (options.height ?? 1)
-          ) {
+          // Skip the fallback format at the base size (that goes in the <img> tag via getURL)
+          if (format === fallbackFormat && width === baseWidth && height === baseHeight) {
             return null;
           }
 
           return {
-            descriptor: `${numericDensity}x`,
+            descriptor,
             transform: {
               ...options,
               format,
@@ -76,8 +87,8 @@ const imagorImageService: ExternalImageService = {
             },
           };
         })
-        .filter(Boolean) as UnresolvedSrcSetValue[];
-    }) as UnresolvedSrcSetValue[];
+        .filter(Boolean),
+    ) as UnresolvedSrcSetValue[];
   },
   getURL(options: ImagorImageTransform) {
     return getImagorURLForTransform(options);
