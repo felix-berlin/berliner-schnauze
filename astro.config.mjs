@@ -109,6 +109,9 @@ export default defineConfig({
     domains: ["upload.wikimedia.org", "cms.berliner-schnauze.wtf", "m.media-amazon.com"],
     breakpoints: [180, 320, 480, 640, 750, 828, 960, 1080, 1280, 1668, 1920, 2048, 2560],
     responsiveStyles: true,
+    service: {
+      entrypoint: "./src/lib/imagorImageService.ts",
+    },
   },
   env: {
     schema: {
@@ -139,6 +142,14 @@ export default defineConfig({
         context: "server",
         access: "secret",
         optional: true,
+      }),
+      IMAGOR_HOST: envField.string({
+        context: "server",
+        access: "public",
+      }),
+      IMAGOR_SECRET: envField.string({
+        context: "server",
+        access: "secret",
       }),
       WP_AUTH_REFRESH_TOKEN: envField.string({
         context: "server",
@@ -374,6 +385,20 @@ export default defineConfig({
               expiration: {
                 maxEntries: 1,
                 maxAgeSeconds: 10_800, // 3 hours
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/assets\.kasimir\.dev\/.*/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "imagor-images",
+              expiration: {
+                maxEntries: 200,
+                maxAgeSeconds: 2_592_000, // 30 days
               },
               cacheableResponse: {
                 statuses: [0, 200],

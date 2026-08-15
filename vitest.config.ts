@@ -135,6 +135,16 @@ export default getViteConfig(
           access: "secret",
           default: "not-a-real-token",
         }),
+        IMAGOR_HOST: envField.string({
+          context: "server",
+          access: "public",
+          default: "https://assets.example.com",
+        }),
+        IMAGOR_SECRET: envField.string({
+          context: "server",
+          access: "secret",
+          default: "not-a-real-secret",
+        }),
         MATOMO_HOST: envField.string({
           context: "client",
           access: "public",
