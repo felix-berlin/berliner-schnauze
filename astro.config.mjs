@@ -25,7 +25,10 @@ const {
   PWA_DEBUG,
   CODECOV_TOKEN,
   BUNDLE_ANALYZER_OPEN,
+  IMAGOR_HOST,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+
+const SITE_ORIGIN = import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf";
 
 const visualizerPlugin = visualizer({
   open: BUNDLE_ANALYZER_OPEN === "true",
@@ -41,7 +44,7 @@ const sassAliases = {
 
 // https://astro.build/config
 export default defineConfig({
-  site: import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf",
+  site: SITE_ORIGIN,
   trailingSlash: "never",
   // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
   devToolbar: {
@@ -349,12 +352,12 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2 MB (Workbox default)
         runtimeCaching: [
           {
-            urlPattern: /.*\/api\/search\/index\.json$/,
+            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/index\\.json$`),
             handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-index",
               expiration: {
-                maxEntries: 5,
+                maxEntries: 1,
                 maxAgeSeconds: 10_800, // 3 hours
               },
               cacheableResponse: {
@@ -363,12 +366,12 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /.*\/api\/search\/meta\.json$/,
+            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/meta\\.json$`),
             handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-meta",
               expiration: {
-                maxEntries: 5,
+                maxEntries: 1,
                 maxAgeSeconds: 10_800, // 3 hours
               },
               cacheableResponse: {
@@ -393,12 +396,15 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /^https:\/\/assets\.kasimir\.dev\/.*/,
+            urlPattern: new RegExp(`^${IMAGOR_HOST}/.*`),
             handler: "CacheFirst",
             options: {
               cacheName: "imagor-images",
               expiration: {
-                maxEntries: 200,
+                // Responsive `widths` variants (multiple breakpoints x formats per
+                // image) multiply the URL count per <Picture> well beyond the old
+                // density-only srcset, so this needs more headroom than before.
+                maxEntries: 500,
                 maxAgeSeconds: 2_592_000, // 30 days
               },
               cacheableResponse: {
