@@ -1,6 +1,5 @@
 ---
 import '@styles/objects/_index.scss';
-import BrownBearRoar from '@assets/images/brown-bear-roar.png';
 import FactCard from '@components/FactCard.astro';
 import GameCtaCard from '@components/GameCtaCard.astro';
 import WordSearch from '@components/word-search/WordSearch.astro';
@@ -51,6 +50,13 @@ const organizationSchema = JSON.stringify({
   url: SITE_URL,
 });
 
+const BrownBearRoarAttrs = {
+  height: 900,
+  src: 'https://cms.berliner-schnauze.wtf/wp-content/uploads/brown-bear-roar.png',
+  type: 'image/png',
+  width: 517,
+};
+
 const content = {
   seo: {
     canonical: SITE_URL,
@@ -58,10 +64,10 @@ const content = {
       'Aktuelles Berlinerisch–Hochdeutsch Wörterbuch. Lerne mehr über die Berliner Mundart, Berlinisch, den Berliner Jargon & Berolinismus.',
     opengraphImage: {
       alt: 'Berliner Schnauze – Berlinerisch Wörterbuch',
-      height: String(BrownBearRoar.height),
-      sourceUrl: new URL(BrownBearRoar.src, SITE_URL).href,
-      type: 'image/png',
-      width: String(BrownBearRoar.width),
+      height: BrownBearRoarAttrs.height,
+      sourceUrl: BrownBearRoarAttrs.src,
+      type: BrownBearRoarAttrs.type,
+      width: BrownBearRoarAttrs.width,
     },
     opengraphType: 'website',
   },
@@ -106,15 +112,17 @@ const facts = [
       Na Keule,<br /> keen'n Dunst vom Berlinern?
     </h1>
 
-    <div class="o-index__image-wrap">
+    <div class='o-index__image-wrap'>
       <Picture
         alt='Ein Bär der brüllt'
         class='o-index__image'
         formats={['avif', 'webp']}
         layout='constrained'
         priority={true}
-        sizes="(min-width: 900px) 900px, (min-width: 768px) 50vw, (min-width: 568px) 85vw, 64vw"
-        src={BrownBearRoar}
+        width={BrownBearRoarAttrs.width}
+        height={BrownBearRoarAttrs.height}
+        sizes='(min-width: 900px) 900px, (min-width: 768px) 50vw, (min-width: 568px) 85vw, 64vw'
+        src={BrownBearRoarAttrs.src}
       />
     </div>
   </header>
@@ -140,4 +148,3 @@ const facts = [
 
   <WordSearch />
 </Layout>
-
