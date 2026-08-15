@@ -31,6 +31,36 @@ describe("buildImagorPath", () => {
       "fit-in/100x50/filters:format(webp):quality(80)/https%3A%2F%2Fupload.wikimedia.org%2Fx.jpg",
     );
   });
+
+  it("appends custom Imagor filters when provided", () => {
+    const path = buildImagorPath("https://cms.berliner-schnauze.wtf/wp-content/uploads/foo.png", {
+      width: 400,
+      height: 200,
+      format: "avif",
+      quality: 70,
+      filters: ["sharpen(2)", "contrast(1.2)"],
+    });
+
+    expect(path).toBe(
+      "fit-in/400x200/filters:format(avif):quality(70):sharpen(2):contrast(1.2)/https%3A%2F%2Fcms.berliner-schnauze.wtf%2Fwp-content%2Fuploads%2Ffoo.png",
+    );
+  });
+
+  it("supports alternate endpoint modes and layout metadata when configured", () => {
+    const path = buildImagorPath("https://cms.berliner-schnauze.wtf/wp-content/uploads/foo.png", {
+      width: 400,
+      height: 200,
+      mode: "stretch",
+      smart: true,
+      align: { horizontal: "left", vertical: "top" },
+      padding: { left: 10, top: 20, right: 30, bottom: 40 },
+      filters: ["grayscale()"],
+    });
+
+    expect(path).toBe(
+      "stretch/400x200/10x20:30x40/left/top/smart/filters:format(webp):quality(80):grayscale()/https%3A%2F%2Fcms.berliner-schnauze.wtf%2Fwp-content%2Fuploads%2Ffoo.png",
+    );
+  });
 });
 
 describe("signImagorPath", () => {

@@ -59,6 +59,7 @@ const itemListJson = () =>
               <Picture
                 alt={post.featuredImage.node.altText ?? ''}
                 class='c-magazin-overview__image'
+                fallbackFormat='webp'
                 formats={['avif', 'webp']}
                 height={200}
                 loading='lazy'
@@ -74,9 +75,7 @@ const itemListJson = () =>
                 {new Date(post.date).toLocaleDateString('de-DE')}
               </time>
             )}
-            {post.excerpt && (
-              <div class='c-magazin-overview__excerpt' set:html={post.excerpt} />
-            )}
+            {post.excerpt && <div class='c-magazin-overview__excerpt' set:html={post.excerpt} />}
           </li>
         ))
       }

@@ -12,7 +12,7 @@ vi.mock("@utils/imagor", () => ({
   signImagorPath: signImagorPathMock,
 }));
 
-const { default: imagorImageService } = await import("@lib/imagorImageService");
+const { default: imagorImageService } = await import("../../../lib/imagorImageService");
 
 describe("imagorImageService.getURL", () => {
   it("builds and signs a path for a remote string src with width/height", () => {
@@ -70,14 +70,47 @@ describe("imagorImageService.getURL", () => {
     expect(buildImagorPathMock).not.toHaveBeenCalled();
     expect(signImagorPathMock).not.toHaveBeenCalled();
   });
+
+  it("skips the fallback format at 1x density (reserved for img tag), includes other formats and densities", () => {
+    const srcSet = imagorImageService.getSrcSet(
+      {
+        src: "https://cms.berliner-schnauze.wtf/foo.png",
+        width: 48,
+        height: 66,
+        format: "avif",
+        densities: [1, 2],
+        formats: ["avif", "webp"],
+      },
+      {} as never,
+    );
+
+    expect(srcSet).toHaveLength(3);
+    expect(
+      srcSet.map(
+        (entry: {
+          descriptor?: string;
+          transform: { format?: string; width?: number; height?: number };
+        }) => ({
+          descriptor: entry.descriptor,
+          format: entry.transform.format,
+          width: entry.transform.width,
+          height: entry.transform.height,
+        }),
+      ),
+    ).toEqual([
+      { descriptor: "1x", format: "avif", width: 48, height: 66 },
+      { descriptor: "2x", format: "avif", width: 96, height: 132 },
+      { descriptor: "2x", format: "webp", width: 96, height: 132 },
+    ]);
+  });
 });
 
 describe("imagorImageService transform-shape hooks", () => {
-  it("delegates validateOptions, getSrcSet, and getHTMLAttributes to Astro's baseService", async () => {
+  it("delegates validateOptions and HTML attributes to Astro's baseService, but overrides srcset generation for Imagor", async () => {
     const { baseService } = await import("astro/assets");
 
     expect(imagorImageService.validateOptions).toBe(baseService.validateOptions);
-    expect(imagorImageService.getSrcSet).toBe(baseService.getSrcSet);
+    expect(imagorImageService.getSrcSet).not.toBe(baseService.getSrcSet);
     expect(imagorImageService.getHTMLAttributes).toBe(baseService.getHTMLAttributes);
   });
 });
