@@ -1,33 +1,5 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## Tool Activation (mandatory at session start)
-
-Pre-load deferred tool schemas before any work — eliminates 2-step friction for the whole session:
-
-```text
-ToolSearch("select:mcp__serena__initial_instructions,mcp__serena__find_symbol,mcp__serena__find_declaration,mcp__serena__find_implementations,mcp__serena__find_referencing_symbols")
-→ call mcp__serena__initial_instructions
-
-ToolSearch("select:mcp__plugin_claude-mem_mcp-search____IMPORTANT,mcp__plugin_claude-mem_mcp-search__search,mcp__plugin_claude-mem_mcp-search__get_observations,mcp__plugin_claude-mem_mcp-search__smart_search,mcp__plugin_claude-mem_mcp-search__observation_search")
-→ call mcp__plugin_claude-mem_mcp-search____IMPORTANT
-```
-
-## Serena (symbol navigation)
-
-BEFORE using Grep/Glob/Read to find symbol definitions, implementations, or references:
-
-Use `mcp__serena__find_symbol`, `mcp__serena__find_declaration`, or `mcp__serena__find_implementations` — schemas pre-loaded via Tool Activation above.
-
-## Claude-Mem (past session context)
-
-For questions about past sessions, prior decisions, observations, or history:
-
-Use `mcp__plugin_claude-mem_mcp-search__search` or `mcp__plugin_claude-mem_mcp-search__smart_search` — schemas pre-loaded via Tool Activation above.
-
-Workflow: search() → timeline(anchor=ID) → get_observations([IDs]) — never fetch full details without filtering first.
-
 ## Project Overview
 
 Berliner Schnauze is a Berlin dialect translator web app. Data lives in a WordPress GraphQL backend; the frontend is a static Astro site with Vue 3 islands for interactivity. Deployed to Cloudflare Pages.
@@ -103,6 +75,7 @@ Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adap
 - **urql** handles GraphQL queries/mutations from Vue components
 - **Orama** provides full-text search with German stemming — index built at build time in `src/pages/api/search/index.json.ts`
 - **Composables** in `src/composable/` — Vue composables wrapping browser APIs (Cache Storage, Service Worker)
+- **Images** — remote images (CMS/Wikimedia/Amazon) are served through a custom Astro image service backed by Imagor (`src/lib/imagorImageService.ts`, URL signing in `src/utils/imagor.ts`, HMAC-SHA256). Configured via `image.service.entrypoint` in `astro.config.mjs`; local ESM-imported images bypass Imagor and use their original Vite asset URL. No `sharp` dependency — removed in favor of Imagor.
 - **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. `<script>` tags in `.astro` files run **only once** on initial load — re-initialize them with `document.addEventListener('astro:page-load', fn)` for subsequent client-side navigations.
 - **Global Vue app setup** in `src/pages/_app.ts` — configures urql client, registers `vTooltip` directive globally, and Nanostores devtools
 
@@ -153,7 +126,7 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 
 **VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Already in use: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`, `useVibrate`.
 
-**PWA**: Built with `@vite-pwa/astro` + Workbox. Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. On update: shows browser Notification if permission granted, else silently reloads. On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Workbox caches all static assets (JS, CSS, images) up to 15 MB.
+**PWA**: Built with `@vite-pwa/astro` + Workbox. Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. On update: shows browser Notification if permission granted, else silently reloads. On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Precache excludes `og/**` and `screenshots/**`; `maximumFileSizeToCacheInBytes` is 2 MB. `navigateFallback: "/"` covers offline navigations to uncached pages. Runtime caching (`astro.config.mjs`): StaleWhileRevalidate for search index/meta, NetworkFirst for word-of-the-day, CacheFirst for `imagor-images` (30 days, 500 entries).
 
 **Fonts**: All `@font-face` rules use `font-display: swap` (`src/styles/base/_typo.scss`). Do NOT change to `optional` — on cold cache the 100ms block period makes all text invisible then appear as fallback, causing severe CLS (0.65 observed).
 
@@ -175,7 +148,7 @@ Also guard `ResizeObserver` / `getBoundingClientRect` callbacks against transiti
 
 ## Environment Variables
 
-Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
+Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`, `IMAGOR_HOST`, `IMAGOR_SECRET`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
 
 ## Testing
 
