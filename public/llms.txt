@@ -1,5 +1,5 @@
 # Berliner Schnauze
-> Berliner Schnauze ist ein aktuelles Berlinerisch–Hochdeutsch Wörterbuch mit über 900 Einträgen,
+> Berliner Schnauze ist ein aktuelles Berlinerisch–Hochdeutsch Wörterbuch mit über 2400 Einträgen,
 > Etymologie, Phonologie, Grammatik und Beispielsätzen für jeden Berliner Ausdruck.
 
 Die Inhalte dürfen für Suche und direkte Nutzeranfragen verwendet werden (search=yes). Eine Vervielfältigung für KI-Training ist nicht gestattet (ai-train=no) — siehe /robots.txt für die verbindliche Bot-Konfiguration je Crawler.
@@ -7,7 +7,7 @@ Die Inhalte dürfen für Suche und direkte Nutzeranfragen verwendet werden (sear
 Einzelne Wortseiten folgen dem Muster `https://berliner-schnauze.wtf/wort/{begriff}`; die vollständige, aktuelle URL-Liste steht in der [Sitemap](https://berliner-schnauze.wtf/sitemap-index.xml).
 
 ## Wörterbuch
-- [Wort-Index](https://berliner-schnauze.wtf/wort): Vollständiger Wort-Index (900+ Einträge)
+- [Wort-Index](https://berliner-schnauze.wtf/wort): Vollständiger Wort-Index (2400+ Einträge)
 - [Wort des Tages](https://berliner-schnauze.wtf): Startseite mit täglich wechselndem Begriff
 - [Themen](https://berliner-schnauze.wtf/themen): Wörter gruppiert nach thematischen Kategorien
 
