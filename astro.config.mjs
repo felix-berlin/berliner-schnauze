@@ -298,12 +298,33 @@ export default defineConfig({
       includeAssets: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
       registerType: "autoUpdate",
       manifest: {
+        id: "/",
         name: "Berliner Schnauze",
         short_name: "BLN Schnauze",
         description: "Berlinerisch Wörterbuch",
         theme_color: "#2b333b",
         background_color: "#a8b2bc",
         lang: "de",
+        launch_handler: {
+          client_mode: "navigate-existing",
+        },
+        shortcuts: [
+          {
+            name: "Wort suchen",
+            short_name: "Suchen",
+            url: "/",
+          },
+          {
+            name: "Berliner oder Nicht spielen",
+            short_name: "Spielen",
+            url: "/games/berliner-oder-nicht",
+          },
+          {
+            name: "Wort vorschlagen",
+            short_name: "Vorschlagen",
+            url: "/wort-vorschlagen",
+          },
+        ],
         icons: [
           {
             src: "favicons/android-chrome-192x192.png",
@@ -339,7 +360,11 @@ export default defineConfig({
       },
       workbox: {
         globDirectory: "dist",
-        // navigateFallback: "/",
+        cleanupOutdatedCaches: true,
+        // Falls back to the (precached) homepage for any navigation that misses
+        // both precache and network — e.g. a word page added after the last SW
+        // update, while offline — instead of the browser's generic offline page.
+        navigateFallback: "/",
         globPatterns: import.meta.env.DEV
           ? []
           : ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
