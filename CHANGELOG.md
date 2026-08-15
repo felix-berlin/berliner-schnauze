@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.48.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.48.0...v3.48.1) (2026-08-15)
+
+
+### Bug Fixes
+
+* **docs:** update llms.txt with additional context and structure improvements ([fc414ff](https://github.com/felix-berlin/berliner-schnauze/commit/fc414ff9cdc7f33a80cd61d6d15dbd2df986c09a))
+
 # [3.48.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.47.0...v3.48.0) (2026-08-15)
 
 
