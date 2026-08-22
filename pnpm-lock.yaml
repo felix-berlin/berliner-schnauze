@@ -131,7 +131,7 @@ importers:
     devDependencies:
       '@0no-co/graphqlsp':
         specifier: ^1.17.3
-        version: 1.17.4(graphql@17.0.2)(typescript@6.0.3)
+        version: 1.17.5(graphql@17.0.2)(typescript@6.0.3)
       '@astrojs/check':
         specifier: ^0.9.10
         version: 0.9.10(prettier@3.8.4)(typescript@6.0.3)
@@ -316,8 +316,8 @@ packages:
       graphql:
         optional: true
 
-  '@0no-co/graphqlsp@1.17.4':
-    resolution: {integrity: sha512-5OneBcUU0dVbyrTqyFzmC1TtXmA1PxRKLLBO3O9wqmB6dzkidea1d+mK3ciqYDSejq22LzBQ2lb829aArK22/g==}
+  '@0no-co/graphqlsp@1.17.5':
+    resolution: {integrity: sha512-wsygfTO3pdkz4idDw8BxdMdgB9AB8nuJDJTUwYy87BiZEZRXS4bEfn4oNl9VtxTo6j2lzX/gED+IvOgxsSy2Jg==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
       typescript: ^5.0.0 || ^6.0.0
@@ -9551,7 +9551,7 @@ snapshots:
     optionalDependencies:
       graphql: 17.0.2
 
-  '@0no-co/graphqlsp@1.17.4(graphql@17.0.2)(typescript@6.0.3)':
+  '@0no-co/graphqlsp@1.17.5(graphql@17.0.2)(typescript@6.0.3)':
     dependencies:
       '@gql.tada/internal': 1.2.2(graphql@17.0.2)(typescript@6.0.3)
       graphql: 17.0.2
