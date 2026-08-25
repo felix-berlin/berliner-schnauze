@@ -117,7 +117,6 @@
     "@graphql-codegen/typescript-operations": "^6.1.6",
     "@infisical/cli": "^0.43.121",
     "@nanostores/logger": "^1.1.0",
-    "@playform/inline": "^0.1.4",
     "@playwright/test": "^1.62.1",
     "@semantic-release/changelog": "^7.0.0",
     "@semantic-release/exec": "^7.1.0",

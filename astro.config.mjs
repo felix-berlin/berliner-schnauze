@@ -457,7 +457,6 @@ export default defineConfig({
             uploadToken: CODECOV_TOKEN,
           }),
         ]),
-    (await import("@playform/inline")).default(),
   ],
   vite: {
     resolve: {
