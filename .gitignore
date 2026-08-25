@@ -2,6 +2,7 @@
 dist/
 dev-dist/
 .astro
+.og-cache/
 
 # one-off migration script output (see scripts/*.ts)
 /data/*

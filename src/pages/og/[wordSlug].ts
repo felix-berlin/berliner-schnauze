@@ -30,6 +30,7 @@ export const { getStaticPaths, GET } = await OGImageRoute({
         side: "inline-start",
         width: 16,
       },
+      cacheDir: "./.og-cache",
       description: page.translation || undefined,
       font: {
         description: {

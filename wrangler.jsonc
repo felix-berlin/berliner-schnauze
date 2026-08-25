@@ -1,0 +1,26 @@
+{
+  "name": "berliner-schnauze",
+  // Set this to today's date when bumping compatibility.
+  "compatibility_date": "2026-08-25",
+  "assets": {
+    "directory": "./dist/",
+  },
+  "preview_urls": true,
+  "workers_dev": true,
+  "observability": {
+    "enabled": false,
+    "head_sampling_rate": 1,
+    "redact_query_string": false,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true,
+    },
+    "traces": {
+      "enabled": true,
+      "persist": true,
+      "head_sampling_rate": 1,
+    },
+  },
+}

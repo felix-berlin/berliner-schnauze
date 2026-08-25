@@ -59,7 +59,8 @@
     "browserslist:update": "pnpx update-browserslist-db@latest",
     "predev": "pnpm run gql:generate && pnpm run supportedBrowsers",
     "preinstall": "pnpx only-allow pnpm",
-    "server:preview": "pnpx wrangler pages dev ./dist",
+    "deploy": "pnpx wrangler deploy",
+    "server:preview": "pnpx wrangler dev",
     "server:build:preview": "pnpm build && pnpm server:preview",
     "supportedBrowsers": "node scripts/generate-supported-browsers.mjs",
     "refreshAuthToken": "node --env-file=.env ./src/utils/refreshToken.js"
