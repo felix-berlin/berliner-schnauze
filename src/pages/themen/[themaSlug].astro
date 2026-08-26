@@ -44,7 +44,7 @@ const { thema, words } = Astro.props as Props;
 
 const seoProps = seoData({
   seo: {
-    canonical: thema.seo?.canonical ?? canonicalUrl(`/themen/${thema.slug}/`, Astro.site),
+    canonical: canonicalUrl(`/themen/${thema.slug}/`, Astro.site),
     opengraphDescription:
       thema.seo?.opengraphDescription ?? thema.seo?.metaDesc ?? thema.description ?? '',
     ...(thema.seo?.opengraphImage?.sourceUrl && {

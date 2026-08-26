@@ -19,11 +19,24 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-# Marker for disabling Bard and Vertex AI
+# Real-time retrieval for a user's Perplexity query (distinct from PerplexityBot's indexing)
+User-agent: Perplexity-User
+Allow: /
+
+# Real-time retrieval when a user asks Claude a question (distinct from ClaudeBot's training crawl)
+User-agent: Claude-User
+Allow: /
+
+# Indexing for Claude's search/retrieval features (not training)
+User-agent: Claude-SearchBot
+Allow: /
+
+# Google AI training opt-out only — does not affect Google Search or AI Overviews,
+# which are grounded on the regular Googlebot-crawled index (not blocked here)
 User-agent: Google-Extended
 Disallow: /
 
-# Speech synthesis only?
+# Training data for Meta's AI/speech-recognition models
 User-agent: FacebookBot
 Disallow: /
 
@@ -47,11 +60,13 @@ Disallow: /
 User-agent: Bytespider
 Disallow: /
 
-# Meta AI
+# Meta AI training and indexing (no separate real-time bot exists to split out)
 User-agent: Meta-ExternalAgent
 Disallow: /
+
+# Real-time retrieval when a user asks a Meta AI product a question (not training)
 User-agent: Meta-ExternalFetcher
-Disallow: /
+Allow: /
 
 # Allen Institute for AI
 User-agent: AI2Bot
