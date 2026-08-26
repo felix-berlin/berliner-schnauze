@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.49.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.0...v3.49.1) (2026-08-26)
+
+
+### Bug Fixes
+
+* **security:** allow Cloudflare's own Web Analytics beacon in CSP ([5a6c8cc](https://github.com/felix-berlin/berliner-schnauze/commit/5a6c8cc6e489ab3e82227536bce05991c45a0f99))
+
 # [3.49.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.48.2...v3.49.0) (2026-08-26)
 
 
