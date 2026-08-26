@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.49.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.48.2...v3.49.0) (2026-08-26)
+
+
+### Bug Fixes
+
+* **seo:** allow real-time AI bots, keep only training crawlers blocked ([9628b65](https://github.com/felix-berlin/berliner-schnauze/commit/9628b656685cb9b4a4ed79e247c621f34055032c))
+* **seo:** stop canonical tags pointing at unreachable WP backend domain ([58745a7](https://github.com/felix-berlin/berliner-schnauze/commit/58745a72447bd7e553dabafe5c94aa4041adc9db))
+
+
+### Features
+
+* **security:** add CSP and security response headers via Cloudflare Workers ([61013f8](https://github.com/felix-berlin/berliner-schnauze/commit/61013f83177fea3d964b63005eb5b5830722a726))
+
 ## [3.48.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.48.1...v3.48.2) (2026-08-15)
 
 
