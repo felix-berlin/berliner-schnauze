@@ -11,9 +11,10 @@ import type { Seo, SeoProps, Title } from '@/types/seo';
 export type { Seo, SeoProps, Title };
 
 const { seo, title } = Astro.props as SeoProps & Title;
-const canonicalURL = seo?.canonical?.trim()
-  ? seo.canonical.replace(/\/$/, '')
-  : canonicalUrl(Astro.url.pathname, Astro.site);
+// Yoast's seo.canonical is generated from the headless WP install's own
+// domain (cms.berliner-schnauze.wtf), which isn't publicly resolvable as
+// content — always self-reference the frontend URL instead.
+const canonicalURL = canonicalUrl(Astro.url.pathname, Astro.site);
 ---
 
 <!-- Global Metadata -->
