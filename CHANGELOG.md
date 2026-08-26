@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.49.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.1...v3.49.2) (2026-08-26)
+
+
+### Bug Fixes
+
+* **perf:** disable Astro prefetch, Cloudflare Workers refuses it with 503 ([45460e0](https://github.com/felix-berlin/berliner-schnauze/commit/45460e044c88b109b243c2856167ae98d9bbca31))
+
 ## [3.49.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.0...v3.49.1) (2026-08-26)
 
 
