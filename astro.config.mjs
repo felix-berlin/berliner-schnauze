@@ -102,10 +102,11 @@ export default defineConfig({
       },
     },
   ],
-  prefetch: {
-    prefetchAll: true,
-    defaultStrategy: "hover",
-  },
+  // Disabled: Cloudflare refuses all prefetch requests (Sec-Purpose: prefetch)
+  // for Workers-hosted origins with a 503 ("disabled for worker requests"),
+  // unlike the Pages platform this project migrated from. prefetchAll would
+  // just ship JS that always fails at the edge.
+  prefetch: false,
   build: {
     format: "file",
   },
