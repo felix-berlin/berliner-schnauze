@@ -141,7 +141,7 @@
     "graphql-config": "^5.1.6",
     "graphql-sock": "^1.0.1",
     "jsdom": "^30.0.1",
-    "oxfmt": "^0.63.0",
+    "oxfmt": "^0.66.0",
     "oxlint": "^1.78.0",
     "oxlint-tsgolint": "^7.0.2001",
     "postcss-html": "^2.0.0",
