@@ -82,7 +82,7 @@ importers:
         version: 1.12.0(astro@7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.2.0)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))
       astro-og-canvas:
         specifier: ^0.13.0
-        version: 0.13.0(astro@7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.2.0)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))
+        version: 0.13.1(astro@7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.2.0)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0))
       canvaskit-wasm:
         specifier: ^0.41.1
         version: 0.41.1
@@ -4780,8 +4780,8 @@ packages:
     peerDependencies:
       astro: ^2.0.0-beta.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
 
-  astro-og-canvas@0.13.0:
-    resolution: {integrity: sha512-jcIDhE9OGIbd7LstZQ4CyzOpbbEKAlxJqEgdkVu6r26m7yJKlQjKysszfDxlox717cnCLPXKivyFjsufcq8sYA==}
+  astro-og-canvas@0.13.1:
+    resolution: {integrity: sha512-YrsWTht6TwNWpP/GHZeQS9sUtxsyf5XeycFEekX0NMyljOVr93MfWcTkNw7GnFD862j4JdekiVGdn/xJ6+8C/g==}
     peerDependencies:
       astro: ^5.0.0 || ^6.0.0 || ^7.0.0
 
@@ -4962,6 +4962,9 @@ packages:
 
   canvaskit-wasm@0.41.1:
     resolution: {integrity: sha512-gO2rNMIE0lOQ8MaarM4qNeq2zZAEknAObKP2XAKidMSAY8P5sURGdFkrx1TSdHuBFqTf5w35JqjuUzjibqkD5g==}
+
+  canvaskit-wasm@0.42.0:
+    resolution: {integrity: sha512-N3ikotmzYwDVAcpQKDMptBT2P5pIEWS9ywdmrQA2awwaMF9cxKEFuxZZHv9ay1Em9kDjxDsPtwUzDm1uNj136g==}
 
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
@@ -14077,10 +14080,10 @@ snapshots:
     dependencies:
       astro: 7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.2.0)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
 
-  astro-og-canvas@0.13.0(astro@7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.2.0)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)):
+  astro-og-canvas@0.13.1(astro@7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.2.0)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)):
     dependencies:
       astro: 7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.2.0)(jiti@2.7.0)(sass@1.101.0)(terser@5.48.0)(yaml@2.9.0)
-      canvaskit-wasm: 0.41.1
+      canvaskit-wasm: 0.42.0
       deterministic-object-hash: 2.0.2
       entities: 8.0.0
 
@@ -14345,6 +14348,10 @@ snapshots:
   caniuse-lite@1.0.30001809: {}
 
   canvaskit-wasm@0.41.1:
+    dependencies:
+      '@webgpu/types': 0.1.21
+
+  canvaskit-wasm@0.42.0:
     dependencies:
       '@webgpu/types': 0.1.21
 
