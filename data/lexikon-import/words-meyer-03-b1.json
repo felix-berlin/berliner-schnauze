@@ -1,0 +1,2042 @@
+[
+  {
+    "word": "Baa",
+    "translations": ["neugieriger Affe (Kindersprache)"],
+    "examples": [{ "example": "Alter Baa-affe!", "explanation": "zu einem neugierig zusehenden Kind gesagt" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bäba",
+    "translations": ["Bett (Kinderwort)"],
+    "infoText": "„Babä“ dagegen ist eine Interjektion der Kindersprache, die Abscheu ausdrückt: „Fui Babä!“",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bachulke",
+    "translations": ["ungeschlachter Mensch"],
+    "infoText": "Vom Polnischen.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bachuner",
+    "translations": ["ungarisches Schwein", "dicker Mensch"],
+    "infoText": "Eigentlich „Bakonyer“, aus dem Bakony-Wald.",
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bachus",
+    "translations": ["dicker Mensch"],
+    "infoText": "Mit Anklang an „Bachuner“.",
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Backebeere",
+    "translations": ["Backbirne", "alte Jungfer (übertragen)"],
+    "infoText": "Übertragen auf eine alte Jungfer, weil sie so „injeschrumpelt“ ist wie eine gebackene Birne.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Backebeern",
+    "translations": ["Sachen, Möbel, die ganze Habe"],
+    "examples": [{ "example": "Er is ausjezogen mit de janze Backebeern.", "explanation": "" }],
+    "infoText": "Eigentlich: was man auf dem Rücken trägt.",
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Backen, der Schnee",
+    "translations": ["der Schnee lässt sich ballen"],
+    "examples": [{ "example": "Der Schnee backt.", "explanation": "er lässt sich ballen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Backenkottelette",
+    "translations": ["Backenbart"],
+    "alternativeWords": ["Bartkotteletten"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Backfeifenjesichte",
+    "translations": ["Gesicht, dem man beim ersten Anblick eine Ohrfeige geben möchte"],
+    "alternativeWords": ["Ohrfeijenjesichte"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Backzähne",
+    "translations": ["drohende Redewendung"],
+    "examples": [{ "example": "Sie ha'm wol lange keene Backzähne jespuckt?", "explanation": "Drohung" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Badeenget",
+    "translations": ["Porzellanpuppe, die ein nacktes Kind vorstellt"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bäcker",
+    "translations": ["Redewendung über löchriges Backwerk"],
+    "examples": [{ "example": "Da hat de Bäcker seine Frau durchjejagt.", "explanation": "von Backwerk mit großen Höhlungen" }],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bäckerbeene",
+    "translations": ["krumme Beine (X-Beine)"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Baffze",
+    "translations": ["unwissender Schwätzer"],
+    "alternativeWords": ["Kunstbaffze"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bahne",
+    "translations": ["Ruf beim Wettrennen, Turnen u. Ä.", "Bahn frei!"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bahnschützen",
+    "translations": ["Droschkenkutscher, die an den Bahnhöfen halten"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Balangse",
+    "translations": ["Gleichgewicht"],
+    "infoText": "Vom französischen „balance“, mit weichem s gesprochen.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bald",
+    "translations": ["ist es noch nicht fertig?", "beinahe hätte ich etwas Grobes gesagt"],
+    "examples": [
+      { "example": "Wirt et bald?", "explanation": "ist es noch immer nicht fertig?" },
+      { "example": "Ick hätte bald wat jesagt!", "explanation": "beinahe hätte ich eine Grobheit gesagt" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Balkonkragen",
+    "translations": ["Steh-Umlegekragen"],
+    "alternativeWords": ["Kragen mit Ausländer"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Balle",
+    "translations": ["bald"],
+    "examples": [{ "example": "Nu wird et mir balle ze bunt.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ballerjan droppen",
+    "translations": ["Baldriantropfen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Balletöse",
+    "translations": ["Ballet-Tänzerin"],
+    "infoText": "Ebenso gebildet: Konfektionöse, Frisöse (nicht französisch).",
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bammelecke",
+    "translations": ["Stelle auf der Regatta-Strecke bei Grünau"],
+    "infoText": "Dort fangen die Segel an zu bammeln.",
+    "themen": ["orte-spitzname", "unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bammelig",
+    "translations": ["liederlich (besonders von Kleidern)"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bammelmann",
+    "translations": ["sich erhängen"],
+    "examples": [{ "example": "Er hat 'n Bammelmann jemacht.", "explanation": "er hat sich erhängt" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bammeln",
+    "translations": ["baumeln"],
+    "examples": [{ "example": "Wat drum un dran bammelt.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bande",
+    "translations": ["Gesellschaft (kaum noch herabsetzend)"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bänke",
+    "translations": ["durch die Bank: alle miteinander"],
+    "infoText": "Plural oft „Banken“ statt „Bänke“.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bankjunge",
+    "translations": ["Börsenstutzer"],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bankrott",
+    "translations": ["matt, müde (übertragen)"],
+    "examples": [{ "example": "Man wird janz bankrott dabei.", "explanation": "" }],
+    "alternativeWords": ["vankrott"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Barbarsch",
+    "translations": ["sehr"],
+    "examples": [{ "example": "'t is barbarsch kalt.", "explanation": "" }],
+    "alternativeWords": ["balbarsch"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Barbierflügel",
+    "translations": ["Gitarre"],
+    "infoText": "Barbiere spielten früher oft Gitarre.",
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Barbiertolle",
+    "translations": ["aufwärts gebürstetes Haar"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Barnim",
+    "translations": ["Spitzname für ein Gefängnis"],
+    "infoText": "Gefängnis in der Barnimstraße.",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Baron",
+    "translations": ["stellungslos sein"],
+    "alternativeWords": ["baronisieren"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bauch",
+    "translations": ["vor Lachen der ganze Bauch eine Falte"],
+    "examples": [
+      { "example": "Mensch, hab ick jelacht! Der janze Bauch war eene Falte!", "explanation": "" },
+      { "example": "Mir wackelt der Bauch! — Mir auch, mir auch!", "explanation": "ursprünglich Parodie auf ein Lied in Gounods Oper Margarete" }
+    ],
+    "themen": ["koerper", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beern",
+    "translations": ["Ruf fahrender Obsthändler"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Befinden",
+    "translations": ["ausweichende Antwort auf eine Befindlichkeitsfrage"],
+    "examples": [{ "example": "Danke, er befindet sich.", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bekleckern, sich",
+    "translations": ["sich beschmutzen (besonders von der Wäsche beim Essen)"],
+    "examples": [
+      { "example": "Du hast dir mit Ruhm bekleckert.", "explanation": "ironisch: du hast dich ausgezeichnet" },
+      { "example": "Bekleckern Se sich man nich!", "explanation": "höhnisch, beim Beginn eines Wortwechsels; ähnlich: „Machen Se sich man nich voll!“" }
+    ],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bekommen, wenn 't Ihnen man jut",
+    "translations": ["ironischer Wunsch"],
+    "examples": [{ "example": "Wenn 't Ihnen man jut bekommt!", "explanation": "ironisch" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Berlin",
+    "translations": ["was will das schon heißen für eine Stadt wie Berlin"],
+    "examples": [
+      { "example": "Wat kost Berlin?", "explanation": "scherzhafte Frage, wenn man plötzlich eine (noch so kleine) Geldsumme in die Hände bekommen hat" },
+      { "example": "Wat will det sagen vor 'ne Stadt wie Berlin!", "explanation": "es ist verhältnismäßig nicht viel" }
+    ],
+    "infoText": "„Berlin W.“ wird öfter gedeutet als „Berlin-Wedding“. Die „Berliner Stube“ ist ein langgestrecktes Durchgangszimmer mit einem Eckfenster nach dem Hofe.",
+    "themen": ["orte-spitzname", "stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bimmel",
+    "translations": ["Glocke"],
+    "alternativeWords": ["bimmeln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Binse, in de Binsen jehn",
+    "translations": ["verloren gehen"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blase",
+    "translations": ["die ganze Gesellschaft", "es regnet Blasen (warmer Regen)"],
+    "examples": [
+      { "example": "De janze Blase.", "explanation": "die ganze Gesellschaft" },
+      { "example": "Et rejent Blasen.", "explanation": "so, dass auf den überschwemmten Stellen Blasen schwimmen (warmer Regen)" }
+    ],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blasen",
+    "translations": ["nicht mehr aushalten können", "beschwindeln"],
+    "examples": [
+      { "example": "Blas' mir 'n Stoob weg!", "explanation": "wird dem Hochmütigen zugeschrieben, der auftritt, als wollte er zu jedermann sagen: blase mir den Staub ab" },
+      { "example": "Nich zum Blasen!", "explanation": "nicht auszuhalten" },
+      { "example": "Sind Sie musikalisch? — Ja, ick blase — de Suppe.", "explanation": "Scherzantwort" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blasenjummi",
+    "translations": ["wie Knalljummi (Luftballon)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blauen",
+    "translations": ["bläuen (von der Wäsche)"],
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bocksdemlich",
+    "translations": ["sehr dumm (Verstärkung von „demlich“)"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bummeln",
+    "translations": ["schlendern, müßig gehen"],
+    "alternativeWords": ["Bummelei", "Bummelfritze", "Bummler"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bau",
+    "translations": ["die ganze Gesellschaft", "zum Bau gehören: einem Berufsstand angehören"],
+    "examples": [{ "example": "Der ianze Bau.", "explanation": "die ganze Gesellschaft, aus Angelys „Fest der Handwerker“" }],
+    "infoText": "Ein Tischler oder Schlosser gehört „zum Bau“, ein Schneider oder Schuster nicht.",
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bauchbinde",
+    "translations": ["Zigarre mit Papierring"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bauen",
+    "translations": ["Leute wie wir (Redewendung)", "machen, anfertigen lassen (Studentensprache)"],
+    "examples": [{ "example": "Wie wir jebaut sind!", "explanation": "Leute wie wir" }],
+    "infoText": "Studentisch für „machen“: „Ick laß mir 'n Anzug bauen.“ Studenten „bauen“ sogar ein Examen.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bauersche",
+    "translations": ["Bauerfrau"],
+    "infoText": "Ebenso gebildet: „'ne Hökersche“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Baumaterialien",
+    "translations": ["Inschrift bei Abbrüchen"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Baustelle",
+    "translations": ["Kopf (scherzhaft, von einem Kahlköpfigen)"],
+    "examples": [{ "example": "Der hat Baustellen zu verkoofen.", "explanation": "von einem Kahlköpfigen" }],
+    "themen": ["koerper", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beaugenscheinigen",
+    "translations": ["besichtigen"],
+    "alternativeWords": ["beaugapfeln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beboomfiedeln",
+    "translations": ["überlegen"],
+    "examples": [{ "example": "Wir woll'n uns det heite Abend beboomfiedeln.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beboomolen",
+    "translations": ["ängstlich sein", "zum Verzweifeln (sein)"],
+    "examples": [{ "example": "Beboomolen Se sich man nich!", "explanation": "seien Sie nicht so ängstlich" }],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bedeckt",
+    "translations": ["Formel zur Ablehnung eines Dankes"],
+    "examples": [{ "example": "Bleiben Se bedeckt!", "explanation": "sagt man, um den Dank eines anderen abzulehnen" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bedibbert",
+    "translations": ["eingeschüchtert"],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bedrippt",
+    "translations": ["kleinlaut"],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beduselt",
+    "translations": ["betrunken"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beebeet",
+    "translations": ["erbärmlich (euphemistisch)", "sich nicht zieren"],
+    "examples": [{ "example": "Beebeen Se sich man nich.", "explanation": "zieren Sie sich nicht" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Been",
+    "translations": ["Bein, auch für Fuß"],
+    "examples": [
+      { "example": "Mach Beene!", "explanation": "geh weg!" },
+      { "example": "Macht der Beene!", "explanation": "reißt der aus!" },
+      { "example": "Er hat hundert Daler an't Been jebunden.", "explanation": "verschwendet, eingebüßt" },
+      { "example": "Er is mit beede Beene rinjesprungen.", "explanation": "er hat sich mit Eifer daraufgeworfen" },
+      { "example": "Dir wer'k Beene machen!", "explanation": "Drohung" }
+    ],
+    "infoText": "„Ans Bein binden“ = verschenken, verschwenden: bei der Taufe wurde den Kindern von den Paten ein Geschenk ans Bein gebunden (Angebinde).",
+    "themen": ["redewendungen-sprueche", "koerper"],
+    "allowDuplicate": true,
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beereblang",
+    "translations": ["Birnensorte (beurre blanc)"],
+    "alternativeWords": ["Beerekrisk"],
+    "infoText": "So nennen die Hökerinnen gewisse Birnenarten (beurre blanc, beurre gris).",
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beeschaf",
+    "translations": ["Kinderwort für Schaf", "dummer Mensch"],
+    "examples": [{ "example": "'n kleenet Beeschaf", "explanation": "" }],
+    "alternativeWords": ["Beelamm"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Befiedelt",
+    "translations": ["leicht angetrunken"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Befleißigen, sich",
+    "translations": ["fleißig sein"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besummeln",
+    "translations": ["zustande bringen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Behalten",
+    "translations": ["das mag ich nicht"],
+    "examples": [{ "example": "Det kannste vor dir alleene behalten.", "explanation": "das mag ich nicht" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Behaupten",
+    "translations": ["das kann ich von mir nicht behaupten"],
+    "examples": [{ "example": "Kann ick von mir nich behaupten!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Behauptung",
+    "translations": ["sich mit einer falschen Behauptung tragen: eine Perücke tragen"],
+    "examples": [{ "example": "Er trägt sich mit einer falschen Behauptung.", "explanation": "alter Witz: er trägt eine Perücke" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Behebbelig",
+    "translations": ["beweglich"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Behende",
+    "translations": ["klein und schwächlich"],
+    "examples": [{ "example": "'t is man so'n behendet Kerlken.", "explanation": "" }],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Behmm",
+    "translations": ["Groschen"],
+    "infoText": "Von den „böhmischen Groschen“.",
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bei, ick wer dir",
+    "translations": ["Drohformel"],
+    "examples": [{ "example": "Mutter, kann ick 'n bisken uf 'n Hof spielen jehn? — Ick wer dir bei spielen jehn!", "explanation": "Drohung" }],
+    "infoText": "Auch: „Er kann nischt bei sich behalten“ = nichts verschweigen.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beilage",
+    "translations": ["dem Fleisch beigelegte Knochen (Schlachtersitte)"],
+    "infoText": "Die Schlachter haben die Sitte, zu dem Fleisch Knochen und Zumpel beizulegen. Auf Beschwerden antworten sie: „Wenn de Ochsen erst uf Bratwurschte rumloofen, wern Se keene Knochen mehr als Beilage kriejen.“",
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beinkleid",
+    "translations": ["Beileid (scherzhaft)"],
+    "examples": [{ "example": "herzlichstes Beinkleid", "explanation": "scherzhaft für Beileid" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beischreiben",
+    "translations": ["ohne Kommentar nicht zu verstehen"],
+    "examples": [{ "example": "Det mußte beischreiben.", "explanation": "das ist ohne Kommentar nicht zu verstehen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beißen",
+    "translations": ["nicht gleich beißen (Beruhigungsformel)", "Zuruf an einen Angler"],
+    "examples": [
+      { "example": "Beißt man nich jleich.", "explanation": "Beruhigungsformel" },
+      { "example": "Beißen se an?", "explanation": "Zuruf an einen Angler" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beißerchen",
+    "translations": ["Zähne (Kinderwort)"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beißzickeln",
+    "translations": ["Bicycle (Fahrrad)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beließen, sich",
+    "translations": ["das Grab besuchen"],
+    "examples": [{ "example": "Ick jeh meine Olle beließen.", "explanation": "ich gehe die Blumen auf ihrem Grab gießen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beiraben",
+    "translations": ["Kritik an einer schlechten Leistung"],
+    "examples": [{ "example": "Laß dir bejraben.", "explanation": "Kritik einer schlechten Leistung; auch: Damit kannste dir bejraben lassen" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beirapschen",
+    "translations": ["betasten"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bekehrt",
+    "translations": ["er wusste nicht, wie ihm geschah (vor Staunen)"],
+    "examples": [{ "example": "Er wußte nich, wie er bekehrt war.", "explanation": "vor Staunen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bekieken",
+    "translations": ["besehen", "sich von innen bekieken: nach dem Mittag schlafen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bekniffen",
+    "translations": ["befangen, beschämt"],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bekobern, sich",
+    "translations": ["sich erholen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bekoofen, sich",
+    "translations": ["sich etwas „anschmieren“ lassen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Belemmern, sich",
+    "translations": ["sich blamieren (euphemistisch)"],
+    "examples": [{ "example": "Belemmer dir man nich!", "explanation": "" }],
+    "infoText": "„Belemmert“ heißt schwach, wertlos.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bellejanxplatz",
+    "translations": ["Spottname für den Bellealliance-Platz"],
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bellevuestraße",
+    "translations": ["volkstümliche Aussprache der Bellevuestraße"],
+    "infoText": "Man hört „Bellevistraße“, mit Anklang an den Namen Levi.",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bemeineidijen",
+    "translations": ["beschwören"],
+    "examples": [{ "example": "Det kann ick bemeineidijen.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bemerken",
+    "translations": ["höfliche Nachfrage bei Unverständnis"],
+    "examples": [{ "example": "Wie bemerkten Sie eben sehr richtig?", "explanation": "höfliche Frage, wenn man nicht verstanden hat" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bemogeln",
+    "translations": ["betrügen"],
+    "infoText": "Daher „Iroß-Mogul“ für einen, der es gut versteht.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "allowDuplicate": true,
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bemuddeln",
+    "translations": ["beschmutzen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bemuttern",
+    "translations": ["sich mütterlich um jemanden kümmern"],
+    "infoText": "Besonders von der Sorge älterer Geschwister für jüngere.",
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Benehmen, wenn man sich's recht",
+    "translations": ["sich's recht überlegen"],
+    "examples": [{ "example": "Wenn man 't sich recht benimmt.", "explanation": "sich's recht überlegt" }],
+    "alternativeWords": ["beniemen", "benähmen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Venehmijung",
+    "translations": ["Benehmen"],
+    "examples": [{ "example": "Det is ja jakeene Benehmijung!", "explanation": "" }],
+    "alternativeWords": ["Benehmireet"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Benzin, alle",
+    "translations": ["Frage an einen langsam gehenden Begleiter"],
+    "examples": [{ "example": "Benzin alle?", "explanation": "fragt man einen Begleiter, wenn er plötzlich langsamer geht" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Benzindroschke",
+    "translations": ["Automobil"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Berechnen",
+    "translations": ["alle Schliche kennen"],
+    "examples": [{ "example": "Der hat's berechent!", "explanation": "er kennt alle Schliche" }],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Berühmt",
+    "translations": ["nichts Besonderes (verneinend)"],
+    "examples": [{ "example": "Det is nich berühmt.", "explanation": "nichts Besonderes" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besabbern, sich",
+    "translations": ["sich mit Speichel nass machen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besalzen",
+    "translations": ["eintränken, es jemandem heimzahlen"],
+    "examples": [{ "example": "Det wer 'k ihn besalzen!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bescheid stoßen",
+    "translations": ["jemanden zurechtweisen"],
+    "examples": [{ "example": "Ick wer'n Bescheid stoßen.", "explanation": "ihn zurechtweisen" }],
+    "alternativeWords": ["Bescheed jestochen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bescheidenheit",
+    "translations": ["Bescheidenheit ziert den Jüngling (Parodie)"],
+    "infoText": "Parodie einer Stelle aus Grillparzers „Ahnfrau“.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beschlabbern, sich",
+    "translations": ["sich beschmutzen (wie bekleckern)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beschmort",
+    "translations": ["angetrunken"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beschnarchen",
+    "translations": ["aufmerksam betrachten"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beschwabbeln",
+    "translations": ["überreden"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bese",
+    "translations": ["sehr, tüchtig"],
+    "examples": [{ "example": "Au du, der kann't bese!", "explanation": "z. B. beim Murmelspielen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besehn",
+    "translations": ["Schläge bekommen", "nicht leiden können", "sehschwach sein"],
+    "examples": [
+      { "example": "Du wist jleich wat besehn!", "explanation": "du wirst gleich Schläge bekommen" },
+      { "example": "Ick kann den Kerl nich besehn.", "explanation": "ich kann ihn nicht leiden" },
+      { "example": "Bloß besehn, aber nich anfassen!", "explanation": "Verbotsformel" }
+    ],
+    "infoText": "„Von inwendig besehn“ = entzweimachen, z. B. eine Uhr — Hauptvergnügen der Kinder.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besen",
+    "translations": ["Dienstmädchen"],
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besenftijen",
+    "translations": ["mit Senf bestreichen"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besenstiel",
+    "translations": ["sehr dick geschrieben"],
+    "examples": [{ "example": "Det is mit'n Besenstiel jeschrieben.", "explanation": "sehr dick" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besinge",
+    "translations": ["Heidelbeeren"],
+    "infoText": "Vom Gotischen „basi“ (Beere). Besinjssuppe = Heidelbeersuppe.",
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besitzen, Sie besitzen mir",
+    "translations": ["Sie klemmen mein Kleid ein"],
+    "examples": [{ "example": "Sie besitzen mir.", "explanation": "Sie klemmen mein Kleid ein" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besorjen",
+    "translations": ["es jemandem heimzahlen (ironisch)"],
+    "infoText": "Eigentlich: es so machen, wie er will; ironisch: es ihm so machen, wie er nicht möchte.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Besser wie keen Hemd",
+    "translations": ["besser als nichts"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beste, du bist der",
+    "translations": ["ironisches Lob"],
+    "examples": [{ "example": "Du bist der beste, wenn de andern nich zu Hause sind.", "explanation": "ironisch" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bestrampelt",
+    "translations": ["verrückt"],
+    "examples": [{ "example": "Bist wol bestrampelt?", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bestreiten, ick bestreite alles",
+    "translations": ["formelhafte Verteidigungsfloskel"],
+    "examples": [{ "example": "Ick bestreite alles un erwarte den Jejenbeweis!", "explanation": "bei Rechtsanwälten am früheren Stadtgericht üblich" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bethlehem, nach",
+    "translations": ["schlafen gehen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Betimveln",
+    "translations": ["betrügen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Betrieb, is ja jakeen",
+    "translations": ["es geht nicht lebhaft/lustig zu"],
+    "examples": [{ "example": "Is ja jakeen Betrieb!", "explanation": "" }],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bettschwere",
+    "translations": ["genug getrunken haben, um gut zu schlafen"],
+    "examples": [{ "example": "Ick habe noch nich die nötije Bettschwere.", "explanation": "" }],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Beurjrunzen",
+    "translations": ["begrüßen (Studentensprache)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bezehmen, sich",
+    "translations": ["sich etwas gönnen"],
+    "examples": [{ "example": "Woll'n wir uns nich noch 'ne Weiße bezehmen?", "explanation": "" }],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bibber",
+    "translations": ["Gelee", "erkaltete Bratenbrühe"],
+    "infoText": "Erkaltete Bratenbrühe wird auch, mit französischer Aussprache, „Jus“ genannt.",
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bieieln",
+    "translations": ["trinken, zechen"],
+    "alternativeWords": ["bügeln", "picheln"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Biete",
+    "translations": ["Kind"],
+    "examples": [
+      { "example": "Ei die kleine Biete!", "explanation": "" },
+      { "example": "'ne nette Biete!", "explanation": "ironisch von einem gemeinen Menschen" }
+    ],
+    "alternativeWords": ["Bieteten"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bielefeld",
+    "translations": ["scherzhafte Zahlformel"],
+    "examples": [{ "example": "Bielefeld bezahlt allens!", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Biereifer",
+    "translations": ["großer Eifer (Studentensprache)"],
+    "examples": [{ "example": "Der entwickelt ja 'n furchbarn Biereifer.", "explanation": "" }],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bierjeld",
+    "translations": ["Trinkgeld"],
+    "themen": ["geld", "alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bierneejen",
+    "translations": ["Bierreste, die zum Kupferscheuern verkauft (oder getrunken) werden"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bierreise",
+    "translations": ["Besuch mehrerer Bierstuben (Studentensprache)"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Biest",
+    "translations": ["ähnlich wie „Aas“, aber gelinder"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bild, Kinder wie de",
+    "translations": ["ironisches Lob für Kinder"],
+    "examples": [
+      { "example": "Kinder wie de Bilder!", "explanation": "ironisches Lob" },
+      { "example": "Mach dir 'n Bild!", "explanation": "stelle dir vor" }
+    ],
+    "infoText": "Straßen-Bilderhändler hängten früher Bilder an Holzgestellen aus; die Kinder drängten sich heran, kauften aber nicht.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bildermuseum",
+    "translations": ["das alte Museum samt Säulenhalle"],
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bildscheen",
+    "translations": ["sehr schön/gut"],
+    "examples": [{ "example": "Die Suppe schmeckt bildscheen.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bimmelbahn",
+    "translations": ["Kleinbahn"],
+    "alternativeWords": ["Klingelbahn"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bisken, 'n bisken ville",
+    "translations": ["scherzhafte Bestellformel"],
+    "examples": [{ "example": "Bringen Se noch 'n bisken Bier, aber 'n bisken ville!", "explanation": "" }],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bitten, nu bitt ick eenen",
+    "translations": ["Ausdruck der Verwunderung"],
+    "examples": [
+      { "example": "Nu bitt ick eenen!", "explanation": "Ausdruck der Verwunderung" },
+      { "example": "Bitte, recht freundlich!", "explanation": "aus dem Fotoatelier stammend, inzwischen allgemein gebraucht" },
+      { "example": "Bitte, danke, recht viel!", "explanation": "wenn man bei Tisch gefragt wird, ob man noch etwas wolle; aus der Posse „Charleys Tante“" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bitter",
+    "translations": ["nicht schlimm/übel (Redewendung)"],
+    "examples": [
+      { "example": "Det is ooch nich bitter!", "explanation": "das ist nicht übel" },
+      { "example": "'n Bittern is sehr jut vor'n Magen.", "explanation": "über einen Schnaps" }
+    ],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blangsierstange",
+    "translations": ["Balancierstange (kindliches Missverständnis)"],
+    "infoText": "Vater-Sohn-Dialog beim Zusehen eines Seiltänzers: der Sohn fragt, wozu die Stange dient, der Vater erklärt sie als Halt — worauf der Sohn fragt, was passiert, wenn die Stange selbst fällt.",
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blaßschnabel",
+    "translations": ["blasser Mensch"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blatt",
+    "translations": ["das ist etwas anderes (Redewendung)"],
+    "examples": [{ "example": "Det steht wieder uf'n janz ander Blatt!", "explanation": "das ist etwas anderes" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blaukoppe",
+    "translations": ["frische Leberwurst"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blaukoller",
+    "translations": ["krankhafte Abneigung gegen die Schutzleute"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blechkopp",
+    "translations": ["Schutzmann"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blechpuster",
+    "translations": ["Trompeter"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blechschrippe",
+    "translations": ["auf dem Blech gebackene Schrippe"],
+    "infoText": "Gilt für wohlschmeckender und daher feiner als die gewöhnliche Schrippe.",
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bleibe",
+    "translations": ["Obdach"],
+    "examples": [{ "example": "Er hat keene Bleibe.", "explanation": "" }],
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bleiben",
+    "translations": ["immerfort tun", "man sieht, wo's bleibt: das Essen schlägt an"],
+    "examples": [
+      { "example": "Er bleibt in een Rennen.", "explanation": "er rennt immerfort" },
+      { "example": "Man sieht, wo't bleibt.", "explanation": "das Essen schlägt an" },
+      { "example": "Der is jut, der kann so bleiben.", "explanation": "ironisches Lob" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bleistift",
+    "translations": ["mit gutem Beispiel vorangehen"],
+    "examples": [{ "example": "Du mußt mit 'n juten Bleistift voranjehn!", "explanation": "für „Beispiel“" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blick, der Blick un 'n Sechser",
+    "translations": ["Reaktion auf einen giftigen Blick"],
+    "examples": [
+      { "example": "Der Blick — un 'n Sechser!", "explanation": "wenn man giftig angesehen wird" },
+      { "example": "'n Blick wie drei Dage Mittelarrest.", "explanation": "ein sehr böser Blick" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blitz, wie 'n jeölter",
+    "translations": ["sehr schnell"],
+    "infoText": "Kasernenhof-Ausdruck: ein Unteroffizier fordert, dass die Beine beim Parademarsch verfliegen „wie 'n jeölter Blitz“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blödsinn",
+    "translations": ["Unsinn"],
+    "examples": [{ "example": "Blödsinn anjeben.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blödsinnig",
+    "translations": ["sehr (verstärkend)"],
+    "examples": [{ "example": "blödsinnig teuer", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blond",
+    "translations": ["Füße mit gelben Stiefeln", "ein Glas Weißbier"],
+    "examples": [
+      { "example": "Blonde Füße", "explanation": "Füße mit gelben Stiefeln" },
+      { "example": "'ne kühle Blonde", "explanation": "ein Glas Weißbier" }
+    ],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bloß, komm bloß ma her",
+    "translations": ["nur (drohend gebraucht)"],
+    "examples": [{ "example": "Komm bloß ma her!", "explanation": "drohend" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blubbern",
+    "translations": ["unartikuliert sprechen"],
+    "infoText": "Eigentlich vom Geräusch aufsteigender Wasserblasen.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blücher",
+    "translations": ["er geht drauf wie Blücher (unbekümmert draufgängerisch)"],
+    "infoText": "Dem Standbild Blüchers am Opernplatz legt der Volksmund die Worte unter: „Komm mir hier keener ruf uf meinen alten Ofen; ick habe alleene kaum Platz.“ Ursprünglich ein Vers aus einem Gedicht der 1820er Jahre: „Er sagt zu die, die da herummer loofen: Komm keener nich uf meinen Ofen, ick hab alleene wenig Platz.“",
+    "themen": ["orte-spitzname"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blumenbrett",
+    "translations": ["Rücksitz der Droschke"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blusen",
+    "translations": ["es wird ihm schlecht bekommen"],
+    "examples": [{ "example": "Et wird ihn eklig in de Blusen rejen!", "explanation": "es wird ihm schlecht bekommen" }],
+    "infoText": "Von „Blüten“ (engl. blossom); Regen in die Baumblüten schadet dem Ansatz der Frucht.",
+    "alternativeWords": ["Blußen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bluten",
+    "translations": ["bezahlen müssen"],
+    "examples": [{ "example": "Er hat jeblut.", "explanation": "er hat bezahlen müssen" }],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blutijel",
+    "translations": ["Blutegel"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Blutwurscht",
+    "translations": ["ordinäre Blutwurst (Bestellformel)", "Hintertreppenroman"],
+    "examples": [{ "example": "Vor'n Sechser or'näre Blutwurscht!", "explanation": "" }],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Boddern",
+    "translations": ["waten (im Schlamm, Schnee)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Boden, uf'n",
+    "translations": ["in der Rumpelkammer unterm Dach"],
+    "examples": [{ "example": "Uf'n Boden bei't (jelbe) Ferd!", "explanation": "in der Rumpelkammer unter dem Dach" }],
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bodenspiker",
+    "translations": ["großer Nagel"],
+    "alternativeWords": ["Bohnenspiker", "Bohlenspiker"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bofiest",
+    "translations": ["etwas Mürbes, Faules"],
+    "infoText": "Bofist ist ein Pilz, der bei Berührung Staub von sich gibt.",
+    "alternativeWords": ["bofiestig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bogen, in eenen",
+    "translations": ["immerfort reden"],
+    "examples": [{ "example": "Er redt in eenen Bogen.", "explanation": "immerfort" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bohnenstange",
+    "translations": ["langer Mensch"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bohnenstroh",
+    "translations": ["grob/dumm wie Bohnenstroh"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bombenfest",
+    "translations": ["ganz fest, sicher"],
+    "examples": [{ "example": "Det steht janz bombenfeste.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bombenkopp",
+    "translations": ["Dummkopf"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bonze",
+    "translations": ["Vorgesetzter"],
+    "alternativeWords": ["Oberbonze"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Boom",
+    "translations": ["Baum (Redewendung)"],
+    "examples": [{ "example": "Det is, um uf de Beeme zu klettern!", "explanation": "vor Ärger, Langeweile o. Ä." }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Boomaffe",
+    "translations": ["Stutzer, gezierter Mensch"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Boomfeste",
+    "translations": ["ganz fest"],
+    "examples": [{ "example": "Det steht boomfeste.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Boomfleckig",
+    "translations": ["fleckig, aber gerade deshalb wohlschmeckend (von Äpfeln)"],
+    "examples": [{ "example": "Je desto boomfleckijer, det se aussehn, je desto besser, det se schmecken.", "explanation": "Verteidigung einer Hökerin ihrer Äpfel" }],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Boomochse",
+    "translations": ["Steigerung von „Ochse“ (Dummkopf)"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Boomöl, ick hau dir",
+    "translations": ["Drohformel"],
+    "examples": [{ "example": "Ick hau dir, dette jibst.", "explanation": "Drohung" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Boomwachs, et is",
+    "translations": ["Schlagformel"],
+    "examples": [{ "example": "Et is Boomwachs!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Boomwollen",
+    "translations": ["kärgliches Weihnachtsgeschenk (Spott)"],
+    "examples": [{ "example": "Dreihundert Daler Gehalt un zu Weihnachten 'ne boomwollne Weste.", "explanation": "" }],
+    "themen": ["spott-ironie", "geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Borschtig",
+    "translations": ["unverträglich, grob"],
+    "alternativeWords": ["borstig"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Borstwisch",
+    "translations": ["schmutzig graublonde Haarfarbe"],
+    "examples": [{ "example": "Kulör de Borstwisch", "explanation": "couleur de Borstwisch — ironisch-französisierende Bezeichnung für die Haarfarbe" }],
+    "infoText": "Beispiel für die Neigung des Berliners, allgemeine, blasse Bezeichnungen durch konkrete, anschauliche zu ersetzen (Handbesen statt „schmutzig graublond“) — sobald es fein anfängt, ironisiert der Berliner durch starken Kontrast.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Botokude",
+    "translations": ["Scheltwort (wie Kaffer)"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bouillon",
+    "translations": ["Kraft", "Dummkopf (Bouillonkopp)"],
+    "examples": [{ "example": "Se hat keene Bouillon (in' Leibe).", "explanation": "von der Kegelkugel: sie hat keine Kraft" }],
+    "infoText": "Schülerwitz: „Wann lebte Gottfried Bouillon?“ — „Wenn er nischt anders hatte.“ Bouillonkopp vom französischen „brouillon“.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brahma, Heilijer",
+    "translations": ["Ausruf"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bramsig",
+    "translations": ["prahlerisch, aufgeblasen"],
+    "examples": [{ "example": "Er macht 'n Bramsijen.", "explanation": "" }],
+    "alternativeWords": ["brämsig"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brandenburg",
+    "translations": ["angebrannt (Wortspiel)"],
+    "examples": [{ "example": "Die Suppe is in Brandenburg jewesen.", "explanation": "sie ist angebrannt" }],
+    "infoText": "Die Standbild-Stellung des Grafen Brandenburg auf dem Leipziger Platz wird gedeutet: „Un wenn der Dreck so hoch is, mit die Stiebeln komm ick doch durch!“",
+    "themen": ["orte-spitzname"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Braten, na nu brat mir eene",
+    "translations": ["Ausdruck des Staunens"],
+    "examples": [{ "example": "Na nu brat mir eene, 'n Storch!", "explanation": "Ausdruck des Staunens" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bratenbarde",
+    "translations": ["jemand, der zur Unterhaltung der Gesellschaft eingeladen wird"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bratenstipper",
+    "translations": ["langschößiger Sonntagsrock"],
+    "alternativeWords": ["Bratenrock"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bratkatoffel",
+    "translations": ["scherzhafte Bestellformel"],
+    "examples": [{ "example": "Vor'n Daler Bratkatoffeln (uf drei Teller)!", "explanation": "" }],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brauchen, form der Ablehnung",
+    "translations": ["höfliche Ablehnungsformel"],
+    "examples": [{ "example": "Wenn Se mal wieder wat brauchen.", "explanation": "Form der Ablehnung" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bravo, ick weeß janich",
+    "translations": ["scherzhaft unpassendes Lob"],
+    "examples": [{ "example": "Ick weeß janich, wovon de Rede is, aber bravo!", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brejen",
+    "translations": ["Gehirn", "Hirnschale"],
+    "examples": [{ "example": "Ja schlag dir 'n Brejen in!", "explanation": "" }],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brejenklietrig",
+    "translations": ["verrückt"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bremmeln",
+    "translations": ["vor sich hin unverständlich reden"],
+    "alternativeWords": ["Bremmel"],
+    "infoText": "„Ohne langen Bremmel“ = ohne viele Redensarten.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bremse, Ohrfeige",
+    "translations": ["Ohrfeige"],
+    "examples": [{ "example": "Wenn de stoßt, stech ick dir 'ne Bremse!", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brensterig",
+    "translations": ["brandig, faul, verdächtig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brett, er hat 'n Brett vor'n Kopp",
+    "translations": ["er ist beschränkt"],
+    "examples": [{ "example": "Er hat 'n Brett vor 'n Kopp.", "explanation": "er ist beschränkt" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Briefkasten, fallen Se man nich in'",
+    "translations": ["Warnformel"],
+    "examples": [{ "example": "Fallen Se man nich in' Briefkasten!", "explanation": "wie: kommen Se nich untern Leierkasten" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Briehe",
+    "translations": ["langes Gerede (oder Schriftstück)", "schöne Geschichte (ironisch)"],
+    "examples": [
+      { "example": "Mach man nich sonne lange Briehe.", "explanation": "" },
+      { "example": "'ne scheene Briehe!", "explanation": "eine schöne Geschichte" }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Briesche",
+    "translations": ["Beule"],
+    "alternativeWords": ["Brüsche"],
+    "examples": [{ "example": "Der looft sich Brieschen.", "explanation": "von einem Übereifrigen" }],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brieze",
+    "translations": ["Bruder"],
+    "alternativeWords": ["Briezkeile"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bringen, dir wer'k bringen",
+    "translations": ["Drohformel", "begleiten"],
+    "examples": [
+      { "example": "Da bringen se eenen jebracht.", "explanation": "" },
+      { "example": "Bring mir doch noch 'n Ende.", "explanation": "begleite mich noch ein Stück" },
+      { "example": "Dir wer 'k bringen!", "explanation": "Drohung (auf Trab bringen)" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brodullje",
+    "translations": ["Verlegenheit"],
+    "examples": [{ "example": "Wir müssen rasch machen, sonst kommen wir in de Brodullje.", "explanation": "" }],
+    "infoText": "Vom französischen „brouillie“.",
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brombeere, ha'm die Beene",
+    "translations": ["Kinderwitz"],
+    "infoText": "Ein Junge fragt im Grunewald seinen Vater: „Vater, ha'm Brombeern ooch Beene?“ „Nee, wie kommst 'n dadruf?“ „Na denn hab ick 'n Mistkäber jejessen.“",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brot, det frißt ja keen",
+    "translations": ["das kann man ruhig aufbewahren"],
+    "examples": [
+      { "example": "Det frißt ja keen Brot!", "explanation": "das kann man ruhig aufbewahren" },
+      { "example": "Brot kann ick zu Hause essen.", "explanation": "dankende Ablehnung von angebotenem Brot" },
+      { "example": "Det kriej ick alle Dage uf't Brot jeschmiert.", "explanation": "diesen Vorwurf muss ich immer wieder hören" }
+    ],
+    "themen": ["essen-trinken", "redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brotfresser",
+    "translations": ["Professor (Schulausdruck)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bruder, det is der beste",
+    "translations": ["das ist ein böser Bursche"],
+    "examples": [
+      { "example": "Det is 'n beser Bruder!", "explanation": "" },
+      { "example": "Na die Brüder!", "explanation": "" }
+    ],
+    "infoText": "„Det is der beste Bruder ooch nich!“ zitiert ein altes, nicht-berlinisches Schelmenlied.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brückenoffizier",
+    "translations": ["offizieller Name der Brückenwärter Berlins"],
+    "infoText": "Offizielle Bezeichnung der Uniform tragenden Leute, die das Aufziehen der Brücken in Berlin besorgten — wahrscheinlich nur eine Verfeinerung von „Brückenaufzieher“.",
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brüderlich, meine",
+    "translations": ["mein Bruder"],
+    "examples": [{ "example": "Meine brüderliche Liebe.", "explanation": "mein Bruder" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brühsuppe",
+    "translations": ["Fleischbrühe"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brüllen, brülle doch leise",
+    "translations": ["scherzhafte Aufforderung"],
+    "examples": [{ "example": "Brülle doch leise!", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brüge",
+    "translations": ["Mundstück der Gießkanne", "Brause im Baderaum"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brummeisen",
+    "translations": ["zänkischer Mensch"],
+    "examples": [{ "example": "Ollet Brummeisen!", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brummen",
+    "translations": ["im Gefängnis sitzen", "nachsitzen (Schule)"],
+    "infoText": "Aufschrift auf Pfefferkuchen: „Oller, brumme nich!“",
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Brummer",
+    "translations": ["große Fliege"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Buch, 'ne Ohrfeije, wie s' in't",
+    "translations": ["eine tüchtige Ohrfeige"],
+    "examples": [{ "example": "'ne Ohrfeije, wie s' in't Buch steht.", "explanation": "eine tüchtige" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Buchholz",
+    "translations": ["formelhafte Redensart aus einer alten Anekdote"],
+    "infoText": "Alte Anekdote: Ein Geistlicher tröstet einen Sterbenden, er werde droben seine Lieben wiedersehen. Der Sterbende fragt ängstlich: „Herr Predjer, Buchholzen ooch?“ Der Prediger bejaht, worauf der Sterbende ausruft: „Ach, Herr Predjer, denn kennen Se Buchholzen schlecht!“ Nach „Bär“ 1881 Nr. 11 geht die Redensart auf Friedrich den Großen zurück, der bei Abweisung einer Forderung sagte: „Da kennt Er Buchholtz schlecht!“ — Buchholtz (1706–98) war des Königs Schatzmeister.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bückt",
+    "translations": ["Bett (Kinderwort)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Buddel",
+    "translations": ["kurze Flasche"],
+    "infoText": "Von französisch „bouteille“.",
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bude",
+    "translations": ["Laden", "Wohnung (Studentensprache)"],
+    "examples": [
+      { "example": "Er hat de Bude zujemacht.", "explanation": "den Laden geschlossen, das Geschäft aufgegeben" },
+      { "example": "Et wird ihn eklig in de Bude rejen!", "explanation": "es wird ihm schlecht bekommen" },
+      { "example": "Ick wer'n uf de Bude steijen.", "explanation": "studentisch: ich werde ihn in seiner Wohnung aufsuchen" }
+    ],
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Budike",
+    "translations": ["Schankgeschäft"],
+    "infoText": "Vom französischen „boutique“ (Laden). Budiker, Budikerladen; Aktienbudiker = reich gewordener Schankwirt.",
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bückling, Ruf",
+    "translations": ["Verkäuferruf"],
+    "examples": [{ "example": "Bücklinge, Bücklinge, drei un vier vor'n Jroschen!", "explanation": "mit eigentümlichem Tonfall gerufen" }],
+    "themen": ["stadtleben", "essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bürjerjewahrsam",
+    "translations": ["das ehemalige Schuldgefängnis"],
+    "infoText": "Ursprünglich im „Ochsenkopp“ gelegen.",
+    "alternativeWords": ["Bürjerjehorsam"],
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bürjersteig",
+    "translations": ["Gehweg im Gegensatz zum Fahrdamm"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bürstenbinder",
+    "translations": ["er rennt wie ein Bürstenbinder (sehr schnell)"],
+    "infoText": "Bürstenbinder boten früher ihre Waren gehend an, mit Haarbesen und Schrubbern über der Schulter; sie zeichneten sich durch rasche Gangart aus.",
+    "alternativeWords": ["Besenbinder"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Busebei",
+    "translations": ["Bett (Kinderwort)"],
+    "examples": [{ "example": "Nu jehn wir in de Busebei.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bulle",
+    "translations": ["Tolpatsch (Schulausdruck, nicht böse gemeint)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bullenbeißer",
+    "translations": ["bissiger Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bullerloge",
+    "translations": ["Amphitheater, billigster Platz"],
+    "alternativeWords": ["Buller"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bumschekschek",
+    "translations": ["Musik mit Pauke und Becken (wie beim Karussell)"],
+    "infoText": "Das bedeutendste Bumschekschek war bei Wurst auf dem Windmühlenberg.",
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bumsstille",
+    "translations": ["ganz still"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bumßen",
+    "translations": ["durch Schlagen einen dumpfen Schall hervorbringen", "jetzt ist es aus"],
+    "examples": [{ "example": "Nanu hat's jebumßt!", "explanation": "jetzt ist es aus" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Bund",
+    "translations": ["Gürtel am Frauenrock"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Buttamisiertrommel",
+    "translations": ["Botanisierbüchse"],
+    "alternativeWords": ["Potamesiertrommel", "Puttasiertrommel", "Poselnentiertrommel"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Butter",
+    "translations": ["schlechtes Gewissen haben", "alles in bester Ordnung"],
+    "examples": [
+      { "example": "Er hat Butter uf'n Kopp.", "explanation": "er hat ein schlechtes Gewissen" },
+      { "example": "Allens in Butter.", "explanation": "sehr fein, alles in Ordnung" }
+    ],
+    "infoText": "„Butter uf'n Kopp“ geht auf einen Handwerksburschen zurück, der gestohlene Butter unter dem Hut versteckt hatte, die am warmen Ofen schmolz.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Butterhexe",
+    "translations": ["Schimpfwort für eine alte Frau"],
+    "examples": [{ "example": "olle Butterhexe!", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Buttermilch, kommen wie de Flieje",
+    "translations": ["sehr langsam machen"],
+    "examples": [{ "example": "Er kommt wie de Flieje aus de Buttermilch.", "explanation": "er macht langsam" }],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Butzen",
+    "translations": ["stoßen"],
+    "alternativeWords": ["Butzkopp"],
+    "infoText": "In der Kindersprache „Butzköppken machen“ = mit den Köpfen zusammenstoßen.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Buxen",
+    "translations": ["Hosen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Buxter",
+    "translations": ["kurzes Holzstück als Kinderwaffe"],
+    "infoText": "Mit einem Bindfaden in der rechten Hand befestigt; damit griffen sich die Knaben an und brachten sich Püffe bei (buxtern). Diese Waffe ist verschwunden; „buxtern“ für puffen wird vielleicht noch gebraucht.",
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

@@ -1,0 +1,1261 @@
+[
+  {
+    "word": "Dabei",
+    "translations": ["was schadet das?", "scheint Ihnen das nicht erlaubt?"],
+    "examples": [
+      { "example": "Wat is'n dabei?", "explanation": "was schadet das?" },
+      { "example": "Finden Se da wat bei?", "explanation": "scheint Ihnen das nicht erlaubt?" },
+      { "example": "Da sind wir doch ooch noch dabei!", "explanation": "Antwort auf eine Drohung" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dachhase",
+    "translations": ["scherzhafte Bezeichnung für Katze (als Fleisch)"],
+    "themen": ["essen-trinken", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dachsbeene",
+    "translations": ["X-Beine"],
+    "examples": [{ "example": "Kiek mal der mit de Dachsbeene!", "explanation": "" }],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dacht",
+    "translations": ["Docht (Wortspiel)"],
+    "examples": [{ "example": "Dachte sind keene Lichte!", "explanation": "wird gebraucht, wenn einer eine Entschuldigung mit „ich dachte“ beginnt" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dag",
+    "translations": ["Tag"],
+    "examples": [
+      { "example": "Däg ooch!", "explanation": "guten Tag!" },
+      { "example": "Je länger der Dag, je scheener de Leite!", "explanation": "wenn sich jemand noch spät in einer Gesellschaft einfindet" },
+      { "example": "Mach dir 'n verjniejten Dag von!", "explanation": "wenn man jemandem einen Sechser schenkt" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dahinter",
+    "translations": ["er betreibt es eifrig"],
+    "examples": [{ "example": "Er lejt sich (kniet sich) dahinter.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dalbern",
+    "translations": ["täppischen Spaß machen"],
+    "alternativeWords": ["Dalberei"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Daler",
+    "translations": ["Taler"],
+    "examples": [
+      { "example": "Jott soll mir 'n Daler schenken!", "explanation": "Ausdruck des Erstaunens" },
+      { "example": "Vor 'n Daler verrat der Spandau!", "explanation": "von einem elenden Menschen" }
+    ],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dalles",
+    "translations": ["Geldmangel"],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dalli",
+    "translations": ["vorwärts, flink"],
+    "infoText": "Vom Polnischen.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Damm",
+    "translations": ["gesund"],
+    "examples": [{ "example": "Na, sind Se wieder uf'n Damm?", "explanation": "" }],
+    "alternativeWords": ["Dammmaler"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dammeln",
+    "translations": ["in unklarem Geisteszustand umhergehen"],
+    "examples": [{ "example": "Er dammelt so hin.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dammlig",
+    "translations": ["albern"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dampf",
+    "translations": ["antreiben zur Beschleunigung", "der letzte Stoß"],
+    "examples": [
+      { "example": "Nu ma Dampf, Dampf!", "explanation": "zur Beschleunigung antreiben" },
+      { "example": "Det hat ihn 'n Dampf anjedan.", "explanation": "es hat ihm den letzten Stoß gegeben" }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dampfferdebahn",
+    "translations": ["Dampfbahn"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Danach",
+    "translations": ["nichts taugen"],
+    "examples": [{ "example": "Et wird ooch danach sind!", "explanation": "nichts taugen" }],
+    "infoText": "Alte Anekdote: ein Küster kommt mit grünem Rock zu einer Beerdigung; der Geistliche rügt dies, der Küster antwortet: „Ach, Herr Paster — wenn't Herz man schwarz is!“",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Danke, Komma",
+    "translations": ["ironische Antwort auf eine Beleidigung"],
+    "alternativeWords": ["Danke, Kolleje"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Danken",
+    "translations": ["übertrieben feierliche Dankesformel"],
+    "examples": [{ "example": "Ich danke Ihnen im Namen Deutschlands.", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Danzboden",
+    "translations": ["die Sache steht schlecht"],
+    "examples": [{ "example": "Danzboden hat'n Loch!", "explanation": "die Sache steht schlecht" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dardanellen",
+    "translations": ["formelhafter Ausruf beim Hineinstoßen"],
+    "examples": [{ "example": "Rin mit ihn in de Dardanellen!", "explanation": "wenn man jemanden z. B. in ein Haus hineinstößt" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dasein",
+    "translations": ["das Leben ist schwer"],
+    "examples": [{ "example": "Is 'n schwerst Dasein, wenn man hier is.", "explanation": "" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dastehn",
+    "translations": ["habe ich nicht recht gehabt?"],
+    "examples": [{ "example": "Wie steh ick nu da?", "explanation": "habe ich nicht recht gehabt?" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Daubenschlag",
+    "translations": ["es geht ständig rein und raus"],
+    "examples": [{ "example": "Det jeht immer rin un raus, wie in' Daubenschlag!", "explanation": "" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dauer",
+    "translations": ["wie lange dauert das noch?"],
+    "examples": [{ "example": "Wie lange dauert'n det? Daweile wird ja 'n Esel jung!", "explanation": "" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Daus",
+    "translations": ["Teufel"],
+    "examples": [{ "example": "Den kenn ick wie'n Daus!", "explanation": "" }],
+    "infoText": "Eigentlich das französische „deux“ (die Zwei war in der alten französischen Karte die höchste) und bedeutet ebenso wie jenes auch Teufel.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dausend",
+    "translations": ["es ist noch reichlich Zeit"],
+    "examples": [{ "example": "Is ja noch dausend Zeit!", "explanation": "" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dazumal",
+    "translations": ["damals"],
+    "examples": [{ "example": "Anno dazumal.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Deechaffe",
+    "translations": ["Spottname für den Bäcker"],
+    "infoText": "Eigentlich „Teigaffe“.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Deftig",
+    "translations": ["tüchtig, kräftig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Deichseln",
+    "translations": ["geschickt durchführen"],
+    "examples": [{ "example": "Det ha'm wa wieder fein jedeichselt.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dekrig",
+    "translations": ["zerbrechlich, beschädigt (von Kannen, Töpfen usw.)"],
+    "infoText": "Ursprünglich „Decher“ = 10 Stück; in Mecklenburg „Dekerware“ (bei uns Dutzendware) = fabrikmäßig, schnell und flüchtig gearbeitet.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Deluel",
+    "translations": ["Kopf"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Demeln",
+    "translations": ["wie bammeln"],
+    "examples": [{ "example": "Er demelt so rum.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Demelsack",
+    "translations": ["er ist sehr dumm"],
+    "examples": [{ "example": "Der Kerl is mit 'n Demelsack jeschlagen.", "explanation": "er ist sehr dumm" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Demlack",
+    "translations": ["Dummkopf"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Demlich",
+    "translations": ["dumm, auch frech", "scherzhaftes Adjektiv zu Dame"],
+    "examples": [
+      { "example": "So demlich wie Sie bin ick noch lange!", "explanation": "" },
+      { "example": "des demliche Schuhzeug", "explanation": "scherzhaft zu „Dame“ gebildet" }
+    ],
+    "infoText": "„Die Deutlichkeiten“ scherzhaft für „die Damen“; ebenso wird „herrlich“ zu „Herr“ gebildet.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Denken",
+    "translations": ["starke Verneinung", "beginnt die Mitteilung einer Neuigkeit"],
+    "examples": [
+      { "example": "Janich dran zu denken!", "explanation": "starke Verneinung" },
+      { "example": "Denk dir mal!", "explanation": "beginnt meist die Mitteilung einer Neuigkeit" },
+      { "example": "Denken dun de Narren, kluge Leite wissen schon.", "explanation": "" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Deppen",
+    "translations": ["ducken, demütigen"],
+    "examples": [{ "example": "Er wollte 'n Bramsijen machen, aber ick hab 'n jedeppt.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Deppentat",
+    "translations": ["seinen Anteil bekommen haben (auch von Schlägen)"],
+    "examples": [{ "example": "Der hat sein' Deppentat weg.", "explanation": "seinen Anteil, auch: seine Schläge" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Derquere",
+    "translations": ["quer"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Desen",
+    "translations": ["schwachen Geistes umhergehen"],
+    "examples": [{ "example": "Er dest so rum.", "explanation": "" }],
+    "alternativeWords": ["dosen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Desig",
+    "translations": ["benommen"],
+    "alternativeWords": ["dosig", "lamdesig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Destillirium",
+    "translations": ["Delirium (scherzhafte Verballhornung)"],
+    "infoText": "Wortspiel mit „Destille“ (Destillation, Schankwirtschaft).",
+    "themen": ["alkohol-kneipe", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Deutsch",
+    "translations": ["Trinkformel unter Berlinern"],
+    "examples": [{ "example": "Un die alten Deutschen!", "explanation": "damit trinkt einer dem anderen ein Stück Weißbier zu" }],
+    "infoText": "„Deutsche Reichstunke“ heißt die in manchen Restaurants übliche Einheitssauce für alle Fleischgerichte.",
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dezem",
+    "translations": ["der einem zukommende Anteil"],
+    "examples": [{ "example": "Da haste dein' Dezem.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dichte",
+    "translations": ["nichts für sich behalten können", "bleiben Sie mir vom Leib"],
+    "examples": [
+      { "example": "Der kann nich dichte halten!", "explanation": "nichts für sich behalten" },
+      { "example": "Man nich so dichte ran!", "explanation": "bleiben Sie mir vom Leib" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dichteritis",
+    "translations": ["der Drang, Verse zu machen (spottend)"],
+    "infoText": "Mit Anklang an „Diphtheritis“.",
+    "themen": ["spott-ironie", "unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dicke",
+    "translations": ["satt", "reichlich", "sich aufspielen"],
+    "examples": [
+      { "example": "Det hab ick dicke.", "explanation": "satt, genug davon" },
+      { "example": "Da biste in' dicken Irrtum.", "explanation": "" },
+      { "example": "So dicke hab ick 't ooch nich.", "explanation": "so reich bin ich nicht" },
+      { "example": "Det dicke Ende kommt nach.", "explanation": "" },
+      { "example": "Er dut sich dicke.", "explanation": "er spielt sich auf" }
+    ],
+    "infoText": "„Dicker!“ ist Liebkosungswort bei Schülern, auch für gar nicht dicke Kinder gebraucht. „Dicke!“ ist Bejahung.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dicknesig",
+    "translations": ["hochmütig"],
+    "alternativeWords": ["Dickschnauzig"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dickpansch",
+    "translations": ["Dickwanst"],
+    "themen": ["koerper", "schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Diebisch",
+    "translations": ["sehr (Verstärkung, besonders bei Verben)"],
+    "examples": [{ "example": "Er hat sich diebisch jefreit.", "explanation": "" }],
+    "infoText": "Eigentlich studentisch (aus Halle), kam 1845 in Berlin auf.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dienerchen",
+    "translations": ["Ihr Diener! (Grußformel)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dienstbar",
+    "translations": ["Kellner, Dienstbote"],
+    "examples": [{ "example": "'n dienstbarer Jeist", "explanation": "Kellner, Dienstbote" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dieses",
+    "translations": ["das nicht! (höfliche Verneinung)"],
+    "examples": [{ "example": "Dieses wenijer!", "explanation": "höfliche Verneinung" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dietrich",
+    "translations": ["Schauspieler-Verdrehung von „blutdürstiger Wüterich“"],
+    "examples": [{ "example": "Blutwürschtijer Dietrich", "explanation": "für „blutdürstiger Wüterich“" }],
+    "infoText": "Ähnliche Schauspieler-Verdrehung: „Jott, jib mir Taft zum Kragen!“ (statt „Kraft zum Tragen“).",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ding",
+    "translations": ["eine Ohrfeige", "irgendein Name/Ortsname"],
+    "examples": [
+      { "example": "Kriest 'n Ding!", "explanation": "eine Ohrfeige" },
+      { "example": "Sie, machen Se keene Dinger!", "explanation": "keinen Unsinn" },
+      { "example": "Wat vor 'n Ding?", "explanation": "was? (wenn man nicht verstanden hat)" }
+    ],
+    "alternativeWords": ["Dings", "Dingerichs", "Dingsda", "Dingskirchen"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dinne",
+    "translations": ["dünn, schwach", "sich unbemerkt entfernen"],
+    "examples": [
+      { "example": "Is det dinne!", "explanation": "schwach" },
+      { "example": "sich dinne machen", "explanation": "sich (namentlich unbemerkt) entfernen" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Direktionsschmuser",
+    "translations": ["einer, der sich bei den Vorgesetzten beliebt zu machen sucht"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Direr",
+    "translations": ["Direktor (Schulausdruck)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Discher",
+    "translations": ["Tischler"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dischkasten",
+    "translations": ["dumpfig riechen/schmecken"],
+    "examples": [{ "example": "Et riecht nach 'n Dischkasten.", "explanation": "dumpfig" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dito",
+    "translations": ["scherzhafte Zustimmungsformel"],
+    "examples": [
+      { "example": "Dito jut Schrauben!", "explanation": "" },
+      { "example": "Dito mit Schmorkatoffeln!", "explanation": "" }
+    ],
+    "themen": ["essen-trinken", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dividendenlauche",
+    "translations": ["Aktienbier"],
+    "themen": ["alkohol-kneipe", "geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dividieren",
+    "translations": ["mit der Faust in die Zähne stoßen (Scherzformel)"],
+    "examples": [{ "example": "Wat kommt'n raus, wenn man mit de Fümwe in de Zehne divediert? — Blut.", "explanation": "Scherzfrage" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dod",
+    "translations": ["Tod (Ausruf des Erstaunens)"],
+    "examples": [
+      { "example": "Kriest 'n Dod! (in alle beede Waden!)", "explanation": "Ausruf des Erstaunens" },
+      { "example": "Allen Dod un Deibel.", "explanation": "alles Mögliche" },
+      { "example": "Ick bin dodsterbenskrank.", "explanation": "bei einer leichten Unpässlichkeit" }
+    ],
+    "infoText": "„Doter Jude“ = Kalbsbraten, Anknüpfung an den ewigen Juden.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dotlachen",
+    "translations": ["übermäßig gut ist es nicht"],
+    "examples": [{ "example": "Zum Dotlachen is't ja nich.", "explanation": "übermäßig gut ist es nicht" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Draasch",
+    "translations": ["starker Regen"],
+    "alternativeWords": ["Dreesch"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drab",
+    "translations": ["dir werde ich Ordnung beibringen"],
+    "examples": [{ "example": "Dir wer'k uf'n Drab bringen!", "explanation": "" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drachen",
+    "translations": ["Ehefrau"],
+    "examples": [{ "example": "Ick laß mein' Drachen steijen.", "explanation": "ich gehe mit ihr spazieren" }],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drängelberjer",
+    "translations": ["absichtliches Gedränge (Schulausdruck)"],
+    "examples": [{ "example": "Woll'n wa ma 'n Drängelberjer machen?", "explanation": "" }],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drängeln",
+    "translations": ["drängen"],
+    "examples": [{ "example": "Drängeln Se nich!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Draht",
+    "translations": ["Geld"],
+    "examples": [{ "example": "Telejraphie ohne Draht!", "explanation": "es wird nicht bezahlt" }],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drahtkommode",
+    "translations": ["Klavier"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drahtzieje",
+    "translations": ["Fahrrad"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dran",
+    "translations": ["du bist am meisten dran"],
+    "examples": [{ "example": "Du bist am dransten!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drange",
+    "translations": ["eng"],
+    "examples": [{ "example": "Der Kasten jeht dränge.", "explanation": "er schiebt sich schwer" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drank",
+    "translations": ["Vielfraß (übertragen)"],
+    "examples": [{ "example": "Olle Dranktonne.", "explanation": "Vielfraß" }],
+    "infoText": "„Dicker Drank macht fette Schweine!“ sagt man z. B. beim Trinken des Rests einer Weißen.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Draußen",
+    "translations": ["eins wie's andere"],
+    "examples": [{ "example": "Det is draußen wie vor de Diere.", "explanation": "eins wie's andere" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreck",
+    "translations": ["sehr wenig oder gar nichts", "jemanden sehr schlecht machen"],
+    "examples": [
+      { "example": "Da frag ick 'n Dreck nach.", "explanation": "" },
+      { "example": "Du verstehst 'n Dreck davon!", "explanation": "" },
+      { "example": "Er hat mir runterjemacht wie'n Dreck in de Renne!", "explanation": "er hat mich sehr schlecht gemacht" },
+      { "example": "Nu stehste da wie't Kind bei'n Dreck!", "explanation": "nun weißt du nicht, was du anfangen sollst" }
+    ],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreckig",
+    "translations": ["schmutzig", "schlecht, übel", "beleidigend"],
+    "examples": [
+      { "example": "Et jeht ihn dreckig.", "explanation": "es geht ihm schlecht" },
+      { "example": "Sie wolln mir dreckig kommen?", "explanation": "beleidigend" },
+      { "example": "Er hat 'n dreckijen Mund.", "explanation": "einen losen Mund" }
+    ],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreckschleuder",
+    "translations": ["frecher Mund"],
+    "examples": [{ "example": "Den sein Maul jeht ooch wie 'ne Dreckschleider!", "explanation": "er hat ein freches Maul" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreckstipper",
+    "translations": ["langer Gehrock"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drecktreter",
+    "translations": ["große Schuhe"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreckwetter",
+    "translations": ["nasses, schmutziges Wetter"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreeschen",
+    "translations": ["stark regnen"],
+    "examples": [{ "example": "Et dreescht.", "explanation": "es regnet stark" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreze",
+    "translations": ["Dummkopf, Schlafmütze"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drehlade",
+    "translations": ["schläfriger Mensch"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreiangel",
+    "translations": ["Triangel"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreier",
+    "translations": ["Dreipfennigstück", "ich spiele nicht mehr mit"],
+    "examples": [
+      { "example": "Platz vor'n Dreier! (de Wurscht is deier!)", "explanation": "" },
+      { "example": "Ick laß mir mein' Dreier wiederjeben.", "explanation": "ich spiele nicht mehr mit" }
+    ],
+    "infoText": "Bei dem alten Geld wurde nach Dreiern gerechnet (5 Dreier = 1¼ Silbergroschen usw., aber nie 2, 3, 8, 12 Dreier). „6 Dreier“ blieb zum Teil noch für 15 Pfennig üblich.",
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreiharig",
+    "translations": ["durchtrieben"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreijoner",
+    "translations": ["Dragoner"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreikesehoch",
+    "translations": ["sehr klein (von Personen)"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drei-Männer-Zijarre",
+    "translations": ["gemeinsam geteilte Zigarre"],
+    "examples": [{ "example": "Eener roocht un zweee halten. — Zweee ziehn, eener spuckt.", "explanation": "" }],
+    "themen": ["alkohol-kneipe", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreimal",
+    "translations": ["schlechter Tabak"],
+    "examples": [{ "example": "Vor'n Jroschen dreimal um' Leib.", "explanation": "von schlechtem Tabak" }],
+    "infoText": "Anspielung auf gesponnenen Tabak, der wie ein dicker Strick aufgerollt wird; der Tabak ist so schlecht, dass man für einen Groschen ein Ende bekommt, das dreimal um den Leib reicht.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dremmeln",
+    "translations": ["durch Zureden drängen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dreiste",
+    "translations": ["das kannst du mir ruhig glauben"],
+    "examples": [{ "example": "Det kannste mir dreiste jlooben.", "explanation": "" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drieft",
+    "translations": ["dreist"],
+    "examples": [{ "example": "Driest un jottesfürchtig.", "explanation": "" }],
+    "alternativeWords": ["Driftig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drin",
+    "translations": ["das ist damit noch gar nicht gesagt", "daraus wird nichts"],
+    "examples": [
+      { "example": "Det licht nich drin.", "explanation": "das ist damit noch gar nicht gesagt" },
+      { "example": "Davon steht nischt drin.", "explanation": "daraus wird nichts" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drinken",
+    "translations": ["trinken"],
+    "examples": [{ "example": "Wer lange drinkt, lebt lange.", "explanation": "" }],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drippen",
+    "translations": ["triefen", "schwach regnen"],
+    "alternativeWords": ["drippeln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drittes Feierdags-Publikum",
+    "translations": ["Dienstboten am dritten Feiertag"],
+    "infoText": "Am dritten Feiertag pflegen die Dienstboten freien Tag zu haben.",
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drittvorletzte",
+    "translations": ["drittletzte"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drömerig",
+    "translations": ["träumerisch"],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Droom",
+    "translations": ["Traum", "einfältiger Mensch (Schimpfwörter)"],
+    "alternativeWords": ["Droomfiöte", "Dromlade", "Droomsuse", "Droomtute"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Droppen",
+    "translations": ["Schnaps (euphemistisch als Medizin bezeichnet)"],
+    "examples": [{ "example": "Ick muß meine Droppen nehmen.", "explanation": "" }],
+    "infoText": "Ironisch nach Vorbild der „Hoffmannsdroppen“.",
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Droschkenkutscher, Necksprüche",
+    "translations": ["Neckformeln gegen Droschkenkutscher"],
+    "examples": [
+      { "example": "Kutscher, det Rad, det Rad! Det dreht sich!", "explanation": "" },
+      { "example": "Kutscher, fahren Se? — Ja! — Na ick loofe.", "explanation": "" },
+      { "example": "Kutscher, sind Se ledig? — Ja. — Na denn heiraten Se!", "explanation": "" }
+    ],
+    "themen": ["stadtleben", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Droschkon",
+    "translations": ["Droschke (mit nasalem -on gesprochen)"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drückeberjer",
+    "translations": ["einer, der sich drückt"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drücken",
+    "translations": ["sich einer Pflicht/Gesellschaft/Bezahlung entziehen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drübend",
+    "translations": ["drüben (besonders bei Kindern)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drufjehn",
+    "translations": ["sterben", "freigebig sein"],
+    "examples": [{ "example": "Er wird wol drufjehn.", "explanation": "sterben; auch von Pflanzen: eingehen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drufsetzen",
+    "translations": ["einen Schnaps nachlegen"],
+    "infoText": "Nötig, wenn man sich geärgert hat; auch nützlich nach fetten Speisen und nach dem Anblick einer sehr dicken Frau.",
+    "themen": ["alkohol-kneipe", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drufstuken",
+    "translations": ["jemanden mit der Nase auf etwas drücken (meist bildlich)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drum ooch",
+    "translations": ["das erklärt die Sache"],
+    "examples": [{ "example": "Drum stinkt's ooch so!", "explanation": "" }],
+    "infoText": "Aus dem Puppenspiel „Doktor Fausts Höllenfahrt“: Mephistopheles fragt die Unterteufel „Seid ihr alle beisammen?“ und bemerkt auf ihr Ja: „Drum stinkt's auch so.“",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Drum rum sein",
+    "translations": ["sich um jemanden bemühen, ihm zu gefallen suchen"],
+    "examples": [{ "example": "Det Meechen is sehre um ihn rum.", "explanation": "" }],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Druzeln",
+    "translations": ["nicht fest schlafen"],
+    "alternativeWords": ["indruzeln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Druxelig",
+    "translations": ["schläfrig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Duddel",
+    "translations": ["Tadel (Schulausdruck)", "Dutzend (Murmelspiel)"],
+    "alternativeWords": ["Dutsch"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dudeln",
+    "translations": ["leiern"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dudelsack",
+    "translations": ["grobe Verwechslung übersehen"],
+    "examples": [{ "example": "Der sieht ooch'n Himmel vor'n Dudelsack an.", "explanation": "bei einer groben Verwechslung" }],
+    "infoText": "Sonst kennt der Berliner das Wort nur in der Zungenübung: „Konstantinopolitanischer Dudelsackpfeifenmacherjeselle“.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Duft",
+    "translations": ["anerkennend: gut, prima"],
+    "examples": [
+      { "example": "'n dufter Junge.", "explanation": "" },
+      { "example": "Jestern Abend wa't dufte!", "explanation": "" }
+    ],
+    "infoText": "Stärker anerkennend als „ausjedragen“.",
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Düze",
+    "translations": ["dummer Mensch"],
+    "alternativeWords": ["düzig"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dummchen",
+    "translations": ["gutmütig scheltende Anrede für ein Kind"],
+    "examples": [{ "example": "Du bist 'n kleines Dummchen!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dumuerjan",
+    "translations": ["Dummkopf"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dummheit",
+    "translations": ["Dummheit ist auch eine Gabe Gottes (Redewendung)"],
+    "examples": [
+      { "example": "Dummheit is ooch 'ne Jabe Jottes, aber man muß se nich mißbrauchen.", "explanation": "" },
+      { "example": "Wenn Dummheit weh dete, hörte man dir schrein bis Potsdam.", "explanation": "" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Doll",
+    "translations": ["begierig", "sehr (Verstärkung: wie doll)"],
+    "examples": [
+      { "example": "Er is janz doll danach.", "explanation": "begierig" },
+      { "example": "Er schnarcht wie doll.", "explanation": "" },
+      { "example": "Je oller, je doller.", "explanation": "je älter, desto toller" }
+    ],
+    "alternativeWords": ["döller", "dölder"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dollen",
+    "translations": ["Tollheiten machen"],
+    "alternativeWords": ["sich ausdollen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dom",
+    "translations": ["ein Vergnügen ist zu Ende"],
+    "examples": [{ "example": "Nu is't aus in' Dom! Jetzt jeht's nach't Spittel.", "explanation": "wurde gesagt, wenn ein Vergnügen (eine Aufführung u. dgl.) zu Ende war" }],
+    "infoText": "Gemeint ist die Spittelkirche auf dem Spittelmarkt — wohl der Gegensatz der (Dom-)Hofkirche zur kleinsten Kirche Berlins.",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Donna",
+    "translations": ["Dienstmädchen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Donnerkiel",
+    "translations": ["Umschreibungen von „Donnerwetter“ (Ausrufe des Staunens)"],
+    "alternativeWords": ["Dunderkiesel", "Dundermiesel", "Donnerlittken", "Donnerwackstock", "Dunnerwittstock", "Dunnerwettsteen"],
+    "infoText": "Umschreibungen von „Donnerwetter“ durch Wachsstock, Wittstock und Wetzstein.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dorweg",
+    "translations": ["Alter schützt vor Torheit nicht (Wortspiel)"],
+    "examples": [{ "example": "Alter schützt vor 'n Dorweg nich.", "explanation": "Wortspiel auf „Torweg“/„Torheit“" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dosen",
+    "translations": ["schneide nicht auf"],
+    "examples": [{ "example": "Mach keene Dosen.", "explanation": "schneide nicht auf" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dot",
+    "translations": ["tot (vor Vergnügen)"],
+    "examples": [
+      { "example": "Ick schrei mir dot!", "explanation": "vor Vergnügen, mit Leichenbittermiene gesprochen" },
+      { "example": "Ick lach mir dot, ick schieß mir dot!", "explanation": "" },
+      { "example": "Wer is dot?", "explanation": "wenn ein unverstandener Name genannt wurde" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "allowDuplicate": true,
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dun",
+    "translations": ["tun"],
+    "examples": [
+      { "example": "Na du man nich so!", "explanation": "verstelle dich nicht" },
+      { "example": "Du mir nischt, ick du dir ooch nischt!", "explanation": "" },
+      { "example": "Man so dune!", "explanation": "nur zum Schein" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dune",
+    "translations": ["völlig betrunken"],
+    "examples": [{ "example": "Er is dick un dune.", "explanation": "" }],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durch",
+    "translations": ["ein Geräusch geht einem durch und durch"],
+    "examples": [{ "example": "Det jeht een' durch un durch.", "explanation": "sagt jemand, der ein Geräusch nicht hören kann" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durchbrennen",
+    "translations": ["entfliehen (und etwas mitnehmen)"],
+    "alternativeWords": ["Durchbrenner"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durchjehn",
+    "translations": ["die Nacht durchkneipen"],
+    "alternativeWords": ["Durchjänger"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durchjengeln",
+    "translations": ["durchprügeln"],
+    "alternativeWords": ["Durchkalaschen"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durchknallen",
+    "translations": ["an der Fensterscheibe durchzeichnen", "durchpausen"],
+    "alternativeWords": ["durchfenstern"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durchknautschen",
+    "translations": ["gründlich besprechen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durchrutschen",
+    "translations": ["knapp versetzt werden (Schulausdruck)"],
+    "examples": [{ "example": "Ich bin noch mit durchjerutscht.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durchstechereien treiben",
+    "translations": ["die Beine mit dem Gegenübersitzenden abwechselnd stellen"],
+    "infoText": "In einem ganz besetzten Wagen stellt man die Beine zur Bequemlichkeit abwechselnd mit denen des „Visavis“.",
+    "themen": ["stadtleben", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durchwackeln",
+    "translations": ["durchprügeln"],
+    "alternativeWords": ["Durchwalken"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durschtern",
+    "translations": ["dursten (unpersönlich)"],
+    "examples": [{ "example": "Mir durschtert so.", "explanation": "" }],
+    "alternativeWords": ["mir durscht"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Durststille",
+    "translations": ["Inschrift an „Destillen“"],
+    "alternativeWords": ["Durststillstation"],
+    "themen": ["alkohol-kneipe", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Düsemang",
+    "translations": ["sacht, langsam"],
+    "infoText": "Vom französischen „doucement“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Dusig",
+    "translations": ["dumm"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Duzel",
+    "translations": ["dummer Mensch"],
+    "examples": [{ "example": "Oller Duzel!", "explanation": "" }],
+    "alternativeWords": ["Duxelkopp", "Duxeltier"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

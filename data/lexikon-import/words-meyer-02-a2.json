@@ -1,0 +1,1113 @@
+[
+  {
+    "word": "Anjehn",
+    "translations": ["losgehen, anfangen", "es geht so einigermaßen"],
+    "examples": [
+      { "example": "Wenn ehr jeht'n de Schule wieder an?", "explanation": "wann fängt bei euch die Schule wieder an?" },
+      { "example": "Et jeht an!", "explanation": "es geht so einigermaßen; Antwort auf „Is et kalt?“" },
+      { "example": "Na det jeht ja noch an!", "explanation": "ironisch: das ist ja noch schlimmer" },
+      { "example": "Wen jeht 'n det nischt an?", "explanation": "das geht dich nichts an" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjekloppt",
+    "translations": ["es hat geklopft"],
+    "examples": [{ "example": "'t hat anjekloppt.", "explanation": "es hat geklopft" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjeländert kommen",
+    "translations": ["gemächlich ankommen"],
+    "infoText": "Ursprung im in den 1820er Jahren sehr beliebten Tanz „Länder“ (Ländler); also „ländern“ = tanzen.",
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjenüchtert",
+    "translations": ["angetrunken"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjepeest",
+    "translations": ["sehr schnell (kommen)"],
+    "examples": [{ "example": "Er kommt anjepeest.", "explanation": "er kommt sehr schnell" }],
+    "infoText": "Vom englischen „pace“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjeprescht",
+    "translations": ["gelaufen kommen"],
+    "examples": [{ "example": "Er kommt anjeprescht.", "explanation": "ebenso: ruf-, runterjeprescht; auch anjeberscht" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjerissen",
+    "translations": ["angetrunken", "wie anjebrochen (spät begonnene Aktivität)"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjeroocht",
+    "translations": ["angetrunken"],
+    "alternativeWords": ["Anjeseiselt"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjesetzt",
+    "translations": ["gelaufen kommen"],
+    "examples": [{ "example": "Er kommt anjesetzt.", "explanation": "er kommt gelaufen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjetzt",
+    "translations": ["jetzt"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjewackelt",
+    "translations": ["langsam herangehend kommen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjewalzt",
+    "translations": ["kommen"],
+    "examples": [{ "example": "Er kommt anjewalzt.", "explanation": "er kommt" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjluven",
+    "translations": ["finster ansehen"],
+    "alternativeWords": ["anjlupschen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjreifsch",
+    "translations": ["zum Wegnehmen einladend (von Ware)", "empfindlich bei Berührung (von Obst)", "hinfällig (von Menschen)"],
+    "examples": [{ "example": "'ne anjreifsche Ware", "explanation": "zum Wegnehmen einladende Ware" }],
+    "alternativeWords": ["anjriepsch", "anjreepsch"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ankeilen",
+    "translations": ["auffordern (Studentensprache)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anklacksen",
+    "translations": ["anwerfen, notdürftig anbringen"],
+    "examples": [{ "example": "Det is man so anjeklackst.", "explanation": "z. B. von Stuck, schlecht befestigt; auch von einem nachträglich stillos hinzugefügten Anbau" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anködern",
+    "translations": ["ansprechen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ankohlen",
+    "translations": ["anreden (Studentensprache)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ankriejen",
+    "translations": ["auffordern (wie ankeilen)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ankulen",
+    "translations": ["sich anschmiegen (von Kindern)"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Antappen",
+    "translations": ["schelten, anfahren"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anleihe",
+    "translations": ["von hinten über die Glatze gekämmte Haare"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anlejen",
+    "translations": ["sich entzweien (mit jemandem)"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anloofen",
+    "translations": ["jemanden drohend bedrängen"],
+    "examples": [{ "example": "Den wer'k anloofen lassen!", "explanation": "darin liegt die Vorstellung einer entgegengehaltenen Faust oder eines in den Weg gestellten Pfahls, an dem sich der Gegner stoßen muss" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anmeiern",
+    "translations": ["sich bei Vorgesetzten beliebt zu machen suchen"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anmuscheln",
+    "translations": ["sich einschmeicheln"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anmuten sind",
+    "translations": ["zumuten"],
+    "examples": [{ "example": "Wie kann er mir sowat anmuten sind?", "explanation": "wie kann er mir so etwas zumuten?" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Annijant",
+    "translations": ["langweilig"],
+    "infoText": "Vom französischen „ennuyant“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anno",
+    "translations": ["Formel für „vor langer Zeit“"],
+    "examples": [
+      { "example": "Anno eens, als de Elbe brannte.", "explanation": "Anfang einer komischen Geschichte, in der die Bauern angeblich mit Stroh löschten" },
+      { "example": "Anno ölwe (null), wie der jroße Wind war.", "explanation": "ähnliche Zeitformel" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anno Tobak",
+    "translations": ["vor langer Zeit"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anoden",
+    "translations": ["durch aufgedrängtes Gespräch langweilen (Studentensprache)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anpassen",
+    "translations": ["jemandem eine Ohrfeige verpassen"],
+    "examples": [{ "example": "Ick hab ihn eene anjepaßt — aber die saß!", "explanation": "übertragen vom Kleid auf die sorgfältig „angepasste“ Ohrfeige" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anpumpen",
+    "translations": ["sich Geld leihen von jemandem"],
+    "examples": [{ "example": "Ick pumpe ihn an.", "explanation": "ich leihe Geld von ihm" }],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anpurren",
+    "translations": ["jemanden anreden, um etwas von ihm zu erreichen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anquaeln",
+    "translations": ["anreden"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anranzen",
+    "translations": ["wie anlappen (grob anfahren)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anrempeln",
+    "translations": ["im Begegnen stoßen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anroochen",
+    "translations": ["sich gut entwickeln"],
+    "examples": [{ "example": "Er roocht sich an.", "explanation": "wie der Meerschaum – er entwickelt sich gut" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anrühren",
+    "translations": ["davon will ich nichts wissen"],
+    "examples": [{ "example": "Nich rühr an!", "explanation": "davon will ich nichts wissen, bleibe mir damit vom Leib" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ansagen",
+    "translations": ["anzeigen (Schulausdruck, wie petzen)"],
+    "examples": [{ "example": "Au wei, det sag ick!", "explanation": "Schulscherz-Drohformel" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anschlejsch",
+    "translations": ["schlau"],
+    "examples": [{ "example": "Der hat 'n anschleichen Kopp; wenn er de Treppe runterfallt, verfehlt er keene Stufe!", "explanation": "scherzhafte Übertreibung der Schläue" }],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anschnauzen",
+    "translations": ["hart anfahren"],
+    "alternativeWords": ["Anschnarchen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anschneiden",
+    "translations": ["jemanden zur Rede stellen"],
+    "examples": [{ "example": "Ick wer'n de Wurscht anschneiden.", "explanation": "ich werde ihn zur Rede stellen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anschwulen",
+    "translations": ["scheel ansehen"],
+    "alternativeWords": ["anschulen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anspucken",
+    "translations": ["das Anspucken nicht wert sein (Verachtung)"],
+    "examples": [{ "example": "Der Kerl is nich 't Anspucken wert.", "explanation": "der Kerl ist verachtenswert" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anstrengen",
+    "translations": ["bedeutende Ausgaben machen"],
+    "examples": [{ "example": "Er hat sich orntlich angestrengt.", "explanation": "er hat bedeutende Ausgaben gemacht, z. B. für ein Geschenk oder einen Besuch" }],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Antippen",
+    "translations": ["mit dem Finger berühren"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anton",
+    "translations": ["scherzhafte Anrede für einen phlegmatischen Mann"],
+    "examples": [
+      { "example": "Anton, steck'n Dejen in!", "explanation": "beruhigender Zuruf" },
+      { "example": "Anton mit de Baubaujacke!", "explanation": "scherzhafter Zuruf" },
+      { "example": "Anton, mach 'n Leim warm!", "explanation": "scherzhafter Zuruf" },
+      { "example": "Immer ruhig Blut, Anton!", "explanation": "älteste bekannte Fassung, aus den 1830er Jahren; vermutlich aus dem Jugendstück „Anton, oder der Knabe, wie er sein soll“ (vor 1820)" }
+    ],
+    "infoText": "Anton steht für den phlegmatischen, gemächlichen Mann; daher auch „Anton mit de Tepperschirze!“, weil eine Töpferschürze durch und durch steif ist, wie der Phlegmatische erscheint.",
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Griener Anton",
+    "translations": ["Spitzname für ein Gefängnis"],
+    "infoText": "Spitzname für das Gefängnis, früher in der Antonstraße, später in der Perleberger Straße gelegen.",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anulken",
+    "translations": ["verhöhnen", "anreden (Studentensprache)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anvettermicheln",
+    "translations": ["sich beliebt machen (durch schmeichelndes Anbiedern)"],
+    "infoText": "Der „Vetter Michel“ ist eine spezifisch märkische Figur, gar nicht dem „deutschen Michel“ gleich, sondern ein liebenswürdiger Schwerenöter. Goethe hat ihn in „Musen und Grazien in der Mark“ unsterblich gemacht: „Laßt den Wihling uns besticheln! / Glücklich, wenn ein deutscher Mann / Seinem Freunde Vetter Micheln / Guten Abend bieten kann. / Wie ist der Gedanke labend: / Solch ein Edler bleibt uns nah! / Immer sagt man: Gestern Abend / War doch Vetter Michel da!“ Goethe bezieht sich auf einen alten Walzertext, der begann: „Gestern Abend war Vetter Michel da“, darin: „Er faßt das Mädchen an das Knie; / Das Mädchen lacht, das Mädchen schrie.“ Daher bedeutet „sich anvettermicheln“, sich durch solche Künste heranzuschleichen.",
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anwenden",
+    "translations": ["etwas nicht zu schätzen wissen"],
+    "examples": [{ "example": "Det is bei die Leite nich anjewendt.", "explanation": "sie wissen es nicht zu gebrauchen/zu schätzen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anzeijen",
+    "translations": ["Schulscherz beim Petzen-Drohen"],
+    "examples": [{ "example": "Au, dir zeij ick an! — Na zeige man nich vorbei!", "explanation": "Schulscherz" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anziehn",
+    "translations": ["sich etwas nicht anziehen: nicht auf sich beziehen"],
+    "examples": [{ "example": "Det brauchste dir nich anziehn.", "explanation": "das brauchst du nicht auf dich zu beziehen" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anzwei",
+    "translations": ["entzwei"],
+    "alternativeWords": ["inzwee"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Apart",
+    "translations": ["ausgesucht, besonders"],
+    "examples": [{ "example": "Det is janz wat Apartet.", "explanation": "das ist etwas ganz Besonderes" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Apparat",
+    "translations": ["ohne großen Aufwand"],
+    "examples": [{ "example": "Ick mach alles, mit un ohne Apparat!", "explanation": "ich schaffe alles, ganz ohne großen Aufwand" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Appel",
+    "translations": ["der Apfel fällt nicht weit vom Stamm (Sprichwort)"],
+    "examples": [{ "example": "Der Appel fällt nich weit vom Noß.", "explanation": "Sprichwort" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Appelfahke",
+    "translations": ["Verstärkung von „Fatzke“ (eingebildeter Mensch)"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Appelkuchen",
+    "translations": ["Verneinung (wie „Scheibe!“)"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Appelmus",
+    "translations": ["gerührt sein wie Apfelmus (sehr gerührt)"],
+    "examples": [{ "example": "Er is jerührt wie Appelmus.", "explanation": "er ist sehr gerührt" }],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aquarium",
+    "translations": ["Kaltwasserheilanstalt (scherzhaft)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Arbeet",
+    "translations": ["Arbeit"],
+    "examples": [
+      { "example": "Wer Arbeet kennt, der hut sich vor.", "explanation": "wer die Arbeit kennt, hütet sich davor" },
+      { "example": "Der kann det jrößte Sticke Arbeet liejen lassen.", "explanation": "er kann die größte Arbeit unerledigt liegen lassen (Faulheit)" },
+      { "example": "De Arbeet is wunderscheen; stundenlang kann man zusehn.", "explanation": "ironisch über die Arbeit anderer" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Arbeeten",
+    "translations": ["scherzhaft über Arbeitsunwilligkeit"],
+    "examples": [{ "example": "Arbeeten woll'n se alle, aber nich essen!", "explanation": "scherzhafte Umkehrung" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Arbeeter",
+    "translations": ["scherzhafte Rednerformel"],
+    "examples": [{ "example": "Arbeeter! (Bravo!) Ihr seid Arbeeter! (Bravo!) Also müßt Ihr arbeeten! (Schmeißt 'n raus!)", "explanation": "Witz über einen Redner in der Volksversammlung" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Arg",
+    "translations": ["begierig (nach etwas)"],
+    "examples": [{ "example": "Nach Mostrich is er janz arg.", "explanation": "er ist ganz versessen auf Senf" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Arm",
+    "translations": ["idiomatische Wendungen zur Armut"],
+    "examples": [
+      { "example": "Der kann ooch 'ne Familie arm fressen.", "explanation": "er isst sehr viel" },
+      { "example": "Davon wer'k noch nich arm wem.", "explanation": "das kann ich noch bestreiten" },
+      { "example": "Sieben Häuser un keene Schlafstelle!", "explanation": "Zusatz zur Armuts-Redensart" },
+      { "example": "Vier Löwen un keen Wärter.", "explanation": "parodistische Anspielung auf das Kaiser-Wilhelm-Denkmal" },
+      { "example": "Arme Lokomotive! Zwee Puffer un keen Teller!", "explanation": "Wortspiel mit „Kartoffelpuffer“" }
+    ],
+    "themen": ["redewendungen-sprueche", "geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Arme, unter de",
+    "translations": ["jemandem unter die Arme greifen: unterstützen"],
+    "examples": [
+      { "example": "Er hat de Arme zu weit durchgestochen.", "explanation": "die Ärmel sind zu kurz" },
+      { "example": "Ick hab 'n mit 'n paa Daler unter de Arme jejriffen.", "explanation": "ich habe ihn finanziell unterstützt" }
+    ],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Armenkasse",
+    "translations": ["Prügel bekommen (scherzhaft)"],
+    "examples": [{ "example": "Et jibt eklig wat aus de Armenkasse.", "explanation": "es setzt kräftig Schläge" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Art",
+    "translations": ["ach, so meinen Sie?"],
+    "examples": [
+      { "example": "Ach uf die Art?", "explanation": "ach, so meinen Sie das?" },
+      { "example": "Er setzt sich hin, det's ne Art hat.", "explanation": "mit einer gewissen Eigenart" }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Artollerie",
+    "translations": ["Artillerie"],
+    "alternativeWords": ["Artullerie"],
+    "examples": [{ "example": "de chinesische Artollerie", "explanation": "Spitzname für den Sprengwagen" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aschjrau",
+    "translations": ["gar nicht zu sagen (Steigerungsformel)"],
+    "examples": [{ "example": "Det jeht in't Aschjraue!", "explanation": "das ist gar nicht zu sagen" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Asthmakiste",
+    "translations": ["kleiner Privatdampfer"],
+    "infoText": "Nach dem starken Fauchen unter Dampf benannt.",
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aßmann",
+    "translations": ["feste Redensart-Figur"],
+    "examples": [{ "example": "Det kannste halten wie der Farrer Aßmann! — Mit de Hand.", "explanation": "scherzhafte Antwort-Formel" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Asten",
+    "translations": ["langsam und mit schwerer Last gehen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Atoffel",
+    "translations": ["Kartoffel"],
+    "alternativeWords": ["Anoffel", "Ertoffel"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Atta jjehn",
+    "translations": ["spazieren gehen (Kindersprache)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Attentäter",
+    "translations": ["Attentäter (im heutigen Sinn)"],
+    "infoText": "Als der ehemalige Bürgermeister Tschech 1844 ein Attentat auf Friedrich Wilhelm IV. verübte, entstand ein Spottlied nach der Melodie von „Kriegers Lust“ (Marsch von Gungl): „Sagt, wer war wol je so frech, / Wie der Bürjermeister Tschech, / Der mit frevelhafter Hand / Kugeln auf den König sandt! / Schoß der juten Landesmutter / Durch den Rock ins Unterfutter.“ — „Dunker hat es jleich erraten, / Daß er wollte attentaten“ (Dunker war der Polizeirat, der alles „rauskrichte“). Refrain: „So'n verfluchter Hochverrather, / Königsmörder, Attentäter! / Hätt' uns ja bei einen Haar / Erschossen 's janze Königspaar.“ Hier erscheint erstmals das seither gebräuchliche Wort „Attentäter“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Atter",
+    "translations": ["Natter (Schlange)"],
+    "examples": [{ "example": "Er fuhr wie 'ne Atter uf mir los.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Atzen",
+    "translations": ["Stück (von etwas Essbarem)"],
+    "examples": [{ "example": "'n Atzen Brot", "explanation": "ein Stück Brot" }],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Au",
+    "translations": ["Ausruf des Schmerzes über einen Kalauer"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Au wei",
+    "translations": ["Ausruf bei Kindern, wenn sie etwas Verbotenes tun sehen"],
+    "examples": [{ "example": "Au wei, det sag ick!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aua",
+    "translations": ["Ausruf des Schmerzes, besonders bei Kindern"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aufbrechen",
+    "translations": ["scherzhafte Formel beim Aufbruch"],
+    "examples": [{ "example": "Auf, laßt uns brechen!", "explanation": "Wortspiel-Scherz beim Aufbruch" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aujust",
+    "translations": ["Spottruf auf einen Betrunkenen"],
+    "infoText": "Populär geworden durch einen Clown im Circus Renz, der einen dummen Tölpel spielte. Zahlreiche feste Redensarten: „Aujust, laß 'n Affen los!“, „Aujust ans Trapez!“, „Aber jlücklich, Aujust, macht es nich!“.",
+    "examples": [
+      { "example": "Aujust, sprach sie, haste Jrund? Scheibe, sagt' er, un verschwund.", "explanation": "gereimte Redensart" },
+      { "example": "Aujust, stoß de Vöjel an!", "explanation": "Aufforderung an den Gehilfen des Spielzeugverkäufers auf dem Weihnachtsmarkt, die Spaßvögel in Bewegung zu setzen" }
+    ],
+    "themen": ["alkohol-kneipe", "unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aulaquatsch",
+    "translations": ["Schulfeier mit Rede (bei Gymnasiasten)"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aurora",
+    "translations": ["Hundename in festen Redensarten"],
+    "examples": [{ "example": "Aurora, Drecksau, wirste aus de Renne raus!", "explanation": "" }],
+    "infoText": "Unter den „Berliner Witzen“ gibt es ein Bild, auf dem eine Mutter ihrem Kind aus dem Fenster zuruft: „Aurora, Dreckliese, wiste wol mit de Beene aus 'n Rennsteen!“",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausbitten",
+    "translations": ["sich etwas kaum zu erhoffen wagen"],
+    "examples": [{ "example": "Der mecht ick mir ooch ausjebeten haben.", "explanation": "bei einem kaum erwarteten Zugeständnis" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausboddern",
+    "translations": ["reinigen (ein Fass)", "sich vollständig aussprechen"],
+    "alternativeWords": ["ausbuttern"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausfallend",
+    "translations": ["beleidigend"],
+    "examples": [{ "example": "Wern Se man nich ausfallend!", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausfejen",
+    "translations": ["ein kleines Geldstück findet sich beim Kehren wieder"],
+    "examples": [{ "example": "Det find sich bei't Ausfeien.", "explanation": "gesagt, wenn ein kleines Geldstück auf den Fußboden gefallen ist" }],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausflucht",
+    "translations": ["Ausflug (Wortspiel mit „Ausflucht“)"],
+    "examples": [{ "example": "Na, machen Se 'ne kleene Ausflucht?", "explanation": "" }],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausfragen",
+    "translations": ["sich nicht ausfragen lassen"],
+    "examples": [{ "example": "So fragt man Leite aus!", "explanation": "ich lasse mich nicht so ausfragen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausführen",
+    "translations": ["stehlen"],
+    "infoText": "Der Scherz liegt darin, dass die gestohlene Sache gleichsam sich freundlich fügend „mitgeht“.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausfunzeln lassen",
+    "translations": ["auslaufen lassen (z. B. Murmeln, Würfel)"],
+    "infoText": "Vergleich mit einer stinkend in sich erlöschenden Öllampe.",
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aushauen",
+    "translations": ["gerade ausreichen"],
+    "examples": [{ "example": "Et haut jrade aus.", "explanation": "es reicht gerade" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausholen",
+    "translations": ["renommistische Prügelei-Erzählung"],
+    "examples": [{ "example": "Un so wie der Kerl det sagt, da hol ick aus — und da haut er mir eene — ick nich faul — haut er mir wieder eene!", "explanation": "typische übertreibende Prügelei-Erzählung, mit wechselnden Fortsetzungen, meist endend mit: „Aber den hab ick jemacht!“" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausjedragen",
+    "translations": ["ein pfiffiger Mensch (Kind)"],
+    "examples": [{ "example": "'n ausjedragnet Kind", "explanation": "ein pfiffiger Mensch" }],
+    "infoText": "Auch scherzhaft verwechselt mit „eingetragen“: „Ausjedragne Genossenschaft“ statt „eingetragene“.",
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausjefallen",
+    "translations": ["seltsam, einzeln stehend (Idee)", "aus der Mode, schwer verkäuflich (Artikel)"],
+    "examples": [{ "example": "'ne ausjefallne Idee", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausjehe",
+    "translations": ["Ausgehtag, Ausgehrock"],
+    "examples": [{ "example": "Er hat heite seinen Ausjehedag.", "explanation": "" }],
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausjekocht",
+    "translations": ["durchtriebener, abgebrühter Junge (stärker als „ausjedragen“)"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausjeleiert",
+    "translations": ["ausgedreht (von einem Gewinde)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausjelutscht",
+    "translations": ["ausgesogen, ausgemergelt aussehend"],
+    "examples": [{ "example": "Er sieht aus wie ausjelutscht.", "explanation": "" }],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausjerechent",
+    "translations": ["das soll man glauben? (ironische Formel)"],
+    "examples": [{ "example": "Natierlich; ausjerechent Maijlöckchen!", "explanation": "du musst immer das Beste haben" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausjeschlagen",
+    "translations": ["den ganzen Tag"],
+    "examples": [{ "example": "'n ausjeschlagnen Dag", "explanation": "den ganzen Tag" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausjlitschen",
+    "translations": ["ausgleiten"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Auskleiden",
+    "translations": ["sich verkleiden"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Auskoddern",
+    "translations": ["wie auskuddeln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Auskuddeln",
+    "translations": ["einige Stück Wäsche reinigen (im Gegensatz zur „großen Wäsche“)"],
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Auslesen",
+    "translations": ["in die Breite wachsen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Auslitern",
+    "translations": ["literweise verkaufen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausnutschen",
+    "translations": ["aussaugen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Auspusten",
+    "translations": ["ausblasen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausputzen",
+    "translations": ["schmücken (Stube, Weihnachtsbaum)"],
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausräuchern",
+    "translations": ["wie rausjraulen (verjagen)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausraten",
+    "translations": ["mittels einer Jahreszahl auf einem Geldstück auslosen, wer zahlt"],
+    "examples": [{ "example": "ein Glas Bier, eine Droschke usw. ausraten", "explanation": "durch die Jahreszahl eines Geldstücks (paar/unpaar) bestimmen, wer bezahlen muss" }],
+    "themen": ["geld", "unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausreden",
+    "translations": ["das gib nur auf (Redewendung)"],
+    "examples": [{ "example": "Det laß dir man ausreden!", "explanation": "das gib nur auf" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausrücken",
+    "translations": ["entfliehen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausrunzeln lassen",
+    "translations": ["wie ausfunzeln lassen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausrutschen",
+    "translations": ["drohende Redewendung"],
+    "examples": [{ "example": "Der mir nich de Hand ausrutscht!", "explanation": "Drohung" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausschimpfen",
+    "translations": ["schelten", "mit Schimpfwörtern belegen"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausschmieren",
+    "translations": ["im Spiel gründlich schlagen/übertrumpfen"],
+    "examples": [{ "example": "Den hab ick orntlich ausjeschmiert!", "explanation": "eigentlich vom Ausschmieren des Ofens" }],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausspannen",
+    "translations": ["entwenden", "bei gemeinsamer Arbeit aufhören"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausspucken",
+    "translations": ["aussehen wie ausgespuckt (sehr ähnlich sehen)", "innehalten, schweigen"],
+    "examples": [
+      { "example": "Er sieht aus wie ausjespuckt.", "explanation": "" },
+      { "example": "Du, spuck mal aus; ick will mal reden!", "explanation": "halt inne, sei still" }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausspülen",
+    "translations": ["den Mund ausspülen (Zurechtweisung nach unschicklicher Äußerung)"],
+    "examples": [{ "example": "Spül dir mal 'n Mund aus!", "explanation": "wenn einer etwas Unschickliches gesagt hat" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausstehn",
+    "translations": ["nicht leiden können", "aushalten müssen", "(Geld) verliehen haben"],
+    "examples": [
+      { "example": "Ick kann'n nich ausstehn.", "explanation": "ich kann ihn nicht leiden" },
+      { "example": "Ick habe ville mit'n auszustehn.", "explanation": "ich muss viel mit ihm aushalten" },
+      { "example": "Ick habe ville auszustehn.", "explanation": "ich habe viel Geld verliehen" }
+    ],
+    "themen": ["geld", "redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Austrudeln",
+    "translations": ["auswürfeln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausverschämt",
+    "translations": ["unverschämt"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "allowDuplicate": true,
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Auswendig",
+    "translations": ["das schadet nichts, es ist auswendig (Wortspiel)", "auswendig wissen: fest im Gedächtnis haben"],
+    "examples": [
+      { "example": "Det schad nischt, det is auswendig!", "explanation": "Wortspiel mit „auswendig“ = von außen" },
+      { "example": "Det weeß ick auswendig.", "explanation": "das habe ich fest im Gedächtnis" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Auswischen",
+    "translations": ["jemandem einen Schlag versetzen", "jemanden bestehlen"],
+    "examples": [{ "example": "Den hab'm se jut de Oogen ausjewischt.", "explanation": "den haben sie gründlich bestohlen" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Auswringen",
+    "translations": ["auswringen (z. B. nasse Wäsche)"],
+    "alternativeWords": ["ausringen"],
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Auszehrung",
+    "translations": ["Abzehrung, Schwindsucht"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ausziehn",
+    "translations": ["jemandem das Geld abnehmen"],
+    "examples": [{ "example": "Den hab'm se ausjezogen.", "explanation": "ihm das Geld abgenommen" }],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aute",
+    "translations": ["August (Kurzform)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Automat",
+    "translations": ["Rätselwitz über das Polizeipräsidium"],
+    "examples": [{ "example": "Welches ist der jrößte Automat in Berlin? Das Polizeipräsidium: wenn man oben 'ne Scheibe „einwirft“, kommt unten 'n Schutzmann raus.", "explanation": "Rätselwitz" }],
+    "themen": ["orte-spitzname", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Autsch",
+    "translations": ["Ausruf des Schmerzes"],
+    "examples": [{ "example": "Autsch, mein Been!", "explanation": "auch gesagt, wenn jemand einen unanständigen Ausdruck gebraucht" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Axe",
+    "translations": ["Axt"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Azesser",
+    "translations": ["Assessor"],
+    "alternativeWords": ["Akzesser"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Azteke",
+    "translations": ["Dummkopf (Schimpfwort, wie Schafskopp)"],
+    "examples": [{ "example": "Oller Azteke!", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

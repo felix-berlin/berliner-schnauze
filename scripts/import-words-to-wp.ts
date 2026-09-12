@@ -67,12 +67,19 @@ const ACF = {
   infoText: "info_text",
   sources: "sources",
   source: "source",
+  berolinismus: "berolinismus",
 } as const;
 
-// Value for the sources > source checkbox on every imported word.
-// Verified against the live ACF checkbox choice (post "dampf") — note the
-// U+2019 apostrophe and en dash; the value must match byte-for-byte.
-const SOURCE_QUELLE = "SDLS/Schlobi’s Linguistic Corner – Berlinisch: Lexikon";
+// Values for the sources > source checkbox, keyed by LexikonEntry.source.
+// Verified against the live ACF checkbox choices — must match byte-for-byte
+// (note the U+2019 apostrophe and en dash in the SDLS value).
+// ⚠ "meyer1904" must be added as a checkbox choice in WP admin before the
+// first non-dry-run import — otherwise ACF silently drops the value.
+const SOURCE_QUELLE: Record<string, string> = {
+  meyer1904: "Der richtige Berliner in Wörtern und Redensarten / Meyer, Hans",
+  sdls: "SDLS/Schlobi’s Linguistic Corner – Berlinisch: Lexikon",
+};
+const DEFAULT_SOURCE_KEY = "sdls";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 export interface LexikonExample {
@@ -100,6 +107,13 @@ export interface LexikonEntry {
    * duplicate guard; the exact-title guard still applies.
    */
   allowDuplicate?: boolean;
+  /** Key into SOURCE_QUELLE; defaults to DEFAULT_SOURCE_KEY when omitted. */
+  source?: string;
+  /**
+   * Berolinismus in the narrow sense (Wikipedia): a nickname/quirk tied to a
+   * specific Berlin place or building — not general dialect vocabulary.
+   */
+  berolinismus?: boolean;
 }
 
 interface WpTerm {
@@ -234,7 +248,11 @@ function buildPostBody(entry: LexikonEntry, termIds: number[]): Record<string, u
     }));
   }
   if (entry.infoText) acf[ACF.infoText] = entry.infoText;
-  acf[ACF.sources] = [{ [ACF.source]: [SOURCE_QUELLE] }];
+  if (entry.berolinismus !== undefined) acf[ACF.berolinismus] = entry.berolinismus;
+  const sourceKey = entry.source ?? DEFAULT_SOURCE_KEY;
+  const quelle = SOURCE_QUELLE[sourceKey];
+  if (!quelle) throw new Error(`"${entry.word}": unknown source "${sourceKey}"`);
+  acf[ACF.sources] = [{ [ACF.source]: [quelle] }];
 
   return {
     title: entry.word,

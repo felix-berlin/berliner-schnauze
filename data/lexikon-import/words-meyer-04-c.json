@@ -1,0 +1,80 @@
+[
+  {
+    "word": "Casus",
+    "translations": ["die Schwierigkeit"],
+    "examples": [
+      { "example": "Det is der Casus knusus.", "explanation": "das ist die Schwierigkeit" },
+      { "example": "Jeder nach seinen Chacun!", "explanation": "verballhorntes Französisch: chacun à son goût" }
+    ],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Champignon",
+    "translations": ["scherzhaft für Champion (z. B. bei Ringkämpfern)"],
+    "themen": ["unterhaltung-freizeit", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Charlottenburjer",
+    "translations": ["Fuhrleute, die vor dem Brandenburger Tor hielten und nach Charlottenburg fuhren", "das Schnäuzen der Nase mit den Fingern"],
+    "infoText": "„Die roheste Klasse aller Berliner Plebejer“ (Glaßbrenner). Nach ihnen heißt „Charlottenburjern“ das Schnäuzen der Nase mit den Fingern.",
+    "themen": ["orte-spitzname", "stadtleben"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Chemische Leiter",
+    "translations": ["die „mechanische“ Leiter der Feuerwehr"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Chor",
+    "translations": ["Corps (Studentenverbindung)", "Gesellschaft (mit schlechter Nebenbedeutung)"],
+    "examples": [
+      { "example": "Sie is bei's Chor.", "explanation": "Tänzerin" },
+      { "example": "Sie is bei'n Chor.", "explanation": "Sängerin" },
+      { "example": "Seid ihr 'n Chor!", "explanation": "Gesellschaft mit schlechter Nebenbedeutung; auch „Chor der Rache“" }
+    ],
+    "infoText": "Der Berliner denkt „Chor“ statt „Corps“; im Plural tritt der Unterschied zutage: „zwei Armeechöre“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Civilhelm",
+    "translations": ["Hut"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Clique",
+    "translations": ["Gesellschaft (ohne tadelnden Nebensinn)"],
+    "infoText": "Anders als in der Schriftsprache und im Französischen ohne abwertenden Beiklang gebraucht.",
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Columbus",
+    "translations": ["scherzhafte Nachfrage zum „Ei des Kolumbus“"],
+    "examples": [{ "example": "Herrjott, lebt denn der olle Mann immer noch?", "explanation": "wenn vom „Ei des Columbus“ die Rede ist" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Cottbus",
+    "translations": ["formelhafte Antwort auf die Frage „Wer war'n det?“"],
+    "examples": [{ "example": "Der fremde Herr aus Cottbus!", "explanation": "Antwort auf die Frage „Wer war'n det?“" }],
+    "infoText": "Die bekannte Redensart stammt laut Vossischer Zeitung (31. Mai 1903) aus dem Buch „Semilasso“ des Fürsten von Pückler-Muskau (1835).",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

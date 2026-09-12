@@ -1,0 +1,976 @@
+[
+  {
+    "word": "Aasig",
+    "translations": ["sehr (verstärkend)"],
+    "examples": [
+      { "example": "'t jibt esije Bimse.", "explanation": "es gibt kräftige Ohrfeigen" },
+      { "example": "'ne esije Kälte", "explanation": "nicht „eisige Kälte“, sondern verstärkend im Sinn von „sehr“" }
+    ],
+    "alternativeWords": ["esig"],
+    "infoText": "Adjektiv zu „Aas“, das in verstärkender Bedeutung („sehr“) auch als Adverb gebraucht wird.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ab Notam",
+    "translations": ["sich (etwas) merken"],
+    "examples": [{ "example": "Det wer'k mir ab Notam nehmen.", "explanation": "das werde ich mir merken" }],
+    "infoText": "Von lateinisch „ad notam“ (zur Kenntnis).",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abbachern",
+    "translations": ["sich abarbeiten"],
+    "themen": ["machen-tun"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abend",
+    "translations": ["Abend (ugs. „Aamt“ ausgesprochen)"],
+    "examples": [
+      { "example": "Ju'n Abend zusamm'!", "explanation": "Guten Abend zusammen (Grußformel)" },
+      { "example": "'t is noch lange nich alle Dage Abend!", "explanation": "es ist noch nicht aller Tage Abend" },
+      { "example": "'n wunderscheener Abend, der Abend heite Abend!", "explanation": "scherzhafte Übertreibung" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aber, aber!",
+    "translations": ["begütigender, abwehrender Ausruf"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Aberscht",
+    "translations": ["aber (Ausdruck gespannter Erwartung)"],
+    "examples": [{ "example": "Aberscht nanu!", "explanation": "Ausdruck der gespannten Erwartung" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abextern",
+    "translations": ["sich abmühen"],
+    "themen": ["machen-tun"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abfuttern",
+    "translations": ["(Kindern) das Abendbrot geben"],
+    "infoText": "„Große Abfütterung“ nennt man ein Mahl, das man aus gesellschaftlichen Rücksichten geben muss.",
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abhuppen",
+    "translations": ["geh weg!"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abitur",
+    "translations": ["Abiturientenexamen"],
+    "alternativeWords": ["Abiturjum"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjang",
+    "translations": ["geh weg! (Schulausdruck)"],
+    "examples": [{ "example": "Abjang! is Mehl mang!", "explanation": "Schulscherzformel" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjeben",
+    "translations": ["sich befassen, sich einlassen mit"],
+    "examples": [{ "example": "Jib dir doch mit den nich ab!", "explanation": "lass dich nicht mit dem ein" }],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjebrannt",
+    "translations": ["ohne Geld, pleite"],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjebrieht",
+    "translations": ["unempfindlich für Tadel oder Schande"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjehn",
+    "translations": ["losgehen, sich ablösen", "gut leben", "von der Schule verwiesen werden"],
+    "examples": [
+      { "example": "Der Knopp ist abjejangen.", "explanation": "der Knopf hat sich gelöst" },
+      { "example": "Der Blei is fortjekommen, die Scheibe is anzweijejangen, meine Murmel sind alle jeworden.", "explanation": "Kinder wählen Redensarten, die sie selbst nicht als Schuldige erscheinen lassen" },
+      { "example": "Er läßt sich nischt abjehn.", "explanation": "er lebt gut, isst und trinkt gut" }
+    ],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjekatert",
+    "translations": ["abgekartet"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjeklappert",
+    "translations": ["abgespielt (vom Klavier)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjeknabbert",
+    "translations": ["mager und jämmerlich"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjemacht",
+    "translations": ["Sela! (bekräftigende Bestätigungsformel)"],
+    "infoText": "„Abjemacht, Sela!“ — auf die scherzhafte Verballhornung zu „Seefe“ hat vielleicht das französische „c'est fait“ eingewirkt.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjetakelt",
+    "translations": ["alt, hässlich geworden"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abjewöhnen, zum",
+    "translations": ["Ausdruck des Abscheus", "Entschuldigungsformel beim Trinken"],
+    "examples": [
+      { "example": "Der Kerl is zum Abjewöhnen!", "explanation": "Ausdruck des Abscheus" },
+      { "example": "Na noch eenen, zum Abjewöhnen!", "explanation": "Entschuldigung beim Trinken eines weiteren Schnapses" }
+    ],
+    "themen": ["alkohol-kneipe", "redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abklabastern",
+    "translations": ["sich müde laufen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abklauen",
+    "translations": ["abschreiben"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abklawieren",
+    "translations": ["abzählen"],
+    "examples": [{ "example": "Der kannste dir an de fümf Finger abklawieren.", "explanation": "das kannst du dir leicht ausrechnen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abknabbern",
+    "translations": ["abnagen"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abknappsen",
+    "translations": ["unrechtmäßig abziehen (von Geld oder Zeit)"],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abknippsen",
+    "translations": ["scharf abschneiden"],
+    "infoText": "Eigentlich von der Federpose: der letzte Akt des Schneidens.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abknöppen",
+    "translations": ["jemandem etwas ungern Hergegebenes abnehmen (Studentensprache)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abknutschen",
+    "translations": ["stürmisch herzen und küssen"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abkommen",
+    "translations": ["sich freimachen können", "sterben können (bei Lebensüberdruss)"],
+    "examples": [
+      { "example": "Ick kann nich abkommen.", "explanation": "ich kann mich nicht freimachen" },
+      { "example": "Der kann abkommen.", "explanation": "er ist überdrüssig, er kann sterben" }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abkneien",
+    "translations": ["(bei drohendem Regen) ein wenig regnen"],
+    "examples": [{ "example": "Wir wern wol noch wat abkneien.", "explanation": "es wird wohl noch etwas regnen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ablassen",
+    "translations": ["im Preis heruntergehen"],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abledern",
+    "translations": ["sich die Haut wund arbeiten"],
+    "examples": [{ "example": "Er hat sich de Haut abjeledert.", "explanation": "z. B. beim Arbeiten" }],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ableiern",
+    "translations": ["langweiliger Mensch (ironisch)", "Sprössling, Kind"],
+    "examples": [{ "example": "Da mecht ick 'n kleenen Ableier von haben!", "explanation": "ironisch, z. B. über eine langweilige Person gesagt" }],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abloofen",
+    "translations": ["sich müde laufen (die Beine, die Hacken)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abluchsen",
+    "translations": ["jemandem geschickt etwas abnehmen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ablutschen",
+    "translations": ["absaugen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abmarachen",
+    "translations": ["sich placken"],
+    "themen": ["machen-tun"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abmucken",
+    "translations": ["zum Schweigen bringen"],
+    "alternativeWords": ["abmucksen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abnehmen",
+    "translations": ["sich fotografieren lassen"],
+    "examples": [{ "example": "Ick muß mir abnehmen lassen.", "explanation": "ich muss mich fotografieren lassen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abphotographieren",
+    "translations": ["sich fotografieren lassen"],
+    "infoText": "Vergleiche das ältere „abkonterfeien“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abrabatzen",
+    "translations": ["mühsam arbeiten"],
+    "infoText": "Vom polnischen „rabota“ (Fronarbeit).",
+    "themen": ["machen-tun"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abschrapen",
+    "translations": ["abschaben"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abschulen",
+    "translations": ["absehen (Schulausdruck)"],
+    "alternativeWords": ["abschwulen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abschustern",
+    "translations": ["abschreiben"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abschwimmen",
+    "translations": ["weggehen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abseien",
+    "translations": ["loswerden, beseitigen"],
+    "alternativeWords": ["absagen"],
+    "examples": [
+      { "example": "Konn' wa uns den Kerl nich abseien?", "explanation": "können wir den Kerl nicht loswerden?" },
+      { "example": "Hatt abjeseiht!", "explanation": "vollständig beseitigt" }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Absicht",
+    "translations": ["Entschuldigungsformel bei einem Versehen"],
+    "examples": [{ "example": "Entschuldjen Se, et is mit Absicht jeschehn!", "explanation": "scherzhaft-ironische Entschuldigung, wenn man jemanden versehentlich gestoßen hat" }],
+    "themen": ["redewendungen-sprueche", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Absocken",
+    "translations": ["weggehen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abspulwasser",
+    "translations": ["schlechter Tee oder Kaffee"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abstinken lassen",
+    "translations": ["derb für: abfallen lassen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abstippen",
+    "translations": ["den Rest der Sauce mit einem Stück Brot auftunken"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abstoßen",
+    "translations": ["(Geld) übrig haben"],
+    "examples": [{ "example": "So ville wer'k wol noch abstoßen können.", "explanation": "so viel Geld werde ich wohl noch übrig haben" }],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abstrapzieren",
+    "translations": ["sich abmühen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abwarten",
+    "translations": ["abwarten (Beruhigungsformel)"],
+    "examples": [{ "example": "Erst abwarten, denn Tee trinken!", "explanation": "Beruhigung eines Ungeduldigen" }],
+    "infoText": "Der Ursprung liegt vermutlich in den „ästhetischen Tees“ der 1820er/30er Jahre; der Tee war „Abspulwasser“, die Butterbrote berühmt dünn, serviert wurde meist erst spät.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Abzoppen",
+    "translations": ["abziehen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Accise",
+    "translations": ["stark frequentiert, wie im Steueramt"],
+    "examples": [{ "example": "Det jeht wie in 'ne Accise.", "explanation": "bei starkem Verkehr in der Wohnung, wenn es fortwährend klingelt" }],
+    "infoText": "Accise hieß das alte Steueramt.",
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ach",
+    "translations": ["ach (Ausruf)"],
+    "examples": [
+      { "example": "Ach wat!", "explanation": "ich will nichts hören" },
+      { "example": "Acherjeh!", "explanation": "ach Herr Jesus" },
+      { "example": "Achott!", "explanation": "ach Gott" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Achsel",
+    "translations": ["etwas auf die leichte Achsel nehmen: es leicht nehmen"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Achte",
+    "translations": ["Doppel-8-Figur, die man beim Wassersprengen zieht"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Achterlichte",
+    "translations": ["Kerzensorte, von der acht aufs Pfund gehen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Achtjroschenjunge",
+    "translations": ["Spitzel", "nicht uniformierter Polizeibeamter"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Achtjroschenstick",
+    "translations": ["Formel: nun nehmen Sie doch Vernunft an!"],
+    "examples": [{ "example": "Ick bitte Sie um dausend Achtjroschensticke.", "explanation": "ich bitte Sie, doch vernünftig zu sein" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Achtung — Dampfwalze",
+    "translations": ["Warnruf bei Annäherung einer sehr beleibten Dame"],
+    "infoText": "Anspielung auf die Warnschilder an den Stadtbahnbögen („Achtung! Nicht aufstehn! Drahtleitung nicht berühren!“) und den Kellnerruf „Achtung, Fettflecke!“.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Adchee",
+    "translations": ["Adieu"],
+    "examples": [
+      { "example": "Adchee Sie!", "explanation": "besonders beim Spiel gesagt, wenn man sieht, dass der andere verlieren wird" },
+      { "example": "Adchee Speck!", "explanation": "wenn einem etwas Erhofftes entgeht" },
+      { "example": "Adchee, jrieß die andern!", "explanation": "gesagt, wenn man einen weiteren Schnaps hinter die Binde gießt — gemeint sind die zuvor getrunkenen" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Adleer",
+    "alternativeWords": ["Adeleer"],
+    "translations": ["Adler"],
+    "examples": [
+      { "example": "Vater, seh mal den Adeleer, der plinkert mit de Oogen un eßt mit de Nase.", "explanation": "alte, aus dem Zoologischen Garten stammende Redensart" },
+      { "example": "Ach, der arme Adleer! Alle Dage Leber!", "explanation": "Kinderwitz nach Aufstellung von Eduard Müllers Prometheus-Skulptur in der Nationalgalerie: ein Vater erklärt, der Adler fresse Prometheus täglich die Leber, worauf der Sohn das Tier bemitleidet" }
+    ],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Adrett",
+    "translations": ["sauber, ordentlich (von Personen)"],
+    "infoText": "Vom französischen „adroit“.",
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Alte, nach de",
+    "translations": ["nach dem eigenen Gutdünken"],
+    "infoText": "Scherzhaft dazu auch: „nach de Junge“.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ärgern",
+    "translations": ["sich nachträglich über eine verpasste Kränkung ärgern"],
+    "examples": [{ "example": "Fängt mir jetz erst an zu arjern.", "explanation": "wenn einem nachträglich einfällt, dass man Grund gehabt hätte, sich beleidigt zu fühlen" }],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ärmel",
+    "translations": ["ein gerissener, durchtriebener Mensch"],
+    "examples": [{ "example": "Eener mit Ärmel!", "explanation": "einer, der es hinter den Ohren hat" }],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Äscherei",
+    "translations": ["Hast, Eile"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Affen",
+    "translations": ["neugierig zusehen"],
+    "examples": [{ "example": "Wat hast'n zu äffen?", "explanation": "was gibt es da so neugierig zu begaffen?" }],
+    "themen": [],
+    "allowDuplicate": true,
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Affendarjus",
+    "translations": ["Referendar (scherzhafte Verballhornung)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Baubaujacke",
+    "translations": ["bunte, kurze oder auffällige Jacke"],
+    "infoText": "Aus ähnlichem Grund wie „Affenjacke“ gebildet (sprich „Babau“) — nach den bunten, soldatenartigen Jäckchen, die Leierkastenmänner ihren dressierten Affen anzogen.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Affenkasten",
+    "translations": ["Haus mit vielen Fenstern", "Omnibus", "photographischer Apparat"],
+    "infoText": "Vom Verb „äffen“ (neugierig zusehen) — ein Haus, bei dem zu möglichst jedem Fenster jemand heraussieht.",
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Affentöter",
+    "translations": ["Attentäter (scherzhafte Verballhornung)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Affig",
+    "translations": ["albern"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ahnen",
+    "translations": ["etwas ahnen / wissen"],
+    "examples": [{ "example": "Du ahnst et nich!", "explanation": "was weißt du schon davon? (wird auch ganz sinnlos gebraucht)" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ahnung",
+    "translations": ["keine Ahnung haben, auf dem Holzweg sein"],
+    "examples": [
+      { "example": "Hast wol Ahnung?", "explanation": "du bist auf dem Holzweg" },
+      { "example": "Ha'm Sie 'ne Ahnung!", "explanation": "Ihr Urteil ist sehr irrig, unreif" },
+      { "example": "Nich de blasse Ahnung!", "explanation": "überhaupt keine Ahnung" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Akklamatoren",
+    "translations": ["Akkumulatoren (Verhörer)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Akustik",
+    "translations": ["schlechte Akustik: es riecht übel"],
+    "examples": [{ "example": "Schlechte Akustik hier im Saal!", "explanation": "gesagt, um einen üblen Geruch anzudeuten, ohne ihn direkt zu benennen" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "All",
+    "translations": ["in tiefer Nacht (Wendung „in aller Nacht“)", "schon (Adverb)"],
+    "examples": [
+      { "example": "In aller Nacht", "explanation": "in tiefer Nacht; ebenso: in allen Nejen, in alle meine Angst, in alle meine Unschuld (bei meiner vollständigen Unschuld)" },
+      { "example": "All widder.", "explanation": "schon wieder (Adverb-Gebrauch)" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Allat",
+    "translations": ["munter, geschwind"],
+    "alternativeWords": ["allächt"],
+    "infoText": "Vom französischen „alerte“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Alle",
+    "translations": ["zu Ende, aufgebraucht", "bankrott", "ohnmächtig hinfallen"],
+    "examples": [
+      { "example": "Der Ol is alle.", "explanation": "das Öl ist zu Ende" },
+      { "example": "Wern Se alle!", "explanation": "entfernen Sie sich" },
+      { "example": "Alle jeworden nach Amerika.", "explanation": "Bankrott gemacht und ausgewandert" },
+      { "example": "'t wurde vor ihn alle.", "explanation": "er fiel wie ohnmächtig hin" }
+    ],
+    "infoText": "„Alle machen“ bedeutet verbrauchen: „Wat er jeerbt hat, hat er alle jemacht.“",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Alleene",
+    "translations": ["allein, selber"],
+    "examples": [
+      { "example": "Alleene jraul ick mir.", "explanation": "schon allein davor graut mir" },
+      { "example": "Der looft alleene!", "explanation": "von Käse/Schinken, der von Maden belebt ist; übertragen auch auf einen schlechten Witz, der so übel „riecht“" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Allemal",
+    "translations": ["klar, selbstverständlich (Zustimmungsformel)"],
+    "examples": [{ "example": "Haste keenen Ziehjarrn? — Allemal!", "explanation": "selbstverständliche Bejahung" }],
+    "infoText": "„Allemal derjenije, welcher!“ stammt aus Angelys Posse „Fest der Handwerker“ — die Redensart des „fixen“ Tischlers, der stets bereit ist.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Allens",
+    "translations": ["alles"],
+    "examples": [
+      { "example": "Allens, wat 'n bisken wat is.", "explanation": "die bessere Gesellschaft" },
+      { "example": "Allens, wat Beene hat, wa draußen.", "explanation": "alle Welt war draußen" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Allerdings",
+    "translations": ["allerdings (scherzhafte Verstärkung)"],
+    "examples": [{ "example": "Allerdings, sprach die Sphinx.", "explanation": "Scherzformel" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Allerhand",
+    "translations": ["das ist achtungswert"],
+    "examples": [{ "example": "Allerhand Achtung!", "explanation": "das ist achtungswert" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Allerliebst",
+    "translations": ["gemütlich", "(ironisch) sehr schlecht"],
+    "examples": [
+      { "example": "Det wa jestern allerliebst.", "explanation": "gemütlich" },
+      { "example": "Det is ja 'n allerliebster Kerl.", "explanation": "ironisch: ein sehr schlechter Kerl" }
+    ],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Allermeist",
+    "translations": ["vollständig"],
+    "examples": [{ "example": "Is allermeist jenung.", "explanation": "ist vollständig genug" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Alleweile",
+    "translations": ["jetzt"],
+    "examples": [{ "example": "Alleweile jeht's ab nach Stralow!", "explanation": "Ruf der Schiffer, die von der Stralauer Brücke nach Stralau übersetzten" }],
+    "infoText": "Bei Glaßbrenner („Berlin wie es ist und — trinkt“, Heft 10: Moabit 1848) rufen die Schiffer, die von den Zelten nach Moabit übersetzen, wohl hundertmal: „Alleweile, jetzt jeht es ab!“",
+    "themen": ["orte-spitzname", "stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Allons",
+    "translations": ["vorwärts, marsch!"],
+    "infoText": "Aus dem Französischen.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Alma",
+    "translations": ["sinnfreier Kinderreim-Name"],
+    "examples": [{ "example": "Alma, wo mag das Mädchen sein?", "explanation": "hochdeutscher Kinderreim, teils auch ganz sinnlos beim Namen Alma zitiert" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Also doch",
+    "translations": ["das hätte ich nicht erwartet"],
+    "examples": [{ "example": "Also doch!", "explanation": "das hätte ich nicht erwartet" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Alt, vor",
+    "translations": ["etwas vor alt kaufen (Redewendung)"],
+    "infoText": "„Der Olle“ bezeichnet den Vater, „Der Alte“ dagegen den Chef bzw. Prinzipal im Geschäft. „Alter Mann“ (mit junger Frau) ist ein Scherzname für Kuhkäse.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Altdeutscher",
+    "translations": ["Napfkuchen-Sorte"],
+    "infoText": "Eine andere Art heißt „Abgeriebener“.",
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Alxen",
+    "translations": ["täppisch greifen"],
+    "examples": [{ "example": "Eenen in de Oogen alxen.", "explanation": "jemandem täppisch in die Augen greifen" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ampeln",
+    "translations": ["sich begierig mit Händen und Füßen um etwas bemühen"],
+    "alternativeWords": ["jampeln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "An sich haben",
+    "translations": ["die Eigenschaft/Gewohnheit haben"],
+    "examples": [{ "example": "Det hat der Franzose so an sich.", "explanation": "aus „Ein gebildeter Hausknecht“ von Kalisch" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anbeißen",
+    "translations": ["einen Heiratsantrag machen wollen"],
+    "examples": [{ "example": "Er beißt nicht an.", "explanation": "er erklärt nicht, sie heiraten zu wollen" }],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anbiedern",
+    "translations": ["sich beliebt zu machen suchen"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anbringen",
+    "translations": ["ausgeben (Geld)"],
+    "examples": [{ "example": "Er hat allens angebracht.", "explanation": "er hat alles ausgegeben" }],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Andermal",
+    "translations": ["das sage ich dir gar nicht (ablehnende Formel)"],
+    "examples": [{ "example": "Det wer'k dir'n andermal sagen!", "explanation": "das sage ich dir gar nicht" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anders, mir wird janz",
+    "translations": ["mir wird übel (Ausdruck des Abscheus)"],
+    "examples": [{ "example": "Mir wird janz anders, aber besser ooch nich.", "explanation": "Ausdruck des Abscheus" }],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Andrechseln",
+    "translations": ["jemandem geschickt etwas zuschieben (z. B. beim Würfeln)"],
+    "examples": [{ "example": "Die wer'k dir andrechseln.", "explanation": "beim Würfeln so manipulieren, dass der andere zahlen muss" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Andrehn",
+    "translations": ["jemandem eine Ohrfeige geben", "wie andrechseln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Andreiben",
+    "translations": ["Unsitte: den Zylinderhut über die Ohren schlagen"],
+    "infoText": "Früher besonders in der Neujahrsnacht verbreitete Unsitte des Pöbels; die Hutkrempe musste bis über die Ohren hinuntergehen.",
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Andudeln",
+    "translations": ["sich betrinken"],
+    "examples": [{ "example": "Er hat sich eklig eenen anjedudelt.", "explanation": "er hat sich gehörig betrunken" }],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anfangen",
+    "translations": ["Streit suchen"],
+    "examples": [
+      { "example": "Der fangt immer mit mir an!", "explanation": "er sucht immer Streit mit mir" },
+      { "example": "Wenn Se seifen wollen, denn fangen Se sich doch alleene wat an!", "explanation": "Retourkutsche, wenn jemand mitpfeift/mitsingt, nach den „Berliner Witzen“" }
+    ],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anfangsbuchstaben",
+    "translations": ["scherzhafte Namensandeutung über den Anfangsbuchstaben"],
+    "examples": [{ "example": "Ick will keenen scharf ansehn, aber mit'n ersten Anfangsbuchstaben heeßt er Puhlmann.", "explanation": "scherzhafte indirekte Namensnennung" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Angeln, sich eenen",
+    "translations": ["jemanden fassen, vornehmen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anhacken",
+    "translations": ["festsitzen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anhang",
+    "translations": ["ohne Anhang: ohne Geliebten (von einem Dienstmädchen)"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anhören, sich mit",
+    "translations": ["sich etwas mit anhören"],
+    "examples": [{ "example": "Ick wer mir det mal mit anhören.", "explanation": "das werde ich mir mit anhören" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjeben",
+    "translations": ["anstellen, Unsinn machen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjebrochen",
+    "translations": ["Entschuldigungsformel für eine spät begonnene Aktivität"],
+    "examples": [{ "example": "Det is nu doch mal 'n anjebrochner Nachmittag.", "explanation": "Entschuldigung, wenn man z. B. spät noch eine neue Kneipe aufsucht" }],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjebufft",
+    "translations": ["angestoßen (von Obst)", "verrückt"],
+    "examples": [{ "example": "Bist wol anjebufft?", "explanation": "bist du wohl verrückt?" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Anjeetert",
+    "translations": ["angetrunken"],
+    "alternativeWords": ["Anjeheitert"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]
