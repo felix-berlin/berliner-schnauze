@@ -1,0 +1,760 @@
+[
+  {
+    "word": "Überwendlich",
+    "translations": ["Nähtechnik: mit überwendlichen Hinterstichen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Überzogen",
+    "translations": ["scherzhaft für überzeugt"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Übrig, det is übrig",
+    "translations": ["das ist nichts wert"],
+    "examples": [{ "example": "Det wa übrig.", "explanation": "es hätte unterbleiben sollen" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufangeln, wo hast 'n die ufjeangelt",
+    "translations": ["finden, aufgreifen"],
+    "infoText": "Z. B. die Läuse.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufbejehren",
+    "translations": ["Skandal machen, besonders von den Marktweibern"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufbieten",
+    "translations": ["schimpfen (Ausdruck der Marktweiber)"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufbremsen, eenen eens",
+    "translations": ["einen Schlag versetzen"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufbringen, 'ne Jeschichte, 'n Witz",
+    "translations": ["erfinden, zuerst vorbringen"],
+    "alternativeWords": ["ufs Trapez bringen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufbrummen",
+    "translations": ["einem eine Strafe zudiktieren"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufdauen",
+    "translations": ["nach längerem Schweigen gesprächig werden"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufdun, da dut sich wat uf",
+    "translations": ["du wirst dich wundern"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufflezen, sich",
+    "translations": ["sich unanständig aufstützen"],
+    "alternativeWords": ["ufftejeln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Uffrischen",
+    "translations": ["verhauen"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufhacken, kutscher, hackt eener uf",
+    "translations": ["von Kindern, die sich hinten auf einen Wagen setzen"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufhangen, er hangt sich nach uf",
+    "translations": ["er begehrt es heftig"],
+    "examples": [{ "example": "Hängen Se sich uf!", "explanation": "legen Sie Ihre Sachen ab" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufheben, sich",
+    "translations": ["die Kleider auf schmutziger Straße raffen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufhelfen, kommen Se her, ick wer Ihnen ufhelfen",
+    "translations": ["hilfreiche Formel, wenn einer gefallen ist"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufhören, nanu hört's uf",
+    "translations": ["Ausruf des Erstaunens"],
+    "examples": [{ "example": "Da hört sich denn doch Verschiedenes uf!", "explanation": "das ist doch zu stark!" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufjabeln",
+    "translations": ["finden, antreffen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufjebot, ick krieg' 'n Ufjebor",
+    "translations": ["scherzhafte Warnung"],
+    "examples": [{ "example": "Ick muß machen, det ick wegkomme, sonst kriej ick'n Ufjebot!", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufjedonnert, wie'n Pfingstochse",
+    "translations": ["geschmacklos und prahlerisch geputzt"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufjehn, ick laß dir ufjehn wie 'n Ballon",
+    "translations": ["dicker werden (Drohung)"],
+    "examples": [{ "example": "Er jeht uf wie'n Pfannkuchen.", "explanation": "wie'n Bärmekloß — er wird dick" }],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufjeknöppt",
+    "translations": ["zugänglich, gesprächig"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufjekratzt",
+    "translations": ["vergnügt"],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufjeschmissen",
+    "translations": ["verloren, reingefallen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufjeschrieben, er is ufjeschrieben",
+    "translations": ["ihm ist Strafe sicher"],
+    "infoText": "Eigentlich vom Schutzmann wegen eines Vergehens.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufklären, et klärt sich schon janz dicke uf",
+    "translations": ["ironischer Trost bei schlechtem Wetter"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufkleben",
+    "translations": ["spalten"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufknallen, 'n Kupferhut",
+    "translations": ["ein Zündhütchen aufschlagen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufkrempeln, die Ärmel, Hosen",
+    "translations": ["aufstreifen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Uftucken, sich",
+    "translations": ["sich beim Lesen oder Schreiben zu nah auf das Buch beugen"],
+    "examples": [{ "example": "Kuck nich immer so uf!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufmischen, et jibt wat ufjemischt",
+    "translations": ["Hiebe verabreichen"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufmöbeln, sich",
+    "translations": ["schelten, Grobheiten sagen"],
+    "infoText": "Sich ufmöbeln: sich putzen.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufmucken",
+    "translations": ["widersprechen, sich widersetzen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufmuntern, von Sachen",
+    "translations": ["wieder neu machen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufmuken",
+    "translations": ["verweisen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufoktrojieren",
+    "translations": ["aufnötigen"],
+    "infoText": "Vielleicht von der „oktroyierten“ preußischen Verfassung von 1848.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufplüstern, sich",
+    "translations": ["die Federn sträuben, von Vögeln", "sich aufblasen, sich spreizen"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufpuckeln, mir ha'm allens ufjepuckelt",
+    "translations": ["aufladen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufrappeln, sich",
+    "translations": ["sich aufraffen, genesen"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufrebbeln, sich",
+    "translations": ["sich sehr anstrengen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufrejen, rejen Se sich nich unnötig uf",
+    "translations": ["aufregen"],
+    "examples": [{ "example": "Man rejt sich uf un hat nischt von.", "explanation": "" }, { "example": "Det is nich uf­rejend.", "explanation": "nicht hervorragend" }],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufschlagen, einen höhern Preis angeben",
+    "translations": ["in der Voraussicht, dass darum gehandelt wird"],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufschneiden, det is kalter Ufschnitt",
+    "translations": ["lügen, besonders prahlerisch"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufschwemme",
+    "translations": ["Spitzname für Stellen am natürlichen Spreeufer, geeignet zum Baumschwemmen und Pferdeschwemmen"],
+    "infoText": "Die letzten waren an der Waisenbrücke (bei Neukölln) und neben Schloss Monbijou. Redensart: „wie 'ne dodije Pletze an de Ufschwemme.“",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Uftecken, etwas",
+    "translations": ["damit aufhören"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufstehn, na der wird bald wieder ufstehn",
+    "translations": ["scherzhafte Antwort auf die Frage, ob jemand tot ist"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufstekern",
+    "translations": ["aufstören, z. B. einen Ameisenhaufen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufstoßen, stoßt dir det ooch noch uf",
+    "translations": ["fällt dir das wieder ein?"],
+    "examples": [{ "example": "Det stieß mir uf.", "explanation": "es fiel mir auf" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Uftreiben",
+    "translations": ["wie andreiben"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufwaschen, det is een Ufwaschen",
+    "translations": ["das wollen wir gleich mit abmachen"],
+    "infoText": "Ufwaschen heißt: das ganze Waschen zusammen besorgen, nicht teilweise.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufziehn, die Wache wird ufjezogen",
+    "translations": ["wie eine Uhr aufziehen"],
+    "examples": [{ "example": "Die Brücke war ufjezogen.", "explanation": "frühere Entschuldigung zu spät kommender Schüler" }, { "example": "Er is ufjezogen.", "explanation": "er ist ins Erzählen oder Witzemachen hineingekommen" }],
+    "infoText": "Auch: necken.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ufzuverheben, du hastet mir doch nich ufzuverheben jejeben",
+    "translations": ["scherzhafte Redensart"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Uten un Apen",
+    "translations": ["Krähenfüße (unleserliche Schrift)"],
+    "infoText": "Platt für Eulen und Affen.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ulk",
+    "translations": ["harmloser Blödsinn"],
+    "infoText": "Auch Name eines Witzblattes, nach dem Namen einer witzigen Gesellschaft in Haspe, Westfalen.",
+    "alternativeWords": ["ulken", "ulkig"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ulrich rufen",
+    "translations": ["sich übergeben"],
+    "infoText": "Der Ausdruck ist tonmalend.",
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Um, det is sehr um",
+    "translations": ["ein großer Umweg"],
+    "examples": [{ "example": "Ick hau dir eene, dette dir um un dum drehst!", "explanation": "" }],
+    "alternativeWords": ["um un dum"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umärmeln",
+    "translations": ["umarmen"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umbringen, er bringt sich reene um",
+    "translations": ["er kann sich nicht genug tun"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umtatern",
+    "translations": ["anders arrangieren (Möbel u. dgl.)"],
+    "infoText": "Vielleicht aus „umquartieren“.",
+    "themen": ["alltag-wohnen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umdreieln",
+    "translations": ["umfallen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umkommen, man bloß nischt umkommen lassen",
+    "translations": ["nichts von Speisen oder Getränken übrig lassen"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umkrempeln, in' Umkrempeln",
+    "translations": ["umdrehen; im Handumdrehen"],
+    "examples": [{ "example": "Er is wie umjekrempelt.", "explanation": "wie verwandelt" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umschlag machen",
+    "translations": ["den Ort wechseln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umschmeißen, det wird dir ooch nich jleich umschmeißen",
+    "translations": ["es wird dir nicht schaden"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umsonst is der Dod",
+    "translations": ["ironisches Sprichwort"],
+    "examples": [{ "example": "Umsonst is der Dod, un der kost ooch noch't Leben.", "explanation": "" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umstandskommissarius",
+    "translations": ["umständlicher Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Umzechtig",
+    "translations": ["umschichtig"],
+    "alternativeWords": ["umzechlig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unanjenehm, det is Ihnen doch weiter nich unanjenehm",
+    "translations": ["ironische Formel"],
+    "examples": [{ "example": "Nu sind Se stille, oder ick wer unanjenehm!", "explanation": "grob" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unband",
+    "translations": ["unbändiges Kind"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unbesehn, det nehm ick unbesehn",
+    "translations": ["ungeprüft nehmen"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Und, was soll ich",
+    "translations": ["Antwort auf einen Ruf"],
+    "examples": [{ "example": "Müller! — Und?", "explanation": "was soll ich?" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Uneben, det is janich so uneben",
+    "translations": ["nicht so schlecht"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unjebachert",
+    "translations": ["tolpatschig"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unjelogen, det muß ick unjelogen sein lassen",
+    "translations": ["das will ich nicht behaupten"],
+    "examples": [{ "example": "Det wa'n unjelogen dreißig Grad in' Schatten.", "explanation": "" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unjemacht, se kam rin mit unjemachte Haare",
+    "translations": ["ungemacht, unfrisiert"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unjemietlich, wenn nu nich bald ufhören, wer't unjemietlich",
+    "translations": ["gereizt"],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unjeschickt läßt jrüßen",
+    "translations": ["ironischer Kommentar zu einem Missgeschick"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unjewiejt, ick wer heite Nacht unjewiejt schlafen",
+    "translations": ["ungewiegt"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unjlückswurm",
+    "translations": ["elende kleine Person, Krüppel, überhaupt ein unglücklicher Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unjut, nischt vor unjut",
+    "translations": ["seien Sie mir darum nicht böse"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unke, besoffen wie 'ne Unke",
+    "translations": ["idiomatischer Vergleich"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unkosten, er kommt nich uf de Unkosten",
+    "translations": ["Geschäftskosten"],
+    "examples": [{ "example": "Stürzen Se sich man nich in Unkosten!", "explanation": "machen Sie keine Komplimente" }],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unmensch, darin bin ick keen Unmensch",
+    "translations": ["das tue ich, ohne mich nötigen zu lassen"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unmöjlich, 'n unmöjlicher Hut",
+    "translations": ["ein geschmackloser"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unrecht, mir is wat in de unrechte Kehle jekommen",
+    "translations": ["in die Luftröhre"],
+    "alternativeWords": ["in de Sonntagskehle"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unsicher, er macht de Schweiz unsicher",
+    "translations": ["er besucht sie"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unsichtbar, wern Se unsichtbar",
+    "translations": ["entfernen Sie sich"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unsinn, Auguste, heiraten mußte",
+    "translations": ["scherzhafter Spruch"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unten durch, er is unten durch",
+    "translations": ["in Verachtung gefallen"],
+    "alternativeWords": ["drunter durch"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unterärmeln",
+    "translations": ["unterfassen"],
+    "alternativeWords": ["Unterhaken"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unterhauen",
+    "translations": ["unterschreiben"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unterkietig",
+    "translations": ["unter der Haut eiternd; faul, verdächtig"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unterklauen, klau unter",
+    "translations": ["unterschreiben", "unterfassen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unterkriejen",
+    "translations": ["bewältigen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unterwejs lassen, laß det unterwejs",
+    "translations": ["unterlassen"],
+    "alternativeWords": ["unterwejens"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unübel, det is nich unübel",
+    "translations": ["nicht übel"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unverfroren",
+    "translations": ["dreist"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unvernümftig, wat nimmste dir vor unvernümftije Sooße",
+    "translations": ["adjektivisch für unvernünftig"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unvorbereitet, wie ich mich habe",
+    "translations": ["beliebter Anfang einer Rede"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Unwohl, se sind wol nich janz unwohl",
+    "translations": ["Sie sind wohl nicht ganz bei Verstande?"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Usinger",
+    "translations": ["Schlesier", "auch Schimpfwort"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Uzen, woll'n Se mir villeicht uzen",
+    "translations": ["verhöhnen"],
+    "examples": [{ "example": "Wenn Se mir uzen wollen, denn suchen Se sich 'n andern aus!", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

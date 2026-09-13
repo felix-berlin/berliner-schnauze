@@ -1,0 +1,228 @@
+[
+  {
+    "word": "Quabblig",
+    "translations": ["weich, rundlich (besonders von Frauen)"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quack",
+    "translations": ["Kind, das noch ganz unmündig ist und nichts vorzustellen hat"],
+    "examples": [{ "example": "Du Quack!", "explanation": "" }, { "example": "So'n Quack!", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quackern",
+    "translations": ["mit Geräusch kochen (von Flüssigkeiten)"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quaddeln",
+    "translations": ["muck reden", "Nesseln auf der Haut"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quadratlaatschen",
+    "translations": ["große Füße"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quangeln",
+    "translations": ["unzufrieden, missmutig reden"],
+    "alternativeWords": ["Quangelei", "Quangelfrieze"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Qualle",
+    "translations": ["Ohrfeige"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Qualmen",
+    "translations": ["dummes Zeug reden"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Qualmtute",
+    "translations": ["Schimpfwort (olle Qualmtute)"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Qualster",
+    "translations": ["ausgespieener Schleim"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quappe",
+    "translations": ["Ohrfeige"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quark",
+    "translations": ["Dreck, schlechtes Zeug"],
+    "infoText": "Goethes Vers „Getretner Quark wird breit, nicht stark“ zeigt den Übergang von der ersten, eigentlichen zur zweiten Bedeutung.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quarkspitzen",
+    "translations": ["Unsinn"],
+    "infoText": "Aus Wien eingedrungen.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quartal, die Schäfer ha'm wol Quartal",
+    "translations": ["scherzhafte Bemerkung, wenn einer fortwährend pfeift"],
+    "infoText": "Anspielung auf die vierteljährlichen Versammlungen der Gewerksinnungen bei der Lade; Schäferknecht ist alte Bezeichnung für einen, der pfeift.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quatsch mit Sooße",
+    "translations": ["reiner Unsinn"],
+    "examples": [{ "example": "Machen Se man keenen Quatsch!", "explanation": "richten Sie nichts Schlimmes an" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quatsche",
+    "translations": ["Ohrfeige"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quatschenaß",
+    "translations": ["völlig durchnässt"],
+    "alternativeWords": ["patschenaß"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quaxeln",
+    "translations": ["viel und töricht sprechen"],
+    "examples": [{ "example": "Hast wol Quaxelwasser jedrunken?", "explanation": "" }],
+    "alternativeWords": ["Quaxelstrippe", "Quaxelkopp", "Quaxelfritze"],
+    "infoText": "Quaxelstrippe war auch scherzhafte Bezeichnung für das Telephon.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quecksilber, er hat Quecksilber im Leibe",
+    "translations": ["er hat keine Ruhe"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Querschreiben",
+    "translations": ["einen Wechsel ausstellen"],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Querüber, ja ja, mein lieber Querüber",
+    "translations": ["scherzhafte Redensart"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quesenkopp",
+    "translations": ["verrückter Mensch"],
+    "infoText": "Von Quese, der Blase, die sich durch Druck oder Reibung unter der Haut bildet.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quetschkartoffeln",
+    "translations": ["Rührkartoffeln"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quiemen",
+    "translations": ["siechen"],
+    "examples": [{ "example": "Der quiemt bloß noch so rum.", "explanation": "" }],
+    "alternativeWords": ["quienen"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quietschen",
+    "translations": ["kreischen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quietschverjniejt",
+    "translations": ["sehr vergnügt"],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quiste, in de Quiste jehn",
+    "translations": ["verloren gehen"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quitschenaß",
+    "translations": ["völlig durchnässt"],
+    "alternativeWords": ["quatschenaß"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quosen",
+    "translations": ["viel und langweilig reden"],
+    "examples": [{ "example": "Der quost wat zusamm'!", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Quurxen",
+    "translations": ["Geräusch des Wassers in den Stiefeln"],
+    "examples": [{ "example": "Et quurrt mir in' Bauch.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

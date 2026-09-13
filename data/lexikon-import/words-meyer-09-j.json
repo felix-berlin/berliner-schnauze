@@ -1,0 +1,1947 @@
+[
+  {
+    "word": "Jabel",
+    "translations": ["mit den Fingern essen"],
+    "examples": [{ "example": "Er ißt mit de fümfzinkije Jabel.", "explanation": "mit den Fingern" }],
+    "themen": ["essen-trinken", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jachern",
+    "translations": ["wild spielen (von Kindern)"],
+    "alternativeWords": ["jachtern"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jacke",
+    "translations": ["das ist immer so gewesen", "eins wie's andere", "ihn durchprügeln"],
+    "examples": [
+      { "example": "Det is 'ne alte Jacke.", "explanation": "das weiß man längst" },
+      { "example": "Det is Jacke wie Hose.", "explanation": "eins wie's andere" },
+      { "example": "Dir hau ick noch mal de Jacke voll!", "explanation": "" }
+    ],
+    "infoText": "„'ne warme Jacke“ = ein Kognak.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jackenfett",
+    "translations": ["Schläge"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jänsewein",
+    "translations": ["Wasser"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jakob, der wahre",
+    "translations": ["das richtige Mittel"],
+    "examples": [{ "example": "Det is der wahre Jakob.", "explanation": "das richtige Mittel" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jaljenholz",
+    "translations": ["falsch, unaufrichtig"],
+    "examples": [{ "example": "Er is falsch wie Jaljenholz.", "explanation": "" }],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jaljenposementier",
+    "translations": ["scherzhaft für Seiler"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jamfen",
+    "translations": ["stehlen"],
+    "infoText": "Vom jüdischen „Gannef“ (Dieb); nur im Partizip „jejamft“ gebräuchlich.",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jammerjestell",
+    "translations": ["elend aussehender Mensch"],
+    "themen": ["koerper", "schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jammerschade",
+    "translations": ["sehr schade"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jampe",
+    "translations": ["Holzpfropfen im Spundloch"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jang, in Jange bringen",
+    "translations": ["nicht im Betrieb", "zur Ordnung bringen"],
+    "examples": [
+      { "example": "Et is nich in Jange.", "explanation": "nicht im Betrieb" },
+      { "example": "Dir wer ick uf'n Jang bringen!", "explanation": "zur Ordnung" }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Janischt",
+    "translations": ["gar nichts, überhaupt nichts"],
+    "examples": [
+      { "example": "Ick sage janischt!", "explanation": "ich übernehme keine Verantwortung" },
+      { "example": "Macht fast janischt!", "explanation": "höfliche Ablehnung einer Entschuldigung" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jans",
+    "translations": ["scherzhafte Häufung des j für g"],
+    "examples": [{ "example": "Eine jute jebratne Jans is eine jute Jabe Jottes.", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Janz",
+    "translations": ["alles auf's Spiel setzen"],
+    "examples": [{ "example": "Ick jeh uf'r Janze!", "explanation": "ich setze alles auf's Spiel" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jardinjarten",
+    "translations": ["Garten"],
+    "infoText": "Vom französischen „jardin“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jarten",
+    "translations": ["notdürftig eingerichteter Wirtsgarten"],
+    "infoText": "Enge Hofräume von Bierwirtschaften werden zu „Gärten“, indem man Laternenständer grün anstreicht und ein paar Gewächse in Kübeln aufstellt.",
+    "themen": ["alkohol-kneipe", "stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jast",
+    "translations": ["Zuruf, um Missbilligung an einem Tischnachbarn auszudrücken"],
+    "examples": [{ "example": "Kellner! 'n andern Jast!", "explanation": "" }],
+    "themen": ["alkohol-kneipe", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jauersche",
+    "translations": ["warme Wurst"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jaulen",
+    "translations": ["schreien"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jaunern",
+    "translations": ["sparen"],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeaicht",
+    "translations": ["er versteht es sehr gut"],
+    "examples": [{ "example": "Er is druf jeaicht.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jebauchkitzelt",
+    "translations": ["scherzhaft für geschmeichelt"],
+    "alternativeWords": ["jebauchklatscht"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeben, jibs ja janich",
+    "translations": ["Redensart bei Rätseln"],
+    "examples": [{ "example": "Ha'm Se schon mal 'n Schutzmann mit fliederfarbne Hanschuh jesehn? — Jibs ja janich.", "explanation": "Rätselformel" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jebildet",
+    "translations": ["sich zusammenreißen"],
+    "examples": [{ "example": "Mensch, sei jebildt, wenn't dir ooch schwer fällt!", "explanation": "" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jebumfidelt",
+    "translations": ["sich sehr geehrt fühlen"],
+    "examples": [{ "example": "Fühle mir sehr jebumfidelt.", "explanation": "" }],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeck",
+    "translations": ["Spaß"],
+    "examples": [{ "example": "Au jeck!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jecken",
+    "translations": ["sich freuen (besonders Schadenfreude)"],
+    "examples": [{ "example": "Det jeckt ihn.", "explanation": "" }],
+    "themen": ["gefuehle-emotionen", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jedächtnis",
+    "translations": ["an den Kopf schlagen (Drohformel)"],
+    "examples": [{ "example": "Det ick dir nich uf't Jedächtnis tippe!", "explanation": "an den Kopf schlage" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jedanke",
+    "translations": ["vortrefflicher Einfall"],
+    "examples": [{ "example": "'n Jedanke von Schiller!", "explanation": "ein vortrefflicher Einfall" }],
+    "infoText": "Rätsel: „Wat is schneller wie 'n Jedanke?“ — „'n Berliner Droschkenferd; wenn man denkt: et fällt, denn licht et schon.“",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jedeje",
+    "translations": ["gefügig, nicht anspruchsvoll"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jediejen",
+    "translations": ["gut (meist ironisch)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jedrängt",
+    "translations": ["knapp zusammengefasst (scherzhaft)"],
+    "examples": [{ "example": "Jedrängte Wochenübersicht.", "explanation": "von Bouletten, Ragout usw." }],
+    "themen": ["essen-trinken", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeduld, Jeduld, Vernunft un Sauerkraut",
+    "translations": ["Beruhigungsformel"],
+    "examples": [{ "example": "Jeduld, Vernunft un Sauerkraut (Haberjrütze).", "explanation": "" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jefährlich",
+    "translations": ["sich ohne Grund aufregen"],
+    "examples": [
+      { "example": "Du schreist ja jefehrlich!", "explanation": "" },
+      { "example": "sich jefehrlich haben", "explanation": "sich zieren, sich ohne Grund aufgeregt zeigen" }
+    ],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jefälle",
+    "translations": ["viel auf einmal trinken"],
+    "examples": [{ "example": "Du hast 'n jutet Jefälle.", "explanation": "wenn einer viel auf einmal trinkt" }],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jefällig",
+    "translations": ["da ist der Teufel los (Redewendung)"],
+    "examples": [{ "example": "Da is wat jefällig.", "explanation": "wie „da is der Deibel los“" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jefallen, det laß ick mir jefallen",
+    "translations": ["das ist schön, das gefällt mir"],
+    "examples": [{ "example": "Det laß ick mir jefallen!", "explanation": "das ist schön" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jefeffert",
+    "translations": ["übertrieben (z. B. von einer Rechnung)"],
+    "themen": ["geld", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jefreite",
+    "translations": ["scherzhafte Definition des Gefreiten"],
+    "examples": [{ "example": "Der Jefreite is der höhere Jrad der Jemeinheit.", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jehabe",
+    "translations": ["viele Umstände machen"],
+    "examples": [{ "example": "Det is'n Jehabe un 'n Jedue.", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Geheime Nüsse",
+    "translations": ["Geheimnisse (scherzhaft)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeheimratsviertel",
+    "translations": ["Spitzname für ein Stadtviertel"],
+    "infoText": "Stadtviertel vor dem Potsdamer und Anhalter Tor, jenseits des Kanals. Dazu: Jeheimratsjöre (Sohn eines höheren Beamten), Jeheimratskneipe (Weißbierlokal, früher Päpke, Jerusalemer Straße 8), Jeheimratsecken (Haarlücken an den Schläfen).",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jehn, dette jehst",
+    "translations": ["mach, dass du wegkommst"],
+    "examples": [
+      { "example": "Dette jehst!", "explanation": "mach, dass du wegkommst" },
+      { "example": "Se jeht mit ihn.", "explanation": "sie hat ein Verhältnis mit ihm" },
+      { "example": "Wenn wir jehn, denn jehn wir alle!", "explanation": "wenn ein Gast früher aufbrechen will" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jehören, det jehört sich nich",
+    "translations": ["das schickt sich nicht"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jehörig",
+    "translations": ["stark, sehr"],
+    "examples": [{ "example": "janz jehörig", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jehoben, alles jehoben un jelejt",
+    "translations": ["alles in Ordnung"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeist, wat is'n det vor'n",
+    "translations": ["von einem unbekannten Neuling"],
+    "examples": [{ "example": "Wat is'n det vor'n Jeist?", "explanation": "von einem neu eintretenden unbekannten Menschen" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeistlich",
+    "translations": ["blass"],
+    "examples": [{ "example": "Er sieht so jeistlich aus.", "explanation": "blass; auch vom Kaffee gebraucht" }],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeizhammel",
+    "translations": ["Geizhals"],
+    "alternativeWords": ["Jeizkragen"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jejen wen denn",
+    "translations": ["Frage bei einer Verlobung"],
+    "infoText": "Ebenso: „Wo dient se denn?“",
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jejend, ooch 'ne scheene Jejend",
+    "translations": ["ironische Redewendung über eine schlechte Sache/Gesellschaft"],
+    "infoText": "Zurückgeführt auf eine Stelle bei Glaßbrenner: zwei Frauen sprechen darüber, wo ihre Söhne gefallen sind; „Bei Leipzig“ — „Ooch 'ne scheene Jejend!“",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jejenhalten",
+    "translations": ["vorhalten"],
+    "examples": [{ "example": "So'n bisken hält nich lange jejen.", "explanation": "" }],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jejenliebe",
+    "translations": ["du wirst abgewiesen werden"],
+    "examples": [{ "example": "Da wirste keene Jejenliebe finden.", "explanation": "" }],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jejenseitigkeit",
+    "translations": ["auf Gegenseitigkeit beruhen (formelhaft)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jejenstand",
+    "translations": ["das ist nicht teuer", "Liebster, Liebste"],
+    "examples": [{ "example": "Det is keen Jejenstand.", "explanation": "das ist nicht teuer" }],
+    "themen": ["beziehungen-soziales", "geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jejenteil",
+    "translations": ["unpassend gebrauchte Verneinung"],
+    "examples": [{ "example": "Hab ick Ihnen weh jedan? — O nee, in Jejenteil!", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jejönnt",
+    "translations": ["das war dir nicht gegönnt (Redewendung)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jejröhle",
+    "translations": ["Geschrei, Gesang"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeklatscht",
+    "translations": ["geschlagen"],
+    "examples": [{ "example": "Da war er jeklatscht.", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeklönne",
+    "translations": ["Gejammer"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jekratzt",
+    "translations": ["geschmeichelt"],
+    "examples": [{ "example": "Er fühlt sich sehr jekratzt.", "explanation": "" }],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jelackmeiert",
+    "translations": ["angeführt, betrogen"],
+    "alternativeWords": ["jemeiert", "jelackiert", "jeblaßmeiert"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeladen",
+    "translations": ["betrunken", "voll von Einfällen", "sehr reizbar"],
+    "examples": [
+      { "example": "Er hat schwer (schief) jeladen.", "explanation": "er ist betrunken" },
+      { "example": "Der is heite jeladen.", "explanation": "er ist voll von Einfällen, Witzen" }
+    ],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeld, jeld spielt keene Rolle",
+    "translations": ["Geld spielt keine Rolle (großspurig)"],
+    "examples": [
+      { "example": "Jeld spielt keene Rolle!", "explanation": "großartig" },
+      { "example": "Jeld is bei mir immer't wenigste!", "explanation": "doppelsinnig" }
+    ],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jelejen, hat mal bei Jold jelejen",
+    "translations": ["es ist unecht (Redewendung)"],
+    "examples": [{ "example": "Hat mal bei Jold jelejen!", "explanation": "es ist unecht" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeloofe",
+    "translations": ["Laufen (für kleine Einkäufe)"],
+    "examples": [{ "example": "Hol doch man jleich vor'n janzen Dreier, det det Jeloofe nich immer is!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jelungen",
+    "translations": ["origineller Mensch/Witz"],
+    "examples": [{ "example": "'n jelungner Kerl!", "explanation": "ein origineller Mensch" }],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jemein",
+    "translations": ["ungefällig, egoistisch"],
+    "examples": [{ "example": "Jib mir 'n Ende ab, sei nich jemein!", "explanation": "" }],
+    "alternativeWords": ["jrundjemein", "hundsjemein"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jemeinerei",
+    "translations": ["Gemeinheit"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jemensche",
+    "translations": ["verächtlich für Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jemiete",
+    "translations": ["trinken", "verrückt werden", "stehlen"],
+    "examples": [{ "example": "sich eenen zu Jemiete führen", "explanation": "trinken" }],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jemietsmensch",
+    "translations": ["krasser Egoist (ironisch)"],
+    "alternativeWords": ["Jemietsathlet"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jemischt",
+    "translations": ["ordinär, zweideutig, anstößig"],
+    "examples": [{ "example": "Die Jesellschaft is mir zu jemischt.", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jemlich",
+    "translations": ["weichlich (von Speisen)"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jemüse",
+    "translations": ["Scheltwort", "ironisches Mitleid"],
+    "examples": [
+      { "example": "Krummes Jemüse!", "explanation": "Scheltwort" },
+      { "example": "Du armes Jemüse!", "explanation": "ironisches Mitleid" }
+    ],
+    "themen": ["schimpfwoerter-beleidigungen", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jemüsejarten",
+    "translations": ["Damenhut mit vielen Blumen"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jenau, is det't jenauste",
+    "translations": ["lassen Sie vom Preis nichts ab?"],
+    "examples": [
+      { "example": "Det is nischt Jenaues.", "explanation": "nicht so, wie es sein soll" },
+      { "example": "Is det't jenauste?", "explanation": "lassen Sie vom Preis nichts ab?" }
+    ],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jenehmijen",
+    "translations": ["trinken"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jenießen, Se können de scheenste Keile jenießen",
+    "translations": ["ironisch für: Sie können ordentlich Prügel bekommen"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jenießer",
+    "translations": ["ein Lebemann"],
+    "examples": [{ "example": "'n oller Jenießer.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jenudelt",
+    "translations": ["ganz satt"],
+    "examples": [{ "example": "Wie jenudelt.", "explanation": "" }],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jenüjen, das jenüjt",
+    "translations": ["das genügt (aus der Posse „Unsere Frauen“)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jepritscht",
+    "translations": ["geschlagen, blamiert"],
+    "examples": [{ "example": "Er is jepritscht.", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jequatsche",
+    "translations": ["albernes Gerede"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jequatzel",
+    "translations": ["unnützes Gerede"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jerammelt voll",
+    "translations": ["gerammelt voll"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jerben",
+    "translations": ["sich erbrechen"],
+    "examples": [{ "example": "Er kotzt wie 'ne Jerbertele.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jerecht, jerechter Strohsack",
+    "translations": ["gemilderter Fluch"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jerichtshof",
+    "translations": ["Anrede an den Vorsitzenden vor Gericht"],
+    "infoText": "Klassische Zeugenaussage: „Ick saß un lag un schlief, un da sah ick, wie Willem den Aujust 'n Kessel an' Kopp schmiß … aber ob er'n jedroffen hat, Herr Jerichtshof, det weeß ick nich.“",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jerichtszeitung",
+    "translations": ["Speisekarte (scherzhaft)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jerieben",
+    "translations": ["schlau"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeringst, in jeringsten janich",
+    "translations": ["nicht im Geringsten"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jerissen",
+    "translations": ["schlau"],
+    "examples": [{ "example": "'n jeriss'ner Junge!", "explanation": "" }],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jerne, nich mehr wie jerne",
+    "translations": ["sehr gerne"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jerührt, na sein Se jerührt",
+    "translations": ["beruhigen Sie sich"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jerüste, fall nich von't",
+    "translations": ["verunglücke nicht (Redewendung)"],
+    "infoText": "Aus Angelys „Fest der Handwerker“.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jesabbern",
+    "translations": ["Geschwätz"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jesangbuch",
+    "translations": ["Spiel Karten", "Butterbrot (Klappstulle)"],
+    "themen": ["essen-trinken", "unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschäft, det leschäft bringt's mal so mit sich",
+    "translations": ["das Geschäft bringt es eben mit sich"],
+    "infoText": "Aus der Posse „Berlin bei Nacht“ von Kalisch.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschäftsverführer",
+    "translations": ["scherzhaft für Geschäftsführer"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jescheit",
+    "translations": ["ordentlich, brauchbar"],
+    "examples": [{ "example": "Ick habe keen' jescheiten Kragen mehr.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschichte, mach man keene Jeschichten",
+    "translations": ["mach keine Umstände, werde nicht krank"],
+    "examples": [{ "example": "Faule Jeschichten!", "explanation": "das ist Schwindel" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschickt, det muß'n Jeschickter machen",
+    "translations": ["ironische Selbstbezeichnung als Geschickter"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschirr",
+    "translations": ["Handwerkszeug (Bauhandwerker)"],
+    "alternativeWords": ["Schleifzeug"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschlagen, ne jeschlagne halbe Stunde",
+    "translations": ["eine volle halbe Stunde"],
+    "examples": [{ "example": "Ick habe 'ne jeschlagne halbe Stunde jewart.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschmack, die Jeschmäcker sind verschieden",
+    "translations": ["über Geschmack lässt sich nicht streiten"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschmadder",
+    "translations": ["schlechte, unsaubere Schrift"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschmiert, det jeht wie jeschmiert",
+    "translations": ["sehr gut, reibungslos"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschminkte Minna",
+    "translations": ["Spitzname für den Nachtomnibus"],
+    "themen": ["orte-spitzname", "spott-ironie"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschrei, viel jeschrei un wenig wolle",
+    "translations": ["viel Geschrei und wenig Wolle"],
+    "examples": [{ "example": "Hast wol lange nich dein eijnet Jeschrei jehört?", "explanation": "drohend" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeschwollen",
+    "translations": ["geldstolz, pathetisch"],
+    "examples": [{ "example": "Er macht'n jeschwollnen.", "explanation": "er spielt den feinen (reichen) Mann" }],
+    "themen": ["spott-ironie", "geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jeseier",
+    "translations": ["Klagen"],
+    "alternativeWords": ["Jeseires"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jesichte, stech dir eene in't",
+    "translations": ["ins Gesicht (idiomatische Wendungen)"],
+    "examples": [
+      { "example": "Sie da mit's Jesichte!", "explanation": "um einen Unbekannten aufmerksam zu machen" },
+      { "example": "Stech dir eene in't Jesichte!", "explanation": "eine Zigarre anzünden" }
+    ],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jesichtserker",
+    "translations": ["Nase"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jespannt, wie'n Rejenschirm",
+    "translations": ["sehr gespannt sein"],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jestatten, jestatten Sie, det ick mir die Freiheit bediene",
+    "translations": ["erlauben Sie"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jestell, wat is'n det vor'n",
+    "translations": ["was für ein Mensch ist das?"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jestern, bist wol von jestern",
+    "translations": ["bist du wohl nicht gescheit?", "er ist ein gescheiter Mensch"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jestohlen, der kann mir jestohlen wern",
+    "translations": ["er ist mir gleichgültig, verächtlich"],
+    "infoText": "Man zählt an den Rockknöpfen ab: „Jestohlen, jenommen, jefunden, jekooft, jestohlen!“",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jestrig, du suchst wol'n jestrijen Dag",
+    "translations": ["was suchst du eigentlich?"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jesund, schlau",
+    "translations": ["schlau, regsam, praktisch"],
+    "examples": [{ "example": "'n jesunder Junge.", "explanation": "" }],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jesundbrunnen",
+    "translations": ["Wortspiel-Antwort aufs Niesen"],
+    "infoText": "Wenn einer niest, sagt man „Jesundbrunnen“, und der Niesende erwidert „Pankow!“",
+    "themen": ["orte-spitzname", "spott-ironie"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jetraatsch",
+    "translations": ["unnützes Gerede"],
+    "alternativeWords": ["Jeträtsch"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jevatter, meine Uhr steht jevatter",
+    "translations": ["sie ist versetzt (im Pfandhaus)"],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jewalt, er will vor de Jewalt nich mit",
+    "translations": ["durchaus nicht"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jewaschen, die sich jewaschen hat",
+    "translations": ["eine tüchtige Ohrfeige"],
+    "examples": [{ "example": "Du kriest 'ne Ohrfeije, die sich jewaschen hat!", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jewesen, nachher will't keener jewesen sind",
+    "translations": ["hinterher will es keiner gewesen sein"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jewieft",
+    "translations": ["schlau"],
+    "examples": [{ "example": "'n jewiefter Junge.", "explanation": "" }],
+    "alternativeWords": ["jewiejt"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jewiß, na jewiß doch",
+    "translations": ["freilich!"],
+    "infoText": "„Nichts Jewisses weeß man nich.“",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jewogen, bleiben Se mir jewogen",
+    "translations": ["lassen Sie mich in Ruhe"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jewohne",
+    "translations": ["gewöhnt"],
+    "examples": [{ "example": "Det bin ick schonst jewohnde.", "explanation": "" }],
+    "alternativeWords": ["jewohnde"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jewunken, wird nischt jewunken",
+    "translations": ["das gibt's nicht"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jibbeln",
+    "translations": ["unterdrückt lachen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jichjondel",
+    "translations": ["offener Wagen der Elektrischen"],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jieper",
+    "translations": ["Appetit"],
+    "examples": [{ "example": "Ick hab'n furchbarn Jieper uf Bratkatoffeln.", "explanation": "" }],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jierpansch",
+    "translations": ["gieriger Esser"],
+    "alternativeWords": ["Jierschlung"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jießen, et jießt wie mit Kannen",
+    "translations": ["es regnet stark"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jießkanne, Kopf",
+    "translations": ["Kopf (Drohformel)"],
+    "examples": [{ "example": "Ick hau dir eene an de Jießkanne, det de Brühe wackelt!", "explanation": "" }],
+    "themen": ["koerper", "schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jift, det schmeckt wie",
+    "translations": ["darauf wette ich"],
+    "examples": [
+      { "example": "Det schmeckt wie Jift un Jalle.", "explanation": "" },
+      { "example": "Da nehm ick Jift druf.", "explanation": "darauf wette ich" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jiftbude",
+    "translations": ["Destillation, Schankwirtschaft"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jiften, sich",
+    "translations": ["sich ärgern"],
+    "examples": [{ "example": "Det hat mir jejift.", "explanation": "" }],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jiftig",
+    "translations": ["ärgerlich (auf jemanden)"],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jiftnudel",
+    "translations": ["schlechte Zigarre"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jipsbeene",
+    "translations": ["Füße mit weißen Tennisschuhen"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jipskonditer",
+    "translations": ["Stuckateur (an Fassaden)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jipsverband",
+    "translations": ["weiße Weste"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlanzpelle",
+    "translations": ["dünne Sommerjacke"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlas, du bist wol von",
+    "translations": ["dich darf man wohl nicht scharf anfassen?"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlasee",
+    "translations": ["Glace"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlaser, is denn Ihr Vater Jlaser",
+    "translations": ["Frage, wenn jemand im Licht steht"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlasooge",
+    "translations": ["ein Beliebiger (scherzhafte Bezeichnung)"],
+    "examples": [{ "example": "Der mit's Jlasooge un's Holzbeen.", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlatt, det jeht eenen jlatt runter",
+    "translations": ["eine schmeichelhafte Bemerkung geht runter wie Öl"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jleich, wo hab ick doch jleich jesehn",
+    "translations": ["es hat ja noch Zeit"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jletscherhaft",
+    "translations": ["sehr"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlibber",
+    "translations": ["Gelee"],
+    "alternativeWords": ["jlibberig"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlied, det hat ihn lange in de Jlieder jelejen",
+    "translations": ["von einer Krankheit"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlimmstengel",
+    "translations": ["Zigarre"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlinik",
+    "translations": ["Klinik in der Ziegelstraße"],
+    "examples": [{ "example": "Ick war int Jlinik.", "explanation": "" }],
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlitschen",
+    "translations": ["gleiten"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlitschig",
+    "translations": ["glatt, glitschig von Schmutz oder Glatteis"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jloobe, mein Jloobe is",
+    "translations": ["mein Glaube ist"],
+    "examples": [{ "example": "Mein Jloobe is: sieben Fund Rindfleesch jeben 'ne jute Briehe.", "explanation": "" }],
+    "themen": ["essen-trinken", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jloogich",
+    "translations": ["glauben (Redewendungen)"],
+    "examples": [
+      { "example": "Ick jloobe ja!", "explanation": "ich will nicht hoffen" },
+      { "example": "Wer't jloobt, jibt acht Jroschen.", "explanation": "" },
+      { "example": "Er muß dran jlooben.", "explanation": "es geht mit ihm zu Ende" }
+    ],
+    "infoText": "Anekdote: ein Fremder gibt sich als „General Globich“ aus; der Torschreiber ruft: „Ach wat, jlooob ich! Sowat muß man doch wissen!“",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlohen",
+    "translations": ["große Augen"],
+    "alternativeWords": ["Jlohoogen"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlück, da wirste keen Jlück mit haben",
+    "translations": ["das wird dir nicht gelingen"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlupen",
+    "translations": ["stieren"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jlupsch",
+    "translations": ["böse (vom Blick)", "grob"],
+    "examples": [{ "example": "Der is immer jleich so jlupsch.", "explanation": "" }],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jnaden, denn jnade dir Jott",
+    "translations": ["dann gnade dir Gott (Drohung)"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jnarren",
+    "translations": ["weinen, wimmern (von Kindern)"],
+    "alternativeWords": ["jnarrig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jnatzen",
+    "translations": ["in ähnlichem Sinne wie jnarren"],
+    "alternativeWords": ["jnatzig", "Jnatzkopp"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jnauen",
+    "translations": ["wie jnarren"],
+    "alternativeWords": ["jnauzen", "jnauig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jneddern",
+    "translations": ["wie jnarren (von Kindern)"],
+    "alternativeWords": ["jneddrig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jnietsche",
+    "translations": ["missgünstiger, geiziger Mensch"],
+    "examples": [{ "example": "Olle Jnietsche!", "explanation": "" }],
+    "alternativeWords": ["Jnietschhammel", "Jnietschkahe", "Jnietschkragen", "Jnietschpeter"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jnihe",
+    "translations": ["Art Mücke"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jo",
+    "translations": ["ja (verstärkend)"],
+    "examples": [{ "example": "Jo nich sehn!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jocus",
+    "translations": ["Streit"],
+    "examples": [{ "example": "Wir ha'm unsen Jocus mit ihn jehatt.", "explanation": "" }],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jore",
+    "translations": ["Kind"],
+    "examples": [{ "example": "Dumme Jore!", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Johlen",
+    "translations": ["schreien (wie jaulen)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jold, det is Jold jejen",
+    "translations": ["es ist viel besser"],
+    "examples": [{ "example": "Da is det Jold jejen!", "explanation": "es ist viel besser" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Joldne Hundertzehn",
+    "translations": ["Spitzname für eine Kleiderhandlung"],
+    "infoText": "Kleiderhandlung 110, durch ihre Reklamen in poetischer Form bekannt (bis 1903).",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Joldleiste",
+    "translations": ["ganz schmaler, langer Sechserkäse"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jondeln",
+    "translations": ["gehen", "im Kahn fahren"],
+    "alternativeWords": ["losjondeln"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Josse",
+    "translations": ["Rinne"],
+    "infoText": "Der Berliner sagt für Rinnstein „Gosse“ und für Rinne (an Häusern) „Renne“ oder „Rennsteen“ — umgekehrt zum sonstigen Sprachgebrauch.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jott, Jotte doch",
+    "translations": ["Ausrufe-Cluster"],
+    "examples": [
+      { "example": "Jotte doch!", "explanation": "" },
+      { "example": "Nanu mach dir mit'n lieben Jott bekannt!", "explanation": "dein Ende ist nah" },
+      { "example": "Det reene Wort Jottes.", "explanation": "guter Schnaps" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jottsjammerlich",
+    "translations": ["jämmerlich verhauen"],
+    "examples": [{ "example": "Mir is jottsjammerlich zu Mute.", "explanation": "" }],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jottvoll",
+    "translations": ["reizend"],
+    "examples": [{ "example": "Die Jeschichte is jottvoll.", "explanation": "" }],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrad, ick hab'n Jrad",
+    "translations": ["Hunger"],
+    "infoText": "Vom Polnischen.",
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrade, nu jrade nich",
+    "translations": ["Trotzformel"],
+    "examples": [
+      { "example": "Nu jrade! Nu jrade nich!", "explanation": "wenn man einem, um ihn zu ärgern, nicht den Willen tun will" },
+      { "example": "Jrade wat Scheenes!", "explanation": "" }
+    ],
+    "infoText": "„Jrade stehn“ = einstehen, die Verantwortung tragen.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jradewohl, uf't",
+    "translations": ["aufs Geratewohl"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jramassen",
+    "translations": ["Grimassen"],
+    "alternativeWords": ["Jremassen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jranseesch",
+    "translations": ["französisch (Wortspiel)"],
+    "infoText": "Nach dem Städtchen Gransee, acht Meilen nördlich von Berlin.",
+    "themen": ["orte-spitzname", "spott-ironie"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jransen",
+    "translations": ["heftig weinen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrapschen",
+    "translations": ["greifen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jras, wo der hinhaut, wächst keen",
+    "translations": ["wo er hinhaut, wächst kein Gras mehr"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jraul",
+    "translations": ["Grauen"],
+    "examples": [{ "example": "Et jeht mir schon'n Jraul an, wenn ick dran denke.", "explanation": "" }],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jraulen, sich",
+    "translations": ["sich fürchten"],
+    "themen": ["gefuehle-emotionen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jraulich",
+    "translations": ["furchtsam (besonders im Dunkeln)"],
+    "examples": [{ "example": "Die is so häßlich, da kann man kleene Kinder mit jraulich machen.", "explanation": "" }],
+    "themen": ["gefuehle-emotionen", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jreschkens",
+    "translations": ["Groschen"],
+    "examples": [{ "example": "Nu man immer raus mit de Jreschkens!", "explanation": "" }],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrieben",
+    "translations": ["Grieben (Speck)", "Ausschlag am Mund"],
+    "infoText": "Alte Erklärung des Ausschlags: „Der hat jenascht; da hat 'n seine Mutter mit de Kelle wat uf't Maul jejeben, un da is 'ne Jriebe hacken jeblieben.“",
+    "themen": ["essen-trinken", "koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrien",
+    "translations": ["grün", "unter freiem Himmel schlafen", "unerfahren"],
+    "examples": [
+      { "example": "Bei Mutter Jrien schlafen.", "explanation": "unter freiem Himmel" },
+      { "example": "jrien un jelb un jämmerlich", "explanation": "elend aussehend" },
+      { "example": "So'n jriener Junge!", "explanation": "dumm, unerfahren" }
+    ],
+    "infoText": "„De jriene Wagen“ (auch „de jriene Aujust“, „de jriene Minna“) = Polizeiwagen zum Transport von Verbrechern. „De jriene Neune“ = das frühere Thalia-, jetzt Residenztheater (wegen seines Gartens).",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrienen",
+    "translations": ["grinsen, stereotyp lächeln"],
+    "examples": [{ "example": "Er jrient wie 'n Oktoberfuchs.", "explanation": "" }],
+    "alternativeWords": ["Jrienefiest"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrienkram",
+    "translations": ["Handel mit Küchengewächsen"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jriennesig",
+    "translations": ["schlecht aussehend", "naseweis"],
+    "examples": [{ "example": "'ne jriennesije Krete.", "explanation": "" }],
+    "themen": ["koerper", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jriesekel",
+    "translations": ["alter Mann, der ein Ekel ist"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrießen, jrieß wenn de'n siehst",
+    "translations": ["grüß ihn, wenn du ihn siehst"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrips",
+    "translations": ["Fassungskraft, Verstand"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jripsch",
+    "translations": ["Gehäuse des Kernobstes"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrob, det konnten Se aber ebenso jut jrob wie freindlich sagen",
+    "translations": ["Vorwurf wegen Grobheit"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrolen",
+    "translations": ["heulen, weinen", "auch singen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jroschen, bist wol nich bei Jroschens",
+    "translations": ["bist du wohl nicht bei Sinnen?"],
+    "examples": [
+      { "example": "Bist wol nich bei Jroschens?", "explanation": "bei Sinnen" },
+      { "example": "Er is sehr uf de Jroschens.", "explanation": "knauserig" }
+    ],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jroß, wat wird'n jroß dabei rauskommen",
+    "translations": ["für „viel“"],
+    "infoText": "„Die Jroße“ ist die Große Berliner Straßenbahn.",
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jroßkoz",
+    "translations": ["prahlerischer Mensch"],
+    "examples": [{ "example": "Jroßkoz von (Kleen-)Pankow!", "explanation": "vom jüdischen „Kozen“, reicher Mann" }],
+    "themen": ["schimpfwoerter-beleidigungen", "orte-spitzname"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jroßmogul",
+    "translations": ["einer, der prahlerisch die erste Rolle spielen will"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jroßmutter",
+    "translations": ["das ist langweilig (Redewendung)", "die Zahl 99 im Lotto"],
+    "examples": [
+      { "example": "Erzähl doch der deine Jroßmutter!", "explanation": "das ist langweilig" },
+      { "example": "Na also jut: Jroßmutter is de allste!", "explanation": "zur Beendigung eines Disputs" }
+    ],
+    "themen": ["unterhaltung-freizeit", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jroßnesig",
+    "translations": ["prahlerisch"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jroßolle",
+    "translations": ["Großmutter"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jroßschnauz",
+    "translations": ["prahlerischer Mensch"],
+    "alternativeWords": ["großspurig"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jroßvater, wejen den is mein Jroßvater schon aus'n Lokal jeschmissen",
+    "translations": ["formelhafte Reaktion auf einen alten Witz"],
+    "infoText": "„'t is nich so leicht, Jroßvater zu wern!“",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jründerboule",
+    "translations": ["Hasardspiel auf dem Billard, mit einem Würfel"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrüneberjer",
+    "translations": ["schlechter Wein"],
+    "infoText": "Nach Grünberg, Stadt im Regierungsbezirk Liegnitz.",
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrußen, ick bitte zu jrüßen",
+    "translations": ["Ausdruck des Erstaunens"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrühe",
+    "translations": ["Verstand"],
+    "examples": [{ "example": "Er hat Jrühe in' Kopp.", "explanation": "" }],
+    "alternativeWords": ["Jrühkopp"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrund, haste Jrund",
+    "translations": ["Anspielung auf einen bekannten Reim"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jrus",
+    "translations": ["Kohlenabfall"],
+    "alternativeWords": ["Jruz", "Kaffeejrus"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jruskopp",
+    "translations": ["wie Quatschkopp"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jubeljahr",
+    "translations": ["sehr selten"],
+    "examples": [{ "example": "Alle Jubeljahr mal.", "explanation": "sehr selten" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jüchhei",
+    "translations": ["Galerie im Theater"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Juchhönese",
+    "translations": ["Stubsnase"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Juckeln",
+    "translations": ["fahren"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jucken, Jroßmutter kricht Backzähne",
+    "translations": ["scherzhafte Erklärung für Juckreiz"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Judenhelm",
+    "translations": ["eine Hutform"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Judentolle",
+    "translations": ["über der Stirn gewölbtes Haar (bei Damen)"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Judsche",
+    "translations": ["Jüdin"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jüdisches Gesandtschafts-Hotel",
+    "translations": ["Spitzname für ein Haus"],
+    "infoText": "Das frühere (Reichenheimsche) Haus neben dem Hotel der russischen Botschaft.",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jüh",
+    "translations": ["Zuruf an Pferde"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jute, 'ne Droschke erster Jute",
+    "translations": ["erster Klasse"],
+    "examples": [{ "example": "I du meine Jute!", "explanation": "" }],
+    "themen": ["stadtleben"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jüterbog",
+    "translations": ["Rätsel um die Stadt Jüterbog"],
+    "examples": [{ "example": "Was ist das Jejenteil von Jüterbog? — Personen-Zieje.", "explanation": "Rätsel" }],
+    "themen": ["orte-spitzname", "spott-ironie"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jule",
+    "translations": ["Julius, Julie"],
+    "alternativeWords": ["Harfenjule"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jumfer, unter uns Jumfern",
+    "translations": ["unter uns jungen Mädchen"],
+    "themen": ["beziehungen-soziales"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jummiquetscher",
+    "translations": ["Radfahrer"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jung, so jung komm wa nich wieder zusamm",
+    "translations": ["nötigende Formel beim Aufbruch"],
+    "infoText": "„Junge Frau!“ riefen Marktweiber ältere Frauen an (Jungfrauen wurden „Madamken“ gerufen).",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Junge, sage mal nee",
+    "translations": ["Herausforderung zur Schlägerei (Straßenjungen)"],
+    "examples": [{ "example": "Junge, Junge, Junge!", "explanation": "verwundert, mit eigentümlichem Tonfall" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jurke, saure Jurken sind ooch Kompot",
+    "translations": ["drohende Formel eines Gastwirts"],
+    "infoText": "Rätsel der Schulkinder: „Welches is der kleinste Jarten?“ — „Das Jesicht; da wächst bloß eene Jurke drin.“",
+    "themen": ["essen-trinken", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jurkensalat, der lässt jrießen",
+    "translations": ["wenn einem nach etwas aufstößt"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jußzwieback",
+    "translations": ["Zwieback mit Zuckerguss"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jut, jib is jut",
+    "translations": ["ironische Kritik über auffallende Namen"],
+    "examples": [
+      { "example": "Backbord? Backbord is jut!", "explanation": "wenn jemand mit seemännischen Ausdrücken prunkt" },
+      { "example": "Na sein Se man wieder jut.", "explanation": "seien Sie nicht böse" },
+      { "example": "Laß man jut sin!", "explanation": "gib nur nach" }
+    ],
+    "infoText": "„De jute Stube“ (auch Pufstube) ist das gute Zimmer. „Jute Jroschen“ (Kurantgroschen) galten 1¼ Silbergroschen.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Jux",
+    "translations": ["Schmutz (berlinisch)", "Spaß"],
+    "infoText": "Als „Spaß“ (vom lateinischen „iocus“) wienerisch, durch die Posse von Nestroy (1844) „Einen Jux will er sich machen“ importiert.",
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

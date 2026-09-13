@@ -1,0 +1,1627 @@
+[
+  {
+    "word": "Laatschen",
+    "translations": [
+      "Hausschuhe (besonders alte)"
+    ],
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Laban, 'n langer",
+    "translations": [
+      "langer Mensch"
+    ],
+    "alternativeWords": [
+      "Laband"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Labundig",
+    "translations": [
+      "lebendig (scherzhaft)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lachhaft",
+    "translations": [
+      "lächerlich"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lack, dekliniere mal",
+    "translations": [
+      "Schulwitz mit Wortspiel auf „Demlack“"
+    ],
+    "examples": [
+      {
+        "example": "Der Lack, des Lacks, Demlack.",
+        "explanation": "Schülerscherz beim Deklinieren"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lächerbar",
+    "translations": [
+      "lächerlich"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lämmerhuppen",
+    "translations": [
+      "Tanz sehr jugendlicher Menschen"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lämmerkens",
+    "translations": [
+      "Lämmerwolken, Art Wolken"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lämmerschwänzken",
+    "translations": [
+      "Blüten der Pappel"
+    ],
+    "examples": [
+      {
+        "example": "Det jeht ja wie Lämmerschwänzken!",
+        "explanation": "von rascher, leichter Hin- und Herbewegung, z. B. bei Klaviertrillern"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ländlich, schändlich",
+    "translations": [
+      "Parodie auf „ländlich, sittlich“"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Langer, länger wa't nich",
+    "translations": [
+      "Antwort auf „Wat?“ bei Unverständnis"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Längde",
+    "translations": [
+      "Länge"
+    ],
+    "examples": [
+      {
+        "example": "Uf de Längde jeht det nich.",
+        "explanation": ""
+      },
+      {
+        "example": "Er schlug de Längde lang hin.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Larmstange",
+    "translations": [
+      "große, zänkische Frau"
+    ],
+    "infoText": "Die Lärmstange war die Standarte, die in alten Städten bei kriegerischer Rüstung auf dem Lärmplatz aufgestellt wurde.",
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lahme Niete",
+    "translations": [
+      "formelhafte Redensart über Amerika"
+    ],
+    "infoText": "Von „L'Amérique“, wegen der vielen wunderbaren Erzählungen von dort; oft ergänzt: „Wenn se nach Schnaps jeht, hinkt se.“",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lakal",
+    "translations": [
+      "Lokal",
+      "Gesicht"
+    ],
+    "examples": [
+      {
+        "example": "eenen eens ins Lakal hauen.",
+        "explanation": ""
+      }
+    ],
+    "alternativeWords": [
+      "Bierlakal"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "La main",
+    "translations": [
+      "darauf lasse ich mich nicht ein"
+    ],
+    "examples": [
+      {
+        "example": "Nich in die La main!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lampignon",
+    "translations": [
+      "scherzhaft für Lampion"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Landpartie, machen Se keene Landpartien uf meine Beene",
+    "translations": [
+      "treten Sie mir nicht auf die Füße"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Landwehrtopp",
+    "translations": [
+      "Glas Bier"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lang, wer lang hat, läßt lang hängen",
+    "translations": [
+      "idiomatischer Cluster um „lang“"
+    ],
+    "examples": [
+      {
+        "example": "Lang wie der Dag vor Johanni.",
+        "explanation": ""
+      },
+      {
+        "example": "Ick habe direkt lang jelejen.",
+        "explanation": "vor Lachen"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lange, wat der is, det bin ick schon lange jewesen",
+    "translations": [
+      "der soll sich nicht einbilden, mehr zu sein als ich"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lange Jette",
+    "translations": [
+      "Lorgnette (Wortspiel)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Langen, lang mir mal det her",
+    "translations": [
+      "reichen, ausreichen",
+      "jemanden fassen",
+      "stehlen"
+    ],
+    "examples": [
+      {
+        "example": "Det langt nich.",
+        "explanation": ""
+      },
+      {
+        "example": "Ich wer dir eene langen.",
+        "explanation": "wie runterhauen"
+      },
+      {
+        "example": "Er hat sich 'n paa Äppel jelangt.",
+        "explanation": "gestohlen"
+      }
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Langsam, langsam un mit Jefühl",
+    "translations": [
+      "langsam, aber sicher"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lantemank",
+    "translations": [
+      "sacht"
+    ],
+    "infoText": "Vom französischen „lentement“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lappen, durch de Lappen jehn",
+    "translations": [
+      "entwischen"
+    ],
+    "infoText": "Von der Hirschjagd.",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lappenpuppe",
+    "translations": [
+      "Puppe, die sich kleine Mädchen aus Lappen anfertigen"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lappig",
+    "translations": [
+      "schlaff, weich"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Laster, 'n langet",
+    "translations": [
+      "ein langer Mensch"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Laternenzug",
+    "translations": [
+      "der letzte Bahnzug (z. B. von Potsdam)"
+    ],
+    "themen": [
+      "stadtleben"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lati, immer lati",
+    "translations": [
+      "fort, trolle dich"
+    ],
+    "examples": [
+      {
+        "example": "Der is ja lange lati!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Latte, 'ne lange Latte",
+    "translations": [
+      "ein langer Mensch",
+      "jemandem viel schuldig sein"
+    ],
+    "examples": [
+      {
+        "example": "Er hat 'ne lange Latte bei mir.",
+        "explanation": "er ist mir viel schuldig, vom Kerbholz"
+      }
+    ],
+    "themen": [
+      "koerper",
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lause-Allee",
+    "translations": [
+      "Scheitel (Wortspiel)"
+    ],
+    "alternativeWords": [
+      "Lause-Chaussee"
+    ],
+    "themen": [
+      "koerper",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lauseangel",
+    "translations": [
+      "Schimpfwörter-Cluster"
+    ],
+    "alternativeWords": [
+      "Lausejunge",
+      "Lauseknochen",
+      "Lauselümmel",
+      "Lausewanst"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lausedarm, er is fein wie Lausedärme",
+    "translations": [
+      "ironisch: wenn einer vornehm tut"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lausekaserne",
+    "translations": [
+      "Hut"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lausepavilion",
+    "translations": [
+      "Grindkruste oder ähnliche Erhöhung auf dem Kopf"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lauserei",
+    "translations": [
+      "Kleinigkeit"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Laussewenzel",
+    "translations": [
+      "sehr schlechter Tabak",
+      "Schimpfwort"
+    ],
+    "infoText": "Daher auch: „der Tobak wenzelt, is wenzlig“.",
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lausig, et setzt lausije Stauke",
+    "translations": [
+      "schlimm, tüchtig, derb",
+      "sehr (Adverb)"
+    ],
+    "examples": [
+      {
+        "example": "Meine Brieze is lausig stark.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lavendeltreppe",
+    "translations": [
+      "Wendeltreppe (scherzhafte Wortverdrehung)"
+    ],
+    "infoText": "Aus den Anekdoten von einem ungebildeten Bankier, der Wörter entstellte oder falsch anwendete.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lawine, immer ruf un runter",
+    "translations": [
+      "bei wechselndem Glück im Spiel"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leben, in' Leben nich",
+    "translations": [
+      "nie"
+    ],
+    "examples": [
+      {
+        "example": "Das Leben is schön, aber kostspielig.",
+        "explanation": ""
+      },
+      {
+        "example": "Das Leben jleicht einer Hühnerleiter.",
+        "explanation": "aus einer scherzhaften tiefsinnigen Sentenz in sächsischer Mundart"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lebendig, da mecht ick ja nich lebendig bejraben sind",
+    "translations": [
+      "Redewendung über eine ungeliebte Kleinstadt"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leberwurst, er spielt de jekränkte",
+    "translations": [
+      "er spielt den Gekränkten"
+    ],
+    "themen": [
+      "gefuehle-emotionen",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lecken, sich alle fümf Finger nach",
+    "translations": [
+      "davon entzückt sein"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leddi",
+    "translations": [
+      "Hundename (stets männlich)"
+    ],
+    "infoText": "Vom englischen „lady“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leder, wat's Leder hält",
+    "translations": [
+      "mit aller Macht"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leg",
+    "translations": [
+      "niedrig"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lehm, wer schmeißt da mit Lehm",
+    "translations": [
+      "sinnlose Antwort auf eine gemeine Bemerkung"
+    ],
+    "infoText": "„Lehm un Stroh“ = Erbsen und Sauerkohl.",
+    "themen": [
+      "essen-trinken",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lehmann, er ziert sich wie Lehmann in't Sarch",
+    "translations": [
+      "Redewendung, dass etwas kein Kunststück ist"
+    ],
+    "infoText": "Särge von Handwerksgesellen wurden früher von Genossen mit dreieckigen Hüten und schwarzen Mänteln zum Kirchhof getragen; jeder Träger hielt zur Erfrischung gegen den Leichengeruch eine Zitrone in der Hand. „Det kann Lehmanns Kutscher ooch!“ — diese Redensart verdrängte die ältere von „Fetschows Hausknecht“.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lehmankolsch",
+    "translations": [
+      "verdreht aus melancholisch"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lehnepump",
+    "translations": [
+      "entliehene Garderobe"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leib, bei Leibe nich",
+    "translations": [
+      "nur ja nicht!"
+    ],
+    "examples": [
+      {
+        "example": "Man immer zehn Schritt von' Leibe!",
+        "explanation": ""
+      },
+      {
+        "example": "Ick habe mir'n Leib volljeärjert.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leich",
+    "translations": [
+      "gleich"
+    ],
+    "examples": [
+      {
+        "example": "Komme leich!",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leiche, bei Berjemanns is heite 'ne Leiche",
+    "translations": [
+      "Begräbnis"
+    ],
+    "examples": [
+      {
+        "example": "Er sieht aus wie 'ne lebendije Leiche.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leichenfledderer",
+    "translations": [
+      "Diebe, die Schlafende bestehlen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leichenwagen, bestell dir man immer'n",
+    "translations": [
+      "Neckformel, wenn ein Spiel sicher verloren geht"
+    ],
+    "infoText": "„'n Leichenwagen mit Troddeln“ = Nordhäuser mit Punschzutat.",
+    "themen": [
+      "unterhaltung-freizeit",
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leicht, so leichte nich",
+    "translations": [
+      "man hat's nicht leicht (Seufzer)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leichtsinn, det sagen Sie so in Ihren jugendlichen Leichtsinn",
+    "translations": [
+      "ironische Formel"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leid, du mir man bloß nich",
+    "translations": [
+      "mitleidige Verachtung"
+    ],
+    "examples": [
+      {
+        "example": "Leid könn' Se mir dun!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leim, 'n scheener Leim",
+    "translations": [
+      "etwas, das lockend aussieht, aber einen Reinfall befürchten lässt"
+    ],
+    "examples": [
+      {
+        "example": "Uf den Leim kriech ick nich!",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Ursprung vom Vogelleim.",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leimen",
+    "translations": [
+      "betrügen",
+      "aufgekündigten Freundschaft wieder anknüpfen"
+    ],
+    "examples": [
+      {
+        "example": "Och, du hast ja jeleimt!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "beziehungen-soziales"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leine, zieh Leine",
+    "translations": [
+      "geh ab!"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leisten, die Stube muß uf'n Leisten jeschlagen wern",
+    "translations": [
+      "die Stube ist für die Gesellschaft zu klein",
+      "sich etwas leisten können"
+    ],
+    "examples": [
+      {
+        "example": "Ick muß mir noch eenen leisten.",
+        "explanation": "noch einen Schnaps trinken"
+      }
+    ],
+    "themen": [
+      "alltag-wohnen",
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leite, wozu hab ick denn meine Leite",
+    "translations": [
+      "das müssen andere tun"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leitnant, 'n Leitnant bezahlt seine Schulden",
+    "translations": [
+      "Formel bei plötzlicher Stille in einer Gesellschaft"
+    ],
+    "alternativeWords": [
+      "Leitnamt"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lejen unter Knaben",
+    "translations": [
+      "im Ringkampf besiegen"
+    ],
+    "examples": [
+      {
+        "example": "Dir lej ick noch!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lekrig",
+    "translations": [
+      "voll (Fass, wenn es leckt)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lendemain",
+    "translations": [
+      "der Morgen nach der Hochzeit"
+    ],
+    "infoText": "Vom französischen „lendemain“ (der nächste Tag), in Berlin ausschließlich in diesem Sinn gebraucht.",
+    "themen": [
+      "beziehungen-soziales"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lennes",
+    "translations": [
+      "kleine Pfähle am Wegesrand im Tiergarten"
+    ],
+    "infoText": "Nach dem Hofgartendirektor Lenné (†1866).",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lenz, mach keen'",
+    "translations": [
+      "Spaß, Unsinn (Schulausdruck)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lepperschulden",
+    "translations": [
+      "kleine, zerstreute Schulden"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lerche, Leiche",
+    "translations": [
+      "dialektale Aussprache von „Leiche“"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Letkolben",
+    "translations": [
+      "Nase"
+    ],
+    "infoText": "Eigentlich „Lötkolben“.",
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Letter",
+    "translations": [
+      "Leiter"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Leujnen, das kann ich nich anders leujnen",
+    "translations": [
+      "das muss ich zugeben"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lichter ziehn",
+    "translations": [
+      "sich die Nase schnauben (zu Kindern gesagt)"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lieb, det liebe Jut",
+    "translations": [
+      "idiomatischer Cluster mit „lieb“"
+    ],
+    "infoText": "Weitere Wendungen: det liebe Jeld, den lieben langen Dag, det liebe Leiden, seine liebe Not haben.",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Liebe, wer kann vor de Liebe",
+    "translations": [
+      "wer kann für seine Gefühle"
+    ],
+    "themen": [
+      "beziehungen-soziales"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lieberst",
+    "translations": [
+      "lieber"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Liebesjabe",
+    "translations": [
+      "schlechte Zigarre"
+    ],
+    "infoText": "Nach den Erfahrungen des Krieges von 1870/71.",
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Liefern, jetz biste jeliefert",
+    "translations": [
+      "verloren"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Liejen, wo willst'n liejen",
+    "translations": [
+      "drohende Formel",
+      "das ist nicht zu ändern"
+    ],
+    "examples": [
+      {
+        "example": "Det licht mal so drin.",
+        "explanation": "das ist nicht zu ändern"
+      },
+      {
+        "example": "Det licht nich in ihm drin.",
+        "explanation": "er hat keine Anlage dazu"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Limpef",
+    "translations": [
+      "wie Flunsch (Lippe)"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Linden, Eselsbrücke für die Querstraßen",
+    "translations": [
+      "Merkhilfe für die Querstraßen der Friedrichstraße"
+    ],
+    "infoText": "Hexameter-Merkspruch: „Unter den Linden tanzen die Bären; französische Jäger schießen den tauben Mohren die Krone vom Kopfe, wie eine Leipziger Lerche, die kraus im Schützenzimmer gekocht wird.“",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Linksanwalt",
+    "translations": [
+      "Winkelkonsulent"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lippentriller",
+    "translations": [
+      "einen Schluck Schnaps trinken"
+    ],
+    "infoText": "Wenn man die Karline (kleine Taschenflasche) an den Mund setzt, kluckert es — das ist der „Lippentriller“.",
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Loch, du hast 'n Loch in de Natur jeschossen",
+    "translations": [
+      "vorbeigeschossen"
+    ],
+    "examples": [
+      {
+        "example": "Der hat 'n Loch in' Magen.",
+        "explanation": "er isst stark"
+      },
+      {
+        "example": "Rede mir keen Loch in' Kopp!",
+        "explanation": "mach mich nicht verwirrt"
+      },
+      {
+        "example": "Er freit sich 'n Loch in' Strump.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Locker, er läßt nich",
+    "translations": [
+      "er lässt nicht nach"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lodderig",
+    "translations": [
+      "nachlässig"
+    ],
+    "alternativeWords": [
+      "Lodderei"
+    ],
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Löffeljarde",
+    "translations": [
+      "Spitzname für Straßenreiniger"
+    ],
+    "infoText": "Ursprünglich eine Truppe Napoleons beim Einzug in Berlin 1806, die einen Löffel am Hut trug; jetzt oft Straßenreiniger oder Kinder, die Soldat spielen.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Löffelstiel, ick habe noch keen' warmen",
+    "translations": [
+      "ich habe noch nichts Warmes gegessen"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Löschen, eenen 'ne jehörije löschen",
+    "translations": [
+      "eine Ohrfeige geben"
+    ],
+    "infoText": "Alter Berliner Witz: Spritzenleute sitzen beim Budiker; der Schlauchmeister fragt entrüstet: „Nennt ihr det spritzen?“ — „Nee, Herr Schlauchmeister, löschen, löschen!“",
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Löwenjrube",
+    "translations": [
+      "Spitzname für das Kaiser-Wilhelm-Denkmal"
+    ],
+    "examples": [
+      {
+        "example": "Willem in de Löwenjrube.",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Die grünlichen Löwen heißen „Spinatlöwen“.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lohn, ick seh mehr uf höhet Lohn",
+    "translations": [
+      "scherzhafte Bevorzugung von Lohn vor Behandlung"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lokalanstreicher",
+    "translations": [
+      "Lokalanzeiger (Wortspiel)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Loofen, det looft in't Jeld",
+    "translations": [
+      "es wird kostspielig"
+    ],
+    "examples": [
+      {
+        "example": "Er weeß druf zu loofen.",
+        "explanation": "er versteht sich auf feinen Vorteil"
+      },
+      {
+        "example": "Du loofst wol vor Jeld?",
+        "explanation": "wenn einer schnell läuft"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Los, los davor",
+    "translations": [
+      "fang an!",
+      "er ist begabt",
+      "er taugt nichts"
+    ],
+    "examples": [
+      {
+        "example": "Der hat wat los.",
+        "explanation": "er ist begabt"
+      },
+      {
+        "example": "Mit den is nischt los.",
+        "explanation": "er taugt nichts"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Losjehn, jeht's nich bald los",
+    "translations": [
+      "anfangen",
+      "weggehen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Loslejen",
+    "translations": [
+      "anfangen (transitiv)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Losschießen, nanu schießen Se los",
+    "translations": [
+      "anfangen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Losziehn",
+    "translations": [
+      "weggehen"
+    ],
+    "alternativeWords": [
+      "Loszittern",
+      "Loszoddeln"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lot, in't Lot bringen",
+    "translations": [
+      "in Ordnung bringen, schlichten"
+    ],
+    "examples": [
+      {
+        "example": "Allet in't Lot.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lotrecht, er steht lotrecht da",
+    "translations": [
+      "er faulenzt"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lucca-Augen",
+    "translations": [
+      "süßes Gebäck"
+    ],
+    "infoText": "Nach der Sängerin Pauline Lucca benannt.",
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lude",
+    "translations": [
+      "Ludwig"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Luder, 'n feines",
+    "translations": [
+      "wie Aas (Schimpfwort)"
+    ],
+    "examples": [
+      {
+        "example": "Dummes Luder!",
+        "explanation": ""
+      },
+      {
+        "example": "Unter allen Luder!",
+        "explanation": "unter aller Würde"
+      }
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lüjen, er lüjt wie jedruckt",
+    "translations": [
+      "er lügt sehr"
+    ],
+    "infoText": "Bismarck sagte dazu: „Wie telegraphiert.“ Unter Kindern eher bewundernd: „Kannst du aber lüjen!“",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lüjenkahe",
+    "translations": [
+      "Schimpfwort für eine Lügnerin"
+    ],
+    "examples": [
+      {
+        "example": "Olle Lüjenkahe!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lümmel von Lande",
+    "translations": [
+      "ungezogener Junge (Allitteration)"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lüttitt",
+    "translations": [
+      "einen kleinen Schwips oder Spitz haben"
+    ],
+    "examples": [
+      {
+        "example": "Er hat'n kleenen Lüttitt.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Luft, an de frische Luft setzen",
+    "translations": [
+      "hinauswerfen"
+    ],
+    "examples": [
+      {
+        "example": "Halt de Luft an!",
+        "explanation": "sei still, hör auf"
+      }
+    ],
+    "infoText": "„Luft“ auch für Pfefferminzschnaps: „Vor'n Sechser feinen Luft!“",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Luftballon, laß dir nich von' Luftballon überfahren",
+    "translations": [
+      "scherzhafte Abschiedsformel"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Luftikus",
+    "translations": [
+      "leichtsinniger Mensch"
+    ],
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lukas, hau ihm",
+    "translations": [
+      "nimm den Stich, trumpfe ab (Whistspiel)"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Luke, jib'n doch eens in de Luken",
+    "translations": [
+      "in die Augen"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lulaatsch, 'n langer",
+    "translations": [
+      "großer Laatsch"
+    ],
+    "alternativeWords": [
+      "Lulei"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lumich",
+    "translations": [
+      "Strolch"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lumpenmatz",
+    "translations": [
+      "Spitzname für einen Lumpenhändler mit Kinderwaren"
+    ],
+    "infoText": "Führte auf einem Karren einen Kasten mit Bildchen, Ringen und Kinkerlitzchen, die er gegen Lumpen eintauschte, die ihm Kinder brachten; kündigte seine Ankunft mit einer kleinen Flöte an.",
+    "alternativeWords": [
+      "Plundermatz"
+    ],
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lumpensalitmier",
+    "translations": [
+      "der letzte Wagen der Pferde-, dann elektrischen Bahn (wie Laternenzug)"
+    ],
+    "themen": [
+      "stadtleben"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lumpig, noch eene lumpije Person",
+    "translations": [
+      "Ruf der Torwagenkutscher, um zum Mitfahren einzuladen"
+    ],
+    "themen": [
+      "stadtleben"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lunge, ick hab ma de Lunge aus'n Leibe jeredt",
+    "translations": [
+      "sich die Lunge aus dem Leib reden"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lungenfeifer",
+    "translations": [
+      "Schwindsüchtiger"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Lutschen",
+    "translations": [
+      "saugen"
+    ],
+    "alternativeWords": [
+      "Lutschbeutel",
+      "Lutschproppen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

@@ -1,0 +1,1268 @@
+[
+  {
+    "word": "Ebend",
+    "translations": [
+      "eben (bes. am Satzende)"
+    ],
+    "examples": [
+      {
+        "example": "Na ebend!",
+        "explanation": "ganz meine Ansicht"
+      },
+      {
+        "example": "Det's man all ebendso!",
+        "explanation": "was du sagst, ist nicht der Rede wert"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eeks",
+    "translations": [
+      "Ausruf des Ekels oder Abscheus"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eenjal",
+    "translations": [
+      "gleich, egal"
+    ],
+    "examples": [
+      {
+        "example": "Is mich partut eenjal.",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Im „gebildeten“ Berlinisch „eingal“, entstanden durch Verschmelzung von „einerlei“ und „egal“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eenmal",
+    "translations": [
+      "scherzhafte Rückfrage bei einer Schuldforderung"
+    ],
+    "examples": [
+      {
+        "example": "Fritze, du bist mir'n Daler schuldig! — Mit eenmal!?",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie",
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eens, in eens weg",
+    "translations": [
+      "immerfort"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eenzig",
+    "translations": [
+      "großartig (ironisch)",
+      "das tut er gewiss nicht"
+    ],
+    "examples": [
+      {
+        "example": "Det is eenzig!",
+        "explanation": "großartig, ironisch"
+      },
+      {
+        "example": "Det is 't Eenzije, wat er nich dut.",
+        "explanation": "das tut er gewiss nicht"
+      },
+      {
+        "example": "Mein eenzigster Engel!",
+        "explanation": "liebkosend"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eer",
+    "translations": [
+      "Ansehen"
+    ],
+    "examples": [
+      {
+        "example": "Er jibt sich 'n Eer.",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Vom französischen „air“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eetschen",
+    "translations": [
+      "verspotten (durch Schaben mit den Fingern)"
+    ],
+    "examples": [
+      {
+        "example": "Eetsch, siehste wol!",
+        "explanation": ""
+      }
+    ],
+    "alternativeWords": [
+      "auseetschen"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Effekt",
+    "translations": [
+      "macht Effekt und kostet nichts"
+    ],
+    "examples": [
+      {
+        "example": "Macht Effekt un kost nischt.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ehekrüppel",
+    "translations": [
+      "Ehemann (mit dem Nebensinn Pantoffelheld)"
+    ],
+    "themen": [
+      "beziehungen-soziales",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ehmänner",
+    "translations": [
+      "eine Art Teekuchen"
+    ],
+    "infoText": "Nach dem Konditor Ehmann in der Friedrichstraße benannt.",
+    "themen": [
+      "essen-trinken",
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ehrenwort",
+    "translations": [
+      "kleines Ehrenwort geben (bei Unsicherheit)"
+    ],
+    "examples": [
+      {
+        "example": "Ick jeb's kleene Ehrenwort.",
+        "explanation": "wenn man etwas nicht ganz sicher weiß"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ehrpuzelig",
+    "translations": [
+      "von komisch-ehrbarem Wesen"
+    ],
+    "examples": [
+      {
+        "example": "Er macht seinen Ehrpuzlijen.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ei wei",
+    "translations": [
+      "Ausruf der Freude, Verwunderung, Besorgnis"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eichen, von't",
+    "translations": [
+      "eine besonders gute (Weiße)"
+    ],
+    "examples": [
+      {
+        "example": "('ne Weiße) von't eichne Brett!",
+        "explanation": "eine besonders gute"
+      }
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eichenlaub",
+    "translations": [
+      "scherzhafte Auszeichnungsformel"
+    ],
+    "examples": [
+      {
+        "example": "'n Rindvieh mit Eichenlaub!",
+        "explanation": ""
+      }
+    ],
+    "infoText": "„Eichenlaub stinkt“ — alter Kalauer.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eichkuz",
+    "translations": [
+      "Eichhörnchen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eien",
+    "translations": [
+      "streicheln (Kinderwort)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eierpampe",
+    "translations": [
+      "Sand mit Wasser vermischt (Kinderspiel)"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eilinder",
+    "translations": [
+      "Zylinder (Hut), scherzhaft"
+    ],
+    "alternativeWords": [
+      "Eulinder"
+    ],
+    "infoText": "Durch absichtlich falsche Lesung von „Cylinder“ entstanden.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Einfach",
+    "translations": [
+      "einfach, aber geschmacklos (scherzhafte Formel)",
+      "natürlich, selbstverständlich"
+    ],
+    "examples": [
+      {
+        "example": "Einfach, aber geschmacklos!",
+        "explanation": ""
+      },
+      {
+        "example": "Ick kann doch nich vor zwölwen zu Hause sind; det is doch einfach!",
+        "explanation": "natürlich"
+      }
+    ],
+    "infoText": "„Einfach Sekt!“ ist üblich geworden, seit ein Rechtsanwalt (Verteidiger im Prozess Heinze) während der Gerichtsverhandlung Sekt bestellte und auf die Frage des Vorsitzenden, was er sich habe bringen lassen, erwiderte: „Einfach Sekt!“",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Einfall",
+    "translations": [
+      "er hat Einfälle wie ein altes Haus"
+    ],
+    "examples": [
+      {
+        "example": "Er hat Einfälle wie'n ollet Haus.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Einsatz",
+    "translations": [
+      "Vorhemd, Chemisette"
+    ],
+    "examples": [
+      {
+        "example": "Du bist mit'n Einsatz rausjekommen!",
+        "explanation": "wenn das Vorhemd „rausgerutscht“ ist; Anspielung auf die Lotterie"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Einsejnungsjunge",
+    "translations": [
+      "Junge mit rundem Hut und Strauß (Konfirmations-Aufmachung)"
+    ],
+    "examples": [
+      {
+        "example": "Der hat 'n Bukett, da kann sich 'ne Kuh dran satt fressen.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Einspänner",
+    "translations": [
+      "Junggeselle"
+    ],
+    "themen": [
+      "beziehungen-soziales"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Einwohner",
+    "translations": [
+      "Zum Vergnügen der Einwohner (Redewendung)"
+    ],
+    "infoText": "Anspielung auf die Inschrift am Theater in Potsdam: „Dem Vergnügen der Einwohner“.",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eisbeer",
+    "translations": [
+      "Eisbär (Kinderrätsel)"
+    ],
+    "examples": [
+      {
+        "example": "Warum dürfen die Eskimos keine blaue Brille tragen? — Weil se sonst de Eisbeeren für Blaubeeren ansehen würden.",
+        "explanation": "sehr verbreitetes Kinderrätsel"
+      }
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eisen, eilen",
+    "translations": [
+      "eilen"
+    ],
+    "examples": [
+      {
+        "example": "Ick rasch an't Dor jeeist.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eiserkasten",
+    "translations": [
+      "Kasten mit Nägeln u. Ä."
+    ],
+    "alternativeWords": [
+      "Eiserladen",
+      "Eisermann",
+      "Eiserficke",
+      "Eisertopp"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eiserfleckig",
+    "translations": [
+      "scherzhaft für eifersüchtig"
+    ],
+    "themen": [
+      "beziehungen-soziales",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ejal",
+    "translations": [
+      "egal",
+      "hintereinander, immerfort"
+    ],
+    "examples": [
+      {
+        "example": "Mir is ejäl, wovon mir schlecht wird.",
+        "explanation": "sagt man z. B., wenn eine schwere Zigarre angeboten wird"
+      },
+      {
+        "example": "Ejal sin 'n Paa Strümpe!",
+        "explanation": "Antwort auf „Det is doch ejal“"
+      },
+      {
+        "example": "Der Kerl is ejal besoffen.",
+        "explanation": "immerfort betrunken"
+      }
+    ],
+    "themen": [
+      "alkohol-kneipe",
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ekeln, sich",
+    "translations": [
+      "sich sträuben (ironisch)"
+    ],
+    "examples": [
+      {
+        "example": "Nu, er wird sich ekeln!",
+        "explanation": "ironisch, z. B. eine Erbschaft anzunehmen"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eklepaxe",
+    "translations": [
+      "Equipage"
+    ],
+    "alternativeWords": [
+      "Eklapaxe"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eklig",
+    "translations": [
+      "unangenehm",
+      "sehr (Adverb)"
+    ],
+    "examples": [
+      {
+        "example": "Sowat is eklig!",
+        "explanation": "unangenehm"
+      },
+      {
+        "example": "Det eß ick eklig jerne.",
+        "explanation": "sehr gerne"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ekzetra",
+    "translations": [
+      "et cetera"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Elefantenhaus",
+    "translations": [
+      "Spitzname für ein besonders buntes Haus"
+    ],
+    "infoText": "Das Haus Wilhelmstraße 67, weil es so bunt ist wie das Elefantenhaus im Zoologischen Garten.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eleojant",
+    "translations": [
+      "scherzhaft für elegant"
+    ],
+    "alternativeWords": [
+      "elojant",
+      "eloajant"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Elfte Jebot",
+    "translations": [
+      "scherzhaftes Rätsel-Gebot"
+    ],
+    "examples": [
+      {
+        "example": "Wie heißt das ölfte Jebot? Laß dir nich verblüffen!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ellbogen",
+    "translations": [
+      "ich gebe nichts (Redewendung)"
+    ],
+    "examples": [
+      {
+        "example": "Ick kann nich mit 'n Ellbogen in de Westentasche kommen!",
+        "explanation": "ich gebe nichts"
+      }
+    ],
+    "themen": [
+      "geld",
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Elle",
+    "translations": [
+      "er geht sehr steif und gerade",
+      "die Kosten sind größer als die Sache wert ist"
+    ],
+    "examples": [
+      {
+        "example": "Der hat 'ne Elle verschluckt.",
+        "explanation": "er geht sehr steif und gerade"
+      },
+      {
+        "example": "Denn wird de Elle langer wie der Kram.",
+        "explanation": "die Kosten sind größer, als die Sache wert ist"
+      },
+      {
+        "example": "Ick weeß schon, wat de Elle davon kost!",
+        "explanation": "von schönen Redensarten/Komplimenten"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ellenreiter",
+    "translations": [
+      "Leinen-, Manufaktur-, Modewarenhändler"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Elsteroog",
+    "translations": [
+      "älteres Wort für Hühnerauge"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Endenblei",
+    "translations": [
+      "brüchiger Bleistift"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Engel, mit'n B vor",
+    "translations": [
+      "scherzhafte Umdeutung zu „Bengel“"
+    ],
+    "examples": [
+      {
+        "example": "Du bist 'n Engel — mit'n B vor.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Englisch",
+    "translations": [
+      "scherzhafte Zusammenfassung berlinischer Englischkenntnisse"
+    ],
+    "infoText": "Der Berliner fasst seine Kenntnis des Englischen in die Worte zusammen: „Oll rait“, „mixed pickles“, „De fenster“ — natürlich in freier Aussprache.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Enke",
+    "translations": [
+      "Steckling, Sprössling"
+    ],
+    "examples": [
+      {
+        "example": "Willem, meine Enke, wo biste?",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ent",
+    "translations": [
+      "entweder"
+    ],
+    "examples": [
+      {
+        "example": "Ent oder weder.",
+        "explanation": "entweder — oder"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ente",
+    "translations": [
+      "er schwimmt schlecht"
+    ],
+    "examples": [
+      {
+        "example": "Er schwimmt wie 'ne bleierne Ente uf'n Jrund.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Entern",
+    "translations": [
+      "gehen"
+    ],
+    "infoText": "Vom französischen „entrer“. „Rufentern“ = schnell hinaufgehen.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Entree",
+    "translations": [
+      "scherzhafte Eintrittsformel"
+    ],
+    "examples": [
+      {
+        "example": "Entree frei; Kinder de Hälfte.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Entschuldjen",
+    "translations": [
+      "Entschuldigungsformeln (auch ironisch)"
+    ],
+    "examples": [
+      {
+        "example": "Enschuldjen Se man, det ick jeboren bin!",
+        "explanation": "wenn man angefahren wird"
+      },
+      {
+        "example": "Enschuldjen Se, det Se mir jetreten haben!",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Anekdote: ein nächtlicher Einbrecher rutscht durch den Schornstein herab und erscheint plötzlich vor den erstaunten Bewohnern; unerschrocken fragt er: „Enschuldjen Se, komm ick hier vielleicht nach de neie...“",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Entzweirig",
+    "translations": [
+      "entzwei"
+    ],
+    "alternativeWords": [
+      "entzweiig"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Epileptische",
+    "translations": [
+      "scherzhafte Verwechslung für „Elektrische“ (Straßenbahn)"
+    ],
+    "alternativeWords": [
+      "Eklektische"
+    ],
+    "themen": [
+      "stadtleben",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erbbejräbnis",
+    "translations": [
+      "ein Laden, in dem schon mancher bankrottgegangen ist"
+    ],
+    "examples": [
+      {
+        "example": "Det reene Erbbejräbnis.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "geld",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erben, für gewinnen",
+    "translations": [
+      "gewinnen"
+    ],
+    "examples": [
+      {
+        "example": "Da is wol vor mir ooch noch wat bei zu erben?",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erbrechen, bis dreimalijes",
+    "translations": [
+      "bis zum Überdruss wiederholt"
+    ],
+    "examples": [
+      {
+        "example": "Bis dreimalijes Erbrechen erfolcht.",
+        "explanation": "wenn etwas bis zum Überdruss wiederholt wird"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erbsen",
+    "translations": [
+      "dicke Erbsen und Sauerkohl — Donnerstagsgericht"
+    ],
+    "examples": [
+      {
+        "example": "Dreiviertel uf kalte Erbsen!",
+        "explanation": "häufige Antwort auf die Frage „Wat is'n de Uhr?“"
+      },
+      {
+        "example": "Da hat der Deibel Erbsen druf jedroschen!",
+        "explanation": "von einem pockennarbigen Gesicht"
+      }
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erbsensprache",
+    "translations": [
+      "Geheimsprache der Kinder"
+    ],
+    "infoText": "Jedem Buchstaben werden die Silben „erbsen“ angehängt: Kerbsen, orbsen, rerbsen, berbsen heißt z. B. „Korb“.",
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erde, an de",
+    "translations": [
+      "auf dem Fußboden"
+    ],
+    "examples": [
+      {
+        "example": "An de Erde.",
+        "explanation": "statt auf dem (den) Fußboden"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erkner",
+    "translations": [
+      "Erker (Wortspiel mit dem Ortsnamen Erkner bei Berlin)"
+    ],
+    "themen": [
+      "orte-spitzname",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erlauben",
+    "translations": [
+      "Erlaube, liebe Taube (scherzhafte Formel)"
+    ],
+    "examples": [
+      {
+        "example": "Erlaube, liebe Taube!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erleben",
+    "translations": [
+      "das kannst du erleben (Redewendung)"
+    ],
+    "examples": [
+      {
+        "example": "Da kannste wat erleben.",
+        "explanation": ""
+      },
+      {
+        "example": "Wenn man wat erleben will, brauch man bloß uf de Welt ze kommen.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ermilderung",
+    "translations": [
+      "Milderung (Wortspiel vor Gericht)"
+    ],
+    "examples": [
+      {
+        "example": "Ick bitte um Ermilderung der Strafe.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ernst",
+    "translations": [
+      "so'n Spaß lass ich mir nicht gefallen (Redewendung)"
+    ],
+    "examples": [
+      {
+        "example": "Is det Ernst oder Spaß? — Ernst! — Na denn is jut; so'n Spaß laß ick mir ooch nich jefallen!",
+        "explanation": "wenn man sich beleidigt fühlt"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erpeln",
+    "translations": [
+      "erben"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erreichen",
+    "translations": [
+      "es ist erreicht! (Werbespruch-Zitat)"
+    ],
+    "infoText": "Ursprünglich Devise des Hofrisiers Haby in der Reklame für seine „deutsche Barttracht“.",
+    "themen": [
+      "orte-spitzname",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erstaunend",
+    "translations": [
+      "erstaunlich (alte berlinische Form)"
+    ],
+    "infoText": "„Erstaunend billig“ wirkt heute modern, ist aber schon 1781 als berlinisch verzeichnet.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erste, der erste",
+    "translations": [
+      "verwundert: das höre ich zum ersten Mal"
+    ],
+    "examples": [
+      {
+        "example": "Der erste, wat ick höre!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Erstklassig",
+    "translations": [
+      "sehr modernes, wohl in Berlin entstandenes Wort"
+    ],
+    "examples": [
+      {
+        "example": "Auftreten nur erstklassiger Spezialitäten.",
+        "explanation": ""
+      },
+      {
+        "example": "Reflektiere nur auf erstklassiges Material.",
+        "explanation": "auf brauchbare Menschen"
+      }
+    ],
+    "themen": [
+      "stadtleben"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Esel",
+    "translations": [
+      "scherzhafte Erklärung für fehlenden Geburtstag"
+    ],
+    "examples": [
+      {
+        "example": "Der hat ja jakeenen jeburtsdag; den hat der Esel in' Jalopp verloren!",
+        "explanation": ""
+      }
+    ],
+    "infoText": "„'n Esel zu Jrabe lauten“ = mit den Beinen baumeln.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Essen",
+    "translations": [
+      "er sitzt in der Tinte",
+      "das kenne ich gar nicht"
+    ],
+    "examples": [
+      {
+        "example": "Da licht er in't Essen!",
+        "explanation": "er sitzt in der Tinte"
+      },
+      {
+        "example": "Fall man nich in't Essen!",
+        "explanation": "ziere dich nicht"
+      },
+      {
+        "example": "Nie jejessen!",
+        "explanation": "das kenne ich gar nicht, habe ich nie erlebt"
+      },
+      {
+        "example": "Wir ha'm doch allens jejessen, wat wir bezahlt haben!",
+        "explanation": "scherzhafte Umkehrung beim Verlassen eines Restaurants"
+      }
+    ],
+    "themen": [
+      "essen-trinken",
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ete",
+    "translations": [
+      "Eduard (Kurzform)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ete, zimperlich",
+    "translations": [
+      "zimperlich, prüde"
+    ],
+    "examples": [
+      {
+        "example": "Er dut sehre ete.",
+        "explanation": ""
+      },
+      {
+        "example": "Hab dir man nich ete!",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Gekürzt aus „etepetete“, das dem französischen „être peut-être“ entstammt — ursprünglich im Spott auf junge Damen gesagt, die französische Brocken in ihre Unterhaltung mengten.",
+    "themen": [
+      "charakter-eigenschaften",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Etzliche",
+    "translations": [
+      "etliche"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Eust",
+    "translations": [
+      "Ausruf von Kindern, wenn sie sehen, dass ein anderer etwas Verbotenes tut"
+    ],
+    "examples": [
+      {
+        "example": "Eust, der wird anjezeigt!",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ewig",
+    "translations": [
+      "sehr lange"
+    ],
+    "examples": [
+      {
+        "example": "Ewig un drei Dage.",
+        "explanation": "sehr lange"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Excellenz",
+    "translations": [
+      "er sitzt da und wartet (Anekdote)"
+    ],
+    "examples": [
+      {
+        "example": "Er sitzt da wie Excellenz bei Bouche.",
+        "explanation": "er sitzt da und wartet"
+      }
+    ],
+    "infoText": "In Bouchés Gärtnerei in der Blumenstraße trank früher die feine Welt Kaffee. Eine alte Exzellenz kam täglich, verzehrte wenig und gab kein Trinkgeld; als der Kellner sie eines Tages vernachlässigte, rief sie ärgerlich: „Ich sitze ja hier wie ein Narr!“ Woraufhin auch Bouché dem Kellner zurief: „Excellenz sitzen ja wie ein Narr!“",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Exempel",
+    "translations": [
+      "man hat Beispiele von Bleistiften (Wortspiel)"
+    ],
+    "examples": [
+      {
+        "example": "Man hat Exempel von Beispielen (auch: von Bleistiften).",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Exen",
+    "translations": [
+      "hinter die Schule gehen"
+    ],
+    "alternativeWords": [
+      "Erschieben"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Exkneifen",
+    "translations": [
+      "ausreißen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Expreß",
+    "translations": [
+      "ausdrücklich"
+    ],
+    "examples": [
+      {
+        "example": "'ne expreße Antwort.",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Vom französischen „exprès“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ertern",
+    "translations": [
+      "jemandem etwas beizubringen suchen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

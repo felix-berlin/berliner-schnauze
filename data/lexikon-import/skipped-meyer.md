@@ -1,5 +1,24 @@
 # Übersprungene Einträge — Meyer 1904
 
+## Seite 158–190 (Anhang, komplett übersprungen)
+
+Der eigentliche Wörterbuchteil (Kopfwort + Definition) endet auf S. 157 mit
+„Zwitschern". Die Seiten 158–190 enthalten stattdessen:
+
+- „Verzeichnis der Ausdrücke für einige Hauptbegriffe" — thematische
+  Synonymlisten (z. B. „Ohrfeige", „Schläge", „Verschwenden", „Verwunderung",
+  „Körperteile", „Betrügen", „Drohungen", „Unter der Kritik") ohne eigene
+  Definitionen; die meisten Einzelwörter darin wurden bereits im A–Z-Teil als
+  vollständige Einträge erfasst.
+- „Volkstümliche Namen von Restaurationen" und „Volksfeste" — Prosa-Absätze
+  über einzelne Berliner Lokale/Feste, keine Kopfwort-Struktur.
+- „Verse" (Kinderverse/Kinderreime) — vollständige kleine Gedichte, keine
+  Lexikoneinträge.
+
+Keines dieser Formate passt ins `LexikonEntry`-Schema (Kopfwort +
+Übersetzung/Beispiele). Der Import wurde daher nach S. 157 als inhaltlich
+abgeschlossen betrachtet. Siehe PROGRESS-meyer.md für Details.
+
 ## Seite 20–24
 
 - **Acht** — reiner Querverweis „s. passen", kein eigener Inhalt.
@@ -43,6 +62,45 @@
 - **Burjemeister** — reine Schreibvariante von „Bürgermeister", kein Dialektinhalt.
 - **Boomwolle-Fragment** (S. 38, „Halb^de aus Baumwolle und...") — OCR-Fragment, unlesbar/zu fragmentarisch.
 - **Bost...** (S. 38, „wild, trotzig") — OCR-Fragment, zu unklar für einen eigenen Eintrag.
+
+## Seite 41–49 (C, D)
+
+- **Corps** — reiner Querverweis „s. Chor" (Inhalt bereits unter „Chor" kuratiert).
+- **Dach Hase** (S. 42, Fragment) — unklarer OCR-Rest neben „Dachsbeene"; „Dachhase" selbst wurde als eigener Eintrag angelegt.
+- **Dämlich** — reiner Querverweis „s. demlich" (Inhalt unter „Demlich" kuratiert).
+- **Daten** — reiner Querverweis „s. taten" (Inhalt erst bei Buchstabe T zu kuratieren).
+- **Dienstspritze** — reiner Querverweis „wie Dienstbolzen" (Inhalt dort/Supplement dokumentiert).
+- **Desinferieren** — reine Schreibvariante von „desinfizieren", kein Dialektinhalt.
+
+## Seite 49–53 (E)
+
+- **Esig** — reiner Querverweis „s. aasig" (Inhalt bereits unter „Aasig" kuratiert, Batch A1).
+- **Erschieben** — reiner Querverweis „wie exen"; als `alternativeWord` bei „Exen" mitgeführt statt eigenem Eintrag.
+- **Ein.** (S. 50, „Andere Zusammensetzungen s. u. In.") — reiner Verweis, kein eigener Inhalt.
+- **Ex faucibus** (S. 53) — lateinische Redewendung ohne eigenständigen berlinischen Dialektinhalt, nur Übersetzungshinweis.
+
+## Seite 53–59 (F, G)
+
+- **Flabbe** (S. 56, „s. Flebbe") — als `alternativeWord` bei „Flabbe"/„Flebbe" zusammengeführt statt zweier eigener Einträge.
+- **Fotoirafuiren** — reine OCR-nahe Schreibvariante von „fotografieren", kein Dialektinhalt.
+- **Freiberjer** — reiner Querverweis „s. Nassauer" (Inhalt erst bei Buchstabe N zu kuratieren).
+- **Flinte** — reiner Querverweis „s. Himmel" (Inhalt erst bei Buchstabe H zu kuratieren).
+
+## Seite 59–66 (H, I)
+
+- **Seite 63**: sehr stark OCR-beschädigte Seite (viele „y"/„x"/Sonderzeichen-Verwechslungen). Nur eindeutig rekonstruierbare Kopfwörter wurden übernommen; einzelne unklare Fragmente (u. a. ein möglicherweise „Hinrichtung"/„Hinsicht" gemeintes Wort) wurden ausgelassen, da nicht sicher rekonstruierbar.
+- **Infall** — reiner Querverweis „s. Einfall" (Inhalt bereits unter „Einfall", Batch E, kuratiert).
+- **Injenommen (Rüben)** vs. **Injeschonken** — Letzteres („eingeschenkt") ist zu dünn für einen eigenen Eintrag, nur Partizip-Notiz ohne Dialektgehalt.
+- **Inpummeln** — reiner Querverweis „wie inmummeln"; als `alternativeWord` bei „Inmummeln" geführt statt eigenem Eintrag.
+
+## Seite 95–102 (M)
+
+- **Moabit** — reiner Ortsname ohne Dialektinhalt (nur „Moabit, Moabit.").
+- **Mohnpielen** — reiner Querverweis „s. Mahn" (Inhalt unter „Mahn" kuratiert).
+- **Mistgriff/Mistiroff** — zu unklarer OCR-Rest für „Mißgriff", kein eigener Dialektinhalt.
+- **Meiran** — reine Schreibvariante von „Majoran", kein Dialektinhalt.
+- **Merretig** — reine Schreibvariante von „Meerrettich", kein Dialektinhalt.
+- **Mehrere** — reine Betonungsnotiz ohne Dialektinhalt.
 
 ## Seiten 1–15 (Vorwort/Grammatik)
 

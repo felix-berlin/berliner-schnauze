@@ -1,0 +1,562 @@
+[
+  {
+    "word": "Nach sich, er is sehr",
+    "translations": ["sehr auf seinen Vorteil bedacht"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nachbar, ick sehe Ihnen",
+    "translations": ["auf Ihr Wohl (beim Weißbier)"],
+    "infoText": "„Nachbar“ auch allgemein als gemütliche Anrede; man hört oft „Nachtbar“.",
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nachloofen",
+    "translations": ["Rätsel über den Omnibusschaffner"],
+    "examples": [{ "example": "Sie looft ihn nach. Er hält um sie an. Sie reicht ihn de Hand. Er nimmt ihr's Jeld ab un läßt se sitzen.", "explanation": "Rätsel: der Omnibusschaffner" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nacht, sich de Nacht um de Ohren schlagen",
+    "translations": ["die Nacht durchwachen"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nachtijall",
+    "translations": ["ich merke, was du vorhast (Wortspiel mit Nachtigall)"],
+    "examples": [{ "example": "Nachtijall, ick hör dir loofen (trampsen).", "explanation": "wenn man etwas merkt" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nachtmühe",
+    "translations": ["schläfriger Mensch"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nachtrat",
+    "translations": ["Nachtwächter (Wortspiel)"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nachtschlafend, bei nachtschlafender Zeit",
+    "translations": ["mitten in der Nacht"],
+    "themen": [],
+    "allowDuplicate": true,
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nachtwächter, et is schon vorjekommen",
+    "translations": ["etwas höchst Unwahrscheinliches"],
+    "examples": [
+      { "example": "Et is schon vorjekommen, det'n Nachtwächter bei Dage jestorben is.", "explanation": "" },
+      { "example": "Untern Nachtwächter.", "explanation": "unter der Kritik" }
+    ],
+    "infoText": "„Nachtwächter“ auch für Philister: „Sei doch nich so'n Nachtwächter!“",
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nackedei",
+    "translations": ["nacktes Kind"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nackendig",
+    "translations": ["nackt"],
+    "alternativeWords": ["nackig", "nacklich", "splitternackendig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nächst, nächste Woche Nachmittag",
+    "translations": ["absichtlich unbestimmte Zeitangabe"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nährung, eenen in Nahrung setzen",
+    "translations": ["ihn etwas verdienen lassen"],
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Naht, du hast 'ne jute Naht jeschlafen",
+    "translations": ["Schnarchen als Nahtstich beschrieben"],
+    "examples": [{ "example": "Er hat 'ne jute Naht zusammjeredt.", "explanation": "übertragen" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Namen, verjeß deinen Namen nich",
+    "translations": ["Formel beim Trinken eines großen Zuges"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nante",
+    "translations": ["Spitzname für den typischen Berliner Eckensteher"],
+    "infoText": "Nante ist in der berlinischen Literatur der Name des Eckenstehers (Vorläufer des Dienstmanns); er erschien zuerst in Holteis Drama „Ein Trauerspiel in Berlin“ (1832), gespielt von Friedrich Beckmann, der auch die „komische Szene“ „Der Eckensteher Nante im Verhör“ schrieb (bekannt: „Herr Kriminell, ick melde mir“). Glaßbrenner stellte den echten Eckensteher Nante in „Buntes Berlin“ Heft 5 dar. Später bekam „Nante“ auch die Bedeutung von „Fatzke“.",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nanu",
+    "translations": ["Interjektion verschiedenster Seelenstimmungen"],
+    "examples": [
+      { "example": "Nanu man zu!", "explanation": "" },
+      { "example": "Nanu wird's Dag (Herr Meier)!", "explanation": "" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Napoljonschnitte",
+    "translations": ["süßes Gebäck"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nase, alle Nase lang",
+    "translations": ["jeden Augenblick"],
+    "examples": [
+      { "example": "Er macht mir 'ne lange Nase.", "explanation": "" },
+      { "example": "Immer de Nase lang!", "explanation": "geradeaus" },
+      { "example": "Viere pro Nase!", "explanation": "pro Person" },
+      { "example": "Faß dir an deine Nase!", "explanation": "kümmere dich nicht um anderer Leute Angelegenheiten" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nasenloch, du machst sonne verliebten Nasenlöcher",
+    "translations": ["spöttische Bemerkung über verliebten Gesichtsausdruck"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nasenpopel",
+    "translations": ["verächtlicher Mensch"],
+    "examples": [{ "example": "Dir eracht ick vor'n Nasenpopel!", "explanation": "" }],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nasenquetscher",
+    "translations": ["schlechter, billiger Sarg"],
+    "infoText": "Der Armensarg hatte früher einen platten Deckel.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nasenstieber",
+    "translations": ["gelinde Strafe: der Zeigefinger wird gegen die Nase geschnellt", "Ahornfrucht"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Naß, per naß",
+    "translations": ["umsonst"],
+    "examples": [{ "example": "Er is noch naß hinter de Ohren.", "explanation": "noch nicht trocken, unerfahren" }],
+    "infoText": "„Das nasse Dreieck“ hieß im Landesausstellungspark die Ecke mit den Restaurationen.",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Naßmachen",
+    "translations": ["durch eine Kneiperei einweihen"],
+    "themen": ["alkohol-kneipe"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Natel",
+    "translations": ["Nadel"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nation, is det 'ne Nation",
+    "translations": ["Gesellschaft (abwertend)"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nattrig",
+    "translations": ["natürlich (scherzhafte Varianten)"],
+    "alternativeWords": ["natterloch", "naturloch"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Natte",
+    "translations": ["Kirschenart"],
+    "infoText": "„De reene Natte“ wie „der reene Kien“.",
+    "alternativeWords": ["Nattkirsche"],
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Natur, wie de Natur spielt",
+    "translations": ["idiomatischer Cluster"],
+    "examples": [
+      { "example": "De Natur is zu kurz.", "explanation": "von kleinen Menschen z. B. beim Billard" },
+      { "example": "Man sollte janich denken, det det Natur is!", "explanation": "Bewunderung, z. B. beim Anblick eines Rosenstraußes" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Naturforscher",
+    "translations": ["Lumpensammler (Wortspiel)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nauke",
+    "translations": ["Spottruf, ähnlich wie Aujust (Bedeutung: Fatzke)"],
+    "examples": [{ "example": "Wo is Nauke (mit de Pauke)?", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Naute",
+    "translations": ["Gebäck aus Sirup und Mohn"],
+    "infoText": "Die echte Naute (ein Dreier) wurde von der geringeren „Bonbonnaute“ unterschieden.",
+    "themen": ["essen-trinken"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nee, nee aber sowat",
+    "translations": ["Ausruf der Verwunderung, weniger entschieden als „nein“"],
+    "examples": [
+      { "example": "I Jott nee doch!", "explanation": "starke Verwunderung" },
+      { "example": "Du denkst wol nee?", "explanation": "" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Neeiet",
+    "translations": ["Neige"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nehmamsell",
+    "translations": ["Näherin"],
+    "alternativeWords": ["Nehsuxel"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nehmen, woher nehmen un nich stehlen",
+    "translations": ["idiomatische Formel"],
+    "examples": [{ "example": "Nehm' wa noch eenen?", "explanation": "für trinken" }],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Neidhammel",
+    "translations": ["neidischer Mensch"],
+    "themen": ["schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Neine, davon nach neine",
+    "translations": ["davon ist keine Rede (vom Zapfenstreich)"],
+    "infoText": "„Alle neine!“ (vom Kegelspiel) wenn etwas mit Geräusch entzweigeworfen wird.",
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nelen",
+    "translations": ["zögern, langsam sein"],
+    "alternativeWords": ["nolen", "Nele", "Nelpeter", "Nelsuse"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nervenkostüm",
+    "translations": ["Nervensystem (Wortspiel)"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nese, ick hab de Nese voll",
+    "translations": ["ich habe genug davon"],
+    "examples": [
+      { "example": "Sie denken wol, Sie könn' mir de Nese verzinnen?", "explanation": "mich zum Besten haben?" },
+      { "example": "Er wird sich de Nese bejießen.", "explanation": "zu viel trinken" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Neten Se treher",
+    "translations": ["scherzhaft für: Treten Sie näher!"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nett, wat de nich nett bist",
+    "translations": ["ironische Bemerkung"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Netz, naus aus Netz",
+    "translations": ["raus aus dem Nest"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Neu, davor hättstet ooch neu jekricht",
+    "translations": ["Reaktion auf den Preis eines Neukaufs"],
+    "themen": ["geld", "spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Neuschandeller",
+    "translations": ["Spitzname für Neufchateler Soldaten in Berlin"],
+    "infoText": "Als der Kanton Neuenburg preußisch war (bis 1857), dienten Neufchateler Soldaten in Berlin. Der langjährige Museumsaufseher Mr. Neuche war einer von ihnen.",
+    "themen": ["orte-spitzname"],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nibbeln",
+    "translations": ["nähen, schneidern", "kleine Stücke abschneiden"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nich doch",
+    "translations": ["sanfte Abwehr"],
+    "alternativeWords": ["Nich sehn"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nichtsdestotrotz",
+    "translations": ["nichtsdestoweniger (scherzhaft)"],
+    "allowDuplicate": true,
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nickel, nu jibs bald mehr Nickelpumper wie Pumpernickel",
+    "translations": ["Zehnpfennigstück"],
+    "infoText": "Formel bei Einführung der Nickelmünzen 1873.",
+    "themen": ["geld"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nicken, er hat seine Nicken",
+    "translations": ["eigensinnige Launen", "schlummern"],
+    "examples": [
+      { "example": "Den wer'k de Nicken austreiben!", "explanation": "" },
+      { "example": "'n bisken nicken.", "explanation": "schlummern (nur im Sitzen)" }
+    ],
+    "alternativeWords": ["Nickerchen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nie, det jeht wie noch nie",
+    "translations": ["sehr gut"],
+    "themen": ["redewendungen-sprueche"],
+    "allowDuplicate": true,
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Niederträchtig-merkwirdijeEisenbahn",
+    "translations": ["scherzhafte Verballhornung der Niederschlesisch-Märkischen Eisenbahn"],
+    "themen": ["spott-ironie", "orte-spitzname"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nimm se du se dir se denn se doch",
+    "translations": ["Zungenbrecher-Scherz mit Pronomen-Häufung"],
+    "infoText": "„Er is von' Stamm Nimm“ = habgierig.",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nischt, vor nischt un wieder nischt",
+    "translations": ["ohne jeden Grund"],
+    "examples": [
+      { "example": "Nischt zu wollen!", "explanation": "es ist nichts zu machen" },
+      { "example": "Is an mir nischt? — Nee, an Ihnen is janischt.", "explanation": "Wortspiel zum Briefträger" }
+    ],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nobel, nobel muß de Welt zu Jrunde jehn",
+    "translations": ["scherzhafte Devise"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Noblenz",
+    "translations": ["Wortspiel auf nolens volens"],
+    "alternativeWords": ["Knoblenz"],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Noch eens, Kotzwetter noch eens",
+    "translations": ["Flüche mit „noch eens“/„noch mal“"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Noch so, na denn is et noch so",
+    "translations": ["das ändert nichts"],
+    "themen": ["redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nörjeln",
+    "translations": ["pedantisch tadeln"],
+    "alternativeWords": ["Nörjelei", "nörjelig", "Nörjler"],
+    "themen": ["charakter-eigenschaften"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nu, nu nee",
+    "translations": ["ironisch: recht gehörig"],
+    "examples": [{ "example": "Hat se dir denn 'n Kuß jejeben? — Nu nee!", "explanation": "" }],
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nucke",
+    "translations": ["Lockruf für Kaninchen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nüchtern, ick bin so nüchtern wie 'ne Wasserpulle",
+    "translations": ["idiomatischer Vergleich"],
+    "themen": ["alkohol-kneipe", "redewendungen-sprueche"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nuse",
+    "translations": ["Mund (wie Fresse)"],
+    "examples": [{ "example": "Kriest eens in de Nuxe!", "explanation": "" }],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nummer, det is 'ne Nummer",
+    "translations": ["Sache, Exemplar, Handlung (auch tadelnd von Personen)"],
+    "infoText": "„Nummer Sicher“ = Polizeiwache, Gefängnis.",
+    "themen": ["redewendungen-sprueche"],
+    "allowDuplicate": true,
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nuppe, uf de Nuppe",
+    "translations": ["ganz genau (beim Würfeln)"],
+    "alternativeWords": ["uf de Niepe"],
+    "themen": ["unterhaltung-freizeit"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nuß, er hat eens uf de Nuß jekricht",
+    "translations": ["Nase (Ohrfeige)"],
+    "themen": ["koerper", "schimpfwoerter-beleidigungen"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nutschen",
+    "translations": ["lutschen"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Nudeln, zaudern",
+    "translations": ["zaudern", "undeutlich sprechen"],
+    "alternativeWords": ["nudlig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "word": "X-Beene",
+    "translations": ["nach auswärts, wie ein X gestellte Beine"],
+    "themen": ["koerper"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Xbeliebig",
+    "translations": ["ganz beliebig"],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Xlom, x, xlom, z",
+    "translations": ["scherzhafter Alphabet-Abschluss der Schulkinder"],
+    "infoText": "Berliner Rebus dazu: „c c c c c c c c mir nich, x x x x x x x x ooch nich“ = „Acht se mir nich, acht ick se ooch nich.“",
+    "themen": ["spott-ironie"],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

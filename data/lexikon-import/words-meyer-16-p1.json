@@ -1,0 +1,933 @@
+[
+  {
+    "word": "Packaje",
+    "translations": [
+      "Bande, Gesindel"
+    ],
+    "infoText": "Vom französischen „bagage“ mit Anlehnung an „Pack“.",
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Packedell",
+    "translations": [
+      "verächtlich behandeln"
+    ],
+    "examples": [
+      {
+        "example": "Er denkt, er kann mir wie packedell behandeln!",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Vom französischen „en bagatelle“.",
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Packet, du kommst uf't",
+    "translations": [
+      "du bist der Ausbund"
+    ],
+    "examples": [
+      {
+        "example": "Du bist der scheenste von't halbe Dutzend — du kommst uf't Packet!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Paddur",
+    "translations": [
+      "Parkwächter"
+    ],
+    "alternativeWords": [
+      "Padder"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Paddenbeene",
+    "translations": [
+      "Froschkeulen"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Paff",
+    "translations": [
+      "verblüfft"
+    ],
+    "examples": [
+      {
+        "example": "Ick war janz paff!",
+        "explanation": ""
+      }
+    ],
+    "alternativeWords": [
+      "baff"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Paffen",
+    "translations": [
+      "stark rauchen"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Palen",
+    "translations": [
+      "von den Schalen befreien"
+    ],
+    "examples": [
+      {
+        "example": "Nur Schoten werden jepalt.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Paletot",
+    "translations": [
+      "scherzhafter Plural: Paletoter"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Paletotmarder",
+    "translations": [
+      "einer, der Überzieher stiehlt"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pampel, er jeht ran wie Pampel an de Buletten",
+    "translations": [
+      "er geht mit Eifer daran"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pansch",
+    "translations": [
+      "Bauch"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Panschen",
+    "translations": [
+      "im Wasser mit Geräusch herumarbeiten"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Panster",
+    "translations": [
+      "großer Fettstreifen auf Kleidern"
+    ],
+    "infoText": "Aus „Panzer“ entstanden.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pantinenviertel",
+    "translations": [
+      "Spitzname für ein Armenviertel"
+    ],
+    "infoText": "Vor dem Hamburger Tor.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pantinenschule",
+    "translations": [
+      "Schule, überwiegend von armen Schülern besucht"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pantineum",
+    "translations": [
+      "Spitzname für das Humboldt-Gymnasium"
+    ],
+    "infoText": "In der Gartenstraße.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pape, bei de Pape kriejen",
+    "translations": [
+      "Gurgel"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Papeln",
+    "translations": [
+      "unartikuliert sprechen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Papen-Grenadier-un-Mohrenstraßenecke",
+    "translations": [
+      "scherzhafte Wohnungsangabe"
+    ],
+    "infoText": "Die Papenstraße war der Teil der Kaiser-Wilhelm-Straße von der Kloster- bis zur Spandauer Straße.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Papier, muß dir 'n Blatt Papier unterlejen",
+    "translations": [
+      "scherzhafte Bemerkung zu einem Kleinen"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pappen, essen",
+    "translations": [
+      "Essen (besonders bei Kindern)"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Papperlapapp",
+    "translations": [
+      "dummes Geschwätz"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pappstoffel",
+    "translations": [
+      "unhöflicher Mensch"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Parade, wie Bescherung",
+    "translations": [
+      "die ganze Parade"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Paree, wie hoch paree",
+    "translations": [
+      "Formel beim Anbieten einer Wette"
+    ],
+    "infoText": "Vom französischen „parier“ (wetten).",
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pariser",
+    "translations": [
+      "Filzschuh"
+    ],
+    "alternativeWords": [
+      "Filzpariser"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Parpe",
+    "translations": [
+      "Nase, die beim Atemholen schnarcht",
+      "Kinder-Pfeife aus Weidenrinde"
+    ],
+    "alternativeWords": [
+      "Notzparpe"
+    ],
+    "themen": [
+      "koerper",
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Part, uf jede Part kommt so un so ville",
+    "translations": [
+      "Partei"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Paß, det kommt mir sehr zu passe",
+    "translations": [
+      "das kommt mir gelegen"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Passieren, det kann jeden passieren",
+    "translations": [
+      "das kann jedem passieren"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pastern",
+    "translations": [
+      "predigen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pasterstunde",
+    "translations": [
+      "Konfirmandenunterricht"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pastete, de janze",
+    "translations": [
+      "die ganze Angelegenheit"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Patern",
+    "translations": [
+      "stehlen (Schulausdruck, wie atern)"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Patschen",
+    "translations": [
+      "ins Nasse treten"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Patschenaß",
+    "translations": [
+      "ganz nass"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Patz, er hat Patz uf'n Kopp",
+    "translations": [
+      "Grind"
+    ],
+    "alternativeWords": [
+      "Patzkopp"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Patzbulette",
+    "translations": [
+      "Schimpfwort der Marktweiber"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Patzeule",
+    "translations": [
+      "Schimpfwort"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pauker",
+    "translations": [
+      "Lehrer"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Paul mit's jroße Maul",
+    "translations": [
+      "Spottruf"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Paulinchen, wie ha'm se dir jebufft",
+    "translations": [
+      "wie ist es dir ergangen"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pechos",
+    "translations": [
+      "unglücklich, von Ereignissen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pecke",
+    "translations": [
+      "Schläge"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pedal, mir dun de Pedale weh",
+    "translations": [
+      "Bein"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Peden",
+    "translations": [
+      "Unkraut mit fortlaufender Wurzel"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Peetscheln",
+    "translations": [
+      "rudern"
+    ],
+    "alternativeWords": [
+      "peezen",
+      "Peetschel"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pelle, er jeht mir doch nich von de Pelle",
+    "translations": [
+      "Haut"
+    ],
+    "alternativeWords": [
+      "Pellkartoffeln"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pennbruder",
+    "translations": [
+      "Landstreicher, Bummler"
+    ],
+    "alternativeWords": [
+      "Pennbrieze"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Penne-Ize",
+    "translations": [
+      "Weib, das Lumpen aus Mullgruben liest"
+    ],
+    "alternativeWords": [
+      "Ize"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pennen",
+    "translations": [
+      "schlafen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Penunxe",
+    "translations": [
+      "Geld"
+    ],
+    "infoText": "Vom Polnischen.",
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Perjamite",
+    "translations": [
+      "Weihnachtspyramide"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Perleberg",
+    "translations": [
+      "Spitzname für ein Polizeigefängnis"
+    ],
+    "infoText": "In der Perleberger Straße Nr. 10.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Perpel",
+    "translations": [
+      "schmutziges Schnupftuch"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Perplex",
+    "translations": [
+      "verwirrt, betäubt"
+    ],
+    "alternativeWords": [
+      "perklex"
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pese",
+    "translations": [
+      "Darmsaite (z. B. für Uhrgewichte)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Peserick",
+    "translations": [
+      "Ochsenziemer, Rohrstock"
+    ],
+    "alternativeWords": [
+      "Peserich"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pete, se haben allens bei Peten jedragen",
+    "translations": [
+      "Trödelhändler"
+    ],
+    "infoText": "Pete platt für Pate, also „steht Gevatter“.",
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Peter Meffert",
+    "translations": [
+      "übler Geruch"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Petern",
+    "translations": [
+      "herumstochern",
+      "sich abmühen (wie polken)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Petersilie, dir wachst ja Petersilie hinter de Ohren",
+    "translations": [
+      "zu einem schmutzigen Kind"
+    ],
+    "examples": [
+      {
+        "example": "Dir is wol de Petersilie verhagelt?",
+        "explanation": "wenn einer sehr unwirsch ist"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Petze",
+    "translations": [
+      "Angeberin in der Schule"
+    ],
+    "alternativeWords": [
+      "petzen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Piccolo",
+    "translations": [
+      "Kellnerlehrling"
+    ],
+    "infoText": "Durch die Fliegenden Blätter eingeschleppt; wird häufig geneckt: „Sagen Se mal, Ihnen kenn ick doch? Ha'm Sie nich früher 'n Vollbart jedragen?“",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pichel",
+    "translations": [
+      "Sabberlätzchen für kleine Kinder"
+    ],
+    "alternativeWords": [
+      "Sabberpichel"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pick",
+    "translations": [
+      "Abneigung (wie Pieke, besonders Schülersprache)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Picke, besoffen wie 'ne Picke",
+    "translations": [
+      "idiomatischer Vergleich"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pickelomini",
+    "translations": [
+      "Mensch mit unreinem Teint"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Picken, dir pickt er wol",
+    "translations": [
+      "bist du wohl verrückt (vom Käfer)"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Piechen",
+    "translations": [
+      "keuchen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pieke, er hat 'ne Pieke uf mir",
+    "translations": [
+      "Groll"
+    ],
+    "infoText": "Daher auch „Pikanterie“ (mit Anlehnung ans Französische): eine Bosheit.",
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pieken, in't Essen pieken",
+    "translations": [
+      "stechen; Beweis fehlenden Appetits"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Piekschlitten",
+    "translations": [
+      "Stuhlschlitten"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Piep, er kann nich mehr piep sagen",
+    "translations": [
+      "keinen Laut mehr von sich geben"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Piepe, mir is allens piepe",
+    "translations": [
+      "Pfeife",
+      "gleichgültig"
+    ],
+    "examples": [
+      {
+        "example": "Det is eene Piepe.",
+        "explanation": "ganz einerlei"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Piepen, Silbergroschen",
+    "translations": [
+      "Silbergroschen (Plural)"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Piepen, zum Piepen",
+    "translations": [
+      "zum Totlachen"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Piependeckel",
+    "translations": [
+      "wie Fatzke"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Piepig",
+    "translations": [
+      "kränklich",
+      "singend, von dünner hoher Stimme"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pieraas, da ha'k de Piereser drin",
+    "translations": [
+      "Regenwurm"
+    ],
+    "infoText": "Anekdote: ein Angler steht bis an den Gurt im Wasser; ein Vorübergehender warnt ihn vor Erkältung wegen seiner dicken Backe — der Angler erwidert, da habe er die Regenwürmer drin.",
+    "alternativeWords": [
+      "Pieresel",
+      "Pieratze"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]
