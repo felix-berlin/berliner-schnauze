@@ -4,6 +4,64 @@ Diese Kopfwörter existieren schon im Glossar. Meyer 1904 liefert zusätzliche
 Redensarten/Bedeutungsnuancen — zur manuellen Durchsicht, **kein**
 automatisches Schreiben an die bestehenden Posts.
 
+## Nachtrag: 38 echte Live-Kollisionen (vollständiger Abgleich, nachträglich gefunden)
+
+Der ursprüngliche Dedup-Check während der Kuratierung stützte sich auf
+`existing-words.txt`, das über `berliner-schnauze/get-words` per `per_page`
+abgerufen wurde und (fälschlich angenommen) am WP-REST-Limit gedeckelt war —
+dadurch deckte es nur Buchstaben A–I zuverlässig ab. Ein Nutzerhinweis führte
+zur Prüfung, ob das wirklich eine harte Grenze ist: **Ist es nicht** — die
+MCP-Ability `berliner-schnauze/get-words` akzeptiert `per_page` ohne
+Obergrenze und lieferte in einem einzigen Aufruf alle **2544** publizierten
+Einträge (0 Drafts/Pending). Der vollständige Abgleich aller 30
+Meyer-Batchdateien (3429 Kandidaten) gegen diese komplette Liste fand **38
+zusätzliche echte Duplikate** (23 exakt, 15 nur Groß-/Kleinschreibung
+abweichend), die beim ursprünglichen A–I-Check nicht auffindbar waren
+(Buchstaben J, K, M, N, P, S, Z) bzw. dort durchgerutscht sind
+(Groß-/Kleinschreibung bei A–D). Alle 38 wurden aus den Batchdateien entfernt;
+Liste:
+
+| Datei | Wort | Meyer-Bedeutung |
+| --- | --- | --- |
+| words-meyer-01-a1.json | Alle | zu Ende, aufgebraucht |
+| words-meyer-02-a2.json | Asten | langsam und mit schwerer Last gehen |
+| words-meyer-02-a2.json | Ausverschämt | unverschämt |
+| words-meyer-03-b1.json | Blase | die ganze Gesellschaft |
+| words-meyer-03-b1.json | Been | Bein, auch für Fuß |
+| words-meyer-03-b1.json | Bemogeln | betrügen |
+| words-meyer-03-b1.json | Bescheid stoßen | jemanden zurechtweisen |
+| words-meyer-03-b1.json | Bohnenstange | langer Mensch |
+| words-meyer-03-b1.json | Bramsig | prahlerisch, aufgeblasen |
+| words-meyer-03-b1.json | Bratenstipper | langschößiger Sonntagsrock |
+| words-meyer-03-b1.json | Buddel | kurze Flasche |
+| words-meyer-03-b1.json | Bude | Laden |
+| words-meyer-03-b1.json | Budike | Schankgeschäft |
+| words-meyer-03-b1.json | Bulle | Tolpatsch (Schulausdruck, nicht böse gemeint) |
+| words-meyer-05-d.json | Dalles | Geldmangel |
+| words-meyer-05-d.json | Dalli | vorwärts, flink |
+| words-meyer-05-d.json | Damm | gesund |
+| words-meyer-05-d.json | Dampf | antreiben zur Beschleunigung |
+| words-meyer-05-d.json | Dicke | satt |
+| words-meyer-05-d.json | Dreck | sehr wenig oder gar nichts |
+| words-meyer-05-d.json | Dreckschleuder | frecher Mund |
+| words-meyer-05-d.json | Durch | ein Geräusch geht einem durch und durch |
+| words-meyer-07-fg.json | Feife | dabei kann einem die Geduld ausgehen |
+| words-meyer-07-fg.json | Flaume | der erste Versuch gelingt nie |
+| words-meyer-07-fg.json | Fleesch | jetzt kannst du doch nichts mehr einwenden (Redewendung) |
+| words-meyer-09-j.json | Jerammelt voll | gerammelt voll |
+| words-meyer-09-j.json | Jeschmadder | schlechte, unsaubere Schrift |
+| words-meyer-09-j.json | Jewieft | schlau |
+| words-meyer-09-j.json | Jiftnudel | schlechte Zigarre |
+| words-meyer-10-k1.json | Kahn | Militärarrest, Gefängnis |
+| words-meyer-10-k1.json | Klamotte | zerbrochener Mauerstein |
+| words-meyer-11-k2.json | Kommode | Spitzname für die Königliche Bibliothek |
+| words-meyer-13-m.json | Mausen | stehlen |
+| words-meyer-14-n.json | Nichtsdestotrotz | nichtsdestoweniger (scherzhaft) |
+| words-meyer-16-p1.json | Pennen | schlafen |
+| words-meyer-17-p2.json | Plauze | Bauch, Magen |
+| words-meyer-21-s1.json | Schmaddern | schmieren |
+| words-meyer-30-z.json | Zwiebeln | peinigen |
+
 ## Seite 20–24
 
 - **Abbeißen** (eenen) — einen (Schnaps) trinken.

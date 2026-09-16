@@ -279,23 +279,6 @@
     "source": "meyer1904"
   },
   {
-    "word": "Feife",
-    "translations": [
-      "dabei kann einem die Geduld ausgehen"
-    ],
-    "examples": [
-      {
-        "example": "Dabei kann eenen de Feife ausjehn.",
-        "explanation": "die Geduld"
-      }
-    ],
-    "themen": [
-      "redewendungen-sprueche"
-    ],
-    "berolinismus": false,
-    "source": "meyer1904"
-  },
-  {
     "word": "Feifen",
     "translations": [
       "Drohformel",
@@ -924,27 +907,6 @@
     "source": "meyer1904"
   },
   {
-    "word": "Flaume",
-    "translations": [
-      "der erste Versuch gelingt nie"
-    ],
-    "examples": [
-      {
-        "example": "De ersten Flaumen sind madig.",
-        "explanation": "der erste Versuch gelingt nie"
-      },
-      {
-        "example": "Um die paa Flaumen weenste?",
-        "explanation": ""
-      }
-    ],
-    "themen": [
-      "redewendungen-sprueche"
-    ],
-    "berolinismus": false,
-    "source": "meyer1904"
-  },
-  {
     "word": "Flaumenschmeißer",
     "translations": [
       "ein großer, sich wichtig machender Mensch"
@@ -989,24 +951,6 @@
     ],
     "themen": [
       "koerper"
-    ],
-    "berolinismus": false,
-    "source": "meyer1904"
-  },
-  {
-    "word": "Fleesch",
-    "translations": [
-      "jetzt kannst du doch nichts mehr einwenden (Redewendung)"
-    ],
-    "examples": [
-      {
-        "example": "Na wat sagste'n nu, Fleesch?",
-        "explanation": ""
-      }
-    ],
-    "infoText": "Als Anrede eigentlich „Flesch“.",
-    "themen": [
-      "redewendungen-sprueche"
     ],
     "berolinismus": false,
     "source": "meyer1904"

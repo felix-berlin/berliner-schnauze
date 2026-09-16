@@ -67,6 +67,26 @@ A: S. 20–30 (Z. 56) · B: S. 30 (Z. 56)–41 (Z. 74) · C: S. 41 (Z. 75)–42 
 
 **Gesamtergebnis: 5208 Einträge über alle Dateien (Schlobinski + Meyer 1904), 0 Validierungsprobleme im finalen Dry-Run. Wörterbuchteil A–Z (S. 20–157) vollständig kuratiert und importbereit.**
 
+⚠ **Korrektur nach vollständigem Live-Abgleich (siehe unten): 5170 Einträge** —
+38 zusätzliche echte Duplikate mit dem Live-Bestand gefunden und entfernt.
+
+## Nachtrag: vollständiger Live-Abgleich deckt 38 übersehene Duplikate auf
+
+Der bisherige Dedup-Check nahm an, `berliner-schnauze/get-words` sei durch das
+WP-REST-`per_page`-Limit gedeckelt und liefere daher nur zuverlässig
+Buchstaben A–I (1000 von 2544 Einträgen). Auf Nutzerhinweis wurde geprüft, ob
+das wirklich eine harte Grenze ist — **war es nicht**: Die Ability akzeptiert
+`per_page` ohne Obergrenze; ein einzelner Aufruf mit `per_page: 3000` lieferte
+alle 2544 publizierten Einträge (zzgl. Prüfung auf `draft`/`pending`: 0
+Treffer, also vollständig). Der komplette Abgleich aller 30
+Meyer-Batchdateien (3429 Kandidaten) gegen diese vollständige Liste ergab 38
+zusätzliche echte Kollisionen (23 exakt, 15 nur Groß-/Kleinschreibung), die
+beim ursprünglichen A–I-Check unentdeckt blieben (v. a. Buchstaben J, K, M,
+N, P, S, Z, die außerhalb der A–I-Abdeckung lagen, sowie ein paar
+Groß-/Kleinschreibungsfälle bei A–D). Alle 38 wurden aus den Batchdateien
+entfernt und in `supplement-suggestions-meyer.md` dokumentiert. Finaler
+Dry-Run nach Korrektur: **5170 Einträge, 0 Validierungsprobleme.**
+
 ⚠ **Wichtige Dedup-Erkenntnis (ab Buchstabe H zu beachten):** Es gibt zwei getrennte Dedup-Quellen:
 1. Live-WP-Bestand via `get-words` — `existing-words.txt`, deckt wegen `per_page`-Deckel (1000 von 2544) nur Buchstaben **A–I** ab.
 2. **Noch nicht importierte** Schlobinski-Batches (`data/lexikon-import/words-01-d.json` … `words-21-z.json`, 1778 Wörter, decken A–Z ab, da bereits komplett kuratiert) — diese liegen im selben Ordner und werden vom Import-Skript **mitgeladen**, kollidieren also genauso wie Live-Wörter.

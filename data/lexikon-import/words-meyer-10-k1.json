@@ -153,26 +153,6 @@
     "source": "meyer1904"
   },
   {
-    "word": "Kahn",
-    "translations": [
-      "Militärarrest, Gefängnis",
-      "zu Bett gehen"
-    ],
-    "examples": [
-      {
-        "example": "Rin in' Kahn!",
-        "explanation": "Gefängnis"
-      },
-      {
-        "example": "Krauch in' Kahn!",
-        "explanation": "zu Bett gehen"
-      }
-    ],
-    "themen": [],
-    "berolinismus": false,
-    "source": "meyer1904"
-  },
-  {
     "word": "Kakao, bravo Kakao",
     "translations": [
       "scherzhaft für da capo"
@@ -1443,18 +1423,6 @@
     "themen": [
       "spott-ironie"
     ],
-    "berolinismus": false,
-    "source": "meyer1904"
-  },
-  {
-    "word": "Klamotte",
-    "translations": [
-      "zerbrochener Mauerstein"
-    ],
-    "alternativeWords": [
-      "Klamottenbeene"
-    ],
-    "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },

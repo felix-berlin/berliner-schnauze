@@ -1,43 +1,63 @@
 [
   {
     "word": "Zalm",
-    "translations": ["Psalm"],
+    "translations": [
+      "Psalm"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zantdeibel",
-    "translations": ["zänkischer Mensch"],
-    "themen": ["schimpfwoerter-beleidigungen"],
+    "translations": [
+      "zänkischer Mensch"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zanktimeter",
-    "translations": ["Zentimeter (Verballhornung)"],
-    "themen": ["spott-ironie"],
+    "translations": [
+      "Zentimeter (Verballhornung)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zapperloosche",
-    "translations": ["der zoologische Garten"],
+    "translations": [
+      "der zoologische Garten"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zappen, ab!",
-    "translations": ["Zapfen; aus, zu Ende"],
-    "alternativeWords": ["Zappen duster"],
-    "themen": ["redewendungen-sprueche"],
+    "translations": [
+      "Zapfen; aus, zu Ende"
+    ],
+    "alternativeWords": [
+      "Zappen duster"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zaruck, zaruck, wer keene Bulljets hat",
-    "translations": ["zurück"],
+    "translations": [
+      "zurück"
+    ],
     "infoText": "Die Gendarmen (Schandarren) wurden Zarucker genannt: „Zaruck, wer keene Bulljets hat! Zaruck, zaruck bis an den Bäumen!“",
     "themen": [],
     "berolinismus": false,
@@ -45,420 +65,701 @@
   },
   {
     "word": "Zaser",
-    "translations": ["Faser"],
+    "translations": [
+      "Faser"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zaunbillet, er hat'n Zaunbillet",
-    "translations": ["er sieht über den Zaun zu, ohne Billet"],
-    "alternativeWords": ["Zaungäste"],
-    "themen": ["unterhaltung-freizeit"],
+    "translations": [
+      "er sieht über den Zaun zu, ohne Billet"
+    ],
+    "alternativeWords": [
+      "Zaungäste"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zaunfahl, 'n Wink mit 'n Zaunfahl",
-    "translations": ["ein sehr deutlicher Wink"],
-    "themen": ["redewendungen-sprueche"],
+    "translations": [
+      "ein sehr deutlicher Wink"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zehne für Zehen",
-    "translations": ["Zehen (Berliner Lautung)"],
-    "examples": [{ "example": "Ick habe Frost an de Zehne.", "explanation": "" }],
-    "themen": ["koerper"],
+    "translations": [
+      "Zehen (Berliner Lautung)"
+    ],
+    "examples": [
+      {
+        "example": "Ick habe Frost an de Zehne.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "koerper"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zehnte, det kann der Zehnte nich verdragen",
-    "translations": ["scherzhafte Steigerung"],
-    "alternativeWords": ["der Zehnteste"],
-    "themen": ["redewendungen-sprueche"],
+    "translations": [
+      "scherzhafte Steigerung"
+    ],
+    "alternativeWords": [
+      "der Zehnteste"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zeich, dummet Zeich",
-    "translations": ["Zeug"],
-    "examples": [{ "example": "Wat 't Zeich hält.", "explanation": "ganz gehörig" }, { "example": "So 'n jrienet Zeijes aus de Apotheke.", "explanation": "" }],
-    "alternativeWords": ["Zeijes"],
+    "translations": [
+      "Zeug"
+    ],
+    "examples": [
+      {
+        "example": "Wat 't Zeich hält.",
+        "explanation": "ganz gehörig"
+      },
+      {
+        "example": "So 'n jrienet Zeijes aus de Apotheke.",
+        "explanation": ""
+      }
+    ],
+    "alternativeWords": [
+      "Zeijes"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zeit, dabei kann eenen Zeit un Weile lang wern",
-    "translations": ["idiomatisches Cluster"],
-    "examples": [{ "example": "Mit der Zeit flickt man Hosen.", "explanation": "" }],
-    "themen": ["redewendungen-sprueche"],
+    "translations": [
+      "idiomatisches Cluster"
+    ],
+    "examples": [
+      {
+        "example": "Mit der Zeit flickt man Hosen.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zejen",
-    "translations": ["Zehe"],
-    "themen": ["koerper"],
+    "translations": [
+      "Zehe"
+    ],
+    "themen": [
+      "koerper"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zelten, die Zelten",
-    "translations": ["Bezeichnung für die Zelte im Tiergarten"],
+    "translations": [
+      "Bezeichnung für die Zelte im Tiergarten"
+    ],
     "infoText": "Der Name stammt aus dem Anfang des 18. Jahrhunderts; damals boten dort zwei Franzosen in Leinwandzelten Erfrischungen an.",
-    "themen": ["orte-spitzname"],
+    "themen": [
+      "orte-spitzname"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zerjen",
-    "translations": ["ärgern, quälen"],
-    "alternativeWords": ["zerjeln", "Zerjerei"],
-    "themen": ["schimpfwoerter-beleidigungen"],
+    "translations": [
+      "ärgern, quälen"
+    ],
+    "alternativeWords": [
+      "zerjeln",
+      "Zerjerei"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zermermeln",
-    "translations": ["zerreiben"],
+    "translations": [
+      "zerreiben"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zerpolken",
-    "translations": ["zerpflücken"],
+    "translations": [
+      "zerpflücken"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zerreißen, sich",
-    "translations": ["angestrengt arbeiten"],
-    "examples": [{ "example": "Sich um eenen zerreißen.", "explanation": "sich sehr um seine Gunst, um seinen Umgang bemühen" }],
+    "translations": [
+      "angestrengt arbeiten"
+    ],
+    "examples": [
+      {
+        "example": "Sich um eenen zerreißen.",
+        "explanation": "sich sehr um seine Gunst, um seinen Umgang bemühen"
+      }
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zerteppern",
-    "translations": ["zerschlagen"],
+    "translations": [
+      "zerschlagen"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zertrampeln",
-    "translations": ["zertreten, z. B. ein Beet"],
+    "translations": [
+      "zertreten, z. B. ein Beet"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Ziehe, ein Kind in de Ziehe jeben",
-    "translations": ["Pflege"],
-    "themen": ["beziehungen-soziales"],
+    "translations": [
+      "Pflege"
+    ],
+    "themen": [
+      "beziehungen-soziales"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Ziehjaliet",
-    "translations": ["Zigarre"],
-    "alternativeWords": ["Ziehjarrn"],
-    "themen": ["alkohol-kneipe"],
+    "translations": [
+      "Zigarre"
+    ],
+    "alternativeWords": [
+      "Ziehjarrn"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Ziehn, der zieht nich",
-    "translations": ["es hat keinen Einfluss"],
-    "examples": [{ "example": "Machen Se doch de Kommode zu! Det zieht ja so!", "explanation": "" }, { "example": "Mach zu, et zieht!", "explanation": "wenn einer gähnt" }],
-    "themen": ["redewendungen-sprueche"],
+    "translations": [
+      "es hat keinen Einfluss"
+    ],
+    "examples": [
+      {
+        "example": "Machen Se doch de Kommode zu! Det zieht ja so!",
+        "explanation": ""
+      },
+      {
+        "example": "Mach zu, et zieht!",
+        "explanation": "wenn einer gähnt"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Ziehtrompete",
-    "translations": ["Posaune"],
-    "themen": ["unterhaltung-freizeit"],
+    "translations": [
+      "Posaune"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zieraffe",
-    "translations": ["Geck"],
-    "alternativeWords": ["Zierlappe"],
-    "themen": ["schimpfwoerter-beleidigungen"],
+    "translations": [
+      "Geck"
+    ],
+    "alternativeWords": [
+      "Zierlappe"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zigaro, Zigarrenhändler-Ruf",
-    "translations": ["fliegender Zigarrenhändler"],
+    "translations": [
+      "fliegender Zigarrenhändler"
+    ],
     "infoText": "Bis Ende der 1830er fand man an den Toren und draußen an belebten Orten „fliegende“ Zigarrenhändler, die mit dem Ruf „Zi-ga-ro mit avec äle to!“ das Publikum lockten. Im Tiergarten durfte man bis 1848 nicht rauchen; daher die revolutionäre Parole „Freiheit un Jleichjiltigkeit un Roochen in' Tiergarten!“",
-    "themen": ["stadtleben"],
+    "themen": [
+      "stadtleben"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zijorje",
-    "translations": ["Zichorie", "Zigarre"],
-    "themen": ["essen-trinken"],
+    "translations": [
+      "Zichorie",
+      "Zigarre"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zimmermannshaar, et stimmt uf'n Zimmermannshaar",
-    "translations": ["sehr ungenau"],
+    "translations": [
+      "sehr ungenau"
+    ],
     "infoText": "„Soweit wie der Zimmermann mit de Art schmeißt“.",
-    "themen": ["spott-ironie"],
+    "themen": [
+      "spott-ironie"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zimtblatt",
-    "translations": ["Gebäck für Kinder"],
-    "themen": ["essen-trinken"],
+    "translations": [
+      "Gebäck für Kinder"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zingern",
-    "translations": ["Gefühl, das man bei einem Stoß am Musikantenknochen hat"],
-    "themen": ["koerper"],
+    "translations": [
+      "Gefühl, das man bei einem Stoß am Musikantenknochen hat"
+    ],
+    "themen": [
+      "koerper"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zinken, er hat'n jehörijen Zinken",
-    "translations": ["Rausch"],
-    "alternativeWords": ["Nase"],
-    "themen": ["alkohol-kneipe"],
+    "translations": [
+      "Rausch"
+    ],
+    "alternativeWords": [
+      "Nase"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zipp, der dut, als wenn er nich Zipp sagen kann",
-    "translations": ["sehr bescheiden"],
-    "themen": ["spott-ironie"],
+    "translations": [
+      "sehr bescheiden"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zislaweng, mit'n Zislaweng",
-    "translations": ["mit besonderem Griff, mit besonderer Geschicklichkeit"],
+    "translations": [
+      "mit besonderem Griff, mit besonderer Geschicklichkeit"
+    ],
     "infoText": "Eigentlich wohl Schwung beim Schreiben (Zeichnen). Ältere Nebenform „Zislawong“.",
-    "themen": ["redewendungen-sprueche"],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zoo, der zoologische Garten",
-    "translations": ["der zoologische Garten"],
+    "translations": [
+      "der zoologische Garten"
+    ],
     "infoText": "Wohl nur im Westen üblich.",
-    "themen": ["orte-spitzname"],
+    "themen": [
+      "orte-spitzname"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zoddel, olle Zoddel",
-    "translations": ["unordentliche Person"],
-    "examples": [{ "example": "Det is 'ne olle zoddlije Zucht.", "explanation": "" }],
-    "alternativeWords": ["Zoddelkopp", "zoddlig"],
-    "themen": ["schimpfwoerter-beleidigungen"],
+    "translations": [
+      "unordentliche Person"
+    ],
+    "examples": [
+      {
+        "example": "Det is 'ne olle zoddlije Zucht.",
+        "explanation": ""
+      }
+    ],
+    "alternativeWords": [
+      "Zoddelkopp",
+      "zoddlig"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zoddeln, einem nachzoddeln",
-    "translations": ["ziehen"],
-    "alternativeWords": ["lange Haare"],
+    "translations": [
+      "ziehen"
+    ],
+    "alternativeWords": [
+      "lange Haare"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zopp, eenen uf'n Zopp spucken",
-    "translations": ["wie uf'n Kopp"],
-    "examples": [{ "example": "Eenen 'n Zopp machen.", "explanation": "ihm die Wahrheit sagen, den Standpunkt klar machen" }, { "example": "Uf den Zopp beiß ick nich.", "explanation": "darauf falle ich nicht rein" }],
+    "translations": [
+      "wie uf'n Kopp"
+    ],
+    "examples": [
+      {
+        "example": "Eenen 'n Zopp machen.",
+        "explanation": "ihm die Wahrheit sagen, den Standpunkt klar machen"
+      },
+      {
+        "example": "Uf den Zopp beiß ick nich.",
+        "explanation": "darauf falle ich nicht rein"
+      }
+    ],
     "infoText": "Auch Kutscherruf zu den Pferden: „Zopp zopp zaruck!“ (zurück), aber auch vorwärts: „Na zopp zopp!“",
-    "themen": ["redewendungen-sprueche"],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zoppen",
-    "translations": ["ziehen"],
+    "translations": [
+      "ziehen"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zossen",
-    "translations": ["altes Droschkenpferd"],
+    "translations": [
+      "altes Droschkenpferd"
+    ],
     "infoText": "Vom Pferdemarkt in Zossen.",
-    "alternativeWords": ["Zosse"],
+    "alternativeWords": [
+      "Zosse"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zu, na denn man zu",
-    "translations": ["jetzt kann es losgehen"],
+    "translations": [
+      "jetzt kann es losgehen"
+    ],
     "infoText": "'ne zuige (zute) Droschke: eine geschlossene. „'ne zuige oder 'ne zute?“ — 'ne zuige hat festes Verdeck, 'ne zute kann zugemacht werden.",
-    "themen": ["redewendungen-sprueche"],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zübuddeln",
-    "translations": ["mit Erde zuschütten"],
+    "translations": [
+      "mit Erde zuschütten"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zuchen, det zucht hier so",
-    "translations": ["ziehen, vom Luftzug"],
-    "alternativeWords": ["zügen", "zuchig"],
+    "translations": [
+      "ziehen, vom Luftzug"
+    ],
+    "alternativeWords": [
+      "zügen",
+      "zuchig"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zucht, wat is 'n det vor 'ne Zucht",
-    "translations": ["Unordnung"],
-    "alternativeWords": ["Zuchten machen"],
-    "themen": ["redewendungen-sprueche"],
+    "translations": [
+      "Unordnung"
+    ],
+    "alternativeWords": [
+      "Zuchten machen"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zuckeldrab",
-    "translations": ["langsamer Trab"],
+    "translations": [
+      "langsamer Trab"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zucker, die dut ja, als wenn det von Zucker is",
-    "translations": ["wenn kleine Mädchen etwas zeigen, aber nicht anrühren lassen"],
-    "themen": ["essen-trinken"],
+    "translations": [
+      "wenn kleine Mädchen etwas zeigen, aber nicht anrühren lassen"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zuckerkante",
-    "translations": ["Kandiszucker"],
-    "themen": ["essen-trinken"],
+    "translations": [
+      "Kandiszucker"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zümftig, 'n zümftijer Mauerjeselle",
-    "translations": ["gelernt (für jede Art von Sachkenntnis)"],
-    "examples": [{ "example": "Det is zümftig.", "explanation": "etwa: comme il faut" }],
-    "alternativeWords": ["Zumft"],
-    "themen": ["redewendungen-sprueche"],
+    "translations": [
+      "gelernt (für jede Art von Sachkenntnis)"
+    ],
+    "examples": [
+      {
+        "example": "Det is zümftig.",
+        "explanation": "etwa: comme il faut"
+      }
+    ],
+    "alternativeWords": [
+      "Zumft"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zudecken",
-    "translations": ["verhauen", "betrügen, ins Unglück bringen"],
-    "themen": ["schimpfwoerter-beleidigungen"],
+    "translations": [
+      "verhauen",
+      "betrügen, ins Unglück bringen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zug, eenen uf'n Zug haben",
-    "translations": ["ihm zürnen, böse sein"],
-    "examples": [{ "example": "Den hab ick eklig uf'n Zug!", "explanation": "" }, { "example": "Nanu Zug un los!", "explanation": "fang an!" }],
+    "translations": [
+      "ihm zürnen, böse sein"
+    ],
+    "examples": [
+      {
+        "example": "Den hab ick eklig uf'n Zug!",
+        "explanation": ""
+      },
+      {
+        "example": "Nanu Zug un los!",
+        "explanation": "fang an!"
+      }
+    ],
     "infoText": "Rätsel: Wer hat am meisten Sonntagsruhe? — Die Zugführer der Vorortzüge: die genießen se in vollen Zügen.",
-    "themen": ["redewendungen-sprueche"],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zulp",
-    "translations": ["Lutschbeutel"],
-    "themen": ["essen-trinken"],
+    "translations": [
+      "Lutschbeutel"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zureden, zureden hilft",
-    "translations": ["ironische Redensart"],
-    "themen": ["redewendungen-sprueche"],
+    "translations": [
+      "ironische Redensart"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zurückzoppen",
-    "translations": ["nachgeben, eine Behauptung einschränken"],
+    "translations": [
+      "nachgeben, eine Behauptung einschränken"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zusammen, wenn wir alle zusamm' reden, wern wir schneller fertig",
-    "translations": ["ironische Bemerkung bei hitzigen Rednern"],
-    "themen": ["spott-ironie"],
+    "translations": [
+      "ironische Bemerkung bei hitzigen Rednern"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zusammenschrumpeln",
-    "translations": ["einschrumpfen"],
+    "translations": [
+      "einschrumpfen"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zuschanzen",
-    "translations": ["beisteuern"],
-    "alternativeWords": ["zuschustern"],
+    "translations": [
+      "beisteuern"
+    ],
+    "alternativeWords": [
+      "zuschustern"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zusehn, seh mal, da licht 'n Ferd",
-    "translations": ["scherzhafte Anekdote über Schaulustige"],
-    "examples": [{ "example": "Die woll'n alle bei't Ufstehn zusehn helfen.", "explanation": "" }],
-    "themen": ["spott-ironie"],
+    "translations": [
+      "scherzhafte Anekdote über Schaulustige"
+    ],
+    "examples": [
+      {
+        "example": "Die woll'n alle bei't Ufstehn zusehn helfen.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zuwachs, uf Zuwachs berechnet",
-    "translations": ["von weiten Kleidungsstücken"],
+    "translations": [
+      "von weiten Kleidungsstücken"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zwangsanleihe",
-    "translations": ["wie Sardellensemmel"],
+    "translations": [
+      "wie Sardellensemmel"
+    ],
     "themen": [],
     "berolinismus": false,
     "source": "meyer1904"
   },
   {
     "word": "Zwee, dazu jehören doch zwee",
-    "translations": ["zwei (Berliner Lautung)"],
-    "examples": [{ "example": "Da kannste zwee draus machen.", "explanation": "um etwas als sehr kräftig zu bezeichnen" }, { "example": "Wir zwee beede.", "explanation": "pleonastisch" }],
-    "themen": ["redewendungen-sprueche"],
-    "berolinismus": false,
-    "source": "meyer1904"
-  },
-  {
-    "word": "Zwiebeln",
-    "translations": ["peinigen"],
-    "themen": ["schimpfwoerter-beleidigungen"],
+    "translations": [
+      "zwei (Berliner Lautung)"
+    ],
+    "examples": [
+      {
+        "example": "Da kannste zwee draus machen.",
+        "explanation": "um etwas als sehr kräftig zu bezeichnen"
+      },
+      {
+        "example": "Wir zwee beede.",
+        "explanation": "pleonastisch"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
     "berolinismus": false,
     "source": "meyer1904"
   }

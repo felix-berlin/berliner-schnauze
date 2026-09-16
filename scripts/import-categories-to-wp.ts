@@ -12,6 +12,10 @@
  *   infisical run -- pnpm tsx scripts/import-categories-to-wp.ts             # full import
  *   infisical run -- pnpm tsx scripts/import-categories-to-wp.ts --dry-run   # preview
  *   infisical run -- pnpm tsx scripts/import-categories-to-wp.ts --slug wat  # single word
+ *   infisical run -- pnpm tsx scripts/import-categories-to-wp.ts --file data/lexikon-import/themen-corrections.json
+ *
+ * Fetches posts across all statuses (publish/draft/pending/future/private),
+ * so this also applies corrections to not-yet-published drafts.
  *
  * Requires env vars: WP_REST_API, WP_AUTH_USER, WP_AUTH_PASS
  */
@@ -28,6 +32,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const DRY_RUN = process.argv.includes("--dry-run");
 const SLUG_FILTER = (() => {
   const idx = process.argv.indexOf("--slug");
+  return idx !== -1 ? (process.argv[idx + 1] ?? null) : null;
+})();
+const FILE_ARG = (() => {
+  const idx = process.argv.indexOf("--file");
   return idx !== -1 ? (process.argv[idx + 1] ?? null) : null;
 })();
 
@@ -74,12 +82,12 @@ async function getOrCreateTerm(slug: string, config: WpConfig): Promise<WpTerm> 
   console.log(`  Creating term: "${slug}" → "${name}"`);
 
   if (DRY_RUN) {
-    return { id: DRY_RUN_TERM_ID, slug, name };
+    return { id: DRY_RUN_TERM_ID, name, slug };
   }
 
   const created = await wpFetch<WpTerm>(
     `/${TAXONOMY_REST_BASE}`,
-    { method: "POST", body: JSON.stringify({ name, slug }) },
+    { body: JSON.stringify({ name, slug }), method: "POST" },
     config,
   );
 
@@ -93,25 +101,34 @@ async function fetchAllPostSlugs(config: WpConfig): Promise<Map<string, number>>
   let page = 1;
   let total = 0;
 
-  while (true) {
-    const posts = await wpFetch<WpPost[]>(
-      `/${POST_TYPE_REST_BASE}?per_page=100&page=${page}&_fields=id,slug&status=publish`,
-      {},
-      config,
-    );
+  for (const status of ["publish", "draft", "pending", "future", "private"]) {
+    page = 1;
+    while (true) {
+      let posts: WpPost[];
+      try {
+        posts = await wpFetch<WpPost[]>(
+          `/${POST_TYPE_REST_BASE}?per_page=100&page=${page}&_fields=id,slug&status=${status}`,
+          {},
+          config,
+        );
+      } catch (err) {
+        if (status === "publish") throw err;
+        break;
+      }
 
-    if (posts.length === 0) break;
+      if (posts.length === 0) break;
 
-    for (const post of posts) {
-      slugMap.set(post.slug, post.id);
+      for (const post of posts) {
+        slugMap.set(post.slug, post.id);
+      }
+
+      total += posts.length;
+      process.stdout.write(`\rFetched ${total} WP posts (${status}, page ${page})...`);
+
+      if (posts.length < 100) break;
+      page++;
+      await delay(RATE_MS);
     }
-
-    total += posts.length;
-    process.stdout.write(`\rFetched ${total} WP posts...`);
-
-    if (posts.length < 100) break;
-    page++;
-    await delay(RATE_MS);
   }
 
   process.stdout.write("\n");
@@ -129,8 +146,8 @@ async function assignTermsToPost(
   await wpFetch(
     `/${POST_TYPE_REST_BASE}/${postId}`,
     {
-      method: "POST",
       body: JSON.stringify({ [TAXONOMY_REST_BASE]: termIds }),
+      method: "POST",
     },
     config,
   );
@@ -144,7 +161,7 @@ async function main(): Promise<void> {
     `Mode: ${DRY_RUN ? "DRY RUN" : "LIVE"}${SLUG_FILTER ? ` | slug="${SLUG_FILTER}"` : ""}`,
   );
 
-  const dataPath = join(__dirname, "../data/word-categories.json");
+  const dataPath = FILE_ARG ?? join(__dirname, "../data/word-categories.json");
   let words: WordCategory[] = JSON.parse(readFileSync(dataPath, "utf-8"));
   console.log(`Loaded ${words.length} words from ${dataPath}`);
 
@@ -176,7 +193,7 @@ async function main(): Promise<void> {
   // Step 3: Fetch all WP post IDs (slug → id)
   console.log("\n--- Step 2: Fetching all WP post slugs ---");
   const postSlugMap = await fetchAllPostSlugs(config);
-  console.log(`Found ${postSlugMap.size} published posts`);
+  console.log(`Found ${postSlugMap.size} posts (all statuses)`);
 
   if (postSlugMap.size === 0) {
     throw new Error(
@@ -201,7 +218,11 @@ async function main(): Promise<void> {
       continue;
     }
 
-    const postId = postSlugMap.get(word.slug);
+    // Prefer the numeric post ID when present — draft posts created by
+    // import-words-to-wp.ts never get a slug (WP leaves post_name empty
+    // until first publish), so slug-based lookup silently misses every
+    // draft. See data/lexikon-import/themen-audit.md.
+    const postId = word.berlinerWordId > 0 ? word.berlinerWordId : postSlugMap.get(word.slug);
     if (!postId) {
       console.warn(`  SKIP ${word.slug}: post not found in WP REST (wrong POST_TYPE_REST_BASE?)`);
       skipped++;

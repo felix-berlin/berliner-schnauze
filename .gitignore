@@ -7,6 +7,7 @@ dev-dist/
 # one-off migration script output (see scripts/*.ts)
 /data/*
 !/data/lexikon-import/
+/data/lexikon-import/audit-themen-export.json
 
 # test output
 coverage

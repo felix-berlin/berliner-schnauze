@@ -19,7 +19,9 @@
   {
     "word": "Machen, mach doch man zu",
     "translations": [
-      "kosten", "spielen (vom Schauspieler)", "es lässt sich gut an"
+      "kosten",
+      "spielen (vom Schauspieler)",
+      "es lässt sich gut an"
     ],
     "examples": [
       {
@@ -657,17 +659,6 @@
     ],
     "themen": [
       "essen-trinken"
-    ],
-    "berolinismus": false,
-    "source": "meyer1904"
-  },
-  {
-    "word": "Mausen",
-    "translations": [
-      "stehlen"
-    ],
-    "themen": [
-      "schimpfwoerter-beleidigungen"
     ],
     "berolinismus": false,
     "source": "meyer1904"
