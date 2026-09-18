@@ -19,7 +19,7 @@ export const GET: APIRoute = async () => {
   const availableWordGroups = Array.from(
     new Set(allWords.map(({ node }) => node.wordGroup?.toUpperCase())),
   )
-    .filter(Boolean)
+    .filter((group): group is string => Boolean(group))
     .sort((a, b) => a.localeCompare(b, "de"));
 
   // The manually curated word groups
