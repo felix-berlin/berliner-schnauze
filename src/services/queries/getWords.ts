@@ -29,10 +29,11 @@ const E2E_REQUIRED_SLUGS = new Set([
 // Caps only the generated pages (word + OG routes) in the Playwright CI build.
 // The full word set must stay intact: list/letter filters and the
 // similar-sounding/neighbor sections are derived from all words.
-export const limitPagesForE2e = <T extends { node: { slug?: string | null } }>(edges: T[]): T[] =>
-  E2E_WORD_LIMIT
-    ? edges.filter(({ node }, i) => i < E2E_WORD_LIMIT || E2E_REQUIRED_SLUGS.has(node.slug ?? ""))
-    : edges;
+export const limitPagesForE2e = <T extends { node: { slug?: string | null } }>(edges: T[]): T[] => {
+  const limit = E2E_WORD_LIMIT;
+  if (!limit) return edges;
+  return edges.filter(({ node }, i) => i < limit || E2E_REQUIRED_SLUGS.has(node.slug ?? ""));
+};
 
 const fetchPaginatedWords = async (
   queryDocument: typeof GetAllWordsDocument | typeof GetAllWordsLinksDocument,
