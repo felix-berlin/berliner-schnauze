@@ -268,23 +268,30 @@ export default defineConfig({
       //   launchEditor: "code",
       // },
     }),
-    sitemap({
-      filter: sitemapFilter,
-      serialize: async (item) => {
-        const word = item.url.match(/\/wort\/([^/?#]+)/);
-        if (word) {
-          const date = (await getWordDates()).get(word[1]);
-          if (date) return { ...item, lastmod: date };
-          return item;
-        }
-        const post = item.url.match(/\/magazin\/([^/?#]+)/);
-        if (post) {
-          const date = (await getPostDates()).get(post[1]);
-          if (date) return { ...item, lastmod: date };
-        }
-        return item;
-      },
-    }),
+    // Skipped for the e2e build: nobody reads its sitemap.xml, and
+    // getWordDates()/getPostDates() each do their own full, unbounded
+    // paginated fetch of every word/post — independent of E2E_WORD_LIMIT.
+    ...(isE2eBuild
+      ? []
+      : [
+          sitemap({
+            filter: sitemapFilter,
+            serialize: async (item) => {
+              const word = item.url.match(/\/wort\/([^/?#]+)/);
+              if (word) {
+                const date = (await getWordDates()).get(word[1]);
+                if (date) return { ...item, lastmod: date };
+                return item;
+              }
+              const post = item.url.match(/\/magazin\/([^/?#]+)/);
+              if (post) {
+                const date = (await getPostDates()).get(post[1]);
+                if (date) return { ...item, lastmod: date };
+              }
+              return item;
+            },
+          }),
+        ]),
     matomo({
       enabled: process.env.ENABLE_ANALYTICS === "true",
       host: process.env.MATOMO_HOST,
@@ -326,19 +333,25 @@ export default defineConfig({
             name: "Wort suchen",
             short_name: "Suchen",
             url: "/",
-            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
+            icons: [
+              { src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+            ],
           },
           {
             name: "Berliner oder Nicht spielen",
             short_name: "Spielen",
             url: "/games/berliner-oder-nicht",
-            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
+            icons: [
+              { src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+            ],
           },
           {
             name: "Wort vorschlagen",
             short_name: "Vorschlagen",
             url: "/wort-vorschlagen",
-            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
+            icons: [
+              { src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+            ],
           },
         ],
         icons: [
