@@ -80,9 +80,19 @@ export default defineConfig({
     // `astro dev` alone breaks on a fresh checkout: src/utils/supportedBrowsers.mjs
     // is a gitignored generated stub normally created by the `predev` hook, which
     // only fires for `pnpm run dev` — not when this command spawns `astro dev` directly.
-    command: "pnpm run supportedBrowsers && pnpm exec astro dev",
+    //
+    // In CI, use a static build + preview instead of dev: `astro dev` compiles
+    // each page on demand AND hits the live WordPress API per request, which
+    // was intermittently exceeding Playwright's 30s navigation timeout under
+    // the shared runner's network/CPU variance (net::ERR_ABORTED / timeouts on
+    // /wort/<slug> and the homepage). The static build removes both the
+    // per-page compile cost and the live-network dependency during the test
+    // run itself — content is fetched once at build time.
+    command: process.env.CI
+      ? "pnpm run build && pnpm run preview"
+      : "pnpm run supportedBrowsers && pnpm exec astro dev",
     url: "http://localhost:4321",
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: process.env.CI ? 300_000 : 120_000,
   },
 });
