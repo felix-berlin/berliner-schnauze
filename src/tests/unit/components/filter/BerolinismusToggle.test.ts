@@ -11,8 +11,8 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 vi.mock("@stores/wordList.ts", () => ({
-  $wordSearch: {},
   $toggleBerolinismus: mockToggle,
+  $wordSearch: {},
   setLetterFilter: vi.fn(),
 }));
 

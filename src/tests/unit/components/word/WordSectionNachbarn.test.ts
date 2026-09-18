@@ -19,13 +19,13 @@ describe("WordSectionNachbarn.astro", () => {
   }, 30_000);
 
   it("renders nothing when neighbors are empty", async () => {
-    const result = await render({ neighbors: { before: [], after: [] } });
+    const result = await render({ neighbors: { after: [], before: [] } });
     expect(result).not.toContain("Alphabetische Nachbarn");
   });
 
   it("renders the section when before neighbors are present", async () => {
     const result = await render({
-      neighbors: { before: [makeWordRef("Affe", "affe")], after: [] },
+      neighbors: { after: [], before: [makeWordRef("Affe", "affe")] },
     });
     expect(result).toContain("Alphabetische Nachbarn");
     expect(result).toContain('id="navigation"');
@@ -34,21 +34,21 @@ describe("WordSectionNachbarn.astro", () => {
 
   it("renders the section when after neighbors are present", async () => {
     const result = await render({
-      neighbors: { before: [], after: [makeWordRef("Zille", "zille")] },
+      neighbors: { after: [makeWordRef("Zille", "zille")], before: [] },
     });
     expect(result).toContain("Alphabetische Nachbarn");
   });
 
   it("renders the section number element", async () => {
     const result = await render({
-      neighbors: { before: [makeWordRef("Affe", "affe")], after: [] },
+      neighbors: { after: [], before: [makeWordRef("Affe", "affe")] },
     });
     expect(result).toContain("c-section-card__num");
   });
 
   it("renders aria-labelledby heading-navigation", async () => {
     const result = await render({
-      neighbors: { before: [makeWordRef("Affe", "affe")], after: [] },
+      neighbors: { after: [], before: [makeWordRef("Affe", "affe")] },
     });
     expect(result).toContain("heading-navigation");
   });

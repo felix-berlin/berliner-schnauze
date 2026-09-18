@@ -11,22 +11,22 @@ vi.mock("@layouts/Layout.astro", async () => {
 vi.mock("astro:content", () => ({
   getCollection: vi.fn(async () => [
     {
-      id: "v3.36.0",
       data: {
-        version: "3.36.0",
+        description: "Neueste Version.",
         releaseDate: "2026-07-01",
         title: "Was ist neu in Version 3.36.0?",
-        description: "Neueste Version.",
+        version: "3.36.0",
       },
+      id: "v3.36.0",
     },
     {
-      id: "v3.35.0",
       data: {
-        version: "3.35.0",
+        description: "Berliner oder Nicht-Spiel und Redesign.",
         releaseDate: "2026-06-27",
         title: "Was ist neu in Version 3.35.0?",
-        description: "Berliner oder Nicht-Spiel und Redesign.",
+        version: "3.35.0",
       },
+      id: "v3.35.0",
     },
   ]),
   render: vi.fn(),

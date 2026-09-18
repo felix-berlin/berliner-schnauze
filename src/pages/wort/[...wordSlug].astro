@@ -152,11 +152,16 @@ const ogImage = word.seo?.opengraphImage?.sourceUrl
 
 const exampleComments = (wordProps?.examples ?? [])
   .filter((e): e is NonNullable<typeof e> => Boolean(e?.example))
-  .map((e) => ({
-    '@type': 'Comment',
-    text: e.example as string,
-    ...(e.exampleExplanation && { description: e.exampleExplanation }),
-  }));
+  .map((e) => {
+    const comment: { '@type': string; text: string; description?: string } = {
+      '@type': 'Comment',
+      text: e.example as string,
+    };
+    if (e.exampleExplanation) {
+      comment.description = e.exampleExplanation;
+    }
+    return comment;
+  });
 
 const schemaJson = () => {
   const alternateNames = (wordProps?.alternativeWords ?? [])

@@ -32,8 +32,8 @@ vi.mock("@utils/analytics", () => ({
 }));
 
 vi.mock("@utils/helpers.ts", () => ({
-  routeToWord: vi.fn((slug: string) => `/wort/${slug}`),
   randomElement: vi.fn(),
+  routeToWord: vi.fn((slug: string) => `/wort/${slug}`),
 }));
 
 vi.mock("@components/DropdownPopover.vue", () => ({

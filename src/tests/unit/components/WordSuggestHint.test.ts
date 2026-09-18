@@ -1,6 +1,6 @@
 import WordSuggestHint from "@components/WordSuggestHint.vue";
 import * as modalStore from "@stores/modal.ts";
-import { mount, flushPromises } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 
 // Mock the stores
@@ -193,13 +193,8 @@ describe("WordSuggestHint.vue", () => {
 
       // Invoke the async loader directly — this is what Vue calls internally
       // when it first renders the component. __asyncLoader holds the factory.
-      const loader = asyncComponent.__asyncLoader as (() => Promise<unknown>) | undefined;
-      if (loader) {
-        await expect(loader()).resolves.toBeDefined();
-      } else {
-        // Fallback: call the raw factory extracted from the async component definition
-        await flushPromises();
-      }
+      const loader = asyncComponent.__asyncLoader as () => Promise<unknown>;
+      await expect(loader()).resolves.toBeDefined();
     });
   });
 

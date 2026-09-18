@@ -342,7 +342,7 @@ export const wordCuriosities = (
   const hasAllVowels = ALL_GERMAN_VOWELS.every((v) => lower.includes(v));
 
   const UMLAUTS = new Set(["ä", "ö", "ü", "Ä", "Ö", "Ü"]);
-  const hasUmlaut = [...word].some((c) => UMLAUTS.has(c));
+  const hasUmlaut = Array.from(word).some((c) => UMLAUTS.has(c));
 
   const letterFreq = new Map<string, number>();
   for (const c of letters) {

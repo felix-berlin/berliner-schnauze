@@ -13,7 +13,7 @@ vi.mock("@vueuse/core", async (importOriginal) => {
     ...actual,
     useResizeObserver: vi.fn((_targets: unknown, fn: (...args: unknown[]) => void) => {
       resizeCb.fn = fn;
-      return { stop: vi.fn(), isSupported: { value: true } };
+      return { isSupported: { value: true }, stop: vi.fn() };
     }),
   };
 });
@@ -34,12 +34,12 @@ afterEach(() => {
 const openToggle = (wrapper: ReturnType<typeof mount>) =>
   wrapper
     .find(".c-dropdown__panel")
-    .element.dispatchEvent(new ToggleEvent("toggle", { newState: "open", bubbles: false }));
+    .element.dispatchEvent(new ToggleEvent("toggle", { bubbles: false, newState: "open" }));
 
 const closeToggle = (wrapper: ReturnType<typeof mount>) =>
   wrapper
     .find(".c-dropdown__panel")
-    .element.dispatchEvent(new ToggleEvent("toggle", { newState: "closed", bubbles: false }));
+    .element.dispatchEvent(new ToggleEvent("toggle", { bubbles: false, newState: "closed" }));
 
 // Helper: mount with a default scoped slot that renders a button receiving triggerProps
 const mountWithTrigger = (options: Parameters<typeof mount>[1] = {}) =>
@@ -48,7 +48,7 @@ const mountWithTrigger = (options: Parameters<typeof mount>[1] = {}) =>
     slots: {
       default: (slotProps: { triggerProps: Record<string, unknown> }) =>
         h("button", { ...slotProps.triggerProps, "data-testid": "trigger-btn" }, "Open"),
-      ...((options as any).slots ?? {}),
+      ...(options as any).slots,
     },
   });
 
@@ -432,25 +432,25 @@ describe("DropdownPopover.vue", () => {
     const triggerSpan = wrapper.find(".c-dropdown__trigger").element;
     vi.spyOn(panelEl, "getBoundingClientRect").mockReturnValue({
       bottom: 400,
-      top: 200,
+      height: 200,
       left: 0,
       right: 200,
+      toJSON: () => ({}),
+      top: 200,
       width: 200,
-      height: 200,
       x: 0,
       y: 200,
-      toJSON: () => ({}),
     } as DOMRect);
     vi.spyOn(triggerSpan, "getBoundingClientRect").mockReturnValue({
       bottom: 100,
-      top: 50,
+      height: 50,
       left: 50,
       right: 150,
+      toJSON: () => ({}),
+      top: 50,
       width: 100,
-      height: 50,
       x: 50,
       y: 50,
-      toJSON: () => ({}),
     } as DOMRect);
     openToggle(wrapper);
     await nextTick();

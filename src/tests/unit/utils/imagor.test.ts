@@ -10,10 +10,10 @@ const { buildImagorPath, signImagorPath } = await import("@utils/imagor");
 describe("buildImagorPath", () => {
   it("builds a fit-in path with format, quality, and an encoded upstream URL", () => {
     const path = buildImagorPath("https://cms.berliner-schnauze.wtf/wp-content/uploads/foo.png", {
-      width: 400,
-      height: 200,
       format: "webp",
+      height: 200,
       quality: 80,
+      width: 400,
     });
 
     expect(path).toBe(
@@ -23,8 +23,8 @@ describe("buildImagorPath", () => {
 
   it("defaults quality to 80 and format to webp when omitted", () => {
     const path = buildImagorPath("https://upload.wikimedia.org/x.jpg", {
-      width: 100,
       height: 50,
+      width: 100,
     });
 
     expect(path).toBe(
@@ -34,11 +34,11 @@ describe("buildImagorPath", () => {
 
   it("appends custom Imagor filters when provided", () => {
     const path = buildImagorPath("https://cms.berliner-schnauze.wtf/wp-content/uploads/foo.png", {
-      width: 400,
-      height: 200,
-      format: "avif",
-      quality: 70,
       filters: ["sharpen(2)", "contrast(1.2)"],
+      format: "avif",
+      height: 200,
+      quality: 70,
+      width: 400,
     });
 
     expect(path).toBe(
@@ -48,13 +48,13 @@ describe("buildImagorPath", () => {
 
   it("supports alternate endpoint modes and layout metadata when configured", () => {
     const path = buildImagorPath("https://cms.berliner-schnauze.wtf/wp-content/uploads/foo.png", {
-      width: 400,
+      align: { horizontal: "left", vertical: "top" },
+      filters: ["grayscale()"],
       height: 200,
       mode: "stretch",
+      padding: { bottom: 40, left: 10, right: 30, top: 20 },
       smart: true,
-      align: { horizontal: "left", vertical: "top" },
-      padding: { left: 10, top: 20, right: 30, bottom: 40 },
-      filters: ["grayscale()"],
+      width: 400,
     });
 
     expect(path).toBe(

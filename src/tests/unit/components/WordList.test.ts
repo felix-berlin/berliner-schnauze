@@ -13,10 +13,10 @@ const { VirtualizerStub, keyStrokeHandlers, startHideActiveTimerFn } = vi.hoiste
   const startFn = vi.fn();
   return {
     VirtualizerStub: {
+      methods: { scrollToIndex: vi.fn() },
       props: ["data", "itemSize", "as", "item", "style"],
       template:
         '<ul class="c-word-list"><template v-for="(d, i) in (data || [])" :key="i"><slot :item="d" :index="i" /></template></ul>',
-      methods: { scrollToIndex: vi.fn() },
     },
     keyStrokeHandlers: handlers,
     startHideActiveTimerFn: startFn,
@@ -24,8 +24,8 @@ const { VirtualizerStub, keyStrokeHandlers, startHideActiveTimerFn } = vi.hoiste
 });
 
 vi.mock("virtua/vue", () => ({
-  WindowVirtualizer: VirtualizerStub,
   VList: VirtualizerStub,
+  WindowVirtualizer: VirtualizerStub,
 }));
 
 vi.mock("@components/word/SingleWord.vue", () => ({
@@ -53,7 +53,7 @@ vi.mock("@vueuse/core", async (importOriginal) => {
     onKeyStroke: vi.fn((key: string, handler: (e: KeyboardEvent) => void) => {
       keyStrokeHandlers.set(key, handler);
     }),
-    useTimeoutFn: vi.fn((fn: () => void) => ({ start: startHideActiveTimerFn })),
+    useTimeoutFn: vi.fn(() => ({ start: startHideActiveTimerFn })),
   };
 });
 
@@ -82,9 +82,9 @@ const mockStores = (
 };
 
 const makeHit = (berlinerisch: string, slug = berlinerisch.toLowerCase()) => ({
+  document: { id: slug, slug, wordProperties: { berlinerisch, translations: ["test"] } },
   id: slug,
   score: 1,
-  document: { id: slug, slug, wordProperties: { berlinerisch, translations: ["test"] } },
 });
 
 function fireKey(key: string, opts: KeyboardEventInit = {}) {
@@ -253,9 +253,12 @@ describe("WordList.vue", () => {
   it("watch callback clears resultRefs when mutableOramaSearch changes (covers line 81)", async () => {
     const oramaRef = ref({ state: "ready" as const, value: { hits: [makeHit("Eier")] } });
     mockStores(oramaRef);
-    mount(WordList);
+    const wrapper = mount(WordList);
     oramaRef.value = { state: "ready", value: { hits: [makeHit("Kiez")] } };
     await nextTick();
+
+    expect(wrapper.findAll(".mock-single-word")).toHaveLength(1);
+    expect(wrapper.find(".mock-single-word").text()).toBe("Kiez");
   });
 
   it("returns empty array when hits is undefined (covers line 57 ?? [] branch)", () => {

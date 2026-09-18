@@ -146,13 +146,13 @@ describe("ToastPositionGroup.vue", () => {
     });
     const el = document.createElement("div");
     vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
-      top: 100,
-      left: 50,
-      width: 200,
       bottom: 0,
-      right: 0,
       height: 0,
+      left: 50,
+      right: 0,
       toJSON: () => ({}),
+      top: 100,
+      width: 200,
     } as DOMRect);
     const setupState = (wrapper.getCurrentComponent() as any).setupState;
     setupState.onBeforeLeave(el);
@@ -202,18 +202,18 @@ describe("ToastPositionGroup.vue", () => {
 
   it("onBeforeLeave sets inline styles on the leaving element", async () => {
     const wrapper = mount(ToastPositionGroup, {
-      props: { position: "top-right", toasts: [toast("a")] },
       attachTo: document.body,
+      props: { position: "top-right", toasts: [toast("a")] },
     });
     const el = document.createElement("div");
     vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
-      top: 100,
-      left: 50,
-      width: 200,
       bottom: 0,
-      right: 0,
       height: 0,
+      left: 50,
+      right: 0,
       toJSON: () => ({}),
+      top: 100,
+      width: 200,
     } as DOMRect);
     // Access unexposed onBeforeLeave from setup state
     const setupState = (wrapper.getCurrentComponent() as any).setupState;

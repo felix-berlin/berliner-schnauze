@@ -11,13 +11,13 @@ const oramaResultsRef = ref({ state: "loading" });
 const localSearchRef = ref("");
 
 const mockStores = {
+  $oramaSearchResults: {},
   $searchQuery: {
+    get: vi.fn(() => localSearchRef.value),
     set: vi.fn((v: string) => {
       localSearchRef.value = v;
     }),
-    get: vi.fn(() => localSearchRef.value),
   },
-  $oramaSearchResults: {},
   searchLength: {},
 };
 
@@ -30,8 +30,8 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 vi.mock("@stores/wordList.ts", () => ({
-  $searchQuery: mockStores.$searchQuery,
   $oramaSearchResults: mockStores.$oramaSearchResults,
+  $searchQuery: mockStores.$searchQuery,
   searchLength: mockStores.searchLength,
 }));
 
@@ -164,8 +164,8 @@ describe("SearchWords.vue", () => {
   it("autoFocus prop focuses the search input on mount", async () => {
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords, {
-      props: { autoFocus: true },
       attachTo: document.body,
+      props: { autoFocus: true },
     });
     await nextTick();
     expect(document.activeElement).toBe(wrapper.find("input").element);

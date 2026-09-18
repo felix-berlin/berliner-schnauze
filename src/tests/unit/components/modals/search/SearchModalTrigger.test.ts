@@ -8,17 +8,17 @@ const { mockWhenever, mockOnEventFired } = vi.hoisted(() => {
   let capturedWheneverCb: (() => void) | null = null;
   let capturedOnEventFired: ((e: KeyboardEvent) => void) | null = null;
   return {
-    mockWhenever: {
-      fn: vi.fn((_: unknown, cb: () => void) => {
-        capturedWheneverCb = cb;
-      }),
-      call: () => capturedWheneverCb?.(),
-    },
     mockOnEventFired: {
+      fire: (e: KeyboardEvent) => capturedOnEventFired?.(e),
       fn: vi.fn((opts: { onEventFired: (e: KeyboardEvent) => void }) => {
         capturedOnEventFired = opts.onEventFired;
       }),
-      fire: (e: KeyboardEvent) => capturedOnEventFired?.(e),
+    },
+    mockWhenever: {
+      call: () => capturedWheneverCb?.(),
+      fn: vi.fn((_: unknown, cb: () => void) => {
+        capturedWheneverCb = cb;
+      }),
     },
   };
 });
@@ -132,7 +132,7 @@ describe("SearchModalTrigger.vue", () => {
 
   it("onEventFired calls preventDefault for Shift+/ keydown", () => {
     mount(SearchModalTrigger);
-    const event = new KeyboardEvent("keydown", { shiftKey: true, key: "/" });
+    const event = new KeyboardEvent("keydown", { key: "/", shiftKey: true });
     const preventDefaultSpy = vi.spyOn(event, "preventDefault");
     mockOnEventFired.fire(event);
     expect(preventDefaultSpy).toHaveBeenCalled();
@@ -156,7 +156,10 @@ describe("SearchModalTrigger.vue", () => {
     // Mount the async component so Vue invokes the factory arrow at line 28
     const { defineComponent, h } = await import("vue");
     const Host = defineComponent({ render: () => h(asyncComponent) });
-    mount(Host);
+
+    expect(() => {
+      mount(Host);
+    }).not.toThrow();
     await flushPromises();
   });
 });

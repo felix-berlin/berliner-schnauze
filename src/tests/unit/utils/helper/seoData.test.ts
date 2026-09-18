@@ -30,8 +30,8 @@ describe("seoData", () => {
 
   it("spreads existing seo fields from data", () => {
     const result = seoData({
-      title: "Test",
       seo: { description: "Eine Beschreibung" },
+      title: "Test",
     });
     expect((result.seo as Record<string, unknown>).description).toBe("Eine Beschreibung");
   });

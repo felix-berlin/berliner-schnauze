@@ -5,9 +5,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { markRaw, ref } from "vue";
 
 const { mockResetModal, mockSetElement, mockPreventScroll, mockSetIsOpen } = vi.hoisted(() => ({
+  mockPreventScroll: vi.fn(),
   mockResetModal: vi.fn(),
   mockSetElement: vi.fn(),
-  mockPreventScroll: vi.fn(),
   mockSetIsOpen: vi.fn(),
 }));
 
@@ -182,8 +182,8 @@ describe("Modal.vue", () => {
   it("renders Component when viewIsComponent is true (covers line 22 true branch)", async () => {
     mockView.value = {
       component: markRaw({ render: () => null }),
-      props: {},
       events: { click: vi.fn() },
+      props: {},
     };
     mockViewIsComponent.value = true;
     setupUseStore();

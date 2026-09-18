@@ -15,7 +15,7 @@ const components = {
 };
 
 function mountAccordion(template: string) {
-  return mount({ template, components });
+  return mount({ components, template });
 }
 
 describe("BaseAccordion", () => {
@@ -232,23 +232,6 @@ describe("AccordionTrigger", () => {
   it("throws when mounted outside AccordionItem (covers line 30 throw branch)", () => {
     expect(() => mount(AccordionTrigger)).toThrow("AccordionTrigger must be inside AccordionItem");
   });
-
-  function mountTrigger(open = false) {
-    return mountAccordion(`
-      <BaseAccordion type="single" :default-value="'item'" v-if="${open}">
-        <AccordionItem value="item">
-          <AccordionTrigger>Label</AccordionTrigger>
-          <AccordionContent>Content</AccordionContent>
-        </AccordionItem>
-      </BaseAccordion>
-      <BaseAccordion type="single" v-else>
-        <AccordionItem value="item">
-          <AccordionTrigger>Label</AccordionTrigger>
-          <AccordionContent>Content</AccordionContent>
-        </AccordionItem>
-      </BaseAccordion>
-    `);
-  }
 
   it("renders a button", () => {
     const wrapper = mountAccordion(`

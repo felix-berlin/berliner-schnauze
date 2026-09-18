@@ -4,13 +4,13 @@ import { describe, expect, it } from "vitest";
 import { markRaw } from "vue";
 
 const defaultProps = {
-  swInfo: { status: "active" as const, scriptURL: "/sw.js", scope: "/" },
-  swStatusLabel: "Aktiv",
-  swStatusIcon: null,
-  swScriptURL: null,
   isPwaInstalled: false,
   storageQuota: null,
   storageQuotaPercent: 0,
+  swInfo: { scope: "/", scriptURL: "/sw.js", status: "active" as const },
+  swScriptURL: null,
+  swStatusIcon: null,
+  swStatusLabel: "Aktiv",
 };
 
 describe("PwaCacheInfoGrid", () => {
@@ -54,7 +54,7 @@ describe("PwaCacheInfoGrid", () => {
     const wrapper = mount(PwaCacheInfoGrid, {
       props: {
         ...defaultProps,
-        storageQuota: { usedBytes: 500, quotaBytes: 1000 },
+        storageQuota: { quotaBytes: 1000, usedBytes: 500 },
         storageQuotaPercent: 50,
       },
     });

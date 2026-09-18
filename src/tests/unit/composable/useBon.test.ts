@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@nanostores/persistent", () => ({
-  persistentMap: vi.fn(() => ({
-    get: vi.fn(() => ({
-      highScore: 0,
-      bestStreak: 0,
-      totalGamesPlayed: 0,
-      totalCorrect: 0,
-      totalAnswered: 0,
-    })),
-    setKey: vi.fn(),
-  })),
   persistentAtom: vi.fn(() => ({
     get: vi.fn(() => null),
     set: vi.fn(),
+  })),
+  persistentMap: vi.fn(() => ({
+    get: vi.fn(() => ({
+      bestStreak: 0,
+      highScore: 0,
+      totalAnswered: 0,
+      totalCorrect: 0,
+      totalGamesPlayed: 0,
+    })),
+    setKey: vi.fn(),
   })),
 }));
 
@@ -44,16 +44,16 @@ import type { FakeWord } from "@/data/fakeWords";
 
 const makeRealWords = (n: number) =>
   Array.from({ length: n }, (_, i) => ({
-    word: `Wort${i}`,
     isReal: true as const,
     slug: `wort-${i}`,
     translation: `Translation ${i}`,
+    word: `Wort${i}`,
   }));
 
 const makeFakeWords = (n: number): FakeWord[] =>
   Array.from({ length: n }, (_, i) => ({
-    word: `Fake${i}`,
     category: "invented" as const,
+    word: `Fake${i}`,
   }));
 
 // ─── computeMultiplier ────────────────────────────────────────────────────────
@@ -260,10 +260,10 @@ describe("answer — correct path", () => {
       nextCard();
       attempts++;
     }
-    if (!currentCard.value?.isReal) {
-      answer(false); // correctly identify as fake
-      expect(createToastNotify).not.toHaveBeenCalled();
-    }
+    expect(currentCard.value?.isReal).toBe(false);
+
+    answer(false); // correctly identify as fake
+    expect(createToastNotify).not.toHaveBeenCalled();
   });
 
   it("saves snapshot to storage after correct answer", () => {
@@ -463,20 +463,20 @@ describe("analytics — startGame / resumeGame", () => {
     init(makeRealWords(30), makeFakeWords(20));
 
     const snapshot: SavedBonSnapshot = {
-      phase: "playing",
-      lives: 2,
-      score: 50,
-      streak: 3,
       bestStreak: 5,
-      multiplier: 2,
-      totalAnswered: 8,
       correctAnswers: 7,
-      currentCard: { word: "Stulle", isReal: true },
+      currentCard: { isReal: true, word: "Stulle" },
       deck: [],
+      fakeQueue: [],
       lastAnswerCorrect: true,
       lastCard: null,
+      lives: 2,
+      multiplier: 2,
+      phase: "playing",
       realQueue: [],
-      fakeQueue: [],
+      score: 50,
+      streak: 3,
+      totalAnswered: 8,
     };
     vi.mocked($savedBon.get).mockReturnValue(snapshot);
 
@@ -596,20 +596,20 @@ describe("session persistence", () => {
     init(makeRealWords(30), makeFakeWords(20));
 
     const snapshot: SavedBonSnapshot = {
-      phase: "playing",
-      lives: 2,
-      score: 50,
-      streak: 3,
       bestStreak: 5,
-      multiplier: 2,
-      totalAnswered: 8,
       correctAnswers: 7,
-      currentCard: { word: "Stulle", isReal: true },
+      currentCard: { isReal: true, word: "Stulle" },
       deck: [],
+      fakeQueue: [],
       lastAnswerCorrect: true,
       lastCard: null,
+      lives: 2,
+      multiplier: 2,
+      phase: "playing",
       realQueue: [],
-      fakeQueue: [],
+      score: 50,
+      streak: 3,
+      totalAnswered: 8,
     };
     vi.mocked($savedBon.get).mockReturnValue(snapshot);
 
@@ -626,20 +626,20 @@ describe("session persistence", () => {
     init(realWords, makeFakeWords(20));
 
     const snapshot: SavedBonSnapshot = {
-      phase: "playing",
-      lives: 3,
-      score: 0,
-      streak: 0,
       bestStreak: 0,
-      multiplier: 1,
-      totalAnswered: 0,
       correctAnswers: 0,
-      currentCard: { word: "Stulle", isReal: true },
+      currentCard: { isReal: true, word: "Stulle" },
       deck: [],
+      fakeQueue: [{ isReal: false, word: "FakeQueue" }],
       lastAnswerCorrect: null,
       lastCard: null,
-      realQueue: [{ word: "QueueWord", isReal: true }],
-      fakeQueue: [{ word: "FakeQueue", isReal: false }],
+      lives: 3,
+      multiplier: 1,
+      phase: "playing",
+      realQueue: [{ isReal: true, word: "QueueWord" }],
+      score: 0,
+      streak: 0,
+      totalAnswered: 0,
     };
     vi.mocked($savedBon.get).mockReturnValue(snapshot);
     resumeGame();
@@ -668,9 +668,8 @@ describe("session persistence", () => {
     startGame();
     vi.mocked($savedBon.set).mockClear();
     answer(!currentCard.value!.isReal);
-    if (lives.value > 0) {
-      expect($savedBon.set).toHaveBeenCalledWith(expect.objectContaining({ phase: "playing" }));
-    }
+    expect(lives.value).toBeGreaterThan(0);
+    expect($savedBon.set).toHaveBeenCalledWith(expect.objectContaining({ phase: "playing" }));
   });
 
   it("game over clears saved game", () => {

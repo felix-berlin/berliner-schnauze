@@ -16,8 +16,8 @@ describe("TurnStile.vue", () => {
     const wrapperId = "testWrapperId";
     const wrapper = mount(TurnStile, {
       props: {
-        wrapperId,
         siteKey: "testSiteKey",
+        wrapperId,
       },
     });
     expect(wrapper.get(`div#${wrapperId}`).exists()).toBe(true);

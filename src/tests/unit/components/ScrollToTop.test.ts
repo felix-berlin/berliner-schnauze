@@ -15,8 +15,8 @@ describe("ScrollToTop.vue", () => {
       // Store the callback so we can call it later
       this.callback = callback;
       return {
-        observe: observeMock,
         disconnect: disconnectMock,
+        observe: observeMock,
         takeRecords: vi.fn(),
         unobserve: vi.fn(),
       };
@@ -36,7 +36,7 @@ describe("ScrollToTop.vue", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     const callback = intersectionObserverMock.mock.calls[0][0];
-    return { wrapper, callback };
+    return { callback, wrapper };
   };
 
   it("should not show the button initially", () => {
@@ -62,7 +62,7 @@ describe("ScrollToTop.vue", () => {
   });
 
   it("tooltip stays disabled when tooltip is non-empty but hideTooltip is true (covers line 7 || true branch)", async () => {
-    const wrapper = mount(ScrollToTop, { props: { tooltip: "Nach oben", hideTooltip: true } });
+    const wrapper = mount(ScrollToTop, { props: { hideTooltip: true, tooltip: "Nach oben" } });
     await wrapper.vm.$nextTick();
     // tooltip.length truthy → false, then false || true = true (disabled)
     expect(wrapper.find("button").exists()).toBe(true);
@@ -79,8 +79,8 @@ describe("ScrollToTop.vue", () => {
 
     await wrapper.find("button").trigger("click");
     expect(window.scrollTo).toHaveBeenCalledWith({
-      top: 0,
       behavior: "smooth",
+      top: 0,
     });
   });
 });

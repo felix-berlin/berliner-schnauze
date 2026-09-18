@@ -1,6 +1,5 @@
 import LetterFilter from "@components/filter/LetterFilter.vue";
-import { useStore } from "@nanostores/vue";
-import { $wordSearch, setLetterFilter } from "@stores/wordList.ts";
+import { setLetterFilter } from "@stores/wordList.ts";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 

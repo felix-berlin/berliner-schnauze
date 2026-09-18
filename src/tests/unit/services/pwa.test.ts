@@ -32,9 +32,9 @@ describe("pwa service — post-update success toast", () => {
     expect(createToastNotify).toHaveBeenCalledWith(
       expect.objectContaining({
         message: `App erfolgreich auf Version ${version} aktualisiert.`,
+        showClose: true,
         status: "success",
         timeout: null,
-        showClose: true,
       }),
     );
     expect(sessionStorage.getItem(PWA_UPDATED_KEY)).toBeNull();
@@ -86,8 +86,12 @@ async function getRegisterSWCallbacks() {
 // ── onNeedReload ──────────────────────────────────────────────────────────────
 
 const mockReload = vi.fn();
+// jsdom's Location.prototype.reload is non-configurable, so neither redefining
+// it directly nor Object.create(window.location) works — replacing the whole
+// object with a plain literal is the only way to stub reload here.
 Object.defineProperty(window, "location", {
   configurable: true,
+  // oxlint-disable-next-line typescript/no-misused-spread
   value: { ...window.location, reload: mockReload },
 });
 
@@ -109,9 +113,9 @@ describe("pwa service — onNeedReload", () => {
 
     expect(createToastNotify).toHaveBeenCalledWith(
       expect.objectContaining({
+        actionLabel: "Jetzt aktualisieren",
         message: "Eine neue Version ist verfügbar.",
         status: "info",
-        actionLabel: "Jetzt aktualisieren",
       }),
     );
     expect(trackEvent).toHaveBeenCalledWith("App", "Update toast shown (active tab)", "PWA");

@@ -8,14 +8,14 @@ describe("installApp store", () => {
   beforeEach(() => {
     vi.resetModules();
     Object.defineProperty(window, "matchMedia", {
+      configurable: true,
       value: vi.fn().mockReturnValue({ matches: false }),
       writable: true,
-      configurable: true,
     });
     Object.defineProperty(window.navigator, "standalone", {
+      configurable: true,
       value: undefined,
       writable: true,
-      configurable: true,
     });
   });
 
@@ -31,9 +31,9 @@ describe("installApp store", () => {
 
     it("returns true when matchMedia returns true (standalone display mode)", async () => {
       Object.defineProperty(window, "matchMedia", {
+        configurable: true,
         value: vi.fn().mockReturnValue({ matches: true }),
         writable: true,
-        configurable: true,
       });
       const { isPwaInstalled } = await import("@stores/installApp.ts");
       expect(isPwaInstalled()).toBe(true);
@@ -41,14 +41,14 @@ describe("installApp store", () => {
 
     it("returns true when navigator.standalone is true", async () => {
       Object.defineProperty(window, "matchMedia", {
+        configurable: true,
         value: vi.fn().mockReturnValue({ matches: false }),
         writable: true,
-        configurable: true,
       });
       Object.defineProperty(window.navigator, "standalone", {
+        configurable: true,
         value: true,
         writable: true,
-        configurable: true,
       });
       const { isPwaInstalled } = await import("@stores/installApp.ts");
       expect(isPwaInstalled()).toBe(true);
@@ -123,9 +123,9 @@ describe("installApp store", () => {
   describe("onMount handler", () => {
     it("calls trackEvent when isPwaInstalled is true on first subscribe", async () => {
       Object.defineProperty(window, "matchMedia", {
+        configurable: true,
         value: vi.fn().mockReturnValue({ matches: true }),
         writable: true,
-        configurable: true,
       });
       const { $installPrompt } = await import("@stores/installApp.ts");
       const { trackEvent } = await import("@utils/analytics");

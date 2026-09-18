@@ -41,10 +41,10 @@ describe("ArticleBlocks.astro", () => {
     const result = await render({
       blocks: [
         {
+          attributes: { value: "<p>Icke, icke, icke!</p>" },
           name: "core/quote",
           order: 0,
           saveContent: "<blockquote><p>Icke, icke, icke!</p></blockquote>",
-          attributes: { value: "<p>Icke, icke, icke!</p>" },
         },
       ],
     });
@@ -54,7 +54,7 @@ describe("ArticleBlocks.astro", () => {
 
   it("renders nothing for a core/image block without a url", async () => {
     const result = await render({
-      blocks: [{ name: "core/image", order: 0, saveContent: "", attributes: {} }],
+      blocks: [{ attributes: {}, name: "core/image", order: 0, saveContent: "" }],
     });
     expect(result).not.toContain("c-magazin-article__image");
   });
@@ -63,15 +63,15 @@ describe("ArticleBlocks.astro", () => {
     const result = await render({
       blocks: [
         {
+          attributes: {
+            alt: "Ein Berliner Bär",
+            height: "300",
+            url: "https://cms.berliner-schnauze.wtf/wp-content/uploads/baer.jpg",
+            width: "600",
+          },
           name: "core/image",
           order: 0,
           saveContent: "",
-          attributes: {
-            url: "https://cms.berliner-schnauze.wtf/wp-content/uploads/baer.jpg",
-            width: "600",
-            height: "300",
-            alt: "Ein Berliner Bär",
-          },
         },
       ],
     });
@@ -83,10 +83,10 @@ describe("ArticleBlocks.astro", () => {
     const result = await render({
       blocks: [
         {
+          attributes: { url: "https://cms.berliner-schnauze.wtf/wp-content/uploads/baer.jpg" },
           name: "core/image",
           order: 0,
           saveContent: "",
-          attributes: { url: "https://cms.berliner-schnauze.wtf/wp-content/uploads/baer.jpg" },
         },
       ],
     });

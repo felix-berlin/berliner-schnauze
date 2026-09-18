@@ -1,10 +1,8 @@
+import { atom, map } from "nanostores";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@nanostores/persistent", () => ({
-  persistentMap: vi.fn((key: string, initial: unknown) => {
-    const { map } = require("nanostores");
-    return map(initial);
-  }),
+  persistentMap: vi.fn((key: string, initial: unknown) => map(initial)),
 }));
 
 vi.mock("@utils/analytics", () => ({
@@ -22,7 +20,6 @@ const { capturedCbRef } = vi.hoisted(() => ({
 vi.mock("@nanostores/async", () => ({
   computedAsync: vi.fn((stores: unknown, callback: (...args: unknown[]) => Promise<unknown>) => {
     capturedCbRef.fn = callback;
-    const { atom } = require("nanostores");
     return atom(null);
   }),
 }));
@@ -40,8 +37,8 @@ vi.mock("@orama/stemmers/german", () => ({
 
 globalThis.fetch = vi.fn(() =>
   Promise.resolve({
+    json: () => Promise.resolve({ availableWordGroups: [], rangeFilterMinMax: {}, wordTypes: [] }),
     ok: true,
-    json: () => Promise.resolve({ availableWordGroups: [], wordTypes: [], rangeFilterMinMax: {} }),
   }),
 ) as unknown as typeof fetch;
 
@@ -437,7 +434,7 @@ describe("wordList store", () => {
 
     it("returns failed when oramaSearchResults failed", async () => {
       const { $oramaSearchResults, $searchState } = await import("@stores/wordList.ts");
-      ($oramaSearchResults as any).set({ state: "failed", error: new Error("boom") });
+      ($oramaSearchResults as any).set({ error: new Error("boom"), state: "failed" });
       expect($searchState.get()).toBe("failed");
     });
   });
@@ -457,9 +454,9 @@ describe("wordList store", () => {
       const { create, search } = await import("@orama/orama");
       vi.mocked(create).mockResolvedValueOnce({ _orama: true } as unknown as never);
       vi.mocked(search).mockResolvedValueOnce({
-        hits: [],
         count: 0,
-        elapsed: { raw: 0, formatted: "0" },
+        elapsed: { formatted: "0", raw: 0 },
+        hits: [],
       } as unknown as never);
       const { $wordSearch } = await import("@stores/wordList.ts");
       expect(capturedCbRef.fn).toBeDefined();
@@ -469,7 +466,7 @@ describe("wordList store", () => {
     });
 
     it("fetches the search index only once for concurrent computations (single-flight)", async () => {
-      const fetchSpy = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve([]) }));
+      const fetchSpy = vi.fn(() => Promise.resolve({ json: () => Promise.resolve([]), ok: true }));
       globalThis.fetch = fetchSpy as unknown as typeof fetch;
       const { $wordSearch } = await import("@stores/wordList.ts");
       await Promise.all([
@@ -491,7 +488,7 @@ describe("wordList store", () => {
 
       // Failure clears the memoized init promise → the next computation retries.
       const retryFetch = vi.fn(() =>
-        Promise.resolve({ ok: true, json: () => Promise.resolve([]) }),
+        Promise.resolve({ json: () => Promise.resolve([]), ok: true }),
       );
       globalThis.fetch = retryFetch as unknown as typeof fetch;
       const result = await capturedCbRef.fn!($wordSearch.get());
@@ -501,9 +498,9 @@ describe("wordList store", () => {
       // restore fetch mock
       globalThis.fetch = vi.fn(() =>
         Promise.resolve({
-          ok: true,
           json: () =>
-            Promise.resolve({ availableWordGroups: [], wordTypes: [], rangeFilterMinMax: {} }),
+            Promise.resolve({ availableWordGroups: [], rangeFilterMinMax: {}, wordTypes: [] }),
+          ok: true,
         }),
       ) as unknown as typeof fetch;
     });

@@ -39,18 +39,22 @@ const imageList = images?.nodes as Array<ImageNode>;
  */
 const lightboxImageList = await Promise.all(
   imageList.map(async (image) => {
+    const results = await Promise.all(
+      formats.map((format) =>
+        getImage({
+          format: format,
+          height: image.mediaDetails?.height || undefined,
+          sizes: `${lightboxSizes}, ${image.mediaDetails?.width}px`,
+          src: image.sourceUrl!,
+          width: image.mediaDetails?.width || undefined,
+          widths: lightboxWidths || undefined,
+        }),
+      ),
+    );
     const images: Record<string, GetImageResult> = {};
-
-    for (const format of formats) {
-      images[format] = await getImage({
-        format: format,
-        height: image.mediaDetails?.height || undefined,
-        sizes: `${lightboxSizes}, ${image.mediaDetails?.width}px`,
-        src: image.sourceUrl!,
-        width: image.mediaDetails?.width || undefined,
-        widths: lightboxWidths || undefined,
-      });
-    }
+    formats.forEach((format, i) => {
+      images[format] = results[i];
+    });
 
     return images;
   }),

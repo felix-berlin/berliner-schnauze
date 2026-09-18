@@ -2,8 +2,8 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 const { mockInit, mockDestroy } = vi.hoisted(() => ({
-  mockInit: vi.fn(),
   mockDestroy: vi.fn(),
+  mockInit: vi.fn(),
 }));
 
 vi.mock("photoswipe/lightbox", () => ({
@@ -17,8 +17,8 @@ vi.mock("photoswipe/style.css", () => ({}));
 vi.mock("photoswipe", () => ({ default: {} }));
 
 const sampleImages = [
-  { image: { preferred: { url: "https://example.com/img1.jpg", width: 800, height: 600 } } },
-  { image: { preferred: { url: "https://example.com/img2.jpg", width: 1024, height: 768 } } },
+  { image: { preferred: { height: 600, url: "https://example.com/img1.jpg", width: 800 } } },
+  { image: { preferred: { height: 768, url: "https://example.com/img2.jpg", width: 1024 } } },
 ];
 
 describe("ImageGallery.vue", () => {
@@ -101,39 +101,25 @@ describe("ImageGallery.vue", () => {
     expect(result).toBeDefined();
   });
 
-  // When the PhotoSwipeLightbox constructor throws, lightbox.value stays null.
-  // onUnmounted then hits the false branch of `if (lightbox.value)` and skips destroy.
-  it("onUnmounted skips destroy when lightbox was never initialised (covers line 45 false branch)", async () => {
+  // When the PhotoSwipeLightbox constructor throws, lightbox.value stays null
+  // and the error propagates out of mount() — @vue/test-utils reinstates its
+  // own errorHandler around mount and rethrows, so onUnmounted (line 45's
+  // false branch) is never reachable through this path; only the throw itself
+  // and that init() never ran are verifiable here.
+  it("propagates the lightbox constructor error and never calls init (covers line 34 throw)", async () => {
     const { default: PhotoSwipeLightbox } = await import("photoswipe/lightbox");
     const { default: ImageGallery } = await import("@components/ImageGallery.vue");
 
-    // Capture a wrapper before the constructor mock so we can unmount even on throw.
-    // Mount once normally to get a wrapper reference, then remount with throwing ctor.
-    // Simpler: mount with errorHandler to absorb the onMounted throw, then unmount.
-    const caughtErrors: unknown[] = [];
     // eslint-disable-next-line prefer-arrow-callback
     vi.mocked(PhotoSwipeLightbox).mockImplementationOnce(function () {
       // oxlint-disable-line prefer-arrow-functions
       throw new Error("lightbox init failed");
     } as unknown as typeof PhotoSwipeLightbox);
 
-    let wrapper: ReturnType<typeof mount> | undefined;
-    try {
-      wrapper = mount(ImageGallery, { props: { images: sampleImages } });
-    } catch (err) {
-      caughtErrors.push(err);
-    }
-
-    // onMounted threw — lightbox.value stayed null, init was never called
+    expect(() => mount(ImageGallery, { props: { images: sampleImages } })).toThrow(
+      "lightbox init failed",
+    );
     expect(mockInit).not.toHaveBeenCalled();
-    // The error from the constructor was propagated out of mount()
-    expect(caughtErrors).toHaveLength(1);
-
-    // If mount threw, wrapper may be partially constructed — unmount if possible
-    // to exercise the onUnmounted false branch (lightbox.value is null → skip destroy).
-    if (wrapper) {
-      wrapper.unmount();
-      expect(mockDestroy).not.toHaveBeenCalled();
-    }
+    expect(mockDestroy).not.toHaveBeenCalled();
   });
 });

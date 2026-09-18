@@ -18,7 +18,9 @@ afterEach(() => {
   mountedWrappers.forEach((w) => {
     try {
       w.unmount();
-    } catch {}
+    } catch {
+      // ignore unmount errors during cleanup
+    }
   });
   mountedWrappers.length = 0;
   vi.clearAllMocks();
@@ -28,7 +30,7 @@ afterEach(() => {
 
 const mountWithDirective = (value: TooltipValue) => {
   const wrapper = mount(
-    { template: '<button v-tooltip="val">trigger</button>', props: ["val"] },
+    { props: ["val"], template: '<button v-tooltip="val">trigger</button>' },
     { global: { directives: { tooltip: vTooltip } }, props: { val: value } },
   );
   mountedWrappers.push(wrapper);
@@ -317,7 +319,7 @@ describe("vTooltip directive", () => {
     expect(() =>
       vTooltip.updated!(
         el,
-        { value: "test", oldValue: undefined } as any,
+        { oldValue: undefined, value: "test" } as any,
         null as any,
         null as any,
       ),
@@ -346,7 +348,7 @@ describe("vTooltip directive", () => {
     const btn = wrapper.find("button").element;
     vTooltip.updated!(
       btn,
-      { value: "Updated", oldValue: undefined } as any,
+      { oldValue: undefined, value: "Updated" } as any,
       null as any,
       null as any,
     );
@@ -359,15 +361,15 @@ describe("vTooltip directive", () => {
 function makeEl(rect: Partial<DOMRect>): HTMLElement {
   const el = document.createElement("div");
   vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
-    top: 0,
-    left: 0,
     bottom: 0,
-    right: 0,
-    width: 0,
     height: 0,
+    left: 0,
+    right: 0,
+    toJSON: () => ({}),
+    top: 0,
+    width: 0,
     x: 0,
     y: 0,
-    toJSON: () => ({}),
     ...rect,
   } as DOMRect);
   return el;
@@ -375,8 +377,8 @@ function makeEl(rect: Partial<DOMRect>): HTMLElement {
 
 describe("syncTooltipArrow", () => {
   it("positions arrow at bottom when panel is above trigger", () => {
-    const panel = makeEl({ top: 0, bottom: 50, left: 100, right: 300, width: 200, height: 50 });
-    const el = makeEl({ top: 60, bottom: 80, left: 140, right: 260 });
+    const panel = makeEl({ bottom: 50, height: 50, left: 100, right: 300, top: 0, width: 200 });
+    const el = makeEl({ bottom: 80, left: 140, right: 260, top: 60 });
     const arrow = document.createElement("span");
     syncTooltipArrow(el, panel, arrow);
     expect(arrow.style.bottom).toBe("-4px");
@@ -384,8 +386,8 @@ describe("syncTooltipArrow", () => {
   });
 
   it("positions arrow at top when panel is below trigger", () => {
-    const panel = makeEl({ top: 80, bottom: 130, left: 100, right: 300, width: 200, height: 50 });
-    const el = makeEl({ top: 0, bottom: 50, left: 140, right: 260 });
+    const panel = makeEl({ bottom: 130, height: 50, left: 100, right: 300, top: 80, width: 200 });
+    const el = makeEl({ bottom: 50, left: 140, right: 260, top: 0 });
     const arrow = document.createElement("span");
     syncTooltipArrow(el, panel, arrow);
     expect(arrow.style.top).toBe("-4px");
@@ -393,8 +395,8 @@ describe("syncTooltipArrow", () => {
   });
 
   it("positions arrow on right side when panel is left of trigger", () => {
-    const panel = makeEl({ top: 20, bottom: 80, left: 0, right: 100, width: 100, height: 60 });
-    const el = makeEl({ top: 20, bottom: 80, left: 110, right: 210 });
+    const panel = makeEl({ bottom: 80, height: 60, left: 0, right: 100, top: 20, width: 100 });
+    const el = makeEl({ bottom: 80, left: 110, right: 210, top: 20 });
     const arrow = document.createElement("span");
     syncTooltipArrow(el, panel, arrow);
     expect(arrow.style.right).toBe("-4px");
@@ -402,8 +404,8 @@ describe("syncTooltipArrow", () => {
   });
 
   it("positions arrow on left side when panel is right of trigger", () => {
-    const panel = makeEl({ top: 20, bottom: 80, left: 110, right: 210, width: 100, height: 60 });
-    const el = makeEl({ top: 20, bottom: 80, left: 0, right: 100 });
+    const panel = makeEl({ bottom: 80, height: 60, left: 110, right: 210, top: 20, width: 100 });
+    const el = makeEl({ bottom: 80, left: 0, right: 100, top: 20 });
     const arrow = document.createElement("span");
     syncTooltipArrow(el, panel, arrow);
     expect(arrow.style.left).toBe("-4px");

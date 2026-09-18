@@ -6,10 +6,10 @@ import { createAstroRender } from "../../helpers";
 vi.mock("@styles/components/_word-hero.scss", () => ({}));
 
 const makeWordProps = (overrides: Record<string, unknown> = {}) => ({
-  berlinerisch: "Schnauze",
   article: "die",
-  berolinismus: false,
+  berlinerisch: "Schnauze",
   berlinerischAudio: null,
+  berolinismus: false,
   ...overrides,
 });
 

@@ -1,13 +1,13 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "jsx-a11y", "vue", "import", "vitest"],
+  "plugins": ["eslint", "typescript", "jsx-a11y", "vue", "import", "oxc", "unicorn", "promise", "vitest"],
   "jsPlugins": ["eslint-plugin-astro"],
   "options": {
     "typeAware": true,
-    "typeCheck": true
+    "typeCheck": false
   },
   "categories": {
-    "correctness": "off"
+    "perf": "error"
   },
   "env": {
     "builtin": true,
@@ -24,7 +24,6 @@
   },
   "ignorePatterns": [
     "src/components/accordion/index.ts",
-    "src/tests",
     "src/gql/",
     "**/coverage/",
     "dist/",
@@ -32,8 +31,7 @@
     "**/node_modules/",
     "**/__snapshots__/",
     "src/types/generated/",
-    "**/*.config.{mjs,cjs,ts,js}",
-    "**/*.test.ts"
+    "**/*.config.{mjs,cjs,ts,js}"
   ],
   "rules": {
     "sort-keys": "error",
@@ -169,6 +167,7 @@
     "vue/no-multiple-slot-args": "warn",
     "vue/no-required-prop-with-default": "warn",
     "import/no-cycle": ["error", { "maxDepth": 3 }],
+    "vitest/require-mock-type-parameters": "off",
     "typescript/ban-ts-comment": "error",
     "typescript/no-duplicate-enum-values": "error",
     "typescript/no-empty-object-type": "error",
@@ -221,6 +220,26 @@
       "env": {
         "astro": true,
         "node": true
+      }
+    },
+    {
+      "files": ["**/*.test.ts", "**/*.spec.ts"],
+      "rules": {
+        "no-await-in-loop": "off",
+        "typescript/no-explicit-any": "warn",
+        "typescript/unbound-method": "off"
+      }
+    },
+    {
+      "files": ["scripts/**/*.ts"],
+      "rules": {
+        "no-await-in-loop": "off"
+      }
+    },
+    {
+      "files": ["src/env.d.ts"],
+      "rules": {
+        "typescript/no-redundant-type-constituents": "off"
       }
     },
     {

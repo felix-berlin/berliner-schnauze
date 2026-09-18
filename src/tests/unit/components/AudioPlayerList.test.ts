@@ -6,8 +6,8 @@ vi.mock("@components/AudioPlayer.vue", () => ({
 }));
 
 const makeAudio = (gender: "female" | "male") => ({
-  gender,
   audio: { node: { mediaItemUrl: `https://example.com/${gender}.mp3` } },
+  gender,
 });
 
 describe("AudioPlayerList.vue", () => {
@@ -53,7 +53,7 @@ describe("AudioPlayerList.vue", () => {
 
   it("passes null to AudioPlayer when mediaItemUrl is null (covers line 12 ?? null branch)", async () => {
     const AudioPlayerList = (await import("@components/AudioPlayerList.vue")).default;
-    const audioWithNullUrl = [{ gender: "male" as const, audio: { node: { mediaItemUrl: null } } }];
+    const audioWithNullUrl = [{ audio: { node: { mediaItemUrl: null } }, gender: "male" as const }];
     const wrapper = mount(AudioPlayerList, {
       props: { audio: audioWithNullUrl, isType: "berlinerisch" },
     });

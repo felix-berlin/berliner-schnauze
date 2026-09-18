@@ -23,7 +23,7 @@ describe("WordExamples.vue", () => {
     const wrapper = mount(WordExamples, {
       props: {
         examples: [
-          { example: "Det is keen Zufall.", exampleExplanation: null, exampleAudio: null },
+          { example: "Det is keen Zufall.", exampleAudio: null, exampleExplanation: null },
         ],
       },
     });
@@ -34,7 +34,7 @@ describe("WordExamples.vue", () => {
     const wrapper = mount(WordExamples, {
       props: {
         examples: [
-          { example: "Ick bin een Berliner.", exampleExplanation: null, exampleAudio: null },
+          { example: "Ick bin een Berliner.", exampleAudio: null, exampleExplanation: null },
         ],
       },
     });
@@ -47,8 +47,8 @@ describe("WordExamples.vue", () => {
         examples: [
           {
             example: "Ick bin een Berliner.",
-            exampleExplanation: "Ich bin ein Berliner.",
             exampleAudio: null,
+            exampleExplanation: "Ich bin ein Berliner.",
           },
         ],
       },
@@ -62,7 +62,7 @@ describe("WordExamples.vue", () => {
     const wrapper = mount(WordExamples, {
       props: {
         examples: [
-          { example: "Ick bin een Berliner.", exampleExplanation: null, exampleAudio: null },
+          { example: "Ick bin een Berliner.", exampleAudio: null, exampleExplanation: null },
         ],
       },
     });
@@ -73,8 +73,8 @@ describe("WordExamples.vue", () => {
     const wrapper = mount(WordExamples, {
       props: {
         examples: [
-          { example: "Beispiel eins.", exampleExplanation: null, exampleAudio: null },
-          { example: "Beispiel zwei.", exampleExplanation: null, exampleAudio: null },
+          { example: "Beispiel eins.", exampleAudio: null, exampleExplanation: null },
+          { example: "Beispiel zwei.", exampleAudio: null, exampleExplanation: null },
         ],
       },
     });
@@ -86,8 +86,8 @@ describe("WordExamples.vue", () => {
     const wrapper = mount(WordExamples, {
       props: {
         examples: [
-          { example: "Erster.", exampleExplanation: null, exampleAudio: null },
-          { example: "Zweiter.", exampleExplanation: null, exampleAudio: null },
+          { example: "Erster.", exampleAudio: null, exampleExplanation: null },
+          { example: "Zweiter.", exampleAudio: null, exampleExplanation: null },
         ],
       },
     });
@@ -100,8 +100,8 @@ describe("WordExamples.vue", () => {
     const wrapper = mount(WordExamples, {
       props: {
         examples: [
-          { example: "Erster.", exampleExplanation: "First.", exampleAudio: null },
-          { example: "Zweiter.", exampleExplanation: null, exampleAudio: null },
+          { example: "Erster.", exampleAudio: null, exampleExplanation: "First." },
+          { example: "Zweiter.", exampleAudio: null, exampleExplanation: null },
         ],
       },
     });
@@ -112,8 +112,8 @@ describe("WordExamples.vue", () => {
   it("applies custom rootBemClass to element classes", () => {
     const wrapper = mount(WordExamples, {
       props: {
+        examples: [{ example: "Test.", exampleAudio: null, exampleExplanation: null }],
         rootBemClass: "c-my-word",
-        examples: [{ example: "Test.", exampleExplanation: null, exampleAudio: null }],
       },
     });
     expect(wrapper.find(".c-my-word__example-wrapper").exists()).toBe(true);
@@ -123,7 +123,7 @@ describe("WordExamples.vue", () => {
   it("renders the quote icon", () => {
     const wrapper = mount(WordExamples, {
       props: {
-        examples: [{ example: "Test.", exampleExplanation: null, exampleAudio: null }],
+        examples: [{ example: "Test.", exampleAudio: null, exampleExplanation: null }],
       },
     });
     expect(wrapper.find("[data-testid='icon-lucide-quote']").exists()).toBe(true);
@@ -135,8 +135,8 @@ describe("WordExamples.vue", () => {
         examples: [
           {
             example: "Test.",
+            exampleAudio: [{ label: "", url: "audio.mp3" }] as any,
             exampleExplanation: null,
-            exampleAudio: [{ url: "audio.mp3", label: "" }] as any,
           },
         ],
       },
@@ -151,10 +151,10 @@ describe("WordExamples.vue", () => {
         examples: [
           {
             example: "Erster.",
+            exampleAudio: [{ label: "", url: "a.mp3" }] as any,
             exampleExplanation: null,
-            exampleAudio: [{ url: "a.mp3", label: "" }] as any,
           },
-          { example: "Zweiter.", exampleExplanation: null, exampleAudio: null },
+          { example: "Zweiter.", exampleAudio: null, exampleExplanation: null },
         ],
       },
     });

@@ -28,10 +28,10 @@ vi.mock("@components/BadgeTag.vue", () => ({
 
 vi.mock("@components/ButtonWithStates.vue", () => ({
   default: {
+    emits: ["click"],
     props: ["state", "type"],
     template:
       '<button class="mock-button-with-states" :type="type" @click="$emit(\'click\')"><slot /></button>',
-    emits: ["click"],
   },
 }));
 

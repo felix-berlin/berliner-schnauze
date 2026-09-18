@@ -56,7 +56,7 @@ describe("NavList.vue", () => {
 
   it("applies ariaLabel to the nav element", () => {
     const wrapper = mount(NavList, {
-      props: { items: linkItems, ariaLabel: "Main navigation" },
+      props: { ariaLabel: "Main navigation", items: linkItems },
     });
     expect(wrapper.find("nav").attributes("aria-label")).toBe("Main navigation");
   });
@@ -95,7 +95,7 @@ describe("NavList.vue", () => {
   });
 
   it("applies rel attribute to link items", () => {
-    const itemsWithRel = [{ link: "https://example.com", title: "Link", rel: "noopener" }];
+    const itemsWithRel = [{ link: "https://example.com", rel: "noopener", title: "Link" }];
     const wrapper = mount(NavList, { props: { items: itemsWithRel } });
     expect(wrapper.find("a").attributes("rel")).toBe("noopener");
   });
@@ -121,8 +121,8 @@ describe("NavList.vue", () => {
   it("supports classesLi as a per-item function", () => {
     const wrapper = mount(NavList, {
       props: {
-        items: linkItems,
         classesLi: (_item: unknown, index: number) => (index === 1 ? "is-split" : "plain"),
+        items: linkItems,
       },
     });
     const items = wrapper.findAll("li");

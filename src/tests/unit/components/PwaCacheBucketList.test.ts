@@ -9,7 +9,7 @@ vi.mock("virtua/vue", () => ({
     props: ["data", "style", "class"],
     setup(props: { data: unknown[] }, { slots }: { slots: any }) {
       return () =>
-        props.data.map((item: unknown, index: number) => slots.default?.({ item, index }));
+        props.data.map((item: unknown, index: number) => slots.default?.({ index, item }));
     },
   },
 }));
@@ -179,7 +179,7 @@ describe("PwaCacheBucketList", () => {
       dateRange: null,
       name: "api-search-index",
       totalSizeBytes: 0,
-      typeBreakdown: [{ type: "js", count: 12, sizeBytes: 5000 }],
+      typeBreakdown: [{ count: 12, sizeBytes: 5000, type: "js" }],
       urls: [],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });

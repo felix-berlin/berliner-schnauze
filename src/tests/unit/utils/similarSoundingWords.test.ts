@@ -18,18 +18,18 @@ describe("similarSoundingWords", () => {
     expect(result).toHaveLength(2);
     expect(result).toEqual([
       {
-        word: allWords[0],
         isSimilar: new SoundEx().compare(
           allWords[0].wordProperties.berlinerisch,
           currentWord.wordProperties.berlinerisch,
         ),
+        word: allWords[0],
       },
       {
-        word: allWords[2],
         isSimilar: new SoundEx().compare(
           allWords[2].wordProperties.berlinerisch,
           currentWord.wordProperties.berlinerisch,
         ),
+        word: allWords[2],
       },
     ]);
   });

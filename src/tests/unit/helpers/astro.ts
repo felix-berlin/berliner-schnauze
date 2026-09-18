@@ -5,8 +5,8 @@ export async function createAstroRender(component: unknown) {
   const container = await AstroContainer.create({
     renderers: [
       {
-        name: "@astrojs/vue",
         clientEntrypoint: "@astrojs/vue/client.js",
+        name: "@astrojs/vue",
         ssr: vueServerRenderer,
       },
     ],

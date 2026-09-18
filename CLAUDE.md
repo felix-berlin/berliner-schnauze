@@ -40,6 +40,8 @@ pnpm server:preview          # Serve ./dist with Wrangler Pages
 pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (exception: needs local .env file, not Infisical)
 ```
 
+When Claude runs `oxlint` directly (not via `pnpm lint`), always pass `--format=agent`.
+
 Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
 
 Update snapshots: `pnpm vitest:update`

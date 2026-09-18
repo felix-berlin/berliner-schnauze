@@ -18,7 +18,7 @@ const fetchPaginatedWords = async (
   orderByType: OrderEnum = "ASC",
   stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
 ) => {
-  let allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
+  const allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
   let cursor = null;
   const pageSize = 100;
 
@@ -32,6 +32,7 @@ const fetchPaginatedWords = async (
       order: orderByType,
       stati,
     };
+    // oxlint-disable-next-line no-await-in-loop -- cursor-based pagination: each page's cursor depends on the previous response
     const response = await wpGraphqlClient.query(queryDocument, variables).toPromise();
 
     if (response.error) {
@@ -42,7 +43,7 @@ const fetchPaginatedWords = async (
     const data = response.data?.berlinerWords;
     if (!data) break;
 
-    allWords = [...allWords, ...(data.edges as typeof allWords)];
+    allWords.push(...(data.edges as typeof allWords));
     cursor = data.pageInfo.endCursor;
 
     if (!data.pageInfo.hasNextPage) {

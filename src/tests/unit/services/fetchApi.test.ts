@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 function makeResponse(ok: boolean, body: unknown): Response {
   return {
-    ok,
     json: vi.fn().mockResolvedValue(body),
+    ok,
     text: vi.fn().mockResolvedValue(String(body)),
   } as unknown as Response;
 }

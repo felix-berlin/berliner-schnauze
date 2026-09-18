@@ -10,10 +10,10 @@ describe("initScrollSpy", () => {
     intersectionObserverMock = vi.fn(function (this: { callback: unknown }, callback: unknown) {
       this.callback = callback;
       return {
-        observe: observeMock,
         disconnect: vi.fn(),
-        unobserve: vi.fn(),
+        observe: observeMock,
         takeRecords: vi.fn(),
+        unobserve: vi.fn(),
       };
     });
     vi.stubGlobal("IntersectionObserver", intersectionObserverMock);
@@ -24,10 +24,10 @@ describe("initScrollSpy", () => {
 
   it("does nothing when the nav is not found", () => {
     initScrollSpy({
-      navSelector: ".missing-nav",
-      linkSelector: "a",
       activeClass: "is-active",
       getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".missing-nav",
     });
     expect(intersectionObserverMock).not.toHaveBeenCalled();
   });
@@ -37,10 +37,10 @@ describe("initScrollSpy", () => {
       <nav class="nav"><a href="#missing">Missing</a></nav>
     `;
     initScrollSpy({
-      navSelector: ".nav",
-      linkSelector: "a",
       activeClass: "is-active",
       getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
     });
     expect(intersectionObserverMock).not.toHaveBeenCalled();
   });
@@ -55,10 +55,10 @@ describe("initScrollSpy", () => {
       <section id="b"></section>
     `;
     initScrollSpy({
-      navSelector: ".nav",
-      linkSelector: "a",
       activeClass: "is-active",
       getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
     });
     expect(observeMock).toHaveBeenCalledTimes(2);
   });
@@ -74,18 +74,18 @@ describe("initScrollSpy", () => {
     `;
     const onActivate = vi.fn();
     initScrollSpy({
-      navSelector: ".nav",
-      linkSelector: "a",
       activeClass: "is-active",
       getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
       onActivate,
     });
 
     const callback = getObserverCallback();
     const linkB = document.querySelector('a[href="#b"]');
     callback([
-      { isIntersecting: true, target: { id: "b" }, boundingClientRect: { top: 50 } },
-      { isIntersecting: true, target: { id: "a" }, boundingClientRect: { top: 10 } },
+      { boundingClientRect: { top: 50 }, isIntersecting: true, target: { id: "b" } },
+      { boundingClientRect: { top: 10 }, isIntersecting: true, target: { id: "a" } },
     ]);
 
     const linkA = document.querySelector('a[href="#a"]');
@@ -104,20 +104,20 @@ describe("initScrollSpy", () => {
       <section id="b"></section>
     `;
     initScrollSpy({
-      navSelector: ".nav",
-      linkSelector: "a",
       activeClass: "is-active",
       getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
     });
 
     const callback = getObserverCallback();
     const linkA = document.querySelector('a[href="#a"]');
     const linkB = document.querySelector('a[href="#b"]');
 
-    callback([{ isIntersecting: true, target: { id: "a" }, boundingClientRect: { top: 0 } }]);
+    callback([{ boundingClientRect: { top: 0 }, isIntersecting: true, target: { id: "a" } }]);
     expect(linkA?.classList.contains("is-active")).toBe(true);
 
-    callback([{ isIntersecting: true, target: { id: "b" }, boundingClientRect: { top: 0 } }]);
+    callback([{ boundingClientRect: { top: 0 }, isIntersecting: true, target: { id: "b" } }]);
     expect(linkA?.classList.contains("is-active")).toBe(false);
     expect(linkB?.classList.contains("is-active")).toBe(true);
   });
@@ -128,14 +128,14 @@ describe("initScrollSpy", () => {
       <section id="a"></section>
     `;
     initScrollSpy({
-      navSelector: ".nav",
-      linkSelector: "a",
       activeClass: "is-active",
       getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
     });
 
     const callback = getObserverCallback();
-    callback([{ isIntersecting: false, target: { id: "a" }, boundingClientRect: { top: 0 } }]);
+    callback([{ boundingClientRect: { top: 0 }, isIntersecting: false, target: { id: "a" } }]);
     expect(document.querySelector('a[href="#a"]')?.classList.contains("is-active")).toBe(false);
   });
 
@@ -145,10 +145,10 @@ describe("initScrollSpy", () => {
       <section id="a"></section>
     `;
     initScrollSpy({
-      navSelector: ".nav",
-      linkSelector: "a",
       activeClass: "is-active",
       getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
       rootMargin: "-10% 0px -80% 0px",
     });
     expect(intersectionObserverMock).toHaveBeenCalledWith(expect.any(Function), {
@@ -162,10 +162,10 @@ describe("initScrollSpy", () => {
       <section id="a"></section>
     `;
     initScrollSpy({
-      navSelector: ".nav",
-      linkSelector: "a",
       activeClass: "is-active",
       getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
     });
     expect(intersectionObserverMock).toHaveBeenCalledWith(expect.any(Function), {
       rootMargin: "-20% 0px -70% 0px",
@@ -181,10 +181,10 @@ describe("initScrollSpy", () => {
       <section id="a"></section>
     `;
     initScrollSpy({
-      navSelector: ".nav",
-      linkSelector: "a",
       activeClass: "is-active",
       getSectionId: (link) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
     });
     expect(observeMock).toHaveBeenCalledTimes(1);
   });

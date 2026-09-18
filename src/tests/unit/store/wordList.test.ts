@@ -1,3 +1,4 @@
+import { map } from "nanostores";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // ─── static fixtures ─────────────────────────────────────────────────────────
@@ -5,10 +6,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const metaResponse = {
   availableWordGroups: ["B", "S"],
   rangeFilterMinMax: {
-    characterLength: { min: 1, max: 20 },
-    consonantsCount: { min: 0, max: 10 },
-    syllablesCount: { min: 1, max: 5 },
-    vowelsCount: { min: 0, max: 8 },
+    characterLength: { max: 20, min: 1 },
+    consonantsCount: { max: 10, min: 0 },
+    syllablesCount: { max: 5, min: 1 },
+    vowelsCount: { max: 8, min: 0 },
   },
   themen: [
     { name: "Essen & Trinken", slug: "essen-trinken" },
@@ -73,10 +74,7 @@ const indexResponse = [
 // ─── module mocks ─────────────────────────────────────────────────────────────
 
 vi.mock("@nanostores/persistent", () => ({
-  persistentMap: vi.fn((key: string, initial: unknown) => {
-    const { map } = require("nanostores");
-    return map(initial);
-  }),
+  persistentMap: vi.fn((key: string, initial: unknown) => map(initial)),
 }));
 
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
@@ -90,10 +88,10 @@ function makeFetch(overrides: Record<string, unknown> = {}) {
   return vi.fn().mockImplementation((url: string) => {
     if (url in overrides) return overrides[url];
     if (url === "/api/search/meta.json") {
-      return Promise.resolve({ ok: true, json: () => Promise.resolve(metaResponse) });
+      return Promise.resolve({ json: () => Promise.resolve(metaResponse), ok: true });
     }
     if (url === "/api/search/index.json") {
-      return Promise.resolve({ ok: true, json: () => Promise.resolve(indexResponse) });
+      return Promise.resolve({ json: () => Promise.resolve(indexResponse), ok: true });
     }
     return Promise.reject(new Error(`Unmocked fetch: ${url}`));
   });
@@ -399,7 +397,7 @@ describe("onMount — getSearchMeta", () => {
 
   it("logs error when meta response is not ok", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 500, json: vi.fn() }));
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ json: vi.fn(), ok: false, status: 500 }));
     const { $wordSearch } = await import("@stores/wordList.ts");
     const unsub = $wordSearch.subscribe(() => {});
     await vi.waitFor(() => {
@@ -440,7 +438,7 @@ describe("$oramaSearchResults", () => {
   });
 
   it("reports failed state on non-ok search index response", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 503, json: vi.fn() }));
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ json: vi.fn(), ok: false, status: 503 }));
     const { $oramaSearchResults } = await import("@stores/wordList.ts");
     await vi.waitFor(
       () => {

@@ -19,9 +19,9 @@ vi.mock("@stores/pushSubscription.ts", async (importOriginal) => {
     ...actual,
     $pushState: $mockPushState,
     isPushSupported: mockIsPushSupported,
+    loadPushState: mockLoadPushState,
     subscribePush: mockSubscribePush,
     unsubscribePush: mockUnsubscribePush,
-    loadPushState: mockLoadPushState,
   };
 });
 
@@ -51,9 +51,9 @@ beforeEach(() => {
   $mockPushState.set("unsubscribed");
 
   Object.defineProperty(global, "Notification", {
+    configurable: true,
     value: { permission: "default" as NotificationPermission, requestPermission: vi.fn() },
     writable: true,
-    configurable: true,
   });
 });
 
