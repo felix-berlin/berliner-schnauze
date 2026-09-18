@@ -270,7 +270,9 @@ describe("WordList.vue", () => {
   it("el.focus() is called inside focusActive nextTick when ref exists (covers line 104)", async () => {
     mockStores({ state: "ready", value: { hits: [makeHit("Kiez")] } });
     const wrapper = mount(WordList, { attachTo: document.body });
-    const setupState = (wrapper.getCurrentComponent() as any).setupState;
+    const setupState = wrapper.getCurrentComponent()!.setupState as {
+      setResultRef: (el: Element | null) => void;
+    };
     // Use setResultRef to populate resultRefs (it checks instanceof HTMLElement before pushing)
     const el = document.createElement("li");
     const focusSpy = vi.spyOn(el, "focus");

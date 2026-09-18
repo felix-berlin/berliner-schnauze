@@ -9,7 +9,7 @@ globalThis.fetch = vi.fn(() =>
   Promise.resolve({
     json: () => Promise.resolve({ availableWordGroups: [] }),
   }),
-) as any;
+) as unknown as typeof fetch;
 
 describe("SortWordsBy.vue", () => {
   const mockToggleFn = vi.fn();

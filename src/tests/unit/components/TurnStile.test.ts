@@ -38,7 +38,7 @@ describe("TurnStile.vue", () => {
   });
 
   it("creates script tag when window.turnstile is exactly null (covers || left-side true short-circuit branch)", () => {
-    (window as any).turnstile = null;
+    window.turnstile = null;
     const scriptsBefore = document.getElementsByTagName("script").length;
     mount(TurnStile, { props: { siteKey: "k" } });
     expect(document.getElementsByTagName("script").length).toBeGreaterThan(scriptsBefore);
@@ -47,21 +47,21 @@ describe("TurnStile.vue", () => {
 
 describe("TurnStile.vue — renderTurnstile callback (covers lines 49-50, 67)", () => {
   afterEach(() => {
-    (window as any).turnstile = null;
-    delete (window as any).onloadTurnstileCallback;
+    window.turnstile = null;
+    window.onloadTurnstileCallback = undefined;
   });
 
   it("mount sets window.onloadTurnstileCallback", () => {
-    (window as any).turnstile = { render: vi.fn() };
+    window.turnstile = { render: vi.fn() };
     mount(TurnStile, { props: { siteKey: "k" } });
-    expect(typeof (window as any).onloadTurnstileCallback).toBe("function");
+    expect(typeof window.onloadTurnstileCallback).toBe("function");
   });
 
   it("calling onloadTurnstileCallback invokes turnstile.render with correct selector (covers line 49)", () => {
     const mockRender = vi.fn();
-    (window as any).turnstile = { render: mockRender };
+    window.turnstile = { render: mockRender };
     mount(TurnStile, { props: { siteKey: "site-key", wrapperId: "tw" } });
-    (window as any).onloadTurnstileCallback();
+    window.onloadTurnstileCallback();
     expect(mockRender).toHaveBeenCalledOnce();
     expect(mockRender.mock.calls[0][0]).toBe("#tw");
     expect(mockRender.mock.calls[0][1]).toMatchObject({ sitekey: "site-key" });
@@ -69,34 +69,34 @@ describe("TurnStile.vue — renderTurnstile callback (covers lines 49-50, 67)", 
 
   it("checkVerification returns true for non-empty response (covers line 67)", () => {
     let capturedCb: ((r: string) => void) | null = null;
-    (window as any).turnstile = {
+    window.turnstile = {
       render: vi.fn((_sel: string, opts: Record<string, unknown>) => {
         capturedCb = opts.callback as (r: string) => void;
       }),
     };
     const wrapper = mount(TurnStile, { props: { siteKey: "k" } });
-    (window as any).onloadTurnstileCallback();
+    window.onloadTurnstileCallback();
     capturedCb!("valid-token");
     expect(wrapper.emitted("verify")![0]).toEqual([true]);
   });
 
   it("checkVerification returns false for empty string response (covers line 67)", () => {
     let capturedCb: ((r: string) => void) | null = null;
-    (window as any).turnstile = {
+    window.turnstile = {
       render: vi.fn((_sel: string, opts: Record<string, unknown>) => {
         capturedCb = opts.callback as (r: string) => void;
       }),
     };
     const wrapper = mount(TurnStile, { props: { siteKey: "k" } });
-    (window as any).onloadTurnstileCallback();
+    window.onloadTurnstileCallback();
     capturedCb!("");
     expect(wrapper.emitted("verify")![0]).toEqual([false]);
   });
 
   it("onloadTurnstileCallback emits fail and expire events immediately on render (lines 51-52)", () => {
-    (window as any).turnstile = { render: vi.fn() };
+    window.turnstile = { render: vi.fn() };
     const wrapper = mount(TurnStile, { props: { siteKey: "k" } });
-    (window as any).onloadTurnstileCallback();
+    window.onloadTurnstileCallback();
     expect(wrapper.emitted("fail")).toBeTruthy();
     expect(wrapper.emitted("expire")).toBeTruthy();
   });
@@ -105,9 +105,9 @@ describe("TurnStile.vue — renderTurnstile callback (covers lines 49-50, 67)", 
     const { $isDarkMode } = await import("@stores/darkMode.ts");
     $isDarkMode.set(true);
     const mockRender = vi.fn();
-    (window as any).turnstile = { render: mockRender };
+    window.turnstile = { render: mockRender };
     mount(TurnStile, { props: { siteKey: "k" } });
-    (window as any).onloadTurnstileCallback();
+    window.onloadTurnstileCallback();
     expect(mockRender.mock.calls[0][1]).toMatchObject({ theme: "dark" });
     $isDarkMode.set(false);
   });

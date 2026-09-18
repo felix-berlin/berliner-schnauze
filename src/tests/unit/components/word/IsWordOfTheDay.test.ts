@@ -11,7 +11,7 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 describe("IsWordOfTheDay.vue", () => {
-  let mockStore;
+  let mockStore: { value: { word: { ID: number } } };
 
   beforeEach(() => {
     mockStore = {
@@ -21,7 +21,7 @@ describe("IsWordOfTheDay.vue", () => {
         },
       },
     };
-    (useStore as any).mockReturnValue(mockStore);
+    vi.mocked(useStore).mockReturnValue(mockStore);
     HTMLElement.prototype.showPopover = vi.fn();
     HTMLElement.prototype.hidePopover = vi.fn();
   });
@@ -29,8 +29,6 @@ describe("IsWordOfTheDay.vue", () => {
   afterEach(() => {
     vi.clearAllMocks();
     document.querySelectorAll("[popover]").forEach((el) => el.remove());
-    delete (HTMLElement.prototype as any).showPopover;
-    delete (HTMLElement.prototype as any).hidePopover;
   });
 
   it("renders correctly when isWordOfTheDay is true", async () => {

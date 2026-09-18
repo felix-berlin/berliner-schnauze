@@ -156,7 +156,7 @@ describe("BonResult.vue", () => {
     const wrapper = mount(BonResult, { props: defaultProps });
     const h2 = wrapper.find("h2").element;
     const focusSpy = vi.spyOn(h2, "focus");
-    (wrapper.vm as any).focus();
+    (wrapper.vm as { focus: () => void }).focus();
     expect(focusSpy).toHaveBeenCalledOnce();
   });
 
@@ -165,7 +165,7 @@ describe("BonResult.vue", () => {
     vi.mocked(useShare).mockReturnValueOnce({
       isSupported: ref(true),
       share: mockShareFn,
-    } as any);
+    } as unknown as ReturnType<typeof useShare>);
     statsRef.value = { playerName: "" };
     const wrapper = mount(BonResult, { props: defaultProps });
     expect(wrapper.find(".c-bon-result__share-btn").exists()).toBe(true);
@@ -180,7 +180,7 @@ describe("BonResult.vue", () => {
     vi.mocked(useShare).mockReturnValueOnce({
       isSupported: ref(true),
       share: mockShareFn,
-    } as any);
+    } as unknown as ReturnType<typeof useShare>);
     statsRef.value = { playerName: "Felix" };
     const wrapper = mount(BonResult, { props: defaultProps });
     await wrapper.find(".c-bon-result__share-btn").trigger("click");

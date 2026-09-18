@@ -1,7 +1,12 @@
+import type { DirectiveBinding, VNode } from "vue";
+
 import { mount, type VueWrapper } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { TooltipValue } from "@/directives/tooltip";
+
+const fakeVNode = null as unknown as VNode;
+const fakeBinding = (value: unknown) => value as unknown as DirectiveBinding<TooltipValue>;
 
 import { syncTooltipArrow, vTooltip } from "@/directives/tooltip";
 
@@ -38,8 +43,10 @@ const mountWithDirective = (value: TooltipValue) => {
 };
 
 // Access the panel element directly from directive state (useful before first show).
+type TooltipEl = HTMLElement & { _tooltip?: { panel: HTMLElement } };
+
 const getStatePanel = (wrapper: VueWrapper) =>
-  (wrapper.find("button").element as any)._tooltip?.panel as HTMLElement | undefined;
+  (wrapper.find("button").element as TooltipEl)._tooltip?.panel;
 
 // Trigger show and return the panel now in document.body.
 const showAndGetPanel = async (wrapper: VueWrapper) => {
@@ -311,7 +318,7 @@ describe("vTooltip directive", () => {
 
   it("unmounted is safe when _tooltip is absent (covers line 220 !state early return)", () => {
     const el = document.createElement("button");
-    expect(() => vTooltip.unmounted!(el, null as any, null as any, null as any)).not.toThrow();
+    expect(() => vTooltip.unmounted!(el, fakeBinding(null), fakeVNode, fakeVNode)).not.toThrow();
   });
 
   it("updated is safe when _tooltip is absent (covers lines 234-237 !state early return)", () => {
@@ -319,15 +326,15 @@ describe("vTooltip directive", () => {
     expect(() =>
       vTooltip.updated!(
         el,
-        { oldValue: undefined, value: "test" } as any,
-        null as any,
-        null as any,
+        fakeBinding({ oldValue: undefined, value: "test" }),
+        fakeVNode,
+        fakeVNode,
       ),
     ).not.toThrow();
   });
 
   it("normalize uses '' for content when value object has no content (covers line 96 ?? '' branch)", () => {
-    const wrapper = mountWithDirective({ disabled: true } as any);
+    const wrapper = mountWithDirective({ disabled: true } as unknown as TooltipValue);
     // Panel is never shown when disabled — access directly via directive state
     const panel = getStatePanel(wrapper);
     expect(panel?.textContent).toBe("");
@@ -348,9 +355,9 @@ describe("vTooltip directive", () => {
     const btn = wrapper.find("button").element;
     vTooltip.updated!(
       btn,
-      { oldValue: undefined, value: "Updated" } as any,
-      null as any,
-      null as any,
+      fakeBinding({ oldValue: undefined, value: "Updated" }),
+      fakeVNode,
+      fakeVNode,
     );
     // Panel may not be in body yet — access via directive state
     const panel = getStatePanel(wrapper);

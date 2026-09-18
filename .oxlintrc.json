@@ -226,7 +226,6 @@
       "files": ["**/*.test.ts", "**/*.spec.ts"],
       "rules": {
         "no-await-in-loop": "off",
-        "typescript/no-explicit-any": "warn",
         "typescript/unbound-method": "off"
       }
     },

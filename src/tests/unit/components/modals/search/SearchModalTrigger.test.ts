@@ -2,7 +2,7 @@ import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue
 import * as modalStore from "@stores/modal.ts";
 import { mount, flushPromises } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { ref } from "vue";
+import { ref, type Component } from "vue";
 
 const { mockWhenever, mockOnEventFired } = vi.hoisted(() => {
   let capturedWheneverCb: (() => void) | null = null;
@@ -151,7 +151,7 @@ describe("SearchModalTrigger.vue", () => {
     await wrapper.find("button").trigger("click");
 
     const callArgs = vi.mocked(modalStore.open).mock.calls[0][0];
-    const asyncComponent = callArgs.view!.component as any;
+    const asyncComponent = callArgs.view!.component as Component;
 
     // Mount the async component so Vue invokes the factory arrow at line 28
     const { defineComponent, h } = await import("vue");

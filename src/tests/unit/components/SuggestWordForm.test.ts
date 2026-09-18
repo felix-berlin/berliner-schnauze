@@ -201,7 +201,7 @@ describe("SuggestWordForm.vue", () => {
     vi.mocked(useMutation).mockReturnValueOnce({
       data: { value: null },
       executeMutation: vi.fn(() => new Promise(() => {})),
-    } as any);
+    } as unknown as ReturnType<typeof useMutation>);
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
@@ -218,7 +218,7 @@ describe("SuggestWordForm.vue", () => {
       executeMutation: vi.fn(() =>
         Promise.resolve({ data: { sendEmail: { sent: false } }, error: null }),
       ),
-    } as any);
+    } as unknown as ReturnType<typeof useMutation>);
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
@@ -268,11 +268,11 @@ describe("SuggestWordForm.vue", () => {
     vi.useFakeTimers();
     const { useMutation } = await import("@urql/vue");
     vi.mocked(useMutation).mockReturnValueOnce({
-      data: { value: { sendEmail: { sent: true } } } as any,
+      data: { value: { sendEmail: { sent: true } } },
       executeMutation: vi.fn(() =>
         Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
       ),
-    } as any);
+    } as unknown as ReturnType<typeof useMutation>);
 
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");

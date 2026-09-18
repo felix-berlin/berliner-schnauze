@@ -48,7 +48,7 @@ const mountWithTrigger = (options: Parameters<typeof mount>[1] = {}) =>
     slots: {
       default: (slotProps: { triggerProps: Record<string, unknown> }) =>
         h("button", { ...slotProps.triggerProps, "data-testid": "trigger-btn" }, "Open"),
-      ...(options as any).slots,
+      ...options.slots,
     },
   });
 

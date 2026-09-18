@@ -9,7 +9,7 @@ describe("randomElement", () => {
   });
 
   it("should return undefined if the array is empty", () => {
-    const elements: any[] = [];
+    const elements: number[] = [];
     const result = randomElement(elements);
     expect(result).toBeUndefined();
   });

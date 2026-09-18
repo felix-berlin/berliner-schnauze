@@ -5,6 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const mockShowPopover = vi.fn();
 const mockHidePopover = vi.fn();
 
+type TooltipPopoverExposed = { show: () => Promise<void>; hide: () => void };
+
 let wrapper: ReturnType<typeof mount> | null = null;
 
 // Panel renders lazily (v-if="isRendered") — only exists in DOM after show() is called.
@@ -19,7 +21,7 @@ function mountComponent(...args: Parameters<typeof mount<typeof TooltipPopover>>
 
 // Renders the tooltip panel into the DOM by calling show() and awaiting Vue's update.
 const showTooltip = (w: ReturnType<typeof mount> = wrapper!) =>
-  (w.vm as any).show() as Promise<void>;
+  (w.vm as unknown as TooltipPopoverExposed).show();
 
 beforeEach(() => {
   HTMLElement.prototype.showPopover = mockShowPopover;
@@ -97,7 +99,7 @@ describe("TooltipPopover.vue", () => {
     for (const placement of placements) {
       // Mount + show + unmount each iteration to avoid stale panels in body
       const w = mount(TooltipPopover, { attachTo: document.body, props: { placement } });
-      await (w.vm as any).show();
+      await (w.vm as unknown as TooltipPopoverExposed).show();
       expect(document.body.querySelector(`.c-tooltip__panel--${placement}`)).not.toBeNull();
       w.unmount();
     }
@@ -161,7 +163,7 @@ describe("TooltipPopover.vue", () => {
     mountComponent(TooltipPopover);
     await showTooltip();
     mockShowPopover.mockClear();
-    (wrapper!.vm as any).hide();
+    (wrapper!.vm as unknown as TooltipPopoverExposed).hide();
     expect(mockHidePopover).toHaveBeenCalledOnce();
   });
 
@@ -229,7 +231,7 @@ describe("TooltipPopover.vue", () => {
       return rafCallbacks.length;
     });
     mountComponent(TooltipPopover);
-    const exposedShow = (wrapper!.vm as any).show as () => Promise<void>;
+    const exposedShow = (wrapper!.vm as unknown as TooltipPopoverExposed).show;
     wrapper!.unmount();
     wrapper = null;
     const countBefore = rafCallbacks.length;

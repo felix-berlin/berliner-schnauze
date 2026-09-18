@@ -13,6 +13,9 @@ vi.mock("@components/toast/ToastNotify.vue", () => ({
 const mockShowPopover = vi.fn();
 const mockHidePopover = vi.fn();
 
+type ExposedMethods = { onAfterLeave: () => void };
+type SetupState = { onBeforeLeave: (el: Element) => void; open: () => void };
+
 const toast = (id: string) => ({
   id,
   message: `Toast ${id}`,
@@ -64,7 +67,7 @@ describe("ToastPositionGroup.vue", () => {
       props: { position: "top-right", toasts: [toast("a"), toast("b")] },
     });
     await wrapper.setProps({ toasts: [toast("b")] });
-    await (wrapper.vm as any).onAfterLeave();
+    (wrapper.vm as unknown as ExposedMethods).onAfterLeave();
     expect(mockHidePopover).not.toHaveBeenCalled();
   });
 
@@ -73,7 +76,7 @@ describe("ToastPositionGroup.vue", () => {
       props: { position: "top-right", toasts: [toast("a")] },
     });
     await wrapper.setProps({ toasts: [] });
-    await (wrapper.vm as any).onAfterLeave();
+    (wrapper.vm as unknown as ExposedMethods).onAfterLeave();
     expect(mockHidePopover).toHaveBeenCalledOnce();
   });
 
@@ -108,7 +111,7 @@ describe("ToastPositionGroup.vue", () => {
     await nextTick();
     // Close: set toasts to empty and trigger onAfterLeave (hidePopover + isOpen=false)
     await wrapper.setProps({ toasts: [] });
-    await (wrapper.vm as any).onAfterLeave();
+    (wrapper.vm as unknown as ExposedMethods).onAfterLeave();
     mockShowPopover.mockClear();
     // Re-open: 0→1 should call showPopover exactly once
     await wrapper.setProps({ toasts: [toast("b")] });
@@ -154,7 +157,7 @@ describe("ToastPositionGroup.vue", () => {
       top: 100,
       width: 200,
     } as DOMRect);
-    const setupState = (wrapper.getCurrentComponent() as any).setupState;
+    const setupState = wrapper.getCurrentComponent()!.setupState as unknown as SetupState;
     setupState.onBeforeLeave(el);
     // container is null → fallback {left:0, top:0} → top=100-0=100, left=50-0=50
     expect(el.style.top).toBe("100px");
@@ -173,7 +176,7 @@ describe("ToastPositionGroup.vue", () => {
     });
     await nextTick();
     await wrapper.setProps({ toasts: [] });
-    await (wrapper.vm as any).onAfterLeave();
+    (wrapper.vm as unknown as ExposedMethods).onAfterLeave();
     expect(consoleSpy).toHaveBeenCalled();
     consoleSpy.mockRestore();
   });
@@ -186,7 +189,7 @@ describe("ToastPositionGroup.vue", () => {
     await nextTick(); // onMounted fires open() → isOpen becomes true
     mockShowPopover.mockClear();
     // Call open() again directly — should hit isOpen.value === true early return
-    (wrapper.getCurrentComponent() as any).setupState.open();
+    (wrapper.getCurrentComponent()!.setupState as unknown as SetupState).open();
     expect(mockShowPopover).not.toHaveBeenCalled();
   });
 
@@ -196,7 +199,7 @@ describe("ToastPositionGroup.vue", () => {
       props: { position: "top-right", toasts: [] },
     });
     // Call open() directly — isOpen=false but container=null → early return
-    (wrapper.getCurrentComponent() as any).setupState.open();
+    (wrapper.getCurrentComponent()!.setupState as unknown as SetupState).open();
     expect(mockShowPopover).not.toHaveBeenCalled();
   });
 
@@ -216,7 +219,7 @@ describe("ToastPositionGroup.vue", () => {
       width: 200,
     } as DOMRect);
     // Access unexposed onBeforeLeave from setup state
-    const setupState = (wrapper.getCurrentComponent() as any).setupState;
+    const setupState = wrapper.getCurrentComponent()!.setupState as unknown as SetupState;
     setupState.onBeforeLeave(el);
     expect(el.style.width).toBe("200px");
     wrapper.unmount();

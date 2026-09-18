@@ -2,6 +2,8 @@ import WordExamples from "@components/word/WordExamples.vue";
 import { flushPromises, mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 
+import type { WordPropertiesExamplesExampleAudio } from "@/gql/entity-types";
+
 vi.mock("@components/AudioPlayerList.vue", () => ({
   __esModule: true,
   default: { name: "AudioPlayerList", template: "<div class='mock-audio-player'></div>" },
@@ -135,7 +137,7 @@ describe("WordExamples.vue", () => {
         examples: [
           {
             example: "Test.",
-            exampleAudio: [{ label: "", url: "audio.mp3" }] as any,
+            exampleAudio: [{ label: "", url: "audio.mp3" }] as WordPropertiesExamplesExampleAudio[],
             exampleExplanation: null,
           },
         ],
@@ -151,7 +153,7 @@ describe("WordExamples.vue", () => {
         examples: [
           {
             example: "Erster.",
-            exampleAudio: [{ label: "", url: "a.mp3" }] as any,
+            exampleAudio: [{ label: "", url: "a.mp3" }] as WordPropertiesExamplesExampleAudio[],
             exampleExplanation: null,
           },
           { example: "Zweiter.", exampleAudio: null, exampleExplanation: null },

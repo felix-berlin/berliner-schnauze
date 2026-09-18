@@ -2,16 +2,20 @@ import ScrollToTop from "@components/ScrollToTop.vue";
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
+type PartialIntersectionCallback = (
+  entries: Pick<IntersectionObserverEntry, "isIntersecting">[],
+) => void;
+
 describe("ScrollToTop.vue", () => {
-  let intersectionObserverMock: any;
-  let observeMock: any;
-  let disconnectMock: any;
+  let intersectionObserverMock: ReturnType<typeof vi.fn>;
+  let observeMock: ReturnType<typeof vi.fn>;
+  let disconnectMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     observeMock = vi.fn();
     disconnectMock = vi.fn();
 
-    intersectionObserverMock = vi.fn(function (callback: any) {
+    intersectionObserverMock = vi.fn(function (callback: PartialIntersectionCallback) {
       // Store the callback so we can call it later
       this.callback = callback;
       return {

@@ -102,19 +102,25 @@ describe("NavList.vue", () => {
 
   it("isVueComponent returns true for object with render property (covers line 58)", () => {
     const wrapper = mount(NavList, { props: { items: linkItems } });
-    const { isVueComponent } = (wrapper.getCurrentComponent() as any).setupState;
+    const { isVueComponent } = wrapper.getCurrentComponent()!.setupState as {
+      isVueComponent: (v: unknown) => boolean;
+    };
     expect(isVueComponent({ render: () => {} })).toBe(true);
   });
 
   it("isVueComponent returns true for object with setup property", () => {
     const wrapper = mount(NavList, { props: { items: linkItems } });
-    const { isVueComponent } = (wrapper.getCurrentComponent() as any).setupState;
+    const { isVueComponent } = wrapper.getCurrentComponent()!.setupState as {
+      isVueComponent: (v: unknown) => boolean;
+    };
     expect(isVueComponent({ setup: () => ({}) })).toBe(true);
   });
 
   it("isVueComponent returns true for object with components property", () => {
     const wrapper = mount(NavList, { props: { items: linkItems } });
-    const { isVueComponent } = (wrapper.getCurrentComponent() as any).setupState;
+    const { isVueComponent } = wrapper.getCurrentComponent()!.setupState as {
+      isVueComponent: (v: unknown) => boolean;
+    };
     expect(isVueComponent({ components: {} })).toBe(true);
   });
 
@@ -132,7 +138,9 @@ describe("NavList.vue", () => {
 
   it("isVueComponent returns false for plain link object", () => {
     const wrapper = mount(NavList, { props: { items: linkItems } });
-    const { isVueComponent } = (wrapper.getCurrentComponent() as any).setupState;
+    const { isVueComponent } = wrapper.getCurrentComponent()!.setupState as {
+      isVueComponent: (v: unknown) => boolean;
+    };
     expect(isVueComponent({ link: "/about", title: "About" })).toBe(false);
   });
 });

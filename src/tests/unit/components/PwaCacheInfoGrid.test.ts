@@ -87,7 +87,7 @@ describe("PwaCacheInfoGrid", () => {
   it("renders swStatusIcon component when provided (covers line 6 v-if true branch)", () => {
     const IconStub = markRaw({ template: "<svg data-testid='icon' />" });
     const wrapper = mount(PwaCacheInfoGrid, {
-      props: { ...defaultProps, swStatusIcon: IconStub as any },
+      props: { ...defaultProps, swStatusIcon: IconStub },
     });
     expect(wrapper.find("[data-testid='icon']").exists()).toBe(true);
   });

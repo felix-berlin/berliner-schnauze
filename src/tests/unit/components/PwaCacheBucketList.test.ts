@@ -3,11 +3,12 @@ import type { CacheBucket } from "@composables/useCacheStorage";
 import PwaCacheBucketList from "@components/PwaCacheBucketList.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
+import type { Slots } from "vue";
 
 vi.mock("virtua/vue", () => ({
   VList: {
     props: ["data", "style", "class"],
-    setup(props: { data: unknown[] }, { slots }: { slots: any }) {
+    setup(props: { data: unknown[] }, { slots }: { slots: Slots }) {
       return () =>
         props.data.map((item: unknown, index: number) => slots.default?.({ index, item }));
     },
