@@ -24,8 +24,11 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 vi.mock("@stores/wordList.ts", () => ({
+  $oramaSearchResults: {},
+  $searchQuery: {},
   $searchResultCount: {},
   $showWordListFilterFlyout: {},
+  searchLength: {},
 }));
 
 // SearchWords.vue (mounted as a real child below) calls this composable,
