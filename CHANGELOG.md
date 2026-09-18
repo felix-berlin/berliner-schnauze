@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.49.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.2...v3.49.3) (2026-09-18)
+
+
+### Bug Fixes
+
+* **e2e:** build+preview instead of astro dev for CI Playwright runs ([1445005](https://github.com/felix-berlin/berliner-schnauze/commit/14450058fc4962f044a8d71ed7660adc1da47528))
+* **e2e:** cap generated pages instead of fetched words in Playwright build ([09798a2](https://github.com/felix-berlin/berliner-schnauze/commit/09798a2fa3f96efb4f86cf38736e5f695098c89b))
+* **e2e:** decouple site build from Playwright's webServer wait ([fb76815](https://github.com/felix-berlin/berliner-schnauze/commit/fb768150885c006f701aedf01dc2b811e6dfaad1))
+* **e2e:** narrow E2E_WORD_LIMIT before use in page-limit filter ([4d9458a](https://github.com/felix-berlin/berliner-schnauze/commit/4d9458adf433f0030a8948cb2d1f5249218e01b6))
+* **search:** narrow filter(Boolean) result to string[] for locale sort ([c4b2fcf](https://github.com/felix-berlin/berliner-schnauze/commit/c4b2fcf0e3bcc7788fe80516e8c78f1c3eb5efe0))
+* **test:** mock the wordList.ts exports SearchWords.vue actually needs ([e431bde](https://github.com/felix-berlin/berliner-schnauze/commit/e431bde56cb245e5fd89dec040e61eb8f9c4d499))
+* **test:** type all remaining any casts and fix broken SearchModal test ([4b29924](https://github.com/felix-berlin/berliner-schnauze/commit/4b2992492593cf1c02f87bea019396820d1f0641))
+
+
+### Performance Improvements
+
+* **e2e:** limit words and skip upload plugins in the Playwright build ([d9abb50](https://github.com/felix-berlin/berliner-schnauze/commit/d9abb5035ed55fa73c7be8aa1e673e02453ea8e1))
+* **e2e:** skip OG image generation in the Playwright build ([a07a693](https://github.com/felix-berlin/berliner-schnauze/commit/a07a6938fe7f7ae2eaa71a21a0af0057bed4f08e))
+* **e2e:** skip the sitemap integration in the Playwright build ([c289efb](https://github.com/felix-berlin/berliner-schnauze/commit/c289efb7e5559d2d654a2d6492ea395d86e89f85))
+
 ## [3.49.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.1...v3.49.2) (2026-08-26)
 
 
