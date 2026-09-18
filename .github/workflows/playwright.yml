@@ -55,6 +55,14 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: pnpm exec playwright install-deps
 
+      # Built explicitly here (rather than inside webServer.command) so the
+      # build has the full job timeout to finish — Astro fetches and renders
+      # every word page from the live WordPress API, which can take longer
+      # than any reasonable "wait for server" timeout. Playwright then only
+      # has to wait for `astro preview` to start, which is near-instant.
+      - name: Build site
+        run: pnpm run build
+
       - name: Run Playwright tests
         run: pnpm exec playwright test
 

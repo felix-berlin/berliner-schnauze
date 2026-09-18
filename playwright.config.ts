@@ -88,11 +88,16 @@ export default defineConfig({
     // /wort/<slug> and the homepage). The static build removes both the
     // per-page compile cost and the live-network dependency during the test
     // run itself — content is fetched once at build time.
+    //
+    // The build itself runs as its own CI step (see playwright.yml) so it gets
+    // the full job timeout rather than racing this webServer timeout — by the
+    // time this command runs in CI, the site is already built, so it only has
+    // to wait for `astro preview` to start listening.
     command: process.env.CI
-      ? "pnpm run build && pnpm run preview"
+      ? "pnpm run preview"
       : "pnpm run supportedBrowsers && pnpm exec astro dev",
     url: "http://localhost:4321",
     reuseExistingServer: !process.env.CI,
-    timeout: process.env.CI ? 300_000 : 120_000,
+    timeout: 120_000,
   },
 });
