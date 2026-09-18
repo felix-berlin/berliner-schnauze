@@ -1,11 +1,12 @@
 import { fetchAllWords } from "@services/api.ts";
-import { limitPagesForE2e } from "@services/queries/getWords.ts";
 import { OGImageRoute } from "astro-og-canvas";
+import { E2E_WORD_LIMIT } from "astro:env/server";
 
-const allWords = await fetchAllWords();
+// The Playwright CI build never needs the images (word pages only reference the URL).
+const allWords = E2E_WORD_LIMIT ? [] : await fetchAllWords();
 
 const pages = Object.fromEntries(
-  limitPagesForE2e(allWords)
+  allWords
     .filter(({ node }) => node.slug)
     .map(({ node }) => [
       node.slug!,
