@@ -129,12 +129,12 @@ async function main(): Promise<void> {
       const result = await wpFetch<WpPost>(
         `/${POST_TYPE_REST_BASE}/${post.id}?_fields=id,acf.info_text,acf.sources`,
         {
-          method: "POST",
           // ACF REST validation requires the mandatory `berlinerisch` field
           // in every acf update payload — send it back unchanged.
           body: JSON.stringify({
             acf: { berlinerisch: post.acf?.berlinerisch, info_text: newInfoText, sources },
           }),
+          method: "POST",
         },
         config,
       );

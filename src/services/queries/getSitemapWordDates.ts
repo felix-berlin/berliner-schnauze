@@ -30,11 +30,13 @@ async function fetchDates(
   }
 
   do {
+    // oxlint-disable-next-line no-await-in-loop -- cursor-based pagination: each page's cursor depends on the previous response
     const res = await fetch(apiUrl, {
       body: JSON.stringify({ query, variables: { after: cursor } }),
       headers,
       method: "POST",
     });
+    // oxlint-disable-next-line no-await-in-loop -- same request chain as the fetch above
     const { data } = (await res.json()) as {
       data?: Record<
         string,

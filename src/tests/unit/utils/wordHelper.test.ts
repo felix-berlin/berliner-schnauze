@@ -62,23 +62,23 @@ describe("coloredConsonantsAndVowels", () => {
 
 describe("countLetters", () => {
   it("returns zeros for empty string", () => {
-    expect(countLetters("")).toEqual({ vowels: 0, consonants: 0 });
+    expect(countLetters("")).toEqual({ consonants: 0, vowels: 0 });
   });
 
   it("counts vowels and consonants correctly", () => {
-    expect(countLetters("abc")).toEqual({ vowels: 1, consonants: 2 });
+    expect(countLetters("abc")).toEqual({ consonants: 2, vowels: 1 });
   });
 
   it("counts umlauts as vowels", () => {
-    expect(countLetters("äöü")).toEqual({ vowels: 3, consonants: 0 });
+    expect(countLetters("äöü")).toEqual({ consonants: 0, vowels: 3 });
   });
 
   it("counts ß as consonant", () => {
-    expect(countLetters("ß")).toEqual({ vowels: 0, consonants: 1 });
+    expect(countLetters("ß")).toEqual({ consonants: 1, vowels: 0 });
   });
 
   it("ignores digits and spaces", () => {
-    expect(countLetters("a 1")).toEqual({ vowels: 1, consonants: 0 });
+    expect(countLetters("a 1")).toEqual({ consonants: 0, vowels: 1 });
   });
 });
 
@@ -218,7 +218,7 @@ describe("createWikimediaFileList", () => {
     mockFetch.mockResolvedValue({ thumbnail: { url: "http://example.com/img.jpg" } });
 
     const result = await createWikimediaFileList([
-      { wikimediaFile: "File:test.jpg", caption: "cap", description: "desc" } as never,
+      { caption: "cap", description: "desc", wikimediaFile: "File:test.jpg" } as never,
     ]);
 
     expect(result).toHaveLength(1);
@@ -233,8 +233,8 @@ describe("createWikimediaFileList", () => {
       .mockRejectedValueOnce(new Error("network error"));
 
     const result = await createWikimediaFileList([
-      { wikimediaFile: "File:ok.jpg", caption: "ok", description: "" } as never,
-      { wikimediaFile: "File:bad.jpg", caption: "bad", description: "" } as never,
+      { caption: "ok", description: "", wikimediaFile: "File:ok.jpg" } as never,
+      { caption: "bad", description: "", wikimediaFile: "File:bad.jpg" } as never,
     ]);
 
     expect(result).toHaveLength(1);
@@ -251,7 +251,7 @@ describe("createWikimediaFileList", () => {
   it("calls fetchWikimediaAPI with empty string when wikimediaFile is null (covers ?? '' branch)", async () => {
     mockFetch.mockResolvedValue({ thumbnail: { url: "http://example.com/img.jpg" } });
     const result = await createWikimediaFileList([
-      { wikimediaFile: null, caption: "cap", description: "desc" } as never,
+      { caption: "cap", description: "desc", wikimediaFile: null } as never,
     ]);
     expect(mockFetch).toHaveBeenCalledWith("");
     expect(result).toHaveLength(1);
@@ -336,7 +336,7 @@ describe("alphabeticNeighbors", () => {
 
   it("returns empty arrays when currentWord id is not in allWords", () => {
     const result = alphabeticNeighbors(words, makeRef("99", "Nope"), 2);
-    expect(result).toEqual({ before: [], after: [] });
+    expect(result).toEqual({ after: [], before: [] });
   });
 
   it("limits neighbors to n", () => {

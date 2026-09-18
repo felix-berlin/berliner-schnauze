@@ -1,6 +1,6 @@
 import SuggestWordForm from "@components/SuggestWordForm.vue";
 import TurnStile from "@components/TurnStile.vue";
-import { mount, flushPromises, config } from "@vue/test-utils";
+import { mount, config } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, beforeAll, afterAll } from "vitest";
 
 vi.mock("astro:env/client", () => ({
@@ -13,10 +13,10 @@ vi.mock("@/gql/graphql.ts", () => ({
 
 vi.mock("@urql/vue", () => ({
   useMutation: vi.fn(() => ({
+    data: { value: null },
     executeMutation: vi.fn(() =>
       Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
     ),
-    data: { value: null },
   })),
 }));
 
@@ -30,9 +30,9 @@ vi.mock("@utils/analytics", () => ({
 
 vi.mock("@components/TurnStile.vue", () => ({
   default: {
+    emits: ["verify"],
     name: "TurnStile",
     template: "<div class='mock-turnstile' />",
-    emits: ["verify"],
   },
 }));
 
@@ -199,9 +199,9 @@ describe("SuggestWordForm.vue", () => {
   it("shows 'Wort wird gesendet' while mutation is pending (covers line 127 v-else branch)", async () => {
     const { useMutation } = await import("@urql/vue");
     vi.mocked(useMutation).mockReturnValueOnce({
-      executeMutation: vi.fn(() => new Promise(() => {})),
       data: { value: null },
-    } as any);
+      executeMutation: vi.fn(() => new Promise(() => {})),
+    } as unknown as ReturnType<typeof useMutation>);
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
@@ -214,11 +214,11 @@ describe("SuggestWordForm.vue", () => {
     const { useMutation } = await import("@urql/vue");
     const { createToastNotify } = await import("@stores/toastNotify.ts");
     vi.mocked(useMutation).mockReturnValueOnce({
+      data: { value: null },
       executeMutation: vi.fn(() =>
         Promise.resolve({ data: { sendEmail: { sent: false } }, error: null }),
       ),
-      data: { value: null },
-    } as any);
+    } as unknown as ReturnType<typeof useMutation>);
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
@@ -268,11 +268,11 @@ describe("SuggestWordForm.vue", () => {
     vi.useFakeTimers();
     const { useMutation } = await import("@urql/vue");
     vi.mocked(useMutation).mockReturnValueOnce({
+      data: { value: { sendEmail: { sent: true } } },
       executeMutation: vi.fn(() =>
         Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
       ),
-      data: { value: { sendEmail: { sent: true } } } as any,
-    } as any);
+    } as unknown as ReturnType<typeof useMutation>);
 
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");

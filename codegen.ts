@@ -10,10 +10,10 @@ const { WP_API, WP_AUTH_USER, WP_AUTH_PASS } = loadEnv(
 
 const schema: Record<string, { assumeValid: boolean; headers: Record<string, string> }> = {
   [WP_API]: {
+    assumeValid: true,
     headers: {
       Authorization: `Basic ${Buffer.from(`${WP_AUTH_USER}:${WP_AUTH_PASS}`).toString("base64")}`,
     },
-    assumeValid: true,
   },
 };
 

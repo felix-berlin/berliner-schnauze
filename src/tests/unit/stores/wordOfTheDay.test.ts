@@ -1,3 +1,4 @@
+import { map } from "nanostores";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("astro:env/client", () => ({
@@ -5,10 +6,7 @@ vi.mock("astro:env/client", () => ({
 }));
 
 vi.mock("@nanostores/persistent", () => ({
-  persistentMap: vi.fn((key: string, initial: unknown) => {
-    const { map } = require("nanostores");
-    return map(initial);
-  }),
+  persistentMap: vi.fn((key: string, initial: unknown) => map(initial)),
 }));
 
 const mockFetch = vi.fn();
@@ -19,8 +17,8 @@ describe("wordOfTheDay store", () => {
     vi.resetModules();
     localStorage.clear();
     mockFetch.mockResolvedValue({
+      json: () => Promise.resolve({ ID: 1, berlinerisch: "Schnauze" }),
       ok: true,
-      json: () => Promise.resolve({ berlinerisch: "Schnauze", ID: 1 }),
     });
   });
 
@@ -35,7 +33,7 @@ describe("wordOfTheDay store", () => {
       await getWordOfTheDay();
       expect($wordOfTheDay.get().loading).toBe(false);
       expect($wordOfTheDay.get().error).toBe(false);
-      expect($wordOfTheDay.get().word).toEqual({ berlinerisch: "Schnauze", ID: 1 });
+      expect($wordOfTheDay.get().word).toEqual({ ID: 1, berlinerisch: "Schnauze" });
     });
 
     it("sets timestamp on success", async () => {

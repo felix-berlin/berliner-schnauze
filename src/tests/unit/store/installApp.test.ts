@@ -7,14 +7,14 @@ beforeEach(() => {
   vi.resetModules();
 
   Object.defineProperty(global.window, "matchMedia", {
+    configurable: true,
     value: vi.fn().mockReturnValue({ matches: false }),
     writable: true,
-    configurable: true,
   });
   Object.defineProperty(global.window.navigator, "standalone", {
+    configurable: true,
     value: undefined,
     writable: true,
-    configurable: true,
   });
 });
 
@@ -30,9 +30,9 @@ describe("isPwaInstalled", () => {
 
   it("returns true when matchMedia reports standalone", async () => {
     Object.defineProperty(global.window, "matchMedia", {
+      configurable: true,
       value: vi.fn().mockReturnValue({ matches: true }),
       writable: true,
-      configurable: true,
     });
     const { isPwaInstalled } = await import("@stores/installApp.ts");
     expect(isPwaInstalled()).toBe(true);
@@ -40,9 +40,9 @@ describe("isPwaInstalled", () => {
 
   it("returns true when navigator.standalone is true (iOS)", async () => {
     Object.defineProperty(global.window.navigator, "standalone", {
+      configurable: true,
       value: true,
       writable: true,
-      configurable: true,
     });
     const { isPwaInstalled } = await import("@stores/installApp.ts");
     expect(isPwaInstalled()).toBe(true);

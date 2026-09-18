@@ -14,11 +14,11 @@ const makeState = (overrides: Partial<ReturnType<typeof useNotificationSettings>
   notificationsSupported: true,
   pushState: ref("unsubscribed"),
   pushSupported: true,
-  vapidConfigured: true,
-  showRevokeHint: ref(false),
-  showPushSection: computed(() => false),
   requestNotificationPermission: mockRequestNotificationPermission,
+  showPushSection: computed(() => false),
+  showRevokeHint: ref(false),
   togglePush: mockTogglePush,
+  vapidConfigured: true,
   ...overrides,
 });
 
@@ -111,8 +111,8 @@ describe("AppSettingsNotifications.vue", () => {
     mockedUseNotificationSettings.mockReturnValue(
       makeState({
         notificationPermission: ref("granted"),
-        vapidConfigured: false,
         showPushSection: computed(() => true),
+        vapidConfigured: false,
       }) as ReturnType<typeof useNotificationSettings>,
     );
     const wrapper = mount(AppSettingsNotifications);

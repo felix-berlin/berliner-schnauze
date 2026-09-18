@@ -17,8 +17,8 @@ const mockWordSearch = ref({
 });
 
 vi.mock("@stores/wordList.ts", () => ({
-  $wordSearch: {},
   $oramaSearchResults: {},
+  $wordSearch: {},
   setLetterFilter: vi.fn(),
 }));
 
@@ -29,6 +29,7 @@ vi.mock("@nanostores/vue", () => ({
 
 vi.mock("@vueform/multiselect", () => ({
   default: {
+    emits: ["select", "deselect", "update:modelValue"],
     name: "Multiselect",
     props: [
       "modelValue",
@@ -41,7 +42,6 @@ vi.mock("@vueform/multiselect", () => ({
       "aria",
     ],
     template: "<div class='mock-multiselect'><slot /></div>",
-    emits: ["select", "deselect", "update:modelValue"],
   },
 }));
 
@@ -84,8 +84,8 @@ describe("ThemenFilter.vue", () => {
     const wrapper = mount(ThemenFilter);
     const multiselect = wrapper.findComponent({ name: "Multiselect" });
     expect(multiselect.props("options")).toEqual([
-      { value: "essen-trinken", label: "Essen & Trinken" },
-      { value: "alkohol-kneipe", label: "Alkohol & Kneipe" },
+      { label: "Essen & Trinken", value: "essen-trinken" },
+      { label: "Alkohol & Kneipe", value: "alkohol-kneipe" },
     ]);
   });
 

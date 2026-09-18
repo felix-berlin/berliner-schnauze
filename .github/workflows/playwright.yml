@@ -38,8 +38,40 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
       - name: Install Playwright Browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install --with-deps
+
+      # Cache hit skips the browser download above, but the OS-level shared
+      # libs (apt packages) still need installing on every fresh runner.
+      - name: Install Playwright OS dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps
+
+      # Built explicitly here (rather than inside webServer.command) so the
+      # build has the full job timeout to finish — Astro fetches and renders
+      # every word page from the live WordPress API, which can take longer
+      # than any reasonable "wait for server" timeout. Playwright then only
+      # has to wait for `astro preview` to start, which is near-instant.
+      #
+      # E2E_WORD_LIMIT caps how many word/OG *pages* are generated (full
+      # site is 6000+ words, ~6.5min). The word data itself is always fetched
+      # in full — list/letter filters and similar-sounding/neighbor sections
+      # depend on it. getWords.ts always builds the specific slugs the specs
+      # navigate to directly, regardless of this limit. Also skips the Sentry/Codecov
+      # source-map upload plugins, which add real time for a build nobody
+      # deploys (see astro.config.mjs's isE2eBuild).
+      - name: Build site
+        env:
+          E2E_WORD_LIMIT: "500"
+        run: pnpm run build
 
       - name: Run Playwright tests
         run: pnpm exec playwright test

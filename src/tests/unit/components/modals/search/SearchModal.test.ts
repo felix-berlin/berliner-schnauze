@@ -24,8 +24,18 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 vi.mock("@stores/wordList.ts", () => ({
-  $showWordListFilterFlyout: {},
+  $oramaSearchResults: {},
+  $searchQuery: {},
   $searchResultCount: {},
+  $showWordListFilterFlyout: {},
+  searchLength: {},
+}));
+
+// SearchWords.vue (mounted as a real child below) calls this composable,
+// which needs $searchQuery from @stores/wordList.ts — not relevant to what
+// this file tests, so stub it out like SearchWords.test.ts does.
+vi.mock("@composables/useSearchQuerySync", () => ({
+  useSearchQuerySync: vi.fn(),
 }));
 
 vi.mock("@components/word-search/WordFilter.vue", () => ({
@@ -53,10 +63,10 @@ vi.mock("@components/WordList.vue", () => {
   // module proxy when an async component resolves. Use a permissive Proxy so those accesses
   // return undefined/false instead of causing Vitest's strict proxy to throw.
   return new Proxy(mod, {
-    has: () => true,
     get(target, key) {
       return key in target ? target[key] : undefined;
     },
+    has: () => true,
   });
 });
 

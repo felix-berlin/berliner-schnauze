@@ -21,15 +21,15 @@ describe("WordAlphabetNav.astro", () => {
   }, 30_000);
 
   it("renders nothing when both before and after are empty", async () => {
-    const result = await render({ neighbors: { before: [], after: [] } });
+    const result = await render({ neighbors: { after: [], before: [] } });
     expect(result).not.toContain("c-single-word__alpha-nav");
   });
 
   it("renders the container when before has entries", async () => {
     const result = await render({
       neighbors: {
-        before: [makeWordRef("affe", "Affe")],
         after: [],
+        before: [makeWordRef("affe", "Affe")],
       },
     });
     expect(result).toContain("c-single-word__alpha-nav");
@@ -38,8 +38,8 @@ describe("WordAlphabetNav.astro", () => {
   it("renders the container when after has entries", async () => {
     const result = await render({
       neighbors: {
-        before: [],
         after: [makeWordRef("berlin", "Berlin")],
+        before: [],
       },
     });
     expect(result).toContain("c-single-word__alpha-nav");
@@ -48,8 +48,8 @@ describe("WordAlphabetNav.astro", () => {
   it("renders Davor label and links for before words", async () => {
     const result = await render({
       neighbors: {
-        before: [makeWordRef("affe", "Affe")],
         after: [],
+        before: [makeWordRef("affe", "Affe")],
       },
     });
     expect(result).toContain("Davor");
@@ -60,8 +60,8 @@ describe("WordAlphabetNav.astro", () => {
   it("renders Danach label and links for after words", async () => {
     const result = await render({
       neighbors: {
-        before: [],
         after: [makeWordRef("berlin", "Berlin")],
+        before: [],
       },
     });
     expect(result).toContain("Danach");
@@ -72,8 +72,8 @@ describe("WordAlphabetNav.astro", () => {
   it("renders multiple before and after words", async () => {
     const result = await render({
       neighbors: {
-        before: [makeWordRef("affe", "Affe"), makeWordRef("ball", "Ball")],
         after: [makeWordRef("dame", "Dame"), makeWordRef("ente", "Ente")],
+        before: [makeWordRef("affe", "Affe"), makeWordRef("ball", "Ball")],
       },
     });
     expect(result).toContain("Affe");
@@ -85,8 +85,8 @@ describe("WordAlphabetNav.astro", () => {
   it("does not render Davor section when before is empty", async () => {
     const result = await render({
       neighbors: {
-        before: [],
         after: [makeWordRef("berlin", "Berlin")],
+        before: [],
       },
     });
     expect(result).not.toContain("Davor");
@@ -95,8 +95,8 @@ describe("WordAlphabetNav.astro", () => {
   it("does not render Danach section when after is empty", async () => {
     const result = await render({
       neighbors: {
-        before: [makeWordRef("affe", "Affe")],
         after: [],
+        before: [makeWordRef("affe", "Affe")],
       },
     });
     expect(result).not.toContain("Danach");
@@ -105,8 +105,8 @@ describe("WordAlphabetNav.astro", () => {
   it("renders links in a list", async () => {
     const result = await render({
       neighbors: {
-        before: [makeWordRef("affe", "Affe")],
         after: [],
+        before: [makeWordRef("affe", "Affe")],
       },
     });
     expect(result).toContain("<ul");

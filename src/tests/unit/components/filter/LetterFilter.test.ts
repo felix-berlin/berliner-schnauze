@@ -1,7 +1,6 @@
 import LetterFilter from "@components/filter/LetterFilter.vue";
-import { useStore } from "@nanostores/vue";
-import { $wordSearch, setLetterFilter } from "@stores/wordList.ts";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { setLetterFilter } from "@stores/wordList.ts";
+import { mount } from "@vue/test-utils";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 vi.mock("@nanostores/vue", () => ({
@@ -17,7 +16,7 @@ vi.mock("@stores/wordList.ts", () => ({
 }));
 
 describe("LetterFilter.vue", () => {
-  let wrapper: VueWrapper<any, any>;
+  let wrapper: ReturnType<typeof mount>;
 
   beforeEach(() => {
     wrapper = mount(LetterFilter);

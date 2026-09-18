@@ -5,9 +5,9 @@ import { ref } from "vue";
 
 import { createStoreMockImpl } from "../helpers/stores";
 
-let installPromptRef = ref<unknown>(null);
-let showInstallButtonRef = ref(false);
-let isPwaInstalledRef = ref(false);
+const installPromptRef = ref<unknown>(null);
+const showInstallButtonRef = ref(false);
+const isPwaInstalledRef = ref(false);
 
 vi.mock("@stores/installApp.ts", () => ({
   $installPrompt: "installPrompt",

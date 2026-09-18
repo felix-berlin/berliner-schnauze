@@ -18,20 +18,20 @@ describe("imagorImageService.getURL", () => {
   it("builds and signs a path for a remote string src with width/height", () => {
     const url = imagorImageService.getURL(
       {
+        format: "webp",
+        height: 200,
+        quality: 80,
         src: "https://cms.berliner-schnauze.wtf/foo.png",
         width: 400,
-        height: 200,
-        format: "webp",
-        quality: 80,
       },
       {} as never,
     );
 
     expect(buildImagorPathMock).toHaveBeenCalledWith("https://cms.berliner-schnauze.wtf/foo.png", {
-      width: 400,
-      height: 200,
       format: "webp",
+      height: 200,
       quality: 80,
+      width: 400,
     });
     expect(signImagorPathMock).toHaveBeenCalledWith(
       "fit-in/400x200/filters:format(webp):quality(80)/encoded-url",
@@ -44,7 +44,7 @@ describe("imagorImageService.getURL", () => {
   it("throws when width is missing", () => {
     expect(() =>
       imagorImageService.getURL(
-        { src: "https://cms.berliner-schnauze.wtf/foo.png", height: 200 },
+        { height: 200, src: "https://cms.berliner-schnauze.wtf/foo.png" },
         {} as never,
       ),
     ).toThrow(/width and height/);
@@ -64,7 +64,7 @@ describe("imagorImageService.getURL", () => {
     signImagorPathMock.mockClear();
 
     const localSrc = { src: "/local-image-abc123.png" } as never;
-    const url = imagorImageService.getURL({ src: localSrc, width: 100, height: 100 }, {} as never);
+    const url = imagorImageService.getURL({ height: 100, src: localSrc, width: 100 }, {} as never);
 
     expect(url).toBe("/local-image-abc123.png");
     expect(buildImagorPathMock).not.toHaveBeenCalled();
@@ -74,12 +74,12 @@ describe("imagorImageService.getURL", () => {
   it("skips the fallback format at 1x density (reserved for img tag), includes other formats and densities", () => {
     const srcSet = imagorImageService.getSrcSet(
       {
+        densities: [1, 2],
+        format: "avif",
+        formats: ["avif", "webp"],
+        height: 66,
         src: "https://cms.berliner-schnauze.wtf/foo.png",
         width: 48,
-        height: 66,
-        format: "avif",
-        densities: [1, 2],
-        formats: ["avif", "webp"],
       },
       {} as never,
     );
@@ -93,14 +93,14 @@ describe("imagorImageService.getURL", () => {
         }) => ({
           descriptor: entry.descriptor,
           format: entry.transform.format,
-          width: entry.transform.width,
           height: entry.transform.height,
+          width: entry.transform.width,
         }),
       ),
     ).toEqual([
-      { descriptor: "1x", format: "avif", width: 48, height: 66 },
-      { descriptor: "2x", format: "avif", width: 96, height: 132 },
-      { descriptor: "2x", format: "webp", width: 96, height: 132 },
+      { descriptor: "1x", format: "avif", height: 66, width: 48 },
+      { descriptor: "2x", format: "avif", height: 132, width: 96 },
+      { descriptor: "2x", format: "webp", height: 132, width: 96 },
     ]);
   });
 });

@@ -30,12 +30,12 @@ describe("RelatedWords.vue", () => {
   });
 
   it("renders the specified numberOfWords", () => {
-    const wrapper = mount(RelatedWords, { props: { words, numberOfWords: 3 } });
+    const wrapper = mount(RelatedWords, { props: { numberOfWords: 3, words } });
     expect(wrapper.findAll("li")).toHaveLength(3);
   });
 
   it("renders links with correct href from routeToWord", () => {
-    const wrapper = mount(RelatedWords, { props: { words, numberOfWords: 1 } });
+    const wrapper = mount(RelatedWords, { props: { numberOfWords: 1, words } });
     const link = wrapper.find("a");
     expect(link.attributes("href")).toMatch(/^\/wort\//);
   });
@@ -46,13 +46,13 @@ describe("RelatedWords.vue", () => {
       makeWord("kiez", "Kiez"),
       makeWord("schnauze", "Schnauze"),
     ];
-    const wrapper = mount(RelatedWords, { props: { words: simpleWords, numberOfWords: 3 } });
+    const wrapper = mount(RelatedWords, { props: { numberOfWords: 3, words: simpleWords } });
     const linkTexts = wrapper.findAll("a").map((a) => a.text());
     expect(linkTexts.some((t) => ["Allet", "Kiez", "Schnauze"].includes(t))).toBe(true);
   });
 
   it("links have title attribute with berlinerisch text", () => {
-    const wrapper = mount(RelatedWords, { props: { words, numberOfWords: 1 } });
+    const wrapper = mount(RelatedWords, { props: { numberOfWords: 1, words } });
     const link = wrapper.find("a");
     expect(link.attributes("title")).toMatch(/Erfahre mehr über/);
   });
@@ -69,7 +69,7 @@ describe("RelatedWords.vue", () => {
 
   it("throws RangeError when numberOfWords exceeds available words (covers line 37)", () => {
     const tooFew = [makeWord("a", "A"), makeWord("b", "B")];
-    expect(() => mount(RelatedWords, { props: { words: tooFew, numberOfWords: 5 } })).toThrow(
+    expect(() => mount(RelatedWords, { props: { numberOfWords: 5, words: tooFew } })).toThrow(
       RangeError,
     );
   });
@@ -80,7 +80,7 @@ describe("RelatedWords.vue", () => {
       { slug: "kiez", wordProperties: { berlinerisch: "Kiez" } },
       { slug: "schnauze", wordProperties: { berlinerisch: "Schnauze" } },
     ] as ReturnType<typeof makeWord>[];
-    const wrapper = mount(RelatedWords, { props: { words: wordsWithoutId, numberOfWords: 3 } });
+    const wrapper = mount(RelatedWords, { props: { numberOfWords: 3, words: wordsWithoutId } });
     expect(wrapper.findAll("li")).toHaveLength(3);
   });
 
@@ -91,7 +91,7 @@ describe("RelatedWords.vue", () => {
       { wordProperties: { berlinerisch: "Schnauze" } },
     ] as unknown as ReturnType<typeof makeWord>[];
     const wrapper = mount(RelatedWords, {
-      props: { words: wordsWithoutIdOrSlug, numberOfWords: 3 },
+      props: { numberOfWords: 3, words: wordsWithoutIdOrSlug },
     });
     expect(wrapper.findAll("li")).toHaveLength(3);
   });

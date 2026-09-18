@@ -9,6 +9,7 @@ on:
 permissions:
   id-token: write
   contents: read
+  checks: write
 
 jobs:
   lint:
@@ -59,3 +60,23 @@ jobs:
           token: ${{ env.CODECOV_TOKEN }}
         env:
           CODECOV_TOKEN: ${{ env.CODECOV_TOKEN }}
+
+      # Fork PRs get a read-only GITHUB_TOKEN, so this check-run publish step
+      # only takes effect on branch pushes/same-repo PRs — permissions above
+      # can't grant more than that.
+      - name: Publish test results as GitHub check
+        if: ${{ !cancelled() }}
+        uses: dorny/test-reporter@v3
+        with:
+          name: Vitest results
+          path: tests/unit/junit-report.xml
+          reporter: java-junit
+
+      - name: Upload test results artifact
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: vitest-results
+          path: |
+            tests/unit/junit-report.xml
+            tests/unit/coverage

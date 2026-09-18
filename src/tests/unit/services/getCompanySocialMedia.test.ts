@@ -7,10 +7,10 @@ const toPromiseMock = vi.fn();
 const queryMock = vi.fn(() => ({ toPromise: toPromiseMock }));
 
 vi.mock("@urql/core", () => ({
-  cacheExchange: {},
   Client: vi.fn().mockImplementation(function (this: { query: typeof queryMock }) {
     this.query = queryMock;
   }),
+  cacheExchange: {},
   fetchExchange: {},
 }));
 

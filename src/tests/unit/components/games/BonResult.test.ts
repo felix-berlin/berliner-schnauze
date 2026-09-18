@@ -28,13 +28,13 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 });
 
 const defaultProps = {
-  score: 50,
+  allTimeHighScore: 100,
   bestStreak: 3,
-  totalAnswered: 10,
   correctAnswers: 7,
   isNewHighScore: false,
-  allTimeHighScore: 100,
   lastCard: null,
+  score: 50,
+  totalAnswered: 10,
 };
 
 describe("BonResult.vue", () => {
@@ -53,21 +53,21 @@ describe("BonResult.vue", () => {
 
   it("renders score and bestStreak values", () => {
     statsRef.value = { playerName: "" };
-    const wrapper = mount(BonResult, { props: { ...defaultProps, score: 99, bestStreak: 7 } });
+    const wrapper = mount(BonResult, { props: { ...defaultProps, bestStreak: 7, score: 99 } });
     expect(wrapper.text()).toContain("99");
     expect(wrapper.text()).toContain("7");
   });
 
   it("computes accuracy percent correctly", () => {
     const wrapper = mount(BonResult, {
-      props: { ...defaultProps, totalAnswered: 10, correctAnswers: 8 },
+      props: { ...defaultProps, correctAnswers: 8, totalAnswered: 10 },
     });
     expect(wrapper.text()).toContain("80%");
   });
 
   it("shows 0% accuracy when totalAnswered is 0", () => {
     const wrapper = mount(BonResult, {
-      props: { ...defaultProps, totalAnswered: 0, correctAnswers: 0 },
+      props: { ...defaultProps, correctAnswers: 0, totalAnswered: 0 },
     });
     expect(wrapper.text()).toContain("0%");
   });
@@ -82,7 +82,7 @@ describe("BonResult.vue", () => {
 
   it("shows allTimeHighScore when not new highscore", () => {
     const wrapper = mount(BonResult, {
-      props: { ...defaultProps, isNewHighScore: false, allTimeHighScore: 200 },
+      props: { ...defaultProps, allTimeHighScore: 200, isNewHighScore: false },
     });
     expect(wrapper.text()).toContain("200");
   });
@@ -91,7 +91,7 @@ describe("BonResult.vue", () => {
     const wrapper = mount(BonResult, {
       props: {
         ...defaultProps,
-        lastCard: { word: "Schnauze", isReal: true, slug: "schnauze" },
+        lastCard: { isReal: true, slug: "schnauze", word: "Schnauze" },
       },
     });
     const link = wrapper.find(".c-bon-result__word-link");
@@ -108,7 +108,7 @@ describe("BonResult.vue", () => {
     const wrapper = mount(BonResult, {
       props: {
         ...defaultProps,
-        lastCard: { word: "FakeWort", isReal: false, slug: null },
+        lastCard: { isReal: false, slug: null, word: "FakeWort" },
       },
     });
     expect(wrapper.find(".c-bon-result__word-link").exists()).toBe(false);
@@ -118,7 +118,7 @@ describe("BonResult.vue", () => {
     const wrapper = mount(BonResult, {
       props: {
         ...defaultProps,
-        lastCard: { word: "Schnauze", isReal: true, slug: "schnauze", translation: "Mund" },
+        lastCard: { isReal: true, slug: "schnauze", translation: "Mund", word: "Schnauze" },
       },
     });
     const meaning = wrapper.find(".c-bon-result__word-meaning");
@@ -130,7 +130,7 @@ describe("BonResult.vue", () => {
     const wrapper = mount(BonResult, {
       props: {
         ...defaultProps,
-        lastCard: { word: "Schnauze", isReal: true, slug: "schnauze" },
+        lastCard: { isReal: true, slug: "schnauze", word: "Schnauze" },
       },
     });
     expect(wrapper.find(".c-bon-result__word-meaning").exists()).toBe(false);
@@ -156,7 +156,7 @@ describe("BonResult.vue", () => {
     const wrapper = mount(BonResult, { props: defaultProps });
     const h2 = wrapper.find("h2").element;
     const focusSpy = vi.spyOn(h2, "focus");
-    (wrapper.vm as any).focus();
+    (wrapper.vm as { focus: () => void }).focus();
     expect(focusSpy).toHaveBeenCalledOnce();
   });
 
@@ -165,7 +165,7 @@ describe("BonResult.vue", () => {
     vi.mocked(useShare).mockReturnValueOnce({
       isSupported: ref(true),
       share: mockShareFn,
-    } as any);
+    } as unknown as ReturnType<typeof useShare>);
     statsRef.value = { playerName: "" };
     const wrapper = mount(BonResult, { props: defaultProps });
     expect(wrapper.find(".c-bon-result__share-btn").exists()).toBe(true);
@@ -180,7 +180,7 @@ describe("BonResult.vue", () => {
     vi.mocked(useShare).mockReturnValueOnce({
       isSupported: ref(true),
       share: mockShareFn,
-    } as any);
+    } as unknown as ReturnType<typeof useShare>);
     statsRef.value = { playerName: "Felix" };
     const wrapper = mount(BonResult, { props: defaultProps });
     await wrapper.find(".c-bon-result__share-btn").trigger("click");

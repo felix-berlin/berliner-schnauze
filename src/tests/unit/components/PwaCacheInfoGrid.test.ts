@@ -4,13 +4,13 @@ import { describe, expect, it } from "vitest";
 import { markRaw } from "vue";
 
 const defaultProps = {
-  swInfo: { status: "active" as const, scriptURL: "/sw.js", scope: "/" },
-  swStatusLabel: "Aktiv",
-  swStatusIcon: null,
-  swScriptURL: null,
   isPwaInstalled: false,
   storageQuota: null,
   storageQuotaPercent: 0,
+  swInfo: { scope: "/", scriptURL: "/sw.js", status: "active" as const },
+  swScriptURL: null,
+  swStatusIcon: null,
+  swStatusLabel: "Aktiv",
 };
 
 describe("PwaCacheInfoGrid", () => {
@@ -54,7 +54,7 @@ describe("PwaCacheInfoGrid", () => {
     const wrapper = mount(PwaCacheInfoGrid, {
       props: {
         ...defaultProps,
-        storageQuota: { usedBytes: 500, quotaBytes: 1000 },
+        storageQuota: { quotaBytes: 1000, usedBytes: 500 },
         storageQuotaPercent: 50,
       },
     });
@@ -87,7 +87,7 @@ describe("PwaCacheInfoGrid", () => {
   it("renders swStatusIcon component when provided (covers line 6 v-if true branch)", () => {
     const IconStub = markRaw({ template: "<svg data-testid='icon' />" });
     const wrapper = mount(PwaCacheInfoGrid, {
-      props: { ...defaultProps, swStatusIcon: IconStub as any },
+      props: { ...defaultProps, swStatusIcon: IconStub },
     });
     expect(wrapper.find("[data-testid='icon']").exists()).toBe(true);
   });

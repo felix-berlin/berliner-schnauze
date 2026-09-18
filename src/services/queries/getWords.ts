@@ -1,5 +1,6 @@
 import { wpGraphqlClient } from "@services/wpGraphqlClient";
 import { SHOW_TEST_DATA } from "astro:env/client";
+import { E2E_WORD_LIMIT } from "astro:env/server";
 
 import type {
   GetAllWordsQuery,
@@ -12,13 +13,35 @@ import type {
 import { graphql } from "@/gql";
 import { GetAllWordsDocument, GetAllWordsLinksDocument } from "@/gql/graphql.ts";
 
+// Words the e2e specs (tests/e2e/*.spec.ts) navigate to directly by slug —
+// always built, even when E2E_WORD_LIMIT caps the number of generated pages.
+const E2E_REQUIRED_SLUGS = new Set([
+  "aasen",
+  "akademiebusen",
+  "alex",
+  "alsche",
+  "anmachen",
+  "ballast-der-republik",
+  "schale",
+  "wa",
+]);
+
+// Caps only the generated pages (word + OG routes) in the Playwright CI build.
+// The full word set must stay intact: list/letter filters and the
+// similar-sounding/neighbor sections are derived from all words.
+export const limitPagesForE2e = <T extends { node: { slug?: string | null } }>(edges: T[]): T[] => {
+  const limit = E2E_WORD_LIMIT;
+  if (!limit) return edges;
+  return edges.filter(({ node }, i) => i < limit || E2E_REQUIRED_SLUGS.has(node.slug ?? ""));
+};
+
 const fetchPaginatedWords = async (
   queryDocument: typeof GetAllWordsDocument | typeof GetAllWordsLinksDocument,
   orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
   orderByType: OrderEnum = "ASC",
   stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
 ) => {
-  let allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
+  const allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
   let cursor = null;
   const pageSize = 100;
 
@@ -32,6 +55,7 @@ const fetchPaginatedWords = async (
       order: orderByType,
       stati,
     };
+    // oxlint-disable-next-line no-await-in-loop -- cursor-based pagination: each page's cursor depends on the previous response
     const response = await wpGraphqlClient.query(queryDocument, variables).toPromise();
 
     if (response.error) {
@@ -42,7 +66,7 @@ const fetchPaginatedWords = async (
     const data = response.data?.berlinerWords;
     if (!data) break;
 
-    allWords = [...allWords, ...(data.edges as typeof allWords)];
+    allWords.push(...(data.edges as typeof allWords));
     cursor = data.pageInfo.endCursor;
 
     if (!data.pageInfo.hasNextPage) {
@@ -88,11 +112,12 @@ export const GetAllWords = graphql(`
     $field: PostObjectsConnectionOrderbyEnum = TITLE
     $order: OrderEnum = ASC
     $stati: [PostStatusEnum] = PUBLISH
+    $nameIn: [String]
   ) {
     berlinerWords(
       first: $first
       after: $after
-      where: { orderby: { field: $field, order: $order }, stati: $stati }
+      where: { orderby: { field: $field, order: $order }, stati: $stati, nameIn: $nameIn }
     ) {
       edges {
         node {
@@ -115,11 +140,12 @@ export const GetAllWordsLinks = graphql(`
     $field: PostObjectsConnectionOrderbyEnum = TITLE
     $order: OrderEnum = ASC
     $stati: [PostStatusEnum] = PUBLISH
+    $nameIn: [String]
   ) {
     berlinerWords(
       first: $first
       after: $after
-      where: { orderby: { field: $field, order: $order }, stati: $stati }
+      where: { orderby: { field: $field, order: $order }, stati: $stati, nameIn: $nameIn }
     ) {
       edges {
         node {

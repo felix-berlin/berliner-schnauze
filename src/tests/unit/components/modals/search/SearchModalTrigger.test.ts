@@ -2,23 +2,23 @@ import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue
 import * as modalStore from "@stores/modal.ts";
 import { mount, flushPromises } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { ref } from "vue";
+import { ref, type Component } from "vue";
 
 const { mockWhenever, mockOnEventFired } = vi.hoisted(() => {
   let capturedWheneverCb: (() => void) | null = null;
   let capturedOnEventFired: ((e: KeyboardEvent) => void) | null = null;
   return {
-    mockWhenever: {
-      fn: vi.fn((_: unknown, cb: () => void) => {
-        capturedWheneverCb = cb;
-      }),
-      call: () => capturedWheneverCb?.(),
-    },
     mockOnEventFired: {
+      fire: (e: KeyboardEvent) => capturedOnEventFired?.(e),
       fn: vi.fn((opts: { onEventFired: (e: KeyboardEvent) => void }) => {
         capturedOnEventFired = opts.onEventFired;
       }),
-      fire: (e: KeyboardEvent) => capturedOnEventFired?.(e),
+    },
+    mockWhenever: {
+      call: () => capturedWheneverCb?.(),
+      fn: vi.fn((_: unknown, cb: () => void) => {
+        capturedWheneverCb = cb;
+      }),
     },
   };
 });
@@ -132,7 +132,7 @@ describe("SearchModalTrigger.vue", () => {
 
   it("onEventFired calls preventDefault for Shift+/ keydown", () => {
     mount(SearchModalTrigger);
-    const event = new KeyboardEvent("keydown", { shiftKey: true, key: "/" });
+    const event = new KeyboardEvent("keydown", { key: "/", shiftKey: true });
     const preventDefaultSpy = vi.spyOn(event, "preventDefault");
     mockOnEventFired.fire(event);
     expect(preventDefaultSpy).toHaveBeenCalled();
@@ -151,12 +151,15 @@ describe("SearchModalTrigger.vue", () => {
     await wrapper.find("button").trigger("click");
 
     const callArgs = vi.mocked(modalStore.open).mock.calls[0][0];
-    const asyncComponent = callArgs.view!.component as any;
+    const asyncComponent = callArgs.view!.component as Component;
 
     // Mount the async component so Vue invokes the factory arrow at line 28
     const { defineComponent, h } = await import("vue");
     const Host = defineComponent({ render: () => h(asyncComponent) });
-    mount(Host);
+
+    expect(() => {
+      mount(Host);
+    }).not.toThrow();
     await flushPromises();
   });
 });

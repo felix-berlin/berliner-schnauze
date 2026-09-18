@@ -37,7 +37,7 @@ export function useSearchQuerySync(): void {
   }, 300);
 
   const unsubscribe = $searchQuery.subscribe((q) => {
-    debouncedUpdateUrl(q);
+    void debouncedUpdateUrl(q);
   });
 
   onBeforeUnmount(() => {

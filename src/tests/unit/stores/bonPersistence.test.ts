@@ -79,20 +79,20 @@ describe("savedBon — persistence callbacks", () => {
   it("stores and retrieves a snapshot", async () => {
     const { $savedBon } = await import("@stores/savedBon");
     const snapshot = {
-      phase: "playing" as const,
-      lives: 2,
-      score: 30,
-      streak: 2,
       bestStreak: 4,
-      multiplier: 1,
-      totalAnswered: 5,
       correctAnswers: 4,
-      currentCard: { word: "Schnauze", isReal: true as const },
+      currentCard: { isReal: true as const, word: "Schnauze" },
       deck: [],
+      fakeQueue: [],
       lastAnswerCorrect: true,
       lastCard: null,
+      lives: 2,
+      multiplier: 1,
+      phase: "playing" as const,
       realQueue: [],
-      fakeQueue: [],
+      score: 30,
+      streak: 2,
+      totalAnswered: 5,
     };
     $savedBon.set(snapshot);
     const loaded = $savedBon.get();

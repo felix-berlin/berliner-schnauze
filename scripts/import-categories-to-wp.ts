@@ -74,12 +74,12 @@ async function getOrCreateTerm(slug: string, config: WpConfig): Promise<WpTerm> 
   console.log(`  Creating term: "${slug}" → "${name}"`);
 
   if (DRY_RUN) {
-    return { id: DRY_RUN_TERM_ID, slug, name };
+    return { id: DRY_RUN_TERM_ID, name, slug };
   }
 
   const created = await wpFetch<WpTerm>(
     `/${TAXONOMY_REST_BASE}`,
-    { method: "POST", body: JSON.stringify({ name, slug }) },
+    { body: JSON.stringify({ name, slug }), method: "POST" },
     config,
   );
 
@@ -129,8 +129,8 @@ async function assignTermsToPost(
   await wpFetch(
     `/${POST_TYPE_REST_BASE}/${postId}`,
     {
-      method: "POST",
       body: JSON.stringify({ [TAXONOMY_REST_BASE]: termIds }),
+      method: "POST",
     },
     config,
   );
@@ -215,7 +215,7 @@ async function main(): Promise<void> {
       );
       success++;
     } catch (err) {
-      console.error(`  ✗ ${word.slug} (id=${postId}): ${err}`);
+      console.error(`  ✗ ${word.slug} (id=${postId}): ${err instanceof Error ? err.message : String(err)}`);
       errors++;
     }
   }

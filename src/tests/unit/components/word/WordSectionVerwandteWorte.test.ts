@@ -20,30 +20,30 @@ describe("WordSectionVerwandteWorte.astro", () => {
   }, 30_000);
 
   it("renders nothing when relatedWords is null", async () => {
-    const result = await render({ relatedWords: null, currentWord: "Schnauze" });
+    const result = await render({ currentWord: "Schnauze", relatedWords: null });
     expect(result).not.toContain("Verwandte Worte");
   });
 
   it("renders nothing when relatedWords nodes are empty", async () => {
     const result = await render({
-      relatedWords: makeRelatedWords(),
       currentWord: "Schnauze",
+      relatedWords: makeRelatedWords(),
     });
     expect(result).not.toContain("Verwandte Worte");
   });
 
   it("renders nothing when only the current word is in the list", async () => {
     const result = await render({
-      relatedWords: makeRelatedWords([{ berlinerisch: "Schnauze", slug: "schnauze" }]),
       currentWord: "Schnauze",
+      relatedWords: makeRelatedWords([{ berlinerisch: "Schnauze", slug: "schnauze" }]),
     });
     expect(result).not.toContain("Verwandte Worte");
   });
 
   it("renders the section when related words are present", async () => {
     const result = await render({
-      relatedWords: makeRelatedWords([{ berlinerisch: "Fresse", slug: "fresse" }]),
       currentWord: "Schnauze",
+      relatedWords: makeRelatedWords([{ berlinerisch: "Fresse", slug: "fresse" }]),
     });
     expect(result).toContain("Verwandte Worte");
     expect(result).toContain('id="verwandte-worte"');
@@ -52,8 +52,8 @@ describe("WordSectionVerwandteWorte.astro", () => {
 
   it("renders the related word links", async () => {
     const result = await render({
-      relatedWords: makeRelatedWords([{ berlinerisch: "Fresse", slug: "fresse" }]),
       currentWord: "Schnauze",
+      relatedWords: makeRelatedWords([{ berlinerisch: "Fresse", slug: "fresse" }]),
     });
     expect(result).toContain("Fresse");
     expect(result).toContain("c-single-word__related-word-link");
@@ -61,11 +61,11 @@ describe("WordSectionVerwandteWorte.astro", () => {
 
   it("filters out the current word from the list", async () => {
     const result = await render({
+      currentWord: "Schnauze",
       relatedWords: makeRelatedWords([
         { berlinerisch: "Schnauze", slug: "schnauze" },
         { berlinerisch: "Fresse", slug: "fresse" },
       ]),
-      currentWord: "Schnauze",
     });
     expect(result).toContain("Fresse");
     expect(result).not.toContain("/wort/schnauze");
@@ -73,16 +73,16 @@ describe("WordSectionVerwandteWorte.astro", () => {
 
   it("renders the section number element", async () => {
     const result = await render({
-      relatedWords: makeRelatedWords([{ berlinerisch: "Fresse", slug: "fresse" }]),
       currentWord: "Schnauze",
+      relatedWords: makeRelatedWords([{ berlinerisch: "Fresse", slug: "fresse" }]),
     });
     expect(result).toContain("c-section-card__num");
   });
 
   it("renders aria-labelledby heading-verwandte", async () => {
     const result = await render({
-      relatedWords: makeRelatedWords([{ berlinerisch: "Fresse", slug: "fresse" }]),
       currentWord: "Schnauze",
+      relatedWords: makeRelatedWords([{ berlinerisch: "Fresse", slug: "fresse" }]),
     });
     expect(result).toContain("heading-verwandte");
   });

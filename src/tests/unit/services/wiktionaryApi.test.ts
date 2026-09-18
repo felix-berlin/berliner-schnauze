@@ -2,8 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 function makeResponse(ok: boolean, body: unknown): Response {
   return {
-    ok,
     json: vi.fn().mockResolvedValue(body),
+    ok,
   } as unknown as Response;
 }
 
@@ -97,8 +97,8 @@ describe("fetchGermanArtikel", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
-        ok: true,
         json: vi.fn().mockRejectedValue(new SyntaxError("Unexpected token")),
+        ok: true,
       }),
     );
     const { fetchGermanArtikel } = await import("@services/wiktionaryApi.ts");

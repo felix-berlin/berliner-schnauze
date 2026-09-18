@@ -18,8 +18,8 @@ function makeRegistration(sub: PushSubscription | null = null) {
 
 function makeSub(ok = true): PushSubscription {
   return {
-    unsubscribe: vi.fn().mockResolvedValue(ok),
     endpoint: "https://push.example.com/sub",
+    unsubscribe: vi.fn().mockResolvedValue(ok),
   } as unknown as PushSubscription;
 }
 
@@ -31,16 +31,16 @@ beforeEach(() => {
 
   // provide navigator.serviceWorker
   Object.defineProperty(global.navigator, "serviceWorker", {
+    configurable: true,
     value: { ready: Promise.resolve(makeRegistration()) },
     writable: true,
-    configurable: true,
   });
 
   // provide window.PushManager so isPushSupported() returns true
   Object.defineProperty(global.window, "PushManager", {
+    configurable: true,
     value: {},
     writable: true,
-    configurable: true,
   });
 });
 
@@ -63,7 +63,7 @@ describe("urlBase64ToUint8Array", () => {
 
   it("throws on a malformed base64 string", async () => {
     const { urlBase64ToUint8Array } = await import("@stores/pushSubscription.ts");
-    expect(() => urlBase64ToUint8Array("!!!invalid!!!")).toThrow();
+    expect(() => urlBase64ToUint8Array("!!!invalid!!!")).toThrow("Invalid character");
   });
 });
 
@@ -74,9 +74,9 @@ describe("loadPushState", () => {
     const sub = makeSub();
     const reg = makeRegistration(sub);
     Object.defineProperty(global.navigator, "serviceWorker", {
+      configurable: true,
       value: { ready: Promise.resolve(reg) },
       writable: true,
-      configurable: true,
     });
     const { loadPushState, $pushState, $pushSubscription } =
       await import("@stores/pushSubscription.ts");
@@ -88,9 +88,9 @@ describe("loadPushState", () => {
   it("sets unsubscribed when SW returns null subscription", async () => {
     const reg = makeRegistration(null);
     Object.defineProperty(global.navigator, "serviceWorker", {
+      configurable: true,
       value: { ready: Promise.resolve(reg) },
       writable: true,
-      configurable: true,
     });
     const { loadPushState, $pushState, $pushSubscription } =
       await import("@stores/pushSubscription.ts");
@@ -101,9 +101,9 @@ describe("loadPushState", () => {
 
   it("sets error + shows toast when SW.ready rejects", async () => {
     Object.defineProperty(global.navigator, "serviceWorker", {
+      configurable: true,
       value: { ready: Promise.reject(new Error("SW unavailable")) },
       writable: true,
-      configurable: true,
     });
     const { loadPushState, $pushState } = await import("@stores/pushSubscription.ts");
     const { createToastNotify } = await import("@stores/toastNotify.ts");
@@ -114,9 +114,9 @@ describe("loadPushState", () => {
 
   it("can be retried after an error", async () => {
     Object.defineProperty(global.navigator, "serviceWorker", {
+      configurable: true,
       value: { ready: Promise.reject(new Error("SW unavailable")) },
       writable: true,
-      configurable: true,
     });
     const { loadPushState, $pushState } = await import("@stores/pushSubscription.ts");
     await loadPushState();
@@ -125,9 +125,9 @@ describe("loadPushState", () => {
     const sub = makeSub();
     const reg = makeRegistration(sub);
     Object.defineProperty(global.navigator, "serviceWorker", {
+      configurable: true,
       value: { ready: Promise.resolve(reg) },
       writable: true,
-      configurable: true,
     });
     await loadPushState();
     expect($pushState.get()).toBe("subscribed");
@@ -140,9 +140,9 @@ describe("loadPushState", () => {
       resolveReady = r;
     });
     Object.defineProperty(global.navigator, "serviceWorker", {
+      configurable: true,
       value: { ready: readyPromise },
       writable: true,
-      configurable: true,
     });
     const { loadPushState } = await import("@stores/pushSubscription.ts");
     const p1 = loadPushState();
@@ -159,9 +159,9 @@ describe("subscribePush", () => {
   it("does nothing when state is already subscribed", async () => {
     const reg = makeRegistration(null);
     Object.defineProperty(global.navigator, "serviceWorker", {
+      configurable: true,
       value: { ready: Promise.resolve(reg) },
       writable: true,
-      configurable: true,
     });
     vi.stubEnv(
       "PUBLIC_VAPID_PUBLIC_KEY",
@@ -187,9 +187,9 @@ describe("subscribePush", () => {
       pushManager: { getSubscription: vi.fn(), subscribe: vi.fn().mockResolvedValue(sub) },
     };
     Object.defineProperty(global.navigator, "serviceWorker", {
+      configurable: true,
       value: { ready: Promise.resolve(reg) },
       writable: true,
-      configurable: true,
     });
     vi.stubEnv(
       "PUBLIC_VAPID_PUBLIC_KEY",
@@ -211,9 +211,9 @@ describe("subscribePush", () => {
       },
     };
     Object.defineProperty(global.navigator, "serviceWorker", {
+      configurable: true,
       value: { ready: Promise.resolve(reg) },
       writable: true,
-      configurable: true,
     });
     vi.stubEnv(
       "PUBLIC_VAPID_PUBLIC_KEY",
@@ -243,9 +243,9 @@ describe("subscribePush", () => {
       pushManager: { getSubscription: vi.fn(), subscribe: vi.fn().mockRejectedValue(denied) },
     };
     Object.defineProperty(global.navigator, "serviceWorker", {
+      configurable: true,
       value: { ready: Promise.resolve(reg) },
       writable: true,
-      configurable: true,
     });
     vi.stubEnv(
       "PUBLIC_VAPID_PUBLIC_KEY",

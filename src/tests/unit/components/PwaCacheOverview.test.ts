@@ -15,6 +15,7 @@ const mockClearAll = vi.fn();
 const mockClearBucket = vi.fn();
 
 vi.mock("@composables/useCacheStorage", () => ({
+  getBucketDisplayName: vi.fn((name: string) => `[${name}]`),
   useCacheStorage: vi.fn(() => ({
     buckets: mockBuckets,
     clearAll: mockClearAll,
@@ -29,7 +30,6 @@ vi.mock("@composables/useCacheStorage", () => ({
     swInfo: mockSwInfo,
     totalSizeBytes: ref(0),
   })),
-  getBucketDisplayName: vi.fn((name: string) => `[${name}]`),
 }));
 
 vi.mock("@nanostores/vue", () => ({
@@ -41,8 +41,8 @@ vi.mock("@stores/installApp.ts", () => ({
 }));
 
 vi.mock("@stores/modal", () => ({
-  open: vi.fn(),
   close: vi.fn(),
+  open: vi.fn(),
 }));
 
 vi.mock("@components/PwaCacheHeader.vue", () => ({
@@ -63,17 +63,17 @@ vi.mock("@components/PwaCacheInfoGrid.vue", () => ({
 
 vi.mock("@components/PwaCacheActions.vue", () => ({
   default: {
+    emits: ["refresh", "clear-all", "resync"],
     name: "PwaCacheActions",
     template: "<div class='mock-pwa-cache-actions' />",
-    emits: ["refresh", "clear-all", "resync"],
   },
 }));
 
 vi.mock("@components/PwaCacheBucketList.vue", () => ({
   default: {
+    emits: ["clear-bucket"],
     name: "PwaCacheBucketList",
     template: "<div class='mock-pwa-cache-bucket-list' />",
-    emits: ["clear-bucket"],
   },
 }));
 
@@ -190,13 +190,13 @@ describe("PwaCacheOverview.vue", () => {
   });
 
   it("swScriptURL is resolved when swInfo has scriptURL", () => {
-    mockSwInfo.value = { status: "active", scriptURL: "/sw.js" };
+    mockSwInfo.value = { scriptURL: "/sw.js", status: "active" };
     const wrapper = mount(PwaCacheOverview);
     expect(wrapper.exists()).toBe(true);
   });
 
   it("swScriptURL returns null when scriptURL is empty string (covers line 127 || null branch)", () => {
-    mockSwInfo.value = { status: "active", scriptURL: "" };
+    mockSwInfo.value = { scriptURL: "", status: "active" };
     const wrapper = mount(PwaCacheOverview);
     expect(wrapper.exists()).toBe(true);
   });

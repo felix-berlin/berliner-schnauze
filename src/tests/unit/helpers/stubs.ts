@@ -5,10 +5,10 @@ export function createComponentStub(template = "<div><slot /></div>") {
     default: { template },
   };
   return new Proxy(mod, {
-    has: () => true,
     get(t, k) {
       return k in t ? t[k] : undefined;
     },
+    has: () => true,
   });
 }
 

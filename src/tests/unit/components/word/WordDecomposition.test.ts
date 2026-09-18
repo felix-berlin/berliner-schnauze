@@ -16,20 +16,20 @@ describe("WordDecomposition.astro", () => {
   }, 30_000);
 
   it("renders nothing for a word shorter than 5 characters", async () => {
-    const result = await render({ word: "Ich", allWords: [] });
+    const result = await render({ allWords: [], word: "Ich" });
     expect(result).not.toContain("Wortzerlegung");
   });
 
   it("renders Wortzerlegung heading when compound word found", async () => {
     // "Berliner" can potentially decompose — use a clearly compound word
-    const result = await render({ word: "Bahnhof", allWords: [] });
+    const result = await render({ allWords: [], word: "Bahnhof" });
     // If decomposed, shows heading; if not decomposable, renders nothing — either is valid
     // The key thing is the component doesn't throw
     expect(typeof result).toBe("string");
   });
 
   it("renders nothing when allWords is empty and word is short", async () => {
-    const result = await render({ word: "Tag", allWords: [] });
+    const result = await render({ allWords: [], word: "Tag" });
     expect(result).not.toContain("Wortzerlegung");
   });
 
@@ -40,21 +40,21 @@ describe("WordDecomposition.astro", () => {
         wordProperties: { berlinerisch: "bahn" },
       },
     ];
-    const result = await render({ word: "Bahnhof", allWords });
+    const result = await render({ allWords, word: "Bahnhof" });
     // Result should be a string — may or may not render parts depending on decompose output
     expect(typeof result).toBe("string");
   });
 
   it("renders word-parts container with plus separator for multi-part results", async () => {
     // Use a known compound that decomposes to multiple parts
-    const result = await render({ word: "Großstadtleben", allWords: [] });
+    const result = await render({ allWords: [], word: "Großstadtleben" });
     // If decomposed to 2+ parts, the + separator appears
     // This just ensures no crash
     expect(typeof result).toBe("string");
   });
 
   it("accepts empty allWords array without throwing", async () => {
-    const result = await render({ word: "Schnauze", allWords: [] });
+    const result = await render({ allWords: [], word: "Schnauze" });
     expect(typeof result).toBe("string");
   });
 });

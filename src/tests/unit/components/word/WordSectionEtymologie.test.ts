@@ -4,9 +4,9 @@ import { describe, expect, it, beforeAll } from "vitest";
 import { createAstroRender } from "../../helpers";
 
 const makeWordProps = (overrides: Record<string, unknown> = {}) => ({
+  alternativeWords: [],
   berlinerisch: "Schnauze",
   infoText: null,
-  alternativeWords: [],
   translations: [],
   ...overrides,
 });

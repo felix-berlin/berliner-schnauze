@@ -47,8 +47,8 @@ test.describe("Startseite (/)", () => {
     await expect(page.getByText(/\d+ Ergebnisse/)).toBeVisible();
 
     await search.fill("aasen");
-    await expect(wordList.getByRole("link", { name: "aasen", exact: true })).toBeVisible();
-    await expect(wordList.getByRole("link", { name: "ab", exact: true })).toHaveCount(0);
+    await expect(wordList.getByRole("link", { exact: true, name: "aasen" })).toBeVisible();
+    await expect(wordList.getByRole("link", { exact: true, name: "ab" })).toHaveCount(0);
   });
 
   test("Wort des Tages ist verlinkt", async ({ page }) => {
@@ -72,7 +72,7 @@ test.describe("Startseite (/)", () => {
 
     const footer = page.getByRole("contentinfo");
     await expect(footer.getByRole("link", { name: "Wort Index" })).toHaveAttribute("href", "/wort");
-    await expect(footer.getByRole("link", { name: "GitHub", exact: true })).toHaveAttribute(
+    await expect(footer.getByRole("link", { exact: true, name: "GitHub" })).toHaveAttribute(
       "href",
       "https://github.com/felix-berlin/berliner-schnauze",
     );

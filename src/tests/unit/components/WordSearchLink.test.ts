@@ -4,8 +4,8 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { nextTick } from "vue";
 
 const mockState = vi.hoisted(() => ({
-  preferredMotion: "reduce" as string,
   breakpointGreater: false as boolean,
+  preferredMotion: "reduce" as string,
 }));
 
 vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));

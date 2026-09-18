@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 const components = { AccordionContent, AccordionItem, AccordionTrigger, BaseAccordion };
 
 function mountAccordion(template: string) {
-  return mount({ template, components });
+  return mount({ components, template });
 }
 
 describe("AccordionContent", () => {

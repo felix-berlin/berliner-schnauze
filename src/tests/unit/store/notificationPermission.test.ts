@@ -5,12 +5,12 @@ vi.mock("@utils/analytics", () => ({ trackEvent: vi.fn() }));
 
 const mockRequestPermission = vi.fn();
 Object.defineProperty(global, "Notification", {
+  configurable: true,
   value: {
     permission: "default" as NotificationPermission,
     requestPermission: mockRequestPermission,
   },
   writable: true,
-  configurable: true,
 });
 
 describe("notificationPermission store", () => {

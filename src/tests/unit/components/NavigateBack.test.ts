@@ -6,10 +6,10 @@ import { nextTick } from "vue";
 function mockHistory(length: number) {
   const backFn = vi.fn();
   vi.spyOn(window, "history", "get").mockReturnValue({
-    length,
     back: backFn,
     forward: vi.fn(),
     go: vi.fn(),
+    length,
     pushState: vi.fn(),
     replaceState: vi.fn(),
     scrollRestoration: "auto",

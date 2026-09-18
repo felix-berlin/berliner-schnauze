@@ -13,9 +13,9 @@ import { makeOramaSearchIndex } from "@/pages/api/search/index.json.ts";
 
 function makeWord(overrides: Partial<BerlinerWord> = {}): BerlinerWord {
   return {
+    berlinerWordId: 1,
     berlinerischThemen: null,
     berlinerischWordTypes: null,
-    berlinerWordId: 1,
     dateGmt: "2025-01-01T00:00:00",
     id: "1",
     modifiedGmt: "2025-01-01T00:00:00",
