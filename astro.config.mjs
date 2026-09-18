@@ -26,7 +26,12 @@ const {
   CODECOV_TOKEN,
   BUNDLE_ANALYZER_OPEN,
   IMAGOR_HOST,
+  E2E_WORD_LIMIT,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+
+// The Playwright e2e build sets this to keep the build fast — skip the
+// source-map upload plugins too, they add real time for a build nobody deploys.
+const isE2eBuild = Boolean(E2E_WORD_LIMIT);
 
 const SITE_ORIGIN = import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf";
 
@@ -225,6 +230,13 @@ export default defineConfig({
         context: "client",
         access: "public",
         default: false,
+      }),
+      // Caps how many words getWords.ts fetches/builds — only set in the
+      // Playwright CI build, to keep the e2e build fast. Unset in production.
+      E2E_WORD_LIMIT: envField.number({
+        context: "server",
+        access: "public",
+        optional: true,
       }),
       PWA_DEBUG: envField.boolean({
         context: "server",
@@ -448,8 +460,9 @@ export default defineConfig({
         // navigateFallbackAllowlist: [/^\//],
       },
     }),
-    // Skipped for local dev builds: slows down the build and isn't needed outside CI.
-    ...(import.meta.env.DEV
+    // Skipped for local dev builds and the e2e build: slows down the build
+    // and isn't needed outside a real CI/deploy build.
+    ...(import.meta.env.DEV || isE2eBuild
       ? []
       : [
           codecovplugin({
@@ -494,18 +507,22 @@ export default defineConfig({
           }
         },
       }), // chooses the compiler automatically
-      sentryVitePlugin({
-        authToken: SENTRY_AUTH_TOKEN,
-        org: SENTRY_ORG,
-        project: SENTRY_PROJECT,
-        sourcemaps: {
-          filesToDeleteAfterUpload: ["dist/**/*.map"],
-        },
-        bundleSizeOptimizations: {
-          excludeDebugStatements: true,
-        },
-        debug: false,
-      }),
+      ...(isE2eBuild
+        ? []
+        : [
+            sentryVitePlugin({
+              authToken: SENTRY_AUTH_TOKEN,
+              org: SENTRY_ORG,
+              project: SENTRY_PROJECT,
+              sourcemaps: {
+                filesToDeleteAfterUpload: ["dist/**/*.map"],
+              },
+              bundleSizeOptimizations: {
+                excludeDebugStatements: true,
+              },
+              debug: false,
+            }),
+          ]),
       graphqlLoader({ sourceMapOptions: { hires: true } }),
       visualizerPlugin,
     ],
@@ -531,7 +548,7 @@ export default defineConfig({
     },
 
     build: {
-      sourcemap: true, // This is needed for sentryVitePlugin
+      sourcemap: !isE2eBuild, // needed for sentryVitePlugin, which is skipped for the e2e build
       target: "esnext",
       cssMinify: "esbuild",
       rolldownOptions: {

@@ -1,5 +1,6 @@
 import { wpGraphqlClient } from "@services/wpGraphqlClient";
 import { SHOW_TEST_DATA } from "astro:env/client";
+import { E2E_WORD_LIMIT } from "astro:env/server";
 
 import type {
   GetAllWordsQuery,
@@ -11,6 +12,20 @@ import type {
 
 import { graphql } from "@/gql";
 import { GetAllWordsDocument, GetAllWordsLinksDocument } from "@/gql/graphql.ts";
+
+// Words the e2e specs (tests/e2e/*.spec.ts) navigate to directly by slug —
+// guaranteed to be present even when E2E_WORD_LIMIT truncates the
+// alphabetical (TITLE-ordered) fetch below before reaching these.
+const E2E_REQUIRED_SLUGS = [
+  "aasen",
+  "akademiebusen",
+  "alex",
+  "alsche",
+  "anmachen",
+  "ballast-der-republik",
+  "schale",
+  "wa",
+];
 
 const fetchPaginatedWords = async (
   queryDocument: typeof GetAllWordsDocument | typeof GetAllWordsLinksDocument,
@@ -48,6 +63,24 @@ const fetchPaginatedWords = async (
 
     if (!data.pageInfo.hasNextPage) {
       break;
+    }
+    if (E2E_WORD_LIMIT && allWords.length >= E2E_WORD_LIMIT) {
+      break;
+    }
+  }
+
+  if (E2E_WORD_LIMIT) {
+    const missingSlugs = E2E_REQUIRED_SLUGS.filter(
+      (slug) => !allWords.some((edge) => edge.node.slug === slug),
+    );
+    if (missingSlugs.length > 0) {
+      const extra = await wpGraphqlClient
+        .query(queryDocument, { first: missingSlugs.length, nameIn: missingSlugs, stati })
+        .toPromise();
+      const extraEdges = extra.data?.berlinerWords?.edges;
+      if (extraEdges) {
+        allWords.push(...(extraEdges as typeof allWords));
+      }
     }
   }
 
@@ -89,11 +122,12 @@ export const GetAllWords = graphql(`
     $field: PostObjectsConnectionOrderbyEnum = TITLE
     $order: OrderEnum = ASC
     $stati: [PostStatusEnum] = PUBLISH
+    $nameIn: [String]
   ) {
     berlinerWords(
       first: $first
       after: $after
-      where: { orderby: { field: $field, order: $order }, stati: $stati }
+      where: { orderby: { field: $field, order: $order }, stati: $stati, nameIn: $nameIn }
     ) {
       edges {
         node {
@@ -116,11 +150,12 @@ export const GetAllWordsLinks = graphql(`
     $field: PostObjectsConnectionOrderbyEnum = TITLE
     $order: OrderEnum = ASC
     $stati: [PostStatusEnum] = PUBLISH
+    $nameIn: [String]
   ) {
     berlinerWords(
       first: $first
       after: $after
-      where: { orderby: { field: $field, order: $order }, stati: $stati }
+      where: { orderby: { field: $field, order: $order }, stati: $stati, nameIn: $nameIn }
     ) {
       edges {
         node {
