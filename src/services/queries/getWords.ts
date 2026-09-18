@@ -14,9 +14,8 @@ import { graphql } from "@/gql";
 import { GetAllWordsDocument, GetAllWordsLinksDocument } from "@/gql/graphql.ts";
 
 // Words the e2e specs (tests/e2e/*.spec.ts) navigate to directly by slug —
-// guaranteed to be present even when E2E_WORD_LIMIT truncates the
-// alphabetical (TITLE-ordered) fetch below before reaching these.
-const E2E_REQUIRED_SLUGS = [
+// always built, even when E2E_WORD_LIMIT caps the number of generated pages.
+const E2E_REQUIRED_SLUGS = new Set([
   "aasen",
   "akademiebusen",
   "alex",
@@ -25,7 +24,15 @@ const E2E_REQUIRED_SLUGS = [
   "ballast-der-republik",
   "schale",
   "wa",
-];
+]);
+
+// Caps only the generated pages (word + OG routes) in the Playwright CI build.
+// The full word set must stay intact: list/letter filters and the
+// similar-sounding/neighbor sections are derived from all words.
+export const limitPagesForE2e = <T extends { node: { slug?: string | null } }>(edges: T[]): T[] =>
+  E2E_WORD_LIMIT
+    ? edges.filter(({ node }, i) => i < E2E_WORD_LIMIT || E2E_REQUIRED_SLUGS.has(node.slug ?? ""))
+    : edges;
 
 const fetchPaginatedWords = async (
   queryDocument: typeof GetAllWordsDocument | typeof GetAllWordsLinksDocument,
@@ -63,24 +70,6 @@ const fetchPaginatedWords = async (
 
     if (!data.pageInfo.hasNextPage) {
       break;
-    }
-    if (E2E_WORD_LIMIT && allWords.length >= E2E_WORD_LIMIT) {
-      break;
-    }
-  }
-
-  if (E2E_WORD_LIMIT) {
-    const missingSlugs = E2E_REQUIRED_SLUGS.filter(
-      (slug) => !allWords.some((edge) => edge.node.slug === slug),
-    );
-    if (missingSlugs.length > 0) {
-      const extra = await wpGraphqlClient
-        .query(queryDocument, { first: missingSlugs.length, nameIn: missingSlugs, stati })
-        .toPromise();
-      const extraEdges = extra.data?.berlinerWords?.edges;
-      if (extraEdges) {
-        allWords.push(...(extraEdges as typeof allWords));
-      }
     }
   }
 

@@ -1,10 +1,11 @@
 import { fetchAllWords } from "@services/api.ts";
+import { limitPagesForE2e } from "@services/queries/getWords.ts";
 import { OGImageRoute } from "astro-og-canvas";
 
 const allWords = await fetchAllWords();
 
 const pages = Object.fromEntries(
-  allWords
+  limitPagesForE2e(allWords)
     .filter(({ node }) => node.slug)
     .map(({ node }) => [
       node.slug!,

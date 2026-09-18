@@ -61,16 +61,16 @@ jobs:
       # than any reasonable "wait for server" timeout. Playwright then only
       # has to wait for `astro preview` to start, which is near-instant.
       #
-      # E2E_WORD_LIMIT caps how many words getWords.ts fetches/builds (full
-      # site is 6000+ words, ~6.5min) — the e2e specs only need a handful of
-      # real pages plus whatever's needed for list/homepage smoke checks.
-      # getWords.ts always fetches the specific slugs the specs navigate to
-      # directly, regardless of this limit. Also skips the Sentry/Codecov
+      # E2E_WORD_LIMIT caps how many word/OG *pages* are generated (full
+      # site is 6000+ words, ~6.5min). The word data itself is always fetched
+      # in full — list/letter filters and similar-sounding/neighbor sections
+      # depend on it. getWords.ts always builds the specific slugs the specs
+      # navigate to directly, regardless of this limit. Also skips the Sentry/Codecov
       # source-map upload plugins, which add real time for a build nobody
       # deploys (see astro.config.mjs's isE2eBuild).
       - name: Build site
         env:
-          E2E_WORD_LIMIT: "100"
+          E2E_WORD_LIMIT: "500"
         run: pnpm run build
 
       - name: Run Playwright tests
