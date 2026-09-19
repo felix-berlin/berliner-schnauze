@@ -54,7 +54,7 @@ export default defineConfig({
   trailingSlash: "never",
   // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
   devToolbar: {
-    enabled: !process.env.CI,
+    enabled: !process.env.CI && !process.env.NO_DEV_TOOLBAR,
   },
   // No Astro.session usage anywhere in the codebase — opt out to tree-shake
   // the session runtime out of the Cloudflare Pages build.
