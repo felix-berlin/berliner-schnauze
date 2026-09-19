@@ -52,15 +52,6 @@ describe("fetchAllWords in dev", () => {
     expect(writeWordsCache).toHaveBeenCalledWith("words_TITLE_ASC_PUBLISH", words);
   });
 
-  it("uses a separate cache key for the links query", async () => {
-    queryMock.mockResolvedValue(page([], false));
-    const { fetchAllWordsLinks } = await load();
-
-    await fetchAllWordsLinks();
-
-    expect(readWordsCache).toHaveBeenCalledWith("words-links_TITLE_ASC_PUBLISH");
-  });
-
   it("does not cache a partial result after a query error", async () => {
     queryMock.mockResolvedValue({ data: undefined, error: new Error("boom") });
     const { fetchAllWords } = await load();

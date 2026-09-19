@@ -12,7 +12,7 @@ import type {
 } from "@/gql/graphql.ts";
 
 import { graphql } from "@/gql";
-import { GetAllWordsDocument, GetAllWordsLinksDocument } from "@/gql/graphql.ts";
+import { GetAllWordsDocument } from "@/gql/graphql.ts";
 
 // Words the e2e specs (tests/e2e/*.spec.ts) navigate to directly by slug —
 // always built, even when E2E_WORD_LIMIT caps the number of generated pages.
@@ -37,7 +37,6 @@ export const limitPagesForE2e = <T extends { node: { slug?: string | null } }>(e
 };
 
 const fetchPaginatedWords = async (
-  queryDocument: typeof GetAllWordsDocument | typeof GetAllWordsLinksDocument,
   orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
   orderByType: OrderEnum = "ASC",
   stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
@@ -46,12 +45,7 @@ const fetchPaginatedWords = async (
   let cursor = null;
   let complete = true;
   const pageSize = 100;
-  const cacheKey = [
-    queryDocument === GetAllWordsDocument ? "words" : "words-links",
-    orderByField,
-    orderByType,
-    stati.join("-"),
-  ].join("_");
+  const cacheKey = ["words", orderByField, orderByType, stati.join("-")].join("_");
 
   if (import.meta.env.DEV) {
     const cached = await readWordsCache<typeof allWords>(cacheKey);
@@ -69,7 +63,7 @@ const fetchPaginatedWords = async (
       stati,
     };
     // oxlint-disable-next-line no-await-in-loop -- cursor-based pagination: each page's cursor depends on the previous response
-    const response = await wpGraphqlClient.query(queryDocument, variables).toPromise();
+    const response = await wpGraphqlClient.query(GetAllWordsDocument, variables).toPromise();
 
     if (response.error) {
       console.error("Error fetching words:", response.error);
@@ -99,29 +93,14 @@ const fetchPaginatedWords = async (
 type WordEdges = NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"];
 
 let _allWordsCache: Promise<WordEdges> | null = null;
-let _allWordsLinksCache: Promise<WordEdges> | null = null;
 
 export const fetchAllWords = async (
   orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
   orderByType: OrderEnum = "ASC",
   stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
 ): Promise<WordEdges> => {
-  _allWordsCache ??= fetchPaginatedWords(GetAllWordsDocument, orderByField, orderByType, stati);
+  _allWordsCache ??= fetchPaginatedWords(orderByField, orderByType, stati);
   return _allWordsCache;
-};
-
-export const fetchAllWordsLinks = async (
-  orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
-  orderByType: OrderEnum = "ASC",
-  stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
-): Promise<WordEdges> => {
-  _allWordsLinksCache ??= fetchPaginatedWords(
-    GetAllWordsLinksDocument,
-    orderByField,
-    orderByType,
-    stati,
-  );
-  return _allWordsLinksCache;
 };
 
 export const GetAllWords = graphql(`
@@ -141,38 +120,6 @@ export const GetAllWords = graphql(`
       edges {
         node {
           ...BerlinerWord
-        }
-        cursor
-      }
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-    }
-  }
-`);
-
-export const GetAllWordsLinks = graphql(`
-  query GetAllWordsLinks(
-    $after: String = ""
-    $first: Int = 100
-    $field: PostObjectsConnectionOrderbyEnum = TITLE
-    $order: OrderEnum = ASC
-    $stati: [PostStatusEnum] = PUBLISH
-    $nameIn: [String]
-  ) {
-    berlinerWords(
-      first: $first
-      after: $after
-      where: { orderby: { field: $field, order: $order }, stati: $stati, nameIn: $nameIn }
-    ) {
-      edges {
-        node {
-          slug
-          wordGroup
-          wordProperties {
-            berlinerisch
-          }
         }
         cursor
       }

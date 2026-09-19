@@ -3,17 +3,17 @@ import "@styles/objects/_word-index.scss";
 import "@styles/components/_word-group.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 import Layout from "@layouts/Layout.astro";
-import { fetchAllWordsLinks } from "@services/api.ts";
+import { fetchAllWords } from "@services/api.ts";
 import { routeToWord, seoData, canonicalUrl } from "@utils/helpers.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import ChevronRight from "~icons/lucide/chevron-right";
 
-import type { GetAllWordsLinksQuery } from "@/gql/graphql";
+import type { GetAllWordsQuery } from "@/gql/graphql";
 
-type WordLinkNode = NonNullable<GetAllWordsLinksQuery["berlinerWords"]>["edges"][number]["node"];
+type WordLinkNode = NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"][number]["node"];
 
 async function getGroupedWords(): Promise<Record<string, WordLinkNode[]>> {
-  const allWords = await fetchAllWordsLinks();
+  const allWords = await fetchAllWords();
 
   const groupedWords: Record<string, WordLinkNode[]> = {};
 
