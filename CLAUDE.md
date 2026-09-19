@@ -46,6 +46,8 @@ Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
 
 Update snapshots: `pnpm vitest:update`
 
+E2E (Playwright): specs in `src/tests/e2e/`; run with `npx playwright test <file> --project=chromium`. Set `E2E_PORT=4322` to target another server. Don't run the full suite against the user's dev server — it starves it; start your own with `ASTRO_DEV_BACKGROUND=0 npx infisical run -- pnpm exec astro dev --ignore-lock --port 4322`.
+
 ## Secrets
 
 Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical login` once before local development. The `dev`, `gql:generate`, and `gql:generate:watch` scripts automatically inject secrets via `infisical run --`.
@@ -150,6 +152,8 @@ Also guard `ResizeObserver` / `getBoundingClientRect` callbacks against transiti
 
 ## Environment Variables
 
+**Dev words cache**: fetched words are cached in `node_modules/.cache/berliner-words/`; dev start asks "Wörter neu fetchen?" (TTY only, `REFETCH_WORDS=1` forces it). Never compute per-word similarity/anagram data in `getStaticPaths` (`wort/[...wordSlug].astro`) — it's O(n²) over ~6000 words and freezes the dev server; derive it in the page body.
+
 Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`, `IMAGOR_HOST`, `IMAGOR_SECRET`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
 
 ## Testing
@@ -163,6 +167,8 @@ Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mj
 - `createStoreMockImpl(storeMap)` — builds a `useStore` mock impl that returns the right `ref` per store
 - `createComponentStub(template?)` — Proxy-safe module mock for `vi.mock()` factories; includes `[Symbol.toStringTag]: 'Module'` so Vue's `defineAsyncComponent` correctly extracts `.default` (omitting it causes "Component is missing template or render function" warn)
 - `createSlotStub(name, template?)` — lightweight stub for `config.global.stubs`
+
+**E2E in CI**: `E2E_WORD_LIMIT=500` caps only generated `/wort/<slug>` pages (plus `E2E_REQUIRED_SLUGS` in `getWords.ts`); the search index and homepage list still hold all words. Only navigate to required slugs (aasen, anmachen, wa, …).
 
 **Testing gotchas:**
 
