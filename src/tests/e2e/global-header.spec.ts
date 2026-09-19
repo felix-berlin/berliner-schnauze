@@ -1,11 +1,14 @@
 import { test, expect } from "@playwright/test";
 
+import { dismissToasts } from "./helpers";
+
 const menuButton = (page: import("@playwright/test").Page) =>
   page.getByRole("button", { name: "Website Menu Navigation" });
 
 test.describe("Header", () => {
   test("Logo-Link führt zur Startseite", async ({ page }) => {
     await page.goto("/wort/anmachen");
+    await dismissToasts(page);
 
     await page.getByRole("banner").getByRole("link", { name: "Berliner Schnauze" }).click();
 
@@ -14,6 +17,7 @@ test.describe("Header", () => {
 
   test("Dark Mode bleibt nach Reload erhalten und lässt sich zurücknehmen", async ({ page }) => {
     await page.goto("/");
+    await dismissToasts(page);
     const html = page.locator("html");
     const toggle = page.getByRole("banner").getByRole("button", { name: /Farbschema wechseln/ });
 
@@ -32,6 +36,7 @@ test.describe("Header", () => {
 
   test("Menü zeigt die Navigation und schließt mit Escape", async ({ page }) => {
     await page.goto("/");
+    await dismissToasts(page);
 
     await menuButton(page).click();
     await expect(menuButton(page)).toHaveAttribute("aria-expanded", "true");
@@ -53,6 +58,7 @@ test.describe("Header", () => {
 
   test("Menü-Link navigiert und schließt das Menü", async ({ page }) => {
     await page.goto("/");
+    await dismissToasts(page);
 
     await menuButton(page).click();
     await page.getByRole("link", { name: "Wort Index" }).first().click();

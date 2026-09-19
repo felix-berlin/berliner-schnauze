@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 
+import { dismissToasts } from "./helpers";
+
 test.describe("404-Seite", () => {
   test("unbekannte URL liefert 404 mit Header und Footer", async ({ page }) => {
     const response = await page.goto("/nope-xyz");
@@ -15,6 +17,7 @@ test.describe("404-Seite", () => {
 
   test("Logo führt von der 404-Seite zurück zur Startseite", async ({ page }) => {
     await page.goto("/nope-xyz");
+    await dismissToasts(page);
 
     await page.getByRole("banner").getByRole("link", { name: "Berliner Schnauze" }).click();
 
