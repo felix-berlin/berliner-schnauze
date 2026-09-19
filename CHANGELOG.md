@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.49.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.3...v3.49.4) (2026-09-19)
+
+
+### Bug Fixes
+
+* **e2e:** change ScrollToTop component to use client:idle for improved performance ([950b332](https://github.com/felix-berlin/berliner-schnauze/commit/950b33236f86a743bbd21a0d7c4142c7423bf79e))
+* **e2e:** update settings and documentation for Playwright integration ([c173b89](https://github.com/felix-berlin/berliner-schnauze/commit/c173b89c2efae7f15c9641183423b6cc5a86bae0))
+* improve code readability and maintainability in [...wordSlug].astro ([cac541d](https://github.com/felix-berlin/berliner-schnauze/commit/cac541d12b9fbd55074247007dc0fac33438efdb))
+* **search:** focus active result on arrow keys and let Enter reach buttons and links ([0a3d534](https://github.com/felix-berlin/berliner-schnauze/commit/0a3d534cd4735b3131960574b41052a221e83f55))
+* **ui:** avoid hydration mismatch on donation wallets and routeToWord error before word of the day loads ([ab1ae88](https://github.com/felix-berlin/berliner-schnauze/commit/ab1ae88f36c7fd2892259f4d82501d3eb4527b16))
+* **ui:** keep scroll-to-top button visible over the footer on desktop ([1990858](https://github.com/felix-berlin/berliner-schnauze/commit/199085864d0b4c0a23f40a23177305b7fa76b943))
+
+
+### Performance Improvements
+
+* **build:** fetch all words once and reuse them for the word index ([944cbb0](https://github.com/felix-berlin/berliner-schnauze/commit/944cbb0f9cfdff4445a9f309af1acd6562287a79))
+* **build:** fetch words in pages of 500 ([d657e1f](https://github.com/felix-berlin/berliner-schnauze/commit/d657e1f99fc9403fb1fcc7ce149e00eb3d413ffc))
+* **dev:** cache fetched words on disk and ask before refetching ([7d34169](https://github.com/felix-berlin/berliner-schnauze/commit/7d34169fa82f3133743d91cc7b19fe8fcae8c8b3))
+* **word:** derive neighbor/sound/anagram results per page instead of in getStaticPaths ([a6138c5](https://github.com/felix-berlin/berliner-schnauze/commit/a6138c5eb77a55d8031c5e400884f407c32dcd29))
+
 ## [3.49.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.2...v3.49.3) (2026-09-18)
 
 
