@@ -267,20 +267,17 @@ describe("WordList.vue", () => {
     expect(wrapper.findAll(".mock-single-word")).toHaveLength(0);
   });
 
-  it("el.focus() is called inside focusActive nextTick when ref exists (covers line 104)", async () => {
+  it("focuses the active item's element in focusActive nextTick", async () => {
     mockStores({ state: "ready", value: { hits: [makeHit("Kiez")] } });
     const wrapper = mount(WordList, { attachTo: document.body });
-    const setupState = wrapper.getCurrentComponent()!.setupState as {
-      setResultRef: (el: Element | null) => void;
-    };
-    // Use setResultRef to populate resultRefs (it checks instanceof HTMLElement before pushing)
-    const el = document.createElement("li");
-    const focusSpy = vi.spyOn(el, "focus");
-    setupState.setResultRef(el);
+    // The list item is a component ref, so its root element ($el) must end up focusable.
+    const focusSpy = vi.spyOn(HTMLElement.prototype, "focus");
     // ArrowDown: activeIndex stays 0 (1 item: (0+1)%1=0), calls focusActive → nextTick → el.focus()
     fireKey("ArrowDown");
     await nextTick();
     expect(focusSpy).toHaveBeenCalledOnce();
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+    focusSpy.mockRestore();
     wrapper.unmount();
   });
 });

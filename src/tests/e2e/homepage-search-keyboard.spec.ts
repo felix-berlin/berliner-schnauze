@@ -31,9 +31,7 @@ test.describe("Search keyboard navigation and dropdown (/)", () => {
     await expect(activeCard(page)).toHaveAttribute("id", first ?? "");
   });
 
-  // WordList.vue tries to focus the active card, but setResultRef only accepts HTMLElement
-  // refs, so focus stays in the searchbox.
-  test.fixme("Pfeiltasten verschieben den Fokus auf die aktive Karte", async ({ page }) => {
+  test("Pfeiltasten verschieben den Fokus auf die aktive Karte", async ({ page }) => {
     await searchAndFocusList(page);
 
     await page.keyboard.press("ArrowDown");
@@ -75,9 +73,7 @@ test.describe("Search keyboard navigation and dropdown (/)", () => {
     await expect(page.getByRole("button", { name: "Wort kopieren" }).first()).toBeHidden();
   });
 
-  // The global Enter handler in WordList.vue always navigates to the active word, even when
-  // the focused element is the options button.
-  test.fixme("Dropdown ist per Tastatur erreichbar und bedienbar", async ({ page }) => {
+  test("Dropdown ist per Tastatur erreichbar und bedienbar", async ({ page }) => {
     await searchAndFocusList(page);
 
     await page.keyboard.press("ArrowDown");
@@ -87,5 +83,6 @@ test.describe("Search keyboard navigation and dropdown (/)", () => {
     await expect(
       page.getByRole("button", { name: "Link zum Wort kopieren" }).first(),
     ).toBeVisible();
+    await expect(page).toHaveURL(/\/(\?.*)?$/);
   });
 });
