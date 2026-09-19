@@ -14,7 +14,7 @@ import type {
 import { graphql } from "@/gql";
 import { GetAllWordsDocument } from "@/gql/graphql.ts";
 
-// Words the e2e specs (tests/e2e/*.spec.ts) navigate to directly by slug —
+// Words the e2e specs (src/tests/e2e/*.spec.ts) navigate to directly by slug —
 // always built, even when E2E_WORD_LIMIT caps the number of generated pages.
 const E2E_REQUIRED_SLUGS = new Set([
   "aasen",
@@ -110,12 +110,11 @@ export const GetAllWords = graphql(`
     $field: PostObjectsConnectionOrderbyEnum = TITLE
     $order: OrderEnum = ASC
     $stati: [PostStatusEnum] = PUBLISH
-    $nameIn: [String]
   ) {
     berlinerWords(
       first: $first
       after: $after
-      where: { orderby: { field: $field, order: $order }, stati: $stati, nameIn: $nameIn }
+      where: { orderby: { field: $field, order: $order }, stati: $stati }
     ) {
       edges {
         node {
