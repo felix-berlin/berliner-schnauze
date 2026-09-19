@@ -33,7 +33,7 @@ application behavior.
   ```markdown file=specs/plan.md
   ### 1. Adding New Todos
 
-  **Seed:** `tests/seed.spec.ts`
+  **Seed:** `src/tests/e2e/seed.spec.ts`
 
   #### 1.1 Add Valid Todo
 
@@ -50,7 +50,7 @@ application behavior.
 
   ```ts file=add-valid-todo.spec.ts
   // spec: specs/plan.md
-  // seed: tests/seed.spec.ts
+  // seed: src/tests/e2e/seed.spec.ts
 
   test.describe('Adding New Todos', () => {
     test('Add Valid Todo', async { page } => {
