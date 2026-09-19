@@ -58,6 +58,27 @@ describe("ScrollToTop.vue", () => {
     expect(wrapper.find("button").isVisible()).toBe(true);
   });
 
+  it("marks the button as close to the end only while the footer is in view", async () => {
+    const wrapper = mount(ScrollToTop);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    const [docStartCallback, footerCallback] = intersectionObserverMock.mock.calls.map(
+      ([callback]) => callback,
+    );
+
+    docStartCallback([{ isIntersecting: false }]);
+    footerCallback([{ isIntersecting: true }]);
+    await wrapper.vm.$nextTick();
+
+    // Footer in view must not reset the scrolled state (desktop keeps the button visible).
+    expect(wrapper.find("button").isVisible()).toBe(true);
+    expect(wrapper.find("button").classes()).toContain("is-close-to-end");
+
+    footerCallback([{ isIntersecting: false }]);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("button").classes()).not.toContain("is-close-to-end");
+  });
+
   it("tooltip is not disabled when tooltip prop is non-empty (covers line 7 ternary true branch)", async () => {
     const wrapper = mount(ScrollToTop, { props: { tooltip: "Nach oben scrollen" } });
     await wrapper.vm.$nextTick();
