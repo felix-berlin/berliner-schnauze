@@ -12,6 +12,8 @@ import { isAgent } from "std-env";
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+const port = process.env.E2E_PORT ?? "4321";
+
 export default defineConfig({
   testDir: "./src/tests/e2e",
   /* Run tests in files in parallel */
@@ -31,7 +33,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: "http://localhost:4321",
+    baseURL: `http://localhost:${port}`,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
@@ -96,7 +98,7 @@ export default defineConfig({
     command: process.env.CI
       ? "pnpm run preview"
       : "pnpm run supportedBrowsers && pnpm exec astro dev",
-    url: "http://localhost:4321",
+    url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

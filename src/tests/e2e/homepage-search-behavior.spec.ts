@@ -85,7 +85,8 @@ test.describe("Search behaviour (/)", () => {
     await expect(page.locator('.c-word-list a[href^="/wort/aasen"]').first()).toBeVisible();
   });
 
-  test("Suche in Kombination mit Buchstabenfilter und Zurücksetzen", async ({ page }) => {
+  test("Zurücksetzen leert Suchfeld und ?q=", async ({ isMobile, page }) => {
+    test.skip(isMobile, "Filter sidebar is collapsed on mobile");
     await page.goto("/");
 
     await searchbox(page).fill("aasen");
