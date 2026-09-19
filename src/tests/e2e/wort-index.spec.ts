@@ -7,8 +7,8 @@ test.describe("Wort-Index (/wort)", () => {
 
     await expect(page).toHaveTitle(/Wort-Index/);
     await expect(page.getByRole("heading", { level: 1, name: "Wort-Index" })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2, name: "A", exact: true })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2, name: "B", exact: true })).toBeAttached();
+    await expect(page.getByRole("heading", { exact: true, level: 2, name: "A" })).toBeVisible();
+    await expect(page.getByRole("heading", { exact: true, level: 2, name: "B" })).toBeAttached();
     expect(await page.locator('main a[href^="/wort/"]').count()).toBeGreaterThan(500);
   });
 

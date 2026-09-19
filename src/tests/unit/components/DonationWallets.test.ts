@@ -8,13 +8,13 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@vueuse/core")>();
   return {
     ...actual,
-    useMounted: () => ref(true),
     useClipboard: vi.fn(() => ({
       copied: ref(false),
       copy: vi.fn().mockResolvedValue(undefined),
       isSupported: ref(true),
       text: ref(""),
     })),
+    useMounted: () => ref(true),
   };
 });
 
