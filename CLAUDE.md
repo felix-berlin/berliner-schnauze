@@ -152,7 +152,7 @@ Also guard `ResizeObserver` / `getBoundingClientRect` callbacks against transiti
 
 ## Environment Variables
 
-**Dev words cache**: fetched words are cached in `node_modules/.cache/berliner-words/`; dev start asks "Wörter neu fetchen?" (TTY only, `REFETCH_WORDS=1` forces it). Never compute per-word similarity/anagram data in `getStaticPaths` (`wort/[...wordSlug].astro`) — it's O(n²) over ~6000 words and freezes the dev server; derive it in the page body.
+**Dev words cache**: fetched words are cached in `node_modules/.cache/berliner-words/`; dev start asks "Re-fetch words?" (TTY only, `REFETCH_WORDS=1` forces it). Never compute per-word similarity/anagram data in `getStaticPaths` (`wort/[...wordSlug].astro`) — it's O(n²) over ~6000 words and freezes the dev server; derive it in the page body.
 
 Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`, `IMAGOR_HOST`, `IMAGOR_SECRET`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
 

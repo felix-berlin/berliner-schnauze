@@ -112,9 +112,9 @@ describe("promptRefetchWords", () => {
   });
 
   it.each([
-    [10 * 60, "10 Minuten"],
-    [5 * 3600, "5 Stunden"],
-    [4 * 86_400, "4 Tagen"],
+    [10 * 60, "10 minutes"],
+    [5 * 3600, "5 hours"],
+    [4 * 86_400, "4 days"],
   ])("shows the cache age (%i s → %s)", async (ageSeconds, text) => {
     setTty(true);
     question.mockResolvedValue("n");

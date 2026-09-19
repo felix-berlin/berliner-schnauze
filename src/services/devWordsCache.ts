@@ -9,9 +9,9 @@ const CACHE_DIR = join(process.cwd(), "node_modules/.cache/berliner-words");
 
 const formatAge = (ms: number): string => {
   const minutes = Math.round(ms / 60_000);
-  if (minutes < 60) return `${minutes} Minuten`;
+  if (minutes < 60) return `${minutes} minutes`;
   const hours = Math.round(minutes / 60);
-  return hours < 48 ? `${hours} Stunden` : `${Math.round(hours / 24)} Tagen`;
+  return hours < 48 ? `${hours} hours` : `${Math.round(hours / 24)} days`;
 };
 
 export const readWordsCache = async <T>(key: string): Promise<T | null> => {
@@ -44,10 +44,10 @@ export const promptRefetchWords = async (): Promise<void> => {
     );
     const rl = createInterface({ input: process.stdin, output: process.stdout });
     const answer = await rl.question(
-      `Wörter neu fetchen? Die gecachten Einträge sind ${formatAge(Date.now() - oldest)} alt. [j/N] `,
+      `Re-fetch words? The cached entries are ${formatAge(Date.now() - oldest)} old. [y/N] `,
     );
     rl.close();
-    refetch = /^(j|ja|y|yes)$/i.test(answer.trim());
+    refetch = /^(y|yes|j|ja)$/i.test(answer.trim());
   }
 
   if (refetch) await rm(CACHE_DIR, { force: true, recursive: true });
