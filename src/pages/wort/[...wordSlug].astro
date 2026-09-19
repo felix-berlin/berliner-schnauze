@@ -93,8 +93,7 @@ const { word, wordRef, wordRefs } = Astro.props;
 // and getStaticPaths would run them for every word up front — which froze the dev server.
 const alphabeticNeighborsResult = alphabeticNeighbors(wordRefs, wordRef);
 const anagramsResult = findAnagrams(wordRef.wordProperties?.berlinerisch ?? '', wordRefs);
-const similarSpellingResult = similarWords(wordRefs, wordRef)
-  .filter((w) => w.isSimilar >= 0.85)
+const similarSpellingResult = similarWords(wordRefs, wordRef, 0.85)
   .sort((a, b) => b.isSimilar - a.isSimilar)
   .slice(0, 5)
   .map((w) => w.word);
