@@ -44,7 +44,7 @@ const fetchPaginatedWords = async (
   const allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
   let cursor = null;
   let complete = true;
-  const pageSize = 100;
+  const pageSize = 500; // needs graphql_connection_max_query_amount >= 500 on the WP side
   const cacheKey = ["words", orderByField, orderByType, stati.join("-")].join("_");
 
   if (import.meta.env.DEV) {
