@@ -59,7 +59,6 @@ export const getStaticPaths = (async () => {
       return [];
     }
     const wordRef = wordRefById.get(node.id)!;
-    const berlinerisch = node.wordProperties?.berlinerisch ?? '';
     return [{
       // experimental.incrementalBuild: this only reflects the word's own
       // modified date. Neighbor/anagram/similar-sounding sections are derived
@@ -72,17 +71,8 @@ export const getStaticPaths = (async () => {
         wordSlug: node.slug,
       },
       props: {
-        alphabeticNeighborsResult: alphabeticNeighbors(wordRefs, wordRef),
-        anagramsResult: findAnagrams(berlinerisch, wordRefs),
-        similarSpellingResult: similarWords(wordRefs, wordRef)
-          .filter((w) => w.isSimilar >= 0.85)
-          .sort((a, b) => b.isSimilar - a.isSimilar)
-          .slice(0, 5)
-          .map((w) => w.word),
-        soundingWordsResult: similarSoundingWords(wordRefs, wordRef)
-          .filter((r) => r.isSimilar)
-          .map((r) => r.word),
         word: node,
+        wordRef,
         wordRefs,
       },
     }];
@@ -93,8 +83,20 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { wordSlug } = Astro.params as Params;
-const { word, wordRefs, alphabeticNeighborsResult, anagramsResult, soundingWordsResult, similarSpellingResult } =
-  Astro.props;
+const { word, wordRef, wordRefs } = Astro.props;
+
+// Derived per page (not in getStaticPaths): these compare the word against all ~6000 others,
+// and getStaticPaths would run them for every word up front — which froze the dev server.
+const alphabeticNeighborsResult = alphabeticNeighbors(wordRefs, wordRef);
+const anagramsResult = findAnagrams(wordRef.wordProperties.berlinerisch ?? '', wordRefs);
+const similarSpellingResult = similarWords(wordRefs, wordRef)
+  .filter((w) => w.isSimilar >= 0.85)
+  .sort((a, b) => b.isSimilar - a.isSimilar)
+  .slice(0, 5)
+  .map((w) => w.word);
+const soundingWordsResult = similarSoundingWords(wordRefs, wordRef)
+  .filter((r) => r.isSimilar)
+  .map((r) => r.word);
 
 const wordProps: BerlinerWord['wordProperties'] = word.wordProperties;
 
