@@ -26,8 +26,12 @@ test.describe("Magazin (/magazin)", () => {
     await page.goto("/magazin");
     await page.locator('main a[href^="/magazin/"]').first().click();
 
-    await page.getByRole("button", { name: /Link kopieren/ }).click();
+    const toast = page.locator(".c-toast-notify").filter({ hasText: "Link kopiert" });
 
-    await expect(page.locator(".c-toast-notify")).toBeVisible();
+    // The click can land before the island hydrates (seen in WebKit), so retry until the toast shows.
+    await expect(async () => {
+      await page.getByRole("button", { name: /Link kopieren/ }).click();
+      await expect(toast).toBeVisible({ timeout: 1500 });
+    }).toPass({ timeout: 15_000 });
   });
 });
