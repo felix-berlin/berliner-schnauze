@@ -17,6 +17,8 @@ test.describe("Spenden (/spenden)", () => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]).catch(() => {});
     await page.goto("/spenden");
 
+    // The island hydrates when visible (client:visible).
+    await page.locator(".c-donation-wallets").scrollIntoViewIfNeeded().catch(() => {});
     const copyButton = page.getByRole("button", { name: /Adresse für Bitcoin/ }).first();
     // Wallets come from the CMS; skip when the dev server rendered none.
     await copyButton.waitFor({ timeout: 5000 }).catch(() => {});
