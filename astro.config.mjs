@@ -12,6 +12,7 @@ import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
 
+import { promptRefetchWords } from "./src/services/devWordsCache.ts";
 import {
   getPostDates,
   getWordDates,
@@ -53,7 +54,7 @@ export default defineConfig({
   trailingSlash: "never",
   // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
   devToolbar: {
-    enabled: !process.env.CI,
+    enabled: !process.env.CI && !process.env.NO_DEV_TOOLBAR,
   },
   // No Astro.session usage anywhere in the codebase — opt out to tree-shake
   // the session runtime out of the Cloudflare Pages build.
@@ -262,6 +263,14 @@ export default defineConfig({
   },
   compressHTML: true,
   integrations: [
+    {
+      name: "dev-words-cache-prompt",
+      hooks: {
+        "astro:config:setup": async ({ command }) => {
+          if (command === "dev") await promptRefetchWords();
+        },
+      },
+    },
     vue({
       appEntrypoint: "/src/pages/_app",
       // devtools: {

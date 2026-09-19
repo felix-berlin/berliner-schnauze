@@ -9,6 +9,7 @@
       }"
       type="button"
       class="c-scroll-to-top c-button c-button--center-icon"
+      :class="{ 'is-close-to-end': isFooterVisible }"
       :aria-label="buttonAriaLabel"
       @click="scrollToTop"
     >
@@ -38,6 +39,7 @@ const {
 } = defineProps<ScrollToTopProps>();
 
 const isScrolled = ref(false);
+const isFooterVisible = ref(false);
 
 const scrollToTop = () => {
   window.scrollTo({ behavior: "smooth", top: 0 });
@@ -53,12 +55,17 @@ onMounted(() => {
 });
 
 useIntersectionObserver(
-  [docStart, footerGround],
-  ([entry]) => {
-    isScrolled.value = !entry.isIntersecting;
+  docStart,
+  (entries) => {
+    isScrolled.value = !entries.at(-1)?.isIntersecting;
   },
   { rootMargin: `${showAtPosition}px 0px 0px 0px` },
 );
+
+// Only styled away below the md breakpoint, where the button would sit on top of the footer.
+useIntersectionObserver(footerGround, (entries) => {
+  isFooterVisible.value = entries.at(-1)?.isIntersecting ?? false;
+});
 </script>
 
 <style lang="scss">

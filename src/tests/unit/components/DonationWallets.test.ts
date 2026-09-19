@@ -14,6 +14,7 @@ vi.mock("@vueuse/core", async (importOriginal) => {
       isSupported: ref(true),
       text: ref(""),
     })),
+    useMounted: () => ref(true),
   };
 });
 
