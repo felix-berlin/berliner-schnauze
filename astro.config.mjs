@@ -12,6 +12,7 @@ import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
 
+import { promptRefetchWords } from "./src/services/devWordsCache.ts";
 import {
   getPostDates,
   getWordDates,
@@ -262,6 +263,14 @@ export default defineConfig({
   },
   compressHTML: true,
   integrations: [
+    {
+      name: "dev-words-cache-prompt",
+      hooks: {
+        "astro:config:setup": async ({ command }) => {
+          if (command === "dev") await promptRefetchWords();
+        },
+      },
+    },
     vue({
       appEntrypoint: "/src/pages/_app",
       // devtools: {

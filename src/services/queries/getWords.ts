@@ -1,3 +1,4 @@
+import { readWordsCache, writeWordsCache } from "@services/devWordsCache";
 import { wpGraphqlClient } from "@services/wpGraphqlClient";
 import { SHOW_TEST_DATA } from "astro:env/client";
 import { E2E_WORD_LIMIT } from "astro:env/server";
@@ -43,7 +44,19 @@ const fetchPaginatedWords = async (
 ) => {
   const allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
   let cursor = null;
+  let complete = true;
   const pageSize = 100;
+  const cacheKey = [
+    queryDocument === GetAllWordsDocument ? "words" : "words-links",
+    orderByField,
+    orderByType,
+    stati.join("-"),
+  ].join("_");
+
+  if (import.meta.env.DEV) {
+    const cached = await readWordsCache<typeof allWords>(cacheKey);
+    if (cached) return cached;
+  }
 
   while (true) {
     console.info("Fetching words...", allWords.length);
@@ -60,11 +73,15 @@ const fetchPaginatedWords = async (
 
     if (response.error) {
       console.error("Error fetching words:", response.error);
+      complete = false;
       break;
     }
 
     const data = response.data?.berlinerWords;
-    if (!data) break;
+    if (!data) {
+      complete = false;
+      break;
+    }
 
     allWords.push(...(data.edges as typeof allWords));
     cursor = data.pageInfo.endCursor;
@@ -73,6 +90,8 @@ const fetchPaginatedWords = async (
       break;
     }
   }
+
+  if (import.meta.env.DEV && complete) await writeWordsCache(cacheKey, allWords);
 
   return allWords;
 };
