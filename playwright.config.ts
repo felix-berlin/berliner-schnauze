@@ -63,13 +63,7 @@ export default defineConfig({
     },
     {
       name: "Mobile Safari",
-      // Playwright's iPhone UA claims iOS 15, which the app's browserslist rejects: the
-      // "browser outdated" error toast (no timeout) then covers the header and blocks clicks.
-      use: {
-        ...devices["iPhone 12"],
-        userAgent:
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1",
-      },
+      use: { ...devices["iPhone 12"] },
     },
 
     /* Test against branded browsers. */
