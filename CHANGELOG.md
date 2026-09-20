@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.49.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.4...v3.49.5) (2026-09-20)
+
+
+### Performance Improvements
+
+* **word:** cache sorted words and anagram index across word pages ([69f0ea4](https://github.com/felix-berlin/berliner-schnauze/commit/69f0ea421365bd947101ae1ffb5eff9446e8a151))
+
 ## [3.49.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.3...v3.49.4) (2026-09-19)
 
 
