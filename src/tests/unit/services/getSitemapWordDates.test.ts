@@ -7,15 +7,15 @@ function makePage(
   root = "berlinerWords",
 ) {
   return {
-    ok: true,
     json: vi.fn().mockResolvedValue({
       data: {
         [root]: {
           edges: edges.map((e) => ({ node: e })),
-          pageInfo: { hasNextPage, endCursor },
+          pageInfo: { endCursor, hasNextPage },
         },
       },
     }),
+    ok: true,
   } as unknown as Response;
 }
 
@@ -43,7 +43,7 @@ describe("getWordDates", () => {
       vi
         .fn()
         .mockResolvedValue(
-          makePage([{ slug: "aalen", modifiedGmt: "2025-04-09T12:00:00" }], false, ""),
+          makePage([{ modifiedGmt: "2025-04-09T12:00:00", slug: "aalen" }], false, ""),
         ),
     );
     const { getWordDates } = await import("@services/queries/getSitemapWordDates");
@@ -56,10 +56,10 @@ describe("getWordDates", () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
-        makePage([{ slug: "aalen", modifiedGmt: "2025-01-01T00:00:00" }], true, "cursor1"),
+        makePage([{ modifiedGmt: "2025-01-01T00:00:00", slug: "aalen" }], true, "cursor1"),
       )
       .mockResolvedValueOnce(
-        makePage([{ slug: "bier", modifiedGmt: "2025-01-02T00:00:00" }], false, ""),
+        makePage([{ modifiedGmt: "2025-01-02T00:00:00", slug: "bier" }], false, ""),
       );
     vi.stubGlobal("fetch", fetchMock);
     const { getWordDates } = await import("@services/queries/getSitemapWordDates");
@@ -73,8 +73,8 @@ describe("getWordDates", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
-        ok: true,
         json: vi.fn().mockResolvedValue({ data: {} }),
+        ok: true,
       }),
     );
     const { getWordDates } = await import("@services/queries/getSitemapWordDates");
@@ -88,9 +88,9 @@ describe("getWordDates", () => {
       vi.fn().mockResolvedValue(
         makePage(
           [
-            { slug: "", modifiedGmt: "2025-01-01T00:00:00" },
-            { slug: "aalen", modifiedGmt: "" },
-            { slug: "bier", modifiedGmt: "2025-01-02T00:00:00" },
+            { modifiedGmt: "2025-01-01T00:00:00", slug: "" },
+            { modifiedGmt: "", slug: "aalen" },
+            { modifiedGmt: "2025-01-02T00:00:00", slug: "bier" },
           ],
           false,
           "",
@@ -108,7 +108,7 @@ describe("getWordDates", () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValue(
-        makePage([{ slug: "aalen", modifiedGmt: "2025-04-09T12:00:00" }], false, ""),
+        makePage([{ modifiedGmt: "2025-04-09T12:00:00", slug: "aalen" }], false, ""),
       );
     vi.stubGlobal("fetch", fetchMock);
     const { getWordDates } = await import("@services/queries/getSitemapWordDates");
@@ -133,7 +133,7 @@ describe("getPostDates", () => {
         .fn()
         .mockResolvedValue(
           makePage(
-            [{ slug: "berlinerische-woerter-herkunft", modifiedGmt: "2026-07-20T14:06:35" }],
+            [{ modifiedGmt: "2026-07-20T14:06:35", slug: "berlinerische-woerter-herkunft" }],
             false,
             "",
             "posts",
@@ -152,10 +152,10 @@ describe("getPostDates", () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
-        makePage([{ slug: "post-a", modifiedGmt: "2026-01-01T00:00:00" }], true, "c1", "posts"),
+        makePage([{ modifiedGmt: "2026-01-01T00:00:00", slug: "post-a" }], true, "c1", "posts"),
       )
       .mockResolvedValueOnce(
-        makePage([{ slug: "post-b", modifiedGmt: "2026-01-02T00:00:00" }], false, "", "posts"),
+        makePage([{ modifiedGmt: "2026-01-02T00:00:00", slug: "post-b" }], false, "", "posts"),
       );
     vi.stubGlobal("fetch", fetchMock);
     const { getPostDates } = await import("@services/queries/getSitemapWordDates");
@@ -171,9 +171,9 @@ describe("getPostDates", () => {
       vi.fn().mockResolvedValue(
         makePage(
           [
-            { slug: "", modifiedGmt: "2026-01-01T00:00:00" },
-            { slug: "post-a", modifiedGmt: "" },
-            { slug: "post-b", modifiedGmt: "2026-01-02T00:00:00" },
+            { modifiedGmt: "2026-01-01T00:00:00", slug: "" },
+            { modifiedGmt: "", slug: "post-a" },
+            { modifiedGmt: "2026-01-02T00:00:00", slug: "post-b" },
           ],
           false,
           "",
@@ -192,7 +192,7 @@ describe("getPostDates", () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValue(
-        makePage([{ slug: "post-a", modifiedGmt: "2026-01-01T00:00:00" }], false, "", "posts"),
+        makePage([{ modifiedGmt: "2026-01-01T00:00:00", slug: "post-a" }], false, "", "posts"),
       );
     vi.stubGlobal("fetch", fetchMock);
     const { getPostDates } = await import("@services/queries/getSitemapWordDates");

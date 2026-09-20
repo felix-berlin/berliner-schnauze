@@ -13,12 +13,12 @@ describe("AudioPlayer.vue", () => {
 
     vi.spyOn(window, "Audio").mockImplementation(function (this: unknown) {
       return {
-        play: audioPlayMock,
-        pause: audioPauseMock,
         addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
         currentTime: 0,
         duration: 100,
+        pause: audioPauseMock,
+        play: audioPlayMock,
+        removeEventListener: vi.fn(),
       };
     } as unknown as typeof Audio);
   });
@@ -67,14 +67,14 @@ describe("AudioPlayer.vue", () => {
     let capturedEndedHandler: (() => void) | null = null;
     vi.spyOn(window, "Audio").mockImplementationOnce(function (this: unknown) {
       return {
-        play: vi.fn().mockResolvedValue(undefined),
-        pause: vi.fn(),
         addEventListener: vi.fn((event: string, handler: () => void) => {
           if (event === "ended") capturedEndedHandler = handler;
         }),
-        removeEventListener: vi.fn(),
         currentTime: 50,
         duration: 100,
+        pause: vi.fn(),
+        play: vi.fn().mockResolvedValue(undefined),
+        removeEventListener: vi.fn(),
       };
     } as unknown as typeof Audio);
 
@@ -95,7 +95,7 @@ describe("AudioPlayer.vue", () => {
 
   it("onUnmounted is safe when never played (covers line 87 false branch)", () => {
     const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
-    wrapper.unmount();
+    expect(() => wrapper.unmount()).not.toThrow();
   });
 
   it("updateProgress exits early when audioFile is null (covers line 49 false branch)", async () => {
@@ -107,6 +107,8 @@ describe("AudioPlayer.vue", () => {
     const wrapper = mount(AudioPlayer, { props: { audio: "" } });
     await wrapper.find("button").trigger("click"); // playAudio schedules rAF even with null audioFile
     capturedCb!(0); // fire updateProgress → if (null && isPlaying) → false → exits
+    await nextTick();
+    expect(wrapper.get<HTMLElement>(".c-audio-player__progress").element.style.height).toBe("0%");
     rafSpy.mockRestore();
     wrapper.unmount();
   });
@@ -117,9 +119,21 @@ describe("AudioPlayer.vue", () => {
       capturedCb = cb;
       return 1;
     });
+    vi.spyOn(window, "Audio").mockImplementationOnce(function (this: unknown) {
+      return {
+        addEventListener: vi.fn(),
+        currentTime: 50,
+        duration: 100,
+        pause: audioPauseMock,
+        play: audioPlayMock,
+        removeEventListener: vi.fn(),
+      };
+    } as unknown as typeof Audio);
     const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
-    await wrapper.find("button").trigger("click"); // default mock: duration=100, currentTime=0
+    await wrapper.find("button").trigger("click"); // mocked: duration=100, currentTime=50
     capturedCb!(0); // fire updateProgress → if (audioFile && isPlaying) → true → duration truthy → computes ratio
+    await nextTick();
+    expect(wrapper.get<HTMLElement>(".c-audio-player__progress").element.style.height).toBe("50%");
     rafSpy.mockRestore();
     wrapper.unmount();
   });
@@ -127,12 +141,12 @@ describe("AudioPlayer.vue", () => {
   it("updateProgress uses 0 when audioFile.duration is 0 (covers line 50 false branch)", async () => {
     vi.spyOn(window, "Audio").mockImplementationOnce(function (this: unknown) {
       return {
-        play: vi.fn().mockResolvedValue(undefined),
-        pause: vi.fn(),
         addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
         currentTime: 5,
         duration: 0,
+        pause: vi.fn(),
+        play: vi.fn().mockResolvedValue(undefined),
+        removeEventListener: vi.fn(),
       };
     } as unknown as typeof Audio);
     let capturedCb: FrameRequestCallback | null = null;
@@ -143,6 +157,8 @@ describe("AudioPlayer.vue", () => {
     const wrapper = mount(AudioPlayer, { props: { audio: "test.mp3" } });
     await wrapper.find("button").trigger("click");
     capturedCb!(0); // fire updateProgress → duration=0 → progress = 0 (false branch)
+    await nextTick();
+    expect(wrapper.get<HTMLElement>(".c-audio-player__progress").element.style.height).toBe("0%");
     rafSpy.mockRestore();
     wrapper.unmount();
   });

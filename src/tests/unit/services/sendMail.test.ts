@@ -8,26 +8,26 @@ beforeEach(() => {
 describe("sendEmailViaContactForm7", () => {
   it("makes two fetch calls", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
       json: vi.fn().mockResolvedValue({ success: true }),
+      ok: true,
     });
     vi.stubGlobal("fetch", fetchMock);
 
     const { sendEmailViaContactForm7 } = await import("@services/mutations/sendMail.ts");
-    await sendEmailViaContactForm7({ name: "Felix", email: "felix@test.de" });
+    await sendEmailViaContactForm7({ email: "felix@test.de", name: "Felix" });
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it("skips undefined form values", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
       json: vi.fn().mockResolvedValue({}),
+      ok: true,
     });
     vi.stubGlobal("fetch", fetchMock);
 
     const { sendEmailViaContactForm7 } = await import("@services/mutations/sendMail.ts");
-    await sendEmailViaContactForm7({ name: "Felix", email: undefined });
+    await sendEmailViaContactForm7({ email: undefined, name: "Felix" });
 
     const secondCall = fetchMock.mock.calls[1];
     const body = secondCall[1].body as FormData;
@@ -39,12 +39,12 @@ describe("sendEmailViaContactForm7", () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce({
-        ok: true,
         json: vi.fn().mockResolvedValue({}),
+        ok: true,
       })
       .mockResolvedValueOnce({
-        ok: false,
         json: vi.fn().mockResolvedValue({ message: "error" }),
+        ok: false,
       });
     vi.stubGlobal("fetch", fetchMock);
 
@@ -58,8 +58,8 @@ describe("sendEmailViaContactForm7", () => {
       .fn()
       .mockRejectedValueOnce(new Error("Network error"))
       .mockResolvedValueOnce({
-        ok: true,
         json: vi.fn().mockResolvedValue({}),
+        ok: true,
       });
     vi.stubGlobal("fetch", fetchMock);
 
@@ -76,8 +76,8 @@ describe("sendEmailViaContactForm7", () => {
 
   it("second fetch call uses POST method", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
       json: vi.fn().mockResolvedValue({}),
+      ok: true,
     });
     vi.stubGlobal("fetch", fetchMock);
 
@@ -90,8 +90,8 @@ describe("sendEmailViaContactForm7", () => {
 
   it("includes Authorization header in both calls", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
       json: vi.fn().mockResolvedValue({}),
+      ok: true,
     });
     vi.stubGlobal("fetch", fetchMock);
 
@@ -106,8 +106,8 @@ describe("sendEmailViaContactForm7", () => {
 
   it("second call url contains contact-form-7 feedback path", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
       json: vi.fn().mockResolvedValue({}),
+      ok: true,
     });
     vi.stubGlobal("fetch", fetchMock);
 

@@ -6,9 +6,11 @@ on:
   pull_request:
     branches: [main]
 
-# Repo default is write; this job only reads code, so scope it down.
+# Repo default is write; this job only reads code plus uploads a lint report,
+# so scope it down to exactly that.
 permissions:
   contents: read
+  security-events: write
 
 jobs:
   lint-and-typecheck:
@@ -36,6 +38,25 @@ jobs:
         run: |
           pnpm run supportedBrowsers
           pnpm exec astro sync
+
+      # Runs before the fixing `pnpm run lint` below so the report reflects
+      # the actual pre-fix findings, not whatever's left after autofix.
+      - name: Generate lint report (SARIF)
+        if: ${{ !cancelled() }}
+        run: pnpm run lint:report:sarif
+
+      - name: Upload lint report artifact
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: oxlint-report
+          path: oxlint-results.sarif
+
+      - name: Upload lint report to code scanning
+        if: ${{ !cancelled() }}
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: oxlint-results.sarif
 
       - name: Lint
         run: pnpm run lint

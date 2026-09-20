@@ -3,13 +3,14 @@ import type { CacheBucket } from "@composables/useCacheStorage";
 import PwaCacheBucketList from "@components/PwaCacheBucketList.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
+import type { Slots } from "vue";
 
 vi.mock("virtua/vue", () => ({
   VList: {
     props: ["data", "style", "class"],
-    setup(props: { data: unknown[] }, { slots }: { slots: any }) {
+    setup(props: { data: unknown[] }, { slots }: { slots: Slots }) {
       return () =>
-        props.data.map((item: unknown, index: number) => slots.default?.({ item, index }));
+        props.data.map((item: unknown, index: number) => slots.default?.({ index, item }));
     },
   },
 }));
@@ -179,7 +180,7 @@ describe("PwaCacheBucketList", () => {
       dateRange: null,
       name: "api-search-index",
       totalSizeBytes: 0,
-      typeBreakdown: [{ type: "js", count: 12, sizeBytes: 5000 }],
+      typeBreakdown: [{ count: 12, sizeBytes: 5000, type: "js" }],
       urls: [],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });

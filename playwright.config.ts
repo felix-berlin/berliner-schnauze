@@ -12,16 +12,18 @@ import { isAgent } from "std-env";
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+const port = process.env.E2E_PORT ?? "4321";
+
 export default defineConfig({
-  testDir: "./tests/e2e",
+  testDir: "./src/tests/e2e",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* 2 workers on CI: ubuntu-latest has 4 vCPUs, and astro preview shares them. */
+  workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters
    * The HTML report is always generated for humans to open later. For the live
    * terminal output, AI agents (detected via std-env, same signal Vitest 4.1+
@@ -31,7 +33,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: "http://localhost:4321",
+    baseURL: `http://localhost:${port}`,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
@@ -80,8 +82,23 @@ export default defineConfig({
     // `astro dev` alone breaks on a fresh checkout: src/utils/supportedBrowsers.mjs
     // is a gitignored generated stub normally created by the `predev` hook, which
     // only fires for `pnpm run dev` — not when this command spawns `astro dev` directly.
-    command: "pnpm run supportedBrowsers && pnpm exec astro dev",
-    url: "http://localhost:4321",
+    //
+    // In CI, use a static build + preview instead of dev: `astro dev` compiles
+    // each page on demand AND hits the live WordPress API per request, which
+    // was intermittently exceeding Playwright's 30s navigation timeout under
+    // the shared runner's network/CPU variance (net::ERR_ABORTED / timeouts on
+    // /wort/<slug> and the homepage). The static build removes both the
+    // per-page compile cost and the live-network dependency during the test
+    // run itself — content is fetched once at build time.
+    //
+    // The build itself runs as its own CI step (see playwright.yml) so it gets
+    // the full job timeout rather than racing this webServer timeout — by the
+    // time this command runs in CI, the site is already built, so it only has
+    // to wait for `astro preview` to start listening.
+    command: process.env.CI
+      ? "pnpm run preview"
+      : "pnpm run supportedBrowsers && pnpm exec astro dev",
+    url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

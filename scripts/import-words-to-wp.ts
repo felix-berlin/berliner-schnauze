@@ -55,31 +55,24 @@ const DRY_RUN_TERM_ID = -1;
 // Check one existing post: curl -u "$WP_AUTH_USER:$WP_AUTH_PASS" \
 //   "$WP_REST_API/wp/v2/berlinerisch?per_page=1" | jq '.[0].acf'
 const ACF = {
-  berlinerisch: "berlinerisch",
+  alternativeWord: "alternative_word",
+  alternativeWords: "alternative_words",
   article: "article",
-  translations: "translations",
-  translation: "translation",
-  examples: "examples",
+  berlinerisch: "berlinerisch",
   example: "example",
   exampleExplanation: "example_explanation",
-  alternativeWords: "alternative_words",
-  alternativeWord: "alternative_word",
+  examples: "examples",
   infoText: "info_text",
-  sources: "sources",
   source: "source",
-  berolinismus: "berolinismus",
+  sources: "sources",
+  translation: "translation",
+  translations: "translations",
 } as const;
 
-// Values for the sources > source checkbox, keyed by LexikonEntry.source.
-// Verified against the live ACF checkbox choices — must match byte-for-byte
-// (note the U+2019 apostrophe and en dash in the SDLS value).
-// ⚠ "meyer1904" must be added as a checkbox choice in WP admin before the
-// first non-dry-run import — otherwise ACF silently drops the value.
-const SOURCE_QUELLE: Record<string, string> = {
-  meyer1904: "Der richtige Berliner in Wörtern und Redensarten / Meyer, Hans",
-  sdls: "SDLS/Schlobi’s Linguistic Corner – Berlinisch: Lexikon",
-};
-const DEFAULT_SOURCE_KEY = "sdls";
+// Value for the sources > source checkbox on every imported word.
+// Verified against the live ACF checkbox choice (post "dampf") — note the
+// U+2019 apostrophe and en dash; the value must match byte-for-byte.
+const SOURCE_QUELLE = "SDLS/Schlobi’s Linguistic Corner – Berlinisch: Lexikon";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 export interface LexikonExample {
@@ -107,13 +100,6 @@ export interface LexikonEntry {
    * duplicate guard; the exact-title guard still applies.
    */
   allowDuplicate?: boolean;
-  /** Key into SOURCE_QUELLE; defaults to DEFAULT_SOURCE_KEY when omitted. */
-  source?: string;
-  /**
-   * Berolinismus in the narrow sense (Wikipedia): a nickname/quirk tied to a
-   * specific Berlin place or building — not general dialect vocabulary.
-   */
-  berolinismus?: boolean;
 }
 
 interface WpTerm {
@@ -176,11 +162,11 @@ async function getOrCreateTerm(slug: string, config: WpConfig): Promise<WpTerm> 
 
   const name = CATEGORY_LABELS[slug] ?? slug;
   console.log(`  Creating term: "${slug}" → "${name}"`);
-  if (DRY_RUN) return { id: DRY_RUN_TERM_ID, slug, name };
+  if (DRY_RUN) return { id: DRY_RUN_TERM_ID, name, slug };
 
   const created = await wpFetch<WpTerm>(
     `/${TAXONOMY_REST_BASE}`,
-    { method: "POST", body: JSON.stringify({ name, slug }) },
+    { body: JSON.stringify({ name, slug }), method: "POST" },
     config,
   );
   await delay(RATE_MS);
@@ -248,16 +234,12 @@ function buildPostBody(entry: LexikonEntry, termIds: number[]): Record<string, u
     }));
   }
   if (entry.infoText) acf[ACF.infoText] = entry.infoText;
-  if (entry.berolinismus !== undefined) acf[ACF.berolinismus] = entry.berolinismus;
-  const sourceKey = entry.source ?? DEFAULT_SOURCE_KEY;
-  const quelle = SOURCE_QUELLE[sourceKey];
-  if (!quelle) throw new Error(`"${entry.word}": unknown source "${sourceKey}"`);
-  acf[ACF.sources] = [{ [ACF.source]: [quelle] }];
+  acf[ACF.sources] = [{ [ACF.source]: [SOURCE_QUELLE] }];
 
   return {
-    title: entry.word,
-    status: PUBLISH ? "publish" : "draft",
     acf,
+    status: PUBLISH ? "publish" : "draft",
+    title: entry.word,
     ...(termIds.length > 0 ? { [TAXONOMY_REST_BASE]: termIds } : {}),
   };
 }
@@ -359,7 +341,7 @@ async function main(): Promise<void> {
     try {
       const post = await wpFetch<WpPost>(
         `/${POST_TYPE_REST_BASE}`,
-        { method: "POST", body: JSON.stringify(body) },
+        { body: JSON.stringify(body), method: "POST" },
         config,
       );
 
@@ -377,7 +359,7 @@ async function main(): Promise<void> {
       created++;
       await delay(RATE_MS);
     } catch (err) {
-      console.error(`  ✗ ${entry.word}: ${err}`);
+      console.error(`  ✗ ${entry.word}: ${err instanceof Error ? err.message : String(err)}`);
       errors++;
       if (errors >= 5 && created === 0) {
         console.error("Aborting: first 5 requests all failed — check config/auth.");

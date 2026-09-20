@@ -5,12 +5,12 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 
 const samplePayload: BonSharePayload = {
-  score: 120,
   bestStreak: 5,
-  totalAnswered: 10,
   correctAnswers: 8,
   date: "2026-06-23T10:00:00.000Z",
   playerName: "Felix",
+  score: 120,
+  totalAnswered: 10,
 };
 
 vi.mock("@vueuse/core", async (importOriginal) => {
@@ -77,8 +77,8 @@ describe("BonShareView.vue", () => {
     >);
     vi.mocked(decodeShareHash).mockReturnValueOnce({
       ...samplePayload,
-      totalAnswered: 0,
       correctAnswers: 0,
+      totalAnswered: 0,
     });
 
     const wrapper = mount(BonShareView);

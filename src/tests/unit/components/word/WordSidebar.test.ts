@@ -6,21 +6,21 @@ import { createAstroRender } from "../../helpers";
 vi.mock("@styles/components/_word-sidebar.scss", () => ({}));
 
 const makeWordProps = (overrides: Record<string, unknown> = {}) => ({
-  berlinerisch: "Schnauze",
   article: "die",
+  berlinerisch: "Schnauze",
   examples: [{ example: "Det is keen Zufall." }],
   ...overrides,
 });
 
 const defaultProps = {
+  hasAnagrams: false,
+  hasLinguistik: false,
+  hasNeighbors: false,
+  hasOrthographie: false,
+  hasPhonologie: false,
+  hasRelatedWords: false,
   wordProps: makeWordProps(),
   wordTags: [],
-  hasAnagrams: false,
-  hasOrthographie: false,
-  hasLinguistik: false,
-  hasPhonologie: false,
-  hasNeighbors: false,
-  hasRelatedWords: false,
 };
 
 describe("WordSidebar.astro", () => {

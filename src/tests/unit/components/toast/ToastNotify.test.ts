@@ -13,8 +13,6 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 vi.mock("@stores/toastNotify.ts", () => ({
   removeToastById: vi.fn(),
 }));
-const svgStub = { template: "<svg />" };
-
 // Track all wrappers so watchers on mockIsSwiping don't leak across tests
 const mountedWrappers: VueWrapper[] = [];
 const mountToast = (...args: Parameters<typeof mount>) => {
@@ -52,7 +50,7 @@ describe("ToastNotify.vue", () => {
   it("calls onAction and removeToastById when action button clicked", async () => {
     const onAction = vi.fn();
     const wrapper = mountToast(ToastNotify, {
-      props: { id: "test-uuid-2", message: "Hi", actionLabel: "Aktualisieren", onAction },
+      props: { actionLabel: "Aktualisieren", id: "test-uuid-2", message: "Hi", onAction },
     });
     await wrapper.find(".c-toast-notify__action").trigger("click");
     expect(onAction).toHaveBeenCalledOnce();
@@ -61,7 +59,7 @@ describe("ToastNotify.vue", () => {
 
   it("calls removeToastById even when onAction is absent", async () => {
     const wrapper = mountToast(ToastNotify, {
-      props: { id: "test-uuid-3", message: "Hi", actionLabel: "Aktualisieren" },
+      props: { actionLabel: "Aktualisieren", id: "test-uuid-3", message: "Hi" },
     });
     await wrapper.find(".c-toast-notify__action").trigger("click");
     expect(removeToastById).toHaveBeenCalledWith("test-uuid-3");
@@ -102,7 +100,7 @@ describe("ToastNotify.vue", () => {
   it("swipe-to-dismiss calls removeToastById when isSwiping becomes true", async () => {
     const { nextTick } = await import("vue");
     mountToast(ToastNotify, {
-      props: { id: "swipe-test", message: "hi", closeOnSwipe: true },
+      props: { closeOnSwipe: true, id: "swipe-test", message: "hi" },
     });
     mockIsSwiping.value = true;
     await nextTick();
@@ -112,7 +110,7 @@ describe("ToastNotify.vue", () => {
   it("does not call removeToastById on swipe when closeOnSwipe is false", async () => {
     const { nextTick } = await import("vue");
     mountToast(ToastNotify, {
-      props: { id: "swipe-off", message: "hi", closeOnSwipe: false },
+      props: { closeOnSwipe: false, id: "swipe-off", message: "hi" },
     });
     mockIsSwiping.value = true;
     await nextTick();
@@ -183,7 +181,7 @@ describe("ToastNotify.vue", () => {
   it("renders warning status icon component when status is warning (covers line 80 factory branch)", async () => {
     const { flushPromises } = await import("@vue/test-utils");
     mountToast(ToastNotify, {
-      props: { id: "warn-1", message: "Warning!", status: "warning", showStatusIcon: true },
+      props: { id: "warn-1", message: "Warning!", showStatusIcon: true, status: "warning" },
     });
     await flushPromises();
     // The warning defineAsyncComponent factory is invoked on render — coverage is the goal

@@ -13,7 +13,7 @@
         }}</code>
 
         <button
-          v-if="clipBoardIsSupported"
+          v-if="isMounted && clipBoardIsSupported"
           type="button"
           class="c-button c-donation-wallets__copy-button"
           :class="{ 'is-copied': copied && copiedAddress === wallet.address }"
@@ -39,7 +39,7 @@ import type { FundingWallet } from "@services/queries/getCompanyFunding";
 
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
-import { useClipboard } from "@vueuse/core";
+import { useClipboard, useMounted } from "@vueuse/core";
 import { defineAsyncComponent, ref } from "vue";
 
 const CopyIcon = defineAsyncComponent(() => import("virtual:icons/lucide/copy"));
@@ -48,6 +48,8 @@ const CheckIcon = defineAsyncComponent(() => import("virtual:icons/lucide/check"
 const { wallets } = defineProps<{ wallets: FundingWallet[] }>();
 
 const { copied, copy, isSupported: clipBoardIsSupported } = useClipboard();
+// isSupported differs between SSR and browser; gate on mount to keep hydration identical.
+const isMounted = useMounted();
 const copiedAddress = ref("");
 
 /**

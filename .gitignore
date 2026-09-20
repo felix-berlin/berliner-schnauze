@@ -48,6 +48,7 @@ pnpm-debug.log*
 src/utils/supportedBrowsers.mjs
 stats.html
 tests/unit/junit-report.xml
+oxlint-results.sarif
 
 # AI
 .claude/settings.local.json

@@ -42,27 +42,27 @@ function makeMockCacheStorage(
       return [
         name,
         {
+          delete: vi.fn().mockResolvedValue(true),
           keys: vi.fn().mockResolvedValue(requests),
           match: vi
             .fn()
             .mockImplementation((req: Request) =>
               Promise.resolve(responseMap.get(req.url) ?? null),
             ),
-          delete: vi.fn().mockResolvedValue(true),
         },
       ];
     }),
   );
 
   return {
-    keys: vi.fn().mockResolvedValue(Object.keys(data)),
-    open: vi.fn().mockImplementation((name: string) => Promise.resolve(cacheInstances[name])),
     delete: vi.fn().mockImplementation((name: string) => {
       delete cacheInstances[name];
       return Promise.resolve(true);
     }),
     has: vi.fn(),
+    keys: vi.fn().mockResolvedValue(Object.keys(data)),
     match: vi.fn(),
+    open: vi.fn().mockImplementation((name: string) => Promise.resolve(cacheInstances[name])),
   };
 }
 
@@ -151,12 +151,12 @@ describe("useCacheStorage — loadCaches", () => {
     mockCacheStorage = makeMockCacheStorage({
       "api-search-index": [
         {
-          url: "https://example.com/api/search/index.json",
-          size: 1024,
           dateStr: "Thu, 01 Jan 2026 10:00:00 GMT",
+          size: 1024,
+          url: "https://example.com/api/search/index.json",
         },
       ],
-      "api-word-of-the-day": [{ url: "https://example.com/api/word-of-the-day", size: 512 }],
+      "api-word-of-the-day": [{ size: 512, url: "https://example.com/api/word-of-the-day" }],
     });
     vi.stubGlobal("caches", mockCacheStorage);
   });
@@ -213,8 +213,8 @@ describe("useCacheStorage — loadCaches", () => {
       "caches",
       makeMockCacheStorage({
         "api-search-index": [
-          { url: "https://example.com/a", size: 100, dateStr: "Thu, 01 Jan 2026 08:00:00 GMT" },
-          { url: "https://example.com/b", size: 100, dateStr: "Thu, 01 Jan 2026 12:00:00 GMT" },
+          { dateStr: "Thu, 01 Jan 2026 08:00:00 GMT", size: 100, url: "https://example.com/a" },
+          { dateStr: "Thu, 01 Jan 2026 12:00:00 GMT", size: 100, url: "https://example.com/b" },
         ],
       }),
     );
@@ -231,9 +231,9 @@ describe("useCacheStorage — loadCaches", () => {
       "caches",
       makeMockCacheStorage({
         "api-search-index": [
-          { url: "https://example.com/a", size: 100, dateStr: "Thu, 01 Jan 2026 08:00:00 GMT" },
-          { url: "https://example.com/b", size: 100, dateStr: "Thu, 01 Jan 2026 12:00:00 GMT" },
-          { url: "https://example.com/c", size: 100, dateStr: "Thu, 01 Jan 2026 06:00:00 GMT" },
+          { dateStr: "Thu, 01 Jan 2026 08:00:00 GMT", size: 100, url: "https://example.com/a" },
+          { dateStr: "Thu, 01 Jan 2026 12:00:00 GMT", size: 100, url: "https://example.com/b" },
+          { dateStr: "Thu, 01 Jan 2026 06:00:00 GMT", size: 100, url: "https://example.com/c" },
         ],
       }),
     );
@@ -274,8 +274,8 @@ describe("useCacheStorage — loadCaches", () => {
       "caches",
       makeMockCacheStorage({
         "api-search-index": [
-          { url: "https://example.com/a.js", size: 500, contentType: "application/javascript" },
-          { url: "https://example.com/b.css", size: 200, contentType: "text/css" },
+          { contentType: "application/javascript", size: 500, url: "https://example.com/a.js" },
+          { contentType: "text/css", size: 200, url: "https://example.com/b.css" },
         ],
       }),
     );
@@ -293,8 +293,8 @@ describe("useCacheStorage — loadCaches", () => {
       "caches",
       makeMockCacheStorage({
         "api-search-index": [
-          { url: "https://example.com/a.json", size: 300, contentType: "application/json" },
-          { url: "https://example.com/b.json", size: 200, contentType: "application/json" },
+          { contentType: "application/json", size: 300, url: "https://example.com/a.json" },
+          { contentType: "application/json", size: 200, url: "https://example.com/b.json" },
         ],
       }),
     );
@@ -319,16 +319,16 @@ describe("useCacheStorage — cache entry edge cases", () => {
     match: ReturnType<typeof vi.fn>;
   }) => {
     vi.stubGlobal("caches", {
-      keys: vi.fn().mockResolvedValue(["test-cache"]),
-      open: vi.fn().mockResolvedValue({ ...cacheData, delete: vi.fn().mockResolvedValue(true) }),
       delete: vi.fn(),
       has: vi.fn(),
+      keys: vi.fn().mockResolvedValue(["test-cache"]),
       match: vi.fn(),
+      open: vi.fn().mockResolvedValue({ ...cacheData, delete: vi.fn().mockResolvedValue(true) }),
     });
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
       serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: 0, usage: 0 }) },
     });
   };
 
@@ -408,8 +408,8 @@ describe("useCacheStorage — clearBucket", () => {
 
   beforeEach(() => {
     mockCacheStorage = makeMockCacheStorage({
-      "api-search-index": [{ url: "https://example.com/api/search/index.json", size: 100 }],
-      "api-word-of-the-day": [{ url: "https://example.com/api/wotd", size: 50 }],
+      "api-search-index": [{ size: 100, url: "https://example.com/api/search/index.json" }],
+      "api-word-of-the-day": [{ size: 50, url: "https://example.com/api/wotd" }],
     });
     vi.stubGlobal("caches", mockCacheStorage);
   });
@@ -439,8 +439,8 @@ describe("useCacheStorage — clearAll", () => {
 
   beforeEach(() => {
     mockCacheStorage = makeMockCacheStorage({
-      "api-search-index": [{ url: "https://example.com/a", size: 100 }],
-      "workbox-precache-v2": [{ url: "https://example.com/b", size: 200 }],
+      "api-search-index": [{ size: 100, url: "https://example.com/a" }],
+      "workbox-precache-v2": [{ size: 200, url: "https://example.com/b" }],
     });
     vi.stubGlobal("caches", mockCacheStorage);
   });
@@ -542,11 +542,11 @@ describe("useCacheStorage — storageQuota", () => {
     vi.stubGlobal("navigator", {
       onLine: true,
       serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: 1024, quota: 1_000_000 }) },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: 1_000_000, usage: 1024 }) },
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
-    expect(result.storageQuota.value).toEqual({ usedBytes: 1024, quotaBytes: 1_000_000 });
+    expect(result.storageQuota.value).toEqual({ quotaBytes: 1_000_000, usedBytes: 1024 });
     unmount();
   });
 
@@ -573,22 +573,22 @@ describe("useCacheStorage — swInfo", () => {
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
       serviceWorker: {
         getRegistration: vi.fn().mockResolvedValue({
           active: { scriptURL: "https://example.com/sw.js", state: "activated" },
-          waiting: null,
           installing: null,
           scope: "https://example.com/",
+          waiting: null,
         }),
       },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: 0, usage: 0 }) },
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
     expect(result.swInfo.value).toMatchObject({
-      status: "active",
-      scriptURL: "https://example.com/sw.js",
       scope: "https://example.com/",
+      scriptURL: "https://example.com/sw.js",
+      status: "active",
     });
     unmount();
   });
@@ -597,8 +597,8 @@ describe("useCacheStorage — swInfo", () => {
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
       serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: 0, usage: 0 }) },
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -610,7 +610,7 @@ describe("useCacheStorage — swInfo", () => {
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: 0, usage: 0 }) },
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -622,21 +622,21 @@ describe("useCacheStorage — swInfo", () => {
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
       serviceWorker: {
         getRegistration: vi.fn().mockResolvedValue({
           active: null,
-          waiting: { scriptURL: "https://example.com/sw.js" },
           installing: null,
           scope: "https://example.com/",
+          waiting: { scriptURL: "https://example.com/sw.js" },
         }),
       },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: 0, usage: 0 }) },
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
     expect(result.swInfo.value).toMatchObject({
-      status: "waiting",
       scriptURL: "https://example.com/sw.js",
+      status: "waiting",
     });
     unmount();
   });
@@ -645,15 +645,15 @@ describe("useCacheStorage — swInfo", () => {
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
       serviceWorker: {
         getRegistration: vi.fn().mockResolvedValue({
           active: null,
-          waiting: null,
           installing: { scriptURL: "https://example.com/sw.js" },
           scope: "https://example.com/",
+          waiting: null,
         }),
       },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: 0, usage: 0 }) },
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -665,8 +665,8 @@ describe("useCacheStorage — swInfo", () => {
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
       serviceWorker: { getRegistration: vi.fn().mockRejectedValue(new Error("SW error")) },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: 0, usage: 0 }) },
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -678,19 +678,19 @@ describe("useCacheStorage — swInfo", () => {
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
       serviceWorker: {
         getRegistration: vi.fn().mockResolvedValue({
           active: { scriptURL: null },
-          waiting: null,
           installing: null,
           scope: "https://example.com/",
+          waiting: null,
         }),
       },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: 0, usage: 0 }) },
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
-    expect(result.swInfo.value).toMatchObject({ status: "active", scriptURL: "" });
+    expect(result.swInfo.value).toMatchObject({ scriptURL: "", status: "active" });
     unmount();
   });
 
@@ -698,15 +698,15 @@ describe("useCacheStorage — swInfo", () => {
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: 0, quota: 0 }) },
       serviceWorker: {
         getRegistration: vi.fn().mockResolvedValue({
           active: { scriptURL: "https://example.com/sw.js" },
-          waiting: null,
           installing: null,
           scope: null,
+          waiting: null,
         }),
       },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: 0, usage: 0 }) },
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -721,8 +721,8 @@ describe("useCacheStorage — swInfo", () => {
     vi.stubGlobal("caches", makeMockCacheStorage({}));
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockResolvedValue({ usage: "unknown", quota: "unknown" }) },
       serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+      storage: { estimate: vi.fn().mockResolvedValue({ quota: "unknown", usage: "unknown" }) },
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -735,8 +735,8 @@ describe("useCacheStorage — swInfo", () => {
     const domEx = new DOMException("Permission denied", "NotAllowedError");
     vi.stubGlobal("navigator", {
       onLine: true,
-      storage: { estimate: vi.fn().mockRejectedValue(domEx) },
       serviceWorker: { getRegistration: vi.fn().mockResolvedValue(null) },
+      storage: { estimate: vi.fn().mockRejectedValue(domEx) },
     });
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     const { result, unmount } = withSetup(() => useCacheStorage());
@@ -754,11 +754,11 @@ describe("useCacheStorage — loadCaches error handling", () => {
 
   it("sets loadError when caches.keys() throws", async () => {
     vi.stubGlobal("caches", {
-      keys: vi.fn().mockRejectedValue(new DOMException("SecurityError")),
-      open: vi.fn(),
       delete: vi.fn(),
       has: vi.fn(),
+      keys: vi.fn().mockRejectedValue(new DOMException("SecurityError")),
       match: vi.fn(),
+      open: vi.fn(),
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -768,11 +768,11 @@ describe("useCacheStorage — loadCaches error handling", () => {
 
   it("resets isLoading to false when caches.keys() throws", async () => {
     vi.stubGlobal("caches", {
-      keys: vi.fn().mockRejectedValue(new DOMException("SecurityError")),
-      open: vi.fn(),
       delete: vi.fn(),
       has: vi.fn(),
+      keys: vi.fn().mockRejectedValue(new DOMException("SecurityError")),
       match: vi.fn(),
+      open: vi.fn(),
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -877,11 +877,11 @@ describe("useCacheStorage — clearBucket error toast", () => {
 
   it("shows error toast when caches.delete() throws in clearBucket", async () => {
     vi.stubGlobal("caches", {
-      keys: vi.fn().mockResolvedValue([]),
-      open: vi.fn().mockResolvedValue(null),
       delete: vi.fn().mockRejectedValue(new DOMException("SecurityError")),
       has: vi.fn(),
+      keys: vi.fn().mockResolvedValue([]),
       match: vi.fn(),
+      open: vi.fn().mockResolvedValue(null),
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.clearBucket("api-search-index");
@@ -900,14 +900,14 @@ describe("useCacheStorage — clearAll error toasts", () => {
 
   it("shows toast with failCount when some deletes are rejected in clearAll", async () => {
     vi.stubGlobal("caches", {
-      keys: vi.fn().mockResolvedValue(["bucket-a", "bucket-b"]),
-      open: vi.fn().mockResolvedValue(null),
       delete: vi
         .fn()
         .mockResolvedValueOnce(true)
         .mockRejectedValueOnce(new Error("permission denied")),
       has: vi.fn(),
+      keys: vi.fn().mockResolvedValue(["bucket-a", "bucket-b"]),
       match: vi.fn(),
+      open: vi.fn().mockResolvedValue(null),
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.clearAll();
@@ -922,11 +922,11 @@ describe("useCacheStorage — clearAll error toasts", () => {
 
   it("shows generic error toast when caches.keys() throws in clearAll", async () => {
     vi.stubGlobal("caches", {
-      keys: vi.fn().mockRejectedValue(new Error("Security error")),
-      open: vi.fn().mockResolvedValue(null),
       delete: vi.fn(),
       has: vi.fn(),
+      keys: vi.fn().mockRejectedValue(new Error("Security error")),
       match: vi.fn(),
+      open: vi.fn().mockResolvedValue(null),
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.clearAll();
@@ -954,15 +954,15 @@ describe("useCacheStorage — blob() non-TypeError error branch", () => {
       headers: { get: (key: string) => (key === "Content-Type" ? "application/json" : null) },
     };
     vi.stubGlobal("caches", {
-      keys: vi.fn().mockResolvedValue(["test-bucket"]),
-      open: vi.fn().mockResolvedValue({
-        keys: vi.fn().mockResolvedValue([new Request("https://example.com/data.json")]),
-        match: vi.fn().mockResolvedValue(mockResponse),
-        delete: vi.fn(),
-      }),
       delete: vi.fn(),
       has: vi.fn(),
+      keys: vi.fn().mockResolvedValue(["test-bucket"]),
       match: vi.fn(),
+      open: vi.fn().mockResolvedValue({
+        delete: vi.fn(),
+        keys: vi.fn().mockResolvedValue([new Request("https://example.com/data.json")]),
+        match: vi.fn().mockResolvedValue(mockResponse),
+      }),
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();
@@ -985,18 +985,18 @@ describe("useCacheStorage — rejected bucket in Promise.allSettled", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const loadError = new Error("Permission denied");
     vi.stubGlobal("caches", {
+      delete: vi.fn(),
+      has: vi.fn(),
       keys: vi.fn().mockResolvedValue(["good-bucket", "bad-bucket"]),
+      match: vi.fn(),
       open: vi.fn().mockImplementation((name: string) => {
         if (name === "bad-bucket") return Promise.reject(loadError);
         return Promise.resolve({
+          delete: vi.fn(),
           keys: vi.fn().mockResolvedValue([]),
           match: vi.fn(),
-          delete: vi.fn(),
         });
       }),
-      delete: vi.fn(),
-      has: vi.fn(),
-      match: vi.fn(),
     });
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.loadCaches();

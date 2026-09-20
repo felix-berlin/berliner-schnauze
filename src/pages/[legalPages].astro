@@ -48,7 +48,7 @@ const { page } = Astro.props;
 const pageContent = {
   ...page,
   seo: {
-    ...(page.seo ?? {}),
+    ...page.seo,
     opengraphType: "website",
   },
 };

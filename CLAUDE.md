@@ -40,9 +40,13 @@ pnpm server:preview          # Serve ./dist with Wrangler Pages
 pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (exception: needs local .env file, not Infisical)
 ```
 
+When Claude runs `oxlint` directly (not via `pnpm lint`), always pass `--format=agent`.
+
 Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
 
 Update snapshots: `pnpm vitest:update`
+
+E2E (Playwright): specs in `src/tests/e2e/`; run with `npx playwright test <file> --project=chromium`. Set `E2E_PORT=4322` to target another server. Don't run the full suite against the user's dev server — it starves it; start your own with `NO_DEV_TOOLBAR=1 ASTRO_DEV_BACKGROUND=0 npx infisical run -- pnpm exec astro dev --ignore-lock --port 4322`. Always start with `NO_DEV_TOOLBAR=1` (Astro dev toolbar overlay distorts agent/Playwright results); the toolbar is on by default locally, and a server already running without it must be restarted.
 
 ## Secrets
 
@@ -148,6 +152,8 @@ Also guard `ResizeObserver` / `getBoundingClientRect` callbacks against transiti
 
 ## Environment Variables
 
+**Dev words cache**: fetched words are cached in `node_modules/.cache/berliner-words/`; dev start asks "Re-fetch words?" (TTY only, `REFETCH_WORDS=1` forces it). Never compute per-word similarity/anagram data in `getStaticPaths` (`wort/[...wordSlug].astro`) — it's O(n²) over ~6000 words and freezes the dev server; derive it in the page body.
+
 Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`, `IMAGOR_HOST`, `IMAGOR_SECRET`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
 
 ## Testing
@@ -161,6 +167,10 @@ Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mj
 - `createStoreMockImpl(storeMap)` — builds a `useStore` mock impl that returns the right `ref` per store
 - `createComponentStub(template?)` — Proxy-safe module mock for `vi.mock()` factories; includes `[Symbol.toStringTag]: 'Module'` so Vue's `defineAsyncComponent` correctly extracts `.default` (omitting it causes "Component is missing template or render function" warn)
 - `createSlotStub(name, template?)` — lightweight stub for `config.global.stubs`
+
+**Playwright agents**: they use the `mcp__playwright-test__*` MCP server (not `mcp__plugin_playwright_playwright__*`), which must be allowed in `.claude/settings.json`. Without it a background agent can't get approval, a `browser_click` is rejected and its run ends silently — it looks hung (seen 2026-08-14, 2026-09-19). If an agent seems stuck, check its `.output` (last timestamp/tool result) before waiting. Scroll via `browser_run_code_unsafe`/`browser_evaluate` (`window.scrollTo(0, document.body.scrollHeight)`), give a fixed checklist, and tell it to report rejected tools instead of retrying. Animated/`ResizeObserver` elements and toasts also make clicks flaky.
+
+**E2E in CI**: `E2E_WORD_LIMIT=500` caps only generated `/wort/<slug>` pages (plus `E2E_REQUIRED_SLUGS` in `getWords.ts`); the search index and homepage list still hold all words. Only navigate to required slugs (aasen, anmachen, wa, …).
 
 **Testing gotchas:**
 

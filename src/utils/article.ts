@@ -138,7 +138,7 @@ export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle =
       (match) => `${match}<span class="c-magazin-article__sponsored-tag">Anzeige</span>`,
     );
 
-    return { ...block, saveContent: html };
+    return Object.assign(block, { saveContent: html });
   });
 
   return { blocks: outBlocks, hasAffiliateLinks, toc };

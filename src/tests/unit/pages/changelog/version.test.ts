@@ -5,13 +5,13 @@ import { createAstroRender } from "../../helpers";
 
 const { mockEntry } = vi.hoisted(() => ({
   mockEntry: {
-    id: "v3.35.0",
     data: {
-      version: "3.35.0",
+      description: "Berliner oder Nicht-Spiel und Redesign.",
       releaseDate: "2026-06-27",
       title: "Was ist neu in Version 3.35.0?",
-      description: "Berliner oder Nicht-Spiel und Redesign.",
+      version: "3.35.0",
     },
+    id: "v3.35.0",
   },
 }));
 

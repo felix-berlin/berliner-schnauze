@@ -3,23 +3,23 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 // Provide the env var that wikimediaApi.ts imports from astro:env/client.
 // vi.mock is hoisted so this intercepts the import before the module loads.
 vi.mock("astro:env/client", () => ({
-  WIKIMEDIA_API_AUTH_TOKEN: "Bearer test-wikimedia-token",
-  WP_API: "https://berliner-schnauze.test/api",
-  WP_REST_API: "https://berliner-schnauze.test/wp-json",
-  WP_AUTH_REFRESH_TOKEN: "not-a-real-token",
-  SUGGEST_WORD_FORM_ID: "1111",
-  TURNSTILE_SITE_KEY: "not-a-real-key",
-  SENTRY_ENVIRONMENT: "development",
-  SENTRY_TRACES_SAMPLE_RATE: 0.1,
   MATOMO_HOST: "matomo.example.com",
   MATOMO_SITE_ID: 1,
+  SENTRY_ENVIRONMENT: "development",
+  SENTRY_TRACES_SAMPLE_RATE: 0.1,
+  SUGGEST_WORD_FORM_ID: "1111",
+  TURNSTILE_SITE_KEY: "not-a-real-key",
+  WIKIMEDIA_API_AUTH_TOKEN: "Bearer test-wikimedia-token",
   WIKIMEDIA_API_AUTH_TOKEN_missing: undefined,
+  WP_API: "https://berliner-schnauze.test/api",
+  WP_AUTH_REFRESH_TOKEN: "not-a-real-token",
+  WP_REST_API: "https://berliner-schnauze.test/wp-json",
 }));
 
 function makeResponse(ok: boolean, body: unknown): Response {
   return {
-    ok,
     json: vi.fn().mockResolvedValue(body),
+    ok,
     text: vi.fn().mockResolvedValue("Error"),
   } as unknown as Response;
 }
@@ -36,8 +36,8 @@ afterEach(() => {
 describe("fetchWikimediaAPI", () => {
   it("returns parsed JSON for a valid file", async () => {
     const mockData = {
-      title: "File:Berlin.jpg",
       preferred: { url: "https://example.com/berlin.jpg" },
+      title: "File:Berlin.jpg",
     };
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(makeResponse(true, mockData)));
     const { fetchWikimediaAPI } = await import("@services/wikimediaApi.ts");

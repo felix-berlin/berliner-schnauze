@@ -3,11 +3,11 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 
 const defaultProps = {
+  isHighscore: false,
   lives: 3,
+  multiplier: 1,
   score: 0,
   streak: 0,
-  multiplier: 1,
-  isHighscore: false,
 };
 
 describe("BonHUD.vue", () => {
@@ -50,14 +50,14 @@ describe("BonHUD.vue", () => {
 
   it("shows multiplier badge when multiplier > 1", () => {
     const wrapper = mount(BonHUD, {
-      props: { ...defaultProps, streak: 3, multiplier: 2 },
+      props: { ...defaultProps, multiplier: 2, streak: 3 },
     });
     expect(wrapper.find(".c-bon-hud__multiplier-badge").text()).toContain("2×");
   });
 
   it("does not show multiplier badge when multiplier is 1", () => {
     const wrapper = mount(BonHUD, {
-      props: { ...defaultProps, streak: 3, multiplier: 1 },
+      props: { ...defaultProps, multiplier: 1, streak: 3 },
     });
     expect(wrapper.find(".c-bon-hud__multiplier").exists()).toBe(false);
   });

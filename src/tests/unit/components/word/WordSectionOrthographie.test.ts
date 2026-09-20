@@ -17,46 +17,46 @@ describe("WordSectionOrthographie.astro", () => {
   }, 30_000);
 
   it("renders nothing for an empty word", async () => {
-    const result = await render({ word: "", allWords: [] });
+    const result = await render({ allWords: [], word: "" });
     expect(result).not.toContain("Orthographie");
   });
 
   it("renders the section for a non-empty word", async () => {
-    const result = await render({ word: "Schnauze", allWords: [] });
+    const result = await render({ allWords: [], word: "Schnauze" });
     expect(result).toContain("Orthographie");
     expect(result).toContain("c-section-card");
     expect(result).toContain('id="orthographie"');
   });
 
   it("renders syllable separation heading", async () => {
-    const result = await render({ word: "Schnauze", allWords: [] });
+    const result = await render({ allWords: [], word: "Schnauze" });
     expect(result).toContain("Silbentrennung");
   });
 
   it("renders syllable count heading", async () => {
-    const result = await render({ word: "Schnauze", allWords: [] });
+    const result = await render({ allWords: [], word: "Schnauze" });
     expect(result).toContain("Anzahl der Silben");
   });
 
   it("renders the section number element", async () => {
-    const result = await render({ word: "Schnauze", allWords: [] });
+    const result = await render({ allWords: [], word: "Schnauze" });
     expect(result).toContain("c-section-card__num");
   });
 
   it("renders aria-labelledby heading-orthographie", async () => {
-    const result = await render({ word: "Schnauze", allWords: [] });
+    const result = await render({ allWords: [], word: "Schnauze" });
     expect(result).toContain("heading-orthographie");
   });
 
   it("renders syllables divided by separator for multi-syllable word", async () => {
     // hypher will split "Berliner" into syllables
-    const result = await render({ word: "Berliner", allWords: [] });
+    const result = await render({ allWords: [], word: "Berliner" });
     expect(result).toContain("is-divider");
   });
 
   it("accepts allWords array without throwing", async () => {
     const allWords = [{ slug: "bahn", wordProperties: { berlinerisch: "Bahn" } }];
-    const result = await render({ word: "Bahnhof", allWords });
+    const result = await render({ allWords, word: "Bahnhof" });
     expect(result).toContain("Orthographie");
   });
 });

@@ -5,7 +5,7 @@
     data-track-content
     data-content-name="Word of the Day"
     :data-content-piece="currentWord?.word?.berlinerisch ?? ''"
-    :data-content-target="routeToWord(currentWord?.word?.post_name)"
+    :data-content-target="currentWord?.word?.post_name ? routeToWord(currentWord.word.post_name) : undefined"
     role="link"
     tabindex="0"
     @mouseover="toggleCelebration(true)"

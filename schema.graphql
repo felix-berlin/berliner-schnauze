@@ -415,7 +415,7 @@ type BerlinerWord implements ContentNode & DatabaseIdentifier & HierarchicalCont
     """Arguments for filtering the connection"""
     where: HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs
   ): HierarchicalContentNodeToContentNodeAncestorsConnection
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the content node."""
   berlinerWordId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
   """
   Connection between the BerlinerWord type and the berlinerischThema type
@@ -529,7 +529,7 @@ type BerlinerWord implements ContentNode & DatabaseIdentifier & HierarchicalCont
     where: ContentNodeToEnqueuedStylesheetConnectionWhereArgs
   ): ContentNodeToEnqueuedStylesheetConnection
   """
-  The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+  The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.
   """
   guid: String
   """Whether the berlinerisch object is password protected."""
@@ -574,12 +574,12 @@ type BerlinerWord implements ContentNode & DatabaseIdentifier & HierarchicalCont
   preview: BerlinerWordToPreviewConnectionEdge
   """The database id of the preview node"""
   previewRevisionDatabaseId: Int
-  """Whether the object is a node in the preview state"""
+  """The globally unique ID of the preview node"""
   previewRevisionId: ID
   """The Yoast SEO data of the ContentNode"""
   seo: PostTypeSEO
   """
-  The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+  The URL-friendly, human-readable identifier for the content node, used in its permalink.
   """
   slug: String
   """The current status of the object"""
@@ -1087,7 +1087,7 @@ type BerlinerischThema implements DatabaseIdentifier & MenuItemLinkable & Node &
     """Arguments for filtering the connection"""
     where: BerlinerischThemaToBerlinerWordConnectionWhereArgs
   ): BerlinerischThemaToBerlinerWordConnection
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the term."""
   berlinerischThemaId: Int @deprecated(reason: "Deprecated in favor of databaseId")
   """Connection between the BerlinerischThema type and the ContentNode type"""
   contentNodes(
@@ -1461,7 +1461,7 @@ type BerlinerischWordType implements DatabaseIdentifier & HierarchicalNode & Hie
     """Arguments for filtering the connection"""
     where: BerlinerischWordTypeToBerlinerWordConnectionWhereArgs
   ): BerlinerischWordTypeToBerlinerWordConnection
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the term."""
   berlinerischWordTypeId: Int @deprecated(reason: "Deprecated in favor of databaseId")
   """
   Connection between the berlinerischWordType type and its children berlinerischWordTypes.
@@ -2145,7 +2145,7 @@ type BlockEditorPreview implements ContentNode & DatabaseIdentifier & Node & Nod
   authorDatabaseId: Int
   """The globally unique identifier of the author of the node"""
   authorId: ID
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the content node."""
   blockEditorPreviewId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
   blocks: [Block!]
   blocksJSON: String
@@ -2209,7 +2209,7 @@ type BlockEditorPreview implements ContentNode & DatabaseIdentifier & Node & Nod
     where: ContentNodeToEnqueuedStylesheetConnectionWhereArgs
   ): ContentNodeToEnqueuedStylesheetConnection
   """
-  The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+  The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.
   """
   guid: String
   """Whether the wgg_preview object is password protected."""
@@ -2253,7 +2253,7 @@ type BlockEditorPreview implements ContentNode & DatabaseIdentifier & Node & Nod
   preview: BlockEditorPreviewToPreviewConnectionEdge @deprecated(reason: "The &quot;BlockEditorPreview&quot; Type is not publicly queryable and does not support previews. This field will be removed in the future.")
   """The database id of the preview node"""
   previewRevisionDatabaseId: Int
-  """Whether the object is a node in the preview state"""
+  """The globally unique ID of the preview node"""
   previewRevisionId: ID
   previewed: BlockEditorContentNode
   previewedDatabaseId: Int
@@ -2261,7 +2261,7 @@ type BlockEditorPreview implements ContentNode & DatabaseIdentifier & Node & Nod
   """The Yoast SEO data of the ContentNode"""
   seo: PostTypeSEO
   """
-  The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+  The URL-friendly, human-readable identifier for the content node, used in its permalink.
   """
   slug: String
   """The current status of the object"""
@@ -2422,7 +2422,7 @@ type Category implements DatabaseIdentifier & HierarchicalNode & HierarchicalTer
     """The number of items to return before the referenced "before" cursor"""
     last: Int
   ): CategoryToAncestorsCategoryConnection
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the term."""
   categoryId: Int @deprecated(reason: "Deprecated in favor of databaseId")
   """Connection between the category type and its children categories."""
   children(
@@ -2978,40 +2978,28 @@ type CategoryToTaxonomyConnectionEdge implements Edge & OneToOneConnection & Tax
 A response or reaction to content submitted by users. Comments are typically associated with a specific content entry.
 """
 type Comment implements DatabaseIdentifier & Node & UniformResourceIdentifiable {
-  """
-  User agent used to post the comment. This field is equivalent to WP_Comment-&gt;comment_agent and the value matching the &quot;comment_agent&quot; column in SQL.
-  """
+  """User agent (browser or client) used to post the comment."""
   agent: String
-  """
-  The approval status of the comment. This field is equivalent to WP_Comment-&gt;comment_approved and the value matching the &quot;comment_approved&quot; column in SQL.
-  """
+  """The approval status of the comment."""
   approved: Boolean @deprecated(reason: "Deprecated in favor of the `status` field")
   """The author of the comment"""
   author: CommentToCommenterConnectionEdge
-  """
-  IP address for the author at the time of commenting. This field is equivalent to WP_Comment-&gt;comment_author_IP and the value matching the &quot;comment_author_IP&quot; column in SQL.
-  """
+  """IP address for the author at the time of commenting."""
   authorIp: String @deprecated(reason: "Use the ipAddress field on the edge between the comment and author")
   """ID for the comment, unique among comments."""
   commentId: Int @deprecated(reason: "Deprecated in favor of databaseId")
   """Connection between the Comment type and the ContentNode type"""
   commentedOn: CommentToContentNodeConnectionEdge
-  """
-  Content of the comment. This field is equivalent to WP_Comment-&gt;comment_content and the value matching the &quot;comment_content&quot; column in SQL.
-  """
+  """Content of the comment."""
   content(
     """Format of the field output"""
     format: PostObjectFieldFormatEnum
   ): String
   """The unique identifier stored in the database"""
   databaseId: Int!
-  """
-  Date the comment was posted in local time. This field is equivalent to WP_Comment-&gt;date and the value matching the &quot;date&quot; column in SQL.
-  """
+  """Date the comment was posted in local time."""
   date: String
-  """
-  Date the comment was posted in GMT. This field is equivalent to WP_Comment-&gt;date_gmt and the value matching the &quot;date_gmt&quot; column in SQL.
-  """
+  """Date the comment was posted in GMT."""
   dateGmt: String
   """The globally unique identifier for the comment object"""
   id: ID!
@@ -3027,9 +3015,7 @@ type Comment implements DatabaseIdentifier & Node & UniformResourceIdentifiable 
   isRestricted: Boolean
   """Whether the node is a Term"""
   isTermNode: Boolean!
-  """
-  Karma value for the comment. This field is equivalent to WP_Comment-&gt;comment_karma and the value matching the &quot;comment_karma&quot; column in SQL.
-  """
+  """Karma value for the comment."""
   karma: Int
   """The permalink of the comment"""
   link: String
@@ -3061,13 +3047,9 @@ type Comment implements DatabaseIdentifier & Node & UniformResourceIdentifiable 
     """Arguments for filtering the connection"""
     where: CommentToCommentConnectionWhereArgs
   ): CommentToCommentConnection
-  """
-  The approval status of the comment. This field is equivalent to WP_Comment-&gt;comment_approved and the value matching the &quot;comment_approved&quot; column in SQL.
-  """
+  """The approval status of the comment."""
   status: CommentStatusEnum
-  """
-  Type of comment. This field is equivalent to WP_Comment-&gt;comment_type and the value matching the &quot;comment_type&quot; column in SQL.
-  """
+  """Type of comment."""
   type: String
   """The unique resource identifier path"""
   uri: String
@@ -3284,9 +3266,7 @@ type CommentToCommenterConnectionEdge implements CommenterConnectionEdge & Edge 
   cursor: String
   """Email address representing the author for this particular comment"""
   email: String
-  """
-  IP address of the author at the time of making this comment. This field is equivalent to WP_Comment-&gt;comment_author_IP and the value matching the &quot;comment_author_IP&quot; column in SQL.
-  """
+  """IP address of the author at the time of making this comment."""
   ipAddress: String
   """The display name of the comment author for this particular comment"""
   name: String
@@ -3725,7 +3705,7 @@ interface ContentNode implements Node & UniformResourceIdentifiable {
     where: ContentNodeToEnqueuedStylesheetConnectionWhereArgs
   ): ContentNodeToEnqueuedStylesheetConnection
   """
-  The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+  The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.
   """
   guid: String
   """The globally unique ID for the object"""
@@ -3758,12 +3738,12 @@ interface ContentNode implements Node & UniformResourceIdentifiable {
   modifiedGmt: String
   """The database id of the preview node"""
   previewRevisionDatabaseId: Int
-  """Whether the object is a node in the preview state"""
+  """The globally unique ID of the preview node"""
   previewRevisionId: ID
   """The Yoast SEO data of the ContentNode"""
   seo: PostTypeSEO
   """
-  The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+  The URL-friendly, human-readable identifier for the content node, used in its permalink.
   """
   slug: String
   """The current status of the object"""
@@ -13737,7 +13717,7 @@ interface HierarchicalContentNode implements ContentNode & DatabaseIdentifier & 
     where: ContentNodeToEnqueuedStylesheetConnectionWhereArgs
   ): ContentNodeToEnqueuedStylesheetConnection
   """
-  The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+  The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.
   """
   guid: String
   """The globally unique ID for the object"""
@@ -13776,12 +13756,12 @@ interface HierarchicalContentNode implements ContentNode & DatabaseIdentifier & 
   parentId: ID
   """The database id of the preview node"""
   previewRevisionDatabaseId: Int
-  """Whether the object is a node in the preview state"""
+  """The globally unique ID of the preview node"""
   previewRevisionId: ID
   """The Yoast SEO data of the ContentNode"""
   seo: PostTypeSEO
   """
-  The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+  The URL-friendly, human-readable identifier for the content node, used in its permalink.
   """
   slug: String
   """The current status of the object"""
@@ -14282,7 +14262,7 @@ type MediaItem implements ContentNode & DatabaseIdentifier & HierarchicalContent
     size: MediaItemSizeEnum
   ): Int
   """
-  The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+  The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.
   """
   guid: String
   """Whether the attachment object is password protected."""
@@ -14309,7 +14289,7 @@ type MediaItem implements ContentNode & DatabaseIdentifier & HierarchicalContent
   link: String
   """Details about the mediaItem"""
   mediaDetails: MediaDetails
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the content node."""
   mediaItemId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
   """Url of the mediaItem"""
   mediaItemUrl: String
@@ -14335,7 +14315,7 @@ type MediaItem implements ContentNode & DatabaseIdentifier & HierarchicalContent
   password: String
   """The database id of the preview node"""
   previewRevisionDatabaseId: Int
-  """Whether the object is a node in the preview state"""
+  """The globally unique ID of the preview node"""
   previewRevisionId: ID
   """The Yoast SEO data of the ContentNode"""
   seo: PostTypeSEO
@@ -14345,7 +14325,7 @@ type MediaItem implements ContentNode & DatabaseIdentifier & HierarchicalContent
     size: MediaItemSizeEnum
   ): String
   """
-  The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+  The URL-friendly, human-readable identifier for the content node, used in its permalink.
   """
   slug: String
   """Url of the mediaItem"""
@@ -14660,9 +14640,9 @@ type Menu implements DatabaseIdentifier & Node {
     """Arguments for filtering the connection"""
     where: MenuToMenuItemConnectionWhereArgs
   ): MenuToMenuItemConnection
-  """Display name of the menu. Equivalent to WP_Term-&gt;name."""
+  """Display name of the menu."""
   name: String
-  """The url friendly name of the menu. Equivalent to WP_Term-&gt;slug"""
+  """The url friendly name of the menu."""
   slug: String
 }
 
@@ -15568,7 +15548,7 @@ type Page implements BlockEditorContentNode & ContentNode & DatabaseIdentifier &
   """Globally unique ID of the featured image assigned to the node"""
   featuredImageId: ID
   """
-  The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+  The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.
   """
   guid: String
   """Whether the page object is password protected."""
@@ -15609,7 +15589,7 @@ type Page implements BlockEditorContentNode & ContentNode & DatabaseIdentifier &
   The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT.
   """
   modifiedGmt: String
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the content node."""
   pageId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
   """The parent of the node. The parent object can be of various types"""
   parent: HierarchicalContentNodeToParentContentNodeConnectionEdge
@@ -15627,7 +15607,7 @@ type Page implements BlockEditorContentNode & ContentNode & DatabaseIdentifier &
   previewBlocksJSON: String
   """The database id of the preview node"""
   previewRevisionDatabaseId: Int
-  """Whether the object is a node in the preview state"""
+  """The globally unique ID of the preview node"""
   previewRevisionId: ID
   """
   If the current node is a revision, this field exposes the node this is a revision of. Returns null if the node is not a revision of another node.
@@ -15653,7 +15633,7 @@ type Page implements BlockEditorContentNode & ContentNode & DatabaseIdentifier &
   """The Yoast SEO data of the ContentNode"""
   seo: PostTypeSEO
   """
-  The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+  The URL-friendly, human-readable identifier for the content node, used in its permalink.
   """
   slug: String
   """The current status of the object"""
@@ -16193,7 +16173,7 @@ type Post implements BlockEditorContentNode & ContentNode & DatabaseIdentifier &
   """Globally unique ID of the featured image assigned to the node"""
   featuredImageId: ID
   """
-  The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+  The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.
   """
   guid: String
   """Whether the post object is password protected."""
@@ -16255,7 +16235,7 @@ type Post implements BlockEditorContentNode & ContentNode & DatabaseIdentifier &
     """Arguments for filtering the connection"""
     where: PostToPostFormatConnectionWhereArgs
   ): PostToPostFormatConnection
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the content node."""
   postId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
   """Connection between the post type and the post type"""
   preview: PostToPreviewConnectionEdge
@@ -16291,7 +16271,7 @@ type Post implements BlockEditorContentNode & ContentNode & DatabaseIdentifier &
   """The Yoast SEO data of the ContentNode"""
   seo: PostTypeSEO
   """
-  The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+  The URL-friendly, human-readable identifier for the content node, used in its permalink.
   """
   slug: String
   """The current status of the object"""
@@ -16499,7 +16479,7 @@ type PostFormat implements DatabaseIdentifier & Node & TermNode & UniformResourc
   link: String
   """The human friendly name of the object."""
   name: String
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the term."""
   postFormatId: Int @deprecated(reason: "Deprecated in favor of databaseId")
   """Connection between the PostFormat type and the post type"""
   posts(
@@ -18028,7 +18008,7 @@ type ReusableBlock implements BlockEditorContentNode & ContentNode & DatabaseIde
     format: PostObjectFieldFormatEnum
   ): String
   """
-  The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table.
+  The global unique identifier for this content node. This is a stable, unique identifier for the node that does not change even if the node is moved or its url changes.
   """
   guid: String
   """Whether the wp_block object is password protected."""
@@ -18079,9 +18059,9 @@ type ReusableBlock implements BlockEditorContentNode & ContentNode & DatabaseIde
   previewBlocksJSON: String
   """The database id of the preview node"""
   previewRevisionDatabaseId: Int
-  """Whether the object is a node in the preview state"""
+  """The globally unique ID of the preview node"""
   previewRevisionId: ID
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the content node."""
   reusableBlockId: Int! @deprecated(reason: "Deprecated in favor of the databaseId field")
   """
   If the current node is a revision, this field exposes the node this is a revision of. Returns null if the node is not a revision of another node.
@@ -18107,7 +18087,7 @@ type ReusableBlock implements BlockEditorContentNode & ContentNode & DatabaseIde
   """The Yoast SEO data of the ContentNode"""
   seo: PostTypeSEO
   """
-  The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table.
+  The URL-friendly, human-readable identifier for the content node, used in its permalink.
   """
   slug: String
   """The current status of the object"""
@@ -18575,10 +18555,6 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
   allSettings: Settings
   """An object of the berlinerWord Type. Berlinerische Wörter"""
   berlinerWord(
-    """
-    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
-    """
-    asPreview: Boolean
     """The globally unique identifier of the object."""
     id: ID!
     """Type of unique identifier to fetch by. Default is Global ID"""
@@ -18681,10 +18657,6 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
   ): BlockEditorContentNodeConnection
   """An object of the BlockEditorPreview Type. """
   blockEditorPreview(
-    """
-    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
-    """
-    asPreview: Boolean
     """The globally unique identifier of the object."""
     id: ID!
     """Type of unique identifier to fetch by. Default is Global ID"""
@@ -18772,10 +18744,6 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
   """A node used to manage content"""
   contentNode(
     """
-    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
-    """
-    asPreview: Boolean
-    """
     The content type the node is used for. Required when idType is set to "name" or "slug"
     """
     contentType: ContentTypeEnum
@@ -18833,10 +18801,6 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
   generalSettings: GeneralSettings
   """An object of the mediaItem Type. """
   mediaItem(
-    """
-    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
-    """
-    asPreview: Boolean
     """The globally unique identifier of the object."""
     id: ID!
     """Type of unique identifier to fetch by. Default is Global ID"""
@@ -18936,10 +18900,6 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
   ): UniformResourceIdentifiable
   """An object of the page Type. """
   page(
-    """
-    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
-    """
-    asPreview: Boolean
     """The globally unique identifier of the object."""
     id: ID!
     """Type of unique identifier to fetch by. Default is Global ID"""
@@ -18997,10 +18957,6 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
   ): RootQueryToPluginConnection
   """An object of the post Type. """
   post(
-    """
-    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
-    """
-    asPreview: Boolean
     """The globally unique identifier of the object."""
     id: ID!
     """Type of unique identifier to fetch by. Default is Global ID"""
@@ -19096,10 +19052,6 @@ type RootQuery implements WithAcfOptionsPageAffliate & WithAcfOptionsPageCompany
   ): RootQueryToEnqueuedStylesheetConnection
   """An object of the ReusableBlock Type. """
   reusableBlock(
-    """
-    Whether to return the Preview Node instead of the Published Node. When the ID of a Node is provided along with asPreview being set to true, the preview node with un-published changes will be returned instead of the published node. If no preview node exists or the requester doesn't have proper capabilities to preview, no node will be returned. If the ID provided is a URI and has a preview query arg, it will be used as a fallback if the "asPreview" argument is not explicitly provided as an argument.
-    """
-    asPreview: Boolean
     """The globally unique identifier of the object."""
     id: ID!
     """Type of unique identifier to fetch by. Default is Global ID"""
@@ -21898,7 +21850,7 @@ type Tag implements DatabaseIdentifier & MenuItemLinkable & Node & TermNode & Un
   seo: TaxonomySEO
   """An alphanumeric identifier for the object unique to its type."""
   slug: String
-  """The id field matches the WP_Post-&gt;ID field."""
+  """The unique numeric identifier for the term."""
   tagId: Int @deprecated(reason: "Deprecated in favor of databaseId")
   """Connection between the Tag type and the Taxonomy type"""
   taxonomy: TagToTaxonomyConnectionEdge
@@ -22217,9 +22169,7 @@ type Taxonomy implements Node {
     """The number of items to return before the referenced "before" cursor"""
     last: Int
   ): TaxonomyToTermNodeConnection
-  """
-  Description of the taxonomy. This field is equivalent to WP_Taxonomy-&gt;description
-  """
+  """Description of the taxonomy."""
   description: String
   """The plural name of the post type within the GraphQL Schema."""
   graphqlPluralName: String
@@ -22233,9 +22183,7 @@ type Taxonomy implements Node {
   isRestricted: Boolean
   """Name of the taxonomy shown in the menu. Usually plural."""
   label: String
-  """
-  The display name of the taxonomy. This field is equivalent to WP_Taxonomy-&gt;label
-  """
+  """The display name of the taxonomy."""
   name: String
   """Whether the taxonomy is publicly queryable"""
   public: Boolean
@@ -22245,9 +22193,7 @@ type Taxonomy implements Node {
   restBase: String
   """The REST Controller class assigned to handling this content type."""
   restControllerClass: String
-  """
-  Whether to show the taxonomy as part of a tag cloud widget. This field is equivalent to WP_Taxonomy-&gt;show_tagcloud
-  """
+  """Whether to show the taxonomy as part of a tag cloud widget."""
   showCloud: Boolean
   """
   Whether to display a column for the taxonomy on its post type listing screens.
@@ -22698,45 +22644,35 @@ enum TermObjectsConnectionOrderbyEnum {
 
 """A theme object"""
 type Theme implements Node {
-  """
-  Name of the theme author(s), could also be a company name. This field is equivalent to WP_Theme-&gt;get( &quot;Author&quot; ).
-  """
+  """Name of the theme author(s), could also be a company name."""
   author: String
-  """
-  URI for the author/company website. This field is equivalent to WP_Theme-&gt;get( &quot;AuthorURI&quot; ).
-  """
+  """URI for the author/company website."""
   authorUri: String
-  """
-  The description of the theme. This field is equivalent to WP_Theme-&gt;get( &quot;Description&quot; ).
-  """
+  """The description of the theme."""
   description: String
   """The globally unique identifier of the theme object."""
   id: ID!
   """Whether the object is restricted from the current viewer"""
   isRestricted: Boolean
-  """
-  Display name of the theme. This field is equivalent to WP_Theme-&gt;get( &quot;Name&quot; ).
-  """
+  """Display name of the theme."""
   name: String
   """
-  The URL of the screenshot for the theme. The screenshot is intended to give an overview of what the theme looks like. This field is equivalent to WP_Theme-&gt;get_screenshot().
+  The URL of the screenshot for the theme. The screenshot is intended to give an overview of what the theme looks like.
   """
   screenshot: String
   """
-  The theme slug is used to internally match themes. Theme slugs can have subdirectories like: my-theme/sub-theme. This field is equivalent to WP_Theme-&gt;get_stylesheet().
+  The theme slug is used to internally match themes. Theme slugs can have subdirectories like: my-theme/sub-theme.
   """
   slug: String
   """
-  URI for the author/company website. This field is equivalent to WP_Theme-&gt;get( &quot;Tags&quot; ).
+  A list of tags associated with the theme, typically describing its features (e.g. custom-logo, accessibility-ready, full-site-editing).
   """
   tags: [String]
   """
-  A URI if the theme has a website associated with it. The Theme URI is handy for directing users to a theme site for support etc. This field is equivalent to WP_Theme-&gt;get( &quot;ThemeURI&quot; ).
+  A URI if the theme has a website associated with it. The Theme URI is handy for directing users to a theme site for support etc.
   """
   themeUri: String
-  """
-  The current version of the theme. This field is equivalent to WP_Theme-&gt;get( &quot;Version&quot; ).
-  """
+  """The current version of the theme."""
   version: String
 }
 
@@ -23492,9 +23428,7 @@ type User implements Commenter & DatabaseIdentifier & Node & UniformResourceIden
   databaseId: Int!
   """Description of the user."""
   description: String
-  """
-  Email address of the user. This is equivalent to the WP_User-&gt;user_email property.
-  """
+  """Email address of the user."""
   email: String
   """Connection between the User type and the EnqueuedScript type"""
   enqueuedScripts(
@@ -23531,12 +23465,10 @@ type User implements Commenter & DatabaseIdentifier & Node & UniformResourceIden
     where: UserToEnqueuedStylesheetConnectionWhereArgs
   ): UserToEnqueuedStylesheetConnection
   """
-  A complete list of capabilities including capabilities inherited from a role. This is equivalent to the array keys of WP_User-&gt;allcaps.
+  A complete list of capabilities including capabilities inherited from a role.
   """
   extraCapabilities: [String]
-  """
-  First name of the user. This is equivalent to the WP_User-&gt;user_first_name property.
-  """
+  """First name of the user."""
   firstName: String
   """
   Whether the user has enabled keyboard shortcuts for comment moderation. Defaults to false.
@@ -23584,9 +23516,7 @@ type User implements Commenter & DatabaseIdentifier & Node & UniformResourceIden
   A unique secret tied to the users JWT token that can be revoked or refreshed. Revoking the secret prevents JWT tokens from being issued to the user. Refreshing the token invalidates previously issued tokens, but allows new tokens to be issued.
   """
   jwtUserSecret: String
-  """
-  Last name of the user. This is equivalent to the WP_User-&gt;user_last_name property.
-  """
+  """Last name of the user."""
   lastName: String
   """
   The preferred language locale set for the user. Value derived from get_user_locale().
@@ -23609,12 +23539,10 @@ type User implements Commenter & DatabaseIdentifier & Node & UniformResourceIden
     """Arguments for filtering the connection"""
     where: UserToMediaItemConnectionWhereArgs
   ): UserToMediaItemConnection
-  """
-  Display name of the user. This is equivalent to the WP_User-&gt;display_name property.
-  """
+  """Display name of the user."""
   name: String
   """
-  The nicename for the user. This field is equivalent to WP_User-&gt;user_nicename
+  The url friendly name for the user, used to reference the user in a public url.
   """
   nicename: String
   """Nickname of the user."""
@@ -23695,9 +23623,7 @@ type User implements Commenter & DatabaseIdentifier & Node & UniformResourceIden
   Whether the Toolbar should be displayed when the user is viewing the site.
   """
   shouldShowAdminToolbar: Boolean
-  """
-  The slug for the user. This field is equivalent to WP_User-&gt;user_nicename
-  """
+  """The url friendly identifier for the user."""
   slug: String
   """Fields of the SocialAdvanced ACF Field Group"""
   socialAdvanced: SocialAdvanced
@@ -23705,10 +23631,10 @@ type User implements Commenter & DatabaseIdentifier & Node & UniformResourceIden
   uri: String
   """A website url that is associated with the user."""
   url: String
-  """The Id of the user. Equivalent to WP_User-&gt;ID"""
+  """The unique numeric identifier for the user."""
   userId: Int @deprecated(reason: "Deprecated in favor of the databaseId field")
   """
-  Username for the user. This field is equivalent to WP_User-&gt;user_login.
+  Username for the user. This is the unique identifier the user provides to log in.
   """
   username: String
 }

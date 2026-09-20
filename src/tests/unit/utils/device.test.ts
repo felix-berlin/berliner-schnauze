@@ -5,9 +5,9 @@ const originalUA = navigator.userAgent;
 
 function setUA(ua: string) {
   Object.defineProperty(navigator, "userAgent", {
+    configurable: true,
     value: ua,
     writable: true,
-    configurable: true,
   });
 }
 

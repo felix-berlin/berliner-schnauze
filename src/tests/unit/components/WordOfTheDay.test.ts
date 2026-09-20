@@ -8,8 +8,8 @@ const mockWordOfTheDay = ref<{
   error: boolean;
   word: { berlinerisch: string; post_name: string } | null;
 }>({
-  loading: false,
   error: false,
+  loading: false,
   word: { berlinerisch: "Kiez", post_name: "kiez" },
 });
 
@@ -45,8 +45,8 @@ describe("WordOfTheDay.vue", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     mockWordOfTheDay.value = {
-      loading: false,
       error: false,
+      loading: false,
       word: { berlinerisch: "Kiez", post_name: "kiez" },
     };
   });
@@ -82,14 +82,14 @@ describe("WordOfTheDay.vue", () => {
   });
 
   it("shows loader when loading is true", () => {
-    mockWordOfTheDay.value = { loading: true, error: false, word: null };
+    mockWordOfTheDay.value = { error: false, loading: true, word: null };
     const wrapper = mountComponent();
     expect(wrapper.find(".mock-loader").exists()).toBe(true);
     expect(wrapper.find("a.c-word-of-the-day__word").exists()).toBe(false);
   });
 
   it("shows error message when error is true", () => {
-    mockWordOfTheDay.value = { loading: false, error: true, word: null };
+    mockWordOfTheDay.value = { error: true, loading: false, word: null };
     const wrapper = mountComponent();
     expect(wrapper.find(".is-error").exists()).toBe(true);
     expect(wrapper.find(".is-error").text()).toContain("Fehler aufgetreten");

@@ -21,7 +21,15 @@
     right: 10px;
   }
 
+  // Footer in view: hide so the (bottom-centered) button does not cover it.
   &.is-close-to-end {
     opacity: 0;
+    pointer-events: none;
+
+    // On md+ the button sits at the side and does not overlap the footer.
+    @include mx.breakpoint("md") {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 }

@@ -5,7 +5,7 @@ beforeAll(() => {
   vi.stubEnv("WP_API", "https://cms.berliner-schnauze.wtf/api");
 
   config.global.directives = {
-    tooltip: { mounted() {}, updated() {}, unmounted() {} },
+    tooltip: { mounted() {}, unmounted() {}, updated() {} },
   };
 });
 

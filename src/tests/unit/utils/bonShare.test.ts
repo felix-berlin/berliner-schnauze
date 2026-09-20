@@ -4,11 +4,11 @@ import { buildShareUrl, decodeShareHash, encodeShareHash } from "@utils/bonShare
 import { describe, expect, it } from "vitest";
 
 const payload: BonSharePayload = {
-  score: 150,
   bestStreak: 7,
-  totalAnswered: 18,
   correctAnswers: 14,
   date: "2026-06-11T00:00:00.000Z",
+  score: 150,
+  totalAnswered: 18,
 };
 
 describe("encodeShareHash", () => {

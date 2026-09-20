@@ -2,21 +2,25 @@ import ScrollToTop from "@components/ScrollToTop.vue";
 import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
+type PartialIntersectionCallback = (
+  entries: Pick<IntersectionObserverEntry, "isIntersecting">[],
+) => void;
+
 describe("ScrollToTop.vue", () => {
-  let intersectionObserverMock: any;
-  let observeMock: any;
-  let disconnectMock: any;
+  let intersectionObserverMock: ReturnType<typeof vi.fn>;
+  let observeMock: ReturnType<typeof vi.fn>;
+  let disconnectMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     observeMock = vi.fn();
     disconnectMock = vi.fn();
 
-    intersectionObserverMock = vi.fn(function (callback: any) {
+    intersectionObserverMock = vi.fn(function (callback: PartialIntersectionCallback) {
       // Store the callback so we can call it later
       this.callback = callback;
       return {
-        observe: observeMock,
         disconnect: disconnectMock,
+        observe: observeMock,
         takeRecords: vi.fn(),
         unobserve: vi.fn(),
       };
@@ -36,7 +40,7 @@ describe("ScrollToTop.vue", () => {
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     const callback = intersectionObserverMock.mock.calls[0][0];
-    return { wrapper, callback };
+    return { callback, wrapper };
   };
 
   it("should not show the button initially", () => {
@@ -54,6 +58,27 @@ describe("ScrollToTop.vue", () => {
     expect(wrapper.find("button").isVisible()).toBe(true);
   });
 
+  it("marks the button as close to the end only while the footer is in view", async () => {
+    const wrapper = mount(ScrollToTop);
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    const [docStartCallback, footerCallback] = intersectionObserverMock.mock.calls.map(
+      ([callback]) => callback,
+    );
+
+    docStartCallback([{ isIntersecting: false }]);
+    footerCallback([{ isIntersecting: true }]);
+    await wrapper.vm.$nextTick();
+
+    // Footer in view must not reset the scrolled state (desktop keeps the button visible).
+    expect(wrapper.find("button").isVisible()).toBe(true);
+    expect(wrapper.find("button").classes()).toContain("is-close-to-end");
+
+    footerCallback([{ isIntersecting: false }]);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("button").classes()).not.toContain("is-close-to-end");
+  });
+
   it("tooltip is not disabled when tooltip prop is non-empty (covers line 7 ternary true branch)", async () => {
     const wrapper = mount(ScrollToTop, { props: { tooltip: "Nach oben scrollen" } });
     await wrapper.vm.$nextTick();
@@ -62,7 +87,7 @@ describe("ScrollToTop.vue", () => {
   });
 
   it("tooltip stays disabled when tooltip is non-empty but hideTooltip is true (covers line 7 || true branch)", async () => {
-    const wrapper = mount(ScrollToTop, { props: { tooltip: "Nach oben", hideTooltip: true } });
+    const wrapper = mount(ScrollToTop, { props: { hideTooltip: true, tooltip: "Nach oben" } });
     await wrapper.vm.$nextTick();
     // tooltip.length truthy → false, then false || true = true (disabled)
     expect(wrapper.find("button").exists()).toBe(true);
@@ -79,8 +104,8 @@ describe("ScrollToTop.vue", () => {
 
     await wrapper.find("button").trigger("click");
     expect(window.scrollTo).toHaveBeenCalledWith({
-      top: 0,
       behavior: "smooth",
+      top: 0,
     });
   });
 });

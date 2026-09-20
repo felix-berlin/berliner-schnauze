@@ -9,7 +9,7 @@ globalThis.fetch = vi.fn(() =>
   Promise.resolve({
     json: () => Promise.resolve({ availableWordGroups: [] }),
   }),
-) as any;
+) as unknown as typeof fetch;
 
 describe("SortWordsBy.vue", () => {
   const mockToggleFn = vi.fn();
@@ -33,13 +33,13 @@ describe("SortWordsBy.vue", () => {
 
   it("renders correctly for ASC", () => {
     const wrapper = mount(SortWordsBy, {
+      global: {
+        components: { SortAsc, SortDesc },
+      },
       props: {
         orderCategory: "date",
         orderType: "ASC",
         toggleFn: mockToggleFn,
-      },
-      global: {
-        components: { SortAsc, SortDesc },
       },
     });
 
@@ -53,13 +53,13 @@ describe("SortWordsBy.vue", () => {
 
   it("renders correctly for DESC", () => {
     const wrapper = mount(SortWordsBy, {
+      global: {
+        components: { SortAsc, SortDesc },
+      },
       props: {
         orderCategory: "date",
         orderType: "DESC",
         toggleFn: mockToggleFn,
-      },
-      global: {
-        components: { SortAsc, SortDesc },
       },
     });
 
@@ -70,13 +70,13 @@ describe("SortWordsBy.vue", () => {
 
   it("calls toggleFn and setActiveOrderCategory on click", async () => {
     const wrapper = mount(SortWordsBy, {
+      global: {
+        components: { SortAsc, SortDesc },
+      },
       props: {
         orderCategory: "date",
         orderType: "ASC",
         toggleFn: mockToggleFn,
-      },
-      global: {
-        components: { SortAsc, SortDesc },
       },
     });
 
@@ -88,13 +88,13 @@ describe("SortWordsBy.vue", () => {
 
   it("is not active if orderCategory does not match", () => {
     const wrapper = mount(SortWordsBy, {
+      global: {
+        components: { SortAsc, SortDesc },
+      },
       props: {
         orderCategory: "other",
         orderType: "ASC",
         toggleFn: mockToggleFn,
-      },
-      global: {
-        components: { SortAsc, SortDesc },
       },
     });
 

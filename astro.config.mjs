@@ -12,6 +12,7 @@ import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
 
+import { promptRefetchWords } from "./src/services/devWordsCache.ts";
 import {
   getPostDates,
   getWordDates,
@@ -26,7 +27,12 @@ const {
   CODECOV_TOKEN,
   BUNDLE_ANALYZER_OPEN,
   IMAGOR_HOST,
+  E2E_WORD_LIMIT,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+
+// The Playwright e2e build sets this to keep the build fast — skip the
+// source-map upload plugins too, they add real time for a build nobody deploys.
+const isE2eBuild = Boolean(E2E_WORD_LIMIT);
 
 const SITE_ORIGIN = import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf";
 
@@ -48,7 +54,7 @@ export default defineConfig({
   trailingSlash: "never",
   // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
   devToolbar: {
-    enabled: !process.env.CI,
+    enabled: !process.env.CI && !process.env.NO_DEV_TOOLBAR,
   },
   // No Astro.session usage anywhere in the codebase — opt out to tree-shake
   // the session runtime out of the Cloudflare Pages build.
@@ -226,6 +232,13 @@ export default defineConfig({
         access: "public",
         default: false,
       }),
+      // Caps how many words getWords.ts fetches/builds — only set in the
+      // Playwright CI build, to keep the e2e build fast. Unset in production.
+      E2E_WORD_LIMIT: envField.number({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
       PWA_DEBUG: envField.boolean({
         context: "server",
         access: "public",
@@ -250,29 +263,44 @@ export default defineConfig({
   },
   compressHTML: true,
   integrations: [
+    {
+      name: "dev-words-cache-prompt",
+      hooks: {
+        "astro:config:setup": async ({ command }) => {
+          if (command === "dev") await promptRefetchWords();
+        },
+      },
+    },
     vue({
       appEntrypoint: "/src/pages/_app",
       // devtools: {
       //   launchEditor: "code",
       // },
     }),
-    sitemap({
-      filter: sitemapFilter,
-      serialize: async (item) => {
-        const word = item.url.match(/\/wort\/([^/?#]+)/);
-        if (word) {
-          const date = (await getWordDates()).get(word[1]);
-          if (date) return { ...item, lastmod: date };
-          return item;
-        }
-        const post = item.url.match(/\/magazin\/([^/?#]+)/);
-        if (post) {
-          const date = (await getPostDates()).get(post[1]);
-          if (date) return { ...item, lastmod: date };
-        }
-        return item;
-      },
-    }),
+    // Skipped for the e2e build: nobody reads its sitemap.xml, and
+    // getWordDates()/getPostDates() each do their own full, unbounded
+    // paginated fetch of every word/post — independent of E2E_WORD_LIMIT.
+    ...(isE2eBuild
+      ? []
+      : [
+          sitemap({
+            filter: sitemapFilter,
+            serialize: async (item) => {
+              const word = item.url.match(/\/wort\/([^/?#]+)/);
+              if (word) {
+                const date = (await getWordDates()).get(word[1]);
+                if (date) return { ...item, lastmod: date };
+                return item;
+              }
+              const post = item.url.match(/\/magazin\/([^/?#]+)/);
+              if (post) {
+                const date = (await getPostDates()).get(post[1]);
+                if (date) return { ...item, lastmod: date };
+              }
+              return item;
+            },
+          }),
+        ]),
     matomo({
       enabled: process.env.ENABLE_ANALYTICS === "true",
       host: process.env.MATOMO_HOST,
@@ -314,19 +342,25 @@ export default defineConfig({
             name: "Wort suchen",
             short_name: "Suchen",
             url: "/",
-            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
+            icons: [
+              { src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+            ],
           },
           {
             name: "Berliner oder Nicht spielen",
             short_name: "Spielen",
             url: "/games/berliner-oder-nicht",
-            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
+            icons: [
+              { src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+            ],
           },
           {
             name: "Wort vorschlagen",
             short_name: "Vorschlagen",
             url: "/wort-vorschlagen",
-            icons: [{ src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" }],
+            icons: [
+              { src: "favicons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+            ],
           },
         ],
         icons: [
@@ -448,8 +482,9 @@ export default defineConfig({
         // navigateFallbackAllowlist: [/^\//],
       },
     }),
-    // Skipped for local dev builds: slows down the build and isn't needed outside CI.
-    ...(import.meta.env.DEV
+    // Skipped for local dev builds and the e2e build: slows down the build
+    // and isn't needed outside a real CI/deploy build.
+    ...(import.meta.env.DEV || isE2eBuild
       ? []
       : [
           codecovplugin({
@@ -494,18 +529,22 @@ export default defineConfig({
           }
         },
       }), // chooses the compiler automatically
-      sentryVitePlugin({
-        authToken: SENTRY_AUTH_TOKEN,
-        org: SENTRY_ORG,
-        project: SENTRY_PROJECT,
-        sourcemaps: {
-          filesToDeleteAfterUpload: ["dist/**/*.map"],
-        },
-        bundleSizeOptimizations: {
-          excludeDebugStatements: true,
-        },
-        debug: false,
-      }),
+      ...(isE2eBuild
+        ? []
+        : [
+            sentryVitePlugin({
+              authToken: SENTRY_AUTH_TOKEN,
+              org: SENTRY_ORG,
+              project: SENTRY_PROJECT,
+              sourcemaps: {
+                filesToDeleteAfterUpload: ["dist/**/*.map"],
+              },
+              bundleSizeOptimizations: {
+                excludeDebugStatements: true,
+              },
+              debug: false,
+            }),
+          ]),
       graphqlLoader({ sourceMapOptions: { hires: true } }),
       visualizerPlugin,
     ],
@@ -531,7 +570,7 @@ export default defineConfig({
     },
 
     build: {
-      sourcemap: true, // This is needed for sentryVitePlugin
+      sourcemap: !isE2eBuild, // needed for sentryVitePlugin, which is skipped for the e2e build
       target: "esnext",
       cssMinify: "esbuild",
       rolldownOptions: {

@@ -11,10 +11,10 @@ describe("IsWordOfTheDay.vue", () => {
   it("renders the crown icon when isWordOfTheDay is true", async () => {
     const wrapper = mount(IsWordOfTheDay, {
       props: {
-        wordId: 1,
-        word: "test",
         iconSize: 24,
         tooltipPlacement: "right",
+        word: "test",
+        wordId: 1,
       },
     });
 

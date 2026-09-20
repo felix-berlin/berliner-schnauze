@@ -29,10 +29,10 @@ describe("WakapiStats.astro", () => {
 
   it("renders hours when fetch returns valid data", async () => {
     global.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
       json: async () => ({
         data: { total_seconds: 7200 },
       }),
+      ok: true,
     } as unknown as Response);
 
     const { default: WakapiStats } = await import("@components/WakapiStats.astro");
@@ -44,8 +44,8 @@ describe("WakapiStats.astro", () => {
 
   it("renders nothing when total_seconds is zero", async () => {
     global.fetch = vi.fn().mockResolvedValueOnce({
-      ok: true,
       json: async () => ({ data: { total_seconds: 0 } }),
+      ok: true,
     } as unknown as Response);
 
     const { default: WakapiStats } = await import("@components/WakapiStats.astro");
@@ -56,8 +56,8 @@ describe("WakapiStats.astro", () => {
 
   it("renders nothing when fetch returns ok=false", async () => {
     global.fetch = vi.fn().mockResolvedValueOnce({
-      ok: false,
       json: async () => ({}),
+      ok: false,
     } as unknown as Response);
 
     const { default: WakapiStats } = await import("@components/WakapiStats.astro");

@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 const components = { AccordionContent, AccordionItem, AccordionTrigger, BaseAccordion };
 
 function mountAccordion(template: string) {
-  return mount({ template, components });
+  return mount({ components, template });
 }
 
 describe("AccordionItem", () => {
@@ -72,7 +72,9 @@ describe("AccordionItem", () => {
       </BaseAccordion>
     `);
     const itemWrapper = wrapper.findComponent(AccordionItem);
-    const { toggle } = (itemWrapper.getCurrentComponent() as any).setupState;
+    const { toggle } = itemWrapper.getCurrentComponent()!.setupState as {
+      toggle: () => void;
+    };
     toggle();
     expect(wrapper.find(".c-accordion__item").classes()).not.toContain("is-open");
   });
@@ -84,7 +86,9 @@ describe("AccordionItem", () => {
       </BaseAccordion>
     `);
     const itemWrapper = wrapper.findComponent(AccordionItem);
-    const { toggle } = (itemWrapper.getCurrentComponent() as any).setupState;
+    const { toggle } = itemWrapper.getCurrentComponent()!.setupState as {
+      toggle: () => void;
+    };
     toggle();
     await new Promise((r) => setTimeout(r, 0));
     expect(wrapper.find(".c-accordion__item").classes()).toContain("is-open");

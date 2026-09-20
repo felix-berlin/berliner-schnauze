@@ -4,12 +4,12 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { nextTick } from "vue";
 
 const mockSwipeState = vi.hoisted(() => ({
-  isSwiping: { value: false } as { value: boolean },
   distanceX: { value: 0 } as { value: number },
-  onSwipeEndCallback: null as ((e: PointerEvent, dir: string) => void) | null,
-  vibrateCallback: vi.fn(),
+  isSwiping: { value: false } as { value: boolean },
   keyHandlers: new Map<string, () => void>(),
+  onSwipeEndCallback: null as ((e: PointerEvent, dir: string) => void) | null,
   startHintTimer: vi.fn(),
+  vibrateCallback: vi.fn(),
 }));
 
 vi.mock("@vueuse/core", async (importOriginal) => {
@@ -18,28 +18,28 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   const isSwiping = ref(false);
   const distanceX = ref(0);
   // expose refs so tests can mutate them
-  Object.defineProperty(mockSwipeState, "isSwiping", { get: () => isSwiping, configurable: true });
-  Object.defineProperty(mockSwipeState, "distanceX", { get: () => distanceX, configurable: true });
+  Object.defineProperty(mockSwipeState, "isSwiping", { configurable: true, get: () => isSwiping });
+  Object.defineProperty(mockSwipeState, "distanceX", { configurable: true, get: () => distanceX });
   return {
     ...actual,
-    usePointerSwipe: vi.fn((_, opts) => {
-      mockSwipeState.onSwipeEndCallback = opts.onSwipeEnd;
-      return { isSwiping, distanceX };
-    }),
-    useVibrate: vi.fn(() => ({ vibrate: mockSwipeState.vibrateCallback })),
-    useTimeoutFn: vi.fn(() => ({ start: mockSwipeState.startHintTimer })),
     onKeyStroke: vi.fn((key: string, handler: () => void) => {
       mockSwipeState.keyHandlers.set(key, handler);
     }),
+    usePointerSwipe: vi.fn((_, opts) => {
+      mockSwipeState.onSwipeEndCallback = opts.onSwipeEnd;
+      return { distanceX, isSwiping };
+    }),
+    useTimeoutFn: vi.fn(() => ({ start: mockSwipeState.startHintTimer })),
+    useVibrate: vi.fn(() => ({ vibrate: mockSwipeState.vibrateCallback })),
   };
 });
 
 const defaultProps = {
-  word: "Schnauze",
   cardNumber: 1,
+  isReal: null,
   isShaking: false,
   lastAnswerCorrect: null,
-  isReal: null,
+  word: "Schnauze",
 };
 
 describe("BonCard.vue", () => {
@@ -81,28 +81,28 @@ describe("BonCard.vue", () => {
 
   it("does not show overlay when not shaking", () => {
     const wrapper = mount(BonCard, {
-      props: { ...defaultProps, isShaking: false, lastAnswerCorrect: false, isReal: true },
+      props: { ...defaultProps, isReal: true, isShaking: false, lastAnswerCorrect: false },
     });
     expect(wrapper.find(".c-bon-card__overlay").exists()).toBe(false);
   });
 
   it("shows overlay when shaking and lastAnswerCorrect is false", () => {
     const wrapper = mount(BonCard, {
-      props: { ...defaultProps, isShaking: true, lastAnswerCorrect: false, isReal: true },
+      props: { ...defaultProps, isReal: true, isShaking: true, lastAnswerCorrect: false },
     });
     expect(wrapper.find(".c-bon-card__overlay").exists()).toBe(true);
   });
 
   it("overlay text says echtes Berlinerisch when isReal is true", () => {
     const wrapper = mount(BonCard, {
-      props: { ...defaultProps, isShaking: true, lastAnswerCorrect: false, isReal: true },
+      props: { ...defaultProps, isReal: true, isShaking: true, lastAnswerCorrect: false },
     });
     expect(wrapper.find(".c-bon-card__overlay").text()).toContain("echtes Berlinerisch");
   });
 
   it("overlay text says erfunden when isReal is false", () => {
     const wrapper = mount(BonCard, {
-      props: { ...defaultProps, isShaking: true, lastAnswerCorrect: false, isReal: false },
+      props: { ...defaultProps, isReal: false, isShaking: true, lastAnswerCorrect: false },
     });
     expect(wrapper.find(".c-bon-card__overlay").text()).toContain("erfunden");
   });
@@ -111,11 +111,11 @@ describe("BonCard.vue", () => {
     const wrapper = mount(BonCard, {
       props: {
         ...defaultProps,
-        word: "Aas",
+        isReal: true,
         isShaking: true,
         lastAnswerCorrect: false,
-        isReal: true,
         translation: "fauler Mensch",
+        word: "Aas",
       },
     });
     const meaning = wrapper.find(".c-bon-card__overlay-meaning");
@@ -128,9 +128,9 @@ describe("BonCard.vue", () => {
     const wrapper = mount(BonCard, {
       props: {
         ...defaultProps,
+        isReal: true,
         isShaking: true,
         lastAnswerCorrect: false,
-        isReal: true,
         translation: null,
       },
     });
@@ -142,9 +142,9 @@ describe("BonCard.vue", () => {
     const wrapper = mount(BonCard, {
       props: {
         ...defaultProps,
+        isReal: false,
         isShaking: true,
         lastAnswerCorrect: false,
-        isReal: false,
         translation: "irrelevant",
       },
     });
@@ -168,7 +168,7 @@ describe("BonCard.vue", () => {
   });
 
   it("focus() calls focus on neeButtonRef when button is mounted (covers line 97 ?. non-null branch)", () => {
-    const wrapper = mount(BonCard, { props: defaultProps, attachTo: document.body });
+    const wrapper = mount(BonCard, { attachTo: document.body, props: defaultProps });
     const focusSpy = vi.spyOn(wrapper.find(".c-bon-card__btn--no").element, "focus");
     (wrapper.vm as { focus: () => void }).focus();
     expect(focusSpy).toHaveBeenCalledOnce();

@@ -6,9 +6,9 @@ import { defineComponent, nextTick } from "vue";
 
 function mountComposable(locationSearch: string) {
   Object.defineProperty(window, "location", {
-    value: { search: locationSearch, href: `http://localhost/${locationSearch}` },
-    writable: true,
     configurable: true,
+    value: { href: `http://localhost/${locationSearch}`, search: locationSearch },
+    writable: true,
   });
   return mount(
     defineComponent({
@@ -56,9 +56,9 @@ describe("useSearchQuerySync", () => {
     expect($searchQuery.get()).toBe("");
 
     Object.defineProperty(window, "location", {
-      value: { search: "?q=kiez", href: "http://localhost/?q=kiez" },
-      writable: true,
       configurable: true,
+      value: { href: "http://localhost/?q=kiez", search: "?q=kiez" },
+      writable: true,
     });
     document.dispatchEvent(new Event("astro:page-load"));
     await nextTick();

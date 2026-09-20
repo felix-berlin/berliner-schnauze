@@ -1,10 +1,18 @@
+import { atom, map } from "nanostores";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+type OramaResultsState =
+  | { state: "loading" }
+  | { state: "ready"; value: { count: number } | null }
+  | { state: "failed"; error: Error };
+
+// $oramaSearchResults is a computedAsync store (read-only in its real type);
+// these tests write to it directly via the mocked atom returned in its place.
+const setOramaResults = (store: unknown, value: OramaResultsState) =>
+  (store as { set: (v: OramaResultsState) => void }).set(value);
+
 vi.mock("@nanostores/persistent", () => ({
-  persistentMap: vi.fn((key: string, initial: unknown) => {
-    const { map } = require("nanostores");
-    return map(initial);
-  }),
+  persistentMap: vi.fn((key: string, initial: unknown) => map(initial)),
 }));
 
 vi.mock("@utils/analytics", () => ({
@@ -22,7 +30,6 @@ const { capturedCbRef } = vi.hoisted(() => ({
 vi.mock("@nanostores/async", () => ({
   computedAsync: vi.fn((stores: unknown, callback: (...args: unknown[]) => Promise<unknown>) => {
     capturedCbRef.fn = callback;
-    const { atom } = require("nanostores");
     return atom(null);
   }),
 }));
@@ -40,8 +47,8 @@ vi.mock("@orama/stemmers/german", () => ({
 
 globalThis.fetch = vi.fn(() =>
   Promise.resolve({
+    json: () => Promise.resolve({ availableWordGroups: [], rangeFilterMinMax: {}, wordTypes: [] }),
     ok: true,
-    json: () => Promise.resolve({ availableWordGroups: [], wordTypes: [], rangeFilterMinMax: {} }),
   }),
 ) as unknown as typeof fetch;
 
@@ -405,19 +412,19 @@ describe("wordList store", () => {
   describe("$searchResultCount", () => {
     it("returns 0 when oramaSearchResults state is not ready", async () => {
       const { $oramaSearchResults, $searchResultCount } = await import("@stores/wordList.ts");
-      ($oramaSearchResults as any).set({ state: "loading" });
+      setOramaResults($oramaSearchResults, { state: "loading" });
       expect($searchResultCount.get()).toBe(0);
     });
 
     it("returns count when state is ready", async () => {
       const { $oramaSearchResults, $searchResultCount } = await import("@stores/wordList.ts");
-      ($oramaSearchResults as any).set({ state: "ready", value: { count: 42 } });
+      setOramaResults($oramaSearchResults, { state: "ready", value: { count: 42 } });
       expect($searchResultCount.get()).toBe(42);
     });
 
     it("returns 0 when state is ready but value has no count", async () => {
       const { $oramaSearchResults, $searchResultCount } = await import("@stores/wordList.ts");
-      ($oramaSearchResults as any).set({ state: "ready", value: null });
+      setOramaResults($oramaSearchResults, { state: "ready", value: null });
       expect($searchResultCount.get()).toBe(0);
     });
   });
@@ -425,19 +432,19 @@ describe("wordList store", () => {
   describe("$searchState", () => {
     it("returns loading while oramaSearchResults is loading", async () => {
       const { $oramaSearchResults, $searchState } = await import("@stores/wordList.ts");
-      ($oramaSearchResults as any).set({ state: "loading" });
+      setOramaResults($oramaSearchResults, { state: "loading" });
       expect($searchState.get()).toBe("loading");
     });
 
     it("returns ready when oramaSearchResults is ready", async () => {
       const { $oramaSearchResults, $searchState } = await import("@stores/wordList.ts");
-      ($oramaSearchResults as any).set({ state: "ready", value: { count: 1 } });
+      setOramaResults($oramaSearchResults, { state: "ready", value: { count: 1 } });
       expect($searchState.get()).toBe("ready");
     });
 
     it("returns failed when oramaSearchResults failed", async () => {
       const { $oramaSearchResults, $searchState } = await import("@stores/wordList.ts");
-      ($oramaSearchResults as any).set({ state: "failed", error: new Error("boom") });
+      setOramaResults($oramaSearchResults, { error: new Error("boom"), state: "failed" });
       expect($searchState.get()).toBe("failed");
     });
   });
@@ -457,9 +464,9 @@ describe("wordList store", () => {
       const { create, search } = await import("@orama/orama");
       vi.mocked(create).mockResolvedValueOnce({ _orama: true } as unknown as never);
       vi.mocked(search).mockResolvedValueOnce({
-        hits: [],
         count: 0,
-        elapsed: { raw: 0, formatted: "0" },
+        elapsed: { formatted: "0", raw: 0 },
+        hits: [],
       } as unknown as never);
       const { $wordSearch } = await import("@stores/wordList.ts");
       expect(capturedCbRef.fn).toBeDefined();
@@ -469,7 +476,7 @@ describe("wordList store", () => {
     });
 
     it("fetches the search index only once for concurrent computations (single-flight)", async () => {
-      const fetchSpy = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve([]) }));
+      const fetchSpy = vi.fn(() => Promise.resolve({ json: () => Promise.resolve([]), ok: true }));
       globalThis.fetch = fetchSpy as unknown as typeof fetch;
       const { $wordSearch } = await import("@stores/wordList.ts");
       await Promise.all([
@@ -491,7 +498,7 @@ describe("wordList store", () => {
 
       // Failure clears the memoized init promise → the next computation retries.
       const retryFetch = vi.fn(() =>
-        Promise.resolve({ ok: true, json: () => Promise.resolve([]) }),
+        Promise.resolve({ json: () => Promise.resolve([]), ok: true }),
       );
       globalThis.fetch = retryFetch as unknown as typeof fetch;
       const result = await capturedCbRef.fn!($wordSearch.get());
@@ -501,9 +508,9 @@ describe("wordList store", () => {
       // restore fetch mock
       globalThis.fetch = vi.fn(() =>
         Promise.resolve({
-          ok: true,
           json: () =>
-            Promise.resolve({ availableWordGroups: [], wordTypes: [], rangeFilterMinMax: {} }),
+            Promise.resolve({ availableWordGroups: [], rangeFilterMinMax: {}, wordTypes: [] }),
+          ok: true,
         }),
       ) as unknown as typeof fetch;
     });

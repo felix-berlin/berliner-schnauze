@@ -26,6 +26,7 @@ import BookRecommendations from '@components/word/BookRecommendations.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
 import { fetchAffiliateData, fetchAllWords } from '@services/api.ts';
+import { limitPagesForE2e } from '@services/queries/getWords.ts';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
   alphabeticNeighbors,
@@ -52,39 +53,33 @@ export const getStaticPaths = (async () => {
     }));
   const wordRefById = new Map(wordRefs.map((ref) => [ref.id, ref]));
 
-  return allWords.flatMap(({ node }) => {
+  return limitPagesForE2e(allWords).flatMap(({ node }) => {
     if (!node.slug) {
-      console.warn(`[wort/[...wordSlug]] Word without slug skipped — id: ${node.id}, berlinerisch: "${node.wordProperties?.berlinerisch ?? '(unknown)'}"`);
+      console.warn(
+        `[wort/[...wordSlug]] Word without slug skipped — id: ${node.id}, berlinerisch: "${node.wordProperties?.berlinerisch ?? '(unknown)'}"`,
+      );
       return [];
     }
     const wordRef = wordRefById.get(node.id)!;
-    const berlinerisch = node.wordProperties?.berlinerisch ?? '';
-    return [{
-      // experimental.incrementalBuild: this only reflects the word's own
-      // modified date. Neighbor/anagram/similar-sounding sections are derived
-      // from OTHER words in wordRefs, so a page can theoretically go stale if
-      // a different word changes in a way that affects this word's neighbors
-      // without this word itself being touched. Narrow blast radius (only
-      // alphabetically/phonetically adjacent words), monitored during rollout.
-      cacheKey: node.modifiedGmt ?? undefined,
-      params: {
-        wordSlug: node.slug,
+    return [
+      {
+        // experimental.incrementalBuild: this only reflects the word's own
+        // modified date. Neighbor/anagram/similar-sounding sections are derived
+        // from OTHER words in wordRefs, so a page can theoretically go stale if
+        // a different word changes in a way that affects this word's neighbors
+        // without this word itself being touched. Narrow blast radius (only
+        // alphabetically/phonetically adjacent words), monitored during rollout.
+        cacheKey: node.modifiedGmt ?? undefined,
+        params: {
+          wordSlug: node.slug,
+        },
+        props: {
+          word: node,
+          wordRef,
+          wordRefs,
+        },
       },
-      props: {
-        alphabeticNeighborsResult: alphabeticNeighbors(wordRefs, wordRef),
-        anagramsResult: findAnagrams(berlinerisch, wordRefs),
-        similarSpellingResult: similarWords(wordRefs, wordRef)
-          .filter((w) => w.isSimilar >= 0.85)
-          .sort((a, b) => b.isSimilar - a.isSimilar)
-          .slice(0, 5)
-          .map((w) => w.word),
-        soundingWordsResult: similarSoundingWords(wordRefs, wordRef)
-          .filter((r) => r.isSimilar)
-          .map((r) => r.word),
-        word: node,
-        wordRefs,
-      },
-    }];
+    ];
   });
 }) satisfies GetStaticPaths;
 
@@ -92,8 +87,19 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { wordSlug } = Astro.params as Params;
-const { word, wordRefs, alphabeticNeighborsResult, anagramsResult, soundingWordsResult, similarSpellingResult } =
-  Astro.props;
+const { word, wordRef, wordRefs } = Astro.props;
+
+// Derived per page (not in getStaticPaths): these compare the word against all ~6000 others,
+// and getStaticPaths would run them for every word up front — which froze the dev server.
+const alphabeticNeighborsResult = alphabeticNeighbors(wordRefs, wordRef);
+const anagramsResult = findAnagrams(wordRef.wordProperties?.berlinerisch ?? '', wordRefs);
+const similarSpellingResult = similarWords(wordRefs, wordRef, 0.85)
+  .sort((a, b) => b.isSimilar - a.isSimilar)
+  .slice(0, 5)
+  .map((w) => w.word);
+const soundingWordsResult = similarSoundingWords(wordRefs, wordRef)
+  .filter((r) => r.isSimilar)
+  .map((r) => r.word);
 
 const wordProps: BerlinerWord['wordProperties'] = word.wordProperties;
 
@@ -123,7 +129,8 @@ const berlinerisch = wordProps?.berlinerisch ?? '';
 const hasOrthographie = berlinerisch.length > 0;
 const hasLinguistik = berlinerisch.length > 0;
 const hasPhonologie = soundingWordsResult.length > 0 || similarSpellingResult.length > 0;
-const hasNeighbors = alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
+const hasNeighbors =
+  alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
 const hasRelatedWords = (wordProps?.relatedWords?.nodes?.length ?? 0) > 0;
 const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetchAffiliateData();
 const wortartLabel: string | undefined =
@@ -152,11 +159,16 @@ const ogImage = word.seo?.opengraphImage?.sourceUrl
 
 const exampleComments = (wordProps?.examples ?? [])
   .filter((e): e is NonNullable<typeof e> => Boolean(e?.example))
-  .map((e) => ({
-    '@type': 'Comment',
-    text: e.example as string,
-    ...(e.exampleExplanation && { description: e.exampleExplanation }),
-  }));
+  .map((e) => {
+    const comment: { '@type': string; text: string; description?: string } = {
+      '@type': 'Comment',
+      text: e.example as string,
+    };
+    if (e.exampleExplanation) {
+      comment.description = e.exampleExplanation;
+    }
+    return comment;
+  });
 
 const schemaJson = () => {
   const alternateNames = (wordProps?.alternativeWords ?? [])
@@ -273,34 +285,32 @@ const schemaJson = () => {
 
         <WordSectionBeispiele examples={wordProps?.examples} />
 
-        <WordSectionOrthographie
-          allWords={wordRefs}
-          word={berlinerisch}
-        />
+        <WordSectionOrthographie allWords={wordRefs} word={berlinerisch} />
 
         <WordSectionLinguistik word={berlinerisch} />
 
         <WordSectionGrammatik wordTags={wordTags} />
 
-        <WordSectionPhonologie soundingWords={soundingWordsResult} similarSpelling={similarSpellingResult} />
+        <WordSectionPhonologie
+          soundingWords={soundingWordsResult}
+          similarSpelling={similarSpellingResult}
+        />
 
         <WordAnagrams anagrams={anagramsResult} />
 
         <WordSectionNachbarn neighbors={alphabeticNeighborsResult} />
 
-        <WordSectionVerwandteWorte relatedWords={wordProps?.relatedWords ?? null} currentWord={berlinerisch} />
+        <WordSectionVerwandteWorte
+          relatedWords={wordProps?.relatedWords ?? null}
+          currentWord={berlinerisch}
+        />
 
         {!hasImages && wordProps?.learnMore && <WordLearnMore learnMore={wordProps.learnMore} />}
 
         <BookRecommendations books={affiliateBooks} disclaimers={affiliateDisclaimers} />
       </div>
 
-      {hasImages && (
-        <WordGalleryCol
-          images={wordProps?.images}
-          learnMore={wordProps?.learnMore}
-        />
-      )}
+      {hasImages && <WordGalleryCol images={wordProps?.images} learnMore={wordProps?.learnMore} />}
     </div>
   </article>
 

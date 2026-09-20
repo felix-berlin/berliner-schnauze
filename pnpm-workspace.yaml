@@ -24,24 +24,31 @@ minimumReleaseAgeExclude:
   - "@sentry/replay@10.62.0"
   - js-yaml
   - stylelint@17.14.0
-  - "@iconify-json/lucide@1.2.115"
+  - '@iconify-json/lucide@1.2.115 || 1.2.134'
   - virtua@0.49.2
   - autoprefixer@10.5.3
   - compromise@14.16.0
   - de-compromise@0.1.0
-  - miniflare@4.20260710.0 || 4.20260721.0 || 5.20260811.1-alpha
-  - wrangler@4.111.0 || 4.113.0 || 4.123.0
-  - "@cloudflare/workerd-darwin-64@1.20260721.1"
-  - "@cloudflare/workerd-darwin-arm64@1.20260721.1"
-  - "@cloudflare/workerd-linux-64@1.20260721.1"
-  - "@cloudflare/workerd-linux-arm64@1.20260721.1"
-  - "@cloudflare/workerd-windows-64@1.20260721.1"
+  - miniflare@4.20260710.0 || 4.20260721.0 || 5.20260811.1-alpha || 5.20260918.0-alpha
+  - wrangler@4.111.0 || 4.113.0 || 4.123.0 || 4.135.0
+  - '@cloudflare/workerd-darwin-64@1.20260721.1 || 1.20260918.1'
+  - '@cloudflare/workerd-darwin-arm64@1.20260721.1 || 1.20260918.1'
+  - '@cloudflare/workerd-linux-64@1.20260721.1 || 1.20260918.1'
+  - '@cloudflare/workerd-linux-arm64@1.20260721.1 || 1.20260918.1'
+  - '@cloudflare/workerd-windows-64@1.20260721.1 || 1.20260918.1'
   - "@infisical/cli@0.43.111"
   - "@semantic-release/changelog@7.0.0"
   - "@semantic-release/git@11.0.0"
   - nanostores@1.4.1
-  - workerd@1.20260721.1
+  - workerd@1.20260721.1 || 1.20260918.1
   - rollup-plugin-visualizer@7.1.1
+  - '@oxlint-tsgolint/darwin-arm64@7.0.2002'
+  - '@oxlint-tsgolint/darwin-x64@7.0.2002'
+  - '@oxlint-tsgolint/linux-arm64@7.0.2002'
+  - '@oxlint-tsgolint/linux-x64@7.0.2002'
+  - '@oxlint-tsgolint/win32-arm64@7.0.2002'
+  - '@oxlint-tsgolint/win32-x64@7.0.2002'
+  - oxlint-tsgolint@7.0.2002
 
 patchedDependencies:
   de-compromise: patches/de-compromise.patch

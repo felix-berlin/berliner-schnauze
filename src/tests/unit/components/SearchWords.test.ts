@@ -6,18 +6,22 @@ vi.mock("@composables/useSearchQuerySync", () => ({
   useSearchQuerySync: vi.fn(),
 }));
 
+type OramaResultsState =
+  | { state: "loading" }
+  | { state: "ready"; value: { count: number } | null };
+
 const searchLengthRef = ref(0);
-const oramaResultsRef = ref({ state: "loading" });
+const oramaResultsRef = ref<OramaResultsState>({ state: "loading" });
 const localSearchRef = ref("");
 
 const mockStores = {
+  $oramaSearchResults: {},
   $searchQuery: {
+    get: vi.fn(() => localSearchRef.value),
     set: vi.fn((v: string) => {
       localSearchRef.value = v;
     }),
-    get: vi.fn(() => localSearchRef.value),
   },
-  $oramaSearchResults: {},
   searchLength: {},
 };
 
@@ -30,8 +34,8 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 vi.mock("@stores/wordList.ts", () => ({
-  $searchQuery: mockStores.$searchQuery,
   $oramaSearchResults: mockStores.$oramaSearchResults,
+  $searchQuery: mockStores.$searchQuery,
   searchLength: mockStores.searchLength,
 }));
 
@@ -52,7 +56,7 @@ describe("SearchWords.vue", () => {
     vi.clearAllMocks();
     searchLengthRef.value = 0;
     localSearchRef.value = "";
-    oramaResultsRef.value = { state: "loading" } as any;
+    oramaResultsRef.value = { state: "loading" };
   });
 
   it("renders the search input", async () => {
@@ -125,7 +129,7 @@ describe("SearchWords.vue", () => {
 
   it("input event tracks search immediately when oramaResults is ready", async () => {
     const { setMatomoSearch } = await import("@utils/analytics");
-    oramaResultsRef.value = { state: "ready", value: { count: 2 } } as any;
+    oramaResultsRef.value = { state: "ready", value: { count: 2 } };
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords);
     // setValue sets the DOM value and triggers v-model + @input
@@ -136,14 +140,14 @@ describe("SearchWords.vue", () => {
 
   it("input event sets pendingTrackSearch when loading, fires setMatomoSearch on ready", async () => {
     const { setMatomoSearch } = await import("@utils/analytics");
-    oramaResultsRef.value = { state: "loading" } as any;
+    oramaResultsRef.value = { state: "loading" };
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords);
     await wrapper.find("input").setValue("Kiez");
     await nextTick();
     expect(setMatomoSearch).not.toHaveBeenCalled();
     // Transition to ready — watcher fires and flushes pendingTrackSearch
-    oramaResultsRef.value = { state: "ready", value: { count: 1 } } as any;
+    oramaResultsRef.value = { state: "ready", value: { count: 1 } };
     await nextTick();
     expect(setMatomoSearch).toHaveBeenCalledWith("Kiez", "Word Search", 1);
     wrapper.unmount();
@@ -151,11 +155,11 @@ describe("SearchWords.vue", () => {
 
   it("watcher is a no-op when state is ready but pendingTrackSearch is null (covers line 65 false branch)", async () => {
     const { setMatomoSearch } = await import("@utils/analytics");
-    oramaResultsRef.value = { state: "loading" } as any;
+    oramaResultsRef.value = { state: "loading" };
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords);
     // Transition directly to ready without any pending search → watcher fires, if-body skipped
-    oramaResultsRef.value = { state: "ready", value: { count: 0 } } as any;
+    oramaResultsRef.value = { state: "ready", value: { count: 0 } };
     await nextTick();
     expect(setMatomoSearch).not.toHaveBeenCalled();
     wrapper.unmount();
@@ -164,8 +168,8 @@ describe("SearchWords.vue", () => {
   it("autoFocus prop focuses the search input on mount", async () => {
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords, {
-      props: { autoFocus: true },
       attachTo: document.body,
+      props: { autoFocus: true },
     });
     await nextTick();
     expect(document.activeElement).toBe(wrapper.find("input").element);
@@ -183,11 +187,11 @@ describe("SearchWords.vue", () => {
 
   it("watcher short-circuits when state transitions to non-ready (covers line 65 && left false branch)", async () => {
     const { setMatomoSearch } = await import("@utils/analytics");
-    oramaResultsRef.value = { state: "ready", value: { count: 0 } } as any;
+    oramaResultsRef.value = { state: "ready", value: { count: 0 } };
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords);
     vi.clearAllMocks();
-    oramaResultsRef.value = { state: "loading" } as any;
+    oramaResultsRef.value = { state: "loading" };
     await nextTick();
     expect(setMatomoSearch).not.toHaveBeenCalled();
     wrapper.unmount();
@@ -195,14 +199,14 @@ describe("SearchWords.vue", () => {
 
   it("watcher covers results.value?.count null branch when value is null (covers line 66)", async () => {
     const { setMatomoSearch } = await import("@utils/analytics");
-    oramaResultsRef.value = { state: "loading" } as any;
+    oramaResultsRef.value = { state: "loading" };
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords);
     await wrapper.find("input").setValue("Kiez");
     await nextTick();
     expect(setMatomoSearch).not.toHaveBeenCalled();
     // Transition to ready with null value → results.value?.count = undefined ?? 0 = 0
-    oramaResultsRef.value = { state: "ready", value: null } as any;
+    oramaResultsRef.value = { state: "ready", value: null };
     await nextTick();
     expect(setMatomoSearch).toHaveBeenCalledWith("Kiez", "Word Search", 0);
     wrapper.unmount();
@@ -210,7 +214,7 @@ describe("SearchWords.vue", () => {
 
   it("trackWordSearchListSearch covers value?.count null branch when typing while ready and value is null (covers line 73)", async () => {
     const { setMatomoSearch } = await import("@utils/analytics");
-    oramaResultsRef.value = { state: "ready", value: null } as any;
+    oramaResultsRef.value = { state: "ready", value: null };
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords);
     await wrapper.find("input").setValue("Kiez");

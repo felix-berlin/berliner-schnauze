@@ -24,9 +24,17 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 vi.mock("@stores/wordList.ts", () => ({
-  $showWordListFilterFlyout: {},
+  $oramaSearchResults: {},
+  $searchQuery: {},
   $searchResultCount: {},
+  $showWordListFilterFlyout: {},
+  searchLength: {},
 }));
+
+vi.mock("@components/SearchWords.vue", async () => {
+  const { createComponentStub } = await import("../../../helpers/stubs");
+  return createComponentStub("<div class='mock-search-words' />");
+});
 
 vi.mock("@components/word-search/WordFilter.vue", () => ({
   default: { template: "<div class='mock-word-filter' />" },
@@ -53,10 +61,10 @@ vi.mock("@components/WordList.vue", () => {
   // module proxy when an async component resolves. Use a permissive Proxy so those accesses
   // return undefined/false instead of causing Vitest's strict proxy to throw.
   return new Proxy(mod, {
-    has: () => true,
     get(target, key) {
       return key in target ? target[key] : undefined;
     },
+    has: () => true,
   });
 });
 

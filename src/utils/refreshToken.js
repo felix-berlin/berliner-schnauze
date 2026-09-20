@@ -52,4 +52,4 @@ export async function refreshToken() {
   return newToken;
 }
 
-refreshToken();
+void refreshToken();

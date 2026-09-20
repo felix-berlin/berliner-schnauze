@@ -21,8 +21,8 @@ export function getWpConfig(): WpConfig {
   if (!pass) throw new Error("WP_AUTH_PASS env var missing");
 
   return {
-    baseUrl: baseUrl.replace(/\/$/, ""),
     auth: Buffer.from(`${user}:${pass}`).toString("base64"),
+    baseUrl: baseUrl.replace(/\/$/, ""),
   };
 }
 
@@ -37,8 +37,8 @@ export async function wpFetch<T>(
   const response = await fetch(url, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Basic ${auth}`,
+      "Content-Type": "application/json",
       ...(options.headers as Record<string, string>),
     },
     signal: AbortSignal.timeout(TIMEOUT_MS),

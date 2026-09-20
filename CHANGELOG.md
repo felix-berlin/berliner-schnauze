@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.49.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.4...v3.49.5) (2026-09-20)
+
+
+### Performance Improvements
+
+* **word:** cache sorted words and anagram index across word pages ([69f0ea4](https://github.com/felix-berlin/berliner-schnauze/commit/69f0ea421365bd947101ae1ffb5eff9446e8a151))
+
+## [3.49.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.3...v3.49.4) (2026-09-19)
+
+
+### Bug Fixes
+
+* **e2e:** change ScrollToTop component to use client:idle for improved performance ([950b332](https://github.com/felix-berlin/berliner-schnauze/commit/950b33236f86a743bbd21a0d7c4142c7423bf79e))
+* **e2e:** update settings and documentation for Playwright integration ([c173b89](https://github.com/felix-berlin/berliner-schnauze/commit/c173b89c2efae7f15c9641183423b6cc5a86bae0))
+* improve code readability and maintainability in [...wordSlug].astro ([cac541d](https://github.com/felix-berlin/berliner-schnauze/commit/cac541d12b9fbd55074247007dc0fac33438efdb))
+* **search:** focus active result on arrow keys and let Enter reach buttons and links ([0a3d534](https://github.com/felix-berlin/berliner-schnauze/commit/0a3d534cd4735b3131960574b41052a221e83f55))
+* **ui:** avoid hydration mismatch on donation wallets and routeToWord error before word of the day loads ([ab1ae88](https://github.com/felix-berlin/berliner-schnauze/commit/ab1ae88f36c7fd2892259f4d82501d3eb4527b16))
+* **ui:** keep scroll-to-top button visible over the footer on desktop ([1990858](https://github.com/felix-berlin/berliner-schnauze/commit/199085864d0b4c0a23f40a23177305b7fa76b943))
+
+
+### Performance Improvements
+
+* **build:** fetch all words once and reuse them for the word index ([944cbb0](https://github.com/felix-berlin/berliner-schnauze/commit/944cbb0f9cfdff4445a9f309af1acd6562287a79))
+* **build:** fetch words in pages of 500 ([d657e1f](https://github.com/felix-berlin/berliner-schnauze/commit/d657e1f99fc9403fb1fcc7ce149e00eb3d413ffc))
+* **dev:** cache fetched words on disk and ask before refetching ([7d34169](https://github.com/felix-berlin/berliner-schnauze/commit/7d34169fa82f3133743d91cc7b19fe8fcae8c8b3))
+* **word:** derive neighbor/sound/anagram results per page instead of in getStaticPaths ([a6138c5](https://github.com/felix-berlin/berliner-schnauze/commit/a6138c5eb77a55d8031c5e400884f407c32dcd29))
+
+## [3.49.3](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.2...v3.49.3) (2026-09-18)
+
+
+### Bug Fixes
+
+* **e2e:** build+preview instead of astro dev for CI Playwright runs ([1445005](https://github.com/felix-berlin/berliner-schnauze/commit/14450058fc4962f044a8d71ed7660adc1da47528))
+* **e2e:** cap generated pages instead of fetched words in Playwright build ([09798a2](https://github.com/felix-berlin/berliner-schnauze/commit/09798a2fa3f96efb4f86cf38736e5f695098c89b))
+* **e2e:** decouple site build from Playwright's webServer wait ([fb76815](https://github.com/felix-berlin/berliner-schnauze/commit/fb768150885c006f701aedf01dc2b811e6dfaad1))
+* **e2e:** narrow E2E_WORD_LIMIT before use in page-limit filter ([4d9458a](https://github.com/felix-berlin/berliner-schnauze/commit/4d9458adf433f0030a8948cb2d1f5249218e01b6))
+* **search:** narrow filter(Boolean) result to string[] for locale sort ([c4b2fcf](https://github.com/felix-berlin/berliner-schnauze/commit/c4b2fcf0e3bcc7788fe80516e8c78f1c3eb5efe0))
+* **test:** mock the wordList.ts exports SearchWords.vue actually needs ([e431bde](https://github.com/felix-berlin/berliner-schnauze/commit/e431bde56cb245e5fd89dec040e61eb8f9c4d499))
+* **test:** type all remaining any casts and fix broken SearchModal test ([4b29924](https://github.com/felix-berlin/berliner-schnauze/commit/4b2992492593cf1c02f87bea019396820d1f0641))
+
+
+### Performance Improvements
+
+* **e2e:** limit words and skip upload plugins in the Playwright build ([d9abb50](https://github.com/felix-berlin/berliner-schnauze/commit/d9abb5035ed55fa73c7be8aa1e673e02453ea8e1))
+* **e2e:** skip OG image generation in the Playwright build ([a07a693](https://github.com/felix-berlin/berliner-schnauze/commit/a07a6938fe7f7ae2eaa71a21a0af0057bed4f08e))
+* **e2e:** skip the sitemap integration in the Playwright build ([c289efb](https://github.com/felix-berlin/berliner-schnauze/commit/c289efb7e5559d2d654a2d6492ea395d86e89f85))
+
 ## [3.49.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.1...v3.49.2) (2026-08-26)
 
 

@@ -18,46 +18,46 @@ vi.mock("@stores/installApp.ts", async () => {
 vi.mock("@components/AppSettingsTheme.vue", () => {
   const mod: Record<string | symbol, unknown> = { default: { template: "<div />" } };
   return new Proxy(mod, {
-    has: () => true,
     get(t, k) {
       return k in t ? t[k] : undefined;
     },
+    has: () => true,
   });
 });
 vi.mock("@components/AppSettingsNotifications.vue", () => {
   const mod: Record<string | symbol, unknown> = { default: { template: "<div />" } };
   return new Proxy(mod, {
-    has: () => true,
     get(t, k) {
       return k in t ? t[k] : undefined;
     },
+    has: () => true,
   });
 });
 vi.mock("@components/AppSettingsNavCard.vue", () => {
   const mod: Record<string | symbol, unknown> = {
     default: {
-      props: ["icon", "title", "description", "href", "tag"],
       emits: ["click"],
+      props: ["icon", "title", "description", "href", "tag"],
       template: "<a data-testid='nav-card-loaded' />",
     },
   };
   return new Proxy(mod, {
-    has: () => true,
     get(t, k) {
       return k in t ? t[k] : undefined;
     },
+    has: () => true,
   });
 });
 // Nav card stub defined outside vi.mock — no hoisting issue here
 const NavCardStub = defineComponent({
-  props: ["icon", "title", "description", "href", "tag"],
   emits: ["click"],
+  props: ["icon", "title", "description", "href", "tag"],
   setup(props, { emit }) {
     return () =>
       h("a", {
-        href: (props as Record<string, string>).href,
-        "data-title": (props as Record<string, string>).title,
         "data-testid": "nav-card",
+        "data-title": (props as Record<string, string>).title,
+        href: (props as Record<string, string>).href,
         onClick: () => emit("click"),
       });
   },
@@ -68,8 +68,8 @@ const mountOptions = {
     stubs: {
       // Match by the component's __name (set by Vite from filename)
       AppSettingsNavCard: NavCardStub,
-      AppSettingsTheme: { template: "<div />" },
       AppSettingsNotifications: { template: "<div />" },
+      AppSettingsTheme: { template: "<div />" },
     },
   },
 };

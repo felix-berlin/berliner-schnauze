@@ -6,10 +6,10 @@ vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn(() => ({
     value: {
       rangeFilterMinMax: {
-        characterLength: { min: 1, max: 20 },
-        consonantsCount: { min: 0, max: 15 },
-        syllablesCount: { min: 1, max: 10 },
-        vowelsCount: { min: 0, max: 10 },
+        characterLength: { max: 20, min: 1 },
+        consonantsCount: { max: 15, min: 0 },
+        syllablesCount: { max: 10, min: 1 },
+        vowelsCount: { max: 10, min: 0 },
       },
     },
   })),
@@ -100,7 +100,9 @@ describe("WordRangeSlider.vue", () => {
 
   it("getMinMax falls back to {max:0,min:0} when rangeFilterMinMax is null (covers ?? branch)", async () => {
     const { useStore } = await import("@nanostores/vue");
-    vi.mocked(useStore).mockReturnValueOnce({ value: { rangeFilterMinMax: null } } as any);
+    vi.mocked(useStore).mockReturnValueOnce({
+      value: { rangeFilterMinMax: null },
+    } as unknown as ReturnType<typeof useStore>);
 
     const WordRangeSlider = (await import("@components/filter/WordRangeSlider.vue")).default;
     const wrapper = mount(WordRangeSlider, {

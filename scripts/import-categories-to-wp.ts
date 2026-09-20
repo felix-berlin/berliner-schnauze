@@ -236,7 +236,7 @@ async function main(): Promise<void> {
       );
       success++;
     } catch (err) {
-      console.error(`  ✗ ${word.slug} (id=${postId}): ${err}`);
+      console.error(`  ✗ ${word.slug} (id=${postId}): ${err instanceof Error ? err.message : String(err)}`);
       errors++;
     }
   }

@@ -2,11 +2,8 @@ import {
   useTestStorageEngine,
   setTestStorageKey,
   cleanTestStorage,
-  getTestStorage,
 } from "@nanostores/persistent";
 import { $wordOfTheDay, getWordOfTheDay } from "@stores/index.ts";
-import { JSDOM } from "jsdom";
-import { cleanStores, keepMount, allTasks } from "nanostores";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 describe("Word of the Day", () => {
@@ -25,10 +22,10 @@ describe("Word of the Day", () => {
 
   it("$wordOfTheDay should have initial state", () => {
     expect($wordOfTheDay.get()).toEqual({
-      word: {},
-      loading: true,
       error: false,
+      loading: true,
       timestamp: 0,
+      word: {},
     });
   });
 
@@ -58,8 +55,8 @@ describe("getWordOfTheDay", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
-        ok: true,
         json: vi.fn().mockResolvedValue(wordData),
+        ok: true,
       }),
     );
 
@@ -102,8 +99,8 @@ describe("getWordOfTheDay", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
-        ok: true,
         json: vi.fn().mockResolvedValue({ ID: 2, berlinerisch: "Ick" }),
+        ok: true,
       }),
     );
 

@@ -9,13 +9,13 @@ vi.mock("@utils/analytics", () => ({
 
 const mockActiveWordTypeFilter = ref<string[]>([]);
 const mockWordSearch = ref({
-  wordTypes: ["Substantiv", "Verb", "Adjektiv"],
   activeWordTypeFilter: mockActiveWordTypeFilter.value,
+  wordTypes: ["Substantiv", "Verb", "Adjektiv"],
 });
 
 vi.mock("@stores/wordList.ts", () => ({
-  $wordSearch: {},
   $oramaSearchResults: {},
+  $wordSearch: {},
   setLetterFilter: vi.fn(),
 }));
 
@@ -26,6 +26,7 @@ vi.mock("@nanostores/vue", () => ({
 
 vi.mock("@vueform/multiselect", () => ({
   default: {
+    emits: ["select", "deselect", "update:modelValue"],
     name: "Multiselect",
     props: [
       "modelValue",
@@ -40,7 +41,6 @@ vi.mock("@vueform/multiselect", () => ({
       "aria",
     ],
     template: "<div class='mock-multiselect'><slot /></div>",
-    emits: ["select", "deselect", "update:modelValue"],
   },
 }));
 
@@ -49,8 +49,8 @@ describe("WordTypeFilter.vue", () => {
     vi.clearAllMocks();
     mockActiveWordTypeFilter.value = [];
     mockWordSearch.value = {
-      wordTypes: ["Substantiv", "Verb", "Adjektiv"],
       activeWordTypeFilter: [],
+      wordTypes: ["Substantiv", "Verb", "Adjektiv"],
     };
   });
 

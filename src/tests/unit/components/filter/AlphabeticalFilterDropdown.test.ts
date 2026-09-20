@@ -4,8 +4,8 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { ref } from "vue";
 
 const { mockSetLetterFilter, mockDropdownClose, onSetHolder } = vi.hoisted(() => ({
-  mockSetLetterFilter: vi.fn(),
   mockDropdownClose: vi.fn(),
+  mockSetLetterFilter: vi.fn(),
   onSetHolder: { callback: null as ((arg: { newValue: unknown }) => void) | null },
 }));
 
@@ -32,11 +32,11 @@ vi.mock("nanostores", async (importOriginal) => {
 
 vi.mock("@components/DropdownPopover.vue", () => ({
   default: {
-    name: "DropdownPopover",
-    template: `<div class="mock-dropdown" :class="$attrs.class"><slot :triggerProps="{}" /><slot name="panel" /></div>`,
-    inheritAttrs: false,
     expose: ["close"],
+    inheritAttrs: false,
+    name: "DropdownPopover",
     setup: () => ({ close: mockDropdownClose }),
+    template: `<div class="mock-dropdown" :class="$attrs.class"><slot :triggerProps="{}" /><slot name="panel" /></div>`,
   },
 }));
 

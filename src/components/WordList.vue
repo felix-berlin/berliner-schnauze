@@ -98,8 +98,10 @@ watch(mutableOramaSearch, () => {
   resultRefs.value = [];
 });
 
+// The ref is a SingleWord component instance, so unwrap its root element.
 const setResultRef = (el: ComponentPublicInstance | Element | null) => {
-  if (el instanceof HTMLElement) resultRefs.value.push(el);
+  const node = el instanceof Element ? el : el?.$el;
+  if (node instanceof HTMLElement) resultRefs.value.push(node);
 };
 
 const goToWord = (slug: string) => {
@@ -115,9 +117,13 @@ const focusActive = () => {
 
   // 2. Wait for DOM update, then focus and scroll the element
   void nextTick(() => {
-    const el = resultRefs.value[activeIndex.value];
+    // The list is virtualized, so refs are not indexed like the hits — prefer the element id.
+    const wordId = mutableOramaSearch.value[activeIndex.value]?.document?.berlinerWordId;
+    const el =
+      (wordId === undefined ? null : document.getElementById(`word-${wordId}`)) ??
+      resultRefs.value[activeIndex.value];
     if (el && typeof el.focus === "function") {
-      el.focus();
+      el.focus({ preventScroll: true });
     }
   });
 };
@@ -141,6 +147,8 @@ onKeyStroke("ArrowUp", (e) => {
 
 onKeyStroke("Enter", (e) => {
   if (!mutableOramaSearch.value.length) return;
+  // Buttons/links (e.g. the options dropdown trigger) handle Enter themselves.
+  if (e.target instanceof Element && e.target.closest("button, a")) return;
   const slug = mutableOramaSearch.value[activeIndex.value].document?.slug;
 
   if (slug) goToWord(slug);

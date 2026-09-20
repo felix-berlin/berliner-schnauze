@@ -14,13 +14,13 @@ const {
   mockStartCooldown,
   mockVibrate,
 } = vi.hoisted(() => ({
-  mockInit: vi.fn(),
-  mockStartGame: vi.fn(),
-  mockResumeGame: vi.fn(),
   mockAnswer: vi.fn(),
+  mockInit: vi.fn(),
   mockNextCard: vi.fn(),
-  mockStartShake: vi.fn(),
+  mockResumeGame: vi.fn(),
   mockStartCooldown: vi.fn(),
+  mockStartGame: vi.fn(),
+  mockStartShake: vi.fn(),
   mockVibrate: vi.fn(),
 }));
 
@@ -69,7 +69,7 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 vi.mock("@/data/fakeWords", () => ({
-  fakeWords: [{ word: "Quatsch", isReal: false }],
+  fakeWords: [{ isReal: false, word: "Quatsch" }],
 }));
 
 vi.mock("@components/ConfettiEffect.vue", () => ({
@@ -78,6 +78,8 @@ vi.mock("@components/ConfettiEffect.vue", () => ({
 
 vi.mock("@components/games/BonCard.vue", () => ({
   default: {
+    emits: ["answer"],
+    expose: ["focus"],
     name: "BonCard",
     props: [
       "word",
@@ -88,10 +90,8 @@ vi.mock("@components/games/BonCard.vue", () => ({
       "isFirstCard",
       "disabled",
     ],
-    template: "<div class='mock-bon-card'>{{ word }}</div>",
-    emits: ["answer"],
-    expose: ["focus"],
     setup: () => ({ focus: vi.fn() }),
+    template: "<div class='mock-bon-card'>{{ word }}</div>",
   },
 }));
 
@@ -104,6 +104,8 @@ vi.mock("@components/games/BonHUD.vue", () => ({
 
 vi.mock("@components/games/BonResult.vue", () => ({
   default: {
+    emits: ["restart"],
+    expose: ["focus"],
     name: "BonResult",
     props: [
       "score",
@@ -114,10 +116,8 @@ vi.mock("@components/games/BonResult.vue", () => ({
       "allTimeHighScore",
       "lastCard",
     ],
-    template: "<div class='mock-bon-result' />",
-    emits: ["restart"],
-    expose: ["focus"],
     setup: () => ({ focus: vi.fn() }),
+    template: "<div class='mock-bon-result' />",
   },
 }));
 
@@ -125,14 +125,14 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
   return {
     ...actual,
-    useVibrate: vi.fn(() => ({ vibrate: mockVibrate })),
     useTimeoutFn: vi.fn((_, delay?: number) =>
       delay === 350 ? { start: mockStartCooldown } : { start: mockStartShake },
     ),
+    useVibrate: vi.fn(() => ({ vibrate: mockVibrate })),
   };
 });
 
-const defaultStats = { highScore: 0, bestStreak: 0, playerName: "", hasSeenIntro: false };
+const defaultStats = { bestStreak: 0, hasSeenIntro: false, highScore: 0, playerName: "" };
 
 function setupMocks(statsOverride = {}, savedBon: unknown = null) {
   // mockReset clears the once-queue so we start fresh each call
@@ -162,7 +162,7 @@ describe("BerlinerOderNicht.vue", () => {
     mockVibrate.mockClear();
 
     global.fetch = vi.fn(() =>
-      Promise.resolve({ ok: true, json: () => Promise.resolve([]) }),
+      Promise.resolve({ json: () => Promise.resolve([]), ok: true }),
     ) as unknown as typeof fetch;
 
     setupMocks();
@@ -217,7 +217,7 @@ describe("BerlinerOderNicht.vue", () => {
   });
 
   it("shows idle stats when highScore > 0", () => {
-    setupMocks({ highScore: 42, bestStreak: 5 });
+    setupMocks({ bestStreak: 5, highScore: 42 });
     const wrapper = mount(BerlinerOderNicht);
     expect(wrapper.find(".c-berliner-oder-nicht__idle-prev-stats").exists()).toBe(true);
     expect(wrapper.text()).toContain("42");
@@ -254,7 +254,7 @@ describe("BerlinerOderNicht.vue", () => {
 
   it("renders BonHUD and BonCard in playing phase", () => {
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    mockCurrentCard.value = { isReal: true, word: "Kiez" };
     const wrapper = mount(BerlinerOderNicht);
     expect(wrapper.find(".mock-bon-hud").exists()).toBe(true);
     expect(wrapper.find(".mock-bon-card").exists()).toBe(true);
@@ -262,7 +262,7 @@ describe("BerlinerOderNicht.vue", () => {
 
   it("renders BonCard with correct word in playing phase", () => {
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Schnauze", isReal: true };
+    mockCurrentCard.value = { isReal: true, word: "Schnauze" };
     const wrapper = mount(BerlinerOderNicht);
     expect(wrapper.find(".mock-bon-card").text()).toBe("Schnauze");
   });
@@ -296,14 +296,14 @@ describe("BerlinerOderNicht.vue", () => {
   it("calls init after successful fetch on mount", async () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
-        ok: true,
         json: () =>
           Promise.resolve([
             {
-              wordProperties: { berlinerisch: "Kiez", translations: ["Neighborhood"] },
               slug: "kiez",
+              wordProperties: { berlinerisch: "Kiez", translations: ["Neighborhood"] },
             },
           ]),
+        ok: true,
       }),
     ) as unknown as typeof fetch;
     mount(BerlinerOderNicht);
@@ -405,7 +405,7 @@ describe("BerlinerOderNicht.vue", () => {
 
   it("onAnswer correct guess calls answer and nextCard", async () => {
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    mockCurrentCard.value = { isReal: true, word: "Kiez" };
     setupMocks({ hasSeenIntro: true });
     const wrapper = mount(BerlinerOderNicht);
     await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
@@ -417,7 +417,7 @@ describe("BerlinerOderNicht.vue", () => {
 
   it("onAnswer incorrect guess shakes card and starts shake timer", async () => {
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    mockCurrentCard.value = { isReal: true, word: "Kiez" };
     setupMocks({ hasSeenIntro: true });
     const wrapper = mount(BerlinerOderNicht);
     await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", false);
@@ -430,7 +430,7 @@ describe("BerlinerOderNicht.vue", () => {
 
   it("onAnswer does nothing when isAnswering is true", async () => {
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    mockCurrentCard.value = { isReal: true, word: "Kiez" };
     setupMocks({ hasSeenIntro: true });
     const wrapper = mount(BerlinerOderNicht);
     const bonCard = wrapper.findComponent({ name: "BonCard" });
@@ -442,7 +442,7 @@ describe("BerlinerOderNicht.vue", () => {
 
   it("onAnswer returns early when phase becomes result after answer()", async () => {
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Kiez", isReal: false };
+    mockCurrentCard.value = { isReal: false, word: "Kiez" };
     setupMocks({ hasSeenIntro: true });
     // Make answer() transition to result phase
     mockAnswer.mockImplementation(() => {
@@ -458,7 +458,7 @@ describe("BerlinerOderNicht.vue", () => {
   it("onAnswer sets hasSeenIntro when not yet seen", async () => {
     const { $bonStats } = await import("@stores/bonStats");
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    mockCurrentCard.value = { isReal: true, word: "Kiez" };
     setupMocks({ hasSeenIntro: false }); // not seen
     const wrapper = mount(BerlinerOderNicht);
     await wrapper.findComponent({ name: "BonCard" }).vm.$emit("answer", true);
@@ -503,7 +503,7 @@ describe("BerlinerOderNicht.vue", () => {
       );
 
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    mockCurrentCard.value = { isReal: true, word: "Kiez" };
     setupMocks({ hasSeenIntro: true });
     const wrapper = mount(BerlinerOderNicht);
 
@@ -529,7 +529,7 @@ describe("BerlinerOderNicht.vue", () => {
       });
 
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    mockCurrentCard.value = { isReal: true, word: "Kiez" };
     setupMocks({ hasSeenIntro: true });
     const wrapper = mount(BerlinerOderNicht);
 
@@ -581,12 +581,14 @@ describe("BerlinerOderNicht.vue", () => {
     statsRef.value = { ...defaultStats, playerName: null as unknown as string };
     // Flush: watcher fires with editing=true, reads stats.value.playerName (null) → null ?? '' → right branch
     await nextTick();
+    const input = wrapper.find<HTMLInputElement>("#bon-player-name");
+    expect(input.element.value).toBe("");
     wrapper.unmount();
   });
 
   it("onAnswer returns early when currentCard is null (covers line 275 true branch)", () => {
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Kiez", isReal: true };
+    mockCurrentCard.value = { isReal: true, word: "Kiez" };
     setupMocks({ hasSeenIntro: true });
     const wrapper = mount(BerlinerOderNicht);
     const bonCard = wrapper.findComponent({ name: "BonCard" });
@@ -599,7 +601,7 @@ describe("BerlinerOderNicht.vue", () => {
 
   it("onAnswer correct guess on fake word sets exitDirection=left (covers lines 228/292)", async () => {
     mockPhase.value = "playing";
-    mockCurrentCard.value = { word: "Quatsch", isReal: false };
+    mockCurrentCard.value = { isReal: false, word: "Quatsch" };
     setupMocks({ hasSeenIntro: true });
     const wrapper = mount(BerlinerOderNicht);
     // guessedReal=false, card.isReal=false → correct=true → exitDirection='left'
@@ -612,11 +614,11 @@ describe("BerlinerOderNicht.vue", () => {
   it("onMounted maps word with empty translations to translation=undefined (covers line 246 ?? branch)", async () => {
     global.fetch = vi.fn(() =>
       Promise.resolve({
-        ok: true,
         json: () =>
           Promise.resolve([
-            { wordProperties: { berlinerisch: "Schnauze", translations: [] }, slug: "schnauze" },
+            { slug: "schnauze", wordProperties: { berlinerisch: "Schnauze", translations: [] } },
           ]),
+        ok: true,
       }),
     ) as unknown as typeof fetch;
     mount(BerlinerOderNicht);

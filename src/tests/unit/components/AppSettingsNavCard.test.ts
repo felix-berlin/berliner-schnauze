@@ -7,9 +7,9 @@ const StubIcon = markRaw(defineComponent({ template: "<span />" }));
 
 describe("AppSettingsNavCard.vue", () => {
   const baseProps = {
+    description: "Cache-Daten löschen",
     icon: StubIcon,
     title: "Cache verwalten",
-    description: "Cache-Daten löschen",
   };
 
   it("renders title and description", () => {

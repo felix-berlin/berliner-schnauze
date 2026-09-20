@@ -1,6 +1,5 @@
 import IsWordOfTheDay from "@components/word/IsWordOfTheDay.vue";
 import { useStore } from "@nanostores/vue";
-import { $wordOfTheDay } from "@stores/wordOfTheDay.ts";
 import { mount } from "@vue/test-utils";
 import Crown from "virtual:icons/lucide/crown";
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
@@ -12,7 +11,7 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 describe("IsWordOfTheDay.vue", () => {
-  let mockStore;
+  let mockStore: { value: { word: { ID: number } } };
 
   beforeEach(() => {
     mockStore = {
@@ -22,7 +21,7 @@ describe("IsWordOfTheDay.vue", () => {
         },
       },
     };
-    (useStore as any).mockReturnValue(mockStore);
+    vi.mocked(useStore).mockReturnValue(mockStore);
     HTMLElement.prototype.showPopover = vi.fn();
     HTMLElement.prototype.hidePopover = vi.fn();
   });
@@ -30,18 +29,10 @@ describe("IsWordOfTheDay.vue", () => {
   afterEach(() => {
     vi.clearAllMocks();
     document.querySelectorAll("[popover]").forEach((el) => el.remove());
-    delete (HTMLElement.prototype as any).showPopover;
-    delete (HTMLElement.prototype as any).hidePopover;
   });
 
   it("renders correctly when isWordOfTheDay is true", async () => {
     const wrapper = mount(IsWordOfTheDay, {
-      props: {
-        wordId: 1,
-        word: "TestWord",
-        iconSize: 24,
-        tooltipPlacement: "right",
-      },
       global: {
         components: {
           Crown, // Register Crown component globally
@@ -49,6 +40,12 @@ describe("IsWordOfTheDay.vue", () => {
         directives: {
           tooltip: vTooltip,
         },
+      },
+      props: {
+        iconSize: 24,
+        tooltipPlacement: "right",
+        word: "TestWord",
+        wordId: 1,
       },
     });
 
@@ -63,10 +60,10 @@ describe("IsWordOfTheDay.vue", () => {
   it("does not render when isWordOfTheDay is false", () => {
     const wrapper = mount(IsWordOfTheDay, {
       props: {
-        wordId: 2,
-        word: "TestWord",
         iconSize: 24,
         tooltipPlacement: "right",
+        word: "TestWord",
+        wordId: 2,
       },
     });
 
@@ -76,12 +73,6 @@ describe("IsWordOfTheDay.vue", () => {
 
   it("renders with correct tooltip content and placement", async () => {
     const wrapper = mount(IsWordOfTheDay, {
-      props: {
-        wordId: 1,
-        word: "TestWord",
-        iconSize: 24,
-        tooltipPlacement: "bottom",
-      },
       global: {
         components: {
           Crown, // Register Crown component globally
@@ -89,6 +80,12 @@ describe("IsWordOfTheDay.vue", () => {
         directives: {
           tooltip: vTooltip,
         },
+      },
+      props: {
+        iconSize: 24,
+        tooltipPlacement: "bottom",
+        word: "TestWord",
+        wordId: 1,
       },
     });
 
@@ -102,13 +99,13 @@ describe("IsWordOfTheDay.vue", () => {
 
   it("renders badge variant with crown icon and text when isWordOfTheDay is true", () => {
     const wrapper = mount(IsWordOfTheDay, {
-      props: {
-        wordId: 1,
-        word: "TestWord",
-        variant: "badge",
-      },
       global: {
         components: { Crown },
+      },
+      props: {
+        variant: "badge",
+        word: "TestWord",
+        wordId: 1,
       },
     });
 
@@ -123,9 +120,9 @@ describe("IsWordOfTheDay.vue", () => {
   it("does not render badge variant when isWordOfTheDay is false", () => {
     const wrapper = mount(IsWordOfTheDay, {
       props: {
-        wordId: 2,
-        word: "TestWord",
         variant: "badge",
+        word: "TestWord",
+        wordId: 2,
       },
     });
 

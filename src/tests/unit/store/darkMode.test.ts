@@ -1,10 +1,8 @@
+import { atom } from "nanostores";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@nanostores/persistent", () => ({
-  persistentAtom: vi.fn((key: string, initial: unknown) => {
-    const { atom } = require("nanostores");
-    return atom(initial);
-  }),
+  persistentAtom: vi.fn((key: string, initial: unknown) => atom(initial)),
 }));
 
 describe("darkMode store", () => {
