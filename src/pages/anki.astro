@@ -1,0 +1,48 @@
+---
+import "@styles/components/_button.scss";
+import Layout from "@layouts/Layout.astro";
+
+const page = {
+  title: "Berlinerisch lernen mit Anki - Berliner Schnauze",
+};
+
+// Polar-Checkout-Link, sobald das Produkt existiert. Solange leer, wird kein Kauf-Button gezeigt.
+const FULL_CHECKOUT_URL = "";
+---
+
+<Layout content={page}>
+  <h1>Berlinerisch lernen mit Anki</h1>
+
+  <p>
+    Die Wörter von Berliner Schnauze als Anki-Karten: Berlinerisch auf der Vorderseite, Übersetzung
+    und Beispiele hinten.
+  </p>
+
+  <h2>Lite, kostenlos</h2>
+  <p>
+    Rund 10 % der Wörter, gleichmäßig über das Alphabet. Zum Reinschnuppern und zum Testen, ob dir
+    die Karten liegen.
+  </p>
+  <p>
+    <a class="c-button" href="/downloads/berlinerisch-lite.apkg" download>Lite-Deck herunterladen</a>
+  </p>
+
+  <h2>Full, alle Wörter</h2>
+  <p>
+    Das komplette Deck mit allen Wörtern. Bereits importierte Lite-Karten werden dabei aktualisiert,
+    es entstehen keine Doppelten.
+  </p>
+  {
+    FULL_CHECKOUT_URL ? (
+      <p>
+        <a class="c-button" href={FULL_CHECKOUT_URL} rel="noopener">
+          Full-Deck kaufen
+        </a>
+      </p>
+    ) : (
+      <p>Kommt bald.</p>
+    )
+  }
+
+  <p>Nur für den persönlichen Gebrauch. Weitergabe der Dateien ist nicht erlaubt.</p>
+</Layout>
