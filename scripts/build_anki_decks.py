@@ -165,3 +165,42 @@ def check_decks(full, lite, words):
     lite_letters = {t for n in lite.notes for t in n.tags}
     assert lite_letters == full_letters, "Buchstaben fehlen im Lite-Deck"
     assert len(lite.notes) <= len(full.notes) // 10 + len(full_letters), "Lite ist zu groß"
+
+
+QUERY = """query($after:String){berlinerWords(first:100,after:$after,where:{stati:[PUBLISH],orderby:{field:TITLE,order:ASC}}){edges{node{databaseId slug title wordProperties{berlinerisch article translations{translation} examples{example exampleExplanation} alternativeWords{alternativeWord}}}} pageInfo{endCursor hasNextPage}}}"""
+
+
+def fetch_words():
+    auth = base64.b64encode(
+        ("%s:%s" % (os.environ["WP_AUTH_USER"], os.environ["WP_AUTH_PASS"])).encode()
+    ).decode()
+    nodes, after = [], None
+    while True:
+        req = urllib.request.Request(
+            os.environ["WP_API"],
+            data=json.dumps({"query": QUERY, "variables": {"after": after}}).encode(),
+            headers={"Content-Type": "application/json", "Authorization": "Basic " + auth},
+        )
+        with urllib.request.urlopen(req, timeout=60) as r:
+            data = json.load(r)
+        if data.get("errors"):
+            sys.exit("GraphQL-Fehler: %s" % [e["message"][:80] for e in data["errors"]])
+        page = data["data"]["berlinerWords"]
+        nodes += [e["node"] for e in page["edges"]]
+        if not page["pageInfo"]["hasNextPage"]:
+            return nodes
+        after = page["pageInfo"]["endCursor"]
+
+
+def main():
+    full_url = os.environ.get("ANKI_FULL_URL") or SITE + "/anki"
+    words = [normalize_word(n) for n in fetch_words()]
+    full, lite = build_decks(words, full_url)
+    os.makedirs(OUT_DIR, exist_ok=True)
+    for deck, name in ((full, "full"), (lite, "lite")):
+        genanki.Package(deck).write_to_file("%s/berlinerisch-%s.apkg" % (OUT_DIR, name))
+    print("Wörter gesamt %d, Full %d Karten, Lite %d Karten" % (len(words), len(full.notes), len(lite.notes)))
+
+
+if __name__ == "__main__":
+    main()
