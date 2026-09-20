@@ -1,6 +1,11 @@
 import os
+import sqlite3
 import sys
+import tempfile
 import unittest
+import zipfile
+
+import genanki
 
 sys.path.insert(0, os.path.dirname(__file__))
 import build_anki_decks as b
@@ -77,6 +82,64 @@ class LiteTests(unittest.TestCase):
     def test_selection_is_deterministic(self):
         words = [word(i, "d%02d" % i, ex=i % 3) for i in range(40)]
         self.assertEqual(b.select_lite(words), b.select_lite(list(reversed(words))))
+
+
+def note_count(apkg_path):
+    with tempfile.TemporaryDirectory() as tmp:
+        with zipfile.ZipFile(apkg_path) as z:
+            names = z.namelist()
+            db = "collection.anki21" if "collection.anki21" in names else "collection.anki2"
+            z.extract(db, tmp)
+        con = sqlite3.connect(os.path.join(tmp, db))
+        try:
+            return con.execute("select count(*) from notes").fetchone()[0]
+        finally:
+            con.close()
+
+
+class DeckTests(unittest.TestCase):
+    def setUp(self):
+        self.words = [word(i, "%s%02d" % (c, i), ex=i % 3) for c in "abc" for i in range(20)]
+        # id-Kollisionen vermeiden: pro Buchstabe eigener Bereich
+        for n, w in enumerate(self.words):
+            w["id"] = 1000 + n
+        self.words.append(word(9999, "leer", tr=()))
+        self.full, self.lite = b.build_decks(self.words, "https://example.test/anki")
+
+    def test_full_skips_words_without_translation(self):
+        self.assertEqual(len(self.full.notes), 60)
+
+    def test_lite_is_ten_percent_per_letter(self):
+        self.assertEqual(len(self.lite.notes), 6)  # 3 Buchstaben * ceil(20/10)=2
+
+    def test_guids_are_stable_and_shared(self):
+        full_guids = {n.guid for n in self.full.notes}
+        self.assertEqual(len(full_guids), 60)
+        self.assertTrue({n.guid for n in self.lite.notes} <= full_guids)
+        self.assertEqual(self.full.notes[0].guid, genanki.guid_for(self.words[0]["id"]))
+
+    def test_hint_only_in_lite(self):
+        self.assertTrue(all(n.fields[6] == "" for n in self.full.notes))
+        self.assertTrue(all("https://example.test/anki" in n.fields[6] for n in self.lite.notes))
+
+    def test_fields_escape_html_and_limit_examples(self):
+        w = word(1, "x<y", tr=("a&b",), ex=3)
+        f = b.note_fields(w, "")
+        self.assertIn("a&amp;b", f[2])
+        self.assertEqual(f[4], "")  # keine Alternativen
+        self.assertEqual(f[3].count('class="ex"'), 2)
+        self.assertIn("/wort/x&lt;y", f[5])
+
+    def test_check_decks_detects_missing_letter(self):
+        broken = genanki.Deck(1, "x")
+        with self.assertRaises(AssertionError):
+            b.check_decks(self.full, broken, self.words)
+
+    def test_package_roundtrip(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "lite.apkg")
+            genanki.Package(self.lite).write_to_file(path)
+            self.assertEqual(note_count(path), 6)
 
 
 if __name__ == "__main__":
