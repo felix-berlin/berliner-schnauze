@@ -31,9 +31,10 @@ vi.mock("@stores/wordList.ts", () => ({
   searchLength: {},
 }));
 
-vi.mock("@components/SearchWords.vue", () => ({
-  default: { template: "<div class='mock-search-words' />" },
-}));
+vi.mock("@components/SearchWords.vue", async () => {
+  const { createComponentStub } = await import("../../../helpers/stubs");
+  return createComponentStub("<div class='mock-search-words' />");
+});
 
 vi.mock("@components/word-search/WordFilter.vue", () => ({
   default: { template: "<div class='mock-word-filter' />" },
