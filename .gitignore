@@ -66,3 +66,6 @@ oxlint-results.sarif
 # Playwright
 /blob-report/
 /playwright/.auth/
+
+dist-anki/
+.venv-anki/
