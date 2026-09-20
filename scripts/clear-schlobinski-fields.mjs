@@ -4,7 +4,7 @@
  * (columns <field>_clear = 1). Everything else (title, slug, status, themen, other
  * fields) stays untouched and is verified after each write.
  *
- * Usage: infisical run -- node scripts/clear-schlobinski-fields.mjs [--dry-run] [--ids 1,2] [--limit N]
+ * Usage: infisical run -- node scripts/clear-schlobinski-fields.mjs [--dry-run] [--csv file] [--ids 1,2] [--limit N]
  * Backup (full acf per touched entry, JSONL) goes to ~/backups-schlobinski/, never into the repo.
  */
 import { readFileSync, mkdirSync, appendFileSync, chmodSync } from "fs";
@@ -45,7 +45,7 @@ const parse = (t) => {
   return d.filter((r) => r.length === h.length).map((r) => Object.fromEntries(h.map((k, i) => [k, r[i]])));
 };
 
-const jobs = parse(readFileSync("reports/schlobinski-scan.csv", "utf8"))
+const jobs = parse(readFileSync(arg("--csv") ?? "reports/schlobinski-scan.csv", "utf8"))
   .map((r) => ({ id: +r.id, title: r.title, fields: Object.keys(ACF_OF).filter((f) => r[f + "_clear"] === "1") }))
   .filter((j) => j.fields.length && (!only || only.includes(j.id)))
   .slice(0, limit);
