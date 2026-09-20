@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.50.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.5...v3.50.0) (2026-09-20)
+
+
+### Bug Fixes
+
+* **scripts:** strip HTML and check joined fields in Schlobinski scan ([bfdef9a](https://github.com/felix-berlin/berliner-schnauze/commit/bfdef9ae204f8ce50ed315286305815132637995))
+
+
+### Features
+
+* add meyer word a - d ([cd0fe82](https://github.com/felix-berlin/berliner-schnauze/commit/cd0fe82f39b645cbad9f43138cd4bebdcae20be3))
+* add script to publish draft berlinerisch posts via WP REST API ([33f3aba](https://github.com/felix-berlin/berliner-schnauze/commit/33f3aba0b040c75c587be3e597f86cb37ed37525))
+* add scripts for appending Meyer supplements and fetching words for audit ([f64f960](https://github.com/felix-berlin/berliner-schnauze/commit/f64f960cdb839193d2d3e521ddcd6b640f04499e))
+
 ## [3.49.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.4...v3.49.5) (2026-09-20)
 
 
