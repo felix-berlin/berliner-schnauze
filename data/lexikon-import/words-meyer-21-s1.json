@@ -1,0 +1,1346 @@
+[
+  {
+    "word": "Schafgraben",
+    "translations": [
+      "Spitzname für den Landwehrkanal"
+    ],
+    "infoText": "Es gab an ihm zwei öffentliche Bäder, das Studentenbad und das Katzenbad.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schafkopp",
+    "translations": [
+      "Schimpfwort",
+      "Kartenspiel"
+    ],
+    "examples": [
+      {
+        "example": "Denkste denn, du kannst Schafkopp mit mir spielen?",
+        "explanation": "du darfst mir alles bieten?"
+      }
+    ],
+    "alternativeWords": [
+      "Schafskopp"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schafleder, er reißt aus wie Schafleder",
+    "translations": [
+      "er flieht"
+    ],
+    "infoText": "Weil Schafleder leicht reißt.",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schafsdemel",
+    "translations": [
+      "wie Schafkopp"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schafsinnig",
+    "translations": [
+      "scharfsinnig (Verballhornung)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schafsnese",
+    "translations": [
+      "Schimpfwort"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schalet, wer schmeißt da mit Schalet",
+    "translations": [
+      "Ausruf, wenn man ausgelacht wird"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schalen jehn, in de",
+    "translations": [
+      "Müllkasten und Ähnliches nach Abfällen durchstöbern"
+    ],
+    "alternativeWords": [
+      "Schaljule",
+      "Schalehengst"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schalou",
+    "translations": [
+      "eifersüchtig"
+    ],
+    "infoText": "Vom französischen „jaloux“.",
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schamberjärnich",
+    "translations": [
+      "möbliertes Zimmer"
+    ],
+    "infoText": "Verballhornung von „chambre garnie“.",
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schampeln",
+    "translations": [
+      "ohne Erlaubnis die Schule versäumen",
+      "gemächlich gehen, schlendern"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schattieren, sich",
+    "translations": [
+      "sich genieren"
+    ],
+    "alternativeWords": [
+      "scharnieren"
+    ],
+    "examples": [
+      {
+        "example": "Det is mir scharnierlich.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schapen",
+    "translations": [
+      "schaben"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scharnhorst, hör mal die scheene Musike",
+    "translations": [
+      "scherzhafte Zuschreibung an ein Denkmal"
+    ],
+    "infoText": "Vom Scharnhorst-Denkmal am Kastanienwäldchen, wo die Wachtparade spielt; er halte dabei die rechte Hand ans Ohr.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scharteke",
+    "translations": [
+      "altes Gerät, altes Buch u. Ä."
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schassee",
+    "translations": [
+      "Chaussee"
+    ],
+    "alternativeWords": [
+      "Schossee"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schasseefloh",
+    "translations": [
+      "Radfahrer"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schasseetreter",
+    "translations": [
+      "große Stiefel"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schassen",
+    "translations": [
+      "von der Schule wegjagen"
+    ],
+    "infoText": "Vom französischen „chasser“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schauklappe",
+    "translations": [
+      "Scheuklappe bei Pferden",
+      "Klappe über einem schlimmen Auge"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schauerrohr",
+    "translations": [
+      "Abfälle vom Stubenrohr, zum Scheuern benutzt"
+    ],
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scheenchen",
+    "translations": [
+      "gut, schön (nur als Antwort)"
+    ],
+    "examples": [
+      {
+        "example": "Scheeneken!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scheibe, Ausdruck der Verneinung",
+    "translations": [
+      "Ausdruck der Verneinung und Abweisung"
+    ],
+    "examples": [
+      {
+        "example": "Scheibe, mein Herzken!",
+        "explanation": ""
+      },
+      {
+        "example": "Scheibe! sagt Cicero!",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Die Schießscheibe beim Militär hat einen Kreis von zwölf Ringen; für Schüsse, die wenigstens noch das Weiße treffen, ist der Ruf „Scheibe!“, doch zählen sie nicht.",
+    "alternativeWords": [
+      "Scheibenschießen"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scheintot, lieber scheintot in't Massenjrab",
+    "translations": [
+      "Ausdruck starker Abneigung"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schelbern, vom Eise",
+    "translations": [
+      "eine ganz dünne, noch nicht zusammenhängende Decke bilden"
+    ],
+    "examples": [
+      {
+        "example": "Er will schon Schlittschuh loofen, wenn't Eis ebend erst schelbert.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schemmelbeene",
+    "translations": [
+      "siehe Frikassee"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scheniert, er hat 'n schenierten Blick",
+    "translations": [
+      "er schielt ein wenig"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scherbel",
+    "translations": [
+      "Scherbe"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scheren, sich",
+    "translations": [
+      "sich davonmachen"
+    ],
+    "examples": [
+      {
+        "example": "Scher dir, dette rauskommen dust!",
+        "explanation": "scher' dich hinaus"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scherenschleifer, Straßenruf",
+    "translations": [
+      "traditioneller Straßenruf der Scherenschleifer"
+    ],
+    "examples": [
+      {
+        "example": "Haben Se nischt zu schleifen — Rasiermesser, Tischmesser, Hackemesser, Wiegemesser, Scheren!",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Später auch scherzhaft für Radfahrer verwendet.",
+    "themen": [
+      "stadtleben"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schersant",
+    "translations": [
+      "Sergeant"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schese",
+    "translations": [
+      "Kutsche"
+    ],
+    "alternativeWords": [
+      "schesen"
+    ],
+    "infoText": "Schesen auch: schnell laufen, besonders die Treppe hinunter.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scheuerlappen, scherzhaft",
+    "translations": [
+      "Schleier (scherzhaft)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Scheundrescher, er frißt wie'n Scheundrescher",
+    "translations": [
+      "idiomatischer Vergleich fürs Vielessen"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schicht machen",
+    "translations": [
+      "eine Pause machen, aufhören"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schiddebold",
+    "translations": [
+      "die große Libelle"
+    ],
+    "infoText": "Schulwitz: Der Lehrer fragt entrüstet „Wer brummt da?“ Die Schüler: „Schiddebold!“ Lehrer: „Schiddebold — einen Tadel!“ Niederdeutsch „Spillebold“ von Spille (Spindel), weil sie wie eine solche summt.",
+    "alternativeWords": [
+      "Schillebold"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schiebung",
+    "translations": [
+      "Mache, Intrige"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schiedunter, scherzhaft für Unterschied",
+    "translations": [
+      "Unterschied (scherzhafte Verdrehung)"
+    ],
+    "examples": [
+      {
+        "example": "'t is allens mit 'n Schiedunter!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schief jeladen",
+    "translations": [
+      "betrunken"
+    ],
+    "examples": [
+      {
+        "example": "Wir ha'm uns schief jelacht.",
+        "explanation": ""
+      },
+      {
+        "example": "Wenn de det denkst, denn biste schief jewickelt.",
+        "explanation": "vom Wickeln der Kinder"
+      },
+      {
+        "example": "Schief is englisch! Englisch is Mode!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schielen, er schielt, det ihn de Trenen kreuzweis über'n Nucken loofen",
+    "translations": [
+      "übertriebenes Schielen"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schießen, so scharf schießen de Preußen nich",
+    "translations": [
+      "so gefährlich ist es nicht"
+    ],
+    "examples": [
+      {
+        "example": "Kannst schießen!",
+        "explanation": "Schulausdruck: den Hab ick schießen lassen"
+      },
+      {
+        "example": "Det is ja zum Schießen!",
+        "explanation": "zum Totlachen"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schießhund, er paßt uf wie 'n Schießhund",
+    "translations": [
+      "Jagdhund"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schießkette",
+    "translations": [
+      "Gewehr (nach Muskete)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schiffahrt, Jott sejne de Schiffahrt",
+    "translations": [
+      "wenn einer einen großen Zug aus der Weißen tat"
+    ],
+    "infoText": "Früher waren in Neukölln am Wasser Weißbierlokale, über denen unter einem gemalten Schiff „Gott segne die Schiffahrt“ stand — sie hießen „Schiffer-Verkehr“.",
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schiffelklavier",
+    "translations": [
+      "Ziehharmonika"
+    ],
+    "infoText": "Bei Schiffern findet sich dieses Instrument oft.",
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schiffernachricht",
+    "translations": [
+      "Gerücht"
+    ],
+    "examples": [
+      {
+        "example": "Et is 'ne unverbürgte Schiffernachricht.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schikane, mit allen Schikanen",
+    "translations": [
+      "mit allem Denkbaren, z. B. ein Beefsteak"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schildplatt",
+    "translations": [
+      "Schildpatt"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schillerlocke",
+    "translations": [
+      "ein süßes Gebäck"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schimmel, er hat mir zujered wie'n kranken Schimmel",
+    "translations": [
+      "idiomatischer Vergleich"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schimpfen, sich",
+    "translations": [
+      "sich einen Titel unrechtmäßig beilegen"
+    ],
+    "examples": [
+      {
+        "example": "Er schimpft sich Dokter.",
+        "explanation": ""
+      },
+      {
+        "example": "Er läßt sich Dokter schimpfen.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schinden",
+    "translations": [
+      "quälen",
+      "genießen ohne zu bezahlen"
+    ],
+    "examples": [
+      {
+        "example": "Ick habe de Droschke jeschunden.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schinder, der heeßt ooch 'n Schinder de Keule abkoofen",
+    "translations": [
+      "über den Kopf bezahlen"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schinderkule",
+    "translations": [
+      "Abdeckerei"
+    ],
+    "infoText": "Auch scherzhafte Umstellung für Kinderschule (alter Schüttelreim).",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schindluder spielen",
+    "translations": [
+      "jemanden grob verhöhnen"
+    ],
+    "alternativeWords": [
+      "Schindluder treiben"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schinkenärmel",
+    "translations": [
+      "Puffärmel des Damenkleides"
+    ],
+    "infoText": "Waren vor wenigen Jahren Mode.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schkandal",
+    "translations": [
+      "Ärgernis",
+      "Lärm"
+    ],
+    "alternativeWords": [
+      "Schkandal-Anzeiger"
+    ],
+    "infoText": "Schkandal-Anzeiger scherzhaft für den Lokalanzeiger.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlabberig",
+    "translations": [
+      "wässrig (getauft), von der Milch"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlachtenbummler",
+    "translations": [
+      "Begleiter des Hauptquartiers ohne militärische Stellung, besonders Zeitungsberichterstatter"
+    ],
+    "infoText": "So hießen sie während der letzten Feldzüge.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlängeln, sich",
+    "translations": [
+      "gehen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlafbursche",
+    "translations": [
+      "jemand, der eine Schlafstelle bei anderen Leuten gemietet hat"
+    ],
+    "alternativeWords": [
+      "Schlafvater",
+      "Schlafmutter",
+      "Schlafleute"
+    ],
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlafrockfabrik",
+    "translations": [
+      "scherzhaft für Sargmagazin"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlag, 'n Schlag mehr wie sonst",
+    "translations": [
+      "scherzhafte Preisformel"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlagen, ick schlage nach",
+    "translations": [
+      "Antwort auf einen Vorschlag"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlampampen",
+    "translations": [
+      "schwelgen"
+    ],
+    "infoText": "Daher „Schlampanjer“ für Champagner.",
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlampig",
+    "translations": [
+      "liederlich, von Frauen in Beziehung auf die Kleidung"
+    ],
+    "alternativeWords": [
+      "schlampßig"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlau, ironisch für schlecht",
+    "translations": [
+      "ironisch für schlecht"
+    ],
+    "examples": [
+      {
+        "example": "Der is 'n schlauer Proppen!",
+        "explanation": "beim Aufziehen einer Flasche"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlauberger",
+    "translations": [
+      "Schlaukopf"
+    ],
+    "alternativeWords": [
+      "Schlaumeier"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlawake",
+    "translations": [
+      "Slowake"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schleech jemessen",
+    "translations": [
+      "nicht gehäuft (schlecht gemessen)"
+    ],
+    "alternativeWords": [
+      "schleejes Maß"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schleesch, kiek nich so",
+    "translations": [
+      "sieh mich nicht so misstrauisch an"
+    ],
+    "infoText": "Eigentlich „schlesisch“.",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schleudern, den Schlitten",
+    "translations": [
+      "den Schlitten beim Umbiegen heftig herumwerfen"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schliefig",
+    "translations": [
+      "wässrig (nicht mehlig), von Kartoffeln"
+    ],
+    "alternativeWords": [
+      "schliepig",
+      "seefig"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlieker",
+    "translations": [
+      "Schleicher"
+    ],
+    "examples": [
+      {
+        "example": "Prediger H. war 'n richtijer alter Schlieker.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schließlicherweise",
+    "translations": [
+      "schließlich"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlimm, wund",
+    "translations": [
+      "wund, empfindlich"
+    ],
+    "examples": [
+      {
+        "example": "'n schlimmer Finger.",
+        "explanation": ""
+      },
+      {
+        "example": "Da is er schlimm druf.",
+        "explanation": "danach ist er begierig"
+      },
+      {
+        "example": "Schlimm un übel kann een' wern!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlossertele, er heult wie 'ne Schlossertele",
+    "translations": [
+      "idiomatischer Vergleich fürs Heulen"
+    ],
+    "alternativeWords": [
+      "Schloßhund"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlucken, det hat der wieder jeschluckt",
+    "translations": [
+      "wenn einem viel Geld zugefallen ist"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schluckuf",
+    "translations": [
+      "Schlucken (Schluckauf)"
+    ],
+    "alternativeWords": [
+      "Schlucker"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlumpßig",
+    "translations": [
+      "wie schlampig"
+    ],
+    "alternativeWords": [
+      "schlumpig",
+      "Schlumpe",
+      "Schlumpliese"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlum",
+    "translations": [
+      "Lump (etwas gemildert)"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schlurren",
+    "translations": [
+      "mit den Füßen schleifen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmachtlappen",
+    "translations": [
+      "wie Jammerlappen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmachtlocken",
+    "translations": [
+      "Söckchen an den Schläfen, bei Damen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmachtriemen",
+    "translations": [
+      "Lederriemen als Gürtel"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmackeduzken",
+    "translations": [
+      "wie Bumskeulen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmalz-Amor",
+    "translations": [
+      "dicker, bartloser, eleganter Mann"
+    ],
+    "alternativeWords": [
+      "Schmalztolle"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmalzkopp",
+    "translations": [
+      "Mensch, der eine Perücke trägt"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmatz",
+    "translations": [
+      "Kuss"
+    ],
+    "alternativeWords": [
+      "schmatzen",
+      "schmacksen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmeer",
+    "translations": [
+      "Schmiere"
+    ],
+    "infoText": "„Schmeeren“ auch: Trinkgeld geben, immer angewendet vom Postillon; danach das Sprichwort: wer gut schmeert, der gut fährt.",
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmehlich",
+    "translations": [
+      "groß, lang; sehr (bei Verben und Adjektiven)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmeizig",
+    "translations": [
+      "geschmeidig"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmerz, hoch der Schmerz",
+    "translations": [
+      "scherzhafter Klageruf"
+    ],
+    "examples": [
+      {
+        "example": "Schmerz, laß nach!",
+        "explanation": "beim Rekeln"
+      },
+      {
+        "example": "Ha'm Se sonst noch Schmerzen?",
+        "explanation": "wollen Sie noch etwas? (aus Don Juan)"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmiere",
+    "translations": [
+      "Keile",
+      "Masse",
+      "Wache (Gaunersprache)"
+    ],
+    "examples": [
+      {
+        "example": "De janze Schmiere.",
+        "explanation": ""
+      },
+      {
+        "example": "Er steht Schmiere.",
+        "explanation": "er hält Wache, während die andern etwas Verbotenes ausführen"
+      }
+    ],
+    "infoText": "Vom hebräischen „schemura“ (Wache).",
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmierfinke",
+    "translations": [
+      "unreinlicher Mensch"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmisette",
+    "translations": [
+      "Chemisette"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmisse",
+    "translations": [
+      "Schläge"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmöker",
+    "translations": [
+      "altes Buch, alter Ritter- oder Räuberroman"
+    ],
+    "alternativeWords": [
+      "schmökern"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmok",
+    "translations": [
+      "Klatsche"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmolen",
+    "translations": [
+      "schmoren"
+    ],
+    "alternativeWords": [
+      "Schmoltopp",
+      "Schmolkohl",
+      "Schmoljurke"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmujroschen",
+    "translations": [
+      "Schmu machen (beim Einkaufen)"
+    ],
+    "infoText": "Schmu (jüdisch): Betrug im Kleinen.",
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmuddlig",
+    "translations": [
+      "leicht beschmutzt"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmulappen",
+    "translations": [
+      "Reste, die die Schneider vom gelieferten Tuch behalten"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmusen",
+    "translations": [
+      "viel reden"
+    ],
+    "infoText": "Jüdisch. Vgl. „Klugschmus“ für Besserwisser.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmustern, in Dustern is jut schmustern",
+    "translations": [
+      "heimlich lächeln"
+    ],
+    "infoText": "Wird auch wie munkeln verstanden.",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmuhtruppe",
+    "translations": [
+      "scherzhaft für die Straßenreiniger"
+    ],
+    "infoText": "Aus „Schuhtruppe“ verballhornt.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Schmuzettel",
+    "translations": [
+      "Zettel zum Absehen (Schulausdruck)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

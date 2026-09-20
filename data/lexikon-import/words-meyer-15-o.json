@@ -1,0 +1,534 @@
+[
+  {
+    "word": "Ob se jeld hat",
+    "translations": [
+      "verhüllende Formel für das Rülpsen"
+    ],
+    "examples": [
+      {
+        "example": "Ob se jeld hat? — Achzigdausend Daler!",
+        "explanation": ""
+      }
+    ],
+    "infoText": "„Ob“ auch abgekürzt für „wie kannst du zweifeln, ob“: „Dumm, meenste, war se? — Ob se dumm is!“",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Obacht jeben",
+    "translations": [
+      "Acht geben"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "O-Beene",
+    "translations": [
+      "wie ein O gestellte Beine"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Oben uf sein",
+    "translations": [
+      "vergnügt sein"
+    ],
+    "examples": [
+      {
+        "example": "Oben hui, unten fui!",
+        "explanation": "aufgedonnert bei schmutzigen oder zerrissenen Unterkleidern"
+      }
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Oberkopp",
+    "translations": [
+      "Obertasse (Wortspiel)"
+    ],
+    "themen": [
+      "essen-trinken",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Obermime",
+    "translations": [
+      "der Leiter (von's Janze)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Obst, danke vor Obst",
+    "translations": [
+      "ironische Dankesformel"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Obsternätsch",
+    "translations": [
+      "obstinat (Wortspiel)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Och, mach doch",
+    "translations": [
+      "ach"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ochse! sagt der, der den andern angelaufen hat",
+    "translations": [
+      "Entschuldigungs-Ersatzformel"
+    ],
+    "examples": [
+      {
+        "example": "Man kann von'n Ochsen nich mehr verlangen, wien Stück Rindfleesch.",
+        "explanation": ""
+      },
+      {
+        "example": "Bitte — Herr Ochse!",
+        "explanation": "Antwort, wenn man Ochse genannt wird"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ochsen, emsig lernen",
+    "translations": [
+      "emsig lernen (Schulausdruck)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ochsenkiekel",
+    "translations": [
+      "Schimpfwort"
+    ],
+    "alternativeWords": [
+      "Rindskiekel"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ochsenkopp",
+    "translations": [
+      "Spitzname für das frühere Arbeitshaus"
+    ],
+    "infoText": "Das alte Arbeitshaus (Belle-Alliance-Platz Nr. 11) gehörte dem Schlachtergewerk und hieß nach seinem Schild „der Ochsenkopf“; der Name übertrug sich auf das spätere (1756 erbaute) Arbeitshaus auf dem Alexanderplatz (jetzt Polizeipräsidium). Auch das benachbarte Schuldgefängnis wurde so genannt, bis es in die Köpenicker Straße kam.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ochsig",
+    "translations": [
+      "sehr"
+    ],
+    "examples": [
+      {
+        "example": "Et rejent ochsig.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Oder ooch nich",
+    "translations": [
+      "formelhafte Redewendung"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Oderkahne",
+    "translations": [
+      "große Schuhe, auch große Füße"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ode, öden",
+    "translations": [
+      "langweilig, langweilen (besonders durch Reden, Studentensprache)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Öfter, machen Se det öfters",
+    "translations": [
+      "ironische Bemerkung bei einem Missgeschick"
+    ],
+    "examples": [
+      {
+        "example": "Kriejen Se det öfter?",
+        "explanation": "spöttisch nach einem schlechten Witz"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "allowDuplicate": true,
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ölf",
+    "translations": [
+      "elf"
+    ],
+    "alternativeWords": [
+      "ölwe"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Öl, det jeht in wie",
+    "translations": [
+      "es tut wohl"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Öljotze",
+    "translations": [
+      "steifer, langweiliger Mensch"
+    ],
+    "examples": [
+      {
+        "example": "Er sitzt (nie steht, liegt) da wie'n Öljotze.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ölkopp, er hat'n",
+    "translations": [
+      "er ist betrunken"
+    ],
+    "allowDuplicate": true,
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ölkousine",
+    "translations": [
+      "junge Malerin (Berufsjargon)"
+    ],
+    "infoText": "Eine ältere Malerin heißt scherzhaft „Terpentintante“.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Offen machen",
+    "translations": [
+      "öffnen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Offenherzig, zerrissen",
+    "translations": [
+      "zerrissen, von Stiefeln"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Offizierviertel",
+    "translations": [
+      "Spitzname für kleine, karg beladene Brennholzwagen"
+    ],
+    "infoText": "Kleine Wagen aus den Dörfern brachten wenig, klein gehauenes Kiefernholz mit zwei Klobenbündeln als Zugabe nach Berlin — genannt „Offizierviertel“, weil ein Leutnant nicht mehr Holz anschaffen konnte.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Oha",
+    "translations": [
+      "ich merke was"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ohr, schreib dir det hinter de Ohren",
+    "translations": [
+      "merk dir das"
+    ],
+    "examples": [
+      {
+        "example": "Knöpp de Ohren uf!",
+        "explanation": "höre genau zu"
+      },
+      {
+        "example": "Der kann sich alleene wat int Ohr sagen!",
+        "explanation": "von einem Menschen mit großem Munde"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Olja",
+    "translations": [
+      "das glaube ich nicht (Reimformel)"
+    ],
+    "examples": [
+      {
+        "example": "Ja woll ja, sprach Olja.",
+        "explanation": "das glaube ich nicht, oder: das passt mir nicht"
+      }
+    ],
+    "infoText": "Ähnliche Reime: „Arthur mit de Haartour“, „Is denn kein Mann da für meine Wanda?“",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Olpern",
+    "translations": [
+      "beim Laufen in Holzpantinen klappern"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Omdebus",
+    "translations": [
+      "Omnibus"
+    ],
+    "alternativeWords": [
+      "Umnebus",
+      "Onepus"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Omnibus, schwarzer",
+    "translations": [
+      "Leichenwagen"
+    ],
+    "alternativeWords": [
+      "Omnibi"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ooch, ju'n Dag ooch",
+    "translations": [
+      "auch (idiomatischer Cluster)"
+    ],
+    "examples": [
+      {
+        "example": "Ooch schlecht (sagt der Hecht, wenn er sich de Beene brecht)!",
+        "explanation": "Ausdruck der Teilnahme"
+      },
+      {
+        "example": "Ick bin ooch nich so.",
+        "explanation": "ich vergelte es gern"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ooge, er kiekt mit's rechte Ooge in de linke Westentasche",
+    "translations": [
+      "er schielt"
+    ],
+    "examples": [
+      {
+        "example": "Det paßt wie de Faust uf't Ooge.",
+        "explanation": "ironisch: es passt gar nicht"
+      },
+      {
+        "example": "Er macht Oogen wie'n jestochnet Kalb.",
+        "explanation": ""
+      },
+      {
+        "example": "Bei dir sind ooch de Oogen jrößer wie der Magen!",
+        "explanation": "von einem, der sich mehr genommen hat, als er essen kann"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Oogenblick, er muß jeden Oogenblick kommen",
+    "translations": [
+      "gleich"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Opodeldok",
+    "translations": [
+      "scherzhafte Volksetymologie für Medikamentennamen"
+    ],
+    "infoText": "„Opodeldok is, wenn man Ruckenschmerzen hat.“ Weitere Beispiele der Volksetymologie: Linimentum volatile → „fliegendes Element“; Kurella-Brustpulver → „Korallenbrustpulver“ oder „Gorillabrustpulver“; unguentum neapolitanum → „umjewendter Napoljum“; doppelkohlensaures Natron → „doppelsohlenkauendes Nashorn“.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Optikieker",
+    "translations": [
+      "Optiker (Wortspiel)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ordnung, ornung rejiert de Welt",
+    "translations": [
+      "Ordnung regiert die Welt (und der Knüppel die Leute)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Orntlich, det is ja orntlich vernümftig",
+    "translations": [
+      "wirklich",
+      "gehörig"
+    ],
+    "examples": [
+      {
+        "example": "Den ha'm se orntlich zujedeckt.",
+        "explanation": "gehörig"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ostern, Ostern un Fingsten fällt uf eenen Dag",
+    "translations": [
+      "Drohformel"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Othello",
+    "translations": [
+      "Schokoladengebäck mit Schlagsahne"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

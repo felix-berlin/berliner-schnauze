@@ -1,0 +1,1262 @@
+[
+  {
+    "word": "Wasser fahren",
+    "translations": [
+      "scherzhaft für spazieren am Wasser"
+    ],
+    "examples": [
+      {
+        "example": "Wir ha'm 'n janzen Nachmittag Wasser jefahren.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wasserleiche",
+    "translations": [
+      "unförmlich dicker Mensch"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wat, wat haste wat kannste",
+    "translations": [
+      "in aller Eile"
+    ],
+    "examples": [
+      {
+        "example": "Ach wat!",
+        "explanation": "laß mich in Ruhe"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Watte, haste wol Watte in de Ohren",
+    "translations": [
+      "kannst du nicht hören?"
+    ],
+    "examples": [
+      {
+        "example": "Watte is keene Baumwolle!",
+        "explanation": "Antwort auf die Frage „Wat?“"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weenen, weenen Se man nich jleich",
+    "translations": [
+      "weinen"
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weffe",
+    "translations": [
+      "Wunde, Schmarre"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weg, det hab ick weg",
+    "translations": [
+      "begriffen"
+    ],
+    "examples": [
+      {
+        "example": "Mach dette weg kommst!",
+        "explanation": ""
+      },
+      {
+        "example": "Er is janz weg.",
+        "explanation": "hingerissen"
+      }
+    ],
+    "alternativeWords": [
+      "det hat noch jute Weje"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wegbleiben, vom Schreikrampf",
+    "translations": [
+      "bei kleinen Kindern"
+    ],
+    "examples": [
+      {
+        "example": "Herr Jott, jetz bleibt er weg! Klopp'n man uf'n Puckel!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wegjraulen",
+    "translations": [
+      "wie rausjraulen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weihnachten, die Geschenke",
+    "translations": [
+      "die Geschenke"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weihnachtsrute",
+    "translations": [
+      "Rute mit bunten Fähnchen"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wein, Weinbergsweg",
+    "translations": [
+      "historischer Hinweis auf Berliner Weinbau"
+    ],
+    "infoText": "Namen wie Weinstraße, Weinmeisterstraße, Weinbergsweg belegen, dass in Berlin einst Wein gebaut wurde; der Landrücken hieß der „Wollanksche Weinberg“. Hier lag das „Vorstädtische Theater“ der Mutter Gräbert.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weinessig, mit Weinessig jefuttert",
+    "translations": [
+      "früher übliche Bezeichnung für schlechtes Kleiderfutter"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weiß, du hast dir wat weiß machen lassen",
+    "translations": [
+      "scherzhaft für hereingelegt worden sein"
+    ],
+    "infoText": "'n Weißlackierter: Kutscher einer Taxameterdroschke. Weiße: Flasche Weißbier, mit Arten wie Einfache Weiße, Doppelweiße, Nullweiße, Champagnerweiße, Budikerweiße. 'ne Weiße mit Musik = mit Himbeere.",
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weißbier, hinten rum schenkt man Weißbier",
+    "translations": [
+      "Sie wenden sich an den Falschen"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weißen für wissen",
+    "translations": [
+      "wissen (Berliner Lautung)"
+    ],
+    "examples": [
+      {
+        "example": "Man kann nich alles weißen.",
+        "explanation": ""
+      },
+      {
+        "example": "Wer kann's weißen!",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weit, det jeht entschieden wieder nich weit jenug",
+    "translations": [
+      "es geht zu weit"
+    ],
+    "examples": [
+      {
+        "example": "Wenn't weiter nischt is!",
+        "explanation": "wenn nicht mehr verlangt wird"
+      },
+      {
+        "example": "Na un denn weiter?",
+        "explanation": "Ablehnung einer salzlosen Anekdote"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Welt, et jeht doch nirjends doller zu, wie uf de Welt",
+    "translations": [
+      "scherzhafte Redensart"
+    ],
+    "examples": [
+      {
+        "example": "Denn wär de Welt unterjejangen!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wenig, nich so wenig Kaffee",
+    "translations": [
+      "scherzhafte Redensart"
+    ],
+    "examples": [
+      {
+        "example": "Dieses wenijer!",
+        "explanation": "das nicht"
+      },
+      {
+        "example": "Wenijer jeben wir nich!",
+        "explanation": "z. B. Trinkgeld"
+      }
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wer? Peter Behr!",
+    "translations": [
+      "scherzhafte Antwort auf die Frage „Wer?“"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Werden, wat nich is, kann noch werden",
+    "translations": [
+      "idiomatisches Cluster"
+    ],
+    "examples": [
+      {
+        "example": "Wat soll'n det werden, wenn't fertig is?",
+        "explanation": "zu einem, der Anerkennung erwartet"
+      },
+      {
+        "example": "Sie wern doch nich!",
+        "explanation": "das tun"
+      },
+      {
+        "example": "Na wird's bald?",
+        "explanation": "wird es endlich geschehen?"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Werdersche",
+    "translations": [
+      "die Obstfrauen von Werder"
+    ],
+    "infoText": "Feilhaltend in den Markthallen, früher an der Friedrichsbrücke.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Werk, det is 'n janz ander Werk",
+    "translations": [
+      "das sieht schon besser aus"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wert, den ha'm se jenommen, wat er wert is",
+    "translations": [
+      "übervorteilt"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wertheim",
+    "translations": [
+      "Rätselreim über das Kaufhaus Wertheim"
+    ],
+    "examples": [
+      {
+        "example": "Warum wollen die Kinder nicht zu Wertheim gehn? — Weil er die kleinen Leute tot macht.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wesel",
+    "translations": [
+      "Echo-Scherzruf"
+    ],
+    "examples": [
+      {
+        "example": "Wie heißt der Bürjermeister von Wesel? — Esel!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wesenberg, scherzhaft für wesentlich",
+    "translations": [
+      "wesentlich (Wortspiel)"
+    ],
+    "infoText": "Wesenberg ist eine bekannte Firma (Zichorien) in der alten Schönhauser Straße.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Westfelinger",
+    "translations": [
+      "Westfale"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Weste, 'ne derbe Weste",
+    "translations": [
+      "Busen"
+    ],
+    "alternativeWords": [
+      "stramme Weste"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Westindien für Westend",
+    "translations": [
+      "scherzhafte Verballhornung für Westend"
+    ],
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wetten, so ha'm wir nich jewett",
+    "translations": [
+      "das ist gegen die Abrede"
+    ],
+    "infoText": "Anekdote über einen Droschkenkutscher, der eine tote Person nach Hause fährt und die Witwe fragt: „Sind Se villeicht de Witwe Schulzen?“ — „Mein Name is Schulze, aber Witwe bin ich nich.“ — „Wolln wa wetten?“",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wetter, um jut Wetter bitten",
+    "translations": [
+      "um Pardon, Aufschub bitten"
+    ],
+    "examples": [
+      {
+        "example": "Vor so'n Wetter lieber jakeens!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wichstopp",
+    "translations": [
+      "Zylinderhut"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wicken, er is in de Wicken jejangen",
+    "translations": [
+      "verloren gegangen"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Widder, wat wist'n Widders",
+    "translations": [
+      "was willst du wieder"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wieder, jetz muß ick mal'n Oogenblick zu Hause jehn",
+    "translations": [
+      "kurze Abwesenheitsentschuldigung"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wiejen",
+    "translations": [
+      "wägen"
+    ],
+    "alternativeWords": [
+      "Wiejeschale"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wiewe, det Meechen is mir zu wiewe",
+    "translations": [
+      "die kann man nich trauen"
+    ],
+    "infoText": "Vom französischen „vif“.",
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wille, mit Willen",
+    "translations": [
+      "mit Absicht"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Willem, der Leichenwagen kommt",
+    "translations": [
+      "Neckruf der Straßenjungen"
+    ],
+    "infoText": "In den 1850ern war ein alter Gitarrespieler in Alt-Berlin die Freude der Straßenjungen, die ihn mit diesem Ruf verfolgten, weil bekannt war, dass er vor Leichenwagen eine kindische Furcht hatte. Auch: „Er macht 'n dicken Willem“ (wie Großkotz).",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Willens, ick bin in Willens",
+    "translations": [
+      "ich will"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wilmb für Wilhelm",
+    "translations": [
+      "in den Weißbierstuben"
+    ],
+    "examples": [
+      {
+        "example": "Wilmb, Weiße!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wimmeln, von der Schule wegjagen",
+    "translations": [
+      "von der Schule wegjagen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wimmerholz",
+    "translations": [
+      "Gitarre"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wimper, ick laß mir nich an de Wimpern klimpern",
+    "translations": [
+      "ich lasse mir nichts vorreden"
+    ],
+    "alternativeWords": [
+      "ick laß mir nich an de Lippen tippen",
+      "an de Wolken polken"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wind, er macht Wind",
+    "translations": [
+      "er schneidet auf"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Windbeutel",
+    "translations": [
+      "Gebäck mit Schlagsahne",
+      "leichtfertiger Mensch"
+    ],
+    "themen": [
+      "essen-trinken",
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Winde, mensch, hast du 'ne Winde",
+    "translations": [
+      "hast du 'ne Ahnung"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Windig, da nich hin, da is et windig",
+    "translations": [
+      "unsicher, nicht geheuer"
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Windmühlen von Papier",
+    "translations": [
+      "Kinderspielzeug, Stück drei Nadeln"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Winspel",
+    "translations": [
+      "Wispel (Hohlmaß)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wippkens",
+    "translations": [
+      "Finten, Ausflüchte"
+    ],
+    "examples": [
+      {
+        "example": "Mach mir keene Wippkens vor!",
+        "explanation": "Zusatz: „Denn et kommt det Gardekorps.“"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wippe, Schaukel",
+    "translations": [
+      "Schaukel (Brett oder Balken mit Stützpunkt in der Mitte)"
+    ],
+    "alternativeWords": [
+      "wippen"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wirsekohl",
+    "translations": [
+      "Wirsingkohl"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wischer",
+    "translations": [
+      "Verweis"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wissen, na weeßte",
+    "translations": [
+      "idiomatisches Cluster"
+    ],
+    "examples": [
+      {
+        "example": "Weeßte, wat de bist? 'n Ochse biste!",
+        "explanation": ""
+      },
+      {
+        "example": "Weeßte verstehste!",
+        "explanation": "Drohung, bei der die Faust unter die Nase gehalten wird"
+      },
+      {
+        "example": "Der weeß, wo't lang jeht.",
+        "explanation": "er ist gewitzt"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Witwee",
+    "translations": [
+      "Witwe"
+    ],
+    "alternativeWords": [
+      "Witweenball"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Witz, mach keene Witze, komm man mit",
+    "translations": [
+      "scherzhafte Aufforderung"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Woche, die Woche fängt jut an",
+    "translations": [
+      "ironische Anekdote über einen Hingerichteten"
+    ],
+    "infoText": "Als er zum Richtplatz gefahren wurde und das Volk dem Wagen voraus eilte, rief er: „Kinder, rennt doch nich so! Ehr ick nich da bin, jeht's ja doch nich los!“ Als er die Treppe zum Schafott betrat: „Det Dings wackelt ja lebensjefährlich.“",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wohl, leben Se sowohl als auch",
+    "translations": [
+      "Abschiedsformel"
+    ],
+    "examples": [
+      {
+        "example": "Ihn is wohl, un uns is wohler!",
+        "explanation": "wenn man einen unangenehmen Menschen losgeworden ist"
+      }
+    ],
+    "infoText": "Scherzhafte Steigerung: wohl, Wohlert, Borsig (zwei bekannte Maschinenfabriken).",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wohlhabend, du siehst ja heute so wohlhabend aus",
+    "translations": [
+      "so wohl"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wohlgefallen, sich in Wohlgefallen uflösen",
+    "translations": [
+      "sich auflösen"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wohlriechend, schlafen Se wohlriechend",
+    "translations": [
+      "scherzhafte Gute-Nacht-Formel"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wohnen, bleib man nich jleich drin wohnen",
+    "translations": [
+      "wenn einer einen langen Zug aus der Weißen tut"
+    ],
+    "examples": [
+      {
+        "example": "Früher hat er janich gewohnt, jetz wohnt er gradeüber.",
+        "explanation": "von einem, der keine feste Wohnung hat"
+      },
+      {
+        "example": "Wohnt nich!",
+        "explanation": "wie: is nich!"
+      }
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wolkenschieber",
+    "translations": [
+      "Art Mütze",
+      "ein Likör"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wolle, in de Wolle jeforben",
+    "translations": [
+      "echt"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wollen, will ick denn",
+    "translations": [
+      "ich will nicht"
+    ],
+    "examples": [
+      {
+        "example": "Nischt zu wollen!",
+        "explanation": "nichts zu machen"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wollonkel",
+    "translations": [
+      "Gutsbesitzer, der seine Wolle in Berlin zu Markte bringt"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wonnetloß",
+    "translations": [
+      "kugelrundes Daunenkissen"
+    ],
+    "infoText": "In der Sprache der „höheren Tochter“.",
+    "alternativeWords": [
+      "Wonnepropp"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wort, haste Worte",
+    "translations": [
+      "was soll man dazu sagen!"
+    ],
+    "alternativeWords": [
+      "haste Töne"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wrackeln",
+    "translations": [
+      "leise wackeln, z. B. vom Tisch"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wrampelen",
+    "translations": [
+      "siehe prampieren"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wrangel, nechts fahren",
+    "translations": [
+      "scherzhaftes Zitat, dem Wrangel-Denkmal zugeschrieben"
+    ],
+    "infoText": "Denkmal auf dem Leipziger Platz.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wrangen, sich",
+    "translations": [
+      "sich balgen, ringen"
+    ],
+    "alternativeWords": [
+      "wringen"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wraze",
+    "translations": [
+      "Warze"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wreemsch",
+    "translations": [
+      "von kleinen Kindern, die ohne ersichtlichen Grund unruhig sind und weinen"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wribbelmatz",
+    "translations": [
+      "Kind, das nicht still sitzen kann"
+    ],
+    "infoText": "Von wribbeln, wirbeln.",
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wricken",
+    "translations": [
+      "mit einem Ruder am Stern rudern"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wünschen, wünschen Se villeicht noch wat",
+    "translations": [
+      "scherzhaftes Angebot einer Ohrfeige"
+    ],
+    "examples": [
+      {
+        "example": "Wir wollen't nich wünschen, aber Jott jeb't!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wüstenbahn",
+    "translations": [
+      "Spitzname für die Südringbahn"
+    ],
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wusig",
+    "translations": [
+      "mit dichtem, ungekämmtem Haar"
+    ],
+    "alternativeWords": [
+      "Wusekopp"
+    ],
+    "infoText": "Wusekopp auch übertragen für geistig unordentlich, unklar.",
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wunder, er hat seinen Wunder",
+    "translations": [
+      "seinen Kummer"
+    ],
+    "examples": [
+      {
+        "example": "Mach mir doch nich soville Wunder.",
+        "explanation": "mach mir den Kopf nicht warm"
+      },
+      {
+        "example": "Det jibt vill Wunder.",
+        "explanation": "viele Umstände"
+      },
+      {
+        "example": "Da kannste deinen blauen Wunder erleben!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wundern, viel Aufhebens machen",
+    "translations": [
+      "viel Aufhebens machen"
+    ],
+    "examples": [
+      {
+        "example": "Der wundert heile ooch 'n janzen Dag rum!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wünderschön, janisch t dajejen",
+    "translations": [
+      "ironisches Lob"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wuppdiziteet",
+    "translations": [
+      "Geschwindigkeit"
+    ],
+    "examples": [
+      {
+        "example": "Mit einer Wuppdiziteet von null Komma nischt.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Würmisieren, det wurmisiert mir in' Leibe rum",
+    "translations": [
+      "wurmen"
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wurscht wider Wurscht",
+    "translations": [
+      "wie du mir, so ich dir"
+    ],
+    "examples": [
+      {
+        "example": "Det is mir Wurscht.",
+        "explanation": "gleichgültig"
+      },
+      {
+        "example": "'n Kerl wie'n Pfund Wurscht.",
+        "explanation": ""
+      },
+      {
+        "example": "Jedet Ding hat 'n Ende, bloß 'ne Wurscht hat zwee.",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Eenen de Wurscht anschneiden: ihn zur Rechenschaft ziehen.",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wurschtarme",
+    "translations": [
+      "dicke Arme bei Kindern"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wurschtblatt",
+    "translations": [
+      "verächtlich für eine Zeitung, wie Käseblatt"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wurschtengel",
+    "translations": [
+      "Kind mit dicken Armen"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wurschtkessel, er sitzt in Abrahams Wurschtkessel",
+    "translations": [
+      "es geht ihm gut"
+    ],
+    "examples": [
+      {
+        "example": "Jetz sitzte in' Wurschtkessel.",
+        "explanation": "jetzt bist du verloren"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wurschtkirche",
+    "translations": [
+      "Spitzname für die Lukaskirche"
+    ],
+    "infoText": "Weil in ihrem Turm die von einem Schlächtermeister geschenkte „Wurstglocke“ hängt.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wurschtpellen",
+    "translations": [
+      "Sprungriemen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wurzeln, tüchtig arbeiten",
+    "translations": [
+      "tüchtig arbeiten"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wuschen",
+    "translations": [
+      "huschen"
+    ],
+    "alternativeWords": [
+      "wutschen",
+      "durchwutschen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]
