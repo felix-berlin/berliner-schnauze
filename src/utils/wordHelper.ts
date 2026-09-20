@@ -407,26 +407,45 @@ export const wordCuriosities = (
 
 const sortedChars = (word: string): string => word.toLowerCase().split("").sort().join("");
 
+// Per-page callers pass the same ~6000-word array; index it once instead of once per page.
+const anagramIndexCache = new WeakMap<WordRef[], Map<string, WordRef[]>>();
+
 export const findAnagrams = (word: string, allWords: WordRef[]): WordRef[] => {
-  const target = sortedChars(word);
-  return allWords.filter((w) => {
-    const berlinerisch = w.wordProperties?.berlinerisch ?? "";
-    return (
-      berlinerisch.toLowerCase() !== word.toLowerCase() && sortedChars(berlinerisch) === target
-    );
-  });
+  let index = anagramIndexCache.get(allWords);
+  if (!index) {
+    index = new Map();
+    for (const w of allWords) {
+      const key = sortedChars(w.wordProperties?.berlinerisch ?? "");
+      const bucket = index.get(key);
+      if (bucket) bucket.push(w);
+      else index.set(key, [w]);
+    }
+    anagramIndexCache.set(allWords, index);
+  }
+  const lower = word.toLowerCase();
+  return (index.get(sortedChars(word)) ?? []).filter(
+    (w) => (w.wordProperties?.berlinerisch ?? "").toLowerCase() !== lower,
+  );
 };
+
+const germanCollator = new Intl.Collator("de");
+const sortedWordsCache = new WeakMap<WordRef[], WordRef[]>();
 
 export const alphabeticNeighbors = (
   allWords: WordRef[],
   currentWord: WordRef,
   n: number = 3,
 ): { before: WordRef[]; after: WordRef[] } => {
-  const sorted = [...allWords].sort((a, b) =>
-    (a.wordProperties?.berlinerisch ?? "")
-      .toLowerCase()
-      .localeCompare((b.wordProperties?.berlinerisch ?? "").toLowerCase(), "de"),
-  );
+  let sorted = sortedWordsCache.get(allWords);
+  if (!sorted) {
+    sorted = [...allWords].sort((a, b) =>
+      germanCollator.compare(
+        (a.wordProperties?.berlinerisch ?? "").toLowerCase(),
+        (b.wordProperties?.berlinerisch ?? "").toLowerCase(),
+      ),
+    );
+    sortedWordsCache.set(allWords, sorted);
+  }
   const idx = sorted.findIndex((w) => w.id === currentWord.id);
   if (idx === -1) return { after: [], before: [] };
   return {
