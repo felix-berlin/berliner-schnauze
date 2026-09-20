@@ -86,8 +86,8 @@ ul { list-style: none; padding: 0; margin: 0.6em 0; }
 .ex small { font-style: normal; color: #4e545a; }
 .alt, .link, .hint { font-size: 0.75em; margin-top: 1em; color: #4e545a; }
 .hint { border-top: 1px dashed #fad0b0; padding-top: 0.6em; }
-@media (prefers-color-scheme: dark) { .card { background: #2b333b; color: #fcead7; } .ex small, .alt, .link, .hint { color: #fad0b0; } }
-.nightMode .card { background: #2b333b; color: #fcead7; }
+.card.nightMode { background: #2b333b; color: #fcead7; }
+.nightMode .ex small, .nightMode .alt, .nightMode .link, .nightMode .hint { color: #fad0b0; }
 """
 
 MODEL = genanki.Model(
@@ -113,11 +113,13 @@ MODEL = genanki.Model(
 def note_fields(word, hint_html):
     esc = html.escape
     examples = "".join(
-        '<p class="ex">%s<br><small>%s</small></p>' % (esc(ex), esc(expl))
+        ('<p class="ex">%s<br><small>%s</small></p>' % (esc(ex), esc(expl)))
+        if expl
+        else '<p class="ex">%s</p>' % esc(ex)
         for ex, expl in word["examples"][:2]
     )
     alternatives = "Auch: " + esc(", ".join(word["alternatives"])) if word["alternatives"] else ""
-    link = '<a href="%s/wort/%s">Mehr zu „%s"</a>' % (SITE, esc(word["slug"]), esc(word["title"]))
+    link = '<a href="%s/wort/%s">Mehr zu „%s“</a>' % (SITE, esc(word["slug"]), esc(word["title"]))
     return [
         esc(word["title"]),
         esc(word["article"]),
@@ -195,6 +197,7 @@ def fetch_words():
 def main():
     full_url = os.environ.get("ANKI_FULL_URL") or SITE + "/anki"
     words = [normalize_word(n) for n in fetch_words()]
+    assert words, "keine Wörter geladen"
     full, lite = build_decks(words, full_url)
     os.makedirs(OUT_DIR, exist_ok=True)
     for deck, name in ((full, "full"), (lite, "lite")):

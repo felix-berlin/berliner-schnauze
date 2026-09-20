@@ -130,6 +130,12 @@ class DeckTests(unittest.TestCase):
         self.assertEqual(f[3].count('class="ex"'), 2)
         self.assertIn("/wort/x&lt;y", f[5])
 
+    def test_empty_explanation_emits_no_small(self):
+        w = word(1, "x", ex=1)
+        self.assertNotIn("<small>", b.note_fields(w, "")[3])
+        w["examples"] = [("e0", "erklaert")]
+        self.assertIn("<small>erklaert</small>", b.note_fields(w, "")[3])
+
     def test_check_decks_detects_missing_letter(self):
         broken = genanki.Deck(1, "x")
         with self.assertRaises(AssertionError):

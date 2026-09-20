@@ -69,3 +69,4 @@ oxlint-results.sarif
 
 dist-anki/
 .venv-anki/
+__pycache__/
