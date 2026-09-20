@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 /**
+ * WARNING: The Schlobinski ("Berlinisch Lexikon", (c) SDLS) source data was removed
+ * from this repository (copyright). Do NOT re-add words-*.json derived from it and
+ * do not import its text. Only own texts and Meyer (1904) content may be imported.
+ * This script no longer writes skipped entries to disk (they contained source text).
+ *
  * Imports new Berliner words from data/lexikon-import/words-*.json into
  * WordPress as `berlinerisch` posts (ACF WordProperties + themen taxonomy)
  * via WP REST API.
@@ -24,7 +29,7 @@
  * Requires env vars: WP_REST_API, WP_AUTH_USER, WP_AUTH_PASS
  */
 
-import { readFileSync, readdirSync, writeFileSync } from "fs";
+import { readFileSync, readdirSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -69,6 +74,8 @@ const ACF = {
   translations: "translations",
 } as const;
 
+// WARNING: this attribution is only valid for the removed Schlobinski data — set the
+// correct source before any new import.
 // Value for the sources > source checkbox on every imported word.
 // Verified against the live ACF checkbox choice (post "dampf") — note the
 // U+2019 apostrophe and en dash; the value must match byte-for-byte.
@@ -372,9 +379,7 @@ async function main(): Promise<void> {
   console.log(`✓ Created: ${created}${DRY_RUN ? " (dry run)" : ""}`);
   console.log(`→ Skipped (already exist): ${skipped}`);
   if (skippedEntries.length > 0) {
-    const skipFile = join(DATA_DIR, "skipped-words.json");
-    writeFileSync(skipFile, JSON.stringify(skippedEntries, null, 2) + "\n");
-    console.log(`→ Skipped entries written to ${skipFile}`);
+    console.log(`→ ${skippedEntries.length} skipped entries (not written to disk)`);
   }
   if (errors > 0) {
     console.log(`✗ Errors: ${errors}`);
