@@ -1,0 +1,563 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-anki {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacer * 4;
+  padding-block: vars.$spacer * 2 vars.$spacer * 4;
+
+  // Icon + label buttons need the gap the shared .c-button never sets.
+  .c-button--center-icon {
+    gap: vars.$spacer * 0.625;
+  }
+
+  // Buy CTAs use .c-button--theme as a hook, but that variant is the site's dark
+  // "ink" button (wrong color + Berliner font). The handoff's primary button is
+  // orange with body-bold text, so override both back to spec within this page.
+  .c-button--theme {
+    --color-background: var(--orange-500);
+    --color: var(--white-100);
+    --color-border: var(--orange-500);
+
+    font-family: vars.$berlin;
+    font-weight: 700;
+
+    @include butler-mx.hover {
+      --color-border: var(--yellow-500);
+    }
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--orange-500);
+      --color: var(--white-100);
+      --color-border: var(--orange-500);
+    }
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 1.5;
+  }
+
+  &__eyebrow {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--orange-600);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__lead {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 1.15rem;
+    line-height: 1.55;
+    max-width: 42em;
+    text-wrap: pretty;
+
+    &--hero {
+      font-size: 1.25rem;
+      line-height: 1.5;
+      max-width: 34em;
+    }
+
+    &--intro {
+      font-size: 1.2rem;
+    }
+  }
+
+  // Hero
+  &__hero {
+    display: grid;
+    gap: vars.$spacer * 3;
+    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 27.5rem), 1fr));
+  }
+
+  &__hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 1.25;
+  }
+
+  &__title {
+    font-family: vars.$berliner;
+    font-weight: normal;
+    font-size: clamp(2rem, 1.36rem + 3.19vw, 4.5rem);
+    line-height: 1.05;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.75;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.25 vars.$spacer * 1.25;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.95rem;
+    color: var(--blue-100);
+  }
+
+  // Step cards ("Was ist Anki")
+  &__steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));
+    gap: vars.$spacer * 1.25;
+  }
+
+  &__step {
+    background: var(--white-100);
+    border: 1px dashed var(--grey-100);
+    border-radius: 4px;
+    box-shadow:
+      0 0.5px 0.6px rgb(0 0 0 / 8%),
+      0 4px 5px rgb(0 0 0 / 16%);
+    display: flex;
+    flex-direction: column;
+
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-400);
+    }
+  }
+
+  &__step-head {
+    display: flex;
+    align-items: baseline;
+    gap: vars.$spacer * 0.625;
+    padding: vars.$spacer * 0.75 vars.$spacer * 1.25;
+    border-bottom: 1px dashed var(--orange-200);
+  }
+
+  &__step-num {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--orange-500);
+  }
+
+  &__step-title {
+    // Section-card title: Body Bold per DESIGN.md, not the display font.
+    font-family: vars.$berlin;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  &__step-text {
+    margin: 0;
+    padding: vars.$spacer vars.$spacer * 1.25 vars.$spacer * 1.25;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  // Interval timeline card
+  &__timeline {
+    background: var(--white-100);
+    border: 1px dashed var(--grey-100);
+    border-radius: 4px;
+    box-shadow:
+      0 0.5px 0.6px rgb(0 0 0 / 8%),
+      0 4px 5px rgb(0 0 0 / 16%);
+    padding: vars.$spacer * 1.75 vars.$spacer * 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 1.25;
+
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-400);
+    }
+  }
+
+  &__timeline-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__timeline-title {
+    font-family: vars.$berlin;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  &__timeline-caption {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.85rem;
+    color: var(--blue-100);
+  }
+
+  &__timeline-row {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: start;
+    position: relative;
+  }
+
+  &__timeline-line {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    top: 0.6875rem;
+    border-top: 2px dashed var(--orange-300);
+  }
+
+  &__timeline-point {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: vars.$spacer * 0.625;
+    text-align: center;
+  }
+
+  &__timeline-dot {
+    width: 1.375rem;
+    height: 1.375rem;
+    border-radius: 50%;
+    background: var(--orange-500);
+    border: 3px solid var(--white-100);
+    box-shadow: 0 0 0 1px var(--orange-500);
+
+    // The ring punches through the dashed line to the card's own surface color.
+    @include butler-mx.dark-mode-class {
+      border-color: var(--new-blue-400);
+    }
+  }
+
+  &__timeline-label {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  // Platform tiles
+  &__platforms {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13.75rem), 1fr));
+    gap: vars.$spacer * 0.75;
+  }
+
+  &__platform {
+    display: flex;
+    gap: vars.$spacer * 0.75;
+    align-items: center;
+    padding: vars.$spacer * 0.875 vars.$spacer;
+    background: var(--white-100);
+    border: 1px solid var(--orange-200);
+
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-400);
+      border-color: var(--new-blue-200);
+    }
+
+    svg {
+      color: var(--orange-600);
+      flex-shrink: 0;
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-300);
+      }
+    }
+  }
+
+  &__platform-name {
+    font-weight: 700;
+  }
+
+  &__platform-meta {
+    font-size: 0.8rem;
+    color: var(--blue-100);
+  }
+
+  // Pricing cards
+  &__plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21.25rem), 1fr));
+    gap: vars.$spacer * 1.5;
+    align-items: stretch;
+  }
+
+  &__plan {
+    position: relative;
+    background: var(--white-100);
+    border: 1px dashed var(--grey-100);
+    border-radius: 4px;
+    box-shadow:
+      0 0.5px 0.6px rgb(0 0 0 / 8%),
+      0 4px 5px rgb(0 0 0 / 16%);
+    display: flex;
+    flex-direction: column;
+
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-400);
+    }
+
+    &--full {
+      border: 2px solid var(--orange-500);
+      box-shadow:
+        0 0.5px 0.6px rgb(0 0 0 / 8%),
+        0 4px 5px rgb(0 0 0 / 16%),
+        0 0 24px 0 color-mix(in srgb, var(--orange-500) 25%, transparent);
+    }
+  }
+
+  &__plan-badge {
+    position: absolute;
+    top: -0.875rem;
+    right: vars.$spacer * 1.5;
+    background: var(--orange-500);
+    color: var(--white-100);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border: 1px dashed var(--yellow-500);
+  }
+
+  &__plan-head {
+    padding: vars.$spacer * 1.5 vars.$spacer * 1.75;
+    border-bottom: 1px dashed var(--orange-200);
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.375;
+
+    .c-anki__plan--full & {
+      background: color-mix(in srgb, var(--orange-100) 50%, white);
+
+      @include butler-mx.dark-mode-class {
+        background: var(--new-blue-500);
+      }
+    }
+  }
+
+  &__plan-name {
+    font-family: vars.$berliner;
+    font-weight: normal;
+    font-size: 2rem;
+    margin: 0;
+
+    .c-anki__plan--full & {
+      color: var(--orange-600);
+
+      @include butler-mx.dark-mode-class {
+        color: var(--orange-300);
+      }
+    }
+  }
+
+  &__plan-price {
+    display: flex;
+    align-items: baseline;
+    gap: vars.$spacer * 0.625;
+
+    strong {
+      // impeccable-disable design-system-font-size -- literal value from design handoff
+      font-size: 2.25rem;
+      font-weight: 900;
+    }
+
+    span {
+      color: var(--blue-100);
+    }
+  }
+
+  &__plan-features {
+    padding: vars.$spacer * 1.5 vars.$spacer * 1.75;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.875;
+    flex: 1;
+
+    li {
+      display: flex;
+      gap: vars.$spacer * 0.75;
+      align-items: flex-start;
+      // impeccable-disable design-system-font-size -- literal value from design handoff
+      font-size: 1.05rem;
+      line-height: 1.4;
+    }
+
+    li::before {
+      content: "✓";
+      color: var(--orange-500);
+      font-weight: 900;
+    }
+  }
+
+  &__plan-cta {
+    padding: 0 vars.$spacer * 1.75 vars.$spacer * 1.75;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.625;
+
+    .c-button {
+      justify-content: center;
+      display: flex;
+      font-weight: 700;
+      // impeccable-disable design-system-font-size -- literal value from design handoff
+      font-size: 1.05rem;
+      padding: 0.875rem 1.25rem;
+    }
+  }
+
+  &__plan-note {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.85rem;
+    color: var(--blue-100);
+    text-align: center;
+  }
+
+  // Upgrade diagram
+  &__upgrade {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 26.25rem), 1fr));
+    gap: vars.$spacer * 2.5;
+    align-items: center;
+  }
+
+  &__upgrade-card {
+    background: var(--white-100);
+    border: 1px dashed var(--grey-100);
+    border-radius: 4px;
+    box-shadow:
+      0 0.5px 0.6px rgb(0 0 0 / 8%),
+      0 4px 5px rgb(0 0 0 / 16%);
+    padding: vars.$spacer * 1.5 vars.$spacer * 1.25;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer;
+
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-400);
+    }
+  }
+
+  &__upgrade-row {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__upgrade-row-head {
+    display: flex;
+    justify-content: space-between;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.95rem;
+
+    strong {
+      font-weight: 700;
+    }
+
+    span {
+      color: var(--blue-100);
+    }
+  }
+
+  &__upgrade-bar {
+    height: 1.75rem;
+    display: flex;
+    border: 1px solid var(--orange-200);
+    overflow: hidden;
+  }
+
+  &__upgrade-bar-learned {
+    width: 10%;
+    background: var(--orange-500);
+  }
+
+  &__upgrade-bar-rest {
+    flex: 1;
+    background: color-mix(in srgb, var(--orange-100) 60%, white);
+  }
+
+  &__upgrade-bar-new {
+    flex: 1;
+    background: var(--orange-300);
+    border-left: 2px dashed var(--white-100);
+  }
+
+  &__upgrade-plus {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.625;
+    color: var(--orange-600);
+    font-weight: 700;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.95rem;
+
+    @include butler-mx.dark-mode-class {
+      color: var(--orange-300);
+    }
+  }
+
+  &__legend {
+    display: flex;
+    gap: vars.$spacer;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.8rem;
+    color: var(--blue-100);
+    flex-wrap: wrap;
+  }
+
+  &__legend-item {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.375;
+
+    span {
+      width: 0.75rem;
+      height: 0.75rem;
+      display: inline-block;
+    }
+  }
+
+  // Open Source
+  &__opensource {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 26.25rem), 1fr));
+    gap: vars.$spacer * 2.5;
+    align-items: center;
+  }
+
+  &__opensource-copy {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer;
+  }
+
+  &__opensource-cta {
+    align-self: flex-start;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 1rem;
+    padding: 0.75rem 1.125rem;
+  }
+
+  // Final CTA
+  &__final {
+    max-width: 42em;
+  }
+
+  // Primary/secondary CTA buttons (hero + final CTA)
+  &__actions .c-button {
+    padding: 0.875rem 1.375rem;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 1.1rem;
+    gap: vars.$spacer * 0.625;
+
+    &.c-button--theme {
+      box-shadow:
+        0 0.5px 0.6px rgb(0 0 0 / 8%),
+        0 4px 5px rgb(0 0 0 / 16%);
+    }
+  }
+}
