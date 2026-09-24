@@ -67,3 +67,8 @@ oxlint-results.sarif
 # Playwright
 /blob-report/
 /playwright/.auth/
+
+# Anki deck build output and design handoff export (not project source)
+/dist-anki/
+/design_handoff_anki_deck_landing/
+scripts/__pycache__/
