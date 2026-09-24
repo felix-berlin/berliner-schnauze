@@ -1,0 +1,181 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-anki-flashcard {
+  position: relative;
+  padding: vars.$spacer * 1.5 vars.$spacer * 0.75 vars.$spacer * 0.75;
+
+  &__paper {
+    position: absolute;
+    background: var(--white-100);
+    border: 1px dashed var(--orange-200);
+    box-shadow:
+      0 0.5px 0.6px rgb(0 0 0 / 8%),
+      0 2px 3px rgb(0 0 0 / 16%);
+    border-radius: 4px;
+
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-300);
+      border-color: var(--new-blue-200);
+    }
+
+    &--back {
+      inset: vars.$spacer * 2.25 vars.$spacer * 1.75 0 vars.$spacer * 1.75;
+      transform: rotate(3deg);
+    }
+
+    &--front {
+      inset: vars.$spacer * 1.875 vars.$spacer * 1.25 vars.$spacer * 0.25 vars.$spacer * 1.25;
+      transform: rotate(-2deg);
+    }
+  }
+
+  &__card {
+    position: relative;
+    background: var(--white-100);
+    border: 1px dashed var(--grey-100);
+    border-radius: 4px;
+    box-shadow:
+      0 0.5px 0.6px rgb(0 0 0 / 8%),
+      0 4px 5px rgb(0 0 0 / 16%);
+    min-height: 25rem;
+    display: flex;
+    flex-direction: column;
+
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-400);
+    }
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: vars.$spacer * 0.625 vars.$spacer;
+    border-bottom: 1px dashed var(--orange-200);
+    font-size: 0.8rem;
+    color: var(--blue-100);
+
+    span:first-child {
+      font-weight: 700;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: vars.$spacer;
+    padding: vars.$spacer * 2 vars.$spacer * 1.5;
+    text-align: center;
+  }
+
+  &__word {
+    font-family: vars.$berliner;
+    font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+    line-height: 1.1;
+    text-decoration: underline dashed from-font;
+    text-decoration-color: var(--orange-500);
+    text-underline-position: from-font;
+  }
+
+  &__answer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: vars.$spacer * 0.75;
+    border-top: 1px dashed var(--new-blue-200);
+    padding-top: vars.$spacer * 1.125;
+  }
+
+  &__meaning {
+    // impeccable-disable design-system-font-size -- literal value from design_handoff_anki_deck_landing (v2, confirmed with user)
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--orange-600);
+
+    @include butler-mx.dark-mode-class {
+      color: var(--orange-300);
+    }
+  }
+
+  &__example {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 1.05rem;
+    font-style: italic;
+    line-height: 1.5;
+    max-width: 26em;
+    text-wrap: pretty;
+  }
+
+  &__foot {
+    padding: vars.$spacer;
+    border-top: 1px dashed var(--orange-200);
+
+    .c-button {
+      width: 100%;
+      justify-content: center;
+      display: flex;
+      padding: vars.$spacer * 0.875;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+  }
+
+  &__ratings {
+    padding: vars.$spacer;
+    border-top: 1px dashed var(--orange-200);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: vars.$spacer * 0.625 vars.$spacer * 0.25;
+  }
+
+  &__rating-interval {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.75rem;
+    color: var(--blue-100);
+  }
+
+  &__rating-label {
+    font-weight: 700;
+  }
+
+  &__rating--again .c-anki-flashcard__rating-label {
+    color: var(--danger);
+  }
+
+  &__rating--hard .c-anki-flashcard__rating-label {
+    color: var(--color-body);
+  }
+
+  &__rating--good .c-anki-flashcard__rating-label {
+    color: var(--success);
+  }
+
+  &__rating--easy .c-anki-flashcard__rating-label {
+    color: var(--orange-600);
+
+    @include butler-mx.dark-mode-class {
+      color: var(--orange-300);
+    }
+  }
+
+  &__hint {
+    margin: vars.$spacer 0 0;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.9rem;
+    text-align: center;
+    color: var(--blue-100);
+  }
+}
