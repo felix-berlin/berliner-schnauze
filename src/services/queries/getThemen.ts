@@ -1,4 +1,4 @@
-import { wpGraphqlClient } from "@services/wpGraphqlClient";
+import { wpQuery } from "@services/wpGraphqlClient";
 
 import type { GetAllBerlinerischThemenQuery } from "@/gql/graphql";
 
@@ -25,13 +25,8 @@ export const GetAllBerlinerischThemen = graphql(`
 let _themenCache: Promise<ThemaNodes> | null = null;
 
 export const fetchAllThemen = async () => {
-  _themenCache ??= wpGraphqlClient
-    .query(GetAllBerlinerischThemen, {})
-    .toPromise()
-    .then((result) => {
-      if (result.error) throw result.error;
-      return result.data?.berlinerischThemen?.nodes ?? [];
-    })
+  _themenCache ??= wpQuery(GetAllBerlinerischThemen, {}, "Fetching themen failed")
+    .then((data) => data?.berlinerischThemen?.nodes ?? [])
     .catch((err: unknown) => {
       _themenCache = null;
       throw err;

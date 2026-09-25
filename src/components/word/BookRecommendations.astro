@@ -99,11 +99,10 @@ function isAmazonLink(href: string | null): boolean {
 <script>
   import { trackEvent } from '@utils/analytics';
 
-  document.addEventListener('astro:page-load', () => {
-    document.querySelectorAll<HTMLAnchorElement>('.c-book-recs__link').forEach((link) => {
-      link.addEventListener('click', () => {
-        trackEvent('Affiliate', 'Book clicked', link.dataset.contentPiece ?? '');
-      });
-    });
+  // Delegated + registered once (module scripts run once): survives View Transitions
+  // without rebinding per navigation.
+  document.addEventListener('click', (event) => {
+    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('.c-book-recs__link');
+    if (link) trackEvent('Affiliate', 'Book clicked', link.dataset.contentPiece ?? '');
   });
 </script>

@@ -5,9 +5,10 @@ export const sitemapFilter = (page: string): boolean =>
 
 type DateNode = { slug: string; modifiedGmt: string };
 
+// Same max as getWords — needs graphql_connection_max_query_amount >= 500 on the WP side.
 const buildQuery = (root: string, where: string): string => `
   query($after: String) {
-    ${root}(first: 100, after: $after, where: { ${where} }) {
+    ${root}(first: 500, after: $after, where: { ${where} }) {
       edges { node { slug modifiedGmt } }
       pageInfo { endCursor hasNextPage }
     }

@@ -37,7 +37,7 @@ export const getStaticPaths = (async () => {
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { post, related } = Astro.props as Props;
+const { post, related } = Astro.props;
 
 const { blocks, toc, hasAffiliateLinks } = processArticleBlocks(post.blocks ?? []);
 const readingMinutes = post.seo?.readingTime ? Math.max(1, Math.round(post.seo.readingTime)) : null;

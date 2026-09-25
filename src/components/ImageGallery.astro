@@ -8,9 +8,9 @@ import type { WordProperties } from '@/gql/entity-types';
 
 type ImageNode = NonNullable<NonNullable<WordProperties['images']>['nodes']>[number];
 
-type ImageGalleryProps = {
+interface Props {
   fallbackAlt?: string;
-  formats?: string[];
+  formats?: ImageOutputFormat[];
   id?: string;
   images: WordProperties['images'];
   lightboxSizes?: string;
@@ -18,7 +18,7 @@ type ImageGalleryProps = {
   priority?: boolean;
   sizes: string;
   widths: number[];
-};
+}
 
 const {
   fallbackAlt = '',
@@ -30,9 +30,11 @@ const {
   priority = false,
   sizes,
   widths,
-} = Astro.props as ImageGalleryProps;
+} = Astro.props;
 
-const imageList = images?.nodes as Array<ImageNode>;
+const imageList = (images?.nodes ?? []).filter(
+  (image): image is ImageNode & { sourceUrl: string } => Boolean(image?.sourceUrl),
+);
 
 /**
  * Generate lightbox images
@@ -45,7 +47,7 @@ const lightboxImageList = await Promise.all(
           format: format,
           height: image.mediaDetails?.height || undefined,
           sizes: `${lightboxSizes}, ${image.mediaDetails?.width}px`,
-          src: image.sourceUrl!,
+          src: image.sourceUrl,
           width: image.mediaDetails?.width || undefined,
           widths: lightboxWidths || undefined,
         }),
@@ -62,10 +64,10 @@ const lightboxImageList = await Promise.all(
 ---
 
 {
-  images && images?.nodes && (
+  images?.nodes && (
     <image-gallery data-formats={formats} data-id={id}>
       <div class='c-image-gallery' id={id}>
-        {imageList?.map((image, index) => {
+        {imageList.map((image, index) => {
           return (
             <figure class='c-image-gallery__item'>
               <a
@@ -84,12 +86,12 @@ const lightboxImageList = await Promise.all(
                 <Picture
                   alt={image.altText || (imageList.length > 1 ? `${fallbackAlt} (Bild ${index + 1})` : fallbackAlt)}
                   class="c-image-gallery__image"
-                  fallbackFormat={"webp" as ImageOutputFormat}
-                  formats={formats as ImageOutputFormat[]}
+                  fallbackFormat="webp"
+                  formats={formats}
                   height={image.mediaDetails?.height ?? 0}
                   priority={priority}
                   sizes={`${sizes}, ${image.mediaDetails?.width}px`}
-                  src={image.sourceUrl!}
+                  src={image.sourceUrl}
                   width={image.mediaDetails?.width ?? 0}
                   widths={widths}
                 />

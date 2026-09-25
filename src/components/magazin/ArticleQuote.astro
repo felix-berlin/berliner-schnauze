@@ -1,16 +1,12 @@
 ---
-interface QuoteBlockAttributes {
-  value?: string | null;
-}
+import type { CoreQuoteBlockFieldsFragment } from '@/gql/graphql';
 
 interface Props {
-  block: {
-    attributes?: unknown;
-  };
+  block: CoreQuoteBlockFieldsFragment;
 }
 
-const { block } = Astro.props as Props;
-const value = (block.attributes as QuoteBlockAttributes | null | undefined)?.value ?? '';
+const { block } = Astro.props;
+const value = block.attributes?.value ?? '';
 ---
 
 <blockquote class='c-magazin-article__quote' set:html={value} />

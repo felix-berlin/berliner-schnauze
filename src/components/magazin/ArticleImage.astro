@@ -1,21 +1,13 @@
 ---
 import { Picture } from 'astro:assets';
-
-interface ImageBlockAttributes {
-  url?: string | null;
-  width?: string | null;
-  height?: string | null;
-  alt?: string | null;
-}
+import type { CoreImageBlockFieldsFragment } from '@/gql/graphql';
 
 interface Props {
-  block: {
-    attributes?: unknown;
-  };
+  block: CoreImageBlockFieldsFragment;
 }
 
-const { block } = Astro.props as Props;
-const attrs = block.attributes as ImageBlockAttributes | null | undefined;
+const { block } = Astro.props;
+const attrs = block.attributes;
 ---
 
 {

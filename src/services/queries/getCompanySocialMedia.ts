@@ -1,4 +1,4 @@
-import { wpGraphqlClient } from "@services/wpGraphqlClient";
+import { wpQuery } from "@services/wpGraphqlClient";
 
 import { graphql } from "@/gql";
 import { CompanySocialMediaDocument } from "@/gql/graphql.ts";
@@ -10,13 +10,12 @@ export interface SocialMenuItem {
 }
 
 export const fetchSocialMenu = async (): Promise<SocialMenuItem[]> => {
-  const response = await wpGraphqlClient.query(CompanySocialMediaDocument, {}).toPromise();
-
-  if (response.error) {
-    throw new Error("Fetching company social media links failed", { cause: response.error });
-  }
-
-  const entries = response.data?.company?.companyInformations?.socialMedia ?? [];
+  const data = await wpQuery(
+    CompanySocialMediaDocument,
+    {},
+    "Fetching company social media links failed",
+  );
+  const entries = data?.company?.companyInformations?.socialMedia ?? [];
 
   return entries
     .filter((entry): entry is NonNullable<typeof entry> => entry !== null)

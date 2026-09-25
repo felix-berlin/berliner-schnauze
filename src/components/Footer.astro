@@ -11,22 +11,16 @@ import { fetchMenu } from '@services/queries/getMenu';
 
 import { version } from '../../package.json';
 
-// const randomWord = () => {
-//   // TODO: Implement random word
-//   // return randomElement(berlinerWords).post_name;
-// };
-//
-//
-const socialMenu = await fetchSocialMenu();
-const { platforms } = await fetchFundingData();
+const [socialMenu, { platforms }, navMenu1, navMenu2] = await Promise.all([
+  fetchSocialMenu(),
+  fetchFundingData(),
+  fetchMenu('Footer Nav 1'),
+  fetchMenu('Footer Nav 2'),
+]);
 const fundingMenu = [
   ...platforms.map((platform) => ({ link: platform.link, title: platform.name })),
   { link: '/spenden', title: 'Alle Spenden-Möglichkeiten' },
 ];
-
-const navMenu1 = await fetchMenu('Footer Nav 1');
-
-const navMenu2 = await fetchMenu('Footer Nav 2');
 ---
 
 <footer class='c-footer'>

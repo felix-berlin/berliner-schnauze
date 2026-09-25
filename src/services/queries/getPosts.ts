@@ -1,4 +1,4 @@
-import { wpGraphqlClient } from "@services/wpGraphqlClient";
+import { wpQuery } from "@services/wpGraphqlClient";
 
 import type { GetAllPostsQuery } from "@/gql/graphql";
 
@@ -39,13 +39,8 @@ export const GetAllPosts = graphql(`
 let _postsCache: Promise<PostNodes> | null = null;
 
 export const fetchAllPosts = async () => {
-  _postsCache ??= wpGraphqlClient
-    .query(GetAllPosts, {})
-    .toPromise()
-    .then((result) => {
-      if (result.error) throw result.error;
-      return result.data?.posts?.nodes ?? [];
-    })
+  _postsCache ??= wpQuery(GetAllPosts, {}, "Fetching posts failed")
+    .then((data) => data?.posts?.nodes ?? [])
     .catch((err: unknown) => {
       _postsCache = null;
       throw err;
