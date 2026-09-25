@@ -174,27 +174,46 @@ export const translateNlpTags = (tags: WordTags[]): WordTags[] => {
   return translatedTags;
 };
 
+// Soundex compare() is exact code equality, so — like findAnagrams — we can bucket by
+// code once per array instead of running compare() against all ~6000 words on every page.
+const soundexIndexCache = new WeakMap<WordRef[], Map<string, WordRef[]>>();
+
 export const similarSoundingWords = (allWords: WordRef[], currentWord: WordRef) => {
   if (!currentWord || !allWords) {
     return [];
   }
 
-  const allWordsWithoutCurrent = allWords.filter((word) => word.id !== currentWord?.id);
-  return allWordsWithoutCurrent.map((word) => {
-    const currentBerlinerisch = currentWord.wordProperties?.berlinerisch;
-    const wordBerlinerisch = word.wordProperties?.berlinerisch;
+  let index = soundexIndexCache.get(allWords);
+  if (!index) {
+    index = new Map();
+    for (const word of allWords) {
+      const berlinerisch = word.wordProperties?.berlinerisch;
+      if (!berlinerisch) continue;
+      const code = _soundEx.process(berlinerisch);
+      const bucket = index.get(code);
+      if (bucket) bucket.push(word);
+      else index.set(code, [word]);
+    }
+    soundexIndexCache.set(allWords, index);
+  }
 
-    const isSimilar =
-      currentBerlinerisch && wordBerlinerisch
-        ? _soundEx.compare(wordBerlinerisch, currentBerlinerisch)
-        : false;
+  const currentBerlinerisch = currentWord.wordProperties?.berlinerisch;
+  const soundsLikeCurrent = new Set(
+    currentBerlinerisch ? index.get(_soundEx.process(currentBerlinerisch)) : undefined,
+  );
 
-    return {
-      isSimilar: isSimilar,
+  return allWords
+    .filter((word) => word.id !== currentWord?.id)
+    .map((word) => ({
+      isSimilar: soundsLikeCurrent.has(word),
       word: word,
-    };
-  });
+    }));
 };
+
+// JaroWinkler is a continuous distance, not bucketable like soundex — but the berlinerisch
+// string of each word is normalized identically on every comparison, on every page. Cache
+// that normalization once per array instead of redoing it ~6000×6000 times.
+const normalizedBerlinerischCache = new WeakMap<WordRef[], Map<WordRef, string>>();
 
 export const similarWords = (
   allWords: WordRef[],
@@ -205,21 +224,28 @@ export const similarWords = (
     return [];
   }
 
-  const allWordsWithoutCurrent = allWords.filter((word) => word.id !== currentWord?.id);
-  const similarWords = allWordsWithoutCurrent.map((word) => {
-    return {
-      isSimilar: natural.JaroWinklerDistance(
-        word.wordProperties?.berlinerisch ?? "",
-        currentWord.wordProperties?.berlinerisch ?? "",
-      ),
-      word: word,
-    };
-  });
+  let normalized = normalizedBerlinerischCache.get(allWords);
+  if (!normalized) {
+    normalized = new Map();
+    for (const word of allWords) {
+      normalized.set(word, word.wordProperties?.berlinerisch ?? "");
+    }
+    normalizedBerlinerischCache.set(allWords, normalized);
+  }
 
-  if (needsSimilarity !== undefined)
-    return similarWords.filter((word) => word.isSimilar >= needsSimilarity);
+  const currentBerlinerisch =
+    normalized.get(currentWord) ?? currentWord.wordProperties?.berlinerisch ?? "";
+  const results: { isSimilar: number; word: WordRef }[] = [];
 
-  return similarWords;
+  for (const word of allWords) {
+    if (word.id === currentWord?.id) continue;
+    const isSimilar = natural.JaroWinklerDistance(normalized.get(word) ?? "", currentBerlinerisch);
+    if (needsSimilarity === undefined || isSimilar >= needsSimilarity) {
+      results.push({ isSimilar, word });
+    }
+  }
+
+  return results;
 };
 
 export const createWikimediaFileList = async (
