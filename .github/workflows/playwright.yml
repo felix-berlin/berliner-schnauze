@@ -2,8 +2,16 @@ name: Playwright Tests
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "openspec/**"
   pull_request:
     branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "openspec/**"
 
 permissions:
   id-token: write
@@ -13,6 +21,10 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    # Browsers + OS libs are baked into the image. Keep the tag in sync with @playwright/test.
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host
     steps:
       - name: Checkout ✅
         uses: actions/checkout@v7
@@ -35,25 +47,22 @@ jobs:
           node-version: lts/*
           cache: pnpm
 
+      - name: Get date
+        id: date
+        run: echo "day=$(date +%F)" >> "$GITHUB_OUTPUT"
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v6
+      # Only used by the E2E build (see useDiskCache in getWords.ts). Keyed by day so
+      # the words are re-fetched at most once per day; saved right after the build
+      # so a failing test run doesn't discard it.
+      - name: Restore words cache
+        id: words-cache
+        uses: actions/cache/restore@v6
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-
-      - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps
-
-      # Cache hit skips the browser download above, but the OS-level shared
-      # libs (apt packages) still need installing on every fresh runner.
-      - name: Install Playwright OS dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm exec playwright install-deps
+          path: node_modules/.cache/berliner-words
+          key: words-${{ github.ref_name == 'main' && 'prod' || 'staging' }}-${{ steps.date.outputs.day }}
 
       # Built explicitly here (rather than inside webServer.command) so the
       # build has the full job timeout to finish — Astro fetches and renders
@@ -72,6 +81,13 @@ jobs:
         env:
           E2E_WORD_LIMIT: "500"
         run: pnpm run build
+
+      - name: Save words cache
+        if: steps.words-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: node_modules/.cache/berliner-words
+          key: ${{ steps.words-cache.outputs.cache-primary-key }}
 
       - name: Run Playwright tests
         run: pnpm exec playwright test

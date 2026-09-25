@@ -22,8 +22,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* 2 workers on CI: ubuntu-latest has 4 vCPUs, and astro preview shares them. */
-  workers: process.env.CI ? 2 : undefined,
+  /* Playwright default (half of the CPU cores) */
+  workers: undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters
    * The HTML report is always generated for humans to open later. For the live
    * terminal output, AI agents (detected via std-env, same signal Vitest 4.1+

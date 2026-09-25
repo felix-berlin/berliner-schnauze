@@ -30,6 +30,9 @@ export const limitPagesForE2e = <T extends { slug: string }>(words: T[]): T[] =>
   return words.filter(({ slug }, i) => i < limit || E2E_REQUIRED_SLUGS.has(slug));
 };
 
+// Dev servers and the Playwright CI build (restored via actions/cache) skip the ~60 sequential requests.
+const useDiskCache = import.meta.env.DEV || !!E2E_WORD_LIMIT;
+
 const fetchPaginatedWords = async () => {
   const stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"];
   const allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
@@ -38,7 +41,7 @@ const fetchPaginatedWords = async () => {
   const pageSize = 500; // needs graphql_connection_max_query_amount >= 500 on the WP side
   const cacheKey = ["words", "TITLE", "ASC", stati.join("-")].join("_");
 
-  if (import.meta.env.DEV) {
+  if (useDiskCache) {
     const cached = await readWordsCache<typeof allWords>(cacheKey);
     if (cached) return cached;
   }
@@ -76,7 +79,7 @@ const fetchPaginatedWords = async () => {
     }
   }
 
-  if (import.meta.env.DEV && complete) await writeWordsCache(cacheKey, allWords);
+  if (useDiskCache && complete) await writeWordsCache(cacheKey, allWords);
 
   return allWords;
 };
