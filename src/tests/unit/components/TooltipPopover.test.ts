@@ -238,3 +238,24 @@ describe("TooltipPopover.vue", () => {
     expect(() => rafCallbacks.forEach((cb) => cb(0))).not.toThrow();
   });
 });
+
+describe("TooltipPopover.vue DOM removal", () => {
+  it("removes the panel from the DOM after the exit animation", async () => {
+    vi.useFakeTimers();
+    mountComponent(TooltipPopover, { props: { content: "Tip" } });
+    await showTooltip();
+    expect(getPanel()).not.toBeNull();
+    (wrapper!.vm as unknown as TooltipPopoverExposed).hide();
+    await vi.advanceTimersByTimeAsync(100);
+    expect(getPanel()).toBeNull();
+  });
+
+  it("show() while already rendered reuses the panel", async () => {
+    mountComponent(TooltipPopover, { props: { content: "Tip" } });
+    await showTooltip();
+    const panel = getPanel();
+    await showTooltip();
+    expect(getPanel()).toBe(panel);
+    expect(mockShowPopover).toHaveBeenCalledTimes(2);
+  });
+});

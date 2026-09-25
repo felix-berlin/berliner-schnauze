@@ -80,3 +80,24 @@ describe("trackEvent", () => {
     expect((window as Window & { _paq?: unknown })._paq).toBeUndefined();
   });
 });
+
+describe("trackContentImpressionsWithinNode", () => {
+  it("pushes the node to the Matomo queue", async () => {
+    const { trackContentImpressionsWithinNode } = await import("@utils/analytics");
+    const el = document.createElement("div");
+    trackContentImpressionsWithinNode(el);
+    expect(window._paq?.[0]).toEqual(["trackContentImpressionsWithinNode", el]);
+  });
+
+  it("returns early without pushing when window is undefined", async () => {
+    const { trackContentImpressionsWithinNode } = await import("@utils/analytics");
+    const el = document.createElement("div");
+    vi.stubGlobal("window", undefined);
+    try {
+      trackContentImpressionsWithinNode(el);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+    expect((window as Window & { _paq?: unknown })._paq).toBeUndefined();
+  });
+});
