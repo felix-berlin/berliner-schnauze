@@ -26,8 +26,8 @@ const hasContent = soundingWords.length > 0 || similarSpelling.length > 0;
           <ul>
             {soundingWords.map((w) => (
               <li>
-                <a href={routeToWord(w.slug ?? undefined)}>
-                  {w.wordProperties?.berlinerisch}
+                <a href={routeToWord(w.slug)}>
+                  {w.wordProperties.berlinerisch}
                 </a>
               </li>
             ))}

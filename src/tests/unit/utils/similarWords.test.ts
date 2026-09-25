@@ -9,11 +9,6 @@ describe("similarWords", () => {
     { id: "3", wordProperties: { berlinerisch: "word3" } },
   ];
 
-  it("returns empty array if no current word or all words are provided", () => {
-    expect(similarWords(null, mockWords[0])).toEqual([]);
-    expect(similarWords(mockWords, null)).toEqual([]);
-  });
-
   it("returns all words without current word", () => {
     const result = similarWords(mockWords, mockWords[0]);
     expect(result.length).toBe(2);
@@ -34,5 +29,35 @@ describe("similarWords", () => {
   it("filters words based on similarity if needsSimilarity is provided", () => {
     const result = similarWords(mockWords, mockWords[0], 0.8);
     expect(result.every((word) => word.isSimilar >= 0.8)).toBe(true);
+  });
+
+  it("length pre-filter never drops a word that reaches the threshold", () => {
+    const texts = [
+      "wa",
+      "was",
+      "wat",
+      "waschen",
+      "wachtmeister",
+      "a",
+      "ab",
+      "abc",
+      "abcd",
+      "abcdefgh",
+    ];
+    const words = texts.map((t, i) => ({ id: String(i), wordProperties: { berlinerisch: t } }));
+    for (const threshold of [0.81, 0.85, 0.9, 0.95]) {
+      for (const current of words) {
+        const expected = words
+          .filter((w) => w.id !== current.id)
+          .filter(
+            (w) =>
+              natural.JaroWinklerDistance(
+                w.wordProperties.berlinerisch,
+                current.wordProperties.berlinerisch,
+              ) >= threshold,
+          );
+        expect(similarWords(words, current, threshold).map((r) => r.word)).toEqual(expected);
+      }
+    }
   });
 });

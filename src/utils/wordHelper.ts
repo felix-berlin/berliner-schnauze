@@ -1,19 +1,34 @@
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
-import germanWordsArray from "all-the-german-words";
 import nlp from "de-compromise";
 import natural from "natural";
+import { createRequire } from "node:module";
 
 import type { WordPropertiesWikimediaFiles } from "@/gql/entity-types";
 
+/** Minimal word shape for cross-word helpers; `Word` from fetchAllWords satisfies it. */
 export type WordRef = {
-  id?: string | null;
-  slug?: string | null;
-  wordProperties?: { berlinerisch?: string | null } | null;
+  id: string;
+  slug: string;
+  wordProperties: { berlinerisch: string };
 };
 
-export const germanWords = new Set<string>(
-  (germanWordsArray as string[]).map((w) => w.toLowerCase()),
-);
+// all-the-german-words is a ~28 MB JSON array — require it on first use instead of at module
+// load, so importers that never decompose words (e.g. the search index) don't pay for it.
+let germanWordsCache: Set<string> | undefined;
+export const getGermanWords = (): Set<string> =>
+  (germanWordsCache ??= new Set(
+    (createRequire(import.meta.url)("all-the-german-words") as string[]).map((w) =>
+      w.toLowerCase(),
+    ),
+  ));
+
+const VOWELS = new Set(["a", "e", "i", "o", "u", "ä", "ö", "ü"]);
+const LETTER_RE = /[a-zäöüß]/i;
+
+/** Expects a lowercase char. */
+const isVowelChar = (c: string): boolean => VOWELS.has(c);
+/** Expects a lowercase char. */
+const isConsonantChar = (c: string): boolean => LETTER_RE.test(c) && !isVowelChar(c);
 
 const _soundEx = new natural.SoundEx();
 
@@ -28,7 +43,7 @@ export const coloredConsonantsAndVowels = (word: string): string => {
   let html = "";
 
   for (const char of word) {
-    if ("aeiouäöü".includes(char.toLowerCase())) {
+    if (isVowelChar(char.toLowerCase())) {
       html += `<span class="is-vowel">${char}</span>`; // Vowels
     } else {
       html += `<span class="is-consonant">${char}</span>`; // Consonants
@@ -42,10 +57,10 @@ export const countLetters = (word: string) => {
   let vowelsCount = 0;
   let consonantsCount = 0;
 
-  for (const char of word) {
-    if ("aeiouäöü".includes(char.toLowerCase())) {
+  for (const char of word.toLowerCase()) {
+    if (isVowelChar(char)) {
       vowelsCount++;
-    } else if (char.match(/[a-zäöüß]/i)) {
+    } else if (isConsonantChar(char)) {
       consonantsCount++;
     }
   }
@@ -178,16 +193,13 @@ export const translateNlpTags = (tags: WordTags[]): WordTags[] => {
 // code once per array instead of running compare() against all ~6000 words on every page.
 const soundexIndexCache = new WeakMap<WordRef[], Map<string, WordRef[]>>();
 
-export const similarSoundingWords = (allWords: WordRef[], currentWord: WordRef) => {
-  if (!currentWord || !allWords) {
-    return [];
-  }
-
+/** Words (other than `currentWord`) whose berlinerisch shares its Soundex code. */
+export const similarSoundingWords = (allWords: WordRef[], currentWord: WordRef): WordRef[] => {
   let index = soundexIndexCache.get(allWords);
   if (!index) {
     index = new Map();
     for (const word of allWords) {
-      const berlinerisch = word.wordProperties?.berlinerisch;
+      const { berlinerisch } = word.wordProperties;
       if (!berlinerisch) continue;
       const code = _soundEx.process(berlinerisch);
       const bucket = index.get(code);
@@ -197,49 +209,38 @@ export const similarSoundingWords = (allWords: WordRef[], currentWord: WordRef) 
     soundexIndexCache.set(allWords, index);
   }
 
-  const currentBerlinerisch = currentWord.wordProperties?.berlinerisch;
-  const soundsLikeCurrent = new Set(
-    currentBerlinerisch ? index.get(_soundEx.process(currentBerlinerisch)) : undefined,
+  const currentBerlinerisch = currentWord.wordProperties.berlinerisch;
+  if (!currentBerlinerisch) return [];
+  return (index.get(_soundEx.process(currentBerlinerisch)) ?? []).filter(
+    (word) => word.id !== currentWord.id,
   );
-
-  return allWords
-    .filter((word) => word.id !== currentWord?.id)
-    .map((word) => ({
-      isSimilar: soundsLikeCurrent.has(word),
-      word: word,
-    }));
 };
-
-// JaroWinkler is a continuous distance, not bucketable like soundex — but the berlinerisch
-// string of each word is normalized identically on every comparison, on every page. Cache
-// that normalization once per array instead of redoing it ~6000×6000 times.
-const normalizedBerlinerischCache = new WeakMap<WordRef[], Map<WordRef, string>>();
 
 export const similarWords = (
   allWords: WordRef[],
   currentWord: WordRef,
   needsSimilarity?: number,
 ) => {
-  if (!currentWord || !allWords) {
-    return [];
-  }
-
-  let normalized = normalizedBerlinerischCache.get(allWords);
-  if (!normalized) {
-    normalized = new Map();
-    for (const word of allWords) {
-      normalized.set(word, word.wordProperties?.berlinerisch ?? "");
-    }
-    normalizedBerlinerischCache.set(allWords, normalized);
-  }
-
-  const currentBerlinerisch =
-    normalized.get(currentWord) ?? currentWord.wordProperties?.berlinerisch ?? "";
+  const currentBerlinerisch = currentWord.wordProperties.berlinerisch;
   const results: { isSimilar: number; word: WordRef }[] = [];
 
+  // Length pre-filter. With m ≤ min(len), Jaro ≤ (2 + r) / 3 where r = min/max length, and
+  // natural's Winkler boost (prefix ≤ 4, p = 0.1) gives JW ≤ 0.6·Jaro + 0.4 ≤ 0.8 + 0.2·r.
+  // So a candidate can only reach the threshold when r ≥ (threshold − 0.8) / 0.2.
+  const minRatio = needsSimilarity === undefined ? 0 : (needsSimilarity - 0.8) / 0.2 - 1e-9;
+  const currentLength = currentBerlinerisch.length;
+
   for (const word of allWords) {
-    if (word.id === currentWord?.id) continue;
-    const isSimilar = natural.JaroWinklerDistance(normalized.get(word) ?? "", currentBerlinerisch);
+    if (word.id === currentWord.id) continue;
+    const candidate = word.wordProperties.berlinerisch;
+    if (
+      minRatio > 0 &&
+      Math.min(candidate.length, currentLength) <
+        minRatio * Math.max(candidate.length, currentLength)
+    ) {
+      continue;
+    }
+    const isSimilar = natural.JaroWinklerDistance(candidate, currentBerlinerisch);
     if (needsSimilarity === undefined || isSimilar >= needsSimilarity) {
       results.push({ isSimilar, word });
     }
@@ -332,17 +333,11 @@ export const letterFrequency = (
     })
     .map((char) => ({
       char,
-      isVowel: "aeiouäöü".includes(char),
+      isVowel: isVowelChar(char),
       label: frequencyLabel(GERMAN_LETTER_FREQ[char]!),
       percent: GERMAN_LETTER_FREQ[char]!,
     }));
 };
-
-const VOWELS_SET = new Set(["a", "e", "i", "o", "u", "ä", "ö", "ü"]);
-const ALL_GERMAN_VOWELS = ["a", "e", "i", "o", "u", "ä", "ö", "ü"];
-
-const isVowelChar = (c: string): boolean => VOWELS_SET.has(c);
-const isConsonantChar = (c: string): boolean => /[a-zäöüß]/i.test(c) && !isVowelChar(c);
 
 export const wordCuriosities = (
   word: string,
@@ -362,10 +357,11 @@ export const wordCuriosities = (
   endsWithConsonant: boolean;
 } => {
   const lower = word.toLowerCase();
-  const letters = lower.split("").filter((c) => /[a-zäöüß]/i.test(c));
+  const letters = lower.split("").filter((c) => LETTER_RE.test(c));
 
   const isPalindrome = lower === lower.split("").reverse().join("");
-  const hasAllVowels = ALL_GERMAN_VOWELS.every((v) => lower.includes(v));
+  const distinctVowelCount = [...VOWELS].filter((v) => lower.includes(v)).length;
+  const hasAllVowels = distinctVowelCount === VOWELS.size;
 
   const UMLAUTS = new Set(["ä", "ö", "ü", "Ä", "Ö", "Ü"]);
   const hasUmlaut = Array.from(word).some((c) => UMLAUTS.has(c));
@@ -401,7 +397,7 @@ export const wordCuriosities = (
 
   const doubleLettersSet = new Set<string>();
   for (let i = 0; i < lower.length - 1; i++) {
-    if (lower[i] === lower[i + 1] && /[a-zäöüß]/i.test(lower[i])) {
+    if (lower[i] === lower[i + 1] && LETTER_RE.test(lower[i])) {
       doubleLettersSet.add(lower[i]);
     }
   }
@@ -415,7 +411,7 @@ export const wordCuriosities = (
   }
 
   return {
-    distinctVowelCount: ALL_GERMAN_VOWELS.filter((v) => lower.includes(v)).length,
+    distinctVowelCount,
     doubleLetters: [...doubleLettersSet],
     endsWithConsonant: isConsonantChar(lower[lower.length - 1] ?? ""),
     hasAllVowels,
@@ -441,7 +437,7 @@ export const findAnagrams = (word: string, allWords: WordRef[]): WordRef[] => {
   if (!index) {
     index = new Map();
     for (const w of allWords) {
-      const key = sortedChars(w.wordProperties?.berlinerisch ?? "");
+      const key = sortedChars(w.wordProperties.berlinerisch);
       const bucket = index.get(key);
       if (bucket) bucket.push(w);
       else index.set(key, [w]);
@@ -450,29 +446,39 @@ export const findAnagrams = (word: string, allWords: WordRef[]): WordRef[] => {
   }
   const lower = word.toLowerCase();
   return (index.get(sortedChars(word)) ?? []).filter(
-    (w) => (w.wordProperties?.berlinerisch ?? "").toLowerCase() !== lower,
+    (w) => w.wordProperties.berlinerisch.toLowerCase() !== lower,
   );
 };
 
 const germanCollator = new Intl.Collator("de");
-const sortedWordsCache = new WeakMap<WordRef[], WordRef[]>();
+const sortedWordsCache = new WeakMap<
+  WordRef[],
+  { sorted: WordRef[]; indexById: Map<WordRef["id"], number> }
+>();
 
 export const alphabeticNeighbors = (
   allWords: WordRef[],
   currentWord: WordRef,
   n: number = 3,
 ): { before: WordRef[]; after: WordRef[] } => {
-  let sorted = sortedWordsCache.get(allWords);
-  if (!sorted) {
-    sorted = [...allWords].sort((a, b) =>
+  let cached = sortedWordsCache.get(allWords);
+  if (!cached) {
+    const sorted = [...allWords].sort((a, b) =>
       germanCollator.compare(
-        (a.wordProperties?.berlinerisch ?? "").toLowerCase(),
-        (b.wordProperties?.berlinerisch ?? "").toLowerCase(),
+        a.wordProperties.berlinerisch.toLowerCase(),
+        b.wordProperties.berlinerisch.toLowerCase(),
       ),
     );
-    sortedWordsCache.set(allWords, sorted);
+    const indexById = new Map<WordRef["id"], number>();
+    // First occurrence wins, matching the previous findIndex semantics.
+    sorted.forEach((w, i) => {
+      if (!indexById.has(w.id)) indexById.set(w.id, i);
+    });
+    cached = { indexById, sorted };
+    sortedWordsCache.set(allWords, cached);
   }
-  const idx = sorted.findIndex((w) => w.id === currentWord.id);
+  const { sorted, indexById } = cached;
+  const idx = indexById.get(currentWord.id) ?? -1;
   if (idx === -1) return { after: [], before: [] };
   return {
     after: sorted.slice(idx + 1, idx + 1 + n),
@@ -480,9 +486,10 @@ export const alphabeticNeighbors = (
   };
 };
 
-export const decomposeCompoundWord = (word: string, germanWords: Set<string>): string[] | null => {
+export const decomposeCompoundWord = (word: string, dictionary?: Set<string>): string[] | null => {
   const lower = word.toLowerCase();
   if (lower.length < 5) return null; // Too short to be a compound
+  const germanWords = dictionary ?? getGermanWords();
   if (germanWords.has(lower)) return null;
 
   for (let i = 3; i <= lower.length - 3; i++) {

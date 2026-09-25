@@ -82,18 +82,6 @@ describe("SingleWord.vue", () => {
     expect(wrapper.find("article").classes()).toContain("has-translation");
   });
 
-  it("does not have has-translation class when translations is absent", async () => {
-    const SingleWord = (await import("@components/word/SingleWord.vue")).default;
-    const sourceNoTranslation = {
-      ...source,
-      wordProperties: { berlinerisch: "Schnauze" },
-    };
-    const wrapper = mount(SingleWord, {
-      props: { showDropdown: false, source: sourceNoTranslation },
-    });
-    expect(wrapper.find("article").classes()).not.toContain("has-translation");
-  });
-
   it("renders berlinerisch text in the link", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
@@ -121,19 +109,6 @@ describe("SingleWord.vue", () => {
     const link = wrapper.find(".c-word-list__berlinerisch a");
     expect(link.html()).not.toContain("<mark");
     expect(link.html()).toContain("Schnauze");
-  });
-
-  it("uses empty string fallback when berlinerisch is undefined (covers ?? '' branch)", async () => {
-    const SingleWord = (await import("@components/word/SingleWord.vue")).default;
-    const sourceNoBerlinerisch = {
-      ...source,
-      wordProperties: { berlinerisch: undefined as unknown as string },
-    };
-    const wrapper = mount(SingleWord, {
-      props: { showDropdown: false, source: sourceNoBerlinerisch },
-    });
-    const link = wrapper.find(".c-word-list__berlinerisch a");
-    expect(link.html()).not.toContain("<mark");
   });
 
   it("returns plain text when highlightTerm is whitespace only", async () => {
