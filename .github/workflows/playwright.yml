@@ -18,13 +18,9 @@ permissions:
   contents: read
 
 jobs:
-  test:
-    timeout-minutes: 60
+  build:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
-    # Browsers + OS libs are baked into the image. Keep the tag in sync with @playwright/test.
-    container:
-      image: mcr.microsoft.com/playwright:v1.63.0-noble
-      options: --ipc=host
     steps:
       - name: Checkout ✅
         uses: actions/checkout@v7
@@ -89,8 +85,64 @@ jobs:
           path: node_modules/.cache/berliner-words
           key: ${{ steps.words-cache.outputs.cache-primary-key }}
 
-      - name: Run Playwright tests
-        run: pnpm exec playwright test
+      # dist/ is served by `astro preview` in every shard job. Same public-repo
+      # caveat as the report below: the static site holds no secrets, only public HTML/JS.
+      - name: Upload build
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist
+          retention-days: 1
+
+  test:
+    needs: build
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    # Browsers + OS libs are baked into the image. Keep the tag in sync with @playwright/test.
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+
+      - name: Fetch secrets from Infisical 🔐
+        uses: Infisical/secrets-action@v1.0.18
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+          domain: "https://infisical.kasimir.dev"
+
+      - name: Setup pnpm 🛠️
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download build
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+
+      # `astro preview` loads astro.config.mjs, which imports this generated stub.
+      - name: Generate supportedBrowsers
+        run: pnpm run supportedBrowsers
+
+      - name: Run Playwright tests (shard ${{ matrix.shard }}/4)
+        run: pnpm exec playwright test --shard=${{ matrix.shard }}/4
 
       # Traces/screenshots/console logs can contain secrets — this repo is public,
       # so GitHub Actions artifacts are downloadable by anyone. Encrypt before
@@ -112,6 +164,6 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.shard }}
           path: playwright-report.tar.gz.gpg
           retention-days: 14
