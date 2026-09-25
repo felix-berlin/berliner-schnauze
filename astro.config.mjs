@@ -259,6 +259,12 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
+      // Polar checkout URL for the Full Anki deck. Unset until the product goes live.
+      ANKI_DECK_FULL_CHECKOUT: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
     },
   },
   compressHTML: true,

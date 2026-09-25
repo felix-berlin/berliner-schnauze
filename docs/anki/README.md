@@ -95,8 +95,8 @@ Things to know about AnkiWeb (terms last updated 2018-10-17, read 2026-09-21):
 ## Publish Full
 
 1. Create a product in Polar and attach `dist-anki/berlinerisch-full.apkg` as the file benefit.
-2. Copy the shareable checkout link into `FULL_CHECKOUT_URL` in `src/pages/anki.astro`.
-   While it is empty, the page shows "Kommt bald" instead of a buy button.
+2. Set the shareable checkout link as `ANKI_DECK_FULL_CHECKOUT` in Infisical (public, client-side —
+   see `astro.config.mjs`). While it is unset, the page shows "Kommt bald" instead of a buy button.
 3. Do not commit `berlinerisch-full.apkg` to the repository.
 
 Check fees and VAT handling on the Polar pricing pages yourself before deciding.
