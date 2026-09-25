@@ -28,7 +28,6 @@ vi.mock("@stores/wordList.ts", () => ({
   $searchQuery: {},
   $searchResultCount: {},
   $showWordListFilterFlyout: {},
-  searchLength: {},
 }));
 
 vi.mock("@components/SearchWords.vue", async () => {

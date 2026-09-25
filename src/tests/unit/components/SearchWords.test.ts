@@ -6,11 +6,8 @@ vi.mock("@composables/useSearchQuerySync", () => ({
   useSearchQuerySync: vi.fn(),
 }));
 
-type OramaResultsState =
-  | { state: "loading" }
-  | { state: "ready"; value: { count: number } | null };
+type OramaResultsState = { state: "loading" } | { state: "ready"; value: { count: number } | null };
 
-const searchLengthRef = ref(0);
 const oramaResultsRef = ref<OramaResultsState>({ state: "loading" });
 const localSearchRef = ref("");
 
@@ -22,12 +19,10 @@ const mockStores = {
       localSearchRef.value = v;
     }),
   },
-  searchLength: {},
 };
 
 vi.mock("@nanostores/vue", () => ({
   useStore: vi.fn((store) => {
-    if (store === mockStores.searchLength) return searchLengthRef;
     if (store === mockStores.$searchQuery) return localSearchRef;
     return oramaResultsRef;
   }),
@@ -36,7 +31,6 @@ vi.mock("@nanostores/vue", () => ({
 vi.mock("@stores/wordList.ts", () => ({
   $oramaSearchResults: mockStores.$oramaSearchResults,
   $searchQuery: mockStores.$searchQuery,
-  searchLength: mockStores.searchLength,
 }));
 
 vi.mock("@utils/analytics", () => ({
@@ -54,7 +48,6 @@ vi.mock("@vueuse/core", async (importOriginal) => {
 describe("SearchWords.vue", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    searchLengthRef.value = 0;
     localSearchRef.value = "";
     oramaResultsRef.value = { state: "loading" };
   });
@@ -84,14 +77,13 @@ describe("SearchWords.vue", () => {
   });
 
   it("button aria-label says betätigen when search is empty", async () => {
-    searchLengthRef.value = 0;
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords);
     expect(wrapper.find("button").attributes("aria-label")).toBe("Wortsuche betätigen");
   });
 
   it("button aria-label says löschen when search has content", async () => {
-    searchLengthRef.value = 3;
+    localSearchRef.value = "Kie";
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords);
     expect(wrapper.find("button").attributes("aria-label")).toBe("Wortsuche löschen");
@@ -109,8 +101,7 @@ describe("SearchWords.vue", () => {
     expect(wrapper.find("button").classes()).toContain("c-word-search__search-button--right");
   });
 
-  it("clicking button when searchLength > 0 resets localSearch", async () => {
-    searchLengthRef.value = 3;
+  it("clicking button when the input has content resets the search", async () => {
     localSearchRef.value = "Kiez";
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords);
@@ -118,13 +109,27 @@ describe("SearchWords.vue", () => {
     expect(localSearchRef.value).toBe("");
   });
 
-  it("clicking button when searchLength is 0 does not reset search", async () => {
-    searchLengthRef.value = 0;
-    localSearchRef.value = "";
+  it("clicking button when the input is empty does not write the store", async () => {
     const SearchWords = (await import("@components/SearchWords.vue")).default;
     const wrapper = mount(SearchWords);
     await wrapper.find("button").trigger("click");
-    expect(localSearchRef.value).toBe("");
+    expect(mockStores.$searchQuery.set).not.toHaveBeenCalled();
+  });
+
+  it("typing writes the (debounced) store value", async () => {
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords);
+    await wrapper.find("input").setValue("Kiez");
+    expect(mockStores.$searchQuery.set).toHaveBeenCalledWith("Kiez");
+  });
+
+  it("adopts external store changes into the input", async () => {
+    localSearchRef.value = "Kiez";
+    const SearchWords = (await import("@components/SearchWords.vue")).default;
+    const wrapper = mount(SearchWords);
+    localSearchRef.value = "";
+    await nextTick();
+    expect((wrapper.find("input").element as HTMLInputElement).value).toBe("");
   });
 
   it("input event tracks search immediately when oramaResults is ready", async () => {

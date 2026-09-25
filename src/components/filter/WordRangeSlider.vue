@@ -12,6 +12,7 @@
       class="c-input c-input--range"
       :aria-labelledby="`${id}-legend`"
       :aria-controls="`${id}-number`"
+      @change="commit"
     />
 
     <input
@@ -25,6 +26,7 @@
       :min="getMinMax.min"
       :aria-labelledby="`${id}-legend`"
       :aria-controls="id"
+      @input="debouncedCommit"
     />
 
     <transition name="fade">
@@ -44,17 +46,34 @@
 
 <script setup lang="ts">
 import { useStore, useVModel } from "@nanostores/vue";
-import { $wordSearch } from "@stores/wordList.ts";
+import { $searchMeta, $wordSearch } from "@stores/wordList.ts";
+import { useDebounceFn } from "@vueuse/core";
 import RotateCcwIcon from "virtual:icons/lucide/rotate-ccw";
-import { computed, useId } from "vue";
+import { computed, ref, useId, watch } from "vue";
 
 const { label, rangeType } = defineProps<{
   label: string;
   rangeType: "characterCount" | "consonantsCount" | "syllablesCount" | "vowelsCount";
 }>();
 
-const rangeValue = useVModel($wordSearch, rangeType);
-const wordSearch = useStore($wordSearch);
+const storeValue = useVModel($wordSearch, rangeType);
+const searchMeta = useStore($searchMeta);
+
+// Local while dragging/typing: the store (and with it the Orama search) is
+// only written on slider release or after a typing pause, not per drag step.
+const rangeValue = ref(storeValue.value);
+const commit = () => {
+  storeValue.value = rangeValue.value;
+};
+const debouncedCommit = useDebounceFn(commit, 300);
+
+// Adopt external changes such as "reset all filters".
+watch(
+  () => storeValue.value,
+  (value) => {
+    rangeValue.value = value;
+  },
+);
 
 const getMinMax = computed(() => {
   // Map prop to correct key in the object
@@ -65,13 +84,14 @@ const getMinMax = computed(() => {
     vowelsCount: "vowelsCount",
   } as const;
   const key = keyMap[rangeType];
-  return wordSearch.value.rangeFilterMinMax?.[key] ?? { max: 0, min: 0 };
+  return searchMeta.value.rangeFilterMinMax?.[key] ?? { max: 0, min: 0 };
 });
 
 const id = useId();
 
 const resetRange = () => {
   rangeValue.value = undefined;
+  commit();
 };
 
 const hasRangeSet = computed(() => typeof rangeValue.value === "undefined");

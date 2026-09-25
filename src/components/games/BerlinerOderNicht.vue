@@ -124,6 +124,7 @@ import BonCard from "@components/games/BonCard.vue";
 import BonHUD from "@components/games/BonHUD.vue";
 import BonResult from "@components/games/BonResult.vue";
 import { useBon, type BonCard as BonCardData } from "@composables/useBon";
+import { fetchSearchIndex } from "@services/searchIndex.ts";
 import { $bonStats } from "@stores/bonStats";
 import { $savedBon } from "@stores/savedBon";
 
@@ -258,18 +259,8 @@ const cardTransitionName = computed(() => {
 
 onMounted(async () => {
   try {
-    const res = await fetch("/api/search/index.json");
-    if (!res.ok) throw new Error("Failed to load word index");
-    const data = await res.json();
-
-    type SearchRecord = {
-      wordProperties: { berlinerisch: string; translations: string[] };
-      slug: string;
-    };
-    const records = data as SearchRecord[];
-
-    const realWords: BonCardData[] = records
-      .filter((r) => r?.wordProperties?.berlinerisch)
+    const realWords: BonCardData[] = (await fetchSearchIndex())
+      .filter((r) => r.wordProperties.berlinerisch)
       .map((r) => ({
         isReal: true,
         slug: r.slug,
@@ -283,19 +274,20 @@ onMounted(async () => {
   }
 });
 
-function startGame() {
+function resetAnimationState() {
   cardNumber.value = 1;
   exitDirection.value = null;
   isShaking.value = false;
   isAnswering.value = false;
+}
+
+function startGame() {
+  resetAnimationState();
   _startGame();
 }
 
 function resumeGame() {
-  cardNumber.value = 1;
-  exitDirection.value = null;
-  isShaking.value = false;
-  isAnswering.value = false;
+  resetAnimationState();
   _resumeGame();
 }
 

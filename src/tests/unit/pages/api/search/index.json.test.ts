@@ -43,7 +43,7 @@ function makeWord(overrides: Partial<BerlinerWord> = {}): BerlinerWord {
 
 describe("makeOramaSearchIndex — themen extraction", () => {
   it("returns empty themen array when berlinerischThemen is null", () => {
-    const result = makeOramaSearchIndex(makeWord({ berlinerischThemen: null }), new Map());
+    const result = makeOramaSearchIndex(makeWord({ berlinerischThemen: null }));
     expect(result.themen).toEqual([]);
   });
 
@@ -57,7 +57,6 @@ describe("makeOramaSearchIndex — themen extraction", () => {
           ],
         },
       } as unknown as Partial<BerlinerWord>),
-      new Map(),
     );
     expect(result.themen).toEqual(["essen-trinken"]);
   });
@@ -65,7 +64,6 @@ describe("makeOramaSearchIndex — themen extraction", () => {
   it("does not throw when nodes is null", () => {
     const result = makeOramaSearchIndex(
       makeWord({ berlinerischThemen: { nodes: null } } as unknown as Partial<BerlinerWord>),
-      new Map(),
     );
     expect(result.themen).toEqual([]);
   });
