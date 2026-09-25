@@ -96,12 +96,16 @@ jobs:
 
   test:
     needs: build
-    timeout-minutes: 60
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     # Browsers + OS libs are baked into the image. Keep the tag in sync with @playwright/test.
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --ipc=host
+    # GitHub sets HOME=/github/home in container jobs; Firefox/WebKit refuse to start
+    # as root unless HOME is root's own home.
+    env:
+      HOME: /root
     strategy:
       fail-fast: false
       matrix:
