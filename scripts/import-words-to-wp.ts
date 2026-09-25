@@ -312,22 +312,17 @@ async function main(): Promise<void> {
   let skipped = 0;
   let errors = 0;
   let acfWarned = false;
-  // Skipped entries incl. their full lexikon data, persisted for a later
-  // pass that checks whether the existing WP posts can be enriched.
-  const skippedEntries: Array<LexikonEntry & { skipReason: string }> = [];
 
   for (const entry of entries) {
     if (created >= LIMIT) break;
 
     if (existingTitles.has(entry.word)) {
       console.log(`  SKIP (exists): ${entry.word}`);
-      skippedEntries.push({ ...entry, skipReason: "exists" });
       skipped++;
       continue;
     }
     if (existingLower.has(entry.word.toLowerCase()) && !entry.allowDuplicate) {
       console.log(`  SKIP (case-variant exists): ${entry.word}`);
-      skippedEntries.push({ ...entry, skipReason: "case-variant-exists" });
       skipped++;
       continue;
     }
@@ -378,9 +373,6 @@ async function main(): Promise<void> {
   console.log(`\n${"─".repeat(50)}`);
   console.log(`✓ Created: ${created}${DRY_RUN ? " (dry run)" : ""}`);
   console.log(`→ Skipped (already exist): ${skipped}`);
-  if (skippedEntries.length > 0) {
-    console.log(`→ ${skippedEntries.length} skipped entries (not written to disk)`);
-  }
   if (errors > 0) {
     console.log(`✗ Errors: ${errors}`);
     process.exit(1);

@@ -59,3 +59,39 @@ export async function wpFetch<T>(
 export function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+const ALL_POST_STATUSES = "publish,draft,pending,future,private";
+
+/**
+ * Fetches every post of a post type across all statuses in one paginated
+ * pass, using WP REST's comma-separated `status` filter instead of one
+ * request per status.
+ */
+export async function fetchAllPosts<T extends { id: number }>(
+  restBase: string,
+  fields: string,
+  config: WpConfig,
+  rateMs: number,
+  onProgress?: (count: number, page: number) => void,
+): Promise<T[]> {
+  const all: T[] = [];
+  let page = 1;
+
+  while (true) {
+    const posts = await wpFetch<T[]>(
+      `/${restBase}?per_page=100&page=${page}&_fields=${fields}&status=${ALL_POST_STATUSES}`,
+      {},
+      config,
+    );
+    if (posts.length === 0) break;
+
+    all.push(...posts);
+    onProgress?.(all.length, page);
+
+    if (posts.length < 100) break;
+    page++;
+    await delay(rateMs);
+  }
+
+  return all;
+}
