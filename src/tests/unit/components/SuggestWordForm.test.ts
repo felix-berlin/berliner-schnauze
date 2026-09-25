@@ -323,6 +323,29 @@ describe("SuggestWordForm.vue", () => {
     expect(body).not.toContain("<b>Kiez</b>");
   });
 
+  it("sends the user's email as replyTo, not as sender", async () => {
+    const { useMutation } = await import("@urql/vue");
+    const executeMutation = vi.fn(() =>
+      Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
+    );
+    vi.mocked(useMutation).mockReturnValueOnce({
+      executeMutation,
+    } as unknown as ReturnType<typeof useMutation>);
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.find<HTMLInputElement>("#userEmail").setValue("test@example.com");
+    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.find("form").trigger("submit");
+    await Promise.resolve();
+
+    const { input } = (
+      executeMutation.mock.calls[0] as unknown as [{ input: Record<string, unknown> }]
+    )[0];
+    expect(input.replyTo).toBe("test@example.com");
+    expect(input).not.toHaveProperty("from");
+  });
+
   it("re-enables the submit button after a failed send", async () => {
     const { useMutation } = await import("@urql/vue");
     vi.mocked(useMutation).mockReturnValueOnce({

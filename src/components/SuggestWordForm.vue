@@ -202,7 +202,8 @@ const onSubmit = async (): Promise<void> => {
     input: {
       body: mailBody(result.data),
       clientMutationId: "newSuggestedWord",
-      from: result.data.userMail,
+      // The site stays the sender (SPF); the suggester is only the reply target.
+      replyTo: result.data.userMail || undefined,
       subject: "Wortvorschlag - Berliner Schnauze",
       to: "mail@berliner-schnauze.wtf",
     },
