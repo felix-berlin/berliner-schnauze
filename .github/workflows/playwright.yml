@@ -146,8 +146,29 @@ jobs:
       - name: Generate supportedBrowsers
         run: pnpm run supportedBrowsers
 
+      # Started here instead of via Playwright's webServer: in the container the job hung
+      # after the last test while Playwright tore the server down. setsid + redirected
+      # output detach it from the step so the step can end.
+      - name: Start preview server
+        run: |
+          setsid nohup pnpm run preview > preview.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:4321 > /dev/null && exit 0
+            sleep 1
+          done
+          cat preview.log
+          exit 1
+
       - name: Run Playwright tests (shard ${{ matrix.shard }}/4)
+        timeout-minutes: 8
         run: pnpm exec playwright test --shard=${{ matrix.shard }}/4
+
+      # Diagnostics for a hung run: what is still alive after the tests finished.
+      - name: Show processes after a timeout
+        if: ${{ failure() || cancelled() }}
+        run: |
+          ps -eo pid,ppid,stat,etime,args --forest | cut -c1-200 || true
+          tail -20 preview.log || true
 
       # Traces/screenshots/console logs can contain secrets — this repo is public,
       # so GitHub Actions artifacts are downloadable by anyone. Encrypt before

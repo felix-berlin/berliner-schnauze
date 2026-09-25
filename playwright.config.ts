@@ -99,7 +99,8 @@ export default defineConfig({
       ? "pnpm run preview"
       : "pnpm run supportedBrowsers && pnpm exec astro dev",
     url: `http://localhost:${port}`,
-    reuseExistingServer: !process.env.CI,
+    // CI starts `astro preview` itself (see playwright.yml) so Playwright never has to tear it down.
+    reuseExistingServer: true,
     timeout: 120_000,
   },
 });
