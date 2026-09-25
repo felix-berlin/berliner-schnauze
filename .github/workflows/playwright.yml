@@ -163,13 +163,6 @@ jobs:
         timeout-minutes: 8
         run: pnpm exec playwright test --shard=${{ matrix.shard }}/4
 
-      # Diagnostics for a hung run: what is still alive after the tests finished.
-      - name: Show processes after a timeout
-        if: ${{ failure() || cancelled() }}
-        run: |
-          ps -eo pid,ppid,stat,etime,args --forest | cut -c1-200 || true
-          tail -20 preview.log || true
-
       # Traces/screenshots/console logs can contain secrets — this repo is public,
       # so GitHub Actions artifacts are downloadable by anyone. Encrypt before
       # upload per https://playwright.dev/docs/ci-intro#properly-handling-secrets.

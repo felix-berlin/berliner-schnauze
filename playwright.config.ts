@@ -91,15 +91,13 @@ export default defineConfig({
     // per-page compile cost and the live-network dependency during the test
     // run itself — content is fetched once at build time.
     //
-    // The build itself runs as its own CI step (see playwright.yml) so it gets
-    // the full job timeout rather than racing this webServer timeout — by the
-    // time this command runs in CI, the site is already built, so it only has
-    // to wait for `astro preview` to start listening.
+    // The build and `astro preview` both run as their own CI steps (see playwright.yml):
+    // the build gets the full job timeout, and Playwright never has to tear the server
+    // down (that hung the containerized job). In CI this command is only a fallback.
     command: process.env.CI
       ? "pnpm run preview"
       : "pnpm run supportedBrowsers && pnpm exec astro dev",
     url: `http://localhost:${port}`,
-    // CI starts `astro preview` itself (see playwright.yml) so Playwright never has to tear it down.
     reuseExistingServer: true,
     timeout: 120_000,
   },
