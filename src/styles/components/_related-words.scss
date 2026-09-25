@@ -14,9 +14,7 @@
     justify-content: center;
     background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
     padding: vars.$spacer * 1.5;
-    box-shadow:
-      0 0.5px 0.6px rgb(0 0 0 / 8%),
-      0 4px 5px rgb(0 0 0 / 16%);
+    box-shadow: vars.$paper-lift;
     border: 1px var(--style-border, dashed) var(--grey-100);
     font-size: 1.2rem;
 

@@ -1,1 +1,6 @@
 $spacer: 1rem;
+
+// "Paper Lift" — the single shadow for every raised surface (DESIGN.md)
+$paper-lift:
+  0 0.5px 0.6px rgb(0 0 0 / 8%),
+  0 4px 5px rgb(0 0 0 / 16%);

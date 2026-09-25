@@ -5,9 +5,7 @@
 
 .c-header {
   background-color: var(--color-background, var(--orange-200));
-  box-shadow:
-    0 0.5px 0.6px rgb(0 0 0 / 8%),
-    0 4px 5px rgb(0 0 0 / 16%);
+  box-shadow: vars.$paper-lift;
   position: sticky;
   top: 0;
   left: 0;

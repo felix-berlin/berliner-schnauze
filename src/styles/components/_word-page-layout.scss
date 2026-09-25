@@ -2,12 +2,6 @@
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
-// ── Global token ──────────────────────────────────────────────────────────────
-
-:root {
-  --site-header-height: 60px;
-}
-
 // ── Page layout containers ────────────────────────────────────────────────────
 
 .c-page-topbar {
