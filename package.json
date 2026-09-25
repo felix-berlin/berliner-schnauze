@@ -82,7 +82,6 @@
     "@sentry/vite-plugin": "^5.4.0",
     "@spotlightjs/astro": "^3.2.6",
     "@urql/core": "^6.0.3",
-    "@urql/vue": "^2.1.1",
     "@vueform/multiselect": "^2.6.11",
     "@vueuse/core": "^15.0.0",
     "all-the-german-words": "^1.1.0",

@@ -74,7 +74,7 @@
 import TurnStile from "@components/TurnStile.vue";
 import { useContentTracking } from "@composables/useContentTracking";
 import { createToastNotify } from "@stores/toastNotify.ts";
-import { cacheExchange, fetchExchange, provideClient, useMutation } from "@urql/vue";
+import { Client, fetchExchange } from "@urql/core";
 import { trackEvent } from "@utils/analytics";
 import { useTimeoutFn } from "@vueuse/core";
 import { TURNSTILE_SITE_KEY, WP_API } from "astro:env/client";
@@ -157,12 +157,8 @@ const isSending = ref(false);
 const root = ref<HTMLFormElement | null>(null);
 useContentTracking(root);
 
-provideClient({
-  exchanges: [cacheExchange, fetchExchange],
-  fetchOptions: { headers: { "Content-Type": "application/json" } },
-  url: WP_API,
-});
-const { executeMutation } = useMutation(SendEmailDocument);
+// A single fire-and-forget mutation: a plain client, no provide/inject or reactive state.
+const client = new Client({ exchanges: [fetchExchange], url: WP_API });
 
 // Keep the sent values visible for a moment before clearing the form.
 const { start: scheduleReset } = useTimeoutFn(() => Object.assign(form, emptyForm()), 3000, {
@@ -198,16 +194,18 @@ const onSubmit = async (): Promise<void> => {
   if (!isVerified.value || isSending.value) return;
 
   isSending.value = true;
-  const { data, error } = await executeMutation({
-    input: {
-      body: mailBody(result.data),
-      clientMutationId: "newSuggestedWord",
-      // The site stays the sender (SPF); the suggester is only the reply target.
-      replyTo: result.data.userMail || undefined,
-      subject: "Wortvorschlag - Berliner Schnauze",
-      to: "mail@berliner-schnauze.wtf",
-    },
-  });
+  const { data, error } = await client
+    .mutation(SendEmailDocument, {
+      input: {
+        body: mailBody(result.data),
+        clientMutationId: "newSuggestedWord",
+        // The site stays the sender (SPF); the suggester is only the reply target.
+        replyTo: result.data.userMail || undefined,
+        subject: "Wortvorschlag - Berliner Schnauze",
+        to: "mail@berliner-schnauze.wtf",
+      },
+    })
+    .toPromise();
   isSending.value = false;
 
   if (error || !data?.sendEmail?.sent) {

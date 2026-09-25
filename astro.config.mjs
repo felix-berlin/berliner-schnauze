@@ -504,7 +504,7 @@ export default defineConfig({
     // Deps only imported by lazily hydrated islands are discovered late; the
     // mid-session re-optimization then breaks the in-flight dynamic import.
     optimizeDeps: {
-      include: ["@urql/vue", "zod"],
+      include: ["@urql/core", "zod"],
     },
 
     plugins: [

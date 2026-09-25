@@ -12,16 +12,24 @@ vi.mock("@/gql/graphql.ts", () => ({
   SendEmailDocument: {},
 }));
 
-vi.mock("@urql/vue", () => ({
-  cacheExchange: {},
+type MutationResult = { data: unknown; error: unknown };
+const { mutationMock } = vi.hoisted(() => ({
+  mutationMock: vi.fn((_document: unknown, _variables: unknown): Promise<MutationResult> =>
+    Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
+  ),
+}));
+const mutationInput = () => {
+  const [, variables] = mutationMock.mock.calls[0] ?? [];
+  return (variables as { input: Record<string, unknown> }).input;
+};
+
+vi.mock("@urql/core", () => ({
+  Client: class {
+    mutation(document: unknown, variables: unknown) {
+      return { toPromise: () => mutationMock(document, variables) };
+    }
+  },
   fetchExchange: {},
-  provideClient: vi.fn(),
-  useMutation: vi.fn(() => ({
-    data: { value: null },
-    executeMutation: vi.fn(() =>
-      Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
-    ),
-  })),
 }));
 
 vi.mock("@stores/toastNotify.ts", () => ({
@@ -148,8 +156,7 @@ describe("SuggestWordForm.vue", () => {
     expect(label.text()).toContain("optional");
   });
 
-  it("calls executeMutation when form is valid and verified", async () => {
-    const { useMutation } = await import("@urql/vue");
+  it("sends the mutation when form is valid and verified", async () => {
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
@@ -157,7 +164,7 @@ describe("SuggestWordForm.vue", () => {
     await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
     await wrapper.find("form").trigger("submit");
     await Promise.resolve();
-    expect(vi.mocked(useMutation).mock.results[0].value.executeMutation).toHaveBeenCalled();
+    expect(mutationMock).toHaveBeenCalled();
   });
 
   it("shows eMail has-error when invalid email is provided", async () => {
@@ -201,11 +208,7 @@ describe("SuggestWordForm.vue", () => {
   });
 
   it("shows 'Wort wird gesendet' while mutation is pending (covers line 127 v-else branch)", async () => {
-    const { useMutation } = await import("@urql/vue");
-    vi.mocked(useMutation).mockReturnValueOnce({
-      data: { value: null },
-      executeMutation: vi.fn(() => new Promise(() => {})),
-    } as unknown as ReturnType<typeof useMutation>);
+    mutationMock.mockImplementationOnce(() => new Promise(() => {}));
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
@@ -215,14 +218,10 @@ describe("SuggestWordForm.vue", () => {
   });
 
   it("shows error toast when sent=false (covers line 231)", async () => {
-    const { useMutation } = await import("@urql/vue");
     const { createToastNotify } = await import("@stores/toastNotify.ts");
-    vi.mocked(useMutation).mockReturnValueOnce({
-      data: { value: null },
-      executeMutation: vi.fn(() =>
-        Promise.resolve({ data: { sendEmail: { sent: false } }, error: null }),
-      ),
-    } as unknown as ReturnType<typeof useMutation>);
+    mutationMock.mockImplementationOnce(() =>
+      Promise.resolve({ data: { sendEmail: { sent: false } }, error: null }),
+    );
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
@@ -270,13 +269,9 @@ describe("SuggestWordForm.vue", () => {
 
   it("clears the form 3 s after a successful send", async () => {
     vi.useFakeTimers();
-    const { useMutation } = await import("@urql/vue");
-    vi.mocked(useMutation).mockReturnValueOnce({
-      data: { value: { sendEmail: { sent: true } } },
-      executeMutation: vi.fn(() =>
-        Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
-      ),
-    } as unknown as ReturnType<typeof useMutation>);
+    mutationMock.mockImplementationOnce(() =>
+      Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
+    );
 
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
@@ -303,13 +298,6 @@ describe("SuggestWordForm.vue", () => {
   });
 
   it("escapes user input in the mail body", async () => {
-    const { useMutation } = await import("@urql/vue");
-    const executeMutation = vi.fn(() =>
-      Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
-    );
-    vi.mocked(useMutation).mockReturnValueOnce({
-      executeMutation,
-    } as unknown as ReturnType<typeof useMutation>);
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("<b>Kiez</b>");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
@@ -317,20 +305,12 @@ describe("SuggestWordForm.vue", () => {
     await wrapper.find("form").trigger("submit");
     await Promise.resolve();
 
-    const { body } = (executeMutation.mock.calls[0] as unknown as [{ input: { body: string } }])[0]
-      .input;
+    const { body } = mutationInput() as { body: string };
     expect(body).toContain("&#60;b&#62;Kiez&#60;/b&#62;");
     expect(body).not.toContain("<b>Kiez</b>");
   });
 
   it("sends the user's email as replyTo, not as sender", async () => {
-    const { useMutation } = await import("@urql/vue");
-    const executeMutation = vi.fn(() =>
-      Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
-    );
-    vi.mocked(useMutation).mockReturnValueOnce({
-      executeMutation,
-    } as unknown as ReturnType<typeof useMutation>);
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
@@ -339,18 +319,15 @@ describe("SuggestWordForm.vue", () => {
     await wrapper.find("form").trigger("submit");
     await Promise.resolve();
 
-    const { input } = (
-      executeMutation.mock.calls[0] as unknown as [{ input: Record<string, unknown> }]
-    )[0];
+    const input = mutationInput();
     expect(input.replyTo).toBe("test@example.com");
     expect(input).not.toHaveProperty("from");
   });
 
   it("re-enables the submit button after a failed send", async () => {
-    const { useMutation } = await import("@urql/vue");
-    vi.mocked(useMutation).mockReturnValueOnce({
-      executeMutation: vi.fn(() => Promise.resolve({ data: null, error: new Error("boom") })),
-    } as unknown as ReturnType<typeof useMutation>);
+    mutationMock.mockImplementationOnce(() =>
+      Promise.resolve({ data: null, error: new Error("boom") }),
+    );
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");

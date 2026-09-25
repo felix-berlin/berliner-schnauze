@@ -242,9 +242,6 @@ importers:
       '@urql/core':
         specifier: ^6.0.3
         version: 6.0.3(graphql@17.0.2)
-      '@urql/vue':
-        specifier: ^2.1.1
-        version: 2.1.1(@urql/core@6.0.3(graphql@17.0.2))(vue@3.5.43(typescript@6.0.3))
       '@vueform/multiselect':
         specifier: ^2.6.11
         version: 2.6.11
@@ -4351,12 +4348,6 @@ packages:
 
   '@urql/core@6.0.3':
     resolution: {integrity: sha512-0F39XWR21+IVLJfsqBvLShvoSzxT6h6wWXwrDhN8j9J+IEVOpQIUNHwpgjsp+2ePzn9aCH+rpDonn3HOAUnn9A==}
-
-  '@urql/vue@2.1.1':
-    resolution: {integrity: sha512-gmQBQtHO7Rtw1W+CiLb6YcnQEczog3ZxLsFhMvTex1aM1mczT6dDJuiYpJDg2KkuJ8zqXSbMnbwwbm4ukr9vTA==}
-    peerDependencies:
-      '@urql/core': ^6.0.0
-      vue: ^3.2.0
 
   '@vite-pwa/assets-generator@2.0.0':
     resolution: {integrity: sha512-GBjHBLBzOP1GDJTc7MjeDdeJTi+PS9eFjw3HYjNHXnEbkS7vRS/YFwl8VW5/4vWF0Fo35Mji1yXAABvSVzu0Ew==}
@@ -13359,12 +13350,6 @@ snapshots:
       wonka: 6.3.6
     transitivePeerDependencies:
       - graphql
-
-  '@urql/vue@2.1.1(@urql/core@6.0.3(graphql@17.0.2))(vue@3.5.43(typescript@6.0.3))':
-    dependencies:
-      '@urql/core': 6.0.3(graphql@17.0.2)
-      vue: 3.5.43(typescript@6.0.3)
-      wonka: 6.3.6
 
   '@vite-pwa/assets-generator@2.0.0(@types/node@26.6.2)':
     dependencies:
