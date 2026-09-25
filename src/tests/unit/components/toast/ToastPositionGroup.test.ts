@@ -1,11 +1,7 @@
 import ToastPositionGroup from "@components/toast/ToastPositionGroup.vue";
-import { supportsPopover } from "@stores/toastNotify.ts";
 import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@stores/toastNotify.ts", () => ({
-  supportsPopover: vi.fn(() => true),
-}));
 vi.mock("@components/toast/ToastNotify.vue", () => ({
   default: { template: '<div class="c-toast-notify" />' },
 }));
@@ -80,14 +76,6 @@ describe("ToastPositionGroup.vue", () => {
     expect(mockHidePopover).toHaveBeenCalledOnce();
   });
 
-  it("renders nothing when popover is not supported", () => {
-    vi.mocked(supportsPopover).mockReturnValueOnce(false);
-    const wrapper = mount(ToastPositionGroup, {
-      props: { position: "top-right", toasts: [] },
-    });
-    expect(wrapper.find(".c-toast-container").exists()).toBe(false);
-  });
-
   it("does not call showPopover twice when already open (double-open guard)", async () => {
     const { nextTick } = await import("vue");
     // Mount with toasts already present — onMounted fires showPopover (isOpen → true)
@@ -132,18 +120,7 @@ describe("ToastPositionGroup.vue", () => {
     consoleSpy.mockRestore();
   });
 
-  it("watcher skips open() when isSupported is false (covers line 59 early return)", async () => {
-    vi.mocked(supportsPopover).mockReturnValueOnce(false);
-    const wrapper = mount(ToastPositionGroup, {
-      props: { position: "top-right", toasts: [] },
-    });
-    await wrapper.setProps({ toasts: [toast("a")] });
-    expect(mockShowPopover).not.toHaveBeenCalled();
-    wrapper.unmount();
-  });
-
-  it("onBeforeLeave uses {left:0,top:0} fallback when container is null (covers line 69 ?? fallback)", () => {
-    vi.mocked(supportsPopover).mockReturnValueOnce(false);
+  it("onBeforeLeave positions the leaving toast relative to the container", () => {
     const wrapper = mount(ToastPositionGroup, {
       props: { position: "top-right", toasts: [] },
     });
@@ -159,7 +136,7 @@ describe("ToastPositionGroup.vue", () => {
     } as DOMRect);
     const setupState = wrapper.getCurrentComponent()!.setupState as unknown as SetupState;
     setupState.onBeforeLeave(el);
-    // container is null → fallback {left:0, top:0} → top=100-0=100, left=50-0=50
+    // jsdom container rect is all zeros → top=100-0=100, left=50-0=50
     expect(el.style.top).toBe("100px");
     expect(el.style.left).toBe("50px");
     wrapper.unmount();
@@ -189,16 +166,6 @@ describe("ToastPositionGroup.vue", () => {
     await nextTick(); // onMounted fires open() → isOpen becomes true
     mockShowPopover.mockClear();
     // Call open() again directly — should hit isOpen.value === true early return
-    (wrapper.getCurrentComponent()!.setupState as unknown as SetupState).open();
-    expect(mockShowPopover).not.toHaveBeenCalled();
-  });
-
-  it("open() returns early when container ref is null (covers line 40 !container.value branch)", () => {
-    vi.mocked(supportsPopover).mockReturnValueOnce(false); // v-if=false → no div → container stays null
-    const wrapper = mount(ToastPositionGroup, {
-      props: { position: "top-right", toasts: [] },
-    });
-    // Call open() directly — isOpen=false but container=null → early return
     (wrapper.getCurrentComponent()!.setupState as unknown as SetupState).open();
     expect(mockShowPopover).not.toHaveBeenCalled();
   });

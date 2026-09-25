@@ -1,16 +1,11 @@
 import PwaCacheInfoGrid from "@components/PwaCacheInfoGrid.vue";
-import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
-import { markRaw } from "vue";
+import { flushPromises, mount } from "@vue/test-utils";
+import { describe, expect, it, vi } from "vitest";
 
 const defaultProps = {
   isPwaInstalled: false,
   storageQuota: null,
-  storageQuotaPercent: 0,
   swInfo: { scope: "/", scriptURL: "/sw.js", status: "active" as const },
-  swScriptURL: null,
-  swStatusIcon: null,
-  swStatusLabel: "Aktiv",
 };
 
 describe("PwaCacheInfoGrid", () => {
@@ -19,21 +14,56 @@ describe("PwaCacheInfoGrid", () => {
     expect(wrapper.text()).toContain("Aktiv");
   });
 
+  it.each([
+    ["installing", "Wird installiert", "loader"],
+    ["waiting", "Wartend", "clock"],
+    ["not-registered", "Nicht registriert", "circle"],
+    ["not-supported", "Nicht unterstützt", "circle-x"],
+    ["active", "Aktiv", "circle-check"],
+  ] as const)("renders label and icon for status %s", async (status, label, icon) => {
+    const swInfo =
+      status === "not-registered" || status === "not-supported"
+        ? { status }
+        : { scope: "/", scriptURL: "/sw.js", status };
+    const wrapper = mount(PwaCacheInfoGrid, { props: { ...defaultProps, swInfo } });
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    expect(wrapper.text()).toContain(label);
+    expect(wrapper.find(`[data-testid='icon-lucide-${icon}']`).exists()).toBe(true);
+  });
+
   it("applies SW status class", () => {
     const wrapper = mount(PwaCacheInfoGrid, { props: defaultProps });
     expect(wrapper.find(".c-pwa-cache__info-value").classes()).toContain("is-sw-active");
   });
 
-  it("shows script URL when provided", () => {
-    const wrapper = mount(PwaCacheInfoGrid, {
-      props: { ...defaultProps, swScriptURL: "/sw.js" },
-    });
-    expect(wrapper.find(".c-pwa-cache__info-sub").text()).toContain("/sw.js");
+  it("shows script URL from swInfo", () => {
+    const wrapper = mount(PwaCacheInfoGrid, { props: defaultProps });
+    expect(wrapper.find(".c-pwa-cache__info-sub").text()).toBe("/sw.js");
   });
 
-  it("hides script URL when null", () => {
-    const wrapper = mount(PwaCacheInfoGrid, { props: defaultProps });
+  it("hides script URL when it is empty", () => {
+    const wrapper = mount(PwaCacheInfoGrid, {
+      props: { ...defaultProps, swInfo: { scope: "/", scriptURL: "", status: "active" } },
+    });
     expect(wrapper.find(".c-pwa-cache__info-sub").exists()).toBe(false);
+  });
+
+  it("hides script URL when swInfo has none", () => {
+    const wrapper = mount(PwaCacheInfoGrid, {
+      props: { ...defaultProps, swInfo: { status: "not-registered" } },
+    });
+    expect(wrapper.find(".c-pwa-cache__info-sub").exists()).toBe(false);
+  });
+
+  it("truncates long SW script URLs", () => {
+    const scriptURL = "https://example.com/" + "a".repeat(60);
+    const wrapper = mount(PwaCacheInfoGrid, {
+      props: { ...defaultProps, swInfo: { scope: "/", scriptURL, status: "active" } },
+    });
+    const subText = wrapper.find(".c-pwa-cache__info-sub").text();
+    expect(subText).toContain("…");
+    expect(subText.length).toBeLessThan(65);
   });
 
   it("shows installed state", () => {
@@ -50,17 +80,20 @@ describe("PwaCacheInfoGrid", () => {
     expect(wrapper.text()).toContain("Nicht installiert");
   });
 
-  it("shows quota progressbar when storageQuota provided", () => {
+  it("computes the quota percentage for the progressbar", () => {
     const wrapper = mount(PwaCacheInfoGrid, {
-      props: {
-        ...defaultProps,
-        storageQuota: { quotaBytes: 1000, usedBytes: 500 },
-        storageQuotaPercent: 50,
-      },
+      props: { ...defaultProps, storageQuota: { quotaBytes: 1000, usedBytes: 500 } },
     });
     const bar = wrapper.find("[role='progressbar']");
     expect(bar.exists()).toBe(true);
     expect(bar.attributes("aria-valuenow")).toBe("50");
+  });
+
+  it("shows 0% when the quota is 0 bytes", () => {
+    const wrapper = mount(PwaCacheInfoGrid, {
+      props: { ...defaultProps, storageQuota: { quotaBytes: 0, usedBytes: 0 } },
+    });
+    expect(wrapper.find("[role='progressbar']").attributes("aria-valuenow")).toBe("0");
   });
 
   it("hides quota row when storageQuota is null", () => {
@@ -68,44 +101,11 @@ describe("PwaCacheInfoGrid", () => {
     expect(wrapper.find("[role='progressbar']").exists()).toBe(false);
   });
 
-  it("truncates long SW script URLs", () => {
-    const longUrl = "https://example.com/" + "a".repeat(60);
-    const wrapper = mount(PwaCacheInfoGrid, {
-      props: { ...defaultProps, swScriptURL: longUrl },
-    });
-    expect(wrapper.find(".c-pwa-cache__info-sub").text().length).toBeLessThan(65);
-    expect(wrapper.find(".c-pwa-cache__info-sub").text()).toContain("…");
-  });
-
-  it("shows is-sw-unknown class when swInfo is null (covers line 5 ?. null branch)", () => {
+  it("shows is-sw-unknown class and placeholder label when swInfo is null", () => {
     const wrapper = mount(PwaCacheInfoGrid, {
       props: { ...defaultProps, swInfo: null },
     });
     expect(wrapper.find(".c-pwa-cache__info-value").classes()).toContain("is-sw-unknown");
-  });
-
-  it("renders swStatusIcon component when provided (covers line 6 v-if true branch)", () => {
-    const IconStub = markRaw({ template: "<svg data-testid='icon' />" });
-    const wrapper = mount(PwaCacheInfoGrid, {
-      props: { ...defaultProps, swStatusIcon: IconStub },
-    });
-    expect(wrapper.find("[data-testid='icon']").exists()).toBe(true);
-  });
-
-  it("truncates long non-URL script path in catch branch (covers lines 55-56 catch true branch)", () => {
-    const longRelativePath = "/" + "a".repeat(60);
-    const wrapper = mount(PwaCacheInfoGrid, {
-      props: { ...defaultProps, swScriptURL: longRelativePath },
-    });
-    const subText = wrapper.find(".c-pwa-cache__info-sub").text();
-    expect(subText).toContain("…");
-    expect(subText.length).toBeLessThan(65);
-  });
-
-  it("returns short pathname as-is for valid URL (covers line 54 false branch)", () => {
-    const wrapper = mount(PwaCacheInfoGrid, {
-      props: { ...defaultProps, swScriptURL: "https://example.com/sw.js" },
-    });
-    expect(wrapper.find(".c-pwa-cache__info-sub").text()).toBe("/sw.js");
+    expect(wrapper.text()).toContain("…");
   });
 });

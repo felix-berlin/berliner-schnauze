@@ -1,17 +1,19 @@
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";
-import { atom } from "nanostores";
+import { atom, onMount } from "nanostores";
 
 export type NotificationPermissionState = NotificationPermission | "unsupported";
 
 export const isNotificationSupported = (): boolean =>
   typeof window !== "undefined" && Boolean(window.Notification);
 
-export const $notificationPermission = atom<NotificationPermissionState>(
-  isNotificationSupported()
-    ? (window.Notification.permission as NotificationPermission)
-    : "unsupported",
-);
+export const $notificationPermission = atom<NotificationPermissionState>("unsupported");
+
+// Re-read the browser permission whenever the store gains its first subscriber
+// (the user may have changed it in the browser settings meanwhile).
+onMount($notificationPermission, () => {
+  if (isNotificationSupported()) $notificationPermission.set(Notification.permission);
+});
 
 export const requestNotificationPermission = async (): Promise<void> => {
   if (!isNotificationSupported()) return;

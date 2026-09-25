@@ -175,6 +175,7 @@ describe("onMounted", () => {
   });
 
   it("syncs notificationPermission atom from browser on mount", async () => {
+    vi.resetModules(); // fresh, not-yet-mounted store
     global.Notification.permission = "granted";
     const { $notificationPermission } = await import("@stores/notificationPermission.ts");
     $notificationPermission.set("unsupported"); // stale SSR value
@@ -185,7 +186,7 @@ describe("onMounted", () => {
     unmount();
   });
 
-  it("does not sync permission when Notification is unavailable (covers line 47 false branch)", async () => {
+  it("does not sync permission when Notification is unavailable", async () => {
     vi.stubGlobal("Notification", undefined);
     const { $notificationPermission } = await import("@stores/notificationPermission.ts");
     const setSpy = vi.spyOn($notificationPermission, "set");

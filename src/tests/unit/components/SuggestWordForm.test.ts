@@ -5,6 +5,7 @@ import { describe, expect, it, vi, beforeEach, beforeAll, afterAll } from "vites
 
 vi.mock("astro:env/client", () => ({
   TURNSTILE_SITE_KEY: "test-site-key",
+  WP_API: "https://wp.test/graphql",
 }));
 
 vi.mock("@/gql/graphql.ts", () => ({
@@ -12,6 +13,9 @@ vi.mock("@/gql/graphql.ts", () => ({
 }));
 
 vi.mock("@urql/vue", () => ({
+  cacheExchange: {},
+  fetchExchange: {},
+  provideClient: vi.fn(),
   useMutation: vi.fn(() => ({
     data: { value: null },
     executeMutation: vi.fn(() =>

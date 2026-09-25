@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="isSupported"
     ref="container"
     popover="manual"
     class="c-toast-container"
@@ -20,8 +19,7 @@
 import type { ToastNotify as ToastNotifyType, ToastPosition } from "@stores/toastNotify.ts";
 
 import ToastNotify from "@components/toast/ToastNotify.vue";
-import { supportsPopover } from "@stores/toastNotify";
-import { onBeforeMount, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps<{
   position: ToastPosition;
@@ -29,12 +27,7 @@ const props = defineProps<{
 }>();
 
 const container = ref<HTMLElement | null>(null);
-const isSupported = ref(false);
 const isOpen = ref(false);
-
-onBeforeMount(() => {
-  isSupported.value = supportsPopover();
-});
 
 const open = (): void => {
   if (isOpen.value || !container.value) return;
@@ -46,20 +39,15 @@ const open = (): void => {
   }
 };
 
+// createToastNotify() refuses to queue toasts without popover support, so no guard is needed here.
 onMounted(() => {
-  if (!isSupported.value) return;
-  if (props.toasts.length > 0) {
-    open();
-  }
+  if (props.toasts.length > 0) open();
 });
 
 watch(
   () => props.toasts.length,
   (newLen, oldLen) => {
-    if (!isSupported.value) return;
-    if (oldLen === 0 && newLen > 0) {
-      open();
-    }
+    if (oldLen === 0 && newLen > 0) open();
   },
 );
 

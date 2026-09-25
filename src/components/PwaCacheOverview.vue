@@ -18,19 +18,15 @@
 
       <PwaCacheInfoGrid
         :sw-info="swInfo"
-        :sw-status-label="swStatusLabel"
-        :sw-status-icon="swStatusIcon"
-        :sw-script-u-r-l="swScriptURL"
         :is-pwa-installed="isPwaInstalled"
         :storage-quota="storageQuota"
-        :storage-quota-percent="storageQuotaPercent"
       />
 
       <PwaCacheActions
         :is-loading="isLoading"
         :has-no-buckets="buckets.length === 0"
         @refresh="loadCaches"
-        @clear-all="confirmClearAll"
+        @clear-all="confirmClear()"
         @resync="reSync"
       />
 
@@ -46,15 +42,12 @@
         <p>Noch nichts gecacht.</p>
       </div>
 
-      <PwaCacheBucketList v-else :buckets="buckets" @clear-bucket="confirmClearBucket" />
+      <PwaCacheBucketList v-else :buckets="buckets" @clear-bucket="confirmClear" />
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { SwStatus } from "@composables/useCacheStorage";
-import type { Component } from "vue";
-
 import PwaCacheActions from "@components/PwaCacheActions.vue";
 import PwaCacheBucketList from "@components/PwaCacheBucketList.vue";
 import PwaCacheHeader from "@components/PwaCacheHeader.vue";
@@ -66,12 +59,6 @@ import { useStore } from "@nanostores/vue";
 import { $isPwaInstalled } from "@stores/installApp.ts";
 import { close, open } from "@stores/modal";
 import { computed, defineAsyncComponent, onMounted } from "vue";
-
-const Circle = defineAsyncComponent(() => import("virtual:icons/lucide/circle"));
-const CircleCheck = defineAsyncComponent(() => import("virtual:icons/lucide/circle-check"));
-const CircleX = defineAsyncComponent(() => import("virtual:icons/lucide/circle-x"));
-const Clock = defineAsyncComponent(() => import("virtual:icons/lucide/clock"));
-const Loader = defineAsyncComponent(() => import("virtual:icons/lucide/loader"));
 
 const {
   buckets,
@@ -94,40 +81,12 @@ const isPwaInstalled = useStore($isPwaInstalled);
 
 const totalEntryCount = computed(() => buckets.value.reduce((sum, b) => sum + b.urls.length, 0));
 
-const storageQuotaPercent = computed(() => {
-  if (!storageQuota.value || storageQuota.value.quotaBytes === 0) return 0;
-  return Math.round((storageQuota.value.usedBytes / storageQuota.value.quotaBytes) * 100);
-});
-
-const SW_STATUS_LABELS: Readonly<Record<SwStatus, string>> = {
-  active: "Aktiv",
-  installing: "Wird installiert",
-  "not-registered": "Nicht registriert",
-  "not-supported": "Nicht unterstützt",
-  waiting: "Wartend",
-};
-
-const SW_STATUS_ICONS: Readonly<Record<SwStatus, Component>> = {
-  active: CircleCheck,
-  installing: Loader,
-  "not-registered": Circle,
-  "not-supported": CircleX,
-  waiting: Clock,
-};
-
-const swStatusLabel = computed(() => (swInfo.value ? SW_STATUS_LABELS[swInfo.value.status] : "…"));
-const swStatusIcon = computed(() => (swInfo.value ? SW_STATUS_ICONS[swInfo.value.status] : null));
-const swScriptURL = computed((): string | null => {
-  const info = swInfo.value;
-  if (!info || !("scriptURL" in info)) return null;
-  return info.scriptURL || null;
-});
-
 onMounted(() => {
   loadCaches();
 });
 
-function confirmClearAll(): void {
+/** Asks for confirmation, then clears one bucket (`name`) or all caches. */
+function confirmClear(name?: string): void {
   open({
     props: { width: "400px" },
     view: {
@@ -136,27 +95,15 @@ function confirmClearAll(): void {
         cancel: () => close(),
         confirm: () => {
           close();
-          clearAll();
+          void (name === undefined ? clearAll() : clearBucket(name));
         },
       },
-      props: { message: "Alle Caches wirklich leeren?" },
-    },
-  });
-}
-
-function confirmClearBucket(name: string): void {
-  open({
-    props: { width: "400px" },
-    view: {
-      component: ConfirmDialog,
-      events: {
-        cancel: () => close(),
-        confirm: () => {
-          close();
-          clearBucket(name);
-        },
+      props: {
+        message:
+          name === undefined
+            ? "Alle Caches wirklich leeren?"
+            : `Cache „${getBucketDisplayName(name)}" wirklich leeren?`,
       },
-      props: { message: `Cache „${getBucketDisplayName(name)}" wirklich leeren?` },
     },
   });
 }

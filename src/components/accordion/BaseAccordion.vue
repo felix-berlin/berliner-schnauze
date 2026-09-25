@@ -5,13 +5,8 @@
 </template>
 
 <script setup lang="ts">
+import { ACCORDION_KEY } from "@components/accordion/keys";
 import { provide, ref, watch } from "vue";
-
-export interface AccordionContext {
-  type: "single" | "multiple";
-  isOpen: (id: string | number) => boolean;
-  toggle: (id: string | number) => void;
-}
 
 const props = withDefaults(
   defineProps<{
@@ -61,7 +56,7 @@ function toggle(id: string | number): void {
   emit("update:modelValue", next);
 }
 
-provide<AccordionContext>("accordion", { isOpen, toggle, type: props.type });
+provide(ACCORDION_KEY, { isOpen, toggle, type: props.type });
 </script>
 
 <style lang="scss">

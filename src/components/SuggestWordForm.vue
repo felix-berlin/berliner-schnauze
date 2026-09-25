@@ -149,9 +149,9 @@
 import TurnStile from "@components/TurnStile.vue";
 import { useContentTracking } from "@composables/useContentTracking";
 import { createToastNotify } from "@stores/toastNotify.ts";
-import { useMutation } from "@urql/vue";
+import { cacheExchange, fetchExchange, provideClient, useMutation } from "@urql/vue";
 import { trackEvent } from "@utils/analytics";
-import { TURNSTILE_SITE_KEY } from "astro:env/client";
+import { TURNSTILE_SITE_KEY, WP_API } from "astro:env/client";
 import { defineAsyncComponent, reactive, ref } from "vue";
 
 import { SendEmailDocument } from "@/gql/graphql.ts";
@@ -202,6 +202,12 @@ const formErrors = reactive<FormErrors>({
 const turnstileSiteKey = TURNSTILE_SITE_KEY;
 const isVerified = ref(false);
 const isSending = ref(false);
+
+provideClient({
+  exchanges: [cacheExchange, fetchExchange],
+  fetchOptions: { headers: { "Content-Type": "application/json" } },
+  url: WP_API,
+});
 
 const sendMailMutation = useMutation(SendEmailDocument);
 

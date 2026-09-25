@@ -5,19 +5,21 @@
     data-track-content
     data-content-name="Word of the Day"
     :data-content-piece="currentWord?.word?.berlinerisch ?? ''"
-    :data-content-target="currentWord?.word?.post_name ? routeToWord(currentWord.word.post_name) : undefined"
+    :data-content-target="
+      currentWord?.word?.post_name ? routeToWord(currentWord.word.post_name) : undefined
+    "
     role="link"
     tabindex="0"
-    @mouseover="toggleCelebration(true)"
-    @mouseout="toggleCelebration(false)"
-    @focus="toggleCelebration(true)"
-    @blur="toggleCelebration(false)"
+    @mouseover="celebrate = true"
+    @mouseout="celebrate = false"
+    @focus="celebrate = true"
+    @blur="celebrate = false"
   >
     <div
       v-tooltip="{
         content: 'Klick auf das Wort um mehr zu erfahren!',
         offset: 10,
-        shown: showTooltip,
+        shown: celebrate,
         placement: 'bottom',
       }"
       class="c-word-of-the-day__content"
@@ -58,123 +60,38 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from "vue";
-
 import ConfettiEffect from "@components/ConfettiEffect.vue";
 import SingleLoader from "@components/SingleLoader.vue";
 import { useContentTracking } from "@composables/useContentTracking";
 import { useStore } from "@nanostores/vue";
 import { $wordOfTheDay } from "@stores/wordOfTheDay.ts";
 import { routeToWord } from "@utils/helpers.ts";
+import { useIntervalFn, useNow } from "@vueuse/core";
 import Crown from "virtual:icons/lucide/crown";
-import { onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 
 const root = ref<HTMLElement | null>(null);
 useContentTracking(root);
 
 const currentWord = useStore($wordOfTheDay);
+// Drives both the confetti and the hint tooltip.
 const celebrate = ref(false);
-const showTooltip = ref(false);
-const countDown = ref();
 
-interface TimeToUpdate {
-  hours: string;
-  minutes: string;
-  seconds: string;
-}
+const now = useNow({ scheduler: (cb) => useIntervalFn(cb, 1000) });
 
-const timeToUpdate: Ref<TimeToUpdate> = ref({
-  hours: "00",
-  minutes: "00",
-  seconds: "00",
-});
+const pad = (num: number): string => num.toString().padStart(2, "0");
 
-/**
- * Counts down the time until midnight
- *
- * @return  {void}
- */
-const countDownTimer = () => {
-  setTimeout(() => {
-    let milliseconds = resetAtMidnight();
-    milliseconds--;
-    countDown.value = milliseconds;
-    timeToUpdate.value = convertMsToTime(milliseconds);
-
-    countDownTimer();
-  }, 1000);
-};
-
-/**
- * Returns the milliseconds until midnight
- *
- * @return  {number}
- */
-const resetAtMidnight = (): number => {
-  const now = new Date();
-  const night = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() + 1, // the next day, ...
-    0,
-    0,
-    0, // ...at 00:00:00 hours
-  );
-
-  return night.getTime() - now.getTime();
-};
-
-/**
- * Returns a string with 2 digits
- *
- * @param   {number}  num  number to convert
- *
- * @return  {string}
- */
-const padTo2Digits = (num: number): string => {
-  return num.toString().padStart(2, "0");
-};
-
-/**
- * Converts milliseconds to hours, minutes and seconds
- *
- * @param   {number}  milliseconds
- * @see: https://bobbyhadz.com/blog/javascript-convert-milliseconds-to-hours-minutes-seconds
- *
- * @return  {[type]}                returns a string or an object with hours, minutes and seconds
- */
-const convertMsToTime = (
-  milliseconds: number,
-): { hours: string; minutes: string; seconds: string } => {
-  let seconds = Math.floor(milliseconds / 1000);
-  let minutes = Math.floor(seconds / 60);
-  let hours = Math.floor(minutes / 60);
-
-  seconds %= 60;
-  minutes %= 60;
-  hours %= 24;
+/** Hours / minutes / seconds left until local midnight. */
+const timeToUpdate = computed(() => {
+  const n = now.value;
+  const midnight = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1);
+  const totalSeconds = Math.floor((midnight.getTime() - n.getTime()) / 1000);
 
   return {
-    hours: padTo2Digits(hours),
-    minutes: padTo2Digits(minutes),
-    seconds: padTo2Digits(seconds),
+    hours: pad(Math.floor(totalSeconds / 3600) % 24),
+    minutes: pad(Math.floor(totalSeconds / 60) % 60),
+    seconds: pad(totalSeconds % 60),
   };
-};
-
-/**
- * Toggles the celebration
- *
- * @param   {boolean}  toggleValue
- *
- * @return  {void}
- */
-const toggleCelebration = (toggleValue: boolean) => {
-  celebrate.value = toggleValue;
-  showTooltip.value = toggleValue;
-};
-
-onMounted(() => {
-  countDownTimer();
 });
 </script>
 

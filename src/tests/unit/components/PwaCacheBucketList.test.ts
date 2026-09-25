@@ -1,9 +1,9 @@
 import type { CacheBucket } from "@composables/useCacheStorage";
+import type { Slots } from "vue";
 
 import PwaCacheBucketList from "@components/PwaCacheBucketList.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
-import type { Slots } from "vue";
 
 vi.mock("virtua/vue", () => ({
   VList: {
@@ -160,7 +160,7 @@ describe("PwaCacheBucketList", () => {
     expect(wrapper.find(".c-pwa-cache__url-type").text()).toBe("JSON");
   });
 
-  it("shows extracted subtype for unknown content type", async () => {
+  it("falls back to the file type (or OTHER) for unknown content types", async () => {
     const bucket: CacheBucket = {
       dateRange: null,
       name: "api-search-index",
@@ -172,7 +172,7 @@ describe("PwaCacheBucketList", () => {
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
     await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
-    expect(wrapper.find(".c-pwa-cache__url-type").text()).toBe("X-CUSTOM");
+    expect(wrapper.find(".c-pwa-cache__url-type").text()).toBe("OTHER");
   });
 
   it("renders type breakdown pills when typeBreakdown has items (covers line 51 v-if true branch)", () => {

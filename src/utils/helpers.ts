@@ -9,7 +9,7 @@ import type { Seo } from "@/types/seo";
  *
  * @return  {string}
  */
-export const routeToWord = (word: string | undefined): string => {
+export const routeToWord = (word: string | null | undefined): string => {
   if (typeof word !== "string") {
     console.error(`routeToWord: "${word}" is not a string`);
 
@@ -30,6 +30,16 @@ export const routeToWord = (word: string | undefined): string => {
 export const randomElement = (elements: any[]): any => {
   return elements[Math.floor(Math.random() * elements.length)];
 };
+
+/** Returns a shuffled copy of `arr` (Fisher–Yates). */
+export function shuffle<T>(arr: readonly T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 export const seoData = (
   data: { seo?: Record<string, unknown>; title: string },
@@ -79,39 +89,6 @@ export const formattedDate = (date?: string, locale = "de-DE") => {
     day: "numeric",
     month: "long",
     year: "numeric",
-  });
-};
-
-/**
- * Checks if all object values are true || false
- *
- * @param   {Object}  object    The object to check
- * @param   {Boolean}  checkFor  Boolean your are checking for
- *
- * @return  {Boolean}            Return if all are true or false
- */
-export const checkObjectValues = (object: object, checkFor: boolean = false): boolean => {
-  return Object.values(object).every((v) => v === checkFor);
-};
-
-/**
- * Checks if all values in the given object are empty strings.
- *
- * @param {Object} object - The object to check.
- * @returns {boolean} Returns true if all values in the object are empty strings, false otherwise.
- */
-// oxlint-disable-next-line typescript/no-explicit-any
-export const checkObjectValueLength = (obj: Record<string, any>): boolean => {
-  return Object.values(obj).every((v) => {
-    if (typeof v === "string" || Array.isArray(v)) {
-      return v.length === 0;
-    } else if (v === null || v === undefined) {
-      return true;
-    } else if (typeof v === "object") {
-      return Object.keys(v).length === 0;
-    } else {
-      return false;
-    }
   });
 };
 

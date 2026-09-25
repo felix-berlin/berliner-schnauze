@@ -1,6 +1,6 @@
 import type { BonSharePayload } from "@utils/bonShare";
 
-import { buildShareUrl, decodeShareHash, encodeShareHash } from "@utils/bonShare";
+import { accuracyPercent, buildShareUrl, decodeShareHash, encodeShareHash } from "@utils/bonShare";
 import { describe, expect, it } from "vitest";
 
 const payload: BonSharePayload = {
@@ -10,6 +10,11 @@ const payload: BonSharePayload = {
   score: 150,
   totalAnswered: 18,
 };
+
+describe("accuracyPercent", () => {
+  it("rounds to a whole percentage", () => expect(accuracyPercent(2, 3)).toBe(67));
+  it("returns 0 when nothing was answered", () => expect(accuracyPercent(0, 0)).toBe(0));
+});
 
 describe("encodeShareHash", () => {
   it("returns a non-empty string", () => {

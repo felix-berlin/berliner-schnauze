@@ -11,40 +11,6 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-// ─── isVueComponent ───────────────────────────────────────────────────────────
-
-describe("isVueComponent", () => {
-  it("returns false for null", async () => {
-    const { isVueComponent } = await import("@stores/modal.ts");
-    expect(isVueComponent(null)).toBe(false);
-  });
-
-  it("returns false for a string", async () => {
-    const { isVueComponent } = await import("@stores/modal.ts");
-    expect(isVueComponent("MyComponent")).toBe(false);
-  });
-
-  it("returns false for a number", async () => {
-    const { isVueComponent } = await import("@stores/modal.ts");
-    expect(isVueComponent(42)).toBe(false);
-  });
-
-  it("returns false for a plain object without render/setup", async () => {
-    const { isVueComponent } = await import("@stores/modal.ts");
-    expect(isVueComponent({ name: "test", props: {} })).toBe(false);
-  });
-
-  it("returns true for an object with a render function", async () => {
-    const { isVueComponent } = await import("@stores/modal.ts");
-    expect(isVueComponent({ render: () => null })).toBe(true);
-  });
-
-  it("returns true for an object with a setup function", async () => {
-    const { isVueComponent } = await import("@stores/modal.ts");
-    expect(isVueComponent({ setup: () => ({}) })).toBe(true);
-  });
-});
-
 // ─── preventScroll ────────────────────────────────────────────────────────────
 
 describe("preventScroll", () => {
@@ -71,25 +37,6 @@ describe("preventScroll", () => {
   });
 });
 
-// ─── updateProps ──────────────────────────────────────────────────────────────
-
-describe("updateProps", () => {
-  it("merges new props with existing defaults", async () => {
-    const { updateProps, $props } = await import("@stores/modal.ts");
-    updateProps({ class: "c-my-modal", width: "600px" });
-    expect($props.get().class).toBe("c-my-modal");
-    expect($props.get().width).toBe("600px");
-    // unchanged defaults stay intact
-    expect($props.get().position).toBe("center");
-  });
-
-  it("can toggle closeOnClickOutside", async () => {
-    const { updateProps, $props } = await import("@stores/modal.ts");
-    updateProps({ closeOnClickOutside: false });
-    expect($props.get().closeOnClickOutside).toBe(false);
-  });
-});
-
 // ─── open ─────────────────────────────────────────────────────────────────────
 
 describe("open", () => {
@@ -107,31 +54,6 @@ describe("open", () => {
     expect($view.get().props).toEqual(viewProps);
   });
 
-  it("sets $viewIsComponent to true when view.component has a render fn", async () => {
-    const { open, $viewIsComponent } = await import("@stores/modal.ts");
-    open({ view: { component: { render: () => null } } });
-    expect($viewIsComponent.get()).toBe(true);
-  });
-
-  it("sets $viewIsComponent to false for non-component view", async () => {
-    const { open, $viewIsComponent } = await import("@stores/modal.ts");
-    open({ view: { props: { foo: "bar" } } });
-    expect($viewIsComponent.get()).toBe(false);
-  });
-
-  it("stores the onClose callback in $onCloseCallback", async () => {
-    const { open, $onCloseCallback } = await import("@stores/modal.ts");
-    const cb = vi.fn();
-    open({}, cb);
-    expect($onCloseCallback.get()).toBe(cb);
-  });
-
-  it("stores null when no callback is given", async () => {
-    const { open, $onCloseCallback } = await import("@stores/modal.ts");
-    open({});
-    expect($onCloseCallback.get()).toBeNull();
-  });
-
   it("calls el.showModal() on the registered dialog element after nextTick", async () => {
     const { open, $element } = await import("@stores/modal.ts");
     const fakeDialog = { showModal: vi.fn() } as unknown as HTMLDialogElement;
@@ -146,18 +68,9 @@ describe("open", () => {
 // ─── close ────────────────────────────────────────────────────────────────────
 
 describe("close", () => {
-  it("invokes the onClose callback then clears it", async () => {
-    const { close, $onCloseCallback } = await import("@stores/modal.ts");
-    const cb = vi.fn();
-    $onCloseCallback.set(cb);
-    close();
-    expect(cb).toHaveBeenCalledOnce();
-    expect($onCloseCallback.get()).toBeNull();
-  });
-
-  it("does not throw when no callback is set", async () => {
-    const { close, $onCloseCallback } = await import("@stores/modal.ts");
-    $onCloseCallback.set(null);
+  it("does not throw when no dialog element is registered", async () => {
+    const { close, $element } = await import("@stores/modal.ts");
+    $element.set(null);
     expect(() => close()).not.toThrow();
   });
 
@@ -173,12 +86,11 @@ describe("close", () => {
 // ─── resetModal ───────────────────────────────────────────────────────────────
 
 describe("resetModal", () => {
-  it("resets $view, $props and $viewIsComponent after 500 ms", async () => {
-    const { resetModal, $view, $props, $viewIsComponent } = await import("@stores/modal.ts");
+  it("resets $view and $props after 500 ms", async () => {
+    const { resetModal, $view, $props } = await import("@stores/modal.ts");
 
     // put the store in a non-default state
     $view.set({ props: { foo: "bar" } });
-    $viewIsComponent.set(true);
 
     resetModal();
     // state has not changed yet
@@ -187,7 +99,6 @@ describe("resetModal", () => {
     vi.advanceTimersByTime(500);
 
     expect($view.get()).toEqual({});
-    expect($viewIsComponent.get()).toBe(false);
     expect($props.get().class).toBe(""); // back to default
   });
 
@@ -199,7 +110,7 @@ describe("resetModal", () => {
     expect(document.body.classList.contains("u-disable-scroll")).toBe(false);
   });
 
-  it("does not call preventScroll when disableScroll is false (covers line 90 false branch)", async () => {
+  it("does not call preventScroll when disableScroll is false", async () => {
     const { resetModal, $props } = await import("@stores/modal.ts");
     $props.setKey("disableScroll", false);
     document.body.classList.add("u-disable-scroll");
@@ -207,10 +118,9 @@ describe("resetModal", () => {
     expect(document.body.classList.contains("u-disable-scroll")).toBe(true);
   });
 
-  it("skips setTimeout when window is undefined (covers line 94 false branch)", async () => {
-    const { resetModal, $view, $viewIsComponent } = await import("@stores/modal.ts");
+  it("skips setTimeout when window is undefined", async () => {
+    const { resetModal, $view } = await import("@stores/modal.ts");
     $view.set({ props: { foo: "bar" } });
-    $viewIsComponent.set(true);
     vi.stubGlobal("window", undefined);
     try {
       resetModal();

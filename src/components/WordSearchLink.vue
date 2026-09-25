@@ -9,24 +9,14 @@
 
 <script setup lang="ts">
 import { trackEvent } from "@utils/analytics";
-import { useBreakpoints, usePreferredReducedMotion } from "@vueuse/core";
+import { useMediaQuery, usePreferredReducedMotion } from "@vueuse/core";
 import MousePointerClick from "virtual:icons/lucide/mouse-pointer-click";
 import { onMounted, ref } from "vue";
 
 const searchLinkIconWrapClass = ref("");
 const preferredMotion = usePreferredReducedMotion();
-const breakpoints = useBreakpoints({
-  fhd: 1920,
-  lg: 1260,
-  md: 1024,
-  sm: 768,
-  uhd: 2560,
-  xlg: 1440,
-  xs: 568,
-  xxs: 375,
-});
-
-const largerThanSm = breakpoints.greater("sm");
+// Matches $sm in src/styles/variables/_layout.scss
+const largerThanSm = useMediaQuery("(width > 768px)");
 
 const scrollToWordSearch = () => {
   const findSearchBar = (retries = 5) => {

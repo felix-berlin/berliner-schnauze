@@ -3,6 +3,9 @@
  */
 const isBrowser = (): boolean => typeof window !== "undefined";
 
+/** Matomo command queue, created on first use. */
+const paq = () => (window._paq ??= []);
+
 /**
  * Track search events in Matomo
  *
@@ -16,9 +19,7 @@ export const setMatomoSearch = (
   numberOfResults: boolean | number = false,
 ): void => {
   if (isBrowser() && searchKey.length > 0) {
-    const _paq = (window._paq = window._paq || []);
-
-    _paq.push(["trackSiteSearch", searchKey, searchCategory, numberOfResults]);
+    paq().push(["trackSiteSearch", searchKey, searchCategory, numberOfResults]);
   }
 };
 
@@ -41,14 +42,12 @@ export const trackEvent = (
   if (!isBrowser()) {
     return;
   }
-  const _paq = (window._paq = window._paq || []);
-
   const eventData: (number | string)[] = [category, action, name];
   if (value !== undefined) {
     eventData.push(value);
   }
 
-  _paq.push(["trackEvent", ...eventData]);
+  paq().push(["trackEvent", ...eventData]);
 };
 
 /**
@@ -59,6 +58,5 @@ export const trackEvent = (
  */
 export const trackContentImpressionsWithinNode = (el: Element): void => {
   if (!isBrowser()) return;
-  const _paq = (window._paq = window._paq || []);
-  _paq.push(["trackContentImpressionsWithinNode", el]);
+  paq().push(["trackContentImpressionsWithinNode", el]);
 };

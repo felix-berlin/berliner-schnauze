@@ -25,22 +25,20 @@ describe("darkMode store", () => {
     metaThemeColor.remove();
   });
 
-  it("setDarkMode(true) adds dark + cc--darkmode, sets colorScheme dark, sets dark meta", async () => {
+  it("setDarkMode(true) adds dark, sets colorScheme dark, sets dark meta", async () => {
     const { setDarkMode } = await import("@stores/darkMode.ts");
     setDarkMode(true);
     expect(document.documentElement.classList.contains("dark")).toBe(true);
-    expect(document.documentElement.classList.contains("cc--darkmode")).toBe(true);
     expect(document.documentElement.style.colorScheme).toBe("dark");
     expect(metaThemeColor.getAttribute("content")).toBe("#2b333b");
   });
 
-  it("setDarkMode(false) removes dark + cc--darkmode, sets colorScheme light, sets light meta", async () => {
+  it("setDarkMode(false) removes dark, sets colorScheme light, sets light meta", async () => {
     const { setDarkMode } = await import("@stores/darkMode.ts");
     // first enable then disable
     setDarkMode(true);
     setDarkMode(false);
     expect(document.documentElement.classList.contains("dark")).toBe(false);
-    expect(document.documentElement.classList.contains("cc--darkmode")).toBe(false);
     expect(document.documentElement.style.colorScheme).toBe("light");
     expect(metaThemeColor.getAttribute("content")).toBe("#fad0b0");
   });
@@ -53,7 +51,6 @@ describe("darkMode store", () => {
     const { setDarkMode } = await import("@stores/darkMode.ts");
     setDarkMode(null);
     expect(document.documentElement.classList.contains("dark")).toBe(true);
-    expect(document.documentElement.classList.contains("cc--darkmode")).toBe(true);
   });
 
   it("setDarkMode(null) with system light preference resolves to light", async () => {
@@ -64,7 +61,6 @@ describe("darkMode store", () => {
     const { setDarkMode } = await import("@stores/darkMode.ts");
     setDarkMode(null);
     expect(document.documentElement.classList.contains("dark")).toBe(false);
-    expect(document.documentElement.classList.contains("cc--darkmode")).toBe(false);
     expect(document.documentElement.style.colorScheme).toBe("light");
   });
 

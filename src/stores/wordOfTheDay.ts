@@ -1,4 +1,5 @@
 import { persistentMap } from "@nanostores/persistent";
+import { jsonCodec } from "@utils/jsonCodec";
 import { WP_REST_API } from "astro:env/client";
 import { onMount, task } from "nanostores";
 
@@ -42,16 +43,7 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
     timestamp: 0,
     word: {},
   },
-  {
-    decode(value) {
-      try {
-        return JSON.parse(value);
-      } catch {
-        return value;
-      }
-    },
-    encode: (value) => JSON.stringify(value),
-  },
+  jsonCodec,
 );
 
 /**
@@ -113,8 +105,7 @@ onMount($wordOfTheDay, () => {
     const timestamp = getPersistedTimestamp();
     if (timestamp && isCachedToday(timestamp)) return;
 
-    await getWordOfTheDay().catch((err) => {
-      console.error("Failed to fetch Word of the Day: ", err);
-    });
+    // getWordOfTheDay() handles its own errors and never rejects.
+    await getWordOfTheDay();
   });
 });
