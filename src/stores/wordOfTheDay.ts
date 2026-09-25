@@ -101,6 +101,10 @@ const getPersistedTimestamp = (): number => {
 };
 
 onMount($wordOfTheDay, () => {
+  // Server-rendered subscribers (e.g. IsWordOfTheDay in WordHero.astro) would otherwise
+  // fire this fetch once per page during the build.
+  if (import.meta.env.SSR) return;
+
   void task(async () => {
     const timestamp = getPersistedTimestamp();
     if (timestamp && isCachedToday(timestamp)) return;

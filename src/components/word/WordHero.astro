@@ -53,6 +53,7 @@ const themen = word.berlinerischThemen?.nodes ?? [];
       }
       {wortartLabel && <span class='c-word-hero__wortart-badge'>{wortartLabel}</span>}
       <IsWordOfTheDay
+        client:only='vue'
         variant='badge'
         word={wordProps.berlinerisch}
         wordId={word.berlinerWordId}
