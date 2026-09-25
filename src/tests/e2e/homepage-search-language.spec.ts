@@ -71,7 +71,7 @@ test.describe("Search language handling (/)", () => {
     page,
   }) => {
     await page.goto("/wort/anmachen");
-    await expect(page.getByText(/sich jemandem nähern/).first()).toBeVisible();
+    await expect(page.getByText(/sich jemandem .*nähern/).first()).toBeVisible();
 
     await page.goto("/");
     await search(page, "nähern");

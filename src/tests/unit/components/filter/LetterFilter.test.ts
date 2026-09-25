@@ -11,6 +11,7 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 vi.mock("@stores/wordList.ts", () => ({
+  $searchMeta: vi.fn(),
   $wordSearch: vi.fn(),
   setLetterFilter: vi.fn(),
 }));

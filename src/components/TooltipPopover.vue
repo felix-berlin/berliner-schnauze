@@ -30,20 +30,15 @@
 </template>
 
 <script setup lang="ts">
-import { useEventListener } from "@vueuse/core";
+import { useEventListener, useTimeoutFn } from "@vueuse/core";
 import { nextTick, ref } from "vue";
 
-import { syncTooltipArrow } from "@/directives/tooltip";
-
-export type TooltipPlacement =
-  | "top"
-  | "top-start"
-  | "top-end"
-  | "bottom"
-  | "bottom-start"
-  | "bottom-end"
-  | "left"
-  | "right";
+import {
+  EXIT_ANIMATION_MS,
+  HIDE_DELAY,
+  syncTooltipArrow,
+  type TooltipPlacement,
+} from "@/directives/tooltip";
 
 export type TooltipPopoverProps = {
   content?: string;
@@ -62,44 +57,27 @@ const arrow = ref<HTMLElement | null>(null);
 const isVisible = ref(false);
 const isRendered = ref(false);
 
-let hideTimer: ReturnType<typeof setTimeout> | null = null;
-let domRemovalTimer: ReturnType<typeof setTimeout> | null = null;
-
-// Matches the CSS exit transition duration in _tooltip.scss
-const EXIT_ANIMATION_MS = 100;
-
-const cancelHide = (): void => {
-  if (hideTimer !== null) {
-    clearTimeout(hideTimer);
-    hideTimer = null;
-  }
-};
-
-const cancelDomRemoval = (): void => {
-  if (domRemovalTimer !== null) {
-    clearTimeout(domRemovalTimer);
-    domRemovalTimer = null;
-  }
-};
+// Keep panel in DOM until the overlay allow-discrete exit animation completes,
+// then remove it so it doesn't persist as dead DOM between interactions.
+const { start: scheduleDomRemoval, stop: cancelDomRemoval } = useTimeoutFn(
+  () => {
+    isRendered.value = false;
+  },
+  EXIT_ANIMATION_MS,
+  { immediate: false },
+);
 
 const hide = (): void => {
   cancelHide();
   panel.value?.hidePopover();
   isVisible.value = false;
-  // Keep panel in DOM until the overlay allow-discrete exit animation completes,
-  // then remove it so it doesn't persist as dead DOM between interactions.
-  domRemovalTimer = setTimeout(() => {
-    isRendered.value = false;
-    domRemovalTimer = null;
-  }, EXIT_ANIMATION_MS);
+  scheduleDomRemoval();
 };
 
-// Delay lets the pointer move from trigger to tooltip panel without dismissing (WCAG 1.4.13)
-const HIDE_DELAY = 200;
-
-const scheduleHide = (): void => {
-  hideTimer = setTimeout(hide, HIDE_DELAY);
-};
+const { start: startHideTimer, stop: cancelHide } = useTimeoutFn(hide, HIDE_DELAY, {
+  immediate: false,
+});
+const scheduleHide = (): void => startHideTimer();
 
 const show = async (): Promise<void> => {
   cancelHide();
@@ -110,13 +88,11 @@ const show = async (): Promise<void> => {
   }
   panel.value?.showPopover();
   isVisible.value = true;
-  if (container.value && panel.value && arrow.value) {
-    requestAnimationFrame(() => {
-      if (container.value && panel.value && arrow.value) {
-        syncTooltipArrow(container.value, panel.value, arrow.value);
-      }
-    });
-  }
+  requestAnimationFrame(() => {
+    if (container.value && panel.value && arrow.value) {
+      syncTooltipArrow(container.value, panel.value, arrow.value);
+    }
+  });
 };
 
 // WCAG 1.4.13: tooltip must be dismissible without moving pointer/focus (Escape key)

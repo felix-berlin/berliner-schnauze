@@ -51,7 +51,8 @@
 import type { BonSharePayload } from "@utils/bonShare";
 
 import { useContentTracking } from "@composables/useContentTracking";
-import { decodeShareHash } from "@utils/bonShare";
+import { accuracyPercent as toAccuracyPercent, decodeShareHash } from "@utils/bonShare";
+import { formattedDate as formatDate } from "@utils/helpers";
 import { useUrlSearchParams } from "@vueuse/core";
 import { computed, ref } from "vue";
 
@@ -65,17 +66,10 @@ const payload = computed<BonSharePayload | null>(() => {
 });
 
 const accuracyPercent = computed(() =>
-  payload.value && payload.value.totalAnswered > 0
-    ? Math.round((payload.value.correctAnswers / payload.value.totalAnswered) * 100)
-    : 0,
+  payload.value ? toAccuracyPercent(payload.value.correctAnswers, payload.value.totalAnswered) : 0,
 );
 
-const formattedDate = computed(() => {
-  if (!payload.value?.date) return "";
-  return new Intl.DateTimeFormat("de-DE", { dateStyle: "long" }).format(
-    new Date(payload.value.date),
-  );
-});
+const formattedDate = computed(() => formatDate(payload.value?.date) ?? "");
 
 const contentPiece = computed(() =>
   payload.value

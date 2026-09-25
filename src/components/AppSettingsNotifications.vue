@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import { useNotificationSettings } from "@composables/useNotificationSettings";
-import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent, ref } from "vue";
 
 const BellIcon = defineAsyncComponent(() => import("virtual:icons/lucide/bell"));
 const BellRingIcon = defineAsyncComponent(() => import("virtual:icons/lucide/bell-ring"));
@@ -86,9 +86,10 @@ const {
   notificationsSupported,
   pushState,
   vapidConfigured,
-  showRevokeHint,
   showPushSection,
   togglePush,
   requestNotificationPermission,
 } = useNotificationSettings();
+
+const showRevokeHint = ref(false);
 </script>

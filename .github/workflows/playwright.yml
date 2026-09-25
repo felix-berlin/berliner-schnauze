@@ -2,17 +2,115 @@ name: Playwright Tests
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "openspec/**"
   pull_request:
     branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "openspec/**"
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  test:
-    timeout-minutes: 60
+  build:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+
+      - name: Fetch secrets from Infisical 🔐
+        uses: Infisical/secrets-action@v1.0.18
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: ${{ github.ref_name == 'main' && 'prod' || 'staging' }}
+          domain: "https://infisical.kasimir.dev"
+
+      - name: Setup pnpm 🛠️
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Get date
+        id: date
+        run: echo "day=$(date +%F)" >> "$GITHUB_OUTPUT"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Only used by the E2E build (see useDiskCache in getWords.ts). Keyed by day so
+      # the words are re-fetched at most once per day; saved right after the build
+      # so a failing test run doesn't discard it.
+      - name: Restore words cache
+        id: words-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: node_modules/.cache/berliner-words
+          key: words-${{ github.ref_name == 'main' && 'prod' || 'staging' }}-${{ steps.date.outputs.day }}
+
+      # Built explicitly here (rather than inside webServer.command) so the
+      # build has the full job timeout to finish — Astro fetches and renders
+      # every word page from the live WordPress API, which can take longer
+      # than any reasonable "wait for server" timeout. Playwright then only
+      # has to wait for `astro preview` to start, which is near-instant.
+      #
+      # E2E_WORD_LIMIT caps how many word/OG *pages* are generated (full
+      # site is 6000+ words, ~6.5min). The word data itself is always fetched
+      # in full — list/letter filters and similar-sounding/neighbor sections
+      # depend on it. getWords.ts always builds the specific slugs the specs
+      # navigate to directly, regardless of this limit. Also skips the Sentry/Codecov
+      # source-map upload plugins, which add real time for a build nobody
+      # deploys (see astro.config.mjs's isE2eBuild).
+      - name: Build site
+        env:
+          E2E_WORD_LIMIT: "500"
+        run: pnpm run build
+
+      - name: Save words cache
+        if: steps.words-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: node_modules/.cache/berliner-words
+          key: ${{ steps.words-cache.outputs.cache-primary-key }}
+
+      # dist/ is served by `astro preview` in every shard job. Same public-repo
+      # caveat as the report below: the static site holds no secrets, only public HTML/JS.
+      - name: Upload build
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist
+          retention-days: 1
+
+  test:
+    needs: build
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    # Browsers + OS libs are baked into the image. Keep the tag in sync with @playwright/test.
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      # --init reaps zombie browser/server processes; without it the run hangs after the last test.
+      options: --init --ipc=host
+    # GitHub sets HOME=/github/home in container jobs; Firefox/WebKit refuse to start
+    # as root unless HOME is root's own home.
+    env:
+      HOME: /root
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - name: Checkout ✅
         uses: actions/checkout@v7
@@ -38,43 +136,32 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v6
+      - name: Download build
+        uses: actions/download-artifact@v8
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          name: dist
+          path: dist
 
-      - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps
+      # `astro preview` loads astro.config.mjs, which imports this generated stub.
+      - name: Generate supportedBrowsers
+        run: pnpm run supportedBrowsers
 
-      # Cache hit skips the browser download above, but the OS-level shared
-      # libs (apt packages) still need installing on every fresh runner.
-      - name: Install Playwright OS dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm exec playwright install-deps
+      # Started here instead of via Playwright's webServer: in the container the job hung
+      # after the last test while Playwright tore the server down. setsid + redirected
+      # output detach it from the step so the step can end.
+      - name: Start preview server
+        run: |
+          setsid nohup pnpm run preview > preview.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:4321 > /dev/null && exit 0
+            sleep 1
+          done
+          cat preview.log
+          exit 1
 
-      # Built explicitly here (rather than inside webServer.command) so the
-      # build has the full job timeout to finish — Astro fetches and renders
-      # every word page from the live WordPress API, which can take longer
-      # than any reasonable "wait for server" timeout. Playwright then only
-      # has to wait for `astro preview` to start, which is near-instant.
-      #
-      # E2E_WORD_LIMIT caps how many word/OG *pages* are generated (full
-      # site is 6000+ words, ~6.5min). The word data itself is always fetched
-      # in full — list/letter filters and similar-sounding/neighbor sections
-      # depend on it. getWords.ts always builds the specific slugs the specs
-      # navigate to directly, regardless of this limit. Also skips the Sentry/Codecov
-      # source-map upload plugins, which add real time for a build nobody
-      # deploys (see astro.config.mjs's isE2eBuild).
-      - name: Build site
-        env:
-          E2E_WORD_LIMIT: "500"
-        run: pnpm run build
-
-      - name: Run Playwright tests
-        run: pnpm exec playwright test
+      - name: Run Playwright tests (shard ${{ matrix.shard }}/4)
+        timeout-minutes: 8
+        run: pnpm exec playwright test --shard=${{ matrix.shard }}/4
 
       # Traces/screenshots/console logs can contain secrets — this repo is public,
       # so GitHub Actions artifacts are downloadable by anyone. Encrypt before
@@ -96,6 +183,6 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.shard }}
           path: playwright-report.tar.gz.gpg
           retention-days: 14

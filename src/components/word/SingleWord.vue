@@ -5,40 +5,40 @@
     :key="source.berlinerWordId"
     :data-group="source.wordGroup"
     class="c-word-list__word"
-    :class="{ 'has-translation': source.wordProperties?.translations }"
+    :class="{ 'has-translation': source.wordProperties.translations }"
     data-track-content
     data-content-name="word"
-    :data-content-target="routeToWord(source.slug!)"
+    :data-content-target="routeToWord(source.slug)"
   >
     <dl class="c-word-list__header">
       <dt
         class="c-word-list__berlinerisch"
-        :data-content-piece="source.wordProperties?.berlinerisch"
+        :data-content-piece="source.wordProperties.berlinerisch"
       >
         <IsWordOfTheDay
-          :word="source.wordProperties?.berlinerisch"
+          :word="source.wordProperties.berlinerisch"
           :word-id="source.berlinerWordId"
           class="c-word-list__crown"
         />
         <a
-          :href="routeToWord(source.slug!)"
-          v-html="highlightMatches(source.wordProperties?.berlinerisch ?? '', highlightTerm)"
+          :href="routeToWord(source.slug)"
+          v-html="highlightMatches(source.wordProperties.berlinerisch, highlightTerm)"
         />
       </dt>
 
       <dd
         class="c-word-list__translation c-word-list__translation--single-line"
-        v-html="(source.wordProperties?.translations ?? []).join('<span>᛫</span>')"
+        v-html="source.wordProperties.translations.join('<span>᛫</span>')"
       />
     </dl>
     <WordOptionDropdown
       v-if="showDropdown"
-      :berlinerisch="source.wordProperties?.berlinerisch"
+      :berlinerisch="source.wordProperties.berlinerisch"
       :slug="source.slug"
       class="c-word-list__options-dropdown"
     >
       <template #after>
-        <a :href="routeToWord(source.slug!)" class="c-options-dropdown__copy-button c-button">
+        <a :href="routeToWord(source.slug)" class="c-options-dropdown__copy-button c-button">
           <BookOpen width="18" height="18" class="c-options-dropdown__icon-button" />
           <span class="c-options-dropdown__copy-text">Mehr erfahren</span>
         </a>

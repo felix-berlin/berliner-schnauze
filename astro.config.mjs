@@ -501,6 +501,12 @@ export default defineConfig({
       },
     },
 
+    // Deps only imported by lazily hydrated islands are discovered late; the
+    // mid-session re-optimization then breaks the in-flight dynamic import.
+    optimizeDeps: {
+      include: ["@urql/core", "zod"],
+    },
+
     plugins: [
       // In dev mode, the browser fetches sw.js.map and workbox-*.js.map because
       // vite-pwa generates source maps for the dev service worker. These requests

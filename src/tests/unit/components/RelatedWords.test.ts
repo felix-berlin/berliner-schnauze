@@ -2,7 +2,8 @@ import RelatedWords from "@components/RelatedWords.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("@utils/helpers.ts", () => ({
+vi.mock("@utils/helpers.ts", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@utils/helpers.ts")>()),
   routeToWord: vi.fn((slug: string) => `/wort/${slug}`),
 }));
 
@@ -67,14 +68,13 @@ describe("RelatedWords.vue", () => {
     expect(wrapper.find("h2").text()).toBe("Bock mehr Wörter kennen zu lernen?");
   });
 
-  it("throws RangeError when numberOfWords exceeds available words (covers line 37)", () => {
+  it("renders all words when numberOfWords exceeds available words", () => {
     const tooFew = [makeWord("a", "A"), makeWord("b", "B")];
-    expect(() => mount(RelatedWords, { props: { numberOfWords: 5, words: tooFew } })).toThrow(
-      RangeError,
-    );
+    const wrapper = mount(RelatedWords, { props: { numberOfWords: 5, words: tooFew } });
+    expect(wrapper.findAll("a.c-related-words__word")).toHaveLength(2);
   });
 
-  it("uses slug as key when id is undefined (covers line 5 ?? word.slug branch)", () => {
+  it("uses slug as key when id is undefined", () => {
     const wordsWithoutId = [
       { slug: "allet", wordProperties: { berlinerisch: "Allet" } },
       { slug: "kiez", wordProperties: { berlinerisch: "Kiez" } },
@@ -84,7 +84,7 @@ describe("RelatedWords.vue", () => {
     expect(wrapper.findAll("li")).toHaveLength(3);
   });
 
-  it("falls back to empty string key when both id and slug are undefined (covers line 5 ?? '' branch)", () => {
+  it("falls back to empty string key when both id and slug are undefined", () => {
     const wordsWithoutIdOrSlug = [
       { wordProperties: { berlinerisch: "Allet" } },
       { wordProperties: { berlinerisch: "Kiez" } },
@@ -95,10 +95,4 @@ describe("RelatedWords.vue", () => {
     });
     expect(wrapper.findAll("li")).toHaveLength(3);
   });
-
-  // v-if="word" on line 7: the false branch is structurally unreachable through the
-  // public API — xRandomWords always returns real array elements (objects), which are
-  // truthy, and the :key binding on <li> would crash on a null/undefined entry before
-  // v-if could evaluate.  Coverage of this branch requires a source-level fix (guard the
-  // :key expression too) or a compiler-internal hook; no test can reach it cleanly.
 });

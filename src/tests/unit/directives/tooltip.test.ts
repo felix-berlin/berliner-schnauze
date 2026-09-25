@@ -419,3 +419,46 @@ describe("syncTooltipArrow", () => {
     expect(arrow.style.right).toBe("");
   });
 });
+
+describe("vTooltip DOM removal", () => {
+  it("removes the panel from the DOM after the exit animation", async () => {
+    vi.useFakeTimers();
+    const wrapper = mountWithDirective("Test");
+    const panel = await showAndGetPanel(wrapper);
+    await wrapper.find("button").trigger("pointerleave");
+    vi.advanceTimersByTime(200 + 100);
+    expect(panel.isConnected).toBe(false);
+    wrapper.unmount();
+  });
+
+  it("show() cancels a DOM removal scheduled by a previous hide", async () => {
+    vi.useFakeTimers();
+    const wrapper = mountWithDirective("Test");
+    const panel = await showAndGetPanel(wrapper);
+    await wrapper.find("button").trigger("pointerleave");
+    vi.advanceTimersByTime(200); // hide runs, removal is pending
+    await wrapper.find("button").trigger("pointerenter");
+    vi.advanceTimersByTime(300);
+    expect(panel.isConnected).toBe(true);
+    wrapper.unmount();
+  });
+
+  it("does not throw when the Popover API is unavailable", async () => {
+    (HTMLElement.prototype as { showPopover?: unknown }).showPopover = undefined;
+    const wrapper = mountWithDirective("Test");
+    await expect(showAndGetPanel(wrapper)).resolves.toBeInstanceOf(HTMLElement);
+  });
+
+  it("a second hide while removal is pending restarts the removal timer", async () => {
+    vi.useFakeTimers();
+    const wrapper = mountWithDirective("Test");
+    const panel = await showAndGetPanel(wrapper);
+    // pointerleave + focusout each schedule their own hide timer; both fire together
+    await wrapper.find("button").trigger("pointerleave");
+    await wrapper.find("button").trigger("focusout");
+    vi.advanceTimersByTime(200);
+    vi.advanceTimersByTime(100);
+    expect(panel.isConnected).toBe(false);
+    wrapper.unmount();
+  });
+});

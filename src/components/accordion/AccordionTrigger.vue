@@ -20,12 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import type { AccordionItemContext } from "@components/accordion/AccordionItem.vue";
-
+import { ACCORDION_ITEM_KEY } from "@components/accordion/keys";
 import { defineAsyncComponent, inject } from "vue";
 
 const ChevronDown = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
 
-const ctx = inject<AccordionItemContext>("accordion-item");
+const ctx = inject(ACCORDION_ITEM_KEY);
 if (!ctx) throw new Error("AccordionTrigger must be inside AccordionItem");
 </script>

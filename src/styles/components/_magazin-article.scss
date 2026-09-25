@@ -7,7 +7,7 @@ $reading-width: 68ch;
 $toc-width: 16rem;
 
 .o-magazin-article {
-  --anchor-offset: calc(var(--site-header-height, 60px) + 1.5rem);
+  --anchor-offset: calc(var(--site-header-height) + 1.5rem);
 
   display: flex;
   flex-direction: column;
@@ -364,9 +364,7 @@ $toc-width: 16rem;
     &--featured {
       margin-block-start: vars.$spacer * 1.5;
       width: 100%;
-      box-shadow:
-        0 0.5px 0.6px rgb(0 0 0 / 8%),
-        0 4px 5px rgb(0 0 0 / 16%);
+      box-shadow: vars.$paper-lift;
     }
   }
 

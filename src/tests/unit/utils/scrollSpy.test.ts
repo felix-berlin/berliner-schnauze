@@ -188,4 +188,21 @@ describe("initScrollSpy", () => {
     });
     expect(observeMock).toHaveBeenCalledTimes(1);
   });
+
+  it("disconnects the previous observer for the same nav on re-init", () => {
+    document.body.innerHTML = `
+      <nav class="nav"><a href="#a">A</a></nav>
+      <section id="a"></section>
+    `;
+    const options = {
+      activeClass: "is-active",
+      getSectionId: (link: HTMLAnchorElement) => link.getAttribute("href")?.slice(1),
+      linkSelector: "a",
+      navSelector: ".nav",
+    };
+    initScrollSpy(options);
+    const first = intersectionObserverMock.mock.results[0].value;
+    initScrollSpy(options);
+    expect(first.disconnect).toHaveBeenCalledTimes(1);
+  });
 });

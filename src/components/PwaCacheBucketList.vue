@@ -70,7 +70,7 @@
                       formatBytes(item.size)
                     }}</span>
                     <span v-if="item.contentType" class="c-pwa-cache__url-type">{{
-                      formatContentType(item.contentType)
+                      getEntryType(item.url, item.contentType).toUpperCase()
                     }}</span>
                     <span v-if="item.date" class="c-pwa-cache__url-age">{{
                       formatRelativeTime(item.date)
@@ -96,9 +96,10 @@ import {
   BaseAccordion,
 } from "@components/accordion";
 import {
-  CONTENT_TYPE_TO_EXT,
   formatBytes,
+  formatUrl,
   getBucketDisplayName,
+  getEntryType,
 } from "@composables/useCacheStorage";
 import { VList } from "virtua/vue";
 import { defineAsyncComponent } from "vue";
@@ -113,21 +114,6 @@ const emit = defineEmits<{
 
 const ChevronDown = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
 const X = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
-
-function formatContentType(contentType: string): string {
-  const type = contentType.split(";")[0].trim();
-  const ext = CONTENT_TYPE_TO_EXT[type];
-  return ext ? ext.toUpperCase() : (type.split("/").pop()?.toUpperCase() ?? type);
-}
-
-function formatUrl(url: string): string {
-  try {
-    const path = new URL(url).pathname;
-    return path.length > 60 ? `${path.slice(0, 57)}…` : path;
-  } catch {
-    return url.length > 60 ? `${url.slice(0, 57)}…` : url;
-  }
-}
 
 function formatRelativeTime(date: Date): string {
   const diff = Date.now() - date.getTime();

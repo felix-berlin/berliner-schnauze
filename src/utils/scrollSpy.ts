@@ -7,6 +7,10 @@ interface ScrollSpyOptions {
   onActivate?: (link: HTMLAnchorElement, nav: HTMLElement) => void;
 }
 
+// One observer per nav: re-running init after a View Transitions navigation must drop the
+// previous page's observer, otherwise it keeps observing detached sections.
+const observers = new Map<string, IntersectionObserver>();
+
 export function initScrollSpy({
   navSelector,
   linkSelector,
@@ -15,6 +19,9 @@ export function initScrollSpy({
   rootMargin = "-20% 0px -70% 0px",
   onActivate,
 }: ScrollSpyOptions): void {
+  observers.get(navSelector)?.disconnect();
+  observers.delete(navSelector);
+
   const nav = document.querySelector<HTMLElement>(navSelector);
   if (!nav) return;
 
@@ -50,4 +57,5 @@ export function initScrollSpy({
   );
 
   sections.forEach((section) => observer.observe(section));
+  observers.set(navSelector, observer);
 }

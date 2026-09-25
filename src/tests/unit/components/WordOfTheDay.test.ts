@@ -139,7 +139,6 @@ describe("WordOfTheDay.vue", () => {
 
   it("updates countdown display after first tick", async () => {
     const wrapper = mountComponent();
-    // The countdown is initialized with "00" values; after 1 second it runs resetAtMidnight / convertMsToTime
     vi.advanceTimersByTime(1000);
     await wrapper.vm.$nextTick();
     // Countdown spans should still be present — values are derived from real time
@@ -154,5 +153,12 @@ describe("WordOfTheDay.vue", () => {
     spans.forEach((span) => {
       expect(span.text()).toMatch(/^\d{2}$/);
     });
+  });
+
+  it("counts down to local midnight", () => {
+    vi.setSystemTime(new Date(2026, 0, 1, 22, 58, 30));
+    const wrapper = mountComponent();
+    const spans = wrapper.findAll(".c-word-of-the-day__update span").map((s) => s.text());
+    expect(spans).toEqual(["01", "01", "30"]);
   });
 });

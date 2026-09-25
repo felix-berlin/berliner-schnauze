@@ -30,7 +30,7 @@ import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
-import { wpFetch, delay, getWpConfig, type WpConfig } from "./lib/wp-rest.ts";
+import { wpFetch, delay, getWpConfig, fetchAllPosts, type WpConfig } from "./lib/wp-rest.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const MD_PATH = join(__dirname, "../data/lexikon-import/supplement-suggestions-meyer.md");
@@ -127,34 +127,21 @@ function decodeEntities(s: string): string {
 }
 
 async function fetchAllPostsByTitle(config: WpConfig): Promise<Map<string, WpPost>> {
+  const posts = await fetchAllPosts<WpPost>(
+    POST_TYPE_REST_BASE,
+    "id,title,acf",
+    config,
+    RATE_MS,
+    (count, page) => process.stdout.write(`\rFetched ${count} posts (page ${page})...`),
+  );
+  process.stdout.write("\n");
+
   const map = new Map<string, WpPost>();
-  for (const status of ["publish", "draft", "pending", "future", "private"]) {
-    let page = 1;
-    while (true) {
-      let posts: WpPost[];
-      try {
-        posts = await wpFetch<WpPost[]>(
-          `/${POST_TYPE_REST_BASE}?per_page=100&page=${page}&_fields=id,title,acf&status=${status}`,
-          {},
-          config,
-        );
-      } catch (err) {
-        if (status === "publish") throw err;
-        break;
-      }
-      if (posts.length === 0) break;
-      for (const post of posts) {
-        if (post.title?.rendered) {
-          map.set(decodeEntities(post.title.rendered).trim().toLowerCase(), post);
-        }
-      }
-      process.stdout.write(`\rFetched ${map.size} posts (${status}, page ${page})...`);
-      if (posts.length < 100) break;
-      page++;
-      await delay(RATE_MS);
+  for (const post of posts) {
+    if (post.title?.rendered) {
+      map.set(decodeEntities(post.title.rendered).trim().toLowerCase(), post);
     }
   }
-  process.stdout.write("\n");
   return map;
 }
 

@@ -25,7 +25,7 @@ const filteredWords = (relatedWords?.nodes ?? []).filter(
       <ul class='c-single-word__related-words-list'>
         {filteredWords.map((w) => (
           <li class='c-single-word__related-word'>
-            <a class='c-single-word__related-word-link' href={routeToWord(w?.slug ?? undefined)}>
+            <a class='c-single-word__related-word-link' href={routeToWord(w?.slug)}>
               {w?.wordProperties?.berlinerisch}
             </a>
           </li>

@@ -12,7 +12,7 @@
         </button>
       </li>
       <li
-        v-for="letter in wordSearchStore.letterGroups"
+        v-for="letter in searchMeta.letterGroups"
         :key="letter!"
         class="c-letter-filter__list-item"
       >
@@ -35,9 +35,10 @@
 
 <script setup lang="ts">
 import { useStore } from "@nanostores/vue";
-import { $wordSearch, setLetterFilter } from "@stores/wordList.ts";
+import { $searchMeta, $wordSearch, setLetterFilter } from "@stores/wordList.ts";
 
 const wordSearchStore = useStore($wordSearch);
+const searchMeta = useStore($searchMeta);
 </script>
 
 <style lang="scss">

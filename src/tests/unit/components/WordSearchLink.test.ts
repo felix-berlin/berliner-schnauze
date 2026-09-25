@@ -14,12 +14,10 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@vueuse/core")>();
   return {
     ...actual,
-    useBreakpoints: vi.fn(() => ({
-      greater: vi.fn(() => ({
-        get value() {
-          return mockState.breakpointGreater;
-        },
-      })),
+    useMediaQuery: vi.fn(() => ({
+      get value() {
+        return mockState.breakpointGreater;
+      },
     })),
     usePreferredReducedMotion: vi.fn(() => ({
       get value() {

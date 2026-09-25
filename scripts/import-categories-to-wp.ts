@@ -25,7 +25,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
 import { CATEGORY_LABELS, type WordCategory } from "./lib/word-category.ts";
-import { wpFetch, delay, getWpConfig, type WpConfig } from "./lib/wp-rest.ts";
+import { wpFetch, delay, getWpConfig, fetchAllPosts, type WpConfig } from "./lib/wp-rest.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -97,41 +97,15 @@ async function getOrCreateTerm(slug: string, config: WpConfig): Promise<WpTerm> 
 
 // ── Fetch all WP posts (slug → id map) ────────────────────────────────────
 async function fetchAllPostSlugs(config: WpConfig): Promise<Map<string, number>> {
-  const slugMap = new Map<string, number>();
-  let page = 1;
-  let total = 0;
-
-  for (const status of ["publish", "draft", "pending", "future", "private"]) {
-    page = 1;
-    while (true) {
-      let posts: WpPost[];
-      try {
-        posts = await wpFetch<WpPost[]>(
-          `/${POST_TYPE_REST_BASE}?per_page=100&page=${page}&_fields=id,slug&status=${status}`,
-          {},
-          config,
-        );
-      } catch (err) {
-        if (status === "publish") throw err;
-        break;
-      }
-
-      if (posts.length === 0) break;
-
-      for (const post of posts) {
-        slugMap.set(post.slug, post.id);
-      }
-
-      total += posts.length;
-      process.stdout.write(`\rFetched ${total} WP posts (${status}, page ${page})...`);
-
-      if (posts.length < 100) break;
-      page++;
-      await delay(RATE_MS);
-    }
-  }
-
+  const posts = await fetchAllPosts<WpPost>(POST_TYPE_REST_BASE, "id,slug", config, RATE_MS, (count, page) =>
+    process.stdout.write(`\rFetched ${count} WP posts (page ${page})...`),
+  );
   process.stdout.write("\n");
+
+  const slugMap = new Map<string, number>();
+  for (const post of posts) {
+    slugMap.set(post.slug, post.id);
+  }
   return slugMap;
 }
 

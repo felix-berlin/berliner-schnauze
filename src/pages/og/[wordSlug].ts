@@ -6,18 +6,13 @@ import { E2E_WORD_LIMIT } from "astro:env/server";
 const allWords = E2E_WORD_LIMIT ? [] : await fetchAllWords();
 
 const pages = Object.fromEntries(
-  allWords
-    .filter(({ node }) => node.slug)
-    .map(({ node }) => [
-      node.slug!,
-      {
-        berlinerisch: node.wordProperties?.berlinerisch ?? node.slug!,
-        translation: (node.wordProperties?.translations ?? [])
-          .map((t) => t?.translation)
-          .filter(Boolean)
-          .join(", "),
-      },
-    ]),
+  allWords.map((word) => [
+    word.slug,
+    {
+      berlinerisch: word.wordProperties.berlinerisch || word.slug,
+      translation: word.translations.join(", "),
+    },
+  ]),
 );
 
 export const { getStaticPaths, GET } = await OGImageRoute({
@@ -50,11 +45,7 @@ export const { getStaticPaths, GET } = await OGImageRoute({
         },
       },
       fonts: ["./src/assets/fonts/Berlin-Bold.woff2"],
-      // TODO: add logo with transparent background
-      // logo: {
-      //   path: './public/favicons/android-chrome-192x192.png',
-      //   size: [72, 72],
-      // },
+      // TODO: add a logo (needs a version with transparent background)
       padding: 72,
       title: page.berlinerisch,
     };

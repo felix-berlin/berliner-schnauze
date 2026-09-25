@@ -1,26 +1,16 @@
-import type { Orama, SearchParamsFullText, TypedDocument } from "@orama/orama";
+import type { Orama, SearchParamsFullText } from "@orama/orama";
 
 import { computedAsync } from "@nanostores/async";
 import { persistentMap } from "@nanostores/persistent";
 import { create, insertMultiple, search } from "@orama/orama";
 import { language, stemmer } from "@orama/stemmers/german";
+import { fetchSearchIndex } from "@services/searchIndex.ts";
 import { trackEvent } from "@utils/analytics";
 import { useViewTransition } from "@utils/helpers.ts";
+import { jsonCodec } from "@utils/jsonCodec";
 import { atom, computed, onMount, task } from "nanostores";
 
-import type { BerlinerWord } from "@/gql/entity-types";
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
-
-export type CleanBerlinerWord = {
-  berlinerischWordTypes: BerlinerWord["berlinerischWordTypes"];
-  berlinerWordId: BerlinerWord["berlinerWordId"];
-  dateGmt: BerlinerWord["dateGmt"];
-  id: BerlinerWord["id"];
-  modifiedGmt: BerlinerWord["modifiedGmt"];
-  slug: BerlinerWord["slug"];
-  wordGroup: BerlinerWord["wordGroup"];
-  wordProperties: BerlinerWord["wordProperties"];
-};
 
 export type RangeFilterMinMax = {
   characterLength: { max: number; min: number };
@@ -29,116 +19,93 @@ export type RangeFilterMinMax = {
   vowelsCount: { max: number; min: number };
 };
 
+type SortOrder = "ASC" | "DESC";
+
 export type WordList = {
   activeLetterFilter: string;
   activeOrderCategory: "alphabetical" | "date" | "modifiedDate";
   activeThemenFilter: string[];
   activeWordTypeFilter: string[];
-  alphabeticalOrder: "ASC" | "DESC";
+  alphabeticalOrder: SortOrder;
   audioBerlinerisch: boolean;
-  audioExamples?: boolean;
+  audioExamples: boolean;
   berolinismus: boolean;
   characterCount?: number;
   consonantsCount?: number;
-  dateOrder: "ASC" | "DESC";
-  letterGroups: string[];
-  modifiedDateOrder: "ASC" | "DESC";
-  multipleMeanings?: boolean;
-  rangeFilterMinMax?: RangeFilterMinMax;
-  resultLimit?: number;
-  similarSoundingWords?: boolean;
+  dateOrder: SortOrder;
+  modifiedDateOrder: SortOrder;
+  multipleMeanings: boolean;
   syllablesCount?: number;
-  themen: { name: string; slug: string }[];
   vowelsCount?: number;
-  wordTypes: string[];
 };
+
+const FILTER_DEFAULTS: WordList = {
+  activeLetterFilter: "",
+  activeOrderCategory: "alphabetical",
+  activeThemenFilter: [],
+  activeWordTypeFilter: [],
+  alphabeticalOrder: "ASC",
+  audioBerlinerisch: false,
+  audioExamples: false,
+  berolinismus: false,
+  characterCount: undefined,
+  consonantsCount: undefined,
+  dateOrder: "ASC",
+  modifiedDateOrder: "ASC",
+  multipleMeanings: false,
+  syllablesCount: undefined,
+  vowelsCount: undefined,
+};
+
+/** Boolean filters: `true` → `where["wordProperties.<key>"] = true`. */
+const BOOLEAN_FILTERS = [
+  "audioBerlinerisch",
+  "audioExamples",
+  "berolinismus",
+  "multipleMeanings",
+] as const satisfies readonly (keyof WordList)[];
+
+/** Range filters: store key → Orama `wordProperties.*` property (matched with `gte`). */
+const RANGE_FILTERS = {
+  characterCount: "characterLength",
+  consonantsCount: "consonantsCount",
+  syllablesCount: "syllablesCount",
+  vowelsCount: "vowelsCount",
+} as const satisfies Partial<Record<keyof WordList, keyof RangeFilterMinMax>>;
+
+/** Keys that count towards $activeFilterCount (sort settings do not). */
+const COUNTED_FILTERS = [
+  "activeLetterFilter",
+  "activeThemenFilter",
+  "activeWordTypeFilter",
+  ...BOOLEAN_FILTERS,
+  ...(Object.keys(RANGE_FILTERS) as (keyof typeof RANGE_FILTERS)[]),
+] as const;
 
 export const $wordSearch = persistentMap<WordList>(
   "wordSearch:",
-  {
-    activeLetterFilter: "",
-    activeOrderCategory: "alphabetical",
-    activeThemenFilter: [],
-    activeWordTypeFilter: [],
-    alphabeticalOrder: "ASC",
-    audioBerlinerisch: false,
-    audioExamples: false,
-    berolinismus: false,
-    characterCount: undefined,
-    consonantsCount: undefined,
-    dateOrder: "ASC",
-    letterGroups: [],
-    modifiedDateOrder: "ASC",
-    multipleMeanings: false,
-    resultLimit: undefined,
-    similarSoundingWords: false,
-    syllablesCount: undefined,
-    themen: [],
-    vowelsCount: undefined,
-    wordTypes: [],
-  },
-  {
-    decode(value) {
-      try {
-        return JSON.parse(value);
-      } catch {
-        return value;
-      }
-    },
-    encode: (value) => JSON.stringify(value),
-  },
+  structuredClone(FILTER_DEFAULTS),
+  jsonCodec,
 );
 
 export const $searchQuery = atom<string>("");
 
-export const $activeFilterCount = computed($wordSearch, (wordSearch) => {
-  // List all filter keys that should count as "active" if truthy
-  const booleanKeys: (keyof WordList)[] = [
-    "berolinismus",
-    "audioBerlinerisch",
-    "audioExamples",
-    "multipleMeanings",
-    "similarSoundingWords",
-  ];
-  const numberKeys: (keyof WordList)[] = [
-    "characterCount",
-    "consonantsCount",
-    "vowelsCount",
-    "syllablesCount",
-  ];
-
-  let count = 0;
-
-  if (wordSearch.activeLetterFilter !== "") count++;
-  if (wordSearch.activeWordTypeFilter?.length) count++;
-  if (wordSearch.activeThemenFilter?.length) count++;
-
-  count += booleanKeys.filter((key) => !!wordSearch[key]).length;
-  count += numberKeys.filter(
-    (key) => wordSearch[key] !== undefined && wordSearch[key] !== null,
-  ).length;
-
-  return count;
-});
+export const $activeFilterCount = computed(
+  $wordSearch,
+  (wordSearch) =>
+    COUNTED_FILTERS.filter((key) => {
+      const value = wordSearch[key];
+      return Array.isArray(value)
+        ? value.length > 0
+        : value != null && value !== FILTER_DEFAULTS[key];
+    }).length,
+);
 
 export const resetAll = () => {
-  $wordSearch.setKey("activeLetterFilter", "");
-  $wordSearch.setKey("activeOrderCategory", "alphabetical");
-  $wordSearch.setKey("activeThemenFilter", []);
-  $wordSearch.setKey("activeWordTypeFilter", []);
-  $wordSearch.setKey("alphabeticalOrder", "ASC");
-  $wordSearch.setKey("audioBerlinerisch", false);
-  $wordSearch.setKey("audioExamples", false);
-  $wordSearch.setKey("berolinismus", false);
-  $wordSearch.setKey("characterCount", undefined);
-  $wordSearch.setKey("consonantsCount", undefined);
-  $wordSearch.setKey("dateOrder", "ASC");
-  $wordSearch.setKey("modifiedDateOrder", "ASC");
-  $wordSearch.setKey("multipleMeanings", false);
+  for (const [key, value] of Object.entries(structuredClone(FILTER_DEFAULTS))) {
+    $wordSearch.setKey(key as keyof WordList, value);
+  }
   $searchQuery.set("");
-  $wordSearch.setKey("similarSoundingWords", false);
-  $wordSearch.setKey("syllablesCount", undefined);
-  $wordSearch.setKey("vowelsCount", undefined);
 
   trackEvent("WordList", "Reset", "All filters reset");
 };
@@ -162,71 +129,6 @@ export const setLetterFilter = (letter: string) => {
   trackEvent("WordList", "Filter", `Letter: ${letter}`);
 };
 
-function toggleInArray<T>(arr: T[], item: T): T[] {
-  const index = arr.indexOf(item);
-  if (index === -1) {
-    // Not in array, add it
-    return [...arr, item];
-  } else {
-    // Already in array, remove it
-    return arr.filter((_, i) => i !== index);
-  }
-}
-
-export const setWordTypeFilter = (wordType: string) => {
-  useViewTransition(() =>
-    $wordSearch.setKey(
-      "activeWordTypeFilter",
-      toggleInArray($wordSearch.get().activeWordTypeFilter, wordType),
-    ),
-  );
-};
-
-export const setThemenFilter = (themaSlug: string) => {
-  useViewTransition(() =>
-    $wordSearch.setKey(
-      "activeThemenFilter",
-      toggleInArray($wordSearch.get().activeThemenFilter, themaSlug),
-    ),
-  );
-};
-
-export const setActiveOrderCategory = (orderCategory: WordList["activeOrderCategory"]) => {
-  $wordSearch.setKey("activeOrderCategory", orderCategory);
-};
-
-/**
- * Toggle order by name
- * @return {void}
- */
-export const $alphabeticalOrderToggle = (): void => {
-  $wordSearch.setKey(
-    "alphabeticalOrder",
-    $wordSearch.get().alphabeticalOrder === "ASC" ? "DESC" : "ASC",
-  );
-};
-
-/**
- * Toggle order by date
- * @param {MapStore<WordList>} $wordSearch
- * @return {void}
- */
-export const $wordListDateOrderToggle = (): void => {
-  $wordSearch.setKey("dateOrder", $wordSearch.get().dateOrder === "ASC" ? "DESC" : "ASC");
-};
-
-/**
- * Toggle order by modified date
- * @param {MapStore<WordList>} $wordSearch
- * @return {void}
- */
-export const $wordListModifiedDateOrderToggle = (): void => {
-  $wordSearch.setKey(
-    "modifiedDateOrder",
-    $wordSearch.get().modifiedDateOrder === "ASC" ? "DESC" : "ASC",
-  );
-};
-
 export const $setSortOrder = (
   category: WordList["activeOrderCategory"],
   orderName: string,
@@ -238,17 +140,15 @@ export const $setSortOrder = (
   trackEvent("WordList", "Sort Order", `${category}: ${order}`);
 };
 
-export const setSearch = (search: string) => {
-  $searchQuery.set(search);
+export type SearchMeta = {
+  letterGroups: string[];
+  rangeFilterMinMax?: RangeFilterMinMax;
+  themen: { name: string; slug: string }[];
+  wordTypes: string[];
 };
 
-export const $toggleBerolinismus = () => {
-  useViewTransition(() => $wordSearch.setKey("berolinismus", !$wordSearch.get().berolinismus));
-
-  trackEvent("WordList", "Filter", `Berolinismus: ${$wordSearch.get().berolinismus}`);
-};
-
-export const searchLength = computed($searchQuery, (q) => q.length);
+/** Server-derived filter options — not user state, so not persisted. */
+export const $searchMeta = atom<SearchMeta>({ letterGroups: [], themen: [], wordTypes: [] });
 
 const getSearchMeta = async () => {
   const response = await fetch("/api/search/meta.json");
@@ -263,14 +163,11 @@ const getSearchMeta = async () => {
   };
 };
 
-onMount($wordSearch, () => {
+onMount($searchMeta, () => {
   void task(async () => {
     try {
-      const meta = await getSearchMeta();
-      $wordSearch.setKey("letterGroups", meta.availableWordGroups);
-      $wordSearch.setKey("wordTypes", meta.wordTypes);
-      $wordSearch.setKey("themen", meta.themen);
-      $wordSearch.setKey("rangeFilterMinMax", meta.rangeFilterMinMax);
+      const { availableWordGroups, rangeFilterMinMax, themen, wordTypes } = await getSearchMeta();
+      $searchMeta.set({ letterGroups: availableWordGroups, rangeFilterMinMax, themen, wordTypes });
     } catch (err) {
       console.error("[wordList] Failed to load search meta:", err);
     }
@@ -283,9 +180,7 @@ onMount($wordSearch, () => {
 
 const wordSchema = {
   berlinerischWordTypes: "enum[]",
-  dateGmt: "string",
   dateTs: "number",
-  modifiedGmt: "string",
   modifiedTs: "number",
   themen: "enum[]",
   wordComponents: "string[]",
@@ -298,86 +193,44 @@ const wordSchema = {
     characterLength: "number",
     consonantsCount: "number",
     multipleMeanings: "boolean",
-    similarSoundingWords: "boolean",
     syllablesCount: "number",
     translations: "string[]",
     vowelsCount: "number",
   },
 } as const;
 
-type WordDocument = TypedDocument<Orama<typeof wordSchema>>;
-
 let db: null | Orama<typeof wordSchema> = null;
-
-type SortByType =
-  | ((a: [number, number, WordDocument], b: [number, number, WordDocument]) => number)
-  | { order: "ASC" | "DESC"; property: string };
 
 function buildWhere(wordSearch: WordList): Record<string, unknown> {
   const where: Record<string, unknown> = {};
-  if (wordSearch.berolinismus) where["wordProperties.berolinismus"] = true;
-  if (wordSearch.audioBerlinerisch) where["wordProperties.audioBerlinerisch"] = true;
-  if (wordSearch.audioExamples) where["wordProperties.audioExamples"] = true;
-  if (wordSearch.multipleMeanings) where["wordProperties.multipleMeanings"] = true;
-  if (wordSearch.similarSoundingWords) {
-    where["wordProperties.similarSoundingWords"] = true;
+  for (const key of BOOLEAN_FILTERS) {
+    if (wordSearch[key]) where[`wordProperties.${key}`] = true;
   }
-  if (wordSearch.characterCount != null) {
-    where["wordProperties.characterLength"] = {
-      gte: wordSearch.characterCount,
-    };
-  }
-  if (wordSearch.consonantsCount != null) {
-    where["wordProperties.consonantsCount"] = {
-      gte: wordSearch.consonantsCount,
-    };
-  }
-  if (wordSearch.vowelsCount != null) {
-    where["wordProperties.vowelsCount"] = {
-      gte: wordSearch.vowelsCount,
-    };
-  }
-  if (wordSearch.syllablesCount != null) {
-    where["wordProperties.syllablesCount"] = {
-      gte: wordSearch.syllablesCount,
-    };
+  for (const [key, property] of Object.entries(RANGE_FILTERS)) {
+    const value = wordSearch[key as keyof typeof RANGE_FILTERS];
+    if (value != null) where[`wordProperties.${property}`] = { gte: value };
   }
   if (wordSearch.activeLetterFilter) {
     where.wordGroup = { eq: wordSearch.activeLetterFilter };
   }
-  if (
-    Array.isArray(wordSearch.activeWordTypeFilter) &&
-    wordSearch.activeWordTypeFilter.length > 0
-  ) {
-    where.berlinerischWordTypes = {
-      containsAny: wordSearch.activeWordTypeFilter,
-    };
+  if (wordSearch.activeWordTypeFilter?.length) {
+    where.berlinerischWordTypes = { containsAny: wordSearch.activeWordTypeFilter };
   }
-  if (Array.isArray(wordSearch.activeThemenFilter) && wordSearch.activeThemenFilter.length > 0) {
-    where.themen = {
-      containsAny: wordSearch.activeThemenFilter,
-    };
+  if (wordSearch.activeThemenFilter?.length) {
+    where.themen = { containsAny: wordSearch.activeThemenFilter };
   }
   return where;
 }
 
-function getSortBy(wordSearch: WordList): SortByType {
-  if (wordSearch.activeOrderCategory === "date") {
-    return (a, b) => {
-      return wordSearch.dateOrder === "ASC" ? a[2].dateTs - b[2].dateTs : b[2].dateTs - a[2].dateTs;
-    };
-  }
-  if (wordSearch.activeOrderCategory === "modifiedDate") {
-    return (a, b) => {
-      return wordSearch.modifiedDateOrder === "ASC"
-        ? a[2].modifiedTs - b[2].modifiedTs
-        : b[2].modifiedTs - a[2].modifiedTs;
-    };
-  }
-  return {
-    order: wordSearch.alphabeticalOrder,
-    property: "wordProperties.berlinerisch",
-  };
+const SORT_BY = {
+  alphabetical: { orderKey: "alphabeticalOrder", property: "wordProperties.berlinerisch" },
+  date: { orderKey: "dateOrder", property: "dateTs" },
+  modifiedDate: { orderKey: "modifiedDateOrder", property: "modifiedTs" },
+} as const;
+
+function getSortBy(wordSearch: WordList) {
+  const { orderKey, property } = SORT_BY[wordSearch.activeOrderCategory] ?? SORT_BY.alphabetical;
+  return { order: wordSearch[orderKey], property };
 }
 
 async function initOrama(words: OramaSearchIndex[]) {
@@ -389,9 +242,7 @@ async function initOrama(words: OramaSearchIndex[]) {
         stemmerSkipProperties: [
           "wordGroup",
           "modifiedTs",
-          "modifiedGmt",
           "dateTs",
-          "dateGmt",
           "wordProperties.berolinismus",
           "berlinerischWordTypes",
           "themen",
@@ -405,28 +256,25 @@ async function initOrama(words: OramaSearchIndex[]) {
   await insertMultiple(db, words);
 }
 
-let initPromise: null | Promise<OramaSearchIndex[]> = null;
+let initPromise: null | Promise<number> = null;
 
 /**
- * Single-flight guard: fetch the search index and build the Orama DB exactly
- * once, even when several computations start before the first one settles
- * (rapid typing on a cold cache would otherwise double-fetch and
- * double-insert documents). Kept lazy — nothing runs until the first search.
- * On failure the memoized promise is cleared so the next computation retries.
+ * Single-flight guard: build the Orama DB exactly once, even when several
+ * computations start before the first one settles (rapid typing on a cold
+ * cache would otherwise double-insert documents). Kept lazy — nothing runs
+ * until the first search. On failure the memoized promise is cleared so the
+ * next computation retries. Resolves to the number of indexed words.
  */
-function ensureSearchReady(): Promise<OramaSearchIndex[]> {
-  initPromise ??= (async () => {
-    const response = await fetch("/api/search/index.json");
-    if (!response.ok) {
-      throw new Error(`[wordList] search index fetch failed: ${response.status}`);
-    }
-    const searchIndex = (await response.json()) as OramaSearchIndex[];
-    await initOrama(searchIndex);
-    return searchIndex;
-  })().catch((err) => {
-    initPromise = null; // allow retry after failure
-    throw err;
-  });
+function ensureSearchReady(): Promise<number> {
+  initPromise ??= fetchSearchIndex()
+    .then(async (searchIndex) => {
+      await initOrama(searchIndex);
+      return searchIndex.length;
+    })
+    .catch((err: unknown) => {
+      initPromise = null; // allow retry after failure
+      throw err;
+    });
   return initPromise;
 }
 
@@ -435,8 +283,8 @@ export const $oramaSearchResults = computedAsync(
   async (wordSearch, searchQuery) => {
     // Fetch/init failures propagate on purpose: computedAsync then reports
     // state "failed" and the error UI can prompt a reload.
-    const oramaSearchIndex = await ensureSearchReady();
-    const resultLimit = oramaSearchIndex.length;
+    // limit = index size, so every match is returned.
+    const limit = await ensureSearchReady();
 
     try {
       const where = buildWhere(wordSearch);
@@ -448,9 +296,8 @@ export const $oramaSearchResults = computedAsync(
           "wordProperties.berlinerisch": 2.5,
           "wordProperties.translations": 1,
         },
-        limit: wordSearch.resultLimit ?? resultLimit ?? 10,
-        // Only the user-facing text fields — "*" would also run full-text
-        // matching over dateGmt/modifiedGmt ISO strings.
+        limit,
+        // Only the user-facing text fields.
         properties: [
           "wordComponents",
           "wordProperties.berlinerisch",

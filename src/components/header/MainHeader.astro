@@ -34,3 +34,24 @@ const mainMenuItems = await fetchMenu("Main Menu");
     </nav>
   </div>
 </header>
+
+<script>
+  // Runs once: the header is `transition:persist`ed, so the element (and this observer)
+  // survive client-side navigations. Pages read --site-header-height for sticky offsets.
+  function syncHeaderHeight() {
+    const header = document.querySelector<HTMLElement>('.c-header');
+    if (!header) return;
+    const h = Math.round(header.getBoundingClientRect().height);
+    // View Transitions can briefly report 0 for persisted elements.
+    if (h > 0) {
+      document.documentElement.style.setProperty('--site-header-height', h + 'px');
+    }
+  }
+
+  const siteHeader = document.querySelector<HTMLElement>('.c-header');
+  if (siteHeader) {
+    new ResizeObserver(syncHeaderHeight).observe(siteHeader);
+  }
+
+  document.addEventListener('astro:page-load', syncHeaderHeight);
+</script>

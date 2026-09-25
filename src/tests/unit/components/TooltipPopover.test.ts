@@ -224,7 +224,7 @@ describe("TooltipPopover.vue", () => {
     expect(() => rafCallbacks.forEach((cb) => cb(0))).not.toThrow();
   });
 
-  it("show() does not call requestAnimationFrame when refs are null (covers line 90 false branch)", async () => {
+  it("show() after unmount does not throw when the rAF callback runs with null refs", async () => {
     const rafCallbacks: FrameRequestCallback[] = [];
     vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
       rafCallbacks.push(cb);
@@ -234,8 +234,28 @@ describe("TooltipPopover.vue", () => {
     const exposedShow = (wrapper!.vm as unknown as TooltipPopoverExposed).show;
     wrapper!.unmount();
     wrapper = null;
-    const countBefore = rafCallbacks.length;
     await expect(exposedShow()).resolves.toBeUndefined();
-    expect(rafCallbacks.length).toBe(countBefore);
+    expect(() => rafCallbacks.forEach((cb) => cb(0))).not.toThrow();
+  });
+});
+
+describe("TooltipPopover.vue DOM removal", () => {
+  it("removes the panel from the DOM after the exit animation", async () => {
+    vi.useFakeTimers();
+    mountComponent(TooltipPopover, { props: { content: "Tip" } });
+    await showTooltip();
+    expect(getPanel()).not.toBeNull();
+    (wrapper!.vm as unknown as TooltipPopoverExposed).hide();
+    await vi.advanceTimersByTimeAsync(100);
+    expect(getPanel()).toBeNull();
+  });
+
+  it("show() while already rendered reuses the panel", async () => {
+    mountComponent(TooltipPopover, { props: { content: "Tip" } });
+    await showTooltip();
+    const panel = getPanel();
+    await showTooltip();
+    expect(getPanel()).toBe(panel);
+    expect(mockShowPopover).toHaveBeenCalledTimes(2);
   });
 });

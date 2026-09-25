@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { useStore } from "@nanostores/vue";
-import { $isDarkMode, setDarkMode } from "@stores/darkMode.ts";
+import { $isDarkMode, resolveDarkMode, setDarkMode } from "@stores/darkMode.ts";
 import { trackEvent } from "@utils/analytics";
 import Moon from "virtual:icons/lucide/moon";
 import Sun from "virtual:icons/lucide/sun";
@@ -37,10 +37,7 @@ const { cssClasses = "" } = defineProps<ColorModeToggleProps>();
 const isDarkMode = useStore($isDarkMode);
 
 const toggleMode = (): void => {
-  const newMode =
-    isDarkMode.value === null
-      ? !window.matchMedia("(prefers-color-scheme: dark)").matches
-      : !isDarkMode.value;
+  const newMode = !resolveDarkMode(isDarkMode.value);
 
   setDarkMode(newMode);
   trackEvent("Color Mode", newMode ? "Dark Mode" : "Light Mode", "Toggle Color Mode");

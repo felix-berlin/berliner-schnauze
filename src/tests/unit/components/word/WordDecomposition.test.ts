@@ -3,6 +3,12 @@ import { describe, expect, it, vi, beforeAll } from "vitest";
 
 import { createAstroRender } from "../../helpers";
 
+const { decomposeCompoundWord } = vi.hoisted(() => ({ decomposeCompoundWord: vi.fn() }));
+vi.mock("@utils/wordHelper", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@utils/wordHelper")>()),
+  decomposeCompoundWord,
+}));
+
 vi.mock("@utils/helpers", () => ({
   routeToWord: vi.fn((slug?: string) => (slug ? `/wort/${slug}` : "/wort/")),
 }));
@@ -56,5 +62,42 @@ describe("WordDecomposition.astro", () => {
   it("accepts empty allWords array without throwing", async () => {
     const result = await render({ allWords: [], word: "Schnauze" });
     expect(typeof result).toBe("string");
+  });
+
+  describe("with a mocked decomposition", () => {
+    const word = (slug: string, berlinerisch = slug) => ({
+      slug,
+      wordProperties: { berlinerisch },
+    });
+
+    it("renders nothing when the word is not a compound", async () => {
+      decomposeCompoundWord.mockReturnValue(null);
+      expect(await render({ allWords: [], word: "Schnauze" })).not.toContain("Wortzerlegung");
+    });
+
+    it("renders nothing for a single part", async () => {
+      decomposeCompoundWord.mockReturnValue(["bahn"]);
+      expect(await render({ allWords: [], word: "Bahn" })).not.toContain("Wortzerlegung");
+    });
+
+    it("links parts that are words and shows the rest as plain text", async () => {
+      decomposeCompoundWord.mockReturnValue(["bahn", "hof"]);
+      const result = await render({ allWords: [word("bahn", "Bahn")], word: "Bahnhof" });
+      expect(result).toContain("Wortzerlegung");
+      expect(result).toContain('href="/wort/bahn"');
+      expect(result).toMatch(/<a [^>]*>\s*Bahn\s*<\/a>/);
+      expect(result).toContain(">Hof</span>");
+      expect(result).toContain("c-single-word__word-parts-plus");
+    });
+
+    it("prefers the last word when duplicates match a part", async () => {
+      decomposeCompoundWord.mockReturnValue(["bahn", "hof"]);
+      const result = await render({
+        allWords: [word("bahn-alt", "bahn"), word("bahn-neu", "Bahn")],
+        word: "Bahnhof",
+      });
+      expect(result).toContain('href="/wort/bahn-neu"');
+      expect(result).not.toContain("bahn-alt");
+    });
   });
 });

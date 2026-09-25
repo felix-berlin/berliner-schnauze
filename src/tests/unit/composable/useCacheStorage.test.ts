@@ -1,4 +1,9 @@
-import { formatBytes, getBucketDisplayName, getEntryType } from "@composables/useCacheStorage";
+import {
+  formatBytes,
+  formatUrl,
+  getBucketDisplayName,
+  getEntryType,
+} from "@composables/useCacheStorage";
 import { useCacheStorage } from "@composables/useCacheStorage";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
@@ -65,6 +70,22 @@ function makeMockCacheStorage(
     open: vi.fn().mockImplementation((name: string) => Promise.resolve(cacheInstances[name])),
   };
 }
+
+describe("formatUrl", () => {
+  it("returns the pathname of an absolute URL", () => {
+    expect(formatUrl("https://example.com/sw.js?x=1")).toBe("/sw.js");
+  });
+
+  it("returns an unparsable string as-is", () => {
+    expect(formatUrl("/sw.js")).toBe("/sw.js");
+  });
+
+  it("truncates to 57 chars plus an ellipsis", () => {
+    const out = formatUrl("https://example.com/" + "a".repeat(80));
+    expect(out).toHaveLength(58);
+    expect(out.endsWith("…")).toBe(true);
+  });
+});
 
 describe("formatBytes", () => {
   it('returns "0 B" for 0', () => {

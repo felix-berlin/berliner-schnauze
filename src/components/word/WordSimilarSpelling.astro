@@ -15,15 +15,15 @@ const { similar } = Astro.props;
     <div
       data-track-content
       data-content-name="Similar Spelling"
-      data-content-piece={similar[0]?.wordProperties?.berlinerisch ?? ''}
+      data-content-piece={similar[0]?.wordProperties.berlinerisch ?? ''}
       data-content-target="#"
     >
       <h3>Ähnlich geschrieben</h3>
       <ul class="c-single-word__related-words-list">
         {similar.map((w) => (
           <li>
-            <a class="c-single-word__related-word-link" href={routeToWord(w.slug ?? undefined)}>
-              {w.wordProperties?.berlinerisch}
+            <a class="c-single-word__related-word-link" href={routeToWord(w.slug)}>
+              {w.wordProperties.berlinerisch}
             </a>
           </li>
         ))}

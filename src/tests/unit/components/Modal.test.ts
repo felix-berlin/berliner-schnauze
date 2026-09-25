@@ -4,21 +4,18 @@ import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { markRaw, ref } from "vue";
 
-const { mockResetModal, mockSetElement, mockPreventScroll, mockSetIsOpen } = vi.hoisted(() => ({
+const { mockResetModal, mockSetElement, mockPreventScroll } = vi.hoisted(() => ({
   mockPreventScroll: vi.fn(),
   mockResetModal: vi.fn(),
   mockSetElement: vi.fn(),
-  mockSetIsOpen: vi.fn(),
 }));
 
 let capturedMutationCallback: ((mutations: MutationRecord[]) => void) | null = null;
 
 vi.mock("@stores/modal.ts", () => ({
   $element: { set: mockSetElement },
-  $isOpen: { set: mockSetIsOpen },
   $props: {},
   $view: {},
-  $viewIsComponent: {},
   preventScroll: mockPreventScroll,
   resetModal: mockResetModal,
 }));
@@ -47,14 +44,9 @@ const mockProps = ref({
   uid: undefined as string | undefined,
   width: "800px",
 });
-const mockViewIsComponent = ref(false);
-
-function setupUseStore(view = mockView, props = mockProps, viewIsComponent = mockViewIsComponent) {
+function setupUseStore(view = mockView, props = mockProps) {
   vi.mocked(useStore).mockReset();
-  vi.mocked(useStore)
-    .mockReturnValueOnce(view)
-    .mockReturnValueOnce(props)
-    .mockReturnValueOnce(viewIsComponent);
+  vi.mocked(useStore).mockReturnValueOnce(view).mockReturnValueOnce(props);
 }
 
 beforeEach(() => {
@@ -69,10 +61,8 @@ beforeEach(() => {
     uid: undefined,
     width: "800px",
   };
-  mockViewIsComponent.value = false;
   mockResetModal.mockClear();
   mockSetElement.mockClear();
-  mockSetIsOpen.mockClear();
   mockPreventScroll.mockClear();
   setupUseStore();
 });
@@ -118,13 +108,6 @@ describe("Modal.vue", () => {
     expect(wrapper.find("dialog").classes()).not.toContain("has-close-on-click-outside");
   });
 
-  it("MutationObserver callback sets $isOpen.set(true) when dialog opens", () => {
-    mount(Modal);
-    const fakeDialog = Object.assign(document.createElement("dialog"), { open: true });
-    capturedMutationCallback?.([{ target: fakeDialog } as unknown as MutationRecord]);
-    expect(mockSetIsOpen).toHaveBeenCalledWith(true);
-  });
-
   it("MutationObserver callback calls preventScroll(true) when disableScroll and dialog opens", () => {
     mount(Modal);
     const fakeDialog = Object.assign(document.createElement("dialog"), { open: true });
@@ -132,17 +115,12 @@ describe("Modal.vue", () => {
     expect(mockPreventScroll).toHaveBeenCalledWith(true);
   });
 
-  it("MutationObserver callback sets $isOpen.set(false) when dialog closes", () => {
+  it("MutationObserver callback does not call preventScroll when dialog closes", () => {
     mount(Modal);
     const fakeDialog = Object.assign(document.createElement("dialog"), { open: false });
     capturedMutationCallback?.([{ target: fakeDialog } as unknown as MutationRecord]);
-    expect(mockSetIsOpen).toHaveBeenCalledWith(false);
-  });
-
-  it("MutationObserver callback skips empty mutations array", () => {
-    mount(Modal);
     capturedMutationCallback?.([]);
-    expect(mockSetIsOpen).not.toHaveBeenCalled();
+    expect(mockPreventScroll).not.toHaveBeenCalled();
   });
 
   it("registers the dialog element via $element.set on mount", () => {
@@ -152,7 +130,6 @@ describe("Modal.vue", () => {
 
   it("renders inner template when hasView is true (covers line 16 true branch)", async () => {
     mockView.value = { component: markRaw({ render: () => null }), props: {} };
-    mockViewIsComponent.value = true;
     setupUseStore();
     const wrapper = mount(Modal);
     await wrapper.vm.$nextTick();
@@ -162,7 +139,6 @@ describe("Modal.vue", () => {
   it("renders close button when showCloseButton is true and hasView is true (covers line 17 true branch)", async () => {
     mockView.value = { props: { foo: "bar" } };
     mockProps.value = { ...mockProps.value, showCloseButton: true };
-    mockViewIsComponent.value = false;
     setupUseStore();
     const wrapper = mount(Modal);
     await wrapper.vm.$nextTick();
@@ -172,7 +148,6 @@ describe("Modal.vue", () => {
   it("does not render close button when showCloseButton is false and hasView is true (covers line 17 false branch)", async () => {
     mockView.value = { props: { foo: "bar" } };
     mockProps.value = { ...mockProps.value, showCloseButton: false };
-    mockViewIsComponent.value = false;
     setupUseStore();
     const wrapper = mount(Modal);
     await wrapper.vm.$nextTick();
@@ -185,19 +160,17 @@ describe("Modal.vue", () => {
       events: { click: vi.fn() },
       props: {},
     };
-    mockViewIsComponent.value = true;
     setupUseStore();
     const wrapper = mount(Modal);
     await wrapper.vm.$nextTick();
     expect(wrapper.find("dialog").exists()).toBe(true);
   });
 
-  it("renders div with v-html when viewIsComponent is false and hasView is true (covers line 22 false branch)", async () => {
-    mockView.value = { html: "<p>content</p>" };
-    mockViewIsComponent.value = false;
+  it("renders nothing inside the dialog when view has no component", async () => {
+    mockView.value = { props: { foo: "bar" } };
     setupUseStore();
     const wrapper = mount(Modal);
     await wrapper.vm.$nextTick();
-    expect(wrapper.find("dialog").exists()).toBe(true);
+    expect(wrapper.find("dialog").html()).not.toContain("<div");
   });
 });

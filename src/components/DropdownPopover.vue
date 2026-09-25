@@ -1,46 +1,31 @@
 <template>
   <div v-bind="$attrs" class="c-dropdown">
-    <span
-      ref="triggerEl"
-      class="c-dropdown__trigger"
-      :style="`anchor-name: --${panelId}`"
-      @mouseenter="onMouseEnter"
-      @mouseleave="onMouseLeave"
-      @focusin="onFocusIn"
-      @focusout="onFocusOut"
-    >
+    <span ref="triggerEl" class="c-dropdown__trigger" :style="`anchor-name: --${panelId}`">
       <slot :trigger-props="triggerProps" :is-open="isOpen" :panel-id="panelId" />
     </span>
 
-    <component
-      :is="panelTag"
+    <div
       ref="panel"
       :id="panelId"
       popover="auto"
       class="c-dropdown__panel"
-      :class="[`c-dropdown__panel--${placement}`, panelClass]"
+      :class="`c-dropdown__panel--${placement}`"
       :style="panelStyle"
       @toggle="onToggle"
-      @mouseenter="cancelClose"
-      @mouseleave="onMouseLeave"
-      @focusin="cancelClose"
     >
-      <span
-        v-if="arrow && (!lazy || hasContent)"
-        class="c-dropdown__arrow"
-        :style="arrowDynamicStyle"
-        aria-hidden="true"
-      />
-      <template v-if="!lazy || hasContent">
+      <template v-if="hasContent">
+        <span class="c-dropdown__arrow" :style="arrowDynamicStyle" aria-hidden="true" />
         <slot name="panel" />
       </template>
-    </component>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useResizeObserver } from "@vueuse/core";
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
+
+import { computeArrowOffset } from "@/directives/tooltip";
 
 export type PlacementValue =
   | "bottom-start"
@@ -50,48 +35,27 @@ export type PlacementValue =
   | "top-end"
   | "top";
 
-export type TriggerEvent = "click" | "hover" | "focus";
-
 export type DropdownPopoverProps = {
   /** Unique identifier for this instance, e.g. "main-menu" or `word-options-${slug}`.
    * Must be unique across every DropdownPopover rendered on a page — each Astro
    * island mounts its own Vue app, so a generated id (e.g. useId()) is NOT
    * guaranteed unique across islands, only within one. */
   name: string;
-  lazy?: boolean;
   offset?: number;
   placement?: PlacementValue;
-  skidding?: number;
-  triggers?: TriggerEvent[];
-  panelClass?: string | string[] | Record<string, boolean>;
-  panelTag?: string;
-  arrow?: boolean;
-  arrowPadding?: number;
-  haspopup?: boolean | "dialog" | "grid" | "listbox" | "menu" | "tree";
 };
 
-const {
-  name,
-  lazy = true,
-  offset = 8,
-  placement = "bottom-start",
-  skidding = 0,
-  triggers = ["click"],
-  panelClass,
-  panelTag = "div",
-  arrow = true,
-  arrowPadding = 12,
-  haspopup = true,
-} = defineProps<DropdownPopoverProps>();
+const { name, offset = 8, placement = "bottom-start" } = defineProps<DropdownPopoverProps>();
 
 defineOptions({ inheritAttrs: false });
 
 const panelId = `dropdown-${name}`;
+const ARROW_PADDING = 12;
 
 const triggerEl = ref<HTMLElement | null>(null);
 const panel = ref<HTMLElement | null>(null);
 const isOpen = ref(false);
-const hasContent = ref(false); // lags isOpen by close-animation duration so lazy content stays during fade-out
+const hasContent = ref(false); // lags isOpen by close-animation duration so content stays during fade-out
 
 const arrowX = ref<number | null>(null);
 const arrowAbove = ref(false);
@@ -105,45 +69,49 @@ const arrowDynamicStyle = computed((): Record<string, string> => {
   };
 });
 
-const ARROW_SIZE = 8;
-
 const syncArrow = (): void => {
-  if (!arrow || !panel.value || !triggerEl.value) return;
+  if (!panel.value || !triggerEl.value) return;
   const panelRect = panel.value.getBoundingClientRect();
   const triggerRect = triggerEl.value.getBoundingClientRect();
-  const triggerCenterX = (triggerRect.left + triggerRect.right) / 2;
-  const rawX = triggerCenterX - panelRect.left - ARROW_SIZE / 2;
-  arrowX.value = Math.max(
-    arrowPadding,
-    Math.min(rawX, panelRect.width - arrowPadding - ARROW_SIZE),
+  arrowX.value = computeArrowOffset(
+    triggerRect.left,
+    triggerRect.right,
+    panelRect.left,
+    panelRect.width,
+    ARROW_PADDING,
   );
   arrowAbove.value = panelRect.bottom <= triggerRect.top;
 };
 
-// document access must wait for onMounted — this runs during SSR under client:load
-onMounted(() => {
-  useResizeObserver([triggerEl, panel, document.documentElement as HTMLElement], () => {
-    if (isOpen.value) syncArrow();
-  });
-});
+// Observe only while open; the getter is lazy, so `document` is never touched during SSR.
+useResizeObserver(
+  () => (isOpen.value ? [triggerEl.value, panel.value, document.documentElement] : []),
+  syncArrow,
+);
 
 const triggerProps = computed(() => ({
   "aria-controls": panelId,
   "aria-expanded": isOpen.value,
-  "aria-haspopup": haspopup,
-  ...(triggers.includes("click") && { popovertarget: panelId }),
+  "aria-haspopup": true,
+  popovertarget: panelId,
 }));
 
 const panelStyle = computed(() => ({
-  "--c-dropdown-arrow-padding": `${arrowPadding}px`,
   "--c-dropdown-offset": `${offset}px`,
-  "--c-dropdown-skidding": `${skidding}px`,
   "position-anchor": `--${panelId}`,
 }));
 
+const FOCUSABLE =
+  'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
+const focusTrigger = (): void => {
+  const focusable = triggerEl.value?.querySelector<HTMLElement>(FOCUSABLE);
+  (focusable ?? triggerEl.value)?.focus();
+};
+
 const onToggle = (event: ToggleEvent): void => {
   isOpen.value = event.newState === "open";
-  if (event.newState === "open") {
+  if (isOpen.value) {
     hasContent.value = true;
     void nextTick(syncArrow);
     return;
@@ -155,59 +123,15 @@ const onToggle = (event: ToggleEvent): void => {
   // Escape leaves focus on <body>; panel content losing focus also qualifies.
   // Don't steal focus when the user clicked somewhere else (activeElement already moved).
   if (document.activeElement === document.body || panel.value?.contains(document.activeElement)) {
-    const focusable = triggerEl.value?.querySelector<HTMLElement>(FOCUSABLE);
-    (focusable ?? triggerEl.value)?.focus();
+    focusTrigger();
   }
 };
-
-// Hover / focus close timer
-let closeTimer: ReturnType<typeof setTimeout> | null = null;
-
-const cancelClose = (): void => {
-  if (closeTimer !== null) {
-    clearTimeout(closeTimer);
-    closeTimer = null;
-  }
-};
-
-const scheduleClose = (): void => {
-  closeTimer = setTimeout(() => {
-    panel.value?.hidePopover();
-  }, 100);
-};
-
-const onMouseEnter = (): void => {
-  if (!triggers.includes("hover")) return;
-  cancelClose();
-  panel.value?.showPopover();
-};
-
-const onMouseLeave = (): void => {
-  if (!triggers.includes("hover")) return;
-  scheduleClose();
-};
-
-const onFocusIn = (): void => {
-  if (!triggers.includes("focus")) return;
-  cancelClose();
-  panel.value?.showPopover();
-};
-
-const onFocusOut = (): void => {
-  if (!triggers.includes("focus")) return;
-  scheduleClose();
-};
-
-const FOCUSABLE =
-  'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
 const close = (): void => {
   panel.value?.hidePopover();
-  const focusable = triggerEl.value?.querySelector<HTMLElement>(FOCUSABLE);
-  (focusable ?? triggerEl.value)?.focus();
+  focusTrigger();
 };
 
-defineExpose({ close });
 </script>
 
 <style lang="scss">

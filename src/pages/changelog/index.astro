@@ -2,6 +2,7 @@
 import Layout from '@layouts/Layout.astro';
 import type { Seo } from '@/types/seo';
 import { getCollection } from 'astro:content';
+import { formattedDate } from '@utils/helpers';
 
 const changelogs = await getCollection('changelogs');
 const sorted = changelogs.sort((a, b) =>
@@ -25,11 +26,7 @@ const seo: Seo = {
               {entry.data.title}
             </a>
             <time class='c-changelog-overview__date' datetime={entry.data.releaseDate}>
-              {new Date(entry.data.releaseDate).toLocaleDateString('de-DE', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-              })}
+              {formattedDate(entry.data.releaseDate)}
             </time>
             {entry.data.description && (
               <p class='c-changelog-overview__description'>{entry.data.description}</p>

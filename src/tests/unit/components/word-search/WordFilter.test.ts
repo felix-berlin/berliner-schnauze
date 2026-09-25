@@ -12,11 +12,18 @@ const onClickOutsideHolder = vi.hoisted(() => ({
 
 const mockUseTimeout = vi.hoisted(() => vi.fn());
 
+const mockSearchMeta = vi.hoisted(() => ({}));
+const searchMetaRef = ref({
+  themen: [{ name: "Essen & Trinken", slug: "essen-trinken" }],
+  wordTypes: ["Verb"],
+});
+
 vi.mock("@nanostores/vue", () => ({
-  useStore: vi.fn(() => showFilterRef),
+  useStore: vi.fn((store) => (store === mockSearchMeta ? searchMetaRef : showFilterRef)),
 }));
 
 vi.mock("@stores/wordList.ts", () => ({
+  $searchMeta: mockSearchMeta,
   $showWordListFilterFlyout: {},
   $toggleWordListFilterFlyout: mockToggle,
   resetAll: mockResetAll,
@@ -57,12 +64,11 @@ vi.mock("@components/filter/WordSwitch.vue", () => ({
   },
 }));
 
-vi.mock("@components/filter/WordTypeFilter.vue", () => ({
-  default: { template: '<div class="mock-word-type-filter" />' },
-}));
-
-vi.mock("@components/filter/ThemenFilter.vue", () => ({
-  default: { template: '<div class="mock-themen-filter" />' },
+vi.mock("@components/filter/MultiselectFilter.vue", () => ({
+  default: {
+    props: ["storeKey", "options", "label", "trackLabel"],
+    template: '<div class="mock-multiselect-filter" :data-store-key="storeKey" />',
+  },
 }));
 
 vi.mock("@vueuse/core", async (importOriginal) => {
@@ -161,18 +167,22 @@ describe("WordFilter.vue", () => {
     expect(wrapper.find(".mock-letter-filter").exists()).toBe(true);
   });
 
-  it("renders WordTypeFilter component", async () => {
+  it("renders the word type MultiselectFilter with meta word types", async () => {
     showFilterRef.value = true;
     const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
     const wrapper = mount(WordFilter);
-    expect(wrapper.find(".mock-word-type-filter").exists()).toBe(true);
+    const filter = wrapper.findComponent('[data-store-key="activeWordTypeFilter"]');
+    expect(filter.exists()).toBe(true);
+    expect(filter.props("options")).toEqual(["Verb"]);
   });
 
-  it("renders ThemenFilter component", async () => {
+  it("renders the themen MultiselectFilter with label/value options", async () => {
     showFilterRef.value = true;
     const WordFilter = (await import("@components/word-search/WordFilter.vue")).default;
     const wrapper = mount(WordFilter);
-    expect(wrapper.find(".mock-themen-filter").exists()).toBe(true);
+    const filter = wrapper.findComponent('[data-store-key="activeThemenFilter"]');
+    expect(filter.exists()).toBe(true);
+    expect(filter.props("options")).toEqual([{ label: "Essen & Trinken", value: "essen-trinken" }]);
   });
 
   it("renders multiple WordSwitch components", async () => {

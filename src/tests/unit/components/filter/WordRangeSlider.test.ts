@@ -17,6 +17,7 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 vi.mock("@stores/wordList.ts", () => ({
+  $searchMeta: {},
   $wordSearch: {},
 }));
 
@@ -74,7 +75,7 @@ describe("WordRangeSlider.vue", () => {
     expect(rangeRef.value).toBeUndefined();
   });
 
-  it("triggering input on range element updates rangeValue (covers v-model handler at line 8)", async () => {
+  it("range drag does not write the store until change (release)", async () => {
     const { useVModel } = await import("@nanostores/vue");
     const rangeRef = ref<number | undefined>(undefined);
     vi.mocked(useVModel).mockReturnValueOnce(rangeRef as ReturnType<typeof useVModel>);
@@ -82,11 +83,17 @@ describe("WordRangeSlider.vue", () => {
     const wrapper = mount(WordRangeSlider, {
       props: { label: "Zeichen", rangeType: "characterCount" },
     });
-    await wrapper.find("input[type='range']").setValue("5");
-    expect(rangeRef.value).toBeDefined();
+    const range = wrapper.find("input[type='range']");
+    // setValue() would also fire "change"; simulate a drag step (input only).
+    (range.element as HTMLInputElement).value = "5";
+    await range.trigger("input");
+    expect(rangeRef.value).toBeUndefined();
+    await range.trigger("change");
+    expect(rangeRef.value).toBe("5");
   });
 
-  it("triggering input on number element updates rangeValue (covers v-model handler at line 19)", async () => {
+  it("number input writes the store after a typing pause", async () => {
+    vi.useFakeTimers();
     const { useVModel } = await import("@nanostores/vue");
     const rangeRef = ref<number | undefined>(undefined);
     vi.mocked(useVModel).mockReturnValueOnce(rangeRef as ReturnType<typeof useVModel>);
@@ -95,7 +102,10 @@ describe("WordRangeSlider.vue", () => {
       props: { label: "Silben", rangeType: "syllablesCount" },
     });
     await wrapper.find("input[type='number']").setValue("3");
-    expect(rangeRef.value).toBeDefined();
+    expect(rangeRef.value).toBeUndefined();
+    await vi.advanceTimersByTimeAsync(300);
+    expect(rangeRef.value).toBe(3);
+    vi.useRealTimers();
   });
 
   it("getMinMax falls back to {max:0,min:0} when rangeFilterMinMax is null (covers ?? branch)", async () => {

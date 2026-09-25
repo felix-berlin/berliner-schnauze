@@ -2,6 +2,7 @@ import { $bonStats } from "@stores/bonStats";
 import { $savedBon } from "@stores/savedBon";
 import { createToastNotify } from "@stores/toastNotify";
 import { trackEvent } from "@utils/analytics";
+import { shuffle } from "@utils/helpers";
 import { ref, computed } from "vue";
 
 import type { FakeWord } from "@/data/fakeWords";
@@ -37,34 +38,28 @@ export function computeMultiplier(streak: number): number {
   return 1;
 }
 
-function fisherYates<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
+const DECK_SIZE = 20;
 
-export function buildDeck(realWords: BonCard[], fakes: FakeWord[]): BonCard[] {
-  const DECK_SIZE = 20;
-  // Variable split: 50–75% real (10–15 cards), rest fake
-  const realCount = Math.floor(Math.random() * 6) + 10; // 10..15
-  const fakeCount = DECK_SIZE - realCount;
-
-  const shuffledReal = fisherYates(realWords).slice(0, realCount);
-  const shuffledFake = fisherYates(fakes)
-    .slice(0, fakeCount)
-    .map((f): BonCard => ({ isReal: false, word: f.word }));
-
-  return fisherYates([...shuffledReal, ...shuffledFake]);
-}
+const initialState = (): BonState => ({
+  bestStreak: 0,
+  correctAnswers: 0,
+  currentCard: null,
+  deck: [],
+  lastAnswerCorrect: null,
+  lastCard: null,
+  lives: 3,
+  multiplier: 1,
+  phase: "idle",
+  score: 0,
+  streak: 0,
+  totalAnswered: 0,
+});
 
 // Draw n cards from queue without repeating; refills by reshuffling source when empty
 function drawFromQueue(queue: BonCard[], source: BonCard[], n: number): BonCard[] {
   const result: BonCard[] = [];
   for (let i = 0; i < n; i++) {
-    if (queue.length === 0) queue.push(...fisherYates([...source]));
+    if (queue.length === 0) queue.push(...shuffle(source));
     if (queue.length === 0) break;
     result.push(queue.shift()!);
   }
@@ -74,20 +69,7 @@ function drawFromQueue(queue: BonCard[], source: BonCard[], n: number): BonCard[
 // --- Composable ---
 
 export function useBon() {
-  const state = ref<BonState>({
-    bestStreak: 0,
-    correctAnswers: 0,
-    currentCard: null,
-    deck: [],
-    lastAnswerCorrect: null,
-    lastCard: null,
-    lives: 3,
-    multiplier: 1,
-    phase: "idle",
-    score: 0,
-    streak: 0,
-    totalAnswered: 0,
-  });
+  const state = ref<BonState>(initialState());
   const isReady = ref(false);
 
   // Exposed reactive slices
@@ -112,53 +94,37 @@ export function useBon() {
   function init(realWords: BonCard[], fakeWords: FakeWord[]) {
     _realWords = realWords;
     _fakeSource = fakeWords.map((f) => ({ isReal: false as const, word: f.word }));
-    _realQueue = fisherYates([...realWords]);
-    _fakeQueue = fisherYates([..._fakeSource]);
+    _realQueue = shuffle(realWords);
+    _fakeQueue = shuffle(_fakeSource);
     isReady.value = true;
   }
 
+  // Variable split: 50–75% real (10–15 cards), rest fake
   function _makeQueuedDeck(): BonCard[] {
     const realCount = Math.floor(Math.random() * 6) + 10; // 10..15
-    const fakeCount = 20 - realCount;
+    const fakeCount = DECK_SIZE - realCount;
     const real = drawFromQueue(_realQueue, _realWords, realCount);
     const fake = drawFromQueue(_fakeQueue, _fakeSource, fakeCount);
-    return fisherYates([...real, ...fake]);
+    return shuffle([...real, ...fake]);
   }
 
   function startGame() {
     if (!isReady.value) return;
-    _realQueue = fisherYates([..._realWords]);
-    _fakeQueue = fisherYates([..._fakeSource]);
+    _realQueue = shuffle(_realWords);
+    _fakeQueue = shuffle(_fakeSource);
     _clearStorage();
-    state.value = {
-      bestStreak: 0,
-      correctAnswers: 0,
-      currentCard: null,
-      deck: _makeQueuedDeck(),
-      lastAnswerCorrect: null,
-      lastCard: null,
-      lives: 3,
-      multiplier: 1,
-      phase: "playing",
-      score: 0,
-      streak: 0,
-      totalAnswered: 0,
-    };
-    _nextCard();
+    state.value = { ...initialState(), deck: _makeQueuedDeck(), phase: "playing" };
+    nextCard();
     trackEvent("Game", "Game Started", "berliner-oder-nicht");
   }
 
-  function _nextCard() {
+  function nextCard() {
     if (state.value.deck.length === 0) {
       state.value.deck = _makeQueuedDeck();
     }
     const [next, ...rest] = state.value.deck;
     state.value.deck = rest;
     state.value.currentCard = next ?? null;
-  }
-
-  function nextCard() {
-    _nextCard();
   }
 
   function _saveToStorage() {
