@@ -268,7 +268,7 @@ describe("SuggestWordForm.vue", () => {
     expect(wrapper.text()).toContain("Irgendwas läuft hier nicht");
   });
 
-  it("resetForm schedules form reset via setTimeout after successful send (covers lines 250, 267)", async () => {
+  it("clears the form 3 s after a successful send", async () => {
     vi.useFakeTimers();
     const { useMutation } = await import("@urql/vue");
     vi.mocked(useMutation).mockReturnValueOnce({
@@ -286,8 +286,56 @@ describe("SuggestWordForm.vue", () => {
     await Promise.resolve();
     await Promise.resolve();
 
+    const input = wrapper.find<HTMLInputElement>("#berlinerWort");
+    expect(input.element.value).toBe("Kiez");
     vi.advanceTimersByTime(3100);
-    expect(wrapper.exists()).toBe(true);
+    await wrapper.vm.$nextTick();
+    expect(input.element.value).toBe("");
     vi.useRealTimers();
+  });
+  it("treats a whitespace-only word as missing", async () => {
+    const wrapper = mount(SuggestWordForm, {
+      global: { stubs: { AlertBanner: { template: "<div><slot /></div>" } } },
+    });
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("   ");
+    await wrapper.find("form").trigger("submit");
+    expect(wrapper.text()).toContain("Hey du hast ditt Wort vergessen.");
+  });
+
+  it("escapes user input in the mail body", async () => {
+    const { useMutation } = await import("@urql/vue");
+    const executeMutation = vi.fn(() =>
+      Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
+    );
+    vi.mocked(useMutation).mockReturnValueOnce({
+      executeMutation,
+    } as unknown as ReturnType<typeof useMutation>);
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("<b>Kiez</b>");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.find("form").trigger("submit");
+    await Promise.resolve();
+
+    const { body } = (executeMutation.mock.calls[0] as unknown as [{ input: { body: string } }])[0]
+      .input;
+    expect(body).toContain("&#60;b&#62;Kiez&#60;/b&#62;");
+    expect(body).not.toContain("<b>Kiez</b>");
+  });
+
+  it("re-enables the submit button after a failed send", async () => {
+    const { useMutation } = await import("@urql/vue");
+    vi.mocked(useMutation).mockReturnValueOnce({
+      executeMutation: vi.fn(() => Promise.resolve({ data: null, error: new Error("boom") })),
+    } as unknown as ReturnType<typeof useMutation>);
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.find("form").trigger("submit");
+    await Promise.resolve();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("button[type='submit']").attributes("disabled")).toBeUndefined();
   });
 });

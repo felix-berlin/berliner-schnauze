@@ -2,129 +2,53 @@
   <form
     ref="root"
     class="c-suggest-word-form c-form"
-    novalidate="true"
+    novalidate
     data-track-content
     data-content-name="Word Suggest Form"
     data-content-piece="Wort einreichen"
     data-content-target="/wort-vorschlagen"
-    @submit.prevent="checkForm"
+    @submit.prevent="onSubmit"
   >
-    <div class="c-form__group">
+    <div v-for="(group, groupIndex) in FIELD_GROUPS" :key="groupIndex" class="c-form__group">
       <div
+        v-for="field in group"
+        :key="field.name"
         class="c-form__item is-vertical"
-        :class="{ 'has-error': formErrors.berlinerWord?.length }"
+        :class="{ [field.textarea ? 'c-textarea--error' : 'has-error']: errors[field.name] }"
       >
-        <label class="c-form__label c-label is-required" for="berlinerWort">Berliner Wort</label>
-        <div class="c-floating-label">
-          <input
-            id="berlinerWort"
-            v-model="formData.berlinerWord"
-            class="c-input c-form__input c-floating-label__input"
-            type="text"
-            name="berlinerWort"
-            placeholder=" "
-            required
-          />
-          <AlertBanner
-            v-if="formErrors.berlinerWord?.length"
-            type="danger"
-            class="c-floating-label__label c-floating-label__label--bottom c-alert--small"
-          >
-            {{ formErrors.berlinerWord }}
-          </AlertBanner>
-        </div>
-      </div>
-
-      <div
-        class="c-form__item is-vertical"
-        :class="{ 'has-error': formErrors.translation?.length }"
-      >
-        <label class="c-form__label c-label is-required" for="translation"
-          >Übersetzung in Hochdeutsche</label
+        <label
+          class="c-form__label c-label"
+          :class="{ 'is-required': field.required }"
+          :for="field.id"
+          >{{ field.label }}</label
         >
         <div class="c-floating-label">
+          <textarea
+            v-if="field.textarea"
+            :id="field.id"
+            v-model="form[field.name]"
+            class="c-textarea c-floating-label__input"
+            :name="field.id"
+            rows="4"
+            placeholder=" "
+          />
           <input
-            id="translation"
-            v-model="formData.translation"
+            v-else
+            :id="field.id"
+            v-model="form[field.name]"
             class="c-input c-form__input c-floating-label__input"
-            type="text"
-            name="translation"
+            :class="{ 'c-input--email': field.type === 'email' }"
+            :type="field.type ?? 'text'"
+            :name="field.id"
             placeholder=" "
+            :required="field.required"
           />
           <AlertBanner
-            v-if="formErrors.translation?.length"
+            v-if="errors[field.name]"
             type="danger"
             class="c-floating-label__label c-floating-label__label--bottom c-alert--small"
           >
-            {{ formErrors.translation }}
-          </AlertBanner>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="c-form__item is-vertical"
-      :class="{ 'c-textarea--error': formErrors.example?.length }"
-    >
-      <label class="c-label c-form__label" for="example">Schreibe einen Beispielsatz:</label>
-      <div class="c-floating-label">
-        <textarea
-          id="example"
-          v-model="formData.example"
-          class="c-textarea c-floating-label__input"
-          name="example"
-          rows="4"
-          placeholder=" "
-        />
-        <AlertBanner
-          v-if="formErrors.example?.length"
-          type="danger"
-          class="c-floating-label__label c-floating-label__label--bottom c-alert--small"
-        >
-          {{ formErrors.example }}
-        </AlertBanner>
-      </div>
-    </div>
-
-    <div class="c-form__group">
-      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.name?.length }">
-        <label class="c-label c-form__label" for="userName">Dein Name (optional)</label>
-        <div class="c-floating-label">
-          <input
-            id="userName"
-            v-model="formData.userName"
-            class="c-input c-form__input c-floating-label__input"
-            type="text"
-            name="userName"
-            placeholder=" "
-          />
-          <AlertBanner
-            v-if="formErrors.name.length"
-            type="danger"
-            class="c-floating-label__label c-floating-label__label--bottom c-alert--small"
-          >
-            {{ formErrors.name }}
-          </AlertBanner>
-        </div>
-      </div>
-
-      <div class="c-form__item is-vertical" :class="{ 'has-error': formErrors.eMail?.length }">
-        <label class="c-label c-form__label" for="userEmail">Deine E-Mailadresse (optional)</label>
-        <div class="c-floating-label">
-          <input
-            id="userEmail"
-            v-model="formData.userMail"
-            class="c-input c-form__input c-input--email c-floating-label__input"
-            type="email"
-            name="userEmail"
-            placeholder=" "
-          />
-          <AlertBanner
-            v-if="formErrors.eMail?.length"
-            type="danger"
-            class="c-floating-label__label c-floating-label__label--bottom c-alert--small"
-          >
-            {{ formErrors.eMail }}
+            {{ errors[field.name] }}
           </AlertBanner>
         </div>
       </div>
@@ -133,6 +57,7 @@
     <button
       class="c-button c-suggest-word-form__button"
       type="submit"
+      :disabled="isSending"
       data-content-ignoreinteraction
     >
       <Transition name="fade" mode="out-in">
@@ -141,7 +66,7 @@
       </Transition>
     </button>
 
-    <TurnStile :site-key="turnstileSiteKey" @verify="isVerified = $event" />
+    <TurnStile :site-key="TURNSTILE_SITE_KEY" @verify="isVerified = $event" />
   </form>
 </template>
 
@@ -151,30 +76,72 @@ import { useContentTracking } from "@composables/useContentTracking";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { cacheExchange, fetchExchange, provideClient, useMutation } from "@urql/vue";
 import { trackEvent } from "@utils/analytics";
+import { useTimeoutFn } from "@vueuse/core";
 import { TURNSTILE_SITE_KEY, WP_API } from "astro:env/client";
 import { defineAsyncComponent, reactive, ref } from "vue";
+import { z } from "zod";
 
 import { SendEmailDocument } from "@/gql/graphql.ts";
 
 const AlertBanner = defineAsyncComponent(() => import("@components/AlertBanner.vue"));
 
-const root = ref<HTMLFormElement | null>(null);
-useContentTracking(root);
+const { berlinerWord = "" } = defineProps<{ berlinerWord?: string }>();
 
-const props = defineProps<{
-  berlinerWord?: string;
-}>();
+/** Required text: empty and one-letter answers get their own message. */
+const required = (missing: string, tooShort: string) =>
+  z.string().trim().min(1, missing).min(2, tooShort);
+/** Optional text: empty is fine, a single letter is not. */
+const optional = (tooShort: string) =>
+  z
+    .string()
+    .trim()
+    .refine((v) => v.length !== 1, tooShort);
 
-export interface FormData {
-  [key: string]: string | undefined; // This is the index signature
-  berlinerWord?: string;
-  example?: string;
-  translation?: string;
-  userMail?: string;
-  userName?: string;
-}
+const suggestWordSchema = z.object({
+  berlinerWord: required(
+    "Hey du hast ditt Wort vergessen.",
+    "Oh, ditt is aber een sehr kurzes Wort",
+  ),
+  example: optional("Mehr is dir nicht eingefallen?"),
+  translation: required(
+    "Ohne die Übersetzung wird dett etwas schwierig.",
+    "Ditt is aber ne kleene Übersetzung.",
+  ),
+  userMail: z.union([z.literal(""), z.email("Irgendwas läuft hier nicht")]),
+  userName: optional("Du hast nen sehr kleinen Namen"),
+});
 
-let formData = reactive<FormData>({
+type SuggestWord = z.infer<typeof suggestWordSchema>;
+type FieldName = keyof SuggestWord;
+
+type Field = {
+  id: string;
+  label: string;
+  name: FieldName;
+  required?: boolean;
+  textarea?: boolean;
+  type?: "email";
+};
+
+// One inner array per c-form__group row; fields in a row sit side by side from md up.
+const FIELD_GROUPS: Field[][] = [
+  [
+    { id: "berlinerWort", label: "Berliner Wort", name: "berlinerWord", required: true },
+    {
+      id: "translation",
+      label: "Übersetzung in Hochdeutsche",
+      name: "translation",
+      required: true,
+    },
+  ],
+  [{ id: "example", label: "Schreibe einen Beispielsatz:", name: "example", textarea: true }],
+  [
+    { id: "userName", label: "Dein Name (optional)", name: "userName" },
+    { id: "userEmail", label: "Deine E-Mailadresse (optional)", name: "userMail", type: "email" },
+  ],
+];
+
+const emptyForm = (): SuggestWord => ({
   berlinerWord: "",
   example: "",
   translation: "",
@@ -182,169 +149,78 @@ let formData = reactive<FormData>({
   userName: "",
 });
 
-interface FormErrors {
-  [key: string]: string; // This is the index signature
-  berlinerWord: string;
-  eMail: string;
-  example: string;
-  name: string;
-  translation: string;
-}
-
-const formErrors = reactive<FormErrors>({
-  berlinerWord: "",
-  eMail: "",
-  example: "",
-  name: "",
-  translation: "",
-});
-
-const turnstileSiteKey = TURNSTILE_SITE_KEY;
+const form = reactive<SuggestWord>({ ...emptyForm(), berlinerWord });
+const errors = ref<Partial<Record<FieldName, string>>>({});
 const isVerified = ref(false);
 const isSending = ref(false);
+
+const root = ref<HTMLFormElement | null>(null);
+useContentTracking(root);
 
 provideClient({
   exchanges: [cacheExchange, fetchExchange],
   fetchOptions: { headers: { "Content-Type": "application/json" } },
   url: WP_API,
 });
+const { executeMutation } = useMutation(SendEmailDocument);
 
-const sendMailMutation = useMutation(SendEmailDocument);
+// Keep the sent values visible for a moment before clearing the form.
+const { start: scheduleReset } = useTimeoutFn(() => Object.assign(form, emptyForm()), 3000, {
+  immediate: false,
+});
 
-if (props.berlinerWord) {
-  formData.berlinerWord = props.berlinerWord;
-}
+const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
-const sendMail = async () => {
-  const createBody = `
-  <p>Ein neues Berliner Wort wurde eingereicht:</p>
-  <p>Berliner Wort: <strong>${formData.berlinerWord}</strong></p>
-  <p>Übersetzung: <strong>${formData.translation}</strong></p>
-  <p>Beispiel: <strong>${formData.example}</strong></p>
-  <p>Name: <strong>${formData.userName}</strong></p>
-  <p>E-Mail: <strong>${formData.userMail}</strong></p>
-`;
+const mailBody = (data: SuggestWord) => {
+  const rows: [string, string][] = [
+    ["Berliner Wort", data.berlinerWord],
+    ["Übersetzung", data.translation],
+    ["Beispiel", data.example],
+    ["Name", data.userName],
+    ["E-Mail", data.userMail],
+  ];
+  return [
+    "<p>Ein neues Berliner Wort wurde eingereicht:</p>",
+    ...rows.map(([label, value]) => `<p>${label}: <strong>${escapeHtml(value)}</strong></p>`),
+  ].join("\n");
+};
 
-  await sendMailMutation
-    .executeMutation({
-      input: {
-        body: createBody,
-        clientMutationId: "newSuggestedWord",
-        from: formData.userMail,
-        subject: "Wortvorschlag - Berliner Schnauze",
-        to: "mail@berliner-schnauze.wtf",
-      },
-    })
-    .then((response) => {
-      const { data, error } = response;
-      const sent = data?.sendEmail?.sent;
+const onSubmit = async (): Promise<void> => {
+  const result = suggestWordSchema.safeParse(form);
+  if (!result.success) {
+    const { fieldErrors } = z.flattenError(result.error);
+    errors.value = Object.fromEntries(
+      Object.entries(fieldErrors).map(([name, messages]) => [name, messages?.[0]]),
+    );
+    return;
+  }
+  errors.value = {};
+  if (!isVerified.value || isSending.value) return;
 
-      if (sent) {
-        createToastNotify({
-          message: "Dein Wortvorschlag wurde versandt",
-          status: "success",
-        });
+  isSending.value = true;
+  const { data, error } = await executeMutation({
+    input: {
+      body: mailBody(result.data),
+      clientMutationId: "newSuggestedWord",
+      from: result.data.userMail,
+      subject: "Wortvorschlag - Berliner Schnauze",
+      to: "mail@berliner-schnauze.wtf",
+    },
+  });
+  isSending.value = false;
 
-        trackEvent("Form", "Send", "Word Suggestion");
-
-        isSending.value = false;
-      }
-
-      if (error || !sent) {
-        createToastNotify({
-          message: "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
-          status: "error",
-          timeout: null,
-        });
-      }
-
-      resetForm();
+  if (error || !data?.sendEmail?.sent) {
+    createToastNotify({
+      message: "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
+      status: "error",
+      timeout: null,
     });
-};
-
-/**
- * Resets the form after a successful submission
- *
- * @return  {void}  [return description]
- */
-const resetForm = (): void => {
-  if (sendMailMutation.data?.value?.sendEmail?.sent) {
-    setTimeout(() => {
-      formData = convertObjectKeysTo(formData, "");
-    }, 3000);
-  }
-};
-
-/**
- * Turns all given object values to false
- *
- * @param   {}  object  The object values you want to turn falsy
- * @param   {}  to        Any data format
- *
- * @return  {}          returns object with falsy values
- */
-const convertObjectKeysTo = <T>(
-  object: Record<string, T | undefined>,
-  to: T,
-): Record<string, T> => {
-  return Object.fromEntries(Object.keys(object).map((key) => [key, to])) as Record<string, T>;
-};
-
-/**
- * Validates the form
- *
- * @return  {void}     Submit form
- */
-const checkForm = async (): Promise<void> => {
-  for (const error in formErrors) {
-    formErrors[error] = "";
+    return;
   }
 
-  if (formData?.berlinerWord && formData?.berlinerWord?.length <= 1) {
-    formErrors.berlinerWord = "Oh, ditt is aber een sehr kurzes Wort";
-  }
-  if (!formData.berlinerWord) {
-    formErrors.berlinerWord = "Hey du hast ditt Wort vergessen.";
-  }
-
-  if (formData?.translation && formData?.translation?.length <= 1) {
-    formErrors.translation = "Ditt is aber ne kleene Übersetzung.";
-  }
-  if (!formData.translation) {
-    formErrors.translation = "Ohne die Übersetzung wird dett etwas schwierig.";
-  }
-
-  if (formData.userName && formData.userName?.length <= 1) {
-    formErrors.name = "Du hast nen sehr kleinen Namen";
-  }
-  if (formData.example && formData.example?.length <= 1) {
-    formErrors.example = "Mehr is dir nicht eingefallen?";
-  }
-
-  // If an e-mail address is given, validate it
-  if (formData?.userMail && formData?.userMail?.length > 0 && !validEmail(formData?.userMail)) {
-    formErrors.eMail = "Irgendwas läuft hier nicht";
-  }
-
-  // If there are no errors and the user is verified, submit the form
-  if (Object.values(formErrors).every((v) => v?.length === 0) && isVerified.value) {
-    isSending.value = true;
-    await sendMail();
-  }
-};
-
-/**
- * Checks if its a real email address
- *
- * @param   {String}  email  E-Mail address
- *
- * @return  {Boolean}         If check passes return true
- */
-const validEmail = (email: string): boolean => {
-  const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-  return re.test(email);
+  createToastNotify({ message: "Dein Wortvorschlag wurde versandt", status: "success" });
+  trackEvent("Form", "Send", "Word Suggestion");
+  scheduleReset();
 };
 </script>
 
