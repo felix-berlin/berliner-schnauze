@@ -3,4 +3,5 @@
 
 :root {
   --padding-y-header: #{vars.$spacer * 0.6};
+  --site-header-height: 60px; // JS-updated by MainHeader.astro
 }

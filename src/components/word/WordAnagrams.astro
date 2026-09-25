@@ -19,7 +19,7 @@ const { anagrams } = Astro.props;
       aria-labelledby="heading-anagramme"
       data-track-content
       data-content-name="Word Anagrams"
-      data-content-piece={anagrams[0]?.wordProperties?.berlinerisch ?? ''}
+      data-content-piece={anagrams[0]?.wordProperties.berlinerisch ?? ''}
       data-content-target="#"
     >
       <div class="c-section-card__header">
@@ -31,7 +31,7 @@ const { anagrams } = Astro.props;
         <ul class="c-single-word__related-words-list">
           {anagrams.map((w) => (
             <li>
-              <a class="c-single-word__related-word-link" href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+              <a class="c-single-word__related-word-link" href={routeToWord(w.slug)}>{w.wordProperties.berlinerisch}</a>
             </li>
           ))}
         </ul>

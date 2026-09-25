@@ -22,8 +22,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* 2 workers on CI: ubuntu-latest has 4 vCPUs, and astro preview shares them. */
-  workers: process.env.CI ? 2 : undefined,
+  /* Playwright default (half of the CPU cores) */
+  workers: undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters
    * The HTML report is always generated for humans to open later. For the live
    * terminal output, AI agents (detected via std-env, same signal Vitest 4.1+
@@ -91,15 +91,14 @@ export default defineConfig({
     // per-page compile cost and the live-network dependency during the test
     // run itself — content is fetched once at build time.
     //
-    // The build itself runs as its own CI step (see playwright.yml) so it gets
-    // the full job timeout rather than racing this webServer timeout — by the
-    // time this command runs in CI, the site is already built, so it only has
-    // to wait for `astro preview` to start listening.
+    // The build and `astro preview` both run as their own CI steps (see playwright.yml):
+    // the build gets the full job timeout, and Playwright never has to tear the server
+    // down (that hung the containerized job). In CI this command is only a fallback.
     command: process.env.CI
       ? "pnpm run preview"
       : "pnpm run supportedBrowsers && pnpm exec astro dev",
     url: `http://localhost:${port}`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 120_000,
   },
 });

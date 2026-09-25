@@ -52,6 +52,8 @@ globalThis.fetch = vi.fn(() =>
   }),
 ) as unknown as typeof fetch;
 
+const defaultFetch = globalThis.fetch;
+
 describe("wordList store", () => {
   beforeEach(() => {
     vi.resetModules();
@@ -140,10 +142,18 @@ describe("wordList store", () => {
       expect($activeFilterCount.get()).toBe(1);
     });
 
-    it("counts similarSoundingWords as 1 when true", async () => {
+    it("does not count sort settings", async () => {
       const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("similarSoundingWords", true);
-      expect($activeFilterCount.get()).toBe(1);
+      $wordSearch.setKey("activeOrderCategory", "date");
+      $wordSearch.setKey("dateOrder", "DESC");
+      expect($activeFilterCount.get()).toBe(0);
+    });
+
+    it("does not count a range filter reset to undefined or null", async () => {
+      const { $wordSearch, $activeFilterCount } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("vowelsCount", undefined);
+      $wordSearch.setKey("syllablesCount", null as unknown as number);
+      expect($activeFilterCount.get()).toBe(0);
     });
 
     it("counts vowelsCount when set", async () => {
@@ -178,6 +188,31 @@ describe("wordList store", () => {
       expect(state.activeThemenFilter).toEqual([]);
       expect(state.alphabeticalOrder).toBe("ASC");
       expect(state.dateOrder).toBe("ASC");
+    });
+
+    it("resets range and boolean filters and sort settings", async () => {
+      const { $wordSearch, $activeFilterCount, resetAll } = await import("@stores/wordList.ts");
+      $wordSearch.setKey("characterCount", 4);
+      $wordSearch.setKey("multipleMeanings", true);
+      $wordSearch.setKey("activeOrderCategory", "modifiedDate");
+      $wordSearch.setKey("modifiedDateOrder", "DESC");
+
+      resetAll();
+
+      const state = $wordSearch.get();
+      expect(state.characterCount).toBeUndefined();
+      expect(state.multipleMeanings).toBe(false);
+      expect(state.activeOrderCategory).toBe("alphabetical");
+      expect(state.modifiedDateOrder).toBe("ASC");
+      expect($activeFilterCount.get()).toBe(0);
+    });
+
+    it("does not share array instances with the defaults", async () => {
+      const { $wordSearch, resetAll } = await import("@stores/wordList.ts");
+      resetAll();
+      $wordSearch.get().activeThemenFilter.push("mutated");
+      resetAll();
+      expect($wordSearch.get().activeThemenFilter).toEqual([]);
     });
 
     it("calls trackEvent", async () => {
@@ -228,114 +263,6 @@ describe("wordList store", () => {
     });
   });
 
-  describe("setWordTypeFilter", () => {
-    it("adds a word type when not present", async () => {
-      const { $wordSearch, setWordTypeFilter } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("activeWordTypeFilter", []);
-      setWordTypeFilter("Verb");
-      expect($wordSearch.get().activeWordTypeFilter).toContain("Verb");
-    });
-
-    it("removes a word type when already present", async () => {
-      const { $wordSearch, setWordTypeFilter } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("activeWordTypeFilter", ["Verb"]);
-      setWordTypeFilter("Verb");
-      expect($wordSearch.get().activeWordTypeFilter).not.toContain("Verb");
-    });
-
-    it("keeps other word types when toggling one", async () => {
-      const { $wordSearch, setWordTypeFilter } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("activeWordTypeFilter", ["Verb", "Substantiv"]);
-      setWordTypeFilter("Verb");
-      expect($wordSearch.get().activeWordTypeFilter).toEqual(["Substantiv"]);
-    });
-  });
-
-  describe("setThemenFilter", () => {
-    it("adds a thema when not present", async () => {
-      const { $wordSearch, setThemenFilter } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("activeThemenFilter", []);
-      setThemenFilter("essen-trinken");
-      expect($wordSearch.get().activeThemenFilter).toContain("essen-trinken");
-    });
-
-    it("removes a thema when already present", async () => {
-      const { $wordSearch, setThemenFilter } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("activeThemenFilter", ["essen-trinken"]);
-      setThemenFilter("essen-trinken");
-      expect($wordSearch.get().activeThemenFilter).not.toContain("essen-trinken");
-    });
-
-    it("keeps other themen when toggling one", async () => {
-      const { $wordSearch, setThemenFilter } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("activeThemenFilter", ["essen-trinken", "alkohol-kneipe"]);
-      setThemenFilter("essen-trinken");
-      expect($wordSearch.get().activeThemenFilter).toEqual(["alkohol-kneipe"]);
-    });
-  });
-
-  describe("setActiveOrderCategory", () => {
-    it("sets the activeOrderCategory", async () => {
-      const { $wordSearch, setActiveOrderCategory } = await import("@stores/wordList.ts");
-      setActiveOrderCategory("date");
-      expect($wordSearch.get().activeOrderCategory).toBe("date");
-    });
-
-    it("sets to modifiedDate", async () => {
-      const { $wordSearch, setActiveOrderCategory } = await import("@stores/wordList.ts");
-      setActiveOrderCategory("modifiedDate");
-      expect($wordSearch.get().activeOrderCategory).toBe("modifiedDate");
-    });
-  });
-
-  describe("$alphabeticalOrderToggle", () => {
-    it("toggles from ASC to DESC", async () => {
-      const { $wordSearch, $alphabeticalOrderToggle } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("alphabeticalOrder", "ASC");
-      $alphabeticalOrderToggle();
-      expect($wordSearch.get().alphabeticalOrder).toBe("DESC");
-    });
-
-    it("toggles from DESC to ASC", async () => {
-      const { $wordSearch, $alphabeticalOrderToggle } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("alphabeticalOrder", "DESC");
-      $alphabeticalOrderToggle();
-      expect($wordSearch.get().alphabeticalOrder).toBe("ASC");
-    });
-  });
-
-  describe("$wordListDateOrderToggle", () => {
-    it("toggles from ASC to DESC", async () => {
-      const { $wordSearch, $wordListDateOrderToggle } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("dateOrder", "ASC");
-      $wordListDateOrderToggle();
-      expect($wordSearch.get().dateOrder).toBe("DESC");
-    });
-
-    it("toggles from DESC to ASC", async () => {
-      const { $wordSearch, $wordListDateOrderToggle } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("dateOrder", "DESC");
-      $wordListDateOrderToggle();
-      expect($wordSearch.get().dateOrder).toBe("ASC");
-    });
-  });
-
-  describe("$wordListModifiedDateOrderToggle", () => {
-    it("toggles from ASC to DESC", async () => {
-      const { $wordSearch, $wordListModifiedDateOrderToggle } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("modifiedDateOrder", "ASC");
-      $wordListModifiedDateOrderToggle();
-      expect($wordSearch.get().modifiedDateOrder).toBe("DESC");
-    });
-
-    it("toggles from DESC to ASC", async () => {
-      const { $wordSearch, $wordListModifiedDateOrderToggle } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("modifiedDateOrder", "DESC");
-      $wordListModifiedDateOrderToggle();
-      expect($wordSearch.get().modifiedDateOrder).toBe("ASC");
-    });
-  });
-
   describe("$setSortOrder", () => {
     it("sets category and order", async () => {
       const { $wordSearch, $setSortOrder } = await import("@stores/wordList.ts");
@@ -352,60 +279,61 @@ describe("wordList store", () => {
     });
   });
 
-  describe("setSearch", () => {
-    it("sets the search string", async () => {
-      const { $searchQuery, setSearch } = await import("@stores/wordList.ts");
-      setSearch("Berliner");
-      expect($searchQuery.get()).toBe("Berliner");
+  describe("$searchMeta", () => {
+    afterEach(() => {
+      globalThis.fetch = defaultFetch;
     });
 
-    it("can be set to empty string", async () => {
-      const { $searchQuery, setSearch } = await import("@stores/wordList.ts");
-      setSearch("foo");
-      setSearch("");
-      expect($searchQuery.get()).toBe("");
-    });
-  });
-
-  describe("$toggleBerolinismus", () => {
-    it("toggles berolinismus from false to true", async () => {
-      const { $wordSearch, $toggleBerolinismus } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("berolinismus", false);
-      $toggleBerolinismus();
-      expect($wordSearch.get().berolinismus).toBe(true);
+    it("is not part of the persisted $wordSearch map", async () => {
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      const state = $wordSearch.get() as Record<string, unknown>;
+      for (const key of ["letterGroups", "rangeFilterMinMax", "themen", "wordTypes"]) {
+        expect(state).not.toHaveProperty(key);
+      }
     });
 
-    it("toggles berolinismus from true to false", async () => {
-      const { $wordSearch, $toggleBerolinismus } = await import("@stores/wordList.ts");
-      $wordSearch.setKey("berolinismus", true);
-      $toggleBerolinismus();
-      expect($wordSearch.get().berolinismus).toBe(false);
-    });
-
-    it("calls trackEvent", async () => {
-      const { $wordSearch, $toggleBerolinismus } = await import("@stores/wordList.ts");
-      const { trackEvent } = await import("@utils/analytics");
-      $wordSearch.setKey("berolinismus", false);
-      $toggleBerolinismus();
-      expect(trackEvent).toHaveBeenCalledWith(
-        "WordList",
-        "Filter",
-        expect.stringContaining("Berolinismus"),
+    it("loads meta.json on first subscriber and maps availableWordGroups → letterGroups", async () => {
+      const meta = {
+        availableWordGroups: ["B", "S"],
+        rangeFilterMinMax: { characterLength: { max: 20, min: 1 } },
+        themen: [{ name: "Essen & Trinken", slug: "essen-trinken" }],
+        wordTypes: ["Nomen", "Verb"],
+      };
+      const fetchSpy = vi.fn(() =>
+        Promise.resolve({ json: () => Promise.resolve(meta), ok: true }),
       );
+      globalThis.fetch = fetchSpy as unknown as typeof fetch;
+      const { $searchMeta } = await import("@stores/wordList.ts");
+      const unsub = $searchMeta.subscribe(() => {});
+      await vi.waitFor(() => {
+        expect($searchMeta.get().letterGroups).toEqual(["B", "S"]);
+      });
+      expect($searchMeta.get()).toEqual({
+        letterGroups: meta.availableWordGroups,
+        rangeFilterMinMax: meta.rangeFilterMinMax,
+        themen: meta.themen,
+        wordTypes: meta.wordTypes,
+      });
+      expect(fetchSpy).toHaveBeenCalledWith("/api/search/meta.json");
+      unsub();
     });
-  });
 
-  describe("searchLength", () => {
-    it("returns 0 when search is empty", async () => {
-      const { $searchQuery, searchLength } = await import("@stores/wordList.ts");
-      $searchQuery.set("");
-      expect(searchLength.get()).toBe(0);
-    });
-
-    it("returns the length of the search string", async () => {
-      const { $searchQuery, searchLength } = await import("@stores/wordList.ts");
-      $searchQuery.set("Berlin");
-      expect(searchLength.get()).toBe(6);
+    it.each([
+      ["network failure", () => Promise.reject(new Error("network error"))],
+      ["non-ok response", () => Promise.resolve({ json: vi.fn(), ok: false, status: 500 })],
+    ])("logs an error on %s and keeps empty defaults", async (_label, impl) => {
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      globalThis.fetch = vi.fn(impl) as unknown as typeof fetch;
+      const { $searchMeta } = await import("@stores/wordList.ts");
+      const unsub = $searchMeta.subscribe(() => {});
+      await vi.waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalledWith(
+          "[wordList] Failed to load search meta:",
+          expect.any(Error),
+        );
+      });
+      expect($searchMeta.get().letterGroups).toEqual([]);
+      unsub();
     });
   });
 
@@ -475,6 +403,62 @@ describe("wordList store", () => {
       expect(result).toBeDefined();
     });
 
+    it.each([
+      ["alphabetical", "alphabeticalOrder", "wordProperties.berlinerisch"],
+      ["date", "dateOrder", "dateTs"],
+      ["modifiedDate", "modifiedDateOrder", "modifiedTs"],
+    ] as const)("sorts %s via Orama property sort", async (category, orderKey, property) => {
+      const { create, search } = await import("@orama/orama");
+      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      await capturedCbRef.fn!(
+        { ...$wordSearch.get(), activeOrderCategory: category, [orderKey]: "DESC" },
+        "",
+      );
+      expect(vi.mocked(search).mock.calls.at(-1)?.[1]).toMatchObject({
+        sortBy: { order: "DESC", property },
+      });
+    });
+
+    it("builds where clauses for boolean, range, letter, word type and themen filters", async () => {
+      const { create, search } = await import("@orama/orama");
+      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      await capturedCbRef.fn!(
+        {
+          ...$wordSearch.get(),
+          activeLetterFilter: "B",
+          activeThemenFilter: ["essen-trinken"],
+          activeWordTypeFilter: ["Verb"],
+          audioExamples: true,
+          berolinismus: true,
+          characterCount: 4,
+          syllablesCount: 0,
+        },
+        "",
+      );
+      expect(vi.mocked(search).mock.calls.at(-1)?.[1].where).toEqual({
+        berlinerischWordTypes: { containsAny: ["Verb"] },
+        themen: { containsAny: ["essen-trinken"] },
+        wordGroup: { eq: "B" },
+        "wordProperties.audioExamples": true,
+        "wordProperties.berolinismus": true,
+        "wordProperties.characterLength": { gte: 4 },
+        "wordProperties.syllablesCount": { gte: 0 },
+      });
+    });
+
+    it("omits where entirely when no filter is active", async () => {
+      const { create, search } = await import("@orama/orama");
+      vi.mocked(create).mockReturnValueOnce({ _orama: true } as unknown as never);
+      vi.mocked(search).mockResolvedValueOnce({ count: 0, hits: [] } as unknown as never);
+      const { $wordSearch } = await import("@stores/wordList.ts");
+      await capturedCbRef.fn!($wordSearch.get(), "");
+      expect(vi.mocked(search).mock.calls.at(-1)?.[1]).not.toHaveProperty("where");
+    });
+
     it("fetches the search index only once for concurrent computations (single-flight)", async () => {
       const fetchSpy = vi.fn(() => Promise.resolve({ json: () => Promise.resolve([]), ok: true }));
       globalThis.fetch = fetchSpy as unknown as typeof fetch;
@@ -493,7 +477,7 @@ describe("wordList store", () => {
       ) as unknown as typeof fetch;
       const { $wordSearch } = await import("@stores/wordList.ts");
       await expect(capturedCbRef.fn!($wordSearch.get())).rejects.toThrow(
-        "[wordList] search index fetch failed: 500",
+        "[searchIndex] search index fetch failed: 500",
       );
 
       // Failure clears the memoized init promise → the next computation retries.

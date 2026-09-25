@@ -4,6 +4,17 @@ import { SENTRY_DSN, SENTRY_ENVIRONMENT, SENTRY_TRACES_SAMPLE_RATE } from "astro
 import { version } from "../../package.json";
 
 Sentry.init({
+  // v10's unset sendDefaultPii was restrictive; keep that baseline under v11's dataCollection
+  dataCollection: {
+    cookies: false,
+    databaseQueryData: false,
+    genAI: { inputs: false, outputs: false },
+    httpBodies: [],
+    httpHeaders: false,
+    urlQueryParams: true,
+    userInfo: false,
+  },
+
   dsn: SENTRY_DSN,
 
   environment: SENTRY_ENVIRONMENT,

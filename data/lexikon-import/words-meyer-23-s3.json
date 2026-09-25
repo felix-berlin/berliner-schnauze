@@ -1,0 +1,2447 @@
+[
+  {
+    "word": "Sechserenden",
+    "translations": [
+      "Zugabe der Musik in kleineren Tanzlokalen"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sechserkarte",
+    "translations": [
+      "Postkarte"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sechserpeitsche, det knallt ja wie 'ne Sechserpeitsche",
+    "translations": [
+      "idiomatischer Vergleich, z. B. bei einem schmatzenden Kuss"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sechserstampe",
+    "translations": [
+      "Tanzlokal niederen Ranges"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sechsertopp",
+    "translations": [
+      "Destille, in der das Glas Bier für 5 Pfennig verschenkt wird"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Seckelter",
+    "translations": [
+      "Sekretär"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Seebach, er kommt wie Seebach um de Klöße",
+    "translations": [
+      "es entgeht ihm, er hat das Nachsehen"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Seefig",
+    "translations": [
+      "wie schliefig"
+    ],
+    "alternativeWords": [
+      "Seefkugeln"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Seehund, det kann jeder Seehund sagen",
+    "translations": [
+      "scherzhafte Redensart"
+    ],
+    "infoText": "Droschkenkutscher rufen ihren Pferden wohl zu: „Steh, Seehund!“",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Seele, 'ne Seele von Mensch",
+    "translations": [
+      "ein sehr guter Mensch"
+    ],
+    "examples": [
+      {
+        "example": "Det's de Seele von't Butterjeschäft.",
+        "explanation": "die Hauptsache"
+      },
+      {
+        "example": "Nu hat de liebe Seele Ruh!",
+        "explanation": "es ist getan, ist zu Ende"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Seelensjut",
+    "translations": [
+      "sehr gutmütig"
+    ],
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Seelenwärmer",
+    "translations": [
+      "gestrickte wollene Weste (für Frauen)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Siehste, siehste, Mutter, jib mir doch 'ne Stulle",
+    "translations": [
+      "Form der Bitte, besonders bei Kindern"
+    ],
+    "examples": [
+      {
+        "example": "Siehste wie de bist!",
+        "explanation": "das habe ich mir wohl gedacht"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Seitengebäude, olles",
+    "translations": [
+      "gemütliche Anrede"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Seje, er kommt mit de Seje uf'n Nagel",
+    "translations": [
+      "Säge (Schnarchen mit überschnappender Stimme)"
+    ],
+    "alternativeWords": [
+      "sejen"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sejen, det is'n wahrer Sejen",
+    "translations": [
+      "ein wahrer Segen"
+    ],
+    "infoText": "„Jottes Sejen bei Cohn“ ist ein Kartenspiel.",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sekern",
+    "translations": [
+      "glimmen, sengen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Selbstjewachsen, is selbstjewachsener",
+    "translations": [
+      "rühmende Bemerkung des Gastgebers über selbst Angebautes"
+    ],
+    "alternativeWords": [
+      "Selbstjelejte"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Selbstmurmelnd",
+    "translations": [
+      "für selbstredend (Verballhornung)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Selbstredend, allgemein für selbstverständlich",
+    "translations": [
+      "selbstverständlich"
+    ],
+    "infoText": "„Selbstverständlich“ wird neuerdings stark auf der dritten Silbe betont, tatsächlich auf der zweiten, kolossal oft auf der ersten, tadellos auf der letzten (die beiden letzten Neuerungen gingen von den Studenten aus).",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Setter, 'ne kleene Setter",
+    "translations": [
+      "Flasche Selterwasser"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Semmelbeene",
+    "translations": [
+      "wie T-Beene, Bäckerbeene"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Semf, er muß überall seinen Semf zujeben",
+    "translations": [
+      "von einem, der sich in alles mischt"
+    ],
+    "infoText": "Sonst braucht der Berliner nur „Mostrich“.",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sengerig, et riecht sengerig",
+    "translations": [
+      "brandig, verdächtig"
+    ],
+    "examples": [
+      {
+        "example": "Hör mal du, die Sache wird sengerig!",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Servante",
+    "translations": [
+      "Glasschrank"
+    ],
+    "infoText": "Das französische „servante“ heißt eigentlich Nebentischchen, „stummer Diener“.",
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Setzen, et setzt Keile",
+    "translations": [
+      "geben (von Schlägen)"
+    ],
+    "examples": [
+      {
+        "example": "Hier bleibste oder et setzt wat!",
+        "explanation": ""
+      },
+      {
+        "example": "Er hat sich uf mir jesetzt.",
+        "explanation": "sagt ein Mädchen von einem Mann, der sie durchaus heiraten will"
+      }
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sexteckel",
+    "translations": [
+      "Sextaner (Schulausdruck)"
+    ],
+    "alternativeWords": [
+      "Quinteckel",
+      "Quarteckel"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sibberroschen",
+    "translations": [
+      "Silbergroschen"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sicherheitskommissarius",
+    "translations": [
+      "einer, der immer sicher gehen will"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Siejesschornstein",
+    "translations": [
+      "Spitzname für die Siegessäule auf dem Königsplatz"
+    ],
+    "infoText": "Rätsel: „Warum darf man die Siegessäule nich Siejesschornstein nennen?“ — „Denn müsste ja die Viktoria von Rauch sein; se is aber von Drake.“ Auch: „Bei den Schornstein hangen de Würschte draußen“ mit Bezug auf die Geschützrohre, die in die Rinnen der Säule eingelassen sind.",
+    "alternativeWords": [
+      "Siejessparjel"
+    ],
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sielen, sich",
+    "translations": [
+      "sich wälzen (im Schmutz)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Siepern",
+    "translations": [
+      "sickern, z. B. vom Blut"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Silbermorjen",
+    "translations": [
+      "Silbergroschen"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Simpelfranjen",
+    "translations": [
+      "über die Stirn gekämmtes glattes Haar"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Simpeln, er simpelt so hin",
+    "translations": [
+      "ohne bestimmte Tätigkeit sein"
+    ],
+    "infoText": "Studentisch auch: Fach simpeln, Familie simpeln u. dgl.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Simse",
+    "translations": [
+      "Schläge, wie Bimse"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Singemaz",
+    "translations": [
+      "Gesanglehrer"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Singuhr",
+    "translations": [
+      "Spitzname für das Glockenspiel der Parochialkirche"
+    ],
+    "examples": [
+      {
+        "example": "Det Singuhr bimmelt 'n janzen Dag.",
+        "explanation": ""
+      },
+      {
+        "example": "Mein Kleener wird in't Singuhr jedooft.",
+        "explanation": "zur Bezeichnung der Kirche selbst"
+      }
+    ],
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Siste",
+    "translations": [
+      "Napfkuchen aus Kartoffelmehl (Altdeutscher)"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sittlich, det hat keenen sittlichen Wert",
+    "translations": [
+      "das nützt nichts"
+    ],
+    "alternativeWords": [
+      "keene sittliche Spitze"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "So, der Aste frißt wie so'n Mensch",
+    "translations": [
+      "reiches Idiom-Cluster"
+    ],
+    "examples": [
+      {
+        "example": "So so la la.",
+        "explanation": "Antwort auf die Frage: wie geht's?"
+      },
+      {
+        "example": "Ach sorum?",
+        "explanation": "so meinen Sie?"
+      },
+      {
+        "example": "Mir jeht's so weit janz jut.",
+        "explanation": "im Allgemeinen gut"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Söffel",
+    "translations": [
+      "Säufer"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Soffa",
+    "translations": [
+      "Sofa"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sohle, der danzt 'ne feine Sohle",
+    "translations": [
+      "Aufschnitt, Lüge"
+    ],
+    "examples": [
+      {
+        "example": "Det is Sohle!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Solches mit sowas",
+    "translations": [
+      "kompliziertes Konditorgebäck"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Soldatenwurscht",
+    "translations": [
+      "grobe Blutwurst"
+    ],
+    "alternativeWords": [
+      "Hundewurscht"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sommerleutnant",
+    "translations": [
+      "Reserveleutnant, der im Sommer eingezogen wird"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sommerverjnüjen",
+    "translations": [
+      "Spitzname für die Matthäikirche am Tiergarten"
+    ],
+    "infoText": "Vollständig: „'n lieben Herrjott sein Sommerverjnüjen“.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sommerwohnen",
+    "translations": [
+      "im Sommer auf dem Lande wohnen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sommerwohnung, er mietet sich 'ne Sommerwohnung",
+    "translations": [
+      "wenn sich einer entfernt hat und unerwartet lange wegbleibt"
+    ],
+    "infoText": "Auch: durchbrochener Einsatz in einem Frauenkleid.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sonnenbrüder",
+    "translations": [
+      "die alten Eckensteher, jetzt überhaupt Bummler"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sonnenknicker",
+    "translations": [
+      "Sonnenschirm"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sonnenkopp",
+    "translations": [
+      "Frucht der Sonnenblume, die später von den Körnern befreit als Bürste gebraucht wird"
+    ],
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sonst, sonst jeht's Ihnen doch jut",
+    "translations": [
+      "fragt man besorgt, wenn man einen für verrückt zu halten anfängt"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sooße, de janze Sooße",
+    "translations": [
+      "die ganze Angelegenheit"
+    ],
+    "examples": [
+      {
+        "example": "Det is eene Sooße.",
+        "explanation": "ganz dasselbe"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sooßenstipper",
+    "translations": [
+      "lang herabhängender Ärmel"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sorte, det is Sorte",
+    "translations": [
+      "verächtlich für Menschenart"
+    ],
+    "examples": [
+      {
+        "example": "Von die Sorte jehn zwölwe uf's Dutzend!",
+        "explanation": "er ist ein „Dutzendmensch“"
+      }
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spack, er sieht recht spack aus",
+    "translations": [
+      "gebrechlich, hinfällig"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spade",
+    "translations": [
+      "Spaten"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Später, später peut-être",
+    "translations": [
+      "ironisches Zitat"
+    ],
+    "infoText": "Wird „Speter Meter“ gesprochen.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spanien",
+    "translations": [
+      "scherzhaft für Spandau"
+    ],
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spannen",
+    "translations": [
+      "aufpassen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sparjel",
+    "translations": [
+      "Fabrikschornstein"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spaßvogel",
+    "translations": [
+      "Spielzeug auf dem Weihnachtsmarkt"
+    ],
+    "examples": [
+      {
+        "example": "Vorne nickt er, hinten pickt er, Stück vor'n Silberjroschen!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spazierhölzer",
+    "translations": [
+      "Beine"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spazifizieren",
+    "translations": [
+      "spazieren gehen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Speck, ick habe wol Speck in de Tasche",
+    "translations": [
+      "wenn einer einem nicht von der Pelle geht"
+    ],
+    "examples": [
+      {
+        "example": "Adchee, Speck! Jrüß Schinken!",
+        "explanation": ""
+      },
+      {
+        "example": "Uf den Speck jeht er nich!",
+        "explanation": "darauf fällt er nicht rein"
+      },
+      {
+        "example": "Immer ran an Speck!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spektakel",
+    "translations": [
+      "Lärm"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Speiseanstalt, halten Se Ihre Speiseanstalt",
+    "translations": [
+      "Mund"
+    ],
+    "alternativeWords": [
+      "Speiserihe"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spendieren, er hat de Spendierhosen an",
+    "translations": [
+      "schenken, freihalten"
+    ],
+    "alternativeWords": [
+      "spendabel"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spene, mach man keene Spene",
+    "translations": [
+      "Quangeleien"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sperlingskopp",
+    "translations": [
+      "schlechtes Gedächtnis"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sperspektive",
+    "translations": [
+      "Perspektive"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sperrenzken",
+    "translations": [
+      "Umstände, Ausflüchte"
+    ],
+    "alternativeWords": [
+      "Sparrenzken"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spiejel, den steckt er sich nich hinter 'n Spiejel",
+    "translations": [
+      "so grob ist er geschrieben (vom Brief)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spielratze",
+    "translations": [
+      "spielerisches Kind",
+      "eifriger Spieler (auch Erwachsene)"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spiernesig",
+    "translations": [
+      "unverschämt aushorchend"
+    ],
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spinatwachtel, sie olle Spinatwachtel",
+    "translations": [
+      "wie alte Schachtel"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spinde",
+    "translations": [
+      "Schrank"
+    ],
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spines, 'n recht spineset Frauenzimmer",
+    "translations": [
+      "spitz im Reden (spinös)"
+    ],
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spinnewebe",
+    "translations": [
+      "Spinngewebe"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spiritus is auch 'n Nahrungsmittel",
+    "translations": [
+      "scherzhafte Übersetzung von „Nutrimentum spiritus“"
+    ],
+    "infoText": "Anspielung auf die Inschrift der Königlichen Bibliothek.",
+    "examples": [
+      {
+        "example": "Aha, wetterst wat, Spiritus?",
+        "explanation": "wenn man etwas merkt, Lunte riecht"
+      }
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spirrfix",
+    "translations": [
+      "kleiner, schwächlicher Mensch"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spitzen, sich",
+    "translations": [
+      "auf etwas Gutes rechnen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spitznesig",
+    "translations": [
+      "anzüglich"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Splinter, den Splinter ha'k mir injerissen",
+    "translations": [
+      "Splitter"
+    ],
+    "infoText": "Ein Holzhauer bringt Muttern eine annektierte Kloben Holz mit und sagt diesen Satz.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sponsade",
+    "translations": [
+      "Liebesverhältnis"
+    ],
+    "themen": [
+      "beziehungen-soziales"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sprechanismus",
+    "translations": [
+      "Mundwerk"
+    ],
+    "alternativeWords": [
+      "Sprechmatismus"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spreewasser, ick bin doch ooch mit Spreewasser jedooft",
+    "translations": [
+      "in Berlin geboren, also intelligent"
+    ],
+    "themen": [
+      "stadtleben"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sprengsel",
+    "translations": [
+      "Zikade, Heuschrecke"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Springebock",
+    "translations": [
+      "Brustknochen der Gans"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sprünge, eenen uf de Sprünge helfen",
+    "translations": [
+      "wie uf'n Drab bringen"
+    ],
+    "examples": [
+      {
+        "example": "Jroße Sprünge kann er nich machen.",
+        "explanation": "auf großem Fuß kann er nicht leben"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spruten",
+    "translations": [
+      "Frühjahrssprossen des Grünkohls"
+    ],
+    "alternativeWords": [
+      "Sprutenkohl"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spucke, nüchterne Spucke klebt",
+    "translations": [
+      "Speichel"
+    ],
+    "infoText": "Es ist ein alter Glaube, dass nüchterne Spucke klebt.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spucken, er spuckt de Schwäne uf de Koppe",
+    "translations": [
+      "er hat nichts zu tun, ist brotlos"
+    ],
+    "examples": [
+      {
+        "example": "Spuck'n doch uf de Stiebeln!",
+        "explanation": "lass dir nichts von ihm gefallen"
+      },
+      {
+        "example": "Ick spuck dir in de Oogen, dette wegschwimmst!",
+        "explanation": ""
+      },
+      {
+        "example": "Aber der hat jespuckt!",
+        "explanation": "wild, zornig sein"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spucklocken",
+    "translations": [
+      "anklebende Söckchen an der Seite des Kopfes"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Spuk, jlooben Se doch nich an Spuk",
+    "translations": [
+      "wenn man einem etwas Unwahrscheinliches ausreden will"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sputen, sich",
+    "translations": [
+      "sich beeilen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Staat, det is 'n wahrer Staat",
+    "translations": [
+      "Putz, sehr prächtig"
+    ],
+    "alternativeWords": [
+      "Staat machen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Staatsch, 'n jroßet, staatschet Meechen",
+    "translations": [
+      "stattlich"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stadtbahn, du bist wol von de Stadtbahn überjefahren",
+    "translations": [
+      "du bist wohl verdreht?"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stänkern",
+    "translations": [
+      "Zwist säen"
+    ],
+    "alternativeWords": [
+      "Stänker",
+      "Stänkerei",
+      "stänkerig",
+      "Stänkerbock"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stafelstein",
+    "translations": [
+      "Tafelstein (Griffel)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stall",
+    "translations": [
+      "Schule (Schulausdruck)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stammern",
+    "translations": [
+      "stottern"
+    ],
+    "alternativeWords": [
+      "Stammerbock",
+      "Stammerfritze"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Standpauke",
+    "translations": [
+      "ermahnende Anrede"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stantepee",
+    "translations": [
+      "sofort"
+    ],
+    "infoText": "Vom lateinischen „stante pede“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stapeln",
+    "translations": [
+      "gehen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Station, Station Freienfelde",
+    "translations": [
+      "scherzhafter Ruf, wenn der Zug auf der Strecke hält"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Starniksel",
+    "translations": [
+      "Schlag ins Genick"
+    ],
+    "alternativeWords": [
+      "Sterniksel"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Statzen",
+    "translations": [
+      "wie Atzen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Staubdumm",
+    "translations": [
+      "scherzhaft für taubstumm"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Staubfrei, wenn sich einer ausführlich schnauzt",
+    "translations": [
+      "scherzhafter Ausruf beim ausgiebigen Naseputzen"
+    ],
+    "examples": [
+      {
+        "example": "Staubfreie (Müllabfuhr)!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Staute",
+    "translations": [
+      "Schläge"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Steckerig, die Kohlrabi wern schon steckerig",
+    "translations": [
+      "holzig"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Steen, lieber Steene kloppen",
+    "translations": [
+      "Stein"
+    ],
+    "examples": [
+      {
+        "example": "Wo ha'm wir denn schon mal zusamm' Steene jekloppt?",
+        "explanation": "wenn man unerwarteter Weise geduzt wird"
+      }
+    ],
+    "alternativeWords": [
+      "Steenerkens"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stehldieb, oller Stehldieb",
+    "translations": [
+      "Dieb (nur im Scherz)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stehsitz",
+    "translations": [
+      "Stehplatz"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stehuf",
+    "translations": [
+      "Spielzeug: kleine Figur, die sich aufrichtet, wenn man sie hinlegt"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Steiern, er hat uns jesteiert",
+    "translations": [
+      "in der Miete gesteigert"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Steijen, woll'n Se schon wieder steijen",
+    "translations": [
+      "weggehen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stekerling",
+    "translations": [
+      "kleines Stück, das übrig bleibt"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stekern",
+    "translations": [
+      "wie petern, besonders mit Stangen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stengel, er fiel von' Stengel",
+    "translations": [
+      "er war sehr erstaunt"
+    ],
+    "examples": [
+      {
+        "example": "Fall nich von' Stengel!",
+        "explanation": "bleibe gefasst"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stenzen",
+    "translations": [
+      "einem Vernunft beibringen, ihn überreden",
+      "von der Schule wegjagen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stephan",
+    "translations": [
+      "Briefträger"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stepsel",
+    "translations": [
+      "Stöpsel",
+      "kleiner Mensch, Kind"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sternanis un Kümmel",
+    "translations": [
+      "Fluch"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sternhagel, sternhagelvoll besoffen",
+    "translations": [
+      "sehr betrunken"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sternkieker",
+    "translations": [
+      "Astronom",
+      "Mensch, der mit erhobenem Kopf geht"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stick",
+    "translations": [
+      "Stück",
+      "Frauenzimmer"
+    ],
+    "examples": [
+      {
+        "example": "Ooch so'n Sticke Malerjehilfe.",
+        "explanation": "auch ein Maler u. Ä."
+      }
+    ],
+    "alternativeWords": [
+      "'n Stick Unjlück"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sticken, ick sticke ja reeneweg",
+    "translations": [
+      "ersticken"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stiebel, dein Stiebel hat Hunger",
+    "translations": [
+      "Stiefel, Stil (idiomatisches Cluster)"
+    ],
+    "examples": [
+      {
+        "example": "In die Stiebeln kann eener in' Stehn sterben.",
+        "explanation": ""
+      },
+      {
+        "example": "Der schreibt 'n juten Stiebel zusamm.",
+        "explanation": "Stil"
+      },
+      {
+        "example": "In een' Stiebel.",
+        "explanation": "auf einmal, ohne Unterbrechung"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stiebeln",
+    "translations": [
+      "gehen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stiebelsohlen, det looft man sich ja an de Stiebelsohlen ab",
+    "translations": [
+      "was die Fahrgelegenheit kostet"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stiebelwichse, er frißt keene Stiebelwichse",
+    "translations": [
+      "idiomatischer Vergleich, dass jemand kein guter Kerl ist"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stiefliebste",
+    "translations": [
+      "scherzhaft: Nebengeliebte"
+    ],
+    "themen": [
+      "beziehungen-soziales"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stiesel, so'n richtijer Stiesel",
+    "translations": [
+      "früher: Dummkopf, jetzt: ungebildeter, ungesitteter Mensch"
+    ],
+    "alternativeWords": [
+      "stieselig"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stieze",
+    "translations": [
+      "Stange mit Zinken zum Stützen der Waschleine",
+      "langer Mensch"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stiezen, de Wäsche ufstiezen",
+    "translations": [
+      "stützen"
+    ],
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stiezig",
+    "translations": [
+      "wie langstiezig"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stift, Kautabak",
+    "translations": [
+      "Lehrling, auch Sohn",
+      "Kautabak"
+    ],
+    "alternativeWords": [
+      "stiften"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stimmen, stimmt uffallend",
+    "translations": [
+      "Zustimmungsformel"
+    ],
+    "examples": [
+      {
+        "example": "Sie, det stimmt wol nich?",
+        "explanation": "sagen die Droschkenkutscher, wenn sie mit der Bezahlung nicht zufrieden sind"
+      },
+      {
+        "example": "Stimmt, Schulze; krist'n Sechser wieder!",
+        "explanation": "du hast recht (bei Geldgeschäften)"
+      }
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stinkbolzen, ick muß mir erst 'n Stinkbolzen in de Fresse rammeln",
+    "translations": [
+      "Zigarre"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stinken, stinken Se mal, wie det riecht",
+    "translations": [
+      "scherzhafte Umkehrung von riechen"
+    ],
+    "alternativeWords": [
+      "erstunken un erlogen"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stinkdroschke",
+    "translations": [
+      "Automobil"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stint, er is verliebt wie'n Stint",
+    "translations": [
+      "idiomatischer Vergleich"
+    ],
+    "examples": [
+      {
+        "example": "Er is besoffen wie'n Stint.",
+        "explanation": "stintmäßig besoffen"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stippe",
+    "translations": [
+      "Sauce"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stippsvisite",
+    "translations": [
+      "kurzer Besuch"
+    ],
+    "examples": [
+      {
+        "example": "Uf'n Stipps besuchen.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stooben, et stoobt hier",
+    "translations": [
+      "es gibt nichts zu trinken"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stoobig, stoobije Brüder",
+    "translations": [
+      "ärmlich, elend"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stoppevoll",
+    "translations": [
+      "gepfropft voll"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Storch, er jeht wie der Storch in' Salat",
+    "translations": [
+      "idiomatischer Gang-Vergleich"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Storchnest",
+    "translations": [
+      "süßes Gebäck"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Storre",
+    "translations": [
+      "widerspenstig, z. B. von Haaren"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stoßen, stoß dir man nich",
+    "translations": [
+      "verrechne dich nicht"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stoßer",
+    "translations": [
+      "Habicht"
+    ],
+    "alternativeWords": [
+      "Stoßvogel"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stoßkante",
+    "translations": [
+      "Schmutzrand an Frauenkleidern"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stottern, stottern Sie immer",
+    "translations": [
+      "Anekdote über einen stotternden Kutscher"
+    ],
+    "infoText": "Auf die Frage antwortet er: „N—n—nee ... bloß, wenn ick spreche.“",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strahl, er red 'n bedeutenden Strahl",
+    "translations": [
+      "er redet viel und anspruchsvoll"
+    ],
+    "alternativeWords": [
+      "'n jebildten Strahl"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strambulstrig",
+    "translations": [
+      "aufgeblasen"
+    ],
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strampeln",
+    "translations": [
+      "die Beine heftig bewegen",
+      "radeln"
+    ],
+    "alternativeWords": [
+      "Strampelfritze"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strapzieren, strapzier dir de Kehle nich so",
+    "translations": [
+      "anstrengen, beschädigen"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Straßenjunge, benehme dir nich wie 'n Straßenjunge",
+    "translations": [
+      "Gassenjunge"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strebern",
+    "translations": [
+      "fleißig sein (Schülerwort)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Streen, jejen 'n Streen schneiden",
+    "translations": [
+      "gegen den Strich"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Streene",
+    "translations": [
+      "zusammengeflochtenes Garn"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Streichbalken",
+    "translations": [
+      "Streichholz"
+    ],
+    "alternativeWords": [
+      "Streichbolzen",
+      "Streichboom"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Streithammel",
+    "translations": [
+      "streitsüchtiger Mensch"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stremel, 'n Stremel reden",
+    "translations": [
+      "langer Streifen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stremmen",
+    "translations": [
+      "stehlen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strich, den hab ick uf'n Strich",
+    "translations": [
+      "kleine Verrücktheit",
+      "ich habe einen Groll gegen ihn"
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stricke machen",
+    "translations": [
+      "streiken (die Arbeit einstellen)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stricken, einjestochen, umjeschlagen, durchjezogen, abjetippt",
+    "translations": [
+      "Kinderreim beim Stricken"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stritte, scherzhaft für stille",
+    "translations": [
+      "stille (scherzhafte Verballhornung)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strippe, na, nu reißt wol de Strippe",
+    "translations": [
+      "Bindfaden (idiomatisches Cluster)"
+    ],
+    "examples": [
+      {
+        "example": "Er hat se alle an de Strippe.",
+        "explanation": "alle tun was er will, vom Puppentheater"
+      },
+      {
+        "example": "Strippe mit Jewehr über.",
+        "explanation": "Weiße mit Pomeranzen"
+      },
+      {
+        "example": "Et rejent Strippen.",
+        "explanation": "man sieht die Striche der einzelnen Tropfen"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strippenjungs",
+    "translations": [
+      "Husaren"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strohkopp",
+    "translations": [
+      "Dummkopf"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strohwitwer",
+    "translations": [
+      "ein Mann, dessen Frau verreist ist"
+    ],
+    "themen": [
+      "beziehungen-soziales"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strolchen",
+    "translations": [
+      "streifen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stromer",
+    "translations": [
+      "Landstreicher, Strolch"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strubbelig",
+    "translations": [
+      "struppig"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strump, ick wer mir sachte uf de Strümpe machen",
+    "translations": [
+      "ich werde gehen"
+    ],
+    "examples": [
+      {
+        "example": "Wat hat'n Ihre Flamme vor Strümpe?",
+        "explanation": "doppelsinnige Frage: Glühstrümpfe"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Strumpenband",
+    "translations": [
+      "Strumpfband"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stubenbohner, der Stubenbohner Franz, der kann's",
+    "translations": [
+      "scherzhaftes Zitat"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stuckern, vom Wagen",
+    "translations": [
+      "stoßen"
+    ],
+    "infoText": "Alter Scherz: „Det is merkwürdig! Wenn man bei den Wagen so nebenherlooft, denn stuckert et ville wenijer.“",
+    "alternativeWords": [
+      "stuckerig"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Studentenfutter",
+    "translations": [
+      "Rosinen und Mandeln"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Studentenpomade",
+    "translations": [
+      "Wasser (scherzhaft)"
+    ],
+    "alternativeWords": [
+      "Studentenwichse"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stürze",
+    "translations": [
+      "Deckel zum Kochtopf"
+    ],
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stuten, hart aufstoßen",
+    "translations": [
+      "hart aufstoßen (stauchen)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stulle, Klappstulle",
+    "translations": [
+      "Butterstulle, Butterbrot"
+    ],
+    "examples": [
+      {
+        "example": "'ne Stulle schmieren.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stummel, der Stummel von Portorico",
+    "translations": [
+      "Ende einer Zigarre, eines Lichts, Stumpf eines Zahns; auch kurze Pfeife"
+    ],
+    "infoText": "Scherzhaft für „die Stumme von Portici“.",
+    "alternativeWords": [
+      "Stummelquäler",
+      "Stummelsucher",
+      "Stummelroocher"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stunkladen",
+    "translations": [
+      "niedere Kneipe mit Musik"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stupsen",
+    "translations": [
+      "gelinde stoßen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stupsnese",
+    "translations": [
+      "unten stumpfwinklige Nase"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sturm, er is in Sturm",
+    "translations": [
+      "betrunken"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Stutterbulle",
+    "translations": [
+      "verdreht aus Butterstulle mit Käse"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sublaternheamter",
+    "translations": [
+      "Subalternbeamter (Verballhornung)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Süffel",
+    "translations": [
+      "Säufer"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Süffig",
+    "translations": [
+      "leicht und angenehm zu trinken"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Süß, Ausruf der Bewunderung",
+    "translations": [
+      "Ausruf der Bewunderung bei „höheren Töchtern“"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Süßholz raspeln",
+    "translations": [
+      "Damen den Hof machen"
+    ],
+    "themen": [
+      "beziehungen-soziales"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Suff, stiller Suff",
+    "translations": [
+      "Trunksucht"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Sumpfen, 'n Sumpfhuhn",
+    "translations": [
+      "liederlich leben (studentisch)"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Suppengrünes",
+    "translations": [
+      "Sellerie, Petersilienwurzel u. dgl."
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Suse",
+    "translations": [
+      "langsamer, träger Mensch"
+    ],
+    "alternativeWords": [
+      "susig"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

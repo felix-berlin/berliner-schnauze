@@ -16,7 +16,6 @@ const makeState = (overrides: Partial<ReturnType<typeof useNotificationSettings>
   pushSupported: true,
   requestNotificationPermission: mockRequestNotificationPermission,
   showPushSection: computed(() => false),
-  showRevokeHint: ref(false),
   togglePush: mockTogglePush,
   vapidConfigured: true,
   ...overrides,
@@ -165,7 +164,7 @@ describe("AppSettingsNotifications.vue", () => {
     expect(wrapper.text()).toContain("Benachrichtigungen deaktivieren");
   });
 
-  it("clicking revoke button toggles showRevokeHint (covers line 64)", async () => {
+  it("clicking revoke button shows the revoke hint", async () => {
     mockedUseNotificationSettings.mockReturnValue(
       makeState({ notificationPermission: ref("granted") }) as ReturnType<
         typeof useNotificationSettings
@@ -176,18 +175,6 @@ describe("AppSettingsNotifications.vue", () => {
     expect(revokeBtn.exists()).toBe(true);
     await revokeBtn.trigger("click");
     await wrapper.vm.$nextTick();
-    expect(wrapper.text()).toContain("Schloss-Symbol");
-  });
-
-  it("shows revoke hint text when showRevokeHint is true", async () => {
-    const revokeRef = ref(true);
-    mockedUseNotificationSettings.mockReturnValue(
-      makeState({
-        notificationPermission: ref("granted"),
-        showRevokeHint: revokeRef,
-      }) as ReturnType<typeof useNotificationSettings>,
-    );
-    const wrapper = mount(AppSettingsNotifications);
     expect(wrapper.text()).toContain("Schloss-Symbol");
   });
 });

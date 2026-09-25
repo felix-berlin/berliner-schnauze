@@ -1,0 +1,2382 @@
+[
+  {
+    "word": "Haare",
+    "translations": [
+      "schlau und nicht auf den Mund gefallen sein"
+    ],
+    "examples": [
+      {
+        "example": "Der hat Haare uf de Zehne.",
+        "explanation": "er ist schlau und nicht auf den Mund gefallen"
+      },
+      {
+        "example": "Drei Haare in sieben Reihen!",
+        "explanation": "von einem dünnen Schnurrbart"
+      }
+    ],
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Haarig",
+    "translations": [
+      "höchst komisch",
+      "großartiger Mensch",
+      "sehr (Adverb)"
+    ],
+    "examples": [
+      {
+        "example": "Det Ding wa haarig.",
+        "explanation": "höchst komisch"
+      },
+      {
+        "example": "'n haarijer Kerl.",
+        "explanation": "anerkennend: ein großartiger Mensch"
+      },
+      {
+        "example": "Wir war'n alle haarig besoffen.",
+        "explanation": ""
+      }
+    ],
+    "infoText": "„Der haarije Mann“ war ein Spielzeug auf dem Weihnachtsmarkt; die Verkäufer riefen: „Haarig is der Mann!“",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Haben",
+    "translations": [
+      "die Sache ist schon gemacht",
+      "sich zieren, ängstlich tun"
+    ],
+    "examples": [
+      {
+        "example": "Hat sich wat!",
+        "explanation": "wie „Is nich!“"
+      },
+      {
+        "example": "Hat ihm schon!",
+        "explanation": "die Sache ist schon gemacht"
+      },
+      {
+        "example": "Wer nich will, der hat schon!",
+        "explanation": ""
+      }
+    ],
+    "infoText": "„Sich haben“ = sich zieren, ängstlich tun, sich aufregen: „Jott, hab da man nich!“",
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Haber",
+    "translations": [
+      "Schläge"
+    ],
+    "examples": [
+      {
+        "example": "Et jibt langen Haber.",
+        "explanation": "Schläge"
+      }
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Haberig",
+    "translations": [
+      "von einem, der sich sehr fürchtet/aufregt"
+    ],
+    "examples": [
+      {
+        "example": "Mautä is sonst nich haberig, aber wenn se 'ne Spinne sieht —!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hanschuh",
+    "translations": [
+      "Handschuh"
+    ],
+    "examples": [
+      {
+        "example": "'s mein' Vater janz recht, det mir de Fingern verfrieren; warum kooft er ma keene Hanschuh!",
+        "explanation": "aus den Berliner Witzen"
+      }
+    ],
+    "infoText": "„Hanschuhnummer 13“ scherzhaft für große Hände.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Happen",
+    "translations": [
+      "Bissen",
+      "verdreht/verrückt sein"
+    ],
+    "examples": [
+      {
+        "example": "Er zehlt eenen de Happen in' Mund.",
+        "explanation": "er sieht gierig zu, wie man isst"
+      },
+      {
+        "example": "Sie sind wol 'n Happen weg?",
+        "explanation": "Sie sind wohl verdreht?"
+      }
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Harung",
+    "translations": [
+      "Hering (Studentensprache)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hase",
+    "translations": [
+      "ich weiß von nichts (Redewendung)",
+      "Kosewort"
+    ],
+    "examples": [
+      {
+        "example": "Mein Name is Hase, ich weeß von janischt!",
+        "explanation": ""
+      },
+      {
+        "example": "Mein Haseken.",
+        "explanation": "Kosewort"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hasenjagd",
+    "translations": [
+      "es geht zu hastig"
+    ],
+    "examples": [
+      {
+        "example": "Det is de reene Hasenjagd.",
+        "explanation": "es geht zu hastig"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hauen, ehr ick mir hauen lasse",
+    "translations": [
+      "lieber nachgeben als sich schlagen lassen"
+    ],
+    "examples": [
+      {
+        "example": "Ehr ick mir hauen lasse —!",
+        "explanation": "will ich lieber nachgeben, z. B. bei einer ungeliebten Einladung"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Haupthahn",
+    "translations": [
+      "einer der Tätigsten (Studentensprache)"
+    ],
+    "examples": [
+      {
+        "example": "Es is 'n Haupthahn bei die Jeschichte.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hauptjebäude",
+    "translations": [
+      "an den Kopf"
+    ],
+    "examples": [
+      {
+        "example": "Du kriest eens uf's Hauptjebäude!",
+        "explanation": "an den Kopf"
+      }
+    ],
+    "themen": [
+      "koerper",
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hauptkerl",
+    "translations": [
+      "Schlaukopf (ironisch)"
+    ],
+    "examples": [
+      {
+        "example": "Du bist 'n Hauptkerl!",
+        "explanation": "ironisch"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hauptmucker",
+    "translations": [
+      "Anführer, Macher"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hauptsache",
+    "translations": [
+      "Hauptsache, das Kind hat Luft"
+    ],
+    "examples": [
+      {
+        "example": "Hauptsache, det 't Kind Luft hat.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hauptspaß",
+    "translations": [
+      "großer Spaß"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Haus, laß dir kämmen",
+    "translations": [
+      "drohende Formel"
+    ],
+    "examples": [
+      {
+        "example": "Ick zu Hause, laß dir kämmen!",
+        "explanation": "drohend"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hausknecht, von sein' Hausknecht Gebrauch machen",
+    "translations": [
+      "ihn hinauswerfen lassen"
+    ],
+    "examples": [
+      {
+        "example": "Er hat von sein' Hausknecht Jebrauch jemacht.",
+        "explanation": "von seinem Hausrecht: er hat ihn hinauswerfen lassen"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hausmöbel",
+    "translations": [
+      "alter Diener, Factotum"
+    ],
+    "examples": [
+      {
+        "example": "so'n olles Hausmöbel",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Haute wolaute",
+    "translations": [
+      "scherzhafte Verballhornung von haute volée"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heben, eenen",
+    "translations": [
+      "einen (Schnaps) trinken"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hebestelle",
+    "translations": [
+      "Schenke an der Landstraße"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hebräisch, meine Uhr lernt",
+    "translations": [
+      "sie ist versetzt (Wortspiel)"
+    ],
+    "examples": [
+      {
+        "example": "Meine Uhr lernt hebräisch.",
+        "explanation": "sie ist versetzt (im Pfandhaus)"
+      }
+    ],
+    "themen": [
+      "geld",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heeßen",
+    "translations": [
+      "Vater korrigiert Berlinisch des Sohnes (Anekdote)"
+    ],
+    "examples": [
+      {
+        "example": "Heeßen heeßt et nich; heißen heeßt et.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heft",
+    "translations": [
+      "ironisch von einem Menschen"
+    ],
+    "examples": [
+      {
+        "example": "'n nettet Heft!",
+        "explanation": "ironisch, wie „'ne nette Flanze!“"
+      },
+      {
+        "example": "Verricktet Heft!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heiden",
+    "translations": [
+      "verstärkender Zusatz"
+    ],
+    "examples": [
+      {
+        "example": "Heidenblödsinn",
+        "explanation": ""
+      },
+      {
+        "example": "Heidenjeld",
+        "explanation": ""
+      },
+      {
+        "example": "Heidenulk",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heidi jjehn",
+    "translations": [
+      "verloren gehen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heil, alles heil",
+    "translations": [
+      "scherzhafter Zuruf an Radfahrer"
+    ],
+    "examples": [
+      {
+        "example": "Alles heil?",
+        "explanation": "scherzhaft für „Alle Heil“"
+      }
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heilig, da kannste dir heilig druf verlassen",
+    "translations": [
+      "darauf kannst du dich sicher verlassen"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heimlich, Kriminalbeamter",
+    "translations": [
+      "durchtrieben",
+      "Kriminalbeamter in Zivil"
+    ],
+    "examples": [
+      {
+        "example": "Det is so 'n Heimlicher!",
+        "explanation": "durchtrieben; auch: Kriminalbeamter in Zivil"
+      }
+    ],
+    "themen": [
+      "charakter-eigenschaften",
+      "stadtleben"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Held, du bist mir 'n scheener Held",
+    "translations": [
+      "ironischer Tadel"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Helfen, dir wer'k helfen",
+    "translations": [
+      "drohende Formel"
+    ],
+    "examples": [
+      {
+        "example": "Warte, dir wer'k helfen!",
+        "explanation": "drohend"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heljoland",
+    "translations": [
+      "Aufmunterung zur Arbeit (Wortspiel)"
+    ],
+    "examples": [
+      {
+        "example": "Immer Heljoland!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Helling",
+    "translations": [
+      "Semmelhälfte"
+    ],
+    "infoText": "Eine Semmel besteht aus zwei Teilen, die Helling(e) heißen.",
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hemde, der hat keen Hemde an",
+    "translations": [
+      "Schulhänselei"
+    ],
+    "examples": [
+      {
+        "example": "Der hat keen Hemde an!",
+        "explanation": "höhnisch, mit dem Finger auf den anderen weisend — gemeint ist der Zeigefinger"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hemdenmatz",
+    "translations": [
+      "kleines Kind"
+    ],
+    "alternativeWords": [
+      "Hosenmatz"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Herein, ruft man",
+    "translations": [
+      "Ausruf, wenn etwas mit Geräusch fällt"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hering, mager wie'n",
+    "translations": [
+      "mager, verrückt"
+    ],
+    "examples": [
+      {
+        "example": "Mager wie 'n ausjenommner Hering.",
+        "explanation": ""
+      },
+      {
+        "example": "'n wahnsinnjer Hering.",
+        "explanation": "von Menschen"
+      }
+    ],
+    "infoText": "Als scherzhaftes Leibgericht wird genannt: „Saurer Hering mit Schlagsahne“.",
+    "themen": [
+      "koerper",
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heringskopp",
+    "translations": [
+      "Ladendiener im Kolonialwarengeschäft"
+    ],
+    "alternativeWords": [
+      "Heringsbändijer"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Herr, sieh dein Volk an",
+    "translations": [
+      "scherzhaftes Zitat",
+      "Grußformel"
+    ],
+    "examples": [
+      {
+        "example": "Herr, sieh dein Volk an — lauter Zijeiner!",
+        "explanation": ""
+      },
+      {
+        "example": "Morjen, die Herrn!",
+        "explanation": "Grußformel"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Herr Je",
+    "translations": [
+      "Ausrufe der Verwunderung"
+    ],
+    "alternativeWords": [
+      "Ach Herr Je Herr Je",
+      "Ach Herr Jemine",
+      "Ach Herr Jemersch nee"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Herrchen",
+    "translations": [
+      "Anrede des Hundebesitzers an seinen Hund"
+    ],
+    "alternativeWords": [
+      "Frauchen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Herrenwinker",
+    "translations": [
+      "angeklebte Söckchen an den Schläfen (bei Damen)"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Herrjott, 'n steiwer",
+    "translations": [
+      "ein steifer Mensch"
+    ],
+    "examples": [
+      {
+        "example": "'n steiwer (hölzerner) Herrjott.",
+        "explanation": "ein steifer Mensch"
+      }
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hete",
+    "translations": [
+      "Hedwig"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hetscheln",
+    "translations": [
+      "hegen und pflegen, liebkosen"
+    ],
+    "alternativeWords": [
+      "tetscheln"
+    ],
+    "themen": [
+      "beziehungen-soziales"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hetze",
+    "translations": [
+      "Menge"
+    ],
+    "examples": [
+      {
+        "example": "Der hat 'ne janze Hetze.",
+        "explanation": "z. B. Kinder"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hetzen, ick will nich hetzen",
+    "translations": [
+      "ich will nicht hetzen, aber..."
+    ],
+    "examples": [
+      {
+        "example": "Ick will nich hetzen, aber — ks, ks!",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heu, er hat Jeld wie",
+    "translations": [
+      "viel Geld haben"
+    ],
+    "examples": [
+      {
+        "example": "Er hat Jeld wie Heu.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heuochse",
+    "translations": [
+      "Schimpfwort"
+    ],
+    "alternativeWords": [
+      "Heuferd"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heute mir, morjen jestern",
+    "translations": [
+      "alter Unsinnsspruch"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Heuwagen, da kann ooch 'n",
+    "translations": [
+      "wenn einer gähnt (Redewendung)"
+    ],
+    "examples": [
+      {
+        "example": "Da kann ooch 'n Heuwagen rinfahren.",
+        "explanation": "wenn einer gähnt"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hieb",
+    "translations": [
+      "Schluck",
+      "kleiner Rausch"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hierher, det ha'k bis hierher",
+    "translations": [
+      "es ist mir zum Ekel"
+    ],
+    "examples": [
+      {
+        "example": "Det ha'k bis hierher.",
+        "explanation": "wobei die rechte Hand bis an den Hals erhoben wird"
+      }
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Himmel, haste keene Flinte",
+    "translations": [
+      "Bittformel um Geld"
+    ],
+    "examples": [
+      {
+        "example": "Himmel, haste keene Flinte? Schieß mir mal acht Jroschen vor!",
+        "explanation": ""
+      },
+      {
+        "example": "Himmel un Menschen!",
+        "explanation": "weiter sah man im Gedränge nichts"
+      }
+    ],
+    "themen": [
+      "geld",
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Himmelfahrtsnese",
+    "translations": [
+      "Stubsnase"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Himmelfahrtsschlips",
+    "translations": [
+      "über den Kragen hinaufgerutschter Schlips"
+    ],
+    "examples": [
+      {
+        "example": "Mensch, wenn de keenen Kopp hältst, wurdste jetz'n Schlips verlieren!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hinbringen, ick weeß nich, wo ick hinbringen soll",
+    "translations": [
+      "sich nicht erinnern können, woher man jemanden kennt"
+    ],
+    "examples": [
+      {
+        "example": "Ick weeß 'n Oogenblick nich, wo ick 'n hinbringen soll.",
+        "explanation": "ich kann mich nicht erinnern, woher ich ihn kenne"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hinkeldei",
+    "translations": [
+      "einer, der hinkt"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hinterblieben",
+    "translations": [
+      "scherzhaftes Mitleid mit den Hinterbliebenen"
+    ],
+    "examples": [
+      {
+        "example": "Det is traurig vor de Hinterbliebnen.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hinterher, er is furchbar hinterher",
+    "translations": [
+      "sehr eifrig"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hinterjestell",
+    "translations": [
+      "das dauert lange (Redewendung)"
+    ],
+    "examples": [
+      {
+        "example": "Mensch, hast du 'n Hinterjestell!",
+        "explanation": "das dauert lange"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hinüber",
+    "translations": [
+      "kaputt"
+    ],
+    "examples": [
+      {
+        "example": "Det is hinüber.",
+        "explanation": "wie kaputt"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hippeln",
+    "translations": [
+      "hüpfen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hitze, na bei die Hitze",
+    "translations": [
+      "Vorwand, wenn man etwas nicht tun will"
+    ],
+    "examples": [
+      {
+        "example": "Na bei die Hitze!",
+        "explanation": "besonders als Vorwand, wenn man etwas nicht tun will"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hoch, hochjelegen",
+    "translations": [
+      "gestohlen sein (Verdacht)",
+      "übervorteilen",
+      "Gymnasium (spöttisch)"
+    ],
+    "examples": [
+      {
+        "example": "Det hat wol hoch jelejen?",
+        "explanation": "wenn einer etwas Hübsches zeigt, aber der Verdacht besteht, dass es gestohlen ist"
+      }
+    ],
+    "infoText": "„Hoch nehmen“ = übervorteilen. „Hohe Schule“ nennen das Gymnasium jene, die ihm fernstehen. „'ne höhere Tochter“, von „höhere Töchterschule“ abgeleitet.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hochnesig",
+    "translations": [
+      "stolz"
+    ],
+    "themen": [
+      "charakter-eigenschaften"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hökersche",
+    "translations": [
+      "Obstfrau (übertrieben höflich behandelt)"
+    ],
+    "examples": [
+      {
+        "example": "Zu den muß man 'nehm Se mal' sagen.",
+        "explanation": "er verlangt eine sehr höfliche Behandlung"
+      }
+    ],
+    "themen": [
+      "stadtleben"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hof, uf meinen Hof",
+    "translations": [
+      "scherzhafte Abweisung eines Musizierenden"
+    ],
+    "examples": [
+      {
+        "example": "Uf meinen Hof darfste aber nich kommen.",
+        "explanation": "sagt man boshaft zu einem, der Musik machen will"
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hoffen, hoffen wir das Beste",
+    "translations": [
+      "ironische Beruhigungsformel"
+    ],
+    "examples": [
+      {
+        "example": "Hoffen wir das Beste, lieber Leser! 't Schlechte kommt von alleene.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hohlkoppe",
+    "translations": [
+      "Kuchenhülle für Schlagsahne"
+    ],
+    "alternativeWords": [
+      "Hohlippe"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hoiappen",
+    "translations": [
+      "gähnen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hont",
+    "translations": [
+      "Honig (Straßenhändler-Ruf)"
+    ],
+    "examples": [
+      {
+        "example": "Honi, honi, scheenen Blietenhoni!",
+        "explanation": "Ruf der Straßenhändler mit eigentümlichem Tonfall"
+      }
+    ],
+    "themen": [
+      "stadtleben",
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Honig, an de Backe schmieren",
+    "translations": [
+      "schmeicheln"
+    ],
+    "examples": [
+      {
+        "example": "Er schmiert 'n Honig an de Backe.",
+        "explanation": "er schmeichelt ihm"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Holterdiepolter",
+    "translations": [
+      "Bezeichnung eines dumpf polternden Geräuschs"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Holze",
+    "translations": [
+      "Schläge"
+    ],
+    "examples": [
+      {
+        "example": "Kellerei muss sind, Holze muß et jeben!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Honecken",
+    "translations": [
+      "verhöhnen"
+    ],
+    "alternativeWords": [
+      "honepeln",
+      "honepiepeln",
+      "verhonepiepeln"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hoppeikens",
+    "translations": [
+      "Sachen, Habseligkeiten"
+    ],
+    "examples": [
+      {
+        "example": "Er nimmt seine janzen Hoppeikens mit.",
+        "explanation": "z. B. von einem, der abreist"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hoppelpoppeln",
+    "translations": [
+      "Gemisch aus Eiern und Zucker (zum Geschmeidigmachen der Kehle)"
+    ],
+    "infoText": "Auch ein Gemisch aus Fleisch, Rühreiern und Kartoffeln.",
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hoppenstang",
+    "translations": [
+      "langer Mensch"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hoppewahre",
+    "translations": [
+      "Gott bewahre!"
+    ],
+    "alternativeWords": [
+      "Hotteken"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hopla",
+    "translations": [
+      "Interjektion beim Stolpern"
+    ],
+    "alternativeWords": [
+      "hopsa"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hopjehn",
+    "translations": [
+      "bankrott werden",
+      "sterben"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hopsen",
+    "translations": [
+      "hüpfen, springen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hopser",
+    "translations": [
+      "ein Hopser ist kein Walzer (Redewendung)"
+    ],
+    "examples": [
+      {
+        "example": "'n Hopser is keen Walzer.",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Der deutsche Walzer hatte sechs Takte; man tanzte ihn aber auch so, dass man abwechselnd mit jedem Fuß zwei Sprünge machte, ungleich lang — das war der „Hopser“.",
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Horchen, horch mal zu",
+    "translations": [
+      "hören (dialektal)"
+    ],
+    "examples": [
+      {
+        "example": "Horch mal zu, ick will dir wat sagen.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hornochse",
+    "translations": [
+      "Schimpfwort"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hosen, womit sind de Hosen jefüttert",
+    "translations": [
+      "scherzhafte Frage beim Kneifen ins Bein"
+    ],
+    "examples": [
+      {
+        "example": "Womit sind 'n die Hosen jefüttert?",
+        "explanation": "fragt man, wenn man einem in die Beine kneift"
+      },
+      {
+        "example": "Den wer'k mal de Hosen stramm ziehn.",
+        "explanation": "überlegen und durchprügeln"
+      }
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hosenknopp",
+    "translations": [
+      "zu einem, der sich aufspielt"
+    ],
+    "examples": [
+      {
+        "example": "Du bist 'n starken Mann sein Hosenknopp.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hottehü",
+    "translations": [
+      "Kinderwort für Pferd"
+    ],
+    "alternativeWords": [
+      "Hottehüferd",
+      "Hotteferd"
+    ],
+    "infoText": "„Hottehübuletten“ gibt es beim Rossschlächter gleich gebraten.",
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hottepese",
+    "translations": [
+      "Schimpfwort zwischen Fatzke und Ochse"
+    ],
+    "examples": [
+      {
+        "example": "Olle Hottepese!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hotz Donnerwetter",
+    "translations": [
+      "Fluch-Ausrufe"
+    ],
+    "alternativeWords": [
+      "Kotz Donnerwetter",
+      "Hotz Deibel"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hubel",
+    "translations": [
+      "Hobel"
+    ],
+    "examples": [
+      {
+        "example": "Du kannst mir 'n Hubel ausblasen!",
+        "explanation": "Ausdruck der Verachtung"
+      }
+    ],
+    "alternativeWords": [
+      "Hubelspene"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hucken",
+    "translations": [
+      "hocken"
+    ],
+    "alternativeWords": [
+      "Huckezeck"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Huckepacke",
+    "translations": [
+      "auf dem Rücken tragen"
+    ],
+    "alternativeWords": [
+      "Hackepacke"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hucker",
+    "translations": [
+      "Höcker"
+    ],
+    "alternativeWords": [
+      "huckerig"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hühnerkieke",
+    "translations": [
+      "beim genauen Hinsehen den Kopf schief halten"
+    ],
+    "examples": [
+      {
+        "example": "Er hat de Hühnerkieke.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hühneroog",
+    "translations": [
+      "ihn zur Rede stellen (Redewendung)"
+    ],
+    "examples": [
+      {
+        "example": "Jetzt ha'm Se mir't beste Hühnerooge abjetreten.",
+        "explanation": ""
+      },
+      {
+        "example": "Den wer'k uf de Hühneroogen treten.",
+        "explanation": "ihn zur Rede stellen"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hüten, hüten wer'k ma",
+    "translations": [
+      "ich werde mich hüten"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Huhn, verrücktes",
+    "translations": [
+      "anerkennendes Kosewort"
+    ],
+    "examples": [
+      {
+        "example": "Verrücktes Huhn!",
+        "explanation": "beinahe ein Kosewort"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hujanen",
+    "translations": [
+      "gähnen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hujo",
+    "translations": [
+      "Hugo (scherzhaft für einen Blamierten)"
+    ],
+    "examples": [
+      {
+        "example": "Hujo, wie tief bist du jesunken!",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hulaner",
+    "translations": [
+      "Ulan"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Humpeln",
+    "translations": [
+      "hinken"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hundebillig",
+    "translations": [
+      "spottbillig"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hundefrölen",
+    "translations": [
+      "Spitzname für eine alte Hundeliebhaberin"
+    ],
+    "infoText": "Ursprünglich soll eine bestimmte alte Jungfer in der Elisabethstraße um 1830 so genannt worden sein.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hundekälte",
+    "translations": [
+      "starke Kälte"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hundeleben",
+    "translations": [
+      "elendes Leben"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hundestall, hier is et kalt wie in'",
+    "translations": [
+      "hier ist es sehr kalt"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hundetürkei",
+    "translations": [
+      "Spitzname für eine Berliner Gegend"
+    ],
+    "infoText": "Gegend zwischen der Tegeler und der Dalldorfer Chaussee.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hundewetter",
+    "translations": [
+      "Wetter, bei dem man keinen Hund hinausjagt"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hundezucht",
+    "translations": [
+      "Unordnung, unangenehme Sache"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hundskanalje",
+    "translations": [
+      "Schimpfwort"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hundsloden",
+    "translations": [
+      "Schelte, Vorwürfe"
+    ],
+    "alternativeWords": [
+      "Hundslohn"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hunger, so friert mir",
+    "translations": [
+      "scherzhafte Übertreibung von Hunger und Durst"
+    ],
+    "examples": [
+      {
+        "example": "Ick habe so'n Hunger, det ick vor Durscht nich weeß, wo ick de Nacht schlafen soll, so friert mir.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "essen-trinken",
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hurrah die Enten",
+    "translations": [
+      "wenn etwas lange Erwartetes endlich kommt"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hurrjott",
+    "translations": [
+      "Herr Gott!"
+    ],
+    "examples": [
+      {
+        "example": "Hurrjott, sind wir verjniejt — un haben't janich nötig!",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Husar, brauner",
+    "translations": [
+      "Floh"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Huststange",
+    "translations": [
+      "Zuckerstange für Kinder"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hut, immer mit'n",
+    "translations": [
+      "mit dem feinen Hut, nicht der ordinären Mütze"
+    ],
+    "examples": [
+      {
+        "example": "Immer mit'n Hut!",
+        "explanation": "der feine Hut im Gegensatz zur ordinären Mütze"
+      }
+    ],
+    "infoText": "1845 entstand der „Verein der Nichthutabnehmer“ (auch „immer mit'n Hut“) unter Dr. Weil; er besteht bis heute als „Verein der Freimütigen“ weiter und führt noch einen Hut im Wappen.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Hutschnur, det jeht über de",
+    "translations": [
+      "das geht mir zu weit"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Wie meenen Sie des",
+    "translations": [
+      "Spottname für ein Goethe-Festspiel"
+    ],
+    "infoText": "Höhnischer Berliner Spottname für das allegorische Festspiel „Des Epimenides Erwachen“ von Goethe, aufgeführt am 30. März 1815.",
+    "themen": [
+      "orte-spitzname",
+      "spott-ironie"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ibsen",
+    "translations": [
+      "Missverständnis-Witz um den Namen Ibsen"
+    ],
+    "examples": [
+      {
+        "example": "Kennen Sie Ibsen? — Können Sie ibsen? — Nee, wie macht man'n das?",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Idee",
+    "translations": [
+      "durchaus nicht",
+      "ein bisschen"
+    ],
+    "examples": [
+      {
+        "example": "Keene Idee!",
+        "explanation": "durchaus nicht"
+      },
+      {
+        "example": "Bloß noch 'ne Idee!",
+        "explanation": "ein bisschen"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ijel",
+    "translations": [
+      "Igel (Wortspiel mit Egel)"
+    ],
+    "examples": [
+      {
+        "example": "Der sauft wie'n Ijel.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ikel",
+    "translations": [
+      "kleiner Spreefisch (Ükeleye)"
+    ],
+    "alternativeWords": [
+      "Ikelbotze"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Iluminiert",
+    "translations": [
+      "betrunken"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Immerzu",
+    "translations": [
+      "fortwährend",
+      "Formel der Erlaubnis"
+    ],
+    "examples": [
+      {
+        "example": "Det war schon immer!",
+        "explanation": "wenn z. B. ein Milchtopf einen Sprung bekommen hat"
+      },
+      {
+        "example": "Kann ick't ihn wiedersagen? — Immerzu!",
+        "explanation": "Formel der Erlaubnis"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inaasen",
+    "translations": [
+      "beschmutzen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inbatern",
+    "translations": [
+      "stark heizen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inbrocken",
+    "translations": [
+      "sich in eine üble Lage bringen"
+    ],
+    "examples": [
+      {
+        "example": "Det Kleene eßt schon injebrockt.",
+        "explanation": "von einem Kind"
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Indewidjum",
+    "translations": [
+      "Individuum (verächtlich)"
+    ],
+    "examples": [
+      {
+        "example": "Vor mir biste überhaupt bloß 'n Indewidjum!",
+        "explanation": ""
+      }
+    ],
+    "alternativeWords": [
+      "Indewidebum"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Infallen",
+    "translations": [
+      "einfallen"
+    ],
+    "examples": [
+      {
+        "example": "Det fällt mir janich in!",
+        "explanation": ""
+      },
+      {
+        "example": "Laß dir bloß nischt infallen!",
+        "explanation": "drohend"
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Infamt",
+    "translations": [
+      "niederträchtig"
+    ],
+    "examples": [
+      {
+        "example": "Infamter Esel!",
+        "explanation": ""
+      }
+    ],
+    "alternativeWords": [
+      "infamicht"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Infaulenzia",
+    "translations": [
+      "Influenza (Wortspiel mit „faulenzen“)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inhaken",
+    "translations": [
+      "unterfassen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inhauen, stark zulangen",
+    "translations": [
+      "stark zulangen (beim Essen)"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inholen",
+    "translations": [
+      "Lebensmittel einkaufen"
+    ],
+    "examples": [
+      {
+        "example": "Se jeht inholen.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "essen-trinken",
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Injenommen",
+    "translations": [
+      "zu viel Rüben eingenommen (scherzhaft für angetrunken)"
+    ],
+    "examples": [
+      {
+        "example": "Sie haben wol zu viel Neben injenommen?",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inkacheln",
+    "translations": [
+      "einheizen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inkriejen",
+    "translations": [
+      "einholen",
+      "Medizin bei Kranken einnehmen"
+    ],
+    "examples": [
+      {
+        "example": "Wat hat er injekriejt?",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inkugeln, sich",
+    "translations": [
+      "sich behaglich ins Bett schmiegen"
+    ],
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inlochen",
+    "translations": [
+      "einsperren"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inmuddeln",
+    "translations": [
+      "beschmutzen"
+    ],
+    "examples": [
+      {
+        "example": "Du hast dir widder scheen injemuddelt.",
+        "explanation": ""
+      }
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inmummeln",
+    "translations": [
+      "dick und warm einhüllen"
+    ],
+    "alternativeWords": [
+      "inpummeln"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inpacken",
+    "translations": [
+      "gehen Sie ab",
+      "er ist abgetan",
+      "hässlicher geworden"
+    ],
+    "examples": [
+      {
+        "example": "Packen Se in!",
+        "explanation": "gehen Sie ab"
+      },
+      {
+        "example": "Der kann inpacken.",
+        "explanation": "er ist abgetan"
+      },
+      {
+        "example": "Se hat injepackt.",
+        "explanation": "sie ist hässlicher geworden (ihre zur Schau gestellten Reize sind verschwunden)"
+      }
+    ],
+    "infoText": "Bild vom Hausierer, der seine ausgekramte Ware wieder zusammenpacken muss.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inpökeln",
+    "translations": [
+      "einsegnen (Konfirmation, scherzhaft)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inrammeln",
+    "translations": [
+      "einrammen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Insacken",
+    "translations": [
+      "Geld einnehmen"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Insauen",
+    "translations": [
+      "beschmutzen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inschrumpeln",
+    "translations": [
+      "einschrumpfen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inschustern",
+    "translations": [
+      "Geld einbüßen",
+      "Bankrott machen"
+    ],
+    "examples": [
+      {
+        "example": "Er hat sein janzet Jeld bei injeschustert.",
+        "explanation": ""
+      },
+      {
+        "example": "Er hat injeschustert.",
+        "explanation": "er hat Bankrott gemacht"
+      }
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inseefen",
+    "translations": [
+      "betrügen",
+      "auf Verabredung betrunken machen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen",
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inspunnen",
+    "translations": [
+      "einsperren"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Instippen",
+    "translations": [
+      "eintunken"
+    ],
+    "alternativeWords": [
+      "Stippe machen"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Insultieren",
+    "translations": [
+      "konsultieren (Verwechslung)"
+    ],
+    "examples": [
+      {
+        "example": "Herr Dokter, ick muß Ihnen insultieren.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Intreiben",
+    "translations": [
+      "einschüchtern",
+      "den Hut andreiben"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inweihen",
+    "translations": [
+      "Schulbrauch: Verhauen der Neuversetzten"
+    ],
+    "infoText": "Die älteren Schüler einer Klasse „weihen“ die neu versetzten durch Verhauen ein. „Seinen (Anzug) inweihen“ = zum ersten Mal aufsetzen oder nass werden lassen.",
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Inwickeln",
+    "translations": [
+      "betrügen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Irjendwo",
+    "translations": [
+      "ich habe ihn doch schon irgendwo gesehen"
+    ],
+    "examples": [
+      {
+        "example": "Den muß ick doch schon irjendwo jesehn haben.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Irletieren",
+    "translations": [
+      "beirren"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Italjeensblatt",
+    "translations": [
+      "Intelligenzblatt (Verballhornung)"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Itsche",
+    "translations": [
+      "besoffen wie eine Itsche"
+    ],
+    "examples": [
+      {
+        "example": "Besoffen wie 'ne Itsche.",
+        "explanation": ""
+      }
+    ],
+    "infoText": "Itsche ist die Kröte; „itschen“ = zechen.",
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Izen",
+    "translations": [
+      "stellen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

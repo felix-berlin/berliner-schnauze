@@ -29,7 +29,12 @@
         deshalb nach mehreren Typen filtern.
       </i>
 
-      <WordTypeFilter />
+      <MultiselectFilter
+        store-key="activeWordTypeFilter"
+        :options="searchMeta.wordTypes"
+        label="Worttypen filtern"
+        track-label="Word Type"
+      />
 
       <div class="c-filter-search__headline-wrap" role="group" aria-labelledby="filter-themen">
         <p id="filter-themen" class="c-filter-search__sub-label">Themen</p>
@@ -40,7 +45,12 @@
         Schimpfwörter.
       </i>
 
-      <ThemenFilter />
+      <MultiselectFilter
+        store-key="activeThemenFilter"
+        :options="themenOptions"
+        label="Themen filtern"
+        track-label="Themen"
+      />
 
       <div class="c-filter-search__switch" role="group" aria-labelledby="filter-berolinismus">
         <p id="filter-berolinismus" class="c-filter-search__sub-label">Berolinismus</p>
@@ -103,13 +113,13 @@
 import BadgeTag from "@components/BadgeTag.vue";
 import ButtonWithStates from "@components/ButtonWithStates.vue";
 import LetterFilter from "@components/filter/LetterFilter.vue";
+import MultiselectFilter from "@components/filter/MultiselectFilter.vue";
 import SortWordBySelect from "@components/filter/SortWordBySelect.vue";
-import ThemenFilter from "@components/filter/ThemenFilter.vue";
 import WordRangeSlider from "@components/filter/WordRangeSlider.vue";
 import WordSwitch from "@components/filter/WordSwitch.vue";
-import WordTypeFilter from "@components/filter/WordTypeFilter.vue";
 import { useStore } from "@nanostores/vue";
 import {
+  $searchMeta,
   $showWordListFilterFlyout,
   $toggleWordListFilterFlyout,
   resetAll,
@@ -118,7 +128,7 @@ import { onClickOutside } from "@vueuse/core";
 import { useTimeout } from "@vueuse/core";
 import FilterReset from "virtual:icons/lucide/filter-x";
 import X from "virtual:icons/lucide/x";
-import { useTemplateRef } from "vue";
+import { computed, useTemplateRef } from "vue";
 
 const { closeOnClickOutside = true } = defineProps<{
   closeOnClickOutside?: boolean;
@@ -128,6 +138,10 @@ const wordListFilter = useTemplateRef("wordListFilter");
 const { ready, start } = useTimeout(1200, { controls: true });
 
 const showWordListFilterFlyout = useStore($showWordListFilterFlyout);
+const searchMeta = useStore($searchMeta);
+const themenOptions = computed(() =>
+  searchMeta.value.themen.map((t) => ({ label: t.name, value: t.slug })),
+);
 
 onClickOutside(wordListFilter, () => {
   if (showWordListFilterFlyout.value && closeOnClickOutside) {

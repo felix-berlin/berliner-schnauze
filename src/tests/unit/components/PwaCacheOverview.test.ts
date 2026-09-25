@@ -183,25 +183,7 @@ describe("PwaCacheOverview.vue", () => {
     expect(callArg.view?.props?.message).toContain("[cache-v1]");
   });
 
-  it("storageQuotaPercent returns correct percentage when quota is set", () => {
-    mockStorageQuota.value = { quotaBytes: 1000, usedBytes: 250 };
-    const wrapper = mount(PwaCacheOverview);
-    expect(wrapper.exists()).toBe(true);
-  });
-
-  it("swScriptURL is resolved when swInfo has scriptURL", () => {
-    mockSwInfo.value = { scriptURL: "/sw.js", status: "active" };
-    const wrapper = mount(PwaCacheOverview);
-    expect(wrapper.exists()).toBe(true);
-  });
-
-  it("swScriptURL returns null when scriptURL is empty string (covers line 127 || null branch)", () => {
-    mockSwInfo.value = { scriptURL: "", status: "active" };
-    const wrapper = mount(PwaCacheOverview);
-    expect(wrapper.exists()).toBe(true);
-  });
-
-  it("confirmClearAll cancel callback calls close()", async () => {
+  it("confirmClear() (all) cancel callback calls close()", async () => {
     const { open, close } = await import("@stores/modal");
     const wrapper = mount(PwaCacheOverview);
     await wrapper.findComponent({ name: "PwaCacheActions" }).vm.$emit("clear-all");
@@ -212,7 +194,7 @@ describe("PwaCacheOverview.vue", () => {
     expect(close).toHaveBeenCalled();
   });
 
-  it("confirmClearAll confirm callback calls close() and clearAll()", async () => {
+  it("confirmClear() (all) confirm callback calls close() and clearAll()", async () => {
     const { open, close } = await import("@stores/modal");
     const wrapper = mount(PwaCacheOverview);
     await wrapper.findComponent({ name: "PwaCacheActions" }).vm.$emit("clear-all");
@@ -224,7 +206,7 @@ describe("PwaCacheOverview.vue", () => {
     expect(mockClearAll).toHaveBeenCalled();
   });
 
-  it("confirmClearBucket cancel callback calls close()", async () => {
+  it("confirmClear(name) cancel callback calls close()", async () => {
     const { open, close } = await import("@stores/modal");
     mockBuckets.value = [{ name: "cache-v1", urls: [] }];
     const wrapper = mount(PwaCacheOverview);
@@ -238,7 +220,7 @@ describe("PwaCacheOverview.vue", () => {
     expect(close).toHaveBeenCalled();
   });
 
-  it("confirmClearBucket confirm callback calls close() and clearBucket()", async () => {
+  it("confirmClear(name) confirm callback calls close() and clearBucket()", async () => {
     const { open, close } = await import("@stores/modal");
     mockBuckets.value = [{ name: "cache-v1", urls: [] }];
     const wrapper = mount(PwaCacheOverview);
@@ -253,23 +235,7 @@ describe("PwaCacheOverview.vue", () => {
     expect(mockClearBucket).toHaveBeenCalledWith("cache-v1");
   });
 
-  it("resolves icon factory functions for all SW statuses (covers L74-78 defineAsyncComponent lambdas)", async () => {
-    const statuses = [
-      "active",
-      "installing",
-      "not-registered",
-      "not-supported",
-      "waiting",
-    ] as const;
-    for (const status of statuses) {
-      mockSwInfo.value = { status };
-      const wrapper = mount(PwaCacheOverview);
-      await flushPromises();
-      expect(wrapper.exists()).toBe(true);
-    }
-  });
-
-  it("resolves ConfirmDialog factory when confirmClearAll is triggered (covers L95 defineAsyncComponent lambda)", async () => {
+  it("resolves ConfirmDialog factory when clear-all is triggered", async () => {
     const { open } = await import("@stores/modal");
     const wrapper = mount(PwaCacheOverview);
     await wrapper.findComponent({ name: "PwaCacheActions" }).vm.$emit("clear-all");

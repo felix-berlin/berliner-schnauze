@@ -34,7 +34,7 @@ vi.mock("@utils/analytics", () => ({
 
 import type { SavedBonSnapshot } from "@stores/savedBon";
 
-import { buildDeck, computeMultiplier, useBon } from "@composables/useBon";
+import { computeMultiplier, useBon, type BonCard } from "@composables/useBon";
 import { $bonStats } from "@stores/bonStats";
 import { $savedBon } from "@stores/savedBon";
 import { createToastNotify } from "@stores/toastNotify";
@@ -69,41 +69,39 @@ describe("computeMultiplier", () => {
   it("returns 5 for streak 20", () => expect(computeMultiplier(20)).toBe(5));
 });
 
-// ─── buildDeck ────────────────────────────────────────────────────────────────
+// ─── deck composition (_makeQueuedDeck) ──────────────────────────────────────
 
-describe("buildDeck", () => {
-  it("always returns exactly 20 cards", () => {
-    const deck = buildDeck(makeRealWords(50), makeFakeWords(30));
-    expect(deck).toHaveLength(20);
-  });
+/** Starts a game and draws the full first deck (current card + 19 more). */
+function drawFirstDeck(): BonCard[] {
+  const { init, startGame, nextCard, currentCard } = useBon();
+  init(makeRealWords(50), makeFakeWords(30));
+  startGame();
+  const cards: BonCard[] = [currentCard.value!];
+  for (let i = 0; i < 19; i++) {
+    nextCard();
+    cards.push(currentCard.value!);
+  }
+  return cards;
+}
 
-  it("real card count is between 10 and 15 (50–75%)", () => {
+describe("deck composition", () => {
+  it("real card count per deck is between 10 and 15 (50–75%)", () => {
     for (let i = 0; i < 20; i++) {
-      const deck = buildDeck(makeRealWords(50), makeFakeWords(30));
-      const realCount = deck.filter((c) => c.isReal).length;
+      const realCount = drawFirstDeck().filter((c) => c.isReal).length;
       expect(realCount).toBeGreaterThanOrEqual(10);
       expect(realCount).toBeLessThanOrEqual(15);
     }
   });
 
-  it("fake cards have isReal = false", () => {
-    const deck = buildDeck(makeRealWords(50), makeFakeWords(30));
-    deck.filter((c) => !c.isReal).forEach((c) => expect(c.isReal).toBe(false));
-  });
-
-  it("real cards carry slug and word", () => {
-    const deck = buildDeck(makeRealWords(50), makeFakeWords(30));
-    deck
-      .filter((c) => c.isReal)
-      .forEach((c) => {
-        expect(c.slug).toBeDefined();
-        expect(c.word).toBeTruthy();
-      });
+  it("real cards carry slug and word, fake cards only a word", () => {
+    const deck = drawFirstDeck();
+    expect(deck.every((c) => Boolean(c.word))).toBe(true);
+    expect(deck.filter((c) => c.isReal).every((c) => c.slug !== undefined)).toBe(true);
+    expect(deck.filter((c) => !c.isReal).every((c) => c.slug === undefined)).toBe(true);
   });
 
   it("no duplicate words within one deck", () => {
-    const deck = buildDeck(makeRealWords(50), makeFakeWords(30));
-    expect(new Set(deck.map((c) => c.word)).size).toBe(20);
+    expect(new Set(drawFirstDeck().map((c) => c.word)).size).toBe(20);
   });
 });
 

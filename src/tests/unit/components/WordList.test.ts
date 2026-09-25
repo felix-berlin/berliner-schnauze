@@ -32,7 +32,7 @@ vi.mock("@components/word/SingleWord.vue", () => ({
   default: {
     props: ["source", "index", "highlightTerm", "showDropdown"],
     template:
-      "<li class='mock-single-word' tabindex='0'>{{ source?.wordProperties?.berlinerisch }}</li>",
+      "<li class='mock-single-word' :id=\"`word-${source?.berlinerWordId}`\" tabindex='0'>{{ source?.wordProperties?.berlinerisch }}</li>",
   },
 }));
 
@@ -82,7 +82,12 @@ const mockStores = (
 };
 
 const makeHit = (berlinerisch: string, slug = berlinerisch.toLowerCase()) => ({
-  document: { id: slug, slug, wordProperties: { berlinerisch, translations: ["test"] } },
+  document: {
+    berlinerWordId: slug,
+    id: slug,
+    slug,
+    wordProperties: { berlinerisch, translations: ["test"] },
+  },
   id: slug,
   score: 1,
 });
@@ -250,7 +255,7 @@ describe("WordList.vue", () => {
     capturedFn();
   });
 
-  it("watch callback clears resultRefs when mutableOramaSearch changes (covers line 81)", async () => {
+  it("re-renders the list when mutableOramaSearch changes", async () => {
     const oramaRef = ref({ state: "ready" as const, value: { hits: [makeHit("Eier")] } });
     mockStores(oramaRef);
     const wrapper = mount(WordList);
@@ -270,7 +275,6 @@ describe("WordList.vue", () => {
   it("focuses the active item's element in focusActive nextTick", async () => {
     mockStores({ state: "ready", value: { hits: [makeHit("Kiez")] } });
     const wrapper = mount(WordList, { attachTo: document.body });
-    // The list item is a component ref, so its root element ($el) must end up focusable.
     const focusSpy = vi.spyOn(HTMLElement.prototype, "focus");
     // ArrowDown: activeIndex stays 0 (1 item: (0+1)%1=0), calls focusActive → nextTick → el.focus()
     fireKey("ArrowDown");

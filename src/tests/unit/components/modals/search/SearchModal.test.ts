@@ -28,15 +28,12 @@ vi.mock("@stores/wordList.ts", () => ({
   $searchQuery: {},
   $searchResultCount: {},
   $showWordListFilterFlyout: {},
-  searchLength: {},
 }));
 
-// SearchWords.vue (mounted as a real child below) calls this composable,
-// which needs $searchQuery from @stores/wordList.ts — not relevant to what
-// this file tests, so stub it out like SearchWords.test.ts does.
-vi.mock("@composables/useSearchQuerySync", () => ({
-  useSearchQuerySync: vi.fn(),
-}));
+vi.mock("@components/SearchWords.vue", async () => {
+  const { createComponentStub } = await import("../../../helpers/stubs");
+  return createComponentStub("<div class='mock-search-words' />");
+});
 
 vi.mock("@components/word-search/WordFilter.vue", () => ({
   default: { template: "<div class='mock-word-filter' />" },

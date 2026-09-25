@@ -17,10 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import { useEventListener } from "@vueuse/core";
+import { useEventListener, useRafFn } from "@vueuse/core";
 import Pause from "virtual:icons/lucide/pause";
 import Play from "virtual:icons/lucide/play";
-import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 
 import type { MediaItem } from "@/gql/entity-types";
 
@@ -35,36 +35,35 @@ const isPlaying = ref(false);
 const audioButton = ref<HTMLButtonElement | null>(null);
 const progress = ref(0);
 
-let animationFrameId: null | number = null;
-const handleEnded = () => {
-  isPlaying.value = false;
-  progress.value = 0;
-};
-
 const fillStyle = computed(() => ({
   height: `${progress.value}%`,
 }));
 
-const updateProgress = () => {
-  if (audioFile && isPlaying.value) {
+// Stopped automatically on unmount by VueUse.
+const { pause: stopProgress, resume: startProgress } = useRafFn(
+  () => {
+    if (!audioFile) return;
     progress.value = audioFile.duration ? (audioFile.currentTime / audioFile.duration) * 100 : 0;
-    animationFrameId = requestAnimationFrame(updateProgress);
-  }
+  },
+  { immediate: false },
+);
+
+const handleEnded = () => {
+  isPlaying.value = false;
+  stopProgress();
+  progress.value = 0;
 };
 
 const playAudio = async () => {
   await audioFile?.play();
   isPlaying.value = true;
-  animationFrameId = requestAnimationFrame(updateProgress);
+  startProgress();
 };
 
 const stopAudio = () => {
   audioFile?.pause();
   isPlaying.value = false;
-  if (animationFrameId !== null) {
-    cancelAnimationFrame(animationFrameId);
-    animationFrameId = null;
-  }
+  stopProgress();
 };
 
 const togglePlayStop = async () => {
@@ -81,12 +80,6 @@ onMounted(() => {
   void nextTick(() => {
     audioButton.value?.focus();
   });
-});
-
-onUnmounted(() => {
-  if (animationFrameId !== null) {
-    cancelAnimationFrame(animationFrameId);
-  }
 });
 </script>
 

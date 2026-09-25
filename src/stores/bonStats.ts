@@ -1,4 +1,5 @@
 import { persistentMap } from "@nanostores/persistent";
+import { jsonCodec } from "@utils/jsonCodec";
 
 export interface BonStats {
   highScore: number;
@@ -21,14 +22,5 @@ export const $bonStats = persistentMap<BonStats>(
     totalCorrect: 0,
     totalGamesPlayed: 0,
   },
-  {
-    decode(value) {
-      try {
-        return JSON.parse(value);
-      } catch {
-        return value;
-      }
-    },
-    encode: (value) => JSON.stringify(value),
-  },
+  jsonCodec,
 );

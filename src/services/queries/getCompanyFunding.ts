@@ -1,4 +1,4 @@
-import { wpGraphqlClient } from "@services/wpGraphqlClient";
+import { wpQuery } from "@services/wpGraphqlClient";
 
 import { graphql } from "@/gql";
 import { CompanyFundingDocument } from "@/gql/graphql.ts";
@@ -19,13 +19,8 @@ export interface FundingData {
 }
 
 export const fetchFundingData = async (): Promise<FundingData> => {
-  const response = await wpGraphqlClient.query(CompanyFundingDocument, {}).toPromise();
-
-  if (response.error) {
-    throw new Error("Fetching company funding data failed", { cause: response.error });
-  }
-
-  const entries = response.data?.company?.companyInformations?.funding ?? [];
+  const data = await wpQuery(CompanyFundingDocument, {}, "Fetching company funding data failed");
+  const entries = data?.company?.companyInformations?.funding ?? [];
 
   const platforms: FundingPlatform[] = [];
   const wallets: FundingWallet[] = [];

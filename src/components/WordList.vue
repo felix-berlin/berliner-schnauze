@@ -19,7 +19,6 @@
     item="li"
   >
     <SingleWord
-      :ref="setResultRef"
       :key="index"
       :index="index"
       :source="item.document"
@@ -33,8 +32,6 @@
 </template>
 
 <script setup lang="ts">
-import type { ComponentPublicInstance } from "vue";
-
 import WordListSkeleton from "@components/word-search/WordListSkeleton.vue";
 import SingleWord from "@components/word/SingleWord.vue";
 import { useStore } from "@nanostores/vue";
@@ -42,7 +39,7 @@ import { $oramaSearchResults, $searchQuery, $searchState } from "@stores/wordLis
 import { routeToWord } from "@utils/helpers.ts";
 import { onKeyStroke, useTimeoutFn } from "@vueuse/core";
 import { VList, WindowVirtualizer } from "virtua/vue";
-import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
+import { computed, nextTick, ref, useTemplateRef } from "vue";
 
 import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 
@@ -75,7 +72,6 @@ const mutableOramaSearch = computed(
 );
 
 const activeIndex = ref(0);
-const resultRefs = ref<HTMLElement[]>([]);
 const virtualizerRef = useTemplateRef("virtualizer");
 const showActive = ref(false);
 const ACTIVE_TIMEOUT = 3500; // ms
@@ -93,17 +89,6 @@ const showActiveWithTimeout = () => {
   startHideActiveTimer();
 };
 
-// Clear refs when result data changes, not on every render side effect.
-watch(mutableOramaSearch, () => {
-  resultRefs.value = [];
-});
-
-// The ref is a SingleWord component instance, so unwrap its root element.
-const setResultRef = (el: ComponentPublicInstance | Element | null) => {
-  const node = el instanceof Element ? el : el?.$el;
-  if (node instanceof HTMLElement) resultRefs.value.push(node);
-};
-
 const goToWord = (slug: string) => {
   window.location.href = routeToWord(slug);
 };
@@ -117,33 +102,25 @@ const focusActive = () => {
 
   // 2. Wait for DOM update, then focus and scroll the element
   void nextTick(() => {
-    // The list is virtualized, so refs are not indexed like the hits — prefer the element id.
+    // The list is virtualized, so look the rendered item up by its element id.
     const wordId = mutableOramaSearch.value[activeIndex.value]?.document?.berlinerWordId;
-    const el =
-      (wordId === undefined ? null : document.getElementById(`word-${wordId}`)) ??
-      resultRefs.value[activeIndex.value];
-    if (el && typeof el.focus === "function") {
-      el.focus({ preventScroll: true });
+    if (wordId !== undefined) {
+      document.getElementById(`word-${wordId}`)?.focus({ preventScroll: true });
     }
   });
 };
 
-onKeyStroke("ArrowDown", (e) => {
-  if (!mutableOramaSearch.value.length) return;
+const move = (delta: number) => (e: KeyboardEvent) => {
+  const { length } = mutableOramaSearch.value;
+  if (!length) return;
   showActiveWithTimeout();
-  activeIndex.value = (activeIndex.value + 1) % mutableOramaSearch.value.length;
+  activeIndex.value = (activeIndex.value + delta + length) % length;
   focusActive();
   e.preventDefault();
-});
+};
 
-onKeyStroke("ArrowUp", (e) => {
-  if (!mutableOramaSearch.value.length) return;
-  showActiveWithTimeout();
-  activeIndex.value =
-    (activeIndex.value - 1 + mutableOramaSearch.value.length) % mutableOramaSearch.value.length;
-  focusActive();
-  e.preventDefault();
-});
+onKeyStroke("ArrowDown", move(1));
+onKeyStroke("ArrowUp", move(-1));
 
 onKeyStroke("Enter", (e) => {
   if (!mutableOramaSearch.value.length) return;

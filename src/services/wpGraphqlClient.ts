@@ -1,3 +1,5 @@
+import type { AnyVariables, DocumentInput } from "@urql/core";
+
 import { cacheExchange, Client, fetchExchange } from "@urql/core";
 import { WP_API } from "astro:env/client";
 import { WP_AUTH_PASS, WP_AUTH_USER } from "astro:env/server";
@@ -18,3 +20,14 @@ export const wpGraphqlClient = new Client({
   },
   url: WP_API,
 });
+
+/** Runs a build-time WPGraphQL query, returning `data` and throwing on any GraphQL/network error. */
+export const wpQuery = async <Data, Variables extends AnyVariables>(
+  document: DocumentInput<Data, Variables>,
+  variables: Variables,
+  errorMessage = "WPGraphQL query failed",
+): Promise<Data | undefined> => {
+  const { data, error } = await wpGraphqlClient.query(document, variables).toPromise();
+  if (error) throw new Error(`${errorMessage}: ${error.message}`, { cause: error });
+  return data;
+};

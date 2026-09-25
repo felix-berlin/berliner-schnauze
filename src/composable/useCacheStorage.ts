@@ -64,6 +64,17 @@ export function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1).replace(".", ",")} MB`;
 }
 
+/** Pathname of a URL (or the raw string if unparsable), truncated to 60 chars. */
+export function formatUrl(url: string): string {
+  let path = url;
+  try {
+    path = new URL(url).pathname;
+  } catch {
+    // keep the raw string
+  }
+  return path.length > 60 ? `${path.slice(0, 57)}…` : path;
+}
+
 export function getBucketDisplayName(name: string): string {
   for (const [prefix, displayName] of Object.entries(BUCKET_NAME_MAP)) {
     if (name.startsWith(prefix)) return displayName;
@@ -158,7 +169,7 @@ export function useCacheStorage() {
   }
 
   async function loadCaches(): Promise<void> {
-    if (typeof caches === "undefined" || !caches) return;
+    if (!isCacheAvailable) return;
     isLoading.value = true;
     loadError.value = null;
     try {
@@ -166,9 +177,6 @@ export function useCacheStorage() {
       const settled = await Promise.allSettled(
         cacheNames.map(async (name): Promise<CacheBucket> => {
           const cache = await caches.open(name);
-          if (!cache)
-            return { dateRange: null, name, totalSizeBytes: 0, typeBreakdown: [], urls: [] };
-
           const requests = await cache.keys();
 
           const urls = await Promise.all(
@@ -267,7 +275,7 @@ export function useCacheStorage() {
   });
 
   async function clearBucket(name: string): Promise<void> {
-    if (typeof caches === "undefined" || !caches) return;
+    if (!isCacheAvailable) return;
     try {
       await caches.delete(name);
     } catch {
@@ -281,7 +289,7 @@ export function useCacheStorage() {
   }
 
   async function clearAll(): Promise<void> {
-    if (typeof caches === "undefined" || !caches) return;
+    if (!isCacheAvailable) return;
     try {
       const names = await caches.keys();
       const results = await Promise.allSettled(names.map((name) => caches.delete(name)));

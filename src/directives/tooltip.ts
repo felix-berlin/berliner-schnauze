@@ -38,13 +38,29 @@ type TooltipEl = HTMLElement & { _tooltip?: TooltipState };
 
 let _counter = 0;
 
-const HIDE_DELAY = 200;
+// Delay lets the pointer move from trigger to panel without dismissing (WCAG 1.4.13)
+export const HIDE_DELAY = 200;
 // Matches the CSS exit-transition duration in _tooltip.scss
-const EXIT_ANIMATION_MS = 100;
+export const EXIT_ANIMATION_MS = 100;
 
 const ARROW_SIZE = 8;
 const ARROW_HALF = ARROW_SIZE / 2;
 const ARROW_PADDING = 6;
+
+/**
+ * Offset of an arrow along one axis of the panel so it points at the anchor's
+ * center, clamped to stay `padding` away from the panel edges.
+ */
+export function computeArrowOffset(
+  anchorStart: number,
+  anchorEnd: number,
+  panelStart: number,
+  panelSize: number,
+  padding: number,
+): number {
+  const raw = (anchorStart + anchorEnd) / 2 - panelStart - ARROW_HALF;
+  return Math.max(padding, Math.min(raw, panelSize - padding - ARROW_SIZE));
+}
 
 export function syncTooltipArrow(el: HTMLElement, panel: HTMLElement, arrow: HTMLElement): void {
   const panelRect = panel.getBoundingClientRect();
@@ -53,9 +69,13 @@ export function syncTooltipArrow(el: HTMLElement, panel: HTMLElement, arrow: HTM
   const isBelow = panelRect.top >= elRect.bottom;
 
   if (isAbove || isBelow) {
-    const elCenterX = (elRect.left + elRect.right) / 2;
-    const rawX = elCenterX - panelRect.left - ARROW_HALF;
-    const x = Math.max(ARROW_PADDING, Math.min(rawX, panelRect.width - ARROW_PADDING - ARROW_SIZE));
+    const x = computeArrowOffset(
+      elRect.left,
+      elRect.right,
+      panelRect.left,
+      panelRect.width,
+      ARROW_PADDING,
+    );
     arrow.style.left = `${x}px`;
     arrow.style.right = "";
     if (isAbove) {
@@ -69,9 +89,13 @@ export function syncTooltipArrow(el: HTMLElement, panel: HTMLElement, arrow: HTM
   }
 
   const isLeft = panelRect.right <= elRect.left;
-  const elCenterY = (elRect.top + elRect.bottom) / 2;
-  const rawY = elCenterY - panelRect.top - ARROW_HALF;
-  const y = Math.max(ARROW_PADDING, Math.min(rawY, panelRect.height - ARROW_PADDING - ARROW_SIZE));
+  const y = computeArrowOffset(
+    elRect.top,
+    elRect.bottom,
+    panelRect.top,
+    panelRect.height,
+    ARROW_PADDING,
+  );
   arrow.style.top = `${y}px`;
   arrow.style.bottom = "";
   if (isLeft) {
@@ -100,6 +124,33 @@ function scheduleDomRemoval(state: TooltipState): void {
     state.panel.remove();
     state.domRemovalTimer = null;
   }, EXIT_ANIMATION_MS);
+}
+
+function cancelHide(state: TooltipState): void {
+  if (state.hideTimer !== null) {
+    clearTimeout(state.hideTimer);
+    state.hideTimer = null;
+  }
+}
+
+function show(el: HTMLElement, state: TooltipState): void {
+  // Cancel any DOM removal that was scheduled by a previous hide
+  if (state.domRemovalTimer !== null) {
+    clearTimeout(state.domRemovalTimer);
+    state.domRemovalTimer = null;
+  }
+  cancelHide(state);
+  if (!state.panel.isConnected) document.body.appendChild(state.panel);
+  state.panel.showPopover?.();
+  requestAnimationFrame(() => syncTooltipArrow(el, state.panel, state.arrow));
+  document.addEventListener("keydown", state.onKeyDown);
+}
+
+function hide(state: TooltipState): void {
+  cancelHide(state);
+  state.panel.hidePopover?.();
+  document.removeEventListener("keydown", state.onKeyDown);
+  scheduleDomRemoval(state);
 }
 
 function applyPanel(
@@ -133,7 +184,7 @@ function removeListeners(el: HTMLElement, state: TooltipState): void {
   document.removeEventListener("keydown", state.onKeyDown);
 }
 
-export const vTooltip: Directive<HTMLElement, TooltipValue> = {
+export const vTooltip: Directive<TooltipEl, TooltipValue> = {
   mounted(el, binding) {
     const opts = normalize(binding.value);
     const id = `tooltip-${++_counter}`;
@@ -163,72 +214,36 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
       hideTimer: null,
       onHide() {
         if (state.shown) return;
-        if (state.hideTimer !== null) {
-          clearTimeout(state.hideTimer);
-          state.hideTimer = null;
-        }
-        // Delay lets the pointer move from trigger to panel without dismissing (WCAG 1.4.13)
-        state.hideTimer = setTimeout(() => {
-          panel.hidePopover?.();
-          state.hideTimer = null;
-          document.removeEventListener("keydown", state.onKeyDown);
-          scheduleDomRemoval(state);
-        }, HIDE_DELAY);
+        cancelHide(state);
+        state.hideTimer = setTimeout(() => hide(state), HIDE_DELAY);
       },
       onKeyDown(e: KeyboardEvent) {
-        if (e.key !== "Escape") return;
-        if (state.hideTimer !== null) {
-          clearTimeout(state.hideTimer);
-          state.hideTimer = null;
-        }
-        panel.hidePopover?.();
-        document.removeEventListener("keydown", state.onKeyDown);
-        scheduleDomRemoval(state);
+        if (e.key === "Escape") hide(state);
       },
       onPanelPointerEnter() {
         // Cancel pending hide when pointer enters the tooltip panel
-        if (state.hideTimer !== null) {
-          clearTimeout(state.hideTimer);
-          state.hideTimer = null;
-        }
+        cancelHide(state);
       },
       onPanelPointerLeave() {
         state.onHide();
       },
       onShow() {
         if (state.shown) return;
-        // Cancel any DOM removal that was scheduled by a previous hide
-        if (state.domRemovalTimer !== null) {
-          clearTimeout(state.domRemovalTimer);
-          state.domRemovalTimer = null;
-        }
-        if (state.hideTimer !== null) {
-          clearTimeout(state.hideTimer);
-          state.hideTimer = null;
-        }
-        if (!panel.isConnected) document.body.appendChild(panel);
-        panel.showPopover?.();
-        requestAnimationFrame(() => syncTooltipArrow(el, panel, state.arrow));
-        document.addEventListener("keydown", state.onKeyDown);
+        show(el, state);
       },
       panel,
       shown: opts.shown,
     };
-    (el as TooltipEl)._tooltip = state;
+    el._tooltip = state;
 
     if (!opts.disabled) {
       addListeners(el, state);
     }
-    if (opts.shown) {
-      document.body.appendChild(panel);
-      panel.showPopover?.();
-      requestAnimationFrame(() => syncTooltipArrow(el, panel, state.arrow));
-      document.addEventListener("keydown", state.onKeyDown);
-    }
+    if (opts.shown) show(el, state);
   },
 
   unmounted(el) {
-    const state = (el as TooltipEl)._tooltip;
+    const state = el._tooltip;
     if (!state) return;
 
     if (state.hideTimer !== null) clearTimeout(state.hideTimer);
@@ -237,11 +252,11 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
     el.style.removeProperty("anchor-name");
     el.removeAttribute("aria-describedby");
     state.panel.remove();
-    delete (el as TooltipEl)._tooltip;
+    delete el._tooltip;
   },
 
   updated(el, binding) {
-    const state = (el as TooltipEl)._tooltip;
+    const state = el._tooltip;
     if (!state) return;
 
     const newOpts = normalize(binding.value);
@@ -254,12 +269,7 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
     if (newOpts.disabled !== oldOpts.disabled) {
       if (newOpts.disabled) {
         removeListeners(el, state);
-        if (state.hideTimer !== null) {
-          clearTimeout(state.hideTimer);
-          state.hideTimer = null;
-        }
-        state.panel.hidePopover?.();
-        scheduleDomRemoval(state);
+        hide(state);
       } else {
         addListeners(el, state);
       }
@@ -267,23 +277,7 @@ export const vTooltip: Directive<HTMLElement, TooltipValue> = {
 
     if (newOpts.shown === oldOpts.shown) return;
     state.shown = newOpts.shown;
-    if (newOpts.shown) {
-      if (!state.panel.isConnected) document.body.appendChild(state.panel);
-      if (state.domRemovalTimer !== null) {
-        clearTimeout(state.domRemovalTimer);
-        state.domRemovalTimer = null;
-      }
-      state.panel.showPopover?.();
-      requestAnimationFrame(() => syncTooltipArrow(el, state.panel, state.arrow));
-      document.addEventListener("keydown", state.onKeyDown);
-      return;
-    }
-    if (state.hideTimer !== null) {
-      clearTimeout(state.hideTimer);
-      state.hideTimer = null;
-    }
-    state.panel.hidePopover?.();
-    document.removeEventListener("keydown", state.onKeyDown);
-    scheduleDomRemoval(state);
+    if (newOpts.shown) show(el, state);
+    else hide(state);
   },
 };

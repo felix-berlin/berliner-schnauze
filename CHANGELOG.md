@@ -2,6 +2,52 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.51.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.50.0...v3.51.0) (2026-09-25)
+
+
+### Bug Fixes
+
+* **ci:** run the Playwright container with --init so the job exits after the tests ([6c87b2b](https://github.com/felix-berlin/berliner-schnauze/commit/6c87b2bdd076265e7d4461653b92601977485234))
+* **ci:** set HOME=/root so Firefox and WebKit start in the Playwright container ([2f26861](https://github.com/felix-berlin/berliner-schnauze/commit/2f26861f1ebd5bcaf57fd31c038c20c078c0d10e))
+* **ci:** start astro preview outside Playwright and add hang diagnostics ([7c3e059](https://github.com/felix-berlin/berliner-schnauze/commit/7c3e05983a22d69c8b8893b8ea05fb05f41e43ad))
+* **form:** send the suggester's email as replyTo instead of from ([01b5ea4](https://github.com/felix-berlin/berliner-schnauze/commit/01b5ea41575f11d5dc0347b15d0263ad78195488))
+* **form:** send the suggestion via a plain urql core client ([d85ea0a](https://github.com/felix-berlin/berliner-schnauze/commit/d85ea0ad40464562b5e06dab1dc49881be2bdfa4))
+* **word:** stop fetching word of the day during the build ([7b1f004](https://github.com/felix-berlin/berliner-schnauze/commit/7b1f004b04d013fa3e1c672073223cfa9516059f))
+
+
+### Features
+
+* optimize similar sound and word comparison with caching mechanisms ([e2269e2](https://github.com/felix-berlin/berliner-schnauze/commit/e2269e224591d96ecd42f32160530d41e2939591))
+* simplify post fetching by introducing fetchAllPosts utility ([8b14bfd](https://github.com/felix-berlin/berliner-schnauze/commit/8b14bfdd53e543d2e0f0be7ed18321c44b6a67ca))
+
+
+### Performance Improvements
+
+* **ci:** run Playwright in container image, cache words, skip doc-only runs ([cf23f19](https://github.com/felix-berlin/berliner-schnauze/commit/cf23f1997dc0cfe2f8d3b27b1d836ae92797c0b5))
+* **ci:** shard Playwright tests across 4 jobs with a shared build ([351d7cd](https://github.com/felix-berlin/berliner-schnauze/commit/351d7cd165c86d290b2268fcc34aa30d50cafb47))
+* **search:** debounce search input and slim the search index ([b868f8a](https://github.com/felix-berlin/berliner-schnauze/commit/b868f8aa56bb10eb9ba53f870c2ee084bc0b2682))
+
+# [3.50.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.5...v3.50.0) (2026-09-20)
+
+
+### Bug Fixes
+
+* **scripts:** strip HTML and check joined fields in Schlobinski scan ([bfdef9a](https://github.com/felix-berlin/berliner-schnauze/commit/bfdef9ae204f8ce50ed315286305815132637995))
+
+
+### Features
+
+* add meyer word a - d ([cd0fe82](https://github.com/felix-berlin/berliner-schnauze/commit/cd0fe82f39b645cbad9f43138cd4bebdcae20be3))
+* add script to publish draft berlinerisch posts via WP REST API ([33f3aba](https://github.com/felix-berlin/berliner-schnauze/commit/33f3aba0b040c75c587be3e597f86cb37ed37525))
+* add scripts for appending Meyer supplements and fetching words for audit ([f64f960](https://github.com/felix-berlin/berliner-schnauze/commit/f64f960cdb839193d2d3e521ddcd6b640f04499e))
+
+## [3.49.5](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.4...v3.49.5) (2026-09-20)
+
+
+### Performance Improvements
+
+* **word:** cache sorted words and anagram index across word pages ([69f0ea4](https://github.com/felix-berlin/berliner-schnauze/commit/69f0ea421365bd947101ae1ffb5eff9446e8a151))
+
 ## [3.49.4](https://github.com/felix-berlin/berliner-schnauze/compare/v3.49.3...v3.49.4) (2026-09-19)
 
 

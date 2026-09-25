@@ -5,32 +5,25 @@ import { describe, it, expect } from "vitest";
 const SoundEx = natural.SoundEx;
 
 describe("similarSoundingWords", () => {
-  it("should filter out the current word and calculate similarity", () => {
+  it("returns only the other words sharing the current word's soundex code", () => {
     const allWords = [
-      { id: 1, wordProperties: { berlinerisch: "word1" } },
-      { id: 2, wordProperties: { berlinerisch: "word2" } },
-      { id: 3, wordProperties: { berlinerisch: "word3" } },
+      { id: "1", wordProperties: { berlinerisch: "Smith" } },
+      { id: "2", wordProperties: { berlinerisch: "Smyth" } },
+      { id: "3", wordProperties: { berlinerisch: "Pier" } },
     ];
-    const currentWord = { id: 2, wordProperties: { berlinerisch: "word2" } };
+    const currentWord = allWords[1]!;
 
     const result = similarSoundingWords(allWords, currentWord);
 
-    expect(result).toHaveLength(2);
-    expect(result).toEqual([
-      {
-        isSimilar: new SoundEx().compare(
-          allWords[0].wordProperties.berlinerisch,
+    const expected = allWords.filter(
+      (w) =>
+        w.id !== currentWord.id &&
+        new SoundEx().compare(
+          w.wordProperties.berlinerisch,
           currentWord.wordProperties.berlinerisch,
         ),
-        word: allWords[0],
-      },
-      {
-        isSimilar: new SoundEx().compare(
-          allWords[2].wordProperties.berlinerisch,
-          currentWord.wordProperties.berlinerisch,
-        ),
-        word: allWords[2],
-      },
-    ]);
+    );
+    expect(expected).toHaveLength(1);
+    expect(result).toEqual(expected);
   });
 });

@@ -16,13 +16,13 @@ export const getStaticPaths = (async () => {
   const [allThemen, allWords] = await Promise.all([fetchAllThemen(), fetchAllWords()]);
 
   // Wort-zu-Thema-Mapping aus bereits gefetchten Wörtern
-  type WordNode = (typeof allWords)[number]['node'];
-  const wordsByThema = new Map<string, { node: WordNode }[]>();
-  for (const { node } of allWords) {
-    for (const thema of node.berlinerischThemen?.nodes ?? []) {
+  const wordsByThema = new Map<string, typeof allWords>();
+  for (const word of allWords) {
+    for (const thema of word.berlinerischThemen?.nodes ?? []) {
       if (!thema.slug) continue;
-      if (!wordsByThema.has(thema.slug)) wordsByThema.set(thema.slug, []);
-      wordsByThema.get(thema.slug)!.push({ node });
+      const bucket = wordsByThema.get(thema.slug);
+      if (bucket) bucket.push(word);
+      else wordsByThema.set(thema.slug, [word]);
     }
   }
 
@@ -40,7 +40,7 @@ export const getStaticPaths = (async () => {
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { thema, words } = Astro.props as Props;
+const { thema, words } = Astro.props;
 
 const seoProps = seoData({
   seo: {
@@ -60,10 +60,10 @@ const itemListJson = () =>
   JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    itemListElement: words.map(({ node }, index) => ({
+    itemListElement: words.map((word, index) => ({
       '@type': 'ListItem',
       position: index + 1,
-      url: canonicalUrl(routeToWord(node.slug ?? undefined), Astro.site),
+      url: canonicalUrl(routeToWord(word.slug), Astro.site),
     })),
     name: thema.name ?? '',
     numberOfItems: words.length,
@@ -84,10 +84,10 @@ const itemListJson = () =>
   <h2 class='c-thema-word-list__heading'>{words.length} Wörter zu diesem Thema</h2>
   <ul class='c-thema-word-list'>
     {
-      words.map(({ node }) => (
+      words.map((word) => (
         <li class='c-thema-word-list__item'>
-          <a class='c-thema-word-list__link' href={routeToWord(node.slug ?? undefined)}>
-            {node.wordProperties?.berlinerisch}
+          <a class='c-thema-word-list__link' href={routeToWord(word.slug)}>
+            {word.wordProperties.berlinerisch}
           </a>
         </li>
       ))

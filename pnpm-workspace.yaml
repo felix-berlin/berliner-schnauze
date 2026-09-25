@@ -29,26 +29,36 @@ minimumReleaseAgeExclude:
   - autoprefixer@10.5.3
   - compromise@14.16.0
   - de-compromise@0.1.0
-  - miniflare@4.20260710.0 || 4.20260721.0 || 5.20260811.1-alpha || 5.20260918.0-alpha
-  - wrangler@4.111.0 || 4.113.0 || 4.123.0 || 4.135.0
+  - miniflare@4.20260710.0 || 4.20260721.0 || 5.20260811.1-alpha || 5.20260918.0-alpha || 5.20260923.0-alpha
+  - wrangler@4.111.0 || 4.113.0 || 4.123.0 || 4.135.0 || 4.140.0
   - '@cloudflare/workerd-darwin-64@1.20260721.1 || 1.20260918.1'
   - '@cloudflare/workerd-darwin-arm64@1.20260721.1 || 1.20260918.1'
   - '@cloudflare/workerd-linux-64@1.20260721.1 || 1.20260918.1'
   - '@cloudflare/workerd-linux-arm64@1.20260721.1 || 1.20260918.1'
   - '@cloudflare/workerd-windows-64@1.20260721.1 || 1.20260918.1'
-  - "@infisical/cli@0.43.111"
+  - '@infisical/cli@0.43.111 || 0.43.137'
   - "@semantic-release/changelog@7.0.0"
   - "@semantic-release/git@11.0.0"
-  - nanostores@1.4.1
+  - nanostores@1.4.1 || 1.5.4
   - workerd@1.20260721.1 || 1.20260918.1
   - rollup-plugin-visualizer@7.1.1
-  - '@oxlint-tsgolint/darwin-arm64@7.0.2002'
-  - '@oxlint-tsgolint/darwin-x64@7.0.2002'
-  - '@oxlint-tsgolint/linux-arm64@7.0.2002'
-  - '@oxlint-tsgolint/linux-x64@7.0.2002'
-  - '@oxlint-tsgolint/win32-arm64@7.0.2002'
-  - '@oxlint-tsgolint/win32-x64@7.0.2002'
-  - oxlint-tsgolint@7.0.2002
+  - '@oxlint-tsgolint/darwin-arm64@7.0.2002 || 7.0.2003'
+  - '@oxlint-tsgolint/darwin-x64@7.0.2002 || 7.0.2003'
+  - '@oxlint-tsgolint/linux-arm64@7.0.2002 || 7.0.2003'
+  - '@oxlint-tsgolint/linux-x64@7.0.2002 || 7.0.2003'
+  - '@oxlint-tsgolint/win32-arm64@7.0.2002 || 7.0.2003'
+  - '@oxlint-tsgolint/win32-x64@7.0.2002 || 7.0.2003'
+  - oxlint-tsgolint@7.0.2002 || 7.0.2003
+  - '@graphql-codegen/cli@7.4.3'
+  - '@vitest/coverage-v8@5.0.2'
+  - '@vitest/mocker@5.0.2'
+  - '@vitest/pretty-format@5.0.2'
+  - '@vitest/spy@5.0.2'
+  - '@vitest/ui@5.0.2'
+  - '@vitest/utils@5.0.2'
+  - '@vitest/web-worker@5.0.2'
+  - vite@8.3.1
+  - vitest@5.0.2
 
 patchedDependencies:
   de-compromise: patches/de-compromise.patch

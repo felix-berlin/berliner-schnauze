@@ -32,7 +32,7 @@
 
     <a
       v-if="lastCard?.isReal && lastCard.slug"
-      :href="`/wort/${lastCard.slug}`"
+      :href="routeToWord(lastCard.slug)"
       class="c-bon-result__word-link"
       @click="trackWordExplored"
     >
@@ -60,7 +60,8 @@ import type { BonCard } from "@composables/useBon";
 import { useStore } from "@nanostores/vue";
 import { $bonStats } from "@stores/bonStats";
 import { trackEvent } from "@utils/analytics";
-import { buildShareUrl } from "@utils/bonShare";
+import { accuracyPercent as toAccuracyPercent, buildShareUrl } from "@utils/bonShare";
+import { routeToWord } from "@utils/helpers";
 import { useShare } from "@vueuse/core";
 import { computed, defineAsyncComponent, ref } from "vue";
 
@@ -91,7 +92,7 @@ defineExpose({
 });
 
 const accuracyPercent = computed(() =>
-  props.totalAnswered > 0 ? Math.round((props.correctAnswers / props.totalAnswered) * 100) : 0,
+  toAccuracyPercent(props.correctAnswers, props.totalAnswered),
 );
 
 const stats = useStore($bonStats);

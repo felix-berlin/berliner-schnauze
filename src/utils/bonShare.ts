@@ -7,6 +7,11 @@ export interface BonSharePayload {
   playerName?: string;
 }
 
+/** Share of correct answers as a whole percentage (0 when nothing was answered). */
+export function accuracyPercent(correctAnswers: number, totalAnswered: number): number {
+  return totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
+}
+
 function toBase64Url(str: string): string {
   return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }

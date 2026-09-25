@@ -21,7 +21,8 @@ vi.mock("@vueuse/core", async (importOriginal) => {
   };
 });
 
-vi.mock("@utils/bonShare", () => ({
+vi.mock("@utils/bonShare", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@utils/bonShare")>()),
   decodeShareHash: vi.fn((hash: string) => {
     if (hash === "valid") return samplePayload;
     return null;

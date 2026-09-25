@@ -40,47 +40,38 @@ import type { WordRef } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 
-import type { BerlinerWord } from '@/gql/entity-types';
 
 export const getStaticPaths = (async () => {
   const allWords = await fetchAllWords();
-  const wordRefs: WordRef[] = allWords
-    .filter(({ node }) => !!node.slug)
-    .map(({ node }) => ({
-      id: node.id,
-      slug: node.slug,
-      wordProperties: { berlinerisch: node.wordProperties?.berlinerisch },
-    }));
-  const wordRefById = new Map(wordRefs.map((ref) => [ref.id, ref]));
+  // Slim refs: wordRefs is serialized into the RelatedWords/RandomWordButton island props.
+  const pages = allWords.map((word) => ({
+    slug: word.slug,
+    word,
+    wordRef: {
+      id: word.id,
+      slug: word.slug,
+      wordProperties: { berlinerisch: word.wordProperties.berlinerisch },
+    } satisfies WordRef,
+  }));
+  const wordRefs: WordRef[] = pages.map((p) => p.wordRef);
 
-  return limitPagesForE2e(allWords).flatMap(({ node }) => {
-    if (!node.slug) {
-      console.warn(
-        `[wort/[...wordSlug]] Word without slug skipped — id: ${node.id}, berlinerisch: "${node.wordProperties?.berlinerisch ?? '(unknown)'}"`,
-      );
-      return [];
-    }
-    const wordRef = wordRefById.get(node.id)!;
-    return [
-      {
+  return limitPagesForE2e(pages).map(({ word, wordRef }) => ({
         // experimental.incrementalBuild: this only reflects the word's own
         // modified date. Neighbor/anagram/similar-sounding sections are derived
         // from OTHER words in wordRefs, so a page can theoretically go stale if
         // a different word changes in a way that affects this word's neighbors
         // without this word itself being touched. Narrow blast radius (only
         // alphabetically/phonetically adjacent words), monitored during rollout.
-        cacheKey: node.modifiedGmt ?? undefined,
+        cacheKey: word.modifiedGmt ?? undefined,
         params: {
-          wordSlug: node.slug,
+          wordSlug: word.slug,
         },
         props: {
-          word: node,
+          word,
           wordRef,
           wordRefs,
         },
-      },
-    ];
-  });
+  }));
 }) satisfies GetStaticPaths;
 
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
@@ -92,53 +83,43 @@ const { word, wordRef, wordRefs } = Astro.props;
 // Derived per page (not in getStaticPaths): these compare the word against all ~6000 others,
 // and getStaticPaths would run them for every word up front — which froze the dev server.
 const alphabeticNeighborsResult = alphabeticNeighbors(wordRefs, wordRef);
-const anagramsResult = findAnagrams(wordRef.wordProperties?.berlinerisch ?? '', wordRefs);
-const similarSpellingResult = similarWords(wordRefs, wordRef)
-  .filter((w) => w.isSimilar >= 0.85)
+const anagramsResult = findAnagrams(wordRef.wordProperties.berlinerisch, wordRefs);
+const similarSpellingResult = similarWords(wordRefs, wordRef, 0.85)
   .sort((a, b) => b.isSimilar - a.isSimilar)
   .slice(0, 5)
   .map((w) => w.word);
-const soundingWordsResult = similarSoundingWords(wordRefs, wordRef)
-  .filter((r) => r.isSimilar)
-  .map((r) => r.word);
+const soundingWordsResult = similarSoundingWords(wordRefs, wordRef);
 
-const wordProps: BerlinerWord['wordProperties'] = word.wordProperties;
+const wordProps = word.wordProperties;
+const { berlinerisch } = wordProps;
 
 const wordDescription = (() => {
-  const translations = (wordProps?.translations ?? [])
-    .map((t) => t?.translation)
-    .filter(Boolean)
-    .join(', ');
+  const translations = word.translations.join(', ');
   if (!translations) return undefined;
-  const berlinerisch = wordProps?.berlinerisch ?? '';
   const raw = `${berlinerisch} heißt auf Berlinerisch: ${translations}. Mit Etymologie, Aussprache und Beispielsätzen.`;
   return raw.length > 160 ? raw.slice(0, 157) + '…' : raw;
 })();
 
-const wordPageTitle = wordProps?.berlinerisch
-  ? `${wordProps.berlinerisch} auf Berlinerisch — Bedeutung, Beispiel & Herkunft | Berliner Schnauze`
+const wordPageTitle = berlinerisch
+  ? `${berlinerisch} auf Berlinerisch — Bedeutung, Beispiel & Herkunft | Berliner Schnauze`
   : (word.title ?? '');
 
-// const wikimediaFiles = await createWikimediaFileList(wordProps?.wikimediaFiles!);
-// console.log(wikimediaFiles);
+const wordTags = translateNlpTags(getWordType(berlinerisch));
 
-const wordTags = translateNlpTags(getWordType(word.wordProperties?.berlinerisch ?? ''));
-
-const hasImages = Boolean(wordProps?.images && wordProps.images.nodes.length > 0);
+const hasImages = Boolean(wordProps.images && wordProps.images.nodes.length > 0);
 const hasAnagrams = anagramsResult.length > 0;
-const berlinerisch = wordProps?.berlinerisch ?? '';
 const hasOrthographie = berlinerisch.length > 0;
 const hasLinguistik = berlinerisch.length > 0;
 const hasPhonologie = soundingWordsResult.length > 0 || similarSpellingResult.length > 0;
 const hasNeighbors =
   alphabeticNeighborsResult.before.length > 0 || alphabeticNeighborsResult.after.length > 0;
-const hasRelatedWords = (wordProps?.relatedWords?.nodes?.length ?? 0) > 0;
+const hasRelatedWords = (wordProps.relatedWords?.nodes?.length ?? 0) > 0;
 const { books: affiliateBooks, disclaimers: affiliateDisclaimers } = await fetchAffiliateData();
 const wortartLabel: string | undefined =
   wordTags.length > 0 ? Object.values(wordTags[0])[0]?.[0] : undefined;
 
-const firstImage = wordProps?.images?.nodes?.[0];
-const firstAudio = wordProps?.berlinerischAudio?.[0];
+const firstImage = wordProps.images?.nodes?.[0];
+const firstAudio = wordProps.berlinerischAudio?.[0];
 
 const generatedOgImageUrl = new URL(`/og/${wordSlug}.png`, Astro.site).toString();
 
@@ -146,19 +127,19 @@ const ogImage = word.seo?.opengraphImage?.sourceUrl
   ? word.seo.opengraphImage
   : firstImage?.sourceUrl
     ? {
-        alt: firstImage.altText || wordProps?.berlinerisch || '',
+        alt: firstImage.altText || berlinerisch,
         height: firstImage.mediaDetails?.height,
         sourceUrl: firstImage.sourceUrl,
         width: firstImage.mediaDetails?.width,
       }
     : {
-        alt: wordProps?.berlinerisch ?? '',
+        alt: berlinerisch,
         height: '630',
         sourceUrl: generatedOgImageUrl,
         width: '1200',
       };
 
-const exampleComments = (wordProps?.examples ?? [])
+const exampleComments = (wordProps.examples ?? [])
   .filter((e): e is NonNullable<typeof e> => Boolean(e?.example))
   .map((e) => {
     const comment: { '@type': string; text: string; description?: string } = {
@@ -172,7 +153,7 @@ const exampleComments = (wordProps?.examples ?? [])
   });
 
 const schemaJson = () => {
-  const alternateNames = (wordProps?.alternativeWords ?? [])
+  const alternateNames = (wordProps.alternativeWords ?? [])
     .map((w) => w?.alternativeWord)
     .filter((n): n is string => Boolean(n));
 
@@ -185,11 +166,8 @@ const schemaJson = () => {
     ...(word.modifiedGmt && { dateModified: word.modifiedGmt }),
     description:
       wordDescription ??
-      (wordProps?.translations ?? [])
-        .map((t) => t?.translation)
-        .filter(Boolean)
-        .join('; '),
-    ...(wordProps?.article && {
+      word.translations.join('; '),
+    ...(wordProps.article && {
       disambiguatingDescription: `Berliner Dialektwort, ${wordProps.article}`,
     }),
     identifier: word.id,
@@ -219,19 +197,19 @@ const schemaJson = () => {
     },
     inLanguage: 'de-DE',
     mainEntityOfPage: canonicalUrl(Astro.url.pathname, Astro.site),
-    name: wordProps?.berlinerisch,
-    sameAs: wordProps?.learnMore || undefined,
+    name: berlinerisch,
+    sameAs: wordProps.learnMore || undefined,
     ...(firstAudio?.audio?.node?.mediaItemUrl && {
       subjectOf: {
         '@type': 'AudioObject',
         contentUrl: firstAudio.audio.node.mediaItemUrl,
-        description: `Berliner Aussprache von „${wordProps?.berlinerisch}"`,
+        description: `Berliner Aussprache von „${berlinerisch}"`,
         encodingFormat: 'audio/mpeg',
         inLanguage: 'de-DE',
-        name: `Aussprache: ${wordProps?.berlinerisch}`,
+        name: `Aussprache: ${berlinerisch}`,
       },
     }),
-    termCode: word.slug || undefined,
+    termCode: word.slug,
     url: canonicalUrl(Astro.url.pathname, Astro.site),
   });
 };
@@ -284,7 +262,7 @@ const schemaJson = () => {
       <div class='c-word-main__content'>
         <WordSectionEtymologie wordProps={wordProps} />
 
-        <WordSectionBeispiele examples={wordProps?.examples} />
+        <WordSectionBeispiele examples={wordProps.examples} />
 
         <WordSectionOrthographie allWords={wordRefs} word={berlinerisch} />
 
@@ -302,42 +280,25 @@ const schemaJson = () => {
         <WordSectionNachbarn neighbors={alphabeticNeighborsResult} />
 
         <WordSectionVerwandteWorte
-          relatedWords={wordProps?.relatedWords ?? null}
+          relatedWords={wordProps.relatedWords ?? null}
           currentWord={berlinerisch}
         />
 
-        {!hasImages && wordProps?.learnMore && <WordLearnMore learnMore={wordProps.learnMore} />}
+        {!hasImages && wordProps.learnMore && <WordLearnMore learnMore={wordProps.learnMore} />}
 
         <BookRecommendations books={affiliateBooks} disclaimers={affiliateDisclaimers} />
       </div>
 
-      {hasImages && <WordGalleryCol images={wordProps?.images} learnMore={wordProps?.learnMore} />}
+      {hasImages && <WordGalleryCol images={wordProps.images} learnMore={wordProps.learnMore} />}
     </div>
   </article>
 
   <WordPageFooter dateGmt={word.dateGmt} modifiedGmt={word.modifiedGmt} />
 
-  <RelatedWords words={wordRefs} currentWord={wordProps?.berlinerisch ?? ''}>
+  <RelatedWords words={wordRefs} currentWord={berlinerisch}>
     <li>
       <RandomWordButton class:list='c-related-words__word is-random' words={wordRefs} />
     </li>
   </RelatedWords>
 </Layout>
 
-<script>
-  function syncHeaderHeight() {
-    const header = document.querySelector<HTMLElement>('.c-header');
-    if (!header) return;
-    const h = Math.round(header.getBoundingClientRect().height);
-    if (h > 0) {
-      document.documentElement.style.setProperty('--site-header-height', h + 'px');
-    }
-  }
-
-  const siteHeader = document.querySelector<HTMLElement>('.c-header');
-  if (siteHeader) {
-    new ResizeObserver(syncHeaderHeight).observe(siteHeader);
-  }
-
-  document.addEventListener('astro:page-load', syncHeaderHeight);
-</script>

@@ -2,6 +2,7 @@
 import Layout from '@layouts/Layout.astro';
 import type { Seo } from '@/types/seo';
 import { getCollection, render } from 'astro:content';
+import { formattedDate } from '@utils/helpers';
 
 export async function getStaticPaths() {
   const changelogs = await getCollection('changelogs');
@@ -26,13 +27,7 @@ const seo: Seo = {
     <header class='c-user-changelog__header'>
       <h1 class='c-user-changelog__title'>{title}</h1>
       <time class='c-user-changelog__date' datetime={releaseDate}>
-        Veröffentlicht am {
-          new Date(releaseDate).toLocaleDateString('de-DE', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          })
-        }
+        Veröffentlicht am {formattedDate(releaseDate)}
       </time>
     </header>
     <div class='c-user-changelog__content'>

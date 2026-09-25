@@ -3,15 +3,17 @@ import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { h, nextTick } from "vue";
 
-const { resizeCb } = vi.hoisted(() => ({
+const { resizeCb, resizeTargets } = vi.hoisted(() => ({
   resizeCb: { fn: null as ((...args: unknown[]) => void) | null },
+  resizeTargets: { get: null as (() => unknown[]) | null },
 }));
 
 vi.mock("@vueuse/core", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@vueuse/core")>();
   return {
     ...actual,
-    useResizeObserver: vi.fn((_targets: unknown, fn: (...args: unknown[]) => void) => {
+    useResizeObserver: vi.fn((targets: () => unknown[], fn: (...args: unknown[]) => void) => {
+      resizeTargets.get = targets;
       resizeCb.fn = fn;
       return { isSupported: { value: true }, stop: vi.fn() };
     }),
@@ -67,14 +69,6 @@ describe("DropdownPopover.vue", () => {
     expect(wrapper.find(".c-dropdown__trigger span").text()).toBe("label");
   });
 
-  it("renders panel slot content inside panel element when lazy=false", () => {
-    const wrapper = mount(DropdownPopover, {
-      props: { lazy: false },
-      slots: { panel: "<button>Action</button>" },
-    });
-    expect(wrapper.find(".c-dropdown__panel button").text()).toBe("Action");
-  });
-
   it("panel has popover='auto' attribute", () => {
     const wrapper = mount(DropdownPopover);
     expect(wrapper.find(".c-dropdown__panel").attributes("popover")).toBe("auto");
@@ -82,15 +76,10 @@ describe("DropdownPopover.vue", () => {
 
   // --- Slot scope: triggerProps ---
 
-  it("triggerProps.popovertarget matches panel id when triggers includes 'click'", () => {
-    const wrapper = mountWithTrigger({ props: { triggers: ["click"] } });
+  it("triggerProps.popovertarget matches panel id", () => {
+    const wrapper = mountWithTrigger();
     const panelId = wrapper.find(".c-dropdown__panel").attributes("id");
     expect(wrapper.find("[data-testid=trigger-btn]").attributes("popovertarget")).toBe(panelId);
-  });
-
-  it("triggerProps does not include popovertarget when triggers is ['hover']", () => {
-    const wrapper = mountWithTrigger({ props: { triggers: ["hover"] } });
-    expect(wrapper.find("[data-testid=trigger-btn]").attributes("popovertarget")).toBeUndefined();
   });
 
   it("triggerProps.aria-controls matches panel id", () => {
@@ -168,7 +157,7 @@ describe("DropdownPopover.vue", () => {
     expect(panelStyle).toContain(`position-anchor: ${anchorName}`);
   });
 
-  // --- Props: placement, offset, skidding ---
+  // --- Props: placement, offset ---
 
   it("applies correct CSS class for each placement value", () => {
     const placements = [
@@ -192,54 +181,14 @@ describe("DropdownPopover.vue", () => {
     );
   });
 
-  it("sets --c-dropdown-skidding in panel inline style from skidding prop", () => {
-    const wrapper = mount(DropdownPopover, { props: { skidding: 12 } });
-    expect(wrapper.find(".c-dropdown__panel").attributes("style")).toContain(
-      "--c-dropdown-skidding: 12px",
-    );
-  });
+  // --- arrow ---
 
-  it("--c-dropdown-skidding defaults to 0px", () => {
-    const wrapper = mount(DropdownPopover);
-    expect(wrapper.find(".c-dropdown__panel").attributes("style")).toContain(
-      "--c-dropdown-skidding: 0px",
-    );
-  });
-
-  // --- Props: panelClass, panelTag ---
-
-  it("panelClass is applied to the panel element", () => {
-    const wrapper = mount(DropdownPopover, { props: { panelClass: "my-custom-panel" } });
-    expect(wrapper.find(".c-dropdown__panel.my-custom-panel").exists()).toBe(true);
-  });
-
-  it("panelTag changes the panel element tag (default is div)", () => {
-    const wrapper = mount(DropdownPopover, { props: { panelTag: "menu" } });
-    expect(wrapper.find("menu.c-dropdown__panel").exists()).toBe(true);
-  });
-
-  // --- Props: arrow, arrowPadding ---
-
-  it("arrow element is NOT rendered when arrow=false", () => {
-    const wrapper = mount(DropdownPopover, { props: { arrow: false } });
+  it("arrow element is rendered with aria-hidden once opened", async () => {
+    const wrapper = mountWithTrigger();
     expect(wrapper.find(".c-dropdown__arrow").exists()).toBe(false);
-  });
-
-  it("arrow element IS rendered when arrow=true (lazy=false)", () => {
-    const wrapper = mount(DropdownPopover, { props: { arrow: true, lazy: false } });
-    expect(wrapper.find(".c-dropdown__arrow").exists()).toBe(true);
-  });
-
-  it("arrow element has aria-hidden='true'", () => {
-    const wrapper = mount(DropdownPopover, { props: { arrow: true, lazy: false } });
+    openToggle(wrapper);
+    await nextTick();
     expect(wrapper.find(".c-dropdown__arrow").attributes("aria-hidden")).toBe("true");
-  });
-
-  it("sets --c-dropdown-arrow-padding in panel style from arrowPadding prop", () => {
-    const wrapper = mount(DropdownPopover, { props: { arrow: true, arrowPadding: 8 } });
-    expect(wrapper.find(".c-dropdown__panel").attributes("style")).toContain(
-      "--c-dropdown-arrow-padding: 8px",
-    );
   });
 
   // --- $attrs ---
@@ -262,17 +211,17 @@ describe("DropdownPopover.vue", () => {
     wrapper.unmount();
   });
 
-  // --- lazy prop ---
+  // --- lazy panel content ---
 
-  describe("lazy prop", () => {
-    it("panel slot is NOT rendered before first open when lazy=true (default)", () => {
+  describe("lazy panel content", () => {
+    it("panel slot is NOT rendered before first open", () => {
       const wrapper = mount(DropdownPopover, {
         slots: { panel: '<button class="panel-item">Action</button>' },
       });
       expect(wrapper.find(".panel-item").exists()).toBe(false);
     });
 
-    it("panel slot renders after first toggle to open when lazy=true", async () => {
+    it("panel slot renders after first toggle to open", async () => {
       const wrapper = mount(DropdownPopover, {
         slots: { panel: '<button class="panel-item">Action</button>' },
       });
@@ -281,7 +230,7 @@ describe("DropdownPopover.vue", () => {
       expect(wrapper.find(".panel-item").exists()).toBe(true);
     });
 
-    it("panel slot is unmounted after close animation when lazy=true", async () => {
+    it("panel slot is unmounted after close animation", async () => {
       vi.useFakeTimers();
       const wrapper = mount(DropdownPopover, {
         slots: { panel: '<button class="panel-item">Action</button>' },
@@ -296,96 +245,23 @@ describe("DropdownPopover.vue", () => {
       await nextTick();
       expect(wrapper.find(".panel-item").exists()).toBe(false);
     });
-
-    it("panel slot renders immediately on mount when lazy=false", () => {
-      const wrapper = mount(DropdownPopover, {
-        props: { lazy: false },
-        slots: { panel: '<button class="panel-item">Action</button>' },
-      });
-      expect(wrapper.find(".panel-item").exists()).toBe(true);
-    });
-  });
-
-  // --- triggers: hover ---
-
-  describe("hover trigger", () => {
-    beforeEach(() => vi.useFakeTimers());
-
-    it("mouseenter on trigger calls showPopover", async () => {
-      const wrapper = mount(DropdownPopover, { props: { triggers: ["hover"] } });
-      await wrapper.find(".c-dropdown__trigger").trigger("mouseenter");
-      expect(mockShowPopover).toHaveBeenCalledOnce();
-    });
-
-    it("mouseleave on trigger hides popover after 100ms delay", async () => {
-      const wrapper = mount(DropdownPopover, { props: { triggers: ["hover"] } });
-      await wrapper.find(".c-dropdown__trigger").trigger("mouseleave");
-      expect(mockHidePopover).not.toHaveBeenCalled();
-      vi.advanceTimersByTime(100);
-      expect(mockHidePopover).toHaveBeenCalledOnce();
-    });
-
-    it("mouseenter on panel cancels the close timer", async () => {
-      const wrapper = mount(DropdownPopover, { props: { triggers: ["hover"] } });
-      await wrapper.find(".c-dropdown__trigger").trigger("mouseleave");
-      await wrapper.find(".c-dropdown__panel").trigger("mouseenter");
-      vi.advanceTimersByTime(100);
-      expect(mockHidePopover).not.toHaveBeenCalled();
-    });
-
-    it("mouseleave on panel re-schedules the close", async () => {
-      const wrapper = mount(DropdownPopover, { props: { triggers: ["hover"] } });
-      await wrapper.find(".c-dropdown__trigger").trigger("mouseleave");
-      await wrapper.find(".c-dropdown__panel").trigger("mouseenter");
-      await wrapper.find(".c-dropdown__panel").trigger("mouseleave");
-      vi.advanceTimersByTime(100);
-      expect(mockHidePopover).toHaveBeenCalledOnce();
-    });
-
-    it("mouseenter does not call showPopover when triggers does not include 'hover'", async () => {
-      const wrapper = mount(DropdownPopover, { props: { triggers: ["click"] } });
-      await wrapper.find(".c-dropdown__trigger").trigger("mouseenter");
-      expect(mockShowPopover).not.toHaveBeenCalled();
-    });
-  });
-
-  // --- triggers: focus ---
-
-  describe("focus trigger", () => {
-    beforeEach(() => vi.useFakeTimers());
-
-    it("focusin on trigger calls showPopover", async () => {
-      const wrapper = mount(DropdownPopover, { props: { triggers: ["focus"] } });
-      await wrapper.find(".c-dropdown__trigger").trigger("focusin");
-      expect(mockShowPopover).toHaveBeenCalledOnce();
-    });
-
-    it("focusout on trigger hides popover after 100ms delay", async () => {
-      const wrapper = mount(DropdownPopover, { props: { triggers: ["focus"] } });
-      await wrapper.find(".c-dropdown__trigger").trigger("focusout");
-      expect(mockHidePopover).not.toHaveBeenCalled();
-      vi.advanceTimersByTime(100);
-      expect(mockHidePopover).toHaveBeenCalledOnce();
-    });
-
-    it("focusin does not call showPopover when triggers does not include 'focus'", async () => {
-      const wrapper = mount(DropdownPopover, { props: { triggers: ["click"] } });
-      await wrapper.find(".c-dropdown__trigger").trigger("focusin");
-      expect(mockShowPopover).not.toHaveBeenCalled();
-    });
   });
 
   // --- ResizeObserver callback (line 112) ---
 
-  it("resize observer callback is a no-op when dropdown is closed (covers line 112 false branch)", async () => {
+  it("resize observer targets are empty while closed and populated while open", async () => {
     const wrapper = mountWithTrigger();
-    // isOpen is false by default — callback should not invoke syncArrow
-    resizeCb.fn?.();
+    const getTargets = resizeTargets.get!;
+    expect(getTargets()).toEqual([]);
+    openToggle(wrapper);
     await nextTick();
-    expect(wrapper.find(".c-dropdown").exists()).toBe(true);
+    expect(getTargets()).toHaveLength(3);
+    closeToggle(wrapper);
+    await nextTick();
+    expect(getTargets()).toEqual([]);
   });
 
-  it("resize observer callback calls syncArrow when dropdown is open (covers line 112 true branch)", async () => {
+  it("resize observer callback calls syncArrow when dropdown is open", async () => {
     const wrapper = mountWithTrigger();
     openToggle(wrapper);
     await nextTick();
@@ -395,39 +271,10 @@ describe("DropdownPopover.vue", () => {
     expect(wrapper.find(".c-dropdown").exists()).toBe(true);
   });
 
-  // --- triggers: early-return branches (lines 169, 180) ---
-
-  it("mouseleave on trigger does not schedule close when triggers excludes 'hover' (covers line 169 true branch)", async () => {
-    vi.useFakeTimers();
-    const wrapper = mount(DropdownPopover, { props: { triggers: ["click"] } });
-    await wrapper.find(".c-dropdown__trigger").trigger("mouseleave");
-    vi.advanceTimersByTime(200);
-    expect(mockHidePopover).not.toHaveBeenCalled();
-  });
-
-  it("focusout on trigger does not schedule close when triggers excludes 'focus' (covers line 180 true branch)", async () => {
-    vi.useFakeTimers();
-    const wrapper = mount(DropdownPopover, { props: { triggers: ["click"] } });
-    await wrapper.find(".c-dropdown__trigger").trigger("focusout");
-    vi.advanceTimersByTime(200);
-    expect(mockHidePopover).not.toHaveBeenCalled();
-  });
-
-  // --- syncArrow: early-return when arrow=false (line 101) ---
-
-  it("resize observer callback with arrow=false hits syncArrow early-return (covers line 101 !arrow branch)", async () => {
-    const wrapper = mountWithTrigger({ props: { arrow: false } });
-    openToggle(wrapper);
-    await nextTick();
-    resizeCb.fn?.();
-    await nextTick();
-    expect(wrapper.find(".c-dropdown").exists()).toBe(true);
-  });
-
   // --- arrowDynamicStyle: arrowAbove=false ternary branches (lines 92, 94) ---
 
-  it("syncArrow sets arrowAbove=false when panel is below trigger (covers lines 92/94 false ternary branches)", async () => {
-    const wrapper = mountWithTrigger({ props: { arrow: true, lazy: false } });
+  it("syncArrow sets arrowAbove=false when panel is below trigger", async () => {
+    const wrapper = mountWithTrigger();
     const panelEl = wrapper.find(".c-dropdown__panel").element;
     const triggerSpan = wrapper.find(".c-dropdown__trigger").element;
     vi.spyOn(panelEl, "getBoundingClientRect").mockReturnValue({
@@ -459,7 +306,7 @@ describe("DropdownPopover.vue", () => {
 
   // --- onToggle close: setTimeout false branch (line 137) ---
 
-  it("setTimeout callback does not clear hasContent when dropdown was reopened within 150ms (covers line 137 false branch)", async () => {
+  it("setTimeout callback does not clear hasContent when dropdown was reopened within 150ms", async () => {
     vi.useFakeTimers();
     const wrapper = mount(DropdownPopover, {
       slots: { panel: '<button class="panel-item">Action</button>' },
@@ -477,7 +324,7 @@ describe("DropdownPopover.vue", () => {
 
   // --- onToggle close: focus-stealing guard false branch (line 140) ---
 
-  it("onToggle close skips focus-steal when activeElement is outside trigger and panel (covers line 140 false branch)", async () => {
+  it("onToggle close skips focus-steal when activeElement is outside trigger and panel", async () => {
     const wrapper = mount(DropdownPopover, { attachTo: document.body });
     const external = document.createElement("button");
     document.body.appendChild(external);
@@ -493,7 +340,7 @@ describe("DropdownPopover.vue", () => {
 
   // --- close() fallback (line 190) ---
 
-  it("close() focuses triggerEl directly when no focusable descendant inside trigger (covers line 190 ?? branch)", () => {
+  it("close() focuses triggerEl directly when no focusable descendant inside trigger", () => {
     const wrapper = mount(DropdownPopover, {
       attachTo: document.body,
       slots: { default: "<span>not focusable</span>" },

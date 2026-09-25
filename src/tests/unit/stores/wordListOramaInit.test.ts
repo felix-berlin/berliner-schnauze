@@ -22,9 +22,7 @@ vi.mock("@utils/helpers.ts", () => ({
 const makeWord = (berlinerisch: string, slug: string) => ({
   berlinerWordId: slug,
   berlinerischWordTypes: [],
-  dateGmt: "2026-01-01T00:00:00",
   dateTs: 1_767_225_600_000,
-  modifiedGmt: "2026-01-01T00:00:00",
   modifiedTs: 1_767_225_600_000,
   slug,
   themen: [],
@@ -38,7 +36,6 @@ const makeWord = (berlinerisch: string, slug: string) => ({
     characterLength: berlinerisch.length,
     consonantsCount: 3,
     multipleMeanings: false,
-    similarSoundingWords: false,
     syllablesCount: 2,
     translations: ["übersetzung"],
     vowelsCount: 2,

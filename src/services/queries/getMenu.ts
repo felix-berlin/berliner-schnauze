@@ -1,4 +1,4 @@
-import { wpGraphqlClient } from "@services/wpGraphqlClient";
+import { wpQuery } from "@services/wpGraphqlClient";
 
 import { graphql } from "@/gql";
 import { MenuByNameDocument } from "@/gql/graphql.ts";
@@ -13,13 +13,8 @@ export interface MenuItem {
  * Fetches a WordPress menu by name and maps its items to the NavList item shape.
  */
 export const fetchMenu = async (name: string): Promise<MenuItem[]> => {
-  const response = await wpGraphqlClient.query(MenuByNameDocument, { name }).toPromise();
-
-  if (response.error) {
-    throw new Error(`Fetching menu "${name}" failed`, { cause: response.error });
-  }
-
-  const nodes = response.data?.menu?.menuItems?.nodes ?? [];
+  const data = await wpQuery(MenuByNameDocument, { name }, `Fetching menu "${name}" failed`);
+  const nodes = data?.menu?.menuItems?.nodes ?? [];
 
   return nodes.flatMap((node) =>
     node.path && node.label

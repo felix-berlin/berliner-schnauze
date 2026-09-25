@@ -12,7 +12,8 @@ vi.mock("@nanostores/vue", () => ({
 
 vi.mock("@stores/bonStats", () => ({ $bonStats: {} }));
 
-vi.mock("@utils/bonShare", () => ({
+vi.mock("@utils/bonShare", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@utils/bonShare")>()),
   buildShareUrl: vi.fn(() => "/games/berliner-oder-nicht/share?r=abc"),
 }));
 

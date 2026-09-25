@@ -1,16 +1,24 @@
 import { WP_API } from "astro:env/client";
 
+import type {
+  CoreImageBlockFieldsFragment,
+  CoreQuoteBlockFieldsFragment,
+  GetAllPostsQuery,
+} from "@/gql/graphql";
+
 export interface TocEntry {
   id: string;
   text: string;
 }
 
-export interface ArticleBlock {
-  name: string;
-  order: number;
-  saveContent?: string | null;
-  attributes?: unknown;
-}
+export type ArticleBlock = NonNullable<
+  NonNullable<GetAllPostsQuery["posts"]>["nodes"][number]["blocks"]
+>[number];
+
+export const isImageBlock = (block: ArticleBlock): block is CoreImageBlockFieldsFragment =>
+  block.name === "core/image";
+export const isQuoteBlock = (block: ArticleBlock): block is CoreQuoteBlockFieldsFragment =>
+  block.name === "core/quote";
 
 export interface ProcessedArticle {
   blocks: ArticleBlock[];
@@ -87,7 +95,7 @@ export const processArticleBlocks = (blocks: ArticleBlock[]): ProcessedArticle =
   };
 
   const outBlocks = sorted.map((block) => {
-    if (block.name === "core/image" || block.name === "core/quote") return block;
+    if (isImageBlock(block) || isQuoteBlock(block)) return block;
 
     const source = block.saveContent ?? "";
     if (!source) return block;

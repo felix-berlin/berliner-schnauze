@@ -3,13 +3,7 @@ import { wpGraphqlClient } from "@services/wpGraphqlClient";
 import { SHOW_TEST_DATA } from "astro:env/client";
 import { E2E_WORD_LIMIT } from "astro:env/server";
 
-import type {
-  GetAllWordsQuery,
-  GetAllWordsQueryVariables,
-  OrderEnum,
-  PostObjectsConnectionOrderbyEnum,
-  PostStatusEnum,
-} from "@/gql/graphql.ts";
+import type { GetAllWordsQuery, GetAllWordsQueryVariables, PostStatusEnum } from "@/gql/graphql.ts";
 
 import { graphql } from "@/gql";
 import { GetAllWordsDocument } from "@/gql/graphql.ts";
@@ -30,24 +24,24 @@ const E2E_REQUIRED_SLUGS = new Set([
 // Caps only the generated pages (word + OG routes) in the Playwright CI build.
 // The full word set must stay intact: list/letter filters and the
 // similar-sounding/neighbor sections are derived from all words.
-export const limitPagesForE2e = <T extends { node: { slug?: string | null } }>(edges: T[]): T[] => {
+export const limitPagesForE2e = <T extends { slug: string }>(words: T[]): T[] => {
   const limit = E2E_WORD_LIMIT;
-  if (!limit) return edges;
-  return edges.filter(({ node }, i) => i < limit || E2E_REQUIRED_SLUGS.has(node.slug ?? ""));
+  if (!limit) return words;
+  return words.filter(({ slug }, i) => i < limit || E2E_REQUIRED_SLUGS.has(slug));
 };
 
-const fetchPaginatedWords = async (
-  orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
-  orderByType: OrderEnum = "ASC",
-  stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
-) => {
+// Dev servers and the Playwright CI build (restored via actions/cache) skip the ~60 sequential requests.
+const useDiskCache = import.meta.env.DEV || !!E2E_WORD_LIMIT;
+
+const fetchPaginatedWords = async () => {
+  const stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"];
   const allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
   let cursor = null;
   let complete = true;
   const pageSize = 500; // needs graphql_connection_max_query_amount >= 500 on the WP side
-  const cacheKey = ["words", orderByField, orderByType, stati.join("-")].join("_");
+  const cacheKey = ["words", "TITLE", "ASC", stati.join("-")].join("_");
 
-  if (import.meta.env.DEV) {
+  if (useDiskCache) {
     const cached = await readWordsCache<typeof allWords>(cacheKey);
     if (cached) return cached;
   }
@@ -57,9 +51,9 @@ const fetchPaginatedWords = async (
 
     const variables: GetAllWordsQueryVariables = {
       after: cursor,
-      field: orderByField,
+      field: "TITLE",
       first: pageSize,
-      order: orderByType,
+      order: "ASC",
       stati,
     };
     // oxlint-disable-next-line no-await-in-loop -- cursor-based pagination: each page's cursor depends on the previous response
@@ -85,23 +79,44 @@ const fetchPaginatedWords = async (
     }
   }
 
-  if (import.meta.env.DEV && complete) await writeWordsCache(cacheKey, allWords);
+  if (useDiskCache && complete) await writeWordsCache(cacheKey, allWords);
 
   return allWords;
 };
 
 type WordEdges = NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"];
+type RawWord = WordEdges[number]["node"];
 
-let _allWordsCache: Promise<WordEdges> | null = null;
-
-export const fetchAllWords = async (
-  orderByField: PostObjectsConnectionOrderbyEnum = "TITLE",
-  orderByType: OrderEnum = "ASC",
-  stati: PostStatusEnum[] = SHOW_TEST_DATA ? ["DRAFT", "PUBLISH"] : ["PUBLISH"],
-): Promise<WordEdges> => {
-  _allWordsCache ??= fetchPaginatedWords(orderByField, orderByType, stati);
-  return _allWordsCache;
+/** A word as every build-time consumer sees it: slug-less words dropped, nullable basics resolved. */
+export type Word = RawWord & {
+  slug: string;
+  /** Flattened, non-empty `wordProperties.translations`. */
+  translations: string[];
+  wordProperties: NonNullable<RawWord["wordProperties"]> & { berlinerisch: string };
 };
+
+const normalizeWords = (edges: WordEdges): Word[] =>
+  edges.flatMap(({ node }) => {
+    if (!node.slug || !node.wordProperties) {
+      console.warn(
+        `[fetchAllWords] Word without slug/wordProperties skipped — id: ${node.id}, berlinerisch: "${node.wordProperties?.berlinerisch ?? "(unknown)"}"`,
+      );
+      return [];
+    }
+    const wordProperties = {
+      ...node.wordProperties,
+      berlinerisch: node.wordProperties.berlinerisch ?? "",
+    };
+    const translations = (wordProperties.translations ?? [])
+      .map((t) => t?.translation)
+      .filter((t): t is string => !!t);
+    return [{ ...node, slug: node.slug, translations, wordProperties }];
+  });
+
+let _allWordsCache: Promise<Word[]> | null = null;
+
+export const fetchAllWords = (): Promise<Word[]> =>
+  (_allWordsCache ??= fetchPaginatedWords().then(normalizeWords));
 
 export const GetAllWords = graphql(`
   query GetAllWords(

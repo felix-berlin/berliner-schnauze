@@ -13,8 +13,10 @@ const {
   mockStartShake,
   mockStartCooldown,
   mockVibrate,
+  mockFetchSearchIndex,
 } = vi.hoisted(() => ({
   mockAnswer: vi.fn(),
+  mockFetchSearchIndex: vi.fn(),
   mockInit: vi.fn(),
   mockNextCard: vi.fn(),
   mockResumeGame: vi.fn(),
@@ -58,6 +60,10 @@ vi.mock("@composables/useBon", () => ({
 
 vi.mock("@stores/bonStats", () => ({
   $bonStats: { setKey: vi.fn() },
+}));
+
+vi.mock("@services/searchIndex.ts", () => ({
+  fetchSearchIndex: mockFetchSearchIndex,
 }));
 
 vi.mock("@stores/savedBon", () => ({
@@ -161,9 +167,7 @@ describe("BerlinerOderNicht.vue", () => {
     mockStartCooldown.mockClear();
     mockVibrate.mockClear();
 
-    global.fetch = vi.fn(() =>
-      Promise.resolve({ json: () => Promise.resolve([]), ok: true }),
-    ) as unknown as typeof fetch;
+    mockFetchSearchIndex.mockReset().mockResolvedValue([]);
 
     setupMocks();
   });
@@ -294,18 +298,12 @@ describe("BerlinerOderNicht.vue", () => {
   });
 
   it("calls init after successful fetch on mount", async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        json: () =>
-          Promise.resolve([
-            {
-              slug: "kiez",
-              wordProperties: { berlinerisch: "Kiez", translations: ["Neighborhood"] },
-            },
-          ]),
-        ok: true,
-      }),
-    ) as unknown as typeof fetch;
+    mockFetchSearchIndex.mockResolvedValue([
+      {
+        slug: "kiez",
+        wordProperties: { berlinerisch: "Kiez", translations: ["Neighborhood"] },
+      },
+    ]);
     mount(BerlinerOderNicht);
     await vi.runAllTimersAsync();
     expect(mockInit).toHaveBeenCalled();
@@ -313,7 +311,7 @@ describe("BerlinerOderNicht.vue", () => {
 
   it("logs error when fetch fails on mount", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    global.fetch = vi.fn(() => Promise.resolve({ ok: false })) as unknown as typeof fetch;
+    mockFetchSearchIndex.mockRejectedValue(new Error("search index fetch failed"));
     mount(BerlinerOderNicht);
     await vi.runAllTimersAsync();
     expect(consoleSpy).toHaveBeenCalled();
@@ -612,15 +610,9 @@ describe("BerlinerOderNicht.vue", () => {
   });
 
   it("onMounted maps word with empty translations to translation=undefined (covers line 246 ?? branch)", async () => {
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        json: () =>
-          Promise.resolve([
-            { slug: "schnauze", wordProperties: { berlinerisch: "Schnauze", translations: [] } },
-          ]),
-        ok: true,
-      }),
-    ) as unknown as typeof fetch;
+    mockFetchSearchIndex.mockResolvedValue([
+      { slug: "schnauze", wordProperties: { berlinerisch: "Schnauze", translations: [] } },
+    ]);
     mount(BerlinerOderNicht);
     await vi.runAllTimersAsync();
     expect(mockInit).toHaveBeenCalled();

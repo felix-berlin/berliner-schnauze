@@ -110,14 +110,6 @@ describe("translateNlpTags", () => {
 // ---------------------------------------------------------------------------
 
 describe("similarWords", () => {
-  it("returns empty array when allWords is falsy", () => {
-    expect(similarWords(null as unknown as BerlinerWord[], makeWord("1"))).toEqual([]);
-  });
-
-  it("returns empty array when currentWord is falsy", () => {
-    expect(similarWords([makeWord("1")], null as unknown as BerlinerWord)).toEqual([]);
-  });
-
   it("excludes current word from results", () => {
     const current = makeWord("1", "Bier");
     const other = makeWord("2", "Pier");
@@ -149,53 +141,29 @@ describe("similarWords", () => {
     const withUndefined = similarWords([current, other], current, undefined);
     expect(withZero).toHaveLength(withUndefined.length);
   });
-
-  it("handles words with null berlinerisch (covers word.?.berlinerisch ?? '' branch)", () => {
-    const current = makeWord("1", "Bier");
-    const nullWord = { id: "2", wordProperties: { berlinerisch: null } } as unknown as BerlinerWord;
-    const noPropsWord = { id: "3" } as unknown as BerlinerWord;
-    const results = similarWords([current, nullWord, noPropsWord], current);
-    expect(results).toHaveLength(2);
-  });
-
-  it("handles currentWord with no wordProperties (covers currentWord.?.berlinerisch ?? '' branch)", () => {
-    const current = { id: "1" } as unknown as BerlinerWord;
-    const other = makeWord("2", "Bier");
-    const results = similarWords([current, other], current);
-    expect(results).toHaveLength(1);
-  });
 });
 
 // ---------------------------------------------------------------------------
 
 describe("similarSoundingWords", () => {
-  it("returns empty array when allWords is falsy", () => {
-    expect(similarSoundingWords(null as unknown as BerlinerWord[], makeWord("1"))).toEqual([]);
-  });
-
-  it("returns empty array when currentWord is falsy", () => {
-    expect(similarSoundingWords([makeWord("1")], null as unknown as BerlinerWord)).toEqual([]);
-  });
-
   it("excludes current word from results", () => {
     const current = makeWord("1", "Bier");
     const other = makeWord("2", "Pier");
     const results = similarSoundingWords([current, other], current);
-    expect(results.every((r) => r.word.id !== "1")).toBe(true);
+    expect(results.every((r) => r.id !== "1")).toBe(true);
   });
 
-  it("marks phonetically similar words as isSimilar true", () => {
+  it("returns phonetically similar words", () => {
     const current = makeWord("1", "Smith");
     const similar = makeWord("2", "Smyth");
     const results = similarSoundingWords([current, similar], current);
-    expect(results.find((r) => r.word.id === "2")?.isSimilar).toBe(true);
+    expect(results.map((r) => r.id)).toEqual(["2"]);
   });
 
-  it("returns isSimilar false when berlinerisch is missing", () => {
+  it("returns no matches when berlinerisch is missing", () => {
     const current = makeWord("1", null);
     const other = makeWord("2", "Pier");
-    const results = similarSoundingWords([current, other], current);
-    expect(results.find((r) => r.word.id === "2")?.isSimilar).toBe(false);
+    expect(similarSoundingWords([current, other], current)).toEqual([]);
   });
 });
 
@@ -299,18 +267,6 @@ describe("findAnagrams", () => {
     const words = [makeRef("1", "hello"), makeRef("2", "world")];
     expect(findAnagrams("xyz", words)).toEqual([]);
   });
-
-  it("handles word with null berlinerisch (falls back to empty string)", () => {
-    const words = [makeRef("1", null), makeRef("2", "abc")];
-    const result = findAnagrams("abc", words);
-    expect(result.map((w) => w.id)).toEqual([]);
-  });
-
-  it("handles word with undefined wordProperties (falls back to empty string)", () => {
-    const words = [makeRef("1", undefined), makeRef("2", "test")];
-    const result = findAnagrams("sett", words);
-    expect(result.map((w) => w.id)).toEqual(["2"]);
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -355,12 +311,5 @@ describe("alphabeticNeighbors", () => {
     const result = alphabeticNeighbors(words, makeRef("5", "Feige"), 3);
     expect(result.after).toEqual([]);
     expect(result.before.map((w) => w.id)).toEqual(["4", "3", "2"]);
-  });
-
-  it("sorts words with null berlinerisch as empty string (branch coverage)", () => {
-    const mixed = [makeRef("a", null), makeRef("b", "Zoo"), makeRef("c", undefined)];
-    const result = alphabeticNeighbors(mixed, makeRef("b", "Zoo"), 3);
-    expect(result.before).toHaveLength(2);
-    expect(result.after).toEqual([]);
   });
 });

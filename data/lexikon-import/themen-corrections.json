@@ -1,0 +1,1784 @@
+[
+  {
+    "berlinerWordId": 7976,
+    "slug": "",
+    "berlinerisch": "Abschwimmen",
+    "translations": [
+      "weggehen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7979,
+    "slug": "",
+    "berlinerisch": "Absocken",
+    "translations": [
+      "weggehen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 8036,
+    "slug": "",
+    "berlinerisch": "Andrehn",
+    "translations": [
+      "jemandem eine Ohrfeige geben",
+      "wie andrechseln"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 8080,
+    "slug": "",
+    "berlinerisch": "Anpassen",
+    "translations": [
+      "jemandem eine Ohrfeige verpassen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 8165,
+    "slug": "",
+    "berlinerisch": "Ausrücken",
+    "translations": [
+      "entfliehen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 8274,
+    "slug": "",
+    "berlinerisch": "Bekoofen, sich",
+    "translations": [
+      "sich etwas „anschmieren“ lassen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 8308,
+    "slug": "",
+    "berlinerisch": "Betimveln",
+    "translations": [
+      "betrügen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 8469,
+    "slug": "",
+    "berlinerisch": "Deppentat",
+    "translations": [
+      "seinen Anteil bekommen haben (auch von Schlägen)"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6204,
+    "slug": "dresche",
+    "berlinerisch": "Dresche",
+    "translations": [
+      "Prügel",
+      "Schläge"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6206,
+    "slug": "droehnen",
+    "berlinerisch": "dröhnen",
+    "translations": [
+      "jemandem ein paar knallen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6221,
+    "slug": "duenne-machen-sich",
+    "berlinerisch": "dünne machen, sich",
+    "translations": [
+      "sich verkrümeln",
+      "sich zurückziehen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 8563,
+    "slug": "",
+    "berlinerisch": "Durchbrennen",
+    "translations": [
+      "entfliehen (und etwas mitnehmen)"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 6269,
+    "slug": "eingemachtes",
+    "berlinerisch": "Eingemachtes",
+    "translations": [
+      "Reserven (in der Wendung »an’s Eingemachte gehen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 8603,
+    "slug": "",
+    "berlinerisch": "Eisen, eilen",
+    "translations": [
+      "eilen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 6249,
+    "slug": "eisenbahn",
+    "berlinerisch": "Eisenbahn",
+    "translations": [
+      "höchste Zeit (in der Wendung »höchste Eisenbahn«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6289,
+    "slug": "essig",
+    "berlinerisch": "Essig",
+    "translations": [
+      "vorbei",
+      "aus (in der Wendung »damit is Essig«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6297,
+    "slug": "fall",
+    "berlinerisch": "Fall",
+    "translations": [
+      "Geschmack (in der Wendung »nich mein Fall«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6306,
+    "slug": "faust",
+    "berlinerisch": "Faust",
+    "translations": [
+      "unpassend (in der Wendung »wie die Faust uff’s Ooge«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6310,
+    "slug": "fegen",
+    "berlinerisch": "fegen",
+    "translations": [
+      "schnell laufen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 6311,
+    "slug": "feierabend",
+    "berlinerisch": "Feierabend",
+    "translations": [
+      "Schluss (in der Wendung »Nu is Feierabend«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 8683,
+    "slug": "",
+    "berlinerisch": "Fejen",
+    "translations": [
+      "schnell gehen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 6321,
+    "slug": "fett",
+    "berlinerisch": "Fett",
+    "translations": [
+      "Strafe, Denkzettel (in der Wendung »sein Fett wegbekommen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6340,
+    "slug": "flach",
+    "berlinerisch": "flach",
+    "translations": [
+      "ausfallend (in der Wendung »flach fallen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6347,
+    "slug": "fleck",
+    "berlinerisch": "Fleck",
+    "translations": [
+      "Ziererei (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6351,
+    "slug": "fliege",
+    "berlinerisch": "Fliege",
+    "translations": [
+      "Flucht (in der Wendung »’ne Flieje machen«)"
+    ],
+    "themen": [
+      "bewegung-gehen",
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6352,
+    "slug": "fliegen",
+    "berlinerisch": "fliegen",
+    "translations": [
+      "eilen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 6358,
+    "slug": "flocke",
+    "berlinerisch": "Flocke",
+    "translations": [
+      "Verschwinden (in der Wendung »’ne Flocke machen«)"
+    ],
+    "themen": [
+      "bewegung-gehen",
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6357,
+    "slug": "floetentoene",
+    "berlinerisch": "Flötentöne",
+    "translations": [
+      "Anstand, Benehmen (in der Drohung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6372,
+    "slug": "fressen",
+    "berlinerisch": "Fressen",
+    "translations": [
+      "gelegene Sache (in der Wendung »jefundenet Fressen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6392,
+    "slug": "gang",
+    "berlinerisch": "Gang",
+    "translations": [
+      "Funktion (in der Wendung »im Gange sein«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6397,
+    "slug": "geblassmeiert",
+    "berlinerisch": "geblaßmeiert",
+    "translations": [
+      "angeschmiert"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6414,
+    "slug": "gelackmeiert",
+    "berlinerisch": "gelackmeiert",
+    "translations": [
+      "angeschmiert"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6425,
+    "slug": "genau",
+    "berlinerisch": "genau",
+    "translations": [
+      "Genaues (in der Wendung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6428,
+    "slug": "genuegen",
+    "berlinerisch": "genügen",
+    "translations": [
+      "abschließender Kommentar (in der Wendung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6440,
+    "slug": "geschnitten",
+    "berlinerisch": "geschnitten",
+    "translations": [
+      "verkalkuliert (in der Wendung »sich geschnitten haben«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6447,
+    "slug": "gestohlen",
+    "berlinerisch": "gestohlen",
+    "translations": [
+      "egal (in der Wendung »gestohlen bleiben können«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6474,
+    "slug": "grossmutter",
+    "berlinerisch": "Großmutter",
+    "translations": [
+      "Unglaube (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6520,
+    "slug": "handschuhe",
+    "berlinerisch": "Handschuhe",
+    "translations": [
+      "Gleichgültigkeit (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6530,
+    "slug": "hasenjacht",
+    "berlinerisch": "Hasenjacht",
+    "translations": [
+      "große Eile (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6531,
+    "slug": "haue",
+    "berlinerisch": "Haue",
+    "translations": [
+      "Prügel",
+      "Schläge"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6504,
+    "slug": "henkel",
+    "berlinerisch": "Henkel",
+    "translations": [
+      "Verstand (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6510,
+    "slug": "heuler",
+    "berlinerisch": "Heuler",
+    "translations": [
+      "abfällige Bemerkung (in der Wendung »der letzte Heuler«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6512,
+    "slug": "hier",
+    "berlinerisch": "hier",
+    "translations": [
+      "gescheit (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6549,
+    "slug": "hindaemeln",
+    "berlinerisch": "hindämeln",
+    "translations": [
+      "schlendern"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 6582,
+    "slug": "immer",
+    "berlinerisch": "immer",
+    "translations": [
+      "nachdrückliche Feststellung (in der Wendung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6589,
+    "slug": "itzen",
+    "berlinerisch": "itzen",
+    "translations": [
+      "stehlen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6591,
+    "slug": "jagen",
+    "berlinerisch": "jagen",
+    "translations": [
+      "nicht mögen (in der Wendung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6611,
+    "slug": "kajolen",
+    "berlinerisch": "kajolen",
+    "translations": [
+      "jagen",
+      "eilen",
+      "mal hier, mal da sein"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 6624,
+    "slug": "kanone",
+    "berlinerisch": "Kanone",
+    "translations": [
+      "unter aller Kritik (in der Wendung »unter aller Kanone«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6628,
+    "slug": "kanthaken",
+    "berlinerisch": "Kanthaken",
+    "translations": [
+      "Schlafittchen (in der Wendung »am Kanthaken nehmen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6638,
+    "slug": "kartoffel",
+    "berlinerisch": "Kartoffel",
+    "translations": [
+      "Taschenuhr",
+      "Hin und Her (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6648,
+    "slug": "keile",
+    "berlinerisch": "Keile",
+    "translations": [
+      "Schläge",
+      "Prügel",
+      "Hiebe"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6651,
+    "slug": "keulen",
+    "berlinerisch": "keulen",
+    "translations": [
+      "schnell laufen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 6655,
+    "slug": "kieker",
+    "berlinerisch": "Kieker",
+    "translations": [
+      "Beobachtung (in der Wendung »auf dem Kieker haben«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6656,
+    "slug": "kien",
+    "berlinerisch": "Kien",
+    "translations": [
+      "Hut, Aufmerksamkeit (in der Wendung »auf dem Kien sein«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6659,
+    "slug": "kievief",
+    "berlinerisch": "Kievief",
+    "translations": [
+      "Aufmerksamkeit (in der Wendung »auf dem Kievief sein«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6675,
+    "slug": "klammerbeutel",
+    "berlinerisch": "Klammerbeutel",
+    "translations": [
+      "Verrücktheit (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6686,
+    "slug": "kleben",
+    "berlinerisch": "kleben",
+    "translations": [
+      "eine runterhauen (in der Wendung »eine kleben«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche",
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6694,
+    "slug": "kloppe",
+    "berlinerisch": "Kloppe",
+    "translations": [
+      "Schläge"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6697,
+    "slug": "klossbruehe",
+    "berlinerisch": "Kloßbrühe",
+    "translations": [
+      "völlig verständlich (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6710,
+    "slug": "knall",
+    "berlinerisch": "Knall",
+    "translations": [
+      "Verrücktheit (in der Wendung »einen Knall haben«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6713,
+    "slug": "knallschote",
+    "berlinerisch": "Knallschote",
+    "translations": [
+      "Ohrfeige"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6775,
+    "slug": "krepierseite",
+    "berlinerisch": "Krepierseite",
+    "translations": [
+      "Sterbelager (in der Wendung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6811,
+    "slug": "lackieren",
+    "berlinerisch": "lackieren",
+    "translations": [
+      "betrügen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6813,
+    "slug": "lamaeng",
+    "berlinerisch": "Lamäng",
+    "translations": [
+      "Handgelenk (in der Wendung »aus der Lamäng«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6822,
+    "slug": "laternenpfahl",
+    "berlinerisch": "Laternenpfahl",
+    "translations": [
+      "überdeutlicher Hinweis (in der Wendung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6825,
+    "slug": "latz",
+    "berlinerisch": "Latz",
+    "translations": [
+      "Brust (in der Wendung »eene vor’n Latz kriegen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6826,
+    "slug": "laube",
+    "berlinerisch": "Laube",
+    "translations": [
+      "Fertigstellung (in der Wendung »fertig is de Laube«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6830,
+    "slug": "laus",
+    "berlinerisch": "Laus",
+    "translations": [
+      "Unannehmlichkeit (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6836,
+    "slug": "leib",
+    "berlinerisch": "Leib",
+    "translations": [
+      "Ruhe (in der Wendung »vom Leibe gehen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6838,
+    "slug": "leichenwagen",
+    "berlinerisch": "Leichenwagen",
+    "translations": [
+      "Leichenwagen (in der Drohung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 9642,
+    "slug": "",
+    "berlinerisch": "Losjehn, jeht’s nich bald los",
+    "translations": [
+      "anfangen",
+      "weggehen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 9645,
+    "slug": "",
+    "berlinerisch": "Losziehn",
+    "translations": [
+      "weggehen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 6888,
+    "slug": "mauscheln",
+    "berlinerisch": "mauscheln",
+    "translations": [
+      "heimlich betrügen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 6895,
+    "slug": "meile",
+    "berlinerisch": "Meile",
+    "translations": [
+      "Verdacht (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6949,
+    "slug": "nachtigall",
+    "berlinerisch": "Nachtigall",
+    "translations": [
+      "Vorahnung (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6968,
+    "slug": "nie",
+    "berlinerisch": "nie",
+    "translations": [
+      "sehr gut (in der Wendung »wie nie«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 6974,
+    "slug": "noten",
+    "berlinerisch": "Noten",
+    "translations": [
+      "Schläge"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7001,
+    "slug": "oper",
+    "berlinerisch": "Oper",
+    "translations": [
+      "dummes Gerede (in der Wendung »Opern quatschen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7002,
+    "slug": "organisieren",
+    "berlinerisch": "organisieren",
+    "translations": [
+      "stehlen",
+      "etwas besorgen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7016,
+    "slug": "panne",
+    "berlinerisch": "Panne",
+    "translations": [
+      "Verrücktheit (in der Wendung »’ne Panne haben«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7018,
+    "slug": "pantinen",
+    "berlinerisch": "Pantinen",
+    "translations": [
+      "Holzschuhe (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7036,
+    "slug": "pellen",
+    "berlinerisch": "pellen",
+    "translations": [
+      "jemandem eine Ohrfeige verpassen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7040,
+    "slug": "pesen",
+    "berlinerisch": "pesen",
+    "translations": [
+      "schnell laufen",
+      "rennen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7043,
+    "slug": "petzen",
+    "berlinerisch": "petzen",
+    "translations": [
+      "anschwärzen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7044,
+    "slug": "pfanne",
+    "berlinerisch": "Pfanne",
+    "translations": [
+      "Niederlage (in der Wendung »in die Pfanne hauen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7060,
+    "slug": "pieke",
+    "berlinerisch": "Pieke",
+    "translations": [
+      "Anfang (in der Wendung »von der Pieke auf«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7141,
+    "slug": "praesentierteller",
+    "berlinerisch": "Präsentierteller",
+    "translations": [
+      "exponierte Stelle (in der Wendung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7142,
+    "slug": "preschen",
+    "berlinerisch": "preschen",
+    "translations": [
+      "rennen",
+      "eilen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7147,
+    "slug": "proeppke",
+    "berlinerisch": "Pröppke",
+    "translations": [
+      "behaglich (in der Wendung »wie Pröppke dasitzen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7200,
+    "slug": "rad",
+    "berlinerisch": "Rad",
+    "translations": [
+      "Verrücktheit (in der Wendung »ein Rad abhaben«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7209,
+    "slug": "rand",
+    "berlinerisch": "Rand",
+    "translations": [
+      "Mund (in der Wendung »halt den Rand«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7225,
+    "slug": "register",
+    "berlinerisch": "Register",
+    "translations": [
+      "nicht mehr jung (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7231,
+    "slug": "reinschmoken",
+    "berlinerisch": "reinschmoken",
+    "translations": [
+      "jemandem eine Ohrfeige verpassen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 10326,
+    "slug": "",
+    "berlinerisch": "Rumstrolchen",
+    "translations": [
+      "herumschweifen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7272,
+    "slug": "salat",
+    "berlinerisch": "Salat",
+    "translations": [
+      "Bescherung (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7283,
+    "slug": "saures",
+    "berlinerisch": "Saures",
+    "translations": [
+      "Prügel (in der Aufmunterung »Jib ihm Saures!«)"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7285,
+    "slug": "schacht",
+    "berlinerisch": "Schacht",
+    "translations": [
+      "Keile",
+      "Prügel"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 10346,
+    "slug": "",
+    "berlinerisch": "Schampeln",
+    "translations": [
+      "ohne Erlaubnis die Schule versäumen",
+      "gemächlich gehen, schlendern"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7293,
+    "slug": "schandtat",
+    "berlinerisch": "Schandtat",
+    "translations": [
+      "Unternehmung (in der Wendung »zu allen Schandtaten bereit«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7301,
+    "slug": "schaukeln",
+    "berlinerisch": "schaukeln",
+    "translations": [
+      "hinbekommen (in der Wendung »das Kind schon schaukeln«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7332,
+    "slug": "schlafittchen",
+    "berlinerisch": "Schlafittchen",
+    "translations": [
+      "Kragen (in der Wendung »beim Schlafittchen kriegen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7337,
+    "slug": "schlauch",
+    "berlinerisch": "Schlauch",
+    "translations": [
+      "Erschöpfung, Pleite (in der Wendung »auf dem Schlauch stehen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7392,
+    "slug": "scholli",
+    "berlinerisch": "Scholli",
+    "translations": [
+      "Drohung (in der Wendung »mein lieber Scholli«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7395,
+    "slug": "schote",
+    "berlinerisch": "Schote",
+    "translations": [
+      "Ohrfeige",
+      "nicht ganz korrekte Situation"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7397,
+    "slug": "schraeg",
+    "berlinerisch": "schräg",
+    "translations": [
+      "schief (in der Wendung »schräg ankieken«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 10499,
+    "slug": "",
+    "berlinerisch": "Schummeln",
+    "translations": [
+      "betrügen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7419,
+    "slug": "schwarz",
+    "berlinerisch": "schwarz",
+    "translations": [
+      "lange (in der Wendung »warten, bis de schwarz wirst«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7440,
+    "slug": "seifensieder",
+    "berlinerisch": "Seifensieder",
+    "translations": [
+      "Licht, Erkenntnis (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7446,
+    "slug": "senge",
+    "berlinerisch": "Senge",
+    "translations": [
+      "Schläge",
+      "Tracht Prügel"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7451,
+    "slug": "setzen",
+    "berlinerisch": "setzen",
+    "translations": [
+      "Prügel geben (in der Wendung »es setzt gleich«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche",
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7466,
+    "slug": "sosse",
+    "berlinerisch": "Soße",
+    "translations": [
+      "dasselbe (in der Wendung »alles eine Soße«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7468,
+    "slug": "span",
+    "berlinerisch": "Span",
+    "translations": [
+      "Theater, Ziererei (in der Wendung »keene Späne machen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7490,
+    "slug": "steif",
+    "berlinerisch": "steif",
+    "translations": [
+      "unnachgiebig (in der Drohung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 10665,
+    "slug": "",
+    "berlinerisch": "Steijen, woll’n Se schon wieder steijen",
+    "translations": [
+      "weggehen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7497,
+    "slug": "stibitzen",
+    "berlinerisch": "stibitzen",
+    "translations": [
+      "stehlen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7510,
+    "slug": "stossen",
+    "berlinerisch": "stoßen",
+    "translations": [
+      "verprügeln (in der Wendung »aus’m Anzug stoßen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche",
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7517,
+    "slug": "striezen",
+    "berlinerisch": "striezen",
+    "translations": [
+      "stehlen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7522,
+    "slug": "strumpf",
+    "berlinerisch": "Strumpf",
+    "translations": [
+      "gute Geschichte (in der Wendung)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7525,
+    "slug": "stuken",
+    "berlinerisch": "stuken",
+    "translations": [
+      "stoßen",
+      "stauchen",
+      "verhauen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7541,
+    "slug": "tachtel",
+    "berlinerisch": "Tachtel",
+    "translations": [
+      "Ohrfeige"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7552,
+    "slug": "teilachen",
+    "berlinerisch": "teilachen",
+    "translations": [
+      "ausreißen",
+      "flüchten"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7557,
+    "slug": "teppich",
+    "berlinerisch": "Teppich",
+    "translations": [
+      "Ruhe (in der Wendung »auf dem Teppich bleiben«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7594,
+    "slug": "tube",
+    "berlinerisch": "Tube",
+    "translations": [
+      "Gaspedal (in der Wendung »auf die Tube drücken«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 10850,
+    "slug": "",
+    "berlinerisch": "Turnen, losturnen",
+    "translations": [
+      "gehen, weggehen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7607,
+    "slug": "ueberlegen",
+    "berlinerisch": "überlegen",
+    "translations": [
+      "ein Kind übers Knie legen und verhauen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7609,
+    "slug": "ueberziehen",
+    "berlinerisch": "überziehen",
+    "translations": [
+      "eine Ohrfeige geben"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7613,
+    "slug": "umgekehrt",
+    "berlinerisch": "umgekehrt",
+    "translations": [
+      "andersherum (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7618,
+    "slug": "ungeschickt",
+    "berlinerisch": "ungeschickt",
+    "translations": [
+      "ungeschickt (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7631,
+    "slug": "verballern",
+    "berlinerisch": "verballern",
+    "translations": [
+      "verhauen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7638,
+    "slug": "verdampfen",
+    "berlinerisch": "verdampfen",
+    "translations": [
+      "flüchten",
+      "weglaufen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7640,
+    "slug": "verduften",
+    "berlinerisch": "verduften",
+    "translations": [
+      "verschwinden"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7642,
+    "slug": "verfatzen",
+    "berlinerisch": "verfatzen",
+    "translations": [
+      "abhauen",
+      "weglaufen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7643,
+    "slug": "verfuegen-sich",
+    "berlinerisch": "verfügen, sich",
+    "translations": [
+      "sich entfernen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7644,
+    "slug": "verhackstuecken",
+    "berlinerisch": "verhackstücken",
+    "translations": [
+      "verprügeln"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7647,
+    "slug": "verhohnepiepeln",
+    "berlinerisch": "verhohnepiepeln",
+    "translations": [
+      "verhöhnen",
+      "verspotten"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 11028,
+    "slug": "",
+    "berlinerisch": "Verkeilen",
+    "translations": [
+      "verhauen",
+      "verkaufen (studentisch)"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7652,
+    "slug": "verkloppen",
+    "berlinerisch": "verkloppen",
+    "translations": [
+      "verhauen",
+      "verkaufen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7657,
+    "slug": "verkohlen",
+    "berlinerisch": "verkohlen",
+    "translations": [
+      "verspotten",
+      "an der Nase herumführen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7660,
+    "slug": "verkringeln",
+    "berlinerisch": "verkringeln",
+    "translations": [
+      "flüchten",
+      "abhauen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7661,
+    "slug": "verkruemeln-sich",
+    "berlinerisch": "verkrümeln, sich",
+    "translations": [
+      "sich davonmachen",
+      "sich verstecken"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7671,
+    "slug": "verplaetten",
+    "berlinerisch": "verplätten",
+    "translations": [
+      "durchprügeln"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7681,
+    "slug": "verschiss",
+    "berlinerisch": "Verschiß",
+    "translations": [
+      "Ungnade (in der Wendung »in Verschiß geraten«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7686,
+    "slug": "verschuett-gehen",
+    "berlinerisch": "verschütt gehen",
+    "translations": [
+      "verschwinden",
+      "verloren gehen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7688,
+    "slug": "versohlen",
+    "berlinerisch": "versohlen",
+    "translations": [
+      "durchprügeln"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7689,
+    "slug": "versuchsweise-geboren",
+    "berlinerisch": "versuchsweise geboren",
+    "translations": [
+      "ein Versuch (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7690,
+    "slug": "vertobaken",
+    "berlinerisch": "vertobaken",
+    "translations": [
+      "verhauen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7691,
+    "slug": "verwichsen",
+    "berlinerisch": "verwichsen",
+    "translations": [
+      "verprügeln"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7710,
+    "slug": "wahr",
+    "berlinerisch": "wahr",
+    "translations": [
+      "lange her (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7713,
+    "slug": "wamse",
+    "berlinerisch": "Wamse",
+    "translations": [
+      "Schläge"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7716,
+    "slug": "waschfrau",
+    "berlinerisch": "Waschfrau",
+    "translations": [
+      "Abfuhr (in der Redensart)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7721,
+    "slug": "wegschmelzen",
+    "berlinerisch": "wegschmelzen",
+    "translations": [
+      "abhauen, weglaufen",
+      "vor Rührung zerfließen"
+    ],
+    "themen": [
+      "bewegung-gehen"
+    ]
+  },
+  {
+    "berlinerWordId": 7730,
+    "slug": "wichse",
+    "berlinerisch": "Wichse",
+    "translations": [
+      "Schläge",
+      "Prügel"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7733,
+    "slug": "wickel",
+    "berlinerisch": "Wickel",
+    "translations": [
+      "Kragen (in der Wendung »beim Wickel nehmen«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 7744,
+    "slug": "wucht",
+    "berlinerisch": "Wucht",
+    "translations": [
+      "Tracht Prügel",
+      "großartige Sache (anerkennend)"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ]
+  },
+  {
+    "berlinerWordId": 7755,
+    "slug": "zack",
+    "berlinerisch": "Zack",
+    "translations": [
+      "Aufmerksamkeit (in der Wendung »auf Zack sein«)"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ]
+  },
+  {
+    "berlinerWordId": 5552,
+    "slug": "bulle",
+    "berlinerisch": "Bulle",
+    "translations": [
+      "Industriebahn Oberschöneweide",
+      "Polizist"
+    ],
+    "themen": [
+      "orte-spitzname",
+      "stadtleben"
+    ]
+  },
+  {
+    "berlinerWordId": 4394,
+    "slug": "hohler-zahn",
+    "berlinerisch": "hohler Zahn",
+    "translations": [
+      "Kaiser-Wilhelm-Gedächtniskirche",
+      "etwas ist für den hohlen Zahn, wenn man nur wenig zu essen bekommt"
+    ],
+    "themen": [
+      "alltag-wohnen",
+      "essen-trinken",
+      "koerper",
+      "orte-spitzname"
+    ]
+  }
+]

@@ -1,0 +1,945 @@
+[
+  {
+    "word": "Pietsch",
+    "translations": [
+      "Spitzname eines Berliner Lumpensammlers"
+    ],
+    "infoText": "Anekdote: Pietsch, ein bekannter Lumpensammler, wurde einst von Feldmarschall Wrangel auf der Straße angehalten und gefragt, was er da mache — die beiden waren sich, wie das Volk erzählte, äußerlich zum Verwechseln ähnlich.",
+    "themen": [
+      "orte-spitzname"
+    ],
+    "berolinismus": true,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pille",
+    "translations": [
+      "Kugel (Schülersprache)",
+      "Fußball"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pillendreher",
+    "translations": [
+      "Apotheker"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pinnen",
+    "translations": [
+      "heften, stecken"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Piperlings",
+    "translations": [
+      "Pfifferlinge"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pips",
+    "translations": [
+      "Unlust, Unpässlichkeit"
+    ],
+    "examples": [
+      {
+        "example": "Ick hab' heute den Pips.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pisacken",
+    "translations": [
+      "quälen, plagen"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pitschenaß",
+    "translations": [
+      "völlig durchnässt"
+    ],
+    "alternativeWords": [
+      "pitschnaß"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pitti",
+    "translations": [
+      "kleines Kind (Koseform)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pladauz",
+    "translations": [
+      "Fall mit dumpfem Geräusch"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plängschaß",
+    "translations": [
+      "ängstlicher Mensch"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plan, uf'm Plan sind",
+    "translations": [
+      "zur Stelle, bereit sein"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Planschaptheke",
+    "translations": [
+      "scherzhaft für Planke"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Planschen",
+    "translations": [
+      "im Wasser plätschern"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Planschkopp",
+    "translations": [
+      "Kind, das gern im Wasser spielt"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Planschnese",
+    "translations": [
+      "Klatschbase"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Platz, ick jebe keenen Platz",
+    "translations": [
+      "ich weiche nicht"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Platzen",
+    "translations": [
+      "zornig werden, außer sich geraten"
+    ],
+    "examples": [
+      {
+        "example": "Ick hätte platzen können vor Ärger.",
+        "explanation": ""
+      }
+    ],
+    "themen": [
+      "gefuehle-emotionen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pleesirlich",
+    "translations": [
+      "vergnüglich"
+    ],
+    "infoText": "Vom französischen „plaisir“.",
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pleesirverjniejen",
+    "translations": [
+      "scherzhafte Doppelung für Vergnügen"
+    ],
+    "themen": [
+      "unterhaltung-freizeit"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pletteisen",
+    "translations": [
+      "Plätteisen"
+    ],
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pletze",
+    "translations": [
+      "Fleck, Klecks"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plinken",
+    "translations": [
+      "blinzeln, zwinkern"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plöter",
+    "translations": [
+      "Schwätzer"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plötzlich, jottlob plötzlich",
+    "translations": [
+      "scherzhaft: unerwartet schnell"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plumpen",
+    "translations": [
+      "Pumpe"
+    ],
+    "themen": [
+      "alltag-wohnen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plumphecht",
+    "translations": [
+      "plumper Mensch"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plumpßen",
+    "translations": [
+      "schwerfällig fallen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plunder",
+    "translations": [
+      "altes, wertloses Zeug"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plustern, sich",
+    "translations": [
+      "sich aufblähen, wichtigtun"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Plutz",
+    "translations": [
+      "dicker, kleiner Mensch"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pockig",
+    "translations": [
+      "pockennarbig"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pojiften",
+    "translations": [
+      "schwatzen, quatschen"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Politsch",
+    "translations": [
+      "politisch (mit Berliner Lautung)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Polkafrisur",
+    "translations": [
+      "nach der Polkamode geordnete Haartracht"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Polkschinken",
+    "translations": [
+      "dicke Wade"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pollack",
+    "translations": [
+      "Pole (abwertend)"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Polle polle",
+    "translations": [
+      "schnell, schnell!"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pollezei",
+    "translations": [
+      "Polizei (Berliner Lautung)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pollezeifinger",
+    "translations": [
+      "scherzhaft für Zeigefinger"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pollezeijriff",
+    "translations": [
+      "harter Griff, Festnahme-Griff"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pollezeioogen",
+    "translations": [
+      "scharfe, wachsame Augen"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pollezei widrije Visage",
+    "translations": [
+      "verdächtiges Gesicht"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Polnisch, dit kommt mir polnisch vor",
+    "translations": [
+      "das kommt mir merkwürdig vor"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pomade, mir is det Pomade",
+    "translations": [
+      "mir ist das gleichgültig"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pomeranze",
+    "translations": [
+      "scherzhaft für die Domglocken-Nachahmung im Volksmund"
+    ],
+    "infoText": "Anspielung auf den Klang der Domglocken, der volkstümlich mit „Pomeranze“ nachgeahmt wurde.",
+    "themen": [
+      "stadtleben"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pompiek",
+    "translations": [
+      "Feuerwehrmann"
+    ],
+    "infoText": "Vom französischen „pompier“.",
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ponatschke",
+    "translations": [
+      "dickes, unbeholfenes Frauenzimmer"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Ponny",
+    "translations": [
+      "Stirnhaar, Pony-Frisur"
+    ],
+    "alternativeWords": [
+      "Ponnylocken"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Popeln",
+    "translations": [
+      "in der Nase bohren"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Portmannee",
+    "translations": [
+      "Geldbörse"
+    ],
+    "infoText": "Vom französischen „portemonnaie“.",
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Posämentier",
+    "translations": [
+      "Posamentenhändler, Bortenmacher"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Posematzki",
+    "translations": [
+      "wichtigtuerisches Getue"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Post, bei die Post sind",
+    "translations": [
+      "auf dem Laufenden sein"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Postdag",
+    "translations": [
+      "Posttag"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Posten, uf'n scharfen Posten stehn",
+    "translations": [
+      "wachsam sein"
+    ],
+    "themen": [
+      "redewendungen-sprueche"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Postprernerando",
+    "translations": [
+      "scherzhaftes Fantasiewort für Überraschung"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Postschwebe",
+    "translations": [
+      "scherzhaft für Postkutsche"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Poten",
+    "translations": [
+      "Pfoten, Hände"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Potsdemlich",
+    "translations": [
+      "etwas beschränkt, naiv"
+    ],
+    "infoText": "Abgeleitet von „Potsdamer“ in der Bedeutung naiv/unerfahren.",
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Power",
+    "translations": [
+      "Kraft, Schwung"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prachern",
+    "translations": [
+      "betteln"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prampieren",
+    "translations": [
+      "prahlen"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prätschen",
+    "translations": [
+      "im Wasser plätschern"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Preambeln",
+    "translations": [
+      "umständlich reden"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prediger, dem sein Vater is Prediger",
+    "translations": [
+      "scherzhaft über Vielredner"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Pree",
+    "translations": [
+      "Preis"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Premorando",
+    "translations": [
+      "scherzhaftes Fantasiewort"
+    ],
+    "alternativeWords": [
+      "Postprernerando"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prengel",
+    "translations": [
+      "Prügel, Stock"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prepeln",
+    "translations": [
+      "mühsam essen, kauen"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prezel",
+    "translations": [
+      "Brezel"
+    ],
+    "themen": [
+      "essen-trinken"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Priepsel",
+    "translations": [
+      "kleines, zierliches Ding"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prise",
+    "translations": [
+      "kleine Menge (z. B. Schnupftabak)"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Priesel",
+    "translations": [
+      "kleines Kind"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Produktenjeschäft",
+    "translations": [
+      "Handel mit landwirtschaftlichen Produkten"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prökeln",
+    "translations": [
+      "herumstochern, herumbohren"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Proffentieren",
+    "translations": [
+      "profitieren"
+    ],
+    "themen": [
+      "geld"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prokeratern",
+    "translations": [
+      "prozessieren"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prolet",
+    "translations": [
+      "ungebildeter, roher Mensch"
+    ],
+    "themen": [
+      "schimpfwoerter-beleidigungen"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Proppenbruder",
+    "translations": [
+      "Trinker"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Proppenzieher",
+    "translations": [
+      "Korkenzieher"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Propper",
+    "translations": [
+      "sauber, ordentlich"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prost, Prost Mahlzeit",
+    "translations": [
+      "ironischer Ausruf bei Enttäuschung"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prosten",
+    "translations": [
+      "zuprosten, anstoßen"
+    ],
+    "themen": [
+      "alkohol-kneipe"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Provisor",
+    "translations": [
+      "Apothekergehilfe"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prudeln",
+    "translations": [
+      "sprudeln, brodeln"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prüfen, wer sich prüft, der prüft sich jut",
+    "translations": [
+      "scherzhafte Redensart"
+    ],
+    "themen": [
+      "spott-ironie"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prumpßen",
+    "translations": [
+      "dumpf poltern"
+    ],
+    "themen": [],
+    "berolinismus": false,
+    "source": "meyer1904"
+  },
+  {
+    "word": "Prüschen",
+    "translations": [
+      "niesen"
+    ],
+    "themen": [
+      "koerper"
+    ],
+    "berolinismus": false,
+    "source": "meyer1904"
+  }
+]

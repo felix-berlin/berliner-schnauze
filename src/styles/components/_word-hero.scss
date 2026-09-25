@@ -13,9 +13,7 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: vars.$spacer;
-  box-shadow:
-    0 0.5px 0.6px rgb(0 0 0 / 8%),
-    0 4px 5px rgb(0 0 0 / 16%);
+  box-shadow: vars.$paper-lift;
 
   @include butler-mx.dark-mode-class {
     --color-background: var(--new-blue-400);

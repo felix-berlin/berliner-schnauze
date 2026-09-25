@@ -1,32 +1,11 @@
+import type { Word } from "@services/queries/getWords.ts";
 import type { APIRoute } from "astro";
 
 import { fetchAllWords } from "@services/api.ts";
+import { hypher } from "@utils/hypher";
 import { countLetters, getWordType, translateNlpTags } from "@utils/wordHelper.ts";
-import german from "hyphenation.de";
-import Hypher from "hypher";
-import natural from "natural";
-
-import type { BerlinerWord } from "@/gql/entity-types";
-
-// Create Hypher instance once
-const hypher = new Hypher(german);
 
 export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
-
-function extractWordTypes(wordTags: unknown): string[] {
-  // wordTags can be an array of objects or a single object
-  const tagObjs = Array.isArray(wordTags) ? wordTags : [wordTags];
-  // Collect all type arrays, flatten, deduplicate
-  return Array.from(
-    new Set(
-      tagObjs.flatMap((obj) =>
-        obj && typeof obj === "object"
-          ? (Object.values(obj as Record<string, string[]>).flat() as string[])
-          : [],
-      ),
-    ),
-  );
-}
 
 // Suffix sub-tokens enable compound word search: "Pinsel" finds "Bierpinsel".
 // Orama does prefix matching natively; this covers the suffix (head-word) side.
@@ -45,25 +24,15 @@ function getWordComponents(word: string, minLen = 4): string[] {
   return [...suffixes];
 }
 
-export function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<string, boolean>) {
-  const translations = Array.isArray(node.wordProperties?.translations)
-    ? node.wordProperties.translations
-        .map((t) => t?.translation)
-        .filter((tr): tr is string => typeof tr === "string")
-    : [];
-
-  // Manually curated word types
-  // const berlinerischWordTypes = node?.berlinerischWordTypes?.nodes.map((type) => type.name);
-
-  const berlinerisch = node.wordProperties?.berlinerisch || "";
+export function makeOramaSearchIndex(node: Word) {
+  const { translations } = node;
+  const { berlinerisch } = node.wordProperties;
   const syllablesCount = berlinerisch ? hypher.hyphenate(berlinerisch).length : 0;
   const { consonants, vowels } = countLetters(berlinerisch);
 
-  // Use precomputed similar words map
-  const hasSimilarSounding = similarWordsMap.get(berlinerisch) || false;
-
-  const wordTags = translateNlpTags(getWordType(berlinerisch));
-  const wordTypes = extractWordTypes(wordTags);
+  const wordTypes = [
+    ...new Set(translateNlpTags(getWordType(berlinerisch)).flatMap((t) => Object.values(t).flat())),
+  ];
 
   const themen = (node.berlinerischThemen?.nodes ?? [])
     .map((n) => n.slug)
@@ -72,25 +41,22 @@ export function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<st
   return {
     berlinerWordId: node.berlinerWordId,
     berlinerischWordTypes: wordTypes,
-    dateGmt: node.dateGmt ?? "",
     dateTs: node.dateGmt ? Date.parse(node.dateGmt) : 0,
-    modifiedGmt: node.modifiedGmt ?? "",
     modifiedTs: node.modifiedGmt ? Date.parse(node.modifiedGmt) : 0,
     slug: node.slug,
     themen,
-    wordComponents: getWordComponents(node.wordProperties?.berlinerisch ?? ""),
+    wordComponents: getWordComponents(berlinerisch),
     wordGroup: node.wordGroup ?? "",
     wordProperties: {
-      audioBerlinerisch: !!node.wordProperties?.berlinerischAudio,
+      audioBerlinerisch: !!node.wordProperties.berlinerischAudio,
       audioExamples:
-        Array.isArray(node?.wordProperties?.examples) &&
+        Array.isArray(node.wordProperties.examples) &&
         node.wordProperties.examples.some((e) => !!e?.exampleAudio?.length),
       berlinerisch,
-      berolinismus: !!node.wordProperties?.berolinismus,
+      berolinismus: !!node.wordProperties.berolinismus,
       characterLength: berlinerisch.length,
       consonantsCount: consonants,
-      multipleMeanings: !!node.wordProperties?.alternativeWords,
-      similarSoundingWords: hasSimilarSounding,
+      multipleMeanings: !!node.wordProperties.alternativeWords,
       syllablesCount,
       translations,
       vowelsCount: vowels,
@@ -98,34 +64,10 @@ export function makeOramaSearchIndex(node: BerlinerWord, similarWordsMap: Map<st
   };
 }
 
-export const GET: APIRoute = async () => {
-  const allWords = await fetchAllWords();
+// index.json and meta.json both need the entries — run the per-word NLP/hyphenation once per build.
+let _entriesCache: Promise<OramaSearchIndex[]> | null = null;
+export const getSearchIndexEntries = (): Promise<OramaSearchIndex[]> =>
+  (_entriesCache ??= fetchAllWords().then((words) => words.map(makeOramaSearchIndex)));
 
-  // Precompute similar sounding words in O(n) by grouping identical SoundEx codes.
-  const soundEx = new natural.SoundEx();
-  const codeCounts = new Map<string, number>();
-
-  for (const { node } of allWords) {
-    const berlinerisch = node.wordProperties?.berlinerisch;
-
-    if (!berlinerisch) continue;
-
-    const code = soundEx.process(berlinerisch);
-    codeCounts.set(code, (codeCounts.get(code) ?? 0) + 1);
-  }
-
-  const similarWordsMap = new Map<string, boolean>();
-
-  for (const { node } of allWords) {
-    const berlinerisch = node.wordProperties?.berlinerisch;
-
-    if (!berlinerisch || similarWordsMap.has(berlinerisch)) continue;
-
-    const code = soundEx.process(berlinerisch);
-    similarWordsMap.set(berlinerisch, (codeCounts.get(code) ?? 0) > 1);
-  }
-
-  const oramaSearchIndex = allWords.map(({ node }) => makeOramaSearchIndex(node, similarWordsMap));
-
-  return new Response(JSON.stringify(oramaSearchIndex));
-};
+export const GET: APIRoute = async () =>
+  new Response(JSON.stringify(await getSearchIndexEntries()));

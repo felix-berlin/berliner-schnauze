@@ -35,25 +35,42 @@
 </template>
 
 <script setup lang="ts">
-import { type StorageQuota, type SwInfo } from "@composables/useCacheStorage";
-import { type Component } from "vue";
+import {
+  formatUrl,
+  type StorageQuota,
+  type SwInfo,
+  type SwStatus,
+} from "@composables/useCacheStorage";
+import { type Component, computed, defineAsyncComponent } from "vue";
 
-defineProps<{
+const { swInfo, storageQuota } = defineProps<{
   swInfo: SwInfo | null;
-  swStatusLabel: string;
-  swStatusIcon: Component | null;
-  swScriptURL: string | null;
   isPwaInstalled: boolean;
   storageQuota: StorageQuota | null;
-  storageQuotaPercent: number;
 }>();
 
-function formatUrl(url: string): string {
-  try {
-    const path = new URL(url).pathname;
-    return path.length > 60 ? `${path.slice(0, 57)}…` : path;
-  } catch {
-    return url.length > 60 ? `${url.slice(0, 57)}…` : url;
-  }
-}
+const SW_STATUS_LABELS: Readonly<Record<SwStatus, string>> = {
+  active: "Aktiv",
+  installing: "Wird installiert",
+  "not-registered": "Nicht registriert",
+  "not-supported": "Nicht unterstützt",
+  waiting: "Wartend",
+};
+
+const SW_STATUS_ICONS: Readonly<Record<SwStatus, Component>> = {
+  active: defineAsyncComponent(() => import("virtual:icons/lucide/circle-check")),
+  installing: defineAsyncComponent(() => import("virtual:icons/lucide/loader")),
+  "not-registered": defineAsyncComponent(() => import("virtual:icons/lucide/circle")),
+  "not-supported": defineAsyncComponent(() => import("virtual:icons/lucide/circle-x")),
+  waiting: defineAsyncComponent(() => import("virtual:icons/lucide/clock")),
+};
+
+const swStatusLabel = computed(() => (swInfo ? SW_STATUS_LABELS[swInfo.status] : "…"));
+const swStatusIcon = computed(() => (swInfo ? SW_STATUS_ICONS[swInfo.status] : null));
+const swScriptURL = computed(() => (swInfo && "scriptURL" in swInfo && swInfo.scriptURL) || null);
+
+const storageQuotaPercent = computed(() => {
+  if (!storageQuota || storageQuota.quotaBytes === 0) return 0;
+  return Math.round((storageQuota.usedBytes / storageQuota.quotaBytes) * 100);
+});
 </script>

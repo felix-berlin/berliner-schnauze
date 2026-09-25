@@ -9,8 +9,8 @@ interface Props {
 
 const { neighbors: { before, after } } = Astro.props;
 
-const validBefore = before.filter(w => w.slug && w.wordProperties?.berlinerisch);
-const validAfter = after.filter(w => w.slug && w.wordProperties?.berlinerisch);
+const validBefore = before.filter(w => w.wordProperties.berlinerisch);
+const validAfter = after.filter(w => w.wordProperties.berlinerisch);
 ---
 
 {(validBefore.length > 0 || validAfter.length > 0) && <nav
@@ -18,8 +18,8 @@ const validAfter = after.filter(w => w.slug && w.wordProperties?.berlinerisch);
   aria-label="Alphabetische Nachbarn"
   data-track-content
   data-content-name="Alphabet Navigation"
-  data-content-piece={`${validBefore[0]?.wordProperties?.berlinerisch ?? ''} → ${validAfter[0]?.wordProperties?.berlinerisch ?? ''}`}
-  data-content-target={validAfter[0] ? routeToWord(validAfter[0].slug ?? undefined) : validBefore[0] ? routeToWord(validBefore[0].slug ?? undefined) : '#'}
+  data-content-piece={`${validBefore[0]?.wordProperties.berlinerisch ?? ''} → ${validAfter[0]?.wordProperties.berlinerisch ?? ''}`}
+  data-content-target={validAfter[0] ? routeToWord(validAfter[0].slug) : validBefore[0] ? routeToWord(validBefore[0].slug) : '#'}
 >
     {
       validBefore.length > 0 && (
@@ -28,7 +28,7 @@ const validAfter = after.filter(w => w.slug && w.wordProperties?.berlinerisch);
           <ul>
             {validBefore.map((w) => (
               <li>
-                <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+                <a href={routeToWord(w.slug)}>{w.wordProperties.berlinerisch}</a>
               </li>
             ))}
           </ul>
@@ -42,7 +42,7 @@ const validAfter = after.filter(w => w.slug && w.wordProperties?.berlinerisch);
           <ul>
             {validAfter.map((w) => (
               <li>
-                <a href={routeToWord(w.slug ?? undefined)}>{w.wordProperties?.berlinerisch}</a>
+                <a href={routeToWord(w.slug)}>{w.wordProperties.berlinerisch}</a>
               </li>
             ))}
           </ul>
