@@ -114,6 +114,14 @@
     font-weight: 700;
     font-size: 1.25rem;
     margin: 0;
+
+    &--lg {
+      font-family: vars.$berliner;
+      font-weight: normal;
+      font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+      line-height: 1.1;
+      text-wrap: balance;
+    }
   }
 
   &__eyebrow {
@@ -326,29 +334,76 @@
     font-weight: 700;
   }
 
-  // Platform tiles
-  &__platforms {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13.75rem), 1fr));
-    gap: vars.$spacer * 0.75;
+  // Platform card ("Läuft überall")
+  &__platform-card {
+    background: var(--white-100);
+    border: 1px dashed var(--grey-100);
+    border-radius: 4px;
+    box-shadow:
+      0 0.5px 0.6px rgb(0 0 0 / 8%),
+      0 4px 5px rgb(0 0 0 / 16%);
+    display: flex;
+    flex-direction: column;
+
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-400);
+    }
   }
 
-  &__platform {
+  &__platform-card-head {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: vars.$spacer * 1.25 vars.$spacer * 2.5;
+    align-items: end;
+    padding: vars.$spacer * 1.75 vars.$spacer * 1.75 vars.$spacer * 0.5;
+  }
+
+  &__platform-card-copy {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: vars.$spacer;
+  }
+
+  &__platform-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
     gap: vars.$spacer * 0.75;
+    padding: vars.$spacer * 1.25 vars.$spacer * 1.75 vars.$spacer * 1.75;
+  }
+
+  &__platform-tile {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: vars.$spacer * 0.875 vars.$spacer;
+    gap: vars.$spacer * 0.75;
+    padding: vars.$spacer * 1.375 vars.$spacer;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
     background: var(--white-100);
     border: 1px solid var(--orange-200);
+    transition: all 0.3s ease-in-out;
 
+    @include butler-mx.hover {
+      border-style: dashed;
+      border-color: var(--orange-600);
+    }
     @include butler-mx.dark-mode-class {
       background: var(--new-blue-400);
       border-color: var(--new-blue-200);
     }
+  }
+
+  &__platform-tile-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: vars.$spacer * 0.625;
+    min-height: 2.125rem;
 
     svg {
       color: var(--orange-600);
-      flex-shrink: 0;
 
       @include butler-mx.dark-mode-class {
         color: var(--orange-300);
@@ -363,6 +418,21 @@
   &__platform-meta {
     font-size: 0.8rem;
     color: var(--anki-color-muted);
+  }
+
+  &__platform-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: vars.$spacer * 0.5;
+    padding: vars.$spacer * 0.75 vars.$spacer * 1.25;
+    border-top: 1px dashed var(--orange-200);
+    font-size: 0.9rem;
+    color: var(--anki-color-muted);
+
+    svg {
+      color: var(--orange-500);
+    }
   }
 
   // Pricing cards

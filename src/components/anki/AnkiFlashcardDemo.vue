@@ -4,7 +4,7 @@
     <div class="c-anki-flashcard__paper c-anki-flashcard__paper--front"></div>
     <div class="c-anki-flashcard__card">
       <div class="c-anki-flashcard__head">
-        <span>Berliner Schnauze · Anki</span>
+        <span>Berliner Schnauze ᛫ Anki</span>
         <span>Noch {{ remaining }} heute</span>
       </div>
       <div class="c-anki-flashcard__body">

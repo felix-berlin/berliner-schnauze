@@ -12,12 +12,14 @@ import AnkiDevHours from '@components/anki/AnkiDevHours.astro';
 import Layers from 'virtual:icons/lucide/layers';
 import ArrowUpRight from 'virtual:icons/lucide/arrow-up-right';
 import Download from 'virtual:icons/lucide/download';
-import Monitor from 'virtual:icons/lucide/monitor';
-import Smartphone from 'virtual:icons/lucide/smartphone';
-import TabletSmartphone from 'virtual:icons/lucide/tablet-smartphone';
 import Globe from 'virtual:icons/lucide/globe';
 import Plus from 'virtual:icons/lucide/plus';
 import FolderGit2 from 'virtual:icons/lucide/folder-git-2';
+import RefreshCw from 'virtual:icons/lucide/refresh-cw';
+import Windows from 'virtual:icons/mdi/microsoft-windows';
+import Apple from 'virtual:icons/simple-icons/apple';
+import Linux from 'virtual:icons/simple-icons/linux';
+import Android from 'virtual:icons/simple-icons/android';
 
 const page = {
   seo: {
@@ -77,10 +79,10 @@ const steps = [
 const intervals = ['Heute', '1 Tag', '3 Tage', '1 Woche', '3 Wochen', '2 Monate'];
 
 const platforms = [
-  { icon: Monitor, meta: 'Windows, macOS, Linux · kostenlos', name: 'Anki Desktop' },
-  { icon: Smartphone, meta: 'Android · kostenlos', name: 'AnkiDroid' },
-  { icon: TabletSmartphone, meta: 'iPhone & iPad · kostenpflichtig', name: 'AnkiMobile' },
-  { icon: Globe, meta: 'Im Browser & Sync · kostenlos', name: 'AnkiWeb' },
+  { icons: [Windows, Apple, Linux], meta: 'Windows, macOS, Linux', name: 'Anki Desktop' },
+  { icons: [Android], meta: 'Android', name: 'AnkiDroid' },
+  { icons: [Apple], meta: 'iPhone & iPad', name: 'AnkiMobile' },
+  { icons: [Globe], meta: 'Im Browser & Sync', name: 'AnkiWeb' },
 ];
 
 const liteFeatures = [
@@ -94,7 +96,7 @@ const fullFeatures = [
   `Der komplette Wortschatz: ${fmt(TOTAL_WORDS)} Wörter`,
   'Fügt sich nahtlos in Deine Lite-Version ein',
   'Lernfortschritt bleibt, keine Dopplungen',
-  'Einmal zahlen, kein Abo',
+  'Einmal zahlen, kein Abo — neue Wörter kommen gratis dazu',
   'Nur für Dich — Weitergabe nicht erlaubt',
 ];
 
@@ -102,6 +104,14 @@ const faqs = [
   {
     a: "Ja. Anki ist die App, in der Du das Deck lernst. Für Windows, macOS, Linux, Android und im Browser ist sie kostenlos, für iPhone und iPad gibt's AnkiMobile als Kauf-App. Einmal installieren, Deck-Datei (.apkg) öffnen, fertig.",
     q: 'Brauch ich Anki dafür?',
+  },
+  {
+    a: 'Anki von apps.ankiweb.net herunterladen und installieren. Die heruntergeladene .apkg-Datei doppelklicken — oder in Anki über „Datei → Importieren“ auswählen. Das Deck „Berliner Schnauze“ erscheint in Deiner Deckliste. Draufklicken, „Jetzt lernen“, fertig.',
+    q: 'Wie installiere und importiere ich das Deck?',
+  },
+  {
+    a: 'Einfach die Full-Datei (.apkg) genauso importieren wie vorher die Lite. Anki erkennt die vorhandenen Karten, behält Deinen Lernstand und fügt nur die fehlenden Wörter hinzu. Du musst nichts löschen.',
+    q: 'Wie update ich von Lite auf Full?',
   },
   {
     a: 'Nee. Die Full ist so gebaut, dass sie sich in Dein bestehendes Lite-Deck einfügt. Karten, die Du schon hast, bleiben mit ihrem Lernstand erhalten — es kommen nur die fehlenden dazu, ohne Dopplungen.',
@@ -114,6 +124,10 @@ const faqs = [
   {
     a: 'Der Kauf läuft über Polar. Nach dem Klick auf „Full-Deck kaufen“ wirst Du dorthin weitergeleitet und bekommst das Deck nach der Zahlung zum Download.',
     q: 'Wie bezahle ich die Full?',
+  },
+  {
+    a: 'Na klar, die Updates sind im einmaligen Kauf mit drin. Ruf einfach den Download-Link aus Deiner Kauf-Mail nochmal auf, lade die aktuelle Datei runter und importier sie in Anki. Neue Wörter kommen dazu, Dein Lernstand bleibt, doppelte Karten gibt’s keine.',
+    q: 'Kriege ich neue Wörter, wenn das Wörterbuch wächst?',
   },
   {
     a: 'Leider nein. Die Full ist nur für Dich — Weitergabe, Weiterverkauf oder Veröffentlichung sind nicht erlaubt. Die Lite darfste dagegen gerne teilen.',
@@ -129,7 +143,7 @@ const faqs = [
       <div class='c-anki__hero-copy'>
         <div class='c-anki__eyebrow'>
           <Layers width='18' height='18' />
-          <span>Neu · Dit Anki-Deck</span>
+          <span>Neu ᛫ Dit Anki-Deck</span>
         </div>
         <h1 id='anki-hero-title' class='c-anki__title'>
           Jeden Tag 'n paar Karten. Bald quatschst Du wie'n Ur-Berliner.
@@ -149,7 +163,7 @@ const faqs = [
                 target='_blank'
                 rel='noopener'
               >
-                <span>Full-Deck kaufen{PRICE && ` · ${PRICE}`}</span>
+                <span>Full-Deck kaufen{PRICE && ` ᛫ ${PRICE}`}</span>
                 <ArrowUpRight width='20' height='20' />
               </a>
             )
@@ -225,20 +239,52 @@ const faqs = [
         </div>
       </div>
 
-      <div class='c-anki__heading'>
-        <h3 class='c-anki__h3'>Läuft überall, wo Du lernst</h3>
-        <div class='c-anki__platforms'>
+      <div class='c-anki__platform-card'>
+        <div class='c-anki__platform-card-head'>
+          <div class='c-anki__heading'>
+            <div class='c-anki__eyebrow'>Läuft überall</div>
+            <h3 class='c-anki__h3 c-anki__h3--lg'>Lern am Schreibtisch, wiederhol in der U-Bahn.</h3>
+          </div>
+          <div class='c-anki__platform-card-copy'>
+            <p class='c-anki__lead'>
+              Anki gibt's für Rechner, Handy und Browser. Mit einem AnkiWeb-Konto synchronisiert sich
+              Dein Lernstand zwischen allen Geräten — Du machst einfach da weiter, wo Du uffgehört
+              hast.
+            </p>
+            <a
+              class='c-button c-button--center-icon'
+              href='https://apps.ankiweb.net/'
+              target='_blank'
+              rel='noopener'
+            >
+              <Download width='20' height='20' /><span>Anki herunterladen</span>
+              <ArrowUpRight width='18' height='18' />
+            </a>
+          </div>
+        </div>
+        <div class='c-anki__platform-tiles'>
           {
-            platforms.map(({ icon: Icon, name, meta }) => (
-              <div class='c-anki__platform'>
-                <Icon width='22' height='22' />
-                <div>
-                  <div class='c-anki__platform-name'>{name}</div>
-                  <div class='c-anki__platform-meta'>{meta}</div>
+            platforms.map(({ icons, name, meta }) => (
+              <a
+                class='c-anki__platform-tile'
+                href='https://apps.ankiweb.net/'
+                target='_blank'
+                rel='noopener'
+              >
+                <div class='c-anki__platform-tile-icons'>
+                  {icons.map((Icon) => (
+                    <Icon width='28' height='28' />
+                  ))}
                 </div>
-              </div>
+                <div class='c-anki__platform-name'>{name}</div>
+                <div class='c-anki__platform-meta'>{meta}</div>
+              </a>
             ))
           }
+        </div>
+        <div class='c-anki__platform-card-foot'>
+          <RefreshCw width='16' height='16' />
+          <span>Ein Lernstand, alle Geräte ᛫ Sync über AnkiWeb</span>
         </div>
       </div>
     </section>
@@ -273,6 +319,10 @@ const faqs = [
                 <span class='c-anki__plan-note'>Download derzeit nicht verfügbar.</span>
               )
             }
+            <span class='c-anki__plan-note'>
+              Datei doppelklicken — Anki importiert das Deck automatisch. Kostenlos und ohne
+              Anmeldung.
+            </span>
           </div>
         </div>
 
@@ -281,7 +331,7 @@ const faqs = [
           <div class='c-anki__plan-head'>
             <h3 class='c-anki__plan-name'>Full</h3>
             <div class='c-anki__plan-price'>
-              {PRICE && <strong>{PRICE}</strong>}<span>einmalig</span>
+              {PRICE && <strong>{PRICE}</strong>}<span>einmalig ᛫ Updates inklusive</span>
             </div>
           </div>
           <ul class='c-anki__plan-features'>
@@ -296,7 +346,7 @@ const faqs = [
                   target='_blank'
                   rel='noopener'
                 >
-                  <span>Full-Deck kaufen{PRICE && ` · ${PRICE}`}</span>
+                  <span>Full-Deck kaufen{PRICE && ` ᛫ ${PRICE}`}</span>
                   <ArrowUpRight width='20' height='20' />
                 </a>
               ) : (
@@ -337,7 +387,7 @@ const faqs = [
       <div class='c-anki__upgrade-card'>
         <div class='c-anki__upgrade-row'>
           <div class='c-anki__upgrade-row-head'>
-            <strong>Deine Lite</strong><span>{fmt(LITE_WORDS)} Karten · Fortschritt bleibt</span>
+            <strong>Deine Lite</strong><span>{fmt(LITE_WORDS)} Karten ᛫ Fortschritt bleibt</span>
           </div>
           <div class='c-anki__upgrade-bar'>
             <div class='c-anki__upgrade-bar-learned'></div>
@@ -349,7 +399,7 @@ const faqs = [
         </div>
         <div class='c-anki__upgrade-row'>
           <div class='c-anki__upgrade-row-head'>
-            <strong>Danach</strong><span>{fmt(TOTAL_WORDS)} Karten · 0 Dopplungen</span>
+            <strong>Danach</strong><span>{fmt(TOTAL_WORDS)} Karten ᛫ 0 Dopplungen</span>
           </div>
           <div class='c-anki__upgrade-bar'>
             <div class='c-anki__upgrade-bar-learned'></div>
@@ -411,7 +461,7 @@ const faqs = [
       <h2 id='anki-final-title' class='c-anki__h2'>Na los, ab uff die Karten.</h2>
       <p class='c-anki__lead'>
         {fmt(TOTAL_WORDS)} Wörter Berliner Schnauze{PRICE && ` für ${PRICE}`}. Weniger als 'ne
-        Currywurst mit Pommes.
+        Currywurst mit Pommes — und neue Wörter kriegste ohne Aufpreis nachgeliefert.
       </p>
       <div class='c-anki__actions'>
         {
@@ -422,7 +472,7 @@ const faqs = [
               target='_blank'
               rel='noopener'
             >
-              <span>Full-Deck kaufen{PRICE && ` · ${PRICE}`}</span>
+              <span>Full-Deck kaufen{PRICE && ` ᛫ ${PRICE}`}</span>
               <ArrowUpRight width='20' height='20' />
             </a>
           )

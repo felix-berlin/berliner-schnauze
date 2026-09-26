@@ -2,9 +2,9 @@
   <div class="c-anki-coverage">
     <div class="c-anki-coverage__head">
       <div>
-        <h3 class="c-anki-coverage__title">Von A bis Z — nicht nur „A“ bis „F“</h3>
+        <h3 class="c-anki-coverage__title">Die Lite: ein Querschnitt durch alle Buchstaben</h3>
         <span class="c-anki-coverage__subtitle">
-          Die Lite deckt rund 10&nbsp;% ab, gleichmäßig verteilt über alle Buchstaben.
+          Aus jedem Buchstaben von A bis Z steckt rund jedes zehnte Wort in der Lite.
         </span>
       </div>
       <div class="c-anki-coverage__count-toggle">
