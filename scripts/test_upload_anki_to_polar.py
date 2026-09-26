@@ -1,3 +1,5 @@
+import base64
+import hashlib
 import os
 import sys
 import unittest
@@ -5,6 +7,64 @@ from unittest import mock
 
 sys.path.insert(0, os.path.dirname(__file__))
 import upload_anki_to_polar as u
+
+
+class RequestTests(unittest.TestCase):
+    def test_sets_a_non_default_user_agent(self):
+        # Cloudflare (fronting api.polar.sh) returns error 1010 for Python's
+        # default urllib User-Agent, seen live against the sandbox API.
+        captured = {}
+
+        def fake_urlopen(req, timeout=None):
+            captured["user_agent"] = req.get_header("User-agent")
+            return mock.mock_open(read_data=b"{}")()
+
+        with mock.patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            u._request("GET", "https://example.test/v1/x", token="tok")
+
+        self.assertIsNotNone(captured["user_agent"])
+        self.assertNotIn("python-urllib", captured["user_agent"].lower())
+
+
+class ChecksumTests(unittest.TestCase):
+    def test_create_file_includes_the_part_sha256_checksum(self):
+        data = b"hello-apkg"
+        expected = base64.b64encode(hashlib.sha256(data).digest()).decode()
+
+        def fake_request(method, url, token=None, body=None):
+            return {"body": body}
+
+        with mock.patch.object(u, "_request", side_effect=fake_request):
+            result = u.create_file("tok", "x.apkg", len(data), checksum_b64=expected)
+
+        part = result["body"]["upload"]["parts"][0]
+        self.assertEqual(part["checksum_sha256_base64"], expected)
+
+    def test_upload_part_sends_the_s3_checksum_header(self):
+        # S3 rejected the upload with "Checksum Type mismatch ... expected
+        # checksum Type: sha256, actual checksum Type: null" without this header
+        # (seen live against the sandbox API).
+        data = b"hello-apkg"
+        checksum_b64 = base64.b64encode(hashlib.sha256(data).digest()).decode()
+        captured = {}
+
+        class FakeResponse:
+            headers = {"ETag": '"abc123"'}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+        def fake_urlopen(req, timeout=None):
+            captured["checksum_header"] = req.get_header("X-amz-checksum-sha256")
+            return FakeResponse()
+
+        with mock.patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            u.upload_part({"url": "https://s3.example/part1"}, data, checksum_b64)
+
+        self.assertEqual(captured["checksum_header"], checksum_b64)
 
 
 class UploadFullDeckTests(unittest.TestCase):
