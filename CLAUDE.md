@@ -118,7 +118,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 Pattern: `.c-block__element--modifier`. Hyphens separate words within each part (`c-my-component`, not `c-myComponent`). Never use plain BEM without a namespace prefix.
 
-**JS & CSS feature targeting**: Always use native JS and CSS features that are [Baseline Widely Available or Newly Available](https://web.dev/baseline). No polyfills for Baseline features.
+**JS & CSS feature targeting**: Default to native JS and CSS features that are [Baseline Widely Available or Newly Available](https://web.dev/baseline); no polyfills for Baseline features. Non-Baseline features are allowed as progressive enhancement: either with a fallback, or without one when the feature still works where unsupported (e.g. `interpolate-size` in `_accordion.scss` — Chromium slides the height, other browsers just fade). Never let a non-Baseline feature be required for content or function.
 
 **Icons**: Load asynchronously via `defineAsyncComponent(() => import("virtual:icons/lucide/icon-name"))`. All icons from Lucide.
 
