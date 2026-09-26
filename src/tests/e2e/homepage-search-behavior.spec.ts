@@ -37,8 +37,11 @@ test.describe("Search behaviour (/)", () => {
   }) => {
     await page.goto("/");
     const count = resultCount(page);
+    const total = await count.textContent();
 
     await searchbox(page).fill("aasen");
+    // Wait for the debounced search to apply — otherwise the unfiltered total is captured.
+    await expect(count).not.toHaveText(total ?? "");
     await expect(count).not.toHaveText(/^0 /);
     const expected = await count.textContent();
 
