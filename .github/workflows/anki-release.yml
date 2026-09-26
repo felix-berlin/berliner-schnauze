@@ -1,0 +1,51 @@
+name: Anki Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    name: Build & publish Anki decks
+    if: ${{ !github.event.release.prerelease }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+
+      - name: Fetch secrets from Infisical 🔐
+        uses: Infisical/secrets-action@v1.0.18
+        with:
+          method: "oidc"
+          identity-id: "5f0ad8b7-0224-48ca-b233-abbd59f2eb68"
+          project-slug: "berliner-schnauze"
+          env-slug: "prod"
+          domain: "https://infisical.kasimir.dev"
+
+      - name: Setup Python 🛠️
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install deck-build dependencies
+        run: pip install -r scripts/requirements-anki.txt
+
+      - name: Build decks 🏗️
+        env:
+          VERSION: ${{ github.event.release.tag_name }}
+        run: python scripts/build_anki_decks.py --version "${VERSION#v}"
+
+      - name: Attach Lite deck to the GitHub Release 📎
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ github.event.release.tag_name }}
+        run: gh release upload "$VERSION" "dist-anki/berlinerisch-lite-v${VERSION#v}.apkg"
+
+      - name: Upload Full deck to Polar 📦
+        env:
+          VERSION: ${{ github.event.release.tag_name }}
+        run: python scripts/upload_anki_to_polar.py "dist-anki/berlinerisch-full-v${VERSION#v}.apkg" --version "${VERSION#v}"
