@@ -1,30 +1,22 @@
 <template>
-  <button
-    :id="ctx.triggerId"
-    type="button"
-    class="c-accordion__trigger"
-    :aria-expanded="ctx.isOpen.value"
-    :aria-controls="ctx.contentId"
-    :disabled="ctx.disabled.value"
-    @click="ctx.toggle()"
-  >
-    <span class="c-accordion__trigger-label">
+  <summary class="c-accordion__trigger">
+    <component :is="level ? `h${level}` : 'span'" class="c-accordion__trigger-label">
       <slot />
-    </span>
+    </component>
     <span class="c-accordion__trigger-icon" aria-hidden="true">
       <slot name="icon">
         <component :is="ChevronDown" width="18" height="18" />
       </slot>
     </span>
-  </button>
+  </summary>
 </template>
 
 <script setup lang="ts">
-import { ACCORDION_ITEM_KEY } from "@components/accordion/keys";
-import { defineAsyncComponent, inject } from "vue";
+import { defineAsyncComponent } from "vue";
+
+defineProps<{
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+}>();
 
 const ChevronDown = defineAsyncComponent(() => import("virtual:icons/lucide/chevron-down"));
-
-const ctx = inject(ACCORDION_ITEM_KEY);
-if (!ctx) throw new Error("AccordionTrigger must be inside AccordionItem");
 </script>

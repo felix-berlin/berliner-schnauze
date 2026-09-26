@@ -1,0 +1,36 @@
+---
+import { getWakapiStats } from "@services/wakapiStats";
+import Timer from "virtual:icons/lucide/timer";
+
+const { hours } = await getWakapiStats();
+const days = Math.round(hours / 8);
+---
+
+{
+  hours > 0 && (
+    <div class="c-anki-dev-hours">
+      <div class="c-anki-dev-hours__head">
+        <Timer width="18" height="18" />
+        <span>Bisherige Entwicklungszeit</span>
+      </div>
+      <div class="c-anki-dev-hours__body">
+        <div class="c-anki-dev-hours__figure">
+          <strong>{hours.toLocaleString("de-DE")}</strong>
+          <span>Stunden</span>
+        </div>
+        <p>
+          Knapp {days.toLocaleString("de-DE")} volle Arbeitstage Code, Recherche und Feinschliff —
+          und es werden täglich mehr.
+        </p>
+      </div>
+      <div class="c-anki-dev-hours__foot">
+        <span class="c-anki-dev-hours__dot" />
+        <span>Live gemessen mit Wakapi</span>
+      </div>
+    </div>
+  )
+}
+
+<style lang="scss" is:global>
+  @use "@styles/components/anki-dev-hours";
+</style>

@@ -1,0 +1,73 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-anki-dev-hours {
+  @include mx.paper-card;
+
+  display: flex;
+  flex-direction: column;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.5;
+    padding: vars.$spacer * 0.75 vars.$spacer * 1.25;
+    border-bottom: 1px dashed var(--orange-200);
+    font-weight: 700;
+
+    svg {
+      color: var(--orange-500);
+      flex-shrink: 0;
+    }
+  }
+
+  &__body {
+    padding: vars.$spacer * 1.75 vars.$spacer * 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer;
+  }
+
+  &__figure {
+    display: flex;
+    align-items: baseline;
+    gap: vars.$spacer * 0.5;
+    flex-wrap: wrap;
+
+    strong {
+      font-size: clamp(3rem, 2.4rem + 2.5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1;
+      color: var(--anki-color-accent-text);
+    }
+
+    span {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+  }
+
+  &__body p {
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  &__foot {
+    padding: vars.$spacer * 0.875 vars.$spacer * 1.5;
+    border-top: 1px dashed var(--new-blue-200);
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.375;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+
+  &__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--success);
+    flex-shrink: 0;
+  }
+}

@@ -38,7 +38,15 @@ const fundingMenu = [
         src='https://cms.berliner-schnauze.wtf/wp-content/uploads/bear-walking.png'
       />
     </div>
-    <p class='c-footer__farewell-text'>Knorke ditt du mich hier unten besuchst.</p>
+    {
+      Astro.slots.has('farewell') ? (
+        <div class='c-footer__farewell-slot'>
+          <slot name='farewell' />
+        </div>
+      ) : (
+        <p class='c-footer__farewell-text'>Knorke ditt du mich hier unten besuchst.</p>
+      )
+    }
   </div>
 
   <div class='c-footer__ground'>

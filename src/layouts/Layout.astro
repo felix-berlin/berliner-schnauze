@@ -41,7 +41,17 @@ const {
     <ScrollToTop client:idle />
     <ToastNotifyContainer client:only='vue' />
     <Modal client:idle />
-    <Footer transition:persist />
+    {
+      // A page-specific farewell needs its own persist name, otherwise the ClientRouter
+      // would carry the previous page's footer over (and vice versa).
+      Astro.slots.has('footer-farewell') ? (
+        <Footer transition:persist='footer-custom-farewell'>
+          <slot name='footer-farewell' slot='farewell' />
+        </Footer>
+      ) : (
+        <Footer transition:persist />
+      )
+    }
   </body>
 </html>
 

@@ -33,6 +33,10 @@ export const writeWordsCache = async (key: string, data: unknown): Promise<void>
  * `REFETCH_WORDS=1` forces a refetch.
  */
 export const promptRefetchWords = async (): Promise<void> => {
+  // Config-change restarts re-import this module in the same process; env survives, module state doesn't.
+  if (process.env.WORDS_CACHE_PROMPTED) return;
+  process.env.WORDS_CACHE_PROMPTED = "1";
+
   const files = await readdir(CACHE_DIR).catch(() => []);
   if (files.length === 0) return;
 

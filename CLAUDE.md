@@ -38,6 +38,10 @@ pnpm server:preview          # Serve ./dist with Wrangler Pages
 
 # WordPress auth
 pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (exception: needs local .env file, not Infisical)
+
+# Anki decks (Python venv `.venv-anki`, setup in docs/anki/README.md)
+pnpm anki:build              # Build Full + Lite into dist-anki/ (version <package.json version>-dev)
+pnpm anki:push:sandbox       # Upload that Full deck to the Polar sandbox
 ```
 
 When Claude runs `oxlint` directly (not via `pnpm lint`), always pass `--format=agent`.
@@ -73,15 +77,15 @@ Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adap
 **Data flow**: WordPress GraphQL API → Astro API routes (static JSON at build time) → Orama in-browser search → Vue components
 
 - **Astro** handles routing, SSG, and static pages (`src/pages/`)
-- **Vue 3** islands handle all interactive UI (`src/components/`) — flat files for standalone components, subdirs for feature groups (`games/`, `word/`, `toast/`, `header/`, `accordion/`, `filter/`, `modals/`, `word-search/`). Use **VueUse** (`@vueuse/core`) for browser APIs and Vue utilities before writing custom logic
+- **Vue 3** islands handle all interactive UI (`src/components/`) — flat files for standalone components, subdirs for feature groups (`games/`, `word/`, `toast/`, `header/`, `accordion/`, `filter/`, `modals/`, `word-search/`, `magazin/`, `anki/`). Use **VueUse** (`@vueuse/core`) for browser APIs and Vue utilities before writing custom logic
 - **BON game** (`src/components/games/`) — "Berliner oder Nicht" dialect card game (BerlinerOderNicht.vue, BonCard.vue, BonHUD.vue, BonResult.vue, BonShareView.vue). State in `$bonStats` (persistent high scores/streaks) and `$savedBon` (session resume snapshot). Sharing via URL query params (`src/utils/bonShare.ts`)
 - **Nanostores** manage client state (`src/stores/`) — import directly from individual store files (e.g. `@stores/darkMode.ts`, `@stores/modal.ts`). Do NOT import from `@stores/index` barrel unless the component specifically needs `wordList.ts` exports — the barrel's `computedAsync` side effect triggers `api/search/index.json` on every chunk that imports it.
-- **urql** handles GraphQL queries/mutations from Vue components
+- **`@urql/core`** (no Vue bindings): build-time WPGraphQL client in `src/services/wpGraphqlClient.ts`; the only client-side call is the mutation in `SuggestWordForm.vue`
 - **Orama** provides full-text search with German stemming — index built at build time in `src/pages/api/search/index.json.ts`
 - **Composables** in `src/composable/` — Vue composables wrapping browser APIs (Cache Storage, Service Worker)
 - **Images** — remote images (CMS/Wikimedia/Amazon) are served through a custom Astro image service backed by Imagor (`src/lib/imagorImageService.ts`, URL signing in `src/utils/imagor.ts`, HMAC-SHA256). Configured via `image.service.entrypoint` in `astro.config.mjs`; local ESM-imported images bypass Imagor and use their original Vite asset URL. No `sharp` dependency — removed in favor of Imagor.
 - **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. `<script>` tags in `.astro` files run **only once** on initial load — re-initialize them with `document.addEventListener('astro:page-load', fn)` for subsequent client-side navigations.
-- **Global Vue app setup** in `src/pages/_app.ts` — configures urql client, registers `vTooltip` directive globally, and Nanostores devtools
+- **Global Vue app setup** in `src/pages/_app.ts` — registers the `vTooltip` directive and (dev only) Nanostores devtools
 
 ## Import Aliases
 
@@ -118,7 +122,7 @@ Always use TypeScript path aliases — never relative paths like `../../stores/`
 
 Pattern: `.c-block__element--modifier`. Hyphens separate words within each part (`c-my-component`, not `c-myComponent`). Never use plain BEM without a namespace prefix.
 
-**JS & CSS feature targeting**: Always use native JS and CSS features that are [Baseline Widely Available or Newly Available](https://web.dev/baseline). No polyfills for Baseline features.
+**JS & CSS feature targeting**: Default to native JS and CSS features that are [Baseline Widely Available or Newly Available](https://web.dev/baseline); no polyfills for Baseline features. Non-Baseline features are allowed as progressive enhancement: either with a fallback, or without one when the feature still works where unsupported (e.g. `interpolate-size` in `_accordion.scss` — Chromium slides the height, other browsers just fade). Never let a non-Baseline feature be required for content or function.
 
 **Icons**: Load asynchronously via `defineAsyncComponent(() => import("virtual:icons/lucide/icon-name"))`. All icons from Lucide.
 
@@ -128,11 +132,15 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 
 **Breakpoints & container queries**: Never write raw `@media (width >= vars.$sm)` queries. Fixed viewport breakpoints always go through the sass-butler mixin: `@use "@styles/mixins" as mx;` then `@include mx.breakpoint("sm") { ... }` (direction defaults to `min`; pass `"max"` for a max-width query). The breakpoint map lives in `src/styles/variables/_layout.scss`. Wherever the responsive behavior is really about a component's own available space rather than the viewport, prefer a **container query** instead: `container-type: inline-size; container-name: x;` on the ancestor, then `@container x (inline-size >= Yrem) { ... }` on the descendant — see `src/styles/components/_word-page-layout.scss` and `_word-gallery-col.scss` for the established pattern.
 
-**VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Already in use: `useBreakpoints`, `usePreferredReducedMotion`, `useDebounceFn`, `onKeyStroke`, `useMutationObserver`, `useSwipe`, `useMagicKeys`, `onClickOutside`, `useClipboard`, `useShare`, `useEventListener`, `useTimeoutFn`, `useVibrate`.
+**VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Already in use (grep `@vueuse/core` for the current set): `useEventListener`, `useIntersectionObserver`, `useResizeObserver`, `useMediaQuery`, `useDebounceFn`, `onClickOutside`, `onKeyStroke`, `useMagicKeys`, `useSwipe`, `useClipboard`, `useShare`, `useOnline`, `useUrlSearchParams`.
 
 **PWA**: Built with `@vite-pwa/astro` + Workbox. Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. On update: shows browser Notification if permission granted, else silently reloads. On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Precache excludes `og/**` and `screenshots/**`; `maximumFileSizeToCacheInBytes` is 2 MB. `navigateFallback: "/"` covers offline navigations to uncached pages. Runtime caching (`astro.config.mjs`): StaleWhileRevalidate for search index/meta, NetworkFirst for word-of-the-day, CacheFirst for `imagor-images` (30 days, 500 entries).
 
-**Fonts**: All `@font-face` rules use `font-display: swap` (`src/styles/base/_typo.scss`). Do NOT change to `optional` — on cold cache the 100ms block period makes all text invisible then appear as fallback, causing severe CLS (0.65 observed).
+**Fonts**: Loaded via the Astro Fonts API (`fonts` in `astro.config.mjs`, local woff2 in `src/assets/fonts/`) with `display: "fallback"`. Don't switch to `swap` (Berlin's size-adjust re-wraps text on swap → CLS 0.46) or `optional` (cold cache shows the fallback font → CLS 0.65).
+
+**Accordion**: native `<details>`/`<summary>` wrappers (`@components/accordion`, docs in `docs/accordion.md`). Works without a `client:*` directive; items with the same `name` = only one open. No interactive elements inside `<summary>`.
+
+**Shared SCSS**: raised cards use `@include mx.paper-card` / `mx.paper-card-title` (`src/styles/mixins/_paper-card.scss`); orange CTA = `.c-button--primary`; muted secondary text = `var(--color-muted)`.
 
 **Modal system**: Open modals via `open()` from `@stores/modal.ts` using `defineAsyncComponent` for dynamic component loading. See `src/components/WordSuggestHint.vue` for reference.
 
@@ -197,7 +205,7 @@ Format: `<type>(<scope>): <description>` — imperative, lowercase, no trailing 
 
 Breaking change: append `!` before colon → `feat(api)!: remove endpoint`. Footer must include `BREAKING CHANGE: <description>`.
 
-Scope is optional but encouraged for this project: `bon`, `pwa`, `search`, `toast`, `word`, `auth`, `ai`.
+Scope is optional but encouraged for this project: `bon`, `pwa`, `search`, `toast`, `word`, `images`, `anki`, `ci`, `deps`, `dev`.
 
 Reference: [Conventional Commits](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13)
 

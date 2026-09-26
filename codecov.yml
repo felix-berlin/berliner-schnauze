@@ -3,4 +3,5 @@
 # no test here currently does. Excluded from coverage instead of flagging
 # every new or touched page route.
 ignore:
+  - "src/pages/*.astro"
   - "src/pages/**/*.astro"

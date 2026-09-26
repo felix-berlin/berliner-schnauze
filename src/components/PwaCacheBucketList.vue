@@ -1,62 +1,52 @@
 <template>
-  <BaseAccordion type="multiple" v-slot="{ toggle }">
+  <BaseAccordion>
     <ul class="c-pwa-cache__list u-list-reset">
       <li v-for="bucket in buckets" :key="bucket.name" class="c-pwa-cache__bucket">
-        <AccordionItem :value="bucket.name" :disabled="bucket.urls.length === 0">
-          <div
-            class="c-pwa-cache__bucket-header"
-            :style="bucket.urls.length > 0 ? 'cursor: pointer' : ''"
-            @click="bucket.urls.length > 0 && toggle(bucket.name)"
+        <component
+          :is="bucket.urls.length > 0 ? AccordionItem : 'div'"
+          class="c-pwa-cache__bucket-item"
+          :class="{ 'is-empty': bucket.urls.length === 0 }"
+        >
+          <component
+            :is="bucket.urls.length > 0 ? AccordionTrigger : 'div'"
+            class="c-pwa-cache__bucket-summary"
           >
-            <span class="c-pwa-cache__bucket-name">
-              {{ getBucketDisplayName(bucket.name) }}
+            <span class="c-pwa-cache__bucket-header">
+              <span class="c-pwa-cache__bucket-name">
+                {{ getBucketDisplayName(bucket.name) }}
+              </span>
+              <span class="c-pwa-cache__bucket-size">
+                {{ formatBytes(bucket.totalSizeBytes) }}
+              </span>
             </span>
-            <span class="c-pwa-cache__bucket-size">
-              {{ formatBytes(bucket.totalSizeBytes) }}
-            </span>
-            <AccordionTrigger
-              v-if="bucket.urls.length > 0"
-              class="c-pwa-cache__bucket-toggle"
-              :aria-label="`${getBucketDisplayName(bucket.name)} URLs anzeigen`"
-              @click.stop
-            >
-              <template #icon>
-                <component :is="ChevronDown" width="14" height="14" />
+            <span class="c-pwa-cache__bucket-meta">
+              {{ bucket.urls.length }} {{ bucket.urls.length === 1 ? "Eintrag" : "Einträge" }}
+              <template v-if="bucket.dateRange">
+                · neu: {{ formatRelativeTime(bucket.dateRange.lastModified) }}
               </template>
-            </AccordionTrigger>
-            <button
-              type="button"
-              class="c-pwa-cache__bucket-delete"
-              :aria-label="`${getBucketDisplayName(bucket.name)} leeren`"
-              @click.stop="emit('clear-bucket', bucket.name)"
-            >
-              <component :is="X" width="16" height="16" />
-            </button>
-          </div>
-          <div class="c-pwa-cache__bucket-meta">
-            {{ bucket.urls.length }} {{ bucket.urls.length === 1 ? "Eintrag" : "Einträge" }}
-            <template v-if="bucket.dateRange">
-              · neu: {{ formatRelativeTime(bucket.dateRange.lastModified) }}
-            </template>
-            <template
-              v-if="
-                bucket.dateRange &&
-                bucket.dateRange.oldestEntry.getTime() !== bucket.dateRange.lastModified.getTime()
-              "
-            >
-              · alt: {{ formatRelativeTime(bucket.dateRange.oldestEntry) }}
-            </template>
-          </div>
-          <div v-if="bucket.typeBreakdown.length > 0" class="c-pwa-cache__bucket-types">
-            <span
-              v-for="td in bucket.typeBreakdown.slice(0, 6)"
-              :key="td.type"
-              class="c-pwa-cache__type-pill"
-            >
-              {{ td.type.toUpperCase() }} {{ td.count }}
+              <template
+                v-if="
+                  bucket.dateRange &&
+                  bucket.dateRange.oldestEntry.getTime() !== bucket.dateRange.lastModified.getTime()
+                "
+              >
+                · alt: {{ formatRelativeTime(bucket.dateRange.oldestEntry) }}
+              </template>
             </span>
-          </div>
-          <AccordionContent>
+            <span v-if="bucket.typeBreakdown.length > 0" class="c-pwa-cache__bucket-types">
+              <span
+                v-for="td in bucket.typeBreakdown.slice(0, 6)"
+                :key="td.type"
+                class="c-pwa-cache__type-pill"
+              >
+                {{ td.type.toUpperCase() }} {{ td.count }}
+              </span>
+            </span>
+            <template #icon>
+              <component :is="ChevronDown" width="14" height="14" />
+            </template>
+          </component>
+          <AccordionContent v-if="bucket.urls.length > 0">
             <VList
               :data="bucket.urls"
               :style="{ height: `min(${bucket.urls.length * 28}px, 50vh)` }"
@@ -80,7 +70,15 @@
               </template>
             </VList>
           </AccordionContent>
-        </AccordionItem>
+        </component>
+        <button
+          type="button"
+          class="c-pwa-cache__bucket-delete"
+          :aria-label="`${getBucketDisplayName(bucket.name)} leeren`"
+          @click="emit('clear-bucket', bucket.name)"
+        >
+          <component :is="X" width="16" height="16" />
+        </button>
       </li>
     </ul>
   </BaseAccordion>

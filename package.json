@@ -64,7 +64,9 @@
     "server:preview": "pnpx wrangler dev",
     "server:build:preview": "pnpm build && pnpm server:preview",
     "supportedBrowsers": "node scripts/generate-supported-browsers.mjs",
-    "refreshAuthToken": "node --env-file=.env ./src/utils/refreshToken.js"
+    "refreshAuthToken": "node --env-file=.env ./src/utils/refreshToken.js",
+    "anki:build": "infisical run -- .venv-anki/bin/python scripts/build_anki_decks.py --version $npm_package_version-dev",
+    "anki:push:sandbox": "infisical run -- env POLAR_SANDBOX=true .venv-anki/bin/python scripts/upload_anki_to_polar.py --version $npm_package_version-dev"
   },
   "dependencies": {
     "@astrojs/partytown": "^2.1.8",
@@ -114,6 +116,8 @@
     "@graphql-codegen/schema-ast": "^6.1.0",
     "@graphql-codegen/typescript": "^6.1.0",
     "@graphql-codegen/typescript-operations": "^6.1.7",
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify-json/simple-icons": "^1.2.97",
     "@infisical/cli": "^0.43.137",
     "@nanostores/logger": "^1.1.0",
     "@playwright/test": "^1.63.0",

@@ -12,6 +12,15 @@ dev-dist/
 # test output
 coverage
 /tests/unit/coverage
+tests/unit/junit-report.xml
+.vitest/
+
+# Playwright
+/blob-report/
+/playwright/.auth/
+/test-results/
+/playwright-report/
+/playwright/.cache/
 
 # dependencies
 node_modules/
@@ -35,9 +44,6 @@ pnpm-debug.log*
 .
 
 .idea
-/test-results/
-/playwright-report/
-/playwright/.cache/
 
 # Sentry Config File
 .env.sentry-build-plugin
@@ -47,7 +53,6 @@ pnpm-debug.log*
 
 src/utils/supportedBrowsers.mjs
 stats.html
-tests/unit/junit-report.xml
 oxlint-results.sarif
 
 # AI
@@ -64,6 +69,11 @@ oxlint-results.sarif
 .github/skills/impeccable/
 .codex/skills/impeccable/
 
-# Playwright
-/blob-report/
-/playwright/.auth/
+# Python virtual environments and build artifacts
+dist-anki/
+.venv-anki/
+__pycache__/
+
+# design handoff export (not project source)
+/design_handoff_anki_deck_landing/
+
