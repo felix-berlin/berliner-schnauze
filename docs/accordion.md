@@ -63,5 +63,7 @@ Leave out `name`.
 ## Styling
 
 Styles live in `src/styles/components/_accordion.scss`. Open state is `[open]`, not a class. The chevron
-rotates, the content fades in via `@starting-style`. There is no height animation: animating `<details>`
-height needs `interpolate-size`, which is not Baseline.
+rotates and the native `::details-content` slot fades in and out. Browsers with `interpolate-size`
+(Chromium) also slide the height; the others just fade — progressive enhancement, no fallback code.
+`@starting-style` on the content does **not** work here: closed `<details>` content is hidden via
+`content-visibility`, so it never gets a "first style" to transition from.

@@ -11,6 +11,28 @@
     &:first-child {
       border-top: 1px solid var(--new-blue-200);
     }
+
+    // Animate the native content slot. Fade everywhere ::details-content exists;
+    // the height slide is progressive enhancement where interpolate-size is
+    // supported (Chromium) — other browsers just fade.
+    @include butler-mx.feature("motion") {
+      interpolate-size: allow-keywords;
+
+      &::details-content {
+        opacity: 0;
+        block-size: 0;
+        overflow-y: clip;
+        transition:
+          opacity 0.28s ease,
+          block-size 0.28s ease,
+          content-visibility 0.28s allow-discrete;
+      }
+
+      &[open]::details-content {
+        opacity: 1;
+        block-size: auto;
+      }
+    }
   }
 
   &__trigger {
@@ -53,16 +75,5 @@
 
   &__content {
     padding-bottom: vars.$spacer * 0.75;
-
-    @include butler-mx.feature("motion") {
-      transition:
-        opacity 0.28s ease,
-        translate 0.28s ease;
-
-      @starting-style {
-        opacity: 0;
-        translate: 0 -0.25rem;
-      }
-    }
   }
 }
