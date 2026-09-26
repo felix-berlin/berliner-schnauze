@@ -37,19 +37,9 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
-// ponytail: real word data (title/meaning/example) verified against the WordPress
-// dictionary on 2026-09-22 — do not invent examples for this list.
-const CARDS = [
-  { example: "Dit is mir Wurscht wie Stulle!", meaning: "eine Scheibe Brot", title: "Stulle" },
-  { example: "Ditt is knorke!", meaning: "großartig, toll, Klasse", title: "Knorke" },
-  {
-    example: "Ick bin der Schürftse von meen Kiez!",
-    meaning: "Kietz, Wohnviertel, Stadtteil",
-    title: "Kiez",
-  },
-  { example: "meene Atze", meaning: "Bruder, Schwester, Freunde", title: "Atze" },
-  { example: "Dit is dufte.", meaning: "total super, anerkennend", title: "dufte" },
-];
+const props = defineProps<{
+  cards: { example: string; meaning: string; title: string }[];
+}>();
 
 const ratings = [
   { interval: "< 10 Min", label: "Nochmal", type: "again" },
@@ -62,7 +52,7 @@ const i = ref(0);
 const flipped = ref(false);
 const done = ref(0);
 
-const card = computed(() => CARDS[i.value % CARDS.length]);
+const card = computed(() => props.cards[i.value % props.cards.length]);
 const remaining = computed(() => 20 - (done.value % 20));
 
 function flip(): void {
