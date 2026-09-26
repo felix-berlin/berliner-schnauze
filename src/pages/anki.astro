@@ -37,10 +37,18 @@ const [LITE_URL, allWords, PRICE] = await Promise.all([
   fetchAllWords(),
   getPolarFullDeckPrice(),
 ]);
-const TOTAL_WORDS = allWords.length;
+// Gleicher Filter wie `is_publishable()` in scripts/build_anki_decks.py: Titel und mindestens eine
+// Übersetzung (nach dem Entfernen von HTML). Das Deck holt nur PUBLISH-Wörter; mit SHOW_TEST_DATA
+// enthält `allWords` auch Entwürfe, die Zahlen gelten dann nur näherungsweise.
+const deckWords = allWords.filter(
+  (w) =>
+    stripTags(w.wordProperties.berlinerisch || w.title || '').trim() !== '' &&
+    w.translations.some((t) => stripTags(t).trim() !== ''),
+);
+const TOTAL_WORDS = deckWords.length;
 
 // Gleiche Gruppierung wie `group` in scripts/build_anki_decks.py: WordPress-wordGroup, leer -> Sonstige.
-const wordsPerLetter = Object.groupBy(allWords, (w) => w.wordGroup?.trim().toUpperCase() || 'Sonstige');
+const wordsPerLetter = Object.groupBy(deckWords, (w) => w.wordGroup?.trim().toUpperCase() || 'Sonstige');
 const LETTER_COUNTS = Object.fromEntries(
   Object.entries(wordsPerLetter).map(([letter, words]) => [letter, words?.length ?? 0]),
 );
@@ -57,7 +65,7 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
 
 // Demo-Karten: Wörter mit Übersetzung und Beispielsatz, pro Build zufällig gezogen.
 const DEMO_CARDS = shuffle(
-  allWords.flatMap((w) => {
+  deckWords.flatMap((w) => {
     const example = stripTags(w.wordProperties.examples?.[0]?.example ?? '');
     if (!example || w.translations.length === 0) return [];
     return [
