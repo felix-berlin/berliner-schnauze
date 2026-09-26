@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   build-and-publish:
@@ -43,7 +44,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ github.event.release.tag_name }}
-        run: gh release upload "$VERSION" "dist-anki/berlinerisch-lite-v${VERSION#v}.apkg"
+        run: gh release upload "$VERSION" "dist-anki/berlinerisch-lite-v${VERSION#v}.apkg" --clobber
 
       - name: Upload Full deck to Polar 📦
         env:

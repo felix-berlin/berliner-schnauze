@@ -265,6 +265,13 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
+      // Optional PAT to raise the GitHub API's unauthenticated rate limit for the
+      // Lite-deck release lookup at build time. Unset works fine at low build volume.
+      GITHUB_API_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
     },
   },
   compressHTML: true,
