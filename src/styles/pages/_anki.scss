@@ -7,6 +7,28 @@
   gap: vars.$spacer * 4;
   padding-block: vars.$spacer * 2 vars.$spacer * 4;
 
+  // Muted secondary text. The global --blue-100 (generated shade, ~#7a8c9e) is
+  // lighter than the handoff's #617385 and fails AA on white and on dark surfaces.
+  --anki-color-muted: color-mix(in srgb, var(--blue) 75%, white);
+  --anki-color-accent-text: var(--orange-600);
+
+  @include butler-mx.dark-mode-class {
+    --anki-color-muted: color-mix(in srgb, var(--yellow-500) 75%, var(--blue));
+    --anki-color-accent-text: var(--orange-300);
+  }
+
+  // Secondary buttons: white paper instead of the site's orange-100 default.
+  .c-button:not(.c-button--theme, .c-button--filter) {
+    --color-background: var(--white-100);
+
+    @include butler-mx.hover {
+      --style-border: dashed;
+    }
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--new-blue-600);
+    }
+  }
+
   // Icon + label buttons need the gap the shared .c-button never sets.
   .c-button--center-icon {
     gap: vars.$spacer * 0.625;
@@ -36,14 +58,69 @@
   &__section {
     display: flex;
     flex-direction: column;
-    gap: vars.$spacer * 1.5;
+    gap: vars.$spacer * 2.5;
+    scroll-margin-top: vars.$spacer * 5;
+  }
+
+  // Full-bleed tinted band: background via spread shadow, dashed edges via
+  // border-image outset — both are ink overflow, so no horizontal scrollbar.
+  &__band {
+    --band-bg: color-mix(in srgb, var(--orange-100) 45%, white);
+    --band-line: var(--orange-300);
+
+    padding-block: vars.$spacer * 5;
+    background: var(--band-bg);
+    box-shadow: 0 0 0 100vmax var(--band-bg);
+    clip-path: inset(0 -100vmax);
+    border-block: 1px solid;
+    border-image: repeating-linear-gradient(90deg, var(--band-line) 0 4px, transparent 4px 8px) 1 /
+      1px 0 / 0 100vmax;
+
+    @include butler-mx.dark-mode-class {
+      --band-bg: var(--new-blue-500);
+      --band-line: color-mix(in srgb, var(--orange-300) 45%, transparent);
+    }
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.75;
+
+    &--narrow {
+      max-width: 45rem;
+    }
+
+    &--loose {
+      gap: vars.$spacer;
+    }
+  }
+
+  &__h2 {
+    // impeccable-disable design-system-font-size -- --fs-display from design handoff
+    font-size: clamp(2rem, 1.36rem + 3.19vw, 4rem);
+    line-height: 1.05;
+    margin: 0;
+    text-wrap: balance;
+
+    &--sm {
+      font-size: 2.5rem;
+      line-height: 1.1;
+    }
+  }
+
+  &__h3 {
+    font-family: vars.$berlin;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin: 0;
   }
 
   &__eyebrow {
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--orange-600);
+    color: var(--anki-color-accent-text);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     display: flex;
@@ -87,7 +164,7 @@
     font-family: vars.$berliner;
     font-weight: normal;
     font-size: clamp(2rem, 1.36rem + 3.19vw, 4.5rem);
-    line-height: 1.05;
+    line-height: 1.02;
     margin: 0;
     text-wrap: balance;
   }
@@ -104,7 +181,15 @@
     gap: vars.$spacer * 0.25 vars.$spacer * 1.25;
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.95rem;
-    color: var(--blue-100);
+    color: var(--anki-color-muted);
+  }
+
+  // "Was ist Anki" intro: heading | paragraph
+  &__explainer-intro {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 23.75rem), 1fr));
+    gap: vars.$spacer * 2 vars.$spacer * 3.5;
+    align-items: end;
   }
 
   // Step cards ("Was ist Anki")
@@ -195,7 +280,7 @@
   &__timeline-caption {
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.85rem;
-    color: var(--blue-100);
+    color: var(--anki-color-muted);
   }
 
   &__timeline-row {
@@ -277,7 +362,7 @@
 
   &__platform-meta {
     font-size: 0.8rem;
-    color: var(--blue-100);
+    color: var(--anki-color-muted);
   }
 
   // Pricing cards
@@ -367,7 +452,7 @@
     }
 
     span {
-      color: var(--blue-100);
+      color: var(--anki-color-muted);
     }
   }
 
@@ -413,7 +498,7 @@
   &__plan-note {
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.85rem;
-    color: var(--blue-100);
+    color: var(--anki-color-muted);
     text-align: center;
   }
 
@@ -459,7 +544,7 @@
     }
 
     span {
-      color: var(--blue-100);
+      color: var(--anki-color-muted);
     }
   }
 
@@ -478,6 +563,10 @@
   &__upgrade-bar-rest {
     flex: 1;
     background: color-mix(in srgb, var(--orange-100) 60%, white);
+
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-200);
+    }
   }
 
   &__upgrade-bar-new {
@@ -505,7 +594,7 @@
     gap: vars.$spacer;
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.8rem;
-    color: var(--blue-100);
+    color: var(--anki-color-muted);
     flex-wrap: wrap;
   }
 
@@ -529,12 +618,6 @@
     align-items: center;
   }
 
-  &__opensource-copy {
-    display: flex;
-    flex-direction: column;
-    gap: vars.$spacer;
-  }
-
   &__opensource-cta {
     align-self: flex-start;
     // impeccable-disable design-system-font-size -- literal value from design handoff
@@ -542,10 +625,47 @@
     padding: 0.75rem 1.125rem;
   }
 
-  // Final CTA
-  &__final {
-    max-width: 42em;
+  // FAQ
+  &__faq {
+    --band-bg: color-mix(in srgb, var(--orange-100) 30%, white);
+
+    border-bottom: 0;
   }
+
+  &__faq-inner {
+    width: 100%;
+    max-width: 53.75rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 1.75;
+
+    .c-accordion__header {
+      margin: 0;
+    }
+
+    .c-accordion__trigger {
+      font-family: vars.$berlin;
+      font-weight: 700;
+      // impeccable-disable design-system-font-size -- literal value from design handoff
+      font-size: 1.15rem;
+      padding-block: vars.$spacer * 1.25;
+    }
+
+    .c-accordion__content {
+      // impeccable-disable design-system-font-size -- literal value from design handoff
+      font-size: 1.05rem;
+      line-height: 1.55;
+      padding-inline-end: vars.$spacer * 2.5;
+      text-wrap: pretty;
+    }
+  }
+
+  // Final CTA, rendered into the footer's farewell slot next to the bear.
+  &--farewell {
+    padding-block: 0 vars.$spacer * 2;
+  }
+
 
   // Primary/secondary CTA buttons (hero + final CTA)
   &__actions .c-button {

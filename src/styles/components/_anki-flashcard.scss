@@ -54,7 +54,7 @@
     padding: vars.$spacer * 0.625 vars.$spacer;
     border-bottom: 1px dashed var(--orange-200);
     font-size: 0.8rem;
-    color: var(--blue-100);
+    color: var(--anki-color-muted);
 
     span:first-child {
       font-weight: 700;
@@ -73,7 +73,8 @@
   }
 
   &__word {
-    font-family: vars.$berliner;
+    font-family: vars.$berlin;
+    font-weight: 700;
     font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem);
     line-height: 1.1;
     text-decoration: underline dashed from-font;
@@ -144,7 +145,7 @@
   &__rating-interval {
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.75rem;
-    color: var(--blue-100);
+    color: var(--anki-color-muted);
   }
 
   &__rating-label {
@@ -176,6 +177,6 @@
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.9rem;
     text-align: center;
-    color: var(--blue-100);
+    color: var(--anki-color-muted);
   }
 }

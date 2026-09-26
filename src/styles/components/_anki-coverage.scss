@@ -37,7 +37,7 @@
     display: block;
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.95rem;
-    color: var(--blue-100);
+    color: var(--anki-color-muted);
   }
 
   &__count-toggle {
@@ -66,7 +66,7 @@
     span {
       // impeccable-disable design-system-font-size -- literal value from design handoff
       font-size: 0.95rem;
-      color: var(--blue-100);
+      color: var(--anki-color-muted);
     }
   }
 
@@ -76,6 +76,16 @@
 
     .c-button {
       border: 0;
+      font-weight: 700;
+      padding: vars.$spacer * 0.5 vars.$spacer * 1.125;
+    }
+
+    .c-button.is-current {
+      --color: var(--white-100);
+
+      @include butler-mx.dark-mode-class {
+        --color: var(--white-100);
+      }
     }
   }
 
