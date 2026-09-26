@@ -1,6 +1,7 @@
 ---
 import "@styles/components/_button.scss";
 import { ANKI_DECK_FULL_CHECKOUT } from "astro:env/client";
+import { getLiteDeckDownloadUrl } from "@services/githubRelease.ts";
 import Layout from "@layouts/Layout.astro";
 import AnkiFlashcardDemo from "@components/anki/AnkiFlashcardDemo.vue";
 import AnkiLetterCoverage from "@components/anki/AnkiLetterCoverage.vue";
@@ -26,7 +27,7 @@ const page = {
 
 // Polar-Checkout-Link. Solange nicht gesetzt, wird kein Kauf-Button gezeigt.
 const FULL_CHECKOUT_URL = ANKI_DECK_FULL_CHECKOUT || "";
-const LITE_URL = "/downloads/berlinerisch-lite.apkg";
+const LITE_URL = await getLiteDeckDownloadUrl();
 
 // ponytail: Zahlen aus dem letzten Deck-Build (siehe `pnpm run` in docs/anki/README.md).
 // Beim nächsten Rebuild der Decks hier aktualisieren (Skript gibt die Summe aus).
@@ -136,10 +137,14 @@ const faqs = [
               </a>
             )
           }
-          <a class="c-button c-button--center-icon" href={LITE_URL} download>
-            <Download width="20" height="20" />
-            <span>Lite kostenlos laden</span>
-          </a>
+          {
+            LITE_URL && (
+              <a class="c-button c-button--center-icon" href={LITE_URL} download>
+                <Download width="20" height="20" />
+                <span>Lite kostenlos laden</span>
+              </a>
+            )
+          }
         </div>
         <div class="c-anki__meta">
           <span>{fmt(TOTAL_WORDS)} Wörter in der Full</span>
@@ -227,9 +232,15 @@ const faqs = [
             {liteFeatures.map((f) => <li>{f}</li>)}
           </ul>
           <div class="c-anki__plan-cta">
-            <a class="c-button c-button--center-icon" href={LITE_URL} download>
-              <Download width="20" height="20" /><span>Lite runterladen (.apkg)</span>
-            </a>
+            {
+              LITE_URL ? (
+                <a class="c-button c-button--center-icon" href={LITE_URL} download>
+                  <Download width="20" height="20" /><span>Lite runterladen (.apkg)</span>
+                </a>
+              ) : (
+                <span class="c-anki__plan-note">Download derzeit nicht verfügbar.</span>
+              )
+            }
           </div>
         </div>
 
@@ -371,9 +382,13 @@ const faqs = [
               </a>
             )
           }
-          <a class="c-button c-button--center-icon" href={LITE_URL} download>
-            <Download width="20" height="20" /><span>Erst mal Lite</span>
-          </a>
+          {
+            LITE_URL && (
+              <a class="c-button c-button--center-icon" href={LITE_URL} download>
+                <Download width="20" height="20" /><span>Erst mal Lite</span>
+              </a>
+            )
+          }
         </div>
       </div>
     </section>
