@@ -197,6 +197,13 @@ def fetch_words():
         after = page["pageInfo"]["endCursor"]
 
 
+DECK_LABELS = {"full": "Full", "lite": "Lite"}
+
+
+def deck_filename(kind, version):
+    return "Berliner-Schnauze-Anki-Deck-%s-v%s.apkg" % (DECK_LABELS[kind], version)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--version", default="dev")
@@ -208,7 +215,7 @@ def main():
     full, lite = build_decks(words, full_url, args.version)
     os.makedirs(OUT_DIR, exist_ok=True)
     for deck, name in ((full, "full"), (lite, "lite")):
-        genanki.Package(deck).write_to_file("%s/berlinerisch-%s-v%s.apkg" % (OUT_DIR, name, args.version))
+        genanki.Package(deck).write_to_file("%s/%s" % (OUT_DIR, deck_filename(name, args.version)))
     print("Wörter gesamt %d, Full %d Karten, Lite %d Karten" % (len(words), len(full.notes), len(lite.notes)))
 
 

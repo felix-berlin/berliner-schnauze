@@ -6,17 +6,19 @@ import { join } from "node:path";
 const DIST_DIR = "dist-anki";
 
 const files = readdirSync(DIST_DIR)
-  .filter((f) => /^berlinerisch-full-v.+\.apkg$/.test(f))
+  .filter((f) => /^Berliner-Schnauze-Anki-Deck-Full-v.+\.apkg$/.test(f))
   .map((f) => ({ file: f, mtime: statSync(join(DIST_DIR, f)).mtimeMs }))
   .sort((a, b) => b.mtime - a.mtime);
 
 if (files.length === 0) {
-  console.error(`No ${DIST_DIR}/berlinerisch-full-v*.apkg found. Run \`pnpm anki:build\` first.`);
+  console.error(
+    `No ${DIST_DIR}/Berliner-Schnauze-Anki-Deck-Full-v*.apkg found. Run \`pnpm anki:build\` first.`,
+  );
   process.exit(1);
 }
 
 const { file } = files[0];
-const version = file.replace(/^berlinerisch-full-v/, "").replace(/\.apkg$/, "");
+const version = file.replace(/^Berliner-Schnauze-Anki-Deck-Full-v/, "").replace(/\.apkg$/, "");
 
 execFileSync(
   "npx",

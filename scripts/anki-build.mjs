@@ -20,6 +20,6 @@ execFileSync(
   { stdio: "inherit" },
 );
 
-const liteFile = `dist-anki/berlinerisch-lite-v${devVersion}.apkg`;
+const liteFile = `dist-anki/Berliner-Schnauze-Anki-Deck-Lite-v${devVersion}.apkg`;
 copyFileSync(liteFile, "public/downloads/berlinerisch-lite.apkg");
 console.log(`Copied ${liteFile} -> public/downloads/berlinerisch-lite.apkg`);

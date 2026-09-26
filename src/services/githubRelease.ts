@@ -27,7 +27,7 @@ async function loadLiteDeckDownloadUrl(): Promise<string | undefined> {
     // (der anki-release-Workflow braucht selbst noch einen Moment) - deshalb
     // wird der naechstaeltere durchsucht, statt nur /releases/latest zu nutzen.
     for (const release of releases) {
-      const asset = release.assets?.find((a) => a.name.startsWith("berlinerisch-lite"));
+      const asset = release.assets?.find((a) => a.name.startsWith("Berliner-Schnauze-Anki-Deck-Lite"));
       if (asset) return asset.browser_download_url;
     }
     return undefined;

@@ -4,7 +4,7 @@ die am Full-Deck-Downloadable-Benefit haengt.
 
 Aufruf (Secrets ueber Infisical):
     npx infisical run -- .venv-anki/bin/python scripts/upload_anki_to_polar.py \
-        dist-anki/berlinerisch-full-v3.52.0.apkg --version 3.52.0
+        dist-anki/Berliner-Schnauze-Anki-Deck-Full-v3.52.0.apkg --version 3.52.0
 
 Benoetigt POLAR_UPLOAD_TOKEN (Scopes files:write, benefits:write) und
 ANKI_DECK_FULL_BENEFIT_ID. POLAR_SANDBOX=true nutzt die Polar-Sandbox statt Prod.

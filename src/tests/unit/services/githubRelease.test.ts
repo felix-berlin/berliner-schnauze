@@ -20,8 +20,8 @@ describe("getLiteDeckDownloadUrl", () => {
     const releases = [
       {
         assets: [
-          { browser_download_url: "https://example.com/full", name: "berlinerisch-full-v3.52.0.apkg" },
-          { browser_download_url: "https://example.com/lite", name: "berlinerisch-lite-v3.52.0.apkg" },
+          { browser_download_url: "https://example.com/full", name: "Berliner-Schnauze-Anki-Deck-Full-v3.52.0.apkg" },
+          { browser_download_url: "https://example.com/lite", name: "Berliner-Schnauze-Anki-Deck-Lite-v3.52.0.apkg" },
         ],
       },
     ];
@@ -32,8 +32,8 @@ describe("getLiteDeckDownloadUrl", () => {
 
   it("falls back to an older release if the newest one has no lite asset yet", async () => {
     const releases = [
-      { assets: [{ browser_download_url: "https://example.com/full-new", name: "berlinerisch-full-v3.53.0.apkg" }] },
-      { assets: [{ browser_download_url: "https://example.com/lite-old", name: "berlinerisch-lite-v3.52.0.apkg" }] },
+      { assets: [{ browser_download_url: "https://example.com/full-new", name: "Berliner-Schnauze-Anki-Deck-Full-v3.53.0.apkg" }] },
+      { assets: [{ browser_download_url: "https://example.com/lite-old", name: "Berliner-Schnauze-Anki-Deck-Lite-v3.52.0.apkg" }] },
     ];
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(makeResponse(true, releases)));
     const { getLiteDeckDownloadUrl } = await import("@services/githubRelease.ts");
@@ -88,7 +88,7 @@ describe("getLiteDeckDownloadUrl", () => {
   });
 
   it("memoizes the result across calls within the same module instance", async () => {
-    const releases = [{ assets: [{ browser_download_url: "https://example.com/lite", name: "berlinerisch-lite-v1.apkg" }] }];
+    const releases = [{ assets: [{ browser_download_url: "https://example.com/lite", name: "Berliner-Schnauze-Anki-Deck-Lite-v1.apkg" }] }];
     const fetchMock = vi.fn().mockResolvedValue(makeResponse(true, releases));
     vi.stubGlobal("fetch", fetchMock);
     const { getLiteDeckDownloadUrl } = await import("@services/githubRelease.ts");

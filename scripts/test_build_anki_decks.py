@@ -23,6 +23,12 @@ def word(i, title, tr=("x",), ex=0, alt=0):
     }
 
 
+class FilenameTests(unittest.TestCase):
+    def test_deck_filename_is_branded(self):
+        self.assertEqual(b.deck_filename("full", "3.51.0"), "Berliner-Schnauze-Anki-Deck-Full-v3.51.0.apkg")
+        self.assertEqual(b.deck_filename("lite", "3.51.0-dev"), "Berliner-Schnauze-Anki-Deck-Lite-v3.51.0-dev.apkg")
+
+
 class NormalizeTests(unittest.TestCase):
     def test_clean_strips_html_and_entities(self):
         self.assertEqual(b.clean("<p>Ick &amp;  du</p>"), "Ick & du")
