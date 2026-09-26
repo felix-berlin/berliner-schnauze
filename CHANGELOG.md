@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.52.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.51.0...v3.52.0) (2026-09-26)
+
+
+### Bug Fixes
+
+* **accordion:** animate the native details content slot ([313b72e](https://github.com/felix-berlin/berliner-schnauze/commit/313b72ec965a68a16c3d4fe491f007577a50b069))
+* **anki:** apply final review fixes ([b308012](https://github.com/felix-berlin/berliner-schnauze/commit/b30801280d0d9a2ceaf531b537ac74c496dd268e))
+* **anki:** count only deck-eligible words on the anki page ([4e4dff2](https://github.com/felix-berlin/berliner-schnauze/commit/4e4dff2a86d36f29c9c5e33e032e8e8434200286))
+* **anki:** fix live-verified Polar upload bugs (User-Agent, checksum) ([c5d3308](https://github.com/felix-berlin/berliner-schnauze/commit/c5d3308af2b3e82dbe2a418d450d7872496ba5b4))
+* **anki:** force the polar sandbox in anki:push:sandbox ([4c58988](https://github.com/felix-berlin/berliner-schnauze/commit/4c589888e919b39c8cf4b29cd93457bd2e8fe7a7))
+* **anki:** harden release automation per final review ([9b40cab](https://github.com/felix-berlin/berliner-schnauze/commit/9b40cabee1c83a0c3f900bbf90a04aa3d24e1ed2))
+* **anki:** keep Ä, Ö, Ü as their own letter groups ([606678f](https://github.com/felix-berlin/berliner-schnauze/commit/606678fee821939e0f8c31ae616aa54cfa29e14b))
+* **anki:** size and weight the secondary CTA buttons per handoff ([643f5f3](https://github.com/felix-berlin/berliner-schnauze/commit/643f5f3aed2adb12d4e2cca8076cf39594c0bf2e))
+* **dev:** prompt for words refetch only on initial dev-server start ([6cb30c1](https://github.com/felix-berlin/berliner-schnauze/commit/6cb30c13694cfc307857aa387b4d12868981c4e9))
+
+
+### Features
+
+* **anki:** add --version flag to deck build script ([1fb4c02](https://github.com/felix-berlin/berliner-schnauze/commit/1fb4c024ea87bf5d11daecab84465775741d9cbb))
+* **anki:** add deck landing page components and styles ([cdeb15e](https://github.com/felix-berlin/berliner-schnauze/commit/cdeb15e903a73d7f1159557120cbab7a7e9f56c2))
+* **anki:** add download page and lite deck ([757bc81](https://github.com/felix-berlin/berliner-schnauze/commit/757bc8159e603267d2c36f2bfae1b5b4b55564b3))
+* **anki:** add githubRelease service for the live Lite download link ([374bfb0](https://github.com/felix-berlin/berliner-schnauze/commit/374bfb02659ae0e8e2cd3b6fb984b596b6cc50e2))
+* **anki:** add note model, deck building and consistency checks ([8466f72](https://github.com/felix-berlin/berliner-schnauze/commit/8466f7242ea3b073634aef525985ab3d86381590))
+* **anki:** add pnpm scripts for local deck build and sandbox upload ([2ab8a09](https://github.com/felix-berlin/berliner-schnauze/commit/2ab8a090549479de07016cfd57bf4ab56071b72a))
+* **anki:** add Polar full-deck upload script ([1b37948](https://github.com/felix-berlin/berliner-schnauze/commit/1b37948dfe3e7e7b424f0f9e8195d43599444b6b))
+* **anki:** add wakapi coding-hours fetch utility ([e5780cd](https://github.com/felix-berlin/berliner-schnauze/commit/e5780cd323f0f252adc1f193c19bcc2d24f3e1b6))
+* **anki:** add word normalisation and lite selection ([71406c1](https://github.com/felix-berlin/berliner-schnauze/commit/71406c1794e82ac3f78731a71c12444a05fe2f55))
+* **anki:** apply v3 design handoff changes ([a0a8858](https://github.com/felix-berlin/berliner-schnauze/commit/a0a88583dc7af6ac24cc728eb81b2a4d20bf2e39))
+* **anki:** feed the flashcard demo from live word data ([30a6daf](https://github.com/felix-berlin/berliner-schnauze/commit/30a6dafb87fcd9721b1170730b1d1330e75e4784))
+* **anki:** fetch published words and write lite and full apkg files ([a05de8c](https://github.com/felix-berlin/berliner-schnauze/commit/a05de8c22f796284bfd8ff617818b61c996ddf37))
+* **anki:** implement deck landing page ([56ea753](https://github.com/felix-berlin/berliner-schnauze/commit/56ea7538e369fe3136d204ad385dc664f5340aff))
+* **anki:** link the Lite download to the latest GitHub Release asset ([ac92670](https://github.com/felix-berlin/berliner-schnauze/commit/ac92670b1c84ec8346b5add9709413738bf56823))
+* **anki:** live word data, per-letter coverage, and dynamic Full-deck price ([ac12492](https://github.com/felix-berlin/berliner-schnauze/commit/ac124922c6e7cfef61cb022710b22286f6431048))
+* **footer:** support a page-specific farewell slot ([36e2b7f](https://github.com/felix-berlin/berliner-schnauze/commit/36e2b7f2615d95da7c9842682964e1211b518199))
+
 # [3.51.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.50.0...v3.51.0) (2026-09-25)
 
 
