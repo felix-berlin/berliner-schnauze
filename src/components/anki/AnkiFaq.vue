@@ -1,9 +1,7 @@
 <template>
-  <BaseAccordion type="single" collapsible default-value="0" class="c-anki-faq">
-    <AccordionItem v-for="(faq, idx) in faqs" :key="faq.q" :value="String(idx)">
-      <AccordionHeader :level="3">
-        <AccordionTrigger>{{ faq.q }}</AccordionTrigger>
-      </AccordionHeader>
+  <BaseAccordion class="c-anki-faq">
+    <AccordionItem v-for="(faq, idx) in faqs" :key="faq.q" name="anki-faq" :open="idx === 0">
+      <AccordionTrigger :level="3">{{ faq.q }}</AccordionTrigger>
       <AccordionContent>{{ faq.a }}</AccordionContent>
     </AccordionItem>
   </BaseAccordion>
@@ -12,7 +10,6 @@
 <script setup lang="ts">
 import {
   AccordionContent,
-  AccordionHeader,
   AccordionItem,
   AccordionTrigger,
   BaseAccordion,

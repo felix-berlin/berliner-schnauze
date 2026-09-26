@@ -617,10 +617,6 @@
     flex-direction: column;
     gap: vars.$spacer * 1.75;
 
-    .c-accordion__header {
-      margin: 0;
-    }
-
     .c-accordion__trigger {
       font-family: vars.$berlin;
       font-weight: 700;

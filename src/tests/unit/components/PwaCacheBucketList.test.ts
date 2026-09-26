@@ -63,10 +63,11 @@ describe("PwaCacheBucketList", () => {
     expect(wrapper.findAll(".c-pwa-cache__bucket")).toHaveLength(2);
   });
 
-  it("disables accordion item when bucket has no URLs", () => {
+  it("renders an empty bucket without an expandable <details>", () => {
     const buckets = [makeBucket("api-search-index", [])];
     const wrapper = mount(PwaCacheBucketList, { props: { buckets } });
-    expect(wrapper.find(".c-accordion__item").classes()).toContain("is-disabled");
+    expect(wrapper.find("details").exists()).toBe(false);
+    expect(wrapper.find(".c-pwa-cache__bucket-item").classes()).toContain("is-empty");
   });
 
   it("emits clear-bucket with bucket name on delete click", async () => {
@@ -79,15 +80,15 @@ describe("PwaCacheBucketList", () => {
   it("expands URLs on header click", async () => {
     const buckets = [makeBucket("api-search-index", ["https://a.com/path"])];
     const wrapper = mount(PwaCacheBucketList, { props: { buckets } });
-    expect(wrapper.find(".c-accordion__item").classes()).not.toContain("is-open");
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
-    expect(wrapper.find(".c-accordion__item").classes()).toContain("is-open");
+    const details = wrapper.find("details").element;
+    expect(details.open).toBe(false);
+    wrapper.find("summary").element.click();
+    expect(details.open).toBe(true);
   });
 
   it("shows formatted URL paths in expanded content", async () => {
     const buckets = [makeBucket("api-search-index", ["https://example.com/some/path"])];
     const wrapper = mount(PwaCacheBucketList, { props: { buckets } });
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     expect(wrapper.find(".c-pwa-cache__url-path").text()).toContain("/some/path");
   });
 
@@ -110,14 +111,12 @@ describe("PwaCacheBucketList", () => {
       ],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     expect(wrapper.find(".c-pwa-cache__url-age").exists()).toBe(true);
   });
 
   it("omits age for entry without date", async () => {
     const buckets = [makeBucket("api-search-index", ["https://a.com/x"])];
     const wrapper = mount(PwaCacheBucketList, { props: { buckets } });
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     expect(wrapper.find(".c-pwa-cache__url-age").exists()).toBe(false);
   });
 
@@ -136,14 +135,12 @@ describe("PwaCacheBucketList", () => {
       urls: [{ contentType: null, date: null, size: 2048, url: "https://a.com/x" }],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     expect(wrapper.find(".c-pwa-cache__url-size").text()).toContain("KB");
   });
 
   it("omits size span when entry size is null", async () => {
     const buckets = [makeBucket("api-search-index", ["https://a.com/x"])];
     const wrapper = mount(PwaCacheBucketList, { props: { buckets } });
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     expect(wrapper.find(".c-pwa-cache__url-size").exists()).toBe(false);
   });
 
@@ -156,7 +153,6 @@ describe("PwaCacheBucketList", () => {
       urls: [{ contentType: "application/json", date: null, size: null, url: "https://a.com/x" }],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     expect(wrapper.find(".c-pwa-cache__url-type").text()).toBe("JSON");
   });
 
@@ -171,7 +167,6 @@ describe("PwaCacheBucketList", () => {
       ],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     expect(wrapper.find(".c-pwa-cache__url-type").text()).toBe("OTHER");
   });
 
@@ -197,7 +192,6 @@ describe("PwaCacheBucketList", () => {
       urls: [{ contentType: null, date: null, size: null, url: "/relative-path-no-origin" }],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     expect(wrapper.find(".c-pwa-cache__url-path").text()).toContain("/relative-path-no-origin");
   });
 
@@ -211,7 +205,6 @@ describe("PwaCacheBucketList", () => {
       urls: [{ contentType: null, date: null, size: null, url: `https://example.com${longPath}` }],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     const text = wrapper.find(".c-pwa-cache__url-path").text();
     expect(text).toContain("…");
     expect(text.length).toBeLessThan(longPath.length);
@@ -227,7 +220,6 @@ describe("PwaCacheBucketList", () => {
       urls: [{ contentType: null, date: null, size: null, url: longRelative }],
     };
     const wrapper = mount(PwaCacheBucketList, { props: { buckets: [bucket] } });
-    await wrapper.find(".c-pwa-cache__bucket-header").trigger("click");
     const text = wrapper.find(".c-pwa-cache__url-path").text();
     expect(text).toContain("…");
     expect(text.length).toBeLessThan(longRelative.length);
@@ -263,17 +255,12 @@ describe("PwaCacheBucketList", () => {
     expect(wrapper.find(".c-pwa-cache__bucket-meta").text()).toContain("Min.");
   });
 
-  it("clicking AccordionTrigger button does not propagate to header (covers L21 @click.stop handler)", async () => {
+  it("delete button sits outside <summary> and does not toggle the bucket", async () => {
     const buckets = [makeBucket("api-search-index", ["https://a.com/path"])];
     const wrapper = mount(PwaCacheBucketList, { props: { buckets } });
-    // The accordion trigger button carries the @click.stop compiled handler — trigger it directly
-    const trigger = wrapper.find(".c-accordion__trigger");
-    expect(trigger.exists()).toBe(true);
-    await trigger.trigger("click");
-    // After clicking the trigger (which has @click.stop), the accordion item should now be open
-    // because AccordionTrigger's own click handler toggles it — the stop modifier just prevents
-    // the event from reaching the parent header div's handler a second time
-    expect(wrapper.find(".c-accordion__item").classes()).toContain("is-open");
+    expect(wrapper.find("summary .c-pwa-cache__bucket-delete").exists()).toBe(false);
+    await wrapper.find(".c-pwa-cache__bucket-delete").trigger("click");
+    expect(wrapper.find("details").element.open).toBe(false);
   });
 
   it("formatRelativeTime returns 'vor X Std.' for date 5 hours ago (covers line 129)", () => {
