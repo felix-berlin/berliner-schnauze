@@ -41,7 +41,7 @@ Felder: `Berlinerisch`, `Artikel`, `Uebersetzungen`, `Beispiele`, `Alternativen`
 
 ## Lite-Auswahl
 
-- Wörter nach Anfangsbuchstabe gruppieren (normalisiert: `ä→a`, `ö→o`, `ü→u`, `ß→s`, sonst `Sonstige`).
+- Wörter nach Anfangsbuchstabe gruppieren, wie das `wordGroup` der Website: `Ä`, `Ö`, `Ü` sind eigene Buchstaben, alles außer `a–z` und `ä/ö/ü` landet in `Sonstige`.
 - Pro Gruppe nach Vollständigkeit absteigend sortieren: `2 * Beispiele + Alternativwörter + (Übersetzungen - 1)`, bei Gleichstand nach Titel.
 - Pro Gruppe `max(1, ceil(0.10 * n))` Wörter übernehmen.
 - Deterministisch: gleiche Daten ergeben dieselbe Auswahl.

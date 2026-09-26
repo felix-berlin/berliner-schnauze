@@ -37,11 +37,10 @@ const allWords = await fetchAllWords();
 const TOTAL_WORDS = allWords.length;
 const PRICE = await getPolarFullDeckPrice();
 
-// Gleiche Umlaut-Faltung wie `letter()` in scripts/build_anki_decks.py.
-const UMLAUTS: Record<string, string> = { ß: 's', ä: 'a', ö: 'o', ü: 'u' };
+// Gleiche Gruppierung wie `letter()` in scripts/build_anki_decks.py: Umlaute sind eigene Buchstaben.
 const letterOf = (word: string) => {
-  const ch = UMLAUTS[word.trim().charAt(0).toLowerCase()] ?? word.trim().charAt(0).toLowerCase();
-  return /^[a-z]$/.test(ch) ? ch.toUpperCase() : 'Sonstige';
+  const ch = word.trim().charAt(0).toLowerCase();
+  return /^[a-zäöü]$/.test(ch) ? ch.toUpperCase() : 'Sonstige';
 };
 const wordsPerLetter = Object.groupBy(allWords, (w) => letterOf(w.wordProperties.berlinerisch));
 const LETTER_COUNTS = Object.fromEntries(
@@ -49,7 +48,7 @@ const LETTER_COUNTS = Object.fromEntries(
 );
 const LETTERS = Object.keys(LETTER_COUNTS)
   .filter((l) => l !== 'Sonstige')
-  .sort();
+  .sort((a, b) => a.localeCompare(b, 'de'));
 // Gleiche Auswahl wie `select_lite()` in scripts/build_anki_decks.py: max(1, ceil(10 %)) pro Buchstabe.
 const LITE_WORDS = Object.values(wordsPerLetter).reduce(
   (sum, words) => sum + Math.max(1, Math.ceil((words?.length ?? 0) / 10)),

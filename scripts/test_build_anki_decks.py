@@ -64,9 +64,11 @@ class NormalizeTests(unittest.TestCase):
 
 
 class LiteTests(unittest.TestCase):
-    def test_letter_folds_umlauts_and_falls_back(self):
-        self.assertEqual(b.letter("Änne"), "A")
-        self.assertEqual(b.letter("üben"), "U")
+    def test_letter_keeps_umlauts_and_falls_back(self):
+        # Matches the website's wordGroup, where Ä/Ö/Ü are letters of their own.
+        self.assertEqual(b.letter("Änne"), "Ä")
+        self.assertEqual(b.letter("üben"), "Ü")
+        self.assertEqual(b.letter("Kiez"), "K")
         self.assertEqual(b.letter("'ne"), "Sonstige")
         self.assertEqual(b.letter("3 Mark"), "Sonstige")
 

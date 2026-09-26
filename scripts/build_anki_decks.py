@@ -23,7 +23,8 @@ OUT_DIR = "dist-anki"
 FULL_DECK_ID = 1734921001
 LITE_DECK_ID = 1734921002
 MODEL_ID = 1734921003
-UMLAUTS = {"ä": "a", "ö": "o", "ü": "u", "ß": "s"}
+# Same letter groups as the website's wordGroup: umlauts are letters of their own.
+LETTERS = set("abcdefghijklmnopqrstuvwxyzäöü")
 
 
 def clean(value):
@@ -58,8 +59,7 @@ def is_publishable(word):
 
 def letter(title):
     ch = title.strip()[:1].lower()
-    ch = UMLAUTS.get(ch, ch)
-    return ch.upper() if len(ch) == 1 and "a" <= ch <= "z" else "Sonstige"
+    return ch.upper() if ch in LETTERS else "Sonstige"
 
 
 def score(word):
