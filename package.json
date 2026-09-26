@@ -64,7 +64,9 @@
     "server:preview": "pnpx wrangler dev",
     "server:build:preview": "pnpm build && pnpm server:preview",
     "supportedBrowsers": "node scripts/generate-supported-browsers.mjs",
-    "refreshAuthToken": "node --env-file=.env ./src/utils/refreshToken.js"
+    "refreshAuthToken": "node --env-file=.env ./src/utils/refreshToken.js",
+    "anki:build": "node scripts/anki-build.mjs",
+    "anki:push:sandbox": "node scripts/anki-push-sandbox.mjs"
   },
   "dependencies": {
     "@astrojs/partytown": "^2.1.8",
