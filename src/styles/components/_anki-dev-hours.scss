@@ -1,19 +1,12 @@
 @use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-anki-dev-hours {
-  background: var(--white-100);
-  border: 1px dashed var(--grey-100);
-  border-radius: 4px;
-  box-shadow:
-    0 0.5px 0.6px rgb(0 0 0 / 8%),
-    0 4px 5px rgb(0 0 0 / 16%);
+  @include mx.paper-card;
+
   display: flex;
   flex-direction: column;
-
-  @include butler-mx.dark-mode-class {
-    background: var(--new-blue-400);
-  }
 
   &__head {
     display: flex;
@@ -46,11 +39,7 @@
       font-size: clamp(3rem, 2.4rem + 2.5vw, 4.5rem);
       font-weight: 900;
       line-height: 1;
-      color: var(--orange-600);
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
-      }
+      color: var(--anki-color-accent-text);
     }
 
     span {
@@ -71,7 +60,7 @@
     align-items: center;
     gap: vars.$spacer * 0.375;
     font-size: 0.8rem;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
   }
 
   &__dot {

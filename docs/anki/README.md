@@ -4,7 +4,7 @@ Two `.apkg` decks are generated from the published words in WordPress:
 
 | Deck     | Content                                                     | Distribution                             |
 | -------- | ----------------------------------------------------------- | ---------------------------------------- |
-| **Lite** | About 10 % of the words, evenly spread over the alphabet    | Free: website (`/anki`) and AnkiWeb      |
+| **Lite** | About 10 % of the words, evenly spread over the alphabet    | Free: GitHub Release asset and AnkiWeb   |
 | **Full** | All published words that have at least one translation      | Paid: Polar checkout link (no SDK)       |
 
 Cards go one way only: Berlinerisch → German. Design details live in
@@ -15,7 +15,7 @@ Cards go one way only: Berlinerisch → German. Design details live in
 - **Front:** article (if any) and the Berlinerisch word.
 - **Back:** translations, up to two examples with explanation, alternative words, a link to `/wort/<slug>`.
 - **Not included:** `sources`/`quelle` and `infoText`.
-- **Lite only:** the `Hinweis` field shows a short pointer to the Full deck (`https://berliner-schnauze.wtf/anki` by default).
+- **Lite only:** the `Hinweis` field shows a short pointer to the Full deck (`https://berliner-schnauze.wtf/anki`).
 
 Both decks use the same note type and the same GUIDs (`genanki.guid_for(databaseId)`).
 Importing Full after Lite therefore updates the Lite cards instead of duplicating them.
@@ -36,19 +36,21 @@ uv pip install --python .venv-anki/bin/python -r scripts/requirements-anki.txt
 ## Build the decks
 
 ```bash
-npx infisical run -- .venv-anki/bin/python scripts/build_anki_decks.py
+pnpm anki:build   # version <package.json version>-dev
 ```
 
 Output goes to `dist-anki/` (gitignored):
 
-- `berlinerisch-lite.apkg`
-- `berlinerisch-full.apkg`
+- `Berliner-Schnauze-Anki-Deck-Lite-v<version>.apkg`
+- `Berliner-Schnauze-Anki-Deck-Full-v<version>.apkg`
+
+Letter groups come from the WordPress `wordGroup` field (the same one the website uses); words
+without one land in `Sonstige`.
 
 The script prints one summary line, for example `Wörter gesamt 5935, Full 5907 Karten, Lite 603 Karten`.
 The difference between total and Full is the number of published entries without a translation.
 
-Optional: `ANKI_FULL_URL=<url>` changes the link shown in the Lite `Hinweis` field.
-The default is the website page, which stays valid even if the checkout link changes.
+The Lite `Hinweis` links to the website page, which stays valid even if the checkout link changes.
 
 ## Run the tests
 
@@ -63,22 +65,17 @@ Python 3.14) is expected and does not come from this code.
 
 ## Check the result in Anki before publishing
 
-1. Import `berlinerisch-lite.apkg`. Flip through some cards (light and dark mode).
-2. Import `berlinerisch-full.apkg` on top.
+1. Import the Lite `.apkg`. Flip through some cards (light and dark mode).
+2. Import the Full `.apkg` on top.
 3. Expect: no duplicate cards, the hint disappears from the Lite cards, the remaining words are added.
 
 The site copy promises "no duplicates", so do this check before the first public release.
 
 ## Publish Lite
 
-1. Copy the file into the site and commit it:
-
-   ```bash
-   cp dist-anki/berlinerisch-lite.apkg public/downloads/berlinerisch-lite.apkg
-   ```
-
-   The file is not precached by the PWA (only web asset extensions are), so it does not count against
-   the 2 MB Workbox limit.
+1. Publishing a GitHub Release runs `.github/workflows/anki-release.yml`, which attaches the Lite deck
+   to the release. `/anki` links to the newest release asset (`src/services/githubRelease.ts`); nothing
+   is committed to the repository.
 
 2. **AnkiWeb:** upload by hand (Shared Decks → Upload). There is no API. Use the ready-made text in
    [`ankiweb-description.md`](./ankiweb-description.md). Read its "Before uploading" checklist first.
@@ -94,18 +91,20 @@ Things to know about AnkiWeb (terms last updated 2018-10-17, read 2026-09-21):
 
 ## Publish Full
 
-1. Create a product in Polar and attach `dist-anki/berlinerisch-full.apkg` as the file benefit.
+1. Create a product in Polar with a downloadable benefit. The release workflow uploads the Full deck and
+   swaps the benefit file (`scripts/upload_anki_to_polar.py`); `pnpm anki:push:sandbox` does the same
+   against the Polar sandbox with the last `pnpm anki:build` output.
 2. Set the shareable checkout link as `ANKI_DECK_FULL_CHECKOUT` in Infisical (public, client-side —
    see `astro.config.mjs`). While it is unset, the page shows "Kommt bald" instead of a buy button.
-3. Do not commit `berlinerisch-full.apkg` to the repository.
+3. Do not commit the Full `.apkg` to the repository.
 
 Check fees and VAT handling on the Polar pricing pages yourself before deciding.
 
 ## Update the decks
 
 1. Rebuild (see above). Deck, model and note IDs are fixed, so nothing needs to be renamed.
-2. Replace `public/downloads/berlinerisch-lite.apkg`, upload the new Lite file to AnkiWeb again and
-   replace the Full file in Polar.
+2. Publish a release (Lite goes to GitHub, Full to Polar automatically) and upload the new Lite file
+   to AnkiWeb again.
 3. Users who re-import get changed cards updated in place. Newly published words are added.
 
 Do not change `FULL_DECK_ID`, `LITE_DECK_ID`, `MODEL_ID` or the GUID scheme in `scripts/build_anki_decks.py`

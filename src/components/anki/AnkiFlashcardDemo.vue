@@ -50,10 +50,9 @@ const ratings = [
 
 const i = ref(0);
 const flipped = ref(false);
-const done = ref(0);
 
 const card = computed(() => props.cards[i.value % props.cards.length]);
-const remaining = computed(() => 20 - (done.value % 20));
+const remaining = computed(() => 20 - (i.value % 20));
 
 function flip(): void {
   flipped.value = true;
@@ -62,7 +61,6 @@ function flip(): void {
 function next(): void {
   i.value += 1;
   flipped.value = false;
-  done.value += 1;
 }
 </script>
 

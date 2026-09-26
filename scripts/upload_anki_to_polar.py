@@ -2,9 +2,8 @@
 """Laedt ein gebautes Full-Anki-Deck zu Polar hoch und ersetzt die Datei,
 die am Full-Deck-Downloadable-Benefit haengt.
 
-Aufruf (Secrets ueber Infisical):
-    npx infisical run -- .venv-anki/bin/python scripts/upload_anki_to_polar.py \
-        dist-anki/Berliner-Schnauze-Anki-Deck-Full-v3.52.0.apkg --version 3.52.0
+Aufruf (Secrets ueber Infisical), nach build_anki_decks.py mit derselben Version:
+    npx infisical run -- .venv-anki/bin/python scripts/upload_anki_to_polar.py --version 3.52.0
 
 Benoetigt POLAR_UPLOAD_TOKEN (Scopes files:write, benefits:write) und
 ANKI_DECK_FULL_BENEFIT_ID. POLAR_SANDBOX=true nutzt die Polar-Sandbox statt Prod.
@@ -18,6 +17,8 @@ import os
 import sys
 import urllib.error
 import urllib.request
+
+from build_anki_decks import deck_filename
 
 API_HOSTS = {"prod": "https://api.polar.sh", "sandbox": "https://sandbox-api.polar.sh"}
 
@@ -127,8 +128,7 @@ def upload_full_deck(path, token, benefit_id, version=None):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("apkg_path")
-    parser.add_argument("--version", default=None)
+    parser.add_argument("--version", required=True)
     args = parser.parse_args()
 
     token = os.environ.get("POLAR_UPLOAD_TOKEN")
@@ -136,8 +136,8 @@ def main():
     if not token or not benefit_id:
         sys.exit("POLAR_UPLOAD_TOKEN und ANKI_DECK_FULL_BENEFIT_ID muessen gesetzt sein.")
 
-    file_id = upload_full_deck(args.apkg_path, token, benefit_id, version=args.version)
-    print("Full-Deck hochgeladen (Version %s), neue Datei-ID: %s" % (args.version or "?", file_id))
+    file_id = upload_full_deck(deck_filename("full", args.version), token, benefit_id, version=args.version)
+    print("Full-Deck hochgeladen (Version %s), neue Datei-ID: %s" % (args.version, file_id))
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 
 Aufruf (Secrets über Infisical):
     npx infisical run -- .venv-anki/bin/python scripts/build_anki_decks.py
-Optional: ANKI_FULL_URL (Standard: <SITE>/anki). Ausgabe: dist-anki/*.apkg
+Ausgabe: dist-anki/*.apkg
 """
 import argparse
 import base64
@@ -19,14 +19,12 @@ from datetime import date
 import genanki
 
 SITE = "https://berliner-schnauze.wtf"
+FULL_URL = SITE + "/anki"
 OUT_DIR = "dist-anki"
 FULL_DECK_ID = 1734921001
 LITE_DECK_ID = 1734921002
 MODEL_ID = 1734921003
 # Same letter groups as the website's wordGroup: umlauts are letters of their own.
-LETTERS = set("abcdefghijklmnopqrstuvwxyzäöü")
-
-
 def clean(value):
     if isinstance(value, list):
         value = " ".join(str(v) for v in value)
@@ -46,6 +44,8 @@ def normalize_word(node):
         "id": node["databaseId"],
         "slug": node["slug"],
         "title": clean(p.get("berlinerisch") or node.get("title")),
+        # Buchstabengruppe wie auf der Website (Ä/Ö/Ü eigene Gruppen); leer -> "Sonstige".
+        "group": (node.get("wordGroup") or "").strip().upper() or "Sonstige",
         "article": clean(p.get("article")),
         "translations": [t for t in translations if t],
         "examples": [e for e in examples if e[0]],
@@ -57,11 +57,6 @@ def is_publishable(word):
     return bool(word["title"] and word["translations"])
 
 
-def letter(title):
-    ch = title.strip()[:1].lower()
-    return ch.upper() if ch in LETTERS else "Sonstige"
-
-
 def score(word):
     return 2 * len(word["examples"]) + len(word["alternatives"]) + len(word["translations"]) - 1
 
@@ -69,7 +64,7 @@ def score(word):
 def select_lite(words):
     groups = defaultdict(list)
     for w in words:
-        groups[letter(w["title"])].append(w)
+        groups[w["group"]].append(w)
     picked = []
     for group in groups.values():
         group.sort(key=lambda w: (-score(w), w["title"].lower(), w["id"]))
@@ -138,16 +133,16 @@ def make_note(word, hint_html):
         model=MODEL,
         fields=note_fields(word, hint_html),
         guid=genanki.guid_for(word["id"]),
-        tags=[letter(word["title"])],
+        tags=[word["group"]],
     )
 
 
-def build_decks(words, full_url, version="dev"):
+def build_decks(words, version="dev"):
     words = sorted((w for w in words if is_publishable(w)), key=lambda w: (w["title"].lower(), w["id"]))
     lite_ids = {w["id"] for w in select_lite(words)}
     hint = 'Lite-Version mit 10 %% der Wörter. Alle Wörter: <a href="%s">%s</a>' % (
-        html.escape(full_url),
-        html.escape(full_url),
+        html.escape(FULL_URL),
+        html.escape(FULL_URL),
     )
     description = "Version %s · %s" % (version, date.today().isoformat())
     full = genanki.Deck(FULL_DECK_ID, "Berliner Schnauze Full", description=description)
@@ -161,8 +156,7 @@ def build_decks(words, full_url, version="dev"):
 
 
 def check_decks(full, lite, words):
-    publishable = [w for w in words if is_publishable(w)]
-    assert len(full.notes) == len(publishable), "Full: Kartenzahl weicht von den Wörtern ab"
+    assert len(full.notes) == len(words), "Full: Kartenzahl weicht von den Wörtern ab"
     full_guids = [n.guid for n in full.notes]
     assert len(set(full_guids)) == len(full_guids), "doppelte GUIDs"
     assert {n.guid for n in lite.notes} <= set(full_guids), "Lite-GUID fehlt in Full"
@@ -172,7 +166,7 @@ def check_decks(full, lite, words):
     assert len(lite.notes) <= len(full.notes) // 10 + len(full_letters), "Lite ist zu groß"
 
 
-QUERY = """query($after:String){berlinerWords(first:100,after:$after,where:{stati:[PUBLISH],orderby:{field:TITLE,order:ASC}}){edges{node{databaseId slug title wordProperties{berlinerisch article translations{translation} examples{example exampleExplanation} alternativeWords{alternativeWord}}}} pageInfo{endCursor hasNextPage}}}"""
+QUERY = """query($after:String){berlinerWords(first:100,after:$after,where:{stati:[PUBLISH],orderby:{field:TITLE,order:ASC}}){edges{node{databaseId slug title wordGroup wordProperties{berlinerisch article translations{translation} examples{example exampleExplanation} alternativeWords{alternativeWord}}}} pageInfo{endCursor hasNextPage}}}"""
 
 
 def fetch_words():
@@ -197,11 +191,8 @@ def fetch_words():
         after = page["pageInfo"]["endCursor"]
 
 
-DECK_LABELS = {"full": "Full", "lite": "Lite"}
-
-
 def deck_filename(kind, version):
-    return "Berliner-Schnauze-Anki-Deck-%s-v%s.apkg" % (DECK_LABELS[kind], version)
+    return "%s/Berliner-Schnauze-Anki-Deck-%s-v%s.apkg" % (OUT_DIR, kind.capitalize(), version)
 
 
 def main():
@@ -209,13 +200,12 @@ def main():
     parser.add_argument("--version", default="dev")
     args = parser.parse_args()
 
-    full_url = os.environ.get("ANKI_FULL_URL") or SITE + "/anki"
     words = [normalize_word(n) for n in fetch_words()]
     assert words, "keine Wörter geladen"
-    full, lite = build_decks(words, full_url, args.version)
+    full, lite = build_decks(words, args.version)
     os.makedirs(OUT_DIR, exist_ok=True)
     for deck, name in ((full, "full"), (lite, "lite")):
-        genanki.Package(deck).write_to_file("%s/%s" % (OUT_DIR, deck_filename(name, args.version)))
+        genanki.Package(deck).write_to_file(deck_filename(name, args.version))
     print("Wörter gesamt %d, Full %d Karten, Lite %d Karten" % (len(words), len(full.notes), len(lite.notes)))
 
 

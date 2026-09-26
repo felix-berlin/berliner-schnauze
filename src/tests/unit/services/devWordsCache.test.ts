@@ -28,6 +28,8 @@ beforeEach(async () => {
   question.mockReset();
   close.mockReset();
   vi.stubEnv("REFETCH_WORDS", "");
+  // Once-per-process guard in promptRefetchWords; reset so every test prompts.
+  vi.stubEnv("WORDS_CACHE_PROMPTED", "");
   setTty(false);
 });
 

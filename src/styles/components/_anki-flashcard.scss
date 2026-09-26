@@ -1,4 +1,5 @@
 @use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-anki-flashcard {
@@ -9,9 +10,7 @@
     position: absolute;
     background: var(--white-100);
     border: 1px dashed var(--orange-200);
-    box-shadow:
-      0 0.5px 0.6px rgb(0 0 0 / 8%),
-      0 2px 3px rgb(0 0 0 / 16%);
+    box-shadow: vars.$paper-lift;
     border-radius: 4px;
 
     @include butler-mx.dark-mode-class {
@@ -32,19 +31,12 @@
 
   &__card {
     position: relative;
-    background: var(--white-100);
-    border: 1px dashed var(--grey-100);
-    border-radius: 4px;
-    box-shadow:
-      0 0.5px 0.6px rgb(0 0 0 / 8%),
-      0 4px 5px rgb(0 0 0 / 16%);
+
+    @include mx.paper-card;
+
     min-height: 25rem;
     display: flex;
     flex-direction: column;
-
-    @include butler-mx.dark-mode-class {
-      background: var(--new-blue-400);
-    }
   }
 
   &__head {
@@ -54,7 +46,7 @@
     padding: vars.$spacer * 0.625 vars.$spacer;
     border-bottom: 1px dashed var(--orange-200);
     font-size: 0.8rem;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
 
     span:first-child {
       font-weight: 700;
@@ -96,11 +88,7 @@
     // impeccable-disable design-system-font-size -- literal value from design_handoff_anki_deck_landing (v2, confirmed with user)
     font-size: 1.4rem;
     font-weight: 700;
-    color: var(--orange-600);
-
-    @include butler-mx.dark-mode-class {
-      color: var(--orange-300);
-    }
+    color: var(--anki-color-accent-text);
   }
 
   &__example {
@@ -145,7 +133,7 @@
   &__rating-interval {
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.75rem;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
   }
 
   &__rating-label {
@@ -165,11 +153,7 @@
   }
 
   &__rating--easy .c-anki-flashcard__rating-label {
-    color: var(--orange-600);
-
-    @include butler-mx.dark-mode-class {
-      color: var(--orange-300);
-    }
+    color: var(--anki-color-accent-text);
   }
 
   &__hint {
@@ -177,6 +161,6 @@
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.9rem;
     text-align: center;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
   }
 }

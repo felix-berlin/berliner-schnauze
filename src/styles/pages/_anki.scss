@@ -1,4 +1,5 @@
 @use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-anki {
@@ -7,18 +8,14 @@
   gap: vars.$spacer * 4;
   padding-block: vars.$spacer * 2 vars.$spacer * 4;
 
-  // Muted secondary text. The global --blue-100 (generated shade, ~#7a8c9e) is
-  // lighter than the handoff's #617385 and fails AA on white and on dark surfaces.
-  --anki-color-muted: color-mix(in srgb, var(--blue) 75%, white);
   --anki-color-accent-text: var(--orange-600);
 
   @include butler-mx.dark-mode-class {
-    --anki-color-muted: color-mix(in srgb, var(--yellow-500) 75%, var(--blue));
     --anki-color-accent-text: var(--orange-300);
   }
 
   // Secondary buttons: white paper instead of the site's orange-100 default.
-  .c-button:not(.c-button--theme, .c-button--filter) {
+  .c-button:not(.c-button--primary, .c-button--filter) {
     --color-background: var(--white-100);
 
     font-weight: 700;
@@ -34,27 +31,6 @@
   // Icon + label buttons need the gap the shared .c-button never sets.
   .c-button--center-icon {
     gap: vars.$spacer * 0.625;
-  }
-
-  // Buy CTAs use .c-button--theme as a hook, but that variant is the site's dark
-  // "ink" button (wrong color + Berliner font). The handoff's primary button is
-  // orange with body-bold text, so override both back to spec within this page.
-  .c-button--theme {
-    --color-background: var(--orange-500);
-    --color: var(--white-100);
-    --color-border: var(--orange-500);
-
-    font-family: vars.$berlin;
-    font-weight: 700;
-
-    @include butler-mx.hover {
-      --color-border: var(--yellow-500);
-    }
-    @include butler-mx.dark-mode-class {
-      --color-background: var(--orange-500);
-      --color: var(--white-100);
-      --color-border: var(--orange-500);
-    }
   }
 
   &__section {
@@ -112,18 +88,12 @@
   }
 
   &__h3 {
-    font-family: vars.$berlin;
-    font-weight: 700;
-    font-size: 1.25rem;
+    font-family: vars.$berliner;
+    font-weight: normal;
+    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+    line-height: 1.1;
+    text-wrap: balance;
     margin: 0;
-
-    &--lg {
-      font-family: vars.$berliner;
-      font-weight: normal;
-      font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
-      line-height: 1.1;
-      text-wrap: balance;
-    }
   }
 
   &__eyebrow {
@@ -191,7 +161,7 @@
     gap: vars.$spacer * 0.25 vars.$spacer * 1.25;
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.95rem;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
   }
 
   // "Was ist Anki" intro: heading | paragraph
@@ -210,18 +180,10 @@
   }
 
   &__step {
-    background: var(--white-100);
-    border: 1px dashed var(--grey-100);
-    border-radius: 4px;
-    box-shadow:
-      0 0.5px 0.6px rgb(0 0 0 / 8%),
-      0 4px 5px rgb(0 0 0 / 16%);
+    @include mx.paper-card;
+
     display: flex;
     flex-direction: column;
-
-    @include butler-mx.dark-mode-class {
-      background: var(--new-blue-400);
-    }
   }
 
   &__step-head {
@@ -240,11 +202,7 @@
   }
 
   &__step-title {
-    // Section-card title: Body Bold per DESIGN.md, not the display font.
-    font-family: vars.$berlin;
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin: 0;
+    @include mx.paper-card-title;
   }
 
   &__step-text {
@@ -256,20 +214,12 @@
 
   // Interval timeline card
   &__timeline {
-    background: var(--white-100);
-    border: 1px dashed var(--grey-100);
-    border-radius: 4px;
-    box-shadow:
-      0 0.5px 0.6px rgb(0 0 0 / 8%),
-      0 4px 5px rgb(0 0 0 / 16%);
+    @include mx.paper-card;
+
     padding: vars.$spacer * 1.75 vars.$spacer * 1.5;
     display: flex;
     flex-direction: column;
     gap: vars.$spacer * 1.25;
-
-    @include butler-mx.dark-mode-class {
-      background: var(--new-blue-400);
-    }
   }
 
   &__timeline-head {
@@ -281,16 +231,13 @@
   }
 
   &__timeline-title {
-    font-family: vars.$berlin;
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin: 0;
+    @include mx.paper-card-title;
   }
 
   &__timeline-caption {
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.85rem;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
   }
 
   &__timeline-row {
@@ -338,18 +285,10 @@
 
   // Platform card ("Läuft überall")
   &__platform-card {
-    background: var(--white-100);
-    border: 1px dashed var(--grey-100);
-    border-radius: 4px;
-    box-shadow:
-      0 0.5px 0.6px rgb(0 0 0 / 8%),
-      0 4px 5px rgb(0 0 0 / 16%);
+    @include mx.paper-card;
+
     display: flex;
     flex-direction: column;
-
-    @include butler-mx.dark-mode-class {
-      background: var(--new-blue-400);
-    }
   }
 
   &__platform-card-head {
@@ -405,11 +344,7 @@
     min-height: 2.125rem;
 
     svg {
-      color: var(--orange-600);
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
-      }
+      color: var(--anki-color-accent-text);
     }
   }
 
@@ -419,7 +354,7 @@
 
   &__platform-meta {
     font-size: 0.8rem;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
   }
 
   &__platform-card-foot {
@@ -430,7 +365,7 @@
     padding: vars.$spacer * 0.75 vars.$spacer * 1.25;
     border-top: 1px dashed var(--orange-200);
     font-size: 0.9rem;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
 
     svg {
       color: var(--orange-500);
@@ -447,24 +382,16 @@
 
   &__plan {
     position: relative;
-    background: var(--white-100);
-    border: 1px dashed var(--grey-100);
-    border-radius: 4px;
-    box-shadow:
-      0 0.5px 0.6px rgb(0 0 0 / 8%),
-      0 4px 5px rgb(0 0 0 / 16%);
+
+    @include mx.paper-card;
+
     display: flex;
     flex-direction: column;
-
-    @include butler-mx.dark-mode-class {
-      background: var(--new-blue-400);
-    }
 
     &--full {
       border: 2px solid var(--orange-500);
       box-shadow:
-        0 0.5px 0.6px rgb(0 0 0 / 8%),
-        0 4px 5px rgb(0 0 0 / 16%),
+        vars.$paper-lift,
         0 0 24px 0 color-mix(in srgb, var(--orange-500) 25%, transparent);
     }
   }
@@ -504,11 +431,7 @@
     margin: 0;
 
     .c-anki__plan--full & {
-      color: var(--orange-600);
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
-      }
+      color: var(--anki-color-accent-text);
     }
   }
 
@@ -524,7 +447,7 @@
     }
 
     span {
-      color: var(--anki-color-muted);
+      color: var(--color-muted);
     }
   }
 
@@ -558,9 +481,7 @@
     gap: vars.$spacer * 0.625;
 
     .c-button {
-      justify-content: center;
       display: flex;
-      font-weight: 700;
       // impeccable-disable design-system-font-size -- literal value from design handoff
       font-size: 1.05rem;
       padding: 0.875rem 1.25rem;
@@ -570,12 +491,12 @@
   &__plan-note {
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.85rem;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
     text-align: center;
   }
 
-  // Upgrade diagram
-  &__upgrade {
+  // Two-column text + visual sections (upgrade diagram, open source)
+  &__split {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 26.25rem), 1fr));
     gap: vars.$spacer * 2.5;
@@ -583,20 +504,12 @@
   }
 
   &__upgrade-card {
-    background: var(--white-100);
-    border: 1px dashed var(--grey-100);
-    border-radius: 4px;
-    box-shadow:
-      0 0.5px 0.6px rgb(0 0 0 / 8%),
-      0 4px 5px rgb(0 0 0 / 16%);
+    @include mx.paper-card;
+
     padding: vars.$spacer * 1.5 vars.$spacer * 1.25;
     display: flex;
     flex-direction: column;
     gap: vars.$spacer;
-
-    @include butler-mx.dark-mode-class {
-      background: var(--new-blue-400);
-    }
   }
 
   &__upgrade-row {
@@ -616,7 +529,7 @@
     }
 
     span {
-      color: var(--anki-color-muted);
+      color: var(--color-muted);
     }
   }
 
@@ -666,7 +579,7 @@
     gap: vars.$spacer;
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.8rem;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
     flex-wrap: wrap;
   }
 
@@ -680,14 +593,6 @@
       height: 0.75rem;
       display: inline-block;
     }
-  }
-
-  // Open Source
-  &__opensource {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 26.25rem), 1fr));
-    gap: vars.$spacer * 2.5;
-    align-items: center;
   }
 
   &__cta-sm {
@@ -744,12 +649,9 @@
     padding: 0.875rem 1.375rem;
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 1.1rem;
-    gap: vars.$spacer * 0.625;
 
-    &.c-button--theme {
-      box-shadow:
-        0 0.5px 0.6px rgb(0 0 0 / 8%),
-        0 4px 5px rgb(0 0 0 / 16%);
+    &.c-button--primary {
+      box-shadow: vars.$paper-lift;
     }
   }
 }

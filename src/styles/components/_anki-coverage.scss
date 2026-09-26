@@ -1,21 +1,14 @@
 @use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-anki-coverage {
-  background: var(--white-100);
-  border: 1px dashed var(--grey-100);
-  border-radius: 4px;
-  box-shadow:
-    0 0.5px 0.6px rgb(0 0 0 / 8%),
-    0 4px 5px rgb(0 0 0 / 16%);
+  @include mx.paper-card;
+
   padding: vars.$spacer * 1.5 vars.$spacer * 1.25;
   display: flex;
   flex-direction: column;
   gap: vars.$spacer * 1.25;
-
-  @include butler-mx.dark-mode-class {
-    background: var(--new-blue-400);
-  }
 
   &__head {
     display: flex;
@@ -26,18 +19,14 @@
   }
 
   &__title {
-    // Section-card title: Body Bold per DESIGN.md, not the display font.
-    font-family: vars.$berlin;
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin: 0;
+    @include mx.paper-card-title;
   }
 
   &__subtitle {
     display: block;
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 0.95rem;
-    color: var(--anki-color-muted);
+    color: var(--color-muted);
   }
 
   &__count-toggle {
@@ -56,17 +45,13 @@
       font-size: 2rem;
       font-weight: 900;
       line-height: 1;
-      color: var(--orange-600);
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
-      }
+      color: var(--anki-color-accent-text);
     }
 
     span {
       // impeccable-disable design-system-font-size -- literal value from design handoff
       font-size: 0.95rem;
-      color: var(--anki-color-muted);
+      color: var(--color-muted);
     }
   }
 

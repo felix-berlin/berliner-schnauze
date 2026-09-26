@@ -1,9 +1,12 @@
 ---
 import '@styles/components/_button.scss';
+// Polar-Checkout-Link. Solange nicht gesetzt, wird kein Kauf-Button gezeigt.
 import { ANKI_DECK_FULL_CHECKOUT } from 'astro:env/client';
 import { fetchAllWords } from '@services/api.ts';
 import { getPolarFullDeckPrice } from '@services/polar.ts';
 import { getLiteDeckDownloadUrl } from '@services/githubRelease.ts';
+import { shuffle } from '@utils/helpers.ts';
+import { stripTags } from '@utils/article.ts';
 import Layout from '@layouts/Layout.astro';
 import AnkiFlashcardDemo from '@components/anki/AnkiFlashcardDemo.vue';
 import AnkiLetterCoverage from '@components/anki/AnkiLetterCoverage.vue';
@@ -29,20 +32,15 @@ const page = {
   title: 'Berlinerisch lernen mit Anki - Berliner Schnauze',
 };
 
-// Polar-Checkout-Link. Solange nicht gesetzt, wird kein Kauf-Button gezeigt.
-const FULL_CHECKOUT_URL = ANKI_DECK_FULL_CHECKOUT || '';
-const LITE_URL = await getLiteDeckDownloadUrl();
-
-const allWords = await fetchAllWords();
+const [LITE_URL, allWords, PRICE] = await Promise.all([
+  getLiteDeckDownloadUrl(),
+  fetchAllWords(),
+  getPolarFullDeckPrice(),
+]);
 const TOTAL_WORDS = allWords.length;
-const PRICE = await getPolarFullDeckPrice();
 
-// Gleiche Gruppierung wie `letter()` in scripts/build_anki_decks.py: Umlaute sind eigene Buchstaben.
-const letterOf = (word: string) => {
-  const ch = word.trim().charAt(0).toLowerCase();
-  return /^[a-zäöü]$/.test(ch) ? ch.toUpperCase() : 'Sonstige';
-};
-const wordsPerLetter = Object.groupBy(allWords, (w) => letterOf(w.wordProperties.berlinerisch));
+// Gleiche Gruppierung wie `group` in scripts/build_anki_decks.py: WordPress-wordGroup, leer -> Sonstige.
+const wordsPerLetter = Object.groupBy(allWords, (w) => w.wordGroup?.trim().toUpperCase() || 'Sonstige');
 const LETTER_COUNTS = Object.fromEntries(
   Object.entries(wordsPerLetter).map(([letter, words]) => [letter, words?.length ?? 0]),
 );
@@ -58,9 +56,8 @@ const LITE_WORDS = Object.values(wordsPerLetter).reduce(
 const fmt = (n: number) => n.toLocaleString('de-DE');
 
 // Demo-Karten: Wörter mit Übersetzung und Beispielsatz, pro Build zufällig gezogen.
-const stripTags = (s: string) => s.replace(/<[^>]+>/g, '').trim();
-const DEMO_CARDS = allWords
-  .flatMap((w) => {
+const DEMO_CARDS = shuffle(
+  allWords.flatMap((w) => {
     const example = stripTags(w.wordProperties.examples?.[0]?.example ?? '');
     if (!example || w.translations.length === 0) return [];
     return [
@@ -70,9 +67,8 @@ const DEMO_CARDS = allWords
         title: w.wordProperties.berlinerisch,
       },
     ];
-  })
-  .sort(() => Math.random() - 0.5)
-  .slice(0, 6);
+  }),
+).slice(0, 6);
 
 const steps = [
   {
@@ -172,10 +168,10 @@ const faqs = [
         </p>
         <div class='c-anki__actions'>
           {
-            FULL_CHECKOUT_URL && (
+            ANKI_DECK_FULL_CHECKOUT && (
               <a
-                class='c-button c-button--theme c-button--center-icon'
-                href={FULL_CHECKOUT_URL}
+                class='c-button c-button--primary c-button--center-icon'
+                href={ANKI_DECK_FULL_CHECKOUT}
                 target='_blank'
                 rel='noopener'
               >
@@ -259,7 +255,7 @@ const faqs = [
         <div class='c-anki__platform-card-head'>
           <div class='c-anki__heading'>
             <div class='c-anki__eyebrow'>Läuft überall</div>
-            <h3 class='c-anki__h3 c-anki__h3--lg'>Lern am Schreibtisch, wiederhol in der U-Bahn.</h3>
+            <h3 class='c-anki__h3'>Lern am Schreibtisch, wiederhol in der U-Bahn.</h3>
           </div>
           <div class='c-anki__platform-card-copy'>
             <p class='c-anki__lead'>
@@ -355,10 +351,10 @@ const faqs = [
           </ul>
           <div class='c-anki__plan-cta'>
             {
-              FULL_CHECKOUT_URL ? (
+              ANKI_DECK_FULL_CHECKOUT ? (
                 <a
-                  class='c-button c-button--theme c-button--center-icon'
-                  href={FULL_CHECKOUT_URL}
+                  class='c-button c-button--primary c-button--center-icon'
+                  href={ANKI_DECK_FULL_CHECKOUT}
                   target='_blank'
                   rel='noopener'
                 >
@@ -387,7 +383,7 @@ const faqs = [
     </section>
 
     <!-- UPGRADE -->
-    <section class='c-anki__section c-anki__upgrade' aria-labelledby='anki-upgrade-title'>
+    <section class='c-anki__section c-anki__split' aria-labelledby='anki-upgrade-title'>
       <div class='c-anki__heading c-anki__heading--loose'>
         <div class='c-anki__eyebrow'>Klein anfangen, später uffstocken</div>
         <h2 id='anki-upgrade-title' class='c-anki__h2 c-anki__h2--sm'>
@@ -435,7 +431,7 @@ const faqs = [
     </section>
 
     <!-- OPEN SOURCE -->
-    <section class='c-anki__section c-anki__opensource' aria-labelledby='anki-opensource-title'>
+    <section class='c-anki__section c-anki__split' aria-labelledby='anki-opensource-title'>
       <div class='c-anki__heading c-anki__heading--loose'>
         <div class='c-anki__eyebrow'>Open Source</div>
         <h2 id='anki-opensource-title' class='c-anki__h2 c-anki__h2--sm'>
@@ -481,10 +477,10 @@ const faqs = [
       </p>
       <div class='c-anki__actions'>
         {
-          FULL_CHECKOUT_URL && (
+          ANKI_DECK_FULL_CHECKOUT && (
             <a
-              class='c-button c-button--theme c-button--center-icon'
-              href={FULL_CHECKOUT_URL}
+              class='c-button c-button--primary c-button--center-icon'
+              href={ANKI_DECK_FULL_CHECKOUT}
               target='_blank'
               rel='noopener'
             >

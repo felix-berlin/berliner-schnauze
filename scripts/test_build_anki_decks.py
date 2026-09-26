@@ -16,6 +16,7 @@ def word(i, title, tr=("x",), ex=0, alt=0):
         "id": i,
         "slug": title.lower(),
         "title": title,
+        "group": title[:1].upper() or "Sonstige",
         "article": "",
         "translations": list(tr),
         "examples": [("e%d" % k, "") for k in range(ex)],
@@ -25,8 +26,8 @@ def word(i, title, tr=("x",), ex=0, alt=0):
 
 class FilenameTests(unittest.TestCase):
     def test_deck_filename_is_branded(self):
-        self.assertEqual(b.deck_filename("full", "3.51.0"), "Berliner-Schnauze-Anki-Deck-Full-v3.51.0.apkg")
-        self.assertEqual(b.deck_filename("lite", "3.51.0-dev"), "Berliner-Schnauze-Anki-Deck-Lite-v3.51.0-dev.apkg")
+        self.assertEqual(b.deck_filename("full", "3.51.0"), "dist-anki/Berliner-Schnauze-Anki-Deck-Full-v3.51.0.apkg")
+        self.assertEqual(b.deck_filename("lite", "3.51.0-dev"), "dist-anki/Berliner-Schnauze-Anki-Deck-Lite-v3.51.0-dev.apkg")
 
 
 class NormalizeTests(unittest.TestCase):
@@ -64,13 +65,11 @@ class NormalizeTests(unittest.TestCase):
 
 
 class LiteTests(unittest.TestCase):
-    def test_letter_keeps_umlauts_and_falls_back(self):
-        # Matches the website's wordGroup, where Ä/Ö/Ü are letters of their own.
-        self.assertEqual(b.letter("Änne"), "Ä")
-        self.assertEqual(b.letter("üben"), "Ü")
-        self.assertEqual(b.letter("Kiez"), "K")
-        self.assertEqual(b.letter("'ne"), "Sonstige")
-        self.assertEqual(b.letter("3 Mark"), "Sonstige")
+    def test_group_comes_from_word_group_uppercased(self):
+        node = {"databaseId": 1, "slug": "x", "title": "x", "wordProperties": {}}
+        self.assertEqual(b.normalize_word({**node, "wordGroup": "ö"})["group"], "Ö")
+        self.assertEqual(b.normalize_word({**node, "wordGroup": ""})["group"], "Sonstige")
+        self.assertEqual(b.normalize_word(node)["group"], "Sonstige")
 
     def test_ten_percent_is_integer_ceil(self):
         thirty = [word(i, "a%02d" % i) for i in range(30)]
@@ -112,7 +111,7 @@ class DeckTests(unittest.TestCase):
         for n, w in enumerate(self.words):
             w["id"] = 1000 + n
         self.words.append(word(9999, "leer", tr=()))
-        self.full, self.lite = b.build_decks(self.words, "https://example.test/anki")
+        self.full, self.lite = b.build_decks(self.words)
 
     def test_full_skips_words_without_translation(self):
         self.assertEqual(len(self.full.notes), 60)
@@ -121,12 +120,12 @@ class DeckTests(unittest.TestCase):
         self.assertEqual(len(self.lite.notes), 6)  # 3 Buchstaben * ceil(20/10)=2
 
     def test_description_includes_version(self):
-        full, lite = b.build_decks(self.words, "https://example.test/anki", version="9.9.9")
+        full, lite = b.build_decks(self.words, version="9.9.9")
         self.assertIn("Version 9.9.9", full.description)
         self.assertIn("Version 9.9.9", lite.description)
 
     def test_build_decks_defaults_version_to_dev(self):
-        full, _ = b.build_decks(self.words, "https://example.test/anki")
+        full, _ = b.build_decks(self.words)
         self.assertIn("Version dev", full.description)
 
     def test_guids_are_stable_and_shared(self):
@@ -137,7 +136,7 @@ class DeckTests(unittest.TestCase):
 
     def test_hint_only_in_lite(self):
         self.assertTrue(all(n.fields[6] == "" for n in self.full.notes))
-        self.assertTrue(all("https://example.test/anki" in n.fields[6] for n in self.lite.notes))
+        self.assertTrue(all(b.FULL_URL in n.fields[6] for n in self.lite.notes))
 
     def test_fields_escape_html_and_limit_examples(self):
         w = word(1, "x<y", tr=("a&b",), ex=3)
@@ -156,7 +155,7 @@ class DeckTests(unittest.TestCase):
     def test_check_decks_detects_missing_letter(self):
         broken = genanki.Deck(1, "x")
         with self.assertRaises(AssertionError):
-            b.check_decks(self.full, broken, self.words)
+            b.check_decks(self.full, broken, [w for w in self.words if b.is_publishable(w)])
 
     def test_package_roundtrip(self):
         with tempfile.TemporaryDirectory() as tmp:

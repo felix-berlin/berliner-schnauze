@@ -31,6 +31,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+          cache: pip
+          cache-dependency-path: scripts/requirements-anki.txt
 
       - name: Install deck-build dependencies
         run: pip install -r scripts/requirements-anki.txt
@@ -44,9 +46,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ github.event.release.tag_name }}
-        run: gh release upload "$VERSION" "dist-anki/Berliner-Schnauze-Anki-Deck-Lite-v${VERSION#v}.apkg" --clobber
+        run: gh release upload "$VERSION" dist-anki/*-Lite-*.apkg --clobber
 
       - name: Upload Full deck to Polar 📦
         env:
           VERSION: ${{ github.event.release.tag_name }}
-        run: python scripts/upload_anki_to_polar.py "dist-anki/Berliner-Schnauze-Anki-Deck-Full-v${VERSION#v}.apkg" --version "${VERSION#v}"
+        run: python scripts/upload_anki_to_polar.py --version "${VERSION#v}"
