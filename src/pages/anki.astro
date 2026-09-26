@@ -1,152 +1,169 @@
 ---
-import "@styles/components/_button.scss";
-import { ANKI_DECK_FULL_CHECKOUT } from "astro:env/client";
-import { getLiteDeckDownloadUrl } from "@services/githubRelease.ts";
-import Layout from "@layouts/Layout.astro";
-import AnkiFlashcardDemo from "@components/anki/AnkiFlashcardDemo.vue";
-import AnkiLetterCoverage from "@components/anki/AnkiLetterCoverage.vue";
-import AnkiFaq from "@components/anki/AnkiFaq.vue";
-import AnkiDevHours from "@components/anki/AnkiDevHours.astro";
-import Layers from "virtual:icons/lucide/layers";
-import ArrowUpRight from "virtual:icons/lucide/arrow-up-right";
-import Download from "virtual:icons/lucide/download";
-import Monitor from "virtual:icons/lucide/monitor";
-import Smartphone from "virtual:icons/lucide/smartphone";
-import TabletSmartphone from "virtual:icons/lucide/tablet-smartphone";
-import Globe from "virtual:icons/lucide/globe";
-import Plus from "virtual:icons/lucide/plus";
-import FolderGit2 from "virtual:icons/lucide/folder-git-2";
+import '@styles/components/_button.scss';
+import { ANKI_DECK_FULL_CHECKOUT } from 'astro:env/client';
+import { fetchAllWords } from '@services/api.ts';
+import { getPolarFullDeckPrice } from '@services/polar.ts';
+import { getLiteDeckDownloadUrl } from '@services/githubRelease.ts';
+import Layout from '@layouts/Layout.astro';
+import AnkiFlashcardDemo from '@components/anki/AnkiFlashcardDemo.vue';
+import AnkiLetterCoverage from '@components/anki/AnkiLetterCoverage.vue';
+import AnkiFaq from '@components/anki/AnkiFaq.vue';
+import AnkiDevHours from '@components/anki/AnkiDevHours.astro';
+import Layers from 'virtual:icons/lucide/layers';
+import ArrowUpRight from 'virtual:icons/lucide/arrow-up-right';
+import Download from 'virtual:icons/lucide/download';
+import Monitor from 'virtual:icons/lucide/monitor';
+import Smartphone from 'virtual:icons/lucide/smartphone';
+import TabletSmartphone from 'virtual:icons/lucide/tablet-smartphone';
+import Globe from 'virtual:icons/lucide/globe';
+import Plus from 'virtual:icons/lucide/plus';
+import FolderGit2 from 'virtual:icons/lucide/folder-git-2';
 
 const page = {
   seo: {
     opengraphDescription:
-      "Berliner Wörter als Anki-Karteikarten: kostenloses Lite-Deck zum Download, komplettes Full-Deck für alle Wörter.",
+      'Berliner Wörter als Anki-Karteikarten: kostenloses Lite-Deck zum Download, komplettes Full-Deck für alle Wörter.',
   },
-  title: "Berlinerisch lernen mit Anki - Berliner Schnauze",
+  title: 'Berlinerisch lernen mit Anki - Berliner Schnauze',
 };
 
 // Polar-Checkout-Link. Solange nicht gesetzt, wird kein Kauf-Button gezeigt.
-const FULL_CHECKOUT_URL = ANKI_DECK_FULL_CHECKOUT || "";
+const FULL_CHECKOUT_URL = ANKI_DECK_FULL_CHECKOUT || '';
 const LITE_URL = await getLiteDeckDownloadUrl();
 
-// ponytail: Zahlen aus dem letzten Deck-Build (siehe `pnpm run` in docs/anki/README.md).
-// Beim nächsten Rebuild der Decks hier aktualisieren (Skript gibt die Summe aus).
-const TOTAL_WORDS = 5907;
-const LITE_WORDS = 603;
-const PRICE = "5,99 €";
-// Reale Buchstabenabdeckung im Full-Deck (Umlaute fallen dabei auf den Basis-Buchstaben,
-// siehe `letter()` in scripts/build_anki_decks.py) — aktuell ohne "Y".
-const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXZ".split("");
+const allWords = await fetchAllWords();
+const TOTAL_WORDS = allWords.length;
+const PRICE = await getPolarFullDeckPrice();
 
-const fmt = (n: number) => n.toLocaleString("de-DE");
+// Gleiche Umlaut-Faltung wie `letter()` in scripts/build_anki_decks.py.
+const UMLAUTS: Record<string, string> = { ß: 's', ä: 'a', ö: 'o', ü: 'u' };
+const letterOf = (word: string) => {
+  const ch = UMLAUTS[word.trim().charAt(0).toLowerCase()] ?? word.trim().charAt(0).toLowerCase();
+  return /^[a-z]$/.test(ch) ? ch.toUpperCase() : 'Sonstige';
+};
+const wordsPerLetter = Object.groupBy(allWords, (w) => letterOf(w.wordProperties.berlinerisch));
+const LETTER_COUNTS = Object.fromEntries(
+  Object.entries(wordsPerLetter).map(([letter, words]) => [letter, words?.length ?? 0]),
+);
+const LETTERS = Object.keys(LETTER_COUNTS)
+  .filter((l) => l !== 'Sonstige')
+  .sort();
+// Gleiche Auswahl wie `select_lite()` in scripts/build_anki_decks.py: max(1, ceil(10 %)) pro Buchstabe.
+const LITE_WORDS = Object.values(wordsPerLetter).reduce(
+  (sum, words) => sum + Math.max(1, Math.ceil((words?.length ?? 0) / 10)),
+  0,
+);
+
+const fmt = (n: number) => n.toLocaleString('de-DE');
 
 const steps = [
   {
-    num: "01",
-    text: "Anki zeigt Dir ein Berliner Wort. Du überlegst kurz: Wat heißt ditt nochmal?",
-    title: "Karte sehen",
+    num: '01',
+    text: 'Anki zeigt Dir ein Berliner Wort. Du überlegst kurz: Wat heißt ditt nochmal?',
+    title: 'Karte sehen',
   },
   {
-    num: "02",
-    text: "Du drehst die Karte um und siehst Bedeutung und Beispielsatz. Jetzt weißte, ob Du richtig lagst.",
-    title: "Aufdecken",
+    num: '02',
+    text: 'Du drehst die Karte um und siehst Bedeutung und Beispielsatz. Jetzt weißte, ob Du richtig lagst.',
+    title: 'Aufdecken',
   },
   {
-    num: "03",
-    text: "Nochmal, Schwer, Gut oder Einfach. Danach entscheidet Anki, wann die Karte wiederkommt.",
-    title: "Ehrlich bewerten",
+    num: '03',
+    text: 'Nochmal, Schwer, Gut oder Einfach. Danach entscheidet Anki, wann die Karte wiederkommt.',
+    title: 'Ehrlich bewerten',
   },
 ];
 
-const intervals = ["Heute", "1 Tag", "3 Tage", "1 Woche", "3 Wochen", "2 Monate"];
+const intervals = ['Heute', '1 Tag', '3 Tage', '1 Woche', '3 Wochen', '2 Monate'];
 
 const platforms = [
-  { icon: Monitor, meta: "Windows, macOS, Linux · kostenlos", name: "Anki Desktop" },
-  { icon: Smartphone, meta: "Android · kostenlos", name: "AnkiDroid" },
-  { icon: TabletSmartphone, meta: "iPhone & iPad · kostenpflichtig", name: "AnkiMobile" },
-  { icon: Globe, meta: "Im Browser & Sync · kostenlos", name: "AnkiWeb" },
+  { icon: Monitor, meta: 'Windows, macOS, Linux · kostenlos', name: 'Anki Desktop' },
+  { icon: Smartphone, meta: 'Android · kostenlos', name: 'AnkiDroid' },
+  { icon: TabletSmartphone, meta: 'iPhone & iPad · kostenpflichtig', name: 'AnkiMobile' },
+  { icon: Globe, meta: 'Im Browser & Sync · kostenlos', name: 'AnkiWeb' },
 ];
 
 const liteFeatures = [
   `${fmt(LITE_WORDS)} Wörter — rund 10 % vom Wortschatz`,
-  "Quer durch alle Buchstaben von A bis Z",
-  "Sofort kostenlos laden, ohne Anmeldung",
-  "Perfekter Einstieg, um Anki kennenzulernen",
+  'Quer durch alle Buchstaben von A bis Z',
+  'Sofort kostenlos laden, ohne Anmeldung',
+  'Perfekter Einstieg, um Anki kennenzulernen',
 ];
 
 const fullFeatures = [
   `Der komplette Wortschatz: ${fmt(TOTAL_WORDS)} Wörter`,
-  "Fügt sich nahtlos in Deine Lite-Version ein",
-  "Lernfortschritt bleibt, keine Dopplungen",
-  "Einmal zahlen, kein Abo",
-  "Nur für Dich — Weitergabe nicht erlaubt",
+  'Fügt sich nahtlos in Deine Lite-Version ein',
+  'Lernfortschritt bleibt, keine Dopplungen',
+  'Einmal zahlen, kein Abo',
+  'Nur für Dich — Weitergabe nicht erlaubt',
 ];
 
 const faqs = [
   {
     a: "Ja. Anki ist die App, in der Du das Deck lernst. Für Windows, macOS, Linux, Android und im Browser ist sie kostenlos, für iPhone und iPad gibt's AnkiMobile als Kauf-App. Einmal installieren, Deck-Datei (.apkg) öffnen, fertig.",
-    q: "Brauch ich Anki dafür?",
+    q: 'Brauch ich Anki dafür?',
   },
   {
-    a: "Nee. Die Full ist so gebaut, dass sie sich in Dein bestehendes Lite-Deck einfügt. Karten, die Du schon hast, bleiben mit ihrem Lernstand erhalten — es kommen nur die fehlenden dazu, ohne Dopplungen.",
-    q: "Verliere ich meinen Fortschritt, wenn ich von Lite auf Full wechsle?",
+    a: 'Nee. Die Full ist so gebaut, dass sie sich in Dein bestehendes Lite-Deck einfügt. Karten, die Du schon hast, bleiben mit ihrem Lernstand erhalten — es kommen nur die fehlenden dazu, ohne Dopplungen.',
+    q: 'Verliere ich meinen Fortschritt, wenn ich von Lite auf Full wechsle?',
   },
   {
-    a: "Rund 10 % des gesamten Wortschatzes, gleichmäßig über alle Buchstaben verteilt. So kriegst Du einen ehrlichen Eindruck vom ganzen Deck.",
-    q: "Welche Wörter sind in der Lite?",
+    a: 'Rund 10 % des gesamten Wortschatzes, gleichmäßig über alle Buchstaben verteilt. So kriegst Du einen ehrlichen Eindruck vom ganzen Deck.',
+    q: 'Welche Wörter sind in der Lite?',
   },
   {
-    a: "Der Kauf läuft über Polar. Nach dem Klick auf „Full-Deck kaufen“ wirst Du dorthin weitergeleitet und bekommst das Deck nach der Zahlung zum Download.",
-    q: "Wie bezahle ich die Full?",
+    a: 'Der Kauf läuft über Polar. Nach dem Klick auf „Full-Deck kaufen“ wirst Du dorthin weitergeleitet und bekommst das Deck nach der Zahlung zum Download.',
+    q: 'Wie bezahle ich die Full?',
   },
   {
-    a: "Leider nein. Die Full ist nur für Dich — Weitergabe, Weiterverkauf oder Veröffentlichung sind nicht erlaubt. Die Lite darfste dagegen gerne teilen.",
-    q: "Darf ich die Full an Freunde weitergeben?",
+    a: 'Leider nein. Die Full ist nur für Dich — Weitergabe, Weiterverkauf oder Veröffentlichung sind nicht erlaubt. Die Lite darfste dagegen gerne teilen.',
+    q: 'Darf ich die Full an Freunde weitergeben?',
   },
 ];
 ---
 
 <Layout content={page}>
-  <div class="c-anki">
+  <div class='c-anki'>
     <!-- HERO -->
-    <section class="c-anki__section c-anki__hero" aria-labelledby="anki-hero-title">
-      <div class="c-anki__hero-copy">
-        <div class="c-anki__eyebrow">
-          <Layers width="18" height="18" />
+    <section class='c-anki__section c-anki__hero' aria-labelledby='anki-hero-title'>
+      <div class='c-anki__hero-copy'>
+        <div class='c-anki__eyebrow'>
+          <Layers width='18' height='18' />
           <span>Neu · Dit Anki-Deck</span>
         </div>
-        <h1 id="anki-hero-title" class="c-anki__title">
+        <h1 id='anki-hero-title' class='c-anki__title'>
           Jeden Tag 'n paar Karten. Bald quatschst Du wie'n Ur-Berliner.
         </h1>
-        <p class="c-anki__lead c-anki__lead--hero">
-          Der Berliner-Jargon als Karteikarten für Anki. Fang kostenlos mit der <strong>Lite</strong>
+        <p class='c-anki__lead c-anki__lead--hero'>
+          Der Berliner-Jargon als Karteikarten für Anki. Fang kostenlos mit der <strong>Lite</strong
+          >
           an — und wenn Du Blut geleckt hast, holst Du Dir die <strong>Full</strong> mit dem kompletten
           Wortschatz. Ohne Neuanfang, ohne Dopplungen.
         </p>
-        <div class="c-anki__actions">
+        <div class='c-anki__actions'>
           {
             FULL_CHECKOUT_URL && (
               <a
-                class="c-button c-button--theme c-button--center-icon"
+                class='c-button c-button--theme c-button--center-icon'
                 href={FULL_CHECKOUT_URL}
-                target="_blank"
-                rel="noopener"
+                target='_blank'
+                rel='noopener'
               >
-                <span>Full-Deck kaufen · {PRICE}</span>
-                <ArrowUpRight width="20" height="20" />
+                <span>Full-Deck kaufen{PRICE && ` · ${PRICE}`}</span>
+                <ArrowUpRight width='20' height='20' />
               </a>
             )
           }
           {
             LITE_URL && (
-              <a class="c-button c-button--center-icon" href={LITE_URL} download>
-                <Download width="20" height="20" />
+              <a class='c-button c-button--center-icon' href={LITE_URL} download>
+                <Download width='20' height='20' />
                 <span>Lite kostenlos laden</span>
               </a>
             )
           }
         </div>
-        <div class="c-anki__meta">
+        <div class='c-anki__meta'>
           <span>{fmt(TOTAL_WORDS)} Wörter in der Full</span>
           <span>᛫</span>
           <span>Lite: {fmt(LITE_WORDS)} Wörter quer durch A–Z</span>
@@ -157,121 +174,136 @@ const faqs = [
     </section>
 
     <!-- WAS IST ANKI -->
-    <section id="anki" class="c-anki__section" aria-labelledby="anki-explainer-title">
-      <div class="c-anki__eyebrow">Für alle, die's nich kennen</div>
-      <h2 id="anki-explainer-title">Wat is'n eigentlich Anki?</h2>
-      <p class="c-anki__lead c-anki__lead--intro">
-        Anki ist eine kostenlose Karteikarten-App. Der Clou: Sie merkt sich, was Du schon kannst und
-        was nicht — und zeigt Dir jede Karte genau dann wieder, <strong
-          >kurz bevor Du sie vergessen würdest</strong
-        >. Das nennt sich verteilte Wiederholung (Spaced Repetition). Ein paar Minuten am Tag reichen,
-        und die Wörter bleiben hängen.
-      </p>
+    <section
+      id='anki'
+      class='c-anki__section c-anki__band c-anki__explainer'
+      aria-labelledby='anki-explainer-title'
+    >
+      <div class='c-anki__explainer-intro'>
+        <div class='c-anki__heading'>
+          <div class='c-anki__eyebrow'>Für alle, die's nich kennen</div>
+          <h2 id='anki-explainer-title' class='c-anki__h2'>Wat is'n eigentlich Anki?</h2>
+        </div>
+        <p class='c-anki__lead c-anki__lead--intro'>
+          Anki ist eine kostenlose Karteikarten-App. Der Clou: Sie merkt sich, was Du schon kannst
+          und was nicht — und zeigt Dir jede Karte genau dann wieder, <strong
+            >kurz bevor Du sie vergessen würdest</strong
+          >. Das nennt sich verteilte Wiederholung (Spaced Repetition). Ein paar Minuten am Tag
+          reichen, und die Wörter bleiben hängen.
+        </p>
+      </div>
 
-      <div class="c-anki__steps">
+      <div class='c-anki__steps'>
         {
           steps.map((s) => (
-            <div class="c-anki__step">
-              <div class="c-anki__step-head">
-                <span class="c-anki__step-num">{s.num}</span>
-                <h3 class="c-anki__step-title">{s.title}</h3>
+            <div class='c-anki__step'>
+              <div class='c-anki__step-head'>
+                <span class='c-anki__step-num'>{s.num}</span>
+                <h3 class='c-anki__step-title'>{s.title}</h3>
               </div>
-              <p class="c-anki__step-text">{s.text}</p>
+              <p class='c-anki__step-text'>{s.text}</p>
             </div>
           ))
         }
       </div>
 
-      <div class="c-anki__timeline">
-        <div class="c-anki__timeline-head">
-          <h3 class="c-anki__timeline-title">Wat Du gut kannst, siehste immer seltener</h3>
-          <span class="c-anki__timeline-caption">Beispielhafte Abstände bei „Gut“</span>
+      <div class='c-anki__timeline'>
+        <div class='c-anki__timeline-head'>
+          <h3 class='c-anki__timeline-title'>Wat Du gut kannst, siehste immer seltener</h3>
+          <span class='c-anki__timeline-caption'>Beispielhafte Abstände bei „Gut“</span>
         </div>
-        <div class="c-anki__timeline-row">
-          <div class="c-anki__timeline-line" />
+        <div class='c-anki__timeline-row'>
+          <div class='c-anki__timeline-line'></div>
           {
             intervals.map((iv) => (
-              <div class="c-anki__timeline-point">
-                <span class="c-anki__timeline-dot" />
-                <span class="c-anki__timeline-label">{iv}</span>
+              <div class='c-anki__timeline-point'>
+                <span class='c-anki__timeline-dot' />
+                <span class='c-anki__timeline-label'>{iv}</span>
               </div>
             ))
           }
         </div>
       </div>
 
-      <div class="c-anki__platforms">
-        {
-          platforms.map(({ icon: Icon, name, meta }) => (
-            <div class="c-anki__platform">
-              <Icon width="22" height="22" />
-              <div>
-                <div class="c-anki__platform-name">{name}</div>
-                <div class="c-anki__platform-meta">{meta}</div>
+      <div class='c-anki__heading'>
+        <h3 class='c-anki__h3'>Läuft überall, wo Du lernst</h3>
+        <div class='c-anki__platforms'>
+          {
+            platforms.map(({ icon: Icon, name, meta }) => (
+              <div class='c-anki__platform'>
+                <Icon width='22' height='22' />
+                <div>
+                  <div class='c-anki__platform-name'>{name}</div>
+                  <div class='c-anki__platform-meta'>{meta}</div>
+                </div>
               </div>
-            </div>
-          ))
-        }
+            ))
+          }
+        </div>
       </div>
     </section>
 
     <!-- LITE VS FULL -->
-    <section id="preise" class="c-anki__section" aria-labelledby="anki-pricing-title">
-      <div class="c-anki__eyebrow">Lite oder Full</div>
-      <h2 id="anki-pricing-title">Erst mal reinschnuppern — oder gleich ditt volle Programm.</h2>
+    <section id='preise' class='c-anki__section' aria-labelledby='anki-pricing-title'>
+      <div class='c-anki__heading c-anki__heading--narrow'>
+        <div class='c-anki__eyebrow'>Lite oder Full</div>
+        <h2 id='anki-pricing-title' class='c-anki__h2'>
+          Erst mal reinschnuppern — oder gleich ditt volle Programm.
+        </h2>
+      </div>
 
-      <div class="c-anki__plans">
-        <div class="c-anki__plan">
-          <div class="c-anki__plan-head">
-            <h3 class="c-anki__plan-name">Lite</h3>
-            <div class="c-anki__plan-price">
+      <div class='c-anki__plans'>
+        <div class='c-anki__plan'>
+          <div class='c-anki__plan-head'>
+            <h3 class='c-anki__plan-name'>Lite</h3>
+            <div class='c-anki__plan-price'>
               <strong>0 €</strong><span>direkt hier laden</span>
             </div>
           </div>
-          <ul class="c-anki__plan-features">
+          <ul class='c-anki__plan-features'>
             {liteFeatures.map((f) => <li>{f}</li>)}
           </ul>
-          <div class="c-anki__plan-cta">
+          <div class='c-anki__plan-cta'>
             {
               LITE_URL ? (
-                <a class="c-button c-button--center-icon" href={LITE_URL} download>
-                  <Download width="20" height="20" /><span>Lite runterladen (.apkg)</span>
+                <a class='c-button c-button--center-icon' href={LITE_URL} download>
+                  <Download width='20' height='20' /><span>Lite runterladen (.apkg)</span>
                 </a>
               ) : (
-                <span class="c-anki__plan-note">Download derzeit nicht verfügbar.</span>
+                <span class='c-anki__plan-note'>Download derzeit nicht verfügbar.</span>
               )
             }
           </div>
         </div>
 
-        <div class="c-anki__plan c-anki__plan--full">
-          <span class="c-anki__plan-badge">Dit volle Programm</span>
-          <div class="c-anki__plan-head">
-            <h3 class="c-anki__plan-name">Full</h3>
-            <div class="c-anki__plan-price">
-              <strong>{PRICE}</strong><span>einmalig</span>
+        <div class='c-anki__plan c-anki__plan--full'>
+          <span class='c-anki__plan-badge'>Dit volle Programm</span>
+          <div class='c-anki__plan-head'>
+            <h3 class='c-anki__plan-name'>Full</h3>
+            <div class='c-anki__plan-price'>
+              {PRICE && <strong>{PRICE}</strong>}<span>einmalig</span>
             </div>
           </div>
-          <ul class="c-anki__plan-features">
+          <ul class='c-anki__plan-features'>
             {fullFeatures.map((f) => <li>{f}</li>)}
           </ul>
-          <div class="c-anki__plan-cta">
+          <div class='c-anki__plan-cta'>
             {
               FULL_CHECKOUT_URL ? (
                 <a
-                  class="c-button c-button--theme c-button--center-icon"
+                  class='c-button c-button--theme c-button--center-icon'
                   href={FULL_CHECKOUT_URL}
-                  target="_blank"
-                  rel="noopener"
+                  target='_blank'
+                  rel='noopener'
                 >
-                  <span>Full-Deck kaufen · {PRICE}</span>
-                  <ArrowUpRight width="20" height="20" />
+                  <span>Full-Deck kaufen{PRICE && ` · ${PRICE}`}</span>
+                  <ArrowUpRight width='20' height='20' />
                 </a>
               ) : (
-                <span class="c-anki__plan-note">Kommt bald.</span>
+                <span class='c-anki__plan-note'>Kommt bald.</span>
               )
             }
-            <span class="c-anki__plan-note">
+            <span class='c-anki__plan-note'>
               Sichere Bezahlung über Polar — Du wirst weitergeleitet. Damit unterstützt Du ein
               Open-Source-Projekt.
             </span>
@@ -281,6 +313,7 @@ const faqs = [
 
       <AnkiLetterCoverage
         letters={LETTERS}
+        letterCounts={LETTER_COUNTS}
         liteWords={LITE_WORDS}
         totalWords={TOTAL_WORDS}
         client:visible
@@ -288,45 +321,47 @@ const faqs = [
     </section>
 
     <!-- UPGRADE -->
-    <section class="c-anki__section c-anki__upgrade" aria-labelledby="anki-upgrade-title">
-      <div>
-        <div class="c-anki__eyebrow">Klein anfangen, später uffstocken</div>
-        <h2 id="anki-upgrade-title">Mit Lite loslegen — die Full passt nahtlos drauf.</h2>
-        <p class="c-anki__lead">
-          Du musst Dich nich gleich entscheiden. Lern mit der Lite, so lange Du willst. Wenn Du später
-          die Full importierst, erkennt Anki die Karten, die Du schon hast: Dein Lernfortschritt
-          bleibt, doppelte Karten gibt's keine — nur die fehlenden Wörter kommen dazu.
+    <section class='c-anki__section c-anki__upgrade' aria-labelledby='anki-upgrade-title'>
+      <div class='c-anki__heading c-anki__heading--loose'>
+        <div class='c-anki__eyebrow'>Klein anfangen, später uffstocken</div>
+        <h2 id='anki-upgrade-title' class='c-anki__h2 c-anki__h2--sm'>
+          Mit Lite loslegen — die Full passt nahtlos drauf.
+        </h2>
+        <p class='c-anki__lead'>
+          Du musst Dich nich gleich entscheiden. Lern mit der Lite, so lange Du willst. Wenn Du
+          später die Full importierst, erkennt Anki die Karten, die Du schon hast: Dein
+          Lernfortschritt bleibt, doppelte Karten gibt's keine — nur die fehlenden Wörter kommen
+          dazu.
         </p>
       </div>
-      <div class="c-anki__upgrade-card">
-        <div class="c-anki__upgrade-row">
-          <div class="c-anki__upgrade-row-head">
+      <div class='c-anki__upgrade-card'>
+        <div class='c-anki__upgrade-row'>
+          <div class='c-anki__upgrade-row-head'>
             <strong>Deine Lite</strong><span>{fmt(LITE_WORDS)} Karten · Fortschritt bleibt</span>
           </div>
-          <div class="c-anki__upgrade-bar">
-            <div class="c-anki__upgrade-bar-learned"></div>
-            <div class="c-anki__upgrade-bar-rest"></div>
+          <div class='c-anki__upgrade-bar'>
+            <div class='c-anki__upgrade-bar-learned'></div>
+            <div class='c-anki__upgrade-bar-rest'></div>
           </div>
         </div>
-        <div class="c-anki__upgrade-plus">
-          <Plus width="18" height="18" /><span>Full importieren</span>
+        <div class='c-anki__upgrade-plus'>
+          <Plus width='18' height='18' /><span>Full importieren</span>
         </div>
-        <div class="c-anki__upgrade-row">
-          <div class="c-anki__upgrade-row-head">
+        <div class='c-anki__upgrade-row'>
+          <div class='c-anki__upgrade-row-head'>
             <strong>Danach</strong><span>{fmt(TOTAL_WORDS)} Karten · 0 Dopplungen</span>
           </div>
-          <div class="c-anki__upgrade-bar">
-            <div class="c-anki__upgrade-bar-learned"></div>
-            <div class="c-anki__upgrade-bar-new"></div>
+          <div class='c-anki__upgrade-bar'>
+            <div class='c-anki__upgrade-bar-learned'></div>
+            <div class='c-anki__upgrade-bar-new'></div>
           </div>
-          <div class="c-anki__legend">
-            <span class="c-anki__legend-item"
-              ><span style="background: var(--orange-500)" /> schon gelernt</span
+          <div class='c-anki__legend'>
+            <span class='c-anki__legend-item'
+              ><span style='background: var(--orange-500)'></span> schon gelernt</span
             >
-            <span class="c-anki__legend-item"
-              ><span style="background: var(--orange-300)" />{
-                fmt(TOTAL_WORDS - LITE_WORDS)
-              } neue Wörter</span
+            <span class='c-anki__legend-item'
+              ><span style='background: var(--orange-300)'></span>{fmt(TOTAL_WORDS - LITE_WORDS)} neue
+              Wörter</span
             >
           </div>
         </div>
@@ -334,69 +369,76 @@ const faqs = [
     </section>
 
     <!-- OPEN SOURCE -->
-    <section class="c-anki__section c-anki__opensource" aria-labelledby="anki-opensource-title">
-      <div class="c-anki__opensource-copy">
-        <div class="c-anki__eyebrow">Open Source</div>
-        <h2 id="anki-opensource-title">Dein Kauf hält die Schnauze am Laufen.</h2>
-        <p class="c-anki__lead">
+    <section class='c-anki__section c-anki__opensource' aria-labelledby='anki-opensource-title'>
+      <div class='c-anki__heading c-anki__heading--loose'>
+        <div class='c-anki__eyebrow'>Open Source</div>
+        <h2 id='anki-opensource-title' class='c-anki__h2 c-anki__h2--sm'>
+          Dein Kauf hält die Schnauze am Laufen.
+        </h2>
+        <p class='c-anki__lead'>
           Berliner Schnauze ist ein Open-Source-Projekt — der komplette Code liegt offen auf GitHub.
-          Mit der Full unterstützt Du direkt die Weiterentwicklung: neue Wörter, neue Features, Server
-          und viele Stunden Arbeit nach Feierabend.
+          Mit der Full unterstützt Du direkt die Weiterentwicklung: neue Wörter, neue Features,
+          Server und viele Stunden Arbeit nach Feierabend.
         </p>
         <a
-          class="c-button c-button--center-icon c-anki__opensource-cta"
-          href="https://github.com/felix-berlin/berliner-schnauze"
-          target="_blank"
-          rel="noopener"
+          class='c-button c-button--center-icon c-anki__opensource-cta'
+          href='https://github.com/felix-berlin/berliner-schnauze'
+          target='_blank'
+          rel='noopener'
         >
-          <FolderGit2 width="20" height="20" /><span>Quellcode auf GitHub</span>
+          <FolderGit2 width='20' height='20' /><span>Quellcode auf GitHub</span>
         </a>
       </div>
       <AnkiDevHours />
     </section>
 
     <!-- FAQ -->
-    <section class="c-anki__section" aria-labelledby="anki-faq-title">
-      <h2 id="anki-faq-title">Noch Fragen, wa?</h2>
-      <AnkiFaq faqs={faqs} client:visible />
-    </section>
-
-    <!-- FINAL CTA -->
-    <section class="c-anki__section c-anki__final" aria-labelledby="anki-final-title">
-      <div>
-        <h2 id="anki-final-title">Na los, ab uff die Karten.</h2>
-        <p class="c-anki__lead">
-          {fmt(TOTAL_WORDS)} Wörter Berliner Schnauze für {PRICE}. Weniger als 'ne Currywurst mit Pommes.
-        </p>
-        <div class="c-anki__actions">
-          {
-            FULL_CHECKOUT_URL && (
-              <a
-                class="c-button c-button--theme c-button--center-icon"
-                href={FULL_CHECKOUT_URL}
-                target="_blank"
-                rel="noopener"
-              >
-                <span>Full-Deck kaufen · {PRICE}</span>
-                <ArrowUpRight width="20" height="20" />
-              </a>
-            )
-          }
-          {
-            LITE_URL && (
-              <a class="c-button c-button--center-icon" href={LITE_URL} download>
-                <Download width="20" height="20" /><span>Erst mal Lite</span>
-              </a>
-            )
-          }
-        </div>
+    <section class='c-anki__section c-anki__band c-anki__faq' aria-labelledby='anki-faq-title'>
+      <div class='c-anki__faq-inner'>
+        <h2 id='anki-faq-title' class='c-anki__h2 c-anki__h2--sm'>Noch Fragen, wa?</h2>
+        <AnkiFaq faqs={faqs} client:visible />
       </div>
     </section>
-
-    <p>Nur für den persönlichen Gebrauch. Weitergabe der Dateien ist nicht erlaubt.</p>
   </div>
+
+  <!-- FINAL CTA -->
+  <section
+    slot='footer-farewell'
+    class='c-anki c-anki--farewell'
+    aria-labelledby='anki-final-title'
+  >
+    <div class='c-anki__heading c-anki__heading--loose'>
+      <h2 id='anki-final-title' class='c-anki__h2'>Na los, ab uff die Karten.</h2>
+      <p class='c-anki__lead'>
+        {fmt(TOTAL_WORDS)} Wörter Berliner Schnauze{PRICE && ` für ${PRICE}`}. Weniger als 'ne
+        Currywurst mit Pommes.
+      </p>
+      <div class='c-anki__actions'>
+        {
+          FULL_CHECKOUT_URL && (
+            <a
+              class='c-button c-button--theme c-button--center-icon'
+              href={FULL_CHECKOUT_URL}
+              target='_blank'
+              rel='noopener'
+            >
+              <span>Full-Deck kaufen{PRICE && ` · ${PRICE}`}</span>
+              <ArrowUpRight width='20' height='20' />
+            </a>
+          )
+        }
+        {
+          LITE_URL && (
+            <a class='c-button c-button--center-icon' href={LITE_URL} download>
+              <Download width='20' height='20' /><span>Erst mal Lite</span>
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </section>
 </Layout>
 
-<style lang="scss" is:global>
-  @use "@styles/pages/anki";
+<style lang='scss' is:global>
+  @use '@styles/pages/anki';
 </style>

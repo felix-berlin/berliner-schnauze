@@ -35,7 +35,7 @@
     <div class="c-anki-coverage__grid">
       <div v-for="letter in letters" :key="letter" class="c-anki-coverage__col">
         <div class="c-anki-coverage__track">
-          <div class="c-anki-coverage__fill" :style="{ '--fill-pct': fillPct }"></div>
+          <div class="c-anki-coverage__fill" :style="{ '--fill-pct': fillPct(letter) }"></div>
         </div>
         <span class="c-anki-coverage__letter">{{ letter }}</span>
       </div>
@@ -48,12 +48,20 @@ import { ref, computed } from "vue";
 
 const props = defineProps<{
   letters: string[];
+  letterCounts: Record<string, number>;
   liteWords: number;
   totalWords: number;
 }>();
 
 const plan = ref<"lite" | "full">("lite");
-const fillPct = computed(() => (plan.value === "lite" ? "0.1" : "1"));
+const maxCount = computed(() => Math.max(...Object.values(props.letterCounts), 1));
+// Lite deckt gleichmäßig ~10 % pro Buchstabe ab (siehe scripts/build_anki_decks.py),
+// darum wird die Full-Verteilung anteilig runterskaliert statt separat gezählt.
+const liteRatio = computed(() => props.liteWords / props.totalWords);
+const fillPct = (letter: string) => {
+  const share = (props.letterCounts[letter] ?? 0) / maxCount.value;
+  return String(plan.value === "lite" ? share * liteRatio.value : share);
+};
 const shownWords = computed(() => (plan.value === "lite" ? props.liteWords : props.totalWords));
 const fmt = (n: number) => n.toLocaleString("de-DE");
 </script>

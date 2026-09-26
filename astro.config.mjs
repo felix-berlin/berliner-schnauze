@@ -265,6 +265,26 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
+      // Polar organization access token, used server-side to fetch the live Full-deck
+      // price. Unset until the token is created in the Polar dashboard.
+      POLAR_ORG_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      // Polar product ID for the Full Anki deck.
+      ANKI_DECK_FULL_PRODUCT_ID: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
+      // true while testing against Polar's sandbox org, false for the real production org.
+      POLAR_SANDBOX: envField.boolean({
+        context: "server",
+        access: "public",
+        optional: true,
+        default: false,
+      }),
       // Optional PAT to raise the GitHub API's unauthenticated rate limit for the
       // Lite-deck release lookup at build time. Unset works fine at low build volume.
       GITHUB_API_TOKEN: envField.string({
