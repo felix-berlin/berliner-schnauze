@@ -267,7 +267,7 @@ export default defineConfig({
       }),
       // Polar organization access token, used server-side to fetch the live Full-deck
       // price. Unset until the token is created in the Polar dashboard.
-      POLAR_ORG_TOKEN: envField.string({
+      POLAR_PRICE_TOKEN: envField.string({
         context: "server",
         access: "secret",
         optional: true,
