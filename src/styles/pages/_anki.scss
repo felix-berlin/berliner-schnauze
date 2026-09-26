@@ -21,6 +21,8 @@
   .c-button:not(.c-button--theme, .c-button--filter) {
     --color-background: var(--white-100);
 
+    font-weight: 700;
+
     @include butler-mx.hover {
       --style-border: dashed;
     }
@@ -688,7 +690,7 @@
     align-items: center;
   }
 
-  &__opensource-cta {
+  &__cta-sm {
     align-self: flex-start;
     // impeccable-disable design-system-font-size -- literal value from design handoff
     font-size: 1rem;
