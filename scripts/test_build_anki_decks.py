@@ -112,6 +112,15 @@ class DeckTests(unittest.TestCase):
     def test_lite_is_ten_percent_per_letter(self):
         self.assertEqual(len(self.lite.notes), 6)  # 3 Buchstaben * ceil(20/10)=2
 
+    def test_description_includes_version(self):
+        full, lite = b.build_decks(self.words, "https://example.test/anki", version="9.9.9")
+        self.assertIn("Version 9.9.9", full.description)
+        self.assertIn("Version 9.9.9", lite.description)
+
+    def test_build_decks_defaults_version_to_dev(self):
+        full, _ = b.build_decks(self.words, "https://example.test/anki")
+        self.assertIn("Version dev", full.description)
+
     def test_guids_are_stable_and_shared(self):
         full_guids = {n.guid for n in self.full.notes}
         self.assertEqual(len(full_guids), 60)

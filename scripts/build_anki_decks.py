@@ -5,6 +5,7 @@ Aufruf (Secrets über Infisical):
     npx infisical run -- .venv-anki/bin/python scripts/build_anki_decks.py
 Optional: ANKI_FULL_URL (Standard: <SITE>/anki). Ausgabe: dist-anki/*.apkg
 """
+import argparse
 import base64
 import html
 import json
@@ -13,6 +14,7 @@ import re
 import sys
 import urllib.request
 from collections import defaultdict
+from datetime import date
 
 import genanki
 
@@ -140,15 +142,16 @@ def make_note(word, hint_html):
     )
 
 
-def build_decks(words, full_url):
+def build_decks(words, full_url, version="dev"):
     words = sorted((w for w in words if is_publishable(w)), key=lambda w: (w["title"].lower(), w["id"]))
     lite_ids = {w["id"] for w in select_lite(words)}
     hint = 'Lite-Version mit 10 %% der Wörter. Alle Wörter: <a href="%s">%s</a>' % (
         html.escape(full_url),
         html.escape(full_url),
     )
-    full = genanki.Deck(FULL_DECK_ID, "Berliner Schnauze Full")
-    lite = genanki.Deck(LITE_DECK_ID, "Berliner Schnauze Lite")
+    description = "Version %s · %s" % (version, date.today().isoformat())
+    full = genanki.Deck(FULL_DECK_ID, "Berliner Schnauze Full", description=description)
+    lite = genanki.Deck(LITE_DECK_ID, "Berliner Schnauze Lite", description=description)
     for w in words:
         full.add_note(make_note(w, ""))
         if w["id"] in lite_ids:
@@ -195,13 +198,17 @@ def fetch_words():
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--version", default="dev")
+    args = parser.parse_args()
+
     full_url = os.environ.get("ANKI_FULL_URL") or SITE + "/anki"
     words = [normalize_word(n) for n in fetch_words()]
     assert words, "keine Wörter geladen"
-    full, lite = build_decks(words, full_url)
+    full, lite = build_decks(words, full_url, args.version)
     os.makedirs(OUT_DIR, exist_ok=True)
     for deck, name in ((full, "full"), (lite, "lite")):
-        genanki.Package(deck).write_to_file("%s/berlinerisch-%s.apkg" % (OUT_DIR, name))
+        genanki.Package(deck).write_to_file("%s/berlinerisch-%s-v%s.apkg" % (OUT_DIR, name, args.version))
     print("Wörter gesamt %d, Full %d Karten, Lite %d Karten" % (len(words), len(full.notes), len(lite.notes)))
 
 
