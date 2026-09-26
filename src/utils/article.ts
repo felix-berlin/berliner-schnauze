@@ -42,7 +42,7 @@ const rewriteWpLinks = (html: string): string => html.replaceAll(`href="${wpOrig
 // applied in a fixpoint loop so nested/crafted tags can't reconstruct after a
 // single pass, then any residual angle bracket is removed — the result can
 // never carry an HTML element (CodeQL js/incomplete-multi-character-sanitization).
-const stripTags = (html: string): string => {
+export const stripTags = (html: string): string => {
   let text = html;
   let previous: string;
   do {

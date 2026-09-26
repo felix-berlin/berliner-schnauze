@@ -12,9 +12,26 @@
       border-top: 1px solid var(--new-blue-200);
     }
 
-    &.is-disabled {
-      opacity: 0.5;
-      pointer-events: none;
+    // Animate the native content slot. Fade everywhere ::details-content exists;
+    // the height slide is progressive enhancement where interpolate-size is
+    // supported (Chromium) — other browsers just fade.
+    @include butler-mx.feature("motion") {
+      interpolate-size: allow-keywords;
+
+      &::details-content {
+        opacity: 0;
+        block-size: 0;
+        overflow-y: clip;
+        transition:
+          opacity 0.28s ease,
+          block-size 0.28s ease,
+          content-visibility 0.28s allow-discrete;
+      }
+
+      &[open]::details-content {
+        opacity: 1;
+        block-size: auto;
+      }
     }
   }
 
@@ -23,17 +40,12 @@
     align-items: center;
     justify-content: space-between;
     gap: vars.$spacer * 0.5;
-    width: 100%;
     padding: vars.$spacer * 0.75 0;
-    background: transparent;
-    border: none;
     cursor: pointer;
-    color: inherit;
-    font: inherit;
-    text-align: start;
+    list-style: none;
 
-    &:disabled {
-      cursor: not-allowed;
+    &::-webkit-details-marker {
+      display: none;
     }
 
     @include butler-mx.hover {
@@ -43,6 +55,8 @@
 
   &__trigger-label {
     flex: 1;
+    margin: 0;
+    font: inherit;
   }
 
   &__trigger-icon {
@@ -54,30 +68,12 @@
       transition: transform 0.25s ease;
     }
 
-    .is-open & {
+    [open] > summary & {
       transform: rotate(180deg);
     }
   }
 
-  &__body {
-    display: grid;
-    grid-template-rows: 0fr;
-
-    @include butler-mx.feature("motion") {
-      transition: grid-template-rows 0.28s ease;
-    }
-
-    .is-open & {
-      grid-template-rows: 1fr;
-    }
-  }
-
   &__content {
-    overflow: hidden;
-    padding-bottom: 0;
-
-    .is-open & {
-      padding-bottom: vars.$spacer * 0.75;
-    }
+    padding-bottom: vars.$spacer * 0.75;
   }
 }

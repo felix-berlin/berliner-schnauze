@@ -1,0 +1,653 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-anki {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacer * 4;
+  padding-block: vars.$spacer * 2 vars.$spacer * 4;
+
+  --anki-color-accent-text: var(--orange-600);
+
+  @include butler-mx.dark-mode-class {
+    --anki-color-accent-text: var(--orange-300);
+  }
+
+  // Secondary buttons: white paper instead of the site's orange-100 default.
+  .c-button:not(.c-button--primary, .c-button--filter) {
+    --color-background: var(--white-100);
+
+    font-weight: 700;
+
+    @include butler-mx.hover {
+      --style-border: dashed;
+    }
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--new-blue-600);
+    }
+  }
+
+  // Icon + label buttons need the gap the shared .c-button never sets.
+  .c-button--center-icon {
+    gap: vars.$spacer * 0.625;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 2.5;
+    scroll-margin-top: vars.$spacer * 5;
+  }
+
+  // Full-bleed tinted band: background via spread shadow, dashed edges via
+  // border-image outset — both are ink overflow, so no horizontal scrollbar.
+  &__band {
+    --band-bg: color-mix(in srgb, var(--orange-100) 45%, white);
+    --band-line: var(--orange-300);
+
+    padding-block: vars.$spacer * 5;
+    background: var(--band-bg);
+    box-shadow: 0 0 0 100vmax var(--band-bg);
+    clip-path: inset(0 -100vmax);
+    border-block: 1px solid;
+    border-image: repeating-linear-gradient(90deg, var(--band-line) 0 4px, transparent 4px 8px) 1 /
+      1px 0 / 0 100vmax;
+
+    @include butler-mx.dark-mode-class {
+      --band-bg: var(--new-blue-500);
+      --band-line: color-mix(in srgb, var(--orange-300) 45%, transparent);
+    }
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.75;
+
+    &--narrow {
+      max-width: 45rem;
+    }
+
+    &--loose {
+      gap: vars.$spacer;
+    }
+  }
+
+  &__h2 {
+    // impeccable-disable design-system-font-size -- --fs-display from design handoff
+    font-size: clamp(2rem, 1.36rem + 3.19vw, 4rem);
+    line-height: 1.05;
+    margin: 0;
+    text-wrap: balance;
+
+    &--sm {
+      font-size: 2.5rem;
+      line-height: 1.1;
+    }
+  }
+
+  &__h3 {
+    font-family: vars.$berliner;
+    font-weight: normal;
+    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+    line-height: 1.1;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  &__eyebrow {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--anki-color-accent-text);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__lead {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 1.15rem;
+    line-height: 1.55;
+    max-width: 42em;
+    text-wrap: pretty;
+
+    &--hero {
+      font-size: 1.25rem;
+      line-height: 1.5;
+      max-width: 34em;
+    }
+
+    &--intro {
+      font-size: 1.2rem;
+    }
+  }
+
+  // Hero
+  &__hero {
+    display: grid;
+    gap: vars.$spacer * 3;
+    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 27.5rem), 1fr));
+  }
+
+  &__hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 1.25;
+  }
+
+  &__title {
+    font-family: vars.$berliner;
+    font-weight: normal;
+    font-size: clamp(2rem, 1.36rem + 3.19vw, 4.5rem);
+    line-height: 1.02;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.75;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.25 vars.$spacer * 1.25;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+
+  // "Was ist Anki" intro: heading | paragraph
+  &__explainer-intro {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 23.75rem), 1fr));
+    gap: vars.$spacer * 2 vars.$spacer * 3.5;
+    align-items: end;
+  }
+
+  // Step cards ("Was ist Anki")
+  &__steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));
+    gap: vars.$spacer * 1.25;
+  }
+
+  &__step {
+    @include mx.paper-card;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__step-head {
+    display: flex;
+    align-items: baseline;
+    gap: vars.$spacer * 0.625;
+    padding: vars.$spacer * 0.75 vars.$spacer * 1.25;
+    border-bottom: 1px dashed var(--orange-200);
+  }
+
+  &__step-num {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--orange-500);
+  }
+
+  &__step-title {
+    @include mx.paper-card-title;
+  }
+
+  &__step-text {
+    margin: 0;
+    padding: vars.$spacer vars.$spacer * 1.25 vars.$spacer * 1.25;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  // Interval timeline card
+  &__timeline {
+    @include mx.paper-card;
+
+    padding: vars.$spacer * 1.75 vars.$spacer * 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 1.25;
+  }
+
+  &__timeline-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__timeline-title {
+    @include mx.paper-card-title;
+  }
+
+  &__timeline-caption {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  &__timeline-row {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: start;
+    position: relative;
+  }
+
+  &__timeline-line {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    top: 0.6875rem;
+    border-top: 2px dashed var(--orange-300);
+  }
+
+  &__timeline-point {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: vars.$spacer * 0.625;
+    text-align: center;
+  }
+
+  &__timeline-dot {
+    width: 1.375rem;
+    height: 1.375rem;
+    border-radius: 50%;
+    background: var(--orange-500);
+    border: 3px solid var(--white-100);
+    box-shadow: 0 0 0 1px var(--orange-500);
+
+    // The ring punches through the dashed line to the card's own surface color.
+    @include butler-mx.dark-mode-class {
+      border-color: var(--new-blue-400);
+    }
+  }
+
+  &__timeline-label {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  // Platform card ("Läuft überall")
+  &__platform-card {
+    @include mx.paper-card;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__platform-card-head {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: vars.$spacer * 1.25 vars.$spacer * 2.5;
+    align-items: end;
+    padding: vars.$spacer * 1.75 vars.$spacer * 1.75 vars.$spacer * 0.5;
+  }
+
+  &__platform-card-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: vars.$spacer;
+  }
+
+  &__platform-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
+    gap: vars.$spacer * 0.75;
+    padding: vars.$spacer * 1.25 vars.$spacer * 1.75 vars.$spacer * 1.75;
+  }
+
+  &__platform-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: vars.$spacer * 0.75;
+    padding: vars.$spacer * 1.375 vars.$spacer;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    background: var(--white-100);
+    border: 1px solid var(--orange-200);
+    transition: all 0.3s ease-in-out;
+
+    @include butler-mx.hover {
+      border-style: dashed;
+      border-color: var(--orange-600);
+    }
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-400);
+      border-color: var(--new-blue-200);
+    }
+  }
+
+  &__platform-tile-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: vars.$spacer * 0.625;
+    min-height: 2.125rem;
+
+    svg {
+      color: var(--anki-color-accent-text);
+    }
+  }
+
+  &__platform-name {
+    font-weight: 700;
+  }
+
+  &__platform-meta {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+
+  &__platform-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: vars.$spacer * 0.5;
+    padding: vars.$spacer * 0.75 vars.$spacer * 1.25;
+    border-top: 1px dashed var(--orange-200);
+    font-size: 0.9rem;
+    color: var(--color-muted);
+
+    svg {
+      color: var(--orange-500);
+    }
+  }
+
+  // Pricing cards
+  &__plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 21.25rem), 1fr));
+    gap: vars.$spacer * 1.5;
+    align-items: stretch;
+  }
+
+  &__plan {
+    position: relative;
+
+    @include mx.paper-card;
+
+    display: flex;
+    flex-direction: column;
+
+    &--full {
+      border: 2px solid var(--orange-500);
+      box-shadow:
+        vars.$paper-lift,
+        0 0 24px 0 color-mix(in srgb, var(--orange-500) 25%, transparent);
+    }
+  }
+
+  &__plan-badge {
+    position: absolute;
+    top: -0.875rem;
+    right: vars.$spacer * 1.5;
+    background: var(--orange-500);
+    color: var(--white-100);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border: 1px dashed var(--yellow-500);
+  }
+
+  &__plan-head {
+    padding: vars.$spacer * 1.5 vars.$spacer * 1.75;
+    border-bottom: 1px dashed var(--orange-200);
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.375;
+
+    .c-anki__plan--full & {
+      background: color-mix(in srgb, var(--orange-100) 50%, white);
+
+      @include butler-mx.dark-mode-class {
+        background: var(--new-blue-500);
+      }
+    }
+  }
+
+  &__plan-name {
+    font-family: vars.$berliner;
+    font-weight: normal;
+    font-size: 2rem;
+    margin: 0;
+
+    .c-anki__plan--full & {
+      color: var(--anki-color-accent-text);
+    }
+  }
+
+  &__plan-price {
+    display: flex;
+    align-items: baseline;
+    gap: vars.$spacer * 0.625;
+
+    strong {
+      // impeccable-disable design-system-font-size -- literal value from design handoff
+      font-size: 2.25rem;
+      font-weight: 900;
+    }
+
+    span {
+      color: var(--color-muted);
+    }
+  }
+
+  &__plan-features {
+    padding: vars.$spacer * 1.5 vars.$spacer * 1.75;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.875;
+    flex: 1;
+
+    li {
+      display: flex;
+      gap: vars.$spacer * 0.75;
+      align-items: flex-start;
+      // impeccable-disable design-system-font-size -- literal value from design handoff
+      font-size: 1.05rem;
+      line-height: 1.4;
+    }
+
+    li::before {
+      content: "✓";
+      color: var(--orange-500);
+      font-weight: 900;
+    }
+  }
+
+  &__plan-cta {
+    padding: 0 vars.$spacer * 1.75 vars.$spacer * 1.75;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.625;
+
+    .c-button {
+      display: flex;
+      // impeccable-disable design-system-font-size -- literal value from design handoff
+      font-size: 1.05rem;
+      padding: 0.875rem 1.25rem;
+    }
+  }
+
+  &__plan-note {
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    text-align: center;
+  }
+
+  // Two-column text + visual sections (upgrade diagram, open source)
+  &__split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 26.25rem), 1fr));
+    gap: vars.$spacer * 2.5;
+    align-items: center;
+  }
+
+  &__upgrade-card {
+    @include mx.paper-card;
+
+    padding: vars.$spacer * 1.5 vars.$spacer * 1.25;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer;
+  }
+
+  &__upgrade-row {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.5;
+  }
+
+  &__upgrade-row-head {
+    display: flex;
+    justify-content: space-between;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.95rem;
+
+    strong {
+      font-weight: 700;
+    }
+
+    span {
+      color: var(--color-muted);
+    }
+  }
+
+  &__upgrade-bar {
+    height: 1.75rem;
+    display: flex;
+    border: 1px solid var(--orange-200);
+    overflow: hidden;
+  }
+
+  &__upgrade-bar-learned {
+    width: 10%;
+    background: var(--orange-500);
+  }
+
+  &__upgrade-bar-rest {
+    flex: 1;
+    background: color-mix(in srgb, var(--orange-100) 60%, white);
+
+    @include butler-mx.dark-mode-class {
+      background: var(--new-blue-200);
+    }
+  }
+
+  &__upgrade-bar-new {
+    flex: 1;
+    background: var(--orange-300);
+    border-left: 2px dashed var(--white-100);
+  }
+
+  &__upgrade-plus {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.625;
+    color: var(--orange-600);
+    font-weight: 700;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.95rem;
+
+    @include butler-mx.dark-mode-class {
+      color: var(--orange-300);
+    }
+  }
+
+  &__legend {
+    display: flex;
+    gap: vars.$spacer;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    flex-wrap: wrap;
+  }
+
+  &__legend-item {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.375;
+
+    span {
+      width: 0.75rem;
+      height: 0.75rem;
+      display: inline-block;
+    }
+  }
+
+  &__cta-sm {
+    align-self: flex-start;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 1rem;
+    padding: 0.75rem 1.125rem;
+  }
+
+  // FAQ
+  &__faq {
+    --band-bg: color-mix(in srgb, var(--orange-100) 30%, white);
+
+    border-bottom: 0;
+  }
+
+  &__faq-inner {
+    width: 100%;
+    max-width: 53.75rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 1.75;
+
+    .c-accordion__trigger {
+      font-family: vars.$berlin;
+      font-weight: 700;
+      // impeccable-disable design-system-font-size -- literal value from design handoff
+      font-size: 1.15rem;
+      padding-block: vars.$spacer * 1.25;
+    }
+
+    .c-accordion__content {
+      // impeccable-disable design-system-font-size -- literal value from design handoff
+      font-size: 1.05rem;
+      line-height: 1.55;
+      padding-inline-end: vars.$spacer * 2.5;
+      text-wrap: pretty;
+    }
+  }
+
+  // Final CTA, rendered into the footer's farewell slot next to the bear.
+  &--farewell {
+    padding-block: 0 vars.$spacer * 2;
+  }
+
+
+  // Primary/secondary CTA buttons (hero + final CTA)
+  &__actions .c-button {
+    padding: 0.875rem 1.375rem;
+    // impeccable-disable design-system-font-size -- literal value from design handoff
+    font-size: 1.1rem;
+
+    &.c-button--primary {
+      box-shadow: vars.$paper-lift;
+    }
+  }
+}

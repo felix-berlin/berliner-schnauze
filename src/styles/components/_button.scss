@@ -42,6 +42,25 @@
     }
   }
 
+  // Orange call-to-action (e.g. buy buttons): body font, bold, stays orange in dark mode.
+  &--primary {
+    --color-background: var(--orange-500);
+    --color: var(--white-100);
+    --color-border: var(--orange-500);
+
+    font-family: vars.$berlin;
+    font-weight: 700;
+
+    @include butler-mx.hover {
+      --color-border: var(--yellow-500);
+    }
+    @include butler-mx.dark-mode-class {
+      --color-background: var(--orange-500);
+      --color: var(--white-100);
+      --color-border: var(--orange-500);
+    }
+  }
+
   &--dashed-border {
     --style-border: dashed;
   }

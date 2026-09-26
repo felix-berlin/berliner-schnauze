@@ -26,6 +26,19 @@
       }
     }
 
+    // Page-provided replacement for the farewell text (e.g. the Anki CTA).
+    // Always visible and wraps below the bear when the row gets too narrow.
+    &:has(&-slot) {
+      flex-wrap: wrap;
+      row-gap: vars.$spacer * 2;
+    }
+
+    &-slot {
+      flex: 1 1 20rem;
+      align-self: center;
+      min-width: 0;
+    }
+
     &-text {
       display: var(--display, none);
       font-family: vars.$berliner;

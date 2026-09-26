@@ -18,6 +18,9 @@ html {
   --secondary: var(--red-500);
   --accent: var(--orange-400);
   --color-body: var(--blue);
+  // Secondary text. --primary (blue-100, a generated shade) fails AA on white
+  // and on dark surfaces, so muted copy uses this AA-safe mix instead.
+  --color-muted: color-mix(in srgb, var(--blue) 75%, white);
   --floating-color-background: color-mix(in srgb, var(--orange-200) 50%, white);
 
   &[class~="dark"] {
@@ -25,6 +28,7 @@ html {
     --secondary: var(--blue-400);
     --accent: var(--orange-500);
     --color-body: #{vars.$yellow-500};
+    --color-muted: color-mix(in srgb, var(--yellow-500) 75%, var(--blue));
     --floating-color-background: var(--new-blue-200);
   }
 }

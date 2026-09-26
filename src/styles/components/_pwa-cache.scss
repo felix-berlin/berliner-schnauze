@@ -144,7 +144,12 @@
     gap: 0.5rem;
   }
 
+  // Delete button sits next to the <details>: interactive content can't live in <summary>.
   &__bucket {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 0.5rem;
     padding: 0.75rem 1.25rem;
     background-color: color-mix(in srgb, var(--orange-100) 20%, transparent);
     border: 1px solid var(--new-blue-200);
@@ -152,13 +157,32 @@
     @include butler-mx.dark-mode-class {
       background-color: rgb(0 0 0 / 10%);
     }
+  }
 
-    .c-accordion__item {
+  &__bucket-item {
+    &.c-accordion__item {
       border: none;
+    }
 
-      &:first-child {
-        border: none;
-      }
+    &.is-empty {
+      opacity: 0.5;
+    }
+  }
+
+  &__bucket-summary {
+    &.c-accordion__trigger {
+      padding: 0;
+    }
+
+    .c-accordion__trigger-label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .c-accordion__trigger-icon {
+      align-self: flex-start;
+      padding: 0.25rem;
+      opacity: 0.5;
     }
   }
 
@@ -167,15 +191,6 @@
     align-items: center;
     gap: 0.5rem;
     margin-block-end: 0.25rem;
-
-    .c-accordion__trigger {
-      width: auto;
-      padding: 0.25rem;
-    }
-
-    .c-accordion__trigger-label {
-      display: none;
-    }
   }
 
   &__bucket-name {
@@ -202,32 +217,6 @@
 
     &:hover {
       opacity: 1;
-    }
-  }
-
-  &__bucket-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.25rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    color: inherit;
-    opacity: 0.5;
-
-    &:hover {
-      opacity: 1;
-    }
-
-    svg {
-      @include butler-mx.feature("motion") {
-        transition: transform 0.25s ease;
-      }
-
-      .is-open & {
-        transform: rotate(180deg);
-      }
     }
   }
 

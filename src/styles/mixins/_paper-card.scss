@@ -1,0 +1,22 @@
+@use "@styles/variables" as vars;
+@use "@sass-butler/mixins" as butler-mx;
+
+// Raised paper surface: dashed hairline border + "Paper Lift" shadow (DESIGN.md).
+@mixin paper-card {
+  background: var(--white-100);
+  border: 1px dashed var(--grey-100);
+  border-radius: 4px;
+  box-shadow: vars.$paper-lift;
+
+  @include butler-mx.dark-mode-class {
+    background: var(--new-blue-400);
+  }
+}
+
+// Card title: Body Bold per DESIGN.md, not the display font.
+@mixin paper-card-title {
+  font-family: vars.$berlin;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin: 0;
+}
