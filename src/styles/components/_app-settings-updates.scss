@@ -10,6 +10,12 @@
   padding: 0;
   border: none;
 
+  // A legend isn't a flex item, so the card's gap doesn't reach it — same spacing by hand.
+  &__legend {
+    padding: 0;
+    margin-block-end: 0.875rem;
+  }
+
   &__option {
     display: flex;
     align-items: flex-start;

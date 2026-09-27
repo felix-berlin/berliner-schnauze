@@ -1,7 +1,7 @@
 <template>
   <section class="c-app-settings__card">
     <fieldset class="c-app-settings-updates">
-      <legend class="c-app-settings__card-title">
+      <legend class="c-app-settings__card-title c-app-settings-updates__legend">
         <component :is="RefreshCwIcon" class="c-app-settings__card-title-icon" />
         App-Updates
       </legend>
