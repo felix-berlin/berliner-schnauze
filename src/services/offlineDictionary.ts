@@ -416,6 +416,7 @@ export function pauseDownload(): void {
 }
 
 export async function cancelDownload(): Promise<void> {
+  pausedByUser = true;
   controller?.abort();
   running = null;
   controller = null;
@@ -442,7 +443,11 @@ export async function enableOfflineDictionary(): Promise<void> {
   patchOfflineDictionary({ enabled: true });
   trackEvent("App", "Offline dictionary enabled", "PWA");
   await requestPersistentStorage();
-  await startDownload({ manual: true });
+  // Don't await the download itself — it can run for minutes (in-page path) and the
+  // caller (the settings toggle) would stay disabled the whole time. Progress is
+  // reported reactively via $offlineDictionaryProgress; completion via the "changed"
+  // event the component emits from its state === "done" watcher.
+  void startDownload({ manual: true });
 }
 
 export async function disableOfflineDictionary(): Promise<void> {

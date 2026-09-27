@@ -171,7 +171,7 @@ const emit = defineEmits<{ changed: [] }>();
 
 const settings = useStore($offlineDictionary);
 const progress = useStore($offlineDictionaryProgress);
-const { type: connectionType } = useNetwork();
+const { saveData, type: connectionType } = useNetwork();
 
 const estimatedBytes = ref<number | null>(null);
 const persistState = ref<PersistState>("unsupported");
@@ -203,7 +203,14 @@ const STATUS_TEXT: Record<string, string> = {
   running: "Lädt …",
   waiting: "Wartet auf WLAN.",
 };
-const statusText = computed(() => STATUS_TEXT[progress.value.state]);
+// "waiting" has two distinct causes (see canDownloadNow in offlineDictionary.ts): the
+// wifi-only gate, or Data Saver blocking an automatic start — the generic "Wartet auf
+// WLAN." would be misleading on wifi with Data Saver on.
+const statusText = computed(() =>
+  progress.value.state === "waiting" && saveData.value
+    ? "Datensparmodus aktiv — Download pausiert."
+    : STATUS_TEXT[progress.value.state],
+);
 
 const DownloadCloud = defineAsyncComponent(() => import("virtual:icons/lucide/download-cloud"));
 const CircleCheck = defineAsyncComponent(() => import("virtual:icons/lucide/circle-check"));

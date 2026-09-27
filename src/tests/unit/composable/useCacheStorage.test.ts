@@ -1080,7 +1080,10 @@ describe("useCacheStorage — clearing turns off the offline dictionary", () => 
     const { result, unmount } = withSetup(() => useCacheStorage());
     await result.clearBucket("pages");
     expect(createToastNotify).toHaveBeenCalledWith(
-      expect.objectContaining({ message: expect.stringContaining("Besuchte Seiten"), status: "error" }),
+      expect.objectContaining({
+        message: expect.stringContaining("Besuchte Seiten"),
+        status: "error",
+      }),
     );
     expect(result.buckets.value.some((b) => b.name === "api-search-index")).toBe(true);
     unmount();

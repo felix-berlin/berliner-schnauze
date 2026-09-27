@@ -399,6 +399,26 @@ describe("offlineDictionary — pause / cancel", () => {
     expect($offlineDictionaryProgress.get().state).toBe("paused");
   });
 
+  it("cancelDownload stops the run; online/connection change does not auto-resume", async () => {
+    slowPages();
+    setConnection(Object.assign(new EventTarget(), { type: "wifi" }));
+    const { $offlineDictionaryProgress, cancelDownload, patchOfflineDictionary, startDownload } =
+      await load();
+    patchOfflineDictionary({ enabled: true });
+    const run = startDownload({ manual: true });
+    await vi.waitFor(() => expect($offlineDictionaryProgress.get().state).toBe("running"));
+    await cancelDownload();
+    await run;
+    expect($offlineDictionaryProgress.get().state).toBe("idle");
+
+    const callsBefore = fetchMock.mock.calls.length;
+    window.dispatchEvent(new Event("online"));
+    connection!.dispatchEvent(new Event("change"));
+    await new Promise((r) => setTimeout(r, 20));
+    expect(fetchMock.mock.calls.length).toBe(callsBefore);
+    expect($offlineDictionaryProgress.get().state).toBe("idle");
+  });
+
   it("a manual start after pause resumes", async () => {
     const { $offlineDictionaryProgress, pauseDownload, startDownload } = await load();
     pauseDownload();
@@ -466,8 +486,10 @@ describe("offlineDictionary — pause / cancel", () => {
     await vi.waitFor(() => expect($offlineDictionaryProgress.get().state).toBe("running"));
     await cancelDownload();
     await first;
+    // enableOfflineDictionary no longer awaits the download itself (it can run for
+    // minutes) — wait for the reactive progress to reach "done" instead.
     await enableOfflineDictionary();
-    expect($offlineDictionaryProgress.get().state).toBe("done");
+    await vi.waitFor(() => expect($offlineDictionaryProgress.get().state).toBe("done"));
     expect(pagesCache().size).toBe(SLUGS.length);
   });
 
@@ -552,7 +574,9 @@ describe("offlineDictionary — lifecycle", () => {
     await enableOfflineDictionary();
     expect($offlineDictionary.get().enabled).toBe(true);
     expect(requestPersistentStorage).toHaveBeenCalledOnce();
-    expect($offlineDictionaryProgress.get().state).toBe("done");
+    // enableOfflineDictionary resolves as soon as the download is *started*, not
+    // finished — wait for the reactive progress to reach "done".
+    await vi.waitFor(() => expect($offlineDictionaryProgress.get().state).toBe("done"));
   });
 
   it("disable: removes /wort/* from pages, keeps other pages, resets settings", async () => {
@@ -571,7 +595,7 @@ describe("offlineDictionary — lifecycle", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     const first = await load();
     await first.enableOfflineDictionary();
-    expect(first.$offlineDictionaryProgress.get().state).toBe("error");
+    await vi.waitFor(() => expect(first.$offlineDictionaryProgress.get().state).toBe("error"));
     expect(first.$offlineDictionary.get().failedVersion).toBe(version);
 
     vi.resetModules(); // simulated app start: fresh module state, persisted settings

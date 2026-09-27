@@ -31,9 +31,7 @@ const AppSettingsTheme = defineAsyncComponent(() => import("@components/AppSetti
 const AppSettingsNotifications = defineAsyncComponent(
   () => import("@components/AppSettingsNotifications.vue"),
 );
-const AppSettingsUpdates = defineAsyncComponent(
-  () => import("@components/AppSettingsUpdates.vue"),
-);
+const AppSettingsUpdates = defineAsyncComponent(() => import("@components/AppSettingsUpdates.vue"));
 const AppSettingsNavCard = defineAsyncComponent(() => import("@components/AppSettingsNavCard.vue"));
 
 const DownloadIcon = defineAsyncComponent(() => import("virtual:icons/lucide/download"));

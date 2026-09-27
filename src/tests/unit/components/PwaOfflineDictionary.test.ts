@@ -8,9 +8,10 @@ import { ref } from "vue";
 import { version } from "../../../../package.json";
 
 const networkType = ref<string | undefined>(undefined);
+const networkSaveData = ref(false);
 vi.mock("@vueuse/core", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@vueuse/core")>()),
-  useNetwork: () => ({ type: networkType }),
+  useNetwork: () => ({ saveData: networkSaveData, type: networkType }),
 }));
 vi.mock("@services/storagePersistence", () => ({
   getPersistState: vi.fn().mockResolvedValue("not-persisted"),
@@ -41,6 +42,7 @@ async function mountIt() {
 beforeEach(() => {
   vi.clearAllMocks();
   networkType.value = undefined;
+  networkSaveData.value = false;
   $offlineDictionary.set({
     enabled: false,
     failedVersion: null,
@@ -164,6 +166,32 @@ describe("PwaOfflineDictionary.vue", () => {
       expect(startDownload).toHaveBeenCalledWith({ manual: true });
     },
   );
+
+  it("waiting because of Data Saver: shows a distinct message, not the wifi one", async () => {
+    networkSaveData.value = true;
+    $offlineDictionary.set({
+      enabled: true,
+      failedVersion: null,
+      syncedVersion: null,
+      wifiOnly: true,
+    });
+    $offlineDictionaryProgress.set({ ...IDLE, state: "waiting" });
+    const wrapper = await mountIt();
+    expect(wrapper.text()).toContain("Datensparmodus aktiv");
+    expect(wrapper.text()).not.toContain("Wartet auf WLAN");
+  });
+
+  it("waiting because of the wifi gate (no Data Saver): shows the wifi message", async () => {
+    $offlineDictionary.set({
+      enabled: true,
+      failedVersion: null,
+      syncedVersion: null,
+      wifiOnly: true,
+    });
+    $offlineDictionaryProgress.set({ ...IDLE, state: "waiting" });
+    const wrapper = await mountIt();
+    expect(wrapper.text()).toContain("Wartet auf WLAN");
+  });
 
   it("idle with a stale synced version after a failed download: shows retry, starts manually", async () => {
     $offlineDictionary.set({
