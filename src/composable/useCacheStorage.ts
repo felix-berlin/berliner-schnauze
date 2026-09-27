@@ -289,7 +289,16 @@ export function useCacheStorage() {
     }
     // The offline dictionary lives in "pages". Clearing it means "free the space" — turn
     // the dictionary off instead of silently re-downloading it on the next app start.
-    if (name === "pages") await disableOfflineDictionary();
+    if (name === "pages") {
+      try {
+        await disableOfflineDictionary();
+      } catch {
+        createToastNotify({
+          message: `Cache „${getBucketDisplayName(name)}" konnte nicht geleert werden.`,
+          status: "error",
+        });
+      }
+    }
     await loadCaches();
   }
 

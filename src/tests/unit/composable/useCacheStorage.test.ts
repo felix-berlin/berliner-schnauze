@@ -1073,4 +1073,16 @@ describe("useCacheStorage — clearing turns off the offline dictionary", () => 
     expect(disableOfflineDictionary).not.toHaveBeenCalled();
     unmount();
   });
+
+  it("shows an error toast and still reloads buckets when disableOfflineDictionary rejects", async () => {
+    const { disableOfflineDictionary } = await import("@services/offlineDictionary");
+    vi.mocked(disableOfflineDictionary).mockRejectedValueOnce(new Error("wipeWordPages failed"));
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearBucket("pages");
+    expect(createToastNotify).toHaveBeenCalledWith(
+      expect.objectContaining({ message: expect.stringContaining("Besuchte Seiten"), status: "error" }),
+    );
+    expect(result.buckets.value.some((b) => b.name === "api-search-index")).toBe(true);
+    unmount();
+  });
 });
