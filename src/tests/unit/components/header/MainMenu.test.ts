@@ -16,10 +16,12 @@ vi.mock("@components/MainMenuButton.vue", () => ({
   default: { name: "MainMenuButton", template: '<button type="button">Menü</button>' },
 }));
 
-vi.mock("@components/InstallApp.vue", async () => {
-  const { createComponentStub } = await import("../../helpers");
-  return createComponentStub('<button class="install-app"><slot /></button>');
-});
+// Synchronous factory: an async one races the lazy import() in MainMenu and lets the
+// real InstallApp load. The Module tag makes defineAsyncComponent read `.default`.
+vi.mock("@components/InstallApp.vue", () => ({
+  [Symbol.toStringTag]: "Module",
+  default: { name: "InstallApp", template: '<button class="install-app"><slot /></button>' },
+}));
 
 vi.mock("@stores/installApp.ts", () => ({ $isPwaInstalled: isPwaInstalled }));
 
