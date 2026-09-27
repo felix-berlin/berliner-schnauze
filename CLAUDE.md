@@ -168,6 +168,7 @@ Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mj
 
 - Tests live in `src/tests/unit/` using Vitest + jsdom + `@vue/test-utils`
 - Coverage excludes `src/gql/`, `src/types/`, `src/tests/`, `src/plugins/`
+- **Patch coverage**: Codecov flags every uncovered changed line on the PR. Before calling code done, check the changed source files: `pnpm vitest run <test files> --coverage --coverage.include=<src file> --coverage.reporter=text` — aim for 100 % lines on new/changed code, including catch/fallback branches and every button handler
 
 **Shared helpers** (`src/tests/unit/helpers/`):
 
@@ -185,6 +186,7 @@ Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mj
 - **Icons**: `virtual:icons/*` are auto-stubbed by the Vitest plugin in `vitest.config.ts` — they render as `<span data-testid="icon-lucide-<name>" />`. No per-file `vi.mock` needed.
 - **`markRaw()`**: Wrap any component object stored in `ref()` or passed as a reactive prop. Without it Vue makes it a Proxy and warns about missing template/render function.
 - **`config.global.stubs`**: Preferred way to stub `defineAsyncComponent` components in `mount()` — avoids `vi.mock` hoisting issues.
+- **"Still pending" mocks**: resolve them by hand (keep the promise's `resolve`), not with a `setTimeout` — `vi.waitFor` polls every 50 ms, so a short timer resolves before the step that should race it, and the test silently takes the happy path.
 - **Proxy `vi.mock` factories**: Must include `[Symbol.toStringTag]: 'Module'` in the target object; use `createComponentStub` from helpers instead of rolling your own.
 
 ## Git Commit Conventions
