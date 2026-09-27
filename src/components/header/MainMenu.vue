@@ -51,20 +51,7 @@
                 </a>
               </template>
 
-              <fieldset class="c-main-menu__modes">
-                <legend class="u-sr-only">Farbschema</legend>
-                <label v-for="m in MODES" :key="m.label" class="c-main-menu__mode" :title="m.label">
-                  <input
-                    class="u-sr-only"
-                    type="radio"
-                    name="color-mode"
-                    :checked="isDarkMode === m.value"
-                    :aria-label="m.label"
-                    @change="applyDarkMode(m.value)"
-                  />
-                  <component :is="m.icon" aria-hidden="true" />
-                </label>
-              </fieldset>
+              <ColorModePicker class="c-main-menu__modes" source="Main Menu" />
             </div>
           </div>
 
@@ -86,14 +73,12 @@
 import type { MenuItem } from "@services/queries/getMenu";
 import type { Component } from "vue";
 
+import ColorModePicker from "@components/ColorModePicker.vue";
 import DropdownPopover from "@components/DropdownPopover.vue";
-import InstallApp from "@components/InstallApp.vue";
 import MainMenuButton from "@components/MainMenuButton.vue";
 import { useContentTracking } from "@composables/useContentTracking";
 import { useStore } from "@nanostores/vue";
-import { $isDarkMode, setDarkMode } from "@stores/darkMode.ts";
 import { $isPwaInstalled } from "@stores/installApp.ts";
-import { trackEvent } from "@utils/analytics";
 import { computed, defineAsyncComponent, ref } from "vue";
 
 interface MainMenuProps {
@@ -125,6 +110,9 @@ const ICONS: Record<string, Component> = {
 const APP_PATHS = new Set(["/changelog", "/settings"]);
 const NEW_PATHS = new Set(["/anki"]);
 
+// Only rendered inside the lazily mounted panel; the footer's InstallApp already
+// catches the early beforeinstallprompt event on every page.
+const InstallApp = defineAsyncComponent(() => import("@components/InstallApp.vue"));
 const DownloadIcon = defineAsyncComponent(() => import("virtual:icons/lucide/download"));
 
 // Items with a WP description are the big "Entdecken" cards; the rest are compact links.
@@ -136,35 +124,6 @@ const linkGroups = computed(() => {
     { items: compact.filter((item) => APP_PATHS.has(item.link)), label: "App" },
   ];
 });
-
-const MODES = [
-  {
-    icon: defineAsyncComponent(() => import("virtual:icons/lucide/sun")),
-    label: "Hell",
-    value: false,
-  },
-  {
-    icon: defineAsyncComponent(() => import("virtual:icons/lucide/moon")),
-    label: "Dunkel",
-    value: true,
-  },
-  {
-    icon: defineAsyncComponent(() => import("virtual:icons/lucide/sun-moon")),
-    label: "System",
-    value: null,
-  },
-];
-
-const isDarkMode = useStore($isDarkMode);
-// Same analytics actions as AppSettingsTheme, so both pickers report into one set.
-function applyDarkMode(value: boolean | null): void {
-  setDarkMode(value);
-  trackEvent(
-    "Color Mode",
-    value === null ? "System" : value ? "Dark Mode" : "Light Mode",
-    "Main Menu",
-  );
-}
 
 const isPwaInstalled = useStore($isPwaInstalled);
 </script>

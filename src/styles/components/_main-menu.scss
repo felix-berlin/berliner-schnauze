@@ -143,34 +143,7 @@
   }
 
   &__modes {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    margin: 10px 0 0;
-    padding: 0;
-    border: 1px solid var(--control-border);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  &__mode {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 7px 0;
-    cursor: pointer;
-    transition:
-      background-color 0.3s ease-in-out,
-      color 0.3s ease-in-out;
-
-    &:has(:checked) {
-      background: var(--control-color);
-      color: var(--control-bg);
-    }
-
-    &:has(:focus-visible) {
-      outline: 2px solid var(--accent);
-      outline-offset: -2px;
-    }
+    margin-top: 10px;
   }
 
   &__install {

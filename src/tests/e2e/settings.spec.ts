@@ -19,13 +19,14 @@ test.describe("Einstellungen (/settings)", () => {
     await page.goto("/settings");
     const group = page.getByRole("group", { name: "Farbschema wählen" });
 
-    await group.getByRole("button", { name: "Dunkel" }).click();
+    await group.getByText("Dunkel").click();
+    await expect(group.getByRole("radio", { name: "Dunkel" })).toBeChecked();
     await expect(html(page)).toHaveClass(/(^|\s)dark(\s|$)/);
 
     await page.reload();
     await expect(html(page)).toHaveClass(/(^|\s)dark(\s|$)/);
 
-    await group.getByRole("button", { name: "Hell" }).click();
+    await group.getByText("Hell").click();
     await expect(html(page)).not.toHaveClass(/(^|\s)dark(\s|$)/);
   });
 });

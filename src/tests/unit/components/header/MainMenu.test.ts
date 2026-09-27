@@ -16,9 +16,10 @@ vi.mock("@components/MainMenuButton.vue", () => ({
   default: { name: "MainMenuButton", template: '<button type="button">Menü</button>' },
 }));
 
-vi.mock("@components/InstallApp.vue", () => ({
-  default: { name: "InstallApp", template: '<button class="install-app"><slot /></button>' },
-}));
+vi.mock("@components/InstallApp.vue", async () => {
+  const { createComponentStub } = await import("../../helpers");
+  return createComponentStub('<button class="install-app"><slot /></button>');
+});
 
 vi.mock("@stores/installApp.ts", () => ({ $isPwaInstalled: isPwaInstalled }));
 
@@ -79,12 +80,10 @@ describe("MainMenu.vue", () => {
     expect(links).toEqual(["/wort-vorschlagen", "/changelog"]);
   });
 
-  it("maps the colour scheme radios to setDarkMode", async () => {
+  it("renders the icon-only colour mode picker", async () => {
     const wrapper = await mountMenu();
-    await wrapper.find("input[aria-label=Dunkel]").setValue();
-    expect(setDarkMode).toHaveBeenLastCalledWith(true);
-    await wrapper.find("input[aria-label=System]").setValue();
-    expect(setDarkMode).toHaveBeenLastCalledWith(null);
+    const picker = wrapper.findComponent({ name: "ColorModePicker" });
+    expect(picker.props()).toMatchObject({ showLabels: false, source: "Main Menu" });
   });
 
   it("hides the install bar once the app is installed", async () => {
