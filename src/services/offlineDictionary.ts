@@ -184,7 +184,11 @@ async function downloadInPage(urls: string[], signal: AbortSignal): Promise<void
   };
 
   await Promise.all(Array.from({ length: CONCURRENCY }, worker));
-  if (failure && !signal.aborted) throw failure.error;
+  // TS can't see `failure` being reassigned inside the async `worker` closures,
+  // so it narrows it to `never` here from the initial `null` — the cast just
+  // restores the declared type.
+  const result = failure as { error: unknown } | null;
+  if (result && !signal.aborted) throw result.error;
 }
 
 function markDone(): void {
