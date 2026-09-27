@@ -31,6 +31,7 @@ describe("pwaSettings — $offlineDictionary", () => {
     const { $offlineDictionary } = await load();
     expect($offlineDictionary.get()).toEqual({
       enabled: false,
+      failedVersion: null,
       syncedVersion: null,
       wifiOnly: true,
     });
@@ -47,6 +48,7 @@ describe("pwaSettings — $offlineDictionary", () => {
     const { $offlineDictionary } = await load();
     expect($offlineDictionary.get()).toEqual({
       enabled: true,
+      failedVersion: null,
       syncedVersion: null,
       wifiOnly: true,
     });
@@ -58,6 +60,7 @@ describe("pwaSettings — $offlineDictionary", () => {
     patchOfflineDictionary({ syncedVersion: "1.2.3" });
     expect($offlineDictionary.get()).toEqual({
       enabled: true,
+      failedVersion: null,
       syncedVersion: "1.2.3",
       wifiOnly: true,
     });

@@ -7,12 +7,15 @@ export interface OfflineDictionarySettings {
   wifiOnly: boolean;
   /** package.json version of the last complete download, null = never / invalidated. */
   syncedVersion: string | null;
+  /** package.json version whose download ended in an error; blocks automatic retries. */
+  failedVersion: string | null;
 }
 
 const UPDATE_MODES = new Set<UpdateMode>(["prompt", "auto", "next-start"]);
 
 export const DEFAULT_OFFLINE_DICTIONARY: OfflineDictionarySettings = {
   enabled: false,
+  failedVersion: null,
   syncedVersion: null,
   wifiOnly: true,
 };

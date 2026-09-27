@@ -566,6 +566,26 @@ describe("offlineDictionary — lifecycle", () => {
     expect($offlineDictionary.get()).toMatchObject({ enabled: false, syncedVersion: null });
   });
 
+  it("an error persists failedVersion: a later app start does not retry, a manual start does", async () => {
+    fakeCaches.putError.value = new DOMException("full", "QuotaExceededError");
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const first = await load();
+    await first.enableOfflineDictionary();
+    expect(first.$offlineDictionaryProgress.get().state).toBe("error");
+    expect(first.$offlineDictionary.get().failedVersion).toBe(version);
+
+    vi.resetModules(); // simulated app start: fresh module state, persisted settings
+    fakeCaches.putError.value = null;
+    const second = await load();
+    const callsBefore = fetchMock.mock.calls.length;
+    await second.resumeIfNeeded();
+    expect(fetchMock.mock.calls.length).toBe(callsBefore);
+
+    await second.startDownload({ manual: true });
+    expect(second.$offlineDictionaryProgress.get().state).toBe("done");
+    expect(second.$offlineDictionary.get().failedVersion).toBeNull();
+  });
+
   it("resumeIfNeeded: no-op when disabled", async () => {
     const { resumeIfNeeded } = await load();
     await resumeIfNeeded();
@@ -625,8 +645,8 @@ describe("offlineDictionary — Background Fetch", () => {
 
   const pageFetches = () => fetchMock.mock.calls.filter(([u]) => String(u).startsWith("/wort/"));
 
-  const swMessage = (result: string, stored = 0) =>
-    new MessageEvent("message", { data: { result, stored, type: "offline-dictionary" } });
+  const swMessage = (result: string, stored = 0, id = `offline-dictionary@${version}`) =>
+    new MessageEvent("message", { data: { id, result, stored, type: "offline-dictionary" } });
 
   it("starts a background fetch with the missing urls instead of fetching in the page", async () => {
     const { manager } = makeManager();
@@ -662,29 +682,128 @@ describe("offlineDictionary — Background Fetch", () => {
   it("SW success message → done and synced", async () => {
     const { manager } = makeManager();
     const sw = installServiceWorker(manager);
-    const { $offlineDictionary, $offlineDictionaryProgress, startDownload } = await load();
+    const {
+      $offlineDictionary,
+      $offlineDictionaryProgress,
+      patchOfflineDictionary,
+      startDownload,
+    } = await load();
+    patchOfflineDictionary({ enabled: true }); // messages while disabled only trigger a wipe
     await startDownload({ manual: true });
 
     sw.dispatchEvent(
       new MessageEvent("message", {
-        data: { result: "success", stored: SLUGS.length, type: "offline-dictionary" },
+        data: {
+          id: `offline-dictionary@${version}`,
+          result: "success",
+          stored: SLUGS.length,
+          type: "offline-dictionary",
+        },
       }),
     );
     expect($offlineDictionaryProgress.get().state).toBe("done");
     expect($offlineDictionary.get().syncedVersion).toBe(version);
   });
 
-  it("SW fail message → error", async () => {
+  it("SW fail message → in-page run for the still-missing pages (404 skipped) → done", async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === "/api/search/index.json") {
+        return new Response(JSON.stringify(SLUGS.map((slug) => ({ slug }))));
+      }
+      if (url === "/wort/wa") return pageResponse("", 404); // removed word failed the bg fetch
+      return pageResponse();
+    });
     const { manager } = makeManager();
     const sw = installServiceWorker(manager);
-    const { $offlineDictionaryProgress, startDownload } = await load();
+    const {
+      $offlineDictionary,
+      $offlineDictionaryProgress,
+      patchOfflineDictionary,
+      startDownload,
+    } = await load();
+    patchOfflineDictionary({ enabled: true });
     await startDownload({ manual: true });
-    sw.dispatchEvent(
-      new MessageEvent("message", {
-        data: { result: "fail", stored: 1, type: "offline-dictionary" },
-      }),
+    // The SW stored what it got before reporting fail.
+    const cache = await caches.open("pages");
+    for (const slug of ["aasen", "anmachen"]) {
+      await cache.put(
+        `/wort/${slug}`,
+        new Response("x", { headers: { "x-offline-dictionary-version": version } }),
+      );
+    }
+    sw.dispatchEvent(swMessage("fail", 2));
+    await vi.waitFor(() =>
+      expect($offlineDictionaryProgress.get()).toMatchObject({ mode: "page", state: "done" }),
     );
-    expect($offlineDictionaryProgress.get().state).toBe("error");
+    expect(pageFetches().map(([u]) => u)).toEqual([
+      "/wort/wa",
+      "/wort/alex",
+      "/wort/bulette",
+      "/wort/icke",
+    ]);
+    expect(pagesCache().has("/wort/wa")).toBe(false);
+    expect(manager.fetch).toHaveBeenCalledOnce(); // no loop back into Background Fetch
+    expect($offlineDictionary.get().syncedVersion).toBe(version);
+  });
+
+  it("a stale older-version abort message does not touch the tracked fetch", async () => {
+    const { manager } = makeManager();
+    const sw = installServiceWorker(manager);
+    const { $offlineDictionaryProgress, patchOfflineDictionary, startDownload } = await load();
+    patchOfflineDictionary({ enabled: true });
+    await startDownload({ manual: true });
+    sw.dispatchEvent(swMessage("abort", 0, "offline-dictionary@0.0.1"));
+    expect($offlineDictionaryProgress.get()).toMatchObject({
+      mode: "background-fetch",
+      state: "running",
+    });
+  });
+
+  it("a SW message after disable wipes /wort/* the SW stored after the disable wipe", async () => {
+    const { bgFetch, manager } = makeManager();
+    bgFetch.abort.mockResolvedValue(false); // fetch already completed, SW is storing
+    const sw = installServiceWorker(manager);
+    const { disableOfflineDictionary, patchOfflineDictionary, startDownload } = await load();
+    patchOfflineDictionary({ enabled: true });
+    await startDownload({ manual: true });
+    await disableOfflineDictionary();
+    const cache = await caches.open("pages");
+    await cache.put("/wort/aasen", new Response("x"));
+    await cache.put("/magazin/post", new Response("x"));
+    sw.dispatchEvent(swMessage("success", 1));
+    await vi.waitFor(() => expect([...pagesCache().keys()]).toEqual(["/magazin/post"]));
+  });
+
+  it("re-attaches before the wifi gate: a reload on cellular shows the running fetch", async () => {
+    setConnection(Object.assign(new EventTarget(), { type: "cellular" }));
+    const existing = makeBgFetch(`offline-dictionary@${version}`);
+    const { manager } = makeManager({ get: vi.fn().mockResolvedValue(existing) });
+    installServiceWorker(manager);
+    const { $offlineDictionaryProgress, patchOfflineDictionary, startDownload } = await load();
+    patchOfflineDictionary({ enabled: true, wifiOnly: true });
+    await startDownload();
+    expect(manager.fetch).not.toHaveBeenCalled();
+    expect(pageFetches()).toHaveLength(0);
+    expect($offlineDictionaryProgress.get()).toMatchObject({
+      mode: "background-fetch",
+      state: "running",
+      total: SLUGS.length,
+    });
+  });
+
+  it("closed wifi gate + the fetch finished before re-attaching → waiting, nothing started", async () => {
+    setConnection(Object.assign(new EventTarget(), { type: "cellular" }));
+    const existing = makeBgFetch(`offline-dictionary@${version}`);
+    const { manager } = makeManager({
+      get: vi.fn().mockResolvedValueOnce(existing).mockResolvedValue(undefined),
+    });
+    installServiceWorker(manager);
+    const { $offlineDictionaryProgress, patchOfflineDictionary, startDownload } = await load();
+    patchOfflineDictionary({ enabled: true, wifiOnly: true });
+    await startDownload();
+    expect(manager.fetch).not.toHaveBeenCalled();
+    expect(pageFetches()).toHaveLength(0);
+    expect($offlineDictionaryProgress.get().state).toBe("waiting");
   });
 
   it("falls back to the in-page download when backgroundFetch.fetch rejects", async () => {
@@ -732,23 +851,15 @@ describe("offlineDictionary — Background Fetch", () => {
     expect(bgFetch.abort).toHaveBeenCalledOnce();
   });
 
-  it("disable also aborts a fetch nothing tracks (e.g. after a reload, run parked in waiting)", async () => {
-    setConnection(Object.assign(new EventTarget(), { type: "cellular" }));
+  it("disable also aborts a fetch nothing tracks (app start, before the resume run re-attached)", async () => {
     const untracked = makeBgFetch(`offline-dictionary@${version}`);
     const { manager } = makeManager({
       get: vi.fn().mockResolvedValue(untracked),
       getIds: vi.fn().mockResolvedValue([untracked.id]),
     });
     installServiceWorker(manager);
-    const {
-      $offlineDictionaryProgress,
-      disableOfflineDictionary,
-      patchOfflineDictionary,
-      startDownload,
-    } = await load();
-    patchOfflineDictionary({ enabled: true, wifiOnly: true });
-    await startDownload();
-    expect($offlineDictionaryProgress.get().state).toBe("waiting");
+    const { disableOfflineDictionary, patchOfflineDictionary } = await load();
+    patchOfflineDictionary({ enabled: true });
     await disableOfflineDictionary();
     expect(untracked.abort).toHaveBeenCalledOnce();
   });

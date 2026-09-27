@@ -42,9 +42,10 @@ async function storeRecords(registration) {
   return { failed: false, stored };
 }
 
-async function notifyClients(result, stored) {
+async function notifyClients(registration, result, stored) {
   const windows = await self.clients.matchAll({ includeUncontrolled: true, type: "window" });
-  for (const client of windows) client.postMessage({ result, stored, type: "offline-dictionary" });
+  for (const client of windows)
+    client.postMessage({ id: registration.id, result, stored, type: "offline-dictionary" });
 }
 
 self.addEventListener("backgroundfetchsuccess", (event) => {
@@ -56,7 +57,7 @@ self.addEventListener("backgroundfetchsuccess", (event) => {
       await event.updateUI({
         title: failed ? "Offline-Wörterbuch unvollständig" : "Offline-Wörterbuch bereit",
       });
-      await notifyClients(result, stored);
+      await notifyClients(event.registration, result, stored);
     })(),
   );
 });
@@ -67,7 +68,7 @@ self.addEventListener("backgroundfetchfail", (event) => {
     (async () => {
       const { stored } = await storeRecords(event.registration);
       await event.updateUI({ title: "Offline-Wörterbuch unvollständig" });
-      await notifyClients("fail", stored);
+      await notifyClients(event.registration, "fail", stored);
     })(),
   );
 });
@@ -75,7 +76,7 @@ self.addEventListener("backgroundfetchfail", (event) => {
 // Aborts come from "cancel"/"disable" in the app — don't write pages the app is deleting.
 self.addEventListener("backgroundfetchabort", (event) => {
   if (!isOurs(event.registration)) return;
-  event.waitUntil(notifyClients("abort", 0));
+  event.waitUntil(notifyClients(event.registration, "abort", 0));
 });
 
 self.addEventListener("backgroundfetchclick", (event) => {

@@ -89,6 +89,8 @@ let running: Promise<void> | null = null;
  */
 const unsettledRuns = new Set<Promise<void>>();
 let pausedByUser = false;
+/** Set once a Background Fetch failed: later runs of this page session download in-page only. */
+let bgFetchFailed = false;
 let listenersAttached = false;
 
 export function canDownloadNow(manual: boolean): boolean {
@@ -187,7 +189,7 @@ async function downloadInPage(urls: string[], signal: AbortSignal): Promise<void
 
 function markDone(): void {
   activeBgFetch = null;
-  patchOfflineDictionary({ syncedVersion: version });
+  patchOfflineDictionary({ failedVersion: null, syncedVersion: version });
   setProgress({ done: $offlineDictionaryProgress.get().total, state: "done" });
   trackEvent("App", "Offline dictionary complete", "PWA");
 }
@@ -214,12 +216,33 @@ function followBackgroundFetch(bgFetch: BackgroundFetchRegistrationLike, missing
   });
 }
 
+async function getRunningBackgroundFetch(): Promise<BackgroundFetchRegistrationLike | undefined> {
+  try {
+    return await (await getBackgroundFetchManager())?.get(BG_FETCH_ID);
+  } catch {
+    return undefined;
+  }
+}
+
+async function wipeWordPages(): Promise<void> {
+  const cache = await caches.open(PAGES_CACHE);
+  const keys = await cache.keys();
+  await Promise.all(
+    keys.filter((r) => new URL(r.url).pathname.startsWith("/wort/")).map((r) => cache.delete(r)),
+  );
+}
+
 /**
  * Returns true when the run is over for the page: a Background Fetch now owns the
  * download, or the run was paused/cancelled meanwhile (any fetch it acquired is aborted).
- * Returns false when the in-page download has to do the work.
+ * Returns false when the in-page download has to do the work. With `allowStart` false
+ * it only re-attaches to a running fetch.
  */
-async function tryBackgroundFetch(missing: string[], signal: AbortSignal): Promise<boolean> {
+async function tryBackgroundFetch(
+  missing: string[],
+  signal: AbortSignal,
+  allowStart: boolean,
+): Promise<boolean> {
   let bgFetch: BackgroundFetchRegistrationLike | undefined;
   try {
     const manager = await getBackgroundFetchManager();
@@ -230,7 +253,7 @@ async function tryBackgroundFetch(missing: string[], signal: AbortSignal): Promi
     // Re-attach (e.g. after a reload) instead of starting a second fetch with the same id.
     bgFetch =
       (await manager.get(BG_FETCH_ID)) ??
-      (signal.aborted
+      (signal.aborted || !allowStart
         ? undefined
         : await manager.fetch(BG_FETCH_ID, missing, {
             icons: [
@@ -276,20 +299,34 @@ async function verifySynced(): Promise<void> {
   }
 }
 
-function onServiceWorkerMessage(event: MessageEvent<{ result?: string; type?: string }>): void {
+function onServiceWorkerMessage(
+  event: MessageEvent<{ id?: string; result?: string; type?: string }>,
+): void {
   if (event.data?.type !== "offline-dictionary") return;
-  if (!activeBgFetch) {
-    if (event.data.result === "success") void verifySynced();
-    // "fail"/"abort" untracked: cancelDownload already reset the state (its own abort),
-    // or the next run retries whatever is still missing.
+  // Disabled meanwhile: abort() can't stop a fetch whose SW handler is already storing,
+  // so its pages may have landed after disable's wipe — wipe again.
+  if (!$offlineDictionary.get().enabled) {
+    void wipeWordPages();
     return;
   }
+  // We only ever track BG_FETCH_ID; anything else is a stale older-version fetch.
+  if (event.data.id !== BG_FETCH_ID) return;
+  const { result } = event.data;
+  if (!activeBgFetch) {
+    if (result === "success") void verifySynced();
+    // "fail"/"abort" untracked: cancelDownload already reset the state (its own abort),
+    // or the next run retries whatever is still missing.
+    if (result !== "fail") return;
+  }
   activeBgFetch = null;
-  if (event.data.result === "success") markDone();
-  else if (event.data.result === "fail") {
-    setProgress({ state: "error" });
-    trackEvent("App", "Offline dictionary error", "PWA");
-  } else if (event.data.result === "abort") {
+  if (result === "success") markDone();
+  else if (result === "fail") {
+    // One non-2xx (e.g. a removed word's 404) fails the whole Background Fetch. The SW
+    // stored what it got; the in-page path fetches the rest, skips 404/410 and decides
+    // done vs error — never looping back into Background Fetch.
+    bgFetchFailed = true;
+    void startDownload();
+  } else if (result === "abort") {
     // Tracked fetch aborted from outside the app (the browser's download UI): treat it
     // like a pause so online/connection changes don't restart it; "resume" starts anew.
     pausedByUser = true;
@@ -305,8 +342,11 @@ async function runDownload(manual: boolean): Promise<void> {
   const runController = new AbortController();
   controller = runController;
   const { signal } = runController;
-  if (!canDownloadNow(manual)) {
-    setProgress({ state: "waiting" });
+  const gateOpen = canDownloadNow(manual);
+  // A closed gate still re-attaches to a running fetch (e.g. reload on cellular while
+  // Chrome keeps downloading), so the UI doesn't claim "waiting".
+  if (!gateOpen && !(await getRunningBackgroundFetch())) {
+    if (!signal.aborted) setProgress({ state: "waiting" });
     return;
   }
   try {
@@ -317,8 +357,12 @@ async function runDownload(manual: boolean): Promise<void> {
     setProgress({ bytes: 0, done: urls.length - missing.length, total: urls.length });
     if (missing.length > 0) {
       // Completion of a Background Fetch arrives via onServiceWorkerMessage.
-      if (await tryBackgroundFetch(missing, signal)) return;
+      if (!bgFetchFailed && (await tryBackgroundFetch(missing, signal, gateOpen))) return;
       if (signal.aborted) return;
+      if (!gateOpen) {
+        setProgress({ state: "waiting" }); // the fetch finished before we could re-attach
+        return;
+      }
       setProgress({ mode: "page", state: "running" });
       await downloadInPage(missing, signal);
     }
@@ -333,12 +377,15 @@ async function runDownload(manual: boolean): Promise<void> {
       return;
     }
     setProgress({ state: "error" });
+    patchOfflineDictionary({ failedVersion: version });
     console.error("[offlineDictionary] Download failed:", err);
     trackEvent("App", "Offline dictionary error", "PWA");
   }
 }
 
 export function startDownload({ manual = false }: { manual?: boolean } = {}): Promise<void> {
+  // A manual start is the user's retry: it lifts the persisted failure block.
+  if (manual) patchOfflineDictionary({ failedVersion: null });
   if (activeBgFetch) return Promise.resolve();
   if (!running) {
     const runPromise: Promise<void> = runDownload(manual).finally(() => {
@@ -397,23 +444,19 @@ export async function enableOfflineDictionary(): Promise<void> {
 export async function disableOfflineDictionary(): Promise<void> {
   // Disable first: an online/connection change during the cancel below must not let
   // resumeIfNeeded start a new run that refills /wort/* during or after the wipe.
-  patchOfflineDictionary({ enabled: false, syncedVersion: null });
+  patchOfflineDictionary({ enabled: false, failedVersion: null, syncedVersion: null });
   await cancelDownload();
-  const cache = await caches.open(PAGES_CACHE);
-  const keys = await cache.keys();
-  await Promise.all(
-    keys.filter((r) => new URL(r.url).pathname.startsWith("/wort/")).map((r) => cache.delete(r)),
-  );
+  await wipeWordPages();
   trackEvent("App", "Offline dictionary disabled", "PWA");
 }
 
 /** App start / network or connection change: continue or re-sync if the dictionary needs it. */
 export async function resumeIfNeeded(): Promise<void> {
-  const { enabled, syncedVersion } = $offlineDictionary.get();
+  const { enabled, failedVersion, syncedVersion } = $offlineDictionary.get();
   if (!enabled || pausedByUser || syncedVersion === version) return;
   // An error (e.g. quota exceeded) must not be retried by every online/connection
-  // change — that's frequent on mobile and would violate "no endless retry". Only
-  // a manual startDownload() (the user hitting "retry") should get past this.
-  if ($offlineDictionaryProgress.get().state === "error") return;
+  // change or app start — that's frequent on mobile and would violate "no endless
+  // retry". Only a manual startDownload() (the user hitting "retry") clears it.
+  if (failedVersion === version) return;
   await startDownload();
 }

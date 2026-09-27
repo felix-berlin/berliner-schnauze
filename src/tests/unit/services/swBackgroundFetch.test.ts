@@ -24,6 +24,7 @@ function setup() {
     },
   };
   const caches = { open: vi.fn().mockResolvedValue(cache) };
+  // oxlint-disable-next-line typescript/no-implied-eval -- evaluates the SW script in a fake global scope
   new Function("self", "caches", SCRIPT)(self, caches);
 
   async function fire(type: string, registration: object) {
@@ -67,6 +68,7 @@ describe("sw-background-fetch.js", () => {
     expect(await env.store.get("/wort/aasen")?.text()).toBe("<h1>aasen</h1>");
     expect(updateUI).toHaveBeenCalledWith({ title: "Offline-Wörterbuch bereit" });
     expect(env.client.postMessage).toHaveBeenCalledWith({
+      id: "offline-dictionary@9.9.9",
       result: "success",
       stored: 1,
       type: "offline-dictionary",
@@ -93,6 +95,7 @@ describe("sw-background-fetch.js", () => {
     expect(env.cache.put).toHaveBeenCalledTimes(2);
     expect(updateUI).toHaveBeenCalledWith({ title: "Offline-Wörterbuch unvollständig" });
     expect(env.client.postMessage).toHaveBeenCalledWith({
+      id: "offline-dictionary@1.0.0",
       result: "fail",
       stored: 1,
       type: "offline-dictionary",
@@ -117,7 +120,7 @@ describe("sw-background-fetch.js", () => {
     await env.fire("backgroundfetchfail", reg);
     expect([...env.store.keys()]).toEqual(["/wort/a"]);
     expect(env.client.postMessage).toHaveBeenCalledWith(
-      expect.objectContaining({ result: "fail", stored: 1 }),
+      expect.objectContaining({ id: "offline-dictionary@1.0.0", result: "fail", stored: 1 }),
     );
   });
 
@@ -129,7 +132,7 @@ describe("sw-background-fetch.js", () => {
     expect(env.store.size).toBe(0);
     expect(reg.matchAll).not.toHaveBeenCalled();
     expect(env.client.postMessage).toHaveBeenCalledWith(
-      expect.objectContaining({ result: "abort" }),
+      expect.objectContaining({ id: "offline-dictionary@1.0.0", result: "abort" }),
     );
   });
 
