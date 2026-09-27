@@ -49,6 +49,11 @@ function applyUpdateOnNextNavigation(): void {
 
 registerSW({
   immediate: true,
+  // NOTE: registerType is "autoUpdate" (astro.config.mjs), which forces workbox's
+  // skipWaiting + clientsClaim to true. The new SW activates and takes control of
+  // this page automatically the moment it's found — before this callback even
+  // runs. $updateMode only decides WHEN we reload the page, never whether the new
+  // SW is already active; there's no "leave the old SW in charge" option here.
   onNeedReload() {
     const mode = $updateMode.get();
     if (mode === "next-start") {
