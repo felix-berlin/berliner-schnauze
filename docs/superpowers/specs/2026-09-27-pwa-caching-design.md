@@ -58,27 +58,27 @@ Veraltete gecachte Seiten können offline auf gelöschte `/_astro`-Dateien verwe
 
 ```ts
 type UpdateMode = "prompt" | "auto" | "next-start";
-$updateMode: UpdateMode              // Default "prompt"
+$updateMode: UpdateMode; // Default "prompt"
 $offlineDictionary: {
-  enabled: boolean;                  // Default false
-  wifiOnly: boolean;                 // Default true
-  syncedVersion: string | null;      // package.json version des letzten vollständigen Syncs
+  enabled: boolean; // Default false
+  wifiOnly: boolean; // Default true
+  syncedVersion: string | null; // package.json version des letzten vollständigen Syncs
 }
 ```
 
 ### S3: Update-Verhalten (`src/services/pwa.ts`, `onNeedReload`)
 
-| Modus | Verhalten |
-|---|---|
-| `prompt` (Default) | Wie heute: Tab sichtbar → Toast „Jetzt aktualisieren“; Tab verborgen → Notification (falls erlaubt) + stilles Reload. |
+| Modus                    | Verhalten                                                                                                                                                                                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `prompt` (Default)       | Wie heute: Tab sichtbar → Toast „Jetzt aktualisieren“; Tab verborgen → Notification (falls erlaubt) + stilles Reload.                                                                                                                                              |
 | `auto` (Entscheidung 2c) | Tab verborgen → Reload sofort. Tab sichtbar → Update als „pending“ merken; bei der nächsten ClientRouter-Navigation volles Reload auf das Ziel (`astro:before-preparation` abfangen, `location.href = event.to.href`). Kein Unterbrechen von BON, Formularen o. ä. |
-| `next-start` | Kein Reload, kein Toast. Neue Version ab nächstem vollen Seitenaufruf/App-Start. |
+| `next-start`             | Kein Reload, kein Toast. Neue Version ab nächstem vollen Seitenaufruf/App-Start.                                                                                                                                                                                   |
 
 Das „erfolgreich aktualisiert“-Toast (`PWA_UPDATED_KEY`) bleibt für `prompt` und `auto`.
 
 ### S1: Offline-Wörterbuch (`src/services/offlineDictionary.ts`)
 
-**URL-Liste:** Slugs aus `/api/search/index.json` (bereits via SWR gecacht) → `/wort/<slug>`. Vor dem Start werden URLs übersprungen, die schon in `pages` liegen *und* `syncedVersion === version` ist.
+**URL-Liste:** Slugs aus `/api/search/index.json` (bereits via SWR gecacht) → `/wort/<slug>`. Vor dem Start werden URLs übersprungen, die schon in `pages` liegen _und_ `syncedVersion === version` ist.
 
 **Zwei Download-Wege**, gewählt per Feature-Detection:
 
@@ -99,6 +99,7 @@ Das „erfolgreich aktualisiert“-Toast (`PWA_UPDATED_KEY`) bleibt für `prompt
 **Fortschritt-Store:** `$offlineDictionaryProgress: { state: "idle" | "running" | "paused" | "done" | "error"; done; total; bytes; mode: "background-fetch" | "page" }`.
 
 **Lebenszyklus:**
+
 - Einschalten → S4 `persist()` anfragen → Start (sofern S2 erlaubt).
 - Nach Abschluss → `syncedVersion = version`.
 - App-Start mit `enabled && syncedVersion !== version` → automatischer Re-Sync (sofern S2 erlaubt).
