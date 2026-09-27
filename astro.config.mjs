@@ -474,8 +474,13 @@ export default defineConfig({
                 statuses: [200],
               },
               // Uncached page while offline → homepage (search works offline).
+              // NOTE: workbox-build's precache manifest strips the trailing
+              // `index.html` from root-level HTML files, so the entry is keyed as
+              // "/", not "/index.html" — precacheFallback's matchPrecache lookup
+              // needs the same key or it silently misses and the browser reports
+              // a bare net::ERR_FAILED for the offline navigation.
               precacheFallback: {
-                fallbackURL: "/index.html",
+                fallbackURL: "/",
               },
             },
           },
