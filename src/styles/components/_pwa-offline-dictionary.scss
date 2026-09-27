@@ -1,4 +1,7 @@
 @use "@styles/mixins" as mx;
+// The switch styling (.c-switch track/thumb) is otherwise only pulled in by WordFilter.vue —
+// each component owns its SCSS (CLAUDE.md), so this panel loads it itself.
+@use "@styles/components/switch";
 
 .c-pwa-offline-dictionary {
   container-type: inline-size;
@@ -50,7 +53,7 @@
     color: var(--color-muted);
 
     strong {
-      color: var(--text);
+      color: var(--color-body);
       font-weight: 700;
     }
   }

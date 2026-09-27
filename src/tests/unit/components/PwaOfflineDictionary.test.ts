@@ -41,7 +41,12 @@ async function mountIt() {
 beforeEach(() => {
   vi.clearAllMocks();
   networkType.value = undefined;
-  $offlineDictionary.set({ enabled: false, failedVersion: null, syncedVersion: null, wifiOnly: true });
+  $offlineDictionary.set({
+    enabled: false,
+    failedVersion: null,
+    syncedVersion: null,
+    wifiOnly: true,
+  });
   $offlineDictionaryProgress.set({ ...IDLE });
 });
 
@@ -159,6 +164,21 @@ describe("PwaOfflineDictionary.vue", () => {
       expect(startDownload).toHaveBeenCalledWith({ manual: true });
     },
   );
+
+  it("idle with a stale synced version after a failed download: shows retry, starts manually", async () => {
+    $offlineDictionary.set({
+      enabled: true,
+      failedVersion: version,
+      syncedVersion: null,
+      wifiOnly: true,
+    });
+    $offlineDictionaryProgress.set({ ...IDLE, state: "idle" });
+    const { startDownload } = await import("@services/offlineDictionary");
+    const wrapper = await mountIt();
+    expect(wrapper.find("[data-testid=offline-dictionary-resume]").exists()).toBe(true);
+    await wrapper.find("[data-testid=offline-dictionary-resume]").trigger("click");
+    expect(startDownload).toHaveBeenCalledWith({ manual: true });
+  });
 
   it("synced for the current version: shows ready state", async () => {
     $offlineDictionary.set({

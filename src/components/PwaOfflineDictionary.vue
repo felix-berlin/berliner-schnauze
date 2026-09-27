@@ -27,7 +27,8 @@
     <p v-if="!settings.enabled" class="c-pwa-offline-dictionary__intro">
       Alle Wörter uff'm Gerät – ooch ohne Netz.
       <template v-if="estimatedBytes">
-        Braucht ca. <strong>{{ formatBytes(estimatedBytes) }}</strong>.
+        Braucht ca. <strong>{{ formatBytes(estimatedBytes) }}</strong
+        >.
       </template>
     </p>
 
@@ -81,14 +82,14 @@
             Pause
           </button>
           <button
-            v-if="['paused', 'waiting', 'error'].includes(progress.state)"
+            v-if="needsResume"
             data-testid="offline-dictionary-resume"
             type="button"
             class="c-button c-button--primary"
             @click="startDownload({ manual: true })"
           >
             <RotateCw aria-hidden="true" height="16" width="16" />
-            {{ progress.state === "error" ? "Nochmal versuchen" : "Fortsetzen" }}
+            {{ isRetry ? "Nochmal versuchen" : "Fortsetzen" }}
           </button>
           <button
             v-if="progress.state === 'running'"
@@ -107,6 +108,7 @@
         <input
           data-testid="offline-dictionary-wifi"
           type="checkbox"
+          role="switch"
           class="c-input c-input--checkbox c-switch"
           :checked="settings.wifiOnly"
           @change="toggleWifiOnly"
@@ -159,6 +161,7 @@ import {
   requestPersistentStorage,
 } from "@services/storagePersistence";
 import { $offlineDictionary, patchOfflineDictionary } from "@stores/pwaSettings.ts";
+import { createToastNotify } from "@stores/toastNotify.ts";
 import { useNetwork } from "@vueuse/core";
 import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 
@@ -178,6 +181,18 @@ const isToggling = ref(false);
 const showWifiToggle = computed(() => connectionType.value !== undefined);
 const isReady = computed(
   () => settings.value.syncedVersion === version && progress.value.state !== "running",
+);
+// A failed/interrupted download settles back to "idle" (see offlineDictionary.ts), so "idle"
+// with a stale syncedVersion also needs a manual way out — not just paused/waiting/error.
+const needsResume = computed(
+  () =>
+    ["paused", "waiting", "error"].includes(progress.value.state) ||
+    (progress.value.state === "idle" && settings.value.syncedVersion !== version),
+);
+const isRetry = computed(
+  () =>
+    progress.value.state === "error" ||
+    (progress.value.state === "idle" && settings.value.failedVersion === version),
 );
 
 const STATUS_TEXT: Record<string, string> = {
@@ -232,6 +247,11 @@ async function toggle(event: Event): Promise<void> {
     if ((event.target as HTMLInputElement).checked) await enableOfflineDictionary();
     else await disableOfflineDictionary();
     persistState.value = await getPersistState();
+  } catch {
+    createToastNotify({
+      message: "Offline-Wörterbuch konnte nicht geändert werden.",
+      status: "error",
+    });
   } finally {
     isToggling.value = false;
   }
