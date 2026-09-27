@@ -202,4 +202,35 @@
     height: auto;
     font-size: 0.95rem;
   }
+
+  // Items drift in from the right out of a soft blur, one after another.
+  // The panel content is mounted on open, so @starting-style fires for every item.
+  // The stagger uses sibling-index() (not Baseline yet): without it all items come at once.
+  @include butler-mx.feature("motion") {
+    &__col > *,
+    &__install {
+      --_delay: 0ms;
+
+      transition:
+        opacity 0.3s ease var(--_delay),
+        filter 0.35s ease var(--_delay),
+        translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) var(--_delay),
+        border-color 0.3s ease-in-out,
+        background-color 0.3s ease-in-out;
+
+      @supports (order: sibling-index()) {
+        --_delay: calc(60ms + (sibling-index() - 1) * 40ms);
+      }
+
+      @starting-style {
+        opacity: 0;
+        filter: blur(4px);
+        translate: 12px 0;
+      }
+    }
+
+    &__install {
+      --_delay: 260ms;
+    }
+  }
 }
