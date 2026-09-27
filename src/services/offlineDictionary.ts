@@ -312,20 +312,20 @@ function onServiceWorkerMessage(
   // We only ever track BG_FETCH_ID; anything else is a stale older-version fetch.
   if (event.data.id !== BG_FETCH_ID) return;
   const { result } = event.data;
+  // One non-2xx (e.g. a removed word's 404) fails the whole Background Fetch, so later
+  // runs of this session download in-page (skips 404/410, decides done vs error).
+  if (result === "fail") bgFetchFailed = true;
   if (!activeBgFetch) {
+    // Untracked (cancel/pause cleared it, or a leftover message): never start a run —
+    // cancelDownload already reset the state, the next run retries what is missing.
     if (result === "success") void verifySynced();
-    // "fail"/"abort" untracked: cancelDownload already reset the state (its own abort),
-    // or the next run retries whatever is still missing.
-    if (result !== "fail") return;
+    return;
   }
   activeBgFetch = null;
   if (result === "success") markDone();
   else if (result === "fail") {
-    // One non-2xx (e.g. a removed word's 404) fails the whole Background Fetch. The SW
-    // stored what it got; the in-page path fetches the rest, skips 404/410 and decides
-    // done vs error — never looping back into Background Fetch.
-    bgFetchFailed = true;
-    void startDownload();
+    // Hand the still-missing pages to the in-page path — unless the user paused.
+    if (!pausedByUser) void startDownload();
   } else if (result === "abort") {
     // Tracked fetch aborted from outside the app (the browser's download UI): treat it
     // like a pause so online/connection changes don't restart it; "resume" starts anew.

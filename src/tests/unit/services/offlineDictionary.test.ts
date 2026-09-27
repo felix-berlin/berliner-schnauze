@@ -746,6 +746,40 @@ describe("offlineDictionary — Background Fetch", () => {
     expect($offlineDictionary.get().syncedVersion).toBe(version);
   });
 
+  it("a fail after the user paused does not start the in-page handover", async () => {
+    const { manager } = makeManager();
+    const sw = installServiceWorker(manager);
+    const { $offlineDictionaryProgress, patchOfflineDictionary, pauseDownload, startDownload } =
+      await load();
+    patchOfflineDictionary({ enabled: true });
+    await startDownload({ manual: true });
+    pauseDownload();
+    sw.dispatchEvent(swMessage("fail", 1));
+    await new Promise((r) => setTimeout(r, 20));
+    expect($offlineDictionaryProgress.get().state).toBe("paused");
+    expect(pageFetches()).toHaveLength(0);
+  });
+
+  it("an untracked fail after cancel starts nothing; the next manual start goes in-page", async () => {
+    const { bgFetch, manager } = makeManager();
+    bgFetch.abort.mockResolvedValue(false); // fetch already completed, SW is storing
+    const sw = installServiceWorker(manager);
+    const { $offlineDictionaryProgress, cancelDownload, patchOfflineDictionary, startDownload } =
+      await load();
+    patchOfflineDictionary({ enabled: true });
+    await startDownload({ manual: true });
+    await cancelDownload();
+    sw.dispatchEvent(swMessage("fail", 1));
+    await new Promise((r) => setTimeout(r, 20));
+    expect($offlineDictionaryProgress.get().state).toBe("idle");
+    expect(pageFetches()).toHaveLength(0);
+
+    await startDownload({ manual: true });
+    expect(manager.fetch).toHaveBeenCalledOnce(); // bgFetchFailed honored
+    expect(pageFetches()).toHaveLength(SLUGS.length);
+    expect($offlineDictionaryProgress.get()).toMatchObject({ mode: "page", state: "done" });
+  });
+
   it("a stale older-version abort message does not touch the tracked fetch", async () => {
     const { manager } = makeManager();
     const sw = installServiceWorker(manager);
