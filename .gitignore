@@ -74,6 +74,3 @@ dist-anki/
 .venv-anki/
 __pycache__/
 
-# design handoff export (not project source)
-/design_handoff_anki_deck_landing/
-
