@@ -953,14 +953,21 @@ describe("offlineDictionary — Background Fetch", () => {
 
   it("cancel while backgroundFetch.fetch is pending aborts the fetch it resolves to", async () => {
     const { bgFetch, manager } = makeManager();
+    // Resolved by hand: a timer would race vi.waitFor's polling and resolve before the cancel.
+    let resolveFetch!: (value: typeof bgFetch) => void;
     manager.fetch.mockImplementation(
-      () => new Promise((resolve) => setTimeout(() => resolve(bgFetch), 20)),
+      () =>
+        new Promise((resolve) => {
+          resolveFetch = resolve;
+        }),
     );
     installServiceWorker(manager);
     const { $offlineDictionaryProgress, cancelDownload, startDownload } = await load();
     const run = startDownload({ manual: true });
     await vi.waitFor(() => expect(manager.fetch).toHaveBeenCalled());
-    await cancelDownload();
+    const cancelled = cancelDownload();
+    resolveFetch(bgFetch);
+    await cancelled;
     await run;
     expect(bgFetch.abort).toHaveBeenCalledOnce();
     expect($offlineDictionaryProgress.get().state).toBe("idle");
@@ -968,6 +975,20 @@ describe("offlineDictionary — Background Fetch", () => {
     bgFetch.downloaded = 1000;
     bgFetch.dispatchEvent(new Event("progress"));
     expect($offlineDictionaryProgress.get()).toMatchObject({ bytes: 0, state: "idle" });
+  });
+
+  it("closed gate + failing Background Fetch lookup → just waits", async () => {
+    setConnection(Object.assign(new EventTarget(), { type: "cellular" }));
+    const { manager } = makeManager({ get: vi.fn().mockRejectedValue(new Error("boom")) });
+    installServiceWorker(manager);
+    const { $offlineDictionaryProgress, patchOfflineDictionary, startDownload } = await load();
+    patchOfflineDictionary({ enabled: true, wifiOnly: true });
+    await startDownload();
+    expect($offlineDictionaryProgress.get()).toMatchObject({
+      state: "waiting",
+      waitReason: "wifi",
+    });
+    expect(pageFetches()).toHaveLength(0);
   });
 
   it("an abort from the browser's download UI → paused, not auto-resumed", async () => {

@@ -12,6 +12,7 @@ vi.mock("@vueuse/core", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@vueuse/core")>()),
   useNetwork: () => ({ type: networkType }),
 }));
+vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
 vi.mock("@services/storagePersistence", () => ({
   getPersistState: vi.fn().mockResolvedValue("not-persisted"),
   requestPersistentStorage: vi.fn().mockResolvedValue("persisted"),
@@ -62,6 +63,23 @@ describe("PwaOfflineDictionary.vue", () => {
     const wrapper = await mountIt();
     // formatBytes(270_000_000) with base-1024 formatting
     expect(wrapper.text()).toContain("257,5 MB");
+  });
+
+  it("a failing size estimate just hides the size", async () => {
+    const { estimateDownloadBytes } = await import("@services/offlineDictionary");
+    vi.mocked(estimateDownloadBytes).mockRejectedValueOnce(new Error("offline"));
+    const wrapper = await mountIt();
+    expect(wrapper.text()).not.toContain("MB");
+  });
+
+  it("a failing toggle shows an error toast", async () => {
+    const { enableOfflineDictionary } = await import("@services/offlineDictionary");
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    vi.mocked(enableOfflineDictionary).mockRejectedValueOnce(new Error("quota"));
+    const wrapper = await mountIt();
+    await wrapper.find("[data-testid=offline-dictionary-toggle]").setValue(true);
+    await flushPromises();
+    expect(createToastNotify).toHaveBeenCalledWith(expect.objectContaining({ status: "error" }));
   });
 
   it("toggling on enables the dictionary and emits changed", async () => {
@@ -128,13 +146,14 @@ describe("PwaOfflineDictionary.vue", () => {
       total: 100,
       waitReason: null,
     });
-    const { pauseDownload } = await import("@services/offlineDictionary");
+    const { cancelDownload, pauseDownload } = await import("@services/offlineDictionary");
     const wrapper = await mountIt();
     expect(wrapper.text()).toContain("20 / 100");
     expect(wrapper.find("progress").attributes("value")).toBe("20");
     await wrapper.find("[data-testid=offline-dictionary-pause]").trigger("click");
     expect(pauseDownload).toHaveBeenCalledOnce();
-    expect(wrapper.find("[data-testid=offline-dictionary-cancel]").exists()).toBe(true);
+    await wrapper.find("[data-testid=offline-dictionary-cancel]").trigger("click");
+    expect(cancelDownload).toHaveBeenCalledOnce();
   });
 
   it("background-fetch download: no pause button, hint that it keeps running", async () => {
