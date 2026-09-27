@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { atom } from "nanostores";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -84,6 +84,63 @@ describe("MainMenu.vue", () => {
     const wrapper = await mountMenu();
     const picker = wrapper.findComponent({ name: "ColorModePicker" });
     expect(picker.props()).toMatchObject({ showLabels: false, source: "Main Menu" });
+  });
+
+  it("renders items without a known path without an icon", async () => {
+    const MainMenu = (await import("@components/header/MainMenu.vue")).default;
+    const wrapper = mount(MainMenu, {
+      props: {
+        menuItems: [
+          { description: "Ohne Icon", link: "/unbekannt", title: "Unbekannt" },
+          { link: "/auch-unbekannt", title: "Auch unbekannt" },
+        ],
+      },
+    });
+    expect(wrapper.find(".c-main-menu__tile").element.children).toHaveLength(0);
+    expect(wrapper.find(".c-main-menu__link").text()).toBe("Auch unbekannt");
+    expect(wrapper.find(".c-main-menu__link svg, .c-main-menu__link [data-testid]").exists()).toBe(
+      false,
+    );
+  });
+
+  it("renders an icon for every known menu path", async () => {
+    const paths = [
+      "/anki",
+      "/changelog",
+      "/games/berliner-oder-nicht",
+      "/magazin",
+      "/settings",
+      "/spenden",
+      "/wort",
+      "/wort-vorschlagen",
+    ];
+    const MainMenu = (await import("@components/header/MainMenu.vue")).default;
+    const wrapper = mount(MainMenu, {
+      props: { menuItems: paths.map((link) => ({ link, title: link })) },
+    });
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    for (const name of [
+      "layers",
+      "sparkles",
+      "gamepad-2",
+      "newspaper",
+      "settings",
+      "heart",
+      "book-a",
+      "message-square-plus",
+    ]) {
+      expect(wrapper.find(`[data-testid='icon-lucide-${name}']`).exists()).toBe(true);
+    }
+  });
+
+  it("renders the install button with its label", async () => {
+    const wrapper = await mountMenu();
+    await vi.dynamicImportSettled();
+    await flushPromises();
+    const button = wrapper.find(".c-main-menu__install .install-app");
+    expect(button.text()).toContain("App installieren");
+    expect(button.find("[data-testid='icon-lucide-download']").exists()).toBe(true);
   });
 
   it("hides the install bar once the app is installed", async () => {
