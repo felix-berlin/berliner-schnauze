@@ -4,6 +4,7 @@ import { graphql } from "@/gql";
 import { MenuByNameDocument } from "@/gql/graphql.ts";
 
 export interface MenuItem {
+  description?: string;
   link: string;
   rel?: string;
   title: string;
@@ -23,6 +24,7 @@ export const fetchMenu = async (name: string): Promise<MenuItem[]> => {
             link: node.path,
             title: node.label,
             ...(node.linkRelationship ? { rel: node.linkRelationship } : {}),
+            ...(node.description ? { description: node.description } : {}),
           },
         ]
       : [],
@@ -34,6 +36,7 @@ export const MenuByName = graphql(`
     menu(id: $name, idType: NAME) {
       menuItems(first: 100) {
         nodes {
+          description
           label
           linkRelationship
           path

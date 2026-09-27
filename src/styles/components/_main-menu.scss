@@ -1,0 +1,228 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-main-menu {
+  --_rule: var(--primary);
+  --_hover: color-mix(in srgb, var(--orange-200) 55%, white);
+  --_tile-bg: var(--orange-100);
+  --_tile-color: var(--blue);
+
+  @include butler-mx.dark-mode-class {
+    --_rule: color-mix(in srgb, var(--blue) 70%, white);
+    --_hover: var(--new-blue-400);
+    --_tile-bg: var(--new-blue-600);
+    --_tile-color: var(--yellow-500);
+  }
+
+  .c-dropdown__panel {
+    --padding: 0;
+
+    width: min(600px, 100vw - 2rem);
+    border-radius: 4px;
+  }
+
+  &__columns {
+    display: grid;
+
+    @include mx.breakpoint("sm") {
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    }
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 18px 20px 14px;
+    border-top: 1px dashed var(--_rule);
+
+    @include mx.breakpoint("sm") {
+      border-top: none;
+      border-left: 1px dashed var(--_rule);
+    }
+
+    &--discover {
+      padding: 18px 12px 14px;
+      border: none;
+
+      @include mx.breakpoint("sm") {
+        border: none;
+      }
+    }
+  }
+
+  &__label {
+    margin: 0;
+    padding: 0 0 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-muted);
+
+    .c-main-menu__col--discover & {
+      padding: 0 12px 6px;
+    }
+
+    // "App" group follows the "Mitmachen" links
+    .c-main-menu__link + & {
+      padding-top: 14px;
+    }
+  }
+
+  &__card {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    transition: all 0.3s ease-in-out;
+
+    @include butler-mx.hover {
+      border: 1px dashed var(--header-border);
+      background: var(--_hover);
+    }
+  }
+
+  &__tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: var(--_tile-bg);
+    border: 1px solid var(--header-border);
+    border-radius: 3px;
+    color: var(--_tile-color);
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  &__tag {
+    padding: 1px 6px;
+    font-size: 0.72rem;
+    font-weight: 400;
+    border: 1px dashed var(--header-border);
+    border-radius: 3px;
+    background: var(--_tile-bg);
+  }
+
+  &__desc {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 1.05rem;
+    text-decoration: none;
+
+    svg {
+      flex: none;
+      width: 18px;
+      height: 18px;
+    }
+
+    @include butler-mx.hover {
+      text-decoration: underline dashed from-font;
+      text-underline-position: from-font;
+    }
+  }
+
+  &__modes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 10px 0 0;
+    padding: 0;
+    border: 1px solid var(--header-border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  &__mode {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 0;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:has(:checked) {
+      background: var(--_tile-color);
+      color: var(--_tile-bg);
+    }
+
+    &:has(:focus-visible) {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+  }
+
+  &__install {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 24px;
+    border-top: 1px dashed var(--_rule);
+    border-radius: 0 0 4px 4px;
+    background: color-mix(in srgb, var(--floating-color-background) 70%, var(--_tile-bg));
+
+    @include mx.breakpoint("xs", "max") {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  &__install-text {
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  &__install-button {
+    --padding: 6px 12px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    border-radius: 4px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    @include butler-mx.hover {
+      --style-border: dashed;
+    }
+  }
+}

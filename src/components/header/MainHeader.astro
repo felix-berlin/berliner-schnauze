@@ -1,13 +1,12 @@
 ---
 import "@styles/components/_menu-nav.scss";
-import ColorModeToggle from "@components/ColorModeToggle.vue";
 import MainMenu from "@components/header/MainMenu.vue";
 import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue";
-import SunMoonIcon from "virtual:icons/lucide/sun-moon";
 import { fetchMenu } from "@services/queries/getMenu";
 
 const isIndex = /^\/(index(\.html)?)?$/.test(Astro.url.pathname);
 const mainMenuItems = await fetchMenu("Main Menu");
+const headerLinks = mainMenuItems.filter((item) => ["/wort", "/magazin"].includes(item.link));
 ---
 
 <header class="c-header">
@@ -16,22 +15,22 @@ const mainMenuItems = await fetchMenu("Main Menu");
       <a class="c-logo__link" href="/"> Berliner Schnauze</a>
     </div>
 
-    <nav class="c-menu-nav" aria-label="Hauptnavigation">
+    <div class="c-menu-nav">
+      <nav class="c-menu-nav__links" aria-label="Hauptnavigation">
+        {
+          headerLinks.map((item) => (
+            <a class="c-menu-nav__link" href={item.link}>
+              {item.title}
+            </a>
+          ))
+        }
+      </nav>
+      <span class="c-menu-nav__divider" aria-hidden="true"></span>
+
       {!isIndex && <SearchModalTrigger client:load />}
 
-      <ColorModeToggle client:only="vue" cssClasses={"c-menu-nav__item c-menu-nav__item-button"}>
-        <button
-          class="c-color-mode-toggle c-button c-button--center-icon"
-          slot="fallback"
-          type="button"
-          aria-label="Farbschema wechseln"
-        >
-          <SunMoonIcon aria-hidden="true" />
-        </button>
-      </ColorModeToggle>
-
       <MainMenu client:load menuItems={mainMenuItems} />
-    </nav>
+    </div>
   </div>
 </header>
 
@@ -53,5 +52,17 @@ const mainMenuItems = await fetchMenu("Main Menu");
     new ResizeObserver(syncHeaderHeight).observe(siteHeader);
   }
 
+  // The persisted header isn't re-rendered on navigation, so mark the current section here.
+  function syncCurrentLink() {
+    const path = location.pathname.replace(/\/$/, '');
+    for (const link of document.querySelectorAll<HTMLAnchorElement>('.c-menu-nav__link')) {
+      const target = link.getAttribute('href')!;
+      if (path === target || path.startsWith(target + '/')) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    }
+  }
+
   document.addEventListener('astro:page-load', syncHeaderHeight);
+  syncCurrentLink();
+  document.addEventListener('astro:page-load', syncCurrentLink);
 </script>

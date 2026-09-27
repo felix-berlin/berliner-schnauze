@@ -1,6 +1,6 @@
 <template>
   <button
-    class="c-searchbar c-button c-button--outline"
+    class="c-searchbar c-button c-header-control"
     type="button"
     aria-label="Suche aktivieren"
     @click="openSearchModal()"

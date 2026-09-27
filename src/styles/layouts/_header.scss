@@ -12,9 +12,12 @@
   z-index: 11000;
   width: 100%;
   padding: var(--padding-y-header) 0;
+  // Border colour shared by header controls, dividers and the main-menu tiles (= c-button border).
+  --header-border: var(--orange-600);
 
   @include butler-mx.dark-mode-class {
     --color-background: var(--blue);
+    --header-border: color-mix(in srgb, var(--blue) 80%, white);
   }
 
   &__wrapper {
@@ -24,6 +27,7 @@
     grid-template-areas: var(--areas-template);
     grid-template-columns: var(--columns-header-inner, 1fr max-content);
     align-items: center;
+    gap: 24px;
   }
 
   .c-logo {

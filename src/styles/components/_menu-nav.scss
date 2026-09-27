@@ -1,97 +1,74 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
-@use "@sass-butler/functions" as butler-fn;
 
 .c-menu-nav {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   grid-area: menu-nav;
-  gap: vars.$spacer * 0.7;
+  gap: 10px;
 
-  &__item-button,
-  &__item-link {
-    transition: all 0.3s ease-in-out;
+  &__links {
+    display: none;
+    gap: 2px;
 
-    &:hover {
-      --color-border: var(--color-icon);
+    @include mx.breakpoint("md") {
+      display: flex;
     }
   }
 
-  &__item {
-    &.is-hidden {
-      @include mx.breakpoint("xs", "max") {
-        display: none;
-      }
-    }
-  }
-
-  &__item-link {
+  &__link {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: vars.$spacer * 0.25;
+    height: 36px;
+    padding: 0 10px;
+    text-decoration: none;
+    border-bottom: 1px dashed transparent;
+    transition: all 0.3s ease-in-out;
+
+    &:hover,
+    &[aria-current="page"] {
+      border-bottom-color: currentColor;
+    }
   }
 
-  .c-nav-list__list-item {
-    a,
-    button {
-      padding: 0.25rem;
-    }
+  &__divider {
+    display: none;
+    height: 22px;
+    margin: 0 6px;
+    border-left: 1px dashed var(--header-border);
 
-    a {
+    @include mx.breakpoint("md") {
       display: block;
     }
   }
 }
 
-.c-menu-more {
-  &__list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap, vars.$spacer);
-    font-size: var(--size-font, 1.15rem);
+// Search trigger + menu button: one look for every header control.
+.c-header-control {
+  --padding: 0 12px 0 10px;
 
-    @include mx.breakpoint("md") {
-      --size-font: inherit;
-      --gap: #{vars.$spacer * 0.5};
-    }
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  font: inherit;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  border-radius: 4px;
 
-    .c-install-button {
-      --padding: 0;
-
-      border: none;
-      font-size: inherit;
-      background: none;
-
-      &:hover {
-        box-shadow: none;
-      }
-    }
+  svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
   }
 
-  &__item {
-    &.is-split {
-      border-top: 1px dashed var(--primary);
-      padding-top: var(--padding-top, vars.$spacer);
-
-      @include mx.breakpoint("md") {
-        --padding-top: #{vars.$spacer * 0.5};
-      }
-    }
+  @include butler-mx.hover {
+    --style-border: dashed;
   }
 
-  .c-dropdown {
-    &__menu {
-      --offset: 100%;
-
-      @include mx.breakpoint("sm") {
-        --offset: 60%;
-      }
-
-      &.is-active {
-        border-bottom: 1px dashed vars.$white-100;
-      }
-    }
+  &[aria-expanded="true"] {
+    --style-border: dashed;
   }
 }

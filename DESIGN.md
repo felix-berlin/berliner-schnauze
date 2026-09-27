@@ -37,6 +37,8 @@ typography:
     letterSpacing: "0.05em"
 rounded:
   none: "0px"
+  xxs: "2px"
+  xs: "3px"
   sm: "4px"
 spacing:
   xs: "0.25rem"
@@ -83,7 +85,7 @@ This system explicitly rejects generic SaaS/dictionary-app neutrality — flat c
 - Dashed-line texture as the one recurring signature (borders, underlines, dividers)
 - Currywurst orange dominant; Berlin Red rare and declarative
 - Dark navy-ink (`#2b333b`) carries text and dark-mode surfaces, never used as a bright accent
-- Flat, square-cornered buttons (0 radius); soft 4px radius everywhere else
+- Flat, square-cornered content buttons (0 radius); header controls and floating panels use a small 2–4px radius scale (never above 4px)
 - One consistent "Paper Lift" shadow for every raised card/hero, no ad hoc shadows
 
 ## 2. Colors
@@ -157,6 +159,19 @@ The palette reads as a hand-labeled dossier: warm orange annotations and a rare 
 - **Hover:** border style flips from solid to **dashed**, plus a soft orange glow (`box-shadow: 0 0 12px color-mix(orange-500, white 60%)`). The dashed flip is the interaction signature — do not replace it with a color-only hover.
 - **Filter variant:** active/current state fills Currywurst-500 with a dashed gold border and black text — the loudest state in the system, reserved for "this filter is on."
 
+### Header & Main Menu
+
+The global header (`MainHeader.astro`) is a single row: wordmark · header links · dashed divider · search trigger · menu button. The header bar itself stays square.
+
+- **Header links** ("Wort Index", "Magazin", from the WP "Main Menu"): 36px tall, 1px dashed bottom border that turns `currentColor` on hover and on the current section (`aria-current="page"`). Hidden below `md` — they also live in the menu.
+- **Header controls** (search trigger, menu button, `.c-header-control`): 36px tall, 4px radius, `c-button` colors, visible text label ("Suche" with a `/` kbd, "Menü"). The search trigger drops Berlin Red on purpose so all controls look alike. Hover or open: dashed border + orange glow.
+- **Main menu dropdown** (`MainMenu.vue`, `.c-main-menu`): 600px, 4px radius, Paper-Lift drop-shadow with arrow. Two columns split by a dashed rule:
+  - _Entdecken_ — every CMS item that has a WP description becomes a card: 34×34 icon tile (3px radius, button colors), bold title, muted description. Hover: dashed border + tinted fill, 3px radius. "Neu" tag: 0.72rem, dashed border, 3px radius.
+  - _Mitmachen_ / _App_ — remaining items as compact icon links with a dashed underline on hover, then the Hell / Dunkel / System segment (native radios, 4px radius, active = inverted button colors).
+  - Install bar (only while the PWA isn't installed): dashed top rule, `c-button--primary` CTA with 4px radius.
+  - Group labels are sentence case, 0.8rem / 700 / `--color-muted` — not the uppercase Label style.
+- **Radius scale here:** 4px controls/panel/segment/CTA · 3px tiles, hover areas, tags · 2px `kbd`.
+
 ### Section Cards
 
 - **Corner Style:** 4px radius on the top corners only (`4px 4px 0 0`) — a tab/label feel, not a fully rounded card.
@@ -199,5 +214,5 @@ The word-hero title's `<dfn>` gets a dashed repeating-linear-gradient underline 
 - **Don't** add new colored `border-left`/`border-inline-start` accent stripes beyond the one named exception (the infotext citation callout). One more and it stops being a deliberate signal.
 - **Don't** use the ink-base navy (`#2b333b`) as a bright UI accent — it's structural ink and dark-mode surface only.
 - **Don't** invent a new shadow value for a "raised" component — reuse Paper Lift exactly.
-- **Don't** round button corners — flat/square is the button shape; reserve the 4px radius for cards, badges, and stat boxes.
+- **Don't** round content button corners — flat/square is the button shape; the 2–4px radius scale is for header controls, floating panels, cards, badges, and stat boxes, and never exceeds 4px.
 - **Don't** swap Berliner and Berlin between roles — Berliner never sets body copy, Berlin never sets a headword title.

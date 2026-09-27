@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 import { dismissToasts } from "./helpers";
 
 const menuButton = (page: import("@playwright/test").Page) =>
-  page.getByRole("button", { name: "Website Menu Navigation" });
+  page.getByRole("banner").getByRole("button", { exact: true, name: "Menü" });
 
 test.describe("Header", () => {
   test("Logo-Link führt zur Startseite", async ({ page }) => {
@@ -15,21 +15,27 @@ test.describe("Header", () => {
     await expect(page).toHaveURL(/\/$/, { timeout: 15_000 });
   });
 
-  test("Dark Mode bleibt nach Reload erhalten und lässt sich zurücknehmen", async ({ page }) => {
+  test("Farbschema im Menü bleibt nach Reload erhalten und lässt sich zurücknehmen", async ({
+    page,
+  }) => {
     await page.goto("/");
     await dismissToasts(page);
     const html = page.locator("html");
-    const toggle = page.getByRole("banner").getByRole("button", { name: /Farbschema wechseln/ });
+    const pickMode = async (name: string) => {
+      await menuButton(page).click();
+      await page.getByTitle(name, { exact: true }).click();
+      await expect(page.getByRole("radio", { name })).toBeChecked();
+      await page.keyboard.press("Escape");
+    };
 
-    await toggle.click();
+    await pickMode("Dunkel");
     await expect(html).toHaveClass(/(^|\s)dark(\s|$)/);
     expect(await page.evaluate(() => localStorage.getItem("darkMode"))).toBe("true");
 
     await page.reload();
     await expect(html).toHaveClass(/(^|\s)dark(\s|$)/);
 
-    await expect(toggle).toHaveAccessibleName(/hell/);
-    await toggle.click();
+    await pickMode("Hell");
     await expect(html).not.toHaveClass(/(^|\s)dark(\s|$)/);
     expect(await page.evaluate(() => localStorage.getItem("darkMode"))).toBe("false");
   });

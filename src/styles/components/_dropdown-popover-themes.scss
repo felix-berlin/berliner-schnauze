@@ -4,7 +4,6 @@
 
 .c-dropdown {
   // Theme modifier classes
-  &--theme-dropdown,
   &--theme-word-options {
     .c-dropdown__panel {
       --padding: #{vars.$spacer * 0.5} #{vars.$spacer * 0.6};
@@ -30,12 +29,6 @@
           }
         }
       }
-    }
-  }
-
-  &--theme-dropdown {
-    .c-dropdown__panel {
-      --padding: #{vars.$spacer vars.$spacer * 1.5};
     }
   }
 }

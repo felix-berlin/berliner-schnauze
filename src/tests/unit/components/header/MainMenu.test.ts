@@ -1,93 +1,97 @@
 import { mount } from "@vue/test-utils";
-import { describe, expect, it, vi } from "vitest";
+import { atom } from "nanostores";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const isPwaInstalled = atom(false);
+const setDarkMode = vi.fn();
 
 vi.mock("@components/DropdownPopover.vue", () => ({
   default: {
     name: "DropdownPopover",
-    template: '<div class="c-menu-more"><slot /><slot name="panel" /></div>',
+    template: '<div><slot :trigger-props="{}" :is-open="false" /><slot name="panel" /></div>',
   },
 }));
 
 vi.mock("@components/MainMenuButton.vue", () => ({
-  default: {
-    name: "MainMenuButton",
-    template: '<button type="button">Menu</button>',
-  },
-}));
-
-vi.mock("@components/NavList.vue", () => ({
-  default: {
-    name: "NavList",
-    props: ["items", "classesUl", "classesLi"],
-    template:
-      '<ul><li v-for="(item, index) in items" :key="index" ' +
-      ":class=\"typeof classesLi === 'function' ? classesLi(item, index) : classesLi\">" +
-      '<component v-if="item.component" :is="item.component" v-bind="item.props" />' +
-      "<template v-else>{{ item.title }}</template></li></ul>",
-  },
+  default: { name: "MainMenuButton", template: '<button type="button">Menü</button>' },
 }));
 
 vi.mock("@components/InstallApp.vue", () => ({
-  default: {
-    name: "InstallApp",
-    template: '<div class="install-app" />',
-  },
+  default: { name: "InstallApp", template: '<button class="install-app"><slot /></button>' },
 }));
 
+vi.mock("@stores/installApp.ts", () => ({ $isPwaInstalled: isPwaInstalled }));
+
+vi.mock("@stores/darkMode.ts", async () => {
+  const { atom: a } = await import("nanostores");
+  return { $isDarkMode: a<boolean | null>(null), setDarkMode };
+});
+
+const menuItems = [
+  { description: "Alle Wörter von A bis Z", link: "/wort", title: "Wort Index" },
+  {
+    description: "Berlinerisch lernen, Karte für Karte",
+    link: "/anki",
+    title: "Anki-Karteikarten",
+  },
+  { link: "/wort-vorschlagen", title: "Wort vorschlagen" },
+  { link: "/changelog", title: "Was ist neu?" },
+];
+
+const mountMenu = async () => {
+  const MainMenu = (await import("@components/header/MainMenu.vue")).default;
+  return mount(MainMenu, { props: { menuItems } });
+};
+
 describe("MainMenu.vue", () => {
-  it("renders without errors", async () => {
-    const MainMenu = (await import("@components/header/MainMenu.vue")).default;
-    const wrapper = mount(MainMenu);
-    expect(wrapper.exists()).toBe(true);
+  beforeEach(() => {
+    isPwaInstalled.set(false);
+    setDarkMode.mockClear();
   });
 
-  it("renders the CMS-provided menuItems alongside the fixed install item", async () => {
+  it("renders items with a description as discover cards", async () => {
+    const wrapper = await mountMenu();
+    const cards = wrapper.findAll(".c-main-menu__card");
+    expect(cards.map((c) => c.attributes("href"))).toEqual(["/wort", "/anki"]);
+    expect(cards[0].text()).toContain("Alle Wörter von A bis Z");
+  });
+
+  it("drops the discover column when no CMS item has a description", async () => {
     const MainMenu = (await import("@components/header/MainMenu.vue")).default;
     const wrapper = mount(MainMenu, {
-      props: {
-        menuItems: [
-          { link: "/magazin", title: "Magazin" },
-          { link: "/wort", title: "Wort Index" },
-        ],
-      },
+      props: { menuItems: [{ link: "/spenden", title: "Spenden" }] },
     });
-    const text = wrapper.text();
-    expect(text).toContain("Magazin");
-    expect(text).toContain("Wort Index");
-    expect(wrapper.find(".install-app").exists()).toBe(true);
+    expect(wrapper.find(".c-main-menu__col--discover").exists()).toBe(false);
   });
 
-  it("puts the install item first regardless of CMS item order", async () => {
-    const MainMenu = (await import("@components/header/MainMenu.vue")).default;
-    const wrapper = mount(MainMenu, {
-      props: { menuItems: [{ link: "/magazin", title: "Magazin" }] },
-    });
-    const items = wrapper.findAll("li");
-    expect(items[0].find(".install-app").exists()).toBe(true);
-    expect(items[1].text()).toBe("Magazin");
+  it("tags only the Anki entry as new", async () => {
+    const wrapper = await mountMenu();
+    const tags = wrapper.findAll(".c-main-menu__tag");
+    expect(tags).toHaveLength(1);
+    expect(wrapper.findAll(".c-main-menu__card")[1].text()).toContain("Neu");
   });
 
-  it("adds a dashed divider before the first CMS item, none when the CMS menu is empty", async () => {
-    const MainMenu = (await import("@components/header/MainMenu.vue")).default;
-
-    const withItems = mount(MainMenu, {
-      props: { menuItems: [{ link: "/magazin", title: "Magazin" }] },
-    });
-    expect(withItems.findAll("li")[1].classes()).toContain("is-split");
-
-    const empty = mount(MainMenu, { props: { menuItems: [] } });
-    expect(empty.findAll("li")).toHaveLength(1);
+  it("splits the remaining links into Mitmachen and App groups", async () => {
+    const wrapper = await mountMenu();
+    const labels = wrapper.findAll(".c-main-menu__label").map((l) => l.text());
+    expect(labels).toEqual(["Entdecken", "Mitmachen", "App"]);
+    const links = wrapper.findAll(".c-main-menu__link").map((l) => l.attributes("href"));
+    expect(links).toEqual(["/wort-vorschlagen", "/changelog"]);
   });
 
-  it("uses DropdownPopover as root wrapper", async () => {
-    const MainMenu = (await import("@components/header/MainMenu.vue")).default;
-    const wrapper = mount(MainMenu);
-    expect(wrapper.findComponent({ name: "DropdownPopover" }).exists()).toBe(true);
+  it("maps the colour scheme radios to setDarkMode", async () => {
+    const wrapper = await mountMenu();
+    await wrapper.find("input[value=dark]").setValue();
+    expect(setDarkMode).toHaveBeenLastCalledWith(true);
+    await wrapper.find("input[value=system]").setValue();
+    expect(setDarkMode).toHaveBeenLastCalledWith(null);
   });
 
-  it("renders MainMenuButton inside the default slot", async () => {
-    const MainMenu = (await import("@components/header/MainMenu.vue")).default;
-    const wrapper = mount(MainMenu);
-    expect(wrapper.findComponent({ name: "MainMenuButton" }).exists()).toBe(true);
+  it("hides the install bar once the app is installed", async () => {
+    const wrapper = await mountMenu();
+    expect(wrapper.find(".c-main-menu__install").exists()).toBe(true);
+    isPwaInstalled.set(true);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find(".c-main-menu__install").exists()).toBe(false);
   });
 });
