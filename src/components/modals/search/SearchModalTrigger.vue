@@ -1,11 +1,11 @@
 <template>
   <button
-    class="c-searchbar c-button c-button--outline"
+    class="c-searchbar c-button c-header-control"
     type="button"
     aria-label="Suche aktivieren"
     @click="openSearchModal()"
   >
-    <SearchIcon class="c-searchbar__search-icon" />
+    <SearchIcon />
     <span class="c-searchbar__label">Suche</span>
     <kbd class="c-searchbar__slash-icon">/</kbd>
   </button>

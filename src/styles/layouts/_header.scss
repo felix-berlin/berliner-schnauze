@@ -24,6 +24,7 @@
     grid-template-areas: var(--areas-template);
     grid-template-columns: var(--columns-header-inner, 1fr max-content);
     align-items: center;
+    gap: 24px;
   }
 
   .c-logo {

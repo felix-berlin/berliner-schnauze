@@ -1,18 +1,24 @@
+import MainMenuButton from "@components/MainMenuButton.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 
 describe("MainMenuButton.vue", () => {
-  it("renders a button with correct aria-label", async () => {
-    const MainMenuButton = (await import("@components/MainMenuButton.vue")).default;
-    const wrapper = mount(MainMenuButton);
-    const btn = wrapper.find("button");
-    expect(btn.exists()).toBe(true);
-    expect(btn.attributes("aria-label")).toBe("Website Menu Navigation");
+  it("uses its visible label as accessible name", () => {
+    const btn = mount(MainMenuButton).find("button");
+    expect(btn.attributes("aria-label")).toBeUndefined();
+    expect(btn.attributes("type")).toBe("button");
+    expect(btn.text()).toBe("Menü");
   });
 
-  it("button has type button", async () => {
-    const MainMenuButton = (await import("@components/MainMenuButton.vue")).default;
-    const wrapper = mount(MainMenuButton);
-    expect(wrapper.find("button").attributes("type")).toBe("button");
+  it("keeps both icons mounted for the CSS crossfade", () => {
+    const icons = mount(MainMenuButton).find(".c-header-control__icons");
+    expect(icons.attributes("aria-hidden")).toBe("true");
+    expect(icons.find("[data-testid='icon-lucide-menu']").exists()).toBe(true);
+    expect(icons.find("[data-testid='icon-lucide-x']").exists()).toBe(true);
+  });
+
+  it("passes aria-expanded through from the dropdown trigger props", () => {
+    const btn = mount(MainMenuButton, { attrs: { "aria-expanded": "true" } }).find("button");
+    expect(btn.attributes("aria-expanded")).toBe("true");
   });
 });

@@ -110,7 +110,6 @@ describe("SearchModalTrigger.vue", () => {
     const btn = wrapper.find("button");
     expect(btn.classes()).toContain("c-searchbar");
     expect(btn.classes()).toContain("c-button");
-    expect(btn.classes()).toContain("c-button--outline");
   });
 
   it("keyboard shortcut calls open() via whenever callback", () => {

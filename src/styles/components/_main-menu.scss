@@ -1,0 +1,236 @@
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-main-menu {
+  --_rule: var(--primary);
+  --_hover: color-mix(in srgb, var(--orange-200) 55%, white);
+
+  @include butler-mx.dark-mode-class {
+    --_rule: color-mix(in srgb, var(--blue) 70%, white);
+    --_hover: var(--new-blue-400);
+  }
+
+  .c-dropdown__panel {
+    --padding: 0;
+
+    width: min(600px, 100vw - 2rem);
+    border-radius: 4px;
+
+    // Drops in from the trigger corner: slide + scale on top of the shared fade.
+    // Exit stays at 0.15s to match DropdownPopover's content-unmount timeout.
+    @include butler-mx.feature("motion") {
+      transform-origin: top right;
+      transition:
+        opacity 0.15s ease,
+        transform 0.15s ease,
+        display 0.15s allow-discrete,
+        overlay 0.15s allow-discrete;
+
+      &:not(:popover-open) {
+        transform: translateY(-6px) scale(0.98);
+      }
+
+      &:popover-open {
+        transition-duration: 0.22s;
+        transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      @starting-style {
+        &:popover-open {
+          opacity: 0;
+          transform: translateY(-6px) scale(0.98);
+        }
+      }
+    }
+
+    // Every icon in the panel shares one size (also overrides .c-header-control's 20px).
+    svg {
+      flex: none;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__columns {
+    display: grid;
+
+    @include mx.breakpoint("sm") {
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    }
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 18px 20px 14px;
+
+    & + & {
+      border-top: 1px dashed var(--_rule);
+
+      @include mx.breakpoint("sm") {
+        border-top: none;
+        border-left: 1px dashed var(--_rule);
+      }
+    }
+
+    &--discover {
+      padding: 18px 12px 14px;
+    }
+  }
+
+  &__label {
+    margin: 0;
+    padding: 0 0 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-muted);
+
+    .c-main-menu__col--discover & {
+      padding: 0 12px 6px;
+    }
+
+    // "App" group follows the "Mitmachen" links
+    .c-main-menu__link + & {
+      padding-top: 14px;
+    }
+  }
+
+  &__card {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    transition:
+      border-color 0.3s ease-in-out,
+      background-color 0.3s ease-in-out;
+
+    @include butler-mx.hover {
+      border: 1px dashed var(--control-border);
+      background: var(--_hover);
+    }
+  }
+
+  &__tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: var(--control-bg);
+    border: 1px solid var(--control-border);
+    border-radius: 3px;
+    color: var(--control-color);
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  &__tag {
+    padding: 1px 6px;
+    font-size: 0.72rem;
+    font-weight: 400;
+    border: 1px dashed var(--control-border);
+    border-radius: 3px;
+    background: var(--control-bg);
+  }
+
+  &__desc {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 1.05rem;
+    text-decoration: none;
+
+    @include butler-mx.hover {
+      text-decoration: underline dashed from-font;
+      text-underline-position: from-font;
+    }
+  }
+
+  &__modes {
+    margin-top: 10px;
+  }
+
+  &__install {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 24px;
+    border-top: 1px dashed var(--_rule);
+    border-radius: 0 0 4px 4px;
+    background: color-mix(in srgb, var(--floating-color-background) 70%, var(--control-bg));
+
+    @include mx.breakpoint("xs", "max") {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  &__install-text {
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  // Compact variant of .c-header-control
+  &__install-button.c-header-control {
+    --padding: 6px 12px;
+
+    justify-content: center;
+    height: auto;
+    font-size: 0.95rem;
+  }
+
+  // Items drift in from the right out of a soft blur, one after another.
+  // The panel content is mounted on open, so @starting-style fires for every item.
+  // The stagger uses sibling-index() (not Baseline yet): without it all items come at once.
+  @include butler-mx.feature("motion") {
+    &__col > *,
+    &__install {
+      --_delay: 0ms;
+
+      transition:
+        opacity 0.3s ease var(--_delay),
+        filter 0.35s ease var(--_delay),
+        translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) var(--_delay),
+        border-color 0.3s ease-in-out,
+        background-color 0.3s ease-in-out;
+
+      @supports (order: sibling-index()) {
+        --_delay: calc(60ms + (sibling-index() - 1) * 40ms);
+      }
+
+      @starting-style {
+        opacity: 0;
+        filter: blur(4px);
+        translate: 12px 0;
+      }
+    }
+
+    &__install {
+      --_delay: 260ms;
+    }
+  }
+}

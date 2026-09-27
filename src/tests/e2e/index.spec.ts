@@ -10,7 +10,7 @@ test.describe("Startseite (/)", () => {
     ).toBeVisible();
   });
 
-  test("Header zeigt Logo-Link und Dark-Mode-Toggle", async ({ page }) => {
+  test("Header zeigt Logo-Link", async ({ page }) => {
     await page.goto("/");
 
     const header = page.getByRole("banner");
@@ -18,25 +18,6 @@ test.describe("Startseite (/)", () => {
       "href",
       "/",
     );
-    await expect(header.getByRole("button", { name: /Farbschema wechseln/ })).toBeVisible();
-  });
-
-  test("Dark-Mode-Toggle schaltet das Farbschema um", async ({ page }) => {
-    await page.goto("/");
-
-    const html = page.locator("html");
-    const toggle = page.getByRole("banner").getByRole("button", { name: /Farbschema wechseln/ });
-    const wasDark = /(?:^|\s)dark(?:\s|$)/.test((await html.getAttribute("class")) ?? "");
-
-    // A transient PWA toast can overlap the header on first load and block a real
-    // pointer click — dispatch the click directly on the element instead.
-    await toggle.evaluate((el: HTMLElement) => el.click());
-
-    if (wasDark) {
-      await expect(html).not.toHaveClass(/(?:^|\s)dark(?:\s|$)/);
-    } else {
-      await expect(html).toHaveClass(/(?:^|\s)dark(?:\s|$)/);
-    }
   });
 
   test("Wortsuche filtert die Wortliste", async ({ page }) => {

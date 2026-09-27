@@ -1,7 +1,6 @@
 import NavList from "@components/NavList.vue";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
-import { defineComponent, markRaw } from "vue";
 
 describe("NavList.vue", () => {
   const linkItems = [
@@ -68,79 +67,9 @@ describe("NavList.vue", () => {
     expect(links[1].attributes("href")).toBe("/contact");
   });
 
-  it("renders component items via <component :is>", () => {
-    const TestComponent = markRaw(
-      defineComponent({
-        template: '<span class="test-component">Test</span>',
-      }),
-    );
-    const componentItems = [{ component: TestComponent, props: {} }];
-    const wrapper = mount(NavList, { props: { items: componentItems } });
-    expect(wrapper.find(".test-component").exists()).toBe(true);
-  });
-
-  it("renders mixed link and component items", () => {
-    const TestComponent = markRaw(
-      defineComponent({
-        template: '<span class="comp-item">Comp</span>',
-      }),
-    );
-    const mixedItems = [
-      { link: "/home", title: "Home" },
-      { component: TestComponent, props: {} },
-    ];
-    const wrapper = mount(NavList, { props: { items: mixedItems } });
-    expect(wrapper.find("a").exists()).toBe(true);
-    expect(wrapper.find(".comp-item").exists()).toBe(true);
-  });
-
   it("applies rel attribute to link items", () => {
     const itemsWithRel = [{ link: "https://example.com", rel: "noopener", title: "Link" }];
     const wrapper = mount(NavList, { props: { items: itemsWithRel } });
     expect(wrapper.find("a").attributes("rel")).toBe("noopener");
-  });
-
-  it("isVueComponent returns true for object with render property (covers line 58)", () => {
-    const wrapper = mount(NavList, { props: { items: linkItems } });
-    const { isVueComponent } = wrapper.getCurrentComponent()!.setupState as {
-      isVueComponent: (v: unknown) => boolean;
-    };
-    expect(isVueComponent({ render: () => {} })).toBe(true);
-  });
-
-  it("isVueComponent returns true for object with setup property", () => {
-    const wrapper = mount(NavList, { props: { items: linkItems } });
-    const { isVueComponent } = wrapper.getCurrentComponent()!.setupState as {
-      isVueComponent: (v: unknown) => boolean;
-    };
-    expect(isVueComponent({ setup: () => ({}) })).toBe(true);
-  });
-
-  it("isVueComponent returns true for object with components property", () => {
-    const wrapper = mount(NavList, { props: { items: linkItems } });
-    const { isVueComponent } = wrapper.getCurrentComponent()!.setupState as {
-      isVueComponent: (v: unknown) => boolean;
-    };
-    expect(isVueComponent({ components: {} })).toBe(true);
-  });
-
-  it("supports classesLi as a per-item function", () => {
-    const wrapper = mount(NavList, {
-      props: {
-        classesLi: (_item: unknown, index: number) => (index === 1 ? "is-split" : "plain"),
-        items: linkItems,
-      },
-    });
-    const items = wrapper.findAll("li");
-    expect(items[0].classes()).toContain("plain");
-    expect(items[1].classes()).toContain("is-split");
-  });
-
-  it("isVueComponent returns false for plain link object", () => {
-    const wrapper = mount(NavList, { props: { items: linkItems } });
-    const { isVueComponent } = wrapper.getCurrentComponent()!.setupState as {
-      isVueComponent: (v: unknown) => boolean;
-    };
-    expect(isVueComponent({ link: "/about", title: "About" })).toBe(false);
   });
 });

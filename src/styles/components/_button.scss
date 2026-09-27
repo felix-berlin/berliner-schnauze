@@ -4,15 +4,17 @@
 .c-button {
   cursor: pointer;
   padding: var(--padding, #{vars.$spacer * 0.25});
-  background-color: var(--color-background, var(--orange-100));
-  border: var(--width-border, 1px) var(--style-border, solid) var(--color-border, var(--orange-600));
-  color: var(--color, var(--blue));
+  background-color: var(--color-background, var(--control-bg));
+  border: var(--width-border, 1px) var(--style-border, solid)
+    var(--color-border, var(--control-border));
+  color: var(--color, var(--control-color));
   transition: all 0.3s ease-in-out;
 
+  // Values equal the fallbacks; kept for the `.dark .c-button` specificity that modifiers rely on.
   @include butler-mx.dark-mode-class {
-    --color-background: var(--new-blue-600);
-    --color: var(--yellow-500);
-    --color-border: color-mix(in srgb, var(--blue) 80%, white);
+    --color-background: var(--control-bg);
+    --color: var(--control-color);
+    --color-border: var(--control-border);
   }
 
   &:disabled {

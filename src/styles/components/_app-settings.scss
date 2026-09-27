@@ -128,62 +128,6 @@
     }
   }
 
-  &__theme-selector {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border: 1px solid
-      var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
-    overflow: hidden;
-
-    @include butler-mx.dark-mode-class {
-      --color-card-border: color-mix(in srgb, var(--blue) 80%, white);
-    }
-  }
-
-  &__theme-option {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
-    padding: 0.5rem 0.25rem;
-    background: none;
-    border: none;
-    border-right: 1px solid
-      var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
-    font-size: 0.8125rem;
-    font-weight: 500;
-    cursor: pointer;
-    color: var(--color-body);
-    opacity: 0.55;
-    transition:
-      opacity 0.15s ease,
-      background-color 0.15s ease;
-
-    @include butler-mx.dark-mode-class {
-      --color-card-border: color-mix(in srgb, var(--blue) 80%, white);
-    }
-
-    &:last-child {
-      border-right: none;
-    }
-
-    @include butler-mx.hover {
-      opacity: 0.85;
-    }
-
-    &.is-active {
-      opacity: 1;
-      background-color: var(
-        --color-theme-active-bg,
-        color-mix(in srgb, var(--orange-400) 20%, transparent)
-      );
-
-      @include butler-mx.dark-mode-class {
-        --color-theme-active-bg: color-mix(in srgb, var(--blue) 30%, transparent);
-      }
-    }
-  }
-
   &__nav-card {
     display: flex;
     align-items: center;

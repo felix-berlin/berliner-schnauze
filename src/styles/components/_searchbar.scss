@@ -1,47 +1,28 @@
-@use "@styles/variables/colors";
-@use "@styles/variables/base";
-@use "@sass-butler/functions" as butler-fn;
-@use "@sass-butler/mixins" as butler-mx;
+@use "@styles/mixins" as mx;
 
 .c-searchbar {
-  --color-border: var(--secondary);
+  @include mx.breakpoint("md") {
+    --padding: 0 6px 0 10px;
 
-  display: flex;
-  align-items: center;
-
-  @include butler-mx.breakpoint("sm") {
-    flex: 1 1 auto;
-    max-width: 200px;
-    min-width: 150px;
-  }
-  @include butler-mx.breakpoint("md", "max") {
-    justify-content: center;
-
-    @include butler-mx.dark-mode-class {
-      --color-background: transparent;
-    }
+    width: 180px;
   }
 
-  &__slash-icon,
-  &__label {
+  &__label,
+  &__slash-icon {
     display: none;
 
-    @include butler-mx.breakpoint("sm") {
+    @include mx.breakpoint("md") {
       display: block;
     }
   }
 
   &__slash-icon {
-    width: 16px;
-    height: 16px;
     margin-left: auto;
-  }
-
-  &__search-icon {
-    @include butler-mx.breakpoint("md") {
-      width: 20px;
-      height: 20px;
-      margin-right: 5px;
-    }
+    padding: 3px 6px;
+    font: inherit;
+    font-size: 0.8rem;
+    line-height: 1;
+    border: 1px dashed var(--control-border);
+    border-radius: 2px;
   }
 }

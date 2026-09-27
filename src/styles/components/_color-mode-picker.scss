@@ -1,0 +1,66 @@
+@use "@sass-butler/mixins" as butler-mx;
+
+// Hell / Dunkel / System segment. Native radios; inactive options are dimmed, the
+// active one gets a light tint.
+.c-color-mode-picker {
+  --_border: color-mix(in srgb, var(--orange-400) 50%, transparent);
+  --_active-bg: color-mix(in srgb, var(--orange-400) 20%, transparent);
+
+  @include butler-mx.dark-mode-class {
+    --_border: color-mix(in srgb, var(--blue) 80%, white);
+    --_active-bg: color-mix(in srgb, var(--blue) 30%, transparent);
+  }
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--_border);
+  border-radius: 4px;
+  overflow: hidden;
+
+  &__option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 0;
+    cursor: pointer;
+    color: var(--color-body);
+    opacity: 0.55;
+    transition:
+      opacity 0.15s ease,
+      background-color 0.15s ease;
+
+    & + & {
+      border-left: 1px solid var(--_border);
+    }
+
+    svg {
+      flex: none;
+      width: 18px;
+      height: 18px;
+    }
+
+    @include butler-mx.hover {
+      opacity: 0.85;
+    }
+
+    &:has(:checked) {
+      opacity: 1;
+      background-color: var(--_active-bg);
+    }
+
+    &:has(:focus-visible) {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+  }
+
+  &--labelled &__option {
+    padding: 8px 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}

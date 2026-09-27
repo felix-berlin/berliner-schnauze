@@ -7,7 +7,6 @@
         'Entschuldige die App kann leider nicht installiert werden. Dein Browser unterstützt die Installation nicht.',
       disabled: showButton,
       placement: 'top',
-      ...tooltipProps,
     }"
     class="c-install-button c-button"
     :disabled="!showButton"
@@ -33,15 +32,12 @@ import {
 } from "@stores/installApp.ts";
 import { ref } from "vue";
 
-import type { TooltipOptions } from "@/directives/tooltip";
-
 export interface InstallAppProps {
   hideIfInstalled?: boolean;
   showText?: boolean;
-  tooltipProps?: Partial<TooltipOptions>;
 }
 
-const { hideIfInstalled = true, showText = true, tooltipProps } = defineProps<InstallAppProps>();
+const { hideIfInstalled = true, showText = true } = defineProps<InstallAppProps>();
 
 const root = ref<HTMLElement | null>(null);
 useContentTracking(root);
