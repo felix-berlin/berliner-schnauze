@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.53.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.52.0...v3.53.0) (2026-09-27)
+
+
+### Features
+
+* **header:** animate header controls and the main menu panel ([8910a01](https://github.com/felix-berlin/berliner-schnauze/commit/8910a01a3884ed0b4b8ee562070a532f74d15509))
+* **header:** regroup main nav and dropdown menu (design 5a) ([b40ed7f](https://github.com/felix-berlin/berliner-schnauze/commit/b40ed7fc98c26fb2712a60e4a3d15eb95aacaa0e))
+* **header:** stagger the main menu items in on open ([9e85757](https://github.com/felix-berlin/berliner-schnauze/commit/9e85757eadfd8506c83db22cfa5150798b9fe507))
+
+
+### Performance Improvements
+
+* **header:** load SearchModalTrigger on idle ([1f335db](https://github.com/felix-berlin/berliner-schnauze/commit/1f335db3c23a967be9f9cfbefc7f9f1442327c08))
+
 # [3.52.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.51.0...v3.52.0) (2026-09-26)
 
 
