@@ -432,13 +432,23 @@ export default defineConfig({
       workbox: {
         globDirectory: "dist",
         cleanupOutdatedCaches: true,
-        // Falls back to the (precached) homepage for any navigation that misses
-        // both precache and network — e.g. a word page added after the last SW
-        // update, while offline — instead of the browser's generic offline page.
-        navigateFallback: "/",
+        // @vite-pwa/astro injects its own `navigateFallback: "/"` (and the
+        // NavigationRoute/createHandlerBoundToURL it generates) whenever this key is
+        // absent from the workbox config — explicit `undefined` opts out, since
+        // workbox-build's sw-template only emits that route when the value is truthy.
+        navigateFallback: undefined,
         globPatterns: import.meta.env.DEV
           ? []
-          : ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
+          : [
+              "**/*.{js,css,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}",
+              // HTML: app shell only. Word/changelog/magazin/themen pages are cached on
+              // visit (runtime "pages" cache below) or via the opt-in offline dictionary —
+              // precaching all ~6000 pages re-downloaded ~450 MB on every deploy, because
+              // each page embeds the hashed /_astro asset names.
+              "*.html",
+              "games/**/*.html",
+              "settings/**/*.html",
+            ],
         globIgnores: [
           // OG images are fetched by social crawlers only, never by users
           "og/**",
@@ -446,7 +456,27 @@ export default defineConfig({
           "screenshots/**",
         ],
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2 MB (Workbox default)
+        navigationPreload: true,
         runtimeCaching: [
+          {
+            // Network first so pages deployed after the last SW update are reachable
+            // immediately; the cache only answers offline. No expiration on purpose: the
+            // opt-in offline dictionary (src/services/offlineDictionary.ts) writes into this
+            // same cache, and an entry limit would silently evict its pages.
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "pages",
+              networkTimeoutSeconds: 3,
+              cacheableResponse: {
+                statuses: [200],
+              },
+              // Uncached page while offline → homepage (search works offline).
+              precacheFallback: {
+                fallbackURL: "/index.html",
+              },
+            },
+          },
           {
             urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/index\\.json$`),
             handler: "StaleWhileRevalidate",
