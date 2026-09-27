@@ -93,6 +93,41 @@ async function load() {
 
 const pagesCache = () => fakeCaches.stores.get("pages") ?? new Map<string, Response>();
 
+/** Word pages resolve slowly and reject with AbortError once their signal is aborted. */
+function slowPages() {
+  fetchMock.mockImplementation(async (url: string, init?: RequestInit) => {
+    if (url === "/api/search/index.json") {
+      return new Response(JSON.stringify(SLUGS.map((slug) => ({ slug }))));
+    }
+    return new Promise<Response>((resolve, reject) => {
+      const timer = setTimeout(() => resolve(pageResponse()), 50);
+      init?.signal?.addEventListener("abort", () => {
+        clearTimeout(timer);
+        reject(new DOMException("aborted", "AbortError"));
+      });
+    });
+  });
+}
+
+/** The search index resolves slowly and rejects with AbortError once its signal is aborted. */
+function slowIndex() {
+  fetchMock.mockImplementation(async (url: string, init?: RequestInit) => {
+    if (url === "/api/search/index.json") {
+      return new Promise<Response>((resolve, reject) => {
+        const timer = setTimeout(
+          () => resolve(new Response(JSON.stringify(SLUGS.map((slug) => ({ slug }))))),
+          50,
+        );
+        init?.signal?.addEventListener("abort", () => {
+          clearTimeout(timer);
+          reject(new DOMException("aborted", "AbortError"));
+        });
+      });
+    }
+    return pageResponse();
+  });
+}
+
 // ── tests ─────────────────────────────────────────────────────────────────────
 
 describe("offlineDictionary — url list", () => {
@@ -169,12 +204,13 @@ describe("offlineDictionary — in-page download", () => {
     expect(maxInFlight).toBe(4);
   });
 
-  it("skips non-ok and redirected responses without failing the run", async () => {
+  it("skips 404/410 and redirected responses without failing the run", async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url === "/api/search/index.json") {
         return new Response(JSON.stringify(SLUGS.map((slug) => ({ slug }))));
       }
       if (url === "/wort/wa") return pageResponse("", 404);
+      if (url === "/wort/bulette") return pageResponse("", 410);
       if (url === "/wort/alex") {
         const res = pageResponse();
         Object.defineProperty(res, "redirected", { value: true });
@@ -185,8 +221,25 @@ describe("offlineDictionary — in-page download", () => {
     const { $offlineDictionaryProgress, startDownload } = await load();
     await startDownload({ manual: true });
     expect(pagesCache().has("/wort/wa")).toBe(false);
+    expect(pagesCache().has("/wort/bulette")).toBe(false);
     expect(pagesCache().has("/wort/alex")).toBe(false);
     expect($offlineDictionaryProgress.get().state).toBe("done");
+  });
+
+  it("a transient 5xx response fails the run without marking the version synced", async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === "/api/search/index.json") {
+        return new Response(JSON.stringify(SLUGS.map((slug) => ({ slug }))));
+      }
+      if (url === "/wort/wa") return pageResponse("", 503);
+      return pageResponse();
+    });
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const { $offlineDictionary, $offlineDictionaryProgress, startDownload } = await load();
+    await startDownload({ manual: true });
+    expect($offlineDictionaryProgress.get().state).toBe("error");
+    expect($offlineDictionary.get().syncedVersion).toBeNull();
+    expect(consoleSpy).toHaveBeenCalled();
   });
 
   it("does not re-download pages already cached for this version", async () => {
@@ -214,6 +267,27 @@ describe("offlineDictionary — in-page download", () => {
     expect($offlineDictionaryProgress.get().state).toBe("error");
     expect($offlineDictionary.get().syncedVersion).toBeNull();
     expect(consoleSpy).toHaveBeenCalled();
+  });
+
+  it("an error state ignores online/connection events but a manual start retries", async () => {
+    fakeCaches.putError.value = new DOMException("full", "QuotaExceededError");
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    setConnection(Object.assign(new EventTarget(), { type: "wifi" }));
+    const { $offlineDictionaryProgress, patchOfflineDictionary, startDownload } = await load();
+    patchOfflineDictionary({ enabled: true });
+    await startDownload({ manual: true });
+    expect($offlineDictionaryProgress.get().state).toBe("error");
+
+    const callsBefore = fetchMock.mock.calls.length;
+    window.dispatchEvent(new Event("online"));
+    connection!.dispatchEvent(new Event("change"));
+    await new Promise((r) => setTimeout(r, 20));
+    expect(fetchMock.mock.calls.length).toBe(callsBefore);
+    expect($offlineDictionaryProgress.get().state).toBe("error");
+
+    fakeCaches.putError.value = null;
+    await startDownload({ manual: true });
+    expect($offlineDictionaryProgress.get().state).toBe("done");
   });
 
   it("network loss mid-download → paused; online event resumes and completes", async () => {
@@ -279,21 +353,6 @@ describe("offlineDictionary — gates", () => {
 });
 
 describe("offlineDictionary — pause / cancel", () => {
-  function slowPages() {
-    fetchMock.mockImplementation(async (url: string, init?: RequestInit) => {
-      if (url === "/api/search/index.json") {
-        return new Response(JSON.stringify(SLUGS.map((slug) => ({ slug }))));
-      }
-      return new Promise<Response>((resolve, reject) => {
-        const timer = setTimeout(() => resolve(pageResponse()), 50);
-        init?.signal?.addEventListener("abort", () => {
-          clearTimeout(timer);
-          reject(new DOMException("aborted", "AbortError"));
-        });
-      });
-    });
-  }
-
   it("pauseDownload stops the run; online/connection change does not auto-resume", async () => {
     slowPages();
     setConnection(Object.assign(new EventTarget(), { type: "wifi" }));
@@ -329,6 +388,57 @@ describe("offlineDictionary — pause / cancel", () => {
     await cancelDownload();
     await run;
     expect($offlineDictionaryProgress.get()).toMatchObject({ done: 0, state: "idle", total: 0 });
+  });
+
+  it("pause while the index request is pending → paused, no /wort/* fetches, nothing cached", async () => {
+    slowIndex();
+    const { $offlineDictionaryProgress, pauseDownload, startDownload } = await load();
+    const run = startDownload({ manual: true });
+    await new Promise((r) => setTimeout(r, 5)); // let the index request start
+    pauseDownload();
+    await run;
+    expect($offlineDictionaryProgress.get().state).toBe("paused");
+    expect(fetchMock.mock.calls.some(([u]) => typeof u === "string" && u.startsWith("/wort/"))).toBe(
+      false,
+    );
+    expect(pagesCache().size).toBe(0);
+  });
+
+  it("disable while a download is running removes every cached page once it settles", async () => {
+    slowPages();
+    const { $offlineDictionaryProgress, disableOfflineDictionary, patchOfflineDictionary, startDownload } =
+      await load();
+    patchOfflineDictionary({ enabled: true });
+    const run = startDownload({ manual: true });
+    await vi.waitFor(() => expect($offlineDictionaryProgress.get().state).toBe("running"));
+    await disableOfflineDictionary();
+    await run;
+    expect([...pagesCache().keys()].filter((k) => k.startsWith("/wort/"))).toEqual([]);
+  });
+
+  it("pause during an active run then an immediate manual start resumes and completes", async () => {
+    slowPages();
+    const { $offlineDictionaryProgress, pauseDownload, startDownload } = await load();
+    const first = startDownload({ manual: true });
+    await vi.waitFor(() => expect($offlineDictionaryProgress.get().state).toBe("running"));
+    pauseDownload();
+    const second = startDownload({ manual: true });
+    await Promise.all([first, second]);
+    expect($offlineDictionaryProgress.get().state).toBe("done");
+    expect(pagesCache().size).toBe(SLUGS.length);
+  });
+
+  it("cancel during an active run then an immediate enable resumes and completes", async () => {
+    slowPages();
+    const { $offlineDictionaryProgress, cancelDownload, enableOfflineDictionary, startDownload } =
+      await load();
+    const first = startDownload({ manual: true });
+    await vi.waitFor(() => expect($offlineDictionaryProgress.get().state).toBe("running"));
+    await cancelDownload();
+    await first;
+    await enableOfflineDictionary();
+    expect($offlineDictionaryProgress.get().state).toBe("done");
+    expect(pagesCache().size).toBe(SLUGS.length);
   });
 });
 

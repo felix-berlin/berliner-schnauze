@@ -36,9 +36,8 @@ type Connection = EventTarget & { saveData?: boolean; type?: string };
 const getConnection = (): Connection | undefined =>
   (navigator as Navigator & { connection?: Connection }).connection;
 
+/** The current run's AbortController, created fresh by runDownload for every run. */
 let controller: AbortController | null = null;
-/** Set by pause/cancel so runDownload doesn't overwrite the state they chose. */
-let stopRequested = false;
 let running: Promise<void> | null = null;
 let pausedByUser = false;
 let listenersAttached = false;
@@ -50,8 +49,8 @@ export function canDownloadNow(manual: boolean): boolean {
   return connection.type === "wifi" || connection.type === "ethernet";
 }
 
-export async function getWordUrls(): Promise<string[]> {
-  const response = await fetch(SEARCH_INDEX_URL);
+export async function getWordUrls(signal?: AbortSignal): Promise<string[]> {
+  const response = await fetch(SEARCH_INDEX_URL, { signal });
   if (!response.ok) throw new Error(`Search index request failed: ${response.status}`);
   const entries = (await response.json()) as { slug: string }[];
   return entries.map(({ slug }) => `/wort/${slug}`);
@@ -69,52 +68,77 @@ export async function estimateDownloadBytes(): Promise<number> {
   return (await getMissingUrls(await getWordUrls())).length * AVG_PAGE_BYTES;
 }
 
-async function downloadInPage(urls: string[]): Promise<void> {
-  controller = new AbortController();
-  const { signal } = controller;
+/**
+ * Downloads `urls` into the pages cache using a bounded worker pool (CONCURRENCY
+ * workers pulling from one shared queue — the sequential awaits per worker are
+ * intentional, not an accidental serial loop; parallelism comes from running
+ * several workers at once via Promise.all).
+ *
+ * The run's own AbortSignal is checked before every state-mutating step (deciding
+ * to skip/cache a page, bumping progress) so that once a run is paused/cancelled,
+ * a worker that was already mid-flight can never write stale data into the cache
+ * or the shared progress store.
+ */
+async function downloadInPage(urls: string[], signal: AbortSignal): Promise<void> {
   const cache = await caches.open(PAGES_CACHE);
   const queue = [...urls];
+  let failure: { error: unknown } | null = null;
   setProgress({ mode: "page", state: "running" });
 
-  // Each worker drains the shared queue sequentially; CONCURRENCY workers run in
-  // parallel via Promise.all below, which is the point of a bounded worker pool —
-  // the sequential awaits per worker are intentional, not an accidental serial loop.
   const worker = async (): Promise<void> => {
-    for (let url = queue.shift(); url && !signal.aborted; url = queue.shift()) {
-      // oxlint-disable-next-line eslint/no-await-in-loop
-      const response = await fetch(url, { signal });
-      const progress = $offlineDictionaryProgress.get();
-      // A deleted word (404) or a redirect must not fail the whole run; redirected
-      // responses can't answer navigations, so they're never cached.
-      if (!response.ok || response.redirected) {
-        setProgress({ done: progress.done + 1 });
+    for (
+      let url = queue.shift();
+      url && !signal.aborted && !failure;
+      url = queue.shift()
+    ) {
+      let response: Response;
+      try {
+        // oxlint-disable-next-line eslint/no-await-in-loop
+        response = await fetch(url, { signal });
+      } catch (err) {
+        if (signal.aborted) return; // paused/cancelled while this fetch was in flight
+        failure = { error: err };
+        return;
+      }
+      if (signal.aborted) return;
+      // A deleted word (404/410) must not fail the whole run. A redirect can't
+      // answer a navigation, so it's skipped too — but any other non-ok status
+      // (e.g. a transient 5xx) must not be silently marked as synced.
+      if (response.status === 404 || response.status === 410 || response.redirected) {
+        setProgress({ done: $offlineDictionaryProgress.get().done + 1 });
         continue;
+      }
+      if (!response.ok) {
+        failure = { error: new Error(`Page request failed: ${response.status}`) };
+        return;
       }
       // oxlint-disable-next-line eslint/no-await-in-loop
       const body = await response.blob();
+      if (signal.aborted) return;
       const headers = new Headers(response.headers);
       headers.set(VERSION_HEADER, version);
-      // oxlint-disable-next-line eslint/no-await-in-loop
-      await cache.put(
-        url,
-        new Response(body, { headers, status: response.status, statusText: response.statusText }),
-      );
+      try {
+        // oxlint-disable-next-line eslint/no-await-in-loop
+        await cache.put(
+          url,
+          new Response(body, { headers, status: response.status, statusText: response.statusText }),
+        );
+      } catch (err) {
+        if (signal.aborted) return;
+        failure = { error: err };
+        return;
+      }
+      if (signal.aborted) return; // don't count a write that raced a pause/cancel
       const latest = $offlineDictionaryProgress.get();
       setProgress({ bytes: latest.bytes + body.size, done: latest.done + 1 });
     }
   };
 
-  try {
-    await Promise.all(Array.from({ length: CONCURRENCY }, worker));
-  } finally {
-    // After the first failure the sibling workers must stop too, or they keep writing
-    // while a resumed run starts.
-    controller.abort();
-  }
+  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  if (failure && !signal.aborted) throw failure.error;
 }
 
 function markDone(): void {
-  controller = null;
   patchOfflineDictionary({ syncedVersion: version });
   setProgress({ done: $offlineDictionaryProgress.get().total, state: "done" });
   trackEvent("App", "Offline dictionary complete", "PWA");
@@ -129,23 +153,29 @@ function attachListeners(): void {
 
 async function runDownload(manual: boolean): Promise<void> {
   attachListeners();
-  stopRequested = false;
   if (manual) pausedByUser = false;
+  // Every run gets its own controller so a stale (paused/cancelled) run's tail
+  // can never affect a subsequent run through a shared abort flag.
+  const runController = new AbortController();
+  controller = runController;
+  const { signal } = runController;
   if (!canDownloadNow(manual)) {
     setProgress({ state: "waiting" });
     return;
   }
   try {
-    const urls = await getWordUrls();
+    const urls = await getWordUrls(signal);
+    if (signal.aborted) return;
     const missing = await getMissingUrls(urls);
+    if (signal.aborted) return;
     setProgress({ bytes: 0, done: urls.length - missing.length, total: urls.length });
-    if (missing.length > 0) await downloadInPage(missing);
-    if (stopRequested) return;
+    if (missing.length > 0) await downloadInPage(missing, signal);
+    if (signal.aborted) return;
     markDone();
   } catch (err) {
-    controller = null;
-    // pause/cancel already set the state
-    if (stopRequested) return;
+    // A stale (paused/cancelled) run must never touch shared state once its own
+    // signal is aborted — pause/cancel already set the state they wanted.
+    if (signal.aborted) return;
     if (!navigator.onLine) {
       setProgress({ state: "paused" });
       return;
@@ -157,23 +187,35 @@ async function runDownload(manual: boolean): Promise<void> {
 }
 
 export function startDownload({ manual = false }: { manual?: boolean } = {}): Promise<void> {
-  running ??= runDownload(manual).finally(() => {
-    running = null;
-  });
+  if (!running) {
+    const runPromise: Promise<void> = runDownload(manual).finally(() => {
+      // Only clear `running` if it still points at this exact run — pause/cancel
+      // may already have cleared it (and a newer run may already be in flight).
+      if (running === runPromise) running = null;
+    });
+    running = runPromise;
+  }
   return running;
 }
 
 export function pauseDownload(): void {
   pausedByUser = true;
-  stopRequested = true;
   controller?.abort();
+  // Clear immediately (not via the run's `finally`) so a manual start right after
+  // pause begins a new run instead of returning the still-settling old one.
+  running = null;
   setProgress({ state: "paused" });
 }
 
 export async function cancelDownload(): Promise<void> {
-  stopRequested = true;
+  const previousRun = running;
   controller?.abort();
+  running = null;
   controller = null;
+  // Let the aborted run's tail fully settle before resetting progress, so a
+  // caller that awaits cancelDownload() (e.g. disableOfflineDictionary before it
+  // wipes the cache) never races a worker that hasn't yet observed the abort.
+  if (previousRun) await previousRun.catch(() => {});
   $offlineDictionaryProgress.set(IDLE);
 }
 
@@ -199,5 +241,9 @@ export async function disableOfflineDictionary(): Promise<void> {
 export async function resumeIfNeeded(): Promise<void> {
   const { enabled, syncedVersion } = $offlineDictionary.get();
   if (!enabled || pausedByUser || syncedVersion === version) return;
+  // An error (e.g. quota exceeded) must not be retried by every online/connection
+  // change — that's frequent on mobile and would violate "no endless retry". Only
+  // a manual startDownload() (the user hitting "retry") should get past this.
+  if ($offlineDictionaryProgress.get().state === "error") return;
   await startDownload();
 }
