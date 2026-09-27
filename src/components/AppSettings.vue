@@ -2,6 +2,7 @@
   <div class="c-app-settings">
     <AppSettingsTheme />
     <AppSettingsNotifications />
+    <AppSettingsUpdates />
 
     <AppSettingsNavCard
       v-if="showInstallButton"
@@ -29,6 +30,9 @@ import { defineAsyncComponent } from "vue";
 const AppSettingsTheme = defineAsyncComponent(() => import("@components/AppSettingsTheme.vue"));
 const AppSettingsNotifications = defineAsyncComponent(
   () => import("@components/AppSettingsNotifications.vue"),
+);
+const AppSettingsUpdates = defineAsyncComponent(
+  () => import("@components/AppSettingsUpdates.vue"),
 );
 const AppSettingsNavCard = defineAsyncComponent(() => import("@components/AppSettingsNavCard.vue"));
 

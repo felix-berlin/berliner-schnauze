@@ -1,0 +1,75 @@
+@use "@sass-butler/mixins" as butler-mx;
+
+// App-update mode picker: a vertical fieldset of native radios, each row label
+// + one-line hint. Dashed dividers between rows (Postcard Rule), active row
+// gets a light currywurst tint — same vocabulary as .c-color-mode-picker.
+.c-app-settings-updates {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border: none;
+
+  &__option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    & + & {
+      border-top: 1px dashed color-mix(in srgb, var(--orange-300) 40%, transparent);
+    }
+
+    @include butler-mx.dark-mode-class {
+      & + & {
+        border-top-color: color-mix(in srgb, var(--blue) 80%, white);
+      }
+
+      &:has(:checked) {
+        background-color: color-mix(in srgb, var(--blue) 35%, transparent);
+      }
+    }
+    @include butler-mx.hover {
+      background-color: color-mix(in srgb, var(--orange-100) 45%, transparent);
+    }
+
+    &:has(:checked) {
+      background-color: color-mix(in srgb, var(--orange-400) 15%, transparent);
+    }
+
+    &:has(:focus-visible) {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+  }
+
+  &__input {
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+    accent-color: var(--orange-500);
+    cursor: pointer;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  &__label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-body);
+  }
+
+  &__hint {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--color-muted, currentColor);
+    opacity: 0.75;
+  }
+}
