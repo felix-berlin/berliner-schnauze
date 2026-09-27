@@ -12,6 +12,9 @@ export const VERSION_HEADER = "x-offline-dictionary-version";
 export const AVG_PAGE_BYTES = 75_000;
 const SEARCH_INDEX_URL = "/api/search/index.json";
 const CONCURRENCY = 4;
+const BG_FETCH_PREFIX = "offline-dictionary@";
+/** Carries the app version so public/sw-background-fetch.js can stamp VERSION_HEADER. */
+export const BG_FETCH_ID = `${BG_FETCH_PREFIX}${version}`;
 
 export type DownloadState = "idle" | "waiting" | "running" | "paused" | "done" | "error";
 export type DownloadMode = "background-fetch" | "page";
@@ -35,6 +38,44 @@ const setProgress = (patch: Partial<OfflineDictionaryProgress>): void =>
 type Connection = EventTarget & { saveData?: boolean; type?: string };
 const getConnection = (): Connection | undefined =>
   (navigator as Navigator & { connection?: Connection }).connection;
+
+// Background Fetch API: Chromium only, not in lib.dom — typed locally.
+type BackgroundFetchRegistrationLike = EventTarget & {
+  abort(): Promise<boolean>;
+  downloaded: number;
+  id: string;
+};
+type BackgroundFetchManagerLike = {
+  fetch(
+    id: string,
+    requests: string[],
+    options: { icons: { sizes: string; src: string; type: string }[]; title: string },
+  ): Promise<BackgroundFetchRegistrationLike>;
+  get(id: string): Promise<BackgroundFetchRegistrationLike | undefined>;
+  getIds(): Promise<string[]>;
+};
+
+async function getBackgroundFetchManager(): Promise<BackgroundFetchManagerLike | undefined> {
+  const registration = await navigator.serviceWorker?.getRegistration();
+  return (registration as { backgroundFetch?: BackgroundFetchManagerLike } | undefined)
+    ?.backgroundFetch;
+}
+
+/** Aborts our fetches the page may not track (older app version, or not re-attached after a reload). */
+async function abortBackgroundFetches(
+  manager: BackgroundFetchManagerLike,
+  exceptId?: string,
+): Promise<void> {
+  for (const id of await manager.getIds()) {
+    if (id.startsWith(BG_FETCH_PREFIX) && id !== exceptId) {
+      // oxlint-disable-next-line eslint/no-await-in-loop -- one or two ids in practice
+      await (await manager.get(id))?.abort();
+    }
+  }
+}
+
+/** The Background Fetch that currently owns the download; its completion arrives via SW message. */
+let activeBgFetch: BackgroundFetchRegistrationLike | null = null;
 
 /** The current run's AbortController, created fresh by runDownload for every run. */
 let controller: AbortController | null = null;
@@ -96,11 +137,7 @@ async function downloadInPage(urls: string[], signal: AbortSignal): Promise<void
   let failure: { error: unknown } | null = null;
 
   const worker = async (): Promise<void> => {
-    for (
-      let url = queue.shift();
-      url && !signal.aborted && !failure;
-      url = queue.shift()
-    ) {
+    for (let url = queue.shift(); url && !signal.aborted && !failure; url = queue.shift()) {
       let response: Response;
       try {
         // oxlint-disable-next-line eslint/no-await-in-loop
@@ -149,6 +186,7 @@ async function downloadInPage(urls: string[], signal: AbortSignal): Promise<void
 }
 
 function markDone(): void {
+  activeBgFetch = null;
   patchOfflineDictionary({ syncedVersion: version });
   setProgress({ done: $offlineDictionaryProgress.get().total, state: "done" });
   trackEvent("App", "Offline dictionary complete", "PWA");
@@ -159,6 +197,104 @@ function attachListeners(): void {
   listenersAttached = true;
   window.addEventListener("online", () => void resumeIfNeeded());
   getConnection()?.addEventListener("change", () => void resumeIfNeeded());
+  navigator.serviceWorker?.addEventListener("message", onServiceWorkerMessage);
+}
+
+function followBackgroundFetch(bgFetch: BackgroundFetchRegistrationLike, missing: number): void {
+  activeBgFetch = bgFetch;
+  const alreadyDone = $offlineDictionaryProgress.get().done;
+  setProgress({ mode: "background-fetch", state: "running" });
+  // No per-request progress in the API — estimate done from bytes.
+  bgFetch.addEventListener("progress", () => {
+    if (activeBgFetch !== bgFetch) return; // cancelled/finished: don't touch the reset state
+    setProgress({
+      bytes: bgFetch.downloaded,
+      done: alreadyDone + Math.min(missing, Math.floor(bgFetch.downloaded / AVG_PAGE_BYTES)),
+    });
+  });
+}
+
+/**
+ * Returns true when the run is over for the page: a Background Fetch now owns the
+ * download, or the run was paused/cancelled meanwhile (any fetch it acquired is aborted).
+ * Returns false when the in-page download has to do the work.
+ */
+async function tryBackgroundFetch(missing: string[], signal: AbortSignal): Promise<boolean> {
+  let bgFetch: BackgroundFetchRegistrationLike | undefined;
+  try {
+    const manager = await getBackgroundFetchManager();
+    if (!manager) return false;
+
+    await abortBackgroundFetches(manager, BG_FETCH_ID);
+
+    // Re-attach (e.g. after a reload) instead of starting a second fetch with the same id.
+    bgFetch =
+      (await manager.get(BG_FETCH_ID)) ??
+      (signal.aborted
+        ? undefined
+        : await manager.fetch(BG_FETCH_ID, missing, {
+            icons: [
+              { sizes: "192x192", src: "/favicons/android-chrome-192x192.png", type: "image/png" },
+            ],
+            title: "Berliner Schnauze – Offline-Wörterbuch",
+          }));
+  } catch (err) {
+    if (signal.aborted) return true;
+    console.warn("[offlineDictionary] Background Fetch unavailable, downloading in page:", err);
+    return false;
+  }
+  if (signal.aborted) {
+    // Paused/cancelled while setting up: cancelDownload awaits this run, so aborting
+    // here lands before disableOfflineDictionary wipes the cache.
+    await bgFetch?.abort().catch(() => false);
+    return true;
+  }
+  if (!bgFetch) return false;
+  followBackgroundFetch(bgFetch, missing.length);
+  return true;
+}
+
+/**
+ * A "success" with no tracked fetch (e.g. the page was reloaded and the run is parked in
+ * "waiting") isn't trusted blindly: the dictionary is marked done only once the cache
+ * holds every page for this version.
+ */
+async function verifySynced(): Promise<void> {
+  const isCandidate = () => {
+    const { enabled, syncedVersion } = $offlineDictionary.get();
+    return enabled && syncedVersion !== version && !running && !activeBgFetch;
+  };
+  if (!isCandidate()) return;
+  try {
+    const urls = await getWordUrls();
+    const missing = await getMissingUrls(urls);
+    if (missing.length > 0 || !isCandidate()) return;
+    setProgress({ total: urls.length });
+    markDone();
+  } catch {
+    // Best effort — the next run re-checks the cache anyway.
+  }
+}
+
+function onServiceWorkerMessage(event: MessageEvent<{ result?: string; type?: string }>): void {
+  if (event.data?.type !== "offline-dictionary") return;
+  if (!activeBgFetch) {
+    if (event.data.result === "success") void verifySynced();
+    // "fail"/"abort" untracked: cancelDownload already reset the state (its own abort),
+    // or the next run retries whatever is still missing.
+    return;
+  }
+  activeBgFetch = null;
+  if (event.data.result === "success") markDone();
+  else if (event.data.result === "fail") {
+    setProgress({ state: "error" });
+    trackEvent("App", "Offline dictionary error", "PWA");
+  } else if (event.data.result === "abort") {
+    // Tracked fetch aborted from outside the app (the browser's download UI): treat it
+    // like a pause so online/connection changes don't restart it; "resume" starts anew.
+    pausedByUser = true;
+    setProgress({ state: "paused" });
+  }
 }
 
 async function runDownload(manual: boolean): Promise<void> {
@@ -180,6 +316,9 @@ async function runDownload(manual: boolean): Promise<void> {
     if (signal.aborted) return;
     setProgress({ bytes: 0, done: urls.length - missing.length, total: urls.length });
     if (missing.length > 0) {
+      // Completion of a Background Fetch arrives via onServiceWorkerMessage.
+      if (await tryBackgroundFetch(missing, signal)) return;
+      if (signal.aborted) return;
       setProgress({ mode: "page", state: "running" });
       await downloadInPage(missing, signal);
     }
@@ -200,6 +339,7 @@ async function runDownload(manual: boolean): Promise<void> {
 }
 
 export function startDownload({ manual = false }: { manual?: boolean } = {}): Promise<void> {
+  if (activeBgFetch) return Promise.resolve();
   if (!running) {
     const runPromise: Promise<void> = runDownload(manual).finally(() => {
       unsettledRuns.delete(runPromise);
@@ -228,6 +368,8 @@ export async function cancelDownload(): Promise<void> {
   controller?.abort();
   running = null;
   controller = null;
+  const bgFetch = activeBgFetch;
+  activeBgFetch = null;
   // Reset before awaiting the old run(s) below — a run started while this await is
   // still pending must own the final state, not have it wiped back to idle once the
   // (already-aborted) old run(s) finally settle.
@@ -236,8 +378,13 @@ export async function cancelDownload(): Promise<void> {
   // paused run is no longer `running` but may still have in-flight cache.put calls),
   // so a caller like disableOfflineDictionary never wipes the cache while one of
   // them could still land a write.
-  const pending = [...unsettledRuns];
-  if (pending.length > 0) await Promise.allSettled(pending);
+  // Also abort fetches nothing tracks (e.g. after a reload with the run parked in
+  // "waiting") — the SW would otherwise write pages after disable wiped them.
+  await Promise.allSettled([
+    ...unsettledRuns,
+    bgFetch?.abort(),
+    getBackgroundFetchManager().then((manager) => manager && abortBackgroundFetches(manager)),
+  ]);
 }
 
 export async function enableOfflineDictionary(): Promise<void> {
@@ -248,8 +395,10 @@ export async function enableOfflineDictionary(): Promise<void> {
 }
 
 export async function disableOfflineDictionary(): Promise<void> {
-  await cancelDownload();
+  // Disable first: an online/connection change during the cancel below must not let
+  // resumeIfNeeded start a new run that refills /wort/* during or after the wipe.
   patchOfflineDictionary({ enabled: false, syncedVersion: null });
+  await cancelDownload();
   const cache = await caches.open(PAGES_CACHE);
   const keys = await cache.keys();
   await Promise.all(
