@@ -279,25 +279,15 @@ export function useCacheStorage() {
   async function clearBucket(name: string): Promise<void> {
     if (!isCacheAvailable) return;
     try {
+      // The offline dictionary lives in "pages". Clearing it means "free the space" — turn
+      // the dictionary off (first, so a running download can't refill the cache).
+      if (name === "pages") await disableOfflineDictionary();
       await caches.delete(name);
     } catch {
       createToastNotify({
         message: `Cache „${getBucketDisplayName(name)}" konnte nicht geleert werden.`,
         status: "error",
       });
-      return;
-    }
-    // The offline dictionary lives in "pages". Clearing it means "free the space" — turn
-    // the dictionary off instead of silently re-downloading it on the next app start.
-    if (name === "pages") {
-      try {
-        await disableOfflineDictionary();
-      } catch {
-        createToastNotify({
-          message: `Cache „${getBucketDisplayName(name)}" konnte nicht geleert werden.`,
-          status: "error",
-        });
-      }
     }
     await loadCaches();
   }
@@ -305,6 +295,7 @@ export function useCacheStorage() {
   async function clearAll(): Promise<void> {
     if (!isCacheAvailable) return;
     try {
+      await disableOfflineDictionary();
       const names = await caches.keys();
       const results = await Promise.allSettled(names.map((name) => caches.delete(name)));
       const failCount = results.filter((r) => r.status === "rejected").length;
@@ -314,7 +305,6 @@ export function useCacheStorage() {
           status: "error",
         });
       }
-      await disableOfflineDictionary();
     } catch {
       createToastNotify({
         message: "Caches konnten nicht geleert werden.",

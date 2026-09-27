@@ -8,10 +8,9 @@ import { ref } from "vue";
 import { version } from "../../../../package.json";
 
 const networkType = ref<string | undefined>(undefined);
-const networkSaveData = ref(false);
 vi.mock("@vueuse/core", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@vueuse/core")>()),
-  useNetwork: () => ({ saveData: networkSaveData, type: networkType }),
+  useNetwork: () => ({ type: networkType }),
 }));
 vi.mock("@services/storagePersistence", () => ({
   getPersistState: vi.fn().mockResolvedValue("not-persisted"),
@@ -20,7 +19,14 @@ vi.mock("@services/storagePersistence", () => ({
 vi.mock("@services/offlineDictionary", async () => {
   const { atom } = await import("nanostores");
   return {
-    $offlineDictionaryProgress: atom({ bytes: 0, done: 0, mode: null, state: "idle", total: 0 }),
+    $offlineDictionaryProgress: atom({
+      bytes: 0,
+      done: 0,
+      mode: null,
+      state: "idle",
+      total: 0,
+      waitReason: null,
+    }),
     cancelDownload: vi.fn(),
     disableOfflineDictionary: vi.fn(),
     enableOfflineDictionary: vi.fn(),
@@ -31,7 +37,7 @@ vi.mock("@services/offlineDictionary", async () => {
   };
 });
 
-const IDLE = { bytes: 0, done: 0, mode: null, state: "idle", total: 0 } as const;
+const IDLE = { bytes: 0, done: 0, mode: null, state: "idle", total: 0, waitReason: null } as const;
 
 async function mountIt() {
   const wrapper = mount(PwaOfflineDictionary);
@@ -42,7 +48,6 @@ async function mountIt() {
 beforeEach(() => {
   vi.clearAllMocks();
   networkType.value = undefined;
-  networkSaveData.value = false;
   $offlineDictionary.set({
     enabled: false,
     failedVersion: null,
@@ -121,6 +126,7 @@ describe("PwaOfflineDictionary.vue", () => {
       mode: "page",
       state: "running",
       total: 100,
+      waitReason: null,
     });
     const { pauseDownload } = await import("@services/offlineDictionary");
     const wrapper = await mountIt();
@@ -144,6 +150,7 @@ describe("PwaOfflineDictionary.vue", () => {
       mode: "background-fetch",
       state: "running",
       total: 100,
+      waitReason: null,
     });
     const wrapper = await mountIt();
     expect(wrapper.find("[data-testid=offline-dictionary-pause]").exists()).toBe(false);
@@ -168,27 +175,26 @@ describe("PwaOfflineDictionary.vue", () => {
   );
 
   it("waiting because of Data Saver: shows a distinct message, not the wifi one", async () => {
-    networkSaveData.value = true;
     $offlineDictionary.set({
       enabled: true,
       failedVersion: null,
       syncedVersion: null,
       wifiOnly: true,
     });
-    $offlineDictionaryProgress.set({ ...IDLE, state: "waiting" });
+    $offlineDictionaryProgress.set({ ...IDLE, state: "waiting", waitReason: "data-saver" });
     const wrapper = await mountIt();
     expect(wrapper.text()).toContain("Datensparmodus aktiv");
     expect(wrapper.text()).not.toContain("Wartet auf WLAN");
   });
 
-  it("waiting because of the wifi gate (no Data Saver): shows the wifi message", async () => {
+  it("waiting because of the wifi gate: shows the wifi message", async () => {
     $offlineDictionary.set({
       enabled: true,
       failedVersion: null,
       syncedVersion: null,
       wifiOnly: true,
     });
-    $offlineDictionaryProgress.set({ ...IDLE, state: "waiting" });
+    $offlineDictionaryProgress.set({ ...IDLE, state: "waiting", waitReason: "wifi" });
     const wrapper = await mountIt();
     expect(wrapper.text()).toContain("Wartet auf WLAN");
   });

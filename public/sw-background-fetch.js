@@ -48,29 +48,23 @@ async function notifyClients(registration, result, stored) {
     client.postMessage({ id: registration.id, result, stored, type: "offline-dictionary" });
 }
 
+async function handleFetchSettled(event, forcedFail) {
+  const { failed, stored } = await storeRecords(event.registration);
+  const result = forcedFail || failed ? "fail" : "success";
+  await event.updateUI({
+    title: result === "fail" ? "Offline-Wörterbuch unvollständig" : "Offline-Wörterbuch bereit",
+  });
+  await notifyClients(event.registration, result, stored);
+}
+
 self.addEventListener("backgroundfetchsuccess", (event) => {
   if (!isOurs(event.registration)) return;
-  event.waitUntil(
-    (async () => {
-      const { failed, stored } = await storeRecords(event.registration);
-      const result = failed ? "fail" : "success";
-      await event.updateUI({
-        title: failed ? "Offline-Wörterbuch unvollständig" : "Offline-Wörterbuch bereit",
-      });
-      await notifyClients(event.registration, result, stored);
-    })(),
-  );
+  event.waitUntil(handleFetchSettled(event, false));
 });
 
 self.addEventListener("backgroundfetchfail", (event) => {
   if (!isOurs(event.registration)) return;
-  event.waitUntil(
-    (async () => {
-      const { stored } = await storeRecords(event.registration);
-      await event.updateUI({ title: "Offline-Wörterbuch unvollständig" });
-      await notifyClients(event.registration, "fail", stored);
-    })(),
-  );
+  event.waitUntil(handleFetchSettled(event, true));
 });
 
 // Aborts come from "cancel"/"disable" in the app — don't write pages the app is deleting.

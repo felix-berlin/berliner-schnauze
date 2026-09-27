@@ -171,7 +171,7 @@ const emit = defineEmits<{ changed: [] }>();
 
 const settings = useStore($offlineDictionary);
 const progress = useStore($offlineDictionaryProgress);
-const { saveData, type: connectionType } = useNetwork();
+const { type: connectionType } = useNetwork();
 
 const estimatedBytes = ref<number | null>(null);
 const persistState = ref<PersistState>("unsupported");
@@ -203,11 +203,8 @@ const STATUS_TEXT: Record<string, string> = {
   running: "Lädt …",
   waiting: "Wartet auf WLAN.",
 };
-// "waiting" has two distinct causes (see canDownloadNow in offlineDictionary.ts): the
-// wifi-only gate, or Data Saver blocking an automatic start — the generic "Wartet auf
-// WLAN." would be misleading on wifi with Data Saver on.
 const statusText = computed(() =>
-  progress.value.state === "waiting" && saveData.value
+  progress.value.state === "waiting" && progress.value.waitReason === "data-saver"
     ? "Datensparmodus aktiv — Download pausiert."
     : STATUS_TEXT[progress.value.state],
 );
@@ -235,10 +232,12 @@ const STATUS_ICON = {
 const StatusIcon = computed(() => STATUS_ICON[progress.value.state]);
 
 onMounted(async () => {
-  persistState.value = await getPersistState();
-  if (!settings.value.enabled) {
-    estimatedBytes.value = await estimateDownloadBytes().catch(() => null);
-  }
+  const [persist, estimate] = await Promise.all([
+    getPersistState(),
+    settings.value.enabled ? null : estimateDownloadBytes().catch(() => null),
+  ]);
+  persistState.value = persist;
+  estimatedBytes.value = estimate;
 });
 
 watch(

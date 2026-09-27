@@ -18,6 +18,7 @@ export const BG_FETCH_ID = `${BG_FETCH_PREFIX}${version}`;
 
 export type DownloadState = "idle" | "waiting" | "running" | "paused" | "done" | "error";
 export type DownloadMode = "background-fetch" | "page";
+export type WaitReason = "data-saver" | "wifi";
 
 export interface OfflineDictionaryProgress {
   bytes: number;
@@ -25,9 +26,18 @@ export interface OfflineDictionaryProgress {
   mode: DownloadMode | null;
   state: DownloadState;
   total: number;
+  /** Why the run is "waiting"; only meaningful in that state. */
+  waitReason: WaitReason | null;
 }
 
-const IDLE: OfflineDictionaryProgress = { bytes: 0, done: 0, mode: null, state: "idle", total: 0 };
+const IDLE: OfflineDictionaryProgress = {
+  bytes: 0,
+  done: 0,
+  mode: null,
+  state: "idle",
+  total: 0,
+  waitReason: null,
+};
 
 export const $offlineDictionaryProgress = atom<OfflineDictionaryProgress>(IDLE);
 
@@ -93,11 +103,12 @@ let pausedByUser = false;
 let bgFetchFailed = false;
 let listenersAttached = false;
 
-export function canDownloadNow(manual: boolean): boolean {
+/** null = the download may start now. */
+export function getWaitReason(manual: boolean): WaitReason | null {
   const connection = getConnection();
-  if (!manual && connection?.saveData) return false;
-  if (!$offlineDictionary.get().wifiOnly || connection?.type === undefined) return true;
-  return connection.type === "wifi" || connection.type === "ethernet";
+  if (!manual && connection?.saveData) return "data-saver";
+  if (!$offlineDictionary.get().wifiOnly || connection?.type === undefined) return null;
+  return connection.type === "wifi" || connection.type === "ethernet" ? null : "wifi";
 }
 
 export async function getWordUrls(signal?: AbortSignal): Promise<string[]> {
@@ -206,10 +217,15 @@ function attachListeners(): void {
   navigator.serviceWorker?.addEventListener("message", onServiceWorkerMessage);
 }
 
+/** Registrations that already have a "progress" listener — resumeIfNeeded may re-attach to the same one. */
+const bgFetchesWithListener = new WeakSet<BackgroundFetchRegistrationLike>();
+
 function followBackgroundFetch(bgFetch: BackgroundFetchRegistrationLike, missing: number): void {
   activeBgFetch = bgFetch;
-  const alreadyDone = $offlineDictionaryProgress.get().done;
   setProgress({ mode: "background-fetch", state: "running" });
+  if (bgFetchesWithListener.has(bgFetch)) return;
+  bgFetchesWithListener.add(bgFetch);
+  const alreadyDone = $offlineDictionaryProgress.get().done;
   // No per-request progress in the API — estimate done from bytes.
   bgFetch.addEventListener("progress", () => {
     if (activeBgFetch !== bgFetch) return; // cancelled/finished: don't touch the reset state
@@ -346,11 +362,12 @@ async function runDownload(manual: boolean): Promise<void> {
   const runController = new AbortController();
   controller = runController;
   const { signal } = runController;
-  const gateOpen = canDownloadNow(manual);
+  const waitReason = getWaitReason(manual);
+  const gateOpen = waitReason === null;
   // A closed gate still re-attaches to a running fetch (e.g. reload on cellular while
   // Chrome keeps downloading), so the UI doesn't claim "waiting".
   if (!gateOpen && !(await getRunningBackgroundFetch())) {
-    if (!signal.aborted) setProgress({ state: "waiting" });
+    if (!signal.aborted) setProgress({ state: "waiting", waitReason });
     return;
   }
   try {
@@ -364,7 +381,7 @@ async function runDownload(manual: boolean): Promise<void> {
       if (!bgFetchFailed && (await tryBackgroundFetch(missing, signal, gateOpen))) return;
       if (signal.aborted) return;
       if (!gateOpen) {
-        setProgress({ state: "waiting" }); // the fetch finished before we could re-attach
+        setProgress({ state: "waiting", waitReason }); // the fetch finished before we could re-attach
         return;
       }
       setProgress({ mode: "page", state: "running" });

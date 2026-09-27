@@ -365,16 +365,34 @@ describe("offlineDictionary — gates", () => {
   });
 
   it("no connection.type support → no wifi gate", async () => {
-    const { canDownloadNow, patchOfflineDictionary } = await load();
+    const { getWaitReason, patchOfflineDictionary } = await load();
     patchOfflineDictionary({ wifiOnly: true });
-    expect(canDownloadNow(false)).toBe(true);
+    expect(getWaitReason(false)).toBeNull();
   });
 
   it("saveData blocks automatic starts but not manual ones", async () => {
     setConnection(Object.assign(new EventTarget(), { saveData: true }));
-    const { canDownloadNow } = await load();
-    expect(canDownloadNow(false)).toBe(false);
-    expect(canDownloadNow(true)).toBe(true);
+    const { getWaitReason } = await load();
+    expect(getWaitReason(false)).toBe("data-saver");
+    expect(getWaitReason(true)).toBeNull();
+  });
+
+  it("waiting carries its reason: wifi gate vs Data Saver", async () => {
+    setConnection(Object.assign(new EventTarget(), { type: "cellular" }));
+    const { $offlineDictionaryProgress, patchOfflineDictionary, startDownload } = await load();
+    patchOfflineDictionary({ enabled: true, wifiOnly: true });
+    await startDownload();
+    expect($offlineDictionaryProgress.get()).toMatchObject({
+      state: "waiting",
+      waitReason: "wifi",
+    });
+
+    setConnection(Object.assign(new EventTarget(), { saveData: true, type: "wifi" }));
+    await startDownload();
+    expect($offlineDictionaryProgress.get()).toMatchObject({
+      state: "waiting",
+      waitReason: "data-saver",
+    });
   });
 });
 
