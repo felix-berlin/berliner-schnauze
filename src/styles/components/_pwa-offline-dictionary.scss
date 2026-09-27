@@ -1,0 +1,195 @@
+@use "@styles/mixins" as mx;
+
+.c-pwa-offline-dictionary {
+  container-type: inline-size;
+  container-name: pwa-offline-dictionary;
+  padding: 1.25rem 1.5rem;
+  margin-block-end: 1.5rem;
+
+  @include mx.paper-card;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-block-end: 0.75rem;
+  }
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    color: var(--orange-500);
+  }
+
+  &__title {
+    @include mx.paper-card-title;
+  }
+
+  &__switch-wrap {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    .c-switch {
+      &:focus-visible {
+        outline: 2px solid var(--orange-500);
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  &__intro {
+    margin: 0;
+    color: var(--color-muted);
+
+    strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin: 0.625rem 0 0;
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    &--ready {
+      color: var(--success);
+      font-weight: 700;
+    }
+  }
+
+  &__count,
+  &__bytes {
+    color: var(--color-muted);
+  }
+
+  // Native <progress>, cross-browser styled: track + value pseudo-elements plus a
+  // border fallback for engines that ignore -webkit-progress-bar/-moz-progress-bar.
+  &__bar {
+    display: block;
+    width: 100%;
+    height: 8px;
+    appearance: none;
+    border: 1px dashed var(--grey-100);
+    border-radius: 4px;
+    overflow: hidden;
+    background: transparent;
+
+    &::-webkit-progress-bar {
+      background: transparent;
+    }
+
+    &::-webkit-progress-value {
+      background: var(--orange-500);
+    }
+
+    &::-moz-progress-bar {
+      background: var(--orange-500);
+    }
+  }
+
+  &__hint {
+    margin: 0.5rem 0 0;
+    color: var(--color-muted);
+    font-size: 0.75rem;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin-block-start: 0.875rem;
+
+    .c-button {
+      --padding: 0.5rem 1rem;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    @container pwa-offline-dictionary (inline-size < 24rem) {
+      .c-button {
+        flex: 1 1 auto;
+        justify-content: center;
+      }
+    }
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block-start: 1rem;
+    width: fit-content;
+
+    .c-switch:focus-visible {
+      outline: 2px solid var(--orange-500);
+      outline-offset: 2px;
+    }
+  }
+
+  &__persist {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin: 1rem 0 0;
+    padding-block-start: 0.875rem;
+    border-block-start: 1px dashed var(--grey-100);
+    color: var(--color-muted);
+    font-size: 0.75rem;
+
+    svg {
+      flex-shrink: 0;
+      color: var(--success);
+    }
+
+    @container pwa-offline-dictionary (inline-size < 22rem) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  &__persist-text {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  // "running" status icon spins — a state indicator, not decoration, so it still respects
+  // prefers-reduced-motion (swaps to a static icon feel by simply stopping the spin).
+  &__status svg:first-child {
+    animation: c-pwa-offline-dictionary-spin 1s linear infinite;
+    animation-play-state: paused;
+  }
+
+  &__status--running svg:first-child {
+    animation-play-state: running;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__status svg:first-child {
+      animation: none;
+    }
+  }
+}
+
+@keyframes c-pwa-offline-dictionary-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
