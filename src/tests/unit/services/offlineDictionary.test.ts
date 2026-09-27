@@ -17,7 +17,12 @@ function createFakeCaches() {
   const path = (r: RequestInfo | URL) =>
     new URL(typeof r === "string" ? r : r instanceof URL ? r.href : r.url, ORIGIN).pathname;
   const putError: { value: Error | null } = { value: null };
+  // Artificial delays to widen the async gaps that the N1/N2 regression tests pause/
+  // cancel into (caches.open resolving, cache.put mid-write).
+  const openDelay: { value: number } = { value: 0 };
+  const putDelay: { value: number } = { value: 0 };
   const open = vi.fn(async (name: string) => {
+    if (openDelay.value > 0) await new Promise((r) => setTimeout(r, openDelay.value));
     const store = stores.get(name) ?? new Map<string, Response>();
     stores.set(name, store);
     return {
@@ -25,12 +30,13 @@ function createFakeCaches() {
       keys: async () => [...store.keys()].map((p) => new Request(ORIGIN + p)),
       match: async (r: RequestInfo) => store.get(path(r))?.clone(),
       put: async (r: RequestInfo, res: Response) => {
+        if (putDelay.value > 0) await new Promise((resolve) => setTimeout(resolve, putDelay.value));
         if (putError.value) throw putError.value;
         store.set(path(r), res);
       },
     };
   });
-  return { open, putError, stores };
+  return { open, openDelay, putDelay, putError, stores };
 }
 
 function pageResponse(body = "<html></html>", status = 200) {
@@ -125,6 +131,26 @@ function slowIndex() {
       });
     }
     return pageResponse();
+  });
+}
+
+/**
+ * Word pages resolve quickly (10ms) normally, but once a fetch's signal is aborted,
+ * the rejection is delayed by `abortDelayMs` -- simulating a slow real cancellation so
+ * a run started right after an abort can race ahead of the old run's settlement.
+ */
+function delayedAbortPages(abortDelayMs: number) {
+  fetchMock.mockImplementation(async (url: string, init?: RequestInit) => {
+    if (url === "/api/search/index.json") {
+      return new Response(JSON.stringify(SLUGS.map((slug) => ({ slug }))));
+    }
+    return new Promise<Response>((resolve, reject) => {
+      const timer = setTimeout(() => resolve(pageResponse()), 30);
+      init?.signal?.addEventListener("abort", () => {
+        clearTimeout(timer);
+        setTimeout(() => reject(new DOMException("aborted", "AbortError")), abortDelayMs);
+      });
+    });
   });
 }
 
@@ -437,6 +463,58 @@ describe("offlineDictionary — pause / cancel", () => {
     await cancelDownload();
     await first;
     await enableOfflineDictionary();
+    expect($offlineDictionaryProgress.get().state).toBe("done");
+    expect(pagesCache().size).toBe(SLUGS.length);
+  });
+
+  it("pause while downloadInPage's own caches.open is still resolving → paused, no /wort/* fetches", async () => {
+    fakeCaches.openDelay.value = 15;
+    const { $offlineDictionaryProgress, pauseDownload, startDownload } = await load();
+    const run = startDownload({ manual: true });
+    // Let getWordUrls settle and getMissingUrls's caches.open (1st call, ~15ms) resolve,
+    // then pause while downloadInPage's own caches.open (2nd call) is still in flight.
+    await new Promise((r) => setTimeout(r, 20));
+    pauseDownload();
+    await run;
+    expect($offlineDictionaryProgress.get().state).toBe("paused");
+    expect(fetchMock.mock.calls.some(([u]) => typeof u === "string" && u.startsWith("/wort/"))).toBe(
+      false,
+    );
+    expect(pagesCache().size).toBe(0);
+  });
+
+  it("disable after pausing mid-write waits for in-flight cache.put calls before deleting", async () => {
+    fakeCaches.putDelay.value = 30;
+    const {
+      $offlineDictionaryProgress,
+      disableOfflineDictionary,
+      pauseDownload,
+      patchOfflineDictionary,
+      startDownload,
+    } = await load();
+    patchOfflineDictionary({ enabled: true });
+    const run = startDownload({ manual: true });
+    await vi.waitFor(() => expect($offlineDictionaryProgress.get().state).toBe("running"));
+    // Let the first batch of (up to CONCURRENCY) cache.put calls start before pausing.
+    await new Promise((r) => setTimeout(r, 5));
+    pauseDownload();
+    await disableOfflineDictionary();
+    await run;
+    expect([...pagesCache().keys()].filter((k) => k.startsWith("/wort/"))).toEqual([]);
+  });
+
+  it("a run started while cancelDownload is still awaiting the old one keeps its own progress", async () => {
+    // The first run's fetches resolve fast, but its abort takes 60ms to settle,
+    // giving the fresh second run (unaffected by that abort) time to reach "done"
+    // first — the old bug then had cancelDownload's delayed IDLE reset land after,
+    // wiping the second run's legitimate "done" state.
+    delayedAbortPages(150);
+    const { $offlineDictionaryProgress, cancelDownload, startDownload } = await load();
+    const first = startDownload({ manual: true });
+    await vi.waitFor(() => expect($offlineDictionaryProgress.get().state).toBe("running"));
+    const cancelling = cancelDownload();
+    const second = startDownload({ manual: true }); // started before `cancelling` resolves
+    await Promise.all([first, cancelling, second]);
     expect($offlineDictionaryProgress.get().state).toBe("done");
     expect(pagesCache().size).toBe(SLUGS.length);
   });

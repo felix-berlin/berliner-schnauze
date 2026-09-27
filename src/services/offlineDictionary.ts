@@ -39,6 +39,14 @@ const getConnection = (): Connection | undefined =>
 /** The current run's AbortController, created fresh by runDownload for every run. */
 let controller: AbortController | null = null;
 let running: Promise<void> | null = null;
+/**
+ * Every run's promise, from the moment startDownload creates it until it settles —
+ * independent of `running`, which pause() clears early so a manual start right after
+ * pause can begin immediately. cancelDownload awaits this set so it never returns (and
+ * lets a caller like disableOfflineDictionary touch the cache) while a paused-but-not-
+ * yet-settled run could still land an in-flight cache.put.
+ */
+const unsettledRuns = new Set<Promise<void>>();
 let pausedByUser = false;
 let listenersAttached = false;
 
@@ -81,9 +89,11 @@ export async function estimateDownloadBytes(): Promise<number> {
  */
 async function downloadInPage(urls: string[], signal: AbortSignal): Promise<void> {
   const cache = await caches.open(PAGES_CACHE);
+  // caches.open is async — if pause/cancel aborted while it was in flight, don't
+  // touch anything: no queue, no progress, no fetches.
+  if (signal.aborted) return;
   const queue = [...urls];
   let failure: { error: unknown } | null = null;
-  setProgress({ mode: "page", state: "running" });
 
   const worker = async (): Promise<void> => {
     for (
@@ -169,7 +179,10 @@ async function runDownload(manual: boolean): Promise<void> {
     const missing = await getMissingUrls(urls);
     if (signal.aborted) return;
     setProgress({ bytes: 0, done: urls.length - missing.length, total: urls.length });
-    if (missing.length > 0) await downloadInPage(missing, signal);
+    if (missing.length > 0) {
+      setProgress({ mode: "page", state: "running" });
+      await downloadInPage(missing, signal);
+    }
     if (signal.aborted) return;
     markDone();
   } catch (err) {
@@ -189,11 +202,13 @@ async function runDownload(manual: boolean): Promise<void> {
 export function startDownload({ manual = false }: { manual?: boolean } = {}): Promise<void> {
   if (!running) {
     const runPromise: Promise<void> = runDownload(manual).finally(() => {
+      unsettledRuns.delete(runPromise);
       // Only clear `running` if it still points at this exact run — pause/cancel
       // may already have cleared it (and a newer run may already be in flight).
       if (running === runPromise) running = null;
     });
     running = runPromise;
+    unsettledRuns.add(runPromise);
   }
   return running;
 }
@@ -202,21 +217,27 @@ export function pauseDownload(): void {
   pausedByUser = true;
   controller?.abort();
   // Clear immediately (not via the run's `finally`) so a manual start right after
-  // pause begins a new run instead of returning the still-settling old one.
+  // pause begins a new run instead of returning the still-settling old one. The run
+  // stays in `unsettledRuns` until it actually finishes, so cancelDownload can still
+  // find and await it later.
   running = null;
   setProgress({ state: "paused" });
 }
 
 export async function cancelDownload(): Promise<void> {
-  const previousRun = running;
   controller?.abort();
   running = null;
   controller = null;
-  // Let the aborted run's tail fully settle before resetting progress, so a
-  // caller that awaits cancelDownload() (e.g. disableOfflineDictionary before it
-  // wipes the cache) never races a worker that hasn't yet observed the abort.
-  if (previousRun) await previousRun.catch(() => {});
+  // Reset before awaiting the old run(s) below — a run started while this await is
+  // still pending must own the final state, not have it wiped back to idle once the
+  // (already-aborted) old run(s) finally settle.
   $offlineDictionaryProgress.set(IDLE);
+  // Await every still-unsettled run (not just the last one `running` pointed at — a
+  // paused run is no longer `running` but may still have in-flight cache.put calls),
+  // so a caller like disableOfflineDictionary never wipes the cache while one of
+  // them could still land a write.
+  const pending = [...unsettledRuns];
+  if (pending.length > 0) await Promise.allSettled(pending);
 }
 
 export async function enableOfflineDictionary(): Promise<void> {
