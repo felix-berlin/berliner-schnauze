@@ -8,7 +8,7 @@ const setDarkMode = vi.fn();
 vi.mock("@components/DropdownPopover.vue", () => ({
   default: {
     name: "DropdownPopover",
-    template: '<div><slot :trigger-props="{}" :is-open="false" /><slot name="panel" /></div>',
+    template: '<div><slot :trigger-props="{}" /><slot name="panel" /></div>',
   },
 }));
 

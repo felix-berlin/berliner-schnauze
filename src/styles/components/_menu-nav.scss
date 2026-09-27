@@ -71,4 +71,52 @@
   &[aria-expanded="true"] {
     --style-border: dashed;
   }
+
+  // Stacked icons (menu ↔ close), swapped via the button's [aria-expanded].
+  &__icons {
+    display: grid;
+
+    > * {
+      grid-area: 1 / 1;
+    }
+  }
+
+  &__icon--close,
+  &[aria-expanded="true"] &__icon--menu {
+    opacity: 0;
+    rotate: -90deg;
+    scale: 0.6;
+  }
+
+  &[aria-expanded="true"] &__icon--close {
+    opacity: 1;
+    rotate: 0deg;
+    scale: 1;
+  }
+
+  &[aria-expanded="true"] &__icon--menu {
+    rotate: 90deg;
+  }
+
+  @include butler-mx.feature("motion") {
+    // Beats .c-button's `transition: all 0.3s`: snappier, and only what actually changes.
+    &.c-button {
+      transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.25s ease,
+        scale 0.12s ease-out;
+    }
+
+    &:active {
+      scale: 0.96;
+    }
+
+    &__icon {
+      transition:
+        opacity 0.2s ease,
+        rotate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+        scale 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+  }
 }

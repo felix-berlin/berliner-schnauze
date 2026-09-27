@@ -1,17 +1,15 @@
 <template>
   <button type="button" class="c-button c-header-control">
-    <XIcon v-if="isOpen" aria-hidden="true" />
-    <MenuIcon v-else aria-hidden="true" />
+    <!-- Both icons stay mounted; [aria-expanded] from DropdownPopover crossfades them in CSS. -->
+    <span class="c-header-control__icons" aria-hidden="true">
+      <MenuIcon class="c-header-control__icon c-header-control__icon--menu" />
+      <XIcon class="c-header-control__icon c-header-control__icon--close" />
+    </span>
     Menü
   </button>
 </template>
 
 <script setup lang="ts">
 import MenuIcon from "virtual:icons/lucide/menu";
-import { defineAsyncComponent } from "vue";
-
-// Only shown once the menu is open; MenuIcon stays eager because it's in the SSR markup.
-const XIcon = defineAsyncComponent(() => import("virtual:icons/lucide/x"));
-
-const { isOpen = false } = defineProps<{ isOpen?: boolean }>();
+import XIcon from "virtual:icons/lucide/x";
 </script>

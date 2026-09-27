@@ -16,6 +16,33 @@
     width: min(600px, 100vw - 2rem);
     border-radius: 4px;
 
+    // Drops in from the trigger corner: slide + scale on top of the shared fade.
+    // Exit stays at 0.15s to match DropdownPopover's content-unmount timeout.
+    @include butler-mx.feature("motion") {
+      transform-origin: top right;
+      transition:
+        opacity 0.15s ease,
+        transform 0.15s ease,
+        display 0.15s allow-discrete,
+        overlay 0.15s allow-discrete;
+
+      &:not(:popover-open) {
+        transform: translateY(-6px) scale(0.98);
+      }
+
+      &:popover-open {
+        transition-duration: 0.22s;
+        transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      @starting-style {
+        &:popover-open {
+          opacity: 0;
+          transform: translateY(-6px) scale(0.98);
+        }
+      }
+    }
+
     // Every icon in the panel shares one size (also overrides .c-header-control's 20px).
     svg {
       flex: none;

@@ -7,8 +7,8 @@
     data-content-target="#"
   >
     <DropdownPopover name="main-menu" placement="bottom-end" :offset="13" class="c-main-menu">
-      <template #default="{ triggerProps, isOpen }">
-        <MainMenuButton v-bind="triggerProps" :is-open="isOpen" />
+      <template #default="{ triggerProps }">
+        <MainMenuButton v-bind="triggerProps" />
       </template>
 
       <template #panel>
