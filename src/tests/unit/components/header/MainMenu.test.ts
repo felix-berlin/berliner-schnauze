@@ -81,9 +81,9 @@ describe("MainMenu.vue", () => {
 
   it("maps the colour scheme radios to setDarkMode", async () => {
     const wrapper = await mountMenu();
-    await wrapper.find("input[value=dark]").setValue();
+    await wrapper.find("input[aria-label=Dunkel]").setValue();
     expect(setDarkMode).toHaveBeenLastCalledWith(true);
-    await wrapper.find("input[value=system]").setValue();
+    await wrapper.find("input[aria-label=System]").setValue();
     expect(setDarkMode).toHaveBeenLastCalledWith(null);
   });
 

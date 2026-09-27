@@ -6,6 +6,7 @@ import { fetchMenu } from "@services/queries/getMenu";
 
 const isIndex = /^\/(index(\.html)?)?$/.test(Astro.url.pathname);
 const mainMenuItems = await fetchMenu("Main Menu");
+// ponytail: keyed by path like the icons in MainMenu.vue; move to WP menu CSS classes with them.
 const headerLinks = mainMenuItems.filter((item) => ["/wort", "/magazin"].includes(item.link));
 ---
 
@@ -63,6 +64,5 @@ const headerLinks = mainMenuItems.filter((item) => ["/wort", "/magazin"].include
   }
 
   document.addEventListener('astro:page-load', syncHeaderHeight);
-  syncCurrentLink();
   document.addEventListener('astro:page-load', syncCurrentLink);
 </script>

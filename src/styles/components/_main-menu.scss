@@ -4,14 +4,10 @@
 .c-main-menu {
   --_rule: var(--primary);
   --_hover: color-mix(in srgb, var(--orange-200) 55%, white);
-  --_tile-bg: var(--orange-100);
-  --_tile-color: var(--blue);
 
   @include butler-mx.dark-mode-class {
     --_rule: color-mix(in srgb, var(--blue) 70%, white);
     --_hover: var(--new-blue-400);
-    --_tile-bg: var(--new-blue-600);
-    --_tile-color: var(--yellow-500);
   }
 
   .c-dropdown__panel {
@@ -19,6 +15,13 @@
 
     width: min(600px, 100vw - 2rem);
     border-radius: 4px;
+
+    // Every icon in the panel shares one size (also overrides .c-header-control's 20px).
+    svg {
+      flex: none;
+      width: 18px;
+      height: 18px;
+    }
   }
 
   &__columns {
@@ -34,20 +37,18 @@
     flex-direction: column;
     gap: 2px;
     padding: 18px 20px 14px;
-    border-top: 1px dashed var(--_rule);
 
-    @include mx.breakpoint("sm") {
-      border-top: none;
-      border-left: 1px dashed var(--_rule);
+    & + & {
+      border-top: 1px dashed var(--_rule);
+
+      @include mx.breakpoint("sm") {
+        border-top: none;
+        border-left: 1px dashed var(--_rule);
+      }
     }
 
     &--discover {
       padding: 18px 12px 14px;
-      border: none;
-
-      @include mx.breakpoint("sm") {
-        border: none;
-      }
     }
   }
 
@@ -77,10 +78,12 @@
     text-decoration: none;
     border: 1px solid transparent;
     border-radius: 3px;
-    transition: all 0.3s ease-in-out;
+    transition:
+      border-color 0.3s ease-in-out,
+      background-color 0.3s ease-in-out;
 
     @include butler-mx.hover {
-      border: 1px dashed var(--header-border);
+      border: 1px dashed var(--control-border);
       background: var(--_hover);
     }
   }
@@ -91,15 +94,10 @@
     justify-content: center;
     width: 34px;
     height: 34px;
-    background: var(--_tile-bg);
-    border: 1px solid var(--header-border);
+    background: var(--control-bg);
+    border: 1px solid var(--control-border);
     border-radius: 3px;
-    color: var(--_tile-color);
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
+    color: var(--control-color);
   }
 
   &__text {
@@ -120,9 +118,9 @@
     padding: 1px 6px;
     font-size: 0.72rem;
     font-weight: 400;
-    border: 1px dashed var(--header-border);
+    border: 1px dashed var(--control-border);
     border-radius: 3px;
-    background: var(--_tile-bg);
+    background: var(--control-bg);
   }
 
   &__desc {
@@ -138,12 +136,6 @@
     font-size: 1.05rem;
     text-decoration: none;
 
-    svg {
-      flex: none;
-      width: 18px;
-      height: 18px;
-    }
-
     @include butler-mx.hover {
       text-decoration: underline dashed from-font;
       text-underline-position: from-font;
@@ -155,7 +147,7 @@
     grid-template-columns: repeat(3, 1fr);
     margin: 10px 0 0;
     padding: 0;
-    border: 1px solid var(--header-border);
+    border: 1px solid var(--control-border);
     border-radius: 4px;
     overflow: hidden;
   }
@@ -166,16 +158,13 @@
     justify-content: center;
     padding: 7px 0;
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
+    transition:
+      background-color 0.3s ease-in-out,
+      color 0.3s ease-in-out;
 
     &:has(:checked) {
-      background: var(--_tile-color);
-      color: var(--_tile-bg);
+      background: var(--control-color);
+      color: var(--control-bg);
     }
 
     &:has(:focus-visible) {
@@ -191,7 +180,7 @@
     padding: 12px 24px;
     border-top: 1px dashed var(--_rule);
     border-radius: 0 0 4px 4px;
-    background: color-mix(in srgb, var(--floating-color-background) 70%, var(--_tile-bg));
+    background: color-mix(in srgb, var(--floating-color-background) 70%, var(--control-bg));
 
     @include mx.breakpoint("xs", "max") {
       flex-direction: column;
@@ -205,24 +194,12 @@
     line-height: 1.4;
   }
 
-  &__install-button {
+  // Compact variant of .c-header-control
+  &__install-button.c-header-control {
     --padding: 6px 12px;
 
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    gap: 8px;
+    height: auto;
     font-size: 0.95rem;
-    letter-spacing: 1px;
-    border-radius: 4px;
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    @include butler-mx.hover {
-      --style-border: dashed;
-    }
   }
 }

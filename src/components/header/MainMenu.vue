@@ -12,7 +12,7 @@
       </template>
 
       <template #panel>
-        <nav class="c-main-menu__nav" aria-label="Hauptmenü">
+        <nav aria-label="Hauptmenü">
           <div class="c-main-menu__columns">
             <div v-if="discoverItems.length" class="c-main-menu__col c-main-menu__col--discover">
               <p class="c-main-menu__label">Entdecken</p>
@@ -53,14 +53,14 @@
 
               <fieldset class="c-main-menu__modes">
                 <legend class="u-sr-only">Farbschema</legend>
-                <label v-for="m in MODES" :key="m.value" class="c-main-menu__mode" :title="m.label">
+                <label v-for="m in MODES" :key="m.label" class="c-main-menu__mode" :title="m.label">
                   <input
-                    v-model="mode"
                     class="u-sr-only"
                     type="radio"
                     name="color-mode"
-                    :value="m.value"
+                    :checked="isDarkMode === m.value"
                     :aria-label="m.label"
+                    @change="applyDarkMode(m.value)"
                   />
                   <component :is="m.icon" aria-hidden="true" />
                 </label>
@@ -72,7 +72,7 @@
             <span class="c-main-menu__install-text">
               Mit der App bleibst Du immer informiert, ob online oder offline.
             </span>
-            <InstallApp class="c-button--primary c-main-menu__install-button">
+            <InstallApp class="c-button--primary c-header-control c-main-menu__install-button">
               <DownloadIcon aria-hidden="true" /> App installieren
             </InstallApp>
           </div>
@@ -141,28 +141,30 @@ const MODES = [
   {
     icon: defineAsyncComponent(() => import("virtual:icons/lucide/sun")),
     label: "Hell",
-    value: "light",
+    value: false,
   },
   {
     icon: defineAsyncComponent(() => import("virtual:icons/lucide/moon")),
     label: "Dunkel",
-    value: "dark",
+    value: true,
   },
   {
     icon: defineAsyncComponent(() => import("virtual:icons/lucide/sun-moon")),
     label: "System",
-    value: "system",
+    value: null,
   },
-] as const;
+];
 
 const isDarkMode = useStore($isDarkMode);
-const mode = computed({
-  get: () => (isDarkMode.value === null ? "system" : isDarkMode.value ? "dark" : "light"),
-  set: (value: (typeof MODES)[number]["value"]) => {
-    setDarkMode(value === "system" ? null : value === "dark");
-    trackEvent("Color Mode", value, "Main Menu");
-  },
-});
+// Same analytics actions as AppSettingsTheme, so both pickers report into one set.
+function applyDarkMode(value: boolean | null): void {
+  setDarkMode(value);
+  trackEvent(
+    "Color Mode",
+    value === null ? "System" : value ? "Dark Mode" : "Light Mode",
+    "Main Menu",
+  );
+}
 
 const isPwaInstalled = useStore($isPwaInstalled);
 </script>

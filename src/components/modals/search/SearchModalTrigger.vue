@@ -5,7 +5,7 @@
     aria-label="Suche aktivieren"
     @click="openSearchModal()"
   >
-    <SearchIcon class="c-searchbar__search-icon" />
+    <SearchIcon />
     <span class="c-searchbar__label">Suche</span>
     <kbd class="c-searchbar__slash-icon">/</kbd>
   </button>

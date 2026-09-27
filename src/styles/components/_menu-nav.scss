@@ -25,7 +25,7 @@
     padding: 0 10px;
     text-decoration: none;
     border-bottom: 1px dashed transparent;
-    transition: all 0.3s ease-in-out;
+    transition: border-color 0.3s ease-in-out;
 
     &:hover,
     &[aria-current="page"] {
@@ -37,7 +37,7 @@
     display: none;
     height: 22px;
     margin: 0 6px;
-    border-left: 1px dashed var(--header-border);
+    border-left: 1px dashed var(--control-border);
 
     @include mx.breakpoint("md") {
       display: block;

@@ -1,5 +1,5 @@
-import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { flushPromises, mount } from "@vue/test-utils";
+import { describe, expect, it, vi } from "vitest";
 
 describe("MainMenuButton.vue", () => {
   it("uses its visible label as accessible name", async () => {
@@ -20,6 +20,8 @@ describe("MainMenuButton.vue", () => {
     const closed = mount(MainMenuButton);
     expect(closed.find("[data-testid='icon-lucide-menu']").exists()).toBe(true);
     const open = mount(MainMenuButton, { props: { isOpen: true } });
+    await vi.dynamicImportSettled(); // XIcon is async
+    await flushPromises();
     expect(open.find("[data-testid='icon-lucide-x']").exists()).toBe(true);
     expect(open.text()).toContain("Menü");
   });
