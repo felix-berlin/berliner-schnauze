@@ -20,19 +20,26 @@ async function storeRecords(registration) {
     if (!response?.ok || response.redirected) continue;
     const headers = new Headers(response.headers);
     headers.set(VERSION_HEADER, version);
-    // oxlint-disable-next-line no-await-in-loop -- sequential on purpose, see comment above
-    await cache.put(
-      record.request,
+    try {
       // oxlint-disable-next-line no-await-in-loop -- sequential on purpose, see comment above
-      new Response(await response.blob(), {
-        headers,
-        status: response.status,
-        statusText: response.statusText,
-      }),
-    );
-    stored++;
+      await cache.put(
+        record.request,
+        // oxlint-disable-next-line no-await-in-loop -- sequential on purpose, see comment above
+        new Response(await response.blob(), {
+          headers,
+          status: response.status,
+          statusText: response.statusText,
+        }),
+      );
+      stored++;
+    } catch (err) {
+      // Realistically QuotaExceededError: further writes would fail the same way, so stop
+      // instead of retrying every remaining record.
+      console.error("[sw-background-fetch]", err);
+      return { failed: true, stored };
+    }
   }
-  return stored;
+  return { failed: false, stored };
 }
 
 async function notifyClients(result, stored) {
@@ -44,9 +51,12 @@ self.addEventListener("backgroundfetchsuccess", (event) => {
   if (!isOurs(event.registration)) return;
   event.waitUntil(
     (async () => {
-      const stored = await storeRecords(event.registration);
-      await event.updateUI({ title: "Offline-Wörterbuch bereit" });
-      await notifyClients("success", stored);
+      const { failed, stored } = await storeRecords(event.registration);
+      const result = failed ? "fail" : "success";
+      await event.updateUI({
+        title: failed ? "Offline-Wörterbuch unvollständig" : "Offline-Wörterbuch bereit",
+      });
+      await notifyClients(result, stored);
     })(),
   );
 });
@@ -55,7 +65,7 @@ self.addEventListener("backgroundfetchfail", (event) => {
   if (!isOurs(event.registration)) return;
   event.waitUntil(
     (async () => {
-      const stored = await storeRecords(event.registration);
+      const { stored } = await storeRecords(event.registration);
       await event.updateUI({ title: "Offline-Wörterbuch unvollständig" });
       await notifyClients("fail", stored);
     })(),

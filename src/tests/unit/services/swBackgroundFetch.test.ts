@@ -73,6 +73,34 @@ describe("sw-background-fetch.js", () => {
     });
   });
 
+  it("success: reports fail when a write throws mid-loop (e.g. QuotaExceededError)", async () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    env.cache.put
+      .mockImplementationOnce(async (req: Request, res: Response) => {
+        env.store.set(new URL(req.url).pathname, res);
+      })
+      .mockImplementationOnce(() => {
+        throw new DOMException("quota exceeded", "QuotaExceededError");
+      });
+    const reg = registration("offline-dictionary@1.0.0", [
+      record("/wort/a", new Response("a", { status: 200 })),
+      record("/wort/b", new Response("b", { status: 200 })),
+      record("/wort/c", new Response("c", { status: 200 })),
+    ]);
+    const { updateUI } = await env.fire("backgroundfetchsuccess", reg);
+
+    expect([...env.store.keys()]).toEqual(["/wort/a"]);
+    expect(env.cache.put).toHaveBeenCalledTimes(2);
+    expect(updateUI).toHaveBeenCalledWith({ title: "Offline-Wörterbuch unvollständig" });
+    expect(env.client.postMessage).toHaveBeenCalledWith({
+      result: "fail",
+      stored: 1,
+      type: "offline-dictionary",
+    });
+    expect(consoleError).toHaveBeenCalledWith("[sw-background-fetch]", expect.any(DOMException));
+    consoleError.mockRestore();
+  });
+
   it("skips redirected responses (unusable for navigations)", async () => {
     const redirected = new Response("x", { status: 200 });
     Object.defineProperty(redirected, "redirected", { value: true });
