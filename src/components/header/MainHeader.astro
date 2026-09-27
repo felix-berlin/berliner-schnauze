@@ -1,34 +1,34 @@
 ---
-import "@styles/components/_menu-nav.scss";
-import MainMenu from "@components/header/MainMenu.vue";
-import SearchModalTrigger from "@components/modals/search/SearchModalTrigger.vue";
-import { fetchMenu } from "@services/queries/getMenu";
+import '@styles/components/_menu-nav.scss';
+import MainMenu from '@components/header/MainMenu.vue';
+import SearchModalTrigger from '@components/modals/search/SearchModalTrigger.vue';
+import { fetchMenu } from '@services/queries/getMenu';
 
 const isIndex = /^\/(index(\.html)?)?$/.test(Astro.url.pathname);
-const mainMenuItems = await fetchMenu("Main Menu");
+const mainMenuItems = await fetchMenu('Main Menu');
 // ponytail: keyed by path like the icons in MainMenu.vue; move to WP menu CSS classes with them.
-const headerLinks = mainMenuItems.filter((item) => ["/wort", "/magazin"].includes(item.link));
+const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].includes(item.link));
 ---
 
-<header class="c-header">
-  <div class="c-header__wrapper u-max-body-width">
-    <div class="c-logo">
-      <a class="c-logo__link" href="/"> Berliner Schnauze</a>
+<header class='c-header'>
+  <div class='c-header__wrapper u-max-body-width'>
+    <div class='c-logo'>
+      <a class='c-logo__link' href='/'> Berliner Schnauze</a>
     </div>
 
-    <div class="c-menu-nav">
-      <nav class="c-menu-nav__links" aria-label="Hauptnavigation">
+    <div class='c-menu-nav'>
+      <nav class='c-menu-nav__links' aria-label='Hauptnavigation'>
         {
           headerLinks.map((item) => (
-            <a class="c-menu-nav__link" href={item.link}>
+            <a class='c-menu-nav__link' href={item.link}>
               {item.title}
             </a>
           ))
         }
       </nav>
-      <span class="c-menu-nav__divider" aria-hidden="true"></span>
+      <span class='c-menu-nav__divider' aria-hidden='true'></span>
 
-      {!isIndex && <SearchModalTrigger client:load />}
+      {!isIndex && <SearchModalTrigger client:idle />}
 
       <MainMenu client:load menuItems={mainMenuItems} />
     </div>
@@ -58,7 +58,8 @@ const headerLinks = mainMenuItems.filter((item) => ["/wort", "/magazin"].include
     const path = location.pathname.replace(/\/$/, '');
     for (const link of document.querySelectorAll<HTMLAnchorElement>('.c-menu-nav__link')) {
       const target = link.getAttribute('href')!;
-      if (path === target || path.startsWith(target + '/')) link.setAttribute('aria-current', 'page');
+      if (path === target || path.startsWith(target + '/'))
+        link.setAttribute('aria-current', 'page');
       else link.removeAttribute('aria-current');
     }
   }
