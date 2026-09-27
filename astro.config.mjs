@@ -457,6 +457,8 @@ export default defineConfig({
         ],
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2 MB (Workbox default)
         navigationPreload: true,
+        // Background Fetch handlers for the offline dictionary (public/sw-background-fetch.js).
+        importScripts: ["sw-background-fetch.js"],
         runtimeCaching: [
           {
             // Network first so pages deployed after the last SW update are reachable
