@@ -1,3 +1,4 @@
+import { disableOfflineDictionary } from "@services/offlineDictionary";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { useOnline, useTimeoutFn } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
@@ -54,6 +55,7 @@ const BUCKET_NAME_MAP: Record<string, string> = {
   "api-search-index": "Suchindex",
   "api-search-meta": "Such-Metadaten",
   "api-word-of-the-day": "Wort des Tages",
+  pages: "Besuchte Seiten",
   "workbox-precache": "App-Dateien",
 };
 
@@ -285,6 +287,9 @@ export function useCacheStorage() {
       });
       return;
     }
+    // The offline dictionary lives in "pages". Clearing it means "free the space" — turn
+    // the dictionary off instead of silently re-downloading it on the next app start.
+    if (name === "pages") await disableOfflineDictionary();
     await loadCaches();
   }
 
@@ -300,6 +305,7 @@ export function useCacheStorage() {
           status: "error",
         });
       }
+      await disableOfflineDictionary();
     } catch {
       createToastNotify({
         message: "Caches konnten nicht geleert werden.",

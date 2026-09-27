@@ -11,6 +11,7 @@ import { createApp, nextTick } from "vue";
 
 vi.mock("@stores/index", () => ({ createToastNotify: vi.fn() }));
 vi.mock("@stores/toastNotify.ts", () => ({ createToastNotify: vi.fn() }));
+vi.mock("@services/offlineDictionary", () => ({ disableOfflineDictionary: vi.fn() }));
 
 // Helper: mounts a composable inside a Vue app (needed for onMounted/onUnmounted)
 function withSetup<T>(composable: () => T): { result: T; unmount: () => void } {
@@ -128,6 +129,10 @@ describe("getBucketDisplayName", () => {
 
   it("returns raw name for unknown cache", () => {
     expect(getBucketDisplayName("my-custom-cache")).toBe("my-custom-cache");
+  });
+
+  it("maps the pages runtime cache", () => {
+    expect(getBucketDisplayName("pages")).toBe("Besuchte Seiten");
   });
 });
 
@@ -1025,6 +1030,47 @@ describe("useCacheStorage — rejected bucket in Promise.allSettled", () => {
       "[useCacheStorage] Failed to load cache bucket:",
       loadError,
     );
+    unmount();
+  });
+});
+
+describe("useCacheStorage — clearing turns off the offline dictionary", () => {
+  beforeEach(() => {
+    vi.stubGlobal(
+      "caches",
+      makeMockCacheStorage({
+        "api-search-index": [{ size: 1, url: "https://example.com/a" }],
+        pages: [{ size: 1, url: "https://example.com/wort/aasen" }],
+      }),
+    );
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.clearAllMocks();
+  });
+
+  it("clearAll disables the offline dictionary", async () => {
+    const { disableOfflineDictionary } = await import("@services/offlineDictionary");
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearAll();
+    expect(disableOfflineDictionary).toHaveBeenCalled();
+    unmount();
+  });
+
+  it("clearBucket('pages') disables the offline dictionary", async () => {
+    const { disableOfflineDictionary } = await import("@services/offlineDictionary");
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearBucket("pages");
+    expect(disableOfflineDictionary).toHaveBeenCalled();
+    unmount();
+  });
+
+  it("clearing another bucket does not disable the offline dictionary", async () => {
+    const { disableOfflineDictionary } = await import("@services/offlineDictionary");
+    const { result, unmount } = withSetup(() => useCacheStorage());
+    await result.clearBucket("api-search-index");
+    expect(disableOfflineDictionary).not.toHaveBeenCalled();
     unmount();
   });
 });
