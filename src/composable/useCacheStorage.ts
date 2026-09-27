@@ -55,6 +55,7 @@ const BUCKET_NAME_MAP: Record<string, string> = {
   "api-search-index": "Suchindex",
   "api-search-meta": "Such-Metadaten",
   "api-word-of-the-day": "Wort des Tages",
+  "astro-assets-archive": "Ältere App-Dateien",
   pages: "Besuchte Seiten",
   "workbox-precache": "App-Dateien",
 };

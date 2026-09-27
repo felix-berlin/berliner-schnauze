@@ -358,7 +358,9 @@ export default defineConfig({
       base: "/",
       scope: "/",
       includeAssets: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
-      registerType: "autoUpdate",
+      // "prompt", not "autoUpdate": an update must not take over open pages — activating it
+      // deletes their hashed assets. src/services/pwa.ts decides when, per $updateMode.
+      registerType: "prompt",
       manifest: {
         id: "/",
         name: "Berliner Schnauze",
@@ -432,6 +434,8 @@ export default defineConfig({
       workbox: {
         globDirectory: "dist",
         cleanupOutdatedCaches: true,
+        // Control the page on first install; updates still wait for pwa.ts's updateSW().
+        clientsClaim: true,
         // @vite-pwa/astro injects its own `navigateFallback: "/"` (and the
         // NavigationRoute/createHandlerBoundToURL it generates) whenever this key is
         // absent from the workbox config — explicit `undefined` opts out, since
@@ -457,8 +461,9 @@ export default defineConfig({
         ],
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2 MB (Workbox default)
         navigationPreload: true,
-        // Background Fetch handlers for the offline dictionary (public/sw-background-fetch.js).
-        importScripts: ["sw-background-fetch.js"],
+        // Background Fetch handlers for the offline dictionary (public/sw-background-fetch.js);
+        // archive of the outgoing version's /_astro/ files (public/sw-asset-archive.js).
+        importScripts: ["sw-background-fetch.js", "sw-asset-archive.js"],
         runtimeCaching: [
           {
             // Network first so pages deployed after the last SW update are reachable
@@ -486,13 +491,32 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/index\\.json$`),
+            // Hashed /_astro/ files the precache no longer has: older versions' assets, still
+            // referenced by cached pages. Filled by public/sw-asset-archive.js on install;
+            // hashed names never change, so cache first. ignoreSearch: island retries add
+            // ?astro-retry=.
+            urlPattern: ({ url }) =>
+              url.origin === self.location.origin && url.pathname.startsWith("/_astro/"),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "astro-assets-archive",
+              matchOptions: { ignoreSearch: true },
+              cacheableResponse: {
+                statuses: [200],
+              },
+            },
+          },
+          {
+            // Same-origin path match (not SITE_ORIGIN): also caches on preview/localhost builds.
+            urlPattern: ({ url }) =>
+              url.origin === self.location.origin && url.pathname === "/api/search/index.json",
             handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-index",
+              // No maxAgeSeconds: the expiration plugin drops entries older than that even
+              // offline, which broke offline search after 3 h. SWR revalidates on every use.
               expiration: {
                 maxEntries: 1,
-                maxAgeSeconds: 10_800, // 3 hours
               },
               cacheableResponse: {
                 statuses: [0, 200],
@@ -500,13 +524,16 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/meta\\.json$`),
+            // Same-origin path match (not SITE_ORIGIN): also caches on preview/localhost builds.
+            urlPattern: ({ url }) =>
+              url.origin === self.location.origin && url.pathname === "/api/search/meta.json",
             handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-meta",
+              // No maxAgeSeconds: the expiration plugin drops entries older than that even
+              // offline, which broke offline search after 3 h. SWR revalidates on every use.
               expiration: {
                 maxEntries: 1,
-                maxAgeSeconds: 10_800, // 3 hours
               },
               cacheableResponse: {
                 statuses: [0, 200],
