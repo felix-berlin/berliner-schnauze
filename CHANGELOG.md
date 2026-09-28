@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.53.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.53.0...v3.53.1) (2026-09-28)
+
+
+### Bug Fixes
+
+* **word:** stop ClientRouter's synthetic hash popstate from force-reloading ([e3a442a](https://github.com/felix-berlin/berliner-schnauze/commit/e3a442a80c145672fb0ac928d138af457cc220d0))
+
 # [3.53.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.52.0...v3.53.0) (2026-09-27)
 
 
