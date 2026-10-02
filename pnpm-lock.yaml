@@ -1419,20 +1419,9 @@ packages:
       '@csstools/css-parser-algorithms': ^4.0.2
       '@csstools/css-tokenizer': ^4.0.2
 
-  '@csstools/color-helpers@6.1.1':
-    resolution: {integrity: sha512-gLNsunvwf3mCi5u5o46/Z/JcJMnhbHSaZ69rkgPzNM3J4s8hWwpPUQB6/tt0EDFyCiWzxANlx+2LJwpYj4zS1w==}
-    engines: {node: '>=20.19.0'}
-
   '@csstools/color-helpers@6.1.2':
     resolution: {integrity: sha512-grhRy3OKmniaAEKXMjua5z/EODX0MSqBGjunw8+j/3HQjOnahs2AGhvEOIYVUWcU6ScApbhLhVrQTX8XqrMrow==}
     engines: {node: '>=20.19.0'}
-
-  '@csstools/css-calc@3.4.0':
-    resolution: {integrity: sha512-XQKj5B7QiZcHiegCOCAzcAOJdhGgWOHbbu62h5e5mkHnn8lWcfiJhllkqWmxu5zWR9jucPHuo1iTB56P033hcg==}
-    engines: {node: '>=20.19.0'}
-    peerDependencies:
-      '@csstools/css-parser-algorithms': ^4.0.0
-      '@csstools/css-tokenizer': ^4.0.0
 
   '@csstools/css-calc@3.4.3':
     resolution: {integrity: sha512-iex20d8CHVkyvg6B7UKV7uHnI2Bqo9g+EFfT9E0y+GvTvhZ/DwONJ+9aKb1dlqm0ZiGsL5RXjp0fCoJYnkeDjA==}
@@ -1441,25 +1430,12 @@ packages:
       '@csstools/css-parser-algorithms': ^4.0.2
       '@csstools/css-tokenizer': ^4.0.2
 
-  '@csstools/css-color-parser@4.2.3':
-    resolution: {integrity: sha512-y4LpL+lmpuyKDiEFq2PnZUVFdAjsoB/qQJod79yLNokXyW7jewi+/WJ69EfItj8A2unWtxXnGjw6LYXgXu5ZjA==}
-    engines: {node: '>=20.19.0'}
-    peerDependencies:
-      '@csstools/css-parser-algorithms': ^4.0.0
-      '@csstools/css-tokenizer': ^4.0.0
-
   '@csstools/css-color-parser@4.2.6':
     resolution: {integrity: sha512-iiPQ3iRWwnJkeEn6RIu6SJPr7hYrLz6XZ9s/QZl+2/LI5KQVjpl2fdmDSZKuD4xP6GMmMPgHFFXg6k1Wkz0Trg==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       '@csstools/css-parser-algorithms': ^4.0.2
       '@csstools/css-tokenizer': ^4.0.2
-
-  '@csstools/css-parser-algorithms@4.0.0':
-    resolution: {integrity: sha512-+B87qS7fIG3L5h3qwJ/IFbjoVoOe/bpOdh9hAjXbvx0o8ImEmUsGXN0inFOnk2ChCFgqkkGFQ+TpM5rbhkKe4w==}
-    engines: {node: '>=20.19.0'}
-    peerDependencies:
-      '@csstools/css-tokenizer': ^4.0.0
 
   '@csstools/css-parser-algorithms@4.0.2':
     resolution: {integrity: sha512-40cSKyMvK+tq4qz6Awrlye2WGuOKt3FwPgtGg6KTfbHOWNw+Rk1rzbAtZnZ6IBhsY491HLRnDXwoyBAijmmILA==}
@@ -1475,10 +1451,6 @@ packages:
       css-tree:
         optional: true
 
-  '@csstools/css-tokenizer@4.0.1':
-    resolution: {integrity: sha512-bPlN9S9O1A0euCpEWE4qnvB5YDuyYVsUTrxSgmAM1Is0j4tICHoVyOVAXfWMP/kS9ZrjvyIXWV2PmomiAXXqOw==}
-    engines: {node: '>=20.19.0'}
-
   '@csstools/css-tokenizer@4.0.2':
     resolution: {integrity: sha512-OoKoR0f76dCY666JlcbhmVTs2drYj1GUXZTYTcbUgJjh9Nv41aFfZ21bPQTERm5+L5cBDo466NltB2lplS5GBw==}
     engines: {node: '>=20.19.0'}
@@ -1489,13 +1461,6 @@ packages:
     peerDependencies:
       '@csstools/css-parser-algorithms': ^4.0.2
       '@csstools/css-tokenizer': ^4.0.2
-
-  '@csstools/media-query-list-parser@5.0.0':
-    resolution: {integrity: sha512-T9lXmZOfnam3eMERPsszjY5NK0jX8RmThmmm99FZ8b7z8yMaFZWKwLWGZuTwdO3ddRY5fy13GmmEYZXB4I98Eg==}
-    engines: {node: '>=20.19.0'}
-    peerDependencies:
-      '@csstools/css-parser-algorithms': ^4.0.0
-      '@csstools/css-tokenizer': ^4.0.0
 
   '@csstools/media-query-list-parser@5.0.2':
     resolution: {integrity: sha512-qx19O8AbbLLbDSAcI6YOby/Vq8rV51psgIvlF5OZT/L8fQJDCyQifL6k+kYU4a8ySpzJ4RBzZkIs530bAn8y4Q==}
@@ -1791,12 +1756,6 @@ packages:
     engines: {node: '>=20.19.0'}
     peerDependencies:
       postcss: ^8.4
-
-  '@csstools/selector-resolve-nested@4.0.1':
-    resolution: {integrity: sha512-j3vdQu0XwLME5qOTWxm8cnmvsf423R2YL6DbKklCHZwkDm7UdKNu6RPlw4REIJhSlKBICY3B70/7QZdicLqZgg==}
-    engines: {node: '>=20.19.0'}
-    peerDependencies:
-      postcss-selector-parser: ^7.1.1
 
   '@csstools/selector-resolve-nested@4.0.2':
     resolution: {integrity: sha512-JpjNBJFA+4OnAHKRK4AMp8xrYyLhI9XapOeBlP2PhRU/IylSw+1ep3BFNTksBJnrTS3KT6kqKNVfpzLLwZUW5Q==}
@@ -2278,12 +2237,6 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  '@graphql-codegen/plugin-helpers@7.3.0':
-    resolution: {integrity: sha512-aaGfI/8Q8wmdO1nx1NMWGoZn/5Tl5TNOVQSI2qkGhk8h8Z8Uc6grFH0O6//HdHfqnUsiruBbe3IaK4/ah3sWcQ==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-
   '@graphql-codegen/plugin-helpers@7.4.0':
     resolution: {integrity: sha512-yRvRKsaa3EZMVmrBoOfTbiorGD6D1K459hE7h78/ROsw2jaBPQI3uN/3lG90skZAT+9KuD2roaIbOh+HGpPu7Q==}
     engines: {node: '>=16'}
@@ -2317,12 +2270,6 @@ packages:
     engines: {node: '>=16'}
     peerDependencies:
       graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-
-  '@graphql-codegen/visitor-plugin-common@7.2.5':
-    resolution: {integrity: sha512-hqOemBp0Ue+WSmk8EDcKP+lghuLC2zsI+jHzSUuoffTZnEN2qZH4VP2C9c1fVd2yy6v+YQiiObOarTMaqF4q9w==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
   '@graphql-codegen/visitor-plugin-common@7.2.7':
     resolution: {integrity: sha512-sksmdldREXXA65dxO1/VZi5AjnawH/KFR0q1YqKNa5C3hSFgsWUkQ4i+ztXn3CMmixOUS8oPN04kz/qlBqbaZw==}
@@ -4466,9 +4413,6 @@ packages:
   '@types/node@24.13.5':
     resolution: {integrity: sha512-TXyindR+lBr22aJIdMQzCFHPHR6cR4js838mRDCSz5hOKWZvZwsXSSiXDmjRj4iJmgl+sR9O+1mkoVBSMadNug==}
 
-  '@types/node@26.6.2':
-    resolution: {integrity: sha512-X1P21scMv4zGKLYqjdGjaKa7COa0RKVYYZZN/NfvLQ1JegxFhdhpZG/Lyn8AXx6CDUavKAd11v6BvfpkDByK8g==}
-
   '@types/node@26.6.4':
     resolution: {integrity: sha512-ldVPDCzj7fsaGZrLB0NuHuTvJcsNasysBAqMolr/cgxrLd1xbqxIr3XJiPnHHJUCxj5sNF1vnRj9aWnrVh5Jcg==}
 
@@ -4828,11 +4772,6 @@ packages:
 
   ajv-formats@3.0.1:
     resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
-    peerDependencies:
-      ajv: ^8.0.0
-    peerDependenciesMeta:
-      ajv:
-        optional: true
 
   ajv-i18n@4.2.0:
     resolution: {integrity: sha512-v/ei2UkCEeuKNXh8RToiFsUclmU+G57LO1Oo22OagNMENIw+Yb8eMwvHu7Vn9fmkjJyv6XclhJ8TbuigSglPkg==}
@@ -8321,9 +8260,6 @@ packages:
     resolution: {integrity: sha512-DvEy55V3DB7uknRo+4iOGT5fP1slR8wQohVdknigZPMpMstaKJQWhwiYBACJE3Ul2pTnATihhBYnRhZQHGBiRw==}
     engines: {node: '>= 0.8'}
 
-  std-env@4.2.0:
-    resolution: {integrity: sha512-oCUKSupKTHX53EyjDtuZQ64pjLJ6yYCtpmEw0goYxtjG9KpbRe8KAsl2tBUGU9DyMcJ0RwJ8GqJAFzMXcXW1Rw==}
-
   std-env@4.3.0:
     resolution: {integrity: sha512-OtU/EgQ1kIm5KwqQpBC6ZEMXrZRui11w8zgfTWp8cdO9B8OaPsbA8bTHO2P+HNo1VlUTGMVBwPhydu6poeXiag==}
 
@@ -9660,10 +9596,10 @@ snapshots:
 
   '@asamuzakjp/css-color@7.0.0':
     dependencies:
-      '@csstools/css-calc': 3.4.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.1))(@csstools/css-tokenizer@4.0.1)
-      '@csstools/css-color-parser': 4.2.3(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.1))(@csstools/css-tokenizer@4.0.1)
-      '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.1)
-      '@csstools/css-tokenizer': 4.0.1
+      '@csstools/css-calc': 3.4.3(@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)
+      '@csstools/css-color-parser': 4.2.6(@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)
+      '@csstools/css-parser-algorithms': 4.0.2(@csstools/css-tokenizer@4.0.2)
+      '@csstools/css-tokenizer': 4.0.2
       lru-cache: 11.5.3
 
   '@asamuzakjp/dom-selector@9.2.1':
@@ -10725,26 +10661,12 @@ snapshots:
       '@csstools/css-parser-algorithms': 4.0.2(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-tokenizer': 4.0.2
 
-  '@csstools/color-helpers@6.1.1': {}
-
   '@csstools/color-helpers@6.1.2': {}
-
-  '@csstools/css-calc@3.4.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.1))(@csstools/css-tokenizer@4.0.1)':
-    dependencies:
-      '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.1)
-      '@csstools/css-tokenizer': 4.0.1
 
   '@csstools/css-calc@3.4.3(@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)':
     dependencies:
       '@csstools/css-parser-algorithms': 4.0.2(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-tokenizer': 4.0.2
-
-  '@csstools/css-color-parser@4.2.3(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.1))(@csstools/css-tokenizer@4.0.1)':
-    dependencies:
-      '@csstools/color-helpers': 6.1.1
-      '@csstools/css-calc': 3.4.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.1))(@csstools/css-tokenizer@4.0.1)
-      '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.1)
-      '@csstools/css-tokenizer': 4.0.1
 
   '@csstools/css-color-parser@4.2.6(@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)':
     dependencies:
@@ -10752,10 +10674,6 @@ snapshots:
       '@csstools/css-calc': 3.4.3(@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-parser-algorithms': 4.0.2(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-tokenizer': 4.0.2
-
-  '@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.1)':
-    dependencies:
-      '@csstools/css-tokenizer': 4.0.1
 
   '@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2)':
     dependencies:
@@ -10765,19 +10683,12 @@ snapshots:
     optionalDependencies:
       css-tree: 3.2.1
 
-  '@csstools/css-tokenizer@4.0.1': {}
-
   '@csstools/css-tokenizer@4.0.2': {}
 
   '@csstools/custom-function-parser@1.0.0(@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)':
     dependencies:
       '@csstools/css-parser-algorithms': 4.0.2(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-tokenizer': 4.0.2
-
-  '@csstools/media-query-list-parser@5.0.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.1))(@csstools/css-tokenizer@4.0.1)':
-    dependencies:
-      '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.1)
-      '@csstools/css-tokenizer': 4.0.1
 
   '@csstools/media-query-list-parser@5.0.2(@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)':
     dependencies:
@@ -11100,10 +11011,6 @@ snapshots:
     dependencies:
       postcss: 8.5.28
 
-  '@csstools/selector-resolve-nested@4.0.1(postcss-selector-parser@7.1.6)':
-    dependencies:
-      postcss-selector-parser: 7.1.6
-
   '@csstools/selector-resolve-nested@4.0.2(postcss-selector-parser@7.1.6)':
     dependencies:
       postcss-selector-parser: 7.1.6
@@ -11387,7 +11294,7 @@ snapshots:
 
   '@graphql-codegen/add@7.1.0(graphql@17.0.2)':
     dependencies:
-      '@graphql-codegen/plugin-helpers': 7.3.0(graphql@17.0.2)
+      '@graphql-codegen/plugin-helpers': 7.4.0(graphql@17.0.2)
       graphql: 17.0.2
       tslib: 2.8.1
 
@@ -11398,7 +11305,7 @@ snapshots:
       '@babel/types': 7.29.8
       '@graphql-codegen/client-preset': 6.2.0(graphql-sock@1.0.1(graphql@17.0.2))(graphql@17.0.2)
       '@graphql-codegen/core': 6.2.0(graphql@17.0.2)
-      '@graphql-codegen/plugin-helpers': 7.3.0(graphql@17.0.2)
+      '@graphql-codegen/plugin-helpers': 7.4.0(graphql@17.0.2)
       '@graphql-tools/apollo-engine-loader': 8.0.36(graphql@17.0.2)
       '@graphql-tools/code-file-loader': 8.1.39(graphql@17.0.2)(supports-color@10.2.2)
       '@graphql-tools/git-loader': 8.0.42(graphql@17.0.2)(supports-color@10.2.2)
@@ -11448,11 +11355,11 @@ snapshots:
       '@babel/template': 7.29.7
       '@graphql-codegen/add': 7.1.0(graphql@17.0.2)
       '@graphql-codegen/gql-tag-operations': 6.1.0(graphql@17.0.2)
-      '@graphql-codegen/plugin-helpers': 7.3.0(graphql@17.0.2)
+      '@graphql-codegen/plugin-helpers': 7.4.0(graphql@17.0.2)
       '@graphql-codegen/typed-document-node': 7.1.0(graphql@17.0.2)
       '@graphql-codegen/typescript': 6.1.0(graphql@17.0.2)
       '@graphql-codegen/typescript-operations': 6.1.9(graphql-sock@1.0.1(graphql@17.0.2))(graphql@17.0.2)
-      '@graphql-codegen/visitor-plugin-common': 7.2.5(graphql@17.0.2)
+      '@graphql-codegen/visitor-plugin-common': 7.2.7(graphql@17.0.2)
       '@graphql-tools/documents': 1.0.2(graphql@17.0.2)
       '@graphql-tools/utils': 11.2.2(graphql@17.0.2)
       '@graphql-typed-document-node/core': 3.2.0(graphql@17.0.2)
@@ -11463,7 +11370,7 @@ snapshots:
 
   '@graphql-codegen/core@6.2.0(graphql@17.0.2)':
     dependencies:
-      '@graphql-codegen/plugin-helpers': 7.3.0(graphql@17.0.2)
+      '@graphql-codegen/plugin-helpers': 7.4.0(graphql@17.0.2)
       '@graphql-tools/schema': 10.1.1(graphql@17.0.2)
       '@graphql-tools/utils': 11.2.2(graphql@17.0.2)
       graphql: 17.0.2
@@ -11471,8 +11378,8 @@ snapshots:
 
   '@graphql-codegen/gql-tag-operations@6.1.0(graphql@17.0.2)':
     dependencies:
-      '@graphql-codegen/plugin-helpers': 7.3.0(graphql@17.0.2)
-      '@graphql-codegen/visitor-plugin-common': 7.2.5(graphql@17.0.2)
+      '@graphql-codegen/plugin-helpers': 7.4.0(graphql@17.0.2)
+      '@graphql-codegen/visitor-plugin-common': 7.2.7(graphql@17.0.2)
       '@graphql-tools/utils': 11.2.2(graphql@17.0.2)
       auto-bind: 5.0.1
       graphql: 17.0.2
@@ -11480,18 +11387,9 @@ snapshots:
 
   '@graphql-codegen/introspection@6.1.0(graphql@17.0.2)':
     dependencies:
-      '@graphql-codegen/plugin-helpers': 7.3.0(graphql@17.0.2)
-      '@graphql-codegen/visitor-plugin-common': 7.2.5(graphql@17.0.2)
+      '@graphql-codegen/plugin-helpers': 7.4.0(graphql@17.0.2)
+      '@graphql-codegen/visitor-plugin-common': 7.2.7(graphql@17.0.2)
       graphql: 17.0.2
-      tslib: 2.8.1
-
-  '@graphql-codegen/plugin-helpers@7.3.0(graphql@17.0.2)':
-    dependencies:
-      '@graphql-tools/utils': 11.2.2(graphql@17.0.2)
-      change-case-all: 2.1.0
-      common-tags: 1.8.2
-      graphql: 17.0.2
-      import-from: 4.0.0
       tslib: 2.8.1
 
   '@graphql-codegen/plugin-helpers@7.4.0(graphql@17.0.2)':
@@ -11505,15 +11403,15 @@ snapshots:
 
   '@graphql-codegen/schema-ast@6.1.0(graphql@17.0.2)':
     dependencies:
-      '@graphql-codegen/plugin-helpers': 7.3.0(graphql@17.0.2)
+      '@graphql-codegen/plugin-helpers': 7.4.0(graphql@17.0.2)
       '@graphql-tools/utils': 11.2.2(graphql@17.0.2)
       graphql: 17.0.2
       tslib: 2.8.1
 
   '@graphql-codegen/typed-document-node@7.1.0(graphql@17.0.2)':
     dependencies:
-      '@graphql-codegen/plugin-helpers': 7.3.0(graphql@17.0.2)
-      '@graphql-codegen/visitor-plugin-common': 7.2.5(graphql@17.0.2)
+      '@graphql-codegen/plugin-helpers': 7.4.0(graphql@17.0.2)
+      '@graphql-codegen/visitor-plugin-common': 7.2.7(graphql@17.0.2)
       auto-bind: 5.0.1
       change-case-all: 2.1.0
       graphql: 17.0.2
@@ -11532,25 +11430,11 @@ snapshots:
 
   '@graphql-codegen/typescript@6.1.0(graphql@17.0.2)':
     dependencies:
-      '@graphql-codegen/plugin-helpers': 7.3.0(graphql@17.0.2)
+      '@graphql-codegen/plugin-helpers': 7.4.0(graphql@17.0.2)
       '@graphql-codegen/schema-ast': 6.1.0(graphql@17.0.2)
-      '@graphql-codegen/visitor-plugin-common': 7.2.5(graphql@17.0.2)
+      '@graphql-codegen/visitor-plugin-common': 7.2.7(graphql@17.0.2)
       auto-bind: 5.0.1
       graphql: 17.0.2
-      tslib: 2.8.1
-
-  '@graphql-codegen/visitor-plugin-common@7.2.5(graphql@17.0.2)':
-    dependencies:
-      '@graphql-codegen/plugin-helpers': 7.3.0(graphql@17.0.2)
-      '@graphql-tools/optimize': 2.0.1(graphql@17.0.2)
-      '@graphql-tools/relay-operation-optimizer': 7.1.10(graphql@17.0.2)
-      '@graphql-tools/utils': 11.2.2(graphql@17.0.2)
-      auto-bind: 5.0.1
-      change-case-all: 2.1.0
-      dependency-graph: 1.0.0
-      graphql: 17.0.2
-      graphql-tag: 2.12.7(graphql@17.0.2)
-      parse-filepath: 1.0.2
       tslib: 2.8.1
 
   '@graphql-codegen/visitor-plugin-common@7.2.7(graphql@17.0.2)':
@@ -12135,7 +12019,7 @@ snapshots:
     dependencies:
       '@hono/node-server': 2.1.1(hono@4.13.8)
       ajv: 8.20.0
-      ajv-formats: 3.0.1(ajv@8.20.0)
+      ajv-formats: 3.0.1
       content-type: 1.0.5
       cors: 2.8.6
       cross-spawn: 7.0.6
@@ -13599,10 +13483,6 @@ snapshots:
     dependencies:
       undici-types: 7.18.2
 
-  '@types/node@26.6.2':
-    dependencies:
-      undici-types: 8.9.0
-
   '@types/node@26.6.4':
     dependencies:
       undici-types: 8.9.0
@@ -13623,7 +13503,7 @@ snapshots:
 
   '@types/sax@1.2.7':
     dependencies:
-      '@types/node': 26.6.2
+      '@types/node': 26.6.4
 
   '@types/shimmer@1.2.0': {}
 
@@ -13647,7 +13527,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 26.6.2
+      '@types/node': 26.6.4
 
   '@typescript-eslint/scope-manager@8.70.0':
     dependencies:
@@ -13714,7 +13594,7 @@ snapshots:
       ast-v8-to-istanbul: 1.0.6
       magicast: 0.5.5
       obug: 2.2.1
-      std-env: 4.2.0
+      std-env: 4.3.0
       tinyrainbow: 3.1.1
       vitest: 5.0.3(@opentelemetry/api@1.9.1)(@types/node@26.6.4)(@vitest/coverage-v8@5.0.3)(@vitest/ui@5.0.3)(jsdom@30.1.1)(vite@8.3.2(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.1))
 
@@ -14047,8 +13927,8 @@ snapshots:
     optionalDependencies:
       ajv: 8.20.0
 
-  ajv-formats@3.0.1(ajv@8.20.0):
-    optionalDependencies:
+  ajv-formats@3.0.1:
+    dependencies:
       ajv: 8.20.0
 
   ajv-i18n@4.2.0(ajv@8.20.0):
@@ -17859,8 +17739,6 @@ snapshots:
 
   statuses@2.0.2: {}
 
-  std-env@4.2.0: {}
-
   std-env@4.3.0: {}
 
   stop-iteration-iterator@1.1.0:
@@ -17987,10 +17865,10 @@ snapshots:
 
   stylelint-scss@7.3.0(stylelint@17.16.0(supports-color@10.2.2)(typescript@6.0.3)):
     dependencies:
-      '@csstools/css-calc': 3.4.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.1))(@csstools/css-tokenizer@4.0.1)
-      '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.1)
+      '@csstools/css-calc': 3.4.3(@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)
+      '@csstools/css-parser-algorithms': 4.0.2(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-syntax-patches-for-csstree': 1.1.14(css-tree@3.2.1)
-      '@csstools/css-tokenizer': 4.0.1
+      '@csstools/css-tokenizer': 4.0.2
       css-tree: 3.2.1
       is-plain-object: 5.1.0
       known-css-properties: 0.37.0
@@ -18002,12 +17880,12 @@ snapshots:
 
   stylelint@17.16.0(supports-color@10.2.2)(typescript@6.0.3):
     dependencies:
-      '@csstools/css-calc': 3.4.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.1))(@csstools/css-tokenizer@4.0.1)
-      '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.1)
+      '@csstools/css-calc': 3.4.3(@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)
+      '@csstools/css-parser-algorithms': 4.0.2(@csstools/css-tokenizer@4.0.2)
       '@csstools/css-syntax-patches-for-csstree': 1.1.14(css-tree@3.2.1)
-      '@csstools/css-tokenizer': 4.0.1
-      '@csstools/media-query-list-parser': 5.0.0(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.1))(@csstools/css-tokenizer@4.0.1)
-      '@csstools/selector-resolve-nested': 4.0.1(postcss-selector-parser@7.1.6)
+      '@csstools/css-tokenizer': 4.0.2
+      '@csstools/media-query-list-parser': 5.0.2(@csstools/css-parser-algorithms@4.0.2(@csstools/css-tokenizer@4.0.2))(@csstools/css-tokenizer@4.0.2)
+      '@csstools/selector-resolve-nested': 4.0.2(postcss-selector-parser@7.1.6)
       '@csstools/selector-specificity': 6.0.0(postcss-selector-parser@7.1.6)
       colord: 2.10.0
       cosmiconfig: 9.0.2(typescript@6.0.3)
@@ -18609,7 +18487,7 @@ snapshots:
       magic-string: 1.4.1
       obug: 2.2.1
       picomatch: 4.0.7
-      std-env: 4.2.0
+      std-env: 4.3.0
       tinybench: 6.1.4
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
