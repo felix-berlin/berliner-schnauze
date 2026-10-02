@@ -1,15 +1,16 @@
 @use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-word-sidebar {
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: var(--white-100);
   border: 1px dashed var(--grey-100);
   border-radius: 4px;
   overflow: hidden;
   position: sticky;
-  top: var(--site-header-height);
+  inset-block-start: var(--site-header-height);
   z-index: 10;
 
   @include butler-mx.dark-mode-class {
@@ -18,7 +19,7 @@
   }
 
   @container word-page (inline-size >= 48rem) {
-    top: calc(var(--site-header-height) + vars.$spacer);
+    inset-block-start: calc(var(--site-header-height) + vars.$spacer);
     align-self: start;
     overflow: visible;
     z-index: auto;
@@ -39,7 +40,7 @@
     .c-word-sidebar__nav {
       flex-direction: row;
       padding-block: 0;
-      min-width: max-content;
+      min-inline-size: max-content;
     }
   }
 
@@ -72,7 +73,7 @@
 
   &__word-subtitle {
     font-size: 0.75rem;
-    color: color-mix(in srgb, var(--blue) 75%, white);
+    color: var(--color-muted);
     margin: 0;
     margin-block-start: 0.2rem;
 
@@ -82,11 +83,8 @@
   }
 
   &__group-label {
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--blue) 75%, white);
+    @include mx.eyebrow(0.6rem, 0.12em);
+
     padding-inline: vars.$spacer * 0.75;
     margin-block: vars.$spacer * 0.5 0.2rem;
 

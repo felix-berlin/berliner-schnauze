@@ -1,13 +1,12 @@
 @use "@styles/variables" as vars;
-@use "@sass-butler/mixins" as butler-mx;
 
 .c-single-word {
   &__footer {
     display: flex;
     flex-direction: var(--direction-flex, column);
     gap: var(--spacing, #{vars.$spacer * 0.5});
-    border-top: 1px dashed var(--new-blue-200);
-    padding-top: vars.$spacer * 1.5;
+    border-block-start: 1px dashed var(--new-blue-200);
+    padding-block-start: vars.$spacer * 1.5;
 
     @container word-main (inline-size >= 34rem) {
       --spacing: #{vars.$spacer * 2};

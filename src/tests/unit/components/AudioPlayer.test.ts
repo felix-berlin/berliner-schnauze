@@ -108,7 +108,9 @@ describe("AudioPlayer.vue", () => {
     await wrapper.find("button").trigger("click"); // playAudio schedules rAF even with null audioFile
     capturedCb!(0); // fire updateProgress → if (null && isPlaying) → false → exits
     await nextTick();
-    expect(wrapper.get<HTMLElement>(".c-audio-player__progress").element.style.height).toBe("0%");
+    expect(
+      wrapper.get<HTMLElement>(".c-audio-player__progress").element.style.getPropertyValue("--p"),
+    ).toBe("0");
     rafSpy.mockRestore();
     wrapper.unmount();
   });
@@ -133,7 +135,9 @@ describe("AudioPlayer.vue", () => {
     await wrapper.find("button").trigger("click"); // mocked: duration=100, currentTime=50
     capturedCb!(0); // fire updateProgress → if (audioFile && isPlaying) → true → duration truthy → computes ratio
     await nextTick();
-    expect(wrapper.get<HTMLElement>(".c-audio-player__progress").element.style.height).toBe("50%");
+    expect(
+      wrapper.get<HTMLElement>(".c-audio-player__progress").element.style.getPropertyValue("--p"),
+    ).toBe("0.5");
     rafSpy.mockRestore();
     wrapper.unmount();
   });
@@ -158,7 +162,9 @@ describe("AudioPlayer.vue", () => {
     await wrapper.find("button").trigger("click");
     capturedCb!(0); // fire updateProgress → duration=0 → progress = 0 (false branch)
     await nextTick();
-    expect(wrapper.get<HTMLElement>(".c-audio-player__progress").element.style.height).toBe("0%");
+    expect(
+      wrapper.get<HTMLElement>(".c-audio-player__progress").element.style.getPropertyValue("--p"),
+    ).toBe("0");
     rafSpy.mockRestore();
     wrapper.unmount();
   });

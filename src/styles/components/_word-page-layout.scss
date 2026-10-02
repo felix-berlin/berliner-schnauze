@@ -5,9 +5,9 @@
 // ── Page layout containers ────────────────────────────────────────────────────
 
 .c-page-topbar {
-  background: white;
+  background: var(--white-100);
   border-block-end: 1px dashed var(--grey-100);
-  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+  box-shadow: vars.$paper-lift;
   padding-inline: vars.$spacer * 1.5;
   padding-block: vars.$spacer * 0.75;
 

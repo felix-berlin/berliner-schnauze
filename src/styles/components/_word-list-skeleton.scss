@@ -12,7 +12,7 @@
     gap: 1rem;
     box-sizing: border-box;
     height: var(--word-list-skeleton-row-size, 110px);
-    margin-bottom: vars.$spacer;
+    margin-block-end: vars.$spacer;
     padding: vars.$spacer * 0.5 vars.$spacer;
     background-color: var(--color-background, color-mix(in srgb, var(--orange-100) 30%, white));
     border: 1px dashed var(--color-border, var(--orange-200));
@@ -22,6 +22,9 @@
       --color-border: var(--new-blue-200);
       --color-skeleton-bone: var(--new-blue-200);
     }
+    @include butler-mx.feature("motion") {
+      animation: word-list-skeleton-pulse 1.6s ease-in-out infinite;
+    }
   }
 
   &__lines {
@@ -29,7 +32,7 @@
     flex-direction: column;
     justify-content: center;
     gap: vars.$spacer * 0.5;
-    min-width: 0;
+    min-inline-size: 0;
   }
 
   &__bar {
@@ -53,12 +56,6 @@
     border-radius: 4px;
     background-color: var(--color-skeleton-bone, var(--orange-200));
     opacity: 0.6;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .c-word-list-skeleton__row {
-    animation: word-list-skeleton-pulse 1.6s ease-in-out infinite;
   }
 }
 

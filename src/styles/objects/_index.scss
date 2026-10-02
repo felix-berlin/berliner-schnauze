@@ -7,7 +7,7 @@
   &__header {
     display: flex;
     justify-content: space-between;
-    margin-top: 5%;
+    margin-block-start: 5%;
     flex-wrap: var(--wrap-flex, wrap);
     row-gap: vars.$spacer * 0.5;
 
@@ -23,11 +23,11 @@
 
   &__image-wrap {
     flex: var(--flex, 0 1 64%);
-    margin-left: var(--spacing-outer-left, auto);
+    margin-inline-start: var(--spacing-outer-left, auto);
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
-    margin-top: 80px;
+    margin-block-start: 80px;
 
     @include mx.breakpoint("xs") {
       --flex: 0 1 85%;
@@ -45,18 +45,6 @@
 
     @include butler-mx.dark-mode-class {
       --color-shadow: rgb(255 255 255 / 20%);
-    }
-  }
-
-  &__filter-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: vars.$spacer;
-  }
-
-  .c-word-of-the-day {
-    @include mx.breakpoint("sm") {
-      --spacing-outer: #{vars.$spacer * 1.5};
     }
   }
 

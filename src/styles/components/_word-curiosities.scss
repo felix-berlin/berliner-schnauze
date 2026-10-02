@@ -1,6 +1,3 @@
-@use "@styles/variables" as vars;
-@use "@sass-butler/mixins" as butler-mx;
-
 .c-word-curiosities {
   &__list {
     list-style: none;
@@ -10,7 +7,7 @@
     grid-template-columns: 1fr;
     gap: 0.4rem;
 
-    @media (width >= 36rem) {
+    @container word-main (inline-size >= 36rem) {
       grid-template-columns: repeat(2, 1fr);
     }
   }
@@ -19,14 +16,11 @@
     font-size: 1rem;
 
     &--positive {
-      color: var(--success, #35a672);
+      color: var(--success);
       font-weight: 600;
     }
 
-    &--negative {
-      color: var(--color-muted);
-    }
-
+    &--negative,
     &--neutral {
       color: var(--color-muted);
     }

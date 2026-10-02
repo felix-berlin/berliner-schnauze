@@ -49,7 +49,7 @@ describe("IsWordOfTheDay.vue", () => {
       },
     });
 
-    expect(wrapper.find(".c-word-of-the-day-crown").exists()).toBe(true);
+    expect(wrapper.find(".c-is-word-of-the-day").exists()).toBe(true);
     expect(wrapper.findComponent(Crown).exists()).toBe(true);
     // vTooltip lazily adds the panel to body on first show
     await wrapper.find("[aria-describedby]").trigger("pointerenter");
@@ -67,7 +67,7 @@ describe("IsWordOfTheDay.vue", () => {
       },
     });
 
-    expect(wrapper.find(".c-word-of-the-day-crown").exists()).toBe(false);
+    expect(wrapper.find(".c-is-word-of-the-day").exists()).toBe(false);
     wrapper.unmount();
   });
 
@@ -113,7 +113,7 @@ describe("IsWordOfTheDay.vue", () => {
     expect(badge.exists()).toBe(true);
     expect(badge.text()).toContain("Wort des Tages");
     expect(wrapper.findComponent(Crown).exists()).toBe(true);
-    expect(wrapper.find(".c-word-of-the-day-crown").exists()).toBe(false);
+    expect(wrapper.find(".c-is-word-of-the-day").exists()).toBe(false);
     wrapper.unmount();
   });
 

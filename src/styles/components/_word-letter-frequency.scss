@@ -26,11 +26,25 @@
   }
 
   &__letter-meter {
+    --meter-fill: linear-gradient(
+      90deg,
+      oklch(52% 0.16 var(--meter-hue)),
+      oklch(62% 0.2 var(--meter-hue))
+    );
+
     flex: 1;
     height: 8px;
     appearance: none;
     border: none;
     background: transparent;
+
+    @include butler-mx.dark-mode-class {
+      --meter-fill: linear-gradient(
+        90deg,
+        oklch(65% 0.18 var(--meter-hue)),
+        oklch(76% 0.22 var(--meter-hue))
+      );
+    }
   }
 
   &__letter-meter::-webkit-meter-bar {
@@ -40,38 +54,12 @@
 
   &__letter-meter::-webkit-meter-optimum-value {
     border-radius: 4px;
-    background: linear-gradient(
-      90deg,
-      oklch(52% 0.16 var(--meter-hue)),
-      oklch(62% 0.2 var(--meter-hue))
-    );
+    background: var(--meter-fill);
   }
 
   &__letter-meter::-moz-meter-bar {
     border-radius: 4px;
-    background: linear-gradient(
-      90deg,
-      oklch(52% 0.16 var(--meter-hue)),
-      oklch(62% 0.2 var(--meter-hue))
-    );
-  }
-
-  @include butler-mx.dark-mode-class {
-    &__letter-meter::-webkit-meter-optimum-value {
-      background: linear-gradient(
-        90deg,
-        oklch(65% 0.18 var(--meter-hue)),
-        oklch(76% 0.22 var(--meter-hue))
-      );
-    }
-
-    &__letter-meter::-moz-meter-bar {
-      background: linear-gradient(
-        90deg,
-        oklch(65% 0.18 var(--meter-hue)),
-        oklch(76% 0.22 var(--meter-hue))
-      );
-    }
+    background: var(--meter-fill);
   }
 
   &__letter-label {
@@ -93,12 +81,8 @@
       text-decoration: underline;
       text-underline-offset: 2px;
 
-      &:hover {
-        color: var(--orange-600);
-
-        @include butler-mx.dark-mode-class {
-          color: var(--orange-300);
-        }
+      @include butler-mx.hover {
+        color: var(--color-accent-text);
       }
     }
   }

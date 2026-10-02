@@ -35,8 +35,9 @@ const isPlaying = ref(false);
 const audioButton = ref<HTMLButtonElement | null>(null);
 const progress = ref(0);
 
+// Scale factor (0–1) for the fill; animated via transform, not height.
 const fillStyle = computed(() => ({
-  height: `${progress.value}%`,
+  "--p": progress.value / 100,
 }));
 
 // Stopped automatically on unmount by VueUse.
@@ -84,23 +85,5 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-.c-audio-player {
-  position: relative;
-
-  &__actions {
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__progress {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: var(--accent);
-    transition: height 0.1s linear;
-  }
-}
+@use "@styles/components/audio-player";
 </style>

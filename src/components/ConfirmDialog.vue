@@ -5,7 +5,11 @@
       <button type="button" class="c-button c-button--center-icon" @click="emit('cancel')">
         Abbrechen
       </button>
-      <button type="button" class="c-button c-button--center-icon" @click="emit('confirm')">
+      <button
+        type="button"
+        class="c-button c-button--center-icon c-button--primary"
+        @click="emit('confirm')"
+      >
         Bestätigen
       </button>
     </div>
@@ -18,25 +22,5 @@ const emit = defineEmits<{ confirm: []; cancel: [] }>();
 </script>
 
 <style lang="scss">
-.c-confirm-dialog {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.5rem;
-
-  &__message {
-    margin: 0;
-    font-size: 1.1rem;
-  }
-
-  &__actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.75rem;
-
-    .c-button {
-      --padding: 0.5rem 1rem;
-    }
-  }
-}
+@use "@styles/components/confirm-dialog";
 </style>
