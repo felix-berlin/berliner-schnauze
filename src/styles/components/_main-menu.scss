@@ -1,4 +1,3 @@
-@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-main-menu {
@@ -15,6 +14,7 @@
 
     width: min(600px, 100% - 2rem);
     border-radius: 4px;
+    container: main-menu / inline-size;
 
     // Drops in from the trigger corner: slide + scale on top of the shared fade.
     // Exit stays at 0.15s to match DropdownPopover's content-unmount timeout.
@@ -54,7 +54,7 @@
   &__columns {
     display: grid;
 
-    @include mx.breakpoint("sm") {
+    @container main-menu (inline-size >= 36rem) {
       grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
     }
   }
@@ -68,7 +68,7 @@
     & + & {
       border-block-start: 1px dashed var(--_rule);
 
-      @include mx.breakpoint("sm") {
+      @container main-menu (inline-size >= 36rem) {
         border-block-start: none;
         border-inline-start: 1px dashed var(--_rule);
       }
@@ -183,7 +183,7 @@
     border-end-end-radius: 4px;
     background: color-mix(in srgb, var(--floating-color-background) 70%, var(--control-bg));
 
-    @include mx.breakpoint("xs", "max") {
+    @container main-menu (inline-size < 34rem) {
       flex-direction: column;
       align-items: stretch;
     }
