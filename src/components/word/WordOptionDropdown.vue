@@ -11,7 +11,7 @@
         aria-label="Optionen"
         class="c-options-dropdown__options-icon c-button c-button--center-icon"
       >
-        <span aria-hidden="true" class="c-icon c-icon--lucide-more-vertical" />
+        <EllipsisVertical width="18" height="18" aria-hidden="true" />
       </button>
     </template>
 
@@ -69,6 +69,7 @@ import { SITE_URL } from "astro:env/client";
 import Copy from "virtual:icons/lucide/copy";
 import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
+import { defineAsyncComponent } from "vue";
 
 import type { BerlinerWord, WordProperties } from "@/gql/entity-types";
 
@@ -78,6 +79,10 @@ interface WordProps {
 }
 
 const { berlinerisch, slug } = defineProps<WordProps>();
+
+const EllipsisVertical = defineAsyncComponent(
+  () => import("virtual:icons/lucide/ellipsis-vertical"),
+);
 
 const { copied, copy, isSupported: clipBoardIsSupported, text } = useClipboard();
 const { isSupported: shareIsSupported, share } = useShare();
@@ -135,6 +140,5 @@ const copyNameToClipboard = async (name: string): Promise<void> => {
 </script>
 
 <style lang="scss">
-@use "@styles/components/icons";
 @use "@styles/components/options-dropdown";
 </style>

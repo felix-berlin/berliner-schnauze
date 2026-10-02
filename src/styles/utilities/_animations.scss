@@ -1,3 +1,8 @@
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
 @keyframes shine {
   from {
     transform: translateX(-100%);

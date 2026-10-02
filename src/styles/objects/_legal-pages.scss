@@ -1,10 +1,8 @@
 @use "@styles/variables" as vars;
 
 .o-legal-pages {
-  @for $h from 1 to 6 {
-    h#{$h} {
-      font-family: vars.$berlin;
-      font-weight: bold;
-    }
+  :is(h1, h2, h3, h4, h5, h6) {
+    font-family: vars.$berlin;
+    font-weight: bold;
   }
 }

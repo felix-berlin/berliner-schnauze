@@ -1,20 +1,20 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
-@use "@sass-butler/mixins" as butler-mx;
-@use "@sass-butler/functions" as butler-fn;
+
+// Homepage word listing layout. What WordFilter.vue itself renders lives in _word-filter.scss.
 
 .c-filter-search {
   display: grid;
   grid-template-columns: [start] 1fr [end];
   gap: vars.$spacer * 1.5 vars.$spacer * 3;
-  height: 100vh;
+  height: 100dvh;
   grid-template-rows: min-content 1fr auto;
   grid-template-areas:
     "list-header"
     "list"
     "filter";
 
-  @include butler-mx.breakpoint("md") {
+  @include mx.breakpoint("md") {
     grid-template-columns: [start] 1fr 3fr [end];
     grid-template-rows: auto 1fr;
     grid-template-areas:
@@ -26,7 +26,7 @@
   .c-word-search-filter-toggle {
     grid-area: filter-toggle;
 
-    @include butler-mx.breakpoint("md") {
+    @include mx.breakpoint("md") {
       display: none;
     }
   }
@@ -34,81 +34,27 @@
   &__filter {
     grid-area: filter;
 
-    @include butler-mx.breakpoint("md") {
+    @include mx.breakpoint("md") {
       display: block !important;
     }
-    @include butler-mx.breakpoint("md", "max") {
+    @include mx.breakpoint("md", "max") {
       max-width: var(--width-max, 100lvw);
       position: fixed;
       z-index: 2;
-      left: 0;
-      top: 0;
-      bottom: 0;
+      inset-block: 0;
+      inset-inline-start: 0;
       height: 100%;
       background-color: var(--color-background, var(--floating-color-background));
       overflow-x: auto;
-      padding: 85px vars.$spacer * 1.5 vars.$spacer * 1.5;
+      padding: calc(var(--site-header-height) + #{vars.$spacer * 1.5}) vars.$spacer * 1.5
+        vars.$spacer * 1.5;
       display: flex;
       flex-direction: column;
-      box-shadow:
-        0.5px 0 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-500)) 8%, transparent),
-        4px 0 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-500)) 16%, transparent);
-
-      @include butler-mx.dark-mode-class {
-        --color-box-shadow: black;
-      }
+      box-shadow: vars.$paper-lift;
     }
-    @include butler-mx.breakpoint("xs") {
+    @include mx.breakpoint("xs") {
       --width-max: 50lvw;
     }
-
-    .c-filter-search__sub-label,
-    .c-filter-search__section-label {
-      font-weight: 800;
-    }
-
-    .c-filter-search__section-label {
-      margin-top: 0;
-      font-size: 1.5rem;
-    }
-
-    .c-filter-search__section-label:not(:first-of-type) {
-      margin-top: vars.$spacer * 2;
-    }
-
-    .c-filter-search__sub-label {
-      margin-top: vars.$spacer * 1.5;
-      font-size: 1.2rem;
-    }
-  }
-
-  :where(i) {
-    font-size: 0.7rem;
-    margin-block-end: vars.$spacer * 0.7;
-    display: block;
-  }
-
-  &__close,
-  &__reset {
-    --padding: 0.5rem;
-
-    span,
-    &.is-bottom {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-  }
-
-  &__close {
-    &.is-top {
-      align-self: flex-end;
-    }
-  }
-
-  &__reset {
-    margin-block: 3rem 0.5rem;
-    width: 100%;
   }
 
   &__list {
@@ -123,7 +69,7 @@
     grid-area: list-header;
     grid-template-columns: min-content 1fr;
 
-    @include butler-mx.breakpoint("md") {
+    @include mx.breakpoint("md") {
       grid-template-columns: 1fr max-content;
       grid-template-areas:
         "search search"
@@ -157,14 +103,8 @@
     margin: vars.$spacer 0 vars.$spacer * 0.5;
 
     p {
-      margin-bottom: 0;
+      margin-block-end: 0;
     }
-  }
-
-  &__headline-wrap {
-    display: flex;
-    align-items: center;
-    gap: vars.$spacer * 0.5;
   }
 
   .c-word-list {
@@ -174,23 +114,4 @@
   .c-word-search {
     grid-area: search;
   }
-
-  .c-word-range-slider {
-    margin-block-start: 1.5rem;
-  }
-}
-
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.3s ease;
-}
-
-.slide-enter-from,
-.slide-leave-to {
-  transform: translateX(-100%);
-}
-
-.slide-leave-from,
-.slide-enter-to {
-  transform: translateX(0);
 }

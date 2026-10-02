@@ -2,9 +2,9 @@
 
 .c-word-suggest-hint {
   grid-area: suggest-hint;
-  border-top: 1px solid var(--new-blue-200);
+  border-block-start: 1px solid var(--new-blue-200);
   line-height: 1.7;
-  padding-top: vars.$spacer * 1.5;
+  padding-block-start: vars.$spacer * 1.5;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,6 +18,6 @@
 
     gap: vars.$spacer * 0.5;
     display: flex;
-    margin-top: vars.$spacer * 1;
+    margin-block-start: vars.$spacer * 1;
   }
 }

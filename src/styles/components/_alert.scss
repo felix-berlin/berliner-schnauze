@@ -7,7 +7,7 @@
 
   @each $type, $color in vars.$alert-colors {
     &--#{$type} {
-      --color: var(#{$color});
+      --color: var(--#{$type});
     }
   }
 

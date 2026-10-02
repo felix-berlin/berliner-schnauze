@@ -43,13 +43,14 @@ import SearchResultCount from "@components/word-search/SearchResultCount.vue";
 import ShortcutClose from "@components/word-search/shortcuts/ShortcutClose.vue";
 import ShortcutNavigating from "@components/word-search/shortcuts/ShortcutNavigating.vue";
 import ShortcutSelect from "@components/word-search/shortcuts/ShortcutSelect.vue";
-import WordFilter from "@components/word-search/WordFilter.vue";
 import WordSearchFilterToggle from "@components/word-search/WordSearchFilterToggle.vue";
 import { useStore } from "@nanostores/vue";
 import { $searchResultCount, $showWordListFilterFlyout } from "@stores/wordList.ts";
 import { useMediaQuery } from "@vueuse/core";
 import { defineAsyncComponent } from "vue";
 
+// Async so it shares one chunk (and one CSS file) with the WordFilter island
+const WordFilter = defineAsyncComponent(() => import("@components/word-search/WordFilter.vue"));
 const SearchWords = defineAsyncComponent(() => import("@components/SearchWords.vue"));
 const WordList = defineAsyncComponent(() => import("@components/WordList.vue"));
 

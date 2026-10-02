@@ -1,4 +1,11 @@
 @use "@styles/variables" as vars;
-@forward "@sass-butler/mixins/breakpoint" with (
-  $breakpoints: vars.$custom-breakpoints
-);
+@use "@sass-butler/mixins" as butler-mx;
+
+// Wraps sass-butler's breakpoint with the project map. Passing the map as an
+// argument (instead of `@forward … with`) keeps it working regardless of which
+// file loads sass-butler first.
+@mixin breakpoint($breakpoint, $direction: "min") {
+  @include butler-mx.breakpoint($breakpoint, $direction, vars.$custom-breakpoints) {
+    @content;
+  }
+}

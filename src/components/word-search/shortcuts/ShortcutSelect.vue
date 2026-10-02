@@ -8,5 +8,3 @@
 <script setup lang="ts">
 import CornerDownLeftIcon from "virtual:icons/lucide/corner-down-left";
 </script>
-
-<style scoped></style>

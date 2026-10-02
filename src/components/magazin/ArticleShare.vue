@@ -39,7 +39,3 @@ const shareArticle = async (): Promise<void> => {
   trackEvent("Magazin Share", "Article shared", title);
 };
 </script>
-
-<style lang="scss">
-@use "@styles/components/magazin-article";
-</style>

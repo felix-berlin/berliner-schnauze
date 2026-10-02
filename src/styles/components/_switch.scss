@@ -7,13 +7,14 @@ input[type="checkbox"].c-switch {
   border-radius: 14px;
   position: relative;
 
+  // Thumb rests 2px from the start edge and slides 11px when checked:
+  // only `transform` changes, so the base checkbox transition animates it.
   &::after {
     --color-background: var(--blue);
     --size: 16px;
-    --left: 2px;
 
-    left: var(--left);
-    top: 50%;
+    inset-inline-start: 2px;
+    inset-block-start: 50%;
     width: var(--size);
     height: var(--size);
     background: var(--color-background-after, var(--color-background));
@@ -22,12 +23,8 @@ input[type="checkbox"].c-switch {
   }
 
   &:checked {
-    --color-background-after: #fff;
-    --translate-x: 15px;
-
-    &::after {
-      --left: -2px;
-    }
+    --color-background-after: var(--color-inner-active);
+    --translate-x: 11px;
   }
 
   &:disabled {
@@ -39,6 +36,6 @@ input[type="checkbox"].c-switch {
   }
 
   + label {
-    margin-left: vars.$spacer * 0.5;
+    margin-inline-start: vars.$spacer * 0.5;
   }
 }

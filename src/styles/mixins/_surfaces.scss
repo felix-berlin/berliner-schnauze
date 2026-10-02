@@ -1,0 +1,24 @@
+@use "@sass-butler/mixins" as butler-mx;
+
+// Orange side-stripe callout (section-card notes, magazin blockquotes).
+@mixin side-stripe {
+  border-inline-start: 3px solid var(--orange-300);
+  background: color-mix(in srgb, var(--orange-100) 60%, white);
+  border-start-end-radius: 4px;
+  border-end-end-radius: 4px;
+
+  @include butler-mx.dark-mode-class {
+    background: color-mix(in srgb, var(--new-blue-400) 80%, black);
+  }
+}
+
+// Tinted chip/card with dashed orange hairline (donation page, wallets).
+@mixin paper-chip {
+  background: color-mix(in srgb, var(--orange-600) 10%, white);
+  border: 1px dashed var(--orange-200);
+
+  @include butler-mx.dark-mode-class {
+    background: color-mix(in srgb, var(--new-blue-400) 80%, black);
+    border-color: var(--grey-100);
+  }
+}

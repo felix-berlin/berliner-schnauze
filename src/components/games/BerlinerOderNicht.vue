@@ -44,11 +44,11 @@
         />
       </template>
       <dl v-if="allTimeHighScore > 0" class="c-berliner-oder-nicht__idle-prev-stats">
-        <div>
+        <div class="c-berliner-oder-nicht__idle-prev-stats-item">
           <dt>Highscore</dt>
           <dd class="c-berliner-oder-nicht__idle-stat-value">{{ allTimeHighScore }}</dd>
         </div>
-        <div>
+        <div class="c-berliner-oder-nicht__idle-prev-stats-item">
           <dt>Best Streak</dt>
           <dd class="c-berliner-oder-nicht__idle-stat-value">{{ allTimeBestStreak }}</dd>
         </div>

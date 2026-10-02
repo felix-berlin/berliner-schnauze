@@ -1,12 +1,10 @@
-@use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-modal {
-  display: var(--modal-display, none);
   border: none;
   inset: 0;
   background-color: var(--color-background-modal, var(--floating-color-background));
-  width: var(--width-modal, max(400px, vars.$body-max-width));
+  width: var(--width-modal, min(100% - 2rem, 800px));
   max-height: 80svh;
   margin: auto;
 
@@ -16,51 +14,44 @@
    */
   @include butler-mx.feature("motion") {
     opacity: 0;
-    transform: translateY(-100%);
+    translate: 0 -100%;
     transition:
-      transform 0.3s,
+      translate 0.3s,
       opacity 0.3s,
       display 0.3s allow-discrete,
       overlay 0.3s allow-discrete;
   }
 
   &::backdrop {
-    background-color: var(--color-background-modal, rgb(0 0 0 / 30%));
+    background-color: var(--color-backdrop-modal, rgb(0 0 0 / 30%));
     backdrop-filter: blur(4px);
     animation: fade-in 1s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   }
 
   &[open] {
-    --modal-display: flex;
-
     display: flex;
     flex-direction: column;
-    // animation: slide-in-fwd-top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 
     @include butler-mx.feature("motion") {
       opacity: 1;
-      transform: translateY(0);
+      translate: 0;
 
       @starting-style {
-        transform: translateY(-100%);
+        translate: 0 -100%;
         opacity: 0;
       }
     }
 
-    &:has(.c-modal__close) {
-      .c-modal__close {
-        align-self: flex-end;
-      }
-    }
-
     .c-modal__close {
+      align-self: flex-end;
+
       &.has-suffix,
       &.has-prefix {
         gap: 0.25rem;
       }
 
       &.has-suffix {
-        padding-right: 0.5rem;
+        padding-inline-end: 0.5rem;
       }
     }
   }
@@ -69,10 +60,6 @@
     &::backdrop {
       cursor: pointer;
     }
-  }
-
-  &--top {
-    margin-top: 6rem;
   }
 }
 

@@ -1,5 +1,3 @@
-@use "@styles/variables" as vars;
-
 .c-modal.c-modal--search {
   height: 100%;
   max-height: 90svh;
@@ -10,19 +8,19 @@
     display: flex;
     gap: 1rem;
 
-    @container (width < 670px) {
+    @container search-modal (inline-size < 670px) {
       flex-wrap: wrap;
       row-gap: 1rem;
     }
 
     .c-word-search-filter-toggle {
-      @container (width < 670px) {
+      @container search-modal (inline-size < 670px) {
         order: 2;
         width: 100%;
       }
 
       &__text {
-        @container (width < 670px) {
+        @container search-modal (inline-size < 670px) {
           --display: block;
         }
       }
@@ -41,11 +39,7 @@
     width: 100%;
 
     &__search-input {
-      transition: all 0.3s ease-in-out;
-
-      &:focus-within {
-        margin: 2px;
-      }
+      transition: box-shadow 0.3s ease-in-out;
     }
   }
 
@@ -62,7 +56,7 @@
       margin: auto 0;
 
       p {
-        margin-bottom: 0;
+        margin-block-end: 0;
       }
     }
   }
@@ -79,73 +73,23 @@
     }
 
     &__translation {
-      @container (width < 670px) {
+      @container search-modal (inline-size < 670px) {
         font-size: 0.8rem;
       }
     }
   }
 
-  // TODO: here are a lot of duplicated styles from _filter-search.scss
+  // Shared WordFilter styles come from _word-filter.scss; only modal-specific layout here
   .c-filter-search {
     &__filter {
       overflow-y: scroll;
       display: flex;
       flex-direction: column;
-
-      :where(h2) {
-        margin-top: 0;
-      }
-
-      :where(h2:not(:first-of-type)) {
-        margin-top: vars.$spacer * 2;
-      }
-
-      :where(h3) {
-        margin-top: vars.$spacer * 1.5;
-      }
-
-      :where(i) {
-        font-size: 0.7rem;
-        margin-block-end: vars.$spacer * 0.7;
-        display: block;
-      }
-
-      .c-word-range-slider {
-        margin-block-start: 1.5rem;
-      }
     }
 
-    &__close,
-    &__reset {
-      --padding: 0.5rem;
-
-      span,
-      &.is-bottom {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-    }
-
-    &__reset {
-      margin-block: 3rem 0.5rem;
-    }
-
-    &__headline-wrap {
-      display: flex;
-      align-items: center;
-      gap: vars.$spacer * 0.5;
-    }
-
-    &__close {
-      &.is-top {
-        align-self: flex-end;
-
-        svg {
-          width: 1.5rem;
-          height: 1.5rem;
-        }
-      }
+    &__close.is-top svg {
+      width: 1.5rem;
+      height: 1.5rem;
     }
   }
 
@@ -156,7 +100,7 @@
     gap: 1rem 2rem;
 
     .c-shortcut {
-      @container (width < 650px) {
+      @container search-modal (inline-size < 650px) {
         display: none;
       }
     }
@@ -164,9 +108,9 @@
     .c-modal__close {
       width: 100%;
 
-      @container (width > 500px) {
+      @container search-modal (inline-size > 500px) {
         width: auto;
-        margin-left: auto;
+        margin-inline-start: auto;
       }
     }
   }

@@ -1,4 +1,3 @@
-@use "sass:color";
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
@@ -13,12 +12,12 @@
     align-items: center;
 
     &:not(:last-child) {
-      margin-bottom: vars.$spacer * 1.5;
+      margin-block-end: vars.$spacer * 1.5;
     }
 
     .c-form__label {
       order: -1;
-      margin-right: vars.$spacer;
+      margin-inline-end: vars.$spacer;
       font-weight: 700;
     }
 
@@ -28,10 +27,8 @@
       justify-content: flex-start;
 
       .c-form__label {
-        margin: {
-          right: 0;
-          bottom: vars.$spacer * 0.5;
-        }
+        margin-inline-end: 0;
+        margin-block-end: vars.$spacer * 0.5;
       }
     }
 
@@ -46,19 +43,19 @@
     }
 
     select {
-      padding-right: vars.$spacer * 4;
+      padding-inline-end: vars.$spacer * 4;
     }
 
     &.has-error {
-      .c-form__input,
-      .c-form__select {
+      .c-form__input {
         --color-border: var(--danger);
+        --color-background: color-mix(in srgb, var(--danger) 15%, white);
 
-        border-color: vars.$danger;
-        background-color: color.adjust(vars.$danger, $lightness: 40%);
-
+        @include butler-mx.dark-mode-class {
+          --color-background: color-mix(in srgb, var(--danger) 20%, var(--new-blue-600));
+        }
         @include mx.dark-mode-override {
-          --box-shadow-focus: 2px #{rgba(vars.$danger, 0.3)};
+          --box-shadow-focus: 2px color-mix(in srgb, var(--danger) 30%, transparent);
         }
       }
     }
@@ -71,7 +68,7 @@
         content: "*";
         font-weight: 500;
         color: var(--danger);
-        transform: translateY(-0.1em);
+        translate: 0 -0.1em;
         display: inline-block;
       }
     }
@@ -81,37 +78,15 @@
     display: flex;
     flex-direction: column;
     gap: vars.$spacer * 2;
-    margin-bottom: vars.$spacer * 2;
+    margin-block-end: vars.$spacer * 2;
 
     .c-form__item {
       flex: 1;
-      margin-bottom: 0;
+      margin-block-end: 0;
     }
 
     @include mx.breakpoint(md) {
       flex-direction: row;
     }
-  }
-
-  &__footer {
-    display: flex;
-    flex-direction: column;
-    gap: vars.$spacer;
-
-    @include mx.breakpoint(md) {
-      flex-direction: row;
-      align-items: center;
-    }
-
-    &-info {
-      // color: color.$gray-700;
-      // font-size: font.$text-s;
-    }
-  }
-
-  &__error {
-    color: var(--danger);
-    margin-top: vars.$spacer * 0.25;
-    font-weight: 500;
   }
 }

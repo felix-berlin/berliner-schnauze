@@ -10,7 +10,7 @@
       offset: 10,
       placement: tooltipPlacement,
     }"
-    class="c-word-of-the-day-crown"
+    class="c-is-word-of-the-day"
     aria-hidden="true"
   >
     <Crown :width="iconSize" :height="iconSize" />
@@ -47,5 +47,3 @@ const isWordOfTheDay = computed(() => {
   return wordId === wordOfTheDay?.value?.word?.ID;
 });
 </script>
-
-<style lang="scss"></style>

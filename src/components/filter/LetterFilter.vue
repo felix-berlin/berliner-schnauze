@@ -40,7 +40,3 @@ import { $searchMeta, $wordSearch, setLetterFilter } from "@stores/wordList.ts";
 const wordSearchStore = useStore($wordSearch);
 const searchMeta = useStore($searchMeta);
 </script>
-
-<style lang="scss">
-@use "@styles/components/letter-filter";
-</style>

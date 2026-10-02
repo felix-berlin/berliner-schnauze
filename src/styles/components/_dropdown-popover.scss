@@ -1,5 +1,4 @@
 @use "@styles/variables" as vars;
-@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-dropdown {
@@ -18,8 +17,8 @@
   border: none;
   background: transparent;
   overflow: visible;
-  max-width: none;
-  max-height: none;
+  max-inline-size: none;
+  max-block-size: none;
   border-radius: 6px;
 
   // Anchor Positioning — position-anchor is set via inline style (dynamic anchor name per instance)
@@ -36,28 +35,13 @@
   // filter: drop-shadow casts a unified shadow around the panel + arrow silhouette,
   // avoiding the double-shadow artefact that box-shadow produces where the arrow
   // overlaps the panel interior.
-  filter: drop-shadow(
-      0 0.5px 0.6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 8%, transparent)
-    )
-    drop-shadow(
-      0 4px 5px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 16%, transparent)
-    );
+  filter: vars.$paper-lift-drop;
   background-color: var(--color-background);
   padding: var(--padding, #{vars.$spacer * 0.5 vars.$spacer * 0.5});
   color: var(--color, var(--color-body));
 
-  @include butler-mx.dark-mode-class {
-    --color-box-shadow: black;
-  }
-
-  // Skidding — lateral shift; only meaningful with anchor positioning
-  @supports (position-area: block-end) {
-    translate: var(--c-dropdown-skidding, 0) 0;
-  }
-
-  // Fallback for browsers without CSS Anchor Positioning (Chrome <125, very rare)
+  // Fallback for browsers without CSS Anchor Positioning (Anchor Positioning is Baseline Newly, 2026)
   @supports not (position-area: block-end) {
-    position: fixed;
     inset-block-start: 50%;
     inset-inline-start: 50%;
     translate: -50% -50%;
@@ -98,7 +82,7 @@
   width: var(--arrow-size);
   height: var(--arrow-size);
   background: var(--color-background);
-  transform: rotate(45deg);
+  rotate: 45deg;
 
   // top, left, bottom set via inline style from JS (syncArrow) so the arrow
   // tracks the trigger center correctly even after position-try-fallbacks flip

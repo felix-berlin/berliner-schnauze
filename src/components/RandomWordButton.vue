@@ -29,5 +29,3 @@ const { words } = defineProps<RelatedWordsProps>();
 const root = ref<HTMLAnchorElement | null>(null);
 useContentTracking(root);
 </script>
-
-<style scoped></style>

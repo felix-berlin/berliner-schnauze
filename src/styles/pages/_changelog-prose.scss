@@ -1,0 +1,16 @@
+@use "@styles/variables" as vars;
+
+// Markdown prose shared by the user and technical changelog pages (no CSS output).
+@mixin changelog-prose {
+  p {
+    margin-block-end: vars.$spacer * 0.5;
+  }
+
+  ul {
+    padding-inline-start: vars.$spacer * 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.25;
+    margin-block-end: vars.$spacer * 0.5;
+  }
+}

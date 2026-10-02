@@ -21,12 +21,6 @@
     align-items: center;
   }
 
-  &__header {
-    display: flex;
-    align-items: center;
-    gap: vars.$spacer * 0.5;
-  }
-
   &__headline {
     margin: 0;
   }
@@ -41,7 +35,7 @@
     font-size: butler-fn.fluid(19, 32, 320, 1260);
     padding: 0.5rem;
     display: block;
-    word-break: break-all;
+    overflow-wrap: anywhere;
   }
 
   &__crown-icon {
@@ -54,17 +48,10 @@
   &__divider {
     width: 100%;
     border: none;
-    border-top: 1px solid var(--primary);
+    border-block-start: 1px solid var(--primary);
   }
 
   &__update {
     font-size: 0.8rem;
-  }
-
-  &__info-icon {
-    position: absolute;
-    right: -18px;
-    top: 50%;
-    transform: translateY(-50%);
   }
 }

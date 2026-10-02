@@ -7,6 +7,10 @@
     align-items: center;
     gap: vars.$spacer * 0.5;
     flex-wrap: wrap;
+
+    @include butler-mx.dark-mode-class {
+      --_color: color-mix(in srgb, #fff 25%, transparent);
+    }
   }
 
   &__word-part {
@@ -15,18 +19,10 @@
     padding: 3px 12px;
     border: 1px solid var(--_color, var(--grey-100));
     border-radius: 2px;
-
-    @include butler-mx.dark-mode-class {
-      --_color: color-mix(in srgb, #fff 25%, transparent);
-    }
   }
 
   &__word-parts-plus {
     color: var(--_color, var(--grey-100));
     font-size: 1.2rem;
-
-    @include butler-mx.dark-mode-class {
-      --_color: color-mix(in srgb, #fff 25%, transparent);
-    }
   }
 }

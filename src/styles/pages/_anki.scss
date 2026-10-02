@@ -37,7 +37,7 @@
     display: flex;
     flex-direction: column;
     gap: vars.$spacer * 2.5;
-    scroll-margin-top: vars.$spacer * 5;
+    scroll-margin-block-start: vars.$spacer * 5;
   }
 
   // Full-bleed tinted band: background via spread shadow, dashed edges via
@@ -191,7 +191,7 @@
     align-items: baseline;
     gap: vars.$spacer * 0.625;
     padding: vars.$spacer * 0.75 vars.$spacer * 1.25;
-    border-bottom: 1px dashed var(--orange-200);
+    border-block-end: 1px dashed var(--orange-200);
   }
 
   &__step-num {
@@ -249,10 +249,9 @@
 
   &__timeline-line {
     position: absolute;
-    left: 8%;
-    right: 8%;
-    top: 0.6875rem;
-    border-top: 2px dashed var(--orange-300);
+    inset-inline: 8%;
+    inset-block-start: 0.6875rem;
+    border-block-start: 2px dashed var(--orange-300);
   }
 
   &__timeline-point {
@@ -324,7 +323,7 @@
     color: inherit;
     background: var(--white-100);
     border: 1px solid var(--orange-200);
-    transition: all 0.3s ease-in-out;
+    transition: border-color 0.3s ease-in-out;
 
     @include butler-mx.hover {
       border-style: dashed;
@@ -363,7 +362,7 @@
     justify-content: center;
     gap: vars.$spacer * 0.5;
     padding: vars.$spacer * 0.75 vars.$spacer * 1.25;
-    border-top: 1px dashed var(--orange-200);
+    border-block-start: 1px dashed var(--orange-200);
     font-size: 0.9rem;
     color: var(--color-muted);
 
@@ -398,8 +397,8 @@
 
   &__plan-badge {
     position: absolute;
-    top: -0.875rem;
-    right: vars.$spacer * 1.5;
+    inset-block-start: -0.875rem;
+    inset-inline-end: vars.$spacer * 1.5;
     background: var(--orange-500);
     color: var(--white-100);
     font-size: 0.7rem;
@@ -410,7 +409,7 @@
 
   &__plan-head {
     padding: vars.$spacer * 1.5 vars.$spacer * 1.75;
-    border-bottom: 1px dashed var(--orange-200);
+    border-block-end: 1px dashed var(--orange-200);
     display: flex;
     flex-direction: column;
     gap: vars.$spacer * 0.375;
@@ -557,7 +556,7 @@
   &__upgrade-bar-new {
     flex: 1;
     background: var(--orange-300);
-    border-left: 2px dashed var(--white-100);
+    border-inline-start: 2px dashed var(--white-100);
   }
 
   &__upgrade-plus {
@@ -606,7 +605,7 @@
   &__faq {
     --band-bg: color-mix(in srgb, var(--orange-100) 30%, white);
 
-    border-bottom: 0;
+    border-block-end: 0;
   }
 
   &__faq-inner {
@@ -638,7 +637,6 @@
   &--farewell {
     padding-block: 0 vars.$spacer * 2;
   }
-
 
   // Primary/secondary CTA buttons (hero + final CTA)
   &__actions .c-button {

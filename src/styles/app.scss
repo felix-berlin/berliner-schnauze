@@ -3,3 +3,12 @@
 @use "layouts";
 @use "components";
 @use "components/tooltip";
+
+// Word filter (homepage island + search modal on every page) — loaded globally so
+// both entry points share one stylesheet instead of emitting two identical chunks.
+@use "@vueform/multiselect/themes/default.css";
+@use "components/custom-multiselect";
+@use "components/badge";
+@use "components/letter-filter";
+@use "components/word-range-slider";
+@use "components/word-filter";

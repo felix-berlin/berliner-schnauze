@@ -24,7 +24,7 @@
         <BadgeTag> Beta </BadgeTag>
       </div>
 
-      <i>
+      <i class="c-filter-search__hint">
         Redewendungen und Wörter können unterschiedliche Worttypen beinhalten, Du kannst hier
         deshalb nach mehreren Typen filtern.
       </i>
@@ -40,7 +40,7 @@
         <p id="filter-themen" class="c-filter-search__sub-label">Themen</p>
       </div>
 
-      <i>
+      <i class="c-filter-search__hint">
         Filtere nach thematischen Kategorien wie Essen &amp; Trinken, Alkohol &amp; Kneipe oder
         Schimpfwörter.
       </i>
@@ -54,13 +54,15 @@
 
       <div class="c-filter-search__switch" role="group" aria-labelledby="filter-berolinismus">
         <p id="filter-berolinismus" class="c-filter-search__sub-label">Berolinismus</p>
-        <i>Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i>
+        <i class="c-filter-search__hint"
+          >Filter nach Berliner Spitznamen für bestimmte Orte, Straßen u. o. Plätze.</i
+        >
         <WordSwitch switch-type="berolinismus" label="Berolinismus" />
       </div>
 
       <div class="c-filter-search__switch" role="group" aria-labelledby="filter-audio-examples">
         <p id="filter-audio-examples" class="c-filter-search__sub-label">Beispiel Hörprobe(n)</p>
-        <i>Zeige Wörter dessen Beispiel(e) Hörprobe(n) haben.</i>
+        <i class="c-filter-search__hint">Zeige Wörter dessen Beispiel(e) Hörprobe(n) haben.</i>
         <WordSwitch switch-type="audioExamples" label="Beispiel Hörprobe(n)" />
       </div>
 
@@ -68,13 +70,13 @@
         <p id="filter-audio-berlinerisch" class="c-filter-search__sub-label">
           Berlinerisch Hörprobe(n)
         </p>
-        <i>Zeige Wörter mit Berlinerisch Hörprobe(n).</i>
+        <i class="c-filter-search__hint">Zeige Wörter mit Berlinerisch Hörprobe(n).</i>
         <WordSwitch switch-type="audioBerlinerisch" label="Berlinerisch Hörprobe(n)" />
       </div>
 
       <div class="c-filter-search__switch" role="group" aria-labelledby="filter-multiple-meanings">
         <p id="filter-multiple-meanings" class="c-filter-search__sub-label">Mehrere Bedeutungen</p>
-        <i>Zeige Wörter die mehrere Bedeutungen haben.</i>
+        <i class="c-filter-search__hint">Zeige Wörter die mehrere Bedeutungen haben.</i>
         <WordSwitch switch-type="multipleMeanings" label="Mehrere Bedeutungen" />
       </div>
 
@@ -149,9 +151,3 @@ onClickOutside(wordListFilter, () => {
   }
 });
 </script>
-
-<style lang="scss">
-@use "@styles/components/switch";
-@use "@vueform/multiselect/themes/default.css";
-@use "@styles/components/custom-multiselect";
-</style>

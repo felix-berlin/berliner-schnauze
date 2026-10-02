@@ -1,0 +1,19 @@
+.c-audio-player {
+  position: relative;
+
+  &__actions {
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // Updated every animation frame from JS, so no transition.
+  &__progress {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: scaleY(var(--p, 0));
+    transform-origin: bottom;
+  }
+}

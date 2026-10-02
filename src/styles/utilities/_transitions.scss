@@ -3,9 +3,9 @@
   transition: opacity 0.5s ease-in;
 }
 
-.fade-enter,
+.fade-enter-from,
 .fade-leave-to,
-.fade-fast-enter,
+.fade-fast-enter-from,
 .fade-fast-leave-to {
   opacity: 0;
 }

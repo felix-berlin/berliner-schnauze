@@ -20,6 +20,6 @@ describe("IsWordOfTheDay.vue", () => {
 
     await nextTick();
 
-    expect(wrapper.find(".c-word-of-the-day-crown").exists()).toBe(true);
+    expect(wrapper.find(".c-is-word-of-the-day").exists()).toBe(true);
   });
 });

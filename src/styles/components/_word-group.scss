@@ -1,4 +1,10 @@
+@use "@sass-butler/mixins" as butler-mx;
+
 .c-word-group {
+  // ~6000 links on /wort: skip layout/paint of off-screen letter groups.
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1200px;
+
   &__group {
     font-size: 2.5rem;
   }
@@ -11,7 +17,7 @@
     font-size: 1.2rem;
     line-height: 1.6;
 
-    &:hover {
+    @include butler-mx.hover {
       text-decoration: underline;
     }
   }

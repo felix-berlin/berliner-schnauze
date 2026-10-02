@@ -11,9 +11,9 @@ describe("GameCtaCard.astro", () => {
     render = await createAstroRender(GameCtaCard);
   }, 30_000);
 
-  it("renders .c-fact-card--hightlighted container", async () => {
+  it("renders .c-fact-card--highlighted container", async () => {
     const result = await render({});
-    expect(result).toContain("c-fact-card--hightlighted");
+    expect(result).toContain("c-fact-card--highlighted");
   });
 
   it("renders the headline text", async () => {

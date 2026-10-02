@@ -1,12 +1,7 @@
-@use "@styles/variables" as vars;
-
 .o-error-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  &__icon {
-    margin: vars.$spacer * 1.8 0;
-  }
+  min-block-size: 70dvh;
 }

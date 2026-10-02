@@ -1,28 +1,11 @@
 @use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@styles/components/word-definition-grid" as dl;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-single-word {
   &__definitions {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    column-gap: vars.$spacer;
-    row-gap: 0.375rem;
-    margin: 0;
-    align-items: baseline;
-  }
-
-  &__sub-headline {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: color-mix(in srgb, var(--blue) 70%, white);
-    white-space: nowrap;
-    padding-block-start: 0.15em;
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--blue) 30%, white);
-    }
+    @include dl.definition-grid;
   }
 
   &__alternative-word {
@@ -55,7 +38,7 @@
 
       &::before {
         content: counter(meaning) ".";
-        color: var(--orange-500, #c0612a);
+        color: var(--orange-500);
         font-size: 0.7em;
         font-weight: 700;
         padding-block-start: 0.15em;
@@ -87,16 +70,9 @@
   border-block-start: 1px dashed var(--orange-200);
 
   &__label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: color-mix(in srgb, var(--blue) 70%, white);
-    white-space: nowrap;
+    @include mx.eyebrow(0.65rem, 0.08em);
 
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--blue) 30%, white);
-    }
+    white-space: nowrap;
   }
 
   &__list {
@@ -122,7 +98,7 @@
     text-decoration: underline dotted;
     text-underline-offset: 0.2em;
 
-    &:hover {
+    @include butler-mx.hover {
       color: var(--orange-500);
 
       @include butler-mx.dark-mode-class {

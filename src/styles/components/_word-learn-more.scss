@@ -7,7 +7,7 @@
       display: flex;
       gap: vars.$spacer * 0.2;
       font-size: var(--size-font, 0.9rem);
-      margin-top: 2.5rem;
+      margin-block-start: 2.5rem;
 
       @include butler-mx.hover {
         --decoration-text: underline dashed;

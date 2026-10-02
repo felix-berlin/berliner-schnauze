@@ -1,19 +1,10 @@
 ---
+import "@styles/objects/_error-page.scss";
 import Layout from "@layouts/Layout.astro";
 ---
 
 <Layout content={{ title: "Seite konnte nicht gefunden werden" }}>
-  <section class="o-not-found">
+  <section class="o-error-page">
     <h1>Blöd jelaufen, die Seite gibts nicht.</h1>
   </section>
 </Layout>
-
-<style>
-  .o-not-found {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 70dvh;
-  }
-</style>

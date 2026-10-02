@@ -20,23 +20,22 @@
 
     &--back {
       inset: vars.$spacer * 2.25 vars.$spacer * 1.75 0 vars.$spacer * 1.75;
-      transform: rotate(3deg);
+      rotate: 3deg;
     }
 
     &--front {
       inset: vars.$spacer * 1.875 vars.$spacer * 1.25 vars.$spacer * 0.25 vars.$spacer * 1.25;
-      transform: rotate(-2deg);
+      rotate: -2deg;
     }
   }
 
   &__card {
     position: relative;
-
-    @include mx.paper-card;
-
     min-height: 25rem;
     display: flex;
     flex-direction: column;
+
+    @include mx.paper-card;
   }
 
   &__head {
@@ -44,7 +43,7 @@
     justify-content: space-between;
     align-items: center;
     padding: vars.$spacer * 0.625 vars.$spacer;
-    border-bottom: 1px dashed var(--orange-200);
+    border-block-end: 1px dashed var(--orange-200);
     font-size: 0.8rem;
     color: var(--color-muted);
 
@@ -80,8 +79,8 @@
     flex-direction: column;
     align-items: center;
     gap: vars.$spacer * 0.75;
-    border-top: 1px dashed var(--new-blue-200);
-    padding-top: vars.$spacer * 1.125;
+    border-block-start: 1px dashed var(--new-blue-200);
+    padding-block-start: vars.$spacer * 1.125;
   }
 
   &__meaning {
@@ -102,7 +101,7 @@
 
   &__foot {
     padding: vars.$spacer;
-    border-top: 1px dashed var(--orange-200);
+    border-block-start: 1px dashed var(--orange-200);
 
     .c-button {
       width: 100%;
@@ -116,7 +115,7 @@
 
   &__ratings {
     padding: vars.$spacer;
-    border-top: 1px dashed var(--orange-200);
+    border-block-start: 1px dashed var(--orange-200);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: vars.$spacer * 0.5;

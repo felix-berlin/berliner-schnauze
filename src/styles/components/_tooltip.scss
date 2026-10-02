@@ -1,3 +1,4 @@
+@use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-tooltip {
@@ -29,13 +30,7 @@
   border-radius: 4px;
   font-size: 0.8125rem;
   max-width: 20rem;
-  filter: drop-shadow(
-    0 2px 6px color-mix(in srgb, var(--color-box-shadow, var(--orange-900)) 20%, transparent)
-  );
-
-  @include butler-mx.dark-mode-class {
-    --color-box-shadow: black;
-  }
+  filter: vars.$paper-lift-drop;
 
   // Placement modifiers — offset margin direction matches placement direction
   &--top {
@@ -78,12 +73,16 @@
     margin-inline-start: var(--c-tooltip-offset, 8px);
   }
 
-  // Fallback for browsers without CSS Anchor Positioning
+  // Fallback for browsers without CSS Anchor Positioning: centered in the viewport,
+  // so an arrow would point nowhere.
   @supports not (position-area: block-end) {
-    position: fixed;
     inset-block-start: 50%;
     inset-inline-start: 50%;
     translate: -50% -50%;
+
+    .c-tooltip__arrow {
+      display: none;
+    }
   }
 }
 
@@ -93,7 +92,7 @@
   width: 8px;
   height: 8px;
   background: var(--c-tooltip-bg);
-  transform: rotate(45deg);
+  rotate: 45deg;
   // top, left, right, bottom set via JS (syncArrow) to track trigger center
 }
 

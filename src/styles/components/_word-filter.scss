@@ -1,0 +1,77 @@
+@use "@styles/variables" as vars;
+
+// Styles for what WordFilter.vue renders; shared by the homepage island and the
+// search modal. Context layout (flyout, modal scroll) stays in _filter-search.scss
+// and modals/_search-modal.scss.
+.c-filter-search {
+  &__filter {
+    .c-filter-search__sub-label,
+    .c-filter-search__section-label {
+      font-weight: 800;
+    }
+
+    .c-filter-search__section-label {
+      margin-block-start: 0;
+      font-size: 1.5rem;
+    }
+
+    .c-filter-search__section-label:not(:first-of-type) {
+      margin-block-start: vars.$spacer * 2;
+    }
+
+    .c-filter-search__sub-label {
+      margin-block-start: vars.$spacer * 1.5;
+      font-size: 1.2rem;
+    }
+
+    .c-word-range-slider {
+      margin-block-start: 1.5rem;
+    }
+  }
+
+  &__hint {
+    font-size: 0.7rem;
+    margin-block-end: vars.$spacer * 0.7;
+    display: block;
+  }
+
+  &__close,
+  &__reset {
+    --padding: 0.5rem;
+
+    span,
+    &.is-bottom {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+
+  &__close {
+    &.is-top {
+      align-self: flex-end;
+    }
+  }
+
+  &__reset {
+    margin-block: 3rem 0.5rem;
+    width: 100%;
+  }
+
+  &__headline-wrap {
+    display: flex;
+    align-items: center;
+    gap: vars.$spacer * 0.5;
+  }
+}
+
+// <Transition name="slide"> on the filter flyout
+.slide-enter-active,
+.slide-leave-active {
+  transition: translate 0.3s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  translate: -100% 0;
+}

@@ -1,4 +1,3 @@
-@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-main-menu {
@@ -13,8 +12,9 @@
   .c-dropdown__panel {
     --padding: 0;
 
-    width: min(600px, 100vw - 2rem);
+    width: min(600px, 100% - 2rem);
     border-radius: 4px;
+    container: main-menu / inline-size;
 
     // Drops in from the trigger corner: slide + scale on top of the shared fade.
     // Exit stays at 0.15s to match DropdownPopover's content-unmount timeout.
@@ -54,7 +54,7 @@
   &__columns {
     display: grid;
 
-    @include mx.breakpoint("sm") {
+    @container main-menu (inline-size >= 36rem) {
       grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
     }
   }
@@ -66,11 +66,11 @@
     padding: 18px 20px 14px;
 
     & + & {
-      border-top: 1px dashed var(--_rule);
+      border-block-start: 1px dashed var(--_rule);
 
-      @include mx.breakpoint("sm") {
-        border-top: none;
-        border-left: 1px dashed var(--_rule);
+      @container main-menu (inline-size >= 36rem) {
+        border-block-start: none;
+        border-inline-start: 1px dashed var(--_rule);
       }
     }
 
@@ -92,7 +92,7 @@
 
     // "App" group follows the "Mitmachen" links
     .c-main-menu__link + & {
-      padding-top: 14px;
+      padding-block-start: 14px;
     }
   }
 
@@ -170,7 +170,7 @@
   }
 
   &__modes {
-    margin-top: 10px;
+    margin-block-start: 10px;
   }
 
   &__install {
@@ -178,11 +178,12 @@
     align-items: center;
     gap: 16px;
     padding: 12px 24px;
-    border-top: 1px dashed var(--_rule);
-    border-radius: 0 0 4px 4px;
+    border-block-start: 1px dashed var(--_rule);
+    border-end-start-radius: 4px;
+    border-end-end-radius: 4px;
     background: color-mix(in srgb, var(--floating-color-background) 70%, var(--control-bg));
 
-    @include mx.breakpoint("xs", "max") {
+    @container main-menu (inline-size < 34rem) {
       flex-direction: column;
       align-items: stretch;
     }

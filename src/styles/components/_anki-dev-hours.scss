@@ -1,19 +1,18 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
-@use "@sass-butler/mixins" as butler-mx;
 
 .c-anki-dev-hours {
-  @include mx.paper-card;
-
   display: flex;
   flex-direction: column;
+
+  @include mx.paper-card;
 
   &__head {
     display: flex;
     align-items: center;
     gap: vars.$spacer * 0.5;
     padding: vars.$spacer * 0.75 vars.$spacer * 1.25;
-    border-bottom: 1px dashed var(--orange-200);
+    border-block-end: 1px dashed var(--orange-200);
     font-weight: 700;
 
     svg {
@@ -55,7 +54,7 @@
 
   &__foot {
     padding: vars.$spacer * 0.875 vars.$spacer * 1.5;
-    border-top: 1px dashed var(--new-blue-200);
+    border-block-start: 1px dashed var(--new-blue-200);
     display: flex;
     align-items: center;
     gap: vars.$spacer * 0.375;

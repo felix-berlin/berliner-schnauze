@@ -1,4 +1,5 @@
 @use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
@@ -6,6 +7,19 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+
+  // Shared card surface for settings cards and nav cards
+  &__card,
+  &__nav-card {
+    border: 1px solid
+      var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
+    background-color: var(--color-card-bg, color-mix(in srgb, var(--orange-100) 35%, white));
+
+    @include butler-mx.dark-mode-class {
+      --color-card-border: var(--control-border);
+      --color-card-bg: color-mix(in srgb, var(--new-blue-400) 70%, transparent);
+    }
+  }
 
   &__card {
     display: flex;
@@ -17,15 +31,6 @@
       --padding: 0.375rem 0.75rem;
 
       align-self: flex-start;
-    }
-
-    border: 1px solid
-      var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
-    background-color: var(--color-card-bg, color-mix(in srgb, var(--orange-100) 35%, white));
-
-    @include butler-mx.dark-mode-class {
-      --color-card-border: color-mix(in srgb, var(--blue) 80%, white);
-      --color-card-bg: color-mix(in srgb, var(--new-blue-400) 70%, transparent);
     }
   }
 
@@ -54,18 +59,17 @@
     width: fit-content;
 
     &.is-granted {
-      color: vars.$success;
-      background-color: color-mix(in srgb, #{vars.$success} 8%, transparent);
+      color: var(--success);
+      background-color: color-mix(in srgb, var(--success) 8%, transparent);
     }
 
     &.is-denied {
-      color: vars.$danger;
-      background-color: color-mix(in srgb, #{vars.$danger} 8%, transparent);
+      color: var(--danger);
+      background-color: color-mix(in srgb, var(--danger) 8%, transparent);
     }
 
     &.is-default {
-      color: var(--color-body);
-      opacity: 0.55;
+      color: var(--color-muted);
     }
   }
 
@@ -82,12 +86,12 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid
+    padding-block-start: 0.75rem;
+    border-block-start: 1px solid
       var(--color-row-border, color-mix(in srgb, var(--orange-300) 35%, transparent));
 
     @include butler-mx.dark-mode-class {
-      --color-row-border: color-mix(in srgb, var(--blue) 80%, white);
+      --color-row-border: var(--control-border);
     }
   }
 
@@ -102,11 +106,10 @@
   &__hint {
     font-size: 0.8125rem;
     line-height: 1.55;
-    opacity: 0.7;
+    color: var(--color-muted);
 
     &--error {
-      color: vars.$danger;
-      opacity: 1;
+      color: var(--danger);
     }
   }
 
@@ -117,14 +120,13 @@
     padding: 0;
     cursor: pointer;
     font-size: 0.8125rem;
-    color: var(--color-body);
-    opacity: 0.5;
+    color: var(--color-muted);
     text-decoration: underline;
     text-underline-offset: 3px;
-    transition: opacity 0.2s ease;
+    transition: color 0.2s ease;
 
-    @include butler-mx.hover {
-      opacity: 0.85;
+    @include mx.hover-focus {
+      color: var(--color-body);
     }
   }
 
@@ -136,27 +138,20 @@
     padding: 1rem 1.5rem;
     text-decoration: none;
     color: var(--color-body);
-    border: 1px solid
-      var(--color-card-border, color-mix(in srgb, var(--orange-400) 50%, transparent));
-    background-color: var(--color-card-bg, color-mix(in srgb, var(--orange-100) 35%, white));
     transition:
       box-shadow 0.25s ease,
       border-color 0.25s ease;
 
-    @include butler-mx.dark-mode-class {
-      --color-card-border: color-mix(in srgb, var(--blue) 80%, white);
-      --color-card-bg: color-mix(in srgb, var(--new-blue-400) 70%, transparent);
-    }
-    @include butler-mx.hover {
+    @include mx.hover-focus {
       border-color: var(--orange-600);
-      box-shadow: 0 0 12px 0 color-mix(in srgb, var(--orange-500) 50%, white);
+      box-shadow: vars.$hover-glow;
 
       @include butler-mx.dark-mode-class {
         box-shadow: 0 0 12px 0 var(--orange-500);
       }
 
       .c-app-settings__nav-card-arrow {
-        transform: translateX(3px);
+        translate: 3px 0;
       }
     }
   }
@@ -165,7 +160,7 @@
     width: 100%;
     margin: 0;
     font-family: inherit;
-    text-align: left;
+    text-align: start;
     cursor: pointer;
   }
 
@@ -193,12 +188,12 @@
 
   &__nav-card-desc {
     font-size: 0.8125rem;
-    opacity: 0.6;
+    color: var(--color-muted);
   }
 
   &__nav-card-arrow {
     flex-shrink: 0;
     opacity: 0.5;
-    transition: transform 0.2s ease;
+    transition: translate 0.2s ease;
   }
 }

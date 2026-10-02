@@ -1,8 +1,6 @@
 @use "sass:map";
 @use "@styles/variables" as vars;
-@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
-@use "@sass-butler/functions" as butler-fn;
 
 body {
   margin: 0;
@@ -10,19 +8,12 @@ body {
     --color-background-body,
     color-mix(in srgb, var(--orange-100) 5%, transparent)
   );
-  // background-image: radial-gradient(
-  //   var(--color-gradient-body-1, color-mix(in srgb, var(--blue) 30%, transparent)) 1.1px,
-  //   var(--color-gradient-body-2, #{butler-fn.hex-to-rgb(#cad2d9, 50%)}) 1.1px
-  // );
   background-image: radial-gradient(
     var(--color-gradient-body-1, color-mix(in srgb, var(--blue) 15%, transparent)) 1.1px,
     var(--color-gradient-body-2, color-mix(in srgb, var(--orange-100) 10%, white)) 1.1px
   );
   background-size: 22px 22px;
 
-  // @include butler-mx.feature("motion") {
-  //   transition: background-color 0.7s ease-in-out;
-  // }
   @include butler-mx.dark-mode-class {
     --color-gradient-body-1: color-mix(in srgb, var(--new-blue-400) 98%, white);
     --color-gradient-body-2: color-mix(in srgb, var(--blue) 70%, transparent);
@@ -42,9 +33,23 @@ html[class="dark"] {
 }
 
 html {
-  scroll-behavior: smooth;
+  @include butler-mx.feature("motion") {
+    scroll-behavior: smooth;
+  }
+}
+
+// Safety net: no animation or transition runs for users who opted out of motion
+@include butler-mx.feature("no-motion") {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 :target {
-  scroll-margin-top: 100px;
+  scroll-margin-block-start: 100px;
 }

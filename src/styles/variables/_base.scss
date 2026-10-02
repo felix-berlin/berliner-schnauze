@@ -4,3 +4,14 @@ $spacer: 1rem;
 $paper-lift:
   0 0.5px 0.6px rgb(0 0 0 / 8%),
   0 4px 5px rgb(0 0 0 / 16%);
+
+// Paper Lift as a filter, for surfaces whose outline includes an arrow (tooltip, popover)
+$paper-lift-drop: drop-shadow(0 0.5px 0.6px rgb(0 0 0 / 8%)) drop-shadow(0 4px 5px rgb(0 0 0 / 16%));
+
+// Hover glow for controls (DESIGN.md: dashed border + soft orange glow)
+$hover-glow: 0 0 12px 0 color-mix(in srgb, var(--orange-500) 60%, white);
+
+// Radius scale (DESIGN.md: never above 4px for paper UI)
+$radius-xxs: 2px;
+$radius-xs: 3px;
+$radius-sm: 4px;

@@ -1,4 +1,3 @@
-@use "sass:map";
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 @use "@sass-butler/functions" as butler-fn;
@@ -8,7 +7,7 @@
   --space-walking: 40px;
 
   &__farewell {
-    margin-top: 60px;
+    margin-block-start: 60px;
     grid-area: farewell;
     display: flex;
     gap: var(--gap, 5%);
@@ -53,7 +52,7 @@
 
   &__ground {
     background-color: var(--color-background, color-mix(in srgb, var(--orange-200) 60%, white));
-    padding: 25px 0;
+    padding-block: 25px;
 
     @include butler-mx.dark-mode-class {
       --color-background: var(--new-blue-400);
@@ -82,8 +81,6 @@
   }
 
   &__nav {
-    background-color: var(--color-background, var(--secondary));
-
     &-list {
       display: flex;
       flex-direction: column;
@@ -100,7 +97,7 @@
     text-align: var(--align-text, center);
 
     @include mx.breakpoint("md") {
-      --align-text: left;
+      --align-text: start;
     }
   }
 
@@ -116,8 +113,7 @@
       grid-area: content;
       display: flex;
       gap: vars.$spacer * 0.5 vars.$spacer * 1.25;
-      padding-top: vars.$spacer * 0.5;
-      padding-bottom: vars.$spacer * 0.5;
+      padding-block: vars.$spacer * 0.5;
       flex-wrap: wrap;
       justify-content: var(--content-justify, center);
       align-items: center;

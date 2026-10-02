@@ -1,5 +1,4 @@
 @use "@styles/variables" as vars;
-@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
@@ -7,8 +6,8 @@
   background-color: var(--color-background, var(--orange-200));
   box-shadow: vars.$paper-lift;
   position: sticky;
-  top: 0;
-  left: 0;
+  inset-block-start: 0;
+  inset-inline-start: 0;
   z-index: 11000;
   width: 100%;
   padding: var(--padding-y-header) 0;

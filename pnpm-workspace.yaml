@@ -16,12 +16,12 @@ minimumReleaseAgeExclude:
   - "@astrojs/markdown-satteri@0.3.1"
   - "@astrojs/vue@7.0.0 || 7.0.1"
   - astro@7.0.0 || 7.0.3 || 7.2.2
-  - "@sentry/browser-utils@10.62.0"
-  - "@sentry/browser@10.62.0"
-  - "@sentry/core@10.62.0"
-  - "@sentry/feedback@10.62.0"
-  - "@sentry/replay-canvas@10.62.0"
-  - "@sentry/replay@10.62.0"
+  - '@sentry/browser-utils@10.62.0 || 11.4.0'
+  - '@sentry/browser@10.62.0 || 11.4.0'
+  - '@sentry/core@10.62.0 || 11.4.0'
+  - '@sentry/feedback@10.62.0 || 11.4.0'
+  - '@sentry/replay-canvas@10.62.0 || 11.4.0'
+  - '@sentry/replay@10.62.0 || 11.4.0'
   - js-yaml
   - stylelint@17.14.0
   - '@iconify-json/lucide@1.2.115 || 1.2.134'
@@ -30,7 +30,7 @@ minimumReleaseAgeExclude:
   - compromise@14.16.0
   - de-compromise@0.1.0
   - miniflare@4.20260710.0 || 4.20260721.0 || 5.20260811.1-alpha || 5.20260918.0-alpha || 5.20260923.0-alpha
-  - wrangler@4.111.0 || 4.113.0 || 4.123.0 || 4.135.0 || 4.140.0
+  - wrangler@4.111.0 || 4.113.0 || 4.123.0 || 4.135.0 || 4.140.0 || 4.147.0
   - '@cloudflare/workerd-darwin-64@1.20260721.1 || 1.20260918.1'
   - '@cloudflare/workerd-darwin-arm64@1.20260721.1 || 1.20260918.1'
   - '@cloudflare/workerd-linux-64@1.20260721.1 || 1.20260918.1'
@@ -59,6 +59,51 @@ minimumReleaseAgeExclude:
   - '@vitest/web-worker@5.0.2'
   - vite@8.3.1
   - vitest@5.0.2
+  - '@csstools/css-calc@3.4.3'
+  - '@csstools/css-color-parser@4.2.6'
+  - '@csstools/postcss-alpha-function@2.0.16'
+  - '@csstools/postcss-color-function-display-p3-linear@2.0.15'
+  - '@csstools/postcss-color-function@5.0.15'
+  - '@csstools/postcss-color-mix-function@4.0.15'
+  - '@csstools/postcss-color-mix-variadic-function-arguments@2.0.15'
+  - '@csstools/postcss-container-rule-prelude-list@1.0.4'
+  - '@csstools/postcss-content-alt-text@3.0.7'
+  - '@csstools/postcss-contrast-color-function@3.0.15'
+  - '@csstools/postcss-custom-functions@1.0.1'
+  - '@csstools/postcss-exponential-functions@3.0.9'
+  - '@csstools/postcss-gamut-mapping@3.0.15'
+  - '@csstools/postcss-gradients-interpolation-method@6.0.15'
+  - '@csstools/postcss-hwb-function@5.0.15'
+  - '@csstools/postcss-ic-unit@5.0.5'
+  - '@csstools/postcss-image-function@1.0.6'
+  - '@csstools/postcss-is-pseudo-class@6.0.2'
+  - '@csstools/postcss-light-dark-function@3.0.7'
+  - '@csstools/postcss-logical-viewport-units@4.0.3'
+  - '@csstools/postcss-media-minmax@3.0.8'
+  - '@csstools/postcss-oklab-function@5.0.15'
+  - '@csstools/postcss-progressive-custom-properties@5.1.4'
+  - '@csstools/postcss-property-rule-prelude-list@2.0.3'
+  - '@csstools/postcss-random-function@4.0.5'
+  - '@csstools/postcss-relative-color-syntax@4.0.15'
+  - '@csstools/postcss-sign-functions@2.0.9'
+  - '@csstools/postcss-stepped-value-functions@5.0.9'
+  - '@csstools/postcss-system-ui-font-family@2.0.3'
+  - '@csstools/postcss-text-decoration-shorthand@5.0.7'
+  - '@csstools/postcss-trigonometric-functions@5.0.9'
+  - '@types/node@26.6.4'
+  - '@vue/language-core@3.3.12'
+  - postcss-attribute-case-insensitive@8.0.2
+  - postcss-color-functional-notation@8.0.15
+  - postcss-custom-properties@15.0.4
+  - postcss-custom-selectors@9.0.4
+  - postcss-double-position-gradients@7.0.5
+  - postcss-image-set-function@8.0.2
+  - postcss-lab-function@8.0.15
+  - postcss-logical@9.0.2
+  - postcss-overflow-shorthand@7.0.1
+  - postcss-place@11.0.1
+  - postcss-preset-env@11.6.0
+  - vue-tsc@3.3.12
 
 patchedDependencies:
   de-compromise: patches/de-compromise.patch
