@@ -38,11 +38,7 @@ $toc-width: 16rem;
     font-size: 0.8rem;
     letter-spacing: 0.03em;
     text-transform: uppercase;
-    color: var(--grey-100);
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--color-body) 65%, transparent);
-    }
+    color: var(--color-muted);
   }
 
   &__reading-time {
@@ -66,11 +62,7 @@ $toc-width: 16rem;
     border-radius: 4px;
     font-size: 0.75rem;
     line-height: 1.4;
-    color: var(--grey-100);
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--color-body) 65%, transparent);
-    }
+    color: var(--color-muted);
   }
 
   // ------------------------------------------------------- Layout + TOC
@@ -111,18 +103,20 @@ $toc-width: 16rem;
       max-width: none;
       margin: 0;
       position: sticky;
-      top: var(--anchor-offset);
+      inset-block-start: var(--anchor-offset);
       max-height: calc(100dvh - var(--anchor-offset) - 1rem);
       overflow-y: auto;
       border: none;
       border-inline-end: 1px dashed var(--grey-100);
       border-radius: 0;
-      padding: 0 vars.$spacer 0 0;
+      padding: 0;
+      padding-inline-end: vars.$spacer;
     }
   }
 
   &__toc-title {
-    margin: 0 0 vars.$spacer * 0.5;
+    margin: 0;
+    margin-block-end: vars.$spacer * 0.5;
     padding-block-end: vars.$spacer * 0.4;
     border-block-end: 1px dashed var(--orange-200);
     font-family: vars.$berlin;
@@ -150,7 +144,7 @@ $toc-width: 16rem;
     transition:
       color 0.15s ease,
       border-color 0.15s ease,
-      background 0.15s ease;
+      background-color 0.15s ease;
 
     @include butler-mx.hover {
       color: var(--color-accent-text);
@@ -172,7 +166,7 @@ $toc-width: 16rem;
   &__body {
     // fragment ids sit clear of the sticky header when jumped to
     :where([id]) {
-      scroll-margin-top: var(--anchor-offset);
+      scroll-margin-block-start: var(--anchor-offset);
     }
 
     // Lede — the opening paragraph reads a size up, calmer.
@@ -206,7 +200,7 @@ $toc-width: 16rem;
         content: "";
         position: absolute;
         inset-inline: 0;
-        bottom: 0;
+        inset-block-end: 0;
         block-size: 2px;
         background: repeating-linear-gradient(
           to right,
@@ -263,12 +257,11 @@ $toc-width: 16rem;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       text-decoration: none;
-      color: var(--grey-100);
+      color: var(--color-muted);
       vertical-align: middle;
       white-space: nowrap;
 
       @include butler-mx.dark-mode-class {
-        color: color-mix(in srgb, var(--color-body) 65%, transparent);
         border-color: color-mix(in srgb, var(--color-body) 35%, transparent);
       }
     }
@@ -292,26 +285,23 @@ $toc-width: 16rem;
   // The one sanctioned side-stripe: the citation callout.
   &__body ol:has(> li[id^="quelle-"]) {
     margin-block-start: vars.$spacer;
-    padding: vars.$spacer vars.$spacer vars.$spacer (vars.$spacer * 2.5);
-    border-inline-start: 3px solid var(--orange-300);
-    border-radius: 0 4px 4px 0;
-    background: color-mix(in srgb, var(--orange-100) 60%, white);
+    padding: vars.$spacer;
+    padding-inline-start: vars.$spacer * 2.5;
     font-size: 0.8rem;
     line-height: 1.55;
     overflow-wrap: anywhere;
 
+    @include mx.side-stripe;
     @include butler-mx.dark-mode-class {
-      background: color-mix(in srgb, var(--new-blue-400) 80%, black);
       border-inline-start-color: var(--orange-600);
     }
 
     li:target {
       background: color-mix(in srgb, var(--orange-300) 45%, transparent);
       border-radius: 4px;
-      transition: background 0.6s ease-out;
 
-      @media (prefers-reduced-motion: reduce) {
-        transition: none;
+      @include butler-mx.feature("motion") {
+        transition: background-color 0.6s ease-out;
       }
     }
   }
@@ -405,7 +395,7 @@ $toc-width: 16rem;
     color: var(--color-body);
     transition:
       border-color 0.15s ease,
-      background 0.15s ease;
+      background-color 0.15s ease;
 
     @include butler-mx.hover {
       border-style: dashed;
@@ -428,10 +418,6 @@ $toc-width: 16rem;
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    color: var(--grey-100);
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--color-body) 60%, transparent);
-    }
+    color: var(--color-muted);
   }
 }

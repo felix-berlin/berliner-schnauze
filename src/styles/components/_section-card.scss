@@ -1,4 +1,5 @@
 @use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-word-main__content {
@@ -6,16 +7,15 @@
 }
 
 .c-section-card {
-  background: white;
-  border: 1px dashed var(--grey-100);
-  border-radius: 4px 4px 0 0;
-  box-shadow: vars.$paper-lift;
-  scroll-margin-top: calc(var(--site-header-height) + 1rem);
+  scroll-margin-block-start: calc(var(--site-header-height) + 1rem);
   counter-increment: section-num;
 
-  @include butler-mx.dark-mode-class {
-    background: var(--new-blue-400);
-  }
+  @include mx.paper-card;
+
+  // Deviations from paper-card: pure white sheet, square bottom corners.
+  background: white;
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
 
   &--unnumbered {
     counter-increment: none;
@@ -47,24 +47,18 @@
   }
 
   &__title {
-    font-family: vars.$berlin;
-    font-size: 1.25rem;
-    font-weight: 700;
     color: var(--new-blue-400);
-    margin: 0;
 
+    @include mx.paper-card-title;
     @include butler-mx.dark-mode-class {
-      color: white;
+      color: var(--white-100);
     }
   }
 
   &__body {
     padding-inline: 1.25rem;
     padding-block: 1rem;
-
-    * {
-      overflow-wrap: break-word;
-    }
+    overflow-wrap: break-word;
 
     :where(p, a, li) {
       font-size: 1rem;
@@ -88,17 +82,12 @@
   }
 
   &__infotext {
-    border-inline-start: 3px solid var(--orange-300);
-    background: color-mix(in srgb, var(--orange-100) 60%, white);
     padding: 0.75rem 1rem;
-    border-radius: 0 4px 4px 0;
+
+    @include mx.side-stripe;
 
     &:not(:first-child) {
       margin-block-start: vars.$spacer;
-    }
-
-    @include butler-mx.dark-mode-class {
-      background: color-mix(in srgb, var(--new-blue-400) 80%, black);
     }
   }
 
@@ -110,17 +99,12 @@
   }
 
   &__stat-box {
-    background: color-mix(in srgb, var(--orange-600) 10%, white);
-    border: 1px dashed var(--orange-200);
     border-radius: 4px;
     padding: 0.625rem 0.875rem;
     flex: 1;
     min-width: 80px;
 
-    @include butler-mx.dark-mode-class {
-      background: color-mix(in srgb, var(--new-blue-400) 80%, black);
-      border-color: var(--grey-100);
-    }
+    @include mx.paper-chip;
   }
 
   &__stat-label {
@@ -136,7 +120,7 @@
     color: var(--new-blue-400);
 
     @include butler-mx.dark-mode-class {
-      color: white;
+      color: var(--white-100);
     }
 
     &--vowels {
@@ -165,7 +149,7 @@
     gap: 0.3rem;
 
     &::before {
-      content: "●";
+      content: "●" / "";
       font-size: 0.6rem;
     }
 
@@ -183,12 +167,9 @@
   }
 
   &__grammar-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-muted);
     margin-block-end: vars.$spacer * 0.75;
+
+    @include mx.eyebrow(0.7rem, 0.08em);
   }
 
   &__grammar-entry {

@@ -11,19 +11,7 @@
     justify-content: center;
   }
 
-  &__message {
-    display: flex;
-    align-items: center;
-    gap: vars.$spacer * 0.5;
-  }
-
-  &__success-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .c-turnstile {
-    margin-top: vars.$spacer * 2.5;
+    margin-block-start: vars.$spacer * 2.5;
   }
 }

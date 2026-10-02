@@ -1,3 +1,5 @@
+@use "@sass-butler/mixins" as butler-mx;
+
 .c-single-loader {
   padding: 8px;
 
@@ -9,8 +11,11 @@
       19px 0 0 7px,
       38px 0 0 3px,
       57px 0 0 0;
-    transform: translateX(-38px);
-    animation: d1 0.5s infinite alternate linear;
+    translate: -38px 0;
+
+    @include butler-mx.feature("motion") {
+      animation: d1 0.5s infinite alternate linear;
+    }
   }
 }
 

@@ -4,7 +4,7 @@
 .c-related-words {
   &__words {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 4fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: vars.$spacer;
   }
 
