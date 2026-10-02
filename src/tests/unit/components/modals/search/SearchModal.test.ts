@@ -35,9 +35,10 @@ vi.mock("@components/SearchWords.vue", async () => {
   return createComponentStub("<div class='mock-search-words' />");
 });
 
-vi.mock("@components/word-search/WordFilter.vue", () => ({
-  default: { template: "<div class='mock-word-filter' />" },
-}));
+vi.mock("@components/word-search/WordFilter.vue", async () => {
+  const { createComponentStub } = await import("../../../helpers/stubs");
+  return createComponentStub("<div class='mock-word-filter' />");
+});
 
 vi.mock("@components/word-search/SearchResultCount.vue", () => ({
   default: { template: "<div class='mock-search-result-count' />" },
@@ -107,7 +108,7 @@ describe("SearchModal.vue", () => {
   it("renders WordFilter", async () => {
     const SearchModal = (await import("@components/modals/search/SearchModal.vue")).default;
     const wrapper = mount(SearchModal);
-    expect(wrapper.find(".mock-word-filter").exists()).toBe(true);
+    await vi.waitFor(() => expect(wrapper.find(".mock-word-filter").exists()).toBe(true));
   });
 
   it("shows header when flyout is not visible", async () => {

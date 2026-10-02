@@ -96,7 +96,3 @@ const resetRange = () => {
 
 const hasRangeSet = computed(() => typeof rangeValue.value === "undefined");
 </script>
-
-<style lang="scss">
-@use "@styles/components/word-range-slider.scss";
-</style>
