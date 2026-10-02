@@ -15,13 +15,9 @@
 
   &__alpha-label {
     font-size: 0.8rem;
-    color: color-mix(in srgb, var(--blue) 70%, white);
+    color: var(--color-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: vars.$spacer * 0.5;
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--blue) 30%, white);
-    }
   }
 }

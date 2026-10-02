@@ -21,10 +21,6 @@
   &__modified {
     margin: 0;
     font-size: 0.8rem;
-    color: color-mix(in srgb, var(--blue) 70%, white);
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--blue) 30%, white);
-    }
+    color: var(--color-muted);
   }
 }

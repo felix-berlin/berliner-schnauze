@@ -127,11 +127,7 @@
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: color-mix(in srgb, var(--blue) 75%, white);
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--blue) 30%, white);
-    }
+    color: var(--color-muted);
   }
 
   &__stat-value {
@@ -191,12 +187,8 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: color-mix(in srgb, var(--blue) 70%, white);
+    color: var(--color-muted);
     margin-block-end: vars.$spacer * 0.75;
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--blue) 30%, white);
-    }
   }
 
   &__grammar-entry {

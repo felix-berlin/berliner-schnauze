@@ -13,15 +13,11 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: color-mix(in srgb, var(--blue) 70%, white);
+    color: var(--color-muted);
     padding-block-end: 0.5rem;
     border-block-end: 1px dashed var(--orange-200);
     margin-block-end: vars.$spacer * 0.75;
     margin-block-start: 1.75rem;
-
-    @include butler-mx.dark-mode-class {
-      color: color-mix(in srgb, var(--blue) 30%, white);
-    }
   }
 
   .c-image-gallery {

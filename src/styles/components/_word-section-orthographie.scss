@@ -15,13 +15,9 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: color-mix(in srgb, var(--blue) 70%, white);
+      color: var(--color-muted);
       white-space: nowrap;
       padding-block-start: 0.15em;
-
-      @include butler-mx.dark-mode-class {
-        color: color-mix(in srgb, var(--blue) 30%, white);
-      }
     }
 
     dd {
