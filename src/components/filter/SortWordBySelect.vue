@@ -61,5 +61,3 @@ type SelectOption = {
   sort: "ASC" | "DESC";
 };
 </script>
-
-<style lang="scss"></style>

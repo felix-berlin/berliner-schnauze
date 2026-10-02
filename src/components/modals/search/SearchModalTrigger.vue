@@ -54,5 +54,5 @@ whenever(shiftSlash, () => openSearchViaKeyboard());
 </script>
 
 <style lang="scss">
-@use "@styles/components/searchbar.scss";
+@use "@styles/components/searchbar";
 </style>

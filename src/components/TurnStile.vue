@@ -72,5 +72,3 @@ onMounted(() => {
   renderTurnstile();
 });
 </script>
-
-<style scoped></style>

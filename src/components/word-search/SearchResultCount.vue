@@ -11,5 +11,3 @@ import { $searchResultCount, $searchState } from "@stores/wordList.ts";
 const searchResultCount = useStore($searchResultCount);
 const searchState = useStore($searchState);
 </script>
-
-<style scoped></style>

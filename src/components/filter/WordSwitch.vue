@@ -24,5 +24,3 @@ const typeOfSwitch = useVModel($wordSearch, switchType);
 
 const id = useId();
 </script>
-
-<style scoped></style>

@@ -16,5 +16,3 @@ import SearchXIcon from "virtual:icons/lucide/search-x";
 const searchResultCount = useStore($searchResultCount);
 const searchState = useStore($searchState);
 </script>
-
-<style scoped></style>

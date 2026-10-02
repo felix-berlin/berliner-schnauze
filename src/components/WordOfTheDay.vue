@@ -31,10 +31,7 @@
       <Transition v-if="!currentWord.error" name="fade-fast" mode="out-in">
         <SingleLoader v-if="currentWord.loading" key="loading" />
         <div v-else key="word" class="c-word-of-the-day__word-wrap">
-          <a
-            :href="routeToWord(currentWord?.word?.post_name)"
-            class="c-word-of-the-day__word c-loader-text"
-          >
+          <a :href="routeToWord(currentWord?.word?.post_name)" class="c-word-of-the-day__word">
             {{ currentWord?.word?.berlinerisch }}
           </a>
         </div>
@@ -97,5 +94,4 @@ const timeToUpdate = computed(() => {
 
 <style lang="scss">
 @use "@styles/components/word-of-the-day";
-@use "@styles/components/loading-text";
 </style>

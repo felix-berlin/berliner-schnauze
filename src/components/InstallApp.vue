@@ -46,5 +46,3 @@ useStore($installPrompt);
 const showButton = useStore($showInstallButton);
 const isPwaInstalled = useStore($isPwaInstalled);
 </script>
-
-<style scoped></style>

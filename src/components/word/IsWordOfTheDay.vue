@@ -47,5 +47,3 @@ const isWordOfTheDay = computed(() => {
   return wordId === wordOfTheDay?.value?.word?.ID;
 });
 </script>
-
-<style lang="scss"></style>

@@ -54,5 +54,5 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@use "@styles/components/_word-search-link.scss";
+@use "@styles/components/word-search-link";
 </style>

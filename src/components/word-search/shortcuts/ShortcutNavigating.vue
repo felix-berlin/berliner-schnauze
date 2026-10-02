@@ -10,5 +10,3 @@
 import ArrowDownIcon from "virtual:icons/lucide/arrow-down";
 import ArrowUpIcon from "virtual:icons/lucide/arrow-up";
 </script>
-
-<style scoped></style>
