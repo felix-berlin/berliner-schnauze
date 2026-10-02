@@ -1,9 +1,9 @@
 @use "@styles/variables" as vars;
 
 .c-single-word {
-  --size-quote-icon: 32px;
-
   &__quote-icon {
+    --size-quote-icon: 44px;
+
     width: var(--size-quote-icon);
     height: var(--size-quote-icon);
     fill: var(--grey-200);
@@ -33,7 +33,7 @@
   &__example {
     font-size: var(--size-font, 1.7rem);
     flex-basis: 100%;
-    margin: calc(var(--size-quote-icon) + #{vars.$spacer * 0.5}) 0 0 0;
+    margin: 0;
     overflow-wrap: break-word;
 
     &-explanation {

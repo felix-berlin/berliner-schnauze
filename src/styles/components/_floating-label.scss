@@ -13,7 +13,7 @@
 
   &__label {
     --size-font: inherit;
-    --position-left: var(--padding-x-input);
+    --position-left: var(--padding-x-input, 0);
     --offset: 5px;
 
     position: absolute;
