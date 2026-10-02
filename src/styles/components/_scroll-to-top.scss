@@ -13,8 +13,8 @@
     0 0 20px rgb(0 0 0 / 10%);
 
   @include mx.breakpoint("md") {
-    --left-position: none;
-    --bottom-position: none;
+    --left-position: auto;
+    --bottom-position: auto;
     --transform: translateY(-50%);
 
     top: 50%;

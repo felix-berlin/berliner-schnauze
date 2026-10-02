@@ -38,7 +38,7 @@
           </label>
           <input
             id="push-toggle"
-            class="c-switch"
+            class="c-input c-input--checkbox c-switch"
             type="checkbox"
             :checked="pushState === 'subscribed'"
             :disabled="!vapidConfigured || pushState === 'loading'"

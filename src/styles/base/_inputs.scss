@@ -14,7 +14,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   --color-border: var(--blue);
   --color-border-hover: var(--red-200);
   --size-font: 1rem;
-  --box-shadow-focus: 2px rgb(var(--orange-600) 0.3);
+  --box-shadow-focus: 2px color-mix(in srgb, var(--orange-600) 30%, transparent);
   --color-background: color-mix(in srgb, var(--orange-100) 30%, white);
   --color-background-disabled: var(--grey-200);
   --width-border: 1px;
@@ -233,9 +233,8 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
       left: 7px;
       top: 4px;
       transform: rotate(var(--rotate, 20deg));
-      border: {
-        inset: 0 2px solid var(--color-inner-active) 2px solid var(--color-inner-active) 0;
-      }
+      border: solid var(--color-inner-active);
+      border-width: 0 2px 2px 0;
     }
 
     &:checked {

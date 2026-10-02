@@ -12,7 +12,7 @@
     row-gap: vars.$spacer * 0.5;
 
     @include mx.breakpoint("xs") {
-      --wrap-flex: no-wrap;
+      --wrap-flex: nowrap;
     }
   }
 

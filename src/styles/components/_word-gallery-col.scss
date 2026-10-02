@@ -6,7 +6,7 @@
   container-name: word-gallery-col;
   grid-area: gallery;
   position: sticky;
-  top: calc(var(--topbar-height, 52px) + vars.$spacer);
+  top: calc(var(--site-header-height) + vars.$spacer);
 
   &__label {
     font-size: 0.7rem;

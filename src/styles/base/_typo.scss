@@ -1,11 +1,14 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
 
-@for $h from 1 to 6 {
-  h#{$h} {
-    font-family: vars.$berliner;
-    font-weight: normal;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: vars.$berliner;
+  font-weight: normal;
 }
 
 html,

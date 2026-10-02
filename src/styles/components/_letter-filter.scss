@@ -3,8 +3,6 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-letter-filter {
-  display: var(--display);
-
   &__list {
     display: grid;
     grid-template-columns: repeat(auto-fill, 45px);
