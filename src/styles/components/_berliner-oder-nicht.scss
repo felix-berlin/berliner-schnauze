@@ -399,13 +399,14 @@
       opacity: 0.88;
     }
 
+    // Darker than the brand tones so white labels reach AA (5.6:1 / 4.6:1)
     &--no {
-      background: var(--orange-500);
+      background: var(--orange-600);
       color: #fff;
     }
 
     &--yes {
-      background: var(--success);
+      background: color-mix(in srgb, var(--success) 80%, black);
       color: #fff;
     }
   }

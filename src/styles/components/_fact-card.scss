@@ -48,15 +48,15 @@
     display: inline-block;
     padding-inline: 1.25rem;
     padding-block: 0.5rem;
-    background-color: var(--orange-500);
-    color: var(--color-on-accent, #fff);
+    background-color: var(--orange-600);
+    color: var(--white-100);
     font-weight: 600;
     text-decoration: none;
     transition: background-color 0.15s ease;
 
     &:hover,
     &:focus-visible {
-      background-color: var(--orange-600, color-mix(in srgb, var(--orange-500) 80%, #000));
+      background-color: var(--orange-700);
     }
   }
 }

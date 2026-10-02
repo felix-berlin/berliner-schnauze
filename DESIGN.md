@@ -95,6 +95,7 @@ The palette reads as a hand-labeled dossier: warm orange annotations and a rare 
 ### Primary
 
 - **Currywurst Orange** (`#cf5736` core, ramp `#fcead7` → `#781111`): the dominant accent. Badges, borders, stat highlights, button fills, the word-of-the-day marker, the dashed underline beneath headwords. Carries most of the system's color weight.
+- **Fills behind white text use Currywurst-600** (`#b23b27`, 5.6:1): `.c-button--primary`, fact-card CTA, BON "Nee". White on `#cf5736` is only 3.9:1 and fails WCAG AA; 500 stays the accent for borders, tints and large display text. Orange accent text uses `--color-accent-text` (600 light / 300 dark).
 
 ### Secondary
 

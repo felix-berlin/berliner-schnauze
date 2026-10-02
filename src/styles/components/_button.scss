@@ -45,10 +45,11 @@
   }
 
   // Orange call-to-action (e.g. buy buttons): body font, bold, stays orange in dark mode.
+  // orange-600, not 500: white text on 500 is only 3.9:1 (AA needs 4.5:1)
   &--primary {
-    --color-background: var(--orange-500);
+    --color-background: var(--orange-600);
     --color: var(--white-100);
-    --color-border: var(--orange-500);
+    --color-border: var(--orange-600);
 
     font-family: vars.$berlin;
     font-weight: 700;
@@ -57,9 +58,9 @@
       --color-border: var(--yellow-500);
     }
     @include butler-mx.dark-mode-class {
-      --color-background: var(--orange-500);
+      --color-background: var(--orange-600);
       --color: var(--white-100);
-      --color-border: var(--orange-500);
+      --color-border: var(--orange-600);
     }
   }
 
