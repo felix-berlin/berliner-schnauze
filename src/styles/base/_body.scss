@@ -26,11 +26,16 @@ dialog {
   color: var(--color-body);
 }
 
-@include butler-mx.select-style(vars.$red-200, vars.$white-100);
+html {
+  --selection-bg: #{vars.$red-200};
+  --selection-color: #{vars.$white-100};
+}
 
 html[class="dark"] {
-  @include butler-mx.select-style(map.get(vars.$blue-shades, "blue-200"), vars.$white-100);
+  --selection-bg: #{map.get(vars.$blue-shades, "blue-200")};
 }
+
+@include butler-mx.select-style(var(--selection-bg), var(--selection-color));
 
 html {
   @include butler-mx.feature("motion") {

@@ -215,7 +215,7 @@ $panel-border: 1px solid var(--new-blue-200);
     color: inherit;
     opacity: 0.5;
 
-    @include mx.hover-focus {
+    @include butler-mx.hover-focus {
       opacity: 1;
     }
   }

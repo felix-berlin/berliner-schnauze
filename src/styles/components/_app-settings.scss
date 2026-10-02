@@ -125,7 +125,7 @@
     text-underline-offset: 3px;
     transition: color 0.2s ease;
 
-    @include mx.hover-focus {
+    @include butler-mx.hover-focus {
       color: var(--color-body);
     }
   }
@@ -142,7 +142,7 @@
       box-shadow 0.25s ease,
       border-color 0.25s ease;
 
-    @include mx.hover-focus {
+    @include butler-mx.hover-focus {
       border-color: var(--orange-600);
       box-shadow: vars.$hover-glow;
 
