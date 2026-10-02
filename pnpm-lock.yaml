@@ -207,8 +207,8 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3(@types/node@26.6.4)(astro@7.3.5(@types/node@26.6.4)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.1))(esbuild@0.28.2)(jiti@2.7.0)(sass@1.104.1)(supports-color@10.2.2)(terser@5.51.2)(vue@3.5.43(typescript@6.0.3))(yaml@2.9.1)
       '@felix_berlin/sass-butler':
-        specifier: 3.1.1
-        version: 3.1.1(sass@1.104.1)
+        specifier: 4.0.0
+        version: 4.0.0(sass@1.104.1)
       '@graphql-typed-document-node/core':
         specifier: ^3.2.0
         version: 3.2.0(graphql@17.0.2)
@@ -2180,9 +2180,9 @@ packages:
   '@fastify/busboy@3.2.2':
     resolution: {integrity: sha512-yXSS27qPExaXeuLvMRMXOLtpipzfQYNjG3FkunDWKGfMYjKuhFXko9CVzqxm8jcF+lmtS9Fd89QNdh9XDjnbNg==}
 
-  '@felix_berlin/sass-butler@3.1.1':
-    resolution: {integrity: sha512-ZpCw8557DaP8Bpm2hmyES4fHqWiP9+b32f6ZF0e280IzsG8NJ9JjID1v8ghwQrgqNSzi+qGmHZicgdtgIZFtwA==}
-    engines: {node: '>=12'}
+  '@felix_berlin/sass-butler@4.0.0':
+    resolution: {integrity: sha512-4ovoN5+P42xx9teaM0VkdYB2v8VWpkaY4MaQfvZiRg3BMK2eTksUxQOUfjc1onVimzGlt3Bh3ah5BDEJ8+Gnqw==}
+    engines: {node: '>=22'}
     peerDependencies:
       sass: '>=1.95.0'
 
@@ -11282,7 +11282,7 @@ snapshots:
 
   '@fastify/busboy@3.2.2': {}
 
-  '@felix_berlin/sass-butler@3.1.1(sass@1.104.1)':
+  '@felix_berlin/sass-butler@4.0.0(sass@1.104.1)':
     dependencies:
       sass: 1.104.1
 
