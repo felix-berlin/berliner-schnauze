@@ -81,8 +81,6 @@
   }
 
   &__nav {
-    background-color: var(--color-background, var(--secondary));
-
     &-list {
       display: flex;
       flex-direction: column;
