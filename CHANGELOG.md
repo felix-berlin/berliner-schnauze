@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.54.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.53.1...v3.54.0) (2026-10-02)
+
+
+### Bug Fixes
+
+* **a11y:** darken white-text CTA fills to meet WCAG AA ([af8df90](https://github.com/felix-berlin/berliner-schnauze/commit/af8df90cbd247b2dbc69aa8d569d4db68bd8103a))
+* **bon:** readable muted text in the game ([2676f50](https://github.com/felix-berlin/berliner-schnauze/commit/2676f50dfa1341483fa77471d26e3da16f46ed7e)), closes [#999](https://github.com/felix-berlin/berliner-schnauze/issues/999)
+* **css:** configure breakpoints via argument instead of forward-with ([90291a4](https://github.com/felix-berlin/berliner-schnauze/commit/90291a42c43e03d2b57fad9659e717b4a0e1d768))
+* **css:** drop footer nav background revived by red-500 token ([43ef859](https://github.com/felix-berlin/berliner-schnauze/commit/43ef8594be0f967558df144e44476e2470310d2f))
+* **css:** give quote icon and floating label defined values ([27c18ec](https://github.com/felix-berlin/berliner-schnauze/commit/27c18eca314a7516ace93c2d66aaa9283562aaf9))
+* **css:** repair broken focus ring, checkmark, alerts, fades and dark tokens ([2fee915](https://github.com/felix-berlin/berliner-schnauze/commit/2fee915d275f9e5dd89b7c7576d8f9311749aac9))
+* **css:** respect prefers-reduced-motion globally ([c3a9945](https://github.com/felix-berlin/berliner-schnauze/commit/c3a994582aa1ae77f0f4ec82da9c67efddd87886))
+
+
+### Features
+
+* **a11y:** add keyboard focus ring, color-scheme and accent text token ([6de10e1](https://github.com/felix-berlin/berliner-schnauze/commit/6de10e10de3c2650e10d0bd81dd5050e28ea5411))
+* **css:** add shared eyebrow, hover-focus and surface mixins plus shadow/radius tokens ([99095d7](https://github.com/felix-berlin/berliner-schnauze/commit/99095d710b35fe14a8ea36bf61983b6ce244db3c))
+
+
+### Performance Improvements
+
+* **search:** load word filter styles once globally ([86b0a4d](https://github.com/felix-berlin/berliner-schnauze/commit/86b0a4dca6703ba32e3d91aea524bcafc40f0df3))
+
 ## [3.53.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.53.0...v3.53.1) (2026-09-28)
 
 
