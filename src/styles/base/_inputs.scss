@@ -1,6 +1,4 @@
-@use "sass:color";
 @use "@styles/variables" as vars;
-@use "@styles/mixins" as mx;
 @use "@sass-butler/functions" as butler-fn;
 @use "@sass-butler/mixins" as butler-mx;
 
@@ -74,25 +72,14 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
 }
 
-// button,
-// input[type='submit'],
-// input[type='button'],
-// input[type='reset'],
-// input[type='color'] {
-// 	@extend .c-button;
-
-// 	--spacing-inner-vertical: #{vars.$spacer * .75};
-// 	--spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
-// }
-
 .c-select {
   --spacing-inner-vertical: #{vars.$spacer};
   --spacing-inner-horizontal: calc(var(--spacing-inner-vertical) * 2);
   --size-font: 1rem;
   --spacing-inner: #{vars.$spacer * 0.75} #{vars.$spacer * 4.5} #{vars.$spacer * 0.75}
     #{vars.$spacer};
-  --color-background: var(--orange-100);
-  --color-border: var(--orange-600);
+  --color-background: var(--control-bg);
+  --color-border: var(--control-border);
 
   padding: var(--spacing-inner-vertical) var(--spacing-inner-horizontal);
   font-size: var(--size-font);
@@ -105,15 +92,13 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     size: 16px 12px;
   }
 
+  // Re-declared in dark mode: the shared .c-input/.c-select dark block above
+  // sets --color-background on the element and would otherwise win.
   @include butler-mx.dark-mode-class {
-    --color-background: var(--new-blue-600);
-    --color-border: color-mix(in srgb, var(--blue) 80%, white);
+    --color-background: var(--control-bg);
+    --color-border: var(--control-border);
 
     background-blend-mode: screen;
-  }
-
-  &:not(:disabled):hover {
-    --color-hover-background: var(--grey-200);
   }
 }
 
@@ -153,8 +138,8 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   &::after {
     content: "";
     display: block;
-    left: 0;
-    top: 0;
+    inset-block-start: 0;
+    inset-inline-start: 0;
     position: absolute;
     transition:
       transform var(--duration-transition-transform) var(--timing-transition-transform),
@@ -189,11 +174,9 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     }
   }
 
-  &:hover {
-    &:not(:checked) {
-      &:not(:disabled) {
-        --color-border: var(--color-border-hover);
-      }
+  @include butler-mx.hover {
+    &:not(:checked, :disabled) {
+      --color-border: var(--color-border-hover);
     }
   }
 
@@ -221,7 +204,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     display: inline-block;
     vertical-align: top;
     cursor: var(--cursor);
-    margin-left: 4px;
+    margin-inline-start: 4px;
   }
 }
 
@@ -230,8 +213,8 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     &::after {
       width: 5px;
       height: 9px;
-      left: 7px;
-      top: 4px;
+      inset-inline-start: 7px;
+      inset-block-start: 4px;
       transform: rotate(var(--rotate, 20deg));
       border: solid var(--color-inner-active);
       border-width: 0 2px 2px 0;
@@ -260,22 +243,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   }
 }
 
-%track {
-  background-color: vars.$grey-200;
-  width: 100%;
-  height: 0.3rem;
-}
-
-%thumb {
-  background-color: var(--color-background-thumb);
-  width: var(--size-thumb);
-  height: var(--size-thumb);
-  margin-top: calc(-1 * var(--height-track) - 0.05rem); // -1 * to negate the value
-  border-radius: 50%;
-}
-
 .c-input--range {
-  $color-background-track: vars.$grey-200;
   $color-background-thumb: vars.$orange-500;
   $height-track: 0.3rem;
   $size-thumb: 1rem;
@@ -298,7 +266,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     background-color: $color-background-thumb;
     width: $size-thumb;
     height: $size-thumb;
-    margin-top: -($height-track + 0.05rem);
+    margin-block-start: -($height-track + 0.05rem);
     border-radius: 50%;
     border-color: transparent; // Mozilla need this
     border-width: 0; // Mozilla need this
@@ -315,7 +283,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
     background-color: $color-background-thumb;
     width: $size-thumb;
     height: $size-thumb;
-    margin-top: -($height-track + 0.05rem);
+    margin-block-start: -($height-track + 0.05rem);
     border-radius: 50%;
     appearance: none;
   }
@@ -325,7 +293,7 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   &:not(:disabled) {
     cursor: pointer;
 
-    &:hover {
+    @include butler-mx.hover {
       &::file-selector-button {
         --width-border: 0;
         --color-border-hover: var(--grey-200);
@@ -336,16 +304,13 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   }
 
   &::file-selector-button {
-    // FIXME: Herausfinden, warum die gesamte .c-button Klasse entfernt wird, wenn dieses Pseudo-Element extended wird — Autoprefixer
-    // @extend .c-button;
-
     --width-border: 0;
 
     margin-inline-end: vars.$spacer;
     border-inline-end-width: 1px;
     border-color: inherit;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
   }
 }
 
@@ -358,13 +323,13 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   --style-border: solid;
 
   padding: var(--spacing-inner);
-  margin-bottom: var(--spacing-after);
+  margin-block-end: var(--spacing-after);
   border: var(--width-border) var(--style-border) var(--color-border);
 
   legend {
     font-weight: 600;
     padding: 0 var(--spacing-legend);
-    margin-left: calc(-1 * var(--spacing-legend));
+    margin-inline-start: calc(-1 * var(--spacing-legend));
   }
 }
 
@@ -372,6 +337,6 @@ $icon-chevron-down: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' 
   display: block;
 
   &:not(:last-of-type) {
-    margin-bottom: vars.$spacer;
+    margin-block-end: vars.$spacer;
   }
 }

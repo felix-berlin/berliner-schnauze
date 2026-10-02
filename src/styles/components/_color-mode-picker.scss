@@ -1,15 +1,10 @@
 @use "@sass-butler/mixins" as butler-mx;
 
-// Hell / Dunkel / System segment. Native radios; inactive options are dimmed, the
+// Hell / Dunkel / System segment. Native radios; inactive options are muted, the
 // active one gets a light tint.
 .c-color-mode-picker {
   --_border: color-mix(in srgb, var(--orange-400) 50%, transparent);
   --_active-bg: color-mix(in srgb, var(--orange-400) 20%, transparent);
-
-  @include butler-mx.dark-mode-class {
-    --_border: color-mix(in srgb, var(--blue) 80%, white);
-    --_active-bg: color-mix(in srgb, var(--blue) 30%, transparent);
-  }
 
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -20,6 +15,11 @@
   border-radius: 4px;
   overflow: hidden;
 
+  @include butler-mx.dark-mode-class {
+    --_border: var(--control-border);
+    --_active-bg: color-mix(in srgb, var(--blue) 30%, transparent);
+  }
+
   &__option {
     display: flex;
     align-items: center;
@@ -27,14 +27,13 @@
     gap: 6px;
     padding: 7px 0;
     cursor: pointer;
-    color: var(--color-body);
-    opacity: 0.55;
+    color: var(--color-muted);
     transition:
-      opacity 0.15s ease,
+      color 0.15s ease,
       background-color 0.15s ease;
 
     & + & {
-      border-left: 1px solid var(--_border);
+      border-inline-start: 1px solid var(--_border);
     }
 
     svg {
@@ -44,11 +43,11 @@
     }
 
     @include butler-mx.hover {
-      opacity: 0.85;
+      color: var(--color-body);
     }
 
     &:has(:checked) {
-      opacity: 1;
+      color: var(--color-body);
       background-color: var(--_active-bg);
     }
 

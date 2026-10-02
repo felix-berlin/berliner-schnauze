@@ -17,21 +17,12 @@
     --offset: 5px;
 
     position: absolute;
-    left: var(--position-left);
+    inset-inline-start: var(--position-left);
     font-size: var(--size-font);
     pointer-events: none; // only needed when no <label> element is used
 
-    &--center {
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    &--top {
-      bottom: calc(100% + var(--offset));
-    }
-
     &--bottom {
-      top: calc(100% + var(--offset));
+      inset-block-start: calc(100% + var(--offset));
     }
   }
 }

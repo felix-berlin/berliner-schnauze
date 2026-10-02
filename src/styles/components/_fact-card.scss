@@ -1,4 +1,4 @@
-@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 @use "@sass-butler/functions" as butler-fn;
 
@@ -14,7 +14,7 @@
     --color-background: rgb(0 0 0 / 10%);
   }
 
-  &--hightlighted {
+  &--highlighted {
     --color-background: color-mix(in srgb, var(--orange-500) 20%, transparent);
 
     @include butler-mx.dark-mode-class {
@@ -29,7 +29,7 @@
 
     &::first-letter {
       initial-letter: 2;
-      margin-right: 0.25rem;
+      margin-inline-end: 0.25rem;
     }
   }
 
@@ -43,7 +43,6 @@
   }
 
   &__link {
-    align-self: flex-start;
     margin-block-start: 1.5rem;
     display: inline-block;
     padding-inline: 1.25rem;
@@ -54,8 +53,7 @@
     text-decoration: none;
     transition: background-color 0.15s ease;
 
-    &:hover,
-    &:focus-visible {
+    @include mx.hover-focus {
       background-color: var(--orange-700);
     }
   }

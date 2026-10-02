@@ -1,6 +1,17 @@
 @use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 
+@mixin filter-active {
+  --color-border: var(--yellow-500);
+  --style-border: dashed;
+  --color-background: var(--orange-500);
+  --color: black;
+
+  @include butler-mx.dark-mode-class {
+    --color: black;
+  }
+}
+
 .c-button {
   cursor: pointer;
   padding: var(--padding, #{vars.$spacer * 0.25});
@@ -8,7 +19,11 @@
   border: var(--width-border, 1px) var(--style-border, solid)
     var(--color-border, var(--control-border));
   color: var(--color, var(--control-color));
-  transition: all 0.3s ease-in-out;
+  transition:
+    background-color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out,
+    color 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
 
   // Values equal the fallbacks; kept for the `.dark .c-button` specificity that modifiers rely on.
   @include butler-mx.dark-mode-class {
@@ -23,24 +38,10 @@
   }
 
   @include butler-mx.hover {
-    box-shadow: 0 0 12px 0 var(--color-box-shadow, color-mix(in srgb, var(--orange-500) 60%, white));
+    box-shadow: vars.$hover-glow;
 
     @include butler-mx.dark-mode-class {
-      --color-box-shadow: var(--orange-500);
-    }
-  }
-
-  &--theme {
-    --color-background: var(--primary);
-    --color: var(--white-100);
-
-    font-family: vars.$berliner;
-
-    @include butler-mx.hover {
-      --style-border: dashed;
-    }
-    @include butler-mx.dark-mode-class {
-      --color-border: var(--white-100);
+      box-shadow: 0 0 12px 0 var(--orange-500);
     }
   }
 
@@ -64,22 +65,10 @@
     }
   }
 
-  &--dashed-border {
-    --style-border: dashed;
-  }
-
   &--center-icon {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-  }
-
-  &--back {
-    --padding: 0;
-
-    display: flex;
-    align-items: center;
-    gap: vars.$spacer * 0.25;
   }
 
   &--filter {
@@ -90,22 +79,13 @@
       gap: vars.$spacer * 0.25;
     }
 
-    &:hover,
     &.is-active,
     &.is-current {
-      --color-border: var(--yellow-500);
-      --style-border: dashed;
-      --color-background: var(--orange-500);
-      --color: black;
+      @include filter-active;
+    }
 
-      @include butler-mx.dark-mode-class {
-        --color: black;
-      }
+    @include butler-mx.hover {
+      @include filter-active;
     }
   }
-}
-
-.u-button-reset {
-  background-color: transparent;
-  border: none;
 }

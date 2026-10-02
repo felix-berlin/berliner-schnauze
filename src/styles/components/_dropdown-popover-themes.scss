@@ -1,5 +1,4 @@
 @use "@styles/variables" as vars;
-@use "@styles/mixins" as mx;
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-dropdown {
@@ -16,8 +15,8 @@
       .c-button {
         --color-border: transparent;
 
-        transition: border 200ms ease-in-out;
-        border-bottom: 1px dashed var(--color-border, transparent);
+        transition: border-color 200ms ease-in-out;
+        border-block-end: 1px dashed var(--color-border, transparent);
 
         @include butler-mx.hover {
           --color-border: var(--blue);

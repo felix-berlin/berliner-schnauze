@@ -11,11 +11,7 @@ $duration: 1000;
 
   &__wrapper {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
+    inset: 0;
     pointer-events: none;
   }
 
@@ -24,13 +20,14 @@ $duration: 1000;
     width: 8px;
     height: 16px;
     background: $yellow;
-    top: 0;
+    inset-block-start: 0;
     opacity: 0;
 
-    @for $i from 1 through 13 {
+    // One rule per piece; ConfettiEffect.vue renders 10 by default
+    @for $i from 1 through 10 {
       &:nth-child(#{$i}) {
-        left: $i * 7%;
-        transform: rotate(#{butler-fn.random-num(-80, 80)}deg);
+        inset-inline-start: $i * 7%;
+        rotate: #{butler-fn.random-num(-80, 80)}deg;
         animation: make-it-rain $duration * 1ms infinite ease-out;
         animation-delay: #{butler-fn.random-num(0, $duration * 0.5)}ms;
         animation-duration: #{butler-fn.random-num($duration * 0.7, $duration * 1.2)}ms;
@@ -58,7 +55,7 @@ $duration: 1000;
       animation-delay: $duration * 1ms;
     }
 
-    &:nth-child(4n-7) {
+    &:nth-child(4n + 1) {
       background: $pink;
     }
   }
@@ -74,6 +71,6 @@ $duration: 1000;
   }
 
   100% {
-    transform: translateY(200px);
+    translate: 0 200px;
   }
 }

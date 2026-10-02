@@ -6,10 +6,10 @@
   flex-direction: column;
 
   &__item {
-    border-bottom: 1px solid var(--new-blue-200);
+    border-block-end: 1px solid var(--new-blue-200);
 
     &:first-child {
-      border-top: 1px solid var(--new-blue-200);
+      border-block-start: 1px solid var(--new-blue-200);
     }
 
     // Animate the native content slot. Fade everywhere ::details-content exists;
@@ -65,15 +65,15 @@
     flex-shrink: 0;
 
     @include butler-mx.feature("motion") {
-      transition: transform 0.25s ease;
+      transition: rotate 0.25s ease;
     }
 
     [open] > summary & {
-      transform: rotate(180deg);
+      rotate: 180deg;
     }
   }
 
   &__content {
-    padding-bottom: vars.$spacer * 0.75;
+    padding-block-end: vars.$spacer * 0.75;
   }
 }

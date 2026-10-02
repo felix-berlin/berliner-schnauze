@@ -1,5 +1,4 @@
 @use "@styles/variables" as vars;
-@use "@styles/mixins" as mx;
 
 :root {
   --padding-y-header: #{vars.$spacer * 0.6};

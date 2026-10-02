@@ -1,5 +1,6 @@
 @use "@styles/variables" as vars;
 @use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
 
 h1,
 h2,
@@ -33,7 +34,7 @@ a {
     @include mx.breakpoint("xs") {
       --decoration-text: none;
 
-      &:hover {
+      @include butler-mx.hover {
         --decoration-text: underline dashed from-font;
       }
     }

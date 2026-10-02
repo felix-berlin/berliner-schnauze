@@ -1,16 +1,10 @@
-@use "@styles/variables" as vars;
 @use "@sass-butler/mixins" as butler-mx;
 
 // Page wrapper
 .c-berliner-oder-nicht {
-  --c-bon-surface: #fff;
+  --c-bon-surface: var(--white-100);
   --c-bon-border: rgb(0 0 0 / 12%);
   --c-bon-text-muted: var(--color-muted);
-
-  @include butler-mx.dark-mode-class {
-    --c-bon-surface: var(--new-blue-400);
-    --c-bon-border: rgb(255 255 255 / 12%);
-  }
 
   display: flex;
   flex-direction: column;
@@ -18,7 +12,12 @@
   justify-content: center;
   gap: 1.5rem;
   padding: 1.5rem 1rem 2rem;
-  min-height: 60vh;
+  min-height: 60svh;
+
+  @include butler-mx.dark-mode-class {
+    --c-bon-surface: var(--new-blue-400);
+    --c-bon-border: rgb(255 255 255 / 12%);
+  }
 
   &__idle {
     display: flex;
@@ -42,7 +41,7 @@
 
   &__idle-hint {
     max-width: 30rem;
-    margin-top: -0.5rem;
+    margin-block-start: -0.5rem;
     color: var(--c-bon-text-muted);
     font-size: 0.875rem;
     font-style: italic;
@@ -62,7 +61,7 @@
     cursor: pointer;
     transition: border-color 0.15s;
 
-    &:hover {
+    @include butler-mx.hover {
       border-color: var(--accent);
     }
 
@@ -99,7 +98,7 @@
     font-size: 0.875rem;
     color: var(--c-bon-text-muted);
 
-    & > div {
+    &-item {
       display: flex;
       flex-direction: column;
     }
@@ -124,7 +123,7 @@
     color: #111;
     transition: opacity 0.15s;
 
-    &:hover {
+    @include butler-mx.hover {
       opacity: 0.88;
     }
   }
@@ -140,7 +139,7 @@
     color: var(--accent);
     transition: opacity 0.15s;
 
-    &:hover {
+    @include butler-mx.hover {
       opacity: 0.88;
     }
   }
@@ -189,14 +188,14 @@
   }
 
   &__score-label {
-    font-size: 0.625rem;
+    font-size: 0.7rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--c-bon-text-muted);
   }
 
   &__player {
-    font-size: 0.6875rem;
+    font-size: 0.7rem;
     font-weight: 600;
     color: var(--color-body);
     max-width: 90px;
@@ -222,7 +221,7 @@
   }
 
   &__multiplier {
-    font-size: 0.625rem;
+    font-size: 0.7rem;
     letter-spacing: 0.05em;
     color: var(--c-bon-text-muted);
   }
@@ -267,7 +266,7 @@
     display: flex;
     justify-content: space-between;
     padding: 0 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-block-end: 0.5rem;
     font-size: 0.75rem;
     color: var(--c-bon-text-muted);
   }
@@ -287,37 +286,25 @@
       transform 0.25s ease,
       border-color 0.2s,
       box-shadow 0.2s;
-    will-change: translate, rotate, transform;
 
     &--intro {
       animation: c-bon-card-intro 2s linear 0.6s both;
-    }
-
-    &--exit-right {
-      transform: translateX(110%) rotate(12deg);
-      border-color: var(--success);
-      box-shadow: 0 8px 32px rgb(53 166 114 / 30%);
-    }
-
-    &--exit-left {
-      transform: translateX(-110%) rotate(-12deg);
-      border-color: var(--orange-500);
-      box-shadow: 0 8px 32px rgb(207 48 24 / 30%);
+      will-change: translate, rotate;
     }
 
     &--shake {
       animation: c-bon-card-shake 0.4s ease;
       border-color: var(--orange-500);
-      box-shadow: 0 8px 32px rgb(207 48 24 / 30%);
+      box-shadow: 0 8px 32px color-mix(in srgb, var(--red-500) 30%, transparent);
     }
   }
 
   &__label {
-    font-size: 0.625rem;
+    font-size: 0.7rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--c-bon-text-muted);
-    margin-bottom: 0.75rem;
+    margin-block-end: 0.75rem;
   }
 
   &__word {
@@ -330,7 +317,7 @@
   &__progress {
     font-size: 0.75rem;
     color: var(--c-bon-text-muted);
-    margin-top: 1rem;
+    margin-block-start: 1rem;
   }
 
   &__swipe-hint {
@@ -340,7 +327,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding-bottom: 1.25rem;
+    padding-block-end: 1.25rem;
     pointer-events: none;
     z-index: 2;
   }
@@ -378,7 +365,7 @@
   &__buttons {
     display: flex;
     gap: 1rem;
-    margin-top: 1.25rem;
+    margin-block-start: 1.25rem;
   }
 
   &__btn {
@@ -395,7 +382,7 @@
     cursor: pointer;
     transition: opacity 0.15s;
 
-    &:hover {
+    @include butler-mx.hover {
       opacity: 0.88;
     }
 
@@ -412,7 +399,7 @@
   }
 
   &__keyboard-hint {
-    margin-top: 0.5rem;
+    margin-block-start: 0.5rem;
     font-size: 0.7rem;
     color: var(--c-bon-text-muted);
     text-align: center;
@@ -514,17 +501,6 @@
   }
 }
 
-// Overlay fade-in/-out
-.fade-fast-enter-active,
-.fade-fast-leave-active {
-  transition: opacity 0.15s ease;
-}
-
-.fade-fast-enter-from,
-.fade-fast-leave-to {
-  opacity: 0;
-}
-
 // Card Vue transitions
 .c-bon-card-right-leave-active,
 .c-bon-card-left-leave-active {
@@ -614,7 +590,7 @@
   }
 
   &__stat-label {
-    font-size: 0.625rem;
+    font-size: 0.7rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--c-bon-text-muted);
@@ -642,11 +618,11 @@
     font-weight: 600;
 
     svg:first-child {
-      color: oklch(75% 0.17 75deg);
+      color: var(--gold);
       flex-shrink: 0;
     }
 
-    &:hover {
+    @include butler-mx.hover {
       opacity: 0.88;
     }
   }
@@ -672,7 +648,7 @@
     cursor: pointer;
     transition: opacity 0.15s;
 
-    &:hover {
+    @include butler-mx.hover {
       opacity: 0.75;
     }
   }
@@ -693,7 +669,7 @@
     cursor: pointer;
     transition: opacity 0.15s;
 
-    &:hover {
+    @include butler-mx.hover {
       opacity: 0.88;
     }
   }
