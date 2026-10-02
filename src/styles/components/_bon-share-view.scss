@@ -4,12 +4,11 @@
 .c-bon-share-view {
   --c-gsv-surface: #fff;
   --c-gsv-border: rgb(0 0 0 / 12%);
-  --c-gsv-text-muted: #999;
+  --c-gsv-text-muted: var(--color-muted);
 
   @include butler-mx.dark-mode-class {
     --c-gsv-surface: var(--new-blue-400);
     --c-gsv-border: rgb(255 255 255 / 12%);
-    --c-gsv-text-muted: rgb(255 255 255 / 45%);
   }
 
   display: flex;
