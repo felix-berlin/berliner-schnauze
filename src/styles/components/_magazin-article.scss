@@ -130,11 +130,7 @@ $toc-width: 16rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--orange-600);
-
-    @include butler-mx.dark-mode-class {
-      color: var(--orange-300);
-    }
+    color: var(--color-accent-text);
   }
 
   &__toc-list {
@@ -157,21 +153,16 @@ $toc-width: 16rem;
       background 0.15s ease;
 
     @include butler-mx.hover {
-      color: var(--orange-600);
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
-      }
+      color: var(--color-accent-text);
     }
 
     &.is-current {
-      color: var(--orange-600);
+      color: var(--color-accent-text);
       border-inline-start-color: var(--orange-500);
       background: color-mix(in srgb, var(--orange-100) 55%, transparent);
       font-weight: 700;
 
       @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
         background: color-mix(in srgb, var(--orange-500) 18%, transparent);
       }
     }
@@ -251,13 +242,9 @@ $toc-width: 16rem;
 
     // Inline content links carry the dashed underline signature.
     a {
-      color: var(--orange-600);
+      color: var(--color-accent-text);
       text-decoration: underline dashed from-font;
       text-underline-offset: 0.15em;
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
-      }
     }
 
     // Sponsored-link label — sits right after the link, not just the
@@ -333,11 +320,8 @@ $toc-width: 16rem;
     margin-inline-start: 0.35em;
     font-size: 0.9em;
     text-decoration: none;
-    color: var(--orange-600);
+    color: var(--color-accent-text);
 
-    @include butler-mx.dark-mode-class {
-      color: var(--orange-300);
-    }
     @include butler-mx.hover {
       text-decoration: underline;
     }

@@ -152,11 +152,7 @@
     }
 
     &--consonants {
-      color: var(--orange-600);
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
-      }
+      color: var(--color-accent-text);
     }
   }
 
@@ -186,11 +182,7 @@
     }
 
     &--consonant {
-      color: var(--orange-600);
-
-      @include butler-mx.dark-mode-class {
-        color: var(--orange-300);
-      }
+      color: var(--color-accent-text);
     }
   }
 
