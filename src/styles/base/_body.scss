@@ -42,7 +42,21 @@ html[class="dark"] {
 }
 
 html {
-  scroll-behavior: smooth;
+  @include butler-mx.feature("motion") {
+    scroll-behavior: smooth;
+  }
+}
+
+// Safety net: no animation or transition runs for users who opted out of motion
+@include butler-mx.feature("no-motion") {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 :target {
