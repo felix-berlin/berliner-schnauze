@@ -254,3 +254,5 @@ export default defineConfig({
 ## Design Context
 
 Full strategic/visual system in `PRODUCT.md` and `DESIGN.md` at project root (managed by the `impeccable` skill). Register: **product** (fast lookup beats decoration). Voice: cheeky/schnodderig + warm/heimatlich — never generic dictionary-app neutrality. Visual north star: **"The Postcard Rule"** — a dashed-line texture (borders, dividers, underlines, the headword underline) is the one recurring signature. Currywurst orange is the dominant accent; Berlin Red is rare and declarative; navy-ink `#2b333b` is structural (text/dark-mode surfaces) only. One shadow ("Paper Lift") for every raised surface. Read `DESIGN.md` before any UI work.
+
+**Light + dark check (mandatory)**: every UI change is verified in the browser in both light and dark mode before it counts as done, and in both a desktop and a mobile width. Toggle dark in the browser with `document.documentElement.classList.toggle('dark')` (the `.dark` class drives `butler-mx.dark-mode-class`) and take a screenshot of each state.
