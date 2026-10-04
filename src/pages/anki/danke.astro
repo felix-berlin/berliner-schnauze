@@ -1,9 +1,13 @@
 ---
 import '@styles/components/_button.scss';
 import Layout from '@layouts/Layout.astro';
+import { getPolarFullDeckPriceAmount } from '@services/polar.ts';
 import ArrowLeft from 'virtual:icons/lucide/arrow-left';
 import BookOpen from 'virtual:icons/lucide/book-open';
 import Check from 'virtual:icons/lucide/check';
+
+// Matomo braucht die Zahl als Ereigniswert (= Umsatz des Ziels).
+const price = await getPolarFullDeckPriceAmount();
 
 const page = { title: 'Danke für Deinen Kauf - Berliner Schnauze' };
 
@@ -18,7 +22,7 @@ const steps = [
   <Fragment slot='head'>
     <meta content='noindex' name='robots' />
   </Fragment>
-  <section class='c-anki-thanks' aria-labelledby='anki-thanks-title'>
+  <section class='c-anki-thanks' aria-labelledby='anki-thanks-title' data-price={price}>
     <span class='c-anki-thanks__stamp'><Check width='34' height='34' stroke-width='3' /></span>
     <h1 id='anki-thanks-title' class='c-anki-thanks__title'>Danke, dit hat geklappt!</h1>
     <p class='c-anki-thanks__lead'>
@@ -37,6 +41,25 @@ const steps = [
     </div>
   </section>
 </Layout>
+
+<script>
+  import { trackEvent } from '@utils/analytics';
+
+  // Matomo-Ziel "Full-Deck gekauft": Ereignisaktion "Purchase Full", Ereigniswert = Umsatz.
+  // Nur mit checkout_id (Direktaufrufe zählen nicht) und pro Checkout nur einmal, auch bei Reload.
+  document.addEventListener('astro:page-load', () => {
+    const el = document.querySelector<HTMLElement>('.c-anki-thanks');
+    const id = new URLSearchParams(location.search).get('checkout_id');
+    if (!el || !id) return;
+    try {
+      if (sessionStorage.getItem(`anki-purchase-${id}`)) return;
+      sessionStorage.setItem(`anki-purchase-${id}`, '1');
+    } catch {
+      // Storage gesperrt: lieber einmal zu oft als gar nicht zählen
+    }
+    trackEvent('Anki', 'Purchase Full', 'full-deck', Number(el.dataset.price) || undefined);
+  });
+</script>
 
 <style lang='scss' is:global>
   @use '@styles/pages/anki-danke';

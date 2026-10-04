@@ -3,7 +3,7 @@ import '@styles/components/_button.scss';
 // Polar-Checkout-Link. Solange nicht gesetzt, wird kein Kauf-Button gezeigt.
 import { ANKI_DECK_FULL_CHECKOUT, SITE_URL } from 'astro:env/client';
 import { fetchAllWords } from '@services/api.ts';
-import { getPolarFullDeckPrice } from '@services/polar.ts';
+import { getPolarFullDeckPrice, getPolarFullDeckPriceAmount } from '@services/polar.ts';
 import { getLiteDeckDownloadUrl } from '@services/githubRelease.ts';
 import { routeToWord, shuffle } from '@utils/helpers.ts';
 import { stripTags } from '@utils/article.ts';
@@ -40,10 +40,11 @@ const page = {
   title: 'Berlinerisch lernen: Anki-Karteikarten - Berliner Schnauze',
 };
 
-const [LITE_URL, allWords, PRICE] = await Promise.all([
+const [LITE_URL, allWords, PRICE, PRICE_AMOUNT] = await Promise.all([
   getLiteDeckDownloadUrl(),
   fetchAllWords(),
   getPolarFullDeckPrice(),
+  getPolarFullDeckPriceAmount(),
 ]);
 // Gleicher Filter wie `is_publishable()` in scripts/build_anki_decks.py: Titel und mindestens eine
 // Übersetzung (nach dem Entfernen von HTML). Das Deck holt nur PUBLISH-Wörter; mit SHOW_TEST_DATA
@@ -69,10 +70,9 @@ const LITE_WORDS = Object.values(wordsPerLetter).reduce(
   0,
 );
 
-// Polar liefert "5,99 €"; schema.org will "5.99". Ohne Preis (kein Token) kein Product-Markup.
-const priceValue = PRICE?.replace(/[^\d,]/g, '').replace(',', '.');
+// Ohne Preis (kein Token) kein Product-Markup.
 const productSchema =
-  priceValue &&
+  PRICE_AMOUNT !== undefined &&
   JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -83,7 +83,7 @@ const productSchema =
     offers: {
       '@type': 'Offer',
       availability: 'https://schema.org/InStock',
-      price: priceValue,
+      price: PRICE_AMOUNT.toFixed(2),
       priceCurrency: 'EUR',
       url: `${SITE_URL}/anki`,
     },

@@ -27,6 +27,15 @@ afterEach(() => {
   vi.doUnmock("astro:env/server");
 });
 
+describe("getPolarFullDeckPriceAmount", () => {
+  it("returns the fixed price as a number in euros", async () => {
+    fetchJson.mockResolvedValue({ prices: [{ amount_type: "fixed", price_amount: 599 }] });
+    const { getPolarFullDeckPriceAmount } = await import("@services/polar.ts");
+
+    expect(await getPolarFullDeckPriceAmount()).toBe(5.99);
+  });
+});
+
 describe("getPolarFullDeckPrice", () => {
   it("formats the fixed price in German euro notation", async () => {
     fetchJson.mockResolvedValue({
