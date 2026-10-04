@@ -3,8 +3,11 @@
 @use "@sass-butler/mixins" as butler-mx;
 
 .c-anki-flashcard {
-  position: relative;
-  padding: vars.$spacer * 1.5 vars.$spacer * 0.75 vars.$spacer * 0.75;
+  // Stack holds the papers + card; the hint sits below it so the papers can't cover it
+  &__stack {
+    position: relative;
+    padding: vars.$spacer * 1.5 vars.$spacer * 0.75 vars.$spacer * 0.75;
+  }
 
   &__paper {
     position: absolute;
@@ -161,5 +164,12 @@
     font-size: 0.9rem;
     text-align: center;
     color: var(--color-muted);
+
+    a {
+      color: inherit;
+      font-weight: 600;
+      text-decoration: underline dashed;
+      text-underline-offset: 0.2em;
+    }
   }
 }

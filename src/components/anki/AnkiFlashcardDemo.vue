@@ -1,33 +1,35 @@
 <template>
   <div class="c-anki-flashcard">
-    <div class="c-anki-flashcard__paper c-anki-flashcard__paper--back"></div>
-    <div class="c-anki-flashcard__paper c-anki-flashcard__paper--front"></div>
-    <div class="c-anki-flashcard__card">
-      <div class="c-anki-flashcard__head">
-        <span>Berliner Schnauze ᛫ Anki</span>
-        <span>Noch {{ remaining }} heute</span>
-      </div>
-      <div class="c-anki-flashcard__body">
-        <div class="c-anki-flashcard__word">{{ card.title }}</div>
-        <div v-if="flipped" class="c-anki-flashcard__answer">
-          <div class="c-anki-flashcard__meaning">{{ card.meaning }}</div>
-          <div v-if="card.example" class="c-anki-flashcard__example">„{{ card.example }}“</div>
+    <div class="c-anki-flashcard__stack">
+      <div class="c-anki-flashcard__paper c-anki-flashcard__paper--back"></div>
+      <div class="c-anki-flashcard__paper c-anki-flashcard__paper--front"></div>
+      <div class="c-anki-flashcard__card">
+        <div class="c-anki-flashcard__head">
+          <span>Berliner Schnauze ᛫ Anki</span>
+          <span>Noch {{ remaining }} heute</span>
         </div>
-      </div>
-      <div v-if="!flipped" class="c-anki-flashcard__foot">
-        <button type="button" class="c-button" @click="flip">Antwort zeigen</button>
-      </div>
-      <div v-else class="c-anki-flashcard__ratings">
-        <button
-          v-for="r in ratings"
-          :key="r.label"
-          type="button"
-          :class="['c-button', 'c-anki-flashcard__rating', `c-anki-flashcard__rating--${r.type}`]"
-          @click="next"
-        >
-          <span class="c-anki-flashcard__rating-interval">{{ r.interval }}</span>
-          <span class="c-anki-flashcard__rating-label">{{ r.label }}</span>
-        </button>
+        <div class="c-anki-flashcard__body">
+          <div class="c-anki-flashcard__word">{{ card.title }}</div>
+          <div v-if="flipped" class="c-anki-flashcard__answer">
+            <div class="c-anki-flashcard__meaning">{{ card.meaning }}</div>
+            <div v-if="card.example" class="c-anki-flashcard__example">„{{ card.example }}“</div>
+          </div>
+        </div>
+        <div v-if="!flipped" class="c-anki-flashcard__foot">
+          <button type="button" class="c-button" @click="flip">Antwort zeigen</button>
+        </div>
+        <div v-else class="c-anki-flashcard__ratings">
+          <button
+            v-for="r in ratings"
+            :key="r.label"
+            type="button"
+            :class="['c-button', 'c-anki-flashcard__rating', `c-anki-flashcard__rating--${r.type}`]"
+            @click="next"
+          >
+            <span class="c-anki-flashcard__rating-interval">{{ r.interval }}</span>
+            <span class="c-anki-flashcard__rating-label">{{ r.label }}</span>
+          </button>
+        </div>
       </div>
     </div>
     <p class="c-anki-flashcard__hint">
