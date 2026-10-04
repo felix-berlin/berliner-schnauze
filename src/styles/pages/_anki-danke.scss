@@ -1,0 +1,74 @@
+@use "@styles/variables" as vars;
+@use "@styles/mixins" as mx;
+@use "@sass-butler/mixins" as butler-mx;
+
+.c-anki-thanks {
+  @include mx.paper-card;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: vars.$spacer * 1.25;
+  max-inline-size: 36rem;
+  margin: vars.$spacer * 3 auto;
+  padding: vars.$spacer * 2;
+
+  &__stamp {
+    display: grid;
+    place-items: center;
+    inline-size: 3.5rem;
+    aspect-ratio: 1;
+    border: 2px dashed var(--orange-500);
+    border-radius: 50%;
+    color: var(--orange-600);
+    rotate: -8deg;
+
+    @include butler-mx.dark-mode-class {
+      border-color: var(--orange-300);
+      color: var(--orange-300);
+    }
+  }
+
+  &__title {
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  &__lead {
+    margin: 0;
+    max-inline-size: 65ch;
+    text-wrap: pretty;
+  }
+
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacer * 0.75;
+    margin: 0;
+    padding-inline-start: vars.$spacer * 1.25;
+    max-inline-size: 65ch;
+
+    li {
+      padding-inline-start: vars.$spacer * 0.25;
+      text-wrap: pretty;
+
+      &::marker {
+        font-weight: 700;
+        color: var(--orange-600);
+
+        @include butler-mx.dark-mode-class {
+          color: var(--orange-300);
+        }
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: vars.$spacer * 0.75;
+    padding-block-start: vars.$spacer * 1.25;
+    border-block-start: 1px dashed var(--grey-100);
+    inline-size: 100%;
+  }
+}

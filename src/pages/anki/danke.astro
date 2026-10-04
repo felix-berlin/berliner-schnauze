@@ -1,20 +1,37 @@
 ---
 import '@styles/components/_button.scss';
 import Layout from '@layouts/Layout.astro';
+import Check from 'virtual:icons/lucide/check';
 
 const page = { title: 'Danke für Deinen Kauf - Berliner Schnauze' };
+
+const steps = [
+  'Polar schickt Dir eine Mail mit dem Download-Link. Schau zur Not im Spam-Ordner nach.',
+  'Lad die Full-Datei (.apkg) runter und öffne sie mit Anki.',
+  'Anki ergänzt nur die fehlenden Wörter. Dein Lernstand bleibt, doppelte Karten gibt’s keine.',
+];
 ---
 
 <Layout content={page}>
   <Fragment slot='head'>
     <meta content='noindex' name='robots' />
   </Fragment>
-  <h1>Danke, dit hat geklappt!</h1>
-  <p>
-    Der Download-Link für Dein Full-Deck kommt per Mail von Polar. Importier die Datei in Anki, Dein
-    Lernstand bleibt erhalten. Schau zur Not auch im Spam-Ordner nach.
-  </p>
-  <p>
-    <a class='c-button c-button--primary' href='/anki'>Zurück zur Anki-Seite</a>
-  </p>
+  <section class='c-anki-thanks' aria-labelledby='anki-thanks-title'>
+    <span class='c-anki-thanks__stamp'><Check width='28' height='28' /></span>
+    <h1 id='anki-thanks-title' class='c-anki-thanks__title'>Danke, dit hat geklappt!</h1>
+    <p class='c-anki-thanks__lead'>
+      Mit Deinem Kauf hältst Du die Schnauze am Laufen. Und so kommst Du an Dein Deck:
+    </p>
+    <ol class='c-anki-thanks__steps'>
+      {steps.map((step) => <li>{step}</li>)}
+    </ol>
+    <div class='c-anki-thanks__actions'>
+      <a class='c-button c-button--primary' href='/wort'>Zum Wörterbuch</a>
+      <a class='c-button' href='/anki'>Zurück zur Anki-Seite</a>
+    </div>
+  </section>
 </Layout>
+
+<style lang='scss' is:global>
+  @use '@styles/pages/anki-danke';
+</style>
