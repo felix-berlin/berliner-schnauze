@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.55.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.54.0...v3.55.0) (2026-10-04)
+
+
+### Bug Fixes
+
+* **anki:** keep flashcard hint above the paper stack ([57ac9d4](https://github.com/felix-berlin/berliner-schnauze/commit/57ac9d4f5490cc32f953c63cef113e04f0482b2c))
+
+
+### Features
+
+* **anki:** add noindex thank-you page for checkout tracking ([9068585](https://github.com/felix-berlin/berliner-schnauze/commit/9068585c490c2d897c257434c53c6eda8f72d1ba))
+* **anki:** link demo flashcard to its word page ([e566cab](https://github.com/felix-berlin/berliner-schnauze/commit/e566cab19e52b31186ef814b9ca972a6ed27705e))
+* **anki:** track buy, download, demo and FAQ interactions in matomo ([0e47afa](https://github.com/felix-berlin/berliner-schnauze/commit/0e47afafa1e2b03f548bad2c50137b123ede877f))
+* **seo:** add og image, product schema and word links to anki page ([95bb4d6](https://github.com/felix-berlin/berliner-schnauze/commit/95bb4d6f85771068e5b838fb6cee254d0a8298bc))
+
 # [3.54.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.53.1...v3.54.0) (2026-10-02)
 
 
