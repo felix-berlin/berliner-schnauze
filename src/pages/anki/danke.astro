@@ -1,0 +1,20 @@
+---
+import '@styles/components/_button.scss';
+import Layout from '@layouts/Layout.astro';
+
+const page = { title: 'Danke für Deinen Kauf - Berliner Schnauze' };
+---
+
+<Layout content={page}>
+  <Fragment slot='head'>
+    <meta content='noindex' name='robots' />
+  </Fragment>
+  <h1>Danke, dit hat geklappt!</h1>
+  <p>
+    Der Download-Link für Dein Full-Deck kommt per Mail von Polar. Importier die Datei in Anki, Dein
+    Lernstand bleibt erhalten. Schau zur Not auch im Spam-Ordner nach.
+  </p>
+  <p>
+    <a class='c-button c-button--primary' href='/anki'>Zurück zur Anki-Seite</a>
+  </p>
+</Layout>

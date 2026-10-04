@@ -210,6 +210,12 @@ describe("sitemapFilter", () => {
     expect(sitemapFilter("https://berliner-schnauze.wtf/themen/kiez")).toBe(true);
   });
 
+  it("drops the Anki thank-you page", async () => {
+    const { sitemapFilter } = await import("@services/queries/getSitemapWordDates");
+    expect(sitemapFilter("https://berliner-schnauze.wtf/anki/danke")).toBe(false);
+    expect(sitemapFilter("https://berliner-schnauze.wtf/anki")).toBe(true);
+  });
+
   it("drops settings pages and the BON share route", async () => {
     const { sitemapFilter } = await import("@services/queries/getSitemapWordDates");
     expect(sitemapFilter("https://berliner-schnauze.wtf/settings")).toBe(false);
