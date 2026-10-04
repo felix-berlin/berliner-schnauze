@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.56.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.55.0...v3.56.0) (2026-10-04)
+
+
+### Features
+
+* **anki:** send purchase event with price from thank-you page ([07fdd4b](https://github.com/felix-berlin/berliner-schnauze/commit/07fdd4bd895b52872deac231a4170bf39ff17e8c))
+
 # [3.55.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.54.0...v3.55.0) (2026-10-04)
 
 
