@@ -30,7 +30,10 @@
         </button>
       </div>
     </div>
-    <p class="c-anki-flashcard__hint">Probier's aus: Karte aufdecken, ehrlich bewerten.</p>
+    <p class="c-anki-flashcard__hint">
+      Probier's aus: Karte aufdecken, ehrlich bewerten.<br />
+      Mehr zu <a :href="card.href">„{{ card.title }}“</a> im Wörterbuch.
+    </p>
   </div>
 </template>
 
@@ -38,7 +41,7 @@
 import { ref, computed } from "vue";
 
 const props = defineProps<{
-  cards: { example: string; meaning: string; title: string }[];
+  cards: { example: string; href: string; meaning: string; title: string }[];
 }>();
 
 const ratings = [

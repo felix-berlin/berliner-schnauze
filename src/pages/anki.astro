@@ -5,7 +5,7 @@ import { ANKI_DECK_FULL_CHECKOUT, SITE_URL } from 'astro:env/client';
 import { fetchAllWords } from '@services/api.ts';
 import { getPolarFullDeckPrice } from '@services/polar.ts';
 import { getLiteDeckDownloadUrl } from '@services/githubRelease.ts';
-import { shuffle } from '@utils/helpers.ts';
+import { routeToWord, shuffle } from '@utils/helpers.ts';
 import { stripTags } from '@utils/article.ts';
 import Layout from '@layouts/Layout.astro';
 import AnkiFlashcardDemo from '@components/anki/AnkiFlashcardDemo.vue';
@@ -95,10 +95,11 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
 const DEMO_CARDS = shuffle(
   deckWords.flatMap((w) => {
     const example = stripTags(w.wordProperties.examples?.[0]?.example ?? '');
-    if (!example || w.translations.length === 0) return [];
+    if (!example || !w.slug || w.translations.length === 0) return [];
     return [
       {
         example,
+        href: routeToWord(w.slug),
         meaning: w.translations.slice(0, 2).map(stripTags).join(', '),
         title: w.wordProperties.berlinerisch,
       },
@@ -255,11 +256,6 @@ const faqs = [
             >kurz bevor Du sie vergessen würdest</strong
           >. Das nennt sich verteilte Wiederholung (Spaced Repetition). Ein paar Minuten am Tag
           reichen, und die Wörter bleiben hängen.
-        </p>
-        <p class='c-anki__lead c-anki__lead--intro'>
-          Zum Beispiel <a href='/wort/anmachen'>anmachen</a>, <a href='/wort/aasen'>aasen</a> oder <a
-            href='/wort/wa'>wa</a
-          >: Jedes Wort aus dem <a href='/wort'>Wörterbuch</a> kriegt eine eigene Karte.
         </p>
       </div>
 
