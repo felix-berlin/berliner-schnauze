@@ -1,6 +1,8 @@
 ---
 import '@styles/components/_button.scss';
 import Layout from '@layouts/Layout.astro';
+import ArrowLeft from 'virtual:icons/lucide/arrow-left';
+import BookOpen from 'virtual:icons/lucide/book-open';
 import Check from 'virtual:icons/lucide/check';
 
 const page = { title: 'Danke für Deinen Kauf - Berliner Schnauze' };
@@ -17,7 +19,7 @@ const steps = [
     <meta content='noindex' name='robots' />
   </Fragment>
   <section class='c-anki-thanks' aria-labelledby='anki-thanks-title'>
-    <span class='c-anki-thanks__stamp'><Check width='28' height='28' /></span>
+    <span class='c-anki-thanks__stamp'><Check width='34' height='34' stroke-width='3' /></span>
     <h1 id='anki-thanks-title' class='c-anki-thanks__title'>Danke, dit hat geklappt!</h1>
     <p class='c-anki-thanks__lead'>
       Mit Deinem Kauf hältst Du die Schnauze am Laufen. Und so kommst Du an Dein Deck:
@@ -26,8 +28,12 @@ const steps = [
       {steps.map((step) => <li>{step}</li>)}
     </ol>
     <div class='c-anki-thanks__actions'>
-      <a class='c-button c-button--primary' href='/wort'>Zum Wörterbuch</a>
-      <a class='c-button' href='/anki'>Zurück zur Anki-Seite</a>
+      <a class='c-button c-button--primary c-button--center-icon' href='/wort'>
+        <BookOpen width='20' height='20' /><span>Zum Wörterbuch</span>
+      </a>
+      <a class='c-button c-button--center-icon' href='/anki'>
+        <ArrowLeft width='20' height='20' /><span>Zurück zur Anki-Seite</span>
+      </a>
     </div>
   </section>
 </Layout>

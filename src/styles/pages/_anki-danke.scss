@@ -13,19 +13,22 @@
   margin: vars.$spacer * 3 auto;
   padding: vars.$spacer * 2;
 
+  // Filled stamp with a dashed outer ring, like a postmark
   &__stamp {
     display: grid;
     place-items: center;
-    inline-size: 3.5rem;
+    inline-size: 4.5rem;
     aspect-ratio: 1;
-    border: 2px dashed var(--orange-500);
+    margin: vars.$spacer * 0.375;
     border-radius: 50%;
-    color: var(--orange-600);
-    rotate: -8deg;
+    background: var(--orange-600);
+    color: var(--white-100);
+    outline: 2px dashed var(--orange-600);
+    outline-offset: 5px;
+    rotate: -6deg;
 
     @include butler-mx.dark-mode-class {
-      border-color: var(--orange-300);
-      color: var(--orange-300);
+      outline-color: var(--orange-300);
     }
   }
 
@@ -67,8 +70,32 @@
     display: flex;
     flex-wrap: wrap;
     gap: vars.$spacer * 0.75;
-    padding-block-start: vars.$spacer * 1.25;
+    padding-block-start: vars.$spacer * 1.5;
     border-block-start: 1px dashed var(--grey-100);
     inline-size: 100%;
+
+    .c-button {
+      gap: vars.$spacer * 0.625;
+      padding: 0.875rem 1.375rem;
+      font-weight: 700;
+      // impeccable-disable design-system-font-size -- same size as the /anki CTAs
+      font-size: 1.1rem;
+    }
+
+    // Secondary button: white paper instead of the site's orange-100 default (as on /anki)
+    .c-button:not(.c-button--primary) {
+      --color-background: var(--white-100);
+
+      @include butler-mx.hover {
+        --style-border: dashed;
+      }
+      @include butler-mx.dark-mode-class {
+        --color-background: var(--new-blue-600);
+      }
+    }
+
+    .c-button--primary {
+      box-shadow: vars.$paper-lift;
+    }
   }
 }
