@@ -211,7 +211,7 @@ const faqs = [
             ANKI_DECK_FULL_CHECKOUT && (
               <a
                 class='c-button c-button--primary c-button--center-icon'
-                href={ANKI_DECK_FULL_CHECKOUT}
+                href={ANKI_DECK_FULL_CHECKOUT} data-track='Click Buy Full|hero'
                 target='_blank'
                 rel='noopener'
               >
@@ -222,7 +222,7 @@ const faqs = [
           }
           {
             LITE_URL && (
-              <a class='c-button c-button--center-icon' href={LITE_URL} download>
+              <a class='c-button c-button--center-icon' href={LITE_URL} data-track='Download Lite|hero' download>
                 <Download width='20' height='20' />
                 <span>Lite kostenlos laden</span>
               </a>
@@ -306,6 +306,7 @@ const faqs = [
             <a
               class='c-button c-button--center-icon c-anki__cta-sm'
               href='https://apps.ankiweb.net/'
+              data-track='Click Anki App|download'
               target='_blank'
               rel='noopener'
             >
@@ -320,6 +321,7 @@ const faqs = [
               <a
                 class='c-anki__platform-tile'
                 href='https://apps.ankiweb.net/'
+                data-track={`Click Anki App|${name}`}
                 target='_blank'
                 rel='noopener'
               >
@@ -364,7 +366,7 @@ const faqs = [
           <div class='c-anki__plan-cta'>
             {
               LITE_URL ? (
-                <a class='c-button c-button--center-icon' href={LITE_URL} download>
+                <a class='c-button c-button--center-icon' href={LITE_URL} data-track='Download Lite|pricing' download>
                   <Download width='20' height='20' /><span>Lite runterladen (.apkg)</span>
                 </a>
               ) : (
@@ -394,7 +396,7 @@ const faqs = [
               ANKI_DECK_FULL_CHECKOUT ? (
                 <a
                   class='c-button c-button--primary c-button--center-icon'
-                  href={ANKI_DECK_FULL_CHECKOUT}
+                  href={ANKI_DECK_FULL_CHECKOUT} data-track='Click Buy Full|pricing'
                   target='_blank'
                   rel='noopener'
                 >
@@ -485,6 +487,7 @@ const faqs = [
         <a
           class='c-button c-button--center-icon c-anki__cta-sm'
           href='https://github.com/felix-berlin/berliner-schnauze'
+          data-track='Click GitHub|anki'
           target='_blank'
           rel='noopener'
         >
@@ -520,7 +523,7 @@ const faqs = [
           ANKI_DECK_FULL_CHECKOUT && (
             <a
               class='c-button c-button--primary c-button--center-icon'
-              href={ANKI_DECK_FULL_CHECKOUT}
+              href={ANKI_DECK_FULL_CHECKOUT} data-track='Click Buy Full|farewell'
               target='_blank'
               rel='noopener'
             >
@@ -531,7 +534,7 @@ const faqs = [
         }
         {
           LITE_URL && (
-            <a class='c-button c-button--center-icon' href={LITE_URL} download>
+            <a class='c-button c-button--center-icon' href={LITE_URL} data-track='Download Lite|farewell' download>
               <Download width='20' height='20' /><span>Erst mal Lite</span>
             </a>
           )
@@ -540,6 +543,24 @@ const faqs = [
     </div>
   </section>
 </Layout>
+
+<script>
+  import { trackEvent } from '@utils/analytics';
+
+  // Ein Listener für alle Klicks mit `data-track="Aktion|Name"` (auch in Vue-Inseln) und die
+  // FAQ-Fragen (statisches <details>, ohne Hydration). Klick auf <summary> kommt vor dem
+  // Toggle: ein noch geschlossenes <details> öffnet sich gerade.
+  document.addEventListener('click', (e) => {
+    const target = e.target as Element;
+    const track = target.closest<HTMLElement>('[data-track]')?.dataset.track;
+    if (track) return trackEvent('Anki', ...(track.split('|') as [string, string]));
+
+    const summary = target.closest<HTMLElement>('.c-anki-faq summary');
+    if (summary && !(summary.parentElement as HTMLDetailsElement).open) {
+      trackEvent('Anki', 'FAQ Open', (summary.textContent ?? '').trim());
+    }
+  });
+</script>
 
 <style lang='scss' is:global>
   @use '@styles/pages/anki';

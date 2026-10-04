@@ -24,7 +24,7 @@
             :key="r.label"
             type="button"
             :class="['c-button', 'c-anki-flashcard__rating', `c-anki-flashcard__rating--${r.type}`]"
-            @click="next"
+            @click="rate(r.type)"
           >
             <span class="c-anki-flashcard__rating-interval">{{ r.interval }}</span>
             <span class="c-anki-flashcard__rating-label">{{ r.label }}</span>
@@ -34,12 +34,14 @@
     </div>
     <p class="c-anki-flashcard__hint">
       Probier's aus: Karte aufdecken, ehrlich bewerten.<br />
-      Mehr zu <a :href="card.href">„{{ card.title }}“</a> im Wörterbuch.
+      Mehr zu <a :href="card.href" data-track="Click Word Link|anki-demo">„{{ card.title }}“</a> im
+      Wörterbuch.
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
+import { trackEvent } from "@utils/analytics";
 import { ref, computed } from "vue";
 
 const props = defineProps<{
@@ -61,9 +63,11 @@ const remaining = computed(() => 20 - (i.value % 20));
 
 function flip(): void {
   flipped.value = true;
+  trackEvent("Anki", "Demo Flip", "anki-demo");
 }
 
-function next(): void {
+function rate(type: string): void {
+  trackEvent("Anki", "Demo Rate", type);
   i.value += 1;
   flipped.value = false;
 }

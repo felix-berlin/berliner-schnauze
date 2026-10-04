@@ -1,10 +1,13 @@
 import AnkiFlashcardDemo from "@components/anki/AnkiFlashcardDemo.vue";
 import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+const trackEvent = vi.hoisted(() => vi.fn());
+vi.mock("@utils/analytics", () => ({ trackEvent }));
 
 const cards = [
-  { example: "Ick aase rum.", meaning: "verschwenden", title: "aasen" },
-  { example: "", meaning: "Alexanderplatz", title: "Alex" },
+  { example: "Ick aase rum.", href: "/wort/aasen", meaning: "verschwenden", title: "aasen" },
+  { example: "", href: "/wort/alex", meaning: "Alexanderplatz", title: "Alex" },
 ];
 
 describe("AnkiFlashcardDemo", () => {
@@ -40,5 +43,15 @@ describe("AnkiFlashcardDemo", () => {
     await wrapper.find(".c-anki-flashcard__rating--again").trigger("click");
 
     expect(wrapper.find(".c-anki-flashcard__word").text()).toBe("aasen");
+  });
+
+  it("tracks flip and rating", async () => {
+    const wrapper = mount(AnkiFlashcardDemo, { props: { cards } });
+
+    await wrapper.find(".c-anki-flashcard__foot button").trigger("click");
+    await wrapper.find(".c-anki-flashcard__rating--good").trigger("click");
+
+    expect(trackEvent).toHaveBeenCalledWith("Anki", "Demo Flip", "anki-demo");
+    expect(trackEvent).toHaveBeenCalledWith("Anki", "Demo Rate", "good");
   });
 });
