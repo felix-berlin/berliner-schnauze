@@ -1,13 +1,13 @@
 ---
 import '@styles/components/_button.scss';
 import Layout from '@layouts/Layout.astro';
-import { getPolarFullDeckPrice } from '@services/polar.ts';
+import { getPolarFullDeckPriceAmount } from '@services/polar.ts';
 import ArrowLeft from 'virtual:icons/lucide/arrow-left';
 import BookOpen from 'virtual:icons/lucide/book-open';
 import Check from 'virtual:icons/lucide/check';
 
-// Polar liefert "5,99 €"; Matomo braucht die Zahl als Ereigniswert (= Umsatz des Ziels).
-const price = (await getPolarFullDeckPrice())?.replace(/[^\d,]/g, '').replace(',', '.');
+// Matomo braucht die Zahl als Ereigniswert (= Umsatz des Ziels).
+const price = await getPolarFullDeckPriceAmount();
 
 const page = { title: 'Danke für Deinen Kauf - Berliner Schnauze' };
 
@@ -46,19 +46,18 @@ const steps = [
   import { trackEvent } from '@utils/analytics';
 
   // Matomo-Ziel "Full-Deck gekauft": Ereignisaktion "Purchase Full", Ereigniswert = Umsatz.
-  // Pro Checkout nur einmal zählen, auch bei Reload.
+  // Nur mit checkout_id (Direktaufrufe zählen nicht) und pro Checkout nur einmal, auch bei Reload.
   document.addEventListener('astro:page-load', () => {
     const el = document.querySelector<HTMLElement>('.c-anki-thanks');
-    if (!el) return;
-    const key = `anki-purchase-${new URLSearchParams(location.search).get('checkout_id') ?? ''}`;
+    const id = new URLSearchParams(location.search).get('checkout_id');
+    if (!el || !id) return;
     try {
-      if (sessionStorage.getItem(key)) return;
-      sessionStorage.setItem(key, '1');
+      if (sessionStorage.getItem(`anki-purchase-${id}`)) return;
+      sessionStorage.setItem(`anki-purchase-${id}`, '1');
     } catch {
       // Storage gesperrt: lieber einmal zu oft als gar nicht zählen
     }
-    const price = Number(el.dataset.price);
-    trackEvent('Anki', 'Purchase Full', 'full-deck', price > 0 ? price : undefined);
+    trackEvent('Anki', 'Purchase Full', 'full-deck', Number(el.dataset.price) || undefined);
   });
 </script>
 
