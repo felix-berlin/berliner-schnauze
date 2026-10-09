@@ -235,7 +235,7 @@ importers:
         version: 3.1.18
       '@sentry/vite-plugin':
         specifier: ^5.4.0
-        version: 5.4.0(rollup@4.63.3)(supports-color@10.2.2)
+        version: 5.4.1(rollup@4.63.3)(supports-color@10.2.2)
       '@spotlightjs/astro':
         specifier: ^3.2.6
         version: 3.2.6(@sentry/astro@10.75.0(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(astro@7.3.5(@types/node@26.6.4)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.1))(rollup@4.63.3)(supports-color@10.2.2))(astro@7.3.5(@types/node@26.6.4)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.1))(supports-color@10.2.2)
@@ -4126,8 +4126,8 @@ packages:
     resolution: {integrity: sha512-jhq5t6nw8KdBq8i3Uyq5vBCHXehtEM+F5f/OoVxuPS2TtSbGizGjqzhAi24EmTNs4DRlQgYpKPdTOBDTMv49HA==}
     engines: {node: '>=20.19.0 <22.0.0 || >=22.12.0 <23.0.0 || >=23.2.0'}
 
-  '@sentry/bundler-plugins@10.75.0':
-    resolution: {integrity: sha512-kpMO7NhvfqsobpShyW/YnNJmJpw7mPEAQorJnEzf0ZRqNvEGFjKKN19SZWbbBNdcQDvHPlRIVOC00zdXuw3y/w==}
+  '@sentry/bundler-plugins@10.76.1':
+    resolution: {integrity: sha512-c7e95RhbJ5h03bughsgw7yhpIv/RKnIfxWQynCgRLXDHfksQGQsq4ias59v3zwg5AuifvnbDKUNfUxAbnWN41g==}
     engines: {node: '>= 18'}
     peerDependencies:
       rollup: '>=3.2.0'
@@ -4200,6 +4200,10 @@ packages:
 
   '@sentry/core@10.75.0':
     resolution: {integrity: sha512-5wDQpQqjJ6RHdPR+z6Q+47XlwoxRKBv0yyB0LKHqL/1azPOQbR+nllyLmmQDcoJpaksuLSmLA1q6hFX7gjDT2w==}
+    engines: {node: '>=18'}
+
+  '@sentry/core@10.76.1':
+    resolution: {integrity: sha512-WZ1D30FDrvZPWcEgbCgaVHROBOaVGxNUcEeF5O5xRAdGu6UB7Epg+CQBeoatw/SxEctQq0BPbMIwtBgbe1QK3g==}
     engines: {node: '>=18'}
 
   '@sentry/core@11.4.0':
@@ -4290,8 +4294,8 @@ packages:
     resolution: {integrity: sha512-7fIa9vFGNzB13hmxl8Sip3xImSkqpc4wETzuQ7CLzVOwPvwI6y/gVEm0pxRhtJSq8SzfOp26eJWl80u8v78Osg==}
     engines: {node: '>=18'}
 
-  '@sentry/vite-plugin@5.4.0':
-    resolution: {integrity: sha512-fFJgCxs5hDyAm9BbZJ+LbA+LK2tjX5OoD0v0ARU4StR6KQmGUduoPs69yJ9AfqZ0om3Rlp5JDliiwFcNkasORA==}
+  '@sentry/vite-plugin@5.4.1':
+    resolution: {integrity: sha512-poFfn3sQbSFaZpXH8CG27D0eNtDD64wFEniQCb853e7huko9vOl4UP3BjT3vsrnmVuRqagnbxItza10MOC7ysA==}
     engines: {node: '>= 18'}
 
   '@shikijs/core@4.4.3':
@@ -13096,7 +13100,7 @@ snapshots:
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.75.0
       '@sentry/node': 10.75.0(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.1))(supports-color@10.2.2)
-      '@sentry/vite-plugin': 5.4.0(rollup@4.63.3)(supports-color@10.2.2)
+      '@sentry/vite-plugin': 5.4.1(rollup@4.63.3)(supports-color@10.2.2)
       astro: 7.3.5(@types/node@26.6.4)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(yaml@2.9.1)
     transitivePeerDependencies:
       - '@opentelemetry/core'
@@ -13135,11 +13139,11 @@ snapshots:
       '@sentry/replay': 11.4.0
       '@sentry/replay-canvas': 11.4.0
 
-  '@sentry/bundler-plugins@10.75.0(rollup@4.63.3)(supports-color@10.2.2)':
+  '@sentry/bundler-plugins@10.76.1(rollup@4.63.3)(supports-color@10.2.2)':
     dependencies:
       '@babel/core': 7.29.7(supports-color@10.2.2)
       '@sentry/cli': 2.58.6(supports-color@10.2.2)
-      '@sentry/core': 10.75.0
+      '@sentry/core': 10.76.1
       dotenv: 17.4.2
       find-up: 5.0.0
       glob: 13.0.6
@@ -13199,6 +13203,10 @@ snapshots:
   '@sentry/conventions@0.25.0': {}
 
   '@sentry/core@10.75.0':
+    dependencies:
+      '@sentry/conventions': 0.16.0
+
+  '@sentry/core@10.76.1':
     dependencies:
       '@sentry/conventions': 0.16.0
 
@@ -13329,9 +13337,9 @@ snapshots:
       '@sentry/conventions': 0.16.0
       '@sentry/core': 10.75.0
 
-  '@sentry/vite-plugin@5.4.0(rollup@4.63.3)(supports-color@10.2.2)':
+  '@sentry/vite-plugin@5.4.1(rollup@4.63.3)(supports-color@10.2.2)':
     dependencies:
-      '@sentry/bundler-plugins': 10.75.0(rollup@4.63.3)(supports-color@10.2.2)
+      '@sentry/bundler-plugins': 10.76.1(rollup@4.63.3)(supports-color@10.2.2)
     transitivePeerDependencies:
       - encoding
       - rollup
