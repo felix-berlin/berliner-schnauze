@@ -341,7 +341,7 @@ importers:
         version: 1.2.99
       '@infisical/cli':
         specifier: ^0.43.138
-        version: 0.43.138
+        version: 0.43.141
       '@nanostores/logger':
         specifier: ^1.1.0
         version: 1.1.0(nanostores@1.5.4)
@@ -2693,8 +2693,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@infisical/cli@0.43.138':
-    resolution: {integrity: sha512-UQKvdASDJyojlzSArCII6vxoVfYcd0YzZIWmRBjs9ot5cPodHENkfgOWfPJgpOrND61sWuqr4sYC77Znf2FD9g==}
+  '@infisical/cli@0.43.141':
+    resolution: {integrity: sha512-Pmufs8EScRDtnYho6l6HQhOJTRP5+k0VNjwbP6bDwwPhtV3hIf67+9mR2kTiKDxwZB1Vl9mpimhKYOyDcnK03w==}
     hasBin: true
 
   '@inquirer/ansi@2.0.8':
@@ -12020,7 +12020,7 @@ snapshots:
   '@img/sharp-win32-x64@0.35.4':
     optional: true
 
-  '@infisical/cli@0.43.138':
+  '@infisical/cli@0.43.141':
     dependencies:
       tar: 7.5.22
       yauzl: 3.4.0
