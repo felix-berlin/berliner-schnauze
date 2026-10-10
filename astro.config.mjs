@@ -358,7 +358,9 @@ export default defineConfig({
       base: "/",
       scope: "/",
       includeAssets: ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
-      registerType: "autoUpdate",
+      // "prompt", not "autoUpdate": an update must not take over open pages — activating it
+      // deletes their hashed assets. src/services/pwa.ts decides when, per $updateMode.
+      registerType: "prompt",
       manifest: {
         id: "/",
         name: "Berliner Schnauze",
@@ -432,13 +434,25 @@ export default defineConfig({
       workbox: {
         globDirectory: "dist",
         cleanupOutdatedCaches: true,
-        // Falls back to the (precached) homepage for any navigation that misses
-        // both precache and network — e.g. a word page added after the last SW
-        // update, while offline — instead of the browser's generic offline page.
-        navigateFallback: "/",
+        // Control the page on first install; updates still wait for pwa.ts's updateSW().
+        clientsClaim: true,
+        // @vite-pwa/astro injects its own `navigateFallback: "/"` (and the
+        // NavigationRoute/createHandlerBoundToURL it generates) whenever this key is
+        // absent from the workbox config — explicit `undefined` opts out, since
+        // workbox-build's sw-template only emits that route when the value is truthy.
+        navigateFallback: undefined,
         globPatterns: import.meta.env.DEV
           ? []
-          : ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
+          : [
+              "**/*.{js,css,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}",
+              // HTML: app shell only. Word/changelog/magazin/themen pages are cached on
+              // visit (runtime "pages" cache below) or via the opt-in offline dictionary —
+              // precaching all ~6000 pages re-downloaded ~450 MB on every deploy, because
+              // each page embeds the hashed /_astro asset names.
+              "*.html",
+              "games/**/*.html",
+              "settings/**/*.html",
+            ],
         globIgnores: [
           // OG images are fetched by social crawlers only, never by users
           "og/**",
@@ -446,15 +460,63 @@ export default defineConfig({
           "screenshots/**",
         ],
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2 MB (Workbox default)
+        navigationPreload: true,
+        // Background Fetch handlers for the offline dictionary (public/sw-background-fetch.js);
+        // archive of the outgoing version's /_astro/ files (public/sw-asset-archive.js).
+        importScripts: ["sw-background-fetch.js", "sw-asset-archive.js"],
         runtimeCaching: [
           {
-            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/index\\.json$`),
+            // Network first so pages deployed after the last SW update are reachable
+            // immediately; the cache only answers offline. No expiration on purpose: the
+            // opt-in offline dictionary (src/services/offlineDictionary.ts) writes into this
+            // same cache, and an entry limit would silently evict its pages.
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "pages",
+              networkTimeoutSeconds: 3,
+              cacheableResponse: {
+                statuses: [200],
+              },
+              // Uncached page while offline → homepage (search works offline).
+              // NOTE: @vite-pwa/astro's manifestTransform rewrites the root
+              // index.html precache entry to Astro's `base` ("/" here), not
+              // "/index.html" — precacheFallback's matchPrecache lookup needs
+              // the same key or it silently misses and the browser reports a
+              // bare net::ERR_FAILED for the offline navigation. Revisit this
+              // key if `base` ever changes.
+              precacheFallback: {
+                fallbackURL: "/",
+              },
+            },
+          },
+          {
+            // Hashed /_astro/ files the precache no longer has: older versions' assets, still
+            // referenced by cached pages. Filled by public/sw-asset-archive.js on install;
+            // hashed names never change, so cache first. ignoreSearch: island retries add
+            // ?astro-retry=.
+            urlPattern: ({ url }) =>
+              url.origin === self.location.origin && url.pathname.startsWith("/_astro/"),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "astro-assets-archive",
+              matchOptions: { ignoreSearch: true },
+              cacheableResponse: {
+                statuses: [200],
+              },
+            },
+          },
+          {
+            // Same-origin path match (not SITE_ORIGIN): also caches on preview/localhost builds.
+            urlPattern: ({ url }) =>
+              url.origin === self.location.origin && url.pathname === "/api/search/index.json",
             handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-index",
+              // No maxAgeSeconds: the expiration plugin drops entries older than that even
+              // offline, which broke offline search after 3 h. SWR revalidates on every use.
               expiration: {
                 maxEntries: 1,
-                maxAgeSeconds: 10_800, // 3 hours
               },
               cacheableResponse: {
                 statuses: [0, 200],
@@ -462,13 +524,16 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/meta\\.json$`),
+            // Same-origin path match (not SITE_ORIGIN): also caches on preview/localhost builds.
+            urlPattern: ({ url }) =>
+              url.origin === self.location.origin && url.pathname === "/api/search/meta.json",
             handler: "StaleWhileRevalidate",
             options: {
               cacheName: "api-search-meta",
+              // No maxAgeSeconds: the expiration plugin drops entries older than that even
+              // offline, which broke offline search after 3 h. SWR revalidates on every use.
               expiration: {
                 maxEntries: 1,
-                maxAgeSeconds: 10_800, // 3 hours
               },
               cacheableResponse: {
                 statuses: [0, 200],

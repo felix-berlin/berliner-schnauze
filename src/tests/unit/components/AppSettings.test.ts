@@ -70,6 +70,7 @@ const mountOptions = {
       AppSettingsNavCard: NavCardStub,
       AppSettingsNotifications: { template: "<div />" },
       AppSettingsTheme: { template: "<div />" },
+      AppSettingsUpdates: { template: "<div />" },
     },
   },
 };
