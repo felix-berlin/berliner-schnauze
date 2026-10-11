@@ -1,6 +1,25 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Startseite (/)", () => {
+  test("Hero-Bild hat korrektes Seitenverhältnis (kein Layout Shift)", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForFunction(() => {
+      const img = document.querySelector<HTMLImageElement>(".o-index__image");
+      return !!img && img.complete && img.naturalWidth > 0;
+    });
+    const m = await page.evaluate(() => {
+      const img = document.querySelector<HTMLImageElement>(".o-index__image")!;
+      const r = img.getBoundingClientRect();
+      return {
+        rendered: r.height / r.width,
+        intrinsic: img.naturalHeight / img.naturalWidth,
+        attr: Number(img.getAttribute("height")) / Number(img.getAttribute("width")),
+      };
+    });
+    expect(Math.abs(m.rendered / m.intrinsic - 1)).toBeLessThan(0.02);
+    expect(Math.abs(m.attr / m.intrinsic - 1)).toBeLessThan(0.02);
+  });
+
   test("lädt mit korrektem Titel und Überschrift", async ({ page }) => {
     await page.goto("/");
 
