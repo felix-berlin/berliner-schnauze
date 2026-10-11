@@ -27,15 +27,20 @@ describe("sentryBrowser loader", () => {
     await import("@/plugins/sentryBrowser");
     await vi.runAllTimersAsync();
     expect(initSpy).not.toHaveBeenCalled();
+    // consume this instance's pending once-listener so it can't leak into later tests
+    window.dispatchEvent(new Event("load"));
+    await vi.runAllTimersAsync();
   });
 
   it("imports once after load + idle", async () => {
     setReadyState("loading");
-    vi.stubGlobal("requestIdleCallback", (cb: () => void) => setTimeout(cb, 0));
+    const idle = vi.fn((cb: () => void) => setTimeout(cb, 0));
+    vi.stubGlobal("requestIdleCallback", idle);
     await import("@/plugins/sentryBrowser");
     window.dispatchEvent(new Event("load"));
     window.dispatchEvent(new Event("load"));
     await vi.runAllTimersAsync();
+    expect(idle).toHaveBeenCalledTimes(1);
     expect(initSpy).toHaveBeenCalledTimes(1);
   });
 
