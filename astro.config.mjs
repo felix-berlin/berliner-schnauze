@@ -622,7 +622,7 @@ export default defineConfig({
             ) {
               return "wordList";
             }
-            if (id.includes("@sentry/") || id.includes("/plugins/sentryBrowser")) {
+            if (id.includes("@sentry/")) {
               return "sentry";
             }
           },
