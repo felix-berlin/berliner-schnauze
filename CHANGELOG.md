@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.56.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.56.0...v3.56.1) (2026-10-11)
+
+
+### Bug Fixes
+
+* **perf:** address final review (e2e lint, anki og size, lazy sentry hardening) ([7283205](https://github.com/felix-berlin/berliner-schnauze/commit/7283205960c369396ab7575c7c99f6e84ac51bb0))
+
+
+### Performance Improvements
+
+* **cache:** serve hashed assets as immutable ([405fd7d](https://github.com/felix-berlin/berliner-schnauze/commit/405fd7dda89fe288fe0883793fe1efeebe153ab1))
+* **images:** add smaller footer image candidate for mobile ([0725356](https://github.com/felix-berlin/berliner-schnauze/commit/0725356183586915391f9f5a7ae7bb4bd64ce55b))
+* **images:** match footer image sizes to rendered width ([c246f61](https://github.com/felix-berlin/berliner-schnauze/commit/c246f61cebf9da54e98eb66b6cae0fcf60da699e))
+* **index:** fix swapped hero image dimensions causing layout shift ([1df979d](https://github.com/felix-berlin/berliner-schnauze/commit/1df979d8365aca15fe1f8fe3fe4b1c9c7fdfc0ec))
+* **sentry:** initialize Sentry after load and idle ([b128bfd](https://github.com/felix-berlin/berliner-schnauze/commit/b128bfd0087c8daff9c63893495a7db9428ab152))
+
 # [3.56.0](https://github.com/felix-berlin/berliner-schnauze/compare/v3.55.0...v3.56.0) (2026-10-04)
 
 
