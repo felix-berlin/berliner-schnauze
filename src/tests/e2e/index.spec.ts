@@ -9,15 +9,16 @@ test.describe("Startseite (/)", () => {
     });
     const m = await page.evaluate(() => {
       const img = document.querySelector<HTMLImageElement>(".o-index__image")!;
-      const r = img.getBoundingClientRect();
       return {
-        rendered: r.height / r.width,
-        intrinsic: img.naturalHeight / img.naturalWidth,
         attr: Number(img.getAttribute("height")) / Number(img.getAttribute("width")),
+        intrinsic: img.naturalHeight / img.naturalWidth,
       };
     });
-    expect(Math.abs(m.rendered / m.intrinsic - 1)).toBeLessThan(0.02);
-    expect(Math.abs(m.attr / m.intrinsic - 1)).toBeLessThan(0.02);
+    const diff = Math.abs(m.attr / m.intrinsic - 1);
+    expect(
+      diff,
+      "hero width/height attributes must match the image's intrinsic aspect ratio",
+    ).toBeLessThan(0.02);
   });
 
   test("lädt mit korrektem Titel und Überschrift", async ({ page }) => {

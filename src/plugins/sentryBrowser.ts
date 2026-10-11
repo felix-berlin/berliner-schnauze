@@ -1,8 +1,8 @@
 // Sentry costs ~500 ms main-thread time on mid-range mobiles; load it after the
 // page is interactive. Errors before that point are not reported (accepted).
 const loadSentry = () => {
-  const init = () => void import("./sentryInit");
-  if ("requestIdleCallback" in window) window.requestIdleCallback(init);
+  const init = () => import("@/plugins/sentryInit").catch(() => {});
+  if ("requestIdleCallback" in window) window.requestIdleCallback(init, { timeout: 5000 });
   else setTimeout(init, 1);
 };
 
