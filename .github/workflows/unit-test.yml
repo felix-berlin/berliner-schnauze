@@ -4,7 +4,6 @@ on:
     paths-ignore:
       - "**.md"
       - "docs/**"
-      - "openspec/**"
   push:
     branches:
       - main
@@ -12,7 +11,6 @@ on:
     paths-ignore:
       - "**.md"
       - "docs/**"
-      - "openspec/**"
 
 permissions:
   id-token: write

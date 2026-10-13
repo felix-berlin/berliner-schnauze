@@ -7,6 +7,8 @@
     </div>
 
     <template v-else>
+      <PwaOfflineDictionary @changed="loadCaches" />
+
       <PwaCacheStats
         :bucket-count="buckets.length"
         :storage-quota="storageQuota"
@@ -76,6 +78,9 @@ const {
 } = useCacheStorage();
 
 const ConfirmDialog = defineAsyncComponent(() => import("@components/ConfirmDialog.vue"));
+const PwaOfflineDictionary = defineAsyncComponent(
+  () => import("@components/PwaOfflineDictionary.vue"),
+);
 
 const isPwaInstalled = useStore($isPwaInstalled);
 

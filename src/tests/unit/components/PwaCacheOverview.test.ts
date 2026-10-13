@@ -3,6 +3,8 @@ import { mount, flushPromises } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { ref } from "vue";
 
+import { createComponentStub } from "../helpers";
+
 const mockBuckets = ref<{ name: string; urls: string[] }[]>([]);
 const mockIsCacheAvailable = ref(true);
 const mockIsLoading = ref(false);
@@ -44,6 +46,10 @@ vi.mock("@stores/modal", () => ({
   close: vi.fn(),
   open: vi.fn(),
 }));
+
+vi.mock("@components/PwaOfflineDictionary.vue", () =>
+  createComponentStub("<div class='mock-pwa-offline-dictionary' />"),
+);
 
 vi.mock("@components/PwaCacheHeader.vue", () => ({
   default: { template: "<div class='mock-pwa-cache-header' />" },

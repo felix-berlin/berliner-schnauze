@@ -1,3 +1,4 @@
+import { disableOfflineDictionary } from "@services/offlineDictionary";
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { useOnline, useTimeoutFn } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
@@ -54,6 +55,8 @@ const BUCKET_NAME_MAP: Record<string, string> = {
   "api-search-index": "Suchindex",
   "api-search-meta": "Such-Metadaten",
   "api-word-of-the-day": "Wort des Tages",
+  "astro-assets-archive": "Ältere App-Dateien",
+  pages: "Besuchte Seiten",
   "workbox-precache": "App-Dateien",
 };
 
@@ -277,13 +280,15 @@ export function useCacheStorage() {
   async function clearBucket(name: string): Promise<void> {
     if (!isCacheAvailable) return;
     try {
+      // The offline dictionary lives in "pages". Clearing it means "free the space" — turn
+      // the dictionary off (first, so a running download can't refill the cache).
+      if (name === "pages") await disableOfflineDictionary();
       await caches.delete(name);
     } catch {
       createToastNotify({
         message: `Cache „${getBucketDisplayName(name)}" konnte nicht geleert werden.`,
         status: "error",
       });
-      return;
     }
     await loadCaches();
   }
@@ -291,6 +296,7 @@ export function useCacheStorage() {
   async function clearAll(): Promise<void> {
     if (!isCacheAvailable) return;
     try {
+      await disableOfflineDictionary();
       const names = await caches.keys();
       const results = await Promise.allSettled(names.map((name) => caches.delete(name)));
       const failCount = results.filter((r) => r.status === "rejected").length;
