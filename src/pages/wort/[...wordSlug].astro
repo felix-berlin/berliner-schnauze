@@ -26,7 +26,7 @@ import BookRecommendations from '@components/word/BookRecommendations.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
 import { fetchAffiliateData, fetchAllWords } from '@services/api.ts';
-import { fetchWordRefs, limitPagesForE2e } from '@services/queries/getWords.ts';
+import { fetchWordRefs, limitPagesForE2e, toWordRef } from '@services/queries/getWords.ts';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
   alphabeticNeighbors,
@@ -36,22 +36,17 @@ import {
   similarWords,
   translateNlpTags,
 } from '@utils/wordHelper.ts';
-import type { WordRef } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 
 
 export const getStaticPaths = (async () => {
   const allWords = await fetchAllWords();
-  // Slim refs: wordRefs is serialized into the RelatedWords/RandomWordButton island props.
+  // Slim ref: serialized into the RelatedWords/RandomWordButton island props.
   const pages = allWords.map((word) => ({
     slug: word.slug,
     word,
-    wordRef: {
-      id: word.id,
-      slug: word.slug,
-      wordProperties: { berlinerisch: word.wordProperties.berlinerisch },
-    } satisfies WordRef,
+    wordRef: toWordRef(word),
   }));
 
   return limitPagesForE2e(pages).map(({ word, wordRef }) => ({

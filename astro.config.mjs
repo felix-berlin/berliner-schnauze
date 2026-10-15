@@ -31,10 +31,11 @@ const {
   E2E_WORD_LIMIT,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
-// The Playwright e2e build sets this to keep the build fast — skip the
-// source-map upload plugins too, they add real time for a build nobody deploys.
 // One id per build: prerender workers (copies of this env) share a single words fetch, see getWords.ts.
 process.env.WORDS_BUILD_ID ??= String(Date.now());
+
+// The Playwright e2e build sets this to keep the build fast — skip the
+// source-map upload plugins too, they add real time for a build nobody deploys.
 const isE2eBuild = Boolean(E2E_WORD_LIMIT);
 // Source map + bundle stats uploads (Sentry, Codecov) only make sense for a real CI/deploy build.
 const uploadsArtifacts = !isE2eBuild && Boolean(process.env.CI);

@@ -169,17 +169,18 @@ let _allWordsCache: Promise<Word[]> | null = null;
 export const fetchAllWords = (): Promise<Word[]> =>
   (_allWordsCache ??= fetchPaginatedWords().then(normalizeWords));
 
+/** Slim ref of a word, small enough to serialize into island props. */
+export const toWordRef = ({ id, slug, wordProperties }: Word): WordRef => ({
+  id,
+  slug,
+  wordProperties: { berlinerisch: wordProperties.berlinerisch },
+});
+
 let _wordRefsCache: Promise<WordRef[]> | null = null;
 
 /** Slim refs of every word (what the neighbor/anagram/similar-sounding sections compare against). */
 export const fetchWordRefs = (): Promise<WordRef[]> =>
-  (_wordRefsCache ??= fetchAllWords().then((words) =>
-    words.map(({ id, slug, wordProperties }) => ({
-      id,
-      slug,
-      wordProperties: { berlinerisch: wordProperties.berlinerisch },
-    })),
-  ));
+  (_wordRefsCache ??= fetchAllWords().then((words) => words.map(toWordRef)));
 
 export const GetAllWords = graphql(`
   query GetAllWords(

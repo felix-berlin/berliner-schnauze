@@ -4,7 +4,7 @@ import { createInterface } from "node:readline/promises";
 
 // Disk cache for the WordPress word lists: fetching ~6000 words takes ~12 GraphQL requests,
 // and every dev-server restart would pay for it again while all pages and assets wait on it.
-// Builds also use it to hand the main thread's fetch to parallelPrerender workers.
+// Builds also use it to share one fetch between parallelPrerender workers (see getWords.ts).
 const CACHE_DIR = join(process.cwd(), "node_modules/.cache/berliner-words");
 
 const formatAge = (ms: number): string => {
