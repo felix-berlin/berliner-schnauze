@@ -2,9 +2,9 @@ import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises"
 import { join } from "node:path";
 import { createInterface } from "node:readline/promises";
 
-// Dev-only disk cache for the WordPress word lists: fetching ~6000 words takes ~60
-// sequential GraphQL requests, and every dev-server restart would pay for it again
-// while all pages and assets wait on it.
+// Disk cache for the WordPress word lists: fetching ~6000 words takes ~12 GraphQL requests,
+// and every dev-server restart would pay for it again while all pages and assets wait on it.
+// Builds also use it to hand the main thread's fetch to parallelPrerender workers.
 const CACHE_DIR = join(process.cwd(), "node_modules/.cache/berliner-words");
 
 const formatAge = (ms: number): string => {
