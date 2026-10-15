@@ -80,8 +80,8 @@ const fetchPaginatedWords = async () => {
   const allWords: NonNullable<GetAllWordsQuery["berlinerWords"]>["edges"] = [];
   let complete = true;
   const cacheKey = ["words", "TITLE", "ASC", stati.join("-")].join("_");
-
   const buildCacheKey = `${cacheKey}_build`;
+
   if (useDiskCache) {
     const cached = await readWordsCache<typeof allWords>(cacheKey);
     if (cached) return cached;
@@ -126,9 +126,10 @@ const fetchPaginatedWords = async () => {
     }
   }
 
-  if (useDiskCache && complete) await writeWordsCache(cacheKey, allWords);
-  // A partial result is shared too: every thread of this build should see the same words.
-  else if (!useDiskCache && buildId) {
+  if (useDiskCache) {
+    if (complete) await writeWordsCache(cacheKey, allWords);
+  } else if (buildId) {
+    // A partial result is shared too: every thread of this build should see the same words.
     await writeWordsCache(buildCacheKey, { buildId, edges: allWords });
   }
 
