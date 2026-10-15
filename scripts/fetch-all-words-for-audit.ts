@@ -75,12 +75,12 @@ async function fetchAll(): Promise<WpWordNode[]> {
 
   while (true) {
     const res = await fetch(wpApi, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Basic ${auth}` },
       body: JSON.stringify({
         query: QUERY,
         variables: { after, stati: ["PUBLISH", "DRAFT"] },
       }),
+      headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/json" },
+      method: "POST",
     });
     const json = (await res.json()) as {
       data?: { berlinerWords: { edges: { node: WpWordNode }[]; pageInfo: { endCursor: string; hasNextPage: boolean } } };
@@ -106,19 +106,19 @@ async function main(): Promise<void> {
   console.log(`Total: ${words.length} words`);
 
   const simplified = words.map((w) => ({
-    id: w.id,
-    slug: w.slug,
-    title: w.title,
-    status: w.status ?? null,
     berlinerisch: w.wordProperties.berlinerisch,
-    translations: (w.wordProperties.translations ?? []).map((t) => t.translation).filter(Boolean),
-    infoText: w.wordProperties.infoText,
     berolinismus: w.wordProperties.berolinismus ?? false,
     examples: (w.wordProperties.examples ?? []).map((e) => ({
       example: e.example,
       explanation: e.exampleExplanation,
     })),
+    id: w.id,
+    infoText: w.wordProperties.infoText,
+    slug: w.slug,
+    status: w.status ?? null,
     themen: (w.berlinerischThemen?.nodes ?? []).map((n) => n.slug).filter(Boolean),
+    title: w.title,
+    translations: (w.wordProperties.translations ?? []).map((t) => t.translation).filter(Boolean),
   }));
 
   writeFileSync(OUT_FILE, JSON.stringify(simplified, null, 2) + "\n", "utf-8");

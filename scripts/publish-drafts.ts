@@ -41,8 +41,8 @@ for (const post of drafts) {
   if (DRY_RUN) continue;
 
   await wpFetch(`/${POST_TYPE_REST_BASE}/${post.id}`, {
-    method: "POST",
     body: JSON.stringify({ status: "publish" }),
+    method: "POST",
   });
   await delay(RATE_MS);
 }

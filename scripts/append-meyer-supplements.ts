@@ -241,7 +241,7 @@ async function main(): Promise<void> {
       else appendedInfoText++;
       await delay(RATE_MS);
     } catch (err) {
-      console.error(`  ✗ ${entry.words.join("/")}: ${err}`);
+      console.error(`  ✗ ${entry.words.join("/")}: ${String(err)}`);
       errors++;
     }
   }

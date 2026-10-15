@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* oxlint-disable no-await-in-loop -- sequential on purpose: each write is verified before the next, with rate limiting */
 /**
  * Clears the corpus-overlapping ACF fields listed in reports/schlobinski-scan.csv
  * (columns <field>_clear = 1). Everything else (title, slug, status, themen, other
@@ -7,11 +8,11 @@
  * Usage: infisical run -- node scripts/clear-schlobinski-fields.mjs [--dry-run] [--csv file] [--ids 1,2] [--limit N]
  * Backup (full acf per touched entry, JSONL) goes to ~/backups-schlobinski/, never into the repo.
  */
-import { readFileSync, mkdirSync, appendFileSync, chmodSync } from "fs";
+import { readFileSync, mkdirSync, appendFileSync } from "fs";
 import { homedir } from "os";
 import { join } from "path";
 
-const ACF_OF = { translations: "translations", infoText: "info_text", examples: "examples", alternativeWords: "alternative_words" };
+const ACF_OF = { alternativeWords: "alternative_words", examples: "examples", infoText: "info_text", translations: "translations" };
 const args = process.argv.slice(2);
 const DRY = args.includes("--dry-run");
 const arg = (n) => (args.includes(n) ? args[args.indexOf(n) + 1] : null);
@@ -46,7 +47,7 @@ const parse = (t) => {
 };
 
 const jobs = parse(readFileSync(arg("--csv") ?? "reports/schlobinski-scan.csv", "utf8"))
-  .map((r) => ({ id: +r.id, title: r.title, fields: Object.keys(ACF_OF).filter((f) => r[f + "_clear"] === "1") }))
+  .map((r) => ({ fields: Object.keys(ACF_OF).filter((f) => r[f + "_clear"] === "1"), id: +r.id, title: r.title }))
   .filter((j) => j.fields.length && (!only || only.includes(j.id)))
   .slice(0, limit);
 
@@ -65,10 +66,10 @@ let done = 0;
 for (let i = 0; i < jobs.length; i += BATCH) {
   for (const j of jobs.slice(i, i + BATCH)) {
     const before = await req(`/${j.id}?context=edit`);
-    appendFileSync(backup, JSON.stringify({ id: j.id, title: before.title?.raw ?? before.title, status: before.status, acf: before.acf }) + "\n", { mode: 0o600 });
+    appendFileSync(backup, JSON.stringify({ acf: before.acf, id: j.id, status: before.status, title: before.title?.raw ?? before.title }) + "\n", { mode: 0o600 });
     const acf = { berlinerisch: before.acf.berlinerisch }; // required by the ACF REST schema, sent unchanged
     for (const f of j.fields) acf[ACF_OF[f]] = ACF_OF[f] === "info_text" ? "" : [];
-    await req(`/${j.id}`, { method: "POST", body: JSON.stringify({ acf, meta: { needs_rewrite: 1 } }) });
+    await req(`/${j.id}`, { body: JSON.stringify({ acf, meta: { needs_rewrite: 1 } }), method: "POST" });
     const after = await req(`/${j.id}?context=edit`);
     const cleared = Object.keys(acf).filter((k) => k !== "berlinerisch");
     const bad =
