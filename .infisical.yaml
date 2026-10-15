@@ -1,0 +1,9 @@
+general:
+    domain: https://infisical.kasimir.dev
+secrets-management:
+    project-id: cb85888f-7b32-44b7-9ce0-9b13ab4ef7ba
+    default-environment: ""
+    mappings:
+        git-branch-to-environment:
+            .*: dev
+            main: prod
