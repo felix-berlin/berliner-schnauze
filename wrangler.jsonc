@@ -5,6 +5,7 @@
   "assets": {
     "directory": "./dist/",
   },
+  "previews": {},
   "preview_urls": true,
   "workers_dev": true,
   "observability": {
