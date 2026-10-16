@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { CoreImageBlockFields, CoreQuoteBlockFields } from "@services/fragments/blockFragments";
 import { describe, expect, it } from "vitest";
 

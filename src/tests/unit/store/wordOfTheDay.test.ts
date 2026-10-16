@@ -1,8 +1,4 @@
-import {
-  useTestStorageEngine,
-  setTestStorageKey,
-  cleanTestStorage,
-} from "@nanostores/persistent";
+import { useTestStorageEngine, setTestStorageKey, cleanTestStorage } from "@nanostores/persistent";
 import { $wordOfTheDay, getWordOfTheDay } from "@stores/index.ts";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 

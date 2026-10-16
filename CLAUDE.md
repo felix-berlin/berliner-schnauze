@@ -33,8 +33,13 @@ pnpm gql:generate            # One-shot codegen run
 pnpm format                  # Format with oxfmt
 pnpm format:check            # Check formatting without writing
 
-# Cloudflare Workers (run after build)
-pnpm server:preview          # Serve ./dist locally via `wrangler dev`
+# Docker (Node adapter, replacing Cloudflare; run after build)
+docker compose up --build    # Serve dist/ via server/index.mjs (applies public/_headers + _redirects)
+scripts/docker-smoke.sh      # Build image from dist/, check routes/headers/redirects (runs on every PR)
+                             # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze (release.yml `docker` job)
+
+# Cloudflare Workers (until the Docker move; run after build)
+pnpm server:preview          # Serve ./dist/client locally via `wrangler dev`
 pnpm deploy                  # `wrangler deploy`
 
 # WordPress auth

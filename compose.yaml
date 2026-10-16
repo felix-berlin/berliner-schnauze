@@ -1,0 +1,26 @@
+# Local: `pnpm build:local && docker compose up --build`
+# Server: `TAG=3.57.0 docker compose pull && docker compose up -d`
+services:
+  web:
+    image: ghcr.io/felix-berlin/berliner-schnauze:${TAG:-latest}
+    build: .
+    restart: unless-stopped
+    # Runtime env for on-demand routes: the adapter loads none itself, and
+    # astro:env/server validates every required secret on import.
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "${PORT:-4321}:4321"
+    healthcheck:
+      test:
+        - CMD
+        - /nodejs/bin/node
+        - -e
+        - "fetch('http://localhost:4321/ping').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 30s
+      # Probe every 2 s while starting, so `compose up --wait` returns fast.
+      start_period: 20s
+      start_interval: 2s
+      timeout: 5s
+      retries: 3

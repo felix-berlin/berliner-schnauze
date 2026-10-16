@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { useViewTransition } from "@utils/helpers";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 

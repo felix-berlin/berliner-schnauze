@@ -3,7 +3,7 @@
   // Set this to today's date when bumping compatibility.
   "compatibility_date": "2026-08-25",
   "assets": {
-    "directory": "./dist/",
+    "directory": "./dist/client/",
   },
   "previews": {},
   "preview_urls": true,
