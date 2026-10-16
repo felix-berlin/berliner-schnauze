@@ -126,12 +126,14 @@ const fetchPaginatedWords = async () => {
     }
   }
 
-  if (useDiskCache) {
-    if (complete) await writeWordsCache(cacheKey, allWords);
-  } else if (buildId) {
-    // A partial result is shared too: every thread of this build should see the same words.
-    await writeWordsCache(buildCacheKey, { buildId, edges: allWords });
+  if (!complete) {
+    // Dev and e2e keep going with what they got; a real build must not deploy missing words.
+    if (useDiskCache) return allWords;
+    throw new Error("Fetching words from WordPress failed, aborting the build");
   }
+
+  if (useDiskCache) await writeWordsCache(cacheKey, allWords);
+  else if (buildId) await writeWordsCache(buildCacheKey, { buildId, edges: allWords });
 
   return allWords;
 };

@@ -157,6 +157,14 @@ describe("fetchAllWords in a plain build", () => {
       edges: [edge("fresh")],
     });
   });
+
+  it("fails the build instead of sharing an incomplete word list", async () => {
+    queryMock.mockResolvedValue({ data: undefined, error: new Error("boom") });
+    const { fetchAllWords } = await loadBuild("b3");
+
+    await expect(fetchAllWords()).rejects.toThrow("aborting the build");
+    expect(writeWordsCache).not.toHaveBeenCalled();
+  });
 });
 
 describe("limitPagesForE2e", () => {
