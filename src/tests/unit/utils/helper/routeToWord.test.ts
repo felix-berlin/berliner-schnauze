@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { routeToWord } from "@utils/helpers";
 import { describe, it, expect } from "vitest";
 

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("astro:env/server", () => ({ GITHUB_API_TOKEN: "" }));
@@ -20,8 +21,14 @@ describe("getLiteDeckDownloadUrl", () => {
     const releases = [
       {
         assets: [
-          { browser_download_url: "https://example.com/full", name: "Berliner-Schnauze-Anki-Deck-Full-v3.52.0.apkg" },
-          { browser_download_url: "https://example.com/lite", name: "Berliner-Schnauze-Anki-Deck-Lite-v3.52.0.apkg" },
+          {
+            browser_download_url: "https://example.com/full",
+            name: "Berliner-Schnauze-Anki-Deck-Full-v3.52.0.apkg",
+          },
+          {
+            browser_download_url: "https://example.com/lite",
+            name: "Berliner-Schnauze-Anki-Deck-Lite-v3.52.0.apkg",
+          },
         ],
       },
     ];
@@ -32,8 +39,22 @@ describe("getLiteDeckDownloadUrl", () => {
 
   it("falls back to an older release if the newest one has no lite asset yet", async () => {
     const releases = [
-      { assets: [{ browser_download_url: "https://example.com/full-new", name: "Berliner-Schnauze-Anki-Deck-Full-v3.53.0.apkg" }] },
-      { assets: [{ browser_download_url: "https://example.com/lite-old", name: "Berliner-Schnauze-Anki-Deck-Lite-v3.52.0.apkg" }] },
+      {
+        assets: [
+          {
+            browser_download_url: "https://example.com/full-new",
+            name: "Berliner-Schnauze-Anki-Deck-Full-v3.53.0.apkg",
+          },
+        ],
+      },
+      {
+        assets: [
+          {
+            browser_download_url: "https://example.com/lite-old",
+            name: "Berliner-Schnauze-Anki-Deck-Lite-v3.52.0.apkg",
+          },
+        ],
+      },
     ];
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(makeResponse(true, releases)));
     const { getLiteDeckDownloadUrl } = await import("@services/githubRelease.ts");
@@ -41,7 +62,10 @@ describe("getLiteDeckDownloadUrl", () => {
   });
 
   it("returns undefined when no recent release has a lite asset", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(makeResponse(true, [{ assets: [] }, { assets: [] }])));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(makeResponse(true, [{ assets: [] }, { assets: [] }])),
+    );
     const { getLiteDeckDownloadUrl } = await import("@services/githubRelease.ts");
     expect(await getLiteDeckDownloadUrl()).toBeUndefined();
   });
@@ -67,7 +91,9 @@ describe("getLiteDeckDownloadUrl", () => {
     await getLiteDeckDownloadUrl();
 
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
-    expect(url).toBe("https://api.github.com/repos/felix-berlin/berliner-schnauze/releases?per_page=5");
+    expect(url).toBe(
+      "https://api.github.com/repos/felix-berlin/berliner-schnauze/releases?per_page=5",
+    );
     const headers = init.headers as Record<string, string>;
     expect(headers["Accept"]).toBe("application/vnd.github+json");
     expect(headers["Authorization"]).toBeUndefined();
@@ -88,7 +114,16 @@ describe("getLiteDeckDownloadUrl", () => {
   });
 
   it("memoizes the result across calls within the same module instance", async () => {
-    const releases = [{ assets: [{ browser_download_url: "https://example.com/lite", name: "Berliner-Schnauze-Anki-Deck-Lite-v1.apkg" }] }];
+    const releases = [
+      {
+        assets: [
+          {
+            browser_download_url: "https://example.com/lite",
+            name: "Berliner-Schnauze-Anki-Deck-Lite-v1.apkg",
+          },
+        ],
+      },
+    ];
     const fetchMock = vi.fn().mockResolvedValue(makeResponse(true, releases));
     vi.stubGlobal("fetch", fetchMock);
     const { getLiteDeckDownloadUrl } = await import("@services/githubRelease.ts");

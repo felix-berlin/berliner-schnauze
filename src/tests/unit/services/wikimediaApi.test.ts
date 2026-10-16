@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Provide the env var that wikimediaApi.ts imports from astro:env/client.

@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { getWordType } from "@utils/wordHelper";
 import nlp from "de-compromise";
 import { describe, it, expect } from "vitest";

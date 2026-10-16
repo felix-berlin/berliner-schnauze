@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { randomElement } from "@utils/helpers";
 import { describe, it, expect } from "vitest";
 

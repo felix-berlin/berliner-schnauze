@@ -12,6 +12,9 @@ vi.mock("@nanostores/persistent", () => ({
 const mockFetch = vi.fn();
 globalThis.fetch = mockFetch;
 
+// Imported after `vi.resetModules()` so it shares the store's nanostores instance.
+const flushTasks = async () => (await import("nanostores")).allTasks();
+
 describe("wordOfTheDay store", () => {
   beforeEach(() => {
     vi.resetModules();
@@ -66,7 +69,7 @@ describe("wordOfTheDay store", () => {
     it("calls getWordOfTheDay when no timestamp in localStorage", async () => {
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       const unsub = $wordOfTheDay.subscribe(() => {});
-      await new Promise<void>((r) => setTimeout(r, 50));
+      await flushTasks();
       expect(mockFetch).toHaveBeenCalled();
       unsub();
     });
@@ -76,7 +79,7 @@ describe("wordOfTheDay store", () => {
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
       const unsub = $wordOfTheDay.subscribe(() => {});
-      await new Promise<void>((r) => setTimeout(r, 50));
+      await flushTasks();
       expect(mockFetch).not.toHaveBeenCalled();
       unsub();
     });
@@ -87,7 +90,7 @@ describe("wordOfTheDay store", () => {
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
       const unsub = $wordOfTheDay.subscribe(() => {});
-      await new Promise<void>((r) => setTimeout(r, 50));
+      await flushTasks();
       expect(mockFetch).toHaveBeenCalled();
       unsub();
     });
@@ -99,7 +102,7 @@ describe("wordOfTheDay store", () => {
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
       const unsub = $wordOfTheDay.subscribe(() => {});
-      await new Promise<void>((r) => setTimeout(r, 50));
+      await flushTasks();
       // timestamp=0 → isCachedToday(0) is false → fetch is called
       expect(mockFetch).toHaveBeenCalled();
       unsub();

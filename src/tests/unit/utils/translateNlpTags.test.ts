@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { translateNlpTags } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
 
