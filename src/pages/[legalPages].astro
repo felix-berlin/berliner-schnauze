@@ -1,49 +1,15 @@
 ---
 import "@styles/objects/_legal-pages.scss";
-import type { GetStaticPaths, InferGetStaticParamsType, InferGetStaticPropsType } from "astro";
-
 import Layout from "@layouts/Layout.astro";
+import { fetchPagesBySlugs } from "@services/api.ts";
 
-import { GetPagesBySlugsDocument } from "@/gql/graphql.ts";
-import { wpGraphqlClient } from "@services/wpGraphqlClient";
+const LEGAL_PAGES = ["datenschutz", "impressum"];
 
-export const getStaticPaths = (async () => {
-  const pagesResponse = await wpGraphqlClient
-    .query(GetPagesBySlugsDocument, {
-      slugs: ["datenschutz", "impressum"],
-    })
-    .toPromise();
+const { legalPages } = Astro.params;
+if (!legalPages || !LEGAL_PAGES.includes(legalPages)) return Astro.rewrite("/404");
 
-  const pages = pagesResponse?.data?.pages?.nodes;
-
-  if (!pages) {
-    return [];
-  }
-
-  return pages.map((page) => {
-    let betterSlug;
-    if (page.slug === "datenschutz") {
-      betterSlug = "datenschutz";
-    } else if (page.slug === "impressum") {
-      betterSlug = "impressum";
-    }
-
-    return {
-      params: {
-        legalPages: betterSlug,
-      },
-      props: {
-        page,
-      },
-    };
-  });
-}) satisfies GetStaticPaths;
-
-type Params = InferGetStaticParamsType<typeof getStaticPaths>;
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
-const { legalPages } = Astro.params as Params;
-const { page } = Astro.props;
+const [page] = await fetchPagesBySlugs([legalPages]);
+if (!page) return Astro.rewrite("/404");
 
 const pageContent = {
   ...page,

@@ -4,15 +4,9 @@ import type { Seo } from '@/types/seo';
 import { getCollection, render } from 'astro:content';
 import { formattedDate } from '@utils/helpers';
 
-export async function getStaticPaths() {
-  const changelogs = await getCollection('changelogs');
-  return changelogs.map((entry) => ({
-    params: { version: entry.data.version },
-    props: { entry },
-  }));
-}
-
-const { entry } = Astro.props;
+const { version } = Astro.params;
+const entry = (await getCollection('changelogs')).find((e) => e.data.version === version);
+if (!entry) return Astro.rewrite('/404');
 const { Content } = await render(entry);
 const { title, description, releaseDate } = entry.data;
 

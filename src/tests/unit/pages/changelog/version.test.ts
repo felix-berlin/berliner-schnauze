@@ -27,54 +27,49 @@ vi.mock("astro:content", async () => {
   };
 });
 
-describe("changelog/[version].astro — getStaticPaths", () => {
-  it("returns one path per changelog entry", async () => {
-    const { getStaticPaths } = await import("@/pages/changelog/[version].astro");
-    const paths = await getStaticPaths();
-    expect(paths).toHaveLength(1);
-    expect(paths[0].params.version).toBe("3.35.0");
-    expect(paths[0].props.entry).toBe(mockEntry);
-  });
-});
-
 describe("changelog/[version].astro — rendering", () => {
-  let render: (props: Record<string, unknown>) => Promise<string>;
+  let render: (props?: Record<string, unknown>, params?: Record<string, string>) => Promise<string>;
 
   beforeAll(async () => {
     const { default: Page } = await import("@/pages/changelog/[version].astro");
     render = await createAstroRender(Page);
   }, 30_000);
 
+  it("does not render an entry for an unknown version", async () => {
+    const result = await render({}, { version: "9.9.9" }).catch(() => "");
+    expect(result).not.toContain("c-user-changelog__content");
+  });
+
   it("renders the .c-user-changelog article", async () => {
-    const result = await render({ entry: mockEntry });
+    const result = await render({}, { version: "3.35.0" });
     expect(result).toContain("c-user-changelog");
   });
 
   it("renders the entry title in an h1", async () => {
-    const result = await render({ entry: mockEntry });
+    const result = await render({}, { version: "3.35.0" });
     expect(result).toContain("Was ist neu in Version 3.35.0?");
     expect(result).toMatch(/<h1/);
   });
 
   it("renders a time element with the releaseDate as datetime", async () => {
-    const result = await render({ entry: mockEntry });
+    const result = await render({}, { version: "3.35.0" });
     expect(result).toContain('datetime="2026-06-27"');
   });
 
   it("renders the date formatted in German locale", async () => {
-    const result = await render({ entry: mockEntry });
+    const result = await render({}, { version: "3.35.0" });
     expect(result).toContain("27.");
     expect(result).toContain("Juni");
     expect(result).toContain("2026");
   });
 
   it("renders the content wrapper .c-user-changelog__content", async () => {
-    const result = await render({ entry: mockEntry });
+    const result = await render({}, { version: "3.35.0" });
     expect(result).toContain("c-user-changelog__content");
   });
 
   it("renders the mocked entry content", async () => {
-    const result = await render({ entry: mockEntry });
+    const result = await render({}, { version: "3.35.0" });
     expect(result).toContain("mock-content");
   });
 });

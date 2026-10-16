@@ -3,44 +3,20 @@
 import '@styles/plugins/astro-breadcrumbs.scss';
 import '@styles/components/_thema-detail.scss';
 
-// Types
-import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
-
 import Layout from '@layouts/Layout.astro';
 import { fetchAllThemen, fetchAllWords } from '@services/api.ts';
 import { canonicalUrl, routeToWord, seoData } from '@utils/helpers.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 
-export const getStaticPaths = (async () => {
-  const [allThemen, allWords] = await Promise.all([fetchAllThemen(), fetchAllWords()]);
+const { themaSlug } = Astro.params;
+const [allThemen, allWords] = await Promise.all([fetchAllThemen(), fetchAllWords()]);
+const thema = allThemen.find((t) => t.slug === themaSlug);
+if (!thema) return Astro.rewrite('/404');
 
-  // Wort-zu-Thema-Mapping aus bereits gefetchten Wörtern
-  const wordsByThema = new Map<string, typeof allWords>();
-  for (const word of allWords) {
-    for (const thema of word.berlinerischThemen?.nodes ?? []) {
-      if (!thema.slug) continue;
-      const bucket = wordsByThema.get(thema.slug);
-      if (bucket) bucket.push(word);
-      else wordsByThema.set(thema.slug, [word]);
-    }
-  }
-
-  return allThemen.flatMap((thema) => {
-    if (!thema.slug) return [];
-    return [{
-      params: { themaSlug: thema.slug },
-      props: {
-        thema,
-        words: wordsByThema.get(thema.slug) ?? [],
-      },
-    }];
-  });
-}) satisfies GetStaticPaths;
-
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
-const { thema, words } = Astro.props;
+const words = allWords.filter((word) =>
+  word.berlinerischThemen?.nodes.some((t) => t.slug === themaSlug),
+);
 
 const seoProps = seoData({
   seo: {

@@ -1,3 +1,4 @@
+import { ttl } from "@services/cache.ts";
 import { fetchJson } from "@services/fetchJson.ts";
 import { GITHUB_API_TOKEN } from "astro:env/server";
 
@@ -29,7 +30,5 @@ async function loadLiteDeckDownloadUrl(): Promise<string | undefined> {
   return undefined;
 }
 
-// Resolve once per process — the release doesn't change within a build/server lifetime.
-let liteDeckUrlPromise: Promise<string | undefined> | undefined;
-export const getLiteDeckDownloadUrl = (): Promise<string | undefined> =>
-  (liteDeckUrlPromise ??= loadLiteDeckDownloadUrl());
+// Pages render on demand: look up the latest release hourly instead of once per process.
+export const getLiteDeckDownloadUrl = ttl(60 * 60 * 1000, loadLiteDeckDownloadUrl);

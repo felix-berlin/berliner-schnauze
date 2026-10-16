@@ -2,8 +2,6 @@
 import '@styles/plugins/astro-breadcrumbs.scss';
 import '@styles/components/_magazin-article.scss';
 
-import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
-
 import Layout from '@layouts/Layout.astro';
 import ArticleBlocks from '@components/magazin/ArticleBlocks.astro';
 import ArticleShare from '@components/magazin/ArticleShare.vue';
@@ -14,30 +12,13 @@ import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 import { Picture } from 'astro:assets';
 
-export const getStaticPaths = (async () => {
-  const allPosts = await fetchAllPosts();
+const { postSlug } = Astro.params;
+const allPosts = await fetchAllPosts();
+const post = allPosts.find((p) => p.slug === postSlug);
+if (!post) return Astro.rewrite('/404');
 
-  const byDateDesc = [...allPosts].sort(
-    (a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime(),
-  );
-
-  return allPosts.flatMap((post) => {
-    if (!post.slug) return [];
-
-    const related = byDateDesc.filter((p) => p.slug && p.slug !== post.slug).slice(0, 3);
-
-    return [
-      {
-        params: { postSlug: post.slug },
-        props: { post, related },
-      },
-    ];
-  });
-}) satisfies GetStaticPaths;
-
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
-const { post, related } = Astro.props;
+// fetchAllPosts is newest first
+const related = allPosts.filter((p) => p.slug && p.slug !== post.slug).slice(0, 3);
 
 const { blocks, toc, hasAffiliateLinks } = processArticleBlocks(post.blocks ?? []);
 const readingMinutes = post.seo?.readingTime ? Math.max(1, Math.round(post.seo.readingTime)) : null;

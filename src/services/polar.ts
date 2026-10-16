@@ -1,3 +1,4 @@
+import { ttl } from "@services/cache.ts";
 import { fetchJson } from "@services/fetchJson.ts";
 import { ANKI_DECK_FULL_PRODUCT_ID, POLAR_PRICE_TOKEN, POLAR_SANDBOX } from "astro:env/server";
 
@@ -19,9 +20,8 @@ async function loadPriceCents(): Promise<number | undefined> {
   return typeof cents === "number" ? cents : undefined;
 }
 
-// Resolve once per process — the price doesn't change within a build/server lifetime.
-let centsPromise: Promise<number | undefined> | undefined;
-const getCents = (): Promise<number | undefined> => (centsPromise ??= loadPriceCents());
+// Pages render on demand: refresh the price hourly instead of once per process.
+const getCents = ttl(60 * 60 * 1000, loadPriceCents);
 
 /** Display price, e.g. "5,99 €". */
 export const getPolarFullDeckPrice = async (): Promise<string | undefined> => {

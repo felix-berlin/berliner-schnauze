@@ -33,7 +33,8 @@ export default buildConfig({
   // start only where PAYLOAD_RUN_MIGRATIONS=true (the cms container), so no second app migrates concurrently.
   // Every schema change needs `payload migrate:create <name>`.
   db: postgresAdapter({
-    pool: { connectionString: process.env.DATABASE_URL },
+    // A database that is down must fail a request fast instead of hanging it (pg waits forever by default).
+    pool: { connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 5000 },
     prodMigrations: process.env.PAYLOAD_RUN_MIGRATIONS === "true" ? migrations : undefined,
   }),
 });

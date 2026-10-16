@@ -11,8 +11,9 @@ export async function createAstroRender(component: unknown) {
       },
     ],
   });
-  return (props: Record<string, unknown>) =>
+  return (props: Record<string, unknown> = {}, params?: Record<string, string>) =>
     container.renderToString(component as Parameters<typeof container.renderToString>[0], {
+      params,
       props,
     });
 }

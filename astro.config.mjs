@@ -63,8 +63,10 @@ export default defineConfig({
   devToolbar: {
     enabled: !process.env.CI && !process.env.NO_DEV_TOOLBAR,
   },
-  // output stays "static": every page is still prerendered, the standalone
-  // server (Docker image) only serves dist/client.
+  // Every page renders on demand: the header and footer read Payload (menus, funding, social links), so no
+  // page can be prerendered without a database at build time. The standalone server (Docker image) still
+  // serves dist/client (assets, sw.js) itself.
+  output: "server",
   adapter: node({ mode: "standalone" }),
   // No Astro.session usage anywhere in the codebase — opt out to tree-shake
   // the session runtime out of the server build.
@@ -447,6 +449,8 @@ export default defineConfig({
         // both precache and network — e.g. a word page added after the last SW
         // update, while offline — instead of the browser's generic offline page.
         navigateFallback: "/",
+        // Pages are no longer files in dist/client, so the fallback target has to be added to the precache by hand.
+        additionalManifestEntries: [{ url: "/", revision: String(Date.now()) }],
         globPatterns: import.meta.env.DEV
           ? []
           : ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],

@@ -1,3 +1,4 @@
+import { ttl } from "@services/cache.ts";
 import { fetchJson } from "@services/fetchJson.ts";
 import { WAKAPI_HOST } from "astro:env/client";
 import { WAKAPI_API_KEY } from "astro:env/server";
@@ -67,7 +68,6 @@ async function loadStats(): Promise<WakapiStats> {
   return { hours, minutes };
 }
 
-// The footer renders on every page: resolve once per process instead of re-reading
-// and re-parsing the cache file per page. The file cache still spans builds.
-let statsPromise: Promise<WakapiStats> | undefined;
-export const getWakapiStats = (): Promise<WakapiStats> => (statsPromise ??= loadStats());
+// The footer renders on every page: refresh hourly instead of re-reading and re-parsing the cache file
+// per request. The file cache still spans restarts.
+export const getWakapiStats = ttl(60 * 60 * 1000, loadStats);

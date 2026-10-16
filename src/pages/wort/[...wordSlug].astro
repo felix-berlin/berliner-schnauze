@@ -4,9 +4,6 @@ import '@styles/objects/_word.scss';
 import '@styles/components/_word-page-layout.scss';
 import '@styles/plugins/astro-breadcrumbs.scss';
 
-// Types
-import type { GetStaticPaths, InferGetStaticParamsType, InferGetStaticPropsType } from 'astro';
-
 import RandomWordButton from '@components/RandomWordButton.vue';
 import RelatedWords from '@components/RelatedWords.vue';
 import WordAnagrams from '@components/word/WordAnagrams.astro';
@@ -40,43 +37,14 @@ import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 
 
-export const getStaticPaths = (async () => {
-  const allWords = await fetchAllWords();
-  // Slim ref: serialized into the RelatedWords/RandomWordButton island props.
-  const pages = allWords.map((word) => ({
-    slug: word.slug,
-    word,
-    wordRef: toWordRef(word),
-  }));
+const { wordSlug } = Astro.params;
+const word = (await fetchAllWords()).find((w) => w.slug === wordSlug);
+if (!word) return Astro.rewrite('/404');
 
-  return pages.map(({ word, wordRef }) => ({
-        // experimental.incrementalBuild: this only reflects the word's own
-        // modified date. Neighbor/anagram/similar-sounding sections are derived
-        // from OTHER words in wordRefs, so a page can theoretically go stale if
-        // a different word changes in a way that affects this word's neighbors
-        // without this word itself being touched. Narrow blast radius (only
-        // alphabetically/phonetically adjacent words), monitored during rollout.
-        cacheKey: word.modifiedGmt ?? undefined,
-        params: {
-          wordSlug: word.slug,
-        },
-        props: {
-          word,
-          wordRef,
-        },
-  }));
-}) satisfies GetStaticPaths;
-
-type Params = InferGetStaticParamsType<typeof getStaticPaths>;
-type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-
-const { wordSlug } = Astro.params as Params;
-const { word, wordRef } = Astro.props;
-// Not a prop: props are structured-cloned per page when prerendering in workers (~6000 pages x ~6000 refs).
+const wordRef = toWordRef(word);
 const wordRefs = await fetchWordRefs();
 
-// Derived per page (not in getStaticPaths): these compare the word against all ~6000 others,
-// and getStaticPaths would run them for every word up front — which froze the dev server.
+// Derived per request from the memoized refs of all words (~6000, rebuilt once a minute).
 const alphabeticNeighborsResult = alphabeticNeighbors(wordRefs, wordRef);
 const anagramsResult = findAnagrams(wordRef.wordProperties.berlinerisch, wordRefs);
 const similarSpellingResult = similarWords(wordRefs, wordRef, 0.85)

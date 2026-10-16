@@ -118,3 +118,18 @@ describe("fetchWikimediaAPI – without auth token", () => {
     expect(headers["Authorization"]).toBeUndefined();
   });
 });
+
+describe("fetchWikimediaAPI cache", () => {
+  it("serves a repeated file from memory but retries after a failure", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(makeResponse(false, null))
+      .mockResolvedValue(makeResponse(true, { title: "A" }));
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const { fetchWikimediaAPI } = await import("@services/wikimediaApi.ts");
+    expect(await fetchWikimediaAPI("File:A.jpg")).toBeUndefined();
+    expect(await fetchWikimediaAPI("File:A.jpg")).toEqual({ title: "A" });
+    expect(await fetchWikimediaAPI("File:A.jpg")).toEqual({ title: "A" });
+    expect(fetchSpy).toHaveBeenCalledTimes(2);
+  });
+});

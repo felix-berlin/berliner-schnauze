@@ -19,3 +19,11 @@ describe("fetchWordRefs", () => {
     expect(await fetchWordRefs()).toEqual([{ id: "1", slug: "aasen", wordProperties: { berlinerisch: "aasen" } }]);
   });
 });
+
+describe("fetchWordRefs memo", () => {
+  it("returns the same array within the cache window so derived indexes can key on it", async () => {
+    fetchAllWords.mockResolvedValue([word]);
+    const { fetchWordRefs: fresh } = await import("@services/queries/getWords.ts");
+    expect(await fresh()).toBe(await fresh());
+  });
+});
