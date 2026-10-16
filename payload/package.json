@@ -1,0 +1,38 @@
+{
+  "name": "payload-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev -p 3001",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "3.91.0",
+    "@payloadcms/next": "3.91.0",
+    "@payloadcms/richtext-lexical": "3.91.0",
+    "@payloadcms/ui": "3.91.0",
+    "cross-env": "^7.0.3",
+    "graphql": "^16.8.1",
+    "next": "16.4.2",
+    "payload": "3.91.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "typescript": "^6.0.3",
+    "vitest": "5.0.5"
+  },
+  "engines": { "node": ">=20.18.1" }
+}

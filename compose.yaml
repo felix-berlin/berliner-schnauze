@@ -24,3 +24,24 @@ services:
       start_interval: 2s
       timeout: 5s
       retries: 3
+
+  postgres:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-berliner_schnauze}
+      POSTGRES_USER: ${POSTGRES_USER:-berliner}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      start_period: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

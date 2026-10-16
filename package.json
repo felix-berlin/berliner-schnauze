@@ -35,6 +35,8 @@
   "type": "module",
   "scripts": {
     "dev": "infisical run -- astro dev",
+    "cms:dev": "pnpm --filter payload-app dev",
+    "cms:test": "pnpm --filter payload-app test",
     "start": "astro dev",
     "build": "pnpm run supportedBrowsers && astro build",
     "build:local": "infisical run -- pnpm run build",
