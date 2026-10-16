@@ -4,7 +4,7 @@ import { usersCreate } from "../src/access";
 import { getTestPayload } from "./helpers/payload";
 
 // Task 3 and Task 5 append their collections/globals here.
-const lockedCollections = ["users"] as const;
+const lockedCollections = ["users", "words", "word-types", "themen"] as const;
 
 const png = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",

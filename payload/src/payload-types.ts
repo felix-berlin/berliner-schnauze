@@ -69,6 +69,9 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    'word-types': WordType;
+    themen: Theman;
+    words: Word;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +81,9 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'word-types': WordTypesSelect<false> | WordTypesSelect<true>;
+    themen: ThemenSelect<false> | ThemenSelect<true>;
+    words: WordsSelect<false> | WordsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -170,6 +176,135 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-types".
+ */
+export interface WordType {
+  id: number;
+  name: string;
+  wpId?: number | null;
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "themen".
+ */
+export interface Theman {
+  id: number;
+  name: string;
+  description?: string | null;
+  wpId?: number | null;
+  slug?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    canonical?: string | null;
+    ogTitle?: string | null;
+    ogDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    twitterTitle?: string | null;
+    twitterDescription?: string | null;
+    noindex?: boolean | null;
+    nofollow?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "words".
+ */
+export interface Word {
+  id: number;
+  berlinerisch: string;
+  wpId?: number | null;
+  slug?: string | null;
+  berlinerWordId?: number | null;
+  article?: string | null;
+  translations?:
+    | {
+        translation?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  alternativeWords?:
+    | {
+        alternativeWord?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  examples?:
+    | {
+        example?: string | null;
+        exampleExplanation?: string | null;
+        exampleAudio?:
+          | {
+              gender?: ('male' | 'female') | null;
+              audio?: (number | null) | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  berlinerischAudio?:
+    | {
+        gender?: ('male' | 'female') | null;
+        audio?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  relatedWords?: (number | Word)[] | null;
+  wikimediaFiles?:
+    | {
+        wikimediaFile?: string | null;
+        description?: string | null;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  infoText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  learnMore?: string | null;
+  berolinismus?: boolean | null;
+  sources?: string[] | null;
+  images?: (number | Media)[] | null;
+  wordTypes?: (number | WordType)[] | null;
+  themen?: (number | Theman)[] | null;
+  publishedAt?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    canonical?: string | null;
+    ogTitle?: string | null;
+    ogDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    twitterTitle?: string | null;
+    twitterDescription?: string | null;
+    noindex?: boolean | null;
+    nofollow?: boolean | null;
+  };
+  contentModifiedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -199,6 +334,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'word-types';
+        value: number | WordType;
+      } | null)
+    | ({
+        relationTo: 'themen';
+        value: number | Theman;
+      } | null)
+    | ({
+        relationTo: 'words';
+        value: number | Word;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -288,6 +435,122 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "word-types_select".
+ */
+export interface WordTypesSelect<T extends boolean = true> {
+  name?: T;
+  wpId?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "themen_select".
+ */
+export interface ThemenSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  wpId?: T;
+  slug?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonical?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        ogImage?: T;
+        twitterTitle?: T;
+        twitterDescription?: T;
+        noindex?: T;
+        nofollow?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "words_select".
+ */
+export interface WordsSelect<T extends boolean = true> {
+  berlinerisch?: T;
+  wpId?: T;
+  slug?: T;
+  berlinerWordId?: T;
+  article?: T;
+  translations?:
+    | T
+    | {
+        translation?: T;
+        id?: T;
+      };
+  alternativeWords?:
+    | T
+    | {
+        alternativeWord?: T;
+        id?: T;
+      };
+  examples?:
+    | T
+    | {
+        example?: T;
+        exampleExplanation?: T;
+        exampleAudio?:
+          | T
+          | {
+              gender?: T;
+              audio?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  berlinerischAudio?:
+    | T
+    | {
+        gender?: T;
+        audio?: T;
+        id?: T;
+      };
+  relatedWords?: T;
+  wikimediaFiles?:
+    | T
+    | {
+        wikimediaFile?: T;
+        description?: T;
+        caption?: T;
+        id?: T;
+      };
+  infoText?: T;
+  learnMore?: T;
+  berolinismus?: T;
+  sources?: T;
+  images?: T;
+  wordTypes?: T;
+  themen?: T;
+  publishedAt?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonical?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        ogImage?: T;
+        twitterTitle?: T;
+        twitterDescription?: T;
+        noindex?: T;
+        nofollow?: T;
+      };
+  contentModifiedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
