@@ -14,6 +14,7 @@ import { Words } from "./collections/Words";
 import { Affiliate } from "./globals/Affiliate";
 import { Company } from "./globals/Company";
 import { Navigation } from "./globals/Navigation";
+import { migrations } from "./migrations";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -28,5 +29,7 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || "",
   serverURL: process.env.PAYLOAD_SERVER_URL || "",
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },
-  db: postgresAdapter({ pool: { connectionString: process.env.DATABASE_URL } }),
+  // Dev/tests push the schema; production (NODE_ENV=production) runs the committed
+  // migrations on start instead. Every schema change needs `payload migrate:create <name>`.
+  db: postgresAdapter({ pool: { connectionString: process.env.DATABASE_URL }, prodMigrations: migrations }),
 });
