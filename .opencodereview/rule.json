@@ -1,0 +1,37 @@
+{
+  "include": ["src/tests/**"],
+  "exclude": [
+    "src/gql/**",
+    "CHANGELOG.md",
+    "pnpm-lock.yaml",
+    "**/__snapshots__/**",
+    "data/**"
+  ],
+  "rules": [
+    {
+      "path": "src/tests/**",
+      "rule": "Test conventions (see CLAUDE.md, Testing):\n- Unit tests: Vitest + jsdom + `@vue/test-utils`. Reuse helpers from `src/tests/unit/helpers/` (`createAstroRender`, `createStoreMockImpl`, `createComponentStub`, `createSlotStub`) instead of re-implementing them.\n- `createAstroRender` belongs in `beforeAll` with a 30 s timeout, unless the test calls `vi.resetModules()` per test.\n- Do not `vi.mock` `virtual:icons/*` (auto-stubbed in `vitest.config.ts`). Prefer `config.global.stubs` for async components; hand-rolled Proxy `vi.mock` factories must include `[Symbol.toStringTag]: 'Module'` (use `createComponentStub`).\n- Components stored in `ref()` or passed as reactive props need `markRaw()`.\n- Flag tests that cannot fail (no assertion, asserting on the mock itself, snapshot-only for logic), missing cleanup of fake timers/mocks, and timing-dependent waits.\n- E2E (`src/tests/e2e/`, Playwright): only navigate to slugs in `E2E_REQUIRED_SLUGS` (CI builds just 500 word pages); avoid fixed `waitForTimeout`, use web-first assertions.\n- Path aliases instead of relative imports.",
+      "merge_system_rule": true
+    },
+    {
+      "path": "src/**/*.scss",
+      "rule": "Project conventions (see CLAUDE.md):\n- BEMIT class names only: `.c-` component, `.o-` object, `.u-` utility, `.is-`/`.has-` state; `.js-` hooks must never be styled. Pattern `.c-block__element--modifier`, hyphenated words. Flag plain BEM without namespace prefix.\n- `@use \"@styles/...\"`, never `@import`.\n- No raw `@media (width >= ...)`: viewport breakpoints go through `@include mx.breakpoint(\"sm\")`; prefer a container query when the behavior depends on the component's own width.\n- Raised cards use `mx.paper-card`; muted text `var(--color-muted)`; orange CTA `.c-button--primary`. Flag new box-shadows (one shadow, \"Paper Lift\", for all raised surfaces).\n- Every color/surface change must also work in dark mode (`butler-mx.dark-mode-class`).\n- Non-Baseline CSS only as progressive enhancement; content/function must not depend on it.",
+      "merge_system_rule": true
+    },
+    {
+      "path": "src/**/*.vue",
+      "rule": "Project conventions (see CLAUDE.md):\n- `<script setup lang=\"ts\">` Composition API only; block order template → script → style.\n- `<style lang=\"scss\">` WITHOUT `scoped`; component styles live in `src/styles/components/_name.scss`, loaded via `@use` in the component's own style block. Class names follow BEMIT (`.c-`, `.o-`, `.u-`, `.is-`/`.has-`, `.js-`).\n- Before custom browser-API/reactivity code (listeners, debounce, observers, storage, clipboard, keyboard, swipe, media queries), check whether `@vueuse/core` already provides it; flag hand-rolled equivalents.\n- Icons: Lucide only, loaded via `defineAsyncComponent(() => import(\"virtual:icons/lucide/...\"))`.\n- Modals open via `open()` from `@stores/modal.ts` with `defineAsyncComponent`.\n- Stores via `useStore()` from `@nanostores/vue`; import from the individual store file. Flag imports from `@stores/index` / `@stores` barrel unless `wordList.ts` exports are needed (its side effect fetches the search index).\n- Interactions tracked with `trackEvent()` from `@utils/analytics`.\n- Path aliases (`@components/`, `@stores/`, `@utils/`, ...), never relative `../` imports.\n- Accessibility basics: interactive elements are buttons/links, labels present, no interactive elements inside `<summary>`.",
+      "merge_system_rule": true
+    },
+    {
+      "path": "src/**/*.astro",
+      "rule": "Project conventions (see CLAUDE.md):\n- `<script>` blocks run only once because of View Transitions (`ClientRouter`): DOM-querying logic must be wrapped in `document.addEventListener(\"astro:page-load\", ...)`. Flag scripts that query the DOM at top level.\n- Guard ResizeObserver/getBoundingClientRect callbacks against transitional zero heights (`if (h > 0)`).\n- In `wort/[...wordSlug].astro`: never compute per-word similarity/anagram data in `getStaticPaths` (O(n²) over ~6000 words); derive it in the page body.\n- Env vars come from `astro:env/client` / `astro:env/server`, never `import.meta.env` for schema vars.\n- Path aliases instead of relative imports; no `@stores/index` barrel imports.",
+      "merge_system_rule": true
+    },
+    {
+      "path": "src/**/*.{ts,mjs,js}",
+      "rule": "Project conventions (see CLAUDE.md):\n- Path aliases (`@components/`, `@stores/`, `@utils/`, `@services/`, `@composables/`, `@lib/`, ...), never relative `../` imports.\n- Nanostores: exports use `$` prefix; async computed stores use `computedAsync` from `@nanostores/async`, not the deprecated `computed()` + `task()` pattern. Flag imports from the `@stores/index` barrel unless `wordList.ts` exports are needed.\n- GraphQL: use the `graphql` tag from `@/gql`; `@urql/core` without Vue bindings.\n- Env vars via `astro:env/client` / `astro:env/server`.\n- Imagor URL signing (`src/utils/imagor.ts`) and anything touching secrets (`IMAGOR_SECRET`, `WP_AUTH_REFRESH_TOKEN`) must stay server/build-side; flag any path that could ship them to the client.\n- Native Baseline JS features, no polyfills; prefer VueUse over custom composables.",
+      "merge_system_rule": true
+    }
+  ]
+}
