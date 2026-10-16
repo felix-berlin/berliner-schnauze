@@ -11,8 +11,13 @@ const activeCard = (page: Page) => page.locator(".c-word-list article.is-active"
 // "anmach" yields a small, stable result set that includes the required slug `anmachen`.
 const searchAndFocusList = async (page: Page) => {
   await page.goto("/");
+  const results = page.getByText(/^\d+ Ergebnisse$/);
+  const unfiltered = await results.textContent();
   await searchbox(page).fill("anmach");
-  await expect(page.getByText(/^\d+ Ergebnisse$/)).not.toHaveText(/^0 /);
+  // The input reaches the search only after a 150 ms debounce; until then the
+  // unfiltered list (non-zero count, visible cards) is still shown.
+  await expect(results).not.toHaveText(unfiltered ?? "");
+  await expect(results).not.toHaveText(/^0 /);
   await expect(page.locator(".c-word-list article").first()).toBeVisible();
 };
 
