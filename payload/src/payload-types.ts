@@ -300,6 +300,27 @@ export interface Word {
     nofollow?: boolean | null;
   };
   contentModifiedAt?: string | null;
+  /**
+   * Computed from berlinerisch on save.
+   */
+  derived?: {
+    wordGroup?: string | null;
+    characterLength?: number | null;
+    syllablesCount?: number | null;
+    consonantsCount?: number | null;
+    vowelsCount?: number | null;
+    nlpTags?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    wordComponents?: string[] | null;
+    soundexCode?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -550,6 +571,18 @@ export interface WordsSelect<T extends boolean = true> {
         nofollow?: T;
       };
   contentModifiedAt?: T;
+  derived?:
+    | T
+    | {
+        wordGroup?: T;
+        characterLength?: T;
+        syllablesCount?: T;
+        consonantsCount?: T;
+        vowelsCount?: T;
+        nlpTags?: T;
+        wordComponents?: T;
+        soundexCode?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

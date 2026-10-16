@@ -1,4 +1,1 @@
-import german from "hyphenation.de";
-import Hypher from "hypher";
-
-export const hypher = new Hypher(german);
+export { hypher } from "payload-app/word-derived";

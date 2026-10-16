@@ -101,6 +101,7 @@
     "hypher": "^0.2.5",
     "nanostores": "^1.5.5",
     "natural": "^8.1.1",
+    "payload-app": "workspace:*",
     "photoswipe": "^5.4.4",
     "virtua": "^0.53.5",
     "vite-plugin-pwa": "^2.0.0",

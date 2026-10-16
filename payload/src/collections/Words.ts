@@ -4,6 +4,7 @@ import { authenticated } from "../access";
 import { PRESERVE_CONTENT_MODIFIED_AT } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { seoField } from "../fields/seo";
+import { setDerivedWordFields } from "../hooks/deriveWordFields";
 
 const gender: Field = { name: "gender", type: "select", options: ["male", "female"] };
 const audioRows = (name: string): Field => ({
@@ -28,7 +29,7 @@ export const Words: CollectionConfig = {
   access: { read: authenticated, create: authenticated, update: authenticated, delete: authenticated },
   admin: { useAsTitle: "berlinerisch" },
   versions: { drafts: true },
-  hooks: { beforeChange: [touchContentModifiedAt] },
+  hooks: { beforeChange: [touchContentModifiedAt, setDerivedWordFields] },
   fields: [
     { name: "berlinerisch", type: "text", required: true },
     ...identityFields,
@@ -66,5 +67,20 @@ export const Words: CollectionConfig = {
     { name: "publishedAt", type: "date" },
     seoField,
     { name: "contentModifiedAt", type: "date", admin: { readOnly: true } },
+    {
+      name: "derived",
+      type: "group",
+      admin: { readOnly: true, position: "sidebar", description: "Computed from berlinerisch on save." },
+      fields: [
+        { name: "wordGroup", type: "text" },
+        { name: "characterLength", type: "number" },
+        { name: "syllablesCount", type: "number" },
+        { name: "consonantsCount", type: "number" },
+        { name: "vowelsCount", type: "number" },
+        { name: "nlpTags", type: "json" },
+        { name: "wordComponents", type: "text", hasMany: true },
+        { name: "soundexCode", type: "text", index: true },
+      ],
+    },
   ],
 };

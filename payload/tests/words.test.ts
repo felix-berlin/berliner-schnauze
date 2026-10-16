@@ -62,6 +62,26 @@ describe("words", () => {
     });
   });
 
+  it("derives fields on create and recomputes them on update", async () => {
+    const payload = await getTestPayload();
+    const doc = await payload.create({ collection: "words", data: { ...base, berlinerisch: "aasen" } });
+    expect(doc.derived?.wordGroup).toBe("A");
+    expect(doc.derived?.characterLength).toBe(5);
+    const upd = await payload.update({ collection: "words", id: doc.id, data: { berlinerisch: "Bulette" } });
+    expect(upd.derived?.wordGroup).toBe("B");
+    const other = await payload.update({ collection: "words", id: doc.id, data: { article: "die" } });
+    expect(other.derived?.wordGroup).toBe("B");
+  });
+
+  it("derives fields on draft saves", async () => {
+    const payload = await getTestPayload();
+    const doc = await payload.create({ collection: "words", data: { ...base, berlinerisch: "aasen" }, draft: true });
+    const upd = await payload.update({ collection: "words", id: doc.id, data: { berlinerisch: "Ärger" }, draft: true });
+    expect(upd.derived?.wordGroup).toBe("Ä");
+    const latest = await payload.findByID({ collection: "words", id: doc.id, draft: true });
+    expect(latest.derived?.wordGroup).toBe("Ä");
+  });
+
   it("overwrites updatedAt on update (why contentModifiedAt exists)", async () => {
     const payload = await getTestPayload();
     const doc = await payload.create({ collection: "words", data: base });

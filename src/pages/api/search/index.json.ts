@@ -4,25 +4,9 @@ import type { APIRoute } from "astro";
 import { fetchAllWords } from "@services/api.ts";
 import { hypher } from "@utils/hypher";
 import { countLetters, getWordType, translateNlpTags } from "@utils/wordHelper.ts";
+import { getWordComponents } from "payload-app/word-derived";
 
 export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
-
-// Suffix sub-tokens enable compound word search: "Pinsel" finds "Bierpinsel".
-// Orama does prefix matching natively; this covers the suffix (head-word) side.
-function getWordComponents(word: string, minLen = 4): string[] {
-  const parts = word
-    .toLowerCase()
-    .replace(/[^a-zäöüß]/g, " ")
-    .split(/\s+/)
-    .filter(Boolean);
-  const suffixes = new Set<string>();
-  for (const part of parts) {
-    for (let i = 1; i <= part.length - minLen; i++) {
-      suffixes.add(part.slice(i));
-    }
-  }
-  return [...suffixes];
-}
 
 export function makeOramaSearchIndex(node: Word) {
   const { translations } = node;

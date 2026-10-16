@@ -1,9 +1,16 @@
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
-import nlp from "de-compromise";
 import natural from "natural";
 import { createRequire } from "node:module";
+import { isConsonantChar, isVowelChar, soundexCode } from "payload-app/word-derived";
 
 import type { WordPropertiesWikimediaFiles } from "@/gql/entity-types";
+
+export {
+  countLetters,
+  getWordType,
+  translateNlpTags,
+  type WordTags,
+} from "payload-app/word-derived";
 
 /** Minimal word shape for cross-word helpers; `Word` from fetchAllWords satisfies it. */
 export type WordRef = {
@@ -24,13 +31,6 @@ export const getGermanWords = (): Set<string> =>
 
 const VOWELS = new Set(["a", "e", "i", "o", "u", "ä", "ö", "ü"]);
 const LETTER_RE = /[a-zäöüß]/i;
-
-/** Expects a lowercase char. */
-const isVowelChar = (c: string): boolean => VOWELS.has(c);
-/** Expects a lowercase char. */
-const isConsonantChar = (c: string): boolean => LETTER_RE.test(c) && !isVowelChar(c);
-
-const _soundEx = new natural.SoundEx();
 
 /**
  * Returns the word with vowels and consonants colored.
@@ -53,142 +53,6 @@ export const coloredConsonantsAndVowels = (word: string): string => {
   return html;
 };
 
-export const countLetters = (word: string) => {
-  let vowelsCount = 0;
-  let consonantsCount = 0;
-
-  for (const char of word.toLowerCase()) {
-    if (isVowelChar(char)) {
-      vowelsCount++;
-    } else if (isConsonantChar(char)) {
-      consonantsCount++;
-    }
-  }
-
-  return {
-    consonants: consonantsCount,
-    vowels: vowelsCount,
-  };
-};
-
-type TagTranslations = {
-  [key: string]: string;
-};
-
-type WordTags = {
-  [key: string]: string[];
-};
-
-export const getWordType = (word: string): WordTags[] => {
-  const doc = nlp(word);
-
-  return doc.out("tags");
-};
-
-const tagTranslations: TagTranslations = {
-  Abbreviation: "Abkürzung",
-  Acronym: "Akronym",
-  Activity: "Aktivität",
-  Actor: "Schauspieler",
-  Address: "Adresse",
-  Adjective: "Adjektiv",
-  Adverb: "Adverb",
-  AtMention: "@Erwähnung",
-  Auxiliary: "Hilfsverb",
-  Cardinal: "Kardinalzahl",
-  City: "Stadt",
-  Company: "Unternehmen",
-  Comparable: "Vergleichbar",
-  Comparative: "Komparativ",
-  Conjunction: "Konjunktion",
-  Contraction: "Kontraktion",
-  Copula: "Kopula",
-  Country: "Land",
-  Currency: "Währung",
-  Date: "Datum",
-  Demonym: "Demonym",
-  Determiner: "Artikel",
-  Duration: "Dauer",
-  Email: "E-Mail",
-  Emoji: "Emoji",
-  Emoticon: "Emoticon",
-  Expression: "Ausdruck",
-  FemaleName: "Weiblicher Name",
-  FemaleNoun: "Weibliches Nomen",
-  FirstName: "Vorname",
-  FirstPerson: "Erste Person",
-  Fraction: "Bruchzahl",
-  FuturePerfect: "Futur II",
-  Gerund: "Gerundium",
-  Hashtag: "Hashtag",
-  Holiday: "Feiertag",
-  Honorific: "Anrede",
-  Infinitive: "Infinitiv",
-  LastName: "Nachname",
-  MaleName: "Männlicher Name",
-  MaleNoun: "Männliches Nomen",
-  Modal: "Modalverb",
-  Money: "Geld",
-  Month: "Monat",
-  Multiple: "Mehrfach",
-  Negative: "Negation",
-  NeuterNoun: "Neutrum Nomen",
-  Noun: "Nomen",
-  NumericValue: "Numerischer Wert",
-  Ordinal: "Ordinalzahl",
-  Organization: "Organisation",
-  Participle: "Partizip",
-  Particle: "Partikel",
-  PastTense: "Präteritum",
-  Percent: "Prozent",
-  PerfectTense: "Perfekt",
-  Person: "Person",
-  PhoneNumber: "Telefonnummer",
-  PhrasalVerb: "Phrasalverb",
-  Place: "Ort",
-  Pluperfect: "Plusquamperfekt",
-  Plural: "Mehrzahl",
-  Possessive: "Possessivpronomen",
-  Preposition: "Präposition",
-  PresentTense: "Präsens",
-  Pronoun: "Pronomen",
-  ProperNoun: "Eigenname",
-  QuestionWord: "Fragepronomen",
-  Region: "Region",
-  RelativeDay: "Relativer Tag",
-  RomanNumeral: "Römische Zahl",
-  School: "Schule",
-  SecondPerson: "Zweite Person",
-  Singular: "Einzahl",
-  SportsTeam: "Sportteam",
-  Superlative: "Superlativ",
-  TextCardinal: "Text-Kardinalzahl",
-  TextValue: "Textwert",
-  ThirdPerson: "Dritte Person",
-  Time: "Zeit",
-  URL: "URL",
-  Uncountable: "Unzählbar",
-  Unit: "Einheit",
-  Value: "Wert",
-  Verb: "Verb",
-  WeekDay: "Wochentag",
-  Year: "Jahr",
-};
-
-export const translateNlpTags = (tags: WordTags[]): WordTags[] => {
-  const translatedTags: WordTags[] = tags.map((tag: WordTags) => {
-    const translatedTag: WordTags = {};
-    for (const word in tag) {
-      const englishTags = tag[word];
-      const germanTags = englishTags.map((englishTag) => tagTranslations[englishTag] || englishTag);
-      translatedTag[word] = germanTags;
-    }
-    return translatedTag;
-  });
-
-  return translatedTags;
-};
-
 // Soundex compare() is exact code equality, so — like findAnagrams — we can bucket by
 // code once per array instead of running compare() against all ~6000 words on every page.
 const soundexIndexCache = new WeakMap<WordRef[], Map<string, WordRef[]>>();
@@ -201,7 +65,7 @@ export const similarSoundingWords = (allWords: WordRef[], currentWord: WordRef):
     for (const word of allWords) {
       const { berlinerisch } = word.wordProperties;
       if (!berlinerisch) continue;
-      const code = _soundEx.process(berlinerisch);
+      const code = soundexCode(berlinerisch);
       const bucket = index.get(code);
       if (bucket) bucket.push(word);
       else index.set(code, [word]);
@@ -211,7 +75,7 @@ export const similarSoundingWords = (allWords: WordRef[], currentWord: WordRef):
 
   const currentBerlinerisch = currentWord.wordProperties.berlinerisch;
   if (!currentBerlinerisch) return [];
-  return (index.get(_soundEx.process(currentBerlinerisch)) ?? []).filter(
+  return (index.get(soundexCode(currentBerlinerisch)) ?? []).filter(
     (word) => word.id !== currentWord.id,
   );
 };
