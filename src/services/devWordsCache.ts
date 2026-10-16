@@ -1,4 +1,5 @@
-import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { createInterface } from "node:readline/promises";
 
@@ -24,7 +25,11 @@ export const readWordsCache = async <T>(key: string): Promise<T | null> => {
 
 export const writeWordsCache = async (key: string, data: unknown): Promise<void> => {
   await mkdir(CACHE_DIR, { recursive: true });
-  await writeFile(join(CACHE_DIR, `${key}.json`), JSON.stringify(data));
+  // Write + rename: prerender workers read this file concurrently and must never see it half-written.
+  const file = join(CACHE_DIR, `${key}.json`);
+  const tmp = `${file}.${randomUUID()}.tmp`;
+  await writeFile(tmp, JSON.stringify(data));
+  await rename(tmp, file);
 };
 
 /**
