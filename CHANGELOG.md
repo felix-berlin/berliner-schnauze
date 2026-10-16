@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.56.2](https://github.com/felix-berlin/berliner-schnauze/compare/v3.56.1...v3.56.2) (2026-10-16)
+
+
+### Bug Fixes
+
+* **build:** fail the build when the words fetch is incomplete ([dbd65b7](https://github.com/felix-berlin/berliner-schnauze/commit/dbd65b7e1778660e778fa9983e3f74a48c9f3a10))
+* **build:** write words cache atomically ([d2f99bf](https://github.com/felix-berlin/berliner-schnauze/commit/d2f99bf14dc293414592670872d8cf3496a00097))
+
+
+### Performance Improvements
+
+* **build:** speed up cold builds with parallel prerender and word fetch ([a8db126](https://github.com/felix-berlin/berliner-schnauze/commit/a8db126b4cc4e781fe348de82e41f1482b6446fb))
+
 ## [3.56.1](https://github.com/felix-berlin/berliner-schnauze/compare/v3.56.0...v3.56.1) (2026-10-11)
 
 
