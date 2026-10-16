@@ -7,10 +7,15 @@ set -euo pipefail
 BASE="http://localhost:${PORT:-4321}"
 fail=0
 
+# Only `web` is under test. Compose interpolates the whole file, so the
+# required vars of `postgres`/`cms` need (dummy) values even when they don't start.
+export POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-smoke}" PAYLOAD_SECRET="${PAYLOAD_SECRET:-smoke}" \
+  PAYLOAD_SERVER_URL="${PAYLOAD_SERVER_URL:-http://localhost:3001}"
+
 cleanup() { docker compose down --remove-orphans >/dev/null 2>&1 || true; }
 trap cleanup EXIT
 
-docker compose up -d --build --wait --wait-timeout 60
+docker compose up -d --build --wait --wait-timeout 60 web
 
 check() { # name, actual, expected
   if [[ "$2" == "$3" ]]; then echo "ok   $1"; else echo "FAIL $1: got '$2', want '$3'"; fail=1; fi
