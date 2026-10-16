@@ -2,100 +2,66 @@ import TurnStile from "@components/TurnStile.vue";
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-describe("TurnStile.vue", () => {
-  it("renders the component", () => {
-    const wrapper = mount(TurnStile, {
-      props: {
-        siteKey: "testSiteKey",
-      },
-    });
-    expect(wrapper.exists()).toBe(true);
-  });
+const turnstileScripts = () =>
+  document.querySelectorAll('script[src*="challenges.cloudflare.com/turnstile"]');
 
-  it("applies the wrapperId prop to the div", () => {
-    const wrapperId = "testWrapperId";
-    const wrapper = mount(TurnStile, {
-      props: {
-        siteKey: "testSiteKey",
-        wrapperId,
-      },
-    });
-    expect(wrapper.get(`div#${wrapperId}`).exists()).toBe(true);
-  });
-
-  it("does not create a new script tag if window.turnstile is not null", () => {
-    window.turnstile = {};
-    const scriptTagCountBefore = document.getElementsByTagName("script").length;
-    mount(TurnStile, {
-      props: {
-        siteKey: "testSiteKey",
-      },
-    });
-    const scriptTagCountAfter = document.getElementsByTagName("script").length;
-    expect(scriptTagCountAfter).toBe(scriptTagCountBefore);
-
-    window.turnstile = null;
-  });
-
-  it("creates script tag when window.turnstile is exactly null (covers || left-side true short-circuit branch)", () => {
-    window.turnstile = null;
-    const scriptsBefore = document.getElementsByTagName("script").length;
-    mount(TurnStile, { props: { siteKey: "k" } });
-    expect(document.getElementsByTagName("script").length).toBeGreaterThan(scriptsBefore);
-  });
+afterEach(() => {
+  window.turnstile = null;
+  window.onloadTurnstileCallback = undefined;
+  for (const script of turnstileScripts()) script.remove();
 });
 
-describe("TurnStile.vue — renderTurnstile callback (covers lines 49-50, 67)", () => {
-  afterEach(() => {
-    window.turnstile = null;
-    window.onloadTurnstileCallback = undefined;
+/** Mounts with a loaded Turnstile and returns the options the widget was rendered with. */
+const renderOptions = () => {
+  const render = vi.fn();
+  window.turnstile = { render, reset: vi.fn() };
+  const wrapper = mount(TurnStile, { props: { siteKey: "k", wrapperId: "tw" } });
+  return { options: render.mock.calls[0][1], render, wrapper };
+};
+
+describe("TurnStile.vue", () => {
+  it("renders its wrapper with the wrapperId", () => {
+    const wrapper = mount(TurnStile, { props: { siteKey: "k", wrapperId: "testWrapperId" } });
+    expect(wrapper.get("div#testWrapperId").exists()).toBe(true);
   });
 
-  it("mount sets window.onloadTurnstileCallback", () => {
-    window.turnstile = { render: vi.fn() };
+  it("loads the script once and renders when it calls back", () => {
+    const render = vi.fn();
     mount(TurnStile, { props: { siteKey: "k" } });
-    expect(typeof window.onloadTurnstileCallback).toBe("function");
+    mount(TurnStile, { props: { siteKey: "k" } });
+    expect(turnstileScripts()).toHaveLength(1);
+
+    window.turnstile = { render, reset: vi.fn() };
+    window.onloadTurnstileCallback!();
+    expect(render).toHaveBeenCalledOnce();
   });
 
-  it("calling onloadTurnstileCallback invokes turnstile.render with correct selector (covers line 49)", () => {
-    const mockRender = vi.fn();
-    window.turnstile = { render: mockRender };
-    mount(TurnStile, { props: { siteKey: "site-key", wrapperId: "tw" } });
-    window.onloadTurnstileCallback();
-    expect(mockRender).toHaveBeenCalledOnce();
-    expect(mockRender.mock.calls[0][0]).toBe("#tw");
-    expect(mockRender.mock.calls[0][1]).toMatchObject({ sitekey: "site-key" });
+  it("renders right away when the script is already loaded (second visit), without a new script", () => {
+    const { render } = renderOptions();
+    expect(render).toHaveBeenCalledWith("#tw", expect.objectContaining({ sitekey: "k" }));
+    expect(turnstileScripts()).toHaveLength(0);
   });
 
-  it("emits the token Turnstile hands to its callback", () => {
-    let capturedCb: ((r: string) => void) | null = null;
-    window.turnstile = {
-      render: vi.fn((_sel: string, opts: Record<string, unknown>) => {
-        capturedCb = opts.callback as (r: string) => void;
-      }),
-    };
-    const wrapper = mount(TurnStile, { props: { siteKey: "k" } });
-    window.onloadTurnstileCallback();
-    capturedCb!("valid-token");
-    expect(wrapper.emitted("token")![0]).toEqual(["valid-token"]);
+  it("emits the token, and an empty token once it expired or the challenge failed", () => {
+    const { options, wrapper } = renderOptions();
+    options.callback("valid-token");
+    options["expired-callback"]();
+    options["error-callback"]();
+    expect(wrapper.emitted("token")).toEqual([["valid-token"], [""], [""]]);
   });
 
-  it("onloadTurnstileCallback emits fail and expire events immediately on render (lines 51-52)", () => {
-    window.turnstile = { render: vi.fn() };
-    const wrapper = mount(TurnStile, { props: { siteKey: "k" } });
-    window.onloadTurnstileCallback();
-    expect(wrapper.emitted("fail")).toBeTruthy();
-    expect(wrapper.emitted("expire")).toBeTruthy();
+  it("emits nothing until Turnstile calls back", () => {
+    const { wrapper } = renderOptions();
+    expect(wrapper.emitted("token")).toBeUndefined();
   });
 
-  it("passes theme='dark' when isDarkMode store is true (covers line 54 dark branch)", async () => {
+  it.each([
+    [true, "dark"],
+    [false, "light"],
+  ])("follows dark mode (%s -> %s)", async (dark, theme) => {
     const { $isDarkMode } = await import("@stores/darkMode.ts");
-    $isDarkMode.set(true);
-    const mockRender = vi.fn();
-    window.turnstile = { render: mockRender };
-    mount(TurnStile, { props: { siteKey: "k" } });
-    window.onloadTurnstileCallback();
-    expect(mockRender.mock.calls[0][1]).toMatchObject({ theme: "dark" });
+    $isDarkMode.set(dark);
+    expect(renderOptions().options).toMatchObject({ theme });
     $isDarkMode.set(false);
   });
 });

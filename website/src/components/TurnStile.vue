@@ -16,48 +16,31 @@ const { siteKey, wrapperId = "turnstileWrapper" } = defineProps<TurnStileProps>(
 
 const isDarkMode = useStore($isDarkMode);
 
-const emit = defineEmits<{
-  expire: [expired: boolean];
-  fail: [error: boolean];
-  token: [token: string];
-}>();
+// The current token; "" once it expired or the challenge failed, so a stale token is never sent.
+const emit = defineEmits<{ token: [token: string] }>();
 
-/**
- * Create the turnstile script tag
- *
- * @return  {void}
- */
-const createTurnstileScriptTag = (): void => {
-  if (!(window.turnstile === null || !window.turnstile)) {
-    return;
-  }
-  const script = document.createElement("script");
-  script.src =
-    "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback";
-  script.async = true;
-  script.defer = true;
-  document.head.appendChild(script);
-};
+const SCRIPT_SRC =
+  "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback";
 
-/**
- * Render the turnstile
- *
- * @return  {void}  [return description]
- */
-const renderTurnstile = (): void => {
-  window.onloadTurnstileCallback = function () {
-    turnstile.render(`#${wrapperId}`, {
-      callback: (response: string) => emit("token", response),
-      "error-callback": emit("fail", true),
-      "expired-callback": emit("expire", true),
-      sitekey: siteKey,
-      theme: isDarkMode ? "dark" : "light",
-    });
-  };
+const render = (): void => {
+  window.turnstile?.render(`#${wrapperId}`, {
+    callback: (token) => emit("token", token),
+    "error-callback": () => emit("token", ""),
+    "expired-callback": () => emit("token", ""),
+    sitekey: siteKey,
+    theme: isDarkMode.value ? "dark" : "light",
+  });
 };
 
 onMounted(() => {
-  createTurnstileScriptTag();
-  renderTurnstile();
+  // Already loaded (e.g. a second visit via view transition): the onload callback will not fire again.
+  if (window.turnstile) return render();
+  window.onloadTurnstileCallback = render;
+  if (document.querySelector(`script[src="${SCRIPT_SRC}"]`)) return;
+  const script = document.createElement("script");
+  script.src = SCRIPT_SRC;
+  script.async = true;
+  script.defer = true;
+  document.head.appendChild(script);
 });
 </script>

@@ -2,8 +2,9 @@
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": [
-    "payload",
     "dist",
+    // server/index.mjs imports the build output, which would pull dist/ into the check
+    "server",
     "node_modules",
     "dev-dist",
     "coverage",

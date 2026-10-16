@@ -10,12 +10,14 @@ interface TurnstileInstance {
     selector: string,
     options: {
       callback?: (response: string) => void;
-      "error-callback"?: unknown;
-      "expired-callback"?: unknown;
+      "error-callback"?: () => void;
+      "expired-callback"?: () => void;
       sitekey: string;
       theme?: "auto" | "dark" | "light";
     },
   ): string | undefined;
+  /** Resets a widget (the last rendered one without id) so it issues a new token. */
+  reset(widgetId?: string): void;
 }
 
 declare global {
