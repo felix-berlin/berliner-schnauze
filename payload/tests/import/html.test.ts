@@ -6,7 +6,7 @@ import type { ImportRefs } from "../../src/import/mappers";
 import type { WpPost, WpWord } from "../../src/import/wp";
 
 import { PRESERVE_CONTENT_MODIFIED_AT } from "../../src/fields/contentModified";
-import { htmlToLexical } from "../../src/import/html";
+import { htmlToLexical, htmlToText } from "../../src/import/html";
 import { mapPost, mapWord } from "../../src/import/mappers";
 import { wpUploadPath } from "../../src/lib/wpUploadPath";
 import { expectNoPendingUploads, lexicalNodes } from "../helpers/lexical";
@@ -129,5 +129,24 @@ describe("mapPost", () => {
     expectNoPendingUploads(read.content);
     expect(lexicalNodes(read.content, "upload")).toEqual([]);
     await payload.delete({ collection: "posts", id: created.id });
+  });
+});
+
+describe("htmlToText", () => {
+  it("decodes entities and keeps a literal <https://...> URL", () => {
+    expect(htmlToText("<p>Milla&#038;Partner <https://example.org/x>, via Commons</p>")).toBe("Milla&Partner <https://example.org/x>, via Commons");
+  });
+
+  it("separates paragraphs and line breaks with a newline", () => {
+    expect(htmlToText("<p>a</p>\n<p>b<br>c</p>")).toBe("a\nb\nc");
+  });
+});
+
+describe("htmlToLexical links", () => {
+  it("keeps a link and a literal <https://...> URL as text", async () => {
+    const state = await htmlToLexical('<p>A <a href="https://example.org/l">Lizenz</a> <https://example.org/x> B</p>', payload.config);
+    expect(lexicalNodes(state, "link")).toEqual([expect.objectContaining({ fields: expect.objectContaining({ url: "https://example.org/l" }) })]);
+    const text = lexicalNodes(state, "text").map((n) => n.text).join("");
+    expect(text).toBe("A Lizenz <https://example.org/x> B");
   });
 });

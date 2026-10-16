@@ -11,6 +11,7 @@ import type { ImportRefs } from "./mappers";
 import type { WpPage, WpPost, WpThema, WpWord, WpWordType } from "./wp";
 
 import { PRESERVE_CONTENT_MODIFIED_AT } from "../fields/contentModified";
+import { htmlToLexical } from "./html";
 import { collectMedia, mapPage, mapPost, mapRelatedWords, mapThema, mapWord } from "./mappers";
 import {
   AFFILIATE_QUERY,
@@ -197,8 +198,9 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
     const media = [...collectMedia(words ?? [], posts ?? [], pages ?? [], themen ?? []).entries()];
     console.info(`[import] media: ${media.length} files`);
     await eachLimit(media, MEDIA_CONCURRENCY, async ([wpPath, meta]) => {
-      const data = { wpPath, alt: meta.alt ?? null, caption: meta.caption ?? null, description: meta.description ?? null };
       try {
+        const description = meta.description ? await htmlToLexical(meta.description, payload.config) : null;
+        const data = { wpPath, alt: meta.alt ?? null, caption: meta.caption ?? null, description };
         const id = refs.mediaIdByUrl.get(wpPath);
         if (id != null) {
           await payload.update({ collection: "media", id, data, depth: 0 }); // metadata only, no re-download
@@ -261,6 +263,11 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
       console.info(`[import] words: ${words.length}`);
       const stored = new Map<number, number[]>(); // wpId -> relatedWords after pass 1
       for (const [i, node] of words.entries()) {
+        // A published word needs a headword (required field); drafts may stay empty. Skip + warn, never fail.
+        if (node.status === "publish" && !node.wordProperties?.berlinerisch?.trim()) {
+          report.warnings.push({ kind: "word-without-berlinerisch", ref: node.slug || String(node.databaseId), src: `wpId ${node.databaseId}` });
+          continue;
+        }
         try {
           // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
           const data = await mapWord(node, refs, payload.config, htmlImage(node.slug ?? String(node.databaseId)));

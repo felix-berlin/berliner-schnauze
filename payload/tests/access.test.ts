@@ -26,10 +26,10 @@ beforeAll(async () => {
   userId = user.id;
   const media = await payload.create({
     collection: "media",
-    data: { alt: "pixel", description: "desc", wpPath: "access-test/pixel.png" },
+    data: { alt: "pixel", wpPath: "access-test/pixel.png" },
     file: { data: png, name: "access-pixel.png", mimetype: "image/png", size: png.length },
   });
-  expect(media.description).toBe("desc");
+  expect(media.alt).toBe("pixel");
   mediaId = media.id;
 });
 

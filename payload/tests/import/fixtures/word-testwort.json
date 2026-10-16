@@ -85,7 +85,7 @@
           "sourceUrl": "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/K%C3%BCche.png",
           "caption": "<p>Credit: Beispiel</p>\n",
           "altText": "Eine Küche",
-          "description": "<p>Beschreibung</p>\n"
+          "description": "<p>Beschreibung <a href=\"https://example.org/lizenz\">Lizenz</a></p>\n"
         },
         {
           "sourceUrl": "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/handout.pdf",

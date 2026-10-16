@@ -25,6 +25,9 @@ const WORD_IDS = [aasen.databaseId, wa.databaseId, testwort.databaseId];
 /** WP drafts with empty slug and empty (required) berlinerisch. */
 const emptyDrafts = [990601, 990602].map((databaseId) => ({ databaseId, status: "draft", slug: "", wordProperties: { berlinerisch: "" } }));
 
+/** Published word with no headword (real case: baletti-machen-2): not importable, skipped with a warning. */
+const emptyPublished = { databaseId: 990603, status: "publish", slug: "baletti-machen-2", wordProperties: { berlinerisch: null, translations: null } };
+
 const page = (nodes: unknown[], endCursor: string, hasNextPage: boolean) => ({
   berlinerWords: { nodes, pageInfo: { endCursor, hasNextPage } },
 });
@@ -96,7 +99,7 @@ beforeAll(async () => {
 beforeEach(async () => {
   fetchMock.mockReset();
   vi.mocked(wp.wpGraphql).mockReset();
-  await payload.delete({ collection: "words", where: { wpId: { in: [...WORD_IDS, ...emptyDrafts.map((w) => w.databaseId)] } } });
+  await payload.delete({ collection: "words", where: { wpId: { in: [...WORD_IDS, emptyPublished.databaseId, ...emptyDrafts.map((w) => w.databaseId)] } } });
   await payload.delete({ collection: "posts", where: { wpId: { equals: post.databaseId } } });
   await payload.delete({ collection: "pages", where: { wpId: { equals: 990501 } } });
   await payload.delete({ collection: "themen", where: { wpId: { greater_than_equal: 990401, less_than: 990500 } } });
@@ -146,6 +149,9 @@ describe("runImport", () => {
     // The <img> in testwort's infoText was downloaded and is stored as an upload node.
     const info = await payload.find({ collection: "media", where: { wpPath: { equals: "2024/01/info-bild.png" } }, depth: 0 });
     expect(lexicalNodes(t.infoText, "upload")).toEqual([expect.objectContaining({ relationTo: "media", value: info.docs[0].id })]);
+    // Media description is rich text: its link survives the import.
+    const kueche = await payload.find({ collection: "media", where: { wpPath: { equals: "2024/01/Küche.png" } }, depth: 0 });
+    expect(lexicalNodes(kueche.docs[0].description, "link")).toEqual([expect.objectContaining({ fields: expect.objectContaining({ url: "https://example.org/lizenz" }) })]);
     for (const word of [a, w, t]) expectNoPendingUploads(word.infoText);
     const [storedPost] = (await payload.find({ collection: "posts", where: { wpId: { equals: post.databaseId } }, depth: 0 })).docs;
     const [storedPage] = (await payload.find({ collection: "pages", where: { wpId: { equals: 990501 } }, depth: 0 })).docs;
@@ -194,6 +200,16 @@ describe("runImport", () => {
     }
     // Re-run updates the drafts in place.
     expect((await runImport(payload, { only: ["taxonomies", "words"] })).failures).toEqual([]);
+  });
+
+  it("skips published words without a headword with a warning instead of failing", async () => {
+    mockWordPress(() => page([testwort, emptyPublished], "c2", false));
+    mockDownloads();
+    const report = await runImport(payload, { only: ["taxonomies", "words"] });
+    expect(report.failures).toEqual([]);
+    expect(report.warnings).toContainEqual({ kind: "word-without-berlinerisch", ref: "baletti-machen-2", src: `wpId ${emptyPublished.databaseId}` });
+    expect(await findWord(emptyPublished.databaseId)).toBeUndefined();
+    expect(exitCodeFor(report)).toBe(0);
   });
 
   it("aborts the words phase when listing words fails mid-pagination", async () => {

@@ -39,7 +39,7 @@ export async function htmlToLexical(html: string, config: SanitizedConfig, opts:
   let editorConfig = editorConfigs.get(config);
   if (!editorConfig) editorConfigs.set(config, (editorConfig = editorConfigFactory.default({ config })));
 
-  const doc = new JSDOM(html).window.document;
+  const doc = new JSDOM(escapeUrlBrackets(html)).window.document;
   for (const img of doc.querySelectorAll("img")) {
     const src = img.getAttribute("src") ?? "";
     const id = isWpUploadUrl(src) ? opts.mediaIdByUrl?.get(wpUploadPath(src)) : undefined;
@@ -64,5 +64,11 @@ export async function htmlToLexical(html: string, config: SanitizedConfig, opts:
 export const imagesIn = (html: string): { src: string; alt: string | null }[] =>
   [...new JSDOM(html).window.document.querySelectorAll("img")].map((img) => ({ src: img.getAttribute("src") ?? "", alt: img.getAttribute("alt") || null }));
 
-/** Rendered HTML -> plain text (entities decoded). */
-export const htmlToText = (html: string): string => new JSDOM(html).window.document.body.textContent?.trim() ?? "";
+/** A literal `<https://...>` (Wikimedia attribution) must stay text, the parser would swallow it as a tag. */
+const escapeUrlBrackets = (html: string): string => html.replace(/<(?=https?:)/gi, "&lt;");
+
+/**
+ * Rendered HTML -> plain text (entities decoded). Paragraph ends and `<br>` become newlines.
+ */
+export const htmlToText = (html: string): string =>
+  new JSDOM(escapeUrlBrackets(html).replace(/<br\s*\/?>|<\/p>\s*/gi, "\n")).window.document.body.textContent?.trim() ?? "";

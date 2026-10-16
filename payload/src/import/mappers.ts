@@ -46,7 +46,7 @@ export function collectMedia(words: WpWord[], posts: WpPost[], pages: WpPage[], 
     for (const { src, alt } of html ? imagesIn(html) : []) if (isWpUploadUrl(src)) add(src, { alt });
   };
   const addImage = (img: Maybe<WpImage>) =>
-    add(img?.sourceUrl, { alt: img?.altText || null, caption: img?.caption?.trim() || null, description: img?.description?.trim() || null });
+    add(img?.sourceUrl, { alt: img?.altText || null, caption: htmlToText(img?.caption ?? "") || null, description: img?.description?.trim() || null });
 
   for (const w of words) {
     const p = w.wordProperties;

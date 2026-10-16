@@ -5,7 +5,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import type { ImportRefs } from "../../src/import/mappers";
 import type { WpPost, WpWord } from "../../src/import/wp";
 
-import { collectMediaUrls, mapRelatedWords, mapSeo, mapWord } from "../../src/import/mappers";
+import { collectMedia, collectMediaUrls, mapRelatedWords, mapSeo, mapWord } from "../../src/import/mappers";
 import { wpUploadPath } from "../../src/lib/wpUploadPath";
 import { lexicalNodes } from "../helpers/lexical";
 import { getTestPayload } from "../helpers/payload";
@@ -130,5 +130,29 @@ describe("collectMediaUrls", () => {
         "https://example.com/fremd.jpg",
       ].sort(),
     );
+  });
+});
+
+describe("collectMedia", () => {
+  it("stores image caption as plain text and keeps the description as HTML for the rich text field", () => {
+    const node = {
+      databaseId: 990700,
+      wordProperties: {
+        images: {
+          nodes: [
+            {
+              sourceUrl: "https://cms.berliner-schnauze.wtf/wp-content/uploads/Denkmal.jpg",
+              altText: "",
+              caption: "<p>Das Nationale Freiheits und Einheitsdenkmal</p>\n",
+              description: "<p>Milla&#038;Partner, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons</p>\n",
+            },
+          ],
+        },
+      },
+    } as unknown as WpWord;
+    expect(collectMedia([node], [], [], []).get("Denkmal.jpg")).toMatchObject({
+      caption: "Das Nationale Freiheits und Einheitsdenkmal",
+      description: "<p>Milla&#038;Partner, CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0>, via Wikimedia Commons</p>",
+    });
   });
 });

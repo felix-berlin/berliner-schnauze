@@ -9,7 +9,7 @@ export const Media: CollectionConfig = {
   fields: [
     { name: "alt", type: "text" },
     { name: "caption", type: "text" },
-    { name: "description", type: "textarea" },
+    { name: "description", type: "richText" },
     { name: "wpPath", type: "text", unique: true, index: true, admin: { readOnly: true } },
   ],
 };
