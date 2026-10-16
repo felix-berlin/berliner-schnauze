@@ -13,5 +13,7 @@ export async function findMediaRedirect(payload: Payload, requestPath: string): 
   });
   const url = docs[0]?.url;
   if (!url) return null;
-  return new URL(url, process.env.PAYLOAD_SERVER_URL).toString();
+  const base = process.env.PAYLOAD_SERVER_URL || payload.config.serverURL;
+  if (!base) throw new Error("PAYLOAD_SERVER_URL is not set; cannot build absolute media redirect URL");
+  return new URL(url, base).toString();
 }

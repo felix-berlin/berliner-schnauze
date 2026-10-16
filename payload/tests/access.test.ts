@@ -16,6 +16,8 @@ let mediaId: number | string;
 
 beforeAll(async () => {
   const payload = await getTestPayload();
+  await payload.delete({ collection: "users", where: { email: { equals: "access@test.local" } } });
+  await payload.delete({ collection: "media", where: { wpPath: { in: ["access-test/pixel.png", "access-test/anon.png", "access-test/authed.png"] } } });
   const user = await payload.create({
     collection: "users",
     data: { email: "access@test.local", password: "x".repeat(16), enableAPIKey: true, apiKey: "k-access" },
@@ -47,6 +49,41 @@ describe("anonymous reads", () => {
     const payload = await getTestPayload();
     const res = await payload.find({ collection: "media", overrideAccess: false });
     expect(res.docs.some((d) => d.id === mediaId)).toBe(true);
+  });
+});
+
+describe("media writes", () => {
+  const file = () => ({ data: png, name: "access-w.png", mimetype: "image/png", size: png.length });
+  const denied = /not allowed|forbidden/i;
+
+  it("anonymous create is Forbidden", async () => {
+    const payload = await getTestPayload();
+    await expect(
+      payload.create({ collection: "media", data: { wpPath: "access-test/anon.png" }, file: file(), overrideAccess: false }),
+    ).rejects.toThrow(denied);
+  });
+  it("anonymous update is Forbidden", async () => {
+    const payload = await getTestPayload();
+    await expect(
+      payload.update({ collection: "media", id: mediaId, data: { alt: "x" }, overrideAccess: false }),
+    ).rejects.toThrow(denied);
+  });
+  it("anonymous delete is Forbidden", async () => {
+    const payload = await getTestPayload();
+    await expect(payload.delete({ collection: "media", id: mediaId, overrideAccess: false })).rejects.toThrow(denied);
+  });
+  it("authenticated create works", async () => {
+    const payload = await getTestPayload();
+    const user = await payload.findByID({ collection: "users", id: userId });
+    const doc = await payload.create({
+      collection: "media",
+      data: { wpPath: "access-test/authed.png" },
+      file: { ...file(), name: "access-authed.png" },
+      overrideAccess: false,
+      user: { ...user, collection: "users" },
+    });
+    expect(doc.id).toBeDefined();
+    await payload.delete({ collection: "media", id: doc.id });
   });
 });
 
