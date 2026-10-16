@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { initScrollSpy } from "@utils/scrollSpy";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 

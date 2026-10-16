@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { existsSync } from "node:fs";
 import { mkdtemp, readdir, rm, utimes, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";

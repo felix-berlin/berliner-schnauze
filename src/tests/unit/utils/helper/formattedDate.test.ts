@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { formattedDate } from "@utils/helpers";
 import { describe, it, expect } from "vitest";
 

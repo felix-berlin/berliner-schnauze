@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { similarWords } from "@utils/wordHelper";
 import * as natural from "natural";
 import { describe, it, expect } from "vitest";

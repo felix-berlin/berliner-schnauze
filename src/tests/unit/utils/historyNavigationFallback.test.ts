@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { initHistoryNavigationFallback, shouldForceReload } from "@utils/historyNavigationFallback";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 

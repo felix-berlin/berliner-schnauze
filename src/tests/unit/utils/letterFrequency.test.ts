@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { letterFrequency } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
 

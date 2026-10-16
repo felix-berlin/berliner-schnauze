@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { canonicalUrl } from "@utils/helpers";
 import { describe, expect, it } from "vitest";
 

@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("astro:env/client", () => ({ WP_API: "http://test.local/graphql" }));

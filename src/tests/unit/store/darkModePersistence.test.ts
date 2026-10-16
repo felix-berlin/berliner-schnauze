@@ -8,7 +8,7 @@ async function loadStore(stored?: string) {
   persistent.useTestStorageEngine();
   persistent.cleanTestStorage();
   if (stored !== undefined) persistent.setTestStorageKey("darkMode", stored);
-  return import("@stores/darkMode.ts");
+  return { ...(await import("@stores/darkMode.ts")), getTestStorage: persistent.getTestStorage };
 }
 
 describe("darkMode store — persistence decode/encode", () => {
@@ -43,8 +43,7 @@ describe("darkMode store — persistence decode/encode", () => {
   });
 
   it("encode stores value as JSON string", async () => {
-    const { $isDarkMode } = await loadStore();
-    const { getTestStorage } = await import("@nanostores/persistent");
+    const { $isDarkMode, getTestStorage } = await loadStore();
     $isDarkMode.set(true);
     expect($isDarkMode.get()).toBe(true);
     expect(getTestStorage().darkMode).toBe("true");

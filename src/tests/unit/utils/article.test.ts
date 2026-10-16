@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { processArticleBlocks, slugify } from "@utils/article";
 import { WP_API } from "astro:env/client";
 import { describe, expect, it } from "vitest";

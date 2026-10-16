@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { decomposeCompoundWord } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
 

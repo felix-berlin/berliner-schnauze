@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { wordCuriosities } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
 

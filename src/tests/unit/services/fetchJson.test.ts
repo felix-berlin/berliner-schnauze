@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { fetchJson } from "@services/fetchJson.ts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 

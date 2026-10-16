@@ -1,4 +1,3 @@
-// @vitest-environment node
 import type { BonSharePayload } from "@utils/bonShare";
 
 import { accuracyPercent, buildShareUrl, decodeShareHash, encodeShareHash } from "@utils/bonShare";

@@ -35,6 +35,10 @@ const iconAlias = [
   },
 ];
 
+const TEST_FILES = "*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}";
+const UNIT_TESTS = `src/tests/unit/**/${TEST_FILES}`;
+const NODE_TESTS = `src/tests/unit/{utils,services,server,pages,lib}/**/${TEST_FILES}`;
+
 export default getViteConfig(
   {
     plugins: [iconStubPlugin()],
@@ -47,10 +51,30 @@ export default getViteConfig(
       // detection) and falls back to the normal verbose reporter for humans.
       // Setting `reporters` explicitly here would disable that auto-detection.
       // `pnpm run test:ci` overrides this via --reporter CLI flags for CI runs.
-      include: ["src/tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
       globals: true,
-      environment: "jsdom",
       setupFiles: ["src/tests/setup.ts", "@vitest/web-worker"],
+      // Pure-logic folders run in `node`: creating a jsdom environment costs more
+      // than most of these tests. A file there that needs the DOM opts back in
+      // with a `// @vitest-environment jsdom` docblock.
+      projects: [
+        {
+          extends: true,
+          test: {
+            name: "node",
+            environment: "node",
+            include: [NODE_TESTS],
+          },
+        },
+        {
+          extends: true,
+          test: {
+            name: "jsdom",
+            environment: "jsdom",
+            include: [UNIT_TESTS],
+            exclude: [NODE_TESTS],
+          },
+        },
+      ],
       outputFile: {
         junit: "./tests/unit/junit-report.xml",
       },
