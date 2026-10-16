@@ -1,11 +1,11 @@
 # Anki decks: build, test and publish
 
-Two `.apkg` decks are generated from the published words in WordPress:
+Two `.apkg` decks are generated from the published words in the Payload CMS:
 
-| Deck     | Content                                                     | Distribution                             |
-| -------- | ----------------------------------------------------------- | ---------------------------------------- |
-| **Lite** | About 10 % of the words, evenly spread over the alphabet    | Free: GitHub Release asset and AnkiWeb   |
-| **Full** | All published words that have at least one translation      | Paid: Polar checkout link (no SDK)       |
+| Deck     | Content                                                  | Distribution                           |
+| -------- | -------------------------------------------------------- | -------------------------------------- |
+| **Lite** | About 10 % of the words, evenly spread over the alphabet | Free: GitHub Release asset and AnkiWeb |
+| **Full** | All published words that have at least one translation   | Paid: Polar checkout link (no SDK)     |
 
 Cards go one way only: Berlinerisch → German. Design details live in
 [`docs/superpowers/specs/2026-09-21-anki-decks-design.md`](../superpowers/specs/2026-09-21-anki-decks-design.md).
@@ -17,14 +17,14 @@ Cards go one way only: Berlinerisch → German. Design details live in
 - **Not included:** `sources`/`quelle` and `infoText`.
 - **Lite only:** the `Hinweis` field shows a short pointer to the Full deck (`https://berliner-schnauze.wtf/anki`).
 
-Both decks use the same note type and the same GUIDs (`genanki.guid_for(databaseId)`).
+Both decks use the same note type and the same GUIDs (`genanki.guid_for(id)`, where `id` is the former WordPress id (`wpId`) so existing cards keep their GUIDs; words created in Payload later get `1,000,000 + their Payload id`).
 Importing Full after Lite therefore updates the Lite cards instead of duplicating them.
 
 ## Prerequisites
 
 - [`uv`](https://docs.astral.sh/uv/) (the system Python may have no `pip`).
 - `pnpm install` once, so `npx infisical` works.
-- An Infisical login (`npx infisical login`) with access to `WP_API`, `WP_AUTH_USER` and `WP_AUTH_PASS`.
+- An Infisical login (`npx infisical login`) with access to `PAYLOAD_URL` (e.g. `https://cms.berliner-schnauze.wtf`) and `PAYLOAD_API_KEY`: the API key of a Payload user (Admin → Users → "Enable API Key", e.g. a dedicated `anki-bot` user). The CMS API is closed to anonymous reads. The release workflow gets both from Infisical (`prod`) the same way.
 
 Create the virtual environment (once per checkout):
 
@@ -44,7 +44,7 @@ Output goes to `dist-anki/` (gitignored):
 - `Berliner-Schnauze-Anki-Deck-Lite-v<version>.apkg`
 - `Berliner-Schnauze-Anki-Deck-Full-v<version>.apkg`
 
-Letter groups come from the WordPress `wordGroup` field (the same one the website uses); words
+Letter groups come from the `derived.wordGroup` field (the same one the website uses); words
 without one land in `Sonstige`.
 
 The script prints one summary line, for example `Wörter gesamt 5935, Full 5907 Karten, Lite 603 Karten`.
@@ -113,10 +113,11 @@ Changing the fields or templates of the note type is fine, but keep the field or
 
 ## Troubleshooting
 
-| Problem                                             | Fix                                                                                       |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `npx infisical` fails with `ENOVERSIONS`            | Run `pnpm install --frozen-lockfile` first.                                               |
-| `KeyError: 'WP_AUTH_USER'`                          | Run through `npx infisical run --` and check the variable names in `scripts/fetch-wp-words-for-scan.mjs`. |
-| `AssertionError` from `check_decks`                 | Card counts, GUIDs or letter coverage are inconsistent. Fix the data or the script, do not publish. |
-| `AssertionError: keine Wörter geladen`              | The fetch returned nothing. Check the credentials and that words are published.           |
-| `python3 -m venv` fails, no `pip`                   | Use `uv venv` as shown above.                                                             |
+| Problem                                               | Fix                                                                                                 |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `npx infisical` fails with `ENOVERSIONS`              | Run `pnpm install --frozen-lockfile` first.                                                         |
+| `PAYLOAD_URL und PAYLOAD_API_KEY müssen gesetzt sein` | Run through `npx infisical run --` and check both variables exist in Infisical.                     |
+| `HTTP Error 403`                                      | The API key is wrong or its user lost access. Create a new key in the Payload admin.                |
+| `AssertionError` from `check_decks`                   | Card counts, GUIDs or letter coverage are inconsistent. Fix the data or the script, do not publish. |
+| `AssertionError: keine Wörter geladen`                | The fetch returned nothing. Check the credentials and that words are published.                     |
+| `python3 -m venv` fails, no `pip`                     | Use `uv venv` as shown above.                                                                       |

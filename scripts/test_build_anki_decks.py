@@ -1,9 +1,12 @@
+import json
 import os
 import sqlite3
 import sys
 import tempfile
 import unittest
+import urllib.error
 import zipfile
+from unittest import mock
 
 import genanki
 
@@ -166,3 +169,97 @@ class DeckTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class FakeResponse:
+    def __init__(self, body):
+        self.body = json.dumps(body).encode()
+
+    def read(self, *args):
+        return self.body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+def payload_doc(wp_id=7, slug="anmachen", **over):
+    doc = {
+        "id": 1,
+        "wpId": wp_id,
+        "slug": slug,
+        "berlinerisch": "anmachen",
+        "article": None,
+        "translations": [{"translation": "<b>anschalten</b>"}, {"translation": " "}],
+        "examples": [{"example": "Mach ma det Licht an", "exampleExplanation": "Schalte das Licht ein"}, {"example": "", "exampleExplanation": "x"}],
+        "alternativeWords": [{"alternativeWord": "anknipsen"}, {"alternativeWord": None}],
+        "derived": {"wordGroup": "A"},
+        "_status": "published",
+    }
+    doc.update(over)
+    return doc
+
+
+class PayloadTests(unittest.TestCase):
+    def test_payload_word_normalizes_like_the_old_wordpress_node(self):
+        w = b.normalize_word(b.payload_to_node(payload_doc()))
+        self.assertEqual(w["id"], 7)
+        self.assertEqual(w["slug"], "anmachen")
+        self.assertEqual(w["title"], "anmachen")
+        self.assertEqual(w["group"], "A")
+        self.assertEqual(w["translations"], ["anschalten"])
+        self.assertEqual(w["examples"], [("Mach ma det Licht an", "Schalte das Licht ein")])
+        self.assertEqual(w["alternatives"], ["anknipsen"])
+
+    def test_card_guid_stays_the_wordpress_id(self):
+        # Anki updates cards by guid: the ids of the existing deck must not change.
+        self.assertEqual(b.payload_to_node(payload_doc(wp_id=5703))["databaseId"], 5703)
+
+    def test_word_created_in_payload_gets_an_id_that_cannot_clash_with_a_wordpress_id(self):
+        node = b.payload_to_node(payload_doc(wp_id=None, id=42))
+        self.assertEqual(node["databaseId"], b.PAYLOAD_ID_OFFSET + 42)
+        self.assertGreater(b.PAYLOAD_ID_OFFSET, 1_000_000 - 1)
+
+    def test_missing_group_falls_back_to_sonstige(self):
+        w = b.normalize_word(b.payload_to_node(payload_doc(derived=None)))
+        self.assertEqual(w["group"], "Sonstige")
+
+    def test_fetch_words_pages_through_the_api_and_sends_the_api_key(self):
+        pages = [
+            {"docs": [payload_doc(1, "a"), payload_doc(2, "b")], "hasNextPage": True, "nextPage": 2},
+            {"docs": [payload_doc(3, "c")], "hasNextPage": False, "nextPage": None},
+        ]
+        requests = []
+
+        def fake_urlopen(req, timeout=None):
+            requests.append(req)
+            return FakeResponse(pages[len(requests) - 1])
+
+        with mock.patch.object(b.urllib.request, "urlopen", fake_urlopen):
+            nodes = b.fetch_words("https://cms.example/", "secret-key")
+        self.assertEqual([n["databaseId"] for n in nodes], [1, 2, 3])
+        self.assertEqual(len(requests), 2)
+        self.assertEqual(requests[0].get_header("Authorization"), "users API-Key secret-key")
+        self.assertIn("https://cms.example/api/words?", requests[0].full_url)
+        self.assertIn("where%5B_status%5D%5Bequals%5D=published", requests[0].full_url)
+        self.assertIn("page=2", requests[1].full_url)
+
+    def test_fetch_words_fails_loudly_instead_of_returning_an_empty_deck(self):
+        def forbidden(req, timeout=None):
+            raise urllib.error.HTTPError(req.full_url, 403, "Forbidden", {}, None)
+
+        with mock.patch.object(b.urllib.request, "urlopen", forbidden):
+            with self.assertRaises(urllib.error.HTTPError):
+                b.fetch_words("https://cms.example", "wrong")
+
+    def test_fetch_words_rejects_an_answer_without_docs(self):
+        with mock.patch.object(b.urllib.request, "urlopen", lambda req, timeout=None: FakeResponse({"errors": [{"message": "x"}]})):
+            with self.assertRaises(RuntimeError):
+                b.fetch_words("https://cms.example", "k")
+
+    def test_missing_credentials_stop_the_build(self):
+        with mock.patch.dict(os.environ, {}, clear=True):
+            with self.assertRaises(SystemExit):
+                b.credentials()
