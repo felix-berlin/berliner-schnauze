@@ -161,6 +161,7 @@ export interface Media {
   id: number;
   alt?: string | null;
   caption?: string | null;
+  description?: string | null;
   wpPath?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -423,6 +424,7 @@ export interface UsersSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  description?: T;
   wpPath?: T;
   updatedAt?: T;
   createdAt?: T;

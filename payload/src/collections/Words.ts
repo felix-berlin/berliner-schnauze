@@ -1,6 +1,7 @@
 import type { CollectionBeforeChangeHook, CollectionConfig, Field } from "payload";
 
 import { authenticated } from "../access";
+import { PRESERVE_CONTENT_MODIFIED_AT } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { seoField } from "../fields/seo";
 
@@ -12,10 +13,13 @@ const audioRows = (name: string): Field => ({
 });
 
 /** Payload always rewrites updatedAt on update, so WP's modifiedGmt lives here (sitemap lastmod). */
-const touchContentModifiedAt: CollectionBeforeChangeHook = ({ data, originalDoc }) => {
-  // On update `data` is merged with the stored doc, so "not passed" means "unchanged from stored".
-  const unchanged = originalDoc && data.contentModifiedAt === originalDoc.contentModifiedAt;
-  if (!data.contentModifiedAt || unchanged) data.contentModifiedAt = new Date().toISOString();
+const touchContentModifiedAt: CollectionBeforeChangeHook = ({ data, originalDoc, req }) => {
+  if (req.context[PRESERVE_CONTENT_MODIFIED_AT] === true) {
+    // On update `data` is merged with the stored doc, so an absent value already falls back to the stored one.
+    data.contentModifiedAt ??= originalDoc?.contentModifiedAt ?? new Date().toISOString();
+  } else {
+    data.contentModifiedAt = new Date().toISOString();
+  }
   return data;
 };
 

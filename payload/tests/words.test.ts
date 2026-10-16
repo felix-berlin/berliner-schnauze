@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 
+import { PRESERVE_CONTENT_MODIFIED_AT } from "../src/fields/contentModified";
 import { getTestPayload } from "./helpers/payload";
 
 const SLUG = "words-test-aasen";
@@ -23,20 +24,42 @@ describe("words", () => {
     await payload.create({ collection: "words", data: { ...base, _status: "published" } });
     await expect(
       payload.create({ collection: "words", data: { ...base, wpId: 990002, _status: "published" } }),
-    ).rejects.toThrow();
+    ).rejects.toThrow(/slug|unique|duplicate/i);
   });
 
-  // Payload honors updatedAt on create but overwrites it on update, hence contentModifiedAt.
-  it("keeps an explicit contentModifiedAt and bumps it on edits that omit it", async () => {
-    const payload = await getTestPayload();
-    const at = "2020-01-02T03:04:05.000Z";
-    const doc = await payload.create({ collection: "words", data: { ...base, contentModifiedAt: at } });
-    expect(doc.contentModifiedAt).toBe(at);
-    const at2 = "2021-02-03T04:05:06.000Z";
-    const imported = await payload.update({ collection: "words", id: doc.id, data: { contentModifiedAt: at2 } });
-    expect(imported.contentModifiedAt).toBe(at2);
-    const edited = await payload.update({ collection: "words", id: doc.id, data: { article: "der" } });
-    expect(new Date(edited.contentModifiedAt!).getTime()).toBeGreaterThan(Date.now() - 60_000);
+  describe("contentModifiedAt", () => {
+    const keep = { context: { [PRESERVE_CONTENT_MODIFIED_AT]: true } };
+    const ms = (v?: string | null) => new Date(v!).getTime();
+    const A = "2020-01-02T03:04:05.000Z";
+    const B = "2021-02-03T04:05:06.000Z";
+    const recent = (v?: string | null) => expect(ms(v)).toBeGreaterThan(Date.now() - 60_000);
+
+    it("create with flag keeps the value, without gets now", async () => {
+      const payload = await getTestPayload();
+      const doc = await payload.create({ collection: "words", data: { ...base, contentModifiedAt: A }, ...keep });
+      expect(ms(doc.contentModifiedAt)).toBe(ms(A));
+      await clean();
+      const plain = await payload.create({ collection: "words", data: { ...base, contentModifiedAt: A } });
+      recent(plain.contentModifiedAt);
+    });
+
+    it("update with flag and same value keeps it; new value is stored; absent keeps stored", async () => {
+      const payload = await getTestPayload();
+      const doc = await payload.create({ collection: "words", data: { ...base, contentModifiedAt: A }, ...keep });
+      const same = await payload.update({ collection: "words", id: doc.id, data: { contentModifiedAt: A, article: "der" }, ...keep });
+      expect(ms(same.contentModifiedAt)).toBe(ms(A));
+      const next = await payload.update({ collection: "words", id: doc.id, data: { contentModifiedAt: B }, ...keep });
+      expect(ms(next.contentModifiedAt)).toBe(ms(B));
+      const absent = await payload.update({ collection: "words", id: doc.id, data: { article: "die" }, ...keep });
+      expect(ms(absent.contentModifiedAt)).toBe(ms(B));
+    });
+
+    it("update without flag becomes now even when the incoming value equals the stored one", async () => {
+      const payload = await getTestPayload();
+      const doc = await payload.create({ collection: "words", data: { ...base, contentModifiedAt: A }, ...keep });
+      const upd = await payload.update({ collection: "words", id: doc.id, data: { contentModifiedAt: A } });
+      recent(upd.contentModifiedAt);
+    });
   });
 
   it("overwrites updatedAt on update (why contentModifiedAt exists)", async () => {
