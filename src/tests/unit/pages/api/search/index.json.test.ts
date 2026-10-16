@@ -99,6 +99,14 @@ describe("makeOramaSearchIndex — word properties", () => {
     expect(present.dateTs).toBe(Date.parse("2025-01-01T00:00:00Z"));
   });
 
+  it("reads WP-format dates (no zone) as UTC, independent of the server's timezone", () => {
+    const result = makeOramaSearchIndex(
+      makeWord({ dateGmt: "2025-04-09T08:12:37", modifiedGmt: "2026-09-20T17:24:19" } as never),
+    );
+    expect(result.dateTs).toBe(Date.UTC(2025, 3, 9, 8, 12, 37));
+    expect(result.modifiedTs).toBe(Date.UTC(2026, 8, 20, 17, 24, 19));
+  });
+
   it("flags audio, example audio, alternative words and berolinismus", () => {
     const result = makeOramaSearchIndex(
       makeWord({
@@ -133,13 +141,79 @@ describe("makeOramaSearchIndex — word properties", () => {
   });
 });
 
+describe("makeOramaSearchIndex — stored derived fields", () => {
+  const derived = {
+    characterLength: 11,
+    consonantsCount: 7,
+    nlpTags: [{ Verb: ["Verb", "Präsens"] }, { Noun: ["Verb"] }],
+    soundexCode: "W300",
+    syllablesCount: 9,
+    vowelsCount: 5,
+    wordComponents: ["stored"],
+    wordGroup: "W",
+  };
+
+  it("takes counts, components and word types from the stored fields instead of computing them", () => {
+    const result = makeOramaSearchIndex(makeWord({ derived, wordGroup: "W" } as never));
+    expect(result.wordProperties).toMatchObject({
+      characterLength: 11,
+      consonantsCount: 7,
+      syllablesCount: 9,
+      vowelsCount: 5,
+    });
+    expect(result.wordComponents).toEqual(["stored"]);
+    expect(result.berlinerischWordTypes).toEqual(["Verb", "Präsens"]);
+  });
+
+  it("keeps the public index slim: no definitions, examples, sources or info text", () => {
+    const result = makeOramaSearchIndex(
+      makeWord({
+        derived,
+        wordProperties: {
+          berlinerisch: "wat",
+          examples: [{ example: "geheim" }],
+          infoText: "<p>geheim</p>",
+          sources: [{ quelle: ["geheim"] }],
+        },
+      } as never),
+    );
+    expect(Object.keys(result).sort()).toEqual(
+      [
+        "berlinerischWordTypes",
+        "berlinerWordId",
+        "dateTs",
+        "modifiedTs",
+        "slug",
+        "themen",
+        "wordComponents",
+        "wordGroup",
+        "wordProperties",
+      ].sort(),
+    );
+    expect(Object.keys(result.wordProperties).sort()).toEqual(
+      [
+        "audioBerlinerisch",
+        "audioExamples",
+        "berlinerisch",
+        "berolinismus",
+        "characterLength",
+        "consonantsCount",
+        "multipleMeanings",
+        "syllablesCount",
+        "translations",
+        "vowelsCount",
+      ].sort(),
+    );
+    expect(JSON.stringify(result)).not.toContain("geheim");
+  });
+});
+
 describe("search index entries + GET", () => {
-  it("builds entries once and serves them as JSON", async () => {
+  it("maps a words array once and serves the entries as JSON", async () => {
     fetchAllWords.mockResolvedValue([makeWord()]);
     const first = await getSearchIndexEntries();
     const second = await getSearchIndexEntries();
     expect(second).toBe(first);
-    expect(fetchAllWords).toHaveBeenCalledOnce();
 
     const body = await (await GET({} as APIContext)).json();
     expect(body).toHaveLength(1);

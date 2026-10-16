@@ -1,6 +1,5 @@
 import node from "@astrojs/node";
 import partytown from "@astrojs/partytown";
-import sitemap from "@astrojs/sitemap";
 import vue from "@astrojs/vue";
 import codecovplugin from "@codecov/astro-plugin";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
@@ -14,11 +13,6 @@ import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
 
-import {
-  getPostDates,
-  getWordDates,
-  sitemapFilter,
-} from "./src/services/queries/getSitemapWordDates.ts";
 
 const env = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 const {
@@ -320,30 +314,6 @@ export default defineConfig({
       //   launchEditor: "code",
       // },
     }),
-    // Skipped for the e2e build: nobody reads its sitemap.xml, and
-    // getWordDates()/getPostDates() each do their own full, unbounded
-    // paginated fetch of every word/post — independent of E2E_WORD_LIMIT.
-    ...(isE2eBuild
-      ? []
-      : [
-          sitemap({
-            filter: sitemapFilter,
-            serialize: async (item) => {
-              const word = item.url.match(/\/wort\/([^/?#]+)/);
-              if (word) {
-                const date = (await getWordDates()).get(word[1]);
-                if (date) return { ...item, lastmod: date };
-                return item;
-              }
-              const post = item.url.match(/\/magazin\/([^/?#]+)/);
-              if (post) {
-                const date = (await getPostDates()).get(post[1]);
-                if (date) return { ...item, lastmod: date };
-              }
-              return item;
-            },
-          }),
-        ]),
     matomo({
       enabled: process.env.ENABLE_ANALYTICS === "true",
       host: process.env.MATOMO_HOST,

@@ -10,14 +10,18 @@ import type { AudioRow, Word, WordImage } from "@/types/cms.ts";
 
 const PAGE_SIZE = 1000;
 
+/** WPGraphQL returned null for an empty repeater and callers test the fields for truthiness. */
+const orNull = <T>(items: readonly T[] | null | undefined): T[] | null =>
+  items?.length ? [...items] : null;
+
 const populated = <T extends object>(items: readonly (T | number)[] | null | undefined): T[] =>
   (items ?? []).filter((item): item is T => typeof item === "object");
 
-const audioRows = (rows: PayloadWord["berlinerischAudio"]): AudioRow[] =>
-  (rows ?? []).map((row) => {
+const audioRows = (rows: PayloadWord["berlinerischAudio"]): AudioRow[] | null =>
+  orNull(rows)?.map((row) => {
     const url = mediaUrl(row.audio);
     return { audio: url ? { node: { mediaItemUrl: url } } : null, gender: row.gender ?? null };
-  });
+  }) ?? null;
 
 const toImage = (media: Media): WordImage => ({
   altText: media.alt ?? null,
@@ -60,18 +64,19 @@ export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
   translations: (doc.translations ?? []).map((t) => t.translation).filter((t): t is string => !!t),
   wordGroup: doc.derived?.wordGroup ?? null,
   wordProperties: {
-    alternativeWords: (doc.alternativeWords ?? []).map((a) => ({
-      alternativeWord: a.alternativeWord ?? null,
-    })),
+    alternativeWords:
+      orNull(doc.alternativeWords)?.map((a) => ({ alternativeWord: a.alternativeWord ?? null })) ??
+      null,
     article: doc.article ?? null,
     berlinerisch: doc.berlinerisch,
     berlinerischAudio: audioRows(doc.berlinerischAudio),
     berolinismus: doc.berolinismus ?? null,
-    examples: (doc.examples ?? []).map((e) => ({
-      example: e.example ?? null,
-      exampleAudio: audioRows(e.exampleAudio),
-      exampleExplanation: e.exampleExplanation ?? null,
-    })),
+    examples:
+      orNull(doc.examples)?.map((e) => ({
+        example: e.example ?? null,
+        exampleAudio: audioRows(e.exampleAudio),
+        exampleExplanation: e.exampleExplanation ?? null,
+      })) ?? null,
     images: { nodes: populated<Media>(doc.images).map(toImage) },
     infoText: lexicalToHtml(doc.infoText) || null,
     learnMore: doc.learnMore ?? null,
@@ -82,13 +87,15 @@ export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
         wordProperties: { berlinerisch: w.berlinerisch },
       })),
     },
-    sources: doc.sources?.length ? [{ quelle: doc.sources }] : [],
-    translations: (doc.translations ?? []).map((t) => ({ translation: t.translation ?? null })),
-    wikimediaFiles: (doc.wikimediaFiles ?? []).map((f) => ({
-      caption: f.caption ?? null,
-      description: f.description ?? null,
-      wikimediaFile: f.wikimediaFile ?? null,
-    })),
+    sources: doc.sources?.length ? [{ quelle: doc.sources }] : null,
+    translations:
+      orNull(doc.translations)?.map((t) => ({ translation: t.translation ?? null })) ?? null,
+    wikimediaFiles:
+      orNull(doc.wikimediaFiles)?.map((f) => ({
+        caption: f.caption ?? null,
+        description: f.description ?? null,
+        wikimediaFile: f.wikimediaFile ?? null,
+      })) ?? null,
   },
 });
 

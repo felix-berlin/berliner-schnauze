@@ -203,6 +203,27 @@ describe("toWord", () => {
     });
   });
 
+  it("uses null for empty repeaters, like WPGraphQL did (callers test them for truthiness)", async () => {
+    const { toWord } = await load();
+    const { wordProperties } = toWord({
+      ...doc,
+      alternativeWords: [],
+      berlinerischAudio: [],
+      examples: [],
+      sources: [],
+      translations: [],
+      wikimediaFiles: [],
+    } as never);
+    expect(wordProperties).toMatchObject({
+      alternativeWords: null,
+      berlinerischAudio: null,
+      examples: null,
+      sources: null,
+      translations: null,
+      wikimediaFiles: null,
+    });
+  });
+
   it("copes with a sparse document", async () => {
     const { toWord } = await load();
     const word = toWord({
