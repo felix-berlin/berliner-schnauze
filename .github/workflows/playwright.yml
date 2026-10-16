@@ -6,8 +6,8 @@ on:
       - "**.md"
       - "docs/**"
       - "openspec/**"
+  # Every PR, whatever its base: stacked PRs need e2e + docker smoke too.
   pull_request:
-    branches: [main]
     paths-ignore:
       - "**.md"
       - "docs/**"
