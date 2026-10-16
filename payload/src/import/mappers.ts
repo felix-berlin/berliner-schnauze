@@ -113,7 +113,7 @@ export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedC
   const p = node.wordProperties ?? {};
   return {
     wpId: node.databaseId,
-    slug: node.slug ?? null,
+    slug: node.slug || null,
     berlinerisch: p.berlinerisch ?? "",
     berlinerWordId: node.berlinerWordId ?? null,
     article: p.article ?? null,
@@ -189,10 +189,11 @@ export type PostData = Omit<Post, "id" | "createdAt" | "updatedAt">;
 export async function mapPost(node: WpPost, refs: ImportRefs, config: SanitizedConfig, onUnmappedImage?: OnUnmappedImage): Promise<PostData> {
   return {
     wpId: node.databaseId,
-    slug: node.slug ?? null,
+    slug: node.slug || null,
     title: node.title ?? "",
     excerpt: node.excerpt ? htmlToText(node.excerpt) : null,
     publishedAt: gmtToIso(node.dateGmt),
+    contentModifiedAt: gmtToIso(node.modifiedGmt),
     featuredImage: mediaId(node.featuredImage?.node?.sourceUrl, refs),
     content: await blocksToLexical(node.blocks ?? [], refs, config, onUnmappedImage),
     seo: mapSeo(node.seo, refs),
@@ -208,7 +209,7 @@ export async function mapPage(
 ): Promise<Omit<Page, "id" | "createdAt" | "updatedAt">> {
   return {
     wpId: node.databaseId,
-    slug: node.slug ?? null,
+    slug: node.slug || null,
     title: node.title ?? "",
     content: await htmlOrNull(node.content, config, refs, onUnmappedImage),
     seo: mapSeo(node.seo, refs),
@@ -217,7 +218,7 @@ export async function mapPage(
 
 export const mapThema = (node: WpThema, refs: ImportRefs): Omit<Theman, "id" | "createdAt" | "updatedAt"> => ({
   wpId: node.databaseId,
-  slug: node.slug ?? null,
+  slug: node.slug || null,
   name: node.name ?? "",
   description: node.description || null,
   seo: mapSeo(node.seo, refs),

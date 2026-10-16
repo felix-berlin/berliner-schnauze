@@ -1,8 +1,9 @@
 /**
  * Idempotent WordPress -> Payload import. CLI: `pnpm --filter payload-app import:wp`
  * (needs WP_API, WP_AUTH_USER, WP_AUTH_PASS plus the Payload env). Exits 1 on any failure.
+ * Refuses a non-local DATABASE_URL unless IMPORT_ALLOW_REMOTE_DB=1 and NODE_ENV=production.
  */
-import type { CollectionSlug, Payload } from "payload";
+import type { CollectionSlug, Payload, Where } from "payload";
 
 import path from "node:path";
 
@@ -29,7 +30,10 @@ export type ImportReport = {
   updated: Record<string, number>;
   missingRelated: number;
   failures: { kind: string; ref: string; error: string }[];
-  /** Not fatal (exit code unaffected): `html-image` = `<img>` turned into a link, `media-foreign-host` = not downloaded. */
+  /**
+   * Not fatal (exit code unaffected): `html-image` = `<img>` turned into a link, `media-foreign-host` = not downloaded,
+   * `word-not-in-wp` = Payload word whose wpId WordPress no longer returns (kept, not deleted).
+   */
   warnings: { kind: string; ref: string; src: string }[];
 };
 
@@ -38,12 +42,31 @@ const PAGE_SLUGS = ["datenschutz", "impressum"];
 const MENUS = { main: "Main Menu", footer1: "Footer Nav 1", footer2: "Footer Nav 2" } as const;
 const WORDS_PAGE_SIZE = 100;
 const MEDIA_CONCURRENCY = 5;
-const WORD_CONTEXT = { [PRESERVE_CONTENT_MODIFIED_AT]: true };
+const PRESERVE_CONTEXT = { [PRESERVE_CONTENT_MODIFIED_AT]: true };
+const LOCAL_DB_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
 
 type Maybe<T> = T | null | undefined;
 type Connection<T> = Maybe<{ nodes?: Maybe<Maybe<T>[]>; pageInfo?: Maybe<{ hasNextPage?: Maybe<boolean>; endCursor?: Maybe<string> }> }>;
 
 export const exitCodeFor = (report: ImportReport): number => (report.failures.length > 0 ? 1 : 0);
+
+/**
+ * Throws unless DATABASE_URL points at this machine, or both IMPORT_ALLOW_REMOTE_DB=1 and NODE_ENV=production
+ * are set: outside production Payload pushes the dev schema into whatever database it connects to.
+ */
+export function assertSafeImportTarget(env: Record<string, string | undefined>): void {
+  let host: string;
+  try {
+    host = new URL(env.DATABASE_URL ?? "").hostname;
+  } catch {
+    throw new Error("DATABASE_URL is missing or not a valid URL; refusing to import");
+  }
+  if (LOCAL_DB_HOSTS.has(host)) return;
+  if (env.IMPORT_ALLOW_REMOTE_DB === "1" && env.NODE_ENV === "production") return;
+  throw new Error(
+    `DATABASE_URL host "${host}" is not local; refusing to import. A remote import needs IMPORT_ALLOW_REMOTE_DB=1 and NODE_ENV=production.`,
+  );
+}
 
 const nodesOf = <T>(conn: Connection<T>, what: string): T[] => {
   if (!conn) throw new Error(`WPGraphQL returned no ${what}`);
@@ -101,8 +124,8 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
   };
 
   // Existing documents (from earlier runs) double as upsert index and refs for skipped phases.
-  const existing = async <K extends string | number>(collection: CollectionSlug, key: string) => {
-    const { docs } = await payload.find({ collection, pagination: false, depth: 0, select: { [key]: true } as never });
+  const existing = async <K extends string | number>(collection: CollectionSlug, key: string, where?: Where) => {
+    const { docs } = await payload.find({ collection, pagination: false, depth: 0, select: { [key]: true } as never, where });
     const map = new Map<K, number>();
     for (const doc of docs as unknown as Record<string, unknown>[]) if (doc[key] != null) map.set(doc[key] as K, doc.id as number);
     return map;
@@ -114,6 +137,14 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
     posts: await existing<number>("posts", "wpId"),
     pages: await existing<number>("pages", "wpId"),
   };
+  // wpIds whose Payload doc is published: a WP draft is saved as a draft version only (`draft: true`, required
+  // fields not enforced) unless it is published in Payload, then a plain update unpublishes it.
+  const published = {
+    words: new Set((await existing<number>("words", "wpId", { _status: { equals: "published" } })).keys()),
+    posts: new Set((await existing<number>("posts", "wpId", { _status: { equals: "published" } })).keys()),
+  };
+  const asDraft = (collection: string, wpId: number, status: unknown) =>
+    (collection === "words" || collection === "posts") && status !== "published" && !published[collection].has(wpId);
   const refs: ImportRefs = {
     mediaIdByUrl: await existing<string>("media", "wpPath"),
     wordTypeIdByName: await existing<string>("word-types", "name"),
@@ -124,12 +155,18 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
   /** find-by-wpId (preloaded) -> update or create. Returns the stored doc (depth 0). */
   const upsert = async (collection: keyof typeof byWpId, wpId: number, data: object, context?: Record<string, unknown>) => {
     const id = byWpId[collection].get(wpId);
+    const status = (data as { _status?: unknown })._status;
+    const draft = asDraft(collection, wpId, status);
     const doc = (
       id == null
-        ? await payload.create({ collection, data: data as never, depth: 0, context })
-        : await payload.update({ collection, id, data: data as never, depth: 0, context })
+        ? await payload.create({ collection, data: data as never, depth: 0, context, draft })
+        : await payload.update({ collection, id, data: data as never, depth: 0, context, draft })
     ) as unknown as Record<string, unknown> & { id: number };
     byWpId[collection].set(wpId, doc.id);
+    if (collection === "words" || collection === "posts") {
+      if (status === "published") published[collection].add(wpId);
+      else published[collection].delete(wpId);
+    }
     tally(collection, id == null);
     return doc;
   };
@@ -197,7 +234,7 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
     for (const t of wordTypes ?? []) {
       try {
         // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
-        const doc = await upsert("word-types", t.databaseId, { wpId: t.databaseId, name: t.name ?? "", slug: t.slug ?? null });
+        const doc = await upsert("word-types", t.databaseId, { wpId: t.databaseId, name: t.name ?? "", slug: t.slug || null });
         if (t.name) refs.wordTypeIdByName.set(t.name, doc.id);
       } catch (error) {
         taxonomiesOk = false;
@@ -228,7 +265,7 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
           // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
           const data = await mapWord(node, refs, payload.config, htmlImage(node.slug ?? String(node.databaseId)));
           // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
-          const doc = await upsert("words", node.databaseId, data, WORD_CONTEXT);
+          const doc = await upsert("words", node.databaseId, data, PRESERVE_CONTEXT);
           stored.set(node.databaseId, ((doc.relatedWords as number[] | null) ?? []).map(Number));
         } catch (error) {
           fail("words", node.slug ?? String(node.databaseId), error);
@@ -243,10 +280,24 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
         if (ids.length === current.length && ids.every((id, i) => id === current[i])) continue;
         try {
           // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
-          await payload.update({ collection: "words", id: refs.wordIdByWpId.get(node.databaseId)!, data: { relatedWords: ids }, depth: 0, context: WORD_CONTEXT });
+          await payload.update({
+            collection: "words",
+            id: refs.wordIdByWpId.get(node.databaseId)!,
+            data: { relatedWords: ids },
+            depth: 0,
+            context: PRESERVE_CONTEXT,
+            draft: asDraft("words", node.databaseId, undefined),
+          });
         } catch (error) {
           fail("words", `${node.slug ?? node.databaseId} (relatedWords)`, error);
         }
+      }
+      // Words deleted in WordPress: reported only, WordPress stays the source of truth until cutover.
+      const seen = new Set(words.map((w) => w.databaseId));
+      const gone = [...byWpId.words.keys()].filter((wpId) => !seen.has(wpId));
+      if (gone.length) {
+        const { docs } = await payload.find({ collection: "words", where: { wpId: { in: gone } }, pagination: false, depth: 0, draft: true, select: { slug: true, wpId: true } });
+        for (const d of docs) report.warnings.push({ kind: "word-not-in-wp", ref: d.slug || `wpId ${d.wpId}`, src: `wpId ${d.wpId}` });
       }
     }
   }
@@ -256,7 +307,7 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
     for (const node of posts ?? []) {
       try {
         // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
-        await upsert("posts", node.databaseId, await mapPost(node, refs, payload.config, htmlImage(node.slug ?? String(node.databaseId))));
+        await upsert("posts", node.databaseId, await mapPost(node, refs, payload.config, htmlImage(node.slug ?? String(node.databaseId))), PRESERVE_CONTEXT);
       } catch (error) {
         fail("posts", node.slug ?? String(node.databaseId), error);
       }
@@ -325,9 +376,18 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
 
 // CLI entry (`payload run src/import/run.ts`); tests import this module without running it.
 if (!process.env.VITEST) {
+  try {
+    assertSafeImportTarget(process.env);
+  } catch (error) {
+    console.error(`[import] ${error instanceof Error ? error.message : String(error)}`);
+    process.exit(1);
+  }
   const [{ getPayload }, { default: config }] = await Promise.all([import("payload"), import("../payload.config")]);
   const report = await runImport(await getPayload({ config }));
   console.log(JSON.stringify(report, null, 2));
-  console.log(`[import] ${report.failures.length ? `FAILED: ${report.failures.length} failure(s)` : "OK"}, ${report.warnings.length} warning(s)`);
+  const notInWp = report.warnings.filter((w) => w.kind === "word-not-in-wp").length;
+  console.log(
+    `[import] ${report.failures.length ? `FAILED: ${report.failures.length} failure(s)` : "OK"}, ${report.warnings.length} warning(s) (${notInWp} word(s) no longer in WordPress)`,
+  );
   process.exit(exitCodeFor(report));
 }

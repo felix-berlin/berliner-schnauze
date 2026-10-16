@@ -73,7 +73,7 @@ export const POSTS_QUERY = `
   query ImportPosts {
     posts(first: 100, where: { stati: [DRAFT, PUBLISH] }) {
       nodes {
-        databaseId status slug title dateGmt
+        databaseId status slug title dateGmt modifiedGmt
         excerpt(format: RENDERED)
         featuredImage { node { sourceUrl altText } }
         blocks {
@@ -171,6 +171,7 @@ export type WpPost = {
   slug?: Maybe<string>;
   title?: Maybe<string>;
   dateGmt?: Maybe<string>;
+  modifiedGmt?: Maybe<string>;
   excerpt?: Maybe<string>;
   featuredImage?: Maybe<{ node?: Maybe<WpImage> }>;
   blocks?: Maybe<Maybe<WpBlock>[]>;

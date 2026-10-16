@@ -3,7 +3,7 @@ import type { Payload } from "payload";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 import * as wp from "../../src/import/wp";
-import { exitCodeFor, runImport } from "../../src/import/run";
+import { assertSafeImportTarget, exitCodeFor, runImport } from "../../src/import/run";
 import { MP3_BYTES, PDF_BYTES, PNG_BYTES } from "../helpers/media";
 import { expectNoPendingUploads, lexicalNodes } from "../helpers/lexical";
 import { getTestPayload } from "../helpers/payload";
@@ -22,13 +22,15 @@ const PDF = "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/handou
 const INFO_BILD = "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/info-bild.png";
 const MEDIA_PATHS = ["2024/01/info-bild.png", "import_testwort.mp3", "2024/01/Küche.png", "2024/01/handout.pdf", "2024/03/titelbild.png", "2024/03/bild.png"];
 const WORD_IDS = [aasen.databaseId, wa.databaseId, testwort.databaseId];
+/** WP drafts with empty slug and empty (required) berlinerisch. */
+const emptyDrafts = [990601, 990602].map((databaseId) => ({ databaseId, status: "draft", slug: "", wordProperties: { berlinerisch: "" } }));
 
 const page = (nodes: unknown[], endCursor: string, hasNextPage: boolean) => ({
   berlinerWords: { nodes, pageInfo: { endCursor, hasNextPage } },
 });
 
-/** WordPress fake. `wordsPage2` lets a test break pagination. */
-function mockWordPress(wordsPage2: () => unknown = () => page([testwort], "c2", false)) {
+/** WordPress fake. `wordsPage2` lets a test break pagination, `wordsPage1` drop or add words. */
+function mockWordPress(wordsPage2: () => unknown = () => page([testwort], "c2", false), wordsPage1: unknown[] = [aasen, wa]) {
   vi.mocked(wp.wpGraphql).mockImplementation(async (query: string, variables?: Record<string, unknown>) => {
     switch (query) {
       case wp.WORD_TYPES_QUERY:
@@ -47,7 +49,7 @@ function mockWordPress(wordsPage2: () => unknown = () => page([testwort], "c2", 
           },
         };
       case wp.WORDS_QUERY:
-        return variables?.after ? wordsPage2() : page([aasen, wa], "c1", true);
+        return variables?.after ? wordsPage2() : page(wordsPage1, "c1", true);
       case wp.POSTS_QUERY:
         return { posts: { nodes: [post], pageInfo: { hasNextPage: false } } };
       case wp.PAGES_QUERY:
@@ -83,7 +85,7 @@ function mockDownloads(status: (url: string) => number = () => 200) {
 
 let payload: Payload;
 const findWord = async (wpId: number) =>
-  (await payload.find({ collection: "words", where: { wpId: { equals: wpId } }, depth: 0, limit: 1 })).docs[0];
+  (await payload.find({ collection: "words", where: { wpId: { equals: wpId } }, depth: 0, limit: 1, draft: true })).docs[0];
 
 beforeAll(async () => {
   payload = await getTestPayload();
@@ -94,7 +96,7 @@ beforeAll(async () => {
 beforeEach(async () => {
   fetchMock.mockReset();
   vi.mocked(wp.wpGraphql).mockReset();
-  await payload.delete({ collection: "words", where: { wpId: { in: WORD_IDS } } });
+  await payload.delete({ collection: "words", where: { wpId: { in: [...WORD_IDS, ...emptyDrafts.map((w) => w.databaseId)] } } });
   await payload.delete({ collection: "posts", where: { wpId: { equals: post.databaseId } } });
   await payload.delete({ collection: "pages", where: { wpId: { equals: 990501 } } });
   await payload.delete({ collection: "themen", where: { wpId: { greater_than_equal: 990401, less_than: 990500 } } });
@@ -147,6 +149,7 @@ describe("runImport", () => {
     for (const word of [a, w, t]) expectNoPendingUploads(word.infoText);
     const [storedPost] = (await payload.find({ collection: "posts", where: { wpId: { equals: post.databaseId } }, depth: 0 })).docs;
     const [storedPage] = (await payload.find({ collection: "pages", where: { wpId: { equals: 990501 } }, depth: 0 })).docs;
+    expect(storedPost.contentModifiedAt).toBe("2024-03-05T06:07:08.000Z");
     expectNoPendingUploads(storedPost.content);
     expectNoPendingUploads(storedPage.content);
     expect(lexicalNodes(storedPost.content, "upload")).toHaveLength(1);
@@ -168,6 +171,31 @@ describe("runImport", () => {
     expect(exitCodeFor({ created: {}, updated: {}, missingRelated: 0, failures: [], warnings: [{ kind: "html-image", ref: "x", src: "y" }] })).toBe(0);
   });
 
+  it("warns about words that WordPress no longer returns, without deleting them", async () => {
+    mockWordPress();
+    mockDownloads();
+    const notInWp = (r: { warnings: { kind: string }[] }) => r.warnings.filter((w) => w.kind === "word-not-in-wp");
+    expect(notInWp(await runImport(payload, { only: ["taxonomies", "words"] }))).toEqual([]);
+    mockWordPress(undefined, [aasen]);
+    const report = await runImport(payload, { only: ["taxonomies", "words"] });
+    expect(notInWp(report)).toEqual([{ kind: "word-not-in-wp", ref: wa.slug, src: `wpId ${wa.databaseId}` }]);
+    expect(await findWord(wa.databaseId)).toBeDefined();
+    expect(exitCodeFor(report)).toBe(0);
+  });
+
+  it("imports WP drafts with empty slug and empty required fields", async () => {
+    mockWordPress(() => page([testwort, ...emptyDrafts], "c2", false));
+    mockDownloads();
+    const report = await runImport(payload, { only: ["taxonomies", "words"] });
+    expect(report.failures).toEqual([]);
+    for (const { databaseId } of emptyDrafts) {
+      const doc = await findWord(databaseId);
+      expect(doc).toMatchObject({ slug: null, _status: "draft" });
+    }
+    // Re-run updates the drafts in place.
+    expect((await runImport(payload, { only: ["taxonomies", "words"] })).failures).toEqual([]);
+  });
+
   it("aborts the words phase when listing words fails mid-pagination", async () => {
     mockWordPress(() => {
       throw new Error("WP HTTP 504");
@@ -177,5 +205,25 @@ describe("runImport", () => {
     expect(report.failures).toContainEqual(expect.objectContaining({ kind: "words", error: expect.stringContaining("504") }));
     expect((await payload.count({ collection: "words", where: { wpId: { in: WORD_IDS } } })).totalDocs).toBe(0);
     expect(exitCodeFor(report)).toBe(1);
+  });
+});
+
+describe("assertSafeImportTarget", () => {
+  const db = (host: string) => `postgres://u:p@${host}:5432/x`;
+  it("allows local hosts", () => {
+    for (const host of ["localhost", "127.0.0.1", "[::1]"]) expect(() => assertSafeImportTarget({ DATABASE_URL: db(host) })).not.toThrow();
+  });
+  it("refuses non-local hosts without IMPORT_ALLOW_REMOTE_DB=1 and NODE_ENV=production", () => {
+    expect(() => assertSafeImportTarget({ DATABASE_URL: db("postgres") })).toThrow(/IMPORT_ALLOW_REMOTE_DB/);
+    expect(() => assertSafeImportTarget({ DATABASE_URL: db("db.example.com") })).toThrow(/IMPORT_ALLOW_REMOTE_DB/);
+    expect(() => assertSafeImportTarget({ DATABASE_URL: db("db.example.com"), IMPORT_ALLOW_REMOTE_DB: "1" })).toThrow(/NODE_ENV=production/);
+    expect(() => assertSafeImportTarget({ DATABASE_URL: db("db.example.com"), NODE_ENV: "production" })).toThrow(/IMPORT_ALLOW_REMOTE_DB/);
+  });
+  it("allows a remote host with both the flag and NODE_ENV=production", () => {
+    expect(() => assertSafeImportTarget({ DATABASE_URL: db("db.example.com"), IMPORT_ALLOW_REMOTE_DB: "1", NODE_ENV: "production" })).not.toThrow();
+  });
+  it("refuses a missing or unparsable DATABASE_URL", () => {
+    expect(() => assertSafeImportTarget({})).toThrow(/DATABASE_URL/);
+    expect(() => assertSafeImportTarget({ DATABASE_URL: "not a url" })).toThrow(/DATABASE_URL/);
   });
 });
