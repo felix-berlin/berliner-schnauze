@@ -4,7 +4,7 @@ Payload 3 (Admin + REST/GraphQL, Postgres). Stand nach Plan 1: Payload läuft ne
 
 ## Einrichten von null
 
-**1. Env-Variablen anlegen** (Infisical oder die git-ignorierte Root-`.env`, Vorlage: `.env.example`):
+**1. Env-Variablen anlegen.** Für `pnpm cms:dev`, `cms:test` und `cms:migrate` reicht eine git-ignorierte `payload/.env` (Next und die Payload-CLI laden sie aus `payload/`, die Root-`.env` sieht `payload/` nicht; Infisical-Werte haben Vorrang). Compose liest dagegen die Root-`.env`. Vorlage: `.env.example`:
 
 | Variable | Bedeutung | Lokal |
 | --- | --- | --- |
