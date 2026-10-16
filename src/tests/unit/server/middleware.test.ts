@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { onRequest } from "../../../middleware.ts";
+import { onRequest } from "../../../middleware/index.ts";
 
 const run = (next: () => Promise<Response>) =>
   (onRequest as (ctx: unknown, next: () => Promise<Response>) => Promise<Response>)({}, next);
