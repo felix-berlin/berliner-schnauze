@@ -553,8 +553,10 @@ export default defineConfig({
     },
 
     // Bundle every dep into dist/server so the Docker image needs no node_modules.
+    // Dev keeps deps external: CJS ones (hypher, natural, ...) imported by the linked
+    // payload-app package are not pre-bundled and fail with "module is not defined".
     ssr: {
-      noExternal: true,
+      noExternal: import.meta.env.DEV ? undefined : true,
     },
 
     plugins: [
