@@ -55,7 +55,7 @@ All in `src/services/queries/`, `src/services/fragments/`, `src/stores/wordOfThe
 
 - `/wort/<slug>`, `/themen/<slug>`, `/magazin/<slug>` and the rest keep their paths. Slugs are imported verbatim.
 - The Yoast output (title, meta description, canonical, OG/Twitter, robots) must render identically. Diff a sample of pages before and after.
-- Media URLs change (`…/wp-content/uploads/…` → Payload media URLs). Anything indexed or shared under an old media URL gets a 301 to its new URL on `cms.berliner-schnauze.wtf`. The import records the old→new mapping for this. *(Assumption: WordPress runs on that host today. If it doesn't, the old host needs a redirect too.)*
+- Media URLs change (`…/wp-content/uploads/…` → Payload media URLs). Anything indexed or shared under an old media URL gets a 301 to its new URL on `cms.berliner-schnauze.wtf`. The import records the old→new mapping for this. (Confirmed: WordPress media is served from that host today.)
 - Sitemap with `lastmod` stays.
 
 ## Import
