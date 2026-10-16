@@ -59,7 +59,8 @@ export default defineConfig({
   // page can be prerendered without a database at build time. The standalone server (Docker image) still
   // serves dist/client (assets, sw.js) itself.
   output: "server",
-  adapter: node({ mode: "standalone" }),
+  // The suggest-word POST is anonymous and parsed before validation: cap what the adapter buffers.
+  adapter: node({ mode: "standalone", bodySizeLimit: 64 * 1024 }),
   // Astro.url (breadcrumb JSON-LD ids, ...) takes its origin from the proxy's X-Forwarded-Host/-Proto only for these
   // hosts; without a match it falls back to http://localhost:<port>. The reverse proxy must send both headers.
   security: {
@@ -410,12 +411,9 @@ export default defineConfig({
       workbox: {
         globDirectory: "dist/client",
         cleanupOutdatedCaches: true,
-        // Falls back to the (precached) homepage for any navigation that misses
-        // both precache and network — e.g. a word page added after the last SW
-        // update, while offline — instead of the browser's generic offline page.
-        navigateFallback: "/",
-        // Pages are no longer files in dist/client, so the fallback target has to be added to the precache by hand.
-        additionalManifestEntries: [{ url: "/", revision: String(Date.now()) }],
+        // No navigate fallback option: with on-demand pages the precache holds no HTML, and Workbox would answer
+        // every page load (not just offline ones) with the homepage. Visited pages are cached by the
+        // NetworkFirst navigation route in runtimeCaching instead.
         globPatterns: import.meta.env.DEV
           ? []
           : ["**/*.{js,css,html,svg,png,jpg,jpeg,gif,webp,avif,woff2,ico,txt}"],
@@ -427,6 +425,16 @@ export default defineConfig({
         ],
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2 MB (Workbox default)
         runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "pages",
+              networkTimeoutSeconds: 3,
+              expiration: { maxEntries: 50, maxAgeSeconds: 86_400 },
+              cacheableResponse: { statuses: [200] },
+            },
+          },
           {
             urlPattern: new RegExp(`^${SITE_ORIGIN}/api/search/index\\.json$`),
             handler: "StaleWhileRevalidate",

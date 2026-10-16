@@ -79,7 +79,11 @@ const doc = {
   infoText: lexical("Adjektiv zu Aas"),
   learnMore: "https://example.org/mehr",
   publishedAt: "2025-04-09T08:12:37.000Z",
-  relatedWords: [{ berlinerisch: "wa", id: 13, slug: "wa" }, 14],
+  relatedWords: [
+    { _status: "published", berlinerisch: "wa", id: 13, slug: "wa" },
+    { _status: "draft", berlinerisch: "geheim", id: 15, slug: "geheim" },
+    14,
+  ],
   seo: {
     canonical: null,
     description: "Meta",

@@ -16,9 +16,14 @@ Background: `docs/superpowers/specs/2026-10-16-payload-migration-design.md`. Set
   Cloudflare's dummy Turnstile keys).
 - **Anki:** the deck built from Payload is identical to the one built from WordPress (5907/5907 Full, 603/603 Lite
   cards, same GUIDs and fields).
-- **Not verified, needs you:** the PWA offline fallback in a browser (the service worker now precaches `/`),
+- **Not verified, needs you:** the PWA offline fallback in a browser (the service worker caches visited pages (NetworkFirst), there is no precached fallback page),
   playing audio from the CMS host (CSP `media-src` was added), WebKit/Firefox/mobile Playwright projects (only
   Chromium ran locally; CI runs all), the GitHub Actions jobs (the branch was never pushed).
+
+## Before anything: do not merge early
+
+- [ ] Do not merge `feat/payload-migration` into `main` before step 7, or first disconnect/pause Cloudflare Workers Builds for this repo. The branch builds without a database but `dist/client` holds no HTML any more; a Workers deploy of it would serve empty pages on the live domain.
+- [ ] Known gap: Lexical links in magazine posts have no `rel="sponsored"` (the "Anzeige" disclosure in `article.ts` relies on it). No published post has one today; check before publishing a post with affiliate links.
 
 ## 1. Secrets and env
 

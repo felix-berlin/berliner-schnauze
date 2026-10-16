@@ -13,9 +13,14 @@ export const E2E_WORD_SLUGS = ["aasen", "akademiebusen", "alex", "alsche", "anma
 
 /** The seed writes invented words: never let it near a real database. */
 export function assertLocalDatabase(url: string | undefined): void {
-  const host = url && URL.canParse(url) ? new URL(url).hostname : "";
+  const parsed = url && URL.canParse(url) ? new URL(url) : undefined;
+  const host = parsed?.hostname ?? "";
   if (!["localhost", "127.0.0.1", "::1", "[::1]", "postgres"].includes(host)) {
     throw new Error(`Refusing to seed "${host || String(url)}": only a local or compose database is allowed`);
+  }
+  // The production compose database is "local" too: only throwaway databases (CI: bs_e2e, docker-smoke: bs_smoke).
+  if (!/_(e2e|smoke)$/.test(parsed!.pathname.slice(1))) {
+    throw new Error(`Refusing to seed database "${parsed!.pathname.slice(1)}": its name must end in _e2e or _smoke`);
   }
 }
 

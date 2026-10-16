@@ -95,11 +95,14 @@ export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
     infoText: lexicalToHtml(doc.infoText) || null,
     learnMore: doc.learnMore ?? null,
     relatedWords: {
-      nodes: populated<PayloadWord>(doc.relatedWords).map((w) => ({
-        id: wordGlobalId(w),
-        slug: w.slug ?? null,
-        wordProperties: { berlinerisch: w.berlinerisch },
-      })),
+      // the Local API ignores access control: a never-published word must not leak through a relation
+      nodes: populated<PayloadWord>(doc.relatedWords)
+        .filter((w) => w._status === "published")
+        .map((w) => ({
+          id: wordGlobalId(w),
+          slug: w.slug ?? null,
+          wordProperties: { berlinerisch: w.berlinerisch },
+        })),
     },
     sources: doc.sources?.length ? [{ quelle: doc.sources }] : null,
     translations:

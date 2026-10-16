@@ -81,6 +81,18 @@ describe("assertLocalDatabase", () => {
     expect(() => assertLocalDatabase("postgres://u:p@127.0.0.1/bs_e2e")).not.toThrow();
   });
 
+  it.each([
+    "postgres://u:p@postgres:5432/berliner",
+    "postgres://u:p@127.0.0.1:5432/berliner",
+    "postgres://u:p@localhost/berliner_schnauze",
+  ])("refuses a local host with a database not named for e2e: %j (the prod compose DB is local too)", (url) => {
+    expect(() => assertLocalDatabase(url)).toThrow();
+  });
+
+  it("accepts the smoke database", () => {
+    expect(() => assertLocalDatabase("postgres://u:p@127.0.0.1/bs_smoke")).not.toThrow();
+  });
+
   it.each(["postgres://u:p@db.prod.example/berliner_schnauze", "", "not a url"])("refuses %j: the seed writes invented words", (url) => {
     expect(() => assertLocalDatabase(url)).toThrow();
   });
