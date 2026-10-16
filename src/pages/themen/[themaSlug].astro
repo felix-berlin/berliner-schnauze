@@ -27,9 +27,9 @@ const seoProps = seoData({
       opengraphImage: { sourceUrl: thema.seo.opengraphImage.sourceUrl },
     }),
     opengraphType: 'website',
-    title: thema.seo?.title ?? thema.name ?? '',
+    title: thema.seo?.title ?? thema.name,
   },
-  title: thema.name ?? '',
+  title: thema.name,
 });
 
 const itemListJson = () =>
@@ -41,7 +41,7 @@ const itemListJson = () =>
       position: index + 1,
       url: canonicalUrl(routeToWord(word.slug), Astro.site),
     })),
-    name: thema.name ?? '',
+    name: thema.name,
     numberOfItems: words.length,
   });
 ---

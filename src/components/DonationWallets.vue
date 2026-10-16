@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FundingWallet } from "@services/queries/getCompanyFunding";
+import type { FundingWallet } from "@services/payload/site.ts";
 
 import { createToastNotify } from "@stores/toastNotify.ts";
 import { trackEvent } from "@utils/analytics";

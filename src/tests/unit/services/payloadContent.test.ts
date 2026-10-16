@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { getPayload, find, count } = vi.hoisted(() => ({
-  count: vi.fn(),
+const { getPayload, find } = vi.hoisted(() => ({
   find: vi.fn(),
   getPayload: vi.fn(),
 }));
@@ -58,8 +57,7 @@ const img = {
 beforeEach(() => {
   vi.resetModules();
   find.mockReset();
-  count.mockReset();
-  getPayload.mockReset().mockResolvedValue({ count, find });
+  getPayload.mockReset().mockResolvedValue({ find });
 });
 
 describe("toPostBlocks", () => {
@@ -170,23 +168,36 @@ describe("fetchAllPosts", () => {
 });
 
 describe("fetchAllThemen", () => {
-  it("maps themen with their public word count and seo", async () => {
-    find.mockResolvedValue({
-      docs: [
-        {
-          description: "Kulinarisches",
-          id: 2,
-          name: "Essen & Trinken",
-          seo: { ogImage: { id: 1, url: "/api/media/file/e.png" }, title: "Essen" },
-          slug: "essen",
-        },
-      ],
-    });
-    count.mockResolvedValue({ totalDocs: 42 });
+  const thema = (id: number, name: string, slug: string | null) => ({
+    description: null,
+    id,
+    name,
+    seo: null,
+    slug,
+  });
+
+  it("maps themen with their public word count and seo, sorted by name (de)", async () => {
+    find.mockImplementation(({ collection }: { collection: string }) =>
+      Promise.resolve(
+        collection === "themen"
+          ? {
+              docs: [
+                thema(3, "Zoo", "zoo"),
+                {
+                  ...thema(2, "Essen & Trinken", "essen"),
+                  description: "Kulinarisches",
+                  seo: { ogImage: { id: 1, url: "/api/media/file/e.png" }, title: "Essen" },
+                },
+                thema(4, "Ohne Slug", null),
+              ],
+            }
+          : { docs: [{ themen: [2, 3] }, { themen: [2] }, { themen: null }] },
+      ),
+    );
     const { fetchAllThemen } = await import("@services/payload/themen.ts");
     expect(await fetchAllThemen()).toMatchObject([
       {
-        count: 42,
+        count: 2,
         description: "Kulinarisches",
         name: "Essen & Trinken",
         seo: {
@@ -195,11 +206,12 @@ describe("fetchAllThemen", () => {
         },
         slug: "essen",
       },
+      { count: 1, name: "Zoo", slug: "zoo" },
     ]);
-    expect(count).toHaveBeenCalledWith(
+    expect(find).toHaveBeenCalledWith(
       expect.objectContaining({
         collection: "words",
-        where: { and: [{ themen: { contains: 2 } }, { _status: { equals: "published" } }] },
+        where: { _status: { equals: "published" } },
       }),
     );
   });

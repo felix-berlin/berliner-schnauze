@@ -9,7 +9,9 @@
  * Requires env vars: PAYLOAD_URL, PAYLOAD_API_KEY
  */
 
-import { delay, payloadFetch } from "./lib/payload-rest.ts";
+import { setTimeout as delay } from "node:timers/promises";
+
+import { payloadFetch } from "./lib/payload-rest.ts";
 
 const DRY_RUN = process.argv.includes("--dry-run");
 const RATE_MS = 150;

@@ -13,10 +13,7 @@ const getMinMax = (arr: number[]) => ({
 export const GET: APIRoute = async () => {
   const [entries, allThemen] = await Promise.all([getSearchIndexEntries(), fetchAllThemen()]);
 
-  const themen = allThemen
-    .filter((t): t is typeof t & { name: string; slug: string } => !!t.slug && !!t.name)
-    .map((t) => ({ name: t.name, slug: t.slug }))
-    .sort((a, b) => a.name.localeCompare(b.name, "de"));
+  const themen = allThemen.map(({ name, slug }) => ({ name, slug }));
 
   // Everything else comes from the search index entries, so the NLP word
   // types, hyphenation and letter counts use the exact same logic.
@@ -43,9 +40,5 @@ export const GET: APIRoute = async () => {
     wordTypes,
   };
 
-  const res = new Response(JSON.stringify(meta), {
-    headers: { "Content-Type": "application/json" },
-  });
-  setPageCache(res);
-  return res;
+  return setPageCache(Response.json(meta));
 };

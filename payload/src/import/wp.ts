@@ -1,6 +1,6 @@
 /**
  * WPGraphQL access for the importer. Field selections copy src/services/fragments/fragments.ts and
- * src/services/queries/* (plus `databaseId` and `status`). Nothing here imports the Astro app.
+ * src/types/cms.ts (plus `databaseId` and `status`). Nothing here imports the Astro app.
  */
 
 /** POST a query to WP_API with Basic Auth. Throws on HTTP and GraphQL errors. */
@@ -27,8 +27,6 @@ const POST_TYPE_SEO = `
   title canonical metaDesc opengraphTitle opengraphDescription
   opengraphImage { sourceUrl }
   twitterTitle twitterDescription metaRobotsNofollow metaRobotsNoindex`;
-
-const TAXONOMY_SEO = POST_TYPE_SEO;
 
 const MEDIA_ITEM = `audio { node { mediaItemUrl } } gender`;
 
@@ -64,7 +62,7 @@ export const WORD_TYPES_QUERY = `
 export const THEMEN_QUERY = `
   query ImportThemen {
     berlinerischThemen(first: 100) {
-      nodes { databaseId name slug description seo { ${TAXONOMY_SEO} } }
+      nodes { databaseId name slug description seo { ${POST_TYPE_SEO} } }
       pageInfo { hasNextPage }
     }
   }`;
@@ -112,8 +110,8 @@ export const COMPANY_QUERY = `
     } }
   }`;
 
-type Maybe<T> = T | null | undefined;
-type AudioRow = { gender?: Maybe<string>; audio?: Maybe<{ node?: Maybe<{ mediaItemUrl?: Maybe<string> }> }> };
+export type Maybe<T> = T | null | undefined;
+export type AudioRow = { gender?: Maybe<string>; audio?: Maybe<{ node?: Maybe<{ mediaItemUrl?: Maybe<string> }> }> };
 type Nodes<T> = Maybe<{ nodes?: Maybe<Maybe<T>[]> }>;
 
 export type WpSeo = {

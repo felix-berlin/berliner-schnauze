@@ -1,12 +1,12 @@
 import type { CollectionConfig } from "payload";
 
-import { authenticated } from "../access";
+import { authenticatedOnly } from "../access";
 import { identityFields } from "../fields/identity";
 import { seoField } from "../fields/seo";
 
 export const Pages: CollectionConfig = {
   slug: "pages",
-  access: { read: authenticated, create: authenticated, update: authenticated, delete: authenticated },
+  access: authenticatedOnly,
   admin: { useAsTitle: "title" },
   fields: [
     { name: "title", type: "text", required: true },

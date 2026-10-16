@@ -30,27 +30,26 @@ describe("fetchMenu", () => {
 
   it.each([
     [
-      "Main Menu",
+      "main",
       [
         { description: "Alle Wörter", link: "/wort", rel: "noopener", title: "Wörterbuch" },
         { link: "/magazin", title: "Magazin" },
       ],
     ],
-    ["Footer Nav 1", [{ link: "/impressum", title: "Impressum" }]],
-    ["Footer Nav 2", []],
-    ["Unknown", []],
-  ])("maps the WordPress menu name %s onto the navigation global", async (name, expected) => {
+    ["footer1", [{ link: "/impressum", title: "Impressum" }]],
+    ["footer2", []],
+  ])("maps the %s menu of the navigation global", async (name, expected) => {
     findGlobal.mockResolvedValue(nav);
     const { fetchMenu } = await load();
-    expect(await fetchMenu(name)).toEqual(expected);
+    expect(await fetchMenu(name as "main")).toEqual(expected);
   });
 
   it("reads the global once and rejects without caching when the database fails", async () => {
     findGlobal.mockRejectedValueOnce(new Error("db down")).mockResolvedValue(nav);
     const { fetchMenu } = await load();
-    await expect(fetchMenu("Main Menu")).rejects.toThrow("db down");
-    await fetchMenu("Main Menu");
-    await fetchMenu("Footer Nav 1");
+    await expect(fetchMenu("main")).rejects.toThrow("db down");
+    await fetchMenu("main");
+    await fetchMenu("footer1");
     expect(findGlobal).toHaveBeenCalledTimes(2);
     expect(findGlobal).toHaveBeenCalledWith(expect.objectContaining({ slug: "navigation" }));
   });

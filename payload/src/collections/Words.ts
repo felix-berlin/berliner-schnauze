@@ -1,6 +1,6 @@
 import type { CollectionConfig, Field } from "payload";
 
-import { authenticated } from "../access";
+import { authenticatedOnly } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { seoField } from "../fields/seo";
@@ -15,7 +15,7 @@ const audioRows = (name: string): Field => ({
 
 export const Words: CollectionConfig = {
   slug: "words",
-  access: { read: authenticated, create: authenticated, update: authenticated, delete: authenticated },
+  access: authenticatedOnly,
   admin: { useAsTitle: "berlinerisch" },
   versions: { drafts: true },
   hooks: { beforeChange: [touchContentModifiedAt, setDerivedWordFields] },

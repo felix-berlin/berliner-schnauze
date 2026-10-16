@@ -1,23 +1,11 @@
+import type { Word } from "payload-app";
+
 import { mediaUrl } from "@services/payload.ts";
 
 import type { SeoData } from "@/types/cms.ts";
 
-/** WP format (no milliseconds, no trailing Z): callers append "Z" or parse it themselves. */
-export const wpDate = (iso: string | null | undefined): string | null =>
-  iso ? iso.replace(/(\.\d+)?Z$/, "") : null;
-
-type PayloadSeo = {
-  canonical?: string | null;
-  description?: string | null;
-  nofollow?: boolean | null;
-  noindex?: boolean | null;
-  ogDescription?: string | null;
-  ogImage?: Parameters<typeof mediaUrl>[0];
-  ogTitle?: string | null;
-  title?: string | null;
-  twitterDescription?: string | null;
-  twitterTitle?: string | null;
-};
+/** The shared `seo` group (payload/src/fields/seo.ts): words, posts, pages and themen store the same shape. */
+type PayloadSeo = Word["seo"];
 
 const SITE_NAME = "Berliner Schnauze";
 
@@ -36,16 +24,11 @@ export const toSeoData = (
     metaDesc: seo.description || null,
     metaRobotsNofollow: seo.nofollow ? "nofollow" : "follow",
     metaRobotsNoindex: seo.noindex ? "noindex" : "index",
-    opengraphAuthor: null,
     opengraphDescription: seo.ogDescription || null,
     opengraphImage: og ? { sourceUrl: og } : null,
-    opengraphModifiedTime: null,
-    opengraphPublishedTime: null,
-    opengraphPublisher: null,
     opengraphSiteName: SITE_NAME,
     opengraphTitle: seo.ogTitle || null,
     opengraphType,
-    opengraphUrl: null,
     readingTime: null,
     title: seo.title || null,
     twitterDescription: seo.twitterDescription || null,

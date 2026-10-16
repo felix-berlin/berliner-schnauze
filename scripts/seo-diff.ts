@@ -74,14 +74,13 @@ for (const path of paths) {
       ),
     );
 
-  const known = KNOWN.find((k) => k.path === path)?.keys ?? [];
-  const unexpected = diffs.filter((d) => !known.includes(d.key));
-  if (diffs.length > unexpected.length && unexpected.length === 0) {
-    console.log(`known ${path}  (${diffs.map((d) => d.key).join(", ")})`);
-    continue;
-  }
   if (diffs.length === 0) {
     console.log(`ok    ${path}`);
+    continue;
+  }
+  const known = KNOWN.find((k) => k.path === path)?.keys ?? [];
+  if (diffs.every((d) => known.includes(d.key))) {
+    console.log(`known ${path}  (${diffs.map((d) => d.key).join(", ")})`);
     continue;
   }
   different++;

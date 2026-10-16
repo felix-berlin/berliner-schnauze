@@ -28,7 +28,7 @@ vi.mock("@utils/analytics", () => ({
 
 vi.mock("@components/TurnStile.vue", () => ({
   default: {
-    emits: ["token", "verify"],
+    emits: ["token"],
     name: "TurnStile",
     template: "<div class='mock-turnstile' />",
   },

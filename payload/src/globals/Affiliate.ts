@@ -1,10 +1,10 @@
 import type { GlobalConfig } from "payload";
 
-import { authenticated } from "../access";
+import { authenticatedGlobal } from "../access";
 
 export const Affiliate: GlobalConfig = {
   slug: "affiliate",
-  access: { read: authenticated, update: authenticated },
+  access: authenticatedGlobal,
   fields: [
     {
       name: "books",

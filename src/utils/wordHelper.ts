@@ -1,7 +1,13 @@
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
 import natural from "natural";
 import { createRequire } from "node:module";
-import { isConsonantChar, isVowelChar, soundexCode } from "payload-app/word-derived";
+import {
+  isConsonantChar,
+  isVowelChar,
+  LETTER_RE,
+  soundexCode,
+  VOWELS,
+} from "payload-app/word-derived";
 
 import type { WordPropertiesWikimediaFiles } from "@/types/cms";
 
@@ -28,9 +34,6 @@ export const getGermanWords = (): Set<string> =>
       w.toLowerCase(),
     ),
   ));
-
-const VOWELS = new Set(["a", "e", "i", "o", "u", "ä", "ö", "ü"]);
-const LETTER_RE = /[a-zäöüß]/i;
 
 /**
  * Returns the word with vowels and consonants colored.

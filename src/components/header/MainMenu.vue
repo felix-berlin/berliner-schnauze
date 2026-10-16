@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MenuItem } from "@services/queries/getMenu";
+import type { MenuItem } from "@services/payload/site.ts";
 import type { Component } from "vue";
 
 import ColorModePicker from "@components/ColorModePicker.vue";

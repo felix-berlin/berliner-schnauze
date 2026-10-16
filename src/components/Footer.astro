@@ -5,17 +5,15 @@ import FooterAppSection from '@components/FooterAppSection.vue';
 import NavList from '@components/NavList.vue';
 import { Picture } from 'astro:assets';
 import WakapiStats from '@components/WakapiStats.astro';
-import { fetchSocialMenu } from '@services/queries/getCompanySocialMedia';
-import { fetchFundingData } from '@services/queries/getCompanyFunding';
-import { fetchMenu } from '@services/queries/getMenu';
+import { fetchFundingData, fetchMenu, fetchSocialMenu } from '@services/payload/site.ts';
 
 import { version } from '../../package.json';
 
 const [socialMenu, { platforms }, navMenu1, navMenu2] = await Promise.all([
   fetchSocialMenu(),
   fetchFundingData(),
-  fetchMenu('Footer Nav 1'),
-  fetchMenu('Footer Nav 2'),
+  fetchMenu('footer1'),
+  fetchMenu('footer2'),
 ]);
 const fundingMenu = [
   ...platforms.map((platform) => ({ link: platform.link, title: platform.name })),

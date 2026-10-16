@@ -78,13 +78,11 @@ describe("meta.json GET", () => {
     expect((await getMeta()).wordTypes).toEqual(["Nomen", "Verb"]);
   });
 
-  it("keeps only themen with name and slug, sorted by name (de)", async () => {
+  it("keeps name and slug of each thema in the adapter's order", async () => {
     getSearchIndexEntries.mockResolvedValue([]);
     fetchAllThemen.mockResolvedValue([
-      { name: "Zoo", slug: "zoo" },
-      { name: "Ärger", slug: "aerger" },
-      { name: "Ohne Slug", slug: null },
-      { name: null, slug: "ohne-name" },
+      { count: 1, name: "Ärger", slug: "aerger" },
+      { count: 2, name: "Zoo", slug: "zoo" },
     ]);
     expect((await getMeta()).themen).toEqual([
       { name: "Ärger", slug: "aerger" },

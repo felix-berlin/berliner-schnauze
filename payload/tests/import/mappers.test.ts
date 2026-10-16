@@ -5,7 +5,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import type { ImportRefs } from "../../src/import/mappers";
 import type { WpPost, WpWord } from "../../src/import/wp";
 
-import { collectMedia, collectMediaUrls, mapRelatedWords, mapSeo, mapWord } from "../../src/import/mappers";
+import { collectMedia, mapRelatedWords, mapSeo, mapWord } from "../../src/import/mappers";
 import { wpUploadPath } from "../../src/lib/wpUploadPath";
 import { lexicalNodes } from "../helpers/lexical";
 import { getTestPayload } from "../helpers/payload";
@@ -114,9 +114,9 @@ describe("mapSeo", () => {
   });
 });
 
-describe("collectMediaUrls", () => {
+describe("collectMedia urls", () => {
   it("collects audio, images, og and featured images, deduplicated by upload path", () => {
-    const urls = collectMediaUrls([aasen, wa, testwort] as WpWord[], [post as WpPost], [], []);
+    const urls = [...collectMedia([aasen, wa, testwort] as WpWord[], [post as WpPost], [], []).values()].map((m) => m.url);
     expect(urls.sort()).toEqual(
       [
         AUDIO,

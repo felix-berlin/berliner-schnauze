@@ -1,15 +1,15 @@
 import type { Media } from "payload-app";
 
 import { ttl } from "@services/cache.ts";
-import { getPayloadClient, mediaUrl } from "@services/payload.ts";
-import { toSeoData, wpDate } from "@services/payload/seo.ts";
-import { SHOW_TEST_DATA } from "astro:env/client";
+import { getPayloadClient, mediaUrl, publicDocs } from "@services/payload.ts";
+import { toSeoData } from "@services/payload/seo.ts";
+import { berlinParts } from "@utils/wordOfTheDay.ts";
+import { wpDate } from "@utils/wpDate.ts";
 import { lexicalToHtml } from "payload-app/lexical-html";
 
 import type { ArticleBlock, PostNode } from "@/types/cms.ts";
 
 export type { PostNode };
-export type PostNodes = PostNode[];
 
 type LexicalNode = { children?: LexicalNode[]; type?: string; value?: unknown };
 type LexicalRoot = { root: { children: LexicalNode[] } & Record<string, unknown> };
@@ -72,20 +72,7 @@ export const toPostBlocks = (content: unknown): ArticleBlock[] => {
 /** WP `date` of a post: local time of the site (Berlin), no zone, no milliseconds. */
 const berlinLocalDate = (iso: string | null | undefined): string | null => {
   if (!iso) return null;
-  const p = Object.fromEntries(
-    new Intl.DateTimeFormat("en-GB", {
-      day: "2-digit",
-      hour: "2-digit",
-      hourCycle: "h23",
-      minute: "2-digit",
-      month: "2-digit",
-      second: "2-digit",
-      timeZone: "Europe/Berlin",
-      year: "numeric",
-    })
-      .formatToParts(new Date(iso))
-      .map((part) => [part.type, part.value]),
-  );
+  const p = berlinParts(new Date(iso));
   return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`;
 };
 
@@ -107,7 +94,7 @@ const loadPosts = async (): Promise<PostNode[]> => {
     depth: 1,
     pagination: false,
     sort: "-publishedAt",
-    ...(SHOW_TEST_DATA ? { draft: true } : { where: { _status: { equals: "published" } } }),
+    ...publicDocs(),
   });
   return docs.flatMap((post) => {
     if (!post.slug) return [];

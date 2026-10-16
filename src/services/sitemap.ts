@@ -1,4 +1,5 @@
 import { fetchAllPosts, fetchAllThemen, fetchAllWords } from "@services/api.ts";
+import { wpDateMs } from "@utils/wpDate.ts";
 import { getCollection } from "astro:content";
 
 export type SitemapEntry = { lastmod?: string; loc: string };
@@ -24,9 +25,8 @@ const STATIC_PATHS = [
   "/wort-vorschlagen",
 ];
 
-/** WP-format dates (no trailing Z) are UTC. */
 const isoDate = (date: string | null | undefined): string | undefined => {
-  const time = date ? Date.parse(`${date}Z`) : Number.NaN;
+  const time = wpDateMs(date);
   return Number.isNaN(time) ? undefined : new Date(time).toISOString();
 };
 
@@ -41,7 +41,7 @@ export const buildSitemapEntries = async (site: URL): Promise<SitemapEntry[]> =>
   const entries: { lastmod?: string; path: string }[] = [
     ...STATIC_PATHS.map((path) => ({ path })),
     ...changelogs.map((c) => ({ path: `/changelog/${c.data.version}` })),
-    ...themen.flatMap((t) => (t.slug ? [{ path: `/themen/${t.slug}` }] : [])),
+    ...themen.map((t) => ({ path: `/themen/${t.slug}` })),
     ...posts.flatMap((p) =>
       p.slug ? [{ lastmod: isoDate(p.modifiedGmt), path: `/magazin/${p.slug}` }] : [],
     ),

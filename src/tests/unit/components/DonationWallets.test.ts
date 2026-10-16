@@ -1,4 +1,4 @@
-import type { FundingWallet } from "@services/queries/getCompanyFunding";
+import type { FundingWallet } from "@services/payload/site.ts";
 
 import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";

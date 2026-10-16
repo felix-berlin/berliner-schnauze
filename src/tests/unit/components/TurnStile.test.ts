@@ -67,7 +67,7 @@ describe("TurnStile.vue — renderTurnstile callback (covers lines 49-50, 67)", 
     expect(mockRender.mock.calls[0][1]).toMatchObject({ sitekey: "site-key" });
   });
 
-  it("checkVerification returns true for non-empty response (covers line 67)", () => {
+  it("emits the token Turnstile hands to its callback", () => {
     let capturedCb: ((r: string) => void) | null = null;
     window.turnstile = {
       render: vi.fn((_sel: string, opts: Record<string, unknown>) => {
@@ -77,20 +77,7 @@ describe("TurnStile.vue — renderTurnstile callback (covers lines 49-50, 67)", 
     const wrapper = mount(TurnStile, { props: { siteKey: "k" } });
     window.onloadTurnstileCallback();
     capturedCb!("valid-token");
-    expect(wrapper.emitted("verify")![0]).toEqual([true]);
-  });
-
-  it("checkVerification returns false for empty string response (covers line 67)", () => {
-    let capturedCb: ((r: string) => void) | null = null;
-    window.turnstile = {
-      render: vi.fn((_sel: string, opts: Record<string, unknown>) => {
-        capturedCb = opts.callback as (r: string) => void;
-      }),
-    };
-    const wrapper = mount(TurnStile, { props: { siteKey: "k" } });
-    window.onloadTurnstileCallback();
-    capturedCb!("");
-    expect(wrapper.emitted("verify")![0]).toEqual([false]);
+    expect(wrapper.emitted("token")![0]).toEqual(["valid-token"]);
   });
 
   it("onloadTurnstileCallback emits fail and expire events immediately on render (lines 51-52)", () => {

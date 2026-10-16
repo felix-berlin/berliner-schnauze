@@ -4,7 +4,7 @@ import "@styles/components/_word-group.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 import Layout from "@layouts/Layout.astro";
 import { fetchAllWords } from "@services/api.ts";
-import type { Word } from "@services/queries/getWords.ts";
+import type { Word } from "@/types/cms.ts";
 import { routeToWord, seoData, canonicalUrl } from "@utils/helpers.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
 import ChevronRight from "~icons/lucide/chevron-right";

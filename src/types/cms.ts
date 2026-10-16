@@ -21,16 +21,11 @@ export type SeoData = {
   metaDesc: string | null;
   metaRobotsNofollow: string | null;
   metaRobotsNoindex: string | null;
-  opengraphAuthor: string | null;
   opengraphDescription: string | null;
   opengraphImage: { sourceUrl: string | null } | null;
-  opengraphModifiedTime: string | null;
-  opengraphPublishedTime: string | null;
-  opengraphPublisher: string | null;
   opengraphSiteName: string | null;
   opengraphTitle: string | null;
   opengraphType: string | null;
-  opengraphUrl: string | null;
   readingTime: number | null;
   title: string | null;
   twitterDescription: string | null;
@@ -101,9 +96,9 @@ export type Word = {
 export type ThemaNode = {
   count: number;
   description: string | null;
-  name: string | null;
+  name: string;
   seo: SeoData | null;
-  slug: string | null;
+  slug: string;
 };
 
 export type CoreImageBlock = {

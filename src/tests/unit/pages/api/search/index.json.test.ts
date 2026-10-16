@@ -90,7 +90,7 @@ describe("makeOramaSearchIndex — word properties", () => {
   it("uses 0 timestamps when the dates are missing and parses them otherwise", () => {
     const missing = makeOramaSearchIndex(makeWord({ dateGmt: null, modifiedGmt: null } as never));
     expect([missing.dateTs, missing.modifiedTs]).toEqual([0, 0]);
-    const present = makeOramaSearchIndex(makeWord({ dateGmt: "2025-01-01T00:00:00Z" }));
+    const present = makeOramaSearchIndex(makeWord({ dateGmt: "2025-01-01T00:00:00" }));
     expect(present.dateTs).toBe(Date.parse("2025-01-01T00:00:00Z"));
   });
 

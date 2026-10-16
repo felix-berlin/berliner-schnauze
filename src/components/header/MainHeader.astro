@@ -2,10 +2,10 @@
 import '@styles/components/_menu-nav.scss';
 import MainMenu from '@components/header/MainMenu.vue';
 import SearchModalTrigger from '@components/modals/search/SearchModalTrigger.vue';
-import { fetchMenu } from '@services/queries/getMenu';
+import { fetchMenu } from '@services/payload/site.ts';
 
 const isIndex = /^\/(index(\.html)?)?$/.test(Astro.url.pathname);
-const mainMenuItems = await fetchMenu('Main Menu');
+const mainMenuItems = await fetchMenu('main');
 // ponytail: keyed by path like the icons in MainMenu.vue; move to WP menu CSS classes with them.
 const headerLinks = mainMenuItems.filter((item) => ['/wort', '/magazin'].includes(item.link));
 ---

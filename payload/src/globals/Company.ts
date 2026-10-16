@@ -1,11 +1,11 @@
 import type { GlobalConfig } from "payload";
 
-import { authenticated } from "../access";
+import { authenticatedGlobal } from "../access";
 
 /** Raw WordPress rows; the platform/wallet grouping stays in the frontend. */
 export const Company: GlobalConfig = {
   slug: "company",
-  access: { read: authenticated, update: authenticated },
+  access: authenticatedGlobal,
   fields: [
     {
       name: "funding",

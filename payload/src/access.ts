@@ -2,6 +2,11 @@ import type { Access } from "payload";
 
 export const authenticated: Access = ({ req }) => Boolean(req.user);
 
+/** The default for content: the site reads it through the Local API, the REST/GraphQL API only for logged-in users. */
+export const authenticatedOnly = { read: authenticated, create: authenticated, update: authenticated, delete: authenticated };
+
+export const authenticatedGlobal = { read: authenticated, update: authenticated };
+
 /** Files are public (`/api/media/file/*` passes `isReadingStaticFile`); listing the media docs needs login. */
 export const mediaRead: Access = ({ req, isReadingStaticFile }) => Boolean(req.user) || isReadingStaticFile === true;
 

@@ -1,15 +1,13 @@
-import type { Word } from "@services/queries/getWords.ts";
 import type { APIRoute } from "astro";
 
 import { fetchAllWords } from "@services/api.ts";
 import { setPageCache } from "@utils/cacheHeaders.ts";
+import { wpDateMs } from "@utils/wpDate.ts";
 import { deriveWordFields } from "payload-app/word-derived";
 
-export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
+import type { Word } from "@/types/cms.ts";
 
-/** WP-format dates carry no zone but are UTC; `Date.parse` alone would read them in the server's timezone. */
-const utcTimestamp = (date: string | null): number =>
-  date ? Date.parse(/(?:Z|[+-]\d\d:?\d\d)$/i.test(date) ? date : `${date}Z`) : 0;
+export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
 
 /** Assembles the slim public entry from stored fields: nothing here may carry definitions, examples or sources. */
 export function makeOramaSearchIndex(node: Word) {
@@ -33,8 +31,8 @@ export function makeOramaSearchIndex(node: Word) {
   return {
     berlinerWordId: node.berlinerWordId,
     berlinerischWordTypes: wordTypes,
-    dateTs: utcTimestamp(node.dateGmt),
-    modifiedTs: utcTimestamp(node.modifiedGmt),
+    dateTs: wpDateMs(node.dateGmt) || 0,
+    modifiedTs: wpDateMs(node.modifiedGmt) || 0,
     slug: node.slug,
     themen,
     wordComponents: derived.wordComponents ?? [],
@@ -56,20 +54,23 @@ export function makeOramaSearchIndex(node: Word) {
   };
 }
 
-// index.json and meta.json both need the entries: map each (memoized) words array once.
-const entriesByWords = new WeakMap<Word[], OramaSearchIndex[]>();
+// index.json and meta.json both need the entries: map (and serialize) each memoized words array once.
+const indexByWords = new WeakMap<Word[], { entries: OramaSearchIndex[]; json: string }>();
 
-export const getSearchIndexEntries = async (): Promise<OramaSearchIndex[]> => {
+const searchIndex = async () => {
   const words = await fetchAllWords();
-  let entries = entriesByWords.get(words);
-  if (!entries) entriesByWords.set(words, (entries = words.map(makeOramaSearchIndex)));
-  return entries;
+  let index = indexByWords.get(words);
+  if (!index) {
+    const entries = words.map(makeOramaSearchIndex);
+    indexByWords.set(words, (index = { entries, json: JSON.stringify(entries) }));
+  }
+  return index;
 };
 
-export const GET: APIRoute = async () => {
-  const res = new Response(JSON.stringify(await getSearchIndexEntries()), {
-    headers: { "Content-Type": "application/json" },
-  });
-  setPageCache(res);
-  return res;
-};
+export const getSearchIndexEntries = async (): Promise<OramaSearchIndex[]> =>
+  (await searchIndex()).entries;
+
+export const GET: APIRoute = async () =>
+  setPageCache(
+    new Response((await searchIndex()).json, { headers: { "Content-Type": "application/json" } }),
+  );

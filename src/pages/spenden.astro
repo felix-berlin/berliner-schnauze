@@ -9,7 +9,7 @@ import DonationWallets from '@components/DonationWallets.vue';
 import HeartIcon from '~icons/lucide/heart';
 import Layout from '@layouts/Layout.astro';
 import CheckIcon from '~icons/lucide/check';
-import { fetchFundingData } from '@services/queries/getCompanyFunding';
+import { fetchFundingData } from '@services/payload/site.ts';
 
 const { platforms, wallets } = await fetchFundingData();
 

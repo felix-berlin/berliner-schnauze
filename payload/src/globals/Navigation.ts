@@ -1,8 +1,8 @@
 import type { ArrayField, GlobalConfig } from "payload";
 
-import { authenticated } from "../access";
+import { authenticatedGlobal } from "../access";
 
-/** Same shape as `MenuItem` in src/services/queries/getMenu.ts. */
+/** Same shape as `MenuItem` in src/services/payload/site.ts. */
 const menu = (name: string): ArrayField => ({
   name,
   type: "array",
@@ -16,6 +16,6 @@ const menu = (name: string): ArrayField => ({
 
 export const Navigation: GlobalConfig = {
   slug: "navigation",
-  access: { read: authenticated, update: authenticated },
+  access: authenticatedGlobal,
   fields: [menu("main"), menu("footer1"), menu("footer2")],
 };

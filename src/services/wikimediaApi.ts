@@ -34,12 +34,16 @@ const loadWikimediaFile = async (file: string) => {
 
 // On-demand word pages ask for the same files on every request: keep results for a day, never a failure.
 const DAY = 24 * 60 * 60 * 1000;
-const cache = new Map<string, { at: number; value: unknown }>();
+// The pending promise is cached too, so concurrent requests for one file share a single fetch.
+const cache = new Map<string, { at: number; value: Promise<unknown> }>();
 
-export const fetchWikimediaAPI = async (file: string) => {
+export const fetchWikimediaAPI = (file: string) => {
   const hit = cache.get(file);
   if (hit && Date.now() - hit.at < DAY) return hit.value;
-  const value = await loadWikimediaFile(file);
-  if (value !== undefined) cache.set(file, { at: Date.now(), value });
+  const value = loadWikimediaFile(file);
+  cache.set(file, { at: Date.now(), value });
+  void value.then((result) => {
+    if (result === undefined && cache.get(file)?.value === value) cache.delete(file);
+  });
   return value;
 };

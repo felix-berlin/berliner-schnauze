@@ -1,5 +1,6 @@
 import type { Media, Payload } from "payload-app";
 
+import { SHOW_TEST_DATA } from "astro:env/client";
 import { PAYLOAD_SERVER_URL } from "astro:env/server";
 import { config, getPayload } from "payload-app";
 
@@ -13,6 +14,15 @@ export const getPayloadClient = (): Promise<Payload> => {
   });
   return client;
 };
+
+/**
+ * Find args for what the site shows: published docs only, or the drafts too with SHOW_TEST_DATA. The Local API
+ * ignores access control, so every query of a drafts collection spreads this.
+ */
+export const publicDocs = () =>
+  SHOW_TEST_DATA
+    ? ({ draft: true } as const)
+    : ({ where: { _status: { equals: "published" as const } } } as const);
 
 /** Absolute URL of a populated media doc (`depth >= 1`); ids and empty values give `undefined`. */
 export const mediaUrl = (media: Media | number | null | undefined): string | undefined =>

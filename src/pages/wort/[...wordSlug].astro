@@ -23,7 +23,7 @@ import BookRecommendations from '@components/word/BookRecommendations.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
 import { fetchAffiliateData, fetchAllWords } from '@services/api.ts';
-import { fetchWordRefs, toWordRef } from '@services/queries/getWords.ts';
+import { fetchWordRefs, toWordRef } from '@services/payload/wordRefs.ts';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
   alphabeticNeighbors,
@@ -32,6 +32,7 @@ import {
   similarSoundingWords,
   similarWords,
   translateNlpTags,
+  type WordTags,
 } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
@@ -67,7 +68,10 @@ const wordPageTitle = berlinerisch
   ? `${berlinerisch} auf Berlinerisch — Bedeutung, Beispiel & Herkunft | Berliner Schnauze`
   : (word.title ?? '');
 
-const wordTags = translateNlpTags(getWordType(berlinerisch));
+// Stored on save; computed only for a word that never went through the hook.
+const wordTags =
+  (word.derived?.nlpTags as WordTags[] | null | undefined) ??
+  translateNlpTags(getWordType(berlinerisch));
 
 const hasImages = Boolean(wordProps.images && wordProps.images.nodes.length > 0);
 const hasAnagrams = anagramsResult.length > 0;
@@ -188,10 +192,8 @@ const schemaJson = () => {
         twitterDescription: wordDescription,
       }),
       ...(ogImage && { opengraphImage: ogImage }),
-      ...(!word.seo?.opengraphPublishedTime &&
-        word.dateGmt && { opengraphPublishedTime: word.dateGmt }),
-      ...(!word.seo?.opengraphModifiedTime &&
-        word.modifiedGmt && { opengraphModifiedTime: word.modifiedGmt }),
+      ...(word.dateGmt && { opengraphPublishedTime: word.dateGmt }),
+      ...(word.modifiedGmt && { opengraphModifiedTime: word.modifiedGmt }),
     },
     title: word.title ?? '',
   })}

@@ -6,7 +6,7 @@
 
 const TIMEOUT_MS = 15_000;
 
-export function getPayloadConfig(): { apiKey: string; baseUrl: string } {
+function getPayloadConfig(): { apiKey: string; baseUrl: string } {
   const baseUrl = process.env["PAYLOAD_URL"];
   const apiKey = process.env["PAYLOAD_API_KEY"];
   if (!baseUrl) throw new Error("PAYLOAD_URL env var missing");
@@ -34,8 +34,4 @@ export async function payloadFetch<T>(path: string, options: RequestInit = {}): 
   }
 
   return response.json() as Promise<T>;
-}
-
-export function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }

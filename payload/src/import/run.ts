@@ -8,7 +8,7 @@ import type { CollectionSlug, Payload, Where } from "payload";
 import path from "node:path";
 
 import type { ImportRefs } from "./mappers";
-import type { WpPage, WpPost, WpThema, WpWord, WpWordType } from "./wp";
+import type { Maybe, WpPage, WpPost, WpThema, WpWord, WpWordType } from "./wp";
 
 import { PRESERVE_CONTENT_MODIFIED_AT } from "../fields/contentModified";
 import { htmlToLexical } from "./html";
@@ -46,7 +46,6 @@ const MEDIA_CONCURRENCY = 5;
 const PRESERVE_CONTEXT = { [PRESERVE_CONTENT_MODIFIED_AT]: true };
 const LOCAL_DB_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
 
-type Maybe<T> = T | null | undefined;
 type Connection<T> = Maybe<{ nodes?: Maybe<Maybe<T>[]>; pageInfo?: Maybe<{ hasNextPage?: Maybe<boolean>; endCursor?: Maybe<string> }> }>;
 
 export const exitCodeFor = (report: ImportReport): number => (report.failures.length > 0 ? 1 : 0);

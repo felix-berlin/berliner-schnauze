@@ -1,11 +1,11 @@
 import type { APIRoute } from "astro";
 
 import { fetchAllWords } from "@services/api.ts";
+import { setPageCache } from "@utils/cacheHeaders.ts";
 import { generateOpenGraphImage } from "astro-og-canvas";
 import { OG_CACHE_DIR } from "astro:env/server";
 
-const notFound = () =>
-  new Response(null, { headers: { "Cache-Control": "no-store" }, status: 404 });
+const notFound = () => setPageCache(new Response(null, { status: 404 }));
 
 /** `/og/<slug>.png`, rendered on the first request and kept in OG_CACHE_DIR (a volume in the container). */
 export const GET: APIRoute = async ({ params }) => {

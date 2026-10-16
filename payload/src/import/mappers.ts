@@ -2,7 +2,7 @@
 import type { SanitizedConfig } from "payload";
 
 import type { Page, Post, Theman, Word } from "../payload-types";
-import type { WpBlock, WpImage, WpPage, WpPost, WpSeo, WpThema, WpWord } from "./wp";
+import type { AudioRow, Maybe, WpBlock, WpImage, WpPage, WpPost, WpSeo, WpThema, WpWord } from "./wp";
 
 import { isWpUploadUrl, wpUploadPath } from "../lib/wpUploadPath";
 import { htmlToLexical, htmlToText, imagesIn, type RichText } from "./html";
@@ -23,7 +23,6 @@ export const SITE_ASSET_FILES = ["brown-bear-roar.png", "bear-walking.png"];
 
 export type MediaMeta = { url: string; alt?: string | null; caption?: string | null; description?: string | null };
 
-type Maybe<T> = T | null | undefined;
 const present = <T>(v: Maybe<T>): v is T => v != null;
 
 /** WP `*Gmt` ("2025-04-09T12:18:58", no zone) -> ISO string; null when empty/invalid. */
@@ -75,9 +74,6 @@ export function collectMedia(words: WpWord[], posts: WpPost[], pages: WpPage[], 
   return media;
 }
 
-export const collectMediaUrls = (...args: Parameters<typeof collectMedia>): string[] =>
-  [...collectMedia(...args).values()].map((m) => m.url);
-
 /** Yoast robots value ("index", "noindex", "noindex, follow", ...) contains `flag`. */
 const robots = (value: Maybe<string>, flag: string) => !!value?.trim().toLowerCase().includes(flag);
 
@@ -99,7 +95,7 @@ export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): NonNullable<Word["s
 }
 
 type AudioRows = NonNullable<Word["berlinerischAudio"]>;
-const mapAudio = (rows: Maybe<Maybe<{ gender?: Maybe<string>; audio?: Maybe<{ node?: Maybe<{ mediaItemUrl?: Maybe<string> }> }> }>[]>, refs: ImportRefs): AudioRows =>
+const mapAudio = (rows: Maybe<Maybe<AudioRow>[]>, refs: ImportRefs): AudioRows =>
   (rows ?? []).filter(present).flatMap((row) => {
     const audio = mediaId(row.audio?.node?.mediaItemUrl, refs);
     if (audio == null) return []; // download failed -> already in report.failures

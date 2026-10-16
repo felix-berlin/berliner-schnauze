@@ -21,7 +21,7 @@ if (!post) return Astro.rewrite('/404');
 const related = allPosts.filter((p) => p.slug && p.slug !== post.slug).slice(0, 3);
 
 const { blocks, toc, hasAffiliateLinks } = processArticleBlocks(post.blocks ?? []);
-const readingMinutes = post.seo?.readingTime ? Math.max(1, Math.round(post.seo.readingTime)) : null;
+const readingMinutes = post.seo?.readingTime ?? null;
 
 const seoProps = seoData({
   seo: {

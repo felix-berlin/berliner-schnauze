@@ -9,8 +9,8 @@ import SoundEx from "natural/lib/natural/phonetics/soundex.js";
 
 export const hypher = new Hypher(german);
 
-const VOWELS = new Set(["a", "e", "i", "o", "u", "ä", "ö", "ü"]);
-const LETTER_RE = /[a-zäöüß]/i;
+export const VOWELS = new Set(["a", "e", "i", "o", "u", "ä", "ö", "ü"]);
+export const LETTER_RE = /[a-zäöüß]/i;
 
 /** Expects a lowercase char. */
 export const isVowelChar = (c: string): boolean => VOWELS.has(c);

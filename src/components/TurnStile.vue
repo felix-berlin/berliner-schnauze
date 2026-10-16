@@ -20,7 +20,6 @@ const emit = defineEmits<{
   expire: [expired: boolean];
   fail: [error: boolean];
   token: [token: string];
-  verify: [response: boolean];
 }>();
 
 /**
@@ -48,27 +47,13 @@ const createTurnstileScriptTag = (): void => {
 const renderTurnstile = (): void => {
   window.onloadTurnstileCallback = function () {
     turnstile.render(`#${wrapperId}`, {
-      callback: (response: string) => {
-        emit("token", response);
-        emit("verify", checkVerification(response));
-      },
+      callback: (response: string) => emit("token", response),
       "error-callback": emit("fail", true),
       "expired-callback": emit("expire", true),
       sitekey: siteKey,
       theme: isDarkMode ? "dark" : "light",
     });
   };
-};
-
-/**
- * Check if the response is valid
- *
- * @param   {string}   response
- *
- * @return  {boolean}
- */
-const checkVerification = (response: string): boolean => {
-  return response !== null && response !== "";
 };
 
 onMounted(() => {

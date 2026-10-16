@@ -39,7 +39,7 @@ beforeEach(() => {
       slug: "berlinerische-woerter-herkunft",
     },
   ]);
-  fetchAllThemen.mockResolvedValue([{ slug: "alkohol-kneipe" }, { slug: null }]);
+  fetchAllThemen.mockResolvedValue([{ slug: "alkohol-kneipe" }]);
   getCollection.mockResolvedValue(baselineVersions.map((version) => ({ data: { version } })));
 });
 

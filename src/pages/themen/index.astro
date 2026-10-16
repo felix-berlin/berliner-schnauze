@@ -10,10 +10,7 @@ import { getImage } from 'astro:assets';
 import '@styles/plugins/astro-breadcrumbs.scss';
 import '@styles/components/_themen-overview.scss';
 
-const allThemen = await fetchAllThemen();
-const sortedThemen = [...allThemen].sort((a, b) =>
-  (a.name ?? '').localeCompare(b.name ?? '', 'de'),
-);
+const themen = await fetchAllThemen();
 
 const ogImage = await getImage({
   format: 'png',
@@ -43,14 +40,14 @@ const itemListJson = () =>
   JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    itemListElement: sortedThemen.map((thema, index) => ({
+    itemListElement: themen.map((thema, index) => ({
       '@type': 'ListItem',
-      name: thema.name ?? '',
+      name: thema.name,
       position: index + 1,
       url: canonicalUrl(`/themen/${thema.slug}`, Astro.site),
     })),
     name: 'Themen',
-    numberOfItems: sortedThemen.length,
+    numberOfItems: themen.length,
   });
 ---
 
@@ -67,10 +64,10 @@ const itemListJson = () =>
       ein.
     </p>
 
-    <h2 class='c-themen-overview__heading'>{sortedThemen.length} Themen entdecken</h2>
+    <h2 class='c-themen-overview__heading'>{themen.length} Themen entdecken</h2>
     <ul class='c-themen-overview__list'>
       {
-        sortedThemen.map((thema) => (
+        themen.map((thema) => (
           <li class='c-themen-overview__item'>
             <a class='c-themen-overview__link' href={`/themen/${thema.slug}`}>
               {thema.name}

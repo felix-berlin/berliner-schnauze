@@ -1,13 +1,13 @@
 import type { CollectionConfig } from "payload";
 
-import { authenticated } from "../access";
+import { authenticatedOnly } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { seoField } from "../fields/seo";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
-  access: { read: authenticated, create: authenticated, update: authenticated, delete: authenticated },
+  access: authenticatedOnly,
   admin: { useAsTitle: "title" },
   versions: { drafts: true },
   hooks: { beforeChange: [touchContentModifiedAt] },

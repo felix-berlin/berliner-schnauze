@@ -1,28 +1,16 @@
-import type { Company } from "payload-app";
+import type { Config } from "payload-app";
 
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 
 import type { AffiliateBook, AffiliateDisclaimer } from "@/types/cms.ts";
 
-const TTL = 60_000;
+const global = <S extends keyof Config["globals"]>(slug: S) =>
+  ttl(60_000, async () => (await getPayloadClient()).findGlobal({ depth: 0, slug }));
 
-const global = <T>(slug: string) =>
-  ttl(
-    TTL,
-    async () => (await getPayloadClient()).findGlobal({ depth: 0, slug } as never) as Promise<T>,
-  );
-
-type Row = Record<string, string | null | undefined>;
-type Navigation = Record<"main" | "footer1" | "footer2", Row[] | null | undefined>;
-type AffiliateGlobal = {
-  books?: AffiliateBook[] | null;
-  disclaimers?: AffiliateDisclaimer[] | null;
-};
-
-const navigation = global<Navigation>("navigation");
-const affiliate = global<AffiliateGlobal>("affiliate");
-const company = global<Company>("company");
+const navigation = global("navigation");
+const affiliate = global("affiliate");
+const company = global("company");
 
 export interface MenuItem {
   description?: string;
@@ -31,17 +19,8 @@ export interface MenuItem {
   title: string;
 }
 
-// WordPress menu names the pages still ask for.
-const MENUS: Record<string, keyof Navigation> = {
-  "Footer Nav 1": "footer1",
-  "Footer Nav 2": "footer2",
-  "Main Menu": "main",
-};
-
-export const fetchMenu = async (name: string): Promise<MenuItem[]> => {
-  const key = MENUS[name];
-  if (!key) return [];
-  return ((await navigation())[key] ?? []).flatMap((row) =>
+export const fetchMenu = async (menu: "main" | "footer1" | "footer2"): Promise<MenuItem[]> =>
+  ((await navigation())[menu] ?? []).flatMap((row) =>
     row.title && row.link
       ? [
           {
@@ -53,7 +32,6 @@ export const fetchMenu = async (name: string): Promise<MenuItem[]> => {
         ]
       : [],
   );
-};
 
 export interface AffiliateData {
   books: AffiliateBook[];
@@ -62,7 +40,11 @@ export interface AffiliateData {
 
 export const fetchAffiliateData = async (): Promise<AffiliateData> => {
   const data = await affiliate();
-  return { books: data.books ?? [], disclaimers: data.disclaimers ?? [] };
+  // Postgres returns null (not undefined) for unset fields, which is what the hand-written types say.
+  return {
+    books: (data.books ?? []) as AffiliateBook[],
+    disclaimers: (data.disclaimers ?? []) as AffiliateDisclaimer[],
+  };
 };
 
 export interface FundingPlatform {
