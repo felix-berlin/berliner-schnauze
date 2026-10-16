@@ -35,6 +35,7 @@ pnpm format:check            # Check formatting without writing
 
 # Docker (Node adapter, replacing Cloudflare; run after build)
 docker compose up --build    # Serve dist/ via server/index.mjs (applies public/_headers + _redirects)
+scripts/docker-smoke.sh      # Build image from dist/, check routes/headers/redirects (runs on every PR)
                              # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze (release.yml `docker` job)
 
 # Cloudflare Workers (until the Docker move; run after build)

@@ -94,6 +94,25 @@ jobs:
           path: dist
           retention-days: 1
 
+  # Builds the production image from the same dist/ the e2e shards use and
+  # checks routing, _headers/_redirects and caching in the running container.
+  docker-smoke:
+    needs: build
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+
+      - name: Download build
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+
+      - name: Docker smoke test 🐳
+        run: scripts/docker-smoke.sh
+
   test:
     needs: build
     timeout-minutes: 15
