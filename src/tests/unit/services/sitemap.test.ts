@@ -33,7 +33,11 @@ beforeEach(() => {
     { modifiedGmt: null, slug: "wa" },
   ]);
   fetchAllPosts.mockResolvedValue([
-    { date: "2025-05-01T08:00:00", slug: "berlinerische-woerter-herkunft" },
+    {
+      date: "2025-05-01T10:00:00",
+      modifiedGmt: "2026-01-02T03:04:05",
+      slug: "berlinerische-woerter-herkunft",
+    },
   ]);
   fetchAllThemen.mockResolvedValue([{ slug: "alkohol-kneipe" }, { slug: null }]);
   getCollection.mockResolvedValue(baselineVersions.map((version) => ({ data: { version } })));
@@ -55,6 +59,14 @@ describe("buildSitemapEntries", () => {
       loc: "https://berliner-schnauze.wtf/wort/aasen",
     });
     expect(entries).toContainEqual({ loc: "https://berliner-schnauze.wtf/wort/wa" });
+  });
+
+  it("dates a post by its modified date (UTC), not by the Berlin-local publish date", async () => {
+    const entries = await buildSitemapEntries(SITE);
+    expect(entries).toContainEqual({
+      lastmod: "2026-01-02T03:04:05.000Z",
+      loc: "https://berliner-schnauze.wtf/magazin/berlinerische-woerter-herkunft",
+    });
   });
 
   it("adds posts and themen, skipping themen without a slug", async () => {

@@ -131,7 +131,8 @@ describe("toWord", () => {
       berlinerischWordTypes: { nodes: [{ name: "Adjektiv" }] },
       // WP format: no milliseconds, no trailing Z (callers append "Z" themselves)
       dateGmt: "2025-04-09T08:12:37",
-      id: "12",
+      // WP global id format ("post:<id>" base64): the JSON-LD identifier of every word stays as it was
+      id: btoa("post:5703"),
       modifiedGmt: "2026-09-20T17:24:19",
       slug: "aasen",
       title: "aasen",
@@ -162,7 +163,9 @@ describe("toWord", () => {
       infoText: "<p>Adjektiv zu Aas</p>",
       learnMore: "https://example.org/mehr",
       // only populated related words, as { id, slug, wordProperties }
-      relatedWords: { nodes: [{ id: "13", slug: "wa", wordProperties: { berlinerisch: "wa" } }] },
+      relatedWords: {
+        nodes: [{ id: btoa("post:1000013"), slug: "wa", wordProperties: { berlinerisch: "wa" } }],
+      },
       sources: [{ quelle: ["Meyer", "Schlobinski"] }],
     });
   });
@@ -179,6 +182,14 @@ describe("toWord", () => {
           sourceUrl: "https://cms.example/api/media/file/k.png",
         },
       ],
+    });
+  });
+
+  it("marks a word as an article for og:type and names the site, like Yoast did", async () => {
+    const { toWord } = await load();
+    expect(toWord(doc as never).seo).toMatchObject({
+      opengraphSiteName: "Berliner Schnauze",
+      opengraphType: "article",
     });
   });
 

@@ -60,6 +60,11 @@ export default defineConfig({
   // serves dist/client (assets, sw.js) itself.
   output: "server",
   adapter: node({ mode: "standalone" }),
+  // Astro.url (breadcrumb JSON-LD ids, ...) takes its origin from the proxy's X-Forwarded-Host/-Proto only for these
+  // hosts; without a match it falls back to http://localhost:<port>. The reverse proxy must send both headers.
+  security: {
+    allowedDomains: [{ hostname: "berliner-schnauze.wtf", protocol: "https" }],
+  },
   // No Astro.session usage anywhere in the codebase — opt out to tree-shake
   // the session runtime out of the server build.
   session: false,

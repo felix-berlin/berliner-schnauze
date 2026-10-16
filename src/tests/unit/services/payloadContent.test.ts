@@ -107,6 +107,7 @@ describe("toPostBlocks", () => {
 describe("fetchAllPosts", () => {
   const post = {
     content: state(para(text("Wort ".repeat(450)))),
+    contentModifiedAt: "2026-02-03T04:05:06.000Z",
     excerpt: "Kurz & gut",
     featuredImage: { alt: "Titel", id: 9, url: "/api/media/file/titel.png" },
     id: 5,
@@ -121,16 +122,30 @@ describe("fetchAllPosts", () => {
     const { fetchAllPosts } = await import("@services/payload/posts.ts");
     const [node] = await fetchAllPosts();
     expect(node).toMatchObject({
-      date: "2025-05-01T08:00:00",
+      // WP `date` is local (Berlin) time: 08:00 UTC is 10:00 in summer
+      date: "2025-05-01T10:00:00",
       excerpt: "Kurz & gut",
       featuredImage: {
         node: { altText: "Titel", sourceUrl: "https://cms.example/api/media/file/titel.png" },
       },
-      seo: { metaDesc: "Meta", readingTime: 3, title: "SEO Titel" },
+      modifiedGmt: "2026-02-03T04:05:06",
+      seo: {
+        metaDesc: "Meta",
+        opengraphSiteName: "Berliner Schnauze",
+        opengraphType: "article",
+        readingTime: 3,
+        title: "SEO Titel",
+      },
       slug: "kiezdeutsch",
       title: "Kiezdeutsch",
     });
     expect(node.blocks).toHaveLength(1);
+  });
+
+  it("converts the publish date to Berlin local time, also in winter", async () => {
+    find.mockResolvedValue({ docs: [{ ...post, publishedAt: "2025-01-15T08:00:00.000Z" }] });
+    const { fetchAllPosts } = await import("@services/payload/posts.ts");
+    expect((await fetchAllPosts())[0].date).toBe("2025-01-15T09:00:00");
   });
 
   it("asks for published posts, newest first, and does not cache a failure", async () => {

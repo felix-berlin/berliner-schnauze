@@ -19,8 +19,16 @@ type PayloadSeo = {
   twitterTitle?: string | null;
 };
 
-/** Payload `seo` group -> the Yoast-shaped fields the pages feed to `seoData()`. Empty strings become `null`. */
-export const toSeoData = (seo: PayloadSeo | null | undefined): SeoData | null => {
+const SITE_NAME = "Berliner Schnauze";
+
+/**
+ * Payload `seo` group -> the Yoast-shaped fields the pages feed to `seoData()`. Empty strings become `null`.
+ * Yoast set og:type "article" for posts and words; pages and themen set their own type.
+ */
+export const toSeoData = (
+  seo: PayloadSeo | null | undefined,
+  opengraphType: string | null = null,
+): SeoData | null => {
   if (!seo) return null;
   const og = mediaUrl(seo.ogImage);
   return {
@@ -34,9 +42,9 @@ export const toSeoData = (seo: PayloadSeo | null | undefined): SeoData | null =>
     opengraphModifiedTime: null,
     opengraphPublishedTime: null,
     opengraphPublisher: null,
-    opengraphSiteName: null,
+    opengraphSiteName: SITE_NAME,
     opengraphTitle: seo.ogTitle || null,
-    opengraphType: null,
+    opengraphType,
     opengraphUrl: null,
     readingTime: null,
     title: seo.title || null,

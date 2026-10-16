@@ -38,9 +38,16 @@ const toImage = (media: Media): WordImage => ({
   sourceUrl: mediaUrl(media) ?? null,
 });
 
+const wordDbId = (doc: Pick<PayloadWord, "berlinerWordId" | "id">): number =>
+  doc.berlinerWordId ?? PAYLOAD_ID_OFFSET + doc.id;
+
+/** The id a word had in WPGraphQL ("post:<id>" base64): the JSON-LD identifier of a word page stays as it was. */
+const wordGlobalId = (doc: Pick<PayloadWord, "berlinerWordId" | "id">): string =>
+  btoa(`post:${wordDbId(doc)}`);
+
 /** `doc` must be populated one level deep (relations and media are objects, not ids) and have a slug. */
 export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
-  berlinerWordId: doc.berlinerWordId ?? PAYLOAD_ID_OFFSET + doc.id,
+  berlinerWordId: wordDbId(doc),
   berlinerischThemen: {
     nodes: populated<Theman>(doc.themen).map((t) => ({
       name: t.name ?? null,
@@ -63,9 +70,9 @@ export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
         wordGroup: doc.derived.wordGroup ?? null,
       }
     : null,
-  id: String(doc.id),
+  id: wordGlobalId(doc),
   modifiedGmt: wpDate(doc.contentModifiedAt),
-  seo: toSeoData(doc.seo),
+  seo: toSeoData(doc.seo, "article"),
   slug: doc.slug,
   title: doc.berlinerisch,
   translations: (doc.translations ?? []).map((t) => t.translation).filter((t): t is string => !!t),
@@ -89,7 +96,7 @@ export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
     learnMore: doc.learnMore ?? null,
     relatedWords: {
       nodes: populated<PayloadWord>(doc.relatedWords).map((w) => ({
-        id: String(w.id),
+        id: wordGlobalId(w),
         slug: w.slug ?? null,
         wordProperties: { berlinerisch: w.berlinerisch },
       })),

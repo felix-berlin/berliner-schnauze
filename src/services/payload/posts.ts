@@ -69,6 +69,26 @@ export const toPostBlocks = (content: unknown): ArticleBlock[] => {
   return blocks;
 };
 
+/** WP `date` of a post: local time of the site (Berlin), no zone, no milliseconds. */
+const berlinLocalDate = (iso: string | null | undefined): string | null => {
+  if (!iso) return null;
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat("en-GB", {
+      day: "2-digit",
+      hour: "2-digit",
+      hourCycle: "h23",
+      minute: "2-digit",
+      month: "2-digit",
+      second: "2-digit",
+      timeZone: "Europe/Berlin",
+      year: "numeric",
+    })
+      .formatToParts(new Date(iso))
+      .map((part) => [part.type, part.value]),
+  );
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`;
+};
+
 const WORDS_PER_MINUTE = 200;
 
 const readingTime = (blocks: ArticleBlock[]): number => {
@@ -92,12 +112,12 @@ const loadPosts = async (): Promise<PostNode[]> => {
   return docs.flatMap((post) => {
     if (!post.slug) return [];
     const blocks = toPostBlocks(post.content);
-    const seo = toSeoData(post.seo);
+    const seo = toSeoData(post.seo, "article");
     const image = mediaUrl(post.featuredImage);
     return [
       {
         blocks,
-        date: wpDate(post.publishedAt),
+        date: berlinLocalDate(post.publishedAt),
         excerpt: post.excerpt ?? null,
         featuredImage: image
           ? {
@@ -109,6 +129,7 @@ const loadPosts = async (): Promise<PostNode[]> => {
             }
           : null,
         id: String(post.id),
+        modifiedGmt: wpDate(post.contentModifiedAt),
         seo: seo && { ...seo, readingTime: readingTime(blocks) },
         slug: post.slug,
         title: post.title,

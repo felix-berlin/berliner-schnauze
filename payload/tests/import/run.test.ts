@@ -20,7 +20,8 @@ vi.mock("../../src/import/wp", async (importOriginal) => ({
 const PNG = "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/K%C3%BCche.png";
 const PDF = "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/handout.pdf";
 const INFO_BILD = "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/info-bild.png";
-const MEDIA_PATHS = ["2024/01/info-bild.png", "import_testwort.mp3", "2024/01/Küche.png", "2024/01/handout.pdf", "2024/03/titelbild.png", "2024/03/bild.png"];
+const SITE_ASSET_PATHS = ["brown-bear-roar.png", "bear-walking.png"];
+const MEDIA_PATHS = ["2024/01/info-bild.png", "import_testwort.mp3", "2024/01/Küche.png", "2024/01/handout.pdf", "2024/03/titelbild.png", "2024/03/bild.png", ...SITE_ASSET_PATHS];
 const WORD_IDS = [aasen.databaseId, wa.databaseId, testwort.databaseId];
 /** WP drafts with empty slug and empty (required) berlinerisch. */
 const emptyDrafts = [990601, 990602].map((databaseId) => ({ databaseId, status: "draft", slug: "", wordProperties: { berlinerisch: "" } }));
@@ -112,7 +113,7 @@ describe("runImport", () => {
     mockWordPress();
     mockDownloads();
     const first = await runImport(payload);
-    expect(first.created).toMatchObject({ media: 5, "word-types": 1, themen: 4, words: 3, posts: 1, pages: 1 });
+    expect(first.created).toMatchObject({ media: 7, "word-types": 1, themen: 4, words: 3, posts: 1, pages: 1 });
     expect(first.failures).toEqual([expect.objectContaining({ kind: "media", ref: PDF })]);
     expect(first.missingRelated).toBe(1);
     expect(first.warnings).toEqual(
@@ -127,7 +128,7 @@ describe("runImport", () => {
 
     const second = await runImport(payload);
     expect(Object.values(second.created).every((n) => n === 0)).toBe(true);
-    expect(second.updated).toMatchObject({ media: 5, "word-types": 1, themen: 4, words: 3, posts: 1, pages: 1 });
+    expect(second.updated).toMatchObject({ media: 7, "word-types": 1, themen: 4, words: 3, posts: 1, pages: 1 });
     expect(second.missingRelated).toBe(1);
     // Existing media are not downloaded again (only the rejected pdf is retried).
     expect(fetchMock.mock.calls.length - downloads).toBe(1);
@@ -135,7 +136,7 @@ describe("runImport", () => {
     const count = (collection: "words" | "media") =>
       payload.count({ collection, where: collection === "words" ? { wpId: { in: WORD_IDS } } : { wpPath: { in: MEDIA_PATHS } } });
     expect((await count("words")).totalDocs).toBe(3);
-    expect((await count("media")).totalDocs).toBe(5);
+    expect((await count("media")).totalDocs).toBe(7);
 
     // Relations: pass 2 links testwort to aasen and wa.
     const [a, w, t] = await Promise.all(WORD_IDS.map(findWord));
@@ -166,6 +167,14 @@ describe("runImport", () => {
     expect(company.socialMedia).toEqual([expect.objectContaining({ network: "mastodon", label: "Mastodon", profile: "https://example.social/@bs" })]);
     const affiliate = await payload.findGlobal({ slug: "affiliate" });
     expect(affiliate.books).toEqual([expect.objectContaining({ title: "Buch" })]);
+  });
+
+  it("imports the images the frontend hard-codes by their WordPress url, so those urls keep redirecting", async () => {
+    mockWordPress();
+    mockDownloads();
+    await runImport(payload, { only: ["media"] });
+    const { docs } = await payload.find({ collection: "media", where: { wpPath: { in: SITE_ASSET_PATHS } }, depth: 0 });
+    expect(docs.map((d) => d.wpPath).sort()).toEqual([...SITE_ASSET_PATHS].sort());
   });
 
   it("reports a media 404 and exits non-zero", async () => {

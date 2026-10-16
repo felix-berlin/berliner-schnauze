@@ -12,7 +12,7 @@ import type { WpPage, WpPost, WpThema, WpWord, WpWordType } from "./wp";
 
 import { PRESERVE_CONTENT_MODIFIED_AT } from "../fields/contentModified";
 import { htmlToLexical } from "./html";
-import { collectMedia, mapPage, mapPost, mapRelatedWords, mapThema, mapWord } from "./mappers";
+import { collectMedia, mapPage, mapPost, mapRelatedWords, mapThema, mapWord, SITE_ASSET_FILES } from "./mappers";
 import {
   AFFILIATE_QUERY,
   COMPANY_QUERY,
@@ -196,6 +196,10 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
   // --- Media ---
   if (only.has("media")) {
     const media = [...collectMedia(words ?? [], posts ?? [], pages ?? [], themen ?? []).entries()];
+    for (const file of wpOrigin ? SITE_ASSET_FILES : []) {
+      const url = `${wpOrigin}/wp-content/uploads/${file}`;
+      if (!media.some(([wpPath]) => wpPath === file)) media.push([file, { url }]);
+    }
     console.info(`[import] media: ${media.length} files`);
     await eachLimit(media, MEDIA_CONCURRENCY, async ([wpPath, meta]) => {
       try {

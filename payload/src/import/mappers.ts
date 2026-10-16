@@ -15,6 +15,12 @@ export type ImportRefs = {
   wordIdByWpId: Map<number, number>;
 };
 
+/**
+ * Images the frontend hard-codes by their WordPress url (hero and footer art): no content references them, so
+ * they are imported explicitly and the old urls keep redirecting once WordPress is gone.
+ */
+export const SITE_ASSET_FILES = ["brown-bear-roar.png", "bear-walking.png"];
+
 export type MediaMeta = { url: string; alt?: string | null; caption?: string | null; description?: string | null };
 
 type Maybe<T> = T | null | undefined;

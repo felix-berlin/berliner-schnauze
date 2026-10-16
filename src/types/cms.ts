@@ -131,11 +131,13 @@ export type ArticleBlock = CoreImageBlock | CoreQuoteBlock | HtmlBlock;
 
 export type PostNode = {
   blocks: ArticleBlock[];
-  /** WP format: ISO without milliseconds and without a trailing Z. */
+  /** WP `date`: local (Berlin) time of the site, no zone. */
   date: string | null;
   excerpt: string | null;
   featuredImage: { node: { altText: string | null; sourceUrl: string | null } } | null;
   id: string;
+  /** WP format (UTC, no trailing Z). */
+  modifiedGmt: string | null;
   seo: SeoData | null;
   slug: string | null;
   title: string | null;
