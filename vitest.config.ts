@@ -96,6 +96,8 @@ export default getViteConfig(
           // BaseHead and Footer have too many runtime/env-var deps to test with the Container API.
           "src/components/BaseHead.astro",
           "src/components/Footer.astro",
+          // Layout.astro only composes BaseHead, Footer and MainHeader (all excluded above).
+          "src/layouts/Layout.astro",
           // ImageGallery.astro wires PhotoSwipe via a client-side custom element.
           "src/components/ImageGallery.astro",
           // berliner-oder-nicht.astro is a thin shell around a client:only Vue island with astro:env deps.
