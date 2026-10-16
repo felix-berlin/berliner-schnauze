@@ -45,6 +45,13 @@ pnpm deploy                  # `wrangler deploy`
 # WordPress auth
 pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (exception: needs local .env file, not Infisical)
 
+# CMS (Payload, workspace package payload/)
+pnpm cms:dev                 # Payload admin + API on :3001
+pnpm cms:test                # Payload tests (needs DATABASE_URL_TEST, a throwaway Postgres DB)
+pnpm --filter payload-app import:wp   # Idempotent WordPress -> Payload import
+pnpm --filter payload-app payload migrate:create <name>   # After EVERY schema change; commit it. The cms container runs migrations on start (CI fails on drift)
+docker compose up --build cms postgres   # CMS image (payload/Dockerfile, context = repo root)
+
 # Anki decks (Python venv `.venv-anki`, setup in docs/anki/README.md)
 pnpm anki:build              # Build Full + Lite into dist-anki/ (version <package.json version>-dev)
 pnpm anki:push:sandbox       # Upload that Full deck to the Polar sandbox
@@ -91,6 +98,7 @@ Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adap
 - **Composables** in `src/composable/` — Vue composables wrapping browser APIs (Cache Storage, Service Worker)
 - **Images** — remote images (CMS/Wikimedia/Amazon) are served through a custom Astro image service backed by Imagor (`src/lib/imagorImageService.ts`, URL signing in `src/utils/imagor.ts`, HMAC-SHA256). Configured via `image.service.entrypoint` in `astro.config.mjs`; local ESM-imported images bypass Imagor and use their original Vite asset URL. No `sharp` dependency — removed in favor of Imagor.
 - **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. See **Astro scripts + View Transitions** below.
+- **CMS**: `payload/` (pnpm workspace package `payload-app`) is the Payload 3 backend (Next.js admin + REST/GraphQL, Postgres). Compose services `cms` (image `berliner-schnauze-cms`, media volume) and `postgres`; the Astro site still reads WordPress until Plan 2
 - **Global Vue app setup** in `src/pages/_app.ts` — registers the `vTooltip` directive and (dev only) Nanostores devtools
 
 ## Import Aliases

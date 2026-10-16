@@ -88,3 +88,57 @@ jobs:
           path: |
             tests/unit/junit-report.xml
             tests/unit/coverage
+
+  cms-test:
+    name: Run CMS tests
+    runs-on: ubuntu-latest
+    # Throwaway CI database: no Infisical, dummy values only.
+    env:
+      DATABASE_URL_TEST: postgres://postgres:postgres@localhost:5432/cms_test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/cms_test
+      PAYLOAD_SECRET: ci-dummy-secret
+      PAYLOAD_SERVER_URL: http://localhost:3001
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cms_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d cms_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout ✅
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm 🛠️
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v7
+        with:
+          node-version: "lts/*"
+          cache: "pnpm"
+
+      - name: Install dependencies 🛠️
+        run: pnpm install --frozen-lockfile
+
+      - name: Run CMS tests 🧪
+        run: pnpm --filter payload-app test
+
+      # migrate:create diffs the config against the last committed migration
+      # snapshot; --skip-empty writes nothing when they match.
+      - name: Check migrations match the schema 🗄️
+        run: |
+          pnpm --filter payload-app payload migrate:create schema-drift --skip-empty
+          if [ -n "$(git status --porcelain -- payload/src/migrations)" ]; then
+            git status --porcelain -- payload/src/migrations
+            echo "::error::Schema changed without a migration. Run: pnpm --filter payload-app payload migrate:create <name>"
+            exit 1
+          fi
