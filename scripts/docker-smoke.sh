@@ -35,7 +35,8 @@ check "_redirects target" "$(header /suggest-word location)" /wort-vorschlagen
 check "_headers X-Frame-Options" "$(header /wort/aasen x-frame-options)" DENY
 [[ -n "$(header / content-security-policy)" ]] && echo "ok   _headers CSP" || { echo "FAIL _headers CSP missing"; fail=1; }
 
-asset=$(curl -s "$BASE/" | grep -o '/_astro/[^"]*\.js' | head -1)
+# sed reads all input: `head -1` would SIGPIPE grep, and pipefail + set -e would exit silently.
+asset=$(curl -s "$BASE/" | grep -o '/_astro/[^"]*\.js' | sed -n 1p)
 check "_astro immutable" "$(header "$asset" cache-control)" "public, max-age=31536000, immutable"
 [[ "$(header /_astro/missing.js cache-control)" != *immutable* ]] && echo "ok   _astro 404 not immutable" || { echo "FAIL _astro 404 is immutable"; fail=1; }
 
