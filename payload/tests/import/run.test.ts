@@ -5,6 +5,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as wp from "../../src/import/wp";
 import { exitCodeFor, runImport } from "../../src/import/run";
 import { MP3_BYTES, PDF_BYTES, PNG_BYTES } from "../helpers/media";
+import { expectNoPendingUploads, lexicalNodes } from "../helpers/lexical";
 import { getTestPayload } from "../helpers/payload";
 import aasen from "./fixtures/word-aasen.json";
 import post from "./fixtures/post.json";
@@ -18,7 +19,8 @@ vi.mock("../../src/import/wp", async (importOriginal) => ({
 
 const PNG = "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/K%C3%BCche.png";
 const PDF = "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/handout.pdf";
-const MEDIA_PATHS = ["import_testwort.mp3", "2024/01/Küche.png", "2024/01/handout.pdf", "2024/03/titelbild.png", "2024/03/bild.png"];
+const INFO_BILD = "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/info-bild.png";
+const MEDIA_PATHS = ["2024/01/info-bild.png", "import_testwort.mp3", "2024/01/Küche.png", "2024/01/handout.pdf", "2024/03/titelbild.png", "2024/03/bild.png"];
 const WORD_IDS = [aasen.databaseId, wa.databaseId, testwort.databaseId];
 
 const page = (nodes: unknown[], endCursor: string, hasNextPage: boolean) => ({
@@ -85,6 +87,8 @@ const findWord = async (wpId: number) =>
 
 beforeAll(async () => {
   payload = await getTestPayload();
+  // Only the origin matters (media host check); wpGraphql itself is mocked.
+  process.env.WP_API = "https://cms.berliner-schnauze.wtf/graphql";
 });
 
 beforeEach(async () => {
@@ -103,14 +107,22 @@ describe("runImport", () => {
     mockWordPress();
     mockDownloads();
     const first = await runImport(payload);
-    expect(first.created).toMatchObject({ media: 4, "word-types": 1, themen: 4, words: 3, posts: 1, pages: 1 });
+    expect(first.created).toMatchObject({ media: 5, "word-types": 1, themen: 4, words: 3, posts: 1, pages: 1 });
     expect(first.failures).toEqual([expect.objectContaining({ kind: "media", ref: PDF })]);
     expect(first.missingRelated).toBe(1);
+    expect(first.warnings).toEqual(
+      expect.arrayContaining([
+        { kind: "media-foreign-host", ref: "https://example.com/fremd.jpg", src: "https://example.com/fremd.jpg" },
+        { kind: "html-image", ref: post.slug, src: "https://example.com/extern.png" },
+      ]),
+    );
+    expect(first.warnings).toHaveLength(2);
+    expect(fetchMock.mock.calls.map(([url]) => String(url))).not.toContain("https://example.com/fremd.jpg");
     const downloads = fetchMock.mock.calls.length;
 
     const second = await runImport(payload);
     expect(Object.values(second.created).every((n) => n === 0)).toBe(true);
-    expect(second.updated).toMatchObject({ media: 4, "word-types": 1, themen: 4, words: 3, posts: 1, pages: 1 });
+    expect(second.updated).toMatchObject({ media: 5, "word-types": 1, themen: 4, words: 3, posts: 1, pages: 1 });
     expect(second.missingRelated).toBe(1);
     // Existing media are not downloaded again (only the rejected pdf is retried).
     expect(fetchMock.mock.calls.length - downloads).toBe(1);
@@ -118,7 +130,7 @@ describe("runImport", () => {
     const count = (collection: "words" | "media") =>
       payload.count({ collection, where: collection === "words" ? { wpId: { in: WORD_IDS } } : { wpPath: { in: MEDIA_PATHS } } });
     expect((await count("words")).totalDocs).toBe(3);
-    expect((await count("media")).totalDocs).toBe(4);
+    expect((await count("media")).totalDocs).toBe(5);
 
     // Relations: pass 2 links testwort to aasen and wa.
     const [a, w, t] = await Promise.all(WORD_IDS.map(findWord));
@@ -129,6 +141,15 @@ describe("runImport", () => {
     expect(a._status).toBe("published");
     expect(t._status).toBe("draft");
     expect(a.derived?.wordGroup).toBe("A");
+    // The <img> in testwort's infoText was downloaded and is stored as an upload node.
+    const info = await payload.find({ collection: "media", where: { wpPath: { equals: "2024/01/info-bild.png" } }, depth: 0 });
+    expect(lexicalNodes(t.infoText, "upload")).toEqual([expect.objectContaining({ relationTo: "media", value: info.docs[0].id })]);
+    for (const word of [a, w, t]) expectNoPendingUploads(word.infoText);
+    const [storedPost] = (await payload.find({ collection: "posts", where: { wpId: { equals: post.databaseId } }, depth: 0 })).docs;
+    const [storedPage] = (await payload.find({ collection: "pages", where: { wpId: { equals: 990501 } }, depth: 0 })).docs;
+    expectNoPendingUploads(storedPost.content);
+    expectNoPendingUploads(storedPage.content);
+    expect(lexicalNodes(storedPost.content, "upload")).toHaveLength(1);
 
     const nav = await payload.findGlobal({ slug: "navigation" });
     expect(nav.main).toEqual([expect.objectContaining({ title: "Start Main Menu", link: "/" })]);
@@ -144,7 +165,7 @@ describe("runImport", () => {
     const report = await runImport(payload, { only: ["media"] });
     expect(report.failures).toContainEqual(expect.objectContaining({ kind: "media", ref: PNG, error: expect.stringContaining("404") }));
     expect(exitCodeFor(report)).toBe(1);
-    expect(exitCodeFor({ created: {}, updated: {}, missingRelated: 0, failures: [] })).toBe(0);
+    expect(exitCodeFor({ created: {}, updated: {}, missingRelated: 0, failures: [], warnings: [{ kind: "html-image", ref: "x", src: "y" }] })).toBe(0);
   });
 
   it("aborts the words phase when listing words fails mid-pagination", async () => {

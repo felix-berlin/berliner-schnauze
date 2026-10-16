@@ -29,6 +29,8 @@ export type ImportReport = {
   updated: Record<string, number>;
   missingRelated: number;
   failures: { kind: string; ref: string; error: string }[];
+  /** Not fatal (exit code unaffected): `html-image` = `<img>` turned into a link, `media-foreign-host` = not downloaded. */
+  warnings: { kind: string; ref: string; src: string }[];
 };
 
 const PHASES: ImportPhase[] = ["media", "taxonomies", "words", "posts", "pages", "globals"];
@@ -77,7 +79,10 @@ async function eachLimit<T>(items: T[], limit: number, fn: (item: T) => Promise<
 
 export async function runImport(payload: Payload, opts: { only?: ImportPhase[] } = {}): Promise<ImportReport> {
   const only = new Set(opts.only ?? PHASES);
-  const report: ImportReport = { created: {}, updated: {}, missingRelated: 0, failures: [] };
+  const report: ImportReport = { created: {}, updated: {}, missingRelated: 0, failures: [], warnings: [] };
+  const htmlImage = (ref: string) => (src: string) => report.warnings.push({ kind: "html-image", ref, src });
+  // Media are downloaded only from the WordPress host itself.
+  const wpOrigin = process.env.WP_API ? new URL(process.env.WP_API).origin : null;
   const fail = (kind: string, ref: string, error: unknown) => {
     report.failures.push({ kind, ref, error: error instanceof Error ? error.message : String(error) });
     console.error(`[import] ${kind} ${ref}: ${error instanceof Error ? error.message : String(error)}`);
@@ -163,7 +168,11 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
           tally("media", false);
           return;
         }
-        const res = await fetch(meta.url);
+        if (new URL(meta.url).origin !== wpOrigin) {
+          report.warnings.push({ kind: "media-foreign-host", ref: meta.url, src: meta.url });
+          return;
+        }
+        const res = await fetch(meta.url, { signal: AbortSignal.timeout(60_000) });
         if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
         const file = Buffer.from(await res.arrayBuffer());
         const mimetype = res.headers.get("content-type")?.split(";")[0].trim() || "application/octet-stream";
@@ -217,7 +226,7 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
       for (const [i, node] of words.entries()) {
         try {
           // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
-          const data = await mapWord(node, refs, payload.config);
+          const data = await mapWord(node, refs, payload.config, htmlImage(node.slug ?? String(node.databaseId)));
           // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
           const doc = await upsert("words", node.databaseId, data, WORD_CONTEXT);
           stored.set(node.databaseId, ((doc.relatedWords as number[] | null) ?? []).map(Number));
@@ -247,7 +256,7 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
     for (const node of posts ?? []) {
       try {
         // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
-        await upsert("posts", node.databaseId, await mapPost(node, refs, payload.config));
+        await upsert("posts", node.databaseId, await mapPost(node, refs, payload.config, htmlImage(node.slug ?? String(node.databaseId))));
       } catch (error) {
         fail("posts", node.slug ?? String(node.databaseId), error);
       }
@@ -257,7 +266,7 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
     for (const node of pages ?? []) {
       try {
         // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
-        await upsert("pages", node.databaseId, await mapPage(node, refs, payload.config));
+        await upsert("pages", node.databaseId, await mapPage(node, refs, payload.config, htmlImage(node.slug ?? String(node.databaseId))));
       } catch (error) {
         fail("pages", node.slug ?? String(node.databaseId), error);
       }
@@ -319,6 +328,6 @@ if (!process.env.VITEST) {
   const [{ getPayload }, { default: config }] = await Promise.all([import("payload"), import("../payload.config")]);
   const report = await runImport(await getPayload({ config }));
   console.log(JSON.stringify(report, null, 2));
-  console.log(report.failures.length ? `[import] FAILED: ${report.failures.length} failure(s)` : "[import] OK");
+  console.log(`[import] ${report.failures.length ? `FAILED: ${report.failures.length} failure(s)` : "OK"}, ${report.warnings.length} warning(s)`);
   process.exit(exitCodeFor(report));
 }

@@ -5,17 +5,44 @@
   "title": "Import-Testbeitrag",
   "dateGmt": "2024-03-04T05:06:07",
   "excerpt": "<p>Kurz &amp; knapp: ein <strong>erfundener</strong> Beitrag.</p>\n",
-  "featuredImage": { "node": { "sourceUrl": "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/03/titelbild.png", "altText": "Titelbild" } },
+  "featuredImage": {
+    "node": {
+      "sourceUrl": "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/03/titelbild.png",
+      "altText": "Titelbild"
+    }
+  },
   "blocks": [
-    { "name": "core/paragraph", "order": 0, "saveContent": "<p>Erster Absatz.</p>", "attributes": null },
+    {
+      "name": "core/paragraph",
+      "order": 0,
+      "saveContent": "<p>Erster Absatz. <img src=\"https://example.com/extern.png\" alt=\"Extern\"/></p>",
+      "attributes": null
+    },
     {
       "name": "core/image",
       "order": 1,
       "saveContent": "<figure class=\"wp-block-image\"><img src=\"https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/03/bild.png\" alt=\"Bild\"/></figure>",
-      "attributes": { "url": "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/03/bild.png", "alt": "Bild", "width": 10, "height": 10 }
+      "attributes": {
+        "url": "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/03/bild.png",
+        "alt": "Bild",
+        "width": 10,
+        "height": 10
+      }
     },
-    { "name": "core/quote", "order": 2, "saveContent": "<blockquote class=\"wp-block-quote\"><p>Ick bin een Zitat.</p></blockquote>", "attributes": { "value": "<p>Ick bin een Zitat.</p>" } },
-    { "name": "core/paragraph", "order": 3, "saveContent": "<p>Letzter Absatz.</p>", "attributes": null }
+    {
+      "name": "core/quote",
+      "order": 2,
+      "saveContent": "<blockquote class=\"wp-block-quote\"><p>Ick bin een Zitat.</p></blockquote>",
+      "attributes": {
+        "value": "<p>Ick bin een Zitat.</p>"
+      }
+    },
+    {
+      "name": "core/paragraph",
+      "order": 3,
+      "saveContent": "<p>Letzter Absatz.</p>",
+      "attributes": null
+    }
   ],
   "seo": {
     "title": "Import-Testbeitrag",

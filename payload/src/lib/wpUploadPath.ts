@@ -10,3 +10,6 @@ export function wpUploadPath(url: string): string {
     return clean;
   }
 }
+
+/** True for URLs below a WordPress uploads directory (the only ones `wpUploadPath` can map). */
+export const isWpUploadUrl = (url: string): boolean => url.includes("/wp-content/uploads/");

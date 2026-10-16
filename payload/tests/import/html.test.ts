@@ -3,32 +3,46 @@ import type { Payload } from "payload";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { ImportRefs } from "../../src/import/mappers";
-import type { WpPost } from "../../src/import/wp";
+import type { WpPost, WpWord } from "../../src/import/wp";
 
+import { PRESERVE_CONTENT_MODIFIED_AT } from "../../src/fields/contentModified";
 import { htmlToLexical } from "../../src/import/html";
-import { mapPost } from "../../src/import/mappers";
+import { mapPost, mapWord } from "../../src/import/mappers";
 import { wpUploadPath } from "../../src/lib/wpUploadPath";
+import { expectNoPendingUploads, lexicalNodes } from "../helpers/lexical";
 import { PNG_BYTES } from "../helpers/media";
 import { getTestPayload } from "../helpers/payload";
 import post from "./fixtures/post.json";
+import testwort from "./fixtures/word-testwort.json";
 
 type Node = { type: string; text?: string; format?: number | string; children?: Node[]; value?: unknown };
 
 let payload: Payload;
 let mediaId: number;
 const BILD = "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/03/bild.png";
+const HTML_TEST_IMG = "https://cms.berliner-schnauze.wtf/wp-content/uploads/html-test/bild.png?ver=3";
+const WORD_IDS = [990102, 990103];
 
 const refs = (): ImportRefs => ({
-  mediaIdByUrl: new Map([[wpUploadPath(BILD), mediaId]]),
+  mediaIdByUrl: new Map([
+    [wpUploadPath(BILD), mediaId],
+    [wpUploadPath(HTML_TEST_IMG), mediaId],
+  ]),
   wordTypeIdByName: new Map(),
   themaIdBySlug: new Map(),
   wordIdByWpId: new Map(),
 });
+const emptyRefs = (): ImportRefs => ({ mediaIdByUrl: new Map(), wordTypeIdByName: new Map(), themaIdBySlug: new Map(), wordIdByWpId: new Map() });
+
+const cleanup = async () => {
+  await payload.delete({ collection: "posts", where: { slug: { equals: post.slug } } });
+  await payload.delete({ collection: "words", where: { wpId: { in: WORD_IDS } } });
+  await payload.delete({ collection: "media", where: { wpPath: { equals: "html-test/bild.png" } } });
+};
 
 beforeAll(async () => {
   payload = await getTestPayload();
-  await payload.delete({ collection: "posts", where: { slug: { equals: post.slug } } });
-  await payload.delete({ collection: "media", where: { wpPath: { equals: "html-test/bild.png" } } });
+  await cleanup();
   const media = await payload.create({
     collection: "media",
     data: { wpPath: "html-test/bild.png" },
@@ -37,10 +51,18 @@ beforeAll(async () => {
   mediaId = media.id;
 });
 
-afterAll(async () => {
-  await payload.delete({ collection: "posts", where: { slug: { equals: post.slug } } });
-  await payload.delete({ collection: "media", where: { wpPath: { equals: "html-test/bild.png" } } });
-});
+afterAll(cleanup);
+
+/** Map an invented word with `infoText`, save it via the Local API and read it back. */
+async function saveWordWithInfoText(wpId: number, infoText: string, wordRefs: ImportRefs) {
+  const unmapped: string[] = [];
+  const node = { ...structuredClone(testwort), databaseId: wpId, slug: `import-html-${wpId}`, wordProperties: { ...testwort.wordProperties, infoText, relatedWords: null } };
+  const data = await mapWord(node as WpWord, wordRefs, payload.config, (src) => unmapped.push(src));
+  const context = { [PRESERVE_CONTENT_MODIFIED_AT]: true };
+  const created = await payload.create({ collection: "words", data, context, depth: 0 });
+  const read = await payload.findByID({ collection: "words", id: created.id, depth: 0 });
+  return { read, unmapped };
+}
 
 describe("htmlToLexical", () => {
   it("converts paragraphs with bold text and blockquotes", async () => {
@@ -52,6 +74,21 @@ describe("htmlToLexical", () => {
       ["b", 1],
     ]);
     expect(quote.type).toBe("quote");
+  });
+
+  it("stores a mapped <img> in infoText as an upload node", async () => {
+    const { read, unmapped } = await saveWordWithInfoText(990102, `<p>Text</p><p><img src="${HTML_TEST_IMG}" alt="Bild" /></p>`, refs());
+    expectNoPendingUploads(read.infoText);
+    expect(lexicalNodes(read.infoText, "upload")).toEqual([expect.objectContaining({ relationTo: "media", value: mediaId })]);
+    expect(unmapped).toEqual([]);
+  });
+
+  it("turns an unmapped <img> into a link and reports it", async () => {
+    const { read, unmapped } = await saveWordWithInfoText(990103, `<p>Siehe <img src="https://example.com/x.png" alt="X" /></p>`, refs());
+    expectNoPendingUploads(read.infoText);
+    expect(lexicalNodes(read.infoText, "upload")).toEqual([]);
+    expect(lexicalNodes(read.infoText, "link")).toEqual([expect.objectContaining({ fields: expect.objectContaining({ url: "https://example.com/x.png" }) })]);
+    expect(unmapped).toEqual(["https://example.com/x.png"]);
   });
 });
 
@@ -72,9 +109,25 @@ describe("mapPost", () => {
   });
 
   it("round-trips upload and quote nodes through posts.content", async () => {
-    const data = await mapPost(post as WpPost, refs(), payload.config);
+    const unmapped: string[] = [];
+    const data = await mapPost(post as WpPost, refs(), payload.config, (src) => unmapped.push(src));
+    expect(unmapped).toEqual(["https://example.com/extern.png"]);
     const created = await payload.create({ collection: "posts", data });
     const read = await payload.findByID({ collection: "posts", id: created.id, depth: 0 });
     expect(read.content).toEqual(data.content);
+    expectNoPendingUploads(read.content);
+    expect(lexicalNodes(read.content, "quote")).toHaveLength(1);
+    await payload.delete({ collection: "posts", id: created.id });
+  });
+
+  it("saves a post whose image download failed (fallback HTML becomes a link)", async () => {
+    const unmapped: string[] = [];
+    const data = await mapPost(post as WpPost, emptyRefs(), payload.config, (src) => unmapped.push(src));
+    expect(unmapped.sort()).toEqual([BILD, "https://example.com/extern.png"].sort());
+    const created = await payload.create({ collection: "posts", data });
+    const read = await payload.findByID({ collection: "posts", id: created.id, depth: 0 });
+    expectNoPendingUploads(read.content);
+    expect(lexicalNodes(read.content, "upload")).toEqual([]);
+    await payload.delete({ collection: "posts", id: created.id });
   });
 });

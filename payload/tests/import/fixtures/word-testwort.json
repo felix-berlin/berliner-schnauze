@@ -9,7 +9,14 @@
     "article": "det",
     "berlinerisch": "Import-Testwort",
     "berlinerischAudio": [
-      { "gender": "female", "audio": { "node": { "mediaItemUrl": "https://cms.berliner-schnauze.wtf/wp-content/uploads/import_testwort.mp3" } } }
+      {
+        "gender": "female",
+        "audio": {
+          "node": {
+            "mediaItemUrl": "https://cms.berliner-schnauze.wtf/wp-content/uploads/import_testwort.mp3"
+          }
+        }
+      }
     ],
     "learnMore": "https://example.com/mehr",
     "berolinismus": true,
@@ -18,22 +25,60 @@
         "example": "Det is'n Testwort, wa?",
         "exampleExplanation": "Erfundenes Beispiel",
         "exampleAudio": [
-          { "gender": "male", "audio": { "node": { "mediaItemUrl": "https://cms.berliner-schnauze.wtf/wp-content/uploads/import_testwort.mp3" } } }
+          {
+            "gender": "male",
+            "audio": {
+              "node": {
+                "mediaItemUrl": "https://cms.berliner-schnauze.wtf/wp-content/uploads/import_testwort.mp3"
+              }
+            }
+          }
         ]
       }
     ],
-    "translations": [{ "translation": "Testwort" }],
+    "translations": [
+      {
+        "translation": "Testwort"
+      }
+    ],
     "alternativeWords": null,
     "relatedWords": {
       "nodes": [
-        { "databaseId": 5704, "slug": "aasen" },
-        { "databaseId": 4671, "slug": "wa" },
-        { "databaseId": 999999, "slug": "gibts-nicht" }
+        {
+          "databaseId": 5704,
+          "slug": "aasen"
+        },
+        {
+          "databaseId": 4671,
+          "slug": "wa"
+        },
+        {
+          "databaseId": 999999,
+          "slug": "gibts-nicht"
+        }
       ]
     },
-    "wikimediaFiles": [{ "wikimediaFile": "File:Example.jpg", "description": null, "caption": "Beispiel" }],
-    "infoText": "<p>Erfunden für den Import-Test.</p>\n",
-    "sources": [{ "quelle": ["Quelle A", "Quelle B"] }, { "quelle": ["Quelle C"] }],
+    "wikimediaFiles": [
+      {
+        "wikimediaFile": "File:Example.jpg",
+        "description": null,
+        "caption": "Beispiel"
+      }
+    ],
+    "infoText": "<p>Erfunden für den Import-Test.</p>\n<p><img src=\"https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/info-bild.png\" alt=\"Infobild\" /></p>\n",
+    "sources": [
+      {
+        "quelle": [
+          "Quelle A",
+          "Quelle B"
+        ]
+      },
+      {
+        "quelle": [
+          "Quelle C"
+        ]
+      }
+    ],
     "images": {
       "nodes": [
         {
@@ -47,19 +92,40 @@
           "caption": null,
           "altText": "",
           "description": null
+        },
+        {
+          "sourceUrl": "https://example.com/fremd.jpg",
+          "caption": null,
+          "altText": "Fremd",
+          "description": null
         }
       ]
     }
   },
-  "berlinerischWordTypes": { "nodes": [{ "name": "Substantiv" }] },
-  "berlinerischThemen": { "nodes": [{ "name": "Geld", "slug": "geld" }] },
+  "berlinerischWordTypes": {
+    "nodes": [
+      {
+        "name": "Substantiv"
+      }
+    ]
+  },
+  "berlinerischThemen": {
+    "nodes": [
+      {
+        "name": "Geld",
+        "slug": "geld"
+      }
+    ]
+  },
   "seo": {
     "title": "Import-Testwort",
     "canonical": "",
     "metaDesc": "Erfundenes Testwort",
     "opengraphDescription": "",
     "opengraphTitle": "",
-    "opengraphImage": { "sourceUrl": "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/Küche.png?ver=2" },
+    "opengraphImage": {
+      "sourceUrl": "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/Küche.png?ver=2"
+    },
     "twitterDescription": "",
     "twitterTitle": "",
     "metaRobotsNofollow": "nofollow",

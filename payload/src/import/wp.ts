@@ -14,6 +14,7 @@ export async function wpGraphql<T>(query: string, variables?: Record<string, unk
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ query, variables }),
+    signal: AbortSignal.timeout(120_000),
   });
   if (!res.ok) throw new Error(`WPGraphQL HTTP ${res.status} ${res.statusText}`);
   const json = (await res.json()) as { data?: T; errors?: { message: string }[] };
@@ -92,7 +93,7 @@ export const PAGES_QUERY = `
 
 export const MENU_QUERY = `
   query ImportMenu($name: ID!) {
-    menu(id: $name, idType: NAME) { menuItems(first: 100) { nodes { description label linkRelationship path } } }
+    menu(id: $name, idType: NAME) { menuItems(first: 100) { nodes { description label linkRelationship path } pageInfo { hasNextPage } } }
   }`;
 
 export const AFFILIATE_QUERY = `

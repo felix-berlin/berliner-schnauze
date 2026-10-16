@@ -7,6 +7,7 @@ import type { WpPost, WpWord } from "../../src/import/wp";
 
 import { collectMediaUrls, mapRelatedWords, mapSeo, mapWord } from "../../src/import/mappers";
 import { wpUploadPath } from "../../src/lib/wpUploadPath";
+import { lexicalNodes } from "../helpers/lexical";
 import { getTestPayload } from "../helpers/payload";
 import aasen from "./fixtures/word-aasen.json";
 import post from "./fixtures/post.json";
@@ -67,12 +68,17 @@ describe("mapWord", () => {
   });
 
   it("maps audio, media, sources and draft status", async () => {
-    const doc = await mapWord(testwort as WpWord, refs(), config);
+    const unmapped: string[] = [];
+    const doc = await mapWord(testwort as WpWord, refs(), config, (src) => unmapped.push(src));
+    // info-bild.png is not in refs: it becomes a link and is reported.
+    expect(unmapped).toEqual(["https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/info-bild.png"]);
+    expect(lexicalNodes(doc.infoText, "upload")).toEqual([]);
+    expect(lexicalNodes(doc.infoText, "link")).toHaveLength(1);
     expect(doc._status).toBe("draft");
     expect(doc.examples?.[0].exampleAudio).toEqual([{ gender: "male", audio: 11 }]);
     expect(doc.berlinerischAudio).toEqual([{ gender: "female", audio: 11 }]);
     expect(doc.sources).toEqual(["Quelle A", "Quelle B", "Quelle C"]);
-    expect(doc.images).toEqual([12]); // the unmapped pdf is dropped
+    expect(doc.images).toEqual([12]); // the unmapped pdf and the foreign image are dropped
     expect(doc.wordTypes).toEqual([21]);
     expect(doc.seo?.ogImage).toBe(12);
   });
@@ -89,7 +95,22 @@ describe("mapSeo", () => {
   it("maps Yoast robots strings and empty strings", () => {
     expect(mapSeo(testwort.seo, refs())).toMatchObject({ noindex: true, nofollow: true, title: "Import-Testwort", canonical: null, ogImage: 12 });
     expect(mapSeo(aasen.seo, refs())).toMatchObject({ noindex: false, nofollow: false, description: aasen.seo.metaDesc });
-    expect(mapSeo(null, refs())).toEqual({});
+    expect(mapSeo({ metaRobotsNoindex: " NoIndex, follow ", metaRobotsNofollow: "noindex, nofollow" }, refs())).toMatchObject({ noindex: true, nofollow: true });
+  });
+
+  it("resets every field when WordPress has no SEO block", () => {
+    expect(mapSeo(null, refs())).toEqual({
+      title: null,
+      description: null,
+      canonical: null,
+      ogTitle: null,
+      ogDescription: null,
+      ogImage: null,
+      twitterTitle: null,
+      twitterDescription: null,
+      noindex: false,
+      nofollow: false,
+    });
   });
 });
 
@@ -103,6 +124,10 @@ describe("collectMediaUrls", () => {
         "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/handout.pdf",
         "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/03/titelbild.png",
         "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/03/bild.png",
+        // <img> in infoText; the foreign word image is collected (the run skips it with a warning),
+        // the external <img> in the post HTML is not (no WP upload).
+        "https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/info-bild.png",
+        "https://example.com/fremd.jpg",
       ].sort(),
     );
   });

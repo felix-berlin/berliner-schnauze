@@ -4,8 +4,8 @@ import type { SanitizedConfig } from "payload";
 import type { Page, Post, Theman, Word } from "../payload-types";
 import type { WpBlock, WpImage, WpPage, WpPost, WpSeo, WpThema, WpWord } from "./wp";
 
-import { wpUploadPath } from "../lib/wpUploadPath";
-import { htmlToLexical, htmlToText, type RichText } from "./html";
+import { isWpUploadUrl, wpUploadPath } from "../lib/wpUploadPath";
+import { htmlToLexical, htmlToText, imagesIn, type RichText } from "./html";
 
 export type ImportRefs = {
   /** Keyed by `wpUploadPath(url)`. */
@@ -41,6 +41,10 @@ export function collectMedia(words: WpWord[], posts: WpPost[], pages: WpPage[], 
   const add = (url: Maybe<string>, meta: Omit<MediaMeta, "url"> = {}) => {
     if (url && !media.has(wpUploadPath(url))) media.set(wpUploadPath(url), { url, ...meta });
   };
+  /** `<img>` in HTML that will be converted (only WP uploads can be imported). */
+  const addHtml = (html: Maybe<string>) => {
+    for (const { src, alt } of html ? imagesIn(html) : []) if (isWpUploadUrl(src)) add(src, { alt });
+  };
   const addImage = (img: Maybe<WpImage>) =>
     add(img?.sourceUrl, { alt: img?.altText || null, caption: img?.caption?.trim() || null, description: img?.description?.trim() || null });
 
@@ -50,22 +54,30 @@ export function collectMedia(words: WpWord[], posts: WpPost[], pages: WpPage[], 
     for (const ex of p?.examples ?? []) for (const row of ex?.exampleAudio ?? []) add(row?.audio?.node?.mediaItemUrl);
     for (const img of p?.images?.nodes ?? []) addImage(img);
     add(w.seo?.opengraphImage?.sourceUrl);
+    addHtml(p?.infoText);
   }
   for (const post of posts) {
     addImage(post.featuredImage?.node);
-    for (const b of post.blocks ?? []) if (b?.name === "core/image") add(b.attributes?.url, { alt: b.attributes?.alt || null });
+    for (const b of post.blocks ?? []) {
+      if (b?.name === "core/image") add(b.attributes?.url, { alt: b.attributes?.alt || null });
+      addHtml(b?.saveContent);
+    }
     add(post.seo?.opengraphImage?.sourceUrl);
   }
   for (const n of [...pages, ...themen]) add(n.seo?.opengraphImage?.sourceUrl);
+  for (const page of pages) addHtml(page.content);
   return media;
 }
 
 export const collectMediaUrls = (...args: Parameters<typeof collectMedia>): string[] =>
   [...collectMedia(...args).values()].map((m) => m.url);
 
-/** Yoast SEO -> `seo` group. Empty strings become null so a re-import clears them. */
+/** Yoast robots value ("index", "noindex", "noindex, follow", ...) contains `flag`. */
+const robots = (value: Maybe<string>, flag: string) => !!value?.trim().toLowerCase().includes(flag);
+
+/** Yoast SEO -> `seo` group. Empty or missing values become null/false so a re-import clears them. */
 export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): NonNullable<Word["seo"]> {
-  if (!seo) return {};
+  seo ??= {};
   return {
     title: seo.title || null,
     description: seo.metaDesc || null,
@@ -75,9 +87,8 @@ export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): NonNullable<Word["s
     ogImage: mediaId(seo.opengraphImage?.sourceUrl, refs),
     twitterTitle: seo.twitterTitle || null,
     twitterDescription: seo.twitterDescription || null,
-    // Yoast returns "index"/"noindex" and "follow"/"nofollow".
-    noindex: seo.metaRobotsNoindex === "noindex",
-    nofollow: seo.metaRobotsNofollow === "nofollow",
+    noindex: robots(seo.metaRobotsNoindex, "noindex"),
+    nofollow: robots(seo.metaRobotsNofollow, "nofollow"),
   };
 }
 
@@ -90,11 +101,15 @@ const mapAudio = (rows: Maybe<Maybe<{ gender?: Maybe<string>; audio?: Maybe<{ no
     return [{ gender, audio }];
   });
 
-const htmlOrNull = async (html: Maybe<string>, config: SanitizedConfig) => (html?.trim() ? htmlToLexical(html, config) : null);
+/** Called with the src of every `<img>` that could not be mapped to media (it became a link). */
+export type OnUnmappedImage = (src: string) => void;
+
+const htmlOrNull = async (html: Maybe<string>, config: SanitizedConfig, refs: ImportRefs, onUnmappedImage?: OnUnmappedImage) =>
+  html?.trim() ? htmlToLexical(html, config, { mediaIdByUrl: refs.mediaIdByUrl, onUnmappedImage }) : null;
 
 export type WordData = Omit<Word, "id" | "derived" | "relatedWords" | "createdAt" | "updatedAt">;
 
-export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedConfig): Promise<WordData> {
+export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedConfig, onUnmappedImage?: OnUnmappedImage): Promise<WordData> {
   const p = node.wordProperties ?? {};
   return {
     wpId: node.databaseId,
@@ -115,7 +130,7 @@ export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedC
       description: f.description ?? null,
       caption: f.caption ?? null,
     })),
-    infoText: await htmlOrNull(p.infoText, config),
+    infoText: await htmlOrNull(p.infoText, config, refs, onUnmappedImage),
     learnMore: p.learnMore ?? null,
     berolinismus: p.berolinismus ?? false,
     // ACF repeater of `quelle` fields, each a string or a list of strings.
@@ -146,19 +161,19 @@ export function mapRelatedWords(node: WpWord, refs: ImportRefs): { ids: number[]
 const uploadNode = (value: number) => ({ type: "upload", relationTo: "media", value, version: 3, format: "", fields: null });
 
 /** Gutenberg blocks in `order`: runs of non-image blocks are converted together, images become upload nodes. */
-export async function blocksToLexical(blocks: Maybe<WpBlock>[], refs: ImportRefs, config: SanitizedConfig): Promise<RichText | null> {
+export async function blocksToLexical(blocks: Maybe<WpBlock>[], refs: ImportRefs, config: SanitizedConfig, onUnmappedImage?: OnUnmappedImage): Promise<RichText | null> {
   const sorted = blocks.filter(present).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
   if (!sorted.length) return null;
   const children: RichText["root"]["children"] = [];
   let html: string[] = [];
   const flush = async () => {
-    if (html.join("").trim()) children.push(...(await htmlToLexical(html.join("\n"), config)).root.children);
+    if (html.join("").trim()) children.push(...(await htmlToLexical(html.join("\n"), config, { mediaIdByUrl: refs.mediaIdByUrl, onUnmappedImage })).root.children);
     html = [];
   };
   for (const block of sorted) {
     const id = block.name === "core/image" ? mediaId(block.attributes?.url, refs) : null;
     if (id == null) {
-      // ponytail: an image block whose download failed keeps its HTML (img src stays the WP URL).
+      // An image block whose download failed keeps its HTML; htmlToLexical turns the <img> into a link.
       html.push(block.saveContent ?? "");
       continue;
     }
@@ -171,7 +186,7 @@ export async function blocksToLexical(blocks: Maybe<WpBlock>[], refs: ImportRefs
 
 export type PostData = Omit<Post, "id" | "createdAt" | "updatedAt">;
 
-export async function mapPost(node: WpPost, refs: ImportRefs, config: SanitizedConfig): Promise<PostData> {
+export async function mapPost(node: WpPost, refs: ImportRefs, config: SanitizedConfig, onUnmappedImage?: OnUnmappedImage): Promise<PostData> {
   return {
     wpId: node.databaseId,
     slug: node.slug ?? null,
@@ -179,18 +194,23 @@ export async function mapPost(node: WpPost, refs: ImportRefs, config: SanitizedC
     excerpt: node.excerpt ? htmlToText(node.excerpt) : null,
     publishedAt: gmtToIso(node.dateGmt),
     featuredImage: mediaId(node.featuredImage?.node?.sourceUrl, refs),
-    content: await blocksToLexical(node.blocks ?? [], refs, config),
+    content: await blocksToLexical(node.blocks ?? [], refs, config, onUnmappedImage),
     seo: mapSeo(node.seo, refs),
     _status: statusOf(node.status),
   };
 }
 
-export async function mapPage(node: WpPage, refs: ImportRefs, config: SanitizedConfig): Promise<Omit<Page, "id" | "createdAt" | "updatedAt">> {
+export async function mapPage(
+  node: WpPage,
+  refs: ImportRefs,
+  config: SanitizedConfig,
+  onUnmappedImage?: OnUnmappedImage,
+): Promise<Omit<Page, "id" | "createdAt" | "updatedAt">> {
   return {
     wpId: node.databaseId,
     slug: node.slug ?? null,
     title: node.title ?? "",
-    content: await htmlOrNull(node.content, config),
+    content: await htmlOrNull(node.content, config, refs, onUnmappedImage),
     seo: mapSeo(node.seo, refs),
   };
 }
