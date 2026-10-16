@@ -3318,6 +3318,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "content_modified_at": {
+          "name": "content_modified_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
         "featured_image_id": {
           "name": "featured_image_id",
           "type": "integer",
@@ -3596,6 +3602,12 @@
         },
         "version_published_at": {
           "name": "version_published_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version_content_modified_at": {
+          "name": "version_content_modified_at",
           "type": "timestamp(3) with time zone",
           "primaryKey": false,
           "notNull": false
@@ -5781,6 +5793,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "e3659887-0a3d-4619-8593-0572c8366672",
+  "id": "d2c5672e-7b2d-48c3-9035-ab7cc403f0b7",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

@@ -346,6 +346,7 @@ export interface Post {
   title: string;
   excerpt?: string | null;
   publishedAt?: string | null;
+  contentModifiedAt?: string | null;
   featuredImage?: (number | null) | Media;
   content?: {
     root: {
@@ -697,6 +698,7 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   excerpt?: T;
   publishedAt?: T;
+  contentModifiedAt?: T;
   featuredImage?: T;
   content?: T;
   wpId?: T;
