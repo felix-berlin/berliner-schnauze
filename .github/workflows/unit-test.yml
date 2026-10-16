@@ -92,6 +92,7 @@ jobs:
   cms-test:
     name: Run CMS tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     # Throwaway CI database: no Infisical, dummy values only.
     env:
       DATABASE_URL_TEST: postgres://postgres:postgres@localhost:5432/cms_test

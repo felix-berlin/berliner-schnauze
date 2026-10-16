@@ -47,7 +47,7 @@ pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (exception: needs l
 
 # CMS (Payload, workspace package payload/)
 pnpm cms:dev                 # Payload admin + API on :3001
-pnpm cms:test                # Payload tests (needs DATABASE_URL_TEST, a throwaway Postgres DB)
+pnpm cms:test                # Payload tests (needs DATABASE_URL_TEST, a throwaway Postgres DB named *_test)
 pnpm --filter payload-app import:wp   # Idempotent WordPress -> Payload import
 pnpm --filter payload-app payload migrate:create <name>   # After EVERY schema change; commit it. The cms container runs migrations on start (CI fails on drift)
 docker compose up --build cms postgres   # CMS image (payload/Dockerfile, context = repo root)
@@ -99,6 +99,8 @@ Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adap
 - **Images** — remote images (CMS/Wikimedia/Amazon) are served through a custom Astro image service backed by Imagor (`src/lib/imagorImageService.ts`, URL signing in `src/utils/imagor.ts`, HMAC-SHA256). Configured via `image.service.entrypoint` in `astro.config.mjs`; local ESM-imported images bypass Imagor and use their original Vite asset URL. No `sharp` dependency — removed in favor of Imagor.
 - **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. See **Astro scripts + View Transitions** below.
 - **CMS**: `payload/` (pnpm workspace package `payload-app`) is the Payload 3 backend (Next.js admin + REST/GraphQL, Postgres). Compose services `cms` (image `berliner-schnauze-cms`, media volume) and `postgres`; the Astro site still reads WordPress until Plan 2
+  - Schema: dev and tests push it; production (`NODE_ENV=production`, pinned on `cms`) only runs the committed migrations, and only where `PAYLOAD_RUN_MIGRATIONS=true` (set on `cms` alone). Never point a push-filled DB at the prod container. `import:wp` refuses a non-local DB unless `IMPORT_ALLOW_REMOTE_DB=1` and `NODE_ENV=production`.
+  - First admin: in production `PAYLOAD_ALLOW_FIRST_USER=true` gates `POST /api/users`, but Payload's `/api/users/first-register` bypasses it. Cutover: create the first admin before the proxy route goes public.
 - **Global Vue app setup** in `src/pages/_app.ts` — registers the `vTooltip` directive and (dev only) Nanostores devtools
 
 ## Import Aliases

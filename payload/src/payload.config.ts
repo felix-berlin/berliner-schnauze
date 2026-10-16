@@ -29,7 +29,11 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || "",
   serverURL: process.env.PAYLOAD_SERVER_URL || "",
   typescript: { outputFile: path.resolve(dirname, "payload-types.ts") },
-  // Dev/tests push the schema; production (NODE_ENV=production) runs the committed
-  // migrations on start instead. Every schema change needs `payload migrate:create <name>`.
-  db: postgresAdapter({ pool: { connectionString: process.env.DATABASE_URL }, prodMigrations: migrations }),
+  // Dev/tests push the schema; in production nothing is pushed and the committed migrations run on
+  // start only where PAYLOAD_RUN_MIGRATIONS=true (the cms container), so no second app migrates concurrently.
+  // Every schema change needs `payload migrate:create <name>`.
+  db: postgresAdapter({
+    pool: { connectionString: process.env.DATABASE_URL },
+    prodMigrations: process.env.PAYLOAD_RUN_MIGRATIONS === "true" ? migrations : undefined,
+  }),
 });
