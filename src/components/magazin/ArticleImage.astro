@@ -1,9 +1,9 @@
 ---
 import { Picture } from 'astro:assets';
-import type { CoreImageBlockFieldsFragment } from '@/gql/graphql';
+import type { CoreImageBlock } from '@/types/cms';
 
 interface Props {
-  block: CoreImageBlockFieldsFragment;
+  block: CoreImageBlock;
 }
 
 const { block } = Astro.props;

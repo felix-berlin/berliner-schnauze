@@ -1,8 +1,10 @@
 import { processArticleBlocks, slugify } from "@utils/article";
-import { WP_API } from "astro:env/client";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-const wpOrigin = new URL(WP_API).origin;
+vi.mock("astro:env/server", () => ({ PAYLOAD_SERVER_URL: "https://cms.example:3001" }));
+
+const legacyOrigin = "https://cms.berliner-schnauze.wtf";
+const cmsOrigin = "https://cms.example:3001";
 
 const block = (order: number, saveContent: string, name = "core/paragraph") => ({
   name,
@@ -87,9 +89,9 @@ describe("processArticleBlocks", () => {
     expect(blocks[0].saveContent).toContain('id="abschnitt"');
   });
 
-  it("rewrites CMS-absolute internal links to relative paths", () => {
+  it.each([[legacyOrigin], [cmsOrigin]])("rewrites CMS-absolute internal links (%s) to relative paths", (origin) => {
     const { blocks } = processArticleBlocks([
-      block(1, `<p>Siehe <a href="${wpOrigin}/wort/bulette/">Bulette</a>.</p>`),
+      block(1, `<p>Siehe <a href="${origin}/wort/bulette/">Bulette</a>.</p>`),
     ]);
     expect(blocks[0].saveContent).toContain('href="/wort/bulette/"');
   });

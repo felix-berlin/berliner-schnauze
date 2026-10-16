@@ -1,23 +1,17 @@
-import { WP_API } from "astro:env/client";
+import { PAYLOAD_SERVER_URL } from "astro:env/server";
 
-import type {
-  CoreImageBlockFieldsFragment,
-  CoreQuoteBlockFieldsFragment,
-  GetAllPostsQuery,
-} from "@/gql/graphql";
+import type { ArticleBlock, CoreImageBlock, CoreQuoteBlock } from "@/types/cms";
+
+export type { ArticleBlock };
 
 export interface TocEntry {
   id: string;
   text: string;
 }
 
-export type ArticleBlock = NonNullable<
-  NonNullable<GetAllPostsQuery["posts"]>["nodes"][number]["blocks"]
->[number];
-
-export const isImageBlock = (block: ArticleBlock): block is CoreImageBlockFieldsFragment =>
+export const isImageBlock = (block: ArticleBlock): block is CoreImageBlock =>
   block.name === "core/image";
-export const isQuoteBlock = (block: ArticleBlock): block is CoreQuoteBlockFieldsFragment =>
+export const isQuoteBlock = (block: ArticleBlock): block is CoreQuoteBlock =>
   block.name === "core/quote";
 
 export interface ProcessedArticle {
@@ -31,12 +25,14 @@ export interface ProcessedArticle {
 // link format changes, and matches Google's own rel=sponsored guidance.
 const SPONSORED_LINK_PATTERN = /\brel="[^"]*\bsponsored\b[^"]*"/i;
 
-// WP's internal link inserter always writes hrefs absolute against the CMS's own
-// siteurl (cms.berliner-schnauze.wtf) — there's no WP-side fix without breaking
-// wp-admin/assets. Stripping that origin turns them into root-relative links that
-// resolve against whatever domain actually serves the page (dev or prod).
-const wpOrigin = new URL(WP_API).origin;
-const rewriteWpLinks = (html: string): string => html.replaceAll(`href="${wpOrigin}`, 'href="');
+// Imported WordPress links are absolute against the old CMS origin, links an editor sets in Payload against
+// whatever the admin runs on. Stripping both turns them into root-relative links that resolve against
+// the domain actually serving the page (dev or prod).
+const cmsOrigins = [...new Set(["https://cms.berliner-schnauze.wtf", PAYLOAD_SERVER_URL && new URL(PAYLOAD_SERVER_URL).origin])].filter(
+  (origin): origin is string => !!origin,
+);
+const rewriteWpLinks = (html: string): string =>
+  cmsOrigins.reduce((out, origin) => out.replaceAll(`href="${origin}`, 'href="'), html);
 
 // Reduce heading markup to plain text for TOC labels + slugs. The strip is
 // applied in a fixpoint loop so nested/crafted tags can't reconstruct after a

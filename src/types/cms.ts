@@ -80,3 +80,66 @@ export type Word = {
   wordGroup: string | null;
   wordProperties: WordProperties;
 };
+
+export type ThemaNode = {
+  count: number;
+  description: string | null;
+  name: string | null;
+  seo: SeoData | null;
+  slug: string | null;
+};
+
+export type CoreImageBlock = {
+  attributes: { alt: string; height: string; url: string; width: string } | null;
+  name: "core/image";
+  order: number;
+  saveContent: string | null;
+};
+
+export type CoreQuoteBlock = {
+  attributes: { value: string } | null;
+  name: "core/quote";
+  order: number;
+  saveContent: string | null;
+};
+
+export type HtmlBlock = {
+  attributes?: undefined;
+  name: "core/html";
+  order: number;
+  saveContent: string | null;
+};
+
+export type ArticleBlock = CoreImageBlock | CoreQuoteBlock | HtmlBlock;
+
+export type PostNode = {
+  blocks: ArticleBlock[];
+  /** WP format: ISO without milliseconds and without a trailing Z. */
+  date: string | null;
+  excerpt: string | null;
+  featuredImage: { node: { altText: string | null; sourceUrl: string | null } } | null;
+  id: string;
+  seo: SeoData | null;
+  slug: string | null;
+  title: string | null;
+};
+
+export type PageNode = {
+  /** HTML rendered from rich text. */
+  content: string;
+  seo: SeoData | null;
+  slug: string;
+  title: string;
+};
+
+export type AffiliateBook = {
+  badge: string | null;
+  badgeModifier: string | null;
+  description: string | null;
+  href: string | null;
+  imageAlt: string | null;
+  imageUrl: string | null;
+  title: string | null;
+};
+
+export type AffiliateDisclaimer = { plattform: string | null; text: string | null };

@@ -1,7 +1,7 @@
 import type { Media, Theman, Word as PayloadWord, WordType } from "payload-app";
 
 import { getPayloadClient, mediaUrl } from "@services/payload.ts";
-import { toSeoData } from "@services/payload/seo.ts";
+import { toSeoData, wpDate } from "@services/payload/seo.ts";
 import { ttl } from "@services/cache.ts";
 import { SHOW_TEST_DATA } from "astro:env/client";
 import { escapeHtml, lexicalToHtml } from "payload-app/lexical-html";
@@ -12,9 +12,6 @@ const PAGE_SIZE = 1000;
 
 const populated = <T extends object>(items: readonly (T | number)[] | null | undefined): T[] =>
   (items ?? []).filter((item): item is T => typeof item === "object");
-
-/** WP format (no milliseconds, no trailing Z): callers append "Z" or parse it themselves. */
-const wpDate = (iso: string | null | undefined): string | null => (iso ? iso.replace(/(\.\d+)?Z$/, "") : null);
 
 const audioRows = (rows: PayloadWord["berlinerischAudio"]): AudioRow[] =>
   (rows ?? []).map((row) => {

@@ -1,16 +1,2 @@
-import { graphql } from "@/gql";
-
-export const GetPagesBySlugs = graphql(`
-  query GetPagesBySlugs($slugs: [String] = []) {
-    pages(where: { nameIn: $slugs }) {
-      nodes {
-        slug
-        title
-        content
-        seo {
-          ...PostTypeSeoFragment
-        }
-      }
-    }
-  }
-`);
+export { fetchPagesBySlugs } from "@services/payload/pages.ts";
+export type { PageNode } from "@services/payload/pages.ts";
