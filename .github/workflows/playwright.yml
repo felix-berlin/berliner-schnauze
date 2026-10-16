@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-latest
     # Browsers + OS libs are baked into the image. Keep the tag in sync with @playwright/test.
     container:
-      image: mcr.microsoft.com/playwright:v1.64.0-noble
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
       # --init reaps zombie browser/server processes; without it the run hangs after the last test.
       options: --init --ipc=host
     # GitHub sets HOME=/github/home in container jobs; Firefox/WebKit refuse to start

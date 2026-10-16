@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Berliner Schnauze is a Berlin dialect translator web app. Data lives in a WordPress GraphQL backend; the frontend is a static Astro site with Vue 3 islands for interactivity. Deployed to Cloudflare Pages.
+Berliner Schnauze is a Berlin dialect translator web app. Data lives in a WordPress GraphQL backend; the frontend is a static Astro site with Vue 3 islands for interactivity. Deployed to Cloudflare Workers (static assets, `wrangler.jsonc`).
 
 ## Commands
 
@@ -18,11 +18,11 @@ pnpm test:unit:ui            # Vitest UI for debugging
 pnpm test:ci                 # CI mode: coverage + JUnit reporter
 
 # Linting & type checking
-pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS)
+pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS) — auto-fixes (--fix), modifies files
 pnpm typechecking            # astro check + vue-tsc  (slow — run targeted, not after every edit; tsc can't resolve .vue imports)
 
 # Build
-pnpm build                   # Production build (Cloudflare Pages output) — no infisical, env vars must already be set
+pnpm build                   # Production build (static ./dist) — no infisical, env vars must already be set
 pnpm build:local             # Production build locally — wraps build with infisical to inject env vars
 pnpm build:strict            # Strict build with full type checking
 
@@ -33,8 +33,9 @@ pnpm gql:generate            # One-shot codegen run
 pnpm format                  # Format with oxfmt
 pnpm format:check            # Check formatting without writing
 
-# Cloudflare Pages local preview (run after build)
-pnpm server:preview          # Serve ./dist with Wrangler Pages
+# Cloudflare Workers (run after build)
+pnpm server:preview          # Serve ./dist locally via `wrangler dev`
+pnpm deploy                  # `wrangler deploy`
 
 # WordPress auth
 pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (exception: needs local .env file, not Infisical)
@@ -56,7 +57,7 @@ E2E (Playwright): specs in `src/tests/e2e/`; run with `npx playwright test <file
 
 Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical login` once before local development. The `dev`, `gql:generate`, and `gql:generate:watch` scripts automatically inject secrets via `infisical run --`.
 
-For Cloudflare Pages builds, env vars are configured separately in the CF Pages dashboard.
+For Cloudflare Workers builds, env vars are configured separately in the Workers Builds settings (dashboard).
 
 ## WordPress MCP Access
 
@@ -84,7 +85,7 @@ Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adap
 - **Orama** provides full-text search with German stemming — index built at build time in `src/pages/api/search/index.json.ts`
 - **Composables** in `src/composable/` — Vue composables wrapping browser APIs (Cache Storage, Service Worker)
 - **Images** — remote images (CMS/Wikimedia/Amazon) are served through a custom Astro image service backed by Imagor (`src/lib/imagorImageService.ts`, URL signing in `src/utils/imagor.ts`, HMAC-SHA256). Configured via `image.service.entrypoint` in `astro.config.mjs`; local ESM-imported images bypass Imagor and use their original Vite asset URL. No `sharp` dependency — removed in favor of Imagor.
-- **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. `<script>` tags in `.astro` files run **only once** on initial load — re-initialize them with `document.addEventListener('astro:page-load', fn)` for subsequent client-side navigations.
+- **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. See **Astro scripts + View Transitions** below.
 - **Global Vue app setup** in `src/pages/_app.ts` — registers the `vTooltip` directive and (dev only) Nanostores devtools
 
 ## Import Aliases
@@ -132,7 +133,7 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 
 **Breakpoints & container queries**: Never write raw `@media (width >= vars.$sm)` queries. Fixed viewport breakpoints always go through the sass-butler mixin: `@use "@styles/mixins" as mx;` then `@include mx.breakpoint("sm") { ... }` (direction defaults to `min`; pass `"max"` for a max-width query). The breakpoint map lives in `src/styles/variables/_layout.scss`. Wherever the responsive behavior is really about a component's own available space rather than the viewport, prefer a **container query** instead: `container-type: inline-size; container-name: x;` on the ancestor, then `@container x (inline-size >= Yrem) { ... }` on the descendant — see `src/styles/components/_word-page-layout.scss` and `_word-gallery-col.scss` for the established pattern.
 
-**VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Already in use (grep `@vueuse/core` for the current set): `useEventListener`, `useIntersectionObserver`, `useResizeObserver`, `useMediaQuery`, `useDebounceFn`, `onClickOutside`, `onKeyStroke`, `useMagicKeys`, `useSwipe`, `useClipboard`, `useShare`, `useOnline`, `useUrlSearchParams`.
+**VueUse** ([vueuse.org/functions](https://vueuse.org/functions.html)): ALWAYS check VueUse before writing any browser API wrapper or Vue utility manually. It covers event listeners, debounce, scroll, storage, clipboard, keyboard shortcuts, swipe, breakpoints, reduced-motion, mutation observer, intersection observer, resize, geolocation, animations, and much more. Do NOT implement manually what VueUse already provides. Grep `@vueuse/core` for the set already in use.
 
 **PWA**: Built with `@vite-pwa/astro` + Workbox. Service worker registered in `src/services/pwa.ts` via `virtual:pwa-register`. On update: shows browser Notification if permission granted, else silently reloads. On offline-ready: shows toast. Cache Storage access via `src/composable/useCacheStorage.ts`. Cache management UI in `src/components/PwaCacheOverview.vue`. Precache excludes `og/**` and `screenshots/**`; `maximumFileSizeToCacheInBytes` is 2 MB. `navigateFallback: "/"` covers offline navigations to uncached pages. Runtime caching (`astro.config.mjs`): StaleWhileRevalidate for search index/meta, NetworkFirst for word-of-the-day, CacheFirst for `imagor-images` (30 days, 500 entries).
 
@@ -144,7 +145,7 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 
 **Modal system**: Open modals via `open()` from `@stores/modal.ts` using `defineAsyncComponent` for dynamic component loading. See `src/components/WordSuggestHint.vue` for reference.
 
-**Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic that VueUse does not cover — custom composables are for project-specific logic only; prefer VueUse when it exists. Import `createToastNotify` from `@stores/toastNotify.ts` directly for toast notifications — do NOT import from `@stores/index` as the barrel re-exports `wordList.ts` which has module-level side effects that trigger unnecessary fetches.
+**Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic that VueUse does not cover — custom composables are for project-specific logic only; prefer VueUse when it exists.
 
 **GraphQL**: Import the `graphql` tagged template from `@/gql` for type-safe queries. Generated types live in `src/gql/` (do not edit manually — output of codegen).
 
@@ -158,9 +159,11 @@ document.addEventListener("astro:page-load", () => {
 
 Also guard `ResizeObserver` / `getBoundingClientRect` callbacks against transitional zero-heights: `if (h > 0) { ... }` — View Transition animations can briefly report `height: 0` for persistent elements.
 
-## Environment Variables
+## Dev Words Cache
 
-**Dev words cache**: fetched words are cached in `node_modules/.cache/berliner-words/`; dev start asks "Re-fetch words?" (TTY only, `REFETCH_WORDS=1` forces it). Never compute per-word similarity/anagram data in `getStaticPaths` (`wort/[...wordSlug].astro`) — it's O(n²) over ~6000 words and freezes the dev server; derive it in the page body.
+Fetched words are cached in `node_modules/.cache/berliner-words/`; dev start asks "Re-fetch words?" (TTY only, `REFETCH_WORDS=1` forces it). Never compute per-word similarity/anagram data in `getStaticPaths` (`wort/[...wordSlug].astro`) — it's O(n²) over ~6000 words and freezes the dev server; derive it in the page body.
+
+## Environment Variables
 
 Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`, `IMAGOR_HOST`, `IMAGOR_SECRET`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
 
@@ -235,21 +238,6 @@ astro dev stop           # idempotent — succeeds even if not running
 ```
 
 Astro auto-detects AI agents and enables background mode automatically. A lockfile prevents duplicate instances — starting when already running returns the existing instance. Health endpoint: `/_astro/status`.
-
-**JSON logging** — structured logs for agent parsing or log aggregation:
-
-```bash
-astro dev --json         # enable JSON log output
-```
-
-Or in config:
-
-```js
-import { defineConfig, logHandlers } from "astro/config";
-export default defineConfig({
-  logger: logHandlers.json(), // or logHandlers.compose(logHandlers.console(), logHandlers.json())
-});
-```
 
 ## Design Context
 

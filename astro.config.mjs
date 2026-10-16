@@ -6,6 +6,7 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 import AstroPWA from "@vite-pwa/astro";
 import matomo from "astro-matomo";
 import { defineConfig, envField, fontProviders, svgoOptimizer } from "astro/config";
+import { availableParallelism } from "node:os";
 import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
@@ -30,9 +31,14 @@ const {
   E2E_WORD_LIMIT,
 } = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 
+// One id per build: prerender workers (copies of this env) share a single words fetch, see getWords.ts.
+process.env.WORDS_BUILD_ID ??= String(Date.now());
+
 // The Playwright e2e build sets this to keep the build fast — skip the
 // source-map upload plugins too, they add real time for a build nobody deploys.
 const isE2eBuild = Boolean(E2E_WORD_LIMIT);
+// Source map + bundle stats uploads (Sentry, Codecov) only make sense for a real CI/deploy build.
+const uploadsArtifacts = !isE2eBuild && Boolean(process.env.CI);
 
 const SITE_ORIGIN = import.meta.env.DEV ? "http://localhost:4321" : "https://berliner-schnauze.wtf";
 
@@ -515,9 +521,8 @@ export default defineConfig({
         // navigateFallbackAllowlist: [/^\//],
       },
     }),
-    // Skipped for local dev builds and the e2e build: slows down the build
-    // and isn't needed outside a real CI/deploy build.
-    ...(import.meta.env.DEV || isE2eBuild
+    // Skipped for local builds, dev, and the e2e build: it adds ~13s.
+    ...(import.meta.env.DEV || !uploadsArtifacts
       ? []
       : [
           codecovplugin({
@@ -568,7 +573,7 @@ export default defineConfig({
           }
         },
       }), // chooses the compiler automatically
-      ...(isE2eBuild
+      ...(!uploadsArtifacts
         ? []
         : [
             sentryVitePlugin({
@@ -609,7 +614,7 @@ export default defineConfig({
     },
 
     build: {
-      sourcemap: !isE2eBuild, // needed for sentryVitePlugin, which is skipped for the e2e build
+      sourcemap: uploadsArtifacts, // only needed for sentryVitePlugin (~9s), which is skipped for local and e2e builds
       target: "esnext",
       cssMinify: "esbuild",
       rolldownOptions: {
@@ -635,5 +640,8 @@ export default defineConfig({
     // WordPress data every build; incrementalBuild skips regenerating a page
     // when its module graph and cacheKey are unchanged since the last build.
     incrementalBuild: true,
+    // Renders static pages in worker threads. Half the cores, like Playwright's
+    // `workers: "50%"`: memory is the limit, not CPU.
+    parallelPrerender: { workers: Math.max(1, Math.floor(availableParallelism() / 2)) },
   },
 });

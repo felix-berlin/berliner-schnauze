@@ -1,10 +1,11 @@
-import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { createInterface } from "node:readline/promises";
 
-// Dev-only disk cache for the WordPress word lists: fetching ~6000 words takes ~60
-// sequential GraphQL requests, and every dev-server restart would pay for it again
-// while all pages and assets wait on it.
+// Disk cache for the WordPress word lists: fetching ~6000 words takes ~12 GraphQL requests,
+// and every dev-server restart would pay for it again while all pages and assets wait on it.
+// Builds also use it to share one fetch between parallelPrerender workers (see getWords.ts).
 const CACHE_DIR = join(process.cwd(), "node_modules/.cache/berliner-words");
 
 const formatAge = (ms: number): string => {
@@ -24,7 +25,11 @@ export const readWordsCache = async <T>(key: string): Promise<T | null> => {
 
 export const writeWordsCache = async (key: string, data: unknown): Promise<void> => {
   await mkdir(CACHE_DIR, { recursive: true });
-  await writeFile(join(CACHE_DIR, `${key}.json`), JSON.stringify(data));
+  // Write + rename: prerender workers read this file concurrently and must never see it half-written.
+  const file = join(CACHE_DIR, `${key}.json`);
+  const tmp = `${file}.${randomUUID()}.tmp`;
+  await writeFile(tmp, JSON.stringify(data));
+  await rename(tmp, file);
 };
 
 /**
