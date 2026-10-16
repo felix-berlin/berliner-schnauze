@@ -1,6 +1,5 @@
 import { persistentMap } from "@nanostores/persistent";
 import { jsonCodec } from "@utils/jsonCodec";
-import { WP_REST_API } from "astro:env/client";
 import { onMount, task } from "nanostores";
 
 export interface Word {
@@ -51,7 +50,7 @@ export const $wordOfTheDay = persistentMap<WordOfTheDay>(
  * @return {Promise<void>}
  */
 export const getWordOfTheDay = async (): Promise<void> => {
-  return await fetch(`${WP_REST_API}/berliner-schnauze/v1/word-of-the-day`)
+  return await fetch("/api/word-of-the-day")
     .then((res) => {
       if (!res.ok) {
         $wordOfTheDay.setKey("error", true);

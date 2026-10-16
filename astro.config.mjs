@@ -160,10 +160,16 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
-      // Runtime-only (on-demand routes): optional so the build needs no Payload env.
+      // Runtime-only (on-demand routes) and optional so the build needs no Payload env. "secret" is read from
+      // the container's env at runtime; "public" would be inlined at build time (empty here).
+      OG_CACHE_DIR: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       PAYLOAD_SERVER_URL: envField.string({
         context: "server",
-        access: "public",
+        access: "secret",
         optional: true,
       }),
       IMAGOR_HOST: envField.string({
@@ -461,8 +467,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern:
-              /^https:\/\/cms\.berliner-schnauze\.wtf\/wp-json\/berliner-schnauze\/v1\/word-of-the-day$/,
+            urlPattern: ({ url }) => url.pathname === "/api/word-of-the-day",
             handler: "NetworkFirst",
             options: {
               cacheName: "api-word-of-the-day",
@@ -528,6 +533,9 @@ export default defineConfig({
     // Dev keeps deps external: CJS ones (hypher, natural, ...) imported by the linked
     // payload-app package are not pre-bundled and fail with "module is not defined".
     ssr: {
+      // canvaskit-wasm (astro-og-canvas) loads its .wasm next to the package via __dirname, so it stays a real
+      // node_module: the Dockerfile installs just this package.
+      external: ["canvaskit-wasm"],
       noExternal: import.meta.env.DEV ? undefined : true,
     },
 

@@ -16,6 +16,9 @@ services:
       DATABASE_URL: postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-berliner_schnauze}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET:?set PAYLOAD_SECRET in .env}
       PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL:?set PAYLOAD_SERVER_URL in .env}
+      OG_CACHE_DIR: /app/og-cache
+    volumes:
+      - ogcache:/app/og-cache
     depends_on:
       postgres:
         condition: service_healthy
@@ -93,3 +96,4 @@ services:
 volumes:
   pgdata:
   media:
+  ogcache:

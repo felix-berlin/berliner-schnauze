@@ -1,10 +1,6 @@
 import { map } from "nanostores";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("astro:env/client", () => ({
-  WP_REST_API: "https://mock-api.example.com",
-}));
-
 vi.mock("@nanostores/persistent", () => ({
   persistentMap: vi.fn((key: string, initial: unknown) => map(initial)),
 }));
@@ -66,6 +62,13 @@ describe("wordOfTheDay store", () => {
   });
 
   describe("onMount / isCachedToday", () => {
+    it("asks the site's own word-of-the-day endpoint", async () => {
+      const { getWordOfTheDay } = await import("@stores/wordOfTheDay.ts");
+      mockFetch.mockClear();
+      await getWordOfTheDay();
+      expect(mockFetch).toHaveBeenCalledWith("/api/word-of-the-day");
+    });
+
     it("calls getWordOfTheDay when no timestamp in localStorage", async () => {
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       const unsub = $wordOfTheDay.subscribe(() => {});

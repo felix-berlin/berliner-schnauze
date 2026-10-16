@@ -1,64 +1,56 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { OGImageRoute, fetchAllWords } = vi.hoisted(() => ({
-  OGImageRoute: vi.fn(async () => ({ GET: vi.fn(), getStaticPaths: vi.fn() })),
+const { generateOpenGraphImage, fetchAllWords } = vi.hoisted(() => ({
   fetchAllWords: vi.fn(),
+  generateOpenGraphImage: vi.fn(),
 }));
-const env = vi.hoisted(() => ({ E2E_WORD_LIMIT: undefined as number | undefined }));
 
-vi.mock("astro-og-canvas", () => ({ OGImageRoute }));
+vi.mock("astro-og-canvas", () => ({ generateOpenGraphImage }));
 vi.mock("@services/api.ts", () => ({ fetchAllWords }));
-vi.mock("astro:env/server", () => env);
+vi.mock("astro:env/server", () => ({ OG_CACHE_DIR: "/data/og" }));
 
-type Page = { berlinerisch: string; translation: string };
-type Options = {
-  getImageOptions: (slug: string, page: Page) => { title: string; description?: string };
-  pages: Record<string, Page>;
-};
+import type { APIContext } from "astro";
 
-const load = async (): Promise<Options> => {
-  vi.resetModules();
-  await import("@/pages/og/[wordSlug].ts");
-  return (OGImageRoute.mock.calls[0] as unknown as [Options])[0];
-};
+import { GET } from "@/pages/og/[wordSlug].ts";
+
+const PNG = Buffer.from([0x89, 0x50, 0x4e, 0x47]);
+const call = (wordSlug: string | undefined) =>
+  GET({ params: { wordSlug } } as unknown as APIContext);
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  generateOpenGraphImage.mockResolvedValue(PNG);
+  fetchAllWords.mockResolvedValue([
+    { slug: "wat", translations: ["was", "etwas"], wordProperties: { berlinerisch: "Wat" } },
+    { slug: "nischt", translations: [], wordProperties: { berlinerisch: "" } },
+  ]);
+});
 
 describe("og/[wordSlug] route", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    env.E2E_WORD_LIMIT = undefined;
-    fetchAllWords.mockResolvedValue([
-      { slug: "wat", translations: ["was", "etwas"], wordProperties: { berlinerisch: "Wat" } },
-      { slug: "nischt", translations: [], wordProperties: { berlinerisch: "" } },
-    ]);
+  it("renders a png with the headword as title and the translations as description", async () => {
+    const res = await call("wat.png");
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toBe("image/png");
+    expect(res.headers.get("Cache-Control")).toBe("public, max-age=31536000, immutable");
+    expect(generateOpenGraphImage).toHaveBeenCalledWith(
+      expect.objectContaining({ cacheDir: "/data/og", description: "was, etwas", title: "Wat" }),
+    );
   });
 
-  it("builds one page per word, falling back to the slug without a headword", async () => {
-    const { pages } = await load();
-    expect(pages).toEqual({
-      nischt: { berlinerisch: "nischt", translation: "" },
-      wat: { berlinerisch: "Wat", translation: "was, etwas" },
-    });
+  it("falls back to the slug without a headword and omits an empty description", async () => {
+    await call("nischt.png");
+    const options = generateOpenGraphImage.mock.calls[0][0];
+    expect(options.title).toBe("nischt");
+    expect(options.description).toBeUndefined();
   });
 
-  it("uses headword as title and translations as description", async () => {
-    const { getImageOptions } = await load();
-    expect(getImageOptions("wat", { berlinerisch: "Wat", translation: "was" })).toMatchObject({
-      description: "was",
-      title: "Wat",
-    });
-  });
-
-  it("omits the description when there is no translation", async () => {
-    const { getImageOptions } = await load();
-    expect(
-      getImageOptions("x", { berlinerisch: "X", translation: "" }).description,
-    ).toBeUndefined();
-  });
-
-  it("skips fetching words in the E2E build", async () => {
-    env.E2E_WORD_LIMIT = 500;
-    const { pages } = await load();
-    expect(pages).toEqual({});
-    expect(fetchAllWords).not.toHaveBeenCalled();
-  });
+  it.each([["doesnotexist.png"], ["wat"], [undefined]])(
+    "answers 404 without caching for %s",
+    async (slug) => {
+      const res = await call(slug);
+      expect(res.status).toBe(404);
+      expect(res.headers.get("Cache-Control")).toBe("no-store");
+      expect(generateOpenGraphImage).not.toHaveBeenCalled();
+    },
+  );
 });

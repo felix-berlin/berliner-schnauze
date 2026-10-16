@@ -2,3 +2,5 @@
 *
 !dist/
 !server/
+!package.json
+!src/assets/fonts/Berlin-Bold.woff2
