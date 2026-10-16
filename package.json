@@ -37,6 +37,8 @@
     "dev": "infisical run -- astro dev",
     "cms:dev": "pnpm --filter payload-app dev",
     "cms:test": "pnpm --filter payload-app test",
+    "cms:migrate": "pnpm --filter payload-app migrate",
+    "cms:migrate:create": "pnpm --filter payload-app migrate:create",
     "start": "astro dev",
     "build": "pnpm run supportedBrowsers && astro build",
     "build:local": "infisical run -- pnpm run build",

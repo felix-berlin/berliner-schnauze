@@ -49,7 +49,8 @@ pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (exception: needs l
 pnpm cms:dev                 # Payload admin + API on :3001
 pnpm cms:test                # Payload tests (needs DATABASE_URL_TEST, a throwaway Postgres DB named *_test)
 pnpm --filter payload-app import:wp   # Idempotent WordPress -> Payload import
-pnpm --filter payload-app payload migrate:create <name>   # After EVERY schema change; commit it. The cms container runs migrations on start (CI fails on drift)
+pnpm cms:migrate:create <name>   # After EVERY schema change; commit it. The cms container runs migrations on start (CI fails on drift)
+pnpm cms:migrate                 # Apply migrations to DATABASE_URL (not for dev DBs filled by schema push)
 docker compose up --build cms postgres   # CMS image (payload/Dockerfile, context = repo root)
 
 # Anki decks (Python venv `.venv-anki`, setup in docs/anki/README.md)
