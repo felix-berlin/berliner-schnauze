@@ -1,3 +1,4 @@
+import node from "@astrojs/node";
 import partytown from "@astrojs/partytown";
 import sitemap from "@astrojs/sitemap";
 import vue from "@astrojs/vue";
@@ -62,8 +63,11 @@ export default defineConfig({
   devToolbar: {
     enabled: !process.env.CI && !process.env.NO_DEV_TOOLBAR,
   },
+  // output stays "static": every page is still prerendered, the standalone
+  // server (Docker image) only serves dist/client.
+  adapter: node({ mode: "standalone" }),
   // No Astro.session usage anywhere in the codebase — opt out to tree-shake
-  // the session runtime out of the Cloudflare Pages build.
+  // the session runtime out of the server build.
   session: false,
   fonts: [
     {
@@ -360,6 +364,9 @@ export default defineConfig({
     // spotlightjs(),
     AstroPWA({
       $schema: "https://json.schemastore.org/web-manifest-combined.json",
+      // @vite-pwa/astro only redirects to dist/client for output "server"; with
+      // a static output + adapter it would write sw.js into dist/server.
+      outDir: "dist/client",
       mode: import.meta.env.DEV ? "development" : "production",
       base: "/",
       scope: "/",
@@ -436,7 +443,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globDirectory: "dist",
+        globDirectory: "dist/client",
         cleanupOutdatedCaches: true,
         // Falls back to the (precached) homepage for any navigation that misses
         // both precache and network — e.g. a word page added after the last SW
@@ -543,6 +550,11 @@ export default defineConfig({
     // mid-session re-optimization then breaks the in-flight dynamic import.
     optimizeDeps: {
       include: ["@urql/core", "zod"],
+    },
+
+    // Bundle every dep into dist/server so the Docker image needs no node_modules.
+    ssr: {
+      noExternal: true,
     },
 
     plugins: [
