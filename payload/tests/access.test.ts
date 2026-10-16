@@ -4,7 +4,8 @@ import { usersCreate } from "../src/access";
 import { getTestPayload } from "./helpers/payload";
 
 // Task 3 and Task 5 append their collections/globals here.
-const lockedCollections = ["users", "words", "word-types", "themen"] as const;
+const lockedCollections = ["users", "words", "word-types", "themen", "posts", "pages"] as const;
+const lockedGlobals = ["navigation", "affiliate", "company"] as const;
 
 const png = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
@@ -43,6 +44,13 @@ describe("anonymous reads", () => {
     it(`${collection} is Forbidden`, async () => {
       const payload = await getTestPayload();
       await expect(payload.find({ collection, overrideAccess: false })).rejects.toThrow(/not allowed|forbidden/i);
+    });
+  }
+
+  for (const slug of lockedGlobals) {
+    it(`global ${slug} is Forbidden`, async () => {
+      const payload = await getTestPayload();
+      await expect(payload.findGlobal({ slug, overrideAccess: false })).rejects.toThrow(/not allowed|forbidden/i);
     });
   }
 
@@ -93,6 +101,17 @@ it("an authenticated user can read users", async () => {
   const user = await payload.findByID({ collection: "users", id: userId });
   const res = await payload.find({ collection: "users", overrideAccess: false, user: { ...user, collection: "users" } });
   expect(res.totalDocs).toBeGreaterThan(0);
+});
+
+it("an authenticated user can read every locked collection and global", async () => {
+  const payload = await getTestPayload();
+  const user = { ...(await payload.findByID({ collection: "users", id: userId })), collection: "users" as const };
+  for (const collection of lockedCollections) {
+    await expect(payload.find({ collection, overrideAccess: false, user })).resolves.toBeDefined();
+  }
+  for (const slug of lockedGlobals) {
+    await expect(payload.findGlobal({ slug, overrideAccess: false, user })).resolves.toBeDefined();
+  }
 });
 
 describe("users.create bootstrap", () => {

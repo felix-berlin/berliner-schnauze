@@ -72,6 +72,8 @@ export interface Config {
     'word-types': WordType;
     themen: Theman;
     words: Word;
+    posts: Post;
+    pages: Page;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +86,8 @@ export interface Config {
     'word-types': WordTypesSelect<false> | WordTypesSelect<true>;
     themen: ThemenSelect<false> | ThemenSelect<true>;
     words: WordsSelect<false> | WordsSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -93,8 +97,16 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    navigation: Navigation;
+    affiliate: Affiliate;
+    company: Company;
+  };
+  globalsSelect: {
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
+    affiliate: AffiliateSelect<false> | AffiliateSelect<true>;
+    company: CompanySelect<false> | CompanySelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -327,6 +339,88 @@ export interface Word {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  excerpt?: string | null;
+  publishedAt?: string | null;
+  featuredImage?: (number | null) | Media;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  wpId?: number | null;
+  slug?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    canonical?: string | null;
+    ogTitle?: string | null;
+    ogDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    twitterTitle?: string | null;
+    twitterDescription?: string | null;
+    noindex?: boolean | null;
+    nofollow?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  wpId?: number | null;
+  slug?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    canonical?: string | null;
+    ogTitle?: string | null;
+    ogDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    twitterTitle?: string | null;
+    twitterDescription?: string | null;
+    noindex?: boolean | null;
+    nofollow?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -368,6 +462,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'words';
         value: number | Word;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -589,6 +691,62 @@ export interface WordsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  excerpt?: T;
+  publishedAt?: T;
+  featuredImage?: T;
+  content?: T;
+  wpId?: T;
+  slug?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonical?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        ogImage?: T;
+        twitterTitle?: T;
+        twitterDescription?: T;
+        noindex?: T;
+        nofollow?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  content?: T;
+  wpId?: T;
+  slug?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonical?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        ogImage?: T;
+        twitterTitle?: T;
+        twitterDescription?: T;
+        noindex?: T;
+        nofollow?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -626,6 +784,186 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation".
+ */
+export interface Navigation {
+  id: number;
+  main?:
+    | {
+        title: string;
+        link: string;
+        rel?: string | null;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  footer1?:
+    | {
+        title: string;
+        link: string;
+        rel?: string | null;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  footer2?:
+    | {
+        title: string;
+        link: string;
+        rel?: string | null;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "affiliate".
+ */
+export interface Affiliate {
+  id: number;
+  books?:
+    | {
+        title?: string | null;
+        description?: string | null;
+        href?: string | null;
+        imageUrl?: string | null;
+        imageAlt?: string | null;
+        badge?: string | null;
+        badgeModifier?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  disclaimers?:
+    | {
+        plattform?: string | null;
+        text?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "company".
+ */
+export interface Company {
+  id: number;
+  funding?:
+    | {
+        name: string;
+        link?: string | null;
+        adresse?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  socialMedia?:
+    | {
+        network?: string | null;
+        label?: string | null;
+        profile: string;
+        rel?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation_select".
+ */
+export interface NavigationSelect<T extends boolean = true> {
+  main?:
+    | T
+    | {
+        title?: T;
+        link?: T;
+        rel?: T;
+        description?: T;
+        id?: T;
+      };
+  footer1?:
+    | T
+    | {
+        title?: T;
+        link?: T;
+        rel?: T;
+        description?: T;
+        id?: T;
+      };
+  footer2?:
+    | T
+    | {
+        title?: T;
+        link?: T;
+        rel?: T;
+        description?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "affiliate_select".
+ */
+export interface AffiliateSelect<T extends boolean = true> {
+  books?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        href?: T;
+        imageUrl?: T;
+        imageAlt?: T;
+        badge?: T;
+        badgeModifier?: T;
+        id?: T;
+      };
+  disclaimers?:
+    | T
+    | {
+        plattform?: T;
+        text?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "company_select".
+ */
+export interface CompanySelect<T extends boolean = true> {
+  funding?:
+    | T
+    | {
+        name?: T;
+        link?: T;
+        adresse?: T;
+        id?: T;
+      };
+  socialMedia?:
+    | T
+    | {
+        network?: T;
+        label?: T;
+        profile?: T;
+        rel?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
