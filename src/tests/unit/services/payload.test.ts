@@ -28,7 +28,9 @@ describe("getPayloadClient", () => {
 
 describe("mediaUrl", () => {
   it("makes a media url absolute", () => {
-    expect(mediaUrl({ url: "/api/media/file/a.mp3" } as never)).toBe("https://cms.example/api/media/file/a.mp3");
+    expect(mediaUrl({ url: "/api/media/file/a.mp3" } as never)).toBe(
+      "https://cms.example/api/media/file/a.mp3",
+    );
   });
 
   it.each([[7], [null], [undefined], [{ url: null }]])("returns undefined for %j", (media) => {

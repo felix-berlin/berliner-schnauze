@@ -1,43 +1,116 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const { getPayload, find } = vi.hoisted(() => ({ getPayload: vi.fn(), find: vi.fn() }));
+const { getPayload, find } = vi.hoisted(() => ({ find: vi.fn(), getPayload: vi.fn() }));
 vi.mock("payload-app", () => ({ config: Promise.resolve({}), getPayload }));
 vi.mock("astro:env/server", () => ({ PAYLOAD_SERVER_URL: "https://cms.example" }));
 vi.mock("astro:env/client", () => ({ SHOW_TEST_DATA: false }));
 
 const lexical = (value: string) => ({
-  root: { type: "root", direction: "ltr", format: "", indent: 0, version: 1, children: [{ type: "paragraph", direction: "ltr", format: "", indent: 0, version: 1, textFormat: 0, children: [{ type: "text", text: value, format: 0, detail: 0, mode: "normal", style: "", version: 1 }] }] },
+  root: {
+    children: [
+      {
+        children: [
+          {
+            detail: 0,
+            format: 0,
+            mode: "normal",
+            style: "",
+            text: value,
+            type: "text",
+            version: 1,
+          },
+        ],
+        direction: "ltr",
+        format: "",
+        indent: 0,
+        textFormat: 0,
+        type: "paragraph",
+        version: 1,
+      },
+    ],
+    direction: "ltr",
+    format: "",
+    indent: 0,
+    type: "root",
+    version: 1,
+  },
 });
 
 const doc = {
-  id: 12,
-  berlinerisch: "aasen",
-  slug: "aasen",
-  berlinerWordId: 5703,
-  article: null,
-  translations: [{ translation: "sehr" }, { translation: "" }, { translation: null }, { translation: "viel" }],
+  _status: "published",
   alternativeWords: [{ alternativeWord: "aasig" }],
-  examples: [{ example: "Das war aasen.", exampleExplanation: "Erklärung", exampleAudio: [{ gender: "male", audio: { id: 1, url: "/api/media/file/ex.mp3" } }] }],
-  berlinerischAudio: [{ gender: "female", audio: { id: 4, url: "/api/media/file/b.mp3" } }],
-  relatedWords: [{ id: 13, slug: "wa", berlinerisch: "wa" }, 14],
-  wikimediaFiles: [{ wikimediaFile: "File:A.jpg", description: "d", caption: "c" }],
+  article: null,
+  berlinerWordId: 5703,
+  berlinerisch: "aasen",
+  berlinerischAudio: [{ audio: { id: 4, url: "/api/media/file/b.mp3" }, gender: "female" }],
+  berolinismus: true,
+  contentModifiedAt: "2026-09-20T17:24:19.000Z",
+  createdAt: "2026-10-01T00:00:00.000Z",
+  derived: {
+    characterLength: 5,
+    consonantsCount: 2,
+    nlpTags: [],
+    soundexCode: "A250",
+    syllablesCount: 2,
+    vowelsCount: 3,
+    wordComponents: ["asen"],
+    wordGroup: "A",
+  },
+  examples: [
+    {
+      example: "Das war aasen.",
+      exampleAudio: [{ audio: { id: 1, url: "/api/media/file/ex.mp3" }, gender: "male" }],
+      exampleExplanation: "Erklärung",
+    },
+  ],
+  id: 12,
+  images: [
+    {
+      alt: "Küche",
+      caption: "Tom & Jerry",
+      description: lexical("CC BY-SA"),
+      height: 1120,
+      id: 2,
+      url: "/api/media/file/k.png",
+      width: 2000,
+    },
+    5,
+  ],
   infoText: lexical("Adjektiv zu Aas"),
   learnMore: "https://example.org/mehr",
-  berolinismus: true,
-  sources: ["Meyer", "Schlobinski"],
-  images: [{ id: 2, url: "/api/media/file/k.png", alt: "Küche", caption: "Tom & Jerry", description: lexical("CC BY-SA"), width: 2000, height: 1120 }, 5],
-  wordTypes: [{ id: 1, name: "Adjektiv" }],
-  themen: [{ id: 2, name: "Essen", slug: "essen" }],
   publishedAt: "2025-04-09T08:12:37.000Z",
-  contentModifiedAt: "2026-09-20T17:24:19.000Z",
-  seo: { title: "aasen", description: "Meta", canonical: null, ogTitle: "OG", ogDescription: "OGD", ogImage: { id: 9, url: "/api/media/file/og.png" }, twitterTitle: null, twitterDescription: "T", noindex: false, nofollow: true },
-  derived: { wordGroup: "A", characterLength: 5, syllablesCount: 2, consonantsCount: 2, vowelsCount: 3, nlpTags: [], wordComponents: ["asen"], soundexCode: "A250" },
+  relatedWords: [{ berlinerisch: "wa", id: 13, slug: "wa" }, 14],
+  seo: {
+    canonical: null,
+    description: "Meta",
+    nofollow: true,
+    noindex: false,
+    ogDescription: "OGD",
+    ogImage: { id: 9, url: "/api/media/file/og.png" },
+    ogTitle: "OG",
+    title: "aasen",
+    twitterDescription: "T",
+    twitterTitle: null,
+  },
+  slug: "aasen",
+  sources: ["Meyer", "Schlobinski"],
+  themen: [{ id: 2, name: "Essen", slug: "essen" }],
+  translations: [
+    { translation: "sehr" },
+    { translation: "" },
+    { translation: null },
+    { translation: "viel" },
+  ],
   updatedAt: "2026-10-01T00:00:00.000Z",
-  createdAt: "2026-10-01T00:00:00.000Z",
-  _status: "published",
+  wikimediaFiles: [{ caption: "c", description: "d", wikimediaFile: "File:A.jpg" }],
+  wordTypes: [{ id: 1, name: "Adjektiv" }],
 };
 
-const page = (docs: unknown[], nextPage: number | null = null) => ({ docs, hasNextPage: nextPage !== null, nextPage });
+const page = (docs: unknown[], nextPage: number | null = null) => ({
+  docs,
+  hasNextPage: nextPage !== null,
+  nextPage,
+});
 
 beforeEach(() => {
   vi.resetModules();
@@ -53,36 +126,59 @@ describe("toWord", () => {
     const { toWord } = await load();
     const word = toWord(doc as never);
     expect(word).toMatchObject({
-      id: "12",
-      slug: "aasen",
-      title: "aasen",
-      wordGroup: "A",
       berlinerWordId: 5703,
+      berlinerischThemen: { nodes: [{ name: "Essen", slug: "essen" }] },
+      berlinerischWordTypes: { nodes: [{ name: "Adjektiv" }] },
       // WP format: no milliseconds, no trailing Z (callers append "Z" themselves)
       dateGmt: "2025-04-09T08:12:37",
+      id: "12",
       modifiedGmt: "2026-09-20T17:24:19",
+      slug: "aasen",
+      title: "aasen",
       translations: ["sehr", "viel"],
-      berlinerischWordTypes: { nodes: [{ name: "Adjektiv" }] },
-      berlinerischThemen: { nodes: [{ name: "Essen", slug: "essen" }] },
+      wordGroup: "A",
     });
     expect(word.wordProperties).toMatchObject({
-      berlinerisch: "aasen",
-      berolinismus: true,
-      learnMore: "https://example.org/mehr",
-      infoText: "<p>Adjektiv zu Aas</p>",
-      sources: [{ quelle: ["Meyer", "Schlobinski"] }],
       alternativeWords: [{ alternativeWord: "aasig" }],
+      berlinerisch: "aasen",
+      berlinerischAudio: [
+        {
+          audio: { node: { mediaItemUrl: "https://cms.example/api/media/file/b.mp3" } },
+          gender: "female",
+        },
+      ],
+      berolinismus: true,
+      examples: [
+        {
+          example: "Das war aasen.",
+          exampleAudio: [
+            {
+              audio: { node: { mediaItemUrl: "https://cms.example/api/media/file/ex.mp3" } },
+              gender: "male",
+            },
+          ],
+        },
+      ],
+      infoText: "<p>Adjektiv zu Aas</p>",
+      learnMore: "https://example.org/mehr",
       // only populated related words, as { id, slug, wordProperties }
       relatedWords: { nodes: [{ id: "13", slug: "wa", wordProperties: { berlinerisch: "wa" } }] },
-      berlinerischAudio: [{ gender: "female", audio: { node: { mediaItemUrl: "https://cms.example/api/media/file/b.mp3" } } }],
-      examples: [{ example: "Das war aasen.", exampleAudio: [{ gender: "male", audio: { node: { mediaItemUrl: "https://cms.example/api/media/file/ex.mp3" } } }] }],
+      sources: [{ quelle: ["Meyer", "Schlobinski"] }],
     });
   });
 
   it("serves media captions as escaped html and descriptions rendered from rich text", async () => {
     const { toWord } = await load();
     expect(toWord(doc as never).wordProperties.images).toEqual({
-      nodes: [{ sourceUrl: "https://cms.example/api/media/file/k.png", altText: "Küche", caption: "Tom &amp; Jerry", description: "<p>CC BY-SA</p>", mediaDetails: { height: 1120, width: 2000 } }],
+      nodes: [
+        {
+          altText: "Küche",
+          caption: "Tom &amp; Jerry",
+          description: "<p>CC BY-SA</p>",
+          mediaDetails: { height: 1120, width: 2000 },
+          sourceUrl: "https://cms.example/api/media/file/k.png",
+        },
+      ],
     });
   });
 
@@ -90,23 +186,39 @@ describe("toWord", () => {
     const { toWord } = await load();
     const word = toWord(doc as never);
     expect(word.seo).toMatchObject({
-      title: "aasen",
-      metaDesc: "Meta",
       canonical: null,
-      opengraphTitle: "OG",
+      metaDesc: "Meta",
+      metaRobotsNofollow: "nofollow",
+      metaRobotsNoindex: "index",
       opengraphDescription: "OGD",
       opengraphImage: { sourceUrl: "https://cms.example/api/media/file/og.png" },
+      opengraphTitle: "OG",
+      title: "aasen",
       twitterDescription: "T",
-      metaRobotsNoindex: "index",
-      metaRobotsNofollow: "nofollow",
     });
-    expect(word.derived).toMatchObject({ syllablesCount: 2, soundexCode: "A250", wordComponents: ["asen"] });
+    expect(word.derived).toMatchObject({
+      soundexCode: "A250",
+      syllablesCount: 2,
+      wordComponents: ["asen"],
+    });
   });
 
   it("copes with a sparse document", async () => {
     const { toWord } = await load();
-    const word = toWord({ id: 1, berlinerisch: "x", slug: "x", updatedAt: "", createdAt: "" } as never);
-    expect(word).toMatchObject({ translations: [], dateGmt: null, modifiedGmt: null, berlinerWordId: 0, seo: null });
+    const word = toWord({
+      berlinerisch: "x",
+      createdAt: "",
+      id: 1,
+      slug: "x",
+      updatedAt: "",
+    } as never);
+    expect(word).toMatchObject({
+      berlinerWordId: 0,
+      dateGmt: null,
+      modifiedGmt: null,
+      seo: null,
+      translations: [],
+    });
     expect(word.wordProperties.relatedWords).toEqual({ nodes: [] });
     expect(word.wordProperties.infoText).toBeNull();
   });
@@ -114,21 +226,39 @@ describe("toWord", () => {
 
 describe("fetchAllWords", () => {
   it("pages through the local api and asks for published words only", async () => {
-    find.mockResolvedValueOnce(page([doc], 2)).mockResolvedValueOnce(page([{ ...doc, id: 13, slug: "wa", berlinerisch: "wa" }]));
+    find
+      .mockResolvedValueOnce(page([doc], 2))
+      .mockResolvedValueOnce(page([{ ...doc, berlinerisch: "wa", id: 13, slug: "wa" }]));
     const { fetchAllWords } = await load();
     const words = await fetchAllWords();
     expect(words.map((w) => w.slug)).toEqual(["aasen", "wa"]);
     expect(find).toHaveBeenCalledTimes(2);
-    expect(find.mock.calls[0][0]).toMatchObject({ collection: "words", where: { _status: { equals: "published" } }, page: 1 });
+    expect(find.mock.calls[0][0]).toMatchObject({
+      collection: "words",
+      page: 1,
+      where: { _status: { equals: "published" } },
+    });
     expect(find.mock.calls[0][0].draft).toBeFalsy();
     expect(find.mock.calls[1][0]).toMatchObject({ page: 2 });
   });
 
   it("sorts by German collation (umlauts with their base letter), independent of the database locale", async () => {
-    const w = (id: number, berlinerisch: string) => ({ ...doc, id, slug: berlinerisch.toLowerCase(), berlinerisch });
-    find.mockResolvedValueOnce(page([w(1, "Bulette"), w(2, "Ärger"), w(3, "aasen"), w(4, "Zille")]));
+    const w = (id: number, berlinerisch: string) => ({
+      ...doc,
+      berlinerisch,
+      id,
+      slug: berlinerisch.toLowerCase(),
+    });
+    find.mockResolvedValueOnce(
+      page([w(1, "Bulette"), w(2, "Ärger"), w(3, "aasen"), w(4, "Zille")]),
+    );
     const { fetchAllWords } = await load();
-    expect((await fetchAllWords()).map((x) => x.wordProperties.berlinerisch)).toEqual(["aasen", "Ärger", "Bulette", "Zille"]);
+    expect((await fetchAllWords()).map((x) => x.wordProperties.berlinerisch)).toEqual([
+      "aasen",
+      "Ärger",
+      "Bulette",
+      "Zille",
+    ]);
   });
 
   it("includes drafts when SHOW_TEST_DATA is on", async () => {

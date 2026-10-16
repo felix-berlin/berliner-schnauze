@@ -28,9 +28,12 @@ const SPONSORED_LINK_PATTERN = /\brel="[^"]*\bsponsored\b[^"]*"/i;
 // Imported WordPress links are absolute against the old CMS origin, links an editor sets in Payload against
 // whatever the admin runs on. Stripping both turns them into root-relative links that resolve against
 // the domain actually serving the page (dev or prod).
-const cmsOrigins = [...new Set(["https://cms.berliner-schnauze.wtf", PAYLOAD_SERVER_URL && new URL(PAYLOAD_SERVER_URL).origin])].filter(
-  (origin): origin is string => !!origin,
-);
+const cmsOrigins = [
+  ...new Set([
+    "https://cms.berliner-schnauze.wtf",
+    PAYLOAD_SERVER_URL && new URL(PAYLOAD_SERVER_URL).origin,
+  ]),
+].filter((origin): origin is string => !!origin);
 const rewriteWpLinks = (html: string): string =>
   cmsOrigins.reduce((out, origin) => out.replaceAll(`href="${origin}`, 'href="'), html);
 

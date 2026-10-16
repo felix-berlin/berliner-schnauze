@@ -1,9 +1,10 @@
-import type { SeoData } from "@/types/cms.ts";
-
 import { mediaUrl } from "@services/payload.ts";
 
+import type { SeoData } from "@/types/cms.ts";
+
 /** WP format (no milliseconds, no trailing Z): callers append "Z" or parse it themselves. */
-export const wpDate = (iso: string | null | undefined): string | null => (iso ? iso.replace(/(\.\d+)?Z$/, "") : null);
+export const wpDate = (iso: string | null | undefined): string | null =>
+  iso ? iso.replace(/(\.\d+)?Z$/, "") : null;
 
 type PayloadSeo = {
   canonical?: string | null;

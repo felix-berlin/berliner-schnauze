@@ -1,7 +1,7 @@
 import type { Media, Payload } from "payload-app";
 
-import { config, getPayload } from "payload-app";
 import { PAYLOAD_SERVER_URL } from "astro:env/server";
+import { config, getPayload } from "payload-app";
 
 let client: Promise<Payload> | undefined;
 
@@ -16,4 +16,6 @@ export const getPayloadClient = (): Promise<Payload> => {
 
 /** Absolute URL of a populated media doc (`depth >= 1`); ids and empty values give `undefined`. */
 export const mediaUrl = (media: Media | number | null | undefined): string | undefined =>
-  typeof media === "object" && media?.url ? new URL(media.url, PAYLOAD_SERVER_URL).toString() : undefined;
+  typeof media === "object" && media?.url
+    ? new URL(media.url, PAYLOAD_SERVER_URL).toString()
+    : undefined;

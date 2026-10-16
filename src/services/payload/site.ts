@@ -1,17 +1,24 @@
 import type { Company } from "payload-app";
 
-import { getPayloadClient } from "@services/payload.ts";
 import { ttl } from "@services/cache.ts";
+import { getPayloadClient } from "@services/payload.ts";
 
 import type { AffiliateBook, AffiliateDisclaimer } from "@/types/cms.ts";
 
 const TTL = 60_000;
 
-const global = <T>(slug: string) => ttl(TTL, async () => (await getPayloadClient()).findGlobal({ slug, depth: 0 } as never) as Promise<T>);
+const global = <T>(slug: string) =>
+  ttl(
+    TTL,
+    async () => (await getPayloadClient()).findGlobal({ depth: 0, slug } as never) as Promise<T>,
+  );
 
 type Row = Record<string, string | null | undefined>;
 type Navigation = Record<"main" | "footer1" | "footer2", Row[] | null | undefined>;
-type AffiliateGlobal = { books?: AffiliateBook[] | null; disclaimers?: AffiliateDisclaimer[] | null };
+type AffiliateGlobal = {
+  books?: AffiliateBook[] | null;
+  disclaimers?: AffiliateDisclaimer[] | null;
+};
 
 const navigation = global<Navigation>("navigation");
 const affiliate = global<AffiliateGlobal>("affiliate");
@@ -25,14 +32,25 @@ export interface MenuItem {
 }
 
 // WordPress menu names the pages still ask for.
-const MENUS: Record<string, keyof Navigation> = { "Main Menu": "main", "Footer Nav 1": "footer1", "Footer Nav 2": "footer2" };
+const MENUS: Record<string, keyof Navigation> = {
+  "Footer Nav 1": "footer1",
+  "Footer Nav 2": "footer2",
+  "Main Menu": "main",
+};
 
 export const fetchMenu = async (name: string): Promise<MenuItem[]> => {
   const key = MENUS[name];
   if (!key) return [];
   return ((await navigation())[key] ?? []).flatMap((row) =>
     row.title && row.link
-      ? [{ link: row.link, title: row.title, ...(row.rel ? { rel: row.rel } : {}), ...(row.description ? { description: row.description } : {}) }]
+      ? [
+          {
+            link: row.link,
+            title: row.title,
+            ...(row.rel ? { rel: row.rel } : {}),
+            ...(row.description ? { description: row.description } : {}),
+          },
+        ]
       : [],
   );
 };
@@ -92,7 +110,9 @@ export interface SocialMenuItem {
 
 export const fetchSocialMenu = async (): Promise<SocialMenuItem[]> =>
   ((await company()).socialMedia ?? []).flatMap((entry) => {
-    const title = entry.label || (entry.network ? entry.network.charAt(0).toUpperCase() + entry.network.slice(1) : null);
+    const title =
+      entry.label ||
+      (entry.network ? entry.network.charAt(0).toUpperCase() + entry.network.slice(1) : null);
     if (!entry.profile || !title) return [];
     return [{ link: entry.profile, title, ...(entry.rel ? { rel: entry.rel } : {}) }];
   });

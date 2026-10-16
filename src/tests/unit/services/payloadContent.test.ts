@@ -1,31 +1,88 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { getPayload, find, count } = vi.hoisted(() => ({ getPayload: vi.fn(), find: vi.fn(), count: vi.fn() }));
+const { getPayload, find, count } = vi.hoisted(() => ({
+  count: vi.fn(),
+  find: vi.fn(),
+  getPayload: vi.fn(),
+}));
 vi.mock("payload-app", () => ({ config: Promise.resolve({}), getPayload }));
 vi.mock("astro:env/server", () => ({ PAYLOAD_SERVER_URL: "https://cms.example" }));
 vi.mock("astro:env/client", () => ({ SHOW_TEST_DATA: false }));
 
-const text = (value: string, format = 0) => ({ type: "text", text: value, format, detail: 0, mode: "normal", style: "", version: 1 });
-const para = (...children: unknown[]) => ({ type: "paragraph", children, direction: "ltr", format: "", indent: 0, version: 1, textFormat: 0 });
-const quote = (...children: unknown[]) => ({ type: "quote", children, direction: "ltr", format: "", indent: 0, version: 1 });
-const upload = (value: unknown) => ({ type: "upload", relationTo: "media", value, fields: null, version: 3, format: "" });
-const state = (...children: unknown[]) => ({ root: { type: "root", children, direction: "ltr", format: "", indent: 0, version: 1 } });
-const img = { id: 3, url: "/api/media/file/bild.png", alt: "Ein Bild", width: 1600, height: 900, mimeType: "image/png" };
+const text = (value: string, format = 0) => ({
+  detail: 0,
+  format,
+  mode: "normal",
+  style: "",
+  text: value,
+  type: "text",
+  version: 1,
+});
+const para = (...children: unknown[]) => ({
+  children,
+  direction: "ltr",
+  format: "",
+  indent: 0,
+  textFormat: 0,
+  type: "paragraph",
+  version: 1,
+});
+const quote = (...children: unknown[]) => ({
+  children,
+  direction: "ltr",
+  format: "",
+  indent: 0,
+  type: "quote",
+  version: 1,
+});
+const upload = (value: unknown) => ({
+  fields: null,
+  format: "",
+  relationTo: "media",
+  type: "upload",
+  value,
+  version: 3,
+});
+const state = (...children: unknown[]) => ({
+  root: { children, direction: "ltr", format: "", indent: 0, type: "root", version: 1 },
+});
+const img = {
+  alt: "Ein Bild",
+  height: 900,
+  id: 3,
+  mimeType: "image/png",
+  url: "/api/media/file/bild.png",
+  width: 1600,
+};
 
 beforeEach(() => {
   vi.resetModules();
   find.mockReset();
   count.mockReset();
-  getPayload.mockReset().mockResolvedValue({ find, count });
+  getPayload.mockReset().mockResolvedValue({ count, find });
 });
 
 describe("toPostBlocks", () => {
   it("splits rich text into html, image and quote blocks with ascending order", async () => {
     const { toPostBlocks } = await import("@services/payload/posts.ts");
-    const blocks = toPostBlocks(state(para(text("eins")), upload(img), para(text("zwei")), quote(text("Zitat", 1))));
-    expect(blocks.map((b) => [b.name, b.order])).toEqual([["core/html", 0], ["core/image", 1], ["core/html", 2], ["core/quote", 3]]);
+    const blocks = toPostBlocks(
+      state(para(text("eins")), upload(img), para(text("zwei")), quote(text("Zitat", 1))),
+    );
+    expect(blocks.map((b) => [b.name, b.order])).toEqual([
+      ["core/html", 0],
+      ["core/image", 1],
+      ["core/html", 2],
+      ["core/quote", 3],
+    ]);
     expect(blocks[0].saveContent).toBe("<p>eins</p>");
-    expect(blocks[1]).toMatchObject({ attributes: { url: "https://cms.example/api/media/file/bild.png", alt: "Ein Bild", width: "1600", height: "900" } });
+    expect(blocks[1]).toMatchObject({
+      attributes: {
+        alt: "Ein Bild",
+        height: "900",
+        url: "https://cms.example/api/media/file/bild.png",
+        width: "1600",
+      },
+    });
     expect(blocks[3]).toMatchObject({ attributes: { value: "<p><strong>Zitat</strong></p>" } });
   });
 
@@ -49,14 +106,14 @@ describe("toPostBlocks", () => {
 
 describe("fetchAllPosts", () => {
   const post = {
+    content: state(para(text("Wort ".repeat(450)))),
+    excerpt: "Kurz & gut",
+    featuredImage: { alt: "Titel", id: 9, url: "/api/media/file/titel.png" },
     id: 5,
+    publishedAt: "2025-05-01T08:00:00.000Z",
+    seo: { description: "Meta", nofollow: false, noindex: false, title: "SEO Titel" },
     slug: "kiezdeutsch",
     title: "Kiezdeutsch",
-    excerpt: "Kurz & gut",
-    publishedAt: "2025-05-01T08:00:00.000Z",
-    featuredImage: { id: 9, url: "/api/media/file/titel.png", alt: "Titel" },
-    content: state(para(text("Wort ".repeat(450)))),
-    seo: { title: "SEO Titel", description: "Meta", noindex: false, nofollow: false },
   };
 
   it("maps a post to the shape the magazine pages read", async () => {
@@ -64,12 +121,14 @@ describe("fetchAllPosts", () => {
     const { fetchAllPosts } = await import("@services/payload/posts.ts");
     const [node] = await fetchAllPosts();
     expect(node).toMatchObject({
-      slug: "kiezdeutsch",
-      title: "Kiezdeutsch",
       date: "2025-05-01T08:00:00",
       excerpt: "Kurz & gut",
-      featuredImage: { node: { sourceUrl: "https://cms.example/api/media/file/titel.png", altText: "Titel" } },
-      seo: { title: "SEO Titel", metaDesc: "Meta", readingTime: 3 },
+      featuredImage: {
+        node: { altText: "Titel", sourceUrl: "https://cms.example/api/media/file/titel.png" },
+      },
+      seo: { metaDesc: "Meta", readingTime: 3, title: "SEO Titel" },
+      slug: "kiezdeutsch",
+      title: "Kiezdeutsch",
     });
     expect(node.blocks).toHaveLength(1);
   });
@@ -79,7 +138,13 @@ describe("fetchAllPosts", () => {
     const { fetchAllPosts } = await import("@services/payload/posts.ts");
     await expect(fetchAllPosts()).rejects.toThrow("db down");
     await fetchAllPosts();
-    expect(find).toHaveBeenLastCalledWith(expect.objectContaining({ collection: "posts", sort: "-publishedAt", where: { _status: { equals: "published" } } }));
+    expect(find).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        collection: "posts",
+        sort: "-publishedAt",
+        where: { _status: { equals: "published" } },
+      }),
+    );
   });
 
   it("drops posts without a slug", async () => {
@@ -92,22 +157,63 @@ describe("fetchAllPosts", () => {
 describe("fetchAllThemen", () => {
   it("maps themen with their public word count and seo", async () => {
     find.mockResolvedValue({
-      docs: [{ id: 2, name: "Essen & Trinken", slug: "essen", description: "Kulinarisches", seo: { title: "Essen", ogImage: { id: 1, url: "/api/media/file/e.png" } } }],
+      docs: [
+        {
+          description: "Kulinarisches",
+          id: 2,
+          name: "Essen & Trinken",
+          seo: { ogImage: { id: 1, url: "/api/media/file/e.png" }, title: "Essen" },
+          slug: "essen",
+        },
+      ],
     });
     count.mockResolvedValue({ totalDocs: 42 });
     const { fetchAllThemen } = await import("@services/payload/themen.ts");
     expect(await fetchAllThemen()).toMatchObject([
-      { name: "Essen & Trinken", slug: "essen", description: "Kulinarisches", count: 42, seo: { title: "Essen", opengraphImage: { sourceUrl: "https://cms.example/api/media/file/e.png" } } },
+      {
+        count: 42,
+        description: "Kulinarisches",
+        name: "Essen & Trinken",
+        seo: {
+          opengraphImage: { sourceUrl: "https://cms.example/api/media/file/e.png" },
+          title: "Essen",
+        },
+        slug: "essen",
+      },
     ]);
-    expect(count).toHaveBeenCalledWith(expect.objectContaining({ collection: "words", where: { and: [{ themen: { contains: 2 } }, { _status: { equals: "published" } }] } }));
+    expect(count).toHaveBeenCalledWith(
+      expect.objectContaining({
+        collection: "words",
+        where: { and: [{ themen: { contains: 2 } }, { _status: { equals: "published" } }] },
+      }),
+    );
   });
 });
 
 describe("fetchPagesBySlugs", () => {
   it("renders the content as html and keeps the seo", async () => {
-    find.mockResolvedValue({ docs: [{ id: 1, slug: "impressum", title: "Impressum", content: state(para(text("Anschrift"))), seo: { title: "Impressum", noindex: true } }] });
+    find.mockResolvedValue({
+      docs: [
+        {
+          content: state(para(text("Anschrift"))),
+          id: 1,
+          seo: { noindex: true, title: "Impressum" },
+          slug: "impressum",
+          title: "Impressum",
+        },
+      ],
+    });
     const { fetchPagesBySlugs } = await import("@services/payload/pages.ts");
-    expect(await fetchPagesBySlugs(["impressum"])).toMatchObject([{ slug: "impressum", title: "Impressum", content: "<p>Anschrift</p>", seo: { title: "Impressum", metaRobotsNoindex: "noindex" } }]);
-    expect(find).toHaveBeenCalledWith(expect.objectContaining({ collection: "pages", where: { slug: { in: ["impressum"] } } }));
+    expect(await fetchPagesBySlugs(["impressum"])).toMatchObject([
+      {
+        content: "<p>Anschrift</p>",
+        seo: { metaRobotsNoindex: "noindex", title: "Impressum" },
+        slug: "impressum",
+        title: "Impressum",
+      },
+    ]);
+    expect(find).toHaveBeenCalledWith(
+      expect.objectContaining({ collection: "pages", where: { slug: { in: ["impressum"] } } }),
+    );
   });
 });

@@ -1,8 +1,8 @@
 import type { Media, Theman, Word as PayloadWord, WordType } from "payload-app";
 
+import { ttl } from "@services/cache.ts";
 import { getPayloadClient, mediaUrl } from "@services/payload.ts";
 import { toSeoData, wpDate } from "@services/payload/seo.ts";
-import { ttl } from "@services/cache.ts";
 import { SHOW_TEST_DATA } from "astro:env/client";
 import { escapeHtml, lexicalToHtml } from "payload-app/lexical-html";
 
@@ -16,7 +16,7 @@ const populated = <T extends object>(items: readonly (T | number)[] | null | und
 const audioRows = (rows: PayloadWord["berlinerischAudio"]): AudioRow[] =>
   (rows ?? []).map((row) => {
     const url = mediaUrl(row.audio);
-    return { gender: row.gender ?? null, audio: url ? { node: { mediaItemUrl: url } } : null };
+    return { audio: url ? { node: { mediaItemUrl: url } } : null, gender: row.gender ?? null };
   });
 
 const toImage = (media: Media): WordImage => ({
@@ -29,9 +29,16 @@ const toImage = (media: Media): WordImage => ({
 
 /** `doc` must be populated one level deep (relations and media are objects, not ids) and have a slug. */
 export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
-  berlinerischThemen: { nodes: populated<Theman>(doc.themen).map((t) => ({ name: t.name ?? null, slug: t.slug ?? null })) },
-  berlinerischWordTypes: { nodes: populated<WordType>(doc.wordTypes).map((t) => ({ name: t.name })) },
   berlinerWordId: doc.berlinerWordId ?? 0,
+  berlinerischThemen: {
+    nodes: populated<Theman>(doc.themen).map((t) => ({
+      name: t.name ?? null,
+      slug: t.slug ?? null,
+    })),
+  },
+  berlinerischWordTypes: {
+    nodes: populated<WordType>(doc.wordTypes).map((t) => ({ name: t.name })),
+  },
   dateGmt: wpDate(doc.publishedAt),
   derived: doc.derived
     ? {
@@ -53,7 +60,9 @@ export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
   translations: (doc.translations ?? []).map((t) => t.translation).filter((t): t is string => !!t),
   wordGroup: doc.derived?.wordGroup ?? null,
   wordProperties: {
-    alternativeWords: (doc.alternativeWords ?? []).map((a) => ({ alternativeWord: a.alternativeWord ?? null })),
+    alternativeWords: (doc.alternativeWords ?? []).map((a) => ({
+      alternativeWord: a.alternativeWord ?? null,
+    })),
     article: doc.article ?? null,
     berlinerisch: doc.berlinerisch,
     berlinerischAudio: audioRows(doc.berlinerischAudio),
@@ -102,13 +111,17 @@ const loadAllWords = async (): Promise<Word[]> => {
 
   const words = docs.flatMap((doc) => {
     if (!doc.slug) {
-      console.warn(`[fetchAllWords] Word without slug skipped: id ${doc.id}, berlinerisch "${doc.berlinerisch}"`);
+      console.warn(
+        `[fetchAllWords] Word without slug skipped: id ${doc.id}, berlinerisch "${doc.berlinerisch}"`,
+      );
       return [];
     }
     return [toWord({ ...doc, slug: doc.slug })];
   });
   // German collation here, not the database's: the neighbor sections depend on this order.
-  return words.sort((a, b) => a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch, "de"));
+  return words.sort((a, b) =>
+    a.wordProperties.berlinerisch.localeCompare(b.wordProperties.berlinerisch, "de"),
+  );
 };
 
 /** All public words (plus drafts with SHOW_TEST_DATA), memoized for a minute: an admin edit is live without a rebuild. */

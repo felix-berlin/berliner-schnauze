@@ -1,6 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
 import { ttl } from "@services/cache.ts";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 beforeEach(() => vi.useFakeTimers());
 afterEach(() => vi.useRealTimers());

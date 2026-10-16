@@ -1,7 +1,10 @@
 // Content shapes the components read, produced by the Payload adapters in src/services/payload/.
 // They mirror what the WPGraphQL queries returned, so pages and components stay as they are.
 
-export type AudioRow = { gender: string | null; audio: { node: { mediaItemUrl: string | null } } | null };
+export type AudioRow = {
+  gender: string | null;
+  audio: { node: { mediaItemUrl: string | null } } | null;
+};
 
 export type WordImage = {
   altText: string | null;
@@ -52,15 +55,29 @@ export type WordProperties = {
   berlinerisch: string;
   berlinerischAudio: AudioRow[] | null;
   berolinismus: boolean | null;
-  examples: { example: string | null; exampleAudio: AudioRow[] | null; exampleExplanation: string | null }[] | null;
+  examples:
+    | {
+        example: string | null;
+        exampleAudio: AudioRow[] | null;
+        exampleExplanation: string | null;
+      }[]
+    | null;
   /** HTML rendered from rich text. */
   infoText: string | null;
   images: { nodes: WordImage[] } | null;
   learnMore: string | null;
-  relatedWords: { nodes: { id: string; slug: string | null; wordProperties: { berlinerisch: string | null } | null }[] } | null;
+  relatedWords: {
+    nodes: {
+      id: string;
+      slug: string | null;
+      wordProperties: { berlinerisch: string | null } | null;
+    }[];
+  } | null;
   sources: { quelle: (string | null)[] | null }[] | null;
   translations: { translation: string | null }[] | null;
-  wikimediaFiles: { caption: string | null; description: string | null; wikimediaFile: string | null }[] | null;
+  wikimediaFiles:
+    | { caption: string | null; description: string | null; wikimediaFile: string | null }[]
+    | null;
 };
 
 export type Word = {

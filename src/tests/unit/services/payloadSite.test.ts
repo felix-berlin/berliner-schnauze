@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { getPayload, findGlobal } = vi.hoisted(() => ({ getPayload: vi.fn(), findGlobal: vi.fn() }));
+const { getPayload, findGlobal } = vi.hoisted(() => ({ findGlobal: vi.fn(), getPayload: vi.fn() }));
 vi.mock("payload-app", () => ({ config: Promise.resolve({}), getPayload }));
 vi.mock("astro:env/server", () => ({ PAYLOAD_SERVER_URL: "https://cms.example" }));
 
@@ -18,19 +18,25 @@ const load = () => import("@services/payload/site.ts");
 
 describe("fetchMenu", () => {
   const nav = {
-    main: [
-      { title: "Wörterbuch", link: "/wort", rel: "noopener", description: "Alle Wörter" },
-      { title: "Magazin", link: "/magazin", rel: null, description: null },
-      { title: "", link: "/leer" },
-      { title: "Ohne Link", link: "" },
-    ],
-    footer1: [{ title: "Impressum", link: "/impressum" }],
+    footer1: [{ link: "/impressum", title: "Impressum" }],
     footer2: null,
+    main: [
+      { description: "Alle Wörter", link: "/wort", rel: "noopener", title: "Wörterbuch" },
+      { description: null, link: "/magazin", rel: null, title: "Magazin" },
+      { link: "/leer", title: "" },
+      { link: "", title: "Ohne Link" },
+    ],
   };
 
   it.each([
-    ["Main Menu", [{ title: "Wörterbuch", link: "/wort", rel: "noopener", description: "Alle Wörter" }, { title: "Magazin", link: "/magazin" }]],
-    ["Footer Nav 1", [{ title: "Impressum", link: "/impressum" }]],
+    [
+      "Main Menu",
+      [
+        { description: "Alle Wörter", link: "/wort", rel: "noopener", title: "Wörterbuch" },
+        { link: "/magazin", title: "Magazin" },
+      ],
+    ],
+    ["Footer Nav 1", [{ link: "/impressum", title: "Impressum" }]],
     ["Footer Nav 2", []],
     ["Unknown", []],
   ])("maps the WordPress menu name %s onto the navigation global", async (name, expected) => {
@@ -52,11 +58,11 @@ describe("fetchMenu", () => {
 
 describe("fetchFundingData", () => {
   const funding = [
-    { name: "GitHub Sponsors", link: "https://github.com/sponsors/x", adresse: null },
-    { name: "Ko-fi", link: "https://ko-fi.com/x", adresse: "" },
-    ...EVM_CHAINS.map((name) => ({ name, link: null, adresse: EVM })),
-    { name: "Bitcoin", link: null, adresse: BTC },
-    { name: "", link: "https://skipped.example", adresse: null },
+    { adresse: null, link: "https://github.com/sponsors/x", name: "GitHub Sponsors" },
+    { adresse: "", link: "https://ko-fi.com/x", name: "Ko-fi" },
+    ...EVM_CHAINS.map((name) => ({ adresse: EVM, link: null, name })),
+    { adresse: BTC, link: null, name: "Bitcoin" },
+    { adresse: null, link: "https://skipped.example", name: "" },
   ];
 
   it("splits link rows into platforms and groups wallets by identical address in CMS order", async () => {
@@ -84,15 +90,20 @@ describe("fetchSocialMenu", () => {
   it("maps rows to link/title/rel, falls back to the capitalized network and drops incomplete rows", async () => {
     findGlobal.mockResolvedValue({
       socialMedia: [
-        { network: "mastodon", label: "Mastodon", profile: "https://social.example/@bs", rel: "me" },
-        { network: "bluesky", label: null, profile: "https://bsky.example/bs", rel: null },
-        { network: "x", label: "X", profile: "", rel: null },
-        { network: null, label: null, profile: "https://nameless.example", rel: null },
+        {
+          label: "Mastodon",
+          network: "mastodon",
+          profile: "https://social.example/@bs",
+          rel: "me",
+        },
+        { label: null, network: "bluesky", profile: "https://bsky.example/bs", rel: null },
+        { label: "X", network: "x", profile: "", rel: null },
+        { label: null, network: null, profile: "https://nameless.example", rel: null },
       ],
     });
     const { fetchSocialMenu } = await load();
     expect(await fetchSocialMenu()).toEqual([
-      { link: "https://social.example/@bs", title: "Mastodon", rel: "me" },
+      { link: "https://social.example/@bs", rel: "me", title: "Mastodon" },
       { link: "https://bsky.example/bs", title: "Bluesky" },
     ]);
   });
@@ -101,13 +112,23 @@ describe("fetchSocialMenu", () => {
 describe("fetchAffiliateData", () => {
   it("returns books and disclaimers", async () => {
     findGlobal.mockResolvedValue({
-      books: [{ title: "Buch", description: "d", href: "https://x.example/b", imageUrl: "https://x.example/b.jpg", imageAlt: "Cover", badge: "Tipp", badgeModifier: "orange" }],
+      books: [
+        {
+          badge: "Tipp",
+          badgeModifier: "orange",
+          description: "d",
+          href: "https://x.example/b",
+          imageAlt: "Cover",
+          imageUrl: "https://x.example/b.jpg",
+          title: "Buch",
+        },
+      ],
       disclaimers: [{ plattform: "Amazon", text: "Affiliate" }],
     });
     const { fetchAffiliateData } = await load();
     const data = await fetchAffiliateData();
     expect(data.books).toHaveLength(1);
-    expect(data.books[0]).toMatchObject({ title: "Buch", badgeModifier: "orange" });
+    expect(data.books[0]).toMatchObject({ badgeModifier: "orange", title: "Buch" });
     expect(data.disclaimers).toEqual([{ plattform: "Amazon", text: "Affiliate" }]);
   });
 
