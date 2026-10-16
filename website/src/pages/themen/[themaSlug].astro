@@ -20,7 +20,7 @@ const words = allWords.filter((word) =>
 
 const seoProps = seoData({
   seo: {
-    canonical: canonicalUrl(`/themen/${thema.slug}/`, Astro.site),
+    canonical: thema.seo?.canonical ?? canonicalUrl(`/themen/${thema.slug}/`, Astro.site),
     opengraphDescription:
       thema.seo?.opengraphDescription ?? thema.seo?.metaDesc ?? thema.description ?? '',
     ...(thema.seo?.opengraphImage?.sourceUrl && {

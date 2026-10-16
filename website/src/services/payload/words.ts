@@ -72,7 +72,7 @@ export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
     : null,
   id: wordGlobalId(doc),
   modifiedGmt: wpDate(doc.contentModifiedAt),
-  seo: toSeoData(doc.seo, "article"),
+  seo: toSeoData(doc.meta, "article"),
   slug: doc.slug,
   title: doc.berlinerisch,
   translations: (doc.translations ?? []).map((t) => t.translation).filter((t): t is string => !!t),

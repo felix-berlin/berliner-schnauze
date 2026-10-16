@@ -109,8 +109,8 @@ describe("fetchAllPosts", () => {
     excerpt: "Kurz & gut",
     featuredImage: { alt: "Titel", id: 9, url: "/api/media/file/titel.png" },
     id: 5,
+    meta: { description: "Meta", nofollow: false, noindex: false, title: "SEO Titel" },
     publishedAt: "2025-05-01T08:00:00.000Z",
-    seo: { description: "Meta", nofollow: false, noindex: false, title: "SEO Titel" },
     slug: "kiezdeutsch",
     title: "Kiezdeutsch",
   };
@@ -186,7 +186,7 @@ describe("fetchAllThemen", () => {
                 {
                   ...thema(2, "Essen & Trinken", "essen"),
                   description: "Kulinarisches",
-                  seo: { ogImage: { id: 1, url: "/api/media/file/e.png" }, title: "Essen" },
+                  meta: { image: { id: 1, url: "/api/media/file/e.png" }, title: "Essen" },
                 },
                 thema(4, "Ohne Slug", null),
               ],
@@ -224,7 +224,7 @@ describe("fetchPagesBySlugs", () => {
         {
           content: state(para(text("Anschrift"))),
           id: 1,
-          seo: { noindex: true, title: "Impressum" },
+          meta: { noindex: true, title: "Impressum" },
           slug: "impressum",
           title: "Impressum",
         },

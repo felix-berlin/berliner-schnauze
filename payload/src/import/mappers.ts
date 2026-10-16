@@ -1,7 +1,7 @@
 /** Pure WordPress -> Payload data mapping (no writes). */
 import type { SanitizedConfig } from "payload";
 
-import type { Page, Post, Theman, Word } from "../payload-types";
+import type { Page, Post, SeoMeta, Theman, Word } from "../payload-types";
 import type { AudioRow, Maybe, WpBlock, WpImage, WpPage, WpPost, WpSeo, WpThema, WpWord } from "./wp";
 
 import { isWpUploadUrl, wpUploadPath } from "../lib/wpUploadPath";
@@ -78,15 +78,18 @@ export function collectMedia(words: WpWord[], posts: WpPost[], pages: WpPage[], 
 const robots = (value: Maybe<string>, flag: string) => !!value?.trim().toLowerCase().includes(flag);
 
 /** Yoast SEO -> `seo` group. Empty or missing values become null/false so a re-import clears them. */
-export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): NonNullable<Word["seo"]> {
+/** Yoast set every canonical to the page's own URL on the WordPress host: that is no override, the site uses its own URL. */
+const OLD_CMS_ORIGIN = "https://cms.berliner-schnauze.wtf";
+
+export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): SeoMeta {
   seo ??= {};
   return {
     title: seo.title || null,
     description: seo.metaDesc || null,
-    canonical: seo.canonical || null,
+    canonical: seo.canonical && !seo.canonical.startsWith(OLD_CMS_ORIGIN) ? seo.canonical : null,
     ogTitle: seo.opengraphTitle || null,
     ogDescription: seo.opengraphDescription || null,
-    ogImage: mediaId(seo.opengraphImage?.sourceUrl, refs),
+    image: mediaId(seo.opengraphImage?.sourceUrl, refs),
     twitterTitle: seo.twitterTitle || null,
     twitterDescription: seo.twitterDescription || null,
     noindex: robots(seo.metaRobotsNoindex, "noindex"),
@@ -142,7 +145,7 @@ export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedC
     themen: (node.berlinerischThemen?.nodes ?? []).map((t) => (t?.slug ? refs.themaIdBySlug.get(t.slug) : undefined)).filter(present),
     publishedAt: gmtToIso(node.dateGmt),
     contentModifiedAt: gmtToIso(node.modifiedGmt),
-    seo: mapSeo(node.seo, refs),
+    meta: mapSeo(node.seo, refs),
     _status: statusOf(node.status),
   };
 }
@@ -198,7 +201,7 @@ export async function mapPost(node: WpPost, refs: ImportRefs, config: SanitizedC
     contentModifiedAt: gmtToIso(node.modifiedGmt),
     featuredImage: mediaId(node.featuredImage?.node?.sourceUrl, refs),
     content: await blocksToLexical(node.blocks ?? [], refs, config, onUnmappedImage),
-    seo: mapSeo(node.seo, refs),
+    meta: mapSeo(node.seo, refs),
     _status: statusOf(node.status),
   };
 }
@@ -214,7 +217,7 @@ export async function mapPage(
     slug: node.slug || null,
     title: node.title ?? "",
     content: await htmlOrNull(node.content, config, refs, onUnmappedImage),
-    seo: mapSeo(node.seo, refs),
+    meta: mapSeo(node.seo, refs),
   };
 }
 
@@ -223,5 +226,5 @@ export const mapThema = (node: WpThema, refs: ImportRefs): Omit<Theman, "id" | "
   slug: node.slug || null,
   name: node.name ?? "",
   description: node.description || null,
-  seo: mapSeo(node.seo, refs),
+  meta: mapSeo(node.seo, refs),
 });

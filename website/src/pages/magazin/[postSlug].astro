@@ -25,7 +25,7 @@ const readingMinutes = post.seo?.readingTime ?? null;
 
 const seoProps = seoData({
   seo: {
-    canonical: canonicalUrl(`/magazin/${post.slug}/`, Astro.site),
+    canonical: post.seo?.canonical ?? canonicalUrl(`/magazin/${post.slug}/`, Astro.site),
     opengraphDescription: post.seo?.opengraphDescription ?? post.seo?.metaDesc ?? '',
     ...(post.seo?.opengraphImage?.sourceUrl && {
       opengraphImage: { sourceUrl: post.seo.opengraphImage.sourceUrl },

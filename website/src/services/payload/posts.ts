@@ -99,7 +99,7 @@ const loadPosts = async (): Promise<PostNode[]> => {
   return docs.flatMap((post) => {
     if (!post.slug) return [];
     const blocks = toPostBlocks(post.content);
-    const seo = toSeoData(post.seo, "article");
+    const seo = toSeoData(post.meta, "article");
     const image = mediaUrl(post.featuredImage);
     return [
       {

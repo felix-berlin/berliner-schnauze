@@ -1,24 +1,21 @@
-import type { Word } from "payload-app";
+import type { SeoMeta } from "payload-app";
 
 import { mediaUrl } from "@services/payload.ts";
 
 import type { SeoData } from "@/types/cms.ts";
 
-/** The shared `seo` group (payload/src/fields/seo.ts): words, posts, pages and themen store the same shape. */
-type PayloadSeo = Word["seo"];
-
 const SITE_NAME = "Berliner Schnauze";
 
 /**
- * Payload `seo` group -> the Yoast-shaped fields the pages feed to `seoData()`. Empty strings become `null`.
+ * SEO plugin `meta` group (payload/src/seo.ts) -> the Yoast-shaped fields the pages feed to `seoData()`. Empty strings become `null`.
  * Yoast set og:type "article" for posts and words; pages and themen set their own type.
  */
 export const toSeoData = (
-  seo: PayloadSeo | null | undefined,
+  seo: SeoMeta | null | undefined,
   opengraphType: string | null = null,
 ): SeoData | null => {
   if (!seo) return null;
-  const og = mediaUrl(seo.ogImage);
+  const og = mediaUrl(seo.image);
   return {
     canonical: seo.canonical || null,
     metaDesc: seo.description || null,

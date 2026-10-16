@@ -80,7 +80,7 @@ describe("mapWord", () => {
     expect(doc.sources).toEqual(["Quelle A", "Quelle B", "Quelle C"]);
     expect(doc.images).toEqual([12]); // the unmapped pdf and the foreign image are dropped
     expect(doc.wordTypes).toEqual([21]);
-    expect(doc.seo?.ogImage).toBe(12);
+    expect(doc.meta?.image).toBe(12);
   });
 });
 
@@ -93,8 +93,11 @@ describe("mapRelatedWords", () => {
 
 describe("mapSeo", () => {
   it("maps Yoast robots strings and empty strings", () => {
-    expect(mapSeo(testwort.seo, refs())).toMatchObject({ noindex: true, nofollow: true, title: "Import-Testwort", canonical: null, ogImage: 12 });
+    expect(mapSeo(testwort.seo, refs())).toMatchObject({ noindex: true, nofollow: true, title: "Import-Testwort", canonical: null, image: 12 });
     expect(mapSeo(aasen.seo, refs())).toMatchObject({ noindex: false, nofollow: false, description: aasen.seo.metaDesc });
+    // Yoast's self-canonical on the WordPress host is dropped, a real override is kept
+    expect(mapSeo(aasen.seo, refs()).canonical).toBeNull();
+    expect(mapSeo({ canonical: "https://berliner-schnauze.wtf/wort/aas" }, refs()).canonical).toBe("https://berliner-schnauze.wtf/wort/aas");
     expect(mapSeo({ metaRobotsNoindex: " NoIndex, follow ", metaRobotsNofollow: "noindex, nofollow" }, refs())).toMatchObject({ noindex: true, nofollow: true });
   });
 
@@ -105,7 +108,7 @@ describe("mapSeo", () => {
       canonical: null,
       ogTitle: null,
       ogDescription: null,
-      ogImage: null,
+      image: null,
       twitterTitle: null,
       twitterDescription: null,
       noindex: false,

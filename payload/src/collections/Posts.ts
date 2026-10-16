@@ -3,7 +3,6 @@ import type { CollectionConfig } from "payload";
 import { authenticatedOnly } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
-import { seoField } from "../fields/seo";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
@@ -20,6 +19,5 @@ export const Posts: CollectionConfig = {
     // Default Lexical features already include upload (media) and blockquote.
     { name: "content", type: "richText" },
     ...identityFields,
-    seoField,
   ],
 };

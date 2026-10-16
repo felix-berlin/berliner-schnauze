@@ -27,6 +27,7 @@
   "dependencies": {
     "@payloadcms/db-postgres": "3.91.0",
     "@payloadcms/next": "3.91.0",
+    "@payloadcms/plugin-seo": "3.91.0",
     "@payloadcms/richtext-lexical": "3.91.0",
     "@payloadcms/ui": "3.91.0",
     "cross-env": "^7.0.3",
@@ -49,5 +50,7 @@
     "typescript": "^6.0.3",
     "vitest": "5.0.5"
   },
-  "engines": { "node": ">=20.18.1" }
+  "engines": {
+    "node": ">=20.18.1"
+  }
 }

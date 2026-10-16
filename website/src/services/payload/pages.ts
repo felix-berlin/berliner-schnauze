@@ -16,7 +16,7 @@ export const fetchPagesBySlugs = async (slugs: string[]): Promise<PageNode[]> =>
       ? [
           {
             content: lexicalToHtml(page.content),
-            seo: toSeoData(page.seo),
+            seo: toSeoData(page.meta),
             slug: page.slug,
             title: page.title,
           },

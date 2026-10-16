@@ -34,7 +34,7 @@ const loadThemen = async (): Promise<ThemaNode[]> => {
               count: counts.get(thema.id) ?? 0,
               description: thema.description ?? null,
               name: thema.name,
-              seo: toSeoData(thema.seo),
+              seo: toSeoData(thema.meta),
               slug: thema.slug,
             },
           ]

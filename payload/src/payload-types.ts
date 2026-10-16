@@ -223,20 +223,31 @@ export interface Theman {
   description?: string | null;
   wpId?: number | null;
   slug?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    canonical?: string | null;
-    ogTitle?: string | null;
-    ogDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    twitterTitle?: string | null;
-    twitterDescription?: string | null;
-    noindex?: boolean | null;
-    nofollow?: boolean | null;
-  };
+  meta?: SeoMeta;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SeoMeta".
+ */
+export interface SeoMeta {
+  title?: string | null;
+  description?: string | null;
+  /**
+   * Leer lassen: Wörter bekommen automatisch ihr generiertes Vorschaubild (/og/<slug>.png, astro-og-canvas). Nur setzen, um es zu ersetzen.
+   */
+  image?: (number | null) | Media;
+  /**
+   * Leer lassen: die Seite verweist auf ihre eigene URL. Nur setzen, wenn eine andere URL (auf https://berliner-schnauze.wtf) die maßgebliche ist.
+   */
+  canonical?: string | null;
+  ogTitle?: string | null;
+  ogDescription?: string | null;
+  twitterTitle?: string | null;
+  twitterDescription?: string | null;
+  noindex?: boolean | null;
+  nofollow?: boolean | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -313,18 +324,6 @@ export interface Word {
   wordTypes?: (number | WordType)[] | null;
   themen?: (number | Theman)[] | null;
   publishedAt?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    canonical?: string | null;
-    ogTitle?: string | null;
-    ogDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    twitterTitle?: string | null;
-    twitterDescription?: string | null;
-    noindex?: boolean | null;
-    nofollow?: boolean | null;
-  };
   contentModifiedAt?: string | null;
   /**
    * Computed from berlinerisch on save.
@@ -347,6 +346,7 @@ export interface Word {
     wordComponents?: string[] | null;
     soundexCode?: string | null;
   };
+  meta?: SeoMeta;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -379,18 +379,7 @@ export interface Post {
   } | null;
   wpId?: number | null;
   slug?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    canonical?: string | null;
-    ogTitle?: string | null;
-    ogDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    twitterTitle?: string | null;
-    twitterDescription?: string | null;
-    noindex?: boolean | null;
-    nofollow?: boolean | null;
-  };
+  meta?: SeoMeta;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -419,18 +408,7 @@ export interface Page {
   } | null;
   wpId?: number | null;
   slug?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    canonical?: string | null;
-    ogTitle?: string | null;
-    ogDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    twitterTitle?: string | null;
-    twitterDescription?: string | null;
-    noindex?: boolean | null;
-    nofollow?: boolean | null;
-  };
+  meta?: SeoMeta;
   updatedAt: string;
   createdAt: string;
 }
@@ -596,22 +574,25 @@ export interface ThemenSelect<T extends boolean = true> {
   description?: T;
   wpId?: T;
   slug?: T;
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        canonical?: T;
-        ogTitle?: T;
-        ogDescription?: T;
-        ogImage?: T;
-        twitterTitle?: T;
-        twitterDescription?: T;
-        noindex?: T;
-        nofollow?: T;
-      };
+  meta?: T | SeoMetaSelect<T>;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SeoMeta_select".
+ */
+export interface SeoMetaSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  image?: T;
+  canonical?: T;
+  ogTitle?: T;
+  ogDescription?: T;
+  twitterTitle?: T;
+  twitterDescription?: T;
+  noindex?: T;
+  nofollow?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -673,20 +654,6 @@ export interface WordsSelect<T extends boolean = true> {
   wordTypes?: T;
   themen?: T;
   publishedAt?: T;
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        canonical?: T;
-        ogTitle?: T;
-        ogDescription?: T;
-        ogImage?: T;
-        twitterTitle?: T;
-        twitterDescription?: T;
-        noindex?: T;
-        nofollow?: T;
-      };
   contentModifiedAt?: T;
   derived?:
     | T
@@ -700,6 +667,7 @@ export interface WordsSelect<T extends boolean = true> {
         wordComponents?: T;
         soundexCode?: T;
       };
+  meta?: T | SeoMetaSelect<T>;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -717,20 +685,7 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   wpId?: T;
   slug?: T;
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        canonical?: T;
-        ogTitle?: T;
-        ogDescription?: T;
-        ogImage?: T;
-        twitterTitle?: T;
-        twitterDescription?: T;
-        noindex?: T;
-        nofollow?: T;
-      };
+  meta?: T | SeoMetaSelect<T>;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -744,20 +699,7 @@ export interface PagesSelect<T extends boolean = true> {
   content?: T;
   wpId?: T;
   slug?: T;
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        canonical?: T;
-        ogTitle?: T;
-        ogDescription?: T;
-        ogImage?: T;
-        twitterTitle?: T;
-        twitterDescription?: T;
-        noindex?: T;
-        nofollow?: T;
-      };
+  meta?: T | SeoMetaSelect<T>;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -2,7 +2,6 @@ import type { CollectionConfig } from "payload";
 
 import { authenticatedOnly } from "../access";
 import { identityFields } from "../fields/identity";
-import { seoField } from "../fields/seo";
 
 export const Themen: CollectionConfig = {
   slug: "themen",
@@ -12,6 +11,5 @@ export const Themen: CollectionConfig = {
     { name: "name", type: "text", required: true },
     { name: "description", type: "textarea" },
     ...identityFields,
-    seoField,
   ],
 };

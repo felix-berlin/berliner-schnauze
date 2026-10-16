@@ -3,7 +3,6 @@ import type { CollectionConfig, Field } from "payload";
 import { authenticatedOnly } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
-import { seoField } from "../fields/seo";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
 
 const gender: Field = { name: "gender", type: "select", options: ["male", "female"] };
@@ -54,7 +53,6 @@ export const Words: CollectionConfig = {
     { name: "wordTypes", type: "relationship", relationTo: "word-types", hasMany: true },
     { name: "themen", type: "relationship", relationTo: "themen", hasMany: true },
     { name: "publishedAt", type: "date" },
-    seoField,
     contentModifiedAtField,
     {
       name: "derived",
