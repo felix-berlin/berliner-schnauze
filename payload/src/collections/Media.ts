@@ -1,10 +1,10 @@
 import type { CollectionConfig } from "payload";
 
-import { anyone, authenticated } from "../access";
+import { authenticated, mediaRead } from "../access";
 
 export const Media: CollectionConfig = {
   slug: "media",
-  access: { read: anyone, create: authenticated, update: authenticated, delete: authenticated },
+  access: { read: mediaRead, create: authenticated, update: authenticated, delete: authenticated },
   upload: { staticDir: process.env.MEDIA_DIR ?? "media", mimeTypes: ["image/*", "audio/*"] },
   fields: [
     { name: "alt", type: "text" },
