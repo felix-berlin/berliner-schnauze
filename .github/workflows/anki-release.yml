@@ -28,9 +28,9 @@ jobs:
           domain: "https://infisical.kasimir.dev"
 
       - name: Setup Python 🛠️
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
-          python-version: "3.13"
+          python-version: "3.15"
           cache: pip
           cache-dependency-path: scripts/requirements-anki.txt
 
