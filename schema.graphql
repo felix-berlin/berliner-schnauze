@@ -27271,8 +27271,14 @@ type Taxonomy implements Node {
   label: String
   """The display name of the taxonomy."""
   name: String
-  """Whether the taxonomy is publicly queryable"""
+  """
+  Whether the taxonomy is intended for public use. This is a broad statement of intent rather than a behavior of its own: the more specific settings, such as publiclyQueryable, showUi and showInNavMenus, follow it unless they are given their own value.
+  """
   public: Boolean
+  """
+  Whether terms in this taxonomy can be queried from the front end of the site.
+  """
+  publiclyQueryable: Boolean
   """
   Name of content type to display in REST API &quot;wp/v2&quot; namespace.
   """
