@@ -21,6 +21,13 @@ header() { curl -s -D - -o /dev/null "$BASE$1" | tr -d '\r' | grep -i "^$2:" | c
 check "home 200" "$(status /)" 200
 check "word page 200" "$(status /wort/aasen)" 200
 check "unknown 404" "$(status /gibts-nicht-xyz)" 404
+# Pages whose a.html sits next to an a/ folder (build.format "file"), see the @astrojs/node patch.
+for page in /wort /magazin /themen /changelog /settings /anki /games/berliner-oder-nicht; do
+  check "page $page 200" "$(status "$page")" 200
+done
+check "folder slash 301" "$(status /magazin/)" 301
+check "malformed query 200" "$(status '/games/berliner-oder-nicht/share?r=abc.%%%')" 200
+check "malformed path 400" "$(status '/wort/%E0%A4%A')" 400
 check "sw.js 200" "$(status /sw.js)" 200
 check "trailing slash 301" "$(status /wort/aasen/)" 301
 check "_redirects 301" "$(status /suggest-word)" 301
