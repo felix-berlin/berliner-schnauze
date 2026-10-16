@@ -1,0 +1,204 @@
+/** Pure WordPress -> Payload data mapping (no writes). */
+import type { SanitizedConfig } from "payload";
+
+import type { Page, Post, Theman, Word } from "../payload-types";
+import type { WpBlock, WpImage, WpPage, WpPost, WpSeo, WpThema, WpWord } from "./wp";
+
+import { wpUploadPath } from "../lib/wpUploadPath";
+import { htmlToLexical, htmlToText, type RichText } from "./html";
+
+export type ImportRefs = {
+  /** Keyed by `wpUploadPath(url)`. */
+  mediaIdByUrl: Map<string, number>;
+  wordTypeIdByName: Map<string, number>;
+  themaIdBySlug: Map<string, number>;
+  wordIdByWpId: Map<number, number>;
+};
+
+export type MediaMeta = { url: string; alt?: string | null; caption?: string | null; description?: string | null };
+
+type Maybe<T> = T | null | undefined;
+const present = <T>(v: Maybe<T>): v is T => v != null;
+
+/** WP `*Gmt` ("2025-04-09T12:18:58", no zone) -> ISO string; null when empty/invalid. */
+export const gmtToIso = (gmt: Maybe<string>): string | null => {
+  const d = gmt ? new Date(`${gmt}Z`) : null;
+  return d && !Number.isNaN(d.getTime()) ? d.toISOString() : null;
+};
+
+/** WPGraphQL `status` is "publish"/"draft"/...; everything but publish stays a draft. */
+export const statusOf = (status: Maybe<string>): "published" | "draft" =>
+  status?.toLowerCase() === "publish" ? "published" : "draft";
+
+const mediaId = (url: Maybe<string>, refs: ImportRefs) => (url ? (refs.mediaIdByUrl.get(wpUploadPath(url)) ?? null) : null);
+
+/**
+ * Every media file referenced by the content (audio, word images, featured and OG images),
+ * deduplicated by upload path. The first occurrence's metadata wins.
+ */
+export function collectMedia(words: WpWord[], posts: WpPost[], pages: WpPage[], themen: WpThema[]): Map<string, MediaMeta> {
+  const media = new Map<string, MediaMeta>();
+  const add = (url: Maybe<string>, meta: Omit<MediaMeta, "url"> = {}) => {
+    if (url && !media.has(wpUploadPath(url))) media.set(wpUploadPath(url), { url, ...meta });
+  };
+  const addImage = (img: Maybe<WpImage>) =>
+    add(img?.sourceUrl, { alt: img?.altText || null, caption: img?.caption?.trim() || null, description: img?.description?.trim() || null });
+
+  for (const w of words) {
+    const p = w.wordProperties;
+    for (const row of p?.berlinerischAudio ?? []) add(row?.audio?.node?.mediaItemUrl);
+    for (const ex of p?.examples ?? []) for (const row of ex?.exampleAudio ?? []) add(row?.audio?.node?.mediaItemUrl);
+    for (const img of p?.images?.nodes ?? []) addImage(img);
+    add(w.seo?.opengraphImage?.sourceUrl);
+  }
+  for (const post of posts) {
+    addImage(post.featuredImage?.node);
+    for (const b of post.blocks ?? []) if (b?.name === "core/image") add(b.attributes?.url, { alt: b.attributes?.alt || null });
+    add(post.seo?.opengraphImage?.sourceUrl);
+  }
+  for (const n of [...pages, ...themen]) add(n.seo?.opengraphImage?.sourceUrl);
+  return media;
+}
+
+export const collectMediaUrls = (...args: Parameters<typeof collectMedia>): string[] =>
+  [...collectMedia(...args).values()].map((m) => m.url);
+
+/** Yoast SEO -> `seo` group. Empty strings become null so a re-import clears them. */
+export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): NonNullable<Word["seo"]> {
+  if (!seo) return {};
+  return {
+    title: seo.title || null,
+    description: seo.metaDesc || null,
+    canonical: seo.canonical || null,
+    ogTitle: seo.opengraphTitle || null,
+    ogDescription: seo.opengraphDescription || null,
+    ogImage: mediaId(seo.opengraphImage?.sourceUrl, refs),
+    twitterTitle: seo.twitterTitle || null,
+    twitterDescription: seo.twitterDescription || null,
+    // Yoast returns "index"/"noindex" and "follow"/"nofollow".
+    noindex: seo.metaRobotsNoindex === "noindex",
+    nofollow: seo.metaRobotsNofollow === "nofollow",
+  };
+}
+
+type AudioRows = NonNullable<Word["berlinerischAudio"]>;
+const mapAudio = (rows: Maybe<Maybe<{ gender?: Maybe<string>; audio?: Maybe<{ node?: Maybe<{ mediaItemUrl?: Maybe<string> }> }> }>[]>, refs: ImportRefs): AudioRows =>
+  (rows ?? []).filter(present).flatMap((row) => {
+    const audio = mediaId(row.audio?.node?.mediaItemUrl, refs);
+    if (audio == null) return []; // download failed -> already in report.failures
+    const gender = row.gender === "male" || row.gender === "female" ? row.gender : null;
+    return [{ gender, audio }];
+  });
+
+const htmlOrNull = async (html: Maybe<string>, config: SanitizedConfig) => (html?.trim() ? htmlToLexical(html, config) : null);
+
+export type WordData = Omit<Word, "id" | "derived" | "relatedWords" | "createdAt" | "updatedAt">;
+
+export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedConfig): Promise<WordData> {
+  const p = node.wordProperties ?? {};
+  return {
+    wpId: node.databaseId,
+    slug: node.slug ?? null,
+    berlinerisch: p.berlinerisch ?? "",
+    berlinerWordId: node.berlinerWordId ?? null,
+    article: p.article ?? null,
+    translations: (p.translations ?? []).filter(present).map(({ translation }) => ({ translation: translation ?? null })),
+    alternativeWords: (p.alternativeWords ?? []).filter(present).map(({ alternativeWord }) => ({ alternativeWord: alternativeWord ?? null })),
+    examples: (p.examples ?? []).filter(present).map((ex) => ({
+      example: ex.example ?? null,
+      exampleExplanation: ex.exampleExplanation ?? null,
+      exampleAudio: mapAudio(ex.exampleAudio, refs),
+    })),
+    berlinerischAudio: mapAudio(p.berlinerischAudio, refs),
+    wikimediaFiles: (p.wikimediaFiles ?? []).filter(present).map((f) => ({
+      wikimediaFile: f.wikimediaFile ?? null,
+      description: f.description ?? null,
+      caption: f.caption ?? null,
+    })),
+    infoText: await htmlOrNull(p.infoText, config),
+    learnMore: p.learnMore ?? null,
+    berolinismus: p.berolinismus ?? false,
+    // ACF repeater of `quelle` fields, each a string or a list of strings.
+    sources: (p.sources ?? []).flatMap((s) => [s?.quelle ?? []].flat()).filter((s): s is string => !!s),
+    images: (p.images?.nodes ?? []).map((img) => mediaId(img?.sourceUrl, refs)).filter(present),
+    wordTypes: (node.berlinerischWordTypes?.nodes ?? []).map((t) => (t?.name ? refs.wordTypeIdByName.get(t.name) : undefined)).filter(present),
+    themen: (node.berlinerischThemen?.nodes ?? []).map((t) => (t?.slug ? refs.themaIdBySlug.get(t.slug) : undefined)).filter(present),
+    publishedAt: gmtToIso(node.dateGmt),
+    contentModifiedAt: gmtToIso(node.modifiedGmt),
+    seo: mapSeo(node.seo, refs),
+    _status: statusOf(node.status),
+  };
+}
+
+/** Pass 2: related word ids; links to words that were not imported are dropped and counted. */
+export function mapRelatedWords(node: WpWord, refs: ImportRefs): { ids: number[]; missing: number } {
+  const ids: number[] = [];
+  let missing = 0;
+  for (const rel of node.wordProperties?.relatedWords?.nodes ?? []) {
+    const id = rel?.databaseId == null ? undefined : refs.wordIdByWpId.get(rel.databaseId);
+    if (id == null) missing++;
+    else ids.push(id);
+  }
+  return { ids, missing };
+}
+
+/** Upload node for a media id, as Payload's Lexical upload feature stores it. */
+const uploadNode = (value: number) => ({ type: "upload", relationTo: "media", value, version: 3, format: "", fields: null });
+
+/** Gutenberg blocks in `order`: runs of non-image blocks are converted together, images become upload nodes. */
+export async function blocksToLexical(blocks: Maybe<WpBlock>[], refs: ImportRefs, config: SanitizedConfig): Promise<RichText | null> {
+  const sorted = blocks.filter(present).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  if (!sorted.length) return null;
+  const children: RichText["root"]["children"] = [];
+  let html: string[] = [];
+  const flush = async () => {
+    if (html.join("").trim()) children.push(...(await htmlToLexical(html.join("\n"), config)).root.children);
+    html = [];
+  };
+  for (const block of sorted) {
+    const id = block.name === "core/image" ? mediaId(block.attributes?.url, refs) : null;
+    if (id == null) {
+      // ponytail: an image block whose download failed keeps its HTML (img src stays the WP URL).
+      html.push(block.saveContent ?? "");
+      continue;
+    }
+    await flush();
+    children.push(uploadNode(id));
+  }
+  await flush();
+  return { root: { type: "root", children, direction: "ltr", format: "", indent: 0, version: 1 } };
+}
+
+export type PostData = Omit<Post, "id" | "createdAt" | "updatedAt">;
+
+export async function mapPost(node: WpPost, refs: ImportRefs, config: SanitizedConfig): Promise<PostData> {
+  return {
+    wpId: node.databaseId,
+    slug: node.slug ?? null,
+    title: node.title ?? "",
+    excerpt: node.excerpt ? htmlToText(node.excerpt) : null,
+    publishedAt: gmtToIso(node.dateGmt),
+    featuredImage: mediaId(node.featuredImage?.node?.sourceUrl, refs),
+    content: await blocksToLexical(node.blocks ?? [], refs, config),
+    seo: mapSeo(node.seo, refs),
+    _status: statusOf(node.status),
+  };
+}
+
+export async function mapPage(node: WpPage, refs: ImportRefs, config: SanitizedConfig): Promise<Omit<Page, "id" | "createdAt" | "updatedAt">> {
+  return {
+    wpId: node.databaseId,
+    slug: node.slug ?? null,
+    title: node.title ?? "",
+    content: await htmlOrNull(node.content, config),
+    seo: mapSeo(node.seo, refs),
+  };
+}
+
+export const mapThema = (node: WpThema, refs: ImportRefs): Omit<Theman, "id" | "createdAt" | "updatedAt"> => ({
+  wpId: node.databaseId,
+  slug: node.slug ?? null,
+  name: node.name ?? "",
+  description: node.description || null,
+  seo: mapSeo(node.seo, refs),
+});

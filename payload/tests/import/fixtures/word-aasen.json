@@ -1,0 +1,65 @@
+{
+  "databaseId": 5704,
+  "status": "publish",
+  "slug": "aasen",
+  "dateGmt": "2025-04-09T12:18:58",
+  "modifiedGmt": "2026-09-20T17:24:19",
+  "berlinerWordId": 5704,
+  "wordProperties": {
+    "article": null,
+    "berlinerisch": "aasen",
+    "berlinerischAudio": null,
+    "learnMore": null,
+    "berolinismus": false,
+    "examples": null,
+    "translations": [
+      {
+        "translation": "verschwenden"
+      },
+      {
+        "translation": "vergeuden"
+      }
+    ],
+    "alternativeWords": [
+      {
+        "alternativeWord": "veraasen"
+      }
+    ],
+    "relatedWords": null,
+    "wikimediaFiles": null,
+    "infoText": "<p>Bedeutung seit dem 19. Jahrhundert gebräuchlich.</p>\n",
+    "sources": null,
+    "images": null
+  },
+  "berlinerischWordTypes": {
+    "nodes": []
+  },
+  "berlinerischThemen": {
+    "nodes": [
+      {
+        "name": "Geld",
+        "slug": "geld"
+      },
+      {
+        "name": "Körper",
+        "slug": "koerper"
+      },
+      {
+        "name": "Schimpfwörter & Beleidigungen",
+        "slug": "schimpfwoerter-beleidigungen"
+      }
+    ]
+  },
+  "seo": {
+    "title": "aasen | Bedeutung, Definition, Beispiel",
+    "canonical": "https://cms.berliner-schnauze.wtf/wort/aasen/",
+    "metaDesc": "Das Wort aasen kommt aus dem Berlinerischen, erfahre mehr über die Bedeutung und Definition. Beispiele des Berliner Worts helfen dir beim Verständnis.",
+    "opengraphDescription": "Das Wort aasen kommt aus dem Berlinerischen, erfahre mehr über die Bedeutung und Definition. Beispiele des Berliner Worts helfen dir beim Verständnis.",
+    "opengraphTitle": "aasen | Bedeutung, Definition, Beispiel",
+    "opengraphImage": null,
+    "twitterDescription": "",
+    "twitterTitle": "",
+    "metaRobotsNofollow": "follow",
+    "metaRobotsNoindex": "index"
+  }
+}

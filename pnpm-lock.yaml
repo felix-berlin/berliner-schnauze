@@ -511,6 +511,9 @@ importers:
       hypher:
         specifier: ^0.2.5
         version: 0.2.5
+      jsdom:
+        specifier: ^30.1.3
+        version: 30.1.3
       natural:
         specifier: ^8.1.1
         version: 8.1.1(@opentelemetry/api@1.9.1)
@@ -527,6 +530,9 @@ importers:
         specifier: 19.2.6
         version: 19.2.6(react@19.2.6)
     devDependencies:
+      '@types/jsdom':
+        specifier: ^30.0.0
+        version: 30.0.0
       '@types/node':
         specifier: ^26.6.5
         version: 26.6.5
