@@ -2,8 +2,6 @@ import { config } from "@vue/test-utils";
 import { beforeAll, vi } from "vitest";
 
 beforeAll(() => {
-  vi.stubEnv("WP_API", "https://cms.berliner-schnauze.wtf/api");
-
   config.global.directives = {
     tooltip: { mounted() {}, unmounted() {}, updated() {} },
   };

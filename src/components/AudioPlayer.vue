@@ -22,7 +22,7 @@ import Pause from "virtual:icons/lucide/pause";
 import Play from "virtual:icons/lucide/play";
 import { computed, nextTick, onMounted, ref } from "vue";
 
-import type { MediaItem } from "@/gql/entity-types";
+import type { MediaItem } from "@/types/cms";
 
 type AudioPlayerListProps = {
   audio: MediaItem["mediaItemUrl"];

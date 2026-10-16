@@ -4,7 +4,7 @@ import type { GetImageResult, ImageOutputFormat } from 'astro';
 import 'photoswipe/style.css';
 import { getImage, Picture } from 'astro:assets';
 
-import type { WordProperties } from '@/gql/entity-types';
+import type { WordProperties } from '@/types/cms';
 
 type ImageNode = NonNullable<NonNullable<WordProperties['images']>['nodes']>[number];
 

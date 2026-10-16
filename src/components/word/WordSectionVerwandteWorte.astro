@@ -2,7 +2,7 @@
 import '@styles/components/_section-card.scss';
 import '@styles/components/_word-related-words.scss';
 import { routeToWord } from '@utils/helpers';
-import type { BerlinerWord } from '@/gql/entity-types';
+import type { BerlinerWord } from '@/types/cms';
 
 interface Props {
   relatedWords: NonNullable<BerlinerWord['wordProperties']>['relatedWords'];

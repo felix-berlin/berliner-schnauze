@@ -1,7 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 
-// Search index holds the full dataset in CI; only /wort/<slug> pages are capped (E2E_WORD_LIMIT).
-// Detail-page navigation therefore uses required slugs only (aasen, anmachen, wa, ...).
+// CI runs against the small invented data set of `pnpm --filter payload-app seed:e2e`:
+// assertions target its slugs (aasen, anmachen, wa, ...) and never hardcode totals.
 
 const searchbox = (page: Page) =>
   page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" });

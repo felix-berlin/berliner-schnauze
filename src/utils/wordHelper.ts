@@ -3,7 +3,7 @@ import natural from "natural";
 import { createRequire } from "node:module";
 import { isConsonantChar, isVowelChar, soundexCode } from "payload-app/word-derived";
 
-import type { WordPropertiesWikimediaFiles } from "@/gql/entity-types";
+import type { WordPropertiesWikimediaFiles } from "@/types/cms";
 
 export {
   countLetters,

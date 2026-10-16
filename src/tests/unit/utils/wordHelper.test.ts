@@ -11,7 +11,7 @@ import {
 } from "@utils/wordHelper";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { BerlinerWord } from "@/gql/entity-types";
+import type { BerlinerWord } from "@/types/cms";
 
 vi.mock("@services/wikimediaApi.ts", () => ({
   fetchWikimediaAPI: vi.fn(),

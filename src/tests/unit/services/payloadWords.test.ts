@@ -224,6 +224,17 @@ describe("toWord", () => {
     });
   });
 
+  it("gives a word created in Payload (no berlinerWordId) a unique id outside the WordPress range", async () => {
+    const { toWord } = await load();
+    const [a, b] = [
+      toWord({ ...doc, berlinerWordId: null, id: 7 } as never),
+      toWord({ ...doc, berlinerWordId: null, id: 8 } as never),
+    ];
+    expect(a.berlinerWordId).toBe(1_000_007);
+    expect(b.berlinerWordId).not.toBe(a.berlinerWordId);
+    expect(toWord(doc as never).berlinerWordId).toBe(5703); // imported words keep theirs
+  });
+
   it("copes with a sparse document", async () => {
     const { toWord } = await load();
     const word = toWord({
@@ -234,7 +245,7 @@ describe("toWord", () => {
       updatedAt: "",
     } as never);
     expect(word).toMatchObject({
-      berlinerWordId: 0,
+      berlinerWordId: 1_000_001,
       dateGmt: null,
       modifiedGmt: null,
       seo: null,

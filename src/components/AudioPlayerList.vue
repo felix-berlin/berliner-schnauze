@@ -24,7 +24,7 @@ import type {
   Maybe,
   WordPropertiesBerlinerischAudio,
   WordPropertiesExamplesExampleAudio,
-} from "@/gql/entity-types";
+} from "@/types/cms";
 
 type AudioPlayerListProps = {
   audio:

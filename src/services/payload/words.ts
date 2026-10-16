@@ -10,6 +10,13 @@ import type { AudioRow, Word, WordImage } from "@/types/cms.ts";
 
 const PAGE_SIZE = 1000;
 
+/**
+ * Words imported from WordPress keep their `berlinerWordId` (the DOM id of a card and the word-of-the-day id). A word
+ * created in Payload has none and would share one id with every other new word, so it gets one from a range
+ * above the WordPress ids (Payload ids start at 1 and would clash with them).
+ */
+export const PAYLOAD_ID_OFFSET = 1_000_000;
+
 /** WPGraphQL returned null for an empty repeater and callers test the fields for truthiness. */
 const orNull = <T>(items: readonly T[] | null | undefined): T[] | null =>
   items?.length ? [...items] : null;
@@ -33,7 +40,7 @@ const toImage = (media: Media): WordImage => ({
 
 /** `doc` must be populated one level deep (relations and media are objects, not ids) and have a slug. */
 export const toWord = (doc: PayloadWord & { slug: string }): Word => ({
-  berlinerWordId: doc.berlinerWordId ?? 0,
+  berlinerWordId: doc.berlinerWordId ?? PAYLOAD_ID_OFFSET + doc.id,
   berlinerischThemen: {
     nodes: populated<Theman>(doc.themen).map((t) => ({
       name: t.name ?? null,

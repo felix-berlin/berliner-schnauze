@@ -71,7 +71,7 @@ import Link from "virtual:icons/lucide/link";
 import Share2 from "virtual:icons/lucide/share-2";
 import { defineAsyncComponent } from "vue";
 
-import type { BerlinerWord, WordProperties } from "@/gql/entity-types";
+import type { BerlinerWord, WordProperties } from "@/types/cms";
 
 interface WordProps {
   berlinerisch: WordProperties["berlinerisch"];

@@ -89,12 +89,15 @@ describe("processArticleBlocks", () => {
     expect(blocks[0].saveContent).toContain('id="abschnitt"');
   });
 
-  it.each([[legacyOrigin], [cmsOrigin]])("rewrites CMS-absolute internal links (%s) to relative paths", (origin) => {
-    const { blocks } = processArticleBlocks([
-      block(1, `<p>Siehe <a href="${origin}/wort/bulette/">Bulette</a>.</p>`),
-    ]);
-    expect(blocks[0].saveContent).toContain('href="/wort/bulette/"');
-  });
+  it.each([[legacyOrigin], [cmsOrigin]])(
+    "rewrites CMS-absolute internal links (%s) to relative paths",
+    (origin) => {
+      const { blocks } = processArticleBlocks([
+        block(1, `<p>Siehe <a href="${origin}/wort/bulette/">Bulette</a>.</p>`),
+      ]);
+      expect(blocks[0].saveContent).toContain('href="/wort/bulette/"');
+    },
+  );
 
   it("leaves external links untouched", () => {
     const original = '<p><a href="https://example.com/foo">Extern</a></p>';

@@ -82,7 +82,6 @@ export default getViteConfig(
         include: ["src/**/*.{js,jsx,ts,tsx,vue,astro}"],
         exclude: [
           "src/types/**",
-          "src/gql/**",
           "src/tests/**",
           "src/env.d.ts",
           "src/pages/_app.ts",
@@ -112,26 +111,6 @@ export default getViteConfig(
   {
     env: {
       schema: {
-        WP_API: envField.string({
-          context: "client",
-          access: "public",
-          default: "https://berliner-schnauze.test/api",
-        }),
-        WP_REST_API: envField.string({
-          context: "client",
-          access: "public",
-          default: "https://berliner-schnauze.test/wp-json",
-        }),
-        WP_AUTH_REFRESH_TOKEN: envField.string({
-          context: "client",
-          access: "public",
-          default: "not-a-real-token",
-        }),
-        SUGGEST_WORD_FORM_ID: envField.string({
-          context: "client",
-          access: "public",
-          default: "1111",
-        }),
         TURNSTILE_SITE_KEY: envField.string({
           context: "client",
           access: "public",

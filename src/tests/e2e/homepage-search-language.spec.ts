@@ -1,8 +1,8 @@
 import { test, expect, type Page } from "@playwright/test";
 
 // spec: specs/homepage-search.plan.md (1.5, 1.6, 1.9)
-// Search index holds the full dataset in CI; only /wort/<slug> pages are capped.
-// Assertions therefore target required slugs (anmachen, ...) and never hardcode totals.
+// CI runs against the small invented data set of `pnpm --filter payload-app seed:e2e`:
+// assertions target its slugs (anmachen, ...) and never hardcode totals.
 
 const searchbox = (page: Page) =>
   page.getByRole("searchbox", { name: "Suche nach einem Berliner Word" });

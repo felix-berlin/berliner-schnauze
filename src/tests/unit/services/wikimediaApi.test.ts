@@ -7,13 +7,9 @@ vi.mock("astro:env/client", () => ({
   MATOMO_SITE_ID: 1,
   SENTRY_ENVIRONMENT: "development",
   SENTRY_TRACES_SAMPLE_RATE: 0.1,
-  SUGGEST_WORD_FORM_ID: "1111",
   TURNSTILE_SITE_KEY: "not-a-real-key",
   WIKIMEDIA_API_AUTH_TOKEN: "Bearer test-wikimedia-token",
   WIKIMEDIA_API_AUTH_TOKEN_missing: undefined,
-  WP_API: "https://berliner-schnauze.test/api",
-  WP_AUTH_REFRESH_TOKEN: "not-a-real-token",
-  WP_REST_API: "https://berliner-schnauze.test/wp-json",
 }));
 
 function makeResponse(ok: boolean, body: unknown): Response {

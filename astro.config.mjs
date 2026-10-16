@@ -11,8 +11,6 @@ import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
 import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
-import graphqlLoader from "vite-plugin-graphql-loader";
-
 
 const env = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 const {
@@ -23,15 +21,15 @@ const {
   CODECOV_TOKEN,
   BUNDLE_ANALYZER_OPEN,
   IMAGOR_HOST,
-  E2E_WORD_LIMIT,
+  E2E_BUILD,
 } = env;
 
 // payload.config reads process.env, which Vite does not fill from .env files: bridge the DB vars for local dev.
 for (const key of ["DATABASE_URL", "PAYLOAD_SECRET"]) if (env[key]) process.env[key] ??= env[key];
 
-// The Playwright e2e build sets this to keep the build fast — skip the
-// source-map upload plugins too, they add real time for a build nobody deploys.
-const isE2eBuild = Boolean(E2E_WORD_LIMIT);
+// The Playwright e2e build sets E2E_BUILD: skip the source-map upload plugins, they add real time for a
+// build nobody deploys.
+const isE2eBuild = Boolean(E2E_BUILD);
 // Source map + bundle stats uploads (Sentry, Codecov) only make sense for a real CI/deploy build.
 const uploadsArtifacts = !isE2eBuild && Boolean(process.env.CI);
 
@@ -132,24 +130,6 @@ export default defineConfig({
   },
   env: {
     schema: {
-      WP_API: envField.string({
-        context: "client",
-        access: "public",
-      }),
-      WP_REST_API: envField.string({
-        context: "client",
-        access: "public",
-      }),
-      WP_AUTH_USER: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
-      WP_AUTH_PASS: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
       WAKAPI_HOST: envField.string({
         context: "client",
         access: "public",
@@ -195,14 +175,6 @@ export default defineConfig({
         context: "server",
         access: "secret",
       }),
-      WP_AUTH_REFRESH_TOKEN: envField.string({
-        context: "server",
-        access: "secret",
-      }),
-      SUGGEST_WORD_FORM_ID: envField.string({
-        context: "client",
-        access: "public",
-      }),
       ENABLE_ANALYTICS: envField.boolean({
         context: "server",
         access: "public",
@@ -230,9 +202,11 @@ export default defineConfig({
         context: "client",
         access: "public",
       }),
+      // Only the build reads these (source map upload via loadEnv): the running server must not need them.
       SENTRY_AUTH_TOKEN: envField.string({
         context: "server",
         access: "secret",
+        optional: true,
       }),
       SENTRY_DSN: envField.string({
         context: "client",
@@ -242,10 +216,12 @@ export default defineConfig({
       SENTRY_PROJECT: envField.string({
         context: "server",
         access: "public",
+        optional: true,
       }),
       SENTRY_ORG: envField.string({
         context: "server",
         access: "public",
+        optional: true,
       }),
       SENTRY_ENVIRONMENT: envField.string({
         context: "client",
@@ -264,13 +240,6 @@ export default defineConfig({
         context: "client",
         access: "public",
         default: false,
-      }),
-      // Caps how many words getWords.ts fetches/builds — only set in the
-      // Playwright CI build, to keep the e2e build fast. Unset in production.
-      E2E_WORD_LIMIT: envField.number({
-        context: "server",
-        access: "public",
-        optional: true,
       }),
       PWA_DEBUG: envField.boolean({
         context: "server",
@@ -541,7 +510,7 @@ export default defineConfig({
     // Deps only imported by lazily hydrated islands are discovered late; the
     // mid-session re-optimization then breaks the in-flight dynamic import.
     optimizeDeps: {
-      include: ["@urql/core", "zod"],
+      include: ["zod"],
     },
 
     // Bundle every dep into dist/server so the Docker image needs no node_modules.
@@ -598,7 +567,6 @@ export default defineConfig({
               debug: false,
             }),
           ]),
-      graphqlLoader({ sourceMapOptions: { hires: true } }),
       visualizerPlugin,
     ],
 

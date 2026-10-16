@@ -20,7 +20,9 @@ describe("verifyTurnstile", () => {
     expect(await verifyTurnstile("tok", "1.2.3.4")).toBe(true);
     const [url, init] = fetchMock.mock.calls[0];
     expect(url).toBe("https://challenges.cloudflare.com/turnstile/v0/siteverify");
-    expect(Object.fromEntries(new URLSearchParams((init as { body: URLSearchParams }).body.toString()))).toEqual({
+    expect(
+      Object.fromEntries(new URLSearchParams((init as { body: URLSearchParams }).body.toString())),
+    ).toEqual({
       remoteip: "1.2.3.4",
       response: "tok",
       secret: "secret",
@@ -30,7 +32,9 @@ describe("verifyTurnstile", () => {
   it("omits the ip when unknown", async () => {
     answer({ success: true });
     await verifyTurnstile("tok");
-    expect((fetchMock.mock.calls[0][1] as { body: URLSearchParams }).body.toString()).not.toContain("remoteip");
+    expect((fetchMock.mock.calls[0][1] as { body: URLSearchParams }).body.toString()).not.toContain(
+      "remoteip",
+    );
   });
 
   it("is false when Cloudflare says so", async () => {

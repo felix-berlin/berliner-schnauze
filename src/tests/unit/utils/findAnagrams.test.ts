@@ -1,7 +1,7 @@
 import { findAnagrams } from "@utils/wordHelper";
 import { describe, it, expect } from "vitest";
 
-import type { BerlinerWord } from "@/gql/entity-types";
+import type { BerlinerWord } from "@/types/cms";
 
 const makeWord = (berlinerisch: string, id: string): BerlinerWord =>
   ({

@@ -2,14 +2,13 @@
 
 ## Project Overview
 
-Berliner Schnauze is a Berlin dialect translator web app. Data lives in a WordPress GraphQL backend; the frontend is a static Astro site with Vue 3 islands for interactivity. Deployed to Cloudflare Workers (static assets, `wrangler.jsonc`).
+Berliner Schnauze is a Berlin dialect translator web app. Data lives in the Payload CMS (`payload/`, Postgres); the frontend is an Astro site with Vue 3 islands for interactivity. Every page renders on demand (`output: "server"`, Node adapter, Docker image); the build needs no database. `wrangler.jsonc` (Cloudflare static assets) is a leftover of the old static deploy and cannot serve this site.
 
 ## Commands
 
 ```bash
 # Development
-pnpm dev                     # Start dev server (requires infisical login; auto-runs codegen + supportedBrowsers via predev)
-pnpm gql:generate:watch      # Run in parallel with dev to regenerate types on schema changes (requires infisical login)
+pnpm dev                     # Start dev server (requires infisical login and Postgres with the CMS data, see payload/README.md; auto-runs supportedBrowsers via predev)
 
 # Testing
 pnpm test:unit               # Run full test suite with coverage
@@ -22,12 +21,9 @@ pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS) — a
 pnpm typechecking            # astro check + vue-tsc  (slow — run targeted, not after every edit; tsc can't resolve .vue imports)
 
 # Build
-pnpm build                   # Production build (static ./dist) — no infisical, env vars must already be set
+pnpm build                   # Production build (./dist, server entry + assets) — needs no database; no infisical, env vars must already be set
 pnpm build:local             # Production build locally — wraps build with infisical to inject env vars
 pnpm build:strict            # Strict build with full type checking
-
-# GraphQL
-pnpm gql:generate            # One-shot codegen run
 
 # Formatting
 pnpm format                  # Format with oxfmt
@@ -41,9 +37,6 @@ scripts/docker-smoke.sh      # Build image from dist/, check routes/headers/redi
 # Cloudflare Workers (until the Docker move; run after build)
 pnpm server:preview          # Serve ./dist/client locally via `wrangler dev`
 pnpm deploy                  # `wrangler deploy`
-
-# WordPress auth
-pnpm refreshAuthToken        # Refresh WP_AUTH_REFRESH_TOKEN (exception: needs local .env file, not Infisical)
 
 # CMS (Payload, workspace package payload/)
 pnpm cms:dev                 # Payload admin + API on :3001
@@ -64,17 +57,17 @@ Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
 
 Update snapshots: `pnpm vitest:update`
 
-E2E (Playwright): specs in `src/tests/e2e/`; run with `npx playwright test <file> --project=chromium`. Set `E2E_PORT=4322` to target another server. Don't run the full suite against the user's dev server — it starves it; start your own with `NO_DEV_TOOLBAR=1 ASTRO_DEV_BACKGROUND=0 npx infisical run -- pnpm exec astro dev --ignore-lock --port 4322`. Always start with `NO_DEV_TOOLBAR=1` (Astro dev toolbar overlay distorts agent/Playwright results); the toolbar is on by default locally, and a server already running without it must be restarted.
+E2E (Playwright): specs in `src/tests/e2e/`; run with `npx playwright test <file> --project=chromium`. Set `E2E_PORT=4322` to target another server. The specs run against the invented data set of `pnpm --filter payload-app seed:e2e` (never real words; the seed refuses a non-local database), so use a throwaway database: create `bs_e2e`, `NODE_ENV=production pnpm --filter payload-app migrate`, `seed:e2e`, then `E2E_BUILD=1 pnpm build` and `node server/index.mjs` (with `DATABASE_URL`, `PAYLOAD_SECRET`, `PAYLOAD_SERVER_URL`, `PORT=4322`). Don't run the full suite against the user's dev server — it starves it; alternatively start your own with `NO_DEV_TOOLBAR=1 ASTRO_DEV_BACKGROUND=0 npx infisical run -- pnpm exec astro dev --ignore-lock --port 4322`. Always start with `NO_DEV_TOOLBAR=1` (Astro dev toolbar overlay distorts agent/Playwright results); the toolbar is on by default locally, and a server already running without it must be restarted.
 
 ## Secrets
 
-Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical login` once before local development. The `dev`, `gql:generate`, and `gql:generate:watch` scripts automatically inject secrets via `infisical run --`.
+Secrets are managed via [Infisical](https://infisical.com). Run `npx infisical login` once before local development. The `dev` script automatically injects secrets via `infisical run --`.
 
 For Cloudflare Workers builds, env vars are configured separately in the Workers Builds settings (dashboard).
 
-## WordPress MCP Access
+## WordPress MCP Access (until WordPress is switched off)
 
-Claude has direct MCP access to the WordPress backend via the `berlinerSchnauze` server (configured in `.mcp.json`, credentials in `~/.claude/settings.json` — see `.env.example` for the template, never commit real credentials).
+WordPress is only the import source until the cutover; content is edited in the Payload admin. Claude has direct MCP access to the WordPress backend via the `berlinerSchnauze` server (configured in `.mcp.json`, credentials in `~/.claude/settings.json` — see `.env.example` for the template, never commit real credentials).
 
 Available abilities:
 
@@ -88,18 +81,18 @@ Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adap
 
 ## Architecture
 
-**Data flow**: WordPress GraphQL API → Astro API routes (static JSON at build time) → Orama in-browser search → Vue components
+**Data flow**: Payload (Local API, in the Astro server process) → adapters in `src/services/payload/` (same shapes as the old WPGraphQL fetchers) → on-demand pages and API routes (`api/search/index.json`, sitemap, OG images, word of the day) → Orama in-browser search → Vue components
 
-- **Astro** handles routing, SSG, and static pages (`src/pages/`)
+- **Astro** handles routing and rendering on demand (`src/pages/`). Layout sets `Cache-Control` (`setPageCache`: proxy 5 min, errors never), `src/middleware/index.ts` turns a failing render into a 503. Never name a root `src/middleware.ts`: Next.js in `payload/` picks it up. Content is read through `ttl()` memos (`src/services/cache.ts`: stale-while-revalidate, 60 s)
 - **Vue 3** islands handle all interactive UI (`src/components/`) — flat files for standalone components, subdirs for feature groups (`games/`, `word/`, `toast/`, `header/`, `accordion/`, `filter/`, `modals/`, `word-search/`, `magazin/`, `anki/`). Use **VueUse** (`@vueuse/core`) for browser APIs and Vue utilities before writing custom logic
 - **BON game** (`src/components/games/`) — "Berliner oder Nicht" dialect card game (BerlinerOderNicht.vue, BonCard.vue, BonHUD.vue, BonResult.vue, BonShareView.vue). State in `$bonStats` (persistent high scores/streaks) and `$savedBon` (session resume snapshot). Sharing via URL query params (`src/utils/bonShare.ts`)
 - **Nanostores** manage client state (`src/stores/`) — import directly from individual store files (e.g. `@stores/darkMode.ts`, `@stores/modal.ts`). Do NOT import from `@stores/index` barrel unless the component specifically needs `wordList.ts` exports — the barrel's `computedAsync` side effect triggers `api/search/index.json` on every chunk that imports it.
-- **`@urql/core`** (no Vue bindings): build-time WPGraphQL client in `src/services/wpGraphqlClient.ts`; the only client-side call is the mutation in `SuggestWordForm.vue`
-- **Orama** provides full-text search with German stemming — index built at build time in `src/pages/api/search/index.json.ts`
+- **Suggest-word form**: `SuggestWordForm.vue` posts to `/api/suggest-word`, which validates (`src/utils/suggestWordSchema.ts`), verifies the Turnstile token server-side (fails closed) and sends the mail over SMTP (`SMTP_URL`, `SUGGEST_MAIL_TO`, `TURNSTILE_SECRET_KEY`)
+- **Orama** provides full-text search with German stemming — the slim index is assembled per request from the stored derived fields in `src/pages/api/search/index.json.ts`
 - **Composables** in `src/composable/` — Vue composables wrapping browser APIs (Cache Storage, Service Worker)
 - **Images** — remote images (CMS/Wikimedia/Amazon) are served through a custom Astro image service backed by Imagor (`src/lib/imagorImageService.ts`, URL signing in `src/utils/imagor.ts`, HMAC-SHA256). Configured via `image.service.entrypoint` in `astro.config.mjs`; local ESM-imported images bypass Imagor and use their original Vite asset URL. No `sharp` dependency — removed in favor of Imagor.
 - **View Transitions**: `ClientRouter` is enabled globally in `src/components/BaseHead.astro`. Header and Footer use `transition:persist`. See **Astro scripts + View Transitions** below.
-- **CMS**: `payload/` (pnpm workspace package `payload-app`) is the Payload 3 backend (Next.js admin + REST/GraphQL, Postgres). Compose services `cms` (image `berliner-schnauze-cms`, media volume) and `postgres`; the Astro site still reads WordPress until Plan 2
+- **CMS**: `payload/` (pnpm workspace package `payload-app`) is the Payload 3 backend (Next.js admin + REST/GraphQL, Postgres). Compose services `cms` (image `berliner-schnauze-cms`, media volume) and `postgres`; the Astro site reads it through the Local API (`getPayloadClient()` in `src/services/payload.ts`, `payload-app` workspace dependency; its types come from the `types` export condition)
   - Schema: dev and tests push it; production (`NODE_ENV=production`, pinned on `cms`) only runs the committed migrations, and only where `PAYLOAD_RUN_MIGRATIONS=true` (set on `cms` alone). Never point a push-filled DB at the prod container. `import:wp` refuses a non-local DB unless `IMPORT_ALLOW_REMOTE_DB=1` and `NODE_ENV=production`.
   - First admin: in production `PAYLOAD_ALLOW_FIRST_USER=true` gates `POST /api/users`, but Payload's `/api/users/first-register` bypasses it. Cutover: create the first admin before the proxy route goes public.
 - **Global Vue app setup** in `src/pages/_app.ts` — registers the `vTooltip` directive and (dev only) Nanostores devtools
@@ -163,7 +156,7 @@ Pattern: `.c-block__element--modifier`. Hyphens separate words within each part 
 
 **Composables**: Live in `src/composable/` (note: singular, but alias is `@composables/*`). Use for encapsulating Vue lifecycle + reactive logic that VueUse does not cover — custom composables are for project-specific logic only; prefer VueUse when it exists.
 
-**GraphQL**: Import the `graphql` tagged template from `@/gql` for type-safe queries. Generated types live in `src/gql/` (do not edit manually — output of codegen).
+**Content types**: hand-written in `src/types/cms.ts` (`Word`, `PostNode`, `ThemaNode`, …), produced by the adapters in `src/services/payload/`. Empty repeaters are `null` (callers test them for truthiness); media URLs are absolute via `mediaUrl()`.
 
 **Astro scripts + View Transitions**: `<script>` in `.astro` files compiles to `<script type="module">` and runs only once — never re-runs after client-side navigation. Wrap any DOM-querying logic in `astro:page-load` so it re-runs on every navigation:
 
@@ -175,18 +168,18 @@ document.addEventListener("astro:page-load", () => {
 
 Also guard `ResizeObserver` / `getBoundingClientRect` callbacks against transitional zero-heights: `if (h > 0) { ... }` — View Transition animations can briefly report `height: 0` for persistent elements.
 
-## Dev Words Cache
+## Words in dev
 
-Fetched words are cached in `node_modules/.cache/berliner-words/`; dev start asks "Re-fetch words?" (TTY only, `REFETCH_WORDS=1` forces it). Never compute per-word similarity/anagram data in `getStaticPaths` (`wort/[...wordSlug].astro`) — it's O(n²) over ~6000 words and freezes the dev server; derive it in the page body.
+The dev server reads words from your local Payload database (fill it with `pnpm --filter payload-app import:wp`, see `payload/README.md`); `ttl()` caches them for 60 s per process. Words render per request, so a similarity/anagram computation over all ~6000 words must stay cheap (the soundex index is built once per cache window).
 
 ## Environment Variables
 
-Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `WP_API`, `WP_REST_API`, `WP_AUTH_REFRESH_TOKEN`, `SUGGEST_WORD_FORM_ID`, `TURNSTILE_SITE_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`, `IMAGOR_HOST`, `IMAGOR_SECRET`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
+Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `DATABASE_URL`/`PAYLOAD_SECRET` (read by `payload.config`, not part of the schema), `PAYLOAD_SERVER_URL`, `OG_CACHE_DIR`, `SMTP_URL`, `SUGGEST_MAIL_TO`, `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`, `IMAGOR_HOST`, `IMAGOR_SECRET`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
 
 ## Testing
 
 - Tests live in `src/tests/unit/` using Vitest + jsdom + `@vue/test-utils`
-- Coverage excludes `src/gql/`, `src/types/`, `src/tests/`, `src/plugins/`
+- Coverage excludes `src/types/`, `src/tests/`, `src/plugins/`
 
 **Shared helpers** (`src/tests/unit/helpers/`):
 
@@ -197,7 +190,7 @@ Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mj
 
 **Playwright agents**: they use the `mcp__playwright-test__*` MCP server (not `mcp__plugin_playwright_playwright__*`), which must be allowed in `.claude/settings.json`. Without it a background agent can't get approval, a `browser_click` is rejected and its run ends silently — it looks hung (seen 2026-08-14, 2026-09-19). If an agent seems stuck, check its `.output` (last timestamp/tool result) before waiting. Scroll via `browser_run_code_unsafe`/`browser_evaluate` (`window.scrollTo(0, document.body.scrollHeight)`), give a fixed checklist, and tell it to report rejected tools instead of retrying. Animated/`ResizeObserver` elements and toasts also make clicks flaky.
 
-**E2E in CI**: `E2E_WORD_LIMIT=500` caps only generated `/wort/<slug>` pages (plus `E2E_REQUIRED_SLUGS` in `getWords.ts`); the search index and homepage list still hold all words. Only navigate to required slugs (aasen, anmachen, wa, …).
+**E2E in CI**: the Playwright job starts `node server/index.mjs` against a Postgres service that is migrated and seeded with `payload/src/seed/e2e.ts` (invented words; the repo is public). Specs target that data set: `E2E_WORD_SLUGS` in the seed (aasen, anmachen, wa, …). A search needs ≥ 2 results for the `N Ergebnisse` text (1 shows `1 Ergebnis`). Env var `E2E_BUILD=1` only skips the Sentry/Codecov upload plugins.
 
 **Testing gotchas:**
 

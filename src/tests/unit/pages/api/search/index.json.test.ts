@@ -1,18 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("astro:env/client", () => ({
-  SHOW_TEST_DATA: false,
-  WP_API: "http://test.local/graphql",
-  WP_REST_API: "http://test.local/wp-json",
-}));
-vi.mock("astro:env/server", () => ({ WP_AUTH_PASS: "test", WP_AUTH_USER: "test" }));
+vi.mock("astro:env/client", () => ({ SHOW_TEST_DATA: false }));
 
 const { fetchAllWords } = vi.hoisted(() => ({ fetchAllWords: vi.fn() }));
 vi.mock("@services/api.ts", () => ({ fetchAllWords }));
 
 import type { APIContext } from "astro";
 
-import type { BerlinerWord } from "@/gql/entity-types";
+import type { BerlinerWord } from "@/types/cms";
 
 import { GET, getSearchIndexEntries, makeOramaSearchIndex } from "@/pages/api/search/index.json.ts";
 

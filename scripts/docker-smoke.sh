@@ -12,9 +12,24 @@ fail=0
 export POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-smoke}" PAYLOAD_SECRET="${PAYLOAD_SECRET:-smoke}" \
   PAYLOAD_SERVER_URL="${PAYLOAD_SERVER_URL:-http://localhost:3001}"
 
-cleanup() { docker compose down --remove-orphans >/dev/null 2>&1 || true; }
+# The server validates its required runtime secrets on start: give it a dummy one unless a real .env exists.
+made_env=0
+if [[ ! -f .env ]]; then printf 'IMAGOR_SECRET=smoke\n' > .env; made_env=1; fi
+cleanup() {
+  docker compose down --remove-orphans >/dev/null 2>&1 || true
+  if [[ $made_env -eq 1 ]]; then rm -f .env; fi
+}
 trap cleanup EXIT
 
+# Pages render from the database: migrate a fresh, dedicated database and fill it with the invented e2e data
+# first (needs `pnpm install`). Never the dev database: the seed overwrites words by slug.
+export POSTGRES_DB=bs_smoke
+docker compose up -d --wait --wait-timeout 60 postgres
+docker compose exec -T postgres psql -U "${POSTGRES_USER:-berliner}" -d postgres \
+  -c "drop database if exists ${POSTGRES_DB}" -c "create database ${POSTGRES_DB}"
+export DATABASE_URL="postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD}@127.0.0.1:${POSTGRES_PORT:-5432}/${POSTGRES_DB}"
+NODE_ENV=production pnpm --filter payload-app migrate
+pnpm --filter payload-app seed:e2e
 docker compose up -d --build --wait --wait-timeout 60 web
 
 check() { # name, actual, expected
@@ -26,7 +41,13 @@ header() { curl -s -D - -o /dev/null "$BASE$1" | tr -d '\r' | grep -i "^$2:" | c
 check "home 200" "$(status /)" 200
 check "word page 200" "$(status /wort/aasen)" 200
 check "unknown 404" "$(status /gibts-nicht-xyz)" 404
-# Pages whose a.html sits next to an a/ folder (build.format "file"), see the @astrojs/node patch.
+check "unknown word 404" "$(status /wort/gibts-nicht-xyz)" 404
+check "sitemap 200" "$(status /sitemap-0.xml)" 200
+check "og image 200" "$(status /og/aasen.png)" 200
+check "og image type" "$(header /og/aasen.png content-type)" image/png
+check "word of the day 200" "$(status /api/word-of-the-day)" 200
+check "search index 200" "$(status /api/search/index.json)" 200
+# Index and listing pages (formerly a.html next to an a/ folder, see the @astrojs/node patch).
 for page in /wort /magazin /themen /changelog /settings /anki /games/berliner-oder-nicht; do
   check "page $page 200" "$(status "$page")" 200
 done

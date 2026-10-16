@@ -4,7 +4,6 @@
 /// <reference types="../.astro/astro-env.d.ts" />
 
 declare module "*.gql";
-declare module "*.graphql";
 
 interface TurnstileInstance {
   render(

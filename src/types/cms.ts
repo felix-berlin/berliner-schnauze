@@ -160,3 +160,12 @@ export type AffiliateBook = {
 };
 
 export type AffiliateDisclaimer = { plattform: string | null; text: string | null };
+
+// Names the components used to import from the generated GraphQL types.
+export type Maybe<T> = T | null;
+export type BerlinerWord = Word;
+export type MediaItem = { mediaItemUrl: string | null };
+export type WordPropertiesBerlinerischAudio = AudioRow;
+export type WordPropertiesExamplesExampleAudio = AudioRow;
+export type WordPropertiesExamples = NonNullable<WordProperties["examples"]>[number];
+export type WordPropertiesWikimediaFiles = NonNullable<WordProperties["wikimediaFiles"]>[number];
