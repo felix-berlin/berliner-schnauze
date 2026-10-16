@@ -1,0 +1,14 @@
+# Allowlist for payload/Dockerfile (context = repo root).
+*
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!.npmrc
+!patches/
+!payload/
+payload/node_modules/
+payload/.next/
+payload/media/
+payload/tests/
+payload/*.tsbuildinfo
+payload/.env*

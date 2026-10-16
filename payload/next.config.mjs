@@ -15,6 +15,10 @@ const nextConfig = {
     return webpackConfig;
   },
   turbopack: { root: path.resolve(dirname, "..") },
+  // Self-contained server for the Docker image; trace from the workspace root
+  // so hoisted pnpm deps land in .next/standalone/node_modules.
+  output: "standalone",
+  outputFileTracingRoot: path.resolve(dirname, ".."),
 };
 
 export default withPayload(nextConfig, { devBundleServerPackages: false });
