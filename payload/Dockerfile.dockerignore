@@ -6,6 +6,7 @@
 !.npmrc
 !patches/
 !payload/
+!website/package.json
 payload/node_modules/
 payload/.next/
 payload/media/

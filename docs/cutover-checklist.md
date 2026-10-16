@@ -7,7 +7,7 @@ Background: `docs/superpowers/specs/2026-10-16-payload-migration-design.md`. Set
 
 ## 0. What is already verified (2026-10-16, branch `feat/payload-migration`)
 
-- **SEO parity:** `scripts/seo-diff.ts` compared 49 URLs of the live site (WordPress-fed) with the new stack on the
+- **SEO parity:** `website/scripts/seo-diff.ts` compared 49 URLs of the live site (WordPress-fed) with the new stack on the
   real imported data: title, description, canonical, robots, og/twitter, JSON-LD, language and status code are
   identical. One deliberate difference: the homepage canonical is `/` now (it said `/index`, a URL that only
   redirects), and `/index` is redirected permanently.
@@ -57,7 +57,7 @@ Background: `docs/superpowers/specs/2026-10-16-payload-migration-design.md`. Set
 ## 6. Dry run against the real stack
 
 - [ ] Start the stack with the production image tags (`docker compose up -d`), without public DNS: `curl --resolve` or a hosts entry.
-- [ ] `pnpm dlx tsx scripts/seo-diff.ts https://berliner-schnauze.wtf https://<new stack> scripts/seo-urls.txt` → exit 0 (the `known` line for `/` is expected).
+- [ ] `pnpm dlx tsx website/scripts/seo-diff.ts https://berliner-schnauze.wtf https://<new stack> website/scripts/seo-urls.txt` → exit 0 (the `known` line for `/` is expected).
 - [ ] The homepage hero, the footer bear and the `/anki` og:image still use the old `https://cms.berliner-schnauze.wtf/wp-content/uploads/brown-bear-roar.png` / `bear-walking.png` urls (the 301 maps them to the imported media). They are loaded through Imagor: check that they show. If Imagor does not follow the redirect, change the four urls (`src/pages/index.astro`, `themen/index.astro`, `anki.astro`, `src/components/Footer.astro`) to `/api/media/file/<name>.png`.
 - [ ] Old media link with a query string and an umlaut: `curl -sI "https://cms.berliner-schnauze.wtf/wp-content/uploads/K%C3%BCche.jpg?ver=2"` → `301`, and the target returns `200`.
 - [ ] Anonymous API is closed: `curl -s -o /dev/null -w '%{http_code}' https://cms.berliner-schnauze.wtf/api/words` → `403`.

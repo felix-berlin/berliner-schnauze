@@ -1,5 +1,5 @@
-// Types-only view of this package for the Astro app's typecheck (the `types` condition of this package's `exports`).
-// The real entry (index.ts) imports payload.config and the migrations, which the root tsconfig would then
+// Types-only view of this package for the website package's typecheck (the `types` condition of this package's `exports`).
+// The real entry (index.ts) imports payload.config and the migrations, which website/tsconfig would then
 // compile with its own, stricter options. Runtime resolution is unaffected: Vite uses `exports`.
 import type { Payload, SanitizedConfig } from "payload";
 

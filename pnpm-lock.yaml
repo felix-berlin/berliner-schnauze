@@ -197,6 +197,94 @@ patchedDependencies:
 importers:
 
   .:
+    devDependencies:
+      '@infisical/cli':
+        specifier: ^0.44.0
+        version: 0.44.0
+      '@semantic-release/changelog':
+        specifier: ^7.0.0
+        version: 7.0.0(semantic-release@25.0.9(supports-color@10.2.2)(typescript@6.0.3))
+      '@semantic-release/exec':
+        specifier: ^7.1.0
+        version: 7.1.0(semantic-release@25.0.9(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)
+      '@semantic-release/git':
+        specifier: ^11.0.1
+        version: 11.0.1(semantic-release@25.0.9(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)
+      oxfmt:
+        specifier: ^0.73.0
+        version: 0.73.0(@astrojs/compiler-rs@0.5.1)
+      semantic-release:
+        specifier: ^25.0.9
+        version: 25.0.9(supports-color@10.2.2)(typescript@6.0.3)
+
+  payload:
+    dependencies:
+      '@payloadcms/db-postgres':
+        specifier: 3.91.0
+        version: 3.91.0(@opentelemetry/api@1.9.1)(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)
+      '@payloadcms/next':
+        specifier: 3.91.0
+        version: 3.91.0(@types/react@19.2.14)(graphql@16.14.2)(monaco-editor@0.57.0)(next@16.4.2(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.64.1)(@types/node@26.6.5)(babel-plugin-macros@3.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.104.1))(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(supports-color@10.2.2)(typescript@6.0.3)
+      '@payloadcms/richtext-lexical':
+        specifier: 3.91.0
+        version: 3.91.0(c111e5e0847a7d6033d8c5ca9fc66ce9)
+      '@payloadcms/ui':
+        specifier: 3.91.0
+        version: 3.91.0(@types/react@19.2.14)(monaco-editor@0.57.0)(next@16.4.2(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.64.1)(@types/node@26.6.5)(babel-plugin-macros@3.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.104.1))(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(supports-color@10.2.2)(typescript@6.0.3)
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
+      de-compromise:
+        specifier: ^0.1.1
+        version: 0.1.1(patch_hash=ce030aba9264a43c5de89310603a284cdcaf7ce86fc01dc8f5697350a29c64c4)
+      graphql:
+        specifier: ^16.8.1
+        version: 16.14.2
+      hyphenation.de:
+        specifier: ^0.2.1
+        version: 0.2.1
+      hypher:
+        specifier: ^0.2.5
+        version: 0.2.5
+      jsdom:
+        specifier: ^30.1.3
+        version: 30.1.3
+      natural:
+        specifier: ^8.1.1
+        version: 8.1.1(@opentelemetry/api@1.9.1)
+      next:
+        specifier: 16.4.2
+        version: 16.4.2(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.64.1)(@types/node@26.6.5)(babel-plugin-macros@3.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.104.1)
+      payload:
+        specifier: 3.91.0
+        version: 3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3)
+      react:
+        specifier: 19.2.6
+        version: 19.2.6
+      react-dom:
+        specifier: 19.2.6
+        version: 19.2.6(react@19.2.6)
+    devDependencies:
+      '@types/jsdom':
+        specifier: ^30.0.0
+        version: 30.0.0
+      '@types/node':
+        specifier: ^26.6.5
+        version: 26.6.5
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: 5.0.5
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@26.6.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.6)(jsdom@30.1.3)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.25.12)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
+
+  website:
     dependencies:
       '@astrojs/node':
         specifier: ^11.1.8
@@ -282,9 +370,12 @@ importers:
       nodemailer:
         specifier: ^10.1.1
         version: 10.1.1
+      payload:
+        specifier: 3.91.0
+        version: 3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3)
       payload-app:
         specifier: workspace:*
-        version: link:payload
+        version: link:../payload
       photoswipe:
         specifier: ^5.4.4
         version: 5.4.4
@@ -328,15 +419,6 @@ importers:
       '@playwright/test':
         specifier: ^1.64.1
         version: 1.64.1
-      '@semantic-release/changelog':
-        specifier: ^7.0.0
-        version: 7.0.0(semantic-release@25.0.9(supports-color@10.2.2)(typescript@6.0.3))
-      '@semantic-release/exec':
-        specifier: ^7.1.0
-        version: 7.1.0(semantic-release@25.0.9(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)
-      '@semantic-release/git':
-        specifier: ^11.0.1
-        version: 11.0.1(semantic-release@25.0.9(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)
       '@sentry/browser':
         specifier: ^11.8.0
         version: 11.8.0
@@ -388,9 +470,6 @@ importers:
       jsdom:
         specifier: ^30.1.3
         version: 30.1.3
-      oxfmt:
-        specifier: ^0.73.0
-        version: 0.73.0(@astrojs/compiler-rs@0.5.1)
       oxlint:
         specifier: ^1.88.0
         version: 1.88.0(oxlint-tsgolint@7.0.2004)
@@ -412,9 +491,6 @@ importers:
       sass:
         specifier: ^1.100.00
         version: 1.104.1
-      semantic-release:
-        specifier: ^25.0.9
-        version: 25.0.9(supports-color@10.2.2)(typescript@6.0.3)
       std-env:
         specifier: ^4.3.0
         version: 4.3.0
@@ -445,73 +521,6 @@ importers:
       wrangler:
         specifier: ^4.151.0
         version: 4.151.0(@types/node@26.6.5)
-
-  payload:
-    dependencies:
-      '@payloadcms/db-postgres':
-        specifier: 3.91.0
-        version: 3.91.0(@opentelemetry/api@1.9.1)(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)
-      '@payloadcms/next':
-        specifier: 3.91.0
-        version: 3.91.0(@types/react@19.2.14)(graphql@16.14.2)(monaco-editor@0.57.0)(next@16.4.2(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.64.1)(@types/node@26.6.5)(babel-plugin-macros@3.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.104.1))(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(supports-color@10.2.2)(typescript@6.0.3)
-      '@payloadcms/richtext-lexical':
-        specifier: 3.91.0
-        version: 3.91.0(c111e5e0847a7d6033d8c5ca9fc66ce9)
-      '@payloadcms/ui':
-        specifier: 3.91.0
-        version: 3.91.0(@types/react@19.2.14)(monaco-editor@0.57.0)(next@16.4.2(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.64.1)(@types/node@26.6.5)(babel-plugin-macros@3.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.104.1))(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(supports-color@10.2.2)(typescript@6.0.3)
-      cross-env:
-        specifier: ^7.0.3
-        version: 7.0.3
-      de-compromise:
-        specifier: ^0.1.1
-        version: 0.1.1(patch_hash=ce030aba9264a43c5de89310603a284cdcaf7ce86fc01dc8f5697350a29c64c4)
-      graphql:
-        specifier: ^16.8.1
-        version: 16.14.2
-      hyphenation.de:
-        specifier: ^0.2.1
-        version: 0.2.1
-      hypher:
-        specifier: ^0.2.5
-        version: 0.2.5
-      jsdom:
-        specifier: ^30.1.3
-        version: 30.1.3
-      natural:
-        specifier: ^8.1.1
-        version: 8.1.1(@opentelemetry/api@1.9.1)
-      next:
-        specifier: 16.4.2
-        version: 16.4.2(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.64.1)(@types/node@26.6.5)(babel-plugin-macros@3.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.104.1)
-      payload:
-        specifier: 3.91.0
-        version: 3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3)
-      react:
-        specifier: 19.2.6
-        version: 19.2.6
-      react-dom:
-        specifier: 19.2.6
-        version: 19.2.6(react@19.2.6)
-    devDependencies:
-      '@types/jsdom':
-        specifier: ^30.0.0
-        version: 30.0.0
-      '@types/node':
-        specifier: ^26.6.5
-        version: 26.6.5
-      '@types/react':
-        specifier: 19.2.14
-        version: 19.2.14
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.14)
-      typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
-      vitest:
-        specifier: 5.0.5
-        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@26.6.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.6)(jsdom@30.1.3)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.25.12)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
 
 packages:
 
@@ -14538,7 +14547,7 @@ snapshots:
       obug: 3.0.0
       std-env: 4.3.0
       tinyrainbow: 3.2.0
-      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@26.6.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.6)(jsdom@30.1.3)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@26.6.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.6)(jsdom@30.1.3)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.25.12)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
 
   '@vitest/istanbul-lib-coverage@1.0.2': {}
 
@@ -14578,7 +14587,7 @@ snapshots:
       pathe: 2.0.3
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@26.6.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.6)(jsdom@30.1.3)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
+      vitest: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@26.6.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(happy-dom@20.14.6)(jsdom@30.1.3)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.25.12)(jiti@2.7.0)(sass@1.104.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
 
   '@vitest/utils@5.0.5':
     dependencies:

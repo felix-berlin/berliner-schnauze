@@ -4,7 +4,7 @@
  * the same URLs on two origins, e.g. the current production site and the new stack. Exits 1 on any difference.
  *
  * Usage:
- *   pnpm dlx tsx scripts/seo-diff.ts https://berliner-schnauze.wtf http://localhost:4321 [scripts/seo-urls.txt]
+ *   pnpm dlx tsx website/scripts/seo-diff.ts https://berliner-schnauze.wtf http://localhost:4321 [website/scripts/seo-urls.txt]
  *
  * Differences that are expected (media now served from the CMS under /api/media/file) go into IGNORED below.
  */

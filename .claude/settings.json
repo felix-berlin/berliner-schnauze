@@ -30,7 +30,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in *.ts|*.tsx|*.js|*.mjs|*.cjs) out=$(pnpm exec oxlint \"$file\" --deny-warnings --fix --fix-suggestions 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; *.vue|*.astro) out=$(pnpm exec oxlint \"$(dirname \"$file\")/\" --deny-warnings --fix --fix-suggestions 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; esac"
+            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // \"\"'); case \"$file\" in */website/*.ts|*/website/*.tsx|*/website/*.js|*/website/*.mjs|*/website/*.cjs) out=$(pnpm --dir \"$CLAUDE_PROJECT_DIR/website\" exec oxlint \"$file\" --deny-warnings --fix --fix-suggestions 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; */website/*.vue|*/website/*.astro) out=$(pnpm --dir \"$CLAUDE_PROJECT_DIR/website\" exec oxlint \"$(dirname \"$file\")/\" --deny-warnings --fix --fix-suggestions 2>&1); [ $? -ne 0 ] && echo \"$out\" | tail -30;; esac"
           },
           {
             "type": "command",

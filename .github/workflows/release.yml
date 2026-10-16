@@ -136,7 +136,7 @@ jobs:
       - name: OG image cache
         uses: actions/cache@v6
         with:
-          path: .og-cache
+          path: website/.og-cache
           key: og-images-${{ github.run_id }}
           restore-keys: og-images-
 
@@ -168,7 +168,7 @@ jobs:
       - name: Build and push image 🐳
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: website
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

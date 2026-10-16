@@ -4,6 +4,8 @@
 
 Berliner Schnauze is a Berlin dialect translator web app. Data lives in the Payload CMS (`payload/`, Postgres); the frontend is an Astro site with Vue 3 islands for interactivity. Every page renders on demand (`output: "server"`, Node adapter, Docker image); the build needs no database. `wrangler.jsonc` (Cloudflare static assets) is a leftover of the old static deploy and cannot serve this site.
 
+**Layout** (pnpm workspace, like Payload's `examples/astro`): `website/` is the Astro app (package `website`), `payload/` the CMS (package `payload-app`). The root holds only workspace, release (`.releaserc` bumps both `package.json` versions), `compose.yaml`, `docs/`, `data/` and the CMS/Anki scripts in `scripts/`. **App paths in this file (`src/…`, `public/…`, `server/…`, `astro.config.mjs`) are relative to `website/`.** The root scripts below delegate (`pnpm --filter website …`); everything else runs inside `website/`.
+
 ## Commands
 
 ```bash
@@ -12,9 +14,7 @@ pnpm dev                     # Start dev server (requires infisical login and Po
 
 # Testing
 pnpm test:unit               # Run full test suite with coverage
-pnpm test:unit:watch         # Watch mode
-pnpm test:unit:ui            # Vitest UI for debugging
-pnpm test:ci                 # CI mode: coverage + JUnit reporter
+# in website/: test:unit:watch (watch), test:unit:ui (Vitest UI), test:ci (coverage + JUnit)
 
 # Linting & type checking
 pnpm lint                    # Oxlint (JS/TS/Vue/Astro) + Stylelint (SCSS) — auto-fixes (--fix), modifies files
@@ -23,18 +23,18 @@ pnpm typechecking            # astro check + vue-tsc  (slow — run targeted, no
 # Build
 pnpm build                   # Production build (./dist, server entry + assets) — needs no database; no infisical, env vars must already be set
 pnpm build:local             # Production build locally — wraps build with infisical to inject env vars
-pnpm build:strict            # Strict build with full type checking
+# in website/: build:strict  # Strict build with full type checking
 
 # Formatting
 pnpm format                  # Format with oxfmt
 pnpm format:check            # Check formatting without writing
 
 # Docker (Node adapter, replacing Cloudflare; run after build)
-docker compose up --build    # Serve dist/ via server/index.mjs (applies public/_headers + _redirects)
-scripts/docker-smoke.sh      # Build image from dist/, check routes/headers/redirects (runs on every PR)
+docker compose up --build    # Serve website/dist/ via server/index.mjs (applies public/_headers + _redirects)
+website/scripts/docker-smoke.sh   # Build image from dist/, check routes/headers/redirects (runs on every PR; leaves a running postgres up)
                              # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze (release.yml `docker` job)
 
-# Cloudflare Workers (until the Docker move; run after build)
+# Cloudflare Workers (until the Docker move; run after build, in website/)
 pnpm server:preview          # Serve ./dist/client locally via `wrangler dev`
 pnpm deploy                  # `wrangler deploy`
 
@@ -53,11 +53,11 @@ pnpm anki:push:sandbox       # Upload that Full deck to the Polar sandbox
 
 When Claude runs `oxlint` directly (not via `pnpm lint`), always pass `--format=agent`.
 
-Run a single test file: `pnpm vitest run src/tests/unit/path/to/file.test.ts`
+Run a single test file (in `website/`): `pnpm vitest run src/tests/unit/path/to/file.test.ts`
 
-Update snapshots: `pnpm vitest:update`
+Update snapshots (in `website/`): `pnpm vitest:update`
 
-E2E (Playwright): specs in `src/tests/e2e/`; run with `npx playwright test <file> --project=chromium`. Set `E2E_PORT=4322` to target another server. The specs run against the invented data set of `pnpm --filter payload-app seed:e2e` (never real words; the seed refuses a non-local database), so use a throwaway database: create `bs_e2e`, `NODE_ENV=production pnpm --filter payload-app migrate`, `seed:e2e`, then `E2E_BUILD=1 pnpm build` and `node server/index.mjs` (with `DATABASE_URL`, `PAYLOAD_SECRET`, `PAYLOAD_SERVER_URL`, `PORT=4322`). Don't run the full suite against the user's dev server — it starves it; alternatively start your own with `NO_DEV_TOOLBAR=1 ASTRO_DEV_BACKGROUND=0 npx infisical run -- pnpm exec astro dev --ignore-lock --port 4322`. Always start with `NO_DEV_TOOLBAR=1` (Astro dev toolbar overlay distorts agent/Playwright results); the toolbar is on by default locally, and a server already running without it must be restarted.
+E2E (Playwright, in `website/`): specs in `src/tests/e2e/`; run with `npx playwright test <file> --project=chromium`. Set `E2E_PORT=4322` to target another server. The specs run against the invented data set of `pnpm --filter payload-app seed:e2e` (never real words; the seed refuses a non-local database), so use a throwaway database: create `bs_e2e`, `NODE_ENV=production pnpm --filter payload-app migrate`, `seed:e2e`, then `E2E_BUILD=1 pnpm build` and `node server/index.mjs` (with `DATABASE_URL`, `PAYLOAD_SECRET`, `PAYLOAD_SERVER_URL`, `PORT=4322`). Don't run the full suite against the user's dev server — it starves it; alternatively start your own with `NO_DEV_TOOLBAR=1 ASTRO_DEV_BACKGROUND=0 npx infisical run -- pnpm exec astro dev --ignore-lock --port 4322`. Always start with `NO_DEV_TOOLBAR=1` (Astro dev toolbar overlay distorts agent/Playwright results); the toolbar is on by default locally, and a server already running without it must be restarted.
 
 ## Secrets
 

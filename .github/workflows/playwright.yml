@@ -21,6 +21,9 @@ jobs:
   build:
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
     steps:
       - name: Checkout ✅
         uses: actions/checkout@v7
@@ -61,7 +64,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: dist
-          path: dist
+          path: website/dist
           retention-days: 1
 
   # Builds the production image from the same dist/ the e2e shards use and
@@ -78,7 +81,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: dist
-          path: dist
+          path: website/dist
 
       # The script migrates and seeds a throwaway Postgres with the payload-app package.
       - name: Setup pnpm 🛠️
@@ -94,7 +97,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Docker smoke test 🐳
-        run: scripts/docker-smoke.sh
+        run: website/scripts/docker-smoke.sh
 
   test:
     needs: build
@@ -109,6 +112,9 @@ jobs:
     # as root unless HOME is root's own home.
     env:
       HOME: /root
+    defaults:
+      run:
+        working-directory: website
     # The server renders from this database; it is migrated and seeded with invented words below.
     services:
       postgres:
@@ -154,7 +160,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: dist
-          path: dist
+          path: website/dist
 
       # Step-level env wins over what the Infisical action exports: the e2e run must never touch a real database.
       - name: Migrate and seed the database
@@ -208,5 +214,5 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: playwright-report-${{ matrix.shard }}
-          path: playwright-report.tar.gz.gpg
+          path: website/playwright-report.tar.gz.gpg
           retention-days: 14

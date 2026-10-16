@@ -7,7 +7,7 @@ vi.mock("@layouts/Layout.astro", async () => {
   return { default: MockLayout };
 });
 
-vi.mock("../../../../CHANGELOG.md", async () => {
+vi.mock("../../../../../CHANGELOG.md", async () => {
   const { default: Content } = await import("../helpers/MockContent.astro");
   return { Content };
 });

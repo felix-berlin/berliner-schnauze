@@ -1,6 +1,6 @@
 # Payload CMS image. Build from the repo root (workspace + root lockfile):
 #   docker build -f payload/Dockerfile .
-# Ignore rules: payload/Dockerfile.dockerignore (the root .dockerignore is the web image's).
+# Ignore rules: payload/Dockerfile.dockerignore (website/.dockerignore is the web image's).
 # `next build` needs no database and no secrets; all runtime env (DATABASE_URL,
 # PAYLOAD_SECRET, PAYLOAD_SERVER_URL) comes from compose at start.
 FROM node:24-slim AS build
@@ -10,7 +10,9 @@ RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 # patchedDependencies must exist for a frozen install.
 COPY patches/ patches/
+# Every workspace manifest: a frozen install checks the lockfile against all of them.
 COPY payload/package.json payload/
+COPY website/package.json website/
 RUN pnpm install --frozen-lockfile --filter payload-app...
 COPY payload/ payload/
 RUN pnpm --filter payload-app build \

@@ -1,6 +1,6 @@
 # payload-app: CMS für Berliner Schnauze
 
-Payload 3 (Admin + REST/GraphQL, Postgres). Stand nach Plan 1: Payload läuft neben WordPress und hält eine re-importierbare Kopie aller Inhalte. Die Astro-Seite liest weiter aus WordPress (`pnpm dev` ändert sich nicht), bis Plan 2 sie umstellt.
+Payload 3 (Admin + REST/GraphQL, Postgres). Die Astro-Seite in `website/` liest ihre Inhalte von hier; WordPress dient nur noch als Import-Quelle bis zum Cutover.
 
 ## Einrichten von null
 
@@ -66,17 +66,15 @@ Der Container läuft mit `NODE_ENV=production` und führt die Migrationen aus. E
 
 ## Entwickeln mit Astro und Payload
 
-**Heute (Stand Plan 1):** zwei unabhängige Dev-Server, Astro liest weiter WordPress.
+Die Astro-Seite (Workspace-Package `website/`) liest Payload im selben Prozess über die Local API. `pnpm dev` braucht deshalb Infisical und eine laufende Postgres mit den CMS-Daten; `pnpm cms:dev` brauchst du nur zum Editieren.
 
 ```bash
 docker compose up -d postgres   # einmal
 pnpm cms:dev                    # Terminal 1: Payload-Admin, :3001
-pnpm dev                        # Terminal 2: Astro, :4321 (braucht Infisical, nicht Postgres)
+pnpm dev                        # Terminal 2: Astro (website/), :4321
 ```
 
-Änderungen im Admin erscheinen noch nicht auf der Astro-Seite. Die Payload-DB füllt `import:wp`.
-
-**Geplant (nach Plan 2, noch nicht umgesetzt):** Astro ruft Payload im selben Prozess über die Local API auf. Dann braucht `pnpm dev` `DATABASE_URL` und `PAYLOAD_SECRET` und eine laufende Postgres; `pnpm cms:dev` brauchst du nur zum Editieren. Seiten rendern auf Anfrage mit etwa 60 s Cache, ein Edit im Admin ist ohne Rebuild sichtbar. Das Schema pusht nur `cms:dev`, Astro nie.
+Seiten rendern auf Anfrage mit etwa 60 s Cache, ein Edit im Admin ist ohne Rebuild sichtbar. Das Schema pusht nur `cms:dev`, Astro nie. Die Payload-DB füllt `import:wp`.
 
 ## Admin-User
 

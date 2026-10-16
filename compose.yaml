@@ -4,7 +4,7 @@
 services:
   web:
     image: ghcr.io/felix-berlin/berliner-schnauze:${TAG:-latest}
-    build: .
+    build: ./website
     restart: unless-stopped
     # Runtime env for on-demand routes: the adapter loads none itself, and
     # astro:env/server validates every required secret on import.

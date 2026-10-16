@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Smoke test for the Docker image: builds from an existing dist/, starts it via
 # compose, waits for the healthcheck and checks routing, headers and redirects.
-# Usage: scripts/docker-smoke.sh   (needs a prior `pnpm build`)
+# Usage: website/scripts/docker-smoke.sh   (needs a prior `pnpm build`)
 set -euo pipefail
+# compose.yaml and its .env live in the repo root.
+cd "$(dirname "$0")/../.."
 
 BASE="http://localhost:${PORT:-4321}"
 fail=0
@@ -15,8 +17,14 @@ export POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-smoke}" PAYLOAD_SECRET="${PAYLOAD
 # The server validates its required runtime secrets on start: give it a dummy one unless a real .env exists.
 made_env=0
 if [[ ! -f .env ]]; then printf 'IMAGOR_SECRET=smoke\n' > .env; made_env=1; fi
+# A postgres that already runs (the local dev database) stays up: only what this script started goes down.
+pg_was_up=$(docker compose ps -q --status running postgres 2>/dev/null || true)
 cleanup() {
-  docker compose down --remove-orphans >/dev/null 2>&1 || true
+  if [[ -n $pg_was_up ]]; then
+    docker compose rm -sf web >/dev/null 2>&1 || true
+  else
+    docker compose down --remove-orphans >/dev/null 2>&1 || true
+  fi
   if [[ $made_env -eq 1 ]]; then rm -f .env; fi
 }
 trap cleanup EXIT

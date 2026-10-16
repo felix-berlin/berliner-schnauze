@@ -15,6 +15,9 @@ permissions:
 jobs:
   lint-and-typecheck:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
     steps:
       - name: Checkout ✅
         uses: actions/checkout@v7
@@ -50,13 +53,13 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: oxlint-report
-          path: oxlint-results.sarif
+          path: website/oxlint-results.sarif
 
       - name: Upload lint report to code scanning
         if: ${{ !cancelled() }}
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: oxlint-results.sarif
+          sarif_file: website/oxlint-results.sarif
 
       - name: Lint
         run: pnpm run lint

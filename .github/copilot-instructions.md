@@ -1,5 +1,7 @@
 # Berliner Schnauze - AI Coding Agent Guide
 
+> The Astro app lives in `website/`; the `src/…` paths below are relative to it.
+
 ## Tech Stack & Architecture
 
 **Core Framework**: Astro v5 (SSG/SSR hybrid with file-based routing) + Vue 3 islands for client-side interactivity

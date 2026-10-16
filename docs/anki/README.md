@@ -74,7 +74,7 @@ The site copy promises "no duplicates", so do this check before the first public
 ## Publish Lite
 
 1. Publishing a GitHub Release runs `.github/workflows/anki-release.yml`, which attaches the Lite deck
-   to the release. `/anki` links to the newest release asset (`src/services/githubRelease.ts`); nothing
+   to the release. `/anki` links to the newest release asset (`website/src/services/githubRelease.ts`); nothing
    is committed to the repository.
 
 2. **AnkiWeb:** upload by hand (Shared Decks → Upload). There is no API. Use the ready-made text in

@@ -11,16 +11,16 @@ dev-dist/
 
 # test output
 coverage
-/tests/unit/coverage
+tests/unit/coverage
 tests/unit/junit-report.xml
 .vitest/
 
 # Playwright
-/blob-report/
-/playwright/.auth/
-/test-results/
-/playwright-report/
-/playwright/.cache/
+blob-report/
+playwright/.auth/
+test-results/
+playwright-report/
+playwright/.cache/
 
 # dependencies
 node_modules/
@@ -51,7 +51,7 @@ pnpm-debug.log*
 # Wrangler
 .wrangler
 
-src/utils/supportedBrowsers.mjs
+website/src/utils/supportedBrowsers.mjs
 stats.html
 oxlint-results.sarif
 
