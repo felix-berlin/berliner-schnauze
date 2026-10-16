@@ -5,6 +5,11 @@ services:
     image: ghcr.io/felix-berlin/berliner-schnauze:${TAG:-latest}
     build: .
     restart: unless-stopped
+    # Runtime env for on-demand routes: the adapter loads none itself, and
+    # astro:env/server validates every required secret on import.
+    env_file:
+      - path: .env
+        required: false
     ports:
       - "${PORT:-4321}:4321"
     healthcheck:
