@@ -46,7 +46,7 @@
     "typechecking": "astro check && vue-tsc --noEmit",
     "lint:js": "pnpm run lint:js:oxlint",
     "lint:js:oxlint": "oxlint src/ --deny-warnings --fix --fix-suggestions",
-    "lint:style": "stylelint \"**/*.{scss,sass}\" --ignore-path .gitignore --fix",
+    "lint:style": "stylelint \"**/*.{scss,sass}\" --ignore-path .gitignore --ignore-pattern \"payload/**\" --fix",
     "lint": "pnpm run lint:js && pnpm run lint:style",
     "lint:report:sarif": "oxlint src/ --format=sarif > oxlint-results.sarif",
     "test:unit": "vitest run --coverage",

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 
 import { PRESERVE_CONTENT_MODIFIED_AT } from "../src/fields/contentModified";
+import { soundexCode } from "../src/lib/wordDerived";
 import { getTestPayload } from "./helpers/payload";
 
 const SLUG = "words-test-aasen";
@@ -67,6 +68,7 @@ describe("words", () => {
     const doc = await payload.create({ collection: "words", data: { ...base, berlinerisch: "aasen" } });
     expect(doc.derived?.wordGroup).toBe("A");
     expect(doc.derived?.characterLength).toBe(5);
+    expect(doc.derived?.soundexCode).toBe(soundexCode("aasen"));
     const upd = await payload.update({ collection: "words", id: doc.id, data: { berlinerisch: "Bulette" } });
     expect(upd.derived?.wordGroup).toBe("B");
     const other = await payload.update({ collection: "words", id: doc.id, data: { article: "die" } });
