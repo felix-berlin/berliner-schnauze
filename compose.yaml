@@ -11,6 +11,14 @@ services:
     env_file:
       - path: .env
         required: false
+    # Reads Payload through the Local API (own connection, never migrates: only `cms` does).
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-berliner_schnauze}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:?set PAYLOAD_SECRET in .env}
+      PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL:?set PAYLOAD_SERVER_URL in .env}
+    depends_on:
+      postgres:
+        condition: service_healthy
     ports:
       - "${PORT:-4321}:4321"
     healthcheck:
@@ -74,7 +82,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s

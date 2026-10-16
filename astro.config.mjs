@@ -164,6 +164,12 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      // Runtime-only (on-demand routes): optional so the build needs no Payload env.
+      PAYLOAD_SERVER_URL: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
       IMAGOR_HOST: envField.string({
         context: "server",
         access: "public",
