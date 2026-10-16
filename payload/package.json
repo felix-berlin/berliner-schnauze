@@ -4,8 +4,12 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./word-derived": "./src/lib/wordDerived.ts"
+    ".": {
+      "types": "./src/astro.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./word-derived": "./src/lib/wordDerived.ts",
+    "./lexical-html": "./src/lib/lexicalHtml.ts"
   },
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",

@@ -15,7 +15,6 @@
   "compilerOptions": {
     "jsx": "preserve",
     "paths": {
-      "payload-app": ["./payload/src/astro.d.ts"],
       "@components/*": ["./src/components/*"],
       "@composables/*": ["./src/composable/*"],
       "@layouts/*": ["./src/layouts/*"],

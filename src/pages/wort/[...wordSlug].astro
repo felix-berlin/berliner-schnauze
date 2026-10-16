@@ -26,7 +26,7 @@ import BookRecommendations from '@components/word/BookRecommendations.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
 import { fetchAffiliateData, fetchAllWords } from '@services/api.ts';
-import { fetchWordRefs, limitPagesForE2e, toWordRef } from '@services/queries/getWords.ts';
+import { fetchWordRefs, toWordRef } from '@services/queries/getWords.ts';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
   alphabeticNeighbors,
@@ -49,7 +49,7 @@ export const getStaticPaths = (async () => {
     wordRef: toWordRef(word),
   }));
 
-  return limitPagesForE2e(pages).map(({ word, wordRef }) => ({
+  return pages.map(({ word, wordRef }) => ({
         // experimental.incrementalBuild: this only reflects the word's own
         // modified date. Neighbor/anagram/similar-sounding sections are derived
         // from OTHER words in wordRefs, so a page can theoretically go stale if

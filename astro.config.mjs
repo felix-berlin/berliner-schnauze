@@ -14,13 +14,13 @@ import Icons from "unplugin-icons/vite";
 import { loadEnv } from "vite";
 import graphqlLoader from "vite-plugin-graphql-loader";
 
-import { promptRefetchWords } from "./src/services/devWordsCache.ts";
 import {
   getPostDates,
   getWordDates,
   sitemapFilter,
 } from "./src/services/queries/getSitemapWordDates.ts";
 
+const env = loadEnv(process.env.NODE_ENV, process.cwd(), "");
 const {
   SENTRY_AUTH_TOKEN,
   SENTRY_ORG,
@@ -30,10 +30,10 @@ const {
   BUNDLE_ANALYZER_OPEN,
   IMAGOR_HOST,
   E2E_WORD_LIMIT,
-} = loadEnv(process.env.NODE_ENV, process.cwd(), "");
+} = env;
 
-// One id per build: prerender workers (copies of this env) share a single words fetch, see getWords.ts.
-process.env.WORDS_BUILD_ID ??= String(Date.now());
+// payload.config reads process.env, which Vite does not fill from .env files: bridge the DB vars for local dev.
+for (const key of ["DATABASE_URL", "PAYLOAD_SECRET"]) if (env[key]) process.env[key] ??= env[key];
 
 // The Playwright e2e build sets this to keep the build fast — skip the
 // source-map upload plugins too, they add real time for a build nobody deploys.
@@ -312,14 +312,6 @@ export default defineConfig({
   },
   compressHTML: true,
   integrations: [
-    {
-      name: "dev-words-cache-prompt",
-      hooks: {
-        "astro:config:setup": async ({ command }) => {
-          if (command === "dev") await promptRefetchWords();
-        },
-      },
-    },
     vue({
       appEntrypoint: "/src/pages/_app",
       // devtools: {
