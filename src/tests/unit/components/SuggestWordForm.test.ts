@@ -5,32 +5,18 @@ import { describe, expect, it, vi, beforeEach, beforeAll, afterAll } from "vites
 
 vi.mock("astro:env/client", () => ({
   TURNSTILE_SITE_KEY: "test-site-key",
-  WP_API: "https://wp.test/graphql",
 }));
 
-vi.mock("@/gql/graphql.ts", () => ({
-  SendEmailDocument: {},
-}));
-
-type MutationResult = { data: unknown; error: unknown };
-const { mutationMock } = vi.hoisted(() => ({
-  mutationMock: vi.fn((_document: unknown, _variables: unknown): Promise<MutationResult> =>
-    Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
-  ),
-}));
-const mutationInput = () => {
-  const [, variables] = mutationMock.mock.calls[0] ?? [];
-  return (variables as { input: Record<string, unknown> }).input;
-};
-
-vi.mock("@urql/core", () => ({
-  Client: class {
-    mutation(document: unknown, variables: unknown) {
-      return { toPromise: () => mutationMock(document, variables) };
-    }
-  },
-  fetchExchange: {},
-}));
+type ServerAnswer = { json: () => Promise<unknown>; ok: boolean };
+const sent = (): Promise<ServerAnswer> =>
+  Promise.resolve({ json: async () => ({ sent: true }), ok: true });
+const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }));
+vi.stubGlobal("fetch", fetchMock);
+const postedBody = () =>
+  JSON.parse((fetchMock.mock.calls[0] as [string, { body: string }])[1].body) as Record<
+    string,
+    unknown
+  >;
 
 vi.mock("@stores/toastNotify.ts", () => ({
   createToastNotify: vi.fn(),
@@ -42,7 +28,7 @@ vi.mock("@utils/analytics", () => ({
 
 vi.mock("@components/TurnStile.vue", () => ({
   default: {
-    emits: ["verify"],
+    emits: ["token", "verify"],
     name: "TurnStile",
     template: "<div class='mock-turnstile' />",
   },
@@ -64,6 +50,7 @@ describe("SuggestWordForm.vue", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    fetchMock.mockImplementation(sent);
   });
 
   it("renders the form element", () => {
@@ -156,15 +143,23 @@ describe("SuggestWordForm.vue", () => {
     expect(label.text()).toContain("optional");
   });
 
-  it("sends the mutation when form is valid and verified", async () => {
+  it("posts the suggestion with the turnstile token to the server", async () => {
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
     // Simulate TurnStile verification
-    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
     await wrapper.find("form").trigger("submit");
     await Promise.resolve();
-    expect(mutationMock).toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/suggest-word",
+      expect.objectContaining({ method: "POST" }),
+    );
+    expect(postedBody()).toMatchObject({
+      berlinerWord: "Kiez",
+      translation: "Viertel",
+      turnstileToken: "tok",
+    });
   });
 
   it("shows eMail has-error when invalid email is provided", async () => {
@@ -207,25 +202,25 @@ describe("SuggestWordForm.vue", () => {
     expect(field?.classList.contains("c-textarea--error")).toBe(true);
   });
 
-  it("shows 'Wort wird gesendet' while mutation is pending (covers line 127 v-else branch)", async () => {
-    mutationMock.mockImplementationOnce(() => new Promise(() => {}));
+  it("shows 'Wort wird gesendet' while the request is pending", async () => {
+    fetchMock.mockImplementationOnce(() => new Promise(() => {}));
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
-    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
     await wrapper.find("form").trigger("submit");
     expect(wrapper.find("button[type='submit']").text()).toContain("Wort wird gesendet");
   });
 
-  it("shows error toast when sent=false (covers line 231)", async () => {
+  it("shows an error toast when the server refuses", async () => {
     const { createToastNotify } = await import("@stores/toastNotify.ts");
-    mutationMock.mockImplementationOnce(() =>
-      Promise.resolve({ data: { sendEmail: { sent: false } }, error: null }),
+    fetchMock.mockImplementationOnce(() =>
+      Promise.resolve({ json: async () => ({ error: "x" }), ok: false }),
     );
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
-    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
     await wrapper.find("form").trigger("submit");
     await Promise.resolve();
     await Promise.resolve();
@@ -269,14 +264,11 @@ describe("SuggestWordForm.vue", () => {
 
   it("clears the form 3 s after a successful send", async () => {
     vi.useFakeTimers();
-    mutationMock.mockImplementationOnce(() =>
-      Promise.resolve({ data: { sendEmail: { sent: true } }, error: null }),
-    );
 
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
-    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
     await wrapper.find("form").trigger("submit");
     await Promise.resolve();
     await Promise.resolve();
@@ -297,41 +289,50 @@ describe("SuggestWordForm.vue", () => {
     expect(wrapper.text()).toContain("Hey du hast ditt Wort vergessen.");
   });
 
-  it("escapes user input in the mail body", async () => {
+  it("posts the user's email as userMail and the raw text, the server builds the mail", async () => {
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("<b>Kiez</b>");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
-    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.find<HTMLInputElement>("#userEmail").setValue("test@example.com");
+    await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
     await wrapper.find("form").trigger("submit");
     await Promise.resolve();
 
-    const { body } = mutationInput() as { body: string };
-    expect(body).toContain("&#60;b&#62;Kiez&#60;/b&#62;");
-    expect(body).not.toContain("<b>Kiez</b>");
+    expect(postedBody()).toMatchObject({
+      berlinerWord: "<b>Kiez</b>",
+      userMail: "test@example.com",
+    });
+    expect(postedBody()).not.toHaveProperty("body");
   });
 
-  it("sends the user's email as replyTo, not as sender", async () => {
+  it("does not post before the captcha is solved", async () => {
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
-    await wrapper.find<HTMLInputElement>("#userEmail").setValue("test@example.com");
-    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
     await wrapper.find("form").trigger("submit");
     await Promise.resolve();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
 
-    const input = mutationInput();
-    expect(input.replyTo).toBe("test@example.com");
-    expect(input).not.toHaveProperty("from");
+  it("needs a fresh captcha after every send (a token works once)", async () => {
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
+    await wrapper.find("form").trigger("submit");
+    await Promise.resolve();
+    await Promise.resolve();
+    await wrapper.find("form").trigger("submit");
+    await Promise.resolve();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it("re-enables the submit button after a failed send", async () => {
-    mutationMock.mockImplementationOnce(() =>
-      Promise.resolve({ data: null, error: new Error("boom") }),
-    );
+    fetchMock.mockImplementationOnce(() => Promise.reject(new Error("boom")));
     const wrapper = mount(SuggestWordForm);
     await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
-    await wrapper.findComponent(TurnStile).vm.$emit("verify", true);
+    await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
     await wrapper.find("form").trigger("submit");
     await Promise.resolve();
     await wrapper.vm.$nextTick();

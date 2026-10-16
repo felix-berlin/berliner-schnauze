@@ -66,7 +66,7 @@
       </Transition>
     </button>
 
-    <TurnStile :site-key="TURNSTILE_SITE_KEY" @verify="isVerified = $event" />
+    <TurnStile :site-key="TURNSTILE_SITE_KEY" @token="turnstileToken = $event" />
   </form>
 </template>
 
@@ -74,44 +74,17 @@
 import TurnStile from "@components/TurnStile.vue";
 import { useContentTracking } from "@composables/useContentTracking";
 import { createToastNotify } from "@stores/toastNotify.ts";
-import { Client, fetchExchange } from "@urql/core";
 import { trackEvent } from "@utils/analytics";
+import { type SuggestWord, suggestWordSchema } from "@utils/suggestWordSchema.ts";
 import { useTimeoutFn } from "@vueuse/core";
-import { TURNSTILE_SITE_KEY, WP_API } from "astro:env/client";
+import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import { defineAsyncComponent, reactive, ref } from "vue";
 import { z } from "zod";
-
-import { SendEmailDocument } from "@/gql/graphql.ts";
 
 const AlertBanner = defineAsyncComponent(() => import("@components/AlertBanner.vue"));
 
 const { berlinerWord = "" } = defineProps<{ berlinerWord?: string }>();
 
-/** Required text: empty and one-letter answers get their own message. */
-const required = (missing: string, tooShort: string) =>
-  z.string().trim().min(1, missing).min(2, tooShort);
-/** Optional text: empty is fine, a single letter is not. */
-const optional = (tooShort: string) =>
-  z
-    .string()
-    .trim()
-    .refine((v) => v.length !== 1, tooShort);
-
-const suggestWordSchema = z.object({
-  berlinerWord: required(
-    "Hey du hast ditt Wort vergessen.",
-    "Oh, ditt is aber een sehr kurzes Wort",
-  ),
-  example: optional("Mehr is dir nicht eingefallen?"),
-  translation: required(
-    "Ohne die Übersetzung wird dett etwas schwierig.",
-    "Ditt is aber ne kleene Übersetzung.",
-  ),
-  userMail: z.union([z.literal(""), z.email("Irgendwas läuft hier nicht")]),
-  userName: optional("Du hast nen sehr kleinen Namen"),
-});
-
-type SuggestWord = z.infer<typeof suggestWordSchema>;
 type FieldName = keyof SuggestWord;
 
 type Field = {
@@ -151,35 +124,17 @@ const emptyForm = (): SuggestWord => ({
 
 const form = reactive<SuggestWord>({ ...emptyForm(), berlinerWord });
 const errors = ref<Partial<Record<FieldName, string>>>({});
-const isVerified = ref(false);
+// The token is checked by the server; a token works once, so the widget is reset after every send.
+const turnstileToken = ref("");
 const isSending = ref(false);
 
 const root = ref<HTMLFormElement | null>(null);
 useContentTracking(root);
 
-// A single fire-and-forget mutation: a plain client, no provide/inject or reactive state.
-const client = new Client({ exchanges: [fetchExchange], url: WP_API });
-
 // Keep the sent values visible for a moment before clearing the form.
 const { start: scheduleReset } = useTimeoutFn(() => Object.assign(form, emptyForm()), 3000, {
   immediate: false,
 });
-
-const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
-
-const mailBody = (data: SuggestWord) => {
-  const rows: [string, string][] = [
-    ["Berliner Wort", data.berlinerWord],
-    ["Übersetzung", data.translation],
-    ["Beispiel", data.example],
-    ["Name", data.userName],
-    ["E-Mail", data.userMail],
-  ];
-  return [
-    "<p>Ein neues Berliner Wort wurde eingereicht:</p>",
-    ...rows.map(([label, value]) => `<p>${label}: <strong>${escapeHtml(value)}</strong></p>`),
-  ].join("\n");
-};
 
 const onSubmit = async (): Promise<void> => {
   const result = suggestWordSchema.safeParse(form);
@@ -191,24 +146,21 @@ const onSubmit = async (): Promise<void> => {
     return;
   }
   errors.value = {};
-  if (!isVerified.value || isSending.value) return;
+  if (!turnstileToken.value || isSending.value) return;
 
   isSending.value = true;
-  const { data, error } = await client
-    .mutation(SendEmailDocument, {
-      input: {
-        body: mailBody(result.data),
-        clientMutationId: "newSuggestedWord",
-        // The site stays the sender (SPF); the suggester is only the reply target.
-        replyTo: result.data.userMail || undefined,
-        subject: "Wortvorschlag - Berliner Schnauze",
-        to: "mail@berliner-schnauze.wtf",
-      },
-    })
-    .toPromise();
+  const sent = await fetch("/api/suggest-word", {
+    body: JSON.stringify({ ...result.data, turnstileToken: turnstileToken.value }),
+    headers: { "Content-Type": "application/json" },
+    method: "POST",
+  })
+    .then((res) => res.ok)
+    .catch(() => false);
   isSending.value = false;
+  turnstileToken.value = "";
+  window.turnstile?.reset();
 
-  if (error || !data?.sendEmail?.sent) {
+  if (!sent) {
     createToastNotify({
       message: "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
       status: "error",
