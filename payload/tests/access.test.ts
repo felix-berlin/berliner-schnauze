@@ -54,7 +54,7 @@ describe("anonymous reads", () => {
     });
   }
 
-  for (const collection of ["words", "posts"] as const) {
+  for (const collection of ["words", "posts", "pages"] as const) {
     it(`${collection} versions and count are Forbidden`, async () => {
       const payload = await getTestPayload();
       await expect(payload.findVersions({ collection, overrideAccess: false })).rejects.toThrow(/not allowed|forbidden/i);

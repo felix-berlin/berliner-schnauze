@@ -7,6 +7,7 @@ import * as migration_20261017_100905_drop_berliner_word_id from './20261017_100
 import * as migration_20261017_101928_company_platforms_wallets from './20261017_101928_company_platforms_wallets';
 import * as migration_20261017_103801_seo_drop_og_twitter from './20261017_103801_seo_drop_og_twitter';
 import * as migration_20261017_104452_schedule_publish_posts from './20261017_104452_schedule_publish_posts';
+import * as migration_20261017_104729_pages_versions from './20261017_104729_pages_versions';
 
 export const migrations = [
   {
@@ -52,6 +53,11 @@ export const migrations = [
   {
     up: migration_20261017_104452_schedule_publish_posts.up,
     down: migration_20261017_104452_schedule_publish_posts.down,
-    name: '20261017_104452_schedule_publish_posts'
+    name: '20261017_104452_schedule_publish_posts',
+  },
+  {
+    up: migration_20261017_104729_pages_versions.up,
+    down: migration_20261017_104729_pages_versions.down,
+    name: '20261017_104729_pages_versions'
   },
 ];

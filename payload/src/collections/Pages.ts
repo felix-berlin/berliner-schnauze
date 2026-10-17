@@ -7,6 +7,8 @@ import { redirectOldSlug, rememberPublicSlug } from "../hooks/redirectOldSlug";
 export const Pages: CollectionConfig = {
   slug: "pages",
   access: authenticatedOnly,
+  // History of the legal pages (Impressum, Datenschutz); no drafts, a save is live.
+  versions: { maxPerDoc: 50 },
   hooks: { beforeChange: [rememberPublicSlug], afterChange: [redirectOldSlug] },
   admin: { useAsTitle: "title" },
   fields: [
