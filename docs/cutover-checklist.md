@@ -27,9 +27,9 @@ Background: `docs/superpowers/specs/2026-10-16-payload-migration-design.md`. Set
 
 ## 1. Secrets and env
 
-- [ ] Infisical (`prod` and `staging`): `DATABASE_URL`, `PAYLOAD_SECRET`, `PAYLOAD_SERVER_URL` (`https://cms.berliner-schnauze.wtf`), `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `TURNSTILE_SECRET_KEY`, `SMTP_URL`, `SUGGEST_MAIL_TO` (web and cms: the cms mails password resets too), `SITE_URL` (cms: target of the admin's preview links), `PAYLOAD_URL`, `PAYLOAD_API_KEY`. `PAYLOAD_RUN_JOBS` is pinned on `cms` in `compose.yaml`.
-  Inside compose the database host is `postgres`, on your machine `127.0.0.1`: compose overrides `DATABASE_URL` for `web` and `cms`.
-- [ ] The server's `.env` (read by compose `env_file`) holds every runtime secret the `web` service needs: `IMAGOR_SECRET` and the vars above that are not set by compose itself. `IMAGOR_HOST`, `SITE_URL` and the other `public` vars are inlined at build time (CI build with the `prod` Infisical env).
+- [ ] Infisical (`prod` and `staging`): runtime application variables including `DATABASE_URL` (hostname `postgres` inside Compose), `PAYLOAD_SECRET`, `PAYLOAD_SERVER_URL` (`https://cms.berliner-schnauze.wtf`), `IMAGOR_SECRET`, `TURNSTILE_SECRET_KEY`, `SMTP_URL`, `SUGGEST_MAIL_TO` (web and cms: the cms mails password resets too), `SITE_URL` (cms: target of the admin's preview links), `PAYLOAD_URL`, and `PAYLOAD_API_KEY`. `PAYLOAD_RUN_JOBS` is pinned on `cms` in `compose.yaml`.
+- [ ] Komodo: set `INFISICAL_ENABLED=true`, the project ID/environment/domain, and separate secret Universal Auth credentials for the `web` and `cms` machine identities. Keep `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` available to Compose because the Postgres service needs them before the applications start. See [Infisical with Docker Compose](./infisical-compose.md).
+- [ ] The server's `.env` (read by Compose `env_file`) is only a local runtime fallback when Infisical is disabled. Once Infisical is enabled, remove application runtime secrets from that file; `IMAGOR_HOST`, `SITE_URL` and the other public vars are inlined at build time (CI build with the `prod` Infisical env).
 - [ ] GitHub secrets for the Anki release: `PAYLOAD_URL`, `PAYLOAD_API_KEY` (the workflow reads Infisical `prod`).
 
 ## 2. Last import and content check

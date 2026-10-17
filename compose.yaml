@@ -6,16 +6,19 @@ services:
     image: ghcr.io/felix-berlin/berliner-schnauze:${TAG:-latest}
     build: ./website
     restart: unless-stopped
-    # Runtime env for on-demand routes: the adapter loads none itself, and
-    # astro:env/server validates every required secret on import.
+    # Local fallback only. Set APP_RUNTIME_ENV_FILE=/dev/null in Komodo so its
+    # Stack .env (which contains both identities' credentials) is not passed in.
     env_file:
-      - path: .env
+      - path: ${APP_RUNTIME_ENV_FILE:-.env}
         required: false
-    # Reads Payload through the Local API (own connection, never migrates: only `cms` does).
     environment:
+      INFISICAL_ENABLED: ${INFISICAL_ENABLED:-false}
+      INFISICAL_PROJECT_ID: ${INFISICAL_PROJECT_ID:-}
+      INFISICAL_ENV: ${INFISICAL_ENV:-prod}
+      INFISICAL_DOMAIN: ${INFISICAL_DOMAIN:-https://app.infisical.com}
+      INFISICAL_CLIENT_ID: ${INFISICAL_WEB_CLIENT_ID:-}
+      INFISICAL_CLIENT_SECRET: ${INFISICAL_WEB_CLIENT_SECRET:-}
       DATABASE_URL: postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-berliner_schnauze}
-      PAYLOAD_SECRET: ${PAYLOAD_SECRET:?set PAYLOAD_SECRET in .env}
-      PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL:?set PAYLOAD_SERVER_URL in .env}
       OG_CACHE_DIR: /app/og-cache
     volumes:
       - ogcache:/app/og-cache
@@ -47,19 +50,24 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    # PAYLOAD_SERVER_URL etc. come from .env; migrations run on start.
+    # Local fallback only. Set APP_RUNTIME_ENV_FILE=/dev/null in Komodo so its
+    # Stack .env (which contains both identities' credentials) is not passed in.
     env_file:
-      - path: .env
+      - path: ${APP_RUNTIME_ENV_FILE:-.env}
         required: false
     environment:
+      INFISICAL_ENABLED: ${INFISICAL_ENABLED:-false}
+      INFISICAL_PROJECT_ID: ${INFISICAL_PROJECT_ID:-}
+      INFISICAL_ENV: ${INFISICAL_ENV:-prod}
+      INFISICAL_DOMAIN: ${INFISICAL_DOMAIN:-https://app.infisical.com}
+      INFISICAL_CLIENT_ID: ${INFISICAL_CMS_CLIENT_ID:-}
+      INFISICAL_CLIENT_SECRET: ${INFISICAL_CMS_CLIENT_SECRET:-}
       # Pinned: an .env NODE_ENV must not flip prod into schema-push mode. Only cms migrates.
       NODE_ENV: production
       PAYLOAD_RUN_MIGRATIONS: "true"
       # Only cms runs queued jobs (scheduled publishing).
       PAYLOAD_RUN_JOBS: "true"
       DATABASE_URL: postgres://${POSTGRES_USER:-berliner}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:-berliner_schnauze}
-      PAYLOAD_SECRET: ${PAYLOAD_SECRET:?set PAYLOAD_SECRET in .env}
-      PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL:?set PAYLOAD_SERVER_URL in .env}
       MEDIA_DIR: /app/media
     volumes:
       - media:/app/media

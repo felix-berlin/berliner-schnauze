@@ -18,13 +18,34 @@ COPY payload/ payload/
 RUN pnpm --filter payload-app build \
   && mkdir /empty-media
 
+FROM --platform=$BUILDPLATFORM node:24-slim AS infisical-cli
+ARG TARGETARCH
+ARG INFISICAL_CLI_VERSION=0.44.2
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates curl \
+ && rm -rf /var/lib/apt/lists/* \
+ && case "$TARGETARCH" in \
+      amd64) checksum=6e8a3b9c4f17e2a95d5934f9bc87b7935927c4cd43dd5f9ba984a89f898022ca ;; \
+      arm64) checksum=baa7c8ef388a9f84a720e75fe972fb2f804f954c4e2b01a77c92e98a86cb26f5 ;; \
+      *) echo "Unsupported Infisical CLI architecture: $TARGETARCH" >&2; exit 1 ;; \
+    esac \
+ && archive="cli_${INFISICAL_CLI_VERSION}_linux_${TARGETARCH}.tar.gz" \
+ && curl -fsSL "https://github.com/Infisical/cli/releases/download/v${INFISICAL_CLI_VERSION}/${archive}" -o "/tmp/${archive}" \
+ && printf '%s  %s\n' "$checksum" "/tmp/${archive}" | sha256sum -c - \
+ && tar -xzf "/tmp/${archive}" -C /tmp infisical \
+ && install -D -m 0755 /tmp/infisical /out/infisical \
+ && rm -f "/tmp/${archive}" /tmp/infisical
+
 FROM gcr.io/distroless/nodejs24-debian13:nonroot
 WORKDIR /app
 COPY --from=build /repo/payload/.next/standalone/ ./
 COPY --from=build /repo/payload/.next/static/ payload/.next/static/
+COPY payload/infisical-entrypoint.mjs infisical-entrypoint.mjs
+COPY --from=infisical-cli /out/infisical /usr/local/bin/infisical
 # Owned by nonroot, so a fresh named volume mounted here inherits it.
 COPY --from=build --chown=nonroot:nonroot /empty-media /app/media
 
 ENV NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3001 MEDIA_DIR=/app/media
 EXPOSE 3001
+ENTRYPOINT ["/nodejs/bin/node", "/app/infisical-entrypoint.mjs"]
 CMD ["payload/server.js"]
