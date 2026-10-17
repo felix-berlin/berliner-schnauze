@@ -133,8 +133,9 @@ describe("fetchAllPosts", () => {
     expect(find).toHaveBeenLastCalledWith(
       expect.objectContaining({
         collection: "posts",
+        context: { siteRead: "published" },
+        overrideAccess: false,
         sort: "-publishedAt",
-        where: { _status: { equals: "published" } },
       }),
     );
   });
@@ -155,6 +156,16 @@ describe("fetchAllThemen", () => {
     slug,
   });
 
+  // public words as fetchAllWords loads them: themen populated
+  const word = (id: number, themen: number[] | null) => ({
+    berlinerisch: `w${id}`,
+    createdAt: "2026-01-01",
+    id,
+    slug: `w${id}`,
+    themen: themen?.map((t) => ({ id: t, name: `t${t}`, slug: `t${t}` })) ?? null,
+    updatedAt: "2026-01-01",
+  });
+
   it("maps themen with their public word count and meta, sorted by name (de)", async () => {
     find.mockImplementation(({ collection }: { collection: string }) =>
       Promise.resolve(
@@ -170,7 +181,7 @@ describe("fetchAllThemen", () => {
                 thema(4, "Ohne Slug", null),
               ],
             }
-          : { docs: [{ themen: [2, 3] }, { themen: [2] }, { themen: null }] },
+          : { docs: [word(1, [2, 3]), word(2, [2]), word(3, null)] },
       ),
     );
     const { fetchAllThemen } = await import("@services/payload/themen.ts");
@@ -188,13 +199,14 @@ describe("fetchAllThemen", () => {
     expect(find).toHaveBeenCalledWith(
       expect.objectContaining({
         collection: "words",
-        where: { _status: { equals: "published" } },
+        context: { siteRead: "published" },
+        overrideAccess: false,
       }),
     );
   });
 });
 
-describe("fetchPagesBySlugs", () => {
+describe("fetchPageBySlug", () => {
   it("renders the content as html and keeps the meta group", async () => {
     find.mockResolvedValue({
       docs: [
@@ -207,17 +219,15 @@ describe("fetchPagesBySlugs", () => {
         },
       ],
     });
-    const { fetchPagesBySlugs } = await import("@services/payload/pages.ts");
-    expect(await fetchPagesBySlugs(["impressum"])).toMatchObject([
-      {
-        contentHtml: "<p>Anschrift</p>",
-        meta: { noindex: true, title: "Impressum" },
-        slug: "impressum",
-        title: "Impressum",
-      },
-    ]);
+    const { fetchPageBySlug } = await import("@services/payload/pages.ts");
+    expect(await fetchPageBySlug("impressum")).toMatchObject({
+      contentHtml: "<p>Anschrift</p>",
+      meta: { noindex: true, title: "Impressum" },
+      slug: "impressum",
+      title: "Impressum",
+    });
     expect(find).toHaveBeenCalledWith(
-      expect.objectContaining({ collection: "pages", where: { slug: { in: ["impressum"] } } }),
+      expect.objectContaining({ collection: "pages", where: { slug: { equals: "impressum" } } }),
     );
   });
 });

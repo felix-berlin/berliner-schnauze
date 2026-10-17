@@ -50,6 +50,10 @@ const sassAliases = {
 export default defineConfig({
   site: SITE_ORIGIN,
   trailingSlash: "never",
+  redirects: {
+    "/index": { destination: "/", status: 301 },
+    "/suggest-word": { destination: "/wort-vorschlagen", status: 301 },
+  },
   // The toolbar's fixed-position overlay can intercept Playwright clicks in CI.
   devToolbar: {
     enabled: !process.env.CI && !process.env.NO_DEV_TOOLBAR,

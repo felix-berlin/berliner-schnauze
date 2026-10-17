@@ -1,10 +1,9 @@
 import type { CollectionConfig, Field } from "payload";
 
-import { authenticatedOnly } from "../access";
+import { draftsAccess } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
-import { redirectOldSlug, rememberPublicSlug } from "../hooks/redirectOldSlug";
 import { previewUrl } from "../lib/preview";
 
 const gender: Field = { name: "gender", type: "select", options: ["male", "female"] };
@@ -17,10 +16,10 @@ const audioRows = (name: string): Field => ({
 
 export const Words: CollectionConfig = {
   slug: "words",
-  access: authenticatedOnly,
+  access: draftsAccess,
   admin: { useAsTitle: "berlinerisch", preview: previewUrl("words") },
   versions: { drafts: true },
-  hooks: { beforeChange: [rememberPublicSlug, touchContentModifiedAt, setDerivedWordFields], afterChange: [redirectOldSlug] },
+  hooks: { beforeChange: [touchContentModifiedAt, setDerivedWordFields] },
   fields: [
     { name: "berlinerisch", type: "text", required: true },
     ...identityFields,
@@ -70,6 +69,7 @@ export const Words: CollectionConfig = {
         { name: "nlpTags", type: "json" },
         { name: "wordComponents", type: "text", hasMany: true },
         { name: "soundexCode", type: "text", index: true },
+        { name: "decomposition", type: "text", hasMany: true },
       ],
     },
   ],

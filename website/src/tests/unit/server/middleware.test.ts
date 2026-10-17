@@ -43,9 +43,20 @@ describe("middleware", () => {
     expect(res.status).toBe(404);
   });
 
-  it("keeps a 404 without a redirect", async () => {
+  it("keeps a 404 without a redirect, never cached", async () => {
     const res = await run(notFound, "/wort/unbekannt");
     expect(res.status).toBe(404);
+    expect(res.headers.get("Cache-Control")).toBe("no-store");
+  });
+
+  it("gives every response the page cache policy, unless the route set its own", async () => {
+    expect((await run(async () => new Response("ok"))).headers.get("Cache-Control")).toContain(
+      "s-maxage=300",
+    );
+    const own = await run(
+      async () => new Response("ok", { headers: { "Cache-Control": "private, no-store" } }),
+    );
+    expect(own.headers.get("Cache-Control")).toBe("private, no-store");
   });
 
   it("keeps the 404 when the redirect lookup fails", async () => {

@@ -12,6 +12,7 @@ import type { Maybe, WpPage, WpPost, WpThema, WpWord, WpWordType } from "./wp";
 
 import { PRESERVE_CONTENT_MODIFIED_AT } from "../fields/contentModified";
 import { splitFunding } from "../lib/funding";
+import { LOCAL_DB_HOSTS } from "../lib/localDb";
 import { htmlToLexical } from "./html";
 import { collectMedia, mapPage, mapPost, mapRelatedWords, mapThema, mapWord, SITE_ASSET_FILES } from "./mappers";
 import {
@@ -45,7 +46,6 @@ const MENUS = { main: "Main Menu", footer1: "Footer Nav 1", footer2: "Footer Nav
 const WORDS_PAGE_SIZE = 100;
 const MEDIA_CONCURRENCY = 5;
 const PRESERVE_CONTEXT = { [PRESERVE_CONTENT_MODIFIED_AT]: true };
-const LOCAL_DB_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
 
 type Connection<T> = Maybe<{ nodes?: Maybe<Maybe<T>[]>; pageInfo?: Maybe<{ hasNextPage?: Maybe<boolean>; endCursor?: Maybe<string> }> }>;
 

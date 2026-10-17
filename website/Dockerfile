@@ -1,15 +1,13 @@
 # Runtime-only image: `dist/` is built beforehand (CI or `pnpm build:local`),
 # so build secrets never enter a layer. The server bundle has every dep inlined
 # (vite.ssr.noExternal) except what is read from disk at runtime: canvaskit-wasm
-# (its .wasm, OG images) and all-the-german-words (a 28 MB JSON, loaded with
-# createRequire for word decomposition). Only these two are installed below.
+# (its .wasm, OG images). Only that one is installed below.
 FROM node:24-slim AS og-deps
 # package.json is only read for the version, never installed (it would run the pnpm-only preinstall).
 COPY package.json /meta/package.json
 WORKDIR /deps
 RUN npm install --omit=dev --no-audit --no-fund --no-package-lock \
     "canvaskit-wasm@$(node -p "require('/meta/package.json').dependencies['canvaskit-wasm']")" \
-    "all-the-german-words@$(node -p "require('/meta/package.json').dependencies['all-the-german-words']")" \
  && mkdir og-cache
 
 FROM --platform=$BUILDPLATFORM node:24-slim AS infisical-cli

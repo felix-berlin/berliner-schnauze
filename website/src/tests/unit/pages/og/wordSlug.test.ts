@@ -1,12 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { generateOpenGraphImage, fetchAllWords } = vi.hoisted(() => ({
-  fetchAllWords: vi.fn(),
+const { generateOpenGraphImage, fetchWordBySlug } = vi.hoisted(() => ({
+  fetchWordBySlug: vi.fn(),
   generateOpenGraphImage: vi.fn(),
 }));
 
 vi.mock("astro-og-canvas", () => ({ generateOpenGraphImage }));
-vi.mock("@services/api.ts", () => ({ fetchAllWords }));
+vi.mock("@services/payload/words.ts", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@services/payload/words.ts")>()),
+  fetchWordBySlug,
+}));
 vi.mock("astro:env/server", () => ({ OG_CACHE_DIR: "/data/og" }));
 
 import type { APIContext } from "astro";
@@ -20,14 +23,15 @@ const call = (wordSlug: string | undefined) =>
 beforeEach(() => {
   vi.clearAllMocks();
   generateOpenGraphImage.mockResolvedValue(PNG);
-  fetchAllWords.mockResolvedValue([
+  const words = [
     {
       berlinerisch: "Wat",
       slug: "wat",
       translations: [{ translation: "was" }, { translation: "etwas" }],
     },
-    { berlinerisch: "", slug: "nischt", translations: [] },
-  ]);
+    { berlinerisch: "Nischt", slug: "nischt", translations: [] },
+  ];
+  fetchWordBySlug.mockImplementation(async (slug: string) => words.find((w) => w.slug === slug));
 });
 
 describe("og/[wordSlug] route", () => {
@@ -41,19 +45,19 @@ describe("og/[wordSlug] route", () => {
     );
   });
 
-  it("falls back to the slug without a headword and omits an empty description", async () => {
+  it("omits an empty description", async () => {
     await call("nischt.png");
     const options = generateOpenGraphImage.mock.calls[0][0];
-    expect(options.title).toBe("nischt");
+    expect(options.title).toBe("Nischt");
     expect(options.description).toBeUndefined();
   });
 
   it.each([["doesnotexist.png"], ["wat"], [undefined]])(
-    "answers 404 without caching for %s",
+    "answers 404 for %s, leaving the cache policy to the middleware (no-store)",
     async (slug) => {
       const res = await call(slug);
       expect(res.status).toBe(404);
-      expect(res.headers.get("Cache-Control")).toBe("no-store");
+      expect(res.headers.has("Cache-Control")).toBe(false);
       expect(generateOpenGraphImage).not.toHaveBeenCalled();
     },
   );

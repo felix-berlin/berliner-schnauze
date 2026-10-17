@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Berliner Schnauze is a Berlin dialect translator web app. Data lives in the Payload CMS (`payload/`, Postgres); the frontend is an Astro site with Vue 3 islands for interactivity. Every page renders on demand (`output: "server"`, Node adapter, Docker image); the build needs no database. `wrangler.jsonc` (Cloudflare static assets) is a leftover of the old static deploy and cannot serve this site.
+Berliner Schnauze is a Berlin dialect translator web app. Data lives in the Payload CMS (`payload/`, Postgres); the frontend is an Astro site with Vue 3 islands for interactivity. Every page renders on demand (`output: "server"`, Node adapter, Docker image); the build needs no database.
 
 **Layout** (pnpm workspace, like Payload's `examples/astro`): `website/` is the Astro app (package `website`), `payload/` the CMS (package `payload-app`). The root holds only workspace, release (`.releaserc` bumps both `package.json` versions), `compose.yaml`, `docs/`, `data/` and the CMS/Anki scripts in `scripts/`. **App paths in this file (`src/…`, `public/…`, `server/…`, `astro.config.mjs`) are relative to `website/`.** The root scripts below delegate (`pnpm --filter website …`); everything else runs inside `website/`.
 
@@ -30,11 +30,11 @@ pnpm format                  # Format with oxfmt
 pnpm format:check            # Check formatting without writing
 
 # Docker (Node adapter, replacing Cloudflare; run after build)
-docker compose up --build    # Serve website/dist/ via server/index.mjs (applies public/_headers + _redirects)
+docker compose up --build    # Serve website/dist/ via server/index.mjs (www redirect + security headers; redirects in astro.config.mjs)
 website/scripts/docker-smoke.sh   # Build image from dist/, check routes/headers/redirects (runs on every PR; leaves a running postgres up)
                              # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze and …/berliner-schnauze-cms (release.yml `docker` job)
 
-# Cloudflare Workers: do NOT `pnpm deploy` this stack — dist/client holds no HTML, Workers would serve empty pages.
+# Cloudflare Workers cannot serve this stack (wrangler.jsonc is gone, a Workers Build fails).
 # Don't merge into main before step 7 of docs/cutover-checklist.md (or pause Workers Builds first).
 pnpm dlx tsx website/scripts/seo-diff.ts <prod-origin> <new-origin>   # SEO head + status parity of two origins
 
@@ -96,8 +96,8 @@ Discover full ability list/schemas: `mcp-adapter-discover-abilities` / `mcp-adap
 - **CMS**: `payload/` (pnpm workspace package `payload-app`) is the Payload 3 backend (Next.js admin + REST/GraphQL, Postgres). Compose services `cms` (image `berliner-schnauze-cms`, media volume) and `postgres`; the Astro site reads it through the Local API (`getPayloadClient()` in `src/services/payload.ts`, `payload-app` workspace dependency; its types come from the `types` export condition)
   - Schema: dev and tests push it; production (`NODE_ENV=production`, pinned on `cms`) only runs the committed migrations, and only where `PAYLOAD_RUN_MIGRATIONS=true` (set on `cms` alone). Never point a push-filled DB at the prod container. `import:wp` refuses a non-local DB unless `IMPORT_ALLOW_REMOTE_DB=1` and `NODE_ENV=production`.
   - Schema change: edit → `pnpm --filter payload-app generate:types` → `pnpm cms:migrate:create <name>`. New collections/globals get `authenticated` access from `src/access.ts` + a Forbidden test in `tests/access.test.ts`.
-  - **Drafts**: the Local API ignores access control — every query on a drafts collection must spread `publicDocs()` (`src/services/payload.ts`), or drafts go public. `SHOW_TEST_DATA` includes them on purpose.
-  - **Derived word fields** (`derived` group) are computed on save by the `beforeChange` hook from `payload/src/lib/wordDerived.ts`, which the site also imports as `payload-app/word-derived` — keep it free of payload/next/config imports. Changing the derivation leaves existing words stale until re-saved (`import:wp` re-saves all).
+  - **Drafts**: the Local API ignores access control unless asked — every site query spreads `siteRead()`, or `siteDocs()` for drafts listings (`src/services/payload.ts`: `overrideAccess: false` + `req.context.siteRead`), and `draftsRead`/`contentRead` (`payload/src/access.ts`) then return published docs only, also in populated relations. REST/GraphQL stay login-only (they cannot set `req.context`). `SHOW_TEST_DATA` includes drafts on purpose (`siteDocs()`).
+  - **Derived word fields** (`derived` group) are computed on save by the `beforeChange` hook from `payload/src/lib/wordDerived.ts`, which the site also imports as `payload-app/word-derived` — keep it free of payload/next/config imports. `derived.decomposition` (compound parts) comes from `payload/src/lib/decompose.ts` instead, CMS only: its 28 MB dictionary never loads in the site. Changing the derivation leaves existing words stale until re-saved (`import:wp` re-saves all).
   - `payload-app` exports: `.` (types via `src/astro.d.ts`, a hand-kept types-only mirror of `src/index.ts` — update both), `./word-derived`, `./lexical-html`, `./routes` (collection → site path, shared by SEO, redirects and rich-text links), `./preview` (signed preview tokens).
   - **Redirects** (`@payloadcms/plugin-redirects`, `payload/src/redirects.ts`): `src/middleware/index.ts` answers a 404 with a matching redirect (`src/services/payload/redirects.ts`). Changing the slug of a public doc adds a 301 itself (`hooks/redirectOldSlug.ts`).
   - **Draft preview**: the admin's preview button (words, posts) links to `/api/preview` with a token signed by `PAYLOAD_SECRET` (1 h); the site keeps it in an httpOnly cookie and renders the latest draft with `Cache-Control: private, no-store`. Admin and site are on different hosts, so the Payload login cookie is not used. The CMS builds the link from `SITE_URL`.

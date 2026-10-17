@@ -6,7 +6,7 @@
 !.npmrc
 !patches/
 !payload/
-!payload/infisical-entrypoint.mjs
+!website/server/infisical-entrypoint.mjs
 !website/package.json
 payload/node_modules/
 payload/.next/

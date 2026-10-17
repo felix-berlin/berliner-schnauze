@@ -19,6 +19,7 @@ import { Anki } from "./globals/Anki";
 import { Company } from "./globals/Company";
 import { Home } from "./globals/Home";
 import { Navigation } from "./globals/Navigation";
+import { withSlugRedirects } from "./hooks/redirectOldSlug";
 import { migrations } from "./migrations";
 import { redirects } from "./redirects";
 import { seo } from "./seo";
@@ -30,7 +31,8 @@ export default buildConfig({
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
   },
-  collections: [Users, Media, WordTypes, Themen, Words, Posts, Pages, Suggestions],
+  // A slug change on a collection with a public page adds a 301 from the old path.
+  collections: [Users, Media, WordTypes, Themen, Words, Posts, Pages, Suggestions].map(withSlugRedirects),
   globals: [Navigation, Affiliate, Company, Home, Anki],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [

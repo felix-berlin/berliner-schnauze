@@ -361,6 +361,7 @@ export interface Word {
       | null;
     wordComponents?: string[] | null;
     soundexCode?: string | null;
+    decomposition?: string[] | null;
   };
   meta?: SeoMetaGroup;
   updatedAt: string;
@@ -811,6 +812,7 @@ export interface WordsSelect<T extends boolean = true> {
         nlpTags?: T;
         wordComponents?: T;
         soundexCode?: T;
+        decomposition?: T;
       };
   meta?: T | SeoMetaGroupSelect<T>;
   updatedAt?: T;

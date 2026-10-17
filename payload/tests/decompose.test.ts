@@ -1,4 +1,4 @@
-import { decomposeCompoundWord } from "@utils/wordHelper";
+import { decomposeCompoundWord } from "../src/lib/decompose";
 import { describe, it, expect } from "vitest";
 
 const dict = new Set([

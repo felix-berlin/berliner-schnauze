@@ -9,7 +9,7 @@
   >
     <h2 class="c-related-words__headline">Bock mehr Wörter kennen zu lernen?</h2>
     <ul class="c-related-words__words u-list-reset">
-      <li v-for="word in shuffle(words).slice(0, numberOfWords)" :key="word.id">
+      <li v-for="word in sample(words, numberOfWords)" :key="word.id">
         <a
           :href="routeToWord(word.slug)"
           class="c-related-words__word"
@@ -27,7 +27,7 @@
 import type { WordRef } from "@utils/wordHelper";
 
 import { useContentTracking } from "@composables/useContentTracking";
-import { routeToWord, shuffle } from "@utils/helpers.ts";
+import { routeToWord, sample } from "@utils/helpers.ts";
 import { ref } from "vue";
 
 interface RelatedWordsProps {

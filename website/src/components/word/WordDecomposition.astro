@@ -1,30 +1,26 @@
 ---
 import '@styles/components/_word-decomposition.scss';
-import { decomposeCompoundWord, capitalizeFirstLetter } from '@utils/wordHelper';
+import { capitalizeFirstLetter, findWordByHeadword } from '@utils/wordHelper';
 import { routeToWord } from '@utils/helpers';
 import type { WordRef } from '@utils/wordHelper';
 
 interface Props {
-  word: string;
+  /** The compound's parts as stored on save (derived.decomposition), empty for a non-compound. */
+  parts: string[];
   allWords: WordRef[];
 }
 
-const { word, allWords } = Astro.props;
-const parts = decomposeCompoundWord(word);
+const { parts, allWords } = Astro.props;
 
-// Only needed to link parts — skip the ~6000-entry lookup for non-compounds.
-// findLast keeps the previous Map semantics (last duplicate wins).
-const findWord = (part: string) =>
-  allWords.findLast((w) => w.berlinerisch.toLowerCase() === part);
 ---
 
 {
-  parts && parts.length >= 2 && (
+  parts.length >= 2 && (
     <div>
       <h3>Wortzerlegung</h3>
       <div class='c-single-word__word-parts'>
         {parts.map((part, i) => {
-          const linked = findWord(part);
+          const linked = findWordByHeadword(allWords, part);
           return (
             <>
               {i > 0 && <span class='c-single-word__word-parts-plus'>+</span>}

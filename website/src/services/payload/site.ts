@@ -4,7 +4,6 @@ import { ttl } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 import { lexicalToHtml } from "payload-app/lexical-html";
 
-
 const global = <S extends keyof Config["globals"]>(slug: S) =>
   ttl(60_000, async () => (await getPayloadClient()).findGlobal({ depth: 0, slug }));
 
@@ -71,11 +70,7 @@ export const fetchFundingData = async (): Promise<FundingData> => {
   };
 };
 
-export interface SocialMenuItem {
-  link: string;
-  rel?: string;
-  title: string;
-}
+export type SocialMenuItem = Omit<MenuItem, "description">;
 
 export const fetchSocialMenu = async (): Promise<SocialMenuItem[]> =>
   ((await company()).socialMedia ?? []).map(({ label, profile, relMe }) =>
@@ -90,10 +85,15 @@ export interface Fact {
 
 /** Unwraps a single paragraph; several stay as they are (the card's <p> then holds block html). */
 const inlineHtml = (html: string): string =>
-  html.startsWith("<p>") && html.endsWith("</p>") && !html.includes("<p", 1) ? html.slice(3, -4) : html;
+  html.startsWith("<p>") && html.endsWith("</p>") && !html.includes("<p", 1)
+    ? html.slice(3, -4)
+    : html;
 
 export const fetchHomeFacts = async (): Promise<Fact[]> =>
-  ((await home()).facts ?? []).map(({ headline, text }) => ({ headline, html: inlineHtml(lexicalToHtml(text)) }));
+  ((await home()).facts ?? []).map(({ headline, text }) => ({
+    headline,
+    html: inlineHtml(lexicalToHtml(text)),
+  }));
 
 export interface AnkiContent {
   faqs: { a: string; q: string }[];
@@ -103,16 +103,25 @@ export interface AnkiContent {
 }
 
 /** The texts of /anki; `{liteWords}` and `{totalWords}` in the features become the given counts. */
-export const fetchAnkiContent = async (counts: { liteWords: string; totalWords: string }): Promise<AnkiContent> => {
+export const fetchAnkiContent = async (counts: {
+  liteWords: string;
+  totalWords: string;
+}): Promise<AnkiContent> => {
   const { faqs, fullFeatures, liteFeatures, steps } = await anki();
   const fill = (rows: { text: string }[] | null | undefined) =>
     (rows ?? []).map(({ text }) =>
-      text.replaceAll("{liteWords}", counts.liteWords).replaceAll("{totalWords}", counts.totalWords),
+      text
+        .replaceAll("{liteWords}", counts.liteWords)
+        .replaceAll("{totalWords}", counts.totalWords),
     );
   return {
     faqs: (faqs ?? []).map(({ answer, question }) => ({ a: answer, q: question })),
     fullFeatures: fill(fullFeatures),
     liteFeatures: fill(liteFeatures),
-    steps: (steps ?? []).map(({ text, title }, i) => ({ num: String(i + 1).padStart(2, "0"), text, title })),
+    steps: (steps ?? []).map(({ text, title }, i) => ({
+      num: String(i + 1).padStart(2, "0"),
+      text,
+      title,
+    })),
   };
 };

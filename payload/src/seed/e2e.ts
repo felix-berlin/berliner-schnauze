@@ -7,6 +7,7 @@ import type { Payload } from "payload";
 import type { Word } from "../payload-types";
 
 import { affiliate, company, navigation } from "./siteData";
+import { LOCAL_DB_HOSTS } from "../lib/localDb";
 
 /** Slugs the e2e specs navigate to directly. */
 export const E2E_WORD_SLUGS = ["aasen", "akademiebusen", "alex", "alsche", "anmachen", "ballast-der-republik", "schale", "wa"] as const;
@@ -15,7 +16,8 @@ export const E2E_WORD_SLUGS = ["aasen", "akademiebusen", "alex", "alsche", "anma
 export function assertLocalDatabase(url: string | undefined): void {
   const parsed = url && URL.canParse(url) ? new URL(url) : undefined;
   const host = parsed?.hostname ?? "";
-  if (!["localhost", "127.0.0.1", "::1", "[::1]", "postgres"].includes(host)) {
+  // "postgres": the compose service (docker-smoke)
+  if (!LOCAL_DB_HOSTS.has(host) && host !== "postgres") {
     throw new Error(`Refusing to seed "${host || String(url)}": only a local or compose database is allowed`);
   }
   // The production compose database is "local" too: only throwaway databases (CI: bs_e2e, docker-smoke: bs_smoke).

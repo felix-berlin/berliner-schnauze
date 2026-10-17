@@ -1,6 +1,8 @@
+import type { Word } from "payload-app";
+
 import { fetchWikimediaAPI } from "@services/wikimediaApi.ts";
-import natural from "natural";
-import { createRequire } from "node:module";
+// Deep import: the package entry loads all of natural (classifiers, WordNet, ...) for this one function.
+import JaroWinklerDistance from "natural/lib/natural/distance/jaro-winkler_distance.js";
 import {
   isConsonantChar,
   isVowelChar,
@@ -8,8 +10,6 @@ import {
   soundexCode,
   VOWELS,
 } from "payload-app/word-derived";
-
-import type { Word } from "payload-app";
 
 export {
   countLetters,
@@ -20,16 +20,6 @@ export {
 
 /** Minimal word shape for cross-word helpers; a `SiteWord` from fetchAllWords satisfies it. */
 export type WordRef = { berlinerisch: string; id: number; slug: string };
-
-// all-the-german-words is a ~28 MB JSON array — require it on first use instead of at module
-// load, so importers that never decompose words (e.g. the search index) don't pay for it.
-let germanWordsCache: Set<string> | undefined;
-export const getGermanWords = (): Set<string> =>
-  (germanWordsCache ??= new Set(
-    (createRequire(import.meta.url)("all-the-german-words") as string[]).map((w) =>
-      w.toLowerCase(),
-    ),
-  ));
 
 /**
  * Returns the word with vowels and consonants colored.
@@ -79,13 +69,28 @@ export const similarSoundingWords = (allWords: WordRef[], currentWord: WordRef):
   );
 };
 
+// ~6000 Jaro-Winkler comparisons per word: computed once per word and refs array (a cache window), not per request.
+const similarWordsCache = new WeakMap<
+  WordRef[],
+  Map<string, { isSimilar: number; word: WordRef }[]>
+>();
+
+/** The words similar in spelling to `currentWord`; memoized per refs array, so do not mutate the result. */
 export const similarWords = (
   allWords: WordRef[],
   currentWord: WordRef,
   needsSimilarity?: number,
 ) => {
+  let byWord = similarWordsCache.get(allWords);
+  if (!byWord) similarWordsCache.set(allWords, (byWord = new Map()));
+  // the headword too: a draft preview shares the id but may spell the word differently
+  const key = `${currentWord.id}:${currentWord.berlinerisch}:${needsSimilarity}`;
+  const cached = byWord.get(key);
+  if (cached) return cached;
+
   const currentBerlinerisch = currentWord.berlinerisch;
   const results: { isSimilar: number; word: WordRef }[] = [];
+  byWord.set(key, results);
 
   // Length pre-filter. With m ≤ min(len), Jaro ≤ (2 + r) / 3 where r = min/max length, and
   // natural's Winkler boost (prefix ≤ 4, p = 0.1) gives JW ≤ 0.6·Jaro + 0.4 ≤ 0.8 + 0.2·r.
@@ -103,7 +108,7 @@ export const similarWords = (
     ) {
       continue;
     }
-    const isSimilar = natural.JaroWinklerDistance(candidate, currentBerlinerisch);
+    const isSimilar = JaroWinklerDistance(candidate, currentBerlinerisch);
     if (needsSimilarity === undefined || isSimilar >= needsSimilarity) {
       results.push({ isSimilar, word });
     }
@@ -112,9 +117,7 @@ export const similarWords = (
   return results;
 };
 
-export const createWikimediaFileList = async (
-  wikimediaFiles: Word["wikimediaFiles"],
-) => {
+export const createWikimediaFileList = async (wikimediaFiles: Word["wikimediaFiles"]) => {
   if (!wikimediaFiles?.length) return [];
 
   const results = await Promise.allSettled(
@@ -308,9 +311,7 @@ export const findAnagrams = (word: string, allWords: WordRef[]): WordRef[] => {
     anagramIndexCache.set(allWords, index);
   }
   const lower = word.toLowerCase();
-  return (index.get(sortedChars(word)) ?? []).filter(
-    (w) => w.berlinerisch.toLowerCase() !== lower,
-  );
+  return (index.get(sortedChars(word)) ?? []).filter((w) => w.berlinerisch.toLowerCase() !== lower);
 };
 
 const germanCollator = new Intl.Collator("de");
@@ -327,10 +328,7 @@ export const alphabeticNeighbors = (
   let cached = sortedWordsCache.get(allWords);
   if (!cached) {
     const sorted = [...allWords].sort((a, b) =>
-      germanCollator.compare(
-        a.berlinerisch.toLowerCase(),
-        b.berlinerisch.toLowerCase(),
-      ),
+      germanCollator.compare(a.berlinerisch.toLowerCase(), b.berlinerisch.toLowerCase()),
     );
     const indexById = new Map<WordRef["id"], number>();
     // First occurrence wins, matching the previous findIndex semantics.
@@ -349,30 +347,14 @@ export const alphabeticNeighbors = (
   };
 };
 
-export const decomposeCompoundWord = (word: string, dictionary?: Set<string>): string[] | null => {
-  const lower = word.toLowerCase();
-  if (lower.length < 5) return null; // Too short to be a compound
-  const germanWords = dictionary ?? getGermanWords();
-  if (germanWords.has(lower)) return null;
+const byHeadwordCache = new WeakMap<WordRef[], Map<string, WordRef>>();
 
-  for (let i = 3; i <= lower.length - 3; i++) {
-    const left = lower.slice(0, i);
-    const right = lower.slice(i);
-
-    if (germanWords.has(left) && germanWords.has(right)) {
-      return [left, right];
-    }
-
-    // Fugen-s: "tageslicht" → "tages" (tag+s) + "licht"
-    if (
-      right.startsWith("s") &&
-      right.length >= 3 &&
-      germanWords.has(left) &&
-      germanWords.has(right.slice(1))
-    ) {
-      return [left, right.slice(1)];
-    }
+/** The word with this headword (case-insensitive, the last of duplicates), via an index per refs array. */
+export const findWordByHeadword = (allWords: WordRef[], headword: string): WordRef | undefined => {
+  let index = byHeadwordCache.get(allWords);
+  if (!index) {
+    index = new Map(allWords.map((w) => [w.berlinerisch.toLowerCase(), w]));
+    byHeadwordCache.set(allWords, index);
   }
-
-  return null;
+  return index.get(headword.toLowerCase());
 };

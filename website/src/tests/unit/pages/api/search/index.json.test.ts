@@ -3,14 +3,19 @@ import { describe, expect, it, vi } from "vitest";
 vi.mock("astro:env/client", () => ({ SHOW_TEST_DATA: false }));
 
 const { fetchAllWords } = vi.hoisted(() => ({ fetchAllWords: vi.fn() }));
-vi.mock("@services/api.ts", () => ({ fetchAllWords }));
+vi.mock("@services/payload/words.ts", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@services/payload/words.ts")>()),
+  fetchAllWords,
+}));
 
 import type { SiteWord } from "@services/payload/words.ts";
 import type { APIContext } from "astro";
 
+import { deriveWordFields } from "payload-app/word-derived";
+
 import { GET, getSearchIndexEntries, makeOramaSearchIndex } from "@/pages/api/search/index.json.ts";
 
-/** A SiteWord (see services/payload/words.ts): repeaters and relations are arrays, dates ISO. */
+/** A SiteWord (see services/payload/words.ts): repeaters and relations are arrays, dates ISO, derived filled. */
 function makeWord(overrides: Record<string, unknown> = {}): SiteWord {
   return {
     alternativeWords: [],
@@ -19,6 +24,7 @@ function makeWord(overrides: Record<string, unknown> = {}): SiteWord {
     berlinerischAudio: [],
     berolinismus: false,
     contentModifiedAt: "2025-01-01T00:00:00.000Z",
+    derived: deriveWordFields((overrides.berlinerisch as string | undefined) ?? "wat"),
     examples: [],
     globalId: btoa("post:1"),
     id: 1,
@@ -123,24 +129,6 @@ describe("makeOramaSearchIndex — word properties", () => {
       }),
     );
     expect(result.wordProperties.translations).toEqual(["was"]);
-  });
-
-  it("computes the derived fields, with a warning, when the stored group is unset (Payload: an object of nulls)", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const result = makeOramaSearchIndex(
-      makeWord({ derived: { characterLength: null, wordGroup: null } }),
-    );
-    expect(result.wordGroup).toBe("W");
-    expect(result.wordProperties.characterLength).toBe(3);
-    expect(warn).toHaveBeenCalledWith(expect.stringContaining("wat"));
-    warn.mockRestore();
-  });
-
-  it("falls back to an empty word group for a headword without a leading letter", () => {
-    expect(
-      makeOramaSearchIndex(makeWord({ berlinerisch: "1a", derived: { wordGroup: null } }))
-        .wordGroup,
-    ).toBe("");
   });
 });
 

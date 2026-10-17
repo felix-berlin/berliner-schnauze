@@ -1,11 +1,11 @@
 import type { CollectionConfig } from "payload";
 
-import { authenticatedOnly } from "../access";
+import { contentAccess } from "../access";
 import { identityFields } from "../fields/identity";
 
 export const WordTypes: CollectionConfig = {
   slug: "word-types",
-  access: authenticatedOnly,
+  access: contentAccess,
   admin: { useAsTitle: "name" },
   fields: [{ name: "name", type: "text", required: true }, ...identityFields],
 };

@@ -1,9 +1,6 @@
 export interface Seo {
   canonical?: string;
   metaDesc?: string;
-  metaRobotsNofollow?: string;
-  metaRobotsNoindex?: string;
-  opengraphAuthor?: string;
   opengraphDescription?: string;
   opengraphImage?: {
     alt?: string;
@@ -14,12 +11,13 @@ export interface Seo {
   };
   opengraphModifiedTime?: string;
   opengraphPublishedTime?: string;
-  opengraphPublisher?: string;
   opengraphSiteName?: string;
   opengraphTitle?: string;
   opengraphType?: string;
   opengraphUrl?: string;
   readingTime?: number;
+  /** `noindex`/`nofollow` from the CMS SEO fields; unset means the default (index, follow). */
+  robots?: string;
   title?: string;
   twitterDescription?: string;
   twitterTitle?: string;

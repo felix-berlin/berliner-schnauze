@@ -1,6 +1,6 @@
 import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 
-import { authenticatedOnly } from "./access";
+import { contentAccess } from "./access";
 import { ROUTES } from "./lib/routes";
 
 /**
@@ -12,8 +12,8 @@ export const redirects = redirectsPlugin({
   redirectTypes: ["301", "302"],
   redirectTypeFieldOverride: { defaultValue: "301" },
   overrides: {
-    // The plugin reads publicly by default; the site reads through the Local API.
-    access: authenticatedOnly,
+    // The plugin reads publicly by default; here only logged-in users and the site's Local API reads.
+    access: contentAccess,
     admin: { description: "Alter Pfad, z. B. /wort/alter-slug → Dokument oder eigene URL." },
   },
 });

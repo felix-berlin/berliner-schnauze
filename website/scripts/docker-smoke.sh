@@ -64,14 +64,14 @@ check "malformed query 200" "$(status '/games/berliner-oder-nicht/share?r=abc.%%
 check "malformed path 400" "$(status '/wort/%E0%A4%A')" 400
 check "sw.js 200" "$(status /sw.js)" 200
 check "trailing slash 301" "$(status /wort/aasen/)" 301
-check "_redirects 301" "$(status /suggest-word)" 301
+check "redirect 301" "$(status /suggest-word)" 301
 check "index redirect 301" "$(status /index)" 301
 check "index redirect target" "$(header /index location)" /
-check "_redirects target" "$(header /suggest-word location)" /wort-vorschlagen
+check "redirect target" "$(header /suggest-word location)" /wort-vorschlagen
 check "www 301" "$(curl -s -o /dev/null -w '%{http_code}' -H 'Host: www.berliner-schnauze.wtf' "$BASE/wort/aasen?a=1")" 301
 check "www target" "$(curl -s -D - -o /dev/null -H 'Host: www.berliner-schnauze.wtf' "$BASE/wort/aasen?a=1" | tr -d '\r' | grep -i '^location:' | cut -d' ' -f2-)" "https://berliner-schnauze.wtf/wort/aasen?a=1"
-check "_headers X-Frame-Options" "$(header /wort/aasen x-frame-options)" DENY
-[[ -n "$(header / content-security-policy)" ]] && echo "ok   _headers CSP" || { echo "FAIL _headers CSP missing"; fail=1; }
+check "X-Frame-Options" "$(header /wort/aasen x-frame-options)" DENY
+[[ -n "$(header / content-security-policy)" ]] && echo "ok   CSP" || { echo "FAIL CSP missing"; fail=1; }
 
 # sed reads all input: `head -1` would SIGPIPE grep, and pipefail + set -e would exit silently.
 asset=$(curl -s "$BASE/" | grep -o '/_astro/[^"]*\.js' | sed -n 1p)

@@ -6,7 +6,7 @@ import { type PreviewCollection, type PreviewTarget, readPreviewToken } from "pa
 export const PREVIEW_COOKIE = "bs_preview";
 
 /** The doc of `collection` the visitor may preview, or null. Reads PAYLOAD_SECRET, which signed the link. */
-export const readPreview = (
+const readPreview = (
   cookies: AstroCookies,
   collection: PreviewCollection,
 ): PreviewTarget | null => {

@@ -1,17 +1,15 @@
 import type { APIRoute } from "astro";
 
-import { fetchAllWords } from "@services/api.ts";
-import { translationTexts } from "@services/payload/words.ts";
-import { setPageCache } from "@utils/cacheHeaders.ts";
+import { fetchWordBySlug, translationTexts } from "@services/payload/words.ts";
 import { generateOpenGraphImage } from "astro-og-canvas";
 import { OG_CACHE_DIR } from "astro:env/server";
 
-const notFound = () => setPageCache(new Response(null, { status: 404 }));
+const notFound = () => new Response(null, { status: 404 });
 
 /** `/og/<slug>.png`, rendered on the first request and kept in OG_CACHE_DIR (a volume in the container). */
 export const GET: APIRoute = async ({ params }) => {
   const slug = params.wordSlug?.endsWith(".png") ? params.wordSlug.slice(0, -4) : undefined;
-  const word = slug ? (await fetchAllWords()).find((w) => w.slug === slug) : undefined;
+  const word = slug ? await fetchWordBySlug(slug) : undefined;
   if (!word) return notFound();
 
   const translation = translationTexts(word).join(", ");
@@ -36,7 +34,7 @@ export const GET: APIRoute = async ({ params }) => {
     fonts: ["./src/assets/fonts/Berlin-Bold.woff2"],
     // TODO: add a logo (needs a version with transparent background)
     padding: 72,
-    title: word.berlinerisch || word.slug,
+    title: word.berlinerisch,
   });
   return new Response(image, {
     headers: {

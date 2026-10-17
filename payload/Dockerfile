@@ -40,7 +40,7 @@ FROM gcr.io/distroless/nodejs24-debian13:nonroot
 WORKDIR /app
 COPY --from=build /repo/payload/.next/standalone/ ./
 COPY --from=build /repo/payload/.next/static/ payload/.next/static/
-COPY payload/infisical-entrypoint.mjs infisical-entrypoint.mjs
+COPY website/server/infisical-entrypoint.mjs infisical-entrypoint.mjs
 COPY --from=infisical-cli /out/infisical /usr/local/bin/infisical
 # Owned by nonroot, so a fresh named volume mounted here inherits it.
 COPY --from=build --chown=nonroot:nonroot /empty-media /app/media

@@ -21,5 +21,8 @@ export const metaToSeo = (meta: SeoMetaGroup | null | undefined, opengraphType?:
     opengraphSiteName: SITE_NAME,
     ...(opengraphType && { opengraphType }),
     ...(meta.title && { title: meta.title }),
+    ...((meta.noindex || meta.nofollow) && {
+      robots: [meta.noindex && "noindex", meta.nofollow && "nofollow"].filter(Boolean).join(", "),
+    }),
   };
 };

@@ -88,8 +88,9 @@ const doc = {
   },
   publishedAt: "2025-04-09T08:12:37.000Z",
   relatedWords: [
-    { _status: "published", berlinerisch: "wa", id: 13, slug: "wa" },
-    { _status: "draft", berlinerisch: "geheim", id: 15, slug: "geheim" },
+    { berlinerisch: "wa", id: 13, slug: "wa" },
+    { berlinerisch: "ohne slug", id: 15, slug: null },
+    // not readable as the site (siteRead): left unpopulated
     14,
   ],
   slug: "aasen",
@@ -179,9 +180,32 @@ describe("toWord", () => {
     ]);
   });
 
-  it("keeps only published, populated related words", async () => {
+  it("keeps the populated related words that have a slug", async () => {
     const { toWord } = await load();
     expect(toWord(doc as never).relatedWords).toEqual([{ berlinerisch: "wa", id: 13, slug: "wa" }]);
+  });
+
+  it("computes the derived fields, with a warning, when the stored group is unset (Payload: an object of nulls)", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { toWord } = await load();
+    const word = toWord({
+      ...doc,
+      berlinerisch: "wat",
+      derived: { characterLength: null, wordGroup: null },
+    } as never);
+    expect(word.derived).toMatchObject({ characterLength: 3, wordGroup: "W" });
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("aasen"));
+    warn.mockRestore();
+  });
+
+  it("leaves the word group empty for a headword without a leading letter", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { toWord } = await load();
+    expect(
+      toWord({ ...doc, berlinerisch: "1a", derived: { wordGroup: null } } as never).derived
+        .wordGroup,
+    ).toBe("");
+    warn.mockRestore();
   });
 
   it("copes with a sparse document: repeaters and relations become empty arrays", async () => {
@@ -222,28 +246,48 @@ describe("metaToSeo", () => {
       opengraphImage: { sourceUrl: "https://cms.example/api/media/file/og.png" },
       opengraphSiteName: "Berliner Schnauze",
       opengraphType: "article",
+      robots: "nofollow",
       title: "aasen",
     });
     expect(metaToSeo(null)).toEqual({});
   });
+
+  it("turns the robots flags into a robots value, and leaves it out when neither is set", async () => {
+    const { metaToSeo } = await import("@services/payload/seo.ts");
+    expect(metaToSeo({ nofollow: true, noindex: true } as never).robots).toBe("noindex, nofollow");
+    expect(metaToSeo({ nofollow: true } as never).robots).toBe("nofollow");
+    expect(metaToSeo({ noindex: false } as never)).not.toHaveProperty("robots");
+  });
 });
 
 describe("fetchAllWords", () => {
+  // The change check (latest updatedAt per collection) answers `probe`; the word pages go to `loadPages`.
+  const loadPages = vi.fn();
+  let probe: { docs: { updatedAt: string }[]; totalDocs: number };
+  beforeEach(() => {
+    probe = { docs: [{ updatedAt: "2026-10-01T00:00:00.000Z" }], totalDocs: 1 };
+    loadPages.mockReset();
+    find.mockImplementation((args: { sort?: string }) =>
+      args.sort === "-updatedAt" ? Promise.resolve(probe) : loadPages(args),
+    );
+  });
+
   it("pages through the local api and asks for published words only", async () => {
-    find
+    loadPages
       .mockResolvedValueOnce(page([doc], 2))
       .mockResolvedValueOnce(page([{ ...doc, berlinerisch: "wa", id: 13, slug: "wa" }]));
     const { fetchAllWords } = await load();
     const words = await fetchAllWords();
     expect(words.map((w) => w.slug)).toEqual(["aasen", "wa"]);
-    expect(find).toHaveBeenCalledTimes(2);
-    expect(find.mock.calls[0][0]).toMatchObject({
+    expect(loadPages).toHaveBeenCalledTimes(2);
+    expect(loadPages.mock.calls[0][0]).toMatchObject({
       collection: "words",
+      context: { siteRead: "published" },
+      overrideAccess: false,
       page: 1,
-      where: { _status: { equals: "published" } },
     });
-    expect(find.mock.calls[0][0].draft).toBeFalsy();
-    expect(find.mock.calls[1][0]).toMatchObject({ page: 2 });
+    expect(loadPages.mock.calls[0][0].draft).toBeFalsy();
+    expect(loadPages.mock.calls[1][0]).toMatchObject({ page: 2 });
   });
 
   it("sorts by German collation (umlauts with their base letter), independent of the database locale", async () => {
@@ -253,7 +297,7 @@ describe("fetchAllWords", () => {
       id,
       slug: berlinerisch.toLowerCase(),
     });
-    find.mockResolvedValueOnce(
+    loadPages.mockResolvedValueOnce(
       page([w(1, "Bulette"), w(2, "Ärger"), w(3, "aasen"), w(4, "Zille")]),
     );
     const { fetchAllWords } = await load();
@@ -267,17 +311,17 @@ describe("fetchAllWords", () => {
 
   it("includes drafts when SHOW_TEST_DATA is on", async () => {
     vi.doMock("astro:env/client", () => ({ SHOW_TEST_DATA: true }));
-    find.mockResolvedValueOnce(page([doc]));
+    loadPages.mockResolvedValueOnce(page([doc]));
     const { fetchAllWords } = await load();
     await fetchAllWords();
-    const args = find.mock.calls[0][0];
+    const args = loadPages.mock.calls[0][0];
     expect(args.draft).toBe(true);
     expect(args.where).toBeUndefined();
   });
 
   it("drops words without a slug, and drafts without a headword, with a warning", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    find.mockResolvedValueOnce(
+    loadPages.mockResolvedValueOnce(
       page([doc, { ...doc, id: 99, slug: null }, { ...doc, berlinerisch: undefined, id: 98 }]),
     );
     const { fetchAllWords } = await load();
@@ -287,30 +331,60 @@ describe("fetchAllWords", () => {
   });
 
   it("populates relations with only the fields the site reads", async () => {
-    find.mockResolvedValueOnce(page([doc]));
+    loadPages.mockResolvedValueOnce(page([doc]));
     const { fetchAllWords } = await load();
     await fetchAllWords();
-    expect(find.mock.calls[0][0]).toMatchObject({
+    expect(loadPages.mock.calls[0][0]).toMatchObject({
       depth: 1,
       populate: {
         themen: { name: true, slug: true },
         "word-types": { name: true },
-        words: { _status: true, berlinerisch: true, slug: true },
+        words: { berlinerisch: true, slug: true },
       },
     });
   });
 
-  it("caches for a minute, then reloads, and never caches a failure", async () => {
+  it("caches for a minute, then reloads only when something changed, and never caches a failure", async () => {
     vi.useFakeTimers();
-    find.mockRejectedValueOnce(new Error("db down")).mockResolvedValue(page([doc]));
+    loadPages.mockRejectedValueOnce(new Error("db down")).mockResolvedValue(page([doc]));
     const { fetchAllWords } = await load();
     await expect(fetchAllWords()).rejects.toThrow("db down");
+    const first = await fetchAllWords();
     await fetchAllWords();
-    await fetchAllWords();
-    expect(find).toHaveBeenCalledTimes(2);
+    expect(loadPages).toHaveBeenCalledTimes(2);
+
+    // a minute later, nothing changed: the same array, no reload
     vi.advanceTimersByTime(61_000);
     await fetchAllWords();
-    expect(find).toHaveBeenCalledTimes(3);
+    await vi.runAllTimersAsync();
+    expect(loadPages).toHaveBeenCalledTimes(2);
+    expect(await fetchAllWords()).toBe(first);
+
+    // a word changed: the next refresh reloads
+    probe = { ...probe, docs: [{ updatedAt: "2026-10-02T00:00:00.000Z" }] };
+    vi.advanceTimersByTime(61_000);
+    await fetchAllWords();
+    await vi.runAllTimersAsync();
+    expect(loadPages).toHaveBeenCalledTimes(3);
+    expect(await fetchAllWords()).not.toBe(first);
+  });
+
+  it("checks the public word count and the populated collections for changes", async () => {
+    vi.doMock("astro:env/client", () => ({ SHOW_TEST_DATA: false }));
+    loadPages.mockResolvedValueOnce(page([doc]));
+    const { fetchAllWords } = await load();
+    await fetchAllWords();
+    const probed = find.mock.calls
+      .map(([args]) => args)
+      .filter((args) => args.sort === "-updatedAt");
+    expect(probed.map((args) => args.collection)).toEqual([
+      "words",
+      "media",
+      "themen",
+      "word-types",
+    ]);
+    for (const args of probed)
+      expect(args).toMatchObject({ context: { siteRead: "published" }, overrideAccess: false });
   });
 });
 
@@ -332,8 +406,10 @@ describe("fetchDraftWord", () => {
     const { fetchDraftWord } = await load();
     const word = await fetchDraftWord(1);
     expect(word?.relatedWords).toEqual([{ berlinerisch: "wa", id: 13, slug: "wa" }]);
-    expect(find.mock.calls[0][0].where).toEqual({
-      and: [{ id: { in: [13, 14] } }, { _status: { equals: "published" } }],
+    expect(find.mock.calls[0][0]).toMatchObject({
+      context: { siteRead: "published" },
+      overrideAccess: false,
+      where: { id: { in: [13, 14] } },
     });
   });
 

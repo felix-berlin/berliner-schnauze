@@ -8,8 +8,9 @@ import type {
 } from "payload-app";
 
 import { ttl } from "@services/cache.ts";
-import { getPayloadClient, mediaUrl, publicDocs } from "@services/payload.ts";
+import { getPayloadClient, mediaUrl, siteDocs, siteRead } from "@services/payload.ts";
 import { lexicalToHtml } from "payload-app/lexical-html";
+import { type DerivedWordFields, deriveWordFields } from "payload-app/word-derived";
 
 const PAGE_SIZE = 1000;
 
@@ -29,11 +30,12 @@ export type RelatedWord = Pick<PayloadWord, "berlinerisch" | "id"> & { slug: str
 /**
  * A public word as the pages render it: the Payload doc with its relations populated, relations and media rows as
  * arrays (never null; the plain text repeaters keep Payload's `| null`), media with absolute urls, and what is
- * computed once per cache window (rich text as HTML).
+ * computed once per cache window (rich text as HTML, derived fields a word never saved through the hook lacks).
  */
 export type SiteWord = Omit<
   PayloadWord,
   | "berlinerischAudio"
+  | "derived"
   | "examples"
   | "images"
   | "infoText"
@@ -43,6 +45,7 @@ export type SiteWord = Omit<
   | "wordTypes"
 > & {
   berlinerischAudio: AudioRow[];
+  derived: DerivedWordFields & { decomposition?: string[] | null };
   examples: WordExample[];
   images: SiteMedia[];
   infoTextHtml: string | null;
@@ -56,7 +59,9 @@ const populated = <T extends object>(
   items: readonly (T | number | null)[] | null | undefined,
 ): T[] => (items ?? []).filter((item): item is T => typeof item === "object" && item !== null);
 
-export const toSiteMedia = (media: Media): SiteMedia | null => {
+/** A populated media doc as SiteMedia; null for an unpopulated id, a missing doc or a doc without a file. */
+export const toSiteMedia = (media: Media | number | null | undefined): SiteMedia | null => {
+  if (typeof media !== "object" || !media) return null;
   const url = mediaUrl(media);
   return url
     ? {
@@ -74,9 +79,22 @@ export const toSiteMedia = (media: Media): SiteMedia | null => {
 
 const audioRows = (rows: AudioArray | undefined): AudioRow[] =>
   (rows ?? []).flatMap(({ audio, ...row }) => {
-    const media = typeof audio === "object" && audio ? toSiteMedia(audio) : null;
+    const media = toSiteMedia(audio);
     return media ? [{ ...row, audio: media }] : [];
   });
+
+/**
+ * The derived fields the hook stored on save, computed only for a word that never went through it. Payload returns
+ * an unset group as an object of nulls, so check a field the hook always sets.
+ */
+const storedDerived = (
+  derived: PayloadWord["derived"],
+  { berlinerisch, slug }: Pick<PayloadWord, "berlinerisch"> & { slug: string },
+): SiteWord["derived"] => {
+  if (derived?.wordGroup != null) return derived as SiteWord["derived"];
+  console.warn(`[words] derived fields missing, computed on the fly: ${slug}`);
+  return deriveWordFields(berlinerisch);
+};
 
 /**
  * `doc` must be populated one level deep (relations and media are objects, not ids) and have a slug: ids are
@@ -84,6 +102,7 @@ const audioRows = (rows: AudioArray | undefined): AudioRow[] =>
  */
 export const toWord = ({
   berlinerischAudio,
+  derived,
   examples,
   images,
   infoText,
@@ -94,16 +113,15 @@ export const toWord = ({
 }: PayloadWord & { slug: string }): SiteWord => ({
   ...doc,
   berlinerischAudio: audioRows(berlinerischAudio),
+  derived: storedDerived(derived, doc),
   examples: (examples ?? []).map(({ exampleAudio, ...e }) =>
     Object.assign(e, { exampleAudio: audioRows(exampleAudio) }),
   ),
-  images: populated<Media>(images).flatMap((m) => toSiteMedia(m) ?? []),
+  images: (images ?? []).flatMap((m) => toSiteMedia(m) ?? []),
   infoTextHtml: lexicalToHtml(infoText) || null,
-  // the Local API ignores access control: a never-published word must not leak through a relation
-  relatedWords: populated<PayloadWord>(relatedWords).flatMap((w) =>
-    w._status === "published" && w.slug
-      ? [{ berlinerisch: w.berlinerisch, id: w.id, slug: w.slug }]
-      : [],
+  // siteRead() leaves a related word the site may not show unpopulated (an id), and populated() drops ids
+  relatedWords: populated<PayloadWord>(relatedWords).flatMap(({ berlinerisch, id, slug }) =>
+    slug ? [{ berlinerisch, id, slug }] : [],
   ),
   themen: populated<Theman>(themen).map(({ id, name, slug }) => ({ id, name, slug })),
   wordTypes: populated<WordType>(wordTypes).map(({ id, name }) => ({ id, name })),
@@ -117,7 +135,7 @@ export const translationTexts = (word: Pick<SiteWord, "translations">): string[]
 const WORD_POPULATE = {
   themen: { name: true, slug: true },
   "word-types": { name: true },
-  words: { _status: true, berlinerisch: true, slug: true },
+  words: { berlinerisch: true, slug: true },
 } as const;
 
 /** A word as a draft may be stored: strictDraftTypes types its required fields optional. */
@@ -147,7 +165,7 @@ const loadAllWords = async (): Promise<SiteWord[]> => {
       page,
       populate: WORD_POPULATE,
       sort: "id",
-      ...publicDocs(),
+      ...siteDocs(),
     });
     for (const doc of result.docs) {
       const word = toSiteWord(doc);
@@ -172,16 +190,16 @@ export const fetchDraftWord = async (id: number): Promise<SiteWord | undefined> 
     populate: WORD_POPULATE,
   });
   if (!doc) return undefined;
-  // `draft: true` populates each related word as its latest version, a draft even when a published one exists:
-  // load them as the public page does, so the preview shows the same related words.
+  // `draft: true` (read as the editor) populates each related word as its latest version, a draft even when a
+  // published one exists: load them as the public page does (published only), so the preview shows the same ones.
   const ids = (doc.relatedWords ?? []).map((w) => (typeof w === "object" ? w.id : w));
-  // Published only, even with SHOW_TEST_DATA: toWord drops every other related word anyway.
   const { docs: related } = ids.length
     ? await payload.find({
         collection: "words",
         depth: 0,
         limit: ids.length,
-        where: { and: [{ id: { in: ids } }, { _status: { equals: "published" } }] },
+        where: { id: { in: ids } },
+        ...siteRead(),
       })
     : { docs: [] };
   return toSiteWord({
@@ -190,5 +208,40 @@ export const fetchDraftWord = async (id: number): Promise<SiteWord | undefined> 
   });
 };
 
-/** All public words (plus drafts with SHOW_TEST_DATA), memoized for a minute: an admin edit is live without a rebuild. */
-export const fetchAllWords = ttl(60_000, loadAllWords);
+/**
+ * Cheap fingerprint of what loadAllWords reads: the public word count and the latest change of the words and of
+ * every collection populated into them. Unchanged, the full reload (~6000 words) is skipped.
+ */
+const wordsFingerprint = async (): Promise<string> => {
+  const payload = await getPayloadClient();
+  const latest = { depth: 0, limit: 1, select: { updatedAt: true }, sort: "-updatedAt" } as const;
+  const results = await Promise.all([
+    payload.find({ collection: "words", ...latest, ...siteDocs() }),
+    ...(["media", "themen", "word-types"] as const).map((collection) =>
+      payload.find({ collection, ...latest, ...siteRead() }),
+    ),
+  ]);
+  return [results[0].totalDocs, ...results.map((r) => r.docs[0]?.updatedAt ?? "")].join("|");
+};
+
+let loaded: { fingerprint: string; words: SiteWord[] } | undefined;
+
+/**
+ * All public words (plus drafts with SHOW_TEST_DATA), checked for changes once a minute: an admin edit is live
+ * without a rebuild. The same array is returned while nothing changed, so indexes keyed on it stay warm.
+ */
+export const fetchAllWords = ttl(60_000, async (): Promise<SiteWord[]> => {
+  const fingerprint = await wordsFingerprint();
+  if (loaded?.fingerprint !== fingerprint) loaded = { fingerprint, words: await loadAllWords() };
+  return loaded.words;
+});
+
+const bySlug = new WeakMap<SiteWord[], Map<string, SiteWord>>();
+
+/** A public word by its slug, through a slug index built once per words array. */
+export const fetchWordBySlug = async (slug: string): Promise<SiteWord | undefined> => {
+  const words = await fetchAllWords();
+  let index = bySlug.get(words);
+  if (!index) bySlug.set(words, (index = new Map(words.map((w) => [w.slug, w]))));
+  return index.get(slug);
+};

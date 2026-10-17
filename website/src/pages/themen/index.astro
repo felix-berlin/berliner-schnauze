@@ -1,37 +1,22 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import { fetchAllThemen } from '@services/api.ts';
+import { fetchAllThemen } from '@services/payload/themen.ts';
 import { canonicalUrl, seoData } from '@utils/helpers.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
-import { SITE_URL } from 'astro:env/client';
-import { getImage } from 'astro:assets';
-import { mediaFileUrl } from '@services/payload.ts';
+import { defaultOgImage } from '@utils/defaultOgImage';
 
 import '@styles/plugins/astro-breadcrumbs.scss';
 import '@styles/components/_themen-overview.scss';
 
 const themen = await fetchAllThemen();
 
-const ogImage = await getImage({
-  format: 'png',
-  height: 517,
-  src: mediaFileUrl('brown-bear-roar.png'),
-  width: 900,
-});
-
 const content = {
   seo: {
     canonical: canonicalUrl('/themen', Astro.site),
     opengraphDescription:
       'Von Alltag und Beziehungen bis Schimpfwörter und Stadtleben – alle Berliner Dialektwörter der Berliner Schnauze sortiert nach 12 Themen zum Entdecken.',
-    opengraphImage: {
-      alt: 'Berliner Schnauze – Themen & Kategorien',
-      height: ogImage.attributes.height,
-      sourceUrl: new URL(ogImage.src, SITE_URL).href,
-      type: 'image/png',
-      width: ogImage.attributes.width,
-    },
+    opengraphImage: await defaultOgImage('Berliner Schnauze – Themen & Kategorien'),
     opengraphType: 'website',
   },
   title: 'Themen & Kategorien – Berlinerisch nach Thema entdecken',
@@ -73,9 +58,7 @@ const itemListJson = () =>
             <a class='c-themen-overview__link' href={`/themen/${thema.slug}`}>
               {thema.name}
             </a>
-            {typeof thema.count === 'number' && (
-              <span class='c-themen-overview__count'>{thema.count} Wörter</span>
-            )}
+            <span class='c-themen-overview__count'>{thema.count} Wörter</span>
           </li>
         ))
       }

@@ -1,7 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 
 const { find } = vi.hoisted(() => ({ find: vi.fn() }));
-vi.mock("@services/payload.ts", () => ({ getPayloadClient: async () => ({ find }) }));
+vi.mock("@services/payload.ts", () => ({
+  getPayloadClient: async () => ({ find }),
+  siteRead: () => ({ context: { siteRead: "published" }, overrideAccess: false }),
+}));
 
 import { fetchRedirects, normalizePath, redirectTarget } from "@services/payload/redirects.ts";
 
@@ -19,7 +22,7 @@ describe("redirectTarget", () => {
     expect(
       redirectTarget({
         to: {
-          reference: { relationTo: "words", value: { _status: "published", slug: "neu" } as never },
+          reference: { relationTo: "words", value: { slug: "neu" } as never },
           type: "reference",
         },
       }),
@@ -34,11 +37,11 @@ describe("redirectTarget", () => {
     ).toBe("/impressum");
   });
 
-  it("drops a redirect to a draft or an unpopulated doc", () => {
+  it("drops a redirect to an unpopulated doc (one the site may not read) or a doc without a slug", () => {
     expect(
       redirectTarget({
         to: {
-          reference: { relationTo: "posts", value: { _status: "draft", slug: "x" } as never },
+          reference: { relationTo: "posts", value: { slug: null } as never },
           type: "reference",
         },
       }),
@@ -58,8 +61,8 @@ describe("redirectTarget", () => {
 
 describe("fetchRedirects", () => {
   it("keys by the normalized from path, maps 302 and defaults to 301, and drops non-public targets", async () => {
-    const word = (slug: string, _status = "published") => ({
-      reference: { relationTo: "words", value: { _status, slug } },
+    const word = (slug: string) => ({
+      reference: { relationTo: "words", value: { slug } },
       type: "reference",
     });
     find.mockResolvedValue({
@@ -67,10 +70,15 @@ describe("fetchRedirects", () => {
         { from: "/wort/Alt/", to: word("neu"), type: "301" },
         { from: "/kurz", to: { type: "custom", url: "https://example.com/" }, type: "302" },
         { from: "/ohne-typ", to: word("neu") },
-        { from: "/wort/geheim", to: word("geheim", "draft"), type: "301" },
+        // a draft target: siteRead leaves it unpopulated
+        {
+          from: "/wort/geheim",
+          to: { reference: { relationTo: "words", value: 7 }, type: "reference" },
+        },
       ],
     });
     const map = await fetchRedirects();
+    expect(find.mock.calls[0][0]).toMatchObject({ overrideAccess: false });
     expect([...map]).toEqual([
       ["/wort/Alt", { location: "/wort/neu", status: 301 }],
       ["/kurz", { location: "https://example.com/", status: 302 }],

@@ -8,8 +8,8 @@ import WordSearchLink from '@components/WordSearchLink.vue';
 import Layout from '@layouts/Layout.astro';
 import { SITE_URL } from 'astro:env/client';
 import { seoData } from '@utils/helpers';
-import { getImage, Picture } from 'astro:assets';
-import { mediaFileUrl } from '@services/payload.ts';
+import { Picture } from 'astro:assets';
+import { BROWN_BEAR_ROAR, defaultOgImage } from '@utils/defaultOgImage';
 import { fetchHomeFacts } from '@services/payload/site.ts';
 import '@styles/components/_facts-grid.scss';
 
@@ -52,25 +52,13 @@ const organizationSchema = JSON.stringify({
   url: SITE_URL,
 });
 
-const BrownBearRoarAttrs = {
-  height: 517,
-  src: mediaFileUrl('brown-bear-roar.png'),
-  width: 900,
-};
-const ogImage = await getImage({ ...BrownBearRoarAttrs, format: 'png' });
 
 const content = {
   seo: {
     canonical: SITE_URL,
     opengraphDescription:
       'Aktuelles Berlinerisch–Hochdeutsch Wörterbuch. Lerne mehr über die Berliner Mundart, Berlinisch, den Berliner Jargon & Berolinismus.',
-    opengraphImage: {
-      alt: 'Berliner Schnauze – Berlinerisch Wörterbuch',
-      height: BrownBearRoarAttrs.height,
-      sourceUrl: new URL(ogImage.src, SITE_URL).href,
-      type: 'image/png',
-      width: BrownBearRoarAttrs.width,
-    },
+    opengraphImage: await defaultOgImage('Berliner Schnauze – Berlinerisch Wörterbuch'),
     opengraphType: 'website',
   },
   title: 'Berliner Dialekt Wörterbuch - Berlinerisch zu Hochdeutsch',
@@ -97,10 +85,10 @@ const facts = await fetchHomeFacts();
         formats={['avif', 'webp']}
         layout='constrained'
         priority={true}
-        width={BrownBearRoarAttrs.width}
-        height={BrownBearRoarAttrs.height}
+        width={BROWN_BEAR_ROAR.width}
+        height={BROWN_BEAR_ROAR.height}
         sizes='(min-width: 900px) 900px, (min-width: 768px) 50vw, (min-width: 568px) 85vw, 64vw'
-        src={BrownBearRoarAttrs.src}
+        src={BROWN_BEAR_ROAR.src}
       />
     </div>
   </header>

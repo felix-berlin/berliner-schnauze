@@ -1,7 +1,7 @@
 ---
 import "@styles/objects/_legal-pages.scss";
 import Layout from "@layouts/Layout.astro";
-import { fetchPagesBySlugs } from "@services/api.ts";
+import { fetchPageBySlug } from "@services/payload/pages.ts";
 import { metaToSeo } from "@services/payload/seo.ts";
 
 const LEGAL_PAGES = ["datenschutz", "impressum"];
@@ -9,7 +9,7 @@ const LEGAL_PAGES = ["datenschutz", "impressum"];
 const { legalPages } = Astro.params;
 if (!legalPages || !LEGAL_PAGES.includes(legalPages)) return Astro.rewrite("/404");
 
-const [page] = await fetchPagesBySlugs([legalPages]);
+const page = await fetchPageBySlug(legalPages);
 if (!page) return Astro.rewrite("/404");
 
 const pageContent = {

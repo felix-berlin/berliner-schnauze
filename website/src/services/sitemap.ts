@@ -1,14 +1,12 @@
-import { fetchAllPosts, fetchAllThemen, fetchAllWords } from "@services/api.ts";
+import { fetchAllPosts } from "@services/payload/posts.ts";
+import { fetchAllThemen } from "@services/payload/themen.ts";
+import { fetchAllWords } from "@services/payload/words.ts";
 import { getCollection } from "astro:content";
+import { docPath } from "payload-app/routes";
 
 export type SitemapEntry = { lastmod?: string; loc: string };
 
-/** Routes that stay out of the sitemap: settings pages, the BON share route and the Anki checkout thank-you page. */
-export const sitemapFilter = (path: string): boolean =>
-  !path.includes("/settings") &&
-  !path.endsWith("/games/berliner-oder-nicht/share") &&
-  !path.includes("/anki/danke");
-
+// Settings pages, the BON share route and the Anki checkout thank-you page stay out on purpose.
 const STATIC_PATHS = [
   "/",
   "/anki",
@@ -40,22 +38,21 @@ export const buildSitemapEntries = async (site: URL): Promise<SitemapEntry[]> =>
   const entries: { lastmod?: string; path: string }[] = [
     ...STATIC_PATHS.map((path) => ({ path })),
     ...changelogs.map((c) => ({ path: `/changelog/${c.data.version}` })),
-    ...themen.map((t) => ({ path: `/themen/${t.slug}` })),
-    ...posts.flatMap((p) =>
-      p.slug ? [{ lastmod: isoDate(p.contentModifiedAt), path: `/magazin/${p.slug}` }] : [],
-    ),
+    ...themen.map((t) => ({ path: docPath("themen", t.slug) })),
+    ...posts.map((p) => ({
+      lastmod: isoDate(p.contentModifiedAt),
+      path: docPath("posts", p.slug),
+    })),
     ...words.map((w) => ({
       lastmod: isoDate(w.contentModifiedAt),
-      path: `/wort/${w.slug}`,
+      path: docPath("words", w.slug),
     })),
   ];
 
-  return entries
-    .filter(({ path }) => sitemapFilter(path))
-    .map(({ lastmod, path }) => {
-      const loc = new URL(path, site).toString();
-      return lastmod ? { lastmod, loc } : { loc };
-    });
+  return entries.map(({ lastmod, path }) => {
+    const loc = new URL(path, site).toString();
+    return lastmod ? { lastmod, loc } : { loc };
+  });
 };
 
 const escapeXml = (value: string): string =>

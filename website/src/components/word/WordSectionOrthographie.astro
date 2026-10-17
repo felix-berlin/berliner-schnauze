@@ -7,10 +7,12 @@ import type { WordRef } from '@utils/wordHelper';
 
 interface Props {
   word: string;
+  /** Compound parts stored on save (derived.decomposition). */
+  parts: string[];
   allWords: WordRef[];
 }
 
-const { word, allWords } = Astro.props;
+const { word, parts, allWords } = Astro.props;
 ---
 
 {word && <section class='c-section-card' id='orthographie' aria-labelledby='heading-orthographie'>
@@ -25,6 +27,6 @@ const { word, allWords } = Astro.props;
       <dt>Anzahl der Silben</dt>
       <dd>{hypher.hyphenate(word).length}</dd>
     </dl>
-    <WordDecomposition allWords={allWords} word={word} />
+    <WordDecomposition allWords={allWords} parts={parts} />
   </div>
 </section>}

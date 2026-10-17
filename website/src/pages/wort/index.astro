@@ -3,7 +3,7 @@ import "@styles/objects/_word-index.scss";
 import "@styles/components/_word-group.scss";
 import "@styles/plugins/astro-breadcrumbs.scss";
 import Layout from "@layouts/Layout.astro";
-import { fetchAllWords } from "@services/api.ts";
+import { fetchAllWords } from "@services/payload/words.ts";
 import type { SiteWord } from "@services/payload/words.ts";
 import { routeToWord, seoData, canonicalUrl } from "@utils/helpers.ts";
 import { Breadcrumbs } from "astro-breadcrumbs";
@@ -15,7 +15,7 @@ async function getGroupedWords(): Promise<Record<string, SiteWord[]>> {
   const groupedWords: Record<string, SiteWord[]> = {};
 
   allWords.forEach((word) => {
-    const group = word.derived?.wordGroup;
+    const group = word.derived.wordGroup;
     if (!group) return;
 
     if (!groupedWords[group]) {

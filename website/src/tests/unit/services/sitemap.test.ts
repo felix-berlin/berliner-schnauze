@@ -7,15 +7,15 @@ const { fetchAllWords, fetchAllPosts, fetchAllThemen, getCollection } = vi.hoist
   fetchAllWords: vi.fn(),
   getCollection: vi.fn(),
 }));
-vi.mock("@services/api.ts", () => ({ fetchAllPosts, fetchAllThemen, fetchAllWords }));
+vi.mock("@services/payload/posts.ts", () => ({ fetchAllPosts }));
+vi.mock("@services/payload/themen.ts", () => ({ fetchAllThemen }));
+vi.mock("@services/payload/words.ts", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@services/payload/words.ts")>()),
+  fetchAllWords,
+}));
 vi.mock("astro:content", () => ({ getCollection }));
 
-import {
-  buildSitemapEntries,
-  renderSitemap,
-  renderSitemapIndex,
-  sitemapFilter,
-} from "@services/sitemap.ts";
+import { buildSitemapEntries, renderSitemap, renderSitemapIndex } from "@services/sitemap.ts";
 
 const SITE = new URL("https://berliner-schnauze.wtf");
 
@@ -107,18 +107,4 @@ describe("renderSitemapIndex", () => {
       "<sitemap><loc>https://berliner-schnauze.wtf/sitemap-0.xml</loc></sitemap>",
     );
   });
-});
-
-describe("sitemapFilter", () => {
-  it("keeps word, magazine, themen and static routes", () => {
-    for (const p of ["/wort/aalen", "/magazin/some-article", "/themen/kiez", "/anki"])
-      expect(sitemapFilter(p)).toBe(true);
-  });
-
-  it.each(["/anki/danke", "/settings", "/settings/cache", "/games/berliner-oder-nicht/share"])(
-    "drops %s",
-    (p) => {
-      expect(sitemapFilter(p)).toBe(false);
-    },
-  );
 });

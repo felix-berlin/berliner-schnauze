@@ -2,7 +2,7 @@
 import "@styles/objects/_error-page.scss";
 import Layout from "@layouts/Layout.astro";
 
-// Also set when another page rewrites here (unknown slug), so Layout does not mark the error page cacheable.
+// Also when another page rewrites here (unknown slug): the middleware then marks the error page uncacheable.
 Astro.response.status = 404;
 ---
 

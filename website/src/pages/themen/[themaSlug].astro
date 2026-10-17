@@ -4,7 +4,8 @@ import '@styles/plugins/astro-breadcrumbs.scss';
 import '@styles/components/_thema-detail.scss';
 
 import Layout from '@layouts/Layout.astro';
-import { fetchAllThemen, fetchAllWords } from '@services/api.ts';
+import { fetchAllThemen } from '@services/payload/themen.ts';
+import { fetchAllWords } from '@services/payload/words.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
 import { canonicalUrl, routeToWord, seoData } from '@utils/helpers.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';

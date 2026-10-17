@@ -41,6 +41,18 @@ export function shuffle<T>(arr: readonly T[]): T[] {
   return a;
 }
 
+/** `k` random items of `arr`, as `shuffle(arr).slice(0, k)` but without copying the whole array (a partial Fisher–Yates). */
+export function sample<T>(arr: readonly T[], k: number): T[] {
+  const moved = new Map<number, number>(); // index -> index of the item now there
+  const picked: T[] = [];
+  for (let i = 0; i < Math.min(k, arr.length); i++) {
+    const j = i + Math.floor(Math.random() * (arr.length - i));
+    picked.push(arr[moved.get(j) ?? j]);
+    moved.set(j, moved.get(i) ?? i);
+  }
+  return picked;
+}
+
 export const seoData = (
   data: { seo?: Record<string, unknown>; title: string },
   baseUrl: string = SITE_URL,

@@ -7,3 +7,6 @@ declare module "natural/lib/natural/phonetics/soundex.js" {
     process(token: string, codeLength?: number): string;
   }
 }
+declare module "natural/lib/natural/distance/jaro-winkler_distance.js" {
+  export default function JaroWinklerDistance(s1: string, s2: string): number;
+}

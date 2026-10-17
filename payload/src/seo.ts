@@ -4,9 +4,7 @@ import { seoPlugin } from "@payloadcms/plugin-seo";
 
 import type { Page, Post, Theman, Word } from "./payload-types";
 
-import { docPath, isRoutedCollection, ROUTES } from "./lib/routes";
-
-const SITE_URL = "https://berliner-schnauze.wtf";
+import { docPath, isRoutedCollection, ROUTES, siteUrl, wordSeoTitle } from "./lib/routes";
 
 type SeoDoc = Partial<Page & Post & Theman & Word>;
 
@@ -49,8 +47,7 @@ export const seo = seoPlugin({
   ],
   generateTitle: ({ doc }) => {
     const d = doc as SeoDoc;
-    // Same title the word page builds when no SEO title is set.
-    if (d.berlinerisch) return `${d.berlinerisch} auf Berlinerisch — Bedeutung, Beispiel & Herkunft | Berliner Schnauze`;
+    if (d.berlinerisch) return wordSeoTitle(d.berlinerisch);
     return `${d.title ?? d.name ?? ""} - Berliner Schnauze`;
   },
   generateDescription: ({ doc }) => {
@@ -62,5 +59,5 @@ export const seo = seoPlugin({
     return d.excerpt ?? d.description ?? "";
   },
   generateURL: ({ doc, collectionSlug }) =>
-    isRoutedCollection(collectionSlug) ? `${SITE_URL}${docPath(collectionSlug, (doc as SeoDoc).slug ?? "")}` : SITE_URL,
+    `${siteUrl()}${isRoutedCollection(collectionSlug) ? docPath(collectionSlug, (doc as SeoDoc).slug ?? "") : ""}`,
 });

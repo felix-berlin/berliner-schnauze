@@ -19,6 +19,8 @@ const nextConfig = {
   // so hoisted pnpm deps land in .next/standalone/node_modules.
   output: "standalone",
   outputFileTracingRoot: path.resolve(dirname, ".."),
+  // The 28 MB word list of the compound decomposition (lib/decompose.ts): required at runtime, not bundled.
+  serverExternalPackages: ["all-the-german-words"],
 };
 
 export default withPayload(nextConfig, { devBundleServerPackages: false });

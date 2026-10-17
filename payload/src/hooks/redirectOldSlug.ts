@@ -1,12 +1,13 @@
-import type { CollectionAfterChangeHook, CollectionBeforeChangeHook } from "payload";
+import type { CollectionAfterChangeHook, CollectionBeforeChangeHook, CollectionConfig } from "payload";
 
 import { docPath, isRoutedCollection } from "../lib/routes";
 
 const contextKey = (id: number | string) => `publicSlug:${id}`;
 
 /**
- * Remembers the slug the public page has before a publishing save. Not `previousDoc`: after a draft save that is
- * the draft, while the collection table still holds the published doc.
+ * Remembers the slug the public page has before a publishing save. `originalDoc` is the latest version: the public
+ * doc when that is published (or the collection has no drafts), else a draft, and only then is the published doc
+ * looked up (the collection table still holds it).
  */
 export const rememberPublicSlug: CollectionBeforeChangeHook = async ({
   collection,
@@ -16,7 +17,7 @@ export const rememberPublicSlug: CollectionBeforeChangeHook = async ({
   req,
 }) => {
   if (operation !== "update" || !originalDoc || data._status === "draft") return data;
-  if (!collection.versions?.drafts) {
+  if (!collection.versions?.drafts || originalDoc._status === "published") {
     req.context[contextKey(originalDoc.id)] = originalDoc.slug;
     return data;
   }
@@ -69,3 +70,17 @@ export const redirectOldSlug: CollectionAfterChangeHook = async ({ collection, d
     });
   return doc;
 };
+
+/** Adds both hooks to every collection with a public page (ROUTES), the way the SEO and redirects plugins pick theirs. */
+export const withSlugRedirects = (collection: CollectionConfig): CollectionConfig =>
+  isRoutedCollection(collection.slug)
+    ? {
+        ...collection,
+        hooks: {
+          ...collection.hooks,
+          // first: it must see the slug before another hook changes data
+          beforeChange: [rememberPublicSlug, ...(collection.hooks?.beforeChange ?? [])],
+          afterChange: [...(collection.hooks?.afterChange ?? []), redirectOldSlug],
+        },
+      }
+    : collection;

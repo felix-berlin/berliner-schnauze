@@ -1,6 +1,6 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import { fetchAllPosts } from '@services/api.ts';
+import { fetchAllPosts } from '@services/payload/posts.ts';
 import { canonicalUrl, seoData } from '@utils/helpers.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
@@ -9,10 +9,8 @@ import { Picture } from 'astro:assets';
 import '@styles/plugins/astro-breadcrumbs.scss';
 import '@styles/components/_magazin-overview.scss';
 
-const allPosts = await fetchAllPosts();
-const sortedPosts = [...allPosts].sort(
-  (a, b) => new Date(b.publishedAt ?? 0).getTime() - new Date(a.publishedAt ?? 0).getTime(),
-);
+// newest first, as the article pages' previous/next links
+const sortedPosts = await fetchAllPosts();
 
 const content = {
   seo: {

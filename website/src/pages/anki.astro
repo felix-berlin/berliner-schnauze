@@ -2,16 +2,14 @@
 import '@styles/components/_button.scss';
 // Polar-Checkout-Link. Solange nicht gesetzt, wird kein Kauf-Button gezeigt.
 import { ANKI_DECK_FULL_CHECKOUT, SITE_URL } from 'astro:env/client';
-import { fetchAllWords } from '@services/api.ts';
-import { translationTexts } from '@services/payload/words.ts';
+import { fetchAllWords, translationTexts } from '@services/payload/words.ts';
 import { fetchAnkiContent } from '@services/payload/site.ts';
 import { getPolarFullDeckPrice, getPolarFullDeckPriceAmount } from '@services/polar.ts';
 import { getLiteDeckDownloadUrl } from '@services/githubRelease.ts';
 import { routeToWord, shuffle } from '@utils/helpers.ts';
 import { stripTags } from '@utils/article.ts';
 import Layout from '@layouts/Layout.astro';
-import { mediaFileUrl } from '@services/payload.ts';
-import { getImage } from 'astro:assets';
+import { defaultOgImage } from '@utils/defaultOgImage';
 import AnkiFlashcardDemo from '@components/anki/AnkiFlashcardDemo.vue';
 import AnkiLetterCoverage from '@components/anki/AnkiLetterCoverage.vue';
 import AnkiFaq from '@components/anki/AnkiFaq.vue';
@@ -28,19 +26,12 @@ import Apple from 'virtual:icons/simple-icons/apple';
 import Linux from 'virtual:icons/simple-icons/linux';
 import Android from 'virtual:icons/simple-icons/android';
 
-const ogImage = await getImage({ format: 'png', height: 517, src: mediaFileUrl('brown-bear-roar.png'), width: 900 });
 
 const page = {
   seo: {
     opengraphDescription:
       'Berlinerisch lernen mit Anki: Lite-Deck kostenlos laden oder das komplette Full-Deck mit allen Wörtern und Beispielen kaufen. Einmal zahlen, Updates inklusive.',
-    opengraphImage: {
-      alt: 'Berliner Schnauze – Anki-Deck zum Berlinerisch lernen',
-      height: 517,
-      sourceUrl: new URL(ogImage.src, SITE_URL).href,
-      type: 'image/png',
-      width: 900,
-    },
+    opengraphImage: await defaultOgImage('Berliner Schnauze – Anki-Deck zum Berlinerisch lernen'),
     opengraphType: 'website',
   },
   title: 'Berlinerisch lernen: Anki-Karteikarten - Berliner Schnauze',
@@ -55,18 +46,17 @@ const [LITE_URL, allWords, PRICE, PRICE_AMOUNT] = await Promise.all([
 // Gleicher Filter wie `is_publishable()` in scripts/build_anki_decks.py: Titel und mindestens eine
 // Übersetzung (nach dem Entfernen von HTML). Das Deck holt nur PUBLISH-Wörter; mit SHOW_TEST_DATA
 // enthält `allWords` auch Entwürfe, die Zahlen gelten dann nur näherungsweise.
-const deckWords = allWords
-  .map((w) => (Object.assign(w, { texts: translationTexts(w) })))
-  .filter(
-    (w) =>
-      stripTags(w.berlinerisch).trim() !== '' && w.texts.some((t) => stripTags(t).trim() !== ''),
-  );
+const deckWords = allWords.filter(
+  (w) =>
+    stripTags(w.berlinerisch).trim() !== '' &&
+    translationTexts(w).some((t) => stripTags(t).trim() !== ''),
+);
 const TOTAL_WORDS = deckWords.length;
 
 // Gleiche Gruppierung wie `group` in scripts/build_anki_decks.py: abgeleitete wordGroup, leer -> Sonstige.
 const wordsPerLetter = Object.groupBy(
   deckWords,
-  (w) => w.derived?.wordGroup?.trim().toUpperCase() || 'Sonstige',
+  (w) => w.derived.wordGroup.trim().toUpperCase() || 'Sonstige',
 );
 const LETTER_COUNTS = Object.fromEntries(
   Object.entries(wordsPerLetter).map(([letter, words]) => [letter, words?.length ?? 0]),
@@ -105,12 +95,13 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
 const DEMO_CARDS = shuffle(
   deckWords.flatMap((w) => {
     const example = stripTags(w.examples[0]?.example ?? '');
-    if (!example || w.texts.length === 0) return [];
+    const texts = translationTexts(w);
+    if (!example || texts.length === 0) return [];
     return [
       {
         example,
         href: routeToWord(w.slug),
-        meaning: w.texts.slice(0, 2).map(stripTags).join(', '),
+        meaning: texts.slice(0, 2).map(stripTags).join(', '),
         title: w.berlinerisch,
       },
     ];

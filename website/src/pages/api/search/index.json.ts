@@ -1,9 +1,6 @@
 import type { APIRoute } from "astro";
 
-import { fetchAllWords } from "@services/api.ts";
-import { type SiteWord, translationTexts } from "@services/payload/words.ts";
-import { setPageCache } from "@utils/cacheHeaders.ts";
-import { deriveWordFields } from "payload-app/word-derived";
+import { fetchAllWords, type SiteWord, translationTexts } from "@services/payload/words.ts";
 
 export type OramaSearchIndex = ReturnType<typeof makeOramaSearchIndex>;
 
@@ -15,22 +12,8 @@ const timestamp = (iso: string | null | undefined): number => (iso && Date.parse
  * Its shape is public (cached by the service worker on visitors' devices).
  */
 export function makeOramaSearchIndex(word: SiteWord) {
-  const { berlinerisch } = word;
-  // Stored on save in Payload; computed only for a word that was never saved through the hook. Payload returns an
-  // unset group as an object of nulls, so check a field the hook always sets.
-  let derived = word.derived;
-  if (derived?.wordGroup == null) {
-    console.warn(`[search-index] derived fields missing, computed on the fly: ${word.slug}`);
-    derived = deriveWordFields(berlinerisch);
-  }
-
-  const wordTypes = [
-    ...new Set(
-      ((derived.nlpTags ?? []) as Record<string, string[]>[]).flatMap((t) =>
-        Object.values(t).flat(),
-      ),
-    ),
-  ];
+  const { berlinerisch, derived } = word;
+  const wordTypes = [...new Set(derived.nlpTags.flatMap((t) => Object.values(t).flat()))];
 
   return {
     berlinerischWordTypes: wordTypes,
@@ -72,6 +55,4 @@ export const getSearchIndexEntries = async (): Promise<OramaSearchIndex[]> =>
   (await searchIndex()).entries;
 
 export const GET: APIRoute = async () =>
-  setPageCache(
-    new Response((await searchIndex()).json, { headers: { "Content-Type": "application/json" } }),
-  );
+  new Response((await searchIndex()).json, { headers: { "Content-Type": "application/json" } });

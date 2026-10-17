@@ -5,7 +5,7 @@ const { getSearchIndexEntries, fetchAllThemen } = vi.hoisted(() => ({
   getSearchIndexEntries: vi.fn(),
 }));
 
-vi.mock("@services/api.ts", () => ({ fetchAllThemen }));
+vi.mock("@services/payload/themen.ts", () => ({ fetchAllThemen }));
 vi.mock("@/pages/api/search/index.json.ts", () => ({ getSearchIndexEntries }));
 
 import type { APIContext } from "astro";

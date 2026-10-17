@@ -22,40 +22,38 @@ import WordSectionVerwandteWorte from '@components/word/WordSectionVerwandteWort
 import BookRecommendations from '@components/word/BookRecommendations.astro';
 import WordSidebar from '@components/word/WordSidebar.astro';
 import Layout from '@layouts/Layout.astro';
-import { fetchAffiliateData, fetchAllWords } from '@services/api.ts';
+import { fetchAffiliateData } from '@services/payload/site.ts';
+import { fetchDraftWord, fetchWordBySlug, translationTexts } from '@services/payload/words.ts';
 import { fetchWordRefs, toWordRef } from '@services/payload/wordRefs.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
-import { fetchDraftWord, translationTexts } from '@services/payload/words.ts';
 import { previewDraft } from '@services/preview.ts';
 import { escapeHtml } from 'payload-app/lexical-html';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
   alphabeticNeighbors,
   findAnagrams,
-  getWordType,
   similarSoundingWords,
   similarWords,
-  translateNlpTags,
-  type WordTags,
 } from '@utils/wordHelper.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
+import { wordSeoTitle } from 'payload-app/routes';
 import ChevronRight from '~icons/lucide/chevron-right';
 
 
 const { wordSlug } = Astro.params;
 // An editor with a preview cookie for this word sees its latest draft.
 const draft = await previewDraft(Astro, 'words', wordSlug, fetchDraftWord);
-const word = draft ?? (await fetchAllWords()).find((w) => w.slug === wordSlug);
+const word = draft ?? (wordSlug ? await fetchWordBySlug(wordSlug) : undefined);
 if (!word) return Astro.rewrite('/404');
 
 const wordRef = toWordRef(word);
 const wordRefs = await fetchWordRefs();
 
-// Derived per request from the memoized refs of all words (~6000, rebuilt once a minute).
+// Derived from the memoized refs of all words (~6000, rebuilt when a word changes); indexes are cached per refs array.
 const alphabeticNeighborsResult = alphabeticNeighbors(wordRefs, wordRef);
 const anagramsResult = findAnagrams(word.berlinerisch, wordRefs);
 const similarSpellingResult = similarWords(wordRefs, wordRef, 0.85)
-  .sort((a, b) => b.isSimilar - a.isSimilar)
+  .toSorted((a, b) => b.isSimilar - a.isSimilar)
   .slice(0, 5)
   .map((w) => w.word);
 const soundingWordsResult = similarSoundingWords(wordRefs, wordRef);
@@ -72,12 +70,9 @@ const wordDescription = (() => {
   return raw.length > 160 ? raw.slice(0, 157) + '…' : raw;
 })();
 
-const wordPageTitle = `${berlinerisch} auf Berlinerisch — Bedeutung, Beispiel & Herkunft | Berliner Schnauze`;
+const wordPageTitle = wordSeoTitle(berlinerisch);
 
-// Stored on save; computed only for a word that never went through the hook.
-const wordTags =
-  (word.derived?.nlpTags as WordTags[] | null | undefined) ??
-  translateNlpTags(getWordType(berlinerisch));
+const wordTags = word.derived.nlpTags;
 
 const hasImages = word.images.length > 0;
 const hasAnagrams = anagramsResult.length > 0;
@@ -190,12 +185,10 @@ const schemaJson = () => {
 <Layout
   content={seoData({
     seo: {
+      // An editor-set SEO title/description (CMS) wins over the generated ones.
+      ...(wordDescription && { opengraphDescription: wordDescription }),
       ...seo,
-      title: wordPageTitle,
-      ...(wordDescription && {
-        opengraphDescription: wordDescription,
-        twitterDescription: wordDescription,
-      }),
+      title: seo.title ?? wordPageTitle,
       ...(ogImage && { opengraphImage: ogImage }),
       ...(dateCreated && { opengraphPublishedTime: dateCreated }),
       ...(dateModified && { opengraphModifiedTime: dateModified }),
@@ -234,7 +227,11 @@ const schemaJson = () => {
 
         <WordSectionBeispiele examples={word.examples} />
 
-        <WordSectionOrthographie allWords={wordRefs} word={berlinerisch} />
+        <WordSectionOrthographie
+          allWords={wordRefs}
+          parts={word.derived.decomposition ?? []}
+          word={berlinerisch}
+        />
 
         <WordSectionLinguistik word={berlinerisch} />
 

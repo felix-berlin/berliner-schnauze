@@ -1,7 +1,7 @@
 import type { Media, Post } from "payload-app";
 
 import { ttl } from "@services/cache.ts";
-import { getPayloadClient, publicDocs } from "@services/payload.ts";
+import { getPayloadClient, siteDocs } from "@services/payload.ts";
 import { type SiteMedia, toSiteMedia } from "@services/payload/words.ts";
 import { type DefaultTypedEditorState, lexicalToHtml } from "payload-app/lexical-html";
 
@@ -18,10 +18,6 @@ export type SitePost = Pick<
   readingTime: number;
   slug: string;
 };
-
-/** The media doc as SiteMedia (absolute url), or null if it is not populated or has no file. */
-const absoluteMedia = (media: Media | number | null | undefined): SiteMedia | null =>
-  typeof media === "object" && media ? toSiteMedia(media) : null;
 
 type Node = DefaultTypedEditorState["root"]["children"][number];
 
@@ -56,7 +52,7 @@ export const toPostBlocks = (content: Post["content"] | undefined): ArticleBlock
       continue;
     }
     flush();
-    const media = absoluteMedia(node.value as Media | number);
+    const media = toSiteMedia(node.value as Media | number);
     if (media?.mimeType?.startsWith("image")) blocks.push(media);
   }
   flush();
@@ -95,7 +91,7 @@ const toSitePost = ({
     blocks,
     contentModifiedAt,
     excerpt,
-    featuredImage: absoluteMedia(featuredImage),
+    featuredImage: toSiteMedia(featuredImage),
     id,
     meta,
     publishedAt,
@@ -113,7 +109,7 @@ const loadPosts = async (): Promise<SitePost[]> => {
     depth: 1,
     pagination: false,
     sort: "-publishedAt",
-    ...publicDocs(),
+    ...siteDocs(),
   });
   return docs.flatMap((doc) => toSitePost(doc) ?? []);
 };

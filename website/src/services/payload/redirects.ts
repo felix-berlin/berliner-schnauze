@@ -1,7 +1,7 @@
 import type { Redirect } from "payload-app";
 
 import { ttl } from "@services/cache.ts";
-import { getPayloadClient } from "@services/payload.ts";
+import { getPayloadClient, siteRead } from "@services/payload.ts";
 import { docPath } from "payload-app/routes";
 
 export interface SiteRedirect {
@@ -15,15 +15,16 @@ export const normalizePath = (path: string): string => {
   return clean || "/";
 };
 
-/** Where a redirect points, or null when its target doc is not public (never published, deleted, ...). */
+/**
+ * Where a redirect points, or null when its target doc is not public (never published, deleted, ...): siteRead leaves
+ * such a target unpopulated (an id).
+ */
 export const redirectTarget = ({ to }: Pick<Redirect, "to">): string | null => {
   if (to?.type === "custom") return to.url || null;
   const ref = to?.reference;
   if (!ref || typeof ref.value !== "object") return null;
-  const doc = ref.value as { _status?: string | null; slug?: string | null };
-  // Only words and posts have drafts; pages and themen are always public.
-  if (doc._status === "draft" || !doc.slug) return null;
-  return docPath(ref.relationTo, doc.slug);
+  const { slug } = ref.value as { slug?: string | null };
+  return slug ? docPath(ref.relationTo, slug) : null;
 };
 
 const loadRedirects = async (): Promise<Map<string, SiteRedirect>> => {
@@ -35,10 +36,12 @@ const loadRedirects = async (): Promise<Map<string, SiteRedirect>> => {
     pagination: false,
     populate: {
       pages: { slug: true },
-      posts: { _status: true, slug: true },
+      posts: { slug: true },
       themen: { slug: true },
-      words: { _status: true, slug: true },
+      words: { slug: true },
     },
+    // published targets only, also with SHOW_TEST_DATA
+    ...siteRead(),
   });
   const map = new Map<string, SiteRedirect>();
   for (const redirect of docs) {

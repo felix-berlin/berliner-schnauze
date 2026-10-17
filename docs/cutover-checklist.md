@@ -78,7 +78,7 @@ Background: `docs/superpowers/specs/2026-10-16-payload-migration-design.md`. Set
 
 - [ ] Last BackWPup export of WordPress.
 - [ ] Remove the WordPress MCP server (`.mcp.json` entry `berlinerSchnauze`, `WP_MCP_*` in `~/.claude/settings.json`, the "WordPress MCP Access" section in `CLAUDE.md`).
-- [ ] Remove `wrangler.jsonc` and the `deploy` / `server:preview` scripts: a Cloudflare static deploy cannot serve this site any more.
+- [x] Remove `wrangler.jsonc` and the `deploy` / `server:preview` scripts: a Cloudflare static deploy cannot serve this site any more. (Done on the branch: a Workers Build of it now fails instead of deploying empty pages.)
 - [ ] Decide about `scripts/scan_schlobinski.py`: its input producer (`fetch-wp-words-for-scan.mjs`) was removed.
 - [ ] Keep the `wpId` / `wpPath` fields: `wpPath` drives the media redirects for good, `wpId` is the id of the Anki cards.
 

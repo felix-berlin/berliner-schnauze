@@ -8,7 +8,6 @@ import MainHeader from '@components/header/MainHeader.astro';
 import Modal from '@components/Modal.vue';
 import ScrollToTop from '@components/ScrollToTop.vue';
 import ToastNotifyContainer from '@components/toast/ToastNotifyContainer.vue';
-import { setPageCache } from '@utils/cacheHeaders';
 
 export interface DefaultLayoutProps {
   bodyClasses?: Array<string> | string;
@@ -25,7 +24,6 @@ const {
   contentClasses,
 } = Astro.props as DefaultLayoutProps;
 
-setPageCache(Astro.response);
 ---
 
 <!doctype html>

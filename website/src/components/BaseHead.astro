@@ -52,6 +52,7 @@ const canonicalURL = seo?.canonical || canonicalUrl(Astro.url.pathname, Astro.si
 <!-- Primary Meta Tags -->
 
 {seo?.opengraphDescription && <meta content={seo?.opengraphDescription} name='description' />}
+{seo?.robots && <meta content={seo.robots} name='robots' />}
 
 <!-- Open Graph / Facebook -->
 {seo?.opengraphSiteName && <meta content={seo?.opengraphSiteName} property='og:site_name' />}

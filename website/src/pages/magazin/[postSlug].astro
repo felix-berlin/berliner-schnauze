@@ -5,8 +5,7 @@ import '@styles/components/_magazin-article.scss';
 import Layout from '@layouts/Layout.astro';
 import ArticleBlocks from '@components/magazin/ArticleBlocks.astro';
 import ArticleShare from '@components/magazin/ArticleShare.vue';
-import { fetchAllPosts } from '@services/api.ts';
-import { fetchDraftPost } from '@services/payload/posts.ts';
+import { fetchAllPosts, fetchDraftPost } from '@services/payload/posts.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
 import { previewDraft } from '@services/preview.ts';
 import { canonicalUrl, formattedDate, seoData } from '@utils/helpers.ts';
@@ -23,7 +22,7 @@ const post = draft ?? allPosts.find((p) => p.slug === postSlug);
 if (!post) return Astro.rewrite('/404');
 
 // fetchAllPosts is newest first
-const related = allPosts.filter((p) => p.slug && p.slug !== post.slug).slice(0, 3);
+const related = allPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
 const { blocks, toc, hasAffiliateLinks } = processArticleBlocks(post.blocks);
 

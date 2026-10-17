@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 
-import { fetchAllThemen } from "@services/api.ts";
-import { setPageCache } from "@utils/cacheHeaders.ts";
+import { fetchAllThemen } from "@services/payload/themen.ts";
 
 import { getSearchIndexEntries } from "@/pages/api/search/index.json.ts";
 
@@ -40,5 +39,5 @@ export const GET: APIRoute = async () => {
     wordTypes,
   };
 
-  return setPageCache(Response.json(meta));
+  return Response.json(meta);
 };

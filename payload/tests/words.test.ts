@@ -75,6 +75,14 @@ describe("words", () => {
     expect(other.derived?.wordGroup).toBe("B");
   });
 
+  it("stores the compound decomposition, empty for a non-compound", async () => {
+    const payload = await getTestPayload();
+    const doc = await payload.create({ collection: "words", data: { ...base, berlinerisch: "Hodenkobold" } });
+    expect(doc.derived?.decomposition).toEqual(["hoden", "kobold"]);
+    const upd = await payload.update({ collection: "words", id: doc.id, data: { berlinerisch: "aasen" } });
+    expect(upd.derived?.decomposition).toEqual([]);
+  });
+
   it("derives fields on draft saves", async () => {
     const payload = await getTestPayload();
     const doc = await payload.create({ collection: "words", data: { ...base, berlinerisch: "aasen" }, draft: true });

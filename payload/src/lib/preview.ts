@@ -1,6 +1,8 @@
 // Shared with the Astro app via `payload-app/preview`: keep it free of payload/next/config imports.
 import { createHmac, timingSafeEqual } from "node:crypto";
 
+import { siteUrl } from "./routes";
+
 /** Collections with drafts, the only ones a preview shows something the live page does not. */
 export type PreviewCollection = "posts" | "words";
 
@@ -53,6 +55,5 @@ export const previewUrl =
   (doc: Record<string, unknown>): string | null => {
     const secret = process.env.PAYLOAD_SECRET;
     if (typeof doc.id !== "number" || !secret) return null;
-    const site = process.env.SITE_URL || "https://berliner-schnauze.wtf";
-    return `${site}/api/preview?token=${previewToken(secret, { collection, id: doc.id })}`;
+    return `${siteUrl()}/api/preview?token=${previewToken(secret, { collection, id: doc.id })}`;
   };

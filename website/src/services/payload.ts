@@ -16,13 +16,18 @@ export const getPayloadClient = (): Promise<Payload> => {
 };
 
 /**
- * Find args for what the site shows: published docs only, or the drafts too with SHOW_TEST_DATA. The Local API
- * ignores access control, so every query of a drafts collection spreads this.
+ * Args of every site query: read with access control as the site (`draftsRead`/`contentRead` in payload/src/access.ts),
+ * so only published docs come back, also where they are populated into another doc. REST/GraphQL cannot set the
+ * context, they stay login-only.
  */
-export const publicDocs = () =>
+export const siteRead = () =>
+  ({ context: { siteRead: "published" }, overrideAccess: false }) as const;
+
+/** siteRead() for the listings of a drafts collection: with SHOW_TEST_DATA the drafts too, in their latest version. */
+export const siteDocs = () =>
   SHOW_TEST_DATA
-    ? ({ draft: true } as const)
-    : ({ where: { _status: { equals: "published" as const } } } as const);
+    ? ({ context: { siteRead: "all" }, draft: true, overrideAccess: false } as const)
+    : siteRead();
 
 /** Absolute URL of a file in the media collection by its filename (site artwork that no doc references). */
 export const mediaFileUrl = (filename: string): string =>
