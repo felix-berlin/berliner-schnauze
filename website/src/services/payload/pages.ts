@@ -1,26 +1,17 @@
+import type { Page } from "payload-app";
+
 import { getPayloadClient } from "@services/payload.ts";
-import { toSeoData } from "@services/payload/seo.ts";
 import { lexicalToHtml } from "payload-app/lexical-html";
 
-import type { PageNode } from "@/types/cms.ts";
-
-export type { PageNode };
+/** A page as the site renders it: the Payload doc with its rich text as html. */
+export type SitePage = Pick<Page, "id" | "meta" | "title"> & { contentHtml: string; slug: string };
 
 /** Pages by slug (legal pages); not memoized, only a handful of on-demand requests read them. */
-export const fetchPagesBySlugs = async (slugs: string[]): Promise<PageNode[]> => {
+export const fetchPagesBySlugs = async (slugs: string[]): Promise<SitePage[]> => {
   const { docs } = await (
     await getPayloadClient()
   ).find({ collection: "pages", depth: 1, pagination: false, where: { slug: { in: slugs } } });
-  return docs.flatMap((page) =>
-    page.slug
-      ? [
-          {
-            content: lexicalToHtml(page.content),
-            seo: toSeoData(page.meta),
-            slug: page.slug,
-            title: page.title,
-          },
-        ]
-      : [],
+  return docs.flatMap(({ content, id, meta, slug, title }) =>
+    slug ? [{ contentHtml: lexicalToHtml(content), id, meta, slug, title }] : [],
   );
 };

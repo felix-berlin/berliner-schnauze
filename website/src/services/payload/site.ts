@@ -1,9 +1,8 @@
-import type { Config } from "payload-app";
+import type { Affiliate, Config } from "payload-app";
 
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient } from "@services/payload.ts";
 
-import type { AffiliateBook, AffiliateDisclaimer } from "@/types/cms.ts";
 
 const global = <S extends keyof Config["globals"]>(slug: S) =>
   ttl(60_000, async () => (await getPayloadClient()).findGlobal({ depth: 0, slug }));
@@ -34,17 +33,13 @@ export const fetchMenu = async (menu: "main" | "footer1" | "footer2"): Promise<M
   );
 
 export interface AffiliateData {
-  books: AffiliateBook[];
-  disclaimers: AffiliateDisclaimer[];
+  books: NonNullable<Affiliate["books"]>;
+  disclaimers: NonNullable<Affiliate["disclaimers"]>;
 }
 
 export const fetchAffiliateData = async (): Promise<AffiliateData> => {
   const data = await affiliate();
-  // Postgres returns null (not undefined) for unset fields, which is what the hand-written types say.
-  return {
-    books: (data.books ?? []) as AffiliateBook[],
-    disclaimers: (data.disclaimers ?? []) as AffiliateDisclaimer[],
-  };
+  return { books: data.books ?? [], disclaimers: data.disclaimers ?? [] };
 };
 
 export interface FundingPlatform {

@@ -5,6 +5,7 @@ import '@styles/components/_thema-detail.scss';
 
 import Layout from '@layouts/Layout.astro';
 import { fetchAllThemen, fetchAllWords } from '@services/api.ts';
+import { metaToSeo } from '@services/payload/seo.ts';
 import { canonicalUrl, routeToWord, seoData } from '@utils/helpers.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
@@ -13,6 +14,7 @@ const { themaSlug } = Astro.params;
 const [allThemen, allWords] = await Promise.all([fetchAllThemen(), fetchAllWords()]);
 const thema = allThemen.find((t) => t.slug === themaSlug);
 if (!thema) return Astro.rewrite('/404');
+const seo = metaToSeo(thema.meta);
 
 const words = allWords.filter((word) =>
   word.themen.some((t) => t.slug === themaSlug),
@@ -20,14 +22,14 @@ const words = allWords.filter((word) =>
 
 const seoProps = seoData({
   seo: {
-    canonical: thema.seo?.canonical ?? canonicalUrl(`/themen/${thema.slug}/`, Astro.site),
+    canonical: seo.canonical ?? canonicalUrl(`/themen/${thema.slug}/`, Astro.site),
     opengraphDescription:
-      thema.seo?.opengraphDescription ?? thema.seo?.metaDesc ?? thema.description ?? '',
-    ...(thema.seo?.opengraphImage?.sourceUrl && {
-      opengraphImage: { sourceUrl: thema.seo.opengraphImage.sourceUrl },
+      seo.opengraphDescription ?? seo.metaDesc ?? thema.description ?? '',
+    ...(seo.opengraphImage && {
+      opengraphImage: { sourceUrl: seo.opengraphImage.sourceUrl },
     }),
     opengraphType: 'website',
-    title: thema.seo?.title ?? thema.name,
+    title: seo.title ?? thema.name,
   },
   title: thema.name,
 });

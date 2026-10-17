@@ -17,14 +17,6 @@ export type SeoData = {
   twitterTitle: string | null;
 };
 
-export type ThemaNode = {
-  count: number;
-  description: string | null;
-  name: string;
-  seo: SeoData | null;
-  slug: string;
-};
-
 export type CoreImageBlock = {
   attributes: { alt: string; height: string; url: string; width: string } | null;
   name: "core/image";
@@ -61,23 +53,3 @@ export type PostNode = {
   slug: string | null;
   title: string | null;
 };
-
-export type PageNode = {
-  /** HTML rendered from rich text. */
-  content: string;
-  seo: SeoData | null;
-  slug: string;
-  title: string;
-};
-
-export type AffiliateBook = {
-  badge: string | null;
-  badgeModifier: string | null;
-  description: string | null;
-  href: string | null;
-  imageAlt: string | null;
-  imageUrl: string | null;
-  title: string | null;
-};
-
-export type AffiliateDisclaimer = { plattform: string | null; text: string | null };

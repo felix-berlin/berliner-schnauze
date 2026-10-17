@@ -1,13 +1,16 @@
+import type { Theman } from "payload-app";
+
 import { ttl } from "@services/cache.ts";
 import { getPayloadClient, publicDocs } from "@services/payload.ts";
-import { toSeoData } from "@services/payload/seo.ts";
 
-import type { ThemaNode } from "@/types/cms.ts";
-
-export type { ThemaNode };
+/** A thema as the site renders it: the Payload doc with a slug and the number of public words in it. */
+export type SiteThema = Pick<Theman, "description" | "id" | "meta" | "name"> & {
+  count: number;
+  slug: string;
+};
 
 /** Themen with a slug, German-sorted by name, each with the number of public words in it. */
-const loadThemen = async (): Promise<ThemaNode[]> => {
+const loadThemen = async (): Promise<SiteThema[]> => {
   const payload = await getPayloadClient();
   const [{ docs }, words] = await Promise.all([
     payload.find({ collection: "themen", depth: 1, pagination: false }),
@@ -27,18 +30,8 @@ const loadThemen = async (): Promise<ThemaNode[]> => {
     }
 
   return docs
-    .flatMap((thema) =>
-      thema.slug
-        ? [
-            {
-              count: counts.get(thema.id) ?? 0,
-              description: thema.description ?? null,
-              name: thema.name,
-              seo: toSeoData(thema.meta),
-              slug: thema.slug,
-            },
-          ]
-        : [],
+    .flatMap(({ description, id, meta, name, slug }) =>
+      slug ? [{ count: counts.get(id) ?? 0, description, id, meta, name, slug }] : [],
     )
     .sort((a, b) => a.name.localeCompare(b.name, "de"));
 };

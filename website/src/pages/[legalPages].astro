@@ -2,6 +2,7 @@
 import "@styles/objects/_legal-pages.scss";
 import Layout from "@layouts/Layout.astro";
 import { fetchPagesBySlugs } from "@services/api.ts";
+import { metaToSeo } from "@services/payload/seo.ts";
 
 const LEGAL_PAGES = ["datenschutz", "impressum"];
 
@@ -12,14 +13,11 @@ const [page] = await fetchPagesBySlugs([legalPages]);
 if (!page) return Astro.rewrite("/404");
 
 const pageContent = {
-  ...page,
-  seo: {
-    ...page.seo,
-    opengraphType: "website",
-  },
+  seo: { ...metaToSeo(page.meta), opengraphType: "website" },
+  title: page.title,
 };
 ---
 
 <Layout content={pageContent}>
-  <article set:html={page.content} />
+  <article set:html={page.contentHtml} />
 </Layout>

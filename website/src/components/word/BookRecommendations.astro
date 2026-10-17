@@ -1,18 +1,18 @@
 ---
-import type { AffiliateBook, AffiliateDisclaimer } from '@/types/cms.ts';
+import type { AffiliateData } from '@services/payload/site.ts';
 
 import { Picture } from 'astro:assets';
 import '@styles/components/_book-recommendations.scss';
 import BookOpen from '~icons/lucide/book-open';
 
 interface Props {
-  books: AffiliateBook[];
-  disclaimers: AffiliateDisclaimer[];
+  books: AffiliateData['books'];
+  disclaimers: AffiliateData['disclaimers'];
 }
 
 const { books, disclaimers } = Astro.props;
 
-function getPlatformLabel(href: string | null): string {
+function getPlatformLabel(href?: string | null): string {
   if (!href) return '';
   if (/amazon\.|amzn\.to/i.test(href)) return 'Amazon.de';
   try {
@@ -22,7 +22,7 @@ function getPlatformLabel(href: string | null): string {
   }
 }
 
-function isAmazonLink(href: string | null): boolean {
+function isAmazonLink(href?: string | null): boolean {
   return /amazon\.|amzn\.to/i.test(href ?? '');
 }
 ---
@@ -49,7 +49,7 @@ function isAmazonLink(href: string | null): boolean {
             <div class='c-book-recs__cover' aria-hidden='true'>
               {book.imageUrl ? (
                 <Picture
-                  alt={book.imageAlt ?? book.title}
+                  alt={book.imageAlt ?? book.title ?? ''}
                   densities={[1, 2]}
                   fallbackFormat='webp'
                   formats={['avif', 'webp']}

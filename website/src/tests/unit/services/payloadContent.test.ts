@@ -171,12 +171,12 @@ describe("fetchAllThemen", () => {
   const thema = (id: number, name: string, slug: string | null) => ({
     description: null,
     id,
+    meta: null,
     name,
-    seo: null,
     slug,
   });
 
-  it("maps themen with their public word count and seo, sorted by name (de)", async () => {
+  it("maps themen with their public word count and meta, sorted by name (de)", async () => {
     find.mockImplementation(({ collection }: { collection: string }) =>
       Promise.resolve(
         collection === "themen"
@@ -199,11 +199,9 @@ describe("fetchAllThemen", () => {
       {
         count: 2,
         description: "Kulinarisches",
+        // the plugin meta group as stored: the page maps it with metaToSeo
+        meta: { image: { id: 1, url: "/api/media/file/e.png" }, title: "Essen" },
         name: "Essen & Trinken",
-        seo: {
-          opengraphImage: { sourceUrl: "https://cms.example/api/media/file/e.png" },
-          title: "Essen",
-        },
         slug: "essen",
       },
       { count: 1, name: "Zoo", slug: "zoo" },
@@ -218,7 +216,7 @@ describe("fetchAllThemen", () => {
 });
 
 describe("fetchPagesBySlugs", () => {
-  it("renders the content as html and keeps the seo", async () => {
+  it("renders the content as html and keeps the meta group", async () => {
     find.mockResolvedValue({
       docs: [
         {
@@ -233,8 +231,8 @@ describe("fetchPagesBySlugs", () => {
     const { fetchPagesBySlugs } = await import("@services/payload/pages.ts");
     expect(await fetchPagesBySlugs(["impressum"])).toMatchObject([
       {
-        content: "<p>Anschrift</p>",
-        seo: { metaRobotsNoindex: "noindex", title: "Impressum" },
+        contentHtml: "<p>Anschrift</p>",
+        meta: { noindex: true, title: "Impressum" },
         slug: "impressum",
         title: "Impressum",
       },
