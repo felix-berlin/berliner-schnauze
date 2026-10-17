@@ -58,7 +58,7 @@ Background: `docs/superpowers/specs/2026-10-16-payload-migration-design.md`. Set
 
 - [ ] Start the stack with the production image tags (`docker compose up -d`), without public DNS: `curl --resolve` or a hosts entry.
 - [ ] `pnpm dlx tsx website/scripts/seo-diff.ts https://berliner-schnauze.wtf https://<new stack> website/scripts/seo-urls.txt` → exit 0 (the `known` line for `/` is expected).
-- [ ] The homepage hero, the footer bear and the `/anki` og:image still use the old `https://cms.berliner-schnauze.wtf/wp-content/uploads/brown-bear-roar.png` / `bear-walking.png` urls (the 301 maps them to the imported media). They are loaded through Imagor: check that they show. If Imagor does not follow the redirect, change the four urls (`src/pages/index.astro`, `themen/index.astro`, `anki.astro`, `src/components/Footer.astro`) to `/api/media/file/<name>.png`.
+- [ ] The homepage hero, the footer bear and the og:images of `/`, `/themen` and `/anki` load `brown-bear-roar.png` / `bear-walking.png` from `PAYLOAD_SERVER_URL/api/media/file/` through Imagor (`mediaFileUrl`): check that they show (Imagor must reach the CMS host).
 - [ ] Old media link with a query string and an umlaut: `curl -sI "https://cms.berliner-schnauze.wtf/wp-content/uploads/K%C3%BCche.jpg?ver=2"` → `301`, and the target returns `200`.
 - [ ] Anonymous API is closed: `curl -s -o /dev/null -w '%{http_code}' https://cms.berliner-schnauze.wtf/api/words` → `403`.
 - [ ] One word page, the homepage, a magazine page and `/spenden` in light and dark mode, desktop and mobile width (`CLAUDE.md`).
