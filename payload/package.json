@@ -9,7 +9,8 @@
       "default": "./src/index.ts"
     },
     "./word-derived": "./src/lib/wordDerived.ts",
-    "./lexical-html": "./src/lib/lexicalHtml.ts"
+    "./lexical-html": "./src/lib/lexicalHtml.ts",
+    "./routes": "./src/lib/routes.ts"
   },
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
@@ -28,6 +29,7 @@
     "@payloadcms/db-postgres": "3.91.0",
     "@payloadcms/email-nodemailer": "3.91.0",
     "@payloadcms/next": "3.91.0",
+    "@payloadcms/plugin-redirects": "3.91.0",
     "@payloadcms/plugin-seo": "3.91.0",
     "@payloadcms/richtext-lexical": "3.91.0",
     "@payloadcms/ui": "3.91.0",

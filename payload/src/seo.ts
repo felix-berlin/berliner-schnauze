@@ -4,10 +4,9 @@ import { seoPlugin } from "@payloadcms/plugin-seo";
 
 import type { Page, Post, Theman, Word } from "./payload-types";
 
-const SITE_URL = "https://berliner-schnauze.wtf";
+import { docPath, isRoutedCollection, ROUTES } from "./lib/routes";
 
-/** Public path of each collection with SEO; the plugin's search preview shows it. */
-const ROUTES: Record<string, string> = { pages: "", posts: "/magazin", themen: "/themen", words: "/wort" };
+const SITE_URL = "https://berliner-schnauze.wtf";
 
 type SeoDoc = Partial<Page & Post & Theman & Word>;
 
@@ -67,5 +66,5 @@ export const seo = seoPlugin({
     return d.excerpt ?? d.description ?? "";
   },
   generateURL: ({ doc, collectionSlug }) =>
-    `${SITE_URL}${ROUTES[collectionSlug ?? ""] ?? ""}/${(doc as SeoDoc).slug ?? ""}`,
+    isRoutedCollection(collectionSlug) ? `${SITE_URL}${docPath(collectionSlug, (doc as SeoDoc).slug ?? "")}` : SITE_URL,
 });

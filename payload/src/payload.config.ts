@@ -18,6 +18,7 @@ import { Affiliate } from "./globals/Affiliate";
 import { Company } from "./globals/Company";
 import { Navigation } from "./globals/Navigation";
 import { migrations } from "./migrations";
+import { redirects } from "./redirects";
 import { seo } from "./seo";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -40,7 +41,7 @@ export default buildConfig({
         transport: nodemailer.createTransport(process.env.SMTP_URL),
       })
     : undefined,
-  plugins: [seo],
+  plugins: [seo, redirects],
   secret: process.env.PAYLOAD_SECRET || "",
   serverURL: process.env.PAYLOAD_SERVER_URL || "",
   typescript: {
