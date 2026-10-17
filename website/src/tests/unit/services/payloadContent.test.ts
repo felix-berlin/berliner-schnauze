@@ -68,7 +68,7 @@ describe("toPostBlocks", () => {
     );
     expect(blocks).toEqual([
       "<p>eins</p>",
-      { ...img, url: "https://cms.example/api/media/file/bild.png" },
+      { ...img, descriptionHtml: null, url: "https://cms.example/api/media/file/bild.png" },
       '<p>zwei</p><blockquote class="c-magazin-article__quote"><p><strong>Zitat</strong></p></blockquote>',
     ]);
   });

@@ -1,10 +1,9 @@
 ---
 import { Picture } from 'astro:assets';
-import type { Media } from 'payload-app';
+import type { SiteMedia } from '@services/payload/words.ts';
 
 interface Props {
-  /** Media doc with an absolute url (`toPostBlocks`). */
-  media: Media;
+  media: SiteMedia;
 }
 
 const { media } = Astro.props;

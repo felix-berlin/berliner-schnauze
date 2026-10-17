@@ -1,11 +1,12 @@
 import type { Media, Post } from "payload-app";
 
 import { ttl } from "@services/cache.ts";
-import { getPayloadClient, mediaUrl, publicDocs } from "@services/payload.ts";
+import { getPayloadClient, publicDocs } from "@services/payload.ts";
+import { type SiteMedia, toSiteMedia } from "@services/payload/words.ts";
 import { type DefaultTypedEditorState, lexicalToHtml } from "payload-app/lexical-html";
 
 /** A run of article html, or an image the article renders as a `<Picture>`. */
-export type ArticleBlock = string | Media;
+export type ArticleBlock = string | SiteMedia;
 
 /** A post as the site renders it: the Payload doc, its rich text as article blocks and the reading time. */
 export type SitePost = Pick<
@@ -13,16 +14,14 @@ export type SitePost = Pick<
   "contentModifiedAt" | "excerpt" | "id" | "meta" | "publishedAt" | "title"
 > & {
   blocks: ArticleBlock[];
-  featuredImage: Media | null;
+  featuredImage: SiteMedia | null;
   readingTime: number;
   slug: string;
 };
 
-/** The media doc with its url made absolute, or null if it is not populated or has no file. */
-const absoluteMedia = (media: Media | number | null | undefined): Media | null => {
-  const url = mediaUrl(media);
-  return url && typeof media === "object" ? { ...media!, url } : null;
-};
+/** The media doc as SiteMedia (absolute url), or null if it is not populated or has no file. */
+const absoluteMedia = (media: Media | number | null | undefined): SiteMedia | null =>
+  typeof media === "object" && media ? toSiteMedia(media) : null;
 
 type Node = DefaultTypedEditorState["root"]["children"][number];
 
@@ -39,7 +38,7 @@ const html = (state: DefaultTypedEditorState, children: Node[]) =>
   );
 
 /** Splits stored rich text at its images: each image becomes its own block, everything between them one html block. */
-export const toPostBlocks = (content: unknown): ArticleBlock[] => {
+export const toPostBlocks = (content: Post["content"] | undefined): ArticleBlock[] => {
   const state = content as DefaultTypedEditorState | null | undefined;
   const nodes = state?.root?.children;
   if (!state || !nodes) return [];
@@ -74,11 +73,11 @@ const readingTime = (blocks: ArticleBlock[]): number => {
   return Math.max(1, Math.ceil(text.split(/\s+/).filter(Boolean).length / WORDS_PER_MINUTE));
 };
 
-/** A stored post as a SitePost, or undefined when it lacks its slug or title (a draft may). */
 /** A post as a draft may be stored: strictDraftTypes types its required fields optional. */
 type StoredPost = Omit<Post, "createdAt" | "title" | "updatedAt"> &
   Partial<Pick<Post, "createdAt" | "title" | "updatedAt">>;
 
+/** A stored post as a SitePost, or undefined when it lacks its slug or title (a draft may). */
 const toSitePost = ({
   content,
   contentModifiedAt,
