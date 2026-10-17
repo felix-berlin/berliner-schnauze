@@ -20,7 +20,6 @@ vi.mock("@utils/helpers.ts", () => ({
 }));
 
 const makeWord = (berlinerisch: string, slug: string) => ({
-  berlinerWordId: slug,
   berlinerischWordTypes: [],
   dateTs: 1_767_225_600_000,
   modifiedTs: 1_767_225_600_000,

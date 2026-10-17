@@ -27,21 +27,21 @@ interface IsWordOfTheDayProps {
   iconSize?: number;
   tooltipPlacement?: "bottom" | "left" | "right" | "top";
   variant?: "badge" | "icon";
+  slug: string;
   word: string;
-  wordId: number;
 }
 
 const {
   iconSize = 24,
   tooltipPlacement = "right",
+  slug,
   variant = "icon",
   word,
-  wordId,
 } = defineProps<IsWordOfTheDayProps>();
 
 const wordOfTheDay = useStore($wordOfTheDay);
 
 const isWordOfTheDay = computed(() => {
-  return wordId === wordOfTheDay?.value?.word?.ID;
+  return slug === wordOfTheDay?.value?.word?.slug;
 });
 </script>

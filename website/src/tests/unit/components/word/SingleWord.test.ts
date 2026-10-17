@@ -15,7 +15,6 @@ vi.mock("@components/word/WordOptionDropdown.vue", () => ({
 }));
 
 const source = {
-  berlinerWordId: "42",
   slug: "schnauze",
   wordGroup: "noun",
   wordProperties: {
@@ -29,12 +28,12 @@ beforeEach(() => {
 });
 
 describe("SingleWord.vue", () => {
-  it("renders article with id word-{berlinerWordId}", async () => {
+  it("renders article with id word-{slug}", async () => {
     const SingleWord = (await import("@components/word/SingleWord.vue")).default;
     const wrapper = mount(SingleWord, {
       props: { showDropdown: false, source },
     });
-    expect(wrapper.find("article#word-42").exists()).toBe(true);
+    expect(wrapper.find("article#word-schnauze").exists()).toBe(true);
   });
 
   it("sets data-group attribute from wordGroup", async () => {

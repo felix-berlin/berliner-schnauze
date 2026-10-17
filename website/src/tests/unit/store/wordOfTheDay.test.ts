@@ -47,7 +47,7 @@ describe("getWordOfTheDay", () => {
   });
 
   it("populates word data and clears loading on success", async () => {
-    const wordData = { ID: 1, berlinerisch: "Jotte", translations: [{ translation: "Oh Gott" }] };
+    const wordData = { berlinerisch: "Jotte", slug: "jotte" };
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
@@ -95,7 +95,7 @@ describe("getWordOfTheDay", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
-        json: vi.fn().mockResolvedValue({ ID: 2, berlinerisch: "Ick" }),
+        json: vi.fn().mockResolvedValue({ berlinerisch: "Ick", slug: "ick" }),
         ok: true,
       }),
     );

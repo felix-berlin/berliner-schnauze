@@ -120,7 +120,6 @@ export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedC
     wpId: node.databaseId,
     slug: node.slug || null,
     berlinerisch: p.berlinerisch ?? "",
-    berlinerWordId: node.berlinerWordId ?? null,
     article: p.article ?? null,
     translations: (p.translations ?? []).filter(present).map(({ translation }) => ({ translation: translation ?? null })),
     alternativeWords: (p.alternativeWords ?? []).filter(present).map(({ alternativeWord }) => ({ alternativeWord: alternativeWord ?? null })),

@@ -11,13 +11,13 @@ vi.mock("@nanostores/vue", () => ({
 }));
 
 describe("IsWordOfTheDay.vue", () => {
-  let mockStore: { value: { word: { ID: number } } };
+  let mockStore: { value: { word: { slug: string } } };
 
   beforeEach(() => {
     mockStore = {
       value: {
         word: {
-          ID: 1,
+          slug: "kiez",
         },
       },
     };
@@ -45,7 +45,7 @@ describe("IsWordOfTheDay.vue", () => {
         iconSize: 24,
         tooltipPlacement: "right",
         word: "TestWord",
-        wordId: 1,
+        slug: "kiez",
       },
     });
 
@@ -63,7 +63,7 @@ describe("IsWordOfTheDay.vue", () => {
         iconSize: 24,
         tooltipPlacement: "right",
         word: "TestWord",
-        wordId: 2,
+        slug: "andere",
       },
     });
 
@@ -85,7 +85,7 @@ describe("IsWordOfTheDay.vue", () => {
         iconSize: 24,
         tooltipPlacement: "bottom",
         word: "TestWord",
-        wordId: 1,
+        slug: "kiez",
       },
     });
 
@@ -105,7 +105,7 @@ describe("IsWordOfTheDay.vue", () => {
       props: {
         variant: "badge",
         word: "TestWord",
-        wordId: 1,
+        slug: "kiez",
       },
     });
 
@@ -122,7 +122,7 @@ describe("IsWordOfTheDay.vue", () => {
       props: {
         variant: "badge",
         word: "TestWord",
-        wordId: 2,
+        slug: "andere",
       },
     });
 

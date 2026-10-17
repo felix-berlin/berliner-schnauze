@@ -1,8 +1,7 @@
 <template>
   <article
-    :id="`word-${source.berlinerWordId}`"
-    :ref="`word-${source.berlinerWordId}`"
-    :key="source.berlinerWordId"
+    :id="`word-${source.slug}`"
+    :key="source.slug"
     :data-group="source.wordGroup"
     class="c-word-list__word"
     :class="{ 'has-translation': source.wordProperties.translations }"
@@ -17,7 +16,7 @@
       >
         <IsWordOfTheDay
           :word="source.wordProperties.berlinerisch"
-          :word-id="source.berlinerWordId"
+          :slug="source.slug"
           class="c-word-list__crown"
         />
         <a

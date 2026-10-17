@@ -13,13 +13,6 @@ import { lexicalToHtml } from "payload-app/lexical-html";
 
 const PAGE_SIZE = 1000;
 
-/**
- * Words imported from WordPress keep their `berlinerWordId` (the DOM id of a card and the word-of-the-day id). A word
- * created in Payload has none and would share one id with every other new word, so it gets one from a range
- * above the WordPress ids (Payload ids start at 1 and would clash with them).
- */
-const PAYLOAD_ID_OFFSET = 1_000_000;
-
 /** A media doc as the site renders it: absolute url, rich-text description as HTML. */
 export type SiteMedia = Pick<Media, "alt" | "caption" | "height" | "id" | "mimeType" | "width"> & {
   descriptionHtml: string | null;
@@ -35,12 +28,10 @@ export type RelatedWord = Pick<PayloadWord, "berlinerisch" | "id"> & { slug: str
 
 /**
  * A public word as the pages render it: the Payload doc with its relations populated, repeaters as arrays
- * (never null), media with absolute urls, and what is computed once per cache window (rich text as HTML,
- * the ids the old site used).
+ * (never null), media with absolute urls, and what is computed once per cache window (rich text as HTML).
  */
 export type SiteWord = Omit<
   PayloadWord,
-  | "berlinerWordId"
   | "berlinerischAudio"
   | "examples"
   | "images"
@@ -51,11 +42,7 @@ export type SiteWord = Omit<
   | "wordTypes"
 > & {
   berlinerischAudio: AudioRow[];
-  /** DOM id of the word's card and the word-of-the-day id (the WordPress id, or one above PAYLOAD_ID_OFFSET). */
-  berlinerWordId: number;
   examples: WordExample[];
-  /** The id the word had in WPGraphQL: the JSON-LD identifier of a word page stays as it was. */
-  globalId: string;
   images: SiteMedia[];
   infoTextHtml: string | null;
   relatedWords: RelatedWord[];
@@ -89,9 +76,6 @@ const audioRows = (rows: AudioArray | undefined): AudioRow[] =>
     return media ? [{ ...row, audio: media }] : [];
   });
 
-const wordDbId = (doc: Pick<PayloadWord, "berlinerWordId" | "id">): number =>
-  doc.berlinerWordId ?? PAYLOAD_ID_OFFSET + doc.id;
-
 /** `doc` must be populated one level deep (relations and media are objects, not ids) and have a slug. */
 export const toWord = ({
   berlinerischAudio,
@@ -104,10 +88,8 @@ export const toWord = ({
   ...doc
 }: PayloadWord & { slug: string }): SiteWord => ({
   ...doc,
-  berlinerWordId: wordDbId(doc),
   berlinerischAudio: audioRows(berlinerischAudio),
   examples: (examples ?? []).map(({ exampleAudio, ...e }) => (Object.assign(e, { exampleAudio: audioRows(exampleAudio) }))),
-  globalId: btoa(`post:${wordDbId(doc)}`),
   images: populated<Media>(images).flatMap((m) => toSiteMedia(m) ?? []),
   infoTextHtml: lexicalToHtml(infoText) || null,
   // the Local API ignores access control: a never-published word must not leak through a relation
@@ -136,7 +118,7 @@ const loadAllWords = async (): Promise<SiteWord[]> => {
       populate: {
         themen: { name: true, slug: true },
         "word-types": { name: true },
-        words: { _status: true, berlinerWordId: true, berlinerisch: true, slug: true },
+        words: { _status: true, berlinerisch: true, slug: true },
       },
       sort: "id",
       ...publicDocs(),

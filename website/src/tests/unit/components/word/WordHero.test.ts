@@ -7,7 +7,6 @@ vi.mock("@styles/components/_word-hero.scss", () => ({}));
 
 const makeWord = (overrides: Record<string, unknown> = {}) => ({
   article: "die",
-  berlinerWordId: 42,
   berlinerisch: "Schnauze",
   berlinerischAudio: [],
   berolinismus: false,

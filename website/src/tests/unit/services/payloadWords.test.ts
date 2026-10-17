@@ -131,13 +131,10 @@ describe("toWord", () => {
     const word = toWord(doc as never);
     expect(word).toMatchObject({
       alternativeWords: [{ alternativeWord: "aasig" }],
-      berlinerWordId: 5703,
       berlinerisch: "aasen",
       berolinismus: true,
       contentModifiedAt: "2026-09-20T17:24:19.000Z",
       derived: { soundexCode: "A250", syllablesCount: 2, wordComponents: ["asen"] },
-      // WP global id format ("post:<id>" base64): the JSON-LD identifier of every word stays as it was
-      globalId: btoa("post:5703"),
       infoTextHtml: "<p>Adjektiv zu Aas</p>",
       learnMore: "https://example.org/mehr",
       meta: { description: "Meta", title: "aasen" },
@@ -193,17 +190,6 @@ describe("toWord", () => {
     ]);
   });
 
-  it("gives a word created in Payload (no berlinerWordId) a unique id outside the WordPress range", async () => {
-    const { toWord } = await load();
-    const [a, b] = [
-      toWord({ ...doc, berlinerWordId: null, id: 7 } as never),
-      toWord({ ...doc, berlinerWordId: null, id: 8 } as never),
-    ];
-    expect(a.berlinerWordId).toBe(1_000_007);
-    expect(b.berlinerWordId).not.toBe(a.berlinerWordId);
-    expect(toWord(doc as never).berlinerWordId).toBe(5703); // imported words keep theirs
-  });
-
   it("copes with a sparse document: repeaters and relations become empty arrays", async () => {
     const { toWord } = await load();
     const word = toWord({
@@ -214,7 +200,6 @@ describe("toWord", () => {
       updatedAt: "",
     } as never);
     expect(word).toMatchObject({
-      berlinerWordId: 1_000_001,
       berlinerischAudio: [],
       examples: [],
       images: [],
@@ -318,7 +303,7 @@ describe("fetchAllWords", () => {
       populate: {
         themen: { name: true, slug: true },
         "word-types": { name: true },
-        words: { _status: true, berlinerWordId: true, berlinerisch: true, slug: true },
+        words: { _status: true, berlinerisch: true, slug: true },
       },
     });
   });

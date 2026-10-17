@@ -15,7 +15,6 @@ function makeWord(overrides: Record<string, unknown> = {}): SiteWord {
   return {
     alternativeWords: [],
     article: null,
-    berlinerWordId: 1,
     berlinerisch: "wat",
     berlinerischAudio: [],
     berolinismus: false,
@@ -165,7 +164,6 @@ describe("makeOramaSearchIndex — stored derived fields", () => {
     expect(Object.keys(result).sort()).toEqual(
       [
         "berlinerischWordTypes",
-        "berlinerWordId",
         "dateTs",
         "modifiedTs",
         "slug",

@@ -43,13 +43,12 @@ test.describe("On-demand routes", () => {
     expect((await request.get("/og/doesnotexist.png")).status()).toBe(404);
   });
 
-  test("the word of the day keeps the old WordPress response shape", async ({ request }) => {
+  test("the word of the day answers headword, slug and expiry", async ({ request }) => {
     const body = await (await request.get("/api/word-of-the-day")).json();
-    expect(body).toMatchObject({
-      ID: expect.any(Number),
+    expect(body).toEqual({
       berlinerisch: expect.any(String),
-      post_name: expect.any(String),
-      translations: expect.any(Array),
+      expires: expect.any(Number),
+      slug: expect.any(String),
     });
   });
 

@@ -2,29 +2,11 @@ import { persistentMap } from "@nanostores/persistent";
 import { jsonCodec } from "@utils/jsonCodec";
 import { onMount, task } from "nanostores";
 
+/** The body of /api/word-of-the-day (`toWordOfTheDayResponse`). */
 export interface Word {
-  alternative_words?: boolean;
-  article?: null | string;
   berlinerisch?: string;
-  examples?: Example[];
   expires?: number;
-  group?: string;
-  ID?: number;
-  learn_more?: null | string;
-  post_date?: string;
-  post_modified?: string;
-  post_name?: string;
-  related_words?: null | string;
-  translations?: Translation[];
-  word_type?: boolean;
-}
-interface Example {
-  example: string;
-  example_explanation: string;
-}
-
-interface Translation {
-  translation: string;
+  slug?: string;
 }
 
 type WordOfTheDay = {
@@ -87,15 +69,15 @@ const isCachedToday = (timestamp: number): boolean => {
   );
 };
 
-const getPersistedTimestamp = (): number => {
-  // nanostores onMount callbacks run in reverse registration order (reduceRight),
-  // so persistentMap's restore() hasn't populated the store yet when our callback runs.
-  // Read directly from localStorage using the persistentMap key format.
+// nanostores onMount callbacks run in reverse registration order (reduceRight),
+// so persistentMap's restore() hasn't populated the store yet when our callback runs.
+// Read directly from localStorage using the persistentMap key format.
+const readPersisted = <T>(key: keyof WordOfTheDay, fallback: T): T => {
   try {
-    const raw = localStorage.getItem("wordOfTheDay:timestamp");
-    return raw ? (JSON.parse(raw) as number) : 0;
+    const raw = localStorage.getItem(`wordOfTheDay:${key}`);
+    return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
-    return 0;
+    return fallback;
   }
 };
 
@@ -105,8 +87,10 @@ onMount($wordOfTheDay, () => {
   if (import.meta.env.SSR) return;
 
   void task(async () => {
-    const timestamp = getPersistedTimestamp();
-    if (timestamp && isCachedToday(timestamp)) return;
+    const timestamp = readPersisted("timestamp", 0);
+    // A word cached in the former WordPress shape has no slug: fetch it again.
+    const cachedSlug = readPersisted<Word>("word", {}).slug;
+    if (timestamp && isCachedToday(timestamp) && cachedSlug) return;
 
     // getWordOfTheDay() handles its own errors and never rejects.
     await getWordOfTheDay();

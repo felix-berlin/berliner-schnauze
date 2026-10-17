@@ -6,11 +6,11 @@ import { ref } from "vue";
 const mockWordOfTheDay = ref<{
   loading: boolean;
   error: boolean;
-  word: { berlinerisch: string; post_name: string } | null;
+  word: { berlinerisch: string; slug: string } | null;
 }>({
   error: false,
   loading: false,
-  word: { berlinerisch: "Kiez", post_name: "kiez" },
+  word: { berlinerisch: "Kiez", slug: "kiez" },
 });
 
 vi.mock("@stores/wordOfTheDay.ts", () => ({
@@ -47,7 +47,7 @@ describe("WordOfTheDay.vue", () => {
     mockWordOfTheDay.value = {
       error: false,
       loading: false,
-      word: { berlinerisch: "Kiez", post_name: "kiez" },
+      word: { berlinerisch: "Kiez", slug: "kiez" },
     };
   });
 

@@ -32,7 +32,7 @@ vi.mock("@components/word/SingleWord.vue", () => ({
   default: {
     props: ["source", "index", "highlightTerm", "showDropdown"],
     template:
-      "<li class='mock-single-word' :id=\"`word-${source?.berlinerWordId}`\" tabindex='0'>{{ source?.wordProperties?.berlinerisch }}</li>",
+      "<li class='mock-single-word' :id=\"`word-${source?.slug}`\" tabindex='0'>{{ source?.wordProperties?.berlinerisch }}</li>",
   },
 }));
 
@@ -83,7 +83,6 @@ const mockStores = (
 
 const makeHit = (berlinerisch: string, slug = berlinerisch.toLowerCase()) => ({
   document: {
-    berlinerWordId: slug,
     id: slug,
     slug,
     wordProperties: { berlinerisch, translations: ["test"] },

@@ -34,7 +34,7 @@ export const WORDS_QUERY = `
   query ImportWords($after: String, $first: Int) {
     berlinerWords(first: $first, after: $after, where: { orderby: { field: TITLE, order: ASC }, stati: [DRAFT, PUBLISH] }) {
       nodes {
-        databaseId status slug dateGmt modifiedGmt berlinerWordId
+        databaseId status slug dateGmt modifiedGmt
         wordProperties {
           article berlinerisch learnMore berolinismus infoText
           berlinerischAudio { ${MEDIA_ITEM} }
@@ -135,7 +135,6 @@ export type WpWord = {
   slug?: Maybe<string>;
   dateGmt?: Maybe<string>;
   modifiedGmt?: Maybe<string>;
-  berlinerWordId?: Maybe<number>;
   wordProperties?: Maybe<{
     article?: Maybe<string>;
     berlinerisch?: Maybe<string>;

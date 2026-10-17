@@ -1,5 +1,4 @@
-import { type SiteWord, translationTexts } from "@services/payload/words.ts";
-import { wpDate } from "@utils/wpDate.ts";
+import type { SiteWord } from "@services/payload/words.ts";
 
 const BERLIN = "Europe/Berlin";
 
@@ -54,25 +53,9 @@ export const secondsUntilBerlinMidnight = (date: Date): number => {
   return 86_400 - (hour * 3600 + minute * 60 + second);
 };
 
-/** The shape of the former WordPress endpoint, which the nanostore and its components still read. */
-export const toWordOfTheDayResponse = (word: SiteWord, now: Date) => ({
-  ID: word.berlinerWordId,
-  alternative_words: word.alternativeWords?.length ? true : null,
-  article: word.article ?? null,
+/** What the nanostore and its components read; the store refetches a cached word without a slug (older shape). */
+export const toWordOfTheDayResponse = (word: Pick<SiteWord, "berlinerisch" | "slug">, now: Date) => ({
   berlinerisch: word.berlinerisch,
-  examples: word.examples.length
-    ? word.examples.map((e) => ({
-        example: e.example ?? null,
-        example_explanation: e.exampleExplanation ?? null,
-      }))
-    : null,
   expires: secondsUntilBerlinMidnight(now),
-  group: word.derived?.wordGroup ?? null,
-  learn_more: word.learnMore ?? null,
-  post_date: wpDate(word.publishedAt)?.replace("T", " ") ?? null,
-  post_modified: wpDate(word.contentModifiedAt)?.replace("T", " ") ?? null,
-  post_name: word.slug,
-  related_words: word.relatedWords.length ? true : null,
-  translations: translationTexts(word).map((translation) => ({ translation })),
-  word_type: false,
+  slug: word.slug,
 });

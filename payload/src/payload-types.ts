@@ -286,7 +286,6 @@ export interface Word {
   berlinerisch: string;
   wpId?: number | null;
   slug?: string | null;
-  berlinerWordId?: number | null;
   article?: string | null;
   translations?:
     | {
@@ -672,7 +671,6 @@ export interface WordsSelect<T extends boolean = true> {
   berlinerisch?: T;
   wpId?: T;
   slug?: T;
-  berlinerWordId?: T;
   article?: T;
   translations?:
     | T

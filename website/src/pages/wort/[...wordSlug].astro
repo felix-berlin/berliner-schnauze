@@ -141,7 +141,7 @@ const schemaJson = () => {
     ...(word.article && {
       disambiguatingDescription: `Berliner Dialektwort, ${word.article}`,
     }),
-    identifier: word.globalId,
+    identifier: canonicalUrl(Astro.url.pathname, Astro.site),
     publisher: { '@id': `${Astro.site}#organization` },
     speakable: {
       '@type': 'SpeakableSpecification',

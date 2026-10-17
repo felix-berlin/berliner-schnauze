@@ -44,7 +44,6 @@ describe("mapWord", () => {
     expect(doc).toMatchObject({
       slug: "aasen",
       wpId: 5704,
-      berlinerWordId: 5704,
       berlinerisch: "aasen",
       _status: "published",
       publishedAt: "2025-04-09T12:18:58.000Z",

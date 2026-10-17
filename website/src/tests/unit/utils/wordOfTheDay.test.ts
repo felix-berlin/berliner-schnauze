@@ -44,38 +44,9 @@ describe("secondsUntilBerlinMidnight", () => {
 });
 
 describe("toWordOfTheDayResponse", () => {
-  // A SiteWord (Payload doc): ISO dates with milliseconds, translations as rows, repeaters as arrays.
-  const word = {
-    alternativeWords: [],
-    article: null,
-    berlinerWordId: 10473,
-    berlinerisch: "Schrapen",
-    contentModifiedAt: "2026-09-16T13:15:30.000Z",
-    derived: { wordGroup: "S" },
-    examples: [{ example: "Wir schrapen.", exampleAudio: [], exampleExplanation: "Erklärung" }],
-    learnMore: null,
-    publishedAt: "2026-09-16T13:15:30.000Z",
-    relatedWords: [],
-    slug: "schrapen",
-    translations: [{ translation: "schaben" }, { translation: "" }, { translation: "tanzen" }],
-  };
-
-  it("keeps the shape of the old WordPress endpoint", () => {
-    expect(toWordOfTheDayResponse(word as never, new Date("2026-10-16T21:00:00Z"))).toEqual({
-      ID: 10473,
-      alternative_words: null,
-      article: null,
-      berlinerisch: "Schrapen",
-      examples: [{ example: "Wir schrapen.", example_explanation: "Erklärung" }],
-      expires: 3600,
-      group: "S",
-      learn_more: null,
-      post_date: "2026-09-16 13:15:30",
-      post_modified: "2026-09-16 13:15:30",
-      post_name: "schrapen",
-      related_words: null,
-      translations: [{ translation: "schaben" }, { translation: "tanzen" }],
-      word_type: false,
-    });
+  it("answers what the store reads: headword, slug and the seconds until Berlin midnight", () => {
+    expect(
+      toWordOfTheDayResponse({ berlinerisch: "Schrapen", slug: "schrapen" }, new Date("2026-10-16T21:00:00Z")),
+    ).toEqual({ berlinerisch: "Schrapen", expires: 3600, slug: "schrapen" });
   });
 });

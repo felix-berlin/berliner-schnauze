@@ -103,9 +103,9 @@ const focusActive = () => {
   // 2. Wait for DOM update, then focus and scroll the element
   void nextTick(() => {
     // The list is virtualized, so look the rendered item up by its element id.
-    const wordId = mutableOramaSearch.value[activeIndex.value]?.document?.berlinerWordId;
-    if (wordId !== undefined) {
-      document.getElementById(`word-${wordId}`)?.focus({ preventScroll: true });
+    const slug = mutableOramaSearch.value[activeIndex.value]?.document?.slug;
+    if (slug !== undefined) {
+      document.getElementById(`word-${slug}`)?.focus({ preventScroll: true });
     }
   });
 };

@@ -4,7 +4,7 @@ import { describe, it, expect, vi } from "vitest";
 import { nextTick } from "vue";
 
 vi.mock("@nanostores/vue", () => ({
-  useStore: () => ({ value: { word: { ID: 1, berlinerisch: "test" } } }),
+  useStore: () => ({ value: { word: { berlinerisch: "test", slug: "test" } } }),
 }));
 
 describe("IsWordOfTheDay.vue", () => {
@@ -14,7 +14,7 @@ describe("IsWordOfTheDay.vue", () => {
         iconSize: 24,
         tooltipPlacement: "right",
         word: "test",
-        wordId: 1,
+        slug: "test",
       },
     });
 

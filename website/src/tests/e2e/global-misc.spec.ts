@@ -6,7 +6,7 @@ test.describe("Startseite: Wort des Tages und Zufallswort", () => {
 
     await expect
       .poll(() => page.evaluate(() => localStorage.getItem("wordOfTheDay:word")))
-      .toContain("post_name");
+      .toContain("slug");
   });
 
   test("Zufallswort-Link auf der Wortseite zeigt auf eine Wortseite", async ({ page }) => {

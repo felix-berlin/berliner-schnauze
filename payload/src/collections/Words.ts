@@ -23,7 +23,6 @@ export const Words: CollectionConfig = {
   fields: [
     { name: "berlinerisch", type: "text", required: true },
     ...identityFields,
-    { name: "berlinerWordId", type: "number" },
     { name: "article", type: "text" },
     { name: "translations", type: "array", fields: [{ name: "translation", type: "text" }] },
     { name: "alternativeWords", type: "array", fields: [{ name: "alternativeWord", type: "text" }] },

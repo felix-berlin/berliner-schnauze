@@ -16,7 +16,7 @@ describe("wordOfTheDay store", () => {
     vi.resetModules();
     localStorage.clear();
     mockFetch.mockResolvedValue({
-      json: () => Promise.resolve({ ID: 1, berlinerisch: "Schnauze" }),
+      json: () => Promise.resolve({ berlinerisch: "Schnauze", slug: "schnauze" }),
       ok: true,
     });
   });
@@ -32,7 +32,7 @@ describe("wordOfTheDay store", () => {
       await getWordOfTheDay();
       expect($wordOfTheDay.get().loading).toBe(false);
       expect($wordOfTheDay.get().error).toBe(false);
-      expect($wordOfTheDay.get().word).toEqual({ ID: 1, berlinerisch: "Schnauze" });
+      expect($wordOfTheDay.get().word).toEqual({ berlinerisch: "Schnauze", slug: "schnauze" });
     });
 
     it("sets timestamp on success", async () => {
@@ -77,8 +77,20 @@ describe("wordOfTheDay store", () => {
       unsub();
     });
 
+    it("fetches again when today's cached word has the former WordPress shape (no slug)", async () => {
+      localStorage.setItem("wordOfTheDay:timestamp", JSON.stringify(Date.now()));
+      localStorage.setItem("wordOfTheDay:word", JSON.stringify({ ID: 1, post_name: "schnauze" }));
+      const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
+      mockFetch.mockClear();
+      const unsub = $wordOfTheDay.subscribe(() => {});
+      await flushTasks();
+      expect(mockFetch).toHaveBeenCalled();
+      unsub();
+    });
+
     it("skips fetch when localStorage timestamp is from today (isCachedToday = true)", async () => {
       localStorage.setItem("wordOfTheDay:timestamp", JSON.stringify(Date.now()));
+      localStorage.setItem("wordOfTheDay:word", JSON.stringify({ berlinerisch: "Schnauze", slug: "schnauze" }));
       const { $wordOfTheDay } = await import("@stores/wordOfTheDay.ts");
       mockFetch.mockClear();
       const unsub = $wordOfTheDay.subscribe(() => {});

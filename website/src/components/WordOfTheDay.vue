@@ -6,7 +6,7 @@
     data-content-name="Word of the Day"
     :data-content-piece="currentWord?.word?.berlinerisch ?? ''"
     :data-content-target="
-      currentWord?.word?.post_name ? routeToWord(currentWord.word.post_name) : undefined
+      currentWord?.word?.slug ? routeToWord(currentWord.word.slug) : undefined
     "
     role="link"
     tabindex="0"
@@ -29,9 +29,9 @@
       </div>
 
       <Transition v-if="!currentWord.error" name="fade-fast" mode="out-in">
-        <SingleLoader v-if="currentWord.loading" key="loading" />
+        <SingleLoader v-if="currentWord.loading || !currentWord.word?.slug" key="loading" />
         <div v-else key="word" class="c-word-of-the-day__word-wrap">
-          <a :href="routeToWord(currentWord?.word?.post_name)" class="c-word-of-the-day__word">
+          <a :href="routeToWord(currentWord?.word?.slug)" class="c-word-of-the-day__word">
             {{ currentWord?.word?.berlinerisch }}
           </a>
         </div>

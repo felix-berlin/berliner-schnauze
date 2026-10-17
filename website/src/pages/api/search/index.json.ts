@@ -29,7 +29,6 @@ export function makeOramaSearchIndex(word: SiteWord) {
   ];
 
   return {
-    berlinerWordId: word.berlinerWordId,
     berlinerischWordTypes: wordTypes,
     dateTs: timestamp(word.publishedAt),
     modifiedTs: timestamp(word.contentModifiedAt),
