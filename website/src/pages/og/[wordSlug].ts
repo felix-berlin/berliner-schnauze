@@ -40,7 +40,8 @@ export const GET: APIRoute = async ({ params }) => {
   });
   return new Response(image, {
     headers: {
-      "Cache-Control": "public, max-age=31536000, immutable",
+      // The url stays the same when the word changes: a day, not immutable, so an edit shows up.
+      "Cache-Control": "public, max-age=86400",
       "Content-Type": "image/png",
     },
   });

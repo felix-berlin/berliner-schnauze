@@ -35,7 +35,7 @@ describe("og/[wordSlug] route", () => {
     const res = await call("wat.png");
     expect(res.status).toBe(200);
     expect(res.headers.get("Content-Type")).toBe("image/png");
-    expect(res.headers.get("Cache-Control")).toBe("public, max-age=31536000, immutable");
+    expect(res.headers.get("Cache-Control")).toBe("public, max-age=86400");
     expect(generateOpenGraphImage).toHaveBeenCalledWith(
       expect.objectContaining({ cacheDir: "/data/og", description: "was, etwas", title: "Wat" }),
     );
