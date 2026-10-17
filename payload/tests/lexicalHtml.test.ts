@@ -17,6 +17,13 @@ describe("lexicalToHtml", () => {
     expect(lexicalToHtml(state(para(link("https://example.org/l", "Lizenz"))), { mediaBase: BASE })).toContain('<a href="https://example.org/l"');
   });
 
+  it("links an internal link to the populated doc's page", () => {
+    const internal = (doc: unknown) => ({ ...link("", "Kiez"), fields: { linkType: "internal", newTab: false, doc } });
+    expect(lexicalToHtml(state(para(internal({ relationTo: "words", value: { id: 1, slug: "kiez" } }))), { mediaBase: BASE })).toContain('<a href="/wort/kiez"');
+    expect(lexicalToHtml(state(para(internal({ relationTo: "posts", value: { id: 2, slug: "kiezdeutsch" } }))), { mediaBase: BASE })).toContain('href="/magazin/kiezdeutsch"');
+    expect(lexicalToHtml(state(para(internal({ relationTo: "words", value: 1 }))), { mediaBase: BASE })).toContain('href="#"');
+  });
+
   it("escapes angle brackets and ampersands in text", () => {
     expect(lexicalToHtml(state(para(text("Milla&Partner <https://x.org>"))), { mediaBase: BASE })).toBe("<p>Milla&amp;Partner &lt;https://x.org&gt;</p>");
   });
