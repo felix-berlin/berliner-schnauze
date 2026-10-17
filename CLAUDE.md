@@ -32,7 +32,7 @@ pnpm format:check            # Check formatting without writing
 # Docker (Node adapter, replacing Cloudflare; run after build)
 docker compose up --build    # Serve website/dist/ via server/index.mjs (applies public/_headers + _redirects)
 website/scripts/docker-smoke.sh   # Build image from dist/, check routes/headers/redirects (runs on every PR; leaves a running postgres up)
-                             # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze (release.yml `docker` job)
+                             # Release CI builds + pushes ghcr.io/felix-berlin/berliner-schnauze and …/berliner-schnauze-cms (release.yml `docker` job)
 
 # Cloudflare Workers: do NOT `pnpm deploy` this stack — dist/client holds no HTML, Workers would serve empty pages.
 # Don't merge into main before step 7 of docs/cutover-checklist.md (or pause Workers Builds first).
@@ -184,7 +184,7 @@ The dev server reads words from your local Payload database (fill it with `pnpm 
 
 ## Environment Variables
 
-Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `DATABASE_URL`/`PAYLOAD_SECRET` (read by `payload.config`, not part of the schema), `PAYLOAD_SERVER_URL`, `OG_CACHE_DIR`, `SMTP_URL`, `SUGGEST_MAIL_TO`, `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`, `IMAGOR_HOST`, `IMAGOR_SECRET`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
+Import from `astro:env/client` or `astro:env/server` (schema in `astro.config.mjs`). Key vars: `DATABASE_URL`/`PAYLOAD_SECRET`/`SMTP_URL`/`SUGGEST_MAIL_TO` (read by Payload via `process.env`, not part of the schema), `PAYLOAD_SERVER_URL`, `OG_CACHE_DIR`, `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `SENTRY_*`, `WAKAPI_API_KEY`, `IMAGOR_HOST`, `IMAGOR_SECRET`. Full list defined in the `env` schema in `astro.config.mjs`. See [Secrets](#secrets) for how vars are injected.
 
 ## Testing
 

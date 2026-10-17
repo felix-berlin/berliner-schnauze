@@ -2,7 +2,7 @@ import type { ArrayField, GlobalConfig } from "payload";
 
 import { authenticatedGlobal } from "../access";
 
-/** Same shape as `MenuItem` in src/services/payload/site.ts. */
+/** Same shape as `MenuItem` in website/src/services/payload/site.ts. */
 const menu = (name: string): ArrayField => ({
   name,
   type: "array",

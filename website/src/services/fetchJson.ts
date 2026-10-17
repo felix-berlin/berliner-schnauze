@@ -1,8 +1,8 @@
 const FETCH_TIMEOUT_MS = 5000;
 
 /**
- * Build-time JSON fetch for optional third-party data: times out after 5 s and
- * logs + returns undefined on any failure, so a flaky API never breaks the build.
+ * JSON fetch for optional third-party data: times out after 5 s and logs +
+ * returns undefined on any failure, so a flaky API never breaks a page render.
  */
 export async function fetchJson<T>(
   url: string,

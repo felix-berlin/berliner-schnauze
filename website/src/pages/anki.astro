@@ -63,7 +63,7 @@ const deckWords = allWords
   );
 const TOTAL_WORDS = deckWords.length;
 
-// Gleiche Gruppierung wie `group` in scripts/build_anki_decks.py: WordPress-wordGroup, leer -> Sonstige.
+// Gleiche Gruppierung wie `group` in scripts/build_anki_decks.py: abgeleitete wordGroup, leer -> Sonstige.
 const wordsPerLetter = Object.groupBy(
   deckWords,
   (w) => w.derived?.wordGroup?.trim().toUpperCase() || 'Sonstige',
@@ -101,7 +101,7 @@ const productSchema =
 
 const fmt = (n: number) => n.toLocaleString('de-DE');
 
-// Demo-Karten: Wörter mit Übersetzung und Beispielsatz, pro Build zufällig gezogen.
+// Demo-Karten: Wörter mit Übersetzung und Beispielsatz, pro Aufruf zufällig gezogen.
 const DEMO_CARDS = shuffle(
   deckWords.flatMap((w) => {
     const example = stripTags(w.examples[0]?.example ?? '');

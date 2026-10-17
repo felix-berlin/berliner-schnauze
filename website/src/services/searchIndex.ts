@@ -3,7 +3,7 @@ import type { OramaSearchIndex } from "@/pages/api/search/index.json";
 let pending: null | Promise<OramaSearchIndex[]> = null;
 
 /**
- * Fetch the static search index once per page session (single-flight): the
+ * Fetch the search index once per page session (single-flight): the
  * word list and the BON game share one request. On failure the memoized
  * promise is cleared so the next call retries.
  */

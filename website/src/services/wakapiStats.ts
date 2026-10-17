@@ -19,8 +19,8 @@ export interface WakapiStats {
 
 const CACHE_FILE = join(process.cwd(), ".astro/wakapi-stats.json");
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour — stats don't need to be real-time
-// Failures are cached too: without this, every prerendered page (the footer is
-// on all of them) retries the fetch and stalls the whole build when Wakapi is down.
+// Failures are cached too: without this, every render (the footer is on every
+// page) retries the fetch and waits for the timeout while Wakapi is down.
 const FAILURE_TTL_MS = 5 * 60 * 1000;
 
 function readCache(): CachedStats | null {

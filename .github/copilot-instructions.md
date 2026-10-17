@@ -4,7 +4,7 @@
 
 ## Tech Stack & Architecture
 
-**Core Framework**: Astro v5 (SSG/SSR hybrid with file-based routing) + Vue 3 islands for client-side interactivity
+**Core Framework**: Astro v7 (every page rendered on demand, Node adapter, file-based routing) + Vue 3 islands for client-side interactivity
 **Package Manager**: pnpm (required - enforced via preinstall script)
 **State Management**: Nanostores with persistent stores (`@nanostores/persistent`)
 **Data Layer**: Payload CMS (`payload/`, Postgres) read through the Local API in the Astro server (`src/services/payload/`)
@@ -31,8 +31,8 @@ pnpm dev  # Generates supportedBrowsers.mjs
 
 ```bash
 pnpm dev                      # Starts Astro dev server (auto-runs supportedBrowsers.mjs via predev)
-pnpm test:unit:watch          # Run tests with coverage in watch mode
-pnpm test:unit:ui             # Run tests with Vitest UI for debugging
+pnpm --filter website test:unit:watch   # Run tests with coverage in watch mode
+pnpm --filter website test:unit:ui      # Run tests with Vitest UI for debugging
 ```
 
 **Critical**: `predev` script runs automatically before `dev` to generate the browser support detection. Don't skip this.
@@ -57,9 +57,10 @@ pnpm build                     # Generates supportedBrowsers.mjs, then builds
 
 ```typescript
 import Component from "@components/Component.vue"; // src/components/
+import { fetchData } from "@services/api.ts"; // src/services/
 import { $store } from "@stores/index.ts"; // src/stores/
 import { helper } from "@utils/helpers.ts"; // src/utils/
-import { fetchData } from "@services/api.ts"; // src/services/
+
 import type { Word } from "@/types/cms"; // src/types/
 ```
 
@@ -189,9 +190,9 @@ export const GET: APIRoute = async () => {
 **Test Structure**:
 
 ```typescript
+import Component from "@components/Component.vue";
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
-import Component from "@components/Component.vue";
 
 describe("Component", () => {
   it("should render correctly", () => {
