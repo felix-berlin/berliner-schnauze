@@ -17,7 +17,7 @@ beforeEach(() => {
 describe("verifyTurnstile", () => {
   it("asks Cloudflare with the secret, the token and the client ip", async () => {
     answer({ success: true });
-    expect(await verifyTurnstile("tok", "1.2.3.4")).toBe(true);
+    expect(await verifyTurnstile("tok", "1.2.3.4")).toBe("pass");
     const [url, init] = fetchMock.mock.calls[0];
     expect(url).toBe("https://challenges.cloudflare.com/turnstile/v0/siteverify");
     expect(
@@ -37,32 +37,38 @@ describe("verifyTurnstile", () => {
     );
   });
 
-  it("is false when Cloudflare says so", async () => {
+  it("fails when Cloudflare says so", async () => {
     answer({ success: false });
-    expect(await verifyTurnstile("tok")).toBe(false);
+    expect(await verifyTurnstile("tok")).toBe("fail");
   });
 
-  it("is false when the answer is not a plain success", async () => {
+  it("fails when the answer is not a plain success", async () => {
     answer({ success: "true" });
-    expect(await verifyTurnstile("tok")).toBe(false);
+    expect(await verifyTurnstile("tok")).toBe("fail");
   });
 
-  it("fails closed on a network error, a bad status and unparsable answers", async () => {
+  it("is unavailable, and logs why, on a network error, a bad status and unparsable answers", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
     fetchMock.mockRejectedValueOnce(new Error("offline"));
-    expect(await verifyTurnstile("tok")).toBe(false);
+    expect(await verifyTurnstile("tok")).toBe("unavailable");
     answer({ success: true }, false);
-    expect(await verifyTurnstile("tok")).toBe(false);
+    expect(await verifyTurnstile("tok")).toBe("unavailable");
     fetchMock.mockResolvedValue({
       json: async () => Promise.reject(new Error("not json")),
       ok: true,
     } as unknown as Response);
-    expect(await verifyTurnstile("tok")).toBe(false);
+    expect(await verifyTurnstile("tok")).toBe("unavailable");
+    expect(log).toHaveBeenCalledTimes(3);
+    log.mockRestore();
   });
 
-  it("is false without a token and without a configured secret, and then never calls Cloudflare", async () => {
-    expect(await verifyTurnstile("")).toBe(false);
+  it("fails without a token, is unavailable without a secret, and then never calls Cloudflare", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(await verifyTurnstile("")).toBe("fail");
     env.TURNSTILE_SECRET_KEY = undefined;
-    expect(await verifyTurnstile("tok")).toBe(false);
+    expect(await verifyTurnstile("tok")).toBe("unavailable");
+    expect(log).toHaveBeenCalledOnce();
     expect(fetchMock).not.toHaveBeenCalled();
+    log.mockRestore();
   });
 });

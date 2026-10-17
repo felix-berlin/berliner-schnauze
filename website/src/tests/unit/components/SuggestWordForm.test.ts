@@ -1,6 +1,6 @@
 import SuggestWordForm from "@components/SuggestWordForm.vue";
 import TurnStile from "@components/TurnStile.vue";
-import { mount, config } from "@vue/test-utils";
+import { flushPromises, mount, config } from "@vue/test-utils";
 import { describe, expect, it, vi, beforeEach, beforeAll, afterAll } from "vitest";
 
 vi.mock("astro:env/client", () => ({
@@ -222,10 +222,26 @@ describe("SuggestWordForm.vue", () => {
     await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
     await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
     await wrapper.find("form").trigger("submit");
-    await Promise.resolve();
-    await Promise.resolve();
+    await flushPromises();
     expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
-      expect.objectContaining({ status: "error" }),
+      expect.objectContaining({ message: "x", status: "error" }),
+    );
+  });
+
+  it("falls back to a generic error toast when the server sends no message", async () => {
+    const { createToastNotify } = await import("@stores/toastNotify.ts");
+    fetchMock.mockImplementationOnce(() => Promise.reject(new Error("offline")));
+    const wrapper = mount(SuggestWordForm);
+    await wrapper.find<HTMLInputElement>("#berlinerWort").setValue("Kiez");
+    await wrapper.find<HTMLInputElement>("#translation").setValue("Viertel");
+    await wrapper.findComponent(TurnStile).vm.$emit("token", "tok");
+    await wrapper.find("form").trigger("submit");
+    await flushPromises();
+    expect(vi.mocked(createToastNotify)).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringContaining("Unbekannter Fehler"),
+        status: "error",
+      }),
     );
   });
 

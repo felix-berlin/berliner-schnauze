@@ -19,13 +19,13 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
   if (!suggestion.success) return reply({ error: "Ungültige Eingabe" }, 400);
 
   const token = (body as { turnstileToken?: unknown }).turnstileToken;
-  let human = false;
-  try {
-    human = typeof token === "string" && (await verifyTurnstile(token, clientAddress));
-  } catch {
-    human = false;
-  }
-  if (!human) return reply({ error: "Captcha nicht bestanden" }, 403);
+  const captcha = typeof token === "string" ? await verifyTurnstile(token, clientAddress) : "fail";
+  if (captcha === "unavailable")
+    return reply(
+      { error: "Die Captcha-Prüfung ist gerade gestört, bitte versuch es später nochmal." },
+      503,
+    );
+  if (captcha === "fail") return reply({ error: "Captcha nicht bestanden" }, 403);
 
   try {
     await (await getPayloadClient()).create({ collection: "suggestions", data: suggestion.data });

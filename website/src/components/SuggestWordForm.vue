@@ -149,20 +149,23 @@ const onSubmit = async (): Promise<void> => {
   if (!turnstileToken.value || isSending.value) return;
 
   isSending.value = true;
-  const sent = await fetch("/api/suggest-word", {
+  // undefined = sent; otherwise the server's message, if it gave one
+  const failure = await fetch("/api/suggest-word", {
     body: JSON.stringify({ ...result.data, turnstileToken: turnstileToken.value }),
     headers: { "Content-Type": "application/json" },
     method: "POST",
   })
-    .then((res) => res.ok)
-    .catch(() => false);
+    .then(async (res) =>
+      res.ok ? undefined : String((await res.json().catch(() => ({})))?.error ?? ""),
+    )
+    .catch(() => "");
   isSending.value = false;
   turnstileToken.value = "";
   window.turnstile?.reset();
 
-  if (!sent) {
+  if (failure !== undefined) {
     createToastNotify({
-      message: "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
+      message: failure || "Unbekannter Fehler, Dein Wort konnte leider nicht gesendet werden.",
       status: "error",
       timeout: null,
     });

@@ -29,7 +29,7 @@ const post = (body: unknown, raw = false) =>
   } as unknown as APIContext);
 
 beforeEach(() => {
-  verifyTurnstile.mockReset().mockResolvedValue(true);
+  verifyTurnstile.mockReset().mockResolvedValue("pass");
   create.mockReset().mockResolvedValue({ id: 1 });
 });
 
@@ -53,17 +53,17 @@ describe("POST /api/suggest-word", () => {
     ["an empty token", { ...valid, turnstileToken: "" }],
     ["a token that is not a string", { ...valid, turnstileToken: 1 }],
   ])("answers 403 and stores nothing for %s", async (_name, body) => {
-    verifyTurnstile.mockResolvedValue(false);
+    verifyTurnstile.mockResolvedValue("fail");
     const res = await post(body);
     expect(res.status).toBe(403);
     expect(create).not.toHaveBeenCalled();
   });
 
-  it("answers 403 when Cloudflare rejects the token, and also when Cloudflare cannot be reached", async () => {
-    verifyTurnstile.mockResolvedValue(false);
+  it("answers 403 when Cloudflare rejects the token and 503 when the check is broken", async () => {
+    verifyTurnstile.mockResolvedValue("fail");
     expect((await post(valid)).status).toBe(403);
-    verifyTurnstile.mockRejectedValue(new Error("offline"));
-    expect((await post(valid)).status).toBe(403);
+    verifyTurnstile.mockResolvedValue("unavailable");
+    expect((await post(valid)).status).toBe(503);
     expect(create).not.toHaveBeenCalled();
   });
 
