@@ -118,10 +118,8 @@ export default defineConfig({
       },
     },
   ],
-  // Disabled: Cloudflare refuses all prefetch requests (Sec-Purpose: prefetch)
-  // for Workers-hosted origins with a 503 ("disabled for worker requests"),
-  // unlike the Pages platform this project migrated from. prefetchAll would
-  // just ship JS that always fails at the edge.
+  // Off (ClientRouter would enable it): pages are sent with max-age=0, so the router's fetch() never reuses a
+  // prefetched page and every hovered link costs a second render. Revisit only with a browser-cacheable page.
   prefetch: false,
   build: {
     format: "file",
