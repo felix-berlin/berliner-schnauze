@@ -27,7 +27,7 @@ Background: `docs/superpowers/specs/2026-10-16-payload-migration-design.md`. Set
 
 ## 1. Secrets and env
 
-- [ ] Infisical (`prod` and `staging`): `DATABASE_URL`, `PAYLOAD_SECRET`, `PAYLOAD_SERVER_URL` (`https://cms.berliner-schnauze.wtf`), `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `TURNSTILE_SECRET_KEY`, `SMTP_URL`, `SUGGEST_MAIL_TO`, `PAYLOAD_URL`, `PAYLOAD_API_KEY`.
+- [ ] Infisical (`prod` and `staging`): `DATABASE_URL`, `PAYLOAD_SECRET`, `PAYLOAD_SERVER_URL` (`https://cms.berliner-schnauze.wtf`), `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `TURNSTILE_SECRET_KEY`, `SMTP_URL`, `SUGGEST_MAIL_TO` (web and cms: the cms mails password resets too), `SITE_URL` (cms: target of the admin's preview links), `PAYLOAD_URL`, `PAYLOAD_API_KEY`. `PAYLOAD_RUN_JOBS` is pinned on `cms` in `compose.yaml`.
   Inside compose the database host is `postgres`, on your machine `127.0.0.1`: compose overrides `DATABASE_URL` for `web` and `cms`.
 - [ ] The server's `.env` (read by compose `env_file`) holds every runtime secret the `web` service needs: `IMAGOR_SECRET` and the vars above that are not set by compose itself. `IMAGOR_HOST`, `SITE_URL` and the other `public` vars are inlined at build time (CI build with the `prod` Infisical env).
 - [ ] GitHub secrets for the Anki release: `PAYLOAD_URL`, `PAYLOAD_API_KEY` (the workflow reads Infisical `prod`).
@@ -63,7 +63,8 @@ Background: `docs/superpowers/specs/2026-10-16-payload-migration-design.md`. Set
 - [ ] Anonymous API is closed: `curl -s -o /dev/null -w '%{http_code}' https://cms.berliner-schnauze.wtf/api/words` → `403`.
 - [ ] One word page, the homepage, a magazine page and `/spenden` in light and dark mode, desktop and mobile width (`CLAUDE.md`).
 - [ ] Play an audio file on a word page (CSP `media-src`), switch the browser offline after one visit and open a word page you have not visited (service worker fallback).
-- [ ] Suggest-word form: real submission arrives at `SUGGEST_MAIL_TO`; check the spam folder (sender `mail@berliner-schnauze.wtf`, SPF).
+- [ ] Suggest-word form: real submission shows up in the admin under Suggestions and arrives at `SUGGEST_MAIL_TO`; check the spam folder (sender `mail@berliner-schnauze.wtf`, SPF).
+- [ ] Admin preview: the preview button of a draft word opens the draft on the site (not the cached public page).
 
 ## 7. Switch
 
