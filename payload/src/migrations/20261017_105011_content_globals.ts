@@ -1,7 +1,5 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
-import { seedSiteContent } from '../seed/siteContent'
-
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TABLE "home_facts" (
@@ -70,6 +68,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "anki_faqs_order_idx" ON "anki_faqs" USING btree ("_order");
   CREATE INDEX "anki_faqs_parent_id_idx" ON "anki_faqs" USING btree ("_parent_id");`)
   // The texts lived in the Astro pages until now: start the new globals with them.
+  // Loaded lazily: the seed pulls in jsdom (../import/html), and a static import would bundle it into the
+  // site's server through payload.config, where jsdom's __dirname lookups crash every render.
+  const { seedSiteContent } = await import('../seed/siteContent')
   await seedSiteContent(payload, req)
 }
 
