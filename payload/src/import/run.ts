@@ -11,6 +11,7 @@ import type { ImportRefs } from "./mappers";
 import type { Maybe, WpPage, WpPost, WpThema, WpWord, WpWordType } from "./wp";
 
 import { PRESERVE_CONTENT_MODIFIED_AT } from "../fields/contentModified";
+import { splitFunding } from "../lib/funding";
 import { htmlToLexical } from "./html";
 import { collectMedia, mapPage, mapPost, mapRelatedWords, mapThema, mapWord, SITE_ASSET_FILES } from "./mappers";
 import {
@@ -371,11 +372,12 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
       const info = data.company?.companyInformations;
       if (!info) throw new Error("companyInformations missing");
       return {
-        funding: (info.funding ?? []).flatMap((f) => (f?.name ? [{ name: f.name, link: f.link || null, adresse: f.adresse || null }] : [])),
+        ...splitFunding((info.funding ?? []).flatMap((f) => (f ? [f] : []))),
         // ACF select "Both (Array)": networkname is [value, label].
-        socialMedia: (info.socialMedia ?? []).flatMap((s) =>
-          s?.networkprofile ? [{ network: s.networkname?.[0] ?? null, label: s.networkname?.[1] ?? null, profile: s.networkprofile, rel: s.rel || null }] : [],
-        ),
+        socialMedia: (info.socialMedia ?? []).flatMap((s) => {
+          const label = s?.networkname?.[1] ?? s?.networkname?.[0];
+          return s?.networkprofile && label ? [{ label, profile: s.networkprofile, relMe: s.rel === "me" }] : [];
+        }),
       };
     });
   }

@@ -58,25 +58,11 @@ export interface FundingData {
 }
 
 export const fetchFundingData = async (): Promise<FundingData> => {
-  const platforms: FundingPlatform[] = [];
-  const wallets: FundingWallet[] = [];
-  const walletsByAddress = new Map<string, FundingWallet>();
-
-  for (const entry of (await company()).funding ?? []) {
-    if (!entry.name) continue;
-    if (entry.link) platforms.push({ link: entry.link, name: entry.name });
-    if (entry.adresse) {
-      const existing = walletsByAddress.get(entry.adresse);
-      if (existing) {
-        existing.chains.push(entry.name);
-      } else {
-        const wallet: FundingWallet = { address: entry.adresse, chains: [entry.name] };
-        walletsByAddress.set(entry.adresse, wallet);
-        wallets.push(wallet);
-      }
-    }
-  }
-  return { platforms, wallets };
+  const { platforms, wallets } = await company();
+  return {
+    platforms: (platforms ?? []).map(({ link, name }) => ({ link, name })),
+    wallets: (wallets ?? []).map(({ address, chains }) => ({ address, chains: chains ?? [] })),
+  };
 };
 
 export interface SocialMenuItem {
@@ -86,10 +72,8 @@ export interface SocialMenuItem {
 }
 
 export const fetchSocialMenu = async (): Promise<SocialMenuItem[]> =>
-  ((await company()).socialMedia ?? []).flatMap((entry) => {
-    const title =
-      entry.label ||
-      (entry.network ? entry.network.charAt(0).toUpperCase() + entry.network.slice(1) : null);
-    if (!entry.profile || !title) return [];
-    return [{ link: entry.profile, title, ...(entry.rel ? { rel: entry.rel } : {}) }];
-  });
+  ((await company()).socialMedia ?? []).map(({ label, profile, relMe }) => ({
+    link: profile,
+    title: label,
+    ...(relMe ? { rel: "me" } : {}),
+  }));

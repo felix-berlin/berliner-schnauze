@@ -56,54 +56,37 @@ describe("fetchMenu", () => {
 });
 
 describe("fetchFundingData", () => {
-  const funding = [
-    { adresse: null, link: "https://github.com/sponsors/x", name: "GitHub Sponsors" },
-    { adresse: "", link: "https://ko-fi.com/x", name: "Ko-fi" },
-    ...EVM_CHAINS.map((name) => ({ adresse: EVM, link: null, name })),
-    { adresse: BTC, link: null, name: "Bitcoin" },
-    { adresse: null, link: "https://skipped.example", name: "" },
-  ];
-
-  it("splits link rows into platforms and groups wallets by identical address in CMS order", async () => {
-    findGlobal.mockResolvedValue({ funding });
+  it("passes platforms and wallets through without the row ids", async () => {
+    findGlobal.mockResolvedValue({
+      platforms: [{ id: "a", link: "https://ko-fi.com/x", name: "Ko-fi" }],
+      wallets: [{ address: "0xA", chains: ["Ethereum", "Base"], id: "b" }],
+    });
     const { fetchFundingData } = await load();
-    const { platforms, wallets } = await fetchFundingData();
-    expect(platforms).toEqual([
-      { link: "https://github.com/sponsors/x", name: "GitHub Sponsors" },
-      { link: "https://ko-fi.com/x", name: "Ko-fi" },
-    ]);
-    expect(wallets).toEqual([
-      { address: EVM, chains: EVM_CHAINS },
-      { address: BTC, chains: ["Bitcoin"] },
-    ]);
+    expect(await fetchFundingData()).toEqual({
+      platforms: [{ link: "https://ko-fi.com/x", name: "Ko-fi" }],
+      wallets: [{ address: "0xA", chains: ["Ethereum", "Base"] }],
+    });
   });
 
-  it("returns empty arrays when funding is missing", async () => {
-    findGlobal.mockResolvedValue({ funding: null });
+  it("returns empty arrays when the global is empty", async () => {
+    findGlobal.mockResolvedValue({ platforms: null, wallets: null });
     const { fetchFundingData } = await load();
     expect(await fetchFundingData()).toEqual({ platforms: [], wallets: [] });
   });
 });
 
 describe("fetchSocialMenu", () => {
-  it("maps rows to link/title/rel, falls back to the capitalized network and drops incomplete rows", async () => {
+  it("maps rows to link/title and sets rel=me only where checked", async () => {
     findGlobal.mockResolvedValue({
       socialMedia: [
-        {
-          label: "Mastodon",
-          network: "mastodon",
-          profile: "https://social.example/@bs",
-          rel: "me",
-        },
-        { label: null, network: "bluesky", profile: "https://bsky.example/bs", rel: null },
-        { label: "X", network: "x", profile: "", rel: null },
-        { label: null, network: null, profile: "https://nameless.example", rel: null },
+        { label: "Mastodon", profile: "https://m.social/@x", relMe: true },
+        { label: "GitHub", profile: "https://github.com/x", relMe: false },
       ],
     });
     const { fetchSocialMenu } = await load();
     expect(await fetchSocialMenu()).toEqual([
-      { link: "https://social.example/@bs", rel: "me", title: "Mastodon" },
-      { link: "https://bsky.example/bs", title: "Bluesky" },
+      { link: "https://m.social/@x", rel: "me", title: "Mastodon" },
+      { link: "https://github.com/x", title: "GitHub" },
     ]);
   });
 });

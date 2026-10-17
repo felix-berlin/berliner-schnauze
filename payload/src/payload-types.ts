@@ -913,20 +913,34 @@ export interface Affiliate {
  */
 export interface Company {
   id: number;
-  funding?:
+  /**
+   * Spenden-Plattformen (Footer und /spenden).
+   */
+  platforms?:
     | {
         name: string;
-        link?: string | null;
-        adresse?: string | null;
+        link: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Krypto-Adressen; eine Adresse kann auf mehreren Chains gelten.
+   */
+  wallets?:
+    | {
+        address: string;
+        chains: string[];
         id?: string | null;
       }[]
     | null;
   socialMedia?:
     | {
-        network?: string | null;
-        label?: string | null;
+        label: string;
         profile: string;
-        rel?: string | null;
+        /**
+         * Link mit rel="me" (z. B. Mastodon-Verifizierung).
+         */
+        relMe?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -1002,21 +1016,26 @@ export interface AffiliateSelect<T extends boolean = true> {
  * via the `definition` "company_select".
  */
 export interface CompanySelect<T extends boolean = true> {
-  funding?:
+  platforms?:
     | T
     | {
         name?: T;
         link?: T;
-        adresse?: T;
+        id?: T;
+      };
+  wallets?:
+    | T
+    | {
+        address?: T;
+        chains?: T;
         id?: T;
       };
   socialMedia?:
     | T
     | {
-        network?: T;
         label?: T;
         profile?: T;
-        rel?: T;
+        relMe?: T;
         id?: T;
       };
   updatedAt?: T;

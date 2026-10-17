@@ -164,7 +164,8 @@ describe("runImport", () => {
     const nav = await payload.findGlobal({ slug: "navigation" });
     expect(nav.main).toEqual([expect.objectContaining({ title: "Start Main Menu", link: "/" })]);
     const company = await payload.findGlobal({ slug: "company" });
-    expect(company.socialMedia).toEqual([expect.objectContaining({ network: "mastodon", label: "Mastodon", profile: "https://example.social/@bs" })]);
+    expect(company.socialMedia).toEqual([expect.objectContaining({ label: "Mastodon", profile: "https://example.social/@bs", relMe: true })]);
+    expect(company.platforms).toEqual([expect.objectContaining({ name: "Beispiel", link: "https://example.com/pay" })]);
     const affiliate = await payload.findGlobal({ slug: "affiliate" });
     expect(affiliate.books).toEqual([expect.objectContaining({ title: "Buch" })]);
   });

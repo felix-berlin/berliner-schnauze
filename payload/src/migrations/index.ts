@@ -4,6 +4,7 @@ import * as migration_20261016_232524_seo_plugin_meta from './20261016_232524_se
 import * as migration_20261017_095811_suggestions from './20261017_095811_suggestions';
 import * as migration_20261017_100125_redirects from './20261017_100125_redirects';
 import * as migration_20261017_100905_drop_berliner_word_id from './20261017_100905_drop_berliner_word_id';
+import * as migration_20261017_101928_company_platforms_wallets from './20261017_101928_company_platforms_wallets';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20261017_100905_drop_berliner_word_id.up,
     down: migration_20261017_100905_drop_berliner_word_id.down,
-    name: '20261017_100905_drop_berliner_word_id'
+    name: '20261017_100905_drop_berliner_word_id',
+  },
+  {
+    up: migration_20261017_101928_company_platforms_wallets.up,
+    down: migration_20261017_101928_company_platforms_wallets.down,
+    name: '20261017_101928_company_platforms_wallets'
   },
 ];

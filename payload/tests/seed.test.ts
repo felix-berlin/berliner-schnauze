@@ -71,7 +71,7 @@ describe("seedE2e", () => {
 
   it("fills the site globals", async () => {
     expect((await payload.findGlobal({ slug: "navigation" })).main?.length).toBeGreaterThan(0);
-    expect((await payload.findGlobal({ slug: "company" })).funding?.length).toBeGreaterThan(0);
+    expect((await payload.findGlobal({ slug: "company" })).platforms?.length).toBeGreaterThan(0);
   });
 });
 

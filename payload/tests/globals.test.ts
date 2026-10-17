@@ -26,11 +26,15 @@ describe("globals round-trip", () => {
 
   it("company", async () => {
     const payload = await getTestPayload();
-    const funding = [{ name: "Beispiel Wallet", link: "https://example.com/pay", adresse: "0xEXAMPLE" }];
-    const socialMedia = [{ network: "mastodon", label: "Mastodon", profile: "https://example.social/@berliner", rel: "me" }];
-    await payload.updateGlobal({ slug: "company", data: { funding, socialMedia } });
+    const data = {
+      platforms: [{ name: "Ko-fi", link: "https://ko-fi.com/beispiel" }],
+      wallets: [{ address: "0xEXAMPLE", chains: ["Ethereum", "Base"] }],
+      socialMedia: [{ label: "Mastodon", profile: "https://example.social/@berliner", relMe: true }],
+    };
+    await payload.updateGlobal({ slug: "company", data });
     const doc = await payload.findGlobal({ slug: "company" });
-    expect(doc.funding?.[0]).toMatchObject(funding[0]);
-    expect(doc.socialMedia?.[0]).toMatchObject(socialMedia[0]);
+    expect(doc.platforms?.[0]).toMatchObject(data.platforms[0]!);
+    expect(doc.wallets?.[0]).toMatchObject(data.wallets[0]!);
+    expect(doc.socialMedia?.[0]).toMatchObject(data.socialMedia[0]!);
   });
 });

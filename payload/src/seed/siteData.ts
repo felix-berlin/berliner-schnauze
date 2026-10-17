@@ -112,107 +112,77 @@ export const navigation = {
 };
 
 export const company = {
-  "funding": [
+  "platforms": [
     {
       "name": "GitHub Sponsors",
-      "link": "https://github.com/sponsors/felix-berlin",
-      "adresse": null
+      "link": "https://github.com/sponsors/felix-berlin"
     },
     {
       "name": "Ko-fi",
-      "link": "https://ko-fi.com/felixberlin",
-      "adresse": null
+      "link": "https://ko-fi.com/felixberlin"
     },
     {
       "name": "PayPal",
-      "link": "https://paypal.me/FelixScholze",
-      "adresse": null
+      "link": "https://paypal.me/FelixScholze"
     },
     {
       "name": "Buy me a coffee",
-      "link": "https://www.buymeacoffee.com/felixberlin",
-      "adresse": null
+      "link": "https://www.buymeacoffee.com/felixberlin"
+    }
+  ],
+  "wallets": [
+    {
+      "address": "0x4A21A332cAc9809dBCAdcD4CeDD43fdF32661eeE",
+      "chains": [
+        "Ethereum",
+        "Linea",
+        "Base",
+        "BNB Chain",
+        "Sei",
+        "Polygon",
+        "OP",
+        "Arbitrum"
+      ]
     },
     {
-      "name": "Ethereum",
-      "link": null,
-      "adresse": "0x4A21A332cAc9809dBCAdcD4CeDD43fdF32661eeE"
+      "address": "bc1qdp6ucj4pcp7w94y4nevktzazpul53pr2jxt040",
+      "chains": [
+        "Bitcoin"
+      ]
     },
     {
-      "name": "Bitcoin",
-      "link": null,
-      "adresse": "bc1qdp6ucj4pcp7w94y4nevktzazpul53pr2jxt040"
+      "address": "HUj6hkvdb9kHhRGwLQfT4K6q1RBeXsR7xxCNekT9ZjrA",
+      "chains": [
+        "Solana"
+      ]
     },
     {
-      "name": "Solana",
-      "link": null,
-      "adresse": "HUj6hkvdb9kHhRGwLQfT4K6q1RBeXsR7xxCNekT9ZjrA"
-    },
-    {
-      "name": "Linea",
-      "link": null,
-      "adresse": "0x4A21A332cAc9809dBCAdcD4CeDD43fdF32661eeE"
-    },
-    {
-      "name": "Base",
-      "link": null,
-      "adresse": "0x4A21A332cAc9809dBCAdcD4CeDD43fdF32661eeE"
-    },
-    {
-      "name": "BNB Chain",
-      "link": null,
-      "adresse": "0x4A21A332cAc9809dBCAdcD4CeDD43fdF32661eeE"
-    },
-    {
-      "name": "Sei",
-      "link": null,
-      "adresse": "0x4A21A332cAc9809dBCAdcD4CeDD43fdF32661eeE"
-    },
-    {
-      "name": "Polygon",
-      "link": null,
-      "adresse": "0x4A21A332cAc9809dBCAdcD4CeDD43fdF32661eeE"
-    },
-    {
-      "name": "OP",
-      "link": null,
-      "adresse": "0x4A21A332cAc9809dBCAdcD4CeDD43fdF32661eeE"
-    },
-    {
-      "name": "Arbitrum",
-      "link": null,
-      "adresse": "0x4A21A332cAc9809dBCAdcD4CeDD43fdF32661eeE"
-    },
-    {
-      "name": "Tron",
-      "link": null,
-      "adresse": "TRwwuT7924VxDNzDcVj7TRz9kpgtyAb2C3"
+      "address": "TRwwuT7924VxDNzDcVj7TRz9kpgtyAb2C3",
+      "chains": [
+        "Tron"
+      ]
     }
   ],
   "socialMedia": [
     {
-      "network": "bluesky",
       "label": "Bluesky",
       "profile": "https://bsky.app/profile/berliner-schnauze.wtf",
-      "rel": null
+      "relMe": false
     },
     {
-      "network": "mastodon",
       "label": "Mastodon",
       "profile": "https://mastodon.social/@berliner_schnauze",
-      "rel": "me"
+      "relMe": true
     },
     {
-      "network": "github",
       "label": "GitHub",
       "profile": "https://github.com/felix-berlin/berliner-schnauze",
-      "rel": null
+      "relMe": false
     },
     {
-      "network": "facebook",
       "label": "Facebook",
       "profile": "https://www.facebook.com/Berliner.Schnauze030",
-      "rel": null
+      "relMe": false
     }
   ]
 };
