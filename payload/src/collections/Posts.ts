@@ -10,7 +10,7 @@ export const Posts: CollectionConfig = {
   slug: "posts",
   access: authenticatedOnly,
   admin: { useAsTitle: "title", preview: previewUrl("posts") },
-  versions: { drafts: true },
+  versions: { drafts: { schedulePublish: true } },
   hooks: { beforeChange: [rememberPublicSlug, touchContentModifiedAt], afterChange: [redirectOldSlug] },
   fields: [
     { name: "title", type: "text", required: true },

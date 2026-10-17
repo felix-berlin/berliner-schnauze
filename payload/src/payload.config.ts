@@ -42,6 +42,11 @@ export default buildConfig({
       })
     : undefined,
   plugins: [seo, redirects],
+  // Runs queued jobs (scheduled publishing of posts) only where PAYLOAD_RUN_JOBS=true, the cms container: the site's
+  // Local API process must not pick them up as well.
+  jobs: {
+    autoRun: process.env.PAYLOAD_RUN_JOBS === "true" ? [{ cron: "* * * * *", queue: "default" }] : undefined,
+  },
   secret: process.env.PAYLOAD_SECRET || "",
   serverURL: process.env.PAYLOAD_SERVER_URL || "",
   typescript: {
