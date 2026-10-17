@@ -14,6 +14,9 @@ vi.mock("@utils/imagor", () => ({
 
 const { default: imagorImageService } = await import("../../../lib/imagorImageService");
 
+/** The allowlist part of `image` in astro.config.mjs. */
+const IMAGE_CONFIG = { domains: ["cms.berliner-schnauze.wtf"], remotePatterns: [] } as never;
+
 describe("imagorImageService.getURL", () => {
   it("builds and signs a path for a remote string src with width/height", () => {
     const url = imagorImageService.getURL(
@@ -24,7 +27,7 @@ describe("imagorImageService.getURL", () => {
         src: "https://cms.berliner-schnauze.wtf/foo.png",
         width: 400,
       },
-      {} as never,
+      IMAGE_CONFIG,
     );
 
     expect(buildImagorPathMock).toHaveBeenCalledWith("https://cms.berliner-schnauze.wtf/foo.png", {
@@ -45,7 +48,7 @@ describe("imagorImageService.getURL", () => {
     expect(() =>
       imagorImageService.getURL(
         { height: 200, src: "https://cms.berliner-schnauze.wtf/foo.png" },
-        {} as never,
+        IMAGE_CONFIG,
       ),
     ).toThrow(/width and height/);
   });
@@ -54,7 +57,7 @@ describe("imagorImageService.getURL", () => {
     expect(() =>
       imagorImageService.getURL(
         { src: "https://cms.berliner-schnauze.wtf/foo.png", width: 400 },
-        {} as never,
+        IMAGE_CONFIG,
       ),
     ).toThrow(/width and height/);
   });
@@ -64,7 +67,7 @@ describe("imagorImageService.getURL", () => {
     signImagorPathMock.mockClear();
 
     const localSrc = { src: "/local-image-abc123.png" } as never;
-    const url = imagorImageService.getURL({ height: 100, src: localSrc, width: 100 }, {} as never);
+    const url = imagorImageService.getURL({ height: 100, src: localSrc, width: 100 }, IMAGE_CONFIG);
 
     expect(url).toBe("/local-image-abc123.png");
     expect(buildImagorPathMock).not.toHaveBeenCalled();
@@ -81,7 +84,7 @@ describe("imagorImageService.getURL", () => {
         src: "https://cms.berliner-schnauze.wtf/foo.png",
         width: 48,
       },
-      {} as never,
+      IMAGE_CONFIG,
     );
 
     expect(srcSet).toHaveLength(3);
@@ -102,6 +105,23 @@ describe("imagorImageService.getURL", () => {
       { descriptor: "2x", format: "avif", height: 132, width: 96 },
       { descriptor: "2x", format: "webp", height: 132, width: 96 },
     ]);
+  });
+});
+
+describe("imagorImageService allowlist", () => {
+  it("does not sign a host outside image.domains: original url, no srcset", () => {
+    signImagorPathMock.mockClear();
+    const src = "https://evil.example/x.png";
+    expect(imagorImageService.getURL({ height: 10, src, width: 10 }, IMAGE_CONFIG)).toBe(src);
+    expect(
+      imagorImageService.getSrcSet({ densities: [1, 2], height: 10, src, width: 10 }, IMAGE_CONFIG),
+    ).toEqual([]);
+    expect(signImagorPathMock).not.toHaveBeenCalled();
+  });
+
+  it("does not sign a lookalike of an allowed host", () => {
+    const src = "https://cms.berliner-schnauze.wtf.evil.example/x.png";
+    expect(imagorImageService.getURL({ height: 10, src, width: 10 }, IMAGE_CONFIG)).toBe(src);
   });
 });
 
