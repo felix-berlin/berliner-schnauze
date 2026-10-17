@@ -27,8 +27,9 @@ export type WordExample = Omit<NonNullable<WordExamplesArray>[number], "exampleA
 export type RelatedWord = Pick<PayloadWord, "berlinerisch" | "id"> & { slug: string };
 
 /**
- * A public word as the pages render it: the Payload doc with its relations populated, repeaters as arrays
- * (never null), media with absolute urls, and what is computed once per cache window (rich text as HTML).
+ * A public word as the pages render it: the Payload doc with its relations populated, relations and media rows as
+ * arrays (never null; the plain text repeaters keep Payload's `| null`), media with absolute urls, and what is
+ * computed once per cache window (rich text as HTML).
  */
 export type SiteWord = Omit<
   PayloadWord,
@@ -51,8 +52,9 @@ export type SiteWord = Omit<
   wordTypes: Pick<WordType, "id" | "name">[];
 };
 
-const populated = <T extends object>(items: readonly (T | number | null)[] | null | undefined): T[] =>
-  (items ?? []).filter((item): item is T => typeof item === "object" && item !== null);
+const populated = <T extends object>(
+  items: readonly (T | number | null)[] | null | undefined,
+): T[] => (items ?? []).filter((item): item is T => typeof item === "object" && item !== null);
 
 export const toSiteMedia = (media: Media): SiteMedia | null => {
   const url = mediaUrl(media);
@@ -76,7 +78,10 @@ const audioRows = (rows: AudioArray | undefined): AudioRow[] =>
     return media ? [{ ...row, audio: media }] : [];
   });
 
-/** `doc` must be populated one level deep (relations and media are objects, not ids) and have a slug. */
+/**
+ * `doc` must be populated one level deep (relations and media are objects, not ids) and have a slug: ids are
+ * dropped silently. Exported for the tests; pages go through fetchAllWords/fetchDraftWord.
+ */
 export const toWord = ({
   berlinerischAudio,
   examples,
@@ -89,12 +94,16 @@ export const toWord = ({
 }: PayloadWord & { slug: string }): SiteWord => ({
   ...doc,
   berlinerischAudio: audioRows(berlinerischAudio),
-  examples: (examples ?? []).map(({ exampleAudio, ...e }) => (Object.assign(e, { exampleAudio: audioRows(exampleAudio) }))),
+  examples: (examples ?? []).map(({ exampleAudio, ...e }) =>
+    Object.assign(e, { exampleAudio: audioRows(exampleAudio) }),
+  ),
   images: populated<Media>(images).flatMap((m) => toSiteMedia(m) ?? []),
   infoTextHtml: lexicalToHtml(infoText) || null,
   // the Local API ignores access control: a never-published word must not leak through a relation
   relatedWords: populated<PayloadWord>(relatedWords).flatMap((w) =>
-    w._status === "published" && w.slug ? [{ berlinerisch: w.berlinerisch, id: w.id, slug: w.slug }] : [],
+    w._status === "published" && w.slug
+      ? [{ berlinerisch: w.berlinerisch, id: w.id, slug: w.slug }]
+      : [],
   ),
   themen: populated<Theman>(themen).map(({ id, name, slug }) => ({ id, name, slug })),
   wordTypes: populated<WordType>(wordTypes).map(({ id, name }) => ({ id, name })),
@@ -111,17 +120,18 @@ const WORD_POPULATE = {
   words: { _status: true, berlinerisch: true, slug: true },
 } as const;
 
-/** A stored word as a SiteWord, or undefined when it lacks what a page needs (a draft may). */
 /** A word as a draft may be stored: strictDraftTypes types its required fields optional. */
 type StoredWord = Omit<PayloadWord, "berlinerisch" | "createdAt" | "updatedAt"> &
   Partial<Pick<PayloadWord, "berlinerisch" | "createdAt" | "updatedAt">>;
 
+/** A stored word as a SiteWord, or undefined when it lacks what a page needs (a draft may). */
 const toSiteWord = (doc: StoredWord): SiteWord | undefined => {
-  // strictDraftTypes types the required fields of a draft optional.
   const { berlinerisch, createdAt, slug, updatedAt } = doc;
   if (slug && berlinerisch && createdAt && updatedAt)
     return toWord({ ...doc, berlinerisch, createdAt, slug, updatedAt });
-  console.warn(`[words] Word without slug or headword skipped: id ${doc.id}, berlinerisch "${berlinerisch}"`);
+  console.warn(
+    `[words] Word without slug or headword skipped: id ${doc.id}, berlinerisch "${berlinerisch}"`,
+  );
   return undefined;
 };
 
@@ -152,10 +162,32 @@ const loadAllWords = async (): Promise<SiteWord[]> => {
 
 /** The latest version of a word, draft included, for the editor's preview (never cached). */
 export const fetchDraftWord = async (id: number): Promise<SiteWord | undefined> => {
-  const doc = await (
-    await getPayloadClient()
-  ).findByID({ collection: "words", depth: 1, disableErrors: true, draft: true, id, populate: WORD_POPULATE });
-  return doc ? toSiteWord(doc) : undefined;
+  const payload = await getPayloadClient();
+  const doc = await payload.findByID({
+    collection: "words",
+    depth: 1,
+    disableErrors: true,
+    draft: true,
+    id,
+    populate: WORD_POPULATE,
+  });
+  if (!doc) return undefined;
+  // `draft: true` populates each related word as its latest version, a draft even when a published one exists:
+  // load them as the public page does, so the preview shows the same related words.
+  const ids = (doc.relatedWords ?? []).map((w) => (typeof w === "object" ? w.id : w));
+  // Published only, even with SHOW_TEST_DATA: toWord drops every other related word anyway.
+  const { docs: related } = ids.length
+    ? await payload.find({
+        collection: "words",
+        depth: 0,
+        limit: ids.length,
+        where: { and: [{ id: { in: ids } }, { _status: { equals: "published" } }] },
+      })
+    : { docs: [] };
+  return toSiteWord({
+    ...doc,
+    relatedWords: ids.flatMap((rid) => related.find((w) => w.id === rid) ?? []),
+  });
 };
 
 /** All public words (plus drafts with SHOW_TEST_DATA), memoized for a minute: an admin edit is live without a rebuild. */

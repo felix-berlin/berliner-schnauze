@@ -181,9 +181,7 @@ describe("toWord", () => {
 
   it("keeps only published, populated related words", async () => {
     const { toWord } = await load();
-    expect(toWord(doc as never).relatedWords).toEqual([
-      { berlinerisch: "wa", id: 13, slug: "wa" },
-    ]);
+    expect(toWord(doc as never).relatedWords).toEqual([{ berlinerisch: "wa", id: 13, slug: "wa" }]);
   });
 
   it("copes with a sparse document: repeaters and relations become empty arrays", async () => {
@@ -313,5 +311,36 @@ describe("fetchAllWords", () => {
     vi.advanceTimersByTime(61_000);
     await fetchAllWords();
     expect(find).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe("fetchDraftWord", () => {
+  it("shows the published version of related words, as the public page does", async () => {
+    const findByID = vi.fn().mockResolvedValue({
+      ...doc,
+      _status: "draft",
+      // draft: true populated the latest versions: 13 has a newer draft, 14 was never published
+      relatedWords: [
+        { _status: "draft", berlinerisch: "wa (neu)", id: 13, slug: "wa" },
+        { _status: "draft", berlinerisch: "geheim", id: 14, slug: "geheim" },
+      ],
+    });
+    getPayload.mockResolvedValue({ find, findByID });
+    find.mockResolvedValue({
+      docs: [{ _status: "published", berlinerisch: "wa", id: 13, slug: "wa" }],
+    });
+    const { fetchDraftWord } = await load();
+    const word = await fetchDraftWord(1);
+    expect(word?.relatedWords).toEqual([{ berlinerisch: "wa", id: 13, slug: "wa" }]);
+    expect(find.mock.calls[0][0].where).toEqual({
+      and: [{ id: { in: [13, 14] } }, { _status: { equals: "published" } }],
+    });
+  });
+
+  it("is undefined for a missing doc", async () => {
+    getPayload.mockResolvedValue({ find, findByID: vi.fn().mockResolvedValue(null) });
+    const { fetchDraftWord } = await load();
+    expect(await fetchDraftWord(1)).toBeUndefined();
+    expect(find).not.toHaveBeenCalled();
   });
 });

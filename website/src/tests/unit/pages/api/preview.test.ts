@@ -64,10 +64,23 @@ describe("GET /api/preview", () => {
     expect(set).not.toHaveBeenCalled();
   });
 
-  it("answers 403 when the doc is gone", async () => {
+  it("answers 404, not 'invalid link', when the doc is gone or has no slug yet", async () => {
     fetchDraftWord.mockResolvedValue(undefined);
-    expect(
-      (await get(previewToken("geheim", { collection: "words", id: 7 })).response).status,
-    ).toBe(403);
+    const { response, set } = get(previewToken("geheim", { collection: "words", id: 7 }));
+    const res = await response;
+    expect(res.status).toBe(404);
+    expect(await res.text()).toContain("Slug");
+    expect(set).not.toHaveBeenCalled();
+  });
+
+  it("answers 503 and logs when PAYLOAD_SECRET is missing", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    const token = previewToken("geheim", { collection: "words", id: 7 });
+    vi.stubEnv("PAYLOAD_SECRET", "");
+    const { response, set } = get(token);
+    expect((await response).status).toBe(503);
+    expect(log).toHaveBeenCalledOnce();
+    expect(set).not.toHaveBeenCalled();
+    log.mockRestore();
   });
 });

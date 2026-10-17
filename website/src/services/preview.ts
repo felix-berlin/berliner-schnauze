@@ -1,4 +1,4 @@
-import type { AstroCookies } from "astro";
+import type { AstroCookies, AstroGlobal } from "astro";
 
 import { type PreviewCollection, type PreviewTarget, readPreviewToken } from "payload-app/preview";
 
@@ -19,3 +19,20 @@ export const readPreview = (
 
 /** A preview response must never be stored by the proxy or shown to anyone else. */
 export const PREVIEW_CACHE_CONTROL = "private, no-store";
+
+/**
+ * The draft of `slug` when the visitor's preview cookie is for exactly this doc, else undefined (the page renders
+ * its public version). A preview response is marked private first, so no proxy keeps the draft.
+ */
+export const previewDraft = async <T extends { slug: string }>(
+  { cookies, response }: Pick<AstroGlobal, "cookies" | "response">,
+  collection: PreviewCollection,
+  slug: string | undefined,
+  fetchDraft: (id: number) => Promise<T | undefined>,
+): Promise<T | undefined> => {
+  const target = readPreview(cookies, collection);
+  const draft = target ? await fetchDraft(target.id) : undefined;
+  if (!draft || draft.slug !== slug) return undefined;
+  response.headers.set("Cache-Control", PREVIEW_CACHE_CONTROL);
+  return draft;
+};
