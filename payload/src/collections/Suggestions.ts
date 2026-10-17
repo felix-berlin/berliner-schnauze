@@ -5,7 +5,11 @@ import { authenticatedOnly } from "../access";
 /** Mails the editors about a new suggestion; a failed mail is logged, the suggestion stays in the admin. */
 const mailEditors: CollectionAfterChangeHook = async ({ doc, operation, req }) => {
   const to = process.env.SUGGEST_MAIL_TO;
-  if (operation !== "create" || !to) return doc;
+  if (operation !== "create") return doc;
+  if (!to) {
+    req.payload.logger.warn(`Suggestion ${doc.id}: SUGGEST_MAIL_TO is not set, no editor was mailed`);
+    return doc;
+  }
   const rows: [string, string | null | undefined][] = [
     ["Berliner Wort", doc.berlinerWord],
     ["Übersetzung", doc.translation],
