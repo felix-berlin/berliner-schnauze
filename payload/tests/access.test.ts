@@ -75,6 +75,28 @@ describe("anonymous reads", () => {
   });
 });
 
+describe("anonymous writes", () => {
+  const denied = /not allowed|forbidden/i;
+  // id -1 matches nothing: should access ever let a write through, the test fails without touching data
+  const nothing = { id: { equals: -1 } };
+
+  for (const collection of lockedCollections) {
+    it(`${collection} create, update and delete are Forbidden`, async () => {
+      const payload = await getTestPayload();
+      await expect(payload.create({ collection, data: {} as never, overrideAccess: false })).rejects.toThrow(denied);
+      await expect(payload.update({ collection, data: {}, overrideAccess: false, where: nothing })).rejects.toThrow(denied);
+      await expect(payload.delete({ collection, overrideAccess: false, where: nothing })).rejects.toThrow(denied);
+    });
+  }
+
+  for (const slug of lockedGlobals) {
+    it(`global ${slug} update is Forbidden`, async () => {
+      const payload = await getTestPayload();
+      await expect(payload.updateGlobal({ slug, data: {}, overrideAccess: false })).rejects.toThrow(denied);
+    });
+  }
+});
+
 it("an authenticated user can list media", async () => {
   const payload = await getTestPayload();
   const user = { ...(await payload.findByID({ collection: "users", id: userId })), collection: "users" as const };

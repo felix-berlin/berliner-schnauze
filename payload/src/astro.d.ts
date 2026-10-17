@@ -6,4 +6,4 @@ import type { Payload, SanitizedConfig } from "payload";
 export type * from "./payload-types";
 export type { Payload };
 export declare const config: Promise<SanitizedConfig>;
-export declare const getPayload: (options: { config: Promise<SanitizedConfig> | SanitizedConfig }) => Promise<Payload>;
+export declare const getPayload: typeof import("payload").getPayload;
