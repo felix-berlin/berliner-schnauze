@@ -148,16 +148,6 @@ export default defineConfig({
       }),
       // Runtime-only (on-demand routes) and optional so the build needs no Payload env. "secret" is read from
       // the container's env at runtime; "public" would be inlined at build time (empty here).
-      SMTP_URL: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
-      SUGGEST_MAIL_TO: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
       TURNSTILE_SECRET_KEY: envField.string({
         context: "server",
         access: "secret",

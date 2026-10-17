@@ -97,6 +97,7 @@ export interface Config {
     words: Word;
     posts: Post;
     pages: Page;
+    suggestions: Suggestion;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -111,6 +112,7 @@ export interface Config {
     words: WordsSelect<false> | WordsSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    suggestions: SuggestionsSelect<false> | SuggestionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -419,6 +421,25 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suggestions".
+ */
+export interface Suggestion {
+  id: number;
+  berlinerWord: string;
+  translation: string;
+  example?: string | null;
+  userName?: string | null;
+  userMail?: string | null;
+  status?: ('new' | 'accepted' | 'rejected') | null;
+  /**
+   * Das Wort, das aus diesem Vorschlag entstanden ist.
+   */
+  word?: (number | null) | Word;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -468,6 +489,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'suggestions';
+        value: number | Suggestion;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -705,6 +730,21 @@ export interface PagesSelect<T extends boolean = true> {
   wpId?: T;
   slug?: T;
   meta?: T | SeoMetaGroupSelect<T>;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suggestions_select".
+ */
+export interface SuggestionsSelect<T extends boolean = true> {
+  berlinerWord?: T;
+  translation?: T;
+  example?: T;
+  userName?: T;
+  userMail?: T;
+  status?: T;
+  word?: T;
   updatedAt?: T;
   createdAt?: T;
 }

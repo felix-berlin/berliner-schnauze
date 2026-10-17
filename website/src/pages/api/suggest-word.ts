@@ -1,13 +1,16 @@
 import type { APIRoute } from "astro";
 
-import { sendSuggestionMail } from "@services/suggestMail.ts";
+import { getPayloadClient } from "@services/payload.ts";
 import { verifyTurnstile } from "@services/turnstile.ts";
 import { suggestWordSchema } from "@utils/suggestWordSchema.ts";
 
 const reply = (body: unknown, status: number) =>
   Response.json(body, { headers: { "Cache-Control": "no-store" }, status });
 
-/** Validates, then checks the Turnstile token server-side (the browser check alone protects nothing), then mails. */
+/**
+ * Validates, then checks the Turnstile token server-side (the browser check alone protects nothing), then stores the
+ * suggestion in Payload, whose hook mails the editors.
+ */
 export const POST: APIRoute = async ({ clientAddress, request }) => {
   const body: unknown = await request.json().catch(() => undefined);
   if (typeof body !== "object" || body === null) return reply({ error: "Ungültige Anfrage" }, 400);
@@ -25,9 +28,9 @@ export const POST: APIRoute = async ({ clientAddress, request }) => {
   if (!human) return reply({ error: "Captcha nicht bestanden" }, 403);
 
   try {
-    await sendSuggestionMail(suggestion.data);
+    await (await getPayloadClient()).create({ collection: "suggestions", data: suggestion.data });
   } catch (error) {
-    console.error("[suggest-word] mail failed:", error);
+    console.error("[suggest-word] storing failed:", error);
     return reply({ error: "Dein Wort konnte leider nicht gesendet werden." }, 502);
   }
   return reply({ sent: true }, 200);

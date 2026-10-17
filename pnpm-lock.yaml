@@ -222,6 +222,9 @@ importers:
       '@payloadcms/db-postgres':
         specifier: 3.91.0
         version: 3.91.0(@opentelemetry/api@1.9.1)(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))(supports-color@10.2.2)
+      '@payloadcms/email-nodemailer':
+        specifier: 3.91.0
+        version: 3.91.0(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))
       '@payloadcms/next':
         specifier: 3.91.0
         version: 3.91.0(@types/react@19.2.14)(graphql@16.14.2)(monaco-editor@0.57.0)(next@16.4.2(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.64.1)(@types/node@26.6.5)(babel-plugin-macros@3.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.104.1))(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(supports-color@10.2.2)(typescript@6.0.3)
@@ -258,6 +261,9 @@ importers:
       next:
         specifier: 16.4.2
         version: 16.4.2(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.64.1)(@types/node@26.6.5)(babel-plugin-macros@3.1.0)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.104.1)
+      nodemailer:
+        specifier: ^10.1.1
+        version: 10.1.1
       payload:
         specifier: 3.91.0
         version: 3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3)
@@ -274,6 +280,9 @@ importers:
       '@types/node':
         specifier: ^26.6.5
         version: 26.6.5
+      '@types/nodemailer':
+        specifier: ^8.0.2
+        version: 8.0.2
       '@types/react':
         specifier: 19.2.14
         version: 19.2.14
@@ -370,9 +379,6 @@ importers:
       natural:
         specifier: ^8.1.1
         version: 8.1.1(@opentelemetry/api@1.9.1)
-      nodemailer:
-        specifier: ^10.1.1
-        version: 10.1.1
       payload:
         specifier: 3.91.0
         version: 3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3)
@@ -431,9 +437,6 @@ importers:
       '@types/node':
         specifier: ^26.6.5
         version: 26.6.5
-      '@types/nodemailer':
-        specifier: ^8.0.2
-        version: 8.0.2
       '@vite-pwa/assets-generator':
         specifier: ^2.0.0
         version: 2.0.0(@types/node@26.6.5)
@@ -3882,6 +3885,12 @@ packages:
 
   '@payloadcms/drizzle@3.91.0':
     resolution: {integrity: sha512-qkY+UKgi+Ku1FZw9G5jEaRhXB9+iS7ic7cY0LM+42GtKXln3wp/vyAXLuIPwutTGQ0WZYpcKkuvRkN7L/yojKg==}
+    peerDependencies:
+      payload: 3.91.0
+
+  '@payloadcms/email-nodemailer@3.91.0':
+    resolution: {integrity: sha512-Hp3TpLz0Lu3WgDVkCk4Ua1HFMzOUuVKJ1rsffS2TEDSbNRd7BdWrXvvTtyjwnfuAjdMk4sBWIFGvaT7Ckbxlgg==}
+    engines: {node: '>=20.18.1'}
     peerDependencies:
       payload: 3.91.0
 
@@ -13513,6 +13522,11 @@ snapshots:
       - prisma
       - sql.js
       - sqlite3
+
+  '@payloadcms/email-nodemailer@3.91.0(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))':
+    dependencies:
+      nodemailer: 10.1.1
+      payload: 3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3)
 
   '@payloadcms/graphql@3.91.0(graphql@16.14.2)(payload@3.91.0(graphql@16.14.2)(supports-color@10.2.2)(typescript@6.0.3))(typescript@6.0.3)':
     dependencies:
