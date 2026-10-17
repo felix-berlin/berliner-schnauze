@@ -68,7 +68,8 @@ describe("mapWord", () => {
 
   it("maps audio, media, sources and draft status", async () => {
     const unmapped: string[] = [];
-    const doc = await mapWord(testwort as WpWord, refs(), config, (src) => unmapped.push(src));
+    const missing: string[] = [];
+    const doc = await mapWord(testwort as WpWord, refs(), config, (src) => unmapped.push(src), (kind, src) => missing.push(`${kind} ${src}`));
     // info-bild.png is not in refs: it becomes a link and is reported.
     expect(unmapped).toEqual(["https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/info-bild.png"]);
     expect(lexicalNodes(doc.infoText, "upload")).toEqual([]);
@@ -77,7 +78,8 @@ describe("mapWord", () => {
     expect(doc.examples?.[0].exampleAudio).toEqual([{ gender: "male", audio: 11 }]);
     expect(doc.berlinerischAudio).toEqual([{ gender: "female", audio: 11 }]);
     expect(doc.sources).toEqual(["Quelle A", "Quelle B", "Quelle C"]);
-    expect(doc.images).toEqual([12]); // the unmapped pdf and the foreign image are dropped
+    expect(doc.images).toEqual([12]); // the unmapped pdf and the foreign image are dropped, and reported
+    expect(missing).toEqual(["missing-media https://cms.berliner-schnauze.wtf/wp-content/uploads/2024/01/handout.pdf", "missing-media https://example.com/fremd.jpg"]);
     expect(doc.wordTypes).toEqual([21]);
     expect(doc.meta?.image).toBe(12);
   });
@@ -97,6 +99,8 @@ describe("mapSeo", () => {
     // Yoast's self-canonical on the WordPress host is dropped, a real override is kept
     expect(mapSeo(aasen.seo, refs()).canonical).toBeNull();
     expect(mapSeo({ canonical: "https://berliner-schnauze.wtf/wort/aas" }, refs()).canonical).toBe("https://berliner-schnauze.wtf/wort/aas");
+    expect(mapSeo({ canonical: "https://cms.berliner-schnauze.wtf" }, refs()).canonical).toBeNull();
+    expect(mapSeo({ canonical: "https://cms.berliner-schnauze.wtf.example/x" }, refs()).canonical).toBe("https://cms.berliner-schnauze.wtf.example/x");
     expect(mapSeo({ metaRobotsNoindex: " NoIndex, follow ", metaRobotsNofollow: "noindex, nofollow" }, refs())).toMatchObject({ noindex: true, nofollow: true });
   });
 

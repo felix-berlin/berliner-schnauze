@@ -79,7 +79,7 @@ const robots = (value: Maybe<string>, flag: string) => !!value?.trim().toLowerCa
 
 /** Yoast SEO -> `seo` group. Empty or missing values become null/false so a re-import clears them. */
 /** Yoast set every canonical to the page's own URL on the WordPress host: that is no override, the site uses its own URL. */
-const OLD_CMS_ORIGIN = "https://cms.berliner-schnauze.wtf";
+const OLD_CMS_ORIGIN = /^https:\/\/cms\.berliner-schnauze\.wtf(\/|$)/;
 
 export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): SeoMetaGroup {
   seo ??= {};
@@ -87,18 +87,28 @@ export function mapSeo(seo: Maybe<WpSeo>, refs: ImportRefs): SeoMetaGroup {
     title: seo.title || null,
     // Without a meta description Yoast generated og:description from the content; the site renders it as both.
     description: seo.metaDesc || seo.opengraphDescription || null,
-    canonical: seo.canonical && !seo.canonical.startsWith(OLD_CMS_ORIGIN) ? seo.canonical : null,
+    canonical: seo.canonical && !OLD_CMS_ORIGIN.test(seo.canonical) ? seo.canonical : null,
     image: mediaId(seo.opengraphImage?.sourceUrl, refs),
     noindex: robots(seo.metaRobotsNoindex, "noindex"),
     nofollow: robots(seo.metaRobotsNofollow, "nofollow"),
   };
 }
 
+/**
+ * Called for every reference of a word that resolves to nothing (media not imported: download failed, foreign host,
+ * `--only words`; unknown term): the word is stored without it.
+ */
+export type OnMissingRef = (kind: "missing-media" | "missing-term", src: string) => void;
+
 type AudioRows = NonNullable<Word["berlinerischAudio"]>;
-const mapAudio = (rows: Maybe<Maybe<AudioRow>[]>, refs: ImportRefs): AudioRows =>
+const mapAudio = (rows: Maybe<Maybe<AudioRow>[]>, refs: ImportRefs, onMissing?: OnMissingRef): AudioRows =>
   (rows ?? []).filter(present).flatMap((row) => {
-    const audio = mediaId(row.audio?.node?.mediaItemUrl, refs);
-    if (audio == null) return []; // download failed -> already in report.failures
+    const url = row.audio?.node?.mediaItemUrl;
+    const audio = mediaId(url, refs);
+    if (audio == null) {
+      if (url) onMissing?.("missing-media", url);
+      return [];
+    }
     const gender = row.gender === "male" || row.gender === "female" ? row.gender : null;
     return [{ gender, audio }];
   });
@@ -111,8 +121,15 @@ const htmlOrNull = async (html: Maybe<string>, config: SanitizedConfig, refs: Im
 
 export type WordData = Omit<Word, "id" | "derived" | "relatedWords" | "createdAt" | "updatedAt">;
 
-export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedConfig, onUnmappedImage?: OnUnmappedImage): Promise<WordData> {
+export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedConfig, onUnmappedImage?: OnUnmappedImage, onMissing?: OnMissingRef): Promise<WordData> {
   const p = node.wordProperties ?? {};
+  /** `lookup(key)`, reported when a present key resolves to nothing. */
+  const resolve = (kind: Parameters<OnMissingRef>[0], key: Maybe<string>, lookup: (key: string) => Maybe<number>): number[] => {
+    if (!key) return [];
+    const id = lookup(key);
+    if (id == null) onMissing?.(kind, key);
+    return id == null ? [] : [id];
+  };
   return {
     wpId: node.databaseId,
     slug: node.slug || null,
@@ -123,9 +140,9 @@ export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedC
     examples: (p.examples ?? []).filter(present).map((ex) => ({
       example: ex.example ?? null,
       exampleExplanation: ex.exampleExplanation ?? null,
-      exampleAudio: mapAudio(ex.exampleAudio, refs),
+      exampleAudio: mapAudio(ex.exampleAudio, refs, onMissing),
     })),
-    berlinerischAudio: mapAudio(p.berlinerischAudio, refs),
+    berlinerischAudio: mapAudio(p.berlinerischAudio, refs, onMissing),
     wikimediaFiles: (p.wikimediaFiles ?? []).filter(present).map((f) => ({
       wikimediaFile: f.wikimediaFile ?? null,
       description: f.description ?? null,
@@ -136,9 +153,9 @@ export async function mapWord(node: WpWord, refs: ImportRefs, config: SanitizedC
     berolinismus: p.berolinismus ?? false,
     // ACF repeater of `quelle` fields, each a string or a list of strings.
     sources: (p.sources ?? []).flatMap((s) => [s?.quelle ?? []].flat()).filter((s): s is string => !!s),
-    images: (p.images?.nodes ?? []).map((img) => mediaId(img?.sourceUrl, refs)).filter(present),
-    wordTypes: (node.berlinerischWordTypes?.nodes ?? []).map((t) => (t?.name ? refs.wordTypeIdByName.get(t.name) : undefined)).filter(present),
-    themen: (node.berlinerischThemen?.nodes ?? []).map((t) => (t?.slug ? refs.themaIdBySlug.get(t.slug) : undefined)).filter(present),
+    images: (p.images?.nodes ?? []).flatMap((img) => resolve("missing-media", img?.sourceUrl, (url) => mediaId(url, refs))),
+    wordTypes: (node.berlinerischWordTypes?.nodes ?? []).flatMap((t) => resolve("missing-term", t?.name, (name) => refs.wordTypeIdByName.get(name))),
+    themen: (node.berlinerischThemen?.nodes ?? []).flatMap((t) => resolve("missing-term", t?.slug, (slug) => refs.themaIdBySlug.get(slug))),
     publishedAt: gmtToIso(node.dateGmt),
     contentModifiedAt: gmtToIso(node.modifiedGmt),
     meta: mapSeo(node.seo, refs),

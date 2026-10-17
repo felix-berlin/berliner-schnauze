@@ -273,7 +273,8 @@ export async function runImport(payload: Payload, opts: { only?: ImportPhase[] }
         }
         try {
           // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
-          const data = await mapWord(node, refs, payload.config, htmlImage(node.slug ?? String(node.databaseId)));
+          const ref = node.slug ?? String(node.databaseId);
+          const data = await mapWord(node, refs, payload.config, htmlImage(ref), (kind, src) => report.warnings.push({ kind, ref, src }));
           // oxlint-disable-next-line no-await-in-loop -- sequential Local API writes
           const doc = await upsert("words", node.databaseId, data, PRESERVE_CONTEXT);
           stored.set(node.databaseId, ((doc.relatedWords as number[] | null) ?? []).map(Number));

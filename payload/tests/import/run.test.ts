@@ -120,9 +120,12 @@ describe("runImport", () => {
       expect.arrayContaining([
         { kind: "media-foreign-host", ref: "https://example.com/fremd.jpg", src: "https://example.com/fremd.jpg" },
         { kind: "html-image", ref: post.slug, src: "https://example.com/extern.png" },
+        // dropped from the word: the failed pdf and the foreign image
+        { kind: "missing-media", ref: "import-testwort", src: PDF },
+        { kind: "missing-media", ref: "import-testwort", src: "https://example.com/fremd.jpg" },
       ]),
     );
-    expect(first.warnings).toHaveLength(2);
+    expect(first.warnings).toHaveLength(4);
     expect(fetchMock.mock.calls.map(([url]) => String(url))).not.toContain("https://example.com/fremd.jpg");
     const downloads = fetchMock.mock.calls.length;
 
