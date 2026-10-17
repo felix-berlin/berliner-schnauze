@@ -35,6 +35,14 @@ describe("middleware", () => {
     expect(res.headers.get("Cache-Control")).toContain("s-maxage");
   });
 
+  it("keeps the 404 instead of redirecting a path to itself (no loop)", async () => {
+    fetchRedirects.mockResolvedValue(
+      new Map([["/wort/kreis", { location: "/wort/kreis/", status: 301 }]]),
+    );
+    const res = await run(notFound, "/wort/kreis");
+    expect(res.status).toBe(404);
+  });
+
   it("keeps a 404 without a redirect", async () => {
     const res = await run(notFound, "/wort/unbekannt");
     expect(res.status).toBe(404);
