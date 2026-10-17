@@ -104,6 +104,23 @@ export const toWord = ({
 export const translationTexts = (word: Pick<SiteWord, "translations">): string[] =>
   (word.translations ?? []).flatMap((t) => t.translation || []);
 
+// Relations: only what toWord reads, not every related word in full.
+const WORD_POPULATE = {
+  themen: { name: true, slug: true },
+  "word-types": { name: true },
+  words: { _status: true, berlinerisch: true, slug: true },
+} as const;
+
+/** A stored word as a SiteWord, or undefined when it lacks what a page needs (a draft may). */
+const toSiteWord = (doc: PayloadWord): SiteWord | undefined => {
+  // strictDraftTypes types the required fields of a draft optional.
+  const { berlinerisch, createdAt, slug, updatedAt } = doc;
+  if (slug && berlinerisch && createdAt && updatedAt)
+    return toWord({ ...doc, berlinerisch, createdAt, slug, updatedAt });
+  console.warn(`[words] Word without slug or headword skipped: id ${doc.id}, berlinerisch "${berlinerisch}"`);
+  return undefined;
+};
+
 const loadAllWords = async (): Promise<SiteWord[]> => {
   const payload = await getPayloadClient();
   const words: SiteWord[] = [];
@@ -114,30 +131,27 @@ const loadAllWords = async (): Promise<SiteWord[]> => {
       depth: 1,
       limit: PAGE_SIZE,
       page,
-      // relations: only what toWord reads, not every related word in full
-      populate: {
-        themen: { name: true, slug: true },
-        "word-types": { name: true },
-        words: { _status: true, berlinerisch: true, slug: true },
-      },
+      populate: WORD_POPULATE,
       sort: "id",
       ...publicDocs(),
     });
     for (const doc of result.docs) {
-      // A draft (SHOW_TEST_DATA) may lack required fields: strictDraftTypes types them optional.
-      const { berlinerisch, createdAt, slug, updatedAt } = doc;
-      if (slug && berlinerisch && createdAt && updatedAt)
-        words.push(toWord({ ...doc, berlinerisch, createdAt, slug, updatedAt }));
-      else
-        console.warn(
-          `[fetchAllWords] Word without slug or headword skipped: id ${doc.id}, berlinerisch "${berlinerisch}"`,
-        );
+      const word = toSiteWord(doc);
+      if (word) words.push(word);
     }
     if (!result.hasNextPage) break;
   }
 
   // German collation here, not the database's: the neighbor sections depend on this order.
   return words.sort((a, b) => a.berlinerisch.localeCompare(b.berlinerisch, "de"));
+};
+
+/** The latest version of a word, draft included, for the editor's preview (never cached). */
+export const fetchDraftWord = async (id: number): Promise<SiteWord | undefined> => {
+  const doc = await (
+    await getPayloadClient()
+  ).findByID({ collection: "words", depth: 1, disableErrors: true, draft: true, id, populate: WORD_POPULATE });
+  return doc ? toSiteWord(doc) : undefined;
 };
 
 /** All public words (plus drafts with SHOW_TEST_DATA), memoized for a minute: an admin edit is live without a rebuild. */

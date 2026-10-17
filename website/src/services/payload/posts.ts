@@ -74,6 +74,24 @@ const readingTime = (blocks: ArticleBlock[]): number => {
   return Math.max(1, Math.ceil(text.split(/\s+/).filter(Boolean).length / WORDS_PER_MINUTE));
 };
 
+/** A stored post as a SitePost, or undefined when it lacks its slug or title (a draft may). */
+const toSitePost = ({ content, contentModifiedAt, excerpt, featuredImage, id, meta, publishedAt, slug, title }: Post): SitePost | undefined => {
+  if (!slug || !title) return undefined;
+  const blocks = toPostBlocks(content);
+  return {
+    blocks,
+    contentModifiedAt,
+    excerpt,
+    featuredImage: absoluteMedia(featuredImage),
+    id,
+    meta,
+    publishedAt,
+    readingTime: readingTime(blocks),
+    slug,
+    title,
+  };
+};
+
 const loadPosts = async (): Promise<SitePost[]> => {
   const { docs } = await (
     await getPayloadClient()
@@ -84,37 +102,15 @@ const loadPosts = async (): Promise<SitePost[]> => {
     sort: "-publishedAt",
     ...publicDocs(),
   });
-  return docs.flatMap(
-    ({
-      content,
-      contentModifiedAt,
-      excerpt,
-      featuredImage,
-      id,
-      meta,
-      publishedAt,
-      slug,
-      title,
-    }) => {
-      // A draft (SHOW_TEST_DATA) may lack its title: strictDraftTypes types it optional.
-      if (!slug || !title) return [];
-      const blocks = toPostBlocks(content);
-      return [
-        {
-          blocks,
-          contentModifiedAt,
-          excerpt,
-          featuredImage: absoluteMedia(featuredImage),
-          id,
-          meta,
-          publishedAt,
-          readingTime: readingTime(blocks),
-          slug,
-          title,
-        },
-      ];
-    },
-  );
+  return docs.flatMap((doc) => toSitePost(doc) ?? []);
+};
+
+/** The latest version of a post, draft included, for the editor's preview (never cached). */
+export const fetchDraftPost = async (id: number): Promise<SitePost | undefined> => {
+  const doc = await (
+    await getPayloadClient()
+  ).findByID({ collection: "posts", depth: 1, disableErrors: true, draft: true, id });
+  return doc ? toSitePost(doc) : undefined;
 };
 
 export const fetchAllPosts = ttl(60_000, loadPosts);

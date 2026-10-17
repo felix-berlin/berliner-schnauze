@@ -5,6 +5,7 @@ import { contentModifiedAtField, touchContentModifiedAt } from "../fields/conten
 import { identityFields } from "../fields/identity";
 import { setDerivedWordFields } from "../hooks/deriveWordFields";
 import { redirectOldSlug, rememberPublicSlug } from "../hooks/redirectOldSlug";
+import { previewUrl } from "../lib/preview";
 
 const gender: Field = { name: "gender", type: "select", options: ["male", "female"] };
 const audioRows = (name: string): Field => ({
@@ -17,7 +18,7 @@ const audioRows = (name: string): Field => ({
 export const Words: CollectionConfig = {
   slug: "words",
   access: authenticatedOnly,
-  admin: { useAsTitle: "berlinerisch" },
+  admin: { useAsTitle: "berlinerisch", preview: previewUrl("words") },
   versions: { drafts: true },
   hooks: { beforeChange: [rememberPublicSlug, touchContentModifiedAt, setDerivedWordFields], afterChange: [redirectOldSlug] },
   fields: [

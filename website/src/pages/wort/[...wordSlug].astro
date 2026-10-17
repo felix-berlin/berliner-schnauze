@@ -25,7 +25,8 @@ import Layout from '@layouts/Layout.astro';
 import { fetchAffiliateData, fetchAllWords } from '@services/api.ts';
 import { fetchWordRefs, toWordRef } from '@services/payload/wordRefs.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
-import { translationTexts } from '@services/payload/words.ts';
+import { fetchDraftWord, translationTexts } from '@services/payload/words.ts';
+import { PREVIEW_CACHE_CONTROL, readPreview } from '@services/preview.ts';
 import { escapeHtml } from 'payload-app/lexical-html';
 import { seoData, canonicalUrl } from '@utils/helpers.ts';
 import {
@@ -42,7 +43,12 @@ import ChevronRight from '~icons/lucide/chevron-right';
 
 
 const { wordSlug } = Astro.params;
-const word = (await fetchAllWords()).find((w) => w.slug === wordSlug);
+// An editor with a preview cookie for this word sees its latest draft.
+const preview = readPreview(Astro.cookies, 'words');
+const draft = preview ? await fetchDraftWord(preview.id) : undefined;
+const isPreview = draft?.slug === wordSlug;
+if (isPreview) Astro.response.headers.set('Cache-Control', PREVIEW_CACHE_CONTROL);
+const word = isPreview ? draft : (await fetchAllWords()).find((w) => w.slug === wordSlug);
 if (!word) return Astro.rewrite('/404');
 
 const wordRef = toWordRef(word);

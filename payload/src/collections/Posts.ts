@@ -4,11 +4,12 @@ import { authenticatedOnly } from "../access";
 import { contentModifiedAtField, touchContentModifiedAt } from "../fields/contentModified";
 import { identityFields } from "../fields/identity";
 import { redirectOldSlug, rememberPublicSlug } from "../hooks/redirectOldSlug";
+import { previewUrl } from "../lib/preview";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
   access: authenticatedOnly,
-  admin: { useAsTitle: "title" },
+  admin: { useAsTitle: "title", preview: previewUrl("posts") },
   versions: { drafts: true },
   hooks: { beforeChange: [rememberPublicSlug, touchContentModifiedAt], afterChange: [redirectOldSlug] },
   fields: [

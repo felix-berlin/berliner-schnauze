@@ -6,7 +6,9 @@ import Layout from '@layouts/Layout.astro';
 import ArticleBlocks from '@components/magazin/ArticleBlocks.astro';
 import ArticleShare from '@components/magazin/ArticleShare.vue';
 import { fetchAllPosts } from '@services/api.ts';
+import { fetchDraftPost } from '@services/payload/posts.ts';
 import { metaToSeo } from '@services/payload/seo.ts';
+import { PREVIEW_CACHE_CONTROL, readPreview } from '@services/preview.ts';
 import { canonicalUrl, formattedDate, seoData } from '@utils/helpers.ts';
 import { processArticleBlocks } from '@utils/article.ts';
 import { Breadcrumbs } from 'astro-breadcrumbs';
@@ -15,7 +17,12 @@ import { Picture } from 'astro:assets';
 
 const { postSlug } = Astro.params;
 const allPosts = await fetchAllPosts();
-const post = allPosts.find((p) => p.slug === postSlug);
+// An editor with a preview cookie for this post sees its latest draft.
+const preview = readPreview(Astro.cookies, 'posts');
+const draft = preview ? await fetchDraftPost(preview.id) : undefined;
+const isPreview = draft?.slug === postSlug;
+if (isPreview) Astro.response.headers.set('Cache-Control', PREVIEW_CACHE_CONTROL);
+const post = isPreview ? draft : allPosts.find((p) => p.slug === postSlug);
 if (!post) return Astro.rewrite('/404');
 
 // fetchAllPosts is newest first
