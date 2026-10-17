@@ -22,8 +22,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    # Localhost only, like cms: the reverse proxy (Pangolin/Newt) fronts berliner-schnauze.wtf.
     ports:
-      - "${PORT:-4321}:4321"
+      - "127.0.0.1:${PORT:-4321}:4321"
     healthcheck:
       test:
         - CMD

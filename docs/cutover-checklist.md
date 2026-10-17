@@ -43,6 +43,9 @@ Background: `docs/superpowers/specs/2026-10-16-payload-migration-design.md`. Set
 - [ ] `berliner-schnauze.wtf` → `web:4321`. It must send `Host`, `X-Forwarded-Host` and `X-Forwarded-Proto: https`. Astro only trusts them for `berliner-schnauze.wtf` (`security.allowedDomains` in `astro.config.mjs`); without them breadcrumb JSON-LD ids say `http://localhost:4321`.
 - [ ] `cms.berliner-schnauze.wtf` → `cms:3001`. `/wp-content/uploads/...` on this host is answered by the CMS with a 301 to the new file (old media links and previews keep working).
 - [ ] The proxy may cache pages: responses carry `Cache-Control: public, max-age=0, s-maxage=300, stale-while-revalidate=86400`; errors are `no-store`. A change in the admin is visible after about a minute (60 s in-process cache) plus the proxy's 5 minutes.
+- [ ] Pangolin (Traefik) is enough as the proxy; it sets `X-Forwarded-Proto: https` and passes `X-Forwarded-Host`. It caches nothing, so `s-maxage` is unused: every request reaches Node, admin changes are live after the 60 s in-process cache.
+- [ ] Pangolin resources ask for a login by default. `berliner-schnauze.wtf`: authentication off. `cms.berliner-schnauze.wtf`: off, or SSO only for the admin with rules that bypass it for `/api/*` (Imagor fetches `/api/media/file/*`, the Anki release and `publish-drafts.ts` use the REST API with an API key) and `/wp-content/*` (old media links). Payload guards the API itself (anonymous → 403).
+- [ ] Newt targets: on the host `127.0.0.1:4321` / `127.0.0.1:3001` (compose binds both ports to localhost only); as a container in the compose network `web:4321` / `cms:3001`.
 
 ## 4. First admin and API users
 
