@@ -6,6 +6,7 @@ import { Breadcrumbs } from 'astro-breadcrumbs';
 import ChevronRight from '~icons/lucide/chevron-right';
 import { SITE_URL } from 'astro:env/client';
 import { getImage } from 'astro:assets';
+import { mediaFileUrl } from '@services/payload.ts';
 
 import '@styles/plugins/astro-breadcrumbs.scss';
 import '@styles/components/_themen-overview.scss';
@@ -15,7 +16,7 @@ const themen = await fetchAllThemen();
 const ogImage = await getImage({
   format: 'png',
   height: 517,
-  src: 'https://cms.berliner-schnauze.wtf/wp-content/uploads/brown-bear-roar.png',
+  src: mediaFileUrl('brown-bear-roar.png'),
   width: 900,
 });
 

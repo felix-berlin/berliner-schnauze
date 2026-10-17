@@ -1,10 +1,10 @@
 ---
-import BearWalking from '@assets/images/bear-walking.png';
 import CarbonBadge from '@components/CarbonBadge.vue';
 import FooterAppSection from '@components/FooterAppSection.vue';
 import NavList from '@components/NavList.vue';
 import { Picture } from 'astro:assets';
 import WakapiStats from '@components/WakapiStats.astro';
+import { mediaFileUrl } from '@services/payload.ts';
 import { fetchFundingData, fetchMenu, fetchSocialMenu } from '@services/payload/site.ts';
 
 import { version } from '../../package.json';
@@ -34,7 +34,7 @@ const fundingMenu = [
         height='451'
         sizes='(min-width: 1024px) 40vw, 48vw'
         widths={[180, 320, 360, 480, 640, 700, 750, 828, 960, 1080, 1280, 1400]}
-        src='https://cms.berliner-schnauze.wtf/wp-content/uploads/bear-walking.png'
+        src={mediaFileUrl('bear-walking.png')}
       />
     </div>
     {

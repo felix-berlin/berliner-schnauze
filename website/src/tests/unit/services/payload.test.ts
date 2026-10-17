@@ -4,7 +4,7 @@ const { getPayload } = vi.hoisted(() => ({ getPayload: vi.fn() }));
 vi.mock("payload-app", () => ({ config: Promise.resolve({}), getPayload }));
 vi.mock("astro:env/server", () => ({ PAYLOAD_SERVER_URL: "https://cms.example" }));
 
-import { getPayloadClient, mediaUrl } from "@services/payload.ts";
+import { getPayloadClient, mediaFileUrl, mediaUrl } from "@services/payload.ts";
 
 beforeEach(() => getPayload.mockReset());
 
@@ -35,5 +35,11 @@ describe("mediaUrl", () => {
 
   it.each([[7], [null], [undefined], [{ url: null }]])("returns undefined for %j", (media) => {
     expect(mediaUrl(media as never)).toBeUndefined();
+  });
+});
+
+describe("mediaFileUrl", () => {
+  it("builds the absolute file url on the CMS host, encoding the filename", () => {
+    expect(mediaFileUrl("brown bear.png")).toBe("https://cms.example/api/media/file/brown%20bear.png");
   });
 });

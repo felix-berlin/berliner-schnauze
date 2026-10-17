@@ -9,6 +9,8 @@ import { getLiteDeckDownloadUrl } from '@services/githubRelease.ts';
 import { routeToWord, shuffle } from '@utils/helpers.ts';
 import { stripTags } from '@utils/article.ts';
 import Layout from '@layouts/Layout.astro';
+import { mediaFileUrl } from '@services/payload.ts';
+import { getImage } from 'astro:assets';
 import AnkiFlashcardDemo from '@components/anki/AnkiFlashcardDemo.vue';
 import AnkiLetterCoverage from '@components/anki/AnkiLetterCoverage.vue';
 import AnkiFaq from '@components/anki/AnkiFaq.vue';
@@ -25,6 +27,8 @@ import Apple from 'virtual:icons/simple-icons/apple';
 import Linux from 'virtual:icons/simple-icons/linux';
 import Android from 'virtual:icons/simple-icons/android';
 
+const ogImage = await getImage({ format: 'png', height: 517, src: mediaFileUrl('brown-bear-roar.png'), width: 900 });
+
 const page = {
   seo: {
     opengraphDescription:
@@ -32,7 +36,7 @@ const page = {
     opengraphImage: {
       alt: 'Berliner Schnauze – Anki-Deck zum Berlinerisch lernen',
       height: 517,
-      sourceUrl: 'https://cms.berliner-schnauze.wtf/wp-content/uploads/brown-bear-roar.png',
+      sourceUrl: new URL(ogImage.src, SITE_URL).href,
       type: 'image/png',
       width: 900,
     },

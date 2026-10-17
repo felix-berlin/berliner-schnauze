@@ -24,6 +24,10 @@ export const publicDocs = () =>
     ? ({ draft: true } as const)
     : ({ where: { _status: { equals: "published" as const } } } as const);
 
+/** Absolute URL of a file in the media collection by its filename (site artwork that no doc references). */
+export const mediaFileUrl = (filename: string): string =>
+  new URL(`/api/media/file/${encodeURIComponent(filename)}`, PAYLOAD_SERVER_URL).toString();
+
 /** Absolute URL of a populated media doc (`depth >= 1`); ids and empty values give `undefined`. */
 export const mediaUrl = (media: Media | number | null | undefined): string | undefined =>
   typeof media === "object" && media?.url

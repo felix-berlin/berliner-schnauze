@@ -8,7 +8,8 @@ import WordSearchLink from '@components/WordSearchLink.vue';
 import Layout from '@layouts/Layout.astro';
 import { SITE_URL } from 'astro:env/client';
 import { seoData } from '@utils/helpers';
-import { Picture } from 'astro:assets';
+import { getImage, Picture } from 'astro:assets';
+import { mediaFileUrl } from '@services/payload.ts';
 import '@styles/components/_facts-grid.scss';
 
 const websiteSchema = JSON.stringify({
@@ -52,10 +53,10 @@ const organizationSchema = JSON.stringify({
 
 const BrownBearRoarAttrs = {
   height: 517,
-  src: 'https://cms.berliner-schnauze.wtf/wp-content/uploads/brown-bear-roar.png',
-  type: 'image/png',
+  src: mediaFileUrl('brown-bear-roar.png'),
   width: 900,
 };
+const ogImage = await getImage({ ...BrownBearRoarAttrs, format: 'png' });
 
 const content = {
   seo: {
@@ -65,8 +66,8 @@ const content = {
     opengraphImage: {
       alt: 'Berliner Schnauze – Berlinerisch Wörterbuch',
       height: BrownBearRoarAttrs.height,
-      sourceUrl: BrownBearRoarAttrs.src,
-      type: BrownBearRoarAttrs.type,
+      sourceUrl: new URL(ogImage.src, SITE_URL).href,
+      type: 'image/png',
       width: BrownBearRoarAttrs.width,
     },
     opengraphType: 'website',
